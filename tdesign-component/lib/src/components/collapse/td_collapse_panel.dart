@@ -3,12 +3,12 @@
  */
 import 'package:flutter/material.dart';
 
-typedef TDCollapseIconTextBuilder = String Function(
+typedef TCollapseIconTextBuilder = String Function(
     BuildContext context, bool isExpanded);
 
-/// 折叠面板，需配合 [TDCollapse] 使用
-class TDCollapsePanel extends ExpansionPanel {
-  TDCollapsePanel({
+/// 折叠面板，需配合 [TCollapse] 使用
+class TCollapsePanel extends ExpansionPanel {
+  TCollapsePanel({
     /// 折叠面板的头部组件构造函数
     required ExpansionPanelHeaderBuilder headerBuilder,
 
@@ -21,7 +21,7 @@ class TDCollapsePanel extends ExpansionPanel {
     /// 折叠按钮操作说明文案的构造函数
     this.expandIconTextBuilder,
 
-    /// 折叠面板的值，当使用 [TDCollapse.accordion] 时，必须传入此值
+    /// 折叠面板的值，当使用 [TCollapse.accordion] 时，必须传入此值
     this.value,
 
     /// 折叠面板的背景色
@@ -36,5 +36,5 @@ class TDCollapsePanel extends ExpansionPanel {
 
   final Object? value;
 
-  final TDCollapseIconTextBuilder? expandIconTextBuilder;
+  final TCollapseIconTextBuilder? expandIconTextBuilder;
 }

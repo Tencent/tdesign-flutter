@@ -12,8 +12,8 @@ typedef OnGroupChange = void Function(List<String> checkedIds);
 ///
 /// 控制CheckBoxGroup
 ///
-class TDCheckboxGroupController {
-  TDCheckboxGroupState? _state;
+class TCheckboxGroupController {
+  TCheckboxGroupState? _state;
 
   ///
   /// 选择全部
@@ -58,13 +58,13 @@ class TDCheckboxGroupController {
 ///
 /// child的属性可以是任意包含TDCheckBox的容器组件，例如：
 /// ```dart
-/// TDCheckboxGroup(
+/// TCheckboxGroup(
 ///   child: Row(
 ///     children: [
-///       TDCheckBox(),
+///       TCheckBox(),
 ///       Column(
 ///         children: [
-///           TDCheckBox()
+///           TCheckBox()
 ///           ...
 ///         ]
 ///       )
@@ -75,9 +75,9 @@ class TDCheckboxGroupController {
 /// ```
 ///
 ///
-class TDCheckboxGroup extends StatefulWidget {
+class TCheckboxGroup extends StatefulWidget {
 
-  const TDCheckboxGroup(
+  const TCheckboxGroup(
       {required this.child,
         Key? key,
         this.onChangeGroup,
@@ -97,8 +97,8 @@ class TDCheckboxGroup extends StatefulWidget {
   /// ```
   /// Row(
   ///   children: [
-  ///     TDCheckBox(),
-  ///     TDCheckBox(),
+  ///     TCheckBox(),
+  ///     TCheckBox(),
   ///     ...
   ///   ]
   /// )
@@ -110,7 +110,7 @@ class TDCheckboxGroup extends StatefulWidget {
   final OnGroupChange? onChangeGroup;
 
   /// 可以通过控制器操作勾选状态
-  final TDCheckboxGroupController? controller;
+  final TCheckboxGroupController? controller;
 
   /// 最多可以勾选多少
   final int? maxChecked;
@@ -132,22 +132,22 @@ class TDCheckboxGroup extends StatefulWidget {
   final double? spacing;
 
   /// CheckBox复选框样式：圆形或方形
-  final TDCheckboxStyle? style;
+  final TCheckboxStyle? style;
 
   /// 文字相对icon的方位
-  final TDContentDirection? contentDirection;
+  final TContentDirection? contentDirection;
 
   /// 自定义选择icon的样式
   final IconBuilder? customIconBuilder;
 
   @override
   State<StatefulWidget> createState() {
-    return TDCheckboxGroupState();
+    return TCheckboxGroupState();
   }
 }
 
 
-class TDCheckboxGroupState extends State<TDCheckboxGroup> {
+class TCheckboxGroupState extends State<TCheckboxGroup> {
   ///
   /// 管理所有子CheckBox的状态
   ///
@@ -172,7 +172,7 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
 
 
   @override
-  void didUpdateWidget(TDCheckboxGroup oldWidget) {
+  void didUpdateWidget(TCheckboxGroup oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldCheckIds = oldWidget.checkedIds;
     final newCheckIds = widget.checkedIds;
@@ -258,47 +258,47 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
 
   @override
   Widget build(BuildContext context) {
-    return TDCheckboxGroupInherited(this, widget.child);
+    return TCheckboxGroupInherited(this, widget.child);
   }
 }
 
-class TDCheckboxGroupInherited extends InheritedWidget {
-  final TDCheckboxGroupState state;
+class TCheckboxGroupInherited extends InheritedWidget {
+  final TCheckboxGroupState state;
 
   ///
   /// 获取树上的Group节点
   ///
-  static TDCheckboxGroupInherited? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TDCheckboxGroupInherited>();
+  static TCheckboxGroupInherited? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TCheckboxGroupInherited>();
   }
 
-  const TDCheckboxGroupInherited(this.state, Widget child, {Key? key}) : super(child: child, key: key);
+  const TCheckboxGroupInherited(this.state, Widget child, {Key? key}) : super(child: child, key: key);
 
   @override
-  bool updateShouldNotify(covariant TDCheckboxGroupInherited oldWidget) {
+  bool updateShouldNotify(covariant TCheckboxGroupInherited oldWidget) {
     return true;
   }
 }
 
 
-class TDCheckboxGroupContainer extends TDCheckboxGroup {
+class TCheckboxGroupContainer extends TCheckboxGroup {
 
-  TDCheckboxGroupContainer({
+  TCheckboxGroupContainer({
     Key? key,
     Widget? child, // 使用child 则请勿设置direction
     Axis? direction, // direction 对 directionalTdRadios 起作用
-    List<TDCheckbox>? directionalTdCheckboxes,
+    List<TCheckbox>? directionalTdCheckboxes,
     List<String>? selectIds, // 默认选择项的id组
     bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
     bool cardMode = false,
     int? titleMaxLine, // item的行数
     int? maxSelected, // 最大勾选数
-    TDCheckboxStyle? style,// 勾选样式
-    TDCheckboxGroupController? controller,
+    TCheckboxStyle? style,// 勾选样式
+    TCheckboxGroupController? controller,
     IconBuilder? customIconBuilder,
     ContentBuilder? customContentBuilder,
     double? spacing, // icon和文字距离
-    TDContentDirection? contentDirection,
+    TContentDirection? contentDirection,
     OnCheckBoxGroupChange? onCheckBoxGroupChange,
     VoidCallback? onOverloadChecked,
     int? rowCount,
@@ -306,12 +306,12 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
     // 使用direction属性则必须配合directionalTdCheckboxes，child字段无效
     if (direction != null && directionalTdCheckboxes == null) {
       throw FlutterError(
-          '[TDCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time');
+          '[TCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time');
     }
     // 未使用direction则必须设置child
     if (direction == null && child == null) {
       throw FlutterError(
-          '[TDCheckboxGroupContainer] direction means use child as the exact one, but child is null');
+          '[TCheckboxGroupContainer] direction means use child as the exact one, but child is null');
     }
     // 横向单选框 每个选项有字数限制
     if (direction == Axis.horizontal && directionalTdCheckboxes != null) {
@@ -324,7 +324,7 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
       });
       var maxWordCount = 2;
       var tips =
-          '[TDCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
+          '[TCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
           '2tabs: 7words maximum\n'
           '3tabs: 4words maximum\n'
           '4tabs: 2words maximum';
@@ -351,12 +351,12 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
     if (cardMode == true) {
       assert(direction != null && directionalTdCheckboxes != null);
       directionalTdCheckboxes!.forEach((element) {
-        // if use cardMode at TDRadioGroup, then every TDRadio should
+        // if use cardMode at TRadioGroup, then every TRadio should
         // set it's own carMode to true.
         if (element.cardMode == false) {
           throw FlutterError(
-              'if use cardMode at TDCheckboxGroupContainer, then every '
-                  'TDCheckbox should set it\'s own carMode to true.');
+              'if use cardMode at TCheckboxGroupContainer, then every '
+                  'TCheckbox should set it\'s own carMode to true.');
         }
         if (element.subTitle != null && direction == Axis.horizontal) {
           throw FlutterError(
@@ -475,11 +475,11 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
 
   @override
   State<StatefulWidget> createState() {
-    return TDCheckboxGroupContainerState();
+    return TCheckboxGroupContainerState();
   }
 }
 
-class TDCheckboxGroupContainerState extends TDCheckboxGroupState {
+class TCheckboxGroupContainerState extends TCheckboxGroupState {
 
 }
 

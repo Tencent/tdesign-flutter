@@ -10,8 +10,8 @@ import 'sticky_header/sticky_header_widget.dart';
 import 'td_indexes_anchor.dart';
 
 /// 索引
-class TDIndexesList extends StatefulWidget {
-  const TDIndexesList({
+class TIndexesList extends StatefulWidget {
+  const TIndexesList({
     Key? key,
     required this.indexList,
     this.indexListMaxHeight = 0.8,
@@ -37,10 +37,10 @@ class TDIndexesList extends StatefulWidget {
       builderIndex;
 
   @override
-  State<TDIndexesList> createState() => _TDIndexesListState();
+  State<TIndexesList> createState() => _TIndexesListState();
 }
 
-class _TDIndexesListState extends State<TDIndexesList> {
+class _TIndexesListState extends State<TIndexesList> {
   late Map<String, GlobalKey> _containerKeys;
   final _indexSize = 20.0;
   Timer? _hideTipTimer;
@@ -58,7 +58,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
   }
 
   @override
-  void didUpdateWidget(TDIndexesList oldWidget) {
+  void didUpdateWidget(TIndexesList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
       _initContainerKeys();
@@ -74,7 +74,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: TDTheme.of(context).spacer8,
+      right: TTheme.of(context).spacer8,
       top: 0,
       bottom: 0,
       child: Align(
@@ -112,25 +112,25 @@ class _TDIndexesListState extends State<TDIndexesList> {
                           children: [
                             if (_showTip && value == e)
                               Positioned(
-                                top: -TDTheme.of(context).spacer48 / 2 +
+                                top: -TTheme.of(context).spacer48 / 2 +
                                     _indexSize / 2,
-                                left: -TDTheme.of(context).spacer48,
+                                left: -TTheme.of(context).spacer48,
                                 child: Container(
-                                  height: TDTheme.of(context).spacer48,
-                                  width: TDTheme.of(context).spacer48,
+                                  height: TTheme.of(context).spacer48,
+                                  width: TTheme.of(context).spacer48,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(
-                                        TDTheme.of(context).radiusCircle),
-                                    color: TDTheme.of(context).brandLightColor,
+                                        TTheme.of(context).radiusCircle),
+                                    color: TTheme.of(context).brandLightColor,
                                   ),
                                   child: Center(
-                                    child: TDText(
+                                    child: TText(
                                       e,
                                       forceVerticalCenter: true,
-                                      font: TDTheme.of(context)
+                                      font: TTheme.of(context)
                                           .fontTitleExtraLarge,
                                       textColor:
-                                          TDTheme.of(context).brandNormalColor,
+                                          TTheme.of(context).brandNormalColor,
                                     ),
                                   ),
                                 ),
@@ -138,28 +138,28 @@ class _TDIndexesListState extends State<TDIndexesList> {
                             Container(
                               key: _containerKeys[e],
                               padding: EdgeInsets.only(
-                                  left: TDTheme.of(context).spacer8),
+                                  left: TTheme.of(context).spacer8),
                               child: Container(
                                 width: _indexSize,
                                 height: _indexSize,
                                 decoration: isActive
                                     ? BoxDecoration(
                                         borderRadius: BorderRadius.circular(
-                                            TDTheme.of(context).radiusCircle),
-                                        color: TDTheme.of(context)
+                                            TTheme.of(context).radiusCircle),
+                                        color: TTheme.of(context)
                                             .brandNormalColor,
                                       )
                                     : null,
                                 child: Center(
-                                  child: TDText(
+                                  child: TText(
                                     e,
                                     forceVerticalCenter: true,
                                     font: isActive
-                                        ? TDTheme.of(context).fontMarkSmall
-                                        : TDTheme.of(context).fontLinkSmall,
+                                        ? TTheme.of(context).fontMarkSmall
+                                        : TTheme.of(context).fontLinkSmall,
                                     textColor: isActive
-                                        ? TDTheme.of(context).textColorAnti
-                                        : TDTheme.of(context).textColorPrimary,
+                                        ? TTheme.of(context).textColorAnti
+                                        : TTheme.of(context).textColorPrimary,
                                   ),
                                 ),
                               ),

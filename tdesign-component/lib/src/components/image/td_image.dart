@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-enum TDImageType {
+enum TImageType {
   /// 裁剪
   clip,
 
@@ -28,11 +28,11 @@ enum TDImageType {
   circle,
 }
 
-class TDImage extends StatefulWidget {
-  const TDImage({
+class TImage extends StatefulWidget {
+  const TImage({
     this.imgUrl,
     Key? key,
-    this.type = TDImageType.roundedSquare,
+    this.type = TImageType.roundedSquare,
     this.errorWidget,
     this.loadingWidget,
     this.width,
@@ -69,7 +69,7 @@ class TDImage extends StatefulWidget {
   final File? imageFile;
 
   /// 图片类型
-  final TDImageType type;
+  final TImageType type;
 
   /// 加载自定义提示
   final Widget? loadingWidget;
@@ -123,15 +123,15 @@ class TDImage extends StatefulWidget {
   final int? cacheWidth;
 
   @override
-  State<StatefulWidget> createState() => _TDImageState();
+  State<StatefulWidget> createState() => _TImageState();
 }
 
-class _TDImageState extends State<TDImage> {
+class _TImageState extends State<TImage> {
   /// @todo 重复代码，需简化
   @override
   Widget build(BuildContext context) {
     switch (widget.type) {
-      case TDImageType.clip:
+      case TImageType.clip:
         return widget.imageFile == null
             ? (widget.assetUrl == null
                 ? ImageWidget.network(
@@ -204,7 +204,7 @@ class _TDImageState extends State<TDImage> {
                 cacheWidth: widget.cacheWidth,
                 cacheHeight: widget.cacheHeight,
               );
-      case TDImageType.fitHeight:
+      case TImageType.fitHeight:
         return widget.imageFile == null
             ? (widget.assetUrl == null
                 ? ImageWidget.network(
@@ -277,7 +277,7 @@ class _TDImageState extends State<TDImage> {
                 cacheWidth: widget.cacheWidth,
                 cacheHeight: widget.cacheHeight,
               );
-      case TDImageType.stretch:
+      case TImageType.stretch:
         return widget.imageFile == null
             ? (widget.assetUrl == null
                 ? ConstrainedBox(
@@ -360,7 +360,7 @@ class _TDImageState extends State<TDImage> {
                 cacheWidth: widget.cacheWidth,
                 cacheHeight: widget.cacheHeight,
               );
-      case TDImageType.square:
+      case TImageType.square:
         return widget.imageFile == null
             ? (widget.assetUrl == null
                 ? ImageWidget.network(
@@ -433,14 +433,14 @@ class _TDImageState extends State<TDImage> {
                 cacheWidth: widget.cacheWidth,
                 cacheHeight: widget.cacheHeight,
               );
-      case TDImageType.roundedSquare:
+      case TImageType.roundedSquare:
         return Container(
             height: widget.height ?? 72,
             width: widget.width ?? 72,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             child: widget.imageFile == null
                 ? (widget.assetUrl == null
                     ? ImageWidget.network(
@@ -513,7 +513,7 @@ class _TDImageState extends State<TDImage> {
                     cacheWidth: widget.cacheWidth,
                     cacheHeight: widget.cacheHeight,
                   ));
-      case TDImageType.circle:
+      case TImageType.circle:
         return Container(
             height: widget.height ?? 72,
             width: widget.width ?? 72,
@@ -594,7 +594,7 @@ class _TDImageState extends State<TDImage> {
                     cacheHeight: widget.cacheHeight,
                     cacheWidth: widget.cacheWidth,
                   ));
-      case TDImageType.fitWidth:
+      case TImageType.fitWidth:
         return widget.imageFile == null
             ? (widget.assetUrl == null
                 ? ImageWidget.network(

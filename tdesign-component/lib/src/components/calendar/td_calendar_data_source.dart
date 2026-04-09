@@ -4,13 +4,13 @@ import 'td_lunar_date.dart';
 /// 
 /// 开发者需要实现此接口来提供农历转换能力。
 /// 组件内部不包含农历算法和数据，完全依赖外部实现。
-abstract class TDCalendarDataSource {
+abstract class TCalendarDataSource {
   /// 获取指定阳历日期的农历信息
   /// 
   /// [solarDate] 阳历日期
   /// 
   /// 返回 null 表示不显示农历信息
-  TDLunarInfo? getLunarInfo(DateTime solarDate);
+  TLunarInfo? getLunarInfo(DateTime solarDate);
 
   /// 格式化日期文本
   /// 
@@ -21,8 +21,8 @@ abstract class TDCalendarDataSource {
   /// 返回格式化后的日期字符串
   String formatDate(
     DateTime date,
-    TDCalendarDateType type, [
-    TDLunarInfo? lunarInfo,
+    TCalendarDateType type, [
+    TLunarInfo? lunarInfo,
   ]);
 
   /// 获取节气信息（可选实现）
@@ -38,7 +38,7 @@ abstract class TDCalendarDataSource {
   /// [lunarInfo] 农历信息（可选）
   /// 
   /// 返回节日名称，如"春节"、"中秋节"等，无节日则返回 null
-  String? getFestival(DateTime date, [TDLunarInfo? lunarInfo]) => null;
+  String? getFestival(DateTime date, [TLunarInfo? lunarInfo]) => null;
 
   /// 获取假期信息（可选实现）
   /// 
@@ -63,8 +63,8 @@ abstract class TDCalendarDataSource {
   /// 返回格式化后的年份字符串
   /// 阳历示例：2025 -> "2025年"
   /// 阴历示例：2025 -> "二〇二五年"
-  String formatYear(int year, TDCalendarDateType type) {
-    if (type == TDCalendarDateType.solar) {
+  String formatYear(int year, TCalendarDateType type) {
+    if (type == TCalendarDateType.solar) {
       return '$year年';
     }
     return '${_convertToChineseNumber(year)}年';
@@ -79,9 +79,9 @@ abstract class TDCalendarDataSource {
   /// 返回格式化后的月份字符串
   /// 阳历示例：3 -> "3月"
   /// 阴历示例：3 -> "三月"，闰3月 -> "闰三月"
-  String formatMonth(int month, TDCalendarDateType type,
+  String formatMonth(int month, TCalendarDateType type,
       [bool isLeapMonth = false]) {
-    if (type == TDCalendarDateType.solar) {
+    if (type == TCalendarDateType.solar) {
       return '$month月';
     }
     const months = [
@@ -110,8 +110,8 @@ abstract class TDCalendarDataSource {
   /// 返回格式化后的日期字符串
   /// 阳历示例：7 -> "7日"
   /// 阴历示例：7 -> "初七"
-  String formatDay(int day, TDCalendarDateType type) {
-    if (type == TDCalendarDateType.solar) {
+  String formatDay(int day, TCalendarDateType type) {
+    if (type == TCalendarDateType.solar) {
       return '$day日';
     }
     const days = [

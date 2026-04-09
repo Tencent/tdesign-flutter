@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-class TDCalendarHeader extends StatelessWidget {
-  const TDCalendarHeader({
+class TCalendarHeader extends StatelessWidget {
+  const TCalendarHeader({
     Key? key,
     required this.firstDayOfWeek,
     required this.weekdayGap,
@@ -63,7 +63,7 @@ class TDCalendarHeader extends StatelessWidget {
                   Expanded(
                     child: Center(
                       child: titleWidget ??
-                          TDText(
+                          TText(
                             title,
                             style: titleStyle,
                             maxLines: titleMaxLine,
@@ -75,7 +75,7 @@ class TDCalendarHeader extends StatelessWidget {
                     SizedBox(
                       width: 24,
                       child: GestureDetector(
-                        child: Icon(TDIcons.close, color: closeColor),
+                        child: Icon(TIcons.close, color: closeColor),
                         onTap: () {
                           onClose?.call();
                         },
@@ -96,7 +96,7 @@ class TDCalendarHeader extends StatelessWidget {
                     child: SizedBox(
                       height: weekdayHeight,
                       child: Center(
-                        child: TDText(
+                        child: TText(
                           list[index],
                           style: weekdayStyle,
                         ),

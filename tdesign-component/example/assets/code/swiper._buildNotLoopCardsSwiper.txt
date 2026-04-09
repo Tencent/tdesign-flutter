@@ -9,10 +9,10 @@
       loop: false,
       pagination: const SwiperPagination(
         alignment: Alignment.center,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },

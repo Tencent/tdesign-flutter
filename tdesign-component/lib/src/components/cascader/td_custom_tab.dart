@@ -4,19 +4,19 @@ import '../../../tdesign_flutter.dart';
 
 typedef TapCallback = void Function(int index);
 
-class TDCustomTab extends StatefulWidget {
+class TCustomTab extends StatefulWidget {
   final List<String> tabs;
   final TapCallback? onTap;
   final int? initialIndex;
 
-  const TDCustomTab(
+  const TCustomTab(
       {super.key, required this.tabs, this.onTap, this.initialIndex});
 
   @override
-  State<TDCustomTab> createState() => _TDCustomTabState();
+  State<TCustomTab> createState() => _TCustomTabState();
 }
 
-class _TDCustomTabState extends State<TDCustomTab> {
+class _TCustomTabState extends State<TCustomTab> {
   ScrollController _scrollController = ScrollController();
   int _currentTabIndex = 0;
 
@@ -28,7 +28,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
   }
 
   @override
-  void didUpdateWidget(TDCustomTab oldWidget) {
+  void didUpdateWidget(TCustomTab oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialIndex != oldWidget.initialIndex) {
       _currentTabIndex = widget.initialIndex!;
@@ -53,13 +53,13 @@ class _TDCustomTabState extends State<TDCustomTab> {
                     child: Stack(
                       children: [
                         Center(
-                          child: TDText(
+                          child: TText(
                             widget.tabs[index],
                             style: TextStyle(
                                 fontSize: 16,
                                 color: _currentTabIndex == index
-                                    ? TDTheme.of(context).brandNormalColor
-                                    : TDTheme.of(context).textColorPrimary),
+                                    ? TTheme.of(context).brandNormalColor
+                                    : TTheme.of(context).textColorPrimary),
                             fontWeight: _currentTabIndex == index
                                 ? FontWeight.w600
                                 : FontWeight.w400,
@@ -73,7 +73,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
                               child: Container(
                                 width: 20,
                                 height: 1.5,
-                                color: TDTheme.of(context).brandNormalColor,
+                                color: TTheme.of(context).brandNormalColor,
                               ),
                             ),
                           ),

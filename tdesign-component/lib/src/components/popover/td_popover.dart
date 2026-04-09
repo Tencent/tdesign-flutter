@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDPopover {
+class TPopover {
   static Future showPopover({
     required BuildContext context,
     String? content,
     Widget? contentWidget,
     double offset = 4,
-    TDPopoverTheme? theme,
+    TPopoverTheme? theme,
     bool closeOnClickOutside = true,
-    TDPopoverPlacement? placement,
+    TPopoverPlacement? placement,
     bool? showArrow = true,
     double arrowSize = 8,
     EdgeInsetsGeometry? padding,
@@ -26,7 +26,7 @@ class TDPopover {
       barrierColor: overlayColor,
       useSafeArea: false,
       context: context,
-      builder: (ctx) => TDPopoverWidget(
+      builder: (ctx) => TPopoverWidget(
         context: context,
         content: content,
         contentWidget: contentWidget,

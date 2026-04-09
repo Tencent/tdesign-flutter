@@ -7,24 +7,24 @@ import 'td_dropdown_item.dart';
 import 'td_dropdown_menu.dart';
 import 'td_dropdown_panel.dart';
 
-typedef TDDropdownPopupDirection = TDDropdownMenuDirection;
+typedef TDropdownPopupDirection = TDropdownMenuDirection;
 typedef FutureCallback = Future<void> Function();
 
-class TDDropdownPopup {
-  TDDropdownPopup({
+class TDropdownPopup {
+  TDropdownPopup({
     required this.parentContext,
     required this.child,
     required this.handleClose,
-    this.direction = TDDropdownPopupDirection.auto,
+    this.direction = TDropdownPopupDirection.auto,
     this.showOverlay = true,
     this.closeOnClickOverlay = true,
     this.duration = const Duration(milliseconds: 200),
   });
 
   final BuildContext parentContext;
-  final TDDropdownItem child;
+  final TDropdownItem child;
   final FutureCallback handleClose;
-  final TDDropdownPopupDirection? direction;
+  final TDropdownPopupDirection? direction;
   final bool? showOverlay;
   final bool? closeOnClickOverlay;
   final Duration? duration;
@@ -49,22 +49,22 @@ class TDDropdownPopup {
       _initContentBottom;
   final _closeListenable = ValueNotifier<FutureCallback?>(null);
   final _directionListenable =
-      ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
+      ValueNotifier<TDropdownPopupDirection>(TDropdownPopupDirection.auto);
   final _colorAlphaListenable = ValueNotifier(false);
 
   Duration get _duration => duration ?? const Duration(milliseconds: 200);
 
-  double get maxContentHeight => direction == TDDropdownPopupDirection.down
+  double get maxContentHeight => direction == TDropdownPopupDirection.down
       ? _initContentBottom
       : _initContentTop;
 
-  void _init(TDDropdownPopupDirection d) {
+  void _init(TDropdownPopupDirection d) {
     final ancestor = Navigator.of(parentContext).context.findRenderObject();
     final popupContainerHeight = (ancestor as RenderBox).size.height;
     var renderBox = parentContext.findRenderObject() as RenderBox;
     var position = renderBox.localToGlobal(Offset.zero, ancestor: ancestor);
     var size = renderBox.size;
-    if (d == TDDropdownPopupDirection.down) {
+    if (d == TDropdownPopupDirection.down) {
       _overlay1Top = position.dy + size.height;
       _overlay2Top = position.dy;
       _overlay3Top = 0;
@@ -91,21 +91,21 @@ class TDDropdownPopup {
     }
   }
 
-  Future<void> add([TDDropdownItem? updateChild]) {
+  Future<void> add([TDropdownItem? updateChild]) {
     var completer = Completer<void>();
-    _directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
+    _directionListenable.value = direction ?? TDropdownPopupDirection.auto;
     final overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
-        return _directionListenable.value == TDDropdownPopupDirection.auto
+        return _directionListenable.value == TDropdownPopupDirection.auto
             ? ValueListenableBuilder(
                 valueListenable: _directionListenable,
                 builder: (context, value, child) =>
-                    value == TDDropdownPopupDirection.auto
+                    value == TDropdownPopupDirection.auto
                         ? child!
                         : _getPopup(
                             value, updateChild, completer), // 每次重新渲染item，更新高度
                 child: _getPopup(
-                    TDDropdownPopupDirection.down, updateChild, completer),
+                    TDropdownPopupDirection.down, updateChild, completer),
               )
             : _getPopup(_directionListenable.value, updateChild, completer);
       },
@@ -115,7 +115,7 @@ class TDDropdownPopup {
     return completer.future;
   }
 
-  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild,
+  Widget _getPopup(TDropdownMenuDirection value, TDropdownItem? updateChild,
       Completer<void> completer) {
     _init(value);
     final barrier = GestureDetector(
@@ -123,15 +123,15 @@ class TDDropdownPopup {
       onTap: _overlayClick,
     );
     return Stack(children: [
-      if (_directionListenable.value != TDDropdownPopupDirection.auto) ...[
+      if (_directionListenable.value != TDropdownPopupDirection.auto) ...[
         _getOverlay1(barrier),
         _getOverlay2(),
         _getOverlay3(barrier),
       ],
-      TDDropdownInherited(
+      TDropdownInherited(
         popupState: this,
         directionListenable: _directionListenable,
-        child: TDDropdownPanel(
+        child: TDropdownPanel(
           duration: _duration,
           direction: value,
           directionListenable: _directionListenable,

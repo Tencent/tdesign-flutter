@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-/// TDDialog手脚架
-class TDDialogScaffold extends StatelessWidget {
-  const TDDialogScaffold({
+/// TDialog手脚架
+class TDialogScaffold extends StatelessWidget {
+  const TDialogScaffold({
     Key? key,
     required this.body,
     this.showCloseButton,
@@ -43,7 +43,7 @@ class TDDialogScaffold extends StatelessWidget {
           width: width ?? 311,
           decoration: BoxDecoration(
             color:
-                backgroundColor ?? TDTheme.of(context).bgColorContainer, // 底色
+                backgroundColor ?? TTheme.of(context).bgColorContainer, // 底色
             borderRadius: BorderRadius.all(Radius.circular(radius)),
           ),
           child: Stack(
@@ -62,9 +62,9 @@ class TDDialogScaffold extends StatelessWidget {
                           height: 38,
                           child: Center(
                             child: Icon(
-                              TDIcons.close,
+                              TIcons.close,
                               size: 22,
-                              color: TDTheme.of(context).textColorPlaceholder,
+                              color: TTheme.of(context).textColorPlaceholder,
                             ),
                           ),
                         ),
@@ -79,8 +79,8 @@ class TDDialogScaffold extends StatelessWidget {
 }
 
 /// 弹窗标题
-class TDDialogTitle extends StatelessWidget {
-  const TDDialogTitle({
+class TDialogTitle extends StatelessWidget {
+  const TDialogTitle({
     Key? key,
     this.title,
     this.titleColor,
@@ -95,9 +95,9 @@ class TDDialogTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
-    return TDText(
+    return TText(
       title,
-      textColor: titleColor ?? TDTheme.of(context).textColorPrimary,
+      textColor: titleColor ?? TTheme.of(context).textColorPrimary,
       fontWeight: FontWeight.w600,
       font: Font(size: 18, lineHeight: 26),
       textAlign: TextAlign.center,
@@ -106,8 +106,8 @@ class TDDialogTitle extends StatelessWidget {
 }
 
 /// 弹窗内容
-class TDDialogContent extends StatelessWidget {
-  const TDDialogContent({
+class TDialogContent extends StatelessWidget {
+  const TDialogContent({
     Key? key,
     this.content,
     this.contentColor,
@@ -122,9 +122,9 @@ class TDDialogContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
-    return TDText(
+    return TText(
       content,
-      textColor: contentColor ?? TDTheme.of(context).textColorSecondary,
+      textColor: contentColor ?? TTheme.of(context).textColorSecondary,
       font: Font(size: 16, lineHeight: 24),
       textAlign: TextAlign.center,
     );
@@ -132,8 +132,8 @@ class TDDialogContent extends StatelessWidget {
 }
 
 /// 弹窗信息
-class TDDialogInfoWidget extends StatelessWidget {
-  const TDDialogInfoWidget({
+class TDialogInfoWidget extends StatelessWidget {
+  const TDialogInfoWidget({
     Key? key,
     this.title,
     this.titleColor,
@@ -181,7 +181,7 @@ class TDDialogInfoWidget extends StatelessWidget {
           if (title != null)
             Align(
               alignment: titleAlignment ?? Alignment.center,
-              child: TDDialogTitle(
+              child: TDialogTitle(
                 title: title,
                 titleColor: titleColor,
               ),
@@ -199,10 +199,10 @@ class TDDialogInfoWidget extends StatelessWidget {
                   Scrollbar(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: TDDialogContent(
+                      child: TDialogContent(
                         content: content!,
                         contentColor: contentColor ??
-                            TDTheme.of(context).textColorSecondary,
+                            TTheme.of(context).textColorSecondary,
                       ),
                     ),
                   ),
@@ -222,10 +222,10 @@ class HorizontalNormalButtons extends StatelessWidget {
   }) : super(key: key);
 
   /// 左按钮
-  final TDDialogButtonOptions leftBtn;
+  final TDialogButtonOptions leftBtn;
 
   /// 右按钮
-  final TDDialogButtonOptions rightBtn;
+  final TDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -236,7 +236,7 @@ class HorizontalNormalButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: TDDialogButton(
+            child: TDialogButton(
               buttonText: leftBtn.title,
               buttonTextColor: leftBtn.titleColor,
               buttonTextSize: leftBtn.titleSize,
@@ -254,13 +254,13 @@ class HorizontalNormalButtons extends StatelessWidget {
               },
             ),
           ),
-          const TDDivider(
+          const TDivider(
             height: 0.5,
             width: 12,
             color: Colors.transparent,
           ),
           Expanded(
-            child: TDDialogButton(
+            child: TDialogButton(
               buttonText: rightBtn.title,
               buttonTextColor: rightBtn.titleColor,
               buttonTextSize: rightBtn.titleSize,
@@ -293,27 +293,27 @@ class HorizontalTextButtons extends StatelessWidget {
   }) : super(key: key);
 
   /// 左按钮
-  final TDDialogButtonOptions leftBtn;
+  final TDialogButtonOptions leftBtn;
 
   /// 右按钮
-  final TDDialogButtonOptions rightBtn;
+  final TDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     return Column(
       children: [
-        const TDDivider(height: 0.5),
+        const TDivider(height: 0.5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: TDDialogButton(
+              child: TDialogButton(
                 buttonText: leftBtn.title,
                 buttonTextColor: leftBtn.titleColor,
                 buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
-                buttonType: leftBtn.type ?? TDButtonType.text,
+                buttonType: leftBtn.type ?? TButtonType.text,
                 buttonTheme: leftBtn.theme,
                 // fix： The button height does not fill the container.
                 height: 56,
@@ -327,18 +327,18 @@ class HorizontalTextButtons extends StatelessWidget {
                 },
               ),
             ),
-            const TDDivider(
+            const TDivider(
               width: 0.5,
               height: 56,
             ),
             Expanded(
-              child: TDDialogButton(
+              child: TDialogButton(
                 buttonText: rightBtn.title,
                 buttonTextColor: rightBtn.titleColor,
                 buttonTextSize: rightBtn.titleSize,
                 buttonStyle: rightBtn.style,
-                buttonType: rightBtn.type ?? TDButtonType.text,
-                buttonTheme: rightBtn.theme ?? TDButtonTheme.primary,
+                buttonType: rightBtn.type ?? TButtonType.text,
+                buttonTheme: rightBtn.theme ?? TButtonTheme.primary,
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
@@ -358,8 +358,8 @@ class HorizontalTextButtons extends StatelessWidget {
 }
 
 /// 弹窗标题
-class TDDialogButton extends StatelessWidget {
-  const TDDialogButton({
+class TDialogButton extends StatelessWidget {
+  const TDialogButton({
     Key? key,
     this.buttonText,
     this.buttonTextColor,
@@ -387,13 +387,13 @@ class TDDialogButton extends StatelessWidget {
   final FontWeight? buttonTextFontWeight;
 
   /// 按钮样式
-  final TDButtonStyle? buttonStyle;
+  final TButtonStyle? buttonStyle;
 
   /// 按钮类型
-  final TDButtonType? buttonType;
+  final TButtonType? buttonType;
 
   /// 按钮主题
-  final TDButtonTheme? buttonTheme;
+  final TButtonTheme? buttonTheme;
 
   /// 按钮宽度
   final double? width;
@@ -409,10 +409,10 @@ class TDDialogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDButton(
+    return TButton(
       onTap: onPressed,
       style: buttonStyle,
-      type: buttonType ?? TDButtonType.fill,
+      type: buttonType ?? TButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
       textStyle: TextStyle(

@@ -19,21 +19,21 @@ String _getMark(String format, String? type) {
 }
 
 /// 计时组件
-class TDTimeCounter extends StatefulWidget {
-  const TDTimeCounter({
+class TTimeCounter extends StatefulWidget {
+  const TTimeCounter({
     Key? key,
     this.autoStart = true,
     this.content = 'default',
     this.format = 'HH:mm:ss',
     this.millisecond = false,
-    this.size = TDTimeCounterSize.medium,
+    this.size = TTimeCounterSize.medium,
     this.splitWithUnit = false,
-    this.theme = TDTimeCounterTheme.defaultTheme,
+    this.theme = TTimeCounterTheme.defaultTheme,
     required this.time,
     this.style,
     this.onChange,
     this.onFinish,
-    this.direction = TDTimeCounterDirection.down,
+    this.direction = TTimeCounterDirection.down,
     this.controller,
   }) : super(key: key);
 
@@ -50,19 +50,19 @@ class TDTimeCounter extends StatefulWidget {
   final bool millisecond;
 
   /// 尺寸
-  final TDTimeCounterSize size;
+  final TTimeCounterSize size;
 
   /// 使用时间单位分割
   final bool splitWithUnit;
 
   /// 风格
-  final TDTimeCounterTheme theme;
+  final TTimeCounterTheme theme;
 
   /// 必需；计时时长，单位毫秒
   final int time;
 
   /// 自定义样式，有则优先用它，没有则根据size和theme选取
-  final TDTimeCounterStyle? style;
+  final TTimeCounterStyle? style;
 
   /// 时间变化时触发回调
   final Function(int time)? onChange;
@@ -71,18 +71,18 @@ class TDTimeCounter extends StatefulWidget {
   final VoidCallback? onFinish;
 
   /// 计时方向，默认倒计时
-  final TDTimeCounterDirection direction;
+  final TTimeCounterDirection direction;
 
   /// 控制器，可控制开始/暂停/继续/重置
-  final TDTimeCounterController? controller;
+  final TTimeCounterController? controller;
 
   @override
-  _TDTimeCounterState createState() => _TDTimeCounterState();
+  _TTimeCounterState createState() => _TTimeCounterState();
 }
 
-class _TDTimeCounterState extends State<TDTimeCounter>
+class _TTimeCounterState extends State<TTimeCounter>
     with SingleTickerProviderStateMixin {
-  late TDTimeCounterStyle _style;
+  late TTimeCounterStyle _style;
   late Map<String, String> timeUnitMap;
   Ticker? _ticker;
   int _time = 0;
@@ -100,7 +100,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _style = widget.style ??
-        TDTimeCounterStyle.generateStyle(
+        TTimeCounterStyle.generateStyle(
           context,
           size: widget.size,
           theme: widget.theme,
@@ -116,7 +116,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
   }
 
   @override
-  void didUpdateWidget(TDTimeCounter oldWidget) {
+  void didUpdateWidget(TTimeCounter oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       oldWidget.controller?.removeListener(_onControllerChanged);
@@ -141,10 +141,10 @@ class _TDTimeCounterState extends State<TDTimeCounter>
     }
     _tempMilliseconds = 0;
     _ticker ??= createTicker((Duration elapsed) {
-      if ((widget.direction == TDTimeCounterDirection.down && _time > 0) ||
-          widget.direction == TDTimeCounterDirection.up && _time < _maxTime) {
+      if ((widget.direction == TTimeCounterDirection.down && _time > 0) ||
+          widget.direction == TTimeCounterDirection.up && _time < _maxTime) {
         setState(() {
-          if (widget.direction == TDTimeCounterDirection.down) {
+          if (widget.direction == TTimeCounterDirection.down) {
             _time =
                 max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
           } else {
@@ -176,7 +176,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
   /// 重置计时
   void resetTimer([int? time, bool update = true]) {
     _ticker?.stop();
-    if (widget.direction == TDTimeCounterDirection.down) {
+    if (widget.direction == TTimeCounterDirection.down) {
       _time = time ?? widget.time;
     } else {
       _time = 0;
@@ -194,16 +194,16 @@ class _TDTimeCounterState extends State<TDTimeCounter>
 
   void _onControllerChanged() {
     switch (widget.controller?.value) {
-      case TDTimeCounterStatus.start:
+      case TTimeCounterStatus.start:
         startTimer();
         break;
-      case TDTimeCounterStatus.pause:
+      case TTimeCounterStatus.pause:
         pauseTimer();
         break;
-      case TDTimeCounterStatus.resume:
+      case TTimeCounterStatus.resume:
         resumeTimer();
         break;
-      case TDTimeCounterStatus.reset:
+      case TTimeCounterStatus.reset:
         resetTimer(widget.controller?.time);
         break;
       default:
@@ -255,7 +255,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
         margin: _style.timeMargin,
         decoration: _style.timeBox,
         child: Center(
-          child: TDText(
+          child: TText(
             time,
             style: TextStyle(
               fontFamily: _style.timeFontFamily?.fontFamily,
@@ -272,7 +272,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
     if (split.isNotEmpty) {
       children.addAll([
         SizedBox(width: _style.space),
-        TDText(
+        TText(
           split,
           style: TextStyle(
             fontSize: _style.splitFontSize,

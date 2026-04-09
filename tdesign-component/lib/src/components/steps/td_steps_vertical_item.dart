@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// Steps步骤条，垂直步骤item
-class TDStepsVerticalItem extends StatelessWidget {
-  final TDStepsItemData data;
+class TStepsVerticalItem extends StatelessWidget {
+  final TStepsItemData data;
   final int index;
   final int stepsCount;
   final int activeIndex;
-  final TDStepsStatus status;
+  final TStepsStatus status;
   final bool simple;
   final bool readOnly;
   final bool verticalSelect;
@@ -15,7 +15,7 @@ class TDStepsVerticalItem extends StatelessWidget {
   /// item 标题组件插槽
   final Widget? titleWidget;
 
-  const TDStepsVerticalItem({
+  const TStepsVerticalItem({
     super.key,
     required this.data,
     required this.index,
@@ -30,7 +30,7 @@ class TDStepsVerticalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
 
     /// 步骤条数字背景色
     var stepsNumberBgColor = theme.brandNormalColor;
@@ -59,7 +59,7 @@ class TDStepsVerticalItem extends StatelessWidget {
       stepsTitleColor = theme.textColorPrimary;
 
       completeIconWidget = Icon(
-        TDIcons.check,
+        TIcons.check,
         color: theme.brandNormalColor,
         size: 16,
       );
@@ -101,7 +101,7 @@ class TDStepsVerticalItem extends StatelessWidget {
 
     /// 错误状态
     /// 激活索引是当前索引，只有当前激活索引才需要显示
-    if (status == TDStepsStatus.error && activeIndex == index) {
+    if (status == TStepsStatus.error && activeIndex == index) {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
@@ -110,7 +110,7 @@ class TDStepsVerticalItem extends StatelessWidget {
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
         stepsIconWidget = Icon(
-          data.errorIcon ?? TDIcons.close,
+          data.errorIcon ?? TIcons.close,
           color: theme.errorNormalColor,
           size: shouldSetIconWidgetDecoration ? 16 : 22,
         );
@@ -202,7 +202,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: TDText(
+                            child: TText(
                               data.title!,
                               style: TextStyle(
                                 fontWeight: (activeIndex == index && !readOnly)
@@ -218,7 +218,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                           ),
                           verticalSelect
                               ? Icon(
-                                  TDIcons.chevron_right,
+                                  TIcons.chevron_right,
                                   color: theme.textColorPrimary,
                                   size: 16,
                                 )
@@ -245,8 +245,8 @@ class TDStepsVerticalItem extends StatelessWidget {
           width: 1,
           height: double.infinity,
           color: (activeIndex > index || readOnly)
-              ? TDTheme.of(context).brandNormalColor
-              : TDTheme.of(context).componentBorderColor,
+              ? TTheme.of(context).brandNormalColor
+              : TTheme.of(context).componentBorderColor,
         ),
       ),
     );
@@ -260,11 +260,11 @@ class TDStepsVerticalItem extends StatelessWidget {
         if (data.customContent != null)
           data.customContent!
         else if (data.content != null && data.content!.isNotEmpty)
-          TDText(
+          TText(
             data.content!,
             style: TextStyle(
               fontWeight: FontWeight.w400,
-              color: TDTheme.of(context).textColorPlaceholder,
+              color: TTheme.of(context).textColorPlaceholder,
               fontSize: 12,
             ),
           ),

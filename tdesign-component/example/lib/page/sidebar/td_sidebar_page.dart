@@ -6,18 +6,18 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarPage演示
+/// TSideBarPage演示
 ///
-class TDSideBarPage extends StatefulWidget {
-  const TDSideBarPage({Key? key}) : super(key: key);
+class TSideBarPage extends StatefulWidget {
+  const TSideBarPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarPageState();
+    return TSideBarPageState();
   }
 }
 
-class TDSideBarPageState extends State<TDSideBarPage> {
+class TSideBarPageState extends State<TSideBarPage> {
   @override
   Widget build(BuildContext context) {
     var current = buildWidget(context);
@@ -107,15 +107,15 @@ class TDSideBarPageState extends State<TDSideBarPage> {
     );
   }
 
-  TDButton getCustomButton(
+  TButton getCustomButton(
       BuildContext context, String text, String routeName) {
-    return TDButton(
+    return TButton(
       text: text,
       isBlock: true,
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.primary,
       onTap: () {
         Navigator.pushNamed(
           context,

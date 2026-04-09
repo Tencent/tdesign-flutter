@@ -17,8 +17,8 @@ enum PlacementEnum {
 }
 
 /// 评分组件
-class TDRate extends StatefulWidget {
-  const TDRate({
+class TRate extends StatefulWidget {
+  const TRate({
     super.key,
     this.allowHalf = false,
     this.color,
@@ -44,7 +44,7 @@ class TDRate extends StatefulWidget {
   /// 是否允许半选
   final bool? allowHalf;
 
-  /// 评分图标的颜色，示例：[选中颜色] / [选中颜色，未选中颜色]，默认：[TDTheme.of(context).warningColor5, TDTheme.of(context).grayColor4]
+  /// 评分图标的颜色，示例：[选中颜色] / [选中颜色，未选中颜色]，默认：[TTheme.of(context).warningColor5, TTheme.of(context).grayColor4]
   final List<Color>? color;
 
   /// 评分的数量
@@ -53,10 +53,10 @@ class TDRate extends StatefulWidget {
   /// 是否禁用评分
   final bool? disabled;
 
-  /// 评分图标的间距，默认：TDTheme.of(context).spacer8
+  /// 评分图标的间距，默认：TTheme.of(context).spacer8
   final double? gap;
 
-  /// 自定义评分图标，[选中和未选中图标] / [选中图标，未选中图标]，默认：[TDIcons.star_filled]
+  /// 自定义评分图标，[选中和未选中图标] / [选中图标，未选中图标]，默认：[TIcons.star_filled]
   final List<IconData>? icon;
 
   /// 选择评分弹框的位置，值为[PlacementEnum.none]表示不显示评分弹框。
@@ -99,14 +99,14 @@ class TDRate extends StatefulWidget {
   /// 评分图标与辅助文字主轴方向上如何占用空间
   final MainAxisSize? mainAxisSize;
 
-  /// 评分图标与辅助文字的间距，默认：[TDTheme.of(context).spacer16]
+  /// 评分图标与辅助文字的间距，默认：[TTheme.of(context).spacer16]
   final double? iconTextGap;
 
   @override
-  _TDRateState createState() => _TDRateState();
+  _TRateState createState() => _TRateState();
 }
 
-class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
+class _TRateState extends State<TRate> with TickerProviderStateMixin {
   /// 节流
   final _throttle = Throttle(delay: const Duration(milliseconds: 100));
 
@@ -120,7 +120,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   late Map<double, GlobalKey> _globalKeys;
 
   /// 弹框
-  late TDRateOverlay _overlay;
+  late TRateOverlay _overlay;
 
   /// 动画
   late List<AnimationController> _controller;
@@ -153,7 +153,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
             .asMap()
             .map((index, e) => MapEntry(e, GlobalKey()));
     _overlay =
-        TDRateOverlay(context: context, builder: (context) => _buildOverlay())
+        TRateOverlay(context: context, builder: (context) => _buildOverlay())
           ..show();
     _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
     _controller = List.generate(
@@ -169,7 +169,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   }
 
   @override
-  void didUpdateWidget(TDRate oldWidget) {
+  void didUpdateWidget(TRate oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.value != oldWidget.value) {
       _activeValue = widget.value ?? 0;
@@ -236,7 +236,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
               return Padding(
                 padding: EdgeInsets.only(
                     right:
-                        isLast ? 0 : widget.gap ?? TDTheme.of(context).spacer8),
+                        isLast ? 0 : widget.gap ?? TTheme.of(context).spacer8),
                 child: AnimatedBuilder(
                   animation: _animation[index],
                   builder: (context, child) {
@@ -372,21 +372,21 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
     return Padding(
       padding: widget.direction == Axis.horizontal
           ? EdgeInsets.only(
-              left: widget.iconTextGap ?? TDTheme.of(context).spacer16)
+              left: widget.iconTextGap ?? TTheme.of(context).spacer16)
           : EdgeInsets.only(
-              top: widget.iconTextGap ?? TDTheme.of(context).spacer8),
+              top: widget.iconTextGap ?? TTheme.of(context).spacer8),
       child: SizedBox(
         width: widget.textWidth ?? 50,
-        child: TDText(
+        child: TText(
           notRated
               ? context.resource.notRated
               : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
           font: notRated
-              ? TDTheme.of(context).fontBodyLarge
-              : TDTheme.of(context).fontTitleMedium,
+              ? TTheme.of(context).fontBodyLarge
+              : TTheme.of(context).fontTitleMedium,
           textColor: notRated
-              ? TDTheme.of(context).textDisabledColor
-              : TDTheme.of(context).textColorPrimary,
+              ? TTheme.of(context).textDisabledColor
+              : TTheme.of(context).textColorPrimary,
         ),
       ),
     );
@@ -395,12 +395,12 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   Color _getIconColor({double? value, bool? isActive}) {
     return (value != null && _activeValue >= value) ||
             (isActive != null && isActive)
-        ? widget.color?.getOrNull(0) ?? TDTheme.of(context).warningColor5
-        : widget.color?.getOrNull(1) ?? TDTheme.of(context).bgColorComponent;
+        ? widget.color?.getOrNull(0) ?? TTheme.of(context).warningColor5
+        : widget.color?.getOrNull(1) ?? TTheme.of(context).bgColorComponent;
   }
 
   IconData _getIcon({double? value, bool? isActive}) {
-    final selectIcon = widget.icon?.getOrNull(0) ?? TDIcons.star_filled;
+    final selectIcon = widget.icon?.getOrNull(0) ?? TIcons.star_filled;
     final icon = [selectIcon, widget.icon?.getOrNull(1) ?? selectIcon];
     return (value != null && _activeValue >= value) ||
             (isActive != null && isActive)
@@ -422,10 +422,10 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
     }
     return Positioned(
       top: widget.placement == PlacementEnum.top
-          ? rateOffset.dy - TDTheme.of(context).spacer8 - _tipSize.height
-          : rateOffset.dy + TDTheme.of(context).spacer8 + rateSize.height,
+          ? rateOffset.dy - TTheme.of(context).spacer8 - _tipSize.height
+          : rateOffset.dy + TTheme.of(context).spacer8 + rateSize.height,
       left: rateOffset.dx - (_tipSize.width - rateSize.width) / 2,
-      child: TDRateTips(
+      child: TRateTips(
         allowHalf: widget.allowHalf,
         activeValue: _activeValue,
         icon: _getIcon(isActive: true),

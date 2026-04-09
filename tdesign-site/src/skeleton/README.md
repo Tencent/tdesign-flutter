@@ -26,7 +26,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildAvatarSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.avatar);
+    return TSkeleton(theme: TSkeletonTheme.avatar);
   }</pre>
 
 </td-code-block>
@@ -38,7 +38,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildImageSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.image);
+    return TSkeleton(theme: TSkeletonTheme.image);
   }</pre>
 
 </td-code-block>
@@ -50,7 +50,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildTextSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.text);
+    return TSkeleton(theme: TSkeletonTheme.text);
   }</pre>
 
 </td-code-block>
@@ -62,7 +62,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildParagraphSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.paragraph);
+    return TSkeleton(theme: TSkeletonTheme.paragraph);
   }</pre>
 
 </td-code-block>
@@ -74,17 +74,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildCellSkeleton(BuildContext context) {
-    var rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
-    var rowColsImage = TDSkeleton.fromRowCol(
-      rowCol: TDSkeletonRowCol(objects: const [
-        [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)]
+    var rowColsAvatar = TSkeleton(theme: TSkeletonTheme.avatar);
+    var rowColsImage = TSkeleton.fromRowCol(
+      rowCol: TSkeletonRowCol(objects: const [
+        [TSkeletonRowColObj.rect(width: 48, height: 48, flex: null)]
       ]),
     );
-    var rowColsContent = TDSkeleton.fromRowCol(
-      rowCol: TDSkeletonRowCol(
+    var rowColsContent = TSkeleton.fromRowCol(
+      rowCol: TSkeletonRowCol(
         objects: const [
-          [TDSkeletonRowColObj(), TDSkeletonRowColObj.spacer(flex: 1)],
-          [TDSkeletonRowColObj()]
+          [TSkeletonRowColObj(), TSkeletonRowColObj.spacer(flex: 1)],
+          [TSkeletonRowColObj()]
         ],
       ),
     );
@@ -123,10 +123,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         for (var i = 0; i < 5; i++)
-          TDSkeleton.fromRowCol(
-            rowCol: TDSkeletonRowCol(objects: const [
-              [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-              [TDSkeletonRowColObj.text(width: 48, flex: null)],
+          TSkeleton.fromRowCol(
+            rowCol: TSkeletonRowCol(objects: const [
+              [TSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+              [TSkeletonRowColObj.text(width: 48, flex: null)],
             ]),
           ),
       ],
@@ -145,24 +145,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     var rowCols = Flexible(
         child: LayoutBuilder(
             builder: (context, constraints) => Row(children: [
-                  TDSkeleton.fromRowCol(
-                    rowCol: TDSkeletonRowCol(
+                  TSkeleton.fromRowCol(
+                    rowCol: TSkeletonRowCol(
                       objects: [
                         [
-                          TDSkeletonRowColObj(
+                          TSkeletonRowColObj(
                               width: constraints.maxWidth*0.96,
                               height: constraints.maxWidth,
                               flex: null,
-                              style: TDSkeletonRowColObjStyle(
+                              style: TSkeletonRowColObjStyle(
                                   borderRadius: (context) =>
-                                      TDTheme.of(context).radiusExtraLarge))
+                                      TTheme.of(context).radiusExtraLarge))
                         ],
-                        [TDSkeletonRowColObj.text(
+                        [TSkeletonRowColObj.text(
                           width: constraints.maxWidth*0.96,
                         )],
                         const [
-                          TDSkeletonRowColObj.text(),
-                          TDSkeletonRowColObj.spacer(flex: 1),
+                          TSkeletonRowColObj.text(),
+                          TSkeletonRowColObj.spacer(flex: 1),
                         ],
                       ],
                     ),
@@ -172,7 +172,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return Row(
       children: [
         rowCols,
-        SizedBox(width: TDTheme.of(context).spacer4),
+        SizedBox(width: TTheme.of(context).spacer4),
         rowCols,
       ],
     );
@@ -188,9 +188,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildGradientSkeleton(BuildContext context) {
-    return TDSkeleton(
-      animation: TDSkeletonAnimation.gradient,
-      theme: TDSkeletonTheme.paragraph,
+    return TSkeleton(
+      animation: TSkeletonAnimation.gradient,
+      theme: TSkeletonTheme.paragraph,
     );
   }</pre>
 
@@ -203,9 +203,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildFlashedSkeleton(BuildContext context) {
-    return TDSkeleton(
-      animation: TDSkeletonAnimation.flashed,
-      theme: TDSkeletonTheme.paragraph,
+    return TSkeleton(
+      animation: TSkeletonAnimation.flashed,
+      theme: TSkeletonTheme.paragraph,
     );
   }</pre>
 
@@ -214,15 +214,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDSkeleton
+### TSkeleton
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| animation | TDSkeletonAnimation? | null | 动画效果 |
+| animation | TSkeletonAnimation? | null | 动画效果 |
 | delay | int | 0 | 延迟显示加载时间 |
-| theme | TDSkeletonTheme | TDSkeletonTheme.text | 风格 |
+| theme | TSkeletonTheme | TSkeletonTheme.text | 风格 |
 
 
 #### 命名构造方法
@@ -230,49 +230,49 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| animation | TDSkeletonAnimation? | null | 动画效果 |
+| animation | TSkeletonAnimation? | null | 动画效果 |
 | delay | int | 0 | 延迟显示加载时间 |
-| rowCol | TDSkeletonRowCol | - | 自定义行列数量、宽度高度、间距等 |
+| rowCol | TSkeletonRowCol | - | 自定义行列数量、宽度高度、间距等 |
 
 ```
 ```
-### TDSkeletonRowColStyle
+### TSkeletonRowColStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| rowSpacing | double Function(BuildContext) | (context) => TDTheme.of(context).spacer16 | 行间距 |
+| rowSpacing | double Function(BuildContext) | (context) => TTheme.of(context).spacer16 | 行间距 |
 
 ```
 ```
-### TDSkeletonRowCol
+### TSkeletonRowCol
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| objects | List<List<TDSkeletonRowColObj>> | - | 行列对象 |
-| style | TDSkeletonRowColStyle | TDSkeletonRowColStyle() | 样式 |
+| objects | List<List<TSkeletonRowColObj>> | - | 行列对象 |
+| style | TSkeletonRowColStyle | TSkeletonRowColStyle() | 样式 |
 
 ```
 ```
-### TDSkeletonRowColObjStyle
+### TSkeletonRowColObjStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| background | double Function(BuildContext) | (context) => TDTheme.of(context).grayColor1 | 背景颜色 |
-| borderRadius | double Function(BuildContext) | (context) => TDTheme.of(context).radiusSmall | 圆角 |
+| background | double Function(BuildContext) | (context) => TTheme.of(context).grayColor1 | 背景颜色 |
+| borderRadius | double Function(BuildContext) | (context) => TTheme.of(context).radiusSmall | 圆角 |
 
 
 #### 工厂构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| background | double Function(BuildContext) | (context) => TDTheme.of(context).grayColor1 | 背景颜色 |
+| background | double Function(BuildContext) | (context) => TTheme.of(context).grayColor1 | 背景颜色 |
 
 ```
 ```
-### TDSkeletonRowColObj
+### TSkeletonRowColObj
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -281,7 +281,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | height | double? | 16 | 高度 |
 | flex | int? | 1 | 弹性因子 |
 | margin | EdgeInsets | EdgeInsets.zero | 间距 |
-| style | TDSkeletonRowColObjStyle | TDSkeletonRowColObjStyle() | 样式 |
+| style | TSkeletonRowColObjStyle | TSkeletonRowColObjStyle() | 样式 |
 
 
 #### 工厂构造方法
@@ -292,6 +292,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | height | double? | 48 / 16 / null | 高度 |
 | flex | int? | null / 1 | 弹性因子 |
 | margin | EdgeInsets | EdgeInsets.zero | 间距 |
-| style | TDSkeletonRowColObjStyle | TDSkeletonRowColObjStyle.circle() / TDSkeletonRowColObjStyle.rect() / TDSkeletonRowColObjStyle.text() / TDSkeletonRowColObjStyle.spacer() | 样式 |
+| style | TSkeletonRowColObjStyle | TSkeletonRowColObjStyle.circle() / TSkeletonRowColObjStyle.rect() / TSkeletonRowColObjStyle.text() / TSkeletonRowColObjStyle.spacer() | 样式 |
 
   

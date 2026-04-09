@@ -28,7 +28,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeBasic(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: 'Label Text',
           controller: controller[0],
           hintText: 'Please enter text',
@@ -58,7 +58,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeRequire(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           required: true,
           controller: controller[1],
@@ -89,7 +89,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeOptional(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           controller: controller[2],
           hintText: '请输入文字(选填)',
@@ -119,7 +119,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypePureInput(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           controller: controller[3],
           hintText: '请输入文字',
           onChanged: (text) {
@@ -146,8 +146,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _basicTypeAdditionalDesc(BuildContext context) {
-    return TDInput(
-      type: TDInputType.normal,
+    return TInput(
+      type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[4],
       hintText: '请输入文字',
@@ -173,8 +173,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeTextLimit(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.normal,
+        TInput(
+          type: TInputType.normal,
           leftLabel: '标签文字',
           controller: controller[5],
           hintText: '请输入文字',
@@ -204,8 +204,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _basicTypeTextLimitChinese2(BuildContext context) {
-    return TDInput(
-      type: TDInputType.normal,
+    return TInput(
+      type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[6],
       hintText: '请输入文字',
@@ -232,16 +232,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeWithHandleIconOne(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           controller: controller[7],
           hintText: '请输入文字',
           rightBtn: Icon(
-            TDIcons.error_circle_filled,
-            color: TDTheme.of(context).textColorPlaceholder,
+            TIcons.error_circle_filled,
+            color: TTheme.of(context).textColorPlaceholder,
           ),
           onBtnTap: () {
-            TDToast.showText('点击右侧按钮', context: context);
+            TToast.showText('点击右侧按钮', context: context);
           },
           onChanged: (text) {
             setState(() {});
@@ -269,7 +269,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeWithHandleIconTwo(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           controller: controller[8],
           hintText: '请输入文字',
@@ -279,16 +279,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             height: 28,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: TDTheme.of(context).brandNormalColor,
+              color: TTheme.of(context).brandNormalColor,
             ),
-            child: const TDButton(
+            child: const TButton(
               text: '操作按钮',
-              size: TDButtonSize.extraSmall,
-              theme: TDButtonTheme.primary,
+              size: TButtonSize.extraSmall,
+              theme: TButtonTheme.primary,
             ),
           ),
           onBtnTap: () {
-            TDToast.showText('点击操作按钮', context: context);
+            TToast.showText('点击操作按钮', context: context);
           },
           needClear: false,
         ),
@@ -308,16 +308,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _basicTypeWithHandleIconThree(BuildContext context) {
-    return TDInput(
+    return TInput(
       leftLabel: '标签文字',
       controller: controller[9],
       hintText: '请输入文字',
       rightBtn: Icon(
-        TDIcons.user_avatar,
-        color: TDTheme.of(context).textColorPlaceholder,
+        TIcons.user_avatar,
+        color: TTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
-        TDToast.showText('点击操作按钮', context: context);
+        TToast.showText('点击操作按钮', context: context);
       },
       onChanged: (text) {
         setState(() {});
@@ -340,8 +340,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeWithLeftIconLeftLabel(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          leftIcon: const Icon(TDIcons.app),
+        TInput(
+          leftIcon: const Icon(TIcons.app),
           leftLabel: '标签文字',
           controller: controller[10],
           hintText: '请输入文字',
@@ -371,8 +371,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeWithLeftIcon(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          leftIcon: const Icon(TDIcons.app),
+        TInput(
+          leftIcon: const Icon(TIcons.app),
           controller: controller[11],
           hintText: '请输入文字',
           onChanged: (text) {
@@ -401,20 +401,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _specialTypePassword(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.normal,
+        TInput(
+          type: TInputType.normal,
           controller: controller[12],
           obscureText: !browseOn,
           leftLabel: '输入密码',
           hintText: '请输入密码',
           rightBtn: browseOn
               ? Icon(
-                  TDIcons.browse,
-                  color: TDTheme.of(context).textColorPlaceholder,
+                  TIcons.browse,
+                  color: TTheme.of(context).textColorPlaceholder,
                 )
               : Icon(
-                  TDIcons.browse_off,
-                  color: TDTheme.of(context).textColorPlaceholder,
+                  TIcons.browse_off,
+                  color: TTheme.of(context).textColorPlaceholder,
                 ),
           onBtnTap: () {
             setState(() {
@@ -441,9 +441,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _specialTypeVerifyCode(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.normal,
-          size: TDInputSize.small,
+        TInput(
+          type: TInputType.normal,
+          size: TInputSize.small,
           controller: controller[13],
           leftLabel: '验证码',
           hintText: '输入验证码',
@@ -453,7 +453,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               Container(
                 width: 0.5,
                 height: 24,
-                color: TDTheme.of(context).componentBorderColor,
+                color: TTheme.of(context).componentBorderColor,
               ),
               const SizedBox(
                 width: 16,
@@ -467,7 +467,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
           needClear: false,
           onBtnTap: () {
-            TDToast.showText('点击更换验证码', context: context);
+            TToast.showText('点击更换验证码', context: context);
           },
         ),
         const SizedBox(
@@ -488,8 +488,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _specialTypePhoneNumber(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.normal,
+        TInput(
+          type: TInputType.normal,
           controller: controller[14],
           leftLabel: '手机号',
           hintText: '输入手机号',
@@ -503,23 +503,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   child: Container(
                     width: 0.5,
                     height: 24,
-                    color: TDTheme.of(context).componentBorderColor,
+                    color: TTheme.of(context).componentBorderColor,
                   ),
                 ),
                 _countdownTime > 0
-                    ? TDText(
+                    ? TText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).textDisabledColor,
+                        textColor: TTheme.of(context).textDisabledColor,
                       )
-                    : TDText(confirmText,
-                        textColor: TDTheme.of(context).brandNormalColor),
+                    : TText(confirmText,
+                        textColor: TTheme.of(context).brandNormalColor),
               ],
             ),
           ),
           needClear: false,
           onBtnTap: () {
             if (_countdownTime == 0) {
-              TDToast.showText('点击了发送验证码', context: context);
+              TToast.showText('点击了发送验证码', context: context);
               setState(() {
                 _countdownTime = 60;
               });
@@ -545,14 +545,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _specialTypePrice(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.special,
+        TInput(
+          type: TInputType.special,
           controller: controller[15],
           leftLabel: '价格',
           hintText: '0.00',
           textAlign: TextAlign.end,
           rightWidget:
-              TDText('元', textColor: TDTheme.of(context).textColorPrimary),
+              TText('元', textColor: TTheme.of(context).textColorPrimary),
         ),
         const SizedBox(
           height: 16,
@@ -570,13 +570,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _specialTypeNumber(BuildContext context) {
-    return TDInput(
-      type: TDInputType.special,
+    return TInput(
+      type: TInputType.special,
       controller: controller[16],
       leftLabel: '数量',
       hintText: '填写个数',
       textAlign: TextAlign.end,
-      rightWidget: TDText('个', textColor: TDTheme.of(context).textColorPrimary),
+      rightWidget: TText('个', textColor: TTheme.of(context).textColorPrimary),
     );
   }</pre>
 
@@ -591,7 +591,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _autoHeightInput(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '地址',
           controller: controller[27],
           hintText: '请输入地址，高度自适应',
@@ -620,13 +620,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _specialTypeNumber(BuildContext context) {
-    return TDInput(
-      type: TDInputType.special,
+    return TInput(
+      type: TInputType.special,
       controller: controller[16],
       leftLabel: '数量',
       hintText: '填写个数',
       textAlign: TextAlign.end,
-      rightWidget: TDText('个', textColor: TDTheme.of(context).textColorPrimary),
+      rightWidget: TText('个', textColor: TTheme.of(context).textColorPrimary),
     );
   }</pre>
 
@@ -641,8 +641,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _specialTypePasswordWithPaste(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.normal,
+        TInput(
+          type: TInputType.normal,
           controller: controller[27],
           obscureText: true,
           enableInteractiveSelection: true,
@@ -702,12 +702,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _inputStatusAdditionInfo(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           controller: controller[17],
           hintText: '请输入文字',
           additionInfo: '错误提示说明',
-          additionInfoColor: TDTheme.of(context).errorColor6,
+          additionInfoColor: TTheme.of(context).errorColor6,
           onChanged: (text) {
             setState(() {});
           },
@@ -732,7 +732,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _inputStatusReadOnly(BuildContext context) {
-    return TDInput(
+    return TInput(
       leftLabel: '标签文字',
       readOnly: true,
       // 不可编辑文字 则不必带入controller
@@ -751,9 +751,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _inputStatusLongLabel(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftInfoWidth: 80,
-          spacer: TDInputSpacer(iconLabelSpace: 4),
+          spacer: TInputSpacer(iconLabelSpace: 4),
           leftLabel: '标签超长时最多十个字',
           controller: controller[18],
           hintText: '请输入文字',
@@ -781,13 +781,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _inputStatusLongInput(BuildContext context) {
-    return TDInput(
-      type: TDInputType.normal,
+    return TInput(
+      type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[19],
       hintText: '输入文字超长不超过两行输入文字超长不超过两行',
       hintTextStyle: TextStyle(
-        color: TDTheme.of(context).textColorPrimary,
+        color: TTheme.of(context).textColorPrimary,
       ),
       maxLines: 2,
     );
@@ -805,7 +805,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _contentLeft(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '左对齐',
           controller: controller[23],
           hintText: '请输入文字',
@@ -835,7 +835,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _contentCenter(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '居中',
           controller: controller[24],
           contentAlignment: TextAlign.center,
@@ -866,7 +866,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _contentRight(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '右对齐',
           controller: controller[25],
           contentAlignment: TextAlign.end,
@@ -895,18 +895,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _verticalStyle(BuildContext context) {
-    return TDInput(
-      spacer: TDInputSpacer(iconLabelSpace: 0),
-      type: TDInputType.twoLine,
+    return TInput(
+      spacer: TInputSpacer(iconLabelSpace: 0),
+      type: TInputType.twoLine,
       leftLabel: '标签文字',
       controller: controller[20],
       hintText: '请输入文字',
       rightBtn: Icon(
-        TDIcons.error_circle_filled,
-        color: TDTheme.of(context).textColorPlaceholder,
+        TIcons.error_circle_filled,
+        color: TTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
-        TDToast.showText('点击右侧按钮', context: context);
+        TToast.showText('点击右侧按钮', context: context);
       },
       onChanged: (text) {
         setState(() {});
@@ -927,8 +927,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _cardStyle(BuildContext context) {
-    return TDInput(
-      type: TDInputType.cardStyle,
+    return TInput(
+      type: TInputType.cardStyle,
       width: MediaQuery.of(context).size.width - 32,
       leftLabel: '标签文字',
       controller: controller[21],
@@ -956,19 +956,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       alignment: Alignment.center,
       padding: const EdgeInsets.only(top: 16, bottom: 24),
       width: MediaQuery.of(context).size.width,
-      child: TDInput(
-        type: TDInputType.cardStyle,
-        cardStyle: TDCardStyle.topText,
+      child: TInput(
+        type: TInputType.cardStyle,
+        cardStyle: TCardStyle.topText,
         width: MediaQuery.of(context).size.width - 32,
         cardStyleTopText: '标签文字',
         controller: controller[22],
         hintText: '请输入文字',
         rightBtn: Icon(
-          TDIcons.error_circle_filled,
-          color: TDTheme.of(context).textColorPlaceholder,
+          TIcons.error_circle_filled,
+          color: TTheme.of(context).textColorPlaceholder,
         ),
         onBtnTap: () {
-          TDToast.showText('点击右侧按钮', context: context);
+          TToast.showText('点击右侧按钮', context: context);
         },
         onChanged: (text) {
           setState(() {});
@@ -990,18 +990,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _customStyle(BuildContext context) {
-    return TDInput(
+    return TInput(
       leftLabel: '标签文字',
       controller: controller[26],
-      backgroundColor: TDTheme.of(context).grayColor12,
-      leftLabelStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
-      textStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
+      backgroundColor: TTheme.of(context).grayColor12,
+      leftLabelStyle: TextStyle(color: TTheme.of(context).fontWhColor1),
+      textStyle: TextStyle(color: TTheme.of(context).fontWhColor1),
       hintText: '请输入文字',
-      hintTextStyle: TextStyle(color: TDTheme.of(context).fontWhColor3),
+      hintTextStyle: TextStyle(color: TTheme.of(context).fontWhColor3),
       onChanged: (text) {
         setState(() {});
       },
-      clearBtnColor: TDTheme.of(context).fontWhColor3,
+      clearBtnColor: TTheme.of(context).fontWhColor3,
       onClearTap: () {
         controller[26].clear();
         setState(() {});
@@ -1014,7 +1014,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDInput
+### TInput
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -1023,7 +1023,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | additionInfoColor | Color? | - | 错误提示颜色 |
 | autofocus | bool | false | 是否自动获取焦点 |
 | backgroundColor | Color? | - | 输入框背景色 |
-| cardStyle | TDCardStyle? | - | 卡片默认样式 |
+| cardStyle | TCardStyle? | - | 卡片默认样式 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
 | cardStyleTopText | String? | - | 卡片模式上方文字 |
 | clearBtnColor | Color? | - | 右侧删除按钮颜色 |
@@ -1066,13 +1066,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
 | selectionControls | TextSelectionControls? | - | 自定义选择控制器 |
 | showBottomDivider | bool | true | 是否展示底部分割线 |
-| size | TDInputSize | TDInputSize.large | 输入框规格 |
-| spacer | TDInputSpacer | - | 组件各模块间间距 |
+| size | TInputSize | TInputSize.large | 输入框规格 |
+| spacer | TInputSpacer | - | 组件各模块间间距 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | textStyle | TextStyle? | - | 文本颜色 |
-| type | TDInputType | TDInputType.normal | 输入框类型 |
-| width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
+| type | TInputType | TInputType.normal | 输入框类型 |
+| width | double? | - | 输入框宽度(TCardStyle时必须设置该参数) |
 
 
   

@@ -9,8 +9,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDNoticeBar extends StatefulWidget {
-  const TDNoticeBar({
+class TNoticeBar extends StatefulWidget {
+  const TNoticeBar({
     super.key,
     this.content,
     this.context,
@@ -21,7 +21,7 @@ class TDNoticeBar extends StatefulWidget {
     this.interval = 3000,
     this.marquee = false,
     this.direction = Axis.horizontal,
-    this.theme = TDNoticeBarTheme.info,
+    this.theme = TNoticeBarTheme.info,
     this.prefixIcon,
     this.suffixIcon,
     this.onTap,
@@ -40,8 +40,8 @@ class TDNoticeBar extends StatefulWidget {
   /// 文本内容（字符串或字符串数组等）
   final dynamic content;
 
-  /// 公告栏样式 [TDNoticeBarStyle]
-  final TDNoticeBarStyle? style;
+  /// 公告栏样式 [TNoticeBarStyle]
+  final TNoticeBarStyle? style;
 
   /// 左侧内容（自定义左侧内容，优先级高于prefixIcon）
   final Widget? left;
@@ -62,7 +62,7 @@ class TDNoticeBar extends StatefulWidget {
   final Axis? direction;
 
   /// 主题
-  final TDNoticeBarTheme? theme;
+  final TNoticeBarTheme? theme;
 
   /// 左侧图标
   final IconData? prefixIcon;
@@ -80,15 +80,15 @@ class TDNoticeBar extends StatefulWidget {
   final int? maxLines;
 
   @override
-  State<StatefulWidget> createState() => _TDNoticeBarState();
+  State<StatefulWidget> createState() => _TNoticeBarState();
 }
 
-class _TDNoticeBarState extends State<TDNoticeBar> {
+class _TNoticeBarState extends State<TNoticeBar> {
   ScrollController? _scrollController;
   Timer? _timer;
 
   Size? _size;
-  TDNoticeBarStyle? _style;
+  TNoticeBarStyle? _style;
   Color? _backgroundColor;
 
   final GlobalKey _key = GlobalKey();
@@ -115,7 +115,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     if (widget.style != null) {
       _style = widget.style;
     } else {
-      _style = TDNoticeBarStyle.generateTheme(context, theme: widget.theme);
+      _style = TNoticeBarStyle.generateTheme(context, theme: widget.theme);
     }
     _backgroundColor = _style!.backgroundColor;
   }
@@ -246,7 +246,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         height: _getTextHeight(),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TDText(
+          child: TText(
             displayText,
             style: _style?.textStyle,
             maxLines: widget.marquee == true ? 1 : widget.maxLines,
@@ -308,7 +308,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                       height: widget.height,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: TDText(
+                        child: TText(
                           content[i],
                           style: _style!.textStyle,
                           maxLines: 1,
@@ -321,7 +321,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                     height: widget.height,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: TDText(
+                      child: TText(
                         content[0],
                         style: _style?.textStyle,
                         maxLines: 1,

@@ -1,5 +1,5 @@
 ## API
-### TDRefreshHeader
+### TRefreshHeader
 #### 简介
 TDesign刷新头部
  结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
@@ -24,7 +24,7 @@ TDesign刷新头部
 | infiniteOffset | double? | - | 无限刷新偏移量 |
 | key | Key? | - | Key |
 | listenable |  | - |  |
-| loadingIcon | TDLoadingIcon | TDLoadingIcon.circle | loading样式 |
+| loadingIcon | TLoadingIcon | TLoadingIcon.circle | loading样式 |
 | maxOverOffset |  | - |  |
 | notifyWhenInvisible |  | - |  |
 | overScroll | bool | true | 越界滚动([enableInfiniteRefresh]为true或[infiniteOffset]有值时生效) |

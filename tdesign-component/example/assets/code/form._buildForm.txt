@@ -1,7 +1,7 @@
 
   Widget _buildForm(BuildContext context) {
-    final theme = TDTheme.of(context);
-    return TDForm(
+    final theme = TTheme.of(context);
+    return TForm(
         formController: _formController,
         disabled: _formDisableState,
         data: _formData,
@@ -14,10 +14,10 @@
         formShowErrorMessage: true,
         onSubmit: onSubmit,
         items: [
-          TDFormItem(
+          TFormItem(
             label: '用户名',
             name: 'name',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             help: '请输入用户名',
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['name'],
@@ -25,17 +25,17 @@
             /// 控制单个 item 是否展示错误提醒
             showErrorMessage: true,
             requiredMark: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入用户名',
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: TDTheme.of(context).textColorPlaceholder,
+                    color: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
                 controller: _controller[0],
-                additionInfoColor: TDTheme.of(context).errorColor6,
+                additionInfoColor: TTheme.of(context).errorColor6,
                 showBottomDivider: false,
                 readOnly: _formDisableState,
                 onChanged: (val) {
@@ -46,23 +46,23 @@
                   _formItemNotifier['name']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '密码',
             name: 'password',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入密码',
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: TDTheme.of(context).textColorPlaceholder,
+                    color: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
-                type: TDInputType.normal,
+                type: TInputType.normal,
                 controller: _controller[1],
                 obscureText: !browseOn,
                 needClear: false,
@@ -76,22 +76,22 @@
                   _formItemNotifier['password']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '性别',
             name: 'gender',
-            type: TDFormItemType.radios,
+            type: TFormItemType.radios,
             labelWidth: 82.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
-            child: TDRadioGroup(
+            child: TRadioGroup(
               spacing: 0,
               direction: Axis.horizontal,
               controller: _genderCheckboxGroupController,
               directionalTdRadios: _radios.entries.map((entry) {
-                return TDRadio(
+                return TRadio(
                   id: entry.key,
                   title: entry.value,
-                  radioStyle: TDRadioStyle.circle,
+                  radioStyle: TRadioStyle.circle,
                   showDivider: false,
                   spacing: 4,
                   checkBoxLeftSpace: 0,
@@ -107,11 +107,11 @@
               },
             ),
           ),
-          TDFormItem(
+          TFormItem(
             label: '生日',
             name: 'birth',
             labelWidth: 82.0,
-            type: TDFormItemType.dateTimePicker,
+            type: TFormItemType.dateTimePicker,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
@@ -121,7 +121,7 @@
               if (_formDisableState) {
                 return;
               }
-              TDPicker.showDatePicker(context, title: '选择时间',
+              TPicker.showDatePicker(context, title: '选择时间',
                   onConfirm: (selected) {
                 setState(() {
                   _selected_1 =
@@ -135,10 +135,10 @@
                   initialDate: [2012, 1, 1]);
             },
           ),
-          TDFormItem(
+          TFormItem(
             label: '籍贯',
             name: 'place',
-            type: TDFormItemType.cascader,
+            type: TFormItemType.cascader,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
@@ -149,7 +149,7 @@
               if (_formDisableState) {
                 return;
               }
-              TDCascader.showMultiCascader(context,
+              TCascader.showMultiCascader(context,
                   title: '选择地址',
                   data: _data,
                   initialData: _initLocalData,
@@ -170,16 +170,16 @@
               });
             },
           ),
-          TDFormItem(
+          TFormItem(
               label: '年限',
               name: 'age',
               labelWidth: 82.0,
-              type: TDFormItemType.stepper,
+              type: TFormItemType.stepper,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
                 padding: const EdgeInsets.only(right: 18),
-                child: TDStepper(
-                  theme: TDStepperTheme.filled,
+                child: TStepper(
+                  theme: TStepperTheme.filled,
                   disabled: _formDisableState,
                   eventController: _stepController!,
                   value: int.parse(_formData['age']),
@@ -188,18 +188,18 @@
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
             label: '自我评价',
             name: 'description',
             tipAlign: TextAlign.left,
-            type: TDFormItemType.rate,
+            type: TFormItemType.rate,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['description'],
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                   padding: const EdgeInsets.only(right: 18),
-                  child: TDRate(
+                  child: TRate(
                     count: 5,
                     value: double.parse(_formData['description']),
                     allowHalf: false,
@@ -213,22 +213,22 @@
                   )),
             ),
           ),
-          TDFormItem(
+          TFormItem(
               label: '个人简介',
               labelWidth: 82.0,
               name: 'resume',
-              type: TDFormItemType.textarea,
+              type: TFormItemType.textarea,
               formItemNotifier: _formItemNotifier['resume'],
               child: Padding(
                 padding:
                     EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
-                child: TDTextarea(
+                child: TTextarea(
                   backgroundColor: Colors.red,
                   hintText: '请输入个人简介',
                   maxLength: 500,
                   indicator: true,
                   readOnly: _formDisableState,
-                  layout: TDTextareaLayout.vertical,
+                  layout: TTextareaLayout.vertical,
                   controller: _controller[2],
                   showBottomDivider: false,
                   onChanged: (value) {
@@ -236,15 +236,15 @@
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
               label: '上传图片',
               name: 'photo',
               labelWidth: 82.0,
-              type: TDFormItemType.upLoadImg,
+              type: TFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
                 padding: EdgeInsets.only(top: 4, bottom: 4),
-                child: TDUpload(
+                child: TUpload(
                   files: files,
                   multiple: true,
                   max: 6,
@@ -271,12 +271,12 @@
               child: Row(
                 children: [
                   Expanded(
-                      child: TDButton(
+                      child: TButton(
                     text: '重置',
-                    size: TDButtonSize.large,
-                    type: TDButtonType.fill,
-                    theme: TDButtonTheme.light,
-                    shape: TDButtonShape.rectangle,
+                    size: TButtonSize.large,
+                    type: TButtonType.fill,
+                    theme: TButtonTheme.light,
+                    shape: TButtonShape.rectangle,
                     disabled: _formDisableState,
                     onTap: () {
                       //用户名称
@@ -292,7 +292,7 @@
                       //籍贯
                       _selected_2 = '';
                       //年限
-                      _stepController.add(TDStepperEventType.cleanValue);
+                      _stepController.add(TStepperEventType.cleanValue);
                       //上传图片
                       files.clear();
                       _formData = {
@@ -317,12 +317,12 @@
                     width: 20,
                   ),
                   Expanded(
-                      child: TDButton(
+                      child: TButton(
                           text: '提交',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          theme: TDButtonTheme.primary,
-                          shape: TDButtonShape.rectangle,
+                          size: TButtonSize.large,
+                          type: TButtonType.fill,
+                          theme: TButtonTheme.primary,
+                          shape: TButtonShape.rectangle,
                           onTap: _onSubmit,
                           disabled: _formDisableState)),
                 ],

@@ -27,12 +27,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildArea(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_1.isEmpty ? '请选择' : selected_1,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: title,
           onConfirm: (selected) {
@@ -57,12 +57,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildTime(BuildContext context) {
     const title = '选择时间';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_2.isEmpty ? '请选择' : selected_2,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: title,
           onConfirm: (selected) {
@@ -89,12 +89,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildMultiArea(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiLinkedPicker(
+        TPicker.showMultiLinkedPicker(
           context,
           title: title,
           onConfirm: (selected) {
@@ -122,12 +122,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildAreaWithTitle(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_4.isEmpty ? '请选择' : selected_4,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: '带标题选择器',
           onConfirm: (selected) {
@@ -151,12 +151,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildAreaWithoutTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择地区',
       note: selected_5.isEmpty ? '请选择' : selected_5,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           // 不传或传空字符串、null，则不显示标题
           // title: '',
@@ -181,7 +181,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildWithoutHeader(BuildContext context) {
-    return TDMultiPicker(
+    return TMultiPicker(
       /// 不显示header内容
       header: false,
       /// todo onChange
@@ -200,7 +200,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDPicker
+### TPicker
 
 #### 静态方法
 
@@ -213,7 +213,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDMultiPicker
+### TMultiPicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -248,7 +248,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDMultiLinkedPicker
+### TMultiLinkedPicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

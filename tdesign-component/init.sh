@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 可以指定自己的Flutter SDK路径
-# FLUTTER_SDK_PATH=~/tools/flutter
+ FLUTTER_SDK_PATH=~/tools/flutter1
 
 # 设置基础目录（脚本所在目录）
 BASE_DIR="$( cd "$( dirname "$0" )" && pwd )"

@@ -5,21 +5,21 @@ import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
 
-enum TDStepperSize { small, medium, large }
+enum TStepperSize { small, medium, large }
 
-enum TDStepperTheme { normal, filled, outline }
+enum TStepperTheme { normal, filled, outline }
 
-enum TDStepperIconType { remove, add }
+enum TStepperIconType { remove, add }
 
-enum TDStepperOverlimitType { minus, plus }
+enum TStepperOverlimitType { minus, plus }
 
-enum TDStepperEventType { cleanValue }
+enum TStepperEventType { cleanValue }
 
-typedef TDStepperOverlimitFunction = void Function(TDStepperOverlimitType type);
+typedef TStepperOverlimitFunction = void Function(TStepperOverlimitType type);
 
 /// Stepper控制器
-class TDStepperController {
-  _TDStepperState? _state;
+class TStepperController {
+  _TStepperState? _state;
 
   int _value = 0;
 
@@ -30,14 +30,14 @@ class TDStepperController {
     _state?.updateUI();
   }
 
-  void _bindState(_TDStepperState _tdStepperState) {
+  void _bindState(_TStepperState _tdStepperState) {
     _state = _tdStepperState;
   }
 }
 
 /// 步进器
-class TDStepper extends StatefulWidget {
-  const TDStepper({
+class TStepper extends StatefulWidget {
+  const TStepper({
     Key? key,
     this.disableInput = false,
     this.disabled = false,
@@ -45,9 +45,9 @@ class TDStepper extends StatefulWidget {
     this.eventController,
     this.max = 100,
     this.min = 0,
-    this.size = TDStepperSize.medium,
+    this.size = TStepperSize.medium,
     this.step = 1,
-    this.theme = TDStepperTheme.normal,
+    this.theme = TStepperTheme.normal,
     this.value = 0,
     this.defaultValue = 0,
     this.onBlur,
@@ -72,13 +72,13 @@ class TDStepper extends StatefulWidget {
   final int min;
 
   /// 组件尺寸
-  final TDStepperSize size;
+  final TStepperSize size;
 
   /// 步长
   final int step;
 
   /// 组件风格
-  final TDStepperTheme theme;
+  final TStepperTheme theme;
 
   /// 值
   final int? value;
@@ -93,20 +93,20 @@ class TDStepper extends StatefulWidget {
   final ValueChanged<int>? onChange;
 
   /// 数值超出限制时触发
-  final TDStepperOverlimitFunction? onOverlimit;
+  final TStepperOverlimitFunction? onOverlimit;
 
   /// 事件控制器
-  final StreamController<TDStepperEventType>? eventController;
+  final StreamController<TStepperEventType>? eventController;
 
   /// Stepper控制器
-  final TDStepperController? controller;
+  final TStepperController? controller;
 
   @override
-  State<TDStepper> createState() => _TDStepperState();
+  State<TStepper> createState() => _TStepperState();
 }
 
-class _TDStepperState extends State<TDStepper> {
-  late TDStepperController _controller;
+class _TStepperState extends State<TStepper> {
+  late TStepperController _controller;
   late TextEditingController _textController;
   final FocusNode _focusNode = FocusNode();
 
@@ -116,13 +116,13 @@ class _TDStepperState extends State<TDStepper> {
     if (widget.controller != null) {
       _controller = widget.controller!;
     } else {
-      _controller = TDStepperController()
+      _controller = TStepperController()
         ..value = widget.value ?? widget.defaultValue ?? 0;
     }
     _controller._bindState(this);
     if (widget.eventController != null) {
-      widget.eventController?.stream.listen((TDStepperEventType event) {
-        if (event == TDStepperEventType.cleanValue) {
+      widget.eventController?.stream.listen((TStepperEventType event) {
+        if (event == TStepperEventType.cleanValue) {
           cleanValue();
         }
       });
@@ -152,11 +152,11 @@ class _TDStepperState extends State<TDStepper> {
     }
 
     switch (widget.size) {
-      case TDStepperSize.small:
+      case TStepperSize.small:
         return 34;
-      case TDStepperSize.medium:
+      case TStepperSize.medium:
         return 38;
-      case TDStepperSize.large:
+      case TStepperSize.large:
         return 45;
       default:
         return 38;
@@ -170,11 +170,11 @@ class _TDStepperState extends State<TDStepper> {
 
   double _getHeight() {
     switch (widget.size) {
-      case TDStepperSize.small:
+      case TStepperSize.small:
         return 20;
-      case TDStepperSize.medium:
+      case TStepperSize.medium:
         return 24;
-      case TDStepperSize.large:
+      case TStepperSize.large:
         return 28;
       default:
         return 24;
@@ -183,13 +183,13 @@ class _TDStepperState extends State<TDStepper> {
 
   Color? _getBackgroundColor(BuildContext context) {
     switch (widget.theme) {
-      case TDStepperTheme.filled:
+      case TStepperTheme.filled:
         return widget.disabled
-            ? TDTheme.of(context).bgColorComponentDisabled
-            : TDTheme.of(context).bgColorSecondaryContainer;
-      case TDStepperTheme.outline:
+            ? TTheme.of(context).bgColorComponentDisabled
+            : TTheme.of(context).bgColorSecondaryContainer;
+      case TStepperTheme.outline:
         return null;
-      case TDStepperTheme.normal:
+      case TStepperTheme.normal:
       default:
         return null;
     }
@@ -197,11 +197,11 @@ class _TDStepperState extends State<TDStepper> {
 
   double _getFontSize() {
     switch (widget.size) {
-      case TDStepperSize.small:
+      case TStepperSize.small:
         return 10;
-      case TDStepperSize.medium:
+      case TStepperSize.medium:
         return 12;
-      case TDStepperSize.large:
+      case TStepperSize.large:
         return 16;
       default:
         return 12;
@@ -219,7 +219,7 @@ class _TDStepperState extends State<TDStepper> {
       });
 
       if (widget.onOverlimit != null) {
-        widget.onOverlimit!(TDStepperOverlimitType.plus);
+        widget.onOverlimit!(TStepperOverlimitType.plus);
       }
 
       renderNumber();
@@ -244,7 +244,7 @@ class _TDStepperState extends State<TDStepper> {
       });
 
       if (widget.onOverlimit != null) {
-        widget.onOverlimit!(TDStepperOverlimitType.minus);
+        widget.onOverlimit!(TStepperOverlimitType.minus);
       }
 
       renderNumber();
@@ -286,8 +286,8 @@ class _TDStepperState extends State<TDStepper> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        TDStepperIconButton(
-          type: TDStepperIconType.remove,
+        TStepperIconButton(
+          type: TStepperIconType.remove,
           disabled: widget.disabled || _controller._value <= widget.min,
           theme: widget.theme,
           size: widget.size,
@@ -295,18 +295,18 @@ class _TDStepperState extends State<TDStepper> {
         ),
         Container(
           decoration: BoxDecoration(
-              border: widget.theme == TDStepperTheme.outline
+              border: widget.theme == TStepperTheme.outline
                   ? Border(
                       top: BorderSide(
-                        color: TDTheme.of(context).componentBorderColor,
+                        color: TTheme.of(context).componentBorderColor,
                       ),
                       bottom: BorderSide(
-                        color: TDTheme.of(context).componentBorderColor,
+                        color: TTheme.of(context).componentBorderColor,
                       ))
                   : null),
           child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: widget.theme == TDStepperTheme.normal ? 0 : 4),
+                  horizontal: widget.theme == TStepperTheme.normal ? 0 : 4),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                     minWidth: _getWidth(),
@@ -326,8 +326,8 @@ class _TDStepperState extends State<TDStepper> {
                       style: TextStyle(
                           fontSize: _getFontSize(),
                           color: widget.disabled
-                              ? TDTheme.of(context).textDisabledColor
-                              : TDTheme.of(context).textColorPrimary),
+                              ? TTheme.of(context).textDisabledColor
+                              : TTheme.of(context).textColorPrimary),
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                       keyboardType: TextInputType.number,
@@ -347,7 +347,7 @@ class _TDStepperState extends State<TDStepper> {
 
                               if (widget.onOverlimit != null) {
                                 widget
-                                    .onOverlimit!(TDStepperOverlimitType.minus);
+                                    .onOverlimit!(TStepperOverlimitType.minus);
                               }
 
                               return newValue.copyWith(
@@ -365,7 +365,7 @@ class _TDStepperState extends State<TDStepper> {
                               });
                               if (widget.onOverlimit != null) {
                                 widget
-                                    .onOverlimit!(TDStepperOverlimitType.minus);
+                                    .onOverlimit!(TStepperOverlimitType.minus);
                               }
                             } else if (newNum > widget.max) {
                               setState(() {
@@ -373,7 +373,7 @@ class _TDStepperState extends State<TDStepper> {
                               });
                               if (widget.onOverlimit != null) {
                                 widget
-                                    .onOverlimit!(TDStepperOverlimitType.plus);
+                                    .onOverlimit!(TStepperOverlimitType.plus);
                               }
                             } else {
                               setState(() {
@@ -402,8 +402,8 @@ class _TDStepperState extends State<TDStepper> {
                 ),
               )),
         ),
-        TDStepperIconButton(
-          type: TDStepperIconType.add,
+        TStepperIconButton(
+          type: TStepperIconType.add,
           disabled: widget.disabled || _controller._value >= widget.max,
           theme: widget.theme,
           size: widget.size,
@@ -425,31 +425,31 @@ class _TDStepperState extends State<TDStepper> {
   }
 }
 
-typedef TDTapFunction = void Function();
+typedef TTapFunction = void Function();
 
-class TDStepperIconButton extends StatelessWidget {
-  const TDStepperIconButton({
+class TStepperIconButton extends StatelessWidget {
+  const TStepperIconButton({
     Key? key,
     this.onTap,
-    this.size = TDStepperSize.medium,
+    this.size = TStepperSize.medium,
     this.disabled = false,
-    this.theme = TDStepperTheme.normal,
+    this.theme = TStepperTheme.normal,
     required this.type,
   }) : super(key: key);
 
-  final TDTapFunction? onTap;
-  final TDStepperSize size;
-  final TDStepperIconType type;
+  final TTapFunction? onTap;
+  final TStepperSize size;
+  final TStepperIconType type;
   final bool disabled;
-  final TDStepperTheme theme;
+  final TStepperTheme theme;
 
   double _getIconSize() {
     switch (size) {
-      case TDStepperSize.large:
+      case TStepperSize.large:
         return 20;
-      case TDStepperSize.medium:
+      case TStepperSize.medium:
         return 16;
-      case TDStepperSize.small:
+      case TStepperSize.small:
         return 12;
       default:
         return 16;
@@ -457,35 +457,35 @@ class TDStepperIconButton extends StatelessWidget {
   }
 
   Icon _getIcon(context) {
-    var iconType = type == TDStepperIconType.add ? Icons.add : Icons.remove;
+    var iconType = type == TStepperIconType.add ? Icons.add : Icons.remove;
 
     return Icon(iconType,
         size: _getIconSize(),
         color: disabled
-            ? TDTheme.of(context).textDisabledColor
-            : TDTheme.of(context).textColorPrimary);
+            ? TTheme.of(context).textDisabledColor
+            : TTheme.of(context).textColorPrimary);
   }
 
   Color? _getBackgroundColor(BuildContext context) {
     switch (theme) {
-      case TDStepperTheme.filled:
+      case TStepperTheme.filled:
         return disabled
-            ? TDTheme.of(context).bgColorComponentDisabled
-            : TDTheme.of(context).bgColorSecondaryContainer;
-      case TDStepperTheme.outline:
-        return disabled ? TDTheme.of(context).bgColorComponentDisabled : null;
-      case TDStepperTheme.normal:
+            ? TTheme.of(context).bgColorComponentDisabled
+            : TTheme.of(context).bgColorSecondaryContainer;
+      case TStepperTheme.outline:
+        return disabled ? TTheme.of(context).bgColorComponentDisabled : null;
+      case TStepperTheme.normal:
       default:
         return null;
     }
   }
 
   BorderRadiusGeometry? _getBorderRadius(BuildContext context) {
-    if (theme == TDStepperTheme.normal) {
+    if (theme == TStepperTheme.normal) {
       return null;
     }
 
-    return type == TDStepperIconType.remove
+    return type == TStepperIconType.remove
         ? const BorderRadius.only(
             topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
         : const BorderRadius.only(
@@ -493,9 +493,9 @@ class TDStepperIconButton extends StatelessWidget {
   }
 
   BoxBorder? _getBoxBorder(BuildContext context) {
-    if (theme == TDStepperTheme.outline) {
+    if (theme == TStepperTheme.outline) {
       return Border.all(
-        color: TDTheme.of(context).componentBorderColor,
+        color: TTheme.of(context).componentBorderColor,
       );
     }
 

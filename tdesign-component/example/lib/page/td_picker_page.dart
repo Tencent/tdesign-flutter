@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDPickerPage extends StatefulWidget {
-  const TDPickerPage({Key? key}) : super(key: key);
+class TPickerPage extends StatefulWidget {
+  const TPickerPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDPickerPageState();
+  State<StatefulWidget> createState() => _TPickerPageState();
 }
 
-class _TDPickerPageState extends State<TDPickerPage> {
+class _TPickerPageState extends State<TPickerPage> {
   String selected_1 = '';
   List<String> data_1 = ['广州市', '韶关市', '深圳市', '珠海区', '汕头市'];
   String selected_2 = '';
@@ -222,12 +222,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
   @Demo(group: 'picker')
   Widget buildArea(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_1.isEmpty ? '请选择' : selected_1,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: title,
           onConfirm: (selected) {
@@ -245,12 +245,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
   @Demo(group: 'picker')
   Widget buildTime(BuildContext context) {
     const title = '选择时间';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_2.isEmpty ? '请选择' : selected_2,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: title,
           onConfirm: (selected) {
@@ -270,12 +270,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
   @Demo(group: 'picker')
   Widget buildMultiArea(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiLinkedPicker(
+        TPicker.showMultiLinkedPicker(
           context,
           title: title,
           onConfirm: (selected) {
@@ -295,12 +295,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
   @Demo(group: 'picker')
   Widget buildAreaWithTitle(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_4.isEmpty ? '请选择' : selected_4,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: '带标题选择器',
           onConfirm: (selected) {
@@ -317,12 +317,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
 
   @Demo(group: 'picker')
   Widget buildAreaWithoutTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择地区',
       note: selected_5.isEmpty ? '请选择' : selected_5,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           // 不传或传空字符串、null，则不显示标题
           // title: '',
@@ -340,7 +340,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
 
   @Demo(group: 'picker')
   Widget buildWithoutHeader(BuildContext context) {
-    return TDMultiPicker(
+    return TMultiPicker(
       /// 不显示header内容
       header: false,
       /// todo onChange
@@ -356,14 +356,14 @@ class _TDPickerPageState extends State<TDPickerPage> {
 
   @Demo(group: 'picker')
   Widget buildCustomLeftRightText(BuildContext context) {
-    return TDCellGroup(
+    return TCellGroup(
       cells: [
-        TDCell(
+        TCell(
           title: '基础选择器',
           note: selected_5.isEmpty ? '请选择' : selected_5,
           arrow: true,
           onClick: (click) {
-            TDPicker.showMultiPicker(
+            TPicker.showMultiPicker(
               context,
               leftText: '自定义取消',
               rightText: '自定义确认',
@@ -378,12 +378,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
             );
           },
         ),
-        TDCell(
+        TCell(
           title: '联动选择器',
           note: selected_3.isEmpty ? '请选择' : selected_3,
           arrow: true,
           onClick: (click) {
-            TDPicker.showMultiLinkedPicker(
+            TPicker.showMultiLinkedPicker(
               context,
               leftText: '自定义取消',
               rightText: '自定义确认',
@@ -406,12 +406,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
 
   @Demo(group: 'picker')
   Widget buildKeepMultiArea(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择地区',
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiLinkedPicker(
+        TPicker.showMultiLinkedPicker(
           context,
           title: '选择地区',
           onConfirm: (selected) {

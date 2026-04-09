@@ -46,7 +46,7 @@
    如果没有指定 `--folder-name`，默认文件夹名称是第一个 `name` 参数的下划线表示。示例：
 
    ```bash
-   ./demo_tool/bin/api_tool_xxx generate --file lib/src/components/tags/td_tag.dart --name TDTag --folder-name tag --only-api
+   ./demo_tool/bin/api_tool_xxx generate --file lib/src/components/tags/td_tag.dart --name TTag --folder-name tag --only-api
    ```
 
 2. **把一个文件中的多个组件合并生成一份示例数据**  
@@ -93,10 +93,10 @@ Widget build(BuildContext context) {
 }
 
 @Demo(group: 'button')
-TDButton _buildNormalClickButton(BuildContext context) {
-  return TDButton(
+TButton _buildNormalClickButton(BuildContext context) {
+  return TButton(
     content: '强按钮',
-    style: TDButtonStyle.primary(),
+    style: TButtonStyle.primary(),
     onTap: onTap,
     onLongPress: onLongPress,
   );

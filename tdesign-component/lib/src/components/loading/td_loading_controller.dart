@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../util/context_extension.dart';
 import 'td_loading.dart';
 
-class TDLoadingController {
+class TLoadingController {
   static BuildContext? _context;
   static OverlayEntry? _overlayEntry;
 
@@ -11,8 +11,8 @@ class TDLoadingController {
   // 展示
   static void show(BuildContext context,
       {Widget? child,
-      TDLoadingSize size = TDLoadingSize.medium,
-      TDLoadingIcon? icon = TDLoadingIcon.circle,
+      TLoadingSize size = TLoadingSize.medium,
+      TLoadingIcon? icon = TLoadingIcon.circle,
       Color? iconColor,
       String? text,
       Widget? refreshWidget,
@@ -21,14 +21,14 @@ class TDLoadingController {
       Widget? customIcon,
       int duration = 2000}) {
     if (_isShowing) {
-      print('warn: TDLoading is showing!');
+      print('warn: TLoading is showing!');
       return;
     }
 
     _overlayEntry = OverlayEntry(builder: (context) {
       return Center(
         child: child ??
-            TDLoading(
+            TLoading(
               size: size,
               icon: icon,
               customIcon: customIcon,
@@ -44,7 +44,7 @@ class TDLoadingController {
 
     _context = context;
     if (_context == null || _overlayEntry == null) {
-      print('error: TDLoading is not init!:${_context} ${_overlayEntry}');
+      print('error: TLoading is not init!:${_context} ${_overlayEntry}');
       return;
     }
     _isShowing = true;

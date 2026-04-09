@@ -14,7 +14,7 @@ enum IconTextDirection {
 }
 
 /// Toast配置类，支持独立样式定制
-class TDToastConfig {
+class TToastConfig {
   final Color? backgroundColor;
   final TextStyle? textStyle;
   final double? iconSize;
@@ -22,7 +22,7 @@ class TDToastConfig {
   final Duration duration;
   final bool preventTap;
 
-  const TDToastConfig({
+  const TToastConfig({
     this.backgroundColor,
     this.textStyle,
     this.iconSize,
@@ -54,7 +54,7 @@ class _ToastInstance {
 }
 
 /// 改进的Toast组件，支持多个实例和独立样式
-class TDToast {
+class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
   static int _instanceCounter = 0;
 
@@ -78,12 +78,12 @@ class TDToast {
   }) {
     final id = toastId ?? _generateToastId();
     _showOverlay(
-      _TDTextToast(
+      _TTextToast(
         text: text,
         maxLines: maxLines,
         constraints: constraints,
         customWidget: customWidget,
-        config: TDToastConfig(
+        config: TToastConfig(
           backgroundColor: backgroundColor,
           textStyle: textStyle,
           duration: duration,
@@ -115,12 +115,12 @@ class TDToast {
   }) {
     final id = toastId ?? _generateToastId();
     _showOverlay(
-      _TDIconTextToast(
+      _TIconTextToast(
         text: text,
         iconData: icon,
         iconTextDirection: direction,
         maxLines: maxLines,
-        config: TDToastConfig(
+        config: TToastConfig(
           backgroundColor: backgroundColor,
           textStyle: textStyle,
           iconSize: iconSize,
@@ -153,7 +153,7 @@ class TDToast {
   }) {
     return showIconText(
       text,
-      icon: TDIcons.check_circle,
+      icon: TIcons.check_circle,
       direction: direction,
       context: context,
       duration: duration,
@@ -183,7 +183,7 @@ class TDToast {
   }) {
     return showIconText(
       text,
-      icon: TDIcons.error_circle,
+      icon: TIcons.error_circle,
       direction: direction,
       context: context,
       duration: duration,
@@ -213,7 +213,7 @@ class TDToast {
   }) {
     return showIconText(
       text,
-      icon: TDIcons.close_circle,
+      icon: TIcons.close_circle,
       direction: direction,
       context: context,
       duration: duration,
@@ -242,10 +242,10 @@ class TDToast {
   }) {
     final id = toastId ?? _generateToastId();
     _showOverlay(
-      _TDToastLoading(
+      _TToastLoading(
         text: text,
         customWidget: customWidget,
-        config: TDToastConfig(
+        config: TToastConfig(
           backgroundColor: backgroundColor,
           textStyle: textStyle,
           iconSize: iconSize,
@@ -274,8 +274,8 @@ class TDToast {
   }) {
     final id = toastId ?? _generateToastId();
     _showOverlay(
-      _TDToastLoadingWithoutText(
-        config: TDToastConfig(
+      _TToastLoadingWithoutText(
+        config: TToastConfig(
           backgroundColor: backgroundColor,
           iconSize: iconSize,
           iconColor: iconColor,
@@ -384,14 +384,14 @@ class TDToast {
   }
 }
 
-class _TDIconTextToast extends StatelessWidget {
+class _TIconTextToast extends StatelessWidget {
   final String? text;
   final IconData? iconData;
   final IconTextDirection iconTextDirection;
   final int? maxLines;
-  final TDToastConfig config;
+  final TToastConfig config;
 
-  const _TDIconTextToast({
+  const _TIconTextToast({
     this.text,
     this.iconData,
     this.iconTextDirection = IconTextDirection.horizontal,
@@ -400,7 +400,7 @@ class _TDIconTextToast extends StatelessWidget {
   });
 
   Widget buildHorizontalWidgets(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 191, maxHeight: 94),
       child: Container(
@@ -420,7 +420,7 @@ class _TDIconTextToast extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Flexible(
-                  child: TDText(
+                  child: TText(
                 text ?? '',
                 font: config.textStyle != null ? null : theme.fontBodyMedium,
                 style: config.textStyle,
@@ -434,7 +434,7 @@ class _TDIconTextToast extends StatelessWidget {
   }
 
   Widget buildVerticalWidgets(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 136),
       child: Container(
@@ -453,7 +453,7 @@ class _TDIconTextToast extends StatelessWidget {
               color: config.iconColor ?? theme.whiteColor1,
             ),
             const SizedBox(height: 8),
-            TDText(
+            TText(
               text ?? '',
               font: config.textStyle != null ? null : theme.fontBodyMedium,
               style: config.textStyle,
@@ -475,12 +475,12 @@ class _TDIconTextToast extends StatelessWidget {
   }
 }
 
-class _TDToastLoading extends StatelessWidget {
+class _TToastLoading extends StatelessWidget {
   final String? text;
   final Widget? customWidget;
-  final TDToastConfig config;
+  final TToastConfig config;
 
-  const _TDToastLoading({
+  const _TToastLoading({
     this.text,
     this.customWidget,
     required this.config,
@@ -488,7 +488,7 @@ class _TDToastLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return Container(
         height: 110,
         width: 110,
@@ -501,14 +501,14 @@ class _TDToastLoading extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            TDCircleIndicator(
+            TCircleIndicator(
               color: config.iconColor ?? theme.whiteColor1,
               size: config.iconSize ?? 32,
               lineWidth: 4,
             ),
             const SizedBox(height: 8),
             customWidget ??
-                TDText(
+                TText(
                   text ?? context.resource.loadingWithPoint,
                   font: config.textStyle != null ? null : theme.fontBodyMedium,
                   style: config.textStyle,
@@ -521,16 +521,16 @@ class _TDToastLoading extends StatelessWidget {
   }
 }
 
-class _TDToastLoadingWithoutText extends StatelessWidget {
-  final TDToastConfig config;
+class _TToastLoadingWithoutText extends StatelessWidget {
+  final TToastConfig config;
 
-  const _TDToastLoadingWithoutText({
+  const _TToastLoadingWithoutText({
     required this.config,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return Container(
       width: 80,
       height: 80,
@@ -539,7 +539,7 @@ class _TDToastLoadingWithoutText extends StatelessWidget {
         color: config.backgroundColor ?? theme.fontGyColor1,
         borderRadius: BorderRadius.circular(theme.radiusDefault),
       ),
-      child: TDCircleIndicator(
+      child: TCircleIndicator(
         color: config.iconColor ?? theme.whiteColor1,
         size: config.iconSize ?? 32,
         lineWidth: 4,
@@ -548,14 +548,14 @@ class _TDToastLoadingWithoutText extends StatelessWidget {
   }
 }
 
-class _TDTextToast extends StatelessWidget {
+class _TTextToast extends StatelessWidget {
   final String? text;
   final int? maxLines;
   final BoxConstraints? constraints;
   final Widget? customWidget;
-  final TDToastConfig config;
+  final TToastConfig config;
 
-  const _TDTextToast({
+  const _TTextToast({
     this.text,
     this.maxLines,
     this.constraints,
@@ -565,7 +565,7 @@ class _TDTextToast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return ConstrainedBox(
       constraints: constraints ?? BoxConstraints(maxWidth: 191.scale),
       child: Container(
@@ -575,7 +575,7 @@ class _TDTextToast extends StatelessWidget {
           borderRadius: BorderRadius.circular(theme.radiusDefault),
         ),
         child: customWidget ??
-            TDText(
+            TText(
               text ?? '',
               font: config.textStyle != null ? null : theme.fontBodyMedium,
               style: config.textStyle,

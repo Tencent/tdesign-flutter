@@ -11,7 +11,7 @@ import 'td_activity_indicator.dart';
 import 'td_point_indicator.dart';
 
 /// Loading 尺寸
-enum TDLoadingSize {
+enum TLoadingSize {
   /// 小尺寸
   small,
 
@@ -23,7 +23,7 @@ enum TDLoadingSize {
 }
 
 /// Loading图标
-enum TDLoadingIcon {
+enum TLoadingIcon {
   /// 圆形
   circle,
 
@@ -34,11 +34,11 @@ enum TDLoadingIcon {
   activity,
 }
 
-class TDLoading extends StatelessWidget {
-  const TDLoading({
+class TLoading extends StatelessWidget {
+  const TLoading({
     Key? key,
     required this.size,
-    this.icon = TDLoadingIcon.circle,
+    this.icon = TLoadingIcon.circle,
     this.iconColor,
     this.axis = Axis.vertical,
     this.text,
@@ -49,10 +49,10 @@ class TDLoading extends StatelessWidget {
   }) : super(key: key);
 
   /// 尺寸
-  final TDLoadingSize size;
+  final TLoadingSize size;
 
   /// 图标，支持圆形、点状、菊花状
-  final TDLoadingIcon? icon;
+  final TLoadingIcon? icon;
 
   /// 图标颜色
   final Color? iconColor;
@@ -93,24 +93,24 @@ class TDLoading extends StatelessWidget {
         indicator = customIcon!;
       } else {
         switch (icon!) {
-          case TDLoadingIcon.activity:
-            indicator = TDCupertinoActivityIndicator(
+          case TLoadingIcon.activity:
+            indicator = TCupertinoActivityIndicator(
               activeColor: iconColor,
-              radius: size == TDLoadingSize.small
+              radius: size == TLoadingSize.small
                   ? 10
-                  : (size == TDLoadingSize.medium ? 11 : 13),
+                  : (size == TLoadingSize.medium ? 11 : 13),
               duration: _innerDuration,
             );
             break;
-          case TDLoadingIcon.circle:
+          case TLoadingIcon.circle:
             indicator = _getCircleIndicator();
             break;
-          case TDLoadingIcon.point:
-            indicator = TDPointBounceIndicator(
+          case TLoadingIcon.point:
+            indicator = TPointBounceIndicator(
               color: iconColor,
-              size: size == TDLoadingSize.small
+              size: size == TLoadingSize.small
                   ? 12
-                  : (size == TDLoadingSize.medium ? 16 : 20),
+                  : (size == TLoadingSize.medium ? 16 : 20),
               duration: _innerDuration,
             );
             break;
@@ -141,22 +141,22 @@ class TDLoading extends StatelessWidget {
 
   Widget _getCircleIndicator() {
     switch (size) {
-      case TDLoadingSize.large:
-        return TDCircleIndicator(
+      case TLoadingSize.large:
+        return TCircleIndicator(
           color: iconColor,
           size: 24,
           lineWidth: 3 * 4 / 3, // 根据small等等比缩放
           duration: _innerDuration,
         );
-      case TDLoadingSize.medium:
-        return TDCircleIndicator(
+      case TLoadingSize.medium:
+        return TCircleIndicator(
           color: iconColor,
           size: 21,
           lineWidth: 3 * 7 / 6, // 根据small等等比缩放
           duration: _innerDuration,
         );
-      case TDLoadingSize.small:
-        return TDCircleIndicator(
+      case TLoadingSize.small:
+        return TCircleIndicator(
           color: iconColor,
           size: 18, // 设计稿框为24，图形宽为19.5，推导lineWidth为3时，size为18
           lineWidth: 3,
@@ -167,28 +167,28 @@ class TDLoading extends StatelessWidget {
 
   double _getPaddingSize() {
     switch (size) {
-      case TDLoadingSize.large:
+      case TLoadingSize.large:
         return 10;
-      case TDLoadingSize.medium:
+      case TLoadingSize.medium:
         return 8;
-      case TDLoadingSize.small:
+      case TLoadingSize.small:
         return 6;
     }
   }
 
   Widget textWidget(BuildContext context) {
     final font = switch (size) {
-      TDLoadingSize.large =>
-        TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24),
-      TDLoadingSize.medium =>
-        TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22),
-      TDLoadingSize.small =>
-        TDTheme.of(context).fontBodySmall ?? Font(size: 12, lineHeight: 20),
+      TLoadingSize.large =>
+        TTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24),
+      TLoadingSize.medium =>
+        TTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22),
+      TLoadingSize.small =>
+        TTheme.of(context).fontBodySmall ?? Font(size: 12, lineHeight: 20),
     };
 
-    Widget result = TDText(
+    Widget result = TText(
       text,
-      textColor: textColor ?? TDTheme.of(context).textColorPrimary,
+      textColor: textColor ?? TTheme.of(context).textColorPrimary,
       fontWeight: FontWeight.w400,
       font: font,
       textAlign: TextAlign.center,

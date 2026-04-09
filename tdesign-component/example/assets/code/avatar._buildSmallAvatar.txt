@@ -3,21 +3,21 @@
     return const Row(
       // spacing: 56,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.small,
-          type: TDAvatarType.normal,
+        TAvatar(
+          size: TAvatarSize.small,
+          type: TAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
         SizedBox(width: 56),
-        TDAvatar(
-          size: TDAvatarSize.small,
-          type: TDAvatarType.customText,
+        TAvatar(
+          size: TAvatarSize.small,
+          type: TAvatarType.customText,
           text: 'A',
         ),
         SizedBox(width: 56),
-        TDAvatar(
-          size: TDAvatarSize.small,
-          type: TDAvatarType.icon,
+        TAvatar(
+          size: TAvatarSize.small,
+          type: TAvatarType.icon,
         ),
       ],
     );

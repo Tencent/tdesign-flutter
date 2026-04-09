@@ -4,53 +4,53 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDTabsPage extends StatefulWidget {
-  const TDTabsPage({Key? key}) : super(key: key);
+class TTabsPage extends StatefulWidget {
+  const TTabsPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDTabsPageState();
+  State<StatefulWidget> createState() => _TTabsPageState();
 }
 
-class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
+class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
   TabController? _tabController1;
   TabController? _tabController2;
   TabController? _tabController3;
   TabController? _tabController4;
-  List<TDTab> tabs = [];
+  List<TTab> tabs = [];
   List<Widget> tabViews = [];
 
-  List<TDTab> _getTabs() {
+  List<TTab> _getTabs() {
     tabs = const [
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
     ];
     return tabs;
   }
 
   List<Widget> _getTabViews() {
     tabViews = const [
-      Center(child: TDText('内容区 1')),
-      Center(child: TDText('内容区 2')),
-      Center(child: TDText('内容区 3')),
+      Center(child: TText('内容区 1')),
+      Center(child: TText('内容区 2')),
+      Center(child: TText('内容区 3')),
     ];
     return tabViews;
   }
@@ -62,20 +62,20 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  List<TDTab> subList(int length) {
-    var temp = <TDTab>[];
+  List<TTab> subList(int length) {
+    var temp = <TTab>[];
     for (var i = 0; i < length; i++) {
       temp.add(tabs[i]);
     }
     switch (length) {
       case 3:
-        temp[temp.length - 1] = const TDTab(text: '上限六个字');
+        temp[temp.length - 1] = const TTab(text: '上限六个字');
         break;
       case 4:
-        temp[temp.length - 1] = const TDTab(text: '上限四字');
+        temp[temp.length - 1] = const TTab(text: '上限四字');
         break;
       case 5:
-        temp[temp.length - 1] = const TDTab(text: '上限三');
+        temp[temp.length - 1] = const TTab(text: '上限三');
         break;
     }
     return temp;
@@ -131,7 +131,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit1(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       showIndicator: true,
@@ -140,7 +140,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit2(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(3),
       controller: _tabController2,
       showIndicator: true,
@@ -149,7 +149,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit3(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(4),
       controller: _tabController3,
       showIndicator: true,
@@ -158,7 +158,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit4(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(5),
       controller: _tabController4,
       showIndicator: true,
@@ -167,7 +167,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSpace(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(16),
       controller: TabController(length: 16, vsync: this),
       labelPadding: const EdgeInsets.all(10),
@@ -180,12 +180,12 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = List.generate(3, (index) {
       final text = '选项${index + 1}';
-      return TDTab(
+      return TTab(
         text: text,
-        icon: const Icon(TDIcons.app, size: 18),
+        icon: const Icon(TIcons.app, size: 18),
       );
     });
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -195,25 +195,25 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   @Demo(group: 'tabs')
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
-      const TDTab(
+      const TTab(
         text: '选项',
         contentHeight: 48,
         textMargin: EdgeInsets.only(right: 8),
-        badge: TDBadge(TDBadgeType.redPoint),
+        badge: TBadge(TBadgeType.redPoint),
       ),
-      const TDTab(
+      const TTab(
         text: '选项',
         contentHeight: 42,
         textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
-        badge: TDBadge(TDBadgeType.message, message: '8'),
+        badge: TBadge(TBadgeType.message, message: '8'),
       ),
-      const TDTab(
+      const TTab(
         text: '选项',
         height: 48,
-        icon: Icon(TDIcons.app, size: 18),
+        icon: Icon(TIcons.app, size: 18),
       ),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -227,7 +227,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
       height: 120 + 48,
       child: Column(
         children: [
-          TDTabBar(
+          TTabBar(
             tabs: subList(3),
             controller: tabController,
             showIndicator: true,
@@ -235,8 +235,8 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
           ),
           Container(
             height: 120,
-            color: TDTheme.of(context).bgColorContainer,
-            child: TDTabBarView(
+            color: TTheme.of(context).bgColorContainer,
+            child: TTabBarView(
               children: _getTabViews(),
               controller: tabController,
             ),
@@ -249,11 +249,11 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   @Demo(group: 'tabs')
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选中'),
-      const TDTab(text: '默认'),
-      const TDTab(text: '禁用', enable: false),
+      const TTab(text: '选中'),
+      const TTab(text: '默认'),
+      const TTab(text: '禁用', enable: false),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -263,12 +263,12 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   @Demo(group: 'tabs')
   Widget _buildItemWithSizeSmall(BuildContext context) {
     var tabs = [
-      const TDTab(text: '小尺寸'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '小尺寸'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -278,12 +278,12 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   @Demo(group: 'tabs')
   Widget _buildItemWithSizeBig(BuildContext context) {
     var tabs = [
-      const TDTab(text: '大尺寸', size: TDTabSize.large),
-      const TDTab(text: '选项2', size: TDTabSize.large),
-      const TDTab(text: '选项3', size: TDTabSize.large),
-      const TDTab(text: '选项4', size: TDTabSize.large),
+      const TTab(text: '大尺寸', size: TTabSize.large),
+      const TTab(text: '选项2', size: TTabSize.large),
+      const TTab(text: '选项3', size: TTabSize.large),
+      const TTab(text: '选项4', size: TTabSize.large),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -293,14 +293,14 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   @Demo(group: 'tabs')
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项1'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '选项1'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.capsule,
+      outlineType: TTabBarOutlineType.capsule,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: false,
     );
@@ -309,14 +309,14 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   @Demo(group: 'tabs')
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项1'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '选项1'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.card,
+      outlineType: TTabBarOutlineType.card,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: false,
     );
@@ -324,7 +324,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _customIndicatorStyle(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       showIndicator: true,
@@ -337,7 +337,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _customDividerStyle(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       showIndicator: true,
@@ -348,7 +348,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _hideBottomDivider(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       showIndicator: true,
@@ -359,11 +359,11 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   @Demo(group: 'tabs')
   Widget _capsuleBackgroundColor(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.red,
-      outlineType: TDTabBarOutlineType.capsule,
+      outlineType: TTabBarOutlineType.capsule,
     );
   }
 }

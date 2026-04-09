@@ -10,14 +10,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDLoadingPage extends StatefulWidget {
-  const TDLoadingPage({Key? key}) : super(key: key);
+class TLoadingPage extends StatefulWidget {
+  const TLoadingPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDLoadingPageState();
+  State<StatefulWidget> createState() => _TLoadingPageState();
 }
 
-class _TDLoadingPageState extends State<TDLoadingPage> {
+class _TLoadingPageState extends State<TLoadingPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -48,19 +48,19 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             builder: (_) {
               return Padding(
                 padding: const EdgeInsets.all(16),
-                child: TDLoading(
-                  icon: TDLoadingIcon.circle,
-                  size: TDLoadingSize.small,
+                child: TLoading(
+                  icon: TLoadingIcon.circle,
+                  size: TLoadingSize.small,
                   axis: Axis.horizontal,
                   text: '加载失败',
                   refreshWidget: GestureDetector(
-                    child: TDText(
+                    child: TText(
                       '刷新',
-                      font: TDTheme.of(context).fontBodySmall,
-                      textColor: TDTheme.of(context).brandNormalColor,
+                      font: TTheme.of(context).fontBodySmall,
+                      textColor: TTheme.of(context).brandNormalColor,
                     ),
                     onTap: () {
-                      TDToast.showText('刷新', context: context);
+                      TToast.showText('刷新', context: context);
                     },
                   ),
                 ),
@@ -72,18 +72,18 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             builder: (_) {
               return Container(
                 padding: const EdgeInsets.all(16),
-                child: TDLoading(
-                  icon: TDLoadingIcon.circle,
-                  size: TDLoadingSize.small,
+                child: TLoading(
+                  icon: TLoadingIcon.circle,
+                  size: TLoadingSize.small,
                   text: '加载失败',
                   refreshWidget: GestureDetector(
-                    child: TDText(
+                    child: TText(
                       '刷新',
-                      font: TDTheme.of(context).fontBodySmall,
-                      textColor: TDTheme.of(context).brandNormalColor,
+                      font: TTheme.of(context).fontBodySmall,
+                      textColor: TTheme.of(context).brandNormalColor,
                     ),
                     onTap: () {
-                      TDToast.showText('刷新', context: context);
+                      TToast.showText('刷新', context: context);
                     },
                   ),
                 ),
@@ -97,16 +97,16 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                   // spacing: 36,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TDLoading(
-                      size: TDLoadingSize.large,
-                      icon: TDLoadingIcon.circle,
+                    TLoading(
+                      size: TLoadingSize.large,
+                      icon: TLoadingIcon.circle,
                       text: '加载中…',
                       axis: Axis.vertical,
                     ),
                     SizedBox(width: 36),
-                    TDLoading(
-                      size: TDLoadingSize.large,
-                      icon: TDLoadingIcon.activity,
+                    TLoading(
+                      size: TLoadingSize.large,
+                      icon: TLoadingIcon.activity,
                       text: '加载中…',
                       axis: Axis.vertical,
                     ),
@@ -120,18 +120,18 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                 // spacing: 36,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TDButton(
+                  TButton(
                     text: '展示Loading',
-                    theme: TDButtonTheme.primary,
+                    theme: TButtonTheme.primary,
                     onTap: () {
-                      TDLoadingController.show(context);
+                      TLoadingController.show(context);
                     },
                   ),
                   const SizedBox(width: 36),
-                  const TDButton(
+                  const TButton(
                     text: '隐藏Loading',
-                    theme: TDButtonTheme.primary,
-                    onTap: TDLoadingController.dismiss,
+                    theme: TButtonTheme.primary,
+                    onTap: TLoadingController.dismiss,
                   ),
                 ],
               );
@@ -147,20 +147,20 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
         ),
         const SizedBox(width: 36),
-        const TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.activity,
+        const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.activity,
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.point,
-          iconColor: TDTheme.of(context).brandNormalColor,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.point,
+          iconColor: TTheme.of(context).brandNormalColor,
         ),
       ],
     );
@@ -173,16 +173,16 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
           text: '加载中…',
           axis: Axis.horizontal,
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.activity,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.activity,
           text: '加载中…',
           axis: Axis.horizontal,
         ),
@@ -197,16 +197,16 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
           text: '加载中…',
           axis: Axis.vertical,
         ),
         SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.activity,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.activity,
           text: '加载中…',
           axis: Axis.vertical,
         ),
@@ -221,28 +221,28 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TDLoading(
-          size: TDLoadingSize.small,
+        const TLoading(
+          size: TLoadingSize.small,
           text: '加载中…',
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
+        TLoading(
+          size: TLoadingSize.small,
           text: '加载失败',
-          textColor: TDTheme.of(context).textColorPlaceholder,
+          textColor: TTheme.of(context).textColorPlaceholder,
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
+        TLoading(
+          size: TLoadingSize.small,
           text: '加载失败',
           refreshWidget: GestureDetector(
-            child: TDText(
+            child: TText(
               '刷新',
-              font: TDTheme.of(context).fontBodySmall,
-              textColor: TDTheme.of(context).brandNormalColor,
+              font: TTheme.of(context).fontBodySmall,
+              textColor: TTheme.of(context).brandNormalColor,
             ),
             onTap: () {
-              TDToast.showText('刷新', context: context);
+              TToast.showText('刷新', context: context);
             },
           ),
         ),
@@ -253,9 +253,9 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   /// 大尺寸
   @Demo(group: 'loading')
   Widget _buildLargeLoading(BuildContext context) {
-    return const TDLoading(
-      size: TDLoadingSize.large,
-      icon: TDLoadingIcon.circle,
+    return const TLoading(
+      size: TLoadingSize.large,
+      icon: TLoadingIcon.circle,
       text: '加载中…',
       axis: Axis.horizontal,
     );
@@ -264,9 +264,9 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   /// 中尺寸
   @Demo(group: 'loading')
   Widget _buildMediumLoading(BuildContext context) {
-    return const TDLoading(
-      size: TDLoadingSize.medium,
-      icon: TDLoadingIcon.circle,
+    return const TLoading(
+      size: TLoadingSize.medium,
+      icon: TLoadingIcon.circle,
       text: '加载中…',
       axis: Axis.horizontal,
     );
@@ -275,9 +275,9 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   /// 小尺寸
   @Demo(group: 'loading')
   Widget _buildSmallLoading(BuildContext context) {
-    return const TDLoading(
-      size: TDLoadingSize.small,
-      icon: TDLoadingIcon.circle,
+    return const TLoading(
+      size: TLoadingSize.small,
+      icon: TLoadingIcon.circle,
       text: '加载中…',
       axis: Axis.horizontal,
     );
@@ -292,17 +292,17 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       // spacing: 16,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
           axis: Axis.horizontal,
           text: '加载中…',
           duration: _currentSliderValue.round(),
         ),
         const SizedBox(height: 16),
-        TDSlider(
+        TSlider(
           value: _currentSliderValue,
-          sliderThemeData: TDSliderThemeData(
+          sliderThemeData: TSliderThemeData(
             context: context,
             max: 2000,
             min: -20,

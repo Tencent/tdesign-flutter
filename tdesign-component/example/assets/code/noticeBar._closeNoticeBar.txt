@@ -1,8 +1,8 @@
 
 Widget _closeNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
+  return const TNoticeBar(
     content: '这是一条普通的通知信息',
-    prefixIcon: TDIcons.error_circle_filled,
-    suffixIcon: TDIcons.close,
+    prefixIcon: TIcons.error_circle_filled,
+    suffixIcon: TIcons.close,
   );
 }

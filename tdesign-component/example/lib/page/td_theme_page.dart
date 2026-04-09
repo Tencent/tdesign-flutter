@@ -6,14 +6,14 @@ import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 /// 主题颜色示例页
-class TDThemeColorsPage extends StatefulWidget {
-  const TDThemeColorsPage({Key? key}) : super(key: key);
+class TThemeColorsPage extends StatefulWidget {
+  const TThemeColorsPage({Key? key}) : super(key: key);
 
   @override
-  _TDThemeColorsPageState createState() => _TDThemeColorsPageState();
+  _TThemeColorsPageState createState() => _TThemeColorsPageState();
 }
 
-class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
+class _TThemeColorsPageState extends State<TThemeColorsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -51,7 +51,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
 
   void _initData() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      TDTheme.of(context).colorMap.forEach((key, value) {
+      TTheme.of(context).colorMap.forEach((key, value) {
         if (key.startsWith('brand')) {
           brandMap[key] = value;
         } else if (key.startsWith('error')) {
@@ -67,8 +67,8 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
         }
       });
 
-      TDTheme.of(context).refMap.forEach((key, value) {
-        var color = TDTheme.of(context).colorMap[key];
+      TTheme.of(context).refMap.forEach((key, value) {
+        var color = TTheme.of(context).colorMap[key];
         if (color == null) {
           return;
         }
@@ -94,18 +94,18 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   Widget _buildDefaultTheme(BuildContext context) {
     // 通过TDTheme.of(context).xxx使用公共主题属性
     return Container(
-      margin: EdgeInsets.all(TDTheme.of(context).spacer8),
-      padding: EdgeInsets.all(TDTheme.of(context).spacer8),
+      margin: EdgeInsets.all(TTheme.of(context).spacer8),
+      padding: EdgeInsets.all(TTheme.of(context).spacer8),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorSecondaryContainer,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-        boxShadow: TDTheme.of(context).shadowsBase,
+        color: TTheme.of(context).bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
+        boxShadow: TTheme.of(context).shadowsBase,
       ),
-      child: TDText(
+      child: TText(
         '使用外层默认主题',
-        font: TDTheme.of(context).fontBodyLarge, // 字体，业务方使用时，
+        font: TTheme.of(context).fontBodyLarge, // 字体，业务方使用时，
         textColor:
-            TDTheme.of(context).brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
+            TTheme.of(context).brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
       ),
     );
   }
@@ -113,12 +113,12 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   @Demo(group: 'theme')
   Widget _buildCustomTheme(BuildContext context) {
     /// 开启多主题
-    TDTheme.needMultiTheme(true);
+    TTheme.needMultiTheme(true);
 
     /// 此处替换主题
-    return TDTheme(
+    return TTheme(
         // 替换fonts和colors，其他主题从父类拷贝
-        data: TDTheme.of(context).copyWithTDThemeData('custom', fontMap: {
+        data: TTheme.of(context).copyWithTDThemeData('custom', fontMap: {
           'fontBodyLarge': Font(size: 40, lineHeight: 80),
         }, colorMap: {
           'brandNormalColor': Colors.red
@@ -159,21 +159,21 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
             }
             if (index < 10) {
               return Container(
-                color: TDTheme.of(context)
+                color: TTheme.of(context)
                     .colorMap['${function}Color${index + 1}'],
-                child: TDText('${function}Color${index + 1}'),
+                child: TText('${function}Color${index + 1}'),
               );
             } else {
               return Container(
                 color: map.values.elementAt(index),
-                child: TDText(map.keys.elementAt(index)),
+                child: TText(map.keys.elementAt(index)),
               );
             }
           });
     } else {
-      return TDText(
+      return TText(
         '功能色数量不一样',
-        textColor: TDTheme.of(context).errorNormalColor,
+        textColor: TTheme.of(context).errorNormalColor,
       );
     }
   }
@@ -193,9 +193,9 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             color: type == 0 ? Colors.white : Colors.black,
             child: Container(
-              color: TDTheme.of(context)
+              color: TTheme.of(context)
                   .colorMap['font${function}Color${index + 1}'],
-              child: TDText(
+              child: TText(
                 'font${function}Color${index + 1}',
                 textColor: light ? Colors.black : Colors.white,
               ),
@@ -214,13 +214,13 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
           var light = index < 6;
           if (index == 0) {
             return Container(
-              color: TDTheme.of(context).bgColorContainer,
-              child: const TDText('whiteColor1'),
+              color: TTheme.of(context).bgColorContainer,
+              child: const TText('whiteColor1'),
             );
           } else {
             return Container(
-              color: TDTheme.of(context).colorMap['grayColor${index}'],
-              child: TDText(
+              color: TTheme.of(context).colorMap['grayColor${index}'],
+              child: TText(
                 'grayColor${index}',
                 textColor: light ? Colors.black : Colors.white,
               ),
@@ -241,27 +241,27 @@ class TestWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TDText(
+          TText(
             '使用内层赋值主题',
-            font: TDTheme.of(context).fontBodyLarge, //明确使用内层主题，必须传context
+            font: TTheme.of(context).fontBodyLarge, //明确使用内层主题，必须传context
             textColor:
-                TDTheme.of(context).brandNormalColor, // 明确使用内层主题，必须传context
+                TTheme.of(context).brandNormalColor, // 明确使用内层主题，必须传context
           ),
-          TDText(
+          TText(
             '使用内层不赋值主题',
-            font: TDTheme.of(context).fontTitleExtraLarge, //明确使用内层主题，必须传context
+            font: TTheme.of(context).fontTitleExtraLarge, //明确使用内层主题，必须传context
             textColor:
-                TDTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
+                TTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
           ),
-          const TDButton(
+          const TButton(
             text: '使用内层赋值主题',
-            theme: TDButtonTheme.primary,
+            theme: TButtonTheme.primary,
           ),
-          TDText(
+          TText(
             '使用默认主题',
             font:
-                TDTheme.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
-            textColor: TDTheme.defaultData().brandNormalColor,
+                TTheme.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
+            textColor: TTheme.defaultData().brandNormalColor,
           ),
         ],
       ),
@@ -270,14 +270,14 @@ class TestWidget extends StatelessWidget {
 }
 
 /// 扩展主题属性示例
-extension TGLayouts on TDThemeData {
+extension TGLayouts on TThemeData {
   /// 因为扩展中不能声明字段，只能借助TDExtraThemeData
   double get layout1 => ofExtra<LayoutExtra>()?.layouts['layout1'] ?? 0;
 
   Data2? get data2 => ofExtra<LayoutExtra>()?.data2;
 }
 
-class LayoutExtra extends TDExtraThemeData {
+class LayoutExtra extends TExtraThemeData {
   Map<String, double> layouts = {};
   Data2? data2;
 
@@ -295,6 +295,6 @@ extension Data2Ext on Data2 {
 }
 
 void test() {
-  TDTheme.of(null).layout1;
-  TDTheme.of(null).data2!.test;
+  TTheme.of(null).layout1;
+  TTheme.of(null).data2!.test;
 }

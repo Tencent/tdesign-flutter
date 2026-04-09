@@ -45,7 +45,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(
+          child: TButton(
             text: '更新children',
             onTap: () {
               setState(() {
@@ -68,8 +68,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             children: [
               SizedBox(
                 width: 110,
-                child: TDSideBar(
-                  style: TDSideBarStyle.normal,
+                child: TSideBar(
+                  style: TSideBarStyle.normal,
                   value: currentValue,
                   controller: _sideBarController,
                   onChanged: onChanged,
@@ -80,7 +80,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 child: SingleChildScrollView(
                     controller: _demoScroller,
                     child: Container(
-                      color: TDTheme.of(context).bgColorContainer,
+                      color: TTheme.of(context).bgColorContainer,
                       child: Column(
                         children: [
                           ...pages,
@@ -117,9 +117,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -134,12 +134,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -178,7 +178,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(
+          child: TButton(
             text: '更新children',
             onTap: () {
               setState(() {
@@ -201,8 +201,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             children: [
               SizedBox(
                 width: 110,
-                child: TDSideBar(
-                  style: TDSideBarStyle.normal,
+                child: TSideBar(
+                  style: TSideBarStyle.normal,
                   value: currentValue,
                   controller: _sideBarController,
                   onChanged: onChanged,
@@ -213,7 +213,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 child: SingleChildScrollView(
                     controller: _demoScroller,
                     child: Container(
-                      color: TDTheme.of(context).bgColorContainer,
+                      color: TTheme.of(context).bgColorContainer,
                       child: Column(
                         children: [
                           ...pages,
@@ -250,9 +250,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -267,12 +267,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -310,19 +310,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         index: i,
         label: '选项${i}',
         value: i,
-        icon: TDIcons.app,
+        icon: TIcons.app,
       ));
       pages.add(getAnchorDemo(i));
     }
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
     ));
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -330,12 +330,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -383,12 +383,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
     ));
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -396,12 +396,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.outline,
+          child: TSideBar(
+            style: TSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -440,14 +440,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         index: i,
         label: '选项 $i',
         value: i,
-        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
+        textStyle: TextStyle(color: TTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
     list[1].textStyle = const TextStyle(color: Colors.green);
@@ -463,12 +463,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -518,12 +518,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
     ));
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -531,12 +531,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.outline,
+          child: TSideBar(
+            style: TSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -575,14 +575,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         index: i,
         label: '选项 $i',
         value: i,
-        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
+        textStyle: TextStyle(color: TTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
     list[1].textStyle = const TextStyle(color: Colors.green);
@@ -598,12 +598,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -635,14 +635,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDSideBar
+### TSideBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| children | List<TDSideBarItem> | const [] | 单项 |
+| children | List<TSideBarItem> | const [] | 单项 |
 | contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
-| controller | TDSideBarController? | - | 控制器 |
+| controller | TSideBarController? | - | 控制器 |
 | defaultValue | int? | - | 默认值 |
 | height | double? | - | 高度 |
 | key |  | - |  |
@@ -653,7 +653,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | selectedBgColor | Color? | - | 选择的背景颜色 |
 | selectedColor | Color? | - | 选中值后颜色 |
 | selectedTextStyle | TextStyle? | - | 选中样式 |
-| style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
+| style | TSideBarStyle | TSideBarStyle.normal | 样式 |
 | unSelectedBgColor | Color? | - | 未选择的背景颜色 |
 | unSelectedColor | Color? | - | 未选中颜色 |
 | value | int? | - | 选项值 |
@@ -661,12 +661,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDSideBarItem
+### TSideBarItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TDBadge? | - | 徽标 |
+| badge | TBadge? | - | 徽标 |
 | disabled | bool | false | 是否禁用 |
 | icon | IconData? | - | 图标 |
 | key |  | - |  |

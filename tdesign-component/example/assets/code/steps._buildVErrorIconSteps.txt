@@ -1,33 +1,33 @@
 
   Widget _buildVErrorIconSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
-          errorIcon: TDIcons.close_circle,
+          successIcon: TIcons.cart,
+          errorIcon: TIcons.close_circle,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }

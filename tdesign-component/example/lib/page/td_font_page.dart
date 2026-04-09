@@ -5,8 +5,8 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 /// 字体示例页面
-class TDFontPage extends StatelessWidget {
-  const TDFontPage({Key? key}) : super(key: key);
+class TFontPage extends StatelessWidget {
+  const TFontPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +20,17 @@ class TDFontPage extends StatelessWidget {
                 ignoreCode: true,
                 builder: (context) {
                   var children = <Widget>[];
-                  TDTheme.of(context).fontMap.forEach((key, value) {
+                  TTheme.of(context).fontMap.forEach((key, value) {
                     children.add(Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                              color: TDTheme.of(context).componentBorderColor,
+                              color: TTheme.of(context).componentBorderColor,
                               width: 0.5),
                         ),
                       ),
-                      child: TDText(
+                      child: TText(
                         '@$key:${value.size.toInt()}px',
                         font: value,
 
@@ -40,7 +40,7 @@ class TDFontPage extends StatelessWidget {
                                 ? TextDecoration.underline
                                 : null,
                             decorationColor:
-                                TDTheme.of(context).textColorPrimary),
+                                TTheme.of(context).textColorPrimary),
                       ),
                     ));
                   });
@@ -60,27 +60,27 @@ class TDFontPage extends StatelessWidget {
               return Column(
                 // spacing: 16,
                 children: [
-                  TDText(
+                  TText(
                     '使用主题字体：fontBodySmall',
-                    font: TDTheme.of(context).fontBodySmall,
+                    font: TTheme.of(context).fontBodySmall,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '使用主题字体：fontBodyLarge',
-                    font: TDTheme.of(context).fontBodyLarge,
+                    font: TTheme.of(context).fontBodyLarge,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '不使用数字字体：1234567890abcd',
-                    font: TDTheme.defaultData().fontTitleSmall,
-                    textColor: TDTheme.of(context).brandNormalColor,
+                    font: TTheme.defaultData().fontTitleSmall,
+                    textColor: TTheme.of(context).brandNormalColor,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '使用数字字体：1234567890abcd',
-                    font: TDTheme.defaultData().fontTitleSmall,
-                    textColor: TDTheme.of(context).brandNormalColor,
-                    fontFamily: TDTheme.defaultData().numberFontFamily,
+                    font: TTheme.defaultData().fontTitleSmall,
+                    textColor: TTheme.of(context).brandNormalColor,
+                    fontFamily: TTheme.defaultData().numberFontFamily,
                   )
                 ],
               );
@@ -93,34 +93,34 @@ class TDFontPage extends StatelessWidget {
               return Column(
                 // spacing: 16,
                 children: [
-                  TDText(
+                  TText(
                     '延14字号',
                     style: const TextStyle(fontSize: 14),
-                    font: TDTheme.of(context).fontMarkLarge,
+                    font: TTheme.of(context).fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '延15字号',
                     style: const TextStyle(fontSize: 15),
-                    font: TDTheme.of(context).fontMarkLarge,
+                    font: TTheme.of(context).fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '延16字号',
                     style: const TextStyle(fontSize: 16),
-                    font: TDTheme.of(context).fontMarkLarge,
+                    font: TTheme.of(context).fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '延17字号',
                     style: const TextStyle(fontSize: 17),
-                    font: TDTheme.of(context).fontMarkLarge,
+                    font: TTheme.of(context).fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
-                  TDText(
+                  TText(
                     '延18字号',
                     style: const TextStyle(fontSize: 18),
-                    font: TDTheme.of(context).fontMarkLarge,
+                    font: TTheme.of(context).fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
                   const Text('延-系统字体16字号', style: TextStyle(fontSize: 18)),

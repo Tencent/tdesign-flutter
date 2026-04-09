@@ -1,5 +1,5 @@
 ## API
-### TDImage
+### TImage
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -29,5 +29,5 @@
 | opacity |  | - |  |
 | repeat |  | ImageRepeat.noRepeat |  |
 | semanticLabel |  | - |  |
-| type | TDImageType | TDImageType.roundedSquare | 图片类型 |
+| type | TImageType | TImageType.roundedSquare | 图片类型 |
 | width | double? | - | 自定义宽 |

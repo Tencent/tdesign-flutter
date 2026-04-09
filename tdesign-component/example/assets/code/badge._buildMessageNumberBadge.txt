@@ -6,9 +6,9 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDText('消息', font: TDTheme.of(context).fontBodyLarge),
+          TText('消息', font: TTheme.of(context).fontBodyLarge),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 28,
             bottom: 18,
           )

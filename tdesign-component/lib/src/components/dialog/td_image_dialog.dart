@@ -10,17 +10,17 @@ import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import 'td_dialog_widget.dart';
 
-enum TDDialogImagePosition {
+enum TDialogImagePosition {
   top,
   middle,
 }
 
 /// 带有图片的弹窗控件
-class TDImageDialog extends StatelessWidget {
-  const TDImageDialog({
+class TImageDialog extends StatelessWidget {
+  const TImageDialog({
     Key? key,
     required this.image,
-    this.imagePosition = TDDialogImagePosition.top,
+    this.imagePosition = TDialogImagePosition.top,
     this.backgroundColor,
     this.radius = 12.0,
     this.title,
@@ -61,16 +61,16 @@ class TDImageDialog extends StatelessWidget {
   final Color? contentColor;
 
   /// 左侧按钮配置
-  final TDDialogButtonOptions? leftBtn;
+  final TDialogButtonOptions? leftBtn;
 
   /// 右侧按钮配置
-  final TDDialogButtonOptions? rightBtn;
+  final TDialogButtonOptions? rightBtn;
 
   /// 图片
   final Image image;
 
   /// 图片位置
-  final TDDialogImagePosition? imagePosition;
+  final TDialogImagePosition? imagePosition;
 
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
@@ -100,7 +100,7 @@ class TDImageDialog extends StatelessWidget {
             topRight: Radius.circular(radius)),
         child: _buildImage(context),
       ),
-      TDDialogInfoWidget(
+      TDialogInfoWidget(
         title: title,
         padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
         titleColor: titleColor,
@@ -109,14 +109,14 @@ class TDImageDialog extends StatelessWidget {
         content: content,
         contentColor: contentColor,
       ),
-      const TDDivider(height: 24, color: Colors.transparent),
+      const TDivider(height: 24, color: Colors.transparent),
       _horizontalButtons(context),
     ]);
   }
 
   Widget _buildMiddleImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      TDDialogInfoWidget(
+      TDialogInfoWidget(
         padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
         title: title,
         titleColor: titleColor,
@@ -131,7 +131,7 @@ class TDImageDialog extends StatelessWidget {
           child: _buildImage(context),
         ),
       ),
-      const TDDivider(height: 24, color: Colors.transparent),
+      const TDivider(height: 24, color: Colors.transparent),
       _horizontalButtons(context),
     ]);
   }
@@ -144,7 +144,7 @@ class TDImageDialog extends StatelessWidget {
             topRight: Radius.circular(radius)),
         child: _buildImage(context),
       ),
-      const TDDivider(height: 24, color: Colors.transparent),
+      const TDivider(height: 24, color: Colors.transparent),
       _horizontalButtons(context),
     ]);
   }
@@ -152,7 +152,7 @@ class TDImageDialog extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     if (title == null && content == null) {
       return _buildOnlyImage(context);
-    } else if (imagePosition == TDDialogImagePosition.middle) {
+    } else if (imagePosition == TDialogImagePosition.middle) {
       return _buildMiddleImage(context);
     } else {
       return _buildTopImage(context);
@@ -161,7 +161,7 @@ class TDImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDDialogScaffold(
+    return TDialogScaffold(
         showCloseButton: showCloseButton,
         backgroundColor: backgroundColor,
         radius: radius,
@@ -173,14 +173,14 @@ class TDImageDialog extends StatelessWidget {
       return buttonWidget!;
     }
     final left = leftBtn ??
-        TDDialogButtonOptions(
+        TDialogButtonOptions(
             title: context.resource.cancel,
-            theme: TDButtonTheme.light,
+            theme: TButtonTheme.light,
             action: null);
     final right = rightBtn ??
-        TDDialogButtonOptions(
+        TDialogButtonOptions(
             title: context.resource.confirm,
-            theme: TDButtonTheme.primary,
+            theme: TButtonTheme.primary,
             action: null);
     return HorizontalNormalButtons(
       leftBtn: left,

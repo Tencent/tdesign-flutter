@@ -3,8 +3,8 @@
     return Column(
       // spacing: 16,
       children: [
-        TDSlider(
-          sliderThemeData: TDSliderThemeData(
+        TSlider(
+          sliderThemeData: TSliderThemeData(
             activeTrackColor: Colors.red,
             inactiveTrackColor: Colors.green,
             context: context,
@@ -16,8 +16,8 @@
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             activeTrackColor: Colors.green,
             inactiveTrackColor: Colors.red,
             context: context,

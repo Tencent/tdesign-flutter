@@ -1,11 +1,11 @@
 ## API
-### TDSearchBar
+### TSearchBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | action | String | '' | 自定义操作文字 |
-| alignment | TDSearchAlignment? | TDSearchAlignment.left | 对齐方式，居中或这头部对齐 |
+| alignment | TSearchAlignment? | TSearchAlignment.left | 对齐方式，居中或这头部对齐 |
 | autoFocus | bool | false | 是否自动获取焦点 |
 | autoHeight | bool | false | 是否自动计算高度 |
 | backgroundColor | Color? | - | 背景颜色 |
@@ -17,14 +17,14 @@
 | key |  | - |  |
 | mediumStyle | bool | false | 是否在导航栏中的样式 |
 | needCancel | bool | false | 是否需要取消按钮 |
-| onActionClick | TDSearchBarEvent? | - | 自定义操作回调 |
-| onClearClick | TDSearchBarClearEvent? | - | 自定义操作回调 |
-| onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
+| onActionClick | TSearchBarEvent? | - | 自定义操作回调 |
+| onClearClick | TSearchBarClearEvent? | - | 自定义操作回调 |
+| onEditComplete | TSearchBarCallBack? | - | 编辑完成回调 |
 | onInputClick | GestureTapCallback? | - | 输入框点击事件 |
-| onSubmitted | TDSearchBarEvent? | - | 提交回调 |
+| onSubmitted | TSearchBarEvent? | - | 提交回调 |
 | onTapOutside | TapRegionCallback? | - | 点击输入框外部回调 |
-| onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
+| onTextChanged | TSearchBarEvent? | - | 文字改变回调 |
 | padding | EdgeInsets | const EdgeInsets.symmetric(horizontal: 16, vertical: 8) | 内部填充 |
 | placeHolder | String? | - | 预设文案 |
 | readOnly | bool? | - | 是否只读 |
-| style | TDSearchStyle? | TDSearchStyle.square | 样式 |
+| style | TSearchStyle? | TSearchStyle.square | 样式 |

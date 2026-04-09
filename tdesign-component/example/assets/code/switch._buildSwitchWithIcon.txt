@@ -1,10 +1,10 @@
 
   Widget _buildSwitchWithIcon(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '带图标开关',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: true,
-        type: TDSwitchType.icon,
+        type: TSwitchType.icon,
       ),
     );
   }

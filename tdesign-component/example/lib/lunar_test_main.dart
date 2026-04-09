@@ -21,7 +21,7 @@ class LunarTestApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const TDCalendarLunarTest(),
+      home: const TCalendarLunarTest(),
     );
   }
 }

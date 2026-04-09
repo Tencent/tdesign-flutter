@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDDatePickerPage extends StatefulWidget {
-  const TDDatePickerPage({Key? key}) : super(key: key);
+class TDatePickerPage extends StatefulWidget {
+  const TDatePickerPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDDatePickerPageState();
+  State<StatefulWidget> createState() => _TDatePickerPageState();
 }
 
-class _TDDatePickerPageState extends State<TDDatePickerPage> {
+class _TDatePickerPageState extends State<TDatePickerPage> {
   String selected_1 = '';
   String selected_2 = '';
   String selected_3 = '';
@@ -68,12 +68,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildYearMonthDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_1.isEmpty ? '请选择' : selected_1,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -94,12 +94,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildYearMonth(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_2.isEmpty ? '请选择' : selected_2,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -120,12 +120,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildMonthDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -146,12 +146,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildHourMinuteSecond(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_4.isEmpty ? '请选择' : selected_4,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -178,12 +178,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildAll(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_5.isEmpty ? '请选择' : selected_5,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -210,12 +210,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildWeekDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_6.isEmpty ? '请选择' : selected_6,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -238,12 +238,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildWithTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_7.isEmpty ? '请选择' : selected_7,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -264,12 +264,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildWithoutTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_8.isEmpty ? '请选择' : selected_8,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           // 不传或传空字符串、null，则不显示标题
           // title: '',
@@ -291,7 +291,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget buildWithoutHeader(BuildContext context) {
-    return TDDatePicker(
+    return TDatePicker(
       header: false,
       model: DatePickerModel(
         useYear: true,
@@ -313,12 +313,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget _customStartTime(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_5.isEmpty ? '请选择' : selected_5,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -348,12 +348,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget _customLimitTime(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_4.isEmpty ? '请选择' : selected_4,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -380,12 +380,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget _customItems(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_9.isEmpty ? '请选择' : selected_9,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -414,7 +414,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
           itemBuilder: (context, content, colIndex, index,
               itemDistanceCalculator, distance) {
             return colIndex == 5
-                ? TDText(
+                ? TText(
                     content,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -423,8 +423,8 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                           context, distance),
                       fontSize: index % 2 == 0 ? 20 : 10,
                       color: index % 2 == 1
-                          ? TDTheme.of(context).textColorPrimary
-                          : TDTheme.of(context).successColor6,
+                          ? TTheme.of(context).textColorPrimary
+                          : TTheme.of(context).successColor6,
                     ),
                   )
                 : null;
@@ -436,12 +436,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget _customItemsOnlyHour(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_9.isEmpty ? '请选择' : selected_9,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '只有时分',
           onConfirm: (selected) {
@@ -463,12 +463,12 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @Demo(group: 'datetimePicker')
   Widget _customSelectWidget(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_9,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {

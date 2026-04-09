@@ -2,7 +2,7 @@ import 'basic.dart';
 import 'td_theme.dart';
 
 /// 内置字体数据
-extension TDFonts on TDThemeData {
+extension TFonts on TThemeData {
   /// 字体大小/行高
   /// 64/72
   Font? get fontDisplayLarge => fontMap['fontDisplayLarge'];

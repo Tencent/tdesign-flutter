@@ -17,14 +17,14 @@ export 'td_input_dialog.dart';
 ///
 /// 用于在Dialog层面配置按钮样式
 /// Dialog内支持配置每个按钮的样式
-enum TDDialogButtonStyle {
+enum TDialogButtonStyle {
   normal,
   text,
 }
 
 /// 弹窗按钮配置
-class TDDialogButtonOptions {
-  TDDialogButtonOptions({
+class TDialogButtonOptions {
+  TDialogButtonOptions({
     required this.title,
     required this.action,
     this.titleColor,
@@ -50,13 +50,13 @@ class TDDialogButtonOptions {
 
   /// 按钮样式
   /// 设置单个按钮的样式会覆盖Dialog的默认样式
-  final TDButtonStyle? style;
+  final TButtonStyle? style;
 
   /// 按钮类型
-  final TDButtonType? type;
+  final TButtonType? type;
 
   /// 按钮类型
-  final TDButtonTheme? theme;
+  final TButtonTheme? theme;
 
   /// 按钮高度
   /// 建议使用默认高度

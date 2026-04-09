@@ -1,5 +1,5 @@
 ## API
-### TDNavBar
+### TNavBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -7,17 +7,17 @@
 | backgroundColor | Color? | - | 背景颜色 |
 | backIconColor | Color? | - | 左边返回图标颜色 |
 | belowTitleWidget | Widget? | - | belowTitleWidget navbar 下方的 widget |
-| border | TDNavBarItemBorder? | - | 边框 |
+| border | TNavBarItemBorder? | - | 边框 |
 | boxShadow | List<BoxShadow>? | - | 底部阴影 |
 | centerTitle | bool | true | 标题是否居中 |
 | flexibleSpace | Widget? | - | 固定背景 |
 | height | double | 48 | 高度 |
 | key |  | - |  |
-| leftBarItems | List<TDNavBarItem>? | - | 左边操作项 |
+| leftBarItems | List<TNavBarItem>? | - | 左边操作项 |
 | onBack | VoidCallback? | - | 返回事件 |
 | opacity | double | 1.0 | 透明度 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
-| rightBarItems | List<TDNavBarItem>? | - | 右边操作项 |
+| rightBarItems | List<TNavBarItem>? | - | 右边操作项 |
 | screenAdaptation | bool | true | 是否进行屏幕适配，默认 true |
 | title | String? | - | 标题文案 |
 | titleColor | Color? | - | 标题颜色 |
@@ -32,12 +32,12 @@
 ```
 ```
 
-### TDNavBarItem
+### TNavBarItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action | TDBarItemAction? | - | 操作回调 |
+| action | TBarItemAction? | - | 操作回调 |
 | customWidget | Widget? | - | 自定义组件，优先级高于 icon，可以是任意 Widget |
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |

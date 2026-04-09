@@ -3,8 +3,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDCellPage extends StatelessWidget {
-  const TDCellPage({super.key});
+class TCellPage extends StatelessWidget {
+  const TCellPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +32,17 @@ class TDCellPage extends StatelessWidget {
 @Demo(group: 'cell')
 Widget _buildSimple(BuildContext context) {
   // 可统一修改样式
-  var style = TDCellStyle(context: context);
-  return TDCellGroup(
+  var style = TCellStyle(context: context);
+  return TCellGroup(
     style: style,
     cells: [
       // 可单独修改样式
-      TDCell(
+      TCell(
         arrow: true,
         title: '单行标题',
-        style: TDCellStyle.cellStyle(context),
+        style: TCellStyle.cellStyle(context),
       ),
-      TDCell(
+      TCell(
         arrow: true,
         title: '单行标题',
         required: true,
@@ -53,74 +53,74 @@ Widget _buildSimple(BuildContext context) {
           print('onLongPress 单行标题');
         },
       ),
-      const TDCell(
+      const TCell(
         arrow: true,
         title: '单行标题',
-        noteWidget: TDBadge(TDBadgeType.message, count: '8'),
+        noteWidget: TBadge(TBadgeType.message, count: '8'),
       ),
-      const TDCell(
+      const TCell(
         arrow: false,
         title: '单行标题',
-        rightIconWidget: TDSwitch(isOn: true),
+        rightIconWidget: TSwitch(isOn: true),
       ),
-      const TDCell(
+      const TCell(
         arrow: true,
         title: '单行标题',
         note: '辅助信息',
       ),
-      const TDCell(
+      const TCell(
         arrow: true,
         title: '单行标题',
-        leftIcon: TDIcons.lock_on,
+        leftIcon: TIcons.lock_on,
       ),
-      const TDCell(arrow: false, title: '单行标题'),
+      const TCell(arrow: false, title: '单行标题'),
     ],
   );
 }
 
 @Demo(group: 'cell')
 Widget _buildDesSimple(BuildContext context) {
-  return const TDCellGroup(
+  return const TCellGroup(
     cells: [
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字'),
-      TDCell(
+      TCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字'),
+      TCell(
           arrow: true,
           title: '单行标题',
           description: '一段很长很长的内容文字',
           required: true),
-      TDCell(
+      TCell(
           arrow: true,
           title: '单行标题',
           description: '一段很长很长的内容文字',
-          noteWidget: TDBadge(TDBadgeType.message, count: '8')),
-      TDCell(
+          noteWidget: TBadge(TBadgeType.message, count: '8')),
+      TCell(
           arrow: false,
           title: '单行标题',
           description: '一段很长很长的内容文字',
-          rightIconWidget: TDSwitch(isOn: true)),
-      TDCell(
+          rightIconWidget: TSwitch(isOn: true)),
+      TCell(
           arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
-      TDCell(
+      TCell(
           arrow: true,
           title: '单行标题',
           description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内',
-          leftIcon: TDIcons.lock_on),
-      TDCell(
+          leftIcon: TIcons.lock_on),
+      TCell(
           arrow: false,
           title: '单行标题',
           description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
-      TDCell(
+      TCell(
           arrow: false,
           title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容',
           description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
-      TDCell(
+      TCell(
         arrow: true,
         title: '多行带头像',
         description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内容',
         image: AssetImage('assets/img/td_avatar_1.png'),
       ),
       // NetworkImage('https://tdesign.gtimg.com/mobile/demos/avatar1.png')),
-      TDCell(
+      TCell(
         arrow: true,
         title: '多行带图片',
         description: '一段很长很长的内容文字',
@@ -133,24 +133,24 @@ Widget _buildDesSimple(BuildContext context) {
 
 @Demo(group: 'cell')
 Widget _buildCard(BuildContext context) {
-  return const TDCellGroup(
-    theme: TDCellGroupTheme.cardTheme,
+  return const TCellGroup(
+    theme: TCellGroupTheme.cardTheme,
     cells: [
-      TDCell(arrow: true, title: '单行标题'),
-      TDCell(arrow: true, title: '单行标题', required: true),
-      TDCell(arrow: true, title: '单行标题'),
+      TCell(arrow: true, title: '单行标题'),
+      TCell(arrow: true, title: '单行标题', required: true),
+      TCell(arrow: true, title: '单行标题'),
     ],
   );
 }
 
 @Demo(group: 'cell')
 Widget _buildPadding(BuildContext context) {
-  var style = TDCellStyle(context: context);
+  var style = TCellStyle(context: context);
   style.padding = const EdgeInsets.all(30);
-  return TDCellGroup(
-    theme: TDCellGroupTheme.cardTheme,
+  return TCellGroup(
+    theme: TCellGroupTheme.cardTheme,
     cells: [
-      TDCell(
+      TCell(
         arrow: true,
         title: 'padding-all-30',
         style: style,
@@ -164,7 +164,7 @@ Widget _buildPadding(BuildContext context) {
 
 @Demo(group: 'cell')
 Widget _buildTestContent(BuildContext context) {
-  return const TDCell(
+  return const TCell(
     title: '这是标题，非常长的标题',
     note: '这是一个很长很长的note字段，测试长内容，你说这内容长不长！',
     noteMaxLine: 2,

@@ -4,8 +4,8 @@ import '../../../tdesign_flutter.dart';
 
 /// 点击型标签组件，点击时内部更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标
-class TDSelectTag extends StatefulWidget {
-  const TDSelectTag(
+class TSelectTag extends StatefulWidget {
+  const TSelectTag(
     this.text, {
     this.theme,
     this.icon,
@@ -16,11 +16,11 @@ class TDSelectTag extends StatefulWidget {
     this.onSelectChanged,
     this.isSelected = false,
     this.disableSelect = false,
-    this.size = TDTagSize.medium,
+    this.size = TTagSize.medium,
     this.padding,
     this.forceVerticalCenter = true,
     this.isOutline = false,
-    this.shape = TDTagShape.square,
+    this.shape = TTagShape.square,
     this.isLight = false,
     this.needCloseIcon = false,
     this.onCloseTap,
@@ -32,7 +32,7 @@ class TDSelectTag extends StatefulWidget {
   final String text;
 
   /// 主题
-  final TDTagTheme? theme;
+  final TTagTheme? theme;
 
   /// 图标内容，可随状态改变颜色
   final IconData? icon;
@@ -41,13 +41,13 @@ class TDSelectTag extends StatefulWidget {
   final Widget? iconWidget;
 
   /// 选中的标签样式
-  final TDTagStyle? selectStyle;
+  final TTagStyle? selectStyle;
 
   /// 未选中标签样式
-  final TDTagStyle? unSelectStyle;
+  final TTagStyle? unSelectStyle;
 
   /// 不可选标签样式
-  final TDTagStyle? disableSelectStyle;
+  final TTagStyle? disableSelectStyle;
 
   /// 标签点击，选中状态改变时的回调
   final ValueChanged<bool>? onSelectChanged;
@@ -59,7 +59,7 @@ class TDSelectTag extends StatefulWidget {
   final bool disableSelect;
 
   /// 标签大小
-  final TDTagSize size;
+  final TTagSize size;
 
   /// 自定义模式下的间距
   final EdgeInsets? padding;
@@ -71,7 +71,7 @@ class TDSelectTag extends StatefulWidget {
   final bool isOutline;
 
   /// 标签形状
-  final TDTagShape shape;
+  final TTagShape shape;
 
   /// 是否为浅色
   final bool isLight;
@@ -86,10 +86,10 @@ class TDSelectTag extends StatefulWidget {
   final double? fixedWidth;
 
   @override
-  _TDClickTagState createState() => _TDClickTagState();
+  _TClickTagState createState() => _TClickTagState();
 }
 
-class _TDClickTagState extends State<TDSelectTag> {
+class _TClickTagState extends State<TSelectTag> {
   bool _isSelected = false;
 
   @override
@@ -100,7 +100,7 @@ class _TDClickTagState extends State<TDSelectTag> {
 
   @override
   Widget build(BuildContext context) {
-    Widget result = TDTag(
+    Widget result = TTag(
       widget.text,
       icon: widget.icon,
       iconWidget: widget.iconWidget,
@@ -126,45 +126,45 @@ class _TDClickTagState extends State<TDSelectTag> {
     return result;
   }
 
-  TDTagStyle? _getStyle() {
+  TTagStyle? _getStyle() {
     if (widget.disableSelect) {
       return _getDisableSelectStyle();
     }
     return _isSelected ? _getSelectStyle() : _getUnSelectStyle();
   }
 
-  TDTagStyle _getDisableSelectStyle() {
+  TTagStyle _getDisableSelectStyle() {
     if (widget.disableSelectStyle != null) {
       return widget.disableSelectStyle!;
     }
-    return TDTagStyle.generateDisableSelectStyle(
+    return TTagStyle.generateDisableSelectStyle(
         context, widget.isLight, widget.isOutline, widget.shape);
   }
 
-  TDTagStyle _getSelectStyle() {
+  TTagStyle _getSelectStyle() {
     if (widget.selectStyle != null) {
       return widget.selectStyle!;
     }
     return widget.isOutline
-        ? TDTagStyle.generateOutlineStyleByTheme(
+        ? TTagStyle.generateOutlineStyleByTheme(
             context, widget.theme, widget.isLight, widget.shape)
-        : TDTagStyle.generateFillStyleByTheme(
+        : TTagStyle.generateFillStyleByTheme(
             context, widget.theme, widget.isLight, widget.shape);
   }
 
-  TDTagStyle _getUnSelectStyle() {
+  TTagStyle _getUnSelectStyle() {
     if (widget.unSelectStyle != null) {
       return widget.unSelectStyle!;
     }
     return widget.isOutline
-        ? TDTagStyle.generateOutlineStyleByTheme(
-            context, TDTagTheme.defaultTheme, widget.isLight, widget.shape)
-        : TDTagStyle.generateFillStyleByTheme(
-            context, TDTagTheme.defaultTheme, widget.isLight, widget.shape);
+        ? TTagStyle.generateOutlineStyleByTheme(
+            context, TTagTheme.defaultTheme, widget.isLight, widget.shape)
+        : TTagStyle.generateFillStyleByTheme(
+            context, TTagTheme.defaultTheme, widget.isLight, widget.shape);
   }
 
   @override
-  void didUpdateWidget(covariant TDSelectTag oldWidget) {
+  void didUpdateWidget(covariant TSelectTag oldWidget) {
     super.didUpdateWidget(oldWidget);
     _isSelected = widget.isSelected;
   }

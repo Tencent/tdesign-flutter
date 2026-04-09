@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 /// 农历日期信息模型
 @immutable
-class TDLunarInfo {
+class TLunarInfo {
   /// 农历年份（数字）
   final int year;
 
@@ -24,7 +24,7 @@ class TDLunarInfo {
   /// 日期文本（如：初七）
   final String dayText;
 
-  const TDLunarInfo({
+  const TLunarInfo({
     required this.year,
     required this.month,
     required this.day,
@@ -45,7 +45,7 @@ class TDLunarInfo {
     if (identical(this, other)) {
       return true;
     }
-    return other is TDLunarInfo &&
+    return other is TLunarInfo &&
         other.year == year &&
         other.month == month &&
         other.day == day &&
@@ -61,7 +61,7 @@ class TDLunarInfo {
 }
 
 /// 日历类型枚举
-enum TDCalendarDateType {
+enum TCalendarDateType {
   /// 阳历（公历）
   solar,
 

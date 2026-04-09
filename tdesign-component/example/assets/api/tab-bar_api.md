@@ -7,12 +7,12 @@
 | badgeRightOffset | double? | - | 消息右侧偏移量 |
 | badgeTopOffset | double? | - | 消息顶部偏移量 |
 | showBadge | bool | - | 是否展示消息 |
-| tdBadge | TDBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
+| tdBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
 
 ```
 ```
 
-### TDBottomTabBarTabConfig
+### TBottomTabBarTabConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -21,7 +21,7 @@
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
 | onTap | GestureTapCallback? | - | tab点击事件 |
-| popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
+| popUpButtonConfig | TBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | selectedIcon | Widget? | - | 选中时图标 |
 | selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
 | tabText | String? | - | tab 文本 |
@@ -31,7 +31,7 @@
 ```
 ```
 
-### TDBottomTabBar
+### TBottomTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -40,18 +40,18 @@
 | animationDuration | Duration | const Duration(milliseconds: 300) | 动画时长 |
 | backgroundColor | Color? | - | 背景颜色 （可选） |
 | barHeight | double? | _kDefaultTabBarHeight | tab高度 |
-| basicType | TDBottomTabBarBasicType | basicType | 基本样式（纯文本、纯图标、图标+文本） |
+| basicType | TBottomTabBarBasicType | basicType | 基本样式（纯文本、纯图标、图标+文本） |
 | centerDistance | double? | - | icon与文本中间距离（可选） |
-| componentType | TDBottomTabBarComponentType? | TDBottomTabBarComponentType.label | 选项样式 默认label |
+| componentType | TBottomTabBarComponentType? | TBottomTabBarComponentType.label | 选项样式 默认label |
 | currentIndex | int? | - | 选中的index（可选） |
 | dividerColor | Color? | - | 分割线颜色（可选） |
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
-| indicatorAnimation | TDBottomTabBarIndicatorAnimation | TDBottomTabBarIndicatorAnimation.none | 指示器动画类型 |
+| indicatorAnimation | TBottomTabBarIndicatorAnimation | TBottomTabBarIndicatorAnimation.none | 指示器动画类型 |
 | key |  | - |  |
-| navigationTabs | List<TDBottomTabBarTabConfig> | - | tabs配置 |
+| navigationTabs | List<TBottomTabBarTabConfig> | - | tabs配置 |
 | needInkWell | bool | false | 是否需要水波纹效果 |
-| outlineType | TDBottomTabBarOutlineType? | TDBottomTabBarOutlineType.filled | 标签栏样式 默认filled |
+| outlineType | TBottomTabBarOutlineType? | TBottomTabBarOutlineType.filled | 标签栏样式 默认filled |
 | placeholder | bool | true | 是否添加安全区域占位 |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
 | showTopBorder | bool? | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
@@ -63,19 +63,19 @@
 ```
 ```
 
-### TDBottomTabBarPopUpBtnConfig
+### TBottomTabBarPopUpBtnConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | items | List<PopUpMenuItem> | - | 选项list |
 | onChanged | ValueChanged<String> | - | 统一在 onChanged 中处理各item点击事件 |
-| popUpDialogConfig | TDBottomTabBarPopUpShapeConfig? | - | 弹窗UI配置 |
+| popUpDialogConfig | TBottomTabBarPopUpShapeConfig? | - | 弹窗UI配置 |
 
 ```
 ```
 
-### TDBottomTabBarPopUpShapeConfig
+### TBottomTabBarPopUpShapeConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

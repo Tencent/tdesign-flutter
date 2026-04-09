@@ -3,15 +3,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// 农历日历演示页面
 /// 这是一个独立的演示页面，展示农历功能的基本用法
-class TDCalendarLunarDemo extends StatefulWidget {
-  const TDCalendarLunarDemo({Key? key}) : super(key: key);
+class TCalendarLunarDemo extends StatefulWidget {
+  const TCalendarLunarDemo({Key? key}) : super(key: key);
 
   @override
-  State<TDCalendarLunarDemo> createState() => _TDCalendarLunarDemoState();
+  State<TCalendarLunarDemo> createState() => _TCalendarLunarDemoState();
 }
 
-class _TDCalendarLunarDemoState extends State<TDCalendarLunarDemo> {
-  TDCalendarDateType _dateType = TDCalendarDateType.solar;
+class _TCalendarLunarDemoState extends State<TCalendarLunarDemo> {
+  TCalendarDateType _dateType = TCalendarDateType.solar;
   bool _showLunarInfo = false;
   List<int> _selectedDates = [DateTime.now().millisecondsSinceEpoch];
 
@@ -20,14 +20,14 @@ class _TDCalendarLunarDemoState extends State<TDCalendarLunarDemo> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('农历日历演示'),
-        backgroundColor: TDTheme.of(context).brandNormalColor,
+        backgroundColor: TTheme.of(context).brandNormalColor,
       ),
       body: Column(
         children: [
           // 控制面板
           Container(
             padding: const EdgeInsets.all(16),
-            color: TDTheme.of(context).grayColor1,
+            color: TTheme.of(context).grayColor1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,34 +39,34 @@ class _TDCalendarLunarDemoState extends State<TDCalendarLunarDemo> {
                 Row(
                   children: [
                     Expanded(
-                      child: TDRadio(
+                      child: TRadio(
                         id: 'solar',
                         title: '阳历模式',
-                        radioStyle: TDRadioStyle.circle,
+                        radioStyle: TRadioStyle.circle,
                         showDivider: false,
                         enable: true,
-                        checked: _dateType == TDCalendarDateType.solar,
+                        checked: _dateType == TCalendarDateType.solar,
                         onChanged: (checked) {
                           if (checked) {
                             setState(() {
-                              _dateType = TDCalendarDateType.solar;
+                              _dateType = TCalendarDateType.solar;
                             });
                           }
                         },
                       ),
                     ),
                     Expanded(
-                      child: TDRadio(
+                      child: TRadio(
                         id: 'lunar',
                         title: '农历模式',
-                        radioStyle: TDRadioStyle.circle,
+                        radioStyle: TRadioStyle.circle,
                         showDivider: false,
                         enable: false, // 暂时禁用，因为需要实现数据源
-                        checked: _dateType == TDCalendarDateType.lunar,
+                        checked: _dateType == TCalendarDateType.lunar,
                         onChanged: (checked) {
                           if (checked) {
                             setState(() {
-                              _dateType = TDCalendarDateType.lunar;
+                              _dateType = TCalendarDateType.lunar;
                             });
                           }
                         },
@@ -75,29 +75,29 @@ class _TDCalendarLunarDemoState extends State<TDCalendarLunarDemo> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                TDSwitch(
-                  enable: _dateType == TDCalendarDateType.solar,
+                TSwitch(
+                  enable: _dateType == TCalendarDateType.solar,
                   isOn: _showLunarInfo,
                   onChanged: (value) {
                     setState(() {
                       _showLunarInfo = value;
                     });
                   },
-                  size: TDSwitchSize.large,
+                  size: TSwitchSize.large,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '阳历模式下显示农历副标题',
                   style: TextStyle(
                     fontSize: 14,
-                    color: TDTheme.of(context).fontGyColor3,
+                    color: TTheme.of(context).fontGyColor3,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: TDTheme.of(context).brandColor1,
+                    color: TTheme.of(context).brandColor1,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Column(
@@ -109,14 +109,14 @@ class _TDCalendarLunarDemoState extends State<TDCalendarLunarDemo> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        _dateType == TDCalendarDateType.lunar
-                            ? '农历模式需要实现 TDCalendarDataSource 接口\n请参考 lunar_data_source_example.dart'
+                        _dateType == TCalendarDateType.lunar
+                            ? '农历模式需要实现 TCalendarDataSource 接口\n请参考 lunar_data_source_example.dart'
                             : _showLunarInfo
-                                ? '当前显示阳历日期，下方显示农历信息\n需要实现 TDCalendarDataSource 接口'
+                                ? '当前显示阳历日期，下方显示农历信息\n需要实现 TCalendarDataSource 接口'
                                 : '当前仅显示阳历日期（默认模式）',
                         style: TextStyle(
                           fontSize: 12,
-                          color: TDTheme.of(context).fontGyColor3,
+                          color: TTheme.of(context).fontGyColor3,
                         ),
                       ),
                     ],
@@ -127,7 +127,7 @@ class _TDCalendarLunarDemoState extends State<TDCalendarLunarDemo> {
           ),
           // 日历组件
           Expanded(
-            child: TDCalendar(
+            child: TCalendar(
               type: CalendarType.single,
               value: _selectedDates,
               dateType: _dateType,

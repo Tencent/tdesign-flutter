@@ -1,6 +1,6 @@
 
   Widget _inputStatusReadOnly(BuildContext context) {
-    return TDInput(
+    return TInput(
       leftLabel: '标签文字',
       readOnly: true,
       // 不可编辑文字 则不必带入controller

@@ -4,8 +4,8 @@ import '../badge/td_badge.dart';
 import 'td_action_sheet.dart';
 
 /// 动作面板项目
-class TDActionSheetItem {
-  TDActionSheetItem({
+class TActionSheetItem {
+  TActionSheetItem({
     required this.label,
     this.textStyle,
     this.icon,
@@ -26,7 +26,7 @@ class TDActionSheetItem {
   final Widget? icon;
 
   /// 角标
-  final TDBadge? badge;
+  final TBadge? badge;
 
   /// 是否禁用
   final bool disabled;
@@ -35,8 +35,8 @@ class TDActionSheetItem {
   final double? iconSize;
 
   /// 分组，用于带描述多行滚动宫格
-  /// 当[TDActionSheet.theme]等于[TDActionSheetTheme.group]时有效
-  /// 有效时，如果该值未配置整个[TDActionSheetItem]会被忽略，即不会展示
+  /// 当[TActionSheet.theme]等于[TActionSheetTheme.group]时有效
+  /// 有效时，如果该值未配置整个[TActionSheetItem]会被忽略，即不会展示
   final String? group;
 
   /// 描述信息

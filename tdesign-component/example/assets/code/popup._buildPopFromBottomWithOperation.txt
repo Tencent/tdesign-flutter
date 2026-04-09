@@ -1,22 +1,22 @@
 
   Widget _buildPopFromBottomWithOperation(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带操作',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(TDSlidePopupRoute(
-            modalBarrierColor: TDTheme.of(context).fontGyColor2,
+        Navigator.of(context).push(TSlidePopupRoute(
+            modalBarrierColor: TTheme.of(context).fontGyColor2,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
-              return TDPopupBottomConfirmPanel(
+              return TPopupBottomConfirmPanel(
                 leftClick: () {
                   Navigator.maybePop(context);
                 },
                 rightClick: () {
-                  TDToast.showText('确定', context: context);
+                  TToast.showText('确定', context: context);
                   Navigator.maybePop(context);
                 },
                 child: Container(

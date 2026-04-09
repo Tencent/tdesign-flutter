@@ -3,8 +3,8 @@ import '../../../tdesign_flutter.dart';
 import '../../util/iterable_ext.dart';
 import '../../util/list_ext.dart';
 
-class TDCalendarCell extends StatefulWidget {
-  const TDCalendarCell({
+class TCalendarCell extends StatefulWidget {
+  const TCalendarCell({
     Key? key,
     this.tdate,
     this.format,
@@ -19,7 +19,7 @@ class TDCalendarCell extends StatefulWidget {
     required this.colIndex,
     required this.dateList,
     this.cellWidget,
-    this.dateType = TDCalendarDateType.solar,
+    this.dateType = TCalendarDateType.solar,
     this.showLunarInfo = false,
   }) : super(key: key);
 
@@ -48,14 +48,14 @@ class TDCalendarCell extends StatefulWidget {
     TDate tdate,
     DateSelectType selectType,
   )? cellWidget;
-  final TDCalendarDateType dateType;
+  final TCalendarDateType dateType;
   final bool showLunarInfo;
 
   @override
-  _TDCalendarCellState createState() => _TDCalendarCellState();
+  _TCalendarCellState createState() => _TCalendarCellState();
 }
 
-class _TDCalendarCellState extends State<TDCalendarCell> {
+class _TCalendarCellState extends State<TCalendarCell> {
   var isToday = false;
   var positionOffset = 0;
 
@@ -67,7 +67,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
   }
 
   @override
-  void didUpdateWidget(TDCalendarCell oldWidget) {
+  void didUpdateWidget(TCalendarCell oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.tdate != oldWidget.tdate) {
       isToday = _isToday();
@@ -88,7 +88,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
       return const SizedBox.shrink();
     }
     final tdate = widget.format?.call(widget.tdate) ?? widget.tdate!;
-    final cellStyle = TDCalendarStyle.cellStyle(context, widget.tdate!._type);
+    final cellStyle = TCalendarStyle.cellStyle(context, widget.tdate!._type);
     final decoration = tdate.decoration ?? cellStyle.cellDecoration;
     final positionColor = _getColor(cellStyle, decoration);
 
@@ -197,7 +197,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     setState(() {});
   }
 
-  Color? _getColor(TDCalendarStyle cellStyle, BoxDecoration? decoration) {
+  Color? _getColor(TCalendarStyle cellStyle, BoxDecoration? decoration) {
     positionOffset = 0;
     final next = _nextDay();
     if (widget.tdate?._type == DateSelectType.start) {
@@ -232,16 +232,16 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
 
   /// 构建默认单元格内容
   Widget _buildDefaultCell(
-      BuildContext context, TDate tdate, TDCalendarStyle cellStyle) {
+      BuildContext context, TDate tdate, TCalendarStyle cellStyle) {
     // 根据 dateType 和 showLunarInfo 决定显示内容
     String mainText = widget.tdate!.date.day.toString();
     String? subText;
 
-    if (widget.dateType == TDCalendarDateType.lunar && tdate.lunarInfo != null) {
+    if (widget.dateType == TCalendarDateType.lunar && tdate.lunarInfo != null) {
       // 农历模式：主文本显示农历，副文本显示阳历日期
       mainText = tdate.lunarInfo!.dayText;
       subText = widget.tdate!.date.day.toString();
-    } else if (widget.dateType == TDCalendarDateType.solar &&
+    } else if (widget.dateType == TCalendarDateType.solar &&
         widget.showLunarInfo) {
       // 阳历模式+显示农历信息
       mainText = widget.tdate!.date.day.toString();
@@ -267,7 +267,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
           SizedBox(
             height: 12,
             child: tdate.prefixWidget ??
-                TDText(
+                TText(
                   tdate.prefix ?? '',
                   style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
                   maxLines: 1,
@@ -281,7 +281,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TDText(
+                TText(
                   forceVerticalCenter: subText == null,
                   mainText,
                   style: (isToday ? cellStyle.todayStyle : null) ??
@@ -291,7 +291,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
                 if (subText != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: TDText(
+                    child: TText(
                       subText,
                       style: cellStyle.cellSuffixStyle?.copyWith(fontSize: 9),
                       maxLines: 1,
@@ -307,7 +307,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
           SizedBox(
             height: 12,
             child: tdate.suffixWidget ??
-                TDText(
+                TText(
                   tdate.suffix ?? '',
                   style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
                   maxLines: 1,
@@ -373,7 +373,7 @@ class TDate {
   final bool isLastDayOfMonth;
 
   /// 农历信息
-  final TDLunarInfo? lunarInfo;
+  final TLunarInfo? lunarInfo;
 
   /// 节气信息（如"春分"、"立夏"）
   final String? solarTerm;

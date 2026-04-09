@@ -6,15 +6,15 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDButton(
+          TButton(
             width: 80,
             height: 48,
             text: '按钮',
-            size: TDButtonSize.large,
-            type: TDButtonType.fill,
+            size: TButtonSize.large,
+            type: TButtonType.fill,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )

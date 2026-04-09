@@ -1,8 +1,8 @@
 
-TDCountDown _buildRoundMediumSize(BuildContext context) {
-  return const TDCountDown(
+TCountDown _buildRoundMediumSize(BuildContext context) {
+  return const TCountDown(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.medium,
-    theme: TDCountDownTheme.round,
+    size: TCountDownSize.medium,
+    theme: TCountDownTheme.round,
   );
 }

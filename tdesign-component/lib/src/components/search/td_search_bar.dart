@@ -6,7 +6,7 @@ import '../../util/context_extension.dart';
 ///
 /// 搜索框的样式
 ///
-enum TDSearchStyle {
+enum TSearchStyle {
   /// 方形
   square,
 
@@ -17,7 +17,7 @@ enum TDSearchStyle {
 ///
 /// 搜索框对齐方式
 ///
-enum TDSearchAlignment {
+enum TSearchAlignment {
   /// 默认头部对齐
   left,
 
@@ -25,16 +25,16 @@ enum TDSearchAlignment {
   center,
 }
 
-typedef TDSearchBarEvent = void Function(String value);
-typedef TDSearchBarClearEvent = bool? Function(String value);
-typedef TDSearchBarCallBack = void Function();
+typedef TSearchBarEvent = void Function(String value);
+typedef TSearchBarClearEvent = bool? Function(String value);
+typedef TSearchBarCallBack = void Function();
 
-class TDSearchBar extends StatefulWidget {
-  const TDSearchBar({
+class TSearchBar extends StatefulWidget {
+  const TSearchBar({
     Key? key,
     this.placeHolder,
-    this.style = TDSearchStyle.square,
-    this.alignment = TDSearchAlignment.left,
+    this.style = TSearchStyle.square,
+    this.alignment = TSearchAlignment.left,
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
@@ -61,10 +61,10 @@ class TDSearchBar extends StatefulWidget {
   final String? placeHolder;
 
   /// 样式
-  final TDSearchStyle? style;
+  final TSearchStyle? style;
 
   /// 对齐方式，居中或这头部对齐
-  final TDSearchAlignment? alignment;
+  final TSearchAlignment? alignment;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -91,13 +91,13 @@ class TDSearchBar extends StatefulWidget {
   final TextEditingController? controller;
 
   /// 文字改变回调
-  final TDSearchBarEvent? onTextChanged;
+  final TSearchBarEvent? onTextChanged;
 
   /// 提交回调
-  final TDSearchBarEvent? onSubmitted;
+  final TSearchBarEvent? onSubmitted;
 
   /// 编辑完成回调
-  final TDSearchBarCallBack? onEditComplete;
+  final TSearchBarCallBack? onEditComplete;
 
   /// 点击输入框外部回调
   final TapRegionCallback? onTapOutside;
@@ -109,10 +109,10 @@ class TDSearchBar extends StatefulWidget {
   final GestureTapCallback? onInputClick;
 
   /// 自定义操作回调
-  final TDSearchBarEvent? onActionClick;
+  final TSearchBarEvent? onActionClick;
 
   /// 自定义操作回调
-  final TDSearchBarClearEvent? onClearClick;
+  final TSearchBarClearEvent? onClearClick;
 
   /// 自定义焦点
   final FocusNode? focusNode;
@@ -127,10 +127,10 @@ class TDSearchBar extends StatefulWidget {
   final bool? readOnly;
 
   @override
-  State<StatefulWidget> createState() => _TDSearchBarState();
+  State<StatefulWidget> createState() => _TSearchBarState();
 }
 
-class _TDSearchBarState extends State<TDSearchBar>
+class _TSearchBarState extends State<TSearchBar>
     with TickerProviderStateMixin {
   late FocusNode focusNode = FocusNode();
   final TextEditingController controller = TextEditingController();
@@ -166,7 +166,7 @@ class _TDSearchBarState extends State<TDSearchBar>
   }
 
   @override
-  void didUpdateWidget(covariant TDSearchBar oldWidget) {
+  void didUpdateWidget(covariant TSearchBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateFocusNode();
   }
@@ -190,12 +190,12 @@ class _TDSearchBarState extends State<TDSearchBar>
 
   Font? getSize(BuildContext context) {
     return widget.mediumStyle
-        ? TDTheme.of(context).fontBodyMedium
-        : TDTheme.of(context).fontBodyLarge;
+        ? TTheme.of(context).fontBodyMedium
+        : TTheme.of(context).fontBodyLarge;
   }
 
   Widget actionBtn(BuildContext context, String? text,
-      {String? action, TDSearchBarEvent? onActionClick}) {
+      {String? action, TSearchBarEvent? onActionClick}) {
     return GestureDetector(
       onTap: () {
         onActionClick!(text ?? '');
@@ -205,7 +205,7 @@ class _TDSearchBarState extends State<TDSearchBar>
         child: Text(action!,
             style: TextStyle(
                 fontSize: getSize(context)?.size,
-                color: TDTheme.of(context).brandNormalColor)),
+                color: TTheme.of(context).brandNormalColor)),
       ),
     );
   }
@@ -215,7 +215,7 @@ class _TDSearchBarState extends State<TDSearchBar>
     return Container(
       padding: widget.padding,
       height: widget.autoHeight ? double.infinity : 56,
-      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+      color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
       child: Stack(alignment: AlignmentDirectional.center, children: [
         Row(
           children: [
@@ -224,9 +224,9 @@ class _TDSearchBarState extends State<TDSearchBar>
               child: Container(
                 height: double.infinity,
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).bgColorSecondaryContainer,
+                    color: TTheme.of(context).bgColorSecondaryContainer,
                     borderRadius: BorderRadius.circular(
-                        widget.style == TDSearchStyle.square ? 4 : 28)),
+                        widget.style == TSearchStyle.square ? 4 : 28)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -234,9 +234,9 @@ class _TDSearchBarState extends State<TDSearchBar>
                       width: 12,
                     ),
                     Icon(
-                      TDIcons.search,
+                      TIcons.search,
                       size: widget.mediumStyle ? 20 : 24,
-                      color: TDTheme.of(context).textColorPlaceholder,
+                      color: TTheme.of(context).textColorPlaceholder,
                     ),
                     const Padding(padding: EdgeInsets.only(left: 3)),
                     Expanded(
@@ -248,10 +248,10 @@ class _TDSearchBarState extends State<TDSearchBar>
                           key: _textFieldKey,
                           controller: widget.controller ?? controller,
                           autofocus: widget.autoFocus,
-                          cursorColor: TDTheme.of(context).brandNormalColor,
+                          cursorColor: TTheme.of(context).brandNormalColor,
                           cursorHeight: widget.cursorHeight,
                           textAlign:
-                              widget.alignment == TDSearchAlignment.center
+                              widget.alignment == TSearchAlignment.center
                                   ? TextAlign.center
                                   : TextAlign.left,
                           focusNode: focusNode,
@@ -263,12 +263,12 @@ class _TDSearchBarState extends State<TDSearchBar>
                           style: TextStyle(
                               textBaseline: TextBaseline.ideographic,
                               fontSize: getSize(context)?.size,
-                              color: TDTheme.of(context).textColorPrimary),
+                              color: TTheme.of(context).textColorPrimary),
                           decoration: InputDecoration(
                             hintText: widget.placeHolder,
                             hintStyle: TextStyle(
                               fontSize: getSize(context)?.size,
-                              color: TDTheme.of(context).textColorPlaceholder,
+                              color: TTheme.of(context).textColorPlaceholder,
                               textBaseline: TextBaseline.ideographic,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -276,7 +276,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                             border: InputBorder.none,
                             isCollapsed: true,
                             // filled: true,
-                            // fillColor: TDTheme.of(context).bgColorSecondaryContainer,
+                            // fillColor: TTheme.of(context).bgColorSecondaryContainer,
                           ),
                           maxLines: 1,
                           textInputAction: widget.inputAction,
@@ -297,9 +297,9 @@ class _TDSearchBarState extends State<TDSearchBar>
                             }
                           },
                           child: Icon(
-                            TDIcons.close_circle_filled,
+                            TIcons.close_circle_filled,
                             size: widget.mediumStyle ? 17 : 21,
-                            color: TDTheme.of(context).textColorPlaceholder,
+                            color: TTheme.of(context).textColorPlaceholder,
                           )),
                     ),
                     const Padding(padding: EdgeInsets.only(right: 9)),
@@ -329,7 +329,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                         child: Text(context.resource.cancel,
                             style: TextStyle(
                                 fontSize: getSize(context)?.size,
-                                color: TDTheme.of(context).brandNormalColor)),
+                                color: TTheme.of(context).brandNormalColor)),
                       ),
                     ),
                   ),

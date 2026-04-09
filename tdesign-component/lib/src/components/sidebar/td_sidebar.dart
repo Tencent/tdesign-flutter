@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_wrap_sidebar_item.dart';
 
-enum TDSideBarStyle {
+enum TSideBarStyle {
   normal,
   outline,
 }
@@ -14,7 +14,7 @@ class SideItemProps {
   bool? disabled;
   IconData? icon;
   String? label;
-  TDBadge? badge;
+  TBadge? badge;
   TextStyle? textStyle;
 
   SideItemProps({
@@ -28,8 +28,8 @@ class SideItemProps {
   });
 }
 
-class TDSideBar extends StatefulWidget {
-  const TDSideBar({
+class TSideBar extends StatefulWidget {
+  const TSideBar({
     Key? key,
     this.value,
     this.defaultValue,
@@ -41,7 +41,7 @@ class TDSideBar extends StatefulWidget {
     this.controller,
     this.contentPadding,
     this.selectedTextStyle,
-    this.style = TDSideBarStyle.normal,
+    this.style = TSideBarStyle.normal,
     this.loading,
     this.loadingWidget,
     this.selectedBgColor,
@@ -56,7 +56,7 @@ class TDSideBar extends StatefulWidget {
   final int? defaultValue;
 
   /// 单项
-  final List<TDSideBarItem> children;
+  final List<TSideBarItem> children;
 
   /// 选中值发生变化（Controller控制）
   final ValueChanged<int>? onChanged;
@@ -74,7 +74,7 @@ class TDSideBar extends StatefulWidget {
   final TextStyle? selectedTextStyle;
 
   /// 样式
-  final TDSideBarStyle style;
+  final TSideBarStyle style;
 
   /// 高度
   final double? height;
@@ -83,7 +83,7 @@ class TDSideBar extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
 
   /// 控制器
-  final TDSideBarController? controller;
+  final TSideBarController? controller;
 
   /// 加载效果
   final bool? loading;
@@ -98,10 +98,10 @@ class TDSideBar extends StatefulWidget {
   final Color? unSelectedBgColor;
 
   @override
-  State<TDSideBar> createState() => _TDSideBarState();
+  State<TSideBar> createState() => _TSideBarState();
 }
 
-class _TDSideBarState extends State<TDSideBar> {
+class _TSideBarState extends State<TSideBar> {
   late List<SideItemProps> displayChildren;
   late int? currentValue;
   late int? currentIndex;
@@ -254,7 +254,7 @@ class _TDSideBarState extends State<TDSideBar> {
         width: MediaQuery.of(context).size.width,
         child: const Align(
           child:
-              TDLoading(icon: TDLoadingIcon.circle, size: TDLoadingSize.large),
+              TLoading(icon: TLoadingIcon.circle, size: TLoadingSize.large),
         ),
       );
     }
@@ -277,7 +277,7 @@ class _TDSideBarState extends State<TDSideBar> {
                     itemBuilder: (BuildContext context, int index) {
                       var ele = displayChildren[index];
 
-                      return TDWrapSideBarItem(
+                      return TWrapSideBarItem(
                         style: widget.style,
                         value: ele.value,
                         icon: ele.icon,
@@ -295,9 +295,9 @@ class _TDSideBarState extends State<TDSideBar> {
                         bottomAdjacent: currentIndex != null &&
                             currentIndex! - 1 == ele.index,
                         selectedBgColor: widget.selectedBgColor ??
-                            TDTheme.of(context).bgColorContainer,
+                            TTheme.of(context).bgColorContainer,
                         unSelectedBgColor: widget.unSelectedBgColor ??
-                            TDTheme.of(context).bgColorSecondaryContainer,
+                            TTheme.of(context).bgColorSecondaryContainer,
                         onTap: () {
                           if (!(ele.disabled ?? false)) {
                             onSelect(ele, isController: false);
@@ -308,7 +308,7 @@ class _TDSideBarState extends State<TDSideBar> {
   }
 
   @override
-  void didUpdateWidget(covariant TDSideBar oldWidget) {
+  void didUpdateWidget(covariant TSideBar oldWidget) {
     getDisplayChildren();
     super.didUpdateWidget(oldWidget);
   }

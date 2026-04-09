@@ -1,8 +1,8 @@
 
   Widget _buildSwitchWithColor(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '自定义颜色开关',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: true,
         trackOnColor: Colors.green,
       ),

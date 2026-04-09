@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  group('TDLunarInfo', () {
+  group('TLunarInfo', () {
     test('should create lunar info correctly', () {
-      final lunarInfo = TDLunarInfo(
+      final lunarInfo = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -24,7 +24,7 @@ void main() {
     });
 
     test('should handle leap month correctly', () {
-      final lunarInfo = TDLunarInfo(
+      final lunarInfo = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('should compare lunar info correctly', () {
-      final info1 = TDLunarInfo(
+      final info1 = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -49,7 +49,7 @@ void main() {
         dayText: '初七',
       );
 
-      final info2 = TDLunarInfo(
+      final info2 = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -58,7 +58,7 @@ void main() {
         dayText: '初七',
       );
 
-      final info3 = TDLunarInfo(
+      final info3 = TLunarInfo(
         year: 2025,
         month: 3,
         day: 8,
@@ -73,19 +73,19 @@ void main() {
     });
   });
 
-  group('TDCalendarDataSource', () {
+  group('TCalendarDataSource', () {
     test('should format year correctly', () {
       final dataSource = _MockDataSource();
 
       // 阳历
       expect(
-        dataSource.formatYear(2025, TDCalendarDateType.solar),
+        dataSource.formatYear(2025, TCalendarDateType.solar),
         '2025年',
       );
 
       // 农历
       expect(
-        dataSource.formatYear(2025, TDCalendarDateType.lunar),
+        dataSource.formatYear(2025, TCalendarDateType.lunar),
         '二〇二五年',
       );
     });
@@ -95,31 +95,31 @@ void main() {
 
       // 阳历
       expect(
-        dataSource.formatMonth(3, TDCalendarDateType.solar),
+        dataSource.formatMonth(3, TCalendarDateType.solar),
         '3月',
       );
 
       // 农历
       expect(
-        dataSource.formatMonth(1, TDCalendarDateType.lunar),
+        dataSource.formatMonth(1, TCalendarDateType.lunar),
         '正月',
       );
       expect(
-        dataSource.formatMonth(3, TDCalendarDateType.lunar),
+        dataSource.formatMonth(3, TCalendarDateType.lunar),
         '三月',
       );
       expect(
-        dataSource.formatMonth(11, TDCalendarDateType.lunar),
+        dataSource.formatMonth(11, TCalendarDateType.lunar),
         '冬月',
       );
       expect(
-        dataSource.formatMonth(12, TDCalendarDateType.lunar),
+        dataSource.formatMonth(12, TCalendarDateType.lunar),
         '腊月',
       );
 
       // 闰月
       expect(
-        dataSource.formatMonth(3, TDCalendarDateType.lunar, true),
+        dataSource.formatMonth(3, TCalendarDateType.lunar, true),
         '闰三月',
       );
     });
@@ -129,29 +129,29 @@ void main() {
 
       // 阳历
       expect(
-        dataSource.formatDay(7, TDCalendarDateType.solar),
+        dataSource.formatDay(7, TCalendarDateType.solar),
         '7日',
       );
 
       // 农历
       expect(
-        dataSource.formatDay(1, TDCalendarDateType.lunar),
+        dataSource.formatDay(1, TCalendarDateType.lunar),
         '初一',
       );
       expect(
-        dataSource.formatDay(7, TDCalendarDateType.lunar),
+        dataSource.formatDay(7, TCalendarDateType.lunar),
         '初七',
       );
       expect(
-        dataSource.formatDay(15, TDCalendarDateType.lunar),
+        dataSource.formatDay(15, TCalendarDateType.lunar),
         '十五',
       );
       expect(
-        dataSource.formatDay(21, TDCalendarDateType.lunar),
+        dataSource.formatDay(21, TCalendarDateType.lunar),
         '廿一',
       );
       expect(
-        dataSource.formatDay(30, TDCalendarDateType.lunar),
+        dataSource.formatDay(30, TCalendarDateType.lunar),
         '三十',
       );
     });
@@ -159,7 +159,7 @@ void main() {
 
   group('TDate with LunarInfo', () {
     test('should create TDate with lunar info', () {
-      final lunarInfo = TDLunarInfo(
+      final lunarInfo = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -194,11 +194,11 @@ void main() {
 }
 
 /// Mock 数据源用于测试
-class _MockDataSource extends TDCalendarDataSource {
+class _MockDataSource extends TCalendarDataSource {
   @override
-  TDLunarInfo? getLunarInfo(DateTime solarDate) {
+  TLunarInfo? getLunarInfo(DateTime solarDate) {
     // 简单的 mock 实现
-    return TDLunarInfo(
+    return TLunarInfo(
       year: 2025,
       month: 3,
       day: 7,
@@ -211,10 +211,10 @@ class _MockDataSource extends TDCalendarDataSource {
   @override
   String formatDate(
     DateTime date,
-    TDCalendarDateType type, [
-    TDLunarInfo? lunarInfo,
+    TCalendarDateType type, [
+    TLunarInfo? lunarInfo,
   ]) {
-    if (type == TDCalendarDateType.solar) {
+    if (type == TCalendarDateType.solar) {
       return '${date.year}年${date.month}月${date.day}日';
     } else {
       if (lunarInfo != null) {

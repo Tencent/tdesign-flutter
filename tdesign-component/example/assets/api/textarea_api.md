@@ -1,5 +1,5 @@
 ## API
-### TDTextarea
+### TTextarea
 #### 简介
 用于多行文本信息输入
 #### 默认构造方法
@@ -29,7 +29,7 @@
 | labelStyle | TextStyle? | - | 左侧标签文本样式 |
 | labelWidget | Widget? | - | label组件，支持自定义 |
 | labelWidth | double? | - | 输入框标题宽度 |
-| layout | TDTextareaLayout? | TDTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
+| layout | TTextareaLayout? | TTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
 | margin | EdgeInsetsGeometry? | - | 外边距 |
 | maxLength | int? | - | 最大字数限制 |
 | maxLengthEnforcement | MaxLengthEnforcement? | - | 如何执行输入长度限制 |
@@ -42,7 +42,7 @@
 | readOnly | bool? | false | 是否只读 |
 | required | bool? | - | 是否必填标志（红色*） |
 | showBottomDivider | bool? | true | 边框外部下划线 |
-| size | TDInputSize? | TDInputSize.large | 输入框规格 |
+| size | TInputSize? | TInputSize.large | 输入框规格 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |

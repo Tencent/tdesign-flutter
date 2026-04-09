@@ -2,22 +2,22 @@ import 'package:flutter/widgets.dart';
 
 import '../../tdesign_flutter.dart';
 
-typedef TDTDResourceBuilder = TDResourceDelegate? Function(
+typedef TResourceBuilder = TResourceDelegate? Function(
   BuildContext context,
 );
 
 /// 资源管理器
-class TDResourceManager {
+class TResourceManager {
   /// 代理构建器
-  TDTDResourceBuilder? _builder;
+  TResourceBuilder? _builder;
 
   /// 每次都调用build方法
   bool _needAlwaysBuild = false;
 
-  TDResourceDelegate? _delegate;
+  TResourceDelegate? _delegate;
 
   /// 获取资源
-  TDResourceDelegate delegate(BuildContext context) {
+  TResourceDelegate delegate(BuildContext context) {
     if (_builder == null) {
       return _defaultDelegate;
     }
@@ -32,11 +32,11 @@ class TDResourceManager {
     return _delegate ?? _defaultDelegate;
   }
 
-  static TDResourceManager? _instance;
+  static TResourceManager? _instance;
 
   /// 单例对象
-  static TDResourceManager get instance {
-    _instance ??= TDResourceManager();
+  static TResourceManager get instance {
+    _instance ??= TResourceManager();
     return _instance!;
   }
 
@@ -44,171 +44,171 @@ class TDResourceManager {
   static final _defaultDelegate = _DefaultResourceDelegate();
 
   /// 设置资源代理
-  void setResourceBuilder(TDTDResourceBuilder delegate, needAlwaysBuild) {
+  void setResourceBuilder(TResourceBuilder delegate, needAlwaysBuild) {
     _builder = delegate;
     _needAlwaysBuild = needAlwaysBuild;
   }
 }
 
 /// 资源管理器，允许外部重写，设计成抽象类，防止有新增字段时，用户没有感知
-abstract class TDResourceDelegate {
-  /// [TDSwitch]的打开状态文案
+abstract class TResourceDelegate {
+  /// [TSwitch]的打开状态文案
   String get open;
 
-  /// [TDSwitch]的关闭状态文案
+  /// [TSwitch]的关闭状态文案
   String get close;
 
-  /// [TDBadge]为0时的默认文案
+  /// [TBadge]为0时的默认文案
   String get badgeZero;
 
-  /// [TDAlertDialog]等 取消
+  /// [TAlertDialog]等 取消
   String get cancel;
 
-  /// [TDAlertDialog]等 确认
+  /// [TAlertDialog]等 确认
   String get confirm;
 
-  /// [TDDropdownMenu] 其他
+  /// [TDropdownMenu] 其他
   String get other;
 
-  /// [TDDropdownMenu] 重置
+  /// [TDropdownMenu] 重置
   String get reset;
 
-  /// [TDLoading] 加载中
+  /// [TLoading] 加载中
   String get loading;
 
-  /// [TDToast] 加载中...
+  /// [TToast] 加载中...
   String get loadingWithPoint;
 
-  /// [TDConfirmDialog] 知道了
+  /// [TConfirmDialog] 知道了
   String get knew;
 
-  /// [TDRefreshHeader] 正在刷新
+  /// [TRefreshHeader] 正在刷新
   String get refreshing;
 
-  /// [TDRefreshHeader] 松开刷新
+  /// [TRefreshHeader] 松开刷新
   String get releaseRefresh;
 
-  /// [TDRefreshHeader] 下拉刷新
+  /// [TRefreshHeader] 下拉刷新
   String get pullToRefresh;
 
-  /// [TDRefreshHeader] 刷新完成
+  /// [TRefreshHeader] 刷新完成
   String get completeRefresh;
 
-  /// [TDTimeCounter] 天
+  /// [TTimeCounter] 天
   String get days;
 
-  /// [TDTimeCounter] 时
+  /// [TTimeCounter] 时
   String get hours;
 
-  /// [TDTimeCounter] 分
+  /// [TTimeCounter] 分
   String get minutes;
 
-  /// [TDTimeCounter] 秒
+  /// [TTimeCounter] 秒
   String get seconds;
 
-  /// [TDTimeCounter] 毫秒
+  /// [TTimeCounter] 毫秒
   String get milliseconds;
 
-  /// [TDDatePicker]  年
+  /// [TDatePicker]  年
   String get yearLabel;
 
-  /// [TDDatePicker]  月
+  /// [TDatePicker]  月
   String get monthLabel;
 
-  /// [TDDatePicker] 日
+  /// [TDatePicker] 日
   String get dateLabel;
 
-  /// [TDDatePicker] 周
+  /// [TDatePicker] 周
   String get weeksLabel;
 
-  /// [TDCalendarHeader] 星期日
+  /// [TCalendarHeader] 星期日
   String get sunday;
 
-  /// [TDCalendarHeader] 星期一
+  /// [TCalendarHeader] 星期一
   String get monday;
 
-  /// [TDCalendarHeader] 星期二
+  /// [TCalendarHeader] 星期二
   String get tuesday;
 
-  /// [TDCalendarHeader] 星期三
+  /// [TCalendarHeader] 星期三
   String get wednesday;
 
-  /// [TDCalendarHeader] 星期四
+  /// [TCalendarHeader] 星期四
   String get thursday;
 
-  /// [TDCalendarHeader] 星期五
+  /// [TCalendarHeader] 星期五
   String get friday;
 
-  /// [TDCalendarHeader] 星期六
+  /// [TCalendarHeader] 星期六
   String get saturday;
 
-  /// [TDCalendarBody] 年
+  /// [TCalendarBody] 年
   String get year;
 
-  /// [TDCalendarBody] 一月
+  /// [TCalendarBody] 一月
   String get january;
 
-  /// [TDCalendarBody] 二月
+  /// [TCalendarBody] 二月
   String get february;
 
-  /// [TDCalendarBody] 三月
+  /// [TCalendarBody] 三月
   String get march;
 
-  /// [TDCalendarBody] 四月
+  /// [TCalendarBody] 四月
   String get april;
 
-  /// [TDCalendarBody] 五月
+  /// [TCalendarBody] 五月
   String get may;
 
-  /// [TDCalendarBody] 六月
+  /// [TCalendarBody] 六月
   String get june;
 
-  /// [TDCalendarBody] 七月
+  /// [TCalendarBody] 七月
   String get july;
 
-  /// [TDCalendarBody] 八月
+  /// [TCalendarBody] 八月
   String get august;
 
-  /// [TDCalendarBody] 九月
+  /// [TCalendarBody] 九月
   String get september;
 
-  /// [TDCalendarBody] 十月
+  /// [TCalendarBody] 十月
   String get october;
 
-  /// [TDCalendarBody] 十一月
+  /// [TCalendarBody] 十一月
   String get november;
 
-  /// [TDCalendarBody] 十二月
+  /// [TCalendarBody] 十二月
   String get december;
 
-  /// [TDCalendar] 时间
+  /// [TCalendar] 时间
   String get time;
 
-  /// [TDCalendar] 开始
+  /// [TCalendar] 开始
   String get start;
 
-  /// [TDCalendar] 结束
+  /// [TCalendar] 结束
   String get end;
 
-  /// [TDRate] 未评分
+  /// [TRate] 未评分
   String get notRated;
 
-  /// [TDRate] 选择选项
+  /// [TRate] 选择选项
   String get cascadeLabel;
 
-  /// [TDBackTop] 返回
+  /// [TBackTop] 返回
   String get back;
 
-  /// [TDBackTop] 顶部
+  /// [TBackTop] 顶部
   String get top;
 
-  /// [TDTable] 空数据
+  /// [TTable] 空数据
   String get emptyData;
 }
 
 /// 如果用户要重写，就应该全部重写，不开放只重新部分资源
 /// todo 这里默认为中文，推荐使用 Material 本地化作为备用，如 MaterialLocalizations.of(context).cancelButtonLabel
-class _DefaultResourceDelegate extends TDResourceDelegate {
+class _DefaultResourceDelegate extends TResourceDelegate {
   @override
   String get open => '开';
 

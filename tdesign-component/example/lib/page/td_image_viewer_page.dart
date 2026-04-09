@@ -4,9 +4,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-final List<TDActionSheetItem> actionSheetItems = [
-  TDActionSheetItem(label: '保存图片', icon: const Icon(TDIcons.save)),
-  TDActionSheetItem(label: '删除图片', icon: const Icon(TDIcons.delete)),
+final List<TActionSheetItem> actionSheetItems = [
+  TActionSheetItem(label: '保存图片', icon: const Icon(TIcons.save)),
+  TActionSheetItem(label: '删除图片', icon: const Icon(TIcons.delete)),
 ];
 
 List<String> get images => [
@@ -14,14 +14,14 @@ List<String> get images => [
       'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
     ];
 
-class TDImageViewerPage extends StatefulWidget {
-  const TDImageViewerPage({Key? key}) : super(key: key);
+class TImageViewerPage extends StatefulWidget {
+  const TImageViewerPage({Key? key}) : super(key: key);
 
   @override
-  State<TDImageViewerPage> createState() => _TDImageViewerPageState();
+  State<TImageViewerPage> createState() => _TImageViewerPageState();
 }
 
-class _TDImageViewerPageState extends State<TDImageViewerPage> {
+class _TImageViewerPageState extends State<TImageViewerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -45,28 +45,28 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _basicImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '基础图片预览',
       onTap: () {
-        TDImageViewer.showImageViewer(context: context, images: images);
+        TImageViewer.showImageViewer(context: context, images: images);
       },
     );
   }
 
   @Demo(group: 'image_viewer')
   Widget _actionImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '带操作图片预览',
       onTap: () {
-        TDImageViewer.showImageViewer(
+        TImageViewer.showImageViewer(
           context: context,
           images: images,
           showIndex: true,
@@ -78,20 +78,20 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _longPressImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '长按图片',
       onTap: () {
-        TDImageViewer.showImageViewer(
+        TImageViewer.showImageViewer(
           context: context,
           images: images,
           deleteBtn: true,
           showIndex: true,
           onLongPress: (index) {
-            TDActionSheet(
+            TActionSheet(
               context,
               visible: true,
               items: actionSheetItems,
@@ -104,20 +104,20 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _ultraWidthImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '图片超宽情况',
       onTap: () {
-        TDImageViewer.showImageViewer(
+        TImageViewer.showImageViewer(
           context: context,
           images: images,
           showIndex: true,
           height: 140,
           onLongPress: (index) {
-            TDActionSheet(
+            TActionSheet(
               context,
               visible: true,
               items: actionSheetItems,
@@ -130,20 +130,20 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _ultraHeightImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '图片超高情况',
       onTap: () {
-        TDImageViewer.showImageViewer(
+        TImageViewer.showImageViewer(
           context: context,
           images: images,
           showIndex: true,
           width: 180,
           onLongPress: (index) {
-            TDActionSheet(
+            TActionSheet(
               context,
               visible: true,
               items: actionSheetItems,
@@ -156,14 +156,14 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _descImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '带图片标题',
       onTap: () {
-        TDImageViewer.showImageViewer(
+        TImageViewer.showImageViewer(
           context: context,
           images: images,
           labels: ['图片标题1', '图片标题2'],

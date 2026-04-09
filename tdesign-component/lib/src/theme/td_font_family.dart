@@ -1,6 +1,6 @@
 import 'basic.dart';
 import 'td_theme.dart';
 
-extension TDFontFamilies on TDThemeData {
+extension TFontFamilies on TThemeData {
   FontFamily? get numberFontFamily => fontFamilyMap['numberFontFamily'];
 }

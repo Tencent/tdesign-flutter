@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-enum TDFooterType {
+enum TFooterType {
   /// 文字样式
   text,
 
@@ -13,8 +13,8 @@ enum TDFooterType {
   brand,
 }
 
-class TDFooter extends StatefulWidget {
-  const TDFooter(
+class TFooter extends StatefulWidget {
+  const TFooter(
     this.type, {
     Key? key,
     this.logo,
@@ -28,7 +28,7 @@ class TDFooter extends StatefulWidget {
   final String? logo;
 
   /// 样式
-  final TDFooterType type;
+  final TFooterType type;
 
   /// 文字
   final String text;
@@ -40,27 +40,27 @@ class TDFooter extends StatefulWidget {
   final double? height;
 
   /// 链接
-  final List<TDLink> links;
+  final List<TLink> links;
 
   @override
-  State<TDFooter> createState() => _TDFooterState();
+  State<TFooter> createState() => _TFooterState();
 }
 
-class _TDFooterState extends State<TDFooter> {
+class _TFooterState extends State<TFooter> {
   @override
   Widget build(BuildContext context) {
     var children = <Widget>[];
 
     switch (widget.type) {
-      case TDFooterType.text:
+      case TFooterType.text:
         children = [_renderText()];
         break;
-      case TDFooterType.link:
+      case TFooterType.link:
         children = [
           if (widget.links.isNotEmpty) _renderLinks() else _renderText()
         ];
         break;
-      case TDFooterType.brand:
+      case TFooterType.brand:
         children = [if (widget.logo != null) _renderLogo() else _renderText()];
         break;
     }
@@ -78,9 +78,9 @@ class _TDFooterState extends State<TDFooter> {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
         padding: const EdgeInsets.only(top: 4, bottom: 4),
-        child: TDImage(
+        child: TImage(
           assetUrl: widget.logo,
-          type: TDImageType.fitWidth,
+          type: TImageType.fitWidth,
           width: widget.width,
           height: widget.height,
         ),
@@ -104,7 +104,7 @@ class _TDFooterState extends State<TDFooter> {
                         border: Border(
                             right: BorderSide(
                                 color:
-                                    TDTheme.of(context).textColorPlaceholder)))
+                                    TTheme.of(context).textColorPlaceholder)))
                     : null,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: link,
@@ -128,7 +128,7 @@ class _TDFooterState extends State<TDFooter> {
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 12,
-        color: TDTheme.of(context).textColorPlaceholder,
+        color: TTheme.of(context).textColorPlaceholder,
       ),
     );
   }

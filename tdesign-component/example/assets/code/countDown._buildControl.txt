@@ -1,6 +1,6 @@
 
 Widget _buildControl(BuildContext context) {
-  var controller = TDCountDownController();
+  var controller = TCountDownController();
   return Wrap(
     direction: Axis.vertical,
     spacing: 8,
@@ -8,49 +8,49 @@ Widget _buildControl(BuildContext context) {
       Wrap(
         spacing: 8,
         children: [
-          TDButton(
+          TButton(
             text: '开始',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: TButtonSize.extraSmall,
+            theme: TButtonTheme.primary,
             onTap: () {
               controller.start();
             },
           ),
-          TDButton(
+          TButton(
             text: '结束',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: TButtonSize.extraSmall,
+            theme: TButtonTheme.primary,
             onTap: () {
               controller.reset(0);
             },
           ),
-          TDButton(
+          TButton(
             text: '重置',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: TButtonSize.extraSmall,
+            theme: TButtonTheme.primary,
             onTap: () {
               controller.reset();
             },
           ),
-          TDButton(
+          TButton(
             text: '暂停',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: TButtonSize.extraSmall,
+            theme: TButtonTheme.primary,
             onTap: () {
               controller.pause();
             },
           ),
-          TDButton(
+          TButton(
             text: '继续',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: TButtonSize.extraSmall,
+            theme: TButtonTheme.primary,
             onTap: () {
               controller.resume();
             },
           ),
         ],
       ),
-      TDCountDown(
+      TCountDown(
         time: 60 * 60 * 1000,
         controller: controller,
         autoStart: false,

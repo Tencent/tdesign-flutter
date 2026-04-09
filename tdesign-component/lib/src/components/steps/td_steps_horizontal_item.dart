@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// Steps步骤条，水平步骤item
-class TDStepsHorizontalItem extends StatelessWidget {
-  final TDStepsItemData data;
+class TStepsHorizontalItem extends StatelessWidget {
+  final TStepsItemData data;
   final int index;
   final int stepsCount;
   final int activeIndex;
-  final TDStepsStatus status;
+  final TStepsStatus status;
   final bool simple;
   final bool readOnly;
 
-  const TDStepsHorizontalItem({
+  const TStepsHorizontalItem({
     super.key,
     required this.data,
     required this.index,
@@ -24,7 +24,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
 
     /// 步骤条数字背景色
     var stepsNumberBgColor = theme.brandNormalColor;
@@ -53,7 +53,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
       stepsTitleColor = theme.textColorPrimary;
 
       completeIconWidget = Icon(
-        TDIcons.check,
+        TIcons.check,
         color: theme.brandNormalColor,
         size: 16,
       );
@@ -95,7 +95,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
 
     /// 错误状态处理
     /// 激活索引是当前索引，只有当前激活索引才需要显示
-    if (status == TDStepsStatus.error && activeIndex == index) {
+    if (status == TStepsStatus.error && activeIndex == index) {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
@@ -104,7 +104,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
         stepsIconWidget = Icon(
-          data.errorIcon ?? TDIcons.close,
+          data.errorIcon ?? TIcons.close,
           color: theme.errorNormalColor,
           size: shouldSetIconWidgetDecoration ? 16 : 22,
         );
@@ -210,7 +210,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 8),
       alignment: Alignment.center,
-      child: TDText(
+      child: TText(
         title,
         style: TextStyle(
           fontWeight: (activeIndex == index && !readOnly)
@@ -229,11 +229,11 @@ class TDStepsHorizontalItem extends StatelessWidget {
       margin: const EdgeInsets.only(top: 4),
       alignment: Alignment.center,
       child: data.customContent ??
-          TDText(
+          TText(
             data.content ?? '',
             style: TextStyle(
               fontWeight: FontWeight.w400,
-              color: TDTheme.of(context).textColorPlaceholder,
+              color: TTheme.of(context).textColorPlaceholder,
               fontSize: 12,
             ),
           ),

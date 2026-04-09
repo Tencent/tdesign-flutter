@@ -1,10 +1,10 @@
 
-  TDButton _buildPrimaryStrokeButton(BuildContext context) {
-    return const TDButton(
+  TButton _buildPrimaryStrokeButton(BuildContext context) {
+    return const TButton(
       text: '描边按钮',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.primary,
     );
   }

@@ -4,8 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDFooterPage extends StatelessWidget {
-  const TDFooterPage({Key? key}) : super(key: key);
+class TFooterPage extends StatelessWidget {
+  const TFooterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +29,21 @@ class TDFooterPage extends StatelessWidget {
 
   @Demo(group: 'footer')
   Widget _buildFooter(BuildContext context) {
-    return const TDFooter(
-      TDFooterType.text,
+    return const TFooter(
+      TFooterType.text,
       text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }
 
   @Demo(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
-    return TDFooter(
-      TDFooterType.link,
+    return TFooter(
+      TFooterType.link,
       links: [
-        TDLink(
+        TLink(
           label: '底部链接',
-          style: TDLinkStyle.primary,
-          type: TDLinkType.withSuffixIcon,
+          style: TLinkStyle.primary,
+          type: TLinkType.withSuffixIcon,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接 $link');
@@ -56,20 +56,20 @@ class TDFooterPage extends StatelessWidget {
 
   @Demo(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
-    return TDFooter(
-      TDFooterType.link,
+    return TFooter(
+      TFooterType.link,
       links: [
-        TDLink(
+        TLink(
           label: '底部链接1',
-          style: TDLinkStyle.primary,
+          style: TLinkStyle.primary,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接1 $link');
           },
         ),
-        TDLink(
+        TLink(
           label: '底部链接2',
-          style: TDLinkStyle.primary,
+          style: TLinkStyle.primary,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接2 $link');
@@ -82,8 +82,8 @@ class TDFooterPage extends StatelessWidget {
 
   @Demo(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
-    return const TDFooter(
-      TDFooterType.brand,
+    return const TFooter(
+      TFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,
     );

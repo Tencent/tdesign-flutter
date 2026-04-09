@@ -15,8 +15,8 @@ typedef OnLongPress = Function(int index);
 typedef LeftItemBuilder = Widget Function(BuildContext context, int index);
 typedef RightItemBuilder = Widget Function(BuildContext context, int index);
 
-class TDImageViewerWidget extends StatefulWidget {
-  const TDImageViewerWidget({
+class TImageViewerWidget extends StatefulWidget {
+  const TImageViewerWidget({
     Key? key,
     this.closeBtn,
     this.deleteBtn,
@@ -118,11 +118,11 @@ class TDImageViewerWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _TDImageViewerWidgetState();
+    return _TImageViewerWidgetState();
   }
 }
 
-class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
+class _TImageViewerWidgetState extends State<TImageViewerWidget> {
   int _index = 1;
   var swiperController = SwiperController();
 
@@ -156,10 +156,10 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     if (image is File) {
       return Container(
         margin: margin,
-        child: TDImage(
+        child: TImage(
           imageFile: image,
           fit: boxFit,
-          type: TDImageType.fitWidth,
+          type: TImageType.fitWidth,
         ),
       );
     }
@@ -167,20 +167,20 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       if (image.startsWith('http')) {
         return Container(
           margin: margin,
-          child: TDImage(
+          child: TImage(
             imgUrl: image,
             fit: boxFit,
-            type: TDImageType.fitWidth,
+            type: TImageType.fitWidth,
             loadingWidget: Container(
               width: size.width,
               height: size.height,
               // todo
-              color: TDTheme.of(context).fontGyColor1,
+              color: TTheme.of(context).fontGyColor1,
               child: Center(
-                child: TDLoading(
-                  icon: TDLoadingIcon.circle,
-                  size: TDLoadingSize.large,
-                  iconColor: TDTheme.of(context).brandNormalColor,
+                child: TLoading(
+                  icon: TLoadingIcon.circle,
+                  size: TLoadingSize.large,
+                  iconColor: TTheme.of(context).brandNormalColor,
                 ),
               ),
             ),
@@ -189,10 +189,10 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       }
       return Container(
         margin: margin,
-        child: TDImage(
+        child: TImage(
           assetUrl: image,
           fit: boxFit,
-          type: TDImageType.fitWidth,
+          type: TImageType.fitWidth,
         ),
       );
     }
@@ -210,7 +210,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
               widget.labels![_index - 1],
               textAlign: TextAlign.center,
               style: widget.labelStyle ??
-                  TextStyle(color: TDTheme.of(context).textColorAnti),
+                  TextStyle(color: TTheme.of(context).textColorAnti),
             ),
           ),
           Visibility(
@@ -220,7 +220,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
               textAlign: TextAlign.center,
               style: widget.indexStyle ??
                   TextStyle(
-                      color: TDTheme.of(context).brandClickColor, fontSize: 10),
+                      color: TTheme.of(context).brandClickColor, fontSize: 10),
             ),
           )
         ],
@@ -230,7 +230,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       (widget.showIndex ?? false) ? '$_index / ${widget.images.length}' : '',
       textAlign: TextAlign.center,
       style: widget.indexStyle ??
-          TextStyle(color: TDTheme.of(context).textColorAnti),
+          TextStyle(color: TTheme.of(context).textColorAnti),
     );
   }
 
@@ -247,8 +247,8 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         }
       },
       child: Icon(
-        TDIcons.close,
-        color: widget.iconColor ?? TDTheme.of(context).textColorAnti,
+        TIcons.close,
+        color: widget.iconColor ?? TTheme.of(context).textColorAnti,
       ),
     );
   }
@@ -277,8 +277,8 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           });
         },
         child: Icon(
-          TDIcons.delete,
-          color: widget.iconColor ?? TDTheme.of(context).textColorAnti,
+          TIcons.delete,
+          color: widget.iconColor ?? TTheme.of(context).textColorAnti,
         ),
       ),
     );
@@ -297,7 +297,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           right: 0,
           child: Container(
             // todo
-            color: widget.bgColor ?? TDTheme.of(context).fontGyColor1,
+            color: widget.bgColor ?? TTheme.of(context).fontGyColor1,
           ),
         ),
         Positioned(
@@ -334,7 +334,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         SafeArea(
           child: Container(
             color: widget.navBarBgColor ??
-                TDTheme.of(context).textColorPlaceholder,
+                TTheme.of(context).textColorPlaceholder,
             height: 44,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(

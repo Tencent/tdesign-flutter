@@ -3,14 +3,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDBadgePage extends StatefulWidget {
-  const TDBadgePage({Key? key}) : super(key: key);
+class TBadgePage extends StatefulWidget {
+  const TBadgePage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDBadgePageState();
+  State<StatefulWidget> createState() => _TBadgePageState();
 }
 
-class _TDBadgePageState extends State<TDBadgePage> {
+class _TBadgePageState extends State<TBadgePage> {
   int num = 8;
 
   @override
@@ -108,8 +108,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
           builder: _buildMoreThanMaxCountBadge,
         )
       ],
-      floatingActionButton: TDFab(
-          theme: TDFabTheme.primary,
+      floatingActionButton: TFab(
+          theme: TFabTheme.primary,
           onClick: () {
             setState(() {
               num = num + 1;
@@ -126,12 +126,12 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDText(
+          TText(
             '消息',
-            font: TDTheme.of(context).fontBodyLarge,
+            font: TTheme.of(context).fontBodyLarge,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
@@ -148,9 +148,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Icon(TDIcons.notification),
+          Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
@@ -167,15 +167,15 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDButton(
+          TButton(
             width: 80,
             height: 48,
             text: '按钮',
-            size: TDButtonSize.large,
-            type: TDButtonType.fill,
+            size: TButtonSize.large,
+            type: TButtonType.fill,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
@@ -192,9 +192,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDText('消息', font: TDTheme.of(context).fontBodyLarge),
+          TText('消息', font: TTheme.of(context).fontBodyLarge),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 28,
             bottom: 18,
           )
@@ -211,9 +211,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 18,
             bottom: 18,
           )
@@ -230,14 +230,14 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDButton(
+          const TButton(
             width: 80,
             height: 48,
             text: '按钮',
-            size: TDButtonSize.large,
+            size: TButtonSize.large,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             right: 0,
             top: 0,
           )
@@ -255,16 +255,16 @@ class _TDBadgePageState extends State<TDBadgePage> {
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             right: 0,
             top: 0,
           )
@@ -282,16 +282,16 @@ class _TDBadgePageState extends State<TDBadgePage> {
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.message, count: '0'),
+            child: TBadge(TBadgeType.message, count: '0'),
             right: 0,
             top: 0,
           )
@@ -309,17 +309,17 @@ class _TDBadgePageState extends State<TDBadgePage> {
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
             // 不显示 0
-            child: TDBadge(TDBadgeType.message, count: '0', showZero: false),
+            child: TBadge(TBadgeType.message, count: '0', showZero: false),
             right: 0,
             top: 0,
           )
@@ -336,9 +336,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 18,
             bottom: 18,
           )
@@ -355,11 +355,11 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
-              border: TDBadgeBorder.small,
+            child: TBadge(
+              TBadgeType.square,
+              border: TBadgeBorder.small,
               count: num.toString(),
             ),
             left: 20,
@@ -379,16 +379,16 @@ class _TDBadgePageState extends State<TDBadgePage> {
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.shop),
+            child: const Icon(TIcons.shop),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.bubble, count: '领积分'),
+            child: TBadge(TBadgeType.bubble, count: '领积分'),
             right: 0,
             top: 0,
           )
@@ -402,8 +402,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return const Stack(
       alignment: Alignment.topRight,
       children: [
-        TDCell(title: '单行标题'),
-        TDBadge(TDBadgeType.subscript, message: 'NEW'),
+        TCell(title: '单行标题'),
+        TBadge(TBadgeType.subscript, message: 'NEW'),
       ],
     );
   }
@@ -416,10 +416,10 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDAvatar(size: TDAvatarSize.large, type: TDAvatarType.icon),
+          const TAvatar(size: TAvatarSize.large, type: TAvatarType.icon),
           Positioned(
-            child: TDBadge(TDBadgeType.message,
-                size: TDBadgeSize.large, count: num.toString()),
+            child: TBadge(TBadgeType.message,
+                size: TBadgeSize.large, count: num.toString()),
             left: 48,
             bottom: 48,
           )
@@ -436,9 +436,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+          const TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 36,
             bottom: 36,
           )
@@ -457,15 +457,15 @@ class _TDBadgePageState extends State<TDBadgePage> {
           Positioned(
             left: 0,
             bottom: 0,
-            child: Icon(TDIcons.notification),
+            child: Icon(TIcons.notification),
           ),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
+            child: TBadge(
+              TBadgeType.square,
               count: '8888',
               maxCount: '9000',
-              size: TDBadgeSize.large,
-              border: TDBadgeBorder.large,
+              size: TBadgeSize.large,
+              border: TBadgeBorder.large,
             ),
             left: 18,
             bottom: 18,
@@ -482,14 +482,14 @@ class _TDBadgePageState extends State<TDBadgePage> {
       height: 50,
       child: Stack(
         children: [
-          Positioned(left: 0, bottom: 0, child: Icon(TDIcons.notification)),
+          Positioned(left: 0, bottom: 0, child: Icon(TIcons.notification)),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
+            child: TBadge(
+              TBadgeType.square,
               count: '888',
               maxCount: '99',
-              size: TDBadgeSize.large,
-              border: TDBadgeBorder.large,
+              size: TBadgeSize.large,
+              border: TBadgeBorder.large,
             ),
             left: 18,
             bottom: 18,

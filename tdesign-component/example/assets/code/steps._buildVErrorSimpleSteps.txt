@@ -1,34 +1,34 @@
 
   Widget _buildVErrorSimpleSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 简略模式
       simple: true,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }

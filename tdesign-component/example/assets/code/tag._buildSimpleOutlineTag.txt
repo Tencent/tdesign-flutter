@@ -1,6 +1,6 @@
 
-  TDTag _buildSimpleOutlineTag(BuildContext context) {
-    return const TDTag(
+  TTag _buildSimpleOutlineTag(BuildContext context) {
+    return const TTag(
       '标签文字',
       isOutline: true,
     );

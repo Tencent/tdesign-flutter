@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
-class TDSearchBarPage extends StatefulWidget {
-  const TDSearchBarPage({Key? key}) : super(key: key);
+class TSearchBarPage extends StatefulWidget {
+  const TSearchBarPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDSearchBarPageState();
+  State<StatefulWidget> createState() => _TSearchBarPageState();
 }
 
-class _TDSearchBarPageState extends State<TDSearchBarPage> {
+class _TSearchBarPageState extends State<TSearchBarPage> {
   String? inputText;
   String? searchText;
   TextEditingController inputController = TextEditingController();
@@ -45,7 +45,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
 
   @Demo(group: 'search')
   Widget _buildDefaultSearchBar(BuildContext context) {
-    return TDSearchBar(
+    return TSearchBar(
       placeHolder: '搜索预设文案',
       onTextChanged: (String text) {
         setState(() {
@@ -57,7 +57,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
 
   @Demo(group: 'search')
   Widget _buildFocusSearchBar(BuildContext context) {
-    return const TDSearchBar(
+    return const TSearchBar(
       placeHolder: '搜索预设文案',
       needCancel: true,
       autoFocus: true,
@@ -69,10 +69,10 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
     return Column(
       // spacing: 16,
       children: [
-        TDSearchBar(
+        TSearchBar(
           placeHolder: '搜索预设文案',
           // 方形
-          style: TDSearchStyle.square,
+          style: TSearchStyle.square,
           onTextChanged: (String text) {
             setState(() {
               inputText = text;
@@ -80,10 +80,10 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
           },
         ),
         const SizedBox(height: 16),
-        TDSearchBar(
+        TSearchBar(
           placeHolder: '搜索预设文案',
           // 圆形
-          style: TDSearchStyle.round,
+          style: TSearchStyle.round,
           onTextChanged: (String text) {
             setState(() {
               inputText = text;
@@ -96,9 +96,9 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
 
   @Demo(group: 'search')
   Widget _buildCenterSearchBar(BuildContext context) {
-    return TDSearchBar(
+    return TSearchBar(
       placeHolder: '搜索预设文案',
-      alignment: TDSearchAlignment.center,
+      alignment: TSearchAlignment.center,
       onTextChanged: (String text) {
         setState(() {
           inputText = text;
@@ -112,9 +112,9 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
     return Column(
       // spacing: 16,
       children: [
-        TDSearchBar(
+        TSearchBar(
           placeHolder: '搜索预设文案',
-          alignment: TDSearchAlignment.left,
+          alignment: TSearchAlignment.left,
           action: '搜索',
           onActionClick: (String text) {
             setState(() {
@@ -131,7 +131,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
         Container(
           padding: const EdgeInsets.only(left: 15),
           alignment: Alignment.centerLeft,
-          child: TDText('搜索框输入的内容：${searchText ?? ''}'),
+          child: TText('搜索框输入的内容：${searchText ?? ''}'),
         )
       ],
     );
@@ -139,7 +139,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
 
   @Demo(group: 'search')
   Widget _buildFocusSearchBarWithAction(BuildContext context) {
-    return TDSearchBar(
+    return TSearchBar(
       placeHolder: '搜索预设文案',
       action: '搜索',
       needCancel: true,
@@ -149,7 +149,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return TDConfirmDialog(
+            return TConfirmDialog(
               content: inputController.text.isNotEmpty
                   ? '搜索关键词：${inputController.text}'
                   : '搜索关键词为空',

@@ -9,8 +9,8 @@ import 'td_swipe_cell_inherited.dart';
 import 'td_swipe_cell_panel.dart';
 
 /// 滑动单元格操作按钮
-class TDSwipeCellAction extends StatelessWidget {
-  const TDSwipeCellAction({
+class TSwipeCellAction extends StatelessWidget {
+  const TSwipeCellAction({
     Key? key,
     this.flex = 1,
     this.backgroundColor,
@@ -29,7 +29,7 @@ class TDSwipeCellAction extends StatelessWidget {
         assert(icon != null || label != null, 'icon or label must not be null'),
         super(key: key);
 
-  /// 宽度占比，默认为 1，[TDSwipeCellPanel.confirms]下无效（失踪占满整个[TDSwipeCellPanel]宽度）
+  /// 宽度占比，默认为 1，[TSwipeCellPanel.confirms]下无效（失踪占满整个[TSwipeCellPanel]宽度）
   final int? flex;
 
   /// 背景颜色
@@ -62,8 +62,8 @@ class TDSwipeCellAction extends StatelessWidget {
   /// 图标和标题的排列方向
   final Axis? direction;
 
-  /// 指定[TDSwipeCellPanel.children]的索引，来打开该[TDSwipeCellAction]
-  /// [TDSwipeCellPanel.confirms]参数下才配置该参数
+  /// 指定[TSwipeCellPanel.children]的索引，来打开该[TSwipeCellAction]
+  /// [TSwipeCellPanel.confirms]参数下才配置该参数
   final List<int>? confirmIndex;
 
   /// 自定义构建
@@ -71,23 +71,23 @@ class TDSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = TDTheme.of(context).fontMarkMedium ??
+    final fontSize = TTheme.of(context).fontMarkMedium ??
         Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
     final children = <Widget>[
       if (icon != null)
         Icon(
           icon,
           size: iconSize ?? 18,
-          color: labelStyle?.color ?? TDTheme.of(context).textColorAnti,
+          color: labelStyle?.color ?? TTheme.of(context).textColorAnti,
         ),
       if (icon != null && label != null) SizedBox(width: spacing ?? 2),
       if (label != null)
         Flexible(
-          child: TDText(
+          child: TText(
             label,
             forceVerticalCenter: true,
             font: fontSize,
-            textColor: TDTheme.of(context).textColorAnti,
+            textColor: TTheme.of(context).textColorAnti,
             style: labelStyle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -119,7 +119,7 @@ class TDSwipeCellAction extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    final swipeInherited = TDSwipeCellInherited.of(context)!;
+    final swipeInherited = TSwipeCellInherited.of(context)!;
     var openConfirm = swipeInherited.actionClick(this);
     if (openConfirm == true) {
       return;

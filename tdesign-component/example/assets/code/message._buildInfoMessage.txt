@@ -1,13 +1,13 @@
 
   Widget _buildInfoMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
       isBlock: true,
       text: '普通通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
-        TDMessage.showMessage(
+        TMessage.showMessage(
           context: context,
           visible: true,
           icon: true,

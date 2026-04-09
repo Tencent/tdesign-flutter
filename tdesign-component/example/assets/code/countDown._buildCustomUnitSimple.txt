@@ -1,6 +1,6 @@
 
-TDCountDown _buildCustomUnitSimple(BuildContext context) {
-  var style = TDCountDownStyle.generateStyle(context);
-  style.timeColor = TDTheme.of(context).errorColor6;
-  return TDCountDown(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+TCountDown _buildCustomUnitSimple(BuildContext context) {
+  var style = TCountDownStyle.generateStyle(context);
+  style.timeColor = TTheme.of(context).errorColor6;
+  return TCountDown(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
 }

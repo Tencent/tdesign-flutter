@@ -28,7 +28,7 @@
 - 提供遵循 TDesign 设计规范的 Flutter UI 组件库
 - 支持根据 App 设计风格自定义主题
 - 提供常用图标库，支持自定义替换
-- 根据 TDesign 规范定义颜色组（可在 `TDColors` 中查看）
+- 根据 TDesign 规范定义颜色组（可在 `TColors` 中查看）
 - 通过颜色值声明类实时预览默认颜色效果
 
 ## 📱 预览
@@ -71,16 +71,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### 主题配置
 
-可通过 JSON 文件配置主题样式（颜色、字体尺寸、字体样式、圆角、阴影）。通过 `TDTheme.of(context)` 或 `TDTheme.defaultData()` 获取主题数据。
+可通过 JSON 文件配置主题样式（颜色、字体尺寸、字体样式、圆角、阴影）。通过 `TTheme.of(context)` 或 `TTheme.defaultData()` 获取主题数据。
 
-> **建议**：组件都使用 `TDTheme.of(context)`。不需要跟随局部主题的组件，才可以使用 `TDTheme.defaultData()`。
+> **建议**：组件都使用 `TTheme.of(context)`。不需要跟随局部主题的组件，才可以使用 `TTheme.defaultData()`。
 
 ```dart
 // 颜色
-TDTheme.of(context).brandNormalColor
+TTheme.of(context).brandNormalColor
 
 // 字体
-TDTheme.defaultData().fontBodyLarge
+TTheme.defaultData().fontBodyLarge
 ```
 
 ### 图标
@@ -88,7 +88,7 @@ TDTheme.defaultData().fontBodyLarge
 TDesign 图标为 TTF 格式，不跟随主题：
 
 ```dart
-Icon(TDIcons.activity)
+Icon(TIcons.activity)
 ```
 
 ## 🎨 自定义主题
@@ -118,7 +118,7 @@ String themeConfig = '''
 
 MaterialApp(
   theme: ThemeData(
-    extensions: [TDThemeData.fromJson('myTheme', themeConfig)!],
+    extensions: [TThemeData.fromJson('myTheme', themeConfig)!],
   ),
   // ...
 )
@@ -142,14 +142,14 @@ MaterialApp(
 
 ![img.png](https://tdesign.tencent.com/flutter/assets/dart_modify.png)
 
-3. **应用**：将主题 JSON 加载进 `TDTheme`，美观的自定义主题就设置完成了。
+3. **应用**：将主题 JSON 加载进 `TTheme`，美观的自定义主题就设置完成了。
 
 ```dart
 // 开启多套主题功能
-TDTheme.needMultiTheme();
+TTheme.needMultiTheme();
 
 var jsonString = await rootBundle.loadString('assets/theme.json');
-var _themeData = TDThemeData.fromJson('green', jsonString);
+var _themeData = TThemeData.fromJson('green', jsonString);
 // ...
 MaterialApp(
   title: 'TDesign Flutter Example',
@@ -166,7 +166,7 @@ MaterialApp(
 
 ```dart
 // 开启多套主题功能
-TDTheme.needMultiTheme();
+TTheme.needMultiTheme();
 // ...
 // MaterialApp 中设置三个属性如下，如果有自定义主题属性，可以通过 copyWith() 方法修改。
 // 注：主题切换需要业务自己实现，比如使用 Provider，具体可参考 tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart
@@ -180,15 +180,15 @@ MaterialApp(
 
 ## 🌍 国际化
 
-TDesign Flutter 组件库内部不内置国际化语言，但支持与 Flutter 的国际化能力搭配使用。可以继承 `TDResourceDelegate` 类，该类抽离了组件内部所有文字资源，重写获取文字的方法进行国际化处理，并通过 `TDTheme.setResourceBuilder` 注入。
+TDesign Flutter 组件库内部不内置国际化语言，但支持与 Flutter 的国际化能力搭配使用。可以继承 `TResourceDelegate` 类，该类抽离了组件内部所有文字资源，重写获取文字的方法进行国际化处理，并通过 `TTheme.setResourceBuilder` 注入。
 
 ### 快速配置
 
-1. **重写 `TDResourceDelegate` 类：**
+1. **重写 `TResourceDelegate` 类：**
 
 ```dart
 /// 国际化资源代理
-class IntlResourceDelegate extends TDResourceDelegate {
+class IntlResourceDelegate extends TResourceDelegate {
   IntlResourceDelegate(this.context);
 
   BuildContext context;
@@ -206,7 +206,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
 }
 ```
 
-2. **注入 `TDResourceDelegate` 类：**
+2. **注入 `TResourceDelegate` 类：**
 
 ```dart
 var delegate = IntlResourceDelegate(context);
@@ -214,7 +214,7 @@ return MaterialApp(
   home: Builder(
     builder: (context) {
       // 设置文案代理，国际化需要在 MaterialApp 初始化完成之后才生效，而且需要每次更新 context
-      TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
+      TTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
       return MyHomePage(
         title: AppLocalizations.of(context)?.components ?? '',
       );
@@ -235,7 +235,7 @@ return MaterialApp(
 
 - **v0.1.4 版本**：Flutter 3.16 之后，修改了渲染引擎，导致启用 `forceVerticalCenter` 参数的组件字体偏移更多，不再居中。可以通过设置 `kTextForceVerticalCenterEnable=false` 来禁用字体居中功能，让组件显示与官方 Text 一致。
 
-- **v0.1.5 版本**：适配了 Android 和 iOS 双端基础系统字体的中文居中，其他语言的字体，可以通过重写 `TDTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TDTextPaddingConfig` 使用方法可参考 `TDTextPage`。
+- **v0.1.5 版本**：适配了 Android 和 iOS 双端基础系统字体的中文居中，其他语言的字体，可以通过重写 `TTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TTextPaddingConfig` 使用方法可参考 `TTextPage`。
 
 ## 🔗 更多示例
 

@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDIconPage extends StatefulWidget {
-  const TDIconPage({Key? key}) : super(key: key);
+class TIconPage extends StatefulWidget {
+  const TIconPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDIconPageState();
+  State<StatefulWidget> createState() => _TIconPageState();
 }
 
-class _TDIconPageState extends State<TDIconPage> {
+class _TIconPageState extends State<TIconPage> {
   bool showBorder = false;
 
   Iterable iconList = [];
@@ -22,7 +22,7 @@ class _TDIconPageState extends State<TDIconPage> {
   void initState() {
     super.initState();
 
-    iconList = TDIcons.all.values;
+    iconList = TIcons.all.values;
   }
 
   @override
@@ -55,13 +55,13 @@ class _TDIconPageState extends State<TDIconPage> {
             alignment: Alignment.topLeft,
             child: const Wrap(
               children: [
-                TDText('筛选Icon请前往TDesign官网(长按网址可复制):'),
+                TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
                 SelectableText(
                     'https://tdesign.tencent.com/icons')
               ],
             ),
           ),
-          TDSearchBar(
+          TSearchBar(
             action: '搜索',
             onActionClick: (text) {
               setState(() {
@@ -70,7 +70,7 @@ class _TDIconPageState extends State<TDIconPage> {
               });
               Future.delayed(const Duration(milliseconds: 30), () {
                 var list = [];
-                TDIcons.all.forEach((key, value) {
+                TIcons.all.forEach((key, value) {
                   if (value.name.contains(text)) {
                     list.add(value);
                   }
@@ -83,13 +83,13 @@ class _TDIconPageState extends State<TDIconPage> {
             },
             onClearClick: (_) {
               setState(() {
-                iconList = TDIcons.all.values;
+                iconList = TIcons.all.values;
               });
             },
           ),
-          TDCell(
+          TCell(
             title: '显示边框',
-            noteWidget: TDSwitch(
+            noteWidget: TSwitch(
               isOn: showBorder,
               onChanged: (value) {
                 setState(() {
@@ -105,7 +105,7 @@ class _TDIconPageState extends State<TDIconPage> {
                 height: 300,
                 alignment: Alignment.center,
                 child:
-                    isLoading ? const TDText('加载中...') : const TDText('暂无内容'),
+                    isLoading ? const TText('加载中...') : const TText('暂无内容'),
               );
             }
 
@@ -127,12 +127,12 @@ class _TDIconPageState extends State<TDIconPage> {
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   color: showBorder
-                                      ? TDTheme.of(context).brandDisabledColor
+                                      ? TTheme.of(context).brandDisabledColor
                                       : Colors.transparent,
                                 ),
                                 child: Icon(item, size: 32),
                               ),
-                              TDText(item.name)
+                              TText(item.name)
                             ],
                           ),
                         );

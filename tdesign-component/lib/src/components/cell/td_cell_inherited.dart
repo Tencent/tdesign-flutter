@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 
 import 'td_cell_style.dart';
 
-class TDCellInherited extends InheritedWidget {
-  const TDCellInherited({required Widget child, required this.style, Key? key})
+class TCellInherited extends InheritedWidget {
+  const TCellInherited({required Widget child, required this.style, Key? key})
       : super(child: child, key: key);
 
-  final TDCellStyle style;
+  final TCellStyle style;
 
   @override
-  bool updateShouldNotify(covariant TDCellInherited oldWidget) {
+  bool updateShouldNotify(covariant TCellInherited oldWidget) {
     return true;
   }
 
-  static TDCellInherited? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TDCellInherited>();
+  static TCellInherited? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TCellInherited>();
   }
 }

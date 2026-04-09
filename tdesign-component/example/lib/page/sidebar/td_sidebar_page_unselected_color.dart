@@ -5,25 +5,25 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarUnSelectedColorPage演示
+/// TSideBarUnSelectedColorPage演示
 ///
-class TDSideBarUnSelectedColorPage extends StatefulWidget {
-  const TDSideBarUnSelectedColorPage({Key? key}) : super(key: key);
+class TSideBarUnSelectedColorPage extends StatefulWidget {
+  const TSideBarUnSelectedColorPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarUnSelectedColorPageState();
+    return TSideBarUnSelectedColorPageState();
   }
 }
 
-class TDSideBarUnSelectedColorPageState
-    extends State<TDSideBarUnSelectedColorPage> {
+class TSideBarUnSelectedColorPageState
+    extends State<TSideBarUnSelectedColorPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   var titleBarHeight = 44;
   var testButtonHeight = 80.0;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
   static const threshold = 50;
   var lock = false;
   var list = <SideItemProps>[];
@@ -55,14 +55,14 @@ class TDSideBarUnSelectedColorPageState
         index: i,
         label: '选项$i',
         value: i,
-        icon: TDIcons.app,
+        icon: TIcons.app,
       ));
       pages.add(getAnchorDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -119,7 +119,7 @@ class TDSideBarUnSelectedColorPageState
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(
+          child: TButton(
             text: '更新children',
             onTap: () {
               setState(() {
@@ -142,9 +142,9 @@ class TDSideBarUnSelectedColorPageState
           children: [
             SizedBox(
               width: 110,
-              child: TDSideBar(
+              child: TSideBar(
                 unSelectedColor: Colors.red,
-                style: TDSideBarStyle.normal,
+                style: TSideBarStyle.normal,
                 value: currentValue,
                 controller: _sideBarController,
                 onChanged: onChanged,
@@ -155,7 +155,7 @@ class TDSideBarUnSelectedColorPageState
               child: SingleChildScrollView(
                   controller: _demoScroller,
                   child: Container(
-                    color: TDTheme.of(context).bgColorContainer,
+                    color: TTheme.of(context).bgColorContainer,
                     child: Column(
                       children: [
                         ...pages,
@@ -176,7 +176,7 @@ class TDSideBarUnSelectedColorPageState
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-          child: TDText('标题$index',
+          child: TText('标题$index',
               style: const TextStyle(
                 fontSize: 14,
               )),
@@ -193,11 +193,11 @@ class TDSideBarUnSelectedColorPageState
     return Column(
       children: [
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
       ],
     );
   }
@@ -209,14 +209,14 @@ class TDSideBarUnSelectedColorPageState
         // spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TDImage(
+          TImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: TImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           SizedBox(width: 16),
-          TDText('标题', style: TextStyle(fontSize: 16))
+          TText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

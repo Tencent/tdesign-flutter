@@ -1,31 +1,31 @@
 
 Widget _buildBadgeListActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '带徽标列表',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      TActionSheet(
         context,
         visible: true,
         items: [
-          TDActionSheetItem(
+          TActionSheetItem(
             label: '选项一',
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const TBadge(TBadgeType.redPoint),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: '选项二',
-            badge: const TDBadge(TDBadgeType.message, count: '8'),
+            badge: const TBadge(TBadgeType.message, count: '8'),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: '选项三',
-            badge: const TDBadge(TDBadgeType.message, count: '99'),
+            badge: const TBadge(TBadgeType.message, count: '99'),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: '选项四',
-            badge: const TDBadge(TDBadgeType.message, count: '99+'),
+            badge: const TBadge(TBadgeType.message, count: '99+'),
           ),
         ],
       );

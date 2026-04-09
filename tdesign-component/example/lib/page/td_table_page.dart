@@ -4,8 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDTablePage extends StatelessWidget {
-  const TDTablePage({Key? key}) : super(key: key);
+class TTablePage extends StatelessWidget {
+  const TTablePage({Key? key}) : super(key: key);
 
   List<dynamic> _getData(int index) {
     var data = <dynamic>[];
@@ -103,12 +103,12 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _basicTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
     );
@@ -116,13 +116,13 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _sortableTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(
+        TTableCol(
             title: '标题', colKey: 'title1', ellipsis: true, sortable: true),
-        TDTableCol(title: '标题', colKey: 'title2', sortable: true),
-        TDTableCol(title: '标题', colKey: 'title3', sortable: true),
-        TDTableCol(title: '标题', colKey: 'title4', sortable: true)
+        TTableCol(title: '标题', colKey: 'title2', sortable: true),
+        TTableCol(title: '标题', colKey: 'title3', sortable: true),
+        TTableCol(title: '标题', colKey: 'title4', sortable: true)
       ],
       data: _getData(9),
     );
@@ -130,28 +130,28 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _operationBtnTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(
+        TTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(
           title: '标题',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                TText(
                   '修改',
                   style: TextStyle(
-                      color: TDTheme.of(context).brandNormalColor,
+                      color: TTheme.of(context).brandNormalColor,
                       fontSize: 14),
                 ),
-                TDText(
+                TText(
                   '通过',
                   style: TextStyle(
-                      color: TDTheme.of(context).brandNormalColor,
+                      color: TTheme.of(context).brandNormalColor,
                       fontSize: 14),
                 ),
               ],
@@ -165,22 +165,22 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _operationIconTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(
+        TTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(
           title: '标题',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(TDIcons.upload,
-                    color: TDTheme.of(context).brandNormalColor, size: 16),
-                Icon(TDIcons.delete,
-                    color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TIcons.upload,
+                    color: TTheme.of(context).brandNormalColor, size: 16),
+                Icon(TIcons.delete,
+                    color: TTheme.of(context).brandNormalColor, size: 16),
               ],
             );
           },
@@ -192,16 +192,16 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _fixedFirstColTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       bordered: true,
       height: 240,
       columns: [
-        TDTableCol(title: '固定列', colKey: 'title1', fixed: TDTableColFixed.left, width: 100),
-        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
-        TDTableCol(title: '标题四', colKey: 'title4', width: 160),
-        TDTableCol(title: '标题五', colKey: 'title5', width: 160),
-        TDTableCol(title: '标题六', colKey: 'title6', width: 160),
+        TTableCol(title: '固定列', colKey: 'title1', fixed: TTableColFixed.left, width: 100),
+        TTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TTableCol(title: '标题四', colKey: 'title4', width: 160),
+        TTableCol(title: '标题五', colKey: 'title5', width: 160),
+        TTableCol(title: '标题六', colKey: 'title6', width: 160),
       ],
       data: _getFixedColData(15),
     );
@@ -209,35 +209,35 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _fixedEndColTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       bordered: true,
       height: 240,
       columns: [
-        TDTableCol(title: '标题一', colKey: 'title1', width: 160),
-        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
-        TDTableCol(title: '标题四', colKey: 'title5', width: 160),
-        TDTableCol(title: '标题五', colKey: 'title6', width: 160),
-        TDTableCol(
+        TTableCol(title: '标题一', colKey: 'title1', width: 160),
+        TTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TTableCol(title: '标题四', colKey: 'title5', width: 160),
+        TTableCol(title: '标题五', colKey: 'title6', width: 160),
+        TTableCol(
           title: '操作',
           colKey: 'title4',
-          fixed: TDTableColFixed.right,
+          fixed: TTableColFixed.right,
           width: 100,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                TText(
                   '修改',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
+                    color: TTheme.of(context).brandNormalColor,
                     fontSize: 14,
                   ),
                 ),
-                TDText(
+                TText(
                   '通过',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
+                    color: TTheme.of(context).brandNormalColor,
                     fontSize: 14,
                   ),
                 ),
@@ -252,11 +252,11 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _horizontalScrollTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', width: 160),
-        TDTableCol(title: '标题', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题', colKey: 'title3', width: 160),
+        TTableCol(title: '标题', colKey: 'title1', width: 160),
+        TTableCol(title: '标题', colKey: 'title2', width: 160),
+        TTableCol(title: '标题', colKey: 'title3', width: 160),
       ],
       data: _getData2(),
     );
@@ -264,13 +264,13 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _stripeTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       stripe: true,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
     );
@@ -278,13 +278,13 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _borderTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       bordered: true,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
     );
@@ -292,14 +292,14 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _fixedHeaderTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       bordered: true,
       height: 240,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
     );
@@ -307,30 +307,30 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _fixedScrollTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', width: 200),
-        TDTableCol(title: '标题', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题', colKey: 'title3', width: 160),
-        TDTableCol(
+        TTableCol(title: '标题', colKey: 'title1', width: 200),
+        TTableCol(title: '标题', colKey: 'title2', width: 160),
+        TTableCol(title: '标题', colKey: 'title3', width: 160),
+        TTableCol(
           title: '标题',
           colKey: 'title4',
-          fixed: TDTableColFixed.right,
+          fixed: TTableColFixed.right,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                TText(
                   '修改',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
+                    color: TTheme.of(context).brandNormalColor,
                     fontSize: 14,
                   ),
                 ),
-                TDText(
+                TText(
                   '通过',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
+                    color: TTheme.of(context).brandNormalColor,
                     fontSize: 14,
                   ),
                 ),
@@ -345,15 +345,15 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _centerTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(
-            title: '标题', colKey: 'title1', align: TDTableColAlign.center),
-        TDTableCol(
-            title: '标题', colKey: 'title2', align: TDTableColAlign.center),
-        TDTableCol(
-            title: '标题', colKey: 'title3', align: TDTableColAlign.center),
-        TDTableCol(title: '标题', colKey: 'title4', align: TDTableColAlign.center)
+        TTableCol(
+            title: '标题', colKey: 'title1', align: TTableColAlign.center),
+        TTableCol(
+            title: '标题', colKey: 'title2', align: TTableColAlign.center),
+        TTableCol(
+            title: '标题', colKey: 'title3', align: TTableColAlign.center),
+        TTableCol(title: '标题', colKey: 'title4', align: TTableColAlign.center)
       ],
       data: _getData(10),
     );
@@ -361,24 +361,24 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _emptyTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1'),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
     );
   }
 
   @Demo(group: 'table')
   Widget _loadingTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1'),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
       loading: true,
     );
@@ -386,10 +386,10 @@ class TDTablePage extends StatelessWidget {
 
   @Demo(group: 'table')
   Widget _selectTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       data: _getData(10),
       columns: [
-        TDTableCol(
+        TTableCol(
             selection: true,
             checked: (index, row) {
               return index == 0;
@@ -398,10 +398,10 @@ class TDTablePage extends StatelessWidget {
             selectable: (index, row) {
               return index % 2 == 0;
             }),
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1'),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
     );
   }
@@ -443,9 +443,9 @@ class _ShowFooterTableState extends State<ShowFooterTable> {
 
   @Demo(group: 'table')
   Widget _showFooterTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       height: 100,
-      footerWidget: _hasMore ? TDText('加载更多...') : TDText('没有更多数据了'),
+      footerWidget: _hasMore ? TText('加载更多...') : TText('没有更多数据了'),
       onScroll: (controller) {
         if (controller.position.pixels == controller.position.maxScrollExtent &&
             _hasMore) {
@@ -455,10 +455,10 @@ class _ShowFooterTableState extends State<ShowFooterTable> {
       },
       data: _data,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
+        TTableCol(title: '标题', colKey: 'title1'),
+        TTableCol(title: '标题', colKey: 'title2'),
+        TTableCol(title: '标题', colKey: 'title3'),
+        TTableCol(title: '标题', colKey: 'title4')
       ],
     );
   }

@@ -3,8 +3,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDResultPage extends StatelessWidget {
-  const TDResultPage({super.key});
+class TResultPage extends StatelessWidget {
+  const TResultPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +59,10 @@ class TDResultPage extends StatelessWidget {
   }
 
   Widget _buildPageExample(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '页面示例跳转',
-      theme: TDButtonTheme.primary,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      size: TButtonSize.large,
       isBlock: true,
       onTap: () {
         Navigator.push(
@@ -76,16 +76,16 @@ class TDResultPage extends StatelessWidget {
                 // spacing: 48,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const TDResult(
+                  const TResult(
                     title: '成功状态',
-                    theme: TDResultTheme.success,
+                    theme: TResultTheme.success,
                     description: '描述文字',
                   ),
                   const SizedBox(height: 48),
-                  TDButton(
+                  TButton(
                     text: '返回',
-                    theme: TDButtonTheme.primary,
-                    size: TDButtonSize.large,
+                    theme: TButtonTheme.primary,
+                    size: TButtonSize.large,
                     isBlock: true,
                     onTap: () => Navigator.pop(context),
                   ),
@@ -99,76 +99,76 @@ class TDResultPage extends StatelessWidget {
   }
 
   @Demo(group: 'result')
-  TDResult _buildBasicResultSuccess(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultSuccess(BuildContext context) {
+    return const TResult(
       title: '成功状态',
-      theme: TDResultTheme.success,
+      theme: TResultTheme.success,
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildBasicResultError(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildBasicResultWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildBasicResultDefault(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultDefault(BuildContext context) {
+    return const TResult(
       title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
+      theme: TResultTheme.defaultTheme,
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionSuccess(BuildContext context) {
+    return const TResult(
       title: '成功状态',
-      theme: TDResultTheme.success,
+      theme: TResultTheme.success,
       description: '描述文字',
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
       description: '描述文字',
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
       description: '描述文字',
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionDefault(BuildContext context) {
+    return const TResult(
       title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
+      theme: TResultTheme.defaultTheme,
       description: '描述文字',
     );
   }
 
   @Demo(group: 'result')
-  TDResult _buildCustomResultContent(BuildContext context) {
-    return TDResult(
+  TResult _buildCustomResultContent(BuildContext context) {
+    return TResult(
       title: '自定义结果',
       icon: Image.asset('assets/img/illustration.png'),
       description: '描述文字',

@@ -10,8 +10,8 @@ export 'td_indexes_anchor.dart';
 export 'td_indexes_list.dart';
 
 /// 索引
-class TDIndexes extends StatefulWidget {
-  const TDIndexes({
+class TIndexes extends StatefulWidget {
+  const TIndexes({
     Key? key,
     this.indexList,
     this.indexListMaxHeight = 0.8,
@@ -66,10 +66,10 @@ class TDIndexes extends StatefulWidget {
       builderIndex;
 
   @override
-  _TDIndexesState createState() => _TDIndexesState();
+  _TIndexesState createState() => _TIndexesState();
 }
 
-class _TDIndexesState extends State<TDIndexes> {
+class _TIndexesState extends State<TIndexes> {
   late List<String> _indexList;
   late ValueNotifier<String> _activeIndex;
   late ScrollController _scrollController;
@@ -92,7 +92,7 @@ class _TDIndexesState extends State<TDIndexes> {
   }
 
   @override
-  void didUpdateWidget(TDIndexes oldWidget) {
+  void didUpdateWidget(TIndexes oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
       _indexList = widget.indexList ?? _defaultAZList;
@@ -113,7 +113,7 @@ class _TDIndexesState extends State<TDIndexes> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: TDTheme.of(context).bgColorContainer,
+      color: TTheme.of(context).bgColorContainer,
       child: Stack(
         children: [
           CustomScrollView(
@@ -121,7 +121,7 @@ class _TDIndexesState extends State<TDIndexes> {
             reverse: widget.reverse ?? false,
             slivers: _slivers(),
           ),
-          TDIndexesList(
+          TIndexesList(
             indexList: _indexList,
             activeIndex: _activeIndex,
             onSelect: (newIndex, oldIndex) {
@@ -147,7 +147,7 @@ class _TDIndexesState extends State<TDIndexes> {
       return SliverStickyHeader.builder(
         sticky: widget.sticky ?? true,
         pinnedOffset: isPinnedOffset
-            ? TDTheme.of(context).spacer8 + stickyOffset
+            ? TTheme.of(context).spacer8 + stickyOffset
             : stickyOffset,
         builder: (context, state) {
           _anchorKeys[e] = context;
@@ -157,7 +157,7 @@ class _TDIndexesState extends State<TDIndexes> {
               widget.onChange?.call(e);
             });
           }
-          return TDIndexesAnchor(
+          return TIndexesAnchor(
             text: e,
             capsuleTheme: capsuleTheme,
             activeIndex: _activeIndex,
@@ -171,7 +171,7 @@ class _TDIndexesState extends State<TDIndexes> {
               _contentKeys[e] = context;
               return Padding(
                 padding: isPinnedOffset
-                    ? EdgeInsets.only(top: TDTheme.of(context).spacer8)
+                    ? EdgeInsets.only(top: TTheme.of(context).spacer8)
                     : EdgeInsets.zero,
                 child: widget.builderContent(context, e),
               );

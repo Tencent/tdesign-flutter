@@ -1,7 +1,7 @@
 
   Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
-    return TDSlider(
-      sliderThemeData: TDSliderThemeData.capsule(
+    return TSlider(
+      sliderThemeData: TSliderThemeData.capsule(
         context: context,
         showScaleValue: true,
         divisions: 5,
@@ -9,8 +9,8 @@
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-          // activeTickMarkColor: TDTheme.of(context).componentBorderColor,
-          // inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
+          // activeTickMarkColor: TTheme.of(context).componentBorderColor,
+          // inactiveTickMarkColor: TTheme.of(context).componentStrokeColor,
           )),
       value: 60,
       onChanged: (value) {},

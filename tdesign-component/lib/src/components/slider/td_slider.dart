@@ -13,7 +13,7 @@ enum Position {
 }
 
 /// 单滑动选择器
-class TDSlider extends StatefulWidget {
+class TSlider extends StatefulWidget {
   /// 默认值
   final double value;
 
@@ -36,7 +36,7 @@ class TDSlider extends StatefulWidget {
   final ValueChanged<double>? onChangeEnd;
 
   /// 样式
-  final TDSliderThemeData? sliderThemeData;
+  final TSliderThemeData? sliderThemeData;
 
   ///  Thumb 点击事件 坐标、当前值
   final Function(Offset offset, double value)? onTap;
@@ -44,7 +44,7 @@ class TDSlider extends StatefulWidget {
   ///  Thumb 点击浮标文字 坐标、当前值
   final Function(Offset offset, double value)? onThumbTextTap;
 
-  const TDSlider({
+  const TSlider({
     Key? key,
     required this.value,
     this.boxDecoration,
@@ -60,11 +60,11 @@ class TDSlider extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return TDSliderState();
+    return TSliderState();
   }
 }
 
-class TDSliderState extends State<TDSlider> {
+class TSliderState extends State<TSlider> {
   final GlobalKey _sliderKey = GlobalKey();
   double value = 0;
 
@@ -75,7 +75,7 @@ class TDSliderState extends State<TDSlider> {
   }
 
   @override
-  void didUpdateWidget(covariant TDSlider oldWidget) {
+  void didUpdateWidget(covariant TSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     value = widget.value;
   }
@@ -85,8 +85,8 @@ class TDSliderState extends State<TDSlider> {
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
       color: _enabled
-          ? TDTheme.of(context).textColorPrimary
-          : TDTheme.of(context).textDisabledColor);
+          ? TTheme.of(context).textColorPrimary
+          : TTheme.of(context).textDisabledColor);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -104,7 +104,7 @@ class TDSliderState extends State<TDSlider> {
 
   @override
   Widget build(BuildContext context) {
-    var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    var tdSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
 
     final showValue =
         tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue;
@@ -120,7 +120,7 @@ class TDSliderState extends State<TDSlider> {
           }
 
           final localOffset = sliderBox.globalToLocal(event.position);
-          final themeData = widget.sliderThemeData ?? TDSliderThemeData();
+          final themeData = widget.sliderThemeData ?? TSliderThemeData();
           final textRect = themeData.sliderMeasureData.thumbTextRect;
 
           if (textRect != null && textRect.contains(localOffset)) {
@@ -133,9 +133,9 @@ class TDSliderState extends State<TDSlider> {
             bottom: 8,
           ),
           decoration: widget.boxDecoration ??
-              BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+              BoxDecoration(color: TTheme.of(context).bgColorContainer),
           child: Row(
-            // spacing: TDTheme.of(context).spacer8,
+            // spacing: TTheme.of(context).spacer8,
             children: [
               leftLabel,
               const SizedBox(width: 8),
@@ -186,7 +186,7 @@ class TDSliderState extends State<TDSlider> {
 }
 
 /// 范围滑动选择器
-class TDRangeSlider extends StatefulWidget {
+class TRangeSlider extends StatefulWidget {
   /// 默认值
   final RangeValues value;
 
@@ -211,7 +211,7 @@ class TDRangeSlider extends StatefulWidget {
   final ValueChanged<RangeValues>? onChangeEnd;
 
   /// 样式
-  final TDSliderThemeData? sliderThemeData;
+  final TSliderThemeData? sliderThemeData;
 
   /// Thumb 点击事件 位置、坐标、当前值
   final Function(
@@ -227,7 +227,7 @@ class TDRangeSlider extends StatefulWidget {
     double value,
   )? onThumbTextTap;
 
-  const TDRangeSlider({
+  const TRangeSlider({
     Key? key,
     required this.value,
     this.boxDecoration,
@@ -243,11 +243,11 @@ class TDRangeSlider extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _TDRangeSliderState();
+    return _TRangeSliderState();
   }
 }
 
-class _TDRangeSliderState extends State<TDRangeSlider> {
+class _TRangeSliderState extends State<TRangeSlider> {
   RangeValues rangeValues = const RangeValues(0, 100);
   final GlobalKey _sliderRangeKey = GlobalKey();
 
@@ -258,7 +258,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
   }
 
   @override
-  void didUpdateWidget(covariant TDRangeSlider oldWidget) {
+  void didUpdateWidget(covariant TRangeSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     rangeValues = widget.value;
   }
@@ -268,8 +268,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
       color: _enabled
-          ? TDTheme.of(context).textColorPrimary
-          : TDTheme.of(context).textDisabledColor);
+          ? TTheme.of(context).textColorPrimary
+          : TTheme.of(context).textDisabledColor);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -287,7 +287,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
   @override
   Widget build(BuildContext context) {
-    var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    var tdSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
     final showValue =
         tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue;
 
@@ -304,7 +304,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
           return;
         }
 
-        final themeData = widget.sliderThemeData ?? TDSliderThemeData();
+        final themeData = widget.sliderThemeData ?? TSliderThemeData();
         final startTextRect =
             themeData.sliderMeasureData.startRangeThumbTextRect;
         final endTextRect = themeData.sliderMeasureData.endRangeThumbTextRect;
@@ -325,7 +325,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
         ),
         decoration: widget.boxDecoration ??
             BoxDecoration(
-              color: TDTheme.of(context).bgColorContainer,
+              color: TTheme.of(context).bgColorContainer,
             ),
         child: Row(
           // spacing: 8,

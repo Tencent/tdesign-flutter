@@ -2,26 +2,26 @@
 Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return TButton(
     text: '带底部插槽样式',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDDrawer(
+      TDrawer(
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
         title: '标题',
-        placement: TDDrawerPlacement.left,
+        placement: TDrawerPlacement.left,
         items: List.generate(
-            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
-        footer: const TDButton(
+            drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
+        footer: const TButton(
           text: '操作',
-          type: TDButtonType.outline,
+          type: TButtonType.outline,
           width: double.infinity,
-          size: TDButtonSize.large,
+          size: TButtonSize.large,
         ),
       );
     },

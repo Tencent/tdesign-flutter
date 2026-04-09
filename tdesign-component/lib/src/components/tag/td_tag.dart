@@ -3,8 +3,8 @@ import '../../../tdesign_flutter.dart';
 
 /// 展示型标签组件，仅展示，内部不可更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标
-class TDTag extends StatelessWidget {
-  const TDTag(
+class TTag extends StatelessWidget {
+  const TTag(
     this.text, {
     this.theme,
     this.icon,
@@ -14,11 +14,11 @@ class TDTag extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.style,
-    this.size = TDTagSize.medium,
+    this.size = TTagSize.medium,
     this.padding,
     this.forceVerticalCenter = true,
     this.isOutline = false,
-    this.shape = TDTagShape.square,
+    this.shape = TTagShape.square,
     this.isLight = false,
     this.disable = false,
     this.needCloseIcon = false,
@@ -32,7 +32,7 @@ class TDTag extends StatelessWidget {
   final String text;
 
   /// 主题
-  final TDTagTheme? theme;
+  final TTagTheme? theme;
 
   /// 图标内容，可随状态改变颜色
   final IconData? icon;
@@ -53,10 +53,10 @@ class TDTag extends StatelessWidget {
   final FontWeight? fontWeight;
 
   /// 标签样式
-  final TDTagStyle? style;
+  final TTagStyle? style;
 
   /// 标签大小
-  final TDTagSize size;
+  final TTagSize size;
 
   /// 自定义模式下的间距
   final EdgeInsets? padding;
@@ -68,7 +68,7 @@ class TDTag extends StatelessWidget {
   final bool isOutline;
 
   /// 标签形状
-  final TDTagShape shape;
+  final TTagShape shape;
 
   /// 是否为浅色
   final bool isLight;
@@ -92,7 +92,7 @@ class TDTag extends StatelessWidget {
   Widget build(BuildContext context) {
     var innerStyle = _getInnerStyle(context);
 
-    Widget child = TDText(
+    Widget child = TText(
       text,
       overflow: overflow ?? TextOverflow.ellipsis,
       forceVerticalCenter: forceVerticalCenter,
@@ -120,9 +120,9 @@ class TDTag extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.only(left: 4),
               child: Icon(
-                TDIcons.close,
+                TIcons.close,
                 color: innerStyle.closeIconColor ??
-                    TDTheme.of(context).textColorAnti,
+                    TTheme.of(context).textColorAnti,
                 size: 14,
               ),
             ),
@@ -130,7 +130,7 @@ class TDTag extends StatelessWidget {
         );
       }
       child = Row(
-        // spacing: TDTheme.of(context).spacer4,
+        // spacing: TTheme.of(context).spacer4,
         mainAxisSize: MainAxisSize.min,
         children: children,
       );
@@ -151,7 +151,7 @@ class TDTag extends StatelessWidget {
     );
   }
 
-  Widget? getIcon(TDTagStyle innerStyle) {
+  Widget? getIcon(TTagStyle innerStyle) {
     if (iconWidget != null) {
       return iconWidget;
     }
@@ -174,29 +174,29 @@ class TDTag extends StatelessWidget {
     return null;
   }
 
-  TDTagStyle _getInnerStyle(BuildContext context) {
+  TTagStyle _getInnerStyle(BuildContext context) {
     if (style != null) {
       return style!;
     }
     if (disable) {
-      return TDTagStyle.generateDisableSelectStyle(
+      return TTagStyle.generateDisableSelectStyle(
           context, isLight, isOutline, shape);
     }
     return isOutline
-        ? TDTagStyle.generateOutlineStyleByTheme(context, theme, isLight, shape)
-        : TDTagStyle.generateFillStyleByTheme(context, theme, isLight, shape);
+        ? TTagStyle.generateOutlineStyleByTheme(context, theme, isLight, shape)
+        : TTagStyle.generateFillStyleByTheme(context, theme, isLight, shape);
   }
 
   Font? _getFont(BuildContext context) {
     switch (size) {
-      case TDTagSize.extraLarge:
-        return TDTheme.of(context).fontBodyMedium;
-      case TDTagSize.large:
-        return TDTheme.of(context).fontBodyMedium;
-      case TDTagSize.small:
-        return TDTheme.of(context).fontBodyExtraSmall;
+      case TTagSize.extraLarge:
+        return TTheme.of(context).fontBodyMedium;
+      case TTagSize.large:
+        return TTheme.of(context).fontBodyMedium;
+      case TTagSize.small:
+        return TTheme.of(context).fontBodyExtraSmall;
       default:
-        return TDTheme.of(context).fontBodySmall;
+        return TTheme.of(context).fontBodySmall;
     }
   }
 
@@ -205,19 +205,19 @@ class TDTag extends StatelessWidget {
     var hPadding = 0.0;
     var vPadding = 0.0;
     switch (size) {
-      case TDTagSize.extraLarge:
+      case TTagSize.extraLarge:
         hPadding = 16;
         vPadding = 9;
         break;
-      case TDTagSize.large:
+      case TTagSize.large:
         hPadding = 8;
         vPadding = 3;
         break;
-      case TDTagSize.medium:
+      case TTagSize.medium:
         hPadding = 8;
         vPadding = 2;
         break;
-      case TDTagSize.small:
+      case TTagSize.small:
         hPadding = 6;
         vPadding = 2;
         break;
@@ -244,13 +244,13 @@ class TDTag extends StatelessWidget {
 
   double _getIconSize() {
     switch (size) {
-      case TDTagSize.extraLarge:
+      case TTagSize.extraLarge:
         return 16;
-      case TDTagSize.large:
+      case TTagSize.large:
         return 16;
-      case TDTagSize.medium:
+      case TTagSize.medium:
         return 14;
-      case TDTagSize.small:
+      case TTagSize.small:
         return 12;
       default:
         return 14;

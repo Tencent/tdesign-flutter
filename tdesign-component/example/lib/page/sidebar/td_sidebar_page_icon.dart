@@ -5,22 +5,22 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarIconPage演示
+/// TSideBarIconPage演示
 ///
-class TDSideBarIconPage extends StatefulWidget {
-  const TDSideBarIconPage({Key? key}) : super(key: key);
+class TSideBarIconPage extends StatefulWidget {
+  const TSideBarIconPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarIconPageState();
+    return TSideBarIconPageState();
   }
 }
 
-class TDSideBarIconPageState extends State<TDSideBarIconPage> {
+class TSideBarIconPageState extends State<TSideBarIconPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
   static const threshold = 50;
   var lock = false;
 
@@ -90,19 +90,19 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
         index: i,
         label: '选项${i}',
         value: i,
-        icon: TDIcons.app,
+        icon: TIcons.app,
       ));
       pages.add(getAnchorDemo(i));
     }
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
     ));
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -110,12 +110,12 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -139,13 +139,13 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
+            child: TText('标题$index',
                 style: const TextStyle(
                   fontSize: 14,
                 )),
@@ -163,11 +163,11 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
     return Column(
       children: [
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
       ],
     );
   }
@@ -179,14 +179,14 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         // spacing: 16,
         children: [
-          TDImage(
+          TImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: TImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           SizedBox(width: 16),
-          TDText('标题', style: TextStyle(fontSize: 16))
+          TText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

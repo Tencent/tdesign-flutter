@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDTextareaPage extends StatefulWidget {
-  const TDTextareaPage({Key? key}) : super(key: key);
+class TTextareaPage extends StatefulWidget {
+  const TTextareaPage({Key? key}) : super(key: key);
 
   @override
-  _TDTextareaPageState createState() => _TDTextareaPageState();
+  _TTextareaPageState createState() => _TTextareaPageState();
 }
 
-class _TDTextareaPageState extends State<TDTextareaPage> {
+class _TTextareaPageState extends State<TTextareaPage> {
   var controller = <TextEditingController>[];
 
   @override
@@ -77,7 +77,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _basicType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[0],
       hintText: '请输入文字',
       maxLines: 4,
@@ -90,7 +90,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _basicTypeByTitle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[1],
       label: '标签文字',
       hintText: '请输入文字',
@@ -102,7 +102,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _autoHeightType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[2],
       hintText: '请输入文字',
       minLines: 1,
@@ -112,7 +112,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _maxLengthType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[3],
       label: '标签文字',
       hintText: '请输入文字',
@@ -126,7 +126,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _disabledState(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[4],
       label: '标签文字',
       hintText: '不可编辑文字',
@@ -139,7 +139,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _verticalStyle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[5],
       label: '标签文字',
       hintText: '请输入文字',
@@ -147,14 +147,14 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
+      layout: TTextareaLayout.vertical,
       onChanged: (value) {},
     );
   }
 
   @Demo(group: 'textarea')
   Widget _cardStyle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[6],
       label: '标签文字',
       hintText: '请输入文字',
@@ -163,20 +163,20 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
       ),
       margin: EdgeInsets.only(
-          right: TDTheme.of(context).spacer16,
-          left: TDTheme.of(context).spacer16),
+          right: TTheme.of(context).spacer16,
+          left: TTheme.of(context).spacer16),
       onChanged: (value) {},
     );
   }
 
   @Demo(group: 'textarea')
   Widget _extensionStyle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[7],
       label: '标签文字',
       hintText: '请输入文字',
@@ -184,7 +184,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
+      layout: TTextareaLayout.vertical,
       bordered: true,
       onChanged: (value) {},
     );
@@ -192,7 +192,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _setWidth(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[8],
       label: '标签文字',
       hintText: '请输入文字',
@@ -207,14 +207,14 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _setLabel(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[9],
       label: '地址信息',
       // labelWidth: 100,
       labelIcon: Icon(
-        TDIcons.location,
+        TIcons.location,
         size: 20,
-        color: TDTheme.of(context).textColorPrimary,
+        color: TTheme.of(context).textColorPrimary,
       ),
       hintText: '请输入文字',
       maxLines: 4,
@@ -227,7 +227,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _setStatus(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[10],
       label: '标签文字',
       hintText: '请输入文字',
@@ -235,7 +235,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
+      layout: TTextareaLayout.vertical,
       required: true,
       additionInfo: '辅助说明',
       onChanged: (value) {},
@@ -244,7 +244,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @Demo(group: 'textarea')
   Widget _smallSize(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[11],
       label: '标签文字',
       hintText: '请输入文字',
@@ -252,8 +252,8 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
-      size: TDInputSize.small,
+      layout: TTextareaLayout.vertical,
+      size: TInputSize.small,
       onChanged: (value) {},
     );
   }

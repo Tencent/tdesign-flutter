@@ -1,9 +1,9 @@
 
-TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
+TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.large);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.large);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,

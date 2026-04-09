@@ -1,23 +1,23 @@
 import 'package:flutter/cupertino.dart';
 
-enum TDTableColFixed { left, right, none }
+enum TTableColFixed { left, right, none }
 
-enum TDTableColAlign { left, center, right }
+enum TTableColAlign { left, center, right }
 
 typedef SelectableFunc = bool Function(int index, dynamic row);
 typedef RowCheckFunc = bool Function(int index, dynamic row);
 
 /// 表格列配置
-class TDTableCol {
-  TDTableCol({
+class TTableCol {
+  TTableCol({
     this.title,
     this.colKey,
     this.width,
-    this.fixed = TDTableColFixed.none,
+    this.fixed = TTableColFixed.none,
     this.ellipsis,
     this.ellipsisTitle,
     this.cellBuilder,
-    this.align = TDTableColAlign.left,
+    this.align = TTableColAlign.left,
     this.sortable = false,
     this.selection,
     this.selectable,
@@ -37,7 +37,7 @@ class TDTableCol {
   double? width;
 
   /// 固定列
-  TDTableColFixed? fixed;
+  TTableColFixed? fixed;
 
   /// 列内容超出时是否省略
   bool? ellipsis;
@@ -49,7 +49,7 @@ class TDTableCol {
   IndexedWidgetBuilder? cellBuilder;
 
   /// 列内容横向对齐方式
-  TDTableColAlign? align;
+  TTableColAlign? align;
 
   /// 是否可排序
   bool? sortable;

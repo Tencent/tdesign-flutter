@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDFormInherited extends InheritedWidget {
+class TFormInherited extends InheritedWidget {
   final Map<String, dynamic> formData;
   final double? labelWidth;
   final bool isHorizontal;
   final bool isValidate;
-  final Map<String, TDFormValidation> rules;
+  final Map<String, TFormValidation> rules;
   final bool? formShowErrorMessage;
   final bool? requiredMark;
   final TextAlign formContentAlign;
@@ -16,7 +16,7 @@ class TDFormInherited extends InheritedWidget {
   final int updateCount;
   final Function onSubmit;
 
-  const TDFormInherited({
+  const TFormInherited({
     super.key,
     required this.formData,
     required Widget child,
@@ -33,12 +33,12 @@ class TDFormInherited extends InheritedWidget {
     required this.isReset,
   }) : super(child: child);
 
-  static TDFormInherited? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TDFormInherited>();
+  static TFormInherited? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TFormInherited>();
   }
 
   @override
-  bool updateShouldNotify(TDFormInherited oldWidget) {
+  bool updateShouldNotify(TFormInherited oldWidget) {
     return updateCount != oldWidget.updateCount ||
         isReset != oldWidget.isReset ||
         labelWidth != oldWidget.labelWidth ||

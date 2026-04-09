@@ -3,9 +3,9 @@
     return SizedBox(
       width: 72,
       height: 72,
-      child: TDImage(
+      child: TImage(
         imageFile: File('/sdcard/td/test.jpg'),
-        type: TDImageType.fitWidth,
+        type: TImageType.fitWidth,
       ),
     );
   }

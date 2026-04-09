@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDStepperPage extends StatefulWidget {
-  const TDStepperPage({Key? key}) : super(key: key);
+class TStepperPage extends StatefulWidget {
+  const TStepperPage({Key? key}) : super(key: key);
 
   @override
-  State<TDStepperPage> createState() => _TDStepperPageState();
+  State<TStepperPage> createState() => _TStepperPageState();
 }
 
-class _TDStepperPageState extends State<TDStepperPage> {
+class _TStepperPageState extends State<TStepperPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,8 +50,8 @@ class _TDStepperPageState extends State<TDStepperPage> {
   @Demo(group: 'stepper')
   Widget _buildStepperWithBase(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(
-        theme: TDStepperTheme.filled,
+      const TStepper(
+        theme: TStepperTheme.filled,
       )
     ]);
   }
@@ -59,24 +59,24 @@ class _TDStepperPageState extends State<TDStepperPage> {
   @Demo(group: 'stepper')
   Widget _buildStepperWithMaxMinStatus(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(theme: TDStepperTheme.filled, value: 0, min: 0),
-      const TDStepper(theme: TDStepperTheme.filled, value: 999, max: 999),
+      const TStepper(theme: TStepperTheme.filled, value: 0, min: 0),
+      const TStepper(theme: TStepperTheme.filled, value: 999, max: 999),
     ]);
   }
 
   @Demo(group: 'stepper')
   Widget _buildStepperWithDisableStatus(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(
-        theme: TDStepperTheme.filled,
+      const TStepper(
+        theme: TStepperTheme.filled,
         disabled: true,
       ),
-      const TDStepper(
-        theme: TDStepperTheme.outline,
+      const TStepper(
+        theme: TStepperTheme.outline,
         disabled: true,
       ),
-      const TDStepper(
-        theme: TDStepperTheme.normal,
+      const TStepper(
+        theme: TStepperTheme.normal,
         disabled: true,
       ),
     ]);
@@ -85,27 +85,27 @@ class _TDStepperPageState extends State<TDStepperPage> {
   @Demo(group: 'stepper')
   Widget _buildStepperWithTheme(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(theme: TDStepperTheme.filled, value: 3),
-      const TDStepper(theme: TDStepperTheme.outline, value: 3),
-      const TDStepper(theme: TDStepperTheme.normal, value: 3),
+      const TStepper(theme: TStepperTheme.filled, value: 3),
+      const TStepper(theme: TStepperTheme.outline, value: 3),
+      const TStepper(theme: TStepperTheme.normal, value: 3),
     ]);
   }
 
   @Demo(group: 'stepper')
   Widget _buildStepperWithSize(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(
-          size: TDStepperSize.large, theme: TDStepperTheme.filled, value: 3),
-      const TDStepper(
-          size: TDStepperSize.medium, theme: TDStepperTheme.filled, value: 3),
-      const TDStepper(
-          size: TDStepperSize.small, theme: TDStepperTheme.filled, value: 3),
+      const TStepper(
+          size: TStepperSize.large, theme: TStepperTheme.filled, value: 3),
+      const TStepper(
+          size: TStepperSize.medium, theme: TStepperTheme.filled, value: 3),
+      const TStepper(
+          size: TStepperSize.small, theme: TStepperTheme.filled, value: 3),
     ]);
   }
 
   @Demo(group: 'stepper')
   Widget _buildRow(BuildContext context, List<Widget> stepperItems) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -126,7 +126,7 @@ class _TDStepperPageState extends State<TDStepperPage> {
     );
   }
 
-  var controller = TDStepperController()..value = 1;
+  var controller = TStepperController()..value = 1;
 
   @Demo(group: 'stepper')
   Widget _customStepperValue(BuildContext context) {
@@ -135,11 +135,11 @@ class _TDStepperPageState extends State<TDStepperPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          TDStepper(
-            theme: TDStepperTheme.filled,
+          TStepper(
+            theme: TStepperTheme.filled,
             controller: controller,
           ),
-          TDButton(
+          TButton(
             text: 'value * 2',
             onTap: () {
               controller.value *= 2;

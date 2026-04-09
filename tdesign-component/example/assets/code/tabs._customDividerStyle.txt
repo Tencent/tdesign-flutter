@@ -1,6 +1,6 @@
 
   Widget _customDividerStyle(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       showIndicator: true,

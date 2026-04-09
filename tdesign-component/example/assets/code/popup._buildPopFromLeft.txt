@@ -1,18 +1,18 @@
 
   Widget _buildPopFromLeft(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '左侧弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.left,
               builder: (context) {
                 return Container(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   width: 280,
                 );
               }),

@@ -1,12 +1,12 @@
 ## API
-### TDCell
+### TCell
 #### 简介
 单元格组件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| align | TDCellAlign? | TDCellAlign.middle | 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom |
+| align | TCellAlign? | TCellAlign.middle | 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom |
 | arrow | bool? | false | 是否显示右侧箭头 |
 | bordered | bool? | true | 是否显示下边框，仅在TDCellGroup组件下起作用 |
 | description | String? | - | 下方内容描述文字 |
@@ -25,20 +25,20 @@
 | noteMaxLine | int | 1 | 说明文字组件 最大行数 |
 | noteMaxWidth | double? | - | 说明文字组件 最大宽度，超过部分显示省略号，防止文字溢出 |
 | noteWidget | Widget? | - | 说明文字组件 |
-| onClick | TDCellClick? | - | 点击事件 |
-| onLongPress | TDCellClick? | - | 长按事件 |
+| onClick | TCellClick? | - | 点击事件 |
+| onLongPress | TCellClick? | - | 长按事件 |
 | required | bool? | false | 是否显示表单必填星号 |
 | rightIcon | IconData? | - | 最右侧图标 |
 | rightIconWidget | Widget? | - | 最右侧图标组件 |
 | showBottomBorder | bool? | false | 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠） |
-| style | TDCellStyle? | - | 自定义样式 |
+| style | TCellStyle? | - | 自定义样式 |
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |
 
 ```
 ```
 
-### TDCellStyle
+### TCellStyle
 #### 简介
 单元格组件样式
 #### 默认构造方法
@@ -69,12 +69,12 @@
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDCellStyle.cellStyle  | 生成单元格默认样式 |
+| TCellStyle.cellStyle  | 生成单元格默认样式 |
 
 ```
 ```
 
-### TDCellGroup
+### TCellGroup
 #### 简介
 单元格组组件
 #### 默认构造方法
@@ -83,11 +83,11 @@
 | --- | --- | --- | --- |
 | bordered | bool? | false | 是否显示组边框 |
 | builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
-| cells | List<TDCell> | - | 单元格列表 |
+| cells | List<TCell> | - | 单元格列表 |
 | isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
 | key |  | - |  |
 | scrollable | bool? | false | 可滚动 |
-| style | TDCellStyle? | - | 自定义样式 |
-| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
+| style | TCellStyle? | - | 自定义样式 |
+| theme | TCellGroupTheme? | TCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
 | title | String? | - | 单元格组标题 |
 | titleWidget | Widget? | - | 单元格组标题组件 |

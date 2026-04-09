@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDCascader {
+class TCascader {
   /// 显示多级选择器
   static void showMultiCascader(context,
       {String? title,
@@ -17,15 +17,15 @@ class TDCascader {
       String? closeText,
       bool isLetterSort = false,
       List<String>? subTitles,
-      TDCascaderAction? action,
+      TCascaderAction? action,
       Function? onClose}) {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
         barrierColor:
-            barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            barrierColor ?? TTheme.of(context).fontGyColor2.withOpacity(0.6),
         builder: (context) {
-          return TDMultiCascader(
+          return TMultiCascader(
               title: title,
               onClose: onClose,
               data: data,

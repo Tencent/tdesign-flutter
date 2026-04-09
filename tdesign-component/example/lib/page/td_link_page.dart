@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDLinkViewPage extends StatefulWidget {
-  const TDLinkViewPage({Key? key}) : super(key: key);
+class TLinkViewPage extends StatefulWidget {
+  const TLinkViewPage({Key? key}) : super(key: key);
 
   @override
-  _TDLinkViewPageState createState() => _TDLinkViewPageState();
+  _TLinkViewPageState createState() => _TLinkViewPageState();
 }
 
-class _TDLinkViewPageState extends State<TDLinkViewPage> {
+class _TLinkViewPageState extends State<TLinkViewPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -39,26 +39,26 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget _basicTypeBasic(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.basic),
+          children: _buildLinksWithType(TLinkType.basic),
         ));
   }
 
-  List<Widget> _buildLinksWithType(TDLinkType type) {
+  List<Widget> _buildLinksWithType(TLinkType type) {
     return [
-      TDLink(
+      TLink(
         label: '跳转链接',
-        style: TDLinkStyle.primary,
+        style: TLinkStyle.primary,
         type: type,
-        size: TDLinkSize.small,
+        size: TLinkSize.small,
       ),
-      TDLink(
+      TLink(
         label: '跳转链接',
-        style: TDLinkStyle.defaultStyle,
+        style: TLinkStyle.defaultStyle,
         type: type,
-        size: TDLinkSize.small,
+        size: TLinkSize.small,
       ),
     ];
   }
@@ -67,10 +67,10 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget _withUnderline(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.withUnderline),
+          children: _buildLinksWithType(TLinkType.withUnderline),
         ));
   }
 
@@ -78,10 +78,10 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget _withSuffixIcon(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.withSuffixIcon),
+          children: _buildLinksWithType(TLinkType.withSuffixIcon),
         ));
   }
 
@@ -89,48 +89,48 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget _withPrefixIcon(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.withPrefixIcon),
+          children: _buildLinksWithType(TLinkType.withPrefixIcon),
         ));
   }
 
   @Demo(group: 'link')
   Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.normal);
+    return _buildLinkWithStyles(TLinkState.normal);
   }
 
   @Demo(group: 'link')
   Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.disabled);
+    return _buildLinkWithStyles(TLinkState.disabled);
   }
 
-  Column _buildLinkWithStyles(TDLinkState state) {
+  Column _buildLinkWithStyles(TLinkState state) {
     return Column(
       // spacing: 16,
       children: [
         Container(
           height: 48,
-          color: TDTheme.of(context).bgColorContainer,
+          color: TTheme.of(context).bgColorContainer,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
-              _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
-              _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
+              _buildLinkWithTypeAndState(TLinkStyle.primary, state),
+              _buildLinkWithTypeAndState(TLinkStyle.defaultStyle, state),
+              _buildLinkWithTypeAndState(TLinkStyle.danger, state),
             ],
           ),
         ),
         const SizedBox(height: 16),
         Container(
           height: 48,
-          color: TDTheme.of(context).bgColorContainer,
+          color: TTheme.of(context).bgColorContainer,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
-              _buildLinkWithTypeAndState(TDLinkStyle.success, state),
+              _buildLinkWithTypeAndState(TLinkStyle.warning, state),
+              _buildLinkWithTypeAndState(TLinkStyle.success, state),
             ],
           ),
         ),
@@ -138,13 +138,13 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     );
   }
 
-  TDLink _buildLinkWithTypeAndState(TDLinkStyle style, TDLinkState state) {
-    return TDLink(
+  TLink _buildLinkWithTypeAndState(TLinkStyle style, TLinkState state) {
+    return TLink(
       label: '跳转链接',
       style: style,
       state: state,
-      type: TDLinkType.withSuffixIcon,
-      size: TDLinkSize.small,
+      type: TLinkType.withSuffixIcon,
+      size: TLinkSize.small,
     );
   }
 
@@ -152,26 +152,26 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
-            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
-            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
+            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.small),
+            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.medium),
+            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.large),
           ],
         ));
   }
 
-  TDLink _buildLinkWithSizeAndStyle(TDLinkStyle style, TDLinkSize size) {
-    var s = size == TDLinkSize.small
+  TLink _buildLinkWithSizeAndStyle(TLinkStyle style, TLinkSize size) {
+    var s = size == TLinkSize.small
         ? 'S'
-        : (size == TDLinkSize.medium ? 'M' : 'L');
-    return TDLink(
+        : (size == TLinkSize.medium ? 'M' : 'L');
+    return TLink(
       label: '${s}号链接',
       style: style,
-      state: TDLinkState.normal,
-      type: TDLinkType.withSuffixIcon,
+      state: TLinkState.normal,
+      type: TLinkType.withSuffixIcon,
       size: size,
     );
   }

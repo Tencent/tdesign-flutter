@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDSideBarController extends ChangeNotifier {
+class TSideBarController extends ChangeNotifier {
   int currentValue = 0;
   List<SideItemProps> children = [];
   bool _loading = false;

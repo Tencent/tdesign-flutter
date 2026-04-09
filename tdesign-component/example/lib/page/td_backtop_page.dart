@@ -4,18 +4,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDBackTopPage extends StatefulWidget {
-  const TDBackTopPage({Key? key}) : super(key: key);
+class TBackTopPage extends StatefulWidget {
+  const TBackTopPage({Key? key}) : super(key: key);
 
   @override
-  State<TDBackTopPage> createState() => _TDBackTopPageState();
+  State<TBackTopPage> createState() => _TBackTopPageState();
 }
 
-class _TDBackTopPageState extends State<TDBackTopPage> {
+class _TBackTopPageState extends State<TBackTopPage> {
   ScrollController controller = ScrollController();
   bool showBackTop = false;
-  TDBackTopStyle style = TDBackTopStyle.circle;
-  TDBackTopTheme theme = TDBackTopTheme.light;
+  TBackTopStyle style = TBackTopStyle.circle;
+  TBackTopTheme theme = TBackTopTheme.light;
 
   @override
   void initState() {
@@ -25,8 +25,8 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
-            ? TDBackTopTheme.light
-            : TDBackTopTheme.dark;
+            ? TBackTopTheme.light
+            : TBackTopTheme.dark;
       });
     });
   }
@@ -58,17 +58,17 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           children: [
             Visibility(
                 visible: showBackTop,
-                child: style == TDBackTopStyle.halfCircle
+                child: style == TBackTopStyle.halfCircle
                     ? Positioned(
                         right: -16,
                         bottom: 10,
-                        child: TDBackTop(
+                        child: TBackTop(
                           controller: controller,
                           theme: theme,
                           showText: true,
                           style: style,
                         ))
-                    : TDBackTop(
+                    : TBackTop(
                         controller: controller,
                         theme: theme,
                         showText: true,
@@ -92,7 +92,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
         if (controller.hasClients) {
           controller.jumpTo(500);
         }
-        style = TDBackTopStyle.circle;
+        style = TBackTopStyle.circle;
       });
     });
   }
@@ -107,7 +107,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
             if (controller.hasClients) {
               controller.jumpTo(500);
             }
-            style = TDBackTopStyle.halfCircle;
+            style = TBackTopStyle.halfCircle;
           });
         }),
         Padding(
@@ -124,19 +124,19 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
 
   Widget getCustomButton(
       BuildContext context, String text, void Function() onTap) {
-    return TDButton(
+    return TButton(
       text: text,
       isBlock: true,
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.primary,
       onTap: onTap,
     );
   }
 
   Widget getDemoBox(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       // spacing: 10,

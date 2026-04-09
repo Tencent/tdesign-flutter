@@ -12,7 +12,7 @@ TDesign Flutter 从 `0.2.0` 版本开始，正常情况下，每月初发一个�
 
 ## 自定义主题
 - 自定义主题用法请参考：https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
-- 如果自定义主题未生效，请检查是否设置：`TDTheme.needMultiTheme(true);`
+- 如果自定义主题未生效，请检查是否设置：`TTheme.needMultiTheme(true);`
 - 在启动即修改主题颜色，完整示例代码请参考：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/component_test/test_app.dart
 - 在应用使用中切换主题颜色，示例代码请参考 example 的 `main.dart` 和 `home.dart`：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/main.dart
 - 转换完整代码：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/shell/theme/css2JsonTheme.dart
@@ -29,23 +29,23 @@ Flutter官方SDK不支持文本居中功能，若要实现通用的文字居中�
 
 TDesign Flutter `0.1.4` 版本开始，添加了全局变量 `kTextForceVerticalCenterEnable` 来控制是否使用内部 padding，如果将全局变量 `kTextForceVerticalCenterEnable `设为`false`，则显示效果与直接使用官方Text一致。(部分机型，尤其是iOS机型，将 kTextForceVerticalCenterEnable 设为`false`，可能比设为true更居中，遇到文字不居中问题，可以尝试将 kTextForceVerticalCenterEnable 改为`false`看看效果。)
 
-TDesign Flutter `0.1.5` 版本之后，可以通过重写 `TDTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TDTextPaddingConfig` 使用方法可参考[TDTextPage](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/td_text_page.dart)。如果 kTextForceVerticalCenterEnable 设为 false 也无法满足需求，则可以通过重写 `TDTextPaddingConfig `自定义适配主流机型。
+TDesign Flutter `0.1.5` 版本之后，可以通过重写 `TTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TTextPaddingConfig` 使用方法可参考[TTextPage](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/td_text_page.dart)。如果 kTextForceVerticalCenterEnable 设为 false 也无法满足需求，则可以通过重写 `TTextPaddingConfig `自定义适配主流机型。
 
 ## 新增组件
 
 如果有新增组件的想法，可以提 [issue](https://github.com/Tencent/tdesign-flutter/issues)，或者在已有 issue 补充。如果想提交代码，开发实现，可以拉负责人一起评估。
 
 ## Input相关
-- 自定义高度：TDInput没有自带 `height` 参数，可以通过外部嵌套 `SizeBox` 来修改高度。不过修改高度后，内部相关高度不会等比缩放，需要业务自己同步修改。
+- 自定义高度：TInput没有自带 `height` 参数，可以通过外部嵌套 `SizeBox` 来修改高度。不过修改高度后，内部相关高度不会等比缩放，需要业务自己同步修改。
 - 输入正则：Input的`FilteringTextInputFormatter.allow(RegExp(r''))`的正则是匹配即将输入的单个字符串的，不是匹配已输入的整个字符串的，按字符串匹配写的正则可能导致无法输入。
 
-## TDImage缓存问题
+## TImage缓存问题
 
-`TDImage`基于系统 [Image](https://api.flutter.dev/flutter/widgets/Image-class.html) 组件封装，未单独处理缓存逻辑，使用的是系统组件自带的缓存。
+`TImage`基于系统 [Image](https://api.flutter.dev/flutter/widgets/Image-class.html) 组件封装，未单独处理缓存逻辑，使用的是系统组件自带的缓存。
 
 ## Toast 使用context
 
-目前 `TDToast` 显示需要`context`，如果使用的是`GetX`，可以考虑是否要方法记录一个全局context，再给 TDToast 使用。如果后续实现方案优化了context，将更新本文档。
+目前 `TToast` 显示需要`context`，如果使用的是`GetX`，可以考虑是否要方法记录一个全局context，再给 TToast 使用。如果后续实现方案优化了context，将更新本文档。
 
 ## 内部写死的颜色或尺寸
 

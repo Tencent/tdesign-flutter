@@ -5,21 +5,21 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarPaginationPage演示
+/// TSideBarPaginationPage演示
 ///
-class TDSideBarPaginationPage extends StatefulWidget {
-  const TDSideBarPaginationPage({Key? key}) : super(key: key);
+class TSideBarPaginationPage extends StatefulWidget {
+  const TSideBarPaginationPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarPaginationPageState();
+    return TSideBarPaginationPageState();
   }
 }
 
-class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
+class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
   var currentValue = 1;
   final _pageController = PageController(initialPage: 1);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +53,9 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -70,12 +70,12 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -98,14 +98,14 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   Widget getPageDemo(int index) {
     return Container(
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         // spacing: 16,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题 $index', style: const TextStyle(fontSize: 14)),
+            child: TText('标题 $index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList()
@@ -135,14 +135,14 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       // spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const TDImage(
+        const TImage(
           assetUrl: 'assets/img/empty.png',
-          type: TDImageType.roundedSquare,
+          type: TImageType.roundedSquare,
           width: 48,
           height: 48,
         ),
         const SizedBox(height: 8),
-        TDText('$title', style: const TextStyle(fontSize: 12))
+        TText('$title', style: const TextStyle(fontSize: 12))
       ],
     );
   }

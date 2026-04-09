@@ -1,6 +1,6 @@
 
   Widget _buildArrangementSwitch(BuildContext buildContext) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     return Container(
         decoration: BoxDecoration(
           color: theme.whiteColor1,
@@ -10,10 +10,10 @@
             child: Row(
               children: [
                 Expanded(
-                  child: TDButton(
+                  child: TButton(
                     text: '水平排布',
-                    shape: TDButtonShape.round,
-                    style: TDButtonStyle(backgroundColor: horizontalButtonColor),
+                    shape: TButtonShape.round,
+                    style: TButtonStyle(backgroundColor: horizontalButtonColor),
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: horizontalTextColor,
@@ -43,10 +43,10 @@
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: TDButton(
+                  child: TButton(
                     text: '竖直排布',
-                    shape: TDButtonShape.round,
-                    style: TDButtonStyle(backgroundColor: verticalButtonColor),
+                    shape: TButtonShape.round,
+                    style: TButtonStyle(backgroundColor: verticalButtonColor),
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: verticalTextColor,

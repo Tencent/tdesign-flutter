@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 单元格组件样式
-class TDCellStyle {
-  TDCellStyle({
+class TCellStyle {
+  TCellStyle({
     this.context,
     this.leftIconColor,
     this.rightIconColor,
@@ -84,53 +84,53 @@ class TDCellStyle {
   Color? titleBackgroundColor;
 
   /// 生成单元格默认样式
-  TDCellStyle.cellStyle(BuildContext context) {
+  TCellStyle.cellStyle(BuildContext context) {
     defaultStyle(context);
   }
 
   defaultStyle(BuildContext context) {
-    backgroundColor = TDTheme.of(context).bgColorContainer;
-    clickBackgroundColor = TDTheme.of(context).bgColorContainerHover;
-    leftIconColor = TDTheme.of(context).brandNormalColor;
-    rightIconColor = TDTheme.of(context).brandNormalColor;
+    backgroundColor = TTheme.of(context).bgColorContainer;
+    clickBackgroundColor = TTheme.of(context).bgColorContainerHover;
+    leftIconColor = TTheme.of(context).brandNormalColor;
+    rightIconColor = TTheme.of(context).brandNormalColor;
     titleStyle = TextStyle(
-      color: TDTheme.of(context).textColorPrimary,
-      fontSize: TDTheme.of(context).fontBodyLarge?.size ?? 16,
-      height: TDTheme.of(context).fontBodyLarge?.height ?? 24,
+      color: TTheme.of(context).textColorPrimary,
+      fontSize: TTheme.of(context).fontBodyLarge?.size ?? 16,
+      height: TTheme.of(context).fontBodyLarge?.height ?? 24,
       fontWeight: FontWeight.w400,
     );
     requiredStyle =
-        titleStyle!.copyWith(color: TDTheme.of(context).errorNormalColor);
+        titleStyle!.copyWith(color: TTheme.of(context).errorNormalColor);
     descriptionStyle = TextStyle(
-      color: TDTheme.of(context).textColorSecondary,
-      fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14,
-      height: TDTheme.of(context).fontBodyMedium?.height ?? 22,
+      color: TTheme.of(context).textColorSecondary,
+      fontSize: TTheme.of(context).fontBodyMedium?.size ?? 14,
+      height: TTheme.of(context).fontBodyMedium?.height ?? 22,
       fontWeight: FontWeight.w400,
     );
     noteStyle =
-        titleStyle!.copyWith(color: TDTheme.of(context).textColorPlaceholder);
-    arrowColor = TDTheme.of(context).textColorPlaceholder;
+        titleStyle!.copyWith(color: TTheme.of(context).textColorPlaceholder);
+    arrowColor = TTheme.of(context).textColorPlaceholder;
 
-    groupBorderedColor = TDTheme.of(context).componentStrokeColor;
-    borderedColor = TDTheme.of(context).componentStrokeColor;
+    groupBorderedColor = TTheme.of(context).componentStrokeColor;
+    borderedColor = TTheme.of(context).componentStrokeColor;
     groupTitleStyle = TextStyle(
-      color: TDTheme.of(context).textColorPrimary,
-      fontSize: TDTheme.of(context).fontTitleLarge?.size ?? 18,
-      height: TDTheme.of(context).fontTitleLarge?.height ?? 26,
+      color: TTheme.of(context).textColorPrimary,
+      fontSize: TTheme.of(context).fontTitleLarge?.size ?? 18,
+      height: TTheme.of(context).fontTitleLarge?.height ?? 26,
       fontWeight:
-          TDTheme.of(context).fontTitleLarge?.fontWeight ?? FontWeight.w600,
+          TTheme.of(context).fontTitleLarge?.fontWeight ?? FontWeight.w600,
     );
 
-    padding = EdgeInsets.all(TDTheme.of(context).spacer16);
+    padding = EdgeInsets.all(TTheme.of(context).spacer16);
     cardBorderRadius =
-        BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
+        BorderRadius.all(Radius.circular(TTheme.of(context).radiusLarge));
     cardPadding =
-        EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer16);
+        EdgeInsets.symmetric(horizontal: TTheme.of(context).spacer16);
     titlePadding = EdgeInsets.only(
-      left: TDTheme.of(context).spacer16,
-      right: TDTheme.of(context).spacer16,
-      top: TDTheme.of(context).spacer24,
-      bottom: TDTheme.of(context).spacer8,
+      left: TTheme.of(context).spacer16,
+      right: TTheme.of(context).spacer16,
+      top: TTheme.of(context).spacer24,
+      bottom: TTheme.of(context).spacer8,
     );
     titleBackgroundColor = Colors.transparent;
   }

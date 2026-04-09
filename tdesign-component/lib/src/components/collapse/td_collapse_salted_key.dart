@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import '../../../tdesign_flutter.dart';
 import '../../theme/td_theme.dart';
 
-class TDCollapseSaltedKey<S, V> extends LocalKey {
-  const TDCollapseSaltedKey(this.salt, this.value);
+class TCollapseSaltedKey<S, V> extends LocalKey {
+  const TCollapseSaltedKey(this.salt, this.value);
 
   final S salt;
   final V value;
@@ -15,7 +15,7 @@ class TDCollapseSaltedKey<S, V> extends LocalKey {
   @override
   bool operator ==(dynamic other) {
     if (other.runtimeType != runtimeType) return false;
-    final TDCollapseSaltedKey<S, V> typedOther = other;
+    final TCollapseSaltedKey<S, V> typedOther = other;
     return salt == typedOther.salt && value == typedOther.value;
   }
 

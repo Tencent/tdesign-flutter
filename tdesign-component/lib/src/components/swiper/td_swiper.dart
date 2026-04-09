@@ -6,26 +6,26 @@ import '../../../tdesign_flutter.dart';
 const _kAminatedDuration = 100;
 
 /// TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
-class TDSwiperPagination extends SwiperPlugin {
-  const TDSwiperPagination({
+class TSwiperPagination extends SwiperPlugin {
+  const TSwiperPagination({
     this.alignment,
     this.key,
     this.margin = const EdgeInsets.all(10.0),
-    this.builder = TDSwiperPagination.dots,
+    this.builder = TSwiperPagination.dots,
   });
 
   /// 圆点样式
-  static const SwiperPlugin dots = TDSwiperDotsPagination();
+  static const SwiperPlugin dots = TSwiperDotsPagination();
 
   /// 圆角矩形 + 圆点样式 默认宽度20，高度6
   static const SwiperPlugin dotsBar =
-      TDSwiperDotsPagination(roundedRectangleWidth: 20);
+      TSwiperDotsPagination(roundedRectangleWidth: 20);
 
   /// 数字样式
-  static const SwiperPlugin fraction = TDFractionPagination();
+  static const SwiperPlugin fraction = TFractionPagination();
 
   /// 箭头样式
-  static const SwiperPlugin controls = TDSwiperArrowPagination();
+  static const SwiperPlugin controls = TSwiperArrowPagination();
 
   /// 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter
   /// 当 scrollDirection== Axis.vertical 时，默认Alignment.centerRight
@@ -61,7 +61,7 @@ class TDSwiperPagination extends SwiperPlugin {
 }
 
 /// 圆点指示器
-class TDSwiperDotsPagination extends SwiperPlugin {
+class TSwiperDotsPagination extends SwiperPlugin {
   /// 当前展示的索引，如果未设置，则为Theme.of(context).primaryColor
   final Color? activeColor;
 
@@ -85,7 +85,7 @@ class TDSwiperDotsPagination extends SwiperPlugin {
 
   final Key? key;
 
-  const TDSwiperDotsPagination({
+  const TSwiperDotsPagination({
     this.activeColor,
     this.color,
     this.key,
@@ -100,16 +100,16 @@ class TDSwiperDotsPagination extends SwiperPlugin {
   Widget build(BuildContext context, SwiperPluginConfig config) {
     if (config.itemCount > 20) {
       print('warning: The itemCount is too big, '
-          'we suggest use TDFractionPaginationBuilder');
+          'we suggest use TFractionPaginationBuilder');
     }
     var activeColor = this.activeColor ??
         (config.outer
-            ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).whiteColor1);
+            ? TTheme.of(context).brandNormalColor
+            : TTheme.of(context).whiteColor1);
     var color = this.color ??
         (config.outer
-            ? TDTheme.of(context).bgColorComponentHover
-            : TDTheme.of(context).fontWhColor2);
+            ? TTheme.of(context).bgColorComponentHover
+            : TTheme.of(context).fontWhColor2);
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {
@@ -171,7 +171,7 @@ class TDSwiperDotsPagination extends SwiperPlugin {
 }
 
 /// 数字指示器
-class TDFractionPagination extends SwiperPlugin {
+class TFractionPagination extends SwiperPlugin {
   /// container宽度
   final double? width;
 
@@ -196,7 +196,7 @@ class TDFractionPagination extends SwiperPlugin {
 
   final Key? key;
 
-  const TDFractionPagination({
+  const TFractionPagination({
     this.width,
     this.height,
     this.borderRadius,
@@ -215,9 +215,9 @@ class TDFractionPagination extends SwiperPlugin {
       height: height ?? 24,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
+        color: backgroundColor ?? TTheme.of(context).textColorPlaceholder,
         borderRadius: BorderRadius.circular(
-            borderRadius ?? TDTheme.of(context).radiusRound),
+            borderRadius ?? TTheme.of(context).radiusRound),
       ),
       child: Row(
         key: key,
@@ -232,7 +232,7 @@ class TDFractionPagination extends SwiperPlugin {
 }
 
 /// 箭头指示器
-class TDSwiperArrowPagination extends SwiperPlugin {
+class TSwiperArrowPagination extends SwiperPlugin {
   /// 当设置 loop = false 时，滑动到边界是否自动隐藏边界箭头
   final bool? autoHideWhenAtBoundary;
 
@@ -248,7 +248,7 @@ class TDSwiperArrowPagination extends SwiperPlugin {
   /// 背景圆形颜色
   final Color? backgroundColor;
 
-  const TDSwiperArrowPagination({
+  const TSwiperArrowPagination({
     this.radius,
     this.backgroundColor,
     this.backArrow,
@@ -295,7 +295,7 @@ class TDSwiperArrowPagination extends SwiperPlugin {
         child: CircleAvatar(
           radius: radius ?? 10.0,
           backgroundColor:
-              backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
+              backgroundColor ?? TTheme.of(context).textColorPlaceholder,
           child: arrowWidget ?? Icon(icon, color: Colors.white, size: 10.0),
         ),
         onTap: onTap,

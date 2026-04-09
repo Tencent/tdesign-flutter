@@ -11,21 +11,21 @@ import '../text/td_text.dart';
 import 'td_action_sheet.dart';
 import 'td_action_sheet_item_widget.dart';
 
-class TDActionSheetGroup extends StatelessWidget {
-  final List<TDActionSheetItem> items;
-  final TDActionSheetAlign align;
+class TActionSheetGroup extends StatelessWidget {
+  final List<TActionSheetItem> items;
+  final TActionSheetAlign align;
   final String? cancelText;
   final bool showCancel;
   final VoidCallback? onCancel;
-  final TDActionSheetItemCallback? onSelected;
+  final TActionSheetItemCallback? onSelected;
   final double itemHeight;
   final double itemMinWidth;
   final bool useSafeArea;
 
-  const TDActionSheetGroup({
+  const TActionSheetGroup({
     super.key,
     required this.items,
-    this.align = TDActionSheetAlign.left,
+    this.align = TActionSheetAlign.left,
     this.cancelText,
     this.showCancel = true,
     this.onCancel,
@@ -37,7 +37,7 @@ class TDActionSheetGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
+    final borderRadius = Radius.circular(TTheme.of(context).radiusExtraLarge);
     final groupItems = items.groupBy((item) => item.group);
     final groupKeys = groupItems.keys
         .where((k) => k != null && groupItems[k]?.isNotEmpty == true);
@@ -46,7 +46,7 @@ class TDActionSheetGroup extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
       padding: useSafeArea
@@ -62,18 +62,18 @@ class TDActionSheetGroup extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.fromLTRB(
-                    TDTheme.of(context).spacer16,
-                    TDTheme.of(context).spacer12,
-                    TDTheme.of(context).spacer16,
+                    TTheme.of(context).spacer16,
+                    TTheme.of(context).spacer12,
+                    TTheme.of(context).spacer16,
                     0,
                   ),
                   child: Row(
                     mainAxisAlignment: getMainAxisAlignment(align),
                     children: [
-                      TDText(
+                      TText(
                         k!,
-                        font: TDTheme.of(context).fontBodyMedium,
-                        textColor: TDTheme.of(context).textColorPlaceholder,
+                        font: TTheme.of(context).fontBodyMedium,
+                        textColor: TTheme.of(context).textColorPlaceholder,
                       ),
                     ],
                   ),
@@ -87,7 +87,7 @@ class TDActionSheetGroup extends StatelessWidget {
                     itemBuilder: (context, row) {
                       return SizedBox(
                         width: itemMinWidth,
-                        child: TDActionSheetItemWidget(
+                        child: TActionSheetItemWidget(
                           item: list[row],
                           onSelected: onSelected,
                           index: items.indexOf(list[row]),
@@ -99,10 +99,10 @@ class TDActionSheetGroup extends StatelessWidget {
                 if (i != groupKeys.length - 1)
                   Container(
                     decoration: BoxDecoration(
-                      color: TDTheme.of(context).fontWhColor1,
+                      color: TTheme.of(context).fontWhColor1,
                       border: Border(
                         top: BorderSide(
-                          color: TDTheme.of(context).componentStrokeColor,
+                          color: TTheme.of(context).componentStrokeColor,
                           width: 0.5,
                         ),
                       ),

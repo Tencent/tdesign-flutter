@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_form_inherited.dart';
 
-class TDForm extends StatefulWidget {
-  const TDForm(
+class TForm extends StatefulWidget {
+  const TForm(
       {Key? key,
       required this.items,
       required this.rules,
@@ -28,7 +28,7 @@ class TDForm extends StatefulWidget {
       : super(key: key);
 
   /// 表单内容 items
-  final List<TDFormItem> items;
+  final List<TFormItem> items;
 
   /// 是否在表单标签字段右侧显示冒号
   final bool? colon;
@@ -36,8 +36,8 @@ class TDForm extends StatefulWidget {
   /// 表单内容对齐方式: 左对齐、右对齐、居中对齐
   /// 可选项: left/right/center
   /// 默认为左对齐
-  /// 优先级低于 TDFormItem 的对齐 API
-  /// TODO: TDStepper TDRate 等组件没用实现通用性
+  /// 优先级低于 TFormItem 的对齐 API
+  /// TODO: TStepper TRate 等组件没用实现通用性
   final TextAlign formContentAlign;
 
   ///	表单数据
@@ -69,7 +69,7 @@ class TDForm extends StatefulWidget {
   final bool? requiredMark;
 
   /// 整个表单字段校验规则
-  final Map<String, TDFormValidation> rules;
+  final Map<String, TFormValidation> rules;
 
   /// 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。
   /// 值为空则表示不滚动。可选项：''/smooth/auto
@@ -95,10 +95,10 @@ class TDForm extends StatefulWidget {
   final FormController? formController;
 
   @override
-  State<TDForm> createState() => _TDFormState();
+  State<TForm> createState() => _TFormState();
 }
 
-class _TDFormState extends State<TDForm> {
+class _TFormState extends State<TForm> {
   List<Widget> _formItems = [];
   Map<String, dynamic> _formData = {};
   bool _isValidate = false;
@@ -167,7 +167,7 @@ class _TDFormState extends State<TDForm> {
     if (widget.btnGroup?.isNotEmpty ?? false) {
       _formItems.addAll(widget.btnGroup ?? []);
     }
-    return TDFormInherited(
+    return TFormInherited(
       formData: widget.data,
       labelWidth: widget.labelWidth,
       isHorizontal: widget.isHorizontal,

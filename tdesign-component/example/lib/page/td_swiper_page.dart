@@ -5,8 +5,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDSwiperPage extends StatelessWidget {
-  const TDSwiperPage({Key? key}) : super(key: key);
+class TSwiperPage extends StatelessWidget {
+  const TSwiperPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class TDSwiperPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            TDTheme.of(context).radiusLarge)),
+                            TTheme.of(context).radiusLarge)),
                     child: CodeWrapper(
                       builder: _buildDotsSwiper,
                     ),
@@ -41,7 +41,7 @@ class TDSwiperPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            TDTheme.of(context).radiusLarge)),
+                            TTheme.of(context).radiusLarge)),
                     child: CodeWrapper(
                       builder: _buildDotsBarSwiper,
                     ),
@@ -56,7 +56,7 @@ class TDSwiperPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            TDTheme.of(context).radiusLarge)),
+                            TTheme.of(context).radiusLarge)),
                     child: CodeWrapper(
                       builder: _buildFractionSwiper,
                     ),
@@ -71,7 +71,7 @@ class TDSwiperPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            TDTheme.of(context).radiusLarge)),
+                            TTheme.of(context).radiusLarge)),
                     child: CodeWrapper(
                       builder: _buildControlsSwiper,
                     ),
@@ -85,7 +85,7 @@ class TDSwiperPage extends StatelessWidget {
                     height: 193,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            TDTheme.of(context).radiusLarge)),
+                            TTheme.of(context).radiusLarge)),
                     child: CodeWrapper(
                       builder: _buildCardsSwiper,
                     ),
@@ -99,7 +99,7 @@ class TDSwiperPage extends StatelessWidget {
                     height: 193,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            TDTheme.of(context).radiusLarge)),
+                            TTheme.of(context).radiusLarge)),
                     child: CodeWrapper(
                       builder: _buildScaleCardsSwiper,
                     ),
@@ -117,7 +117,7 @@ class TDSwiperPage extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusLarge)),
+                          TTheme.of(context).radiusLarge)),
                   child: CodeWrapper(
                     builder: _buildDotsSwiper,
                   ),
@@ -132,7 +132,7 @@ class TDSwiperPage extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusLarge)),
+                          TTheme.of(context).radiusLarge)),
                   child: CodeWrapper(
                     builder: _buildOuterDotsSwiper,
                   ),
@@ -147,7 +147,7 @@ class TDSwiperPage extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusLarge)),
+                          TTheme.of(context).radiusLarge)),
                   child: CodeWrapper(
                     builder: _buildRightDotsSwiper,
                   ),
@@ -164,7 +164,7 @@ class TDSwiperPage extends StatelessWidget {
                 height: 193,
                 decoration: BoxDecoration(
                     borderRadius:
-                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildNotLoopCardsSwiper,
                 ),
@@ -180,7 +180,7 @@ class TDSwiperPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                     borderRadius:
-                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildOuterDotsBarSwiper,
                 ),
@@ -195,7 +195,7 @@ class TDSwiperPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                     borderRadius:
-                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildFractionBarSwiper,
                 ),
@@ -210,7 +210,7 @@ class TDSwiperPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                     borderRadius:
-                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildVerticalDotsBarSwiper,
                 ),
@@ -228,10 +228,10 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       pagination: const SwiperPagination(
         alignment: Alignment.bottomCenter,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -246,10 +246,10 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       pagination: const SwiperPagination(
         alignment: Alignment.bottomCenter,
-        builder: TDSwiperPagination.dotsBar,
+        builder: TSwiperPagination.dotsBar,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -265,10 +265,10 @@ class TDSwiperPage extends StatelessWidget {
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
         alignment: Alignment.bottomCenter,
-        builder: TDSwiperPagination.fraction,
+        builder: TSwiperPagination.fraction,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -283,10 +283,10 @@ class TDSwiperPage extends StatelessWidget {
       loop: false,
       pagination: const SwiperPagination(
         alignment: Alignment.center,
-        builder: TDSwiperPagination.controls,
+        builder: TSwiperPagination.controls,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -301,13 +301,13 @@ class TDSwiperPage extends StatelessWidget {
       autoplay: true,
       itemCount: 6,
       loop: true,
-      transformer: TDPageTransformer.margin(),
+      transformer: TPageTransformer.margin(),
       pagination: const SwiperPagination(
         alignment: Alignment.center,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -322,13 +322,13 @@ class TDSwiperPage extends StatelessWidget {
       autoplay: true,
       itemCount: 6,
       loop: true,
-      transformer: TDPageTransformer.scaleAndFade(),
+      transformer: TPageTransformer.scaleAndFade(),
       pagination: const SwiperPagination(
         alignment: Alignment.center,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -344,10 +344,10 @@ class TDSwiperPage extends StatelessWidget {
       outer: true,
       pagination: const SwiperPagination(
         alignment: Alignment.bottomCenter,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -363,10 +363,10 @@ class TDSwiperPage extends StatelessWidget {
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
         alignment: Alignment.centerRight,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -384,10 +384,10 @@ class TDSwiperPage extends StatelessWidget {
       loop: false,
       pagination: const SwiperPagination(
         alignment: Alignment.center,
-        builder: TDSwiperPagination.dots,
+        builder: TSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -403,10 +403,10 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       pagination: const SwiperPagination(
         alignment: Alignment.topLeft,
-        builder: TDSwiperPagination.dotsBar,
+        builder: TSwiperPagination.dotsBar,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -421,10 +421,10 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       pagination: const SwiperPagination(
         alignment: Alignment.bottomRight,
-        builder: TDSwiperPagination.fraction,
+        builder: TSwiperPagination.fraction,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },
@@ -440,10 +440,10 @@ class TDSwiperPage extends StatelessWidget {
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
         alignment: Alignment.bottomRight,
-        builder: TDSwiperPagination.dotsBar,
+        builder: TSwiperPagination.dotsBar,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(
+        return const TImage(
           assetUrl: 'assets/img/image.png',
         );
       },

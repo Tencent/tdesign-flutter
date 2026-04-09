@@ -26,10 +26,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildBasicHSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
       ],
     );
   }</pre>
@@ -43,14 +43,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildBasicHSteps2(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
-        TDStepsItemData(title: 'Steps3', content: 'Content3'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps3', content: 'Content3'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
     );
   }</pre>
@@ -64,15 +64,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildBasicHSteps3(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
-        TDStepsItemData(title: 'Steps3', content: 'Content3'),
-        TDStepsItemData(title: 'Steps4', content: 'Content4'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps3', content: 'Content3'),
+        TStepsItemData(title: 'Steps4', content: 'Content4'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
     );
   }</pre>
@@ -87,21 +87,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHIconSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps1',
           content: 'Content1',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps2',
           content: 'Content2',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 0,
     );
   }</pre>
@@ -115,26 +115,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHIconSteps2(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps1',
           content: 'Content1',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps2',
           content: 'Content2',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps3',
           content: 'Content3',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
     );
   }</pre>
@@ -148,31 +148,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHIconSteps3(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps1',
           content: 'Content1',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps2',
           content: 'Content2',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps3',
           content: 'Content3',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps4',
           content: 'Content4',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
     );
   }</pre>
@@ -187,13 +187,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSimpleHSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 0,
       // 简略模式
       simple: true,
@@ -209,14 +209,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSimpleHSteps2(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
-        TDStepsItemData(title: 'Steps3', content: 'Content3'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps3', content: 'Content3'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 简略模式
       simple: true,
@@ -232,15 +232,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSimpleHSteps3(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
-        TDStepsItemData(title: 'Steps3', content: 'Content3'),
-        TDStepsItemData(title: 'Steps4', content: 'Content4'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps3', content: 'Content3'),
+        TStepsItemData(title: 'Steps4', content: 'Content4'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 简略模式
       simple: true,
@@ -257,18 +257,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHErrorSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Error', content: 'Content2'),
-        TDStepsItemData(title: 'Steps3', content: 'Content3'),
-        TDStepsItemData(title: 'Steps4', content: 'Content4'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Error', content: 'Content2'),
+        TStepsItemData(title: 'Steps3', content: 'Content3'),
+        TStepsItemData(title: 'Steps4', content: 'Content4'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }</pre>
 
@@ -281,35 +281,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHErrorSteps2(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps1',
           content: 'Content1',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Error',
           content: 'Content2',
-          successIcon: TDIcons.cart,
-          errorIcon: TDIcons.close_circle,
+          successIcon: TIcons.cart,
+          errorIcon: TIcons.close_circle,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps3',
           content: 'Content3',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps4',
           content: 'Content4',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }</pre>
 
@@ -322,35 +322,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHErrorSteps3(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps1',
           content: 'Content1',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Error',
           content: 'Content2',
-          successIcon: TDIcons.cart,
-          errorIcon: TDIcons.close_circle,
+          successIcon: TIcons.cart,
+          errorIcon: TIcons.close_circle,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps3',
           content: 'Content3',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps4',
           content: 'Content4',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
       // 简略模式
       simple: true,
     );
@@ -366,15 +366,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVBasicSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Finish', content: 'Customize content'),
-        TDStepsItemData(title: 'Process', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(title: 'Process', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
     );
   }</pre>
@@ -388,31 +388,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVIconSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
     );
   }</pre>
@@ -426,30 +426,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVSimpleSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
             title: 'Default',
             content: 'Customize content',
-            successIcon: TDIcons.cart),
-        TDStepsItemData(
+            successIcon: TIcons.cart),
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 简略模式
       simple: true,
@@ -465,18 +465,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVErrorBasicSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Finish', content: 'Customize content'),
-        TDStepsItemData(title: 'Process', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(title: 'Process', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }</pre>
 
@@ -489,35 +489,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVErrorIconSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
-          errorIcon: TDIcons.close_circle,
+          successIcon: TIcons.cart,
+          errorIcon: TIcons.close_circle,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }</pre>
 
@@ -530,36 +530,36 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVErrorSimpleSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 简略模式
       simple: true,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }</pre>
 
@@ -572,24 +572,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVCustomTitleBaseSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Finish', content: 'Customize content'),
-        TDStepsItemData(
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          customTitle: const TDText(
+          customTitle: const TText(
             '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
             softWrap: true,
             maxLines: 2,
             overflow: TextOverflow.visible,
           ),
         ),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
     );
   }</pre>
@@ -603,25 +603,25 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVCustomContentBaseSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Finish', content: 'Customize content'),
-        TDStepsItemData(
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(
           title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的标题',
           content: 'Customize content',
           customContent: Container(
             margin: const EdgeInsets.only(bottom: 16, top: 4),
-            child: const TDImage(
+            child: const TImage(
               assetUrl: 'assets/img/image.png',
-              type: TDImageType.roundedSquare,
+              type: TImageType.roundedSquare,
             ),
           ),
         ),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
     );
   }</pre>
@@ -636,12 +636,12 @@ Read-only Steps 纯展示水平步骤条
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHReadOnlySteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Finish', content: 'content'),
-        TDStepsItemData(title: 'Process', content: 'content'),
-        TDStepsItemData(title: 'Default', content: 'content'),
-        TDStepsItemData(title: 'Default', content: 'content'),
+        TStepsItemData(title: 'Finish', content: 'content'),
+        TStepsItemData(title: 'Process', content: 'content'),
+        TStepsItemData(title: 'Default', content: 'content'),
+        TStepsItemData(title: 'Default', content: 'content'),
       ],
       // 只读模式
       readOnly: true,
@@ -657,15 +657,15 @@ Read-only Steps 纯展示垂直步骤条
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVReadOnlySteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Finish', content: 'Customize content'),
-        TDStepsItemData(title: 'Process', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
-        TDStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(title: 'Process', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 0,
       // 只读模式
       readOnly: true,
@@ -681,15 +681,15 @@ Vertical Customize Steps 垂直自定义步骤条
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVCustomizeSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Selected'),
-        TDStepsItemData(title: 'Selected'),
-        TDStepsItemData(title: 'Selected'),
-        TDStepsItemData(title: 'Please Selected'),
+        TStepsItemData(title: 'Selected'),
+        TStepsItemData(title: 'Selected'),
+        TStepsItemData(title: 'Selected'),
+        TStepsItemData(title: 'Please Selected'),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       // 简略模式
       simple: true,
       activeIndex: 3,
@@ -703,7 +703,7 @@ Vertical Customize Steps 垂直自定义步骤条
 
 
 ## API
-### TDStepsItemData
+### TStepsItemData
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -718,18 +718,18 @@ Vertical Customize Steps 垂直自定义步骤条
 ```
 ```
 
-### TDSteps
+### TSteps
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | activeIndex | int | 0 | 步骤条当前激活的索引 |
-| direction | TDStepsDirection | TDStepsDirection.horizontal | 步骤条方向 |
+| direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
 | key |  | - |  |
 | readOnly | bool | false | 步骤条readOnly模式 |
 | simple | bool | false | 步骤条simple模式 |
-| status | TDStepsStatus | TDStepsStatus.success | 步骤条状态 |
-| steps | List<TDStepsItemData> | - | 步骤条数据 |
+| status | TStepsStatus | TStepsStatus.success | 步骤条状态 |
+| steps | List<TStepsItemData> | - | 步骤条数据 |
 | verticalSelect | bool | false | 步骤条垂直自定义步骤条选择模式 |
 
 

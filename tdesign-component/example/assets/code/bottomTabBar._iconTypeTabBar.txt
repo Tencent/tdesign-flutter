@@ -1,11 +1,11 @@
 
   Widget _iconTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.icon,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.icon,
       useVerticalDivider: true,
       navigationTabs: List.generate(2, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {

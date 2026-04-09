@@ -6,10 +6,10 @@
     Color? trackOffColor,
     Color? thumbContentOnColor,
     Color? thumbContentOffColor,
-    TDSwitchSize? size,
-    TDSwitchType? type,
+    TSwitchSize? size,
+    TSwitchType? type,
   }) {
-    return TDSwitch(
+    return TSwitch(
       isOn: on,
       trackOnColor: trackOnColor,
       trackOffColor: trackOffColor,

@@ -3,13 +3,13 @@
 ## 基本信息
 
 - issue: https://github.com/Tencent/tdesign-flutter/issues/900
-- 组件：`TDBottomTabBar`
+- 组件：`TBottomTabBar`
 - 分支：`fix/issue-900-tab-bar`
 - 优先级：P2（功能缺陷，影响视觉反馈）
 
 ## 问题描述
 
-`TDBottomTabBarBasicType.iconText` 类型下，切换选中 tab 时：
+`TBottomTabBarBasicType.iconText` 类型下，切换选中 tab 时：
 - 文字颜色正确切换（选中：brandNormalColor，未选中：textColorPrimary）
 - **图标颜色不切换**，始终保持同一颜色
 
@@ -23,8 +23,8 @@
 ## 修复方案
 
 在 `icon` 和 `iconText` 分支中，用 `IconTheme` 包裹图标 widget，根据 `isSelected` 注入对应颜色：
-- 选中：`TDTheme.of(context).brandNormalColor`
-- 未选中：`TDTheme.of(context).textColorPrimary`
+- 选中：`TTheme.of(context).brandNormalColor`
+- 未选中：`TTheme.of(context).textColorPrimary`
 
 ## 交付物清单
 

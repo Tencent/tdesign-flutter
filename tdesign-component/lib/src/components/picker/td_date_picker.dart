@@ -11,8 +11,8 @@ typedef DatePickerCallback = void Function(Map<String, int> selected);
 enum DateTypeKey { year, month, weekDay, day, hour, minute, second }
 
 /// 时间选择器
-class TDDatePicker extends StatefulWidget {
-  const TDDatePicker({
+class TDatePicker extends StatefulWidget {
+  const TDatePicker({
     this.title,
     this.titleHeight,
     this.titleDividerColor,
@@ -121,10 +121,10 @@ class TDDatePicker extends StatefulWidget {
   final ItemBuilderType? itemBuilder;
 
   @override
-  State<StatefulWidget> createState() => _TDDatePickerState();
+  State<StatefulWidget> createState() => _TDatePickerState();
 }
 
-class _TDDatePickerState extends State<TDDatePicker> {
+class _TDatePickerState extends State<TDatePicker> {
   double pickerHeight = 0;
   static const _pickerTitleHeight = 56.0;
 
@@ -204,10 +204,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
       padding: widget.padding ??
           EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(
-              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+              widget.topRadius ?? TTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
@@ -226,9 +226,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         height: 40,
                         decoration: BoxDecoration(
                             color:
-                                TDTheme.of(context).bgColorSecondaryContainer,
+                                TTheme.of(context).bgColorSecondaryContainer,
                             borderRadius: BorderRadius.all(Radius.circular(
-                                TDTheme.of(context).radiusDefault))),
+                                TTheme.of(context).radiusDefault))),
                       ),
                 ),
                 Container(
@@ -278,8 +278,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [
-                            TDTheme.of(context).bgColorContainer,
-                            TDTheme.of(context).bgColorContainer.withOpacity(0)
+                            TTheme.of(context).bgColorContainer,
+                            TTheme.of(context).bgColorContainer.withOpacity(0)
                           ])),
                     ),
                   ),
@@ -296,8 +296,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
                               colors: [
-                            TDTheme.of(context).bgColorContainer,
-                            TDTheme.of(context).bgColorContainer.withOpacity(0)
+                            TTheme.of(context).bgColorContainer,
+                            TTheme.of(context).bgColorContainer.withOpacity(0)
                           ])),
                     ),
                   ),
@@ -377,7 +377,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         alignment: Alignment.center,
                         height: pickerHeight / widget.pickerItemCount,
                         width: maxWidth,
-                        child: TDItemWidget(
+                        child: TItemWidget(
                           colIndex: whichLine,
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
@@ -396,7 +396,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final padding = TDTheme.of(context).spacer16;
+    final padding = TTheme.of(context).spacer16;
 
     return Container(
       padding: EdgeInsets.only(
@@ -424,25 +424,25 @@ class _TDDatePickerState extends State<TDDatePicker> {
               selectListItem('onCancel');
             },
             behavior: HitTestBehavior.opaque,
-            child: TDText(
+            child: TText(
               widget.leftText ?? context.resource.cancel,
               style: widget.leftTextStyle ??
                   TextStyle(
-                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                      color: TDTheme.of(context).textColorSecondary),
+                      fontSize: TTheme.of(context).fontBodyLarge!.size,
+                      color: TTheme.of(context).textColorSecondary),
             ),
           ),
 
           /// 中间title
           Expanded(
             child: Center(
-              child: TDText(
+              child: TText(
                 widget.title ?? '',
                 style: widget.centerTextStyle ??
                     TextStyle(
-                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                      fontSize: TTheme.of(context).fontBodyLarge!.size,
                       fontWeight: FontWeight.w600,
-                      color: TDTheme.of(context).textColorPrimary,
+                      color: TTheme.of(context).textColorPrimary,
                     ),
               ),
             ),
@@ -454,12 +454,12 @@ class _TDDatePickerState extends State<TDDatePicker> {
               selectListItem('onConfirm');
             },
             behavior: HitTestBehavior.opaque,
-            child: TDText(
+            child: TText(
               widget.rightText ?? context.resource.confirm,
               style: widget.rightTextStyle ??
                   TextStyle(
-                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                      color: TDTheme.of(context).brandNormalColor),
+                      fontSize: TTheme.of(context).fontBodyLarge!.size,
+                      color: TTheme.of(context).brandNormalColor),
             ),
           ),
         ],

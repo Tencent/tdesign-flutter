@@ -5,7 +5,7 @@ import '../../util/context_extension.dart';
 typedef MultiCascaderCallback = void Function(
     List<MultiCascaderListModel> selected);
 
-class TDMultiCascader extends StatefulWidget {
+class TMultiCascader extends StatefulWidget {
   /// 选择器标题
   final String? title;
 
@@ -46,12 +46,12 @@ class TDMultiCascader extends StatefulWidget {
   final Function? onClose;
 
   /// 自定义选择器右上角按钮
-  final TDCascaderAction? action;
+  final TCascaderAction? action;
 
   /// 值发生变更时触发
   final MultiCascaderCallback onChange;
 
-  const TDMultiCascader(
+  const TMultiCascader(
       {super.key,
       this.title,
       this.titleStyle,
@@ -70,10 +70,10 @@ class TDMultiCascader extends StatefulWidget {
       required this.onChange});
 
   @override
-  State<TDMultiCascader> createState() => _TDMultiCascaderState();
+  State<TMultiCascader> createState() => _TMultiCascaderState();
 }
 
-class _TDMultiCascaderState extends State<TDMultiCascader>
+class _TMultiCascaderState extends State<TMultiCascader>
     with TickerProviderStateMixin {
   List<MultiCascaderListModel> _tabListData = [];
 
@@ -146,12 +146,12 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
       width: maxWidth,
       height: widget.cascaderHeight,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(
-              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+              widget.topRadius ?? TTheme.of(context).radiusExtraLarge),
           topRight: Radius.circular(
-              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+              widget.topRadius ?? TTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
@@ -273,13 +273,13 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
           widget.title == null
               ? Container()
               : Center(
-                  child: TDText(
+                  child: TText(
                     widget.title,
                     style: widget.titleStyle ??
                         TextStyle(
-                            fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                            fontSize: TTheme.of(context).fontTitleLarge!.size,
                             fontWeight: FontWeight.w700,
-                            color: TDTheme.of(context).textColorPrimary),
+                            color: TTheme.of(context).textColorPrimary),
                   ),
                 ),
           Positioned(
@@ -309,17 +309,17 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
                       child: widget.action?.build(context) ??
                           (widget.closeText == null
                               ? Icon(
-                                  TDIcons.close,
-                                  color: TDTheme.of(context).textColorPrimary,
+                                  TIcons.close,
+                                  color: TTheme.of(context).textColorPrimary,
                                 )
-                              : TDText(
+                              : TText(
                                   widget.closeText,
                                   style: TextStyle(
-                                      fontSize: TDTheme.of(context)
+                                      fontSize: TTheme.of(context)
                                           .fontTitleMedium!
                                           .size,
                                       color:
-                                          TDTheme.of(context).textColorPrimary),
+                                          TTheme.of(context).textColorPrimary),
                                 )),
                     ),
                   ))),
@@ -339,7 +339,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
-                    color: TDTheme.of(context).componentStrokeColor,
+                    color: TTheme.of(context).componentStrokeColor,
                     width: 0.5))),
         width: maxWidth,
         child: ListView(
@@ -368,13 +368,13 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
                           ),
                         ),
                         Expanded(
-                          child: TDText(
+                          child: TText(
                             '${_tabListData[index].label}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: _currentTabIndex == index
-                                    ? TDTheme.of(context).brandNormalColor
-                                    : TDTheme.of(context).textColorPrimary),
+                                    ? TTheme.of(context).brandNormalColor
+                                    : TTheme.of(context).textColorPrimary),
                             fontWeight: _currentTabIndex == index
                                 ? FontWeight.w600
                                 : FontWeight.w400,
@@ -383,8 +383,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
                         Padding(
                           padding: const EdgeInsets.only(left: 2, right: 16),
                           child: Icon(
-                            TDIcons.chevron_right,
-                            color: TDTheme.of(context).textColorPrimary,
+                            TIcons.chevron_right,
+                            color: TTheme.of(context).textColorPrimary,
                           ),
                         ),
                       ],
@@ -400,10 +400,10 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
-                  color: TDTheme.of(context).componentStrokeColor,
+                  color: TTheme.of(context).componentStrokeColor,
                   width: 0.5))),
       width: maxWidth,
-      child: TDCustomTab(
+      child: TCustomTab(
         tabs: List.generate(_tabListData.length, (index) {
           return _tabListData[index].label ?? '';
         }),
@@ -427,11 +427,11 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
                   padding: const EdgeInsets.only(
                     top: 20,
                   ),
-                  child: TDText(
+                  child: TText(
                     widget.subTitles![_level],
                     style: TextStyle(
-                        color: TDTheme.of(context).textColorPlaceholder),
-                    font: TDTheme.of(context).fontTitleSmall,
+                        color: TTheme.of(context).textColorPlaceholder),
+                    font: TTheme.of(context).fontTitleSmall,
                   ) //,
                   ),
             Expanded(
@@ -494,14 +494,14 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
                                       width: 32,
                                       child: item.segmentValue !=
                                               preItem.segmentValue
-                                          ? TDText(
+                                          ? TText(
                                               '${item.segmentValue}',
                                               font: Font(
                                                   size: 16, lineHeight: 24),
                                             )
                                           : null,
                                     ),
-                                  TDText(
+                                  TText(
                                     '${item.label}',
                                     font: Font(size: 16, lineHeight: 24),
                                   ),
@@ -509,8 +509,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
                               ),
                               if (_selectTabValue == item.value)
                                 Icon(
-                                  TDIcons.check,
-                                  color: TDTheme.of(context).brandNormalColor,
+                                  TIcons.check,
+                                  color: TTheme.of(context).brandNormalColor,
                                 )
                             ],
                           )),
@@ -620,7 +620,7 @@ class LeftLineWidget extends StatelessWidget {
       child: CustomPaint(
         painter: LeftLinePainter(
             isShowTopLine: isShowTopLine,
-            topLineColor: topLineColor ?? TDTheme.of(context).brandNormalColor,
+            topLineColor: topLineColor ?? TTheme.of(context).brandNormalColor,
             isCircleFill: isCircleFill),
       ),
     );

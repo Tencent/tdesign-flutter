@@ -1,9 +1,9 @@
 
-TDCountDown _buildUnitLargeSize(BuildContext context) {
-  return const TDCountDown(
+TCountDown _buildUnitLargeSize(BuildContext context) {
+  return const TCountDown(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.large,
-    theme: TDCountDownTheme.square,
+    size: TCountDownSize.large,
+    theme: TCountDownTheme.square,
     splitWithUnit: true,
   );
 }

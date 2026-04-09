@@ -1,7 +1,7 @@
 
-  TDResult _buildBasicResultError(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
     );
   }

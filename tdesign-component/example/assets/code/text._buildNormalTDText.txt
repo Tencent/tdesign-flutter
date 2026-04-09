@@ -1,6 +1,6 @@
 
   Widget _buildNormalTDText(BuildContext context) {
-    return TDText(
+    return TText(
       exampleTxt,
     );
   }

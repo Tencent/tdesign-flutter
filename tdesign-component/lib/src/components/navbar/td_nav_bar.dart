@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-typedef TDBarItemAction = void Function();
+typedef TBarItemAction = void Function();
 
-class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
-  const TDNavBar({
+class TNavBar extends StatefulWidget implements PreferredSizeWidget {
+  const TNavBar({
     Key? key,
     this.leftBarItems,
     this.rightBarItems,
@@ -35,10 +35,10 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   final Color? backIconColor;
 
   /// 左边操作项
-  final List<TDNavBarItem>? leftBarItems;
+  final List<TNavBarItem>? leftBarItems;
 
   /// 右边操作项
-  final List<TDNavBarItem>? rightBarItems;
+  final List<TNavBarItem>? rightBarItems;
 
   /// 标题控件，优先级高于 title 文案
   final Widget? titleWidget;
@@ -89,7 +89,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   final bool useBorderStyle;
 
   /// 边框
-  final TDNavBarItemBorder? border;
+  final TNavBarItemBorder? border;
 
   /// belowTitleWidget navbar 下方的 widget
   final Widget? belowTitleWidget;
@@ -101,16 +101,16 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget? flexibleSpace;
 
   @override
-  State<StatefulWidget> createState() => _TDNavBarState();
+  State<StatefulWidget> createState() => _TNavBarState();
 
   @override
   Size get preferredSize => Size.fromHeight(height);
 }
 
-class _TDNavBarState extends State<TDNavBar> {
+class _TNavBarState extends State<TNavBar> {
   Widget _addBorder(List<Widget> items) {
-    var border = widget.border ?? TDNavBarItemBorder();
-    var borderColor = border.color ?? TDTheme.of(context).componentStrokeColor;
+    var border = widget.border ?? TNavBarItemBorder();
+    var borderColor = border.color ?? TTheme.of(context).componentStrokeColor;
     var children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
@@ -137,15 +137,15 @@ class _TDNavBarState extends State<TDNavBar> {
         ),
       ),
       padding: border.padding ??
-          EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer4),
+          EdgeInsets.symmetric(horizontal: TTheme.of(context).spacer4),
       child: child,
     );
   }
 
   Widget get backButton {
-    var iconColor = widget.backIconColor ?? TDTheme.of(context).textColorPrimary;
-    return TDNavBarItem(
-      icon: TDIcons.chevron_left,
+    var iconColor = widget.backIconColor ?? TTheme.of(context).textColorPrimary;
+    return TNavBarItem(
+      icon: TIcons.chevron_left,
       iconSize: 28.0,
       iconColor: iconColor,
       action: () {
@@ -179,9 +179,9 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   TextStyle _getTitleStyle(BuildContext context) {
-    var titleColor = widget.titleColor ?? TDTheme.of(context).textColorPrimary;
+    var titleColor = widget.titleColor ?? TTheme.of(context).textColorPrimary;
 
-    var titleFont = widget.titleFont ?? TDTheme.of(context).fontBodyLarge;
+    var titleFont = widget.titleFont ?? TTheme.of(context).fontBodyLarge;
 
     return widget.titleFontFamily == null
         ? TextStyle(
@@ -231,7 +231,7 @@ class _TDNavBarState extends State<TDNavBar> {
   @override
   Widget build(BuildContext context) {
     var _backgroundColor =
-        widget.backgroundColor ?? TDTheme.of(context).bgColorContainer;
+        widget.backgroundColor ?? TTheme.of(context).bgColorContainer;
     if (_backgroundColor != Colors.transparent) {
       _backgroundColor = _backgroundColor.withOpacity(widget.opacity);
     }
@@ -240,8 +240,8 @@ class _TDNavBarState extends State<TDNavBar> {
         widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
     var padding = widget.padding ??
         EdgeInsets.symmetric(
-          horizontal: TDTheme.of(context).spacer16,
-          vertical: TDTheme.of(context).spacer4,
+          horizontal: TTheme.of(context).spacer16,
+          vertical: TTheme.of(context).spacer4,
         );
     Widget appBar = Container(
         height: widget.height + paddingTop,
@@ -265,7 +265,7 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 }
 
-class TDNavBarItem {
+class TNavBarItem {
   /// 图标
   IconData? icon;
 
@@ -273,7 +273,7 @@ class TDNavBarItem {
   Color? iconColor;
 
   /// 操作回调
-  TDBarItemAction? action;
+  TBarItemAction? action;
 
   /// 图标尺寸
   double? iconSize;
@@ -288,7 +288,7 @@ class TDNavBarItem {
   @Deprecated('Use customWidget instead')
   Widget? iconWidget;
 
-  TDNavBarItem({
+  TNavBarItem({
     this.icon,
     this.iconColor,
     this.action,
@@ -306,8 +306,8 @@ class TDNavBarItem {
         child: Padding(
           padding: padding ??
               (isLeft
-                  ? EdgeInsets.only(right: TDTheme.of(context).spacer8)
-                  : EdgeInsets.only(left: TDTheme.of(context).spacer8)),
+                  ? EdgeInsets.only(right: TTheme.of(context).spacer8)
+                  : EdgeInsets.only(left: TTheme.of(context).spacer8)),
           child: customWidget ?? iconWidget ??
               Icon(
                 icon,
@@ -318,13 +318,13 @@ class TDNavBarItem {
       );
 }
 
-class TDNavBarItemBorder {
+class TNavBarItemBorder {
   double width;
   double radius;
   Color? color;
   EdgeInsetsGeometry? padding;
 
-  TDNavBarItemBorder({
+  TNavBarItemBorder({
     this.width = 1.0,
     this.radius = 22.0,
     this.color,

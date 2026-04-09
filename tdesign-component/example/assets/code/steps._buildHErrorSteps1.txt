@@ -1,16 +1,16 @@
 
   Widget _buildHErrorSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Error', content: 'Content2'),
-        TDStepsItemData(title: 'Steps3', content: 'Content3'),
-        TDStepsItemData(title: 'Steps4', content: 'Content4'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Error', content: 'Content2'),
+        TStepsItemData(title: 'Steps3', content: 'Content3'),
+        TStepsItemData(title: 'Steps4', content: 'Content4'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }

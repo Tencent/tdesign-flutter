@@ -1,15 +1,15 @@
 
   Widget _buildItem(BuildContext context, Widget switchItem,
       {String? title, String? desc}) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     Widget current = Row(
       children: [
         Expanded(
-            child: TDText(
+            child: TText(
           title ?? '',
           textColor: theme.fontGyColor1,
         )),
-        TDText(
+        TText(
           desc ?? '',
           textColor: theme.grayColor6,
         ),

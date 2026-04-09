@@ -4,17 +4,17 @@
       // spacing: 16,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
           axis: Axis.horizontal,
           text: '加载中…',
           duration: _currentSliderValue.round(),
         ),
         const SizedBox(height: 16),
-        TDSlider(
+        TSlider(
           value: _currentSliderValue,
-          sliderThemeData: TDSliderThemeData(
+          sliderThemeData: TSliderThemeData(
             context: context,
             max: 2000,
             min: -20,

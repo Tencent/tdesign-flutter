@@ -26,8 +26,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildFooter(BuildContext context) {
-    return const TDFooter(
-      TDFooterType.text,
+    return const TFooter(
+      TFooterType.text,
       text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }</pre>
@@ -41,13 +41,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSingleLinkFooter(BuildContext context) {
-    return TDFooter(
-      TDFooterType.link,
+    return TFooter(
+      TFooterType.link,
       links: [
-        TDLink(
+        TLink(
           label: '底部链接',
-          style: TDLinkStyle.primary,
-          type: TDLinkType.withSuffixIcon,
+          style: TLinkStyle.primary,
+          type: TLinkType.withSuffixIcon,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接 $link');
@@ -67,20 +67,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildLinksFooter(BuildContext context) {
-    return TDFooter(
-      TDFooterType.link,
+    return TFooter(
+      TFooterType.link,
       links: [
-        TDLink(
+        TLink(
           label: '底部链接1',
-          style: TDLinkStyle.primary,
+          style: TLinkStyle.primary,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接1 $link');
           },
         ),
-        TDLink(
+        TLink(
           label: '底部链接2',
-          style: TDLinkStyle.primary,
+          style: TLinkStyle.primary,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接2 $link');
@@ -100,8 +100,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildBrandFooter(BuildContext context) {
-    return const TDFooter(
-      TDFooterType.brand,
+    return const TFooter(
+      TFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,
     );
@@ -112,17 +112,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDFooter
+### TFooter
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | height | double? | - | 自定义图片高 |
 | key |  | - |  |
-| links | List<TDLink> | const [] | 链接 |
+| links | List<TLink> | const [] | 链接 |
 | logo | String? | - | 品牌图片 |
 | text | String | '' | 文字 |
-| type | TDFooterType | type | 样式 |
+| type | TFooterType | type | 样式 |
 | width | double? | - | 自定义图片宽 |
 
 

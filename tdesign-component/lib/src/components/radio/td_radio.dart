@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/auto_size.dart';
 
-enum TDRadioStyle {
+enum TRadioStyle {
   circle, // 圆形
   square, // 方形
   check, // 对号样式
@@ -11,11 +11,11 @@ enum TDRadioStyle {
 }
 
 /// 单选框按钮,继承自TDCheckbox，字段含义与父类一致
-class TDRadio extends TDCheckbox {
+class TRadio extends TCheckbox {
   /// 单选框按钮样式
-  final TDRadioStyle radioStyle;
+  final TRadioStyle radioStyle;
 
-  const TDRadio({
+  const TRadio({
     String? id,
     Key? key,
     String? title,
@@ -31,9 +31,9 @@ class TDRadio extends TDCheckbox {
     double? spacing,
     bool? cardMode,
     bool? showDivider,
-    TDCheckBoxSize size = TDCheckBoxSize.small,
-    this.radioStyle = TDRadioStyle.circle,
-    TDContentDirection contentDirection = TDContentDirection.right,
+    TCheckBoxSize size = TCheckBoxSize.small,
+    this.radioStyle = TRadioStyle.circle,
+    TContentDirection contentDirection = TContentDirection.right,
     IconBuilder? customIconBuilder,
     Color? titleColor,
     Color? subTitleColor,
@@ -69,22 +69,22 @@ class TDRadio extends TDCheckbox {
 
   @override
   Widget buildDefaultIcon(
-      BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
+      BuildContext context, TCheckboxGroupState? groupState, bool isSelected) {
     if (cardMode == true) {
       return Container();
     }
-    TDRadioStyle? style;
-    if (groupState is TDRadioGroupState) {
-      style = (groupState.widget as TDRadioGroup).radioCheckStyle;
+    TRadioStyle? style;
+    if (groupState is TRadioGroupState) {
+      style = (groupState.widget as TRadioGroup).radioCheckStyle;
     }
 
     style = style ?? radioStyle;
 
     var size = 24.0;
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
 
     // 由于镂空圆没有现成icon，因而自己画一个
-    if (style == TDRadioStyle.hollowCircle) {
+    if (style == TRadioStyle.hollowCircle) {
       return SizedBox(
         width: size,
         height: size,
@@ -100,15 +100,15 @@ class TDRadio extends TDCheckbox {
 
     IconData? iconData;
     switch (style) {
-      case TDRadioStyle.check:
-        iconData = isSelected ? TDIcons.check : null;
+      case TRadioStyle.check:
+        iconData = isSelected ? TIcons.check : null;
         break;
-      case TDRadioStyle.square:
+      case TRadioStyle.square:
         iconData =
-            isSelected ? TDIcons.check_rectangle_filled : TDIcons.rectangle;
+            isSelected ? TIcons.check_rectangle_filled : TIcons.rectangle;
         break;
       default:
-        iconData = isSelected ? TDIcons.check_circle_filled : TDIcons.circle;
+        iconData = isSelected ? TIcons.check_circle_filled : TIcons.circle;
         break;
     }
     if (iconData != null) {
@@ -131,17 +131,17 @@ class TDRadio extends TDCheckbox {
 
   @override
   State<StatefulWidget> createState() {
-    return TDRadioState();
+    return TRadioState();
   }
 }
 
-class TDRadioState extends TDCheckboxState {
+class TRadioState extends TCheckboxState {
   @override
   Widget build(BuildContext context) {
     // 检查是否包含在FuiCheckBoxGroup内，如果是的话，状态由Group管理
-    final groupState = TDCheckboxGroupInherited.of(context)?.state;
-    if (groupState is TDRadioGroupState) {
-      final strictMode = (groupState.widget as TDRadioGroup).strictMode;
+    final groupState = TCheckboxGroupInherited.of(context)?.state;
+    if (groupState is TRadioGroupState) {
+      final strictMode = (groupState.widget as TRadioGroup).strictMode;
       // 严格模式下不能取消选项，只能切换
       if (strictMode == true) {
         canNotCancel = true;
@@ -177,12 +177,12 @@ class HollowCircle extends CustomPainter {
 ///
 /// cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
 /// 组合为横向、纵向卡片，同时需要在每个TDRadio上设置cardMode参数。
-class TDRadioGroup extends TDCheckboxGroup {
+class TRadioGroup extends TCheckboxGroup {
   /// 严格模式下，用户不能取消勾选，只能切换选择项，
   final bool strictMode;
 
   /// 勾选样式
-  final TDRadioStyle? radioCheckStyle;
+  final TRadioStyle? radioCheckStyle;
 
   /// 是否显示下划线
   final bool showDivider;
@@ -193,11 +193,11 @@ class TDRadioGroup extends TDCheckboxGroup {
   ///每行几列
   final int rowCount;
 
-  TDRadioGroup(
+  TRadioGroup(
       {Key? key,
       Widget? child, // 使用child 则请勿设置direction
       Axis? direction, // direction 对 directionalTdRadios 起作用
-      List<TDRadio>? directionalTdRadios,
+      List<TRadio>? directionalTdRadios,
       String? selectId, // 默认选择项的id
       bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
       bool cardMode = false,
@@ -208,23 +208,23 @@ class TDRadioGroup extends TDCheckboxGroup {
       ContentBuilder? customContentBuilder,
       double? spacing, // icon和文字距离
       this.rowCount = 1,
-      TDContentDirection? contentDirection,
+      TContentDirection? contentDirection,
       OnRadioGroupChange? onRadioGroupChange, // 切换监听
       this.showDivider = false,
       this.divider,
 
       /// 可以通过控制器操作勾选状态
-      TDCheckboxGroupController? controller})
+      TCheckboxGroupController? controller})
       : assert(() {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
             throw FlutterError(
-                '[TDRadioGroup] direction and directionalTdRadios must set at the same time');
+                '[TRadioGroup] direction and directionalTdRadios must set at the same time');
           }
           // 未使用direction则必须设置child
           if (direction == null && child == null) {
             throw FlutterError(
-                '[TDRadioGroup] direction means use child as the exact one, but child is null');
+                '[TRadioGroup] direction means use child as the exact one, but child is null');
           }
           // 横向单选框 每个选项有字数限制
           if (direction == Axis.horizontal && directionalTdRadios != null) {
@@ -237,7 +237,7 @@ class TDRadioGroup extends TDCheckboxGroup {
             });
             var maxWordCount = 2;
             var tips =
-                '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
+                '[TRadioGroup] radio title please not exceed $maxWordCount words.\n'
                 '2tabs: 7words maximum\n'
                 '3tabs: 4words maximum\n'
                 '4tabs: 2words maximum';
@@ -260,12 +260,12 @@ class TDRadioGroup extends TDCheckboxGroup {
           if (cardMode == true) {
             assert(direction != null && directionalTdRadios != null);
             directionalTdRadios!.forEach((element) {
-              // if use cardMode at TDRadioGroup, then every TDRadio should
+              // if use cardMode at TRadioGroup, then every TRadio should
               // set it's own carMode to true.
               if (element.cardMode == false) {
                 throw FlutterError(
-                    'if use cardMode at TDRadioGroup, then every '
-                    'TDRadio should set it\'s own carMode to true.');
+                    'if use cardMode at TRadioGroup, then every '
+                    'TRadio should set it\'s own carMode to true.');
               }
               if (element.subTitle != null && direction == Axis.horizontal) {
                 throw FlutterError(
@@ -379,7 +379,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                                       ),
                                       if (showDivider)
                                         divider ??
-                                            const TDDivider(
+                                            const TDivider(
                                               margin: EdgeInsets.only(left: 16),
                                             )
                                     ],
@@ -403,11 +403,11 @@ class TDRadioGroup extends TDCheckboxGroup {
 
   @override
   State<StatefulWidget> createState() {
-    return TDRadioGroupState();
+    return TRadioGroupState();
   }
 }
 
-class TDRadioGroupState extends TDCheckboxGroupState {
+class TRadioGroupState extends TCheckboxGroupState {
   @override
   bool toggle(String id, bool check, [bool notify = false]) {
     checkBoxStates.forEach((key, value) {

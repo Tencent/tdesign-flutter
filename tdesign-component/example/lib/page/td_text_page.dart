@@ -4,8 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
-class TDTextPage extends StatelessWidget {
-  const TDTextPage({Key? key}) : super(key: key);
+class TTextPage extends StatelessWidget {
+  const TTextPage({Key? key}) : super(key: key);
 
   final exampleTxt = '文本Text';
 
@@ -25,7 +25,7 @@ class TDTextPage extends StatelessWidget {
           ExampleItem(
               desc: 'style覆盖textColor和font:',
               builder: _buildStyleCoverColorAndFont),
-          ExampleItem(desc: 'TDText.rich测试:', builder: _buildRichText),
+          ExampleItem(desc: 'TText.rich测试:', builder: _buildRichText),
           ExampleItem(desc: '获取系统Text:', builder: _getSystemText),
           ExampleItem(
               desc: '中文居中:（带有英文可能不居中）', builder: _buildVerticalCenterText),
@@ -38,7 +38,7 @@ class TDTextPage extends StatelessWidget {
             desc: '中文居中-系统字体',
             builder: (context) {
               return Container(
-                color: TDTheme.of(context).brandFocusColor,
+                color: TTheme.of(context).brandFocusColor,
                 child: Text(exampleTxt),
               );
             }),
@@ -46,8 +46,8 @@ class TDTextPage extends StatelessWidget {
             desc: '中文居中-TD字体',
             builder: (context) {
               return Container(
-                color: TDTheme.of(context).brandFocusColor,
-                child: TDText(
+                color: TTheme.of(context).brandFocusColor,
+                child: TText(
                   exampleTxt,
                   forceVerticalCenter: true,
                 ),
@@ -59,7 +59,7 @@ class TDTextPage extends StatelessWidget {
 
   @Demo(group: 'text')
   Widget _buildNormalTDText(BuildContext context) {
-    return TDText(
+    return TText(
       exampleTxt,
     );
   }
@@ -73,82 +73,82 @@ class TDTextPage extends StatelessWidget {
 
   @Demo(group: 'text')
   Widget _buildGeneralProp(BuildContext context) {
-    return TDText(
+    return TText(
       exampleTxt,
-      font: TDTheme.of(context).fontHeadlineLarge,
-      textColor: TDTheme.of(context).brandNormalColor,
-      backgroundColor: TDTheme.of(context).brandFocusColor,
+      font: TTheme.of(context).fontHeadlineLarge,
+      textColor: TTheme.of(context).brandNormalColor,
+      backgroundColor: TTheme.of(context).brandFocusColor,
     );
   }
 
   @Demo(group: 'text')
   Widget _buildStyleCoverColor(BuildContext context) {
-    return TDText(
+    return TText(
       exampleTxt,
-      font: TDTheme.of(context).fontBodyLarge,
-      textColor: TDTheme.of(context).brandNormalColor,
-      style: TextStyle(color: TDTheme.of(context).errorNormalColor),
+      font: TTheme.of(context).fontBodyLarge,
+      textColor: TTheme.of(context).brandNormalColor,
+      style: TextStyle(color: TTheme.of(context).errorNormalColor),
     );
   }
 
   @Demo(group: 'text')
   Widget _buildStyleCoverColorAndFont(BuildContext context) {
-    return TDText(
+    return TText(
       exampleTxt,
-      font: TDTheme.of(context).fontBodyLarge,
-      textColor: TDTheme.of(context).brandNormalColor,
+      font: TTheme.of(context).fontBodyLarge,
+      textColor: TTheme.of(context).brandNormalColor,
     );
   }
 
   @Demo(group: 'text')
   Widget _buildRichText(BuildContext context) {
-    return TDText.rich(
+    return TText.rich(
       TextSpan(children: [
-        TDTextSpan(
-            text: 'TDTextSpan1',
-            font: TDTheme.of(context).fontTitleExtraLarge,
-            textColor: TDTheme.of(context).warningNormalColor,
+        TTextSpan(
+            text: 'TTextSpan1',
+            font: TTheme.of(context).fontTitleExtraLarge,
+            textColor: TTheme.of(context).warningNormalColor,
             isTextThrough: true,
-            lineThroughColor: TDTheme.of(context).brandNormalColor,
-            style: TextStyle(color: TDTheme.of(context).errorNormalColor)),
+            lineThroughColor: TTheme.of(context).brandNormalColor,
+            style: TextStyle(color: TTheme.of(context).errorNormalColor)),
         TextSpan(
             text: 'TextSpan2',
             style: TextStyle(
-                fontSize: 14, color: TDTheme.of(context).brandNormalColor)),
+                fontSize: 14, color: TTheme.of(context).brandNormalColor)),
         const WidgetSpan(
             child: Icon(
-          TDIcons.setting,
+          TIcons.setting,
           size: 24,
         )),
       ]),
-      font: TDTheme.of(context).fontBodyLarge,
-      textColor: TDTheme.of(context).brandNormalColor,
+      font: TTheme.of(context).fontBodyLarge,
+      textColor: TTheme.of(context).brandNormalColor,
       style:
-          TextStyle(color: TDTheme.of(context).errorNormalColor, fontSize: 32),
+          TextStyle(color: TTheme.of(context).errorNormalColor, fontSize: 32),
     );
   }
 
   @Demo(group: 'text')
   Widget _getSystemText(BuildContext context) {
-    return TDText(
+    return TText(
       exampleTxt,
-      backgroundColor: TDTheme.of(context).brandFocusColor,
+      backgroundColor: TTheme.of(context).brandFocusColor,
     ).getRawText(context: context);
   }
 
   @Demo(group: 'text')
   Widget _buildVerticalCenterText(BuildContext context) {
-    return TDText(
+    return TText(
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: TDTheme.of(context).brandFocusColor,
+      backgroundColor: TTheme.of(context).brandFocusColor,
     );
   }
 
   @Demo(group: 'text')
   Widget _buildCustomPaddingText(BuildContext context) {
-    return TDTextConfiguration(
+    return TTextConfiguration(
       paddingConfig: CustomTextPaddingConfig(),
       child: const CustomPaddingText(),
     );
@@ -156,7 +156,7 @@ class TDTextPage extends StatelessWidget {
 
   @Demo(group: 'text')
   Widget _buildTextThrough(BuildContext context) {
-    return TDText(exampleTxt, isTextThrough: true);
+    return TText(exampleTxt, isTextThrough: true);
   }
 }
 
@@ -169,16 +169,16 @@ class CustomPaddingText extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TDText(
+        TText(
           '中华人民共和国腾讯科技fgjpqy',
           forceVerticalCenter: true,
-          backgroundColor: TDTheme.of(context).brandFocusColor,
+          backgroundColor: TTheme.of(context).brandFocusColor,
         ),
-        TDText(
+        TText(
           'English',
-          font: TDTheme.of(context).fontHeadlineLarge,
+          font: TTheme.of(context).fontHeadlineLarge,
           forceVerticalCenter: true,
-          backgroundColor: TDTheme.of(context).brandFocusColor,
+          backgroundColor: TTheme.of(context).brandFocusColor,
         ),
       ],
     );
@@ -186,7 +186,7 @@ class CustomPaddingText extends StatelessWidget {
 }
 
 /// 重写内部padding方法
-class CustomTextPaddingConfig extends TDTextPaddingConfig {
+class CustomTextPaddingConfig extends TTextPaddingConfig {
   @override
   EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
     var supperPadding = super.getPadding(data, fontSize, height);

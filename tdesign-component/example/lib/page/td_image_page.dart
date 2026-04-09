@@ -6,14 +6,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDImagePage extends StatefulWidget {
-  const TDImagePage({Key? key}) : super(key: key);
+class TImagePage extends StatefulWidget {
+  const TImagePage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => TDImageState();
+  State<StatefulWidget> createState() => TImageState();
 }
 
-class TDImageState extends State<TDImagePage>
+class TImageState extends State<TImagePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
@@ -214,14 +214,14 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '裁剪',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           assetUrl: 'assets/img/image.png',
-          type: TDImageType.clip,
+          type: TImageType.clip,
         ),
       ],
     );
@@ -235,23 +235,23 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '拉伸',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
-          color: TDTheme.of(context).bgColorContainerHover,
+          color: TTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
           child: const Stack(
             alignment: Alignment.center,
             children: [
-              TDImage(
+              TImage(
                 assetUrl: 'assets/img/image.png',
                 width: 121,
                 height: 50,
-                type: TDImageType.stretch,
+                type: TImageType.stretch,
               ),
             ],
           ),
@@ -268,18 +268,18 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '适应高',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: TDTheme.of(context).bgColorContainerHover,
-          child: const TDImage(
+          color: TTheme.of(context).bgColorContainerHover,
+          child: const TImage(
             assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitHeight,
+            type: TImageType.fitHeight,
           ),
         ),
       ],
@@ -294,18 +294,18 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '适应宽',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: TDTheme.of(context).bgColorContainerHover,
-          child: const TDImage(
+          color: TTheme.of(context).bgColorContainerHover,
+          child: const TImage(
             assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitWidth,
+            type: TImageType.fitWidth,
           ),
         ),
       ],
@@ -320,14 +320,14 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '方形',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           assetUrl: 'assets/img/image.png',
-          type: TDImageType.square,
+          type: TImageType.square,
         ),
       ],
     );
@@ -341,14 +341,14 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '圆角方形',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           assetUrl: 'assets/img/image.png',
-          type: TDImageType.roundedSquare,
+          type: TImageType.roundedSquare,
           width: 72,
           height: 72,
         ),
@@ -364,16 +364,16 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '圆形',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           assetUrl: 'assets/img/image.png',
           width: 72,
           height: 72,
-          type: TDImageType.circle,
+          type: TImageType.circle,
         ),
       ],
     );
@@ -387,9 +387,9 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '加载默认提示',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
@@ -398,21 +398,21 @@ class TDImageState extends State<TDImagePage>
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).bgColorContainerHover,
+                color: TTheme.of(context).bgColorContainerHover,
                 child: Icon(
-                  TDIcons.ellipsis,
+                  TIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).textColorPlaceholder,
+                  color: TTheme.of(context).textColorPlaceholder,
                 ))),
 
         /// @tips 实际组件写法如下：上面仅为加载展示
-        // const TDImage(
+        // const TImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   type: TDImageType.roundedSquare,
+        //   type: TImageType.roundedSquare,
         // ),
       ],
     );
@@ -426,9 +426,9 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '加载自定义提示',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
@@ -437,31 +437,31 @@ class TDImageState extends State<TDImagePage>
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).bgColorContainerHover,
+                color: TTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
-                    child: TDCircleIndicator(
-                      color: TDTheme.of(context).brandNormalColor,
+                    child: TCircleIndicator(
+                      color: TTheme.of(context).brandNormalColor,
                       size: 18,
                       lineWidth: 3,
                     )))),
         // 实际组件写法如下：上面仅为加载展示
-        // TDImage(
+        // TImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
         //   loadingWidget: RotationTransition(
         //       turns: animation,
         //       alignment: Alignment.center,
-        //       child: TDCircleIndicator(
-        //         color: TDTheme.of(context).brandNormalColor,
+        //       child: TCircleIndicator(
+        //         color: TTheme.of(context).brandNormalColor,
         //         size: 18,
         //         lineWidth: 3,
         //       )),
-        //   type: TDImageType.roundedSquare,
+        //   type: TImageType.roundedSquare,
         // ),
       ],
     );
@@ -475,14 +475,14 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '失败默认提示',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           imgUrl: 'error',
-          type: TDImageType.roundedSquare,
+          type: TImageType.roundedSquare,
         ),
       ],
     );
@@ -496,19 +496,19 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '失败自定义提示',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        TDImage(
+        TImage(
           imgUrl: 'error',
-          errorWidget: TDText(
+          errorWidget: TText(
             '加载失败',
             forceVerticalCenter: true,
-            font: TDTheme.of(context).fontBodyExtraSmall,
+            font: TTheme.of(context).fontBodyExtraSmall,
           ),
-          type: TDImageType.roundedSquare,
+          type: TImageType.roundedSquare,
         ),
       ],
     );
@@ -519,9 +519,9 @@ class TDImageState extends State<TDImagePage>
     return SizedBox(
       width: 72,
       height: 72,
-      child: TDImage(
+      child: TImage(
         imageFile: File('/sdcard/td/test.jpg'),
-        type: TDImageType.fitWidth,
+        type: TImageType.fitWidth,
       ),
     );
   }

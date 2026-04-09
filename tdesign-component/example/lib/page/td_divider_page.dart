@@ -4,8 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDDividerPage extends StatelessWidget {
-  const TDDividerPage({Key? key}) : super(key: key);
+class TDividerPage extends StatelessWidget {
+  const TDividerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class TDDividerPage extends StatelessWidget {
     return Container(
       height: 20,
       alignment: Alignment.center,
-      child: const TDDivider(),
+      child: const TDivider(),
     );
   }
 
@@ -39,15 +39,15 @@ class TDDividerPage extends StatelessWidget {
     return const Wrap(
       runSpacing: 20,
       children: [
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.left,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.center,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.right,
         ),
@@ -64,24 +64,24 @@ class TDDividerPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          TDText(
+          TText(
             '文字信息',
-            textColor: TDTheme.of(context).textColorPlaceholder,
+            textColor: TTheme.of(context).textColorPlaceholder,
           ),
-          const TDDivider(
+          const TDivider(
             width: 0.5,
             height: 12,
             margin: EdgeInsets.symmetric(horizontal: 8),
           ),
-          TDText('文字信息', textColor: TDTheme.of(context).textColorPlaceholder),
-          const TDDivider(
+          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
+          const TDivider(
             width: 0.5,
             height: 12,
             margin: EdgeInsets.symmetric(horizontal: 8),
             isDashed: true,
             direction: Axis.vertical,
           ),
-          TDText('文字信息', textColor: TDTheme.of(context).textColorPlaceholder),
+          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
         ],
       ),
     );
@@ -92,20 +92,20 @@ class TDDividerPage extends StatelessWidget {
     return const Wrap(
       runSpacing: 20,
       children: [
-        TDDivider(
+        TDivider(
           isDashed: true,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.left,
           isDashed: true,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.center,
           isDashed: true,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.right,
           isDashed: true,

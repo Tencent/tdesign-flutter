@@ -4,17 +4,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDCollapsePage extends StatefulWidget {
-  const TDCollapsePage({Key? key}) : super(key: key);
+class TCollapsePage extends StatefulWidget {
+  const TCollapsePage({Key? key}) : super(key: key);
 
   @override
-  TDCollapsePageState createState() => TDCollapsePageState();
+  TCollapsePageState createState() => TCollapsePageState();
 }
 
 const String randomString =
     "In the heart of the bustling city, a small park offered a sanctuary of tranquility.Children's laughter echoed from the playground, mingling with the soft rustling of leaves in the gentle breeze.Joggers navigated winding paths, their steady breaths in rhythm with the chirping of the early morning birds.Nearby, an elderly man sat on a bench, engrossed in a book, oblivious to the world around him.The park was a microcosm of life, a testament to the city's vibrant spirit and the enduring allure of nature's simple pleasures.";
 
-class TDCollapsePageState extends State<TDCollapsePage> {
+class TCollapsePageState extends State<TCollapsePage> {
   final List<CollapseDataItem> _basicData = generateItems(5);
   final List<CollapseDataItem> _blockStyleData = generateItems(5);
   final List<CollapseDataItem> _cardStyleData = generateItems(5);
@@ -57,15 +57,15 @@ class TDCollapsePageState extends State<TDCollapsePage> {
 
   @Demo(group: 'collapse')
   Widget _buildBasicCollapse(BuildContext context) {
-    return TDCollapse(
-      style: TDCollapseStyle.block,
+    return TCollapse(
+      style: TCollapseStyle.block,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _basicData[index].isExpanded = !isExpanded;
         });
       },
       children: _basicData.map((CollapseDataItem item) {
-        return TDCollapsePanel(
+        return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },
@@ -78,15 +78,15 @@ class TDCollapsePageState extends State<TDCollapsePage> {
 
   @Demo(group: 'collapse')
   Widget _buildBlockStyleCollapse(BuildContext context) {
-    return TDCollapse(
-      style: TDCollapseStyle.block,
+    return TCollapse(
+      style: TCollapseStyle.block,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _blockStyleData[index].isExpanded = !isExpanded;
         });
       },
       children: _blockStyleData.map((CollapseDataItem item) {
-        return TDCollapsePanel(
+        return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },
@@ -99,15 +99,15 @@ class TDCollapsePageState extends State<TDCollapsePage> {
 
   @Demo(group: 'collapse')
   Widget _buildCardCollapse(BuildContext context) {
-    return TDCollapse(
-      style: TDCollapseStyle.card,
+    return TCollapse(
+      style: TCollapseStyle.card,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _cardStyleData[index].isExpanded = !isExpanded;
         });
       },
       children: _cardStyleData.map((CollapseDataItem item) {
-        return TDCollapsePanel(
+        return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },
@@ -120,15 +120,15 @@ class TDCollapsePageState extends State<TDCollapsePage> {
 
   @Demo(group: 'collapse')
   Widget _buildCollapseWithOperationText(BuildContext context) {
-    return TDCollapse(
-      style: TDCollapseStyle.block,
+    return TCollapse(
+      style: TCollapseStyle.block,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _blockStyleWithOpText[index].isExpanded = !isExpanded;
         });
       },
       children: _blockStyleWithOpText.map((CollapseDataItem item) {
-        return TDCollapsePanel(
+        return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },
@@ -144,15 +144,15 @@ class TDCollapsePageState extends State<TDCollapsePage> {
 
   @Demo(group: 'collapse')
   Widget _buildAccordionCollapse(BuildContext context) {
-    return TDCollapse.accordion(
-      style: TDCollapseStyle.block,
+    return TCollapse.accordion(
+      style: TCollapseStyle.block,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _accordionData[index].isExpanded = !isExpanded;
         });
       },
       children: _accordionData.map((CollapseDataItem item) {
-        return TDCollapsePanel(
+        return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },

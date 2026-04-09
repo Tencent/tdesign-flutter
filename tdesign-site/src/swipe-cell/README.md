@@ -41,22 +41,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return ValueListenableBuilder(
       valueListenable: cellLength,
       builder: (BuildContext context, value, Widget? child) {
-        return TDCellGroup(
+        return TCellGroup(
           cells: list
-              .map((e) => TDCell(
+              .map((e) => TCell(
                   title: e['title'],
                   note: e['note'],
                   description: e['description']))
               .toList(),
           builder: (context, cell, index) {
-            return TDSwipeCell(
+            return TSwipeCell(
               slidableKey: ValueKey(list[index]['id']),
               groupTag: 'test',
               onChange: (direction, open) {
                 print('打开方向：$direction');
                 print('打开转态$open');
               },
-              right: TDSwipeCellPanel(
+              right: TSwipeCellPanel(
                 extentRatio: 60 / screenWidth,
                 // dragDismissible: true,
                 onDismissed: (context) {
@@ -64,13 +64,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   cellLength.value = list.length;
                 },
                 children: [
-                  TDSwipeCellAction(
-                    backgroundColor: TDTheme.of(context).errorNormalColor,
+                  TSwipeCellAction(
+                    backgroundColor: TTheme.of(context).errorNormalColor,
                     label: '删除',
                     onPressed: (context) {
                       print('点击action');
-                      print(TDSwipeCell.of(context));
-                      print(TDSwipeCellInherited.of(context)?.controller);
+                      print(TSwipeCell.of(context));
+                      print(TSwipeCellInherited.of(context)?.controller);
                       list.removeAt(index);
                       cellLength.value = list.length;
                     },
@@ -96,22 +96,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSwiperMuliCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    return TDSwipeCell(
+    return TSwipeCell(
       groupTag: 'test',
-      right: TDSwipeCellPanel(
+      right: TSwipeCellPanel(
         extentRatio: 120 / screenWidth,
         children: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).warningNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).warningNormalColor,
             label: '编辑',
           ),
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).errorNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).errorNormalColor,
             label: '删除',
           ),
         ],
       ),
-      cell: const TDCell(title: '左滑双操作', note: '辅助信息'),
+      cell: const TCell(title: '左滑双操作', note: '辅助信息'),
     );
   }</pre>
 
@@ -126,26 +126,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSwiper3Cell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    return TDSwipeCell(
+    return TSwipeCell(
       groupTag: 'test',
-      right: TDSwipeCellPanel(
+      right: TSwipeCellPanel(
         extentRatio: 180 / screenWidth,
         children: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).brandNormalColor,
             label: '保存',
           ),
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).warningNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).warningNormalColor,
             label: '编辑',
           ),
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).errorNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).errorNormalColor,
             label: '删除',
           ),
         ],
       ),
-      cell: const TDCell(title: '左滑三操作', note: '辅助信息'),
+      cell: const TCell(title: '左滑三操作', note: '辅助信息'),
     );
   }</pre>
 
@@ -160,18 +160,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSwiperRightCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    return TDSwipeCell(
+    return TSwipeCell(
       groupTag: 'test',
-      left: TDSwipeCellPanel(
+      left: TSwipeCellPanel(
         extentRatio: 60 / screenWidth,
         children: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).brandNormalColor,
             label: '选择',
           ),
         ],
       ),
-      cell: const TDCell(title: '右滑操作', note: '辅助信息'),
+      cell: const TCell(title: '右滑操作', note: '辅助信息'),
     );
   }</pre>
 
@@ -186,31 +186,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSwiperRightLeftCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    return TDSwipeCell(
+    return TSwipeCell(
       groupTag: 'test',
-      left: TDSwipeCellPanel(
+      left: TSwipeCellPanel(
         extentRatio: 60 / screenWidth,
         children: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).brandNormalColor,
             label: '选择',
           ),
         ],
       ),
-      right: TDSwipeCellPanel(
+      right: TSwipeCellPanel(
         extentRatio: 120 / screenWidth,
         children: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).warningNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).warningNormalColor,
             label: '编辑',
           ),
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).errorNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).errorNormalColor,
             label: '删除',
           ),
         ],
       ),
-      cell: const TDCell(title: '左右滑操作', note: '辅助信息'),
+      cell: const TCell(title: '左右滑操作', note: '辅助信息'),
     );
   }</pre>
 
@@ -229,66 +229,66 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return Column(
       // spacing: 16,
       children: [
-        TDSwipeCell(
+        TSwipeCell(
           groupTag: 'test',
-          right: TDSwipeCellPanel(
+          right: TSwipeCellPanel(
             extentRatio: 160 / screenWidth,
             children: [
-              TDSwipeCellAction(
-                backgroundColor: TDTheme.of(context).warningNormalColor,
-                icon: TDIcons.edit,
+              TSwipeCellAction(
+                backgroundColor: TTheme.of(context).warningNormalColor,
+                icon: TIcons.edit,
                 label: '编辑',
               ),
-              TDSwipeCellAction(
-                backgroundColor: TDTheme.of(context).errorNormalColor,
-                icon: TDIcons.delete,
+              TSwipeCellAction(
+                backgroundColor: TTheme.of(context).errorNormalColor,
+                icon: TIcons.delete,
                 label: '删除',
               ),
             ],
           ),
-          cell: const TDCell(title: '左滑操作', note: '图标+文字（横向）'),
+          cell: const TCell(title: '左滑操作', note: '图标+文字（横向）'),
         ),
         const SizedBox(height: 16),
-        TDSwipeCell(
+        TSwipeCell(
           groupTag: 'test',
-          right: TDSwipeCellPanel(
+          right: TSwipeCellPanel(
             extentRatio: 120 / screenWidth,
             children: [
-              TDSwipeCellAction(
-                backgroundColor: TDTheme.of(context).warningNormalColor,
-                icon: TDIcons.edit,
+              TSwipeCellAction(
+                backgroundColor: TTheme.of(context).warningNormalColor,
+                icon: TIcons.edit,
               ),
-              TDSwipeCellAction(
-                backgroundColor: TDTheme.of(context).errorNormalColor,
-                icon: TDIcons.delete,
+              TSwipeCellAction(
+                backgroundColor: TTheme.of(context).errorNormalColor,
+                icon: TIcons.delete,
               ),
             ],
           ),
-          cell: const TDCell(title: '左滑操作', note: '仅图标'),
+          cell: const TCell(title: '左滑操作', note: '仅图标'),
         ),
         const SizedBox(height: 16),
-        TDSwipeCell(
+        TSwipeCell(
           groupTag: 'test',
-          right: TDSwipeCellPanel(
+          right: TSwipeCellPanel(
             extentRatio: 120 / screenWidth,
             children: [
-              TDSwipeCellAction(
+              TSwipeCellAction(
                 flex: 60,
-                backgroundColor: TDTheme.of(context).warningNormalColor,
+                backgroundColor: TTheme.of(context).warningNormalColor,
                 direction: Axis.vertical,
-                icon: TDIcons.edit,
+                icon: TIcons.edit,
                 label: '编辑',
               ),
-              TDSwipeCellAction(
+              TSwipeCellAction(
                 flex: 60,
-                backgroundColor: TDTheme.of(context).errorNormalColor,
+                backgroundColor: TTheme.of(context).errorNormalColor,
                 direction: Axis.vertical,
-                icon: TDIcons.delete,
+                icon: TIcons.delete,
                 label: '删除',
               ),
             ],
           ),
-          cell: const TDCell(
+          cell: const TCell(
               title: '左滑操作', note: '图标+文字（纵向）', description: '一段很长很长的内容文字'),
         )
       ],
@@ -306,29 +306,29 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSwiperConfirmCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    return TDSwipeCell(
+    return TSwipeCell(
       groupTag: 'test',
-      right: TDSwipeCellPanel(
+      right: TSwipeCellPanel(
         extentRatio: 120 / screenWidth,
         children: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).warningNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).warningNormalColor,
             label: '编辑',
           ),
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).errorNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).errorNormalColor,
             label: '删除',
           ),
         ],
         confirms: [
-          TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).errorNormalColor,
+          TSwipeCellAction(
+            backgroundColor: TTheme.of(context).errorNormalColor,
             label: '确认删除',
             confirmIndex: const [1],
           ),
         ],
       ),
-      cell: const TDCell(title: '左滑操作', note: '二次确认'),
+      cell: const TCell(title: '左滑操作', note: '二次确认'),
     );
   }</pre>
 
@@ -337,16 +337,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDSwipeCell
+### TSwipeCell
 #### 简介
 滑动单元格组件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| cell | Widget | - | 单元格 [TDCell] |
-| closeWhenOpened | bool? | true | 当同一组（[groupTag]）中的一个[TDSwipeCell]打开时，是否关闭组中的所有其他[TDSwipeCell] |
-| closeWhenTapped | bool? | true | 当同一组（[groupTag]）中的一个[TDSwipeCell]被点击时，是否应该关闭组中的所有[TDSwipeCell] |
+| cell | Widget | - | 单元格 [TCell] |
+| closeWhenOpened | bool? | true | 当同一组（[groupTag]）中的一个[TSwipeCell]打开时，是否关闭组中的所有其他[TSwipeCell] |
+| closeWhenTapped | bool? | true | 当同一组（[groupTag]）中的一个[TSwipeCell]被点击时，是否应该关闭组中的所有[TSwipeCell] |
 | controller | SlidableController? | - | 自定义控制滑动窗口 |
 | direction | Axis? | Axis.horizontal | 可拖动的方向 |
 | disabled | bool? | false | 是否禁用滑动 |
@@ -354,10 +354,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | duration | Duration? | const Duration(milliseconds: 200) | 打开关闭动画时长 |
 | groupTag | Object? | - | 组，配置后，[closeWhenOpened]、[closeWhenTapped]才起作用 |
 | key |  | - |  |
-| left | TDSwipeCellPanel? | - | 左侧滑动操作项面板 |
-| onChange |  Function(TDSwipeDirection direction, bool open)? | - | 滑动展开事件 |
+| left | TSwipeCellPanel? | - | 左侧滑动操作项面板 |
+| onChange |  Function(TSwipeDirection direction, bool open)? | - | 滑动展开事件 |
 | opened | List<bool>? | const [false, false] | 默认打开，[left, right] |
-| right | TDSwipeCellPanel? | - | 右侧滑动操作项面板 |
+| right | TSwipeCellPanel? | - | 右侧滑动操作项面板 |
 | slidableKey | Key? | - | 滑动组件的 Key |
 
 
@@ -365,7 +365,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| close |  |   required Object? tag,  SlidableController? current, | 根据[groupTag]关闭[TDSwipeCell]     current：保留当前不关闭 |
+| close |  |   required Object? tag,  SlidableController? current, | 根据[groupTag]关闭[TSwipeCell]     current：保留当前不关闭 |
 | of |  |   required BuildContext context, | 获取上下文最近的[controller] |
 
 

@@ -10,4 +10,4 @@
 #----- 以上注释，首次允许时放开 --------
 
 # svg放到icon目录（建议figma全量导出替换），运行此命令，生成ttf
-~/.pub-cache/bin/icon_font_generator --from=icons --class-name=TDIcons --out-font=../../assets/tdesign/td_icons.ttf --out-flutter=../../lib/src/components/icon/td_icons.dart
+~/.pub-cache/bin/icon_font_generator --from=icons --class-name=TIcons --out-font=../../assets/tdesign/td_icons.ttf --out-flutter=../../lib/src/components/icon/td_icons.dart

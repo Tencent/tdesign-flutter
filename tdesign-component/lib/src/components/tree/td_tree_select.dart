@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
+typedef TTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
-class TDSelectOption {
-  TDSelectOption({
+class TSelectOption {
+  TSelectOption({
     required this.label,
     required this.value,
     this.children = const [],
@@ -23,7 +23,7 @@ class TDSelectOption {
   final dynamic value;
 
   /// 子选项
-  List<TDSelectOption> children;
+  List<TSelectOption> children;
 
   /// 当前子项支持多选
   final bool multiple;
@@ -35,31 +35,31 @@ class TDSelectOption {
   final double? columnWidth;
 }
 
-enum TDTreeSelectStyle {
+enum TTreeSelectStyle {
   normal,
   outline,
 }
 
-class TDTreeSelect extends StatefulWidget {
-  const TDTreeSelect({
+class TTreeSelect extends StatefulWidget {
+  const TTreeSelect({
     Key? key,
     this.options = const [],
     this.defaultValue = const [],
     this.onChange,
     this.multiple = false,
-    this.style = TDTreeSelectStyle.normal,
+    this.style = TTreeSelectStyle.normal,
     this.height = 336,
     this.outwardCornerRadius = 9,
   }) : super(key: key);
 
   /// 展示的选项列表
-  final List<TDSelectOption> options;
+  final List<TSelectOption> options;
 
   /// 初始值，对应options中的value值
   final List<dynamic> defaultValue;
 
   /// 选中值发生变化
-  final TDTreeSelectChangeEvent? onChange;
+  final TTreeSelectChangeEvent? onChange;
 
   /// 高度
   final double height;
@@ -68,16 +68,16 @@ class TDTreeSelect extends StatefulWidget {
   final bool multiple;
 
   /// 一级菜单样式
-  final TDTreeSelectStyle style;
+  final TTreeSelectStyle style;
 
   /// 一级菜单选中项的外弯折圆角半径，默认为 9
   final double outwardCornerRadius;
 
   @override
-  State<TDTreeSelect> createState() => _TDTreeSelectState();
+  State<TTreeSelect> createState() => _TTreeSelectState();
 }
 
-class _TDTreeSelectState extends State<TDTreeSelect> {
+class _TTreeSelectState extends State<TTreeSelect> {
   ScrollController controller2 = ScrollController();
   ScrollController controller3 = ScrollController();
 
@@ -91,20 +91,20 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
 
   dynamic get thirdValue => values.length >= 3 ? values[2] : null;
 
-  List<TDSelectOption> get firstOptions => widget.options;
+  List<TSelectOption> get firstOptions => widget.options;
 
-  List<TDSelectOption> get secondOptions => maxLevel() <= 1 || values.isEmpty
+  List<TSelectOption> get secondOptions => maxLevel() <= 1 || values.isEmpty
       ? []
       : firstOptions
           .firstWhere((opt) => opt.value == firstValue,
-              orElse: () => TDSelectOption(value: -1, label: '', children: []))
+              orElse: () => TSelectOption(value: -1, label: '', children: []))
           .children;
 
-  List<TDSelectOption> get thirdOptions => maxLevel() <= 2 || currentLevel < 3
+  List<TSelectOption> get thirdOptions => maxLevel() <= 2 || currentLevel < 3
       ? []
       : secondOptions
           .firstWhere((opt) => opt.value == secondValue,
-              orElse: () => TDSelectOption(value: -1, label: '', children: []))
+              orElse: () => TSelectOption(value: -1, label: '', children: []))
           .children;
 
   @override
@@ -127,7 +127,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   }
 
   @override
-  void didUpdateWidget(TDTreeSelect oldWidget) {
+  void didUpdateWidget(TTreeSelect oldWidget) {
     super.didUpdateWidget(oldWidget);
     // 外部传入的 defaultValue 发生变化时，更新 values
     if (widget.defaultValue != oldWidget.defaultValue) {
@@ -156,14 +156,14 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         height: widget.height,
         child: Row(
           children: [
             /// 一级菜单
             Container(
               width: _getLevelWidth(widget.options, 1) ?? 106,
-              color: TDTheme.of(context).bgColorSecondaryContainer,
+              color: TTheme.of(context).bgColorSecondaryContainer,
               child: ListView.builder(
                 itemCount: widget.options.length,
                 itemBuilder: (context, index) {
@@ -198,14 +198,14 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? TDTheme.of(context).bgColorContainer
+                                ? TTheme.of(context).bgColorContainer
                                 : null,
                             border: isSelected &&
-                                    widget.style == TDTreeSelectStyle.outline
+                                    widget.style == TTreeSelectStyle.outline
                                 ? Border(
                                     left: BorderSide(
                                       color:
-                                          TDTheme.of(context).brandNormalColor,
+                                          TTheme.of(context).brandNormalColor,
                                       width: 3,
                                     ),
                                   )
@@ -217,10 +217,10 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize:
-                                  TDTheme.of(context).fontBodyLarge?.size ?? 16,
+                                  TTheme.of(context).fontBodyLarge?.size ?? 16,
                               color: isSelected
-                                  ? TDTheme.of(context).brandNormalColor
-                                  : TDTheme.of(context).textColorPrimary,
+                                  ? TTheme.of(context).brandNormalColor
+                                  : TTheme.of(context).textColorPrimary,
                               fontWeight: isSelected
                                   ? FontWeight.w600
                                   : FontWeight.normal,
@@ -236,7 +236,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                               size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
                               painter: _OutwardCornerPainter(
                                 color:
-                                    TDTheme.of(context).bgColorContainer,
+                                    TTheme.of(context).bgColorContainer,
                                 corner: _Corner.topRight,
                               ),
                             ),
@@ -250,7 +250,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                               size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
                               painter: _OutwardCornerPainter(
                                 color:
-                                    TDTheme.of(context).bgColorContainer,
+                                    TTheme.of(context).bgColorContainer,
                                 corner: _Corner.bottomRight,
                               ),
                             ),
@@ -298,7 +298,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     );
   }
 
-  double? _getLevelWidth(List<TDSelectOption> options, int level) {
+  double? _getLevelWidth(List<TSelectOption> options, int level) {
     for (final option in options) {
       if (option.columnWidth != null) {
         return option.columnWidth;
@@ -427,8 +427,8 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                               style: TextStyle(
                                 fontSize: 16,
                                 color: (!lastColumn && selected)
-                                    ? TDTheme.of(context).brandNormalColor
-                                    : TDTheme.of(context).textColorPrimary,
+                                    ? TTheme.of(context).brandNormalColor
+                                    : TTheme.of(context).textColorPrimary,
                                 fontWeight: (!lastColumn && selected)
                                     ? FontWeight.w600
                                     : FontWeight.w400,
@@ -444,8 +444,8 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             child: Padding(
                               padding: const EdgeInsets.all(16),
                               child: Icon(
-                                TDIcons.check,
-                                color: TDTheme.of(context).brandNormalColor,
+                                TIcons.check,
+                                color: TTheme.of(context).brandNormalColor,
                               ),
                             ),
                           ),

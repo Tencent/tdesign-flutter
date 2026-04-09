@@ -1,12 +1,12 @@
 ## API
-### TDSideBar
+### TSideBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| children | List<TDSideBarItem> | const [] | 单项 |
+| children | List<TSideBarItem> | const [] | 单项 |
 | contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
-| controller | TDSideBarController? | - | 控制器 |
+| controller | TSideBarController? | - | 控制器 |
 | defaultValue | int? | - | 默认值 |
 | height | double? | - | 高度 |
 | key |  | - |  |
@@ -17,7 +17,7 @@
 | selectedBgColor | Color? | - | 选择的背景颜色 |
 | selectedColor | Color? | - | 选中值后颜色 |
 | selectedTextStyle | TextStyle? | - | 选中样式 |
-| style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
+| style | TSideBarStyle | TSideBarStyle.normal | 样式 |
 | unSelectedBgColor | Color? | - | 未选择的背景颜色 |
 | unSelectedColor | Color? | - | 未选中颜色 |
 | value | int? | - | 选项值 |
@@ -25,12 +25,12 @@
 ```
 ```
 
-### TDSideBarItem
+### TSideBarItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TDBadge? | - | 徽标 |
+| badge | TBadge? | - | 徽标 |
 | disabled | bool | false | 是否禁用 |
 | icon | IconData? | - | 图标 |
 | key |  | - |  |

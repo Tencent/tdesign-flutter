@@ -1,12 +1,12 @@
 
   Widget _buildVerticalCascader(BuildContext context) {
     const title = '选择地址';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_1,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               data: _data,
               initialData: _initData,

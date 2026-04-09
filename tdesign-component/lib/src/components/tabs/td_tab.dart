@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-enum TDTabSize { large, small }
+enum TTabSize { large, small }
 
-enum TDTabOutlineType {
+enum TTabOutlineType {
   /// 填充样式
   filled,
 
@@ -15,7 +15,7 @@ enum TDTabOutlineType {
   card
 }
 
-class TDTab extends Tab {
+class TTab extends Tab {
   /// 文字内容
   @override
   final String? text;
@@ -29,7 +29,7 @@ class TDTab extends Tab {
   final Widget? icon;
 
   /// 图标
-  final TDBadge? badge;
+  final TBadge? badge;
 
   /// 图标间距
   @override
@@ -49,13 +49,13 @@ class TDTab extends Tab {
   final bool enable;
 
   /// 选项卡尺寸
-  final TDTabSize size;
+  final TTabSize size;
 
   /// 选项卡样式
-  final TDTabOutlineType outlineType;
+  final TTabOutlineType outlineType;
 
   @override
-  const TDTab({
+  const TTab({
     Key? key,
     this.text,
     this.child,
@@ -64,8 +64,8 @@ class TDTab extends Tab {
     this.height,
     this.contentHeight,
     this.textMargin,
-    this.size = TDTabSize.small,
-    this.outlineType = TDTabOutlineType.filled,
+    this.size = TTabSize.small,
+    this.outlineType = TTabOutlineType.filled,
     this.enable = true,
     this.iconMargin = const EdgeInsets.only(bottom: 4.0, right: 4.0),
   }) : super(
@@ -123,7 +123,7 @@ class TDTab extends Tab {
       ignoring: !enable,
       child: Container(
         alignment: Alignment.center,
-        margin: outlineType == TDTabOutlineType.capsule
+        margin: outlineType == TTabOutlineType.capsule
             ? const EdgeInsets.symmetric(horizontal: 16)
             : null,
         height: height ?? calculatedHeight,
@@ -141,7 +141,7 @@ class TDTab extends Tab {
         child: child!,
         style: DefaultTextStyle.of(context)
             .style
-            .copyWith(fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14),
+            .copyWith(fontSize: TTheme.of(context).fontBodySmall?.size ?? 14),
       );
     }
     return Text(
@@ -157,7 +157,7 @@ class TDTab extends Tab {
     if (defaultTextStyle.style.fontSize != null) {
       return defaultTextStyle.style.fontSize!;
     }
-    if (size == TDTabSize.large) {
+    if (size == TTabSize.large) {
       return 16.0;
     } else {
       return 14.0;

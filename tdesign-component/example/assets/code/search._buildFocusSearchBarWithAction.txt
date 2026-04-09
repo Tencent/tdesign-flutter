@@ -1,6 +1,6 @@
 
   Widget _buildFocusSearchBarWithAction(BuildContext context) {
-    return TDSearchBar(
+    return TSearchBar(
       placeHolder: '搜索预设文案',
       action: '搜索',
       needCancel: true,
@@ -10,7 +10,7 @@
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return TDConfirmDialog(
+            return TConfirmDialog(
               content: inputController.text.isNotEmpty
                   ? '搜索关键词：${inputController.text}'
                   : '搜索关键词为空',

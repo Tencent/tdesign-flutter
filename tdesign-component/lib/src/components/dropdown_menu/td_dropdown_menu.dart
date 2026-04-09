@@ -11,7 +11,7 @@ import './td_dropdown_item.dart';
 import 'td_dropdown_popup.dart';
 
 /// 菜单展开方向
-enum TDDropdownMenuDirection {
+enum TDropdownMenuDirection {
   /// 向下
   down,
 
@@ -23,7 +23,7 @@ enum TDDropdownMenuDirection {
 }
 
 /// 下拉菜单构建器
-typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
+typedef TDropdownItemBuilder = List<TDropdownItem> Function(
     BuildContext context);
 
 /// 自定义标签内容
@@ -31,13 +31,13 @@ typedef LabelBuilder = Widget Function(
     BuildContext context, String label, bool isOpened, int index);
 
 /// 下拉菜单
-class TDDropdownMenu extends StatefulWidget {
-  const TDDropdownMenu({
+class TDropdownMenu extends StatefulWidget {
+  const TDropdownMenu({
     Key? key,
     this.builder,
     this.items,
     this.closeOnClickOverlay = true,
-    this.direction = TDDropdownMenuDirection.auto,
+    this.direction = TDropdownMenuDirection.auto,
     this.duration = 200.0,
     this.showOverlay = true,
     this.isScrollable = false,
@@ -53,16 +53,16 @@ class TDDropdownMenu extends StatefulWidget {
   }) : super(key: key);
 
   /// 下拉菜单构建器，优先级高于[items]
-  final TDDropdownItemBuilder? builder;
+  final TDropdownItemBuilder? builder;
 
   /// 下拉菜单
-  final List<TDDropdownItem>? items;
+  final List<TDropdownItem>? items;
 
   /// 是否在点击遮罩层后关闭菜单
   final bool? closeOnClickOverlay;
 
   /// 菜单展开方向（down、up、auto）
-  final TDDropdownMenuDirection? direction;
+  final TDropdownMenuDirection? direction;
 
   /// 动画时长，毫秒
   final double? duration;
@@ -94,23 +94,23 @@ class TDDropdownMenu extends StatefulWidget {
   /// menu的高度
   final double? height;
 
-  /// [TDDropdownItem.label]和[arrowIcon]/[TDDropdownItem.arrowIcon]的对齐方式
+  /// [TDropdownItem.label]和[arrowIcon]/[TDropdownItem.arrowIcon]的对齐方式
   final MainAxisAlignment? tabBarAlign;
 
   /// 下拉菜单的装饰器
   final Decoration? decoration;
 
   @override
-  _TDDropdownMenuState createState() => _TDDropdownMenuState();
+  _TDropdownMenuState createState() => _TDropdownMenuState();
 }
 
-class _TDDropdownMenuState extends State<TDDropdownMenu>
+class _TDropdownMenuState extends State<TDropdownMenu>
     with TickerProviderStateMixin {
-  List<TDDropdownItem>? _items;
+  List<TDropdownItem>? _items;
   List<AnimationController>? _iconControllers;
   late List<Animation<double>> _iconAnimations;
   late List<bool> _isOpened;
-  TDDropdownPopup? _dropdownPopup;
+  TDropdownPopup? _dropdownPopup;
 
   @override
   void initState() {
@@ -127,7 +127,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
   }
 
   @override
-  void didUpdateWidget(TDDropdownMenu oldWidget) {
+  void didUpdateWidget(TDropdownMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.builder != oldWidget.builder ||
         widget.items != oldWidget.items) {
@@ -167,10 +167,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
       width: widget.width ?? double.infinity,
       decoration: widget.decoration ??
           BoxDecoration(
-            color: TDTheme.of(context).bgColorContainer,
+            color: TTheme.of(context).bgColorContainer,
             border: Border(
               bottom: BorderSide(
-                color: TDTheme.of(context).componentStrokeColor,
+                color: TTheme.of(context).componentStrokeColor,
                 width: 0.5,
               ),
             ),
@@ -205,10 +205,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
 
   Widget _tabBarContent(int index) {
     final color = _disabled(index)
-        ? TDTheme.of(context).textDisabledColor
+        ? TTheme.of(context).textDisabledColor
         : _isOpened[index]
-            ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).textColorPrimary;
+            ? TTheme.of(context).brandNormalColor
+            : TTheme.of(context).textColorPrimary;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -236,9 +236,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
     if (widget.labelBuilder != null) {
       return widget.labelBuilder!(context, label, _isOpened[index], index);
     }
-    return TDText(
+    return TText(
       label,
-      font: TDTheme.of(context).fontBodyMedium,
+      font: TTheme.of(context).fontBodyMedium,
       textColor: color,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -248,9 +248,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
   Widget _getIcon(int index, Color color) {
     var arrowIcon = _items![index].arrowIcon ??
         widget.arrowIcon ??
-        (widget.direction == TDDropdownMenuDirection.up
-            ? TDIcons.caret_up_small
-            : TDIcons.caret_down_small);
+        (widget.direction == TDropdownMenuDirection.up
+            ? TIcons.caret_up_small
+            : TIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
       child: Icon(arrowIcon,
@@ -277,7 +277,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
     if (_isOpened.contains(true)) {
       await Navigator.maybePop(context);
     }
-    _dropdownPopup ??= TDDropdownPopup(
+    _dropdownPopup ??= TDropdownPopup(
       child: _items![index],
       parentContext: context,
       handleClose: _closeMenu,

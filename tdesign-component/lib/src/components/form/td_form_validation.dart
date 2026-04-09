@@ -2,9 +2,9 @@ import '../../../tdesign_flutter.dart';
 
 /// 实现普通表单项的校验
 /// 校验规则 和 错误提醒
-class TDFormValidation {
+class TFormValidation {
 
-  TDFormValidation({
+  TFormValidation({
     required this.validate,
     required this.errorMessage,
     required this.type,
@@ -17,7 +17,7 @@ class TDFormValidation {
   final String errorMessage;
 
   /// 校验对象的类型
-  final TDFormItemType type;
+  final TFormItemType type;
 
   /// 执行校验逻辑
   String? check(dynamic value) {

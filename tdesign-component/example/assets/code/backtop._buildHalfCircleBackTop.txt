@@ -8,7 +8,7 @@
             if (controller.hasClients) {
               controller.jumpTo(500);
             }
-            style = TDBackTopStyle.halfCircle;
+            style = TBackTopStyle.halfCircle;
           });
         }),
         Padding(

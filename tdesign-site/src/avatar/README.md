@@ -29,16 +29,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Row(
       // spacing: 32,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.normal,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.normal,
-          shape: TDAvatarShape.square,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.normal,
+          shape: TAvatarShape.square,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
       ],
@@ -57,16 +57,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Row(
       // spacing: 32,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.customText,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.customText,
           text: 'A',
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.customText,
-          shape: TDAvatarShape.square,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.customText,
+          shape: TAvatarShape.square,
           text: 'A',
         ),
       ],
@@ -85,15 +85,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Row(
       // spacing: 32,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.icon,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.icon,
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.icon,
-          shape: TDAvatarShape.square,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.icon,
+          shape: TAvatarShape.square,
         ),
       ],
     );
@@ -117,12 +117,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TDAvatar(
-                size: TDAvatarSize.medium,
-                type: TDAvatarType.normal,
+              TAvatar(
+                size: TAvatarSize.medium,
+                type: TAvatarType.normal,
                 defaultUrl: 'assets/img/td_avatar_1.png',
               ),
-              Positioned(child: TDBadge(TDBadgeType.redPoint), right: 0, top: 0)
+              Positioned(child: TBadge(TBadgeType.redPoint), right: 0, top: 0)
             ],
           ),
         ),
@@ -133,13 +133,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TDAvatar(
-                size: TDAvatarSize.medium,
-                type: TDAvatarType.customText,
+              TAvatar(
+                size: TAvatarSize.medium,
+                type: TAvatarType.customText,
                 text: 'A',
               ),
               Positioned(
-                child: TDBadge(TDBadgeType.message, count: '8'),
+                child: TBadge(TBadgeType.message, count: '8'),
                 right: 0,
                 top: 0,
               )
@@ -153,9 +153,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+              TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
               Positioned(
-                child: TDBadge(TDBadgeType.message, count: '12'),
+                child: TBadge(TBadgeType.message, count: '12'),
                 right: 0,
                 top: 0,
               )
@@ -179,9 +179,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     var assetUrl = 'assets/img/td_avatar_1.png';
     var assetUrl2 = 'assets/img/td_avatar_2.png';
     var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
-    return TDAvatar(
-      size: TDAvatarSize.medium,
-      type: TDAvatarType.display,
+    return TAvatar(
+      size: TAvatarSize.medium,
+      type: TAvatarType.display,
       displayText: '+5',
       avatarDisplayListAsset: avatarList,
     );
@@ -199,12 +199,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     var assetUrl = 'assets/img/td_avatar_1.png';
     var assetUrl2 = 'assets/img/td_avatar_2.png';
     var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
-    return TDAvatar(
-      size: TDAvatarSize.medium,
-      type: TDAvatarType.operation,
+    return TAvatar(
+      size: TAvatarSize.medium,
+      type: TAvatarType.operation,
       avatarDisplayListAsset: avatarList,
       onTap: () {
-        TDToast.showText('点击了操作', context: context);
+        TToast.showText('点击了操作', context: context);
       },
     );
   }</pre>
@@ -222,21 +222,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Row(
       // spacing: 32,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.large,
-          type: TDAvatarType.normal,
+        TAvatar(
+          size: TAvatarSize.large,
+          type: TAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.large,
-          type: TDAvatarType.customText,
+        TAvatar(
+          size: TAvatarSize.large,
+          type: TAvatarType.customText,
           text: 'A',
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.large,
-          type: TDAvatarType.icon,
+        TAvatar(
+          size: TAvatarSize.large,
+          type: TAvatarType.icon,
         ),
       ],
     );
@@ -254,21 +254,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Row(
       // spacing: 48,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.normal,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
         SizedBox(width: 48),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.customText,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.customText,
           text: 'A',
         ),
         SizedBox(width: 48),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.icon,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.icon,
         ),
       ],
     );
@@ -286,21 +286,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Row(
       // spacing: 56,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.small,
-          type: TDAvatarType.normal,
+        TAvatar(
+          size: TAvatarSize.small,
+          type: TAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
         SizedBox(width: 56),
-        TDAvatar(
-          size: TDAvatarSize.small,
-          type: TDAvatarType.customText,
+        TAvatar(
+          size: TAvatarSize.small,
+          type: TAvatarType.customText,
           text: 'A',
         ),
         SizedBox(width: 56),
-        TDAvatar(
-          size: TDAvatarSize.small,
-          type: TDAvatarType.icon,
+        TAvatar(
+          size: TAvatarSize.small,
+          type: TAvatarType.icon,
         ),
       ],
     );
@@ -311,7 +311,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDAvatar
+### TAvatar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -330,10 +330,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | key |  | - |  |
 | onTap |  Function()? | - | 操作点击事件 |
 | radius | double? | - | 自定义圆角 |
-| shape | TDAvatarShape | TDAvatarShape.circle | 头像形状 |
-| size | TDAvatarSize | TDAvatarSize.medium | 头像尺寸 |
+| shape | TAvatarShape | TAvatarShape.circle | 头像形状 |
+| size | TAvatarSize | TAvatarSize.medium | 头像尺寸 |
 | text | String? | - | 自定义文字 |
-| type | TDAvatarType | TDAvatarType.normal | 头像类型 |
+| type | TAvatarType | TAvatarType.normal | 头像类型 |
 
 
   

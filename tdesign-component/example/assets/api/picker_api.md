@@ -1,5 +1,5 @@
 ## API
-### TDPicker
+### TPicker
 
 #### 静态方法
 
@@ -12,7 +12,7 @@
 ```
 ```
 
-### TDMultiPicker
+### TMultiPicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -47,7 +47,7 @@
 ```
 ```
 
-### TDMultiLinkedPicker
+### TMultiLinkedPicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDWrapSideBarItem extends StatelessWidget {
-  const TDWrapSideBarItem({
+class TWrapSideBarItem extends StatelessWidget {
+  const TWrapSideBarItem({
     Key? key,
     this.badge,
     required this.disabled,
@@ -27,7 +27,7 @@ class TDWrapSideBarItem extends StatelessWidget {
     required this.style,
   }) : super(key: key);
 
-  final TDBadge? badge;
+  final TBadge? badge;
   final bool disabled;
   final IconData? icon;
   final String label;
@@ -43,7 +43,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   final bool topAdjacent;
   final bool bottomAdjacent;
   final VoidCallback? onTap;
-  final TDSideBarStyle style;
+  final TSideBarStyle style;
 
   static const preLineWidth = 3.0;
 
@@ -51,7 +51,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: style == TDSideBarStyle.normal
+      child: style == TSideBarStyle.normal
           ? renderNormalItem(context)
           : renderOutlineItem(context),
     );
@@ -60,19 +60,19 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderNormalItem(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: selectedBgColor ?? TDTheme.of(context).bgColorContainer,
+        color: selectedBgColor ?? TTheme.of(context).bgColorContainer,
       ),
       child: Container(
         decoration: BoxDecoration(
           color: selected
-              ? selectedBgColor ?? TDTheme.of(context).bgColorContainer
+              ? selectedBgColor ?? TTheme.of(context).bgColorContainer
               : unSelectedBgColor ??
-                  TDTheme.of(context).bgColorSecondaryContainer,
+                  TTheme.of(context).bgColorSecondaryContainer,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(
-                topAdjacent ? TDTheme.of(context).radiusLarge : 0),
+                topAdjacent ? TTheme.of(context).radiusLarge : 0),
             bottomRight: Radius.circular(
-                bottomAdjacent ? TDTheme.of(context).radiusLarge : 0),
+                bottomAdjacent ? TTheme.of(context).radiusLarge : 0),
           ),
         ),
         child: Row(
@@ -94,15 +94,15 @@ class TDWrapSideBarItem extends StatelessWidget {
         child: Container(
           // height: 86,
           decoration: BoxDecoration(
-              color: TDTheme.of(context).bgColorSecondaryContainer),
+              color: TTheme.of(context).bgColorSecondaryContainer),
           padding: const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
                 color: selected && !disabled
-                    ? TDTheme.of(context).bgColorContainer
+                    ? TTheme.of(context).bgColorContainer
                     : null,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             padding: const EdgeInsets.all(8),
             child: renderMainContent(context),
           ),
@@ -138,7 +138,7 @@ class TDWrapSideBarItem extends StatelessWidget {
             decoration: BoxDecoration(
                 color: selectedTextStyle != null
                     ? selectedTextStyle?.color
-                    : (selectedColor ?? TDTheme.of(context).brandNormalColor),
+                    : (selectedColor ?? TTheme.of(context).brandNormalColor),
                 borderRadius: BorderRadius.circular(4)),
           )
         ],
@@ -149,15 +149,15 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderIcon(BuildContext context) {
     final iconColor = () {
       if (disabled) {
-        return TDTheme.of(context).textDisabledColor;
+        return TTheme.of(context).textDisabledColor;
       }
       if (!selected) {
-        return unSelectedColor ?? TDTheme.of(context).textColorPrimary;
+        return unSelectedColor ?? TTheme.of(context).textColorPrimary;
       }
       if (selectedTextStyle?.color != null) {
         return selectedTextStyle!.color!;
       }
-      return selectedColor ?? TDTheme.of(context).brandNormalColor;
+      return selectedColor ?? TTheme.of(context).brandNormalColor;
     }();
 
     return Visibility(
@@ -170,11 +170,11 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderLabel(BuildContext context) {
-    return TDText.rich(
+    return TText.rich(
       TextSpan(
         children: [
           WidgetSpan(
-              child: TDText(
+              child: TText(
             label,
             style: selected
                 ? (selectedTextStyle ?? TextStyle(color: selectedColor))
@@ -182,10 +182,10 @@ class TDWrapSideBarItem extends StatelessWidget {
             fontWeight:
                 selected && !disabled ? FontWeight.w600 : FontWeight.w400,
             textColor: disabled
-                ? TDTheme.of(context).textDisabledColor
+                ? TTheme.of(context).textDisabledColor
                 : selected
-                    ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    : unSelectedColor ?? TDTheme.of(context).textColorPrimary,
+                    ? selectedColor ?? TTheme.of(context).brandNormalColor
+                    : unSelectedColor ?? TTheme.of(context).textColorPrimary,
             // forceVerticalCenter: true,
           )),
 

@@ -4,8 +4,8 @@ import 'td_steps_horizontal.dart';
 import 'td_steps_vertical.dart';
 
 /// Steps步骤条数据类型
-class TDStepsItemData {
-  TDStepsItemData({
+class TStepsItemData {
+  TStepsItemData({
     this.title,
     this.content,
     this.successIcon,
@@ -40,41 +40,41 @@ class TDStepsItemData {
 }
 
 /// Steps步骤条方向
-enum TDStepsDirection {
+enum TStepsDirection {
   horizontal,
   vertical,
 }
 
 /// steps步骤条状态
-enum TDStepsStatus {
+enum TStepsStatus {
   success,
   error,
 }
 
 /// Steps步骤条
-class TDSteps extends StatefulWidget {
-  const TDSteps({
+class TSteps extends StatefulWidget {
+  const TSteps({
     super.key,
     required this.steps,
     this.activeIndex = 0,
-    this.direction = TDStepsDirection.horizontal,
-    this.status = TDStepsStatus.success,
+    this.direction = TStepsDirection.horizontal,
+    this.status = TStepsStatus.success,
     this.simple = false,
     this.readOnly = false,
     this.verticalSelect = false,
   });
 
   /// 步骤条数据
-  final List<TDStepsItemData> steps;
+  final List<TStepsItemData> steps;
 
   /// 步骤条方向
-  final TDStepsDirection direction;
+  final TStepsDirection direction;
 
   /// 步骤条当前激活的索引
   final int activeIndex;
 
   /// 步骤条状态
-  final TDStepsStatus status;
+  final TStepsStatus status;
 
   /// 步骤条simple模式
   final bool simple;
@@ -86,10 +86,10 @@ class TDSteps extends StatefulWidget {
   final bool verticalSelect;
 
   @override
-  _TDStepsState createState() => _TDStepsState();
+  _TStepsState createState() => _TStepsState();
 }
 
-class _TDStepsState extends State<TDSteps> {
+class _TStepsState extends State<TSteps> {
   int _clampActiveIndex(int index, int length) {
     if (index < 0) {
       return 0;
@@ -108,14 +108,14 @@ class _TDStepsState extends State<TDSteps> {
       widget.steps.length,
     );
 
-    return widget.direction == TDStepsDirection.horizontal
-        ? TDStepsHorizontal(
+    return widget.direction == TStepsDirection.horizontal
+        ? TStepsHorizontal(
             steps: widget.steps,
             activeIndex: currentActiveIndex,
             status: widget.status,
             simple: widget.simple,
             readOnly: widget.readOnly)
-        : TDStepsVertical(
+        : TStepsVertical(
             steps: widget.steps,
             activeIndex: currentActiveIndex,
             status: widget.status,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 骨架图动画
-enum TDSkeletonAnimation {
+enum TSkeletonAnimation {
   /// 渐变
   gradient,
 
@@ -12,7 +12,7 @@ enum TDSkeletonAnimation {
 }
 
 /// 骨架图风格
-enum TDSkeletonTheme {
+enum TSkeletonTheme {
   /// 头像
   avatar,
 
@@ -26,28 +26,28 @@ enum TDSkeletonTheme {
   paragraph,
 }
 
-class TDSkeleton extends StatefulWidget {
-  factory TDSkeleton({
+class TSkeleton extends StatefulWidget {
+  factory TSkeleton({
     Key? key,
-    TDSkeletonAnimation? animation,
+    TSkeletonAnimation? animation,
     int delay = 0,
-    TDSkeletonTheme theme = TDSkeletonTheme.text,
+    TSkeletonTheme theme = TSkeletonTheme.text,
   }) {
     assert(delay >= 0);
 
-    var objects = <List<TDSkeletonRowColObj>>[];
+    var objects = <List<TSkeletonRowColObj>>[];
 
     // 根据风格创建骨架图
     switch (theme) {
-      case TDSkeletonTheme.avatar:
+      case TSkeletonTheme.avatar:
         objects = const [
-          [TDSkeletonRowColObj.circle()]
+          [TSkeletonRowColObj.circle()]
         ];
         break;
-      case TDSkeletonTheme.image:
+      case TSkeletonTheme.image:
         objects = const [
           [
-            TDSkeletonRowColObj.rect(
+            TSkeletonRowColObj.rect(
               width: 72,
               height: 72,
               flex: null,
@@ -55,37 +55,37 @@ class TDSkeleton extends StatefulWidget {
           ]
         ];
         break;
-      case TDSkeletonTheme.text:
+      case TSkeletonTheme.text:
         objects = const [
           [
-            TDSkeletonRowColObj.text(flex: 24),
-            TDSkeletonRowColObj.spacer(width: 16),
-            TDSkeletonRowColObj.text(flex: 76),
+            TSkeletonRowColObj.text(flex: 24),
+            TSkeletonRowColObj.spacer(width: 16),
+            TSkeletonRowColObj.text(flex: 76),
           ],
-          [TDSkeletonRowColObj.text()],
+          [TSkeletonRowColObj.text()],
         ];
         break;
-      case TDSkeletonTheme.paragraph:
+      case TSkeletonTheme.paragraph:
         objects = [
-          for (int i = 0; i < 3; i++) [const TDSkeletonRowColObj.text()],
+          for (int i = 0; i < 3; i++) [const TSkeletonRowColObj.text()],
           const [
-            TDSkeletonRowColObj.text(flex: 55),
-            TDSkeletonRowColObj.spacer(flex: 45),
+            TSkeletonRowColObj.text(flex: 55),
+            TSkeletonRowColObj.spacer(flex: 45),
           ],
         ];
         break;
     }
 
-    return TDSkeleton.fromRowCol(
+    return TSkeleton.fromRowCol(
       key: key,
       animation: animation,
       delay: delay,
-      rowCol: TDSkeletonRowCol(objects: objects),
+      rowCol: TSkeletonRowCol(objects: objects),
     );
   }
 
   /// 从行列框架创建骨架屏
-  const TDSkeleton.fromRowCol({
+  const TSkeleton.fromRowCol({
     super.key,
     this.animation,
     this.delay = 0,
@@ -93,19 +93,19 @@ class TDSkeleton extends StatefulWidget {
   }) : assert(delay >= 0);
 
   /// 动画效果
-  final TDSkeletonAnimation? animation;
+  final TSkeletonAnimation? animation;
 
   /// 延迟显示加载时间
   final int delay;
 
   /// 自定义行列数量、宽度高度、间距等
-  final TDSkeletonRowCol rowCol;
+  final TSkeletonRowCol rowCol;
 
   @override
-  _TDSkeletonState createState() => _TDSkeletonState();
+  _TSkeletonState createState() => _TSkeletonState();
 }
 
-class _TDSkeletonState extends State<TDSkeleton>
+class _TSkeletonState extends State<TSkeleton>
     with SingleTickerProviderStateMixin {
   /// 动画控制器
   late final AnimationController? _controller;
@@ -127,7 +127,7 @@ class _TDSkeletonState extends State<TDSkeleton>
       LinearGradient(
         colors: [
           Colors.transparent,
-          TDTheme.of(context).bgColorSecondaryContainerActive,
+          TTheme.of(context).bgColorSecondaryContainerActive,
           Colors.transparent,
         ],
         // 15 deg
@@ -142,7 +142,7 @@ class _TDSkeletonState extends State<TDSkeleton>
 
     // 根据动画效果创建动画控制器
     switch (widget.animation) {
-      case TDSkeletonAnimation.gradient:
+      case TSkeletonAnimation.gradient:
         _controller = AnimationController(
           duration: const Duration(milliseconds: 1500),
           vsync: this,
@@ -150,7 +150,7 @@ class _TDSkeletonState extends State<TDSkeleton>
         _animation = Tween<double>(begin: -1, end: 1).animate(_controller!)
           ..addListener(() => setState(() {}));
         break;
-      case TDSkeletonAnimation.flashed:
+      case TSkeletonAnimation.flashed:
         _controller = AnimationController(
           duration: const Duration(seconds: 1),
           vsync: this,
@@ -169,8 +169,8 @@ class _TDSkeletonState extends State<TDSkeleton>
         () => setState(() => _isLoading = false));
   }
 
-  Widget Function(TDSkeletonRowColObj) _buildObj(BuildContext context) =>
-      (TDSkeletonRowColObj obj) {
+  Widget Function(TSkeletonRowColObj) _buildObj(BuildContext context) =>
+      (TSkeletonRowColObj obj) {
         // 骨架图对象
         Widget skeletonObj = Container(
           width: obj.width,
@@ -185,7 +185,7 @@ class _TDSkeletonState extends State<TDSkeleton>
 
         // 动画效果
         switch (widget.animation) {
-          case TDSkeletonAnimation.gradient:
+          case TSkeletonAnimation.gradient:
             skeletonObj = ShaderMask(
               blendMode: BlendMode.srcATop,
               shaderCallback: (bounds) =>
@@ -200,7 +200,7 @@ class _TDSkeletonState extends State<TDSkeleton>
               child: skeletonObj,
             );
             break;
-          case TDSkeletonAnimation.flashed:
+          case TSkeletonAnimation.flashed:
             skeletonObj = Opacity(
               opacity: _animation!.value,
               child: skeletonObj,

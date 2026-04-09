@@ -5,21 +5,21 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarCustomPage演示
+/// TSideBarCustomPage演示
 ///
-class TDSideBarCustomPage extends StatefulWidget {
-  const TDSideBarCustomPage({Key? key}) : super(key: key);
+class TSideBarCustomPage extends StatefulWidget {
+  const TSideBarCustomPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarCustomPageState();
+    return TSideBarCustomPageState();
   }
 }
 
-class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
+class TSideBarCustomPageState extends State<TSideBarCustomPage> {
   var currentValue = 1;
   final _pageController = PageController(initialPage: 1);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,14 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
         index: i,
         label: '选项 $i',
         value: i,
-        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
+        textStyle: TextStyle(color: TTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
     list[1].textStyle = const TextStyle(color: Colors.green);
@@ -72,12 +72,12 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -112,7 +112,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题 $index', style: const TextStyle(fontSize: 14)),
+            child: TText('标题 $index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList()
@@ -128,7 +128,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-          child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
+          child: TText('标题$index', style: const TextStyle(fontSize: 14)),
         ),
         const SizedBox(height: 16),
         displayImageList()
@@ -158,14 +158,14 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
         // spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const TDImage(
+          const TImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: TImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           const SizedBox(height: 4),
-          TDText('$title', style: const TextStyle(fontSize: 12))
+          TText('$title', style: const TextStyle(fontSize: 12))
         ],
       ),
     );

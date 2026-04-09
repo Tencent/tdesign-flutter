@@ -2,8 +2,8 @@
   Widget _specialTypePhoneNumber(BuildContext context) {
     return Column(
       children: [
-        TDInput(
-          type: TDInputType.normal,
+        TInput(
+          type: TInputType.normal,
           controller: controller[14],
           leftLabel: '手机号',
           hintText: '输入手机号',
@@ -17,23 +17,23 @@
                   child: Container(
                     width: 0.5,
                     height: 24,
-                    color: TDTheme.of(context).componentBorderColor,
+                    color: TTheme.of(context).componentBorderColor,
                   ),
                 ),
                 _countdownTime > 0
-                    ? TDText(
+                    ? TText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).textDisabledColor,
+                        textColor: TTheme.of(context).textDisabledColor,
                       )
-                    : TDText(confirmText,
-                        textColor: TDTheme.of(context).brandNormalColor),
+                    : TText(confirmText,
+                        textColor: TTheme.of(context).brandNormalColor),
               ],
             ),
           ),
           needClear: false,
           onBtnTap: () {
             if (_countdownTime == 0) {
-              TDToast.showText('点击了发送验证码', context: context);
+              TToast.showText('点击了发送验证码', context: context);
               setState(() {
                 _countdownTime = 60;
               });

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'td_theme.dart';
 
 /// 内置圆角数据
-extension TDRadius on TDThemeData {
+extension TRadius on TThemeData {
   /// 圆角数据
   double get radiusSmall => radiusMap['radiusSmall'] ?? 3;
   double get radiusDefault => radiusMap['radiusDefault'] ?? 6;

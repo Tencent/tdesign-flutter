@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 线上字体加载工具
-class TDFontLoader {
+class TFontLoader {
   /// 缓存字体 FontLoader，防止重复加载
   static final _record = <String, bool>{};
 
@@ -29,30 +29,30 @@ class TDFontLoader {
       return true;
     } catch (e) {
       print(
-          'TDFontLoader load error, name: ${name}, fontFamilyUrl: $fontFamilyUrl}, e: $e');
+          'TFontLoader load error, name: ${name}, fontFamilyUrl: $fontFamilyUrl}, e: $e');
     }
     return false;
   }
 }
 
 /// 懒加载 FontWidget
-class TDFontLoaderWidget extends StatefulWidget {
-  const TDFontLoaderWidget({
+class TFontLoaderWidget extends StatefulWidget {
+  const TFontLoaderWidget({
     Key? key,
     required this.textWidget,
     required this.fontFamilyUrl,
   }) : super(key: key);
 
-  final TDText textWidget;
+  final TText textWidget;
 
   /// FontFamily 的下载地址
   final String fontFamilyUrl;
 
   @override
-  State<TDFontLoaderWidget> createState() => _TDFontLoaderWidgetState();
+  State<TFontLoaderWidget> createState() => _TFontLoaderWidgetState();
 }
 
-class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
+class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
   bool fontFamilyLoaded = false;
 
   @override
@@ -65,14 +65,14 @@ class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
     if ((widget.textWidget.fontFamily?.fontFamily.isNotEmpty ?? false) &&
         widget.fontFamilyUrl.isNotEmpty) {
       try {
-        if (await TDFontLoader.load(
+        if (await TFontLoader.load(
             name: widget.textWidget.fontFamily!.fontFamily,
             fontFamilyUrl: widget.fontFamilyUrl)) {
           setState(() {});
         }
       } catch (e) {
         print(
-            'TDFontLoader loadFont error, data: ${widget.textWidget.data}, fontFamily: ${widget.textWidget.fontFamilyUrl}, e: $e');
+            'TFontLoader loadFont error, data: ${widget.textWidget.data}, fontFamily: ${widget.textWidget.fontFamilyUrl}, e: $e');
       }
     }
 
@@ -83,7 +83,7 @@ class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
   Widget build(BuildContext context) {
     final textWidget = widget.textWidget;
 
-    return TDText(
+    return TText(
       textWidget.data,
       font: textWidget.font,
       fontWeight: textWidget.fontWeight ?? FontWeight.w400,

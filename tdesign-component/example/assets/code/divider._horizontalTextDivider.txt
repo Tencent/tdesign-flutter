@@ -7,24 +7,24 @@
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          TDText(
+          TText(
             '文字信息',
-            textColor: TDTheme.of(context).textColorPlaceholder,
+            textColor: TTheme.of(context).textColorPlaceholder,
           ),
-          const TDDivider(
+          const TDivider(
             width: 0.5,
             height: 12,
             margin: EdgeInsets.symmetric(horizontal: 8),
           ),
-          TDText('文字信息', textColor: TDTheme.of(context).textColorPlaceholder),
-          const TDDivider(
+          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
+          const TDivider(
             width: 0.5,
             height: 12,
             margin: EdgeInsets.symmetric(horizontal: 8),
             isDashed: true,
             direction: Axis.vertical,
           ),
-          TDText('文字信息', textColor: TDTheme.of(context).textColorPlaceholder),
+          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
         ],
       ),
     );

@@ -5,8 +5,8 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 /// 圆角示例页面
-class TDShadowsPage extends StatelessWidget {
-  const TDShadowsPage({Key? key}) : super(key: key);
+class TShadowsPage extends StatelessWidget {
+  const TShadowsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,9 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorContainer,
-        boxShadow: TDTheme.of(context).shadowsBase,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        color: TTheme.of(context).bgColorContainer,
+        boxShadow: TTheme.of(context).shadowsBase,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
       ),
     );
   }
@@ -41,9 +41,9 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorContainer,
-        boxShadow: TDTheme.of(context).shadowsMiddle,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        color: TTheme.of(context).bgColorContainer,
+        boxShadow: TTheme.of(context).shadowsMiddle,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
       ),
     );
   }
@@ -54,9 +54,9 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorContainer,
-        boxShadow: TDTheme.of(context).shadowsTop,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        color: TTheme.of(context).bgColorContainer,
+        boxShadow: TTheme.of(context).shadowsTop,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
       ),
     );
   }

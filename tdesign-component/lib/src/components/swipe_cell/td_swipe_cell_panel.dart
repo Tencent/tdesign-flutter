@@ -18,8 +18,8 @@ enum SwipeMotion {
 }
 
 /// 滑动单元格操作面板组件
-class TDSwipeCellPanel {
-  TDSwipeCellPanel({
+class TSwipeCellPanel {
+  TSwipeCellPanel({
     this.extentRatio = 0.3,
     this.openThreshold,
     this.closeThreshold,
@@ -56,12 +56,12 @@ class TDSwipeCellPanel {
   final SwipeMotion? motionType;
 
   /// 操作组件列表
-  final List<TDSwipeCellAction> children;
+  final List<TSwipeCellAction> children;
 
   /// 二次确认操作组件列表
-  final List<TDSwipeCellAction>? confirms;
+  final List<TSwipeCellAction>? confirms;
 
-  /// 是否可通过拖动操作来移除 [TDSwipeCell] 组件
+  /// 是否可通过拖动操作来移除 [TSwipeCell] 组件
   final bool? dragDismissible;
 
   /// 滑动到多少比例时，触发移除。dragDismissible为true才有效
@@ -117,7 +117,7 @@ class TDSwipeCellPanel {
                 return true;
               },
               onDismissed: () async {
-                await TDSwipeCell.of(context)?.close();
+                await TSwipeCell.of(context)?.close();
                 onDismissed?.call(context);
               },
             )

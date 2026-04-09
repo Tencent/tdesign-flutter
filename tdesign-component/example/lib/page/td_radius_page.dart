@@ -5,8 +5,8 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 /// 圆角示例页面
-class TDRadiusPage extends StatelessWidget {
-  const TDRadiusPage({Key? key}) : super(key: key);
+class TRadiusPage extends StatelessWidget {
+  const TRadiusPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
+        color: TTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusSmall),
       ),
     );
   }
@@ -45,8 +45,8 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        color: TTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
       ),
     );
   }
@@ -57,8 +57,8 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge),
+        color: TTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusLarge),
       ),
     );
   }
@@ -69,9 +69,9 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
+        color: TTheme.of(context).brandNormalColor,
         borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
       ),
     );
   }
@@ -83,8 +83,8 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusRound),
+        color: TTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusRound),
       ),
     );
   }
@@ -96,8 +96,8 @@ class TDRadiusPage extends StatelessWidget {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
+        color: TTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusCircle),
       ),
     );
   }

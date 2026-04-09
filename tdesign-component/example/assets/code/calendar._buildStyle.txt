@@ -8,16 +8,16 @@ Widget _buildStyle(BuildContext context) {
     14: '情人节',
     15: '元宵节',
   };
-  return TDCellGroup(
+  return TCellGroup(
     cells: [
-      TDCell(
+      TCell(
         title: '自定义文案',
         arrow: true,
         onClick: (cell) {
-          TDCalendarPopup(
+          TCalendarPopup(
             context,
             visible: true,
-            child: TDCalendar(
+            child: TCalendar(
               title: '请选择日期',
               height: size.height * 0.6 + 176,
               minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
@@ -29,15 +29,15 @@ Widget _buildStyle(BuildContext context) {
                     day?.suffix = '¥100';
                     day?.prefix = map[day.date.day];
                     day?.style = TextStyle(
-                      fontSize: TDTheme.of(context).fontTitleMedium?.size,
-                      height: TDTheme.of(context).fontTitleMedium?.height,
+                      fontSize: TTheme.of(context).fontTitleMedium?.size,
+                      height: TTheme.of(context).fontTitleMedium?.height,
                       fontWeight:
-                          TDTheme.of(context).fontTitleMedium?.fontWeight,
-                      color: TDTheme.of(context).errorColor6,
+                          TTheme.of(context).fontTitleMedium?.fontWeight,
+                      color: TTheme.of(context).errorColor6,
                     );
                     if (day?.typeNotifier.value == DateSelectType.selected) {
                       day?.style = day.style
-                          ?.copyWith(color: TDTheme.of(context).fontWhColor1);
+                          ?.copyWith(color: TTheme.of(context).fontWhColor1);
                     }
                   }
                 }
@@ -47,30 +47,30 @@ Widget _buildStyle(BuildContext context) {
           );
         },
       ),
-      TDCell(
+      TCell(
         title: '自定义按钮',
         arrow: true,
         onClick: (cell) {
-          late final TDCalendarPopup calendar;
-          calendar = TDCalendarPopup(
+          late final TCalendarPopup calendar;
+          calendar = TCalendarPopup(
             context,
             visible: true,
             confirmBtn: Padding(
               padding:
-                  EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
-              child: TDButton(
-                theme: TDButtonTheme.danger,
-                shape: TDButtonShape.round,
+                  EdgeInsets.symmetric(vertical: TTheme.of(context).spacer16),
+              child: TButton(
+                theme: TButtonTheme.danger,
+                shape: TButtonShape.round,
                 text: 'ok',
                 isBlock: true,
-                size: TDButtonSize.large,
+                size: TButtonSize.large,
                 onTap: () {
                   print(calendar.selected);
                   calendar.close();
                 },
               ),
             ),
-            child: TDCalendar(
+            child: TCalendar(
               title: '请选择日期',
               value: [DateTime.now().millisecondsSinceEpoch],
               height: size.height * 0.6 + 176,
@@ -78,14 +78,14 @@ Widget _buildStyle(BuildContext context) {
           );
         },
       ),
-      TDCell(
+      TCell(
         title: '自定义日期区间',
         arrow: true,
         onClick: (cell) {
-          TDCalendarPopup(
+          TCalendarPopup(
             context,
             visible: true,
-            child: TDCalendar(
+            child: TCalendar(
               title: '请选择日期',
               minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
               maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,

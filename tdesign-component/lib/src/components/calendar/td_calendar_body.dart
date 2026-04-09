@@ -6,8 +6,8 @@ import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
 
-class TDCalendarBody extends StatelessWidget {
-  const TDCalendarBody({
+class TCalendarBody extends StatelessWidget {
+  const TCalendarBody({
     Key? key,
     this.maxDate,
     this.minDate,
@@ -26,7 +26,7 @@ class TDCalendarBody extends StatelessWidget {
     required this.animateTo,
     this.onMonthChange,
     this.anchorDate,
-    this.dateType = TDCalendarDateType.solar,
+    this.dateType = TCalendarDateType.solar,
     this.dataSource,
   }) : super(key: key);
 
@@ -56,8 +56,8 @@ class TDCalendarBody extends StatelessWidget {
   final double cellHeight;
   final bool animateTo;
   final ValueChanged<DateTime>? onMonthChange;
-  final TDCalendarDateType dateType;
-  final TDCalendarDataSource? dataSource;
+  final TCalendarDateType dateType;
+  final TCalendarDataSource? dataSource;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +123,7 @@ class TDCalendarBody extends StatelessWidget {
             SizedBox(
               height: monthTitleHeight,
               child: monthTitleBuilder?.call(context, monthDate) ??
-                  TDText(monthDateText, style: monthTitleStyle),
+                  TText(monthDateText, style: monthTitleStyle),
             ),
             ...List.generate(
               (monthData.length / 7).ceil(),
@@ -248,7 +248,7 @@ class TDCalendarBody extends StatelessWidget {
         }
       }
       // 获取农历信息
-      TDLunarInfo? lunarInfo;
+      TLunarInfo? lunarInfo;
       String? solarTerm;
       String? festival;
       Map<String, String>? holidayInfo;

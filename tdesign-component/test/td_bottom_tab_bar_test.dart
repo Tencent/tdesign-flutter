@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// Helper: 将组件包裹在 TDTheme + MaterialApp 中渲染
+/// Helper: 将组件包裹在 TTheme + MaterialApp 中渲染
 Widget _buildTestApp(Widget child) {
-  return TDTheme(
-    data: TDThemeData.defaultData(),
+  return TTheme(
+    data: TThemeData.defaultData(),
     child: MaterialApp(
       home: Scaffold(
         body: child,
@@ -14,21 +14,21 @@ Widget _buildTestApp(Widget child) {
   );
 }
 
-/// Helper: 构建标准 iconText 类型 TDBottomTabBar
+/// Helper: 构建标准 iconText 类型 TBottomTabBar
 Widget _buildIconTextTabBar({int currentIndex = 0}) {
-  return TDBottomTabBar(
-    TDBottomTabBarBasicType.iconText,
-    componentType: TDBottomTabBarComponentType.normal,
+  return TBottomTabBar(
+    TBottomTabBarBasicType.iconText,
+    componentType: TBottomTabBarComponentType.normal,
     useVerticalDivider: false,
     currentIndex: currentIndex,
     navigationTabs: [
-      TDBottomTabBarTabConfig(
+      TBottomTabBarTabConfig(
         tabText: '书籍',
         selectedIcon: const Icon(Icons.book),
         unselectedIcon: const Icon(Icons.book),
         onTap: () {},
       ),
-      TDBottomTabBarTabConfig(
+      TBottomTabBarTabConfig(
         tabText: '我的',
         selectedIcon: const Icon(Icons.person),
         unselectedIcon: const Icon(Icons.person),
@@ -38,20 +38,20 @@ Widget _buildIconTextTabBar({int currentIndex = 0}) {
   );
 }
 
-/// Helper: 构建标准 icon 类型 TDBottomTabBar
+/// Helper: 构建标准 icon 类型 TBottomTabBar
 Widget _buildIconTabBar({int currentIndex = 0}) {
-  return TDBottomTabBar(
-    TDBottomTabBarBasicType.icon,
-    componentType: TDBottomTabBarComponentType.normal,
+  return TBottomTabBar(
+    TBottomTabBarBasicType.icon,
+    componentType: TBottomTabBarComponentType.normal,
     useVerticalDivider: false,
     currentIndex: currentIndex,
     navigationTabs: [
-      TDBottomTabBarTabConfig(
+      TBottomTabBarTabConfig(
         selectedIcon: const Icon(Icons.book),
         unselectedIcon: const Icon(Icons.book),
         onTap: () {},
       ),
-      TDBottomTabBarTabConfig(
+      TBottomTabBarTabConfig(
         selectedIcon: const Icon(Icons.person),
         unselectedIcon: const Icon(Icons.person),
         onTap: () {},
@@ -61,14 +61,14 @@ Widget _buildIconTabBar({int currentIndex = 0}) {
 }
 
 void main() {
-  group('TDBottomTabBar — iconText 图标颜色 (issue #900)', () {
+  group('TBottomTabBar — iconText 图标颜色 (issue #900)', () {
     // TC-01: iconText 选中 tab 图标颜色为 brandNormalColor
     testWidgets('TC-01: 选中 tab 的图标颜色应为 brandNormalColor', (tester) async {
       await tester.pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(TDBottomTabBar));
-      final expectedColor = TDTheme.of(context).brandNormalColor;
+      final BuildContext context = tester.element(find.byType(TBottomTabBar));
+      final expectedColor = TTheme.of(context).brandNormalColor;
 
       // 找到所有 Icon widget，第一个属于 index=0（选中）
       final icons = tester.widgetList<Icon>(find.byType(Icon)).toList();
@@ -94,8 +94,8 @@ void main() {
       await tester.pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(TDBottomTabBar));
-      final expectedColor = TDTheme.of(context).textColorPrimary;
+      final BuildContext context = tester.element(find.byType(TBottomTabBar));
+      final expectedColor = TTheme.of(context).textColorPrimary;
 
       final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       expect(iconThemes, isNotEmpty, reason: '未选中图标应被 IconTheme 包裹以注入颜色');
@@ -118,19 +118,19 @@ void main() {
       await tester.pumpWidget(
         StatefulBuilder(builder: (context, setState) {
           outerSetState = setState;
-          return _buildTestApp(TDBottomTabBar(
-            TDBottomTabBarBasicType.iconText,
-            componentType: TDBottomTabBarComponentType.normal,
+          return _buildTestApp(TBottomTabBar(
+            TBottomTabBarBasicType.iconText,
+            componentType: TBottomTabBarComponentType.normal,
             useVerticalDivider: false,
             currentIndex: selectedIndex,
             navigationTabs: [
-              TDBottomTabBarTabConfig(
+              TBottomTabBarTabConfig(
                 tabText: '书籍',
                 selectedIcon: const Icon(Icons.book),
                 unselectedIcon: const Icon(Icons.book),
                 onTap: () => outerSetState(() => selectedIndex = 0),
               ),
-              TDBottomTabBarTabConfig(
+              TBottomTabBarTabConfig(
                 tabText: '我的',
                 selectedIcon: const Icon(Icons.person),
                 unselectedIcon: const Icon(Icons.person),
@@ -142,9 +142,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(TDBottomTabBar));
-      final brandColor = TDTheme.of(context).brandNormalColor;
-      final primaryColor = TDTheme.of(context).textColorPrimary;
+      final BuildContext context = tester.element(find.byType(TBottomTabBar));
+      final brandColor = TTheme.of(context).brandNormalColor;
+      final primaryColor = TTheme.of(context).textColorPrimary;
 
       // 点击 index=1
       await tester.tap(find.text('我的'));
@@ -158,14 +158,14 @@ void main() {
     });
   });
 
-  group('TDBottomTabBar — icon 类型图标颜色 (issue #900 同类问题)', () {
+  group('TBottomTabBar — icon 类型图标颜色 (issue #900 同类问题)', () {
     // TC-04: icon 类型选中 tab 图标颜色为 brandNormalColor
     testWidgets('TC-04: icon 类型 — 选中 tab 图标颜色应为 brandNormalColor', (tester) async {
       await tester.pumpWidget(_buildTestApp(_buildIconTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(TDBottomTabBar));
-      final expectedColor = TDTheme.of(context).brandNormalColor;
+      final BuildContext context = tester.element(find.byType(TBottomTabBar));
+      final expectedColor = TTheme.of(context).brandNormalColor;
 
       final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       expect(iconThemes, isNotEmpty);
@@ -185,8 +185,8 @@ void main() {
       await tester.pumpWidget(_buildTestApp(_buildIconTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(TDBottomTabBar));
-      final expectedColor = TDTheme.of(context).textColorPrimary;
+      final BuildContext context = tester.element(find.byType(TBottomTabBar));
+      final expectedColor = TTheme.of(context).textColorPrimary;
 
       final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       final match = iconThemes.firstWhere(
@@ -200,31 +200,31 @@ void main() {
     });
   });
 
-  group('TDBottomTabBar — 回归检查', () {
+  group('TBottomTabBar — 回归检查', () {
     // TC-06: 文字颜色不受影响
     testWidgets('TC-06: iconText 类型文字颜色回归验证', (tester) async {
       await tester.pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(TDBottomTabBar));
-      final brandColor = TDTheme.of(context).brandNormalColor;
-      final primaryColor = TDTheme.of(context).textColorPrimary;
+      final BuildContext context = tester.element(find.byType(TBottomTabBar));
+      final brandColor = TTheme.of(context).brandNormalColor;
+      final primaryColor = TTheme.of(context).textColorPrimary;
 
-      // 通过 TDText 验证文字颜色
-      final tdTexts = tester.widgetList<TDText>(find.byType(TDText)).toList();
+      // 通过 TText 验证文字颜色
+      final tdTexts = tester.widgetList<TText>(find.byType(TText)).toList();
       expect(tdTexts.length, 2);
 
       // 找到 textColor 为 brandColor 的文字（选中）
       final selectedText = tdTexts.firstWhere(
         (t) => t.textColor == brandColor,
-        orElse: () => throw TestFailure('未找到 textColor == brandNormalColor 的 TDText'),
+        orElse: () => throw TestFailure('未找到 textColor == brandNormalColor 的 TText'),
       );
       expect(selectedText.textColor, equals(brandColor));
 
       // 找到 textColor 为 primaryColor 的文字（未选中）
       final unselectedText = tdTexts.firstWhere(
         (t) => t.textColor == primaryColor,
-        orElse: () => throw TestFailure('未找到 textColor == textColorPrimary 的 TDText'),
+        orElse: () => throw TestFailure('未找到 textColor == textColorPrimary 的 TText'),
       );
       expect(unselectedText.textColor, equals(primaryColor));
     });
@@ -233,18 +233,18 @@ void main() {
     testWidgets('TC-07: 用户显式设置的图标颜色不被 IconTheme 覆盖', (tester) async {
       const explicitColor = Colors.red;
 
-      await tester.pumpWidget(_buildTestApp(TDBottomTabBar(
-        TDBottomTabBarBasicType.iconText,
-        componentType: TDBottomTabBarComponentType.normal,
+      await tester.pumpWidget(_buildTestApp(TBottomTabBar(
+        TBottomTabBarBasicType.iconText,
+        componentType: TBottomTabBarComponentType.normal,
         currentIndex: 0,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             tabText: '书籍',
             selectedIcon: const Icon(Icons.book, color: explicitColor),
             unselectedIcon: const Icon(Icons.book),
             onTap: () {},
           ),
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             tabText: '我的',
             selectedIcon: const Icon(Icons.person),
             unselectedIcon: const Icon(Icons.person),
@@ -256,7 +256,7 @@ void main() {
 
       // Flutter Icon 的 color 属性显式设置时优先于 IconTheme，无需额外断言
       // 只需确保渲染不报错
-      expect(find.byType(TDBottomTabBar), findsOneWidget);
+      expect(find.byType(TBottomTabBar), findsOneWidget);
     });
   });
 }

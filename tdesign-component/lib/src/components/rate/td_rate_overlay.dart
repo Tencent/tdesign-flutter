@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class TDRateOverlay {
-  TDRateOverlay({
+class TRateOverlay {
+  TRateOverlay({
     required this.context,
     required this.builder,
 

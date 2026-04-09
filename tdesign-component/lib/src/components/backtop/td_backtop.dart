@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 
-enum TDBackTopTheme {
+enum TBackTopTheme {
   light, // 明亮主题
   dark // 暗黑主题
 }
 
-enum TDBackTopStyle {
+enum TBackTopStyle {
   circle, // 圆形
   halfCircle, // 半圆形
 }
 
-class TDBackTop extends StatefulWidget {
-  const TDBackTop({
+class TBackTop extends StatefulWidget {
+  const TBackTop({
     Key? key,
     this.controller,
-    this.theme = TDBackTopTheme.light,
-    this.style = TDBackTopStyle.circle,
+    this.theme = TBackTopTheme.light,
+    this.style = TBackTopStyle.circle,
     this.showText = false,
     this.onClick,
   }) : super(key: key);
@@ -27,10 +27,10 @@ class TDBackTop extends StatefulWidget {
   final ScrollController? controller;
 
   /// 主题
-  final TDBackTopTheme theme;
+  final TBackTopTheme theme;
 
   /// 样式，圆形和半圆
-  final TDBackTopStyle style;
+  final TBackTopStyle style;
 
   /// 是否展示文字
   final bool showText;
@@ -39,10 +39,10 @@ class TDBackTop extends StatefulWidget {
   final VoidCallback? onClick;
 
   @override
-  State<TDBackTop> createState() => _TDBackTopState();
+  State<TBackTop> createState() => _TBackTopState();
 }
 
-class _TDBackTopState extends State<TDBackTop> {
+class _TBackTopState extends State<TBackTop> {
   bool _isAnimating = false;
 
   late final Color _bgColor;
@@ -56,7 +56,7 @@ class _TDBackTopState extends State<TDBackTop> {
   }
 
   void _initColors() {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     _bgColor = _getColorByTheme(
       lightColor: theme.grayColor1,
       darkColor: theme.grayColor13,
@@ -75,14 +75,14 @@ class _TDBackTopState extends State<TDBackTop> {
     required Color lightColor,
     required Color darkColor,
   }) {
-    return widget.theme == TDBackTopTheme.light ? lightColor : darkColor;
+    return widget.theme == TBackTopTheme.light ? lightColor : darkColor;
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _handleTap,
-      child: widget.style == TDBackTopStyle.circle
+      child: widget.style == TBackTopStyle.circle
           ? _buildCircleWidget(context)
           : _buildHalfCircleWidget(context),
     );
@@ -113,20 +113,20 @@ class _TDBackTopState extends State<TDBackTop> {
       height: 48,
       padding: EdgeInsets.symmetric(vertical: widget.showText ? 6 : 13),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
+          borderRadius: BorderRadius.circular(TTheme.of(context).radiusCircle),
           border: Border.all(color: _borderColor, width: 0.5),
           color: _bgColor),
       child: Center(
           child: Column(
         children: [
           Icon(
-            TDIcons.backtop,
+            TIcons.backtop,
             size: 20,
             color: _fontColor,
           ),
           Visibility(
             visible: widget.showText,
-            child: TDText(
+            child: TText(
               context.resource.top,
               maxLines: 1,
               overflow: TextOverflow.visible,
@@ -148,16 +148,16 @@ class _TDBackTopState extends State<TDBackTop> {
           decoration: BoxDecoration(
               color: _bgColor,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(TDTheme.of(context).radiusCircle),
+                  topLeft: Radius.circular(TTheme.of(context).radiusCircle),
                   bottomLeft:
-                      Radius.circular(TDTheme.of(context).radiusCircle)),
+                      Radius.circular(TTheme.of(context).radiusCircle)),
               border: Border.all(color: _borderColor, width: 0.5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(
-                TDIcons.backtop,
+                TIcons.backtop,
                 size: 22,
                 color: _fontColor,
               ),
@@ -173,7 +173,7 @@ class _TDBackTopState extends State<TDBackTop> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         /// todo 将 “返回”、“顶部” 两个文本拆分开组合，中文语境下可以，但对于其他语言未必可行
-                        TDText(
+                        TText(
                           context.resource.back,
                           style: TextStyle(
                               height: 1.2,
@@ -181,7 +181,7 @@ class _TDBackTopState extends State<TDBackTop> {
                               color: _fontColor,
                               fontWeight: FontWeight.w600),
                         ),
-                        TDText(
+                        TText(
                           context.resource.top,
                           style: TextStyle(
                               height: 1.2,

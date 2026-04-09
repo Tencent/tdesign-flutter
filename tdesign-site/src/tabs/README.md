@@ -26,7 +26,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSplit1(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(2),
       controller: _tabController1,
       showIndicator: true,
@@ -42,7 +42,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSplit2(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(3),
       controller: _tabController2,
       showIndicator: true,
@@ -58,7 +58,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSplit3(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(4),
       controller: _tabController3,
       showIndicator: true,
@@ -74,7 +74,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSplit4(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(5),
       controller: _tabController4,
       showIndicator: true,
@@ -90,7 +90,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSpace(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(16),
       controller: TabController(length: 16, vsync: this),
       labelPadding: const EdgeInsets.all(10),
@@ -110,12 +110,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = List.generate(3, (index) {
       final text = '选项${index + 1}';
-      return TDTab(
+      return TTab(
         text: text,
-        icon: const Icon(TDIcons.app, size: 18),
+        icon: const Icon(TIcons.app, size: 18),
       );
     });
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -132,25 +132,25 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
-      const TDTab(
+      const TTab(
         text: '选项',
         contentHeight: 48,
         textMargin: EdgeInsets.only(right: 8),
-        badge: TDBadge(TDBadgeType.redPoint),
+        badge: TBadge(TBadgeType.redPoint),
       ),
-      const TDTab(
+      const TTab(
         text: '选项',
         contentHeight: 42,
         textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
-        badge: TDBadge(TDBadgeType.message, message: '8'),
+        badge: TBadge(TBadgeType.message, message: '8'),
       ),
-      const TDTab(
+      const TTab(
         text: '选项',
         height: 48,
-        icon: Icon(TDIcons.app, size: 18),
+        icon: Icon(TIcons.app, size: 18),
       ),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -171,7 +171,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       height: 120 + 48,
       child: Column(
         children: [
-          TDTabBar(
+          TTabBar(
             tabs: subList(3),
             controller: tabController,
             showIndicator: true,
@@ -179,8 +179,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
           Container(
             height: 120,
-            color: TDTheme.of(context).bgColorContainer,
-            child: TDTabBarView(
+            color: TTheme.of(context).bgColorContainer,
+            child: TTabBarView(
               children: _getTabViews(),
               controller: tabController,
             ),
@@ -201,11 +201,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选中'),
-      const TDTab(text: '默认'),
-      const TDTab(text: '禁用', enable: false),
+      const TTab(text: '选中'),
+      const TTab(text: '默认'),
+      const TTab(text: '禁用', enable: false),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -223,12 +223,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSizeSmall(BuildContext context) {
     var tabs = [
-      const TDTab(text: '小尺寸'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '小尺寸'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -245,12 +245,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithSizeBig(BuildContext context) {
     var tabs = [
-      const TDTab(text: '大尺寸', size: TDTabSize.large),
-      const TDTab(text: '选项2', size: TDTabSize.large),
-      const TDTab(text: '选项3', size: TDTabSize.large),
-      const TDTab(text: '选项4', size: TDTabSize.large),
+      const TTab(text: '大尺寸', size: TTabSize.large),
+      const TTab(text: '选项2', size: TTabSize.large),
+      const TTab(text: '选项3', size: TTabSize.large),
+      const TTab(text: '选项4', size: TTabSize.large),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,
@@ -267,14 +267,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项1'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '选项1'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.capsule,
+      outlineType: TTabBarOutlineType.capsule,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: false,
     );
@@ -290,14 +290,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项1'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '选项1'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.card,
+      outlineType: TTabBarOutlineType.card,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: false,
     );
@@ -308,7 +308,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDTabBar
+### TTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -330,12 +330,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | labelPadding | EdgeInsetsGeometry? | - | tab间距 |
 | labelStyle | TextStyle? | - | 已选label字体 |
 | onTap |  Function(int)? | - | 点击事件 |
-| outlineType | TDTabBarOutlineType | TDTabBarOutlineType.filled | 选项卡样式 |
+| outlineType | TTabBarOutlineType | TTabBarOutlineType.filled | 选项卡样式 |
 | physics | ScrollPhysics? | - | 自定义滑动 |
 | selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
 | showIndicator | bool | false | 是否展示引导控件 |
 | tabAlignment |  | - |  |
-| tabs | List<TDTab> | - | tab数组 |
+| tabs | List<TTab> | - | tab数组 |
 | unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
 | unselectedLabelColor | Color? | - | tabBar未选标签颜色 |
 | unselectedLabelStyle | TextStyle? | - | unselectedLabel字体 |
@@ -344,12 +344,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDTab
+### TTab
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TDBadge? | - | 图标 |
+| badge | TBadge? | - | 图标 |
 | child | Widget? | - | 子widget |
 | contentHeight | double? | - | 中间内容高度 |
 | enable | bool | true | 是否可用，默认true |
@@ -357,15 +357,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | icon | Widget? | - | 图标 |
 | iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
 | key |  | - |  |
-| outlineType | TDTabOutlineType | TDTabOutlineType.filled | 选项卡样式 |
-| size | TDTabSize | TDTabSize.small | 选项卡尺寸 |
+| outlineType | TTabOutlineType | TTabOutlineType.filled | 选项卡样式 |
+| size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
 
 ```
 ```
 
-### TDTabBarView
+### TTabBarView
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

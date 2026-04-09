@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TDTabBarView extends TabBarView {
+class TTabBarView extends TabBarView {
   /// 子widget列表
   @override
   final List<Widget> children;
@@ -13,7 +13,7 @@ class TDTabBarView extends TabBarView {
   final bool isSlideSwitch;
 
   @override
-  const TDTabBarView({
+  const TTabBarView({
     Key? key,
     required this.children,
     this.controller,

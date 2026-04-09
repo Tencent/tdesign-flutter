@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 索引锚点
-class TDIndexesAnchor extends StatelessWidget {
-  const TDIndexesAnchor({
+class TIndexesAnchor extends StatelessWidget {
+  const TIndexesAnchor({
     Key? key,
     required this.sticky,
     required this.text,
@@ -39,38 +39,38 @@ class TDIndexesAnchor extends StatelessWidget {
         return customAnchor ??
             Container(
               padding: EdgeInsets.symmetric(
-                  vertical: TDTheme.of(context).spacer4,
-                  horizontal: TDTheme.of(context).spacer16),
+                  vertical: TTheme.of(context).spacer4,
+                  horizontal: TTheme.of(context).spacer16),
               margin: capsuleTheme
                   ? EdgeInsets.symmetric(
-                      horizontal: TDTheme.of(context).spacer8)
+                      horizontal: TTheme.of(context).spacer8)
                   : null,
               decoration: BoxDecoration(
                 color: isPinned
-                    ? TDTheme.of(context).bgColorContainer
-                    : TDTheme.of(context).bgColorSecondaryContainer,
+                    ? TTheme.of(context).bgColorContainer
+                    : TTheme.of(context).bgColorSecondaryContainer,
                 borderRadius: capsuleTheme
-                    ? BorderRadius.circular(TDTheme.of(context).radiusCircle)
+                    ? BorderRadius.circular(TTheme.of(context).radiusCircle)
                     : null,
                 border: isPinned
                     ? capsuleTheme
                         ? Border.all(
-                            color: TDTheme.of(context).componentStrokeColor)
+                            color: TTheme.of(context).componentStrokeColor)
                         : Border(
                             bottom: BorderSide(
-                                color: TDTheme.of(context).componentStrokeColor,
+                                color: TTheme.of(context).componentStrokeColor,
                                 width: 0.5))
                     : null,
               ),
-              child: TDText(
+              child: TText(
                 text,
                 forceVerticalCenter: true,
                 font: isPinned
-                    ? TDTheme.of(context).fontMarkMedium
-                    : TDTheme.of(context).fontTitleSmall,
+                    ? TTheme.of(context).fontMarkMedium
+                    : TTheme.of(context).fontTitleSmall,
                 textColor: isPinned
-                    ? TDTheme.of(context).brandNormalColor
-                    : TDTheme.of(context).textColorPrimary,
+                    ? TTheme.of(context).brandNormalColor
+                    : TTheme.of(context).textColorPrimary,
               ),
             );
       },

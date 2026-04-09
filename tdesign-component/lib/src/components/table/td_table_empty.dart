@@ -1,7 +1,7 @@
 
 /// 空数据状态
-class TDTableEmpty {
-  TDTableEmpty({
+class TTableEmpty {
+  TTableEmpty({
     this.assetUrl,
     this.text,
   });

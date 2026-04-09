@@ -8,15 +8,15 @@
           Positioned(
             left: 0,
             bottom: 0,
-            child: Icon(TDIcons.notification),
+            child: Icon(TIcons.notification),
           ),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
+            child: TBadge(
+              TBadgeType.square,
               count: '8888',
               maxCount: '9000',
-              size: TDBadgeSize.large,
-              border: TDBadgeBorder.large,
+              size: TBadgeSize.large,
+              border: TBadgeBorder.large,
             ),
             left: 18,
             bottom: 18,

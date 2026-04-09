@@ -1,16 +1,16 @@
 
   Widget _longTextSuccessToast(BuildContext context) {
-    return TDButton(
+    return TButton(
       onTap: () {
-        TDToast.showSuccess(
+        TToast.showSuccess(
           '这是一个非常长的成功提示文案，用来测试文字溢出的问题。这是一个非常长的成功提示文案，用来测试文字溢出的问题。',
           context: context,
           maxLines: 10,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       isBlock: true,
       text: '长文本成功提示',
     );

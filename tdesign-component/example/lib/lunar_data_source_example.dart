@@ -4,11 +4,11 @@ import 'package:lunar/lunar.dart';
 /// 基于 lunar 库的农历数据源实现示例
 /// 
 /// 使用方法：
-/// TDCalendar(
-///   dateType: TDCalendarDateType.lunar,
+/// TCalendar(
+///   dateType: TCalendarDateType.lunar,
 ///   dataSource: LunarDataSourceExample(),
 /// )
-class LunarDataSourceExample extends TDCalendarDataSource {
+class LunarDataSourceExample extends TCalendarDataSource {
   /// 将数字转换为中文数字
   static String _convertToChineseNumber(int number) {
     const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -77,12 +77,12 @@ class LunarDataSourceExample extends TDCalendarDataSource {
   }
 
   @override
-  TDLunarInfo? getLunarInfo(DateTime solarDate) {
+  TLunarInfo? getLunarInfo(DateTime solarDate) {
     try {
       final solar = Solar.fromDate(solarDate);
       final lunar = solar.getLunar();
       
-      return TDLunarInfo(
+      return TLunarInfo(
         year: lunar.getYear(),
         month: lunar.getMonth().abs(),
         day: lunar.getDay(),
@@ -100,10 +100,10 @@ class LunarDataSourceExample extends TDCalendarDataSource {
   @override
   String formatDate(
     DateTime date,
-    TDCalendarDateType type, [
-    TDLunarInfo? lunarInfo,
+    TCalendarDateType type, [
+    TLunarInfo? lunarInfo,
   ]) {
-    if (type == TDCalendarDateType.solar) {
+    if (type == TCalendarDateType.solar) {
       return '${date.year}年${date.month}月${date.day}日';
     } else {
       if (lunarInfo != null) {
@@ -146,7 +146,7 @@ class LunarDataSourceExample extends TDCalendarDataSource {
   }
 
   @override
-  String? getFestival(DateTime date, [TDLunarInfo? lunarInfo]) {
+  String? getFestival(DateTime date, [TLunarInfo? lunarInfo]) {
     // 阳历节日
     if (date.month == 1 && date.day == 1) return '元旦';
     if (date.month == 2 && date.day == 14) return '情人节';

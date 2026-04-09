@@ -5,22 +5,22 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarOutlinePage演示
+/// TSideBarOutlinePage演示
 ///
-class TDSideBarOutlinePage extends StatefulWidget {
-  const TDSideBarOutlinePage({Key? key}) : super(key: key);
+class TSideBarOutlinePage extends StatefulWidget {
+  const TSideBarOutlinePage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarOutlinePageState();
+    return TSideBarOutlinePageState();
   }
 }
 
-class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
+class TSideBarOutlinePageState extends State<TSideBarOutlinePage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
   static const threshold = 50;
   var lock = false;
 
@@ -97,12 +97,12 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
     ));
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -110,12 +110,12 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.outline,
+          child: TSideBar(
+            style: TSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -139,13 +139,13 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题 $index',
+            child: TText('标题 $index',
                 style: const TextStyle(
                   fontSize: 14,
                 )),
@@ -163,11 +163,11 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
     return Column(
       children: [
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
       ],
     );
   }
@@ -179,14 +179,14 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
         // spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TDImage(
+          TImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: TImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           SizedBox(width: 16),
-          TDText('标题', style: TextStyle(fontSize: 16))
+          TText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

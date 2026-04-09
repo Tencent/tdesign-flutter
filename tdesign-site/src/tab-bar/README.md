@@ -26,12 +26,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.text,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.text,
       useVerticalDivider: false,
       navigationTabs: List.generate(2, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           onTap: () {
             onTapTab(context, label);
@@ -50,13 +50,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.text,
-      indicatorAnimation: TDBottomTabBarIndicatorAnimation.elastic,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.text,
+      indicatorAnimation: TBottomTabBarIndicatorAnimation.elastic,
       useVerticalDivider: false,
       navigationTabs: List.generate(3, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           onTap: () {
             onTapTab(context, label);
@@ -75,12 +75,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.text,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.text,
       useVerticalDivider: false,
       navigationTabs: List.generate(4, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           onTap: () {
             onTapTab(context, label);
@@ -99,12 +99,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.text,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.text,
       useVerticalDivider: false,
       navigationTabs: List.generate(5, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           onTap: () {
             onTapTab(context, label);
@@ -123,12 +123,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.iconText,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.iconText,
       useVerticalDivider: false,
       navigationTabs: List.generate(2, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
@@ -149,12 +149,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.iconText,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.iconText,
       useVerticalDivider: false,
       navigationTabs: List.generate(3, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
@@ -175,12 +175,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.iconText,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.iconText,
       useVerticalDivider: false,
       navigationTabs: List.generate(4, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
@@ -201,12 +201,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.iconText,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.iconText,
       useVerticalDivider: false,
       navigationTabs: List.generate(5, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
@@ -227,12 +227,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.icon,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.icon,
       useVerticalDivider: true,
       navigationTabs: List.generate(2, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {
@@ -251,12 +251,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.icon,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.icon,
       useVerticalDivider: true,
       navigationTabs: List.generate(3, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {
@@ -275,12 +275,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.icon,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.icon,
       useVerticalDivider: true,
       navigationTabs: List.generate(4, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {
@@ -299,12 +299,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.icon,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.icon,
       useVerticalDivider: true,
       navigationTabs: List.generate(5, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {
@@ -323,30 +323,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _expansionPanelTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.expansionPanel,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,
       navigationTabs: [
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
             tabText: '展开项',
             onTap: () {
               // 不触发点击事件
               onTapTab(context, '展开项');
             },
-            popUpButtonConfig: TDBottomTabBarPopUpBtnConfig(
-                popUpDialogConfig: TDBottomTabBarPopUpShapeConfig(
+            popUpButtonConfig: TBottomTabBarPopUpBtnConfig(
+                popUpDialogConfig: TBottomTabBarPopUpShapeConfig(
                   radius: 10,
                   arrowWidth: 16,
                   arrowHeight: 8,
@@ -358,13 +358,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                           itemWidget: Text(
                             e,
                             style: TextStyle(
-                                color: TDTheme.of(context).textColorPrimary,
+                                color: TTheme.of(context).textColorPrimary,
                                 fontSize: 16),
                           ),
                         ))
                     .toList(),
                 onChanged: (v) {
-                  TDToast.showText('点击了 $v', context: context);
+                  TToast.showText('点击了 $v', context: context);
                 })),
       ],
     );
@@ -380,15 +380,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _weakSelectTextTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.text,
-      componentType: TDBottomTabBarComponentType.normal,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.text,
+      componentType: TBottomTabBarComponentType.normal,
       useVerticalDivider: true,
       navigationTabs: [
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TDBadge(TDBadgeType.redPoint),
+            tdBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -397,13 +397,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
@@ -422,17 +422,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _weakSelectIconTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.icon,
-      componentType: TDBottomTabBarComponentType.normal,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.icon,
+      componentType: TBottomTabBarComponentType.normal,
       useVerticalDivider: false,
       navigationTabs: [
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TDBadge(TDBadgeType.redPoint),
+            tdBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -441,7 +441,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           tabText: '标签',
@@ -449,7 +449,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           tabText: '标签',
@@ -470,17 +470,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _weakSelectIconTextTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.iconText,
-      componentType: TDBottomTabBarComponentType.normal,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.iconText,
+      componentType: TBottomTabBarComponentType.normal,
       useVerticalDivider: false,
       navigationTabs: [
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TDBadge(TDBadgeType.redPoint),
+            tdBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -489,7 +489,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           tabText: '标签',
@@ -497,7 +497,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           tabText: '标签',
@@ -518,13 +518,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _capsuleTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
-        componentType: TDBottomTabBarComponentType.label,
-        outlineType: TDBottomTabBarOutlineType.capsule,
+    return TBottomTabBar(TBottomTabBarBasicType.iconText,
+        componentType: TBottomTabBarComponentType.label,
+        outlineType: TBottomTabBarOutlineType.capsule,
         useVerticalDivider: true,
         navigationTabs: List.generate(3, (index) {
           final label = '标签${index + 1}';
-          return TDBottomTabBarTabConfig(
+          return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             tabText: label,
@@ -545,13 +545,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _capsuleTabBarOnLongPress(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
-        componentType: TDBottomTabBarComponentType.label,
-        outlineType: TDBottomTabBarOutlineType.capsule,
+    return TBottomTabBar(TBottomTabBarBasicType.iconText,
+        componentType: TBottomTabBarComponentType.label,
+        outlineType: TBottomTabBarOutlineType.capsule,
         useVerticalDivider: true,
         navigationTabs: List.generate(3, (index) {
           final label = '标签${index + 1}';
-          return TDBottomTabBarTabConfig(
+          return TBottomTabBarTabConfig(
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             tabText: label,
@@ -560,7 +560,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             },
             onLongPress: () {
               print('长按了${label}');
-              TDToast.showText('长按了 $label', context: context);
+              TToast.showText('长按了 $label', context: context);
             },
           );
         }));
@@ -579,12 +579,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | badgeRightOffset | double? | - | 消息右侧偏移量 |
 | badgeTopOffset | double? | - | 消息顶部偏移量 |
 | showBadge | bool | - | 是否展示消息 |
-| tdBadge | TDBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
+| tdBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
 
 ```
 ```
 
-### TDBottomTabBarTabConfig
+### TBottomTabBarTabConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -593,7 +593,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
 | onTap | GestureTapCallback? | - | tab点击事件 |
-| popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
+| popUpButtonConfig | TBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | selectedIcon | Widget? | - | 选中时图标 |
 | selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
 | tabText | String? | - | tab 文本 |
@@ -603,7 +603,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDBottomTabBar
+### TBottomTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -612,18 +612,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | animationDuration | Duration | const Duration(milliseconds: 300) | 动画时长 |
 | backgroundColor | Color? | - | 背景颜色 （可选） |
 | barHeight | double? | _kDefaultTabBarHeight | tab高度 |
-| basicType | TDBottomTabBarBasicType | basicType | 基本样式（纯文本、纯图标、图标+文本） |
+| basicType | TBottomTabBarBasicType | basicType | 基本样式（纯文本、纯图标、图标+文本） |
 | centerDistance | double? | - | icon与文本中间距离（可选） |
-| componentType | TDBottomTabBarComponentType? | TDBottomTabBarComponentType.label | 选项样式 默认label |
+| componentType | TBottomTabBarComponentType? | TBottomTabBarComponentType.label | 选项样式 默认label |
 | currentIndex | int? | - | 选中的index（可选） |
 | dividerColor | Color? | - | 分割线颜色（可选） |
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
-| indicatorAnimation | TDBottomTabBarIndicatorAnimation | TDBottomTabBarIndicatorAnimation.none | 指示器动画类型 |
+| indicatorAnimation | TBottomTabBarIndicatorAnimation | TBottomTabBarIndicatorAnimation.none | 指示器动画类型 |
 | key |  | - |  |
-| navigationTabs | List<TDBottomTabBarTabConfig> | - | tabs配置 |
+| navigationTabs | List<TBottomTabBarTabConfig> | - | tabs配置 |
 | needInkWell | bool | false | 是否需要水波纹效果 |
-| outlineType | TDBottomTabBarOutlineType? | TDBottomTabBarOutlineType.filled | 标签栏样式 默认filled |
+| outlineType | TBottomTabBarOutlineType? | TBottomTabBarOutlineType.filled | 标签栏样式 默认filled |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
 | showTopBorder | bool? | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
 | topBorder | BorderSide? | - | 上边线样式 |
@@ -634,19 +634,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDBottomTabBarPopUpBtnConfig
+### TBottomTabBarPopUpBtnConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | items | List<PopUpMenuItem> | - | 选项list |
 | onChanged | ValueChanged<String> | - | 统一在 onChanged 中处理各item点击事件 |
-| popUpDialogConfig | TDBottomTabBarPopUpShapeConfig? | - | 弹窗UI配置 |
+| popUpDialogConfig | TBottomTabBarPopUpShapeConfig? | - | 弹窗UI配置 |
 
 ```
 ```
 
-### TDBottomTabBarPopUpShapeConfig
+### TBottomTabBarPopUpShapeConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

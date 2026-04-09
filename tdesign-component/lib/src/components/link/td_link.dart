@@ -5,14 +5,14 @@ import '../../../tdesign_flutter.dart';
 /// 限制Function类型，防止传递错误的Function，导致参数对不上
 typedef LinkClick = Function(Uri? uri);
 
-enum TDLinkType {
+enum TLinkType {
   basic,
   withUnderline,
   withPrefixIcon,
   withSuffixIcon,
 }
 
-enum TDLinkStyle {
+enum TLinkStyle {
   primary,
   defaultStyle,
   danger,
@@ -20,30 +20,30 @@ enum TDLinkStyle {
   success,
 }
 
-enum TDLinkState {
+enum TLinkState {
   normal,
   active,
   disabled,
 }
 
-enum TDLinkSize {
+enum TLinkSize {
   small,
   medium,
   large,
 }
 
-class TDLink extends StatelessWidget {
-  const TDLink({
+class TLink extends StatelessWidget {
+  const TLink({
     Key? key,
     required this.label,
     this.uri,
     this.prefixIcon,
     this.suffixIcon,
     this.linkClick,
-    this.type = TDLinkType.basic,
-    this.style = TDLinkStyle.defaultStyle,
-    this.state = TDLinkState.normal,
-    this.size = TDLinkSize.medium,
+    this.type = TLinkType.basic,
+    this.style = TLinkStyle.defaultStyle,
+    this.state = TLinkState.normal,
+    this.size = TLinkSize.medium,
     this.color,
     this.iconSize,
     this.fontSize,
@@ -58,16 +58,16 @@ class TDLink extends StatelessWidget {
   final Uri? uri;
 
   /// link 类型
-  final TDLinkType type;
+  final TLinkType type;
 
   /// link 风格
-  final TDLinkStyle style;
+  final TLinkStyle style;
 
   /// link 状态
-  final TDLinkState state;
+  final TLinkState state;
 
   /// link 大小
-  final TDLinkSize size;
+  final TLinkSize size;
 
   /// 前置 icon
   final Icon? prefixIcon;
@@ -95,7 +95,7 @@ class TDLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (type == TDLinkType.withPrefixIcon) {
+    if (type == TLinkType.withPrefixIcon) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -106,7 +106,7 @@ class TDLink extends StatelessWidget {
           _buildLink(context),
         ],
       );
-    } else if (type == TDLinkType.withSuffixIcon) {
+    } else if (type == TLinkType.withSuffixIcon) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -122,9 +122,9 @@ class TDLink extends StatelessWidget {
     return _buildLink(context);
   }
 
-  /// 提取成方法，允许业务定义自己的 TDLinkConfiguration
-  TDLinkConfiguration? getConfiguration(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TDLinkConfiguration>();
+  /// 提取成方法，允许业务定义自己的 TLinkConfiguration
+  TLinkConfiguration? getConfiguration(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TLinkConfiguration>();
   }
 
   Color getColor(BuildContext context) {
@@ -132,28 +132,28 @@ class TDLink extends StatelessWidget {
       return color!;
     }
 
-    final theme = TDTheme.of(context);
-    final colorMap = <TDLinkState, Map<TDLinkStyle, Color>>{
-      TDLinkState.normal: {
-        TDLinkStyle.primary: theme.brandNormalColor,
-        TDLinkStyle.danger: theme.errorNormalColor,
-        TDLinkStyle.warning: theme.warningNormalColor,
-        TDLinkStyle.success: theme.successNormalColor,
-        TDLinkStyle.defaultStyle: theme.textColorPrimary,
+    final theme = TTheme.of(context);
+    final colorMap = <TLinkState, Map<TLinkStyle, Color>>{
+      TLinkState.normal: {
+        TLinkStyle.primary: theme.brandNormalColor,
+        TLinkStyle.danger: theme.errorNormalColor,
+        TLinkStyle.warning: theme.warningNormalColor,
+        TLinkStyle.success: theme.successNormalColor,
+        TLinkStyle.defaultStyle: theme.textColorPrimary,
       },
-      TDLinkState.active: {
-        TDLinkStyle.primary: theme.brandClickColor,
-        TDLinkStyle.danger: theme.errorClickColor,
-        TDLinkStyle.warning: theme.warningClickColor,
-        TDLinkStyle.success: theme.successClickColor,
-        TDLinkStyle.defaultStyle: theme.brandClickColor,
+      TLinkState.active: {
+        TLinkStyle.primary: theme.brandClickColor,
+        TLinkStyle.danger: theme.errorClickColor,
+        TLinkStyle.warning: theme.warningClickColor,
+        TLinkStyle.success: theme.successClickColor,
+        TLinkStyle.defaultStyle: theme.brandClickColor,
       },
-      TDLinkState.disabled: {
-        TDLinkStyle.primary: theme.brandDisabledColor,
-        TDLinkStyle.danger: theme.errorDisabledColor,
-        TDLinkStyle.warning: theme.warningDisabledColor,
-        TDLinkStyle.success: theme.successDisabledColor,
-        TDLinkStyle.defaultStyle: theme.textDisabledColor,
+      TLinkState.disabled: {
+        TLinkStyle.primary: theme.brandDisabledColor,
+        TLinkStyle.danger: theme.errorDisabledColor,
+        TLinkStyle.warning: theme.warningDisabledColor,
+        TLinkStyle.success: theme.successDisabledColor,
+        TLinkStyle.defaultStyle: theme.textDisabledColor,
       },
     };
 
@@ -162,7 +162,7 @@ class TDLink extends StatelessWidget {
 
   Widget _getDefaultIcon(BuildContext context) {
     return Icon(
-      type == TDLinkType.withPrefixIcon ? TDIcons.link : TDIcons.jump,
+      type == TLinkType.withPrefixIcon ? TIcons.link : TIcons.jump,
       size: _getIconSize(context),
       color: getColor(context),
     );
@@ -171,7 +171,7 @@ class TDLink extends StatelessWidget {
   Widget _buildLink(BuildContext context) {
     return InkWell(
         onTap: () {
-          if (state == TDLinkState.disabled) {
+          if (state == TLinkState.disabled) {
             return;
           }
           if (linkClick != null) {
@@ -184,12 +184,12 @@ class TDLink extends StatelessWidget {
             }
           }
         },
-        child: TDText(
+        child: TText(
           label,
           style: TextStyle(
             fontSize: _getFontSize(context),
             color: getColor(context),
-            decoration: type == TDLinkType.withUnderline
+            decoration: type == TLinkType.withUnderline
                 ? TextDecoration.underline
                 : null,
             decorationColor: getColor(context),
@@ -203,11 +203,11 @@ class TDLink extends StatelessWidget {
       return iconSize!;
     }
     switch (size) {
-      case TDLinkSize.large:
+      case TLinkSize.large:
         return 18;
-      case TDLinkSize.small:
+      case TLinkSize.small:
         return 14;
-      case TDLinkSize.medium:
+      case TLinkSize.medium:
         return 16;
     }
   }
@@ -217,11 +217,11 @@ class TDLink extends StatelessWidget {
       return fontSize!;
     }
     switch (size) {
-      case TDLinkSize.large:
+      case TLinkSize.large:
         return 16;
-      case TDLinkSize.small:
+      case TLinkSize.small:
         return 12;
-      case TDLinkSize.medium:
+      case TLinkSize.medium:
         return 14;
     }
   }
@@ -231,11 +231,11 @@ class TDLink extends StatelessWidget {
       return leftGapWithIcon!;
     }
     switch (size) {
-      case TDLinkSize.large:
+      case TLinkSize.large:
         return 8;
-      case TDLinkSize.small:
+      case TLinkSize.small:
         return 6.05;
-      case TDLinkSize.medium:
+      case TLinkSize.medium:
         return 6.34;
     }
   }
@@ -245,26 +245,26 @@ class TDLink extends StatelessWidget {
       return rightGapWithIcon!;
     }
     switch (size) {
-      case TDLinkSize.large:
+      case TLinkSize.large:
         return 8;
-      case TDLinkSize.small:
+      case TLinkSize.small:
         return 6.63;
-      case TDLinkSize.medium:
+      case TLinkSize.medium:
         return 7;
     }
   }
 }
 
 /// 存储可以自定义TDLink跳转算法的控件
-class TDLinkConfiguration extends InheritedWidget {
+class TLinkConfiguration extends InheritedWidget {
   /// 统一跳转的函数
   final LinkClick? linkClick;
 
-  const TDLinkConfiguration({this.linkClick, Key? key, required Widget child})
+  const TLinkConfiguration({this.linkClick, Key? key, required Widget child})
       : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(covariant TDLinkConfiguration oldWidget) {
+  bool updateShouldNotify(covariant TLinkConfiguration oldWidget) {
     return linkClick != oldWidget.linkClick;
   }
 }

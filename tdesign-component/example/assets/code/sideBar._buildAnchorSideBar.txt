@@ -10,7 +10,7 @@
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(
+          child: TButton(
             text: '更新children',
             onTap: () {
               setState(() {
@@ -33,8 +33,8 @@
             children: [
               SizedBox(
                 width: 110,
-                child: TDSideBar(
-                  style: TDSideBarStyle.normal,
+                child: TSideBar(
+                  style: TSideBarStyle.normal,
                   value: currentValue,
                   controller: _sideBarController,
                   onChanged: onChanged,
@@ -45,7 +45,7 @@
                 child: SingleChildScrollView(
                     controller: _demoScroller,
                     child: Container(
-                      color: TDTheme.of(context).bgColorContainer,
+                      color: TTheme.of(context).bgColorContainer,
                       child: Column(
                         children: [
                           ...pages,

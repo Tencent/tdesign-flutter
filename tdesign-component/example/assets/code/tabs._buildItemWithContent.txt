@@ -5,7 +5,7 @@
       height: 120 + 48,
       child: Column(
         children: [
-          TDTabBar(
+          TTabBar(
             tabs: subList(3),
             controller: tabController,
             showIndicator: true,
@@ -13,8 +13,8 @@
           ),
           Container(
             height: 120,
-            color: TDTheme.of(context).bgColorContainer,
-            child: TDTabBarView(
+            color: TTheme.of(context).bgColorContainer,
+            child: TTabBarView(
               children: _getTabViews(),
               controller: tabController,
             ),

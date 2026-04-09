@@ -1,17 +1,17 @@
 
   Widget _imageEmpty(BuildContext context) {
-    return TDEmpty(
-      type: TDEmptyType.plain,
+    return TEmpty(
+      type: TEmptyType.plain,
       emptyText: '描述文字',
       image: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).bgColorComponent,
+          color: TTheme.of(context).bgColorComponent,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const TDImage(
+        child: const TImage(
           width: 120,
           assetUrl: 'assets/img/empty.png',
-          type: TDImageType.fitWidth,
+          type: TImageType.fitWidth,
         ),
       ),
     );

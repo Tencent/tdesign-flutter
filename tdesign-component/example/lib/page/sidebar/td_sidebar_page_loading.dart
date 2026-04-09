@@ -7,22 +7,22 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarLoadingPage演示
+/// TSideBarLoadingPage演示
 ///
-class TDSideBarLoadingPage extends StatefulWidget {
-  const TDSideBarLoadingPage({Key? key}) : super(key: key);
+class TSideBarLoadingPage extends StatefulWidget {
+  const TSideBarLoadingPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarLoadingPageState();
+    return TSideBarLoadingPageState();
   }
 }
 
-class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
+class TSideBarLoadingPageState extends State<TSideBarLoadingPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
   static const threshold = 50;
   var lock = false;
 
@@ -99,12 +99,12 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
     ));
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
     if (_sideBarController.loading) {
@@ -126,13 +126,13 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
       children: [
         SizedBox(
           width: list.isEmpty ? size.width : 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             loading: true,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -156,13 +156,13 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
   Widget getLoadingDemo(int index) {
     return Container(
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
+      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
+            child: TText('标题$index',
                 style: const TextStyle(
                   fontSize: 14,
                 )),
@@ -180,11 +180,11 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     return Column(
       children: [
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
       ],
     );
   }
@@ -196,14 +196,14 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
         // spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TDImage(
+          TImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: TImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           SizedBox(width: 16),
-          TDText('标题', style: TextStyle(fontSize: 16))
+          TText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

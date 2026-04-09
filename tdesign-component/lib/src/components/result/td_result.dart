@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-enum TDResultTheme { defaultTheme, success, warning, error }
+enum TResultTheme { defaultTheme, success, warning, error }
 
-class TDResult extends StatelessWidget {
-  const TDResult({
+class TResult extends StatelessWidget {
+  const TResult({
     Key? key,
     this.description,
     this.icon,
     this.titleStyle,
-    this.theme = TDResultTheme.defaultTheme,
+    this.theme = TResultTheme.defaultTheme,
     this.title = '',
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class TDResult extends StatelessWidget {
   final TextStyle? titleStyle;
 
   /// 主题样式，默认主题样式为defaultTheme
-  final TDResultTheme theme;
+  final TResultTheme theme;
 
   /// 标题文本，显示结果的主要信息，默认标题为空字符串
   final String title;
@@ -41,19 +41,19 @@ class TDResult extends StatelessWidget {
         if (title.isNotEmpty)
           Padding(
               padding: const EdgeInsets.only(top: 17),
-              child: TDText(
+              child: TText(
                 title,
-                textColor: TDTheme.of(context).textColorPrimary,
-                font: TDTheme.of(context).fontTitleExtraLarge,
+                textColor: TTheme.of(context).textColorPrimary,
+                font: TTheme.of(context).fontTitleExtraLarge,
                 style: titleStyle,
               )),
         if (description != null && description!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: TDText(
+            child: TText(
               description!,
-              textColor: TDTheme.of(context).textColorSecondary,
-              font: TDTheme.of(context).fontTitleSmall,
+              textColor: TTheme.of(context).textColorSecondary,
+              font: TTheme.of(context).fontTitleSmall,
             ),
           ),
       ],
@@ -61,30 +61,30 @@ class TDResult extends StatelessWidget {
   }
 
   // 根据主题返回对应的默认图标组件
-  Widget _getDefaultIconByTheme(BuildContext context, TDResultTheme theme) {
+  Widget _getDefaultIconByTheme(BuildContext context, TResultTheme theme) {
     switch (theme) {
-      case TDResultTheme.success:
+      case TResultTheme.success:
         return Icon(
-          TDIcons.check_circle,
-          color: TDTheme.of(context).successNormalColor,
+          TIcons.check_circle,
+          color: TTheme.of(context).successNormalColor,
           size: 70,
         );
-      case TDResultTheme.warning:
+      case TResultTheme.warning:
         return Icon(
-          TDIcons.error_circle,
-          color: TDTheme.of(context).warningNormalColor,
+          TIcons.error_circle,
+          color: TTheme.of(context).warningNormalColor,
           size: 70,
         );
-      case TDResultTheme.error:
+      case TResultTheme.error:
         return Icon(
-          TDIcons.close_circle,
-          color: TDTheme.of(context).errorNormalColor,
+          TIcons.close_circle,
+          color: TTheme.of(context).errorNormalColor,
           size: 70,
         );
       default:
         return Icon(
-          TDIcons.info_circle,
-          color: TDTheme.of(context).brandNormalColor,
+          TIcons.info_circle,
+          color: TTheme.of(context).brandNormalColor,
           size: 70,
         );
     }

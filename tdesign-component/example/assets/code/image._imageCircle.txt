@@ -5,16 +5,16 @@
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '圆形',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           assetUrl: 'assets/img/image.png',
           width: 72,
           height: 72,
-          type: TDImageType.circle,
+          type: TImageType.circle,
         ),
       ],
     );

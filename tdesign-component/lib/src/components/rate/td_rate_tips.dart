@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 评分提示组件
-class TDRateTips extends StatelessWidget {
-  const TDRateTips({
+class TRateTips extends StatelessWidget {
+  const TRateTips({
     Key? key,
     this.allowHalf = false,
     required this.activeValue,
@@ -38,7 +38,7 @@ class TDRateTips extends StatelessWidget {
     return Container(
       key: _tipKey,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.12),
@@ -59,9 +59,9 @@ class TDRateTips extends StatelessWidget {
             spreadRadius: 0,
           ),
         ],
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
       ),
-      padding: EdgeInsets.all(TDTheme.of(context).spacer4),
+      padding: EdgeInsets.all(TTheme.of(context).spacer4),
       child: Row(
         children: [
           GestureDetector(
@@ -74,14 +74,14 @@ class TDRateTips extends StatelessWidget {
               decoration: BoxDecoration(
                 color:
                     allowHalf == true && index + 0.5 == activeValue && isClick
-                        ? TDTheme.of(context).bgColorComponent
+                        ? TTheme.of(context).bgColorComponent
                         : Colors.transparent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusSmall),
+                    BorderRadius.circular(TTheme.of(context).radiusSmall),
               ),
               padding: EdgeInsets.only(
-                  left: TDTheme.of(context).spacer4,
-                  right: TDTheme.of(context).spacer4),
+                  left: TTheme.of(context).spacer4,
+                  right: TTheme.of(context).spacer4),
               child: Column(
                 children: [
                   Row(
@@ -115,12 +115,12 @@ class TDRateTips extends StatelessWidget {
                     ],
                   ),
                   Center(
-                    child: TDText(
+                    child: TText(
                       allowHalf == true
                           ? (isClick ? '${index + 0.5}' : '${activeValue}')
                           : '${index + 1}',
-                      font: TDTheme.of(context).fontBodySmall,
-                      textColor: TDTheme.of(context).textColorPrimary,
+                      font: TTheme.of(context).fontBodySmall,
+                      textColor: TTheme.of(context).textColorPrimary,
                     ),
                   ),
                 ],
@@ -128,7 +128,7 @@ class TDRateTips extends StatelessWidget {
             ),
           ),
           if (allowHalf == true && isClick)
-            SizedBox(width: TDTheme.of(context).spacer4),
+            SizedBox(width: TTheme.of(context).spacer4),
           if (allowHalf == true && isClick)
             GestureDetector(
               onTap: () {
@@ -140,13 +140,13 @@ class TDRateTips extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: index + 1 != activeValue
                       ? Colors.transparent
-                      : TDTheme.of(context).bgColorComponent,
+                      : TTheme.of(context).bgColorComponent,
                   borderRadius:
-                      BorderRadius.circular(TDTheme.of(context).radiusSmall),
+                      BorderRadius.circular(TTheme.of(context).radiusSmall),
                 ),
                 padding: EdgeInsets.only(
-                    left: TDTheme.of(context).spacer4,
-                    right: TDTheme.of(context).spacer4),
+                    left: TTheme.of(context).spacer4,
+                    right: TTheme.of(context).spacer4),
                 child: Column(
                   children: [
                     Icon(
@@ -155,10 +155,10 @@ class TDRateTips extends StatelessWidget {
                       color: getIconColor(isActive: true),
                     ),
                     Center(
-                      child: TDText(
+                      child: TText(
                         '${index + 1}',
-                        font: TDTheme.of(context).fontBodySmall,
-                        textColor: TDTheme.of(context).textColorPrimary,
+                        font: TTheme.of(context).fontBodySmall,
+                        textColor: TTheme.of(context).textColorPrimary,
                       ),
                     ),
                   ],

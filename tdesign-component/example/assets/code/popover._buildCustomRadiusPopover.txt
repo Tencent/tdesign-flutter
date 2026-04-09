@@ -5,13 +5,13 @@
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (_, constraints) {
-          return TDButton(
-            size: TDButtonSize.medium,
+          return TButton(
+            size: TButtonSize.medium,
             text: '自定义圆角',
-            type: TDButtonType.outline,
-            theme: TDButtonTheme.primary,
+            type: TButtonType.outline,
+            theme: TButtonTheme.primary,
             onTap: () {
-              TDPopover.showPopover(
+              TPopover.showPopover(
                 context: _,
                 width: 200,
                 radius: BorderRadius.circular(16),

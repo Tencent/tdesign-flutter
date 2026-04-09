@@ -1,29 +1,29 @@
 
   Widget _expansionPanelTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.expansionPanel,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,
       navigationTabs: [
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomTabBarTabConfig(
+        TBottomTabBarTabConfig(
             tabText: '展开项',
             onTap: () {
               // 不触发点击事件
               onTapTab(context, '展开项');
             },
-            popUpButtonConfig: TDBottomTabBarPopUpBtnConfig(
-                popUpDialogConfig: TDBottomTabBarPopUpShapeConfig(
+            popUpButtonConfig: TBottomTabBarPopUpBtnConfig(
+                popUpDialogConfig: TBottomTabBarPopUpShapeConfig(
                   radius: 10,
                   arrowWidth: 16,
                   arrowHeight: 8,
@@ -35,13 +35,13 @@
                           itemWidget: Text(
                             e,
                             style: TextStyle(
-                                color: TDTheme.of(context).textColorPrimary,
+                                color: TTheme.of(context).textColorPrimary,
                                 fontSize: 16),
                           ),
                         ))
                     .toList(),
                 onChanged: (v) {
-                  TDToast.showText('点击了 $v', context: context);
+                  TToast.showText('点击了 $v', context: context);
                 })),
       ],
     );

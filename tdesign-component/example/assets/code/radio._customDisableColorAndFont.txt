@@ -1,28 +1,28 @@
 
   Widget _customDisableColorAndFont(BuildContext context) {
-    return TDRadioGroup(
-      contentDirection: TDContentDirection.right,
+    return TRadioGroup(
+      contentDirection: TContentDirection.right,
       selectId: '0',
       child: Column(
         children: [
-          TDRadio(
+          TRadio(
             id: '0',
             title: '选项禁用-已选',
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: TRadioStyle.circle,
             enable: false,
-            disableColor: TDTheme.of(context).errorDisabledColor,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            disableColor: TTheme.of(context).errorDisabledColor,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
           ),
-          TDRadio(
+          TRadio(
             id: '1',
             title: '选项禁用-默认',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: TRadioStyle.circle,
             enable: false,
-            disableColor: TDTheme.of(context).errorDisabledColor,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            disableColor: TTheme.of(context).errorDisabledColor,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
           ),
         ],
       ),

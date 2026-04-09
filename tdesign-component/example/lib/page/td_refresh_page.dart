@@ -37,7 +37,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
   Widget _buildRefresh(BuildContext context) {
     return EasyRefresh(
       // 下拉样式
-      header: TDRefreshHeader(),
+      header: TRefreshHeader(),
       child: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(16),
@@ -48,13 +48,13 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               height: 171,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(TDTheme.of(context).radiusLarge))),
-              child: TDText(
+                      Radius.circular(TTheme.of(context).radiusLarge))),
+              child: TText(
                 PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
-                font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).textColorPlaceholder,
+                font: TTheme.of(context).fontBodyLarge,
+                textColor: TTheme.of(context).textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 16),
@@ -62,13 +62,13 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(TDTheme.of(context).radiusLarge))),
-              child: TDText(
+                      Radius.circular(TTheme.of(context).radiusLarge))),
+              child: TText(
                 '下拉刷新次数：${count}',
-                font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).textColorPlaceholder,
+                font: TTheme.of(context).fontBodyLarge,
+                textColor: TTheme.of(context).textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 500),

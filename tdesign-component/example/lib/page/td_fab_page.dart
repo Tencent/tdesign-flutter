@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDFabPage extends StatefulWidget {
-  const TDFabPage({Key? key}) : super(key: key);
+class TFabPage extends StatefulWidget {
+  const TFabPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDFabPageState();
+  State<StatefulWidget> createState() => _TFabPageState();
 }
 
-class _TDFabPageState extends State<TDFabPage> {
+class _TFabPageState extends State<TFabPage> {
   bool showBorder = false;
 
   @override
@@ -33,8 +33,8 @@ class _TDFabPageState extends State<TDFabPage> {
   @Demo(group: 'fab')
   Widget _buildPureIconFab(BuildContext context) {
     return _buildRowDemo([
-      const TDFab(
-        theme: TDFabTheme.primary,
+      const TFab(
+        theme: TFabTheme.primary,
       )
     ]);
   }
@@ -42,8 +42,8 @@ class _TDFabPageState extends State<TDFabPage> {
   @Demo(group: 'fab')
   Widget _buildTextFab(BuildContext context) {
     return _buildRowDemo([
-      const TDFab(
-        theme: TDFabTheme.primary,
+      const TFab(
+        theme: TFabTheme.primary,
         text: 'Floating',
       )
     ]);
@@ -53,26 +53,26 @@ class _TDFabPageState extends State<TDFabPage> {
   Widget _buildThemeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
+        'component': const TFab(
+          theme: TFabTheme.primary,
         ),
         'desc': 'Primary'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.defaultTheme,
+        'component': const TFab(
+          theme: TFabTheme.defaultTheme,
         ),
         'desc': 'Default'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.light,
+        'component': const TFab(
+          theme: TFabTheme.light,
         ),
         'desc': 'Light'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.danger,
+        'component': const TFab(
+          theme: TFabTheme.danger,
         ),
         'desc': 'Danger'
       },
@@ -83,16 +83,16 @@ class _TDFabPageState extends State<TDFabPage> {
   Widget _buildShapeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          shape: TDFabShape.circle,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          shape: TFabShape.circle,
         ),
         'desc': 'Circle'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          shape: TDFabShape.square,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          shape: TFabShape.square,
         ),
         'desc': 'Square'
       },
@@ -103,37 +103,37 @@ class _TDFabPageState extends State<TDFabPage> {
   Widget _buildSizeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.large,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.large,
         ),
         'desc': 'Large'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.medium,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.medium,
         ),
         'desc': 'Medium'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.small,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.small,
         ),
         'desc': 'Small'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.extraSmall,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.extraSmall,
         ),
         'desc': 'extraSmall'
       },
     ]);
   }
 
-  Widget _buildRowDemo(List<TDFab> fabs) {
+  Widget _buildRowDemo(List<TFab> fabs) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 16,
@@ -167,7 +167,7 @@ class _TDFabPageState extends State<TDFabPage> {
                       child: Column(children: [fab['component']]),
                     ),
                     const SizedBox(height: 24),
-                    TDText(
+                    TText(
                       fab['desc'],
                       style: const TextStyle(fontSize: 14),
                     )

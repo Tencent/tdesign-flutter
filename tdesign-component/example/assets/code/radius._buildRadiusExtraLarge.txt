@@ -4,9 +4,9 @@
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
+        color: TTheme.of(context).brandNormalColor,
         borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
       ),
     );
   }

@@ -1,39 +1,39 @@
 
 Widget _buildScrollGridActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '多行滚动宫格',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      TActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: TActionSheetTheme.grid,
         count: 8,
         scrollable: true,
         items: [
           ..._gridItems,
-          TDActionSheetItem(
+          TActionSheetItem(
             label: '安卓',
-            icon: const IconWithBackground(icon: TDIcons.logo_android),
+            icon: const IconWithBackground(icon: TIcons.logo_android),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: 'Apple',
-            icon: const IconWithBackground(icon: TDIcons.logo_apple),
+            icon: const IconWithBackground(icon: TIcons.logo_apple),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: 'Chrome',
-            icon: const IconWithBackground(icon: TDIcons.logo_chrome),
+            icon: const IconWithBackground(icon: TIcons.logo_chrome),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: 'Github',
-            icon: const IconWithBackground(icon: TDIcons.logo_github),
+            icon: const IconWithBackground(icon: TIcons.logo_github),
           ),
-          TDActionSheetItem(
+          TActionSheetItem(
             label: 'Twitter',
-            icon: const IconWithBackground(icon: TDIcons.logo_twitter),
+            icon: const IconWithBackground(icon: TIcons.logo_twitter),
           ),
         ],
       );

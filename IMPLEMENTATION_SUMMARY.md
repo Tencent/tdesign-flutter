@@ -20,11 +20,11 @@
 
 #### 新增文件：
 1. **`lib/src/components/calendar/td_lunar_date.dart`**
-   - `TDLunarInfo` 类：农历日期信息模型
-   - `TDCalendarDateType` 枚举：日历类型（solar/lunar）
+   - `TLunarInfo` 类：农历日期信息模型
+   - `TCalendarDateType` 枚举：日历类型（solar/lunar）
 
 2. **`lib/src/components/calendar/td_calendar_data_source.dart`**
-   - `TDCalendarDataSource` 抽象接口
+   - `TCalendarDataSource` 抽象接口
    - 提供农历转换、格式化等方法
 
 #### 修改文件：
@@ -46,10 +46,10 @@
 **文件：** `test/td_calendar_lunar_test.dart`
 
 **覆盖范围：**
-- ✅ TDLunarInfo 模型创建和属性
+- ✅ TLunarInfo 模型创建和属性
 - ✅ 闰月处理
 - ✅ 对象比较和 hashCode
-- ✅ TDCalendarDataSource 格式化方法
+- ✅ TCalendarDataSource 格式化方法
 - ✅ TDate 与农历信息集成
 
 **测试结果：** 8/8 通过 ✅
@@ -82,24 +82,24 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `dateType` | `TDCalendarDateType` | `TDCalendarDateType.solar` | 日历显示类型（阳历/农历） |
-| `dataSource` | `TDCalendarDataSource?` | `null` | 外部数据源，提供农历转换 |
+| `dateType` | `TCalendarDateType` | `TCalendarDateType.solar` | 日历显示类型（阳历/农历） |
+| `dataSource` | `TCalendarDataSource?` | `null` | 外部数据源，提供农历转换 |
 | `showLunarInfo` | `bool` | `false` | 阳历模式下是否显示农历副标题 |
 
 ### 核心类
 
 ```dart
 // 农历信息模型
-class TDLunarInfo {
+class TLunarInfo {
   final int year, month, day;
   final bool isLeapMonth;
   final String yearText, monthText, dayText;
 }
 
 // 数据源接口（开发者实现）
-abstract class TDCalendarDataSource {
-  TDLunarInfo? getLunarInfo(DateTime solarDate);
-  String formatDate(DateTime date, TDCalendarDateType type, [TDLunarInfo? lunarInfo]);
+abstract class TCalendarDataSource {
+  TLunarInfo? getLunarInfo(DateTime solarDate);
+  String formatDate(DateTime date, TCalendarDateType type, [TLunarInfo? lunarInfo]);
   // ... 其他可选方法
 }
 ```
@@ -108,7 +108,7 @@ abstract class TDCalendarDataSource {
 
 ### 基础用法（向后兼容）
 ```dart
-TDCalendar(
+TCalendar(
   type: CalendarType.single,
   onChange: (dates) { },
 )
@@ -116,8 +116,8 @@ TDCalendar(
 
 ### 农历模式
 ```dart
-TDCalendar(
-  dateType: TDCalendarDateType.lunar,
+TCalendar(
+  dateType: TCalendarDateType.lunar,
   dataSource: MyLunarDataSource(),
   onChange: (dates) { },
 )
@@ -125,8 +125,8 @@ TDCalendar(
 
 ### 阳历+农历副标题
 ```dart
-TDCalendar(
-  dateType: TDCalendarDateType.solar,
+TCalendar(
+  dateType: TCalendarDateType.solar,
   dataSource: MyLunarDataSource(),
   showLunarInfo: true,
 )

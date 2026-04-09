@@ -2,7 +2,7 @@
   Widget _basicTypeOptional(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           controller: controller[2],
           hintText: '请输入文字(选填)',

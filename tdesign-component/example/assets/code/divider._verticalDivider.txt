@@ -3,6 +3,6 @@
     return Container(
       height: 20,
       alignment: Alignment.center,
-      child: const TDDivider(),
+      child: const TDivider(),
     );
   }

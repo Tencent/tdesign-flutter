@@ -1,11 +1,11 @@
 
   Widget _buildWithInitialIndexes(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择地区',
       note: _selected_1.isEmpty ? '请选择' : _selected_1,
       arrow: true,
       onClick: (click) {
-        TDCascader.showMultiCascader(
+        TCascader.showMultiCascader(
           context,
           title: '选择地址',
           data: _data,

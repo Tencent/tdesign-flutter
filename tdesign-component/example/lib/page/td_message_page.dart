@@ -3,8 +3,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDMessagePage extends StatelessWidget {
-  const TDMessagePage({super.key});
+class TMessagePage extends StatelessWidget {
+  const TMessagePage({super.key});
 
   final _commonContent = '这是一条普通的通知信息';
   final longContent = '这是一条普通的通知信息看，这是一条普通的通知信息，这是一条普通的通知信息';
@@ -34,14 +34,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildPlainTextMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
       isBlock: true,
       text: '纯文字的通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
-        TDMessage.showMessage(
+        TMessage.showMessage(
           context: context,
           content: _commonContent,
           visible: true,
@@ -58,14 +58,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildIconTextMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
         isBlock: true,
         text: '带图标的通知',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
-          TDMessage.showMessage(
+          TMessage.showMessage(
             context: context,
             content: _commonContent,
             visible: true,
@@ -78,14 +78,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildMessageWithCloseButton(BuildContext context) {
-    return TDButton(
+    return TButton(
         isBlock: true,
         text: '带关闭的通知',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
-          TDMessage.showMessage(
+          TMessage.showMessage(
             context: context,
             visible: true,
             icon: true,
@@ -103,14 +103,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildRollingMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
         isBlock: true,
         text: '可滚动的通知',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
-          TDMessage.showMessage(
+          TMessage.showMessage(
               context: context,
               visible: true,
               icon: false,
@@ -126,14 +126,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildLinkMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
         isBlock: true,
         text: '带按钮的通知',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
-          TDMessage.showMessage(
+          TMessage.showMessage(
               context: context,
               visible: true,
               icon: true,
@@ -152,14 +152,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildInfoMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
       isBlock: true,
       text: '普通通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
-        TDMessage.showMessage(
+        TMessage.showMessage(
           context: context,
           visible: true,
           icon: true,
@@ -173,14 +173,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildSuccessMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
       isBlock: true,
       text: '成功通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
-        TDMessage.showMessage(
+        TMessage.showMessage(
           context: context,
           visible: true,
           icon: true,
@@ -194,14 +194,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildWarningMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
         isBlock: true,
         text: '警示通知',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
-          TDMessage.showMessage(
+          TMessage.showMessage(
             context: context,
             visible: true,
             icon: true,
@@ -214,14 +214,14 @@ class TDMessagePage extends StatelessWidget {
 
   @Demo(group: 'message')
   Widget _buildErrorMessage(BuildContext context) {
-    return TDButton(
+    return TButton(
         isBlock: true,
         text: '错误通知',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
-          TDMessage.showMessage(
+          TMessage.showMessage(
             context: context,
             visible: true,
             icon: true,

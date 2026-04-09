@@ -1,25 +1,25 @@
 
   Widget _customContentAndBtn(BuildContext context) {
-    return TDButton(
+    return TButton(
         text: '自定义边距和按钮',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
           showGeneralDialog(
               context: context,
               pageBuilder: (BuildContext buildContext,
                   Animation<double> animation,
                   Animation<double> secondaryAnimation) {
-                return TDConfirmDialog(
+                return TConfirmDialog(
                   title: _dialogTitle,
                   content: _commonContent,
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                   buttonWidget: Container(
                     padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                    child: TDButton(
+                    child: TButton(
                       text: '自定义按钮',
-                      theme: TDButtonTheme.primary,
+                      theme: TButtonTheme.primary,
                       onTap: () {
                         Navigator.of(context).pop();
                       },

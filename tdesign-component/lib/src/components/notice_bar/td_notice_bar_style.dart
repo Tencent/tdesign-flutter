@@ -6,7 +6,7 @@ import '../../theme/td_theme.dart';
 import 'td_notice_bar.dart';
 
 /// 公告栏类型
-enum TDNoticeBarType {
+enum TNoticeBarType {
   /// 静止（默认）
   none,
 
@@ -18,7 +18,7 @@ enum TDNoticeBarType {
 }
 
 /// 公告栏主题
-enum TDNoticeBarTheme {
+enum TNoticeBarTheme {
   /// 信息（默认）
   info,
 
@@ -33,8 +33,8 @@ enum TDNoticeBarTheme {
 }
 
 /// 公告栏样式
-class TDNoticeBarStyle {
-  TDNoticeBarStyle({
+class TNoticeBarStyle {
+  TNoticeBarStyle({
     this.context,
     this.backgroundColor,
     this.textStyle,
@@ -67,35 +67,35 @@ class TDNoticeBarStyle {
       const EdgeInsets.only(top: 13, bottom: 13, left: 16, right: 12);
 
   /// 根据主题生成样式
-  TDNoticeBarStyle.generateTheme(
+  TNoticeBarStyle.generateTheme(
     BuildContext context, {
-    TDNoticeBarTheme? theme = TDNoticeBarTheme.info,
+    TNoticeBarTheme? theme = TNoticeBarTheme.info,
   }) {
-    rightIconColor = TDTheme.of(context).textColorPlaceholder;
+    rightIconColor = TTheme.of(context).textColorPlaceholder;
     textStyle = textStyle ??
         TextStyle(
-          color: TDTheme.of(context).textColorPrimary,
-          fontSize: TDTheme.of(context).fontBodyMedium?.size,
-          height: TDTheme.of(context).fontBodyMedium?.height,
+          color: TTheme.of(context).textColorPrimary,
+          fontSize: TTheme.of(context).fontBodyMedium?.size,
+          height: TTheme.of(context).fontBodyMedium?.height,
           fontWeight: FontWeight.normal,
           fontStyle: FontStyle.normal,
         );
     switch (theme) {
-      case TDNoticeBarTheme.warning:
-        leftIconColor = TDTheme.of(context).warningNormalColor;
-        backgroundColor = TDTheme.of(context).warningLightColor;
+      case TNoticeBarTheme.warning:
+        leftIconColor = TTheme.of(context).warningNormalColor;
+        backgroundColor = TTheme.of(context).warningLightColor;
         break;
-      case TDNoticeBarTheme.error:
-        leftIconColor = TDTheme.of(context).errorNormalColor;
-        backgroundColor = TDTheme.of(context).errorLightColor;
+      case TNoticeBarTheme.error:
+        leftIconColor = TTheme.of(context).errorNormalColor;
+        backgroundColor = TTheme.of(context).errorLightColor;
         break;
-      case TDNoticeBarTheme.success:
-        leftIconColor = TDTheme.of(context).successNormalColor;
-        backgroundColor = TDTheme.of(context).successLightColor;
+      case TNoticeBarTheme.success:
+        leftIconColor = TTheme.of(context).successNormalColor;
+        backgroundColor = TTheme.of(context).successLightColor;
         break;
       default:
-        leftIconColor = TDTheme.of(context).brandNormalColor;
-        backgroundColor = TDTheme.of(context).brandLightColor;
+        leftIconColor = TTheme.of(context).brandNormalColor;
+        backgroundColor = TTheme.of(context).brandLightColor;
         break;
     }
   }

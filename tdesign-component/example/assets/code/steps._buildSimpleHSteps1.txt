@@ -1,12 +1,12 @@
 
   Widget _buildSimpleHSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 0,
       // 简略模式
       simple: true,

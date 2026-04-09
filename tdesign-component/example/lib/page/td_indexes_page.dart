@@ -103,13 +103,13 @@ const _list = [
   },
 ];
 
-class TDIndexesPage extends StatelessWidget {
-  const TDIndexesPage({super.key});
+class TIndexesPage extends StatelessWidget {
+  const TIndexesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).grayColor2,
+        color: TTheme.of(context).grayColor2,
         child: ExamplePage(
           title: tdTitle(context),
           desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
@@ -150,27 +150,27 @@ class TDIndexesPage extends StatelessWidget {
 Widget _buildSimple(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
-  return TDButton(
+  return TButton(
     text: '基础用法',
     isBlock: true,
-    size: TDButtonSize.large,
-    theme: TDButtonTheme.primary,
-    type: TDButtonType.outline,
+    size: TButtonSize.large,
+    theme: TButtonTheme.primary,
+    type: TButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
-        TDSlidePopupRoute(
+        TSlidePopupRoute(
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return TDIndexes(
+            return TIndexes(
               indexList: indexList,
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
-                return TDCellGroup(
+                return TCellGroup(
                   cells: list
-                      .map((e) => TDCell(
+                      .map((e) => TCell(
                             title: e,
                           ))
                       .toList(),
@@ -188,28 +188,28 @@ Widget _buildSimple(BuildContext context) {
 Widget _buildOther(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
-  return TDButton(
+  return TButton(
     text: '胶囊索引',
     isBlock: true,
-    size: TDButtonSize.large,
-    theme: TDButtonTheme.primary,
-    type: TDButtonType.outline,
+    size: TButtonSize.large,
+    theme: TButtonTheme.primary,
+    type: TButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
-        TDSlidePopupRoute(
+        TSlidePopupRoute(
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return TDIndexes(
+            return TIndexes(
               indexList: indexList,
               capsuleTheme: true,
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
-                return TDCellGroup(
+                return TCellGroup(
                   cells: list
-                      .map((e) => TDCell(
+                      .map((e) => TCell(
                             title: e,
                           ))
                       .toList(),
@@ -227,35 +227,35 @@ Widget _buildOther(BuildContext context) {
 Widget _buildCustomIndexes(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
-  return TDButton(
+  return TButton(
     text: '自定义索引',
     isBlock: true,
-    size: TDButtonSize.large,
-    theme: TDButtonTheme.primary,
-    type: TDButtonType.outline,
+    size: TButtonSize.large,
+    theme: TButtonTheme.primary,
+    type: TButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
-        TDSlidePopupRoute(
+        TSlidePopupRoute(
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return TDIndexes(
+            return TIndexes(
               indexList: indexList,
               builderIndex: (context, index, isActive) {
-                return TDText(
+                return TText(
                   '自定义 ${index}',
                   textColor: isActive
-                      ? TDTheme.of(context).brandNormalColor
-                      : TDTheme.of(context).textColorPrimary,
+                      ? TTheme.of(context).brandNormalColor
+                      : TTheme.of(context).textColorPrimary,
                 );
               },
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
-                return TDCellGroup(
+                return TCellGroup(
                   cells: list
-                      .map((e) => TDCell(
+                      .map((e) => TCell(
                             title: e,
                           ))
                       .toList(),

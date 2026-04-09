@@ -36,8 +36,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildForm(BuildContext context) {
-    final theme = TDTheme.of(context);
-    return TDForm(
+    final theme = TTheme.of(context);
+    return TForm(
         formController: _formController,
         disabled: _formDisableState,
         data: _formData,
@@ -50,10 +50,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         formShowErrorMessage: true,
         onSubmit: onSubmit,
         items: [
-          TDFormItem(
+          TFormItem(
             label: '用户名',
             name: 'name',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             help: '请输入用户名',
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['name'],
@@ -61,17 +61,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             /// 控制单个 item 是否展示错误提醒
             showErrorMessage: true,
             requiredMark: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入用户名',
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: TDTheme.of(context).textColorPlaceholder,
+                    color: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
                 controller: _controller[0],
-                additionInfoColor: TDTheme.of(context).errorColor6,
+                additionInfoColor: TTheme.of(context).errorColor6,
                 showBottomDivider: false,
                 readOnly: _formDisableState,
                 onChanged: (val) {
@@ -82,23 +82,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   _formItemNotifier['name']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '密码',
             name: 'password',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入密码',
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: TDTheme.of(context).textColorPlaceholder,
+                    color: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
-                type: TDInputType.normal,
+                type: TInputType.normal,
                 controller: _controller[1],
                 obscureText: !browseOn,
                 needClear: false,
@@ -112,22 +112,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   _formItemNotifier['password']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '性别',
             name: 'gender',
-            type: TDFormItemType.radios,
+            type: TFormItemType.radios,
             labelWidth: 82.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
-            child: TDRadioGroup(
+            child: TRadioGroup(
               spacing: 0,
               direction: Axis.horizontal,
               controller: _genderCheckboxGroupController,
               directionalTdRadios: _radios.entries.map((entry) {
-                return TDRadio(
+                return TRadio(
                   id: entry.key,
                   title: entry.value,
-                  radioStyle: TDRadioStyle.circle,
+                  radioStyle: TRadioStyle.circle,
                   showDivider: false,
                   spacing: 4,
                   checkBoxLeftSpace: 0,
@@ -143,11 +143,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               },
             ),
           ),
-          TDFormItem(
+          TFormItem(
             label: '生日',
             name: 'birth',
             labelWidth: 82.0,
-            type: TDFormItemType.dateTimePicker,
+            type: TFormItemType.dateTimePicker,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
@@ -157,7 +157,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               if (_formDisableState) {
                 return;
               }
-              TDPicker.showDatePicker(context, title: '选择时间',
+              TPicker.showDatePicker(context, title: '选择时间',
                   onConfirm: (selected) {
                 setState(() {
                   _selected_1 =
@@ -171,10 +171,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   initialDate: [2012, 1, 1]);
             },
           ),
-          TDFormItem(
+          TFormItem(
             label: '籍贯',
             name: 'place',
-            type: TDFormItemType.cascader,
+            type: TFormItemType.cascader,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
@@ -185,7 +185,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               if (_formDisableState) {
                 return;
               }
-              TDCascader.showMultiCascader(context,
+              TCascader.showMultiCascader(context,
                   title: '选择地址',
                   data: _data,
                   initialData: _initLocalData,
@@ -206,16 +206,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               });
             },
           ),
-          TDFormItem(
+          TFormItem(
               label: '年限',
               name: 'age',
               labelWidth: 82.0,
-              type: TDFormItemType.stepper,
+              type: TFormItemType.stepper,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
                 padding: const EdgeInsets.only(right: 18),
-                child: TDStepper(
-                  theme: TDStepperTheme.filled,
+                child: TStepper(
+                  theme: TStepperTheme.filled,
                   disabled: _formDisableState,
                   eventController: _stepController!,
                   value: int.parse(_formData['age']),
@@ -224,18 +224,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
             label: '自我评价',
             name: 'description',
             tipAlign: TextAlign.left,
-            type: TDFormItemType.rate,
+            type: TFormItemType.rate,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['description'],
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                   padding: const EdgeInsets.only(right: 18),
-                  child: TDRate(
+                  child: TRate(
                     count: 5,
                     value: double.parse(_formData['description']),
                     allowHalf: false,
@@ -249,22 +249,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   )),
             ),
           ),
-          TDFormItem(
+          TFormItem(
               label: '个人简介',
               labelWidth: 82.0,
               name: 'resume',
-              type: TDFormItemType.textarea,
+              type: TFormItemType.textarea,
               formItemNotifier: _formItemNotifier['resume'],
               child: Padding(
                 padding:
                     EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
-                child: TDTextarea(
+                child: TTextarea(
                   backgroundColor: Colors.red,
                   hintText: '请输入个人简介',
                   maxLength: 500,
                   indicator: true,
                   readOnly: _formDisableState,
-                  layout: TDTextareaLayout.vertical,
+                  layout: TTextareaLayout.vertical,
                   controller: _controller[2],
                   showBottomDivider: false,
                   onChanged: (value) {
@@ -272,15 +272,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
               label: '上传图片',
               name: 'photo',
               labelWidth: 82.0,
-              type: TDFormItemType.upLoadImg,
+              type: TFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
                 padding: EdgeInsets.only(top: 4, bottom: 4),
-                child: TDUpload(
+                child: TUpload(
                   files: files,
                   multiple: true,
                   max: 6,
@@ -307,12 +307,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               child: Row(
                 children: [
                   Expanded(
-                      child: TDButton(
+                      child: TButton(
                     text: '重置',
-                    size: TDButtonSize.large,
-                    type: TDButtonType.fill,
-                    theme: TDButtonTheme.light,
-                    shape: TDButtonShape.rectangle,
+                    size: TButtonSize.large,
+                    type: TButtonType.fill,
+                    theme: TButtonTheme.light,
+                    shape: TButtonShape.rectangle,
                     disabled: _formDisableState,
                     onTap: () {
                       //用户名称
@@ -328,7 +328,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                       //籍贯
                       _selected_2 = '';
                       //年限
-                      _stepController.add(TDStepperEventType.cleanValue);
+                      _stepController.add(TStepperEventType.cleanValue);
                       //上传图片
                       files.clear();
                       _formData = {
@@ -353,12 +353,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     width: 20,
                   ),
                   Expanded(
-                      child: TDButton(
+                      child: TButton(
                           text: '提交',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          theme: TDButtonTheme.primary,
-                          shape: TDButtonShape.rectangle,
+                          size: TButtonSize.large,
+                          type: TButtonType.fill,
+                          theme: TButtonTheme.primary,
+                          shape: TButtonShape.rectangle,
                           onTap: _onSubmit,
                           disabled: _formDisableState)),
                 ],
@@ -376,8 +376,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildForm(BuildContext context) {
-    final theme = TDTheme.of(context);
-    return TDForm(
+    final theme = TTheme.of(context);
+    return TForm(
         formController: _formController,
         disabled: _formDisableState,
         data: _formData,
@@ -390,10 +390,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         formShowErrorMessage: true,
         onSubmit: onSubmit,
         items: [
-          TDFormItem(
+          TFormItem(
             label: '用户名',
             name: 'name',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             help: '请输入用户名',
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['name'],
@@ -401,17 +401,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             /// 控制单个 item 是否展示错误提醒
             showErrorMessage: true,
             requiredMark: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入用户名',
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: TDTheme.of(context).textColorPlaceholder,
+                    color: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
                 controller: _controller[0],
-                additionInfoColor: TDTheme.of(context).errorColor6,
+                additionInfoColor: TTheme.of(context).errorColor6,
                 showBottomDivider: false,
                 readOnly: _formDisableState,
                 onChanged: (val) {
@@ -422,23 +422,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   _formItemNotifier['name']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '密码',
             name: 'password',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入密码',
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: TDTheme.of(context).textColorPlaceholder,
+                    color: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
-                type: TDInputType.normal,
+                type: TInputType.normal,
                 controller: _controller[1],
                 obscureText: !browseOn,
                 needClear: false,
@@ -452,22 +452,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   _formItemNotifier['password']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '性别',
             name: 'gender',
-            type: TDFormItemType.radios,
+            type: TFormItemType.radios,
             labelWidth: 82.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
-            child: TDRadioGroup(
+            child: TRadioGroup(
               spacing: 0,
               direction: Axis.horizontal,
               controller: _genderCheckboxGroupController,
               directionalTdRadios: _radios.entries.map((entry) {
-                return TDRadio(
+                return TRadio(
                   id: entry.key,
                   title: entry.value,
-                  radioStyle: TDRadioStyle.circle,
+                  radioStyle: TRadioStyle.circle,
                   showDivider: false,
                   spacing: 4,
                   checkBoxLeftSpace: 0,
@@ -483,11 +483,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               },
             ),
           ),
-          TDFormItem(
+          TFormItem(
             label: '生日',
             name: 'birth',
             labelWidth: 82.0,
-            type: TDFormItemType.dateTimePicker,
+            type: TFormItemType.dateTimePicker,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
@@ -497,7 +497,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               if (_formDisableState) {
                 return;
               }
-              TDPicker.showDatePicker(context, title: '选择时间',
+              TPicker.showDatePicker(context, title: '选择时间',
                   onConfirm: (selected) {
                 setState(() {
                   _selected_1 =
@@ -511,10 +511,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   initialDate: [2012, 1, 1]);
             },
           ),
-          TDFormItem(
+          TFormItem(
             label: '籍贯',
             name: 'place',
-            type: TDFormItemType.cascader,
+            type: TFormItemType.cascader,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
@@ -525,7 +525,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               if (_formDisableState) {
                 return;
               }
-              TDCascader.showMultiCascader(context,
+              TCascader.showMultiCascader(context,
                   title: '选择地址',
                   data: _data,
                   initialData: _initLocalData,
@@ -546,16 +546,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               });
             },
           ),
-          TDFormItem(
+          TFormItem(
               label: '年限',
               name: 'age',
               labelWidth: 82.0,
-              type: TDFormItemType.stepper,
+              type: TFormItemType.stepper,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
                 padding: const EdgeInsets.only(right: 18),
-                child: TDStepper(
-                  theme: TDStepperTheme.filled,
+                child: TStepper(
+                  theme: TStepperTheme.filled,
                   disabled: _formDisableState,
                   eventController: _stepController!,
                   value: int.parse(_formData['age']),
@@ -564,18 +564,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
             label: '自我评价',
             name: 'description',
             tipAlign: TextAlign.left,
-            type: TDFormItemType.rate,
+            type: TFormItemType.rate,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['description'],
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                   padding: const EdgeInsets.only(right: 18),
-                  child: TDRate(
+                  child: TRate(
                     count: 5,
                     value: double.parse(_formData['description']),
                     allowHalf: false,
@@ -589,22 +589,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   )),
             ),
           ),
-          TDFormItem(
+          TFormItem(
               label: '个人简介',
               labelWidth: 82.0,
               name: 'resume',
-              type: TDFormItemType.textarea,
+              type: TFormItemType.textarea,
               formItemNotifier: _formItemNotifier['resume'],
               child: Padding(
                 padding:
                     EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
-                child: TDTextarea(
+                child: TTextarea(
                   backgroundColor: Colors.red,
                   hintText: '请输入个人简介',
                   maxLength: 500,
                   indicator: true,
                   readOnly: _formDisableState,
-                  layout: TDTextareaLayout.vertical,
+                  layout: TTextareaLayout.vertical,
                   controller: _controller[2],
                   showBottomDivider: false,
                   onChanged: (value) {
@@ -612,15 +612,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
               label: '上传图片',
               name: 'photo',
               labelWidth: 82.0,
-              type: TDFormItemType.upLoadImg,
+              type: TFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
                 padding: EdgeInsets.only(top: 4, bottom: 4),
-                child: TDUpload(
+                child: TUpload(
                   files: files,
                   multiple: true,
                   max: 6,
@@ -647,12 +647,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               child: Row(
                 children: [
                   Expanded(
-                      child: TDButton(
+                      child: TButton(
                     text: '重置',
-                    size: TDButtonSize.large,
-                    type: TDButtonType.fill,
-                    theme: TDButtonTheme.light,
-                    shape: TDButtonShape.rectangle,
+                    size: TButtonSize.large,
+                    type: TButtonType.fill,
+                    theme: TButtonTheme.light,
+                    shape: TButtonShape.rectangle,
                     disabled: _formDisableState,
                     onTap: () {
                       //用户名称
@@ -668,7 +668,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                       //籍贯
                       _selected_2 = '';
                       //年限
-                      _stepController.add(TDStepperEventType.cleanValue);
+                      _stepController.add(TStepperEventType.cleanValue);
                       //上传图片
                       files.clear();
                       _formData = {
@@ -693,12 +693,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     width: 20,
                   ),
                   Expanded(
-                      child: TDButton(
+                      child: TButton(
                           text: '提交',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          theme: TDButtonTheme.primary,
-                          shape: TDButtonShape.rectangle,
+                          size: TButtonSize.large,
+                          type: TButtonType.fill,
+                          theme: TButtonTheme.primary,
+                          shape: TButtonShape.rectangle,
                           onTap: _onSubmit,
                           disabled: _formDisableState)),
                 ],
@@ -711,7 +711,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDForm
+### TForm
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -726,46 +726,46 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | formLabelAlign | TextAlign? | TextAlign.left | 表单字段标签的对齐方式： |
 | formShowErrorMessage | bool? | true | 校验不通过时，是否显示错误提示信息，统一控制全部表单项 |
 | isHorizontal | bool | true | 表单排列方式是否为 水平方向 |
-| items | List<TDFormItem> | - | 表单内容 items |
+| items | List<TFormItem> | - | 表单内容 items |
 | key |  | - |  |
 | labelWidth | double? | 20.0 | 可以整体设置 label 标签宽度 |
 | onReset | Function? | - | 表单重置时触发 |
 | onSubmit | Function | - | 表单提交时触发 |
 | preventSubmitDefault | bool? | true | 是否阻止表单提交默认事件（表单提交默认事件会刷新页面） |
 | requiredMark | bool? | true | 是否显示必填符号（*），默认显示 |
-| rules | Map<String, TDFormValidation> | - | 整个表单字段校验规则 |
+| rules | Map<String, TFormValidation> | - | 整个表单字段校验规则 |
 | scrollToFirstError | String? | - | 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。 |
 | submitWithWarningMessage | bool? | false | 【讨论中】当校验结果只有告警信息时，是否触发 submit 提交事件 |
 
 ```
 ```
 
-### TDFormValidation
+### TFormValidation
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | errorMessage | String | - | 错误提示信息 |
-| type | TDFormItemType | - | 校验对象的类型 |
+| type | TFormItemType | - | 校验对象的类型 |
 | validate | String? Function(dynamic) | - | 校验方法 |
 
 ```
 ```
 
-### TDFormItem
+### TFormItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| additionInfo | String? | - | TDInput的辅助信息 |
+| additionInfo | String? | - | TInput的辅助信息 |
 | backgroundColor | Color? | - | 背景色 |
 | child | Widget? | - | 表单子组件 |
 | contentAlign | TextAlign? | - | 表单显示内容对齐方式： |
 | formItemNotifier |  | - |  |
-| formRules | List<TDFormValidation>? | - | 整个表单的校验规则 |
-| help | String? | - | TDInput 默认显示文字 |
+| formRules | List<TFormValidation>? | - | 整个表单的校验规则 |
+| help | String? | - | TInput 默认显示文字 |
 | hintText | null | '' | 提示内容 |
-| indicator | bool? | - | TDTextarea 的属性，指示器 |
+| indicator | bool? | - | TTextarea 的属性，指示器 |
 | itemRule | List? | - | 表单项验证规则 |
 | key |  | - |  |
 | label | String? | - | 表单项标签左侧展示的内容 |
@@ -779,7 +779,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
 | showErrorMessage | bool | true | 是否显示错误信息 |
 | tipAlign | TextAlign? | - | 组件提示内容对齐方式 |
-| type | TDFormItemType | - | 表格单元需要使用的组件类型 |
+| type | TFormItemType | - | 表格单元需要使用的组件类型 |
 
 
   

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDSideBarItem {
-  const TDSideBarItem({
+class TSideBarItem {
+  const TSideBarItem({
     Key? key,
     this.badge,
     this.disabled = false,
@@ -16,7 +16,7 @@ class TDSideBarItem {
   });
 
   /// 徽标
-  final TDBadge? badge;
+  final TBadge? badge;
 
   /// 是否禁用
   final bool disabled;

@@ -10,17 +10,17 @@
             alignment: Alignment.bottomLeft,
             children: [
               Container(
-                child: const Icon(TDIcons.notification),
+                child: const Icon(TIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TTheme.of(context).grayColor2,
                     borderRadius: BorderRadius.circular(
-                        TDTheme.of(context).radiusDefault)),
+                        TTheme.of(context).radiusDefault)),
                 height: 48,
                 width: 48,
               ),
               const Positioned(
-                child: TDBadge(
-                  TDBadgeType.message,
+                child: TBadge(
+                  TBadgeType.message,
                   count: '8',
                 ),
                 right: 0,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 计时组件计时方向
-enum TDTimeCounterDirection {
+enum TTimeCounterDirection {
   /// 倒计时
   down,
 
@@ -11,7 +11,7 @@ enum TDTimeCounterDirection {
 }
 
 /// 计时组件尺寸
-enum TDTimeCounterSize {
+enum TTimeCounterSize {
   /// 小
   small,
 
@@ -23,7 +23,7 @@ enum TDTimeCounterSize {
 }
 
 /// 计时组件风格
-enum TDTimeCounterTheme {
+enum TTimeCounterTheme {
   /// 默认
   defaultTheme,
 
@@ -35,8 +35,8 @@ enum TDTimeCounterTheme {
 }
 
 /// 计时组件样式
-class TDTimeCounterStyle {
-  TDTimeCounterStyle({
+class TTimeCounterStyle {
+  TTimeCounterStyle({
     this.timeWidth,
     this.timeHeight,
     this.timePadding,
@@ -100,88 +100,88 @@ class TDTimeCounterStyle {
   double? space;
 
   /// 生成默认样式
-  TDTimeCounterStyle.generateStyle(
+  TTimeCounterStyle.generateStyle(
     BuildContext context, {
-    TDTimeCounterSize? size,
-    TDTimeCounterTheme? theme,
+    TTimeCounterSize? size,
+    TTimeCounterTheme? theme,
     bool? splitWithUnit,
   }) {
-    timeFontFamily = TDTheme.defaultData().numberFontFamily;
+    timeFontFamily = TTheme.defaultData().numberFontFamily;
     late Font? font;
-    switch (size ?? TDTimeCounterSize.medium) {
-      case TDTimeCounterSize.small:
-        if (theme == TDTimeCounterTheme.defaultTheme) {
+    switch (size ?? TTimeCounterSize.medium) {
+      case TTimeCounterSize.small:
+        if (theme == TTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
-          font = TDTheme.of(context).fontBodyMedium;
+          font = TTheme.of(context).fontBodyMedium;
           timeFontSize = splitFontSize = font?.size ?? 14;
           timeFontHeight =
               splitFontHeight = font?.height ?? (22 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 20;
-          font = TDTheme.of(context).fontBodySmall;
+          font = TTheme.of(context).fontBodySmall;
           timeFontSize = splitFontSize = font?.size ?? 12;
           timeFontHeight = splitFontHeight = null;
         }
-        space = TDTheme.of(context).spacer4 / 2;
+        space = TTheme.of(context).spacer4 / 2;
         break;
-      case TDTimeCounterSize.medium:
-        if (theme == TDTimeCounterTheme.defaultTheme) {
+      case TTimeCounterSize.medium:
+        if (theme == TTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
-          font = TDTheme.of(context).fontBodyLarge;
+          font = TTheme.of(context).fontBodyLarge;
           timeFontSize = splitFontSize = font?.size ?? 16;
           timeFontHeight =
               splitFontHeight = font?.height ?? (24 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 24;
-          font = TDTheme.of(context).fontBodyMedium;
+          font = TTheme.of(context).fontBodyMedium;
           timeFontSize = splitFontSize = font?.size ?? 14;
           timeFontHeight = splitFontHeight = null;
         }
-        space = TDTheme.of(context).spacer8 / 2;
+        space = TTheme.of(context).spacer8 / 2;
         break;
-      case TDTimeCounterSize.large:
-        if (theme == TDTimeCounterTheme.defaultTheme) {
+      case TTimeCounterSize.large:
+        if (theme == TTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
-          font = TDTheme.of(context).fontBodyExtraLarge;
+          font = TTheme.of(context).fontBodyExtraLarge;
           timeFontSize = splitFontSize = font?.size ?? 18;
           timeFontHeight =
               splitFontHeight = font?.height ?? (26 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 28;
-          font = TDTheme.of(context).fontBodyLarge;
+          font = TTheme.of(context).fontBodyLarge;
           timeFontSize = splitFontSize = font?.size ?? 16;
           timeFontHeight = splitFontHeight = null;
         }
-        space = TDTheme.of(context).spacer12 / 2;
+        space = TTheme.of(context).spacer12 / 2;
     }
 
-    switch (theme ?? TDTimeCounterTheme.defaultTheme) {
-      case TDTimeCounterTheme.round:
+    switch (theme ?? TTimeCounterTheme.defaultTheme) {
+      case TTimeCounterTheme.round:
         timeBox = BoxDecoration(
           shape: BoxShape.circle,
-          color: TDTheme.of(context).errorNormalColor,
+          color: TTheme.of(context).errorNormalColor,
         );
-        timeColor = TDTheme.of(context).textColorAnti;
-        splitColor = TDTheme.of(context).errorNormalColor;
+        timeColor = TTheme.of(context).textColorAnti;
+        splitColor = TTheme.of(context).errorNormalColor;
         break;
-      case TDTimeCounterTheme.square:
+      case TTimeCounterTheme.square:
         timeBox = BoxDecoration(
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
-          color: TDTheme.of(context).errorNormalColor,
+          borderRadius: BorderRadius.circular(TTheme.of(context).radiusSmall),
+          color: TTheme.of(context).errorNormalColor,
         );
-        timeColor = TDTheme.of(context).textColorAnti;
-        splitColor = TDTheme.of(context).errorNormalColor;
+        timeColor = TTheme.of(context).textColorAnti;
+        splitColor = TTheme.of(context).errorNormalColor;
         break;
-      case TDTimeCounterTheme.defaultTheme:
+      case TTimeCounterTheme.defaultTheme:
         timeBox = null;
-        timeColor = splitColor = TDTheme.of(context).textColorPrimary;
+        timeColor = splitColor = TTheme.of(context).textColorPrimary;
         timeWidth = null;
         timeHeight = null;
     }
 
     if (splitWithUnit ?? false) {
-      splitColor = TDTheme.of(context).textColorPrimary;
+      splitColor = TTheme.of(context).textColorPrimary;
     }
   }
 }

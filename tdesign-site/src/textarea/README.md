@@ -26,7 +26,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _basicType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[0],
       hintText: '请输入文字',
       maxLines: 4,
@@ -46,7 +46,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _basicTypeByTitle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[1],
       label: '标签文字',
       hintText: '请输入文字',
@@ -65,7 +65,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _autoHeightType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[2],
       hintText: '请输入文字',
       minLines: 1,
@@ -82,7 +82,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _maxLengthType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[3],
       label: '标签文字',
       hintText: '请输入文字',
@@ -104,7 +104,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _disabledState(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[4],
       label: '标签文字',
       hintText: '不可编辑文字',
@@ -125,7 +125,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _verticalStyle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[5],
       label: '标签文字',
       hintText: '请输入文字',
@@ -133,7 +133,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
+      layout: TTextareaLayout.vertical,
       onChanged: (value) {},
     );
   }</pre>
@@ -147,7 +147,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _cardStyle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[6],
       label: '标签文字',
       hintText: '请输入文字',
@@ -156,13 +156,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       maxLength: 500,
       indicator: true,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
       ),
       margin: EdgeInsets.only(
-          right: TDTheme.of(context).spacer16,
-          left: TDTheme.of(context).spacer16),
+          right: TTheme.of(context).spacer16,
+          left: TTheme.of(context).spacer16),
       onChanged: (value) {},
     );
   }</pre>
@@ -177,7 +177,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _extensionStyle(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[7],
       label: '标签文字',
       hintText: '请输入文字',
@@ -185,7 +185,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
+      layout: TTextareaLayout.vertical,
       bordered: true,
       onChanged: (value) {},
     );
@@ -200,14 +200,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _setLabel(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[9],
       label: '地址信息',
       // labelWidth: 100,
       labelIcon: Icon(
-        TDIcons.location,
+        TIcons.location,
         size: 20,
-        color: TDTheme.of(context).textColorPrimary,
+        color: TTheme.of(context).textColorPrimary,
       ),
       hintText: '请输入文字',
       maxLines: 4,
@@ -227,7 +227,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _setStatus(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[10],
       label: '标签文字',
       hintText: '请输入文字',
@@ -235,7 +235,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
+      layout: TTextareaLayout.vertical,
       required: true,
       additionInfo: '辅助说明',
       onChanged: (value) {},
@@ -247,7 +247,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDTextarea
+### TTextarea
 #### 简介
 用于多行文本信息输入
 #### 默认构造方法
@@ -277,7 +277,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | labelStyle | TextStyle? | - | 左侧标签文本样式 |
 | labelWidget | Widget? | - | label组件，支持自定义 |
 | labelWidth | double? | - | 输入框标题宽度 |
-| layout | TDTextareaLayout? | TDTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
+| layout | TTextareaLayout? | TTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
 | margin | EdgeInsetsGeometry? | - | 外边距 |
 | maxLength | int? | - | 最大字数限制 |
 | maxLengthEnforcement | MaxLengthEnforcement? | - | 如何执行输入长度限制 |
@@ -290,7 +290,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | readOnly | bool? | false | 是否只读 |
 | required | bool? | - | 是否必填标志（红色*） |
 | showBottomDivider | bool? | true | 边框外部下划线 |
-| size | TDInputSize? | TDInputSize.large | 输入框规格 |
+| size | TInputSize? | TInputSize.large | 输入框规格 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |

@@ -3,14 +3,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../lunar_data_source_example.dart';
 
 /// 农历日历功能快速测试页面
-class TDCalendarLunarTest extends StatefulWidget {
-  const TDCalendarLunarTest({Key? key}) : super(key: key);
+class TCalendarLunarTest extends StatefulWidget {
+  const TCalendarLunarTest({Key? key}) : super(key: key);
 
   @override
-  State<TDCalendarLunarTest> createState() => _TDCalendarLunarTestState();
+  State<TCalendarLunarTest> createState() => _TCalendarLunarTestState();
 }
 
-class _TDCalendarLunarTestState extends State<TDCalendarLunarTest> {
+class _TCalendarLunarTestState extends State<TCalendarLunarTest> {
   bool _showLunarInfo = true;
   final _dataSource = LunarDataSourceExample();
 
@@ -102,9 +102,9 @@ class _TDCalendarLunarTestState extends State<TDCalendarLunarTest> {
                   ),
                 ],
               ),
-              child: TDCalendar(
+              child: TCalendar(
                 type: CalendarType.single,
-                dateType: TDCalendarDateType.solar,
+                dateType: TCalendarDateType.solar,
                 dataSource: _dataSource,
                 showLunarInfo: _showLunarInfo,
                 cellHeight: _showLunarInfo ? 80 : 60, // 增加到 80 以完全避免溢出

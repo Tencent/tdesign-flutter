@@ -1,11 +1,11 @@
 
   Widget _uploadSingleWithReplace(BuildContext context) {
     return wrapDemoContainer('单选上传(替换)',
-        child: TDUpload(
+        child: TUpload(
           files: files6,
           width: 60,
           height: 60,
-          type: TDUploadBoxType.circle,
+          type: TUploadBoxType.circle,
           enabledReplaceType: true,
           onClick: onClick,
           onCancel: onCancel,

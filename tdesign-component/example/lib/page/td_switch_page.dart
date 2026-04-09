@@ -7,16 +7,16 @@ import '../base/example_widget.dart';
 ///
 /// TdSwitchPage演示
 ///
-class TDSwitchPage extends StatefulWidget {
-  const TDSwitchPage({Key? key}) : super(key: key);
+class TSwitchPage extends StatefulWidget {
+  const TSwitchPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSwitchPageState();
+    return TSwitchPageState();
   }
 }
 
-class TDSwitchPageState extends State<TDSwitchPage> {
+class TSwitchPageState extends State<TSwitchPage> {
   @override
   Widget build(BuildContext context) {
     var current = ExamplePage(
@@ -55,39 +55,39 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithBase(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '基础开关',
-      noteWidget: TDSwitch(),
+      noteWidget: TSwitch(),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithText(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '带文字开关',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: true,
-        type: TDSwitchType.text,
+        type: TSwitchType.text,
       ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithIcon(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '带图标开关',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: true,
-        type: TDSwitchType.icon,
+        type: TSwitchType.icon,
       ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithColor(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '自定义颜色开关',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: true,
         trackOnColor: Colors.green,
       ),
@@ -96,31 +96,31 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithLoadingOff(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '加载状态',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: false,
-        type: TDSwitchType.loading,
+        type: TSwitchType.loading,
       ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithLoadingOn(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '加载状态',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         isOn: true,
-        type: TDSwitchType.loading,
+        type: TSwitchType.loading,
       ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithDisableOff(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '禁用状态',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         enable: false,
         isOn: false,
       ),
@@ -129,9 +129,9 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithDisableOn(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '禁用状态',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         enable: false,
         isOn: true,
       ),
@@ -140,10 +140,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithSizeLarge(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '大尺寸32',
-      noteWidget: TDSwitch(
-        size: TDSwitchSize.large,
+      noteWidget: TSwitch(
+        size: TSwitchSize.large,
         isOn: true,
       ),
     );
@@ -151,10 +151,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithSizeMed(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '中尺寸28',
-      noteWidget: TDSwitch(
-        size: TDSwitchSize.medium,
+      noteWidget: TSwitch(
+        size: TSwitchSize.medium,
         isOn: true,
       ),
     );
@@ -162,10 +162,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithSizeSmall(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '小尺寸24',
-      noteWidget: TDSwitch(
-        size: TDSwitchSize.small,
+      noteWidget: TSwitch(
+        size: TSwitchSize.small,
         isOn: true,
       ),
     );
@@ -173,10 +173,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _customText(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '基础开关',
-      noteWidget: TDSwitch(
-        type: TDSwitchType.text,
+      noteWidget: TSwitch(
+        type: TSwitchType.text,
         openText: '1111',
         closeText: '—',
       ),
@@ -185,10 +185,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
   @Demo(group: 'switch')
   Widget _customTextFont(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '基础开关',
-      noteWidget: TDSwitch(
-        type: TDSwitchType.text,
+      noteWidget: TSwitch(
+        type: TSwitchType.text,
         openText: '开',
         closeText: '关',
         thumbContentOffColor: Colors.red,

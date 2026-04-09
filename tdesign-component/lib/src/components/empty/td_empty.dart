@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-typedef TDTapEvent = void Function();
+typedef TTapEvent = void Function();
 
-enum TDEmptyType { plain, operation }
+enum TEmptyType { plain, operation }
 
-class TDEmpty extends StatelessWidget {
-  const TDEmpty({
-    this.type = TDEmptyType.plain,
-    this.icon = TDIcons.info_circle_filled,
+class TEmpty extends StatelessWidget {
+  const TEmpty({
+    this.type = TEmptyType.plain,
+    this.icon = TIcons.info_circle_filled,
     this.image,
     this.emptyText,
     this.operationText,
@@ -22,7 +22,7 @@ class TDEmpty extends StatelessWidget {
   }) : super(key: key);
 
   /// 点击事件
-  final TDTapEvent? onTapEvent;
+  final TTapEvent? onTapEvent;
 
   /// 图标
   final IconData? icon;
@@ -43,10 +43,10 @@ class TDEmpty extends StatelessWidget {
   final String? operationText;
 
   /// 操作按钮文案主题色
-  final TDButtonTheme? operationTheme;
+  final TButtonTheme? operationTheme;
 
   /// 类型，为operation有操作按钮，plain无按钮
-  final TDEmptyType type;
+  final TEmptyType type;
 
   /// 自定义操作按钮
   final Widget? customOperationWidget;
@@ -60,26 +60,26 @@ class TDEmpty extends StatelessWidget {
         children: [
           image ??
               Icon(
-                icon ?? TDIcons.info_circle_filled,
+                icon ?? TIcons.info_circle_filled,
                 size: 96,
-                color: TDTheme.of(context).textColorPlaceholder,
+                color: TTheme.of(context).textColorPlaceholder,
               ),
           Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
-          TDText(
+          TText(
             emptyText ?? '',
             fontWeight: FontWeight.w400,
-            font: emptyTextFont ?? TDTheme.of(context).fontBodyMedium,
+            font: emptyTextFont ?? TTheme.of(context).fontBodyMedium,
             textColor:
-                emptyTextColor ?? TDTheme.of(context).textColorPlaceholder,
+                emptyTextColor ?? TTheme.of(context).textColorPlaceholder,
           ),
-          (type == TDEmptyType.operation)
+          (type == TEmptyType.operation)
               ? customOperationWidget ??
                   Padding(
                       padding: const EdgeInsets.only(top: 32),
-                      child: TDButton(
+                      child: TButton(
                         text: operationText ?? '',
-                        size: TDButtonSize.large,
-                        theme: operationTheme ?? TDButtonTheme.primary,
+                        size: TButtonSize.large,
+                        theme: operationTheme ?? TButtonTheme.primary,
                         width: 179,
                         onTap: () {
                           if (onTapEvent != null) {

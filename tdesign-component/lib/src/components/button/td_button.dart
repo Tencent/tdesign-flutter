@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-enum TDButtonSize { large, medium, small, extraSmall }
+enum TButtonSize { large, medium, small, extraSmall }
 
-enum TDButtonType { fill, outline, text, ghost }
+enum TButtonType { fill, outline, text, ghost }
 
-enum TDButtonShape { rectangle, round, square, circle, filled }
+enum TButtonShape { rectangle, round, square, circle, filled }
 
-enum TDButtonTheme { defaultTheme, primary, danger, light }
+enum TButtonTheme { defaultTheme, primary, danger, light }
 
-enum TDButtonStatus { defaultState, active, disable }
+enum TButtonStatus { defaultState, active, disable }
 
-enum TDButtonIconPosition { left, right }
+enum TButtonIconPosition { left, right }
 
-typedef TDButtonEvent = void Function();
+typedef TButtonEvent = void Function();
 
 /// TD常规按钮
-class TDButton extends StatefulWidget {
-  const TDButton({
+class TButton extends StatefulWidget {
+  const TButton({
     Key? key,
     this.text,
-    this.size = TDButtonSize.medium,
-    this.type = TDButtonType.fill,
-    this.shape = TDButtonShape.rectangle,
+    this.size = TButtonSize.medium,
+    this.type = TButtonType.fill,
+    this.shape = TButtonShape.rectangle,
     this.theme,
     this.child,
     this.disabled = false,
@@ -42,7 +42,7 @@ class TDButton extends StatefulWidget {
     this.onLongPress,
     this.margin,
     this.padding,
-    this.iconPosition = TDButtonIconPosition.left,
+    this.iconPosition = TButtonIconPosition.left,
     this.gradient,
   }) : super(key: key);
 
@@ -62,25 +62,25 @@ class TDButton extends StatefulWidget {
   final double? height;
 
   /// 尺寸
-  final TDButtonSize size;
+  final TButtonSize size;
 
   /// 类型：填充，描边，文字
-  final TDButtonType type;
+  final TButtonType type;
 
   /// 形状：圆角，胶囊，方形，圆形，填充
-  final TDButtonShape shape;
+  final TButtonShape shape;
 
   /// 主题
-  final TDButtonTheme? theme;
+  final TButtonTheme? theme;
 
   /// 自定义样式，有则优先用它，没有则根据 type 和 theme 选取。如果设置了 style，则 activeStyle 和 disableStyle 也应该设置
-  final TDButtonStyle? style;
+  final TButtonStyle? style;
 
   /// 自定义点击样式，有则优先用它，没有则根据 type 和 theme 选取
-  final TDButtonStyle? activeStyle;
+  final TButtonStyle? activeStyle;
 
   /// 自定义禁用样式，有则优先用它，没有则根据 type 和 theme 选取
-  final TDButtonStyle? disableStyle;
+  final TButtonStyle? disableStyle;
 
   /// 自定义可点击状态文本样式
   final TextStyle? textStyle;
@@ -89,10 +89,10 @@ class TDButton extends StatefulWidget {
   final TextStyle? disableTextStyle;
 
   /// 点击事件
-  final TDButtonEvent? onTap;
+  final TButtonEvent? onTap;
 
   /// 长按事件
-  final TDButtonEvent? onLongPress;
+  final TButtonEvent? onLongPress;
 
   /// 图标icon
   final IconData? icon;
@@ -104,7 +104,7 @@ class TDButton extends StatefulWidget {
   final double? iconTextSpacing;
 
   /// 图标位置
-  final TDButtonIconPosition? iconPosition;
+  final TButtonIconPosition? iconPosition;
 
   /// 自定义 padding
   final EdgeInsetsGeometry? padding;
@@ -119,14 +119,14 @@ class TDButton extends StatefulWidget {
   final Gradient? gradient;
 
   @override
-  State<StatefulWidget> createState() => _TDButtonState();
+  State<StatefulWidget> createState() => _TButtonState();
 }
 
-class _TDButtonState extends State<TDButton> {
-  TDButtonStatus _buttonStatus = TDButtonStatus.defaultState;
-  TDButtonStyle? _innerDefaultStyle;
-  TDButtonStyle? _innerActiveStyle;
-  TDButtonStyle? _innerDisableStyle;
+class _TButtonState extends State<TButton> {
+  TButtonStatus _buttonStatus = TButtonStatus.defaultState;
+  TButtonStyle? _innerDefaultStyle;
+  TButtonStyle? _innerActiveStyle;
+  TButtonStyle? _innerDisableStyle;
   double? _width;
   double? _height;
   EdgeInsetsGeometry? _margin;
@@ -136,14 +136,14 @@ class _TDButtonState extends State<TDButton> {
 
   _updateParams() {
     _buttonStatus =
-        widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
+        widget.disabled ? TButtonStatus.disable : TButtonStatus.defaultState;
     _innerDefaultStyle = widget.style;
     _innerActiveStyle = widget.activeStyle;
     _innerDisableStyle = widget.disableStyle;
     _width = _getWidth();
     _height = _getHeight();
     _margin = _getMargin();
-    _alignment = widget.shape == TDButtonShape.filled || widget.isBlock
+    _alignment = widget.shape == TButtonShape.filled || widget.isBlock
         ? Alignment.center
         : null;
     if (widget.text != null) {
@@ -154,13 +154,13 @@ class _TDButtonState extends State<TDButton> {
     }
   }
 
-  TDButtonStyle get style {
+  TButtonStyle get style {
     switch (_buttonStatus) {
-      case TDButtonStatus.defaultState:
+      case TButtonStatus.defaultState:
         return _defaultStyle;
-      case TDButtonStatus.active:
+      case TButtonStatus.active:
         return _activeStyle;
-      case TDButtonStatus.disable:
+      case TButtonStatus.disable:
         return _disableStyle;
     }
   }
@@ -207,14 +207,14 @@ class _TDButtonState extends State<TDButton> {
           return;
         }
         setState(() {
-          _buttonStatus = TDButtonStatus.active;
+          _buttonStatus = TButtonStatus.active;
         });
       },
       onTapUp: (TapUpDetails details) {
         Future.delayed(const Duration(milliseconds: 100), () {
           if (mounted && !widget.disabled) {
             setState(() {
-              _buttonStatus = TDButtonStatus.defaultState;
+              _buttonStatus = TButtonStatus.defaultState;
             });
           }
         });
@@ -224,7 +224,7 @@ class _TDButtonState extends State<TDButton> {
           return;
         }
         setState(() {
-          _buttonStatus = TDButtonStatus.defaultState;
+          _buttonStatus = TButtonStatus.defaultState;
         });
       },
     );
@@ -233,7 +233,7 @@ class _TDButtonState extends State<TDButton> {
   Border? _getBorder(BuildContext context) {
     if (style.frameWidth != null && style.frameWidth != 0) {
       return Border.all(
-        color: style.frameColor ?? TDTheme.of(context).componentStrokeColor,
+        color: style.frameColor ?? TTheme.of(context).componentStrokeColor,
         width: style.frameWidth!,
       );
     }
@@ -247,21 +247,21 @@ class _TDButtonState extends State<TDButton> {
     }
     var children = <Widget>[];
     // 系统Icon会导致不居中，因此自绘icon指定height
-    if (icon != null && widget.iconPosition == TDButtonIconPosition.left) {
+    if (icon != null && widget.iconPosition == TButtonIconPosition.left) {
       children.add(icon);
     }
     if (widget.text != null) {
-      var text = TDText(
+      var text = TText(
         widget.text!,
         font: _getTextFont(),
-        textColor: style.textColor ?? TDTheme.of(context).textColorPrimary,
+        textColor: style.textColor ?? TTheme.of(context).textColorPrimary,
         style: _textStyle,
         forceVerticalCenter: true,
         overflow: TextOverflow.ellipsis,
       );
       children.add(Flexible(child: text));
     }
-    if (icon != null && widget.iconPosition == TDButtonIconPosition.right) {
+    if (icon != null && widget.iconPosition == TButtonIconPosition.right) {
       children.add(icon);
     }
 
@@ -309,17 +309,17 @@ class _TDButtonState extends State<TDButton> {
 
   Font _getTextFont() {
     switch (widget.size) {
-      case TDButtonSize.large:
-        return TDTheme.of(context).fontMarkLarge ??
+      case TButtonSize.large:
+        return TTheme.of(context).fontMarkLarge ??
             Font(size: 16, lineHeight: 24);
-      case TDButtonSize.medium:
-        return TDTheme.of(context).fontMarkLarge ??
+      case TButtonSize.medium:
+        return TTheme.of(context).fontMarkLarge ??
             Font(size: 16, lineHeight: 24);
-      case TDButtonSize.small:
-        return TDTheme.of(context).fontMarkMedium ??
+      case TButtonSize.small:
+        return TTheme.of(context).fontMarkMedium ??
             Font(size: 14, lineHeight: 22);
-      case TDButtonSize.extraSmall:
-        return TDTheme.of(context).fontMarkMedium ??
+      case TButtonSize.extraSmall:
+        return TTheme.of(context).fontMarkMedium ??
             Font(size: 14, lineHeight: 22);
     }
   }
@@ -329,16 +329,16 @@ class _TDButtonState extends State<TDButton> {
       return widget.width;
     }
     if (!widget.isBlock &&
-        (widget.shape == TDButtonShape.square ||
-            widget.shape == TDButtonShape.circle)) {
+        (widget.shape == TButtonShape.square ||
+            widget.shape == TButtonShape.circle)) {
       switch (widget.size) {
-        case TDButtonSize.large:
+        case TButtonSize.large:
           return 48;
-        case TDButtonSize.medium:
+        case TButtonSize.medium:
           return 40;
-        case TDButtonSize.small:
+        case TButtonSize.small:
           return 32;
-        case TDButtonSize.extraSmall:
+        case TButtonSize.extraSmall:
           return 28;
       }
     }
@@ -350,26 +350,26 @@ class _TDButtonState extends State<TDButton> {
       return widget.height!;
     }
     switch (widget.size) {
-      case TDButtonSize.large:
+      case TButtonSize.large:
         return 48;
-      case TDButtonSize.medium:
+      case TButtonSize.medium:
         return 40;
-      case TDButtonSize.small:
+      case TButtonSize.small:
         return 32;
-      case TDButtonSize.extraSmall:
+      case TButtonSize.extraSmall:
         return 28;
     }
   }
 
   double _getIconSize() {
     switch (widget.size) {
-      case TDButtonSize.large:
+      case TButtonSize.large:
         return 24;
-      case TDButtonSize.medium:
+      case TButtonSize.medium:
         return 20;
-      case TDButtonSize.small:
+      case TButtonSize.small:
         return 18;
-      case TDButtonSize.extraSmall:
+      case TButtonSize.extraSmall:
         return 14;
     }
   }
@@ -385,25 +385,25 @@ class _TDButtonState extends State<TDButton> {
     if (widget.padding != null) {
       return widget.padding;
     }
-    var equalSide = widget.shape == TDButtonShape.square ||
-        widget.shape == TDButtonShape.circle;
+    var equalSide = widget.shape == TButtonShape.square ||
+        widget.shape == TButtonShape.circle;
 
     double horizontalPadding;
     double verticalPadding;
     switch (widget.size) {
-      case TDButtonSize.large:
+      case TButtonSize.large:
         horizontalPadding = equalSide ? 12 : 20;
         verticalPadding = 12;
         break;
-      case TDButtonSize.medium:
+      case TButtonSize.medium:
         horizontalPadding = equalSide ? 10 : 16;
         verticalPadding = equalSide ? 10 : 8;
         break;
-      case TDButtonSize.small:
+      case TButtonSize.small:
         horizontalPadding = equalSide ? 7 : 12;
         verticalPadding = equalSide ? 7 : 5;
         break;
-      case TDButtonSize.extraSmall:
+      case TButtonSize.extraSmall:
         horizontalPadding = equalSide ? 5 : 8;
         verticalPadding = equalSide ? 5 : 3;
         break;
@@ -426,42 +426,42 @@ class _TDButtonState extends State<TDButton> {
   }
 
   @override
-  void didUpdateWidget(covariant TDButton oldWidget) {
+  void didUpdateWidget(covariant TButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateParams();
   }
 
-  TDButtonStyle _generateInnerStyle() {
+  TButtonStyle _generateInnerStyle() {
     switch (widget.type) {
-      case TDButtonType.fill:
-        return TDButtonStyle.generateFillStyleByTheme(
+      case TButtonType.fill:
+        return TButtonStyle.generateFillStyleByTheme(
             context, widget.theme, _buttonStatus);
-      case TDButtonType.outline:
-        return TDButtonStyle.generateOutlineStyleByTheme(
+      case TButtonType.outline:
+        return TButtonStyle.generateOutlineStyleByTheme(
             context, widget.theme, _buttonStatus);
-      case TDButtonType.text:
-        return TDButtonStyle.generateTextStyleByTheme(
+      case TButtonType.text:
+        return TButtonStyle.generateTextStyleByTheme(
             context, widget.theme, _buttonStatus);
-      case TDButtonType.ghost:
-        return TDButtonStyle.generateGhostStyleByTheme(
+      case TButtonType.ghost:
+        return TButtonStyle.generateGhostStyleByTheme(
             context, widget.theme, _buttonStatus);
     }
   }
 
   Radius _getRadius() {
     switch (widget.shape) {
-      case TDButtonShape.rectangle:
-      case TDButtonShape.square:
-        return Radius.circular(TDTheme.of(context).radiusDefault);
-      case TDButtonShape.round:
-      case TDButtonShape.circle:
-        return Radius.circular(TDTheme.of(context).radiusRound);
-      case TDButtonShape.filled:
+      case TButtonShape.rectangle:
+      case TButtonShape.square:
+        return Radius.circular(TTheme.of(context).radiusDefault);
+      case TButtonShape.round:
+      case TButtonShape.circle:
+        return Radius.circular(TTheme.of(context).radiusRound);
+      case TButtonShape.filled:
         return Radius.zero;
     }
   }
 
-  TDButtonStyle get _defaultStyle {
+  TButtonStyle get _defaultStyle {
     if (_innerDefaultStyle != null) {
       return _innerDefaultStyle!;
     }
@@ -469,7 +469,7 @@ class _TDButtonState extends State<TDButton> {
     return _innerDefaultStyle!;
   }
 
-  TDButtonStyle get _activeStyle {
+  TButtonStyle get _activeStyle {
     if (_innerActiveStyle != null) {
       return _innerActiveStyle!;
     }
@@ -477,7 +477,7 @@ class _TDButtonState extends State<TDButton> {
     return _innerActiveStyle!;
   }
 
-  TDButtonStyle get _disableStyle {
+  TButtonStyle get _disableStyle {
     if (_innerDisableStyle != null) {
       return _innerDisableStyle!;
     }

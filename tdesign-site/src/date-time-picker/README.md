@@ -26,12 +26,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildYearMonthDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_1.isEmpty ? '请选择' : selected_1,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -59,12 +59,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildYearMonth(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_2.isEmpty ? '请选择' : selected_2,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -92,12 +92,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildMonthDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -125,12 +125,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildHourMinuteSecond(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_4.isEmpty ? '请选择' : selected_4,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -164,12 +164,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildAll(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_5.isEmpty ? '请选择' : selected_5,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -203,12 +203,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildWeekDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_6.isEmpty ? '请选择' : selected_6,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -239,12 +239,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildWithTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_7.isEmpty ? '请选择' : selected_7,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -272,12 +272,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildWithoutTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_8.isEmpty ? '请选择' : selected_8,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           // 不传或传空字符串、null，则不显示标题
           // title: '',
@@ -306,7 +306,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildWithoutHeader(BuildContext context) {
-    return TDDatePicker(
+    return TDatePicker(
       header: false,
       model: DatePickerModel(
         useYear: true,
@@ -331,7 +331,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDPicker
+### TPicker
 
 #### 静态方法
 
@@ -344,7 +344,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDDatePicker
+### TDatePicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

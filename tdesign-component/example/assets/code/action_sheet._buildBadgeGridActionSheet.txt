@@ -1,37 +1,37 @@
 
 Widget _buildBadgeGridActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '带徽标宫格型',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet.showGridActionSheet(context, items: [
-        TDActionSheetItem(
+      TActionSheet.showGridActionSheet(context, items: [
+        TActionSheetItem(
             label: '微信',
             icon: Image.asset('assets/img/td_action_sheet_1.png'),
-            badge: const TDBadge(TDBadgeType.message, count: 'NEW')),
-        TDActionSheetItem(
+            badge: const TBadge(TBadgeType.message, count: 'NEW')),
+        TActionSheetItem(
             label: '朋友圈',
             icon: Image.asset('assets/img/td_action_sheet_2.png')),
-        TDActionSheetItem(
+        TActionSheetItem(
             label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
-        TDActionSheetItem(
+        TActionSheetItem(
             label: '企业微信',
             icon: Image.asset('assets/img/td_action_sheet_4.png')),
-        TDActionSheetItem(
+        TActionSheetItem(
             label: '收藏',
-            icon: const IconWithBackground(icon: TDIcons.star),
-            badge: const TDBadge(TDBadgeType.redPoint)),
-        TDActionSheetItem(
-            label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh)),
-        TDActionSheetItem(
+            icon: const IconWithBackground(icon: TIcons.star),
+            badge: const TBadge(TBadgeType.redPoint)),
+        TActionSheetItem(
+            label: '刷新', icon: const IconWithBackground(icon: TIcons.refresh)),
+        TActionSheetItem(
             label: '下载',
-            icon: const IconWithBackground(icon: TDIcons.download),
-            badge: const TDBadge(TDBadgeType.message, count: '8')),
-        TDActionSheetItem(
-            label: '复制', icon: const IconWithBackground(icon: TDIcons.queue)),
+            icon: const IconWithBackground(icon: TIcons.download),
+            badge: const TBadge(TBadgeType.message, count: '8')),
+        TActionSheetItem(
+            label: '复制', icon: const IconWithBackground(icon: TIcons.queue)),
       ]);
     },
   );

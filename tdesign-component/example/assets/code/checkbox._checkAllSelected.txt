@@ -1,7 +1,7 @@
 
   Widget _checkAllSelected(BuildContext context) {
     const itemCount = 4;
-    return TDCheckboxGroupContainer(
+    return TCheckboxGroupContainer(
       selectIds: checkIds,
       passThrough: false,
       controller: controller,
@@ -15,7 +15,7 @@
             title = '全选';
             return SizedBox(
               height: 56,
-              child: TDCheckbox(
+              child: TCheckbox(
                 id: 'index:$index',
                 title: title,
                 customIconBuilder: (context, checked) {
@@ -38,7 +38,7 @@
           } else {
             return SizedBox(
               height: index == itemCount - 1 ? null : 56,
-              child: TDCheckbox(
+              child: TCheckbox(
                 id: 'index:$index',
                 title: title,
                 subTitle: index == itemCount - 1

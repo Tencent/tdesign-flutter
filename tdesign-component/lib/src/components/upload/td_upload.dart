@@ -6,42 +6,42 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../tdesign_flutter.dart';
 
-enum TDUploadMediaType {
+enum TUploadMediaType {
   image, // 图片
   video, // 视频
 }
 
-enum TDUploadValidatorError {
+enum TUploadValidatorError {
   overSize, // 超出文件大小
   overQuantity, // 超出文件数量限制
 }
 
-enum TDUploadFileStatus {
+enum TUploadFileStatus {
   success, // 成功
   loading, // 加载中
   error, // 失败
   retry, // 重试
 }
 
-enum TDUploadType {
+enum TUploadType {
   add, // 添加
   remove, // 删除
   replace, // 替换
 }
 
-enum TDUploadBoxType {
+enum TUploadBoxType {
   roundedSquare, // 圆角方形
   circle, // 圆形
 }
 
-class TDUploadFile {
-  TDUploadFile(
+class TUploadFile {
+  TUploadFile(
       {required this.key,
       this.remotePath,
       this.assetPath,
       this.file,
       this.progress,
-      this.status = TDUploadFileStatus.success,
+      this.status = TUploadFileStatus.success,
       this.loadingText = 'Loading...',
       this.retryText = 'Re-Upload',
       this.errorText = 'Error',
@@ -56,20 +56,20 @@ class TDUploadFile {
   final String loadingText;
   final String retryText;
   final String errorText;
-  TDUploadFileStatus status;
+  TUploadFileStatus status;
 }
 
-typedef TDUploadErrorEvent = void Function(Object e);
-typedef TDUploadClickEvent = void Function(int value);
-typedef TDUploadValueChangedEvent = void Function(
-    List<TDUploadFile> files, TDUploadType type);
-typedef TDUploadValidatorEvent = void Function(TDUploadValidatorError e);
+typedef TUploadErrorEvent = void Function(Object e);
+typedef TUploadClickEvent = void Function(int value);
+typedef TUploadValueChangedEvent = void Function(
+    List<TUploadFile> files, TUploadType type);
+typedef TUploadValidatorEvent = void Function(TUploadValidatorError e);
 
-class TDUpload extends StatefulWidget {
-  const TDUpload({
+class TUpload extends StatefulWidget {
+  const TUpload({
     Key? key,
     this.max = 0,
-    this.mediaType = const [TDUploadMediaType.image, TDUploadMediaType.video],
+    this.mediaType = const [TUploadMediaType.image, TUploadMediaType.video],
     this.sizeLimit,
     this.onCancel,
     this.onError,
@@ -81,7 +81,7 @@ class TDUpload extends StatefulWidget {
     this.multiple = false,
     this.width = 80.0,
     this.height = 80.0,
-    this.type = TDUploadBoxType.roundedSquare,
+    this.type = TUploadBoxType.roundedSquare,
     this.disabled = false,
     this.enabledReplaceType = false,
     this.wrapSpacing,
@@ -91,13 +91,13 @@ class TDUpload extends StatefulWidget {
   }) : super(key: key);
 
   /// 控制展示的文件列表
-  final List<TDUploadFile> files;
+  final List<TUploadFile> files;
 
   /// 用于控制文件上传数量，0为不限制，仅在multiple为true时有效
   final int max;
 
   /// 支持上传的文件类型，图片或视频
-  final List<TDUploadMediaType> mediaType;
+  final List<TUploadMediaType> mediaType;
 
   /// 图片大小限制，单位为KB
   final double? sizeLimit;
@@ -109,19 +109,19 @@ class TDUpload extends StatefulWidget {
   final VoidCallback? onCancel;
 
   /// 监听获取资源错误
-  final TDUploadErrorEvent? onError;
+  final TUploadErrorEvent? onError;
 
   /// 监听文件校验出错
-  final TDUploadValidatorEvent? onValidate;
+  final TUploadValidatorEvent? onValidate;
 
   /// 监听点击图片位
-  final TDUploadClickEvent? onClick;
+  final TUploadClickEvent? onClick;
 
   /// 监听文件超过最大数量
   final VoidCallback? onMaxLimitReached;
 
   /// 监听添加, 删除和替换media事件
-  final TDUploadValueChangedEvent? onChange;
+  final TUploadValueChangedEvent? onChange;
 
   /// 图片宽度
   final double? width;
@@ -130,7 +130,7 @@ class TDUpload extends StatefulWidget {
   final double? height;
 
   /// Box类型
-  final TDUploadBoxType type;
+  final TUploadBoxType type;
 
   /// 是否启用replace功能
   final bool? enabledReplaceType;
@@ -151,11 +151,11 @@ class TDUpload extends StatefulWidget {
   final VoidCallback? onUploadTap;
 
   @override
-  State<TDUpload> createState() => _TDUploadState();
+  State<TUpload> createState() => _TUploadState();
 }
 
-class _TDUploadState extends State<TDUpload> {
-  List<TDUploadFile> fileList = [];
+class _TUploadState extends State<TUpload> {
+  List<TUploadFile> fileList = [];
 
   bool get canUpload => widget.multiple
       ? (widget.max == 0 ? true : fileList.length < widget.max)
@@ -163,9 +163,9 @@ class _TDUploadState extends State<TDUpload> {
   final ImagePicker _picker = ImagePicker();
 
   // 类型映射
-  final Map<TDUploadBoxType, TDImageType> _imageTypeMap = {
-    TDUploadBoxType.roundedSquare: TDImageType.roundedSquare,
-    TDUploadBoxType.circle: TDImageType.circle,
+  final Map<TUploadBoxType, TImageType> _imageTypeMap = {
+    TUploadBoxType.roundedSquare: TImageType.roundedSquare,
+    TUploadBoxType.circle: TImageType.circle,
   };
 
   @override
@@ -182,7 +182,7 @@ class _TDUploadState extends State<TDUpload> {
       if (widget.onMaxLimitReached != null) {
         widget.onMaxLimitReached!();
       } else if (widget.onValidate != null) {
-        widget.onValidate!(TDUploadValidatorError.overQuantity);
+        widget.onValidate!(TUploadValidatorError.overQuantity);
       } else {
         throw Exception('Initial file count exceeds the maximum limit');
       }
@@ -201,7 +201,7 @@ class _TDUploadState extends State<TDUpload> {
         medias = await _picker.pickMultiImage();
       } else {
         XFile? media;
-        if (widget.mediaType.contains(TDUploadMediaType.image)) {
+        if (widget.mediaType.contains(TUploadMediaType.image)) {
           media = await _picker.pickImage(source: ImageSource.gallery);
         } else {
           media = await _picker.pickVideo(source: ImageSource.gallery);
@@ -217,7 +217,7 @@ class _TDUploadState extends State<TDUpload> {
         if (widget.onMaxLimitReached != null) {
           widget.onMaxLimitReached!();
         } else if (widget.onValidate != null) {
-          widget.onValidate!(TDUploadValidatorError.overQuantity);
+          widget.onValidate!(TUploadValidatorError.overQuantity);
         }
         return [];
       }
@@ -252,21 +252,21 @@ class _TDUploadState extends State<TDUpload> {
     var originMaxKeys =
         fileList.isEmpty ? 0 : fileList.map((file) => file.key).reduce(max);
 
-    var newFiles = <TDUploadFile>[];
+    var newFiles = <TUploadFile>[];
     for (var i = 0; i < files.length; i++) {
-      newFiles.add(TDUploadFile(
+      newFiles.add(TUploadFile(
           key: originMaxKeys + i + 1,
           file: File(files[i].path),
           assetPath: files[i].path));
     }
 
     if (widget.onChange != null) {
-      widget.onChange!(newFiles, TDUploadType.add);
+      widget.onChange!(newFiles, TUploadType.add);
     }
   }
 
   // 替换资源
-  void replaceMedia(List<XFile> files, TDUploadFile oldFile) async {
+  void replaceMedia(List<XFile> files, TUploadFile oldFile) async {
     if (files.isEmpty || files.length != 1) {
       return;
     }
@@ -280,18 +280,18 @@ class _TDUploadState extends State<TDUpload> {
       return;
     }
 
-    var newFile = TDUploadFile(
+    var newFile = TUploadFile(
         key: oldFile.key, file: File(files[0].path), assetPath: files[0].path);
 
     if (widget.onChange != null) {
-      widget.onChange!([newFile], TDUploadType.replace);
+      widget.onChange!([newFile], TUploadType.replace);
     }
   }
 
   // 校验资源
-  Future<TDUploadValidatorError?> validateResources(List<XFile> files,
+  Future<TUploadValidatorError?> validateResources(List<XFile> files,
       [bool? multiple]) async {
-    TDUploadValidatorError? error;
+    TUploadValidatorError? error;
 
     // 多选逻辑，优选从参数获取
     var isMultiple = multiple ?? widget.multiple;
@@ -300,7 +300,7 @@ class _TDUploadState extends State<TDUpload> {
       var remain = widget.max - fileList.length;
 
       if (files.length > remain) {
-        error = TDUploadValidatorError.overQuantity;
+        error = TUploadValidatorError.overQuantity;
         return error;
       }
     }
@@ -310,7 +310,7 @@ class _TDUploadState extends State<TDUpload> {
         final fileSize = await file.length();
         final sizeLimitInBytes = widget.sizeLimit! * 1024;
         if (fileSize > sizeLimitInBytes) {
-          error = TDUploadValidatorError.overSize;
+          error = TUploadValidatorError.overSize;
           break;
         }
       }
@@ -320,9 +320,9 @@ class _TDUploadState extends State<TDUpload> {
   }
 
   // 删除资源
-  void onDelete(TDUploadFile file) {
+  void onDelete(TUploadFile file) {
     if (widget.onChange != null) {
-      widget.onChange!([file], TDUploadType.remove);
+      widget.onChange!([file], TUploadType.remove);
     }
   }
 
@@ -364,25 +364,25 @@ class _TDUploadState extends State<TDUpload> {
             child: Container(
               width: widget.width,
               height: widget.height,
-              decoration: widget.type == TDUploadBoxType.circle
+              decoration: widget.type == TUploadBoxType.circle
                   ? BoxDecoration(
                       shape: BoxShape.circle,
-                      color: TDTheme.of(context).bgColorSecondaryContainer,
+                      color: TTheme.of(context).bgColorSecondaryContainer,
                     )
                   : BoxDecoration(
-                      color: TDTheme.of(context).bgColorSecondaryContainer,
+                      color: TTheme.of(context).bgColorSecondaryContainer,
                       borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
+                          TTheme.of(context).radiusDefault)),
               child: Center(
                   child: Icon(
-                TDIcons.add,
-                color: TDTheme.of(context).textColorPlaceholder,
+                TIcons.add,
+                color: TTheme.of(context).textColorPlaceholder,
                 size: 28,
               )),
             )));
   }
 
-  Widget _buildImageBox(BuildContext context, TDUploadFile file) {
+  Widget _buildImageBox(BuildContext context, TUploadFile file) {
     return GestureDetector(
       onTap: () async {
         if (widget.onClick != null) {
@@ -396,17 +396,17 @@ class _TDUploadState extends State<TDUpload> {
       },
       child: Stack(
         children: [
-          TDImage(
+          TImage(
             key: Key(file.assetPath ?? ''),
             width: widget.width,
             height: widget.height,
             imgUrl: file.remotePath,
             imageFile: file.file,
             assetUrl: file.file == null ? file.assetPath : null,
-            type: _imageTypeMap[widget.type] ?? TDImageType.roundedSquare,
+            type: _imageTypeMap[widget.type] ?? TImageType.roundedSquare,
           ),
           Visibility(
-              visible: file.status != TDUploadFileStatus.success,
+              visible: file.status != TUploadFileStatus.success,
               child: _buildShadowBox(context, file)),
           Visibility(
               visible: file.canDelete,
@@ -420,21 +420,21 @@ class _TDUploadState extends State<TDUpload> {
                     child: Container(
                       width: 20,
                       height: 20,
-                      decoration: widget.type == TDUploadBoxType.circle
+                      decoration: widget.type == TUploadBoxType.circle
                           ? BoxDecoration(
                               shape: BoxShape.circle,
-                              color: TDTheme.of(context).textDisabledColor,
+                              color: TTheme.of(context).textDisabledColor,
                             )
                           : BoxDecoration(
-                              color: TDTheme.of(context).textDisabledColor,
+                              color: TTheme.of(context).textDisabledColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(
-                                      TDTheme.of(context).radiusDefault),
+                                      TTheme.of(context).radiusDefault),
                                   topRight: Radius.circular(
-                                      TDTheme.of(context).radiusDefault))),
+                                      TTheme.of(context).radiusDefault))),
                       child: const Center(
                           child: Icon(
-                        TDIcons.close,
+                        TIcons.close,
                         size: 16,
                         color: Colors.white,
                       )),
@@ -445,17 +445,17 @@ class _TDUploadState extends State<TDUpload> {
     );
   }
 
-  Widget _buildShadowBox(BuildContext context, TDUploadFile file) {
+  Widget _buildShadowBox(BuildContext context, TUploadFile file) {
     var displayText = '';
     switch (file.status) {
-      case TDUploadFileStatus.loading:
+      case TUploadFileStatus.loading:
         displayText =
             file.progress != null ? '${file.progress!}%' : file.loadingText;
         break;
-      case TDUploadFileStatus.retry:
+      case TUploadFileStatus.retry:
         displayText = file.retryText;
         break;
-      case TDUploadFileStatus.error:
+      case TUploadFileStatus.error:
         displayText = file.errorText;
         break;
       default:
@@ -464,15 +464,15 @@ class _TDUploadState extends State<TDUpload> {
     return Container(
       width: widget.width,
       height: widget.height,
-      decoration: widget.type == TDUploadBoxType.circle
+      decoration: widget.type == TUploadBoxType.circle
           ? BoxDecoration(
               shape: BoxShape.circle,
-              color: TDTheme.of(context).fontGyColor3,
+              color: TTheme.of(context).fontGyColor3,
             )
           : BoxDecoration(
-              color: TDTheme.of(context).fontGyColor3,
+              color: TTheme.of(context).fontGyColor3,
               borderRadius:
-                  BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                  BorderRadius.circular(TTheme.of(context).radiusDefault)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Center(
@@ -480,26 +480,26 @@ class _TDUploadState extends State<TDUpload> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Visibility(
-                visible: file.status == TDUploadFileStatus.loading,
-                child: const TDLoading(
-                  size: TDLoadingSize.large,
-                  icon: TDLoadingIcon.circle,
+                visible: file.status == TUploadFileStatus.loading,
+                child: const TLoading(
+                  size: TLoadingSize.large,
+                  icon: TLoadingIcon.circle,
                   iconColor: Colors.white,
                 ),
               ),
               Visibility(
-                  visible: file.status == TDUploadFileStatus.retry ||
-                      file.status == TDUploadFileStatus.error,
+                  visible: file.status == TUploadFileStatus.retry ||
+                      file.status == TUploadFileStatus.error,
                   child: Icon(
-                    file.status == TDUploadFileStatus.retry
-                        ? TDIcons.refresh
-                        : TDIcons.close_circle,
+                    file.status == TUploadFileStatus.retry
+                        ? TIcons.refresh
+                        : TIcons.close_circle,
                     size: 24,
                     color: Colors.white,
                   )),
               Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: TDText(
+                child: TText(
                   displayText,
                   textColor: Colors.white,
                   style: const TextStyle(fontSize: 12, height: 1.67),

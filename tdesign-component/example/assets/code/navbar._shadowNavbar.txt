@@ -1,6 +1,6 @@
 
   Widget _shadowNavbar(BuildContext context) {
-    return TDNavBar(
+    return TNavBar(
       height: 48,
       titleFontWeight: FontWeight.w600,
       title: titleText,
@@ -10,7 +10,7 @@
         BoxShadow(
           blurRadius: 4,
           offset: const Offset(0, 4),
-          color: TDTheme.of(context).componentBorderColor,
+          color: TTheme.of(context).componentBorderColor,
         )
       ],
     );

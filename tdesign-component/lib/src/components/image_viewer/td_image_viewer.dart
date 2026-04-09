@@ -6,7 +6,7 @@ import '../popup/td_popup_route.dart';
 import 'td_image_viewer_widget.dart';
 
 /// 图片预览工具
-class TDImageViewer {
+class TImageViewer {
 
   /// 显示图片预览
   static void showImageViewer({
@@ -38,14 +38,14 @@ class TDImageViewer {
     LeftItemBuilder? leftItemBuilder,
     RightItemBuilder? rightItemBuilder,
   }) {
-    modalBarrierColor ??= TDTheme.of(context).fontGyColor1;
+    modalBarrierColor ??= TTheme.of(context).fontGyColor1;
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible ?? false,
       barrierColor: modalBarrierColor,
       useSafeArea: false,
       builder: (context) {
-        return TDImageViewerWidget(
+        return TImageViewerWidget(
           images: images,
           labels: labels,
           closeBtn: closeBtn,

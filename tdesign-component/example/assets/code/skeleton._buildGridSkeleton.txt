@@ -4,10 +4,10 @@
       // spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
-        return TDSkeleton.fromRowCol(
-          rowCol: TDSkeletonRowCol(objects: const [
-            [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-            [TDSkeletonRowColObj.text(width: 48, flex: null)],
+        return TSkeleton.fromRowCol(
+          rowCol: TSkeletonRowCol(objects: const [
+            [TSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+            [TSkeletonRowColObj.text(width: 48, flex: null)],
           ]),
         );
       }),

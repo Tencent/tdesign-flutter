@@ -15,9 +15,9 @@ const double _kDefaultIndicatorRadius = 10.0;
 /// See also:
 ///
 ///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/progress-indicators/#activity-indicators>
-class TDCupertinoActivityIndicator extends StatefulWidget {
+class TCupertinoActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator that spins clockwise.
-  const TDCupertinoActivityIndicator({
+  const TCupertinoActivityIndicator({
     Key? key,
     this.animating = true,
     this.radius = _kDefaultIndicatorRadius,
@@ -50,12 +50,12 @@ class TDCupertinoActivityIndicator extends StatefulWidget {
   final int duration;
 
   @override
-  _TDCupertinoActivityIndicatorState createState() =>
-      _TDCupertinoActivityIndicatorState();
+  _TCupertinoActivityIndicatorState createState() =>
+      _TCupertinoActivityIndicatorState();
 }
 
-class _TDCupertinoActivityIndicatorState
-    extends State<TDCupertinoActivityIndicator>
+class _TCupertinoActivityIndicatorState
+    extends State<TCupertinoActivityIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -73,7 +73,7 @@ class _TDCupertinoActivityIndicatorState
   }
 
   @override
-  void didUpdateWidget(TDCupertinoActivityIndicator oldWidget) {
+  void didUpdateWidget(TCupertinoActivityIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.animating != oldWidget.animating || widget.duration != oldWidget.duration) {
       if (!widget.animating) {
@@ -99,7 +99,7 @@ class _TDCupertinoActivityIndicatorState
       child: CustomPaint(
         painter: _CupertinoActivityIndicatorPainter(
           position: _controller,
-          activeColor: widget.activeColor ?? TDTheme.of(context).textColorPlaceholder,
+          activeColor: widget.activeColor ?? TTheme.of(context).textColorPlaceholder,
           radius: widget.radius,
           progress: widget.progress,
         ),

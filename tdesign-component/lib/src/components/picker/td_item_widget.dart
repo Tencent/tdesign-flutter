@@ -22,7 +22,7 @@ typedef ItemBuilderType = Widget? Function(
 );
 
 /// 所有选择器的子项组件
-class TDItemWidget extends StatefulWidget {
+class TItemWidget extends StatefulWidget {
   final String content;
   final FixedExtentScrollController fixedExtentScrollController;
   final int colIndex;
@@ -31,7 +31,7 @@ class TDItemWidget extends StatefulWidget {
   final ItemDistanceCalculator? itemDistanceCalculator;
   final ItemBuilderType? itemBuilder;
 
-  const TDItemWidget({
+  const TItemWidget({
     required this.fixedExtentScrollController,
     required this.colIndex,
     required this.index,
@@ -43,10 +43,10 @@ class TDItemWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TDItemWidgetState createState() => _TDItemWidgetState();
+  _TItemWidgetState createState() => _TItemWidgetState();
 }
 
-class _TDItemWidgetState extends State<TDItemWidget> {
+class _TItemWidgetState extends State<TItemWidget> {
   /// 子项监听滚动，从而刷新自身的颜色
   VoidCallback? listener;
   ItemDistanceCalculator? _itemDistanceCalculator;
@@ -80,7 +80,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
           _itemDistanceCalculator!,
           distance,
         ) ??
-        TDText(
+        TText(
           widget.content,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -107,9 +107,9 @@ class ItemDistanceCalculator {
   Color calculateColor(BuildContext context, double distance) {
     /// 线性插值
     if (distance < 0.5) {
-      return TDTheme.of(context).textColorPrimary;
+      return TTheme.of(context).textColorPrimary;
     } else {
-      return TDTheme.of(context).textDisabledColor;
+      return TTheme.of(context).textDisabledColor;
     }
   }
 
@@ -122,6 +122,6 @@ class ItemDistanceCalculator {
   }
 
   double calculateFont(BuildContext context, double distance) {
-    return TDTheme.of(context).fontBodyLarge!.size;
+    return TTheme.of(context).fontBodyLarge!.size;
   }
 }

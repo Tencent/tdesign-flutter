@@ -5,24 +5,24 @@ import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarAnchorPage演示
+/// TSideBarAnchorPage演示
 ///
-class TDSideBarAnchorPage extends StatefulWidget {
-  const TDSideBarAnchorPage({Key? key}) : super(key: key);
+class TSideBarAnchorPage extends StatefulWidget {
+  const TSideBarAnchorPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarAnchorPageState();
+    return TSideBarAnchorPageState();
   }
 }
 
-class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
+class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   var titleBarHeight = 44;
   var testButtonHeight = 80.0;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = TSideBarController();
   static const threshold = 50;
   var lock = false;
   var list = <SideItemProps>[];
@@ -56,9 +56,9 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
       pages.add(getAnchorDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
 
@@ -122,7 +122,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(
+          child: TButton(
             text: '更新children',
             onTap: () {
               setState(() {
@@ -145,8 +145,8 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
             children: [
               SizedBox(
                 width: 110,
-                child: TDSideBar(
-                  style: TDSideBarStyle.normal,
+                child: TSideBar(
+                  style: TSideBarStyle.normal,
                   value: currentValue,
                   controller: _sideBarController,
                   onChanged: onChanged,
@@ -157,7 +157,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
                 child: SingleChildScrollView(
                     controller: _demoScroller,
                     child: Container(
-                      color: TDTheme.of(context).bgColorContainer,
+                      color: TTheme.of(context).bgColorContainer,
                       child: Column(
                         children: [
                           ...pages,
@@ -179,7 +179,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-          child: TDText('标题$index',
+          child: TText('标题$index',
               style: const TextStyle(
                 fontSize: 14,
               )),
@@ -196,11 +196,11 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
     return Column(
       children: [
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const TDivider(),
       ],
     );
   }
@@ -212,14 +212,14 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         // spacing: 16,
         children: [
-          TDImage(
+          TImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: TImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           SizedBox(width: 16),
-          TDText('标题', style: TextStyle(fontSize: 16))
+          TText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

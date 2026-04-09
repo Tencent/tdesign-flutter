@@ -8,8 +8,8 @@ enum TextAlignment { left, center, right }
 /// 分割线
 /// 对于非flutter原有的控件，则只需满足TDesign规范即可；
 /// 如果有业务在实际使用，还需兼容实际业务场景。
-class TDDivider extends StatelessWidget {
-  const TDDivider({
+class TDivider extends StatelessWidget {
+  const TDivider({
     Key? key,
     this.color,
     this.margin,
@@ -118,7 +118,7 @@ class TDDivider extends StatelessWidget {
   /// 绘制线条
   Container _buildLine(BuildContext context,
       {double? width, EdgeInsetsGeometry? margin}) {
-    final lineColor = color ?? TDTheme.of(context).componentStrokeColor;
+    final lineColor = color ?? TTheme.of(context).componentStrokeColor;
 
     if (isDashed) {
       return Container(
@@ -144,10 +144,10 @@ class TDDivider extends StatelessWidget {
   /// 构建中间控件
   Widget _buildMiddleWidget(BuildContext context) {
     return widget ??
-        TDText(
+        TText(
           text,
-          font: TDTheme.of(context).fontBodySmall,
-          textColor: TDTheme.of(context).textColorPlaceholder,
+          font: TTheme.of(context).fontBodySmall,
+          textColor: TTheme.of(context).textColorPlaceholder,
           forceVerticalCenter: true,
           style: textStyle,
         );

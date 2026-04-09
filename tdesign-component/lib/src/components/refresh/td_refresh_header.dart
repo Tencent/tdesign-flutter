@@ -8,8 +8,8 @@ import '../../util/context_extension.dart';
 
 /// TDesign刷新头部
 /// 结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
-class TDRefreshHeader extends Header {
-  TDRefreshHeader({
+class TRefreshHeader extends Header {
+  TRefreshHeader({
     this.key,
     this.extent = 48.0,
     double? triggerOffset,
@@ -24,7 +24,7 @@ class TDRefreshHeader extends Header {
     this.enableInfiniteRefresh = false,
     bool? infiniteHitOver,
     this.overScroll = true,
-    this.loadingIcon = TDLoadingIcon.circle,
+    this.loadingIcon = TLoadingIcon.circle,
     this.backgroundColor,
     super.spring,
     super.horizontalSpring,
@@ -69,7 +69,7 @@ class TDRefreshHeader extends Header {
   final Key? key;
 
   /// loading样式
-  final TDLoadingIcon loadingIcon;
+  final TLoadingIcon loadingIcon;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -120,7 +120,7 @@ class TDRefreshHeader extends Header {
 /// 刷新头部组件
 class TGIconHeaderWidget extends StatefulWidget {
   /// loading样式
-  final TDLoadingIcon loadingIcon;
+  final TLoadingIcon loadingIcon;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -157,13 +157,13 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
 
   double get _safeOffset => widget.state.safeOffset;
 
-  Widget _buildLoading() => TDLoading(
-        size: TDLoadingSize.medium,
+  Widget _buildLoading() => TLoading(
+        size: TLoadingSize.medium,
         icon: widget.loadingIcon,
-        iconColor: TDTheme.of(context).brandNormalColor,
+        iconColor: TTheme.of(context).brandNormalColor,
         axis: Axis.horizontal,
         text: context.resource.refreshing,
-        textColor: TDTheme.of(context).textColorPlaceholder,
+        textColor: TTheme.of(context).textColorPlaceholder,
       );
 
   @override
@@ -199,15 +199,15 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
                     _refreshState == IndicatorMode.ready,
                 replacement: Visibility(
                   visible: _refreshState != IndicatorMode.inactive,
-                  child: TDText(
+                  child: TText(
                     _refreshState == IndicatorMode.drag
                         ? context.resource.pullToRefresh
                         : _refreshState == IndicatorMode.processed ||
                                 _refreshState == IndicatorMode.done
                             ? context.resource.completeRefresh
                             : context.resource.releaseRefresh,
-                    font: TDTheme.of(context).fontBodyMedium,
-                    textColor: TDTheme.of(context).textColorPlaceholder,
+                    font: TTheme.of(context).fontBodyMedium,
+                    textColor: TTheme.of(context).textColorPlaceholder,
                   ),
                 ),
               ),

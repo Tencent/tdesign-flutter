@@ -8,17 +8,17 @@ import '../badge/td_badge.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
 
-class TDActionSheetItemWidget extends StatelessWidget {
-  const TDActionSheetItemWidget({
+class TActionSheetItemWidget extends StatelessWidget {
+  const TActionSheetItemWidget({
     super.key,
     this.item,
     required this.index,
     this.onSelected,
   });
 
-  final TDActionSheetItem? item;
+  final TActionSheetItem? item;
   final int index;
-  final TDActionSheetItemCallback? onSelected;
+  final TActionSheetItemCallback? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +68,12 @@ class TDActionSheetItemWidget extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(height: TDTheme.of(context).spacer8),
+            SizedBox(height: TTheme.of(context).spacer8),
           ],
-          TDText(
+          TText(
             item!.label,
-            font: TDTheme.of(context).fontBodySmall,
-            textColor: TDTheme.of(context).textColorPrimary,
+            font: TTheme.of(context).fontBodySmall,
+            textColor: TTheme.of(context).textColorPrimary,
             style: item!.textStyle,
           ),
         ],
@@ -97,13 +97,13 @@ class TDActionSheetItemWidget extends StatelessWidget {
 }
 
 /// 获取主轴对齐方式
-MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
+MainAxisAlignment getMainAxisAlignment(TActionSheetAlign align) {
   switch (align) {
-    case TDActionSheetAlign.left:
+    case TActionSheetAlign.left:
       return MainAxisAlignment.start;
-    case TDActionSheetAlign.right:
+    case TActionSheetAlign.right:
       return MainAxisAlignment.end;
-    case TDActionSheetAlign.center:
+    case TActionSheetAlign.center:
     default:
       return MainAxisAlignment.center;
   }
@@ -118,8 +118,8 @@ Widget buildCancelButton(
   return Padding(
     padding: EdgeInsets.only(
         top: showPagination
-            ? TDTheme.of(context).spacer16
-            : TDTheme.of(context).spacer8),
+            ? TTheme.of(context).spacer16
+            : TTheme.of(context).spacer8),
     child: GestureDetector(
       onTap: () {
         onCancel?.call();
@@ -127,20 +127,20 @@ Widget buildCancelButton(
       },
       child: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).bgColorContainer,
+          color: TTheme.of(context).bgColorContainer,
           border: Border(
             top: BorderSide(
-              color: TDTheme.of(context).componentStrokeColor,
+              color: TTheme.of(context).componentStrokeColor,
               width: 0.5,
             ),
           ),
         ),
         height: 48,
         child: Center(
-          child: TDText(
+          child: TText(
             cancelText ?? context.resource.cancel,
-            font: TDTheme.of(context).fontBodyLarge,
-            textColor: TDTheme.of(context).textColorPrimary,
+            font: TTheme.of(context).fontBodyLarge,
+            textColor: TTheme.of(context).textColorPrimary,
           ),
         ),
       ),

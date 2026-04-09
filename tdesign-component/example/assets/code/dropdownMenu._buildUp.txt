@@ -1,7 +1,7 @@
 
-TDDropdownMenu _buildUp(BuildContext context) {
-  return TDDropdownMenu(
-    direction: TDDropdownMenuDirection.up,
+TDropdownMenu _buildUp(BuildContext context) {
+  return TDropdownMenu(
+    direction: TDropdownMenuDirection.up,
     onMenuOpened: (value) {
       print('打开第$value个菜单');
     },
@@ -10,21 +10,21 @@ TDDropdownMenu _buildUp(BuildContext context) {
     },
     builder: (context) {
       return [
-        TDDropdownItem(
+        TDropdownItem(
           options: [
-            TDDropdownItemOption(label: '全部产品', value: 'all', selected: true),
-            TDDropdownItemOption(label: '最新产品', value: 'new'),
-            TDDropdownItemOption(label: '最火产品', value: 'hot'),
+            TDropdownItemOption(label: '全部产品', value: 'all', selected: true),
+            TDropdownItemOption(label: '最新产品', value: 'new'),
+            TDropdownItemOption(label: '最火产品', value: 'hot'),
           ],
           onChange: (value) {
             print('选择：$value');
           },
         ),
-        TDDropdownItem(
+        TDropdownItem(
           options: [
-            TDDropdownItemOption(
+            TDropdownItemOption(
                 label: '默认排序', value: 'default', selected: true),
-            TDDropdownItemOption(label: '价格从高到低', value: 'price'),
+            TDropdownItemOption(label: '价格从高到低', value: 'price'),
           ],
         ),
       ];

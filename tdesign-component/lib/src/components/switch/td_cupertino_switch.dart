@@ -25,7 +25,7 @@ import 'package:flutter/services.dart';
 /// switch with a new [value] to update the visual appearance of the switch.
 ///
 /// {@tool dartpad}
-/// This example shows a toggleable [TDCupertinoSwitch]. When the thumb slides to
+/// This example shows a toggleable [TCupertinoSwitch]. When the thumb slides to
 /// the other side of the track, the switch is toggled between on/off.
 ///
 /// ** See code in examples/api/lib/cupertino/switch/cupertino_switch.0.dart **
@@ -33,7 +33,7 @@ import 'package:flutter/services.dart';
 ///
 /// {@tool snippet}
 ///
-/// This sample shows how to use a [TDCupertinoSwitch] in a [ListTile]. The
+/// This sample shows how to use a [TCupertinoSwitch] in a [ListTile]. The
 /// [MergeSemantics] is used to turn the entire [ListTile] into a single item
 /// for accessibility tools.
 ///
@@ -41,7 +41,7 @@ import 'package:flutter/services.dart';
 /// MergeSemantics(
 ///   child: ListTile(
 ///     title: const Text('Lights'),
-///     trailing: TDCupertinoSwitch(
+///     trailing: TCupertinoSwitch(
 ///       value: _lights,
 ///       onChanged: (bool value) { setState(() { _lights = value; }); },
 ///     ),
@@ -55,12 +55,12 @@ import 'package:flutter/services.dart';
 ///
 ///  * [Switch], the Material Design equivalent.
 ///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/switches/>
-class TDCupertinoSwitch extends StatefulWidget {
+class TCupertinoSwitch extends StatefulWidget {
   /// Creates an iOS-style switch.
   ///
   /// The [value] parameter must not be null.
   /// The [dragStartBehavior] parameter defaults to [DragStartBehavior.start] and must not be null.
-  const TDCupertinoSwitch({
+  const TCupertinoSwitch({
     Key? key,
     required this.value,
     required this.onChanged,
@@ -89,7 +89,7 @@ class TDCupertinoSwitch extends StatefulWidget {
   /// gets rebuilt; for example:
   ///
   /// ```dart
-  /// TDCupertinoSwitch(
+  /// TCupertinoSwitch(
   ///   value: _giveVerse,
   ///   onChanged: (bool newValue) {
   ///     setState(() {
@@ -119,7 +119,7 @@ class TDCupertinoSwitch extends StatefulWidget {
   /// The custom widget over the thumb.
   final Widget? thumbView;
 
-  /// {@template flutter.cupertino.TDCupertinoSwitch.dragStartBehavior}
+  /// {@template flutter.cupertino.TCupertinoSwitch.dragStartBehavior}
   /// Determines the way that drag start behavior is handled.
   ///
   /// If set to [DragStartBehavior.start], the drag behavior used to move the
@@ -142,7 +142,7 @@ class TDCupertinoSwitch extends StatefulWidget {
   final DragStartBehavior dragStartBehavior;
 
   @override
-  State<TDCupertinoSwitch> createState() => _TDCupertinoSwitchState();
+  State<TCupertinoSwitch> createState() => _TCupertinoSwitchState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -155,7 +155,7 @@ class TDCupertinoSwitch extends StatefulWidget {
   }
 }
 
-class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
+class _TCupertinoSwitchState extends State<TCupertinoSwitch>
     with TickerProviderStateMixin {
   late TapGestureRecognizer _tap;
   late HorizontalDragGestureRecognizer _drag;
@@ -207,7 +207,7 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
   }
 
   @override
-  void didUpdateWidget(TDCupertinoSwitch oldWidget) {
+  void didUpdateWidget(TCupertinoSwitch oldWidget) {
     super.didUpdateWidget(oldWidget);
     _drag.dragStartBehavior = widget.dragStartBehavior;
 
@@ -320,7 +320,7 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
       child: Opacity(
         opacity:
             widget.onChanged == null ? _kTDCupertinoSwitchDisabledOpacity : 1.0,
-        child: _TDCupertinoSwitchRenderObjectWidget(
+        child: _TCupertinoSwitchRenderObjectWidget(
           value: widget.value,
           activeColor: CupertinoDynamicColor.resolve(
             widget.activeColor ?? CupertinoColors.systemGreen,
@@ -351,9 +351,9 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
   }
 }
 
-class _TDCupertinoSwitchRenderObjectWidget
+class _TCupertinoSwitchRenderObjectWidget
     extends SingleChildRenderObjectWidget {
-  const _TDCupertinoSwitchRenderObjectWidget({
+  const _TCupertinoSwitchRenderObjectWidget({
     required this.child,
     required this.value,
     required this.activeColor,
@@ -369,7 +369,7 @@ class _TDCupertinoSwitchRenderObjectWidget
   final Color trackColor;
   final Color thumbColor;
   final ValueChanged<bool>? onChanged;
-  final _TDCupertinoSwitchState state;
+  final _TCupertinoSwitchState state;
   final TextDirection textDirection;
 
   /// The widget below this widget in the tree.
@@ -432,7 +432,7 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
     required Color thumbColor,
     ValueChanged<bool>? onChanged,
     required TextDirection textDirection,
-    required _TDCupertinoSwitchState state,
+    required _TCupertinoSwitchState state,
   })  : _value = value,
         _activeColor = activeColor,
         _trackColor = trackColor,
@@ -447,7 +447,7 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
     state._reaction.addListener(markNeedsPaint);
   }
 
-  final _TDCupertinoSwitchState _state;
+  final _TCupertinoSwitchState _state;
 
   bool get value => _value;
   bool _value;

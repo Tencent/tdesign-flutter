@@ -11,16 +11,16 @@ import '../popup/td_popup_route.dart';
 import 'td_drawer_widget.dart';
 
 /// 抽屉方向
-enum TDDrawerPlacement { left, right }
+enum TDrawerPlacement { left, right }
 
 /// 抽屉组件
-class TDDrawer {
-  TDDrawer(
+class TDrawer {
+  TDrawer(
     this.context, {
     this.closeOnOverlayClick = true,
     this.footer,
     this.items,
-    this.placement = TDDrawerPlacement.right,
+    this.placement = TDrawerPlacement.right,
     this.showOverlay = true,
     this.title,
     this.titleWidget,
@@ -51,13 +51,13 @@ class TDDrawer {
   final Widget? footer;
 
   /// 抽屉里的列表项
-  final List<TDDrawerItem>? items;
+  final List<TDrawerItem>? items;
 
   /// 自定义内容，优先级高于[items]/[footer]/[title]
   final Widget? contentWidget;
 
   /// 抽屉方向
-  final TDDrawerPlacement? placement;
+  final TDrawerPlacement? placement;
 
   /// 是否显示遮罩层
   final bool? showOverlay;
@@ -75,7 +75,7 @@ class TDDrawer {
   final VoidCallback? onClose;
 
   /// 点击抽屉里的列表项触发
-  final TDDrawerItemClickCallback? onItemClick;
+  final TDrawerItemClickCallback? onItemClick;
 
   /// 宽度
   final double? width;
@@ -84,7 +84,7 @@ class TDDrawer {
   final double? drawerTop;
 
   /// 列表自定义样式
-  final TDCellStyle? style;
+  final TCellStyle? style;
 
   /// 是否开启点击反馈
   final bool? hover;
@@ -98,7 +98,7 @@ class TDDrawer {
   /// 是否显示最后一行分割线
   final bool? isShowLastBordered;
 
-  TDSlidePopupRoute? _drawerRoute;
+  TSlidePopupRoute? _drawerRoute;
 
   void show() {
     if (_drawerRoute != null) {
@@ -108,15 +108,15 @@ class TDDrawer {
     final overlayEnabled = showOverlay ?? true;
     final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
 
-    _drawerRoute = TDSlidePopupRoute(
-      slideTransitionFrom: placement == TDDrawerPlacement.right
+    _drawerRoute = TSlidePopupRoute(
+      slideTransitionFrom: placement == TDrawerPlacement.right
           ? SlideTransitionFrom.right
           : SlideTransitionFrom.left,
       isDismissible: dismissible,
       modalBarrierColor: overlayEnabled ? null : Colors.transparent,
       modalTop: drawerTop,
       builder: (context) {
-        return TDDrawerWidget(
+        return TDrawerWidget(
           footer: footer,
           items: items,
           contentWidget: contentWidget,

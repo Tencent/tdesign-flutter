@@ -46,15 +46,15 @@ class _TabStyle extends AnimatedWidget {
     final defaultStyle = (labelStyle ??
             tabBarTheme.labelStyle ??
             TextStyle(
-                height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
-                fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14))
+                height: TTheme.of(context).fontBodyMedium?.height ?? 1.57,
+                fontSize: TTheme.of(context).fontBodyMedium?.size ?? 14))
         .copyWith(inherit: true);
     final defaultUnselectedStyle = (unselectedLabelStyle ??
             tabBarTheme.unselectedLabelStyle ??
             labelStyle ??
             TextStyle(
-                height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
-                fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14))
+                height: TTheme.of(context).fontBodyMedium?.height ?? 1.57,
+                fontSize: TTheme.of(context).fontBodyMedium?.size ?? 14))
         .copyWith(inherit: true);
     final textStyle = selected
         ? TextStyle.lerp(defaultStyle, defaultUnselectedStyle, animation.value)!
@@ -64,11 +64,11 @@ class _TabStyle extends AnimatedWidget {
     final selectedColor = labelColor ??
         tabBarTheme.labelColor ??
         labelStyle?.color ??
-        TDTheme.of(context).brandNormalColor;
+        TTheme.of(context).brandNormalColor;
     final unselectedColor = unselectedLabelColor ??
         tabBarTheme.unselectedLabelColor ??
         unselectedLabelStyle?.color ??
-        TDTheme.of(context).textColorPrimary;
+        TTheme.of(context).textColorPrimary;
 
     final color = selected
         ? Color.lerp(selectedColor, unselectedColor, animation.value)!
@@ -87,7 +87,7 @@ class _TabStyle extends AnimatedWidget {
   }
 }
 
-class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
+class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Creates a material design tab bar.
   ///
   /// The [tabs] argument must not be null and its length must match the [controller]'s
@@ -102,7 +102,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// If [indicator] is not null or provided from [TabBarTheme],
   /// then [indicatorWeight], [indicatorPadding], and [indicatorColor] are ignored.
-  const TDHorizontalTabBar({
+  const THorizontalTabBar({
     Key? key,
     required this.tabs,
     this.controller,
@@ -136,8 +136,8 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Typically a list of two or more [Tab] widgets.
   ///
   /// The length of this list must match the [controller]'s [TabController.length]
-  /// and the length of the [TDHorizontalTabBarView.children] list.
-  final List<TDTab> tabs;
+  /// and the length of the [THorizontalTabBarView.children] list.
+  final List<TTab> tabs;
 
   /// This widget's selection and animation state.
   ///
@@ -148,14 +148,14 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Whether this tab bar can be scrolled horizontally.
   ///
   /// If [isScrollable] is true, then each tab is as wide as needed for its label
-  /// and the entire [TDHorizontalTabBar] is scrollable. Otherwise each tab gets an equal
+  /// and the entire [THorizontalTabBar] is scrollable. Otherwise each tab gets an equal
   /// share of the available space.
   final bool isScrollable;
 
   /// The amount of space by which to inset the tab bar.
   ///
   /// When [isScrollable] is false, this will yield the same result as if you had wrapped your
-  /// [TDHorizontalTabBar] in a [Padding] widget. When [isScrollable] is true, the scrollable itself is inset,
+  /// [THorizontalTabBar] in a [Padding] widget. When [isScrollable] is true, the scrollable itself is inset,
   /// allowing the padding to scroll with the tab bar, rather than enclosing it.
   final EdgeInsetsGeometry? padding;
 
@@ -295,18 +295,18 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to true.
   final bool? enableFeedback;
 
-  /// An optional callback that's called when the [TDHorizontalTabBar] is tapped.
+  /// An optional callback that's called when the [THorizontalTabBar] is tapped.
   ///
   /// The callback is applied to the index of the tab where the tap occurred.
   ///
   /// This callback has no effect on the default handling of taps. It's for
   /// applications that want to do a little extra work when a tab is tapped,
-  /// even if the tap doesn't change the TabController's index. TDHorizontalTabBar [onTap]
+  /// even if the tap doesn't change the TabController's index. THorizontalTabBar [onTap]
   /// callbacks should not make changes to the TabController since that would
   /// interfere with the default tap handler.
   final ValueChanged<int>? onTap;
 
-  /// How the [TDHorizontalTabBar]'s scroll view should respond to user input.
+  /// How the [THorizontalTabBar]'s scroll view should respond to user input.
   ///
   /// For example, determines how the scroll view continues to animate after the
   /// user stops dragging the scroll view.
@@ -315,7 +315,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   final ScrollPhysics? physics;
 
   /// 选项卡样式
-  final TDTabBarOutlineType? outlineType;
+  final TTabBarOutlineType? outlineType;
 
   /// tabBar背景色
   final Color? backgroundColor;
@@ -343,9 +343,9 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     return Size.fromHeight(maxHeight + indicatorWeight);
   }
 
-  /// Returns whether the [TDHorizontalTabBar] contains a tab with both text and icon.
+  /// Returns whether the [THorizontalTabBar] contains a tab with both text and icon.
   ///
-  /// [TDHorizontalTabBar] uses this to give uniform padding to all tabs in cases where
+  /// [THorizontalTabBar] uses this to give uniform padding to all tabs in cases where
   /// there are some tabs with both text and icon and some which contain only
   /// text or icon.
   bool get tabHasTextAndIcon {
@@ -360,7 +360,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   }
 
   @override
-  State<TDHorizontalTabBar> createState() => _TDHorizontalTabBarState();
+  State<THorizontalTabBar> createState() => _THorizontalTabBarState();
 }
 
 class _ChangeAnimation extends Animation<double>
@@ -533,7 +533,7 @@ double _indexChangeProgress(TabController controller) {
       (currentIndex - previousIndex).abs();
 }
 
-class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
+class _THorizontalTabBarState extends State<THorizontalTabBar> {
   ScrollController? _scrollController;
   TabController? _controller;
   _IndicatorPainter? _indicatorPainter;
@@ -586,7 +586,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     );
   }
 
-  // If the TDHorizontalTabBar is rebuilt with a new tab controller, the caller should
+  // If the THorizontalTabBar is rebuilt with a new tab controller, the caller should
   // dispose the old one. In that case the old controller's animation will be
   // null and should not be accessed.
   bool get _controllerIsValid => _controller?.animation != null;
@@ -636,7 +636,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   @override
-  void didUpdateWidget(TDHorizontalTabBar oldWidget) {
+  void didUpdateWidget(THorizontalTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _updateTabController();
@@ -738,7 +738,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   void _handleTabControllerAnimationTick() {
     assert(mounted);
     if (!_controller!.indexIsChanging && widget.isScrollable) {
-      // Sync the TDHorizontalTabBar's scroll position with the TDHorizontalTabBarView's PageView.
+      // Sync the THorizontalTabBar's scroll position with the THorizontalTabBarView's PageView.
       _currentIndex = _controller!.index;
       _scrollToControllerValue();
     }
@@ -784,41 +784,41 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   BoxDecoration? _getContentDecorateInner(int index) {
-    if (widget.outlineType == TDTabBarOutlineType.capsule) {
+    if (widget.outlineType == TTabBarOutlineType.capsule) {
       return BoxDecoration(
           color: index == _currentIndex
-              ? (widget.selectedBgColor ?? TDTheme.of(context).brandColor1)
-              : (widget.unSelectedBgColor ?? TDTheme.of(context).grayColor1),
+              ? (widget.selectedBgColor ?? TTheme.of(context).brandColor1)
+              : (widget.unSelectedBgColor ?? TTheme.of(context).grayColor1),
           borderRadius: BorderRadius.circular(32));
     }
     return null;
   }
 
   BoxDecoration? _getContentDecorateOuter(int index) {
-    if (widget.outlineType == TDTabBarOutlineType.capsule) {
+    if (widget.outlineType == TTabBarOutlineType.capsule) {
       return BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
       );
-    } else if (widget.outlineType == TDTabBarOutlineType.card) {
+    } else if (widget.outlineType == TTabBarOutlineType.card) {
       if (index == _currentIndex) {
         return BoxDecoration(
             color:
-                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+                widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(index + 1 < widget.tabs.length
-                    ? TDTheme.of(context).radiusLarge
+                    ? TTheme.of(context).radiusLarge
                     : 0),
                 topLeft: Radius.circular(
-                    index > 0 ? TDTheme.of(context).radiusLarge : 0)));
+                    index > 0 ? TTheme.of(context).radiusLarge : 0)));
       } else {
         return BoxDecoration(
-          color: TDTheme.of(context).bgColorSecondaryContainer,
+          color: TTheme.of(context).bgColorSecondaryContainer,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(index - 1 == _currentIndex
-                ? TDTheme.of(context).radiusLarge
+                ? TTheme.of(context).radiusLarge
                 : 0),
             bottomRight: Radius.circular(index + 1 == _currentIndex
-                ? TDTheme.of(context).radiusLarge
+                ? TTheme.of(context).radiusLarge
                 : 0),
           ),
         );
@@ -828,9 +828,9 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   Color? _getBackgroundColor(int index) {
-    if (widget.outlineType == TDTabBarOutlineType.card) {
+    if (widget.outlineType == TTabBarOutlineType.card) {
       if (index == _currentIndex) {
-        return TDTheme.of(context).bgColorSecondaryContainer;
+        return TTheme.of(context).bgColorSecondaryContainer;
       }
     }
     return null;
@@ -870,7 +870,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       if (_controller!.length != widget.tabs.length) {
         throw FlutterError(
           "Controller's length property (${_controller!.length}) does not match the "
-          "number of tabs (${widget.tabs.length}) present in TDHorizontalTabBar's tabs property.",
+          "number of tabs (${widget.tabs.length}) present in THorizontalTabBar's tabs property.",
         );
       }
       return true;
@@ -898,7 +898,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       }
       // tab.size=20;
       EdgeInsetsGeometry? capsuleDefaultPadding;
-      if (widget.outlineType == TDTabBarOutlineType.capsule) {
+      if (widget.outlineType == TTabBarOutlineType.capsule) {
         capsuleDefaultPadding = const EdgeInsets.all(4);
       }
       return Container(
@@ -941,7 +941,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         wrappedTabs[previousIndex] =
             _buildStyledTab(wrappedTabs[previousIndex], false, animation);
       } else {
-        // The user is dragging the TDHorizontalTabBarView's PageView left or right.
+        // The user is dragging the THorizontalTabBarView's PageView left or right.
         final tabIndex = _currentIndex!;
         final Animation<double> centerAnimation =
             _DragAnimation(_controller!, tabIndex);
@@ -981,7 +981,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
             enableFeedback: widget.enableFeedback ?? true,
             overlayColor: widget.overlayColor,
             child: Container(
-              padding: widget.outlineType == TDTabBarOutlineType.filled
+              padding: widget.outlineType == TTabBarOutlineType.filled
                   ? EdgeInsets.only(bottom: widget.indicatorWeight)
                   : EdgeInsets.zero,
               child: Stack(
@@ -1056,7 +1056,7 @@ typedef _LayoutCallback = void Function(
 class _TabBarScrollController extends ScrollController {
   _TabBarScrollController(this.tabBar);
 
-  final _TDHorizontalTabBarState tabBar;
+  final _THorizontalTabBarState tabBar;
 
   @override
   ScrollPosition createScrollPosition(ScrollPhysics physics,
@@ -1087,7 +1087,7 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
           oldPosition: oldPosition,
         );
 
-  final _TDHorizontalTabBarState tabBar;
+  final _THorizontalTabBarState tabBar;
 
   bool? _initialViewportDimensionWasZero;
 
@@ -1240,7 +1240,7 @@ class _DragAnimation extends Animation<double>
 /// A page view that displays the widget which corresponds to the currently
 /// selected tab.
 ///
-/// This widget is typically used in conjunction with a [TDHorizontalTabBar].
+/// This widget is typically used in conjunction with a [THorizontalTabBar].
 ///
 /// {@youtube 560 315 https://www.youtube.com/watch?v=POtoEH-5l40}
 ///
@@ -1248,14 +1248,14 @@ class _DragAnimation extends Animation<double>
 /// ancestor.
 ///
 /// The tab controller's [TabController.length] must equal the length of the
-/// [children] list and the length of the [TDHorizontalTabBar.tabs] list.
+/// [children] list and the length of the [THorizontalTabBar.tabs] list.
 ///
 /// To see a sample implementation, visit the [TabController] documentation.
-class TDHorizontalTabBarView extends StatefulWidget {
+class THorizontalTabBarView extends StatefulWidget {
   /// Creates a page view with one child per tab.
   ///
   /// The length of [children] must be the same as the [controller]'s length.
-  const TDHorizontalTabBarView({
+  const THorizontalTabBarView({
     Key? key,
     required this.children,
     this.controller,
@@ -1271,7 +1271,7 @@ class TDHorizontalTabBarView extends StatefulWidget {
 
   /// One widget per tab.
   ///
-  /// Its length must match the length of the [TDHorizontalTabBar.tabs]
+  /// Its length must match the length of the [THorizontalTabBar.tabs]
   /// list, as well as the [controller]'s [TabController.length].
   final List<Widget> children;
 
@@ -1290,10 +1290,10 @@ class TDHorizontalTabBarView extends StatefulWidget {
   final DragStartBehavior dragStartBehavior;
 
   @override
-  State<TDHorizontalTabBarView> createState() => _TDHorizontalTabBarViewState();
+  State<THorizontalTabBarView> createState() => _THorizontalTabBarViewState();
 }
 
-class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
+class _THorizontalTabBarViewState extends State<THorizontalTabBarView> {
   TabController? _controller;
   late PageController _pageController;
   late List<Widget> _children;
@@ -1301,7 +1301,7 @@ class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
   int? _currentIndex;
   int _warpUnderwayCount = 0;
 
-  // If the TDHorizontalTabBarView is rebuilt with a new tab controller, the caller should
+  // If the THorizontalTabBarView is rebuilt with a new tab controller, the caller should
   // dispose the old one. In that case the old controller's animation will be
   // null and should not be accessed.
   bool get _controllerIsValid => _controller?.animation != null;
@@ -1340,7 +1340,7 @@ class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
   }
 
   @override
-  void didUpdateWidget(TDHorizontalTabBarView oldWidget) {
+  void didUpdateWidget(THorizontalTabBarView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _updateTabController();
@@ -1472,7 +1472,7 @@ class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
       if (_controller!.length != widget.children.length) {
         throw FlutterError(
           "Controller's length property (${_controller!.length}) does not match the "
-          "number of tabs (${widget.children.length}) present in TDHorizontalTabBar's tabs property.",
+          "number of tabs (${widget.children.length}) present in THorizontalTabBar's tabs property.",
         );
       }
       return true;
@@ -1532,7 +1532,7 @@ class TabPageSelectorIndicator extends StatelessWidget {
 /// Displays a row of small circular indicators, one per tab.
 ///
 /// The selected tab's indicator is highlighted. Often used in conjunction with
-/// a [TDHorizontalTabBarView].
+/// a [THorizontalTabBarView].
 ///
 /// If a [TabController] is not provided, then there must be a
 /// [DefaultTabController] ancestor.
@@ -1586,7 +1586,7 @@ class TabPageSelector extends StatelessWidget {
         background = selectedColorTween.begin!;
       }
     } else {
-      // The selection's offset reflects how far the TDHorizontalTabBarView has / been dragged
+      // The selection's offset reflects how far the THorizontalTabBarView has / been dragged
       // to the previous page (-1.0 to 0.0) or the next page (0.0 to 1.0).
       final offset = tabController.offset;
       if (tabController.index == tabIndex) {

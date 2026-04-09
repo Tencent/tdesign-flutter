@@ -3,7 +3,7 @@ import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 表格单元选用组件类型的枚举
-enum TDFormItemType {
+enum TFormItemType {
   input,
   radios,
   dateTimePicker,
@@ -14,8 +14,8 @@ enum TDFormItemType {
   upLoadImg
 }
 
-class TDFormItem extends StatefulWidget {
-  const TDFormItem({
+class TFormItem extends StatefulWidget {
+  const TFormItem({
     required this.type,
     this.child,
     this.formItemNotifier,
@@ -48,15 +48,15 @@ class TDFormItem extends StatefulWidget {
   final Widget? labelWidget;
 
   /// 表格单元需要使用的组件类型
-  final TDFormItemType type;
+  final TFormItemType type;
 
   /// 表单字段名称
   final String? name;
 
-  /// TDInput的辅助信息
+  /// TInput的辅助信息
   final String? additionInfo;
 
-  /// TDInput 默认显示文字
+  /// TInput 默认显示文字
   final String? help;
 
   /// TODO: item 标签对齐方式
@@ -65,7 +65,7 @@ class TDFormItem extends StatefulWidget {
 
   /// 表单显示内容对齐方式：
   /// left、right、top
-  /// TODO: TDStepper TDRate 等组件没用实现通用性
+  /// TODO: TStepper TRate 等组件没用实现通用性
   final TextAlign? contentAlign;
 
   /// 标签宽度，如果提供则覆盖Form的labelWidth
@@ -89,7 +89,7 @@ class TDFormItem extends StatefulWidget {
   final bool? requiredMark;
 
   /// 整个表单的校验规则
-  final List<TDFormValidation>? formRules;
+  final List<TFormValidation>? formRules;
 
   /// 表单项验证规则
   final List? itemRule;
@@ -97,7 +97,7 @@ class TDFormItem extends StatefulWidget {
   /// 是否显示错误信息
   final bool showErrorMessage;
 
-  /// TDTextarea 的属性，指示器
+  /// TTextarea 的属性，指示器
   final bool? indicator;
 
   ///提示内容
@@ -107,10 +107,10 @@ class TDFormItem extends StatefulWidget {
   final Color? backgroundColor;
 
   @override
-  _TDFormItemState createState() => _TDFormItemState();
+  _TFormItemState createState() => _TFormItemState();
 }
 
-class _TDFormItemState extends State<TDFormItem> {
+class _TFormItemState extends State<TFormItem> {
   @override
   void initState() {
     // TODO: implement initState
@@ -142,10 +142,10 @@ class _TDFormItemState extends State<TDFormItem> {
     super.didChangeDependencies();
   }
 
-  /// 从 TDForm 继承获取整个表单的参数
+  /// 从 TForm 继承获取整个表单的参数
   /// 获取真正的 LabelWidth
   double get LabelWidth {
-    final inherited = TDFormInherited.of(context);
+    final inherited = TFormInherited.of(context);
     final defaultLabelWidth = 8.0;
 
     /// 如果 item 传入定制的 labelWidth 则使用
@@ -162,12 +162,12 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   Map<String, dynamic> get FormData {
-    return TDFormInherited.of(context)!.formData;
+    return TFormInherited.of(context)!.formData;
   }
 
   /// 获取 form 以及 formItem 的内容排列方式
   TextAlign get FormContentAlign {
-    final inherited = TDFormInherited.of(context);
+    final inherited = TFormInherited.of(context);
     if (widget.contentAlign != null) {
       /// 断言 widget.contentAlign 不会为空
       return widget.contentAlign!;
@@ -179,7 +179,7 @@ class _TDFormItemState extends State<TDFormItem> {
 
   /// 获取 form 是否为水平排列的状态
   bool get FormIsHorizontal {
-    final inherited = TDFormInherited.of(context);
+    final inherited = TFormInherited.of(context);
     if (inherited?.isHorizontal != null) {
       return inherited!.isHorizontal;
     }
@@ -187,7 +187,7 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   bool get FormIsReset {
-    final inherited = TDFormInherited.of(context);
+    final inherited = TFormInherited.of(context);
     if (inherited?.isReset != null) {
       return inherited!.isReset;
     }
@@ -196,17 +196,17 @@ class _TDFormItemState extends State<TDFormItem> {
 
   /// 获取 form 整体是否校验的信号状态
   bool get FormValidate {
-    final inherited = TDFormInherited.of(context);
+    final inherited = TFormInherited.of(context);
     return inherited!.isValidate;
   }
 
   bool get FormRequiredMark {
-    return TDFormInherited.of(context)!.requiredMark ?? false;
+    return TFormInherited.of(context)!.requiredMark ?? false;
   }
 
   /// 获取整个表格是否需要展示错误提示
   bool? get ShowErrorMessage {
-    final inherited = TDFormInherited.of(context);
+    final inherited = TFormInherited.of(context);
     if (widget.showErrorMessage != null) {
       return widget.showErrorMessage;
     } else {
@@ -215,8 +215,8 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   /// 获取整个表单的校验规则
-  Map<String, TDFormValidation> get FormRules {
-    final inherited = TDFormInherited.of(context);
+  Map<String, TFormValidation> get FormRules {
+    final inherited = TFormInherited.of(context);
     return inherited!.rules;
   }
 
@@ -240,7 +240,7 @@ class _TDFormItemState extends State<TDFormItem> {
       return null;
     }
     if (FormRules[name] != null) {
-      TDFormValidation rule = FormRules[name]!;
+      TFormValidation rule = FormRules[name]!;
 
       /// 只对类型匹配的项进行校验
       if (rule.type == widget.type) {
@@ -260,14 +260,14 @@ class _TDFormItemState extends State<TDFormItem> {
       String name = widget.name!;
       Map<String, dynamic> _formData = FormData;
       _formData[name] = value;
-      TDFormInherited.of(context)!.onFormDataChange(_formData);
+      TFormInherited.of(context)!.onFormDataChange(_formData);
       startValidation();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     Widget labelContent = Visibility(
         visible: widget.label != null ? true : false,
         child: SizedBox(
@@ -275,15 +275,15 @@ class _TDFormItemState extends State<TDFormItem> {
             child: widget.labelWidget ??
                 Row(
                   children: [
-                    TDText(widget.label,
-                        font: TDTheme.of(context).fontBodyMedium,
+                    TText(widget.label,
+                        font: TTheme.of(context).fontBodyMedium,
                         textAlign: widget.labelAlign),
                     if (FormRequiredMark &&
                         (widget.requiredMark != null &&
                             widget.requiredMark == true))
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
-                        child: TDText('*',
+                        child: TText('*',
                             style: const TextStyle(fontSize: 12),
                             textColor: Colors.red,
                             textAlign: widget.labelAlign),
@@ -316,11 +316,11 @@ class _TDFormItemState extends State<TDFormItem> {
       ),
     ];
     switch (widget.type) {
-      case TDFormItemType.input:
-      case TDFormItemType.rate:
+      case TFormItemType.input:
+      case TFormItemType.rate:
         return Container(
             color:
-                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+                widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
             child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -339,13 +339,13 @@ class _TDFormItemState extends State<TDFormItem> {
                     ),
                     _buildTipRow(
                         left: 0,
-                        top: TDFormItemType.rate == widget.type ? 4 : 0)
+                        top: TFormItemType.rate == widget.type ? 4 : 0)
                   ],
                 )));
-      case TDFormItemType.radios:
+      case TFormItemType.radios:
         return Container(
             color:
-                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+                widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
             child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -365,12 +365,12 @@ class _TDFormItemState extends State<TDFormItem> {
                     _buildTipRow(left: 0, top: 4)
                   ],
                 )));
-      case TDFormItemType.dateTimePicker:
-      case TDFormItemType.cascader:
+      case TFormItemType.dateTimePicker:
+      case TFormItemType.cascader:
         return _buildSelectRow(context);
-      case TDFormItemType.stepper:
+      case TFormItemType.stepper:
         return Container(
-          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+          color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child:
@@ -390,10 +390,10 @@ class _TDFormItemState extends State<TDFormItem> {
             ]),
           ),
         );
-      case TDFormItemType.textarea:
+      case TFormItemType.textarea:
         return Container(
             color:
-                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+                widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
             child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -417,8 +417,8 @@ class _TDFormItemState extends State<TDFormItem> {
                             child: SizedBox(
                               width: LabelWidth,
                               child: widget.labelWidget ??
-                                  TDText(widget.label,
-                                      font: TDTheme.of(context).fontBodyMedium,
+                                  TText(widget.label,
+                                      font: TTheme.of(context).fontBodyMedium,
                                       textAlign: widget.labelAlign),
                             ),
                           ),
@@ -429,9 +429,9 @@ class _TDFormItemState extends State<TDFormItem> {
                     _buildTipRow(left: 0, top: 8)
                   ],
                 )));
-      case TDFormItemType.upLoadImg:
+      case TFormItemType.upLoadImg:
         return Container(
-          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+          color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
           child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -449,8 +449,8 @@ class _TDFormItemState extends State<TDFormItem> {
                             child: SizedBox(
                               width: LabelWidth,
                               child: widget.labelWidget ??
-                                  TDText(widget.label,
-                                      font: TDTheme.of(context).fontBodyMedium,
+                                  TText(widget.label,
+                                      font: TTheme.of(context).fontBodyMedium,
                                       textAlign: widget.labelAlign),
                             )),
                         widget.child ?? SizedBox()
@@ -473,15 +473,15 @@ class _TDFormItemState extends State<TDFormItem> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TDText(widget.label ?? '',
-                    font: TDTheme.of(context).fontBodyMedium,
+                TText(widget.label ?? '',
+                    font: TTheme.of(context).fontBodyMedium,
                     textAlign: widget.labelAlign),
                 if (FormRequiredMark &&
                     (widget.requiredMark != null &&
                         widget.requiredMark == true))
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
-                    child: TDText('*',
+                    child: TText('*',
                         style: const TextStyle(fontSize: 12),
                         textColor: Colors.red,
                         textAlign: widget.labelAlign),
@@ -490,13 +490,13 @@ class _TDFormItemState extends State<TDFormItem> {
             ),
           ),
     );
-    Widget selectText = TDText(
+    Widget selectText = TText(
       widget.select != '' ? widget.select : widget.hintText,
       textAlign: FormContentAlign,
-      font: TDTheme.of(context).fontBodyLarge,
+      font: TTheme.of(context).fontBodyLarge,
       textColor: widget.select != ''
-          ? TDTheme.of(context).textColorPrimary
-          : TDTheme.of(context).textColorPlaceholder,
+          ? TTheme.of(context).textColorPrimary
+          : TTheme.of(context).textColorPlaceholder,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -509,8 +509,8 @@ class _TDFormItemState extends State<TDFormItem> {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: Icon(
-              TDIcons.chevron_right,
-              color: TDTheme.of(context).textColorPlaceholder,
+              TIcons.chevron_right,
+              color: TTheme.of(context).textColorPlaceholder,
             ),
           ),
         ],
@@ -524,7 +524,7 @@ class _TDFormItemState extends State<TDFormItem> {
         }
       },
       child: Container(
-        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -558,8 +558,8 @@ class _TDFormItemState extends State<TDFormItem> {
                   Padding(
                     padding: const EdgeInsets.only(left: 2),
                     child: Icon(
-                      TDIcons.chevron_right,
-                      color: TDTheme.of(context).textColorPlaceholder,
+                      TIcons.chevron_right,
+                      color: TTheme.of(context).textColorPlaceholder,
                     ),
                   ),
                 ],
@@ -586,11 +586,11 @@ class _TDFormItemState extends State<TDFormItem> {
                 child: Padding(
                     padding:
                         EdgeInsets.only(left: left, right: right, top: top),
-                    child: TDText(
+                    child: TText(
                       widget.help,
-                      font: TDTheme.of(context).fontBodySmall,
+                      font: TTheme.of(context).fontBodySmall,
                       textAlign: widget.tipAlign ?? TextAlign.left,
-                      textColor: TDTheme.of(context).textColorPlaceholder,
+                      textColor: TTheme.of(context).textColorPlaceholder,
                     )),
               )
             ],
@@ -607,11 +607,11 @@ class _TDFormItemState extends State<TDFormItem> {
                   child: Padding(
                       padding:
                           EdgeInsets.only(left: left, right: right, top: top),
-                      child: TDText(
+                      child: TText(
                         errorMessage,
-                        font: TDTheme.of(context).fontBodySmall,
+                        font: TTheme.of(context).fontBodySmall,
                         textAlign: widget.tipAlign ?? TextAlign.left,
-                        textColor: TDTheme.of(context).errorNormalColor,
+                        textColor: TTheme.of(context).errorNormalColor,
                       )))
             ],
           ),

@@ -5,13 +5,13 @@ import '../base/example_widget.dart';
 
 const drawerItemLength = 30;
 
-class TDDrawerPage extends StatelessWidget {
-  const TDDrawerPage({super.key});
+class TDrawerPage extends StatelessWidget {
+  const TDrawerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).grayColor2,
+        color: TTheme.of(context).grayColor2,
         child: ExamplePage(
           title: tdTitle(context),
           desc: '用作一组平行关系页面/内容的切换器，相较于Tab，同屏可展示更多的选项数量。',
@@ -68,19 +68,19 @@ class TDDrawerPage extends StatelessWidget {
 Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return TButton(
     text: '基础抽屉',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDDrawer(
+      TDrawer(
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
         items: List.generate(
-            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
+            drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
         },
@@ -93,21 +93,21 @@ Widget _buildBaseSimple(BuildContext context) {
 Widget _buildIconSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return TButton(
     text: '带图标抽屉',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDDrawer(
+      TDrawer(
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
         items: List.generate(
             drawerItemLength,
-            (index) => TDDrawerItem(
-                title: '菜单${index + 1}', icon: const Icon(TDIcons.app))),
+            (index) => TDrawerItem(
+                title: '菜单${index + 1}', icon: const Icon(TIcons.app))),
       );
     },
   );
@@ -117,21 +117,21 @@ Widget _buildIconSimple(BuildContext context) {
 Widget _buildTitleSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return TButton(
     text: '带图标抽屉',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDDrawer(
+      TDrawer(
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
         title: '标题',
-        placement: TDDrawerPlacement.left,
+        placement: TDrawerPlacement.left,
         items: List.generate(
-            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
+            drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
       );
     },
   );
@@ -141,26 +141,26 @@ Widget _buildTitleSimple(BuildContext context) {
 Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return TButton(
     text: '带底部插槽样式',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDDrawer(
+      TDrawer(
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
         title: '标题',
-        placement: TDDrawerPlacement.left,
+        placement: TDrawerPlacement.left,
         items: List.generate(
-            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
-        footer: const TDButton(
+            drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
+        footer: const TButton(
           text: '操作',
-          type: TDButtonType.outline,
+          type: TButtonType.outline,
           width: double.infinity,
-          size: TDButtonSize.large,
+          size: TButtonSize.large,
         ),
       );
     },
@@ -171,26 +171,26 @@ Widget _buildBottomSimple(BuildContext context) {
 Widget _buildColorSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
 
-  var tdCellStyle = TDCellStyle(context: context);
-  tdCellStyle.backgroundColor = TDTheme.of(context).brandNormalColor;
+  var tdCellStyle = TCellStyle(context: context);
+  tdCellStyle.backgroundColor = TTheme.of(context).brandNormalColor;
 
-  return TDButton(
+  return TButton(
     text: '自定义背景色',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDDrawer(
+      TDrawer(
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
         title: '标题',
-        backgroundColor: TDTheme.of(context).bgColorSecondaryContainer,
+        backgroundColor: TTheme.of(context).bgColorSecondaryContainer,
         style: tdCellStyle,
-        placement: TDDrawerPlacement.right,
+        placement: TDrawerPlacement.right,
         items: List.generate(
-            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
+            drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
       );
     },
   );

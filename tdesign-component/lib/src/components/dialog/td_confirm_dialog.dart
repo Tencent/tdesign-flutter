@@ -13,8 +13,8 @@ import 'td_dialog_widget.dart';
 /// 只有一个按钮的弹窗控件
 ///
 /// 按钮样式支持普通和文字
-class TDConfirmDialog extends StatelessWidget {
-  const TDConfirmDialog({
+class TConfirmDialog extends StatelessWidget {
+  const TConfirmDialog({
     Key? key,
     this.action,
     this.backgroundColor,
@@ -28,7 +28,7 @@ class TDConfirmDialog extends StatelessWidget {
     this.contentMaxHeight = 0,
     this.buttonText,
     this.buttonTextColor,
-    this.buttonStyle = TDDialogButtonStyle.normal,
+    this.buttonStyle = TDialogButtonStyle.normal,
     this.showCloseButton,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
@@ -70,7 +70,7 @@ class TDConfirmDialog extends StatelessWidget {
   final Color? backgroundColor;
 
   /// 按钮样式
-  final TDDialogButtonStyle buttonStyle;
+  final TDialogButtonStyle buttonStyle;
 
   /// 圆角
   final double radius;
@@ -85,7 +85,7 @@ class TDConfirmDialog extends StatelessWidget {
   final Widget? buttonWidget;
 
   /// 按钮自定义样式属性，背景色、边框...
-  final TDButtonStyle? buttonStyleCustom;
+  final TButtonStyle? buttonStyleCustom;
 
   final double? width;
 
@@ -93,17 +93,17 @@ class TDConfirmDialog extends StatelessWidget {
     if (buttonWidget != null) {
       return buttonWidget!;
     }
-    if (buttonStyle == TDDialogButtonStyle.text) {
+    if (buttonStyle == TDialogButtonStyle.text) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const TDDivider(height: 23, color: Colors.transparent),
-          const TDDivider(height: 1),
-          TDDialogButton(
+          const TDivider(height: 23, color: Colors.transparent),
+          const TDivider(height: 1),
+          TDialogButton(
             buttonText: buttonText ?? context.resource.knew,
             buttonTextColor: buttonTextColor,
-            buttonType: TDButtonType.text,
-            buttonTheme: TDButtonTheme.primary,
+            buttonType: TButtonType.text,
+            buttonTheme: TButtonTheme.primary,
             height: 56,
             buttonStyle: buttonStyleCustom,
             onPressed: () {
@@ -119,10 +119,10 @@ class TDConfirmDialog extends StatelessWidget {
     } else {
       return Container(
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-        child: TDDialogButton(
+        child: TDialogButton(
           buttonText: buttonText ?? context.resource.knew,
           buttonTextColor: buttonTextColor,
-          buttonTheme: TDButtonTheme.primary,
+          buttonTheme: TButtonTheme.primary,
           buttonStyle: buttonStyleCustom,
           onPressed: () {
             if (action != null) {
@@ -141,7 +141,7 @@ class TDConfirmDialog extends StatelessWidget {
     // 标题和内容不能同时为空
     assert((title != null || content != null || contentWidget != null));
 
-    return TDDialogScaffold(
+    return TDialogScaffold(
         showCloseButton: showCloseButton,
         backgroundColor: backgroundColor,
         width: width,
@@ -153,7 +153,7 @@ class TDConfirmDialog extends StatelessWidget {
               // 滚动支持
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
-                child: TDDialogInfoWidget(
+                child: TDialogInfoWidget(
                   title: title,
                   titleColor: titleColor,
                   titleAlignment: titleAlignment,

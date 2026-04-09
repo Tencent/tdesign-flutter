@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'td_dropdown_menu.dart';
 import 'td_dropdown_popup.dart';
 
-class TDDropdownPanel extends StatefulWidget {
-  const TDDropdownPanel({
+class TDropdownPanel extends StatefulWidget {
+  const TDropdownPanel({
     Key? key,
     required this.initContentTop,
     required this.initContentBottom,
@@ -25,18 +25,18 @@ class TDDropdownPanel extends StatefulWidget {
   final double initContentBottom;
   final double reverseHeight;
   final Duration duration;
-  final ValueNotifier<TDDropdownPopupDirection> directionListenable;
+  final ValueNotifier<TDropdownPopupDirection> directionListenable;
   final ValueNotifier<bool> colorAlphaListenable;
-  final TDDropdownPopupDirection direction;
+  final TDropdownPopupDirection direction;
   final ValueNotifier<FutureCallback?> closeListenable;
   final VoidCallback onOpened;
   final Widget child;
 
   @override
-  _TDDropdownPanelState createState() => _TDDropdownPanelState();
+  _TDropdownPanelState createState() => _TDropdownPanelState();
 }
 
-class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProviderStateMixin {
+class _TDropdownPanelState extends State<TDropdownPanel> with SingleTickerProviderStateMixin {
   double? contentTop, contentBottom;
   late AnimationController _controller;
 
@@ -48,7 +48,7 @@ class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProv
   }
 
   @override
-  void didUpdateWidget(TDDropdownPanel oldWidget) {
+  void didUpdateWidget(TDropdownPanel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.directionListenable != oldWidget.directionListenable) {
       widget.closeListenable.value = close;
@@ -83,33 +83,33 @@ class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProv
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var renderBox = itemContext.findRenderObject() as RenderBox;
       var size = renderBox.size;
-      if (widget.directionListenable.value == TDDropdownPopupDirection.auto) {
+      if (widget.directionListenable.value == TDropdownPopupDirection.auto) {
         // 比较展开方向（down）的高度能不能放下item，能将方向更新为down
         // 否则比较反方向（up）的高度是否大于down的方向，大于则将方向更新为up，否则保持为down
-        if (widget.direction == TDDropdownPopupDirection.down) {
+        if (widget.direction == TDropdownPopupDirection.down) {
           if (widget.initContentBottom >= size.height) {
-            widget.directionListenable.value = TDDropdownPopupDirection.down;
+            widget.directionListenable.value = TDropdownPopupDirection.down;
           } else {
             if (widget.reverseHeight > widget.initContentBottom) {
-              widget.directionListenable.value = TDDropdownPopupDirection.up;
+              widget.directionListenable.value = TDropdownPopupDirection.up;
             } else {
-              widget.directionListenable.value = TDDropdownPopupDirection.down;
+              widget.directionListenable.value = TDropdownPopupDirection.down;
             }
           }
         } else {
           if (widget.initContentTop >= size.height) {
-            widget.directionListenable.value = TDDropdownPopupDirection.up;
+            widget.directionListenable.value = TDropdownPopupDirection.up;
           } else {
             if (widget.reverseHeight > widget.initContentTop) {
-              widget.directionListenable.value = TDDropdownPopupDirection.down;
+              widget.directionListenable.value = TDropdownPopupDirection.down;
             } else {
-              widget.directionListenable.value = TDDropdownPopupDirection.up;
+              widget.directionListenable.value = TDropdownPopupDirection.up;
             }
           }
         }
         return;
       }
-      if (widget.direction == TDDropdownPopupDirection.down) {
+      if (widget.direction == TDropdownPopupDirection.down) {
         contentBottom = widget.initContentBottom - size.height;
       } else {
         contentTop = widget.initContentTop - size.height;

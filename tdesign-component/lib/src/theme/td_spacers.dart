@@ -1,7 +1,7 @@
 import 'td_theme.dart';
 
 /// 常用的Margin，一般以8为倍数
-extension TDSpacers on TDThemeData {
+extension TSpacers on TThemeData {
   double get spacer4 => spacerMap['spacer4'] ?? 4.0;
 
   double get spacer8 => spacerMap['spacer8'] ?? 8.0;

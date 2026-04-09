@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-enum TDAvatarSize { large, medium, small }
+enum TAvatarSize { large, medium, small }
 
-enum TDAvatarType { icon, normal, customText, display, operation }
+enum TAvatarType { icon, normal, customText, display, operation }
 
-enum TDAvatarShape { circle, square }
+enum TAvatarShape { circle, square }
 
 /// 用于头像显示
-class TDAvatar extends StatelessWidget {
-  const TDAvatar({
+class TAvatar extends StatelessWidget {
+  const TAvatar({
     Key? key,
-    this.size = TDAvatarSize.medium,
-    this.type = TDAvatarType.normal,
-    this.shape = TDAvatarShape.circle,
+    this.size = TAvatarSize.medium,
+    this.type = TAvatarType.normal,
+    this.shape = TAvatarShape.circle,
     this.text,
     this.radius,
     this.icon,
@@ -34,13 +34,13 @@ class TDAvatar extends StatelessWidget {
   final String? avatarUrl;
 
   /// 头像尺寸
-  final TDAvatarSize size;
+  final TAvatarSize size;
 
   /// 头像类型
-  final TDAvatarType type;
+  final TAvatarType type;
 
   /// 头像形状
-  final TDAvatarShape shape;
+  final TAvatarShape shape;
 
   /// 自定义文字
   final String? text;
@@ -84,13 +84,13 @@ class TDAvatar extends StatelessWidget {
   double _getAvatarWidth() {
     double width;
     switch (size) {
-      case TDAvatarSize.large:
+      case TAvatarSize.large:
         width = 64;
         break;
-      case TDAvatarSize.medium:
+      case TAvatarSize.medium:
         width = 48;
         break;
-      case TDAvatarSize.small:
+      case TAvatarSize.small:
         width = 40;
         break;
     }
@@ -100,14 +100,14 @@ class TDAvatar extends StatelessWidget {
   Font? _getTextFont(BuildContext context) {
     Font? font;
     switch (size) {
-      case TDAvatarSize.large:
-        font = TDTheme.of(context).fontTitleExtraLarge;
+      case TAvatarSize.large:
+        font = TTheme.of(context).fontTitleExtraLarge;
         break;
-      case TDAvatarSize.medium:
-        font = TDTheme.of(context).fontTitleMedium;
+      case TAvatarSize.medium:
+        font = TTheme.of(context).fontTitleMedium;
         break;
-      case TDAvatarSize.small:
-        font = TDTheme.of(context).fontTitleSmall;
+      case TAvatarSize.small:
+        font = TTheme.of(context).fontTitleSmall;
         break;
     }
     return font;
@@ -116,13 +116,13 @@ class TDAvatar extends StatelessWidget {
   double _getIconWidth() {
     double width;
     switch (size) {
-      case TDAvatarSize.large:
+      case TAvatarSize.large:
         width = 32;
         break;
-      case TDAvatarSize.medium:
+      case TAvatarSize.medium:
         width = 24;
         break;
-      case TDAvatarSize.small:
+      case TAvatarSize.small:
         width = 20;
         break;
     }
@@ -132,11 +132,11 @@ class TDAvatar extends StatelessWidget {
   double _getAvatarRadius(BuildContext context) {
     double _radius;
     switch (shape) {
-      case TDAvatarShape.circle:
+      case TAvatarShape.circle:
         _radius = _getAvatarWidth() / 2;
         break;
-      case TDAvatarShape.square:
-        _radius = TDTheme.of(context).radiusDefault;
+      case TAvatarShape.square:
+        _radius = TTheme.of(context).radiusDefault;
         break;
     }
     return radius ?? _radius;
@@ -145,31 +145,31 @@ class TDAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (type) {
-      case TDAvatarType.icon:
+      case TAvatarType.icon:
         return GestureDetector(
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? TDTheme.of(context).brandFocusColor,
+              color: backgroundColor ?? TTheme.of(context).brandFocusColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
                 child: Icon(
-              icon ?? TDIcons.user,
+              icon ?? TIcons.user,
               size: _getIconWidth(),
-              color: TDTheme.of(context).brandNormalColor,
+              color: TTheme.of(context).brandNormalColor,
             )),
           ),
           onTap: onTap,
         );
-      case TDAvatarType.normal:
+      case TAvatarType.normal:
         return GestureDetector(
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-                color: backgroundColor ?? TDTheme.of(context).brandFocusColor,
+                color: backgroundColor ?? TTheme.of(context).brandFocusColor,
                 borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
                 image: avatarUrl != null
                     ? DecorationImage(image: NetworkImage(avatarUrl!))
@@ -179,30 +179,30 @@ class TDAvatar extends StatelessWidget {
           ),
           onTap: onTap,
         );
-      case TDAvatarType.customText:
+      case TAvatarType.customText:
         return GestureDetector(
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? TDTheme.of(context).brandNormalColor,
+              color: backgroundColor ?? TTheme.of(context).brandNormalColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
-              child: TDText(
+              child: TText(
                 text,
                 forceVerticalCenter: true,
                 textAlign: TextAlign.center,
                 font: _getTextFont(context),
-                textColor: TDTheme.of(context).whiteColor1,
+                textColor: TTheme.of(context).whiteColor1,
               ),
             ),
           ),
           onTap: onTap,
         );
-      case TDAvatarType.display:
+      case TAvatarType.display:
         return buildDisplayAvatar(context);
-      case TDAvatarType.operation:
+      case TAvatarType.operation:
         return buildOperationAvatar(context);
     }
   }
@@ -210,13 +210,13 @@ class TDAvatar extends StatelessWidget {
   double _getDisplayPadding() {
     double padding;
     switch (size) {
-      case TDAvatarSize.large:
+      case TAvatarSize.large:
         padding = 10;
         break;
-      case TDAvatarSize.medium:
+      case TAvatarSize.medium:
         padding = 8;
         break;
-      case TDAvatarSize.small:
+      case TAvatarSize.small:
         padding = 6;
         break;
     }
@@ -243,15 +243,15 @@ class TDAvatar extends StatelessWidget {
                 onTap: onTap,
                 child: Container(
                     child: Center(
-                      child: Icon(TDIcons.user_add,
+                      child: Icon(TIcons.user_add,
                           size: _getIconWidth(),
-                          color: TDTheme.of(context).brandNormalColor),
+                          color: TTheme.of(context).brandNormalColor),
                     ),
                     width: _getAvatarWidth(),
                     height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
-                      color: TDTheme.of(context).brandFocusColor,
+                      color: TTheme.of(context).brandFocusColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
@@ -272,7 +272,7 @@ class TDAvatar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
-                              color: TDTheme.of(context).bgColorContainer,
+                              color: TTheme.of(context).bgColorContainer,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: NetworkImage(avatarDisplayList![i]),
@@ -291,20 +291,20 @@ class TDAvatar extends StatelessWidget {
                 child: Container(
                     child: Center(
                       child: avatarDisplayWidget ??
-                          Icon(TDIcons.user_add,
+                          Icon(TIcons.user_add,
                               size: _getIconWidth(),
-                              color: TDTheme.of(context).brandNormalColor),
+                              color: TTheme.of(context).brandNormalColor),
                     ),
                     width: _getAvatarWidth(),
                     height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
-                      color: TDTheme.of(context).brandFocusColor,
+                      color: TTheme.of(context).brandFocusColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
-                              color: TDTheme.of(context).bgColorContainer,
+                              color: TTheme.of(context).bgColorContainer,
                               width: avatarDisplayBorder)),
                     )),
               )));
@@ -320,7 +320,7 @@ class TDAvatar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
-                              color: TDTheme.of(context).bgColorContainer,
+                              color: TTheme.of(context).bgColorContainer,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: AssetImage(avatarDisplayListAsset![i]),
@@ -354,25 +354,25 @@ class TDAvatar extends StatelessWidget {
               left: left,
               child: Container(
                   child: Center(
-                    child: TDText(
+                    child: TText(
                       displayText,
                       fontWeight: FontWeight.w600,
                       forceVerticalCenter: true,
                       textAlign: TextAlign.center,
                       font: _getTextFont(context),
-                      textColor: TDTheme.of(context).brandNormalColor,
+                      textColor: TTheme.of(context).brandNormalColor,
                     ),
                   ),
                   width: _getAvatarWidth(),
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: TDTheme.of(context).brandFocusColor,
+                    color: TTheme.of(context).brandFocusColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             _getAvatarWidth() - _getDisplayPadding()),
                         side: BorderSide(
-                            color: TDTheme.of(context).bgColorContainer,
+                            color: TTheme.of(context).bgColorContainer,
                             width: avatarDisplayBorder)),
                   ))));
         } else {
@@ -387,7 +387,7 @@ class TDAvatar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
-                              color: TDTheme.of(context).bgColorContainer,
+                              color: TTheme.of(context).bgColorContainer,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: NetworkImage(avatarDisplayList![i]),
@@ -403,25 +403,25 @@ class TDAvatar extends StatelessWidget {
               left: left,
               child: Container(
                   child: Center(
-                    child: TDText(
+                    child: TText(
                       displayText,
                       fontWeight: FontWeight.w600,
                       forceVerticalCenter: true,
                       textAlign: TextAlign.center,
                       font: _getTextFont(context),
-                      textColor: TDTheme.of(context).brandNormalColor,
+                      textColor: TTheme.of(context).brandNormalColor,
                     ),
                   ),
                   width: _getAvatarWidth(),
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: TDTheme.of(context).brandFocusColor,
+                    color: TTheme.of(context).brandFocusColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             _getAvatarWidth() - _getDisplayPadding()),
                         side: BorderSide(
-                            color: TDTheme.of(context).bgColorContainer,
+                            color: TTheme.of(context).bgColorContainer,
                             width: avatarDisplayBorder)),
                   ))));
         } else {
@@ -436,7 +436,7 @@ class TDAvatar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
-                              color: TDTheme.of(context).bgColorContainer,
+                              color: TTheme.of(context).bgColorContainer,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: AssetImage(avatarDisplayListAsset![i]),

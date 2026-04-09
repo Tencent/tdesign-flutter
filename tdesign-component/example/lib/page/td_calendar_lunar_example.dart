@@ -4,16 +4,16 @@ import '../lunar_data_source_example.dart';
 
 /// 农历日历示例页面
 /// 
-/// 展示如何使用 TDCalendar 的农历功能
-class TDCalendarLunarExample extends StatefulWidget {
-  const TDCalendarLunarExample({Key? key}) : super(key: key);
+/// 展示如何使用 TCalendar 的农历功能
+class TCalendarLunarExample extends StatefulWidget {
+  const TCalendarLunarExample({Key? key}) : super(key: key);
 
   @override
-  State<TDCalendarLunarExample> createState() => _TDCalendarLunarExampleState();
+  State<TCalendarLunarExample> createState() => _TCalendarLunarExampleState();
 }
 
-class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
-  TDCalendarDateType _dateType = TDCalendarDateType.solar;
+class _TCalendarLunarExampleState extends State<TCalendarLunarExample> {
+  TCalendarDateType _dateType = TCalendarDateType.solar;
   bool _showLunarInfo = true; // 默认显示农历信息
   List<int> _selectedDates = [];
   final _dataSource = LunarDataSourceExample();
@@ -31,7 +31,7 @@ class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
           
           // 日历组件
           Expanded(
-            child: TDCalendar(
+            child: TCalendar(
               dateType: _dateType,
               dataSource: _dataSource,
               showLunarInfo: _showLunarInfo,
@@ -65,9 +65,9 @@ class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
           Row(
             children: [
               Expanded(
-                child: RadioListTile<TDCalendarDateType>(
+                child: RadioListTile<TCalendarDateType>(
                   title: const Text('阳历'),
-                  value: TDCalendarDateType.solar,
+                  value: TCalendarDateType.solar,
                   groupValue: _dateType,
                   onChanged: (value) {
                     setState(() {
@@ -77,9 +77,9 @@ class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
                 ),
               ),
               Expanded(
-                child: RadioListTile<TDCalendarDateType>(
+                child: RadioListTile<TCalendarDateType>(
                   title: const Text('农历'),
-                  value: TDCalendarDateType.lunar,
+                  value: TCalendarDateType.lunar,
                   groupValue: _dateType,
                   onChanged: (value) {
                     setState(() {
@@ -94,7 +94,7 @@ class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
           SwitchListTile(
             title: const Text('阳历模式下显示农历信息'),
             value: _showLunarInfo,
-            onChanged: _dateType == TDCalendarDateType.solar
+            onChanged: _dateType == TCalendarDateType.solar
                 ? (value) {
                     setState(() {
                       _showLunarInfo = value;

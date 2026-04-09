@@ -2,19 +2,19 @@
   Widget _rightMultiAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: TDNavBar(
+      child: TNavBar(
           height: 48,
           title: titleText,
           titleFontWeight: FontWeight.w600,
           screenAdaptation: false,
           useDefaultBack: true,
           rightBarItems: [
-            TDNavBarItem(
-              icon: TDIcons.home,
+            TNavBarItem(
+              icon: TIcons.home,
               iconSize: 24,
             ),
-            TDNavBarItem(
-              icon: TDIcons.ellipsis,
+            TNavBarItem(
+              icon: TIcons.ellipsis,
               iconSize: 24,
             )
           ]),

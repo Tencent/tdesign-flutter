@@ -1,11 +1,11 @@
 
   Widget buildWithoutTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_8.isEmpty ? '请选择' : selected_8,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           // 不传或传空字符串、null，则不显示标题
           // title: '',

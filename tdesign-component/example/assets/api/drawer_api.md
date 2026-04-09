@@ -1,5 +1,5 @@
 ## API
-### TDDrawer
+### TDrawer
 #### 简介
 抽屉组件
 #### 默认构造方法
@@ -15,12 +15,12 @@
 | footer | Widget? | - | 抽屉的底部 |
 | hover | bool? | true | 是否开启点击反馈 |
 | isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
-| items | List<TDDrawerItem>? | - | 抽屉里的列表项 |
+| items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | onClose | VoidCallback? | - | 关闭时触发 |
-| onItemClick | TDDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
-| placement | TDDrawerPlacement? | TDDrawerPlacement.right | 抽屉方向 |
+| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
+| placement | TDrawerPlacement? | TDrawerPlacement.right | 抽屉方向 |
 | showOverlay | bool? | true | 是否显示遮罩层 |
-| style | TDCellStyle? | - | 列表自定义样式 |
+| style | TCellStyle? | - | 列表自定义样式 |
 | title | String? | - | 抽屉的标题 |
 | titleWidget | Widget? | - | 抽屉的标题组件 |
 | visible | bool? | - | 组件是否可见 |
@@ -29,7 +29,7 @@
 ```
 ```
 
-### TDDrawerWidget
+### TDrawerWidget
 #### 简介
 抽屉内容组件
  可用于 Scaffold 中的 drawer 属性
@@ -43,10 +43,10 @@
 | footer | Widget? | - | 抽屉的底部 |
 | hover | bool? | true | 是否开启点击反馈 |
 | isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
-| items | List<TDDrawerItem>? | - | 抽屉里的列表项 |
+| items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key |  | - |  |
-| onItemClick | TDDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
-| style | TDCellStyle? | - | 列表自定义样式 |
+| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
+| style | TCellStyle? | - | 列表自定义样式 |
 | title | String? | - | 抽屉的标题 |
 | titleWidget | Widget? | - | 抽屉的标题组件 |
 | width | double? | 280 | 宽度 |
@@ -54,7 +54,7 @@
 ```
 ```
 
-### TDDrawerItem
+### TDrawerItem
 #### 简介
 抽屉里的列表项
 #### 默认构造方法

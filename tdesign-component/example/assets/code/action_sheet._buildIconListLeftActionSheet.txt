@@ -1,21 +1,21 @@
 
 Widget _buildIconListLeftActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '左对齐带图标列表',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      TActionSheet(
         context,
         visible: true,
         description: '动作面板描述文字',
-        align: TDActionSheetAlign.left,
+        align: TActionSheetAlign.left,
         items: _nums
-            .map((e) => TDActionSheetItem(
+            .map((e) => TActionSheetItem(
                   label: '选项$e',
-                  icon: const Icon(TDIcons.app),
+                  icon: const Icon(TIcons.app),
                 ))
             .toList(),
       );

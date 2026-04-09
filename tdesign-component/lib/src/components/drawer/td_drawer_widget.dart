@@ -8,12 +8,12 @@ import '../cell/td_cell_group.dart';
 import '../cell/td_cell_style.dart';
 import 'td_drawer.dart';
 
-typedef TDDrawerItemClickCallback = void Function(int index, TDDrawerItem item);
+typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
 
 /// 抽屉内容组件
 /// 可用于 Scaffold 中的 drawer 属性
-class TDDrawerWidget extends StatelessWidget {
-  const TDDrawerWidget({
+class TDrawerWidget extends StatelessWidget {
+  const TDrawerWidget({
     super.key,
     this.footer,
     this.items,
@@ -33,7 +33,7 @@ class TDDrawerWidget extends StatelessWidget {
   final Widget? footer;
 
   /// 抽屉里的列表项
-  final List<TDDrawerItem>? items;
+  final List<TDrawerItem>? items;
 
   /// 自定义内容，优先级高于[items]/[footer]/[title]
   final Widget? contentWidget;
@@ -45,13 +45,13 @@ class TDDrawerWidget extends StatelessWidget {
   final Widget? titleWidget;
 
   /// 点击抽屉里的列表项触发
-  final TDDrawerItemClickCallback? onItemClick;
+  final TDrawerItemClickCallback? onItemClick;
 
   /// 宽度
   final double? width;
 
   /// 列表自定义样式
-  final TDCellStyle? style;
+  final TCellStyle? style;
 
   /// 是否开启点击反馈
   final bool? hover;
@@ -71,15 +71,15 @@ class TDDrawerWidget extends StatelessWidget {
     if (content == null) {
       var cellStyle = style;
       if (cellStyle == null) {
-        cellStyle = TDCellStyle.cellStyle(context);
-        cellStyle.leftIconColor = TDTheme.of(context).brandNormalColor;
+        cellStyle = TCellStyle.cellStyle(context);
+        cellStyle.leftIconColor = TTheme.of(context).brandNormalColor;
       }
       var cells = items
           ?.asMap()
           .map(
             (index, item) => MapEntry(
               index,
-              TDCell(
+              TCell(
                 titleWidget: item.content,
                 title: item.title,
                 leftIconWidget: item.icon,
@@ -99,7 +99,7 @@ class TDDrawerWidget extends StatelessWidget {
       content = Column(
         children: [
           Expanded(
-            child: TDCellGroup(
+            child: TCellGroup(
               title: title,
               titleWidget: titleWidget,
               style: cellStyle,
@@ -110,7 +110,7 @@ class TDDrawerWidget extends StatelessWidget {
           ),
           if (footer != null)
             Container(
-              padding: EdgeInsets.all(TDTheme.of(context).spacer16),
+              padding: EdgeInsets.all(TTheme.of(context).spacer16),
               child: footer,
             ),
         ],
@@ -118,7 +118,7 @@ class TDDrawerWidget extends StatelessWidget {
     }
 
     return Container(
-      color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
+      color: backgroundColor ?? TTheme.of(context).bgColorContainer,
       width: width ?? 280,
       height: double.infinity,
       child: content,
@@ -127,8 +127,8 @@ class TDDrawerWidget extends StatelessWidget {
 }
 
 /// 抽屉里的列表项
-class TDDrawerItem {
-  TDDrawerItem({this.title, this.icon, this.content});
+class TDrawerItem {
+  TDrawerItem({this.title, this.icon, this.content});
 
   /// 每列标题
   final String? title;

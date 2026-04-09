@@ -3,14 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 /// 私有组件类，用于展示环形进度条
-class TDProgressCircular extends StatelessWidget {
+class TProgressCircular extends StatelessWidget {
   final double _value;
   final double strokeWidth;
   final Color backgroundColor;
   final Animation<Color> valueColor;
   final double circleRadius;
 
-  const TDProgressCircular({
+  const TProgressCircular({
     Key? key,
     required double value,
     required this.strokeWidth,
@@ -28,7 +28,7 @@ class TDProgressCircular extends StatelessWidget {
       width: circleRadius * 2,
       height: circleRadius * 2,
       child: CustomPaint(
-        painter: _TDProgressCircularPainter(
+        painter: _TProgressCircularPainter(
           value: value,
           backgroundColor: backgroundColor,
           valueColor: valueColor,
@@ -40,14 +40,14 @@ class TDProgressCircular extends StatelessWidget {
   }
 }
 
-class _TDProgressCircularPainter extends CustomPainter {
+class _TProgressCircularPainter extends CustomPainter {
   final double value;
   final Color backgroundColor;
   final Animation<Color> valueColor;
   final double circleRadius;
   final double strokeWidth;
 
-  _TDProgressCircularPainter({
+  _TProgressCircularPainter({
     required this.value,
     required this.backgroundColor,
     required this.valueColor,

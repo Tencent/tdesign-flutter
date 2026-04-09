@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
 
-typedef TDCellClick = void Function(TDCell cell);
+typedef TCellClick = void Function(TCell cell);
 
-enum TDCellAlign { top, middle, bottom }
+enum TCellAlign { top, middle, bottom }
 
 /// 单元格组件
-class TDCell extends StatefulWidget {
-  const TDCell({
+class TCell extends StatefulWidget {
+  const TCell({
     Key? key,
-    this.align = TDCellAlign.middle,
+    this.align = TCellAlign.middle,
     this.arrow = false,
     this.bordered = true,
     this.description,
@@ -41,7 +41,7 @@ class TDCell extends StatefulWidget {
   }) : super(key: key);
 
   /// 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom
-  final TDCellAlign? align;
+  final TCellAlign? align;
 
   /// 是否显示右侧箭头
   final bool? arrow;
@@ -104,13 +104,13 @@ class TDCell extends StatefulWidget {
   final Widget? titleWidget;
 
   /// 点击事件
-  final TDCellClick? onClick;
+  final TCellClick? onClick;
 
   /// 长按事件
-  final TDCellClick? onLongPress;
+  final TCellClick? onLongPress;
 
   /// 自定义样式
-  final TDCellStyle? style;
+  final TCellStyle? style;
 
   /// 禁用
   final bool? disabled;
@@ -122,10 +122,10 @@ class TDCell extends StatefulWidget {
   final double? height;
 
   @override
-  _TDCellState createState() => _TDCellState();
+  _TCellState createState() => _TCellState();
 }
 
-class _TDCellState extends State<TDCell> {
+class _TCellState extends State<TCell> {
   var _status = 'default';
 
   bool get disabled {
@@ -135,10 +135,10 @@ class _TDCellState extends State<TDCell> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
     final style = widget.style ??
-        TDCellInherited.of(context)?.style ??
-        TDCellStyle.cellStyle(context);
+        TCellInherited.of(context)?.style ??
+        TCellStyle.cellStyle(context);
     final crossAxisAlignment = _getAlign();
     final color = _status == 'default'
         ? style.backgroundColor
@@ -158,7 +158,7 @@ class _TDCellState extends State<TDCell> {
         if (widget.onClick != null && !disabled) {
           widget.onClick!(widget);
         }
-        TDSwipeCellInherited.of(context)?.cellClick();
+        TSwipeCellInherited.of(context)?.cellClick();
       },
       onLongPress: widget.onLongPress != null && !disabled
           ? () => widget.onLongPress!(widget)
@@ -196,19 +196,19 @@ class _TDCellState extends State<TDCell> {
                               Flexible(child: widget.titleWidget!)
                             else if (widget.title?.isNotEmpty == true)
                               Flexible(
-                                  child: TDText(widget.title!,
+                                  child: TText(widget.title!,
                                       style: style.titleStyle)),
                             if (widget.required ?? false)
-                              TDText(' *', style: style.requiredStyle),
+                              TText(' *', style: style.requiredStyle),
                           ],
                         ),
                         if ((widget.titleWidget != null || widget.title != null) &&
                             (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
-                          SizedBox(height: TDTheme.of(context).spacer4),
+                          SizedBox(height: TTheme.of(context).spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
                         else if (widget.description?.isNotEmpty ?? false)
-                          TDText(widget.description!,
+                          TText(widget.description!,
                               style: style.descriptionStyle),
                       ],
                     ),
@@ -227,7 +227,7 @@ class _TDCellState extends State<TDCell> {
                       constraints: BoxConstraints(
                           maxWidth: widget.noteMaxWidth ??
                               MediaQuery.of(context).size.width - 84),
-                      child: TDText(
+                      child: TText(
                         widget.note!,
                         style: style.noteStyle,
                         overflow: TextOverflow.ellipsis,
@@ -238,7 +238,7 @@ class _TDCellState extends State<TDCell> {
                 else if (widget.rightIcon != null)
                   Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
                 if (widget.arrow ?? false)
-                  Icon(TDIcons.chevron_right,
+                  Icon(TIcons.chevron_right,
                       size: 24, color: style.arrowColor),
               ],
             ),
@@ -250,11 +250,11 @@ class _TDCellState extends State<TDCell> {
 
   CrossAxisAlignment _getAlign() {
     switch (widget.align) {
-      case TDCellAlign.top:
+      case TCellAlign.top:
         return CrossAxisAlignment.start;
-      case TDCellAlign.middle:
+      case TCellAlign.middle:
         return CrossAxisAlignment.center;
-      case TDCellAlign.bottom:
+      case TCellAlign.bottom:
         return CrossAxisAlignment.end;
       default:
         return CrossAxisAlignment.center;
@@ -297,7 +297,7 @@ class _TDCellState extends State<TDCell> {
     }
 
     if (imageWidgets.isNotEmpty) {
-      imageWidgets.add(SizedBox(width: TDTheme.of(context).spacer12));
+      imageWidgets.add(SizedBox(width: TTheme.of(context).spacer12));
     }
 
     return imageWidgets;

@@ -1,5 +1,5 @@
-class TDInputSpacer {
-  TDInputSpacer({
+class TInputSpacer {
+  TInputSpacer({
     this.iconLabelSpace,
     this.labelInputSpace,
     this.inputRightSpace,
@@ -13,7 +13,7 @@ class TDInputSpacer {
   double? rightSpace;
   double? additionInfoSpace;
 
-  TDInputSpacer.generateDefault() {
+  TInputSpacer.generateDefault() {
     iconLabelSpace = 4;
     labelInputSpace = 16;
     inputRightSpace = 16;

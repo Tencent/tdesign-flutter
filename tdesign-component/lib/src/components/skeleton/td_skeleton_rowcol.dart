@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 骨架屏样式
-class TDSkeletonRowColStyle {
-  const TDSkeletonRowColStyle({
+class TSkeletonRowColStyle {
+  const TSkeletonRowColStyle({
     this.rowSpacing = _defaultRowSpacing,
   });
 
@@ -13,21 +13,21 @@ class TDSkeletonRowColStyle {
 
   /// 默认行间距
   static double _defaultRowSpacing(BuildContext context) =>
-      TDTheme.of(context).spacer16;
+      TTheme.of(context).spacer16;
 }
 
 /// 骨架屏行列框架
-class TDSkeletonRowCol {
-  TDSkeletonRowCol({
+class TSkeletonRowCol {
+  TSkeletonRowCol({
     required this.objects,
-    this.style = const TDSkeletonRowColStyle(),
+    this.style = const TSkeletonRowColStyle(),
   }) : assert(objects.isNotEmpty && objects.every((row) => row.isNotEmpty));
 
   /// 行列对象
-  final List<List<TDSkeletonRowColObj>> objects;
+  final List<List<TSkeletonRowColObj>> objects;
 
   /// 样式
-  final TDSkeletonRowColStyle style;
+  final TSkeletonRowColStyle style;
 
   /// 视觉高度
   double visualHeight(BuildContext context) {
@@ -46,26 +46,26 @@ class TDSkeletonRowCol {
 }
 
 /// 骨架屏元素样式
-class TDSkeletonRowColObjStyle {
-  const TDSkeletonRowColObjStyle({
+class TSkeletonRowColObjStyle {
+  const TSkeletonRowColObjStyle({
     this.background = _defaultBackground,
     this.borderRadius = _textBorderRadius,
   });
 
   /// 圆形
-  const TDSkeletonRowColObjStyle.circle({this.background = _defaultBackground})
+  const TSkeletonRowColObjStyle.circle({this.background = _defaultBackground})
       : borderRadius = _circleBorderRadius;
 
   /// 矩形
-  const TDSkeletonRowColObjStyle.rect({this.background = _defaultBackground})
+  const TSkeletonRowColObjStyle.rect({this.background = _defaultBackground})
       : borderRadius = _rectBorderRadius;
 
   /// 文本
-  const TDSkeletonRowColObjStyle.text({this.background = _defaultBackground})
+  const TSkeletonRowColObjStyle.text({this.background = _defaultBackground})
       : borderRadius = _textBorderRadius;
 
   /// 空白占位符
-  const TDSkeletonRowColObjStyle.spacer()
+  const TSkeletonRowColObjStyle.spacer()
       : background = _transparentBackground,
         borderRadius = _textBorderRadius;
 
@@ -77,7 +77,7 @@ class TDSkeletonRowColObjStyle {
 
   /// 默认背景颜色
   static Color _defaultBackground(BuildContext context) =>
-      TDTheme.of(context).bgColorComponent;
+      TTheme.of(context).bgColorComponent;
 
   /// 透明背景颜色
   static Color _transparentBackground(BuildContext context) =>
@@ -85,61 +85,61 @@ class TDSkeletonRowColObjStyle {
 
   /// 圆形圆角
   static double _circleBorderRadius(BuildContext context) =>
-      TDTheme.of(context).radiusCircle;
+      TTheme.of(context).radiusCircle;
 
   /// 矩形圆角
   static double _rectBorderRadius(BuildContext context) =>
-      TDTheme.of(context).radiusDefault;
+      TTheme.of(context).radiusDefault;
 
   /// 文本圆角
   static double _textBorderRadius(BuildContext context) =>
-      TDTheme.of(context).radiusSmall;
+      TTheme.of(context).radiusSmall;
 }
 
 /// 骨架屏元素
-class TDSkeletonRowColObj {
-  const TDSkeletonRowColObj({
+class TSkeletonRowColObj {
+  const TSkeletonRowColObj({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle(),
+    this.style = const TSkeletonRowColObjStyle(),
   });
 
   /// 圆形
-  const TDSkeletonRowColObj.circle({
+  const TSkeletonRowColObj.circle({
     this.width = 48,
     this.height = 48,
     this.flex,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle.circle(),
+    this.style = const TSkeletonRowColObjStyle.circle(),
   });
 
   /// 矩形
-  const TDSkeletonRowColObj.rect({
+  const TSkeletonRowColObj.rect({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle.rect(),
+    this.style = const TSkeletonRowColObjStyle.rect(),
   });
 
   /// 文本
-  const TDSkeletonRowColObj.text({
+  const TSkeletonRowColObj.text({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle.text(),
+    this.style = const TSkeletonRowColObjStyle.text(),
   });
 
   /// 空白占位符
-  const TDSkeletonRowColObj.spacer({
+  const TSkeletonRowColObj.spacer({
     this.width,
     this.height,
     this.flex,
     this.margin = EdgeInsets.zero,
-  }) : style = const TDSkeletonRowColObjStyle.spacer();
+  }) : style = const TSkeletonRowColObjStyle.spacer();
 
   /// 宽度
   final double? width;
@@ -154,7 +154,7 @@ class TDSkeletonRowColObj {
   final EdgeInsets margin;
 
   /// 样式
-  final TDSkeletonRowColObjStyle style;
+  final TSkeletonRowColObjStyle style;
 
   /// 视觉高度
   double get visualHeight => (height ?? 0) + margin.top + margin.bottom;

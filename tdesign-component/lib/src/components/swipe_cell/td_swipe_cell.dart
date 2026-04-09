@@ -10,11 +10,11 @@ import 'td_swipe_cell_panel.dart';
 
 export 'package:flutter_slidable/flutter_slidable.dart';
 
-enum TDSwipeDirection { right, left }
+enum TSwipeDirection { right, left }
 
 /// 滑动单元格组件
-class TDSwipeCell extends StatefulWidget {
-  const TDSwipeCell({
+class TSwipeCell extends StatefulWidget {
+  const TSwipeCell({
     Key? key,
     this.slidableKey,
     required this.cell,
@@ -35,7 +35,7 @@ class TDSwipeCell extends StatefulWidget {
   /// 滑动组件的 Key
   final Key? slidableKey;
 
-  /// 单元格 [TDCell]
+  /// 单元格 [TCell]
   final Widget cell;
 
   /// 是否禁用滑动
@@ -45,13 +45,13 @@ class TDSwipeCell extends StatefulWidget {
   final List<bool>? opened;
 
   /// 右侧滑动操作项面板
-  final TDSwipeCellPanel? right;
+  final TSwipeCellPanel? right;
 
   /// 左侧滑动操作项面板
-  final TDSwipeCellPanel? left;
+  final TSwipeCellPanel? left;
 
   /// 滑动展开事件
-  final Function(TDSwipeDirection direction, bool open)? onChange;
+  final Function(TSwipeDirection direction, bool open)? onChange;
 
   /// 自定义控制滑动窗口
   final SlidableController? controller;
@@ -59,12 +59,12 @@ class TDSwipeCell extends StatefulWidget {
   /// 组，配置后，[closeWhenOpened]、[closeWhenTapped]才起作用
   final Object? groupTag;
 
-  /// 当同一组（[groupTag]）中的一个[TDSwipeCell]打开时，是否关闭组中的所有其他[TDSwipeCell]
+  /// 当同一组（[groupTag]）中的一个[TSwipeCell]打开时，是否关闭组中的所有其他[TSwipeCell]
   final bool? closeWhenOpened;
 
-  /// 当同一组（[groupTag]）中的一个[TDSwipeCell]被点击时，是否应该关闭组中的所有[TDSwipeCell]
+  /// 当同一组（[groupTag]）中的一个[TSwipeCell]被点击时，是否应该关闭组中的所有[TSwipeCell]
   ///
-  /// [cell]组件被点击时必须传递点击事件，执行`TDSwipeCellInherited.of(context)?.cellClick()`
+  /// [cell]组件被点击时必须传递点击事件，执行`TSwipeCellInherited.of(context)?.cellClick()`
   final bool? closeWhenTapped;
 
   /// 处理拖动开始行为的方式[GestureDetector.dragStartBehavior]
@@ -100,7 +100,7 @@ class TDSwipeCell extends StatefulWidget {
     }
   }
 
-  /// 根据[groupTag]关闭[TDSwipeCell]
+  /// 根据[groupTag]关闭[TSwipeCell]
   ///
   /// current：保留当前不关闭
   static void close(Object? tag, {SlidableController? current}) {
@@ -120,14 +120,14 @@ class TDSwipeCell extends StatefulWidget {
   }
 
   @override
-  _TDSwipeCellState createState() => _TDSwipeCellState();
+  _TSwipeCellState createState() => _TSwipeCellState();
 }
 
-class _TDSwipeCellState extends State<TDSwipeCell>
+class _TSwipeCellState extends State<TSwipeCell>
     with TickerProviderStateMixin {
   late final SlidableController controller;
-  final confirmListenable = ValueNotifier<TDSwipeCellAction?>(null);
-  TDSwipeDirection? openDirection;
+  final confirmListenable = ValueNotifier<TSwipeCellAction?>(null);
+  TSwipeDirection? openDirection;
 
   @override
   void initState() {
@@ -137,7 +137,7 @@ class _TDSwipeCellState extends State<TDSwipeCell>
       ..animation.addStatusListener((status) {
         confirmListenable.value = null;
       });
-    TDSwipeCell._pushController(controller, widget.groupTag);
+    TSwipeCell._pushController(controller, widget.groupTag);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if ((widget.opened?.length ?? 0) > 0 && widget.opened![0] == true) {
         controller.openStartActionPane(duration: widget.getDuration);
@@ -149,14 +149,14 @@ class _TDSwipeCellState extends State<TDSwipeCell>
   }
 
   @override
-  void didUpdateWidget(covariant TDSwipeCell oldWidget) {
+  void didUpdateWidget(covariant TSwipeCell oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       controller.actionPaneType.removeListener(_handleActionPanelTypeChanged);
-      TDSwipeCell._pushController(controller, widget.groupTag, del: true);
+      TSwipeCell._pushController(controller, widget.groupTag, del: true);
       controller = (widget.controller ?? SlidableController(this))
         ..actionPaneType.addListener(_handleActionPanelTypeChanged);
-      TDSwipeCell._pushController(controller, widget.groupTag);
+      TSwipeCell._pushController(controller, widget.groupTag);
     }
   }
 
@@ -164,7 +164,7 @@ class _TDSwipeCellState extends State<TDSwipeCell>
   void dispose() {
     controller.actionPaneType.removeListener(_handleActionPanelTypeChanged);
     controller.dispose();
-    TDSwipeCell._pushController(controller, widget.groupTag, del: true);
+    TSwipeCell._pushController(controller, widget.groupTag, del: true);
     super.dispose();
   }
 
@@ -185,16 +185,16 @@ class _TDSwipeCellState extends State<TDSwipeCell>
       dragStartBehavior: widget.dragStartBehavior ?? DragStartBehavior.start,
       direction: widget.direction ?? Axis.horizontal,
     );
-    return TDSwipeCellInherited(
+    return TSwipeCellInherited(
       duration: widget.getDuration,
       controller: controller,
       cellClick: () {
         if (widget.closeWhenTapped == true) {
-          TDSwipeCell.close(widget.groupTag);
+          TSwipeCell.close(widget.groupTag);
         }
       },
       actionClick: (action) {
-        final isLeft = openDirection == TDSwipeDirection.left;
+        final isLeft = openDirection == TSwipeDirection.left;
         final panel = isLeft ? widget.left! : widget.right!;
         final index = panel.children.indexOf(action);
         final confirm = panel.confirms
@@ -220,7 +220,7 @@ class _TDSwipeCellState extends State<TDSwipeCell>
 
   Widget _confirmWidget() {
     final isHorizontal = widget.direction == Axis.horizontal;
-    final isLeft = openDirection == TDSwipeDirection.left;
+    final isLeft = openDirection == TSwipeDirection.left;
     final pane = isLeft ? widget.left : widget.right;
     final extentRatio = pane?.extentRatio ?? 0.3;
     return Positioned.fill(
@@ -255,16 +255,16 @@ class _TDSwipeCellState extends State<TDSwipeCell>
         break;
       case ActionPaneType.start:
         if (widget.closeWhenOpened == true) {
-          TDSwipeCell.close(widget.groupTag, current: controller);
+          TSwipeCell.close(widget.groupTag, current: controller);
         }
-        openDirection = TDSwipeDirection.left;
+        openDirection = TSwipeDirection.left;
         widget.onChange?.call(openDirection!, true);
         break;
       case ActionPaneType.end:
         if (widget.closeWhenOpened == true) {
-          TDSwipeCell.close(widget.groupTag, current: controller);
+          TSwipeCell.close(widget.groupTag, current: controller);
         }
-        openDirection = TDSwipeDirection.right;
+        openDirection = TSwipeDirection.right;
         widget.onChange?.call(openDirection!, true);
         break;
     }

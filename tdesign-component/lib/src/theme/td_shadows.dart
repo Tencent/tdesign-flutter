@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'td_theme.dart';
 
 /// 内置投影
-extension TDBoxShadows on TDThemeData {
+extension TBoxShadows on TThemeData {
   /// 基础投影
   List<BoxShadow>? get shadowsBase => shadowMap['shadowsBase'];
 

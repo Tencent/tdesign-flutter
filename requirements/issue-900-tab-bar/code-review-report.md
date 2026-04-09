@@ -5,7 +5,7 @@
 ## 修改范围
 
 文件：`tdesign-component/lib/src/components/tabbar/td_bottom_tab_bar.dart`
-方法：`_constructItem`（`TDBottomTabBarItemWithBadge`）
+方法：`_constructItem`（`TBottomTabBarItemWithBadge`）
 
 ## 改动评审
 
@@ -19,12 +19,12 @@
 
 ### API 一致性 ✅
 
-- 未改动任何公开 API（`TDBottomTabBarTabConfig`、`TDBottomTabBar` 构造函数）
+- 未改动任何公开 API（`TBottomTabBarTabConfig`、`TBottomTabBar` 构造函数）
 - 向后兼容：原有使用 `selectedIcon`/`unselectedIcon` 传入不同颜色图标的用法不受影响
 
 ### 色值规范 ✅
 
-- 颜色均从 `TDTheme.of(context)` 取，未硬编码
+- 颜色均从 `TTheme.of(context)` 取，未硬编码
 
 ### 测试覆盖 ✅
 
@@ -33,7 +33,7 @@
 
 ### 回归风险评估 🟡 低风险
 
-- `expansionPanel` 类型中已有图标（`TDIcons.view_list`）也未加 `IconTheme`，但该类型的图标颜色逻辑是硬编码在 `isSelected ? brandNormalColor : textColorPrimary` 三元里的（第 710 行），**颜色已正确，不受本次修复影响**
+- `expansionPanel` 类型中已有图标（`TIcons.view_list`）也未加 `IconTheme`，但该类型的图标颜色逻辑是硬编码在 `isSelected ? brandNormalColor : textColorPrimary` 三元里的（第 710 行），**颜色已正确，不受本次修复影响**
 - `text` 类型无图标，不受影响
 
 ## 不需要改动的部分

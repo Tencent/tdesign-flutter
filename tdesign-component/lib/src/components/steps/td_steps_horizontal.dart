@@ -4,14 +4,14 @@ import '../../../tdesign_flutter.dart';
 import 'td_steps_horizontal_item.dart';
 
 /// Steps步骤条，水平步骤
-class TDStepsHorizontal extends StatelessWidget {
-  final List<TDStepsItemData> steps;
+class TStepsHorizontal extends StatelessWidget {
+  final List<TStepsItemData> steps;
   final int activeIndex;
-  final TDStepsStatus status;
+  final TStepsStatus status;
   final bool simple;
   final bool readOnly;
 
-  const TDStepsHorizontal({
+  const TStepsHorizontal({
     super.key,
     required this.steps,
     required this.activeIndex,
@@ -27,7 +27,7 @@ class TDStepsHorizontal extends StatelessWidget {
     List<Widget> stepsHorizontalItem = steps.asMap().entries.map((item) {
       return Expanded(
         flex: 1,
-        child: TDStepsHorizontalItem(
+        child: TStepsHorizontalItem(
           index: item.key,
           data: item.value,
           stepsCount: stepsCount,

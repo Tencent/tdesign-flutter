@@ -1,6 +1,6 @@
 
 Widget _stepNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
+  return const TNoticeBar(
     context: [
       '君不见黄河之水天上来',
       '奔流到海不复回',
@@ -8,7 +8,7 @@ Widget _stepNoticeBar(BuildContext context) {
       '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试'
     ],
     direction: Axis.vertical,
-    prefixIcon: TDIcons.sound,
+    prefixIcon: TIcons.sound,
     marquee: true,
   );
 }

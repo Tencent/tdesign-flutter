@@ -11,8 +11,8 @@ import '../../util/context_extension.dart';
 import 'td_dialog_widget.dart';
 
 /// 带有输入框的弹窗
-class TDInputDialog extends StatelessWidget {
-  const TDInputDialog({
+class TInputDialog extends StatelessWidget {
+  const TInputDialog({
     Key? key,
     required this.textEditingController,
     this.backgroundColor,
@@ -64,10 +64,10 @@ class TDInputDialog extends StatelessWidget {
   final TextEditingController textEditingController;
 
   /// 左侧按钮配置
-  final TDDialogButtonOptions? leftBtn;
+  final TDialogButtonOptions? leftBtn;
 
   /// 右侧按钮配置
-  final TDDialogButtonOptions? rightBtn;
+  final TDialogButtonOptions? rightBtn;
 
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
@@ -86,12 +86,12 @@ class TDInputDialog extends StatelessWidget {
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: TDDialogScaffold(
+      child: TDialogScaffold(
           showCloseButton: showCloseButton,
           backgroundColor: backgroundColor,
           radius: radius,
           body: Column(mainAxisSize: MainAxisSize.min, children: [
-            TDDialogInfoWidget(
+            TDialogInfoWidget(
               title: title,
               titleColor: titleColor,
               titleAlignment: titleAlignment,
@@ -112,12 +112,12 @@ class TDInputDialog extends StatelessWidget {
                             const EdgeInsets.symmetric(horizontal: 16),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
-                                TDTheme.of(context).radiusDefault),
+                                TTheme.of(context).radiusDefault),
                             borderSide: BorderSide.none),
                         hintText: hintText,
                         hintStyle: TextStyle(
-                            color: TDTheme.of(context).textColorPlaceholder),
-                        fillColor: TDTheme.of(context).bgColorComponent,
+                            color: TTheme.of(context).textColorPlaceholder),
+                        fillColor: TTheme.of(context).bgColorComponent,
                         filled: true,
                         // labelText: '左上角',
                       ),
@@ -133,14 +133,14 @@ class TDInputDialog extends StatelessWidget {
       return buttonWidget!;
     }
     final left = leftBtn ??
-        TDDialogButtonOptions(
+        TDialogButtonOptions(
             title: context.resource.cancel,
-            titleColor: TDTheme.of(context).textColorPrimary,
+            titleColor: TTheme.of(context).textColorPrimary,
             fontWeight: FontWeight.normal,
             action: null,
             height: 56);
     final right = rightBtn ??
-        TDDialogButtonOptions(
+        TDialogButtonOptions(
             title: context.resource.confirm,
             action: null,
             fontWeight: FontWeight.w600,

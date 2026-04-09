@@ -9,17 +9,17 @@ import 'td_cupertino_switch.dart';
 /// 开关改变事件处理
 typedef OnSwitchChanged = bool Function(bool value);
 
-enum TDSwitchSize { large, medium, small }
+enum TSwitchSize { large, medium, small }
 
-enum TDSwitchType { fill, text, loading, icon }
+enum TSwitchType { fill, text, loading, icon }
 
-class TDSwitch extends StatefulWidget {
-  const TDSwitch({
+class TSwitch extends StatefulWidget {
+  const TSwitch({
     Key? key,
     this.enable = true,
     this.isOn = false,
-    this.size = TDSwitchSize.medium,
-    this.type = TDSwitchType.fill,
+    this.size = TSwitchSize.medium,
+    this.type = TSwitchType.fill,
     this.trackOnColor,
     this.trackOffColor,
     this.thumbContentOnColor,
@@ -56,10 +56,10 @@ class TDSwitch extends StatefulWidget {
   final TextStyle? thumbContentOffFont;
 
   /// 尺寸：大、中、小
-  final TDSwitchSize? size;
+  final TSwitchSize? size;
 
   /// 类型：填充、文本、加载
-  final TDSwitchType? type;
+  final TSwitchType? type;
 
   /// 改变事件
   final OnSwitchChanged? onChanged;
@@ -72,11 +72,11 @@ class TDSwitch extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return TDSwitchState();
+    return TSwitchState();
   }
 }
 
-class TDSwitchState extends State<TDSwitch> {
+class TSwitchState extends State<TSwitch> {
   bool isOn = false;
 
   @override
@@ -86,15 +86,15 @@ class TDSwitchState extends State<TDSwitch> {
   }
 
   @override
-  void didUpdateWidget(covariant TDSwitch oldWidget) {
+  void didUpdateWidget(covariant TSwitch oldWidget) {
     super.didUpdateWidget(oldWidget);
     isOn = widget.isOn;
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
-    final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
+    final theme = TTheme.of(context);
+    final switchEnable = widget.enable && widget.type != TSwitchType.loading;
     final trackOnColor = widget.trackOnColor ?? theme.brandNormalColor;
     final trackOffColor = widget.trackOffColor ?? theme.textDisabledColor;
     final thumbContentOnColor =
@@ -105,7 +105,7 @@ class TDSwitchState extends State<TDSwitch> {
         widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
     final thumbContentOffFont =
         widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
-    Widget current = TDCupertinoSwitch(
+    Widget current = TCupertinoSwitch(
       value: isOn,
       activeColor: trackOnColor,
       trackColor: trackOffColor,
@@ -145,11 +145,11 @@ class TDSwitchState extends State<TDSwitch> {
 
   double _getWidth() {
     switch (widget.size) {
-      case TDSwitchSize.large:
+      case TSwitchSize.large:
         return 52;
-      case TDSwitchSize.medium:
+      case TSwitchSize.medium:
         return 45;
-      case TDSwitchSize.small:
+      case TSwitchSize.small:
         return 39;
       default:
         return 45;
@@ -158,11 +158,11 @@ class TDSwitchState extends State<TDSwitch> {
 
   double _getHeight() {
     switch (widget.size) {
-      case TDSwitchSize.large:
+      case TSwitchSize.large:
         return 32;
-      case TDSwitchSize.medium:
+      case TSwitchSize.medium:
         return 28;
-      case TDSwitchSize.small:
+      case TSwitchSize.small:
         return 24;
       default:
         return 28;
@@ -176,13 +176,13 @@ class TDSwitchState extends State<TDSwitch> {
     TextStyle thumbContentOffFont,
   ) {
     switch (widget.type) {
-      case TDSwitchType.text:
+      case TSwitchType.text:
         return Stack(
           children: [
             Container(
               alignment: Alignment.center,
               width: 16,
-              child: TDText(
+              child: TText(
                 isOn
                     ? (widget.openText ?? context.resource.open)
                     : (widget.closeText ?? context.resource.close),
@@ -194,25 +194,25 @@ class TDSwitchState extends State<TDSwitch> {
             )
           ],
         );
-      case TDSwitchType.loading:
+      case TSwitchType.loading:
         return Container(
           alignment: Alignment.centerLeft,
-          child: TDCircleIndicator(
+          child: TCircleIndicator(
             color: thumbContentOnColor,
             size: 16,
             lineWidth: 3,
           ),
         );
-      case TDSwitchType.icon:
+      case TSwitchType.icon:
         return Container(
           alignment: Alignment.centerLeft,
           child: Icon(
-            isOn ? TDIcons.check : TDIcons.close,
+            isOn ? TIcons.check : TIcons.close,
             size: 16,
             color: isOn ? thumbContentOnColor : thumbContentOffColor,
           ),
         );
-      case TDSwitchType.fill:
+      case TSwitchType.fill:
       default:
         return null;
     }

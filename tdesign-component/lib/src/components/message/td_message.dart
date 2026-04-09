@@ -50,9 +50,9 @@ enum MessageTheme {
   error
 }
 
-/// TDMessage 组件
-class TDMessage extends StatefulWidget {
-  const TDMessage({
+/// TMessage 组件
+class TMessage extends StatefulWidget {
+  const TMessage({
     Key? key,
     this.closeBtn,
     this.content,
@@ -105,7 +105,7 @@ class TDMessage extends StatefulWidget {
   final VoidCallback? onLinkClick;
 
   @override
-  _TDMessageState createState() => _TDMessageState();
+  _TMessageState createState() => _TMessageState();
 
   static void showMessage({
     required BuildContext context,
@@ -125,7 +125,7 @@ class TDMessage extends StatefulWidget {
     final overlay = Overlay.of(context);
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
-      builder: (context) => TDMessage(
+      builder: (context) => TMessage(
         content: content,
         visible: visible,
         duration: duration,
@@ -147,7 +147,7 @@ class TDMessage extends StatefulWidget {
   }
 }
 
-class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
+class _TMessageState extends State<TMessage> with TickerProviderStateMixin {
   bool _isVisible = true;
   double _topOffset = 0;
   double initTopOffset = 80;
@@ -236,7 +236,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.content ?? '',
-            style: TextStyle(color: TDTheme.of(context).textColorPrimary),
+            style: TextStyle(color: TTheme.of(context).textColorPrimary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -245,7 +245,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         final textPainter = TextPainter(
           text: TextSpan(
               text: widget.content ?? '',
-              style: TextStyle(color: TDTheme.of(context).textColorPrimary)),
+              style: TextStyle(color: TTheme.of(context).textColorPrimary)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
@@ -290,7 +290,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                           child: Text(
                             widget.content ?? '',
                             style: TextStyle(
-                                color: TDTheme.of(context).textColorPrimary),
+                                color: TTheme.of(context).textColorPrimary),
                             maxLines: 1,
                           ),
                         ),
@@ -310,23 +310,23 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         switch (widget.theme) {
           case MessageTheme.info:
             return Icon(
-              TDIcons.error_circle_filled,
-              color: TDTheme.of(context).brandNormalColor,
+              TIcons.error_circle_filled,
+              color: TTheme.of(context).brandNormalColor,
             );
           case MessageTheme.success:
             return Icon(
-              TDIcons.check_circle_filled,
-              color: TDTheme.of(context).successNormalColor,
+              TIcons.check_circle_filled,
+              color: TTheme.of(context).successNormalColor,
             );
           case MessageTheme.warning:
             return Icon(
-              TDIcons.error_circle_filled,
-              color: TDTheme.of(context).warningNormalColor,
+              TIcons.error_circle_filled,
+              color: TTheme.of(context).warningNormalColor,
             );
           case MessageTheme.error:
             return Icon(
-              TDIcons.error_circle_filled,
-              color: TDTheme.of(context).errorNormalColor,
+              TIcons.error_circle_filled,
+              color: TTheme.of(context).errorNormalColor,
             );
           case null:
             return const SizedBox.shrink();
@@ -349,8 +349,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         return GestureDetector(
           onTap: clickCloseButton,
           child: Icon(
-            TDIcons.close,
-            color: TDTheme.of(context).textColorPlaceholder,
+            TIcons.close,
+            color: TTheme.of(context).textColorPlaceholder,
           ),
         );
       } else if (widget.closeBtn is String) {
@@ -371,13 +371,13 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       if (widget.link is MessageLink) {
         return Align(
             alignment: Alignment.center,
-            child: TDLink(
+            child: TLink(
               label: widget.link.name,
-              style: TDLinkStyle.primary,
-              type: TDLinkType.basic,
+              style: TLinkStyle.primary,
+              type: TLinkType.basic,
               uri: widget.link.uri,
-              size: TDLinkSize.medium,
-              color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
+              size: TLinkSize.medium,
+              color: widget.link.color ?? TTheme.of(context).brandNormalColor,
               linkClick: (link) => clickLink(),
             ));
       } else if (widget.link is String) {
@@ -388,7 +388,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               child: Text(
                 widget.link ?? '',
                 style: TextStyle(
-                  color: TDTheme.of(context).brandNormalColor,
+                  color: TTheme.of(context).brandNormalColor,
                   fontSize: 14,
                 ),
                 maxLines: 1,
@@ -413,10 +413,10 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                 height: 48,
                 padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).bgColorContainer,
+                    color: TTheme.of(context).bgColorContainer,
                     borderRadius: BorderRadius.circular(
-                        TDTheme.of(context).radiusDefault),
-                    boxShadow: TDTheme.of(context).shadowsMiddle),
+                        TTheme.of(context).radiusDefault),
+                    boxShadow: TTheme.of(context).shadowsMiddle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

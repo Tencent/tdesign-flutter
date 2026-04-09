@@ -7,14 +7,14 @@ Widget _buildCustomCell(BuildContext context) {
     valueListenable: selected,
     builder: (context, value, child) {
       final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
-      return TDCellGroup(
+      return TCellGroup(
         cells: [
-          TDCell(
+          TCell(
             title: '自定义日期单元格',
             arrow: true,
             note: '${date.year}-${date.month}-${date.day}',
             onClick: (cell) {
-              TDCalendarPopup(
+              TCalendarPopup(
                 context,
                 visible: true,
                 onConfirm: (value) {
@@ -24,7 +24,7 @@ Widget _buildCustomCell(BuildContext context) {
                 onClose: () {
                   print('onClose');
                 },
-                child: TDCalendar(
+                child: TCalendar(
                     title: '请选择日期',
                     value: value,
                     cellHeight: 80,
@@ -50,7 +50,7 @@ Widget _buildCustomCell(BuildContext context) {
                           selectType != DateSelectType.selected) {
                         return Container(
                           decoration: BoxDecoration(
-                            color: TDTheme.of(context).brandColor4,
+                            color: TTheme.of(context).brandColor4,
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
                           constraints: const BoxConstraints(
@@ -73,7 +73,7 @@ Widget _buildCustomCell(BuildContext context) {
                       if (selectType == DateSelectType.selected) {
                         return Container(
                           decoration: BoxDecoration(
-                            color: TDTheme.of(context).successColor8,
+                            color: TTheme.of(context).successColor8,
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
                           constraints: const BoxConstraints(

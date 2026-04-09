@@ -10,7 +10,7 @@ import 'td_inset_divider.dart';
 import 'td_nonanimated_expand_icon.dart';
 
 /// 折叠面板的组件样式
-enum TDCollapseStyle {
+enum TCollapseStyle {
   /// Block 通栏风格
   block,
 
@@ -18,11 +18,11 @@ enum TDCollapseStyle {
   card
 }
 
-/// 折叠面板列表组件，需配合 [TDCollapsePanel] 使用
-class TDCollapse extends StatefulWidget {
-  const TDCollapse({
+/// 折叠面板列表组件，需配合 [TCollapsePanel] 使用
+class TCollapse extends StatefulWidget {
+  const TCollapse({
     required this.children,
-    this.style = TDCollapseStyle.block,
+    this.style = TCollapseStyle.block,
     this.expansionCallback,
     this.animationDuration = kThemeAnimationDuration,
     this.elevation = 0,
@@ -31,9 +31,9 @@ class TDCollapse extends StatefulWidget {
         initialOpenPanelValue = null,
         super(key: key);
 
-  const TDCollapse.accordion({
+  const TCollapse.accordion({
     required this.children,
-    this.style = TDCollapseStyle.block,
+    this.style = TCollapseStyle.block,
     this.expansionCallback,
     this.animationDuration = kThemeAnimationDuration,
     this.elevation = 0,
@@ -43,12 +43,12 @@ class TDCollapse extends StatefulWidget {
         super(key: key);
 
   /// 折叠面板列表的样式
-  /// - [TDCollapseStyle.block] 通栏风格
-  /// - [TDCollapseStyle.card] 卡片风格
-  final TDCollapseStyle style;
+  /// - [TCollapseStyle.block] 通栏风格
+  /// - [TCollapseStyle.card] 卡片风格
+  final TCollapseStyle style;
 
   /// 折叠面板列表的子组件
-  final List<TDCollapsePanel> children;
+  final List<TCollapsePanel> children;
 
   /// 折叠面板列表的回调函数；
   /// 回调时，入参为当前点击的折叠面板的索引 index 和是否展开的状态 isExpanded
@@ -61,17 +61,17 @@ class TDCollapse extends StatefulWidget {
   final double elevation;
 
   /// 折叠面板列表的默认展开面板的值；
-  /// 当使用 [TDCollapse.accordion] 时，此值生效
+  /// 当使用 [TCollapse.accordion] 时，此值生效
   final Object? initialOpenPanelValue;
 
   final bool _allowOnlyOnePanelOpen;
 
   @override
-  State createState() => _TDCollapseState();
+  State createState() => _TCollapseState();
 }
 
-class _TDCollapseState extends State<TDCollapse> {
-  TDCollapsePanel? _currentOpenPanel;
+class _TCollapseState extends State<TCollapse> {
+  TCollapsePanel? _currentOpenPanel;
 
   @override
   void initState() {
@@ -92,7 +92,7 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   @override
-  void didUpdateWidget(TDCollapse oldWidget) {
+  void didUpdateWidget(TCollapse oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (!widget._allowOnlyOnePanelOpen) {
@@ -134,12 +134,12 @@ class _TDCollapseState extends State<TDCollapse> {
 
       items.add(
         MaterialSlice(
-            key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+            key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
             color:
-                child.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+                child.backgroundColor ?? TTheme.of(context).bgColorContainer,
             child: Column(
               // to prevent collapse state change when parent rebuild
-              key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+              key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
               children: [
                 MergeSemantics(
                   child: InkWell(
@@ -169,9 +169,9 @@ class _TDCollapseState extends State<TDCollapse> {
                   firstChild: Container(height: 0.0),
                   secondChild: Column(
                     children: [
-                      const TDInsetDivider(),
+                      const TInsetDivider(),
                       Container(
-                        padding: EdgeInsets.all(TDTheme.of(context).spacer16),
+                        padding: EdgeInsets.all(TTheme.of(context).spacer16),
                         child: child.body,
                       ),
                     ],
@@ -186,7 +186,7 @@ class _TDCollapseState extends State<TDCollapse> {
                       : CrossFadeState.showFirst,
                   duration: widget.animationDuration,
                 ),
-                if (!isLastChild) const TDInsetDivider()
+                if (!isLastChild) const TInsetDivider()
               ],
             )),
       );
@@ -207,10 +207,10 @@ class _TDCollapseState extends State<TDCollapse> {
       collapse = Container(
         child: ClipRRect(
           child: collapse,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge),
+          borderRadius: BorderRadius.circular(TTheme.of(context).radiusLarge),
         ),
         margin: EdgeInsets.symmetric(
-          horizontal: TDTheme.of(context).spacer16,
+          horizontal: TTheme.of(context).spacer16,
         ),
       );
     }
@@ -221,12 +221,12 @@ class _TDCollapseState extends State<TDCollapse> {
   MergeableMaterialItem _buildGap(BuildContext context, int value) {
     return MaterialGap(
       size: 0.0,
-      key: TDCollapseSaltedKey<BuildContext, int>(context, value),
+      key: TCollapseSaltedKey<BuildContext, int>(context, value),
     );
   }
 
   BorderRadius _createRadius(int index) {
-    final radius = Radius.circular(TDTheme.of(context).radiusLarge);
+    final radius = Radius.circular(TTheme.of(context).radiusLarge);
 
     final isFirst = index == 0;
     if (isFirst) {
@@ -242,7 +242,7 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   bool _isCardStyle() {
-    return widget.style == TDCollapseStyle.card;
+    return widget.style == TCollapseStyle.card;
   }
 
   bool _isChildExpanded(int index) {
@@ -280,7 +280,7 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   Widget _buildTitleWidget(
-      BuildContext context, TDCollapsePanel child, int index) {
+      BuildContext context, TCollapsePanel child, int index) {
     final titleWidget = child.headerBuilder(context, _isChildExpanded(index));
     return ListTile(
       title: titleWidget,
@@ -288,20 +288,20 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   Widget _buildExpandIconWidget(
-      BuildContext context, TDCollapsePanel child, int index) {
+      BuildContext context, TCollapsePanel child, int index) {
     Widget expandedIcon = Container(
-      key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+      key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
       margin: const EdgeInsetsDirectional.all(0.0),
       child: TdNonAnimatedExpandIcon(
         isExpanded: _isChildExpanded(index),
         padding: child.expandIconTextBuilder != null
             ? EdgeInsets.only(
-                right: TDTheme.of(context).spacer16,
-                top: TDTheme.of(context).spacer16,
-                bottom: TDTheme.of(context).spacer16,
+                right: TTheme.of(context).spacer16,
+                top: TTheme.of(context).spacer16,
+                bottom: TTheme.of(context).spacer16,
                 left: 0,
               )
-            : EdgeInsets.all(TDTheme.of(context).spacer16),
+            : EdgeInsets.all(TTheme.of(context).spacer16),
       ),
     );
 
@@ -311,7 +311,7 @@ class _TDCollapseState extends State<TDCollapse> {
           Text(child.expandIconTextBuilder!(context, _isChildExpanded(index)),
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: TDTheme.of(context).textColorPlaceholder,
+                color: TTheme.of(context).textColorPlaceholder,
               )),
         expandedIcon,
       ],
@@ -319,14 +319,14 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   bool _allPanelsHaveValue() {
-    return widget.children.every((TDCollapsePanel child) {
+    return widget.children.every((TCollapsePanel child) {
       return child.value != null;
     });
   }
 
   bool _allPanelsHaveDistinctValues() {
     final valueSet = <Object?>{};
-    return widget.children.every((TDCollapsePanel child) {
+    return widget.children.every((TCollapsePanel child) {
       if (!valueSet.add(child.value)) {
         return false;
       }
@@ -334,7 +334,7 @@ class _TDCollapseState extends State<TDCollapse> {
     });
   }
 
-  TDCollapsePanel? _searchPanelByValue(Object? value) {
+  TCollapsePanel? _searchPanelByValue(Object? value) {
     for (var index = 0; index < widget.children.length; index += 1) {
       final child = widget.children[index];
       if (child.value == value) {

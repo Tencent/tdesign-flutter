@@ -1,8 +1,8 @@
 
   Widget _buildLargeLoading(BuildContext context) {
-    return const TDLoading(
-      size: TDLoadingSize.large,
-      icon: TDLoadingIcon.circle,
+    return const TLoading(
+      size: TLoadingSize.large,
+      icon: TLoadingIcon.circle,
       text: '加载中…',
       axis: Axis.horizontal,
     );

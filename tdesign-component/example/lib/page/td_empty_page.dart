@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDEmptyPage extends StatefulWidget {
-  const TDEmptyPage({Key? key}) : super(key: key);
+class TEmptyPage extends StatefulWidget {
+  const TEmptyPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDEmptyPageState();
+  State<StatefulWidget> createState() => _TEmptyPageState();
 }
 
-class _TDEmptyPageState extends State<TDEmptyPage> {
+class _TEmptyPageState extends State<TEmptyPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -31,16 +31,16 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
 
   @Demo(group: 'empty')
   Widget _iconEmpty(BuildContext context) {
-    return const TDEmpty(
-      type: TDEmptyType.plain,
+    return const TEmpty(
+      type: TEmptyType.plain,
       emptyText: '描述文字',
     );
   }
 
   @Demo(group: 'empty')
   Widget _iconEmptyCustom(BuildContext context) {
-    return const TDEmpty(
-      type: TDEmptyType.plain,
+    return const TEmpty(
+      type: TEmptyType.plain,
       icon: Icons.hourglass_empty_sharp,
       emptyText: '描述文字',
     );
@@ -48,18 +48,18 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
 
   @Demo(group: 'empty')
   Widget _imageEmpty(BuildContext context) {
-    return TDEmpty(
-      type: TDEmptyType.plain,
+    return TEmpty(
+      type: TEmptyType.plain,
       emptyText: '描述文字',
       image: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).bgColorComponent,
+          color: TTheme.of(context).bgColorComponent,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const TDImage(
+        child: const TImage(
           width: 120,
           assetUrl: 'assets/img/empty.png',
-          type: TDImageType.fitWidth,
+          type: TImageType.fitWidth,
         ),
       ),
     );
@@ -67,8 +67,8 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
 
   @Demo(group: 'empty')
   Widget _operationEmpty(BuildContext context) {
-    return const TDEmpty(
-      type: TDEmptyType.operation,
+    return const TEmpty(
+      type: TEmptyType.operation,
       operationText: '操作按钮',
       emptyText: '描述文字',
     );
@@ -76,15 +76,15 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
 
   @Demo(group: 'empty')
   Widget _operationCustomEmpty(BuildContext context) {
-    return TDEmpty(
-      type: TDEmptyType.operation,
+    return TEmpty(
+      type: TEmptyType.operation,
       emptyText: '描述文字',
       customOperationWidget: Padding(
         padding: const EdgeInsets.only(top: 32),
-        child: TDButton(
+        child: TButton(
           text: '自定义操作按钮',
-          size: TDButtonSize.medium,
-          theme: TDButtonTheme.danger,
+          size: TButtonSize.medium,
+          theme: TButtonTheme.danger,
           width: 160,
           onTap: () {},
         ),

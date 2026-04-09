@@ -1,27 +1,27 @@
 
   Widget _horizontalCardStyle(BuildContext context) {
-    return TDRadioGroup(
+    return TRadioGroup(
       selectId: 'index:1',
       cardMode: true,
       direction: Axis.horizontal,
       rowCount: 2,
       directionalTdRadios: const [
-        TDRadio(
+        TRadio(
           id: 'index:0',
           title: '单选',
           cardMode: true,
         ),
-        TDRadio(
+        TRadio(
           id: 'index:1',
           title: '单选',
           cardMode: true,
         ),
-        TDRadio(
+        TRadio(
           id: 'index:2',
           title: '单选',
           cardMode: true,
         ),
-        TDRadio(
+        TRadio(
           id: 'index:3',
           title: '单选',
           cardMode: true,
