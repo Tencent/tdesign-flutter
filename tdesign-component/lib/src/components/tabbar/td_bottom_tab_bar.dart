@@ -737,7 +737,14 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     if (basicType == TDBottomTabBarBasicType.icon) {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
-      child = isSelected ? selectedIcon! : unSelectedIcon!;
+      child = IconTheme(
+        data: IconThemeData(
+          color: isSelected
+              ? TDTheme.of(context).brandNormalColor
+              : TDTheme.of(context).textColorPrimary,
+        ),
+        child: isSelected ? selectedIcon! : unSelectedIcon!,
+      );
     }
 
     if (basicType == TDBottomTabBarBasicType.iconText) {
@@ -747,7 +754,14 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          isSelected ? selectedIcon! : unSelectedIcon!,
+          IconTheme(
+            data: IconThemeData(
+              color: isSelected
+                  ? TDTheme.of(context).brandNormalColor
+                  : TDTheme.of(context).textColorPrimary,
+            ),
+            child: isSelected ? selectedIcon! : unSelectedIcon!,
+          ),
           if (centerDistance > 0)
             SizedBox(
               height: centerDistance,
