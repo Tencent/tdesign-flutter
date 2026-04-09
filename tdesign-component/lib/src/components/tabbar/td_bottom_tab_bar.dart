@@ -155,6 +155,7 @@ class TDBottomTabBar extends StatefulWidget {
     this.showTopBorder = true,
     this.topBorder,
     this.useSafeArea = true,
+    this.placeholder = true,
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
@@ -241,6 +242,9 @@ class TDBottomTabBar extends StatefulWidget {
   /// 使用安全区域
   final bool useSafeArea;
 
+  /// 是否添加安全区域占位
+  final bool placeholder;
+
   /// 选中时背景颜色
   final Color? selectedBgColor;
 
@@ -322,6 +326,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar>
   Widget build(BuildContext context) {
     var isCapsuleOutlineType =
         widget.outlineType == TDBottomTabBarOutlineType.capsule;
+    var safeAreaBottomHeight = MediaQuery.of(context).padding.bottom;
 
     return AnimatedBuilder(
       animation: _animationController,
@@ -374,7 +379,15 @@ class _TDBottomTabBarState extends State<TDBottomTabBar>
                   _verticalDivider(),
                 ]));
             if (widget.useSafeArea) {
-              result = SafeArea(child: result);
+              if (widget.placeholder) {
+                result = Container(
+                  padding: EdgeInsets.only(bottom: safeAreaBottomHeight),
+                  color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+                  child: result,
+                );
+              } else {
+                result = SafeArea(child: result);
+              }
             }
             return result;
           },
