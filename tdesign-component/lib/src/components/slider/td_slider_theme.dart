@@ -1192,18 +1192,14 @@ mixin TDCapsuleRectAdjustment implements TDCapsuleRectThemeData {
   }
 
   // 胶囊类型适配样式边距 trackHeight / 2，默认是 12
+  // 统一使用固定边距，让 adjustThumbCenter 来处理滑块位置限制
   extraPadding({trackHeight = 24}) {
-    if (hasDivisions()) {
-      return 0;
-    }
     return trackHeight / 2;
   }
 
   // 胶囊类型数值计算修正边距 trackHeight / 2，默认是 12
+  // 统一不使用额外 padding，位置计算由 adjustThumbCenter 处理
   trackPadding({trackHeight = 24}) {
-    if (hasDivisions()) {
-      return trackHeight / 2;
-    }
     return 0;
   }
 }
