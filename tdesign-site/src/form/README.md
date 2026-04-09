@@ -743,6 +743,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
+### TFormValidation
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| errorMessage | String | - | 错误提示信息 |
+| type | TFormItemType | - | 校验对象的类型 |
+| validate | String? Function(dynamic) | - | 校验方法 |
+
+```
+```
+
 ### TForm
 #### 默认构造方法
 
@@ -768,18 +780,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rules | Map<String, TFormValidation> | - | 整个表单字段校验规则 |
 | scrollToFirstError | String? | - | 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。 |
 | submitWithWarningMessage | bool? | false | 【讨论中】当校验结果只有告警信息时，是否触发 submit 提交事件 |
-
-```
-```
-
-### TFormValidation
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| errorMessage | String | - | 错误提示信息 |
-| type | TFormItemType | - | 校验对象的类型 |
-| validate | String? Function(dynamic) | - | 校验方法 |
 
 
   
