@@ -9,7 +9,7 @@ class TCellPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '一行内容/功能的垂直排列方式。一行项目左侧为主要内容展示区域，右侧可增加更多操作内容。',
       exampleCodeGroup: 'cell',
       children: const [

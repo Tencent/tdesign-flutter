@@ -12,7 +12,7 @@ class TPopupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       padding: const EdgeInsets.only(top: 16),
       exampleCodeGroup: 'popup',
       desc: '由其他控件触发，屏幕滑出或弹出一块自定义内容区域',

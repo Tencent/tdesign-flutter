@@ -92,7 +92,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于内容分类后的展示切换。',
       exampleCodeGroup: 'tabs',
       padding: const EdgeInsets.only(top: 16),

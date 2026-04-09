@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TdNonAnimatedExpandIcon extends StatelessWidget {
-  const TdNonAnimatedExpandIcon({
+class TNonAnimatedExpandIcon extends StatelessWidget {
+  const TNonAnimatedExpandIcon({
     required this.isExpanded,
     required this.padding,
     Key? key,

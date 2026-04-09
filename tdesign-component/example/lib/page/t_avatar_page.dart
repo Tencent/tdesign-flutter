@@ -17,7 +17,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'avatar',
       desc: '用于展示用户头像信息，除了纯展示也可点击进入个人详情等操作。',
       children: [

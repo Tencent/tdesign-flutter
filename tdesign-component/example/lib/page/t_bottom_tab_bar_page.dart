@@ -36,7 +36,7 @@ class _TBottomTabBarPageState extends State<TBottomTabBarPage> {
       color: TTheme.of(context).textColorPrimary,
     );
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于在不同功能模块之间进行快速切换，位于页面底部。',
       exampleCodeGroup: 'bottomTabBar',
       padding: const EdgeInsets.only(bottom: 16),
@@ -354,7 +354,7 @@ class _TBottomTabBarPageState extends State<TBottomTabBarPage> {
         TBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -391,7 +391,7 @@ class _TBottomTabBarPageState extends State<TBottomTabBarPage> {
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -432,7 +432,7 @@ class _TBottomTabBarPageState extends State<TBottomTabBarPage> {
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -517,7 +517,7 @@ class _TBottomTabBarPageState extends State<TBottomTabBarPage> {
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),

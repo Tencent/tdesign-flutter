@@ -1003,7 +1003,7 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
       }
     }
 
-    Widget tdHorizontalTabBar = CustomPaint(
+    Widget tHorizontalTabBar = CustomPaint(
       painter: _indicatorPainter,
       child: _TabStyle(
         animation: kAlwaysDismissedAnimation,
@@ -1029,22 +1029,22 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
                   .add(widget.padding ?? EdgeInsets.zero)
               : widget.padding;
       _scrollController ??= _TabBarScrollController(this);
-      tdHorizontalTabBar = SingleChildScrollView(
+      tHorizontalTabBar = SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         padding: effectivePadding,
         physics: widget.physics,
-        child: tdHorizontalTabBar,
+        child: tHorizontalTabBar,
       );
     } else if (widget.padding != null) {
-      tdHorizontalTabBar = Padding(
+      tHorizontalTabBar = Padding(
         padding: widget.padding!,
-        child: tdHorizontalTabBar,
+        child: tHorizontalTabBar,
       );
     }
 
-    return tdHorizontalTabBar;
+    return tHorizontalTabBar;
   }
 }
 

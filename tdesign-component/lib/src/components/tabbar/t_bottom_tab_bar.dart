@@ -68,16 +68,16 @@ enum TBottomTabBarIndicatorAnimation {
 class BadgeConfig {
   BadgeConfig({
     required this.showBadge,
-    TBadge? tdBadge,
+    TBadge? tBadge,
     this.badgeTopOffset,
     this.badgeRightOffset,
-  }) : tdBadge = tdBadge ?? const TBadge(TBadgeType.redPoint);
+  }) : tBadge = tBadge ?? const TBadge(TBadgeType.redPoint);
 
   /// 是否展示消息
   final bool showBadge;
 
   /// 消息样式（未设置但 showBadge 为 true，则默认使用红点）
-  final TBadge? tdBadge;
+  final TBadge? tBadge;
 
   /// 消息顶部偏移量
   final double? badgeTopOffset;
@@ -101,9 +101,9 @@ class TBottomTabBarTabConfig {
       this.allowMultipleTaps = false})
       : assert(() {
           if (badgeConfig?.showBadge ?? false) {
-            if (badgeConfig?.tdBadge == null) {
+            if (badgeConfig?.tBadge == null) {
               throw FlutterError('[NavigationTab] if set showBadge = true, '
-                  'you must set a tdBadge instance');
+                  'you must set a tBadge instance');
             }
           }
           return true;
@@ -698,8 +698,8 @@ class TBottomTabBarItemWithBadge extends StatelessWidget {
 
   Widget _badge(BadgeConfig? badgeConfig) {
     if (badgeConfig?.showBadge ?? false) {
-      if (badgeConfig?.tdBadge != null) {
-        return badgeConfig!.tdBadge!;
+      if (badgeConfig?.tBadge != null) {
+        return badgeConfig!.tBadge!;
       }
     }
     return Container();

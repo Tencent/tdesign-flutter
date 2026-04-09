@@ -57,7 +57,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '适用于选择树形的数据结构',
       exampleCodeGroup: 'tree',
       children: [

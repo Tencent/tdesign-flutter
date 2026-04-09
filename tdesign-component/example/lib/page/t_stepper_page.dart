@@ -24,7 +24,7 @@ class _TStepperPageState extends State<TStepperPage> {
         }
       },
       child: ExamplePage(
-        title: tdTitle(),
+        title: tTitle(),
         desc: '用于数量的增减。',
         exampleCodeGroup: 'stepper',
         children: [

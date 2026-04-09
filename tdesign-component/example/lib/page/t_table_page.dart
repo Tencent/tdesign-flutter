@@ -65,7 +65,7 @@ class TTablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc:
           '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
       exampleCodeGroup: 'table',

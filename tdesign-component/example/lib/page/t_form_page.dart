@@ -242,7 +242,7 @@ class _TFormPageState extends State<TFormPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'form',
       desc: '用以收集、校验和提交数据，一般由输入框、单选框、复选框、选择器等控件组成。',
       children: [

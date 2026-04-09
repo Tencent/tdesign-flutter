@@ -10,7 +10,7 @@ class TCalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '按照日历形式展示数据或日期的容器。',
       exampleCodeGroup: 'calendar',
       children: [

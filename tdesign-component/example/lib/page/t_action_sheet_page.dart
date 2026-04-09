@@ -72,7 +72,7 @@ class TActionSheetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '由用户操作后触发的一种特定的模态弹出框 ，呈现一组与当前情境相关的两个或多个选项。',
       exampleCodeGroup: 'action_sheet',
       children: [

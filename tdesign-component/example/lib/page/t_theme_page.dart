@@ -17,7 +17,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '点击标题栏右上角图标可查看使用示例代码',
       exampleCodeGroup: 'theme',
       children: [

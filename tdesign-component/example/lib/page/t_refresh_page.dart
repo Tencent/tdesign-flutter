@@ -12,20 +12,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TdPullDownRefreshPage extends StatefulWidget {
-  const TdPullDownRefreshPage({Key? key}) : super(key: key);
+class TPullDownRefreshPage extends StatefulWidget {
+  const TPullDownRefreshPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TdPullDownRefreshPageState();
+  State<StatefulWidget> createState() => _TPullDownRefreshPageState();
 }
 
-class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
+class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
   var count = 0;
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'refresh',
       desc: '用于快速刷新页面信息，刷新可以是整页刷新也可以是页面的局部刷新。',
       showSingleChild: true,

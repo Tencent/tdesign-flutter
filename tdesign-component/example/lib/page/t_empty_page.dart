@@ -15,7 +15,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
+        title: tTitle(),
         exampleCodeGroup: 'empty',
         desc: '用于空状态时的占位提示。',
         children: [

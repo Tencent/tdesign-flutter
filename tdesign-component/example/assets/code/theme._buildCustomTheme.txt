@@ -6,7 +6,7 @@
     /// 此处替换主题
     return TTheme(
         // 替换fonts和colors，其他主题从父类拷贝
-        data: TTheme.of(context).copyWithTDThemeData('custom', fontMap: {
+        data: TTheme.of(context).copyWithTThemeData('custom', fontMap: {
           'fontBodyLarge': Font(size: 40, lineHeight: 80),
         }, colorMap: {
           'brandNormalColor': Colors.red

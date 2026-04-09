@@ -10,7 +10,7 @@ class TFooterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
       exampleCodeGroup: 'footer',
       children: [

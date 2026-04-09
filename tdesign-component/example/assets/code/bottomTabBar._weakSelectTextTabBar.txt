@@ -8,7 +8,7 @@
         TBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),

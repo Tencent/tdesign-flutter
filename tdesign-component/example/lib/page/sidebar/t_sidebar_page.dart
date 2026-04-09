@@ -26,7 +26,7 @@ class TSideBarPageState extends State<TSideBarPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'sideBar',
       desc: '用于内容分类后的展示切换。',
       children: [

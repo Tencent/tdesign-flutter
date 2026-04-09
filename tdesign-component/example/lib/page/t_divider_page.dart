@@ -10,7 +10,7 @@ class TDividerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(context),
+        title: tTitle(context),
         desc: '用于分割、组织、细化有一定逻辑的组织元素内容和页面结构。',
         exampleCodeGroup: 'divider',
         children: [

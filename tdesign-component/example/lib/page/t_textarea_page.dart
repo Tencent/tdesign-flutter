@@ -33,7 +33,7 @@ class _TTextareaPageState extends State<TTextareaPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于多行文本信息输入。',
       exampleCodeGroup: 'textarea',
       children: [

@@ -12,7 +12,7 @@ class TTextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       exampleCodeGroup: 'text',
       children: [
         ExampleModule(title: '使用示例', children: [

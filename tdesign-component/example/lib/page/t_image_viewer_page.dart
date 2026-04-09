@@ -25,7 +25,7 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于图片内容的缩略展示与查看。',
       exampleCodeGroup: 'image_viewer',
       children: [

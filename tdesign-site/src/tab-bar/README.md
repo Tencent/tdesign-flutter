@@ -388,7 +388,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -432,7 +432,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -480,7 +480,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            tdBadge: const TBadge(TBadgeType.redPoint),
+            tBadge: const TBadge(TBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -579,7 +579,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | badgeRightOffset | double? | - | 消息右侧偏移量 |
 | badgeTopOffset | double? | - | 消息顶部偏移量 |
 | showBadge | bool | - | 是否展示消息 |
-| tdBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
+| tBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
 
 ```
 ```

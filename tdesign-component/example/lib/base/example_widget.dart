@@ -678,7 +678,7 @@ ${codeString}
 
 /// State获取标题的扩展
 extension TStateExs on State {
-  String tdTitle() {
+  String tTitle() {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
@@ -687,7 +687,7 @@ extension TStateExs on State {
 
 /// StatelessWidget获取标题的扩展
 extension TWidgetExs on StatelessWidget {
-  String tdTitle(BuildContext context) {
+  String tTitle(BuildContext context) {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';

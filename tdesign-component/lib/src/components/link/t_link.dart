@@ -177,10 +177,10 @@ class TLink extends StatelessWidget {
           if (linkClick != null) {
             linkClick!(uri);
           } else {
-            var tdLinkConfig = getConfiguration(context);
+            var tLinkConfig = getConfiguration(context);
 
-            if (tdLinkConfig != null && tdLinkConfig.linkClick != null) {
-              tdLinkConfig.linkClick!(uri);
+            if (tLinkConfig != null && tLinkConfig.linkClick != null) {
+              tLinkConfig.linkClick!(uri);
             }
           }
         },

@@ -211,18 +211,18 @@ void main() {
       final primaryColor = TTheme.of(context).textColorPrimary;
 
       // 通过 TText 验证文字颜色
-      final tdTexts = tester.widgetList<TText>(find.byType(TText)).toList();
-      expect(tdTexts.length, 2);
+      final tTexts = tester.widgetList<TText>(find.byType(TText)).toList();
+      expect(tTexts.length, 2);
 
       // 找到 textColor 为 brandColor 的文字（选中）
-      final selectedText = tdTexts.firstWhere(
+      final selectedText = tTexts.firstWhere(
         (t) => t.textColor == brandColor,
         orElse: () => throw TestFailure('未找到 textColor == brandNormalColor 的 TText'),
       );
       expect(selectedText.textColor, equals(brandColor));
 
       // 找到 textColor 为 primaryColor 的文字（未选中）
-      final unselectedText = tdTexts.firstWhere(
+      final unselectedText = tTexts.firstWhere(
         (t) => t.textColor == primaryColor,
         orElse: () => throw TestFailure('未找到 textColor == textColorPrimary 的 TText'),
       );

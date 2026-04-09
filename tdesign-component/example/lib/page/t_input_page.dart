@@ -58,7 +58,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
   Widget build(BuildContext context) {
     var childBuilder = (context) {
       return ExamplePage(
-        title: tdTitle(),
+        title: tTitle(),
         desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
         exampleCodeGroup: 'input',
         children: [

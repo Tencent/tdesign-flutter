@@ -25,7 +25,7 @@ class TRatePageState extends State<TRatePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
+        title: tTitle(),
         desc: '用于对某行为/事物进行打分。',
         exampleCodeGroup: 'rate',
         children: [

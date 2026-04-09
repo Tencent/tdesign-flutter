@@ -335,7 +335,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'pull-down-refresh',
         pageName: 'refresh',
         pageBuilder:
-            _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
+            _wrapInheritedTheme((context) => const TPullDownRefreshPage())),
     ExamplePageModel(
         text: 'Swipecell 滑动操作',
         name: 'swipe-cell',

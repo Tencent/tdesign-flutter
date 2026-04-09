@@ -29,7 +29,7 @@ class _TPopoverPage extends State<TPopoverPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于文字提示的气泡框。',
       exampleCodeGroup: 'popover',
       children: [

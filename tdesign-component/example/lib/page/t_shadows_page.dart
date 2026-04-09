@@ -11,7 +11,7 @@ class TShadowsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(context),
+        title: tTitle(context),
         exampleCodeGroup: 'shadows',
         children: [
           ExampleModule(title: '投影', children: [

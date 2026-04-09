@@ -11,7 +11,7 @@ class TToastPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '用于轻量级反馈或提示，不会打断用户操作。',
       exampleCodeGroup: 'toast',
       children: [

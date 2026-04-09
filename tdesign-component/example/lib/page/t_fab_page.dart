@@ -16,7 +16,7 @@ class _TFabPageState extends State<TFabPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: tdTitle(), exampleCodeGroup: 'fab', children: [
+    return ExamplePage(title: tTitle(), exampleCodeGroup: 'fab', children: [
       ExampleModule(title: '组件类型', children: [
         ExampleItem(desc: 'Icon Fab 纯图标悬浮按钮', builder: _buildPureIconFab),
         ExampleItem(

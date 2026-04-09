@@ -16,7 +16,7 @@ class TNoticeBarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       exampleCodeGroup: 'noticeBar',
       desc: '在导航栏下方，用于给用户显示提示消息。',
       children: const [

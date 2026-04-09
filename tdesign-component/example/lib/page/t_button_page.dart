@@ -22,7 +22,7 @@ class _TButtonPageState extends State<TButtonPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
       exampleCodeGroup: 'button',
       children: [

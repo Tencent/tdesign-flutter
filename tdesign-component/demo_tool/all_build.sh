@@ -23,7 +23,7 @@ dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/compone
 # back_top
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/backtop/t_backtop.dart" --name TBackTop --folder-name back-top --output "$PARENT_DIR/example/assets/api/" --only-api
 # drawer
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/drawer" --name TDrawer,TDrawerWidget,TDrawerItem,TDrawerStyle --folder-name drawer --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/drawer" --name TDrawer,TDrawerWidget,TDrawerItem --folder-name drawer --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # indexes
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/indexes" --name TIndexes,TIndexesAnchor,TIndexesList --folder-name indexes --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # navbar

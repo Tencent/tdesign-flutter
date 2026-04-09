@@ -50,7 +50,7 @@ class _TBackTopPageState extends State<TBackTopPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
         scrollController: controller,
-        title: tdTitle(),
+        title: tTitle(),
         desc: '用于当页面过长往下滑动时，帮助用户快速回到页面顶部。',
         exampleCodeGroup: 'backtop',
         floatingActionButton: Stack(

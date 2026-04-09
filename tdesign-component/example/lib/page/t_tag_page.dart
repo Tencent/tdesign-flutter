@@ -9,7 +9,7 @@ class TTagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(context),
+        title: tTitle(context),
         desc: '用于表明主体的类目，属性或状态',
         exampleCodeGroup: 'tag',
         children: [

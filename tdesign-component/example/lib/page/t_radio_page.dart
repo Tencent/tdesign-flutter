@@ -25,7 +25,7 @@ class TRadioPageState extends State<TRadioPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'radio',
       children: [
         ExampleModule(title: '组件类型', children: [

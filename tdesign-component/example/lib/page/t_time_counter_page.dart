@@ -9,7 +9,7 @@ class TTimeCounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '用于实时展示计时数值。',
       exampleCodeGroup: 'timeCounter',
       children: [

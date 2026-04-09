@@ -11,7 +11,7 @@ class TRadiusPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(context),
+        title: tTitle(context),
         exampleCodeGroup: 'radius',
         children: [
           ExampleModule(title: '数值型', children: [

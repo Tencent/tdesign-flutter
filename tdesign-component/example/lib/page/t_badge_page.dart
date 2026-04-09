@@ -18,7 +18,7 @@ class _TBadgePageState extends State<TBadgePage> {
     var padding = const EdgeInsets.symmetric(horizontal: 16);
 
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
       exampleCodeGroup: 'badge',
       children: [

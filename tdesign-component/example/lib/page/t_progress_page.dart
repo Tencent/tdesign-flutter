@@ -31,7 +31,7 @@ class _TProgressPageState extends State<TProgressPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于展示任务当前的进度',
       exampleCodeGroup: 'progress',
       padding: const EdgeInsets.all(16),

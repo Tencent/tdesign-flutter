@@ -13,7 +13,7 @@ class TDrawerPage extends StatelessWidget {
     return Container(
         color: TTheme.of(context).grayColor2,
         child: ExamplePage(
-          title: tdTitle(context),
+          title: tTitle(context),
           desc: '用作一组平行关系页面/内容的切换器，相较于Tab，同屏可展示更多的选项数量。',
           exampleCodeGroup: 'drawer',
           navBarKey: navBarkey,
@@ -171,8 +171,8 @@ Widget _buildBottomSimple(BuildContext context) {
 Widget _buildColorSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
 
-  var tdCellStyle = TCellStyle(context: context);
-  tdCellStyle.backgroundColor = TTheme.of(context).brandNormalColor;
+  var tCellStyle = TCellStyle(context: context);
+  tCellStyle.backgroundColor = TTheme.of(context).brandNormalColor;
 
   return TButton(
     text: '自定义背景色',
@@ -187,7 +187,7 @@ Widget _buildColorSimple(BuildContext context) {
         drawerTop: renderBox?.size.height,
         title: '标题',
         backgroundColor: TTheme.of(context).bgColorSecondaryContainer,
-        style: tdCellStyle,
+        style: tCellStyle,
         placement: TDrawerPlacement.right,
         items: List.generate(
             drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),

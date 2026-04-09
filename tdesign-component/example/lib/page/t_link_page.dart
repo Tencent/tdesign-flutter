@@ -15,7 +15,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
+        title: tTitle(),
         desc: '文字超链接用于跳转一个新页面，如当前项目跳转，友情链接等。',
         exampleCodeGroup: 'link',
         children: [

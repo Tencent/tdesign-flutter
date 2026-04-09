@@ -11,7 +11,7 @@ class TNavBarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       exampleCodeGroup: 'navbar',
       desc: '用于不同页面之间切换或者跳转，位于内容区的上方，系统状态栏的下方。',
       children: [

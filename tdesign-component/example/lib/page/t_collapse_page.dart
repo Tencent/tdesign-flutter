@@ -24,7 +24,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
+        title: tTitle(),
         exampleCodeGroup: 'collapse',
         desc: '可以折叠/展开的内容区域。',
         children: [

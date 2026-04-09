@@ -5,7 +5,7 @@ import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 ///
-/// TdSwitchPage演示
+/// TSwitchPage演示
 ///
 class TSwitchPage extends StatefulWidget {
   const TSwitchPage({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class TSwitchPageState extends State<TSwitchPage> {
   @override
   Widget build(BuildContext context) {
     var current = ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'switch',
       desc: '用于控制某个功能的开启和关闭。',
       children: [

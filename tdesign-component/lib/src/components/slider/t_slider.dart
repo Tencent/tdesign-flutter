@@ -104,10 +104,10 @@ class TSliderState extends State<TSlider> {
 
   @override
   Widget build(BuildContext context) {
-    var tdSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
+    var tSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
 
     final showValue =
-        tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue;
+        tSliderThemeData.showScaleValue || tSliderThemeData.showThumbValue;
 
     return Listener(
         onPointerDown: (event) {
@@ -115,7 +115,7 @@ class TSliderState extends State<TSlider> {
               _sliderKey.currentContext?.findRenderObject() as RenderBox?;
           if (sliderBox == null ||
               widget.onThumbTextTap == null ||
-              !tdSliderThemeData.showThumbValue) {
+              !tSliderThemeData.showThumbValue) {
             return;
           }
 
@@ -156,13 +156,13 @@ class TSliderState extends State<TSlider> {
                     widget.onTap?.call(tapOffset, value);
                   },
                   child: SliderTheme(
-                    data: tdSliderThemeData.sliderThemeData,
+                    data: tSliderThemeData.sliderThemeData,
                     child: Slider(
                       key: _sliderKey,
                       value: value,
-                      min: tdSliderThemeData.min,
-                      max: tdSliderThemeData.max,
-                      divisions: tdSliderThemeData.divisions,
+                      min: tSliderThemeData.min,
+                      max: tSliderThemeData.max,
+                      divisions: tSliderThemeData.divisions,
                       onChangeStart: widget.onChangeStart,
                       onChangeEnd: widget.onChangeEnd,
                       onChanged: _enabled
@@ -287,9 +287,9 @@ class _TRangeSliderState extends State<TRangeSlider> {
 
   @override
   Widget build(BuildContext context) {
-    var tdSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
+    var tSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
     final showValue =
-        tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue;
+        tSliderThemeData.showScaleValue || tSliderThemeData.showThumbValue;
 
     return Listener(
       onPointerDown: (event) {
@@ -300,7 +300,7 @@ class _TRangeSliderState extends State<TRangeSlider> {
 
         if (sliderBox == null ||
             widget.onThumbTextTap == null ||
-            !tdSliderThemeData.showThumbValue) {
+            !tSliderThemeData.showThumbValue) {
           return;
         }
 
@@ -399,13 +399,13 @@ class _TRangeSliderState extends State<TRangeSlider> {
                   widget.onTap?.call(position, tapOffset, tappedValue);
                 },
                 child: SliderTheme(
-                  data: tdSliderThemeData.sliderThemeData,
+                  data: tSliderThemeData.sliderThemeData,
                   child: RangeSlider(
                     key: _sliderRangeKey,
                     values: rangeValues,
-                    min: tdSliderThemeData.min,
-                    max: tdSliderThemeData.max,
-                    divisions: tdSliderThemeData.divisions,
+                    min: tSliderThemeData.min,
+                    max: tSliderThemeData.max,
+                    divisions: tSliderThemeData.divisions,
                     onChanged: widget.onChanged == null
                         ? null
                         : (slideValue) {

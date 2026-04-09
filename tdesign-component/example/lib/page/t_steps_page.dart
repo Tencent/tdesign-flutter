@@ -17,7 +17,7 @@ class _TStepsPageState extends State<TStepsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       exampleCodeGroup: 'steps',
       desc: '用于任务步骤展示或任务进度展示。',
       children: [

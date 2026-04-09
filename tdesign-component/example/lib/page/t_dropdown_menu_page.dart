@@ -9,7 +9,7 @@ class TDropdownMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tTitle(context),
       desc: '菜单呈现数个并列的选项类目，用于整个页面的内容筛选，由菜单面板和菜单选项组成。',
       exampleCodeGroup: 'dropdownMenu',
       children: const [

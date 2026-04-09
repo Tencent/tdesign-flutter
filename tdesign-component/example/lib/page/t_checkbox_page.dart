@@ -32,7 +32,7 @@ class TCheckboxPageState extends State<TCheckboxPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: tTitle(),
       desc: '用于预设的一组选项中执行多项选择，并呈现选择结果。',
       exampleCodeGroup: 'checkbox',
       children: [

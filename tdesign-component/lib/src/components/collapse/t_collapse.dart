@@ -292,7 +292,7 @@ class _TCollapseState extends State<TCollapse> {
     Widget expandedIcon = Container(
       key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
       margin: const EdgeInsetsDirectional.all(0.0),
-      child: TdNonAnimatedExpandIcon(
+      child: TNonAnimatedExpandIcon(
         isExpanded: _isChildExpanded(index),
         padding: child.expandIconTextBuilder != null
             ? EdgeInsets.only(
