@@ -316,7 +316,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
           ExampleItem(desc: '垂直级联选择器-部门', builder: _buildTestVerticalCompanyCascader),
           ExampleItem(desc: '选择任意项', builder: _buildSelectAnyItemCascader),
           ExampleItem(desc: '使用initialIndexes设置默认值', builder: _buildWithInitialIndexes),
-          ExampleItem(desc: '在TDDropdownItem中使用(修复#705)', builder: _buildInDropdownItem),
+          ExampleItem(desc: '在TDropdownItem中使用(修复#705)', builder: _buildInDropdownItem),
         ],
       ),
     );

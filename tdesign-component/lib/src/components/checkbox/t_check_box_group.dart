@@ -56,7 +56,7 @@ class TCheckboxGroupController {
 ///
 /// CheckBox组，可以通过控制器控制组内的多个CheckBox的选择状态
 ///
-/// child的属性可以是任意包含TDCheckBox的容器组件，例如：
+/// child的属性可以是任意包含TCheckBox的容器组件，例如：
 /// ```dart
 /// TCheckboxGroup(
 ///   child: Row(
@@ -93,7 +93,7 @@ class TCheckboxGroup extends StatefulWidget {
         this.onOverloadChecked}) : super(key: key);
 
   ///
-  /// 可以是任意包含TDCheckBox的容器，比如：
+  /// 可以是任意包含TCheckBox的容器，比如：
   /// ```
   /// Row(
   ///   children: [
@@ -347,7 +347,7 @@ class TCheckboxGroupContainer extends TCheckboxGroup {
         }
       });
     }
-    // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
+    // 卡片模式要求每个TRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
     if (cardMode == true) {
       assert(direction != null && directionalTdCheckboxes != null);
       directionalTdCheckboxes!.forEach((element) {

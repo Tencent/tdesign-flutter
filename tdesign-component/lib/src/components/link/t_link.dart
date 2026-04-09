@@ -255,7 +255,7 @@ class TLink extends StatelessWidget {
   }
 }
 
-/// 存储可以自定义TDLink跳转算法的控件
+/// 存储可以自定义TLink跳转算法的控件
 class TLinkConfiguration extends InheritedWidget {
   /// 统一跳转的函数
   final LinkClick? linkClick;

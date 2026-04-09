@@ -10,7 +10,7 @@ enum TRadioStyle {
   hollowCircle, // 镂空圆点样式
 }
 
-/// 单选框按钮,继承自TDCheckbox，字段含义与父类一致
+/// 单选框按钮,继承自TCheckbox，字段含义与父类一致
 class TRadio extends TCheckbox {
   /// 单选框按钮样式
   final TRadioStyle radioStyle;
@@ -172,11 +172,11 @@ class HollowCircle extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
+/// RadioGroup分组对象，继承自TCheckboxGroup，字段含义与父类一致
 /// RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
 ///
 /// cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
-/// 组合为横向、纵向卡片，同时需要在每个TDRadio上设置cardMode参数。
+/// 组合为横向、纵向卡片，同时需要在每个TRadio上设置cardMode参数。
 class TRadioGroup extends TCheckboxGroup {
   /// 严格模式下，用户不能取消勾选，只能切换选择项，
   final bool strictMode;
@@ -256,7 +256,7 @@ class TRadioGroup extends TCheckboxGroup {
               }
             });
           }
-          // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
+          // 卡片模式要求每个TRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
           if (cardMode == true) {
             assert(direction != null && directionalTdRadios != null);
             directionalTdRadios!.forEach((element) {

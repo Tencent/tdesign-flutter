@@ -224,7 +224,7 @@ Widget _buildCard(BuildContext context) {
 | --- | --- | --- | --- |
 | align | TCellAlign? | TCellAlign.middle | 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom |
 | arrow | bool? | false | 是否显示右侧箭头 |
-| bordered | bool? | true | 是否显示下边框，仅在TDCellGroup组件下起作用 |
+| bordered | bool? | true | 是否显示下边框，仅在TCellGroup组件下起作用 |
 | description | String? | - | 下方内容描述文字 |
 | descriptionWidget | Widget? | - | 下方内容描述组件 |
 | disabled | bool? | false | 禁用 |
@@ -246,7 +246,7 @@ Widget _buildCard(BuildContext context) {
 | required | bool? | false | 是否显示表单必填星号 |
 | rightIcon | IconData? | - | 最右侧图标 |
 | rightIconWidget | Widget? | - | 最右侧图标组件 |
-| showBottomBorder | bool? | false | 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠） |
+| showBottomBorder | bool? | false | 是否显示下边框（建议TCellGroup组件下false，避免与bordered重叠） |
 | style | TCellStyle? | - | 自定义样式 |
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |

@@ -76,7 +76,7 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
   };
 }
 
-/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
+/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TTextPage()
 List<ExamplePageModel> examplePageList = [];
 
 Map<String, List<ExamplePageModel>> exampleMap = {

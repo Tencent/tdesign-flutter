@@ -46,7 +46,7 @@ class TCell extends StatefulWidget {
   /// 是否显示右侧箭头
   final bool? arrow;
 
-  /// 是否显示下边框，仅在TDCellGroup组件下起作用
+  /// 是否显示下边框，仅在TCellGroup组件下起作用
   final bool? bordered;
 
   /// 下方内容描述文字
@@ -115,7 +115,7 @@ class TCell extends StatefulWidget {
   /// 禁用
   final bool? disabled;
 
-  /// 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠）
+  /// 是否显示下边框（建议TCellGroup组件下false，避免与bordered重叠）
   final bool? showBottomBorder;
 
   /// 高度

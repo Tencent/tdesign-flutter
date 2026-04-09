@@ -1,6 +1,6 @@
 
   Widget _buildDefaultTheme(BuildContext context) {
-    // 通过TDTheme.of(context).xxx使用公共主题属性
+    // 通过TTheme.of(context).xxx使用公共主题属性
     return Container(
       margin: EdgeInsets.all(TTheme.of(context).spacer8),
       padding: EdgeInsets.all(TTheme.of(context).spacer8),

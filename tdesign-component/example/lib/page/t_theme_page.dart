@@ -92,7 +92,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
 
   @Demo(group: 'theme')
   Widget _buildDefaultTheme(BuildContext context) {
-    // 通过TDTheme.of(context).xxx使用公共主题属性
+    // 通过TTheme.of(context).xxx使用公共主题属性
     return Container(
       margin: EdgeInsets.all(TTheme.of(context).spacer8),
       padding: EdgeInsets.all(TTheme.of(context).spacer8),
@@ -271,7 +271,7 @@ class TestWidget extends StatelessWidget {
 
 /// 扩展主题属性示例
 extension TGLayouts on TThemeData {
-  /// 因为扩展中不能声明字段，只能借助TDExtraThemeData
+  /// 因为扩展中不能声明字段，只能借助TExtraThemeData
   double get layout1 => ofExtra<LayoutExtra>()?.layouts['layout1'] ?? 0;
 
   Data2? get data2 => ofExtra<LayoutExtra>()?.data2;

@@ -22,7 +22,7 @@ class TResourceManager {
       return _defaultDelegate;
     }
     if (_needAlwaysBuild) {
-      // 每次都调用，适用于全局有多个TDResourceDelegate的情况
+      // 每次都调用，适用于全局有多个TResourceDelegate的情况
       var delegate = _builder?.call(context);
       if (delegate != null) {
         return delegate;

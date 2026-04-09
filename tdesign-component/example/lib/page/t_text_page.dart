@@ -17,7 +17,7 @@ class TTextPage extends StatelessWidget {
       children: [
         ExampleModule(title: '使用示例', children: [
           ExampleItem(desc: '系统Text:', builder: _buildSystemText),
-          ExampleItem(desc: '普通TDText:', builder: _buildNormalTDText),
+          ExampleItem(desc: '普通TText:', builder: _buildNormalTText),
           ExampleItem(desc: '指定常用属性:', builder: _buildGeneralProp),
           ExampleItem(
               desc: 'style覆盖textColor,不覆盖font:',
@@ -58,7 +58,7 @@ class TTextPage extends StatelessWidget {
   }
 
   @Demo(group: 'text')
-  Widget _buildNormalTDText(BuildContext context) {
+  Widget _buildNormalTText(BuildContext context) {
     return TText(
       exampleTxt,
     );
@@ -160,7 +160,7 @@ class TTextPage extends StatelessWidget {
   }
 }
 
-/// 自定义控件，内部的context可拿到外部TDTextConfiguration的配置信息
+/// 自定义控件，内部的context可拿到外部TTextConfiguration的配置信息
 class CustomPaddingText extends StatelessWidget {
   const CustomPaddingText({Key? key}) : super(key: key);
 

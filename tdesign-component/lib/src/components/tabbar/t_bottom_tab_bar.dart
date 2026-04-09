@@ -1061,7 +1061,7 @@ class PopupDialogState extends State<PopupDialog> {
             ),
             Positioned(
 
-                /// 这里 -8 是因为widget.btnContext是TDBottomTabBarItemWithBadge的，它在父widget内有8dp的padding
+                /// 这里 -8 是因为widget.btnContext是TBottomTabBarItemWithBadge的，它在父widget内有8dp的padding
                 /// -4 是设计稿上箭头和tab有4dp的距离
                 top: position!.top -
                     (popUpItemHeight * widget.items.length +
