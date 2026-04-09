@@ -38,27 +38,6 @@
 ```
 ```
 
-### TDCellGroup
-#### 简介
-单元格组组件
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| bordered | bool? | false | 是否显示组边框 |
-| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
-| cells | List<TDCell> | - | 单元格列表 |
-| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
-| key |  | - |  |
-| scrollable | bool? | false | 可滚动 |
-| style | TDCellStyle? | - | 自定义样式 |
-| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
-| title | String? | - | 单元格组标题 |
-| titleWidget | Widget? | - | 单元格组标题组件 |
-
-```
-```
-
 ### TDCellStyle
 #### 简介
 单元格组件样式
@@ -91,3 +70,24 @@
 | 名称  | 说明 |
 | --- |  --- |
 | TDCellStyle.cellStyle  | 生成单元格默认样式 |
+
+```
+```
+
+### TDCellGroup
+#### 简介
+单元格组组件
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| bordered | bool? | false | 是否显示组边框 |
+| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
+| cells | List<TDCell> | - | 单元格列表 |
+| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
+| key |  | - |  |
+| scrollable | bool? | false | 可滚动 |
+| style | TDCellStyle? | - | 自定义样式 |
+| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
+| title | String? | - | 单元格组标题 |
+| titleWidget | Widget? | - | 单元格组标题组件 |

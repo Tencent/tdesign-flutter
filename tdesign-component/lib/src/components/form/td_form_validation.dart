@@ -20,7 +20,7 @@ class TDFormValidation {
   final TDFormItemType type;
 
   /// 执行校验逻辑
-  String? check(String? value) {
+  String? check(dynamic value) {
     if (validate(value) != null) {
       return errorMessage;
     }
