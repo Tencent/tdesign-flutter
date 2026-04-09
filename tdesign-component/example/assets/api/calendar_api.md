@@ -1,51 +1,5 @@
 ## API
-### TDCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
-
-```
-```
-
 ### TDCalendarDataSource
-```
-```
-
-### TDCalendarStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| decoration |  | - |  |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDCalendarStyle.cellStyle  | 日期样式 |
-| TDCalendarStyle.generateStyle  | 生成默认样式 |
-
 ```
 ```
 
@@ -103,3 +57,49 @@
 | monthText | String | - | 月份文本（如：三月、闰三月） |
 | year | int | - | 农历年份（数字） |
 | yearText | String | - | 年份文本（如：二〇二五） |
+
+```
+```
+
+### TDCalendarStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| cellDecoration | BoxDecoration? | - | 日期decoration |
+| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
+| cellStyle | TextStyle? | - | 日期样式 |
+| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
+| centreColor | Color? | - | 日期范围内背景样式 |
+| decoration |  | - |  |
+| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
+| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
+| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
+| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
+| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDCalendarStyle.cellStyle  | 日期样式 |
+| TDCalendarStyle.generateStyle  | 生成默认样式 |
+
+```
+```
+
+### TDCalendarPopup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| child | TDCalendar? | - | 日历控件 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| context | BuildContext | context | 上下文 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| top | double? | - | 距离顶部的距离 |
+| visible | bool? | - | 默认是否显示日历 |
