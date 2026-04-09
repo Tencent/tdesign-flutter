@@ -1,4 +1,14 @@
 ## API
+### TTableEmpty
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| assetUrl | String? | - | 空状态图片 |
+| text | String? | - | 空状态文字 |
+
+```
+```
 
 ### TTable
 #### 默认构造方法
@@ -31,6 +41,7 @@
 | --- | --- | --- | --- |
 | assetUrl | String? | - | 空状态图片 |
 | text | String? | - | 空状态文字 |
+
 
 ```
 ```
@@ -52,7 +63,6 @@
 | sortable | bool? | false | 是否可排序 |
 | title | String? | - | 表头标题 |
 | width | double? | - | 列宽 |
-
 ```
 ```
 
@@ -87,3 +97,4 @@
 | showHeader | bool? | true | 是否显示表头 |
 | stripe | bool? | false | 斑马纹 |
 | width | double? | - | 表格宽度 |
+

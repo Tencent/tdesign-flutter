@@ -1,5 +1,19 @@
 ## API
+### TPopover
+#### 简介
+
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| showPopover |  |   required BuildContext context,  String? content,  Widget? contentWidget,  double offset,  TPopoverTheme? theme,  bool closeOnClickOutside,  TPopoverPlacement? placement,  bool? showArrow,  double arrowSize,  EdgeInsetsGeometry? padding,  double? width,  double? height,  Color? overlayColor,  OnTap? onTap,  OnLongTap? onLongTap,  BorderRadius? radius, |  |
+
+```
+```
+
 ### TPopoverWidget
+
 #### 简介
 
 #### 默认构造方法
@@ -21,7 +35,6 @@
 | showArrow | bool? | true | 是否显示浮层箭头 |
 | theme | TPopoverTheme? | - | 弹出气泡主题 |
 | width | double? | - | 内容宽度（包含padding，实际高度：height - paddingLeft - paddingRight） |
-
 ```
 ```
 
@@ -34,3 +47,4 @@
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
 | showPopover |  |   required BuildContext context,  String? content,  Widget? contentWidget,  double offset,  TPopoverTheme? theme,  bool closeOnClickOutside,  TPopoverPlacement? placement,  bool? showArrow,  double arrowSize,  EdgeInsetsGeometry? padding,  double? width,  double? height,  Color? overlayColor,  OnTap? onTap,  OnLongTap? onLongTap,  BorderRadius? radius, |  |
+

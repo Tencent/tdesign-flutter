@@ -635,7 +635,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
+### TSideBarItem
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badge | TBadge? | - | 徽标 |
+| disabled | bool | false | 是否禁用 |
+| icon | IconData? | - | 图标 |
+| key |  | - |  |
+| label | String | '' | 标签 |
+| textStyle | TextStyle? | - | 标签样式 |
+| value | int | -1 | 值 |
+
+```
+```
+
 ### TSideBar
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

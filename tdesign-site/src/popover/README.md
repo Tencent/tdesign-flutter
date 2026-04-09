@@ -1275,7 +1275,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
+### TPopover
+#### 简介
+
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| showPopover |  |   required BuildContext context,  String? content,  Widget? contentWidget,  double offset,  TPopoverTheme? theme,  bool closeOnClickOutside,  TPopoverPlacement? placement,  bool? showArrow,  double arrowSize,  EdgeInsetsGeometry? padding,  double? width,  double? height,  Color? overlayColor,  OnTap? onTap,  OnLongTap? onLongTap,  BorderRadius? radius, |  |
+
+```
+```
+
 ### TPopoverWidget
+
 #### 简介
 
 #### 默认构造方法

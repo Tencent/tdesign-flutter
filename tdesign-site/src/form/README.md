@@ -711,7 +711,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
+### TFormValidation
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| errorMessage | String | - | 错误提示信息 |
+| type | TFormItemType | - | 校验对象的类型 |
+| validate | String? Function(dynamic) | - | 校验方法 |
+
+```
+```
+
 ### TForm
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -740,19 +753,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TFormValidation
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| errorMessage | String | - | 错误提示信息 |
-| type | TFormItemType | - | 校验对象的类型 |
-| validate | String? Function(dynamic) | - | 校验方法 |
-
-```
-```
-
 ### TFormItem
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

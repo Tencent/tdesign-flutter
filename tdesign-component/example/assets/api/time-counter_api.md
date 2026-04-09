@@ -1,12 +1,6 @@
 ## API
-
-### TTimeCounterController
-#### 简介
-倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
-```
-```
-
 ### TTimeCounter
+
 #### 简介
 计时组件
 #### 默认构造方法

@@ -65,7 +65,6 @@
 | size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
-
 ```
 ```
 
@@ -78,3 +77,4 @@
 | controller | TabController? | - | 控制器 |
 | isSlideSwitch | bool | false | 是否可以滑动切换 |
 | key |  | - |  |
+

@@ -34,12 +34,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
-普通TDText:
+普通TText:
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildNormalTDText(BuildContext context) {
+  Widget _buildNormalTText(BuildContext context) {
     return TText(
       exampleTxt,
     );
