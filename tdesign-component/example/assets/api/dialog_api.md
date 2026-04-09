@@ -1,4 +1,29 @@
 ## API
+### TImageDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+| content | String? | - | 内容 |
+| contentColor | Color? | - | 内容颜色 |
+| contentWidget | Widget? | - | 内容Widget |
+| image | Image | - | 图片 |
+| imagePosition | TDialogImagePosition? | TDialogImagePosition.top | 图片位置 |
+| key |  | - |  |
+| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
+| padding | EdgeInsets? | - | 内容内边距 |
+| radius | double | 12.0 | 圆角 |
+| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| title | String? | - | 标题 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| titleColor | Color? | - | 标题颜色 |
+
+```
+```
+
 ### TConfirmDialog
 #### 默认构造方法
 
@@ -67,7 +92,6 @@
 ```
 
 ### TDialogInfoWidget
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -93,7 +117,6 @@
 | key |  | - |  |
 | leftBtn | TDialogButtonOptions | - | 左按钮 |
 | rightBtn | TDialogButtonOptions | - | 右按钮 |
-
 
 ```
 ```
@@ -131,8 +154,25 @@
 ```
 ```
 
-### TAlertDialog
+### TDialogButtonOptions
+#### 默认构造方法
 
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| action |  Function()? | - | 点击操作 |
+| fontWeight | FontWeight? | - | 字体粗细 |
+| height | double? | - | 按钮高度 |
+| style | TButtonStyle? | - | 按钮样式 |
+| theme | TButtonTheme? | - | 按钮类型 |
+| title | String | - | 标题内容 |
+| titleColor | Color? | - | 标题颜色 |
+| titleSize | double? | - | 字体大小 |
+| type | TButtonType? | - | 按钮类型 |
+
+```
+```
+
+### TAlertDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -163,33 +203,7 @@
 | --- |  --- |
 | TAlertDialog.vertical  | 纵向按钮排列的对话框
 
-[buttons]参数是必须的，纵向按钮默认样式都是[TButtonTheme.primary] |
-
-
-```
-```
-
-### TImageDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentWidget | Widget? | - | 内容Widget |
-| image | Image | - | 图片 |
-| imagePosition | TDialogImagePosition? | TDialogImagePosition.top | 图片位置 |
-| key |  | - |  |
-| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
-| padding | EdgeInsets? | - | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
+ [buttons]参数是必须的，纵向按钮默认样式都是[TButtonTheme.primary] |
 
 ```
 ```
@@ -216,21 +230,3 @@
 | title | String? | - | 标题 |
 | titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
 | titleColor | Color? | - | 标题颜色 |
-
-```
-```
-
-### TDialogButtonOptions
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| action |  Function()? | - | 点击操作 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| height | double? | - | 按钮高度 |
-| style | TButtonStyle? | - | 按钮样式 |
-| theme | TButtonTheme? | - | 按钮类型 |
-| title | String | - | 标题内容 |
-| titleColor | Color? | - | 标题颜色 |
-| titleSize | double? | - | 字体大小 |
-| type | TButtonType? | - | 按钮类型 |

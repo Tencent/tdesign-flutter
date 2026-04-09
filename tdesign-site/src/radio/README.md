@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_radio_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_radio_page.dart)
+[td_radio_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_radio_page.dart)
 
 ### 1 组件类型
 
@@ -333,7 +333,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## API
 ### TRadio
 #### 简介
-单选框按钮,继承自TCheckbox，字段含义与父类一致
+单选框按钮,继承自TDCheckbox，字段含义与父类一致
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -369,11 +369,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### TRadioGroup
 #### 简介
-RadioGroup分组对象，继承自TCheckboxGroup，字段含义与父类一致
+RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
  RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
 
  cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
- 组合为横向、纵向卡片，同时需要在每个TRadio上设置cardMode参数。
+ 组合为横向、纵向卡片，同时需要在每个TDRadio上设置cardMode参数。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

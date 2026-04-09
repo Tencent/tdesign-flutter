@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_checkbox_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_checkbox_page.dart)
+[td_checkbox_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_checkbox_page.dart)
 
 ### 1 组件类型
 
@@ -426,8 +426,29 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TCheckbox
+### TCheckboxGroup
+#### 默认构造方法
 
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| checkedIds | List<String>? | - | 勾选的CheckBox id列表 |
+| child |  | - |  |
+| contentDirection | TContentDirection? | - | 文字相对icon的方位 |
+| controller | TCheckboxGroupController? | - | 可以通过控制器操作勾选状态 |
+| customContentBuilder | ContentBuilder? | - | CheckBox完全自定义内容 |
+| customIconBuilder | IconBuilder? | - | 自定义选择icon的样式 |
+| key |  | - |  |
+| maxChecked | int? | - | 最多可以勾选多少 |
+| onChangeGroup | OnGroupChange? | - | 状态变化监听器 |
+| onOverloadChecked | VoidCallback? | - | 超过最大可勾选的个数 |
+| spacing | double? | - | CheckBoxicon和文字的距离 |
+| style | TCheckboxStyle? | - | CheckBox复选框样式：圆形或方形 |
+| titleMaxLine | int? | - | CheckBox标题的行数 |
+
+```
+```
+
+### TCheckbox
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -459,28 +480,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | titleColor | Color? | - | 标题文字颜色 |
 | titleFont | Font? | - | 标题字体大小 |
 | titleMaxLine | int? | - | 标题的行数 |
-
-```
-```
-
-### TCheckboxGroup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| checkedIds | List<String>? | - | 勾选的CheckBox id列表 |
-| child |  | - |  |
-| contentDirection | TContentDirection? | - | 文字相对icon的方位 |
-| controller | TCheckboxGroupController? | - | 可以通过控制器操作勾选状态 |
-| customContentBuilder | ContentBuilder? | - | CheckBox完全自定义内容 |
-| customIconBuilder | IconBuilder? | - | 自定义选择icon的样式 |
-| key |  | - |  |
-| maxChecked | int? | - | 最多可以勾选多少 |
-| onChangeGroup | OnGroupChange? | - | 状态变化监听器 |
-| onOverloadChecked | VoidCallback? | - | 超过最大可勾选的个数 |
-| spacing | double? | - | CheckBoxicon和文字的距离 |
-| style | TCheckboxStyle? | - | CheckBox复选框样式：圆形或方形 |
-| titleMaxLine | int? | - | CheckBox标题的行数 |
 
 
   

@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_action_sheet_page.dart)
+[td_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_action_sheet_page.dart)
 
 ### 1 组件类型
 
@@ -888,7 +888,6 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
 
 ## API
 ### TActionSheet
-
 #### 简介
 动作面板
 #### 默认构造方法

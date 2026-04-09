@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_table_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_table_page.dart)
+[td_table_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_table_page.dart)
 
 ### 1 组件类型
 
@@ -275,19 +275,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TTableEmpty
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| assetUrl | String? | - | 空状态图片 |
-| text | String? | - | 空状态文字 |
-
-```
-```
-
 ### TTable
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -332,6 +320,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | sortable | bool? | false | 是否可排序 |
 | title | String? | - | 表头标题 |
 | width | double? | - | 列宽 |
+
+```
+```
+
+### TTableEmpty
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| assetUrl | String? | - | 空状态图片 |
+| text | String? | - | 空状态文字 |
 
 
   

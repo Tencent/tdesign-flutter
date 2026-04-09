@@ -18,7 +18,7 @@
 | needMultiTheme |  |   bool value, | 开启多套主题功能 |
 | of |  |   BuildContext? context, | 获取主题数据，如果未传context则获取全局唯一的默认数据,   传了context，则获取最近的主题，取不到则会获取全局唯一默认数据 |
 | ofNullable |  |   BuildContext? context, | 获取主题数据，取不到则可空   传了context，则获取最近的主题，取不到或未传context则返回null, |
-| setResourceBuilder |  |   required TTDResourceBuilder delegate,  bool needAlwaysBuild, | 设置资源代理,   needAlwaysBuild=true:每次都会走build方法;如果全局有多个Delegate,需要区分情况去获取,则可以设置needAlwaysBuild为true,业务自己判断返回哪个delegate   needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回了 |
+| setResourceBuilder |  |   required TResourceBuilder delegate,  bool needAlwaysBuild, | 设置资源代理,   needAlwaysBuild=true:每次都会走build方法;如果全局有多个Delegate,需要区分情况去获取,则可以设置needAlwaysBuild为true,业务自己判断返回哪个delegate   needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回了 |
 
 ```
 ```

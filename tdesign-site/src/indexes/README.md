@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_indexes_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_indexes_page.dart)
+[td_indexes_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_indexes_page.dart)
 
 ### 1 组件类型
 
@@ -240,7 +240,6 @@ Widget _buildOther(BuildContext context) {
 ```
 
 ### TIndexes
-
 #### 简介
 索引
 #### 默认构造方法
@@ -260,23 +259,6 @@ Widget _buildOther(BuildContext context) {
 | scrollController | ScrollController? | - | 滚动控制器 |
 | sticky | bool? | true | 锚点是否吸顶 |
 | stickyOffset | double? | 0 | 锚点吸顶时与顶部的距离 |
-
-```
-```
-
-### TIndexesList
-#### 简介
-索引
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| activeIndex | ValueNotifier<String> | - | 选中索引 |
-| builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
-| indexList | List<String> | - | 索引字符列表。不传默认 A-Z |
-| indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） |
-| key |  | - |  |
-| onSelect | void Function(String newIndex, String oldIndex) | - | 点击侧边栏时触发事件 |
 
 
   

@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_bottom_tab_bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_bottom_tab_bar_page.dart)
+[td_bottom_tab_bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_bottom_tab_bar_page.dart)
 
 ### 1 组件类型
 
@@ -625,7 +625,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | needInkWell | bool | false | 是否需要水波纹效果 |
 | outlineType | TBottomTabBarOutlineType? | TBottomTabBarOutlineType.filled | 标签栏样式 默认filled |
 | placeholder | bool | true | 是否添加安全区域占位 |
-
 | selectedBgColor | Color? | - | 选中时背景颜色 |
 | showTopBorder | bool? | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
 | topBorder | BorderSide? | - | 上边线样式 |

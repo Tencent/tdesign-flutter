@@ -1,6 +1,5 @@
 ## API
 ### TPopupBottomDisplayPanel
-
 #### 简介
 右上角带关闭的底部浮层面板
 #### 默认构造方法

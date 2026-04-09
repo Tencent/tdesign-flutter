@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_tag_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_tag_page.dart)
+[td_tag_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_tag_page.dart)
 
 ### 1 组件类型
 
@@ -502,36 +502,6 @@ Mark标签
 
 
 ## API
-### TSelectTag
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| disableSelect | bool | false | 是否禁用选择 |
-| disableSelectStyle | TTagStyle? | - | 不可选标签样式 |
-| fixedWidth | double? | - | 标签的固定宽度 |
-| forceVerticalCenter | bool | true | 是否强制中文文字居中 |
-| icon | IconData? | - | 图标内容，可随状态改变颜色 |
-| iconWidget | Widget? | - | 自定义图标内容，需自处理颜色 |
-| isLight | bool | false | 是否为浅色 |
-| isOutline | bool | false | 是否为描边类型，默认不是 |
-| isSelected | bool | false | 是否选中 |
-| key |  | - |  |
-| needCloseIcon | bool | false | 关闭图标 |
-| onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
-| onSelectChanged | ValueChanged<bool>? | - | 标签点击，选中状态改变时的回调 |
-| padding | EdgeInsets? | - | 自定义模式下的间距 |
-| selectStyle | TTagStyle? | - | 选中的标签样式 |
-| shape | TTagShape | TTagShape.square | 标签形状 |
-| size | TTagSize | TTagSize.medium | 标签大小 |
-| text | String | text | 标签内容 |
-| theme | TTagTheme? | - | 主题 |
-| unSelectStyle | TTagStyle? | - | 未选中标签样式 |
-
-```
-```
-
 ### TTag
 #### 默认构造方法
 
@@ -558,6 +528,35 @@ Mark标签
 | text | String | text | 标签内容 |
 | textColor | Color? | - | 文字颜色，优先级高于style的textColor |
 | theme | TTagTheme? | - | 主题 |
+
+```
+```
+
+### TSelectTag
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disableSelect | bool | false | 是否禁用选择 |
+| disableSelectStyle | TTagStyle? | - | 不可选标签样式 |
+| fixedWidth | double? | - | 标签的固定宽度 |
+| forceVerticalCenter | bool | true | 是否强制中文文字居中 |
+| icon | IconData? | - | 图标内容，可随状态改变颜色 |
+| iconWidget | Widget? | - | 自定义图标内容，需自处理颜色 |
+| isLight | bool | false | 是否为浅色 |
+| isOutline | bool | false | 是否为描边类型，默认不是 |
+| isSelected | bool | false | 是否选中 |
+| key |  | - |  |
+| needCloseIcon | bool | false | 关闭图标 |
+| onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
+| onSelectChanged | ValueChanged<bool>? | - | 标签点击，选中状态改变时的回调 |
+| padding | EdgeInsets? | - | 自定义模式下的间距 |
+| selectStyle | TTagStyle? | - | 选中的标签样式 |
+| shape | TTagShape | TTagShape.square | 标签形状 |
+| size | TTagSize | TTagSize.medium | 标签大小 |
+| text | String | text | 标签内容 |
+| theme | TTagTheme? | - | 主题 |
+| unSelectStyle | TTagStyle? | - | 未选中标签样式 |
 
 ```
 ```

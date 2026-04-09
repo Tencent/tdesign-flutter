@@ -7,7 +7,7 @@
 | badgeRightOffset | double? | - | 消息右侧偏移量 |
 | badgeTopOffset | double? | - | 消息顶部偏移量 |
 | showBadge | bool | - | 是否展示消息 |
-| tdBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
+| tBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
 
 ```
 ```

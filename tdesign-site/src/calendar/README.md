@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_calendar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_calendar_page.dart)
+[td_calendar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_calendar_page.dart)
 
 ### 1 组件类型
 
@@ -1445,28 +1445,6 @@ Widget _buildLunar(BuildContext context) {
 
 
 ## API
-### TCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
-
-```
-```
-
-### TCalendarDataSource
-```
-```
-
 ### TCalendarStyle
 #### 默认构造方法
 
@@ -1496,7 +1474,6 @@ Widget _buildLunar(BuildContext context) {
 ```
 
 ### TCalendar
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -1538,47 +1515,7 @@ Widget _buildLunar(BuildContext context) {
 ```
 ```
 
-### TLunarInfo
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| day | int | - | 农历日期（数字，1-30） |
-| dayText | String | - | 日期文本（如：初七） |
-| isLeapMonth | bool | false | 是否是闰月 |
-| month | int | - | 农历月份（数字，1-12） |
-| monthText | String | - | 月份文本（如：三月、闰三月） |
-| year | int | - | 农历年份（数字） |
-| yearText | String | - | 年份文本（如：二〇二五） |
-
-```
-```
-
-### TCalendarStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| decoration |  | - |  |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TCalendarStyle.cellStyle  | 日期样式 |
-| TCalendarStyle.generateStyle  | 生成默认样式 |
-
+### TCalendarDataSource
 ```
 ```
 
@@ -1596,6 +1533,22 @@ Widget _buildLunar(BuildContext context) {
 | onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
 | top | double? | - | 距离顶部的距离 |
 | visible | bool? | - | 默认是否显示日历 |
+
+```
+```
+
+### TLunarInfo
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| day | int | - | 农历日期（数字，1-30） |
+| dayText | String | - | 日期文本（如：初七） |
+| isLeapMonth | bool | false | 是否是闰月 |
+| month | int | - | 农历月份（数字，1-12） |
+| monthText | String | - | 月份文本（如：三月、闰三月） |
+| year | int | - | 农历年份（数字） |
+| yearText | String | - | 年份文本（如：二〇二五） |
 
 
   

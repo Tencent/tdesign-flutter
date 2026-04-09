@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_drawer_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_drawer_page.dart)
+[td_drawer_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_drawer_page.dart)
 
 ### 1 组件类型
 
@@ -286,7 +286,6 @@ Widget _buildBottomSimple(BuildContext context) {
 
 ## API
 ### TDrawerWidget
-
 #### 简介
 抽屉内容组件
  可用于 Scaffold 中的 drawer 属性

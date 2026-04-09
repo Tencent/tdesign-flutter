@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_picker_page.dart)
+[td_picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_picker_page.dart)
 
 ### 1 组件类型
 
@@ -201,7 +201,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TMultiPicker
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

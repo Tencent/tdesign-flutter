@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_button_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_button_page.dart)
+[td_button_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_button_page.dart)
 
 ### 1 组件类型
 
@@ -764,7 +764,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
 ### TButton
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -794,31 +793,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | theme | TButtonTheme? | - | 主题 |
 | type | TButtonType | TButtonType.fill | 类型：填充，描边，文字 |
 | width | double? | - | 自定义宽度 |
-
-```
-```
-
-### TButtonStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| frameColor | Color? | - | 边框颜色 |
-| frameWidth | double? | - | 边框宽度 |
-| gradient | Gradient? | - | 渐变背景色 |
-| radius | BorderRadiusGeometry? | - | 自定义圆角 |
-| textColor | Color? | - | 文字颜色 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TButtonStyle.generateFillStyleByTheme  | 生成不同主题的填充按钮样式 |
-| TButtonStyle.generateGhostStyleByTheme  | 生成不同主题的幽灵按钮样式 |
-| TButtonStyle.generateOutlineStyleByTheme  | 生成不同主题的描边按钮样式 |
-| TButtonStyle.generateTextStyleByTheme  | 生成不同主题的文本按钮样式 |
 
 
   

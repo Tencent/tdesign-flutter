@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_tabs_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_tabs_page.dart)
+[td_tabs_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_tabs_page.dart)
 
 ### 1 组件类型
 
@@ -308,6 +308,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
+### TTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | List<Widget> | - | 子widget列表 |
+| controller | TabController? | - | 控制器 |
+| isSlideSwitch | bool | false | 是否可以滑动切换 |
+| key |  | - |  |
+
+```
+```
+
 ### TTabBar
 #### 默认构造方法
 
@@ -344,21 +357,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
-
-```
-```
-
 ### TTab
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -375,19 +374,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
-
-```
-```
-
-### TTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
 
 
   

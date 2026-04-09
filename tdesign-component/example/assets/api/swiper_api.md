@@ -1,21 +1,5 @@
 ## API
-### TSwiperPagination
-#### 简介
-TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| alignment | Alignment? | - | 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter |
-| builder | SwiperPlugin | TSwiperPagination.dots | 具体样式 |
-| key | Key? | - |  |
-| margin | EdgeInsetsGeometry | const EdgeInsets.all(10.0) | 指示器和container之间的距离 |
-
-```
-```
-
 ### TPageTransformer
-
 #### 简介
 TD默认PageTransformer
 #### 默认构造方法
@@ -34,3 +18,17 @@ TD默认PageTransformer
 | TPageTransformer.margin  | 普通margin的卡片式 |
 | TPageTransformer.scaleAndFade  | 缩放或透明的卡片式 |
 
+```
+```
+
+### TSwiperPagination
+#### 简介
+TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| alignment | Alignment? | - | 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter |
+| builder | SwiperPlugin | TSwiperPagination.dots | 具体样式 |
+| key | Key? | - |  |
+| margin | EdgeInsetsGeometry | const EdgeInsets.all(10.0) | 指示器和container之间的距离 |

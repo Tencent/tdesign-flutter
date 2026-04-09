@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/luozaifei/tools/flutter1"
-export "FLUTTER_APPLICATION_PATH=/Users/luozaifei/WorkSpace/td/tdesign-flutter/tdesign-component/example"
+export "FLUTTER_ROOT=/opt/hostedtoolcache/flutter/stable-3.32.0-x64/flutter"
+export "FLUTTER_APPLICATION_PATH=/home/runner/work/tdesign-flutter/tdesign-flutter/tdesign-component/example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
