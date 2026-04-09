@@ -344,6 +344,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
+### TDTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | List<Widget> | - | 子widget列表 |
+| controller | TabController? | - | 控制器 |
+| isSlideSwitch | bool | false | 是否可以滑动切换 |
+| key |  | - |  |
+
+```
+```
+
 ### TDTab
 #### 默认构造方法
 
@@ -361,19 +374,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | size | TDTabSize | TDTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
-
-```
-```
-
-### TDTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
 
 
   

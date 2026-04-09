@@ -1,30 +1,4 @@
 ## API
-### TDTagStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| border | double | 0 | 线框粗细 |
-| borderColor | Color? | - | 边框颜色 |
-| borderRadius | BorderRadiusGeometry? | - | 圆角 |
-| context | BuildContext? | - | 上下文，方便获取主题内容 |
-| font | Font? | - | 字体尺寸 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| textColor | Color? | - | 文字颜色 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDTagStyle.generateDisableSelectStyle  | 根据主题生成禁用Tag样式 |
-| TDTagStyle.generateFillStyleByTheme  | 根据主题生成填充Tag样式 |
-| TDTagStyle.generateOutlineStyleByTheme  | 根据主题生成描边Tag样式 |
-
-```
-```
-
 ### TDSelectTag
 #### 默认构造方法
 
@@ -80,3 +54,29 @@
 | text | String | text | 标签内容 |
 | textColor | Color? | - | 文字颜色，优先级高于style的textColor |
 | theme | TDTagTheme? | - | 主题 |
+
+```
+```
+
+### TDTagStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| border | double | 0 | 线框粗细 |
+| borderColor | Color? | - | 边框颜色 |
+| borderRadius | BorderRadiusGeometry? | - | 圆角 |
+| context | BuildContext? | - | 上下文，方便获取主题内容 |
+| font | Font? | - | 字体尺寸 |
+| fontWeight | FontWeight? | - | 字体粗细 |
+| textColor | Color? | - | 文字颜色 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDTagStyle.generateDisableSelectStyle  | 根据主题生成禁用Tag样式 |
+| TDTagStyle.generateFillStyleByTheme  | 根据主题生成填充Tag样式 |
+| TDTagStyle.generateOutlineStyleByTheme  | 根据主题生成描边Tag样式 |
