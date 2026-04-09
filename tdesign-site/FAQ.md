@@ -29,7 +29,7 @@ Flutter官方SDK不支持文本居中功能，若要实现通用的文字居中�
 
 TDesign Flutter `0.1.4` 版本开始，添加了全局变量 `kTextForceVerticalCenterEnable` 来控制是否使用内部 padding，如果将全局变量 `kTextForceVerticalCenterEnable `设为`false`，则显示效果与直接使用官方Text一致。(部分机型，尤其是iOS机型，将 kTextForceVerticalCenterEnable 设为`false`，可能比设为true更居中，遇到文字不居中问题，可以尝试将 kTextForceVerticalCenterEnable 改为`false`看看效果。)
 
-TDesign Flutter `0.1.5` 版本之后，可以通过重写 `TTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TTextPaddingConfig` 使用方法可参考[TTextPage](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/td_text_page.dart)。如果 kTextForceVerticalCenterEnable 设为 false 也无法满足需求，则可以通过重写 `TTextPaddingConfig `自定义适配主流机型。
+TDesign Flutter `0.1.5` 版本之后，可以通过重写 `TTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TTextPaddingConfig` 使用方法可参考[TTextPage](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_text_page.dart)。如果 kTextForceVerticalCenterEnable 设为 false 也无法满足需求，则可以通过重写 `TTextPaddingConfig `自定义适配主流机型。
 
 ## 新增组件
 

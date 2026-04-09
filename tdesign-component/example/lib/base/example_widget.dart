@@ -7,7 +7,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../page/td_theme_page.dart';
+import '../page/t_theme_page.dart';
 import '../provider/theme_mode_provider.dart';
 import 'syntax_highlighter.dart';
 import 'api_widget.dart';

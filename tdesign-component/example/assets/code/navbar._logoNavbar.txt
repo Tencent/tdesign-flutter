@@ -6,7 +6,7 @@
         centerTitle: false,
         titleMargin: 0,
         titleWidget: const TImage(
-          assetUrl: 'assets/img/td_brand.png',
+          assetUrl: 'assets/img/t_brand.png',
           width: 102,
           height: 24,
         ),

@@ -17,7 +17,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 ## 代码演示
 
-[td_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_refresh_page.dart)
+[t_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_refresh_page.dart)
 
 
       

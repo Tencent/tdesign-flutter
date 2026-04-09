@@ -10,16 +10,16 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
       TActionSheet.showGridActionSheet(context, items: [
         TActionSheetItem(
             label: '微信',
-            icon: Image.asset('assets/img/td_action_sheet_1.png'),
+            icon: Image.asset('assets/img/t_action_sheet_1.png'),
             badge: const TBadge(TBadgeType.message, count: 'NEW')),
         TActionSheetItem(
             label: '朋友圈',
-            icon: Image.asset('assets/img/td_action_sheet_2.png')),
+            icon: Image.asset('assets/img/t_action_sheet_2.png')),
         TActionSheetItem(
-            label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
+            label: 'QQ', icon: Image.asset('assets/img/t_action_sheet_3.png')),
         TActionSheetItem(
             label: '企业微信',
-            icon: Image.asset('assets/img/td_action_sheet_4.png')),
+            icon: Image.asset('assets/img/t_action_sheet_4.png')),
         TActionSheetItem(
             label: '收藏',
             icon: const IconWithBackground(icon: TIcons.star),

@@ -17,7 +17,7 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 ## 代码演示
 
-[td_swiper_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_swiper_page.dart)
+[t_swiper_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_swiper_page.dart)
 
 ### 1 组件类型
 

@@ -35,7 +35,7 @@
 
 **Android**：扫描二维码下载预览应用
 
-<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
+<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/t_apk_qrcode_0_2_7.png" />
 
 下载链接：[tdesign-flutter-0.2.7-314.apk](https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-0.2.7-314.apk)
 
@@ -124,7 +124,7 @@ MaterialApp(
 )
 ```
 
-> 所有可用的主题键值请参考 [td_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/td_default_theme.dart)
+> 所有可用的主题键值请参考 [t_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)
 
 ### 方式二：主题生成器（推荐）
 

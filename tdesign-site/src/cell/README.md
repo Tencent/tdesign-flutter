@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_cell_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_cell_page.dart)
+[t_cell_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_cell_page.dart)
 
 ### 1 组件类型
 
@@ -119,7 +119,7 @@ Widget _buildDesSimple(BuildContext context) {
         arrow: true,
         title: '多行带头像',
         description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内容',
-        image: AssetImage('assets/img/td_avatar_1.png'),
+        image: AssetImage('assets/img/t_avatar_1.png'),
       ),
       // NetworkImage('https://tdesign.gtimg.com/mobile/demos/avatar1.png')),
       TCell(

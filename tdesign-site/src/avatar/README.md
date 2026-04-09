@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_avatar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_avatar_page.dart)
+[t_avatar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_avatar_page.dart)
 
 ### 1 组件类型
 
@@ -32,14 +32,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TAvatar(
           size: TAvatarSize.medium,
           type: TAvatarType.normal,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
           type: TAvatarType.normal,
           shape: TAvatarShape.square,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
       ],
     );
@@ -120,7 +120,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               TAvatar(
                 size: TAvatarSize.medium,
                 type: TAvatarType.normal,
-                defaultUrl: 'assets/img/td_avatar_1.png',
+                defaultUrl: 'assets/img/t_avatar_1.png',
               ),
               Positioned(child: TBadge(TBadgeType.redPoint), right: 0, top: 0)
             ],
@@ -176,8 +176,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildDisplayAvatar(BuildContext context) {
-    var assetUrl = 'assets/img/td_avatar_1.png';
-    var assetUrl2 = 'assets/img/td_avatar_2.png';
+    var assetUrl = 'assets/img/t_avatar_1.png';
+    var assetUrl2 = 'assets/img/t_avatar_2.png';
     var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
     return TAvatar(
       size: TAvatarSize.medium,
@@ -196,8 +196,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildOperationAvatar(BuildContext context) {
-    var assetUrl = 'assets/img/td_avatar_1.png';
-    var assetUrl2 = 'assets/img/td_avatar_2.png';
+    var assetUrl = 'assets/img/t_avatar_1.png';
+    var assetUrl2 = 'assets/img/t_avatar_2.png';
     var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
     return TAvatar(
       size: TAvatarSize.medium,
@@ -225,7 +225,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TAvatar(
           size: TAvatarSize.large,
           type: TAvatarType.normal,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
         SizedBox(width: 32),
         TAvatar(
@@ -257,7 +257,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TAvatar(
           size: TAvatarSize.medium,
           type: TAvatarType.normal,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
         SizedBox(width: 48),
         TAvatar(
@@ -289,7 +289,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TAvatar(
           size: TAvatarSize.small,
           type: TAvatarType.normal,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
         SizedBox(width: 56),
         TAvatar(

@@ -299,7 +299,7 @@ class _CalendarPageState extends State<CalendarPage> {
 运行测试：
 
 ```bash
-flutter test test/td_calendar_lunar_test.dart
+flutter test test/t_calendar_lunar_test.dart
 ```
 
 ## API 文档更新

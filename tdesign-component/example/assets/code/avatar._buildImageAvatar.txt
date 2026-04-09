@@ -6,14 +6,14 @@
         TAvatar(
           size: TAvatarSize.medium,
           type: TAvatarType.normal,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
           type: TAvatarType.normal,
           shape: TAvatarShape.square,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
       ],
     );

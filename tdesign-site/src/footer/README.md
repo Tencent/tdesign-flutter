@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_footer_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_footer_page.dart)
+[t_footer_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_footer_page.dart)
 
 ### 1 组件类型
 
@@ -102,7 +102,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildBrandFooter(BuildContext context) {
     return const TFooter(
       TFooterType.brand,
-      logo: 'assets/img/td_brand.png',
+      logo: 'assets/img/t_brand.png',
       width: 204,
     );
   }</pre>

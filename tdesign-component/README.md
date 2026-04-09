@@ -35,7 +35,7 @@ English | [简体中文](./README_zh_CN.md)
 
 **Android**: Scan the QR code to download the preview app
 
-<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
+<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/t_apk_qrcode_0_2_7.png" />
 
 Download link: [tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/tdesign_flutter_example.apk)
 
@@ -124,7 +124,7 @@ MaterialApp(
 )
 ```
 
-> For all available theme keys, see [td_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/td_default_theme.dart)
+> For all available theme keys, see [t_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)
 
 ### Method 2: Theme Generator (Recommended)
 

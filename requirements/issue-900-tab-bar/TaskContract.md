@@ -31,8 +31,8 @@
 | 序号 | 交付物 | 负责角色 |
 |------|--------|---------|
 | 1 | `requirements/issue-900-tab-bar/test-cases.md` | tester |
-| 2 | `tdesign-component/test/td_bottom_tab_bar_test.dart` | tester |
-| 3 | `tdesign-component/lib/src/components/tabbar/td_bottom_tab_bar.dart`（修复） | developer |
+| 2 | `tdesign-component/test/t_bottom_tab_bar_test.dart` | tester |
+| 3 | `tdesign-component/lib/src/components/tabbar/t_bottom_tab_bar.dart`（修复） | developer |
 | 4 | `requirements/issue-900-tab-bar/code-review-report.md` | reviewer |
 | 5 | `requirements/issue-900-tab-bar/evaluation-report.md` | tester |
 | 6 | PR to develop | ci |

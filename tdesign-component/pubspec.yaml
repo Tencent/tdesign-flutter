@@ -47,7 +47,7 @@ flutter:
   fonts:
     - family: TIcons
       fonts:
-        - asset: assets/tdesign/td_icons.ttf
+        - asset: assets/tdesign/t_icons.ttf
     - family: TCloudNumber
       fonts:
         - asset: assets/tdesign/TCloudNumberVF.ttf

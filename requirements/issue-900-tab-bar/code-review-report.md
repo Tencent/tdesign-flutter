@@ -4,7 +4,7 @@
 
 ## 修改范围
 
-文件：`tdesign-component/lib/src/components/tabbar/td_bottom_tab_bar.dart`
+文件：`tdesign-component/lib/src/components/tabbar/t_bottom_tab_bar.dart`
 方法：`_constructItem`（`TBottomTabBarItemWithBadge`）
 
 ## 改动评审

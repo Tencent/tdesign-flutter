@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_action_sheet_page.dart)
+[t_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_action_sheet_page.dart)
 
 ### 1 组件类型
 
@@ -329,32 +329,32 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
       TActionSheet.showGroupActionSheet(context, items: [
         TActionSheetItem(
           label: 'Allen',
-          icon: Image.asset('assets/img/td_action_sheet_5.png'),
+          icon: Image.asset('assets/img/t_action_sheet_5.png'),
           group: '分享给好友',
         ),
         TActionSheetItem(
           label: 'Nick',
-          icon: Image.asset('assets/img/td_action_sheet_6.png'),
+          icon: Image.asset('assets/img/t_action_sheet_6.png'),
           group: '分享给好友',
         ),
         TActionSheetItem(
           label: 'Jacky',
-          icon: Image.asset('assets/img/td_action_sheet_7.png'),
+          icon: Image.asset('assets/img/t_action_sheet_7.png'),
           group: '分享给好友',
         ),
         TActionSheetItem(
           label: 'Eric',
-          icon: Image.asset('assets/img/td_action_sheet_8.png'),
+          icon: Image.asset('assets/img/t_action_sheet_8.png'),
           group: '分享给好友',
         ),
         TActionSheetItem(
           label: 'Johnsc',
-          icon: Image.asset('assets/img/td_action_sheet_5.png'),
+          icon: Image.asset('assets/img/t_action_sheet_5.png'),
           group: '分享给好友',
         ),
         TActionSheetItem(
           label: 'Kevin',
-          icon: Image.asset('assets/img/td_action_sheet_6.png'),
+          icon: Image.asset('assets/img/t_action_sheet_6.png'),
           group: '分享给好友',
         ),
         ..._gridItems,
@@ -381,16 +381,16 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
       TActionSheet.showGridActionSheet(context, items: [
         TActionSheetItem(
             label: '微信',
-            icon: Image.asset('assets/img/td_action_sheet_1.png'),
+            icon: Image.asset('assets/img/t_action_sheet_1.png'),
             badge: const TBadge(TBadgeType.message, count: 'NEW')),
         TActionSheetItem(
             label: '朋友圈',
-            icon: Image.asset('assets/img/td_action_sheet_2.png')),
+            icon: Image.asset('assets/img/t_action_sheet_2.png')),
         TActionSheetItem(
-            label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
+            label: 'QQ', icon: Image.asset('assets/img/t_action_sheet_3.png')),
         TActionSheetItem(
             label: '企业微信',
-            icon: Image.asset('assets/img/td_action_sheet_4.png')),
+            icon: Image.asset('assets/img/t_action_sheet_4.png')),
         TActionSheetItem(
             label: '收藏',
             icon: const IconWithBackground(icon: TIcons.star),
