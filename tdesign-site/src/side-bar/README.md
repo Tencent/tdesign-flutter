@@ -635,6 +635,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
+### TDSideBarItem
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badge | TDBadge? | - | 徽标 |
+| disabled | bool | false | 是否禁用 |
+| icon | IconData? | - | 图标 |
+| key |  | - |  |
+| label | String | '' | 标签 |
+| textStyle | TextStyle? | - | 标签样式 |
+| value | int | -1 | 值 |
+
+```
+```
+
 ### TDSideBar
 #### 默认构造方法
 
@@ -657,22 +673,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | unSelectedBgColor | Color? | - | 未选择的背景颜色 |
 | unSelectedColor | Color? | - | 未选中颜色 |
 | value | int? | - | 选项值 |
-
-```
-```
-
-### TDSideBarItem
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badge | TDBadge? | - | 徽标 |
-| disabled | bool | false | 是否禁用 |
-| icon | IconData? | - | 图标 |
-| key |  | - |  |
-| label | String | '' | 标签 |
-| textStyle | TextStyle? | - | 标签样式 |
-| value | int | -1 | 值 |
 
 
   
