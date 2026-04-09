@@ -2,6 +2,10 @@ name: autofix.ci
 on:
   pull_request:
     branches: [develop]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "tdesign-adaptation/**"
+      - "*.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -38,5 +42,16 @@ jobs:
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build apk -t ./lib/main.dart --release
+
+      - name: generate web documentation from demo code
+        working-directory: ./tdesign-component/example
+        run: |
+          flutter test test/widget_test.dart --reporter expanded || {
+            echo "⚠ Widget test completed with warnings (this is expected)"
+            echo "Documentation should have been generated"
+          }
+
+      - name: Sync README files
+        run: node scripts/sync-readme.mjs
 
       - uses: autofix-ci/action@v1

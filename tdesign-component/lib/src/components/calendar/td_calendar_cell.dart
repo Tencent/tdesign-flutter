@@ -19,6 +19,8 @@ class TDCalendarCell extends StatefulWidget {
     required this.colIndex,
     required this.dateList,
     this.cellWidget,
+    this.dateType = TDCalendarDateType.solar,
+    this.showLunarInfo = false,
   }) : super(key: key);
 
   final TDate? tdate;
@@ -46,6 +48,8 @@ class TDCalendarCell extends StatefulWidget {
     TDate tdate,
     DateSelectType selectType,
   )? cellWidget;
+  final TDCalendarDateType dateType;
+  final bool showLunarInfo;
 
   @override
   _TDCalendarCellState createState() => _TDCalendarCellState();
@@ -91,42 +95,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     // 新增自定义cell内容判断逻辑
     final content =
         widget.cellWidget?.call(context, tdate, widget.tdate!._type) ??
-            Column(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: tdate.prefixWidget ??
-                      TDText(
-                        tdate.prefix ?? '',
-                        style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Center(
-                    child: TDText(
-                      forceVerticalCenter: true,
-                      widget.tdate!.date.day.toString(),
-                      style: (isToday ? cellStyle.todayStyle : null) ??
-                          tdate.style ??
-                          cellStyle.cellStyle,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: tdate.suffixWidget ??
-                      TDText(
-                        tdate.suffix ?? '',
-                        style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                ),
-              ],
-            );
+            _buildDefaultCell(context, tdate, cellStyle);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -139,11 +108,13 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            width: double.infinity,
-            height: widget.height,
-            decoration: decoration,
-            child: content, // 使用自定义内容
+          ClipRect(
+            child: Container(
+              width: double.infinity,
+              height: widget.height,
+              decoration: decoration,
+              child: content, // 使用自定义内容
+            ),
           ),
           if (widget.colIndex < 6)
             Positioned(
@@ -258,6 +229,94 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     return widget.tdate?._milliseconds ==
         DateTime(today.year, today.month, today.day).millisecondsSinceEpoch;
   }
+
+  /// 构建默认单元格内容
+  Widget _buildDefaultCell(
+      BuildContext context, TDate tdate, TDCalendarStyle cellStyle) {
+    // 根据 dateType 和 showLunarInfo 决定显示内容
+    String mainText = widget.tdate!.date.day.toString();
+    String? subText;
+
+    if (widget.dateType == TDCalendarDateType.lunar && tdate.lunarInfo != null) {
+      // 农历模式：主文本显示农历，副文本显示阳历日期
+      mainText = tdate.lunarInfo!.dayText;
+      subText = widget.tdate!.date.day.toString();
+    } else if (widget.dateType == TDCalendarDateType.solar &&
+        widget.showLunarInfo) {
+      // 阳历模式+显示农历信息
+      mainText = widget.tdate!.date.day.toString();
+      
+      // 优先级：节日 > 节气 > 农历日期
+      if (tdate.festival != null && tdate.festival!.isNotEmpty) {
+        // 显示节日
+        subText = tdate.festival;
+      } else if (tdate.solarTerm != null && tdate.solarTerm!.isNotEmpty) {
+        // 显示节气
+        subText = tdate.solarTerm;
+      } else if (tdate.lunarInfo != null) {
+        // 显示农历日期
+        subText = tdate.lunarInfo!.dayText;
+      }
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // prefix 区域 - 不强制高度
+        if (tdate.prefix != null || tdate.prefixWidget != null)
+          SizedBox(
+            height: 12,
+            child: tdate.prefixWidget ??
+                TDText(
+                  tdate.prefix ?? '',
+                  style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+          ),
+        // 主内容区域 - 自适应高度
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TDText(
+                  forceVerticalCenter: subText == null,
+                  mainText,
+                  style: (isToday ? cellStyle.todayStyle : null) ??
+                      tdate.style ??
+                      cellStyle.cellStyle,
+                ),
+                if (subText != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: TDText(
+                      subText,
+                      style: cellStyle.cellSuffixStyle?.copyWith(fontSize: 9),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        // suffix 区域 - 不强制高度
+        if (tdate.suffix != null || tdate.suffixWidget != null)
+          SizedBox(
+            height: 12,
+            child: tdate.suffixWidget ??
+                TDText(
+                  tdate.suffix ?? '',
+                  style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+          ),
+      ],
+    );
+  }
 }
 
 /// 时间对象
@@ -274,6 +333,10 @@ class TDate {
     this.style,
     this.decoration,
     required this.isLastDayOfMonth,
+    this.lunarInfo,
+    this.solarTerm,
+    this.festival,
+    this.holidayInfo,
   });
 
   /// 时间对象
@@ -308,6 +371,20 @@ class TDate {
 
   /// 是否是当月最后一天
   final bool isLastDayOfMonth;
+
+  /// 农历信息
+  final TDLunarInfo? lunarInfo;
+
+  /// 节气信息（如"春分"、"立夏"）
+  final String? solarTerm;
+
+  /// 节日信息（如"春节"、"中秋节"）
+  final String? festival;
+
+  /// 假期信息（包含类型和名称）
+  /// type: 'holiday' 或 'workday'
+  /// name: 假期名称
+  final Map<String, String>? holidayInfo;
 
   int get _milliseconds =>
       DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;

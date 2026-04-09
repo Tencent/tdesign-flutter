@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
+import '../lunar_data_source_example.dart';
 
 class TDCalendarPage extends StatelessWidget {
   const TDCalendarPage({super.key});
@@ -45,6 +46,14 @@ class TDCalendarPage extends StatelessWidget {
             center: false,
             builder: (BuildContext context) {
               return const CodeWrapper(builder: _buildBlock);
+            },
+          ),
+          ExampleItem(
+            desc: '农历日历',
+            ignoreCode: true,
+            center: false,
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildLunar);
             },
           ),
         ]),
@@ -528,5 +537,310 @@ Widget _buildCustomCell(BuildContext context) {
         ],
       );
     },
+  );
+}
+
+@Demo(group: 'calendar')
+Widget _buildLunar(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  final dataSource = LunarDataSourceExample();
+  
+  // 当前月份状态
+  final currentMonth = ValueNotifier<DateTime>(
+    DateTime(DateTime.now().year, DateTime.now().month, 1),
+  );
+  
+  // 农历开关状态
+  final showLunarInfo = ValueNotifier<bool>(true);
+  
+  // 选中日期
+  final selectedDate = ValueNotifier<List<int>>([
+    DateTime.now().millisecondsSinceEpoch,
+  ]);
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // 控制栏
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          border: Border(
+            bottom: BorderSide(color: Colors.grey.shade200),
+          ),
+        ),
+        child: ValueListenableBuilder(
+          valueListenable: currentMonth,
+          builder: (context, month, child) {
+            // 获取当前月份的农历信息
+            final lunarInfo = dataSource.getLunarInfo(month);
+            final lunarMonth = lunarInfo != null 
+                ? '${lunarInfo.yearText}年 ${lunarInfo.monthText}' 
+                : '';
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 农历年月显示
+                if (lunarMonth.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      lunarMonth,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                // 按钮行
+                Row(
+                  children: [
+                    // 上一月按钮
+                    TDButton(
+                      text: '上一月',
+                      size: TDButtonSize.small,
+                      theme: TDButtonTheme.primary,
+                      onTap: () {
+                        currentMonth.value = DateTime(
+                          month.year,
+                          month.month - 1,
+                          1,
+                        );
+                        selectedDate.value = [currentMonth.value.millisecondsSinceEpoch];
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    // 年份选择
+                    Expanded(
+                      child: TDButton(
+                        text: '${month.year}年',
+                        size: TDButtonSize.small,
+                        theme: TDButtonTheme.defaultTheme,
+                        onTap: () async {
+                          final year = await showModalBottomSheet<int>(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 300,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Text(
+                                        '选择年份',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        itemCount: 50,
+                                        itemBuilder: (context, index) {
+                                          final year = DateTime.now().year - 10 + index;
+                                          final isSelected = year == month.year;
+                                          return ListTile(
+                                            title: Text(
+                                              '$year年',
+                                              style: TextStyle(
+                                                color: isSelected ? Colors.blue : null,
+                                                fontWeight: isSelected ? FontWeight.bold : null,
+                                              ),
+                                            ),
+                                            onTap: () => Navigator.pop(context, year),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                          if (year != null) {
+                            currentMonth.value = DateTime(year, month.month, 1);
+                            selectedDate.value = [currentMonth.value.millisecondsSinceEpoch];
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // 月份选择
+                    Expanded(
+                      child: TDButton(
+                        text: '${month.month}月',
+                        size: TDButtonSize.small,
+                        theme: TDButtonTheme.defaultTheme,
+                        onTap: () async {
+                          final selectedMonth = await showModalBottomSheet<int>(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 400,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Text(
+                                        '选择月份',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: GridView.builder(
+                                        padding: const EdgeInsets.all(16),
+                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          childAspectRatio: 2,
+                                          crossAxisSpacing: 10,
+                                          mainAxisSpacing: 10,
+                                        ),
+                                        itemCount: 12,
+                                        itemBuilder: (context, index) {
+                                          final m = index + 1;
+                                          final isSelected = m == month.month;
+                                          return InkWell(
+                                            onTap: () => Navigator.pop(context, m),
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: isSelected ? Colors.blue : Colors.grey.shade200,
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                '$m月',
+                                                style: TextStyle(
+                                                  color: isSelected ? Colors.white : Colors.black,
+                                                  fontWeight: isSelected ? FontWeight.bold : null,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                          if (selectedMonth != null) {
+                            currentMonth.value = DateTime(month.year, selectedMonth, 1);
+                            selectedDate.value = [currentMonth.value.millisecondsSinceEpoch];
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // 下一月按钮
+                    TDButton(
+                      text: '下一月',
+                      size: TDButtonSize.small,
+                      theme: TDButtonTheme.primary,
+                      onTap: () {
+                        currentMonth.value = DateTime(
+                          month.year,
+                          month.month + 1,
+                          1,
+                        );
+                        selectedDate.value = [currentMonth.value.millisecondsSinceEpoch];
+                      },
+                    ),
+                    const SizedBox(width: 16),
+                    // 农历开关
+                    ValueListenableBuilder(
+                      valueListenable: showLunarInfo,
+                      builder: (context, show, child) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              '农历',
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                            ),
+                            Switch(
+                              value: show,
+                              onChanged: (value) {
+                                showLunarInfo.value = value;
+                              },
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+      const SizedBox(height: 16),
+      // 日历主体
+      ValueListenableBuilder(
+        valueListenable: showLunarInfo,
+        builder: (context, show, child) {
+          return ValueListenableBuilder(
+            valueListenable: selectedDate,
+            builder: (context, value, child) {
+              return TDCalendar(
+                title: '',
+                showLunarInfo: show,
+                dataSource: dataSource,
+                value: value,
+                height: size.height * 0.6,
+                onChange: (newValue) {
+                  selectedDate.value = newValue;
+                  
+                  // 显示完整农历信息
+                  final date = DateTime.fromMillisecondsSinceEpoch(newValue[0]);
+                  final lunarInfo = dataSource.getLunarInfo(date);
+                  final solarTerm = dataSource.getSolarTerm(date);
+                  final festival = dataSource.getFestival(date, lunarInfo);
+                  final holidayInfo = dataSource.getHolidayInfo(date);
+                  
+                  final buffer = StringBuffer();
+                  buffer.write('阳历：${date.year}年${date.month}月${date.day}日');
+                  
+                  if (lunarInfo != null) {
+                    buffer.write('\n农历：${lunarInfo.monthText}${lunarInfo.dayText}');
+                  }
+                  
+                  if (solarTerm != null && solarTerm.isNotEmpty) {
+                    buffer.write('\n节气：$solarTerm');
+                  }
+                  
+                  if (festival != null && festival.isNotEmpty) {
+                    buffer.write('\n节日：$festival');
+                  }
+                  
+                  if (holidayInfo != null) {
+                    final type = holidayInfo['type'] == 'holiday' ? '假期' : '调休';
+                    buffer.write('\n$type：${holidayInfo['name']}');
+                  }
+                  
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(buffer.toString()),
+                      duration: const Duration(seconds: 3),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+    ],
   );
 }

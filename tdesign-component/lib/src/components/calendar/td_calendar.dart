@@ -8,6 +8,8 @@ export 'td_calendar_cell.dart';
 export 'td_calendar_header.dart';
 export 'td_calendar_popup.dart';
 export 'td_calendar_style.dart';
+export 'td_calendar_data_source.dart';
+export 'td_lunar_date.dart';
 
 typedef CalendarFormat = TDate? Function(TDate? day);
 
@@ -49,7 +51,10 @@ class TDCalendar extends StatefulWidget {
     this.animateTo = false,
     this.cellWidget,
     this.onMonthChange,
-    this.anchorDate
+    this.anchorDate,
+    this.dateType = TDCalendarDateType.solar,
+    this.dataSource,
+    this.showLunarInfo = false,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -157,6 +162,15 @@ class TDCalendar extends StatefulWidget {
     DateSelectType selectType,
   )? cellWidget;
 
+  /// 日历类型：阳历或农历
+  final TDCalendarDateType dateType;
+
+  /// 外部数据源，用于提供农历转换等功能
+  final TDCalendarDataSource? dataSource;
+
+  /// 阳历模式下是否显示农历信息作为副标题
+  final bool showLunarInfo;
+
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
         return DateTime(date.year, date.month, date.day);
@@ -247,14 +261,16 @@ class _TDCalendarState extends State<TDCalendar> {
               monthNames: monthNames,
               monthTitleStyle: _style.monthTitleStyle,
               verticalGap: verticalGap,
-              cellHeight: widget.cellHeight ?? 60,
+              cellHeight: _getEffectiveCellHeight(),
               monthTitleHeight: widget.monthTitleHeight ?? 22,
               monthTitleBuilder: widget.monthTitleBuilder,
               animateTo: widget.animateTo ?? false,
               onMonthChange: widget.onMonthChange,
+              dateType: widget.dateType,
+              dataSource: widget.dataSource,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
-                  height: widget.cellHeight ?? 60,
+                  height: _getEffectiveCellHeight(),
                   tdate: date,
                   format: widget.format,
                   type: widget.type ?? CalendarType.single,
@@ -271,6 +287,8 @@ class _TDCalendarState extends State<TDCalendar> {
                   rowIndex: rowIndex,
                   colIndex: colIndex,
                   cellWidget: widget.cellWidget,
+                  dateType: widget.dateType,
+                  showLunarInfo: widget.showLunarInfo,
                 );
               },
             ),
@@ -400,5 +418,15 @@ class _TDCalendarState extends State<TDCalendar> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       inherited!.selected.value = _getValue(widget.value ?? []);
     });
+  }
+
+  /// 获取有效的单元格高度
+  /// 当显示农历信息时，需要更大的高度以容纳额外的文本
+  double _getEffectiveCellHeight() {
+    if (widget.cellHeight != null) {
+      return widget.cellHeight!;
+    }
+    // 显示农历信息时使用更大的默认高度（80px 完全避免溢出）
+    return widget.showLunarInfo ? 80 : 60;
   }
 }
