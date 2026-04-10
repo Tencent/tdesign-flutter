@@ -198,6 +198,11 @@ class TPicker {
     bool keepSameSelection = false,
     Color? barrierColor,
 
+    /// 列选项变化时的回调，用于动态加载下一列数据
+    /// 当第 [columnIndex] 列选项变化时调用，返回第 [columnIndex]+1 列的数据
+    /// 若不提供，则沿用 [data] Map 中的数据（向后兼容）
+    LinkedPickerColumnChangedCallback? onColumnChanged,
+
     /// todo 未传参
     Duration duration = const Duration(milliseconds: 100),
   }) {
@@ -231,6 +236,7 @@ class TPicker {
           itemBuilder: itemBuilder,
           customSelectWidget: customSelectWidget,
           keepSameSelection: keepSameSelection,
+          onColumnChanged: onColumnChanged,
           // itemDistanceCalculator: itemDistanceCalculator,
         );
       },

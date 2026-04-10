@@ -215,6 +215,9 @@ class _TPickerPageState extends State<TPickerPage> {
         ExampleItem(
             desc: '自定义left/right text', builder: buildCustomLeftRightText),
         ExampleItem(desc: '级联选择保持下一级选项', builder: buildKeepMultiArea),
+        ExampleItem(
+            desc: '动态加载下一列数据（onColumnChanged）',
+            builder: buildDynamicLinkedPicker),
       ],
     );
   }
@@ -424,6 +427,58 @@ class _TPickerPageState extends State<TPickerPage> {
           columnNum: 3,
           keepSameSelection: true,
           initialData: ['广东省', '深圳市', '罗湖区'],
+        );
+      },
+    );
+  }
+
+  /// 模拟异步数据源：根据当前列选中值返回下一列数据
+  Future<List> _fetchNextColumnData(int columnIndex, List selectedData) async {
+    // 模拟网络延迟 300ms
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (columnIndex == 0) {
+      final province = selectedData[0]?.toString() ?? '';
+      if (province == '广东省') {
+        return ['深圳市', '广州市', '佛山市'];
+      } else if (province == '浙江省') {
+        return ['杭州市', '宁波市', '温州市'];
+      }
+      return ['（无数据）'];
+    } else if (columnIndex == 1) {
+      final city = selectedData[1]?.toString() ?? '';
+      if (city == '深圳市') return ['南山区', '宝安区', '罗湖区'];
+      if (city == '广州市') return ['天河区', '越秀区', '白云区'];
+      if (city == '杭州市') return ['西湖区', '余杭区', '萧山区'];
+      if (city == '宁波市') return ['江东区', '北仑区', '奉化市'];
+      return ['（无数据）'];
+    }
+    return [];
+  }
+
+  @Demo(group: 'picker')
+  Widget buildDynamicLinkedPicker(BuildContext context) {
+    return TCell(
+      title: '动态加载（onColumnChanged）',
+      note: selected_3.isEmpty ? '请选择' : selected_3,
+      arrow: true,
+      onClick: (click) {
+        TPicker.showMultiLinkedPicker(
+          context,
+          title: '选择地区（动态加载）',
+          onConfirm: (selected) {
+            setState(() {
+              selected_3 = selected.join(' ');
+            });
+            Navigator.of(context).pop();
+          },
+          // data 传空 Map，完全由 onColumnChanged 提供数据
+          data: {
+            '广东省': {},
+            '浙江省': {},
+          },
+          columnNum: 3,
+          initialData: ['广东省', '', ''],
+          onColumnChanged: _fetchNextColumnData,
         );
       },
     );

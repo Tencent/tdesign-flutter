@@ -8,6 +8,15 @@ import 'no_wave_behavior.dart';
 
 typedef MultiPickerCallback = void Function(List selected);
 
+/// 列选项变化时的回调类型
+/// [columnIndex] 发生变化的列索引
+/// [selectedData] 当前各列已选中的数据
+/// 返回值：columnIndex+1 列需要展示的新数据列表
+typedef LinkedPickerColumnChangedCallback = Future<List> Function(
+  int columnIndex,
+  List selectedData,
+);
+
 /// 项之间无联动的多项选择器
 class TMultiPicker extends StatelessWidget {
   /// 选择器标题
@@ -424,6 +433,12 @@ class TMultiLinkedPicker extends StatefulWidget {
   /// 是否显示头部内容
   final bool header;
 
+  /// 列选项变化时的回调，用于动态加载下一列数据
+  ///
+  /// 当第 [columnIndex] 列选项发生变化时，调用此回调获取第 [columnIndex]+1 列的数据。
+  /// 若不提供，则沿用 [data] Map 中的数据（向后兼容）。
+  final LinkedPickerColumnChangedCallback? onColumnChanged;
+
   const TMultiLinkedPicker({
     this.title,
     required this.onConfirm,
@@ -452,6 +467,7 @@ class TMultiLinkedPicker extends StatefulWidget {
     this.itemBuilder,
     this.keepSameSelection = false,
     this.header = true,
+    this.onColumnChanged,
     Key? key,
   }) : super(key: key);
 
@@ -598,11 +614,14 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
               physics: const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
                 if (index >= 0 && index < model.presentData[position].length) {
+                  final hasCallback = widget.onColumnChanged != null &&
+                      position < widget.columnNum - 1;
                   setState(() {
                     model.refreshPresentDataAndController(
                       position,
                       index,
                       false,
+                      cascadeNext: !hasCallback,
                     );
                     if (index >= model.presentData[position].length - 5 &&
                         model.hasMoreData[position]) {
@@ -621,12 +640,33 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
                     pickerHeight =
                         pickerHeight - Random().nextDouble() / 100000000;
                   });
+
+                  if (hasCallback) {
+                    _loadNextColumnData(position);
+                  }
                 }
               },
               childDelegate: ListWheelChildBuilderDelegate(
                   childCount: model.presentData[position].length +
                       (model.hasMoreData[position] ? 1 : 0),
                   builder: (context, index) {
+                    // 展示加载中占位
+                    if (model.isLoading[position] &&
+                        index == 0 &&
+                        model.presentData[position].length == 1 &&
+                        model.presentData[position].first ==
+                            MultiLinkedPickerModel.placeData) {
+                      return Container(
+                        alignment: Alignment.center,
+                        height: pickerHeight / widget.pickerItemCount,
+                        child: Text(
+                          context.resource.loadingWithPoint,
+                          style: TextStyle(
+                            color: TTheme.of(context).textColorPlaceholder,
+                          ),
+                        ),
+                      );
+                    }
                     if (index >= model.presentData[position].length) {
                       // 加载更多指示器
                       return Container(
@@ -663,6 +703,30 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
         ),
       ),
     );
+  }
+
+  /// 调用 [widget.onColumnChanged] 异步加载下一列数据
+  Future<void> _loadNextColumnData(int columnIndex) async {
+    final nextColumn = columnIndex + 1;
+    setState(() {
+      model.resetColumnsAfter(columnIndex);
+      model.setLoading(nextColumn, true);
+    });
+    try {
+      final newData =
+          await widget.onColumnChanged!(columnIndex, model.selectedData);
+      if (!mounted) return;
+      setState(() {
+        model.updateColumnData(nextColumn, newData);
+        model.setLoading(nextColumn, false);
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        model.updateColumnData(nextColumn, []);
+        model.setLoading(nextColumn, false);
+      });
+    }
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -781,6 +845,9 @@ class MultiLinkedPickerModel {
   /// 每列的总数据量
   late List<int> totalCounts;
 
+  /// 每列是否正在异步加载数据
+  late List<bool> isLoading;
+
   MultiLinkedPickerModel({
     required this.data,
     required this.columnNum,
@@ -792,6 +859,7 @@ class MultiLinkedPickerModel {
     currentPages = List.generate(columnNum, (_) => 0);
     hasMoreData = List.generate(columnNum, (_) => true);
     totalCounts = List.generate(columnNum, (_) => 0);
+    isLoading = List.generate(columnNum, (_) => false);
     for (var i = 0; i < columnNum; ++i) {
       if (i >= initialData.length) {
         selectedData.add('');
@@ -892,11 +960,14 @@ class MultiLinkedPickerModel {
   /// [position] 变动的列
   /// [selectedIndex] 对应选中的index
   /// [jump] 是否需要jumpToItem
+  /// [cascadeNext] 是否自动级联更新后续列（默认 true）；
+  ///   传 false 时仅更新当前列的选中状态，后续列由外部的 [LinkedPickerColumnChangedCallback] 负责
   void refreshPresentDataAndController(
     int position,
     int selectedIndex,
-    bool jump,
-  ) {
+    bool jump, {
+    bool cascadeNext = true,
+  }) {
     // 严格的边界检查
     if (position >= presentData.length ||
         selectedIndex >= presentData[position].length ||
@@ -916,7 +987,7 @@ class MultiLinkedPickerModel {
         hasMoreData[position]) {
       loadMoreData(position);
     }
-    if (position < columnNum - 1) {
+    if (cascadeNext && position < columnNum - 1) {
       List nextColumnData;
       if (presentData[position].length == 1 &&
           presentData[position].first == placeData) {
@@ -937,6 +1008,52 @@ class MultiLinkedPickerModel {
         controllers.add(FixedExtentScrollController(initialItem: 0));
       }
       refreshPresentDataAndController(position + 1, 0, true);
+    }
+  }
+
+  /// 将 [columnIndex] 之后的所有列重置为占位状态
+  /// 重置后 hasMoreData 设为 false，避免在动态加载期间额外展示"加载更多"指示器
+  void resetColumnsAfter(int columnIndex) {
+    for (var i = columnIndex + 1; i < columnNum; i++) {
+      while (presentData.length <= i) {
+        presentData.add([placeData]);
+      }
+      presentData[i] = [placeData];
+      currentPages[i] = 0;
+      hasMoreData[i] = false;
+      if (i < controllers.length) {
+        controllers[i].jumpToItem(0);
+      }
+    }
+  }
+
+  /// 将 [columnIndex] 列的展示数据更新为 [newData]
+  ///
+  /// 若 [newData] 为空，则使用占位符 [placeData]。
+  /// 同时将该列 controller 重置到第 0 项。
+  void updateColumnData(int columnIndex, List newData) {
+    while (presentData.length <= columnIndex) {
+      presentData.add([placeData]);
+    }
+    final data = newData.isEmpty ? [placeData] : newData;
+    presentData[columnIndex] = data;
+    currentPages[columnIndex] = 0;
+    hasMoreData[columnIndex] = false;
+    while (controllers.length <= columnIndex) {
+      controllers.add(FixedExtentScrollController(initialItem: 0));
+    }
+    controllers[columnIndex].jumpToItem(0);
+    if (columnIndex < selectedData.length) {
+      selectedData[columnIndex] =
+          data.isNotEmpty ? data.first : placeData;
+      selectedIndexes[columnIndex] = 0;
+    }
+  }
+
+  /// 设置 [columnIndex] 列的加载状态
+  void setLoading(int columnIndex, bool loading) {
+    if (columnIndex >= 0 && columnIndex < columnNum) {
+      isLoading[columnIndex] = loading;
     }
   }
 }
