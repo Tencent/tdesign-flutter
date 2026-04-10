@@ -4,13 +4,13 @@
       padding: const EdgeInsets.only(top: 0),
       child: LayoutBuilder(
         builder: (_, constraints) {
-          return TDButton(
-            size: TDButtonSize.medium,
+          return TButton(
+            size: TButtonSize.medium,
             text: '带箭头',
-            type: TDButtonType.outline,
-            theme: TDButtonTheme.primary,
+            type: TButtonType.outline,
+            theme: TButtonTheme.primary,
             onTap: () {
-              TDPopover.showPopover(
+              TPopover.showPopover(
                   context: _, content: '弹出气泡内容', theme: theme);
             },
           );

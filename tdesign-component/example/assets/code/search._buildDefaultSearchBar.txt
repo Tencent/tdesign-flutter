@@ -1,6 +1,6 @@
 
   Widget _buildDefaultSearchBar(BuildContext context) {
-    return TDSearchBar(
+    return TSearchBar(
       placeHolder: '搜索预设文案',
       onTextChanged: (String text) {
         setState(() {

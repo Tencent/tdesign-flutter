@@ -1,6 +1,6 @@
 
   Widget buildWithoutHeader(BuildContext context) {
-    return TDMultiPicker(
+    return TMultiPicker(
       /// 不显示header内容
       header: false,
       /// todo onChange

@@ -1,25 +1,5 @@
 ## API
-### TDSkeleton
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| animation | TDSkeletonAnimation? | - | 动画效果 |
-| delay | int | 0 | 延迟显示加载时间 |
-| key |  | - |  |
-| theme |  | TDSkeletonTheme.text |  |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDSkeleton.fromRowCol  | 从行列框架创建骨架屏 |
-
-```
-```
-
-### TDSkeletonRowColStyle
+### TSkeletonRowColStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -29,18 +9,18 @@
 ```
 ```
 
-### TDSkeletonRowCol
+### TSkeletonRowCol
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| objects | List<List<TDSkeletonRowColObj>> | - | 行列对象 |
-| style | TDSkeletonRowColStyle | const TDSkeletonRowColStyle() | 样式 |
+| objects | List<List<TSkeletonRowColObj>> | - | 行列对象 |
+| style | TSkeletonRowColStyle | const TSkeletonRowColStyle() | 样式 |
 
 ```
 ```
 
-### TDSkeletonRowColObjStyle
+### TSkeletonRowColObjStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -53,15 +33,15 @@
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDSkeletonRowColObjStyle.circle  | 圆形 |
-| TDSkeletonRowColObjStyle.rect  | 矩形 |
-| TDSkeletonRowColObjStyle.spacer  | 空白占位符 |
-| TDSkeletonRowColObjStyle.text  | 文本 |
+| TSkeletonRowColObjStyle.circle  | 圆形 |
+| TSkeletonRowColObjStyle.rect  | 矩形 |
+| TSkeletonRowColObjStyle.spacer  | 空白占位符 |
+| TSkeletonRowColObjStyle.text  | 文本 |
 
 ```
 ```
 
-### TDSkeletonRowColObj
+### TSkeletonRowColObj
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -69,7 +49,7 @@
 | flex | int? | 1 | 弹性因子 |
 | height | double? | 16 | 高度 |
 | margin | EdgeInsets | EdgeInsets.zero | 间距 |
-| style | TDSkeletonRowColObjStyle | const TDSkeletonRowColObjStyle() | 样式 |
+| style | TSkeletonRowColObjStyle | const TSkeletonRowColObjStyle() | 样式 |
 | width | double? | - | 宽度 |
 
 
@@ -77,7 +57,27 @@
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDSkeletonRowColObj.circle  | 圆形 |
-| TDSkeletonRowColObj.rect  | 矩形 |
-| TDSkeletonRowColObj.spacer  | 空白占位符 |
-| TDSkeletonRowColObj.text  | 文本 |
+| TSkeletonRowColObj.circle  | 圆形 |
+| TSkeletonRowColObj.rect  | 矩形 |
+| TSkeletonRowColObj.spacer  | 空白占位符 |
+| TSkeletonRowColObj.text  | 文本 |
+
+```
+```
+
+### TSkeleton
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| animation | TSkeletonAnimation? | - | 动画效果 |
+| delay | int | 0 | 延迟显示加载时间 |
+| key |  | - |  |
+| theme |  | TSkeletonTheme.text |  |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TSkeleton.fromRowCol  | 从行列框架创建骨架屏 |

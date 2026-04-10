@@ -5,14 +5,14 @@
       height: 50,
       child: Stack(
         children: [
-          Positioned(left: 0, bottom: 0, child: Icon(TDIcons.notification)),
+          Positioned(left: 0, bottom: 0, child: Icon(TIcons.notification)),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
+            child: TBadge(
+              TBadgeType.square,
               count: '888',
               maxCount: '99',
-              size: TDBadgeSize.large,
-              border: TDBadgeBorder.large,
+              size: TBadgeSize.large,
+              border: TBadgeBorder.large,
             ),
             left: 18,
             bottom: 18,

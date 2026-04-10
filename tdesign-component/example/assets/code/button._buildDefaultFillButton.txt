@@ -1,10 +1,10 @@
 
-  TDButton _buildDefaultFillButton(BuildContext context) {
-    return const TDButton(
+  TButton _buildDefaultFillButton(BuildContext context) {
+    return const TButton(
       text: '填充按钮',
-      size: TDButtonSize.large,
-      type: TDButtonType.fill,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.defaultTheme,
+      size: TButtonSize.large,
+      type: TButtonType.fill,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.defaultTheme,
     );
   }

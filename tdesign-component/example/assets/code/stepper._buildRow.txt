@@ -1,6 +1,6 @@
 
   Widget _buildRow(BuildContext context, List<Widget> stepperItems) {
-    final theme = TDTheme.of(context);
+    final theme = TTheme.of(context);
 
     return Container(
       decoration: BoxDecoration(

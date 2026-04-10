@@ -1,4 +1,4 @@
 
   Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.normal);
+    return _buildLinkWithStyles(TLinkState.normal);
   }

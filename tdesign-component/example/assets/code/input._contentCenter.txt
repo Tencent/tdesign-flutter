@@ -2,7 +2,7 @@
   Widget _contentCenter(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '居中',
           controller: controller[24],
           contentAlignment: TextAlign.center,

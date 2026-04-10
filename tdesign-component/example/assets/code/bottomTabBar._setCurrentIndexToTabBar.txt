@@ -8,8 +8,8 @@
           Expanded(
               child: PageView(
             children: const [
-              Center(child: TDText('页面1，手指左滑查看页面2')),
-              Center(child: TDText('页面2，手指右滑查看页面1')),
+              Center(child: TText('页面1，手指左滑查看页面2')),
+              Center(child: TText('页面2，手指右滑查看页面1')),
             ],
             onPageChanged: (index) {
               setState(() {
@@ -17,14 +17,14 @@
               });
             },
           )),
-          TDBottomTabBar(
+          TBottomTabBar(
               // 设置选择index
               currentIndex: currentIndex,
-              TDBottomTabBarBasicType.icon,
+              TBottomTabBarBasicType.icon,
               useVerticalDivider: true,
               navigationTabs: List.generate(2, (index) {
                 final label = '标签${index + 1}';
-                return TDBottomTabBarTabConfig(
+                return TBottomTabBarTabConfig(
                     selectedIcon: _selectedIcon,
                     unselectedIcon: _unSelectedIcon,
                     onTap: () {

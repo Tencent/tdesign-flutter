@@ -1,5 +1,5 @@
 ## API
-### TDText
+### TText
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -35,12 +35,12 @@
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDText.rich  | 富文本构造方法 |
+| TText.rich  | 富文本构造方法 |
 
 ```
 ```
 
-### TDTextSpan
+### TTextSpan
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -65,7 +65,7 @@
 ```
 ```
 
-### TDTextConfiguration
+### TTextConfiguration
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -73,4 +73,4 @@
 | child |  | - |  |
 | globalFontFamily | FontFamily? | - | 全局字体，kTextNeedGlobalFontFamily=true 时生效 |
 | key |  | - |  |
-| paddingConfig | TDTextPaddingConfig? | - | forceVerticalCenter=true 时，内置 padding 配置 |
+| paddingConfig | TTextPaddingConfig? | - | forceVerticalCenter=true 时，内置 padding 配置 |

@@ -9,12 +9,12 @@
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TDAvatar(
-                size: TDAvatarSize.medium,
-                type: TDAvatarType.normal,
-                defaultUrl: 'assets/img/td_avatar_1.png',
+              TAvatar(
+                size: TAvatarSize.medium,
+                type: TAvatarType.normal,
+                defaultUrl: 'assets/img/t_avatar_1.png',
               ),
-              Positioned(child: TDBadge(TDBadgeType.redPoint), right: 0, top: 0)
+              Positioned(child: TBadge(TBadgeType.redPoint), right: 0, top: 0)
             ],
           ),
         ),
@@ -25,13 +25,13 @@
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TDAvatar(
-                size: TDAvatarSize.medium,
-                type: TDAvatarType.customText,
+              TAvatar(
+                size: TAvatarSize.medium,
+                type: TAvatarType.customText,
                 text: 'A',
               ),
               Positioned(
-                child: TDBadge(TDBadgeType.message, count: '8'),
+                child: TBadge(TBadgeType.message, count: '8'),
                 right: 0,
                 top: 0,
               )
@@ -45,9 +45,9 @@
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+              TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
               Positioned(
-                child: TDBadge(TDBadgeType.message, count: '12'),
+                child: TBadge(TBadgeType.message, count: '12'),
                 right: 0,
                 top: 0,
               )

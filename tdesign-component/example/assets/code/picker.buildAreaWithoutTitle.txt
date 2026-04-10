@@ -1,11 +1,11 @@
 
   Widget buildAreaWithoutTitle(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择地区',
       note: selected_5.isEmpty ? '请选择' : selected_5,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           // 不传或传空字符串、null，则不显示标题
           // title: '',

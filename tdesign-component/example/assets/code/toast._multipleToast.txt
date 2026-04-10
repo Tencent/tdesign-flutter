@@ -1,12 +1,12 @@
 
   Widget _multipleToast(BuildContext context) {
-    return TDButton(
+    return TButton(
       onTap: () {
-        TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
+        TToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       isBlock: true,
       text: '多行文字',
     );

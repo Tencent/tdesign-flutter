@@ -1,7 +1,7 @@
 
   Widget _uploadMultiple(BuildContext context) {
     return wrapDemoContainer('多选上传',
-        child: TDUpload(
+        child: TUpload(
           files: files2,
           multiple: true,
           max: 9,

@@ -1,16 +1,16 @@
 
 Widget _buildDescGridActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '带描述宫格',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      TActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: TActionSheetTheme.grid,
         count: 8,
         description: '动作面板描述文字',
         items: _gridItems,

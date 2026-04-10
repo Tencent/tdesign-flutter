@@ -4,7 +4,7 @@
     return Container(
       width: double.infinity,
       child: Center(
-        child: TDRate(
+        child: TRate(
           value: 2,
           size: 30,
           showText: true,
@@ -16,17 +16,17 @@
             return value == 0
                 ? const SizedBox.shrink()
                 : Padding(
-                    padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
-                    child: TDText(
+                    padding: EdgeInsets.only(top: TTheme.of(context).spacer8),
+                    child: TText(
                       texts[(value - 1).toInt()],
-                      font: TDTheme.of(context).fontTitleMedium,
-                      textColor: TDTheme.of(context).warningColor5,
+                      font: TTheme.of(context).fontTitleMedium,
+                      textColor: TTheme.of(context).warningColor5,
                     ),
                   );
           },
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      color: TDTheme.of(context).bgColorContainer,
+      color: TTheme.of(context).bgColorContainer,
     );
   }

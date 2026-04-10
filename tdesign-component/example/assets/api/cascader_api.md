@@ -1,10 +1,10 @@
 ## API
-### TDMultiCascader
+### TMultiCascader
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action | TDCascaderAction? | - | 自定义选择器右上角按钮 |
+| action | TCascaderAction? | - | 自定义选择器右上角按钮 |
 | backgroundColor | Color? | - | 背景颜色 |
 | cascaderHeight | double | - | 选择器List的视窗高度，默认200 |
 | closeText | String? | - | 关闭按钮文本 |

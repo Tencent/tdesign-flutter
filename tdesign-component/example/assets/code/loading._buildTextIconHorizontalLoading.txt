@@ -4,16 +4,16 @@
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
           text: '加载中…',
           axis: Axis.horizontal,
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.activity,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.activity,
           text: '加载中…',
           axis: Axis.horizontal,
         ),

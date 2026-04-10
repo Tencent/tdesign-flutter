@@ -1,12 +1,12 @@
 
   Widget _loadingToast(BuildContext context) {
-    return TDButton(
+    return TButton(
       onTap: () {
-        TDToast.showLoading(context: context);
+        TToast.showLoading(context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       isBlock: true,
       text: '加载状态',
     );

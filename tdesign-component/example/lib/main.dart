@@ -45,19 +45,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late TDThemeData _themeData;
+  late TThemeData _themeData;
 
   @override
   void initState() {
     super.initState();
-    _themeData = TDThemeData.defaultData();
+    _themeData = TThemeData.defaultData();
     print('_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
   }
 
   @override
   Widget build(BuildContext context) {
     // 使用多套主题
-    TDTheme.needMultiTheme();
+    TTheme.needMultiTheme();
     var delegate = IntlResourceDelegate(context);
     return MultiProvider(
       providers: [
@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> {
                 : Builder(
                     builder: (context) {
                       // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
-                      TDTheme.setResourceBuilder(
+                      TTheme.setResourceBuilder(
                         (context) => delegate..updateContext(context),
                         needAlwaysBuild: true,
                       );
@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
             locale: localeProvider.locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            onGenerateRoute: TDExampleRoute.onGenerateRoute,
+            onGenerateRoute: TExampleRoute.onGenerateRoute,
             routes: _getRoutes(),
           );
         },

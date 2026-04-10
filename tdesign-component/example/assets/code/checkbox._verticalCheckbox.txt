@@ -1,6 +1,6 @@
 
   Widget _verticalCheckbox(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return TCheckboxGroupContainer(
       selectIds: const ['index:1'],
       child: ListView.builder(
         padding: EdgeInsets.zero,
@@ -15,7 +15,7 @@
           if (index == 3) {
             subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
           }
-          return TDCheckbox(
+          return TCheckbox(
             id: 'index:$index',
             title: title,
             titleMaxLine: 2,

@@ -1,14 +1,14 @@
 
   Widget _buildInDropdownItem(BuildContext context) {
-    return TDDropdownMenu(
+    return TDropdownMenu(
       key: ValueKey(resetDropdownMenuValue),
-      direction: TDDropdownMenuDirection.up,
+      direction: TDropdownMenuDirection.up,
       builder: (context) {
         return [
-          TDDropdownItem(
+          TDropdownItem(
             label: _selectedDept,
             builder: (context, itemState, popupState) {
-              return TDMultiCascader(
+              return TMultiCascader(
                 title: '选择部门',
                 cascaderHeight: 400,
                 data: _data_3,

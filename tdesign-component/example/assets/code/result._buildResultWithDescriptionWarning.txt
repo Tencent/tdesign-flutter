@@ -1,8 +1,8 @@
 
-  TDResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
       description: '描述文字',
     );
   }

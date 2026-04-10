@@ -1,6 +1,6 @@
 
-TDTimeCounter _buildCustomNum(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildCustomNum(BuildContext context) {
+  return const TTimeCounter(
     time: 2000 * 60 * 1000,
     format: 'mmmmmmm分sss秒',
   );

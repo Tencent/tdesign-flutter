@@ -2,7 +2,7 @@
   Widget _basicTypeRequire(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '标签文字',
           required: true,
           controller: controller[1],

@@ -1,9 +1,9 @@
 
   Widget _customText(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '基础开关',
-      noteWidget: TDSwitch(
-        type: TDSwitchType.text,
+      noteWidget: TSwitch(
+        type: TSwitchType.text,
         openText: '1111',
         closeText: '—',
       ),

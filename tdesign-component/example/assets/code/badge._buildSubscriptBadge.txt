@@ -3,8 +3,8 @@
     return const Stack(
       alignment: Alignment.topRight,
       children: [
-        TDCell(title: '单行标题'),
-        TDBadge(TDBadgeType.subscript, message: 'NEW'),
+        TCell(title: '单行标题'),
+        TBadge(TBadgeType.subscript, message: 'NEW'),
       ],
     );
   }

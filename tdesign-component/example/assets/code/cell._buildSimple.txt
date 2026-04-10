@@ -1,17 +1,17 @@
 
 Widget _buildSimple(BuildContext context) {
   // 可统一修改样式
-  var style = TDCellStyle(context: context);
-  return TDCellGroup(
+  var style = TCellStyle(context: context);
+  return TCellGroup(
     style: style,
     cells: [
       // 可单独修改样式
-      TDCell(
+      TCell(
         arrow: true,
         title: '单行标题',
-        style: TDCellStyle.cellStyle(context),
+        style: TCellStyle.cellStyle(context),
       ),
-      TDCell(
+      TCell(
         arrow: true,
         title: '单行标题',
         required: true,
@@ -22,27 +22,27 @@ Widget _buildSimple(BuildContext context) {
           print('onLongPress 单行标题');
         },
       ),
-      const TDCell(
+      const TCell(
         arrow: true,
         title: '单行标题',
-        noteWidget: TDBadge(TDBadgeType.message, count: '8'),
+        noteWidget: TBadge(TBadgeType.message, count: '8'),
       ),
-      const TDCell(
+      const TCell(
         arrow: false,
         title: '单行标题',
-        rightIconWidget: TDSwitch(isOn: true),
+        rightIconWidget: TSwitch(isOn: true),
       ),
-      const TDCell(
+      const TCell(
         arrow: true,
         title: '单行标题',
         note: '辅助信息',
       ),
-      const TDCell(
+      const TCell(
         arrow: true,
         title: '单行标题',
-        leftIcon: TDIcons.lock_on,
+        leftIcon: TIcons.lock_on,
       ),
-      const TDCell(arrow: false, title: '单行标题'),
+      const TCell(arrow: false, title: '单行标题'),
     ],
   );
 }

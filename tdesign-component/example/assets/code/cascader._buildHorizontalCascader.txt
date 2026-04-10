@@ -1,12 +1,12 @@
 
   Widget _buildHorizontalCascader(BuildContext context) {
     const title = '选择地址';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_1,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               subTitles: ['请选择省份', '请选择城市', '请选择区/县'],
               data: _data,

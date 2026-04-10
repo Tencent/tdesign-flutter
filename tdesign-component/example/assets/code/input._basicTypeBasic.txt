@@ -2,7 +2,7 @@
   Widget _basicTypeBasic(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: 'Label Text',
           controller: controller[0],
           hintText: 'Please enter text',

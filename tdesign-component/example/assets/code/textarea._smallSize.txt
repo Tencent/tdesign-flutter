@@ -1,6 +1,6 @@
 
   Widget _smallSize(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[11],
       label: '标签文字',
       hintText: '请输入文字',
@@ -8,8 +8,8 @@
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      layout: TDTextareaLayout.vertical,
-      size: TDInputSize.small,
+      layout: TTextareaLayout.vertical,
+      size: TInputSize.small,
       onChanged: (value) {},
     );
   }

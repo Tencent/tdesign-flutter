@@ -1,6 +1,6 @@
 
   Widget _basicType(BuildContext context) {
-    return TDTextarea(
+    return TTextarea(
       controller: controller[0],
       hintText: '请输入文字',
       maxLines: 4,

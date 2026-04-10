@@ -1,15 +1,15 @@
 
-  TDButton _buildLoadingIconButton(BuildContext context) {
-    return TDButton(
+  TButton _buildLoadingIconButton(BuildContext context) {
+    return TButton(
       text: '加载中',
-      iconWidget: TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        iconColor: TDTheme.of(context).whiteColor1,
+      iconWidget: TLoading(
+        size: TLoadingSize.small,
+        icon: TLoadingIcon.circle,
+        iconColor: TTheme.of(context).whiteColor1,
       ),
-      size: TDButtonSize.large,
-      type: TDButtonType.fill,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.fill,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.primary,
     );
   }

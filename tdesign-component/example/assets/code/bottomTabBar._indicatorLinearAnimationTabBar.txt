@@ -1,9 +1,9 @@
 
   Widget _indicatorLinearAnimationTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
-        indicatorAnimation: TDBottomTabBarIndicatorAnimation.linear,
+    return TBottomTabBar(TBottomTabBarBasicType.text,
+        indicatorAnimation: TBottomTabBarIndicatorAnimation.linear,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             tabText: '标签1',
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
@@ -11,7 +11,7 @@
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             tabText: '标签2',
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
@@ -19,7 +19,7 @@
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             tabText: '标签3',
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,

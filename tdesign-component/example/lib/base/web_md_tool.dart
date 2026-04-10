@@ -259,15 +259,15 @@ import 'package:easy_refresh/easy_refresh.dart';''';
   static _getPageCode(String pageName) {
     if(pageName == 'td_side-bar_page'){
       return '''
-[td_sidebar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page.dart)
+[t_sidebar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page.dart)
 
-[td_sidebar_page_anchor.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_anchor.dart)
+[t_sidebar_page_anchor.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page_anchor.dart)
 
-[td_sidebar_page_custom.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_custom.dart)
+[t_sidebar_page_custom.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page_custom.dart)
 
-[td_sidebar_page_icon.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_icon.dart)
+[t_sidebar_page_icon.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page_icon.dart)
 
-[td_sidebar_page_pagination.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_pagination.dart)''';
+[t_sidebar_page_pagination.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page_pagination.dart)''';
     }
     return '[$pageName.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/$pageName.dart)';
   }

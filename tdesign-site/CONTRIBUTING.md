@@ -142,7 +142,7 @@ npm run site:dev
 - 对于系统原有组件，如 `Text`、`Image` 等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃 TDesign 控件。
 - 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现；页面写完后，在 `main.dart` 中修改 `exampleMap` 对应组件的 `isTodo` 属性即可。
 - 组件 API 和演示代码，请参考 `demo_tool/README.md` 文件。
-- 组件内部的固定文案，都应该抽离到 `TDResourceDelegate` 中统一管理，方便业务进行国际化适配。
+- 组件内部的固定文案，都应该抽离到 `TResourceDelegate` 中统一管理，方便业务进行国际化适配。
 - 如果使用的组件 TD 有封装，尽量使用 TD 已有组件，而非直接使用系统组件。
 
 ## 5. 验收标准
@@ -150,7 +150,7 @@ npm run site:dev
 ### 5.1 PR 规则
 
 - PR 目标分支为 `develop` 分支，请勿直接往 `main` 分支合并。
-- 标题格式：`组件类名`: 修改描述（示例：`TDUpload`: 新增 Upload 组件；`TDBottomTabBar`: 修复 iconText 模式，底部溢出 2.5 像素）。
+- 标题格式：`组件类名`: 修改描述（示例：`TUpload`: 新增 Upload 组件；`TBottomTabBar`: 修复 iconText 模式，底部溢出 2.5 像素）。
 - 勾选规则：
   > 1. 只要有新增参数，就勾选"新特性提交"。
   >
@@ -162,7 +162,7 @@ npm run site:dev
 
 ### 5.2 代码 Review 自检【欢迎大家补充】
 
-- 尽量使用 TD 已有组件，而非系统组件。比如有直接使用 `Text` 组件的，请换成 `TDText` 组件。
+- 尽量使用 TD 已有组件，而非系统组件。比如有直接使用 `Text` 组件的，请换成 `TText` 组件。
 - 检测边界条件，比如参数为 `null` 是否会导致代码异常？
 - 是否提供验收用例？用例是否 `ExamplePage` 放在 `test` 字段里？
 - 是否提供完善文档？

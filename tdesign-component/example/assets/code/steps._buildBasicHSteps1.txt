@@ -1,9 +1,9 @@
 
   Widget _buildBasicHSteps1(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(title: 'Steps1', content: 'Content1'),
-        TDStepsItemData(title: 'Steps2', content: 'Content2'),
+        TStepsItemData(title: 'Steps1', content: 'Content1'),
+        TStepsItemData(title: 'Steps2', content: 'Content2'),
       ],
     );
   }

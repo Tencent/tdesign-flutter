@@ -1,9 +1,9 @@
 
   Widget _buildSwitchWithSizeMed(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '中尺寸28',
-      noteWidget: TDSwitch(
-        size: TDSwitchSize.medium,
+      noteWidget: TSwitch(
+        size: TSwitchSize.medium,
         isOn: true,
       ),
     );

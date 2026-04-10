@@ -1,14 +1,14 @@
 
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项1'),
-      const TDTab(text: '选项2'),
-      const TDTab(text: '选项3'),
-      const TDTab(text: '选项4'),
+      const TTab(text: '选项1'),
+      const TTab(text: '选项2'),
+      const TTab(text: '选项3'),
+      const TTab(text: '选项4'),
     ];
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.capsule,
+      outlineType: TTabBarOutlineType.capsule,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: false,
     );

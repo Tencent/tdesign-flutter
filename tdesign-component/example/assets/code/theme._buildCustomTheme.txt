@@ -1,12 +1,12 @@
 
   Widget _buildCustomTheme(BuildContext context) {
     /// 开启多主题
-    TDTheme.needMultiTheme(true);
+    TTheme.needMultiTheme(true);
 
     /// 此处替换主题
-    return TDTheme(
+    return TTheme(
         // 替换fonts和colors，其他主题从父类拷贝
-        data: TDTheme.of(context).copyWithTDThemeData('custom', fontMap: {
+        data: TTheme.of(context).copyWithTThemeData('custom', fontMap: {
           'fontBodyLarge': Font(size: 40, lineHeight: 80),
         }, colorMap: {
           'brandNormalColor': Colors.red

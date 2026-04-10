@@ -1,16 +1,16 @@
 
 Widget _buildBaseGridActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '常规宫格',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      TActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: TActionSheetTheme.grid,
         count: 8,
         items: _gridItems,
       );

@@ -2,16 +2,16 @@
   Widget _buildShapeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          shape: TDFabShape.circle,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          shape: TFabShape.circle,
         ),
         'desc': 'Circle'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          shape: TDFabShape.square,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          shape: TFabShape.square,
         ),
         'desc': 'Square'
       },

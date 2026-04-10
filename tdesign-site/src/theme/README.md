@@ -47,12 +47,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDTheme
+### TTheme
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| data | TDThemeData | - | 主题数据 |
+| data | TThemeData | - | 主题数据 |
 | child | Widget | - | 子控件 |
 | systemData | ThemeData? | - | Flutter系统主题数据 |
 | key |  | - |  |
@@ -68,7 +68,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDThemeData
+ ### TThemeData
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -80,15 +80,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | fontFamilyMap | Map<String, FontFamily> | - | 字体样式 |
 | shadowMap | Map<String, List<BoxShadow>> | - | 阴影 |
 | spacerMap | Map<String, double> | - | 间隔 |
-| extraThemeData | TDExtraThemeData? | - | 额外定义的结构 |
+| extraThemeData | TExtraThemeData? | - | 额外定义的结构 |
 
 
 #### 静态方法
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| defaultData |  |   TDExtraThemeData? extraThemeData, | 获取默认Data，一个App里只有一个，用于没有context的地方 |
-| fromJson |  |   required String name,  required String themeJson,  null recoverDefault,  TDExtraThemeData? extraThemeData, | 解析配置的json文件为主题数据 |
+| defaultData |  |   TExtraThemeData? extraThemeData, | 获取默认Data，一个App里只有一个，用于没有context的地方 |
+| fromJson |  |   required String name,  required String themeJson,  null recoverDefault,  TExtraThemeData? extraThemeData, | 解析配置的json文件为主题数据 |
 
 
   

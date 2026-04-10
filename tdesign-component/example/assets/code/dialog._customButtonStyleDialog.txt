@@ -1,24 +1,24 @@
 
   Widget _customButtonStyleDialog(BuildContext context) {
-    return TDButton(
+    return TButton(
         text: '自定义按钮样式',
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        theme: TDButtonTheme.primary,
+        size: TButtonSize.large,
+        type: TButtonType.outline,
+        theme: TButtonTheme.primary,
         onTap: () {
           showGeneralDialog(
               context: context,
               pageBuilder: (BuildContext buildContext,
                   Animation<double> animation,
                   Animation<double> secondaryAnimation) {
-                return TDConfirmDialog(
+                return TConfirmDialog(
                   title: _dialogTitle,
                   content: _commonContent,
-                  buttonStyleCustom: TDButtonStyle(
-                      backgroundColor: TDTheme.of(context).errorClickColor,
-                      textColor: TDTheme.of(context).whiteColor1,
+                  buttonStyleCustom: TButtonStyle(
+                      backgroundColor: TTheme.of(context).errorClickColor,
+                      textColor: TTheme.of(context).whiteColor1,
                       frameWidth: 1,
-                      frameColor: TDTheme.of(context).successClickColor),
+                      frameColor: TTheme.of(context).successClickColor),
                 );
               });
         });

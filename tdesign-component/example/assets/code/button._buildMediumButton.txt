@@ -1,10 +1,10 @@
 
-  TDButton _buildMediumButton(BuildContext context) {
-    return const TDButton(
+  TButton _buildMediumButton(BuildContext context) {
+    return const TButton(
       text: '按钮40',
-      size: TDButtonSize.medium,
-      type: TDButtonType.fill,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.medium,
+      type: TButtonType.fill,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.primary,
     );
   }

@@ -332,7 +332,7 @@ class _StateImageWidget extends State<ImageWidget> {
   @override
   Widget build(BuildContext context) {
     final alignment = widget.alignment;
-    final color = widget.color ?? TDTheme.of(context).bgColorContainerHover;
+    final color = widget.color ?? TTheme.of(context).bgColorContainerHover;
 
     // 优先处理 loading 状态
     if (loading) {
@@ -341,9 +341,9 @@ class _StateImageWidget extends State<ImageWidget> {
         color: color,
         child: widget.loadingWidget ??
             Icon(
-              TDIcons.ellipsis,
+              TIcons.ellipsis,
               size: 22,
-              color: TDTheme.of(context).textColorPlaceholder,
+              color: TTheme.of(context).textColorPlaceholder,
             ),
       );
     }
@@ -355,9 +355,9 @@ class _StateImageWidget extends State<ImageWidget> {
         color: color,
         child: widget.errorWidget ??
             Icon(
-              TDIcons.close,
+              TIcons.close,
               size: 22,
-              color: TDTheme.of(context).textColorPlaceholder,
+              color: TTheme.of(context).textColorPlaceholder,
             ),
       );
     }

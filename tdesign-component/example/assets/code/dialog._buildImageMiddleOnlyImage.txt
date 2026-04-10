@@ -1,18 +1,18 @@
 
   Widget _buildImageMiddleOnlyImage(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '图片居中-纯图片',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return TDImageDialog(
+            return TImageDialog(
               image: _demoImage,
-              imagePosition: TDDialogImagePosition.middle,
+              imagePosition: TDialogImagePosition.middle,
             );
           },
         );

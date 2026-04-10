@@ -1,21 +1,21 @@
 
   Widget _horizontalCardStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return TCheckboxGroupContainer(
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.horizontal,
       directionalTdCheckboxes: const [
-        TDCheckbox(
+        TCheckbox(
           id: 'index:0',
           title: '多选',
           cardMode: true,
         ),
-        TDCheckbox(
+        TCheckbox(
           id: 'index:1',
           title: '多选',
           cardMode: true,
         ),
-        TDCheckbox(
+        TCheckbox(
           id: 'index:2',
           title: '多选',
           cardMode: true,

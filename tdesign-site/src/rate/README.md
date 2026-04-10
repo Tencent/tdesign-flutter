@@ -26,7 +26,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildFilledRate(BuildContext context) {
-    return const TDCell(title: '实心评分', noteWidget: TDRate(value: 3));
+    return const TCell(title: '实心评分', noteWidget: TRate(value: 3));
   }</pre>
 
 </td-code-block>
@@ -38,8 +38,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildCusRate(BuildContext context) {
-    return const TDCell(
-        title: '自定义评分', noteWidget: TDRate(value: 3, icon: [TDIcons.thumb_up]));
+    return const TCell(
+        title: '自定义评分', noteWidget: TRate(value: 3, icon: [TIcons.thumb_up]));
   }</pre>
 
 </td-code-block>
@@ -51,9 +51,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildNumRate(BuildContext context) {
-    return const TDCell(
+    return const TCell(
         title: '自定义评分数量',
-        noteWidget: TDRate(
+        noteWidget: TRate(
           value: 2,
           count: 3,
         ));
@@ -68,12 +68,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildMsgRate(BuildContext context) {
-    return const TDCellGroup(cells: [
-      TDCell(
+    return const TCellGroup(cells: [
+      TCell(
           title: '带描述评分',
-          noteWidget: TDRate(
+          noteWidget: TRate(
               value: 3, showText: true, texts: ['1分', '2分', '3分', '4分', '5分'])),
-      TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true))
+      TCell(title: '带描述评分', noteWidget: TRate(value: 3, showText: true))
     ]);
   }</pre>
 
@@ -86,11 +86,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildDRate(BuildContext context) {
-    return const TDCellGroup(cells: [
-      TDCell(title: '顶部显示', noteWidget: TDRate(placement: PlacementEnum.top)),
-      TDCell(title: '不显示', noteWidget: TDRate(placement: PlacementEnum.none)),
-      TDCell(
-          title: '底部显示', noteWidget: TDRate(placement: PlacementEnum.bottom)),
+    return const TCellGroup(cells: [
+      TCell(title: '顶部显示', noteWidget: TRate(placement: PlacementEnum.top)),
+      TCell(title: '不显示', noteWidget: TRate(placement: PlacementEnum.none)),
+      TCell(
+          title: '底部显示', noteWidget: TRate(placement: PlacementEnum.bottom)),
     ]);
   }</pre>
 
@@ -104,7 +104,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildFullRate(BuildContext context) {
-    return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3));
+    return const TCell(title: '点击活滑动', noteWidget: TRate(value: 3));
   }</pre>
 
 </td-code-block>
@@ -116,9 +116,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHalfRate(BuildContext context) {
-    return const TDCell(
+    return const TCell(
         title: '点击活滑动',
-        noteWidget: TDRate(
+        noteWidget: TRate(
           value: 3,
           allowHalf: true,
           onChange: print,
@@ -135,9 +135,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSizeRate(BuildContext context) {
-    return const TDCellGroup(cells: [
-      TDCell(title: '默认尺寸24', noteWidget: TDRate(value: 3)),
-      TDCell(title: '小尺寸20', noteWidget: TDRate(value: 3, size: 20)),
+    return const TCellGroup(cells: [
+      TCell(title: '默认尺寸24', noteWidget: TRate(value: 3)),
+      TCell(title: '小尺寸20', noteWidget: TRate(value: 3, size: 20)),
     ]);
   }</pre>
 
@@ -150,18 +150,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildColorRate(BuildContext context) {
-    return const TDCellGroup(cells: [
-      TDCell(
+    return const TCellGroup(cells: [
+      TCell(
           title: '填充评分',
-          noteWidget: TDRate(
+          noteWidget: TRate(
             value: 2.5,
             allowHalf: true,
             color: [Color(0xFFFFC51C), Color(0xFFE8E8E8)],
           )),
-      TDCell(
+      TCell(
           title: '线描评分',
           noteWidget:
-              TDRate(value: 2.5, allowHalf: true, color: [Color(0xFF00A870)])),
+              TRate(value: 2.5, allowHalf: true, color: [Color(0xFF00A870)])),
     ]);
   }</pre>
 
@@ -179,7 +179,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return Container(
       width: double.infinity,
       child: Center(
-        child: TDRate(
+        child: TRate(
           value: 2,
           size: 30,
           showText: true,
@@ -191,18 +191,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             return value == 0
                 ? const SizedBox.shrink()
                 : Padding(
-                    padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
-                    child: TDText(
+                    padding: EdgeInsets.only(top: TTheme.of(context).spacer8),
+                    child: TText(
                       texts[(value - 1).toInt()],
-                      font: TDTheme.of(context).fontTitleMedium,
-                      textColor: TDTheme.of(context).warningColor5,
+                      font: TTheme.of(context).fontTitleMedium,
+                      textColor: TTheme.of(context).warningColor5,
                     ),
                   );
           },
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      color: TDTheme.of(context).bgColorContainer,
+      color: TTheme.of(context).bgColorContainer,
     );
   }</pre>
 
@@ -211,21 +211,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDRate
+### TRate
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | allowHalf | bool? | false | 是否允许半选 |
 | builderText | Widget Function(BuildContext context, double value)? | - | 评分等级对应的辅助文字自定义构建，优先级高于[texts] |
-| color | List<Color>? | - | 评分图标的颜色，示例：[选中颜色] / [选中颜色，未选中颜色]，默认：[TDTheme.of(context).warningColor5, TDTheme.of(context).grayColor4] |
+| color | List<Color>? | - | 评分图标的颜色，示例：[选中颜色] / [选中颜色，未选中颜色]，默认：[TTheme.of(context).warningColor5, TTheme.of(context).grayColor4] |
 | count | int? | 5 | 评分的数量 |
 | crossAxisAlignment | CrossAxisAlignment? | CrossAxisAlignment.center | 评分图标与辅助文字的交叉轴对齐方式 |
 | direction | Axis? | Axis.horizontal | 评分图标与辅助文字的布局方向 |
 | disabled | bool? | false | 是否禁用评分 |
-| gap | double? | - | 评分图标的间距，默认：TDTheme.of(context).spacer8 |
-| icon | List<IconData>? | - | 自定义评分图标，[选中和未选中图标] / [选中图标，未选中图标]，默认：[TDIcons.star_filled] |
-| iconTextGap | double? | - | 评分图标与辅助文字的间距，默认：[TDTheme.of(context).spacer16] |
+| gap | double? | - | 评分图标的间距，默认：TTheme.of(context).spacer8 |
+| icon | List<IconData>? | - | 自定义评分图标，[选中和未选中图标] / [选中图标，未选中图标]，默认：[TIcons.star_filled] |
+| iconTextGap | double? | - | 评分图标与辅助文字的间距，默认：[TTheme.of(context).spacer16] |
 | key |  | - |  |
 | mainAxisAlignment | MainAxisAlignment? | MainAxisAlignment.start | 评分图标与辅助文字的主轴对齐方式 |
 | mainAxisSize | MainAxisSize? | MainAxisSize.min | 评分图标与辅助文字主轴方向上如何占用空间 |

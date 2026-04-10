@@ -1,14 +1,14 @@
 
   Widget _buildCardCollapse(BuildContext context) {
-    return TDCollapse(
-      style: TDCollapseStyle.card,
+    return TCollapse(
+      style: TCollapseStyle.card,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _cardStyleData[index].isExpanded = !isExpanded;
         });
       },
       children: _cardStyleData.map((CollapseDataItem item) {
-        return TDCollapsePanel(
+        return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },

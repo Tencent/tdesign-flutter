@@ -1,8 +1,8 @@
 
   Widget _buildSwitchWithDisableOff(BuildContext context) {
-    return const TDCell(
+    return const TCell(
       title: '禁用状态',
-      noteWidget: TDSwitch(
+      noteWidget: TSwitch(
         enable: false,
         isOn: false,
       ),

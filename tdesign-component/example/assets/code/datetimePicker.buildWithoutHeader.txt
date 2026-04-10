@@ -1,6 +1,6 @@
 
   Widget buildWithoutHeader(BuildContext context) {
-    return TDDatePicker(
+    return TDatePicker(
       header: false,
       model: DatePickerModel(
         useYear: true,

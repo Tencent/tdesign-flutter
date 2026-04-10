@@ -6,9 +6,9 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Icon(TDIcons.notification),
+          Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )

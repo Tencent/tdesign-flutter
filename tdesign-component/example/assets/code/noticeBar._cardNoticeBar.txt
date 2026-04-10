@@ -4,7 +4,7 @@ Widget _cardNoticeBar(BuildContext context) {
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: TDNoticeBarStyle.generateTheme(context).backgroundColor,
+      color: TNoticeBarStyle.generateTheme(context).backgroundColor,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       boxShadow: const [
         BoxShadow(
@@ -35,16 +35,16 @@ Widget _cardNoticeBar(BuildContext context) {
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           clipBehavior: Clip.hardEdge,
-          child: const TDNoticeBar(
+          child: const TNoticeBar(
             content: '这是一条普通的通知信息',
-            prefixIcon: TDIcons.error_circle_filled,
-            suffixIcon: TDIcons.chevron_right,
+            prefixIcon: TIcons.error_circle_filled,
+            suffixIcon: TIcons.chevron_right,
           ),
         ),
         Container(
           height: 150,
           decoration: BoxDecoration(
-            color: TDTheme.of(context).bgColorContainer,
+            color: TTheme.of(context).bgColorContainer,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
         )

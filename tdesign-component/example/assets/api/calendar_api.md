@@ -1,27 +1,5 @@
 ## API
-### TDCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
-
-```
-```
-
-### TDCalendarDataSource
-```
-```
-
-### TDCalendarStyle
+### TCalendarStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -34,8 +12,8 @@
 | decoration |  | - |  |
 | monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
 | titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
+| titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
+| titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
 | weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
 
 
@@ -43,13 +21,13 @@
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDCalendarStyle.cellStyle  | 日期样式 |
-| TDCalendarStyle.generateStyle  | 生成默认样式 |
+| TCalendarStyle.cellStyle  | 日期样式 |
+| TCalendarStyle.generateStyle  | 生成默认样式 |
 
 ```
 ```
 
-### TDCalendar
+### TCalendar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -58,8 +36,8 @@
 | animateTo | bool? | false | 动画滚动到指定位置 |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
-| dataSource | TDCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
-| dateType | TDCalendarDateType | TDCalendarDateType.solar | 日历类型：阳历或农历 |
+| dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
+| dateType | TCalendarDateType | TCalendarDateType.solar | 日历类型：阳历或农历 |
 | displayFormat | String? | 'year month' | 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格 |
 | firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
 | format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
@@ -78,7 +56,7 @@
 | pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
 | pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | showLunarInfo | bool | false | 阳历模式下是否显示农历信息作为副标题 |
-| style | TDCalendarStyle? | - | 自定义样式 |
+| style | TCalendarStyle? | - | 自定义样式 |
 | timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |
@@ -91,7 +69,29 @@
 ```
 ```
 
-### TDLunarInfo
+### TCalendarDataSource
+```
+```
+
+### TCalendarPopup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| child | TCalendar? | - | 日历控件 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| context | BuildContext | context | 上下文 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| top | double? | - | 距离顶部的距离 |
+| visible | bool? | - | 默认是否显示日历 |
+
+```
+```
+
+### TLunarInfo
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

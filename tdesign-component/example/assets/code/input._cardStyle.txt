@@ -1,7 +1,7 @@
 
   Widget _cardStyle(BuildContext context) {
-    return TDInput(
-      type: TDInputType.cardStyle,
+    return TInput(
+      type: TInputType.cardStyle,
       width: MediaQuery.of(context).size.width - 32,
       leftLabel: '标签文字',
       controller: controller[21],

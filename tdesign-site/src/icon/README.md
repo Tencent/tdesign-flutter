@@ -35,13 +35,13 @@ icon数量: 2114
             alignment: Alignment.topLeft,
             child: const Wrap(
               children: [
-                TDText('筛选Icon请前往TDesign官网(长按网址可复制):'),
+                TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
                 SelectableText(
                     'https://tdesign.tencent.com/icons')
               ],
             ),
           ),
-          TDSearchBar(
+          TSearchBar(
             action: '搜索',
             onActionClick: (text) {
               setState(() {
@@ -50,7 +50,7 @@ icon数量: 2114
               });
               Future.delayed(const Duration(milliseconds: 30), () {
                 var list = [];
-                TDIcons.all.forEach((key, value) {
+                TIcons.all.forEach((key, value) {
                   if (value.name.contains(text)) {
                     list.add(value);
                   }
@@ -63,13 +63,13 @@ icon数量: 2114
             },
             onClearClick: (_) {
               setState(() {
-                iconList = TDIcons.all.values;
+                iconList = TIcons.all.values;
               });
             },
           ),
-          TDCell(
+          TCell(
             title: '显示边框',
-            noteWidget: TDSwitch(
+            noteWidget: TSwitch(
               isOn: showBorder,
               onChanged: (value) {
                 setState(() {
@@ -85,7 +85,7 @@ icon数量: 2114
                 height: 300,
                 alignment: Alignment.center,
                 child:
-                    isLoading ? const TDText('加载中...') : const TDText('暂无内容'),
+                    isLoading ? const TText('加载中...') : const TText('暂无内容'),
               );
             }
 
@@ -107,12 +107,12 @@ icon数量: 2114
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   color: showBorder
-                                      ? TDTheme.of(context).brandDisabledColor
+                                      ? TTheme.of(context).brandDisabledColor
                                       : Colors.transparent,
                                 ),
                                 child: Icon(item, size: 32),
                               ),
-                              TDText(item.name)
+                              TText(item.name)
                             ],
                           ),
                         );
@@ -129,13 +129,13 @@ icon数量: 2114
 
 
 ## API
-### TDIcons
+### TIcons
 
 #### 工厂构造方法
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDIcons._  | 私有构造方法，不支持外部创建，仅提供静态常量给外部使用 |
+| TIcons._  | 私有构造方法，不支持外部创建，仅提供静态常量给外部使用 |
 
 
   

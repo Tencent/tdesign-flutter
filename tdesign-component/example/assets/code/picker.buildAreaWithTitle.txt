@@ -1,12 +1,12 @@
 
   Widget buildAreaWithTitle(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_4.isEmpty ? '请选择' : selected_4,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: '带标题选择器',
           onConfirm: (selected) {

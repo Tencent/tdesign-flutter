@@ -3,16 +3,16 @@
     return const Row(
       // spacing: 32,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.customText,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.customText,
           text: 'A',
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.customText,
-          shape: TDAvatarShape.square,
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.customText,
+          shape: TAvatarShape.square,
           text: 'A',
         ),
       ],

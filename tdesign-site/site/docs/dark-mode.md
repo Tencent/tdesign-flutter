@@ -15,7 +15,7 @@ spline: explain
 
 使用之前，请先阅读 flutter 官方文档：[使用 Themes 统一颜色和字体风格](https://docs.flutter.cn/cookbook/design/themes/)。
 
-TDFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](https://api.flutter-io.cn/flutter/material/ThemeData-class.html) 进行自定义配置和重载主题实现的。
+TFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](https://api.flutter-io.cn/flutter/material/ThemeData-class.html) 进行自定义配置和重载主题实现的。
 
 具体代码请参考 [深色模式切换](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)。
  
@@ -94,18 +94,18 @@ TDFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](htt
 ### 加载主题配置
 
 ```dart
-late TDThemeData themeData;
-late TDThemeData darkThemeData;
+late TThemeData themeData;
+late TThemeData darkThemeData;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
   /// 开启多套主题功能
-  TDTheme.needMultiTheme(true);
+  TTheme.needMultiTheme(true);
   /// 默认浅色主题,xxxDark为深色主题
-  themeData = TDThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
-      TDTheme.defaultData();
+  themeData = TThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
+      TTheme.defaultData();
 
   runApp(const App());
 }
@@ -291,7 +291,7 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
                       (mode == ThemeMode.light
                           ? Brightness.light
                           : Brightness.dark))
-          ? TDIcons.check
+          ? TIcons.check
           : null;
     }
 
@@ -303,13 +303,13 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
         padding: const EdgeInsets.symmetric(vertical: 24),
         child: Column(
           children: [
-            TDCellGroup(
-              theme: TDCellGroupTheme.cardTheme,
+            TCellGroup(
+              theme: TCellGroupTheme.cardTheme,
               cells: [
-                TDCell(
+                TCell(
                   title: '跟随系统',
                   description: '开启后，将跟随系统打开或关闭深色模式。',
-                  rightIconWidget: TDSwitch(
+                  rightIconWidget: TSwitch(
                     isOn: themeModeProvider.themeMode == ThemeMode.system,
                     onChanged: (isOn) {
                       if (isOn) {
@@ -326,21 +326,21 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
                 ),
               ],
             ),
-            TDCellGroup(
-              theme: TDCellGroupTheme.cardTheme,
+            TCellGroup(
+              theme: TCellGroupTheme.cardTheme,
               title: '手动选择',
               cells: [
-                TDCell(
+                TCell(
                   title: '浅色模式',
-                  leftIcon: TDIcons.mode_light,
+                  leftIcon: TIcons.mode_light,
                   rightIcon: enabledModeCheckIcon(ThemeMode.light),
                   onClick: (cell) {
                     themeModeProvider.themeMode = ThemeMode.light;
                   },
                 ),
-                TDCell(
+                TCell(
                   title: '深色模式',
-                  leftIcon: TDIcons.mode_dark,
+                  leftIcon: TIcons.mode_dark,
                   rightIcon: enabledModeCheckIcon(ThemeMode.dark),
                   onClick: (cell) {
                     themeModeProvider.themeMode = ThemeMode.dark;

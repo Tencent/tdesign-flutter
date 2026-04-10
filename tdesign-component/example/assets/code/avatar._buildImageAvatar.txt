@@ -3,17 +3,17 @@
     return const Row(
       // spacing: 32,
       children: [
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.normal,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.normal,
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
         SizedBox(width: 32),
-        TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.normal,
-          shape: TDAvatarShape.square,
-          defaultUrl: 'assets/img/td_avatar_1.png',
+        TAvatar(
+          size: TAvatarSize.medium,
+          type: TAvatarType.normal,
+          shape: TAvatarShape.square,
+          defaultUrl: 'assets/img/t_avatar_1.png',
         ),
       ],
     );

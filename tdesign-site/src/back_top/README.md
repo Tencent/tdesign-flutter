@@ -30,7 +30,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         if (controller.hasClients) {
           controller.jumpTo(500);
         }
-        style = TDBackTopStyle.circle;
+        style = TBackTopStyle.circle;
       });
     });
   }</pre>
@@ -52,7 +52,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             if (controller.hasClients) {
               controller.jumpTo(500);
             }
-            style = TDBackTopStyle.halfCircle;
+            style = TBackTopStyle.halfCircle;
           });
         }),
         Padding(
@@ -79,14 +79,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDBadge
+### TBadge
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | controller | ScrollController? | - | 页面滚动的控制器 |
-| theme | TDBackTopTheme | TDBackTopTheme.light | 主题 |
-| style | TDBackTopStyle | TDBackTopStyle.circle | 样式，圆形和半圆 |
+| theme | TBackTopTheme | TBackTopTheme.light | 主题 |
+| style | TBackTopStyle | TBackTopStyle.circle | 样式，圆形和半圆 |
 | showText | bool | false | 是否展示文字 |
 | onClick | VoidCallback? | - | 按钮点击事件 |
 
@@ -94,9 +94,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDBackTopTheme.light | 明亮主题 |
-| TDBackTopTheme.dark  | 暗黑主题 |
-| TDBackTopStyle.circle  | 圆形 |
-| TDBackTopStyle.halfCircle  | 半圆形 |
+| TBackTopTheme.light | 明亮主题 |
+| TBackTopTheme.dark  | 暗黑主题 |
+| TBackTopStyle.circle  | 圆形 |
+| TBackTopStyle.halfCircle  | 半圆形 |
 
   

@@ -1,19 +1,19 @@
 
   Widget _buildLinksFooter(BuildContext context) {
-    return TDFooter(
-      TDFooterType.link,
+    return TFooter(
+      TFooterType.link,
       links: [
-        TDLink(
+        TLink(
           label: '底部链接1',
-          style: TDLinkStyle.primary,
+          style: TLinkStyle.primary,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接1 $link');
           },
         ),
-        TDLink(
+        TLink(
           label: '底部链接2',
-          style: TDLinkStyle.primary,
+          style: TLinkStyle.primary,
           uri: Uri.parse('https://example.com'),
           linkClick: (link) {
             print('点击了链接2 $link');

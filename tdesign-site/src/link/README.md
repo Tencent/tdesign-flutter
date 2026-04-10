@@ -28,10 +28,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _basicTypeBasic(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.basic),
+          children: _buildLinksWithType(TLinkType.basic),
         ));
   }</pre>
 
@@ -46,10 +46,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _withUnderline(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.withUnderline),
+          children: _buildLinksWithType(TLinkType.withUnderline),
         ));
   }</pre>
 
@@ -64,10 +64,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _withPrefixIcon(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.withPrefixIcon),
+          children: _buildLinksWithType(TLinkType.withPrefixIcon),
         ));
   }</pre>
 
@@ -82,10 +82,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _withSuffixIcon(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TDLinkType.withSuffixIcon),
+          children: _buildLinksWithType(TLinkType.withSuffixIcon),
         ));
   }</pre>
 
@@ -99,7 +99,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.normal);
+    return _buildLinkWithStyles(TLinkState.normal);
   }</pre>
 
 </td-code-block>
@@ -111,7 +111,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.disabled);
+    return _buildLinkWithStyles(TLinkState.disabled);
   }</pre>
 
 </td-code-block>
@@ -126,13 +126,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
         height: 48,
-        color: TDTheme.of(context).bgColorContainer,
+        color: TTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
-            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
-            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
+            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.small),
+            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.medium),
+            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.large),
           ],
         ));
   }</pre>
@@ -142,7 +142,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDLink
+### TLink
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -156,11 +156,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | linkClick | LinkClick? | - | link 被点击之后所采取的动作，会将uri当做参数传入到该方法当中 |
 | prefixIcon | Icon? | - | 前置 icon |
 | rightGapWithIcon | double? | - | 后置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算 |
-| size | TDLinkSize | TDLinkSize.medium | link 大小 |
-| state | TDLinkState | TDLinkState.normal | link 状态 |
-| style | TDLinkStyle | TDLinkStyle.defaultStyle | link 风格 |
+| size | TLinkSize | TLinkSize.medium | link 大小 |
+| state | TLinkState | TLinkState.normal | link 状态 |
+| style | TLinkStyle | TLinkStyle.defaultStyle | link 风格 |
 | suffixIcon | Icon? | - | 后置 icon |
-| type | TDLinkType | TDLinkType.basic | link 类型 |
+| type | TLinkType | TLinkType.basic | link 类型 |
 | uri | Uri? | - | link 跳转的uri |
 
 

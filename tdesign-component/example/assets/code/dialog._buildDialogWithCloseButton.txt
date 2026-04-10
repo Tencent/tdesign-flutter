@@ -1,16 +1,16 @@
 
   Widget _buildDialogWithCloseButton(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '带关闭按钮的对话框',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return TDConfirmDialog(
+            return TConfirmDialog(
               title: _dialogTitle,
               content: _commonContent,
               showCloseButton: true,

@@ -5,23 +5,23 @@
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '拉伸',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
-          color: TDTheme.of(context).bgColorContainerHover,
+          color: TTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
           child: const Stack(
             alignment: Alignment.center,
             children: [
-              TDImage(
+              TImage(
                 assetUrl: 'assets/img/image.png',
                 width: 121,
                 height: 50,
-                type: TDImageType.stretch,
+                type: TImageType.stretch,
               ),
             ],
           ),

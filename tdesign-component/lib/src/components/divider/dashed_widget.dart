@@ -33,7 +33,7 @@ class DashedWidget extends StatelessWidget {
         height: height,
         child: CustomPaint(
           painter: DashedPainter(
-              color: color ?? TDTheme.of(context).componentStrokeColor,
+              color: color ?? TTheme.of(context).componentStrokeColor,
               strokeWidth: height,
               direction: direction),
         ),
@@ -45,7 +45,7 @@ class DashedWidget extends StatelessWidget {
       height: height ?? MediaQuery.of(context).size.height,
       child: CustomPaint(
         painter: DashedPainter(
-            color: color ?? TDTheme.of(context).componentStrokeColor,
+            color: color ?? TTheme.of(context).componentStrokeColor,
             strokeWidth: width ?? 1,
             direction: direction),
       ),

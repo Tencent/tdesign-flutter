@@ -6,11 +6,11 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
-              border: TDBadgeBorder.small,
+            child: TBadge(
+              TBadgeType.square,
+              border: TBadgeBorder.small,
               count: num.toString(),
             ),
             left: 20,

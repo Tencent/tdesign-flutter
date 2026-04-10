@@ -6,22 +6,22 @@
           // spacing: 16,
           children: [
             Expanded(
-              child: TDButton(
+              child: TButton(
                 text: '填充按钮',
-                size: TDButtonSize.large,
-                type: TDButtonType.fill,
-                shape: TDButtonShape.rectangle,
-                theme: TDButtonTheme.light,
+                size: TButtonSize.large,
+                type: TButtonType.fill,
+                shape: TButtonShape.rectangle,
+                theme: TButtonTheme.light,
               ),
             ),
             SizedBox(width: 16),
             Expanded(
-              child: TDButton(
+              child: TButton(
                 text: '填充按钮',
-                size: TDButtonSize.large,
-                type: TDButtonType.fill,
-                shape: TDButtonShape.rectangle,
-                theme: TDButtonTheme.primary,
+                size: TButtonSize.large,
+                type: TButtonType.fill,
+                shape: TButtonShape.rectangle,
+                theme: TButtonTheme.primary,
               ),
             ),
           ],

@@ -6,14 +6,14 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDButton(
+          const TButton(
             width: 80,
             height: 48,
             text: '按钮',
-            size: TDButtonSize.large,
+            size: TButtonSize.large,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             right: 0,
             top: 0,
           )

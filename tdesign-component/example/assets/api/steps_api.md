@@ -1,5 +1,5 @@
 ## API
-### TDStepsItemData
+### TStepsItemData
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -14,16 +14,16 @@
 ```
 ```
 
-### TDSteps
+### TSteps
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | activeIndex | int | 0 | 步骤条当前激活的索引 |
-| direction | TDStepsDirection | TDStepsDirection.horizontal | 步骤条方向 |
+| direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
 | key |  | - |  |
 | readOnly | bool | false | 步骤条readOnly模式 |
 | simple | bool | false | 步骤条simple模式 |
-| status | TDStepsStatus | TDStepsStatus.success | 步骤条状态 |
-| steps | List<TDStepsItemData> | - | 步骤条数据 |
+| status | TStepsStatus | TStepsStatus.success | 步骤条状态 |
+| steps | List<TStepsItemData> | - | 步骤条数据 |
 | verticalSelect | bool | false | 步骤条垂直自定义步骤条选择模式 |

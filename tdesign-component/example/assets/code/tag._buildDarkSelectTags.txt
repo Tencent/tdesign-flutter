@@ -1,18 +1,18 @@
 
   Widget _buildDarkSelectTags(BuildContext context) {
     return const Wrap(spacing: 8, children: [
-      TDSelectTag(
+      TSelectTag(
         '未选中态',
-        theme: TDTagTheme.primary,
+        theme: TTagTheme.primary,
       ),
-      TDSelectTag(
+      TSelectTag(
         '已选中态',
-        theme: TDTagTheme.primary,
+        theme: TTagTheme.primary,
         isSelected: true,
       ),
-      TDSelectTag(
+      TSelectTag(
         '不可选态',
-        theme: TDTagTheme.primary,
+        theme: TTagTheme.primary,
         disableSelect: true,
       ),
     ]);

@@ -1,6 +1,6 @@
 
   Widget _passThroughStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return TCheckboxGroupContainer(
       selectIds: const ['index:0'],
       passThrough: true,
       child: ListView.builder(
@@ -9,10 +9,10 @@
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           var title = '多选';
-          return TDCheckbox(
+          return TCheckbox(
             id: 'index:$index',
             title: title,
-            size: TDCheckBoxSize.large,
+            size: TCheckBoxSize.large,
           );
         },
         itemCount: 4,

@@ -3,26 +3,26 @@
     return const Wrap(
       spacing: 8,
       children: [
-        TDTag('默认', isLight: true),
-        TDTag(
+        TTag('默认', isLight: true),
+        TTag(
           '主要',
           isLight: true,
-          theme: TDTagTheme.primary,
+          theme: TTagTheme.primary,
         ),
-        TDTag(
+        TTag(
           '警告',
           isLight: true,
-          theme: TDTagTheme.warning,
+          theme: TTagTheme.warning,
         ),
-        TDTag(
+        TTag(
           '危险',
           isLight: true,
-          theme: TDTagTheme.danger,
+          theme: TTagTheme.danger,
         ),
-        TDTag(
+        TTag(
           '成功',
           isLight: true,
-          theme: TDTagTheme.success,
+          theme: TTagTheme.success,
         ),
       ],
     );

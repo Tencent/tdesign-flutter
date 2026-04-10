@@ -1,27 +1,27 @@
 
-TDDropdownMenu _buildGroup(BuildContext context) {
-  return TDDropdownMenu(
-    direction: TDDropdownMenuDirection.up,
+TDropdownMenu _buildGroup(BuildContext context) {
+  return TDropdownMenu(
+    direction: TDropdownMenuDirection.up,
     builder: (context) {
       return [
-        TDDropdownItem(
+        TDropdownItem(
           label: '分组菜单',
           multiple: true,
           optionsColumns: 3,
           options: [
-            TDDropdownItemOption(
+            TDropdownItemOption(
                 label: '选项1', value: '1', selected: true, group: '类型'),
-            TDDropdownItemOption(label: '选项2', value: '2', group: '类型'),
-            TDDropdownItemOption(label: '选项3', value: '3', group: '类型'),
-            TDDropdownItemOption(label: '选项4', value: '4', group: '类型'),
-            TDDropdownItemOption(label: '选项5', value: '5', group: '角色'),
-            TDDropdownItemOption(label: '选项6', value: '6', group: '角色'),
-            TDDropdownItemOption(label: '选项7', value: '7', group: '角色'),
-            TDDropdownItemOption(label: '选项8', value: '8', group: '角色'),
-            TDDropdownItemOption(label: '选项9', value: '9', group: '能力'),
-            TDDropdownItemOption(label: '选项10', value: '10', group: '能力'),
-            TDDropdownItemOption(label: '选项11', value: '11', group: '能力'),
-            TDDropdownItemOption(label: '选项12', value: '12', group: '能力'),
+            TDropdownItemOption(label: '选项2', value: '2', group: '类型'),
+            TDropdownItemOption(label: '选项3', value: '3', group: '类型'),
+            TDropdownItemOption(label: '选项4', value: '4', group: '类型'),
+            TDropdownItemOption(label: '选项5', value: '5', group: '角色'),
+            TDropdownItemOption(label: '选项6', value: '6', group: '角色'),
+            TDropdownItemOption(label: '选项7', value: '7', group: '角色'),
+            TDropdownItemOption(label: '选项8', value: '8', group: '角色'),
+            TDropdownItemOption(label: '选项9', value: '9', group: '能力'),
+            TDropdownItemOption(label: '选项10', value: '10', group: '能力'),
+            TDropdownItemOption(label: '选项11', value: '11', group: '能力'),
+            TDropdownItemOption(label: '选项12', value: '12', group: '能力'),
           ],
           onChange: (value) {
             print('选择：$value');

@@ -1,19 +1,19 @@
 
   Widget _longPressImageViewer(BuildContext context) {
-    return TDButton(
-      type: TDButtonType.ghost,
-      theme: TDButtonTheme.primary,
+    return TButton(
+      type: TButtonType.ghost,
+      theme: TButtonTheme.primary,
       isBlock: true,
-      size: TDButtonSize.large,
+      size: TButtonSize.large,
       text: '长按图片',
       onTap: () {
-        TDImageViewer.showImageViewer(
+        TImageViewer.showImageViewer(
           context: context,
           images: images,
           deleteBtn: true,
           showIndex: true,
           onLongPress: (index) {
-            TDActionSheet(
+            TActionSheet(
               context,
               visible: true,
               items: actionSheetItems,

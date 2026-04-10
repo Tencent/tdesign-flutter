@@ -6,24 +6,24 @@
       alignment: Alignment.center,
       child: Column(
         children: [
-          TDInput(
-            size: TDInputSize.small,
+          TInput(
+            size: TInputSize.small,
             controller: controller,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             hintText: '请输入文字',
           ),
-          TDInput(
-            type: TDInputType.twoLine,
-            size: TDInputSize.small,
+          TInput(
+            type: TInputType.twoLine,
+            size: TInputSize.small,
             controller: controller,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
             hintText: '请输入文字',
           ),
-          TDInput(
-            type: TDInputType.normalMaxTwoLine,
-            size: TDInputSize.small,
+          TInput(
+            type: TInputType.normalMaxTwoLine,
+            size: TInputSize.small,
             controller: controller,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 70),

@@ -2,18 +2,18 @@
   Widget _checkPosition(BuildContext context) {
     return Column(
       children: [
-        TDRadioGroup(
-          contentDirection: TDContentDirection.right,
+        TRadioGroup(
+          contentDirection: TContentDirection.right,
           selectId: 'index:0',
-          child: const TDRadio(
+          child: const TRadio(
             id: 'index:0',
             title: '单选',
           ),
         ),
-        TDRadioGroup(
-          contentDirection: TDContentDirection.left,
+        TRadioGroup(
+          contentDirection: TContentDirection.left,
           selectId: 'index:0',
-          child: const TDRadio(
+          child: const TRadio(
             id: 'index:0',
             title: '单选',
             showDivider: false,

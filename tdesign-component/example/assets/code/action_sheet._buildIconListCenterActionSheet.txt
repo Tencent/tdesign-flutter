@@ -1,20 +1,20 @@
 
 Widget _buildIconListCenterActionSheet(BuildContext context) {
-  return TDButton(
+  return TButton(
     text: '居中带图标列表',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: TButtonType.outline,
+    theme: TButtonTheme.primary,
+    size: TButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      TActionSheet(
         context,
         visible: true,
         description: '动作面板描述文字',
         items: _nums
-            .map((e) => TDActionSheetItem(
+            .map((e) => TActionSheetItem(
                   label: '选项$e',
-                  icon: const Icon(TDIcons.app),
+                  icon: const Icon(TIcons.app),
                 ))
             .toList(),
       );

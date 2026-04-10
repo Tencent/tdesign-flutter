@@ -2,27 +2,27 @@
 Widget _buildSimple(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
-  return TDButton(
+  return TButton(
     text: '基础用法',
     isBlock: true,
-    size: TDButtonSize.large,
-    theme: TDButtonTheme.primary,
-    type: TDButtonType.outline,
+    size: TButtonSize.large,
+    theme: TButtonTheme.primary,
+    type: TButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
-        TDSlidePopupRoute(
+        TSlidePopupRoute(
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return TDIndexes(
+            return TIndexes(
               indexList: indexList,
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
-                return TDCellGroup(
+                return TCellGroup(
                   cells: list
-                      .map((e) => TDCell(
+                      .map((e) => TCell(
                             title: e,
                           ))
                       .toList(),

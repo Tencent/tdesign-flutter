@@ -6,12 +6,12 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDText(
+          TText(
             '消息',
-            font: TDTheme.of(context).fontBodyLarge,
+            font: TTheme.of(context).fontBodyLarge,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
