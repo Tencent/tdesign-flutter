@@ -1,0 +1,28 @@
+
+  Widget buildDynamicLinkedPicker(BuildContext context) {
+    return TCell(
+      title: '动态加载（onColumnChanged）',
+      note: selected_3.isEmpty ? '请选择' : selected_3,
+      arrow: true,
+      onClick: (click) {
+        TPicker.showMultiLinkedPicker(
+          context,
+          title: '选择地区（动态加载）',
+          onConfirm: (selected) {
+            setState(() {
+              selected_3 = selected.join(' ');
+            });
+            Navigator.of(context).pop();
+          },
+          // data 传空 Map，完全由 onColumnChanged 提供数据
+          data: {
+            '广东省': {},
+            '浙江省': {},
+          },
+          columnNum: 3,
+          initialData: ['广东省', '', ''],
+          onColumnChanged: _fetchNextColumnData,
+        );
+      },
+    );
+  }
