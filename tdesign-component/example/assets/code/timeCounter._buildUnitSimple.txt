@@ -1,8 +1,8 @@
 
-TDTimeCounter _buildUnitSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.square,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }

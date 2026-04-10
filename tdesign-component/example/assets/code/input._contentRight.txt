@@ -2,7 +2,7 @@
   Widget _contentRight(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '右对齐',
           controller: controller[25],
           contentAlignment: TextAlign.end,

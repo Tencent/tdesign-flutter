@@ -3,8 +3,8 @@
     return Column(
       // spacing: 16,
       children: [
-        TDSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             context: context,
             showThumbValue: true,
             min: 0,
@@ -14,8 +14,8 @@
           value: 40,
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -24,8 +24,8 @@
           value: const RangeValues(20, 60),
         ),
         const SizedBox(height: 16),
-        TDSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -36,8 +36,8 @@
           value: 40,
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -49,8 +49,8 @@
           rightLabel: '100',
         ),
         const SizedBox(height: 16),
-        TDSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             context: context,
             showScaleValue: true,
             divisions: 5,
@@ -58,14 +58,14 @@
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: TDTheme.of(context).componentStrokeColor,
-                inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
+                activeTickMarkColor: TTheme.of(context).componentStrokeColor,
+                inactiveTickMarkColor: TTheme.of(context).componentStrokeColor,
               )),
           value: 60,
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData.capsule(
             context: context,
             showScaleValue: true,
             divisions: 5,
@@ -73,8 +73,8 @@
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: TDTheme.of(context).bgColorComponentActive,
-                inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
+                activeTickMarkColor: TTheme.of(context).bgColorComponentActive,
+                inactiveTickMarkColor: TTheme.of(context).bgColorComponent,
               )),
           value: const RangeValues(20, 60),
         )

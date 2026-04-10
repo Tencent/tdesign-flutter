@@ -1,14 +1,14 @@
 
-TDDropdownMenu _buildDisabled(BuildContext context) {
-  return TDDropdownMenu(
-    direction: TDDropdownMenuDirection.down,
+TDropdownMenu _buildDisabled(BuildContext context) {
+  return TDropdownMenu(
+    direction: TDropdownMenuDirection.down,
     builder: (context) {
       return [
-        const TDDropdownItem(
+        const TDropdownItem(
           disabled: true,
           label: '禁用菜单',
         ),
-        const TDDropdownItem(
+        const TDropdownItem(
           disabled: true,
           label: '禁用菜单',
         ),

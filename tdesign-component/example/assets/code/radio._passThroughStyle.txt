@@ -1,6 +1,6 @@
 
   Widget _passThroughStyle(BuildContext context) {
-    return TDRadioGroup(
+    return TRadioGroup(
       selectId: 'index:0',
       passThrough: true,
       child: ListView.builder(
@@ -9,10 +9,10 @@
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           var title = '单选';
-          return TDRadio(
+          return TRadio(
             id: 'index:$index',
             title: title,
-            size: TDCheckBoxSize.large,
+            size: TCheckBoxSize.large,
           );
         },
         itemCount: 4,

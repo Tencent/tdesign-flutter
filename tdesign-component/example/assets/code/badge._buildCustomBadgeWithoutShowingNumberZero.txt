@@ -7,17 +7,17 @@
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
             // 不显示 0
-            child: TDBadge(TDBadgeType.message, count: '0', showZero: false),
+            child: TBadge(TBadgeType.message, count: '0', showZero: false),
             right: 0,
             top: 0,
           )

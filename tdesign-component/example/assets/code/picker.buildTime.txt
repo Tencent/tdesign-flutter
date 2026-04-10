@@ -1,12 +1,12 @@
 
   Widget buildTime(BuildContext context) {
     const title = '选择时间';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_2.isEmpty ? '请选择' : selected_2,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiPicker(
+        TPicker.showMultiPicker(
           context,
           title: title,
           onConfirm: (selected) {

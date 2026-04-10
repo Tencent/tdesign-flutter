@@ -6,9 +6,9 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 18,
             bottom: 18,
           )

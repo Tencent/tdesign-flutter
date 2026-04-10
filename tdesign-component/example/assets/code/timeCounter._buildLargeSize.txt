@@ -1,7 +1,7 @@
 
-TDTimeCounter _buildLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
+    size: TTimeCounterSize.large,
   );
 }

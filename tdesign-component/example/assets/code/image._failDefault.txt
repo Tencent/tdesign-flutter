@@ -5,14 +5,14 @@
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '失败默认提示',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
-        const TDImage(
+        const TImage(
           imgUrl: 'error',
-          type: TDImageType.roundedSquare,
+          type: TImageType.roundedSquare,
         ),
       ],
     );

@@ -45,9 +45,9 @@ flutter:
   # adding or updating assets for this project.
   uses-material-design: true
   fonts:
-    - family: TDIcons
+    - family: TIcons
       fonts:
-        - asset: assets/tdesign/td_icons.ttf
+        - asset: assets/tdesign/t_icons.ttf
     - family: TCloudNumber
       fonts:
         - asset: assets/tdesign/TCloudNumberVF.ttf

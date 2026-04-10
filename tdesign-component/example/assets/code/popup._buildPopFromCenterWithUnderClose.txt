@@ -1,18 +1,18 @@
 
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '居中弹出层-关闭在下方',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               isDismissible: false,
               slideTransitionFrom: SlideTransitionFrom.center,
               builder: (context) {
-                return TDPopupCenterPanel(
+                return TPopupCenterPanel(
                   closeUnderBottom: true,
                   closeClick: () {
                     Navigator.maybePop(context);

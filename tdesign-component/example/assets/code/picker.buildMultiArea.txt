@@ -1,12 +1,12 @@
 
   Widget buildMultiArea(BuildContext context) {
     const title = '选择地区';
-    return TDCell(
+    return TCell(
       title: title,
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showMultiLinkedPicker(
+        TPicker.showMultiLinkedPicker(
           context,
           title: title,
           onConfirm: (selected) {

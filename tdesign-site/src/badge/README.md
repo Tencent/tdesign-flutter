@@ -33,12 +33,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDText(
+          TText(
             '消息',
-            font: TDTheme.of(context).fontBodyLarge,
+            font: TTheme.of(context).fontBodyLarge,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
@@ -61,9 +61,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Icon(TDIcons.notification),
+          Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
@@ -86,15 +86,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDButton(
+          TButton(
             width: 80,
             height: 48,
             text: '按钮',
-            size: TDButtonSize.large,
-            type: TDButtonType.fill,
+            size: TButtonSize.large,
+            type: TButtonType.fill,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.redPoint),
+            child: TBadge(TBadgeType.redPoint),
             right: 0,
             top: 0,
           )
@@ -119,9 +119,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          TDText('消息', font: TDTheme.of(context).fontBodyLarge),
+          TText('消息', font: TTheme.of(context).fontBodyLarge),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 28,
             bottom: 18,
           )
@@ -144,9 +144,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 18,
             bottom: 18,
           )
@@ -169,14 +169,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDButton(
+          const TButton(
             width: 80,
             height: 48,
             text: '按钮',
-            size: TDButtonSize.large,
+            size: TButtonSize.large,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             right: 0,
             top: 0,
           )
@@ -202,16 +202,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             right: 0,
             top: 0,
           )
@@ -235,16 +235,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.message, count: '0'),
+            child: TBadge(TBadgeType.message, count: '0'),
             right: 0,
             top: 0,
           )
@@ -268,17 +268,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.notification),
+            child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
             // 不显示 0
-            child: TDBadge(TDBadgeType.message, count: '0', showZero: false),
+            child: TBadge(TBadgeType.message, count: '0', showZero: false),
             right: 0,
             top: 0,
           )
@@ -303,9 +303,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 18,
             bottom: 18,
           )
@@ -329,11 +329,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const Icon(TDIcons.notification),
+          const Icon(TIcons.notification),
           Positioned(
-            child: TDBadge(
-              TDBadgeType.square,
-              border: TDBadgeBorder.small,
+            child: TBadge(
+              TBadgeType.square,
+              border: TBadgeBorder.small,
               count: num.toString(),
             ),
             left: 20,
@@ -360,16 +360,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.shop),
+            child: const Icon(TIcons.shop),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.bubble, count: '领积分'),
+            child: TBadge(TBadgeType.bubble, count: '领积分'),
             right: 0,
             top: 0,
           )
@@ -390,8 +390,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Stack(
       alignment: Alignment.topRight,
       children: [
-        TDCell(title: '单行标题'),
-        TDBadge(TDBadgeType.subscript, message: 'NEW'),
+        TCell(title: '单行标题'),
+        TBadge(TBadgeType.subscript, message: 'NEW'),
       ],
     );
   }</pre>
@@ -412,10 +412,10 @@ Large
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDAvatar(size: TDAvatarSize.large, type: TDAvatarType.icon),
+          const TAvatar(size: TAvatarSize.large, type: TAvatarType.icon),
           Positioned(
-            child: TDBadge(TDBadgeType.message,
-                size: TDBadgeSize.large, count: num.toString()),
+            child: TBadge(TBadgeType.message,
+                size: TBadgeSize.large, count: num.toString()),
             left: 48,
             bottom: 48,
           )
@@ -439,9 +439,9 @@ Medium
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+          const TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 36,
             bottom: 36,
           )
@@ -455,12 +455,12 @@ Medium
 
 
 ## API
-### TDBadge
+### TBadge
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| border | TDBadgeBorder | TDBadgeBorder.large | 红点圆角大小 |
+| border | TBadgeBorder | TBadgeBorder.large | 红点圆角大小 |
 | color | Color? | - | 红点颜色 |
 | count | String? | - | 红点数量 |
 | key |  | - |  |
@@ -468,9 +468,9 @@ Medium
 | message | String? | - | 消息内容 |
 | padding | EdgeInsetsGeometry? | - | 角标自定义padding |
 | showZero | bool | true | 值为0是否显示 |
-| size | TDBadgeSize | TDBadgeSize.small | 红点尺寸 |
+| size | TBadgeSize | TBadgeSize.small | 红点尺寸 |
 | textColor | Color? | - | 文字颜色 |
-| type | TDBadgeType | type | 红点样式 |
+| type | TBadgeType | type | 红点样式 |
 | widthLarge | double | 32 | 角标大三角形宽 |
 | widthSmall | double | 12 | 角标小三角形宽 |
 

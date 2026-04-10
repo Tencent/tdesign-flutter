@@ -1,14 +1,14 @@
 
   Widget _buildPopFromTop(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '顶部弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.top,
               open: () {
                 print('open');
@@ -18,7 +18,7 @@
               },
               builder: (context) {
                 return Container(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   height: 240,
                 );
               }),

@@ -1,6 +1,6 @@
 
-TDTimeCounter _buildMillisecondSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildMillisecondSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
     millisecond: true,
   );

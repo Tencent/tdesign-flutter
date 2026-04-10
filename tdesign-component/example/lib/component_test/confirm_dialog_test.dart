@@ -30,17 +30,17 @@ class _TestPageState extends State<TestPage> {
   void _showProblemDialog() {
     showDialog(
       context: context,
-      builder: (context) => TDConfirmDialog(
+      builder: (context) => TConfirmDialog(
         title: '搜索设备',
         contentWidget: Column(
           children: [
-            TDInput(
-              leftIcon: const Icon(TDIcons.device),
+            TInput(
+              leftIcon: const Icon(TIcons.device),
               controller: _searchNameController,
               hintText: '设备名称',
             ),
-            TDInput(
-              leftIcon: const Icon(TDIcons.pen_quill),
+            TInput(
+              leftIcon: const Icon(TIcons.pen_quill),
               controller: _searchRemarkController,
               hintText: '设备备注',
             ),
@@ -54,9 +54,9 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TDConfirmDialog测试')),
+      appBar: AppBar(title: const Text('TConfirmDialog测试')),
       body: Center(
-        child: TDButton(
+        child: TButton(
           child: const Text('显示问题弹窗'),
           onTap: _showProblemDialog,
         ),

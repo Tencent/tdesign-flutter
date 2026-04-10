@@ -1,5 +1,5 @@
 ## API
-### TDToast
+### TToast
 
 #### 静态方法
 

@@ -1,7 +1,7 @@
 
   Widget _iconEmptyCustom(BuildContext context) {
-    return const TDEmpty(
-      type: TDEmptyType.plain,
+    return const TEmpty(
+      type: TEmptyType.plain,
       icon: Icons.hourglass_empty_sharp,
       emptyText: '描述文字',
     );

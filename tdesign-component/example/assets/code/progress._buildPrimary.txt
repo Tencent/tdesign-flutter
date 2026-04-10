@@ -1,10 +1,10 @@
 
   Widget _buildPrimary(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.linear,
-      progressStatus: TDProgressStatus.primary,
+    return TProgress(
+      type: TProgressType.linear,
+      progressStatus: TProgressStatus.primary,
       value: value,
       strokeWidth: 6,
-      progressLabelPosition: TDProgressLabelPosition.right,
+      progressLabelPosition: TProgressLabelPosition.right,
     );
   }

@@ -1,8 +1,8 @@
 
-TDCountDown _buildCustomUnitSmallSize(BuildContext context) {
-  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.small);
-  style.timeColor = TDTheme.of(context).errorColor6;
-  return TDCountDown(
+TCountDown _buildCustomUnitSmallSize(BuildContext context) {
+  var style = TCountDownStyle.generateStyle(context, size: TCountDownSize.small);
+  style.timeColor = TTheme.of(context).errorColor6;
+  return TCountDown(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,

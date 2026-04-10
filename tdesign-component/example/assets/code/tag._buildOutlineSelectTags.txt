@@ -1,20 +1,20 @@
 
   Widget _buildOutlineSelectTags(BuildContext context) {
     return const Wrap(spacing: 8, children: [
-      TDSelectTag(
+      TSelectTag(
         '未选中态',
-        theme: TDTagTheme.primary,
+        theme: TTagTheme.primary,
         isOutline: true,
       ),
-      TDSelectTag(
+      TSelectTag(
         '已选中态',
-        theme: TDTagTheme.primary,
+        theme: TTagTheme.primary,
         isOutline: true,
         isSelected: true,
       ),
-      TDSelectTag(
+      TSelectTag(
         '不可选态',
-        theme: TDTagTheme.primary,
+        theme: TTagTheme.primary,
         isOutline: true,
         disableSelect: true,
       ),

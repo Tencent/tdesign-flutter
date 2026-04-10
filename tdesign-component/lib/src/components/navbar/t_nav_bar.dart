@@ -1,0 +1,333 @@
+import 'package:flutter/material.dart';
+import '../../../tdesign_flutter.dart';
+
+typedef TBarItemAction = void Function();
+
+class TNavBar extends StatefulWidget implements PreferredSizeWidget {
+  const TNavBar({
+    Key? key,
+    this.leftBarItems,
+    this.rightBarItems,
+    this.titleWidget,
+    this.title,
+    this.titleColor,
+    this.backIconColor,
+    this.titleFont,
+    this.titleFontFamily,
+    this.titleFontWeight = FontWeight.w500,
+    this.centerTitle = true,
+    this.opacity = 1.0,
+    this.backgroundColor,
+    this.titleMargin = 16,
+    this.padding,
+    this.height = 48,
+    this.screenAdaptation = true,
+    this.useDefaultBack = true,
+    this.onBack,
+    this.useBorderStyle = false,
+    this.border,
+    this.belowTitleWidget,
+    this.boxShadow,
+    this.flexibleSpace,
+  }) : super(key: key);
+
+  /// 左边返回图标颜色
+  final Color? backIconColor;
+
+  /// 左边操作项
+  final List<TNavBarItem>? leftBarItems;
+
+  /// 右边操作项
+  final List<TNavBarItem>? rightBarItems;
+
+  /// 标题控件，优先级高于 title 文案
+  final Widget? titleWidget;
+
+  /// 标题文案
+  final String? title;
+
+  /// 标题颜色
+  final Color? titleColor;
+
+  /// 标题字体尺寸
+  final Font? titleFont;
+
+  /// 标题字体粗细
+  final FontWeight? titleFontWeight;
+
+  /// 标题字体样式
+  final FontFamily? titleFontFamily;
+
+  /// 标题是否居中
+  final bool centerTitle;
+
+  /// 透明度
+  final double opacity;
+
+  /// 背景颜色
+  final Color? backgroundColor;
+
+  /// 内部填充
+  final EdgeInsetsGeometry? padding;
+
+  /// 中间文案左右两边间距
+  final double titleMargin;
+
+  /// 高度
+  final double height;
+
+  /// 是否进行屏幕适配，默认 true
+  final bool screenAdaptation;
+
+  /// 是否使用默认的返回
+  final bool useDefaultBack;
+
+  /// 返回事件
+  final VoidCallback? onBack;
+
+  /// 是否使用边框模式
+  final bool useBorderStyle;
+
+  /// 边框
+  final TNavBarItemBorder? border;
+
+  /// belowTitleWidget navbar 下方的 widget
+  final Widget? belowTitleWidget;
+
+  /// 底部阴影
+  final List<BoxShadow>? boxShadow;
+
+  /// 固定背景
+  final Widget? flexibleSpace;
+
+  @override
+  State<StatefulWidget> createState() => _TNavBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
+}
+
+class _TNavBarState extends State<TNavBar> {
+  Widget _addBorder(List<Widget> items) {
+    var border = widget.border ?? TNavBarItemBorder();
+    var borderColor = border.color ?? TTheme.of(context).componentStrokeColor;
+    var children = <Widget>[];
+    for (var i = 0; i < items.length; i++) {
+      children.add(items[i]);
+      if (widget.useBorderStyle && i != items.length - 1) {
+        children.add(
+          Container(
+            width: border.width,
+            height: 16.0,
+            color: borderColor,
+          ),
+        );
+      }
+    }
+    var child = Row(
+      children: children,
+      mainAxisSize: MainAxisSize.min,
+    );
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(border.radius),
+        border: Border.all(
+          color: borderColor,
+          width: border.width,
+        ),
+      ),
+      padding: border.padding ??
+          EdgeInsets.symmetric(horizontal: TTheme.of(context).spacer4),
+      child: child,
+    );
+  }
+
+  Widget get backButton {
+    var iconColor = widget.backIconColor ?? TTheme.of(context).textColorPrimary;
+    return TNavBarItem(
+      icon: TIcons.chevron_left,
+      iconSize: 28.0,
+      iconColor: iconColor,
+      action: () {
+        widget.onBack?.call();
+        Navigator.maybePop(context);
+      },
+    ).toWidget(context);
+  }
+
+  Widget _buildTitleBarItems(bool isLeft) {
+    var barItems = (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
+    var children = barItems
+        .map(
+          (e) => e.toWidget(context, isLeft: isLeft),
+        )
+        .toList();
+
+    return Row(
+      children: [
+        if (isLeft && widget.useDefaultBack) backButton,
+        if (children.isNotEmpty)
+          widget.useBorderStyle
+              ? _addBorder(children)
+              : Row(
+                  children: children,
+                  mainAxisSize: MainAxisSize.min,
+                ),
+      ],
+      mainAxisSize: MainAxisSize.min,
+    );
+  }
+
+  TextStyle _getTitleStyle(BuildContext context) {
+    var titleColor = widget.titleColor ?? TTheme.of(context).textColorPrimary;
+
+    var titleFont = widget.titleFont ?? TTheme.of(context).fontBodyLarge;
+
+    return widget.titleFontFamily == null
+        ? TextStyle(
+            fontSize: titleFont?.size,
+            color: titleColor,
+            fontWeight: widget.titleFontWeight ?? FontWeight.w500,
+            decoration: TextDecoration.none,
+          )
+        : TextStyle(
+            fontSize: titleFont?.size,
+            color: titleColor,
+            fontWeight: widget.titleFontWeight ?? FontWeight.w500,
+            decoration: TextDecoration.none,
+            fontFamily: widget.titleFontFamily!.fontFamily,
+            package: 'tdesign_flutter');
+  }
+
+  Widget _getTitleWidget(BuildContext context) {
+    return widget.titleWidget ??
+        Text(
+          widget.title ?? '',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: _getTitleStyle(context),
+        );
+  }
+
+  Widget _getNavbarChild() {
+    final Widget toolbar = NavigationToolbar(
+      leading: _buildTitleBarItems(true),
+      middle: _getTitleWidget(context),
+      trailing: _buildTitleBarItems(false),
+      middleSpacing: widget.titleMargin,
+      centerMiddle: widget.centerTitle,
+    );
+    if (widget.belowTitleWidget == null) {
+      return toolbar;
+    }
+    var children = <Widget>[Expanded(child: toolbar)];
+    children.add(widget.belowTitleWidget as Widget);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var _backgroundColor =
+        widget.backgroundColor ?? TTheme.of(context).bgColorContainer;
+    if (_backgroundColor != Colors.transparent) {
+      _backgroundColor = _backgroundColor.withOpacity(widget.opacity);
+    }
+
+    var paddingTop =
+        widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
+    var padding = widget.padding ??
+        EdgeInsets.symmetric(
+          horizontal: TTheme.of(context).spacer16,
+          vertical: TTheme.of(context).spacer4,
+        );
+    Widget appBar = Container(
+        height: widget.height + paddingTop,
+        padding: padding.add(EdgeInsets.only(top: paddingTop)),
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          boxShadow: widget.boxShadow,
+        ),
+        child: _getNavbarChild());
+    if (widget.flexibleSpace != null) {
+      appBar = Stack(
+        fit: StackFit.passthrough,
+        children: <Widget>[
+          widget.flexibleSpace!,
+          appBar,
+        ],
+      );
+    }
+
+    return appBar;
+  }
+}
+
+class TNavBarItem {
+  /// 图标
+  IconData? icon;
+
+  /// 图标颜色
+  Color? iconColor;
+
+  /// 操作回调
+  TBarItemAction? action;
+
+  /// 图标尺寸
+  double? iconSize;
+
+  /// 内部填充
+  EdgeInsetsGeometry? padding;
+
+  /// 自定义组件，优先级高于 icon，可以是任意 Widget
+  Widget? customWidget;
+
+  /// 图标组件，优先级高于 icon
+  @Deprecated('Use customWidget instead')
+  Widget? iconWidget;
+
+  TNavBarItem({
+    this.icon,
+    this.iconColor,
+    this.action,
+    this.iconSize = 24.0,
+    this.padding,
+    this.customWidget,
+    @Deprecated('Use customWidget instead')
+    this.iconWidget,
+  });
+
+  Widget toWidget(BuildContext context, {bool isLeft = true}) =>
+      GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: action,
+        child: Padding(
+          padding: padding ??
+              (isLeft
+                  ? EdgeInsets.only(right: TTheme.of(context).spacer8)
+                  : EdgeInsets.only(left: TTheme.of(context).spacer8)),
+          child: customWidget ?? iconWidget ??
+              Icon(
+                icon,
+                size: iconSize,
+                color: iconColor,
+              ),
+        ),
+      );
+}
+
+class TNavBarItemBorder {
+  double width;
+  double radius;
+  Color? color;
+  EdgeInsetsGeometry? padding;
+
+  TNavBarItemBorder({
+    this.width = 1.0,
+    this.radius = 22.0,
+    this.color,
+    this.padding,
+  });
+}

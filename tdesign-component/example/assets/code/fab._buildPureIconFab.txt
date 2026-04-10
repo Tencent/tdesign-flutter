@@ -1,8 +1,8 @@
 
   Widget _buildPureIconFab(BuildContext context) {
     return _buildRowDemo([
-      const TDFab(
-        theme: TDFabTheme.primary,
+      const TFab(
+        theme: TFabTheme.primary,
       )
     ]);
   }

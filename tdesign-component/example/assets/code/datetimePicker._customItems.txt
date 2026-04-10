@@ -1,11 +1,11 @@
 
   Widget _customItems(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_9.isEmpty ? '请选择' : selected_9,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -34,7 +34,7 @@
           itemBuilder: (context, content, colIndex, index,
               itemDistanceCalculator, distance) {
             return colIndex == 5
-                ? TDText(
+                ? TText(
                     content,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -43,8 +43,8 @@
                           context, distance),
                       fontSize: index % 2 == 0 ? 20 : 10,
                       color: index % 2 == 1
-                          ? TDTheme.of(context).textColorPrimary
-                          : TDTheme.of(context).successColor6,
+                          ? TTheme.of(context).textColorPrimary
+                          : TTheme.of(context).successColor6,
                     ),
                   )
                 : null;

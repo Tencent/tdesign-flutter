@@ -32,7 +32,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         if (controller.hasClients) {
           controller.jumpTo(500);
         }
-        style = TDBackTopStyle.circle;
+        style = TBackTopStyle.circle;
       });
     });
   }</pre>
@@ -54,7 +54,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             if (controller.hasClients) {
               controller.jumpTo(500);
             }
-            style = TDBackTopStyle.halfCircle;
+            style = TBackTopStyle.halfCircle;
           });
         }),
         Padding(
@@ -74,7 +74,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDBackTop
+### TBackTop
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -83,8 +83,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | key |  | - |  |
 | onClick | VoidCallback? | - | 按钮点击事件 |
 | showText | bool | false | 是否展示文字 |
-| style | TDBackTopStyle | TDBackTopStyle.circle | 样式，圆形和半圆 |
-| theme | TDBackTopTheme | TDBackTopTheme.light | 主题 |
+| style | TBackTopStyle | TBackTopStyle.circle | 样式，圆形和半圆 |
+| theme | TBackTopTheme | TBackTopTheme.light | 主题 |
 
 
   

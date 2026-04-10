@@ -57,10 +57,10 @@ Widget _buildLunar(BuildContext context) {
                 Row(
                   children: [
                     // 上一月按钮
-                    TDButton(
+                    TButton(
                       text: '上一月',
-                      size: TDButtonSize.small,
-                      theme: TDButtonTheme.primary,
+                      size: TButtonSize.small,
+                      theme: TButtonTheme.primary,
                       onTap: () {
                         currentMonth.value = DateTime(
                           month.year,
@@ -73,10 +73,10 @@ Widget _buildLunar(BuildContext context) {
                     const SizedBox(width: 8),
                     // 年份选择
                     Expanded(
-                      child: TDButton(
+                      child: TButton(
                         text: '${month.year}年',
-                        size: TDButtonSize.small,
-                        theme: TDButtonTheme.defaultTheme,
+                        size: TButtonSize.small,
+                        theme: TButtonTheme.defaultTheme,
                         onTap: () async {
                           final year = await showModalBottomSheet<int>(
                             context: context,
@@ -129,10 +129,10 @@ Widget _buildLunar(BuildContext context) {
                     const SizedBox(width: 8),
                     // 月份选择
                     Expanded(
-                      child: TDButton(
+                      child: TButton(
                         text: '${month.month}月',
-                        size: TDButtonSize.small,
-                        theme: TDButtonTheme.defaultTheme,
+                        size: TButtonSize.small,
+                        theme: TButtonTheme.defaultTheme,
                         onTap: () async {
                           final selectedMonth = await showModalBottomSheet<int>(
                             context: context,
@@ -198,10 +198,10 @@ Widget _buildLunar(BuildContext context) {
                     ),
                     const SizedBox(width: 8),
                     // 下一月按钮
-                    TDButton(
+                    TButton(
                       text: '下一月',
-                      size: TDButtonSize.small,
-                      theme: TDButtonTheme.primary,
+                      size: TButtonSize.small,
+                      theme: TButtonTheme.primary,
                       onTap: () {
                         currentMonth.value = DateTime(
                           month.year,
@@ -249,7 +249,7 @@ Widget _buildLunar(BuildContext context) {
           return ValueListenableBuilder(
             valueListenable: selectedDate,
             builder: (context, value, child) {
-              return TDCalendar(
+              return TCalendar(
                 title: '',
                 showLunarInfo: show,
                 dataSource: dataSource,

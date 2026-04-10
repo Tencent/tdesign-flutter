@@ -1,29 +1,29 @@
 
   Widget _buildVSimpleSteps(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Finish',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
             title: 'Default',
             content: 'Customize content',
-            successIcon: TDIcons.cart),
-        TDStepsItemData(
+            successIcon: TIcons.cart),
+        TStepsItemData(
           title: 'Default',
           content: 'Customize content',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 垂直方向
-      direction: TDStepsDirection.vertical,
+      direction: TStepsDirection.vertical,
       activeIndex: 1,
       // 简略模式
       simple: true,

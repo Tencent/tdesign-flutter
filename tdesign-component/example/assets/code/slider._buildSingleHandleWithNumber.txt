@@ -1,7 +1,7 @@
 
   Widget _buildSingleHandleWithNumber(BuildContext context) {
-    return TDSlider(
-      sliderThemeData: TDSliderThemeData(
+    return TSlider(
+      sliderThemeData: TSliderThemeData(
         context: context,
         showThumbValue: true,
         scaleFormatter: (value) => value.toInt().toString(),

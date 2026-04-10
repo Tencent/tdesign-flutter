@@ -2,7 +2,7 @@
   Widget _autoHeightInput(BuildContext context) {
     return Column(
       children: [
-        TDInput(
+        TInput(
           leftLabel: '地址',
           controller: controller[27],
           hintText: '请输入地址，高度自适应',

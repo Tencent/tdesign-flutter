@@ -25,8 +25,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSimple(BuildContext context) {
-  return const TDTimeCounter(time: 60 * 60 * 1000);
+TTimeCounter _buildSimple(BuildContext context) {
+  return const TTimeCounter(time: 60 * 60 * 1000);
 }</pre>
 
 </td-code-block>
@@ -37,8 +37,8 @@ TDTimeCounter _buildSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildMillisecondSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildMillisecondSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
     millisecond: true,
   );
@@ -52,11 +52,11 @@ TDTimeCounter _buildMillisecondSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUpSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUpSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
     millisecond: true,
-    direction: TDTimeCounterDirection.up,
+    direction: TTimeCounterDirection.up,
   );
 }</pre>
 
@@ -68,10 +68,10 @@ TDTimeCounter _buildUpSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.square,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -83,10 +83,10 @@ TDTimeCounter _buildSquareSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.round,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -98,10 +98,10 @@ TDTimeCounter _buildRoundSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitSimple(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitSimple(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.square,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -114,10 +114,10 @@ TDTimeCounter _buildUnitSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitSimple(BuildContext context) {
-  var style = TDTimeCounterStyle.generateStyle(context);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+TTimeCounter _buildCustomUnitSimple(BuildContext context) {
+  var style = TTimeCounterStyle.generateStyle(context);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -134,10 +134,10 @@ TDTimeCounter _buildCustomUnitSimple(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
+    size: TTimeCounterSize.small,
   );
 }</pre>
 
@@ -148,10 +148,10 @@ TDTimeCounter _buildSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
+    size: TTimeCounterSize.medium,
   );
 }</pre>
 
@@ -162,10 +162,10 @@ TDTimeCounter _buildMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
+    size: TTimeCounterSize.large,
   );
 }</pre>
 
@@ -176,10 +176,10 @@ TDTimeCounter _buildLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
+    size: TTimeCounterSize.small,
   );
 }</pre>
 
@@ -190,10 +190,10 @@ TDTimeCounter _buildSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
+    size: TTimeCounterSize.medium,
   );
 }</pre>
 
@@ -204,10 +204,10 @@ TDTimeCounter _buildMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
+    size: TTimeCounterSize.large,
   );
 }</pre>
 
@@ -220,11 +220,11 @@ TDTimeCounter _buildLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.small,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -235,11 +235,11 @@ TDTimeCounter _buildSquareSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.medium,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -250,11 +250,11 @@ TDTimeCounter _buildSquareMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.large,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -265,11 +265,11 @@ TDTimeCounter _buildSquareLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.small,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -280,11 +280,11 @@ TDTimeCounter _buildSquareSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.medium,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -295,11 +295,11 @@ TDTimeCounter _buildSquareMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildSquareLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildSquareLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.large,
+    theme: TTimeCounterTheme.square,
   );
 }</pre>
 
@@ -312,11 +312,11 @@ TDTimeCounter _buildSquareLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.round,
+    size: TTimeCounterSize.small,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -327,11 +327,11 @@ TDTimeCounter _buildRoundSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.round,
+    size: TTimeCounterSize.medium,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -342,11 +342,11 @@ TDTimeCounter _buildRoundMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.round,
+    size: TTimeCounterSize.large,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -357,11 +357,11 @@ TDTimeCounter _buildRoundLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.round,
+    size: TTimeCounterSize.small,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -372,11 +372,11 @@ TDTimeCounter _buildRoundSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.round,
+    size: TTimeCounterSize.medium,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -387,11 +387,11 @@ TDTimeCounter _buildRoundMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildRoundLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildRoundLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.round,
+    size: TTimeCounterSize.large,
+    theme: TTimeCounterTheme.round,
   );
 }</pre>
 
@@ -404,11 +404,11 @@ TDTimeCounter _buildRoundLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.small,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -420,11 +420,11 @@ TDTimeCounter _buildUnitSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.medium,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -436,11 +436,11 @@ TDTimeCounter _buildUnitMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.large,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -452,11 +452,11 @@ TDTimeCounter _buildUnitLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitSmallSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.small,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -468,11 +468,11 @@ TDTimeCounter _buildUnitSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitMediumSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.medium,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -484,11 +484,11 @@ TDTimeCounter _buildUnitMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildUnitLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+TTimeCounter _buildUnitLargeSize(BuildContext context) {
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.square,
+    size: TTimeCounterSize.large,
+    theme: TTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }</pre>
@@ -502,11 +502,11 @@ TDTimeCounter _buildUnitLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
+TTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.small);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.small);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -520,11 +520,11 @@ TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
+TTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.medium);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.medium);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -538,11 +538,11 @@ TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
+TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.large);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.large);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -556,11 +556,11 @@ TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
+TTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.small);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.small);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -574,11 +574,11 @@ TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
+TTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.medium);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.medium);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -592,11 +592,11 @@ TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
+TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
   var style =
-      TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.large);
-  style.timeColor = TDTheme.of(context).errorNormalColor;
-  return TDTimeCounter(
+      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.large);
+  style.timeColor = TTheme.of(context).errorNormalColor;
+  return TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
@@ -608,38 +608,13 @@ TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 
 
 ## API
-### TDTimeCounter
-#### 简介
-计时组件
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoStart | bool | true | 是否自动开始倒计时 |
-| content | dynamic | 'default' | 'default' / Widget Function(int time) / Widget |
-| controller | TDTimeCounterController? | - | 控制器，可控制开始/暂停/继续/重置 |
-| direction | TDTimeCounterDirection | TDTimeCounterDirection.down | 计时方向，默认倒计时 |
-| format | String | 'HH:mm:ss' | 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒（分隔符必须为长度为1的非空格的字符） |
-| key |  | - |  |
-| millisecond | bool | false | 是否开启毫秒级渲染 |
-| onChange |  Function(int time)? | - | 时间变化时触发回调 |
-| onFinish | VoidCallback? | - | 计时结束时触发回调 |
-| size | TDTimeCounterSize | TDTimeCounterSize.medium | 尺寸 |
-| splitWithUnit | bool | false | 使用时间单位分割 |
-| style | TDTimeCounterStyle? | - | 自定义样式，有则优先用它，没有则根据size和theme选取 |
-| theme | TDTimeCounterTheme | TDTimeCounterTheme.defaultTheme | 风格 |
-| time | int | - | 必需；计时时长，单位毫秒 |
-
-```
-```
-
-### TDTimeCounterController
+### TTimeCounterController
 #### 简介
 倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
 ```
 ```
 
-### TDTimeCounterStyle
+### TTimeCounterStyle
 #### 简介
 计时组件样式
 #### 默认构造方法
@@ -667,7 +642,32 @@ TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 
 | 名称  | 说明 |
 | --- |  --- |
-| TDTimeCounterStyle.generateStyle  | 生成默认样式 |
+| TTimeCounterStyle.generateStyle  | 生成默认样式 |
+
+```
+```
+
+### TTimeCounter
+#### 简介
+计时组件
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| autoStart | bool | true | 是否自动开始倒计时 |
+| content | dynamic | 'default' | 'default' / Widget Function(int time) / Widget |
+| controller | TTimeCounterController? | - | 控制器，可控制开始/暂停/继续/重置 |
+| direction | TTimeCounterDirection | TTimeCounterDirection.down | 计时方向，默认倒计时 |
+| format | String | 'HH:mm:ss' | 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒（分隔符必须为长度为1的非空格的字符） |
+| key |  | - |  |
+| millisecond | bool | false | 是否开启毫秒级渲染 |
+| onChange |  Function(int time)? | - | 时间变化时触发回调 |
+| onFinish | VoidCallback? | - | 计时结束时触发回调 |
+| size | TTimeCounterSize | TTimeCounterSize.medium | 尺寸 |
+| splitWithUnit | bool | false | 使用时间单位分割 |
+| style | TTimeCounterStyle? | - | 自定义样式，有则优先用它，没有则根据size和theme选取 |
+| theme | TTimeCounterTheme | TTimeCounterTheme.defaultTheme | 风格 |
+| time | int | - | 必需；计时时长，单位毫秒 |
 
 
   

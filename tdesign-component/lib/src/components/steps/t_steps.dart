@@ -1,0 +1,127 @@
+import 'package:flutter/material.dart';
+
+import 't_steps_horizontal.dart';
+import 't_steps_vertical.dart';
+
+/// Steps步骤条数据类型
+class TStepsItemData {
+  TStepsItemData({
+    this.title,
+    this.content,
+    this.successIcon,
+    this.errorIcon,
+    this.customContent,
+    this.customTitle,
+  }) : assert(
+          title != null ||
+              customTitle != null ||
+              content != null ||
+              customContent != null,
+          'title, content, customContent needs at least one non-empty value',
+        );
+
+  /// 标题
+  final String? title;
+
+  /// 内容
+  final String? content;
+
+  /// 成功图标
+  final IconData? successIcon;
+
+  /// 失败图标
+  final IconData? errorIcon;
+
+  /// 自定义内容
+  final Widget? customContent;
+
+  /// 自定义标题
+  final Widget? customTitle;
+}
+
+/// Steps步骤条方向
+enum TStepsDirection {
+  horizontal,
+  vertical,
+}
+
+/// steps步骤条状态
+enum TStepsStatus {
+  success,
+  error,
+}
+
+/// Steps步骤条
+class TSteps extends StatefulWidget {
+  const TSteps({
+    super.key,
+    required this.steps,
+    this.activeIndex = 0,
+    this.direction = TStepsDirection.horizontal,
+    this.status = TStepsStatus.success,
+    this.simple = false,
+    this.readOnly = false,
+    this.verticalSelect = false,
+  });
+
+  /// 步骤条数据
+  final List<TStepsItemData> steps;
+
+  /// 步骤条方向
+  final TStepsDirection direction;
+
+  /// 步骤条当前激活的索引
+  final int activeIndex;
+
+  /// 步骤条状态
+  final TStepsStatus status;
+
+  /// 步骤条simple模式
+  final bool simple;
+
+  /// 步骤条readOnly模式
+  final bool readOnly;
+
+  /// 步骤条垂直自定义步骤条选择模式
+  final bool verticalSelect;
+
+  @override
+  _TStepsState createState() => _TStepsState();
+}
+
+class _TStepsState extends State<TSteps> {
+  int _clampActiveIndex(int index, int length) {
+    if (index < 0) {
+      return 0;
+    }
+    if (index >= length) {
+      return length > 0 ? length - 1 : 0;
+    }
+    return index;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    /// 当前激活的step索引
+    final currentActiveIndex = _clampActiveIndex(
+      widget.activeIndex,
+      widget.steps.length,
+    );
+
+    return widget.direction == TStepsDirection.horizontal
+        ? TStepsHorizontal(
+            steps: widget.steps,
+            activeIndex: currentActiveIndex,
+            status: widget.status,
+            simple: widget.simple,
+            readOnly: widget.readOnly)
+        : TStepsVertical(
+            steps: widget.steps,
+            activeIndex: currentActiveIndex,
+            status: widget.status,
+            simple: widget.simple,
+            readOnly: widget.readOnly,
+            verticalSelect: widget.verticalSelect,
+          );
+  }
+}

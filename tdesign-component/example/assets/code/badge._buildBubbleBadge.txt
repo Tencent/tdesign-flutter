@@ -7,16 +7,16 @@
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            child: const Icon(TDIcons.shop),
+            child: const Icon(TIcons.shop),
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorComponent,
+                color: TTheme.of(context).bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
           const Positioned(
-            child: TDBadge(TDBadgeType.bubble, count: '领积分'),
+            child: TBadge(TBadgeType.bubble, count: '领积分'),
             right: 0,
             top: 0,
           )

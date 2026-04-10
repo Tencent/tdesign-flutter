@@ -1,6 +1,6 @@
 
   Widget _buildItemWithSplit2(BuildContext context) {
-    return TDTabBar(
+    return TTabBar(
       tabs: subList(3),
       controller: _tabController2,
       showIndicator: true,

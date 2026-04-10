@@ -5,24 +5,24 @@ Widget _buildBlock(BuildContext context) {
     [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000],
   );
   return Column(
-    // spacing: TDTheme.of(context).spacer16,
+    // spacing: TTheme.of(context).spacer16,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
-        // spacing: TDTheme.of(context).spacer16,
+        // spacing: TTheme.of(context).spacer16,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TDButton(
+          TButton(
             text: '加一个月',
-            theme: TDButtonTheme.primary,
+            theme: TButtonTheme.primary,
             onTap: () {
               selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
             },
           ),
           const SizedBox(width: 16),
-          TDButton(
+          TButton(
             text: '减一个月',
-            theme: TDButtonTheme.primary,
+            theme: TButtonTheme.primary,
             onTap: () {
               selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
             },
@@ -33,7 +33,7 @@ Widget _buildBlock(BuildContext context) {
       ValueListenableBuilder(
         valueListenable: selected,
         builder: (context, value, child) {
-          return TDCalendar(
+          return TCalendar(
             title: '请选择日期',
             value: value,
             height: size.height * 0.6 + 176,

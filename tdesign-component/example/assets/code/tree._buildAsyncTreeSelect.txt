@@ -1,6 +1,6 @@
 
   Widget _buildAsyncTreeSelect(BuildContext context) {
-    return TDTreeSelect(
+    return TTreeSelect(
       options: asyncOptions,
       defaultValue: asyncValues,
       onChange: (val, level) {
@@ -14,8 +14,8 @@
                if(mounted) {
                  setState(() {
                    asyncOptions[index].children = [
-                     TDSelectOption(label: '异步加载二级-1', value: 101),
-                     TDSelectOption(label: '异步加载二级-2', value: 102),
+                     TSelectOption(label: '异步加载二级-1', value: 101),
+                     TSelectOption(label: '异步加载二级-2', value: 102),
                    ];
                  });
                }

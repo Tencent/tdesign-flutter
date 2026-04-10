@@ -1,4 +1,4 @@
 
   Widget _buildImageSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.image);
+    return TSkeleton(theme: TSkeletonTheme.image);
   }

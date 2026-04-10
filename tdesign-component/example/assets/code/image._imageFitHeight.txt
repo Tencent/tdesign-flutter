@@ -5,18 +5,18 @@
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: TText(
             '适应高',
-            font: TDTheme.of(context).fontBodyMedium,
+            font: TTheme.of(context).fontBodyMedium,
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: TDTheme.of(context).bgColorContainerHover,
-          child: const TDImage(
+          color: TTheme.of(context).bgColorContainerHover,
+          child: const TImage(
             assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitHeight,
+            type: TImageType.fitHeight,
           ),
         ),
       ],

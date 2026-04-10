@@ -1,7 +1,7 @@
 
   Widget _basicTypeTextLimitChinese2(BuildContext context) {
-    return TDInput(
-      type: TDInputType.normal,
+    return TInput(
+      type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[6],
       hintText: '请输入文字',

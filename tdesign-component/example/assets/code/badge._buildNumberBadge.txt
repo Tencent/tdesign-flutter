@@ -10,13 +10,13 @@
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                TDText(
+                TText(
                   '消息',
-                  font: TDTheme.of(context).fontBodyLarge,
+                  font: TTheme.of(context).fontBodyLarge,
                 ),
                 const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
+                  child: TBadge(
+                    TBadgeType.message,
                     count: '8',
                   ),
                   right: 0,
@@ -34,10 +34,10 @@
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: const [
-                Icon(TDIcons.notification),
+                Icon(TIcons.notification),
                 Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
+                  child: TBadge(
+                    TBadgeType.message,
                     count: '8',
                   ),
                   right: 0,
@@ -55,15 +55,15 @@
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: const [
-                TDButton(
+                TButton(
                   width: 80,
                   height: 48,
                   text: '按钮',
-                  size: TDButtonSize.large,
+                  size: TButtonSize.large,
                 ),
                 Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
+                  child: TBadge(
+                    TBadgeType.message,
                     count: '8',
                   ),
                   right: 0,

@@ -26,10 +26,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultSuccess(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultSuccess(BuildContext context) {
+    return const TResult(
       title: '成功状态',
-      theme: TDResultTheme.success,
+      theme: TResultTheme.success,
     );
   }</pre>
 
@@ -40,10 +40,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultError(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
     );
   }</pre>
 
@@ -54,10 +54,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
     );
   }</pre>
 
@@ -68,10 +68,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultDefault(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultDefault(BuildContext context) {
+    return const TResult(
       title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
+      theme: TResultTheme.defaultTheme,
     );
   }</pre>
 
@@ -82,10 +82,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultSuccess(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultSuccess(BuildContext context) {
+    return const TResult(
       title: '成功状态',
-      theme: TDResultTheme.success,
+      theme: TResultTheme.success,
     );
   }</pre>
 
@@ -96,10 +96,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultError(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
     );
   }</pre>
 
@@ -110,10 +110,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
     );
   }</pre>
 
@@ -124,10 +124,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildBasicResultDefault(BuildContext context) {
-    return const TDResult(
+  TResult _buildBasicResultDefault(BuildContext context) {
+    return const TResult(
       title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
+      theme: TResultTheme.defaultTheme,
     );
   }</pre>
 
@@ -140,10 +140,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionSuccess(BuildContext context) {
+    return const TResult(
       title: '成功状态',
-      theme: TDResultTheme.success,
+      theme: TResultTheme.success,
       description: '描述文字',
     );
   }</pre>
@@ -155,10 +155,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
       description: '描述文字',
     );
   }</pre>
@@ -170,10 +170,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
       description: '描述文字',
     );
   }</pre>
@@ -185,10 +185,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionDefault(BuildContext context) {
+    return const TResult(
       title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
+      theme: TResultTheme.defaultTheme,
       description: '描述文字',
     );
   }</pre>
@@ -200,10 +200,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionSuccess(BuildContext context) {
+    return const TResult(
       title: '成功状态',
-      theme: TDResultTheme.success,
+      theme: TResultTheme.success,
       description: '描述文字',
     );
   }</pre>
@@ -215,10 +215,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
       description: '描述文字',
     );
   }</pre>
@@ -230,10 +230,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionWarning(BuildContext context) {
+    return const TResult(
       title: '警示状态',
-      theme: TDResultTheme.warning,
+      theme: TResultTheme.warning,
       description: '描述文字',
     );
   }</pre>
@@ -245,10 +245,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionDefault(BuildContext context) {
+    return const TResult(
       title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
+      theme: TResultTheme.defaultTheme,
       description: '描述文字',
     );
   }</pre>
@@ -261,8 +261,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TDResult _buildCustomResultContent(BuildContext context) {
-    return TDResult(
+  TResult _buildCustomResultContent(BuildContext context) {
+    return TResult(
       title: '自定义结果',
       icon: Image.asset('assets/img/illustration.png'),
       description: '描述文字',
@@ -283,7 +283,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDResult
+### TResult
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -291,7 +291,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | description | String? | - | 描述文本，用于提供额外信息 |
 | icon | Widget? | - | 图标组件，用于在结果中显示一个图标 |
 | key |  | - |  |
-| theme | TDResultTheme | TDResultTheme.defaultTheme | 主题样式，默认主题样式为defaultTheme |
+| theme | TResultTheme | TResultTheme.defaultTheme | 主题样式，默认主题样式为defaultTheme |
 | title | String | '' | 标题文本，显示结果的主要信息，默认标题为空字符串 |
 | titleStyle | TextStyle? | - | 自定义字体样式，用于设置标题文本的样式 |
 

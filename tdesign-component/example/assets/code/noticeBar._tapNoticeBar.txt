@@ -1,11 +1,11 @@
 
 Widget _tapNoticeBar(BuildContext context) {
-  return TDNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
-    prefixIcon: TDIcons.error_circle_filled,
-    suffixIcon: TDIcons.chevron_right,
+    prefixIcon: TIcons.error_circle_filled,
+    suffixIcon: TIcons.chevron_right,
     onTap: (trigger) {
-      TDToast.showText('tap:$trigger', context: context);
+      TToast.showText('tap:$trigger', context: context);
     },
   );
 }

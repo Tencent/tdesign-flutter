@@ -9,14 +9,14 @@
         index: i,
         label: '选项 $i',
         value: i,
-        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
+        textStyle: TextStyle(color: TTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
+    list[1].badge = const TBadge(TBadgeType.redPoint);
+    list[2].badge = const TBadge(
+      TBadgeType.message,
       count: '8',
     );
     list[1].textStyle = const TextStyle(color: Colors.green);
@@ -32,12 +32,12 @@
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
-            style: TDSideBarStyle.normal,
+          child: TSideBar(
+            style: TSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map((ele) => TSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,

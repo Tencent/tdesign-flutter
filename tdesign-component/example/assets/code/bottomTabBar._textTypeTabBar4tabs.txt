@@ -1,11 +1,11 @@
 
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(
-      TDBottomTabBarBasicType.text,
+    return TBottomTabBar(
+      TBottomTabBarBasicType.text,
       useVerticalDivider: false,
       navigationTabs: List.generate(4, (index) {
         final label = '标签${index + 1}';
-        return TDBottomTabBarTabConfig(
+        return TBottomTabBarTabConfig(
           tabText: label,
           onTap: () {
             onTapTab(context, label);

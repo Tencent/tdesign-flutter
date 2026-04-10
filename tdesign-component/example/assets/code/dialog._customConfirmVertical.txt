@@ -1,35 +1,35 @@
 
   Widget _customConfirmVertical(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '纵向按钮-自定义内容',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: TButtonSize.large,
+      type: TButtonType.outline,
+      theme: TButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return TDAlertDialog.vertical(
+            return TAlertDialog.vertical(
                 title: _dialogTitle,
-                contentWidget: TDText.rich(TDTextSpan(children: [
-                  TDTextSpan(text: '红色文字', textColor: Colors.red),
-                  TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                contentWidget: TText.rich(TTextSpan(children: [
+                  TTextSpan(text: '红色文字', textColor: Colors.red),
+                  TTextSpan(text: '绿色文字', textColor: Colors.green),
                 ])),
                 buttons: [
-                  TDDialogButtonOptions(
+                  TDialogButtonOptions(
                       title: '主要按钮',
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: TDButtonTheme.primary),
-                  TDDialogButtonOptions(
+                      theme: TButtonTheme.primary),
+                  TDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor7,
+                      titleColor: TTheme.of(context).brandColor7,
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: TDButtonTheme.light),
+                      theme: TButtonTheme.light),
                 ]);
           },
         );

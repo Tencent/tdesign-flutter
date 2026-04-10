@@ -4,20 +4,20 @@
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
+        const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
         ),
         const SizedBox(width: 36),
-        const TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.activity,
+        const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.activity,
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.point,
-          iconColor: TDTheme.of(context).brandNormalColor,
+        TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.point,
+          iconColor: TTheme.of(context).brandNormalColor,
         ),
       ],
     );

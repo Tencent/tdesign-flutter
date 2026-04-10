@@ -1,16 +1,16 @@
 
   Widget _allowMultipleTaps(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TBottomTabBar(TBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             allowMultipleTaps: true,
             tabText: '支持重复点击',
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
+          TBottomTabBarTabConfig(
             tabText: '不支持重复点击',
             onTap: () {
               onTapTab(context, '标签2');

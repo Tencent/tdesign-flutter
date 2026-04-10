@@ -5,11 +5,11 @@
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          TDStepper(
-            theme: TDStepperTheme.filled,
+          TStepper(
+            theme: TStepperTheme.filled,
             controller: controller,
           ),
-          TDButton(
+          TButton(
             text: 'value * 2',
             onTap: () {
               controller.value *= 2;

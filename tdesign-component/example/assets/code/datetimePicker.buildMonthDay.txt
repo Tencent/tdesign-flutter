@@ -1,11 +1,11 @@
 
   Widget buildMonthDay(BuildContext context) {
-    return TDCell(
+    return TCell(
       title: '选择时间',
       note: selected_3.isEmpty ? '请选择' : selected_3,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(
+        TPicker.showDatePicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {

@@ -1,53 +1,53 @@
 
   Widget _customColorAndFont(BuildContext context) {
-    return TDRadioGroup(
+    return TRadioGroup(
       selectId: 'index:1',
       child: ListView(
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          TDRadio(
+          TRadio(
             id: 'index:1',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
-            selectColor: TDTheme.of(context).errorColor3,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            selectColor: TTheme.of(context).errorColor3,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
           ),
-          TDRadio(
+          TRadio(
             id: 'index:2',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行',
-            selectColor: TDTheme.of(context).errorColor3,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            selectColor: TTheme.of(context).errorColor3,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
           ),
-          TDRadio(
+          TRadio(
             id: 'index:3',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
-            selectColor: TDTheme.of(context).errorColor3,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            selectColor: TTheme.of(context).errorColor3,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
           ),
-          TDRadio(
+          TRadio(
             id: 'index:4',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行',
-            selectColor: TDTheme.of(context).errorColor3,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
-            radioStyle: TDRadioStyle.hollowCircle,
+            selectColor: TTheme.of(context).errorColor3,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
+            radioStyle: TRadioStyle.hollowCircle,
           ),
-          TDRadio(
+          TRadio(
             id: 'index:6',
             title: '绿色',
             titleColor: Colors.green,
@@ -55,20 +55,20 @@
             subTitleMaxLine: 2,
             subTitle: '我是蓝色并且有灰色背景',
             subTitleColor: Colors.blue,
-            selectColor: TDTheme.of(context).errorColor3,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
-            backgroundColor: TDTheme.of(context).grayColor2,
+            selectColor: TTheme.of(context).errorColor3,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
+            backgroundColor: TTheme.of(context).grayColor2,
           ),
-          TDRadio(
+          TRadio(
             id: 'index:5',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
-            selectColor: TDTheme.of(context).errorColor3,
-            titleFont: TDTheme.of(context).fontBodySmall,
-            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            selectColor: TTheme.of(context).errorColor3,
+            titleFont: TTheme.of(context).fontBodySmall,
+            subTitleFont: TTheme.of(context).fontBodyExtraSmall,
             cardMode: true,
           ),
         ],

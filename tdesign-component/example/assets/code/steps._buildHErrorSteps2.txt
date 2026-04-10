@@ -1,33 +1,33 @@
 
   Widget _buildHErrorSteps2(BuildContext context) {
-    return TDSteps(
+    return TSteps(
       steps: [
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps1',
           content: 'Content1',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Error',
           content: 'Content2',
-          successIcon: TDIcons.cart,
-          errorIcon: TDIcons.close_circle,
+          successIcon: TIcons.cart,
+          errorIcon: TIcons.close_circle,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps3',
           content: 'Content3',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
-        TDStepsItemData(
+        TStepsItemData(
           title: 'Steps4',
           content: 'Content4',
-          successIcon: TDIcons.cart,
+          successIcon: TIcons.cart,
         ),
       ],
       // 水平方向
-      direction: TDStepsDirection.horizontal,
+      direction: TStepsDirection.horizontal,
       activeIndex: 1,
       // 错误状态
-      status: TDStepsStatus.error,
+      status: TStepsStatus.error,
     );
   }

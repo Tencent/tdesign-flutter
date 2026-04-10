@@ -26,15 +26,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromTop(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '顶部弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.top,
               open: () {
                 print('open');
@@ -44,7 +44,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               },
               builder: (context) {
                 return Container(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   height: 240,
                 );
               }),
@@ -62,19 +62,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromLeft(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '左侧弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.left,
               builder: (context) {
                 return Container(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   width: 280,
                 );
               }),
@@ -92,22 +92,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromCenter(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '中间弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.center,
               builder: (context) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: TDTheme.of(context).bgColorContainer,
+                    color: TTheme.of(context).bgColorContainer,
                     borderRadius:
-                        BorderRadius.circular(TDTheme.of(context).radiusLarge),
+                        BorderRadius.circular(TTheme.of(context).radiusLarge),
                   ),
                   width: 240,
                   height: 240,
@@ -127,19 +127,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottom(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
               builder: (context) {
                 return Container(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   height: 240,
                 );
               }),
@@ -157,19 +157,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromRight(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '右侧弹出',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.right,
               builder: (context) {
                 return Container(
-                  color: TDTheme.of(context).bgColorContainer,
+                  color: TTheme.of(context).bgColorContainer,
                   width: 280,
                 );
               }),
@@ -188,24 +188,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带标题及操作',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
-              return TDPopupBottomConfirmPanel(
+              return TPopupBottomConfirmPanel(
                 title: '标题文字',
                 leftClick: () {
                   Navigator.maybePop(context);
                 },
                 rightClick: () {
-                  TDToast.showText('确定', context: context);
+                  TToast.showText('确定', context: context);
                   Navigator.maybePop(context);
                 },
                 child: Container(height: 200),
@@ -226,23 +226,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottomWithOperation(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带操作',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(TDSlidePopupRoute(
-            modalBarrierColor: TDTheme.of(context).fontGyColor2,
+        Navigator.of(context).push(TSlidePopupRoute(
+            modalBarrierColor: TTheme.of(context).fontGyColor2,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
-              return TDPopupBottomConfirmPanel(
+              return TPopupBottomConfirmPanel(
                 leftClick: () {
                   Navigator.maybePop(context);
                 },
                 rightClick: () {
-                  TDToast.showText('确定', context: context);
+                  TToast.showText('确定', context: context);
                   Navigator.maybePop(context);
                 },
                 child: Container(
@@ -263,18 +263,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带标题及关闭',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
               builder: (context) {
-                return TDPopupBottomDisplayPanel(
+                return TPopupBottomDisplayPanel(
                   title: '标题文字',
                   closeClick: () {
                     Navigator.maybePop(context);
@@ -296,18 +296,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottomWithCloseAndLeftTitle(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带左边标题及关闭',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
               builder: (context) {
-                return TDPopupBottomDisplayPanel(
+                return TPopupBottomDisplayPanel(
                   title: '标题文字',
                   titleLeft: true,
                   closeClick: () {
@@ -330,18 +330,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottomWithClose(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带关闭',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
               builder: (context) {
-                return TDPopupBottomDisplayPanel(
+                return TPopupBottomDisplayPanel(
                   closeClick: () {
                     Navigator.maybePop(context);
                   },
@@ -362,18 +362,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromBottomWithTitle(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-仅标题',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
               builder: (context) {
-                return TDPopupBottomDisplayPanel(
+                return TPopupBottomDisplayPanel(
                   title: '标题文字',
                   hideClose: true,
                   // closeClick: () {
@@ -396,19 +396,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromCenterWithClose(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '居中弹出层-带关闭',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               isDismissible: false,
               slideTransitionFrom: SlideTransitionFrom.center,
               builder: (context) {
-                return TDPopupCenterPanel(
+                return TPopupCenterPanel(
                   closeClick: () {
                     Navigator.maybePop(context);
                   },
@@ -429,19 +429,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '居中弹出层-关闭在下方',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               isDismissible: false,
               slideTransitionFrom: SlideTransitionFrom.center,
               builder: (context) {
-                return TDPopupCenterPanel(
+                return TPopupCenterPanel(
                   closeUnderBottom: true,
                   closeClick: () {
                     Navigator.maybePop(context);
@@ -459,7 +459,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDPopupBottomDisplayPanel
+### TPopupBottomDisplayPanel
 #### 简介
 右上角带关闭的底部浮层面板
 #### 默认构造方法
@@ -485,7 +485,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDPopupBottomConfirmPanel
+### TPopupBottomConfirmPanel
 #### 简介
 带确认的底部浮层面板
 #### 默认构造方法
@@ -514,7 +514,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDPopupCenterPanel
+### TPopupCenterPanel
 #### 简介
 居中浮层面板
 #### 默认构造方法
@@ -533,7 +533,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDSlidePopupRoute
+### TSlidePopupRoute
 #### 简介
 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
 #### 默认构造方法

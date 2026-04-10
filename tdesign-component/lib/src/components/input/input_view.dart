@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class TDInputView extends StatelessWidget {
+class TInputView extends StatelessWidget {
   /// 是否只读
   final bool readOnly;
 
@@ -82,7 +82,7 @@ class TDInputView extends StatelessWidget {
   /// 是否启用交互式选择
   final bool? enableInteractiveSelection;
 
-  const TDInputView(
+  const TInputView(
       {Key? key,
       required this.textStyle,
       this.readOnly = false,

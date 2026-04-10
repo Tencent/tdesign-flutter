@@ -9,7 +9,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 
 /// 宽高屏幕自动适配，使用举例：100.as
-extension TDIntScale on int {
+extension TIntScale on int {
   double get scale {
     /// 屏幕的逻辑宽度=屏幕物理宽度/屏幕的像素倍数
     var view = PlatformDispatcher.instance.views.first;
@@ -20,7 +20,7 @@ extension TDIntScale on int {
   }
 }
 
-extension TDDoubleScale on double {
+extension TDoubleScale on double {
   double get scale {
     /// 屏幕的逻辑宽度=屏幕物理宽度/屏幕的像素倍数
     var view = PlatformDispatcher.instance.views.first;

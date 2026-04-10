@@ -27,12 +27,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildVerticalCascader(BuildContext context) {
     const title = '选择地址';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_1,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               data: _data,
               initialData: _initData,
@@ -62,12 +62,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildVerticalLetterCascader(BuildContext context) {
     const title = '选择地址';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_2,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               data: _data_2,
               initialData: _initData_2,
@@ -97,12 +97,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildHorizontalCascader(BuildContext context) {
     const title = '选择地址';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_1,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               subTitles: ['请选择省份', '请选择城市', '请选择区/县'],
               data: _data,
@@ -133,12 +133,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildHorizontalLetterCascader(BuildContext context) {
     const title = '选择地址';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_2,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               data: _data_2,
               initialData: _initData_2,
@@ -169,12 +169,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildHorizontalCompanyCascader(BuildContext context) {
     const title = '选择部门人员';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_3,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               data: _data_3,
               isLetterSort: true,
@@ -205,12 +205,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildVerticalCompanyCascader(BuildContext context) {
     const title = '选择部门人员';
-    return TDCell(
+    return TCell(
         title: title,
         note: _selected_3,
         arrow: true,
         onClick: (click) {
-          TDCascader.showMultiCascader(context,
+          TCascader.showMultiCascader(context,
               title: title,
               data: _data_3,
               isLetterSort: true,
@@ -236,12 +236,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDMultiCascader
+### TMultiCascader
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action | TDCascaderAction? | - | 自定义选择器右上角按钮 |
+| action | TCascaderAction? | - | 自定义选择器右上角按钮 |
 | backgroundColor | Color? | - | 背景颜色 |
 | cascaderHeight | double | - | 选择器List的视窗高度，默认200 |
 | closeText | String? | - | 关闭按钮文本 |

@@ -31,8 +31,8 @@
           },
         ),
         const SizedBox(height: 10),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData(
             context: context,
             min: 0,
             max: 100,

@@ -1,13 +1,13 @@
 
   Widget buildCustomLeftRightText(BuildContext context) {
-    return TDCellGroup(
+    return TCellGroup(
       cells: [
-        TDCell(
+        TCell(
           title: '基础选择器',
           note: selected_5.isEmpty ? '请选择' : selected_5,
           arrow: true,
           onClick: (click) {
-            TDPicker.showMultiPicker(
+            TPicker.showMultiPicker(
               context,
               leftText: '自定义取消',
               rightText: '自定义确认',
@@ -22,12 +22,12 @@
             );
           },
         ),
-        TDCell(
+        TCell(
           title: '联动选择器',
           note: selected_3.isEmpty ? '请选择' : selected_3,
           arrow: true,
           onClick: (click) {
-            TDPicker.showMultiLinkedPicker(
+            TPicker.showMultiLinkedPicker(
               context,
               leftText: '自定义取消',
               rightText: '自定义确认',

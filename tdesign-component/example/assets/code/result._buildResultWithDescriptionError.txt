@@ -1,8 +1,8 @@
 
-  TDResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TDResult(
+  TResult _buildResultWithDescriptionError(BuildContext context) {
+    return const TResult(
       title: '失败状态',
-      theme: TDResultTheme.error,
+      theme: TResultTheme.error,
       description: '描述文字',
     );
   }

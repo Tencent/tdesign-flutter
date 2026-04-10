@@ -1,5 +1,5 @@
 ## API
-### TDAvatar
+### TAvatar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -18,7 +18,7 @@
 | key |  | - |  |
 | onTap |  Function()? | - | 操作点击事件 |
 | radius | double? | - | 自定义圆角 |
-| shape | TDAvatarShape | TDAvatarShape.circle | 头像形状 |
-| size | TDAvatarSize | TDAvatarSize.medium | 头像尺寸 |
+| shape | TAvatarShape | TAvatarShape.circle | 头像形状 |
+| size | TAvatarSize | TAvatarSize.medium | 头像尺寸 |
 | text | String? | - | 自定义文字 |
-| type | TDAvatarType | TDAvatarType.normal | 头像类型 |
+| type | TAvatarType | TAvatarType.normal | 头像类型 |

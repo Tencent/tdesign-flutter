@@ -1,20 +1,20 @@
 
   Widget _radioStatus(BuildContext context) {
-    return TDRadioGroup(
-      contentDirection: TDContentDirection.right,
+    return TRadioGroup(
+      contentDirection: TContentDirection.right,
       selectId: '0',
       child: const Column(
         children: [
-          TDRadio(
+          TRadio(
             id: '0',
             title: '选项禁用-已选',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: TRadioStyle.circle,
             enable: false,
           ),
-          TDRadio(
+          TRadio(
             id: '1',
             title: '选项禁用-默认',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: TRadioStyle.circle,
             enable: false,
           ),
         ],

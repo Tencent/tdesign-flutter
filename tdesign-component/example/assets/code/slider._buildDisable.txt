@@ -2,8 +2,8 @@
   Widget _buildDisable(BuildContext context) {
     return Column(
       children: [
-        TDSlider(
-          sliderThemeData: TDSliderThemeData(
+        TSlider(
+          sliderThemeData: TSliderThemeData(
             context: context,
             min: 0,
             max: 100,
@@ -15,8 +15,8 @@
         const SizedBox(
           height: 16,
         ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData(
             context: context,
             min: 0,
             max: 100,
@@ -30,8 +30,8 @@
         const SizedBox(
           height: 16,
         ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
+        TRangeSlider(
+          sliderThemeData: TSliderThemeData(
             context: context,
             showScaleValue: true,
             divisions: 5,

@@ -1,17 +1,17 @@
 
   Widget _verticalStyle(BuildContext context) {
-    return TDInput(
-      spacer: TDInputSpacer(iconLabelSpace: 0),
-      type: TDInputType.twoLine,
+    return TInput(
+      spacer: TInputSpacer(iconLabelSpace: 0),
+      type: TInputType.twoLine,
       leftLabel: '标签文字',
       controller: controller[20],
       hintText: '请输入文字',
       rightBtn: Icon(
-        TDIcons.error_circle_filled,
-        color: TDTheme.of(context).textColorPlaceholder,
+        TIcons.error_circle_filled,
+        color: TTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
-        TDToast.showText('点击右侧按钮', context: context);
+        TToast.showText('点击右侧按钮', context: context);
       },
       onChanged: (text) {
         setState(() {});

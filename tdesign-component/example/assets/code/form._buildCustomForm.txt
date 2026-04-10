@@ -1,7 +1,7 @@
 
   Widget _buildCustomForm(BuildContext context) {
-    final theme = TDTheme.of(context);
-    return TDForm(
+    final theme = TTheme.of(context);
+    return TForm(
         formController: _formController,
         disabled: _formDisableState,
         data: _formData,
@@ -14,11 +14,11 @@
         formShowErrorMessage: true,
         onSubmit: onSubmit,
         items: [
-          TDFormItem(
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+          TFormItem(
+            backgroundColor: TTheme.of(context).brandNormalColor,
             label: '用户名',
             name: 'name',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             help: '请输入用户名',
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['name'],
@@ -26,7 +26,7 @@
             /// 控制单个 item 是否展示错误提醒
             showErrorMessage: true,
             requiredMark: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                     hintText: '请输入用户名',
@@ -34,10 +34,10 @@
                     contentPadding: const EdgeInsets.all(0),
                     hintStyle: TextStyle(
                         color:
-                            TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
+                            TTheme.of(context).fontGyColor3.withOpacity(0.4))),
                 controller: _controller[0],
-                backgroundColor: TDTheme.of(context).brandNormalColor,
-                additionInfoColor: TDTheme.of(context).errorColor6,
+                backgroundColor: TTheme.of(context).brandNormalColor,
+                additionInfoColor: TTheme.of(context).errorColor6,
                 showBottomDivider: false,
                 readOnly: _formDisableState,
                 onChanged: (val) {
@@ -48,26 +48,26 @@
                   _formItemNotifier['name']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '密码',
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+            backgroundColor: TTheme.of(context).brandNormalColor,
             name: 'password',
-            type: TDFormItemType.input,
+            type: TFormItemType.input,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
-            child: TDInput(
+            child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                     hintText: '请输入密码',
                     border: InputBorder.none,
                     hintStyle: TextStyle(
                         color:
-                            TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
-                type: TDInputType.normal,
+                            TTheme.of(context).fontGyColor3.withOpacity(0.4))),
+                type: TInputType.normal,
                 controller: _controller[1],
                 obscureText: !browseOn,
-                backgroundColor: TDTheme.of(context).brandNormalColor,
+                backgroundColor: TTheme.of(context).brandNormalColor,
                 needClear: false,
                 readOnly: _formDisableState,
                 showBottomDivider: false,
@@ -79,25 +79,25 @@
                   _formItemNotifier['password']?.upDataForm('');
                 }),
           ),
-          TDFormItem(
+          TFormItem(
             label: '性别',
             name: 'gender',
-            backgroundColor: TDTheme.of(context).brandNormalColor,
-            type: TDFormItemType.radios,
+            backgroundColor: TTheme.of(context).brandNormalColor,
+            type: TFormItemType.radios,
             labelWidth: 82.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
-            child: TDRadioGroup(
+            child: TRadioGroup(
               spacing: 0,
               direction: Axis.horizontal,
               controller: _genderCheckboxGroupController,
               directionalTdRadios: _radios.entries.map((entry) {
-                return TDRadio(
+                return TRadio(
                   id: entry.key,
                   title: entry.value,
-                  backgroundColor: TDTheme.of(context).brandNormalColor,
-                  selectColor: TDTheme.of(context).brandFocusColor,
-                  radioStyle: TDRadioStyle.circle,
+                  backgroundColor: TTheme.of(context).brandNormalColor,
+                  selectColor: TTheme.of(context).brandFocusColor,
+                  radioStyle: TRadioStyle.circle,
                   showDivider: false,
                   spacing: 4,
                   checkBoxLeftSpace: 0,
@@ -113,12 +113,12 @@
               },
             ),
           ),
-          TDFormItem(
+          TFormItem(
             label: '生日',
             name: 'birth',
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+            backgroundColor: TTheme.of(context).brandNormalColor,
             labelWidth: 82.0,
-            type: TDFormItemType.dateTimePicker,
+            type: TFormItemType.dateTimePicker,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
@@ -128,7 +128,7 @@
               if (_formDisableState) {
                 return;
               }
-              TDPicker.showDatePicker(context, title: '选择时间',
+              TPicker.showDatePicker(context, title: '选择时间',
                   onConfirm: (selected) {
                 setState(() {
                   _selected_1 =
@@ -142,17 +142,17 @@
                   initialDate: [2012, 1, 1]);
             },
           ),
-          TDFormItem(
+          TFormItem(
               label: '年限',
               name: 'age',
               labelWidth: 82.0,
-              backgroundColor: TDTheme.of(context).brandNormalColor,
-              type: TDFormItemType.stepper,
+              backgroundColor: TTheme.of(context).brandNormalColor,
+              type: TFormItemType.stepper,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
                 padding: const EdgeInsets.only(right: 18),
-                child: TDStepper(
-                  theme: TDStepperTheme.filled,
+                child: TStepper(
+                  theme: TStepperTheme.filled,
                   disabled: _formDisableState,
                   eventController: _stepController!,
                   value: int.parse(_formData['age']),
@@ -161,19 +161,19 @@
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
             label: '自我评价',
             name: 'description',
             tipAlign: TextAlign.left,
-            type: TDFormItemType.rate,
+            type: TFormItemType.rate,
             labelWidth: 82.0,
-            backgroundColor: TDTheme.of(context).brandNormalColor,
+            backgroundColor: TTheme.of(context).brandNormalColor,
             formItemNotifier: _formItemNotifier['description'],
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                   padding: const EdgeInsets.only(right: 18),
-                  child: TDRate(
+                  child: TRate(
                     count: 5,
                     value: double.parse(_formData['description']),
                     allowHalf: false,
@@ -187,24 +187,24 @@
                   )),
             ),
           ),
-          TDFormItem(
+          TFormItem(
               label: '个人简介',
               labelWidth: 82.0,
               name: 'resume',
-              type: TDFormItemType.textarea,
-              backgroundColor: TDTheme.of(context).brandNormalColor,
+              type: TFormItemType.textarea,
+              backgroundColor: TTheme.of(context).brandNormalColor,
               formItemNotifier: _formItemNotifier['resume'],
               child: Padding(
                 padding:
                     EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
-                child: TDTextarea(
+                child: TTextarea(
                   backgroundColor: Colors.red,
                   padding: const EdgeInsets.all(0),
                   hintText: '请输入个人简介',
                   maxLength: 500,
                   indicator: true,
                   readOnly: _formDisableState,
-                  layout: TDTextareaLayout.vertical,
+                  layout: TTextareaLayout.vertical,
                   controller: _controller[2],
                   showBottomDivider: false,
                   onChanged: (value) {
@@ -212,16 +212,16 @@
                   },
                 ),
               )),
-          TDFormItem(
+          TFormItem(
               label: '上传图片',
               name: 'photo',
               labelWidth: 82.0,
-              backgroundColor: TDTheme.of(context).brandNormalColor,
-              type: TDFormItemType.upLoadImg,
+              backgroundColor: TTheme.of(context).brandNormalColor,
+              type: TFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 4),
-                child: TDUpload(
+                child: TUpload(
                   files: files,
                   multiple: true,
                   max: 6,

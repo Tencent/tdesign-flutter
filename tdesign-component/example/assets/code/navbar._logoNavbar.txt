@@ -1,17 +1,17 @@
 
   Widget _logoNavbar(BuildContext context) {
-    return TDNavBar(
+    return TNavBar(
         useDefaultBack: false,
         screenAdaptation: false,
         centerTitle: false,
         titleMargin: 0,
-        titleWidget: const TDImage(
-          assetUrl: 'assets/img/td_brand.png',
+        titleWidget: const TImage(
+          assetUrl: 'assets/img/t_brand.png',
           width: 102,
           height: 24,
         ),
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+          TNavBarItem(icon: TIcons.home, iconSize: 24),
+          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
         ]);
   }

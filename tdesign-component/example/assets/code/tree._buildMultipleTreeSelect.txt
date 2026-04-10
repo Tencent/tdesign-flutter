@@ -1,17 +1,17 @@
 
   Widget _buildMultipleTreeSelect(BuildContext context) {
-    var options = <TDSelectOption>[];
+    var options = <TSelectOption>[];
 
     for (var i = 1; i <= 10; i++) {
-      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+      options.add(TSelectOption(label: '选项$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+            TSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
       }
     }
 
-    return TDTreeSelect(
+    return TTreeSelect(
       options: options,
       defaultValue: values2,
       multiple: true,

@@ -19,8 +19,8 @@
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
               ],
             ),
-            TDSlider(
-              sliderThemeData: TDSliderThemeData(
+            TSlider(
+              sliderThemeData: TSliderThemeData(
                   context: context, min: 0, max: 100, showThumbValue: true),
               leftLabel: '0',
               rightLabel: '100',

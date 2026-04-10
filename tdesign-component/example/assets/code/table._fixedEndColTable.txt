@@ -1,34 +1,34 @@
 
   Widget _fixedEndColTable(BuildContext context) {
-    return TDTable(
+    return TTable(
       bordered: true,
       height: 240,
       columns: [
-        TDTableCol(title: '标题一', colKey: 'title1', width: 160),
-        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
-        TDTableCol(title: '标题四', colKey: 'title5', width: 160),
-        TDTableCol(title: '标题五', colKey: 'title6', width: 160),
-        TDTableCol(
+        TTableCol(title: '标题一', colKey: 'title1', width: 160),
+        TTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TTableCol(title: '标题四', colKey: 'title5', width: 160),
+        TTableCol(title: '标题五', colKey: 'title6', width: 160),
+        TTableCol(
           title: '操作',
           colKey: 'title4',
-          fixed: TDTableColFixed.right,
+          fixed: TTableColFixed.right,
           width: 100,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                TText(
                   '修改',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
+                    color: TTheme.of(context).brandNormalColor,
                     fontSize: 14,
                   ),
                 ),
-                TDText(
+                TText(
                   '通过',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
+                    color: TTheme.of(context).brandNormalColor,
                     fontSize: 14,
                   ),
                 ),

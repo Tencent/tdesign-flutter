@@ -2,12 +2,12 @@
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = List.generate(3, (index) {
       final text = '选项${index + 1}';
-      return TDTab(
+      return TTab(
         text: text,
-        icon: const Icon(TDIcons.app, size: 18),
+        icon: const Icon(TIcons.app, size: 18),
       );
     });
-    return TDTabBar(
+    return TTabBar(
       tabs: tabs,
       controller: TabController(length: tabs.length, vsync: this),
       showIndicator: true,

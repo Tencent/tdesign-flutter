@@ -64,9 +64,9 @@ class _ApiWidgetState extends State<ApiWidget> {
           );
         } else {
           return const Center(
-            child: TDLoading(
-              size: TDLoadingSize.large,
-              icon: TDLoadingIcon.circle,
+            child: TLoading(
+              size: TLoadingSize.large,
+              icon: TLoadingIcon.circle,
               text: '加载中…',
               axis: Axis.horizontal,
             ),

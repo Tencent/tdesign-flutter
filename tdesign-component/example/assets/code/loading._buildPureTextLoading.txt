@@ -4,28 +4,28 @@
       // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TDLoading(
-          size: TDLoadingSize.small,
+        const TLoading(
+          size: TLoadingSize.small,
           text: '加载中…',
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
+        TLoading(
+          size: TLoadingSize.small,
           text: '加载失败',
-          textColor: TDTheme.of(context).textColorPlaceholder,
+          textColor: TTheme.of(context).textColorPlaceholder,
         ),
         const SizedBox(width: 36),
-        TDLoading(
-          size: TDLoadingSize.small,
+        TLoading(
+          size: TLoadingSize.small,
           text: '加载失败',
           refreshWidget: GestureDetector(
-            child: TDText(
+            child: TText(
               '刷新',
-              font: TDTheme.of(context).fontBodySmall,
-              textColor: TDTheme.of(context).brandNormalColor,
+              font: TTheme.of(context).fontBodySmall,
+              textColor: TTheme.of(context).brandNormalColor,
             ),
             onTap: () {
-              TDToast.showText('刷新', context: context);
+              TToast.showText('刷新', context: context);
             },
           ),
         ),

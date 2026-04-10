@@ -1,10 +1,10 @@
 
-  TDButton _buildDefaultTextButton(BuildContext context) {
-    return const TDButton(
+  TButton _buildDefaultTextButton(BuildContext context) {
+    return const TButton(
       text: '文字按钮',
-      size: TDButtonSize.large,
-      type: TDButtonType.text,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.defaultTheme,
+      size: TButtonSize.large,
+      type: TButtonType.text,
+      shape: TButtonShape.rectangle,
+      theme: TButtonTheme.defaultTheme,
     );
   }

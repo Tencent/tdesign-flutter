@@ -3,22 +3,22 @@
     final rowCols = Flexible(
         child: LayoutBuilder(
             builder: (context, constraints) => Row(children: [
-                  TDSkeleton.fromRowCol(
-                    rowCol: TDSkeletonRowCol(
+                  TSkeleton.fromRowCol(
+                    rowCol: TSkeletonRowCol(
                       objects: [
                         [
-                          TDSkeletonRowColObj(
+                          TSkeletonRowColObj(
                               width: constraints.maxWidth,
                               height: constraints.maxWidth,
                               flex: null,
-                              style: TDSkeletonRowColObjStyle(
+                              style: TSkeletonRowColObjStyle(
                                   borderRadius: (context) =>
-                                      TDTheme.of(context).radiusExtraLarge))
+                                      TTheme.of(context).radiusExtraLarge))
                         ],
-                        [TDSkeletonRowColObj.text(width: constraints.maxWidth)],
+                        [TSkeletonRowColObj.text(width: constraints.maxWidth)],
                         const [
-                          TDSkeletonRowColObj.text(),
-                          TDSkeletonRowColObj.spacer(flex: 1),
+                          TSkeletonRowColObj.text(),
+                          TSkeletonRowColObj.spacer(flex: 1),
                         ],
                       ],
                     ),
@@ -26,10 +26,10 @@
                 ])));
 
     return Row(
-      // spacing: TDTheme.of(context).spacer16,
+      // spacing: TTheme.of(context).spacer16,
       children: [
         rowCols,
-        SizedBox(width: TDTheme.of(context).spacer16),
+        SizedBox(width: TTheme.of(context).spacer16),
         rowCols,
       ],
     );

@@ -3,15 +3,15 @@
     return const Wrap(
       runSpacing: 20,
       children: [
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.left,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.center,
         ),
-        TDDivider(
+        TDivider(
           text: '文字信息',
           alignment: TextAlignment.right,
         ),

@@ -19,37 +19,37 @@
 ### 3. 核心代码实现 ✅
 
 #### 新增文件：
-1. **`lib/src/components/calendar/td_lunar_date.dart`**
-   - `TDLunarInfo` 类：农历日期信息模型
-   - `TDCalendarDateType` 枚举：日历类型（solar/lunar）
+1. **`lib/src/components/calendar/t_lunar_date.dart`**
+   - `TLunarInfo` 类：农历日期信息模型
+   - `TCalendarDateType` 枚举：日历类型（solar/lunar）
 
-2. **`lib/src/components/calendar/td_calendar_data_source.dart`**
-   - `TDCalendarDataSource` 抽象接口
+2. **`lib/src/components/calendar/t_calendar_data_source.dart`**
+   - `TCalendarDataSource` 抽象接口
    - 提供农历转换、格式化等方法
 
 #### 修改文件：
-1. **`lib/src/components/calendar/td_calendar.dart`**
+1. **`lib/src/components/calendar/t_calendar.dart`**
    - 添加 `dateType`、`dataSource`、`showLunarInfo` 参数
    - 导出新增模块
 
-2. **`lib/src/components/calendar/td_calendar_body.dart`**
+2. **`lib/src/components/calendar/t_calendar_body.dart`**
    - 添加数据源支持
    - 在创建 `TDate` 时注入农历信息
 
-3. **`lib/src/components/calendar/td_calendar_cell.dart`**
+3. **`lib/src/components/calendar/t_calendar_cell.dart`**
    - 扩展 `TDate` 添加 `lunarInfo` 字段
    - 实现 `_buildDefaultCell` 方法支持农历显示
    - 根据 `dateType` 和 `showLunarInfo` 控制显示逻辑
 
 ### 4. 测试用例 ✅
 
-**文件：** `test/td_calendar_lunar_test.dart`
+**文件：** `test/t_calendar_lunar_test.dart`
 
 **覆盖范围：**
-- ✅ TDLunarInfo 模型创建和属性
+- ✅ TLunarInfo 模型创建和属性
 - ✅ 闰月处理
 - ✅ 对象比较和 hashCode
-- ✅ TDCalendarDataSource 格式化方法
+- ✅ TCalendarDataSource 格式化方法
 - ✅ TDate 与农历信息集成
 
 **测试结果：** 8/8 通过 ✅
@@ -61,7 +61,7 @@
    - 基于 lunar 包的实现示例
    - 包含节气和节日支持
 
-2. **`example/lib/page/td_calendar_lunar_example.dart`**
+2. **`example/lib/page/t_calendar_lunar_example.dart`**
    - 完整的交互式示例页面
    - 支持阳历/农历切换
    - 显示选中日期的双历信息
@@ -82,24 +82,24 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `dateType` | `TDCalendarDateType` | `TDCalendarDateType.solar` | 日历显示类型（阳历/农历） |
-| `dataSource` | `TDCalendarDataSource?` | `null` | 外部数据源，提供农历转换 |
+| `dateType` | `TCalendarDateType` | `TCalendarDateType.solar` | 日历显示类型（阳历/农历） |
+| `dataSource` | `TCalendarDataSource?` | `null` | 外部数据源，提供农历转换 |
 | `showLunarInfo` | `bool` | `false` | 阳历模式下是否显示农历副标题 |
 
 ### 核心类
 
 ```dart
 // 农历信息模型
-class TDLunarInfo {
+class TLunarInfo {
   final int year, month, day;
   final bool isLeapMonth;
   final String yearText, monthText, dayText;
 }
 
 // 数据源接口（开发者实现）
-abstract class TDCalendarDataSource {
-  TDLunarInfo? getLunarInfo(DateTime solarDate);
-  String formatDate(DateTime date, TDCalendarDateType type, [TDLunarInfo? lunarInfo]);
+abstract class TCalendarDataSource {
+  TLunarInfo? getLunarInfo(DateTime solarDate);
+  String formatDate(DateTime date, TCalendarDateType type, [TLunarInfo? lunarInfo]);
   // ... 其他可选方法
 }
 ```
@@ -108,7 +108,7 @@ abstract class TDCalendarDataSource {
 
 ### 基础用法（向后兼容）
 ```dart
-TDCalendar(
+TCalendar(
   type: CalendarType.single,
   onChange: (dates) { },
 )
@@ -116,8 +116,8 @@ TDCalendar(
 
 ### 农历模式
 ```dart
-TDCalendar(
-  dateType: TDCalendarDateType.lunar,
+TCalendar(
+  dateType: TCalendarDateType.lunar,
   dataSource: MyLunarDataSource(),
   onChange: (dates) { },
 )
@@ -125,8 +125,8 @@ TDCalendar(
 
 ### 阳历+农历副标题
 ```dart
-TDCalendar(
-  dateType: TDCalendarDateType.solar,
+TCalendar(
+  dateType: TCalendarDateType.solar,
   dataSource: MyLunarDataSource(),
   showLunarInfo: true,
 )
@@ -170,17 +170,17 @@ TDCalendar(
 ## 文件清单
 
 ### 新增文件：
-- `lib/src/components/calendar/td_lunar_date.dart`
-- `lib/src/components/calendar/td_calendar_data_source.dart`
-- `test/td_calendar_lunar_test.dart`
+- `lib/src/components/calendar/t_lunar_date.dart`
+- `lib/src/components/calendar/t_calendar_data_source.dart`
+- `test/t_calendar_lunar_test.dart`
 - `example/lib/lunar_data_source_example.dart`
-- `example/lib/page/td_calendar_lunar_example.dart`
+- `example/lib/page/t_calendar_lunar_example.dart`
 - `CALENDAR_LUNAR_README.md`
 
 ### 修改文件：
-- `lib/src/components/calendar/td_calendar.dart`
-- `lib/src/components/calendar/td_calendar_body.dart`
-- `lib/src/components/calendar/td_calendar_cell.dart`
+- `lib/src/components/calendar/t_calendar.dart`
+- `lib/src/components/calendar/t_calendar_body.dart`
+- `lib/src/components/calendar/t_calendar_cell.dart`
 - `example/assets/api/calendar_api.md`
 
 ## 相关链接

@@ -1,11 +1,11 @@
 
   Widget _customIconBuildStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return TCheckboxGroupContainer(
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
       directionalTdCheckboxes: [
-        TDCheckbox(
+        TCheckbox(
           id: 'index:0',
           title: '多选',
           subTitle: '描述信息',
@@ -14,7 +14,7 @@
           cardMode: true,
           customIconBuilder: (context, checked) {
             return const Icon(
-              TDIcons.app,
+              TIcons.app,
               size: 12,
             );
           },

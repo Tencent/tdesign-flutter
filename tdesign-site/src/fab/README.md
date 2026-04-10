@@ -27,8 +27,8 @@ Icon Fab 纯图标悬浮按钮
   <pre slot="Dart" lang="javascript">
   Widget _buildPureIconFab(BuildContext context) {
     return _buildRowDemo([
-      const TDFab(
-        theme: TDFabTheme.primary,
+      const TFab(
+        theme: TFabTheme.primary,
       )
     ]);
   }</pre>
@@ -43,8 +43,8 @@ Icon Fab with Text 图标加文字悬浮按钮
   <pre slot="Dart" lang="javascript">
   Widget _buildTextFab(BuildContext context) {
     return _buildRowDemo([
-      const TDFab(
-        theme: TDFabTheme.primary,
+      const TFab(
+        theme: TFabTheme.primary,
         text: 'Floating',
       )
     ]);
@@ -62,26 +62,26 @@ Fab Theme 悬浮按钮主题
   Widget _buildThemeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
+        'component': const TFab(
+          theme: TFabTheme.primary,
         ),
         'desc': 'Primary'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.defaultTheme,
+        'component': const TFab(
+          theme: TFabTheme.defaultTheme,
         ),
         'desc': 'Default'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.light,
+        'component': const TFab(
+          theme: TFabTheme.light,
         ),
         'desc': 'Light'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.danger,
+        'component': const TFab(
+          theme: TFabTheme.danger,
         ),
         'desc': 'Danger'
       },
@@ -99,16 +99,16 @@ Fab Shape 悬浮按钮形状
   Widget _buildShapeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          shape: TDFabShape.circle,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          shape: TFabShape.circle,
         ),
         'desc': 'Circle'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          shape: TDFabShape.square,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          shape: TFabShape.square,
         ),
         'desc': 'Square'
       },
@@ -126,30 +126,30 @@ Fab Size 悬浮按钮尺寸
   Widget _buildSizeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.large,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.large,
         ),
         'desc': 'Large'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.medium,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.medium,
         ),
         'desc': 'Medium'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.small,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.small,
         ),
         'desc': 'Small'
       },
       {
-        'component': const TDFab(
-          theme: TDFabTheme.primary,
-          size: TDFabSize.extraSmall,
+        'component': const TFab(
+          theme: TFabTheme.primary,
+          size: TFabSize.extraSmall,
         ),
         'desc': 'extraSmall'
       },
@@ -161,7 +161,7 @@ Fab Size 悬浮按钮尺寸
 
 
 ## API
-### TDFab
+### TFab
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -169,10 +169,10 @@ Fab Size 悬浮按钮尺寸
 | icon | Icon? | - | 图标 |
 | key |  | - |  |
 | onClick | VoidCallback? | - | 点击事件 |
-| shape | TDFabShape | TDFabShape.circle | 形状 |
-| size | TDFabSize | TDFabSize.large | 大小 |
+| shape | TFabShape | TFabShape.circle | 形状 |
+| size | TFabSize | TFabSize.large | 大小 |
 | text | String? | - | 文本 |
-| theme | TDFabTheme | TDFabTheme.defaultTheme | 主题 |
+| theme | TFabTheme | TFabTheme.defaultTheme | 主题 |
 
 
   

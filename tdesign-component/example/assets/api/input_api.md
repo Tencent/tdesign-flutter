@@ -1,5 +1,5 @@
 ## API
-### TDInput
+### TInput
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -8,7 +8,7 @@
 | additionInfoColor | Color? | - | 错误提示颜色 |
 | autofocus | bool | false | 是否自动获取焦点 |
 | backgroundColor | Color? | - | 输入框背景色 |
-| cardStyle | TDCardStyle? | - | 卡片默认样式 |
+| cardStyle | TCardStyle? | - | 卡片默认样式 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
 | cardStyleTopText | String? | - | 卡片模式上方文字 |
 | clearBtnColor | Color? | - | 右侧删除按钮颜色 |
@@ -51,10 +51,10 @@
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
 | selectionControls | TextSelectionControls? | - | 自定义选择控制器 |
 | showBottomDivider | bool | true | 是否展示底部分割线 |
-| size | TDInputSize | TDInputSize.large | 输入框规格 |
-| spacer | TDInputSpacer | - | 组件各模块间间距 |
+| size | TInputSize | TInputSize.large | 输入框规格 |
+| spacer | TInputSpacer | - | 组件各模块间间距 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | textStyle | TextStyle? | - | 文本颜色 |
-| type | TDInputType | TDInputType.normal | 输入框类型 |
-| width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
+| type | TInputType | TInputType.normal | 输入框类型 |
+| width | double? | - | 输入框宽度(TCardStyle时必须设置该参数) |

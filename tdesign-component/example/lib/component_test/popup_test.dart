@@ -30,10 +30,10 @@ class _TestPageState extends State<TestPage> {
   void _showProblemDialog() {
 
     Navigator.of(context).push(
-      TDSlidePopupRoute(
+      TSlidePopupRoute(
         slideTransitionFrom: SlideTransitionFrom.bottom,
         builder: (context) {
-          return TDPopupBottomDisplayPanel(
+          return TPopupBottomDisplayPanel(
             title: 'title',
             radius: 20,
             backgroundColor: const Color(0xFFFAFFFC),
@@ -60,9 +60,9 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TDConfirmDialog测试')),
+      appBar: AppBar(title: const Text('TConfirmDialog测试')),
       body: Center(
-        child: TDButton(
+        child: TButton(
           child: const Text('显示问题弹窗'),
           onTap: _showProblemDialog,
         ),

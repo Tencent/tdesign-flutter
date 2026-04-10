@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+
+import '../../../tdesign_flutter.dart';
+
+class TPopover {
+  static Future showPopover({
+    required BuildContext context,
+    String? content,
+    Widget? contentWidget,
+    double offset = 4,
+    TPopoverTheme? theme,
+    bool closeOnClickOutside = true,
+    TPopoverPlacement? placement,
+    bool? showArrow = true,
+    double arrowSize = 8,
+    EdgeInsetsGeometry? padding,
+    double? width,
+    double? height,
+    Color? overlayColor = Colors.transparent,
+    OnTap? onTap,
+    OnLongTap? onLongTap,
+    BorderRadius? radius,
+  }) {
+    return showDialog(
+      barrierDismissible: closeOnClickOutside,
+      barrierColor: overlayColor,
+      useSafeArea: false,
+      context: context,
+      builder: (ctx) => TPopoverWidget(
+        context: context,
+        content: content,
+        contentWidget: contentWidget,
+        offset: offset,
+        theme: theme,
+        placement: placement,
+        showArrow: showArrow,
+        arrowSize: arrowSize,
+        padding: padding,
+        width: width,
+        height: height,
+        onTap: onTap,
+        onLongTap: onLongTap,
+        radius: radius,
+      ),
+    );
+  }
+}

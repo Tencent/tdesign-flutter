@@ -28,8 +28,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall)),
+          color: TTheme.of(context).brandNormalColor,
+          borderRadius: BorderRadius.circular(TTheme.of(context).radiusSmall)),
     );
   }</pre>
 
@@ -46,9 +46,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
+          color: TTheme.of(context).brandNormalColor,
           borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+              BorderRadius.circular(TTheme.of(context).radiusDefault)),
     );
   }</pre>
 
@@ -65,8 +65,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+          color: TTheme.of(context).brandNormalColor,
+          borderRadius: BorderRadius.circular(TTheme.of(context).radiusLarge)),
     );
   }</pre>
 
@@ -83,9 +83,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
+          color: TTheme.of(context).brandNormalColor,
           borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusExtraLarge)),
+              BorderRadius.circular(TTheme.of(context).radiusExtraLarge)),
     );
   }</pre>
 
@@ -104,8 +104,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusRound)),
+          color: TTheme.of(context).brandNormalColor,
+          borderRadius: BorderRadius.circular(TTheme.of(context).radiusRound)),
     );
   }</pre>
 
@@ -123,9 +123,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
+          color: TTheme.of(context).brandNormalColor,
           borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusCircle)),
+              BorderRadius.circular(TTheme.of(context).radiusCircle)),
     );
   }</pre>
 
@@ -135,7 +135,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### radius
-TDTheme内置radiusXXX系列参数，可参考radius演示代码实现圆角组件
+TTheme内置radiusXXX系列参数，可参考radius演示代码实现圆角组件
 
 
   

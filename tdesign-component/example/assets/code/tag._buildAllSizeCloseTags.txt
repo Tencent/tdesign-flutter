@@ -1,25 +1,25 @@
 
   Widget _buildAllSizeCloseTags(BuildContext context) {
     return const Wrap(spacing: 8, children: [
-      TDTag(
+      TTag(
         '加大尺寸',
         needCloseIcon: true,
-        size: TDTagSize.extraLarge,
+        size: TTagSize.extraLarge,
       ),
-      TDTag(
+      TTag(
         '大尺寸',
         needCloseIcon: true,
-        size: TDTagSize.large,
+        size: TTagSize.large,
       ),
-      TDTag(
+      TTag(
         '中尺寸',
         needCloseIcon: true,
-        size: TDTagSize.medium,
+        size: TTagSize.medium,
       ),
-      TDTag(
+      TTag(
         '小尺寸',
         needCloseIcon: true,
-        size: TDTagSize.small,
+        size: TTagSize.small,
       ),
     ]);
   }

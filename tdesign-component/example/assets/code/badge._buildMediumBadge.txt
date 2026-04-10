@@ -6,9 +6,9 @@
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          const TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+          const TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
           Positioned(
-            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            child: TBadge(TBadgeType.message, count: num.toString()),
             left: 36,
             bottom: 36,
           )

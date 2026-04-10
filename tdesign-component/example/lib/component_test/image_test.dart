@@ -30,7 +30,7 @@ class TestPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const TDText('TDImage Test Page'),
+        title: const TText('TImage Test Page'),
       ),
       body: Form(
         key: _formKey,
@@ -44,9 +44,9 @@ class TestPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            const TDImage(
+            const TImage(
               imgUrl: 'assets/img/image.png',
-              type: TDImageType.fitHeight,
+              type: TImageType.fitHeight,
               height: 144,
               fit: BoxFit.fitHeight,
             ),

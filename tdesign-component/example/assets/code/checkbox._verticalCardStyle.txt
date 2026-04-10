@@ -1,11 +1,11 @@
 
   Widget _verticalCardStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return TCheckboxGroupContainer(
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
       directionalTdCheckboxes: const [
-        TDCheckbox(
+        TCheckbox(
           id: 'index:0',
           title: '多选',
           titleMaxLine: 2,
@@ -13,7 +13,7 @@
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDCheckbox(
+        TCheckbox(
           id: 'index:1',
           title: '多选',
           titleMaxLine: 2,
@@ -21,7 +21,7 @@
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDCheckbox(
+        TCheckbox(
           id: 'index:2',
           title: '多选',
           titleMaxLine: 2,
@@ -29,7 +29,7 @@
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDCheckbox(
+        TCheckbox(
           id: 'index:3',
           title: '多选',
           titleMaxLine: 2,

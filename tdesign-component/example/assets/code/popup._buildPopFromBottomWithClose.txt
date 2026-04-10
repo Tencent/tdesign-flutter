@@ -1,17 +1,17 @@
 
   Widget _buildPopFromBottomWithClose(BuildContext context) {
-    return TDButton(
+    return TButton(
       text: '底部弹出层-带关闭',
       isBlock: true,
-      theme: TDButtonTheme.primary,
-      type: TDButtonType.outline,
-      size: TDButtonSize.large,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          TSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
               builder: (context) {
-                return TDPopupBottomDisplayPanel(
+                return TPopupBottomDisplayPanel(
                   closeClick: () {
                     Navigator.maybePop(context);
                   },

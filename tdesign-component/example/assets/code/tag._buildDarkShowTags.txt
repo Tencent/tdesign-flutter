@@ -3,22 +3,22 @@
     return const Wrap(
       spacing: 8,
       children: [
-        TDTag('默认'),
-        TDTag(
+        TTag('默认'),
+        TTag(
           '主要',
-          theme: TDTagTheme.primary,
+          theme: TTagTheme.primary,
         ),
-        TDTag(
+        TTag(
           '警告',
-          theme: TDTagTheme.warning,
+          theme: TTagTheme.warning,
         ),
-        TDTag(
+        TTag(
           '危险',
-          theme: TDTagTheme.danger,
+          theme: TTagTheme.danger,
         ),
-        TDTag(
+        TTag(
           '成功',
-          theme: TDTagTheme.success,
+          theme: TTagTheme.success,
         ),
       ],
     );
