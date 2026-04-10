@@ -1,4 +1,0 @@
-
-TCountDown _buildSimple(BuildContext context) {
-  return const TCountDown(time: 60 * 60 * 1000);
-}
