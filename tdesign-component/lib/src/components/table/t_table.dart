@@ -670,11 +670,10 @@ class TTableState extends State<TTable> {
       }
 
       if (widget.height != null) {
-        // 有height时，整个数据区域做纵向滚动
         dataBody = SingleChildScrollView(
           controller: _scrollController,
           physics: const BouncingScrollPhysics(),
-          child: dataRow,
+          child: IntrinsicHeight(child: dataRow),
         );
       } else {
         dataBody = dataRow;
