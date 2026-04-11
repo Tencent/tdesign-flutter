@@ -23,6 +23,7 @@ class TIndexes extends StatefulWidget {
     this.onChange,
     this.onSelect,
     required this.builderContent,
+    this.builderSliverContent,
     this.builderAnchor,
     this.builderIndex,
   }) : super(key: key);
@@ -56,6 +57,11 @@ class TIndexes extends StatefulWidget {
 
   /// 内容自定义构建
   final Widget? Function(BuildContext context, String index) builderContent;
+
+  /// 内容自定义Sliver构建，用于大数据量场景实现懒加载，性能优于builderContent。
+  /// 返回Sliver类型Widget（如SliverList.builder），优先级高于builderContent。
+  final Widget? Function(BuildContext context, String index)?
+      builderSliverContent;
 
   /// 锚点自定义构建
   final Widget? Function(
@@ -144,6 +150,32 @@ class _TIndexesState extends State<TIndexes> {
     _contentKeys.clear();
     return _indexList.map((e) {
       final isPinnedOffset = capsuleTheme && _activeIndex.value == e;
+
+      Widget contentSliver;
+      if (widget.builderSliverContent != null) {
+        contentSliver = Builder(
+          builder: (context) {
+            _contentKeys[e] = context;
+            return widget.builderSliverContent!(context, e) ??
+                const SliverToBoxAdapter(child: SizedBox.shrink());
+          },
+        );
+      } else {
+        contentSliver = SliverToBoxAdapter(
+          child: Builder(
+            builder: (context) {
+              _contentKeys[e] = context;
+              return Padding(
+                padding: isPinnedOffset
+                    ? EdgeInsets.only(top: TTheme.of(context).spacer8)
+                    : EdgeInsets.zero,
+                child: widget.builderContent(context, e),
+              );
+            },
+          ),
+        );
+      }
+
       return SliverStickyHeader.builder(
         sticky: widget.sticky ?? true,
         pinnedOffset: isPinnedOffset
@@ -165,19 +197,7 @@ class _TIndexesState extends State<TIndexes> {
             sticky: widget.sticky ?? true,
           );
         },
-        sliver: SliverToBoxAdapter(
-          child: Builder(
-            builder: (context) {
-              _contentKeys[e] = context;
-              return Padding(
-                padding: isPinnedOffset
-                    ? EdgeInsets.only(top: TTheme.of(context).spacer8)
-                    : EdgeInsets.zero,
-                child: widget.builderContent(context, e),
-              );
-            },
-          ),
-        ),
+        sliver: contentSliver,
       );
     }).toList();
   }
