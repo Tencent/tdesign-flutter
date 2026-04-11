@@ -249,6 +249,7 @@ Widget _buildOther(BuildContext context) {
 | builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 锚点自定义构建 |
 | builderContent | Widget? Function(BuildContext context, String index) | - | 内容自定义构建 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
+| builderSliverContent | Widget? Function(BuildContext context, String index)? | - | 内容自定义Sliver构建，用于大数据量场景实现懒加载，性能优于builderContent。 |
 | capsuleTheme | bool? | false | 锚点是否为胶囊式样式 |
 | indexList | List<String>? | - | 索引字符列表。不传默认 A-Z |
 | indexListMaxHeight | double? | 0.8 | 索引列表最大高度（父容器高度的百分比，默认 0.8） |
