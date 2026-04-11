@@ -253,9 +253,22 @@ abstract class _TPopupBaseState<T extends TPopupBasePanel> extends State<T>
           }
           return false;
         },
-        child: Container(
-          key: _childKey,
-          child: widget.child,
+        child: NotificationListener<SizeChangedLayoutNotification>(
+          onNotification: (_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!_isDragging && mounted) {
+                _measureChildHeight();
+                setState(() {});
+              }
+            });
+            return true;
+          },
+          child: SizeChangedLayoutNotifier(
+            child: Container(
+              key: _childKey,
+              child: widget.child,
+            ),
+          ),
         ),
       );
 
