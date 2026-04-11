@@ -115,10 +115,7 @@ class TWrapSideBarItem extends StatelessWidget {
       children: [
         renderIcon(context),
         Expanded(child: renderLabel(context)),
-        if (label.length > 4) renderBadge(context),
-        // SizedBox(
-        //   width: !disabled && selected ? 0 : preLineWidth,
-        // )
+        if (badge != null) renderBadge(context),
       ],
     );
   }
@@ -170,45 +167,18 @@ class TWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderLabel(BuildContext context) {
-    return TText.rich(
-      TextSpan(
-        children: [
-          WidgetSpan(
-              child: TText(
-            label,
-            style: selected
-                ? (selectedTextStyle ?? TextStyle(color: selectedColor))
-                : textStyle,
-            fontWeight:
-                selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-            textColor: disabled
-                ? TTheme.of(context).textDisabledColor
-                : selected
-                    ? selectedColor ?? TTheme.of(context).brandNormalColor
-                    : unSelectedColor ?? TTheme.of(context).textColorPrimary,
-            // forceVerticalCenter: true,
-          )),
-
-          /// todo label.length 长度小于则不展示，为什么？？？
-          /// 应再判断有无icon，无icon时位置够，可以展示 badge
-          if (label.length <= 4 || icon == null)
-            WidgetSpan(
-                child: SizedBox(
-              width: 1,
-              height: 16,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  badge != null
-                      ? Positioned(top: -6, child: badge!)
-                      : Container()
-                ],
-              ),
-            ))
-        ],
-      ),
+    return TText(
+      label,
+      style: selected
+          ? (selectedTextStyle ?? TextStyle(color: selectedColor))
+          : textStyle,
+      fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
+      textColor: disabled
+          ? TTheme.of(context).textDisabledColor
+          : selected
+              ? selectedColor ?? TTheme.of(context).brandNormalColor
+              : unSelectedColor ?? TTheme.of(context).textColorPrimary,
       softWrap: true,
-      style: selectedTextStyle,
     );
   }
 
