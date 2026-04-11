@@ -426,6 +426,7 @@ class _TTextareaState extends State<TTextarea> {
     return Container(
       width: widget.width,
       decoration: widget.decoration,
+      color: widget.decoration == null ? widget.backgroundColor : null,
       padding: widget.padding ?? EdgeInsets.all(padding),
       margin: widget.margin,
       child: isHorizontal
