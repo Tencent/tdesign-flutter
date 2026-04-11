@@ -110,20 +110,26 @@ class TInputView extends StatelessWidget {
       this.onTapOutside,
       this.selectionControls,
       this.contextMenuBuilder,
-      this.enableInteractiveSelection})
+      this.enableInteractiveSelection,
+      this.onTap})
       : super(
           key: key,
         );
+
+  /// 点击输入框回调
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       inputFormatters: inputFormatters,
       readOnly: readOnly,
-      keyboardType: inputType,
+      keyboardType: inputType ?? (obscureText ? TextInputType.visiblePassword : null),
       textInputAction: inputAction,
       autofocus: autofocus,
       obscureText: obscureText,
+      enableSuggestions: !obscureText,
+      autocorrect: !obscureText,
       enableInteractiveSelection: enableInteractiveSelection,
       onEditingComplete: onEditingComplete,
       onSubmitted: onSubmitted,
@@ -131,10 +137,15 @@ class TInputView extends StatelessWidget {
       onChanged: onChanged,
       focusNode: focusNode,
       cursorColor: cursorColor,
-      maxLines: maxLines,
+      maxLines: obscureText ? 1 : maxLines,
       minLines: minLines,
       maxLength: maxLength,
       onTapOutside: onTapOutside,
+      onTap: onTap ?? (obscureText ? () {
+        if (focusNode != null && focusNode!.hasFocus) {
+          SystemChannels.textInput.invokeMethod('TextInput.show');
+        }
+      } : null),
       selectionControls: selectionControls,
       contextMenuBuilder: contextMenuBuilder,
       style: textStyle,
