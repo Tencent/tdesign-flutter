@@ -341,6 +341,10 @@ class TMultiPicker extends StatelessWidget {
   }
 }
 
+/// 列选项变更回调，用于动态加载下级数据
+typedef ColumnChangedCallback = Future<List> Function(
+    int columnIndex, List selectedValues);
+
 /// 多项联动选择器
 class TMultiLinkedPicker extends StatefulWidget {
   /// 选择器标题
@@ -424,6 +428,11 @@ class TMultiLinkedPicker extends StatefulWidget {
   /// 是否显示头部内容
   final bool header;
 
+  /// 列选项变更时动态加载下级数据的回调。
+  /// 当用户切换选项时调用，返回下一级列的数据列表。
+  /// 设置后优先级高于静态 [data] 中对应层级的查找。
+  final ColumnChangedCallback? onColumnChanged;
+
   const TMultiLinkedPicker({
     this.title,
     required this.onConfirm,
@@ -452,6 +461,7 @@ class TMultiLinkedPicker extends StatefulWidget {
     this.itemBuilder,
     this.keepSameSelection = false,
     this.header = true,
+    this.onColumnChanged,
     Key? key,
   }) : super(key: key);
 
@@ -607,7 +617,6 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
                     if (index >= model.presentData[position].length - 5 &&
                         model.hasMoreData[position]) {
                       if (model.loadMoreData(position)) {
-                        // 延迟一下再刷新，避免连续setState
                         Future.delayed(const Duration(milliseconds: 50), () {
                           if (mounted) {
                             setState(() {});
@@ -616,11 +625,24 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
                       }
                     }
 
-                    /// todo 通过随机数改变高度来触发UI刷新，这是hack式的解决方案！有待优化！
                     /// fix https://github.com/flutter/flutter/issues/22999
                     pickerHeight =
                         pickerHeight - Random().nextDouble() / 100000000;
                   });
+
+                  if (widget.onColumnChanged != null &&
+                      position < widget.columnNum - 1) {
+                    widget.onColumnChanged!(
+                        position + 1, model.selectedData).then((newData) {
+                      if (mounted && newData.isNotEmpty) {
+                        setState(() {
+                          model.updateColumnData(position + 1, newData);
+                          pickerHeight =
+                              pickerHeight - Random().nextDouble() / 100000000;
+                        });
+                      }
+                    });
+                  }
                 }
               },
               childDelegate: ListWheelChildBuilderDelegate(
@@ -887,6 +909,24 @@ class MultiLinkedPickerModel {
       hasMoreData[columnIndex] = false;
     }
     return false;
+  }
+
+  /// 外部动态更新某列数据
+  void updateColumnData(int columnIndex, List newData) {
+    if (columnIndex >= columnNum || columnIndex < 0) return;
+    while (presentData.length <= columnIndex) {
+      presentData.add([placeData]);
+    }
+    presentData[columnIndex] = newData.isEmpty ? [placeData] : newData;
+    currentPages[columnIndex] = 0;
+    hasMoreData[columnIndex] = false;
+    totalCounts[columnIndex] = newData.length;
+    selectedData[columnIndex] = newData.isNotEmpty ? newData.first : placeData;
+    selectedIndexes[columnIndex] = 0;
+    while (controllers.length <= columnIndex) {
+      controllers.add(FixedExtentScrollController(initialItem: 0));
+    }
+    controllers[columnIndex].jumpToItem(0);
   }
 
   /// [position] 变动的列

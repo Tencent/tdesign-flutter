@@ -197,6 +197,7 @@ class TPicker {
     // ItemDistanceCalculator? itemDistanceCalculator,
     bool keepSameSelection = false,
     Color? barrierColor,
+    ColumnChangedCallback? onColumnChanged,
 
     /// todo 未传参
     Duration duration = const Duration(milliseconds: 100),
@@ -231,6 +232,7 @@ class TPicker {
           itemBuilder: itemBuilder,
           customSelectWidget: customSelectWidget,
           keepSameSelection: keepSameSelection,
+          onColumnChanged: onColumnChanged,
           // itemDistanceCalculator: itemDistanceCalculator,
         );
       },
