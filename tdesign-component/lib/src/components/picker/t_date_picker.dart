@@ -196,9 +196,14 @@ class _TDatePickerState extends State<TDatePicker> {
     return items[itemIndex];
   }
 
+  double _getMaskHeight() =>
+      pickerHeight / widget.pickerItemCount *
+      ((widget.pickerItemCount - 1) / 2.0);
+
   @override
   Widget build(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
+    var maskHeight = _getMaskHeight();
     return Container(
       width: maxWidth,
       padding: widget.padding ??
@@ -265,13 +270,12 @@ class _TDatePickerState extends State<TDatePicker> {
                             : Container(),
                       ],
                     )),
-                // 蒙层
                 Positioned(
                   top: 0,
                   child: IgnorePointer(
                     ignoring: true,
                     child: Container(
-                      height: _pickerTitleHeight,
+                      height: maskHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -289,7 +293,7 @@ class _TDatePickerState extends State<TDatePicker> {
                   child: IgnorePointer(
                     ignoring: true,
                     child: Container(
-                      height: _pickerTitleHeight,
+                      height: maskHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(

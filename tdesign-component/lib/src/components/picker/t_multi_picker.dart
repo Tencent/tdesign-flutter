@@ -116,6 +116,10 @@ class TMultiPicker extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  double _getMaskHeight() =>
+      pickerHeight / pickerItemCount *
+      ((pickerItemCount - 1) / 2.0);
+
   @override
   Widget build(BuildContext context) {
     final dataLength = data.length;
@@ -128,6 +132,7 @@ class TMultiPicker extends StatelessWidget {
     );
 
     final maxWidth = MediaQuery.of(context).size.width;
+    final maskHeight = _getMaskHeight();
 
     return Container(
       width: maxWidth,
@@ -159,7 +164,6 @@ class TMultiPicker extends StatelessWidget {
                       ),
                     ),
               ),
-              // 列表
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 height: pickerHeight,
@@ -171,13 +175,12 @@ class TMultiPicker extends StatelessWidget {
                   ),
                 ),
               ),
-              // 蒙层
               Positioned(
                 top: 0,
                 child: IgnorePointer(
                   ignoring: true,
                   child: Container(
-                    height: _pickerTitleHeight,
+                    height: maskHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -197,7 +200,7 @@ class TMultiPicker extends StatelessWidget {
                 child: IgnorePointer(
                   ignoring: true,
                   child: Container(
-                    height: _pickerTitleHeight,
+                    height: maskHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -478,9 +481,14 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
     );
   }
 
+  double _getMaskHeight() =>
+      pickerHeight / widget.pickerItemCount *
+      ((widget.pickerItemCount - 1) / 2.0);
+
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width;
+    final maskHeight = _getMaskHeight();
     return Container(
       width: maxWidth,
       padding: widget.padding ??
@@ -510,8 +518,6 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
                               TTheme.of(context).radiusDefault))),
                     ),
               ),
-
-              // 列表
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   height: pickerHeight,
@@ -522,13 +528,12 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
                       (i) => Expanded(child: buildList(context, i)),
                     ),
                   )),
-              // 蒙层
               Positioned(
                 top: 0,
                 child: IgnorePointer(
                   ignoring: true,
                   child: Container(
-                    height: _pickerTitleHeight,
+                    height: maskHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -548,7 +553,7 @@ class _TMultiLinkedPickerState extends State<TMultiLinkedPicker> {
                 child: IgnorePointer(
                   ignoring: true,
                   child: Container(
-                    height: _pickerTitleHeight,
+                    height: maskHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
