@@ -704,18 +704,26 @@ class DatePickerModel {
             : second;
         return;
       }
-      if (initialTime.hour >= dateStart[3]) {
+      
+      // 检查初始时间是否在结束日期的同一天
+      var isSameAsEndDate = initialTime.year == dateEnd[0] &&
+          initialTime.month == dateEnd[1] &&
+          initialTime.day == dateEnd[2];
+      
+      // 检查初始时间是否在开始日期的同一天
+      var isSameAsStartDate = initialTime.year == dateStart[0] &&
+          initialTime.month == dateStart[1] &&
+          initialTime.day == dateStart[2];
+      
+      if (isSameAsEndDate) {
+        // 如果初始时间是结束日期，限制小时范围为 0 ~ dateEnd[3]
+        hour = List.generate(dateEnd[3] + 1, (index) => index);
+      } else if (isSameAsStartDate && initialTime.hour >= dateStart[3]) {
+        // 如果初始时间是开始日期且小时>=开始小时，限制小时范围为 dateStart[3] ~ 23
         hour =
             List.generate(24 - dateStart[3], (index) => index + dateStart[3]);
       }
-      if (initialTime.minute >= dateStart[4]) {
-        minute =
-            List.generate(60 - dateStart[4], (index) => index + dateStart[4]);
-      }
-      if (initialTime.second >= dateStart[5]) {
-        second =
-            List.generate(60 - dateStart[5], (index) => index + dateStart[5]);
-      }
+      // 初始化时不限制分钟和秒的范围，只在滑动后通过 refreshMinuteData 和 refreshSecondData 动态限制
     }
     data[4] = useHour && filterItems != null
         ? filterItems!(DateTypeKey.hour, hour)
