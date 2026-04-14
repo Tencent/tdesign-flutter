@@ -1,0 +1,15 @@
+
+  Widget _buildCustomSize(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '大字体水印',
+        textSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }

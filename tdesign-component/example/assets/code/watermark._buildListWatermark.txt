@@ -1,0 +1,56 @@
+
+  Widget _buildListWatermark(BuildContext context) {
+    return Container(
+      height: 300,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '内部数据',
+        opacity: 0.1,
+        child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: TTheme.of(context).componentStrokeColor,
+                    width: 0.5,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: TTheme.of(context).brandLightColor,
+                    child: Text('${index + 1}'),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TText(
+                          '列表项 ${index + 1}',
+                          font: TTheme.of(context).fontBodyMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        TText(
+                          '这是第 ${index + 1} 条数据的描述信息',
+                          font: TTheme.of(context).fontBodySmall,
+                          textColor: TTheme.of(context).textColorSecondary,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
