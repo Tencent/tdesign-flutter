@@ -167,6 +167,9 @@ class _WatermarkPainter extends CustomPainter {
       ..color = textColor
       ..isAntiAlias = true;
 
+    // 裁剪到容器边界，确保水印不超出容器
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
     final textPainter = TextPainter(
       text: TextSpan(
         text: text,
@@ -209,6 +212,11 @@ class _WatermarkPainter extends CustomPainter {
     final centerY = size.height / 2 + offsetY;
     var currentX = offsetX;
 
+    // 向左延伸绘制，确保旋转后能覆盖左边缘
+    while (currentX > -textWidth) {
+      currentX -= textWidth + gapX;
+    }
+
     while (currentX < size.width) {
       _drawTextWithRotation(
         canvas,
@@ -230,6 +238,11 @@ class _WatermarkPainter extends CustomPainter {
     final centerX = size.width / 2 + offsetX;
     var currentY = offsetY;
 
+    // 向上延伸绘制，确保旋转后能覆盖上边缘
+    while (currentY > -textHeight) {
+      currentY -= textHeight + gapY;
+    }
+
     while (currentY < size.height) {
       _drawTextWithRotation(
         canvas,
@@ -248,11 +261,15 @@ class _WatermarkPainter extends CustomPainter {
     double textWidth,
     double textHeight,
   ) {
-    var currentY = -textHeight + offsetY;
+    // 从原点开始绘制，配合clipRect确保水印在容器内
+    var startY = offsetY;
+    var startX = offsetX;
 
+    // 绘制网格，向右下扩展到容器边界
+    // 扩展一些以确保旋转后的水印也能覆盖边缘
+    var currentY = startY;
     while (currentY < size.height + textHeight) {
-      var currentX = -textWidth + offsetX;
-
+      var currentX = startX;
       while (currentX < size.width + textWidth) {
         _drawTextWithRotation(
           canvas,

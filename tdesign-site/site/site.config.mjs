@@ -426,6 +426,13 @@ export default {
           path: '/flutter/components/tag',
           component: () => import('@/tag/README.md'),
         },
+        {
+          title: 'Watermark 水印',
+          name: 'watermark',
+          meta: { docType: 'data' },
+          path: '/flutter/components/watermark',
+          component: () => import('@/watermark/README.md'),
+        },
       ],
     },
     {
