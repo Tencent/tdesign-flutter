@@ -1,0 +1,14 @@
+
+  Widget _buildSingleLine(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: 'TDesign Flutter',
+        type: TWatermarkType.singleLine,
+      ),
+    );
+  }

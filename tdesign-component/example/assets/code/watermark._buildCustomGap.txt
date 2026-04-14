@@ -1,0 +1,16 @@
+
+  Widget _buildCustomGap(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '密集',
+        gapX: 60,
+        gapY: 40,
+        textSize: 12,
+      ),
+    );
+  }

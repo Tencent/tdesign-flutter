@@ -1,0 +1,15 @@
+
+  Widget _buildHorizontalLayout(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '内部资料',
+        layout: TWatermarkLayout.horizontal,
+        gapX: 150,
+      ),
+    );
+  }

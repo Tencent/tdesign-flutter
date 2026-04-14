@@ -1,0 +1,28 @@
+
+  Widget _buildImageWatermark(BuildContext context) {
+    return Container(
+      height: 300,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '仅供查看',
+        child: Center(
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              color: TTheme.of(context).brandFocusColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              TIcons.image,
+              size: 80,
+              color: TTheme.of(context).brandNormalColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
