@@ -28,6 +28,84 @@ class _TFormPageState extends State<TFormPage> {
   /// form 排列方式是否为水平
   bool _isFormHorizontal = true;
 
+  /// 展示日期选择器弹窗
+  void _showDatePicker(BuildContext context, {
+    required Function(List selected) onConfirm,
+    List<int>? initialDate,
+  }) {
+    // 生成年/月/日数据
+    final year = initialDate?[0] ?? 2012;
+    final month = initialDate?[1] ?? 1;
+    final day = initialDate?[2] ?? 1;
+
+    final yearItems = List.generate(52, (i) => TPickerOption(label: '${1999 + i}年', value: 1999 + i));
+    final monthItems = List.generate(12, (i) => TPickerOption(label: '${i + 1}月', value: i + 1));
+    final dayItems = List.generate(31, (i) => TPickerOption(label: '${i + 1}日', value: i + 1));
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: TTheme.of(context).bgColorContainer,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(TTheme.of(context).radiusExtraLarge),
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 标题栏
+              Padding(
+                padding: EdgeInsets.all(TTheme.of(context).spacer16),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Text(
+                        '取消',
+                        style: TextStyle(
+                          color: TTheme.of(context).textColorSecondary,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '选择时间',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: TTheme.of(context).textColorPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Text(
+                        '确认',
+                        style: TextStyle(
+                          color: TTheme.of(context).brandNormalColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // 选择器
+              TPicker(
+                items: [yearItems, monthItems, dayItems],
+                initialValue: [year, month, day],
+                onChange: (v) => onConfirm(v.values),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   /// 设置按钮是否可点击状态
   /// true 表示处于 active 状态
   bool horizontalButton = false;
@@ -397,18 +475,17 @@ class _TFormPageState extends State<TFormPage> {
               if (_formDisableState) {
                 return;
               }
-              TPicker.showDatePicker(context, title: '选择时间',
-                  onConfirm: (selected) {
-                setState(() {
-                  _selected_1 =
-                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-                  _formItemNotifier['birth']?.upDataForm(_selected_1);
-                });
-                Navigator.of(context).pop();
-              },
-                  dateStart: [1999, 01, 01],
-                  dateEnd: [2050, 12, 31],
-                  initialDate: [2012, 1, 1]);
+              _showDatePicker(
+                context,
+                initialDate: [2012, 1, 1],
+                onConfirm: (selected) {
+                  setState(() {
+                    _selected_1 =
+                        '${selected[0].toString().padLeft(4, '0')}-${selected[1].toString().padLeft(2, '0')}-${selected[2].toString().padLeft(2, '0')}';
+                    _formItemNotifier['birth']?.upDataForm(_selected_1);
+                  });
+                },
+              );
             },
           ),
           TFormItem(
@@ -736,18 +813,17 @@ class _TFormPageState extends State<TFormPage> {
               if (_formDisableState) {
                 return;
               }
-              TPicker.showDatePicker(context, title: '选择时间',
-                  onConfirm: (selected) {
-                setState(() {
-                  _selected_1 =
-                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-                  _formItemNotifier['birth']?.upDataForm(_selected_1);
-                });
-                Navigator.of(context).pop();
-              },
-                  dateStart: [1999, 01, 01],
-                  dateEnd: [2050, 12, 31],
-                  initialDate: [2012, 1, 1]);
+              _showDatePicker(
+                context,
+                initialDate: [2012, 1, 1],
+                onConfirm: (selected) {
+                  setState(() {
+                    _selected_1 =
+                        '${selected[0].toString().padLeft(4, '0')}-${selected[1].toString().padLeft(2, '0')}-${selected[2].toString().padLeft(2, '0')}';
+                    _formItemNotifier['birth']?.upDataForm(_selected_1);
+                  });
+                },
+              );
             },
           ),
           TFormItem(
