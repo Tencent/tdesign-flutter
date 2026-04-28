@@ -1,24 +1,4 @@
 ## API
-### TSkeleton
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| animation | TSkeletonAnimation? | - | 动画效果 |
-| delay | int | 0 | 延迟显示加载时间 |
-| key |  | - |  |
-| theme |  | TSkeletonTheme.text |  |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TSkeleton.fromRowCol  | 从行列框架创建骨架屏 |
-
-```
-```
-
 ### TSkeletonRowColStyle
 #### 默认构造方法
 
@@ -81,3 +61,23 @@
 | TSkeletonRowColObj.rect  | 矩形 |
 | TSkeletonRowColObj.spacer  | 空白占位符 |
 | TSkeletonRowColObj.text  | 文本 |
+
+```
+```
+
+### TSkeleton
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| animation | TSkeletonAnimation? | - | 动画效果 |
+| delay | int | 0 | 延迟显示加载时间 |
+| key |  | - |  |
+| theme |  | TSkeletonTheme.text |  |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TSkeleton.fromRowCol  | 从行列框架创建骨架屏 |
