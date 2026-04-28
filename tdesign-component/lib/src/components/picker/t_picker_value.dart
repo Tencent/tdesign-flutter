@@ -2,22 +2,37 @@ import 't_picker_option.dart';
 
 /// onChange 回调返回的选中信息
 ///
-/// 只包含"选了什么"，不包含滚动位置信息
-/// 滚动位置相关请使用 onLoad
+/// 每列返回完整的 [TPickerOption]，包含 label、value、disabled 等全部字段。
+/// 调用方可按需取值：
+/// ```dart
+/// onChange: (v) {
+///   // 取显示文本
+///   final labels = v.selectedOptions.map((o) => o.label).join(' / ');
+///   // 取业务值
+///   final values = v.selectedOptions.map((o) => o.value).toList();
+/// }
+/// ```
 class TPickerValue {
-  /// 当前选中的 value 列表（每列的 TPickerOption.value）
-  final List<dynamic> values;
+  /// 每列选中的完整 option（顺序对应列号）
+  final List<TPickerOption> selectedOptions;
 
-  /// 当前选中的索引列表
+  /// 每列在当前数据列表中的索引（便捷访问）
   final List<int> indexes;
 
+  /// 便捷属性：所有 value 的列表（向后兼容）
+  List<dynamic> get values => selectedOptions.map((o) => o.value).toList();
+
+  /// 便捷属性：所有 label 的列表
+  List<String> get labels => selectedOptions.map((o) => o.label).toList();
+
   TPickerValue({
-    required this.values,
+    required this.selectedOptions,
     required this.indexes,
   });
 
   @override
-  String toString() => 'TPickerValue($values, indexes: $indexes)';
+  String toString() =>
+      'TPickerValue(labels: $labels, values: $values, indexes: $indexes)';
 }
 
 /// onLoad 回调参数 — 滚动接近底部时触发

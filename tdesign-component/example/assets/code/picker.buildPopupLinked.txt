@@ -1,0 +1,22 @@
+
+  Widget buildPopupLinked(BuildContext context) {
+    return TCell(
+      title: '弹窗-联动选择(省市区)',
+      note: selectedLinked.isEmpty ? '请选择' : selectedLinked,
+      arrow: true,
+      onClick: (_) {
+        _showPickerPopup(
+          context,
+          title: '请选择地区',
+          picker: TPicker(
+            items: linkedData,
+            initialValue: selectedLinked.isNotEmpty
+                ? selectedLinked.split(' / ')
+                : ['GD'],
+            onChange: (v) => setState(() => _popupLinkedTemp = v.labels.join(' / ')),
+          ),
+          onConfirm: () => setState(() => selectedLinked = _popupLinkedTemp),
+        );
+      },
+    );
+  }

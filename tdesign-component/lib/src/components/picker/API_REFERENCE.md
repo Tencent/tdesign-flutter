@@ -57,11 +57,17 @@ class TPickerOption {
 
 ```dart
 class TPickerValue {
-  /// 当前选中的 value 列表（每列的 TPickerOption.value）
-  final List values;          // ['广东', '深圳', '南山']
-  
-  /// 当前选中的索引列表
-  final List<int> indexes;     // [0, 1, 2]
+  /// 每列选中的完整 option（顺序对应列号）
+  final List<TPickerOption> selectedOptions;
+
+  /// 每列在当前数据列表中的索引
+  final List<int> indexes;
+
+  /// 便捷属性：所有 value 的列表
+  List<dynamic> get values => selectedOptions.map((o) => o.value).toList();
+
+  /// 便捷属性：所有 label 的列表
+  List<String> get labels => selectedOptions.map((o) => o.label).toList();
 }
 ```
 

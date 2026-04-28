@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 /// 选择器选项
 ///
 /// label 用于显示，value 用于 onChange 返回，两者分离
@@ -25,6 +23,18 @@ class TPickerOption {
     required this.value,
     this.disabled = false,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TPickerOption &&
+          runtimeType == other.runtimeType &&
+          label == other.label &&
+          value == other.value &&
+          disabled == other.disabled;
+
+  @override
+  int get hashCode => Object.hash(label, value, disabled);
 
   @override
   String toString() => 'TPickerOption($label, $value)';

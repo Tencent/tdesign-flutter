@@ -1,0 +1,16 @@
+
+  Widget buildLinked(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: linkedData, initialValue: ['GD'],
+              onChange: (v) => setState(() => selectedLinked = v.labels.join(' / '))),
+        ),
+      ],
+    );
+  }

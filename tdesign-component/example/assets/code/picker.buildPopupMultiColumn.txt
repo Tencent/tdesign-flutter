@@ -1,0 +1,23 @@
+
+  Widget buildPopupMultiColumn(BuildContext context) {
+    return TCell(
+      title: '弹窗-多列选择(性别/偏好)',
+      note: selectedPreference.isEmpty ? '请选择' : selectedPreference,
+      arrow: true,
+      onClick: (_) {
+        _showPickerPopup(
+          context,
+          title: '选择性别和偏好',
+          picker: TPicker(
+            items: preferenceData,
+            initialValue: selectedPreference.isNotEmpty
+                ? selectedPreference.split(' ')
+                : ['M', 'tech'],
+            onChange: (v) => setState(() =>
+                _popupMultiColTemp = '${v.labels.first} ${v.labels.last}'),
+          ),
+          onConfirm: () => setState(() => selectedPreference = _popupMultiColTemp),
+        );
+      },
+    );
+  }

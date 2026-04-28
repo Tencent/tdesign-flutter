@@ -1,0 +1,17 @@
+
+  Widget buildTimeSelect(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中时间: ${selectedTime.isEmpty ? "未选择" : selectedTime}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: timeData, itemCount: 5,
+              onChange: (v) => setState(() =>
+                  selectedTime = '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
+        ),
+      ],
+    );
+  }
