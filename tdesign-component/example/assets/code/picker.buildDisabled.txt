@@ -1,8 +1,0 @@
-
-  Widget buildDisabled(BuildContext context) {
-    return _pickerCard(
-      context,
-      child:
-          TPicker(items: disabledData, initialValue: ['M'], onChange: (v) => debugPrint('选中: ${v.values}')),
-    );
-  }
