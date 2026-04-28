@@ -1,4 +1,32 @@
 ## API
+### TConfirmDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| action |  Function()? | - | 点击 |
+| backgroundColor | Color? | - | 背景颜色 |
+| buttonStyle | TDialogButtonStyle | TDialogButtonStyle.normal | 按钮样式 |
+| buttonStyleCustom | TButtonStyle? | - | 按钮自定义样式属性，背景色、边框... |
+| buttonText | String? | - | 按钮文字 |
+| buttonTextColor | Color? | - | 按钮文字颜色 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+| content | String? | - | 内容 |
+| contentColor | Color? | - | 内容颜色 |
+| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
+| contentWidget | Widget? | - | 内容Widget |
+| key |  | - |  |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| radius | double | 12.0 | 圆角 |
+| showCloseButton | bool? | - | 右上角关闭按钮 |
+| title | String? | - | 标题 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| titleColor | Color? | - | 标题颜色 |
+| width |  | - |  |
+
+```
+```
+
 ### TImageDialog
 #### 默认构造方法
 
@@ -24,30 +52,82 @@
 ```
 ```
 
-### TConfirmDialog
+### TDialogButtonOptions
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action |  Function()? | - | 点击 |
+| action |  Function()? | - | 点击操作 |
+| fontWeight | FontWeight? | - | 字体粗细 |
+| height | double? | - | 按钮高度 |
+| style | TButtonStyle? | - | 按钮样式 |
+| theme | TButtonTheme? | - | 按钮类型 |
+| title | String | - | 标题内容 |
+| titleColor | Color? | - | 标题颜色 |
+| titleSize | double? | - | 字体大小 |
+| type | TButtonType? | - | 按钮类型 |
+
+```
+```
+
+### TInputDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
 | backgroundColor | Color? | - | 背景颜色 |
-| buttonStyle | TDialogButtonStyle | TDialogButtonStyle.normal | 按钮样式 |
-| buttonStyleCustom | TButtonStyle? | - | 按钮自定义样式属性，背景色、边框... |
-| buttonText | String? | - | 按钮文字 |
-| buttonTextColor | Color? | - | 按钮文字颜色 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+| content | String? | - | 内容 |
+| contentColor | Color? | - | 内容颜色 |
+| contentWidget | Widget? | - | 内容Widget |
+| customInputWidget | Widget? | - | 自定义输入框 |
+| hintText | String? | '' | 输入提示 |
+| key |  | - |  |
+| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| radius | double | 12.0 | 圆角 |
+| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| textEditingController | TextEditingController | - | 输入controller |
+| title | String? | - | 标题 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| titleColor | Color? | - | 标题颜色 |
+
+```
+```
+
+### TAlertDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| buttonStyle |  | TDialogButtonStyle.normal |  |
 | buttonWidget | Widget? | - | 自定义按钮 |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
 | contentWidget | Widget? | - | 内容Widget |
 | key |  | - |  |
+| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
+| leftBtnAction |  Function()? | - | 左侧按钮默认点击 |
 | padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
 | radius | double | 12.0 | 圆角 |
-| showCloseButton | bool? | - | 右上角关闭按钮 |
+| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
+| rightBtnAction |  Function()? | - | 右侧按钮默认点击 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
 | title | String? | - | 标题 |
 | titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
 | titleColor | Color? | - | 标题颜色 |
-| width |  | - |  |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TAlertDialog.vertical  | 纵向按钮排列的对话框
+
+ [buttons]参数是必须的，纵向按钮默认样式都是[TButtonTheme.primary] |
 
 ```
 ```
@@ -150,83 +230,3 @@
 | key |  | - |  |
 | onPressed |  Function() | - | 点击 |
 | width | double? | - | 按钮宽度 |
-
-```
-```
-
-### TDialogButtonOptions
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| action |  Function()? | - | 点击操作 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| height | double? | - | 按钮高度 |
-| style | TButtonStyle? | - | 按钮样式 |
-| theme | TButtonTheme? | - | 按钮类型 |
-| title | String | - | 标题内容 |
-| titleColor | Color? | - | 标题颜色 |
-| titleSize | double? | - | 字体大小 |
-| type | TButtonType? | - | 按钮类型 |
-
-```
-```
-
-### TAlertDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonStyle |  | TDialogButtonStyle.normal |  |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key |  | - |  |
-| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
-| leftBtnAction |  Function()? | - | 左侧按钮默认点击 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
-| rightBtnAction |  Function()? | - | 右侧按钮默认点击 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TAlertDialog.vertical  | 纵向按钮排列的对话框
-
- [buttons]参数是必须的，纵向按钮默认样式都是[TButtonTheme.primary] |
-
-```
-```
-
-### TInputDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentWidget | Widget? | - | 内容Widget |
-| customInputWidget | Widget? | - | 自定义输入框 |
-| hintText | String? | '' | 输入提示 |
-| key |  | - |  |
-| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| textEditingController | TextEditingController | - | 输入controller |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
