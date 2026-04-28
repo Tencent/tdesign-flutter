@@ -147,6 +147,9 @@ class _TPickerPageState extends State<TPickerPage> {
           ExampleItem(desc: '时间选择(时分秒)', builder: buildTimeSelect),
           ExampleItem(desc: '联动选择(省市区)', builder: buildLinked),
         ]),
+        ExampleModule(title: '按需请求', children: [
+          ExampleItem(desc: '模拟网络请求加载更多', builder: buildLazyLoad),
+        ]),
         ExampleModule(title: '禁用状态', children: [
           ExampleItem(desc: '项级 disabled（部分选项不可选）', builder: buildItemDisabled),
           ExampleItem(desc: '全局 disabled（整组不可操作）', builder: buildGlobalDisabled),
@@ -337,6 +340,79 @@ class _TPickerPageState extends State<TPickerPage> {
 
   /// 弹窗多列独立模式的临时选中值
   String _popupMultiColTemp = '';
+
+  /// 按需请求：模拟网络延迟加载更多数据
+  List<TPickerOption> _lazyData = [
+    for (int i = 1; i <= 20; i++)
+      TPickerOption(label: '选项 $i', value: 'opt_$i'),
+  ];
+  bool _isLoading = false;
+
+  @Demo(group: 'picker')
+  Widget buildLazyLoad(BuildContext context) {
+    return StatefulBuilder(
+      builder: (ctx, setInner) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _lazyData.isEmpty
+                  ? '暂无数据'
+                  : '已加载 ${_lazyData.length} 条（滚动到底部自动加载更多）',
+              style: TextStyle(
+                  fontSize: 14, color: TTheme.of(context).textColorSecondary),
+            ),
+            const SizedBox(height: 8),
+            _pickerCard(
+              context,
+              child: TPicker(
+                items: [_lazyData],
+                preloadThreshold: 5,
+                onLoad: (e) async {
+                  if (_isLoading) return;
+                  setInner(() => _isLoading = true);
+                  // 模拟网络请求延迟 1.5s
+                  await Future.delayed(const Duration(milliseconds: 1500));
+                  final start = _lazyData.length + 1;
+                  final more = [
+                    for (int i = start; i < start + 20; i++)
+                      TPickerOption(label: '选项 $i', value: 'opt_$i'),
+                  ];
+                  setInner(() {
+                    _lazyData.addAll(more);
+                    _isLoading = false;
+                  });
+                },
+                onChange: (v) => setState(() =>
+                    selectedPreference = v.labels.first),
+              ),
+            ),
+            const SizedBox(height: 4),
+            if (_isLoading)
+              Row(
+                children: [
+                  SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const SizedBox(width: 6),
+                  Text('正在加载更多数据...',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: TTheme.of(context).textColorPlaceholder)),
+                ],
+              )
+            else
+              Text('距底部 5 项时触发 onLoad，模拟 1.5s 网络延迟',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: TTheme.of(context).textColorPlaceholder)),
+          ],
+        );
+      },
+    );
+  }
 
   @Demo(group: 'picker')
   Widget buildPopupMultiColumn(BuildContext context) {
