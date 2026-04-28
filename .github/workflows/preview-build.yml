@@ -26,7 +26,8 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
-        working-directory: ./tdesign-site
+        with:
+          package_json_file: tdesign-site/package.json
 
       - name: Set Node version
         uses: actions/setup-node@v4
@@ -34,6 +35,7 @@ jobs:
         with:
           node-version: "22"
           cache: "pnpm"
+          cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
 
       - uses: actions/setup-java@v5
         with:
