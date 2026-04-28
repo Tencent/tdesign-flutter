@@ -1,10 +1,4 @@
 ## API
-### TTimeCounterController
-#### 简介
-倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
-```
-```
-
 ### TTimeCounterStyle
 #### 简介
 计时组件样式
@@ -59,3 +53,10 @@
 | style | TTimeCounterStyle? | - | 自定义样式，有则优先用它，没有则根据size和theme选取 |
 | theme | TTimeCounterTheme | TTimeCounterTheme.defaultTheme | 风格 |
 | time | int | - | 必需；计时时长，单位毫秒 |
+
+```
+```
+
+### TTimeCounterController
+#### 简介
+倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)

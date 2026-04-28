@@ -321,6 +321,27 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
+### TTab
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badge | TBadge? | - | 图标 |
+| child | Widget? | - | 子widget |
+| contentHeight | double? | - | 中间内容高度 |
+| enable | bool | true | 是否可用，默认true |
+| height | double? | - | tab高度 |
+| icon | Widget? | - | 图标 |
+| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
+| key |  | - |  |
+| outlineType | TTabOutlineType | TTabOutlineType.filled | 选项卡样式 |
+| size | TTabSize | TTabSize.small | 选项卡尺寸 |
+| text | String? | - | 文字内容 |
+| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
+
+```
+```
+
 ### TTabBar
 #### 默认构造方法
 
@@ -353,27 +374,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | unselectedLabelColor | Color? | - | tabBar未选标签颜色 |
 | unselectedLabelStyle | TextStyle? | - | unselectedLabel字体 |
 | width | double? | - | tabBar宽度 |
-
-```
-```
-
-### TTab
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badge | TBadge? | - | 图标 |
-| child | Widget? | - | 子widget |
-| contentHeight | double? | - | 中间内容高度 |
-| enable | bool | true | 是否可用，默认true |
-| height | double? | - | tab高度 |
-| icon | Widget? | - | 图标 |
-| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
-| key |  | - |  |
-| outlineType | TTabOutlineType | TTabOutlineType.filled | 选项卡样式 |
-| size | TTabSize | TTabSize.small | 选项卡尺寸 |
-| text | String? | - | 文字内容 |
-| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
 
 
   
