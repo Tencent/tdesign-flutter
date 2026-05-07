@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import 'no_wave_behavior.dart';
-import 't_item_widget.dart';
-import 't_picker_option.dart';
 import 't_picker_scroll_physics.dart';
 
 /// 纯滚轮选择器组件
@@ -79,24 +77,42 @@ class _TPickerState extends State<TPicker> {
 
   // ========== 初始化 ==========
 
+  /// 初始化多列独立选择模式
+  ///
+  /// 从 widget.items（List<List<TPickerOption>>）中提取各列数据，
+  /// 根据 widget.initialValue 设置每列的初始选中位置，
+  /// 并为每列创建 FixedExtentScrollController
   void _initColumns() {
-    _columns = (widget.items as List).cast<List<TPickerOption>>();
+    _columns = widget.items.cast<List<TPickerOption>>();
     _selectedPath = [];
     _mapStack = [];
     _lastSelectedIndex = [];
 
-    final initValues = widget.initialValue as List?;
+    final initValues = widget.initialValue;
     _controllers = List.generate(_columns.length, (i) {
-      int index = 0;
+      var index = 0;
       if (initValues != null && i < initValues.length) {
         final targetIdx = _columns[i].indexWhere((o) => o.value == initValues[i]);
-        if (targetIdx >= 0) index = targetIdx;
+        if (targetIdx >= 0) {
+          index = targetIdx;
+        }
       }
       _lastSelectedIndex.add(index);
       return FixedExtentScrollController(initialItem: index);
     });
   }
 
+  /// 初始化联动选择模式
+  ///
+  /// 根据 widget.items（Map）递归构建各列数据：
+  /// 1. 从根 Map 开始，提取第一列选项（Map 的 Key）
+  /// 2. 根据 widget.initialValue 设置每列的初始选中项
+  /// 3. 递归查找子数据（Map 的 Value），构建后续列
+  /// 4. 为每列创建 FixedExtentScrollController
+  ///
+  /// 数据结构约定：
+  /// - Map 的 Key 必须是 TPickerOption（或能被转为 TPickerOption）
+  /// - Map 的 Value 可以是 Map（继续联动）或 List<TPickerOption>（末级）
   void _initLinked() {
     final rootMap = widget.items as Map;
     _columns = [];
@@ -107,17 +123,21 @@ class _TPickerState extends State<TPicker> {
 
     var currentMap = rootMap;
     var options = _keysToOptions(currentMap);
-    if (options.isEmpty) return;
+    if (options.isEmpty) {
+      return;
+    }
 
     _columns.add(options);
     final initValues =
-        widget.initialValue is List ? widget.initialValue as List : <dynamic>[];
+        widget.initialValue is List ? widget.initialValue! : <dynamic>[];
 
-    for (int depth = 0; depth <= initValues.length; depth++) {
-      int idx = 0;
+    for (var depth = 0; depth <= initValues.length; depth++) {
+      var idx = 0;
       if (depth < initValues.length) {
         final found = options.indexWhere((o) => o.value == initValues[depth]);
-        if (found >= 0) idx = found;
+        if (found >= 0) {
+          idx = found;
+        }
       }
 
       if (_controllers.length <= depth) {
@@ -127,21 +147,30 @@ class _TPickerState extends State<TPicker> {
       if (options.isNotEmpty && idx < options.length) {
         _selectedPath.add(options[idx].value);
       }
-      if (depth >= initValues.length) break;
+      if (depth >= initValues.length) {
+        break;
+      }
 
       final childData = currentMap[options[idx]];
-      if (childData == null) break;
+      if (childData == null) {
+        break;
+      }
 
       _mapStack.add(currentMap);
 
       if (childData is Map) {
-        currentMap = childData as Map;
+        currentMap = childData;
         options = _keysToOptions(currentMap);
-        if (options.isNotEmpty) _columns.add(options);
-        else break;
+        if (options.isNotEmpty) {
+          _columns.add(options);
+        } else {
+          break;
+        }
       } else if (childData is List) {
-        final leaf = (childData as List).cast<TPickerOption>();
-        if (leaf.isNotEmpty) _columns.add(leaf);
+        final leaf = childData.cast<TPickerOption>();
+        if (leaf.isNotEmpty) {
+          _columns.add(leaf);
+        }
         break;
       }
     }
@@ -192,7 +221,9 @@ class _TPickerState extends State<TPicker> {
 
   Widget _buildColumn(int colIndex) {
     final data = _columns[colIndex];
-    if (data.isEmpty) return const SizedBox.shrink();
+    if (data.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return MediaQuery.removePadding(
       context: context,
@@ -241,23 +272,30 @@ class _TPickerState extends State<TPicker> {
   bool _onScrollNotification(
       ScrollNotification notification, int col, List<TPickerOption> data) {
     // 只在滚动结束时处理
-    if (notification is! ScrollEndNotification) return false;
+    if (notification is! ScrollEndNotification) {
+      return false;
+    }
 
     final controller = _controllers[col];
     final currentIndex = controller.selectedItem;
 
     // 边界检查
-    if (currentIndex < 0 || currentIndex >= data.length) return false;
-    if (!data[currentIndex].disabled) return false; // 已在 enabled 上 → OK
+    if (currentIndex < 0 || currentIndex >= data.length) {
+      return false;
+    }
+    if (!data[currentIndex].disabled) {
+      return false; // 已在 enabled 上 → OK
+    }
 
     // 双向搜索最近 enabled
     final forward = _findNearestEnabled(data, currentIndex, 1);
     final backward = _findNearestEnabled(data, currentIndex, -1);
 
-    int target = currentIndex;
+    var target = currentIndex;
     if (forward >= 0 && backward >= 0) {
       target = (forward - currentIndex).abs() <= (backward - currentIndex).abs()
-          ? forward : backward;
+          ? forward
+          : backward;
     } else if (forward >= 0) {
       target = forward;
     } else if (backward >= 0) {
@@ -269,20 +307,24 @@ class _TPickerState extends State<TPicker> {
     // 🔑 关键：在下一帧执行 animateToItem，此时滚动已完全停止
     // 使用 addPostFrameCallback 避免与当前帧的滚动状态冲突
     // 动画时长根据距离动态调整：近距离 200ms，远距离 350ms
-    if (_animatingCols.contains(col)) return false; // 防止重复触发
+    if (_animatingCols.contains(col)) {
+      return false; // 防止重复触发
+    }
     _animatingCols.add(col);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       final c = _controllers[col];
-      
+
       // 再次检查：如果当前已在 enabled 上，无需修正
       final newIndex = c.selectedItem;
       if (newIndex >= 0 && newIndex < data.length && !data[newIndex].disabled) {
         _animatingCols.remove(col);
         return;
       }
-      
+
       final distance = (target - currentIndex).abs();
       final duration = distance <= 2 ? 200 : 350;
       c.animateToItem(
@@ -309,7 +351,9 @@ class _TPickerState extends State<TPicker> {
 
   void _onItemSelected(int col, int index, List<TPickerOption> data) {
     // disabled 项静默忽略（不干预滚动），由 ScrollEnd 统一兜底修正
-    if (data[index].disabled) return;
+    if (data[index].disabled) {
+      return;
+    }
 
     _lastSelectedIndex[col] = index;
 
@@ -331,19 +375,40 @@ class _TPickerState extends State<TPicker> {
     }
   }
 
-  /// 从 start 出发沿 direction 方向查找最近一个未禁用的索引
+  /// 从 [start] 出发，沿 [direction] 方向查找最近一个未禁用的索引
+  ///
+  /// [data] - 要搜索的选项列表
+  /// [start] - 起始索引
+  /// [direction] - 搜索方向（+1 向前，-1 向后）
+  ///
+  /// 返回：
+  /// - 如果找到未禁用的项，返回其索引
+  /// - 如果全部禁用或未找到，返回 -1
   int _findNearestEnabled(List<TPickerOption> data, int start, int direction) {
-    int i = start + direction;
+    var i = start + direction;
     while (i >= 0 && i < data.length) {
-      if (!data[i].disabled) return i;
+      if (!data[i].disabled) {
+        return i;
+      }
       i += direction;
     }
     return -1;
   }
 
   /// 联动模式：前列变化 → 刷新后续列
+  ///
+  /// 当用户选中某列的选项时，需要：
+  /// 1. 更新 _selectedPath（记录每列选中的 value）
+  /// 2. 清空后续列的数据和控制器
+  /// 3. 根据选中项查找子数据，构建新的后续列
+  /// 4. 调用 setState 重建 UI
+  ///
+  /// [col] - 发生变化的列索引
+  /// [newIndex] - 新选中的索引
   void _refreshLinked(int col, int newIndex) {
-    if (col >= _columns.length - 1) return;
+    if (col >= _columns.length - 1) {
+      return;
+    }
 
     final selectedOpt = _columns[col][newIndex];
     _selectedPath.removeRange(col + 1, _selectedPath.length);
@@ -358,20 +423,19 @@ class _TPickerState extends State<TPicker> {
     final childData = _findChild(sourceMap, selectedOpt.value);
     if (childData != null) {
       if (childData is List) {
-        final list = (childData as List).cast<TPickerOption>();
+        final list = childData.cast<TPickerOption>();
         if (list.isNotEmpty) {
           _columns.add(list);
           _controllers.add(FixedExtentScrollController(initialItem: 0));
           _lastSelectedIndex.add(0);
         }
       } else if (childData is Map) {
-        final map = childData as Map;
-        final opts = _keysToOptions(map);
+        final opts = _keysToOptions(childData);
         if (opts.isNotEmpty) {
           _columns.add(opts);
           _controllers.add(FixedExtentScrollController(initialItem: 0));
           _lastSelectedIndex.add(0);
-          _mapStack.add(map);
+          _mapStack.add(childData);
         }
       }
     }
@@ -381,21 +445,34 @@ class _TPickerState extends State<TPicker> {
 
   // ========== 回调通知 ==========
 
+  /// 通知外部：当前选中的值已改变
+  ///
+  /// 遍历所有列，收集每列选中的 TPickerOption 和索引，
+  /// 构造 TPickerValue 对象并通过 widget.onChange 回调通知外部。
+  ///
+  /// **安全策略**：
+  /// - 使用 clamp 确保索引在有效范围内
+  /// - 如果当前索引指向 disabled 项，自动双向搜索最近的 enabled 项
+  /// - 如果全部 disabled，保持原索引（由 UI 层负责修正）
   void _notifyChange() {
     final selectedOptions = <TPickerOption>[];
     final indexes = <int>[];
 
-    for (int i = 0; i < _controllers.length; i++) {
-      if (_columns[i].isEmpty) continue;
+    for (var i = 0; i < _controllers.length; i++) {
+      if (_columns[i].isEmpty) {
+        continue;
+      }
       // Layer 3 安全网：确保永远不会报告 disabled index
-      int idx = _controllers[i].selectedItem.clamp(0, _columns[i].length - 1);
+      var idx = _controllers[i].selectedItem.clamp(0, _columns[i].length - 1);
       if (idx < _columns[i].length && _columns[i][idx].disabled) {
         // 同时双向搜索，取距离更近的 enabled index
         final forward = _findNearestEnabled(_columns[i], idx, 1);
         final backward = _findNearestEnabled(_columns[i], idx, -1);
         if (forward >= 0 && backward >= 0) {
           // 两者都存在，取距离更近的
-          idx = (forward - idx).abs() <= (backward - idx).abs() ? forward : backward;
+          idx = (forward - idx).abs() <= (backward - idx).abs()
+              ? forward
+              : backward;
         } else if (forward >= 0) {
           idx = forward;
         } else if (backward >= 0) {
@@ -407,17 +484,30 @@ class _TPickerState extends State<TPicker> {
       selectedOptions.add(_columns[i][idx]);
     }
 
-    widget.onChange?.call(TPickerValue(selectedOptions: selectedOptions, indexes: indexes));
+    widget.onChange
+        ?.call(TPickerValue(selectedOptions: selectedOptions, indexes: indexes));
   }
 
+  /// 检查是否需要触发预加载回调
+  ///
+  /// 当 onLoad 回调不为 null，且距离底部剩余项数 ≤ preloadThreshold 时，
+  /// 触发 widget.onLoad 回调，通知外部加载更多数据。
+  ///
+  /// [col] - 当前列索引
+  /// [currentIndex] - 当前选中的索引
+  /// [total] - 该列的总数据量
   void _checkPreload(int col, int currentIndex, int total) {
-    if (widget.onLoad == null) return;
+    if (widget.onLoad == null) {
+      return;
+    }
     final remaining = total - currentIndex - 1;
     if (remaining <= widget.preloadThreshold && remaining > 0) {
       widget.onLoad?.call(TPickerLoadEvent(
         column: col,
         parentValue:
-            col > 0 && col <= _selectedPath.length ? _selectedPath[col - 1] : null,
+            col > 0 && col <= _selectedPath.length
+                ? _selectedPath[col - 1]
+                : null,
         displayedCount: total,
         remaining: remaining,
       ));
@@ -426,20 +516,39 @@ class _TPickerState extends State<TPicker> {
 
   // ========== 工具方法 ==========
 
+  /// 将 Map 的 Key 转换为 TPickerOption 列表
+  ///
+  /// 如果 Key 已经是 TPickerOption，则直接使用；
+  /// 否则用 Key 的 toString() 作为 label，Key 作为 value 创建新的 TPickerOption
   List<TPickerOption> _keysToOptions(Map map) {
     return [
       for (final key in map.keys)
         key is TPickerOption
             ? key
-            : TPickerOption(label: key.toString(), value: key)
+            : TPickerOption(label: key.toString(), value: key),
     ];
   }
 
+  /// 在 Map 中查找指定 value 对应的子数据
+  ///
+  /// [map] - 要搜索的 Map（Key 可能是 TPickerOption 或普通值）
+  /// [targetValue] - 要查找的目标值（匹配 TPickerOption.value 或 Key 本身）
+  ///
+  /// 返回：
+  /// - 如果找到匹配项，返回对应的子数据（可能是 List 或 Map）
+  /// - 如果未找到或子数据为 null，返回 null 并打印警告日志
   dynamic _findChild(Map map, dynamic targetValue) {
     for (final key in map.keys) {
       final kv = key is TPickerOption ? key.value : key;
-      if (kv == targetValue) return map[key];
+      if (kv == targetValue) {
+        final child = map[key];
+        if (child == null) {
+          debugPrint('⚠️ TPicker: $targetValue 的子数据为 null');
+        }
+        return child;
+      }
     }
+    debugPrint('⚠️ TPicker: 在 Map 中未找到 $targetValue');
     return null;
   }
 }

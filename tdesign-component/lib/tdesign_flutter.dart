@@ -49,8 +49,6 @@ export 'src/components/picker/t_picker.dart';
 export 'src/components/picker/t_picker_option.dart';
 export 'src/components/picker/t_picker_value.dart';
 export 'src/components/picker/t_item_widget.dart';
-export 'src/components/picker/date_picker_model.dart';
-export 'src/components/picker/t_date_picker.dart';
 export 'src/components/popover/t_popover.dart';
 export 'src/components/popover/t_popover_widget.dart';
 export 'src/components/popup/t_popup_panel.dart';

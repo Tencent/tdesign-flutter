@@ -77,7 +77,7 @@ build/
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 
-.codebuddy/plans/
+.codebuddy/
 .fvm/
 
 /tdesign-component/local_dependency_override.yaml

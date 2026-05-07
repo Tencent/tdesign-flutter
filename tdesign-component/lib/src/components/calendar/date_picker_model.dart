@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import 'no_wave_behavior.dart';
-import 't_item_widget.dart';
-import 't_picker_option.dart';
-import 't_picker_value.dart';
-
 /// 日期选择器数据模型（供 TCalendar 内部时间选择器使用）
 ///
 /// 精简版，仅包含 TCalendar 时间选择器所需功能
@@ -46,7 +40,8 @@ class DatePickerModel {
 
   /// 获取年数据列表
   List<int> get years {
-    final start = (dateStart != null && dateStart!.isNotEmpty) ? dateStart![0] : 1900;
+    final start =
+        (dateStart != null && dateStart!.isNotEmpty) ? dateStart![0] : 1900;
     final end = (dateEnd != null && dateEnd!.isNotEmpty) ? dateEnd![0] : 2100;
     return List.generate(end - start + 1, (i) => start + i);
   }
@@ -56,7 +51,8 @@ class DatePickerModel {
 
   /// 获取日数据列表
   List<int> days(int year, int month) {
-    final daysInMonth = DateTime(year, month + 1).subtract(const Duration(days: 1)).day;
+    final daysInMonth =
+        DateTime(year, month + 1).subtract(const Duration(days: 1)).day;
     return List.generate(daysInMonth, (i) => i + 1);
   }
 
@@ -151,12 +147,14 @@ class DatePickerModel {
     if (changedColumn == 0 && useMonth) {
       // 年变化 → 刷新月
       _refreshDays();
-      if (controllers.length > changedColumn + 1) controllers[changedColumn + 1].jumpToItem(0);
+      if (controllers.length > changedColumn + 1)
+        controllers[changedColumn + 1].jumpToItem(0);
     }
     if (changedColumn == 1 && useDay) {
       // 月变化 → 刷新日
       _refreshDays();
-      if (controllers.length > changedColumn + 1) controllers[changedColumn + 1].jumpToItem(0);
+      if (controllers.length > changedColumn + 1)
+        controllers[changedColumn + 1].jumpToItem(0);
     }
   }
 
@@ -164,12 +162,18 @@ class DatePickerModel {
   Map<String, int> get selected {
     final result = <String, int>{};
     var idx = 0;
-    if (useYear && idx < data.length) result['year'] = data[idx++][controllers[idx++].selectedItem];
-    if (useMonth && idx < data.length) result['month'] = data[idx++][controllers[idx++].selectedItem];
-    if (useDay && idx < data.length) result['day'] = data[idx++][controllers[idx++].selectedItem];
-    if (useHour && idx < data.length) result['hour'] = data[idx++][controllers[idx++].selectedItem];
-    if (useMinute && idx < data.length) result['minute'] = data[idx++][controllers[idx++].selectedItem];
-    if (useSecond && idx < data.length) result['second'] = data[idx++][controllers[idx++].selectedItem];
+    if (useYear && idx < data.length)
+      result['year'] = data[idx++][controllers[idx++].selectedItem];
+    if (useMonth && idx < data.length)
+      result['month'] = data[idx++][controllers[idx++].selectedItem];
+    if (useDay && idx < data.length)
+      result['day'] = data[idx++][controllers[idx++].selectedItem];
+    if (useHour && idx < data.length)
+      result['hour'] = data[idx++][controllers[idx++].selectedItem];
+    if (useMinute && idx < data.length)
+      result['minute'] = data[idx++][controllers[idx++].selectedItem];
+    if (useSecond && idx < data.length)
+      result['second'] = data[idx++][controllers[idx++].selectedItem];
     return result;
   }
 }

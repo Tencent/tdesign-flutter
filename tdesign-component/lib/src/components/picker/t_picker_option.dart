@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// 选择器选项
 ///
 /// label 用于显示，value 用于 onChange 返回，两者分离
@@ -8,6 +10,7 @@
 /// TPickerOption(label: '18岁', value: 18)
 /// TPickerOption(label: '广东省', value: 'GD', disabled: true)
 /// ```
+@immutable
 class TPickerOption {
   /// 显示文字（可包含 emoji、单位、国际化等）
   final String label;
