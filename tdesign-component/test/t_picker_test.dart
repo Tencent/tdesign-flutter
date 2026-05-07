@@ -6,7 +6,7 @@ void main() {
   group('TPicker 组件测试', () {
     /// 测试 1: 多列独立选择
     testWidgets('多列独立选择 - 基础功能', (WidgetTester tester) async {
-      final testData = const [
+      const testData = [
         [
           TPickerOption(label: '选项1', value: 'v1'),
           TPickerOption(label: '选项2', value: 'v2'),

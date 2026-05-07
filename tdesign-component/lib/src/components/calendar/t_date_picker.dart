@@ -5,18 +5,14 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../picker/no_wave_behavior.dart';
+import '../picker/t_item_widget.dart';
 import 'date_picker_model.dart';
+import '../picker/t_picker_option.dart';
+import '../picker/t_picker_value.dart';
 
-/// @deprecated 此组件已废弃，仅供 TCalendar 内部使用。
-///
-/// 新代码应使用 [TPicker] 组件，它提供了更统一和强大的 API。
-///
-/// 长期目标：用 [TPicker] 重构 [TCalendar] 的时间选择器功能。
-///
 /// 日期/时间选择器（供 TCalendar 内部使用）
 ///
 /// 精简版，仅提供 TCalendar 时间选择器所需功能
-@Deprecated('Use TPicker instead. This class will be removed in a future version.')
 class TDatePicker extends StatefulWidget {
   final String? title;
   final String? leftText;
@@ -70,7 +66,7 @@ class _TDatePickerState extends State<TDatePicker> {
                   onTap: () => Navigator.pop(context),
                   child: Text(widget.leftText ?? '取消', style: TextStyle(color: TTheme.of(context).textColorSecondary)),
                 ),
-                Text(widget.title ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(widget.title ?? '', style: TextStyle(fontWeight: FontWeight.w600)),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Text(widget.rightText ?? '确认', style: TextStyle(color: TTheme.of(context).brandNormalColor)),
@@ -114,9 +110,7 @@ class _TDatePickerState extends State<TDatePicker> {
 
   Widget _buildColumn(int colIndex) {
     final data = widget.model.data[colIndex];
-    if (data.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    if (data.isEmpty) return const SizedBox.shrink();
 
     return MediaQuery.removePadding(
       context: context,
