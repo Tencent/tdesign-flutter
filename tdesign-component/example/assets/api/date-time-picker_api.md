@@ -13,22 +13,3 @@
 | onChange | void Function(TPickerValue)? | - | 值改变回调 |
 | onLoad | void Function(TPickerLoadEvent)? | - | 接近底部时加载回调 |
 | preloadThreshold | int | 5 | 预加载阈值（距底部剩余 N 项时触发），默认 5 |
-
-```
-```
-
-### TDatePicker
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| isTimeUnit | bool? | - |  |
-| key |  | - |  |
-| leftText | String? | - |  |
-| model | DatePickerModel | - |  |
-| onConfirm | void Function(Map<String, int>)? | - |  |
-| onSelectedItemChanged | void Function(int wheelIndex, int index)? | - |  |
-| pickerHeight | double? | - |  |
-| pickerItemCount | int? | - |  |
-| rightText | String? | - |  |
-| title | String? | - |  |
