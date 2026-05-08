@@ -46,14 +46,12 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 
 # checkbox
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/checkbox" --name TCheckbox,TCheckboxGroup --folder-name checkbox --output "$PARENT_DIR/example/assets/api/" --only-api
-# date_picker
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TDatePicker --folder-name date-time-picker --output "$PARENT_DIR/example/assets/api/" --only-api
+# picker
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TPickerOption,TPickerValue,TPickerScrollPhysics --folder-name picker --output "$PARENT_DIR/example/assets/api/" --only-api
 # form
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/form" --name TForm,TFormItem,TFormItemType,TFormValidation --folder-name form --output "$PARENT_DIR/example/assets/api/" --only-api
 # input
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/input/t_input.dart" --name TInput, TInputSpacer --folder-name input --output "$PARENT_DIR/example/assets/api/" --only-api
-# picker
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TMultiPicker,TMultiLinkedPicker,MultiLinkedPickerModel --folder-name picker --output "$PARENT_DIR/example/assets/api/" --only-api
 # radio
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/radio/t_radio.dart" --name TRadioStyle,TRadio,TRadioGroup --folder-name radio --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # rate
