@@ -5,9 +5,7 @@ import 'package:flutter/widgets.dart';
 /// 策略：完全不干预滚动物理，让滚动自然结束。
 /// disabled 修正统一由调用方的 [ScrollEndNotification] 处理（jumpToItem 瞬时修正）。
 class TPickerScrollPhysics extends FixedExtentScrollPhysics {
-  const TPickerScrollPhysics({
-    super.parent,
-  });
+  const TPickerScrollPhysics({super.parent});
 
   @override
   TPickerScrollPhysics applyTo(ScrollPhysics? ancestor) =>

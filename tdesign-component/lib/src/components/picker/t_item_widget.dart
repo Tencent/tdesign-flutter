@@ -23,15 +23,6 @@ typedef ItemBuilderType = Widget? Function(
 
 /// 所有选择器的子项组件
 class TItemWidget extends StatefulWidget {
-  final String content;
-  final FixedExtentScrollController fixedExtentScrollController;
-  final int colIndex;
-  final int index;
-  final double itemHeight;
-  final bool disabled;
-  final ItemDistanceCalculator? itemDistanceCalculator;
-  final ItemBuilderType? itemBuilder;
-
   const TItemWidget({
     required this.fixedExtentScrollController,
     required this.colIndex,
@@ -43,6 +34,15 @@ class TItemWidget extends StatefulWidget {
     this.itemBuilder,
     Key? key,
   }) : super(key: key);
+
+  final String content;
+  final FixedExtentScrollController fixedExtentScrollController;
+  final int colIndex;
+  final int index;
+  final double itemHeight;
+  final bool disabled;
+  final ItemDistanceCalculator? itemDistanceCalculator;
+  final ItemBuilderType? itemBuilder;
 
   @override
   _TItemWidgetState createState() => _TItemWidgetState();

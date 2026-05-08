@@ -10,6 +10,18 @@ import 't_picker_scroll_physics.dart';
 /// - `List<List<TPickerOption>>` → 多列独立选择
 /// - `Map` → 联动选择（Key 必须是 `TPickerOption`）
 class TPicker extends StatefulWidget {
+  const TPicker({
+    super.key,
+    required this.items,
+    this.initialValue,
+    this.onChange,
+    this.onLoad,
+    this.preloadThreshold = 5,
+    this.height = 200,
+    this.itemCount = 5,
+    this.disabled = false,
+  });
+
   /// 数据源（必填）
   final dynamic items;
 
@@ -33,18 +45,6 @@ class TPicker extends StatefulWidget {
 
   /// 是否禁用整个选择器（禁止滚动和操作），默认 false
   final bool disabled;
-
-  const TPicker({
-    super.key,
-    required this.items,
-    this.initialValue,
-    this.onChange,
-    this.onLoad,
-    this.preloadThreshold = 5,
-    this.height = 200,
-    this.itemCount = 5,
-    this.disabled = false,
-  });
 
   @override
   State<TPicker> createState() => _TPickerState();

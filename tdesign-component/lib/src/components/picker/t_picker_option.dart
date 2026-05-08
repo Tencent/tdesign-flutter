@@ -12,6 +12,12 @@ import 'package:flutter/foundation.dart';
 /// ```
 @immutable
 class TPickerOption {
+  const TPickerOption({
+    required this.label,
+    required this.value,
+    this.disabled = false,
+  });
+
   /// 显示文字（可包含 emoji、单位、国际化等）
   final String label;
 
@@ -20,12 +26,6 @@ class TPickerOption {
 
   /// 是否禁用（不可选中/置灰显示），默认 false
   final bool disabled;
-
-  const TPickerOption({
-    required this.label,
-    required this.value,
-    this.disabled = false,
-  });
 
   @override
   bool operator ==(Object other) =>

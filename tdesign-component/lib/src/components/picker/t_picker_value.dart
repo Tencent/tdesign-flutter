@@ -13,6 +13,11 @@ import 't_picker_option.dart';
 /// }
 /// ```
 class TPickerValue {
+  TPickerValue({
+    required this.selectedOptions,
+    required this.indexes,
+  });
+
   /// 每列选中的完整 option（顺序对应列号）
   final List<TPickerOption> selectedOptions;
 
@@ -25,11 +30,6 @@ class TPickerValue {
   /// 便捷属性：所有 label 的列表
   List<String> get labels => selectedOptions.map((o) => o.label).toList();
 
-  TPickerValue({
-    required this.selectedOptions,
-    required this.indexes,
-  });
-
   @override
   String toString() =>
       'TPickerValue(labels: $labels, values: $values, indexes: $indexes)';
@@ -39,6 +39,13 @@ class TPickerValue {
 ///
 /// 包含滚动位置信息，用于按需加载更多数据
 class TPickerLoadEvent {
+  TPickerLoadEvent({
+    required this.column,
+    required this.parentValue,
+    required this.displayedCount,
+    required this.remaining,
+  });
+
   /// 当前是第几列（从 0 开始）
   final int column;
 
@@ -50,13 +57,6 @@ class TPickerLoadEvent {
 
   /// 距离底部还有多少项
   final int remaining;
-
-  TPickerLoadEvent({
-    required this.column,
-    required this.parentValue,
-    required this.displayedCount,
-    required this.remaining,
-  });
 
   @override
   String toString() =>
