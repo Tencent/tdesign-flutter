@@ -16,10 +16,12 @@
             _pickerCard(
               context,
               child: TPicker(
-                items: [_lazyData],
-                preloadThreshold: 5,
+                items: TPickerColumns([_lazyData]),
                 onLoad: (e) async {
-                  if (_isLoading) return;
+                  // 业务层自行判断触发时机：距底部 5 项以内 + 未在加载中
+                  if (e.remaining > 5 || _isLoading) {
+                    return;
+                  }
                   setInner(() => _isLoading = true);
                   // 模拟网络请求延迟 1.5s
                   await Future.delayed(const Duration(milliseconds: 1500));
@@ -33,15 +35,14 @@
                     _isLoading = false;
                   });
                 },
-                onChange: (v) => setState(() =>
-                    selectedPreference = v.labels.first),
+                onChange: (v) => debugPrint('选中: ${v.labels.first}'),
               ),
             ),
             const SizedBox(height: 4),
             if (_isLoading)
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 14,
                     height: 14,
                     child: CircularProgressIndicator(strokeWidth: 2),
@@ -54,7 +55,7 @@
                 ],
               )
             else
-              Text('距底部 5 项时触发 onLoad，模拟 1.5s 网络延迟',
+              Text('在 onLoad 里判断 e.remaining <= 5 时加载，模拟 1.5s 网络延迟',
                   style: TextStyle(
                       fontSize: 12,
                       color: TTheme.of(context).textColorPlaceholder)),

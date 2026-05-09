@@ -1,21 +1,23 @@
 
   Widget buildPopupLinked(BuildContext context) {
+    final label = _popupLinkedValue?.labels.join(' / ') ?? '';
     return TCell(
       title: '弹窗-联动选择(省市区)',
-      note: selectedLinked.isEmpty ? '请选择' : selectedLinked,
+      note: label.isEmpty ? '请选择' : label,
       arrow: true,
       onClick: (_) {
         _showPickerPopup(
           context,
-          title: '请选择地区',
           picker: TPicker(
-            items: linkedData,
-            initialValue: selectedLinked.isNotEmpty
-                ? selectedLinked.split(' / ')
-                : ['GD'],
-            onChange: (v) => setState(() => _popupLinkedTemp = v.labels.join(' / ')),
+            items: linkedItems,
+            initialValue: _popupLinkedValue?.values ?? _popupLinkedInitial,
+            title: '请选择地区',
+            onCancel: () => Navigator.of(context).pop(),
+            onConfirm: (value) {
+              setState(() => _popupLinkedValue = value);
+              Navigator.of(context).pop();
+            },
           ),
-          onConfirm: () => setState(() => selectedLinked = _popupLinkedTemp),
         );
       },
     );

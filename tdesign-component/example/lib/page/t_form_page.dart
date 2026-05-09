@@ -95,7 +95,7 @@ class _TFormPageState extends State<TFormPage> {
               ),
               // 选择器
               TPicker(
-                items: [yearItems, monthItems, dayItems],
+                items: TPickerColumns([yearItems, monthItems, dayItems]),
                 initialValue: [year, month, day],
                 onChange: (v) => onConfirm(v.values),
               ),

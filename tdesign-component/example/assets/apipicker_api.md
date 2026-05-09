@@ -16,43 +16,22 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| cancel | Widget | const Text('取消') | 工具栏左侧自定义插槽，默认为 `Text('取消')` |
+| confirm | Widget | const Text('确认') | 工具栏右侧自定义插槽，默认为 `Text('确认')` |
 | disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
 | height | double | 200 | 视窗高度，默认 200 |
 | initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配） |
 | itemBuilder | ItemBuilderType? | - | 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder） |
 | itemCount | int | 5 | 每屏显示 item 数，默认 5 |
 | itemDistanceCalculator | ItemDistanceCalculator? | - | 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化） |
-| items | Object | - | 数据源（必填） |
+| items | TPickerItems | - | 数据源（必填） |
 | key |  | - |  |
-| keys | TPickerKeys | TPickerKeys.defaults | 字段映射，仅在 [items] 使用自由结构（Map）时生效 |
-| onChange | void Function(TPickerValue)? | - | 值改变回调 |
-| onLoad | void Function(TPickerLoadEvent)? | - | 接近底部时加载回调 |
-
-```
-```
-
-### TPickerKeys
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | String | 'children' | 联动模式下子级数据对应的字段名，默认 `children` |
-| disabled | String | 'disabled' | 禁用标记对应的字段名，默认 `disabled` |
-| label | String | 'label' | 展示文案对应的字段名，默认 `label` |
-| value | String | 'value' | 业务值对应的字段名，默认 `value` |
-
-```
-```
-
-### TPickerLoadEvent
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| column | int | - | 触发加载的列索引（0 表示第一列） |
-| displayedCount | int | - | 当前列已展示的选项总数 |
-| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
-| remaining | int | - | 距底部剩余的选项数 |
+| onCancel | VoidCallback? | - | 点击「取消」按钮回调 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） |
+| onConfirm | void Function(TPickerValue)? | - | 点击「确认」按钮回调 |
+| onLoad | void Function(TPickerLoadEvent)? | - | 列选中项变化的事件回调 |
+| title | String? | - | 工具栏中部标题（可选，不传时中部留白） |
+| titleWidget | Widget? | - | 工具栏中部自定义标题插槽 |
 
 ```
 ```

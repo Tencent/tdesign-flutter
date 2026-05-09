@@ -1,32 +1,30 @@
-import 'dart:io';
-import 'dart:ui';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import '../../util/platform_util.dart';
 
-/// 去掉ListView上下滑动的波纹
+/// 滚动行为：去掉 Android / Fuchsia 平台默认的水波纹（GlowingOverscrollIndicator）
+///
+/// 水波纹会与 [ListWheelScrollView] 的弧形外观产生视觉冲突。
+/// iOS / 桌面端保持系统默认行为。
 class NoWaveBehavior extends ScrollBehavior {
   @override
   Widget buildOverscrollIndicator(
       BuildContext context, Widget child, ScrollableDetails details) {
     if (PlatformUtil.isAndroid || PlatformUtil.isFuchsia) {
       return child;
-    } else {
-      return super.buildOverscrollIndicator(context, child, details);
     }
+    return super.buildOverscrollIndicator(context, child, details);
   }
 
-  // 增加mouse拖拽
+  /// 支持的拖动输入设备类型，覆盖桌面端 / Web 场景
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.stylus,
-    PointerDeviceKind.invertedStylus,
-    PointerDeviceKind.trackpad,
-    // The VoiceAccess sends pointer events with unknown type when scrolling
-    // scrollables.
-    PointerDeviceKind.unknown,
-    PointerDeviceKind.mouse,
-  };
-
+        PointerDeviceKind.touch,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.invertedStylus,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.unknown,
+        PointerDeviceKind.mouse,
+      };
 }
