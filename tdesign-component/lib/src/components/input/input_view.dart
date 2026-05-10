@@ -82,6 +82,11 @@ class TDInputView extends StatelessWidget {
   /// 是否启用交互式选择
   final bool? enableInteractiveSelection;
 
+  /// 自动填充提示，传递给 TextField 的 autofillHints
+  /// 例如密码输入框传 [AutofillHints.password]，可让系统/输入法识别为密码字段
+  /// 配合 AutofillGroup 使用可触发系统自动填充
+  final Iterable<String>? autofillHints;
+
   const TDInputView(
       {Key? key,
       required this.textStyle,
@@ -110,10 +115,26 @@ class TDInputView extends StatelessWidget {
       this.onTapOutside,
       this.selectionControls,
       this.contextMenuBuilder,
-      this.enableInteractiveSelection})
+      this.enableInteractiveSelection,
+      this.autofillHints})
       : super(
           key: key,
         );
+
+  /// 默认的 onTapOutside 实现：不主动 unfocus 当前输入框。
+  ///
+  /// Flutter 3.13+ 的 EditableText 默认 onTapOutside 会在指针落到输入框外部
+  /// 任意位置时调用 focusNode.unfocus()，导致以下交互问题（见 issue #763）：
+  /// 1. Android 上从一个 TDInput 点击切换到另一个 TDInput 时，前者的
+  ///    onTapOutside 会先 unfocus，与后者的 requestFocus 在同一帧竞争，
+  ///    最终表现为键盘被收起；
+  /// 2. 在 Stack/Row 等复杂布局中，第一次 tap 触发 outside 判定，造成
+  ///    "点一次只获焦不弹键盘"的现象。
+  ///
+  /// 本组件采用更克制的策略：tap outside 时不主动 unfocus，让 framework
+  /// 根据真正的焦点变更来管理键盘显隐。业务方如需"点空白处收起键盘"，
+  /// 可显式传入 onTapOutside 覆盖此默认值。
+  static void _defaultOnTapOutside(PointerDownEvent event) {}
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +155,8 @@ class TDInputView extends StatelessWidget {
       maxLines: maxLines,
       minLines: minLines,
       maxLength: maxLength,
-      onTapOutside: onTapOutside,
+      onTapOutside: onTapOutside ?? _defaultOnTapOutside,
+      autofillHints: autofillHints,
       selectionControls: selectionControls,
       contextMenuBuilder: contextMenuBuilder,
       style: textStyle,

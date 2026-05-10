@@ -86,6 +86,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
               ExampleItem(desc: '自适应高度输入框', builder: _autoHeightInput),
               ExampleItem(builder: _specialTypeNumber),
               ExampleItem(builder: _specialTypePasswordWithPaste),
+              ExampleItem(
+                  desc: '登录场景：双密码框焦点切换不收键盘',
+                  builder: _specialTypeLoginForm),
               ExampleItem(builder: (context) {
                 return Container();
               }),
@@ -494,6 +497,42 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           height: 16,
         ),
       ],
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _specialTypeLoginForm(BuildContext context) {
+    // 登录场景：上下两个密码框，演示 issue #763 的修复效果。
+    // - 点击任一密码框：键盘应立即弹出（无需点两次）
+    // - 在两个密码框间切换焦点：键盘保持显示，不会被默认 onTapOutside 收起
+    // - 借助 AutofillGroup + AutofillHints.password 触发系统密码自动填充
+    return AutofillGroup(
+      child: Column(
+        children: [
+          TDInput(
+            type: TDInputType.normal,
+            controller: controller[28],
+            obscureText: true,
+            leftLabel: '密码',
+            hintText: '请输入密码',
+            autofillHints: const [AutofillHints.password],
+            inputAction: TextInputAction.next,
+            needClear: false,
+          ),
+          const SizedBox(height: 8),
+          TDInput(
+            type: TDInputType.normal,
+            controller: controller[29],
+            obscureText: true,
+            leftLabel: '确认密码',
+            hintText: '请再次输入密码',
+            autofillHints: const [AutofillHints.password],
+            inputAction: TextInputAction.done,
+            needClear: false,
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 
