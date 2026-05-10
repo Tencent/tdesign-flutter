@@ -259,61 +259,45 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| items | dynamic | - | 数据源（必填）：`List<List<TPickerOption>>` 多列独立 / `Map` 联动选择 |
-| initialValue | List? | - | 初始选中值列表（按 value 匹配） |
-| onChange | void Function(TPickerValue)? | - | 值改变回调，返回 `TPickerValue`（含 selectedOptions、indexes、values/labels 便捷属性） |
-| onLoad | void Function(TPickerLoadEvent)? | - | 接近底部时加载回调（用于无限滚动） |
-| preloadThreshold | int | 5 | 预加载阈值（距底部剩余 N 项时触发） |
-| height | double | 200 | 视窗高度 |
-| itemCount | int | 5 | 每屏显示 item 数量 |
-| disabled | bool | false | 是否禁用整个选择器 |
+| cancel | Widget | const Text('取消') | 工具栏左侧自定义插槽，默认为 `Text('取消')` |
+| confirm | Widget | const Text('确认') | 工具栏右侧自定义插槽，默认为 `Text('确认')` |
+| disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
+| height | double | 200 | 视窗高度，默认 200 |
+| initialValue | List\<dynamic\>? | - | 初始选中值列表（按 value 匹配） |
+| itemBuilder | ItemBuilderType? | - | 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder） |
+| itemCount | int | 5 | 每屏显示 item 数，默认 5 |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化） |
+| items | TPickerItems | - | 数据源（必填） |
+| onCancel | VoidCallback? | - | 点击「取消」按钮回调 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） |
+| onConfirm | void Function(TPickerValue)? | - | 点击「确认」按钮回调 |
+| onLoad | void Function(TPickerLoadEvent)? | - | 列选中项变化的事件回调 |
+| title | String? | - | 工具栏中部标题（可选，不传时中部留白） |
+| titleWidget | Widget? | - | 工具栏中部自定义标题插槽 |
 
 ### TPickerOption
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| label | String (required) | - | 显示文字（可包含 emoji、单位等） |
-| value | dynamic (required) | - | 实际值（onChange 回调返回此字段） |
-| disabled | bool | false | 是否禁用（不可选中） |
-
-#### 使用示例
-
-```dart
-TPickerOption(label: '👨 男性', value: 'M')
-TPickerOption(label: '18岁', value: 18)
-TPickerOption(label: '广东省', value: 'GD', disabled: true)
-```
+| disabled | bool | false | 是否禁用（不可选中/置灰显示），默认 false |
+| label | String | - | 展示文字（可包含 emoji、单位、国际化等） |
+| value | dynamic | - | 业务值（onChange 回调返回此字段） |
 
 ### TPickerValue
-#### onChange 回调返回对象
+#### 默认构造方法
 
-| 属性 | 类型 | 说明 |
-| --- | --- | --- |
-| selectedOptions | List\<TPickerOption\> | 每列选中的完整 option（顺序对应列号） |
-| indexes | List\<int\> | 每列在当前数据列表中的索引 |
-| values (getter) | List\<dynamic\> | 所有 value 的便捷列表 |
-| labels (getter) | List\<String\> | 所有 label 的便捷列表 |
-
-#### 使用示例
-
-```dart
-TPicker(
-  items: data,
-  onChange: (v) {
-    // 显示文本：v.labels.join(' / ')
-    // 业务值：v.values
-    // 完整选项：v.selectedOptions
-  },
-)
-```
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| indexes | List\<int\> | - | 每列选中项的索引 |
+| selectedOptions | List\<TPickerOption\> | - | 每列选中的完整 option |
 
 ### TPickerLoadEvent
-#### onLoad 回调参数
+#### 默认构造方法
 
-| 属性 | 类型 | 说明 |
-| --- | --- | --- |
-| column | int | 当前列索引（从 0 开始） |
-| parentValue | dynamic | 该列父级选中值（第一列为 null） |
-| displayedCount | int | 该列当前已显示的数据量 |
-| remaining | int | 距离底部还有多少项 |
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| column | int | - | 触发事件的列索引（0 表示第一列） |
+| displayedCount | int | - | 当前列已展示的选项总数 |
+| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
+| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |

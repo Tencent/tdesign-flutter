@@ -11,17 +11,6 @@
 ```
 ```
 
-### TPickerValue
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| indexes | List<int> | - | 每列选中项的索引 |
-| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
-
-```
-```
-
 ### TPicker
 #### 默认构造方法
 
@@ -43,3 +32,27 @@
 | onLoad | void Function(TPickerLoadEvent)? | - | 列选中项变化的事件回调 |
 | title | String? | - | 工具栏中部标题（可选，不传时中部留白） |
 | titleWidget | Widget? | - | 工具栏中部自定义标题插槽 |
+
+```
+```
+
+### TPickerLoadEvent
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| column | int | - | 触发事件的列索引（0 表示第一列） |
+| displayedCount | int | - | 当前列已展示的选项总数 |
+| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
+| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
+
+```
+```
+
+### TPickerValue
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| indexes | List<int> | - | 每列选中项的索引 |
+| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |

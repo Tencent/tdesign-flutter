@@ -47,7 +47,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # checkbox
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/checkbox" --name TCheckbox,TCheckboxGroup --folder-name checkbox --output "$PARENT_DIR/example/assets/api/" --only-api
 # picker
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TPickerOption,TPickerValue,TPickerScrollPhysics --folder-name picker --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TPickerOption,TPickerValue,TPickerLoadEvent --folder-name picker --output "$PARENT_DIR/example/assets/api/" --only-api
 # form
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/form" --name TForm,TFormItem,TFormItemType,TFormValidation --folder-name form --output "$PARENT_DIR/example/assets/api/" --only-api
 # input
