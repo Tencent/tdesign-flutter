@@ -139,11 +139,22 @@ class DatePickerModel {
 
   /// 根据当前选中值刷新日列数据
   void _refreshDays() {
-    final yearIdx = useYear ? controllers[0].selectedItem : 0;
-    final monthIdx = useMonth ? controllers[1].selectedItem : 0;
+    // 动态计算 day 列的实际索引（前面可能没有 year / month 列）
+    int dayCol = 0;
+    if (useYear) dayCol++;
+    if (useMonth) dayCol++;
+    if (dayCol >= data.length) return;
+
+    final yearIdx = useYear
+        ? controllers[0].selectedItem.clamp(0, years.length - 1)
+        : 0;
+    final monthCol = useYear ? 1 : 0;
+    final monthIdx = useMonth
+        ? controllers[monthCol].selectedItem.clamp(0, months.length - 1)
+        : 0;
     final year = useYear ? years[yearIdx] : DateTime.now().year;
     final month = useMonth ? months[monthIdx] : DateTime.now().month;
-    data[2] = days(year, month);
+    data[dayCol] = days(year, month);
   }
 
   /// 外部调用：当年/月变化时刷新后续列
