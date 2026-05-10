@@ -40,7 +40,8 @@ class _TFormPageState extends State<TFormPage> {
 
     final yearItems = List.generate(52, (i) => TPickerOption(label: '${1999 + i}年', value: 1999 + i));
     final monthItems = List.generate(12, (i) => TPickerOption(label: '${i + 1}月', value: i + 1));
-    final dayItems = List.generate(31, (i) => TPickerOption(label: '${i + 1}日', value: i + 1));
+    final daysInMonth = DateTime(year, month + 1).subtract(const Duration(days: 1)).day;
+    final dayItems = List.generate(daysInMonth, (i) => TPickerOption(label: '${i + 1}日', value: i + 1));
 
     showModalBottomSheet(
       context: context,

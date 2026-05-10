@@ -117,9 +117,6 @@ class DatePickerModel {
     if (useSecond) data.add(seconds);
     if (useWeekDay) data.add(weekDays);
 
-    // 刷新日列数据
-    if (useDay) _refreshDays();
-
     controllers = List.generate(
       data.length,
       (_) => FixedExtentScrollController(),
@@ -129,12 +126,15 @@ class DatePickerModel {
     if (dateInitial != null) {
       final init = dateInitial!;
       for (var i = 0; i < init.length && i < controllers.length; i++) {
-        if (i < data[i].length) {
+        if (data[i].isNotEmpty) {
           final idx = data[i].indexOf(init[i]);
           if (idx >= 0) controllers[i].jumpToItem(idx);
         }
       }
     }
+
+    // 刷新日列数据（必须在 controllers 初始化之后，因为需要读取选中的年/月）
+    if (useDay) _refreshDays();
   }
 
   /// 根据当前选中值刷新日列数据
@@ -164,12 +164,30 @@ class DatePickerModel {
   Map<String, int> get selected {
     final result = <String, int>{};
     var idx = 0;
-    if (useYear && idx < data.length) result['year'] = data[idx++][controllers[idx++].selectedItem];
-    if (useMonth && idx < data.length) result['month'] = data[idx++][controllers[idx++].selectedItem];
-    if (useDay && idx < data.length) result['day'] = data[idx++][controllers[idx++].selectedItem];
-    if (useHour && idx < data.length) result['hour'] = data[idx++][controllers[idx++].selectedItem];
-    if (useMinute && idx < data.length) result['minute'] = data[idx++][controllers[idx++].selectedItem];
-    if (useSecond && idx < data.length) result['second'] = data[idx++][controllers[idx++].selectedItem];
+    if (useYear && idx < data.length) {
+      result['year'] = data[idx][controllers[idx].selectedItem];
+      idx++;
+    }
+    if (useMonth && idx < data.length) {
+      result['month'] = data[idx][controllers[idx].selectedItem];
+      idx++;
+    }
+    if (useDay && idx < data.length) {
+      result['day'] = data[idx][controllers[idx].selectedItem];
+      idx++;
+    }
+    if (useHour && idx < data.length) {
+      result['hour'] = data[idx][controllers[idx].selectedItem];
+      idx++;
+    }
+    if (useMinute && idx < data.length) {
+      result['minute'] = data[idx][controllers[idx].selectedItem];
+      idx++;
+    }
+    if (useSecond && idx < data.length) {
+      result['second'] = data[idx][controllers[idx].selectedItem];
+      idx++;
+    }
     return result;
   }
 }

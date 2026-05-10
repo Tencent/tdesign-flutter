@@ -1,14 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
 import '../picker/no_wave_behavior.dart';
-import '../picker/t_item_widget.dart';
 import 'date_picker_model.dart';
-import '../picker/t_picker_option.dart';
-import '../picker/t_picker_value.dart';
 
 /// 日期/时间选择器（供 TCalendar 内部使用）
 ///
@@ -68,7 +62,10 @@ class _TDatePickerState extends State<TDatePicker> {
                 ),
                 Text(widget.title ?? '', style: TextStyle(fontWeight: FontWeight.w600)),
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    widget.onConfirm?.call(widget.model.selected);
+                    Navigator.pop(context);
+                  },
                   child: Text(widget.rightText ?? '确认', style: TextStyle(color: TTheme.of(context).brandNormalColor)),
                 ),
               ],
@@ -76,7 +73,7 @@ class _TDatePickerState extends State<TDatePicker> {
           ),
         SizedBox(
           height: _pickerHeight,
-          width: MediaQuery.of(context).size.width,
+          width: double.infinity,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -136,7 +133,7 @@ class _TDatePickerState extends State<TDatePicker> {
               return Container(
                 alignment: Alignment.center,
                 height: _pickerHeight / (widget.pickerItemCount ?? 5),
-                width: MediaQuery.of(context).size.width,
+                width: double.infinity,
                 child: TItemWidget(
                   content: content,
                   fixedExtentScrollController: widget.model.controllers[colIndex],

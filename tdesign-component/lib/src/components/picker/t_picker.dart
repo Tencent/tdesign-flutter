@@ -354,7 +354,7 @@ class _TPickerState extends State<TPicker> {
         absorbing: widget.disabled,
         child: SizedBox(
           height: widget.height,
-          width: MediaQuery.of(context).size.width,
+          width: double.infinity,
           child: Stack(
             alignment: Alignment.center,
             children: [

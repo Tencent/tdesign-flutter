@@ -160,5 +160,8 @@ class TPickerLinked extends TPickerItems {
   }
 
   @override
-  int get hashCode => Object.hashAll(tree.keys);
+  int get hashCode => Object.hashAll([
+        ...tree.keys,
+        ...tree.values.map((v) => v.hashCode),
+      ]);
 }
