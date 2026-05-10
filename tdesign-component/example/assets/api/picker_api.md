@@ -11,6 +11,17 @@
 ```
 ```
 
+### TPickerValue
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| indexes | List<int> | - | 每列选中项的索引 |
+| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
+
+```
+```
+
 ### TPicker
 #### 默认构造方法
 
@@ -45,14 +56,3 @@
 | displayedCount | int | - | 当前列已展示的选项总数 |
 | parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
 | remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
-
-```
-```
-
-### TPickerValue
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| indexes | List<int> | - | 每列选中项的索引 |
-| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
