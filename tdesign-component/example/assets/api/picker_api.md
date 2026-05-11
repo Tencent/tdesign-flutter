@@ -1,95 +1,123 @@
 ## API
-### TMultiPicker
+### TPickerOption
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| customSelectWidget | Widget? | - | 自定义选择框样式 |
-| data | Map | - | 总的数据 |
-| header | bool | true | 是否显示头部内容 |
-| initialIndexes | List<int>? | - | 若为null表示全部从零开始 |
-| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
-| key |  | - |  |
-| leftPadding | double? | - | 左边填充 |
-| leftText | String? | - | 左侧按钮文案 |
-| leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
-| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
-| onChange | MultiPickerCallback? | - | todo 选择器数据改变时回调 |
-| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
-| padding | EdgeInsets? | - | 适配padding |
-| pickerHeight | double | 200 |  |
-| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度 |
-| rightPadding | double? | - | 右边填充 |
-| rightText | String? | - | 右侧按钮文案 |
-| rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
-| title | String? | - | 选择器标题 |
-| titleDividerColor | Color? | - | 标题分割线颜色 |
-| titleHeight | double? | - | 标题高度 |
-| topPadding | double? | - | 顶部填充 |
-| topRadius | double? | - | 顶部圆角 |
+| disabled | bool | false | 是否禁用（不可选中/置灰显示），默认 false |
+| label | String | - | 展示文字（可包含 emoji、单位、国际化等） |
+| value | dynamic | - | 业务值（onChange 回调返回此字段） |
 
 ```
 ```
 
-### TMultiLinkedPicker
+### TPickerValue
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| columnNum | int | - | 总列数 |
-| customSelectWidget | Widget? | - | 自定义选择框样式 |
-| data | Map | - | 总的数据 |
-| header | bool | true | 是否显示头部内容 |
-| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
-| keepSameSelection | bool | false | 是否保留相同选项 |
-| key |  | - |  |
-| leftPadding | double? | - | 左边填充 |
-| leftText | String? | - | 左侧按钮文案 |
-| leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
-| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
-| onChange | MultiPickerCallback? | - | todo 选择器数据改变时回调 |
-| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
-| padding | EdgeInsets? | - | 适配padding |
-| pickerHeight | double | 200 |  |
-| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度 |
-| rightPadding | double? | - | 右边填充 |
-| rightText | String? | - | 右侧按钮文案 |
-| rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
-| selectedData | List | - | 选中数据 |
-| title | String? | - | 选择器标题 |
-| titleDividerColor | Color? | - | 标题分割线颜色 |
-| titleHeight | double? | - | 标题高度 |
-| topPadding | double? | - | 顶部填充 |
-| topRadius | double? | - | 顶部圆角 |
-
-```
-```
-
-### MultiLinkedPickerModel
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| columnNum | int | - | 总列数 |
-| data | Map | - | 总的数据 |
-| initialData |  | - |  |
-| keepSameSelection | bool | false | 是否保留相同选项 |
+| indexes | List<int> | - | 每列选中项的索引 |
+| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
 
 ```
 ```
 
 ### TPicker
+#### 默认构造方法
 
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  String? title,  double? titleHeight,  Color? titleDividerColor,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  DatePickerCallback? onChange,   Function(int wheelIndex, int index)? onSelectedItemChanged,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  String? rightText,  TextStyle? rightTextStyle,  EdgeInsets? padding,  double? leftPadding,  double? topPadding,  double? rightPadding,  double? topRadius,  Color? backgroundColor,  Widget? customSelectWidget,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  double pickerHeight,  int pickerItemCount,  bool isTimeUnit,  ItemBuilderType? itemBuilder,  Color? barrierColor,  Duration duration, | 显示时间选择器 |
-| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List initialData,  required Map data,  required int columnNum,  double pickerHeight,  int pickerItemCount,  Widget? customSelectWidget,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double? titleHeight,  double? topPadding,  double? leftPadding,  double? rightPadding,  Color? titleDividerColor,  Color? backgroundColor,  double? topRadius,  EdgeInsets? padding,  ItemBuilderType? itemBuilder,  bool keepSameSelection,  Color? barrierColor,  Duration duration, | 显示多级联动选择器 |
-| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  double pickerHeight,  int pickerItemCount,  List<int>? initialIndexes,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double? titleHeight,  double? topPadding,  double? leftPadding,  double? rightPadding,  Color? titleDividerColor,  Color? backgroundColor,  double? topRadius,  EdgeInsets? padding,  Widget? customSelectWidget,  ItemBuilderType? itemBuilder,  Duration duration,  Color? barrierColor, | 显示多级选择器 |
+| cancel | Widget? | - | 工具栏左侧自定义插槽，默认使用 [TResourceDelegate.cancel] |
+| confirm | Widget? | - | 工具栏右侧自定义插槽，默认使用 [TResourceDelegate.confirm] |
+| disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
+| height | double | 200 | 视窗高度，默认 200 |
+| initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配） |
+| itemBuilder | ItemBuilderType? | - | 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder） |
+| itemCount | int | 5 | 每屏显示 item 数，默认 5 |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化） |
+| items | TPickerItems | - | 数据源（必填） |
+| key |  | - |  |
+| onCancel | VoidCallback? | - | 点击「取消」按钮回调 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） |
+| onConfirm | void Function(TPickerValue)? | - | 点击「确认」按钮回调 |
+| onLoad | void Function(TPickerLoadEvent)? | - | 列选中项变化的事件回调 |
+| title | String? | - | 工具栏中部标题（可选，不传时中部留白） |
+| titleWidget | Widget? | - | 工具栏中部自定义标题插槽 |
+
+```
+```
+
+### TPickerItems
+```
+```
+
+### TPickerColumns
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| columns | List<List<TPickerOption>> | columns | 每列的选项列表 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPickerColumns.fromRaw  | 从自由结构的 raw 数据创建，自动归一化
+
+ ```dart
+ TPickerColumns.fromRaw(
+   [['北京', '上海', '广州']],
+   keys: const TPickerKeys(label: 'name', value: 'code'),
+ )
+ ``` |
+
+```
+```
+
+### TPickerLinked
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| tree | Map<TPickerOption, dynamic> | tree | 联动树结构：`Map<TPickerOption, dynamic>` |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPickerLinked.fromRaw  | 从自由结构的 raw Map 数据创建，自动归一化
+
+ ```dart
+ TPickerLinked.fromRaw({
+   '广东': {'深圳': ['南山', '福田'], '广州': ['天河']},
+   '浙江': {'杭州': ['西湖']},
+ })
+ ``` |
+
+```
+```
+
+### TPickerKeys
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | String | 'children' | 联动模式下子级数据对应的字段名，默认 `children` |
+| disabled | String | 'disabled' | 禁用标记对应的字段名，默认 `disabled` |
+| label | String | 'label' | 展示文案对应的字段名，默认 `label` |
+| value | String | 'value' | 业务值对应的字段名，默认 `value` |
+
+```
+```
+
+### TPickerLoadEvent
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| column | int | - | 触发事件的列索引（0 表示第一列） |
+| displayedCount | int | - | 当前列已展示的选项总数 |
+| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
+| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |

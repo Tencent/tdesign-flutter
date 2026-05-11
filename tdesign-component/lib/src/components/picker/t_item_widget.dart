@@ -1,127 +1,180 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
+/// 自定义子项构建器类型
+///
+/// [context] 上下文
+/// [content] 文字内容
+/// [colIndex] 列号
+/// [index] 行号
+/// [itemDistanceCalculator] 根据距离计算字体颜色、透明度、粗细
+/// [distance] 子项此时离中心的距离
 typedef ItemBuilderType = Widget? Function(
-  /// 上下文
   BuildContext context,
-
-  /// 文字内容
   String content,
-
-  /// 列号
   int colIndex,
-
-  /// 行号
   int index,
-
-  /// 根据距离计算字体颜色、透明度、粗细
   ItemDistanceCalculator itemDistanceCalculator,
-
-  /// 子项此时离中心的距离
   double distance,
 );
 
-/// 所有选择器的子项组件
-class TItemWidget extends StatefulWidget {
-  final String content;
-  final FixedExtentScrollController fixedExtentScrollController;
-  final int colIndex;
-  final int index;
-  final double itemHeight;
-  final ItemDistanceCalculator? itemDistanceCalculator;
-  final ItemBuilderType? itemBuilder;
+// =============== 样式默认值（可被 ItemDistanceCalculator 继承覆盖） ===============
 
+/// disabled 项透明度
+const double _kDisabledItemOpacity = 0.5;
+
+/// 基础字号 fallback（theme.fontBodyLarge.size 为 null 时使用）
+const double _kBaseFontSize = 16.0;
+
+/// 选择器的子项组件
+class TItemWidget extends StatelessWidget {
   const TItemWidget({
     required this.fixedExtentScrollController,
     required this.colIndex,
     required this.index,
     required this.content,
     required this.itemHeight,
+    this.disabled = false,
     this.itemDistanceCalculator,
     this.itemBuilder,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
-  @override
-  _TItemWidgetState createState() => _TItemWidgetState();
-}
+  /// 展示文字内容
+  final String content;
 
-class _TItemWidgetState extends State<TItemWidget> {
-  /// 子项监听滚动，从而刷新自身的颜色
-  VoidCallback? listener;
-  ItemDistanceCalculator? _itemDistanceCalculator;
+  /// 所属滚轮的滚动控制器，用于计算离中心的距离
+  final FixedExtentScrollController fixedExtentScrollController;
 
-  @override
-  void initState() {
-    super.initState();
-    listener = () => setState(() {});
-    _itemDistanceCalculator = widget.itemDistanceCalculator;
+  /// 所在列索引
+  final int colIndex;
 
-    /// 子项注册滚动监听
-    widget.fixedExtentScrollController.addListener(listener!);
-  }
+  /// 所在行索引
+  final int index;
+
+  /// 单项高度
+  final double itemHeight;
+
+  /// 是否禁用（置灰且不响应选中）
+  final bool disabled;
+
+  /// 距离到样式的映射计算器，null 时使用默认实现
+  final ItemDistanceCalculator? itemDistanceCalculator;
+
+  /// 自定义子项构建器，null 时使用默认 [TText] 渲染
+  final ItemBuilderType? itemBuilder;
+
+  ItemDistanceCalculator get _calculator =>
+      itemDistanceCalculator ?? const ItemDistanceCalculator();
 
   @override
   Widget build(BuildContext context) {
-    /// 子项此时离中心的距离
-    /// 不要使用widget.fixedExtentScrollController.selectedItem
-    /// 其中selectedItem会报错，原因是一开始minScrollExtent为空
-    var distance =
-        (widget.fixedExtentScrollController.offset / widget.itemHeight -
-                widget.index)
-            .abs()
-            .toDouble();
-    _itemDistanceCalculator ??= ItemDistanceCalculator();
-    return widget.itemBuilder?.call(
-          context,
-          widget.content,
-          widget.colIndex,
-          widget.index,
-          _itemDistanceCalculator!,
-          distance,
-        ) ??
-        TText(
-          widget.content,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontWeight:
-                _itemDistanceCalculator!.calculateFontWeight(context, distance),
-            fontSize: _itemDistanceCalculator!.calculateFont(context, distance),
-            color: _itemDistanceCalculator!.calculateColor(context, distance),
-          ),
-        );
-  }
+    final calc = _calculator;
 
-  @override
-  void dispose() {
-    /// 在销毁前完成监听注销
-    widget.fixedExtentScrollController.removeListener(listener!);
-    super.dispose();
+    if (disabled) {
+      return Center(
+        child: Opacity(
+          opacity: _kDisabledItemOpacity,
+          child: TText(
+            content,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: calc.calculateFont(context, 0),
+              color: TTheme.of(context).textDisabledColor,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return RepaintBoundary(
+      // 语义比 AnimatedBuilder 更准确（后者会让人误以为是补间动画）
+      child: ListenableBuilder(
+        listenable: fixedExtentScrollController,
+        builder: (context, _) {
+          final distance =
+              (fixedExtentScrollController.offset / itemHeight - index).abs();
+          return Center(
+            child: Opacity(
+              opacity: calc.calculateOpacity(distance),
+              child: itemBuilder?.call(
+                    context,
+                    content,
+                    colIndex,
+                    index,
+                    calc,
+                    distance,
+                  ) ??
+                  TText(
+                    content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: calc.calculateFontWeight(context, distance),
+                      fontSize: calc.calculateFont(context, distance),
+                      color: calc.calculateColor(context, distance),
+                    ),
+                  ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
+/// 距离到样式的映射器
+///
+/// 默认采用 4 档离散赋值（0=选中, 1=紧邻, 2=近边, 3+=远边），
+/// 可继承此类自定义颜色/字号/透明度过渡曲线。
 class ItemDistanceCalculator {
-  ItemDistanceCalculator();
+  const ItemDistanceCalculator();
 
+  /// 4 档粗细：选中 → 最远
+  static const List<FontWeight> _fontWeightLevels = <FontWeight>[
+    FontWeight.w700,
+    FontWeight.w500,
+    FontWeight.w400,
+    FontWeight.w300,
+  ];
+
+  /// 4 档字号缩放因子：选中 → 最远
+  static const List<double> _fontSizeScales = <double>[1.00, 0.94, 0.88, 0.82];
+
+  /// 4 档颜色混合比例（主色 → 占位色）：选中 → 最远
+  static const List<double> _colorMixLevels = <double>[0.00, 0.55, 0.78, 1.00];
+
+  /// 把连续距离量化为 0~3 的档位
+  static int _level(double distance) => distance.round().clamp(0, 3);
+
+  /// 计算指定距离处的文字颜色
   Color calculateColor(BuildContext context, double distance) {
-    /// 线性插值
-    if (distance < 0.5) {
-      return TTheme.of(context).textColorPrimary;
-    } else {
-      return TTheme.of(context).textDisabledColor;
+    final theme = TTheme.of(context);
+    final primary = theme.textColorPrimary;
+    final placeholder = theme.textColorPlaceholder;
+    final mix = _colorMixLevels[_level(distance)];
+    if (mix == 0) {
+      return primary;
     }
+    if (mix >= 1) {
+      return placeholder;
+    }
+    return Color.lerp(primary, placeholder, mix) ?? placeholder;
   }
 
-  FontWeight calculateFontWeight(BuildContext context, double distance) {
-    if (distance < 0.5) {
-      return FontWeight.w600;
-    } else {
-      return FontWeight.w400;
-    }
-  }
+  /// 计算指定距离处的文字粗细
+  FontWeight calculateFontWeight(BuildContext context, double distance) =>
+      _fontWeightLevels[_level(distance)];
 
+  /// 计算指定距离处的字体大小
   double calculateFont(BuildContext context, double distance) {
-    return TTheme.of(context).fontBodyLarge!.size;
+    final baseSize = TTheme.of(context).fontBodyLarge?.size ?? _kBaseFontSize;
+    return baseSize * _fontSizeScales[_level(distance)];
   }
+
+  /// 计算指定距离处的不透明度（非选中项统一半透明）
+  double calculateOpacity(double distance) =>
+      _level(distance) == 0 ? 1.00 : 0.75;
 }

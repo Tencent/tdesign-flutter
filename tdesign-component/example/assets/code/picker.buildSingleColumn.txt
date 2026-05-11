@@ -1,0 +1,16 @@
+
+  Widget buildSingleColumn(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中城市: ${selectedCity.isEmpty ? "未选择" : selectedCity}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: cityItems,
+              onChange: (v) => setState(() => selectedCity = v.labels.first)),
+        ),
+      ],
+    );
+  }

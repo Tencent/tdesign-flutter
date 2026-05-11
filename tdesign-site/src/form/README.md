@@ -157,18 +157,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               if (_formDisableState) {
                 return;
               }
-              TPicker.showDatePicker(context, title: '选择时间',
-                  onConfirm: (selected) {
-                setState(() {
-                  _selected_1 =
-                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-                  _formItemNotifier['birth']?.upDataForm(_selected_1);
-                });
-                Navigator.of(context).pop();
-              },
-                  dateStart: [1999, 01, 01],
-                  dateEnd: [2050, 12, 31],
-                  initialDate: [2012, 1, 1]);
+              _showDatePicker(
+                context,
+                initialDate: [2012, 1, 1],
+                onConfirm: (selected) {
+                  setState(() {
+                    _selected_1 =
+                        '${selected[0].toString().padLeft(4, '0')}-${selected[1].toString().padLeft(2, '0')}-${selected[2].toString().padLeft(2, '0')}';
+                    _formItemNotifier['birth']?.upDataForm(_selected_1);
+                  });
+                },
+              );
             },
           ),
           TFormItem(
@@ -497,18 +496,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               if (_formDisableState) {
                 return;
               }
-              TPicker.showDatePicker(context, title: '选择时间',
-                  onConfirm: (selected) {
-                setState(() {
-                  _selected_1 =
-                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-                  _formItemNotifier['birth']?.upDataForm(_selected_1);
-                });
-                Navigator.of(context).pop();
-              },
-                  dateStart: [1999, 01, 01],
-                  dateEnd: [2050, 12, 31],
-                  initialDate: [2012, 1, 1]);
+              _showDatePicker(
+                context,
+                initialDate: [2012, 1, 1],
+                onConfirm: (selected) {
+                  setState(() {
+                    _selected_1 =
+                        '${selected[0].toString().padLeft(4, '0')}-${selected[1].toString().padLeft(2, '0')}-${selected[2].toString().padLeft(2, '0')}';
+                    _formItemNotifier['birth']?.upDataForm(_selected_1);
+                  });
+                },
+              );
             },
           ),
           TFormItem(
