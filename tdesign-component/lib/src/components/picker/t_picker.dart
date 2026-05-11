@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'no_wave_behavior.dart';
 
 // =============== 文件级常量（魔法数字归一） ===============
@@ -66,8 +67,8 @@ class TPicker extends StatefulWidget {
     this.itemBuilder,
     this.itemDistanceCalculator,
     this.title,
-    this.cancel = const Text('取消'),
-    this.confirm = const Text('确认'),
+    this.cancel,
+    this.confirm,
     this.titleWidget,
     this.onCancel,
     this.onConfirm,
@@ -161,7 +162,7 @@ class TPicker extends StatefulWidget {
   /// ```
   final String? title;
 
-  /// 工具栏左侧自定义插槽，默认为 `Text('取消')`
+  /// 工具栏左侧自定义插槽，默认使用 [TResourceDelegate.cancel]
   ///
   /// 可用于渲染图标、图标+文字组合等。点击事件依然由外层 [GestureDetector]
   /// 处理，触发 [onCancel] 回调——所以插槽内的 Widget 不需要自己处理点击。
@@ -179,9 +180,9 @@ class TPicker extends StatefulWidget {
   ///   onCancel: () => Navigator.of(context).pop(),
   /// )
   /// ```
-  final Widget cancel;
+  final Widget? cancel;
 
-  /// 工具栏右侧自定义插槽，默认为 `Text('确认')`
+  /// 工具栏右侧自定义插槽，默认使用 [TResourceDelegate.confirm]
   ///
   /// 可用于渲染图标、图标+文字组合等。点击事件依然由外层 [GestureDetector]
   /// 处理，触发 [onConfirm] 回调——所以插槽内的 Widget 不需要自己处理点击。
@@ -199,7 +200,7 @@ class TPicker extends StatefulWidget {
   ///   onConfirm: (v) => Navigator.of(context).pop(v),
   /// )
   /// ```
-  final Widget confirm;
+  final Widget? confirm;
 
   /// 工具栏中部自定义标题插槽
   ///
@@ -390,6 +391,8 @@ class _TPickerState extends State<TPicker> {
 
   /// 构建顶部工具栏（取消 / 标题 / 确认）
   Widget _buildToolbar(TThemeData theme) {
+    final cancelText = widget.cancel ?? Text(context.resource.cancel);
+    final confirmText = widget.confirm ?? Text(context.resource.confirm);
     return SizedBox(
       height: _kToolbarHeight,
       child: Padding(
@@ -402,7 +405,7 @@ class _TPickerState extends State<TPicker> {
               onPressChange: (v) => setState(() => _cancelPressed = v),
               onTap: () => widget.onCancel?.call(),
               defaultColor: theme.fontGyColor2,
-              child: widget.cancel,
+              child: cancelText,
             ),
             Expanded(
               child: Center(child: _buildTitle(theme)),
@@ -413,7 +416,7 @@ class _TPickerState extends State<TPicker> {
               onPressChange: (v) => setState(() => _confirmPressed = v),
               onTap: () => widget.onConfirm?.call(_buildValue()),
               defaultColor: theme.brandNormalColor,
-              child: widget.confirm,
+              child: confirmText,
             ),
           ],
         ),

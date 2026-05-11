@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../picker/no_wave_behavior.dart';
+import '../../util/context_extension.dart';
 import 'date_picker_model.dart';
 
 /// 日期/时间选择器（供 TCalendar 内部使用）
@@ -58,7 +59,7 @@ class _TDatePickerState extends State<TDatePicker> {
               children: [
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: Text(widget.leftText ?? '取消', style: TextStyle(color: TTheme.of(context).textColorSecondary)),
+                  child: Text(widget.leftText ?? context.resource.cancel, style: TextStyle(color: TTheme.of(context).textColorSecondary)),
                 ),
                 Text(widget.title ?? '', style: TextStyle(fontWeight: FontWeight.w600)),
                 GestureDetector(
@@ -66,7 +67,7 @@ class _TDatePickerState extends State<TDatePicker> {
                     widget.onConfirm?.call(widget.model.selected);
                     Navigator.pop(context);
                   },
-                  child: Text(widget.rightText ?? '确认', style: TextStyle(color: TTheme.of(context).brandNormalColor)),
+                  child: Text(widget.rightText ?? context.resource.confirm, style: TextStyle(color: TTheme.of(context).brandNormalColor)),
                 ),
               ],
             ),
