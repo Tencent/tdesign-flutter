@@ -47,6 +47,71 @@
 ```
 ```
 
+### TPickerItems
+```
+```
+
+### TPickerColumns
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| columns | List<List<TPickerOption>> | columns | 每列的选项列表 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPickerColumns.fromRaw  | 从自由结构的 raw 数据创建，自动归一化
+
+ ```dart
+ TPickerColumns.fromRaw(
+   [['北京', '上海', '广州']],
+   keys: const TPickerKeys(label: 'name', value: 'code'),
+ )
+ ``` |
+
+```
+```
+
+### TPickerLinked
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| tree | Map<TPickerOption, dynamic> | tree | 联动树结构：`Map<TPickerOption, dynamic>` |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPickerLinked.fromRaw  | 从自由结构的 raw Map 数据创建，自动归一化
+
+ ```dart
+ TPickerLinked.fromRaw({
+   '广东': {'深圳': ['南山', '福田'], '广州': ['天河']},
+   '浙江': {'杭州': ['西湖']},
+ })
+ ``` |
+
+```
+```
+
+### TPickerKeys
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | String | 'children' | 联动模式下子级数据对应的字段名，默认 `children` |
+| disabled | String | 'disabled' | 禁用标记对应的字段名，默认 `disabled` |
+| label | String | 'label' | 展示文案对应的字段名，默认 `label` |
+| value | String | 'value' | 业务值对应的字段名，默认 `value` |
+
+```
+```
+
 ### TPickerLoadEvent
 #### 默认构造方法
 
