@@ -1,0 +1,33 @@
+
+  Widget buildGlobalDisabled(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Switch(
+              value: globalDisabled,
+              onChanged: (v) => setState(() => globalDisabled = v),
+            ),
+            const SizedBox(width: 8),
+            Text(globalDisabled ? '已禁用' : '已启用',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: globalDisabled
+                        ? TTheme.of(context).errorNormalColor
+                        : TTheme.of(context).successNormalColor)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: cityItems, initialValue: const ['GZ'],
+              onChange: (v) => debugPrint('选中: $v'),
+              disabled: globalDisabled),
+        ),
+        const SizedBox(height: 4),
+        Text('切换开关可控制整个选择器的禁用/启用状态',
+            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+      ],
+    );
+  }

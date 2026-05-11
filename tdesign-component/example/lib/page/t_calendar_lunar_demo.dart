@@ -39,37 +39,26 @@ class _TCalendarLunarDemoState extends State<TCalendarLunarDemo> {
                 Row(
                   children: [
                     Expanded(
-                      child: TRadio(
-                        id: 'solar',
-                        title: '阳历模式',
-                        radioStyle: TRadioStyle.circle,
-                        showDivider: false,
-                        enable: true,
-                        checked: _dateType == TCalendarDateType.solar,
-                        onChanged: (checked) {
-                          if (checked) {
-                            setState(() {
-                              _dateType = TCalendarDateType.solar;
-                            });
-                          }
-                        },
+                      child: InkWell(
+                        onTap: () => setState(() => _dateType = TCalendarDateType.solar),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: _dateType == TCalendarDateType.solar ? Colors.blue : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Center(child: Text('阳历模式', style: TextStyle(color: _dateType == TCalendarDateType.solar ? Colors.white : Colors.black))),
+                        ),
                       ),
                     ),
                     Expanded(
-                      child: TRadio(
-                        id: 'lunar',
-                        title: '农历模式',
-                        radioStyle: TRadioStyle.circle,
-                        showDivider: false,
-                        enable: false, // 暂时禁用，因为需要实现数据源
-                        checked: _dateType == TCalendarDateType.lunar,
-                        onChanged: (checked) {
-                          if (checked) {
-                            setState(() {
-                              _dateType = TCalendarDateType.lunar;
-                            });
-                          }
-                        },
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(4)),
+                          child: Center(child: Text('农历模式', style: TextStyle(color: Colors.grey))),
+                        ),
                       ),
                     ),
                   ],
@@ -78,12 +67,15 @@ class _TCalendarLunarDemoState extends State<TCalendarLunarDemo> {
                 TSwitch(
                   enable: _dateType == TCalendarDateType.solar,
                   isOn: _showLunarInfo,
-                  onChanged: (value) {
-                    setState(() {
-                      _showLunarInfo = value;
-                    });
-                  },
                   size: TSwitchSize.large,
+                  onChanged: (value) {
+                    if (value != null && value != _showLunarInfo) {
+                      setState(() {
+                        _showLunarInfo = value;
+                      });
+                    }
+                    return true;
+                  },
                 ),
                 const SizedBox(height: 4),
                 Text(

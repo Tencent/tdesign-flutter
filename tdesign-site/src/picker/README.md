@@ -1,6 +1,6 @@
 ---
 title: Picker 选择器
-description: 用于一组预设数据中的选择。
+description: 纯滚轮选择器组件，支持多列独立和联动两种模式
 spline: base
 isComponent: true
 ---
@@ -18,30 +18,251 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 [td_picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_picker_page.dart)
 
-### 1 组件类型
+### 1 基础用法
 
-基础选择器--地区
+单列选择
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget buildArea(BuildContext context) {
-    const title = '选择地区';
-    return TCell(
-      title: title,
-      note: selected_1.isEmpty ? '请选择' : selected_1,
-      arrow: true,
-      onClick: (click) {
-        TPicker.showMultiPicker(
+  Widget buildSingleColumn(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中城市: ${selectedCity.isEmpty ? "未选择" : selectedCity}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        const SizedBox(height: 8),
+        _pickerCard(
           context,
-          title: title,
-          onConfirm: (selected) {
-            setState(() {
-              selected_1 = '${data_1[selected[0]]}';
-            });
-            Navigator.of(context).pop();
-          },
-          data: [data_1],
+          child: TPicker(items: cityItems,
+              onChange: (v) => setState(() => selectedCity = v.labels.first)),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+时间选择(时分秒)
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildTimeSelect(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中时间: ${selectedTime.isEmpty ? "未选择" : selectedTime}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: timeItems, itemCount: 5,
+              onChange: (v) => setState(() =>
+                  selectedTime = '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+联动选择(省市区)
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildLinked(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: linkedItems, initialValue: const ['GD', 'SZ', 'NS'],
+              onChange: (v) => setState(() => selectedLinked = v.labels.join(' / '))),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+### 1 按需请求
+
+模拟网络请求加载更多
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildLazyLoad(BuildContext context) {
+    return StatefulBuilder(
+      builder: (ctx, setInner) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _lazyData.isEmpty
+                  ? '暂无数据'
+                  : '已加载 ${_lazyData.length} 条（滚动到底部自动加载更多）',
+              style: TextStyle(
+                  fontSize: 14, color: TTheme.of(context).textColorSecondary),
+            ),
+            const SizedBox(height: 8),
+            _pickerCard(
+              context,
+              child: TPicker(
+                items: TPickerColumns([_lazyData]),
+                onLoad: (e) async {
+                  // 业务层自行判断触发时机：距底部 5 项以内 + 未在加载中
+                  if (e.remaining > 5 || _isLoading) {
+                    return;
+                  }
+                  setInner(() => _isLoading = true);
+                  // 模拟网络请求延迟 1.5s
+                  await Future.delayed(const Duration(milliseconds: 1500));
+                  final start = _lazyData.length + 1;
+                  final more = [
+                    for (int i = start; i < start + 20; i++)
+                      TPickerOption(label: '选项 $i', value: 'opt_$i'),
+                  ];
+                  setInner(() {
+                    _lazyData.addAll(more);
+                    _isLoading = false;
+                  });
+                },
+                onChange: (v) => debugPrint('选中: ${v.labels.first}'),
+              ),
+            ),
+            const SizedBox(height: 4),
+            if (_isLoading)
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const SizedBox(width: 6),
+                  Text('正在加载更多数据...',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: TTheme.of(context).textColorPlaceholder)),
+                ],
+              )
+            else
+              Text('在 onLoad 里判断 e.remaining <= 5 时加载，模拟 1.5s 网络延迟',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: TTheme.of(context).textColorPlaceholder)),
+          ],
+        );
+      },
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+### 1 禁用状态
+
+项级 disabled（部分选项不可选）
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildItemDisabled(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
+            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        const SizedBox(height: 4),
+        Text('提示: 标灰的选项不可选（第1列「保密」、第2列「A排1座/A排6座/A排7座/A排8座/A排12座」）',
+            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: itemDisabledItems, initialValue: const ['M', 'A5'],
+              onChange: (v) => setState(() =>
+                  selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+全局 disabled（整组不可操作）
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildGlobalDisabled(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Switch(
+              value: globalDisabled,
+              onChanged: (v) => setState(() => globalDisabled = v),
+            ),
+            const SizedBox(width: 8),
+            Text(globalDisabled ? '已禁用' : '已启用',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: globalDisabled
+                        ? TTheme.of(context).errorNormalColor
+                        : TTheme.of(context).successNormalColor)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(items: cityItems, initialValue: const ['GZ'],
+              onChange: (v) => debugPrint('选中: $v'),
+              disabled: globalDisabled),
+        ),
+        const SizedBox(height: 4),
+        Text('切换开关可控制整个选择器的禁用/启用状态',
+            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+### 1 弹窗模式(TPopup)
+
+弹窗-联动选择(省市区)
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildPopupLinked(BuildContext context) {
+    final label = _popupLinkedValue?.labels.join(' / ') ?? '';
+    return TCell(
+      title: '弹窗-联动选择(省市区)',
+      note: label.isEmpty ? '请选择' : label,
+      arrow: true,
+      onClick: (_) {
+        _showPickerPopup(
+          context,
+          picker: TPicker(
+            items: linkedItems,
+            initialValue: _popupLinkedValue?.values ?? _popupLinkedInitial,
+            title: '请选择地区',
+            onCancel: () => Navigator.of(context).pop(),
+            onConfirm: (value) {
+              setState(() => _popupLinkedValue = value);
+              Navigator.of(context).pop();
+            },
+          ),
         );
       },
     );
@@ -50,30 +271,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
-基础选择器--时间
+弹窗-多列选择(性别/偏好)
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget buildTime(BuildContext context) {
-    const title = '选择时间';
+  Widget buildPopupMultiColumn(BuildContext context) {
+    final label = _popupMultiColValue?.labels.join(' ') ?? '';
     return TCell(
-      title: title,
-      note: selected_2.isEmpty ? '请选择' : selected_2,
+      title: '弹窗-多列选择(性别/偏好)',
+      note: label.isEmpty ? '请选择' : label,
       arrow: true,
-      onClick: (click) {
-        TPicker.showMultiPicker(
+      onClick: (_) {
+        _showPickerPopup(
           context,
-          title: title,
-          onConfirm: (selected) {
-            print('selected ${selected}');
-            setState(() {
-              selected_2 =
-                  '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
-            });
-            Navigator.of(context).pop();
-          },
-          data: data_2,
+          picker: TPicker(
+            items: TPickerColumns(preferenceData),
+            initialValue: _popupMultiColValue?.values ?? _popupMultiColInitial,
+            title: '选择性别和偏好',
+            onCancel: () => Navigator.of(context).pop(),
+            onConfirm: (value) {
+              setState(() => _popupMultiColValue = value);
+              Navigator.of(context).pop();
+            },
+          ),
         );
       },
     );
@@ -81,117 +302,176 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+### 1 自定义按钮/标题插槽
 
-基础选择器--地区--联动
+自定义按钮（图标 / 文字）
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget buildMultiArea(BuildContext context) {
-    const title = '选择地区';
-    return TCell(
-      title: title,
-      note: selected_3.isEmpty ? '请选择' : selected_3,
-      arrow: true,
-      onClick: (click) {
-        TPicker.showMultiLinkedPicker(
+  Widget buildCustomSlot(BuildContext context) {
+    final theme = TTheme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'cancel / confirm / titleWidget 参数类型均为 Widget，可自定义图标、文字或组合',
+          style: TextStyle(fontSize: 12, color: theme.textColorPlaceholder),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
           context,
-          title: title,
-          onConfirm: (selected) {
-            setState(() {
-              selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
-            });
-            Navigator.of(context).pop();
-          },
-          data: dataTest,
-          columnNum: 3,
-          initialData: ['浙江省', '杭州市', '西湖区'],
-        );
-      },
+          child: TPicker(
+            items: linkedItems,
+            initialValue: const ['GD', 'SZ', 'NS'],
+            titleWidget: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(TIcons.location,
+                    size: 18, color: theme.brandNormalColor),
+                const SizedBox(width: 4),
+                Text('选择地区',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: theme.fontGyColor1,
+                    )),
+              ],
+            ),
+            cancel: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
+            confirm: Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
+          ),
+        ),
+      ],
     );
   }</pre>
 
 </td-code-block>
                                   
-### 1 组件样式
+### 1 自定义字段映射(keys)
 
-带标题选择器
+数据字段非 label/value 时，用 keys 映射
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget buildAreaWithTitle(BuildContext context) {
-    const title = '选择地区';
-    return TCell(
-      title: title,
-      note: selected_4.isEmpty ? '请选择' : selected_4,
-      arrow: true,
-      onClick: (click) {
-        TPicker.showMultiPicker(
+  Widget buildCustomKeys(BuildContext context) {
+    // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
+    const keys = TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
+    final label = _customKeysValue?.labels.join() ?? '';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '后端原始字段：city / code / readonly。通过 keys(label: "city") 映射为 label',
+          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '当前选中：${label.isEmpty ? "未选择" : label}',
+          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
           context,
-          title: '带标题选择器',
-          onConfirm: (selected) {
-            setState(() {
-              selected_4 = '${data_1[selected[0]]}';
-            });
-            Navigator.of(context).pop();
-          },
-          data: [data_1],
-        );
-      },
+          child: TPicker(
+            items: TPickerColumns.fromRaw(_rawCityData, keys: keys),
+            initialValue: _customKeysValue?.values ?? _customKeysInitial,
+            onChange: (v) => setState(() => _customKeysValue = v),
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+### 1 尺寸与样式
+
+自定义高度和每屏显示数量
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildCustomSize(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '示例：height(300) + itemCount(7)，每屏显示 7 项',
+          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: cityItems,
+            height: 300,
+            itemCount: 7,
+            onChange: (v) => debugPrint('选中: ${v.labels.first}'),
+          ),
+        ),
+      ],
     );
   }</pre>
 
 </td-code-block>
                                   
 
-无标题选择器
+自定义子项渲染（itemBuilder）
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget buildAreaWithoutTitle(BuildContext context) {
-    return TCell(
-      title: '选择地区',
-      note: selected_5.isEmpty ? '请选择' : selected_5,
-      arrow: true,
-      onClick: (click) {
-        TPicker.showMultiPicker(
+  Widget buildCustomItemBuilder(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '示例：itemBuilder 自定义子项渲染，可添加图标、背景色等',
+          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${_customItemBuilderValue.isEmpty ? "未选择" : _customItemBuilderValue}',
+          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
           context,
-          // 不传或传空字符串、null，则不显示标题
-          // title: '',
-          onConfirm: (selected) {
-            setState(() {
-              selected_5 = '${data_1[selected[0]]}';
-            });
-            Navigator.of(context).pop();
-          },
-          data: [data_1],
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-不使用弹窗、不带顶部内容
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget buildWithoutHeader(BuildContext context) {
-    return TMultiPicker(
-      /// 不显示header内容
-      header: false,
-      /// todo onChange
-      onConfirm: (selected) {
-        setState(() {
-          selected_5 = '${data_1[selected[0]]}';
-        });
-        Navigator.of(context).pop();
-      },
-      data: [data_1],
+          child: TPicker(
+            items: cityItems,
+            itemBuilder: (ctx, content, colIndex, index, calculator, distance) {
+              final theme = TTheme.of(ctx);
+              final selected = distance == 0;
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: selected ? theme.brandLightColor : Colors.transparent,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(TIcons.location, size: 20, color: theme.fontGyColor3),
+                    const SizedBox(width: 8),
+                    Text(
+                      content,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                        color: selected ? theme.brandNormalColor : theme.fontGyColor1,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            onChange: (v) => setState(() => _customItemBuilderValue = v.labels.first),
+          ),
+        ),
+      ],
     );
   }</pre>
 
@@ -200,100 +480,128 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TMultiPicker
+### TPickerOption
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| customSelectWidget | Widget? | - | 自定义选择框样式 |
-| data | Map | - | 总的数据 |
-| header | bool | true | 是否显示头部内容 |
-| initialIndexes | List<int>? | - | 若为null表示全部从零开始 |
-| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
-| key |  | - |  |
-| leftPadding | double? | - | 左边填充 |
-| leftText | String? | - | 左侧按钮文案 |
-| leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
-| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
-| onChange | MultiPickerCallback? | - | todo 选择器数据改变时回调 |
-| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
-| padding | EdgeInsets? | - | 适配padding |
-| pickerHeight | double | 200 |  |
-| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度 |
-| rightPadding | double? | - | 右边填充 |
-| rightText | String? | - | 右侧按钮文案 |
-| rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
-| title | String? | - | 选择器标题 |
-| titleDividerColor | Color? | - | 标题分割线颜色 |
-| titleHeight | double? | - | 标题高度 |
-| topPadding | double? | - | 顶部填充 |
-| topRadius | double? | - | 顶部圆角 |
+| disabled | bool | false | 是否禁用（不可选中/置灰显示），默认 false |
+| label | String | - | 展示文字（可包含 emoji、单位、国际化等） |
+| value | dynamic | - | 业务值（onChange 回调返回此字段） |
 
 ```
 ```
 
-### TMultiLinkedPicker
+### TPickerValue
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| columnNum | int | - | 总列数 |
-| customSelectWidget | Widget? | - | 自定义选择框样式 |
-| data | Map | - | 总的数据 |
-| header | bool | true | 是否显示头部内容 |
-| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
-| keepSameSelection | bool | false | 是否保留相同选项 |
-| key |  | - |  |
-| leftPadding | double? | - | 左边填充 |
-| leftText | String? | - | 左侧按钮文案 |
-| leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
-| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
-| onChange | MultiPickerCallback? | - | todo 选择器数据改变时回调 |
-| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
-| padding | EdgeInsets? | - | 适配padding |
-| pickerHeight | double | 200 |  |
-| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度 |
-| rightPadding | double? | - | 右边填充 |
-| rightText | String? | - | 右侧按钮文案 |
-| rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
-| selectedData | List | - | 选中数据 |
-| title | String? | - | 选择器标题 |
-| titleDividerColor | Color? | - | 标题分割线颜色 |
-| titleHeight | double? | - | 标题高度 |
-| topPadding | double? | - | 顶部填充 |
-| topRadius | double? | - | 顶部圆角 |
-
-```
-```
-
-### MultiLinkedPickerModel
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| columnNum | int | - | 总列数 |
-| data | Map | - | 总的数据 |
-| initialData |  | - |  |
-| keepSameSelection | bool | false | 是否保留相同选项 |
+| indexes | List<int> | - | 每列选中项的索引 |
+| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
 
 ```
 ```
 
 ### TPicker
+#### 默认构造方法
 
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  String? title,  double? titleHeight,  Color? titleDividerColor,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  DatePickerCallback? onChange,   Function(int wheelIndex, int index)? onSelectedItemChanged,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  String? rightText,  TextStyle? rightTextStyle,  EdgeInsets? padding,  double? leftPadding,  double? topPadding,  double? rightPadding,  double? topRadius,  Color? backgroundColor,  Widget? customSelectWidget,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  double pickerHeight,  int pickerItemCount,  bool isTimeUnit,  ItemBuilderType? itemBuilder,  Color? barrierColor,  Duration duration, | 显示时间选择器 |
-| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List initialData,  required Map data,  required int columnNum,  double pickerHeight,  int pickerItemCount,  Widget? customSelectWidget,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double? titleHeight,  double? topPadding,  double? leftPadding,  double? rightPadding,  Color? titleDividerColor,  Color? backgroundColor,  double? topRadius,  EdgeInsets? padding,  ItemBuilderType? itemBuilder,  bool keepSameSelection,  Color? barrierColor,  Duration duration, | 显示多级联动选择器 |
-| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  double pickerHeight,  int pickerItemCount,  List<int>? initialIndexes,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double? titleHeight,  double? topPadding,  double? leftPadding,  double? rightPadding,  Color? titleDividerColor,  Color? backgroundColor,  double? topRadius,  EdgeInsets? padding,  Widget? customSelectWidget,  ItemBuilderType? itemBuilder,  Duration duration,  Color? barrierColor, | 显示多级选择器 |
+| cancel | Widget? | - | 工具栏左侧自定义插槽，默认使用 [TResourceDelegate.cancel] |
+| confirm | Widget? | - | 工具栏右侧自定义插槽，默认使用 [TResourceDelegate.confirm] |
+| disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
+| height | double | 200 | 视窗高度，默认 200 |
+| initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配） |
+| itemBuilder | ItemBuilderType? | - | 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder） |
+| itemCount | int | 5 | 每屏显示 item 数，默认 5 |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化） |
+| items | TPickerItems | - | 数据源（必填） |
+| key |  | - |  |
+| onCancel | VoidCallback? | - | 点击「取消」按钮回调 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） |
+| onConfirm | void Function(TPickerValue)? | - | 点击「确认」按钮回调 |
+| onLoad | void Function(TPickerLoadEvent)? | - | 列选中项变化的事件回调 |
+| title | String? | - | 工具栏中部标题（可选，不传时中部留白） |
+| titleWidget | Widget? | - | 工具栏中部自定义标题插槽 |
+
+```
+```
+
+### TPickerItems
+```
+```
+
+### TPickerColumns
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| columns | List<List<TPickerOption>> | columns | 每列的选项列表 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPickerColumns.fromRaw  | 从自由结构的 raw 数据创建，自动归一化
+
+ ```dart
+ TPickerColumns.fromRaw(
+   [['北京', '上海', '广州']],
+   keys: const TPickerKeys(label: 'name', value: 'code'),
+ )
+ ``` |
+
+```
+```
+
+### TPickerLinked
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| tree | Map<TPickerOption, dynamic> | tree | 联动树结构：`Map<TPickerOption, dynamic>` |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPickerLinked.fromRaw  | 从自由结构的 raw Map 数据创建，自动归一化
+
+ ```dart
+ TPickerLinked.fromRaw({
+   '广东': {'深圳': ['南山', '福田'], '广州': ['天河']},
+   '浙江': {'杭州': ['西湖']},
+ })
+ ``` |
+
+```
+```
+
+### TPickerKeys
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | String | 'children' | 联动模式下子级数据对应的字段名，默认 `children` |
+| disabled | String | 'disabled' | 禁用标记对应的字段名，默认 `disabled` |
+| label | String | 'label' | 展示文案对应的字段名，默认 `label` |
+| value | String | 'value' | 业务值对应的字段名，默认 `value` |
+
+```
+```
+
+### TPickerLoadEvent
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| column | int | - | 触发事件的列索引（0 表示第一列） |
+| displayedCount | int | - | 当前列已展示的选项总数 |
+| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
+| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
 
 
   

@@ -117,7 +117,7 @@ class _TCalendarLunarExampleState extends State<TCalendarLunarExample> {
     }
 
     final date = DateTime.fromMillisecondsSinceEpoch(_selectedDates.first);
-    final dataSource = _SimpleLunarDataSource();
+    final dataSource = LunarDataSourceExample();
     final lunarInfo = dataSource.getLunarInfo(date);
 
     return Container(
