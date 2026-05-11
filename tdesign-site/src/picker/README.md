@@ -508,8 +508,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| cancel | Widget | const Text('取消') | 工具栏左侧自定义插槽，默认为 `Text('取消')` |
-| confirm | Widget | const Text('确认') | 工具栏右侧自定义插槽，默认为 `Text('确认')` |
+| cancel | Widget? | - | 工具栏左侧自定义插槽，默认使用 [TResourceDelegate.cancel] |
+| confirm | Widget? | - | 工具栏右侧自定义插槽，默认使用 [TResourceDelegate.confirm] |
 | disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
 | height | double | 200 | 视窗高度，默认 200 |
 | initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配） |
