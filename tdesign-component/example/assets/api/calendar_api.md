@@ -34,6 +34,9 @@
 | --- | --- | --- | --- |
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
+| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，位于日历主体浮层上方，接收 (BuildContext, List\<int\>) 参数 |
+| bottomExpanded | bool | true | bottom 区域是否展开，由外部 setState 控制 |
+| bottomExpandedListenable | ValueListenable\<bool\>? | - | bottom 区域是否展开（响应式版本，优先级高于 bottomExpanded）。传入后展开/收起会跟随该 listenable 自动播放动画 |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 | dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
@@ -42,7 +45,6 @@
 | firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
 | format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
 | height | double? | - | 高度 |
-| isTimeUnit | bool? | true | 是否显示时间单位 |
 | key |  | - |  |
 | maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认半年后 |
 | minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认今天 |
@@ -53,16 +55,12 @@
 | onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
 | onHeaderClick | void Function(int index, String week)? | - | 点击周时触发 |
 | onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
-| pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
-| pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | showLunarInfo | bool | false | 阳历模式下是否显示农历信息作为副标题 |
 | style | TCalendarStyle? | - | 自定义样式 |
-| timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |
 | type | CalendarType? | CalendarType.single | 日历的选择类型，single = 单选；multiple = 多选；range = 区间选择 |
 | useSafeArea | bool? | true | 是否使用安全区域，默认true |
-| useTimePicker | bool? | false | 是否显示时间选择器 |
 | value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
 | width | double? | - | 宽度 |
 

@@ -109,16 +109,16 @@ abstract class TResourceDelegate {
   /// [TTimeCounter] 毫秒
   String get milliseconds;
 
-  /// [TDatePicker]  年
+  /// 年
   String get yearLabel;
 
-  /// [TDatePicker]  月
+  /// 月
   String get monthLabel;
 
-  /// [TDatePicker] 日
+  /// 日
   String get dateLabel;
 
-  /// [TDatePicker] 周
+  /// 周
   String get weeksLabel;
 
   /// [TCalendarHeader] 星期日
