@@ -6,10 +6,10 @@ import '../../util/iterable_ext.dart';
 
 export 't_calendar_body.dart';
 export 't_calendar_cell.dart';
+export 't_calendar_data_source.dart';
 export 't_calendar_header.dart';
 export 't_calendar_popup.dart';
 export 't_calendar_style.dart';
-export 't_calendar_data_source.dart';
 export 't_lunar_date.dart';
 
 typedef CalendarFormat = TDate? Function(TDate? day);
@@ -51,8 +51,7 @@ class TCalendar extends StatefulWidget {
     this.onHeaderClick,
     this.useSafeArea = true,
     this.bottom,
-    this.bottomExpanded = true,
-    this.bottomExpandedListenable,
+    this.bottomExpanded,
     this.monthTitleHeight = 22,
     this.monthTitleBuilder,
     this.animateTo = false,
@@ -135,15 +134,29 @@ class TCalendar extends StatefulWidget {
   /// 是否使用安全区域，默认true
   final bool? useSafeArea;
 
-  /// 底部自定义区域构建器，位于日历主体浮层上方
+  /// 底部自定义区域构建器，位于日历主体浮层上方。
+  ///
+  /// `selectedDates` 是当前选中日期的毫秒时间戳列表，会随用户点击单元格自动更新。
+  ///
+  /// 典型用法：在 bottom 中渲染时间选择器、统计信息、操作按钮等。
   final CalendarBottomBuilder? bottom;
 
-  /// bottom 区域是否展开，默认 true
-  final bool bottomExpanded;
-
-  /// bottom 区域是否展开（响应式版本，优先级高于 [bottomExpanded]）。
-  /// 传入后，bottom 展开/收起会跟随该 listenable 变化自动播放动画。
-  final ValueListenable<bool>? bottomExpandedListenable;
+  /// bottom 区域是否展开（响应式）。
+  ///
+  /// - 传 `null`（默认）：bottom 始终展开
+  /// - 传 `ValueListenable<bool>`：bottom 展开/收起会跟随该 listenable 变化播放滑动动画，
+  ///   常配合 [ValueNotifier] 实现"按钮触发展开/收起"。
+  ///
+  /// 示例：
+  /// ```dart
+  /// final expanded = ValueNotifier<bool>(false);
+  /// TCalendar(
+  ///   bottomExpanded: expanded,
+  ///   onCellClick: (v, t, d) => expanded.value = true,
+  ///   bottom: (ctx, dates) => MyFooter(),
+  /// );
+  /// ```
+  final ValueListenable<bool>? bottomExpanded;
 
   /// 月标题高度
   final double? monthTitleHeight;
@@ -188,12 +201,17 @@ class _TCalendarState extends State<TCalendar> {
   late TCalendarInherited? inherited;
   late TCalendarStyle _style;
 
-  /// bottom 展开时日历主体固定上移高度
-  static const double _bottomOffset = 30.0;
+  /// bottom 展开时日历主体上移高度，露出 bottom "把手"区域
+  /// （设计稿固定值，与 [_buildBottom] 的 bottom offset 配合）
+  static const double _bottomPeekHeight = 30.0;
+
+  /// 标记是否已完成首次 selected 同步，避免 didChangeDependencies 重复触发
+  bool _initializedSelected = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    inherited = TCalendarInherited.of(context);
     weekdayNames = [
       context.resource.sunday,
       context.resource.monday,
@@ -218,30 +236,39 @@ class _TCalendarState extends State<TCalendar> {
       context.resource.december,
     ];
     _style = widget.style ?? TCalendarStyle.generateStyle(context);
+    // 仅首次挂载时同步 widget.value → inherited.selected
+    if (!_initializedSelected) {
+      _initializedSelected = true;
+      _syncSelectedToInherited();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant TCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 仅当 widget.value 内容变化时，才重置 inherited.selected
+    if (!listEquals(oldWidget.value, widget.value)) {
+      _syncSelectedToInherited();
+    }
+  }
+
+  /// 把 widget.value 同步到 inherited.selected（仅在首次或 value 变化时调用）
+  void _syncSelectedToInherited() {
+    if (inherited == null) {
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      inherited!.selected.value = _getValue(widget.value ?? []);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    inherited = TCalendarInherited.of(context);
-    _initValue();
     final verticalGap = _style.verticalGap ?? TTheme.of(context).spacer8;
     final hasBottom = widget.bottom != null;
-
-    if (widget.bottomExpandedListenable != null) {
-      // 响应式：监听 listenable 变化，让 padding 与 bottom 区动画同步重建
-      return ValueListenableBuilder<bool>(
-        valueListenable: widget.bottomExpandedListenable!,
-        builder: (context, expanded, _) {
-          return _buildBody(context, verticalGap, hasBottom, expanded);
-        },
-      );
-    }
-    return _buildBody(context, verticalGap, hasBottom, widget.bottomExpanded);
-  }
-
-  Widget _buildBody(
-      BuildContext context, double verticalGap, bool hasBottom, bool expanded) {
-    final bottomPadding = hasBottom && expanded ? _bottomOffset : 0.0;
 
     return Container(
       height: widget.height,
@@ -269,54 +296,7 @@ class _TCalendarState extends State<TCalendar> {
                 onClick: widget.onHeaderClick,
               ),
               Expanded(
-                child: AnimatedPadding(
-                  duration: const Duration(milliseconds: 200),
-                  padding: EdgeInsets.only(bottom: bottomPadding),
-                  child: TCalendarBody(
-                    type: widget.type ?? CalendarType.single,
-                    firstDayOfWeek: widget.firstDayOfWeek ?? 0,
-                    maxDate: widget.maxDate,
-                    anchorDate: widget.anchorDate,
-                    minDate: widget.minDate,
-                    value: widget._value,
-                    bodyPadding:
-                        _style.bodyPadding ?? TTheme.of(context).spacer16,
-                    displayFormat: widget.displayFormat ?? 'year month',
-                    monthNames: monthNames,
-                    monthTitleStyle: _style.monthTitleStyle,
-                    verticalGap: verticalGap,
-                    cellHeight: _getEffectiveCellHeight(),
-                    monthTitleHeight: widget.monthTitleHeight ?? 22,
-                    monthTitleBuilder: widget.monthTitleBuilder,
-                    animateTo: widget.animateTo ?? false,
-                    onMonthChange: widget.onMonthChange,
-                    dateType: widget.dateType,
-                    dataSource: widget.dataSource,
-                    builder: (date, dateList, data, rowIndex, colIndex) {
-                      return TCalendarCell(
-                        height: _getEffectiveCellHeight(),
-                        tdate: date,
-                        format: widget.format,
-                        type: widget.type ?? CalendarType.single,
-                        data: data,
-                        padding: verticalGap / 2,
-                        onChange: (value) {
-                          final time = _getValue(value);
-                          inherited?.selected.value = time;
-                          widget.onChange?.call(time);
-                        },
-                        onCellClick: widget.onCellClick,
-                        onCellLongPress: widget.onCellLongPress,
-                        dateList: dateList,
-                        rowIndex: rowIndex,
-                        colIndex: colIndex,
-                        cellWidget: widget.cellWidget,
-                        dateType: widget.dateType,
-                        showLunarInfo: widget.showLunarInfo,
-                      );
-                    },
-                  ),
-                ),
+                child: _buildAnimatedBody(verticalGap, hasBottom),
               ),
               if (inherited?.usePopup == true)
                 inherited?.confirmBtn ??
@@ -337,13 +317,85 @@ class _TCalendarState extends State<TCalendar> {
                 SizedBox(height: MediaQuery.of(context).padding.bottom)
             ],
           ),
-          if (hasBottom) _buildBottom(expanded),
+          if (hasBottom) _buildBottom(),
         ],
       ),
     );
   }
 
-  Widget _buildBottom(bool expanded) {
+  /// 仅在此处监听 bottomExpanded，局部化重建范围（只影响 padding 动画）
+  Widget _buildAnimatedBody(double verticalGap, bool hasBottom) {
+    if (!hasBottom || widget.bottomExpanded == null) {
+      // 无 bottom 或始终展开 → 静态 padding
+      final padding = hasBottom ? _bottomPeekHeight : 0.0;
+      return Padding(
+        padding: EdgeInsets.only(bottom: padding),
+        child: _buildCalendarBody(verticalGap),
+      );
+    }
+    // 响应式 → 仅 AnimatedPadding 重建
+    return ValueListenableBuilder<bool>(
+      valueListenable: widget.bottomExpanded!,
+      builder: (context, expanded, child) {
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 200),
+          padding: EdgeInsets.only(
+              bottom: expanded ? _bottomPeekHeight : 0.0),
+          child: child!,
+        );
+      },
+      child: _buildCalendarBody(verticalGap),
+    );
+  }
+
+  Widget _buildCalendarBody(double verticalGap) {
+    return TCalendarBody(
+      type: widget.type ?? CalendarType.single,
+      firstDayOfWeek: widget.firstDayOfWeek ?? 0,
+      maxDate: widget.maxDate,
+      anchorDate: widget.anchorDate,
+      minDate: widget.minDate,
+      value: widget._value,
+      bodyPadding: _style.bodyPadding ?? TTheme.of(context).spacer16,
+      displayFormat: widget.displayFormat ?? 'year month',
+      monthNames: monthNames,
+      monthTitleStyle: _style.monthTitleStyle,
+      verticalGap: verticalGap,
+      cellHeight: _getEffectiveCellHeight(),
+      monthTitleHeight: widget.monthTitleHeight ?? 22,
+      monthTitleBuilder: widget.monthTitleBuilder,
+      animateTo: widget.animateTo ?? false,
+      onMonthChange: widget.onMonthChange,
+      dateType: widget.dateType,
+      dataSource: widget.dataSource,
+      builder: (date, dateList, data, rowIndex, colIndex) {
+        return TCalendarCell(
+          height: _getEffectiveCellHeight(),
+          tdate: date,
+          format: widget.format,
+          type: widget.type ?? CalendarType.single,
+          data: data,
+          padding: verticalGap / 2,
+          onChange: (value) {
+            final time = _getValue(value);
+            inherited?.selected.value = time;
+            widget.onChange?.call(time);
+          },
+          onCellClick: widget.onCellClick,
+          onCellLongPress: widget.onCellLongPress,
+          dateList: dateList,
+          rowIndex: rowIndex,
+          colIndex: colIndex,
+          cellWidget: widget.cellWidget,
+          dateType: widget.dateType,
+          showLunarInfo: widget.showLunarInfo,
+        );
+      },
+    );
+  }
+
+  /// bottom 浮层：仅 AnimatedSlide 响应 expanded，其余内容通过 inherited.selected 驱动
+  Widget _buildBottom() {
     final bottomOffset = (inherited?.usePopup == true)
         ? (widget.useSafeArea == true
             ? MediaQuery.of(context).padding.bottom +
@@ -354,24 +406,44 @@ class _TCalendarState extends State<TCalendar> {
             ? MediaQuery.of(context).padding.bottom
             : 0.0);
 
+    // bottom 内容：跟随选中日期更新
+    final content = inherited != null
+        ? ValueListenableBuilder<List<int>>(
+            valueListenable: inherited!.selected,
+            builder: (context, selectedDates, _) {
+              return widget.bottom!(context, selectedDates);
+            },
+          )
+        : widget.bottom!(context, widget.value ?? []);
+
+    // 如果有 bottomExpanded listenable → 用 ValueListenableBuilder 局部化 slide 动画
+    if (widget.bottomExpanded != null) {
+      return Positioned(
+        left: 0,
+        right: 0,
+        bottom: bottomOffset,
+        child: ClipRect(
+          child: ValueListenableBuilder<bool>(
+            valueListenable: widget.bottomExpanded!,
+            builder: (context, expanded, child) {
+              return AnimatedSlide(
+                duration: const Duration(milliseconds: 200),
+                offset: expanded ? Offset.zero : const Offset(0, 1),
+                child: child!,
+              );
+            },
+            child: content,
+          ),
+        ),
+      );
+    }
+
+    // 无 listenable → 始终展开
     return Positioned(
       left: 0,
       right: 0,
       bottom: bottomOffset,
-      child: ClipRect(
-        child: AnimatedSlide(
-          duration: const Duration(milliseconds: 200),
-          offset: expanded ? Offset.zero : const Offset(0, 1),
-          child: inherited != null
-              ? ValueListenableBuilder<List<int>>(
-                  valueListenable: inherited!.selected,
-                  builder: (context, selectedDates, _) {
-                    return widget.bottom!(context, selectedDates);
-                  },
-                )
-              : widget.bottom!(context, widget.value ?? []),
-        ),
-      ),
+      child: content,
     );
   }
 
@@ -382,14 +454,6 @@ class _TCalendarState extends State<TCalendar> {
     }).toList();
   }
 
-  void _initValue() {
-    if (inherited == null) {
-      return;
-    }
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      inherited!.selected.value = _getValue(widget.value ?? []);
-    });
-  }
   /// 获取有效的单元格高度
   /// 当显示农历信息时，需要更大的高度以容纳额外的文本
   double _getEffectiveCellHeight() {
