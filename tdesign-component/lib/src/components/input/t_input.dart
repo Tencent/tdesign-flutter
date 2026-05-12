@@ -74,6 +74,8 @@ class TInput extends StatelessWidget {
     this.selectionControls,
     this.contextMenuBuilder,
     this.enableInteractiveSelection,
+    this.autofillHints,
+    this.onLabelTap,
   }) : spacer = spacer ?? TInputSpacer.generateDefault();
 
   /// 输入框宽度(TCardStyle时必须设置该参数)
@@ -235,6 +237,18 @@ class TInput extends StatelessWidget {
   /// 是否启用交互式选择
   final bool? enableInteractiveSelection;
 
+  /// 自动填充提示，例如密码框可传 `[AutofillHints.password]`，让系统/输入法
+  /// 识别为密码字段，配合 [AutofillGroup] 触发自动填充。
+  final Iterable<String>? autofillHints;
+
+  /// 点击左侧 leftIcon / leftLabel 区域时的回调。
+  ///
+  /// 默认值为 null，此时点击 label 区域会通过 [HitTestBehavior.translucent]
+  /// 穿透到下方输入框，使输入框获得焦点并弹出键盘（这是密码输入框场景下
+  /// 的常见预期）。若业务方需要拦截 label 点击事件（例如点 label 弹出帮助
+  /// 提示），可传入此回调。
+  final GestureTapCallback? onLabelTap;
+
   /// 获取输入框规格
   double getInputPadding() {
     switch (size) {
@@ -346,6 +360,12 @@ class TInput extends StatelessWidget {
               SizedBox(
                 width: leftLabelWidth,
                 child: GestureDetector(
+                  // [issue #763] 加上 translucent 命中测试行为：当 onLabelTap
+                  // 未传时，让点击事件穿透到下方 TextField，避免 Android 上
+                  // 第一次 tap 只获焦不弹键盘的问题；同时显式传 onTap 让
+                  // GestureDetector 的命中行为可预期。
+                  behavior: HitTestBehavior.translucent,
+                  onTap: onLabelTap,
                   child: Row(
                     children: [
                       Visibility(
@@ -440,6 +460,7 @@ class TInput extends StatelessWidget {
                       selectionControls: selectionControls,
                       contextMenuBuilder: contextMenuBuilder,
                       enableInteractiveSelection: enableInteractiveSelection,
+                      autofillHints: autofillHints,
                     ),
                     Visibility(
                       child: Container(
@@ -675,6 +696,7 @@ class TInput extends StatelessWidget {
                         selectionControls: selectionControls,
                         contextMenuBuilder: contextMenuBuilder,
                         enableInteractiveSelection: enableInteractiveSelection,
+                        autofillHints: autofillHints,
                       ),
                     ),
                     Visibility(
@@ -796,6 +818,7 @@ class TInput extends StatelessWidget {
               selectionControls: selectionControls,
               contextMenuBuilder: contextMenuBuilder,
               enableInteractiveSelection: enableInteractiveSelection,
+              autofillHints: autofillHints,
             ),
           ),
           Container(
@@ -890,6 +913,7 @@ class TInput extends StatelessWidget {
                     selectionControls: selectionControls,
                     contextMenuBuilder: contextMenuBuilder,
                     enableInteractiveSelection: enableInteractiveSelection,
+                    autofillHints: autofillHints,
                   ),
                 ),
               ),
