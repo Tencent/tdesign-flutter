@@ -1,32 +1,4 @@
 ## API
-### TCalendarStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| decoration |  | - |  |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TCalendarStyle.cellStyle  | 日期样式 |
-| TCalendarStyle.generateStyle  | 生成默认样式 |
-
-```
-```
-
 ### TCalendar
 #### 默认构造方法
 
@@ -34,8 +6,8 @@
 | --- | --- | --- | --- |
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
-| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，位于日历主体浮层上方 |
-| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。传 null 表示始终展开；传 ValueNotifier<bool> 时展开/收起会跟随 listenable 变化播放滑动动画 |
+| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，位于日历主体浮层上方。 |
+| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。 |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 | dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
@@ -66,10 +38,6 @@
 ```
 ```
 
-### TCalendarDataSource
-```
-```
-
 ### TCalendarPopup
 #### 默认构造方法
 
@@ -85,6 +53,38 @@
 | top | double? | - | 距离顶部的距离 |
 | visible | bool? | - | 默认是否显示日历 |
 
+```
+```
+
+### TCalendarStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| cellDecoration | BoxDecoration? | - | 日期decoration |
+| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
+| cellStyle | TextStyle? | - | 日期样式 |
+| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
+| centreColor | Color? | - | 日期范围内背景样式 |
+| decoration |  | - |  |
+| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
+| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
+| titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
+| titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
+| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TCalendarStyle.cellStyle  | 日期样式 |
+| TCalendarStyle.generateStyle  | 生成默认样式 |
+
+```
+```
+
+### TCalendarDataSource
 ```
 ```
 

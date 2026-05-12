@@ -1,27 +1,4 @@
 ## API
-### TPickerOption
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| disabled | bool | false | 是否禁用（不可选中/置灰显示），默认 false |
-| label | String | - | 展示文字（可包含 emoji、单位、国际化等） |
-| value | dynamic | - | 业务值（onChange 回调返回此字段） |
-
-```
-```
-
-### TPickerValue
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| indexes | List<int> | - | 每列选中项的索引 |
-| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
-
-```
-```
-
 ### TPicker
 #### 默认构造方法
 
@@ -47,7 +24,39 @@
 ```
 ```
 
-### TPickerItems
+### TPickerOption
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disabled | bool | false | 是否禁用（不可选中/置灰显示），默认 false |
+| label | String | - | 展示文字（可包含 emoji、单位、国际化等） |
+| value | dynamic | - | 业务值（onChange 回调返回此字段） |
+
+```
+```
+
+### TPickerValue
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| indexes | List<int> | - | 每列选中项的索引 |
+| selectedOptions | List<TPickerOption> | - | 每列选中的完整 option |
+
+```
+```
+
+### TPickerLoadEvent
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| column | int | - | 触发事件的列索引（0 表示第一列） |
+| displayedCount | int | - | 当前列已展示的选项总数 |
+| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
+| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
+
 ```
 ```
 
@@ -99,6 +108,10 @@
 ```
 ```
 
+### TPickerItems
+```
+```
+
 ### TPickerKeys
 #### 默认构造方法
 
@@ -108,16 +121,3 @@
 | disabled | String | 'disabled' | 禁用标记对应的字段名，默认 `disabled` |
 | label | String | 'label' | 展示文案对应的字段名，默认 `label` |
 | value | String | 'value' | 业务值对应的字段名，默认 `value` |
-
-```
-```
-
-### TPickerLoadEvent
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| column | int | - | 触发事件的列索引（0 表示第一列） |
-| displayedCount | int | - | 当前列已展示的选项总数 |
-| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） |
-| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
