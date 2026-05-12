@@ -34,9 +34,9 @@
 | --- | --- | --- | --- |
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
-| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，位于日历主体浮层上方，接收 (BuildContext, List\<int\>) 参数 |
-| bottomExpanded | bool | true | bottom 区域是否展开，由外部 setState 控制 |
-| bottomExpandedListenable | ValueListenable\<bool\>? | - | bottom 区域是否展开（响应式版本，优先级高于 bottomExpanded）。传入后展开/收起会跟随该 listenable 自动播放动画 |
+| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，位于日历主体浮层上方 |
+| bottomExpanded | bool | true | bottom 区域是否展开，默认 true |
+| bottomExpandedListenable | ValueListenable<bool>? | - | bottom 区域是否展开（响应式版本，优先级高于 [bottomExpanded]）。 |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 | dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
