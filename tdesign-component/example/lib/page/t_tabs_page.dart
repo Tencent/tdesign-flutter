@@ -108,6 +108,9 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
             ExampleItem(desc: '带图标选项卡', builder: _buildItemWithIcon),
             ExampleItem(desc: '带微标选项卡', builder: _buildItemWithLogo),
             ExampleItem(desc: '带内容区选项卡', builder: _buildItemWithContent),
+            ExampleItem(
+                desc: '带内容区选项卡（autoHeight 自适应高度）',
+                builder: _buildItemWithAutoHeight),
           ],
         ),
         ExampleModule(title: '组件状态', children: [
@@ -243,6 +246,51 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
           )
         ],
       ),
+    );
+  }
+
+  @Demo(group: 'tabs')
+  Widget _buildItemWithAutoHeight(BuildContext context) {
+    // 演示 issue #519 的修复：开启 autoHeight 后，外部无需再包 SizedBox
+    // 显式设置高度，TTabBarView 会根据当前激活 tab 的子内容高度自适应，
+    // 切换 tab 时高度会平滑过渡。
+    var tabController = TabController(length: 3, vsync: this);
+    // 三个子内容高度故意不同，用于观察外层容器的高度过渡效果
+    final autoHeightTabViews = <Widget>[
+      Container(
+        height: 100,
+        color: const Color(0xFFE3F0FF),
+        alignment: Alignment.center,
+        child: const TText('内容区 1（高度 100）'),
+      ),
+      Container(
+        height: 200,
+        color: const Color(0xFFE8F7E3),
+        alignment: Alignment.center,
+        child: const TText('内容区 2（高度 200）'),
+      ),
+      Container(
+        height: 150,
+        color: const Color(0xFFFFF5E0),
+        alignment: Alignment.center,
+        child: const TText('内容区 3（高度 150）'),
+      ),
+    ];
+    return Column(
+      children: [
+        TTabBar(
+          tabs: subList(3),
+          controller: tabController,
+          showIndicator: true,
+          isScrollable: false,
+        ),
+        // 此处未给 TTabBarView 包 SizedBox、也未指定 height
+        TTabBarView(
+          autoHeight: true,
+          controller: tabController,
+          children: autoHeightTabViews,
+        ),
+      ],
     );
   }
 
