@@ -286,30 +286,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### MessageLink
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| color | Color? | - | 颜色 |
-| name | String | - | 名称 |
-| uri | Uri? | - | 资源链接 |
-
-```
-```
-
-### MessageMarquee
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| delay | int? | - | 延迟时间(毫秒) |
-| loop | int? | - | 循环次数 |
-| speed | int? | - | 速度 |
-
-```
-```
-
 ### TMessage
 #### 默认构造方法
 
@@ -335,6 +311,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
 | showMessage |  |   required BuildContext context,  String? content,  bool? visible,  int? duration,  dynamic closeBtn,  dynamic icon,  dynamic link,  MessageMarquee? marquee,  List<double>? offset,  MessageTheme? theme,  VoidCallback? onCloseBtnClick,  VoidCallback? onDurationEnd,  VoidCallback? onLinkClick, |  |
+
+```
+```
+
+### MessageMarquee
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| delay | int? | - | 延迟时间(毫秒) |
+| loop | int? | - | 循环次数 |
+| speed | int? | - | 速度 |
+
+```
+```
+
+### MessageLink
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| color | Color? | - | 颜色 |
+| name | String | - | 名称 |
+| uri | Uri? | - | 资源链接 |
 
 
   

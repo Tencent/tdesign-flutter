@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
+| autofillHints | Iterable<String>? | - | 自动填充提示，例如密码框可传 `[AutofillHints.password]`，让系统/输入法 |
 | autofocus | bool | false | 是否自动获取焦点 |
 | backgroundColor | Color? | - | 输入框背景色 |
 | cardStyle | TCardStyle? | - | 卡片默认样式 |
@@ -43,6 +44,7 @@
 | onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
 | onClearTap | GestureTapCallback? | - | 右侧删除点击 |
 | onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
+| onLabelTap | GestureTapCallback? | - | 点击左侧 leftIcon / leftLabel 区域时的回调。 |
 | onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
 | onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
 | readOnly | bool | false | 是否只读 |

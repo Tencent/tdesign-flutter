@@ -684,6 +684,49 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
+登录场景：双密码框焦点切换不收键盘
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _specialTypeLoginForm(BuildContext context) {
+    // 登录场景：上下两个密码框，演示 issue #763 的修复效果。
+    // - 点击任一密码框：键盘应立即弹出（无需点两次）
+    // - 在两个密码框间切换焦点：键盘保持显示，不会被默认 onTapOutside 收起
+    // - 借助 AutofillGroup + AutofillHints.password 触发系统密码自动填充
+    return AutofillGroup(
+      child: Column(
+        children: [
+          TInput(
+            type: TInputType.normal,
+            controller: controller[28],
+            obscureText: true,
+            leftLabel: '密码',
+            hintText: '请输入密码',
+            autofillHints: const [AutofillHints.password],
+            inputAction: TextInputAction.next,
+            needClear: false,
+          ),
+          const SizedBox(height: 8),
+          TInput(
+            type: TInputType.normal,
+            controller: controller[29],
+            obscureText: true,
+            leftLabel: '确认密码',
+            hintText: '请再次输入密码',
+            autofillHints: const [AutofillHints.password],
+            inputAction: TextInputAction.done,
+            needClear: false,
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
 
       
 <td-code-block panel="Dart">
@@ -1021,6 +1064,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
+| autofillHints | Iterable<String>? | - | 自动填充提示，例如密码框可传 `[AutofillHints.password]`，让系统/输入法 |
 | autofocus | bool | false | 是否自动获取焦点 |
 | backgroundColor | Color? | - | 输入框背景色 |
 | cardStyle | TCardStyle? | - | 卡片默认样式 |
@@ -1058,6 +1102,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
 | onClearTap | GestureTapCallback? | - | 右侧删除点击 |
 | onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
+| onLabelTap | GestureTapCallback? | - | 点击左侧 leftIcon / leftLabel 区域时的回调。 |
 | onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
 | onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
 | readOnly | bool | false | 是否只读 |
