@@ -15,8 +15,12 @@ export 't_lunar_date.dart';
 typedef CalendarFormat = TDate? Function(TDate? day);
 
 /// 底部自定义区域构建器
+///
 /// [context] 当前上下文
 /// [selectedDates] 当前选中的日期列表（毫秒时间戳）
+///
+/// **仅在 popup 模式下** `selectedDates` 才会随用户点击实时更新；
+/// 非 popup 模式下仅传入 [TCalendar.value] 的初始值。
 typedef CalendarBottomBuilder = Widget Function(
   BuildContext context,
   List<int> selectedDates,
@@ -136,6 +140,10 @@ class TCalendar extends StatefulWidget {
 
   /// 底部自定义区域构建器，位于日历主体浮层上方。
   ///
+  /// **注意：此属性仅在 popup 模式下生效**（即通过 [TCalendarPopup] 使用时）。
+  /// 非 popup 模式下，由于缺少 [TCalendarInherited] 提供的响应式选中状态，
+  /// bottom 区域不会随用户点击自动更新 `selectedDates`。
+  ///
   /// `selectedDates` 是当前选中日期的毫秒时间戳列表，会随用户点击单元格自动更新。
   ///
   /// 典型用法：在 bottom 中渲染时间选择器、统计信息、操作按钮等。
@@ -204,6 +212,15 @@ class _TCalendarState extends State<TCalendar> {
   /// bottom 展开时日历主体上移高度，露出 bottom "把手"区域
   /// （设计稿固定值，与 [_buildBottom] 的 bottom offset 配合）
   static const double _bottomPeekHeight = 30.0;
+
+  /// 确认按钮高度（TButton large 尺寸）
+  static const double _confirmBtnHeight = 48.0;
+
+  /// bottom 展开/收起统一动画时长
+  static const Duration _animDuration = Duration(milliseconds: 200);
+
+  /// bottom 展开/收起统一动画曲线
+  static const Curve _animCurve = Curves.easeInOut;
 
   /// 标记是否已完成首次 selected 同步，避免 didChangeDependencies 重复触发
   bool _initializedSelected = false;
@@ -338,7 +355,8 @@ class _TCalendarState extends State<TCalendar> {
       valueListenable: widget.bottomExpanded!,
       builder: (context, expanded, child) {
         return AnimatedPadding(
-          duration: const Duration(milliseconds: 200),
+          duration: _animDuration,
+          curve: _animCurve,
           padding: EdgeInsets.only(
               bottom: expanded ? _bottomPeekHeight : 0.0),
           child: child!,
@@ -394,14 +412,19 @@ class _TCalendarState extends State<TCalendar> {
     );
   }
 
-  /// bottom 浮层：仅 AnimatedSlide 响应 expanded，其余内容通过 inherited.selected 驱动
+  /// bottom 浮层：仅 AnimatedSlide 响应 expanded，其余内容通过 inherited.selected 驱动。
+  ///
+  /// 注意：仅在 popup 模式（inherited != null）下 bottom 才能响应式更新选中日期；
+  /// 非 popup 模式下仅使用 widget.value 的初始快照，不会随用户点击刷新。
   Widget _buildBottom() {
+    assert(widget.bottom != null);
+
     final bottomOffset = (inherited?.usePopup == true)
         ? (widget.useSafeArea == true
             ? MediaQuery.of(context).padding.bottom +
                 TTheme.of(context).spacer16 +
-                48
-            : TTheme.of(context).spacer16 * 2 + 48)
+                _confirmBtnHeight
+            : TTheme.of(context).spacer16 * 2 + _confirmBtnHeight)
         : (widget.useSafeArea == true
             ? MediaQuery.of(context).padding.bottom
             : 0.0);
@@ -427,7 +450,8 @@ class _TCalendarState extends State<TCalendar> {
             valueListenable: widget.bottomExpanded!,
             builder: (context, expanded, child) {
               return AnimatedSlide(
-                duration: const Duration(milliseconds: 200),
+                duration: _animDuration,
+                curve: _animCurve,
                 offset: expanded ? Offset.zero : const Offset(0, 1),
                 child: child!,
               );
