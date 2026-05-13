@@ -22,6 +22,9 @@ class _TFabPageState extends State<TFabPage> {
         ExampleItem(
             desc: 'Icon Fab with Text 图标加文字悬浮按钮', builder: _buildTextFab)
       ]),
+      ExampleModule(title: '事件', children: [
+        ExampleItem(desc: 'LongPress 长按事件', builder: _buildLongPressFab),
+      ]),
       ExampleModule(title: '组件状态', children: [
         ExampleItem(desc: 'Fab Theme 悬浮按钮主题', builder: _buildThemeFab),
         ExampleItem(desc: 'Fab Shape 悬浮按钮形状', builder: _buildShapeFab),
@@ -46,6 +49,18 @@ class _TFabPageState extends State<TFabPage> {
         theme: TFabTheme.primary,
         text: 'Floating',
       )
+    ]);
+  }
+
+  @Demo(group: 'fab')
+  Widget _buildLongPressFab(BuildContext context) {
+    return _buildRowDemo([
+      TFab(
+        theme: TFabTheme.primary,
+        onLongPress: () {
+          debugPrint('TFab onLongPress');
+        },
+      ),
     ]);
   }
 

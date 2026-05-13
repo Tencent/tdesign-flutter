@@ -24,6 +24,7 @@ class TFab extends StatelessWidget {
     this.size = TFabSize.large,
     this.text,
     this.onClick,
+    this.onLongPress,
     this.icon,
   }) : super(key: key);
 
@@ -44,6 +45,9 @@ class TFab extends StatelessWidget {
 
   /// 点击事件
   final VoidCallback? onClick;
+
+  /// 长按事件
+  final VoidCallback? onLongPress;
 
   bool get showText => text?.isNotEmpty ?? false;
 
@@ -137,6 +141,7 @@ class TFab extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onClick,
+      onLongPress: onLongPress,
       child: Container(
         padding: getPadding(),
         decoration: BoxDecoration(
