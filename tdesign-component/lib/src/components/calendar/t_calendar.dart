@@ -14,21 +14,13 @@ export 't_lunar_date.dart';
 
 typedef CalendarFormat = TDate? Function(TDate? day);
 
-/// 底部自定义区域构建器
-///
-/// [context] 当前上下文
-/// [selectedDates] 当前选中的日期列表（毫秒时间戳）
-///
-/// **仅在 popup 模式下** `selectedDates` 才会随用户点击实时更新；
-/// 非 popup 模式下仅传入 [TCalendar.value] 的初始值。
+/// [TCalendar.bottom] 的构建器签名。`selectedDates` 为只读视图，详细行为见 [TCalendar.bottom]。
 typedef CalendarBottomBuilder = Widget Function(
   BuildContext context,
   List<int> selectedDates,
 );
 
 enum CalendarType { single, multiple, range }
-
-enum CalendarTrigger { closeBtn, confirmBtn, overlay }
 
 enum DateSelectType { selected, disabled, start, centre, end, empty }
 
@@ -103,7 +95,7 @@ class TCalendar extends StatefulWidget {
   /// 宽度
   final double? width;
 
-  ///锚点日期
+  /// 锚点日期
   final DateTime? anchorDate;
 
   /// 自定义样式
@@ -119,7 +111,7 @@ class TCalendar extends StatefulWidget {
     TDate tdate,
   )? onCellClick;
 
-  /// 长安日期时触发
+  /// 长按日期时触发
   final void Function(
     int value,
     DateSelectType type,
@@ -135,27 +127,31 @@ class TCalendar extends StatefulWidget {
   /// 月份变化时触发
   final ValueChanged<DateTime>? onMonthChange;
 
-  /// 是否使用安全区域，默认true
+  /// 是否使用安全区域（默认 true）
   final bool? useSafeArea;
 
-  /// 底部自定义区域构建器，位于日历主体浮层上方。
+  /// 底部自定义区域构建器，以浮层方式叠加在日历主体之上。
   ///
-  /// **注意：此属性仅在 popup 模式下生效**（即通过 [TCalendarPopup] 使用时）。
-  /// 非 popup 模式下，由于缺少 [TCalendarInherited] 提供的响应式选中状态，
-  /// bottom 区域不会随用户点击自动更新 `selectedDates`。
+  /// 适用于在日历下方渲染时间选择器、统计信息、操作按钮等。
   ///
-  /// `selectedDates` 是当前选中日期的毫秒时间戳列表，会随用户点击单元格自动更新。
+  /// - **不会撑高 [TCalendar]**，请在 [height] 中预留 bottom 自身的占用高度；
+  /// - 仅在 [TCalendarPopup] 模式下 `selectedDates` 会随点击实时更新，
+  ///   非 popup 模式下为 [value] 的初始快照；
+  /// - 传入的 `selectedDates` 是只读视图（[List.unmodifiable]），如需变更请通过 [onChange]。
   ///
-  /// 典型用法：在 bottom 中渲染时间选择器、统计信息、操作按钮等。
+  /// ```dart
+  /// TCalendar(
+  ///   height: 600,
+  ///   bottom: (ctx, dates) => MyFooter(selectedDates: dates),
+  /// )
+  /// ```
   final CalendarBottomBuilder? bottom;
 
   /// bottom 区域是否展开（响应式）。
   ///
-  /// - 传 `null`（默认）：bottom 始终展开
-  /// - 传 `ValueListenable<bool>`：bottom 展开/收起会跟随该 listenable 变化播放滑动动画，
-  ///   常配合 [ValueNotifier] 实现"按钮触发展开/收起"。
+  /// 为 `null`（默认）时 bottom 始终展开；传入 [ValueListenable] 时，
+  /// bottom 展开/收起将跟随其值变化播放滑动动画，常配合 [ValueNotifier] 使用。
   ///
-  /// 示例：
   /// ```dart
   /// final expanded = ValueNotifier<bool>(false);
   /// TCalendar(
@@ -206,24 +202,25 @@ class TCalendar extends StatefulWidget {
 class _TCalendarState extends State<TCalendar> {
   late List<String> weekdayNames;
   late List<String> monthNames;
-  late TCalendarInherited? inherited;
+  TCalendarInherited? inherited;
   late TCalendarStyle _style;
 
-  /// bottom 展开时日历主体上移高度，露出 bottom "把手"区域
-  /// （设计稿固定值，与 [_buildBottom] 的 bottom offset 配合）
+  List<DateTime>? _cachedValueDates;
+
+  // 时间戳列表，规范化到当日 0 点（去时分秒）。
+  List<int> _cachedNormalizedValue = const <int>[];
+
+  // bottom 展开时日历主体上移的距离，露出 bottom 顶部"把手"区域。
   static const double _bottomPeekHeight = 30.0;
 
-  /// 确认按钮高度（TButton large 尺寸）
   static const double _confirmBtnHeight = 48.0;
-
-  /// bottom 展开/收起统一动画时长
   static const Duration _animDuration = Duration(milliseconds: 200);
-
-  /// bottom 展开/收起统一动画曲线
   static const Curve _animCurve = Curves.easeInOut;
 
-  /// 标记是否已完成首次 selected 同步，避免 didChangeDependencies 重复触发
   bool _initializedSelected = false;
+
+  // 进程内仅打印一次的提示标志（static 跨实例共享）。
+  static bool _warnedNoInheritedForBottom = false;
 
   @override
   void didChangeDependencies() {
@@ -253,32 +250,45 @@ class _TCalendarState extends State<TCalendar> {
       context.resource.december,
     ];
     _style = widget.style ?? TCalendarStyle.generateStyle(context);
-    // 仅首次挂载时同步 widget.value → inherited.selected
     if (!_initializedSelected) {
       _initializedSelected = true;
-      _syncSelectedToInherited();
+      _refreshValueCache();
+      _syncSelectedToInheritedSync();
     }
   }
 
   @override
   void didUpdateWidget(covariant TCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 仅当 widget.value 内容变化时，才重置 inherited.selected
     if (!listEquals(oldWidget.value, widget.value)) {
-      _syncSelectedToInherited();
+      _refreshValueCache();
+      _syncSelectedToInheritedDeferred();
     }
   }
 
-  /// 把 widget.value 同步到 inherited.selected（仅在首次或 value 变化时调用）
-  void _syncSelectedToInherited() {
+  void _refreshValueCache() {
+    _cachedValueDates = widget._value;
+    _cachedNormalizedValue = _getValue(widget.value ?? const <int>[]);
+  }
+
+  // 仅在非 build phase 调用。
+  void _syncSelectedToInheritedSync() {
+    if (inherited == null) {
+      return;
+    }
+    inherited!.selected.value = _getValue(widget.value ?? const <int>[]);
+  }
+
+  // 适用于 build phase 调用，写操作延迟到下一帧。
+  void _syncSelectedToInheritedDeferred() {
     if (inherited == null) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
+      if (!mounted || inherited == null) {
         return;
       }
-      inherited!.selected.value = _getValue(widget.value ?? []);
+      inherited!.selected.value = _getValue(widget.value ?? const <int>[]);
     });
   }
 
@@ -340,17 +350,14 @@ class _TCalendarState extends State<TCalendar> {
     );
   }
 
-  /// 仅在此处监听 bottomExpanded，局部化重建范围（只影响 padding 动画）
   Widget _buildAnimatedBody(double verticalGap, bool hasBottom) {
     if (!hasBottom || widget.bottomExpanded == null) {
-      // 无 bottom 或始终展开 → 静态 padding
       final padding = hasBottom ? _bottomPeekHeight : 0.0;
       return Padding(
         padding: EdgeInsets.only(bottom: padding),
         child: _buildCalendarBody(verticalGap),
       );
     }
-    // 响应式 → 仅 AnimatedPadding 重建
     return ValueListenableBuilder<bool>(
       valueListenable: widget.bottomExpanded!,
       builder: (context, expanded, child) {
@@ -359,7 +366,7 @@ class _TCalendarState extends State<TCalendar> {
           curve: _animCurve,
           padding: EdgeInsets.only(
               bottom: expanded ? _bottomPeekHeight : 0.0),
-          child: child!,
+          child: child,
         );
       },
       child: _buildCalendarBody(verticalGap),
@@ -373,7 +380,7 @@ class _TCalendarState extends State<TCalendar> {
       maxDate: widget.maxDate,
       anchorDate: widget.anchorDate,
       minDate: widget.minDate,
-      value: widget._value,
+      value: _cachedValueDates,
       bodyPadding: _style.bodyPadding ?? TTheme.of(context).spacer16,
       displayFormat: widget.displayFormat ?? 'year month',
       monthNames: monthNames,
@@ -394,11 +401,7 @@ class _TCalendarState extends State<TCalendar> {
           type: widget.type ?? CalendarType.single,
           data: data,
           padding: verticalGap / 2,
-          onChange: (value) {
-            final time = _getValue(value);
-            inherited?.selected.value = time;
-            widget.onChange?.call(time);
-          },
+          onChange: _handleCellChange,
           onCellClick: widget.onCellClick,
           onCellLongPress: widget.onCellLongPress,
           dateList: dateList,
@@ -412,34 +415,44 @@ class _TCalendarState extends State<TCalendar> {
     );
   }
 
-  /// bottom 浮层：仅 AnimatedSlide 响应 expanded，其余内容通过 inherited.selected 驱动。
-  ///
-  /// 注意：仅在 popup 模式（inherited != null）下 bottom 才能响应式更新选中日期；
-  /// 非 popup 模式下仅使用 widget.value 的初始快照，不会随用户点击刷新。
+  void _handleCellChange(List<int> value) {
+    final time = _getValue(value);
+    inherited?.selected.value = time;
+    widget.onChange?.call(time);
+  }
+
+  // 行为约定详见 [TCalendar.bottom]。
   Widget _buildBottom() {
     assert(widget.bottom != null);
+    assert(() {
+      if (inherited == null && !_warnedNoInheritedForBottom) {
+        _warnedNoInheritedForBottom = true;
+        debugPrint(
+          '[TCalendar] bottom 在非 TCalendarPopup 模式下不会响应式更新 selectedDates，'
+          '仅渲染 widget.value 的初始快照。如需响应式，请通过 onChange 自行管理状态。',
+        );
+      }
+      return true;
+    }());
 
-    final bottomOffset = (inherited?.usePopup == true)
-        ? (widget.useSafeArea == true
-            ? MediaQuery.of(context).padding.bottom +
-                TTheme.of(context).spacer16 +
-                _confirmBtnHeight
-            : TTheme.of(context).spacer16 * 2 + _confirmBtnHeight)
-        : (widget.useSafeArea == true
-            ? MediaQuery.of(context).padding.bottom
-            : 0.0);
+    final bottomOffset = _calcBottomOffset();
 
-    // bottom 内容：跟随选中日期更新
+    // popup 模式由 inherited.selected 驱动；非 popup 模式使用规范化后的初始快照。
     final content = inherited != null
         ? ValueListenableBuilder<List<int>>(
             valueListenable: inherited!.selected,
             builder: (context, selectedDates, _) {
-              return widget.bottom!(context, selectedDates);
+              return widget.bottom!(
+                context,
+                List<int>.unmodifiable(selectedDates),
+              );
             },
           )
-        : widget.bottom!(context, widget.value ?? []);
+        : widget.bottom!(
+            context,
+            List<int>.unmodifiable(_cachedNormalizedValue),
+          );
 
-    // 如果有 bottomExpanded listenable → 用 ValueListenableBuilder 局部化 slide 动画
     if (widget.bottomExpanded != null) {
       return Positioned(
         left: 0,
@@ -453,7 +466,7 @@ class _TCalendarState extends State<TCalendar> {
                 duration: _animDuration,
                 curve: _animCurve,
                 offset: expanded ? Offset.zero : const Offset(0, 1),
-                child: child!,
+                child: child,
               );
             },
             child: content,
@@ -462,13 +475,29 @@ class _TCalendarState extends State<TCalendar> {
       );
     }
 
-    // 无 listenable → 始终展开
     return Positioned(
       left: 0,
       right: 0,
       bottom: bottomOffset,
       child: content,
     );
+  }
+
+  // 该值需与 build() 中 Column 底部区域（confirmBtn padding + safeArea）保持一致；
+  // 修改底部布局时需同步更新本方法。
+  double _calcBottomOffset() {
+    final safeBottom = widget.useSafeArea == true
+        ? MediaQuery.of(context).padding.bottom
+        : 0.0;
+
+    if (inherited?.usePopup == true) {
+      final btnPadding = widget.useSafeArea == true
+          ? TTheme.of(context).spacer16
+          : TTheme.of(context).spacer16 * 2;
+      return safeBottom + btnPadding + _confirmBtnHeight;
+    }
+
+    return safeBottom;
   }
 
   List<int> _getValue(List<int> value) {
@@ -478,13 +507,10 @@ class _TCalendarState extends State<TCalendar> {
     }).toList();
   }
 
-  /// 获取有效的单元格高度
-  /// 当显示农历信息时，需要更大的高度以容纳额外的文本
   double _getEffectiveCellHeight() {
     if (widget.cellHeight != null) {
       return widget.cellHeight!;
     }
-    // 显示农历信息时使用更大的默认高度（80px 完全避免溢出）
     return widget.showLunarInfo ? 80 : 60;
   }
 }
