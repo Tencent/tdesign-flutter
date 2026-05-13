@@ -30,7 +30,7 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 2. 创建专用分支，默认格式：`fix/issue-<number>-<slug>`。
 3. 运行 `node scripts/issue-workflow/init-issue-fix.mjs ...` 初始化 `requirements/issue-*/` 文档骨架。
 4. 先补 `TaskContract.md` 与 `test-cases.md`，再开始实现代码。
-5. 按贡献指南实现修复，并补充必要测试或 `ExamplePage.test` 用例。
+5. 按贡献指南实现修复，并补充必要测试或 `ExamplePage.test` 用例；**不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物，见 `rules/site/site-docs.mdc`）。
 6. 按下列规则做 Review：
    - 类声明后先写构造方法，字段在构造方法下方
    - API 注释统一用 `///`
@@ -38,8 +38,8 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
    - 组件内部样式 token 优先使用 `TTheme.of(context)`
    - 组件内部固定文案优先使用 `TResourceDelegate`
 7. 跑最小必要验证，再运行 `node scripts/issue-workflow/check-issue-fix.mjs ...` 做强制检查。
-8. 通过后补全 `code-review-report.md`、`acceptance-report.md` 与 `pr-body.md`。
-9. 最后提交 commit 并创建 PR，目标分支默认是 `develop`。
+8. 通过后补全 `code-review-report.md`、`acceptance-report.md` 与 `pr-body.md`（`pr-body.md` 须符合 `.harness/templates/issue-fix/pr-body.md.tpl` 结构，并遵守 `rules/core/github-pr.mdc` 的注意事项）。
+9. 最后提交 commit 并创建 PR，目标分支默认是 `develop`；PR 正文以 `pr-body.md` 为底稿，提交前按 `github-pr` 规则删除说明注释并完成自查清单勾选。
 
 ## 输出要求
 

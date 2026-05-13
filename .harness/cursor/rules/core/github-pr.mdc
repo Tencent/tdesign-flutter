@@ -1,3 +1,24 @@
+---
+description: GitHub PR 正文模版与提交前自检（Tencent/tdesign-flutter）
+globs: requirements/**/pr-body.md
+alwaysApply: false
+---
+
+# GitHub PR 描述规范
+
+创建或更新 Pull Request 正文时（含使用 `gh pr create --body-file`、或从 `requirements/issue-*/pr-body.md` 粘贴到 GitHub），须使用与 `.harness/templates/issue-fix/pr-body.md.tpl` **一致的结构**（`init-issue-fix.mjs` 会由该 tpl 生成工作区 `pr-body.md`）。
+
+## 注意事项（必遵守）
+
+1. **「🤔 这个 PR 的性质是？」**：按实际改动勾选；只要有**新增公开参数 / 新 API**，应勾选「新特性提交」；仅修内部缺陷且未新增参数时，才勾选「日常 bug 修复」；其余选项按改动性质判断。
+2. **「🔗 相关 Issue」「💡 需求背景和解决方案」等带说明性注释的区块**：按注释提示补全正文后，**删除 HTML 说明注释**（`<!-- ... -->`），再提交 PR，避免把模板说明留给评审。
+3. **「☑️ 请求合并前的自查清单」**：提 PR 前逐项自检并**全部勾选**。
+
+## PR 正文模版
+
+将下列内容作为 PR 描述骨架（占位符在 `init-issue-fix` 生成时会被替换；手工编写时自行替换 `{{ISSUE_URL}}` 等）。
+
+```markdown
 ### 🤔 这个 PR 的性质是？
 > 勾选规则:
 > 1.只要有新增参数，就勾选”新特性提交“
@@ -50,3 +71,4 @@
 - [ ] 标题格式为：`组件类名`: 修改描述（示例：`TBottomTabBar`: 修复iconText模式，底部溢出2.5像素）
 - [ ] ”相关issue“处带上修复的issue链接
 - [ ] 相关文档已补充或无须补充
+```

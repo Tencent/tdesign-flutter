@@ -9,4 +9,6 @@ alwaysApply: true
 - 开始编码前，先读取 `CONTRIBUTING.md`，并对照 https://tdesign.tencent.com/flutter/develop 的 `4. 开发规范`、`5.2 代码 Review 自检`、`5.3 文档自检`。
 - 先给出问题原因、修复方案和测试计划，再开始改代码。
 - 修复流程必须覆盖：创建分支、编写用例或必要检查、实现代码、Review、自检、生成 `requirements/issue-*/` 验收文档、提交 PR。
+- **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物），见 `rules/site/site-docs.mdc`。
+- 提交 PR 时，正文须符合团队模版与注意事项，见 `rules/core/github-pr.mdc`（与 `.harness/templates/issue-fix/pr-body.md.tpl` 结构一致）。
 - 结束前必须运行 `scripts/issue-workflow/check-issue-fix.mjs` 对可自动判定的必做项做强制检查。
