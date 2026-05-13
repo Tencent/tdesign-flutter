@@ -21,5 +21,5 @@ description: 保持仓库 README 源文件与下游文档同步。适用于编�
 
 ## 适用边界
 
-- 如果任务只涉及 `tdesign-site/src/**/README.md` 下的组件专属文档，则不需要触发根 README 同步。
+- 如果任务只涉及 `tdesign-site/src/**/README.md`：该路径为站点**打包 / 同步**生成物，**不应**作为手写文档任务单独维护；请改对应源并由构建链路更新站点，见 `rules/site/site-docs.mdc`。
 - 更新共享 onboarding 内容时，优先使用根目录 `scripts/sync-readme.mjs`，而不是依赖旧的站点单点复制脚本。

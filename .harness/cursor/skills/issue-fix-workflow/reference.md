@@ -23,6 +23,8 @@
 - 检查组件属性注释是否完整。
 - 若组件有系统对应组件，检查是否遗漏系统组件已有能力。
 - `all_build.sh` 中的名称与 `tdesign-component/example/lib/config.dart` 保持一致。
+- **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物）；见 `rules/site/site-docs.mdc`。
+- 创建 PR 时正文按 `rules/core/github-pr.mdc` 与 `.harness/templates/issue-fix/pr-body.md.tpl`。
 
 ## issue #924 示例
 

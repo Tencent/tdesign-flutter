@@ -58,7 +58,7 @@ node scripts/issue-workflow/init-issue-fix.mjs \
 从这一步起，**严格按** [issue-fix-workflow/SKILL.md](../issue-fix-workflow/SKILL.md) 执行，包括：
 
 - 在 `TaskContract.md`、`test-cases.md` 中写清根因、方案与用例后再改代码。
-- 实现、测试、`ExamplePage.test`（如适用）、站点/API 文档（如适用）。
+- 实现、测试、`ExamplePage.test`（如适用）、API 与文档源（如适用）；**不要**手改 `tdesign-site/src/**/README.md`。
 - 按需委托子代理：`issue-analyst`、`flutter-issue-reviewer`、`acceptance-writer`（见 `.harness/cursor/agents/`）。
 
 ## 5. 强制检查（必做，未通过不得收尾）
@@ -87,8 +87,9 @@ node scripts/init-cursor-harness.mjs
 ## 7. 提交与 PR（必做）
 
 - 提交信息建议：`fix(<scope>): <简述> (fixes #<ISSUE_NUMBER>)` 或团队约定格式。
-- PR 目标分支默认 **`develop`**；正文可基于 `requirements/issue-*/pr-body.md` 粘贴并补全。
+- PR 目标分支默认 **`develop`**；正文使用 `requirements/issue-*/pr-body.md`，结构与 `.harness/templates/issue-fix/pr-body.md.tpl` 一致，并遵守 [rules/core/github-pr.mdc](../rules/core/github-pr.mdc)：**按实际勾选 PR 性质**、**补全后删除 `<!-- -->` 说明注释**、**提 PR 前完成自查清单全部勾选**。
 - PR 中关联 issue（链接或 `fixes #xxx`）。
+- **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物），见 [rules/site/site-docs.mdc](../rules/site/site-docs.mdc)。
 
 ## 一键记忆口诀
 

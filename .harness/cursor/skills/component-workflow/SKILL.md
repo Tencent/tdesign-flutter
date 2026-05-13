@@ -12,7 +12,7 @@ description: 指导 TDesign Flutter 组件、示例、demo 和相关 API 的改�
 1. `tdesign-component/lib/` 中的组件实现
 2. `tdesign-component/demo_tool/` 中的 demo 或 API 配置
 3. `tdesign-component/example/` 中的示例页面
-4. 当公开 API 或行为变化时需要同步的相关文档
+4. 当公开 API 或行为变化时需要同步的相关文档（**不要**手改 `tdesign-site/src/**/README.md`，该路径为站点打包生成物；见 `rules/site/site-docs.mdc`）。
 
 ## 评审检查项
 
