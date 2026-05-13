@@ -20,6 +20,8 @@
 
 https://github.com/Tencent/tdesign-flutter/issues/924
 
+Fixes #924
+
 ### 💡 需求背景和解决方案
 
 1. 业务需要在悬浮按钮上响应长按（快捷菜单、上下文操作等），而 `TFab` 此前未透出长按回调。
