@@ -1,0 +1,13 @@
+---
+description: TDesign Flutter 仓库级核心协作规则
+alwaysApply: true
+---
+
+# TDesign Flutter 核心协作规则
+
+- 将 `.harness/cursor/**` 视为仓库级 Cursor 资产的唯一维护源。
+- 不要直接修改生成后的 `.cursor/**` 或根目录 `AGENTS.md`；应更新 `.harness/cursor/**` 后重新执行 `node scripts/init-cursor-harness.mjs`。
+- 改动范围应控制在对应工作区内：`tdesign-component/`、`tdesign-site/` 或 `tdesign-adaptation/`。
+- 保持现有自动化边界，不要把仓库级初始化逻辑塞进 `tdesign-component/init.sh` 这类包级脚本中。
+- 优先提交最小必要改动；除非任务明确要求重新生成，否则避免改动生成物或派生产物。
+- **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物）；维护入口见 `rules/site/site-docs.mdc`。
