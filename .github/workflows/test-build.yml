@@ -59,6 +59,7 @@ jobs:
         run: sh ./tdesign-component/init.sh
 
       - name: generate api md
+        if: ${{ matrix.flutter-version != '3.16.9' }}
         working-directory: ./tdesign-component
         run: sh ./demo_tool/all_build.sh
 
