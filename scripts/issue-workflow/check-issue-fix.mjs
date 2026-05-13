@@ -46,6 +46,51 @@ async function readText(relativePath) {
   return readFile(join(rootDir, relativePath), 'utf8');
 }
 
+
+function extractHeadings(markdown) {
+  return markdown
+    .split('\n')
+    .map((line) => line.trimEnd())
+    .filter((line) => /^#{2,6}\s+/.test(line));
+}
+
+function validatePrBodyTemplate({ prBodyContent, templateContent, failures, relativePath }) {
+  const allowedHeadings = new Set(extractHeadings(templateContent));
+  const prHeadings = extractHeadings(prBodyContent);
+
+  // 1) 必须包含模板里的全部标题（且标题文本需一致）
+  for (const requiredHeading of allowedHeadings) {
+    if (!prBodyContent.includes(requiredHeading)) {
+      failures.push(`${relativePath} 缺少模板标题：${requiredHeading}`);
+    }
+  }
+
+  // 2) 禁止出现模板之外的自定义标题（如 ## Summary / ## Root Cause 等）
+  const extraHeadings = prHeadings.filter((heading) => !allowedHeadings.has(heading));
+  if (extraHeadings.length > 0) {
+    failures.push(
+      `${relativePath} 出现模板之外的标题，请严格按 pr-body.md.tpl 结构填写：${extraHeadings.join(
+        ', '
+      )}`
+    );
+  }
+
+  // 3) 标题顺序必须与模板一致（允许在栏目内补充内容，但不允许打乱栏目顺序）
+  const orderedTemplateHeadings = extractHeadings(templateContent);
+  let lastIndex = -1;
+  for (const heading of orderedTemplateHeadings) {
+    const index = prBodyContent.indexOf(heading);
+    if (index === -1) {
+      continue;
+    }
+    if (index < lastIndex) {
+      failures.push(`${relativePath} 标题顺序与模板不一致，请不要调整栏目顺序`);
+      break;
+    }
+    lastIndex = index;
+  }
+}
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -75,6 +120,8 @@ async function main() {
   const failures = [];
   const warnings = [];
   const requirementsDir = String(args['requirements-dir']);
+
+  const prBodyTemplate = await readText('.harness/templates/issue-fix/pr-body.md.tpl');
   const requiredDocs = {
     'TaskContract.md': [
       '## 基本信息',
@@ -87,7 +134,15 @@ async function main() {
     'test-cases.md': ['# 测试用例', '## TC-01'],
     'code-review-report.md': ['## 审查结论', '## 修改范围', '## 规范检查'],
     'acceptance-report.md': ['## 验收结论', '## 需求对照', '## 执行检查', '## 人工验收指引'],
-    'pr-body.md': ['## Summary', '## Root Cause', '## Fix Plan', '## Test Plan'],
+
+    // PR body 必须严格遵循模板结构（见 .harness/templates/issue-fix/pr-body.md.tpl）
+    'pr-body.md': [
+      '### 🤔 这个 PR 的性质是？',
+      '### 🔗 相关 Issue',
+      '### 💡 需求背景和解决方案',
+      '### 📝 更新日志',
+      '### ☑️ 请求合并前的自查清单',
+    ],
   };
 
   for (const [fileName, headings] of Object.entries(requiredDocs)) {
@@ -104,6 +159,15 @@ async function main() {
       if (!content.includes(heading)) {
         failures.push(`${relativePath} 缺少章节：${heading}`);
       }
+    }
+
+    if (fileName === 'pr-body.md') {
+      validatePrBodyTemplate({
+        prBodyContent: content,
+        templateContent: prBodyTemplate,
+        failures,
+        relativePath,
+      });
     }
 
     if (content.includes('待补充')) {
