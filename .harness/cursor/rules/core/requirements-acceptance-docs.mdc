@@ -1,0 +1,12 @@
+---
+description: issue 修复验收文档在 requirements 目录下的归档规范
+globs: requirements/**/*.md
+alwaysApply: false
+---
+
+# 验收文档归档规范
+
+- issue 修复相关文档统一归档到 `requirements/issue-<number>-<slug>/`。
+- 最少包含 `TaskContract.md`、`test-cases.md`、`code-review-report.md`、`acceptance-report.md`、`pr-body.md`。
+- `acceptance-report.md` 必须覆盖：验收结论、需求对照、执行检查、人工验收指引、阻塞项或环境说明。
+- PR 正文优先以 `requirements/issue-*/pr-body.md` 为底稿，再按 `rules/core/github-pr.mdc` 的团队模版与注意事项整理后用于 GitHub（填完删除说明性注释、完成自查清单勾选）。
