@@ -159,25 +159,6 @@ Fab Size 悬浮按钮尺寸
 </td-code-block>
                                   
 
-### 2 单元测试
-
-长按事件
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildLongPressFab(BuildContext context) {
-    return _buildRowDemo([
-      TFab(
-        theme: TFabTheme.primary,
-        text: 'LongPress',
-        onLongPress: _onLongPressFab,
-      )
-    ]);
-  }</pre>
-
-</td-code-block>
-                                  
 
 ## API
 ### TFab
