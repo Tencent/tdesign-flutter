@@ -1,36 +1,4 @@
 ## API
-### BadgeConfig
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badgeRightOffset | double? | - | 消息右侧偏移量 |
-| badgeTopOffset | double? | - | 消息顶部偏移量 |
-| showBadge | bool | - | 是否展示消息 |
-| tBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
-
-```
-```
-
-### TBottomTabBarTabConfig
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| allowMultipleTaps | bool | false | onTap 方法允许点击多次 |
-| badgeConfig | BadgeConfig? | - | 消息配置 |
-| onLongPress | GestureLongPressCallback? | - | 长按事件 |
-| onTap | GestureTapCallback? | - | tab点击事件 |
-| popUpButtonConfig | TBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
-| selectedIcon | Widget? | - | 选中时图标 |
-| selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
-| tabText | String? | - | tab 文本 |
-| unselectedIcon | Widget? | - | 未选中时图标 |
-| unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
-
-```
-```
-
 ### TBottomTabBar
 #### 默认构造方法
 
@@ -59,6 +27,38 @@
 | unselectedBgColor | Color? | - | 未选中时背景颜色 |
 | useSafeArea | bool | true | 使用安全区域 |
 | useVerticalDivider | bool? | - | 是否使用竖线分隔（如果选项样式为 label，则强制为 false） |
+
+```
+```
+
+### BadgeConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badgeRightOffset | double? | - | 消息右侧偏移量 |
+| badgeTopOffset | double? | - | 消息顶部偏移量 |
+| showBadge | bool | - | 是否展示消息 |
+| tBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
+
+```
+```
+
+### TBottomTabBarTabConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| allowMultipleTaps | bool | false | onTap 方法允许点击多次 |
+| badgeConfig | BadgeConfig? | - | 消息配置 |
+| onLongPress | GestureLongPressCallback? | - | 长按事件 |
+| onTap | GestureTapCallback? | - | tab点击事件 |
+| popUpButtonConfig | TBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
+| selectedIcon | Widget? | - | 选中时图标 |
+| selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
+| tabText | String? | - | tab 文本 |
+| unselectedIcon | Widget? | - | 未选中时图标 |
+| unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
 
 ```
 ```

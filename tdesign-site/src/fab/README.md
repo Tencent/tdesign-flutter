@@ -52,6 +52,26 @@ Icon Fab with Text 图标加文字悬浮按钮
 
 </td-code-block>
                                   
+### 1 事件
+
+LongPress 长按事件
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildLongPressFab(BuildContext context) {
+    return _buildRowDemo([
+      TFab(
+        theme: TFabTheme.primary,
+        onLongPress: () {
+          debugPrint('TFab onLongPress');
+        },
+      ),
+    ]);
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 组件状态
 
 Fab Theme 悬浮按钮主题
@@ -169,6 +189,7 @@ Fab Size 悬浮按钮尺寸
 | icon | Icon? | - | 图标 |
 | key |  | - |  |
 | onClick | VoidCallback? | - | 点击事件 |
+| onLongPress | VoidCallback? | - | 长按事件 |
 | shape | TFabShape | TFabShape.circle | 形状 |
 | size | TFabSize | TFabSize.large | 大小 |
 | text | String? | - | 文本 |
