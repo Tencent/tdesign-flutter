@@ -115,13 +115,13 @@ class TFab extends StatelessWidget {
   Color getIconColor(BuildContext context) {
     switch (theme) {
       case TFabTheme.primary:
-        return TTheme.of(context).whiteColor1;
+        return TTheme.of(context).fontWhColor1;
       case TFabTheme.defaultTheme:
         return TTheme.of(context).fontGyColor1;
       case TFabTheme.light:
         return TTheme.of(context).brandNormalColor;
       case TFabTheme.danger:
-        return TTheme.of(context).whiteColor1;
+        return TTheme.of(context).fontWhColor1;
     }
   }
 

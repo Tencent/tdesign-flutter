@@ -27,7 +27,8 @@ class _TFabPageState extends State<TFabPage> {
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: 'Icon Fab 纯图标悬浮按钮', builder: _buildPureIconFab),
           ExampleItem(
-              desc: 'Icon Fab with Text 图标加文字悬浮按钮', builder: _buildTextFab)
+              desc: 'Icon Fab with Text 图标加文字悬浮按钮',
+              builder: _buildTextFab)
         ]),
         ExampleModule(title: '组件状态', children: [
           ExampleItem(desc: 'Fab Theme 悬浮按钮主题', builder: _buildThemeFab),
@@ -36,7 +37,7 @@ class _TFabPageState extends State<TFabPage> {
         ])
       ],
       test: [
-        ExampleItem(desc: '长按事件', builder: _buildLongPressFab),
+        ExampleItem(desc: 'onLongPress 长按回调', builder: _buildLongPressFab),
       ],
     );
   }
@@ -107,6 +108,21 @@ class _TFabPageState extends State<TFabPage> {
         ),
         'desc': 'Square'
       },
+    ]);
+  }
+
+  @Demo(group: 'fab')
+  Widget _buildLongPressFab(BuildContext context) {
+    return _buildRowDemo([
+      TFab(
+        theme: TFabTheme.primary,
+        text: 'Long press',
+        onLongPress: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('onLongPress')),
+          );
+        },
+      ),
     ]);
   }
 
