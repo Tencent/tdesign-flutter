@@ -169,6 +169,7 @@ Fab Size 悬浮按钮尺寸
 | icon | Icon? | - | 图标 |
 | key |  | - |  |
 | onClick | VoidCallback? | - | 点击事件 |
+| onLongPress | VoidCallback? | - | 长按事件 |
 | shape | TFabShape | TFabShape.circle | 形状 |
 | size | TFabSize | TFabSize.large | 大小 |
 | text | String? | - | 文本 |
