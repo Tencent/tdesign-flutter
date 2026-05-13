@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
-| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，位于日历主体浮层上方。 |
+| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，以浮层方式叠加在日历主体之上。 |
 | bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。 |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
@@ -22,7 +22,7 @@
 | monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
 | monthTitleHeight | double? | 22 | 月标题高度 |
 | onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
-| onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
+| onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长按日期时触发 |
 | onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
 | onHeaderClick | void Function(int index, String week)? | - | 点击周时触发 |
 | onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
@@ -31,7 +31,7 @@
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |
 | type | CalendarType? | CalendarType.single | 日历的选择类型，single = 单选；multiple = 多选；range = 区间选择 |
-| useSafeArea | bool? | true | 是否使用安全区域，默认true |
+| useSafeArea | bool? | true | 是否使用安全区域（默认 true） |
 | value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
 | width | double? | - | 宽度 |
 
@@ -43,15 +43,15 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
+| autoClose | bool? | true | 是否在点击关闭按钮、确认按钮或遮罩层时自动关闭弹窗（默认 true） |
+| builder | CalendarBuilder? | - | 日历构建器，优先级高于 [child] |
+| child | TCalendar? | - | 日历控件，当 [builder] 为 null 时使用 |
+| confirmBtn | Widget? | - | 自定义确认按钮；为 null 时使用默认主色 [TButton] |
+| context | BuildContext | context | 触发 popup 时的根 context，用于 [Navigator.of] 查找并 push 弹窗路由 |
+| onClose | VoidCallback? | - | 弹窗关闭后回调 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时回调，参数为当前选中的日期时间戳列表（毫秒） |
+| top | double? | - | 弹窗顶部距离屏幕顶部的偏移量 |
+| visible | bool? | - | 是否在构造时立即调用 [show] 打开弹窗（默认 false） |
 
 ```
 ```
