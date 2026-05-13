@@ -192,6 +192,58 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+带内容区选项卡（autoHeight 自适应高度）
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildItemWithAutoHeight(BuildContext context) {
+    // 演示 issue #519 的修复：开启 autoHeight 后，外部无需再包 SizedBox
+    // 显式设置高度，TTabBarView 会根据当前激活 tab 的子内容高度自适应，
+    // 切换 tab 时高度会平滑过渡。
+    var tabController = TabController(length: 3, vsync: this);
+    // 三个子内容高度故意不同，用于观察外层容器的高度过渡效果
+    final autoHeightTabViews = <Widget>[
+      Container(
+        height: 100,
+        color: const Color(0xFFE3F0FF),
+        alignment: Alignment.center,
+        child: const TText('内容区 1（高度 100）'),
+      ),
+      Container(
+        height: 200,
+        color: const Color(0xFFE8F7E3),
+        alignment: Alignment.center,
+        child: const TText('内容区 2（高度 200）'),
+      ),
+      Container(
+        height: 150,
+        color: const Color(0xFFFFF5E0),
+        alignment: Alignment.center,
+        child: const TText('内容区 3（高度 150）'),
+      ),
+    ];
+    return Column(
+      children: [
+        TTabBar(
+          tabs: subList(3),
+          controller: tabController,
+          showIndicator: true,
+          isScrollable: false,
+        ),
+        // 此处未给 TTabBarView 包 SizedBox、也未指定 height
+        TTabBarView(
+          autoHeight: true,
+          controller: tabController,
+          children: autoHeightTabViews,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 组件状态
 
 选项卡状态
@@ -308,19 +360,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
-
-```
-```
-
 ### TTabBar
 #### 默认构造方法
 
@@ -374,6 +413,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
+
+```
+```
+
+### TTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| animationDuration | Duration | const Duration(milliseconds: 300) | 高度自适应模式下的过渡动画时长（默认 300ms） |
+| autoHeight | bool | false | 是否开启高度自适应（默认 false，保持向后兼容） |
+| children | List<Widget> | - | 子 widget 列表（每一项对应一个 tab 页的内容） |
+| controller | TabController? | - | Tab 控制器，用于和外部 [TabBar] 联动 |
+| isSlideSwitch | bool | false | 是否可以左右滑动切换 tab 页 |
+| key |  | - |  |
 
 
   

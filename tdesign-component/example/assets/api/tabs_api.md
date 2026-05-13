@@ -1,17 +1,4 @@
 ## API
-### TTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
-
-```
-```
-
 ### TTabBar
 #### 默认构造方法
 
@@ -65,3 +52,18 @@
 | size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
+
+```
+```
+
+### TTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| animationDuration | Duration | const Duration(milliseconds: 300) | 高度自适应模式下的过渡动画时长（默认 300ms） |
+| autoHeight | bool | false | 是否开启高度自适应（默认 false，保持向后兼容） |
+| children | List<Widget> | - | 子 widget 列表（每一项对应一个 tab 页的内容） |
+| controller | TabController? | - | Tab 控制器，用于和外部 [TabBar] 联动 |
+| isSlideSwitch | bool | false | 是否可以左右滑动切换 tab 页 |
+| key |  | - |  |
