@@ -1,0 +1,13 @@
+---
+description: Flutter issue 修复时必须执行的代码规范与 Review 检查
+globs: tdesign-component/lib/src/components/**/*.dart
+alwaysApply: false
+---
+
+# Flutter Issue Review 检查项
+
+- 类声明后应先写构造方法，再写字段；不要把字段放在类声明与构造方法之间。
+- 组件 API 注释使用 `///`，不要在公开类、字段、枚举说明上使用 `//`。
+- 如果新增了组件类或需要新增 API 生成入口，检查 `tdesign-component/demo_tool/all_build.sh` 是否已配置。
+- 组件内部颜色、圆角、阴影、字体等样式优先从 `TTheme.of(context)` 获取，不要硬编码。
+- 组件内部固定文案应统一走 `TResourceDelegate`，不要直接硬编码到组件实现里。

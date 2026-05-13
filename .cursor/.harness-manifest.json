@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "sourceRoot": ".harness/cursor",
+  "generatedAt": "2026-05-13T03:05:06.585Z",
+  "files": [
+    ".cursor/agents/acceptance-writer.md",
+    ".cursor/agents/docs-reviewer.md",
+    ".cursor/agents/flutter-issue-reviewer.md",
+    ".cursor/agents/flutter-verifier.md",
+    ".cursor/agents/issue-analyst.md",
+    ".cursor/rules/core/core-project.mdc",
+    ".cursor/rules/core/github-pr.mdc",
+    ".cursor/rules/core/issue-fix-process.mdc",
+    ".cursor/rules/core/requirements-acceptance-docs.mdc",
+    ".cursor/rules/flutter/flutter-issue-review.mdc",
+    ".cursor/rules/flutter/flutter-package.mdc",
+    ".cursor/rules/site/site-docs.mdc",
+    ".cursor/skills/component-workflow/SKILL.md",
+    ".cursor/skills/doc-sync/SKILL.md",
+    ".cursor/skills/issue-fix-entry/SKILL.md",
+    ".cursor/skills/issue-fix-workflow/SKILL.md",
+    ".cursor/skills/issue-fix-workflow/reference.md",
+    ".cursor/skills/release-checklist/SKILL.md",
+    "AGENTS.md"
+  ]
+}

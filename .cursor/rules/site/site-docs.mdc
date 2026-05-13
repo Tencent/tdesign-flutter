@@ -1,0 +1,13 @@
+---
+description: tdesign-site 文档内容与构建脚本约束
+globs: tdesign-site/**/*
+alwaysApply: false
+---
+
+# 站点文档协作规则
+
+- `tdesign-site/` 下的改动要和现有站点结构、包脚本以及 `site/site.config.mjs` 的路由方式保持一致。
+- 修改 onboarding 或 getting started 相关内容时，请记住根目录 `README.md` 与 `README_zh_CN.md` 才是源文件，下游同步由 `scripts/sync-readme.mjs` 负责。
+- **禁止**手工修改 `tdesign-site/src/<组件名>/README.md`（即 `tdesign-site/src/**/README.md`）：该类文件在站点**打包 / 同步**流程中自动生成，人工改动会在下次构建时被覆盖或产生无意义 diff。组件说明与 API 表应在对应**源**维护（例如 `tdesign-component` 示例、`demo_tool` 生成物、`example/assets/api` 等团队约定入口），由构建链路反映到站点。
+- 仓库级自动化放在根目录 `scripts/` 下，站点专属自动化放在 `tdesign-site/script/` 下。
+- 文档变更优先执行最小必要验证，例如对应的同步步骤或受影响范围内的站点构建命令。
