@@ -2,20 +2,34 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
+/// 悬浮按钮主题
 enum TFabTheme { primary, defaultTheme, light, danger }
 
+/// 悬浮按钮形状
 enum TFabShape {
-  circle, // 圆形
-  square // 矩形
+  /// 圆形
+  circle,
+
+  /// 矩形
+  square
 }
 
+/// 悬浮按钮尺寸
 enum TFabSize {
-  large, // 大
-  medium, // 中
-  small, // 小
-  extraSmall // 特小
+  /// 大
+  large,
+
+  /// 中
+  medium,
+
+  /// 小
+  small,
+
+  /// 特小
+  extraSmall
 }
 
+/// 悬浮按钮
 class TFab extends StatelessWidget {
   const TFab({
     Key? key,
@@ -24,6 +38,7 @@ class TFab extends StatelessWidget {
     this.size = TFabSize.large,
     this.text,
     this.onClick,
+    this.onLongPress,
     this.icon,
   }) : super(key: key);
 
@@ -44,6 +59,9 @@ class TFab extends StatelessWidget {
 
   /// 点击事件
   final VoidCallback? onClick;
+
+  /// 长按事件
+  final GestureLongPressCallback? onLongPress;
 
   bool get showText => text?.isNotEmpty ?? false;
 
@@ -97,13 +115,13 @@ class TFab extends StatelessWidget {
   Color getIconColor(BuildContext context) {
     switch (theme) {
       case TFabTheme.primary:
-        return Colors.white;
+        return TTheme.of(context).whiteColor1;
       case TFabTheme.defaultTheme:
         return TTheme.of(context).fontGyColor1;
       case TFabTheme.light:
         return TTheme.of(context).brandNormalColor;
       case TFabTheme.danger:
-        return Colors.white;
+        return TTheme.of(context).whiteColor1;
     }
   }
 
@@ -137,27 +155,12 @@ class TFab extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onClick,
+      onLongPress: onLongPress,
       child: Container(
         padding: getPadding(),
         decoration: BoxDecoration(
             color: getBackgroundColor(context),
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(0, 5),
-                  blurRadius: 2.5,
-                  spreadRadius: -1.5,
-                  color: Colors.black.withOpacity(0.1)),
-              BoxShadow(
-                  offset: const Offset(0, 8),
-                  blurRadius: 5,
-                  spreadRadius: 0.5,
-                  color: Colors.black.withOpacity(0.06)),
-              BoxShadow(
-                  offset: const Offset(0, 3),
-                  blurRadius: 7,
-                  spreadRadius: 1,
-                  color: Colors.black.withOpacity(0.05))
-            ],
+            boxShadow: TTheme.of(context).shadowsMiddle,
             borderRadius: shape == TFabShape.circle
                 ? BorderRadius.circular(TTheme.of(context).radiusCircle)
                 : BorderRadius.circular(TTheme.of(context).radiusDefault)),

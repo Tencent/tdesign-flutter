@@ -14,20 +14,31 @@ class TFabPage extends StatefulWidget {
 class _TFabPageState extends State<TFabPage> {
   bool showBorder = false;
 
+  void _onLongPressFab() {
+    TToast.showText('长按了悬浮按钮', context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: tTitle(), exampleCodeGroup: 'fab', children: [
-      ExampleModule(title: '组件类型', children: [
-        ExampleItem(desc: 'Icon Fab 纯图标悬浮按钮', builder: _buildPureIconFab),
-        ExampleItem(
-            desc: 'Icon Fab with Text 图标加文字悬浮按钮', builder: _buildTextFab)
-      ]),
-      ExampleModule(title: '组件状态', children: [
-        ExampleItem(desc: 'Fab Theme 悬浮按钮主题', builder: _buildThemeFab),
-        ExampleItem(desc: 'Fab Shape 悬浮按钮形状', builder: _buildShapeFab),
-        ExampleItem(desc: 'Fab Size 悬浮按钮尺寸', builder: _buildSizeFab)
-      ])
-    ]);
+    return ExamplePage(
+      title: tTitle(),
+      exampleCodeGroup: 'fab',
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: 'Icon Fab 纯图标悬浮按钮', builder: _buildPureIconFab),
+          ExampleItem(
+              desc: 'Icon Fab with Text 图标加文字悬浮按钮', builder: _buildTextFab)
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: 'Fab Theme 悬浮按钮主题', builder: _buildThemeFab),
+          ExampleItem(desc: 'Fab Shape 悬浮按钮形状', builder: _buildShapeFab),
+          ExampleItem(desc: 'Fab Size 悬浮按钮尺寸', builder: _buildSizeFab)
+        ])
+      ],
+      test: [
+        ExampleItem(desc: '长按事件', builder: _buildLongPressFab),
+      ],
+    );
   }
 
   @Demo(group: 'fab')
@@ -130,6 +141,17 @@ class _TFabPageState extends State<TFabPage> {
         ),
         'desc': 'extraSmall'
       },
+    ]);
+  }
+
+  @Demo(group: 'fab')
+  Widget _buildLongPressFab(BuildContext context) {
+    return _buildRowDemo([
+      TFab(
+        theme: TFabTheme.primary,
+        text: 'LongPress',
+        onLongPress: _onLongPressFab,
+      )
     ]);
   }
 
