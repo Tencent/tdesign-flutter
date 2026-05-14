@@ -14,7 +14,8 @@
 
 - 尽量使用 TD 已有组件而不是系统组件。
 - 检查空值与边界条件。
-- 是否补了验收用例，且需要的示例放在 `ExamplePage.test`。
+- **单元 / 集成测试**：是否在 `tdesign-component/test/`（等）补充或更新用例，用于锁定逻辑与回归。
+- **示例验收（Example）**：若需人工走查 UI/交互，是否在对应 `ExamplePage(..., test: [...])` 中补充 `ExampleItem`（与上一条目的不同，二者都需时不可互相替代）。
 - 是否提供了文档。
 
 ### 5.3 文档自检
@@ -24,7 +25,7 @@
 - 若组件有系统对应组件，检查是否遗漏系统组件已有能力。
 - `all_build.sh` 中的名称与 `tdesign-component/example/lib/config.dart` 保持一致。
 - **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物）；见 `rules/site/site-docs.mdc`。
-- 创建 PR 时正文按 `rules/core/github-pr.mdc` 与 `.harness/templates/issue-fix/pr-body.md.tpl`。
+- 创建 PR 时正文按 `rules/core/github-pr.mdc` 与 `.harness/templates/issue-fix/pr-body.md.tpl`；**优先**用 `git push` + `gh pr create` 自动发起，失败再提示本地操作（与 `issue-fix-workflow` 一致）。
 
 ## issue #924 示例
 
