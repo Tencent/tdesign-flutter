@@ -99,6 +99,10 @@ node scripts/init-cursor-harness.mjs
 
 在 commit 已就绪的前提下，**应先尝试** `git push -u origin <修复分支>`，再 `gh pr create --base develop --head <修复分支> --title "..." --body-file requirements/issue-*/pr-body.md`（分支已有 PR 时用 `gh pr view` 取链接即可）。**仅当 push 或 `gh pr create` 失败**时，再在回复中说明原因并给出用户需在本地完成的步骤（登录 `gh`、配置 fork、网页创建 PR 等）。成功时必须向用户交付 **PR 链接**。
 
+### 7.2 PR 提交后的下一步建议
+
+成功发起 PR 并给出链接后，收尾时**务必**向用户补充：等待该 PR 流水线构建 **demo APK**（或仓库文档中的等价产物）完成 → 下载安装做走查验收 → 若有问题在 PR / issue 反馈并继续修改迭代。详细表述见 [issue-fix-workflow/SKILL.md](../issue-fix-workflow/SKILL.md) 中的「PR 提交后的下一步建议」。
+
 ## 一键记忆口诀
 
-**读 issue → 开分支 → init requirements → 按 workflow 改 → check 通过 → code-review checklist → 提交并尽量自动开 PR（失败再提示本地操作）。**
+**读 issue → 开分支 → init requirements → 按 workflow 改 → check 通过 → code-review checklist → 提交并尽量自动开 PR（失败再提示本地操作）→ 提醒等待 demo APK 安装验收与反馈闭环。**
