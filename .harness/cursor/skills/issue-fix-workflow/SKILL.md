@@ -61,6 +61,7 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 2. **安装验收**：下载并安装上述 APK，按 `requirements/issue-*/test-cases.md` 与示例页场景做人工走查验收。
 3. **闭环修改**：若验收中发现问题，在 PR 或关联 issue 中反馈现象与复现路径，再回到本 workflow 做小步修复、推送更新分支并等待新一轮构建，直至验收通过。
 
+
 ## 输出要求
 
 执行结束时，至少应交付：
