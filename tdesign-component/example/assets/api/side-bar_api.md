@@ -1,20 +1,4 @@
 ## API
-### TSideBarItem
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badge | TBadge? | - | 徽标 |
-| disabled | bool | false | 是否禁用 |
-| icon | IconData? | - | 图标 |
-| key |  | - |  |
-| label | String | '' | 标签 |
-| textStyle | TextStyle? | - | 标签样式 |
-| value | int | -1 | 值 |
-
-```
-```
-
 ### TSideBar
 #### 默认构造方法
 
@@ -37,3 +21,19 @@
 | unSelectedBgColor | Color? | - | 未选择的背景颜色 |
 | unSelectedColor | Color? | - | 未选中颜色 |
 | value | int? | - | 选项值 |
+
+```
+```
+
+### TSideBarItem
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badge | TBadge? | - | 徽标 |
+| disabled | bool | false | 是否禁用 |
+| icon | IconData? | - | 图标 |
+| key |  | - |  |
+| label | String | '' | 标签 |
+| textStyle | TextStyle? | - | 标签样式 |
+| value | int | -1 | 值 |
