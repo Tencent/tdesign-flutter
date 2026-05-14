@@ -46,6 +46,7 @@ async function readText(relativePath) {
   return readFile(join(rootDir, relativePath), 'utf8');
 }
 
+
 function extractHeadings(markdown) {
   return markdown
     .split('\n')
@@ -119,6 +120,7 @@ async function main() {
   const failures = [];
   const warnings = [];
   const requirementsDir = String(args['requirements-dir']);
+
   const prBodyTemplate = await readText('.harness/templates/issue-fix/pr-body.md.tpl');
   const requiredDocs = {
     'TaskContract.md': [
@@ -132,6 +134,7 @@ async function main() {
     'test-cases.md': ['# 测试用例', '## TC-01'],
     'code-review-report.md': ['## 审查结论', '## 修改范围', '## 规范检查'],
     'acceptance-report.md': ['## 验收结论', '## 需求对照', '## 执行检查', '## 人工验收指引'],
+
     // PR body 必须严格遵循模板结构（见 .harness/templates/issue-fix/pr-body.md.tpl）
     'pr-body.md': [
       '### 🤔 这个 PR 的性质是？',
