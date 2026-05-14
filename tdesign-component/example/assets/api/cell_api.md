@@ -1,4 +1,43 @@
 ## API
+### TCell
+#### 简介
+单元格组件
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| align | TCellAlign? | TCellAlign.middle | 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom |
+| arrow | bool? | false | 是否显示右侧箭头 |
+| bordered | bool? | true | 是否显示下边框，仅在TCellGroup组件下起作用 |
+| description | String? | - | 下方内容描述文字 |
+| descriptionWidget | Widget? | - | 下方内容描述组件 |
+| disabled | bool? | false | 禁用 |
+| height | double? | - | 高度 |
+| hover | bool? | true | 是否开启点击反馈 |
+| image | ImageProvider? | - | 主图 |
+| imageCircle | double? | 50 | 主图圆角，默认50（圆形） |
+| imageSize | double? | - | 主图尺寸 |
+| imageWidget | Widget? | - | 主图组件 |
+| key |  | - |  |
+| leftIcon | IconData? | - | 左侧图标，出现在单元格标题的左侧 |
+| leftIconWidget | Widget? | - | 左侧图标组件 |
+| note | String? | - | 和标题同行的说明文字 |
+| noteMaxLine | int | 1 | 说明文字组件 最大行数 |
+| noteMaxWidth | double? | - | 说明文字组件 最大宽度，超过部分显示省略号，防止文字溢出 |
+| noteWidget | Widget? | - | 说明文字组件 |
+| onClick | TCellClick? | - | 点击事件 |
+| onLongPress | TCellClick? | - | 长按事件 |
+| required | bool? | false | 是否显示表单必填星号 |
+| rightIcon | IconData? | - | 最右侧图标 |
+| rightIconWidget | Widget? | - | 最右侧图标组件 |
+| showBottomBorder | bool? | false | 是否显示下边框（建议TCellGroup组件下false，避免与bordered重叠） |
+| style | TCellStyle? | - | 自定义样式 |
+| title | String? | - | 标题 |
+| titleWidget | Widget? | - | 标题组件 |
+
+```
+```
+
 ### TCellGroup
 #### 简介
 单元格组组件
@@ -52,42 +91,3 @@
 | 名称  | 说明 |
 | --- |  --- |
 | TCellStyle.cellStyle  | 生成单元格默认样式 |
-
-```
-```
-
-### TCell
-#### 简介
-单元格组件
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| align | TCellAlign? | TCellAlign.middle | 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom |
-| arrow | bool? | false | 是否显示右侧箭头 |
-| bordered | bool? | true | 是否显示下边框，仅在TCellGroup组件下起作用 |
-| description | String? | - | 下方内容描述文字 |
-| descriptionWidget | Widget? | - | 下方内容描述组件 |
-| disabled | bool? | false | 禁用 |
-| height | double? | - | 高度 |
-| hover | bool? | true | 是否开启点击反馈 |
-| image | ImageProvider? | - | 主图 |
-| imageCircle | double? | 50 | 主图圆角，默认50（圆形） |
-| imageSize | double? | - | 主图尺寸 |
-| imageWidget | Widget? | - | 主图组件 |
-| key |  | - |  |
-| leftIcon | IconData? | - | 左侧图标，出现在单元格标题的左侧 |
-| leftIconWidget | Widget? | - | 左侧图标组件 |
-| note | String? | - | 和标题同行的说明文字 |
-| noteMaxLine | int | 1 | 说明文字组件 最大行数 |
-| noteMaxWidth | double? | - | 说明文字组件 最大宽度，超过部分显示省略号，防止文字溢出 |
-| noteWidget | Widget? | - | 说明文字组件 |
-| onClick | TCellClick? | - | 点击事件 |
-| onLongPress | TCellClick? | - | 长按事件 |
-| required | bool? | false | 是否显示表单必填星号 |
-| rightIcon | IconData? | - | 最右侧图标 |
-| rightIconWidget | Widget? | - | 最右侧图标组件 |
-| showBottomBorder | bool? | false | 是否显示下边框（建议TCellGroup组件下false，避免与bordered重叠） |
-| style | TCellStyle? | - | 自定义样式 |
-| title | String? | - | 标题 |
-| titleWidget | Widget? | - | 标题组件 |
