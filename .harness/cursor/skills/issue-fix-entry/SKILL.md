@@ -95,6 +95,10 @@ node scripts/init-cursor-harness.mjs
 - PR 中关联 issue（链接或 `fixes #xxx`）。
 - **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物），见 [rules/site/site-docs.mdc](../rules/site/site-docs.mdc)。
 
+### 7.1 优先自动发起 PR
+
+在 commit 已就绪的前提下，**应先尝试** `git push -u origin <修复分支>`，再 `gh pr create --base develop --head <修复分支> --title "..." --body-file requirements/issue-*/pr-body.md`（分支已有 PR 时用 `gh pr view` 取链接即可）。**仅当 push 或 `gh pr create` 失败**时，再在回复中说明原因并给出用户需在本地完成的步骤（登录 `gh`、配置 fork、网页创建 PR 等）。成功时必须向用户交付 **PR 链接**。
+
 ## 一键记忆口诀
 
-**读 issue → 开分支 → init requirements → 按 workflow 改 → check 通过 → code-review checklist → 提交 PR。**
+**读 issue → 开分支 → init requirements → 按 workflow 改 → check 通过 → code-review checklist → 提交并尽量自动开 PR（失败再提示本地操作）。**
