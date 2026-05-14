@@ -16,7 +16,17 @@ class _TFabPageState extends State<TFabPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: tTitle(), exampleCodeGroup: 'fab', children: [
+    return ExamplePage(
+        title: tTitle(),
+        exampleCodeGroup: 'fab',
+        test: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: 'TFab onLongPress 长按回调',
+            builder: _buildLongPressFab,
+          ),
+        ],
+        children: [
       ExampleModule(title: '组件类型', children: [
         ExampleItem(desc: 'Icon Fab 纯图标悬浮按钮', builder: _buildPureIconFab),
         ExampleItem(
@@ -26,6 +36,9 @@ class _TFabPageState extends State<TFabPage> {
         ExampleItem(desc: 'Fab Theme 悬浮按钮主题', builder: _buildThemeFab),
         ExampleItem(desc: 'Fab Shape 悬浮按钮形状', builder: _buildShapeFab),
         ExampleItem(desc: 'Fab Size 悬浮按钮尺寸', builder: _buildSizeFab)
+      ]),
+      ExampleModule(title: '交互', children: [
+        ExampleItem(desc: 'Fab onLongPress 长按回调', builder: _buildLongPressFab),
       ])
     ]);
   }
@@ -97,6 +110,22 @@ class _TFabPageState extends State<TFabPage> {
         'desc': 'Square'
       },
     ]);
+  }
+
+  @Demo(group: 'fab')
+  Widget _buildLongPressFab(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: TFab(
+        theme: TFabTheme.primary,
+        text: '长按',
+        onLongPress: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('已长按')),
+          );
+        },
+      ),
+    );
   }
 
   @Demo(group: 'fab')
