@@ -58,8 +58,8 @@ node scripts/issue-workflow/init-issue-fix.mjs \
 从这一步起，**严格按** [issue-fix-workflow/SKILL.md](../issue-fix-workflow/SKILL.md) 执行，包括：
 
 - 在 `TaskContract.md`、`test-cases.md` 中写清根因、方案与用例后再改代码。
-- 实现、测试、`ExamplePage.test`（如适用）、API 与文档源（如适用）；**不要**手改 `tdesign-site/src/**/README.md`。
-- 按需委托子代理：`issue-analyst`、`flutter-issue-reviewer`、`acceptance-writer`（见 `.harness/cursor/agents/`）。
+- 实现与验证分两条：**单元/集成测试**（`tdesign-component/test/` 等，保证逻辑与回归）与 **示例验收**（`ExamplePage(..., test: [...])` 中的 `ExampleItem`，便于人工走查；后者不替代前者）；另有 API 与文档源时一并处理；**不要**手改 `tdesign-site/src/**/README.md`。
+- 按需委托子代理：`issue-analyst`、`flutter-issue-reviewer`、`code-review`、`acceptance-writer`（见 `.harness/cursor/agents/`）。**建议**：`check-issue-fix.mjs` 通过后再委托 `code-review` 做 checklist 复审。
 
 ## 5. 强制检查（必做，未通过不得收尾）
 
@@ -78,6 +78,10 @@ node scripts/issue-workflow/check-issue-fix.mjs \
 
 检查失败则修代码或文档后**重新运行**，直至通过。
 
+## 5.1 Checklist 复审（强烈建议）
+
+强制检查通过后，委托 **`code-review`** 子代理（`.harness/cursor/agents/code-review.md`）对照贡献指南与 workflow 全量 checklist 复审，并把结论写入 `requirements/issue-*/code-review-report.md`。脚本**不会**校验 `ExamplePage.test` 等项。
+
 ## 6. 同步 harness 到 Cursor（若刚改过 `.harness`）
 
 ```bash
@@ -91,6 +95,10 @@ node scripts/init-cursor-harness.mjs
 - PR 中关联 issue（链接或 `fixes #xxx`）。
 - **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物），见 [rules/site/site-docs.mdc](../rules/site/site-docs.mdc)。
 
+### 7.1 优先自动发起 PR
+
+在 commit 已就绪的前提下，**应先尝试** `git push -u origin <修复分支>`，再 `gh pr create --base develop --head <修复分支> --title "..." --body-file requirements/issue-*/pr-body.md`（分支已有 PR 时用 `gh pr view` 取链接即可）。**仅当 push 或 `gh pr create` 失败**时，再在回复中说明原因并给出用户需在本地完成的步骤（登录 `gh`、配置 fork、网页创建 PR 等）。成功时必须向用户交付 **PR 链接**。
+
 ## 一键记忆口诀
 
-**读 issue → 开分支 → init requirements → 按 workflow 改 → check 通过 → 提交 PR。**
+**读 issue → 开分支 → init requirements → 按 workflow 改 → check 通过 → code-review checklist → 提交并尽量自动开 PR（失败再提示本地操作）。**
