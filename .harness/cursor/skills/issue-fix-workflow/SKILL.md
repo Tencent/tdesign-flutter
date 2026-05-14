@@ -42,7 +42,6 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 7. 跑最小必要验证，再运行 `node scripts/issue-workflow/check-issue-fix.mjs ...` 做强制检查。
 8. **委托 `code-review` 子代理**（见 `.harness/cursor/agents/code-review.md`）：在脚本通过后对照 checklist 复审（含脚本未覆盖项：Example.test、文档与 requirements 一致性等）；将结论同步进 `code-review-report.md`，必要时返工后再跑步骤 7。
 9. 通过后补全 `code-review-report.md`、`acceptance-report.md` 与 `pr-body.md`（`pr-body.md` 须符合 `.harness/templates/issue-fix/pr-body.md.tpl` 结构，并遵守 `rules/core/github-pr.mdc` 的注意事项）。
-
 10. 最后提交 commit 并**优先自动创建 PR**（见下节「发起 PR」）；目标分支默认 **`develop`**；PR 正文以 `pr-body.md` 为底稿，提交前按 `github-pr` 规则删除说明注释并完成自查清单勾选。
 
 ## 发起 PR（优先自动化）
@@ -54,6 +53,14 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 
 **仅当 `git push` 或 `gh pr create` 失败**（无远端写权限、`gh` 未登录、网络错误、需走 fork 工作流等）时，才在回复中说明失败原因，并给出需用户本地执行的补救步骤（如 `gh auth login`、配置 fork remote、在网页端从分支创建 PR 等）。成功时应在收尾输出中给出 **PR 链接**。
 
+## PR 提交后的下一步建议
+
+在已成功发起 PR 并向用户交付 **PR 链接** 后，收尾回复中应**补充一段下一步建议**（与团队 CI 实际产物表述一致即可），例如：
+
+1. **等待构建**：关注该 PR 在 GitHub Actions（或仓库约定流水线）中的检查结果，待 **demo 示例 APK**（或等价产物名称）构建成功并完成归档/上传。
+2. **安装验收**：下载并安装上述 APK，按 `requirements/issue-*/test-cases.md` 与示例页场景做人工走查验收。
+3. **闭环修改**：若验收中发现问题，在 PR 或关联 issue 中反馈现象与复现路径，再回到本 workflow 做小步修复、推送更新分支并等待新一轮构建，直至验收通过。
+
 ## 输出要求
 
 执行结束时，至少应交付：
@@ -62,6 +69,7 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 - 代码改动与测试（含单元/集成测试；按需含 Example `test` 区块）
 - `requirements/issue-*/` 下的完整文档
 - PR 链接
+- **PR 提交后的下一步建议**（见上节「PR 提交后的下一步建议」，便于人类等待 demo APK 并安装验收、有问题再反馈迭代）
 
 ## 注意事项
 
