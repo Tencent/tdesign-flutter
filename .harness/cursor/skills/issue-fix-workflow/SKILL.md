@@ -42,7 +42,16 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 7. 跑最小必要验证，再运行 `node scripts/issue-workflow/check-issue-fix.mjs ...` 做强制检查。
 8. **委托 `code-review` 子代理**（见 `.harness/cursor/agents/code-review.md`）：在脚本通过后对照 checklist 复审（含脚本未覆盖项：Example.test、文档与 requirements 一致性等）；将结论同步进 `code-review-report.md`，必要时返工后再跑步骤 7。
 9. 通过后补全 `code-review-report.md`、`acceptance-report.md` 与 `pr-body.md`（`pr-body.md` 须符合 `.harness/templates/issue-fix/pr-body.md.tpl` 结构，并遵守 `rules/core/github-pr.mdc` 的注意事项）。
-10. 最后提交 commit 并创建 PR，目标分支默认是 `develop`；PR 正文以 `pr-body.md` 为底稿，提交前按 `github-pr` 规则删除说明注释并完成自查清单勾选。
+10. 最后提交 commit 并**优先自动创建 PR**（见下节「发起 PR」）；目标分支默认 **`develop`**；PR 正文以 `pr-body.md` 为底稿，提交前按 `github-pr` 规则删除说明注释并完成自查清单勾选。
+
+## 发起 PR（优先自动化）
+
+在本地 commit 完成后，**应先自行执行**（或由具备终端与 GitHub 权限的自动化执行），不要默认假定用户会手工开 PR：
+
+1. `git push -u origin <修复分支>`
+2. 若该分支尚无 PR：`gh pr create --base develop --head <修复分支> --title "<符合团队格式的标题>" --body-file requirements/issue-*/pr-body.md`（已存在 PR 时可用 `gh pr view` 确认链接即可）。
+
+**仅当 `git push` 或 `gh pr create` 失败**（无远端写权限、`gh` 未登录、网络错误、需走 fork 工作流等）时，才在回复中说明失败原因，并给出需用户本地执行的补救步骤（如 `gh auth login`、配置 fork remote、在网页端从分支创建 PR 等）。成功时应在收尾输出中给出 **PR 链接**。
 
 ## 输出要求
 
@@ -58,3 +67,4 @@ description: 处理 Tencent/tdesign-flutter 仓库中的 GitHub issue 修复流�
 - 如果工作区里有与当前 issue 无关的未提交改动，先让用户决定如何处理。
 - 若强制检查失败，不要跳过；修复后重新执行。
 - 如果自动化无法稳定判定某一项，必须在 `code-review-report.md` 或 `acceptance-report.md` 中明确写出人工复核结论。
+- **发起 PR**：默认定序为「尝试自动 push + `gh pr create` → 失败再提示本地操作」，避免把本可由代理完成的步骤默认推给用户。
