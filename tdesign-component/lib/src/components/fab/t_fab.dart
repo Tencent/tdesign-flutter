@@ -16,7 +16,13 @@ enum TFabSize {
   extraSmall // 特小
 }
 
-class TFab extends StatelessWidget {
+/// 长按态下在底色上叠一层半透明压暗，避免使用 Ink 水波纹带来的矩形裁切问题。
+Color _fabLongPressOverlay(BuildContext context, Color base) {
+  final overlay = TTheme.of(context).fontGyColor1.withOpacity(0.15);
+  return Color.alphaBlend(overlay, base);
+}
+
+class TFab extends StatefulWidget {
   const TFab({
     Key? key,
     this.theme = TFabTheme.defaultTheme,
@@ -49,10 +55,17 @@ class TFab extends StatelessWidget {
   /// 长按回调
   final VoidCallback? onLongPress;
 
-  bool get showText => text?.isNotEmpty ?? false;
+  @override
+  State<TFab> createState() => _TFabState();
+}
+
+class _TFabState extends State<TFab> {
+  bool _longPressHeld = false;
+
+  bool get showText => widget.text?.isNotEmpty ?? false;
 
   EdgeInsets getPadding() {
-    switch (size) {
+    switch (widget.size) {
       case TFabSize.large:
         return showText
             ? const EdgeInsets.symmetric(horizontal: 20, vertical: 12)
@@ -73,7 +86,7 @@ class TFab extends StatelessWidget {
   }
 
   double getMinWidthOrHeight() {
-    switch (size) {
+    switch (widget.size) {
       case TFabSize.large:
         return 48.0;
       case TFabSize.medium:
@@ -86,7 +99,7 @@ class TFab extends StatelessWidget {
   }
 
   Color getBackgroundColor(BuildContext context) {
-    switch (theme) {
+    switch (widget.theme) {
       case TFabTheme.primary:
         return TTheme.of(context).brandColor7;
       case TFabTheme.defaultTheme:
@@ -99,7 +112,7 @@ class TFab extends StatelessWidget {
   }
 
   Color getIconColor(BuildContext context) {
-    switch (theme) {
+    switch (widget.theme) {
       case TFabTheme.primary:
         return TTheme.of(context).textColorAnti;
       case TFabTheme.defaultTheme:
@@ -112,7 +125,7 @@ class TFab extends StatelessWidget {
   }
 
   double getIconSize() {
-    switch (size) {
+    switch (widget.size) {
       case TFabSize.large:
         return 24.0;
       case TFabSize.medium:
@@ -125,7 +138,7 @@ class TFab extends StatelessWidget {
   }
 
   double getFontSize() {
-    switch (size) {
+    switch (widget.size) {
       case TFabSize.large:
         return 16.0;
       case TFabSize.medium:
@@ -137,45 +150,69 @@ class TFab extends StatelessWidget {
     }
   }
 
+  BorderRadius _borderRadius(BuildContext context) {
+    return widget.shape == TFabShape.circle
+        ? BorderRadius.circular(TTheme.of(context).radiusCircle)
+        : BorderRadius.circular(TTheme.of(context).radiusDefault);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onClick,
-      onLongPress: onLongPress,
-      child: Container(
-        padding: getPadding(),
-        decoration: BoxDecoration(
-            color: getBackgroundColor(context),
+    final baseBg = getBackgroundColor(context);
+    final displayBg =
+        _longPressHeld ? _fabLongPressOverlay(context, baseBg) : baseBg;
+
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.onClick,
+        onLongPress: widget.onLongPress,
+        onLongPressStart: (_) {
+          if (widget.onLongPress != null) {
+            setState(() => _longPressHeld = true);
+          }
+        },
+        onLongPressEnd: (_) {
+          setState(() => _longPressHeld = false);
+        },
+        onLongPressCancel: () {
+          setState(() => _longPressHeld = false);
+        },
+        child: Container(
+          padding: getPadding(),
+          decoration: BoxDecoration(
+            color: displayBg,
             boxShadow: TTheme.of(context).shadowsMiddle ??
                 TTheme.of(context).shadowsBase ??
                 const <BoxShadow>[],
-            borderRadius: shape == TFabShape.circle
-                ? BorderRadius.circular(TTheme.of(context).radiusCircle)
-                : BorderRadius.circular(TTheme.of(context).radiusDefault)),
-        height: getMinWidthOrHeight(),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            icon ??
-                Icon(
-                  TIcons.add,
-                  size: getIconSize(),
-                  color: getIconColor(context),
+            borderRadius: _borderRadius(context),
+          ),
+          height: getMinWidthOrHeight(),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              widget.icon ??
+                  Icon(
+                    TIcons.add,
+                    size: getIconSize(),
+                    color: getIconColor(context),
+                  ),
+              if (showText) const SizedBox(width: 4),
+              if (showText)
+                TText(
+                  widget.text ?? '',
+                  style: TextStyle(
+                    height: 1.5,
+                    fontWeight: FontWeight.w600,
+                    fontSize: getFontSize(),
+                    color: getIconColor(context),
+                    leadingDistribution: TextLeadingDistribution.even,
+                  ),
                 ),
-            if (showText) const SizedBox(width: 4),
-            if (showText)
-              TText(
-                text ?? '',
-                style: TextStyle(
-                  height: 1.5,
-                  fontWeight: FontWeight.w600,
-                  fontSize: getFontSize(),
-                  color: getIconColor(context),
-                  leadingDistribution: TextLeadingDistribution.even,
-                ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
