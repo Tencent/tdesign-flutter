@@ -26,6 +26,8 @@
 - `all_build.sh` 中的名称与 `tdesign-component/example/lib/config.dart` 保持一致。
 - **不要**手工修改 `tdesign-site/src/**/README.md`（站点打包生成物）；见 `rules/site/site-docs.mdc`。
 - 创建 PR 时正文按 `rules/core/github-pr.mdc` 与 `.harness/templates/issue-fix/pr-body.md.tpl`；**优先**用 `git push` + `gh pr create` 自动发起，失败再提示本地操作（与 `issue-fix-workflow` 一致）。
+- PR 创建成功后：提醒用户等待 CI 构建 **demo APK**、安装验收，有问题再在 PR / issue 反馈并迭代（见 `issue-fix-workflow` 中「PR 提交后的下一步建议」）。
+
 
 ## issue #924 示例
 
