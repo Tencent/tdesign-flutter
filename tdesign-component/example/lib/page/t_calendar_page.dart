@@ -727,40 +727,51 @@ class _RangeTimePickerPanel extends StatefulWidget {
 }
 
 class _RangeTimePickerPanelState extends State<_RangeTimePickerPanel> {
-  late int _tab = widget.currentTab;
+  late int _tab;
+
+  @override
+  void initState() {
+    super.initState();
+    _tab = widget.currentTab;
+  }
+
+  @override
+  void didUpdateWidget(covariant _RangeTimePickerPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentTab != widget.currentTab) {
+      _tab = widget.currentTab;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Container(
-        decoration: _bottomCardDecoration(context),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TTabBar(
-              height: 40,
-              showIndicator: true,
-              tabs: const [
-                TTab(text: '开始时间'),
-                TTab(text: '结束时间'),
-              ],
-              onTap: (i) {
-                setState(() => _tab = i);
-                widget.onTabChanged(i);
-              },
-            ),
-            TPicker(
-              key: ValueKey(_tab),
-              items: widget.items,
-              initialValue: widget.initialValues[_tab],
-              height: 180,
-              itemCount: 5,
-              onChange: (v) =>
-                  widget.onPickerChanged(_tab, List<int>.from(v.values)),
-            ),
-          ],
-        ),
+    return Container(
+      decoration: _bottomCardDecoration(context),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TTabBar(
+            height: 40,
+            showIndicator: true,
+            tabs: const [
+              TTab(text: '开始时间'),
+              TTab(text: '结束时间'),
+            ],
+            onTap: (i) {
+              setState(() => _tab = i);
+              widget.onTabChanged(i);
+            },
+          ),
+          TPicker(
+            key: ValueKey(_tab),
+            items: widget.items,
+            initialValue: widget.initialValues[_tab],
+            height: 180,
+            itemCount: 5,
+            onChange: (v) =>
+                widget.onPickerChanged(_tab, List<int>.from(v.values)),
+          ),
+        ],
       ),
     );
   }
