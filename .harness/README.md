@@ -52,15 +52,16 @@ node scripts/issue-workflow/check-issue-fix.mjs --help
 4. 编写测试与必要检查
 5. 按规范实现代码
 6. 生成 `requirements/` 下的验收文档
-7. 执行强制检查
-8. 整理 PR
+7. 执行强制检查（`check-issue-fix.mjs`）
+8. **Checklist 复审**：委托 `code-review` 子代理对照贡献指南与脚本未覆盖项（如 `ExamplePage.test`）复核，并更新 `code-review-report.md`
+9. 整理 PR
 
 相关资产分布：
 
 - `.harness/cursor/skills/issue-fix-entry/`：**一键入口** skill（从 issue 链接到 init、检查、PR 的最短路径）
 - `.harness/cursor/skills/issue-fix-workflow/`：主流程 skill（详细步骤与注意事项）
 - `.harness/cursor/rules/`：issue 修复与 Flutter 代码规范规则
-- `.harness/cursor/agents/`：仅保留 issue 修复时会委托的三类子代理——`issue-analyst`、`flutter-issue-reviewer`、`acceptance-writer`
+- `.harness/cursor/agents/`：issue 修复常用子代理——`issue-analyst`、`flutter-issue-reviewer`、`code-review`（checklist 复审，建议在强制检查通过后委托）、`acceptance-writer`
 - `.harness/templates/issue-fix/`：`requirements/` 文档模板
 - `scripts/issue-workflow/`：初始化模板与强制检查脚本
 
@@ -73,4 +74,4 @@ node scripts/issue-workflow/check-issue-fix.mjs --help
 - 同步脚本会写入 `.cursor/.harness-manifest.json`，用于记录受管理的生成文件。
 - 默认只会覆盖或清理 manifest 管理的文件。
 - 仓库文档同步沿用现有的 `scripts/sync-readme.mjs` 流程（不再单独维护 `doc-sync` skill，避免与 issue 流程无关的上下文）。
-- issue workflow 的脚本面向“给定 issue 链接后由 AI 协助执行”的场景，强制检查只负责能被机器稳定判定的部分，仍需结合 code review 清单做人工复核。
+- issue workflow 的脚本面向“给定 issue 链接后由 AI 协助执行”的场景；**强制检查**只负责能被机器稳定判定的部分。**`code-review` 子代理**负责按 checklist 复核脚本未覆盖项（如 `ExamplePage.test`、requirements 与 PR 一致性）；二者串联使用。
