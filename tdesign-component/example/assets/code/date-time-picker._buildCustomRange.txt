@@ -1,0 +1,30 @@
+
+  Widget _buildCustomRange(BuildContext context) {
+    return TCell(
+      title: '自定义选择范围',
+      note: _formatResult(_rangeSelected),
+      arrow: true,
+      onClick: (_) {
+        _showPickerPopup(
+          context,
+          picker: TDateTimePicker(
+            mode: DateTimePickerMode.combined(
+              date: DateMode.date,
+              time: TimeMode.minute,
+            ),
+            title: '2024 ~ 2026',
+            start: DateTime(2024, 1, 1),
+            end: DateTime(2026, 12, 31, 23, 59),
+            defaultValue:
+                _rangeSelected?.toDateTime(fallback: _kReplayFallback) ??
+                    DateTime(2025, 6, 15, 12, 30),
+            onCancel: () => Navigator.of(context).pop(),
+            onConfirm: (result) {
+              setState(() => _rangeSelected = result);
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      },
+    );
+  }
