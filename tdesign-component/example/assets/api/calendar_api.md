@@ -7,7 +7,7 @@
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
 | bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，以浮层方式叠加在日历主体之上。 |
-| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。 |
+| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。**仅能在 [TCalendarPopup] 内使用。** |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 | dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
