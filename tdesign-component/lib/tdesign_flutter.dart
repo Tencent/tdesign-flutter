@@ -45,6 +45,7 @@ export 'src/components/message/t_message.dart';
 export 'src/components/navbar/t_nav_bar.dart';
 export 'src/components/notice_bar/t_notice_bar.dart';
 export 'src/components/notice_bar/t_notice_bar_style.dart';
+export 'src/components/date_time_picker/t_date_time_picker.dart';
 export 'src/components/picker/t_item_widget.dart';
 export 'src/components/picker/t_picker.dart';
 export 'src/components/picker/t_picker_items.dart';

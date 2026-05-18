@@ -124,13 +124,13 @@ class _SingleCalendarCellState extends State<_SingleCalendarCell> {
           visible: true,
           onConfirm: (value) => setState(() => _selected = value),
           onClose: () => _expanded.value = false,
-          child: TCalendar(
+          builder: (ctx) => TCalendar(
             title: '请选择日期',
             value: _selected,
             height: size.height * 0.6 + 176,
             bottomExpanded: _expanded,
             onCellClick: (value, type, tdate) => _expanded.value = true,
-            bottom: (ctx, dates) {
+            bottom: (bCtx, dates) {
               final d = dates.isEmpty
                   ? DateTime.now()
                   : DateTime.fromMillisecondsSinceEpoch(dates.first);
@@ -165,14 +165,14 @@ class _MultipleCalendarCellState extends State<_MultipleCalendarCell> {
           context,
           visible: true,
           onConfirm: (value) => setState(() => _dates = value),
-          child: TCalendar(
+          builder: (ctx) => TCalendar(
             title: '请选择日期',
             type: CalendarType.multiple,
             value: _dates.isEmpty
                 ? [DateTime.now().millisecondsSinceEpoch]
                 : _dates,
             height: size.height * 0.6 + 176,
-            bottom: (ctx, dates) => _MultipleSummary(selected: dates),
+            bottom: (bCtx, dates) => _MultipleSummary(selected: dates),
           ),
         );
       },
@@ -207,12 +207,12 @@ class _RangeCalendarCellState extends State<_RangeCalendarCell> {
           context,
           visible: true,
           onConfirm: (value) => setState(() => _dates = value),
-          child: TCalendar(
+          builder: (ctx) => TCalendar(
             title: '请选择日期区间',
             type: CalendarType.range,
             value: _dates,
             height: size.height * 0.6 + 176,
-            bottom: (ctx, dates) => _RangeSummary(selected: dates),
+            bottom: (bCtx, dates) => _RangeSummary(selected: dates),
           ),
         );
       },
@@ -229,23 +229,24 @@ class _SingleTimeCalendarCell extends StatefulWidget {
 }
 
 class _SingleTimeCalendarCellState extends State<_SingleTimeCalendarCell> {
-  late List<int> _selected = [
-    DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000,
-  ];
-  late final ValueNotifier<List<int>> _pickedTime;
-  late final TPickerColumns _timeItems = _buildTimeItems();
+  late List<int> _selected;
+  // 当前选中的时分（持久跨弹窗）
+  late int _hour;
+  late int _minute;
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
-    _pickedTime = ValueNotifier<List<int>>([now.hour, now.minute]);
-  }
-
-  @override
-  void dispose() {
-    _pickedTime.dispose();
-    super.dispose();
+    _hour = now.hour;
+    _minute = now.minute;
+    // 初始值就带上当前时分
+    _selected = [
+      DateTime.now()
+          .add(const Duration(days: 30))
+          .copyWith(hour: _hour, minute: _minute, second: 0, millisecond: 0)
+          .millisecondsSinceEpoch,
+    ];
   }
 
   @override
@@ -255,10 +256,14 @@ class _SingleTimeCalendarCellState extends State<_SingleTimeCalendarCell> {
     return TCell(
       title: '单个选择日历和时间',
       arrow: true,
-      note: '${d.year}-${d.month}-${d.day} '
+      note: '${d.year}-${d.month.toString().padLeft(2, '0')}-'
+          '${d.day.toString().padLeft(2, '0')} '
           '${d.hour.toString().padLeft(2, '0')}:'
           '${d.minute.toString().padLeft(2, '0')}',
       onClick: (_) {
+        // 弹窗内的时分状态，生命周期与弹窗绑定
+        var popupHour = _hour;
+        var popupMinute = _minute;
         TCalendarPopup(
           context,
           visible: true,
@@ -266,22 +271,31 @@ class _SingleTimeCalendarCellState extends State<_SingleTimeCalendarCell> {
             final merged = dates.map((ms) {
               return DateTime.fromMillisecondsSinceEpoch(ms)
                   .copyWith(
-                    hour: _pickedTime.value[0],
-                    minute: _pickedTime.value[1],
+                    hour: popupHour,
+                    minute: popupMinute,
+                    second: 0,
+                    millisecond: 0,
                   )
                   .millisecondsSinceEpoch;
             }).toList();
-            setState(() => _selected = merged);
+            setState(() {
+              _selected = merged;
+              _hour = popupHour;
+              _minute = popupMinute;
+            });
           },
-          child: TCalendar(
+          builder: (ctx) => TCalendar(
             title: '请选择日期和时间',
             value: _selected,
             height: size.height * 0.92,
-            bottom: (ctx, _) => _TimePickerPanel(
-              items: _timeItems,
-              initialValue: _pickedTime.value,
+            bottom: (_, __) => _TimePickerPanel(
+              initialHour: popupHour,
+              initialMinute: popupMinute,
               title: '选择时间',
-              onChange: (v) => _pickedTime.value = v,
+              onChange: (h, m) {
+                popupHour = h;
+                popupMinute = m;
+              },
             ),
           ),
         );
@@ -298,18 +312,24 @@ class _RangeTimeCalendarCell extends StatefulWidget {
 }
 
 class _RangeTimeCalendarCellState extends State<_RangeTimeCalendarCell> {
-  List<int> _dates = const [];
-  late List<List<int>> _pickedRangeTime;
-  int _currentTab = 0;
-  late final TPickerColumns _timeItems = _buildTimeItems();
+  late List<int> _dates;
+  // 持久跨弹窗的开始/结束时分
+  late List<int> _startTime;
+  late List<int> _endTime;
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
-    _pickedRangeTime = [
-      [now.hour, now.minute],
-      [now.hour, now.minute],
+    _startTime = [now.hour, now.minute];
+    _endTime = [now.hour, now.minute];
+    // 初始值就带上当前时分
+    _dates = [
+      now.copyWith(second: 0, millisecond: 0).millisecondsSinceEpoch,
+      now
+          .add(const Duration(days: 3))
+          .copyWith(second: 0, millisecond: 0)
+          .millisecondsSinceEpoch,
     ];
   }
 
@@ -323,43 +343,70 @@ class _RangeTimeCalendarCellState extends State<_RangeTimeCalendarCell> {
           ? '${_formatMdHm(_dates.first)} ~ ${_formatMdHm(_dates.last)}'
           : '--',
       onClick: (_) {
+        // 弹窗内的时分状态，生命周期与弹窗绑定
+        var popupStartTime = List<int>.from(_startTime);
+        var popupEndTime = List<int>.from(_endTime);
+        // GlobalKey 在 onClick 作用域内创建，与弹窗生命周期一致
+        final panelKey = GlobalKey<_RangeTimePickerPanelState>();
         TCalendarPopup(
           context,
           visible: true,
           onConfirm: (value) {
+            if (value.length < 2) {
+              return;
+            }
             final merged = [
-              for (var i = 0; i < value.length; i++)
-                DateTime.fromMillisecondsSinceEpoch(value[i])
-                    .copyWith(
-                      hour: _pickedRangeTime[i][0],
-                      minute: _pickedRangeTime[i][1],
-                    )
-                    .millisecondsSinceEpoch,
+              DateTime.fromMillisecondsSinceEpoch(value[0])
+                  .copyWith(
+                    hour: popupStartTime[0],
+                    minute: popupStartTime[1],
+                    second: 0,
+                    millisecond: 0,
+                  )
+                  .millisecondsSinceEpoch,
+              DateTime.fromMillisecondsSinceEpoch(value[1])
+                  .copyWith(
+                    hour: popupEndTime[0],
+                    minute: popupEndTime[1],
+                    second: 0,
+                    millisecond: 0,
+                  )
+                  .millisecondsSinceEpoch,
             ];
-            setState(() => _dates = merged);
+            setState(() {
+              _dates = merged;
+              _startTime = popupStartTime;
+              _endTime = popupEndTime;
+            });
           },
-          child: TCalendar(
-            title: '请选择日期和时间区间',
-            height: size.height * 0.92,
-            type: CalendarType.range,
-            value: _dates.isEmpty
-                ? [
-                    DateTime.now().millisecondsSinceEpoch,
-                    DateTime.now()
-                        .add(const Duration(days: 3))
-                        .millisecondsSinceEpoch,
-                  ]
-                : _dates,
-            bottom: (ctx, _) => _RangeTimePickerPanel(
-              items: _timeItems,
-              currentTab: _currentTab,
-              initialValues: _pickedRangeTime,
-              onTabChanged: (tab) => _currentTab = tab,
-              onPickerChanged: (tab, value) {
-                _pickedRangeTime[tab] = value;
+          builder: (ctx) {
+            return TCalendar(
+              title: '请选择日期和时间区间',
+              height: size.height * 0.92,
+              type: CalendarType.range,
+              value: _dates,
+              // 点击开始日期 → 切到「开始时间」tab；点击结束日期 → 切到「结束时间」tab
+              onCellClick: (value, type, tdate) {
+                if (type == DateSelectType.start) {
+                  panelKey.currentState?.switchTab(0);
+                } else if (type == DateSelectType.end) {
+                  panelKey.currentState?.switchTab(1);
+                }
               },
-            ),
-          ),
+              bottom: (_, __) => _RangeTimePickerPanel(
+                key: panelKey,
+                initialStartTime: popupStartTime,
+                initialEndTime: popupEndTime,
+                onChanged: (isStart, h, m) {
+                  if (isStart) {
+                    popupStartTime = [h, m];
+                  } else {
+                    popupEndTime = [h, m];
+                  }
+                },
+              ),
+            );
+          },
         );
       },
     );
@@ -390,7 +437,7 @@ class _AnchorCalendarCellState extends State<_AnchorCalendarCell> {
           context,
           visible: true,
           onConfirm: (dates) => setState(() => _selected = dates),
-          child: TCalendar(
+          builder: (ctx) => TCalendar(
             title: '请选择日期',
             minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
             maxDate: DateTime(2028, 2, 15).millisecondsSinceEpoch,
@@ -422,7 +469,8 @@ String _formatYmd(List<int> dates) {
     return '--';
   }
   final d = DateTime.fromMillisecondsSinceEpoch(dates.first);
-  return '${d.year}-${d.month}-${d.day}';
+  return '${d.year}-${d.month.toString().padLeft(2, '0')}-'
+      '${d.day.toString().padLeft(2, '0')}';
 }
 
 String _formatMd(int ms) {
@@ -676,71 +724,106 @@ class _RangeSegment extends StatelessWidget {
   }
 }
 
-class _TimePickerPanel extends StatelessWidget {
+class _TimePickerPanel extends StatefulWidget {
   const _TimePickerPanel({
-    required this.items,
-    required this.initialValue,
+    required this.initialHour,
+    required this.initialMinute,
     required this.title,
     required this.onChange,
   });
 
-  final TPickerColumns items;
-  final List<int> initialValue;
+  final int initialHour;
+  final int initialMinute;
   final String title;
-  final ValueChanged<List<int>> onChange;
+  final void Function(int hour, int minute) onChange;
+
+  @override
+  State<_TimePickerPanel> createState() => _TimePickerPanelState();
+}
+
+class _TimePickerPanelState extends State<_TimePickerPanel> {
+  late final TPickerColumns _items;
+  late final List<dynamic> _initialValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _items = _buildTimeItems();
+    _initialValue = [widget.initialHour, widget.initialMinute];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: _bottomCardDecoration(context),
       child: TPicker(
-        items: items,
-        initialValue: initialValue,
+        items: _items,
+        initialValue: _initialValue,
         height: 180,
         itemCount: 5,
-        title: title,
-        onChange: (v) => onChange(List<int>.from(v.values)),
+        title: widget.title,
+        onChange: (v) {
+          final values = v.values;
+          if (values.length >= 2 && values[0] is int && values[1] is int) {
+            widget.onChange(values[0] as int, values[1] as int);
+          }
+        },
       ),
     );
   }
 }
 
 /// 区间+时间 demo 的双时间选择器面板（Tab 切换开始/结束）
-/// 使用回调模式：子组件不持有 ValueNotifier，数据由父管理。
 class _RangeTimePickerPanel extends StatefulWidget {
   const _RangeTimePickerPanel({
-    required this.items,
-    required this.currentTab,
-    required this.initialValues,
-    required this.onTabChanged,
-    required this.onPickerChanged,
+    super.key,
+    required this.initialStartTime,
+    required this.initialEndTime,
+    required this.onChanged,
   });
 
-  final TPickerColumns items;
-  final int currentTab;
-  final List<List<int>> initialValues;
-  final ValueChanged<int> onTabChanged;
-  final void Function(int tab, List<int> value) onPickerChanged;
+  final List<int> initialStartTime;
+  final List<int> initialEndTime;
+  final void Function(bool isStart, int hour, int minute) onChanged;
 
   @override
   State<_RangeTimePickerPanel> createState() => _RangeTimePickerPanelState();
 }
 
-class _RangeTimePickerPanelState extends State<_RangeTimePickerPanel> {
-  late int _tab;
+class _RangeTimePickerPanelState extends State<_RangeTimePickerPanel>
+    with SingleTickerProviderStateMixin {
+  late final TPickerColumns _items;
+  late final TabController _tabController;
+  int _tab = 0;
+  // 缓存用户在每个 tab 上最后选择的时分，不依赖 widget props 重置
+  late List<int> _startSelected;
+  late List<int> _endSelected;
 
   @override
   void initState() {
     super.initState();
-    _tab = widget.currentTab;
+    _items = _buildTimeItems();
+    _tabController = TabController(length: 2, vsync: this);
+    _startSelected = List<int>.from(widget.initialStartTime);
+    _endSelected = List<int>.from(widget.initialEndTime);
   }
 
   @override
-  void didUpdateWidget(covariant _RangeTimePickerPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentTab != widget.currentTab) {
-      _tab = widget.currentTab;
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  List<dynamic> get _currentInitialValue =>
+      _tab == 0 ? _startSelected : _endSelected;
+
+  /// 由外部（日历 onCellClick）驱动切换 tab
+  void switchTab(int tab) {
+    if (_tab == tab) {
+      return;
     }
+    setState(() => _tab = tab);
+    _tabController.animateTo(tab);
   }
 
   @override
@@ -753,23 +836,33 @@ class _RangeTimePickerPanelState extends State<_RangeTimePickerPanel> {
           TTabBar(
             height: 40,
             showIndicator: true,
+            controller: _tabController,
             tabs: const [
               TTab(text: '开始时间'),
               TTab(text: '结束时间'),
             ],
-            onTap: (i) {
-              setState(() => _tab = i);
-              widget.onTabChanged(i);
-            },
+            onTap: (i) => setState(() => _tab = i),
           ),
           TPicker(
             key: ValueKey(_tab),
-            items: widget.items,
-            initialValue: widget.initialValues[_tab],
+            items: _items,
+            initialValue: _currentInitialValue,
             height: 180,
             itemCount: 5,
-            onChange: (v) =>
-                widget.onPickerChanged(_tab, List<int>.from(v.values)),
+            onChange: (v) {
+              final values = v.values;
+              if (values.length >= 2 && values[0] is int && values[1] is int) {
+                final h = values[0] as int;
+                final m = values[1] as int;
+                // 缓存当前 tab 的选中值，切回 tab 时恢复位置
+                if (_tab == 0) {
+                  _startSelected = [h, m];
+                } else {
+                  _endSelected = [h, m];
+                }
+                widget.onChanged(_tab == 0, h, m);
+              }
+            },
           ),
         ],
       ),
