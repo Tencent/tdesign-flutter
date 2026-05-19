@@ -834,7 +834,13 @@ class _TCalendarState extends State<TCalendar> {
         // range 仍走老路径：state 决策 start/end，刷新 value，触发 body 重建。
         final resolved = _resolveRangeSelection([curDate]);
         _emitSelection(resolved, rebuild: true);
-        widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        // 上抛点击时已根据 resolved 推导出本次的语义类型（start / end），
+        // 这样调用方无需等到 body 重建后再读 typeNotifier，可直接用于
+        // 切换关联 UI（如时间选择器 Tab）。
+        final reportedType = resolved.length >= 2 && resolved[1] == curDate
+            ? DateSelectType.end
+            : DateSelectType.start;
+        widget.onCellClick?.call(curDate, reportedType, tdate);
         break;
     }
   }
