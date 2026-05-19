@@ -234,7 +234,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
   Widget _buildDefaultCell(
       BuildContext context, TDate tdate, TCalendarStyle cellStyle) {
     // 根据 dateType 和 showLunarInfo 决定显示内容
-    String mainText = widget.tdate!.date.day.toString();
+    var mainText = widget.tdate!.date.day.toString();
     String? subText;
 
     if (widget.dateType == TCalendarDateType.lunar && tdate.lunarInfo != null) {
@@ -245,16 +245,13 @@ class _TCalendarCellState extends State<TCalendarCell> {
         widget.showLunarInfo) {
       // 阳历模式+显示农历信息
       mainText = widget.tdate!.date.day.toString();
-      
+
       // 优先级：节日 > 节气 > 农历日期
       if (tdate.festival != null && tdate.festival!.isNotEmpty) {
-        // 显示节日
         subText = tdate.festival;
       } else if (tdate.solarTerm != null && tdate.solarTerm!.isNotEmpty) {
-        // 显示节气
         subText = tdate.solarTerm;
       } else if (tdate.lunarInfo != null) {
-        // 显示农历日期
         subText = tdate.lunarInfo!.dayText;
       }
     }

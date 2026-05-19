@@ -2,12 +2,14 @@
 ### TCalendar
 #### 默认构造方法
 
+按照日历形式展示数据或日期的容器，支持内嵌和弹窗两种模式。
+
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
-| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，以浮层方式叠加在日历主体之上。 |
-| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。**仅能在 [TCalendarPopup] 内使用。** |
+| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，以浮层方式叠加在日历主体之上。**仅能在 Popup 内使用。** |
+| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。**仅能在 Popup 内使用。** |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 | dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
@@ -17,8 +19,8 @@
 | format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
 | height | double? | - | 高度 |
 | key |  | - |  |
-| maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认半年后 |
-| minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认今天 |
+| maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认 2100-12-31 |
+| minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认 1970-01-01 |
 | monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
 | monthTitleHeight | double? | 22 | 月标题高度 |
 | onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
@@ -38,20 +40,54 @@
 ```
 ```
 
-### TCalendarPopup
-#### 默认构造方法
+### TCalendar.showPopup
+#### 静态方法
+
+弹出日历选择器，返回选中的日期列表。取消或关闭弹窗时返回 `null`；点击确认时返回选中日期的毫秒时间戳列表。
+
+```dart
+final result = await TCalendar.showPopup(
+  context,
+  title: '请选择日期',
+  type: CalendarType.single,
+);
+if (result != null) {
+  print('选中了: $result');
+}
+```
+
+若需完全自定义布局，请直接使用 `TCalendar` + `TPopupBottomDisplayPanel` + `TSlidePopupRoute` 自行组装。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoClose | bool? | true | 是否在点击关闭按钮、确认按钮或遮罩层时自动关闭弹窗（默认 true） |
-| builder | CalendarBuilder? | - | 日历构建器，优先级高于 [child] |
-| child | TCalendar? | - | 日历控件，当 [builder] 为 null 时使用 |
-| confirmBtn | Widget? | - | 自定义确认按钮；为 null 时使用默认主色 [TButton] |
-| context | BuildContext | context | 触发 popup 时的根 context，用于 [Navigator.of] 查找并 push 弹窗路由 |
-| onClose | VoidCallback? | - | 弹窗关闭后回调 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时回调，参数为当前选中的日期时间戳列表（毫秒） |
-| top | double? | - | 弹窗顶部距离屏幕顶部的偏移量 |
-| visible | bool? | - | 是否在构造时立即调用 [show] 打开弹窗（默认 false） |
+| context | BuildContext | - | 必填，触发 popup 时的 context |
+| title | String? | - | 弹窗标题 |
+| type | CalendarType | CalendarType.single | 日历选择类型 |
+| value | List<int>? | - | 当前选中的日期（毫秒时间戳列表） |
+| minDate | int? | - | 最小可选日期（毫秒时间戳），不传则默认 1970-01-01 |
+| maxDate | int? | - | 最大可选日期（毫秒时间戳），不传则默认 2100-12-31 |
+| anchorDate | DateTime? | - | 锚点日期，弹出时滚动到该月 |
+| fixedHeight | double? | - | 面板固定高度（不传时自动计算） |
+| firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
+| displayFormat | String? | 'year month' | 年月显示格式 |
+| cellHeight | double? | 60 | 日期高度 |
+| style | TCalendarStyle? | - | 自定义样式 |
+| format | CalendarFormat? | - | 用于格式化日期的函数 |
+| bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器 |
+| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式） |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| onConfirm | void Function(List<int>)? | - | 点击确认的额外回调 |
+| onClose | VoidCallback? | - | 弹窗关闭后的回调 |
+| onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
+| onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长按日期时触发 |
+| autoClose | bool | true | 点击遮罩或物理返回是否关闭 |
+| draggable | bool | false | 面板是否可拖动 |
+| cellWidget | Widget? Function(BuildContext, TDate, DateSelectType)? | - | 自定义日期单元格组件 |
+| dateType | TCalendarDateType | TCalendarDateType.solar | 日历类型：阳历或农历 |
+| dataSource | TCalendarDataSource? | - | 外部数据源 |
+| showLunarInfo | bool | false | 阳历模式下是否显示农历信息 |
+| onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
+| monthTitleBuilder | Widget Function(BuildContext, DateTime)? | - | 月标题构建器 |
 
 ```
 ```
@@ -71,6 +107,7 @@
 | titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
 | titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
 | titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
+| todayStyle | TextStyle? | - | 当天日期样式 |
 | weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
 
 
@@ -85,6 +122,11 @@
 ```
 
 ### TCalendarDataSource
+
+日历数据源抽象类，用于提供农历、节气、节日、假期等附加信息。
+
+继承此类并实现相应方法即可为日历添加农历支持。参考 `LunarDataSourceExample`。
+
 ```
 ```
 

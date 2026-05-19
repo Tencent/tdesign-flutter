@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
 
-class TCalendarBody extends StatelessWidget {
+class TCalendarBody extends StatefulWidget {
   const TCalendarBody({
     Key? key,
     this.maxDate,
@@ -60,86 +57,145 @@ class TCalendarBody extends StatelessWidget {
   final TCalendarDataSource? dataSource;
 
   @override
-  Widget build(BuildContext context) {
-    final scrollController = TrackingScrollController();
-    final min = _getDefDate(minDate);
-    final max = _getDefDate(maxDate, 6);
-    final months = _monthsBetween(min, max);
-    final data = <DateTime, List<TDate?>>{};
-    final monthHeight = <int, double>{};
-    DateTime? _lastPrintMonth;
-    scrollController.addListener(() {
-      // 根据滚动位置判断当前是几月
-      var currentOffset = 0.0;
-      for (var i = 0; i < months.length; i++) {
-        final mh = _getMonthHeight(months, i, monthHeight);
-        if (scrollController.offset >= currentOffset &&
-            scrollController.offset < currentOffset + mh) {
-          //只返回下一个月
-          DateTime currentMonth = months[i + 1];
-          // 缓存上一次打印的月份，只有变更时才打印
+  State<TCalendarBody> createState() => _TCalendarBodyState();
+}
+
+class _TCalendarBodyState extends State<TCalendarBody> {
+  late final ScrollController _scrollController;
+  DateTime? _lastPrintMonth;
+  final _data = <DateTime, List<TDate?>>{};
+  final _monthHeight = <int, double>{};
+  late List<DateTime> _months;
+  late DateTime _min;
+  late DateTime _max;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    _initMonths();
+    _scrollToItem();
+  }
+
+  @override
+  void didUpdateWidget(covariant TCalendarBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.minDate != widget.minDate ||
+        oldWidget.maxDate != widget.maxDate) {
+      _monthHeight.clear();
+      _data.clear();
+      _lastPrintMonth = null;
+      _initMonths();
+    }
+    if (oldWidget.anchorDate != widget.anchorDate ||
+        oldWidget.value != widget.value) {
+      _scrollToItem();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _initMonths() {
+    _min = _getDefDate(widget.minDate);
+    _max = _getDefDate(widget.maxDate, true);
+    _months = _monthsBetween(_min, _max);
+  }
+
+  int? _lastCleanupIndex;
+
+  void _onScroll() {
+    var currentOffset = 0.0;
+    for (var i = 0; i < _months.length; i++) {
+      final mh = _getMonthHeight(_months, i, _monthHeight);
+      if (_scrollController.offset >= currentOffset &&
+          _scrollController.offset < currentOffset + mh) {
+        if (i + 1 < _months.length) {
+          final currentMonth = _months[i + 1];
           if (_lastPrintMonth == null ||
               !_lastPrintMonth!.isAtSameMomentAs(currentMonth)) {
             _lastPrintMonth = currentMonth;
-            onMonthChange?.call(currentMonth);
+            widget.onMonthChange?.call(currentMonth);
           }
-          break;
         }
-        currentOffset += mh;
+        _cleanupCache(i);
+        break;
       }
-    });
-    _scrollToItem(scrollController, months, monthHeight);
+      currentOffset += mh;
+    }
+  }
+
+  /// 清理距离当前可见月份过远的缓存数据，避免在 itemBuilder 中执行副作用。
+  void _cleanupCache(int currentIndex) {
+    if (_lastCleanupIndex == currentIndex) {
+      return;
+    }
+    _lastCleanupIndex = currentIndex;
+    final keysToRemove = <DateTime>[];
+    final keyList = [..._data.keys];
+    for (var i = 0; i < keyList.length; i++) {
+      final monthIdx = _months.indexOf(keyList[i]);
+      if (monthIdx < currentIndex - 10 || monthIdx > currentIndex + 10) {
+        keysToRemove.add(keyList[i]);
+      }
+    }
+    for (final key in keysToRemove) {
+      _data.remove(key);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.all(bodyPadding),
-      controller: scrollController,
-      itemCount: months.length,
+      padding: EdgeInsets.all(widget.bodyPadding),
+      controller: _scrollController,
+      itemCount: _months.length,
       itemExtentBuilder: (index, dimensions) =>
-          _getMonthHeight(months, index, monthHeight),
+          _getMonthHeight(_months, index, _monthHeight),
       itemBuilder: (context, index) {
-        final monthDate = months[index];
+        final monthDate = _months[index];
         final monthYear = monthDate.year.toString() + context.resource.year;
-        final monthMonth = monthNames[monthDate.month - 1];
-        final monthDateText = displayFormat
+        final monthMonth = widget.monthNames[monthDate.month - 1];
+        final monthDateText = widget.displayFormat
             .replaceFirst('year', monthYear)
             .replaceFirst('month', monthMonth);
         late List<TDate?> monthData;
-        if (data.containsKey(monthDate)) {
-          monthData = data[monthDate]!;
+        if (_data.containsKey(monthDate)) {
+          monthData = _data[monthDate]!;
         } else {
-          monthData = data[monthDate] = _getDaysInMonth(monthDate, min, max);
+          monthData = _data[monthDate] =
+              _getDaysInMonth(monthDate, _min, _max);
         }
 
-        final keyList = [...data.keys];
-        final currentIndex = keyList.indexOf(monthDate);
-        keyList.forEachWidthIndex((key, index) {
-          if (index < currentIndex - 10 || index > currentIndex + 10) {
-            // 保留最近 10 个月的数据，防止内存泄露
-            data.remove(key);
-          }
-        });
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: monthTitleHeight,
-              child: monthTitleBuilder?.call(context, monthDate) ??
-                  TText(monthDateText, style: monthTitleStyle),
+              height: widget.monthTitleHeight,
+              child: widget.monthTitleBuilder?.call(context, monthDate) ??
+                  TText(monthDateText, style: widget.monthTitleStyle),
             ),
             ...List.generate(
               (monthData.length / 7).ceil(),
               (rowIndex) => [
-                SizedBox(height: verticalGap),
+                SizedBox(height: widget.verticalGap),
                 Row(
                   children: [
                     for (int colIndex = 0; colIndex < 7; colIndex++) ...[
-                      if (colIndex != 0) SizedBox(width: verticalGap / 2),
+                      if (colIndex != 0)
+                        SizedBox(width: widget.verticalGap / 2),
                       Expanded(
-                        child: builder(
+                        child: widget.builder(
                           (rowIndex * 7 + colIndex < monthData.length)
                               ? monthData[rowIndex * 7 + colIndex]
                               : null,
                           monthData,
-                          data,
+                          _data,
                           rowIndex,
                           colIndex,
                         ),
@@ -149,60 +205,62 @@ class TCalendarBody extends StatelessWidget {
                 ),
               ],
             ).expand((element) => element).toList(),
-            SizedBox(height: index == months.length - 1 ? 0 : bodyPadding),
+            SizedBox(
+                height: index == _months.length - 1 ? 0 : widget.bodyPadding),
           ],
         );
       },
     );
   }
 
-  void _scrollToItem(ScrollController scrollController, List<DateTime> months,
-      Map<int, double> monthHeight) {
-    DateTime? scrollToDate = anchorDate;
+  void _scrollToItem() {
+    var scrollToDate = widget.anchorDate;
     if (scrollToDate == null) {
-      if (value == null || value!.isEmpty) {
+      if (widget.value == null || widget.value!.isEmpty) {
         return;
       }
-      scrollToDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
+      scrollToDate = widget.value!.reduce((a, b) => a.isBefore(b) ? a : b);
     }
-    var lastMonthDay = DateTime(months.last.year, months.last.month + 1);
+    var lastMonthDay = DateTime(_months.last.year, _months.last.month + 1);
     lastMonthDay = lastMonthDay.add(const Duration(days: -1));
-    if (months.first.isAfter(scrollToDate) || lastMonthDay.isBefore(scrollToDate)) {
+    if (_months.first.isAfter(scrollToDate) ||
+        lastMonthDay.isBefore(scrollToDate)) {
       return;
     }
+    final targetDate = scrollToDate;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
       var height = 0.0;
-      for (var i = 0; i < months.length; i++) {
-        final item = months[i];
-        if (item.year == scrollToDate!.year && item.month == scrollToDate!.month) {
+      for (var i = 0; i < _months.length; i++) {
+        final item = _months[i];
+        if (item.year == targetDate.year && item.month == targetDate.month) {
           break;
         }
-        height += (_getMonthHeight(months, i, monthHeight) ?? 0);
+        height += _getMonthHeight(_months, i, _monthHeight);
       }
       if (height <= 0) {
         return;
       }
-      if (animateTo) {
-        scrollController.animateTo(
+      if (widget.animateTo) {
+        _scrollController.animateTo(
           height,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
         );
       } else {
-        scrollController.jumpTo(height);
+        _scrollController.jumpTo(height);
       }
     });
   }
 
-  DateTime _getDefDate(int? date, [int? addMonth]) {
-    final now = date == null
-        ? DateTime.now()
-        : DateTime.fromMillisecondsSinceEpoch(date);
-    if (addMonth == null) {
-      return DateTime(now.year, now.month, now.day);
+  DateTime _getDefDate(int? date, [bool isMax = false]) {
+    if (date != null) {
+      final d = DateTime.fromMillisecondsSinceEpoch(date);
+      return DateTime(d.year, d.month, d.day);
     }
-    final month = now.month + addMonth;
-    return DateTime(now.year, date == null ? month : now.month, now.day);
+    return isMax ? DateTime(2100, 12, 31) : DateTime(1970);
   }
 
   List<DateTime> _monthsBetween(DateTime min, DateTime max) {
@@ -225,24 +283,29 @@ class TCalendarBody extends StatelessWidget {
       var selectType = DateSelectType.empty;
       if (date.compareTo(min) == -1 || date.compareTo(max) == 1) {
         selectType = DateSelectType.disabled;
-      } else if (type == CalendarType.single && (value?.length ?? 0) >= 1) {
-        if (date.compareTo(value![0]) == 0) {
+      } else if (widget.type == CalendarType.single &&
+          (widget.value?.length ?? 0) >= 1) {
+        if (date.compareTo(widget.value![0]) == 0) {
           selectType = DateSelectType.selected;
         }
-      } else if (type == CalendarType.multiple && value != null) {
-        if (value!.isContains((e) => date.compareTo(e) == 0)) {
+      } else if (widget.type == CalendarType.multiple &&
+          widget.value != null) {
+        if (widget.value!.isContains((e) => date.compareTo(e) == 0)) {
           selectType = DateSelectType.selected;
         }
-      } else if (type == CalendarType.range && (value?.length ?? 0) >= 1) {
-        final end = (value?.length ?? 0) > 1 ? value![1] : null;
-        if (date.compareTo(value![0]) == 0) {
+      } else if (widget.type == CalendarType.range &&
+          (widget.value?.length ?? 0) >= 1) {
+        final end =
+            (widget.value?.length ?? 0) > 1 ? widget.value![1] : null;
+        if (date.compareTo(widget.value![0]) == 0) {
           selectType = DateSelectType.start;
         }
-        if (end != null && value![0].compareTo(end) < 0) {
+        if (end != null && widget.value![0].compareTo(end) < 0) {
           if (date.compareTo(end) == 0) {
             selectType = DateSelectType.end;
           }
-          if (date.compareTo(value![0]) == 1 && date.compareTo(end) == -1) {
+          if (date.compareTo(widget.value![0]) == 1 &&
+              date.compareTo(end) == -1) {
             selectType = DateSelectType.centre;
           }
         }
@@ -252,11 +315,11 @@ class TCalendarBody extends StatelessWidget {
       String? solarTerm;
       String? festival;
       Map<String, String>? holidayInfo;
-      if (dataSource != null) {
-        lunarInfo = dataSource!.getLunarInfo(date);
-        solarTerm = dataSource!.getSolarTerm(date);
-        festival = dataSource!.getFestival(date, lunarInfo);
-        holidayInfo = dataSource!.getHolidayInfo(date);
+      if (widget.dataSource != null) {
+        lunarInfo = widget.dataSource!.getLunarInfo(date);
+        solarTerm = widget.dataSource!.getSolarTerm(date);
+        festival = widget.dataSource!.getFestival(date, lunarInfo);
+        holidayInfo = widget.dataSource!.getHolidayInfo(date);
       }
       daysInMonth.add(TDate(
         date: date,
@@ -270,7 +333,9 @@ class TCalendarBody extends StatelessWidget {
     }
     var sufOffset = 7 - daysInMonth.length % 7;
     sufOffset = sufOffset == 7 ? 0 : sufOffset;
-    List.generate(sufOffset, (index) => daysInMonth.add(null));
+    for (var i = 0; i < sufOffset; i++) {
+      daysInMonth.add(null);
+    }
     return daysInMonth;
   }
 
@@ -279,7 +344,7 @@ class TCalendarBody extends StatelessWidget {
     final month = date.month;
     var dayOneWeek = DateTime(year, month).weekday;
     dayOneWeek = dayOneWeek == 7 ? 0 : dayOneWeek;
-    var preOffset = dayOneWeek - firstDayOfWeek;
+    var preOffset = dayOneWeek - widget.firstDayOfWeek;
     preOffset = preOffset < 0 ? preOffset + 7 : preOffset;
     return preOffset;
   }
@@ -298,9 +363,9 @@ class TCalendarBody extends StatelessWidget {
     final preOffset = _getPreOffset(item);
     final daysInMonthCount = DateTime(item.year, item.month + 1, 0).day;
     final daysInMonth = preOffset + daysInMonthCount;
-    final height = monthTitleHeight +
-        (daysInMonth / 7).ceil() * (verticalGap + cellHeight) +
-        (isLast ? 0 : bodyPadding);
+    final height = widget.monthTitleHeight +
+        (daysInMonth / 7).ceil() * (widget.verticalGap + widget.cellHeight) +
+        (isLast ? 0 : widget.bodyPadding);
     monthHeight[index] = height;
     return height;
   }

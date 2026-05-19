@@ -18,6 +18,7 @@ abstract class TPopupBasePanel extends StatefulWidget {
     this.draggable = false,
     this.maxHeightRatio = 0.9,
     this.minHeightRatio = 0.3,
+    this.fixedHeight,
   }) : super(key: key);
 
   /// 子控件
@@ -44,6 +45,10 @@ abstract class TPopupBasePanel extends StatefulWidget {
   /// 最小高度比例
   final double minHeightRatio;
 
+  /// 固定高度（px）。设置后忽略 [maxHeightRatio] / [minHeightRatio]，
+  /// 面板高度固定为该值。
+  final double? fixedHeight;
+
   @override
   State<TPopupBasePanel> createState();
 }
@@ -58,7 +63,6 @@ abstract class _TPopupBaseState<T extends TPopupBasePanel> extends State<T>
   double _maxHeight = 0;
   double _minHeight = 0;
   double _currentHeight = 0;
-  double _lastChildHeight = 0;
   double _lastScreenHeight = 0;
   double? _lastMaxHeightRatio;
   double? _lastMinHeightRatio;
@@ -77,68 +81,40 @@ abstract class _TPopupBaseState<T extends TPopupBasePanel> extends State<T>
     if (widget.draggable) {
       _controller.addListener(_updateHeight);
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initHeight());
   }
 
-  /// 测量子组件高度并更新弹窗布局参数
-  /// 1.获取子组件渲染尺寸
-  /// 2.计算实际需要的基础高度
-  /// 3.动态计算计算最大最小高度比例
-  /// 4.更新动画控制器状态
-  void _measureChildHeight() {
-    // 获取子组件渲染对象
-    final context = _childKey.currentContext;
-    if (context == null) {
-      return;
-    }
-    final renderBox = context.findRenderObject() as RenderBox?;
-    if (renderBox == null || !renderBox.hasSize) {
-      return;
-    }
+  /// 根据屏幕高度和比例（或固定高度）初始化面板高度
+  void _initHeight() {
+    final ctx = _childKey.currentContext ?? context;
+    final screenHeight = MediaQuery.of(ctx).size.height;
 
-    final screenHeight = MediaQuery.of(context).size.height;
-    final childHeight = renderBox.size.height;
-
-    // 如果高度和相关配置没有变化，则不重新计算
-    if (_lastChildHeight == childHeight &&
-        _lastScreenHeight == screenHeight &&
+    if (_lastScreenHeight == screenHeight &&
         _lastMaxHeightRatio == widget.maxHeightRatio &&
         _lastMinHeightRatio == widget.minHeightRatio &&
         _lastDraggable == widget.draggable) {
       return;
     }
-    _lastChildHeight = childHeight;
     _lastScreenHeight = screenHeight;
     _lastMaxHeightRatio = widget.maxHeightRatio;
     _lastMinHeightRatio = widget.minHeightRatio;
     _lastDraggable = widget.draggable;
 
-    final headerHeight = widget.draggable ? _headerHeight : _headerHeight;
-    final baseHeight = _dragHandleHeight + headerHeight + childHeight;
-
-    // 动态计算最大最小高度
-    final maxHeightByRatio = screenHeight * widget.maxHeightRatio;
-    final minHeightByRatio = screenHeight * widget.minHeightRatio;
-
-    // 内容高度和比例约束
-    _maxHeight = min(baseHeight, maxHeightByRatio);
-    _minHeight = max(baseHeight * 0.5, minHeightByRatio);
-    if (_minHeight > _maxHeight) {
-      _minHeight = _maxHeight;
+    if (widget.fixedHeight != null) {
+      _maxHeight = widget.fixedHeight!;
+      _minHeight = widget.fixedHeight!;
+    } else {
+      _maxHeight = screenHeight * widget.maxHeightRatio;
+      _minHeight = screenHeight * widget.minHeightRatio;
+      if (_minHeight > _maxHeight) {
+        _minHeight = _maxHeight;
+      }
     }
 
-    // 初始化当前高度
-    _currentHeight = baseHeight.clamp(_minHeight, _maxHeight);
-    // // 同步动画控制器 如果不赋值，会导致“键盘弹出默认遮挡”用例无法展示
-    // final newValue = ((_currentHeight - _minHeight) /
-    //         (_maxHeight - _minHeight).clamp(0.1, 1.0))
-    //     .clamp(0.0, 1.0);
-    // if ((_controller.value - newValue).abs() > 0.001) {
-    //   _controller.value = newValue;
-    // }
-    // 同步动画控制器
-    _controller.value = (_currentHeight - _minHeight) /
-        (_maxHeight - _minHeight).clamp(0.1, 1.0);
+    _currentHeight = _maxHeight;
+    _controller.value = 1.0;
+    // 触发 rebuild 以应用新计算的 _currentHeight
+    setState(() {});
   }
 
   void _updateHeight() => setState(() {
@@ -207,14 +183,18 @@ abstract class _TPopupBaseState<T extends TPopupBasePanel> extends State<T>
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 每次 build 都测量子内容高度，确保内容变化时高度自适应 （拖动时不测量）
-      if (!_isDragging) {
-        _measureChildHeight();
+      if (!mounted || _isDragging) {
+        return;
       }
+      _initHeight();
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) => RepaintBoundary(
@@ -232,7 +212,7 @@ abstract class _TPopupBaseState<T extends TPopupBasePanel> extends State<T>
           child: Column(children: [
             _buildDragHandle(),
             buildHeader(context),
-            SizedBox(
+            Expanded(
               child: _buildContent(),
             ),
           ]),
@@ -311,6 +291,7 @@ class TPopupBottomDisplayPanel extends TPopupBasePanel {
     super.draggable,
     super.maxHeightRatio,
     super.minHeightRatio,
+    super.fixedHeight,
   });
 
   /// 标题字体大小

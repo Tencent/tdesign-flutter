@@ -17,6 +17,7 @@ export 'src/components/checkbox/t_check_box_group.dart';
 export 'src/components/collapse/t_collapse.dart';
 export 'src/components/collapse/t_collapse_panel.dart';
 export 'src/components/date_time_picker/t_date_time_picker.dart';
+export 'src/components/dialog/t_dialog.dart';
 export 'src/components/divider/t_divider.dart';
 export 'src/components/drawer/t_drawer.dart';
 export 'src/components/drawer/t_drawer_widget.dart';

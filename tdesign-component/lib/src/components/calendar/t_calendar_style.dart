@@ -11,6 +11,7 @@ class TCalendarStyle {
     this.weekdayStyle,
     this.monthTitleStyle,
     this.cellStyle,
+    this.todayStyle,
     this.centreColor,
     this.cellDecoration,
     this.cellPrefixStyle,

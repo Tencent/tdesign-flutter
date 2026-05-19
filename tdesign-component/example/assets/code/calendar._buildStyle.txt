@@ -1,6 +1,5 @@
 
 Widget _buildStyle(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   const map = {
     1: '初一',
     2: '初二',
@@ -8,93 +7,137 @@ Widget _buildStyle(BuildContext context) {
     14: '情人节',
     15: '元宵节',
   };
-  return TCellGroup(
-    cells: [
-      TCell(
-        title: '自定义文案',
-        arrow: true,
-        onClick: (cell) {
-          TCalendarPopup(
-            context,
-            visible: true,
-            child: TCalendar(
-              title: '请选择日期',
-              height: size.height * 0.6 + 176,
-              minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
-              format: (day) {
-                day?.suffix = '¥60';
-                if (day?.date.month == 2) {
-                  if (map.keys.contains(day?.date.day)) {
-                    day?.suffix = '¥100';
-                    day?.prefix = map[day.date.day];
-                    day?.style = TextStyle(
-                      fontSize: TTheme.of(context).fontTitleMedium?.size,
-                      height: TTheme.of(context).fontTitleMedium?.height,
-                      fontWeight:
-                          TTheme.of(context).fontTitleMedium?.fontWeight,
-                      color: TTheme.of(context).errorColor6,
-                    );
-                    if (day?.typeNotifier.value == DateSelectType.selected) {
-                      day?.style = day.style
-                          ?.copyWith(color: TTheme.of(context).fontWhColor1);
+
+  final customCellSelected = ValueNotifier<List<int>>(
+      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+
+  return ValueListenableBuilder(
+    valueListenable: customCellSelected,
+    builder: (context, cellValue, _) {
+      final cellDate = DateTime.fromMillisecondsSinceEpoch(cellValue[0]);
+      return TCellGroup(
+        cells: [
+          // 1. 自定义文案（format 回调修改 prefix/suffix/style）
+          TCell(
+            title: '自定义文案',
+            arrow: true,
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
+                maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
+                format: (day) {
+                  day?.suffix = '¥60';
+                  if (day?.date.month == 2) {
+                    if (map.keys.contains(day?.date.day)) {
+                      day?.suffix = '¥100';
+                      day?.prefix = map[day.date.day];
+                      day?.style = TextStyle(
+                        fontSize: TTheme.of(context).fontTitleMedium?.size,
+                        height: TTheme.of(context).fontTitleMedium?.height,
+                        fontWeight:
+                            TTheme.of(context).fontTitleMedium?.fontWeight,
+                        color: TTheme.of(context).errorColor6,
+                      );
+                      if (day?.typeNotifier.value == DateSelectType.selected) {
+                        day?.style = day.style
+                            ?.copyWith(color: TTheme.of(context).fontWhColor1);
+                      }
                     }
                   }
-                }
-                return null;
-              },
-            ),
-          );
-        },
-      ),
-      TCell(
-        title: '自定义按钮',
-        arrow: true,
-        onClick: (cell) {
-          late final TCalendarPopup calendar;
-          calendar = TCalendarPopup(
-            context,
-            visible: true,
-            confirmBtn: Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: TTheme.of(context).spacer16),
-              child: TButton(
-                theme: TButtonTheme.danger,
-                shape: TButtonShape.round,
-                text: 'ok',
-                isBlock: true,
-                size: TButtonSize.large,
-                onTap: () {
-                  print(calendar.selected);
-                  calendar.close();
+                  return null;
                 },
-              ),
-            ),
-            child: TCalendar(
-              title: '请选择日期',
-              value: [DateTime.now().millisecondsSinceEpoch],
-              height: size.height * 0.6 + 176,
-            ),
-          );
-        },
-      ),
-      TCell(
-        title: '自定义日期区间',
-        arrow: true,
-        onClick: (cell) {
-          TCalendarPopup(
-            context,
-            visible: true,
-            child: TCalendar(
-              title: '请选择日期',
-              minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,
-              value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
-              height: size.height * 0.6 + 176,
-            ),
-          );
-        },
-      ),
-    ],
+              );
+            },
+          ),
+
+          // 2. 自定义确认按钮
+          TCell(
+            title: '自定义按钮',
+            arrow: true,
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                value: [DateTime.now().millisecondsSinceEpoch],
+                confirmBtn: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: TTheme.of(context).spacer16),
+                  child: const TButton(
+                    theme: TButtonTheme.danger,
+                    shape: TButtonShape.round,
+                    text: 'ok',
+                    isBlock: true,
+                    size: TButtonSize.large,
+                  ),
+                ),
+                onConfirm: (value) => print('confirmed: $value'),
+              );
+            },
+          ),
+
+          // 3. 自定义日期单元格（cellWidget 回调）
+          TCell(
+            title: '自定义日期单元格',
+            arrow: true,
+            note: '${cellDate.year}-${cellDate.month}-${cellDate.day}',
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                value: cellValue,
+                cellHeight: 80,
+                onConfirm: (value) => customCellSelected.value = value,
+                cellWidget: (context, tdate, selectType) {
+                  final today = DateTime.now();
+                  final isToday = tdate.date.millisecondsSinceEpoch ==
+                      DateTime(today.year, today.month, today.day)
+                          .millisecondsSinceEpoch;
+
+                  if (isToday && selectType != DateSelectType.selected) {
+                    return _CustomCellContainer(
+                      color: TTheme.of(context).brandColor4,
+                      child: const Text('今天',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    );
+                  }
+                  if (selectType == DateSelectType.selected) {
+                    return _CustomCellContainer(
+                      color: TTheme.of(context).successColor8,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${tdate.date.day}',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          const Text('已选',
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.white)),
+                        ],
+                      ),
+                    );
+                  }
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${tdate.date.day}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text('自定义', style: TextStyle(fontSize: 8)),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      );
+    },
   );
 }
