@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/iterable_ext.dart';
-import '../../util/list_ext.dart';
 
 class TCalendarCell extends StatefulWidget {
   const TCalendarCell({
     Key? key,
     this.tdate,
-    required this.type,
-    this.onCellClick,
-    this.onChange,
+    this.onTap,
     required this.height,
-    required this.data,
     required this.padding,
     required this.rowIndex,
     required this.colIndex,
@@ -22,15 +18,14 @@ class TCalendarCell extends StatefulWidget {
   }) : super(key: key);
 
   final TDate? tdate;
-  final CalendarType type;
-  final void Function(
-    DateTime value,
-    DateSelectType selectType,
-    TDate tdate,
-  )? onCellClick;
-  final void Function(List<DateTime> value)? onChange;
+
+  /// 点击回调。cell 不再负责任何选中态决策，只把"被点击的这一格"上抛给
+  /// 上层 state，由其结合 [CalendarType] 决定如何更新选中。
+  ///
+  /// 当点击 disabled cell 时同样会回调（state 内部按需要分流到 onCellClick）。
+  final void Function(TDate tdate)? onTap;
+
   final double height;
-  final Map<DateTime, List<TDate?>> data;
   final double padding;
   final int rowIndex;
   final int colIndex;
@@ -76,18 +71,17 @@ class _TCalendarCellState extends State<TCalendarCell> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.tdate == null) {
+    final tdate = widget.tdate;
+    if (tdate == null) {
       return const SizedBox.shrink();
     }
-    final tdate = widget.tdate!;
-    final cellStyle = TCalendarStyle.cellStyle(context, widget.tdate!._type);
+    final cellStyle = TCalendarStyle.cellStyle(context, tdate._type);
     final decoration = tdate.decoration ?? cellStyle.cellDecoration;
     final positionColor = _getColor(cellStyle, decoration);
 
     // 新增自定义cell内容判断逻辑
-    final content =
-        widget.cellWidget?.call(context, tdate, widget.tdate!._type) ??
-            _buildDefaultCell(context, tdate, cellStyle);
+    final content = widget.cellWidget?.call(context, tdate, tdate._type) ??
+        _buildDefaultCell(context, tdate, cellStyle);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -118,66 +112,13 @@ class _TCalendarCellState extends State<TCalendarCell> {
   }
 
   void _cellTap() {
-    final list = widget.data.values.expand((element) => element).toList();
-    final selectType = widget.tdate!._type;
-    final curDate = widget.tdate!.date;
-    if (selectType == DateSelectType.disabled) {
-      widget.onCellClick?.call(curDate, selectType, widget.tdate!);
+    final tdate = widget.tdate;
+    if (tdate == null) {
       return;
     }
-    switch (widget.type) {
-      case CalendarType.single:
-        final date =
-            list.find((item) => item?._type == DateSelectType.selected);
-        date?._setType(DateSelectType.empty);
-        widget.tdate!._setType(DateSelectType.selected);
-        if (date?.date != curDate) {
-          widget.onChange?.call([curDate]);
-        }
-        break;
-      case CalendarType.multiple:
-        final date = list
-            .where((item) => item?._type == DateSelectType.selected)
-            .toList();
-        final value = date.map((item) => item!.date).toList();
-        if (date.find((item) => item!.date == curDate) != null) {
-          widget.tdate!._setType(DateSelectType.empty);
-          value.remove(curDate);
-        } else {
-          widget.tdate!._setType(DateSelectType.selected);
-          value.add(curDate);
-        }
-        widget.onChange?.call(value);
-        break;
-      case CalendarType.range:
-        final start = list.find((item) => item?._type == DateSelectType.start);
-        final end = list.find((item) => item?._type == DateSelectType.end);
-        final startDate = start?.date;
-        if ((start == null && end == null) ||
-            (start != null && end != null) ||
-            (start != null && end == null && !startDate!.isBefore(curDate))) {
-          start?._setType(DateSelectType.empty);
-          end?._setType(DateSelectType.empty);
-          final centres = list
-              .where((item) => item?._type == DateSelectType.centre)
-              .toList();
-          centres.forEach((item) => item!._setType(DateSelectType.empty));
-          widget.tdate!._setType(DateSelectType.start);
-          widget.onChange?.call([curDate]);
-        } else if (start != null && end == null && startDate!.isBefore(curDate)) {
-          start._setType(DateSelectType.start);
-          widget.tdate!._setType(DateSelectType.end);
-          var startIndex = list.indexOf(start) + 1;
-          while (list[startIndex] == null ||
-              list[startIndex]!.date.isBefore(curDate)) {
-            list[startIndex]?._setType(DateSelectType.centre);
-            startIndex++;
-          }
-          widget.onChange?.call([startDate, curDate]);
-        }
-        break;
-    }
-    widget.onCellClick?.call(curDate, widget.tdate!._type, widget.tdate!);
+    // 三种模式统一：cell 不再做任何决策，只把被点击的 TDate 上抛。
+    // 由 [_TCalendarState] 结合 widget.type / 当前选中映射 / value 决定如何更新。
+    widget.onTap?.call(tdate);
   }
 
   void _cellTypeChange() {
@@ -304,6 +245,12 @@ class _TCalendarCellState extends State<TCalendarCell> {
 }
 
 /// 时间对象
+///
+/// 不可变数据载体（除 [typeNotifier] 外所有字段均为 final）。
+///
+/// 选中类型的变化通过 [typeNotifier] 通知监听者；其它视觉字段（[prefix] /
+/// [suffix] / [style] / [decoration] 等）请在构造时传入，不要构造后再 mutate
+/// ——这些字段不发出变更通知，cell 也不会响应运行时修改。
 class TDate {
   TDate({
     required this.date,
@@ -330,28 +277,28 @@ class TDate {
   final DateSelectTypeNotifier typeNotifier;
 
   /// 日期前面的字符串
-  String? prefix;
+  final String? prefix;
 
   /// 日期前面的字符串的样式
-  TextStyle? prefixStyle;
+  final TextStyle? prefixStyle;
 
   /// 日期前面的组件，优先级高于[prefix]
-  Widget? prefixWidget;
+  final Widget? prefixWidget;
 
   /// 日期后面的字符串
-  String? suffix;
+  final String? suffix;
 
   /// 日期后面的字符串的样式
-  TextStyle? suffixStyle;
+  final TextStyle? suffixStyle;
 
   /// 日期后面的组件，优先级高于[suffix]
-  Widget? suffixWidget;
+  final Widget? suffixWidget;
 
   /// 日期样式
-  TextStyle? style;
+  final TextStyle? style;
 
   /// 日期Decoration
-  BoxDecoration? decoration;
+  final BoxDecoration? decoration;
 
   /// 是否是当月最后一天
   final bool isLastDayOfMonth;
@@ -371,10 +318,6 @@ class TDate {
   final Map<String, String>? holidayInfo;
 
   DateSelectType get _type => typeNotifier.value;
-
-  void _setType(DateSelectType type) {
-    typeNotifier.setType(type);
-  }
 }
 
 class DateSelectTypeNotifier extends ChangeNotifier {

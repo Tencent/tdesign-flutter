@@ -25,6 +25,8 @@ class TCalendarBody extends StatefulWidget {
     this.anchorDate,
     this.dateType = TCalendarDateType.solar,
     this.dataSource,
+    this.onTDateGenerated,
+    this.onCacheInvalidated,
   }) : super(key: key);
 
   final DateTime? maxDate;
@@ -36,7 +38,6 @@ class TCalendarBody extends StatefulWidget {
   final Widget Function(
     TDate? date,
     List<TDate?> dateList,
-    Map<DateTime, List<TDate?>> data,
     int rowIndex,
     int colIndex,
   ) builder;
@@ -54,6 +55,18 @@ class TCalendarBody extends StatefulWidget {
   final ValueChanged<DateTime>? onMonthChange;
   final TCalendarDateType dateType;
   final TCalendarDataSource? dataSource;
+
+  /// 在每个月份的 TDate 列表新生成时回调，便于上层把 selected/start/end 等
+  /// 状态的 TDate 引用登记到自己的"权威选中映射"。
+  ///
+  /// 注意：每次 _data 缺失某月时都会生成新 TDate 实例并触发该回调；上层
+  /// 应当以"按需覆盖"语义处理（例如同 date 的旧引用直接被新引用替换）。
+  final void Function(DateTime monthDate, List<TDate?> tdates)?
+      onTDateGenerated;
+
+  /// 当 `_data` 整体被清空（例如 minDate/maxDate 变化或 range 选择变更）时回调，
+  /// 上层据此清空"权威选中映射"，避免悬挂指向已被 GC 的旧 TDate 实例。
+  final VoidCallback? onCacheInvalidated;
 
   @override
   State<TCalendarBody> createState() => _TCalendarBodyState();
@@ -88,6 +101,9 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     final initialOffset = _calcScrollOffset();
     _scrollController = ScrollController(initialScrollOffset: initialOffset);
     _scrollController.addListener(_onScroll);
+    // 首屏预热：在第一帧之前生成初始可见月份的数据，避免 itemBuilder
+    // 第一次 build 时缓存为空，回退路径产生不必要的重算。
+    _warmupCacheAround(_indexAtOffset(initialOffset));
   }
 
   @override
@@ -97,8 +113,16 @@ class _TCalendarBodyState extends State<TCalendarBody> {
         oldWidget.maxDate != widget.maxDate) {
       _monthHeight.clear();
       _data.clear();
+      widget.onCacheInvalidated?.call();
       _lastNotifiedMonthKey = null;
       _initMonths();
+    } else if (widget.type == CalendarType.range &&
+        !_listEqualsDate(oldWidget.value, widget.value)) {
+      // range 模式下，state 通过更新 value 来传达选中区间变化。
+      // 必须清空 _data，让所有月份重新基于新 value 推导 cell 类型，
+      // 避免跨月份 cell 的 typeNotifier 残留旧 start/end/centre 状态。
+      _data.clear();
+      widget.onCacheInvalidated?.call();
     }
     // anchorDate 变化时滚动：使用 identical 引用比较，
     // 让上层即使重复传同一年月（例如滑动到该月后再点击该月按钮）也能触发滚动；
@@ -107,6 +131,24 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     if (newAnchor != null && !identical(newAnchor, oldWidget.anchorDate)) {
       _scrollToItem();
     }
+  }
+
+  static bool _listEqualsDate(List<DateTime>? a, List<DateTime>? b) {
+    if (identical(a, b)) {
+      return true;
+    }
+    if (a == null || b == null) {
+      return false;
+    }
+    if (a.length != b.length) {
+      return false;
+    }
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @override
@@ -204,7 +246,30 @@ class _TCalendarBodyState extends State<TCalendarBody> {
         widget.onMonthChange?.call(currentMonth);
       }
     }
+    _warmupCacheAround(i);
     _cleanupCache(i);
+  }
+
+  /// 预热当前可见月份及其前后相邻月份的缓存。
+  ///
+  /// 把"写入 _data"这一副作用从 itemBuilder 中分离出来，避免 build 阶段写状态。
+  /// 范围 ±2 月（共 5 个月）足以覆盖单屏可见与上下少量预渲染月份，超出部分
+  /// 由 itemBuilder 走 fallback 直接计算（仍不写缓存）。
+  void _warmupCacheAround(int currentIndex) {
+    if (_months.isEmpty) {
+      return;
+    }
+    const radius = 2;
+    final lo = (currentIndex - radius).clamp(0, _months.length - 1);
+    final hi = (currentIndex + radius).clamp(0, _months.length - 1);
+    for (var i = lo; i <= hi; i++) {
+      final monthDate = _months[i];
+      if (!_data.containsKey(monthDate)) {
+        final tdates = _getDaysInMonth(monthDate, _min, _max);
+        _data[monthDate] = tdates;
+        widget.onTDateGenerated?.call(monthDate, tdates);
+      }
+    }
   }
 
   /// 清理距离当前可见月份过远的缓存数据，避免在 itemBuilder 中执行副作用。
@@ -236,12 +301,25 @@ class _TCalendarBodyState extends State<TCalendarBody> {
         final monthYear = monthDate.year.toString() + context.resource.year;
         final monthMonth = widget.monthNames[monthDate.month - 1];
         final monthDateText = '$monthYear $monthMonth';
-        late List<TDate?> monthData;
-        if (_data.containsKey(monthDate)) {
-          monthData = _data[monthDate]!;
+        // 只读：build 不写状态。命中缓存直接用，未命中走纯函数计算并安排
+        // 在下一帧补写缓存（postFrameCallback），避免 build 阶段副作用。
+        List<TDate?> monthData;
+        final cached = _data[monthDate];
+        if (cached != null) {
+          monthData = cached;
         } else {
-          monthData = _data[monthDate] =
-              _getDaysInMonth(monthDate, _min, _max);
+          monthData = _getDaysInMonth(monthDate, _min, _max);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) {
+              return;
+            }
+            // 仅当下一帧仍未被其他路径填充时写入，幂等。
+            // 注册回调也只在真正写入这条新数据时触发，避免重复登记。
+            if (!_data.containsKey(monthDate)) {
+              _data[monthDate] = monthData;
+              widget.onTDateGenerated?.call(monthDate, monthData);
+            }
+          });
         }
 
         return Column(
@@ -267,7 +345,6 @@ class _TCalendarBodyState extends State<TCalendarBody> {
                               ? monthData[rowIndex * 7 + colIndex]
                               : null,
                           monthData,
-                          _data,
                           rowIndex,
                           colIndex,
                         ),

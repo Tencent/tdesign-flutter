@@ -486,6 +486,19 @@ class _TCalendarState extends State<TCalendar> {
 
   List<DateTime>? _cachedValueDates;
 
+  /// single 模式下当前选中的 TDate 引用（来自 body 缓存的当前实例）。
+  ///
+  /// cell 不再反查 `_data` 找上一个 selected：state 维护这条权威引用，点击
+  /// 时直接 setType(empty) 即可。引用会随 body 缓存重生成（cleanup 后再滚回
+  /// 该月）被 [_handleTDateGenerated] 覆盖为新实例，不会出现"指向已 detach
+  /// 的 TDate"导致视觉残留。
+  TDate? _selectedSingleRef;
+
+  /// multiple 模式下当前所有选中的 TDate 引用，按日期键。
+  ///
+  /// 点击切换时直接查表决定 select/empty，避免遍历可见月份缓存。
+  final Map<DateTime, TDate> _selectedMultipleRefs = {};
+
   // bottom 展开时日历主体上移的距离，露出 bottom 顶部"把手"区域。
   static const double _bottomPeekHeight = 30.0;
 
@@ -723,15 +736,14 @@ class _TCalendarState extends State<TCalendar> {
       onMonthChange: widget.onMonthChange,
       dateType: _dateType,
       dataSource: widget.dataSource,
-      builder: (date, dateList, data, rowIndex, colIndex) {
+      onTDateGenerated: _handleTDateGenerated,
+      onCacheInvalidated: _handleCacheInvalidated,
+      builder: (date, dateList, rowIndex, colIndex) {
         return TCalendarCell(
           height: _getEffectiveCellHeight(),
           tdate: date,
-          type: widget.type,
-          data: data,
           padding: verticalGap / 2,
-          onChange: _handleCellChange,
-          onCellClick: widget.onCellClick,
+          onTap: _handleCellTap,
           dateList: dateList,
           rowIndex: rowIndex,
           colIndex: colIndex,
@@ -743,10 +755,120 @@ class _TCalendarState extends State<TCalendar> {
     );
   }
 
-  void _handleCellChange(List<DateTime> value) {
-    final normalized = _getValue(value);
-    inherited?.selected.value = normalized;
-    widget.onChange?.call(normalized);
+  /// 月份 TDate 列表新生成时被 body 调用：登记 selected/start/end 引用，
+  /// 让 state 不依赖 body 内部缓存即可定位"当前选中的那些 TDate 实例"。
+  ///
+  /// single：每月最多一个 selected，遇到即覆盖 _selectedSingleRef。
+  /// multiple：把当月所有 selected 的引用按 date 写入 map。
+  /// range：本身走 widget.value 重建路径，不需要登记。
+  void _handleTDateGenerated(DateTime monthDate, List<TDate?> tdates) {
+    if (widget.type == CalendarType.range) {
+      return;
+    }
+    for (final tdate in tdates) {
+      if (tdate == null) {
+        continue;
+      }
+      if (tdate.typeNotifier.value != DateSelectType.selected) {
+        continue;
+      }
+      if (widget.type == CalendarType.single) {
+        _selectedSingleRef = tdate;
+      } else if (widget.type == CalendarType.multiple) {
+        _selectedMultipleRefs[tdate.date] = tdate;
+      }
+    }
+  }
+
+  /// 当 body 整体清空缓存时（minDate/maxDate 变化等），同步清空选中映射，
+  /// 避免悬挂指向已被替换的 TDate 实例。后续月份重新生成时会再次登记。
+  void _handleCacheInvalidated() {
+    _selectedSingleRef = null;
+    _selectedMultipleRefs.clear();
+  }
+
+  /// 三种模式统一入口：cell 仅上抛被点击的 TDate，由本方法做所有决策。
+  ///
+  /// 行为约定：
+  /// - disabled：仅触发 onCellClick，不改变选中态
+  /// - single：切换 _selectedSingleRef，旧引用置 empty、新引用置 selected
+  /// - multiple：根据 _selectedMultipleRefs 切换该日期的选中态
+  /// - range：交由 [_resolveRangeSelection] 决策后走 setState 重建（保持原有路径）
+  void _handleCellTap(TDate tdate) {
+    final selectType = tdate.typeNotifier.value;
+    final curDate = tdate.date;
+
+    if (selectType == DateSelectType.disabled) {
+      widget.onCellClick?.call(curDate, selectType, tdate);
+      return;
+    }
+
+    switch (widget.type) {
+      case CalendarType.single:
+        // 已经是当前选中：仅触发 onCellClick，不重复 onChange
+        if (identical(_selectedSingleRef, tdate)) {
+          widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+          return;
+        }
+        _selectedSingleRef?.typeNotifier.setType(DateSelectType.empty);
+        tdate.typeNotifier.setType(DateSelectType.selected);
+        _selectedSingleRef = tdate;
+        _emitSelection([curDate], rebuild: false);
+        widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        break;
+      case CalendarType.multiple:
+        final existing = _selectedMultipleRefs[curDate];
+        List<DateTime> nextValue;
+        if (existing != null) {
+          existing.typeNotifier.setType(DateSelectType.empty);
+          _selectedMultipleRefs.remove(curDate);
+        } else {
+          tdate.typeNotifier.setType(DateSelectType.selected);
+          _selectedMultipleRefs[curDate] = tdate;
+        }
+        nextValue = _selectedMultipleRefs.keys.toList()..sort();
+        _emitSelection(nextValue, rebuild: false);
+        widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        break;
+      case CalendarType.range:
+        // range 仍走老路径：state 决策 start/end，刷新 value，触发 body 重建。
+        final resolved = _resolveRangeSelection([curDate]);
+        _emitSelection(resolved, rebuild: true);
+        widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        break;
+    }
+  }
+
+  /// 统一更新 _cachedValueDates / inherited.selected / onChange，并按需触发 setState。
+  void _emitSelection(List<DateTime> value, {required bool rebuild}) {
+    _cachedValueDates = value;
+    inherited?.selected.value = value;
+    widget.onChange?.call(value);
+    if (rebuild && mounted) {
+      setState(() {});
+    }
+  }
+
+  /// range 模式专用的选区决策：
+  /// - 无 start：作为新 start
+  /// - 已有 start 且无 end，且点击晚于 start：作为 end，区间完成
+  /// - 其它（已完成区间 / 点击早于等于 start）：以本次点击重新开始
+  List<DateTime> _resolveRangeSelection(List<DateTime> rawValue) {
+    if (rawValue.isEmpty) {
+      return const [];
+    }
+    final tapped = DateTime(
+      rawValue.first.year,
+      rawValue.first.month,
+      rawValue.first.day,
+    );
+    final current = _cachedValueDates ?? const [];
+    final hasStart = current.isNotEmpty;
+    final hasEnd = current.length >= 2;
+    if (hasStart && !hasEnd && tapped.isAfter(current[0])) {
+      return [current[0], tapped];
+    }
+    return [tapped];
   }
 
   // 行为约定详见 [TCalendar.popupBottomBuilder]。
