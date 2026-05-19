@@ -7,7 +7,7 @@ import 't_calendar_body.dart';
 import 't_calendar_cell.dart';
 import 't_calendar_header.dart';
 
-export 't_calendar_cell.dart' show TDate;
+export 't_calendar_cell.dart' show TDate, DateSelectTypeNotifier;
 export 't_calendar_data_source.dart';
 export 't_calendar_style.dart';
 export 't_lunar_date.dart';

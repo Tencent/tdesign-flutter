@@ -9,22 +9,30 @@ Widget _buildTestApp(Widget child) {
   );
 }
 
+/// 把 [DateTime] 归一化到当天 00:00（与 TCalendar 内部 `_getValue` 行为一致），
+/// 便于在断言中比较。测试 fixture 都使用 `DateTime(y, m, d)` 字面量构造，
+/// 因此默认即为归一化值。
+DateTime _day(int y, int m, int d) => DateTime(y, m, d);
+
 void main() {
-  group('TCalendar — bottom / bottomExpanded', () {
-    test('bottomExpanded 未配合 bottom 时触发 assert', () {
+  // -----------------------------------------------------------------------
+  // popupBottomBuilder / popupBottomExpanded
+  // -----------------------------------------------------------------------
+  group('TCalendar — popupBottom / popupBottomExpanded', () {
+    test('popupBottomExpanded 未配合 popupBottomBuilder 时触发 assert', () {
       expect(
-        () => TCalendar(bottomExpanded: ValueNotifier<bool>(false)),
+        () => TCalendar(popupBottomExpanded: ValueNotifier<bool>(false)),
         throwsAssertionError,
       );
     });
 
-    testWidgets('非 popup 使用 bottom 触发 assert', (tester) async {
+    testWidgets('非弹窗模式使用 popupBottomBuilder 触发 assert', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            title: '测试',
+            titleWidget: const Text('测试'),
             height: 640,
-            bottom: (_, __) => const Text('底部'),
+            popupBottomBuilder: (_, __) => const Text('底部'),
           ),
         ),
       );
@@ -33,11 +41,9 @@ void main() {
       expect(find.text('底部'), findsNothing);
     });
 
-    testWidgets('popup 内选中变化时 bottom 会重建', (tester) async {
-      final day = DateTime(2024, 6, 15);
-      final dayMs =
-          DateTime(day.year, day.month, day.day).millisecondsSinceEpoch;
-      final selected = ValueNotifier<List<int>>([dayMs]);
+    testWidgets('popup 内选中变化时 popupBottomBuilder 会重建', (tester) async {
+      final day = _day(2024, 6, 15);
+      final selected = ValueNotifier<List<DateTime>>([day]);
 
       await tester.pumpWidget(
         _buildTestApp(
@@ -45,10 +51,10 @@ void main() {
             selected: selected,
             usePopup: true,
             child: TCalendar(
-              title: '测试',
+              titleWidget: const Text('测试'),
               height: 640,
-              value: selected.value,
-              bottom: (_, dates) => Text('days:${dates.length}'),
+              initialValue: selected.value,
+              popupBottomBuilder: (_, dates) => Text('days:${dates.length}'),
             ),
           ),
         ),
@@ -57,18 +63,15 @@ void main() {
       expect(find.text('days:1'), findsOneWidget);
 
       final day2 = day.add(const Duration(days: 1));
-      selected.value = [
-        dayMs,
-        DateTime(day2.year, day2.month, day2.day).millisecondsSinceEpoch,
-      ];
+      selected.value = [day, _day(day2.year, day2.month, day2.day)];
       await tester.pump();
 
       expect(find.text('days:2'), findsOneWidget);
     });
 
-    testWidgets('popup 内 bottomExpanded 为 false 时处于收起偏移', (tester) async {
+    testWidgets('popup 内 popupBottomExpanded 为 false 时处于收起偏移', (tester) async {
       final expanded = ValueNotifier<bool>(false);
-      final selected = ValueNotifier<List<int>>([]);
+      final selected = ValueNotifier<List<DateTime>>([]);
 
       await tester.pumpWidget(
         _buildTestApp(
@@ -76,10 +79,10 @@ void main() {
             selected: selected,
             usePopup: true,
             child: TCalendar(
-              title: '测试',
+              titleWidget: const Text('测试'),
               height: 640,
-              bottomExpanded: expanded,
-              bottom: (_, __) => const Text('底部内容'),
+              popupBottomExpanded: expanded,
+              popupBottomBuilder: (_, __) => const Text('底部内容'),
             ),
           ),
         ),
@@ -109,30 +112,24 @@ void main() {
   });
 
   // -----------------------------------------------------------------------
-  // 辅助：将 DateTime 转为日毫秒时间戳（去除时分秒）
-  // -----------------------------------------------------------------------
-  int _ms(DateTime d) =>
-      DateTime(d.year, d.month, d.day).millisecondsSinceEpoch;
-
-  // -----------------------------------------------------------------------
   // 单选
   // -----------------------------------------------------------------------
   group('TCalendar — 单选 (single)', () {
     testWidgets('点击日期触发 onChange', (tester) async {
-      final day15 = DateTime(2024, 6, 15);
-      final day20 = DateTime(2024, 6, 20);
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
-      List<int>? result;
+      final day15 = _day(2024, 6, 15);
+      final day20 = _day(2024, 6, 20);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      List<DateTime>? result;
 
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            value: [_ms(day15)],
-            minDate: minMs,
-            maxDate: maxMs,
+            initialValue: [day15],
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (v) => result = v,
           ),
         ),
@@ -145,13 +142,13 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result!.first, _ms(day20));
+      expect(result!.first, day20);
     });
 
     testWidgets('点击已选中日期不重复触发 onChange', (tester) async {
-      final day15 = DateTime(2024, 6, 15);
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
+      final day15 = _day(2024, 6, 15);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
       var callCount = 0;
 
       await tester.pumpWidget(
@@ -159,9 +156,9 @@ void main() {
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            value: [_ms(day15)],
-            minDate: minMs,
-            maxDate: maxMs,
+            initialValue: [day15],
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (_) => callCount++,
           ),
         ),
@@ -176,19 +173,19 @@ void main() {
     });
 
     testWidgets('点击 disabled 日期不改变选中状态', (tester) async {
-      final day15 = DateTime(2024, 6, 15);
-      final minMs = _ms(DateTime(2024, 6, 10));
-      final maxMs = _ms(DateTime(2024, 6, 25));
-      List<int>? result;
+      final day15 = _day(2024, 6, 15);
+      final minDate = _day(2024, 6, 10);
+      final maxDate = _day(2024, 6, 25);
+      List<DateTime>? result;
 
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            value: [_ms(day15)],
-            minDate: minMs,
-            maxDate: maxMs,
+            initialValue: [day15],
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (v) => result = v,
           ),
         ),
@@ -212,19 +209,19 @@ void main() {
   // -----------------------------------------------------------------------
   group('TCalendar — 多选 (multiple)', () {
     testWidgets('点击新日期添加选中', (tester) async {
-      final day15 = DateTime(2024, 6, 15);
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
-      List<int>? result;
+      final day15 = _day(2024, 6, 15);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      List<DateTime>? result;
 
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.multiple,
-            value: [_ms(day15)],
-            minDate: minMs,
-            maxDate: maxMs,
+            initialValue: [day15],
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (v) => result = v,
           ),
         ),
@@ -236,25 +233,25 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!.length, 2);
-      expect(result!.contains(_ms(day15)), isTrue);
-      expect(result!.contains(_ms(DateTime(2024, 6, 20))), isTrue);
+      expect(result!.contains(day15), isTrue);
+      expect(result!.contains(_day(2024, 6, 20)), isTrue);
     });
 
     testWidgets('再次点击已选日期取消选中', (tester) async {
-      final day15 = DateTime(2024, 6, 15);
-      final day20 = DateTime(2024, 6, 20);
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
-      List<int>? result;
+      final day15 = _day(2024, 6, 15);
+      final day20 = _day(2024, 6, 20);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      List<DateTime>? result;
 
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.multiple,
-            value: [_ms(day15), _ms(day20)],
-            minDate: minMs,
-            maxDate: maxMs,
+            initialValue: [day15, day20],
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (v) => result = v,
           ),
         ),
@@ -267,7 +264,7 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result!.first, _ms(day20));
+      expect(result!.first, day20);
     });
   });
 
@@ -276,17 +273,17 @@ void main() {
   // -----------------------------------------------------------------------
   group('TCalendar — 区间选择 (range)', () {
     testWidgets('选择 start 和 end 触发 onChange', (tester) async {
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
-      List<int>? result;
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      List<DateTime>? result;
 
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.range,
-            minDate: minMs,
-            maxDate: maxMs,
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (v) => result = v,
           ),
         ),
@@ -299,31 +296,31 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result!.first, _ms(DateTime(2024, 6, 10)));
+      expect(result!.first, _day(2024, 6, 10));
 
       // 再点 20 号作为 end
       await tester.tap(find.text('20'));
       await tester.pump();
 
       expect(result!.length, 2);
-      expect(result!.first, _ms(DateTime(2024, 6, 10)));
-      expect(result!.last, _ms(DateTime(2024, 6, 20)));
+      expect(result!.first, _day(2024, 6, 10));
+      expect(result!.last, _day(2024, 6, 20));
     });
 
     testWidgets('end 在 start 之前时重置为新 start', (tester) async {
-      final day20 = DateTime(2024, 6, 20);
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
-      List<int>? result;
+      final day20 = _day(2024, 6, 20);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      List<DateTime>? result;
 
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.range,
-            value: [_ms(day20)],
-            minDate: minMs,
-            maxDate: maxMs,
+            initialValue: [day20],
+            minDate: minDate,
+            maxDate: maxDate,
             onChange: (v) => result = v,
           ),
         ),
@@ -336,7 +333,7 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result!.first, _ms(DateTime(2024, 6, 10)));
+      expect(result!.first, _day(2024, 6, 10));
     });
   });
 
@@ -344,14 +341,14 @@ void main() {
   // 边界条件
   // -----------------------------------------------------------------------
   group('TCalendar — 边界条件', () {
-    testWidgets('不传 value 时正常渲染', (tester) async {
+    testWidgets('不传 initialValue 时正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            minDate: _ms(DateTime(2024, 6, 1)),
-            maxDate: _ms(DateTime(2024, 6, 30)),
+            minDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 30),
           ),
         ),
       );
@@ -362,15 +359,15 @@ void main() {
       expect(find.text('30'), findsOneWidget);
     });
 
-    testWidgets('空 value 列表正常渲染', (tester) async {
+    testWidgets('空 initialValue 列表正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            value: const [],
-            minDate: _ms(DateTime(2024, 6, 1)),
-            maxDate: _ms(DateTime(2024, 6, 30)),
+            initialValue: const [],
+            minDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 30),
           ),
         ),
       );
@@ -380,9 +377,9 @@ void main() {
     });
 
     testWidgets('onCellClick 回调携带正确参数', (tester) async {
-      final minMs = _ms(DateTime(2024, 6, 1));
-      final maxMs = _ms(DateTime(2024, 6, 30));
-      int? clickedValue;
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      DateTime? clickedValue;
       DateSelectType? clickedType;
 
       await tester.pumpWidget(
@@ -390,8 +387,8 @@ void main() {
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            minDate: minMs,
-            maxDate: maxMs,
+            minDate: minDate,
+            maxDate: maxDate,
             onCellClick: (value, type, tdate) {
               clickedValue = value;
               clickedType = type;
@@ -404,7 +401,7 @@ void main() {
       await tester.tap(find.text('15'));
       await tester.pump();
 
-      expect(clickedValue, _ms(DateTime(2024, 6, 15)));
+      expect(clickedValue, _day(2024, 6, 15));
       expect(clickedType, DateSelectType.selected);
     });
 
@@ -414,8 +411,8 @@ void main() {
           TCalendar(
             height: 640,
             type: CalendarType.single,
-            minDate: _ms(DateTime(2024, 6, 1)),
-            maxDate: _ms(DateTime(2024, 6, 1)),
+            minDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 1),
           ),
         ),
       );
@@ -432,8 +429,8 @@ void main() {
             height: 640,
             type: CalendarType.single,
             firstDayOfWeek: 1,
-            minDate: _ms(DateTime(2024, 6, 1)),
-            maxDate: _ms(DateTime(2024, 6, 30)),
+            minDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 30),
           ),
         ),
       );

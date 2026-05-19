@@ -4,7 +4,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void main() {
   group('TLunarInfo', () {
     test('should create lunar info correctly', () {
-      final lunarInfo = TLunarInfo(
+      const lunarInfo = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -24,7 +24,7 @@ void main() {
     });
 
     test('should handle leap month correctly', () {
-      final lunarInfo = TLunarInfo(
+      const lunarInfo = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('should compare lunar info correctly', () {
-      final info1 = TLunarInfo(
+      const info1 = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -49,7 +49,7 @@ void main() {
         dayText: '初七',
       );
 
-      final info2 = TLunarInfo(
+      const info2 = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -58,7 +58,7 @@ void main() {
         dayText: '初七',
       );
 
-      final info3 = TLunarInfo(
+      const info3 = TLunarInfo(
         year: 2025,
         month: 3,
         day: 8,
@@ -159,7 +159,7 @@ void main() {
 
   group('TDate with LunarInfo', () {
     test('should create TDate with lunar info', () {
-      final lunarInfo = TLunarInfo(
+      const lunarInfo = TLunarInfo(
         year: 2025,
         month: 3,
         day: 7,
@@ -198,7 +198,7 @@ class _MockDataSource extends TCalendarDataSource {
   @override
   TLunarInfo? getLunarInfo(DateTime solarDate) {
     // 简单的 mock 实现
-    return TLunarInfo(
+    return const TLunarInfo(
       year: 2025,
       month: 3,
       day: 7,
