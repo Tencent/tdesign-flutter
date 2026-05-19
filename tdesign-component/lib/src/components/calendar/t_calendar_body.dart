@@ -71,10 +71,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
     _initMonths();
-    _scrollToItem();
+    final initialOffset = _calcScrollOffset();
+    _scrollController = ScrollController(initialScrollOffset: initialOffset);
+    _scrollController.addListener(_onScroll);
   }
 
   @override
@@ -87,8 +87,11 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       _lastPrintMonth = null;
       _initMonths();
     }
-    if (oldWidget.anchorDate != widget.anchorDate ||
-        oldWidget.value != widget.value) {
+    // anchorDate 变化时滚动：使用 identical 引用比较，
+    // 让上层即使重复传同一年月（例如滑动到该月后再点击该月按钮）也能触发滚动；
+    // 上层只要每次导航都构造新的 DateTime 实例即可。
+    final newAnchor = widget.anchorDate;
+    if (newAnchor != null && !identical(newAnchor, oldWidget.anchorDate)) {
       _scrollToItem();
     }
   }
@@ -104,6 +107,40 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     _min = _getDefDate(widget.minDate);
     _max = _getDefDate(widget.maxDate, true);
     _months = _monthsBetween(_min, _max);
+  }
+
+  /// 计算目标日期所在月份的滚动偏移量
+  ///
+  /// 越界处理策略：
+  /// - 早于 minDate → clamp 到第一个月
+  /// - 晚于 maxDate → clamp 到最后一个月
+  /// 这样上层即使传入越界 anchorDate，也不会出现"静默回到顶部"的异常表现。
+  double _calcScrollOffset() {
+    var scrollToDate = widget.anchorDate;
+    if (scrollToDate == null) {
+      if (widget.value == null || widget.value!.isEmpty) {
+        return 0.0;
+      }
+      scrollToDate = widget.value!.reduce((a, b) => a.isBefore(b) ? a : b);
+    }
+    if (_months.isEmpty) {
+      return 0.0;
+    }
+    // 用 (年*12 + 月) 作为可比较的标量，规避日级别比较带来的边界陷阱。
+    final firstKey = _months.first.year * 12 + _months.first.month;
+    final lastKey = _months.last.year * 12 + _months.last.month;
+    final targetKey = scrollToDate.year * 12 + scrollToDate.month;
+    final clampedKey = targetKey.clamp(firstKey, lastKey);
+    var height = 0.0;
+    for (var i = 0; i < _months.length; i++) {
+      final item = _months[i];
+      final itemKey = item.year * 12 + item.month;
+      if (itemKey == clampedKey) {
+        break;
+      }
+      height += _getMonthHeight(_months, i, _monthHeight);
+    }
+    return height;
   }
 
   int? _lastCleanupIndex;
@@ -211,44 +248,39 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   }
 
   void _scrollToItem() {
-    var scrollToDate = widget.anchorDate;
-    if (scrollToDate == null) {
-      if (widget.value == null || widget.value!.isEmpty) {
-        return;
-      }
-      scrollToDate = widget.value!.reduce((a, b) => a.isBefore(b) ? a : b);
-    }
-    var lastMonthDay = DateTime(_months.last.year, _months.last.month + 1);
-    lastMonthDay = lastMonthDay.add(const Duration(days: -1));
-    if (_months.first.isAfter(scrollToDate) ||
-        lastMonthDay.isBefore(scrollToDate)) {
-      return;
-    }
-    final targetDate = scrollToDate;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    final height = _calcScrollOffset();
+    // 等待 ScrollController 完成 attach 后再滚动，最多重试若干帧。
+    void attemptScroll([int retry = 0]) {
       if (!mounted) {
         return;
       }
-      var height = 0.0;
-      for (var i = 0; i < _months.length; i++) {
-        final item = _months[i];
-        if (item.year == targetDate.year && item.month == targetDate.month) {
-          break;
+      if (!_scrollController.hasClients) {
+        if (retry >= 5) {
+          return;
         }
-        height += _getMonthHeight(_months, i, _monthHeight);
-      }
-      if (height <= 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          attemptScroll(retry + 1);
+        });
         return;
       }
+      final position = _scrollController.position;
+      final clamped = height.clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
       if (widget.animateTo) {
         _scrollController.animateTo(
-          height,
+          clamped,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
         );
       } else {
-        _scrollController.jumpTo(height);
+        _scrollController.jumpTo(clamped);
       }
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      attemptScroll();
     });
   }
 

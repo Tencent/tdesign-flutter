@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
@@ -1053,15 +1055,18 @@ class _LunarCalendarDemo extends StatefulWidget {
 class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
   final _dataSource = LunarDataSourceExample();
 
-  late DateTime _anchorDate;
+  // 日历可用日期范围。年份/月份选择器都基于这两个常量约束，
+  // 避免越界导致组件层 clamp 兜底（视觉上会卡在端点月份）。
+  static final DateTime _minDate = DateTime(2020, 1, 1);
+  static final DateTime _maxDate = DateTime(2030, 12, 31);
+
+  DateTime? _anchorDate;
   late TCalendarDisplayMode _displayMode;
   List<DateTime> _selected = [DateTime.now()];
 
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
-    _anchorDate = DateTime(now.year, now.month, 15);
     _displayMode = TCalendarDisplayMode.solarWithLunar;
   }
 
@@ -1074,8 +1079,12 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
         _LunarControlBar(
           key: _LunarControlBar.monthKey,
           dataSource: _dataSource,
+          minDate: _minDate,
+          maxDate: _maxDate,
           onNavigate: (anchor) {
-            setState(() => _anchorDate = anchor);
+            setState(() {
+              _anchorDate = anchor;
+            });
           },
           onModeChanged: (mode) {
             setState(() => _displayMode = mode);
@@ -1085,8 +1094,8 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
         // ---- 内嵌日历 ----
         TCalendar(
           type: CalendarType.single,
-          minDate: DateTime(2020, 1, 1),
-          maxDate: DateTime(2030, 12, 31),
+          minDate: _minDate,
+          maxDate: _maxDate,
           initialValue: _selected,
           anchorDate: _anchorDate,
           animateTo: true,
@@ -1149,11 +1158,15 @@ class _LunarControlBar extends StatefulWidget {
   const _LunarControlBar({
     super.key,
     required this.dataSource,
+    required this.minDate,
+    required this.maxDate,
     required this.onNavigate,
     required this.onModeChanged,
   });
 
   final LunarDataSourceExample dataSource;
+  final DateTime minDate;
+  final DateTime maxDate;
   final ValueChanged<DateTime> onNavigate;
   final ValueChanged<TCalendarDisplayMode> onModeChanged;
 
@@ -1169,54 +1182,228 @@ class _LunarControlBarState extends State<_LunarControlBar> {
   late DateTime _currentMonth;
   late TCalendarDisplayMode _mode;
 
-  // 使用 ValueNotifier 避免滚动时 setState 导致整个控制栏重建和布局重算
-  final _yearTextNotifier = ValueNotifier<String>('');
-  final _monthTextNotifier = ValueNotifier<String>('');
-  final _lunarTextNotifier = ValueNotifier<String>('');
+  /// 主动跳转期间忽略来自日历 onMonthChange 的中间过渡回调。
+  ///
+  /// 背景：日历内部 animateTo（约 200ms）会沿途触发若干次 onMonthChange，
+  /// 例如从 2026-05 跳到 2023-05，期间会快速地经过 36 个月份；
+  /// 若让控制栏跟随这些中间值刷新，用户视觉上会看到年/月数字"滚屏跳动"。
+  ///
+  /// 因此当用户主动 _navigateTo 时，短暂屏蔽 updateMonth 的中间值，
+  /// 等动画结束后再恢复随手势/上层切换的同步。
+  bool _suppressUpdate = false;
+  Timer? _suppressTimer;
+
+  // 略微大于动画时长（200ms），留出一帧抖动余量。
+  static const Duration _suppressDuration = Duration(milliseconds: 280);
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
-    _currentMonth = DateTime(now.year, now.month, 1);
+    _currentMonth = _clampMonth(DateTime(now.year, now.month, 1));
     _mode = TCalendarDisplayMode.solarWithLunar;
-    _updateNotifiers();
   }
 
   @override
   void dispose() {
-    _yearTextNotifier.dispose();
-    _monthTextNotifier.dispose();
-    _lunarTextNotifier.dispose();
+    _suppressTimer?.cancel();
     super.dispose();
   }
 
-  void _updateNotifiers() {
-    _yearTextNotifier.value = '${_currentMonth.year}年';
-    _monthTextNotifier.value = '${_currentMonth.month}月';
-    final lunarInfo = widget.dataSource.getLunarInfo(_currentMonth);
-    _lunarTextNotifier.value = lunarInfo != null
-        ? '${lunarInfo.yearText}年 ${lunarInfo.monthText}'
-        : '';
+  /// 将任意 (year, month) clamp 到 [minDate, maxDate] 区间内。
+  DateTime _clampMonth(DateTime date) {
+    final minKey = widget.minDate.year * 12 + widget.minDate.month;
+    final maxKey = widget.maxDate.year * 12 + widget.maxDate.month;
+    final key = (date.year * 12 + date.month).clamp(minKey, maxKey);
+    final year = (key - 1) ~/ 12;
+    final month = (key - 1) % 12 + 1;
+    return DateTime(year, month, 1);
   }
 
-  /// 由日历 onMonthChange 回调驱动，仅更新 ValueNotifier，不触发 setState
+  bool _canGoPrev() {
+    final cur = _currentMonth.year * 12 + _currentMonth.month;
+    final minKey = widget.minDate.year * 12 + widget.minDate.month;
+    return cur > minKey;
+  }
+
+  bool _canGoNext() {
+    final cur = _currentMonth.year * 12 + _currentMonth.month;
+    final maxKey = widget.maxDate.year * 12 + widget.maxDate.month;
+    return cur < maxKey;
+  }
+
+  /// 由日历 onMonthChange 回调驱动，仅更新显示
   void updateMonth(DateTime month) {
+    // 主动跳转动画过程中沿途触发的中间月份不要应用，避免数字跳动。
+    if (_suppressUpdate) {
+      return;
+    }
     if (_currentMonth.year == month.year && _currentMonth.month == month.month) {
       return;
     }
-    _currentMonth = month;
-    _updateNotifiers();
+    setState(() => _currentMonth = month);
   }
 
   void _navigateTo(DateTime month) {
-    _currentMonth = month;
-    _updateNotifiers();
-    widget.onNavigate(DateTime(month.year, month.month, 15));
+    final clamped = _clampMonth(month);
+    // 命中相同月份时直接返回，避免触发上层无意义重建。
+    if (_currentMonth.year == clamped.year &&
+        _currentMonth.month == clamped.month) {
+      return;
+    }
+    // 1) 立即更新控制栏显示，用户感知零延迟
+    setState(() => _currentMonth = clamped);
+    // 2) 在动画期间屏蔽来自日历的中间月份回调，防止数字跳动
+    _suppressUpdate = true;
+    _suppressTimer?.cancel();
+    _suppressTimer = Timer(_suppressDuration, () {
+      if (!mounted) {
+        return;
+      }
+      _suppressUpdate = false;
+    });
+    // 3) 通知上层触发日历滚动
+    widget.onNavigate(DateTime(clamped.year, clamped.month, 15));
+  }
+
+  Future<void> _pickYear() async {
+    final minYear = widget.minDate.year;
+    final maxYear = widget.maxDate.year;
+    final count = maxYear - minYear + 1;
+    final selectedIndex = _currentMonth.year - minYear;
+    // 让选中项默认居中（每行约 56 dp，参考 ListTile 默认高度）。
+    const itemExtent = 56.0;
+    final controller = ScrollController(
+      initialScrollOffset: (selectedIndex * itemExtent - 120).clamp(
+        0.0,
+        (count * itemExtent - 200).clamp(0.0, double.infinity),
+      ),
+    );
+    final year = await showModalBottomSheet<int>(
+      context: context,
+      builder: (ctx) {
+        return SizedBox(
+          height: 300,
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('选择年份',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  controller: controller,
+                  itemExtent: itemExtent,
+                  itemCount: count,
+                  itemBuilder: (ctx, index) {
+                    final y = minYear + index;
+                    final isSelected = y == _currentMonth.year;
+                    return ListTile(
+                      title: Text('$y年',
+                          style: TextStyle(
+                            color: isSelected ? Colors.blue : null,
+                            fontWeight:
+                                isSelected ? FontWeight.bold : null,
+                          )),
+                      trailing: isSelected
+                          ? const Icon(Icons.check, color: Colors.blue)
+                          : null,
+                      onTap: () => Navigator.pop(ctx, y),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    controller.dispose();
+    if (year != null) {
+      // 切年时，目标月可能在端点年越界，_navigateTo 内部会兜底 clamp。
+      _navigateTo(DateTime(year, _currentMonth.month, 1));
+    }
+  }
+
+  Future<void> _pickMonth() async {
+    final minKey = widget.minDate.year * 12 + widget.minDate.month;
+    final maxKey = widget.maxDate.year * 12 + widget.maxDate.month;
+    final m = await showModalBottomSheet<int>(
+      context: context,
+      builder: (ctx) {
+        return SizedBox(
+          height: 400,
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('选择月份',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: 12,
+                  itemBuilder: (ctx, index) {
+                    final month = index + 1;
+                    final monthKey = _currentMonth.year * 12 + month;
+                    final isDisabled =
+                        monthKey < minKey || monthKey > maxKey;
+                    final isSelected =
+                        !isDisabled && month == _currentMonth.month;
+                    final bgColor = isDisabled
+                        ? Colors.grey.shade100
+                        : (isSelected ? Colors.blue : Colors.grey.shade200);
+                    final fgColor = isDisabled
+                        ? Colors.grey.shade400
+                        : (isSelected ? Colors.white : Colors.black);
+                    return InkWell(
+                      onTap: isDisabled
+                          ? null
+                          : () => Navigator.pop(ctx, month),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: bgColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text('$month月',
+                            style: TextStyle(
+                              color: fgColor,
+                              fontWeight:
+                                  isSelected ? FontWeight.bold : null,
+                            )),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    if (m != null) {
+      _navigateTo(DateTime(_currentMonth.year, m, 1));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final lunarInfo = widget.dataSource.getLunarInfo(_currentMonth);
+    final lunarMonth = lunarInfo != null
+        ? '${lunarInfo.yearText}年 ${lunarInfo.monthText}'
+        : '';
+    final canPrev = _canGoPrev();
+    final canNext = _canGoNext();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -1225,19 +1412,12 @@ class _LunarControlBarState extends State<_LunarControlBar> {
           // 固定高度容器，防止农历文字有无时布局跳动
           SizedBox(
             height: 20,
-            child: ValueListenableBuilder<String>(
-              valueListenable: _lunarTextNotifier,
-              builder: (context, lunarMonth, _) {
-                if (lunarMonth.isEmpty) return const SizedBox.shrink();
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
+            child: lunarMonth.isNotEmpty
+                ? Text(
                     lunarMonth,
                     style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                );
-              },
-            ),
+                  )
+                : const SizedBox.shrink(),
           ),
           Row(
             children: [
@@ -1245,119 +1425,28 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                 text: '◀',
                 size: TButtonSize.small,
                 theme: TButtonTheme.defaultTheme,
-                onTap: () => _navigateTo(DateTime(_currentMonth.year, _currentMonth.month - 1, 1)),
+                disabled: !canPrev,
+                onTap: canPrev
+                    ? () => _navigateTo(DateTime(
+                        _currentMonth.year, _currentMonth.month - 1, 1))
+                    : null,
               ),
               const SizedBox(width: 4),
               Expanded(
-                child: ValueListenableBuilder<String>(
-                  valueListenable: _yearTextNotifier,
-                  builder: (context, text, _) => TButton(
-                    text: text,
-                    size: TButtonSize.small,
-                    theme: TButtonTheme.defaultTheme,
-                    onTap: () async {
-                      final year = await showModalBottomSheet<int>(
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: 300,
-                            child: Column(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Text('选择年份',
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: 50,
-                                    itemBuilder: (context, index) {
-                                      final y = DateTime.now().year - 10 + index;
-                                      return ListTile(
-                                        title: Text('$y年',
-                                            style: TextStyle(
-                                              color: y == _currentMonth.year ? Colors.blue : null,
-                                              fontWeight: y == _currentMonth.year ? FontWeight.bold : null,
-                                            )),
-                                        onTap: () => Navigator.pop(context, y),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                      if (year != null) {
-                        _navigateTo(DateTime(year, _currentMonth.month, 1));
-                      }
-                    },
-                  ),
+                child: TButton(
+                  text: '${_currentMonth.year}年',
+                  size: TButtonSize.small,
+                  theme: TButtonTheme.defaultTheme,
+                  onTap: _pickYear,
                 ),
               ),
               const SizedBox(width: 4),
               Expanded(
-                child: ValueListenableBuilder<String>(
-                  valueListenable: _monthTextNotifier,
-                  builder: (context, text, _) => TButton(
-                    text: text,
-                    size: TButtonSize.small,
-                    theme: TButtonTheme.defaultTheme,
-                    onTap: () async {
-                      final m = await showModalBottomSheet<int>(
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: 400,
-                            child: Column(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Text('选择月份',
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                ),
-                                Expanded(
-                                  child: GridView.builder(
-                                    padding: const EdgeInsets.all(16),
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      childAspectRatio: 2,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 10,
-                                    ),
-                                    itemCount: 12,
-                                    itemBuilder: (context, index) {
-                                      final m = index + 1;
-                                      final isSelected = m == _currentMonth.month;
-                                      return InkWell(
-                                        onTap: () => Navigator.pop(context, m),
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: isSelected ? Colors.blue : Colors.grey.shade200,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Text('$m月',
-                                              style: TextStyle(
-                                                color: isSelected ? Colors.white : Colors.black,
-                                                fontWeight: isSelected ? FontWeight.bold : null,
-                                              )),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                      if (m != null) {
-                        _navigateTo(DateTime(_currentMonth.year, m, 1));
-                      }
-                    },
-                  ),
+                child: TButton(
+                  text: '${_currentMonth.month}月',
+                  size: TButtonSize.small,
+                  theme: TButtonTheme.defaultTheme,
+                  onTap: _pickMonth,
                 ),
               ),
               const SizedBox(width: 4),
@@ -1365,12 +1454,18 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                 text: '▶',
                 size: TButtonSize.small,
                 theme: TButtonTheme.defaultTheme,
-                onTap: () => _navigateTo(DateTime(_currentMonth.year, _currentMonth.month + 1, 1)),
+                disabled: !canNext,
+                onTap: canNext
+                    ? () => _navigateTo(DateTime(
+                        _currentMonth.year, _currentMonth.month + 1, 1))
+                    : null,
               ),
               const SizedBox(width: 8),
               Text('农历', style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
-              Switch(
-                value: _mode == TCalendarDisplayMode.solarWithLunar ||
+              const SizedBox(width: 4),
+              TSwitch(
+                size: TSwitchSize.small,
+                isOn: _mode == TCalendarDisplayMode.solarWithLunar ||
                     _mode == TCalendarDisplayMode.lunar,
                 onChanged: (v) {
                   final newMode = v
@@ -1378,8 +1473,9 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                       : TCalendarDisplayMode.solar;
                   setState(() => _mode = newMode);
                   widget.onModeChanged(newMode);
+                  // 已自行处理状态，返回 true 阻止 TSwitch 内部刷新（避免双源冲突）
+                  return true;
                 },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ],
           ),
