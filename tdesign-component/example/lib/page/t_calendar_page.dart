@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
@@ -1182,32 +1180,12 @@ class _LunarControlBarState extends State<_LunarControlBar> {
   late DateTime _currentMonth;
   late TCalendarDisplayMode _mode;
 
-  /// 主动跳转期间忽略来自日历 onMonthChange 的中间过渡回调。
-  ///
-  /// 背景：日历内部 animateTo（约 200ms）会沿途触发若干次 onMonthChange，
-  /// 例如从 2026-05 跳到 2023-05，期间会快速地经过 36 个月份；
-  /// 若让控制栏跟随这些中间值刷新，用户视觉上会看到年/月数字"滚屏跳动"。
-  ///
-  /// 因此当用户主动 _navigateTo 时，短暂屏蔽 updateMonth 的中间值，
-  /// 等动画结束后再恢复随手势/上层切换的同步。
-  bool _suppressUpdate = false;
-  Timer? _suppressTimer;
-
-  // 略微大于动画时长（200ms），留出一帧抖动余量。
-  static const Duration _suppressDuration = Duration(milliseconds: 280);
-
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
     _currentMonth = _clampMonth(DateTime(now.year, now.month, 1));
     _mode = TCalendarDisplayMode.solarWithLunar;
-  }
-
-  @override
-  void dispose() {
-    _suppressTimer?.cancel();
-    super.dispose();
   }
 
   /// 将任意 (year, month) clamp 到 [minDate, maxDate] 区间内。
@@ -1232,12 +1210,12 @@ class _LunarControlBarState extends State<_LunarControlBar> {
     return cur < maxKey;
   }
 
-  /// 由日历 onMonthChange 回调驱动，仅更新显示
+  /// 由日历 onMonthChange 回调驱动，仅更新显示。
+  ///
+  /// 注意：日历组件（TCalendarBody）内部已对程序化滚动期间的 onMonthChange 做静默，
+  /// 因此这里收到的回调只会是「用户手势滑动」或「滚动落定后的最终月份」，
+  /// 无需再做额外的中间值屏蔽。
   void updateMonth(DateTime month) {
-    // 主动跳转动画过程中沿途触发的中间月份不要应用，避免数字跳动。
-    if (_suppressUpdate) {
-      return;
-    }
     if (_currentMonth.year == month.year && _currentMonth.month == month.month) {
       return;
     }
@@ -1251,18 +1229,9 @@ class _LunarControlBarState extends State<_LunarControlBar> {
         _currentMonth.month == clamped.month) {
       return;
     }
-    // 1) 立即更新控制栏显示，用户感知零延迟
+    // 立即更新控制栏显示，用户感知零延迟；
+    // 日历组件会自行屏蔽随后程序化滚动期间的中间月份回调。
     setState(() => _currentMonth = clamped);
-    // 2) 在动画期间屏蔽来自日历的中间月份回调，防止数字跳动
-    _suppressUpdate = true;
-    _suppressTimer?.cancel();
-    _suppressTimer = Timer(_suppressDuration, () {
-      if (!mounted) {
-        return;
-      }
-      _suppressUpdate = false;
-    });
-    // 3) 通知上层触发日历滚动
     widget.onNavigate(DateTime(clamped.year, clamped.month, 15));
   }
 
