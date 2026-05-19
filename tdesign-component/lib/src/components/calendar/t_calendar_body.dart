@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
+import 't_calendar_cell.dart';
 
 class TCalendarBody extends StatefulWidget {
   const TCalendarBody({
@@ -13,7 +14,6 @@ class TCalendarBody extends StatefulWidget {
     required this.firstDayOfWeek,
     required this.builder,
     required this.bodyPadding,
-    required this.displayFormat,
     required this.monthNames,
     this.monthTitleStyle,
     this.monthTitleBuilder,
@@ -27,8 +27,8 @@ class TCalendarBody extends StatefulWidget {
     this.dataSource,
   }) : super(key: key);
 
-  final int? maxDate;
-  final int? minDate;
+  final DateTime? maxDate;
+  final DateTime? minDate;
   final CalendarType type;
   final List<DateTime>? value;
   final DateTime? anchorDate;
@@ -41,7 +41,6 @@ class TCalendarBody extends StatefulWidget {
     int colIndex,
   ) builder;
   final double bodyPadding;
-  final String displayFormat;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
   final Widget Function(
@@ -115,8 +114,8 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       final mh = _getMonthHeight(_months, i, _monthHeight);
       if (_scrollController.offset >= currentOffset &&
           _scrollController.offset < currentOffset + mh) {
-        if (i + 1 < _months.length) {
-          final currentMonth = _months[i + 1];
+        if (i < _months.length) {
+          final currentMonth = _months[i];
           if (_lastPrintMonth == null ||
               !_lastPrintMonth!.isAtSameMomentAs(currentMonth)) {
             _lastPrintMonth = currentMonth;
@@ -161,9 +160,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
         final monthDate = _months[index];
         final monthYear = monthDate.year.toString() + context.resource.year;
         final monthMonth = widget.monthNames[monthDate.month - 1];
-        final monthDateText = widget.displayFormat
-            .replaceFirst('year', monthYear)
-            .replaceFirst('month', monthMonth);
+        final monthDateText = '$monthYear $monthMonth';
         late List<TDate?> monthData;
         if (_data.containsKey(monthDate)) {
           monthData = _data[monthDate]!;
@@ -255,10 +252,9 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     });
   }
 
-  DateTime _getDefDate(int? date, [bool isMax = false]) {
+  DateTime _getDefDate(DateTime? date, [bool isMax = false]) {
     if (date != null) {
-      final d = DateTime.fromMillisecondsSinceEpoch(date);
-      return DateTime(d.year, d.month, d.day);
+      return DateTime(date.year, date.month, date.day);
     }
     return isMax ? DateTime(2100, 12, 31) : DateTime(1970);
   }

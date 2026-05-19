@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
+import 't_calendar_cell.dart';
 
 class TCalendarHeader extends StatelessWidget {
   const TCalendarHeader({
@@ -9,15 +10,13 @@ class TCalendarHeader extends StatelessWidget {
     required this.padding,
     this.weekdayStyle,
     required this.weekdayHeight,
-    this.title,
-    this.titleStyle,
     this.titleWidget,
+    this.titleStyle,
     this.titleMaxLine,
     this.titleOverflow,
     this.closeBtn = true,
     this.closeColor,
     this.onClose,
-    this.onClick,
     required this.weekdayNames,
   }) : super(key: key);
 
@@ -26,16 +25,14 @@ class TCalendarHeader extends StatelessWidget {
   final double padding;
   final TextStyle? weekdayStyle;
   final double weekdayHeight;
-  final String? title;
-  final TextStyle? titleStyle;
   final Widget? titleWidget;
+  final TextStyle? titleStyle;
   final int? titleMaxLine;
   final TextOverflow? titleOverflow;
   final bool closeBtn;
   final Color? closeColor;
   final VoidCallback? onClose;
   final List<String> weekdayNames;
-  final void Function(int index, String week)? onClick;
 
   List<String> _getWeeks(BuildContext context) {
     final ans = <String>[];
@@ -54,7 +51,7 @@ class TCalendarHeader extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: padding),
       child: Column(
         children: [
-          if (title?.isNotEmpty == true || titleWidget != null || closeBtn)
+          if (titleWidget != null || closeBtn)
             Container(
               padding: EdgeInsets.symmetric(vertical: padding),
               child: Row(
@@ -62,13 +59,7 @@ class TCalendarHeader extends StatelessWidget {
                   if (closeBtn) const SizedBox(width: 24),
                   Expanded(
                     child: Center(
-                      child: titleWidget ??
-                          TText(
-                            title,
-                            style: titleStyle,
-                            maxLines: titleMaxLine,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                      child: titleWidget ?? const SizedBox.shrink(),
                     ),
                   ),
                   if (closeBtn)
@@ -89,17 +80,12 @@ class TCalendarHeader extends StatelessWidget {
               for (int index = 0; index < list.length; index++) ...[
                 if (index != 0) SizedBox(width: weekdayGap),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      onClick?.call(index, list[index]);
-                    },
-                    child: SizedBox(
-                      height: weekdayHeight,
-                      child: Center(
-                        child: TText(
-                          list[index],
-                          style: weekdayStyle,
-                        ),
+                  child: SizedBox(
+                    height: weekdayHeight,
+                    child: Center(
+                      child: TText(
+                        list[index],
+                        style: weekdayStyle,
                       ),
                     ),
                   ),

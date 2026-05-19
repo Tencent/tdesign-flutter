@@ -7,10 +7,8 @@ class TCalendarCell extends StatefulWidget {
   const TCalendarCell({
     Key? key,
     this.tdate,
-    this.format,
     required this.type,
     this.onCellClick,
-    this.onCellLongPress,
     this.onChange,
     required this.height,
     required this.data,
@@ -24,19 +22,13 @@ class TCalendarCell extends StatefulWidget {
   }) : super(key: key);
 
   final TDate? tdate;
-  final CalendarFormat? format;
   final CalendarType type;
   final void Function(
-    int value,
-    DateSelectType type,
+    DateTime value,
+    DateSelectType selectType,
     TDate tdate,
   )? onCellClick;
-  final void Function(
-    int value,
-    DateSelectType type,
-    TDate tdate,
-  )? onCellLongPress;
-  final void Function(List<int> value)? onChange;
+  final void Function(List<DateTime> value)? onChange;
   final double height;
   final Map<DateTime, List<TDate?>> data;
   final double padding;
@@ -87,7 +79,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     if (widget.tdate == null) {
       return const SizedBox.shrink();
     }
-    final tdate = widget.format?.call(widget.tdate) ?? widget.tdate!;
+    final tdate = widget.tdate!;
     final cellStyle = TCalendarStyle.cellStyle(context, widget.tdate!._type);
     final decoration = tdate.decoration ?? cellStyle.cellDecoration;
     final positionColor = _getColor(cellStyle, decoration);
@@ -100,11 +92,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _cellTap,
-      onLongPress: () {
-        final selectType = widget.tdate!._type;
-        final curDate = widget.tdate!._milliseconds;
-        widget.onCellLongPress?.call(curDate, selectType, widget.tdate!);
-      },
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -133,7 +120,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
   void _cellTap() {
     final list = widget.data.values.expand((element) => element).toList();
     final selectType = widget.tdate!._type;
-    final curDate = widget.tdate!._milliseconds;
+    final curDate = widget.tdate!.date;
     if (selectType == DateSelectType.disabled) {
       widget.onCellClick?.call(curDate, selectType, widget.tdate!);
       return;
@@ -144,7 +131,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
             list.find((item) => item?._type == DateSelectType.selected);
         date?._setType(DateSelectType.empty);
         widget.tdate!._setType(DateSelectType.selected);
-        if (date?._milliseconds != curDate) {
+        if (date?.date != curDate) {
           widget.onChange?.call([curDate]);
         }
         break;
@@ -152,8 +139,8 @@ class _TCalendarCellState extends State<TCalendarCell> {
         final date = list
             .where((item) => item?._type == DateSelectType.selected)
             .toList();
-        final value = date.map((item) => item!._milliseconds).toList();
-        if (date.find((item) => item?._milliseconds == curDate) != null) {
+        final value = date.map((item) => item!.date).toList();
+        if (date.find((item) => item!.date == curDate) != null) {
           widget.tdate!._setType(DateSelectType.empty);
           value.remove(curDate);
         } else {
@@ -165,10 +152,10 @@ class _TCalendarCellState extends State<TCalendarCell> {
       case CalendarType.range:
         final start = list.find((item) => item?._type == DateSelectType.start);
         final end = list.find((item) => item?._type == DateSelectType.end);
-        final startTimes = start?._milliseconds;
+        final startDate = start?.date;
         if ((start == null && end == null) ||
             (start != null && end != null) ||
-            (start != null && end == null && startTimes! >= curDate)) {
+            (start != null && end == null && !startDate!.isBefore(curDate))) {
           start?._setType(DateSelectType.empty);
           end?._setType(DateSelectType.empty);
           final centres = list
@@ -177,16 +164,16 @@ class _TCalendarCellState extends State<TCalendarCell> {
           centres.forEach((item) => item!._setType(DateSelectType.empty));
           widget.tdate!._setType(DateSelectType.start);
           widget.onChange?.call([curDate]);
-        } else if (start != null && end == null && startTimes! < curDate) {
+        } else if (start != null && end == null && startDate!.isBefore(curDate)) {
           start._setType(DateSelectType.start);
           widget.tdate!._setType(DateSelectType.end);
           var startIndex = list.indexOf(start) + 1;
           while (list[startIndex] == null ||
-              list[startIndex]!._milliseconds < curDate) {
+              list[startIndex]!.date.isBefore(curDate)) {
             list[startIndex]?._setType(DateSelectType.centre);
             startIndex++;
           }
-          widget.onChange?.call([startTimes, curDate]);
+          widget.onChange?.call([startDate, curDate]);
         }
         break;
     }
@@ -226,8 +213,8 @@ class _TCalendarCellState extends State<TCalendarCell> {
 
   bool _isToday() {
     final today = DateTime.now();
-    return widget.tdate?._milliseconds ==
-        DateTime(today.year, today.month, today.day).millisecondsSinceEpoch;
+    return widget.tdate?.date ==
+        DateTime(today.year, today.month, today.day);
   }
 
   /// 构建默认单元格内容
@@ -382,9 +369,6 @@ class TDate {
   /// type: 'holiday' 或 'workday'
   /// name: 假期名称
   final Map<String, String>? holidayInfo;
-
-  int get _milliseconds =>
-      DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
 
   DateSelectType get _type => typeNotifier.value;
 

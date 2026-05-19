@@ -8,45 +8,62 @@ Widget _buildStyle(BuildContext context) {
     15: '元宵节',
   };
 
-  final customCellSelected = ValueNotifier<List<int>>(
-      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  final customCellSelected = ValueNotifier<List<DateTime>>(
+      [DateTime.now().add(const Duration(days: 30))]);
 
   return ValueListenableBuilder(
     valueListenable: customCellSelected,
     builder: (context, cellValue, _) {
-      final cellDate = DateTime.fromMillisecondsSinceEpoch(cellValue[0]);
+      final cellDate = cellValue[0];
       return TCellGroup(
         cells: [
-          // 1. 自定义文案（format 回调修改 prefix/suffix/style）
+          // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
           TCell(
             title: '自定义文案',
             arrow: true,
             onClick: (cell) {
               TCalendar.showPopup(
                 context,
-                title: '请选择日期',
-                minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-                maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
-                format: (day) {
-                  day?.suffix = '¥60';
-                  if (day?.date.month == 2) {
-                    if (map.keys.contains(day?.date.day)) {
-                      day?.suffix = '¥100';
-                      day?.prefix = map[day.date.day];
-                      day?.style = TextStyle(
-                        fontSize: TTheme.of(context).fontTitleMedium?.size,
-                        height: TTheme.of(context).fontTitleMedium?.height,
-                        fontWeight:
-                            TTheme.of(context).fontTitleMedium?.fontWeight,
-                        color: TTheme.of(context).errorColor6,
-                      );
-                      if (day?.typeNotifier.value == DateSelectType.selected) {
-                        day?.style = day.style
-                            ?.copyWith(color: TTheme.of(context).fontWhColor1);
-                      }
-                    }
-                  }
-                  return null;
+                titleWidget: const Text('请选择日期'),
+                minDate: DateTime(2022, 1, 1),
+                maxDate: DateTime(2022, 2, 15),
+                cellWidget: (context, tdate, selectType) {
+                  final isSpecial = tdate.date.month == 2 &&
+                      map.keys.contains(tdate.date.day);
+                  final suffix = isSpecial ? '¥100' : '¥60';
+                  final prefix = isSpecial ? map[tdate.date.day] : null;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (prefix != null)
+                        Text(prefix,
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: isSpecial
+                                  ? TTheme.of(context).errorColor6
+                                  : null,
+                            )),
+                      Text(
+                        tdate.date.day.toString(),
+                        style: TextStyle(
+                          color: selectType == DateSelectType.selected
+                              ? TTheme.of(context).fontWhColor1
+                              : isSpecial
+                                  ? TTheme.of(context).errorColor6
+                                  : null,
+                        ),
+                      ),
+                      Text(suffix,
+                          style: TextStyle(
+                            fontSize: 9,
+                            color: selectType == DateSelectType.selected
+                                ? TTheme.of(context).fontWhColor1
+                                : isSpecial
+                                    ? TTheme.of(context).errorColor6
+                                    : null,
+                          )),
+                    ],
+                  );
                 },
               );
             },
@@ -59,8 +76,8 @@ Widget _buildStyle(BuildContext context) {
             onClick: (cell) {
               TCalendar.showPopup(
                 context,
-                title: '请选择日期',
-                value: [DateTime.now().millisecondsSinceEpoch],
+                titleWidget: const Text('请选择日期'),
+                initialValue: [DateTime.now()],
                 confirmBtn: Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: TTheme.of(context).spacer16),
@@ -85,15 +102,14 @@ Widget _buildStyle(BuildContext context) {
             onClick: (cell) {
               TCalendar.showPopup(
                 context,
-                title: '请选择日期',
-                value: cellValue,
+                titleWidget: const Text('请选择日期'),
+                initialValue: cellValue,
                 cellHeight: 80,
                 onConfirm: (value) => customCellSelected.value = value,
                 cellWidget: (context, tdate, selectType) {
                   final today = DateTime.now();
-                  final isToday = tdate.date.millisecondsSinceEpoch ==
-                      DateTime(today.year, today.month, today.day)
-                          .millisecondsSinceEpoch;
+                  final isToday = tdate.date ==
+                      DateTime(today.year, today.month, today.day);
 
                   if (isToday && selectType != DateSelectType.selected) {
                     return _CustomCellContainer(

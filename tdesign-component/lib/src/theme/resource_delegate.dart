@@ -121,64 +121,64 @@ abstract class TResourceDelegate {
   /// 周
   String get weeksLabel;
 
-  /// [TCalendarHeader] 星期日
+  /// [TCalendar] 星期日
   String get sunday;
 
-  /// [TCalendarHeader] 星期一
+  /// [TCalendar] 星期一
   String get monday;
 
-  /// [TCalendarHeader] 星期二
+  /// [TCalendar] 星期二
   String get tuesday;
 
-  /// [TCalendarHeader] 星期三
+  /// [TCalendar] 星期三
   String get wednesday;
 
-  /// [TCalendarHeader] 星期四
+  /// [TCalendar] 星期四
   String get thursday;
 
-  /// [TCalendarHeader] 星期五
+  /// [TCalendar] 星期五
   String get friday;
 
-  /// [TCalendarHeader] 星期六
+  /// [TCalendar] 星期六
   String get saturday;
 
-  /// [TCalendarBody] 年
+  /// [TCalendar] 年
   String get year;
 
-  /// [TCalendarBody] 一月
+  /// [TCalendar] 一月
   String get january;
 
-  /// [TCalendarBody] 二月
+  /// [TCalendar] 二月
   String get february;
 
-  /// [TCalendarBody] 三月
+  /// [TCalendar] 三月
   String get march;
 
-  /// [TCalendarBody] 四月
+  /// [TCalendar] 四月
   String get april;
 
-  /// [TCalendarBody] 五月
+  /// [TCalendar] 五月
   String get may;
 
-  /// [TCalendarBody] 六月
+  /// [TCalendar] 六月
   String get june;
 
-  /// [TCalendarBody] 七月
+  /// [TCalendar] 七月
   String get july;
 
-  /// [TCalendarBody] 八月
+  /// [TCalendar] 八月
   String get august;
 
-  /// [TCalendarBody] 九月
+  /// [TCalendar] 九月
   String get september;
 
-  /// [TCalendarBody] 十月
+  /// [TCalendar] 十月
   String get october;
 
-  /// [TCalendarBody] 十一月
+  /// [TCalendar] 十一月
   String get november;
 
-  /// [TCalendarBody] 十二月
+  /// [TCalendar] 十二月
   String get december;
 
   /// [TCalendar] 时间

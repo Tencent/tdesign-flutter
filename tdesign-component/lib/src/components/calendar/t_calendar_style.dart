@@ -20,10 +20,10 @@ class TCalendarStyle {
 
   BoxDecoration? decoration;
 
-  /// header区域 [TCalendar.title]的样式
+  /// header区域 [TCalendar.titleWidget]的样式
   TextStyle? titleStyle;
 
-  /// header区域 [TCalendar.title]的行数
+  /// header区域 [TCalendar.titleWidget]的行数
   int? titleMaxLine;
 
   /// header区域 关闭图标的颜色

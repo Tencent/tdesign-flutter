@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
+import 't_calendar_body.dart';
+import 't_calendar_cell.dart';
+import 't_calendar_header.dart';
 
-export 't_calendar_body.dart';
-export 't_calendar_cell.dart';
+export 't_calendar_cell.dart' show TDate;
 export 't_calendar_data_source.dart';
-export 't_calendar_header.dart';
 export 't_calendar_style.dart';
 export 't_lunar_date.dart';
 
@@ -37,10 +38,10 @@ class TCalendarInherited extends InheritedWidget {
   /// 选中态的可写引用（仅供 [TCalendar] 内部更新使用）。
   ///
   /// 对外消费方请使用 [selectedListenable] 这一只读视图。
-  final ValueNotifier<List<int>> selected;
+  final ValueNotifier<List<DateTime>> selected;
 
   /// 选中态的只读视图，供下游 widget 监听变化。
-  ValueListenable<List<int>> get selectedListenable => selected;
+  ValueListenable<List<DateTime>> get selectedListenable => selected;
 
   final bool? usePopup;
 
@@ -69,133 +70,122 @@ class TCalendarInherited extends InheritedWidget {
   }
 }
 
-typedef CalendarFormat = TDate? Function(TDate? day);
+/// 日历选择模式
+enum CalendarType {
+  /// 单选：点击新日期时自动取消旧日期的选中状态
+  single,
 
-/// [TCalendar.bottom] 的构建器签名。`selectedDates` 为只读视图，详细行为见 [TCalendar.bottom]。
-typedef CalendarBottomBuilder = Widget Function(
-  BuildContext context,
-  List<int> selectedDates,
-);
+  /// 多选：点击日期切换选中/取消，可同时选中多个日期
+  multiple,
 
-enum CalendarType { single, multiple, range }
+  /// 区间选择：第一次点击选起点，第二次点击选终点，中间自动填充
+  range,
+}
 
+/// 日期在日历中的选中状态
 enum DateSelectType { selected, disabled, start, centre, end, empty }
+
+/// 日历显示模式，控制日期单元格的主/副文本内容
+enum TCalendarDisplayMode {
+  /// 纯阳历：主文本显示阳历日期数字，无副文本
+  solar,
+
+  /// 阳历 + 农历副标题：主文本显示阳历日期数字，副文本显示农历（如"初七"）
+  solarWithLunar,
+
+  /// 农历为主：主文本显示农历（如"初七"），副文本显示阳历日期数字
+  lunar,
+}
 
 /// 日历组件
 class TCalendar extends StatefulWidget {
   const TCalendar({
     Key? key,
     this.firstDayOfWeek = 0,
-    this.format,
     this.maxDate,
     this.minDate,
-    this.title,
     this.titleWidget,
     this.type = CalendarType.single,
-    this.value,
-    this.displayFormat = 'year month',
-    this.cellHeight = 60,
+    this.initialValue,
+    this.cellHeight,
     this.height,
-    this.width,
     this.style,
     this.onChange,
     this.onCellClick,
-    this.onCellLongPress,
-    this.onHeaderClick,
-    this.useSafeArea = true,
-    this.bottom,
-    this.bottomExpanded,
+    this.safeAreaInset = true,
+    this.popupBottomBuilder,
+    this.popupBottomExpanded,
     this.monthTitleHeight = 22,
     this.monthTitleBuilder,
     this.animateTo = false,
     this.cellWidget,
     this.onMonthChange,
     this.anchorDate,
-    this.dateType = TCalendarDateType.solar,
+    this.displayMode = TCalendarDisplayMode.solar,
     this.dataSource,
-    this.showLunarInfo = false,
   })  : assert(
-          bottomExpanded == null || bottom != null,
-          'bottomExpanded 需配合 bottom 使用',
+          popupBottomExpanded == null || popupBottomBuilder != null,
+          'popupBottomExpanded 需配合 popupBottomBuilder 使用',
         ),
         super(key: key);
 
-  /// 第一天从星期几开始，默认 0 = 周日
-  final int? firstDayOfWeek;
+  /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。
+  final int firstDayOfWeek;
 
-  /// 用于格式化日期的函数，可定义日期前后的显示内容和日期样式
-  final CalendarFormat? format;
+  /// 最大可选的日期，不传则默认 2100-12-31
+  final DateTime? maxDate;
 
-  /// 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认 2100-12-31
-  final int? maxDate;
+  /// 最小可选的日期，不传则默认 1970-01-01
+  final DateTime? minDate;
 
-  /// 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认 1970-01-01
-  final int? minDate;
-
-  /// 标题
-  final String? title;
-
-  /// 标题组件
+  /// 标题组件，可传入 Text 或自定义 Widget
   final Widget? titleWidget;
 
-  /// 日历的选择类型，single = 单选；multiple = 多选；range = 区间选择
-  final CalendarType? type;
+  /// 日历的选择模式，决定点击日期后的选中行为：
+  /// - [CalendarType.single]：单选，点击新日期取消旧选中
+  /// - [CalendarType.multiple]：多选，点击切换选中/取消
+  /// - [CalendarType.range]：区间选择，依次选起止日期
+  final CalendarType type;
 
-  /// 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1
-  final List<int>? value;
-
-  /// 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格
-  final String? displayFormat;
+  /// 初始选中日期列表，不传则默认今天。
+  ///
+  /// 列表长度与 [type] 对应：
+  /// - [CalendarType.single]：1 个元素（选中日期）
+  /// - [CalendarType.multiple]：N 个元素（所有选中日期）
+  /// - [CalendarType.range]：2 个元素（起始、结束日期）
+  final List<DateTime>? initialValue;
 
   /// 高度，不传时内嵌模式自动按 5 行日期计算
   final double? height;
 
-  /// 日期高度
+  /// 日期单元格高度，默认 60。如需更大行高可传入自定义值（如 80）
   final double? cellHeight;
-
-  /// 宽度
-  final double? width;
-
-  /// 锚点日期
-  final DateTime? anchorDate;
 
   /// 自定义样式
   final TCalendarStyle? style;
 
   /// 选中值变化时触发
-  final void Function(List<int> value)? onChange;
+  final void Function(List<DateTime> value)? onChange;
 
   /// 点击日期时触发
   final void Function(
-    int value,
-    DateSelectType type,
+    DateTime value,
+    DateSelectType selectType,
     TDate tdate,
   )? onCellClick;
-
-  /// 长按日期时触发
-  final void Function(
-    int value,
-    DateSelectType type,
-    TDate tdate,
-  )? onCellLongPress;
-
-  /// 点击周时触发
-  final void Function(
-    int index,
-    String week,
-  )? onHeaderClick;
 
   /// 月份变化时触发
   final ValueChanged<DateTime>? onMonthChange;
 
-  /// 是否使用安全区域（默认 true）
-  final bool? useSafeArea;
+  /// 是否适配底部安全区域（如 iPhone Home Indicator），默认 true
+  final bool safeAreaInset;
 
-  /// 底部自定义区域构建器，以浮层方式叠加在日历主体之上。
+  /// 弹窗底部自定义区域构建器，以浮层方式叠加在日历主体之上。
   ///
-  /// **仅能在 `TPopupBottomDisplayPanel` 内使用**（作为其 `child` 的子树）。
+  /// **仅在弹窗模式下生效**（即 [TCalendar] 作为 [TPopupBottomDisplayPanel] 的子树时）。
+  /// 非弹窗模式下传入此参数将被忽略。
   ///
-  /// - **不会撑高 [TCalendar]**，请在面板 `fixedHeight` 中预留 bottom 自身的占用高度；
+  /// - **不会撑高 [TCalendar]**，请在 `popupHeight` 中预留 bottom 自身的占用高度；
   /// - `selectedDates` 随弹窗内日期点击实时更新；
   /// - 传入的 `selectedDates` 是只读视图（[List.unmodifiable]），请勿原地修改。
   ///
@@ -203,13 +193,14 @@ class TCalendar extends StatefulWidget {
   /// TPopupBottomDisplayPanel(
   ///   fixedHeight: 600,
   ///   child: TCalendar(
-  ///     bottom: (ctx, dates) => MyFooter(selectedDates: dates),
+  ///     popupBottomBuilder: (ctx, dates) => MyFooter(selectedDates: dates),
   ///   ),
   /// );
   /// ```
-  final CalendarBottomBuilder? bottom;
+  final Widget Function(BuildContext context, List<DateTime> selectedDates)?
+      popupBottomBuilder;
 
-  /// bottom 区域是否展开（响应式）。**仅能在 [TPopupBottomDisplayPanel] 内使用。**
+  /// 弹窗底部区域是否展开（响应式）。**仅在弹窗模式下生效。**
   ///
   /// 为 `null`（默认）时 bottom 始终展开；传入 [ValueListenable] 时，
   /// bottom 展开/收起将跟随其值变化播放滑动动画，常配合 [ValueNotifier] 使用。
@@ -219,16 +210,16 @@ class TCalendar extends StatefulWidget {
   /// TPopupBottomDisplayPanel(
   ///   fixedHeight: 600,
   ///   child: TCalendar(
-  ///     bottomExpanded: expanded,
+  ///     popupBottomExpanded: expanded,
   ///     onCellClick: (v, t, d) => expanded.value = true,
-  ///     bottom: (ctx, dates) => MyFooter(),
+  ///     popupBottomBuilder: (ctx, dates) => MyFooter(),
   ///   ),
   /// );
   /// ```
-  final ValueListenable<bool>? bottomExpanded;
+  final ValueListenable<bool>? popupBottomExpanded;
 
-  /// 月标题高度
-  final double? monthTitleHeight;
+  /// 每月标题行高度（如 '2025年6月' 所在行），默认 22
+  final double monthTitleHeight;
 
   /// 月标题构建器
   final Widget Function(
@@ -236,8 +227,8 @@ class TCalendar extends StatefulWidget {
     DateTime monthDate,
   )? monthTitleBuilder;
 
-  /// 动画滚动到指定位置
-  final bool? animateTo;
+  /// 滚动到选中日期/锚点日期所在月份时是否使用动画，默认 false
+  final bool animateTo;
 
   /// 自定义日期单元格组件
   final Widget? Function(
@@ -246,18 +237,23 @@ class TCalendar extends StatefulWidget {
     DateSelectType selectType,
   )? cellWidget;
 
-  /// 日历类型：阳历或农历
-  final TCalendarDateType dateType;
+  /// 锚点日期，弹出时自动滚动到该日期所在月份。
+  /// 传入 [DateTime] 对象，如 `DateTime(2025, 6, 15)`。
+  final DateTime? anchorDate;
 
-  /// 外部数据源，用于提供农历转换等功能
+  /// 日历显示模式，控制日期单元格的主/副文本内容：
+  /// - [TCalendarDisplayMode.solar]：纯阳历，主文本显示阳历日期数字
+  /// - [TCalendarDisplayMode.solarWithLunar]：阳历 + 农历副标题
+  /// - [TCalendarDisplayMode.lunar]：农历为主文本，阳历为副文本
+  final TCalendarDisplayMode displayMode;
+
+  /// 外部数据源，用于提供农历转换等功能。
+  /// 当 [displayMode] 为 [TCalendarDisplayMode.solarWithLunar] 或
+  /// [TCalendarDisplayMode.lunar] 时必须提供。
   final TCalendarDataSource? dataSource;
 
-  /// 阳历模式下是否显示农历信息作为副标题
-  final bool showLunarInfo;
-
-  List<DateTime>? get _value => value?.map((e) {
-        final date = DateTime.fromMillisecondsSinceEpoch(e);
-        return DateTime(date.year, date.month, date.day);
+  List<DateTime>? get _value => initialValue?.map((e) {
+        return DateTime(e.year, e.month, e.day);
       }).toList();
 
   // ---------------------------------------------------------------------------
@@ -287,12 +283,12 @@ class TCalendar extends StatefulWidget {
 
   /// 弹出日历选择器，返回选中的日期列表。
   ///
-  /// 取消或关闭弹窗时返回 `null`；点击确认时返回选中日期的毫秒时间戳列表。
+  /// 取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。
   ///
   /// ```dart
   /// final result = await TCalendar.showPopup(
   ///   context,
-  ///   title: '请选择日期',
+  ///   titleWidget: Text('请选择日期'),
   ///   type: CalendarType.single,
   /// );
   /// if (result != null) {
@@ -302,64 +298,57 @@ class TCalendar extends StatefulWidget {
   ///
   /// 若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]
   /// + [TSlidePopupRoute] 自行组装。
-  static Future<List<int>?> showPopup(
+  static Future<List<DateTime>?> showPopup(
     BuildContext context, {
-    /// 弹窗标题
-    String? title,
+    /// 弹窗标题组件
+    Widget? titleWidget,
 
-    /// 日历选择类型
+    /// 日历选择模式
     CalendarType type = CalendarType.single,
 
-    /// 当前选中的日期（毫秒时间戳列表）
-    List<int>? value,
+    /// 初始选中日期列表
+    List<DateTime>? initialValue,
 
-    /// 最小可选日期（毫秒时间戳）
-    int? minDate,
+    /// 最小可选日期
+    DateTime? minDate,
 
-    /// 最大可选日期（毫秒时间戳）
-    int? maxDate,
+    /// 最大可选日期
+    DateTime? maxDate,
 
-    /// 锚点日期，弹出时滚动到该月
+    /// 锚点日期，弹出时自动滚动到该日期所在月份
     DateTime? anchorDate,
 
-    /// 面板固定高度（不传时自动计算）
-    double? fixedHeight,
+    /// 弹窗面板高度（不传时自动计算）
+    double? popupHeight,
 
-    /// 第一天从星期几开始，默认 0 = 周日
-    int? firstDayOfWeek,
+    /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。
+    int firstDayOfWeek = 0,
 
-    /// 年月显示格式
-    String? displayFormat,
-
-    /// 日期高度
+    /// 日期单元格高度
     double? cellHeight,
 
     /// 自定义样式
     TCalendarStyle? style,
 
-    /// 用于格式化日期的函数
-    CalendarFormat? format,
+    /// 弹窗底部自定义区域构建器
+    Widget Function(BuildContext context, List<DateTime> selectedDates)?
+        popupBottomBuilder,
 
-    /// 底部自定义区域构建器
-    CalendarBottomBuilder? bottom,
-
-    /// bottom 区域是否展开（响应式）
-    ValueListenable<bool>? bottomExpanded,
+    /// 弹窗底部区域是否展开（响应式）
+    ValueListenable<bool>? popupBottomExpanded,
 
     /// 自定义确认按钮
     Widget? confirmBtn,
 
-    /// 点击确认的额外回调（除了返回值之外）
-    void Function(List<int>)? onConfirm,
+    /// 点击确认按钮时触发
+    void Function(List<DateTime>)? onConfirm,
 
-    /// 弹窗关闭后的回调
+    /// 弹窗关闭后触发（无论确认还是取消）
     VoidCallback? onClose,
 
     /// 点击日期时触发
-    void Function(int value, DateSelectType type, TDate tdate)? onCellClick,
-
-    /// 长按日期时触发
-    void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress,
+    void Function(DateTime value, DateSelectType selectType, TDate tdate)?
+        onCellClick,
 
     /// 点击遮罩或物理返回是否关闭
     bool autoClose = true,
@@ -374,14 +363,11 @@ class TCalendar extends StatefulWidget {
       DateSelectType selectType,
     )? cellWidget,
 
-    /// 日历类型：阳历或农历
-    TCalendarDateType dateType = TCalendarDateType.solar,
+    /// 日历显示模式
+    TCalendarDisplayMode displayMode = TCalendarDisplayMode.solar,
 
     /// 外部数据源，用于提供农历转换等功能
     TCalendarDataSource? dataSource,
-
-    /// 阳历模式下是否显示农历信息作为副标题
-    bool showLunarInfo = false,
 
     /// 月份变化时触发
     ValueChanged<DateTime>? onMonthChange,
@@ -389,8 +375,8 @@ class TCalendar extends StatefulWidget {
     /// 月标题构建器
     Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder,
   }) async {
-    final selected = ValueNotifier<List<int>>(value ?? []);
-    List<int>? result;
+    final selected = ValueNotifier<List<DateTime>>(initialValue ?? []);
+    List<DateTime>? result;
     var closing = false;
 
     void doClose(NavigatorState nav) {
@@ -410,7 +396,13 @@ class TCalendar extends StatefulWidget {
         final screenHeight = MediaQuery.of(ctx).size.height;
 
         final panelHeight =
-            fixedHeight ?? _calcDefaultHeight(safeBottom, screenHeight);
+            popupHeight ?? _calcDefaultHeight(safeBottom, screenHeight);
+
+        // 提取标题文字给 TPopupBottomDisplayPanel
+        String? panelTitle;
+        if (titleWidget != null) {
+          panelTitle = _extractTextFromWidget(titleWidget);
+        }
 
         return TCalendarInherited(
           selected: selected,
@@ -424,14 +416,14 @@ class TCalendar extends StatefulWidget {
             }
           },
           onConfirm: () {
-            result = List<int>.from(selected.value);
+            result = List<DateTime>.from(selected.value);
             onConfirm?.call(result!);
             if (autoClose) {
               doClose(nav);
             }
           },
           child: TPopupBottomDisplayPanel(
-            title: title,
+            title: panelTitle,
             draggable: draggable,
             fixedHeight: panelHeight,
             closeClick: () {
@@ -440,25 +432,21 @@ class TCalendar extends StatefulWidget {
               }
             },
             child: TCalendar(
-              title: title,
+              titleWidget: titleWidget,
               type: type,
-              value: value,
+              initialValue: initialValue,
               minDate: minDate,
               maxDate: maxDate,
               anchorDate: anchorDate,
               firstDayOfWeek: firstDayOfWeek,
-              displayFormat: displayFormat ?? 'year month',
               cellHeight: cellHeight,
               style: style,
-              format: format,
-              bottom: bottom,
-              bottomExpanded: bottomExpanded,
+              popupBottomBuilder: popupBottomBuilder,
+              popupBottomExpanded: popupBottomExpanded,
               onCellClick: onCellClick,
-              onCellLongPress: onCellLongPress,
               cellWidget: cellWidget,
-              dateType: dateType,
+              displayMode: displayMode,
               dataSource: dataSource,
-              showLunarInfo: showLunarInfo,
               onMonthChange: onMonthChange,
               monthTitleBuilder: monthTitleBuilder,
             ),
@@ -469,6 +457,21 @@ class TCalendar extends StatefulWidget {
 
     onClose?.call();
     return result;
+  }
+
+  /// 尝试从 Widget 中提取文本内容，用于 TPopupBottomDisplayPanel 的标题。
+  /// 仅支持 Text 和 RichText 两种常见情况。
+  static String? _extractTextFromWidget(Widget widget) {
+    if (widget is Text) {
+      return widget.data;
+    }
+    if (widget is RichText) {
+      final text = widget.text;
+      if (text is TextSpan) {
+        return text.toPlainText();
+      }
+    }
+    return null;
   }
 
   @override
@@ -493,6 +496,21 @@ class _TCalendarState extends State<TCalendar> {
   bool _initializedSelected = false;
 
   bool get _usePopupBottom => inherited?.usePopup == true;
+
+  /// 解析 displayMode 为旧的 dateType 和 showLunarInfo
+  TCalendarDateType get _dateType {
+    switch (widget.displayMode) {
+      case TCalendarDisplayMode.solar:
+      case TCalendarDisplayMode.solarWithLunar:
+        return TCalendarDateType.solar;
+      case TCalendarDisplayMode.lunar:
+        return TCalendarDateType.lunar;
+    }
+  }
+
+  bool get _showLunarInfo =>
+      widget.displayMode == TCalendarDisplayMode.solarWithLunar ||
+      widget.displayMode == TCalendarDisplayMode.lunar;
 
   @override
   void didChangeDependencies() {
@@ -532,7 +550,7 @@ class _TCalendarState extends State<TCalendar> {
   @override
   void didUpdateWidget(covariant TCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!listEquals(oldWidget.value, widget.value)) {
+    if (!listEquals(oldWidget.initialValue, widget.initialValue)) {
       _refreshValueCache();
       _syncSelectedToInheritedDeferred();
     }
@@ -544,12 +562,12 @@ class _TCalendarState extends State<TCalendar> {
 
   void _assertPopupOnlyBottom() {
     assert(
-      widget.bottom == null || _usePopupBottom,
-      '[TCalendar] bottom 仅能在 TPopupBottomDisplayPanel 内使用',
+      widget.popupBottomBuilder == null || _usePopupBottom,
+      '[TCalendar] popupBottomBuilder 仅能在弹窗模式下使用',
     );
     assert(
-      widget.bottomExpanded == null || _usePopupBottom,
-      '[TCalendar] bottomExpanded 仅能在 TPopupBottomDisplayPanel 内使用',
+      widget.popupBottomExpanded == null || _usePopupBottom,
+      '[TCalendar] popupBottomExpanded 仅能在弹窗模式下使用',
     );
   }
 
@@ -558,7 +576,7 @@ class _TCalendarState extends State<TCalendar> {
     if (inherited == null) {
       return;
     }
-    inherited!.selected.value = _getValue(widget.value ?? const <int>[]);
+    inherited!.selected.value = _getValue(widget.initialValue ?? const []);
   }
 
   // 适用于 build phase 调用，写操作延迟到下一帧。
@@ -570,7 +588,7 @@ class _TCalendarState extends State<TCalendar> {
       if (!mounted || inherited == null) {
         return;
       }
-      inherited!.selected.value = _getValue(widget.value ?? const <int>[]);
+      inherited!.selected.value = _getValue(widget.initialValue ?? const []);
     });
   }
 
@@ -578,7 +596,7 @@ class _TCalendarState extends State<TCalendar> {
   Widget build(BuildContext context) {
     _assertPopupOnlyBottom();
     final verticalGap = _style.verticalGap ?? TTheme.of(context).spacer8;
-    final hasBottom = widget.bottom != null && _usePopupBottom;
+    final hasBottom = widget.popupBottomBuilder != null && _usePopupBottom;
 
     Widget stackContent(bool bottomExpanded) {
       return Stack(
@@ -590,16 +608,16 @@ class _TCalendarState extends State<TCalendar> {
       );
     }
 
-    final child = hasBottom && widget.bottomExpanded != null
+    final child = hasBottom && widget.popupBottomExpanded != null
         ? ValueListenableBuilder<bool>(
-            valueListenable: widget.bottomExpanded!,
+            valueListenable: widget.popupBottomExpanded!,
             builder: (context, expanded, _) => stackContent(expanded),
           )
         : stackContent(hasBottom);
 
     return Container(
       height: widget.height ?? _calcInlineDefaultHeight(verticalGap),
-      width: widget.width ?? double.infinity,
+      width: double.infinity,
       decoration: _style.decoration,
       child: child,
     );
@@ -623,21 +641,19 @@ class _TCalendarState extends State<TCalendar> {
     return Column(
       children: [
         TCalendarHeader(
-          firstDayOfWeek: widget.firstDayOfWeek ?? 0,
+          firstDayOfWeek: widget.firstDayOfWeek,
           weekdayGap: TTheme.of(context).spacer4,
           padding: TTheme.of(context).spacer16,
           weekdayStyle: _style.weekdayStyle,
           weekdayHeight: 46,
-          title: _showPopupControls ? widget.title : null,
-          titleStyle: _style.titleStyle,
           titleWidget: _showPopupControls ? widget.titleWidget : null,
+          titleStyle: _style.titleStyle,
           titleMaxLine: _style.titleMaxLine,
           titleOverflow: TextOverflow.ellipsis,
           closeBtn: _showPopupControls,
           closeColor: _style.titleCloseColor,
           weekdayNames: weekdayNames,
           onClose: inherited?.onClose,
-          onClick: widget.onHeaderClick,
         ),
         Expanded(
           child: _buildBodyArea(verticalGap, hasBottom, bottomExpanded),
@@ -645,7 +661,7 @@ class _TCalendarState extends State<TCalendar> {
         if (_showPopupConfirmBtn)
           inherited?.confirmBtn ??
               Padding(
-                padding: widget.useSafeArea == true
+                padding: widget.safeAreaInset
                     ? EdgeInsets.only(top: TTheme.of(context).spacer16)
                     : EdgeInsets.symmetric(
                         vertical: TTheme.of(context).spacer16),
@@ -657,7 +673,7 @@ class _TCalendarState extends State<TCalendar> {
                   onTap: inherited?.onConfirm,
                 ),
               ),
-        if (widget.useSafeArea == true)
+        if (widget.safeAreaInset)
           SizedBox(height: MediaQuery.of(context).padding.bottom)
       ],
     );
@@ -672,7 +688,7 @@ class _TCalendarState extends State<TCalendar> {
     if (!hasBottom) {
       return body;
     }
-    if (widget.bottomExpanded == null) {
+    if (widget.popupBottomExpanded == null) {
       return Padding(
         padding: const EdgeInsets.only(bottom: _bottomPeekHeight),
         child: body,
@@ -690,70 +706,67 @@ class _TCalendarState extends State<TCalendar> {
 
   Widget _buildCalendarBody(double verticalGap) {
     return TCalendarBody(
-      type: widget.type ?? CalendarType.single,
-      firstDayOfWeek: widget.firstDayOfWeek ?? 0,
+      type: widget.type,
+      firstDayOfWeek: widget.firstDayOfWeek,
       maxDate: widget.maxDate,
       anchorDate: widget.anchorDate,
       minDate: widget.minDate,
       value: _cachedValueDates,
       bodyPadding: _style.bodyPadding ?? TTheme.of(context).spacer16,
-      displayFormat: widget.displayFormat ?? 'year month',
       monthNames: monthNames,
       monthTitleStyle: _style.monthTitleStyle,
       verticalGap: verticalGap,
       cellHeight: _getEffectiveCellHeight(),
-      monthTitleHeight: widget.monthTitleHeight ?? 22,
+      monthTitleHeight: widget.monthTitleHeight,
       monthTitleBuilder: widget.monthTitleBuilder,
-      animateTo: widget.animateTo ?? false,
+      animateTo: widget.animateTo,
       onMonthChange: widget.onMonthChange,
-      dateType: widget.dateType,
+      dateType: _dateType,
       dataSource: widget.dataSource,
       builder: (date, dateList, data, rowIndex, colIndex) {
         return TCalendarCell(
           height: _getEffectiveCellHeight(),
           tdate: date,
-          format: widget.format,
-          type: widget.type ?? CalendarType.single,
+          type: widget.type,
           data: data,
           padding: verticalGap / 2,
           onChange: _handleCellChange,
           onCellClick: widget.onCellClick,
-          onCellLongPress: widget.onCellLongPress,
           dateList: dateList,
           rowIndex: rowIndex,
           colIndex: colIndex,
           cellWidget: widget.cellWidget,
-          dateType: widget.dateType,
-          showLunarInfo: widget.showLunarInfo,
+          dateType: _dateType,
+          showLunarInfo: _showLunarInfo,
         );
       },
     );
   }
 
-  void _handleCellChange(List<int> value) {
-    final time = _getValue(value);
-    inherited?.selected.value = time;
-    widget.onChange?.call(time);
+  void _handleCellChange(List<DateTime> value) {
+    final normalized = _getValue(value);
+    inherited?.selected.value = normalized;
+    widget.onChange?.call(normalized);
   }
 
-  // 行为约定详见 [TCalendar.bottom]。
+  // 行为约定详见 [TCalendar.popupBottomBuilder]。
   Widget _buildBottom(bool bottomExpanded) {
-    assert(widget.bottom != null);
+    assert(widget.popupBottomBuilder != null);
     assert(inherited != null);
 
     final bottomOffset = _calcBottomOffset();
 
-    final content = ValueListenableBuilder<List<int>>(
+    final content = ValueListenableBuilder<List<DateTime>>(
       valueListenable: inherited!.selected,
       builder: (context, selectedDates, _) {
-        return widget.bottom!(
+        return widget.popupBottomBuilder!(
           context,
-          List<int>.unmodifiable(selectedDates),
+          List<DateTime>.unmodifiable(selectedDates),
         );
       },
     );
 
-    if (widget.bottomExpanded != null) {
+    if (widget.popupBottomExpanded != null) {
       return Positioned(
         left: 0,
         right: 0,
@@ -780,12 +793,12 @@ class _TCalendarState extends State<TCalendar> {
   // 该值需与 build() 中 Column 底部区域（confirmBtn padding + safeArea）保持一致；
   // 修改底部布局时需同步更新本方法。
   double _calcBottomOffset() {
-    final safeBottom = widget.useSafeArea == true
+    final safeBottom = widget.safeAreaInset
         ? MediaQuery.of(context).padding.bottom
         : 0.0;
 
     if (_showPopupConfirmBtn) {
-      final btnPadding = widget.useSafeArea == true
+      final btnPadding = widget.safeAreaInset
           ? TTheme.of(context).spacer16
           : TTheme.of(context).spacer16 * 2;
       // 仅默认确认按钮使用固定高度；自定义 confirmBtn 由调用方保证 bottom 不重叠。
@@ -797,18 +810,15 @@ class _TCalendarState extends State<TCalendar> {
     return safeBottom;
   }
 
-  List<int> _getValue(List<int> value) {
-    return value.map((e) {
-      final date = DateTime.fromMillisecondsSinceEpoch(e);
-      return DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
-    }).toList();
+  List<DateTime> _getValue(List<DateTime> value) {
+    return value.map((e) => DateTime(e.year, e.month, e.day)).toList();
   }
 
   double _getEffectiveCellHeight() {
     if (widget.cellHeight != null) {
       return widget.cellHeight!;
     }
-    return widget.showLunarInfo ? 80 : 60;
+    return 60;
   }
 
   /// 内嵌模式下不传 `height` 时的默认高度。
@@ -816,7 +826,7 @@ class _TCalendarState extends State<TCalendar> {
   /// 布局 = weekday(46) + monthTitle(22) + 5行(cellHeight + verticalGap) + bodyPadding*2
   double _calcInlineDefaultHeight(double verticalGap) {
     const weekdayHeight = 46.0;
-    final monthTitleHeight = widget.monthTitleHeight ?? 22.0;
+    final monthTitleHeight = widget.monthTitleHeight;
     final cellHeight = _getEffectiveCellHeight();
     final bodyPadding = _style.bodyPadding ?? TTheme.of(context).spacer16;
     const visibleRows = 5;
