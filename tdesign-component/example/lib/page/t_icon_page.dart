@@ -14,7 +14,7 @@ class TIconPage extends StatefulWidget {
 class _TIconPageState extends State<TIconPage> {
   bool showBorder = false;
 
-  Iterable iconList = [];
+  List<MapEntry<String, IconData>> iconList = [];
 
   var isLoading = false;
 
@@ -22,7 +22,7 @@ class _TIconPageState extends State<TIconPage> {
   void initState() {
     super.initState();
 
-    iconList = TIcons.all.values;
+    iconList = TIcons.all.entries.toList();
   }
 
   @override
@@ -56,8 +56,7 @@ class _TIconPageState extends State<TIconPage> {
             child: const Wrap(
               children: [
                 TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText(
-                    'https://tdesign.tencent.com/icons')
+                SelectableText('https://tdesign.tencent.com/icons')
               ],
             ),
           ),
@@ -69,10 +68,10 @@ class _TIconPageState extends State<TIconPage> {
                 isLoading = true;
               });
               Future.delayed(const Duration(milliseconds: 30), () {
-                var list = [];
-                TIcons.all.forEach((key, value) {
-                  if (value.name.contains(text)) {
-                    list.add(value);
+                var list = <MapEntry<String, IconData>>[];
+                TIcons.all.entries.forEach((entry) {
+                  if (entry.key.contains(text)) {
+                    list.add(entry);
                   }
                 });
                 setState(() {
@@ -83,7 +82,7 @@ class _TIconPageState extends State<TIconPage> {
             },
             onClearClick: (_) {
               setState(() {
-                iconList = TIcons.all.values;
+                iconList = TIcons.all.entries.toList();
               });
             },
           ),
@@ -104,8 +103,7 @@ class _TIconPageState extends State<TIconPage> {
               return Container(
                 height: 300,
                 alignment: Alignment.center,
-                child:
-                    isLoading ? const TText('加载中...') : const TText('暂无内容'),
+                child: isLoading ? const TText('加载中...') : const TText('暂无内容'),
               );
             }
 
@@ -130,9 +128,9 @@ class _TIconPageState extends State<TIconPage> {
                                       ? TTheme.of(context).brandDisabledColor
                                       : Colors.transparent,
                                 ),
-                                child: Icon(item, size: 32),
+                                child: Icon(item.value, size: 32),
                               ),
-                              TText(item.name)
+                              TText(item.key)
                             ],
                           ),
                         );
