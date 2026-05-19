@@ -498,6 +498,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeColor | Color? | - | 关闭按钮颜色 |
 | closeSize | double? | - | 关闭按钮图标尺寸 |
 | draggable |  | - |  |
+| fixedHeight |  | - |  |
 | hideClose | bool | false | 是否隐藏关闭按钮 |
 | key |  | - |  |
 | maxHeightRatio |  | - |  |

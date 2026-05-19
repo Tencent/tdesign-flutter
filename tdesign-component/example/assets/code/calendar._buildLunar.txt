@@ -1,6 +1,5 @@
 
 Widget _buildLunar(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   final dataSource = LunarDataSourceExample();
   
   // 当前月份状态
@@ -254,7 +253,6 @@ Widget _buildLunar(BuildContext context) {
                 showLunarInfo: show,
                 dataSource: dataSource,
                 value: value,
-                height: size.height * 0.6,
                 onChange: (newValue) {
                   selectedDate.value = newValue;
                   

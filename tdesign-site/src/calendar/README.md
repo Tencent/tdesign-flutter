@@ -34,14 +34,13 @@ Widget _buildSimple(BuildContext context) {
                 
 ### 1 组件样式
 
-可以自由定义想要的风格
+自定义文案、按钮、单元格
 
           
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _buildStyle(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   const map = {
     1: '初一',
     2: '初二',
@@ -49,324 +48,132 @@ Widget _buildStyle(BuildContext context) {
     14: '情人节',
     15: '元宵节',
   };
-  return TCellGroup(
-    cells: [
-      TCell(
-        title: '自定义文案',
-        arrow: true,
-        onClick: (cell) {
-          TCalendarPopup(
-            context,
-            visible: true,
-            child: TCalendar(
-              title: '请选择日期',
-              height: size.height * 0.6 + 176,
-              minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
-              format: (day) {
-                day?.suffix = '¥60';
-                if (day?.date.month == 2) {
-                  if (map.keys.contains(day?.date.day)) {
-                    day?.suffix = '¥100';
-                    day?.prefix = map[day.date.day];
-                    day?.style = TextStyle(
-                      fontSize: TTheme.of(context).fontTitleMedium?.size,
-                      height: TTheme.of(context).fontTitleMedium?.height,
-                      fontWeight:
-                          TTheme.of(context).fontTitleMedium?.fontWeight,
-                      color: TTheme.of(context).errorColor6,
-                    );
-                    if (day?.typeNotifier.value == DateSelectType.selected) {
-                      day?.style = day.style
-                          ?.copyWith(color: TTheme.of(context).fontWhColor1);
-                    }
-                  }
-                }
-                return null;
-              },
-            ),
-          );
-        },
-      ),
-      TCell(
-        title: '自定义按钮',
-        arrow: true,
-        onClick: (cell) {
-          late final TCalendarPopup calendar;
-          calendar = TCalendarPopup(
-            context,
-            visible: true,
-            confirmBtn: Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: TTheme.of(context).spacer16),
-              child: TButton(
-                theme: TButtonTheme.danger,
-                shape: TButtonShape.round,
-                text: 'ok',
-                isBlock: true,
-                size: TButtonSize.large,
-                onTap: () {
-                  print(calendar.selected);
-                  calendar.close();
-                },
-              ),
-            ),
-            child: TCalendar(
-              title: '请选择日期',
-              value: [DateTime.now().millisecondsSinceEpoch],
-              height: size.height * 0.6 + 176,
-            ),
-          );
-        },
-      ),
-      TCell(
-        title: '自定义日期区间',
-        arrow: true,
-        onClick: (cell) {
-          TCalendarPopup(
-            context,
-            visible: true,
-            child: TCalendar(
-              title: '请选择日期',
-              minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,
-              value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
-              height: size.height * 0.6 + 176,
-            ),
-          );
-        },
-      ),
-    ],
-  );
-}</pre>
 
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildStyle(BuildContext context) {
-  final size = MediaQuery.of(context).size;
-  const map = {
-    1: '初一',
-    2: '初二',
-    3: '初三',
-    14: '情人节',
-    15: '元宵节',
-  };
-  return TCellGroup(
-    cells: [
-      TCell(
-        title: '自定义文案',
-        arrow: true,
-        onClick: (cell) {
-          TCalendarPopup(
-            context,
-            visible: true,
-            child: TCalendar(
-              title: '请选择日期',
-              height: size.height * 0.6 + 176,
-              minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
-              format: (day) {
-                day?.suffix = '¥60';
-                if (day?.date.month == 2) {
-                  if (map.keys.contains(day?.date.day)) {
-                    day?.suffix = '¥100';
-                    day?.prefix = map[day.date.day];
-                    day?.style = TextStyle(
-                      fontSize: TTheme.of(context).fontTitleMedium?.size,
-                      height: TTheme.of(context).fontTitleMedium?.height,
-                      fontWeight:
-                          TTheme.of(context).fontTitleMedium?.fontWeight,
-                      color: TTheme.of(context).errorColor6,
-                    );
-                    if (day?.typeNotifier.value == DateSelectType.selected) {
-                      day?.style = day.style
-                          ?.copyWith(color: TTheme.of(context).fontWhColor1);
-                    }
-                  }
-                }
-                return null;
-              },
-            ),
-          );
-        },
-      ),
-      TCell(
-        title: '自定义按钮',
-        arrow: true,
-        onClick: (cell) {
-          late final TCalendarPopup calendar;
-          calendar = TCalendarPopup(
-            context,
-            visible: true,
-            confirmBtn: Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: TTheme.of(context).spacer16),
-              child: TButton(
-                theme: TButtonTheme.danger,
-                shape: TButtonShape.round,
-                text: 'ok',
-                isBlock: true,
-                size: TButtonSize.large,
-                onTap: () {
-                  print(calendar.selected);
-                  calendar.close();
-                },
-              ),
-            ),
-            child: TCalendar(
-              title: '请选择日期',
-              value: [DateTime.now().millisecondsSinceEpoch],
-              height: size.height * 0.6 + 176,
-            ),
-          );
-        },
-      ),
-      TCell(
-        title: '自定义日期区间',
-        arrow: true,
-        onClick: (cell) {
-          TCalendarPopup(
-            context,
-            visible: true,
-            child: TCalendar(
-              title: '请选择日期',
-              minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,
-              value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
-              height: size.height * 0.6 + 176,
-            ),
-          );
-        },
-      ),
-    ],
-  );
-}</pre>
-
-</td-code-block>
-                
-
-自定义日期单元格
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildCustomCell(BuildContext context) {
-  final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>(
+  final customCellSelected = ValueNotifier<List<int>>(
       [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+
   return ValueListenableBuilder(
-    valueListenable: selected,
-    builder: (context, value, child) {
-      final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
+    valueListenable: customCellSelected,
+    builder: (context, cellValue, _) {
+      final cellDate = DateTime.fromMillisecondsSinceEpoch(cellValue[0]);
       return TCellGroup(
         cells: [
+          // 1. 自定义文案（format 回调修改 prefix/suffix/style）
+          TCell(
+            title: '自定义文案',
+            arrow: true,
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
+                maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
+                format: (day) {
+                  day?.suffix = '¥60';
+                  if (day?.date.month == 2) {
+                    if (map.keys.contains(day?.date.day)) {
+                      day?.suffix = '¥100';
+                      day?.prefix = map[day.date.day];
+                      day?.style = TextStyle(
+                        fontSize: TTheme.of(context).fontTitleMedium?.size,
+                        height: TTheme.of(context).fontTitleMedium?.height,
+                        fontWeight:
+                            TTheme.of(context).fontTitleMedium?.fontWeight,
+                        color: TTheme.of(context).errorColor6,
+                      );
+                      if (day?.typeNotifier.value == DateSelectType.selected) {
+                        day?.style = day.style
+                            ?.copyWith(color: TTheme.of(context).fontWhColor1);
+                      }
+                    }
+                  }
+                  return null;
+                },
+              );
+            },
+          ),
+
+          // 2. 自定义确认按钮
+          TCell(
+            title: '自定义按钮',
+            arrow: true,
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                value: [DateTime.now().millisecondsSinceEpoch],
+                confirmBtn: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: TTheme.of(context).spacer16),
+                  child: const TButton(
+                    theme: TButtonTheme.danger,
+                    shape: TButtonShape.round,
+                    text: 'ok',
+                    isBlock: true,
+                    size: TButtonSize.large,
+                  ),
+                ),
+                onConfirm: (value) => print('confirmed: $value'),
+              );
+            },
+          ),
+
+          // 3. 自定义日期单元格（cellWidget 回调）
           TCell(
             title: '自定义日期单元格',
             arrow: true,
-            note: '${date.year}-${date.month}-${date.day}',
+            note: '${cellDate.year}-${cellDate.month}-${cellDate.day}',
             onClick: (cell) {
-              TCalendarPopup(
+              TCalendar.showPopup(
                 context,
-                visible: true,
-                onConfirm: (value) {
-                  print('onConfirm:$value');
-                  selected.value = value;
-                },
-                onClose: () {
-                  print('onClose');
-                },
-                child: TCalendar(
-                    title: '请选择日期',
-                    value: value,
-                    cellHeight: 80,
-                    height: size.height * 0.6 + 176,
-                    onCellClick: (value, type, tdate) {
-                      print('onCellClick: $value');
-                    },
-                    onCellLongPress: (value, type, tdate) {
-                      print('onCellLongPress: $value');
-                    },
-                    onHeaderClick: (index, week) {
-                      print('onHeaderClick: $week');
-                    },
-                    onChange: (value) {
-                      print('onChange: $value');
-                    },
-                    cellWidget: (context, tdate, selectType) {
-                      final today = DateTime.now();
-                      //当前日期的自定义实现
-                      if (tdate.date.millisecondsSinceEpoch ==
-                              DateTime(today.year, today.month, today.day)
-                                  .millisecondsSinceEpoch &&
-                          selectType != DateSelectType.selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: TTheme.of(context).brandColor4,
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                          constraints: const BoxConstraints(
-                              minWidth: 0, // 最小宽度为0
-                              maxWidth: double.infinity, // 最大宽度无限
-                              minHeight: 0, // 最小高度为0
-                              maxHeight: double.infinity),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('今天',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                            ],
-                          ),
-                        );
-                      }
-                      if (selectType == DateSelectType.selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: TTheme.of(context).successColor8,
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                          constraints: const BoxConstraints(
-                              minWidth: 0, // 最小宽度为0
-                              maxWidth: double.infinity, // 最大宽度无限
-                              minHeight: 0, // 最小高度为0
-                              maxHeight: double.infinity),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('${tdate.date.day}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                              const Text('文案文案',
-                                  style: TextStyle(
-                                      fontSize: 6, color: Colors.white)),
-                              const Text('自定义',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white)),
-                            ],
-                          ),
-                        );
-                      }
-                      return Column(
+                title: '请选择日期',
+                value: cellValue,
+                cellHeight: 80,
+                onConfirm: (value) => customCellSelected.value = value,
+                cellWidget: (context, tdate, selectType) {
+                  final today = DateTime.now();
+                  final isToday = tdate.date.millisecondsSinceEpoch ==
+                      DateTime(today.year, today.month, today.day)
+                          .millisecondsSinceEpoch;
+
+                  if (isToday && selectType != DateSelectType.selected) {
+                    return _CustomCellContainer(
+                      color: TTheme.of(context).brandColor4,
+                      child: const Text('今天',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    );
+                  }
+                  if (selectType == DateSelectType.selected) {
+                    return _CustomCellContainer(
+                      color: TTheme.of(context).successColor8,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('${tdate.date.day}',
                               style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          const Text('文案文案', style: TextStyle(fontSize: 8)),
-                          const Text('自定义', style: TextStyle(fontSize: 8)),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          const Text('已选',
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.white)),
                         ],
-                      );
-                    }),
+                      ),
+                    );
+                  }
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${tdate.date.day}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text('自定义', style: TextStyle(fontSize: 8)),
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -383,117 +190,140 @@ Widget _buildCustomCell(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-Widget _buildCustomCell(BuildContext context) {
-  final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>(
+Widget _buildStyle(BuildContext context) {
+  const map = {
+    1: '初一',
+    2: '初二',
+    3: '初三',
+    14: '情人节',
+    15: '元宵节',
+  };
+
+  final customCellSelected = ValueNotifier<List<int>>(
       [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+
   return ValueListenableBuilder(
-    valueListenable: selected,
-    builder: (context, value, child) {
-      final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
+    valueListenable: customCellSelected,
+    builder: (context, cellValue, _) {
+      final cellDate = DateTime.fromMillisecondsSinceEpoch(cellValue[0]);
       return TCellGroup(
         cells: [
+          // 1. 自定义文案（format 回调修改 prefix/suffix/style）
+          TCell(
+            title: '自定义文案',
+            arrow: true,
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
+                maxDate: DateTime(2022, 2, 15).millisecondsSinceEpoch,
+                format: (day) {
+                  day?.suffix = '¥60';
+                  if (day?.date.month == 2) {
+                    if (map.keys.contains(day?.date.day)) {
+                      day?.suffix = '¥100';
+                      day?.prefix = map[day.date.day];
+                      day?.style = TextStyle(
+                        fontSize: TTheme.of(context).fontTitleMedium?.size,
+                        height: TTheme.of(context).fontTitleMedium?.height,
+                        fontWeight:
+                            TTheme.of(context).fontTitleMedium?.fontWeight,
+                        color: TTheme.of(context).errorColor6,
+                      );
+                      if (day?.typeNotifier.value == DateSelectType.selected) {
+                        day?.style = day.style
+                            ?.copyWith(color: TTheme.of(context).fontWhColor1);
+                      }
+                    }
+                  }
+                  return null;
+                },
+              );
+            },
+          ),
+
+          // 2. 自定义确认按钮
+          TCell(
+            title: '自定义按钮',
+            arrow: true,
+            onClick: (cell) {
+              TCalendar.showPopup(
+                context,
+                title: '请选择日期',
+                value: [DateTime.now().millisecondsSinceEpoch],
+                confirmBtn: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: TTheme.of(context).spacer16),
+                  child: const TButton(
+                    theme: TButtonTheme.danger,
+                    shape: TButtonShape.round,
+                    text: 'ok',
+                    isBlock: true,
+                    size: TButtonSize.large,
+                  ),
+                ),
+                onConfirm: (value) => print('confirmed: $value'),
+              );
+            },
+          ),
+
+          // 3. 自定义日期单元格（cellWidget 回调）
           TCell(
             title: '自定义日期单元格',
             arrow: true,
-            note: '${date.year}-${date.month}-${date.day}',
+            note: '${cellDate.year}-${cellDate.month}-${cellDate.day}',
             onClick: (cell) {
-              TCalendarPopup(
+              TCalendar.showPopup(
                 context,
-                visible: true,
-                onConfirm: (value) {
-                  print('onConfirm:$value');
-                  selected.value = value;
-                },
-                onClose: () {
-                  print('onClose');
-                },
-                child: TCalendar(
-                    title: '请选择日期',
-                    value: value,
-                    cellHeight: 80,
-                    height: size.height * 0.6 + 176,
-                    onCellClick: (value, type, tdate) {
-                      print('onCellClick: $value');
-                    },
-                    onCellLongPress: (value, type, tdate) {
-                      print('onCellLongPress: $value');
-                    },
-                    onHeaderClick: (index, week) {
-                      print('onHeaderClick: $week');
-                    },
-                    onChange: (value) {
-                      print('onChange: $value');
-                    },
-                    cellWidget: (context, tdate, selectType) {
-                      final today = DateTime.now();
-                      //当前日期的自定义实现
-                      if (tdate.date.millisecondsSinceEpoch ==
-                              DateTime(today.year, today.month, today.day)
-                                  .millisecondsSinceEpoch &&
-                          selectType != DateSelectType.selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: TTheme.of(context).brandColor4,
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                          constraints: const BoxConstraints(
-                              minWidth: 0, // 最小宽度为0
-                              maxWidth: double.infinity, // 最大宽度无限
-                              minHeight: 0, // 最小高度为0
-                              maxHeight: double.infinity),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('今天',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                            ],
-                          ),
-                        );
-                      }
-                      if (selectType == DateSelectType.selected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: TTheme.of(context).successColor8,
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                          constraints: const BoxConstraints(
-                              minWidth: 0, // 最小宽度为0
-                              maxWidth: double.infinity, // 最大宽度无限
-                              minHeight: 0, // 最小高度为0
-                              maxHeight: double.infinity),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('${tdate.date.day}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                              const Text('文案文案',
-                                  style: TextStyle(
-                                      fontSize: 6, color: Colors.white)),
-                              const Text('自定义',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white)),
-                            ],
-                          ),
-                        );
-                      }
-                      return Column(
+                title: '请选择日期',
+                value: cellValue,
+                cellHeight: 80,
+                onConfirm: (value) => customCellSelected.value = value,
+                cellWidget: (context, tdate, selectType) {
+                  final today = DateTime.now();
+                  final isToday = tdate.date.millisecondsSinceEpoch ==
+                      DateTime(today.year, today.month, today.day)
+                          .millisecondsSinceEpoch;
+
+                  if (isToday && selectType != DateSelectType.selected) {
+                    return _CustomCellContainer(
+                      color: TTheme.of(context).brandColor4,
+                      child: const Text('今天',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    );
+                  }
+                  if (selectType == DateSelectType.selected) {
+                    return _CustomCellContainer(
+                      color: TTheme.of(context).successColor8,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('${tdate.date.day}',
                               style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          const Text('文案文案', style: TextStyle(fontSize: 8)),
-                          const Text('自定义', style: TextStyle(fontSize: 8)),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          const Text('已选',
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.white)),
                         ],
-                      );
-                    }),
+                      ),
+                    );
+                  }
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${tdate.date.day}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text('自定义', style: TextStyle(fontSize: 8)),
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -513,16 +343,13 @@ Widget _buildCustomCell(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   final selected = ValueNotifier<List<int>>(
     [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000],
   );
   return Column(
-    // spacing: TTheme.of(context).spacer16,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
-        // spacing: TTheme.of(context).spacer16,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TButton(
@@ -549,10 +376,7 @@ Widget _buildBlock(BuildContext context) {
           return TCalendar(
             title: '请选择日期',
             value: value,
-            height: size.height * 0.6 + 176,
             animateTo: true,
-            // 不使用popup时，useSafeArea无效
-            useSafeArea: true,
           );
         },
       ),
@@ -568,16 +392,13 @@ Widget _buildBlock(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   final selected = ValueNotifier<List<int>>(
     [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000],
   );
   return Column(
-    // spacing: TTheme.of(context).spacer16,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
-        // spacing: TTheme.of(context).spacer16,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TButton(
@@ -604,10 +425,7 @@ Widget _buildBlock(BuildContext context) {
           return TCalendar(
             title: '请选择日期',
             value: value,
-            height: size.height * 0.6 + 176,
             animateTo: true,
-            // 不使用popup时，useSafeArea无效
-            useSafeArea: true,
           );
         },
       ),
@@ -625,7 +443,6 @@ Widget _buildBlock(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 Widget _buildLunar(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   final dataSource = LunarDataSourceExample();
   
   // 当前月份状态
@@ -710,8 +527,8 @@ Widget _buildLunar(BuildContext context) {
                                 height: 300,
                                 child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
+                                    const Padding(
+                                      padding: EdgeInsets.all(16),
                                       child: Text(
                                         '选择年份',
                                         style: TextStyle(
@@ -766,8 +583,8 @@ Widget _buildLunar(BuildContext context) {
                                 height: 400,
                                 child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
+                                    const Padding(
+                                      padding: EdgeInsets.all(16),
                                       child: Text(
                                         '选择月份',
                                         style: TextStyle(
@@ -879,7 +696,6 @@ Widget _buildLunar(BuildContext context) {
                 showLunarInfo: show,
                 dataSource: dataSource,
                 value: value,
-                height: size.height * 0.6,
                 onChange: (newValue) {
                   selectedDate.value = newValue;
                   
@@ -936,7 +752,6 @@ Widget _buildLunar(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 Widget _buildLunar(BuildContext context) {
-  final size = MediaQuery.of(context).size;
   final dataSource = LunarDataSourceExample();
   
   // 当前月份状态
@@ -1021,8 +836,8 @@ Widget _buildLunar(BuildContext context) {
                                 height: 300,
                                 child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
+                                    const Padding(
+                                      padding: EdgeInsets.all(16),
                                       child: Text(
                                         '选择年份',
                                         style: TextStyle(
@@ -1077,8 +892,8 @@ Widget _buildLunar(BuildContext context) {
                                 height: 400,
                                 child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
+                                    const Padding(
+                                      padding: EdgeInsets.all(16),
                                       child: Text(
                                         '选择月份',
                                         style: TextStyle(
@@ -1190,7 +1005,6 @@ Widget _buildLunar(BuildContext context) {
                 showLunarInfo: show,
                 dataSource: dataSource,
                 value: value,
-                height: size.height * 0.6,
                 onChange: (newValue) {
                   selectedDate.value = newValue;
                   
@@ -1252,7 +1066,7 @@ Widget _buildLunar(BuildContext context) {
 | anchorDate | DateTime? | - | 锚点日期 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
 | bottom | CalendarBottomBuilder? | - | 底部自定义区域构建器，以浮层方式叠加在日历主体之上。 |
-| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。**仅能在 [TCalendarPopup] 内使用。** |
+| bottomExpanded | ValueListenable<bool>? | - | bottom 区域是否展开（响应式）。**仅能在 [TPopupBottomDisplayPanel] 内使用。** |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 | dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
@@ -1260,10 +1074,10 @@ Widget _buildLunar(BuildContext context) {
 | displayFormat | String? | 'year month' | 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格 |
 | firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
 | format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
-| height | double? | - | 高度 |
+| height | double? | - | 高度，不传时内嵌模式自动按 5 行日期计算 |
 | key |  | - |  |
-| maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认半年后 |
-| minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认今天 |
+| maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认 2100-12-31 |
+| minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认 1970-01-01 |
 | monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
 | monthTitleHeight | double? | 22 | 月标题高度 |
 | onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
@@ -1280,23 +1094,12 @@ Widget _buildLunar(BuildContext context) {
 | value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
 | width | double? | - | 宽度 |
 
-```
-```
 
-### TCalendarPopup
-#### 默认构造方法
+#### 静态方法
 
-| 参数 | 类型 | 默认值 | 说明 |
+| 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| autoClose | bool? | true | 是否在点击关闭按钮、确认按钮或遮罩层时自动关闭弹窗（默认 true） |
-| builder | CalendarBuilder? | - | 日历构建器，优先级高于 [child] |
-| child | TCalendar? | - | 日历控件，当 [builder] 为 null 时使用 |
-| confirmBtn | Widget? | - | 自定义确认按钮；为 null 时使用默认主色 [TButton] |
-| context | BuildContext | context | 触发 popup 时的根 context，用于 [Navigator.of] 查找并 push 弹窗路由 |
-| onClose | VoidCallback? | - | 弹窗关闭后回调 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时回调，参数为当前选中的日期时间戳列表（毫秒） |
-| top | double? | - | 弹窗顶部距离屏幕顶部的偏移量 |
-| visible | bool? | - | 是否在构造时立即调用 [show] 打开弹窗（默认 false） |
+| showPopup |  |   required BuildContext context,  String? title,  CalendarType type,  List<int>? value,  int? minDate,  int? maxDate,  DateTime? anchorDate,  double? fixedHeight,  int? firstDayOfWeek,  String? displayFormat,  double? cellHeight,  TCalendarStyle? style,  CalendarFormat? format,  CalendarBottomBuilder? bottom,  ValueListenable<bool>? bottomExpanded,  Widget? confirmBtn,  void Function(List<int>)? onConfirm,  VoidCallback? onClose,  void Function(int value, DateSelectType type, TDate tdate)? onCellClick,  void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress,  bool autoClose,  bool draggable,  Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget,  TCalendarDateType dateType,  TCalendarDataSource? dataSource,  bool showLunarInfo,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中日期的毫秒时间戳列表。     ```dart   final result = await TCalendar.showPopup(     context,     title: '请选择日期',     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
 
 ```
 ```
@@ -1316,6 +1119,7 @@ Widget _buildLunar(BuildContext context) {
 | titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
 | titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
 | titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
+| todayStyle | TextStyle? | - | 当天日期样式 |
 | weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
 
 
