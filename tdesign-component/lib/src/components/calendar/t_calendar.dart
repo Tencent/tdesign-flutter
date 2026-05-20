@@ -31,8 +31,14 @@ class TCalendarInherited extends InheritedWidget {
     this.onConfirm,
     this.confirmBtn,
     this.confirmBtnBuilder,
+    this.popupBottomBuilder,
+    this.popupBottomExpanded,
     Key? key,
-  }) : super(child: child, key: key);
+  })  : assert(
+          popupBottomExpanded == null || popupBottomBuilder != null,
+          'popupBottomExpanded 需配合 popupBottomBuilder 使用',
+        ),
+        super(child: child, key: key);
 
   final VoidCallback? onClose;
 
@@ -67,6 +73,14 @@ class TCalendarInherited extends InheritedWidget {
 
   /// 自定义确认按钮构建器，[onConfirm] 与默认确认按钮行为一致（回传选中值并关闭弹窗）。
   final Widget Function(VoidCallback onConfirm)? confirmBtnBuilder;
+
+  /// 弹窗底部自定义区域构建器（仅弹窗模式，由 [TCalendar.showPopup] 或手动
+  /// [TCalendarInherited] 注入）。
+  final Widget Function(BuildContext context, List<DateTime> selectedDates)?
+      popupBottomBuilder;
+
+  /// 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。
+  final ValueListenable<bool>? popupBottomExpanded;
 
   @override
   bool updateShouldNotify(covariant TCalendarInherited oldWidget) => false;
@@ -119,8 +133,6 @@ class TCalendar extends StatefulWidget {
     this.onChange,
     this.onCellClick,
     this.safeAreaInset = true,
-    this.popupBottomBuilder,
-    this.popupBottomExpanded,
     this.monthTitleHeight = 22,
     this.monthTitleBuilder,
     this.animateTo = false,
@@ -129,11 +141,7 @@ class TCalendar extends StatefulWidget {
     this.anchorDate,
     this.displayMode = TCalendarDisplayMode.solar,
     this.dataSource,
-  })  : assert(
-          popupBottomExpanded == null || popupBottomBuilder != null,
-          'popupBottomExpanded 需配合 popupBottomBuilder 使用',
-        ),
-        super(key: key);
+  }) : super(key: key);
 
   /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。
   final int firstDayOfWeek;
@@ -185,44 +193,6 @@ class TCalendar extends StatefulWidget {
 
   /// 是否适配底部安全区域（如 iPhone Home Indicator），默认 true
   final bool safeAreaInset;
-
-  /// 弹窗底部自定义区域构建器，以浮层方式叠加在日历主体之上。
-  ///
-  /// **仅在弹窗模式下生效**（即 [TCalendar] 作为 [TPopupBottomDisplayPanel] 的子树时）。
-  /// 非弹窗模式下传入此参数将被忽略。
-  ///
-  /// - **不会撑高 [TCalendar]**，请在 `popupHeight` 中预留 bottom 自身的占用高度；
-  /// - `selectedDates` 随弹窗内日期点击实时更新；
-  /// - 传入的 `selectedDates` 是只读视图（[List.unmodifiable]），请勿原地修改。
-  ///
-  /// ```dart
-  /// TPopupBottomDisplayPanel(
-  ///   fixedHeight: 600,
-  ///   child: TCalendar(
-  ///     popupBottomBuilder: (ctx, dates) => MyFooter(selectedDates: dates),
-  ///   ),
-  /// );
-  /// ```
-  final Widget Function(BuildContext context, List<DateTime> selectedDates)?
-      popupBottomBuilder;
-
-  /// 弹窗底部区域是否展开（响应式）。**仅在弹窗模式下生效。**
-  ///
-  /// 为 `null`（默认）时 bottom 始终展开；传入 [ValueListenable] 时，
-  /// bottom 展开/收起将跟随其值变化播放滑动动画，常配合 [ValueNotifier] 使用。
-  ///
-  /// ```dart
-  /// final expanded = ValueNotifier<bool>(false);
-  /// TPopupBottomDisplayPanel(
-  ///   fixedHeight: 600,
-  ///   child: TCalendar(
-  ///     popupBottomExpanded: expanded,
-  ///     onCellClick: (v, t, d) => expanded.value = true,
-  ///     popupBottomBuilder: (ctx, dates) => MyFooter(),
-  ///   ),
-  /// );
-  /// ```
-  final ValueListenable<bool>? popupBottomExpanded;
 
   /// 每月标题行高度（如 '2025年6月' 所在行），默认 22
   final double monthTitleHeight;
@@ -336,11 +306,11 @@ class TCalendar extends StatefulWidget {
     /// 自定义样式
     TCalendarStyle? style,
 
-    /// 弹窗底部自定义区域构建器
+    /// 弹窗底部自定义区域构建器（经 [TCalendarInherited] 注入，仅弹窗内生效）。
     Widget Function(BuildContext context, List<DateTime> selectedDates)?
         popupBottomBuilder,
 
-    /// 弹窗底部区域是否展开（响应式）
+    /// 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。
     ValueListenable<bool>? popupBottomExpanded,
 
     /// 自定义确认按钮（静态 Widget）。
@@ -430,6 +400,8 @@ class TCalendar extends StatefulWidget {
           popupControls: false,
           popupConfirmBtn: true,
           confirmBtnBuilder: effectiveConfirmBtnBuilder,
+          popupBottomBuilder: popupBottomBuilder,
+          popupBottomExpanded: popupBottomExpanded,
           onClose: () {
             if (autoClose) {
               doClose(nav);
@@ -461,8 +433,6 @@ class TCalendar extends StatefulWidget {
               firstDayOfWeek: firstDayOfWeek,
               cellHeight: cellHeight,
               style: style,
-              popupBottomBuilder: popupBottomBuilder,
-              popupBottomExpanded: popupBottomExpanded,
               onCellClick: onCellClick,
               cellWidget: cellWidget,
               displayMode: displayMode,
@@ -528,8 +498,6 @@ class _TCalendarState extends State<TCalendar> {
 
   bool _initializedSelected = false;
 
-  bool get _usePopupBottom => inherited?.usePopup == true;
-
   /// 解析 displayMode 为旧的 dateType 和 showLunarInfo
   TCalendarDateType get _dateType {
     switch (widget.displayMode) {
@@ -593,17 +561,6 @@ class _TCalendarState extends State<TCalendar> {
     _cachedValueDates = widget._value;
   }
 
-  void _assertPopupOnlyBottom() {
-    assert(
-      widget.popupBottomBuilder == null || _usePopupBottom,
-      '[TCalendar] popupBottomBuilder 仅能在弹窗模式下使用',
-    );
-    assert(
-      widget.popupBottomExpanded == null || _usePopupBottom,
-      '[TCalendar] popupBottomExpanded 仅能在弹窗模式下使用',
-    );
-  }
-
   // 仅在非 build phase 调用。
   void _syncSelectedToInheritedSync() {
     if (inherited == null) {
@@ -627,9 +584,11 @@ class _TCalendarState extends State<TCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    _assertPopupOnlyBottom();
     final verticalGap = _style.verticalGap ?? TTheme.of(context).spacer8;
-    final hasBottom = widget.popupBottomBuilder != null && _usePopupBottom;
+    final popupBottomBuilder = inherited?.popupBottomBuilder;
+    final popupBottomExpanded = inherited?.popupBottomExpanded;
+    final hasBottom =
+        inherited?.usePopup == true && popupBottomBuilder != null;
 
     Widget stackContent(bool bottomExpanded) {
       return Stack(
@@ -641,9 +600,9 @@ class _TCalendarState extends State<TCalendar> {
       );
     }
 
-    final child = hasBottom && widget.popupBottomExpanded != null
+    final child = hasBottom && popupBottomExpanded != null
         ? ValueListenableBuilder<bool>(
-            valueListenable: widget.popupBottomExpanded!,
+            valueListenable: popupBottomExpanded,
             builder: (context, expanded, _) => stackContent(expanded),
           )
         : stackContent(hasBottom);
@@ -729,7 +688,7 @@ class _TCalendarState extends State<TCalendar> {
     if (!hasBottom) {
       return body;
     }
-    if (widget.popupBottomExpanded == null) {
+    if (inherited?.popupBottomExpanded == null) {
       return Padding(
         padding: const EdgeInsets.only(bottom: _bottomPeekHeight),
         child: body,
@@ -905,24 +864,22 @@ class _TCalendarState extends State<TCalendar> {
     return [tapped];
   }
 
-  // 行为约定详见 [TCalendar.popupBottomBuilder]。
+  // 行为约定详见 [TCalendarInherited.popupBottomBuilder]。
   Widget _buildBottom(bool bottomExpanded) {
-    assert(widget.popupBottomBuilder != null);
-    assert(inherited != null);
-
+    final popupBottomBuilder = inherited!.popupBottomBuilder!;
     final bottomOffset = _calcBottomOffset();
 
     final content = ValueListenableBuilder<List<DateTime>>(
       valueListenable: inherited!.selected,
       builder: (context, selectedDates, _) {
-        return widget.popupBottomBuilder!(
+        return popupBottomBuilder(
           context,
           List<DateTime>.unmodifiable(selectedDates),
         );
       },
     );
 
-    if (widget.popupBottomExpanded != null) {
+    if (inherited!.popupBottomExpanded != null) {
       return Positioned(
         left: 0,
         right: 0,

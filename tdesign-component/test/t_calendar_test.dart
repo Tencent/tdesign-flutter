@@ -16,28 +16,48 @@ DateTime _day(int y, int m, int d) => DateTime(y, m, d);
 
 void main() {
   // -----------------------------------------------------------------------
-  // popupBottomBuilder / popupBottomExpanded
+  // popupBottomBuilder / popupBottomExpanded（仅 TCalendarInherited / showPopup）
   // -----------------------------------------------------------------------
   group('TCalendar — popupBottom / popupBottomExpanded', () {
     test('popupBottomExpanded 未配合 popupBottomBuilder 时触发 assert', () {
       expect(
-        () => TCalendar(popupBottomExpanded: ValueNotifier<bool>(false)),
+        () => TCalendarInherited(
+          selected: ValueNotifier<List<DateTime>>([]),
+          popupBottomExpanded: ValueNotifier<bool>(false),
+          child: const SizedBox(),
+        ),
         throwsAssertionError,
       );
     });
 
-    testWidgets('非弹窗模式使用 popupBottomBuilder 触发 assert', (tester) async {
+    testWidgets('内嵌模式无法通过 TCalendar 传入 popupBottomBuilder', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             titleWidget: const Text('测试'),
             height: 640,
-            popupBottomBuilder: (_, __) => const Text('底部'),
           ),
         ),
       );
 
-      expect(tester.takeException(), isA<AssertionError>());
+      expect(find.text('底部'), findsNothing);
+    });
+
+    testWidgets('非弹窗 Inherited 不渲染 popupBottomBuilder', (tester) async {
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendarInherited(
+            selected: ValueNotifier<List<DateTime>>([]),
+            usePopup: false,
+            popupBottomBuilder: (_, __) => const Text('底部'),
+            child: TCalendar(
+              titleWidget: const Text('测试'),
+              height: 640,
+            ),
+          ),
+        ),
+      );
+
       expect(find.text('底部'), findsNothing);
     });
 
@@ -50,11 +70,11 @@ void main() {
           TCalendarInherited(
             selected: selected,
             usePopup: true,
+            popupBottomBuilder: (_, dates) => Text('days:${dates.length}'),
             child: TCalendar(
               titleWidget: const Text('测试'),
               height: 640,
               initialValue: selected.value,
-              popupBottomBuilder: (_, dates) => Text('days:${dates.length}'),
             ),
           ),
         ),
@@ -78,11 +98,11 @@ void main() {
           TCalendarInherited(
             selected: selected,
             usePopup: true,
+            popupBottomExpanded: expanded,
+            popupBottomBuilder: (_, __) => const Text('底部内容'),
             child: TCalendar(
               titleWidget: const Text('测试'),
               height: 640,
-              popupBottomExpanded: expanded,
-              popupBottomBuilder: (_, __) => const Text('底部内容'),
             ),
           ),
         ),
@@ -258,13 +278,12 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // 点击已选中的 15 号取消
-      await tester.tap(find.text('15'));
+      await tester.tap(find.text('20'));
       await tester.pump();
 
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result!.first, day20);
+      expect(result!.first, day15);
     });
   });
 
@@ -273,41 +292,7 @@ void main() {
   // -----------------------------------------------------------------------
   group('TCalendar — 区间选择 (range)', () {
     testWidgets('选择 start 和 end 触发 onChange', (tester) async {
-      final minDate = _day(2024, 6, 1);
-      final maxDate = _day(2024, 6, 30);
-      List<DateTime>? result;
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          TCalendar(
-            height: 640,
-            type: CalendarType.range,
-            minDate: minDate,
-            maxDate: maxDate,
-            onChange: (v) => result = v,
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      // 先点 10 号作为 start
-      await tester.tap(find.text('10'));
-      await tester.pump();
-
-      expect(result, isNotNull);
-      expect(result!.length, 1);
-      expect(result!.first, _day(2024, 6, 10));
-
-      // 再点 20 号作为 end
-      await tester.tap(find.text('20'));
-      await tester.pump();
-
-      expect(result!.length, 2);
-      expect(result!.first, _day(2024, 6, 10));
-      expect(result!.last, _day(2024, 6, 20));
-    });
-
-    testWidgets('end 在 start 之前时重置为新 start', (tester) async {
+      final day15 = _day(2024, 6, 15);
       final day20 = _day(2024, 6, 20);
       final minDate = _day(2024, 6, 1);
       final maxDate = _day(2024, 6, 30);
@@ -318,7 +303,6 @@ void main() {
           TCalendar(
             height: 640,
             type: CalendarType.range,
-            initialValue: [day20],
             minDate: minDate,
             maxDate: maxDate,
             onChange: (v) => result = v,
@@ -327,13 +311,45 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // 点击 10 号（在 start=20 之前）应重置
+      await tester.tap(find.text('15'));
+      await tester.pump();
+      await tester.tap(find.text('20'));
+      await tester.pump();
+
+      expect(result, isNotNull);
+      expect(result!.length, 2);
+      expect(result![0], day15);
+      expect(result![1], day20);
+    });
+
+    testWidgets('end 在 start 之前时重置为新 start', (tester) async {
+      final day15 = _day(2024, 6, 15);
+      final day10 = _day(2024, 6, 10);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      List<DateTime>? result;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            height: 640,
+            type: CalendarType.range,
+            minDate: minDate,
+            maxDate: maxDate,
+            onChange: (v) => result = v,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('15'));
+      await tester.pump();
       await tester.tap(find.text('10'));
       await tester.pump();
 
       expect(result, isNotNull);
       expect(result!.length, 1);
-      expect(result!.first, _day(2024, 6, 10));
+      expect(result!.first, day10);
     });
   });
 
