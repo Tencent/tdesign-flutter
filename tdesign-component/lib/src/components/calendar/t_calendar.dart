@@ -17,7 +17,6 @@ export 't_calendar_cell.dart'
         TCalendarCellBuilder;
 export 't_calendar_data_source.dart';
 export 't_calendar_style.dart';
-export 't_lunar_date.dart';
 
 // ---------------------------------------------------------------------------
 // TCalendarInherited — 日历弹窗状态托管，供 TCalendar 内部读取
@@ -36,7 +35,6 @@ class TCalendarInherited extends InheritedWidget {
     this.popupControls = true,
     this.popupConfirmBtn,
     this.onConfirm,
-    this.confirmBtn,
     this.confirmBtnBuilder,
     this.popupBottomBuilder,
     this.popupBottomExpanded,
@@ -75,10 +73,7 @@ class TCalendarInherited extends InheritedWidget {
 
   final VoidCallback? onConfirm;
 
-  /// 自定义确认按钮（静态 Widget，需自行处理点击；推荐 [confirmBtnBuilder]）。
-  final Widget? confirmBtn;
-
-  /// 自定义确认按钮构建器，[onConfirm] 与默认确认按钮行为一致（回传选中值并关闭弹窗）。
+  /// 自定义确认按钮；[onConfirm] 与默认确认按钮一致（回传选中值并关闭弹窗）。
   final Widget Function(VoidCallback onConfirm)? confirmBtnBuilder;
 
   /// 弹窗底部自定义区域构建器（仅弹窗模式，由 [TCalendar.showPopup] 或手动
@@ -89,8 +84,22 @@ class TCalendarInherited extends InheritedWidget {
   /// 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。
   final ValueListenable<bool>? popupBottomExpanded;
 
+  /// 仅当 Inherited 上的**静态配置**变化时通知依赖方重建。
+  ///
+  /// [selected] 为 [ValueNotifier]，变更走 [selectedListenable]，不依赖本方法。
+  /// 若返回 `false`，在运行期替换 [popupBottomBuilder] 等回调时，子树不会自动重建，
+  /// 弹窗场景一般在 push 时一次性注入，内嵌高级用法请整体替换 Inherited。
   @override
-  bool updateShouldNotify(covariant TCalendarInherited oldWidget) => false;
+  bool updateShouldNotify(covariant TCalendarInherited oldWidget) {
+    return oldWidget.usePopup != usePopup ||
+        oldWidget.popupControls != popupControls ||
+        oldWidget.popupConfirmBtn != popupConfirmBtn ||
+        oldWidget.onClose != onClose ||
+        oldWidget.onConfirm != onConfirm ||
+        oldWidget.confirmBtnBuilder != confirmBtnBuilder ||
+        oldWidget.popupBottomBuilder != popupBottomBuilder ||
+        oldWidget.popupBottomExpanded != popupBottomExpanded;
+  }
 
   static TCalendarInherited? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<TCalendarInherited>();
@@ -132,6 +141,7 @@ class TCalendar extends StatefulWidget {
     this.subtitleBuilder,
     this.onMonthChange,
     this.anchorDate,
+    this.anchorRevision = 0,
     this.dataSource,
   }) : super(key: key);
 
@@ -154,6 +164,10 @@ class TCalendar extends StatefulWidget {
   final CalendarType type;
 
   /// 初始选中日期列表，不传则默认今天。
+  ///
+  /// **非受控语义**：仅用于首次挂载；用户点选后以 [onChange] 为准，由调用方自行
+  /// `setState` 保存。若父组件在运行期修改本参数，会同步选中态并刷新格子（与 range
+  /// 行为一致）。
   ///
   /// 列表长度与 [type] 对应：
   /// - [CalendarType.single]：1 个元素（选中日期）
@@ -204,8 +218,13 @@ class TCalendar extends StatefulWidget {
   /// 副标题完全自定义；未设置时可使用 [dataSource.getSubtitle]。
   final TCalendarSubtitleBuilder? subtitleBuilder;
 
-  /// 锚点日期，弹出时自动滚动到该日期所在月份。
+  /// 锚点日期，打开时滚动到该日期所在月份。
   final DateTime? anchorDate;
+
+  /// 锚点滚动触发序号，默认 `0`。
+  ///
+  /// 与 [anchorDate] 配合：序号递增可重复滚到同一月份；仅改月份时也可只更新 [anchorDate]。
+  final int anchorRevision;
 
   /// 可选数据源，提供副标题字符串（无 [subtitleBuilder] 时生效）。
   final TCalendarDataSource? dataSource;
@@ -242,6 +261,8 @@ class TCalendar extends StatefulWidget {
   /// 弹出日历选择器，返回选中的日期列表。
   ///
   /// 取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。
+  /// 弹窗内点选过程无 [onChange]；实时联动请用 [popupBottomBuilder] 的 `dates`，
+  /// 或自行用 [TCalendarInherited] 监听 [TCalendarInherited.selectedListenable]。
   ///
   /// ```dart
   /// final result = await TCalendar.showPopup(
@@ -276,6 +297,9 @@ class TCalendar extends StatefulWidget {
     /// 锚点日期，弹出时自动滚动到该日期所在月份
     DateTime? anchorDate,
 
+    /// 锚点滚动触发序号，见 [TCalendar.anchorRevision]
+    int anchorRevision = 0,
+
     /// 弹窗面板高度（不传时自动计算）
     double? popupHeight,
 
@@ -295,13 +319,7 @@ class TCalendar extends StatefulWidget {
     /// 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。
     ValueListenable<bool>? popupBottomExpanded,
 
-    /// 自定义确认按钮（静态 Widget）。
-    ///
-    /// 若未设置 [onTap]，[showPopup] 会自动为其叠加点击层以触发确认；
-    /// 需要按钮按压态时请改用 [confirmBtnBuilder]。
-    Widget? confirmBtn,
-
-    /// 自定义确认按钮构建器，[onConfirm] 回调与默认确认按钮一致。
+    /// 自定义确认按钮，[onConfirm] 与默认确认按钮一致。
     Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,
 
     /// 点击确认按钮时触发
@@ -362,20 +380,12 @@ class TCalendar extends StatefulWidget {
           panelTitle = _extractTextFromWidget(titleWidget);
         }
 
-        final effectiveConfirmBtnBuilder = confirmBtnBuilder ??
-            (confirmBtn != null
-                ? (onConfirm) => _CalendarConfirmTapProxy(
-                      onConfirm: onConfirm,
-                      child: confirmBtn,
-                    )
-                : null);
-
         return TCalendarInherited(
           selected: selected,
           usePopup: true,
           popupControls: false,
           popupConfirmBtn: true,
-          confirmBtnBuilder: effectiveConfirmBtnBuilder,
+          confirmBtnBuilder: confirmBtnBuilder,
           popupBottomBuilder: popupBottomBuilder,
           popupBottomExpanded: popupBottomExpanded,
           onClose: () {
@@ -406,6 +416,7 @@ class TCalendar extends StatefulWidget {
               minDate: minDate,
               maxDate: maxDate,
               anchorDate: anchorDate,
+              anchorRevision: anchorRevision,
               firstDayOfWeek: firstDayOfWeek,
               cellHeight: cellHeight,
               style: style,
@@ -452,12 +463,12 @@ class _TCalendarState extends State<TCalendar> {
 
   List<DateTime>? _cachedValueDates;
 
-  /// single 模式下当前选中的 TDate 引用（来自 body 缓存的当前实例）。
+  /// single 模式下当前选中的单元格引用（来自 body 缓存的当前实例）。
   ///
   /// cell 不再反查 `_data` 找上一个 selected：state 维护这条权威引用，点击
   /// 时直接 setType(empty) 即可。引用会随 body 缓存重生成（cleanup 后再滚回
-  /// 该月）被 [_handleTDateGenerated] 覆盖为新实例，不会出现"指向已 detach
-  /// 的 TDate"导致视觉残留。
+  /// 该月）被 [_handleCellGenerated] 覆盖为新实例，不会出现"指向已 detach
+  /// 的 cell"导致视觉残留。
   TCalendarCellModel? _selectedSingleRef;
 
   /// multiple 模式下当前所有选中的单元格引用，按日期键。
@@ -621,9 +632,6 @@ class _TCalendarState extends State<TCalendar> {
     if (inherited?.confirmBtnBuilder != null) {
       return inherited!.confirmBtnBuilder!(onConfirm ?? () {});
     }
-    if (inherited?.confirmBtn != null) {
-      return inherited!.confirmBtn!;
-    }
     return Padding(
       padding: widget.safeAreaInset
           ? EdgeInsets.only(top: TTheme.of(context).spacer16)
@@ -669,6 +677,7 @@ class _TCalendarState extends State<TCalendar> {
       firstDayOfWeek: widget.firstDayOfWeek,
       maxDate: widget.maxDate,
       anchorDate: widget.anchorDate,
+      anchorRevision: widget.anchorRevision,
       minDate: widget.minDate,
       value: _cachedValueDates,
       bodyPadding: _style.bodyPadding ?? TTheme.of(context).spacer16,
@@ -702,8 +711,8 @@ class _TCalendarState extends State<TCalendar> {
     );
   }
 
-  /// 月份 TDate 列表新生成时被 body 调用：登记 selected/start/end 引用，
-  /// 让 state 不依赖 body 内部缓存即可定位"当前选中的那些 TDate 实例"。
+  /// 月份单元格列表新生成时被 body 调用：登记 selected 引用，
+  /// 让 state 不依赖 body 内部缓存即可定位当前选中的 cell 实例。
   ///
   /// single：每月最多一个 selected，遇到即覆盖 _selectedSingleRef。
   /// multiple：把当月所有 selected 的引用按 date 写入 map。
@@ -728,13 +737,13 @@ class _TCalendarState extends State<TCalendar> {
   }
 
   /// 当 body 整体清空缓存时（minDate/maxDate 变化等），同步清空选中映射，
-  /// 避免悬挂指向已被替换的 TDate 实例。后续月份重新生成时会再次登记。
+  /// 避免悬挂指向已被替换的 cell 实例。后续月份重新生成时会再次登记。
   void _handleCacheInvalidated() {
     _selectedSingleRef = null;
     _selectedMultipleRefs.clear();
   }
 
-  /// 三种模式统一入口：cell 仅上抛被点击的 TDate，由本方法做所有决策。
+  /// 三种模式统一入口：cell 仅上抛被点击的模型，由本方法做所有决策。
   ///
   /// 行为约定：
   /// - disabled：仅触发 onCellClick，不改变选中态
@@ -869,7 +878,7 @@ class _TCalendarState extends State<TCalendar> {
       final btnPadding = widget.safeAreaInset
           ? TTheme.of(context).spacer16
           : TTheme.of(context).spacer16 * 2;
-      // 默认与自定义 confirmBtn 均预留固定高度，避免 popupBottomBuilder 浮层重叠。
+      // 默认与自定义确认按钮均预留固定高度，避免 popupBottomBuilder 浮层重叠。
       // 若自定义按钮更高，请在 popupHeight 中额外预留空间。
       return safeBottom + btnPadding + _confirmBtnHeight;
     }
@@ -901,31 +910,5 @@ class _TCalendarState extends State<TCalendar> {
         monthTitleHeight +
         visibleRows * (cellHeight + verticalGap) +
         bodyPadding * 2;
-  }
-}
-
-/// 为未绑定 [onTap] 的静态 [confirmBtn] 叠加透明点击层，触发确认并关闭弹窗。
-class _CalendarConfirmTapProxy extends StatelessWidget {
-  const _CalendarConfirmTapProxy({
-    required this.onConfirm,
-    required this.child,
-  });
-
-  final VoidCallback onConfirm;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        child,
-        Positioned.fill(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: onConfirm,
-          ),
-        ),
-      ],
-    );
   }
 }

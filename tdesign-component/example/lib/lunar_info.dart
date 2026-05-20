@@ -1,30 +1,20 @@
 import 'package:flutter/foundation.dart';
 
-/// 农历日期信息模型
+/// 农历日期信息（仅示例用，业务请自行定义模型）。
+///
+/// 日历组件只要求 [TCalendarDataSource.getSubtitle] 返回字符串；
+/// 本类演示如何从农历库组装副标题，非 `tdesign_flutter` 公共 API。
 @immutable
-class TLunarInfo {
-  /// 农历年份（数字）
+class LunarInfo {
   final int year;
-
-  /// 农历月份（数字，1-12）
   final int month;
-
-  /// 农历日期（数字，1-30）
   final int day;
-
-  /// 是否是闰月
   final bool isLeapMonth;
-
-  /// 年份文本（如：二〇二五）
   final String yearText;
-
-  /// 月份文本（如：三月、闰三月）
   final String monthText;
-
-  /// 日期文本（如：初七）
   final String dayText;
 
-  const TLunarInfo({
+  const LunarInfo({
     required this.year,
     required this.month,
     required this.day,
@@ -34,7 +24,6 @@ class TLunarInfo {
     required this.dayText,
   });
 
-  /// 获取完整的农历日期文本
   String get fullText => '$yearText年 $monthText$dayText';
 
   @override
@@ -45,7 +34,7 @@ class TLunarInfo {
     if (identical(this, other)) {
       return true;
     }
-    return other is TLunarInfo &&
+    return other is LunarInfo &&
         other.year == year &&
         other.month == month &&
         other.day == day &&

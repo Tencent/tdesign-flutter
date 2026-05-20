@@ -2,25 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  group('TLunarInfo', () {
-    test('should create lunar info correctly', () {
-      const lunarInfo = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 7,
-        yearText: '二〇二五',
-        monthText: '三月',
-        dayText: '初七',
-      );
-
-      expect(lunarInfo.year, 2025);
-      expect(lunarInfo.month, 3);
-      expect(lunarInfo.day, 7);
-      expect(lunarInfo.isLeapMonth, false);
-      expect(lunarInfo.fullText, '二〇二五年 三月初七');
-    });
-  });
-
   group('TCalendarDataSource', () {
     test('getSubtitle 默认返回 null', () {
       final dataSource = _MockDataSource();

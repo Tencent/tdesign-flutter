@@ -23,6 +23,7 @@ class TCalendarBody extends StatefulWidget {
     required this.animateTo,
     this.onMonthChange,
     this.anchorDate,
+    this.anchorRevision = 0,
     this.onCellGenerated,
     this.onCacheInvalidated,
   }) : super(key: key);
@@ -51,6 +52,12 @@ class TCalendarBody extends StatefulWidget {
   final double cellHeight;
   final bool animateTo;
   final ValueChanged<DateTime>? onMonthChange;
+
+  /// 锚点滚动触发序号。与 [anchorDate] 配合：序号变化或锚点目标月份变化时滚动。
+  ///
+  /// 重复导航到同一月份时递增即可，无需每次 `new DateTime`。
+  final int anchorRevision;
+
   /// 在每个月份的单元格列表新生成时回调，便于上层登记选中引用。
   final void Function(DateTime monthDate, List<TCalendarCellModel?> cells)?
       onCellGenerated;
@@ -106,21 +113,30 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       widget.onCacheInvalidated?.call();
       _lastNotifiedMonthKey = null;
       _initMonths();
-    } else if (widget.type == CalendarType.range &&
-        !_listEqualsDate(oldWidget.value, widget.value)) {
-      // range 模式下，state 通过更新 value 来传达选中区间变化。
-      // 必须清空 _data，让所有月份重新基于新 value 推导 cell 类型，
-      // 避免跨月份 cell 的 typeNotifier 残留旧 start/end/centre 状态。
+    } else if (!_listEqualsDate(oldWidget.value, widget.value)) {
+      // 选中值由上层更新（initialValue / _cachedValueDates）时清空月份缓存，
+      // 让所有 cell 基于新 value 重建 typeNotifier，避免 single/multiple/range 残留旧态。
       _data.clear();
       widget.onCacheInvalidated?.call();
     }
-    // anchorDate 变化时滚动：使用 identical 引用比较，
-    // 让上层即使重复传同一年月（例如滑动到该月后再点击该月按钮）也能触发滚动；
-    // 上层只要每次导航都构造新的 DateTime 实例即可。
-    final newAnchor = widget.anchorDate;
-    if (newAnchor != null && !identical(newAnchor, oldWidget.anchorDate)) {
+    if (_shouldScrollToAnchor(oldWidget)) {
       _scrollToItem();
     }
+  }
+
+  bool _shouldScrollToAnchor(TCalendarBody oldWidget) {
+    final anchor = widget.anchorDate;
+    if (anchor == null) {
+      return false;
+    }
+    if (widget.anchorRevision != oldWidget.anchorRevision) {
+      return true;
+    }
+    final oldAnchor = oldWidget.anchorDate;
+    if (oldAnchor == null) {
+      return true;
+    }
+    return anchor.year != oldAnchor.year || anchor.month != oldAnchor.month;
   }
 
   static bool _listEqualsDate(List<DateTime>? a, List<DateTime>? b) {

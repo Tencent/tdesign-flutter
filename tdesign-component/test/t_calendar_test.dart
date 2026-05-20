@@ -354,6 +354,83 @@ void main() {
   });
 
   // -----------------------------------------------------------------------
+  // initialValue / anchorRevision
+  // -----------------------------------------------------------------------
+  group('TCalendar — initialValue 与 anchorRevision', () {
+    testWidgets('运行期更新 initialValue 会同步选中 UI（single）', (tester) async {
+      final day15 = _day(2024, 6, 15);
+      final day10 = _day(2024, 6, 10);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      var selected = [day15];
+      var onChangeCount = 0;
+
+      Future<void> pumpCalendar() {
+        return tester.pumpWidget(
+          _buildTestApp(
+            TCalendar(
+              height: 640,
+              type: CalendarType.single,
+              initialValue: List<DateTime>.from(selected),
+              minDate: minDate,
+              maxDate: maxDate,
+              onChange: (_) => onChangeCount++,
+            ),
+          ),
+        );
+      }
+
+      await pumpCalendar();
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('15'));
+      await tester.pump();
+      expect(onChangeCount, 0);
+
+      selected = [day10];
+      await pumpCalendar();
+      await tester.pumpAndSettle();
+
+      final countAfterReset = onChangeCount;
+      await tester.tap(find.text('10'));
+      await tester.pump();
+      expect(onChangeCount, countAfterReset);
+
+      await tester.tap(find.text('15'));
+      await tester.pump();
+      expect(onChangeCount, countAfterReset + 1);
+    });
+
+    testWidgets('anchorRevision 递增可重复触发锚点滚动', (tester) async {
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            height: 640,
+            anchorDate: _day(2024, 6, 1),
+            anchorRevision: 0,
+            minDate: _day(2024, 1, 1),
+            maxDate: _day(2024, 12, 31),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            height: 640,
+            anchorDate: _day(2024, 6, 1),
+            anchorRevision: 1,
+            minDate: _day(2024, 1, 1),
+            maxDate: _day(2024, 12, 31),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // 边界条件
   // -----------------------------------------------------------------------
   group('TCalendar — 边界条件', () {
@@ -532,7 +609,7 @@ void main() {
       expect(popupResult, isNull);
     });
 
-    testWidgets('自定义 confirmBtn 点击后返回选中值并关闭弹窗', (tester) async {
+    testWidgets('自定义 confirmBtnBuilder 点击后返回选中值并关闭弹窗', (tester) async {
       final day15 = _day(2024, 6, 15);
       final day20 = _day(2024, 6, 20);
       List<DateTime>? popupResult;
@@ -549,9 +626,12 @@ void main() {
                   initialValue: [day15],
                   minDate: _day(2024, 6, 1),
                   maxDate: _day(2024, 6, 30),
-                  confirmBtn: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text('ok'),
+                  confirmBtnBuilder: (onConfirm) => Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: GestureDetector(
+                      onTap: onConfirm,
+                      child: const Text('ok'),
+                    ),
                   ),
                 );
               },

@@ -1078,6 +1078,7 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
   static final DateTime _maxDate = DateTime(2030, 12, 31);
 
   DateTime? _anchorDate;
+  int _anchorRevision = 0;
   List<DateTime> _selected = [DateTime.now()];
 
   @override
@@ -1093,6 +1094,7 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
           onNavigate: (anchor) {
             setState(() {
               _anchorDate = anchor;
+              _anchorRevision++;
             });
           },
         ),
@@ -1103,6 +1105,7 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
           maxDate: _maxDate,
           initialValue: _selected,
           anchorDate: _anchorDate,
+          anchorRevision: _anchorRevision,
           animateTo: true,
           dataSource: _dataSource,
           onMonthChange: (month) {

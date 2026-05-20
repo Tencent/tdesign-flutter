@@ -1,5 +1,7 @@
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:lunar/lunar.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import 'lunar_info.dart';
 
 /// 基于 lunar 库的农历示例：副标题由 [getSubtitle] 或 [subtitleBuilder] 接入。
 class LunarDataSourceExample extends TCalendarDataSource {
@@ -67,12 +69,12 @@ class LunarDataSourceExample extends TCalendarDataSource {
     return days[day - 1];
   }
 
-  TLunarInfo? getLunarInfo(DateTime solarDate) {
+  LunarInfo? getLunarInfo(DateTime solarDate) {
     try {
       final solar = Solar.fromDate(solarDate);
       final lunar = solar.getLunar();
 
-      return TLunarInfo(
+      return LunarInfo(
         year: lunar.getYear(),
         month: lunar.getMonth().abs(),
         day: lunar.getDay(),
@@ -141,7 +143,7 @@ class LunarDataSourceExample extends TCalendarDataSource {
     return solarTerms[key];
   }
 
-  String? festivalOf(DateTime date, [TLunarInfo? lunarInfo]) {
+  String? festivalOf(DateTime date, [LunarInfo? lunarInfo]) {
     if (date.month == 1 && date.day == 1) return '元旦';
     if (date.month == 2 && date.day == 14) return '情人节';
     if (date.month == 5 && date.day == 1) return '劳动节';
