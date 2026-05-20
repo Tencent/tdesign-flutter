@@ -36,6 +36,34 @@
 ```
 ```
 
+### TCalendarInherited
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| child |  | - |  |
+| confirmBtn | Widget? | - | 自定义确认按钮（静态 Widget，需自行处理点击；推荐 [confirmBtnBuilder]）。 |
+| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | 自定义确认按钮构建器，[onConfirm] 与默认确认按钮行为一致（回传选中值并关闭弹窗）。 |
+| key |  | - |  |
+| onClose |  | - |  |
+| onConfirm |  | - |  |
+| popupBottomBuilder | Widget Function(BuildContext context, List<DateTime> selectedDates)? | - | 弹窗底部自定义区域构建器（仅弹窗模式，由 [TCalendar.showPopup] 或手动 |
+| popupBottomExpanded | ValueListenable<bool>? | - | 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。 |
+| popupConfirmBtn | bool? | - | 是否由 [TCalendar] 渲染底部确认按钮。 |
+| popupControls | bool | true | 是否由 [TCalendar] 自行渲染关闭按钮和标题行。 |
+| selected | ValueNotifier<List<DateTime>> | - | 选中态的可写引用（仅供 [TCalendar] 内部更新使用）。 |
+| usePopup |  | true |  |
+
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| of |  |   required BuildContext context, |  |
+
+```
+```
+
 ### TCalendarStyle
 #### 默认构造方法
 

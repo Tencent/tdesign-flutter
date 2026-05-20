@@ -68,7 +68,7 @@ Widget _buildStyle(BuildContext context) {
               final cellDate = cellValue[0];
               return TCellGroup(
                 cells: [
-          // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
+          // 1. 自定义文案（cellWidget，仅 showPopup 弹窗模式）
           TCell(
             title: '自定义文案',
             arrow: true,
@@ -253,7 +253,7 @@ Widget _buildStyle(BuildContext context) {
               final cellDate = cellValue[0];
               return TCellGroup(
                 cells: [
-          // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
+          // 1. 自定义文案（cellWidget，仅 showPopup 弹窗模式）
           TCell(
             title: '自定义文案',
             arrow: true,
@@ -465,6 +465,34 @@ Widget _buildLunar(BuildContext context) {
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
 | showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget? confirmBtn,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TDate tdate)? onCellClick,  bool autoClose,  bool draggable,  Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget,  TCalendarDisplayMode displayMode,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
+
+```
+```
+
+### TCalendarInherited
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| child |  | - |  |
+| confirmBtn | Widget? | - | 自定义确认按钮（静态 Widget，需自行处理点击；推荐 [confirmBtnBuilder]）。 |
+| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | 自定义确认按钮构建器，[onConfirm] 与默认确认按钮行为一致（回传选中值并关闭弹窗）。 |
+| key |  | - |  |
+| onClose |  | - |  |
+| onConfirm |  | - |  |
+| popupBottomBuilder | Widget Function(BuildContext context, List<DateTime> selectedDates)? | - | 弹窗底部自定义区域构建器（仅弹窗模式，由 [TCalendar.showPopup] 或手动 |
+| popupBottomExpanded | ValueListenable<bool>? | - | 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。 |
+| popupConfirmBtn | bool? | - | 是否由 [TCalendar] 渲染底部确认按钮。 |
+| popupControls | bool | true | 是否由 [TCalendar] 自行渲染关闭按钮和标题行。 |
+| selected | ValueNotifier<List<DateTime>> | - | 选中态的可写引用（仅供 [TCalendar] 内部更新使用）。 |
+| usePopup |  | true |  |
+
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| of |  |   required BuildContext context, |  |
 
 ```
 ```
