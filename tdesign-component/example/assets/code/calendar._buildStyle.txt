@@ -27,7 +27,7 @@ Widget _buildStyle(BuildContext context) {
               final cellDate = cellValue[0];
               return TCellGroup(
                 cells: [
-          // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
+          // 1. 自定义文案（cellWidget，仅 showPopup 弹窗模式）
           TCell(
             title: '自定义文案',
             arrow: true,

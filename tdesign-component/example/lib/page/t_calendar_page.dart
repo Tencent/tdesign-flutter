@@ -91,7 +91,8 @@ class _SimpleDemo extends StatelessWidget {
 // ========================= 1. 单选 + 天气 =========================
 /// 单选日历 + bottom 天气面板
 ///
-/// 演示 [TCalendar.showPopup] 的 popupBottomBuilder / popupBottomExpanded 用法：
+/// 演示 [TCalendar.showPopup] 的 popupBottomBuilder / popupBottomExpanded 用法
+/// （底部区域仅弹窗模式，经 [TCalendarInherited] 注入，不可传给内嵌 [TCalendar]）：
 /// - 选中日期后展开 bottom 区域显示天气信息
 /// - 确认后回传选中值
 class _SingleCalendarCell extends StatefulWidget {
@@ -897,7 +898,7 @@ Widget _buildStyle(BuildContext context) {
               final cellDate = cellValue[0];
               return TCellGroup(
                 cells: [
-          // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
+          // 1. 自定义文案（cellWidget，仅 showPopup 弹窗模式）
           TCell(
             title: '自定义文案',
             arrow: true,
@@ -1050,8 +1051,7 @@ Widget _buildStyle(BuildContext context) {
 /// 「组件样式 - 农历日历」
 ///
 /// 非弹窗内嵌模式，结合 [TCalendarDataSource] 展示农历信息，
-/// 支持月份切换、年份/月份弹窗选择、农历信息开关。
-/// 点击日期时通过 SnackBar 显示完整的农历/节气/节日/假期信息。
+/// 支持月份切换、年份/月份弹窗选择、显示模式切换。
 @Demo(group: 'calendar')
 Widget _buildLunar(BuildContext context) {
   return const _LunarCalendarDemo();
@@ -1123,44 +1123,7 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
             _LunarControlBar.monthKey.currentState
                 ?.updateMonth(DateTime(month.year, month.month, 1));
           },
-          onCellClick: (date, selectType, tdate) {
-            final lunarInfo = _dataSource.getLunarInfo(date);
-            final solarTerm = _dataSource.getSolarTerm(date);
-            final festival = _dataSource.getFestival(date, lunarInfo);
-            final holidayInfo = _dataSource.getHolidayInfo(date);
-
-            final buffer = StringBuffer();
-            buffer.write('阳历：${date.year}年${date.month}月${date.day}日');
-
-            if (lunarInfo != null) {
-              buffer.write('\n农历：${lunarInfo.monthText}${lunarInfo.dayText}');
-            }
-
-            if (solarTerm != null && solarTerm.isNotEmpty) {
-              buffer.write('\n节气：$solarTerm');
-            }
-
-            if (festival != null && festival.isNotEmpty) {
-              buffer.write('\n节日：$festival');
-            }
-
-            if (holidayInfo != null) {
-              final type = holidayInfo['type'] == 'holiday' ? '假期' : '调休';
-              buffer.write('\n$type：${holidayInfo['name']}');
-            }
-
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(buffer.toString()),
-                duration: const Duration(seconds: 3),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          },
-          onChange: (value) {
-            setState(() => _selected = value);
-          },
+          onChange: (value) => setState(() => _selected = value),
         ),
       ],
     );
