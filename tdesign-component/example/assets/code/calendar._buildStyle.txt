@@ -8,25 +8,38 @@ Widget _buildStyle(BuildContext context) {
     15: '元宵节',
   };
 
+  final customTextSelected =
+      ValueNotifier<List<DateTime>>([DateTime(2022, 1, 15)]);
+  final customBtnSelected =
+      ValueNotifier<List<DateTime>>([DateTime.now()]);
   final customCellSelected = ValueNotifier<List<DateTime>>(
       [DateTime.now().add(const Duration(days: 30))]);
 
   return ValueListenableBuilder(
-    valueListenable: customCellSelected,
-    builder: (context, cellValue, _) {
-      final cellDate = cellValue[0];
-      return TCellGroup(
-        cells: [
+    valueListenable: customTextSelected,
+    builder: (context, textSelected, _) {
+      return ValueListenableBuilder(
+        valueListenable: customBtnSelected,
+        builder: (context, btnSelected, _) {
+          return ValueListenableBuilder(
+            valueListenable: customCellSelected,
+            builder: (context, cellValue, _) {
+              final cellDate = cellValue[0];
+              return TCellGroup(
+                cells: [
           // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
           TCell(
             title: '自定义文案',
             arrow: true,
-            onClick: (cell) {
+            note: _formatYmd(textSelected),
+            onClick: (_) {
               TCalendar.showPopup(
                 context,
                 titleWidget: const Text('请选择日期'),
+                initialValue: textSelected,
                 minDate: DateTime(2022, 1, 1),
                 maxDate: DateTime(2022, 2, 15),
+                onConfirm: (value) => customTextSelected.value = value,
                 cellWidget: (context, tdate, selectType) {
                   final isSpecial = tdate.date.month == 2 &&
                       map.keys.contains(tdate.date.day);
@@ -73,23 +86,25 @@ Widget _buildStyle(BuildContext context) {
           TCell(
             title: '自定义按钮',
             arrow: true,
-            onClick: (cell) {
+            note: _formatYmd(btnSelected),
+            onClick: (_) {
               TCalendar.showPopup(
                 context,
                 titleWidget: const Text('请选择日期'),
-                initialValue: [DateTime.now()],
-                confirmBtn: Padding(
+                initialValue: btnSelected,
+                confirmBtnBuilder: (onConfirm) => Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: TTheme.of(context).spacer16),
-                  child: const TButton(
+                  child: TButton(
                     theme: TButtonTheme.danger,
                     shape: TButtonShape.round,
                     text: 'ok',
                     isBlock: true,
                     size: TButtonSize.large,
+                    onTap: onConfirm,
                   ),
                 ),
-                onConfirm: (value) => print('confirmed: $value'),
+                onConfirm: (value) => customBtnSelected.value = value,
               );
             },
           ),
@@ -152,7 +167,11 @@ Widget _buildStyle(BuildContext context) {
               );
             },
           ),
-        ],
+                ],
+              );
+            },
+          );
+        },
       );
     },
   );

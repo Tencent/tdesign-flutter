@@ -30,6 +30,7 @@ class TCalendarInherited extends InheritedWidget {
     this.popupConfirmBtn,
     this.onConfirm,
     this.confirmBtn,
+    this.confirmBtnBuilder,
     Key? key,
   }) : super(child: child, key: key);
 
@@ -60,7 +61,12 @@ class TCalendarInherited extends InheritedWidget {
   bool get effectivePopupConfirmBtn => popupConfirmBtn ?? popupControls;
 
   final VoidCallback? onConfirm;
+
+  /// 自定义确认按钮（静态 Widget，需自行处理点击；推荐 [confirmBtnBuilder]）。
   final Widget? confirmBtn;
+
+  /// 自定义确认按钮构建器，[onConfirm] 与默认确认按钮行为一致（回传选中值并关闭弹窗）。
+  final Widget Function(VoidCallback onConfirm)? confirmBtnBuilder;
 
   @override
   bool updateShouldNotify(covariant TCalendarInherited oldWidget) => false;
@@ -337,8 +343,14 @@ class TCalendar extends StatefulWidget {
     /// 弹窗底部区域是否展开（响应式）
     ValueListenable<bool>? popupBottomExpanded,
 
-    /// 自定义确认按钮
+    /// 自定义确认按钮（静态 Widget）。
+    ///
+    /// 若未设置 [onTap]，[showPopup] 会自动为其叠加点击层以触发确认；
+    /// 需要按钮按压态时请改用 [confirmBtnBuilder]。
     Widget? confirmBtn,
+
+    /// 自定义确认按钮构建器，[onConfirm] 回调与默认确认按钮一致。
+    Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,
 
     /// 点击确认按钮时触发
     void Function(List<DateTime>)? onConfirm,
@@ -404,12 +416,20 @@ class TCalendar extends StatefulWidget {
           panelTitle = _extractTextFromWidget(titleWidget);
         }
 
+        final effectiveConfirmBtnBuilder = confirmBtnBuilder ??
+            (confirmBtn != null
+                ? (onConfirm) => _CalendarConfirmTapProxy(
+                      onConfirm: onConfirm,
+                      child: confirmBtn,
+                    )
+                : null);
+
         return TCalendarInherited(
           selected: selected,
           usePopup: true,
           popupControls: false,
           popupConfirmBtn: true,
-          confirmBtn: confirmBtn,
+          confirmBtnBuilder: effectiveConfirmBtnBuilder,
           onClose: () {
             if (autoClose) {
               doClose(nav);
@@ -671,24 +691,32 @@ class _TCalendarState extends State<TCalendar> {
         Expanded(
           child: _buildBodyArea(verticalGap, hasBottom, bottomExpanded),
         ),
-        if (_showPopupConfirmBtn)
-          inherited?.confirmBtn ??
-              Padding(
-                padding: widget.safeAreaInset
-                    ? EdgeInsets.only(top: TTheme.of(context).spacer16)
-                    : EdgeInsets.symmetric(
-                        vertical: TTheme.of(context).spacer16),
-                child: TButton(
-                  theme: TButtonTheme.primary,
-                  text: context.resource.confirm,
-                  isBlock: true,
-                  size: TButtonSize.large,
-                  onTap: inherited?.onConfirm,
-                ),
-              ),
+        if (_showPopupConfirmBtn) _buildConfirmBtnArea(context),
         if (widget.safeAreaInset)
           SizedBox(height: MediaQuery.of(context).padding.bottom)
       ],
+    );
+  }
+
+  Widget _buildConfirmBtnArea(BuildContext context) {
+    final onConfirm = inherited?.onConfirm;
+    if (inherited?.confirmBtnBuilder != null) {
+      return inherited!.confirmBtnBuilder!(onConfirm ?? () {});
+    }
+    if (inherited?.confirmBtn != null) {
+      return inherited!.confirmBtn!;
+    }
+    return Padding(
+      padding: widget.safeAreaInset
+          ? EdgeInsets.only(top: TTheme.of(context).spacer16)
+          : EdgeInsets.symmetric(vertical: TTheme.of(context).spacer16),
+      child: TButton(
+        theme: TButtonTheme.primary,
+        text: context.resource.confirm,
+        isBlock: true,
+        size: TButtonSize.large,
+        onTap: onConfirm,
+      ),
     );
   }
 
@@ -929,10 +957,9 @@ class _TCalendarState extends State<TCalendar> {
       final btnPadding = widget.safeAreaInset
           ? TTheme.of(context).spacer16
           : TTheme.of(context).spacer16 * 2;
-      // 仅默认确认按钮使用固定高度；自定义 confirmBtn 由调用方保证 bottom 不重叠。
-      final btnHeight =
-          inherited?.confirmBtn == null ? _confirmBtnHeight : 0.0;
-      return safeBottom + btnPadding + btnHeight;
+      // 默认与自定义 confirmBtn 均预留固定高度，避免 popupBottomBuilder 浮层重叠。
+      // 若自定义按钮更高，请在 popupHeight 中额外预留空间。
+      return safeBottom + btnPadding + _confirmBtnHeight;
     }
 
     return safeBottom;
@@ -962,5 +989,31 @@ class _TCalendarState extends State<TCalendar> {
         monthTitleHeight +
         visibleRows * (cellHeight + verticalGap) +
         bodyPadding * 2;
+  }
+}
+
+/// 为未绑定 [onTap] 的静态 [confirmBtn] 叠加透明点击层，触发确认并关闭弹窗。
+class _CalendarConfirmTapProxy extends StatelessWidget {
+  const _CalendarConfirmTapProxy({
+    required this.onConfirm,
+    required this.child,
+  });
+
+  final VoidCallback onConfirm;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        Positioned.fill(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onConfirm,
+          ),
+        ),
+      ],
+    );
   }
 }

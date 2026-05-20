@@ -439,4 +439,159 @@ void main() {
       expect(find.text('15'), findsOneWidget);
     });
   });
+
+  // -----------------------------------------------------------------------
+  // showPopup 集成
+  // -----------------------------------------------------------------------
+  group('TCalendar.showPopup', () {
+    testWidgets('选中新日期并确认后返回选中列表', (tester) async {
+      final day15 = _day(2024, 6, 15);
+      final day20 = _day(2024, 6, 20);
+      List<DateTime>? popupResult;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () async {
+                popupResult = await TCalendar.showPopup(
+                  context,
+                  titleWidget: const Text('选择日期'),
+                  type: CalendarType.single,
+                  initialValue: [day15],
+                  minDate: _day(2024, 6, 1),
+                  maxDate: _day(2024, 6, 30),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('选择日期'), findsOneWidget);
+
+      await tester.tap(find.text('20'));
+      await tester.pump();
+
+      await tester.tap(find.text('确定'));
+      await tester.pumpAndSettle();
+
+      expect(popupResult, isNotNull);
+      expect(popupResult!.length, 1);
+      expect(popupResult!.first, day20);
+    });
+
+    testWidgets('点击关闭按钮未确认时返回 null', (tester) async {
+      List<DateTime>? popupResult;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () async {
+                popupResult = await TCalendar.showPopup(
+                  context,
+                  titleWidget: const Text('选择日期'),
+                  type: CalendarType.single,
+                  minDate: _day(2024, 6, 1),
+                  maxDate: _day(2024, 6, 30),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+
+      expect(popupResult, isNull);
+    });
+
+    testWidgets('自定义 confirmBtn 点击后返回选中值并关闭弹窗', (tester) async {
+      final day15 = _day(2024, 6, 15);
+      final day20 = _day(2024, 6, 20);
+      List<DateTime>? popupResult;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () async {
+                popupResult = await TCalendar.showPopup(
+                  context,
+                  titleWidget: const Text('选择日期'),
+                  type: CalendarType.single,
+                  initialValue: [day15],
+                  minDate: _day(2024, 6, 1),
+                  maxDate: _day(2024, 6, 30),
+                  confirmBtn: const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text('ok'),
+                  ),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('20'));
+      await tester.pump();
+
+      await tester.tap(find.text('ok'));
+      await tester.pumpAndSettle();
+
+      expect(popupResult, isNotNull);
+      expect(popupResult!.single, day20);
+    });
+
+    testWidgets('popupBottomBuilder 与确认按钮区域不重叠', (tester) async {
+      await tester.pumpWidget(
+        _buildTestApp(
+          Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () async {
+                await TCalendar.showPopup(
+                  context,
+                  titleWidget: const Text('选择日期'),
+                  type: CalendarType.single,
+                  minDate: _day(2024, 6, 1),
+                  maxDate: _day(2024, 6, 30),
+                  popupHeight: 640,
+                  popupBottomBuilder: (_, __) => const Text('底部区域'),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      final positioned = tester
+          .widgetList<Positioned>(
+            find.ancestor(
+              of: find.text('底部区域'),
+              matching: find.byType(Positioned),
+            ),
+          )
+          .firstWhere((p) => (p.bottom ?? 0) > 0);
+      expect(positioned.bottom, greaterThan(0));
+    });
+  });
 }
