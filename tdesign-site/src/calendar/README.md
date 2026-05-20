@@ -437,7 +437,8 @@ Widget _buildLunar(BuildContext context) {
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| anchorDate | DateTime? | - | 锚点日期，弹出时自动滚动到该日期所在月份。 |
+| anchorDate | DateTime? | - | 锚点日期，打开时滚动到该日期所在月份。 |
+| anchorRevision | int | 0 | 锚点滚动触发序号，默认 `0`。 |
 | animateTo | bool | false | 滚动到选中日期/锚点日期所在月份时是否使用动画，默认 false |
 | cellBuilder | TCalendarCellBuilder? | - | 整格自定义；设置后不再使用默认主区/副标题布局。 |
 | cellHeight | double? | - | 日期单元格高度，默认 60。如需更大行高可传入自定义值（如 80） |
@@ -464,7 +465,7 @@ Widget _buildLunar(BuildContext context) {
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget? confirmBtn,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? onCellClick,  bool autoClose,  bool draggable,  TCalendarCellBuilder? cellBuilder,  TCalendarSubtitleBuilder? subtitleBuilder,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
+| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  int anchorRevision,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? onCellClick,  bool autoClose,  bool draggable,  TCalendarCellBuilder? cellBuilder,  TCalendarSubtitleBuilder? subtitleBuilder,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。   弹窗内点选过程无 [onChange]；实时联动请用 [popupBottomBuilder] 的 `dates`，   或自行用 [TCalendarInherited] 监听 [TCalendarInherited.selectedListenable]。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
 
 ```
 ```
@@ -475,8 +476,7 @@ Widget _buildLunar(BuildContext context) {
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | child |  | - |  |
-| confirmBtn | Widget? | - | 自定义确认按钮（静态 Widget，需自行处理点击；推荐 [confirmBtnBuilder]）。 |
-| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | 自定义确认按钮构建器，[onConfirm] 与默认确认按钮行为一致（回传选中值并关闭弹窗）。 |
+| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | 自定义确认按钮；[onConfirm] 与默认确认按钮一致（回传选中值并关闭弹窗）。 |
 | key |  | - |  |
 | onClose |  | - |  |
 | onConfirm |  | - |  |
@@ -537,22 +537,6 @@ Widget _buildLunar(BuildContext context) {
 | date |  | - |  |
 | isLastDayOfMonth |  | - |  |
 | typeNotifier |  | - |  |
-
-```
-```
-
-### TLunarInfo
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| day | int | - | 农历日期（数字，1-30） |
-| dayText | String | - | 日期文本（如：初七） |
-| isLeapMonth | bool | false | 是否是闰月 |
-| month | int | - | 农历月份（数字，1-12） |
-| monthText | String | - | 月份文本（如：三月、闰三月） |
-| year | int | - | 农历年份（数字） |
-| yearText | String | - | 年份文本（如：二〇二五） |
 
 
   
