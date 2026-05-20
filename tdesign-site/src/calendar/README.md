@@ -49,25 +49,38 @@ Widget _buildStyle(BuildContext context) {
     15: '元宵节',
   };
 
+  final customTextSelected =
+      ValueNotifier<List<DateTime>>([DateTime(2022, 1, 15)]);
+  final customBtnSelected =
+      ValueNotifier<List<DateTime>>([DateTime.now()]);
   final customCellSelected = ValueNotifier<List<DateTime>>(
       [DateTime.now().add(const Duration(days: 30))]);
 
   return ValueListenableBuilder(
-    valueListenable: customCellSelected,
-    builder: (context, cellValue, _) {
-      final cellDate = cellValue[0];
-      return TCellGroup(
-        cells: [
+    valueListenable: customTextSelected,
+    builder: (context, textSelected, _) {
+      return ValueListenableBuilder(
+        valueListenable: customBtnSelected,
+        builder: (context, btnSelected, _) {
+          return ValueListenableBuilder(
+            valueListenable: customCellSelected,
+            builder: (context, cellValue, _) {
+              final cellDate = cellValue[0];
+              return TCellGroup(
+                cells: [
           // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
           TCell(
             title: '自定义文案',
             arrow: true,
-            onClick: (cell) {
+            note: _formatYmd(textSelected),
+            onClick: (_) {
               TCalendar.showPopup(
                 context,
                 titleWidget: const Text('请选择日期'),
+                initialValue: textSelected,
                 minDate: DateTime(2022, 1, 1),
                 maxDate: DateTime(2022, 2, 15),
+                onConfirm: (value) => customTextSelected.value = value,
                 cellWidget: (context, tdate, selectType) {
                   final isSpecial = tdate.date.month == 2 &&
                       map.keys.contains(tdate.date.day);
@@ -114,23 +127,25 @@ Widget _buildStyle(BuildContext context) {
           TCell(
             title: '自定义按钮',
             arrow: true,
-            onClick: (cell) {
+            note: _formatYmd(btnSelected),
+            onClick: (_) {
               TCalendar.showPopup(
                 context,
                 titleWidget: const Text('请选择日期'),
-                initialValue: [DateTime.now()],
-                confirmBtn: Padding(
+                initialValue: btnSelected,
+                confirmBtnBuilder: (onConfirm) => Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: TTheme.of(context).spacer16),
-                  child: const TButton(
+                  child: TButton(
                     theme: TButtonTheme.danger,
                     shape: TButtonShape.round,
                     text: 'ok',
                     isBlock: true,
                     size: TButtonSize.large,
+                    onTap: onConfirm,
                   ),
                 ),
-                onConfirm: (value) => print('confirmed: $value'),
+                onConfirm: (value) => customBtnSelected.value = value,
               );
             },
           ),
@@ -193,7 +208,11 @@ Widget _buildStyle(BuildContext context) {
               );
             },
           ),
-        ],
+                ],
+              );
+            },
+          );
+        },
       );
     },
   );
@@ -215,25 +234,38 @@ Widget _buildStyle(BuildContext context) {
     15: '元宵节',
   };
 
+  final customTextSelected =
+      ValueNotifier<List<DateTime>>([DateTime(2022, 1, 15)]);
+  final customBtnSelected =
+      ValueNotifier<List<DateTime>>([DateTime.now()]);
   final customCellSelected = ValueNotifier<List<DateTime>>(
       [DateTime.now().add(const Duration(days: 30))]);
 
   return ValueListenableBuilder(
-    valueListenable: customCellSelected,
-    builder: (context, cellValue, _) {
-      final cellDate = cellValue[0];
-      return TCellGroup(
-        cells: [
+    valueListenable: customTextSelected,
+    builder: (context, textSelected, _) {
+      return ValueListenableBuilder(
+        valueListenable: customBtnSelected,
+        builder: (context, btnSelected, _) {
+          return ValueListenableBuilder(
+            valueListenable: customCellSelected,
+            builder: (context, cellValue, _) {
+              final cellDate = cellValue[0];
+              return TCellGroup(
+                cells: [
           // 1. 自定义文案（cellWidget 回调自定义 cell 渲染）
           TCell(
             title: '自定义文案',
             arrow: true,
-            onClick: (cell) {
+            note: _formatYmd(textSelected),
+            onClick: (_) {
               TCalendar.showPopup(
                 context,
                 titleWidget: const Text('请选择日期'),
+                initialValue: textSelected,
                 minDate: DateTime(2022, 1, 1),
                 maxDate: DateTime(2022, 2, 15),
+                onConfirm: (value) => customTextSelected.value = value,
                 cellWidget: (context, tdate, selectType) {
                   final isSpecial = tdate.date.month == 2 &&
                       map.keys.contains(tdate.date.day);
@@ -280,23 +312,25 @@ Widget _buildStyle(BuildContext context) {
           TCell(
             title: '自定义按钮',
             arrow: true,
-            onClick: (cell) {
+            note: _formatYmd(btnSelected),
+            onClick: (_) {
               TCalendar.showPopup(
                 context,
                 titleWidget: const Text('请选择日期'),
-                initialValue: [DateTime.now()],
-                confirmBtn: Padding(
+                initialValue: btnSelected,
+                confirmBtnBuilder: (onConfirm) => Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: TTheme.of(context).spacer16),
-                  child: const TButton(
+                  child: TButton(
                     theme: TButtonTheme.danger,
                     shape: TButtonShape.round,
                     text: 'ok',
                     isBlock: true,
                     size: TButtonSize.large,
+                    onTap: onConfirm,
                   ),
                 ),
-                onConfirm: (value) => print('confirmed: $value'),
+                onConfirm: (value) => customBtnSelected.value = value,
               );
             },
           ),
@@ -359,7 +393,11 @@ Widget _buildStyle(BuildContext context) {
               );
             },
           ),
-        ],
+                ],
+              );
+            },
+          );
+        },
       );
     },
   );
@@ -416,8 +454,6 @@ Widget _buildLunar(BuildContext context) {
 | onCellClick | void Function(DateTime value, DateSelectType selectType, TDate tdate)? | - | 点击日期时触发 |
 | onChange | void Function(List<DateTime> value)? | - | 选中值变化时触发 |
 | onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
-| popupBottomBuilder | Widget Function(BuildContext context, List<DateTime> selectedDates)? | - | 弹窗底部自定义区域构建器，以浮层方式叠加在日历主体之上。 |
-| popupBottomExpanded | ValueListenable<bool>? | - | 弹窗底部区域是否展开（响应式）。**仅在弹窗模式下生效。** |
 | safeAreaInset | bool | true | 是否适配底部安全区域（如 iPhone Home Indicator），默认 true |
 | style | TCalendarStyle? | - | 自定义样式 |
 | titleWidget | Widget? | - | 标题组件，可传入 Text 或自定义 Widget |
@@ -428,7 +464,7 @@ Widget _buildLunar(BuildContext context) {
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget? confirmBtn,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TDate tdate)? onCellClick,  bool autoClose,  bool draggable,  Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget,  TCalendarDisplayMode displayMode,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
+| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget? confirmBtn,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TDate tdate)? onCellClick,  bool autoClose,  bool draggable,  Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget,  TCalendarDisplayMode displayMode,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
 
 ```
 ```
