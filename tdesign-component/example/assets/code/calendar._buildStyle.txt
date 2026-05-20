@@ -27,7 +27,7 @@ Widget _buildStyle(BuildContext context) {
               final cellDate = cellValue[0];
               return TCellGroup(
                 cells: [
-          // 1. 自定义文案（cellWidget，仅 showPopup 弹窗模式）
+          // 1. 自定义文案（cellBuilder，仅 showPopup 弹窗模式）
           TCell(
             title: '自定义文案',
             arrow: true,
@@ -40,16 +40,16 @@ Widget _buildStyle(BuildContext context) {
                 minDate: DateTime(2022, 1, 1),
                 maxDate: DateTime(2022, 2, 15),
                 onConfirm: (value) => customTextSelected.value = value,
-                cellWidget: (context, tdate, selectType) {
-                  final isSpecial = tdate.date.month == 2 &&
-                      map.keys.contains(tdate.date.day);
-                  final suffix = isSpecial ? '¥100' : '¥60';
-                  final prefix = isSpecial ? map[tdate.date.day] : null;
+                cellBuilder: (context, cell) {
+                  final isSpecial = cell.date.month == 2 &&
+                      map.keys.contains(cell.date.day);
+                  final sub = isSpecial ? '¥100' : '¥60';
+                  final top = isSpecial ? map[cell.date.day] : null;
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (prefix != null)
-                        Text(prefix,
+                      if (top != null)
+                        Text(top,
                             style: TextStyle(
                               fontSize: 9,
                               color: isSpecial
@@ -57,19 +57,19 @@ Widget _buildStyle(BuildContext context) {
                                   : null,
                             )),
                       Text(
-                        tdate.date.day.toString(),
+                        cell.date.day.toString(),
                         style: TextStyle(
-                          color: selectType == DateSelectType.selected
+                          color: cell.selectType == DateSelectType.selected
                               ? TTheme.of(context).fontWhColor1
                               : isSpecial
                                   ? TTheme.of(context).errorColor6
                                   : null,
                         ),
                       ),
-                      Text(suffix,
+                      Text(sub,
                           style: TextStyle(
                             fontSize: 9,
-                            color: selectType == DateSelectType.selected
+                            color: cell.selectType == DateSelectType.selected
                                 ? TTheme.of(context).fontWhColor1
                                 : isSpecial
                                     ? TTheme.of(context).errorColor6
@@ -109,7 +109,7 @@ Widget _buildStyle(BuildContext context) {
             },
           ),
 
-          // 3. 自定义日期单元格（cellWidget 回调）
+          // 3. 自定义日期单元格（cellBuilder 回调）
           TCell(
             title: '自定义日期单元格',
             arrow: true,
@@ -121,12 +121,12 @@ Widget _buildStyle(BuildContext context) {
                 initialValue: cellValue,
                 cellHeight: 80,
                 onConfirm: (value) => customCellSelected.value = value,
-                cellWidget: (context, tdate, selectType) {
+                cellBuilder: (context, cell) {
                   final today = DateTime.now();
-                  final isToday = tdate.date ==
+                  final isToday = cell.date ==
                       DateTime(today.year, today.month, today.day);
 
-                  if (isToday && selectType != DateSelectType.selected) {
+                  if (isToday && cell.selectType != DateSelectType.selected) {
                     return _CustomCellContainer(
                       color: TTheme.of(context).brandColor4,
                       child: const Text('今天',
@@ -136,13 +136,13 @@ Widget _buildStyle(BuildContext context) {
                               color: Colors.white)),
                     );
                   }
-                  if (selectType == DateSelectType.selected) {
+                  if (cell.selectType == DateSelectType.selected) {
                     return _CustomCellContainer(
                       color: TTheme.of(context).successColor8,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('${tdate.date.day}',
+                          Text('${cell.date.day}',
                               style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -157,7 +157,7 @@ Widget _buildStyle(BuildContext context) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${tdate.date.day}',
+                      Text('${cell.date.day}',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                       const Text('自定义', style: TextStyle(fontSize: 8)),

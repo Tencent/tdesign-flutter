@@ -7,7 +7,14 @@ import 't_calendar_body.dart';
 import 't_calendar_cell.dart';
 import 't_calendar_header.dart';
 
-export 't_calendar_cell.dart' show TDate, DateSelectTypeNotifier;
+export 't_calendar_cell.dart'
+    show
+        TCalendarCellModel,
+        DateSelectTypeNotifier,
+        DateSelectType,
+        TCalendarSubtitleContext,
+        TCalendarSubtitleBuilder,
+        TCalendarCellBuilder;
 export 't_calendar_data_source.dart';
 export 't_calendar_style.dart';
 export 't_lunar_date.dart';
@@ -102,21 +109,6 @@ enum CalendarType {
   range,
 }
 
-/// 日期在日历中的选中状态
-enum DateSelectType { selected, disabled, start, centre, end, empty }
-
-/// 日历显示模式，控制日期单元格的主/副文本内容
-enum TCalendarDisplayMode {
-  /// 纯阳历：主文本显示阳历日期数字，无副文本
-  solar,
-
-  /// 阳历 + 农历副标题：主文本显示阳历日期数字，副文本显示农历（如"初七"）
-  solarWithLunar,
-
-  /// 农历为主：主文本显示农历（如"初七"），副文本显示阳历日期数字
-  lunar,
-}
-
 /// 日历组件
 class TCalendar extends StatefulWidget {
   const TCalendar({
@@ -136,10 +128,10 @@ class TCalendar extends StatefulWidget {
     this.monthTitleHeight = 22,
     this.monthTitleBuilder,
     this.animateTo = false,
-    this.cellWidget,
+    this.cellBuilder,
+    this.subtitleBuilder,
     this.onMonthChange,
     this.anchorDate,
-    this.displayMode = TCalendarDisplayMode.solar,
     this.dataSource,
   }) : super(key: key);
 
@@ -185,7 +177,7 @@ class TCalendar extends StatefulWidget {
   final void Function(
     DateTime value,
     DateSelectType selectType,
-    TDate tdate,
+    TCalendarCellModel cell,
   )? onCellClick;
 
   /// 月份变化时触发
@@ -206,26 +198,16 @@ class TCalendar extends StatefulWidget {
   /// 滚动到选中日期/锚点日期所在月份时是否使用动画，默认 false
   final bool animateTo;
 
-  /// 自定义日期单元格组件
-  final Widget? Function(
-    BuildContext context,
-    TDate tdate,
-    DateSelectType selectType,
-  )? cellWidget;
+  /// 整格自定义；设置后不再使用默认主区/副标题布局。
+  final TCalendarCellBuilder? cellBuilder;
+
+  /// 副标题完全自定义；未设置时可使用 [dataSource.getSubtitle]。
+  final TCalendarSubtitleBuilder? subtitleBuilder;
 
   /// 锚点日期，弹出时自动滚动到该日期所在月份。
-  /// 传入 [DateTime] 对象，如 `DateTime(2025, 6, 15)`。
   final DateTime? anchorDate;
 
-  /// 日历显示模式，控制日期单元格的主/副文本内容：
-  /// - [TCalendarDisplayMode.solar]：纯阳历，主文本显示阳历日期数字
-  /// - [TCalendarDisplayMode.solarWithLunar]：阳历 + 农历副标题
-  /// - [TCalendarDisplayMode.lunar]：农历为主文本，阳历为副文本
-  final TCalendarDisplayMode displayMode;
-
-  /// 外部数据源，用于提供农历转换等功能。
-  /// 当 [displayMode] 为 [TCalendarDisplayMode.solarWithLunar] 或
-  /// [TCalendarDisplayMode.lunar] 时必须提供。
+  /// 可选数据源，提供副标题字符串（无 [subtitleBuilder] 时生效）。
   final TCalendarDataSource? dataSource;
 
   List<DateTime>? get _value => initialValue?.map((e) {
@@ -329,8 +311,11 @@ class TCalendar extends StatefulWidget {
     VoidCallback? onClose,
 
     /// 点击日期时触发
-    void Function(DateTime value, DateSelectType selectType, TDate tdate)?
-        onCellClick,
+    void Function(
+      DateTime value,
+      DateSelectType selectType,
+      TCalendarCellModel cell,
+    )? onCellClick,
 
     /// 点击遮罩或物理返回是否关闭
     bool autoClose = true,
@@ -338,17 +323,8 @@ class TCalendar extends StatefulWidget {
     /// 面板是否可拖动
     bool draggable = false,
 
-    /// 自定义日期单元格组件
-    Widget? Function(
-      BuildContext context,
-      TDate tdate,
-      DateSelectType selectType,
-    )? cellWidget,
-
-    /// 日历显示模式
-    TCalendarDisplayMode displayMode = TCalendarDisplayMode.solar,
-
-    /// 外部数据源，用于提供农历转换等功能
+    TCalendarCellBuilder? cellBuilder,
+    TCalendarSubtitleBuilder? subtitleBuilder,
     TCalendarDataSource? dataSource,
 
     /// 月份变化时触发
@@ -434,8 +410,8 @@ class TCalendar extends StatefulWidget {
               cellHeight: cellHeight,
               style: style,
               onCellClick: onCellClick,
-              cellWidget: cellWidget,
-              displayMode: displayMode,
+              cellBuilder: cellBuilder,
+              subtitleBuilder: subtitleBuilder,
               dataSource: dataSource,
               onMonthChange: onMonthChange,
               monthTitleBuilder: monthTitleBuilder,
@@ -482,12 +458,10 @@ class _TCalendarState extends State<TCalendar> {
   /// 时直接 setType(empty) 即可。引用会随 body 缓存重生成（cleanup 后再滚回
   /// 该月）被 [_handleTDateGenerated] 覆盖为新实例，不会出现"指向已 detach
   /// 的 TDate"导致视觉残留。
-  TDate? _selectedSingleRef;
+  TCalendarCellModel? _selectedSingleRef;
 
-  /// multiple 模式下当前所有选中的 TDate 引用，按日期键。
-  ///
-  /// 点击切换时直接查表决定 select/empty，避免遍历可见月份缓存。
-  final Map<DateTime, TDate> _selectedMultipleRefs = {};
+  /// multiple 模式下当前所有选中的单元格引用，按日期键。
+  final Map<DateTime, TCalendarCellModel> _selectedMultipleRefs = {};
 
   // bottom 展开时日历主体上移的距离，露出 bottom 顶部"把手"区域。
   static const double _bottomPeekHeight = 30.0;
@@ -497,21 +471,6 @@ class _TCalendarState extends State<TCalendar> {
   static const Curve _animCurve = Curves.easeInOut;
 
   bool _initializedSelected = false;
-
-  /// 解析 displayMode 为旧的 dateType 和 showLunarInfo
-  TCalendarDateType get _dateType {
-    switch (widget.displayMode) {
-      case TCalendarDisplayMode.solar:
-      case TCalendarDisplayMode.solarWithLunar:
-        return TCalendarDateType.solar;
-      case TCalendarDisplayMode.lunar:
-        return TCalendarDateType.lunar;
-    }
-  }
-
-  bool get _showLunarInfo =>
-      widget.displayMode == TCalendarDisplayMode.solarWithLunar ||
-      widget.displayMode == TCalendarDisplayMode.lunar;
 
   @override
   void didChangeDependencies() {
@@ -721,22 +680,23 @@ class _TCalendarState extends State<TCalendar> {
       monthTitleBuilder: widget.monthTitleBuilder,
       animateTo: widget.animateTo,
       onMonthChange: widget.onMonthChange,
-      dateType: _dateType,
-      dataSource: widget.dataSource,
-      onTDateGenerated: _handleTDateGenerated,
+      onCellGenerated: _handleCellGenerated,
       onCacheInvalidated: _handleCacheInvalidated,
-      builder: (date, dateList, rowIndex, colIndex) {
+      builder: (cell, dateList, rowIndex, colIndex) {
         return TCalendarCell(
           height: _getEffectiveCellHeight(),
-          tdate: date,
+          cell: cell,
           padding: verticalGap / 2,
           onTap: _handleCellTap,
           dateList: dateList,
           rowIndex: rowIndex,
           colIndex: colIndex,
-          cellWidget: widget.cellWidget,
-          dateType: _dateType,
-          showLunarInfo: _showLunarInfo,
+          cellBuilder: widget.cellBuilder,
+          subtitleBuilder: widget.subtitleBuilder,
+          dataSource: widget.dataSource,
+          dayStyle: _style.dayStyle,
+          todayDayStyle: _style.todayDayStyle,
+          subtitleStyle: _style.subtitleStyle,
         );
       },
     );
@@ -748,21 +708,21 @@ class _TCalendarState extends State<TCalendar> {
   /// single：每月最多一个 selected，遇到即覆盖 _selectedSingleRef。
   /// multiple：把当月所有 selected 的引用按 date 写入 map。
   /// range：本身走 widget.value 重建路径，不需要登记。
-  void _handleTDateGenerated(DateTime monthDate, List<TDate?> tdates) {
+  void _handleCellGenerated(DateTime monthDate, List<TCalendarCellModel?> cells) {
     if (widget.type == CalendarType.range) {
       return;
     }
-    for (final tdate in tdates) {
-      if (tdate == null) {
+    for (final cell in cells) {
+      if (cell == null) {
         continue;
       }
-      if (tdate.typeNotifier.value != DateSelectType.selected) {
+      if (cell.typeNotifier.value != DateSelectType.selected) {
         continue;
       }
       if (widget.type == CalendarType.single) {
-        _selectedSingleRef = tdate;
+        _selectedSingleRef = cell;
       } else if (widget.type == CalendarType.multiple) {
-        _selectedMultipleRefs[tdate.date] = tdate;
+        _selectedMultipleRefs[cell.date] = cell;
       }
     }
   }
@@ -781,27 +741,26 @@ class _TCalendarState extends State<TCalendar> {
   /// - single：切换 _selectedSingleRef，旧引用置 empty、新引用置 selected
   /// - multiple：根据 _selectedMultipleRefs 切换该日期的选中态
   /// - range：交由 [_resolveRangeSelection] 决策后走 setState 重建（保持原有路径）
-  void _handleCellTap(TDate tdate) {
-    final selectType = tdate.typeNotifier.value;
-    final curDate = tdate.date;
+  void _handleCellTap(TCalendarCellModel cell) {
+    final selectType = cell.typeNotifier.value;
+    final curDate = cell.date;
 
     if (selectType == DateSelectType.disabled) {
-      widget.onCellClick?.call(curDate, selectType, tdate);
+      widget.onCellClick?.call(curDate, selectType, cell);
       return;
     }
 
     switch (widget.type) {
       case CalendarType.single:
-        // 已经是当前选中：仅触发 onCellClick，不重复 onChange
-        if (identical(_selectedSingleRef, tdate)) {
-          widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        if (identical(_selectedSingleRef, cell)) {
+          widget.onCellClick?.call(curDate, cell.typeNotifier.value, cell);
           return;
         }
         _selectedSingleRef?.typeNotifier.setType(DateSelectType.empty);
-        tdate.typeNotifier.setType(DateSelectType.selected);
-        _selectedSingleRef = tdate;
+        cell.typeNotifier.setType(DateSelectType.selected);
+        _selectedSingleRef = cell;
         _emitSelection([curDate], rebuild: false);
-        widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        widget.onCellClick?.call(curDate, cell.typeNotifier.value, cell);
         break;
       case CalendarType.multiple:
         final existing = _selectedMultipleRefs[curDate];
@@ -810,24 +769,20 @@ class _TCalendarState extends State<TCalendar> {
           existing.typeNotifier.setType(DateSelectType.empty);
           _selectedMultipleRefs.remove(curDate);
         } else {
-          tdate.typeNotifier.setType(DateSelectType.selected);
-          _selectedMultipleRefs[curDate] = tdate;
+          cell.typeNotifier.setType(DateSelectType.selected);
+          _selectedMultipleRefs[curDate] = cell;
         }
         nextValue = _selectedMultipleRefs.keys.toList()..sort();
         _emitSelection(nextValue, rebuild: false);
-        widget.onCellClick?.call(curDate, tdate.typeNotifier.value, tdate);
+        widget.onCellClick?.call(curDate, cell.typeNotifier.value, cell);
         break;
       case CalendarType.range:
-        // range 仍走老路径：state 决策 start/end，刷新 value，触发 body 重建。
         final resolved = _resolveRangeSelection([curDate]);
         _emitSelection(resolved, rebuild: true);
-        // 上抛点击时已根据 resolved 推导出本次的语义类型（start / end），
-        // 这样调用方无需等到 body 重建后再读 typeNotifier，可直接用于
-        // 切换关联 UI（如时间选择器 Tab）。
         final reportedType = resolved.length >= 2 && resolved[1] == curDate
             ? DateSelectType.end
             : DateSelectType.start;
-        widget.onCellClick?.call(curDate, reportedType, tdate);
+        widget.onCellClick?.call(curDate, reportedType, cell);
         break;
     }
   }

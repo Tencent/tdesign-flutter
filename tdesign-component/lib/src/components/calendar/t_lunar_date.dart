@@ -59,12 +59,3 @@ class TLunarInfo {
       day.hashCode ^
       isLeapMonth.hashCode;
 }
-
-/// 日历类型枚举
-enum TCalendarDateType {
-  /// 阳历（公历）
-  solar,
-
-  /// 阴历（农历）
-  lunar,
-}

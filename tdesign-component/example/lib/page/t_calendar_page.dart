@@ -898,7 +898,7 @@ Widget _buildStyle(BuildContext context) {
               final cellDate = cellValue[0];
               return TCellGroup(
                 cells: [
-          // 1. 自定义文案（cellWidget，仅 showPopup 弹窗模式）
+          // 1. 自定义文案（cellBuilder，仅 showPopup 弹窗模式）
           TCell(
             title: '自定义文案',
             arrow: true,
@@ -911,16 +911,16 @@ Widget _buildStyle(BuildContext context) {
                 minDate: DateTime(2022, 1, 1),
                 maxDate: DateTime(2022, 2, 15),
                 onConfirm: (value) => customTextSelected.value = value,
-                cellWidget: (context, tdate, selectType) {
-                  final isSpecial = tdate.date.month == 2 &&
-                      map.keys.contains(tdate.date.day);
-                  final suffix = isSpecial ? '¥100' : '¥60';
-                  final prefix = isSpecial ? map[tdate.date.day] : null;
+                cellBuilder: (context, cell) {
+                  final isSpecial = cell.date.month == 2 &&
+                      map.keys.contains(cell.date.day);
+                  final sub = isSpecial ? '¥100' : '¥60';
+                  final top = isSpecial ? map[cell.date.day] : null;
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (prefix != null)
-                        Text(prefix,
+                      if (top != null)
+                        Text(top,
                             style: TextStyle(
                               fontSize: 9,
                               color: isSpecial
@@ -928,19 +928,19 @@ Widget _buildStyle(BuildContext context) {
                                   : null,
                             )),
                       Text(
-                        tdate.date.day.toString(),
+                        cell.date.day.toString(),
                         style: TextStyle(
-                          color: selectType == DateSelectType.selected
+                          color: cell.selectType == DateSelectType.selected
                               ? TTheme.of(context).fontWhColor1
                               : isSpecial
                                   ? TTheme.of(context).errorColor6
                                   : null,
                         ),
                       ),
-                      Text(suffix,
+                      Text(sub,
                           style: TextStyle(
                             fontSize: 9,
-                            color: selectType == DateSelectType.selected
+                            color: cell.selectType == DateSelectType.selected
                                 ? TTheme.of(context).fontWhColor1
                                 : isSpecial
                                     ? TTheme.of(context).errorColor6
@@ -980,7 +980,7 @@ Widget _buildStyle(BuildContext context) {
             },
           ),
 
-          // 3. 自定义日期单元格（cellWidget 回调）
+          // 3. 自定义日期单元格（cellBuilder 回调）
           TCell(
             title: '自定义日期单元格',
             arrow: true,
@@ -992,12 +992,12 @@ Widget _buildStyle(BuildContext context) {
                 initialValue: cellValue,
                 cellHeight: 80,
                 onConfirm: (value) => customCellSelected.value = value,
-                cellWidget: (context, tdate, selectType) {
+                cellBuilder: (context, cell) {
                   final today = DateTime.now();
-                  final isToday = tdate.date ==
+                  final isToday = cell.date ==
                       DateTime(today.year, today.month, today.day);
 
-                  if (isToday && selectType != DateSelectType.selected) {
+                  if (isToday && cell.selectType != DateSelectType.selected) {
                     return _CustomCellContainer(
                       color: TTheme.of(context).brandColor4,
                       child: const Text('今天',
@@ -1007,13 +1007,13 @@ Widget _buildStyle(BuildContext context) {
                               color: Colors.white)),
                     );
                   }
-                  if (selectType == DateSelectType.selected) {
+                  if (cell.selectType == DateSelectType.selected) {
                     return _CustomCellContainer(
                       color: TTheme.of(context).successColor8,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('${tdate.date.day}',
+                          Text('${cell.date.day}',
                               style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -1028,7 +1028,7 @@ Widget _buildStyle(BuildContext context) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${tdate.date.day}',
+                      Text('${cell.date.day}',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                       const Text('自定义', style: TextStyle(fontSize: 8)),
@@ -1050,8 +1050,8 @@ Widget _buildStyle(BuildContext context) {
 
 /// 「组件样式 - 农历日历」
 ///
-/// 非弹窗内嵌模式，结合 [TCalendarDataSource] 展示农历信息，
-/// 支持月份切换、年份/月份弹窗选择、显示模式切换。
+/// 非弹窗内嵌模式，通过 [TCalendarDataSource.getSubtitle] 展示农历副标题，
+/// 支持月份切换、年份/月份弹窗选择。
 @Demo(group: 'calendar')
 Widget _buildLunar(BuildContext context) {
   return const _LunarCalendarDemo();
@@ -1078,21 +1078,13 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
   static final DateTime _maxDate = DateTime(2030, 12, 31);
 
   DateTime? _anchorDate;
-  late TCalendarDisplayMode _displayMode;
   List<DateTime> _selected = [DateTime.now()];
-
-  @override
-  void initState() {
-    super.initState();
-    _displayMode = TCalendarDisplayMode.solarWithLunar;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // ---- 控制栏（独立 Widget，onMonthChange 只更新它自己） ----
         _LunarControlBar(
           key: _LunarControlBar.monthKey,
           dataSource: _dataSource,
@@ -1103,12 +1095,8 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
               _anchorDate = anchor;
             });
           },
-          onModeChanged: (mode) {
-            setState(() => _displayMode = mode);
-          },
         ),
 
-        // ---- 内嵌日历 ----
         TCalendar(
           type: CalendarType.single,
           minDate: _minDate,
@@ -1116,7 +1104,6 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
           initialValue: _selected,
           anchorDate: _anchorDate,
           animateTo: true,
-          displayMode: _displayMode,
           dataSource: _dataSource,
           onMonthChange: (month) {
             // 只通知控制栏更新显示，不 setState 本身 → 日历不重建
@@ -1141,14 +1128,12 @@ class _LunarControlBar extends StatefulWidget {
     required this.minDate,
     required this.maxDate,
     required this.onNavigate,
-    required this.onModeChanged,
   });
 
   final LunarDataSourceExample dataSource;
   final DateTime minDate;
   final DateTime maxDate;
   final ValueChanged<DateTime> onNavigate;
-  final ValueChanged<TCalendarDisplayMode> onModeChanged;
 
   /// 全局 Key，供父 Widget 通过 currentState.updateMonth() 同步月份
   static final GlobalKey<_LunarControlBarState> monthKey =
@@ -1160,14 +1145,12 @@ class _LunarControlBar extends StatefulWidget {
 
 class _LunarControlBarState extends State<_LunarControlBar> {
   late DateTime _currentMonth;
-  late TCalendarDisplayMode _mode;
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
     _currentMonth = _clampMonth(DateTime(now.year, now.month, 1));
-    _mode = TCalendarDisplayMode.solarWithLunar;
   }
 
   /// 将任意 (year, month) clamp 到 [minDate, maxDate] 区间内。
@@ -1410,23 +1393,6 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                     ? () => _navigateTo(DateTime(
                         _currentMonth.year, _currentMonth.month + 1, 1))
                     : null,
-              ),
-              const SizedBox(width: 8),
-              Text('农历', style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
-              const SizedBox(width: 4),
-              TSwitch(
-                size: TSwitchSize.small,
-                isOn: _mode == TCalendarDisplayMode.solarWithLunar ||
-                    _mode == TCalendarDisplayMode.lunar,
-                onChanged: (v) {
-                  final newMode = v
-                      ? TCalendarDisplayMode.solarWithLunar
-                      : TCalendarDisplayMode.solar;
-                  setState(() => _mode = newMode);
-                  widget.onModeChanged(newMode);
-                  // 已自行处理状态，返回 true 阻止 TSwitch 内部刷新（避免双源冲突）
-                  return true;
-                },
               ),
             ],
           ),

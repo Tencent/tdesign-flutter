@@ -23,9 +23,7 @@ class TCalendarBody extends StatefulWidget {
     required this.animateTo,
     this.onMonthChange,
     this.anchorDate,
-    this.dateType = TCalendarDateType.solar,
-    this.dataSource,
-    this.onTDateGenerated,
+    this.onCellGenerated,
     this.onCacheInvalidated,
   }) : super(key: key);
 
@@ -36,8 +34,8 @@ class TCalendarBody extends StatefulWidget {
   final DateTime? anchorDate;
   final int firstDayOfWeek;
   final Widget Function(
-    TDate? date,
-    List<TDate?> dateList,
+    TCalendarCellModel? cell,
+    List<TCalendarCellModel?> dateList,
     int rowIndex,
     int colIndex,
   ) builder;
@@ -53,19 +51,11 @@ class TCalendarBody extends StatefulWidget {
   final double cellHeight;
   final bool animateTo;
   final ValueChanged<DateTime>? onMonthChange;
-  final TCalendarDateType dateType;
-  final TCalendarDataSource? dataSource;
+  /// 在每个月份的单元格列表新生成时回调，便于上层登记选中引用。
+  final void Function(DateTime monthDate, List<TCalendarCellModel?> cells)?
+      onCellGenerated;
 
-  /// 在每个月份的 TDate 列表新生成时回调，便于上层把 selected/start/end 等
-  /// 状态的 TDate 引用登记到自己的"权威选中映射"。
-  ///
-  /// 注意：每次 _data 缺失某月时都会生成新 TDate 实例并触发该回调；上层
-  /// 应当以"按需覆盖"语义处理（例如同 date 的旧引用直接被新引用替换）。
-  final void Function(DateTime monthDate, List<TDate?> tdates)?
-      onTDateGenerated;
-
-  /// 当 `_data` 整体被清空（例如 minDate/maxDate 变化或 range 选择变更）时回调，
-  /// 上层据此清空"权威选中映射"，避免悬挂指向已被 GC 的旧 TDate 实例。
+  /// 当 `_data` 整体被清空时回调，上层清空选中映射。
   final VoidCallback? onCacheInvalidated;
 
   @override
@@ -75,7 +65,7 @@ class TCalendarBody extends StatefulWidget {
 class _TCalendarBodyState extends State<TCalendarBody> {
   late final ScrollController _scrollController;
   int? _lastNotifiedMonthKey;
-  final _data = <DateTime, List<TDate?>>{};
+  final _data = <DateTime, List<TCalendarCellModel?>>{};
   final _monthHeight = <int, double>{};
   late List<DateTime> _months;
   late DateTime _min;
@@ -267,7 +257,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       if (!_data.containsKey(monthDate)) {
         final tdates = _getDaysInMonth(monthDate, _min, _max);
         _data[monthDate] = tdates;
-        widget.onTDateGenerated?.call(monthDate, tdates);
+        widget.onCellGenerated?.call(monthDate, tdates);
       }
     }
   }
@@ -303,7 +293,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
         final monthDateText = '$monthYear $monthMonth';
         // 只读：build 不写状态。命中缓存直接用，未命中走纯函数计算并安排
         // 在下一帧补写缓存（postFrameCallback），避免 build 阶段副作用。
-        List<TDate?> monthData;
+        List<TCalendarCellModel?> monthData;
         final cached = _data[monthDate];
         if (cached != null) {
           monthData = cached;
@@ -317,7 +307,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
             // 注册回调也只在真正写入这条新数据时触发，避免重复登记。
             if (!_data.containsKey(monthDate)) {
               _data[monthDate] = monthData;
-              widget.onTDateGenerated?.call(monthDate, monthData);
+              widget.onCellGenerated?.call(monthDate, monthData);
             }
           });
         }
@@ -495,9 +485,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     return months;
   }
 
-  List<TDate?> _getDaysInMonth(DateTime curDate, DateTime min, DateTime max) {
-    final daysInMonth =
-        List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
+  List<TCalendarCellModel?> _getDaysInMonth(
+      DateTime curDate, DateTime min, DateTime max) {
+    final daysInMonth = List<TCalendarCellModel?>.generate(
+        _getPreOffset(curDate), (index) => null);
     final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0)
         .day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
@@ -532,25 +523,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
           }
         }
       }
-      // 获取农历信息
-      TLunarInfo? lunarInfo;
-      String? solarTerm;
-      String? festival;
-      Map<String, String>? holidayInfo;
-      if (widget.dataSource != null) {
-        lunarInfo = widget.dataSource!.getLunarInfo(date);
-        solarTerm = widget.dataSource!.getSolarTerm(date);
-        festival = widget.dataSource!.getFestival(date, lunarInfo);
-        holidayInfo = widget.dataSource!.getHolidayInfo(date);
-      }
-      daysInMonth.add(TDate(
+      daysInMonth.add(TCalendarCellModel(
         date: date,
         typeNotifier: DateSelectTypeNotifier(selectType),
         isLastDayOfMonth: daysInMonthCount == day,
-        lunarInfo: lunarInfo,
-        solarTerm: solarTerm,
-        festival: festival,
-        holidayInfo: holidayInfo,
       ));
     }
     var sufOffset = 7 - daysInMonth.length % 7;
