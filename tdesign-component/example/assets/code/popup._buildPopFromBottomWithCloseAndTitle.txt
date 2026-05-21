@@ -7,38 +7,36 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 280,
-          cancel: TText(
-            '关闭',
-            textColor: TTheme.of(context).textColorSecondary,
-            font: TTheme.of(context).fontBodyLarge,
-          ),
-          titleWidget: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(TIcons.info_circle,
-                  color: TTheme.of(context).brandNormalColor, size: 18),
-              const SizedBox(width: 4),
-              TText(
-                '自定义标题',
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 280,
+              cancel: TText(
+                '关闭',
+                textColor: TTheme.of(context).textColorSecondary,
+                font: TTheme.of(context).fontBodyLarge,
+              ),
+              titleWidget: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(TIcons.info_circle,
+                      color: TTheme.of(context).brandNormalColor, size: 18),
+                  const SizedBox(width: 4),
+                  TText(
+                    '自定义标题',
+                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TTheme.of(context).fontTitleMedium,
+                  ),
+                ],
+              ),
+              confirm: TText(
+                '完成',
                 textColor: TTheme.of(context).brandNormalColor,
                 font: TTheme.of(context).fontTitleMedium,
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
-          confirm: TText(
-            '完成',
-            textColor: TTheme.of(context).brandNormalColor,
-            font: TTheme.of(context).fontTitleMedium,
-            fontWeight: FontWeight.w600,
-          ),
-          onCancel: () => TPopup.close(context),
-          onConfirm: () => TPopup.close(context),
-          child: Container(height: 200),
-        );
+              child: Container(height: 200)),
+        ).show(context);
       },
     );
   }

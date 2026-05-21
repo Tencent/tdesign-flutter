@@ -7,17 +7,16 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 260,
-          onOverlayClick: () =>
-              TToast.showText('点击蒙层', context: context),
-          child: Container(
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 260,
+              onOverlayClick: () => TToast.showText('点击蒙层', context: context),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }

@@ -7,17 +7,17 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.top,
-          height: 240,
-          onOpen: () => print('open'),
-          onOpened: () => print('opened'),
-          child: Container(
-            color: TTheme.of(context).bgColorContainer,
-            height: 240,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.top,
+              height: 240,
+              onOpen: () => print('open'),
+              onOpened: () => print('opened'),
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+                height: 240,
+              )),
+        ).show(context);
       },
     );
   }

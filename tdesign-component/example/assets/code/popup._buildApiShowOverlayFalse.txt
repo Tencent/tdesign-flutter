@@ -7,20 +7,18 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 280,
-          showOverlay: false,
-          // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
-          title: '无蒙层',
-          onCancel: () => TPopup.close(context),
-          onConfirm: () => TPopup.close(context),
-          child: Container(
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 280,
+              showOverlay: false,
+              // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
+              title: '无蒙层',
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }

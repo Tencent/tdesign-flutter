@@ -7,26 +7,26 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.center,
-          closeOnOverlayClick: true,
-          width: 240,
-          height: 200,
-          closeBuilder: (_, close) => IconButton(
-            icon: Icon(
-              TIcons.poweroff,
-              color: TTheme.of(context).fontWhColor1,
-              size: 36,
-            ),
-            onPressed: close,
-          ),
-          child: Container(
-            width: 240,
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.center,
+              closeOnOverlayClick: true,
+              width: 240,
+              height: 200,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.poweroff,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 36,
+                    ),
+                    onPressed: close,
+                  ),
+              child: Container(
+                width: 240,
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }

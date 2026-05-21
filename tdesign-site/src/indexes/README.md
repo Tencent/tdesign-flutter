@@ -36,23 +36,23 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup.show(
-        context: context,
-        placement: TPopupPlacement.right,
-        width: 280,
-        margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
-        child: TIndexes(
-          indexList: indexList,
-          builderContent: (context, index) {
-            final list = _list
-                .firstWhere((element) => element['index'] == index)['children']
-                as List<String>;
-            return TCellGroup(
-              cells: list.map((e) => TCell(title: e)).toList(),
-            );
-          },
-        ),
-      );
+      TPopup(
+        options: TPopupOptions(
+            placement: TPopupPlacement.right,
+            width: 280,
+            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
+              indexList: indexList,
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TCellGroup(
+                  cells: list.map((e) => TCell(title: e)).toList(),
+                );
+              },
+            )),
+      ).show(context);
     },
   );
 }</pre>
@@ -74,23 +74,23 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup.show(
-        context: context,
-        placement: TPopupPlacement.right,
-        width: 280,
-        margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
-        child: TIndexes(
-          indexList: indexList,
-          builderContent: (context, index) {
-            final list = _list
-                .firstWhere((element) => element['index'] == index)['children']
-                as List<String>;
-            return TCellGroup(
-              cells: list.map((e) => TCell(title: e)).toList(),
-            );
-          },
-        ),
-      );
+      TPopup(
+        options: TPopupOptions(
+            placement: TPopupPlacement.right,
+            width: 280,
+            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
+              indexList: indexList,
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TCellGroup(
+                  cells: list.map((e) => TCell(title: e)).toList(),
+                );
+              },
+            )),
+      ).show(context);
     },
   );
 }</pre>
@@ -115,24 +115,24 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup.show(
-        context: context,
-        placement: TPopupPlacement.right,
-        width: 280,
-        margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
-        child: TIndexes(
-          indexList: indexList,
-          capsuleTheme: true,
-          builderContent: (context, index) {
-            final list = _list
-                .firstWhere((element) => element['index'] == index)['children']
-                as List<String>;
-            return TCellGroup(
-              cells: list.map((e) => TCell(title: e)).toList(),
-            );
-          },
-        ),
-      );
+      TPopup(
+        options: TPopupOptions(
+            placement: TPopupPlacement.right,
+            width: 280,
+            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
+              indexList: indexList,
+              capsuleTheme: true,
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TCellGroup(
+                  cells: list.map((e) => TCell(title: e)).toList(),
+                );
+              },
+            )),
+      ).show(context);
     },
   );
 }</pre>
@@ -154,24 +154,24 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup.show(
-        context: context,
-        placement: TPopupPlacement.right,
-        width: 280,
-        margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
-        child: TIndexes(
-          indexList: indexList,
-          capsuleTheme: true,
-          builderContent: (context, index) {
-            final list = _list
-                .firstWhere((element) => element['index'] == index)['children']
-                as List<String>;
-            return TCellGroup(
-              cells: list.map((e) => TCell(title: e)).toList(),
-            );
-          },
-        ),
-      );
+      TPopup(
+        options: TPopupOptions(
+            placement: TPopupPlacement.right,
+            width: 280,
+            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
+              indexList: indexList,
+              capsuleTheme: true,
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TCellGroup(
+                  cells: list.map((e) => TCell(title: e)).toList(),
+                );
+              },
+            )),
+      ).show(context);
     },
   );
 }</pre>

@@ -30,11 +30,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中城市: ${selectedCity.isEmpty ? "未选择" : selectedCity}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: cityItems,
+          child: TPicker(
+              items: cityItems,
               onChange: (v) => setState(() => selectedCity = v.labels.first)),
         ),
       ],
@@ -54,13 +56,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中时间: ${selectedTime.isEmpty ? "未选择" : selectedTime}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: timeItems, itemCount: 5,
-              onChange: (v) => setState(() =>
-                  selectedTime = '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
+          child: TPicker(
+              items: timeItems,
+              itemCount: 5,
+              onChange: (v) => setState(() => selectedTime =
+                  '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
         ),
       ],
     );
@@ -79,12 +84,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: linkedItems, initialValue: const ['GD', 'SZ', 'NS'],
-              onChange: (v) => setState(() => selectedLinked = v.labels.join(' / '))),
+          child: TPicker(
+              items: linkedItems,
+              initialValue: const ['GD', 'SZ', 'NS'],
+              onChange: (v) =>
+                  setState(() => selectedLinked = v.labels.join(' / '))),
         ),
       ],
     );
@@ -178,15 +187,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        Text(
+            '选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 4),
         Text('提示: 标灰的选项不可选（第1列「保密」、第2列「A排1座/A排6座/A排7座/A排8座/A排12座」）',
-            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+            style: TextStyle(
+                fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: itemDisabledItems, initialValue: const ['M', 'A5'],
+          child: TPicker(
+              items: itemDisabledItems,
+              initialValue: const ['M', 'A5'],
               onChange: (v) => setState(() =>
                   selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
         ),
@@ -224,13 +238,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: cityItems, initialValue: const ['GZ'],
+          child: TPicker(
+              items: cityItems,
+              initialValue: const ['GZ'],
               onChange: (v) => debugPrint('选中: $v'),
               disabled: globalDisabled),
         ),
         const SizedBox(height: 4),
         Text('切换开关可控制整个选择器的禁用/启用状态',
-            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+            style: TextStyle(
+                fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
       ],
     );
   }</pre>
@@ -327,8 +344,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             titleWidget: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(TIcons.location,
-                    size: 18, color: theme.brandNormalColor),
+                Icon(TIcons.location, size: 18, color: theme.brandNormalColor),
                 const SizedBox(width: 4),
                 Text('选择地区',
                     style: TextStyle(
@@ -339,7 +355,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               ],
             ),
             cancel: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
-            confirm: Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
+            confirm:
+                Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
           ),
         ),
       ],
@@ -357,19 +374,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildCustomKeys(BuildContext context) {
     // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
-    const keys = TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
+    const keys =
+        TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
     final label = _customKeysValue?.labels.join() ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '后端原始字段：city / code / readonly。通过 keys(label: "city") 映射为 label',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
           '当前选中：${label.isEmpty ? "未选择" : label}',
-          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
         const SizedBox(height: 8),
         _pickerCard(
@@ -399,7 +419,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         Text(
           '示例：height(300) + itemCount(7)，每屏显示 7 项',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 8),
         _pickerCard(
@@ -429,12 +450,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         Text(
           '示例：itemBuilder 自定义子项渲染，可添加图标、背景色等',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
           '选中: ${_customItemBuilderValue.isEmpty ? "未选择" : _customItemBuilderValue}',
-          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
         const SizedBox(height: 8),
         _pickerCard(
@@ -460,15 +483,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                       content,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                        color: selected ? theme.brandNormalColor : theme.fontGyColor1,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.normal,
+                        color: selected
+                            ? theme.brandNormalColor
+                            : theme.fontGyColor1,
                       ),
                     ),
                   ],
                 ),
               );
             },
-            onChange: (v) => setState(() => _customItemBuilderValue = v.labels.first),
+            onChange: (v) =>
+                setState(() => _customItemBuilderValue = v.labels.first),
           ),
         ),
       ],

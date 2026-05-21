@@ -7,20 +7,20 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.center,
-          closeBuilder: null,
-          child: Container(
-            decoration: BoxDecoration(
-              color: TTheme.of(context).bgColorContainer,
-              borderRadius:
-                  BorderRadius.circular(TTheme.of(context).radiusLarge),
-            ),
-            width: 240,
-            height: 240,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.center,
+              closeBuilder: null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: TTheme.of(context).bgColorContainer,
+                  borderRadius:
+                      BorderRadius.circular(TTheme.of(context).radiusLarge),
+                ),
+                width: 240,
+                height: 240,
+              )),
+        ).show(context);
       },
     );
   }

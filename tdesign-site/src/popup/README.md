@@ -33,17 +33,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.top,
-          height: 240,
-          onOpen: () => print('open'),
-          onOpened: () => print('opened'),
-          child: Container(
-            color: TTheme.of(context).bgColorContainer,
-            height: 240,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.top,
+              height: 240,
+              onOpen: () => print('open'),
+              onOpened: () => print('opened'),
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+                height: 240,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -64,14 +64,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.left,
-          width: 280,
-          child: Container(
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.left,
+              width: 280,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -92,20 +92,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.center,
-          closeBuilder: null,
-          child: Container(
-            decoration: BoxDecoration(
-              color: TTheme.of(context).bgColorContainer,
-              borderRadius:
-                  BorderRadius.circular(TTheme.of(context).radiusLarge),
-            ),
-            width: 240,
-            height: 240,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.center,
+              closeBuilder: null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: TTheme.of(context).bgColorContainer,
+                  borderRadius:
+                      BorderRadius.circular(TTheme.of(context).radiusLarge),
+                ),
+                width: 240,
+                height: 240,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -126,16 +126,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 240,
-          headerBuilder: null,
-          child: Container(
-            color: TTheme.of(context).bgColorContainer,
-            height: 240,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 240,
+              headerBuilder: null,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+                height: 240,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -156,14 +156,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.right,
-          width: 280,
-          child: Container(
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.right,
+              width: 280,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -185,18 +185,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 280,
-          title: '标题文字',
-          onCancel: () => TPopup.close(context),
-          onConfirm: () {
-            TToast.showText('确定', context: context);
-            TPopup.close(context);
-          },
-          child: Container(height: 200),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 280,
+              title: '标题文字',
+              onConfirm: () => TToast.showText('确定', context: context),
+              child: Container(height: 200)),
+        ).show(context);
       },
     );
   }</pre>
@@ -217,38 +213,36 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 280,
-          cancel: TText(
-            '关闭',
-            textColor: TTheme.of(context).textColorSecondary,
-            font: TTheme.of(context).fontBodyLarge,
-          ),
-          titleWidget: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(TIcons.info_circle,
-                  color: TTheme.of(context).brandNormalColor, size: 18),
-              const SizedBox(width: 4),
-              TText(
-                '自定义标题',
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 280,
+              cancel: TText(
+                '关闭',
+                textColor: TTheme.of(context).textColorSecondary,
+                font: TTheme.of(context).fontBodyLarge,
+              ),
+              titleWidget: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(TIcons.info_circle,
+                      color: TTheme.of(context).brandNormalColor, size: 18),
+                  const SizedBox(width: 4),
+                  TText(
+                    '自定义标题',
+                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TTheme.of(context).fontTitleMedium,
+                  ),
+                ],
+              ),
+              confirm: TText(
+                '完成',
                 textColor: TTheme.of(context).brandNormalColor,
                 font: TTheme.of(context).fontTitleMedium,
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
-          confirm: TText(
-            '完成',
-            textColor: TTheme.of(context).brandNormalColor,
-            font: TTheme.of(context).fontTitleMedium,
-            fontWeight: FontWeight.w600,
-          ),
-          onCancel: () => TPopup.close(context),
-          onConfirm: () => TPopup.close(context),
-          child: Container(height: 200),
-        );
+              child: Container(height: 200)),
+        ).show(context);
       },
     );
   }</pre>
@@ -269,22 +263,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.center,
-          closeOnOverlayClick: false,
-          width: 240,
-          height: 240,
-          closeBuilder: (_, close) => IconButton(
-            icon: Icon(
-              TIcons.close_circle,
-              color: TTheme.of(context).fontWhColor1,
-              size: 32,
-            ),
-            onPressed: close,
-          ),
-          child: const SizedBox(width: 240, height: 240),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.center,
+              closeOnOverlayClick: false,
+              width: 240,
+              height: 240,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.close_circle,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 32,
+                    ),
+                    onPressed: close,
+                  ),
+              child: const SizedBox(width: 240, height: 240)),
+        ).show(context);
       },
     );
   }</pre>
@@ -305,26 +299,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.center,
-          closeOnOverlayClick: true,
-          width: 240,
-          height: 200,
-          closeBuilder: (_, close) => IconButton(
-            icon: Icon(
-              TIcons.poweroff,
-              color: TTheme.of(context).fontWhColor1,
-              size: 36,
-            ),
-            onPressed: close,
-          ),
-          child: Container(
-            width: 240,
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.center,
+              closeOnOverlayClick: true,
+              width: 240,
+              height: 200,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.poweroff,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 36,
+                    ),
+                    onPressed: close,
+                  ),
+              child: Container(
+                width: 240,
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -345,57 +339,58 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 360,
-          headerBuilder: null,
-          child: Builder(
-            builder: (innerContext) {
-              return Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TText(
-                      '外层：headerBuilder: null，仅 child',
-                      textColor: TTheme.of(innerContext).textColorSecondary,
+        TPopupHandle? outerHandle;
+        outerHandle = TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 360,
+              headerBuilder: null,
+              child: Builder(
+                builder: (innerContext) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TText(
+                          '外层：headerBuilder: null，仅 child',
+                          textColor: TTheme.of(innerContext).textColorSecondary,
+                        ),
+                        const SizedBox(height: 16),
+                        TButton(
+                          text: '打开内层 Popup',
+                          isBlock: true,
+                          theme: TButtonTheme.primary,
+                          size: TButtonSize.large,
+                          onTap: () {
+                            TPopup(
+                              options: TPopupOptions(
+                                placement: TPopupPlacement.bottom,
+                                height: 280,
+                                title: '内层标题',
+                                child: Container(
+                                  height: 160,
+                                  color: TTheme.of(innerContext)
+                                      .bgColorSecondaryContainer,
+                                ),
+                              ),
+                            ).show(innerContext);
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TButton(
+                          text: '关闭外层',
+                          isBlock: true,
+                          type: TButtonType.outline,
+                          size: TButtonSize.large,
+                          onTap: () => outerHandle?.close(),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    TButton(
-                      text: '打开内层 Popup',
-                      isBlock: true,
-                      theme: TButtonTheme.primary,
-                      size: TButtonSize.large,
-                      onTap: () {
-                        TPopup.show(
-                          context: innerContext,
-                          placement: TPopupPlacement.bottom,
-                          height: 280,
-                          title: '内层标题',
-                          onCancel: () => TPopup.close(innerContext),
-                          onConfirm: () => TPopup.close(innerContext),
-                          child: Container(
-                            height: 160,
-                            color: TTheme.of(innerContext).bgColorSecondaryContainer,
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TButton(
-                      text: '关闭外层',
-                      isBlock: true,
-                      type: TButtonType.outline,
-                      size: TButtonSize.large,
-                      onTap: () => TPopup.close(innerContext),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
+                  );
+                },
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -417,19 +412,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 320,
-          margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-          title: '日历式留白',
-          onCancel: () => TPopup.close(context),
-          onConfirm: () => TPopup.close(context),
-          child: Container(
-            height: 240,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 320,
+              margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
+              title: '日历式留白',
+              child: Container(
+                height: 240,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -450,20 +443,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 280,
-          showOverlay: false,
-          // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
-          title: '无蒙层',
-          onCancel: () => TPopup.close(context),
-          onConfirm: () => TPopup.close(context),
-          child: Container(
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 280,
+              showOverlay: false,
+              // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
+              title: '无蒙层',
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -484,17 +475,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 260,
-          onOverlayClick: () =>
-              TToast.showText('点击蒙层', context: context),
-          child: Container(
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 260,
+              onOverlayClick: () => TToast.showText('点击蒙层', context: context),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -515,16 +505,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 240,
-          duration: const Duration(milliseconds: 600),
-          child: Container(
-            height: 200,
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 240,
+              duration: const Duration(milliseconds: 600),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }</pre>
@@ -536,12 +526,70 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## API
 ### TPopup
 #### 简介
-弹出层：支持五向滑入/居中弹出、蒙层、bottom 操作栏与 center 关闭区。
+弹出层：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
 
- 命令式用法优先调用 [show]；声明式将 [TPopup] 包裹业务子树并设 [initialVisible]（弹层在独立路由中，[build] 仅渲染 [child]）。
- bottom 操作栏参数仅对 [TPopupPlacement.bottom] 生效；center 关闭参数仅对 center 生效；
- top/left/right 仅使用 [child] 与布局参数。
- 嵌套时 [close] 只关栈顶 Popup；无 Popup 时不操作当前页。
+ ## 怎么用
+
+ **命令式（推荐）** — 先组配置，再 `show`，用返回的 [TPopupHandle] 关闭：
+
+ ```dart
+ final handle = TPopup(
+   options: TPopupOptions(
+     placement: TPopupPlacement.bottom,
+     title: '标题',
+     child: MyPanel(),
+   ),
+ ).show(context);
+
+ // 关闭这一层（须保留 handle，不要用 context 猜栈顶）
+ handle.close();
+ ```
+
+ **声明式** — 包住子树，`initialVisible: true` 时首帧自动 [show]；[build] 只渲染 [options.child]：
+
+ ```dart
+ TPopup(
+   options: TPopupOptions(child: body),
+   initialVisible: true,
+ )
+ ```
+
+ 字段说明见 [TPopupOptions]；按 [TPopupPlacement] 只有部分参数生效（无效参数会在
+ [TPopupOptions.normalized] 中裁掉）。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| initialVisible | bool | false | 为 true 时，挂载后首帧自动调用 [show]（仅声明式）。 |
+| key |  | - |  |
+| navigatorContext | BuildContext? | - | 指定使用哪个 [Navigator]；默认 [show] 传入的 `context` 所在 Navigator。 |
+| options | TPopupOptions | - | 浮层内容与行为配置，见 [TPopupOptions]。 |
+| useRootNavigator | bool | false | 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
+
+```
+```
+
+### TPopupOptions
+#### 简介
+浮层配置：[TPopup] 构造与 [TPopup.show] 的唯一参数来源。
+
+ ## 按 [placement] 用哪些字段
+
+ | placement | 常用字段 |
+ |-----------|----------|
+ | [TPopupPlacement.bottom] | `title` / `cancel` / `confirm` / `headerBuilder`、`height`、`margin` |
+ | [TPopupPlacement.center] | `closeBuilder`、`width`、`height`（有下方关闭时） |
+ | [TPopupPlacement.top] / [left] / [right] | 主要 `child`、`margin`、方向对应 `width` 或 `height` |
+
+ 传给其它 placement 的 bottom / center 专用字段会在 [normalized] 里裁掉。
+
+ ## 三态占位（bottom / center）
+
+ - **未传参数**：使用默认 UI（如默认取消/确定文案、默认关闭图标）。
+ - **显式 `null`**：隐藏该槽位（如 `cancel: null` 隐藏左侧；`closeBuilder: null` 无关闭按钮）。
+ - **自定义 Widget / Builder**：完全自定义该区域。
+
+ [TPopup.show] 内部会先 [normalized] 再绘制。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -553,21 +601,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | cancelBtn | String? | - | bottom 左侧按钮文案，覆盖默认「取消」。 |
 | cancelBuilder | WidgetBuilder? | - | bottom 左侧按钮构建器，优先级高于 [cancel]。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
-| closeBuilder | TPopupCloseBuilder? | kPopupDefaultClose | center 关闭区：`null` 不显示；未传则用 [kPopupDefaultClose] 默认圆圈图标； |
+| closeBuilder | TPopupCloseBuilder? | kPopupDefaultClose | center 关闭区：`null` 不显示；未传则用 [kPopupDefaultClose]；bottom 与三边忽略。 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | confirm | Widget? | kPopupActionDefault | bottom 右侧按钮；默认 [kPopupActionDefault]，传 null 隐藏右侧。 |
 | confirmBtn | String? | - | bottom 右侧按钮文案，覆盖默认「确定」。 |
 | confirmBuilder | WidgetBuilder? | - | bottom 右侧按钮构建器，优先级高于 [confirm]。 |
-| destroyOnClose | bool | false | 为 true 时 Popup 路由 [Route.maintainState] 为 false，关闭后不保留路由内 State； |
+| destroyOnClose | bool | false | 为 true 时 Popup 路由 maintainState 为 false，关闭后不保留路由内 State。 |
 | duration | Duration | const Duration(milliseconds: 240) | 打开与关闭动画时长（一致）。 |
-| headerBuilder | TPopupHeaderBuilder? | kPopupDefaultHeader | bottom 头部：`null` 无头部；未传则用 [kPopupDefaultHeader] 默认操作栏；自定义见 [TPopupHeaderBuilder]。 |
+| headerBuilder | TPopupHeaderBuilder? | kPopupDefaultHeader | bottom 头部：`null` 无头部；未传则用 [kPopupDefaultHeader]；自定义见 [TPopupHeaderBuilder]。 |
 | height | double? | - | 高度；对 top、bottom 生效；center 且下方关闭时约束内容区高度。 |
-| initialVisible | bool | false | 声明式：为 true 时在首帧后自动 [show]。 |
-| key |  | - |  |
-| margin | EdgeInsets? | - | 外边距；center 忽略。bottom 的 top 可用来做日历式距顶留白。 |
-| navigatorContext | BuildContext? | - | 指定 Navigator 的 context，默认使用当前 context。 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距；center 忽略。bottom 的 top 可用来做日历式距顶留白。 |
 | onCancel | VoidCallback? | - | 点击 bottom 左侧按钮回调。 |
-| onClose | VoidCallback? | - | 开始关闭时回调（含蒙层、按钮、程序化关闭）。 |
+| onClose | VoidCallback? | - | 开始关闭时回调。 |
 | onCloseBtn | VoidCallback? | - | center 点击关闭控件前的回调。 |
 | onClosed | VoidCallback? | - | 关闭动画结束且路由移除后回调。 |
 | onConfirm | VoidCallback? | - | 点击 bottom 右侧按钮回调。 |
@@ -584,7 +629,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | title | String? | - | bottom 操作栏中间标题文案。 |
 | titleAlignLeft | bool | false | bottom 仅标题行时是否左对齐，默认居中。 |
 | titleWidget | Widget? | - | bottom 操作栏中间标题组件，优先级高于 [title]。 |
-| useRootNavigator | bool | false | 是否使用根 Navigator。 |
 | width | double? | - | 宽度；对 left、right、center 生效。 |
 
 
@@ -592,8 +636,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| close |  |   required BuildContext context,  Object? result, | 关闭当前 Navigator 栈顶 [TPopup]。     仅关闭 Tracker 栈顶展示中的 Popup；无 Popup 时不操作（不会 pop 当前页）。 |
-| show |  |   required BuildContext context,  required Widget child,  TPopupPlacement placement,  double? width,  double? height,  EdgeInsets? margin,  double? radius,  Color? backgroundColor,  bool showOverlay,  bool closeOnOverlayClick,  Color? overlayColor,  double? overlayOpacity,  bool preventScrollThrough,  bool destroyOnClose,  Duration duration,  String? title,  Widget? titleWidget,  bool titleAlignLeft,  String? cancelBtn,  Widget? cancel,  WidgetBuilder? cancelBuilder,  VoidCallback? onCancel,  String? confirmBtn,  Widget? confirm,  WidgetBuilder? confirmBuilder,  VoidCallback? onConfirm,  bool autoCloseOnCancel,  bool autoCloseOnConfirm,  TPopupCloseBuilder? closeBuilder,  VoidCallback? onCloseBtn,  TPopupHeaderBuilder? headerBuilder,  VoidCallback? onOpen,  VoidCallback? onOpened,  VoidCallback? onClose,  VoidCallback? onClosed,  TPopupVisibleChangeCallback? onVisibleChange,  VoidCallback? onOverlayClick,  BuildContext? navigatorContext,  bool useRootNavigator, | 命令式打开浮层，参数与 [TPopup] 构造器一致。     返回 [TPopupHandle]；优先 [TPopupHandle.close]，或在 Popup 子树内 [close]。     [cancel]/[confirm] 默认 [kPopupActionDefault] 表示默认文案，显式 null 可隐藏操作栏侧。   [closeBuilder] 未传为 [kPopupDefaultClose]（默认关闭图标），显式 null 不显示关闭区。 |
+| isActionDefault |  |   required Widget? action, |  |
+
+```
+```
+
+### TPopupHeaderData
+#### 简介
+传给自定义 [TPopupOptions.headerBuilder] 的标题栏数据（库内已组装好各槽 Widget）。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| cancel | Widget? | - | 左侧区域 Widget（null 表示该侧已隐藏）。 |
+| confirm | Widget? | - | 右侧区域 Widget（null 表示该侧已隐藏）。 |
+| onCancel | VoidCallback? | - | 点击左侧区域时回调（是否关闭由 [TPopupOptions.autoCloseOnCancel] 决定）。 |
+| onConfirm | VoidCallback? | - | 点击右侧区域时回调（是否关闭由 [TPopupOptions.autoCloseOnConfirm] 决定）。 |
+| title | Widget? | - | 中间标题（可为 null）。 |
 
 
   

@@ -7,18 +7,14 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.bottom,
-          height: 280,
-          title: '标题文字',
-          onCancel: () => TPopup.close(context),
-          onConfirm: () {
-            TToast.showText('确定', context: context);
-            TPopup.close(context);
-          },
-          child: Container(height: 200),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.bottom,
+              height: 280,
+              title: '标题文字',
+              onConfirm: () => TToast.showText('确定', context: context),
+              child: Container(height: 200)),
+        ).show(context);
       },
     );
   }

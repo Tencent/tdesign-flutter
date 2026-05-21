@@ -21,13 +21,16 @@
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: cityItems, initialValue: const ['GZ'],
+          child: TPicker(
+              items: cityItems,
+              initialValue: const ['GZ'],
               onChange: (v) => debugPrint('选中: $v'),
               disabled: globalDisabled),
         ),
         const SizedBox(height: 4),
         Text('切换开关可控制整个选择器的禁用/启用状态',
-            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+            style: TextStyle(
+                fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
       ],
     );
   }

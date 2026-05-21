@@ -7,14 +7,14 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup.show(
-          context: context,
-          placement: TPopupPlacement.left,
-          width: 280,
-          child: Container(
-            color: TTheme.of(context).bgColorContainer,
-          ),
-        );
+        TPopup(
+          options: TPopupOptions(
+              placement: TPopupPlacement.left,
+              width: 280,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        ).show(context);
       },
     );
   }
