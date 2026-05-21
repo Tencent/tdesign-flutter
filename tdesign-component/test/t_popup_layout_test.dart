@@ -17,7 +17,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Stack(children: [layout.wrapPositioned(child: const SizedBox(height: 50))]),
+            body: Stack(children: [
+              layout.wrapPositioned(child: const SizedBox(height: 50))
+            ]),
           ),
         ),
       );
@@ -36,7 +38,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Stack(children: [layout.wrapPositioned(child: const SizedBox(height: 50))]),
+            body: Stack(children: [
+              layout.wrapPositioned(child: const SizedBox(height: 50))
+            ]),
           ),
         ),
       );
@@ -55,7 +59,9 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Stack(
-              children: [layout.wrapPositioned(child: const SizedBox(height: 1))],
+              children: [
+                layout.wrapPositioned(child: const SizedBox(height: 1))
+              ],
             ),
           ),
         ),
@@ -76,7 +82,8 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: Stack(children: [layout.wrapPositioned(child: const SizedBox())]),
+              body: Stack(
+                  children: [layout.wrapPositioned(child: const SizedBox())]),
             ),
           ),
         );
@@ -97,13 +104,15 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Stack(children: [layout.wrapPositioned(child: const SizedBox())]),
+            body: Stack(
+                children: [layout.wrapPositioned(child: const SizedBox())]),
           ),
         ),
       );
       expect(find.byType(Center), findsOneWidget);
       final sizedBoxes = tester.widgetList<SizedBox>(
-        find.descendant(of: find.byType(Center), matching: find.byType(SizedBox)),
+        find.descendant(
+            of: find.byType(Center), matching: find.byType(SizedBox)),
       );
       final sizedBox = sizedBoxes.firstWhere((w) => w.width == 200);
       expect(sizedBox.height, 150);

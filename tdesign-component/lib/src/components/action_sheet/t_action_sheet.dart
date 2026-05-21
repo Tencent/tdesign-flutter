@@ -9,7 +9,8 @@ import 't_action_sheet_list.dart';
 
 export 't_action_sheet_item.dart';
 
-typedef TActionSheetItemCallback = void Function(TActionSheetItem item, int index);
+typedef TActionSheetItemCallback = void Function(
+    TActionSheetItem item, int index);
 
 enum TActionSheetTheme { list, grid, group }
 
@@ -331,16 +332,17 @@ class TActionSheet {
         break;
     }
 
-    _actionSheetHandle = TPopup.show(
-      context: context,
-      placement: TPopupPlacement.bottom,
-      cancel: null,
-      confirm: null,
-      showOverlay: showOverlay,
-      closeOnOverlayClick: showOverlay && closeOnOverlayClick,
-      overlayColor: showOverlay ? null : Colors.transparent,
-      onClosed: onClose,
-      child: sheetChild,
-    );
+    _actionSheetHandle = TPopup(
+      options: TPopupOptions(
+        placement: TPopupPlacement.bottom,
+        cancel: null,
+        confirm: null,
+        showOverlay: showOverlay,
+        closeOnOverlayClick: showOverlay && closeOnOverlayClick,
+        overlayColor: showOverlay ? null : Colors.transparent,
+        onClosed: onClose,
+        child: sheetChild,
+      ),
+    ).show(context);
   }
 }

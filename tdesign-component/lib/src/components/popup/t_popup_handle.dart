@@ -1,6 +1,15 @@
 part of 't_popup.dart';
 
-/// [TPopup.show] 返回的句柄，用于查询展示状态与程序化关闭。
+/// [TPopup.show] 的返回值，表示**一次**打开操作。
+///
+/// 保存此对象并在需要时调用 [close]；不要依赖 `context` 推断要关哪一层。
+///
+/// ```dart
+/// final handle = TPopup(options: opts).show(context);
+/// if (handle.isShowing) {
+///   handle.close('result'); // 可选 result 传给 Navigator.pop
+/// }
+/// ```
 class TPopupHandle {
   TPopupHandle._({
     required void Function(TPopupTrigger trigger, [Object? result])
@@ -14,12 +23,12 @@ class TPopupHandle {
       _onCloseWithTrigger;
   bool _isClosed = false;
 
-  /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
+  /// 本次 [TPopup.show] 对应的浮层是否仍在展示。
   bool get isShowing => _route != null && !_isClosed;
 
-  /// 以 [TPopupTrigger.programmatic] 关闭浮层，可向 Navigator 传递 [result]。
+  /// 关闭本次 [TPopup.show] 打开的浮层（[TPopupTrigger.programmatic]）。
   ///
-  /// 优先于 [TPopup.close]：不依赖 context 的 Navigator 解析。
+  /// 已关闭或未展示时调用无副作用。嵌套多层时须用**对应层**的 handle 关闭。
   void close([Object? result]) {
     if (!isShowing) {
       return;

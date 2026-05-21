@@ -108,32 +108,33 @@ class TDrawer {
     final overlayEnabled = showOverlay ?? true;
     final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
 
-    _drawerHandle = TPopup.show(
-      context: context,
-      placement: placement == TDrawerPlacement.right
-          ? TPopupPlacement.right
-          : TPopupPlacement.left,
-      width: width,
-      margin: EdgeInsets.only(top: drawerTop ?? 0),
-      showOverlay: overlayEnabled,
-      closeOnOverlayClick: dismissible,
-      overlayColor: overlayEnabled ? null : Colors.transparent,
-      onClosed: _deleteRouter,
-      child: TDrawerWidget(
-        footer: footer,
-        items: items,
-        contentWidget: contentWidget,
-        title: title,
-        titleWidget: titleWidget,
-        onItemClick: onItemClick,
+    _drawerHandle = TPopup(
+      options: TPopupOptions(
+        placement: placement == TDrawerPlacement.right
+            ? TPopupPlacement.right
+            : TPopupPlacement.left,
         width: width,
-        style: style,
-        hover: hover,
-        backgroundColor: backgroundColor,
-        bordered: bordered,
-        isShowLastBordered: isShowLastBordered,
+        margin: EdgeInsets.only(top: drawerTop ?? 0),
+        showOverlay: overlayEnabled,
+        closeOnOverlayClick: dismissible,
+        overlayColor: overlayEnabled ? null : Colors.transparent,
+        onClosed: _deleteRouter,
+        child: TDrawerWidget(
+          footer: footer,
+          items: items,
+          contentWidget: contentWidget,
+          title: title,
+          titleWidget: titleWidget,
+          onItemClick: onItemClick,
+          width: width,
+          style: style,
+          hover: hover,
+          backgroundColor: backgroundColor,
+          bordered: bordered,
+          isShowLastBordered: isShowLastBordered,
+        ),
       ),
-    );
+    ).show(context);
   }
 
   void open() {

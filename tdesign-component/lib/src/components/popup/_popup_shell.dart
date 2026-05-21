@@ -5,32 +5,31 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '_popup_center_close.dart';
 import '_popup_header.dart';
-import 't_popup_config.dart';
+import 't_popup_options.dart';
 import 't_popup_types.dart';
 
 /// 浮层内容外壳：圆角、Header（仅 bottom）、child。
 class PopupShell extends StatelessWidget {
   const PopupShell({
     super.key,
-    required this.config,
+    required this.options,
     required this.onCloseWithTrigger,
   });
 
-  final TPopupConfig config;
+  final TPopupOptions options;
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   @override
   Widget build(BuildContext context) {
     final theme = TTheme.of(context);
-    final radius = config.radius ?? theme.radiusExtraLarge;
-    final backgroundColor =
-        config.backgroundColor ?? theme.bgColorContainer;
-    final borderRadius = _borderRadius(config.placement, radius);
+    final radius = options.radius ?? theme.radiusExtraLarge;
+    final backgroundColor = options.backgroundColor ?? theme.bgColorContainer;
+    final borderRadius = _borderRadius(options.placement, radius);
 
-    Widget content = config.child;
+    Widget content = options.child;
 
-    if (config.placement == TPopupPlacement.center) {
-      if (config.closeBuilder != null) {
+    if (options.placement == TPopupPlacement.center) {
+      if (options.closeBuilder != null) {
         final panel = Container(
           decoration: BoxDecoration(
             color: backgroundColor,
@@ -40,15 +39,15 @@ class PopupShell extends StatelessWidget {
           child: content,
         );
         return PopupCenterUnderClose(
-          config: config,
+          options: options,
           content: panel,
           onCloseWithTrigger: onCloseWithTrigger,
         );
       }
       return Center(
         child: SizedBox(
-          width: config.width,
-          height: config.height,
+          width: options.width,
+          height: options.height,
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,
@@ -61,9 +60,9 @@ class PopupShell extends StatelessWidget {
       );
     }
 
-    final useExpanded = config.placement == TPopupPlacement.left ||
-        config.placement == TPopupPlacement.right ||
-        config.height != null;
+    final useExpanded = options.placement == TPopupPlacement.left ||
+        options.placement == TPopupPlacement.right ||
+        options.height != null;
 
     Widget panel = Container(
       decoration: BoxDecoration(
@@ -71,14 +70,13 @@ class PopupShell extends StatelessWidget {
         borderRadius: borderRadius,
       ),
       clipBehavior: Clip.antiAlias,
-      child: config.placement == TPopupPlacement.bottom
+      child: options.placement == TPopupPlacement.bottom
           ? Column(
-              mainAxisSize:
-                  useExpanded ? MainAxisSize.max : MainAxisSize.min,
+              mainAxisSize: useExpanded ? MainAxisSize.max : MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 PopupHeader(
-                  config: config,
+                  options: options,
                   onCloseWithTrigger: onCloseWithTrigger,
                 ),
                 if (useExpanded) Expanded(child: content) else content,

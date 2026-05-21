@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 
 import '_popup_layout.dart';
 import '_popup_shell.dart';
-import 't_popup_config.dart';
+import 't_popup_options.dart';
 import 't_popup_types.dart';
 
 /// 私有 Popup 路由。
 class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   TPopupNavigatorRoute({
-    required this.config,
+    required this.options,
     required this.onCloseWithTrigger,
   }) : _layout = PopupLayout(
-          placement: config.placement,
+          placement: options.placement,
           screenSize: Size.zero,
-          margin: config.margin,
-          width: config.width,
-          height: config.height,
+          margin: options.margin,
+          width: options.width,
+          height: options.height,
         );
 
-  final TPopupConfig config;
+  final TPopupOptions options;
   final void Function(TPopupTrigger trigger, [Object? result])
       onCloseWithTrigger;
 
@@ -30,29 +30,29 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   String? _barrierSemanticsLabel;
 
   Color get _barrierColor {
-    if (!config.showOverlay) {
+    if (!options.showOverlay) {
       return Colors.transparent;
     }
-    final base = config.overlayColor ?? Colors.black54;
-    if (config.overlayOpacity != null) {
-      final opacity = config.overlayOpacity!.clamp(0.0, 1.0);
+    final base = options.overlayColor ?? Colors.black54;
+    if (options.overlayOpacity != null) {
+      final opacity = options.overlayOpacity!.clamp(0.0, 1.0);
       return base.withValues(alpha: base.a * opacity);
     }
     return base;
   }
 
   @override
-  Duration get transitionDuration => config.duration;
+  Duration get transitionDuration => options.duration;
 
   @override
-  Duration get reverseTransitionDuration => config.duration;
+  Duration get reverseTransitionDuration => options.duration;
 
   @override
   bool get barrierDismissible => false;
 
   @override
   String? get barrierLabel =>
-      config.showOverlay ? _barrierSemanticsLabel : null;
+      options.showOverlay ? _barrierSemanticsLabel : null;
 
   @override
   Color get barrierColor => Colors.transparent;
@@ -64,7 +64,7 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   bool get opaque => false;
 
   @override
-  bool get maintainState => !config.destroyOnClose;
+  bool get maintainState => !options.destroyOnClose;
 
   /// 关闭动画开始前回调（系统返回 / handle.close / 蒙层等统一入口）。
   void fireCloseStart(TPopupTrigger trigger) {
@@ -72,8 +72,8 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
       return;
     }
     _closeStartFired = true;
-    config.onVisibleChange?.call(false, trigger);
-    config.onClose?.call();
+    options.onVisibleChange?.call(false, trigger);
+    options.onClose?.call();
   }
 
   @override
@@ -99,29 +99,28 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
     );
 
     final mediaQuery = MediaQuery.of(context);
-    if (config.showOverlay) {
+    if (options.showOverlay) {
       _barrierSemanticsLabel ??=
           MaterialLocalizations.of(context).modalBarrierDismissLabel;
     }
     _layout = PopupLayout(
-      placement: config.placement,
+      placement: options.placement,
       screenSize: mediaQuery.size,
-      margin: config.margin,
-      width: config.width,
-      height: config.height,
-      centerLooseHeight:
-          config.placement == TPopupPlacement.center &&
-              config.closeBuilder != null,
+      margin: options.margin,
+      width: options.width,
+      height: options.height,
+      centerLooseHeight: options.placement == TPopupPlacement.center &&
+          options.closeBuilder != null,
     );
 
     final t = curved.value;
     final shell = PopupShell(
-      config: config,
+      options: options,
       onCloseWithTrigger: onCloseWithTrigger,
     );
 
     Widget popupContent;
-    if (config.placement == TPopupPlacement.center) {
+    if (options.placement == TPopupPlacement.center) {
       popupContent = Transform.scale(
         scale: t,
         alignment: Alignment.center,
@@ -141,8 +140,8 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        if (config.showOverlay) barrier,
-        if (!config.showOverlay && config.preventScrollThrough)
+        if (options.showOverlay) barrier,
+        if (!options.showOverlay && options.preventScrollThrough)
           _scrollBlocker(child: const SizedBox.expand()),
         positioned,
       ],
@@ -159,14 +158,14 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
         ),
       ),
     );
-    if (config.showOverlay) {
+    if (options.showOverlay) {
       barrier = Semantics(
         label: _barrierSemanticsLabel!,
         button: true,
         child: barrier,
       );
     }
-    if (config.preventScrollThrough) {
+    if (options.preventScrollThrough) {
       barrier = _scrollBlocker(child: barrier);
     }
     return barrier;
@@ -180,8 +179,8 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   void _handleOverlayTap() {
-    config.onOverlayClick?.call();
-    if (config.closeOnOverlayClick) {
+    options.onOverlayClick?.call();
+    if (options.closeOnOverlayClick) {
       onCloseWithTrigger(TPopupTrigger.overlay);
     }
   }
@@ -189,11 +188,11 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   void _onAnimationStatus(AnimationStatus status) {
     if (status == AnimationStatus.completed && !_openedFired) {
       _openedFired = true;
-      config.onOpened?.call();
+      options.onOpened?.call();
     }
     if (status == AnimationStatus.dismissed && !_closedFired) {
       _closedFired = true;
-      config.onClosed?.call();
+      options.onClosed?.call();
     }
   }
 
@@ -214,8 +213,8 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   TickerFuture didPush() {
-    config.onOpen?.call();
-    config.onVisibleChange?.call(true, TPopupTrigger.programmatic);
+    options.onOpen?.call();
+    options.onVisibleChange?.call(true, TPopupTrigger.programmatic);
     final future = super.didPush();
     future.whenComplete(_attachAnimationListener);
     return future;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popup/_popup_route.dart';
-import 'package:tdesign_flutter/src/components/popup/t_popup_config.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'helpers/popup_test_helpers.dart';
@@ -19,10 +18,10 @@ void main() {
           Builder(
             builder: (context) {
               route = TPopupNavigatorRoute<dynamic>(
-                config: TPopupConfig.create(
+                options: TPopupOptions(
                   child: const SizedBox(),
                   placement: TPopupPlacement.bottom,
-                ),
+                ).normalized(),
                 onCloseWithTrigger: (_, [__]) {},
               );
               return route.buildPage(
@@ -41,13 +40,13 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup.show(
-            context: tester.element(find.text('open')),
-            placement: TPopupPlacement.bottom,
-            height: 120,
-            preventScrollThrough: true,
-            child: const SizedBox(height: 60),
-          );
+          TPopup(
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 120,
+                preventScrollThrough: true,
+                child: const SizedBox(height: 60)),
+          ).show(tester.element(find.text('open')));
         },
       );
       await tester.pumpAndSettle();
@@ -83,16 +82,16 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup.show(
-            context: tester.element(find.text('open')),
-            placement: TPopupPlacement.bottom,
-            height: 120,
-            showOverlay: false,
-            preventScrollThrough: true,
-            cancel: null,
-            confirm: null,
-            child: const SizedBox(height: 60),
-          );
+          TPopup(
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 120,
+                showOverlay: false,
+                preventScrollThrough: true,
+                cancel: null,
+                confirm: null,
+                child: const SizedBox(height: 60)),
+          ).show(tester.element(find.text('open')));
         },
       );
       await tester.pumpAndSettle();
@@ -105,22 +104,23 @@ void main() {
     testWidgets('fireCloseStart 仅触发一次 onClose', (tester) async {
       var closeCount = 0;
       late BuildContext hostContext;
+      TPopupHandle? handle;
 
       await openPopup(
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup.show(
-            context: hostContext,
-            placement: TPopupPlacement.bottom,
-            height: 100,
-            onClose: () => closeCount++,
-            child: const SizedBox(height: 60),
-          );
+          handle = TPopup(
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 100,
+                onClose: () => closeCount++,
+                child: const SizedBox(height: 60)),
+          ).show(hostContext);
         },
       );
       await tester.pumpAndSettle();
-      TPopup.close(hostContext);
+      handle!.close();
       await tester.pumpAndSettle();
       expect(closeCount, 1);
     });

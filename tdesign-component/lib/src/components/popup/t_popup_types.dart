@@ -1,27 +1,31 @@
 import 'package:flutter/widgets.dart';
 
-/// 浮层出现位置。
+/// 浮层从哪个方向出现；决定哪些 [TPopupOptions] 字段生效。
+///
+/// - [top] / [bottom]：纵向滑入，用 `height`、`margin`（bottom 可用 `margin.top` 做日历式留白）。
+/// - [left] / [right]：侧栏，用 `width`、`margin`。
+/// - [center]：居中缩放，用 `closeBuilder` 控制下方关闭按钮；不用 bottom 操作栏字段。
 enum TPopupPlacement {
-  /// 自屏幕顶部滑入；height 与 margin 的 top/left/right 生效。
+  /// 自屏幕顶部滑入；`height` 与 `margin` 的 top/left/right 生效。
   top,
 
-  /// 自屏幕左侧滑入；width 与 margin 的 left/top/bottom 生效。
+  /// 自屏幕左侧滑入；`width` 与 margin 的 left/top/bottom 生效。
   left,
 
-  /// 自屏幕右侧滑入；width 与 margin 的 right/top/bottom 生效。
+  /// 自屏幕右侧滑入；`width` 与 margin 的 right/top/bottom 生效。
   right,
 
-  /// 自屏幕底部滑入；默认带操作栏，height 与 margin 生效。
+  /// 自屏幕底部滑入；默认操作栏（取消 | 标题 | 确定），`height`、`margin` 生效。
   bottom,
 
-  /// 屏幕居中缩放弹出；默认内容下方关闭按钮。
+  /// 屏幕居中弹出；默认面板外下方关闭按钮，不用 `title` / `cancel` / `confirm`。
   center,
 }
 
-/// 未传 [cancel]/[confirm] 时的占位 Widget，表示使用默认「取消」「确定」文案。
+/// 未传 [TPopupOptions.cancel] / [confirm] 时的占位，表示渲染默认「取消」「确定」文案。
 ///
-/// 须显式传 `cancel: null` / `confirm: null` 才能隐藏对应侧；两侧均为 null 且无
-/// Builder 时不渲染 bottom 操作栏。
+/// 要**隐藏**某一侧须写 `cancel: null` 或 `confirm: null`（不是省略参数）。
+/// 两侧都为 `null` 且无 Builder 时，bottom 不显示操作栏（适合 Picker 等自带工具栏）。
 class TPopupActionDefault extends StatelessWidget {
   const TPopupActionDefault({super.key});
 
@@ -29,10 +33,10 @@ class TPopupActionDefault extends StatelessWidget {
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
-/// 与 [TPopupActionDefault] 同一实例，供 [TPopup.show] / [TPopup] 默认参数使用。
+/// 与 [TPopupActionDefault] 同一实例，作为 [TPopupOptions.cancel] / [confirm] 的默认值。
 const Widget kPopupActionDefault = TPopupActionDefault();
 
-/// 自定义 [headerBuilder] 时传入的标题栏数据（已按 cancel/confirm/title 参数组装好 Widget）。
+/// 传给自定义 [TPopupOptions.headerBuilder] 的标题栏数据（库内已组装好各槽 Widget）。
 class TPopupHeaderData {
   const TPopupHeaderData({
     this.title,
@@ -42,74 +46,75 @@ class TPopupHeaderData {
     this.onConfirm,
   });
 
-  /// 中间标题区（可能为 null）。
+  /// 中间标题（可为 null）。
   final Widget? title;
 
-  /// 左侧按钮区（可能为 null，表示该侧已隐藏）。
+  /// 左侧区域 Widget（null 表示该侧已隐藏）。
   final Widget? cancel;
 
-  /// 右侧按钮区（可能为 null）。
+  /// 右侧区域 Widget（null 表示该侧已隐藏）。
   final Widget? confirm;
 
+  /// 点击左侧区域时回调（是否关闭由 [TPopupOptions.autoCloseOnCancel] 决定）。
   final VoidCallback? onCancel;
+
+  /// 点击右侧区域时回调（是否关闭由 [TPopupOptions.autoCloseOnConfirm] 决定）。
   final VoidCallback? onConfirm;
 }
 
-/// bottom 自定义头部构建器。
+/// bottom 完全自定义头部：`Widget Function(context, data)`，优先级高于默认操作栏。
 typedef TPopupHeaderBuilder = Widget Function(
   BuildContext context,
   TPopupHeaderData data,
 );
 
-/// 未传 [headerBuilder] 时的默认参数占位，表示使用内置 bottom 操作栏。
+/// 默认 [headerBuilder] 占位：表示使用内置「取消 | 标题 | 确定」操作栏。
 ///
-/// **勿直接调用**；仅作为默认参数值。
-/// 与 [headerBuilder: null]（不渲染任何头部）不同，须显式区分。
+/// 勿直接调用。与 [headerBuilder: null]（完全不显示头部）不同。
 Widget kPopupDefaultHeader(BuildContext context, TPopupHeaderData data) {
   return const SizedBox.shrink();
 }
 
-/// 是否为「使用默认操作栏」（未传 [headerBuilder] 时的默认参数值）。
+/// 是否为默认操作栏占位（未自定义 [headerBuilder]）。
 bool isPopupDefaultHeader(TPopupHeaderBuilder? builder) =>
     builder == kPopupDefaultHeader;
 
-/// center 下方关闭区构建器；[close] 会触发 [onCloseBtn] 并关闭浮层。
+/// center 面板**外下方**关闭区；须调用入参 [close] 才会关层（会走 [onCloseBtn] 等逻辑）。
 typedef TPopupCloseBuilder = Widget Function(
   BuildContext context,
   VoidCallback close,
 );
 
-/// 未传 [closeBuilder] 时的默认参数占位，表示使用内置圆圈关闭图标。
+/// 默认 [closeBuilder] 占位：使用内置圆圈关闭图标（面板外下方）。
 ///
-/// **勿直接调用**；仅作为 [TPopup.show] / [TPopup] 的默认参数值。
-/// 与 [closeBuilder: null]（不渲染关闭区）不同，须显式区分。
+/// 勿直接调用。与 [closeBuilder: null]（不显示关闭区）不同。
 Widget kPopupDefaultClose(BuildContext context, VoidCallback close) {
   return const SizedBox.shrink();
 }
 
-/// 是否为「使用默认关闭按钮」（未传 [closeBuilder] 时的默认参数值）。
+/// 是否为默认关闭按钮占位。
 bool isPopupDefaultClose(TPopupCloseBuilder? builder) =>
     builder == kPopupDefaultClose;
 
-/// 显隐变化触发来源。
+/// 浮层被关闭时的触发来源，见 [TPopupOptions.onVisibleChange]。
 enum TPopupTrigger {
-  /// 点击半透明蒙层。
+  /// 点击蒙层（且 [closeOnOverlayClick] 为 true）。
   overlay,
 
   /// 点击 center 下方关闭控件。
   closeBtn,
 
-  /// 点击 bottom 操作栏左侧取消。
+  /// 点击 bottom 操作栏「取消」。
   cancelBtn,
 
-  /// 点击 bottom 操作栏右侧确定。
+  /// 点击 bottom 操作栏「确定」。
   confirmBtn,
 
-  /// [TPopupHandle.close]、[TPopup.close] 或系统返回等程序化关闭。
+  /// [TPopupHandle.close]、系统返回键等。
   programmatic,
 }
 
-/// 显隐回调：是否可见及触发来源。
+/// 显隐变化：`onVisibleChange(visible, trigger)`。
 typedef TPopupVisibleChangeCallback = void Function(
   bool visible,
   TPopupTrigger trigger,

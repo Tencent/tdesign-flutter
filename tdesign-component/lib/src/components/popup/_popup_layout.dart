@@ -18,6 +18,7 @@ class PopupLayout {
   final EdgeInsets margin;
   final double? width;
   final double? height;
+
   /// 居中且关闭按钮在内容下方时，不限制总高度（含下方关闭区）。
   final bool centerLooseHeight;
 

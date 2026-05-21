@@ -69,28 +69,29 @@ class TCalendarPopup {
       return;
     }
     final childWidget = builder?.call(context) ?? child;
-    _calendarHandle = TPopup.show(
-      context: context,
-      placement: TPopupPlacement.bottom,
-      cancel: null,
-      confirm: null,
-      margin: EdgeInsets.only(top: top ?? 0),
-      closeOnOverlayClick: false,
-      onOverlayClick: () {
-        if (_autoClose) {
-          close();
-        }
-      },
-      onClosed: _deleteRouter,
-      child: TCalendarInherited(
-        selected: _selected,
-        usePopup: true,
-        confirmBtn: confirmBtn,
-        onClose: _onClose,
-        onConfirm: _onConfirm,
-        child: childWidget!,
+    _calendarHandle = TPopup(
+      options: TPopupOptions(
+        placement: TPopupPlacement.bottom,
+        cancel: null,
+        confirm: null,
+        margin: EdgeInsets.only(top: top ?? 0),
+        closeOnOverlayClick: false,
+        onOverlayClick: () {
+          if (_autoClose) {
+            close();
+          }
+        },
+        onClosed: _deleteRouter,
+        child: TCalendarInherited(
+          selected: _selected,
+          usePopup: true,
+          confirmBtn: confirmBtn,
+          onClose: _onClose,
+          onConfirm: _onConfirm,
+          child: childWidget!,
+        ),
       ),
-    );
+    ).show(context);
   }
 
   void _onClose() {

@@ -1,6 +1,6 @@
 part of 't_popup.dart';
 
-/// 按 Navigator 追踪已打开的 [TPopupHandle] 栈，供 [TPopup.close] 查找栈顶。
+/// 库内：按 [Navigator] 记录 [TPopupHandle] 栈，用于嵌套与 [TPopup.show] 防重复打开。
 abstract class TPopupTracker {
   static final Map<NavigatorState, List<TPopupHandle>> _stacks = {};
 

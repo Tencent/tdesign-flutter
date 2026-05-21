@@ -25,23 +25,22 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   void _showProblemDialog() {
-    TPopup.show(
-      context: context,
-      placement: TPopupPlacement.bottom,
-      title: 'title',
-      radius: 20,
-      backgroundColor: const Color(0xFFFAFFFC),
-      onCloseBtn: () => TPopup.close(context),
-      child: Container(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
-        decoration: const BoxDecoration(color: Colors.white),
-        child: const Column(
-          children: [
-            Center(child: Text('立即拨打')),
-          ],
-        ),
-      ),
-    );
+    TPopup(
+      options: TPopupOptions(
+          placement: TPopupPlacement.bottom,
+          title: 'title',
+          radius: 20,
+          backgroundColor: const Color(0xFFFAFFFC),
+          child: Container(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
+            decoration: const BoxDecoration(color: Colors.white),
+            child: const Column(
+              children: [
+                Center(child: Text('立即拨打')),
+              ],
+            ),
+          )),
+    ).show(context);
   }
 
   @override
