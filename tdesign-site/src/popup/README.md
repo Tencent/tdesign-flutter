@@ -430,7 +430,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
     return TButton(
-      text: '居中弹出层-关闭在下方',
+      text: '居中弹出层-自定义下方按钮',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,

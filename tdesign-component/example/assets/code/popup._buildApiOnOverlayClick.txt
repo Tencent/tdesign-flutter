@@ -1,7 +1,7 @@
 
-  Widget _buildPopFromBottom(BuildContext context) {
+  Widget _buildApiOnOverlayClick(BuildContext context) {
     return TButton(
-      text: '底部弹出',
+      text: 'onOverlayClick',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -10,10 +10,12 @@
         TPopup.show(
           context: context,
           placement: TPopupPlacement.bottom,
-          height: 240,
+          height: 260,
+          onOverlayClick: () =>
+              TToast.showText('点击蒙层', context: context),
           child: Container(
+            height: 200,
             color: TTheme.of(context).bgColorContainer,
-            height: 240,
           ),
         );
       },

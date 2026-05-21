@@ -1,7 +1,7 @@
 
-  Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
+  Widget _buildPopFromBottomWithCustomAction(BuildContext context) {
     return TButton(
-      text: '底部弹出层-带标题及关闭',
+      text: '底部弹出层-操作栏全自定义',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -11,11 +11,6 @@
           context: context,
           placement: TPopupPlacement.bottom,
           height: 280,
-          cancel: TText(
-            '关闭',
-            textColor: TTheme.of(context).textColorSecondary,
-            font: TTheme.of(context).fontBodyLarge,
-          ),
           titleWidget: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -29,12 +24,10 @@
               ),
             ],
           ),
-          confirm: TText(
-            '完成',
-            textColor: TTheme.of(context).brandNormalColor,
-            font: TTheme.of(context).fontTitleMedium,
-            fontWeight: FontWeight.w600,
-          ),
+          cancel: Icon(Icons.undo,
+              color: TTheme.of(context).textColorSecondary),
+          confirm: Icon(Icons.check,
+              color: TTheme.of(context).brandNormalColor),
           onCancel: () => TPopup.close(context),
           onConfirm: () => TPopup.close(context),
           child: Container(height: 200),

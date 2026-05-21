@@ -1,0 +1,18 @@
+
+  Widget _buildApiBackgroundColor(BuildContext context) {
+    return TButton(
+      text: 'backgroundColor + radius',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 260,
+        radius: 16,
+        backgroundColor: const Color(0xFFFFF8E7),
+        child: _body(context, height: 220),
+      ),
+    );
+  }

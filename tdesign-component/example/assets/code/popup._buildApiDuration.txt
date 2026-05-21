@@ -1,7 +1,7 @@
 
-  Widget _buildPopFromBottom(BuildContext context) {
+  Widget _buildApiDuration(BuildContext context) {
     return TButton(
-      text: '底部弹出',
+      text: 'duration: 600ms',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -11,9 +11,10 @@
           context: context,
           placement: TPopupPlacement.bottom,
           height: 240,
+          duration: const Duration(milliseconds: 600),
           child: Container(
+            height: 200,
             color: TTheme.of(context).bgColorContainer,
-            height: 240,
           ),
         );
       },

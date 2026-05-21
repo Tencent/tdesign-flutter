@@ -1,0 +1,31 @@
+
+  Widget _buildApiTitleWidget(BuildContext context) {
+    return TButton(
+      text: 'titleWidget',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 280,
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(TIcons.info_circle,
+                color: TTheme.of(context).brandNormalColor),
+            const SizedBox(width: 4),
+            TText(
+              '自定义标题',
+              textColor: TTheme.of(context).brandNormalColor,
+              font: TTheme.of(context).fontTitleMedium,
+            ),
+          ],
+        ),
+        onCancel: () => TPopup.close(context),
+        onConfirm: () => TPopup.close(context),
+        child: _body(context),
+      ),
+    );
+  }

@@ -1,0 +1,22 @@
+
+  Widget _buildBottomActionBar(BuildContext context) {
+    return TButton(
+      text: 'bottom 操作栏（title + onCancel/onConfirm）',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 280,
+        title: '标题文字',
+        onCancel: () => TPopup.close(context),
+        onConfirm: () {
+          TToast.showText('确定', context: context);
+          TPopup.close(context);
+        },
+        child: _body(context, height: 200),
+      ),
+    );
+  }

@@ -7,21 +7,16 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.top,
-              open: () {
-                print('open');
-              },
-              opened: () {
-                print('opened');
-              },
-              builder: (context) {
-                return Container(
-                  color: TTheme.of(context).bgColorContainer,
-                  height: 240,
-                );
-              }),
+        TPopup.show(
+          context: context,
+          placement: TPopupPlacement.top,
+          height: 240,
+          onOpen: () => print('open'),
+          onOpened: () => print('opened'),
+          child: Container(
+            color: TTheme.of(context).bgColorContainer,
+            height: 240,
+          ),
         );
       },
     );

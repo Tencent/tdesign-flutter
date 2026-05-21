@@ -1,0 +1,30 @@
+
+  Widget _buildApiCancelConfirmBuilders(BuildContext context) {
+    return TButton(
+      text: 'cancelBuilder / confirmBuilder',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 280,
+        title: 'Builder 插槽',
+        cancelBuilder: (ctx) => TText(
+          '自定义取消',
+          textColor: TTheme.of(ctx).textColorSecondary,
+          font: TTheme.of(ctx).fontBodyLarge,
+        ),
+        confirmBuilder: (ctx) => TText(
+          '自定义确定',
+          textColor: TTheme.of(ctx).brandNormalColor,
+          font: TTheme.of(ctx).fontTitleMedium,
+          fontWeight: FontWeight.w600,
+        ),
+        onCancel: () => TPopup.close(context),
+        onConfirm: () => TPopup.close(context),
+        child: _body(context),
+      ),
+    );
+  }

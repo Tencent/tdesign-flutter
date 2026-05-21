@@ -1,0 +1,20 @@
+
+  Widget _buildApiTitleAlignLeft(BuildContext context) {
+    return TButton(
+      text: 'titleAlignLeft',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 280,
+        title: '左对齐标题',
+        titleAlignLeft: true,
+        onCancel: () => TPopup.close(context),
+        onConfirm: () => TPopup.close(context),
+        child: _body(context),
+      ),
+    );
+  }

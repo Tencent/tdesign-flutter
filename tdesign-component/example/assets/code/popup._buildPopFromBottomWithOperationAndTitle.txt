@@ -7,23 +7,17 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-            slideTransitionFrom: SlideTransitionFrom.bottom,
-            builder: (context) {
-              return TPopupBottomConfirmPanel(
-                title: '标题文字',
-                leftClick: () {
-                  Navigator.maybePop(context);
-                },
-                rightClick: () {
-                  TToast.showText('确定', context: context);
-                  Navigator.maybePop(context);
-                },
-                child: Container(height: 200),
-              );
-            },
-          ),
+        TPopup.show(
+          context: context,
+          placement: TPopupPlacement.bottom,
+          height: 280,
+          title: '标题文字',
+          onCancel: () => TPopup.close(context),
+          onConfirm: () {
+            TToast.showText('确定', context: context);
+            TPopup.close(context);
+          },
+          child: Container(height: 200),
         );
       },
     );

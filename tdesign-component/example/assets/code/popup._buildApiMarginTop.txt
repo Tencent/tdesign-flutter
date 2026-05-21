@@ -1,0 +1,25 @@
+
+  Widget _buildApiMarginTop(BuildContext context) {
+    return TButton(
+      text: 'bottom margin.top',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context: context,
+          placement: TPopupPlacement.bottom,
+          height: 320,
+          margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
+          title: '日历式留白',
+          onCancel: () => TPopup.close(context),
+          onConfirm: () => TPopup.close(context),
+          child: Container(
+            height: 240,
+            color: TTheme.of(context).bgColorContainer,
+          ),
+        );
+      },
+    );
+  }

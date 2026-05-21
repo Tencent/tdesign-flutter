@@ -53,7 +53,7 @@ class TCalendarPopup {
   /// 点击确认按钮时触发
   final void Function(List<int> value)? onConfirm;
 
-  static TSlidePopupRoute? _calendarPopup;
+  static TPopupHandle? _calendarHandle;
 
   /// 当前选中值
   final ValueNotifier<List<int>> _selected = ValueNotifier<List<int>>([]);
@@ -65,33 +65,32 @@ class TCalendarPopup {
 
   /// 打开日历
   void show() {
-    if (_calendarPopup != null) {
+    if (_calendarHandle?.isShowing == true) {
       return;
     }
-    _calendarPopup = TSlidePopupRoute(
-      isDismissible: false,
-      slideTransitionFrom: SlideTransitionFrom.bottom,
-      modalTop: top,
-      barrierClick: () {
+    final childWidget = builder?.call(context) ?? child;
+    _calendarHandle = TPopup.show(
+      context: context,
+      placement: TPopupPlacement.bottom,
+      cancel: null,
+      confirm: null,
+      margin: EdgeInsets.only(top: top ?? 0),
+      closeOnOverlayClick: false,
+      onOverlayClick: () {
         if (_autoClose) {
           close();
         }
       },
-      builder: (context) {
-        final childWidget = builder?.call(context) ?? child;
-        return TCalendarInherited(
-          selected: _selected,
-          usePopup: true,
-          confirmBtn: confirmBtn,
-          onClose: _onClose,
-          onConfirm: _onConfirm,
-          child: childWidget!,
-        );
-      },
+      onClosed: _deleteRouter,
+      child: TCalendarInherited(
+        selected: _selected,
+        usePopup: true,
+        confirmBtn: confirmBtn,
+        onClose: _onClose,
+        onConfirm: _onConfirm,
+        child: childWidget!,
+      ),
     );
-    Navigator.of(context).push(_calendarPopup!).then((_) {
-      _deleteRouter();
-    });
   }
 
   void _onClose() {
@@ -109,14 +108,11 @@ class TCalendarPopup {
 
   /// 关闭日历
   void close() {
-    if (_calendarPopup != null) {
-      Navigator.of(context).pop();
-      // _deleteRouter();
-    }
+    _calendarHandle?.close();
   }
 
   void _deleteRouter() {
-    _calendarPopup = null;
+    _calendarHandle = null;
     onClose?.call();
   }
 }

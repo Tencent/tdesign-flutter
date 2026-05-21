@@ -184,15 +184,16 @@ class _TPickerPageState extends State<TPickerPage> {
   /// TPicker 自带「取消 / 标题 / 确认」工具栏，业务方在 onCancel/onConfirm
   /// 中自行决定是否调用 Navigator.pop 关闭弹窗。
   void _showPickerPopup(BuildContext context, {required Widget picker}) {
-    Navigator.of(context).push(
-      TSlidePopupRoute(
-        slideTransitionFrom: SlideTransitionFrom.bottom,
-        builder: (ctx) => Material(
-          color: TTheme.of(ctx).bgColorContainer,
-          child: SafeArea(
-            top: false,
-            child: picker,
-          ),
+    TPopup.show(
+      context: context,
+      placement: TPopupPlacement.bottom,
+      cancel: null,
+      confirm: null,
+      child: Material(
+        color: TTheme.of(context).bgColorContainer,
+        child: SafeArea(
+          top: false,
+          child: picker,
         ),
       ),
     );

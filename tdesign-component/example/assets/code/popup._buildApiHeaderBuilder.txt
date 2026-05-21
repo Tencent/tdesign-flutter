@@ -1,0 +1,26 @@
+
+  Widget _buildApiHeaderBuilder(BuildContext context) {
+    return TButton(
+      text: 'headerBuilder（非 closeBtn）',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 280,
+        headerBuilder: (ctx) => Container(
+          height: _headerHeight,
+          alignment: Alignment.center,
+          color: TTheme.of(ctx).brandColor1,
+          child: TText(
+            '自定义头部',
+            textColor: TTheme.of(ctx).brandNormalColor,
+            font: TTheme.of(ctx).fontTitleMedium,
+          ),
+        ),
+        child: _body(context, height: 200),
+      ),
+    );
+  }

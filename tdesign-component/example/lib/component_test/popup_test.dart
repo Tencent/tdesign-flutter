@@ -9,7 +9,7 @@ class ConfirmDialogTestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'confirmDialog 测试示例',
+      title: 'TPopup 测试示例',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const TestPage(),
     );
@@ -24,35 +24,23 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  final TextEditingController _searchNameController = TextEditingController();
-  final TextEditingController _searchRemarkController = TextEditingController();
-
   void _showProblemDialog() {
-
-    Navigator.of(context).push(
-      TSlidePopupRoute(
-        slideTransitionFrom: SlideTransitionFrom.bottom,
-        builder: (context) {
-          return TPopupBottomDisplayPanel(
-            title: 'title',
-            radius: 20,
-            backgroundColor: const Color(0xFFFAFFFC),
-            closeClick: () {
-              Navigator.maybePop(context);
-            },
-            child: Container(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
-              decoration: const BoxDecoration(color: Colors.white),
-              child: const Column(
-                children: [
-                  Center(
-                    child: Text("立即拨打"),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+    TPopup.show(
+      context: context,
+      placement: TPopupPlacement.bottom,
+      title: 'title',
+      radius: 20,
+      backgroundColor: const Color(0xFFFAFFFC),
+      closeBtn: true,
+      onCloseBtn: () => TPopup.close(context),
+      child: Container(
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
+        decoration: const BoxDecoration(color: Colors.white),
+        child: const Column(
+          children: [
+            Center(child: Text('立即拨打')),
+          ],
+        ),
       ),
     );
   }
@@ -60,7 +48,7 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TConfirmDialog测试')),
+      appBar: AppBar(title: const Text('TPopup测试')),
       body: Center(
         child: TButton(
           child: const Text('显示问题弹窗'),
@@ -68,12 +56,5 @@ class _TestPageState extends State<TestPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _searchNameController.dispose();
-    _searchRemarkController.dispose();
-    super.dispose();
   }
 }

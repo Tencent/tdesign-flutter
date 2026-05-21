@@ -1,0 +1,23 @@
+
+  Widget _buildApiAutoCloseFalse(BuildContext context) {
+    return TButton(
+      text: 'autoCloseOnCancel/Confirm=false',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () => TPopup.show(
+        context: context,
+        placement: TPopupPlacement.bottom,
+        height: 280,
+        title: '不自动关闭',
+        autoCloseOnCancel: false,
+        autoCloseOnConfirm: false,
+        onCancel: () =>
+            TToast.showText('已点取消', context: context),
+        onConfirm: () =>
+            TToast.showText('已点确定', context: context),
+        child: _body(context, height: 140),
+      ),
+    );
+  }
