@@ -5,8 +5,6 @@ import '_popup_shell.dart';
 import 't_popup_config.dart';
 import 't_popup_types.dart';
 
-const Duration _kReverseDuration = Duration(milliseconds: 200);
-
 /// 私有 Popup 路由。
 class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   TPopupNavigatorRoute({
@@ -47,7 +45,7 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   Duration get transitionDuration => config.duration;
 
   @override
-  Duration get reverseTransitionDuration => _kReverseDuration;
+  Duration get reverseTransitionDuration => config.duration;
 
   @override
   bool get barrierDismissible => false;
@@ -112,7 +110,8 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
       width: config.width,
       height: config.height,
       centerLooseHeight:
-          config.placement == TPopupPlacement.center && config.closeBtn,
+          config.placement == TPopupPlacement.center &&
+              config.closeBuilder != null,
     );
 
     final t = curved.value;
@@ -161,10 +160,8 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
       ),
     );
     if (config.showOverlay) {
-      final label = _barrierSemanticsLabel ??
-          MaterialLocalizations.of(context).modalBarrierDismissLabel;
       barrier = Semantics(
-        label: label,
+        label: _barrierSemanticsLabel!,
         button: true,
         child: barrier,
       );

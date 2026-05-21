@@ -33,33 +33,32 @@ void main() {
       expect(config.showConfirmSlot, isFalse);
     });
 
-    test('create 忽略 bottom 的 closeBtn', () {
+    test('create 忽略 bottom 的 closeBuilder', () {
       final config = TPopupConfig.create(
         child: const SizedBox(),
         placement: TPopupPlacement.bottom,
-        closeBtn: true,
+        closeBuilder: (_, __) => const Text('x'),
         onCancel: () {},
       );
-      expect(config.closeBtn, isFalse);
+      expect(config.closeBuilder, isNull);
       expect(config.useActionHeader, isTrue);
     });
 
-    test('create center 默认 closeBtn 与 closeBelowContent', () {
+    test('create center 默认 closeBuilder', () {
       final config = TPopupConfig.create(
         child: const SizedBox(),
         placement: TPopupPlacement.center,
       );
-      expect(config.closeBtn, isTrue);
-      expect(config.closeBelowContent, isTrue);
+      expect(isPopupDefaultClose(config.closeBuilder), isTrue);
     });
 
-    test('create center closeBtn false', () {
+    test('create center closeBuilder null 无关闭区', () {
       final config = TPopupConfig.create(
         child: const SizedBox(),
         placement: TPopupPlacement.center,
-        closeBtn: false,
+        closeBuilder: null,
       );
-      expect(config.closeBtn, isFalse);
+      expect(config.closeBuilder, isNull);
     });
 
     test('create top 剥离 title 与 headerBuilder', () {
@@ -67,12 +66,23 @@ void main() {
         child: const SizedBox(),
         placement: TPopupPlacement.top,
         title: '标题',
-        headerBuilder: (_) => const Text('h'),
+        headerBuilder: (_, __) => const Text('h'),
         onCancel: () {},
       );
       expect(config.title, isNull);
       expect(config.headerBuilder, isNull);
       expect(config.useActionHeader, isFalse);
+      expect(config.hasBuiltInHeader, isFalse);
+    });
+
+    test('headerBuilder null 表示无头部', () {
+      final config = TPopupConfig.create(
+        child: const SizedBox(),
+        placement: TPopupPlacement.bottom,
+        title: '标题',
+        headerBuilder: null,
+      );
+      expect(config.hasNoHeader, isTrue);
       expect(config.hasBuiltInHeader, isFalse);
     });
 
@@ -99,7 +109,7 @@ void main() {
         TPopupConfig.create(
           child: const SizedBox(),
           placement: TPopupPlacement.bottom,
-          headerBuilder: (_) => const Text('h'),
+          headerBuilder: (_, __) => const Text('h'),
         ).hasBuiltInHeader,
         isTrue,
       );
@@ -110,6 +120,37 @@ void main() {
         ).hasBuiltInHeader,
         isFalse,
       );
+    });
+
+    test('left/right 剥离 closeBuilder 与 onCloseBtn', () {
+      final left = TPopupConfig.create(
+        child: const SizedBox(),
+        placement: TPopupPlacement.left,
+        closeBuilder: (_, __) => const Text('x'),
+        onCloseBtn: () {},
+      );
+      expect(left.closeBuilder, isNull);
+      expect(left.onCloseBtn, isNull);
+    });
+
+    test('useCustomHeader 为 true 时 hasBuiltInHeader', () {
+      final config = TPopupConfig.create(
+        child: const SizedBox(),
+        placement: TPopupPlacement.bottom,
+        headerBuilder: (_, __) => const SizedBox(),
+      );
+      expect(config.useCustomHeader, isTrue);
+      expect(config.hasBuiltInHeader, isTrue);
+    });
+
+    test('assertPlacementParams 非 bottom 带 cancel 槽位提示', () {
+      final config = TPopupConfig(
+        child: const SizedBox(),
+        placement: TPopupPlacement.center,
+        cancel: kPopupActionDefault,
+        confirm: kPopupActionDefault,
+      );
+      expect(() => config.assertPlacementParams(), returnsNormally);
     });
 
     test('assertPlacementParams 在 debug 模式不抛错', () {

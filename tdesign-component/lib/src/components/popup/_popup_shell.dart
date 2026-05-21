@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '_popup_center_close.dart';
 import '_popup_header.dart';
 import 't_popup_config.dart';
 import 't_popup_types.dart';
@@ -29,17 +30,18 @@ class PopupShell extends StatelessWidget {
     Widget content = config.child;
 
     if (config.placement == TPopupPlacement.center) {
-      if (config.closeBtn) {
+      if (config.closeBuilder != null) {
+        final panel = Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(radius),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: content,
+        );
         return PopupCenterUnderClose(
           config: config,
-          content: Container(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(radius),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: content,
-          ),
+          content: panel,
           onCloseWithTrigger: onCloseWithTrigger,
         );
       }

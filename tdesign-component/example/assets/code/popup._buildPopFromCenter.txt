@@ -10,7 +10,7 @@
         TPopup.show(
           context: context,
           placement: TPopupPlacement.center,
-          closeBtn: false,
+          closeBuilder: null,
           child: Container(
             decoration: BoxDecoration(
               color: TTheme.of(context).bgColorContainer,

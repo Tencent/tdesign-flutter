@@ -31,7 +31,6 @@ class _TestPageState extends State<TestPage> {
       title: 'title',
       radius: 20,
       backgroundColor: const Color(0xFFFAFFFC),
-      closeBtn: true,
       onCloseBtn: () => TPopup.close(context),
       child: Container(
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),

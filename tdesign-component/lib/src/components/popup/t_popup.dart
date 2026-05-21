@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 
 import '_popup_route.dart';
 import 't_popup_config.dart';
-import 't_popup_tracker.dart';
 import 't_popup_types.dart';
 
 export 't_popup_types.dart';
 
-/// 弹出层。
+part 't_popup_handle.dart';
+part 't_popup_tracker.dart';
+
+/// 弹出层：支持五向滑入/居中弹出、蒙层、bottom 操作栏与 center 关闭区。
+///
+/// 命令式用法优先调用 [show]；声明式将 [TPopup] 包裹业务子树并设 [initialVisible]（弹层在独立路由中，[build] 仅渲染 [child]）。
+/// bottom 操作栏参数仅对 [TPopupPlacement.bottom] 生效；center 关闭参数仅对 center 生效；
+/// top/left/right 仅使用 [child] 与布局参数。
+/// 嵌套时 [close] 只关栈顶 Popup；无 Popup 时不操作当前页。
 class TPopup extends StatefulWidget {
   const TPopup({
     super.key,
@@ -24,8 +31,6 @@ class TPopup extends StatefulWidget {
     this.overlayColor,
     this.overlayOpacity,
     this.preventScrollThrough = true,
-    /// 关闭后 Popup 路由是否不再 [maintainState]（不保留路由内 State）。
-    /// 不影响声明式 [TPopup] 自身 [State] 的存活。
     this.destroyOnClose = false,
     this.duration = const Duration(milliseconds: 240),
     this.title,
@@ -41,12 +46,9 @@ class TPopup extends StatefulWidget {
     this.onConfirm,
     this.autoCloseOnCancel = true,
     this.autoCloseOnConfirm = true,
-    this.closeBtn,
-    Widget? close,
-    this.closeBuilder,
-    this.closeBelowContent,
+    this.closeBuilder = kPopupDefaultClose,
     this.onCloseBtn,
-    this.headerBuilder,
+    this.headerBuilder = kPopupDefaultHeader,
     this.onOpen,
     this.onOpened,
     this.onClose,
@@ -55,66 +57,133 @@ class TPopup extends StatefulWidget {
     this.onOverlayClick,
     this.navigatorContext,
     this.useRootNavigator = false,
-  }) : closeWidget = close;
+  });
 
+  /// 浮层主体内容（必填）。
   final Widget child;
+
+  /// 声明式：为 true 时在首帧后自动 [show]。
   final bool initialVisible;
 
+  /// 出现位置，默认 [TPopupPlacement.bottom]。
   final TPopupPlacement placement;
+
+  /// 宽度；对 left、right、center 生效。
   final double? width;
+
+  /// 高度；对 top、bottom 生效；center 且下方关闭时约束内容区高度。
   final double? height;
+
+  /// 外边距；center 忽略。bottom 的 top 可用来做日历式距顶留白。
   final EdgeInsets? margin;
+
+  /// 内容区圆角，默认主题大圆角。
   final double? radius;
+
+  /// 内容区背景色，默认主题容器色。
   final Color? backgroundColor;
+
+  /// 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。
   final bool showOverlay;
+
+  /// 点击蒙层是否关闭（须 [showOverlay] 为 true）。
   final bool closeOnOverlayClick;
+
+  /// 蒙层颜色，默认 black54。
   final Color? overlayColor;
+
+  /// 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。
   final double? overlayOpacity;
+
+  /// 是否拦截底层滚动；无蒙层时用透明层吸收滚动。
   final bool preventScrollThrough;
 
-  /// 关闭后 Popup 路由是否不再 [maintainState]（不保留路由内 State）。
-  /// 不影响声明式 [TPopup] 自身 [State] 的存活。
+  /// 为 true 时 Popup 路由 [Route.maintainState] 为 false，关闭后不保留路由内 State；
+  /// 不销毁包裹 [TPopup] 的 StatefulWidget State。
   final bool destroyOnClose;
+
+  /// 打开与关闭动画时长（一致）。
   final Duration duration;
 
+  /// bottom 操作栏中间标题文案。
   final String? title;
+
+  /// bottom 操作栏中间标题组件，优先级高于 [title]。
   final Widget? titleWidget;
+
+  /// bottom 仅标题行时是否左对齐，默认居中。
   final bool titleAlignLeft;
+
+  /// bottom 左侧按钮文案，覆盖默认「取消」。
   final String? cancelBtn;
+
+  /// bottom 左侧按钮；默认 [kPopupActionDefault] 表示默认文案，传 null 隐藏左侧。
   final Widget? cancel;
+
+  /// bottom 左侧按钮构建器，优先级高于 [cancel]。
   final WidgetBuilder? cancelBuilder;
+
+  /// 点击 bottom 左侧按钮回调。
   final VoidCallback? onCancel;
+
+  /// bottom 右侧按钮文案，覆盖默认「确定」。
   final String? confirmBtn;
+
+  /// bottom 右侧按钮；默认 [kPopupActionDefault]，传 null 隐藏右侧。
   final Widget? confirm;
+
+  /// bottom 右侧按钮构建器，优先级高于 [confirm]。
   final WidgetBuilder? confirmBuilder;
+
+  /// 点击 bottom 右侧按钮回调。
   final VoidCallback? onConfirm;
+
+  /// 点击取消后是否自动关闭，默认 true。
   final bool autoCloseOnCancel;
+
+  /// 点击确定后是否自动关闭，默认 true。
   final bool autoCloseOnConfirm;
 
-  /// center 默认 true；bottom / 三边忽略。
-  final bool? closeBtn;
-  /// [TPopupPlacement.center] 自定义关闭控件；构造参数名为 [close]（与 [show] 一致）。
-  final Widget? closeWidget;
-  final WidgetBuilder? closeBuilder;
+  /// center 关闭区：`null` 不显示；未传则用 [kPopupDefaultClose] 默认圆圈图标；
+  /// 自定义时通过 [close] 回调关闭。bottom 与三边忽略。
+  final TPopupCloseBuilder? closeBuilder;
 
-  /// center 且显示关闭时默认 true。
-  final bool? closeBelowContent;
+  /// center 点击关闭控件前的回调。
   final VoidCallback? onCloseBtn;
 
-  /// 仅 [TPopupPlacement.bottom] 生效。
-  final WidgetBuilder? headerBuilder;
+  /// bottom 头部：`null` 无头部；未传则用 [kPopupDefaultHeader] 默认操作栏；自定义见 [TPopupHeaderBuilder]。
+  final TPopupHeaderBuilder? headerBuilder;
 
+  /// 开始打开时回调（路由入栈）。
   final VoidCallback? onOpen;
+
+  /// 打开动画结束后回调。
   final VoidCallback? onOpened;
+
+  /// 开始关闭时回调（含蒙层、按钮、程序化关闭）。
   final VoidCallback? onClose;
+
+  /// 关闭动画结束且路由移除后回调。
   final VoidCallback? onClosed;
+
+  /// 显隐变化及触发来源。
   final TPopupVisibleChangeCallback? onVisibleChange;
+
+  /// 点击蒙层时回调（在是否关闭判断之前）。
   final VoidCallback? onOverlayClick;
 
+  /// 指定 Navigator 的 context，默认使用当前 context。
   final BuildContext? navigatorContext;
+
+  /// 是否使用根 Navigator。
   final bool useRootNavigator;
 
-  /// 打开浮层。
+  /// 命令式打开浮层，参数与 [TPopup] 构造器一致。
+  ///
+  /// 返回 [TPopupHandle]；优先 [TPopupHandle.close]，或在 Popup 子树内 [close]。
+  ///
+  /// [cancel]/[confirm] 默认 [kPopupActionDefault] 表示默认文案，显式 null 可隐藏操作栏侧。
+  /// [closeBuilder] 未传为 [kPopupDefaultClose]（默认关闭图标），显式 null 不显示关闭区。
   static TPopupHandle show({
     required BuildContext context,
     required Widget child,
@@ -129,7 +198,6 @@ class TPopup extends StatefulWidget {
     Color? overlayColor,
     double? overlayOpacity,
     bool preventScrollThrough = true,
-    /// 关闭后 Popup 路由是否不再 [maintainState]（不保留路由内 State）。
     bool destroyOnClose = false,
     Duration duration = const Duration(milliseconds: 240),
     String? title,
@@ -145,12 +213,9 @@ class TPopup extends StatefulWidget {
     VoidCallback? onConfirm,
     bool autoCloseOnCancel = true,
     bool autoCloseOnConfirm = true,
-    bool? closeBtn,
-    Widget? close,
-    WidgetBuilder? closeBuilder,
-    bool? closeBelowContent,
+    TPopupCloseBuilder? closeBuilder = kPopupDefaultClose,
     VoidCallback? onCloseBtn,
-    WidgetBuilder? headerBuilder,
+    TPopupHeaderBuilder? headerBuilder = kPopupDefaultHeader,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -188,10 +253,7 @@ class TPopup extends StatefulWidget {
       onConfirm: onConfirm,
       autoCloseOnCancel: autoCloseOnCancel,
       autoCloseOnConfirm: autoCloseOnConfirm,
-      closeBtn: closeBtn,
-      close: close,
       closeBuilder: closeBuilder,
-      closeBelowContent: closeBelowContent,
       onCloseBtn: onCloseBtn,
       headerBuilder: headerBuilder,
       onOpen: onOpen,
@@ -209,14 +271,21 @@ class TPopup extends StatefulWidget {
       rootNavigator: useRootNavigator,
     );
 
+    final existing = TPopupTracker.top(navigator);
+    if (existing != null &&
+        existing.isShowing &&
+        ModalRoute.of(context) is! TPopupNavigatorRoute) {
+      return existing;
+    }
+
     TPopupNavigatorRoute<dynamic>? route;
     late TPopupHandle handle;
 
     void closeWithTrigger(TPopupTrigger trigger, [Object? result]) {
-      if (handle._isClosed) {
+      if (!handle.isShowing) {
         return;
       }
-      handle._isClosed = true;
+      handle._markClosing();
       route?.fireCloseStart(trigger);
       navigator.pop(result);
     }
@@ -227,7 +296,6 @@ class TPopup extends StatefulWidget {
     );
 
     handle = TPopupHandle._(
-      navigator: navigator,
       route: route,
       onCloseWithTrigger: closeWithTrigger,
     );
@@ -236,22 +304,21 @@ class TPopup extends StatefulWidget {
 
     navigator.push(route).whenComplete(() {
       TPopupTracker.remove(navigator, handle);
-      handle._isClosed = true;
-      handle._route = null;
+      handle._detachRoute();
     });
 
     return handle;
   }
 
-  /// 关闭当前 Navigator 栈顶 [TPopup]；触发与 [TPopupHandle.close] 相同的生命周期回调。
+  /// 关闭当前 Navigator 栈顶 [TPopup]。
+  ///
+  /// 仅关闭 Tracker 栈顶展示中的 Popup；无 Popup 时不操作（不会 pop 当前页）。
   static void close(BuildContext context, [Object? result]) {
     final navigator = Navigator.of(context);
     final handle = TPopupTracker.top(navigator);
     if (handle?.isShowing == true) {
       handle!.close(result);
-      return;
     }
-    navigator.maybePop(result);
   }
 
   @override
@@ -310,10 +377,7 @@ class _TPopupState extends State<TPopup> {
       onConfirm: widget.onConfirm,
       autoCloseOnCancel: widget.autoCloseOnCancel,
       autoCloseOnConfirm: widget.autoCloseOnConfirm,
-      closeBtn: widget.closeBtn,
-      close: widget.closeWidget,
       closeBuilder: widget.closeBuilder,
-      closeBelowContent: widget.closeBelowContent,
       onCloseBtn: widget.onCloseBtn,
       headerBuilder: widget.headerBuilder,
       onOpen: widget.onOpen,
@@ -328,30 +392,5 @@ class _TPopupState extends State<TPopup> {
   @override
   Widget build(BuildContext context) {
     return widget.child;
-  }
-}
-
-/// [TPopup.show] 返回的句柄。
-class TPopupHandle {
-  TPopupHandle._({
-    required NavigatorState navigator,
-    required TPopupNavigatorRoute<dynamic>? route,
-    required void Function(TPopupTrigger trigger, [Object? result])
-        onCloseWithTrigger,
-  })  : _route = route,
-        _onCloseWithTrigger = onCloseWithTrigger;
-
-  TPopupNavigatorRoute<dynamic>? _route;
-  final void Function(TPopupTrigger trigger, [Object? result])
-      _onCloseWithTrigger;
-  bool _isClosed = false;
-
-  bool get isShowing => _route != null && !_isClosed;
-
-  void close([Object? result]) {
-    if (!isShowing) {
-      return;
-    }
-    _onCloseWithTrigger(TPopupTrigger.programmatic, result);
   }
 }

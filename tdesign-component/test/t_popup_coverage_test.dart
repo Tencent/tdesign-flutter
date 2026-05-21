@@ -106,8 +106,8 @@ void main() {
             placement: TPopupPlacement.center,
             width: 160,
             height: 120,
-            closeBuilder: (ctx) => TextButton(
-              onPressed: () => TPopup.close(ctx),
+            closeBuilder: (_, close) => TextButton(
+              onPressed: close,
               child: const Text('builder关闭'),
             ),
             child: const SizedBox(height: 80, width: 120),
@@ -184,7 +184,7 @@ void main() {
             placement: TPopupPlacement.center,
             width: 100,
             height: 100,
-            closeBtn: false,
+            closeBuilder: null,
             child: const SizedBox(height: 80, width: 80),
           );
         },
@@ -286,6 +286,51 @@ void main() {
       expect(TPopupConfig.isActionDefault(null), isFalse);
     });
 
+    test('useCustomHeader 与 useTitleOnlyHeader 互斥于 useActionHeader', () {
+      final custom = TPopupConfig.create(
+        child: const SizedBox(),
+        placement: TPopupPlacement.bottom,
+        headerBuilder: (_, __) => const Text('h'),
+      );
+      expect(custom.useCustomHeader, isTrue);
+      expect(custom.useActionHeader, isFalse);
+
+      final titleOnly = TPopupConfig.create(
+        child: const SizedBox(),
+        placement: TPopupPlacement.bottom,
+        title: '仅标题',
+        cancel: null,
+        confirm: null,
+      );
+      expect(titleOnly.useTitleOnlyHeader, isTrue);
+      expect(titleOnly.useActionHeader, isFalse);
+    });
+
+    test('isPopupDefaultHeader / isPopupDefaultClose 哨兵识别', () {
+      expect(isPopupDefaultHeader(kPopupDefaultHeader), isTrue);
+      expect(isPopupDefaultHeader(null), isFalse);
+      expect(isPopupDefaultClose(kPopupDefaultClose), isTrue);
+      expect(isPopupDefaultClose(null), isFalse);
+    });
+
+    testWidgets('kPopupDefaultHeader / kPopupDefaultClose 占位函数可调用', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final header = kPopupDefaultHeader(
+                context,
+                const TPopupHeaderData(),
+              );
+              final close = kPopupDefaultClose(context, () {});
+              return Column(children: [header, close]);
+            },
+          ),
+        ),
+      );
+      expect(find.byType(SizedBox), findsWidgets);
+    });
+
     test('assertPlacementParams 覆盖 width 与 top 操作栏提示', () {
       expect(
         () => TPopupConfig.create(
@@ -308,10 +353,291 @@ void main() {
           child: const SizedBox(),
           placement: TPopupPlacement.center,
           height: 100,
-          closeBtn: false,
+          closeBuilder: null,
         ).assertPlacementParams(),
         returnsNormally,
       );
+      expect(
+        () => TPopupConfig.create(
+          child: const SizedBox(),
+          placement: TPopupPlacement.center,
+          onCancel: () {},
+        ).assertPlacementParams(),
+        returnsNormally,
+      );
+    });
+  });
+
+  group('TPopup 覆盖率深化', () {
+    testWidgets('headerBuilder 透传 titleWidget 与 cancelBuilder 槽位', (tester) async {
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            context: tester.element(find.text('open')),
+            placement: TPopupPlacement.bottom,
+            height: 160,
+            titleWidget: const Text('头Widget'),
+            cancelBuilder: (_) => const Text('builder左'),
+            confirmBuilder: (_) => const Text('builder右'),
+            headerBuilder: (_, data) => Column(
+              children: [
+                if (data.title != null) data.title!,
+                Row(
+                  children: [
+                    if (data.cancel != null) data.cancel!,
+                    if (data.confirm != null) data.confirm!,
+                  ],
+                ),
+              ],
+            ),
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('头Widget'), findsOneWidget);
+      expect(find.text('builder左'), findsOneWidget);
+      expect(find.text('builder右'), findsOneWidget);
+    });
+
+    testWidgets('headerBuilder 使用自定义 cancel/confirm Widget 槽位', (tester) async {
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            context: tester.element(find.text('open')),
+            placement: TPopupPlacement.bottom,
+            height: 160,
+            cancel: const Text('左槽Widget'),
+            confirm: const Text('右槽Widget'),
+            headerBuilder: (_, data) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (data.cancel != null) data.cancel!,
+                if (data.confirm != null) data.confirm!,
+              ],
+            ),
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('左槽Widget'), findsOneWidget);
+      expect(find.text('右槽Widget'), findsOneWidget);
+    });
+
+    testWidgets('操作栏使用自定义 cancel/confirm Widget（非 Builder）', (tester) async {
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            context: tester.element(find.text('open')),
+            placement: TPopupPlacement.bottom,
+            height: 160,
+            cancel: const Text('自定义左'),
+            confirm: const Text('自定义右'),
+            onCancel: () {},
+            onConfirm: () {},
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('自定义左'), findsOneWidget);
+      expect(find.text('自定义右'), findsOneWidget);
+    });
+
+    testWidgets('onVisibleChange 记录各关闭触发源', (tester) async {
+      final hideTriggers = <TPopupTrigger>[];
+      late BuildContext hostContext;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          TPopup.show(
+            context: hostContext,
+            placement: TPopupPlacement.bottom,
+            height: 160,
+            title: '标题',
+            onVisibleChange: (visible, trigger) {
+              if (!visible) {
+                hideTriggers.add(trigger);
+              }
+            },
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('取消'));
+      await tester.pumpAndSettle();
+      expect(hideTriggers.last, TPopupTrigger.cancelBtn);
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            context: hostContext,
+            placement: TPopupPlacement.bottom,
+            height: 160,
+            onVisibleChange: (visible, trigger) {
+              if (!visible) {
+                hideTriggers.add(trigger);
+              }
+            },
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+      expect(hideTriggers.last, TPopupTrigger.overlay);
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            context: hostContext,
+            placement: TPopupPlacement.center,
+            width: 120,
+            height: 120,
+            onVisibleChange: (visible, trigger) {
+              if (!visible) {
+                hideTriggers.add(trigger);
+              }
+            },
+            child: const SizedBox(height: 80, width: 80),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(TIcons.close_circle));
+      await tester.pumpAndSettle();
+      expect(hideTriggers.last, TPopupTrigger.closeBtn);
+    });
+
+    testWidgets('Popup 内嵌套 show 可再开一层且先关内层', (tester) async {
+      late BuildContext outerContext;
+      late BuildContext innerContext;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          outerContext = tester.element(find.text('open'));
+          TPopup.show(
+            context: outerContext,
+            placement: TPopupPlacement.bottom,
+            height: 200,
+            cancel: null,
+            confirm: null,
+            child: Builder(
+              builder: (ctx) {
+                return ElevatedButton(
+                  onPressed: () {
+                    innerContext = ctx;
+                    TPopup.show(
+                      context: innerContext,
+                      placement: TPopupPlacement.bottom,
+                      height: 120,
+                      cancel: null,
+                      confirm: null,
+                      child: const Text('内层'),
+                    );
+                  },
+                  child: const Text('开内层'),
+                );
+              },
+            ),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('开内层'), findsOneWidget);
+
+      await tester.tap(find.text('开内层'));
+      await tester.pumpAndSettle();
+      expect(find.text('内层'), findsOneWidget);
+
+      TPopup.close(innerContext);
+      await tester.pumpAndSettle();
+      expect(find.text('内层'), findsNothing);
+      expect(find.text('开内层'), findsOneWidget);
+
+      TPopup.close(outerContext);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('preventScrollThrough 为 false 仍可打开关闭', (tester) async {
+      late BuildContext hostContext;
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          TPopup.show(
+            context: hostContext,
+            placement: TPopupPlacement.bottom,
+            height: 120,
+            preventScrollThrough: false,
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      TPopup.close(hostContext);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('center 自定义 radius 与 backgroundColor', (tester) async {
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            context: tester.element(find.text('open')),
+            placement: TPopupPlacement.center,
+            width: 100,
+            height: 100,
+            radius: 4,
+            backgroundColor: Colors.red,
+            child: const SizedBox(height: 60, width: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      final hasRedPanel = tester
+          .widgetList<Container>(find.byType(Container))
+          .any((c) {
+        final d = c.decoration;
+        return d is BoxDecoration && d.color == Colors.red;
+      });
+      expect(hasRedPanel, isTrue);
+    });
+
+    testWidgets('bottom margin.bottom 与无 overlay 仍可关闭', (tester) async {
+      late BuildContext hostContext;
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          TPopup.show(
+            context: hostContext,
+            placement: TPopupPlacement.bottom,
+            height: 100,
+            margin: const EdgeInsets.only(bottom: 16),
+            showOverlay: false,
+            closeOnOverlayClick: false,
+            cancel: null,
+            confirm: null,
+            child: const SizedBox(height: 60),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      TPopup.close(hostContext);
+      await tester.pumpAndSettle();
     });
   });
 
@@ -348,6 +674,27 @@ void main() {
         ).alignment,
         Alignment.center,
       );
+    });
+
+    testWidgets('right 默认 drawer 宽度与 margin', (tester) async {
+      final layout = PopupLayout(
+        placement: TPopupPlacement.right,
+        screenSize: screen,
+        margin: const EdgeInsets.only(top: 8, bottom: 8, right: 4),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(
+              children: [layout.wrapPositioned(child: const SizedBox())],
+            ),
+          ),
+        ),
+      );
+      final positioned = tester.widget<Positioned>(find.byType(Positioned));
+      expect(positioned.width, PopupLayout.defaultDrawerWidth);
+      expect(positioned.right, 4);
+      expect(positioned.top, 8);
     });
 
     testWidgets('left 默认 drawer 宽度', (tester) async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 't_popup_types.dart';
 
-/// Popup 运行时配置（库内共享）。
+/// Popup 运行时配置（库内共享，由 [TPopup.show] 通过 [TPopupConfig.create] 构建）。
 class TPopupConfig {
   TPopupConfig({
     required this.child,
@@ -17,7 +17,6 @@ class TPopupConfig {
     this.overlayColor,
     this.overlayOpacity,
     this.preventScrollThrough = true,
-    /// 为 true 时路由 [maintainState] 为 false，关闭后丢弃 Popup 路由 State。
     this.destroyOnClose = false,
     this.duration = const Duration(milliseconds: 240),
     this.title,
@@ -33,10 +32,7 @@ class TPopupConfig {
     this.onConfirm,
     this.autoCloseOnCancel = true,
     this.autoCloseOnConfirm = true,
-    this.closeBtn = false,
-    this.close,
     this.closeBuilder,
-    this.closeBelowContent = false,
     this.onCloseBtn,
     this.headerBuilder,
     this.onOpen,
@@ -47,7 +43,7 @@ class TPopupConfig {
     this.onOverlayClick,
   });
 
-  /// 按 [placement] 归一化参数（bottom 无 closeBtn；center 默认关闭；三边仅 child）。
+  /// 按 [placement] 归一化参数（bottom/三边忽略 closeBuilder；center 默认 [kPopupDefaultClose]）。
   factory TPopupConfig.create({
     required Widget child,
     TPopupPlacement placement = TPopupPlacement.bottom,
@@ -76,12 +72,9 @@ class TPopupConfig {
     VoidCallback? onConfirm,
     bool autoCloseOnCancel = true,
     bool autoCloseOnConfirm = true,
-    bool? closeBtn,
-    Widget? close,
-    WidgetBuilder? closeBuilder,
-    bool? closeBelowContent,
+    TPopupCloseBuilder? closeBuilder = kPopupDefaultClose,
     VoidCallback? onCloseBtn,
-    WidgetBuilder? headerBuilder,
+    TPopupHeaderBuilder? headerBuilder = kPopupDefaultHeader,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -91,9 +84,7 @@ class TPopupConfig {
   }) {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;
-    final effectiveCloseBtn = isCenter ? (closeBtn ?? true) : false;
-    final effectiveCloseBelow =
-        isCenter && effectiveCloseBtn ? (closeBelowContent ?? true) : false;
+    final effectiveCloseBuilder = isCenter ? closeBuilder : null;
 
     return TPopupConfig(
       child: child,
@@ -123,10 +114,7 @@ class TPopupConfig {
       onConfirm: isBottom ? onConfirm : null,
       autoCloseOnCancel: autoCloseOnCancel,
       autoCloseOnConfirm: autoCloseOnConfirm,
-      closeBtn: effectiveCloseBtn,
-      close: isCenter ? close : null,
-      closeBuilder: isCenter ? closeBuilder : null,
-      closeBelowContent: effectiveCloseBelow,
+      closeBuilder: effectiveCloseBuilder,
       onCloseBtn: isCenter ? onCloseBtn : null,
       headerBuilder: isBottom ? headerBuilder : null,
       onOpen: onOpen,
@@ -151,7 +139,7 @@ class TPopupConfig {
   final double? overlayOpacity;
   final bool preventScrollThrough;
 
-  /// 为 true 时路由 [maintainState] 为 false，关闭后丢弃 Popup 路由 State。
+  /// 为 true 时路由 maintainState 为 false，关闭后丢弃 Popup 路由 State。
   final bool destroyOnClose;
   final Duration duration;
 
@@ -169,13 +157,12 @@ class TPopupConfig {
   final bool autoCloseOnCancel;
   final bool autoCloseOnConfirm;
 
-  final bool closeBtn;
-  final Widget? close;
-  final WidgetBuilder? closeBuilder;
-  final bool closeBelowContent;
+  /// center 关闭区：`null` 不显示；未传则用 [kPopupDefaultClose]；自定义见 [TPopupCloseBuilder]。
+  final TPopupCloseBuilder? closeBuilder;
+
   final VoidCallback? onCloseBtn;
 
-  final WidgetBuilder? headerBuilder;
+  final TPopupHeaderBuilder? headerBuilder;
 
   final VoidCallback? onOpen;
   final VoidCallback? onOpened;
@@ -194,20 +181,36 @@ class TPopupConfig {
       placement == TPopupPlacement.bottom &&
       (confirmBuilder != null || confirm != null);
 
-  /// 底部操作栏（取消 | 标题 | 确认），仅 bottom 且未使用 [headerBuilder]。
+  /// 不渲染 bottom 头部（显式 [headerBuilder: null]）。
+  bool get hasNoHeader =>
+      placement == TPopupPlacement.bottom && headerBuilder == null;
+
+  /// 使用内置操作栏（未传 headerBuilder，占位为 [kPopupDefaultHeader]）。
   bool get useActionHeader =>
       placement == TPopupPlacement.bottom &&
-      headerBuilder == null &&
+      isPopupDefaultHeader(headerBuilder) &&
       (showCancelSlot || showConfirmSlot);
+
+  /// 自定义头部（非 null 且非默认占位）。
+  bool get useCustomHeader =>
+      placement == TPopupPlacement.bottom &&
+      headerBuilder != null &&
+      !isPopupDefaultHeader(headerBuilder);
 
   static bool isActionDefault(Widget? action) => action is TPopupActionDefault;
 
+  /// bottom 仅标题行（默认头部占位 + 无 cancel/confirm 槽 + 有 title）。
+  bool get useTitleOnlyHeader =>
+      placement == TPopupPlacement.bottom &&
+      isPopupDefaultHeader(headerBuilder) &&
+      !showCancelSlot &&
+      !showConfirmSlot &&
+      ((title != null && title!.isNotEmpty) || titleWidget != null);
+
   bool get hasBuiltInHeader =>
       placement == TPopupPlacement.bottom &&
-      (headerBuilder != null ||
-          useActionHeader ||
-          (title != null && title!.isNotEmpty) ||
-          titleWidget != null);
+      !hasNoHeader &&
+      (useCustomHeader || useActionHeader || useTitleOnlyHeader);
 
   void assertPlacementParams() {
     assert(() {
@@ -221,7 +224,7 @@ class TPopupConfig {
           }
           break;
         case TPopupPlacement.center:
-          if (height != null && !(closeBtn && closeBelowContent)) {
+          if (height != null && closeBuilder == null) {
             debugPrint(
               'TPopup: height is ignored for placement=$placement',
             );
@@ -236,7 +239,11 @@ class TPopupConfig {
           }
           break;
       }
-      if (placement != TPopupPlacement.bottom && useActionHeader) {
+      if (placement != TPopupPlacement.bottom &&
+          (cancel != null ||
+              confirm != null ||
+              cancelBuilder != null ||
+              confirmBuilder != null)) {
         debugPrint(
           'TPopup: cancel/confirm only applies to placement=bottom',
         );

@@ -12,10 +12,21 @@ class TPopupPage extends StatelessWidget {
 
   static const double _headerHeight = 58;
 
-  /// 底部标题 + 关闭（headerBuilder，非 closeBtn）。
-  static WidgetBuilder _bottomTitleCloseHeader({required String title}) {
-    return (BuildContext ctx) {
+  /// 底部标题 + 关闭（自定义 headerBuilder，使用 [TPopupHeaderData]）。
+  static TPopupHeaderBuilder _bottomTitleCloseHeader({String? title}) {
+    return (BuildContext ctx, TPopupHeaderData data) {
       final theme = TTheme.of(ctx);
+      final headerTitle = data.title ??
+          (title != null && title.isNotEmpty
+              ? TText(
+                  title,
+                  textColor: theme.textColorPrimary,
+                  font: theme.fontTitleLarge,
+                  fontWeight: FontWeight.w700,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              : null);
       return SizedBox(
         height: _headerHeight,
         child: Padding(
@@ -23,16 +34,7 @@ class TPopupPage extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Center(
-                  child: TText(
-                    title,
-                    textColor: theme.textColorPrimary,
-                    font: theme.fontTitleLarge,
-                    fontWeight: FontWeight.w700,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                child: Center(child: headerTitle ?? const SizedBox.shrink()),
               ),
               IconButton(
                 icon: Icon(TIcons.close, color: theme.textColorSecondary),
@@ -71,6 +73,7 @@ class TPopupPage extends StatelessWidget {
             ExampleItem(builder: _buildPopFromBottomWithCloseAndTitle),
             ExampleItem(builder: _buildPopFromCenterWithClose),
             ExampleItem(builder: _buildPopFromCenterWithUnderClose),
+            ExampleItem(builder: _buildNestedPopup),
           ],
         ),
         ExampleModule(
@@ -219,13 +222,13 @@ class TPopupPage extends StatelessWidget {
                       width: 240,
                       height: 240,
                       radius: 6,
-                      close: IconButton(
+                      closeBuilder: (_, close) => IconButton(
                         icon: Icon(
                           TIcons.close_circle,
                           color: TTheme.of(context).errorNormalColor,
                           size: 32,
                         ),
-                        onPressed: () => TPopup.close(context),
+                        onPressed: close,
                       ),
                       child: const SizedBox(height: 240, width: 240),
                     );
@@ -342,7 +345,7 @@ class TPopupPage extends StatelessWidget {
         TPopup.show(
           context: context,
           placement: TPopupPlacement.center,
-          closeBtn: false,
+          closeBuilder: null,
           child: Container(
             decoration: BoxDecoration(
               color: TTheme.of(context).bgColorContainer,
@@ -370,6 +373,7 @@ class TPopupPage extends StatelessWidget {
           context: context,
           placement: TPopupPlacement.bottom,
           height: 240,
+          headerBuilder: null,
           child: Container(
             color: TTheme.of(context).bgColorContainer,
             height: 240,
@@ -401,6 +405,71 @@ class TPopupPage extends StatelessWidget {
   }
 
   // --- 02 组件示例 ---
+
+  /// 外层 Popup 的 child 内再 [TPopup.show]：Tracker 栈顶为内层，[TPopup.close] 先关内层。
+  @Demo(group: 'popup')
+  Widget _buildNestedPopup(BuildContext context) {
+    return TButton(
+      text: '内层再弹一层（嵌套叠加）',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context: context,
+          placement: TPopupPlacement.bottom,
+          height: 360,
+          headerBuilder: null,
+          child: Builder(
+            builder: (innerContext) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TText(
+                      '外层：headerBuilder: null，仅 child',
+                      textColor: TTheme.of(innerContext).textColorSecondary,
+                    ),
+                    const SizedBox(height: 16),
+                    TButton(
+                      text: '打开内层 Popup',
+                      isBlock: true,
+                      theme: TButtonTheme.primary,
+                      size: TButtonSize.large,
+                      onTap: () {
+                        TPopup.show(
+                          context: innerContext,
+                          placement: TPopupPlacement.bottom,
+                          height: 280,
+                          title: '内层标题',
+                          onCancel: () => TPopup.close(innerContext),
+                          onConfirm: () => TPopup.close(innerContext),
+                          child: Container(
+                            height: 160,
+                            color: TTheme.of(innerContext).bgColorSecondaryContainer,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    TButton(
+                      text: '关闭外层',
+                      isBlock: true,
+                      type: TButtonType.outline,
+                      size: TButtonSize.large,
+                      onTap: () => TPopup.close(innerContext),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
@@ -487,13 +556,13 @@ class TPopupPage extends StatelessWidget {
           closeOnOverlayClick: false,
           width: 240,
           height: 240,
-          close: IconButton(
+          closeBuilder: (_, close) => IconButton(
             icon: Icon(
               TIcons.close_circle,
               color: TTheme.of(context).fontWhColor1,
               size: 32,
             ),
-            onPressed: () => TPopup.close(context),
+            onPressed: close,
           ),
           child: const SizedBox(width: 240, height: 240),
         );
@@ -516,13 +585,13 @@ class TPopupPage extends StatelessWidget {
           closeOnOverlayClick: true,
           width: 240,
           height: 200,
-          close: IconButton(
+          closeBuilder: (_, close) => IconButton(
             icon: Icon(
               TIcons.poweroff,
               color: TTheme.of(context).fontWhColor1,
               size: 36,
             ),
-            onPressed: () => TPopup.close(context),
+            onPressed: close,
           ),
           child: Container(
             width: 240,

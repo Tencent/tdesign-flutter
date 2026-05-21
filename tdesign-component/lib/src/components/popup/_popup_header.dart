@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../../util/t_toolbar_pressable.dart';
-import '../icon/t_icons.dart';
+import '../text/t_text.dart';
 import 't_popup_config.dart';
 import 't_popup_types.dart';
 
@@ -22,12 +25,15 @@ class PopupHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (config.placement != TPopupPlacement.bottom) {
+    if (config.placement != TPopupPlacement.bottom || config.hasNoHeader) {
       return const SizedBox.shrink();
     }
 
-    if (config.headerBuilder != null) {
-      return config.headerBuilder!(context);
+    if (config.useCustomHeader) {
+      return config.headerBuilder!(
+        context,
+        _buildHeaderData(context),
+      );
     }
 
     if (config.useActionHeader) {
@@ -40,18 +46,7 @@ class PopupHeader extends StatelessWidget {
       );
     }
 
-    final title = config.titleWidget ??
-        (config.title != null && config.title!.isNotEmpty
-            ? TText(
-                config.title!,
-                textColor: TTheme.of(context).textColorPrimary,
-                font: TTheme.of(context).fontTitleLarge,
-                fontWeight: FontWeight.w700,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-            : null);
-
+    final title = _buildTitleWidget(context);
     if (title == null) {
       return const SizedBox.shrink();
     }
@@ -66,6 +61,67 @@ class PopupHeader extends StatelessWidget {
         child: title,
       ),
     );
+  }
+
+  TPopupHeaderData _buildHeaderData(BuildContext context) {
+    final theme = TTheme.of(context);
+    return TPopupHeaderData(
+      title: _buildTitleWidget(context),
+      cancel: config.showCancelSlot
+          ? _buildCancelWidget(context, theme)
+          : null,
+      confirm: config.showConfirmSlot
+          ? _buildConfirmWidget(context, theme)
+          : null,
+      onCancel: config.onCancel,
+      onConfirm: config.onConfirm,
+    );
+  }
+
+  Widget? _buildTitleWidget(BuildContext context) {
+    if (config.titleWidget != null) {
+      return config.titleWidget;
+    }
+    if (config.title != null && config.title!.isNotEmpty) {
+      return TText(
+        config.title!,
+        textColor: TTheme.of(context).textColorPrimary,
+        font: TTheme.of(context).fontTitleLarge,
+        fontWeight: FontWeight.w700,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+    return null;
+  }
+
+  Widget _buildCancelWidget(BuildContext context, TThemeData theme) {
+    if (config.cancelBuilder != null) {
+      return config.cancelBuilder!(context);
+    }
+    if (TPopupConfig.isActionDefault(config.cancel)) {
+      return TText(
+        config.cancelBtn ?? context.resource.cancel,
+        textColor: theme.textColorSecondary,
+        font: theme.fontBodyLarge,
+      );
+    }
+    return config.cancel!;
+  }
+
+  Widget _buildConfirmWidget(BuildContext context, TThemeData theme) {
+    if (config.confirmBuilder != null) {
+      return config.confirmBuilder!(context);
+    }
+    if (TPopupConfig.isActionDefault(config.confirm)) {
+      return TText(
+        config.confirmBtn ?? context.resource.confirm,
+        textColor: theme.brandNormalColor,
+        font: theme.fontTitleMedium,
+        fontWeight: FontWeight.w600,
+      );
+    }
+    return config.confirm!;
   }
 }
 
@@ -182,62 +238,4 @@ String _confirmSemanticsLabel(BuildContext context, TPopupConfig config) {
     return btn;
   }
   return context.resource.confirm;
-}
-
-/// 居中：关闭按钮在内容下方。
-class PopupCenterUnderClose extends StatelessWidget {
-  const PopupCenterUnderClose({
-    super.key,
-    required this.config,
-    required this.content,
-    required this.onCloseWithTrigger,
-  });
-
-  final TPopupConfig config;
-  final Widget content;
-  final void Function(TPopupTrigger trigger) onCloseWithTrigger;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
-    Widget panel = content;
-    if (config.width != null || config.height != null) {
-      panel = SizedBox(
-        width: config.width,
-        height: config.height,
-        child: content,
-      );
-    }
-
-    Widget closeControl;
-    if (config.closeBuilder != null) {
-      closeControl = config.closeBuilder!(context);
-    } else if (config.close != null) {
-      closeControl = config.close!;
-    } else {
-      closeControl = IconButton(
-        tooltip: context.resource.close,
-        icon: Icon(
-          TIcons.close_circle,
-          color: theme.fontWhColor1,
-          size: 32,
-        ),
-        onPressed: () {
-          config.onCloseBtn?.call();
-          onCloseWithTrigger(TPopupTrigger.closeBtn);
-        },
-      );
-    }
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 40),
-        panel,
-        const SizedBox(height: 24),
-        closeControl,
-      ],
-    );
-  }
 }
