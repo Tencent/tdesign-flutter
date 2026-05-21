@@ -13,13 +13,13 @@
           closeOnOverlayClick: true,
           width: 240,
           height: 200,
-          close: IconButton(
+          closeBuilder: (_, close) => IconButton(
             icon: Icon(
               TIcons.poweroff,
               color: TTheme.of(context).fontWhColor1,
               size: 36,
             ),
-            onPressed: () => TPopup.close(context),
+            onPressed: close,
           ),
           child: Container(
             width: 240,

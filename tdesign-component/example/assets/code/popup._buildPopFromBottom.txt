@@ -11,6 +11,7 @@
           context: context,
           placement: TPopupPlacement.bottom,
           height: 240,
+          headerBuilder: null,
           child: Container(
             color: TTheme.of(context).bgColorContainer,
             height: 240,
