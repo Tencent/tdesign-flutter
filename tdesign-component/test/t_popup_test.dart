@@ -661,22 +661,24 @@ void main() {
   });
 
   group('TPopup 扩展场景', () {
-    testWidgets('top 忽略 title 仅 child', (tester) async {
+    testWidgets('top 不渲染头部、仅显示 child（用 .top factory）', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
-                placement: TPopupPlacement.top,
-                height: 120,
-                titleBuilder: (_) => TText('顶部标题'),
-                child: const Text('内容')),
+            // .top factory 根本不暴露 titleBuilder：编译期就杜绝错位
+            options: TPopupOptions.top(
+              height: 120,
+              child: const Text('内容'),
+            ),
           );
         },
       );
       await tester.pumpAndSettle();
-      expect(find.text('顶部标题'), findsNothing);
+      // 不应出现默认头部文案（zh 资源）
+      expect(find.text('取消'), findsNothing);
+      expect(find.text('确定'), findsNothing);
       expect(find.text('内容'), findsOneWidget);
     });
 
@@ -854,7 +856,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('确定'));
       await tester.pumpAndSettle();
-      expect(hideTrigger, TPopupTrigger.programmatic);
+      expect(hideTrigger, TPopupTrigger.confirmBtn);
     });
 
     testWidgets('destroyOnClose 路由关闭后可再次 show', (tester) async {

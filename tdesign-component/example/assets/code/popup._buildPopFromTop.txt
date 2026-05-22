@@ -9,8 +9,7 @@
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.top,
+          options: TPopupOptions.top(
               height: 240,
               onOpen: () => print('open'),
               onOpened: () => print('opened'),

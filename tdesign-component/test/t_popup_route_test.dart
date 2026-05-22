@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdesign_flutter/src/components/popup/_popup_route.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'helpers/popup_test_helpers.dart';
@@ -10,32 +9,7 @@ import 'helpers/popup_test_resource.dart';
 void main() {
   tearDown(resetPopupTestResource);
 
-  group('TPopupNavigatorRoute', () {
-    testWidgets('buildPage 返回占位', (tester) async {
-      late TPopupNavigatorRoute<dynamic> route;
-      await tester.pumpWidget(
-        wrapPopupTest(
-          Builder(
-            builder: (context) {
-              route = TPopupNavigatorRoute<dynamic>(
-                options: TPopupOptions(
-                  child: const SizedBox(),
-                  placement: TPopupPlacement.bottom,
-                ).normalized(),
-                onCloseWithTrigger: (_, [__]) {},
-              );
-              return route.buildPage(
-                context,
-                kAlwaysCompleteAnimation,
-                kAlwaysCompleteAnimation,
-              );
-            },
-          ),
-        ),
-      );
-      expect(find.byType(SizedBox), findsWidgets);
-    });
-
+  group('Popup 路由层行为（通过 TPopup.show 验证）', () {
     testWidgets('蒙层 ScrollNotification 被拦截', (tester) async {
       await openPopup(
         tester,

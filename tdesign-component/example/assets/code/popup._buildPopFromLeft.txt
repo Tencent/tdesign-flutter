@@ -9,8 +9,7 @@
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.left,
+          options: TPopupOptions.left(
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,

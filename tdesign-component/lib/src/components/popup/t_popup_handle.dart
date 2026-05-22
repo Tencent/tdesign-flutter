@@ -1,15 +1,16 @@
 part of 't_popup.dart';
 
-/// [TPopup.show] 的返回值：可查询展示状态，并多次 [open] / [close]。
+/// [TPopup.show] 的返回值，用于控制同一份 [TPopupOptions] 的多次打开与关闭。
 ///
-/// 保存此对象；关闭后再次 [open] 会按创建时的 [TPopupOptions] 重新压入路由。
+/// **示例**
 ///
 /// ```dart
-/// final handle = TPopup.show(context, options: opts);
+/// final handle = TPopup.show(
+///   context,
+///   options: TPopupOptions.bottom(child: panel),
+/// );
 /// handle.close();
-/// if (!handle.isShowing) {
-///   handle.open(context);
-/// }
+/// handle.open(); // 可省略 context，复用已缓存的 Navigator
 /// ```
 class TPopupHandle {
   TPopupHandle._({
@@ -18,16 +19,17 @@ class TPopupHandle {
     this.useRootNavigator = false,
   });
 
-  /// 打开/再次打开时使用的配置（每次 [open] 会 [TPopupOptions.normalized]）。
+  /// 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。
   final TPopupOptions options;
 
-  /// 与 [TPopup.show] 相同：指定 Navigator 的 context。
+  /// 与 [TPopup.show] 的 [navigatorContext] 相同。
   final BuildContext? navigatorContext;
 
-  /// 与 [TPopup.show] 相同：是否使用根 Navigator。
+  /// 与 [TPopup.show] 的 [useRootNavigator] 相同。
   final bool useRootNavigator;
 
-  TPopupNavigatorRoute<dynamic>? _route;
+  _PopupNavigatorRoute<dynamic>? _route;
+  NavigatorState? _lastNavigator;
   bool _isClosed = false;
 
   /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
@@ -35,20 +37,33 @@ class TPopupHandle {
 
   /// 打开或重新打开浮层。
   ///
-  /// 已展示时调用无副作用。关闭后再次调用会压入新的 [TPopupNavigatorRoute]。
-  void open(BuildContext context) {
+  /// [context] 可选。首次调用须能解析 [Navigator]（传入 [context] 或依赖
+  /// [navigatorContext]）；后续可省略以复用缓存的 [NavigatorState]。
+  ///
+  /// 已展示时调用无副作用。Navigator 已销毁且未提供新 [context] 时，debug 下 assert，
+  /// release 下静默返回。
+  void open([BuildContext? context]) {
     if (isShowing) {
       return;
     }
-    // 先用「原始」配置做 debug 期参数校验（保留 sentinel 与用户传值差异），
-    // 再 normalize 给路由使用（normalize 会按 placement 强制清空无效字段）。
+    final navigator = _resolveNavigator(context);
+    if (navigator == null) {
+      assert(
+        false,
+        'TPopupHandle.open: cannot resolve Navigator. '
+        'Either pass a valid context or ensure the handle was created '
+        'with a still-mounted navigatorContext.',
+      );
+      return;
+    }
+
     options.assertPlacementParams();
     final normalized = options.normalized();
 
-    final navigator = _navigatorOf(context);
     _isClosed = false;
+    _lastNavigator = navigator;
 
-    TPopupNavigatorRoute<dynamic>? route;
+    _PopupNavigatorRoute<dynamic>? route;
 
     void closeWithTrigger(TPopupTrigger trigger, [Object? result]) {
       if (!isShowing) {
@@ -59,43 +74,45 @@ class TPopupHandle {
       navigator.pop(result);
     }
 
-    route = TPopupNavigatorRoute<dynamic>(
+    route = _PopupNavigatorRoute<dynamic>(
       options: normalized,
       onCloseWithTrigger: closeWithTrigger,
     );
     _route = route;
 
-    TPopupTracker.push(navigator, this);
+    _PopupTracker.push(navigator, this);
 
     navigator.push(route).whenComplete(() {
-      TPopupTracker.remove(navigator, this);
+      _PopupTracker.remove(navigator, this);
       _detachRoute();
     });
   }
 
-  /// 关闭当前展示的浮层（[TPopupTrigger.programmatic]）。
+  /// 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为
+  /// [TPopupTrigger.programmatic]。
   ///
-  /// 已关闭或未展示时调用无副作用。嵌套多层时须用**对应层**的 handle 关闭。
+  /// [result] 可选，作为 [Navigator.pop] 的返回值。
+  ///
+  /// 已关闭或未展示时调用无副作用。嵌套浮层须使用对应层的 handle 关闭。
   void close([Object? result]) {
     if (!isShowing) {
       return;
     }
     _markClosing();
     _route?.fireCloseStart(TPopupTrigger.programmatic);
-    _navigatorOfForClose().pop(result);
+    _route!.navigator?.pop(result);
   }
 
-  NavigatorState _navigatorOf(BuildContext context) {
-    final navContext = navigatorContext ?? context;
-    return Navigator.of(
-      navContext,
-      rootNavigator: useRootNavigator,
-    );
-  }
-
-  /// [close] 不依赖外部 context，使用路由所在 Navigator。
-  NavigatorState _navigatorOfForClose() {
-    return _route!.navigator!;
+  NavigatorState? _resolveNavigator(BuildContext? context) {
+    final ctx = context ?? navigatorContext;
+    if (ctx != null) {
+      return Navigator.maybeOf(ctx, rootNavigator: useRootNavigator);
+    }
+    final cached = _lastNavigator;
+    if (cached != null && cached.mounted) {
+      return cached;
+    }
+    return null;
   }
 
   void _markClosing() {

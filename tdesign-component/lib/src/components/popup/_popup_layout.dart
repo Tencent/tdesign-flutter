@@ -1,11 +1,6 @@
-import 'package:flutter/material.dart';
+part of 't_popup.dart';
 
-import 't_popup_types.dart';
-
-/// 根据 placement 计算 Positioned 约束。
-///
-/// center 模式只负责 [Positioned.fill] + [Center]，**面板尺寸由 PopupShell 决定**，
-/// 这里不再插入 SizedBox（避免和 shell 中的尺寸约束双重包裹）。
+/// 按 [TPopupPlacement] 计算 [Positioned]；center 仅居中，尺寸由 [PopupShell] 约束。
 class PopupLayout {
   PopupLayout({
     required this.placement,

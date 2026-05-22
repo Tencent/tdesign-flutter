@@ -9,8 +9,7 @@
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeBuilder: null,
               child: Container(
                 decoration: BoxDecoration(

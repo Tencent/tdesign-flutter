@@ -9,8 +9,7 @@
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 260,
               onOverlayClick: () => TToast.showText('点击蒙层', context: context),
               child: Container(

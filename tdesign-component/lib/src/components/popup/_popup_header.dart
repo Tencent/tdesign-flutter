@@ -1,20 +1,6 @@
-import 'package:flutter/material.dart';
+part of 't_popup.dart';
 
-import '../../theme/t_colors.dart';
-import '../../theme/t_fonts.dart';
-import '../../theme/t_spacers.dart';
-import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
-import '../../util/t_toolbar_pressable.dart';
-import '../text/t_text.dart';
-import 't_popup_options.dart';
-import 't_popup_types.dart';
-
-/// 内置标题栏区域（仅 [TPopupPlacement.bottom]）。
-///
-/// - `headerBuilder` 为 sentinel [kPopupDefaultHeader] → 内置三段式（cancel | title | confirm）。
-/// - `headerBuilder` 为自定义 → 整行替换，库内不再插入任何子 Widget。
-/// - `headerBuilder` 为 null → 不渲染头部。
+/// bottom 头部渲染；行为由 [TPopupOptions.hasBuiltInHeader]、[TPopupOptions.useCustomHeader] 决定。
 class PopupHeader extends StatelessWidget {
   const PopupHeader({
     super.key,
@@ -33,8 +19,7 @@ class PopupHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (options.placement != TPopupPlacement.bottom ||
-        options.headerBuilder == null) {
+    if (!options.hasBuiltInHeader) {
       return const SizedBox.shrink();
     }
 
@@ -42,12 +27,12 @@ class PopupHeader extends StatelessWidget {
       return options.headerBuilder!(context, _close);
     }
 
-    // 走内置三段式
     return SizedBox(
       height: headerHeight,
       child: _DefaultHeader(
         options: options,
         close: _close,
+        onCloseWithTrigger: onCloseWithTrigger,
       ),
     );
   }
@@ -57,10 +42,17 @@ class _DefaultHeader extends StatelessWidget {
   const _DefaultHeader({
     required this.options,
     required this.close,
+    required this.onCloseWithTrigger,
   });
 
   final TPopupOptions options;
+
+  /// 给「自定义 cancel/confirm builder」用的 close 回调（上报 [TPopupTrigger.programmatic]）。
   final VoidCallback close;
+
+  /// 给「内置 sentinel cancel/confirm 按钮」用的 close 入口，
+  /// 按钮自己传 [TPopupTrigger.cancelBtn] / [TPopupTrigger.confirmBtn]。
+  final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +112,9 @@ class _DefaultHeader extends StatelessWidget {
   }
 
   Widget _buildCancel(BuildContext context, TThemeData theme) {
-    if (isPopupDefaultCancel(options.cancelBuilder)) {
+    if (_isPopupDefaultCancel(options.cancelBuilder)) {
       return TToolbarPressable(
-        onTap: close,
+        onTap: () => onCloseWithTrigger(TPopupTrigger.cancelBtn),
         child: TText(
           context.resource.cancel,
           textColor: theme.textColorSecondary,
@@ -134,9 +126,9 @@ class _DefaultHeader extends StatelessWidget {
   }
 
   Widget _buildConfirm(BuildContext context, TThemeData theme) {
-    if (isPopupDefaultConfirm(options.confirmBuilder)) {
+    if (_isPopupDefaultConfirm(options.confirmBuilder)) {
       return TToolbarPressable(
-        onTap: close,
+        onTap: () => onCloseWithTrigger(TPopupTrigger.confirmBtn),
         child: TText(
           context.resource.confirm,
           textColor: theme.brandNormalColor,

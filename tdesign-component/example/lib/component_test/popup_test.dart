@@ -27,8 +27,7 @@ class _TestPageState extends State<TestPage> {
   void _showProblemDialog() {
     TPopup.show(
       context,
-      options: TPopupOptions(
-          placement: TPopupPlacement.bottom,
+      options: TPopupOptions.bottom(
           titleBuilder: (_) => TText('title'),
           radius: 20,
           backgroundColor: const Color(0xFFFAFFFC),

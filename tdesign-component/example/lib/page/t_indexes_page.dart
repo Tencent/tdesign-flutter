@@ -159,8 +159,7 @@ Widget _buildSimple(BuildContext context) {
     onTap: () {
       TPopup.show(
         context,
-        options: TPopupOptions(
-            placement: TPopupPlacement.right,
+        options: TPopupOptions.right(
             width: 280,
             margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
             child: TIndexes(
@@ -192,8 +191,7 @@ Widget _buildOther(BuildContext context) {
     onTap: () {
       TPopup.show(
         context,
-        options: TPopupOptions(
-            placement: TPopupPlacement.right,
+        options: TPopupOptions.right(
             width: 280,
             margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
             child: TIndexes(
@@ -226,8 +224,7 @@ Widget _buildCustomIndexes(BuildContext context) {
     onTap: () {
       TPopup.show(
         context,
-        options: TPopupOptions(
-            placement: TPopupPlacement.right,
+        options: TPopupOptions.right(
             width: 280,
             margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
             child: TIndexes(

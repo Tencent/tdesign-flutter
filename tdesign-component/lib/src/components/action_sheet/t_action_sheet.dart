@@ -334,8 +334,7 @@ class TActionSheet {
 
     _actionSheetHandle = TPopup.show(
       context,
-      options: TPopupOptions(
-        placement: TPopupPlacement.bottom,
+      options: TPopupOptions.bottom(
         cancelBuilder: null,
         confirmBuilder: null,
         showOverlay: showOverlay,

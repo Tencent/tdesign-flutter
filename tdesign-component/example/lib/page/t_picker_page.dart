@@ -192,8 +192,7 @@ class _TPickerPageState extends State<TPickerPage> {
   void _showPickerPopup(BuildContext context, {required Widget picker}) {
     TPopup.show(
       context,
-      options: TPopupOptions(
-          placement: TPopupPlacement.bottom,
+      options: TPopupOptions.bottom(
           cancelBuilder: null,
           confirmBuilder: null,
           child: Material(

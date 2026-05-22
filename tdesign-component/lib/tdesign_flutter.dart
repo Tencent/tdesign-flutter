@@ -54,7 +54,16 @@ export 'src/components/picker/t_picker_option.dart';
 export 'src/components/picker/t_picker_value.dart';
 export 'src/components/popover/t_popover.dart';
 export 'src/components/popover/t_popover_widget.dart';
-export 'src/components/popup/t_popup.dart';
+export 'src/components/popup/t_popup.dart'
+    show
+        TPopup,
+        TPopupHandle,
+        TPopupOptions,
+        TPopupPlacement,
+        TPopupTrigger,
+        TPopupHeaderBuilder,
+        TPopupSlotBuilder,
+        TPopupVisibleChangeCallback;
 export 'src/components/progress/t_progress.dart';
 export 'src/components/radio/t_radio.dart';
 export 'src/components/rate/t_rate.dart';

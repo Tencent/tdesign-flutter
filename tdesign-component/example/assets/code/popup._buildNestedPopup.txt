@@ -10,8 +10,7 @@
         TPopupHandle? outerHandle;
         outerHandle = TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 360,
               headerBuilder: null,
               child: Builder(
@@ -34,10 +33,9 @@
                           onTap: () {
                             TPopup.show(
                               innerContext,
-                              options: TPopupOptions(
-                                placement: TPopupPlacement.bottom,
+                              options: TPopupOptions.bottom(
                                 height: 280,
-                                title: '内层标题',
+                                titleBuilder: (_) => const TText('内层标题'),
                                 child: Container(
                                   height: 160,
                                   color: TTheme.of(innerContext)

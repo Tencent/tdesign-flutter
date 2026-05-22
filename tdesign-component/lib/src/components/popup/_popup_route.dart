@@ -1,13 +1,8 @@
-import 'package:flutter/material.dart';
+part of 't_popup.dart';
 
-import '_popup_layout.dart';
-import '_popup_shell.dart';
-import 't_popup_options.dart';
-import 't_popup_types.dart';
-
-/// 私有 Popup 路由。
-class TPopupNavigatorRoute<T> extends PopupRoute<T> {
-  TPopupNavigatorRoute({
+/// 库内 [PopupRoute]；由 [TPopupHandle.open] push，勿在外部直接构造。
+class _PopupNavigatorRoute<T> extends PopupRoute<T> {
+  _PopupNavigatorRoute({
     required this.options,
     required this.onCloseWithTrigger,
   }) : _layout = PopupLayout(
@@ -57,16 +52,14 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
   @override
   Color get barrierColor => Colors.transparent;
 
-  /// 路由须非 opaque，否则透明区域会露出 Modal 默认黑底。
-  ///
-  /// 无蒙层时滚动穿透由 [_scrollBlocker] 处理，不能靠 opaque=true（会整屏发黑）。
+  /// 非 opaque，避免透明区域露出 Modal 默认底色。
   @override
   bool get opaque => false;
 
   @override
   bool get maintainState => !options.destroyOnClose;
 
-  /// 关闭动画开始前回调（系统返回 / handle.close / 蒙层等统一入口）。
+  /// 关闭开始前统一入口：触发 [TPopupOptions.onClose]、[onVisibleChange](false, …)。
   void fireCloseStart(TPopupTrigger trigger) {
     if (_closeStartFired) {
       return;

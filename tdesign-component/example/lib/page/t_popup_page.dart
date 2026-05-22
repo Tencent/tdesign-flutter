@@ -100,8 +100,7 @@ class TPopupPage extends StatelessWidget {
               onTap: () {
                 TPopup.show(
                   context,
-                  options: TPopupOptions(
-                      placement: TPopupPlacement.bottom,
+                  options: TPopupOptions.bottom(
                       height: 280,
                       titleBuilder: (_) => TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
                       cancelBuilder: (_, __) => TText(
@@ -130,11 +129,9 @@ class TPopupPage extends StatelessWidget {
               type: TButtonType.outline,
               size: TButtonSize.large,
               onTap: () {
-                TPopupHandle? handle;
-                handle = TPopup.show(
+                TPopup.show(
                   context,
-                  options: TPopupOptions(
-                      placement: TPopupPlacement.bottom,
+                  options: TPopupOptions.bottom(
                       height: 280,
                       headerBuilder: _bottomTitleCloseHeader(
                         title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -159,11 +156,9 @@ class TPopupPage extends StatelessWidget {
                   type: TButtonType.outline,
                   size: TButtonSize.large,
                   onTap: () {
-                    TPopupHandle? handle;
-                    handle = TPopup.show(
+                    TPopup.show(
                       context,
-                      options: TPopupOptions(
-                          placement: TPopupPlacement.bottom,
+                      options: TPopupOptions.bottom(
                           height: 280,
                           radius: 6,
                           headerBuilder: _bottomTitleCloseHeader(
@@ -183,8 +178,7 @@ class TPopupPage extends StatelessWidget {
                   onTap: () {
                     TPopup.show(
                       context,
-                      options: TPopupOptions(
-                          placement: TPopupPlacement.bottom,
+                      options: TPopupOptions.bottom(
                           height: 280,
                           radius: 6,
                           titleBuilder: (_) => TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
@@ -212,8 +206,7 @@ class TPopupPage extends StatelessWidget {
                   onTap: () {
                     TPopup.show(
                       context,
-                      options: TPopupOptions(
-                          placement: TPopupPlacement.center,
+                      options: TPopupOptions.center(
                           width: 240,
                           height: 240,
                           radius: 6,
@@ -239,8 +232,7 @@ class TPopupPage extends StatelessWidget {
                   onTap: () {
                     TPopup.show(
                       context,
-                      options: TPopupOptions(
-                          placement: TPopupPlacement.center,
+                      options: TPopupOptions.center(
                           width: 240,
                           height: 240,
                           radius: 6,
@@ -266,8 +258,7 @@ class TPopupPage extends StatelessWidget {
                     navBarkey.currentContext!.findRenderObject() as RenderBox;
                 TPopup.show(
                   context,
-                  options: TPopupOptions(
-                      placement: TPopupPlacement.right,
+                  options: TPopupOptions.right(
                       width: 280,
                       margin: EdgeInsets.only(top: renderBox.size.height),
                       child: Container(
@@ -295,8 +286,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.top,
+          options: TPopupOptions.top(
               height: 240,
               onOpen: () => print('open'),
               onOpened: () => print('opened'),
@@ -320,8 +310,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.left,
+          options: TPopupOptions.left(
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
@@ -342,8 +331,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeBuilder: null,
               child: Container(
                 decoration: BoxDecoration(
@@ -370,8 +358,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 240,
               headerBuilder: null,
               child: Container(
@@ -394,8 +381,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.right,
+          options: TPopupOptions.right(
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
@@ -420,8 +406,7 @@ class TPopupPage extends StatelessWidget {
         TPopupHandle? outerHandle;
         outerHandle = TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 360,
               headerBuilder: null,
               child: Builder(
@@ -444,8 +429,7 @@ class TPopupPage extends StatelessWidget {
                           onTap: () {
                             TPopup.show(
                               innerContext,
-                              options: TPopupOptions(
-                                placement: TPopupPlacement.bottom,
+                              options: TPopupOptions.bottom(
                                 height: 280,
                                 titleBuilder: (_) => const TText('内层标题'),
                                 child: Container(
@@ -486,8 +470,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 280,
               titleBuilder: (_) => TText('标题文字'),
               child: Container(height: 200)),
@@ -507,8 +490,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 280,
               cancelBuilder: (_, __) => TText(
                 '关闭',
@@ -551,8 +533,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeOnOverlayClick: false,
               width: 240,
               height: 240,
@@ -581,8 +562,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeOnOverlayClick: true,
               width: 240,
               height: 200,
@@ -617,8 +597,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 320,
               margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
               titleBuilder: (_) => TText('日历式留白'),
@@ -642,8 +621,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 280,
               showOverlay: false,
               // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
@@ -668,8 +646,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 260,
               onOverlayClick: () => TToast.showText('点击蒙层', context: context),
               child: Container(
@@ -692,8 +669,7 @@ class TPopupPage extends StatelessWidget {
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 240,
               duration: const Duration(milliseconds: 600),
               child: Container(

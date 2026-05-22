@@ -1,12 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../theme/t_colors.dart';
-import '../../theme/t_radius.dart';
-import '../../theme/t_theme.dart';
-import '_popup_center_close.dart';
-import '_popup_header.dart';
-import 't_popup_options.dart';
-import 't_popup_types.dart';
+part of 't_popup.dart';
 
 /// 浮层内容外壳：圆角、Header（仅 bottom）、child；center 由 [PopupCenterUnderClose] 接管下方关闭区。
 class PopupShell extends StatelessWidget {

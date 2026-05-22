@@ -1,23 +1,13 @@
-import 'package:flutter/material.dart';
+part of 't_popup.dart';
 
-import '../../theme/t_colors.dart';
-import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
-import '../icon/t_icons.dart';
-import 't_popup_options.dart';
-import 't_popup_types.dart';
-
-/// 构建 center 面板下方关闭控件。
-///
-/// - `closeBuilder` 为 sentinel [kPopupDefaultClose] → 内置圆形关闭图标。
-/// - 自定义 → 调用用户 builder。
-/// - 调用方需保证 `options.closeBuilder != null`。
+/// center 面板外关闭控件：默认图标 → [TPopupTrigger.closeBtn]；自定义 → [TPopupTrigger.programmatic]。
 Widget buildPopupCenterCloseControl({
   required BuildContext context,
   required TPopupOptions options,
-  required VoidCallback onClose,
+  required VoidCallback onProgrammaticClose,
+  required void Function(TPopupTrigger trigger) onCloseWithTrigger,
 }) {
-  if (isPopupDefaultClose(options.closeBuilder)) {
+  if (_isPopupDefaultClose(options.closeBuilder)) {
     final theme = TTheme.of(context);
     return IconButton(
       tooltip: context.resource.close,
@@ -26,13 +16,13 @@ Widget buildPopupCenterCloseControl({
         color: theme.fontWhColor1,
         size: 32,
       ),
-      onPressed: onClose,
+      onPressed: () => onCloseWithTrigger(TPopupTrigger.closeBtn),
     );
   }
-  return options.closeBuilder!(context, onClose);
+  return options.closeBuilder!(context, onProgrammaticClose);
 }
 
-/// 居中浮层：白底内容区 + 面板**外下方**关闭控件（center 内置布局）。
+/// center 布局：内容面板 + 外置关闭区。
 class PopupCenterUnderClose extends StatelessWidget {
   const PopupCenterUnderClose({
     super.key,
@@ -47,7 +37,7 @@ class PopupCenterUnderClose extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget panel = content;
+    var panel = content;
     if (options.width != null || options.height != null) {
       panel = SizedBox(
         width: options.width,
@@ -56,12 +46,14 @@ class PopupCenterUnderClose extends StatelessWidget {
       );
     }
 
-    void close() => onCloseWithTrigger(TPopupTrigger.programmatic);
+    void onProgrammaticClose() =>
+        onCloseWithTrigger(TPopupTrigger.programmatic);
 
     final closeControl = buildPopupCenterCloseControl(
       context: context,
       options: options,
-      onClose: close,
+      onProgrammaticClose: onProgrammaticClose,
+      onCloseWithTrigger: onCloseWithTrigger,
     );
 
     return Column(

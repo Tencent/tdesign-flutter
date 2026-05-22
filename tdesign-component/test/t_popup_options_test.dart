@@ -7,9 +7,9 @@ void main() {
     test('默认 placement 为 bottom，4 个 builder 默认 sentinel', () {
       final options = TPopupOptions(child: const SizedBox()).normalized();
       expect(options.placement, TPopupPlacement.bottom);
-      expect(isPopupDefaultHeader(options.headerBuilder), isTrue);
-      expect(isPopupDefaultCancel(options.cancelBuilder), isTrue);
-      expect(isPopupDefaultConfirm(options.confirmBuilder), isTrue);
+      expect(options.usesDefaultHeader, isTrue);
+      expect(options.usesDefaultCancel, isTrue);
+      expect(options.usesDefaultConfirm, isTrue);
       expect(options.titleBuilder, isNull);
     });
 
@@ -72,7 +72,7 @@ void main() {
         child: const SizedBox(),
         placement: TPopupPlacement.center,
       ).normalized();
-      expect(isPopupDefaultClose(options.closeBuilder), isTrue);
+      expect(options.usesDefaultClose, isTrue);
     });
 
     test('center closeBuilder=null 不显示关闭区', () {
@@ -147,35 +147,35 @@ void main() {
       );
     });
 
-    test('assertPlacementParams 在 debug 模式不抛错', () {
+    test('assertPlacementParams debug 期对错位字段抛 FlutterError', () {
+      // left 不该有 height
       expect(
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.left,
           height: 100,
-          width: 200,
-          margin: const EdgeInsets.only(right: 10),
         ).assertPlacementParams(),
-        returnsNormally,
+        throwsA(isA<FlutterError>()),
       );
+      // center 不该有 titleBuilder（属于 bottom 头部字段）
       expect(
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.center,
           titleBuilder: (_) => const Text('x'),
         ).assertPlacementParams(),
-        returnsNormally,
+        throwsA(isA<FlutterError>()),
       );
     });
 
-    test('assertPlacementParams 各 placement 的 margin 警告项', () {
+    test('assertPlacementParams 各 placement 的 margin 越界项也抛错', () {
       expect(
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.top,
           margin: const EdgeInsets.only(bottom: 10),
         ).assertPlacementParams(),
-        returnsNormally,
+        throwsA(isA<FlutterError>()),
       );
       expect(
         () => TPopupOptions(
@@ -183,13 +183,37 @@ void main() {
           placement: TPopupPlacement.right,
           margin: const EdgeInsets.only(left: 10),
         ).assertPlacementParams(),
-        returnsNormally,
+        throwsA(isA<FlutterError>()),
       );
       expect(
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.center,
           margin: const EdgeInsets.all(10),
+        ).assertPlacementParams(),
+        throwsA(isA<FlutterError>()),
+      );
+    });
+
+    test('assertPlacementParams 合法配置不抛错', () {
+      // 各 placement 用对应合法字段
+      expect(() => TPopupOptions(child: const SizedBox()).assertPlacementParams(),
+          returnsNormally);
+      expect(
+        () => TPopupOptions(
+          child: const SizedBox(),
+          placement: TPopupPlacement.center,
+          width: 200,
+          height: 200,
+        ).assertPlacementParams(),
+        returnsNormally,
+      );
+      expect(
+        () => TPopupOptions(
+          child: const SizedBox(),
+          placement: TPopupPlacement.left,
+          width: 280,
+          margin: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
         ).assertPlacementParams(),
         returnsNormally,
       );

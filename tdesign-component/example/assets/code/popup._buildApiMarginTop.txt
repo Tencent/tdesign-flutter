@@ -9,11 +9,10 @@
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 320,
               margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-              title: '日历式留白',
+              titleBuilder: (_) => TText('日历式留白'),
               child: Container(
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,

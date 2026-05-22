@@ -9,8 +9,7 @@
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeOnOverlayClick: true,
               width: 240,
               height: 200,

@@ -1,101 +1,99 @@
-import 'package:flutter/widgets.dart';
+part of 't_popup.dart';
 
-/// 浮层从哪个方向出现；决定哪些 [TPopupOptions] 字段生效。
+/// 浮层出现方向；决定 [TPopupOptions] 中哪些字段生效。
 ///
-/// - [top] / [bottom]：纵向滑入，用 `height`、`margin`（bottom 可用 `margin.top` 做日历式留白）。
-/// - [left] / [right]：侧栏，用 `width`、`margin`。
-/// - [center]：居中缩放，用 `closeBuilder` 控制下方关闭区。
+/// 与 [TPopupOptions] 类文档中的「字段与 placement」表对应。
+/// 方向固定时请用 [TPopupOptions.bottom]、[TPopupOptions.center] 等命名工厂。
 enum TPopupPlacement {
-  /// 自屏幕顶部滑入；`height` 与 `margin` 的 top/left/right 生效。
+  /// 自顶部滑入；使用 [TPopupOptions.height]、[TPopupOptions.margin]（top/left/right）。
   top,
 
-  /// 自屏幕左侧滑入；`width` 与 margin 的 left/top/bottom 生效。
+  /// 自左侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.margin]（left/top/bottom）。
   left,
 
-  /// 自屏幕右侧滑入；`width` 与 margin 的 right/top/bottom 生效。
+  /// 自右侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.margin]（right/top/bottom）。
   right,
 
-  /// 自屏幕底部滑入；默认内置「取消 | 标题 | 确定」头部，`height`、`margin` 生效。
+  /// 自底部滑入；默认内置头部；使用 [TPopupOptions.height]、[TPopupOptions.margin]。
   bottom,
 
-  /// 屏幕居中弹出；默认面板下方圆形关闭图标；`closeBuilder: null` 隐藏关闭区。
+  /// 屏幕居中；使用 [TPopupOptions.closeBuilder] 控制面板外下方关闭区。
   center,
 }
 
-/// bottom 头部完全自定义构建器签名。
+/// bottom 整行头部自定义构建器。
 ///
-/// - [close]：调用即关闭浮层（触发 [TPopupTrigger.programmatic]）。
+/// * [context] 构建上下文
+/// * [close] 关闭浮层，触发源为 [TPopupTrigger.programmatic]
 typedef TPopupHeaderBuilder = Widget Function(
   BuildContext context,
   VoidCallback close,
 );
 
-/// bottom 槽位 / center 关闭区构建器签名。
+/// bottom 左右操作槽或 center 关闭区构建器。
 ///
-/// - [close]：调用即关闭浮层（触发 [TPopupTrigger.programmatic]）。
+/// * [context] 构建上下文
+/// * [close] 关闭浮层，触发源为 [TPopupTrigger.programmatic]
 typedef TPopupSlotBuilder = Widget Function(
   BuildContext context,
   VoidCallback close,
 );
 
-/// **内置三段式头部**占位常量（bottom 默认）：
-/// 实际渲染为 `cancelBuilder | titleBuilder | confirmBuilder` 三段。
-///
-/// 直接调用返回空 Widget；库内通过 `identical` 判断是否走内置布局。
-/// 与 `headerBuilder: null`（无头部）语义不同。
-Widget kPopupDefaultHeader(BuildContext context, VoidCallback close) =>
+// 库内 sentinel：识别 builder「未传 = 内置默认」。业务三态见 [TPopupOptions]。
+
+Widget _kPopupDefaultHeader(BuildContext context, VoidCallback close) =>
     const SizedBox.shrink();
 
-/// **内置「取消」按钮**占位常量（bottom 默认左槽）。
-///
-/// 实际渲染为本地化「取消」文本，点击调用 [close]。
-/// 与 `cancelBuilder: null`（隐藏左槽）语义不同。
-Widget kPopupDefaultCancel(BuildContext context, VoidCallback close) =>
+Widget _kPopupDefaultCancel(BuildContext context, VoidCallback close) =>
     const SizedBox.shrink();
 
-/// **内置「确定」按钮**占位常量（bottom 默认右槽）。
-///
-/// 实际渲染为本地化「确定」文本，点击调用 [close]。
-/// 与 `confirmBuilder: null`（隐藏右槽）语义不同。
-Widget kPopupDefaultConfirm(BuildContext context, VoidCallback close) =>
+Widget _kPopupDefaultConfirm(BuildContext context, VoidCallback close) =>
     const SizedBox.shrink();
 
-/// **内置「关闭」图标**占位常量（center 默认关闭区）。
-///
-/// 实际渲染为圆形关闭图标，点击调用 [close]。
-/// 与 `closeBuilder: null`（隐藏关闭区）语义不同。
-Widget kPopupDefaultClose(BuildContext context, VoidCallback close) =>
+Widget _kPopupDefaultClose(BuildContext context, VoidCallback close) =>
     const SizedBox.shrink();
 
-/// 是否为「使用内置三段式头部」占位（bottom）。
-bool isPopupDefaultHeader(TPopupHeaderBuilder? builder) =>
-    identical(builder, kPopupDefaultHeader);
+bool _isPopupDefaultHeader(TPopupHeaderBuilder? builder) =>
+    identical(builder, _kPopupDefaultHeader);
 
-/// 是否为「使用内置取消按钮」占位。
-bool isPopupDefaultCancel(TPopupSlotBuilder? builder) =>
-    identical(builder, kPopupDefaultCancel);
+bool _isPopupDefaultCancel(TPopupSlotBuilder? builder) =>
+    identical(builder, _kPopupDefaultCancel);
 
-/// 是否为「使用内置确定按钮」占位。
-bool isPopupDefaultConfirm(TPopupSlotBuilder? builder) =>
-    identical(builder, kPopupDefaultConfirm);
+bool _isPopupDefaultConfirm(TPopupSlotBuilder? builder) =>
+    identical(builder, _kPopupDefaultConfirm);
 
-/// 是否为「使用内置圆形关闭图标」占位（center）。
-bool isPopupDefaultClose(TPopupSlotBuilder? builder) =>
-    identical(builder, kPopupDefaultClose);
+bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
+    identical(builder, _kPopupDefaultClose);
 
-/// 浮层被关闭时的触发来源，见 [TPopupOptions.onVisibleChange]。
+/// 浮层关闭或显隐变化时的触发来源。
 ///
-/// 注意：从库内的内置按钮触发关闭统一上报 [programmatic]（自定义 builder 走自己的 `close`），
-/// 「点击蒙层」仍单独上报 [overlay]。
+/// 作为 [TPopupVisibleChangeCallback] 的第二个参数，以及关闭流程中的语义标记。
+///
+/// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancelBtn]、
+/// [TPopupTrigger.confirmBtn]、[TPopupTrigger.closeBtn]；
+/// [TPopupHandle.close]、系统返回、自定义 builder 内调用 `close` 均为
+/// [TPopupTrigger.programmatic]。
 enum TPopupTrigger {
-  /// 点击蒙层（且 [closeOnOverlayClick] 为 true）。
+  /// 点击蒙层，且 [TPopupOptions.closeOnOverlayClick] 为 true。
   overlay,
 
-  /// [TPopupHandle.close]、内置按钮、系统返回键等。
+  /// 点击 bottom 内置「取消」按钮（[TPopupOptions.cancelBuilder] 为内置默认时）。
+  cancelBtn,
+
+  /// 点击 bottom 内置「确定」按钮（[TPopupOptions.confirmBuilder] 为内置默认时）。
+  confirmBtn,
+
+  /// 点击 center 内置关闭图标（[TPopupOptions.closeBuilder] 为内置默认时）。
+  closeBtn,
+
+  /// [TPopupHandle.close]、系统返回键、自定义 builder 调用 `close` 等。
   programmatic,
 }
 
-/// 显隐变化：`onVisibleChange(visible, trigger)`。
+/// 浮层显隐变化回调。
+///
+/// * [visible] 为 true 表示打开，false 表示开始关闭
+/// * [trigger] 关闭来源，见 [TPopupTrigger]；打开时为 [TPopupTrigger.programmatic]
 typedef TPopupVisibleChangeCallback = void Function(
   bool visible,
   TPopupTrigger trigger,

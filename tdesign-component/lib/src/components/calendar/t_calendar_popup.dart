@@ -71,8 +71,7 @@ class TCalendarPopup {
     final childWidget = builder?.call(context) ?? child;
     _calendarHandle = TPopup.show(
       context,
-      options: TPopupOptions(
-        placement: TPopupPlacement.bottom,
+      options: TPopupOptions.bottom(
         cancelBuilder: null,
         confirmBuilder: null,
         margin: EdgeInsets.only(top: top ?? 0),

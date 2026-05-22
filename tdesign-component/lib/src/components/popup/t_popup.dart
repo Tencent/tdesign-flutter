@@ -1,48 +1,71 @@
+/// TDesign 弹出层（Popup）组件库。
+///
+/// 对外 API：
+/// * [TPopup] — 命令式打开浮层
+/// * [TPopupOptions] — 配置（推荐命名工厂）
+/// * [TPopupHandle] — 显隐控制
+/// * [TPopupPlacement]、[TPopupTrigger] — 方向与关闭来源
+/// * [TPopupHeaderBuilder]、[TPopupSlotBuilder]、[TPopupVisibleChangeCallback] — 构建器类型
+library;
+
 import 'package:flutter/material.dart';
 
-import '_popup_route.dart';
-import 't_popup_options.dart';
-import 't_popup_types.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
+import '../../util/t_toolbar_pressable.dart';
+import '../icon/t_icons.dart';
+import '../text/t_text.dart';
 
-export 't_popup_options.dart';
-export 't_popup_types.dart';
-
+part '_popup_center_close.dart';
+part '_popup_header.dart';
+part '_popup_layout.dart';
+part '_popup_route.dart';
+part '_popup_shell.dart';
+part '_popup_tracker.dart';
 part 't_popup_handle.dart';
-part 't_popup_tracker.dart';
+part 't_popup_options.dart';
+part 't_popup_types.dart';
 
-/// 弹出层命名空间：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
+/// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
 ///
-/// 仅提供静态入口 [show]；返回的 [TPopupHandle] 控制本次浮层的显隐。
+/// 通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
+///
+/// **示例**
 ///
 /// ```dart
 /// final handle = TPopup.show(
 ///   context,
-///   options: TPopupOptions(
-///     placement: TPopupPlacement.bottom,
+///   options: TPopupOptions.bottom(
 ///     titleBuilder: (_) => const Text('标题'),
 ///     child: MyPanel(),
 ///   ),
 /// );
-///
-/// // 关闭后再开（同一 handle）
 /// handle.close();
-/// handle.open(context);
+/// handle.open();
 /// ```
 ///
-/// 字段说明见 [TPopupOptions]；按 [TPopupPlacement] 只有部分参数生效（无效参数会在
-/// [TPopupOptions.normalized] 中裁掉）。
+/// 配置项见 [TPopupOptions]；方向见 [TPopupPlacement]。
 final class TPopup {
   const TPopup._();
 
-  /// 命令式打开浮层并压入独立路由。
+  /// 打开浮层并压入独立 [PopupRoute]。
   ///
-  /// 返回 [TPopupHandle]：可用 [TPopupHandle.close] / [TPopupHandle.open] 控制显隐；
-  /// [TPopupHandle.isShowing] 可查询是否仍在展示。
+  /// [context] 用于查找 [Navigator] 并展示浮层。
   ///
-  /// 同一按钮在页面 context 上重复调用时，若已有展示中的 Popup 会返回已有 handle（防连点）。
+  /// [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。
   ///
-  /// - [navigatorContext]：指定使用哪个 [Navigator]，默认用 `context`。
-  /// - [useRootNavigator]：是否使用根 [Navigator]（嵌套导航场景）。
+  /// 返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、
+  /// [TPopupHandle.isShowing] 控制与查询。
+  ///
+  /// 同一 [Navigator] 上若已有展示中的浮层，重复调用会返回已有 handle（防连点）。
+  ///
+  /// [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。
+  ///
+  /// [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。
   static TPopupHandle show(
     BuildContext context, {
     required TPopupOptions options,
@@ -55,10 +78,10 @@ final class TPopup {
       rootNavigator: useRootNavigator,
     );
 
-    final existing = TPopupTracker.top(navigator);
+    final existing = _PopupTracker.top(navigator);
     if (existing != null &&
         existing.isShowing &&
-        ModalRoute.of(context) is! TPopupNavigatorRoute) {
+        ModalRoute.of(context) is! _PopupNavigatorRoute) {
       return existing;
     }
 
