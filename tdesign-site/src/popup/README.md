@@ -33,7 +33,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.top,
               height: 240,
@@ -43,7 +44,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -64,14 +65,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.left,
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -92,7 +94,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeBuilder: null,
@@ -105,7 +108,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 width: 240,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -126,7 +129,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 240,
@@ -135,7 +139,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -156,14 +160,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.right,
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -185,14 +190,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
               title: '标题文字',
               onConfirm: () => TToast.showText('确定', context: context),
               child: Container(height: 200)),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -213,7 +219,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
@@ -242,7 +249,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 fontWeight: FontWeight.w600,
               ),
               child: Container(height: 200)),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -263,7 +270,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeOnOverlayClick: false,
@@ -278,7 +286,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     onPressed: close,
                   ),
               child: const SizedBox(width: 240, height: 240)),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -299,7 +307,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeOnOverlayClick: true,
@@ -318,7 +327,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -340,7 +349,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       size: TButtonSize.large,
       onTap: () {
         TPopupHandle? outerHandle;
-        outerHandle = TPopup(
+        outerHandle = TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 360,
@@ -363,7 +373,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                           theme: TButtonTheme.primary,
                           size: TButtonSize.large,
                           onTap: () {
-                            TPopup(
+                            TPopup.show(
+                              innerContext,
                               options: TPopupOptions(
                                 placement: TPopupPlacement.bottom,
                                 height: 280,
@@ -374,7 +385,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                       .bgColorSecondaryContainer,
                                 ),
                               ),
-                            ).show(innerContext);
+                            );
                           },
                         ),
                         const SizedBox(height: 12),
@@ -390,7 +401,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   );
                 },
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -412,7 +423,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 320,
@@ -422,7 +434,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -443,7 +455,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
@@ -454,7 +467,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -475,7 +488,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 260,
@@ -484,7 +498,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -505,7 +519,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 240,
@@ -514,7 +529,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }</pre>
@@ -526,48 +541,33 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## API
 ### TPopup
 #### 简介
-弹出层：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
+弹出层命名空间：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。仅提供静态入口 [show]；返回的 [TPopupHandle] 控制本次浮层的显隐。
 
  ## 怎么用
 
- **命令式（推荐）** — 先组配置，再 `show`，用返回的 [TPopupHandle] 关闭：
-
  ```dart
- final handle = TPopup(
+ final handle = TPopup.show(
+   context,
    options: TPopupOptions(
      placement: TPopupPlacement.bottom,
      title: '标题',
      child: MyPanel(),
    ),
- ).show(context);
+ );
 
- // 关闭这一层（须保留 handle，不要用 context 猜栈顶）
+ // 关闭后再开（同一 handle）
  handle.close();
- ```
-
- **声明式** — 包住子树，`initialVisible: true` 时首帧自动 [show]；[build] 只渲染 [options.child]：
-
- ```dart
- TPopup(
-   options: TPopupOptions(child: body),
-   initialVisible: true,
- )
+ handle.open(context);
  ```
 
  字段说明见 [TPopupOptions]；按 [TPopupPlacement] 只有部分参数生效（无效参数会在
  [TPopupOptions.normalized] 中裁掉）。
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| initialVisible | bool | false | 为 true 时，挂载后首帧自动调用 [show]（仅声明式）。 |
-| key |  | - |  |
-| navigatorContext | BuildContext? | - | 指定使用哪个 [Navigator]；默认 [show] 传入的 `context` 所在 Navigator。 |
-| options | TPopupOptions | - | 浮层内容与行为配置，见 [TPopupOptions]。 |
-| useRootNavigator | bool | false | 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
-
-```
-```
+| show | TPopupHandle | `BuildContext context`, `{required TPopupOptions options, BuildContext? navigatorContext, bool useRootNavigator = false}` | 命令式打开浮层并压入独立路由，返回 [TPopupHandle] 控制显隐。 |
 
 ### TPopupOptions
 #### 简介

@@ -332,17 +332,18 @@ class TActionSheet {
         break;
     }
 
-    _actionSheetHandle = TPopup(
+    _actionSheetHandle = TPopup.show(
+      context,
       options: TPopupOptions(
         placement: TPopupPlacement.bottom,
-        cancel: null,
-        confirm: null,
+        cancelBuilder: null,
+        confirmBuilder: null,
         showOverlay: showOverlay,
         closeOnOverlayClick: showOverlay && closeOnOverlayClick,
         overlayColor: showOverlay ? null : Colors.transparent,
         onClosed: onClose,
         child: sheetChild,
       ),
-    ).show(context);
+    );
   }
 }

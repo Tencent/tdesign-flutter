@@ -14,10 +14,8 @@ void main() {
       PopupTestResourceDelegate.en(),
     ]) {
       testWidgets(
-        '${resource.locale.languageCode} 底部操作栏默认 cancel / confirm',
+        '${resource.locale.languageCode} 底部默认 cancel / confirm 按钮点击关闭浮层',
         (tester) async {
-          var cancelCount = 0;
-          var confirmCount = 0;
           late BuildContext hostContext;
 
           await openPopup(
@@ -25,14 +23,13 @@ void main() {
             resource: resource,
             onPressed: () {
               hostContext = tester.element(find.text('open'));
-              TPopup(
+              TPopup.show(
+                hostContext,
                 options: TPopupOptions(
                     placement: TPopupPlacement.bottom,
                     height: 200,
-                    onCancel: () => cancelCount++,
-                    onConfirm: () => confirmCount++,
                     child: const SizedBox(height: 80)),
-              ).show(hostContext);
+              );
             },
           );
           await tester.pumpAndSettle();
@@ -41,25 +38,25 @@ void main() {
 
           await tester.tap(find.text(resource.cancelText));
           await tester.pumpAndSettle();
-          expect(cancelCount, 1);
+          expect(find.text(resource.cancelText), findsNothing);
 
           await openPopup(
             tester,
             resource: resource,
             onPressed: () {
-              TPopup(
+              TPopup.show(
+                hostContext,
                 options: TPopupOptions(
                     placement: TPopupPlacement.bottom,
                     height: 200,
-                    onConfirm: () => confirmCount++,
                     child: const SizedBox(height: 80)),
-              ).show(hostContext);
+              );
             },
           );
           await tester.pumpAndSettle();
           await tester.tap(find.text(resource.confirmText));
           await tester.pumpAndSettle();
-          expect(confirmCount, 1);
+          expect(find.text(resource.confirmText), findsNothing);
         },
       );
     }
@@ -77,13 +74,13 @@ void main() {
           resource: resource,
           onPressed: () {
             hostContext = tester.element(find.text('open'));
-            handle = TPopup(
+            handle = TPopup.show(
+              hostContext,
               options: TPopupOptions(
                   placement: TPopupPlacement.bottom,
                   height: 160,
-                  onCancel: () {},
                   child: const SizedBox(height: 60)),
-            ).show(hostContext);
+            );
           },
         );
         await tester.pumpAndSettle();
@@ -106,14 +103,15 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          handle = TPopup(
+          handle = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
                 onOpen: () => openCount++,
                 onOpened: () => openedCount++,
                 child: const SizedBox(height: 80)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pump();
@@ -136,7 +134,8 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          handle = TPopup(
+          handle = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
@@ -144,7 +143,7 @@ void main() {
                 onClosed: () => closedCount++,
                 onVisibleChange: (v, _) => visibleChanges.add(v),
                 child: const SizedBox(height: 80)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -165,13 +164,14 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          handle = TPopup(
+          handle = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 onClose: () => closeCount++,
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -198,7 +198,8 @@ void main() {
           tester,
           onPressed: () {
             hostContext = tester.element(find.text('open'));
-            handle = TPopup(
+            handle = TPopup.show(
+              hostContext,
               options: TPopupOptions(
                   placement: placement,
                   height: placement == TPopupPlacement.left ||
@@ -210,7 +211,7 @@ void main() {
                       ? null
                       : 200,
                   child: const SizedBox(height: 60, width: 60)),
-            ).show(hostContext);
+            );
           },
         );
         await tester.pumpAndSettle();
@@ -222,102 +223,88 @@ void main() {
   });
 
   group('TPopup Header', () {
-    testWidgets('底部操作栏：取消与确认', (tester) async {
-      var cancelCount = 0;
-      var confirmCount = 0;
+    testWidgets('底部默认头部：title / cancel / confirm 按钮渲染', (tester) async {
       late BuildContext hostContext;
 
       await openPopup(
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 200,
-                title: '标题',
-                onCancel: () => cancelCount++,
-                onConfirm: () => confirmCount++,
+                titleBuilder: (_) => TText('标题'),
                 child: const SizedBox(height: 80)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
       expect(find.text('标题'), findsOneWidget);
-      await tester.tap(find.text('取消'));
-      await tester.pumpAndSettle();
-      expect(cancelCount, 1);
-
-      await openPopup(
-        tester,
-        onPressed: () {
-          TPopup(
-            options: TPopupOptions(
-                placement: TPopupPlacement.bottom,
-                height: 200,
-                onConfirm: () => confirmCount++,
-                child: const SizedBox(height: 80)),
-          ).show(hostContext);
-        },
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('确定'));
-      await tester.pumpAndSettle();
-      expect(confirmCount, 1);
-    });
-
-    testWidgets('autoCloseOnCancel 为 false 时不自动关闭', (tester) async {
-      await openPopup(
-        tester,
-        onPressed: () {
-          TPopup(
-            options: TPopupOptions(
-                placement: TPopupPlacement.bottom,
-                height: 200,
-                autoCloseOnCancel: false,
-                onCancel: () {},
-                child: const SizedBox(height: 80)),
-          ).show(tester.element(find.text('open')));
-        },
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('取消'));
-      await tester.pump();
       expect(find.text('取消'), findsOneWidget);
-    });
+      expect(find.text('确定'), findsOneWidget);
 
-    testWidgets('autoCloseOnConfirm 为 false 时不自动关闭', (tester) async {
+      // 点取消默认 sentinel 自带 close → 浮层关闭
+      await tester.tap(find.text('取消'));
+      await tester.pumpAndSettle();
+      expect(find.text('标题'), findsNothing);
+
+      // 重新打开点确定 → 同样关闭
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 200,
-                autoCloseOnConfirm: false,
-                onConfirm: () {},
                 child: const SizedBox(height: 80)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
       await tester.tap(find.text('确定'));
-      await tester.pump();
-      expect(find.text('确定'), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.text('确定'), findsNothing);
     });
 
-    testWidgets('bottom headerBuilder null 无头部', (tester) async {
+    testWidgets('cancelBuilder 自定义可选择不调 close → 浮层保持展示', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 200,
+                cancelBuilder: (_, __) => GestureDetector(
+                      onTap: () {}, // 不调 close
+                      child: const Text('自定义取消'),
+                    ),
+                child: const SizedBox(height: 80)),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('自定义取消'));
+      await tester.pump();
+      expect(find.text('自定义取消'), findsOneWidget);
+    });
+
+    testWidgets('bottom showHeader=false 不渲染头部', (tester) async {
+      await openPopup(
+        tester,
+        onPressed: () {
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                title: '不应出现',
+                titleBuilder: (_) => TText('不应出现'),
                 headerBuilder: null,
                 child: const SizedBox(height: 80)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -329,15 +316,16 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                title: '仅标题',
-                cancel: null,
-                confirm: null,
+                titleBuilder: (_) => TText('仅标题'),
+                cancelBuilder: null,
+                confirmBuilder: null,
                 child: const SizedBox(height: 80)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -351,14 +339,14 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                title: '传入标题',
-                headerBuilder: (_, data) => Text('自定义:${data.title}'),
+                headerBuilder: (_, __) => const Text('自定义:传入标题'),
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -372,13 +360,14 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 120,
                 height: 120,
                 child: const SizedBox(height: 80, width: 80)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -391,31 +380,33 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 240,
                 height: 240,
                 child: const SizedBox.expand()),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
       expect(find.byIcon(TIcons.close_circle), findsOneWidget);
     });
 
-    testWidgets('center 默认显示下方关闭 closeBuilder null 隐藏', (tester) async {
+    testWidgets('center showClose=false 不显示关闭区', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 120,
                 height: 120,
                 closeBuilder: null,
                 child: const SizedBox(height: 80, width: 80)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -426,16 +417,15 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                cancelBuilder: (_) => const Text('自定义取消'),
-                confirmBuilder: (_) => const Text('自定义确认'),
-                onCancel: () {},
-                onConfirm: () {},
+                cancelBuilder: (_, __) => const Text('自定义取消'),
+                confirmBuilder: (_, __) => const Text('自定义确认'),
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -453,13 +443,14 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 onClosed: () => overlayClose++,
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -476,15 +467,15 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          handle = TPopup(
+          handle = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 closeOnOverlayClick: false,
-                onCancel: () {},
                 onOverlayClick: () {},
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -500,14 +491,15 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 showOverlay: false,
                 preventScrollThrough: true,
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -521,14 +513,15 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 overlayColor: Colors.red,
                 overlayOpacity: 0.5,
                 child: const SizedBox(height: 40)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -539,52 +532,15 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 margin: const EdgeInsets.only(top: 80),
                 child: const SizedBox(height: 200)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
-      await tester.pumpAndSettle();
-    });
-  });
-
-  group('TPopup 声明式', () {
-    testWidgets('initialVisible 自动打开', (tester) async {
-      await tester.pumpWidget(
-        wrapPopupTest(
-          TPopup(
-            initialVisible: true,
-            options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
-              height: 100,
-              child: SizedBox(height: 60),
-            ),
-          ),
-        ),
-      );
-      await tester.pump();
-      await tester.pumpAndSettle();
-      expect(find.byType(SizedBox), findsWidgets);
-    });
-
-    testWidgets('dispose 时关闭弹层', (tester) async {
-      await tester.pumpWidget(
-        wrapPopupTest(
-          TPopup(
-            initialVisible: true,
-            options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
-              height: 100,
-              child: SizedBox(height: 60),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
     });
   });
@@ -596,18 +552,20 @@ void main() {
         tester,
         onPressed: () {
           final ctx = tester.element(find.text('open'));
-          first = TPopup(
+          first = TPopup.show(
+            ctx,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 child: const SizedBox(height: 40)),
-          ).show(ctx);
-          final second = TPopup(
+          );
+          final second = TPopup.show(
+            ctx,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 child: const SizedBox(height: 40)),
-          ).show(ctx);
+          );
           expect(second.isShowing, isTrue);
           expect(identical(first, second), isTrue);
         },
@@ -625,19 +583,80 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 onClosed: () => closedCount++,
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(closedCount, 1);
+    });
+
+    testWidgets('handle.close 后 handle.open 可再次展示', (tester) async {
+      late BuildContext hostContext;
+      TPopupHandle? handle;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          handle = TPopup.show(
+            hostContext,
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 100,
+                cancelBuilder: null,
+                confirmBuilder: null,
+                child: const SizedBox(height: 60, child: Text('panel'))),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('panel'), findsOneWidget);
+
+      handle!.close();
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isFalse);
+      expect(find.text('panel'), findsNothing);
+
+      handle!.open(hostContext);
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isTrue);
+      expect(find.text('panel'), findsOneWidget);
+    });
+
+    testWidgets('handle.open 在已展示时无副作用', (tester) async {
+      late BuildContext hostContext;
+      TPopupHandle? handle;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          handle = TPopup.show(
+            hostContext,
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 80,
+                cancelBuilder: null,
+                confirmBuilder: null,
+                child: const SizedBox(height: 40)),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isTrue);
+
+      handle!.open(hostContext);
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isTrue);
     });
   });
 
@@ -646,13 +665,14 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.top,
                 height: 120,
-                title: '顶部标题',
+                titleBuilder: (_) => TText('顶部标题'),
                 child: const Text('内容')),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -671,12 +691,13 @@ void main() {
           tester,
           onPressed: () {
             hostContext = tester.element(find.text('open'));
-            handle = TPopup(
+            handle = TPopup.show(
+              hostContext,
               options: TPopupOptions(
                   placement: placement,
                   width: 240,
                   child: const SizedBox(height: 40)),
-            ).show(hostContext);
+            );
           },
         );
         await tester.pumpAndSettle();
@@ -686,19 +707,22 @@ void main() {
       }
     });
 
-    testWidgets('titleWidget 与 cancelBtn / confirmBtn 文案', (tester) async {
+    testWidgets('titleBuilder + 自定义 cancel/confirm Builder 文案', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                titleWidget: const Text('Widget标题'),
-                cancelBtn: '左',
-                confirmBtn: '右',
+                titleBuilder: (_) => const Text('Widget标题'),
+                cancelBuilder: (_, close) =>
+                    GestureDetector(onTap: close, child: const Text('左')),
+                confirmBuilder: (_, close) =>
+                    GestureDetector(onTap: close, child: const Text('右')),
                 child: const SizedBox(height: 40)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -713,7 +737,8 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 140,
@@ -722,9 +747,8 @@ void main() {
                       onTap: close,
                       child: const Text('关'),
                     ),
-                onCloseBtn: () {},
                 child: const SizedBox(height: 60, width: 120)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -739,13 +763,14 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 onOverlayClick: () => overlayClick++,
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -759,12 +784,13 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          handle = TPopup(
+          handle = TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 child: const SizedBox(height: 40)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -783,7 +809,8 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          handle = TPopup(
+          handle = TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
@@ -793,7 +820,7 @@ void main() {
                   }
                 },
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -810,7 +837,8 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          TPopup(
+          TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
@@ -820,13 +848,13 @@ void main() {
                   }
                 },
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
       await tester.tap(find.text('确定'));
       await tester.pumpAndSettle();
-      expect(hideTrigger, TPopupTrigger.confirmBtn);
+      expect(hideTrigger, TPopupTrigger.programmatic);
     });
 
     testWidgets('destroyOnClose 路由关闭后可再次 show', (tester) async {
@@ -837,15 +865,16 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          first = TPopup(
+          first = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 destroyOnClose: true,
-                cancel: null,
-                confirm: null,
+                cancelBuilder: null,
+                confirmBuilder: null,
                 child: const SizedBox(height: 40)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -857,15 +886,16 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          second = TPopup(
+          second = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 destroyOnClose: true,
-                cancel: null,
-                confirm: null,
+                cancelBuilder: null,
+                confirmBuilder: null,
                 child: const SizedBox(height: 40)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -880,16 +910,15 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 200,
-                cancel: const Text('自定义取消'),
-                confirm: const Text('自定义确认'),
-                onCancel: () {},
-                onConfirm: () {},
+                cancelBuilder: (_, __) => const Text('自定义取消'),
+                confirmBuilder: (_, __) => const Text('自定义确认'),
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();

@@ -7,7 +7,8 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
@@ -36,7 +37,7 @@
                 fontWeight: FontWeight.w600,
               ),
               child: Container(height: 200)),
-        ).show(context);
+        );
       },
     );
   }

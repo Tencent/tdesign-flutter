@@ -7,7 +7,11 @@ import '../icon/t_icons.dart';
 import 't_popup_options.dart';
 import 't_popup_types.dart';
 
-/// 构建 center 面板下方关闭控件（默认图标或 [closeBuilder]）。
+/// 构建 center 面板下方关闭控件。
+///
+/// - `closeBuilder` 为 sentinel [kPopupDefaultClose] → 内置圆形关闭图标。
+/// - 自定义 → 调用用户 builder。
+/// - 调用方需保证 `options.closeBuilder != null`。
 Widget buildPopupCenterCloseControl({
   required BuildContext context,
   required TPopupOptions options,
@@ -52,10 +56,7 @@ class PopupCenterUnderClose extends StatelessWidget {
       );
     }
 
-    void close() {
-      options.onCloseBtn?.call();
-      onCloseWithTrigger(TPopupTrigger.closeBtn);
-    }
+    void close() => onCloseWithTrigger(TPopupTrigger.programmatic);
 
     final closeControl = buildPopupCenterCloseControl(
       context: context,

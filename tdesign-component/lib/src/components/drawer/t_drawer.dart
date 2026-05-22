@@ -108,7 +108,8 @@ class TDrawer {
     final overlayEnabled = showOverlay ?? true;
     final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
 
-    _drawerHandle = TPopup(
+    _drawerHandle = TPopup.show(
+      context,
       options: TPopupOptions(
         placement: placement == TDrawerPlacement.right
             ? TPopupPlacement.right
@@ -134,7 +135,7 @@ class TDrawer {
           isShowLastBordered: isShowLastBordered,
         ),
       ),
-    ).show(context);
+    );
   }
 
   void open() {

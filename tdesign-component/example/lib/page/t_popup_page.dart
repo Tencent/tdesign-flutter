@@ -12,24 +12,22 @@ class TPopupPage extends StatelessWidget {
 
   static const double _headerHeight = 58;
 
-  /// 底部标题 + 关闭（自定义 headerBuilder，使用 [TPopupHeaderData]）。
+  /// 底部标题 + 关闭（自定义 headerBuilder：标题居中 + 右侧关闭图标）。
   static TPopupHeaderBuilder _bottomTitleCloseHeader({
     String? title,
-    required VoidCallback onClose,
   }) {
-    return (BuildContext ctx, TPopupHeaderData data) {
+    return (BuildContext ctx, VoidCallback close) {
       final theme = TTheme.of(ctx);
-      final headerTitle = data.title ??
-          (title != null && title.isNotEmpty
-              ? TText(
-                  title,
-                  textColor: theme.textColorPrimary,
-                  font: theme.fontTitleLarge,
-                  fontWeight: FontWeight.w700,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )
-              : null);
+      final headerTitle = (title != null && title.isNotEmpty)
+          ? TText(
+              title,
+              textColor: theme.textColorPrimary,
+              font: theme.fontTitleLarge,
+              fontWeight: FontWeight.w700,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null;
       return SizedBox(
         height: _headerHeight,
         child: Padding(
@@ -41,7 +39,7 @@ class TPopupPage extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(TIcons.close, color: theme.textColorSecondary),
-                onPressed: onClose,
+                onPressed: close,
               ),
             ],
           ),
@@ -100,24 +98,24 @@ class TPopupPage extends StatelessWidget {
               type: TButtonType.outline,
               size: TButtonSize.large,
               onTap: () {
-                TPopup(
+                TPopup.show(
+                  context,
                   options: TPopupOptions(
                       placement: TPopupPlacement.bottom,
                       height: 280,
-                      title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                      cancel: TText(
+                      titleBuilder: (_) => TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
+                      cancelBuilder: (_, __) => TText(
                         '点这里确认!',
                         textColor: TTheme.of(context).brandNormalColor,
                         font: TTheme.of(context).fontBodyLarge,
                       ),
-                      confirm: TText(
+                      confirmBuilder: (_, __) => TText(
                         '关闭',
                         textColor: TTheme.of(context).errorNormalColor,
                         font: TTheme.of(context).fontBodyLarge,
                       ),
-                      onCancel: () => TToast.showText('确认', context: context),
                       child: Container(height: 200)),
-                ).show(context);
+                );
               },
             );
           },
@@ -133,16 +131,16 @@ class TPopupPage extends StatelessWidget {
               size: TButtonSize.large,
               onTap: () {
                 TPopupHandle? handle;
-                handle = TPopup(
+                handle = TPopup.show(
+                  context,
                   options: TPopupOptions(
                       placement: TPopupPlacement.bottom,
                       height: 280,
                       headerBuilder: _bottomTitleCloseHeader(
                         title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                        onClose: () => handle?.close(),
                       ),
                       child: Container(height: 200)),
-                ).show(context);
+                );
               },
             );
           },
@@ -162,17 +160,17 @@ class TPopupPage extends StatelessWidget {
                   size: TButtonSize.large,
                   onTap: () {
                     TPopupHandle? handle;
-                    handle = TPopup(
+                    handle = TPopup.show(
+                      context,
                       options: TPopupOptions(
                           placement: TPopupPlacement.bottom,
                           height: 280,
                           radius: 6,
                           headerBuilder: _bottomTitleCloseHeader(
                             title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                            onClose: () => handle?.close(),
                           ),
                           child: Container(height: 200)),
-                    ).show(context);
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
@@ -183,26 +181,25 @@ class TPopupPage extends StatelessWidget {
                   type: TButtonType.outline,
                   size: TButtonSize.large,
                   onTap: () {
-                    TPopup(
+                    TPopup.show(
+                      context,
                       options: TPopupOptions(
                           placement: TPopupPlacement.bottom,
                           height: 280,
                           radius: 6,
-                          title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                          cancel: TText(
+                          titleBuilder: (_) => TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
+                          cancelBuilder: (_, __) => TText(
                             '点这里确认!',
                             textColor: TTheme.of(context).brandNormalColor,
                             font: TTheme.of(context).fontBodyLarge,
                           ),
-                          confirm: TText(
+                          confirmBuilder: (_, __) => TText(
                             '关闭',
                             textColor: TTheme.of(context).errorNormalColor,
                             font: TTheme.of(context).fontBodyLarge,
                           ),
-                          onCancel: () =>
-                              TToast.showText('确认', context: context),
                           child: Container(height: 200)),
-                    ).show(context);
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
@@ -213,7 +210,8 @@ class TPopupPage extends StatelessWidget {
                   type: TButtonType.outline,
                   size: TButtonSize.large,
                   onTap: () {
-                    TPopup(
+                    TPopup.show(
+                      context,
                       options: TPopupOptions(
                           placement: TPopupPlacement.center,
                           width: 240,
@@ -228,7 +226,7 @@ class TPopupPage extends StatelessWidget {
                                 onPressed: close,
                               ),
                           child: const SizedBox(height: 240, width: 240)),
-                    ).show(context);
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
@@ -239,14 +237,15 @@ class TPopupPage extends StatelessWidget {
                   type: TButtonType.outline,
                   size: TButtonSize.large,
                   onTap: () {
-                    TPopup(
+                    TPopup.show(
+                      context,
                       options: TPopupOptions(
                           placement: TPopupPlacement.center,
                           width: 240,
                           height: 240,
                           radius: 6,
                           child: const SizedBox(height: 240, width: 240)),
-                    ).show(context);
+                    );
                   },
                 ),
               ],
@@ -265,7 +264,8 @@ class TPopupPage extends StatelessWidget {
               onTap: () {
                 final renderBox =
                     navBarkey.currentContext!.findRenderObject() as RenderBox;
-                TPopup(
+                TPopup.show(
+                  context,
                   options: TPopupOptions(
                       placement: TPopupPlacement.right,
                       width: 280,
@@ -273,7 +273,7 @@ class TPopupPage extends StatelessWidget {
                       child: Container(
                         color: TTheme.of(context).bgColorContainer,
                       )),
-                ).show(context);
+                );
               },
             );
           },
@@ -293,7 +293,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.top,
               height: 240,
@@ -303,7 +304,7 @@ class TPopupPage extends StatelessWidget {
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -317,14 +318,15 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.left,
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -338,7 +340,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeBuilder: null,
@@ -351,7 +354,7 @@ class TPopupPage extends StatelessWidget {
                 width: 240,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -365,7 +368,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 240,
@@ -374,7 +378,7 @@ class TPopupPage extends StatelessWidget {
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -388,21 +392,22 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.right,
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }
 
   // --- 02 组件示例 ---
 
-  /// 外层 Popup 的 child 内再 `TPopup(options: …).show`：用各自 [TPopupHandle] 关闭。
+  /// 外层 Popup 的 child 内再 `TPopup.show(innerContext, options: …)`：用各自 [TPopupHandle] 关闭。
   @Demo(group: 'popup')
   Widget _buildNestedPopup(BuildContext context) {
     return TButton(
@@ -413,7 +418,8 @@ class TPopupPage extends StatelessWidget {
       size: TButtonSize.large,
       onTap: () {
         TPopupHandle? outerHandle;
-        outerHandle = TPopup(
+        outerHandle = TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 360,
@@ -436,18 +442,19 @@ class TPopupPage extends StatelessWidget {
                           theme: TButtonTheme.primary,
                           size: TButtonSize.large,
                           onTap: () {
-                            TPopup(
+                            TPopup.show(
+                              innerContext,
                               options: TPopupOptions(
                                 placement: TPopupPlacement.bottom,
                                 height: 280,
-                                title: '内层标题',
+                                titleBuilder: (_) => const TText('内层标题'),
                                 child: Container(
                                   height: 160,
                                   color: TTheme.of(innerContext)
                                       .bgColorSecondaryContainer,
                                 ),
                               ),
-                            ).show(innerContext);
+                            );
                           },
                         ),
                         const SizedBox(height: 12),
@@ -463,7 +470,7 @@ class TPopupPage extends StatelessWidget {
                   );
                 },
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -477,14 +484,14 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
-              title: '标题文字',
-              onConfirm: () => TToast.showText('确定', context: context),
+              titleBuilder: (_) => TText('标题文字'),
               child: Container(height: 200)),
-        ).show(context);
+        );
       },
     );
   }
@@ -498,16 +505,17 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
-              cancel: TText(
+              cancelBuilder: (_, __) => TText(
                 '关闭',
                 textColor: TTheme.of(context).textColorSecondary,
                 font: TTheme.of(context).fontBodyLarge,
               ),
-              titleWidget: Row(
+              titleBuilder: (_) => Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(TIcons.info_circle,
@@ -520,14 +528,14 @@ class TPopupPage extends StatelessWidget {
                   ),
                 ],
               ),
-              confirm: TText(
+              confirmBuilder: (_, __) => TText(
                 '完成',
                 textColor: TTheme.of(context).brandNormalColor,
                 font: TTheme.of(context).fontTitleMedium,
                 fontWeight: FontWeight.w600,
               ),
               child: Container(height: 200)),
-        ).show(context);
+        );
       },
     );
   }
@@ -541,7 +549,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeOnOverlayClick: false,
@@ -556,7 +565,7 @@ class TPopupPage extends StatelessWidget {
                     onPressed: close,
                   ),
               child: const SizedBox(width: 240, height: 240)),
-        ).show(context);
+        );
       },
     );
   }
@@ -570,7 +579,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeOnOverlayClick: true,
@@ -589,7 +599,7 @@ class TPopupPage extends StatelessWidget {
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -605,17 +615,18 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 320,
               margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-              title: '日历式留白',
+              titleBuilder: (_) => TText('日历式留白'),
               child: Container(
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -629,18 +640,19 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 280,
               showOverlay: false,
               // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
-              title: '无蒙层',
+              titleBuilder: (_) => const TText('无蒙层'),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -654,7 +666,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 260,
@@ -663,7 +676,7 @@ class TPopupPage extends StatelessWidget {
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }
@@ -677,7 +690,8 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 240,
@@ -686,7 +700,7 @@ class TPopupPage extends StatelessWidget {
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
               )),
-        ).show(context);
+        );
       },
     );
   }

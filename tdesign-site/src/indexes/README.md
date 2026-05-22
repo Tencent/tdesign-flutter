@@ -36,7 +36,8 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup(
+      TPopup.show(
+        context,
         options: TPopupOptions(
             placement: TPopupPlacement.right,
             width: 280,
@@ -52,7 +53,7 @@ Widget _buildSimple(BuildContext context) {
                 );
               },
             )),
-      ).show(context);
+      );
     },
   );
 }</pre>
@@ -74,7 +75,8 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup(
+      TPopup.show(
+        context,
         options: TPopupOptions(
             placement: TPopupPlacement.right,
             width: 280,
@@ -90,7 +92,7 @@ Widget _buildSimple(BuildContext context) {
                 );
               },
             )),
-      ).show(context);
+      );
     },
   );
 }</pre>
@@ -115,7 +117,8 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup(
+      TPopup.show(
+        context,
         options: TPopupOptions(
             placement: TPopupPlacement.right,
             width: 280,
@@ -132,7 +135,7 @@ Widget _buildOther(BuildContext context) {
                 );
               },
             )),
-      ).show(context);
+      );
     },
   );
 }</pre>
@@ -154,7 +157,8 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      TPopup(
+      TPopup.show(
+        context,
         options: TPopupOptions(
             placement: TPopupPlacement.right,
             width: 280,
@@ -171,7 +175,7 @@ Widget _buildOther(BuildContext context) {
                 );
               },
             )),
-      ).show(context);
+      );
     },
   );
 }</pre>

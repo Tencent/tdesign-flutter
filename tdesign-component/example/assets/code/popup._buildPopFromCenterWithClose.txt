@@ -7,7 +7,8 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.center,
               closeOnOverlayClick: false,
@@ -22,7 +23,7 @@
                     onPressed: close,
                   ),
               child: const SizedBox(width: 240, height: 240)),
-        ).show(context);
+        );
       },
     );
   }

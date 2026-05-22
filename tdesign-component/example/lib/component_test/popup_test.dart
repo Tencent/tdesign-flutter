@@ -25,10 +25,11 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   void _showProblemDialog() {
-    TPopup(
+    TPopup.show(
+      context,
       options: TPopupOptions(
           placement: TPopupPlacement.bottom,
-          title: 'title',
+          titleBuilder: (_) => TText('title'),
           radius: 20,
           backgroundColor: const Color(0xFFFAFFFC),
           child: Container(
@@ -40,7 +41,7 @@ class _TestPageState extends State<TestPage> {
               ],
             ),
           )),
-    ).show(context);
+    );
   }
 
   @override

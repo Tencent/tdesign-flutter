@@ -109,8 +109,6 @@ class TPopupNavigatorRoute<T> extends PopupRoute<T> {
       margin: options.margin,
       width: options.width,
       height: options.height,
-      centerLooseHeight: options.placement == TPopupPlacement.center &&
-          options.closeBuilder != null,
     );
 
     final t = curved.value;

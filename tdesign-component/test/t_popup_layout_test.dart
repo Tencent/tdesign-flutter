@@ -93,7 +93,8 @@ void main() {
       }
     });
 
-    testWidgets('center placement 使用 width 与 height', (tester) async {
+    testWidgets('center placement 仅 Center 包裹（尺寸由 PopupShell 控制）',
+        (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.center,
         screenSize: screen,
@@ -105,17 +106,23 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Stack(
-                children: [layout.wrapPositioned(child: const SizedBox())]),
+              children: [
+                layout.wrapPositioned(
+                  child: const SizedBox(
+                    key: ValueKey('content'),
+                    width: 200,
+                    height: 150,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
       expect(find.byType(Center), findsOneWidget);
-      final sizedBoxes = tester.widgetList<SizedBox>(
-        find.descendant(
-            of: find.byType(Center), matching: find.byType(SizedBox)),
-      );
-      final sizedBox = sizedBoxes.firstWhere((w) => w.width == 200);
-      expect(sizedBox.height, 150);
+      final box = tester.widget<SizedBox>(find.byKey(const ValueKey('content')));
+      expect(box.width, 200);
+      expect(box.height, 150);
     });
 
     test('slideOffset 五向偏移', () {
@@ -156,14 +163,14 @@ void main() {
       expect(center.slideOffset(0.5), Offset.zero);
     });
 
-    testWidgets('centerLooseHeight 不限制高度', (tester) async {
+    testWidgets('center 仅 Positioned.fill + Center，由 PopupShell 控制尺寸',
+        (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.center,
         screenSize: screen,
         margin: EdgeInsets.zero,
         width: 100,
         height: 80,
-        centerLooseHeight: true,
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -177,9 +184,7 @@ void main() {
         ),
       );
       final center = tester.widget<Center>(find.byType(Center));
-      final sizedBox = center.child! as SizedBox;
-      expect(sizedBox.width, isNull);
-      expect(sizedBox.height, isNull);
+      expect(center.child, isA<SizedBox>());
     });
 
     test('resolvedMargin center 为零', () {

@@ -7,7 +7,8 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        TPopup(
+        TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.top,
               height: 240,
@@ -17,7 +18,7 @@
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,
               )),
-        ).show(context);
+        );
       },
     );
   }

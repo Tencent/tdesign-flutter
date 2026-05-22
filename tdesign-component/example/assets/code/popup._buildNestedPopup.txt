@@ -8,7 +8,8 @@
       size: TButtonSize.large,
       onTap: () {
         TPopupHandle? outerHandle;
-        outerHandle = TPopup(
+        outerHandle = TPopup.show(
+          context,
           options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 360,
@@ -31,7 +32,8 @@
                           theme: TButtonTheme.primary,
                           size: TButtonSize.large,
                           onTap: () {
-                            TPopup(
+                            TPopup.show(
+                              innerContext,
                               options: TPopupOptions(
                                 placement: TPopupPlacement.bottom,
                                 height: 280,
@@ -42,7 +44,7 @@
                                       .bgColorSecondaryContainer,
                                 ),
                               ),
-                            ).show(innerContext);
+                            );
                           },
                         ),
                         const SizedBox(height: 12),
@@ -58,7 +60,7 @@
                   );
                 },
               )),
-        ).show(context);
+        );
       },
     );
   }

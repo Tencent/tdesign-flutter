@@ -69,11 +69,12 @@ class TCalendarPopup {
       return;
     }
     final childWidget = builder?.call(context) ?? child;
-    _calendarHandle = TPopup(
+    _calendarHandle = TPopup.show(
+      context,
       options: TPopupOptions(
         placement: TPopupPlacement.bottom,
-        cancel: null,
-        confirm: null,
+        cancelBuilder: null,
+        confirmBuilder: null,
         margin: EdgeInsets.only(top: top ?? 0),
         closeOnOverlayClick: false,
         onOverlayClick: () {
@@ -91,7 +92,7 @@ class TCalendarPopup {
           child: childWidget!,
         ),
       ),
-    ).show(context);
+    );
   }
 
   void _onClose() {

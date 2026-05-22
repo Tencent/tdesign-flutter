@@ -11,6 +11,10 @@ import 't_popup_options.dart';
 import 't_popup_types.dart';
 
 /// 内置标题栏区域（仅 [TPopupPlacement.bottom]）。
+///
+/// - `headerBuilder` 为 sentinel [kPopupDefaultHeader] → 内置三段式（cancel | title | confirm）。
+/// - `headerBuilder` 为自定义 → 整行替换，库内不再插入任何子 Widget。
+/// - `headerBuilder` 为 null → 不渲染头部。
 class PopupHeader extends StatelessWidget {
   const PopupHeader({
     super.key,
@@ -23,166 +27,76 @@ class PopupHeader extends StatelessWidget {
 
   static const double headerHeight = 58;
 
+  void _close() {
+    onCloseWithTrigger(TPopupTrigger.programmatic);
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (options.placement != TPopupPlacement.bottom || options.hasNoHeader) {
+    if (options.placement != TPopupPlacement.bottom ||
+        options.headerBuilder == null) {
       return const SizedBox.shrink();
     }
 
     if (options.useCustomHeader) {
-      return options.headerBuilder!(
-        context,
-        _buildHeaderData(context),
-      );
+      return options.headerBuilder!(context, _close);
     }
 
-    if (options.useActionHeader) {
-      return SizedBox(
-        height: headerHeight,
-        child: _ActionHeader(
-          options: options,
-          onCloseWithTrigger: onCloseWithTrigger,
-        ),
-      );
-    }
-
-    final title = _buildTitleWidget(context);
-    if (title == null) {
-      return const SizedBox.shrink();
-    }
-
+    // 走内置三段式
     return SizedBox(
       height: headerHeight,
-      child: Container(
-        alignment:
-            options.titleAlignLeft ? Alignment.centerLeft : Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: title,
+      child: _DefaultHeader(
+        options: options,
+        close: _close,
       ),
     );
   }
-
-  TPopupHeaderData _buildHeaderData(BuildContext context) {
-    final theme = TTheme.of(context);
-    return TPopupHeaderData(
-      title: _buildTitleWidget(context),
-      cancel:
-          options.showCancelSlot ? _buildCancelWidget(context, theme) : null,
-      confirm:
-          options.showConfirmSlot ? _buildConfirmWidget(context, theme) : null,
-      onCancel: options.onCancel,
-      onConfirm: options.onConfirm,
-    );
-  }
-
-  Widget? _buildTitleWidget(BuildContext context) {
-    if (options.titleWidget != null) {
-      return options.titleWidget;
-    }
-    if (options.title != null && options.title!.isNotEmpty) {
-      return TText(
-        options.title!,
-        textColor: TTheme.of(context).textColorPrimary,
-        font: TTheme.of(context).fontTitleLarge,
-        fontWeight: FontWeight.w700,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      );
-    }
-    return null;
-  }
-
-  Widget _buildCancelWidget(BuildContext context, TThemeData theme) {
-    if (options.cancelBuilder != null) {
-      return options.cancelBuilder!(context);
-    }
-    if (TPopupOptions.isActionDefault(options.cancel)) {
-      return TText(
-        options.cancelBtn ?? context.resource.cancel,
-        textColor: theme.textColorSecondary,
-        font: theme.fontBodyLarge,
-      );
-    }
-    return options.cancel!;
-  }
-
-  Widget _buildConfirmWidget(BuildContext context, TThemeData theme) {
-    if (options.confirmBuilder != null) {
-      return options.confirmBuilder!(context);
-    }
-    if (TPopupOptions.isActionDefault(options.confirm)) {
-      return TText(
-        options.confirmBtn ?? context.resource.confirm,
-        textColor: theme.brandNormalColor,
-        font: theme.fontTitleMedium,
-        fontWeight: FontWeight.w600,
-      );
-    }
-    return options.confirm!;
-  }
 }
 
-class _ActionHeader extends StatelessWidget {
-  const _ActionHeader({
+class _DefaultHeader extends StatelessWidget {
+  const _DefaultHeader({
     required this.options,
-    required this.onCloseWithTrigger,
+    required this.close,
   });
 
   final TPopupOptions options;
-  final void Function(TPopupTrigger trigger) onCloseWithTrigger;
+  final VoidCallback close;
 
   @override
   Widget build(BuildContext context) {
     final theme = TTheme.of(context);
-    final title = options.titleWidget ??
-        TText(
-          options.title ?? '',
-          textColor: theme.textColorPrimary,
-          font: theme.fontTitleLarge,
-          fontWeight: FontWeight.w700,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        );
+    final showCancel = options.cancelBuilder != null;
+    final showConfirm = options.confirmBuilder != null;
+
+    final title = options.titleBuilder?.call(context);
 
     return Row(
       children: [
-        if (options.showCancelSlot)
+        if (showCancel)
           Padding(
             padding: EdgeInsets.only(left: theme.spacer8),
             child: Semantics(
               button: true,
               label: _cancelSemanticsLabel(context, options),
               excludeSemantics: true,
-              child: TToolbarPressable(
-                onTap: () {
-                  options.onCancel?.call();
-                  if (options.autoCloseOnCancel) {
-                    onCloseWithTrigger(TPopupTrigger.cancelBtn);
-                  }
-                },
-                child: _buildCancel(context, theme),
-              ),
+              child: _buildCancel(context, theme),
             ),
           )
         else
           SizedBox(width: theme.spacer16),
-        Expanded(child: Center(child: title)),
-        if (options.showConfirmSlot)
+        Expanded(
+          child: title == null
+              ? const SizedBox.shrink()
+              : Center(child: _titleWrap(context, theme, title)),
+        ),
+        if (showConfirm)
           Padding(
             padding: EdgeInsets.only(right: theme.spacer8),
             child: Semantics(
               button: true,
               label: _confirmSemanticsLabel(context, options),
               excludeSemantics: true,
-              child: TToolbarPressable(
-                onTap: () {
-                  options.onConfirm?.call();
-                  if (options.autoCloseOnConfirm) {
-                    onCloseWithTrigger(TPopupTrigger.confirmBtn);
-                  }
-                },
-                child: _buildConfirm(context, theme),
-              ),
+              child: _buildConfirm(context, theme),
             ),
           )
         else
@@ -191,48 +105,54 @@ class _ActionHeader extends StatelessWidget {
     );
   }
 
+  Widget _titleWrap(BuildContext context, TThemeData theme, Widget child) {
+    // 标题由用户 builder 决定样式，这里只做布局约束。
+    return DefaultTextStyle.merge(
+      style: TextStyle(
+        color: theme.textColorPrimary,
+        fontSize: theme.fontTitleLarge?.size,
+        fontWeight: FontWeight.w700,
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      child: child,
+    );
+  }
+
   Widget _buildCancel(BuildContext context, TThemeData theme) {
-    if (options.cancelBuilder != null) {
-      return options.cancelBuilder!(context);
-    }
-    if (TPopupOptions.isActionDefault(options.cancel)) {
-      return TText(
-        options.cancelBtn ?? context.resource.cancel,
-        textColor: theme.textColorSecondary,
-        font: theme.fontBodyLarge,
+    if (isPopupDefaultCancel(options.cancelBuilder)) {
+      return TToolbarPressable(
+        onTap: close,
+        child: TText(
+          context.resource.cancel,
+          textColor: theme.textColorSecondary,
+          font: theme.fontBodyLarge,
+        ),
       );
     }
-    return options.cancel!;
+    return options.cancelBuilder!(context, close);
   }
 
   Widget _buildConfirm(BuildContext context, TThemeData theme) {
-    if (options.confirmBuilder != null) {
-      return options.confirmBuilder!(context);
-    }
-    if (TPopupOptions.isActionDefault(options.confirm)) {
-      return TText(
-        options.confirmBtn ?? context.resource.confirm,
-        textColor: theme.brandNormalColor,
-        font: theme.fontTitleMedium,
-        fontWeight: FontWeight.w600,
+    if (isPopupDefaultConfirm(options.confirmBuilder)) {
+      return TToolbarPressable(
+        onTap: close,
+        child: TText(
+          context.resource.confirm,
+          textColor: theme.brandNormalColor,
+          font: theme.fontTitleMedium,
+          fontWeight: FontWeight.w600,
+        ),
       );
     }
-    return options.confirm!;
+    return options.confirmBuilder!(context, close);
   }
 }
 
 String _cancelSemanticsLabel(BuildContext context, TPopupOptions options) {
-  final btn = options.cancelBtn;
-  if (btn != null && btn.isNotEmpty) {
-    return btn;
-  }
   return context.resource.cancel;
 }
 
 String _confirmSemanticsLabel(BuildContext context, TPopupOptions options) {
-  final btn = options.confirmBtn;
-  if (btn != null && btn.isNotEmpty) {
-    return btn;
-  }
   return context.resource.confirm;
 }

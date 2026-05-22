@@ -8,7 +8,7 @@ import '_popup_header.dart';
 import 't_popup_options.dart';
 import 't_popup_types.dart';
 
-/// 浮层内容外壳：圆角、Header（仅 bottom）、child。
+/// 浮层内容外壳：圆角、Header（仅 bottom）、child；center 由 [PopupCenterUnderClose] 接管下方关闭区。
 class PopupShell extends StatelessWidget {
   const PopupShell({
     super.key,
@@ -26,72 +26,74 @@ class PopupShell extends StatelessWidget {
     final backgroundColor = options.backgroundColor ?? theme.bgColorContainer;
     final borderRadius = _borderRadius(options.placement, radius);
 
-    Widget content = options.child;
-
     if (options.placement == TPopupPlacement.center) {
-      if (options.closeBuilder != null) {
-        final panel = Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(radius),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: content,
-        );
-        return PopupCenterUnderClose(
-          options: options,
-          content: panel,
-          onCloseWithTrigger: onCloseWithTrigger,
-        );
-      }
-      return Center(
-        child: SizedBox(
-          width: options.width,
-          height: options.height,
-          child: Container(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(radius),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: content,
-          ),
-        ),
-      );
+      return _buildCenter(context, radius, backgroundColor);
     }
 
+    return _buildEdge(context, borderRadius, backgroundColor);
+  }
+
+  Widget _buildCenter(BuildContext context, double radius, Color background) {
+    final panel = Container(
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: options.child,
+    );
+
+    if (options.closeBuilder != null) {
+      return PopupCenterUnderClose(
+        options: options,
+        content: panel,
+        onCloseWithTrigger: onCloseWithTrigger,
+      );
+    }
+    return SizedBox(
+      width: options.width,
+      height: options.height,
+      child: panel,
+    );
+  }
+
+  Widget _buildEdge(
+    BuildContext context,
+    BorderRadius? borderRadius,
+    Color background,
+  ) {
     final useExpanded = options.placement == TPopupPlacement.left ||
         options.placement == TPopupPlacement.right ||
         options.height != null;
 
-    Widget panel = Container(
+    final body = options.placement == TPopupPlacement.bottom
+        ? Column(
+            mainAxisSize: useExpanded ? MainAxisSize.max : MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              PopupHeader(
+                options: options,
+                onCloseWithTrigger: onCloseWithTrigger,
+              ),
+              if (useExpanded) Expanded(child: options.child) else options.child,
+            ],
+          )
+        : (useExpanded
+            ? Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [Expanded(child: options.child)],
+              )
+            : options.child);
+
+    return Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: background,
         borderRadius: borderRadius,
       ),
       clipBehavior: Clip.antiAlias,
-      child: options.placement == TPopupPlacement.bottom
-          ? Column(
-              mainAxisSize: useExpanded ? MainAxisSize.max : MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                PopupHeader(
-                  options: options,
-                  onCloseWithTrigger: onCloseWithTrigger,
-                ),
-                if (useExpanded) Expanded(child: content) else content,
-              ],
-            )
-          : (useExpanded
-              ? Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [Expanded(child: content)],
-                )
-              : content),
+      child: body,
     );
-
-    return panel;
   }
 
   BorderRadius? _borderRadius(TPopupPlacement placement, double radius) {

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 't_popup_types.dart';
 
 /// 根据 placement 计算 Positioned 约束。
+///
+/// center 模式只负责 [Positioned.fill] + [Center]，**面板尺寸由 PopupShell 决定**，
+/// 这里不再插入 SizedBox（避免和 shell 中的尺寸约束双重包裹）。
 class PopupLayout {
   PopupLayout({
     required this.placement,
@@ -10,7 +13,6 @@ class PopupLayout {
     required this.margin,
     this.width,
     this.height,
-    this.centerLooseHeight = false,
   });
 
   final TPopupPlacement placement;
@@ -18,9 +20,6 @@ class PopupLayout {
   final EdgeInsets margin;
   final double? width;
   final double? height;
-
-  /// 居中且关闭按钮在内容下方时，不限制总高度（含下方关闭区）。
-  final bool centerLooseHeight;
 
   static const double defaultDrawerWidth = 280;
 
@@ -87,13 +86,7 @@ class PopupLayout {
         );
       case TPopupPlacement.center:
         return Positioned.fill(
-          child: Center(
-            child: SizedBox(
-              width: centerLooseHeight ? null : width,
-              height: centerLooseHeight ? null : height,
-              child: child,
-            ),
-          ),
+          child: Center(child: child),
         );
     }
   }

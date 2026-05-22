@@ -40,13 +40,14 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
                 preventScrollThrough: true,
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -82,16 +83,17 @@ void main() {
       await openPopup(
         tester,
         onPressed: () {
-          TPopup(
+          TPopup.show(
+            tester.element(find.text('open')),
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
                 showOverlay: false,
                 preventScrollThrough: true,
-                cancel: null,
-                confirm: null,
+                cancelBuilder: null,
+                confirmBuilder: null,
                 child: const SizedBox(height: 60)),
-          ).show(tester.element(find.text('open')));
+          );
         },
       );
       await tester.pumpAndSettle();
@@ -110,13 +112,14 @@ void main() {
         tester,
         onPressed: () {
           hostContext = tester.element(find.text('open'));
-          handle = TPopup(
+          handle = TPopup.show(
+            hostContext,
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 onClose: () => closeCount++,
                 child: const SizedBox(height: 60)),
-          ).show(hostContext);
+          );
         },
       );
       await tester.pumpAndSettle();

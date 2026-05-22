@@ -2,25 +2,30 @@ import 'package:flutter/material.dart';
 
 import 't_popup_types.dart';
 
-/// 浮层配置：[TPopup] 构造与 [TPopup.show] 的唯一参数来源。
+/// 浮层配置：[TPopup.show] 的唯一参数来源。
 ///
 /// ## 按 [placement] 用哪些字段
 ///
-/// | placement | 常用字段 |
-/// |-----------|----------|
-/// | [TPopupPlacement.bottom] | `title` / `cancel` / `confirm` / `headerBuilder`、`height`、`margin` |
-/// | [TPopupPlacement.center] | `closeBuilder`、`width`、`height`（有下方关闭时） |
-/// | [TPopupPlacement.top] / [left] / [right] | 主要 `child`、`margin`、方向对应 `width` 或 `height` |
+/// | placement | 头部 / 关闭区 | 尺寸字段 |
+/// |-----------|----------------|----------|
+/// | [TPopupPlacement.bottom] | `headerBuilder` / `titleBuilder` / `cancelBuilder` / `confirmBuilder` | `height`、`margin` |
+/// | [TPopupPlacement.center] | `closeBuilder` | `width`、`height` |
+/// | [TPopupPlacement.top] | — | `height`、`margin.top` / `left` / `right` |
+/// | [TPopupPlacement.left] / [right] | — | `width`、对应方向 `margin` |
 ///
-/// 传给其它 placement 的 bottom / center 专用字段会在 [normalized] 里裁掉。
+/// 非 bottom 上传 `headerBuilder` / `titleBuilder` / `cancelBuilder` / `confirmBuilder`、
+/// 或非 center 上传 `closeBuilder` 都会被 [normalized] 裁掉。
 ///
-/// ## 三态占位（bottom / center）
+/// ## Builder 三态
 ///
-/// - **未传参数**：使用默认 UI（如默认取消/确定文案、默认关闭图标）。
-/// - **显式 `null`**：隐藏该槽位（如 `cancel: null` 隐藏左侧；`closeBuilder: null` 无关闭按钮）。
-/// - **自定义 Widget / Builder**：完全自定义该区域。
+/// 每个 builder 字段都有三种使用方式：
 ///
-/// [TPopup.show] 内部会先 [normalized] 再绘制。
+/// - **不传**（保留默认）→ 使用内置 UI（如 `headerBuilder` 默认走三段式、`cancelBuilder` 默认显示「取消」、
+///   `closeBuilder` 默认显示圆形关闭图标）。
+/// - **显式传 `null`** → 隐藏该部分。
+/// - **传自定义函数** → 完全替换该部分；函数会拿到 `close` 回调，用于在 onTap 中关闭浮层。
+///
+/// `titleBuilder` 例外：默认为 `null` 表示无标题（不需要内置标题文案）。
 class TPopupOptions {
   const TPopupOptions({
     required this.child,
@@ -37,22 +42,11 @@ class TPopupOptions {
     this.preventScrollThrough = true,
     this.destroyOnClose = false,
     this.duration = const Duration(milliseconds: 240),
-    this.title,
-    this.titleWidget,
-    this.titleAlignLeft = false,
-    this.cancelBtn,
-    this.cancel = kPopupActionDefault,
-    this.cancelBuilder,
-    this.onCancel,
-    this.confirmBtn,
-    this.confirm = kPopupActionDefault,
-    this.confirmBuilder,
-    this.onConfirm,
-    this.autoCloseOnCancel = true,
-    this.autoCloseOnConfirm = true,
-    this.closeBuilder = kPopupDefaultClose,
-    this.onCloseBtn,
     this.headerBuilder = kPopupDefaultHeader,
+    this.titleBuilder,
+    this.cancelBuilder = kPopupDefaultCancel,
+    this.confirmBuilder = kPopupDefaultConfirm,
+    this.closeBuilder = kPopupDefaultClose,
     this.onOpen,
     this.onOpened,
     this.onClose,
@@ -70,10 +64,15 @@ class TPopupOptions {
   /// 宽度；对 left、right、center 生效。
   final double? width;
 
-  /// 高度；对 top、bottom 生效；center 且下方关闭时约束内容区高度。
+  /// 高度；对 top、bottom 生效；center 用于约束面板尺寸。
   final double? height;
 
-  /// 外边距；center 忽略。bottom 的 top 可用来做日历式距顶留白。
+  /// 外边距：
+  /// - top：`top` / `left` / `right` 生效。
+  /// - bottom：`top` > 0 触发「贴顶模式」（日历式留白）；否则贴底，`left` / `right` / `bottom` 生效。
+  /// - left：`top` / `bottom` / `left` 生效。
+  /// - right：`top` / `bottom` / `right` 生效。
+  /// - center：全忽略。
   final EdgeInsets margin;
 
   /// 内容区圆角，默认主题大圆角。
@@ -103,73 +102,54 @@ class TPopupOptions {
   /// 打开与关闭动画时长（一致）。
   final Duration duration;
 
-  /// bottom 操作栏中间标题文案。
-  final String? title;
+  // ============ bottom 头部 ============
 
-  /// bottom 操作栏中间标题组件，优先级高于 [title]。
-  final Widget? titleWidget;
-
-  /// bottom 仅标题行时是否左对齐，默认居中。
-  final bool titleAlignLeft;
-
-  /// bottom 左侧按钮文案，覆盖默认「取消」。
-  final String? cancelBtn;
-
-  /// bottom 左侧按钮；默认 [kPopupActionDefault] 表示默认文案，传 null 隐藏左侧。
-  final Widget? cancel;
-
-  /// bottom 左侧按钮构建器，优先级高于 [cancel]。
-  final WidgetBuilder? cancelBuilder;
-
-  /// 点击 bottom 左侧按钮回调。
-  final VoidCallback? onCancel;
-
-  /// bottom 右侧按钮文案，覆盖默认「确定」。
-  final String? confirmBtn;
-
-  /// bottom 右侧按钮；默认 [kPopupActionDefault]，传 null 隐藏右侧。
-  final Widget? confirm;
-
-  /// bottom 右侧按钮构建器，优先级高于 [confirm]。
-  final WidgetBuilder? confirmBuilder;
-
-  /// 点击 bottom 右侧按钮回调。
-  final VoidCallback? onConfirm;
-
-  /// 点击取消后是否自动关闭，默认 true。
-  final bool autoCloseOnCancel;
-
-  /// 点击确定后是否自动关闭，默认 true。
-  final bool autoCloseOnConfirm;
-
-  /// center 关闭区：`null` 不显示；未传则用 [kPopupDefaultClose]；bottom 与三边忽略。
-  final TPopupCloseBuilder? closeBuilder;
-
-  /// center 点击关闭控件前的回调。
-  final VoidCallback? onCloseBtn;
-
-  /// bottom 头部：`null` 无头部；未传则用 [kPopupDefaultHeader]；自定义见 [TPopupHeaderBuilder]。
+  /// bottom 头部构建器：
+  /// - 默认 [kPopupDefaultHeader] → 渲染内置三段式（`cancelBuilder | titleBuilder | confirmBuilder`）。
+  /// - `null` → 不显示头部。
+  /// - 自定义 `(ctx, close) => Widget` → 完全替换整行头部（[titleBuilder] / [cancelBuilder] /
+  ///   [confirmBuilder] 被忽略）。
   final TPopupHeaderBuilder? headerBuilder;
 
-  /// 开始打开时回调（路由入栈）。
+  /// bottom 标题槽（仅当 [headerBuilder] 为 [kPopupDefaultHeader] 时生效）：
+  /// - `null` → 无标题。
+  /// - 自定义 `(ctx) => Widget` → 显示自定义标题。
+  final WidgetBuilder? titleBuilder;
+
+  /// bottom 左槽（仅当 [headerBuilder] 为 [kPopupDefaultHeader] 时生效）：
+  /// - 默认 [kPopupDefaultCancel] → 显示本地化「取消」按钮，点击关闭浮层。
+  /// - `null` → 隐藏左槽。
+  /// - 自定义 `(ctx, close) => Widget` → 替换左槽，自行决定是否调 `close()`。
+  final TPopupSlotBuilder? cancelBuilder;
+
+  /// bottom 右槽（仅当 [headerBuilder] 为 [kPopupDefaultHeader] 时生效）：
+  /// - 默认 [kPopupDefaultConfirm] → 显示本地化「确定」按钮，点击关闭浮层。
+  /// - `null` → 隐藏右槽。
+  /// - 自定义 `(ctx, close) => Widget` → 替换右槽。
+  final TPopupSlotBuilder? confirmBuilder;
+
+  // ============ center 关闭区 ============
+
+  /// center 面板下方关闭区：
+  /// - 默认 [kPopupDefaultClose] → 显示圆形关闭图标，点击关闭浮层。
+  /// - `null` → 不显示关闭区。
+  /// - 自定义 `(ctx, close) => Widget` → 替换关闭区。
+  final TPopupSlotBuilder? closeBuilder;
+
+  // ============ 生命周期 ============
+
   final VoidCallback? onOpen;
-
-  /// 打开动画结束后回调。
   final VoidCallback? onOpened;
-
-  /// 开始关闭时回调。
   final VoidCallback? onClose;
-
-  /// 关闭动画结束且路由移除后回调。
   final VoidCallback? onClosed;
-
-  /// 显隐变化及触发来源。
   final TPopupVisibleChangeCallback? onVisibleChange;
-
-  /// 点击蒙层时回调（在是否关闭判断之前）。
   final VoidCallback? onOverlayClick;
 
   /// 按 [placement] 裁剪无效字段，得到路由实际使用的配置副本。
+  ///
+  /// - bottom 才保留 `headerBuilder` / `titleBuilder` / `cancelBuilder` / `confirmBuilder`；
+  ///   其它 placement 上这些字段强制重置为 sentinel（不渲染头部，因为没渲染入口）。
+  /// - center 才保留 `closeBuilder`；其它 placement 重置为 sentinel。
   TPopupOptions normalized() {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;
@@ -189,22 +169,11 @@ class TPopupOptions {
       preventScrollThrough: preventScrollThrough,
       destroyOnClose: destroyOnClose,
       duration: duration,
-      title: isBottom ? title : null,
-      titleWidget: isBottom ? titleWidget : null,
-      titleAlignLeft: isBottom ? titleAlignLeft : false,
-      cancelBtn: isBottom ? cancelBtn : null,
-      cancel: isBottom ? cancel : null,
-      cancelBuilder: isBottom ? cancelBuilder : null,
-      onCancel: isBottom ? onCancel : null,
-      confirmBtn: isBottom ? confirmBtn : null,
-      confirm: isBottom ? confirm : null,
-      confirmBuilder: isBottom ? confirmBuilder : null,
-      onConfirm: isBottom ? onConfirm : null,
-      autoCloseOnCancel: autoCloseOnCancel,
-      autoCloseOnConfirm: autoCloseOnConfirm,
-      closeBuilder: isCenter ? closeBuilder : null,
-      onCloseBtn: isCenter ? onCloseBtn : null,
       headerBuilder: isBottom ? headerBuilder : null,
+      titleBuilder: isBottom ? titleBuilder : null,
+      cancelBuilder: isBottom ? cancelBuilder : null,
+      confirmBuilder: isBottom ? confirmBuilder : null,
+      closeBuilder: isCenter ? closeBuilder : null,
       onOpen: onOpen,
       onOpened: onOpened,
       onClose: onClose,
@@ -214,77 +183,98 @@ class TPopupOptions {
     );
   }
 
-  bool get showCancelSlot =>
-      placement == TPopupPlacement.bottom &&
-      (cancelBuilder != null || cancel != null);
+  // ============ 派生 ============
 
-  bool get showConfirmSlot =>
-      placement == TPopupPlacement.bottom &&
-      (confirmBuilder != null || confirm != null);
-
-  bool get hasNoHeader =>
-      placement == TPopupPlacement.bottom && headerBuilder == null;
-
-  bool get useActionHeader =>
-      placement == TPopupPlacement.bottom &&
-      isPopupDefaultHeader(headerBuilder) &&
-      (showCancelSlot || showConfirmSlot);
-
+  /// 是否走自定义 header（[headerBuilder] 非 null 且非默认 sentinel）。
   bool get useCustomHeader =>
       placement == TPopupPlacement.bottom &&
       headerBuilder != null &&
       !isPopupDefaultHeader(headerBuilder);
 
-  static bool isActionDefault(Widget? action) => action is TPopupActionDefault;
-
-  bool get useTitleOnlyHeader =>
+  /// 是否走内置三段式头部（[headerBuilder] 为默认 sentinel）。
+  bool get useDefaultHeader =>
       placement == TPopupPlacement.bottom &&
-      isPopupDefaultHeader(headerBuilder) &&
-      !showCancelSlot &&
-      !showConfirmSlot &&
-      ((title != null && title!.isNotEmpty) || titleWidget != null);
+      isPopupDefaultHeader(headerBuilder);
 
-  bool get hasBuiltInHeader =>
+  /// 内置三段式中，左槽是否要画（非 null）。
+  bool get showCancelSlot =>
       placement == TPopupPlacement.bottom &&
-      !hasNoHeader &&
-      (useCustomHeader || useActionHeader || useTitleOnlyHeader);
+      useDefaultHeader &&
+      cancelBuilder != null;
 
-  /// Debug 下检查易误用参数（如 bottom 传 `width`），仅 `debugPrint` 不抛错。
+  /// 内置三段式中，右槽是否要画（非 null）。
+  bool get showConfirmSlot =>
+      placement == TPopupPlacement.bottom &&
+      useDefaultHeader &&
+      confirmBuilder != null;
+
+  /// bottom 是否实际渲染头部（自定义 / 内置三段中至少有一项可见）。
+  bool get hasBuiltInHeader {
+    if (placement != TPopupPlacement.bottom || headerBuilder == null) {
+      return false;
+    }
+    if (useCustomHeader) {
+      return true;
+    }
+    // 默认三段：任一槽位（cancel/title/confirm）非 null 都算
+    return cancelBuilder != null ||
+        confirmBuilder != null ||
+        titleBuilder != null;
+  }
+
+  /// Debug 下检查易误用参数（如 bottom 传 `width`、center 传 `margin`），仅 `debugPrint` 不抛错。
   void assertPlacementParams() {
     assert(() {
       switch (placement) {
+        case TPopupPlacement.top:
+          if (width != null) {
+            debugPrint('TPopup: width is ignored for placement=top');
+          }
+          if (margin.bottom > 0) {
+            debugPrint('TPopup: margin.bottom is ignored for placement=top');
+          }
+          break;
+        case TPopupPlacement.bottom:
+          if (width != null) {
+            debugPrint('TPopup: width is ignored for placement=bottom');
+          }
+          break;
         case TPopupPlacement.left:
+          if (height != null) {
+            debugPrint('TPopup: height is ignored for placement=left');
+          }
+          if (margin.right > 0) {
+            debugPrint('TPopup: margin.right is ignored for placement=left');
+          }
+          break;
         case TPopupPlacement.right:
           if (height != null) {
-            debugPrint(
-              'TPopup: height is ignored for placement=$placement',
-            );
+            debugPrint('TPopup: height is ignored for placement=right');
+          }
+          if (margin.left > 0) {
+            debugPrint('TPopup: margin.left is ignored for placement=right');
           }
           break;
         case TPopupPlacement.center:
-          if (height != null && closeBuilder == null) {
-            debugPrint(
-              'TPopup: height is ignored for placement=$placement',
-            );
-          }
-          break;
-        case TPopupPlacement.top:
-        case TPopupPlacement.bottom:
-          if (width != null) {
-            debugPrint(
-              'TPopup: width is ignored for placement=$placement',
-            );
+          if (margin != EdgeInsets.zero) {
+            debugPrint('TPopup: margin is ignored for placement=center');
           }
           break;
       }
-      if (placement != TPopupPlacement.bottom &&
-          (cancel != null ||
-              confirm != null ||
-              cancelBuilder != null ||
-              confirmBuilder != null)) {
+      // 非 bottom 设了 header / 三段相关字段（非默认 sentinel）→ 提示
+      final hasBottomHeaderCustom = !isPopupDefaultHeader(headerBuilder) ||
+          titleBuilder != null ||
+          !isPopupDefaultCancel(cancelBuilder) ||
+          !isPopupDefaultConfirm(confirmBuilder);
+      if (placement != TPopupPlacement.bottom && hasBottomHeaderCustom) {
         debugPrint(
-          'TPopup: cancel/confirm only applies to placement=bottom',
+          'TPopup: header/title/cancel/confirmBuilder only apply to placement=bottom',
         );
+      }
+      // 非 center 设了 closeBuilder 自定义 → 提示
+      if (placement != TPopupPlacement.center &&
+          !isPopupDefaultClose(closeBuilder)) {
+        debugPrint('TPopup: closeBuilder only applies to placement=center');
       }
       return true;
     }());
