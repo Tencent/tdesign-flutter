@@ -40,8 +40,10 @@ class TPopupHandle {
     if (isShowing) {
       return;
     }
+    // 先用「原始」配置做 debug 期参数校验（保留 sentinel 与用户传值差异），
+    // 再 normalize 给路由使用（normalize 会按 placement 强制清空无效字段）。
+    options.assertPlacementParams();
     final normalized = options.normalized();
-    normalized.assertPlacementParams();
 
     final navigator = _navigatorOf(context);
     _isClosed = false;

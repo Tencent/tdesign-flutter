@@ -19,7 +19,7 @@ part 't_popup_tracker.dart';
 ///   context,
 ///   options: TPopupOptions(
 ///     placement: TPopupPlacement.bottom,
-///     title: '标题',
+///     titleBuilder: (_) => const Text('标题'),
 ///     child: MyPanel(),
 ///   ),
 /// );
