@@ -35,8 +35,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.top,
+          options: TPopupOptions.top(
               height: 240,
               onOpen: () => print('open'),
               onOpened: () => print('opened'),
@@ -67,8 +66,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.left,
+          options: TPopupOptions.left(
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
@@ -96,8 +94,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeBuilder: null,
               child: Container(
                 decoration: BoxDecoration(
@@ -131,8 +128,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 240,
               headerBuilder: null,
               child: Container(
@@ -162,8 +158,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.right,
+          options: TPopupOptions.right(
               width: 280,
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
@@ -192,11 +187,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 280,
-              title: '标题文字',
-              onConfirm: () => TToast.showText('确定', context: context),
+              titleBuilder: (_) => TText('标题文字'),
               child: Container(height: 200)),
         );
       },
@@ -221,15 +214,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 280,
-              cancel: TText(
+              cancelBuilder: (_, __) => TText(
                 '关闭',
                 textColor: TTheme.of(context).textColorSecondary,
                 font: TTheme.of(context).fontBodyLarge,
               ),
-              titleWidget: Row(
+              titleBuilder: (_) => Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(TIcons.info_circle,
@@ -242,7 +234,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   ),
                 ],
               ),
-              confirm: TText(
+              confirmBuilder: (_, __) => TText(
                 '完成',
                 textColor: TTheme.of(context).brandNormalColor,
                 font: TTheme.of(context).fontTitleMedium,
@@ -272,8 +264,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeOnOverlayClick: false,
               width: 240,
               height: 240,
@@ -309,8 +300,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.center,
+          options: TPopupOptions.center(
               closeOnOverlayClick: true,
               width: 240,
               height: 200,
@@ -351,8 +341,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TPopupHandle? outerHandle;
         outerHandle = TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 360,
               headerBuilder: null,
               child: Builder(
@@ -375,10 +364,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                           onTap: () {
                             TPopup.show(
                               innerContext,
-                              options: TPopupOptions(
-                                placement: TPopupPlacement.bottom,
+                              options: TPopupOptions.bottom(
                                 height: 280,
-                                title: '内层标题',
+                                titleBuilder: (_) => const TText('内层标题'),
                                 child: Container(
                                   height: 160,
                                   color: TTheme.of(innerContext)
@@ -425,11 +413,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 320,
               margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-              title: '日历式留白',
+              titleBuilder: (_) => TText('日历式留白'),
               child: Container(
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,
@@ -457,12 +444,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 280,
               showOverlay: false,
               // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
-              title: '无蒙层',
+              titleBuilder: (_) => const TText('无蒙层'),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
@@ -490,8 +476,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 260,
               onOverlayClick: () => TToast.showText('点击蒙层', context: context),
               child: Container(
@@ -521,8 +506,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TPopup.show(
           context,
-          options: TPopupOptions(
-              placement: TPopupPlacement.bottom,
+          options: TPopupOptions.bottom(
               height: 240,
               duration: const Duration(milliseconds: 600),
               child: Container(
@@ -541,118 +525,150 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## API
 ### TPopup
 #### 简介
-弹出层命名空间：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。仅提供静态入口 [show]；返回的 [TPopupHandle] 控制本次浮层的显隐。
+弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
 
- ## 怎么用
+ 通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
+
+ **示例**
 
  ```dart
  final handle = TPopup.show(
    context,
-   options: TPopupOptions(
-     placement: TPopupPlacement.bottom,
-     title: '标题',
+   options: TPopupOptions.bottom(
+     titleBuilder: (_) => const Text('标题'),
      child: MyPanel(),
    ),
  );
-
- // 关闭后再开（同一 handle）
  handle.close();
- handle.open(context);
+ handle.open();
  ```
 
- 字段说明见 [TPopupOptions]；按 [TPopupPlacement] 只有部分参数生效（无效参数会在
- [TPopupOptions.normalized] 中裁掉）。
+ 配置项见 [TPopupOptions]；方向见 [TPopupPlacement]。
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPopup._  |  |
+
 
 #### 静态方法
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| show | TPopupHandle | `BuildContext context`, `{required TPopupOptions options, BuildContext? navigatorContext, bool useRootNavigator = false}` | 命令式打开浮层并压入独立路由，返回 [TPopupHandle] 控制显隐。 |
+| show |  |   required BuildContext context,  required TPopupOptions options,  BuildContext? navigatorContext,  bool useRootNavigator, | 打开浮层并压入独立 [PopupRoute]。     [context] 用于查找 [Navigator] 并展示浮层。     [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。     返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、   [TPopupHandle.isShowing] 控制与查询。     同一 [Navigator] 上若已有展示中的浮层，重复调用会返回已有 handle（防连点）。     [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。     [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
+
+```
+```
 
 ### TPopupOptions
 #### 简介
-浮层配置：[TPopup] 构造与 [TPopup.show] 的唯一参数来源。
+[TPopup.show] 的配置对象。
 
- ## 按 [placement] 用哪些字段
+ ## 如何创建
 
- | placement | 常用字段 |
- |-----------|----------|
- | [TPopupPlacement.bottom] | `title` / `cancel` / `confirm` / `headerBuilder`、`height`、`margin` |
- | [TPopupPlacement.center] | `closeBuilder`、`width`、`height`（有下方关闭时） |
- | [TPopupPlacement.top] / [left] / [right] | 主要 `child`、`margin`、方向对应 `width` 或 `height` |
+ | 场景 | 推荐用法 |
+ |------|----------|
+ | 弹出方向已知 | [TPopupOptions.bottom]、[TPopupOptions.center]、[TPopupOptions.top]、[TPopupOptions.left]、[TPopupOptions.right] |
+ | 方向由变量决定 | 默认构造并设置 [placement]；Debug 下传错字段会抛 [FlutterError] |
 
- 传给其它 placement 的 bottom / center 专用字段会在 [normalized] 里裁掉。
+ 命名工厂只暴露当前方向生效的字段（例如 [TPopupOptions.bottom] 无 [width] 参数）。
 
- ## 三态占位（bottom / center）
+ ## 字段与 [TPopupPlacement]
 
- - **未传参数**：使用默认 UI（如默认取消/确定文案、默认关闭图标）。
- - **显式 `null`**：隐藏该槽位（如 `cancel: null` 隐藏左侧；`closeBuilder: null` 无关闭按钮）。
- - **自定义 Widget / Builder**：完全自定义该区域。
+ | [TPopupPlacement] | 头部 / 关闭 | 尺寸 |
+ |-------------------|-------------|------|
+ | [TPopupPlacement.bottom] | [headerBuilder]、[titleBuilder]、[cancelBuilder]、[confirmBuilder] | [height]、[margin] |
+ | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
+ | [TPopupPlacement.top] | — | [height]、[margin] |
+ | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[margin] |
 
- [TPopup.show] 内部会先 [normalized] 再绘制。
+ ## Builder 三态（[headerBuilder]、[cancelBuilder]、[confirmBuilder]、[closeBuilder]）
+
+ | 传参方式 | 效果 |
+ |----------|------|
+ | 省略（使用默认值） | 渲染内置 UI |
+ | 显式 `null` | 隐藏该区域 |
+ | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
+
+ [titleBuilder] 默认为 `null`，表示无标题文案。
+
+ 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoCloseOnCancel | bool | true | 点击取消后是否自动关闭，默认 true。 |
-| autoCloseOnConfirm | bool | true | 点击确定后是否自动关闭，默认 true。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
-| cancel | Widget? | kPopupActionDefault | bottom 左侧按钮；默认 [kPopupActionDefault] 表示默认文案，传 null 隐藏左侧。 |
-| cancelBtn | String? | - | bottom 左侧按钮文案，覆盖默认「取消」。 |
-| cancelBuilder | WidgetBuilder? | - | bottom 左侧按钮构建器，优先级高于 [cancel]。 |
+| cancelBuilder | TPopupSlotBuilder? | _kPopupDefaultCancel | bottom 左侧操作槽；仅 [headerBuilder] 为内置默认时生效。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
-| closeBuilder | TPopupCloseBuilder? | kPopupDefaultClose | center 关闭区：`null` 不显示；未传则用 [kPopupDefaultClose]；bottom 与三边忽略。 |
+| closeBuilder | TPopupSlotBuilder? | _kPopupDefaultClose | center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效。三态见类文档「Builder 三态」。 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
-| confirm | Widget? | kPopupActionDefault | bottom 右侧按钮；默认 [kPopupActionDefault]，传 null 隐藏右侧。 |
-| confirmBtn | String? | - | bottom 右侧按钮文案，覆盖默认「确定」。 |
-| confirmBuilder | WidgetBuilder? | - | bottom 右侧按钮构建器，优先级高于 [confirm]。 |
-| destroyOnClose | bool | false | 为 true 时 Popup 路由 maintainState 为 false，关闭后不保留路由内 State。 |
-| duration | Duration | const Duration(milliseconds: 240) | 打开与关闭动画时长（一致）。 |
-| headerBuilder | TPopupHeaderBuilder? | kPopupDefaultHeader | bottom 头部：`null` 无头部；未传则用 [kPopupDefaultHeader]；自定义见 [TPopupHeaderBuilder]。 |
-| height | double? | - | 高度；对 top、bottom 生效；center 且下方关闭时约束内容区高度。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距；center 忽略。bottom 的 top 可用来做日历式距顶留白。 |
-| onCancel | VoidCallback? | - | 点击 bottom 左侧按钮回调。 |
-| onClose | VoidCallback? | - | 开始关闭时回调。 |
-| onCloseBtn | VoidCallback? | - | center 点击关闭控件前的回调。 |
-| onClosed | VoidCallback? | - | 关闭动画结束且路由移除后回调。 |
-| onConfirm | VoidCallback? | - | 点击 bottom 右侧按钮回调。 |
-| onOpen | VoidCallback? | - | 开始打开时回调（路由入栈）。 |
-| onOpened | VoidCallback? | - | 打开动画结束后回调。 |
-| onOverlayClick | VoidCallback? | - | 点击蒙层时回调（在是否关闭判断之前）。 |
-| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化及触发来源。 |
+| confirmBuilder | TPopupSlotBuilder? | _kPopupDefaultConfirm | bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。 |
+| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
+| duration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
+| headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。 |
+| height | double? | - | 高度；[TPopupPlacement.top]、[TPopupPlacement.bottom] 生效；[TPopupPlacement.center] 约束面板尺寸。 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距；生效边取决于 [placement]。 |
+| onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
+| onClosed | VoidCallback? | - | 路由 pop 且关闭动画结束。 |
+| onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
+| onOpened | VoidCallback? | - | 打开动画结束。 |
+| onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 [TPopupTrigger]。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 [TPopupPlacement.bottom]。 |
 | preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
-| title | String? | - | bottom 操作栏中间标题文案。 |
-| titleAlignLeft | bool | false | bottom 仅标题行时是否左对齐，默认居中。 |
-| titleWidget | Widget? | - | bottom 操作栏中间标题组件，优先级高于 [title]。 |
-| width | double? | - | 宽度；对 left、right、center 生效。 |
+| titleBuilder | WidgetBuilder? | - | bottom 标题；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。 |
+| width | double? | - | 宽度；[TPopupPlacement.left]、[TPopupPlacement.right]、[TPopupPlacement.center] 生效。 |
 
 
-#### 静态方法
+#### 工厂构造方法
 
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| isActionDefault |  |   required Widget? action, |  |
+| 名称  | 说明 |
+| --- |  --- |
+| TPopupOptions.bottom  | 创建 [TPopupPlacement.bottom] 配置。
+
+ 固定 [placement] 为 [TPopupPlacement.bottom]；默认带内置头部。
+ 蒙层、动画、生命周期等字段语义见同名成员文档。 |
+| TPopupOptions.center  | 创建 [TPopupPlacement.center] 配置。
+
+ 固定 [placement] 为 [TPopupPlacement.center]；默认面板外下方圆形关闭按钮。 |
+| TPopupOptions.left  | 创建 [TPopupPlacement.left] 配置。
+
+ 固定 [placement] 为 [TPopupPlacement.left]；未传 [width] 时布局默认宽度 280。 |
+| TPopupOptions.right  | 创建 [TPopupPlacement.right] 配置。
+
+ 固定 [placement] 为 [TPopupPlacement.right]；未传 [width] 时布局默认宽度 280。 |
+| TPopupOptions.top  | 创建 [TPopupPlacement.top] 配置。
+
+ 固定 [placement] 为 [TPopupPlacement.top]；无内置头部。 |
 
 ```
 ```
 
-### TPopupHeaderData
+### TPopupHandle
 #### 简介
-传给自定义 [TPopupOptions.headerBuilder] 的标题栏数据（库内已组装好各槽 Widget）。
-#### 默认构造方法
+[TPopup.show] 的返回值，用于控制同一份 [TPopupOptions] 的多次打开与关闭。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cancel | Widget? | - | 左侧区域 Widget（null 表示该侧已隐藏）。 |
-| confirm | Widget? | - | 右侧区域 Widget（null 表示该侧已隐藏）。 |
-| onCancel | VoidCallback? | - | 点击左侧区域时回调（是否关闭由 [TPopupOptions.autoCloseOnCancel] 决定）。 |
-| onConfirm | VoidCallback? | - | 点击右侧区域时回调（是否关闭由 [TPopupOptions.autoCloseOnConfirm] 决定）。 |
-| title | Widget? | - | 中间标题（可为 null）。 |
+ **示例**
+
+ ```dart
+ final handle = TPopup.show(
+   context,
+   options: TPopupOptions.bottom(child: panel),
+ );
+ handle.close();
+ handle.open(); // 可省略 context，复用已缓存的 Navigator
+ ```
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TPopupHandle._  |  |
 
 
   
