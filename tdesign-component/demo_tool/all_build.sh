@@ -128,8 +128,8 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # overlay
 # popover
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/popover" --name TPopover,TPopoverWidget --folder-name popover --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
-# popup（API 由源码 /// 生成 example/assets/api/popup_api.md；Handle 见 TPopup.show 返回值说明）
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/popup" --name TPopup,TPopupOptions,TPopupHeaderData,TPopupPlacement,TPopupTrigger --folder-name popup --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+# popup
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/popup" --name TPopup,TPopupOptions,TPopupHandle,TPopupPlacement,TPopupTrigger --folder-name popup --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # refresh
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/refresh/t_refresh_header.dart" --name TRefreshHeader --folder-name pull-down-refresh --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # swipecell
