@@ -3,8 +3,6 @@ import '../../../tdesign_flutter.dart';
 
 typedef CalendarBuilder = Widget Function(BuildContext context);
 
-enum CalendarTrigger { closeBtn, confirmBtn, overlay }
-
 /// 单元格组件popup模式
 class TCalendarPopup {
   TCalendarPopup(
