@@ -18,10 +18,10 @@ const Object _unset = Object();
 ///
 /// | [TPopupPlacement] | 头部 / 关闭 | 尺寸 |
 /// |-------------------|-------------|------|
-/// | [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[margin] |
+/// | [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[inset] |
 /// | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
-/// | [TPopupPlacement.top] | — | [height]、[margin] |
-/// | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[margin] |
+/// | [TPopupPlacement.top] | — | [height]、[inset] |
+/// | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[inset] |
 ///
 /// ## Builder 三态（[headerBuilder]、[cancelBuilder]、[confirmBuilder]、[closeBuilder]）
 ///
@@ -43,7 +43,7 @@ class TPopupOptions {
     this.placement = TPopupPlacement.bottom,
     this.width,
     this.height,
-    this.margin = EdgeInsets.zero,
+    this.inset,
     this.radius,
     this.backgroundColor,
     this.showOverlay = true,
@@ -73,7 +73,7 @@ class TPopupOptions {
   factory TPopupOptions.bottom({
     required Widget child,
     double? height,
-    EdgeInsets margin = EdgeInsets.zero,
+    TPopupBottomInset? inset,
     TPopupHeaderBuilder? headerBuilder = _kPopupDefaultHeader,
     Widget? titleWidget,
     TPopupSlotBuilder? cancelBuilder = _kPopupDefaultCancel,
@@ -98,7 +98,7 @@ class TPopupOptions {
         child: child,
         placement: TPopupPlacement.bottom,
         height: height,
-        margin: margin,
+        inset: inset,
         headerBuilder: headerBuilder,
         titleWidget: titleWidget,
         cancelBuilder: cancelBuilder,
@@ -173,7 +173,7 @@ class TPopupOptions {
   factory TPopupOptions.top({
     required Widget child,
     double? height,
-    EdgeInsets margin = EdgeInsets.zero,
+    TPopupTopInset? inset,
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
@@ -194,7 +194,7 @@ class TPopupOptions {
         child: child,
         placement: TPopupPlacement.top,
         height: height,
-        margin: margin,
+        inset: inset,
         radius: radius,
         backgroundColor: backgroundColor,
         showOverlay: showOverlay,
@@ -218,7 +218,7 @@ class TPopupOptions {
   factory TPopupOptions.left({
     required Widget child,
     double? width,
-    EdgeInsets margin = EdgeInsets.zero,
+    TPopupLeftInset? inset,
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
@@ -239,7 +239,7 @@ class TPopupOptions {
         child: child,
         placement: TPopupPlacement.left,
         width: width,
-        margin: margin,
+        inset: inset,
         radius: radius,
         backgroundColor: backgroundColor,
         showOverlay: showOverlay,
@@ -263,7 +263,7 @@ class TPopupOptions {
   factory TPopupOptions.right({
     required Widget child,
     double? width,
-    EdgeInsets margin = EdgeInsets.zero,
+    TPopupRightInset? inset,
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
@@ -284,7 +284,7 @@ class TPopupOptions {
         child: child,
         placement: TPopupPlacement.right,
         width: width,
-        margin: margin,
+        inset: inset,
         radius: radius,
         backgroundColor: backgroundColor,
         showOverlay: showOverlay,
@@ -314,11 +314,14 @@ class TPopupOptions {
   /// 高度；[TPopupPlacement.top]、[TPopupPlacement.bottom] 生效；[TPopupPlacement.center] 约束面板尺寸。
   final double? height;
 
-  /// 外边距；生效边取决于 [placement]。
+  /// 交叉轴边缘留白；具体类型由 [placement] 决定。
   ///
-  /// [TPopupPlacement.bottom]：`top > 0` 时贴顶留白（日历式），否则贴底。
-  /// [TPopupPlacement.center] 忽略。
-  final EdgeInsets margin;
+  /// * [TPopupPlacement.bottom] 使用 [TPopupBottomInset]
+  /// * [TPopupPlacement.top] 使用 [TPopupTopInset]
+  /// * [TPopupPlacement.left] 使用 [TPopupLeftInset]
+  /// * [TPopupPlacement.right] 使用 [TPopupRightInset]
+  /// * [TPopupPlacement.center] 不支持
+  final TPopupInset? inset;
 
   /// 内容区圆角，默认主题大圆角。
   final double? radius;
@@ -396,7 +399,7 @@ class TPopupOptions {
     TPopupPlacement? placement,
     Object? width = _unset,
     Object? height = _unset,
-    EdgeInsets? margin,
+    Object? inset = _unset,
     Object? radius = _unset,
     Object? backgroundColor = _unset,
     bool? showOverlay,
@@ -421,10 +424,15 @@ class TPopupOptions {
     return TPopupOptions(
       child: child ?? this.child,
       placement: placement ?? this.placement,
-      width: identical(width, _unset) ? this.width : (width as num?)?.toDouble(),
-      height: identical(height, _unset) ? this.height : (height as num?)?.toDouble(),
-      margin: margin ?? this.margin,
-      radius: identical(radius, _unset) ? this.radius : (radius as num?)?.toDouble(),
+      width:
+          identical(width, _unset) ? this.width : (width as num?)?.toDouble(),
+      height: identical(height, _unset)
+          ? this.height
+          : (height as num?)?.toDouble(),
+      inset: identical(inset, _unset) ? this.inset : inset as TPopupInset?,
+      radius: identical(radius, _unset)
+          ? this.radius
+          : (radius as num?)?.toDouble(),
       backgroundColor: identical(backgroundColor, _unset)
           ? this.backgroundColor
           : backgroundColor as Color?,
@@ -482,7 +490,7 @@ class TPopupOptions {
       placement: placement,
       width: width,
       height: height,
-      margin: margin,
+      inset: inset,
       radius: radius,
       backgroundColor: backgroundColor,
       showOverlay: showOverlay,
@@ -508,10 +516,13 @@ class TPopupOptions {
 
   /// {@nodoc}
   bool get usesDefaultHeader => _isPopupDefaultHeader(headerBuilder);
+
   /// {@nodoc}
   bool get usesDefaultCancel => _isPopupDefaultCancel(cancelBuilder);
+
   /// {@nodoc}
   bool get usesDefaultConfirm => _isPopupDefaultConfirm(confirmBuilder);
+
   /// {@nodoc}
   bool get usesDefaultClose => _isPopupDefaultClose(closeBuilder);
 
@@ -566,36 +577,39 @@ class TPopupOptions {
     switch (placement) {
       case TPopupPlacement.top:
         if (width != null) {
-          return 'width is not valid for placement=top; use height + margin.';
+          return 'width is not valid for placement=top; use height + inset.';
         }
-        if (margin.bottom > 0) {
-          return 'margin.bottom is not valid for placement=top.';
+        if (inset != null && inset is! TPopupTopInset) {
+          return 'inset must be TPopupTopInset for placement=top.';
         }
         break;
       case TPopupPlacement.bottom:
         if (width != null) {
-          return 'width is not valid for placement=bottom; use height + margin.';
+          return 'width is not valid for placement=bottom; use height + inset.';
+        }
+        if (inset != null && inset is! TPopupBottomInset) {
+          return 'inset must be TPopupBottomInset for placement=bottom.';
         }
         break;
       case TPopupPlacement.left:
         if (height != null) {
-          return 'height is not valid for placement=left; use width + margin.';
+          return 'height is not valid for placement=left; use width + inset.';
         }
-        if (margin.right > 0) {
-          return 'margin.right is not valid for placement=left.';
+        if (inset != null && inset is! TPopupLeftInset) {
+          return 'inset must be TPopupLeftInset for placement=left.';
         }
         break;
       case TPopupPlacement.right:
         if (height != null) {
-          return 'height is not valid for placement=right; use width + margin.';
+          return 'height is not valid for placement=right; use width + inset.';
         }
-        if (margin.left > 0) {
-          return 'margin.left is not valid for placement=right.';
+        if (inset != null && inset is! TPopupRightInset) {
+          return 'inset must be TPopupRightInset for placement=right.';
         }
         break;
       case TPopupPlacement.center:
-        if (margin != EdgeInsets.zero) {
-          return 'margin is not valid for placement=center.';
+        if (inset != null) {
+          return 'inset is not valid for placement=center.';
         }
         break;
     }

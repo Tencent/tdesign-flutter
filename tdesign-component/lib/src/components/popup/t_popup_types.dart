@@ -5,16 +5,16 @@ part of 't_popup.dart';
 /// 与 [TPopupOptions] 类文档中的「字段与 placement」表对应。
 /// 方向固定时请用 [TPopupOptions.bottom]、[TPopupOptions.center] 等命名工厂。
 enum TPopupPlacement {
-  /// 自顶部滑入；使用 [TPopupOptions.height]、[TPopupOptions.margin]（top/left/right）。
+  /// 自顶部滑入；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupTopInset]）。
   top,
 
-  /// 自左侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.margin]（left/top/bottom）。
+  /// 自左侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupLeftInset]）。
   left,
 
-  /// 自右侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.margin]（right/top/bottom）。
+  /// 自右侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupRightInset]）。
   right,
 
-  /// 自底部滑入；默认内置头部；使用 [TPopupOptions.height]、[TPopupOptions.margin]。
+  /// 自底部滑入；默认内置头部；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）。
   bottom,
 
   /// 屏幕居中；使用 [TPopupOptions.closeBuilder] 控制面板外下方关闭区。

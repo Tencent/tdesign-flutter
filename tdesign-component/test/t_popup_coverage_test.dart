@@ -614,7 +614,7 @@ void main() {
       expect(hasRedPanel, isTrue);
     });
 
-    testWidgets('bottom margin.bottom 与无 overlay 仍可关闭', (tester) async {
+    testWidgets('bottom inset.left/right 与无 overlay 仍可关闭', (tester) async {
       TPopupHandle? handle;
       await openPopup(
         tester,
@@ -624,7 +624,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
-                margin: const EdgeInsets.only(bottom: 16),
+                inset: const TPopupBottomInset(left: 16, right: 16),
                 showOverlay: false,
                 closeOnOverlayClick: false,
                 cancelBuilder: null,
@@ -640,13 +640,9 @@ void main() {
   });
 
   group('PopupLayout 覆盖率补充', () {
-    const screen = Size(400, 800);
-
-    testWidgets('bottom 无 height 且无 margin.top 贴底', (tester) async {
+    testWidgets('bottom 无 height 时贴底', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -669,18 +665,15 @@ void main() {
       expect(
         PopupLayout(
           placement: TPopupPlacement.center,
-          screenSize: screen,
-          margin: EdgeInsets.zero,
         ).alignment,
         Alignment.center,
       );
     });
 
-    testWidgets('right 默认 drawer 宽度与 margin', (tester) async {
+    testWidgets('right 默认 drawer 宽度与 inset', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.right,
-        screenSize: screen,
-        margin: const EdgeInsets.only(top: 8, bottom: 8, right: 4),
+        inset: const TPopupRightInset(top: 8, bottom: 8),
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -693,15 +686,13 @@ void main() {
       );
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.width, PopupLayout.defaultDrawerWidth);
-      expect(positioned.right, 4);
+      expect(positioned.right, 0);
       expect(positioned.top, 8);
     });
 
     testWidgets('left 默认 drawer 宽度', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.left,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -751,8 +742,7 @@ void main() {
       expect(opts.width, 220);
       expect(opts.height, 220);
       expect(opts.usesDefaultClose, isTrue);
-      // center factory 不暴露 margin → 默认零
-      expect(opts.margin, EdgeInsets.zero);
+      expect(opts.inset, isNull);
     });
 
     test('.top / .left / .right 生成对应 placement + 默认无头部', () {
@@ -775,8 +765,7 @@ void main() {
     test('factory 输出的合法配置在 assertPlacementParams 下零异常', () {
       final variants = [
         TPopupOptions.bottom(child: const SizedBox(), height: 300),
-        TPopupOptions.center(
-            child: const SizedBox(), width: 220, height: 220),
+        TPopupOptions.center(child: const SizedBox(), width: 220, height: 220),
         TPopupOptions.top(child: const SizedBox(), height: 100),
         TPopupOptions.left(child: const SizedBox(), width: 280),
         TPopupOptions.right(child: const SizedBox(), width: 280),
@@ -953,8 +942,8 @@ void main() {
                     GestureDetector(onTap: close, child: const Text('应隐藏-左')),
                 confirmBuilder: (_, close) =>
                     GestureDetector(onTap: close, child: const Text('应隐藏-右')),
-                child: const SizedBox(
-                    key: ValueKey('popup-child'), height: 80)),
+                child:
+                    const SizedBox(key: ValueKey('popup-child'), height: 80)),
           );
         },
       );
@@ -1069,7 +1058,8 @@ void main() {
       expect(find.text('确定'), findsNothing);
     });
 
-    testWidgets('headerBuilder 自定义 → titleWidget / cancelBuilder / confirmBuilder 全部被忽略',
+    testWidgets(
+        'headerBuilder 自定义 → titleWidget / cancelBuilder / confirmBuilder 全部被忽略',
         (tester) async {
       await openPopup(
         tester,
@@ -1102,8 +1092,7 @@ void main() {
   // 触发源精细化：sentinel vs 自定义 builder 的 close 上报区分
   // ============================================================
   group('Popup 触发源细分（sentinel vs 自定义 builder）', () {
-    testWidgets('内置 cancel 按钮点击 → cancel（与 confirm 区分）',
-        (tester) async {
+    testWidgets('内置 cancel 按钮点击 → cancel（与 confirm 区分）', (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
         tester,
@@ -1128,8 +1117,7 @@ void main() {
       expect(lastTrigger, TPopupTrigger.cancel);
     });
 
-    testWidgets('自定义 cancelBuilder 内调 close → cancel',
-        (tester) async {
+    testWidgets('自定义 cancelBuilder 内调 close → cancel', (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
         tester,
@@ -1158,8 +1146,7 @@ void main() {
       expect(lastTrigger, TPopupTrigger.cancel);
     });
 
-    testWidgets('自定义 confirmBuilder 内调 close → confirm',
-        (tester) async {
+    testWidgets('自定义 confirmBuilder 内调 close → confirm', (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
         tester,
@@ -1188,8 +1175,7 @@ void main() {
       expect(lastTrigger, TPopupTrigger.confirm);
     });
 
-    testWidgets('center 自定义 closeBuilder 内调 close → close',
-        (tester) async {
+    testWidgets('center 自定义 closeBuilder 内调 close → close', (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
         tester,
@@ -1219,8 +1205,7 @@ void main() {
       expect(lastTrigger, TPopupTrigger.close);
     });
 
-    testWidgets('headerBuilder 自定义内调 close → custom（无预设动作语义）',
-        (tester) async {
+    testWidgets('headerBuilder 自定义内调 close → custom（无预设动作语义）', (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
         tester,

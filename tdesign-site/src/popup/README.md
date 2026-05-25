@@ -403,9 +403,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildApiMarginTop(BuildContext context) {
+  Widget _buildApiInset(BuildContext context) {
     return TButton(
-      text: 'bottom margin.top',
+      text: 'bottom inset.left/right',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -415,8 +415,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           options: TPopupOptions.bottom(
               height: 320,
-              margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-              titleBuilder: (_) => TText('日历式留白'),
+              inset: const TPopupBottomInset(left: 16, right: 16),
+              titleWidget: TText('左右留白'),
               child: Container(
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,
@@ -578,10 +578,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
  | [TPopupPlacement] | 头部 / 关闭 | 尺寸 |
  |-------------------|-------------|------|
- | [TPopupPlacement.bottom] | [headerBuilder]、[titleBuilder]、[cancelBuilder]、[confirmBuilder] | [height]、[margin] |
+| [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[inset] |
  | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
- | [TPopupPlacement.top] | — | [height]、[margin] |
- | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[margin] |
+| [TPopupPlacement.top] | — | [height]、[inset] |
+| [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[inset] |
 
  ## Builder 三态（[headerBuilder]、[cancelBuilder]、[confirmBuilder]、[closeBuilder]）
 
@@ -591,7 +591,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  | 显式 `null` | 隐藏该区域 |
  | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
 
- [titleBuilder] 默认为 `null`，表示无标题文案。
+[titleWidget] 默认为 `null`，表示无标题文案。
 
  生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 #### 默认构造方法
@@ -608,7 +608,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | duration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。 |
 | height | double? | - | 高度；[TPopupPlacement.top]、[TPopupPlacement.bottom] 生效；[TPopupPlacement.center] 约束面板尺寸。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距；生效边取决于 [placement]。 |
+| inset | TPopupInset? | - | 交叉轴边缘留白；具体类型由 [placement] 决定。 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
 | onClosed | VoidCallback? | - | 路由 pop 且关闭动画结束。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |

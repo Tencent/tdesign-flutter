@@ -7,8 +7,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     required this.onCloseWithTrigger,
   }) : _layout = PopupLayout(
           placement: options.placement,
-          screenSize: Size.zero,
-          margin: options.margin,
+          inset: options.inset,
           width: options.width,
           height: options.height,
         );
@@ -91,15 +90,13 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       reverseCurve: Curves.easeOut,
     );
 
-    final mediaQuery = MediaQuery.of(context);
     if (options.showOverlay) {
       _barrierSemanticsLabel ??=
           MaterialLocalizations.of(context).modalBarrierDismissLabel;
     }
     _layout = PopupLayout(
       placement: options.placement,
-      screenSize: mediaQuery.size,
-      margin: options.margin,
+      inset: options.inset,
       width: options.width,
       height: options.height,
     );

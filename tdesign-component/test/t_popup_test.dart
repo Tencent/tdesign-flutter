@@ -528,15 +528,15 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('margin.top 底部日历式布局', (tester) async {
+    testWidgets('right inset.top 可控制顶部留白', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
             options: TPopupOptions(
-                placement: TPopupPlacement.bottom,
-                margin: const EdgeInsets.only(top: 80),
+                placement: TPopupPlacement.right,
+                inset: const TPopupRightInset(top: 80),
                 child: const SizedBox(height: 200)),
           );
         },

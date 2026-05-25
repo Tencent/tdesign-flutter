@@ -168,12 +168,12 @@ void main() {
       );
     });
 
-    test('assertPlacementParams 各 placement 的 margin 越界项也抛错', () {
+    test('assertPlacementParams 各 placement 的 inset 类型错位也抛错', () {
       expect(
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.top,
-          margin: const EdgeInsets.only(bottom: 10),
+          inset: const TPopupBottomInset(left: 10),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
@@ -181,7 +181,7 @@ void main() {
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.right,
-          margin: const EdgeInsets.only(left: 10),
+          inset: const TPopupLeftInset(top: 10),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
@@ -189,7 +189,7 @@ void main() {
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.center,
-          margin: const EdgeInsets.all(10),
+          inset: const TPopupTopInset(left: 10),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
@@ -197,7 +197,8 @@ void main() {
 
     test('assertPlacementParams 合法配置不抛错', () {
       // 各 placement 用对应合法字段
-      expect(() => TPopupOptions(child: const SizedBox()).assertPlacementParams(),
+      expect(
+          () => TPopupOptions(child: const SizedBox()).assertPlacementParams(),
           returnsNormally);
       expect(
         () => TPopupOptions(
@@ -213,7 +214,7 @@ void main() {
           child: const SizedBox(),
           placement: TPopupPlacement.left,
           width: 280,
-          margin: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+          inset: const TPopupLeftInset(top: 10, bottom: 10),
         ).assertPlacementParams(),
         returnsNormally,
       );

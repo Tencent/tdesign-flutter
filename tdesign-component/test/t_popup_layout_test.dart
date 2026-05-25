@@ -5,13 +5,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   group('PopupLayout', () {
-    const screen = Size(400, 800);
-
-    testWidgets('top placement 使用 height 与 margin', (tester) async {
+    testWidgets('top placement 使用 height 与左右 inset', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.top,
-        screenSize: screen,
-        margin: const EdgeInsets.only(top: 8, left: 4, right: 4),
+        inset: const TPopupTopInset(left: 4, right: 6),
         height: 100,
       );
       await tester.pumpWidget(
@@ -24,15 +21,16 @@ void main() {
         ),
       );
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
-      expect(positioned.top, 8);
+      expect(positioned.top, 0);
+      expect(positioned.left, 4);
+      expect(positioned.right, 6);
       expect(positioned.height, 100);
     });
 
-    testWidgets('bottom placement 含 margin.top 与固定 height', (tester) async {
+    testWidgets('bottom placement 使用左右 inset 与固定 height', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
-        screenSize: screen,
-        margin: const EdgeInsets.only(top: 100),
+        inset: const TPopupBottomInset(left: 12, right: 20),
         height: 200,
       );
       await tester.pumpWidget(
@@ -45,15 +43,15 @@ void main() {
         ),
       );
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
-      expect(positioned.top, 100);
+      expect(positioned.left, 12);
+      expect(positioned.right, 20);
+      expect(positioned.bottom, 0);
       expect(positioned.height, 200);
     });
 
-    testWidgets('bottom 无 height 有 margin.top 计算高度', (tester) async {
+    testWidgets('bottom 无 height 时贴底', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
-        screenSize: screen,
-        margin: const EdgeInsets.only(top: 50, bottom: 10),
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -67,38 +65,54 @@ void main() {
         ),
       );
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
-      expect(positioned.top, 50);
-      expect(positioned.height, screen.height - 50 - 10);
+      expect(positioned.bottom, 0);
+      expect(positioned.top, isNull);
+      expect(positioned.height, isNull);
     });
 
-    testWidgets('left / right 使用默认或自定义 width', (tester) async {
-      for (final p in [TPopupPlacement.left, TPopupPlacement.right]) {
-        final layout = PopupLayout(
-          placement: p,
-          screenSize: screen,
-          margin: const EdgeInsets.only(top: 56),
-          width: 300,
-        );
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: Stack(
-                  children: [layout.wrapPositioned(child: const SizedBox())]),
+    testWidgets('left / right 使用默认或自定义 width 与上下 inset', (tester) async {
+      final left = PopupLayout(
+        placement: TPopupPlacement.left,
+        inset: const TPopupLeftInset(top: 56, bottom: 12),
+        width: 300,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body:
+                Stack(children: [left.wrapPositioned(child: const SizedBox())]),
+          ),
+        ),
+      );
+      var positioned = tester.widget<Positioned>(find.byType(Positioned));
+      expect(positioned.width, 300);
+      expect(positioned.top, 56);
+      expect(positioned.bottom, 12);
+
+      final right = PopupLayout(
+        placement: TPopupPlacement.right,
+        inset: const TPopupRightInset(top: 8, bottom: 10),
+        width: 260,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(
+              children: [right.wrapPositioned(child: const SizedBox())],
             ),
           ),
-        );
-        final positioned = tester.widget<Positioned>(find.byType(Positioned));
-        expect(positioned.width, 300);
-        expect(positioned.top, 56);
-      }
+        ),
+      );
+      positioned = tester.widget<Positioned>(find.byType(Positioned));
+      expect(positioned.width, 260);
+      expect(positioned.top, 8);
+      expect(positioned.bottom, 10);
     });
 
     testWidgets('center placement 仅 Center 包裹（尺寸由 PopupShell 控制）',
         (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.center,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
         width: 200,
         height: 150,
       );
@@ -120,7 +134,8 @@ void main() {
         ),
       );
       expect(find.byType(Center), findsOneWidget);
-      final box = tester.widget<SizedBox>(find.byKey(const ValueKey('content')));
+      final box =
+          tester.widget<SizedBox>(find.byKey(const ValueKey('content')));
       expect(box.width, 200);
       expect(box.height, 150);
     });
@@ -128,37 +143,27 @@ void main() {
     test('slideOffset 五向偏移', () {
       final layout = PopupLayout(
         placement: TPopupPlacement.top,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       expect(layout.slideOffset(0), const Offset(0, -1));
       expect(layout.slideOffset(1), const Offset(0, 0));
 
       final bottom = PopupLayout(
         placement: TPopupPlacement.bottom,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       expect(bottom.slideOffset(0), const Offset(0, 1));
 
       final left = PopupLayout(
         placement: TPopupPlacement.left,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       expect(left.slideOffset(0.5), const Offset(-0.5, 0));
 
       final right = PopupLayout(
         placement: TPopupPlacement.right,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       expect(right.slideOffset(0.5), const Offset(0.5, 0));
 
       final center = PopupLayout(
         placement: TPopupPlacement.center,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
       );
       expect(center.slideOffset(0.5), Offset.zero);
     });
@@ -167,8 +172,6 @@ void main() {
         (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.center,
-        screenSize: screen,
-        margin: EdgeInsets.zero,
         width: 100,
         height: 80,
       );
@@ -187,29 +190,16 @@ void main() {
       expect(center.child, isA<SizedBox>());
     });
 
-    test('resolvedMargin center 为零', () {
-      final layout = PopupLayout(
-        placement: TPopupPlacement.center,
-        screenSize: screen,
-        margin: const EdgeInsets.all(20),
-      );
-      expect(layout.resolvedMargin(), EdgeInsets.zero);
-    });
-
     test('alignment 各方向', () {
       expect(
         PopupLayout(
           placement: TPopupPlacement.top,
-          screenSize: screen,
-          margin: EdgeInsets.zero,
         ).alignment,
         Alignment.topCenter,
       );
       expect(
         PopupLayout(
           placement: TPopupPlacement.right,
-          screenSize: screen,
-          margin: EdgeInsets.zero,
         ).alignment,
         Alignment.centerRight,
       );

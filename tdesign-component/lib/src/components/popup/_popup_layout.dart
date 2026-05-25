@@ -4,78 +4,69 @@ part of 't_popup.dart';
 class PopupLayout {
   PopupLayout({
     required this.placement,
-    required this.screenSize,
-    required this.margin,
+    this.inset,
     this.width,
     this.height,
   });
 
   final TPopupPlacement placement;
-  final Size screenSize;
-  final EdgeInsets margin;
+  final TPopupInset? inset;
   final double? width;
   final double? height;
 
   static const double defaultDrawerWidth = 280;
 
-  EdgeInsets resolvedMargin() {
-    if (placement == TPopupPlacement.center) {
-      return EdgeInsets.zero;
-    }
-    return margin;
-  }
-
   Widget wrapPositioned({required Widget child}) {
-    final m = resolvedMargin();
     switch (placement) {
       case TPopupPlacement.top:
+        final inset =
+            this.inset is TPopupTopInset ? this.inset as TPopupTopInset : null;
         return Positioned(
-          top: m.top,
-          left: m.left,
-          right: m.right,
+          top: 0,
+          left: inset?.left ?? 0,
+          right: inset?.right ?? 0,
           height: height,
           child: child,
         );
       case TPopupPlacement.bottom:
-        final bottomHeight = _bottomHeight(m);
-        if (bottomHeight != null && m.top > 0) {
-          return Positioned(
-            top: m.top,
-            left: m.left,
-            right: m.right,
-            height: bottomHeight,
-            child: child,
-          );
-        }
+        final inset = this.inset is TPopupBottomInset
+            ? this.inset as TPopupBottomInset
+            : null;
+        final bottomHeight = _bottomHeight();
         if (bottomHeight != null) {
           return Positioned(
-            left: m.left,
-            right: m.right,
-            bottom: m.bottom,
+            left: inset?.left ?? 0,
+            right: inset?.right ?? 0,
+            bottom: 0,
             height: bottomHeight,
             child: child,
           );
         }
         return Positioned(
-          top: m.top > 0 ? m.top : null,
-          left: m.left,
-          right: m.right,
-          bottom: m.bottom,
+          left: inset?.left ?? 0,
+          right: inset?.right ?? 0,
+          bottom: 0,
           child: child,
         );
       case TPopupPlacement.left:
+        final inset = this.inset is TPopupLeftInset
+            ? this.inset as TPopupLeftInset
+            : null;
         return Positioned(
-          top: m.top,
-          bottom: m.bottom,
-          left: m.left,
+          top: inset?.top ?? 0,
+          bottom: inset?.bottom ?? 0,
+          left: 0,
           width: width ?? defaultDrawerWidth,
           child: child,
         );
       case TPopupPlacement.right:
+        final inset = this.inset is TPopupRightInset
+            ? this.inset as TPopupRightInset
+            : null;
         return Positioned(
-          top: m.top,
-          bottom: m.bottom,
-          right: m.right,
+          top: inset?.top ?? 0,
+          bottom: inset?.bottom ?? 0,
+          right: 0,
           width: width ?? defaultDrawerWidth,
           child: child,
         );
@@ -86,12 +77,9 @@ class PopupLayout {
     }
   }
 
-  double? _bottomHeight(EdgeInsets m) {
+  double? _bottomHeight() {
     if (height != null) {
       return height;
-    }
-    if (m.top > 0) {
-      return screenSize.height - m.top - m.bottom;
     }
     return null;
   }

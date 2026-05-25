@@ -69,12 +69,17 @@ class TCalendarPopup {
       return;
     }
     final childWidget = builder?.call(context) ?? child;
+    final topInset = top?.clamp(0.0, double.infinity).toDouble();
+    final maxHeight = topInset == null
+        ? null
+        : (MediaQuery.sizeOf(context).height - topInset)
+            .clamp(0.0, double.infinity)
+            .toDouble();
     _calendarHandle = TPopup.show(
       context,
       options: TPopupOptions.bottom(
         cancelBuilder: null,
         confirmBuilder: null,
-        margin: EdgeInsets.only(top: top ?? 0),
         closeOnOverlayClick: false,
         onOverlayClick: () {
           if (_autoClose) {
@@ -88,7 +93,12 @@ class TCalendarPopup {
           confirmBtn: confirmBtn,
           onClose: _onClose,
           onConfirm: _onConfirm,
-          child: childWidget!,
+          child: maxHeight == null
+              ? childWidget!
+              : ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: maxHeight),
+                  child: childWidget!,
+                ),
         ),
       ),
     );

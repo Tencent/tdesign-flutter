@@ -107,15 +107,19 @@ class TDrawer {
 
     final overlayEnabled = showOverlay ?? true;
     final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
+    final popupPlacement = placement == TDrawerPlacement.right
+        ? TPopupPlacement.right
+        : TPopupPlacement.left;
+    final popupInset = placement == TDrawerPlacement.right
+        ? TPopupRightInset(top: drawerTop ?? 0)
+        : TPopupLeftInset(top: drawerTop ?? 0);
 
     _drawerHandle = TPopup.show(
       context,
       options: TPopupOptions(
-        placement: placement == TDrawerPlacement.right
-            ? TPopupPlacement.right
-            : TPopupPlacement.left,
+        placement: popupPlacement,
         width: width,
-        margin: EdgeInsets.only(top: drawerTop ?? 0),
+        inset: popupInset,
         showOverlay: overlayEnabled,
         closeOnOverlayClick: dismissible,
         overlayColor: overlayEnabled ? null : Colors.transparent,

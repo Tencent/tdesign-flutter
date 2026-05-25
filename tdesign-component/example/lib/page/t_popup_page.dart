@@ -80,7 +80,7 @@ class TPopupPage extends StatelessWidget {
         ExampleModule(
           title: '更多 API',
           children: [
-            ExampleItem(builder: _buildApiMarginTop),
+            ExampleItem(builder: _buildApiInset),
             ExampleItem(builder: _buildApiShowOverlayFalse),
             ExampleItem(builder: _buildApiOnOverlayClick),
             ExampleItem(builder: _buildApiDuration),
@@ -104,15 +104,15 @@ class TPopupPage extends StatelessWidget {
                       height: 280,
                       titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
                       cancelBuilder: (_, __) => TText(
-                        '点这里确认!',
-                        textColor: TTheme.of(context).brandNormalColor,
-                        font: TTheme.of(context).fontBodyLarge,
-                      ),
+                            '点这里确认!',
+                            textColor: TTheme.of(context).brandNormalColor,
+                            font: TTheme.of(context).fontBodyLarge,
+                          ),
                       confirmBuilder: (_, __) => TText(
-                        '关闭',
-                        textColor: TTheme.of(context).errorNormalColor,
-                        font: TTheme.of(context).fontBodyLarge,
-                      ),
+                            '关闭',
+                            textColor: TTheme.of(context).errorNormalColor,
+                            font: TTheme.of(context).fontBodyLarge,
+                          ),
                       child: Container(height: 200)),
                 );
               },
@@ -183,15 +183,15 @@ class TPopupPage extends StatelessWidget {
                           radius: 6,
                           titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
                           cancelBuilder: (_, __) => TText(
-                            '点这里确认!',
-                            textColor: TTheme.of(context).brandNormalColor,
-                            font: TTheme.of(context).fontBodyLarge,
-                          ),
+                                '点这里确认!',
+                                textColor: TTheme.of(context).brandNormalColor,
+                                font: TTheme.of(context).fontBodyLarge,
+                              ),
                           confirmBuilder: (_, __) => TText(
-                            '关闭',
-                            textColor: TTheme.of(context).errorNormalColor,
-                            font: TTheme.of(context).fontBodyLarge,
-                          ),
+                                '关闭',
+                                textColor: TTheme.of(context).errorNormalColor,
+                                font: TTheme.of(context).fontBodyLarge,
+                              ),
                           child: Container(height: 200)),
                     );
                   },
@@ -260,7 +260,7 @@ class TPopupPage extends StatelessWidget {
                   context,
                   options: TPopupOptions.right(
                       width: 280,
-                      margin: EdgeInsets.only(top: renderBox.size.height),
+                      inset: TPopupRightInset(top: renderBox.size.height),
                       child: Container(
                         color: TTheme.of(context).bgColorContainer,
                       )),
@@ -493,10 +493,10 @@ class TPopupPage extends StatelessWidget {
           options: TPopupOptions.bottom(
               height: 280,
               cancelBuilder: (_, __) => TText(
-                '关闭',
-                textColor: TTheme.of(context).textColorSecondary,
-                font: TTheme.of(context).fontBodyLarge,
-              ),
+                    '关闭',
+                    textColor: TTheme.of(context).textColorSecondary,
+                    font: TTheme.of(context).fontBodyLarge,
+                  ),
               titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -511,11 +511,11 @@ class TPopupPage extends StatelessWidget {
                 ],
               ),
               confirmBuilder: (_, __) => TText(
-                '完成',
-                textColor: TTheme.of(context).brandNormalColor,
-                font: TTheme.of(context).fontTitleMedium,
-                fontWeight: FontWeight.w600,
-              ),
+                    '完成',
+                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TTheme.of(context).fontTitleMedium,
+                    fontWeight: FontWeight.w600,
+                  ),
               child: Container(height: 200)),
         );
       },
@@ -587,9 +587,9 @@ class TPopupPage extends StatelessWidget {
   // --- 更多 API ---
 
   @Demo(group: 'popup')
-  Widget _buildApiMarginTop(BuildContext context) {
+  Widget _buildApiInset(BuildContext context) {
     return TButton(
-      text: 'bottom margin.top',
+      text: 'bottom inset.left/right',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -599,8 +599,8 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.bottom(
               height: 320,
-              margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-              titleWidget: TText('日历式留白'),
+              inset: const TPopupBottomInset(left: 16, right: 16),
+              titleWidget: TText('左右留白'),
               child: Container(
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,

@@ -27,6 +27,7 @@ part '_popup_route.dart';
 part '_popup_shell.dart';
 part '_popup_tracker.dart';
 part 't_popup_handle.dart';
+part 't_popup_inset.dart';
 part 't_popup_options.dart';
 part 't_popup_types.dart';
 

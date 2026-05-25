@@ -61,6 +61,11 @@ export 'src/components/popup/t_popup.dart'
         TPopupOptions,
         TPopupPlacement,
         TPopupTrigger,
+        TPopupInset,
+        TPopupTopInset,
+        TPopupBottomInset,
+        TPopupLeftInset,
+        TPopupRightInset,
         TPopupHeaderBuilder,
         TPopupSlotBuilder,
         TPopupVisibleChangeCallback;
