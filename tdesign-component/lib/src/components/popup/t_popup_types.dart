@@ -33,7 +33,7 @@ typedef TPopupHeaderBuilder = Widget Function(
 /// bottom 左右操作槽或 center 关闭区构建器。
 ///
 /// * [context] 构建上下文
-/// * [close] 关闭浮层，触发源为 [TPopupTrigger.programmatic]
+/// * [close] 关闭浮层；触发源与槽位语义保持一致
 typedef TPopupSlotBuilder = Widget Function(
   BuildContext context,
   VoidCallback close,
@@ -71,7 +71,7 @@ bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
 ///
 /// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancelBtn]、
 /// [TPopupTrigger.confirmBtn]、[TPopupTrigger.closeBtn]；
-/// [TPopupHandle.close]、系统返回、自定义 builder 内调用 `close` 均为
+/// [TPopupHandle.close]、系统返回、[headerBuilder] 内调用 `close` 等为
 /// [TPopupTrigger.programmatic]。
 enum TPopupTrigger {
   /// 点击蒙层，且 [TPopupOptions.closeOnOverlayClick] 为 true。
@@ -86,7 +86,7 @@ enum TPopupTrigger {
   /// 点击 center 内置关闭图标（[TPopupOptions.closeBuilder] 为内置默认时）。
   closeBtn,
 
-  /// [TPopupHandle.close]、系统返回键、自定义 builder 调用 `close` 等。
+  /// [TPopupHandle.close]、系统返回键、[headerBuilder] 自定义内调用 `close` 等。
   programmatic,
 }
 

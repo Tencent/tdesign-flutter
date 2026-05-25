@@ -18,7 +18,7 @@ const Object _unset = Object();
 ///
 /// | [TPopupPlacement] | 头部 / 关闭 | 尺寸 |
 /// |-------------------|-------------|------|
-/// | [TPopupPlacement.bottom] | [headerBuilder]、[titleBuilder]、[cancelBuilder]、[confirmBuilder] | [height]、[margin] |
+/// | [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[margin] |
 /// | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
 /// | [TPopupPlacement.top] | — | [height]、[margin] |
 /// | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[margin] |
@@ -31,7 +31,7 @@ const Object _unset = Object();
 /// | 显式 `null` | 隐藏该区域 |
 /// | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
 ///
-/// [titleBuilder] 默认为 `null`，表示无标题文案。
+/// [titleWidget] 默认为 `null`，表示无标题文案。
 ///
 /// 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 class TPopupOptions {
@@ -54,7 +54,7 @@ class TPopupOptions {
     this.destroyOnClose = false,
     this.duration = const Duration(milliseconds: 240),
     this.headerBuilder = _kPopupDefaultHeader,
-    this.titleBuilder,
+    this.titleWidget,
     this.cancelBuilder = _kPopupDefaultCancel,
     this.confirmBuilder = _kPopupDefaultConfirm,
     this.closeBuilder = _kPopupDefaultClose,
@@ -75,7 +75,7 @@ class TPopupOptions {
     double? height,
     EdgeInsets margin = EdgeInsets.zero,
     TPopupHeaderBuilder? headerBuilder = _kPopupDefaultHeader,
-    WidgetBuilder? titleBuilder,
+    Widget? titleWidget,
     TPopupSlotBuilder? cancelBuilder = _kPopupDefaultCancel,
     TPopupSlotBuilder? confirmBuilder = _kPopupDefaultConfirm,
     double? radius,
@@ -100,7 +100,7 @@ class TPopupOptions {
         height: height,
         margin: margin,
         headerBuilder: headerBuilder,
-        titleBuilder: titleBuilder,
+        titleWidget: titleWidget,
         cancelBuilder: cancelBuilder,
         confirmBuilder: confirmBuilder,
         radius: radius,
@@ -349,11 +349,11 @@ class TPopupOptions {
 
   /// bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。
   ///
-  /// 自定义时忽略 [titleBuilder]、[cancelBuilder]、[confirmBuilder]。
+  /// 自定义时忽略 [titleWidget]、[cancelBuilder]、[confirmBuilder]。
   final TPopupHeaderBuilder? headerBuilder;
 
-  /// bottom 标题；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。
-  final WidgetBuilder? titleBuilder;
+  /// bottom 标题插槽；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。
+  final Widget? titleWidget;
 
   /// bottom 左侧操作槽；仅 [headerBuilder] 为内置默认时生效。
   ///
@@ -390,7 +390,7 @@ class TPopupOptions {
 
   /// 返回配置副本。
   ///
-  /// 未传入的字段保持原值；对 builder 显式传入 `null` 表示隐藏该区域。
+  /// 未传入的字段保持原值；对头部/关闭相关插槽显式传入 `null` 表示隐藏该区域。
   TPopupOptions copyWith({
     Widget? child,
     TPopupPlacement? placement,
@@ -407,7 +407,7 @@ class TPopupOptions {
     bool? destroyOnClose,
     Duration? duration,
     Object? headerBuilder = _unset,
-    Object? titleBuilder = _unset,
+    Object? titleWidget = _unset,
     Object? cancelBuilder = _unset,
     Object? confirmBuilder = _unset,
     Object? closeBuilder = _unset,
@@ -442,9 +442,9 @@ class TPopupOptions {
       headerBuilder: identical(headerBuilder, _unset)
           ? this.headerBuilder
           : headerBuilder as TPopupHeaderBuilder?,
-      titleBuilder: identical(titleBuilder, _unset)
-          ? this.titleBuilder
-          : titleBuilder as WidgetBuilder?,
+      titleWidget: identical(titleWidget, _unset)
+          ? this.titleWidget
+          : titleWidget as Widget?,
       cancelBuilder: identical(cancelBuilder, _unset)
           ? this.cancelBuilder
           : cancelBuilder as TPopupSlotBuilder?,
@@ -493,7 +493,7 @@ class TPopupOptions {
       destroyOnClose: destroyOnClose,
       duration: duration,
       headerBuilder: isBottom ? headerBuilder : null,
-      titleBuilder: isBottom ? titleBuilder : null,
+      titleWidget: isBottom ? titleWidget : null,
       cancelBuilder: isBottom ? cancelBuilder : null,
       confirmBuilder: isBottom ? confirmBuilder : null,
       closeBuilder: isCenter ? closeBuilder : null,
@@ -548,7 +548,7 @@ class TPopupOptions {
     }
     return cancelBuilder != null ||
         confirmBuilder != null ||
-        titleBuilder != null;
+        titleWidget != null;
   }
 
   /// {@nodoc}
@@ -600,11 +600,11 @@ class TPopupOptions {
         break;
     }
     final hasBottomHeaderCustom = !_isPopupDefaultHeader(headerBuilder) ||
-        titleBuilder != null ||
+        titleWidget != null ||
         !_isPopupDefaultCancel(cancelBuilder) ||
         !_isPopupDefaultConfirm(confirmBuilder);
     if (placement != TPopupPlacement.bottom && hasBottomHeaderCustom) {
-      return 'header/title/cancel/confirmBuilder only apply to '
+      return 'header/titleWidget/cancel/confirmBuilder only apply to '
           'placement=bottom (got placement=$placement).';
     }
     if (placement != TPopupPlacement.center &&

@@ -31,7 +31,6 @@ class PopupHeader extends StatelessWidget {
       height: headerHeight,
       child: _DefaultHeader(
         options: options,
-        close: _close,
         onCloseWithTrigger: onCloseWithTrigger,
       ),
     );
@@ -41,14 +40,10 @@ class PopupHeader extends StatelessWidget {
 class _DefaultHeader extends StatelessWidget {
   const _DefaultHeader({
     required this.options,
-    required this.close,
     required this.onCloseWithTrigger,
   });
 
   final TPopupOptions options;
-
-  /// 给「自定义 cancel/confirm builder」用的 close 回调（上报 [TPopupTrigger.programmatic]）。
-  final VoidCallback close;
 
   /// 给「内置 sentinel cancel/confirm 按钮」用的 close 入口，
   /// 按钮自己传 [TPopupTrigger.cancelBtn] / [TPopupTrigger.confirmBtn]。
@@ -60,7 +55,7 @@ class _DefaultHeader extends StatelessWidget {
     final showCancel = options.cancelBuilder != null;
     final showConfirm = options.confirmBuilder != null;
 
-    final title = options.titleBuilder?.call(context);
+    final title = options.titleWidget;
 
     return Row(
       children: [
@@ -98,7 +93,7 @@ class _DefaultHeader extends StatelessWidget {
   }
 
   Widget _titleWrap(BuildContext context, TThemeData theme, Widget child) {
-    // 标题由用户 builder 决定样式，这里只做布局约束。
+    // 标题内容由用户插槽决定样式，这里只做布局约束。
     return DefaultTextStyle.merge(
       style: TextStyle(
         color: theme.textColorPrimary,
@@ -122,7 +117,10 @@ class _DefaultHeader extends StatelessWidget {
         ),
       );
     }
-    return options.cancelBuilder!(context, close);
+    return options.cancelBuilder!(
+      context,
+      () => onCloseWithTrigger(TPopupTrigger.cancelBtn),
+    );
   }
 
   Widget _buildConfirm(BuildContext context, TThemeData theme) {
@@ -137,7 +135,10 @@ class _DefaultHeader extends StatelessWidget {
         ),
       );
     }
-    return options.confirmBuilder!(context, close);
+    return options.confirmBuilder!(
+      context,
+      () => onCloseWithTrigger(TPopupTrigger.confirmBtn),
+    );
   }
 }
 

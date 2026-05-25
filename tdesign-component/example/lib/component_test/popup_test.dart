@@ -28,7 +28,7 @@ class _TestPageState extends State<TestPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-          titleBuilder: (_) => TText('title'),
+          titleWidget: TText('title'),
           radius: 20,
           backgroundColor: const Color(0xFFFAFFFC),
           child: Container(

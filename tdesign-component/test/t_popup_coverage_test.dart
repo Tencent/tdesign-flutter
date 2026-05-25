@@ -20,7 +20,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                titleBuilder: (_) => TText('仅标题行'),
+                titleWidget: TText('仅标题行'),
                 cancelBuilder: null,
                 confirmBuilder: null,
                 child: const SizedBox(height: 60)),
@@ -42,7 +42,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                titleBuilder: (_) => TText('左对齐标题'),
+                titleWidget: TText('左对齐标题'),
                 cancelBuilder: null,
                 confirmBuilder: null,
                 child: const SizedBox(height: 60)),
@@ -298,7 +298,7 @@ void main() {
         TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.bottom,
-          titleBuilder: (_) => const Text('w'),
+          titleWidget: const Text('w'),
           cancelBuilder: null,
           confirmBuilder: null,
         ).hasBuiltInHeader,
@@ -318,7 +318,7 @@ void main() {
       final titleOnly = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.bottom,
-        titleBuilder: (_) => TText('仅标题'),
+        titleWidget: TText('仅标题'),
         cancelBuilder: null,
         confirmBuilder: null,
       );
@@ -455,7 +455,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                titleBuilder: (_) => TText('标题'),
+                titleWidget: TText('标题'),
                 onVisibleChange: (visible, trigger) {
                   if (!visible) {
                     hideTriggers.add(trigger);
@@ -834,9 +834,9 @@ void main() {
 
     test('传自定义 builder → 替换为自定义', () {
       final base = TPopupOptions(child: const SizedBox());
-      titleFn(BuildContext _) => const Text('t');
-      final next = base.copyWith(titleBuilder: titleFn);
-      expect(next.titleBuilder, same(titleFn));
+      const titleWidget = Text('t');
+      final next = base.copyWith(titleWidget: titleWidget);
+      expect(next.titleWidget, same(titleWidget));
       // 其它继承
       expect(next.usesDefaultHeader, isTrue);
     });
@@ -883,7 +883,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                titleBuilder: (_) => const Text('再开测试'),
+                titleWidget: const Text('再开测试'),
                 child: const SizedBox(height: 60)),
           );
         },
@@ -948,7 +948,7 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 headerBuilder: null, // 一票否决
-                titleBuilder: (_) => const Text('应隐藏-标题'),
+                titleWidget: const Text('应隐藏-标题'),
                 cancelBuilder: (_, close) =>
                     GestureDetector(onTap: close, child: const Text('应隐藏-左')),
                 confirmBuilder: (_, close) =>
@@ -1018,7 +1018,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                titleBuilder: (_) => const Text('标题'),
+                titleWidget: const Text('标题'),
                 child: const SizedBox(height: 80)),
           );
         },
@@ -1037,7 +1037,7 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 cancelBuilder: null,
-                titleBuilder: (_) => const Text('标题在'),
+                titleWidget: const Text('标题在'),
                 child: const SizedBox(height: 80)),
           );
         },
@@ -1058,7 +1058,7 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 confirmBuilder: null,
-                titleBuilder: (_) => const Text('标题在'),
+                titleWidget: const Text('标题在'),
                 child: const SizedBox(height: 80)),
           );
         },
@@ -1069,7 +1069,7 @@ void main() {
       expect(find.text('确定'), findsNothing);
     });
 
-    testWidgets('headerBuilder 自定义 → titleBuilder / cancelBuilder / confirmBuilder 全部被忽略',
+    testWidgets('headerBuilder 自定义 → titleWidget / cancelBuilder / confirmBuilder 全部被忽略',
         (tester) async {
       await openPopup(
         tester,
@@ -1080,7 +1080,7 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 headerBuilder: (_, __) => const Text('唯一头部'),
-                titleBuilder: (_) => const Text('不该出现-标题'),
+                titleWidget: const Text('不该出现-标题'),
                 cancelBuilder: (_, __) => const Text('不该出现-左'),
                 confirmBuilder: (_, __) => const Text('不该出现-右'),
                 child: const SizedBox(height: 80)),
@@ -1128,7 +1128,7 @@ void main() {
       expect(lastTrigger, TPopupTrigger.cancelBtn);
     });
 
-    testWidgets('自定义 cancelBuilder 内调 close → programmatic（不是 cancelBtn）',
+    testWidgets('自定义 cancelBuilder 内调 close → cancelBtn',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1155,10 +1155,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('我自己的取消'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.programmatic);
+      expect(lastTrigger, TPopupTrigger.cancelBtn);
     });
 
-    testWidgets('自定义 confirmBuilder 内调 close → programmatic',
+    testWidgets('自定义 confirmBuilder 内调 close → confirmBtn',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1185,10 +1185,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('我自己的确定'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.programmatic);
+      expect(lastTrigger, TPopupTrigger.confirmBtn);
     });
 
-    testWidgets('center 自定义 closeBuilder 内调 close → programmatic（不是 closeBtn）',
+    testWidgets('center 自定义 closeBuilder 内调 close → closeBtn',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1216,7 +1216,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('我自己的关闭'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.programmatic);
+      expect(lastTrigger, TPopupTrigger.closeBtn);
     });
 
     testWidgets('headerBuilder 自定义内调 close → programmatic（无 sentinel 细分）',

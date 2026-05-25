@@ -40,7 +40,7 @@ part 't_popup_types.dart';
 /// final handle = TPopup.show(
 ///   context,
 ///   options: TPopupOptions.bottom(
-///     titleBuilder: (_) => const Text('标题'),
+///     titleWidget: const Text('标题'),
 ///     child: MyPanel(),
 ///   ),
 /// );

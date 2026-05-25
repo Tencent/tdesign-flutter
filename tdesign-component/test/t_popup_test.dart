@@ -235,7 +235,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 200,
-                titleBuilder: (_) => TText('标题'),
+                titleWidget: TText('标题'),
                 child: const SizedBox(height: 80)),
           );
         },
@@ -301,7 +301,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                titleBuilder: (_) => TText('不应出现'),
+                titleWidget: TText('不应出现'),
                 headerBuilder: null,
                 child: const SizedBox(height: 80)),
           );
@@ -321,7 +321,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                titleBuilder: (_) => TText('仅标题'),
+                titleWidget: TText('仅标题'),
                 cancelBuilder: null,
                 confirmBuilder: null,
                 child: const SizedBox(height: 80)),
@@ -667,7 +667,7 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            // .top factory 根本不暴露 titleBuilder：编译期就杜绝错位
+            // .top factory 根本不暴露 titleWidget：编译期就杜绝错位
             options: TPopupOptions.top(
               height: 120,
               child: const Text('内容'),
@@ -709,7 +709,7 @@ void main() {
       }
     });
 
-    testWidgets('titleBuilder + 自定义 cancel/confirm Builder 文案', (tester) async {
+    testWidgets('titleWidget + 自定义 cancel/confirm Builder 文案', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -718,7 +718,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                titleBuilder: (_) => const Text('Widget标题'),
+                titleWidget: const Text('Widget标题'),
                 cancelBuilder: (_, close) =>
                     GestureDetector(onTap: close, child: const Text('左')),
                 confirmBuilder: (_, close) =>

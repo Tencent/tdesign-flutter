@@ -10,7 +10,7 @@ void main() {
       expect(options.usesDefaultHeader, isTrue);
       expect(options.usesDefaultCancel, isTrue);
       expect(options.usesDefaultConfirm, isTrue);
-      expect(options.titleBuilder, isNull);
+      expect(options.titleWidget, isNull);
     });
 
     test('bottom 默认走内置三段式（useDefaultHeader）', () {
@@ -34,7 +34,7 @@ void main() {
       ).normalized();
       expect(options.showCancelSlot, isFalse);
       expect(options.showConfirmSlot, isFalse);
-      expect(options.hasBuiltInHeader, isFalse); // titleBuilder 也为 null
+      expect(options.hasBuiltInHeader, isFalse); // titleWidget 也为 null
     });
 
     test('headerBuilder null 不显示头部', () {
@@ -88,11 +88,11 @@ void main() {
       final options = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.top,
-        titleBuilder: (_) => const Text('x'),
+        titleWidget: const Text('x'),
         headerBuilder: (_, __) => const Text('h'),
       ).normalized();
       expect(options.headerBuilder, isNull);
-      expect(options.titleBuilder, isNull);
+      expect(options.titleWidget, isNull);
       expect(options.cancelBuilder, isNull);
       expect(options.confirmBuilder, isNull);
       expect(options.hasBuiltInHeader, isFalse);
@@ -108,12 +108,12 @@ void main() {
     });
 
     test('hasBuiltInHeader 内置三段中任一槽非 null 即 true', () {
-      // titleBuilder 单独存在
+      // titleWidget 单独存在
       expect(
         TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.bottom,
-          titleBuilder: (_) => const Text('x'),
+          titleWidget: const Text('x'),
           cancelBuilder: null,
           confirmBuilder: null,
         ).normalized().hasBuiltInHeader,
@@ -157,12 +157,12 @@ void main() {
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
-      // center 不该有 titleBuilder（属于 bottom 头部字段）
+      // center 不该有 titleWidget（属于 bottom 头部字段）
       expect(
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.center,
-          titleBuilder: (_) => const Text('x'),
+          titleWidget: const Text('x'),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );

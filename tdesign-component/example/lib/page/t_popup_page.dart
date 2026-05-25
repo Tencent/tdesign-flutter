@@ -102,7 +102,7 @@ class TPopupPage extends StatelessWidget {
                   context,
                   options: TPopupOptions.bottom(
                       height: 280,
-                      titleBuilder: (_) => TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
+                      titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
                       cancelBuilder: (_, __) => TText(
                         '点这里确认!',
                         textColor: TTheme.of(context).brandNormalColor,
@@ -181,7 +181,7 @@ class TPopupPage extends StatelessWidget {
                       options: TPopupOptions.bottom(
                           height: 280,
                           radius: 6,
-                          titleBuilder: (_) => TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
+                          titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
                           cancelBuilder: (_, __) => TText(
                             '点这里确认!',
                             textColor: TTheme.of(context).brandNormalColor,
@@ -431,7 +431,7 @@ class TPopupPage extends StatelessWidget {
                               innerContext,
                               options: TPopupOptions.bottom(
                                 height: 280,
-                                titleBuilder: (_) => const TText('内层标题'),
+                                titleWidget: const TText('内层标题'),
                                 child: Container(
                                   height: 160,
                                   color: TTheme.of(innerContext)
@@ -472,7 +472,7 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.bottom(
               height: 280,
-              titleBuilder: (_) => TText('标题文字'),
+              titleWidget: TText('标题文字'),
               child: Container(height: 200)),
         );
       },
@@ -497,7 +497,7 @@ class TPopupPage extends StatelessWidget {
                 textColor: TTheme.of(context).textColorSecondary,
                 font: TTheme.of(context).fontBodyLarge,
               ),
-              titleBuilder: (_) => Row(
+              titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(TIcons.info_circle,
@@ -600,7 +600,7 @@ class TPopupPage extends StatelessWidget {
           options: TPopupOptions.bottom(
               height: 320,
               margin: const EdgeInsets.only(top: 120, left: 16, right: 16),
-              titleBuilder: (_) => TText('日历式留白'),
+              titleWidget: TText('日历式留白'),
               child: Container(
                 height: 240,
                 color: TTheme.of(context).bgColorContainer,
@@ -625,7 +625,7 @@ class TPopupPage extends StatelessWidget {
               height: 280,
               showOverlay: false,
               // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
-              titleBuilder: (_) => const TText('无蒙层'),
+              titleWidget: const TText('无蒙层'),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
