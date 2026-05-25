@@ -62,8 +62,6 @@ final class TPopup {
   /// 返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、
   /// [TPopupHandle.isShowing] 控制与查询。
   ///
-  /// 同一 [Navigator] 上若已有展示中的浮层，重复调用会返回已有 handle（防连点）。
-  ///
   /// [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。
   ///
   /// [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。
@@ -78,13 +76,6 @@ final class TPopup {
       navContext,
       rootNavigator: useRootNavigator,
     );
-
-    final existing = _PopupTracker.top(navigator);
-    if (existing != null &&
-        existing.isShowing &&
-        ModalRoute.of(context) is! _PopupNavigatorRoute) {
-      return existing;
-    }
 
     final handle = TPopupHandle._(
       options: options,

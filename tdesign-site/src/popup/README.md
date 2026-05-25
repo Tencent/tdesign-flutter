@@ -556,7 +556,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| show |  |   required BuildContext context,  required TPopupOptions options,  BuildContext? navigatorContext,  bool useRootNavigator, | 打开浮层并压入独立 [PopupRoute]。     [context] 用于查找 [Navigator] 并展示浮层。     [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。     返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、   [TPopupHandle.isShowing] 控制与查询。     同一 [Navigator] 上若已有展示中的浮层，重复调用会返回已有 handle（防连点）。     [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。     [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
+| show |  |   required BuildContext context,  required TPopupOptions options,  BuildContext? navigatorContext,  bool useRootNavigator, | 打开浮层并压入独立 [PopupRoute]。     [context] 用于查找 [Navigator] 并展示浮层。     [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。     返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、   [TPopupHandle.isShowing] 控制与查询。     [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。     [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
 
 ```
 ```

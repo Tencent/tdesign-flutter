@@ -546,8 +546,9 @@ void main() {
   });
 
   group('TPopupHandle / Tracker', () {
-    testWidgets('外层重复 show 第二次无效（返回同一 handle）', (tester) async {
+    testWidgets('重复 show 可叠加打开（返回不同 handle）', (tester) async {
       TPopupHandle? first;
+      TPopupHandle? second;
       await openPopup(
         tester,
         onPressed: () {
@@ -557,21 +558,37 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
-                child: const SizedBox(height: 40)),
+                cancelBuilder: null,
+                confirmBuilder: null,
+                child: const SizedBox(height: 40, child: Text('first'))),
           );
-          final second = TPopup.show(
+          second = TPopup.show(
             ctx,
             options: TPopupOptions(
-                placement: TPopupPlacement.bottom,
+                placement: TPopupPlacement.center,
+                width: 120,
                 height: 80,
-                child: const SizedBox(height: 40)),
+                closeBuilder: null,
+                child: const SizedBox(width: 120, height: 80, child: Text('second'))),
           );
-          expect(second.isShowing, isTrue);
-          expect(identical(first, second), isTrue);
+          expect(second!.isShowing, isTrue);
+          expect(identical(first, second), isFalse);
         },
       );
       await tester.pumpAndSettle();
-      first?.close();
+      expect(first!.isShowing, isTrue);
+      expect(second!.isShowing, isTrue);
+      expect(find.text('first'), findsOneWidget);
+      expect(find.text('second'), findsOneWidget);
+
+      second!.close();
+      await tester.pumpAndSettle();
+      expect(second!.isShowing, isFalse);
+      expect(first!.isShowing, isTrue);
+      expect(find.text('second'), findsNothing);
+      expect(find.text('first'), findsOneWidget);
+
+      first!.close();
       await tester.pumpAndSettle();
     });
 
