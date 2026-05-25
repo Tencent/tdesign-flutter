@@ -1,6 +1,7 @@
 part of 't_popup.dart';
 
-/// 浮层内容外壳：圆角、Header（仅 bottom）、child；center 由 [PopupCenterUnderClose] 接管下方关闭区。
+/// 浮层内容外壳：圆角、[PopupHeader]（仅 bottom）与主体内容；
+/// center 由 [PopupCenterUnderClose] 接管面板外下方关闭区。
 class PopupShell extends StatelessWidget {
   const PopupShell({
     super.key,

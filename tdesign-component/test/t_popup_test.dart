@@ -592,6 +592,71 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('外层 handle.close 在内层展示时只关闭外层', (tester) async {
+      TPopupHandle? outerHandle;
+      TPopupHandle? innerHandle;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          outerHandle = TPopup.show(
+            tester.element(find.text('open')),
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 160,
+                cancelBuilder: null,
+                confirmBuilder: null,
+                child: Builder(
+                  builder: (ctx) {
+                    return Column(
+                      children: [
+                        const Text('outer'),
+                        ElevatedButton(
+                          onPressed: () {
+                            innerHandle = TPopup.show(
+                              ctx,
+                              options: TPopupOptions(
+                                placement: TPopupPlacement.center,
+                                width: 120,
+                                height: 80,
+                                closeBuilder: null,
+                                child: const SizedBox(
+                                  width: 120,
+                                  height: 80,
+                                  child: Text('inner'),
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text('open inner'),
+                        ),
+                      ],
+                    );
+                  },
+                )),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('outer'), findsOneWidget);
+
+      await tester.tap(find.text('open inner'));
+      await tester.pumpAndSettle();
+      expect(find.text('outer'), findsOneWidget);
+      expect(find.text('inner'), findsOneWidget);
+
+      outerHandle!.close();
+      await tester.pumpAndSettle();
+      expect(outerHandle!.isShowing, isFalse);
+      expect(innerHandle!.isShowing, isTrue);
+      expect(find.text('outer'), findsNothing);
+      expect(find.text('inner'), findsOneWidget);
+
+      innerHandle!.close();
+      await tester.pumpAndSettle();
+      expect(find.text('inner'), findsNothing);
+    });
+
     testWidgets('系统返回键关闭', (tester) async {
       var closedCount = 0;
       late BuildContext hostContext;

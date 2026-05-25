@@ -16,7 +16,7 @@ const Object _unset = Object();
 ///
 /// ## 字段与 [TPopupPlacement]
 ///
-/// | [TPopupPlacement] | 头部 / 关闭 | 尺寸 |
+/// | [TPopupPlacement] | 头部 / 关闭区 | 尺寸 |
 /// |-------------------|-------------|------|
 /// | [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[inset] |
 /// | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
@@ -31,7 +31,7 @@ const Object _unset = Object();
 /// | 显式 `null` | 隐藏该区域 |
 /// | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
 ///
-/// [titleWidget] 默认为 `null`，表示无标题文案。
+/// [titleWidget] 默认为 `null`，表示无标题内容。
 ///
 /// 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 class TPopupOptions {
@@ -122,7 +122,7 @@ class TPopupOptions {
 
   /// 创建 [TPopupPlacement.center] 配置。
   ///
-  /// 固定 [placement] 为 [TPopupPlacement.center]；默认面板外下方圆形关闭按钮。
+  /// 固定 [placement] 为 [TPopupPlacement.center]；默认展示面板外下方圆形关闭按钮。
   factory TPopupOptions.center({
     required Widget child,
     double? width,

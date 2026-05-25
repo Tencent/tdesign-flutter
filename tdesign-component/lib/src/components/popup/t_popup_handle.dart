@@ -66,12 +66,16 @@ class TPopupHandle {
     _PopupNavigatorRoute<dynamic>? route;
 
     void closeWithTrigger(TPopupTrigger trigger, [Object? result]) {
-      if (!isShowing) {
+      final currentRoute = route;
+      if (!isShowing || currentRoute == null) {
         return;
       }
-      _markClosing();
-      route?.fireCloseStart(trigger);
-      navigator.pop(result);
+      _closeRoute(
+        navigator: navigator,
+        route: currentRoute,
+        trigger: trigger,
+        result: result,
+      );
     }
 
     route = _PopupNavigatorRoute<dynamic>(
@@ -93,14 +97,20 @@ class TPopupHandle {
   ///
   /// [result] 可选，作为 [Navigator.pop] 的返回值。
   ///
-  /// 已关闭或未展示时调用无副作用。嵌套浮层须使用对应层的 handle 关闭。
+  /// 已关闭或未展示时调用无副作用。
+  /// 嵌套浮层场景下会关闭当前 handle 对应的那一层，而不会误关栈顶其它浮层。
   void close([Object? result]) {
-    if (!isShowing) {
+    final route = _route;
+    final navigator = route?.navigator ?? _lastNavigator;
+    if (!isShowing || route == null || navigator == null) {
       return;
     }
-    _markClosing();
-    _route?.fireCloseStart(TPopupTrigger.api);
-    _route!.navigator?.pop(result);
+    _closeRoute(
+      navigator: navigator,
+      route: route,
+      trigger: TPopupTrigger.api,
+      result: result,
+    );
   }
 
   NavigatorState? _resolveNavigator(BuildContext? context) {
@@ -117,6 +127,21 @@ class TPopupHandle {
 
   void _markClosing() {
     _isClosed = true;
+  }
+
+  void _closeRoute({
+    required NavigatorState navigator,
+    required _PopupNavigatorRoute<dynamic> route,
+    required TPopupTrigger trigger,
+    Object? result,
+  }) {
+    _markClosing();
+    route.fireCloseStart(trigger);
+    if (identical(_PopupTracker.top(navigator), this)) {
+      navigator.pop(result);
+      return;
+    }
+    navigator.removeRoute(route, result);
   }
 
   void _detachRoute() {

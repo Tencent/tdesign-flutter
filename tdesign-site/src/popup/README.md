@@ -525,7 +525,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## API
 ### TPopup
 #### 简介
-弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
+弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作区、center 面板外下方关闭区。
 
  通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
  多次调用 [show] 会继续压入新的浮层路由，可用于叠加展示。
@@ -577,7 +577,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
  ## 字段与 [TPopupPlacement]
 
- | [TPopupPlacement] | 头部 / 关闭 | 尺寸 |
+ | [TPopupPlacement] | 头部 / 关闭区 | 尺寸 |
  |-------------------|-------------|------|
 | [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[inset] |
  | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
@@ -592,7 +592,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  | 显式 `null` | 隐藏该区域 |
  | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
 
-[titleWidget] 默认为 `null`，表示无标题文案。
+[titleWidget] 默认为 `null`，表示无标题内容。
 
  生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 #### 默认构造方法
@@ -636,7 +636,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  蒙层、动画、生命周期等字段语义见同名成员文档。 |
 | TPopupOptions.center  | 创建 [TPopupPlacement.center] 配置。
 
- 固定 [placement] 为 [TPopupPlacement.center]；默认面板外下方圆形关闭按钮。 |
+ 固定 [placement] 为 [TPopupPlacement.center]；默认展示面板外下方圆形关闭按钮。 |
 | TPopupOptions.left  | 创建 [TPopupPlacement.left] 配置。
 
  固定 [placement] 为 [TPopupPlacement.left]；未传 [width] 时布局默认宽度 280。 |

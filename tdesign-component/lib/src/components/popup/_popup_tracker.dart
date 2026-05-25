@@ -14,4 +14,12 @@ abstract class _PopupTracker {
       _stacks.remove(navigator);
     }
   }
+
+  static TPopupHandle? top(NavigatorState navigator) {
+    final stack = _stacks[navigator];
+    if (stack == null || stack.isEmpty) {
+      return null;
+    }
+    return stack.last;
+  }
 }

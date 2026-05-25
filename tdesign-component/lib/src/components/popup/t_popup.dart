@@ -31,7 +31,7 @@ part 't_popup_inset.dart';
 part 't_popup_options.dart';
 part 't_popup_types.dart';
 
-/// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
+/// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作区、center 面板外下方关闭区。
 ///
 /// 通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
 /// 多次调用 [show] 会继续压入新的浮层路由，可用于叠加展示。

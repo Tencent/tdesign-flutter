@@ -216,6 +216,10 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
+    if (!_closedFired) {
+      _closedFired = true;
+      options.onClosed?.call();
+    }
     if (_animationListenerAttached) {
       animation?.removeStatusListener(_onAnimationStatus);
     }
