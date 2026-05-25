@@ -14,7 +14,7 @@ class PopupHeader extends StatelessWidget {
   static const double headerHeight = 58;
 
   void _close() {
-    onCloseWithTrigger(TPopupTrigger.programmatic);
+    onCloseWithTrigger(TPopupTrigger.custom);
   }
 
   @override
@@ -46,7 +46,7 @@ class _DefaultHeader extends StatelessWidget {
   final TPopupOptions options;
 
   /// 给「内置 sentinel cancel/confirm 按钮」用的 close 入口，
-  /// 按钮自己传 [TPopupTrigger.cancelBtn] / [TPopupTrigger.confirmBtn]。
+  /// 按钮自己传 [TPopupTrigger.cancel] / [TPopupTrigger.confirm]。
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   @override
@@ -109,7 +109,7 @@ class _DefaultHeader extends StatelessWidget {
   Widget _buildCancel(BuildContext context, TThemeData theme) {
     if (_isPopupDefaultCancel(options.cancelBuilder)) {
       return TToolbarPressable(
-        onTap: () => onCloseWithTrigger(TPopupTrigger.cancelBtn),
+        onTap: () => onCloseWithTrigger(TPopupTrigger.cancel),
         child: TText(
           context.resource.cancel,
           textColor: theme.textColorSecondary,
@@ -119,14 +119,14 @@ class _DefaultHeader extends StatelessWidget {
     }
     return options.cancelBuilder!(
       context,
-      () => onCloseWithTrigger(TPopupTrigger.cancelBtn),
+      () => onCloseWithTrigger(TPopupTrigger.cancel),
     );
   }
 
   Widget _buildConfirm(BuildContext context, TThemeData theme) {
     if (_isPopupDefaultConfirm(options.confirmBuilder)) {
       return TToolbarPressable(
-        onTap: () => onCloseWithTrigger(TPopupTrigger.confirmBtn),
+        onTap: () => onCloseWithTrigger(TPopupTrigger.confirm),
         child: TText(
           context.resource.confirm,
           textColor: theme.brandNormalColor,
@@ -137,7 +137,7 @@ class _DefaultHeader extends StatelessWidget {
     }
     return options.confirmBuilder!(
       context,
-      () => onCloseWithTrigger(TPopupTrigger.confirmBtn),
+      () => onCloseWithTrigger(TPopupTrigger.confirm),
     );
   }
 }

@@ -205,7 +205,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   @override
   TickerFuture didPush() {
     options.onOpen?.call();
-    options.onVisibleChange?.call(true, TPopupTrigger.programmatic);
+    options.onVisibleChange?.call(true, TPopupTrigger.api);
     final future = super.didPush();
     future.whenComplete(_attachAnimationListener);
     return future;
@@ -213,7 +213,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   bool didPop(T? result) {
-    fireCloseStart(TPopupTrigger.programmatic);
+    fireCloseStart(TPopupTrigger.systemBack);
     return super.didPop(result);
   }
 

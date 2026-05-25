@@ -24,7 +24,7 @@ enum TPopupPlacement {
 /// bottom 整行头部自定义构建器。
 ///
 /// * [context] 构建上下文
-/// * [close] 关闭浮层，触发源为 [TPopupTrigger.programmatic]
+/// * [close] 关闭浮层，触发源为 [TPopupTrigger.custom]
 typedef TPopupHeaderBuilder = Widget Function(
   BuildContext context,
   VoidCallback close,
@@ -69,31 +69,38 @@ bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
 ///
 /// 作为 [TPopupVisibleChangeCallback] 的第二个参数，以及关闭流程中的语义标记。
 ///
-/// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancelBtn]、
-/// [TPopupTrigger.confirmBtn]、[TPopupTrigger.closeBtn]；
-/// [TPopupHandle.close]、系统返回、[headerBuilder] 内调用 `close` 等为
-/// [TPopupTrigger.programmatic]。
+/// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancel]、
+/// [TPopupTrigger.confirm]、[TPopupTrigger.close]；
+/// [TPopupHandle.close] 为 [TPopupTrigger.api]；系统返回为
+/// [TPopupTrigger.systemBack]；[headerBuilder] 内调用 `close` 等为
+/// [TPopupTrigger.custom]。
 enum TPopupTrigger {
   /// 点击蒙层，且 [TPopupOptions.closeOnOverlayClick] 为 true。
   overlay,
 
-  /// 点击 bottom 内置「取消」按钮（[TPopupOptions.cancelBuilder] 为内置默认时）。
-  cancelBtn,
+  /// 点击 bottom 取消语义槽位（含默认与自定义 [TPopupOptions.cancelBuilder]）。
+  cancel,
 
-  /// 点击 bottom 内置「确定」按钮（[TPopupOptions.confirmBuilder] 为内置默认时）。
-  confirmBtn,
+  /// 点击 bottom 确认语义槽位（含默认与自定义 [TPopupOptions.confirmBuilder]）。
+  confirm,
 
-  /// 点击 center 内置关闭图标（[TPopupOptions.closeBuilder] 为内置默认时）。
-  closeBtn,
+  /// 点击 center 关闭语义槽位（含默认与自定义 [TPopupOptions.closeBuilder]）。
+  close,
 
-  /// [TPopupHandle.close]、系统返回键、[headerBuilder] 自定义内调用 `close` 等。
-  programmatic,
+  /// 外部 API 主动触发的显隐变化，如 [TPopupHandle.close] 或打开事件。
+  api,
+
+  /// 系统返回键或系统路由返回触发的关闭。
+  systemBack,
+
+  /// 无框架预设动作语义的自定义关闭，如 [headerBuilder] 内调用 `close`。
+  custom,
 }
 
 /// 浮层显隐变化回调。
 ///
 /// * [visible] 为 true 表示打开，false 表示开始关闭
-/// * [trigger] 关闭来源，见 [TPopupTrigger]；打开时为 [TPopupTrigger.programmatic]
+/// * [trigger] 关闭来源，见 [TPopupTrigger]；打开时为 [TPopupTrigger.api]
 typedef TPopupVisibleChangeCallback = void Function(
   bool visible,
   TPopupTrigger trigger,

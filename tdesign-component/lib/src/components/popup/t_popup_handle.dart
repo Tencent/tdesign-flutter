@@ -89,7 +89,7 @@ class TPopupHandle {
   }
 
   /// 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为
-  /// [TPopupTrigger.programmatic]。
+  /// [TPopupTrigger.api]。
   ///
   /// [result] 可选，作为 [Navigator.pop] 的返回值。
   ///
@@ -99,7 +99,7 @@ class TPopupHandle {
       return;
     }
     _markClosing();
-    _route?.fireCloseStart(TPopupTrigger.programmatic);
+    _route?.fireCloseStart(TPopupTrigger.api);
     _route!.navigator?.pop(result);
   }
 

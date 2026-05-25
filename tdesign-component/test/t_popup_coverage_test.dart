@@ -469,7 +469,7 @@ void main() {
 
       await tester.tap(find.text('取消'));
       await tester.pumpAndSettle();
-      expect(hideTriggers.last, TPopupTrigger.cancelBtn);
+      expect(hideTriggers.last, TPopupTrigger.cancel);
 
       await openPopup(
         tester,
@@ -514,7 +514,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(TIcons.close_circle));
       await tester.pumpAndSettle();
-      expect(hideTriggers.last, TPopupTrigger.closeBtn);
+      expect(hideTriggers.last, TPopupTrigger.close);
     });
 
     testWidgets('Popup 内嵌套 show 可再开一层且先关内层', (tester) async {
@@ -801,7 +801,7 @@ void main() {
       expect(opts.showOverlay, isFalse);
       expect(opts.overlayOpacity, 0.5);
       expect(opts.destroyOnClose, isTrue);
-      opts.onVisibleChange?.call(false, TPopupTrigger.programmatic);
+      opts.onVisibleChange?.call(false, TPopupTrigger.api);
       expect(visibleChanges, 1);
     });
   });
@@ -1102,7 +1102,7 @@ void main() {
   // 触发源精细化：sentinel vs 自定义 builder 的 close 上报区分
   // ============================================================
   group('Popup 触发源细分（sentinel vs 自定义 builder）', () {
-    testWidgets('内置 cancel 按钮点击 → cancelBtn（与 confirmBtn 区分）',
+    testWidgets('内置 cancel 按钮点击 → cancel（与 confirm 区分）',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1125,10 +1125,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('取消'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.cancelBtn);
+      expect(lastTrigger, TPopupTrigger.cancel);
     });
 
-    testWidgets('自定义 cancelBuilder 内调 close → cancelBtn',
+    testWidgets('自定义 cancelBuilder 内调 close → cancel',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1155,10 +1155,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('我自己的取消'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.cancelBtn);
+      expect(lastTrigger, TPopupTrigger.cancel);
     });
 
-    testWidgets('自定义 confirmBuilder 内调 close → confirmBtn',
+    testWidgets('自定义 confirmBuilder 内调 close → confirm',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1185,10 +1185,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('我自己的确定'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.confirmBtn);
+      expect(lastTrigger, TPopupTrigger.confirm);
     });
 
-    testWidgets('center 自定义 closeBuilder 内调 close → closeBtn',
+    testWidgets('center 自定义 closeBuilder 内调 close → close',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1216,10 +1216,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('我自己的关闭'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.closeBtn);
+      expect(lastTrigger, TPopupTrigger.close);
     });
 
-    testWidgets('headerBuilder 自定义内调 close → programmatic（无 sentinel 细分）',
+    testWidgets('headerBuilder 自定义内调 close → custom（无预设动作语义）',
         (tester) async {
       TPopupTrigger? lastTrigger;
       await openPopup(
@@ -1246,7 +1246,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('整行自定义头部'));
       await tester.pumpAndSettle();
-      expect(lastTrigger, TPopupTrigger.programmatic);
+      expect(lastTrigger, TPopupTrigger.custom);
     });
   });
 }

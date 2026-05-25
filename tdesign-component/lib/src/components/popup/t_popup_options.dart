@@ -357,17 +357,17 @@ class TPopupOptions {
 
   /// bottom 左侧操作槽；仅 [headerBuilder] 为内置默认时生效。
   ///
-  /// 内置默认为「取消」，点击触发 [TPopupTrigger.cancelBtn]。
+  /// 内置默认为「取消」，点击触发 [TPopupTrigger.cancel]。
   final TPopupSlotBuilder? cancelBuilder;
 
   /// bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。
   ///
-  /// 内置默认为「确定」，点击触发 [TPopupTrigger.confirmBtn]。
+  /// 内置默认为「确定」，点击触发 [TPopupTrigger.confirm]。
   final TPopupSlotBuilder? confirmBuilder;
 
   /// center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效。三态见类文档「Builder 三态」。
   ///
-  /// 内置默认点击触发 [TPopupTrigger.closeBtn]。
+  /// 内置默认点击触发 [TPopupTrigger.close]。
   final TPopupSlotBuilder? closeBuilder;
 
   /// 路由 push 时（打开动画开始前）。

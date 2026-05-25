@@ -1,6 +1,6 @@
 part of 't_popup.dart';
 
-/// center 面板外关闭控件：默认图标与自定义关闭槽位都上报 [TPopupTrigger.closeBtn]。
+/// center 面板外关闭控件：默认图标与自定义关闭槽位都上报 [TPopupTrigger.close]。
 Widget buildPopupCenterCloseControl({
   required BuildContext context,
   required TPopupOptions options,
@@ -16,7 +16,7 @@ Widget buildPopupCenterCloseControl({
         color: theme.fontWhColor1,
         size: 32,
       ),
-      onPressed: () => onCloseWithTrigger(TPopupTrigger.closeBtn),
+      onPressed: () => onCloseWithTrigger(TPopupTrigger.close),
     );
   }
   return options.closeBuilder!(context, onCloseSlotTap);
@@ -46,7 +46,7 @@ class PopupCenterUnderClose extends StatelessWidget {
       );
     }
 
-    void onCloseSlotTap() => onCloseWithTrigger(TPopupTrigger.closeBtn);
+    void onCloseSlotTap() => onCloseWithTrigger(TPopupTrigger.close);
 
     final closeControl = buildPopupCenterCloseControl(
       context: context,

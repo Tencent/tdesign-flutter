@@ -804,7 +804,7 @@ void main() {
   });
 
   group('TPopup 触发源与配置', () {
-    testWidgets('handle.close 触发 programmatic', (tester) async {
+    testWidgets('handle.close 触发 api', (tester) async {
       TPopupTrigger? hideTrigger;
       TPopupHandle? handle;
 
@@ -828,10 +828,10 @@ void main() {
       await tester.pumpAndSettle();
       handle!.close();
       await tester.pumpAndSettle();
-      expect(hideTrigger, TPopupTrigger.programmatic);
+      expect(hideTrigger, TPopupTrigger.api);
     });
 
-    testWidgets('confirm 点击触发 confirmBtn', (tester) async {
+    testWidgets('confirm 点击触发 confirm', (tester) async {
       TPopupTrigger? hideTrigger;
       late BuildContext hostContext;
 
@@ -856,7 +856,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('确定'));
       await tester.pumpAndSettle();
-      expect(hideTrigger, TPopupTrigger.confirmBtn);
+      expect(hideTrigger, TPopupTrigger.confirm);
     });
 
     testWidgets('destroyOnClose 路由关闭后可再次 show', (tester) async {
