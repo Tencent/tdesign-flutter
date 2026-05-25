@@ -174,7 +174,7 @@ void main() {
       expect(find.byType(Positioned), findsWidgets);
     });
 
-    testWidgets('center showClose=false 无下方关闭', (tester) async {
+    testWidgets('center closeBuilder=null 无下方关闭', (tester) async {
       await openPopup(
         tester,
         onPressed: () {

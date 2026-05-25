@@ -189,7 +189,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           options: TPopupOptions.bottom(
               height: 280,
-              titleBuilder: (_) => TText('标题文字'),
+              titleWidget: TText('标题文字'),
               child: Container(height: 200)),
         );
       },
@@ -221,7 +221,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 textColor: TTheme.of(context).textColorSecondary,
                 font: TTheme.of(context).fontBodyLarge,
               ),
-              titleBuilder: (_) => Row(
+              titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(TIcons.info_circle,
@@ -366,7 +366,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                               innerContext,
                               options: TPopupOptions.bottom(
                                 height: 280,
-                                titleBuilder: (_) => const TText('内层标题'),
+                                titleWidget: const TText('内层标题'),
                                 child: Container(
                                   height: 160,
                                   color: TTheme.of(innerContext)
@@ -448,7 +448,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               height: 280,
               showOverlay: false,
               // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
-              titleBuilder: (_) => const TText('无蒙层'),
+              titleWidget: const TText('无蒙层'),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
@@ -528,6 +528,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
 
  通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
+ 多次调用 [show] 会继续压入新的浮层路由，可用于叠加展示。
 
  **示例**
 
@@ -535,7 +536,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  final handle = TPopup.show(
    context,
    options: TPopupOptions.bottom(
-     titleBuilder: (_) => const Text('标题'),
+     titleWidget: const Text('标题'),
      child: MyPanel(),
    ),
  );
@@ -556,7 +557,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| show |  |   required BuildContext context,  required TPopupOptions options,  BuildContext? navigatorContext,  bool useRootNavigator, | 打开浮层并压入独立 [PopupRoute]。     [context] 用于查找 [Navigator] 并展示浮层。     [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。     返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、   [TPopupHandle.isShowing] 控制与查询。     [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。     [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
+| show |  |   required BuildContext context,  required TPopupOptions options,  BuildContext? navigatorContext,  bool useRootNavigator, | 打开浮层并压入独立 [PopupRoute]。     [context] 用于查找 [Navigator] 并展示浮层。     [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。     返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、   [TPopupHandle.isShowing] 控制与查询。     重复调用会继续 push 新的浮层；若需互斥请在业务层管理。     [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。     [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
 
 ```
 ```
@@ -621,7 +622,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
-| titleBuilder | WidgetBuilder? | - | bottom 标题；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。 |
+| titleWidget | Widget? | - | bottom 标题插槽；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。 |
 | width | double? | - | 宽度；[TPopupPlacement.left]、[TPopupPlacement.right]、[TPopupPlacement.center] 生效。 |
 
 

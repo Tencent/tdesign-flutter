@@ -11,7 +11,7 @@
           context,
           options: TPopupOptions.bottom(
               height: 280,
-              titleBuilder: (_) => TText('标题文字'),
+              titleWidget: TText('标题文字'),
               child: Container(height: 200)),
         );
       },

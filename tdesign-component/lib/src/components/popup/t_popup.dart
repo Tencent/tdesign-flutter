@@ -34,6 +34,7 @@ part 't_popup_types.dart';
 /// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作栏、center 下方关闭。
 ///
 /// 通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
+/// 多次调用 [show] 会继续压入新的浮层路由，可用于叠加展示。
 ///
 /// **示例**
 ///
@@ -61,6 +62,7 @@ final class TPopup {
   ///
   /// 返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、
   /// [TPopupHandle.isShowing] 控制与查询。
+  /// 重复调用会继续 push 新的浮层；若需互斥请在业务层管理。
   ///
   /// [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。
   ///

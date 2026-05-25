@@ -292,7 +292,7 @@ void main() {
       expect(find.text('自定义取消'), findsOneWidget);
     });
 
-    testWidgets('bottom showHeader=false 不渲染头部', (tester) async {
+    testWidgets('bottom headerBuilder=null 不渲染头部', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -394,7 +394,7 @@ void main() {
       expect(find.byIcon(TIcons.close_circle), findsOneWidget);
     });
 
-    testWidgets('center showClose=false 不显示关闭区', (tester) async {
+    testWidgets('center closeBuilder=null 不显示关闭区', (tester) async {
       await openPopup(
         tester,
         onPressed: () {

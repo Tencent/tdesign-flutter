@@ -16,7 +16,7 @@
                 textColor: TTheme.of(context).textColorSecondary,
                 font: TTheme.of(context).fontBodyLarge,
               ),
-              titleBuilder: (_) => Row(
+              titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(TIcons.info_circle,

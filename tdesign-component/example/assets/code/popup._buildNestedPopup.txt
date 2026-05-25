@@ -35,7 +35,7 @@
                               innerContext,
                               options: TPopupOptions.bottom(
                                 height: 280,
-                                titleBuilder: (_) => const TText('内层标题'),
+                                titleWidget: const TText('内层标题'),
                                 child: Container(
                                   height: 160,
                                   color: TTheme.of(innerContext)
