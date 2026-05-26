@@ -36,28 +36,22 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );
@@ -80,28 +74,22 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );
@@ -127,12 +115,12 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               capsuleTheme: true,
               builderContent: (context, index) {
@@ -140,16 +128,10 @@ Widget _buildOther(BuildContext context) {
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );
@@ -172,12 +154,12 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               capsuleTheme: true,
               builderContent: (context, index) {
@@ -185,16 +167,10 @@ Widget _buildOther(BuildContext context) {
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );
@@ -218,7 +194,7 @@ Widget _buildOther(BuildContext context) {
 | capsuleTheme | bool? | false | 锚点是否为胶囊式样式 |
 | indexList | List<String>? | - | 索引字符列表。不传默认 A-Z |
 | indexListMaxHeight | double? | 0.8 | 索引列表最大高度（父容器高度的百分比，默认 0.8） |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChange | void Function(String index)? | - | 索引发生变更时触发事件 |
 | onSelect | void Function(String index)? | - | 点击侧边栏时触发事件 |
 | reverse | bool? | false | 反方向滚动置顶 |
@@ -226,8 +202,6 @@ Widget _buildOther(BuildContext context) {
 | sticky | bool? | true | 锚点是否吸顶 |
 | stickyOffset | double? | 0 | 锚点吸顶时与顶部的距离 |
 
-```
-```
 
 ### TIndexesAnchor
 #### 简介
@@ -239,12 +213,10 @@ Widget _buildOther(BuildContext context) {
 | activeIndex | ValueNotifier<String> | - | 选中索引 |
 | builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 索引锚点构建 |
 | capsuleTheme | bool | - | 是否为胶囊式样式 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | sticky | bool | - | 索引是否吸顶 |
 | text | String | - | 锚点文本 |
 
-```
-```
 
 ### TIndexesList
 #### 简介
@@ -257,7 +229,7 @@ Widget _buildOther(BuildContext context) {
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
 | indexList | List<String> | - | 索引字符列表。不传默认 A-Z |
 | indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onSelect | void Function(String newIndex, String oldIndex) | - | 点击侧边栏时触发事件 |
 
 

@@ -7,20 +7,19 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.center,
-              builder: (context) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: TTheme.of(context).bgColorContainer,
-                    borderRadius:
-                        BorderRadius.circular(TTheme.of(context).radiusLarge),
-                  ),
-                  width: 240,
-                  height: 240,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.center(
+              closeBuilder: null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: TTheme.of(context).bgColorContainer,
+                  borderRadius:
+                      BorderRadius.circular(TTheme.of(context).radiusLarge),
+                ),
+                width: 240,
+                height: 240,
+              )),
         );
       },
     );

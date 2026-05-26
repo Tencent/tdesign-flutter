@@ -6,15 +6,13 @@
 | --- | --- | --- | --- |
 | activeIndex | int | 0 | 步骤条当前激活的索引 |
 | direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | readOnly | bool | false | 步骤条readOnly模式 |
 | simple | bool | false | 步骤条simple模式 |
 | status | TStepsStatus | TStepsStatus.success | 步骤条状态 |
 | steps | List<TStepsItemData> | - | 步骤条数据 |
 | verticalSelect | bool | false | 步骤条垂直自定义步骤条选择模式 |
 
-```
-```
 
 ### TStepsItemData
 #### 默认构造方法
@@ -27,3 +25,27 @@
 | errorIcon | IconData? | - | 失败图标 |
 | successIcon | IconData? | - | 成功图标 |
 | title | String? | - | 标题 |
+
+
+### TStepsDirection
+#### 简介
+Steps步骤条方向
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| horizontal | - |
+| vertical | - |
+
+
+### TStepsStatus
+#### 简介
+steps步骤条状态
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| success | - |
+| error | - |

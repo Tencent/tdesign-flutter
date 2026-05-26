@@ -288,7 +288,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | empty | TTableEmpty? | - | 空表格呈现样式 |
 | footerWidget | Widget? | - | 自定义表尾 |
 | height | double? | - | 表格高度，超出后会出现滚动条 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | loading | bool? | false | 加载中状态 |
 | loadingWidget | Widget? | - | 自定义加载中状态 |
 | onCellTap | OnCellTap? | - | 单元格点击事件 |
@@ -300,8 +300,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | stripe | bool? | false | 斑马纹 |
 | width | double? | - | 表格宽度 |
 
-```
-```
 
 ### TTableCol
 #### 默认构造方法
@@ -321,8 +319,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | title | String? | - | 表头标题 |
 | width | double? | - | 列宽 |
 
-```
-```
 
 ### TTableEmpty
 #### 默认构造方法
@@ -331,6 +327,76 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | assetUrl | String? | - | 空状态图片 |
 | text | String? | - | 空状态文字 |
+
+
+### TTableColFixed
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| left | - |
+| right | - |
+| none | - |
+
+
+### TTableColAlign
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| left | - |
+| center | - |
+| right | - |
+
+
+### SelectableFunc
+#### 类型定义
+
+```dart
+typedef SelectableFunc = bool Function(int index, dynamic row);
+```
+
+
+### RowCheckFunc
+#### 类型定义
+
+```dart
+typedef RowCheckFunc = bool Function(int index, dynamic row);
+```
+
+
+### OnCellTap
+#### 类型定义
+
+```dart
+typedef OnCellTap = void Function(int rowIndex, dynamic row, TTableCol col);
+```
+
+
+### OnScroll
+#### 类型定义
+
+```dart
+typedef OnScroll = void Function(ScrollController controller);
+```
+
+
+### OnSelect
+#### 类型定义
+
+```dart
+typedef OnSelect = void Function(List<dynamic>? data);
+```
+
+
+### OnRowSelect
+#### 类型定义
+
+```dart
+typedef OnRowSelect = void Function(int index, bool checked);
+```
 
 
   

@@ -16,7 +16,7 @@
 | height | double? | 48 | menu的高度 |
 | isScrollable | bool? | false | 是否开启滚动列表 |
 | items | List<TDropdownItem>? | - | 下拉菜单 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | labelBuilder | LabelBuilder? | - | 自定义标签内容 |
 | onMenuClosed | ValueChanged<int>? | - | 关闭菜单事件 |
 | onMenuOpened | ValueChanged<int>? | - | 展开菜单事件 |
@@ -24,8 +24,6 @@
 | tabBarAlign | MainAxisAlignment? | MainAxisAlignment.center | [TDropdownItem.label]和[arrowIcon]/[TDropdownItem.arrowIcon]的对齐方式 |
 | width | double? | - | menu的宽度 |
 
-```
-```
 
 ### TDropdownItem
 #### 简介
@@ -39,7 +37,7 @@
 | builder | TDropdownItemContentBuilder? | - | 完全自定义展示内容 |
 | controller | TDropdownItemController? | - | 下拉菜单控制器 |
 | disabled | bool? | false | 是否禁用 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 标题 |
 | maxHeight | double? | - | 内容最大高度 |
 | minHeight | double? | - | 内容最小高度 |
@@ -53,8 +51,12 @@
 | tabBarFlex | int? | 1 | 该item在menu上的宽度占比，仅在[TDropdownMenu.isScrollable]为false时有效 |
 | tabBarWidth | double? | - | 该item在menu上的宽度，仅在[TDropdownMenu.isScrollable]为true时有效 |
 
-```
-```
+#### 静态成员
+
+| 名称 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| operateHeight | double | - | - |
+
 
 ### TDropdownItemOption
 #### 简介
@@ -71,9 +73,55 @@
 | selectedColor | Color? | - | 选中颜色 |
 | value | String | - | 选项值 |
 
-```
-```
 
 ### TDropdownItemController
 #### 简介
 下拉菜单控制器
+
+### TDropdownMenuDirection
+#### 简介
+菜单展开方向
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| down | 向下 |
+| up | 向上 |
+| auto | 根据内容高度动态展示方向 |
+
+
+### TDropdownItemContentBuilder
+#### 类型定义
+
+```dart
+typedef TDropdownItemContentBuilder = Widget Function(BuildContext context, _TDropdownItemState itemState, TDropdownPopup? popupState);
+```
+
+
+### TDropdownItemOptionsCallback
+#### 类型定义
+
+```dart
+typedef TDropdownItemOptionsCallback = void Function(List<TDropdownItemOption>? options);
+```
+
+
+### TDropdownItemBuilder
+#### 简介
+下拉菜单构建器
+#### 类型定义
+
+```dart
+typedef TDropdownItemBuilder = List<TDropdownItem> Function(BuildContext context);
+```
+
+
+### LabelBuilder
+#### 简介
+自定义标签内容
+#### 类型定义
+
+```dart
+typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
+```

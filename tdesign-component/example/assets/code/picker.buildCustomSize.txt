@@ -5,7 +5,8 @@
       children: [
         Text(
           '示例：height(300) + itemCount(7)，每屏显示 7 项',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 8),
         _pickerCard(

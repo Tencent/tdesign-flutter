@@ -1,19 +1,22 @@
 
   Widget buildCustomKeys(BuildContext context) {
     // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
-    const keys = TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
+    const keys =
+        TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
     final label = _customKeysValue?.labels.join() ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '后端原始字段：city / code / readonly。通过 keys(label: "city") 映射为 label',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
           '当前选中：${label.isEmpty ? "未选择" : label}',
-          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
         const SizedBox(height: 8),
         _pickerCard(

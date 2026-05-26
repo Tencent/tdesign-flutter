@@ -64,7 +64,8 @@ void main() {
   group('TBottomTabBar — iconText 图标颜色 (issue #900)', () {
     // TC-01: iconText 选中 tab 图标颜色为 brandNormalColor
     testWidgets('TC-01: 选中 tab 的图标颜色应为 brandNormalColor', (tester) async {
-      await tester.pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
+      await tester
+          .pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
       final BuildContext context = tester.element(find.byType(TBottomTabBar));
@@ -75,7 +76,8 @@ void main() {
       expect(icons, isNotEmpty);
 
       // 通过 IconTheme 验证选中图标的颜色
-      final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
+      final iconThemes =
+          tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       expect(iconThemes, isNotEmpty, reason: '选中图标应被 IconTheme 包裹以注入颜色');
 
       // 验证至少有一个 IconTheme 的 color 是 brandNormalColor
@@ -91,13 +93,15 @@ void main() {
 
     // TC-02: iconText 未选中 tab 图标颜色为 textColorPrimary
     testWidgets('TC-02: 未选中 tab 的图标颜色应为 textColorPrimary', (tester) async {
-      await tester.pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
+      await tester
+          .pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
       final BuildContext context = tester.element(find.byType(TBottomTabBar));
       final expectedColor = TTheme.of(context).textColorPrimary;
 
-      final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
+      final iconThemes =
+          tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       expect(iconThemes, isNotEmpty, reason: '未选中图标应被 IconTheme 包裹以注入颜色');
 
       final unselectedIconTheme = iconThemes.firstWhere(
@@ -150,24 +154,29 @@ void main() {
       await tester.tap(find.text('我的'));
       await tester.pumpAndSettle();
 
-      final iconThemesAfter = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
+      final iconThemesAfter =
+          tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       final colors = iconThemesAfter.map((t) => t.data.color).toSet();
 
-      expect(colors, contains(brandColor), reason: '切换后新选中 tab 图标应为 brandNormalColor');
-      expect(colors, contains(primaryColor), reason: '切换后旧 tab 图标应为 textColorPrimary');
+      expect(colors, contains(brandColor),
+          reason: '切换后新选中 tab 图标应为 brandNormalColor');
+      expect(colors, contains(primaryColor),
+          reason: '切换后旧 tab 图标应为 textColorPrimary');
     });
   });
 
   group('TBottomTabBar — icon 类型图标颜色 (issue #900 同类问题)', () {
     // TC-04: icon 类型选中 tab 图标颜色为 brandNormalColor
-    testWidgets('TC-04: icon 类型 — 选中 tab 图标颜色应为 brandNormalColor', (tester) async {
+    testWidgets('TC-04: icon 类型 — 选中 tab 图标颜色应为 brandNormalColor',
+        (tester) async {
       await tester.pumpWidget(_buildTestApp(_buildIconTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
       final BuildContext context = tester.element(find.byType(TBottomTabBar));
       final expectedColor = TTheme.of(context).brandNormalColor;
 
-      final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
+      final iconThemes =
+          tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       expect(iconThemes, isNotEmpty);
 
       final match = iconThemes.firstWhere(
@@ -181,14 +190,16 @@ void main() {
     });
 
     // TC-05: icon 类型未选中 tab 图标颜色为 textColorPrimary
-    testWidgets('TC-05: icon 类型 — 未选中 tab 图标颜色应为 textColorPrimary', (tester) async {
+    testWidgets('TC-05: icon 类型 — 未选中 tab 图标颜色应为 textColorPrimary',
+        (tester) async {
       await tester.pumpWidget(_buildTestApp(_buildIconTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
       final BuildContext context = tester.element(find.byType(TBottomTabBar));
       final expectedColor = TTheme.of(context).textColorPrimary;
 
-      final iconThemes = tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
+      final iconThemes =
+          tester.widgetList<IconTheme>(find.byType(IconTheme)).toList();
       final match = iconThemes.firstWhere(
         (t) => t.data.color == expectedColor,
         orElse: () => throw TestFailure(
@@ -203,7 +214,8 @@ void main() {
   group('TBottomTabBar — 回归检查', () {
     // TC-06: 文字颜色不受影响
     testWidgets('TC-06: iconText 类型文字颜色回归验证', (tester) async {
-      await tester.pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
+      await tester
+          .pumpWidget(_buildTestApp(_buildIconTextTabBar(currentIndex: 0)));
       await tester.pumpAndSettle();
 
       final BuildContext context = tester.element(find.byType(TBottomTabBar));
@@ -217,14 +229,16 @@ void main() {
       // 找到 textColor 为 brandColor 的文字（选中）
       final selectedText = tTexts.firstWhere(
         (t) => t.textColor == brandColor,
-        orElse: () => throw TestFailure('未找到 textColor == brandNormalColor 的 TText'),
+        orElse: () =>
+            throw TestFailure('未找到 textColor == brandNormalColor 的 TText'),
       );
       expect(selectedText.textColor, equals(brandColor));
 
       // 找到 textColor 为 primaryColor 的文字（未选中）
       final unselectedText = tTexts.firstWhere(
         (t) => t.textColor == primaryColor,
-        orElse: () => throw TestFailure('未找到 textColor == textColorPrimary 的 TText'),
+        orElse: () =>
+            throw TestFailure('未找到 textColor == textColorPrimary 的 TText'),
       );
       expect(unselectedText.textColor, equals(primaryColor));
     });

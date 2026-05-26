@@ -1,7 +1,5 @@
 ## API
 ### TNoticeBar
-#### 简介
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -11,7 +9,7 @@
 | direction | Axis? | Axis.horizontal | 滚动方向 |
 | height | double | 22 | 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性） |
 | interval | int? | 3000 | 步进滚动间隔时间（毫秒） |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | left | Widget? | - | 左侧内容（自定义左侧内容，优先级高于prefixIcon） |
 | marquee | bool? | false | 跑马灯效果 |
 | maxLines | int? | 1 | 文本行数（仅静态有效） |
@@ -23,8 +21,6 @@
 | suffixIcon | IconData? | - | 右侧图标 |
 | theme | TNoticeBarTheme? | TNoticeBarTheme.info | 主题 |
 
-```
-```
 
 ### TNoticeBarStyle
 #### 简介
@@ -43,6 +39,38 @@
 
 #### 工厂构造方法
 
-| 名称  | 说明 |
-| --- |  --- |
-| TNoticeBarStyle.generateTheme  | 根据主题生成样式 |
+##### TNoticeBarStyle.generateTheme
+
+根据主题生成样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 上下文 |
+| theme | TNoticeBarTheme? | TNoticeBarTheme.info | - |
+
+
+### TNoticeBarType
+#### 简介
+公告栏类型
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| none | 静止（默认） |
+| scroll | 滚动 |
+| step | 步进 |
+
+
+### TNoticeBarTheme
+#### 简介
+公告栏主题
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| info | 信息（默认） |
+| success | 成功 |
+| warning | 警告 |
+| error | 错误 |
