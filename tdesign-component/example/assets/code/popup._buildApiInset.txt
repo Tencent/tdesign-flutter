@@ -1,7 +1,7 @@
 
-  Widget _buildApiDuration(BuildContext context) {
+  Widget _buildApiInset(BuildContext context) {
     return TButton(
-      text: 'animationDuration: 600ms',
+      text: 'bottom inset.left/right',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -10,10 +10,11 @@
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
-              height: 240,
-              animationDuration: const Duration(milliseconds: 600),
+              height: 320,
+              inset: const TPopupBottomInset(left: 16, right: 16),
+              titleWidget: TText('左右留白'),
               child: Container(
-                height: 200,
+                height: 240,
                 color: TTheme.of(context).bgColorContainer,
               )),
         );

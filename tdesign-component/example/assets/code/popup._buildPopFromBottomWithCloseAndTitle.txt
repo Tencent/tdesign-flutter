@@ -12,10 +12,10 @@
           options: TPopupOptions.bottom(
               height: 280,
               cancelBuilder: (_, __) => TText(
-                '关闭',
-                textColor: TTheme.of(context).textColorSecondary,
-                font: TTheme.of(context).fontBodyLarge,
-              ),
+                    '关闭',
+                    textColor: TTheme.of(context).textColorSecondary,
+                    font: TTheme.of(context).fontBodyLarge,
+                  ),
               titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -30,11 +30,11 @@
                 ],
               ),
               confirmBuilder: (_, __) => TText(
-                '完成',
-                textColor: TTheme.of(context).brandNormalColor,
-                font: TTheme.of(context).fontTitleMedium,
-                fontWeight: FontWeight.w600,
-              ),
+                    '完成',
+                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TTheme.of(context).fontTitleMedium,
+                    fontWeight: FontWeight.w600,
+                  ),
               child: Container(height: 200)),
         );
       },

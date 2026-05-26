@@ -661,7 +661,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiDuration(BuildContext context) {
     return TButton(
-      text: 'duration: 600ms',
+      text: 'animationDuration: 600ms',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -671,7 +671,7 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.bottom(
               height: 240,
-              duration: const Duration(milliseconds: 600),
+              animationDuration: const Duration(milliseconds: 600),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,

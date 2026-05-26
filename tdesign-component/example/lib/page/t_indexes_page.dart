@@ -161,7 +161,7 @@ Widget _buildSimple(BuildContext context) {
         context,
         options: TPopupOptions.right(
             width: 280,
-            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
             child: TIndexes(
               indexList: indexList,
               builderContent: (context, index) {
@@ -193,7 +193,7 @@ Widget _buildOther(BuildContext context) {
         context,
         options: TPopupOptions.right(
             width: 280,
-            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
             child: TIndexes(
               indexList: indexList,
               capsuleTheme: true,
@@ -226,7 +226,7 @@ Widget _buildCustomIndexes(BuildContext context) {
         context,
         options: TPopupOptions.right(
             width: 280,
-            margin: EdgeInsets.only(top: renderBox?.size.height ?? 0),
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
             child: TIndexes(
               indexList: indexList,
               builderIndex: (context, index, isActive) {
