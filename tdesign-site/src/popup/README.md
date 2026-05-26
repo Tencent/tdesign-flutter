@@ -623,9 +623,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  | 显式 `null` | 隐藏该区域 |
  | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；需自行提供交互与语义，可调用 `close` 关闭浮层 |
 
-[titleWidget] 默认为 `null`，表示无标题内容。
+ [titleWidget] 默认为 `null`，表示无标题内容。
 
-生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。其中 [onClosed] 表示当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。
+ 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -643,7 +643,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | inset | TPopupInset? | - | 交叉轴边缘留白；具体类型由 [placement] 决定。 * [TPopupPlacement.bottom] 使用 [TPopupBottomInset] * [TPopupPlacement.top] 使用 [TPopupTopInset] * [TPopupPlacement.left] 使用 [TPopupLeftInset] * [TPopupPlacement.right] 使用 [TPopupRightInset] * [TPopupPlacement.center] 不支持 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
@@ -687,7 +687,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 [TPopupTrigger]。 |
 | onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
 
@@ -716,7 +716,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 [TPopupTrigger]。 |
 | onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
 
@@ -744,7 +744,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 [TPopupTrigger]。 |
 | onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
 
@@ -772,7 +772,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 [TPopupTrigger]。 |
 | onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
 
@@ -800,7 +800,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onClose | VoidCallback? | - | 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束；非栈顶路由被直接移除时不保证存在关闭动画。 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 [TPopupTrigger]。 |
 | onOverlayClick | VoidCallback? | - | 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。 |
 
