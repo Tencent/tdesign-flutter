@@ -63,7 +63,7 @@
  | 场景 | 推荐用法 |
  |------|----------|
  | 弹出方向已知 | [TPopupOptions.bottom]、[TPopupOptions.center]、[TPopupOptions.top]、[TPopupOptions.left]、[TPopupOptions.right] |
- | 方向由变量决定 | 默认构造并设置 [placement]；Debug 下传错字段会抛 [FlutterError] |
+ | 方向由变量决定 | 默认构造并设置 [placement]；传错字段会在 [TPopup.show] / [TPopupHandle.open] 时抛 [FlutterError] |
 
  命名工厂只暴露当前方向生效的字段（例如 [TPopupOptions.bottom] 无 [width] 参数）。
 
@@ -96,7 +96,7 @@
 | cancelBuilder | TPopupSlotBuilder? | _kPopupDefaultCancel | bottom 左侧操作槽；仅 [headerBuilder] 为内置默认时生效。 内置默认为「取消」，点击触发 [TPopupTrigger.cancel]。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
 | closeBuilder | TPopupSlotBuilder? | _kPopupDefaultClose | center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效。三态见类文档「Builder 三态」。 内置默认点击触发 [TPopupTrigger.close]。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | - | - |
 | confirmBuilder | TPopupSlotBuilder? | _kPopupDefaultConfirm | bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。 内置默认为「确定」，点击触发 [TPopupTrigger.confirm]。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。 自定义时忽略 [titleWidget]、[cancelBuilder]、[confirmBuilder]。 |
@@ -139,7 +139,7 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | - | - |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -168,7 +168,7 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | - | - |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -196,7 +196,7 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | - | - |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -224,7 +224,7 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | - | - |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -252,7 +252,7 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | - | - |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
