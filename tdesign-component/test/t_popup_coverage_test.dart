@@ -33,7 +33,7 @@ void main() {
       expect(find.text('确定'), findsNothing);
     });
 
-    testWidgets('bottom 仅标题且 titleAlignLeft', (tester) async {
+    testWidgets('bottom 仅标题时可正常渲染标题内容', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -366,7 +366,7 @@ void main() {
   });
 
   group('TPopup 覆盖率深化', () {
-    testWidgets('headerBuilder 透传 titleWidget 与 cancelBuilder 槽位',
+    testWidgets('headerBuilder 自定义内容可正常渲染',
         (tester) async {
       await openPopup(
         tester,
@@ -397,7 +397,7 @@ void main() {
       expect(find.text('builder右'), findsOneWidget);
     });
 
-    testWidgets('headerBuilder 使用自定义 cancel/confirm Widget 槽位', (tester) async {
+    testWidgets('headerBuilder 自定义行内内容可正常渲染', (tester) async {
       await openPopup(
         tester,
         onPressed: () {

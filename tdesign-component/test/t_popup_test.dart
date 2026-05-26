@@ -874,8 +874,9 @@ void main() {
       expect(find.text('inner'), findsNothing);
     });
 
-    testWidgets('系统返回键关闭', (tester) async {
+    testWidgets('系统返回键关闭并上报 systemBack trigger', (tester) async {
       var closedCount = 0;
+      TPopupTrigger? hideTrigger;
       late BuildContext hostContext;
 
       await openPopup(
@@ -888,6 +889,11 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 onClosed: () => closedCount++,
+                onVisibleChange: (visible, trigger) {
+                  if (!visible) {
+                    hideTrigger = trigger;
+                  }
+                },
                 child: const SizedBox(height: 60)),
           );
         },
@@ -896,6 +902,7 @@ void main() {
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(closedCount, 1);
+      expect(hideTrigger, TPopupTrigger.systemBack);
     });
 
     testWidgets('handle.close 后 handle.open 可再次展示', (tester) async {
@@ -934,6 +941,8 @@ void main() {
     testWidgets('关闭动画未结束时重新 open 不会被旧 route 回调误清理', (tester) async {
       late BuildContext hostContext;
       TPopupHandle? handle;
+      var openCount = 0;
+      var closedCount = 0;
 
       await openPopup(
         tester,
@@ -946,6 +955,8 @@ void main() {
               cancelBuilder: null,
               confirmBuilder: null,
               animationDuration: const Duration(milliseconds: 300),
+              onOpen: () => openCount++,
+              onClosed: () => closedCount++,
               child: const SizedBox(height: 60, child: Text('race panel')),
             ),
           );
@@ -953,6 +964,8 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(handle!.isShowing, isTrue);
+      expect(openCount, 1);
+      expect(closedCount, 0);
 
       handle!.close();
       await tester.pump(const Duration(milliseconds: 100));
@@ -960,10 +973,145 @@ void main() {
       handle!.open(hostContext);
       await tester.pump();
       expect(handle!.isShowing, isTrue);
+      expect(openCount, 2);
 
       await tester.pumpAndSettle();
       expect(handle!.isShowing, isTrue);
       expect(find.text('race panel'), findsOneWidget);
+      expect(closedCount, 0);
+
+      handle!.close();
+      await tester.pumpAndSettle();
+      expect(closedCount, 1);
+    });
+
+    testWidgets('navigatorContext 失效后 handle.open 仍优先复用缓存 navigator',
+        (tester) async {
+      TPopupHandle? handle;
+      var showLauncher = true;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: TTheme(
+            data: TThemeData.defaultData(),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Scaffold(
+                  body: Column(
+                    children: [
+                      if (showLauncher)
+                        Builder(
+                          builder: (launcherContext) {
+                            return ElevatedButton(
+                              onPressed: () {
+                                handle = TPopup.show(
+                                  launcherContext,
+                                  navigatorContext: launcherContext,
+                                  options: TPopupOptions.bottom(
+                                    height: 100,
+                                    cancelBuilder: null,
+                                    confirmBuilder: null,
+                                    child: const SizedBox(
+                                      height: 60,
+                                      child: Text('cached navigator popup'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text('open popup'),
+                            );
+                          },
+                        ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() => showLauncher = false);
+                        },
+                        child: const Text('dispose launcher'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open popup'));
+      await tester.pumpAndSettle();
+      expect(find.text('cached navigator popup'), findsOneWidget);
+
+      handle!.close();
+      await tester.pumpAndSettle();
+      expect(find.text('cached navigator popup'), findsNothing);
+
+      await tester.tap(find.text('dispose launcher'));
+      await tester.pumpAndSettle();
+
+      expect(() => handle!.open(), returnsNormally);
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isTrue);
+      expect(find.text('cached navigator popup'), findsOneWidget);
+    });
+
+    testWidgets('非栈顶 handle.close 会立即移除 route 并触发 onClosed', (tester) async {
+      TPopupHandle? outerHandle;
+      TPopupHandle? innerHandle;
+      var outerClosedCount = 0;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          outerHandle = TPopup.show(
+            tester.element(find.text('open')),
+            options: TPopupOptions.bottom(
+              height: 160,
+              animationDuration: const Duration(milliseconds: 300),
+              cancelBuilder: null,
+              confirmBuilder: null,
+              onClosed: () => outerClosedCount++,
+              child: Builder(
+                builder: (ctx) {
+                  return Column(
+                    children: [
+                      const Text('outer immediate remove'),
+                      ElevatedButton(
+                        onPressed: () {
+                          innerHandle = TPopup.show(
+                            ctx,
+                            options: TPopupOptions.center(
+                              width: 120,
+                              height: 80,
+                              closeBuilder: null,
+                              child: const SizedBox(
+                                width: 120,
+                                height: 80,
+                                child: Text('inner immediate remove'),
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text('open inner immediate'),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('open inner immediate'));
+      await tester.pumpAndSettle();
+
+      outerHandle!.close();
+      await tester.pump();
+      expect(find.text('outer immediate remove'), findsNothing);
+      expect(find.text('inner immediate remove'), findsOneWidget);
+      expect(outerClosedCount, 1);
+
+      innerHandle!.close();
+      await tester.pumpAndSettle();
     });
 
     testWidgets('handle.open 在已展示时无副作用', (tester) async {

@@ -659,7 +659,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiShowOverlayFalse(BuildContext context) {
     return TButton(
-      text: 'showOverlay: false（无蒙层）',
+      text: 'showOverlay: false（透明模态）',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -671,8 +671,8 @@ class TPopupPage extends StatelessWidget {
               height: 280,
               showOverlay: false,
               modal: true,
-              // 无蒙层但仍保持模态；须保留操作栏取消（或其它关闭入口）
-              titleWidget: const TText('无蒙层'),
+              // 不显示可见蒙层，但仍阻断背景交互；须保留其它关闭入口。
+              titleWidget: const TText('透明模态'),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,

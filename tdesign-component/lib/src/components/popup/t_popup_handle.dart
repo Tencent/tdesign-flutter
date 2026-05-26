@@ -31,6 +31,7 @@ class TPopupHandle {
   _PopupNavigatorRoute<dynamic>? _route;
   NavigatorState? _lastNavigator;
   bool _isClosed = false;
+  int _openEpoch = 0;
 
   /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
   bool get isShowing => _route != null && !_isClosed;
@@ -38,7 +39,7 @@ class TPopupHandle {
   /// 打开或重新打开浮层。
   ///
   /// [context] 可选。首次调用须能解析 [Navigator]（传入 [context] 或依赖
-  /// [navigatorContext]）；后续可省略以复用缓存的 [NavigatorState]。
+  /// [navigatorContext]）；后续可省略，优先复用缓存的 [NavigatorState]。
   ///
   /// 已展示时调用无副作用。Navigator 已销毁且未提供新 [context] 时，debug 下 assert，
   /// release 下静默返回。
@@ -64,6 +65,8 @@ class TPopupHandle {
       _throwPopupOptionsValidationError(validationError);
     }
     final normalized = options.normalized();
+    final onClosed = normalized.onClosed;
+    final openEpoch = ++_openEpoch;
 
     _isClosed = false;
     _lastNavigator = navigator;
@@ -83,7 +86,13 @@ class TPopupHandle {
     }
 
     route = _PopupNavigatorRoute<dynamic>(
-      options: normalized,
+      options: normalized.copyWith(
+        onClosed: () {
+          if (_openEpoch == openEpoch) {
+            onClosed?.call();
+          }
+        },
+      ),
       onCloseWithTrigger: closeWithTrigger,
     );
     _route = route;
@@ -118,15 +127,22 @@ class TPopupHandle {
   }
 
   NavigatorState? _resolveNavigator(BuildContext? context) {
-    final ctx = context ?? navigatorContext;
-    if (ctx != null) {
-      return Navigator.maybeOf(ctx, rootNavigator: useRootNavigator);
+    final explicitNavigator = _navigatorFromContext(context);
+    if (explicitNavigator != null) {
+      return explicitNavigator;
     }
     final cached = _lastNavigator;
     if (cached != null && cached.mounted) {
       return cached;
     }
-    return null;
+    return _navigatorFromContext(navigatorContext);
+  }
+
+  NavigatorState? _navigatorFromContext(BuildContext? context) {
+    if (context == null || !context.mounted) {
+      return null;
+    }
+    return Navigator.maybeOf(context, rootNavigator: useRootNavigator);
   }
 
   void _markClosing() {

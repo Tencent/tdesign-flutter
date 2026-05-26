@@ -397,7 +397,9 @@ class TPopupOptions {
   /// 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。
   final VoidCallback? onClose;
 
-  /// 路由 pop 且关闭动画结束。
+  /// 当前展示周期真正结束。
+  ///
+  /// 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。
   final VoidCallback? onClosed;
 
   /// 显隐变化；第二个参数为 [TPopupTrigger]。
