@@ -25,10 +25,29 @@
 
 #### 静态方法
 
-| 名称 | 返回类型 | 参数 | 说明 |
+##### TSwipeCell.close
+
+根据[groupTag]关闭[TSwipeCell]
+
+ current：保留当前不关闭
+
+返回类型：`void`
+
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| close | void | required Object? tag, SlidableController? current | 根据[groupTag]关闭[TSwipeCell] current：保留当前不关闭 |
-| of | SlidableController? | required BuildContext context | 获取上下文最近的[controller] |
+| tag | Object? | - | - |
+| current | SlidableController? | - | - |
+
+
+##### TSwipeCell.of
+
+获取上下文最近的[controller]
+
+返回类型：`SlidableController?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
 
 
 ### TSwipeDirection
