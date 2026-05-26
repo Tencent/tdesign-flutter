@@ -340,9 +340,6 @@ class TCalendar extends StatefulWidget {
     /// 点击遮罩或物理返回是否关闭
     bool autoClose = true,
 
-    /// 面板是否可拖动
-    bool draggable = false,
-
     TCalendarCellBuilder? cellBuilder,
     TCalendarSubtitleBuilder? subtitleBuilder,
     TCalendarDataSource? dataSource,
