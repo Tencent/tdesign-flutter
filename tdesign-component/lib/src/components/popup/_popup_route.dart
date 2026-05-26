@@ -13,8 +13,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         );
 
   final TPopupOptions options;
-  final void Function(TPopupTrigger trigger, [Object? result])
-      onCloseWithTrigger;
+  final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   late PopupLayout _layout;
   bool _animationListenerAttached = false;

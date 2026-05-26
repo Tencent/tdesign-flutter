@@ -635,7 +635,6 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 showOverlay: false,
-                closeOnOverlayClick: false,
                 modal: true,
                 child: const SizedBox(height: 60)),
           );
@@ -645,6 +644,85 @@ void main() {
       expect(
         find.byType(ModalBarrier),
         findsWidgets,
+      );
+    });
+
+    testWidgets('模态与蒙层合法组合矩阵都可正常 show / close', (tester) async {
+      late BuildContext hostContext;
+
+      await tester.pumpWidget(
+        wrapPopupTest(
+          Builder(
+            builder: (context) {
+              hostContext = context;
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      Future<void> expectShowAndClose(
+        String label,
+        TPopupOptions options,
+      ) async {
+        late TPopupHandle handle;
+        expect(
+          () => handle = TPopup.show(hostContext, options: options),
+          returnsNormally,
+          reason: label,
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(label), findsOneWidget, reason: label);
+
+        handle.close();
+        await tester.pumpAndSettle();
+        expect(find.text(label), findsNothing, reason: label);
+      }
+
+      await expectShowAndClose(
+        '标准模态默认关闭',
+        TPopupOptions.bottom(
+          height: 100,
+          showOverlay: true,
+          modal: true,
+          cancelBuilder: null,
+          confirmBuilder: null,
+          child: const SizedBox(height: 60, child: Text('标准模态默认关闭')),
+        ),
+      );
+      await expectShowAndClose(
+        '标准模态显式禁止蒙层关闭',
+        TPopupOptions.bottom(
+          height: 100,
+          showOverlay: true,
+          modal: true,
+          closeOnOverlayClick: false,
+          cancelBuilder: null,
+          confirmBuilder: null,
+          child: const SizedBox(height: 60, child: Text('标准模态显式禁止蒙层关闭')),
+        ),
+      );
+      await expectShowAndClose(
+        '透明模态默认关闭策略',
+        TPopupOptions.bottom(
+          height: 100,
+          showOverlay: false,
+          modal: true,
+          cancelBuilder: null,
+          confirmBuilder: null,
+          child: const SizedBox(height: 60, child: Text('透明模态默认关闭策略')),
+        ),
+      );
+      await expectShowAndClose(
+        '非模态浮层默认关闭策略',
+        TPopupOptions.bottom(
+          height: 100,
+          showOverlay: false,
+          modal: false,
+          cancelBuilder: null,
+          confirmBuilder: null,
+          child: const SizedBox(height: 60, child: Text('非模态浮层默认关闭策略')),
+        ),
       );
     });
 
@@ -913,6 +991,65 @@ void main() {
       handle!.open(hostContext);
       await tester.pumpAndSettle();
       expect(handle!.isShowing, isTrue);
+    });
+
+    testWidgets('非法参数组合矩阵在 show 时直接抛 FlutterError', (tester) async {
+      late BuildContext hostContext;
+
+      await tester.pumpWidget(
+        wrapPopupTest(
+          Builder(
+            builder: (context) {
+              hostContext = context;
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      void expectInvalidShow(String reason, TPopupOptions options) {
+        expect(
+          () => TPopup.show(hostContext, options: options),
+          throwsA(isA<FlutterError>()),
+          reason: reason,
+        );
+      }
+
+      expectInvalidShow(
+        '有蒙层但非模态（默认关闭策略）',
+        TPopupOptions.bottom(
+          child: const SizedBox(height: 40),
+          showOverlay: true,
+          modal: false,
+        ),
+      );
+      expectInvalidShow(
+        '有蒙层但非模态（显式 false）',
+        TPopupOptions.bottom(
+          child: const SizedBox(height: 40),
+          showOverlay: true,
+          modal: false,
+          closeOnOverlayClick: false,
+        ),
+      );
+      expectInvalidShow(
+        '透明模态显式要求蒙层关闭',
+        TPopupOptions.bottom(
+          child: const SizedBox(height: 40),
+          showOverlay: false,
+          modal: true,
+          closeOnOverlayClick: true,
+        ),
+      );
+      expectInvalidShow(
+        '非模态浮层显式要求蒙层关闭',
+        TPopupOptions.bottom(
+          child: const SizedBox(height: 40),
+          showOverlay: false,
+          modal: false,
+          closeOnOverlayClick: true,
+        ),
+      );
     });
   });
 

@@ -8,10 +8,96 @@ void main() {
       final options = TPopupOptions(child: const SizedBox()).normalized();
       expect(options.placement, TPopupPlacement.bottom);
       expect(options.modal, isTrue);
+      expect(options.closeOnOverlayClick, isTrue);
       expect(options.usesDefaultHeader, isTrue);
       expect(options.usesDefaultCancel, isTrue);
       expect(options.usesDefaultConfirm, isTrue);
       expect(options.titleWidget, isNull);
+    });
+
+    test('showOverlay=false 且省略 closeOnOverlayClick 时默认按 false 解析', () {
+      final options = TPopupOptions(
+        child: const SizedBox(),
+        showOverlay: false,
+      ).normalized();
+      expect(options.closeOnOverlayClick, isFalse);
+    });
+
+    test('模态与蒙层合法组合矩阵可通过校验并解析默认关闭行为', () {
+      void expectValid(
+        String reason,
+        TPopupOptions options, {
+        required bool expectedCloseOnOverlayClick,
+      }) {
+        expect(
+          () => options.assertPlacementParams(),
+          returnsNormally,
+          reason: reason,
+        );
+        expect(
+          options.closeOnOverlayClick,
+          expectedCloseOnOverlayClick,
+          reason: reason,
+        );
+      }
+
+      expectValid(
+        '标准模态 + 默认蒙层关闭',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: true,
+          modal: true,
+        ),
+        expectedCloseOnOverlayClick: true,
+      );
+      expectValid(
+        '标准模态 + 显式禁止蒙层关闭',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: true,
+          modal: true,
+          closeOnOverlayClick: false,
+        ),
+        expectedCloseOnOverlayClick: false,
+      );
+      expectValid(
+        '透明模态 + 默认不允许蒙层关闭',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          modal: true,
+        ),
+        expectedCloseOnOverlayClick: false,
+      );
+      expectValid(
+        '透明模态 + 显式 false 仍合法',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          modal: true,
+          closeOnOverlayClick: false,
+        ),
+        expectedCloseOnOverlayClick: false,
+      );
+      expectValid(
+        '非模态浮层 + 默认不允许蒙层关闭',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          modal: false,
+        ),
+        expectedCloseOnOverlayClick: false,
+      );
+      expectValid(
+        '非模态浮层 + 显式 false 仍合法',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          modal: false,
+          closeOnOverlayClick: false,
+        ),
+        expectedCloseOnOverlayClick: false,
+      );
     });
 
     test('bottom 默认走内置三段式（useDefaultHeader）', () {
@@ -185,6 +271,52 @@ void main() {
       );
     });
 
+    test('模态与蒙层非法组合矩阵全部抛 FlutterError', () {
+      void expectInvalid(String reason, TPopupOptions options) {
+        expect(
+          () => options.assertPlacementParams(),
+          throwsA(isA<FlutterError>()),
+          reason: reason,
+        );
+      }
+
+      expectInvalid(
+        '有蒙层但非模态（默认蒙层关闭值）',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: true,
+          modal: false,
+        ),
+      );
+      expectInvalid(
+        '有蒙层但非模态（显式 false）',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: true,
+          modal: false,
+          closeOnOverlayClick: false,
+        ),
+      );
+      expectInvalid(
+        '透明模态下显式要求蒙层关闭',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          modal: true,
+          closeOnOverlayClick: true,
+        ),
+      );
+      expectInvalid(
+        '非模态浮层下显式要求蒙层关闭',
+        TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          modal: false,
+          closeOnOverlayClick: true,
+        ),
+      );
+    });
+
     test('assertPlacementParams 各 placement 的 inset 类型错位也抛错', () {
       expect(
         () => TPopupOptions(
@@ -239,11 +371,19 @@ void main() {
         () => TPopupOptions(
           child: const SizedBox(),
           showOverlay: false,
-          closeOnOverlayClick: false,
           modal: false,
         ).assertPlacementParams(),
         returnsNormally,
       );
+    });
+
+    test('copyWith(closeOnOverlayClick: null) 可恢复为跟随 showOverlay 的默认值', () {
+      final options = TPopupOptions(
+        child: const SizedBox(),
+        showOverlay: false,
+        closeOnOverlayClick: false,
+      ).copyWith(closeOnOverlayClick: null);
+      expect(options.closeOnOverlayClick, isFalse);
     });
   });
 }

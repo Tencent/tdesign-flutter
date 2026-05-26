@@ -3,6 +3,10 @@ part of 't_popup.dart';
 /// 用于 [TPopupOptions.copyWith] 区分"不传"与"显式 null"。
 const Object _unset = Object();
 
+Never _throwPopupOptionsValidationError(String error) {
+  throw FlutterError('TPopupOptions: $error');
+}
+
 /// [TPopup.show] 的配置对象。
 ///
 /// ## 如何创建
@@ -10,7 +14,7 @@ const Object _unset = Object();
 /// | 场景 | 推荐用法 |
 /// |------|----------|
 /// | 弹出方向已知 | [TPopupOptions.bottom]、[TPopupOptions.center]、[TPopupOptions.top]、[TPopupOptions.left]、[TPopupOptions.right] |
-/// | 方向由变量决定 | 默认构造并设置 [placement]；Debug 下传错字段会抛 [FlutterError] |
+/// | 方向由变量决定 | 默认构造并设置 [placement]；传错字段会在 [TPopup.show] / [TPopupHandle.open] 时抛 [FlutterError] |
 ///
 /// 命名工厂只暴露当前方向生效的字段（例如 [TPopupOptions.bottom] 无 [width] 参数）。
 ///
@@ -47,7 +51,7 @@ class TPopupOptions {
     this.radius,
     this.backgroundColor,
     this.showOverlay = true,
-    this.closeOnOverlayClick = true,
+    bool? closeOnOverlayClick,
     this.overlayColor,
     this.overlayOpacity,
     this.modal = true,
@@ -64,7 +68,7 @@ class TPopupOptions {
     this.onClosed,
     this.onVisibleChange,
     this.onOverlayClick,
-  });
+  }) : _closeOnOverlayClick = closeOnOverlayClick;
 
   /// 创建 [TPopupPlacement.bottom] 配置。
   ///
@@ -81,7 +85,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
-    bool closeOnOverlayClick = true,
+    bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
@@ -131,7 +135,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
-    bool closeOnOverlayClick = true,
+    bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
@@ -177,7 +181,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
-    bool closeOnOverlayClick = true,
+    bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
@@ -222,7 +226,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
-    bool closeOnOverlayClick = true,
+    bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
@@ -267,7 +271,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
-    bool closeOnOverlayClick = true,
+    bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
@@ -334,8 +338,12 @@ class TPopupOptions {
   /// 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。
   final bool showOverlay;
 
-  /// 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。
-  final bool closeOnOverlayClick;
+  final bool? _closeOnOverlayClick;
+
+  /// 点击可见蒙层是否关闭。
+  ///
+  /// 省略时默认跟随 [showOverlay]：显示蒙层时为 true，否则为 false。
+  bool get closeOnOverlayClick => _closeOnOverlayClick ?? showOverlay;
 
   /// 蒙层颜色，默认 black54。
   final Color? overlayColor;
@@ -410,7 +418,7 @@ class TPopupOptions {
     Object? radius = _unset,
     Object? backgroundColor = _unset,
     bool? showOverlay,
-    bool? closeOnOverlayClick,
+    Object? closeOnOverlayClick = _unset,
     Object? overlayColor = _unset,
     Object? overlayOpacity = _unset,
     bool? modal,
@@ -444,7 +452,9 @@ class TPopupOptions {
           ? this.backgroundColor
           : backgroundColor as Color?,
       showOverlay: showOverlay ?? this.showOverlay,
-      closeOnOverlayClick: closeOnOverlayClick ?? this.closeOnOverlayClick,
+      closeOnOverlayClick: identical(closeOnOverlayClick, _unset)
+          ? _closeOnOverlayClick
+          : closeOnOverlayClick as bool?,
       overlayColor: identical(overlayColor, _unset)
           ? this.overlayColor
           : overlayColor as Color?,
@@ -501,7 +511,7 @@ class TPopupOptions {
       radius: radius,
       backgroundColor: backgroundColor,
       showOverlay: showOverlay,
-      closeOnOverlayClick: closeOnOverlayClick,
+      closeOnOverlayClick: _closeOnOverlayClick,
       overlayColor: overlayColor,
       overlayOpacity: overlayOpacity,
       modal: modal,
@@ -574,7 +584,7 @@ class TPopupOptions {
     assert(() {
       final err = _validatePlacementParams();
       if (err != null) {
-        throw FlutterError('TPopupOptions: $err');
+        _throwPopupOptionsValidationError(err);
       }
       return true;
     }());
@@ -636,8 +646,8 @@ class TPopupOptions {
     if (showOverlay && !modal) {
       return 'showOverlay=true requires modal=true.';
     }
-    if (!showOverlay && closeOnOverlayClick) {
-      return 'closeOnOverlayClick requires showOverlay=true.';
+    if (!showOverlay && _closeOnOverlayClick == true) {
+      return 'closeOnOverlayClick=true requires showOverlay=true.';
     }
     return null;
   }

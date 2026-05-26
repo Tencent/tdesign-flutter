@@ -461,7 +461,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           options: TPopupOptions.bottom(
               height: 280,
               showOverlay: false,
-              closeOnOverlayClick: false,
               modal: true,
               // 无蒙层但仍保持模态；须保留操作栏取消（或其它关闭入口）
               titleWidget: const TText('无蒙层'),
@@ -603,7 +602,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  | 场景 | 推荐用法 |
  |------|----------|
  | 弹出方向已知 | [TPopupOptions.bottom]、[TPopupOptions.center]、[TPopupOptions.top]、[TPopupOptions.left]、[TPopupOptions.right] |
- | 方向由变量决定 | 默认构造并设置 [placement]；Debug 下传错字段会抛 [FlutterError] |
+| 方向由变量决定 | 默认构造并设置 [placement]；传错字段会在 [TPopup.show] / [TPopupHandle.open] 时抛 [FlutterError] |
 
  命名工厂只暴露当前方向生效的字段（例如 [TPopupOptions.bottom] 无 [width] 参数）。
 
@@ -626,7 +625,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
  [titleWidget] 默认为 `null`，表示无标题内容。
 
- 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
+生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
+
+## 模态与蒙层
+
+| 参数组合 | 效果 |
+|----------|------|
+| `modal: true, showOverlay: true` | 标准模态弹层：显示遮罩，阻断背景交互与底层语义/焦点 |
+| `modal: true, showOverlay: false` | 透明模态弹层：不显示遮罩，但仍阻断背景交互与底层语义/焦点 |
+| `modal: false, showOverlay: false` | 非模态浮层：不显示遮罩，允许背景继续交互 |
+
+`showOverlay: true, modal: false` 不属于支持组合；`showOverlay: false` 时 `closeOnOverlayClick` 默认按 `false` 处理，若显式传 `true` 则属于非法组合。
+非法组合不会被静默纠正，`show()` / `handle.open()` 时会直接抛出 `FlutterError`。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -636,7 +646,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | cancelBuilder | TPopupSlotBuilder? | _kPopupDefaultCancel | bottom 左侧操作槽；仅 [headerBuilder] 为内置默认时生效。 内置默认为「取消」，点击触发 [TPopupTrigger.cancel]。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
 | closeBuilder | TPopupSlotBuilder? | _kPopupDefaultClose | center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效。三态见类文档「Builder 三态」。 内置默认点击触发 [TPopupTrigger.close]。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| closeOnOverlayClick | bool? | 跟随 showOverlay | 点击可见蒙层是否关闭；省略时显示蒙层为 true，否则为 false。 |
 | confirmBuilder | TPopupSlotBuilder? | _kPopupDefaultConfirm | bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。 内置默认为「确定」，点击触发 [TPopupTrigger.confirm]。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。 自定义时忽略 [titleWidget]、[cancelBuilder]、[confirmBuilder]。 |
@@ -678,8 +688,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | confirmBuilder | TPopupSlotBuilder? | _kPopupDefaultConfirm | bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。 内置默认为「确定」，点击触发 [TPopupTrigger.confirm]。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
-| showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
+| closeOnOverlayClick | bool? | 跟随 showOverlay | 点击可见蒙层是否关闭；省略时显示蒙层为 true，否则为 false。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -707,8 +717,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeBuilder | TPopupSlotBuilder? | _kPopupDefaultClose | center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效。三态见类文档「Builder 三态」。 内置默认点击触发 [TPopupTrigger.close]。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
-| showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
+| closeOnOverlayClick | bool? | 跟随 showOverlay | 点击可见蒙层是否关闭；省略时显示蒙层为 true，否则为 false。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -735,8 +745,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | inset | TPopupLeftInset? | - | 交叉轴边缘留白；具体类型由 [placement] 决定。 * [TPopupPlacement.bottom] 使用 [TPopupBottomInset] * [TPopupPlacement.top] 使用 [TPopupTopInset] * [TPopupPlacement.left] 使用 [TPopupLeftInset] * [TPopupPlacement.right] 使用 [TPopupRightInset] * [TPopupPlacement.center] 不支持 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
-| showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
+| closeOnOverlayClick | bool? | 跟随 showOverlay | 点击可见蒙层是否关闭；省略时显示蒙层为 true，否则为 false。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -763,8 +773,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | inset | TPopupRightInset? | - | 交叉轴边缘留白；具体类型由 [placement] 决定。 * [TPopupPlacement.bottom] 使用 [TPopupBottomInset] * [TPopupPlacement.top] 使用 [TPopupTopInset] * [TPopupPlacement.left] 使用 [TPopupLeftInset] * [TPopupPlacement.right] 使用 [TPopupRightInset] * [TPopupPlacement.center] 不支持 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
-| showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
+| closeOnOverlayClick | bool? | 跟随 showOverlay | 点击可见蒙层是否关闭；省略时显示蒙层为 true，否则为 false。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -791,8 +801,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | inset | TPopupTopInset? | - | 交叉轴边缘留白；具体类型由 [placement] 决定。 * [TPopupPlacement.bottom] 使用 [TPopupBottomInset] * [TPopupPlacement.top] 使用 [TPopupTopInset] * [TPopupPlacement.left] 使用 [TPopupLeftInset] * [TPopupPlacement.right] 使用 [TPopupRightInset] * [TPopupPlacement.center] 不支持 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
-| showOverlay | bool | true | 是否绘制半透明蒙层。 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| closeOnOverlayClick | bool | true | 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。 |
+| showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
+| closeOnOverlayClick | bool? | 跟随 showOverlay | 点击可见蒙层是否关闭；省略时显示蒙层为 true，否则为 false。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 [showOverlay] 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
@@ -824,11 +834,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| isShowing | bool | - | 浮层是否仍在展示（路由在栈中且未进入关闭流程）。 |
 | navigatorContext | BuildContext? | - | 与 [TPopup.show] 的 [navigatorContext] 相同。 |
 | options | TPopupOptions | - | 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。 |
 | useRootNavigator | bool | - | 与 [TPopup.show] 的 [useRootNavigator] 相同。 |
 
+#### 实例方法
 
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| open | void | BuildContext? context | 打开或重新打开浮层。首次调用须能解析 [Navigator]（传入 [context] 或依赖 [navigatorContext]）；后续可省略以复用缓存的 [NavigatorState]。 |
+| close | void | - | 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为 [TPopupTrigger.api]。 |
 #### 工厂构造方法
 
 ##### TPopupHandle._

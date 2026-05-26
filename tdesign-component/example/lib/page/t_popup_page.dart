@@ -670,7 +670,6 @@ class TPopupPage extends StatelessWidget {
           options: TPopupOptions.bottom(
               height: 280,
               showOverlay: false,
-              closeOnOverlayClick: false,
               modal: true,
               // 无蒙层但仍保持模态；须保留操作栏取消（或其它关闭入口）
               titleWidget: const TText('无蒙层'),

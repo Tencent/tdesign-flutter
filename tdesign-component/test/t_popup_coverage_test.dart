@@ -580,7 +580,6 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 120,
                 showOverlay: false,
-                closeOnOverlayClick: false,
                 modal: false,
                 child: const SizedBox(height: 60)),
           );
@@ -628,7 +627,6 @@ void main() {
                 height: 100,
                 inset: const TPopupBottomInset(left: 16, right: 16),
                 showOverlay: false,
-                closeOnOverlayClick: false,
                 cancelBuilder: null,
                 confirmBuilder: null,
                 child: const SizedBox(height: 60)),
@@ -784,13 +782,13 @@ void main() {
         child: const SizedBox(),
         animationDuration: const Duration(milliseconds: 500),
         showOverlay: false,
-        closeOnOverlayClick: false,
         overlayOpacity: 0.5,
         destroyOnClose: true,
         onVisibleChange: (_, __) => visibleChanges++,
       );
       expect(opts.animationDuration, const Duration(milliseconds: 500));
       expect(opts.showOverlay, isFalse);
+      expect(opts.closeOnOverlayClick, isFalse);
       expect(opts.overlayOpacity, 0.5);
       expect(opts.destroyOnClose, isTrue);
       opts.onVisibleChange?.call(false, TPopupTrigger.api);

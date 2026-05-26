@@ -42,6 +42,8 @@ class TPopupHandle {
   ///
   /// 已展示时调用无副作用。Navigator 已销毁且未提供新 [context] 时，debug 下 assert，
   /// release 下静默返回。
+  ///
+  /// 配置非法时会直接抛出 [FlutterError]，debug / release 行为一致。
   void open([BuildContext? context]) {
     if (isShowing) {
       return;
@@ -57,7 +59,10 @@ class TPopupHandle {
       return;
     }
 
-    options.assertPlacementParams();
+    final validationError = options._validatePlacementParams();
+    if (validationError != null) {
+      _throwPopupOptionsValidationError(validationError);
+    }
     final normalized = options.normalized();
 
     _isClosed = false;
@@ -65,7 +70,7 @@ class TPopupHandle {
 
     _PopupNavigatorRoute<dynamic>? route;
 
-    void closeWithTrigger(TPopupTrigger trigger, [Object? result]) {
+    void closeWithTrigger(TPopupTrigger trigger) {
       final currentRoute = route;
       if (!isShowing || currentRoute == null) {
         return;
@@ -74,7 +79,6 @@ class TPopupHandle {
         navigator: navigator,
         route: currentRoute,
         trigger: trigger,
-        result: result,
       );
     }
 
@@ -98,11 +102,9 @@ class TPopupHandle {
   /// 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为
   /// [TPopupTrigger.api]。
   ///
-  /// [result] 可选，作为 [Navigator.pop] 的返回值。
-  ///
   /// 已关闭或未展示时调用无副作用。
   /// 嵌套浮层场景下会关闭当前 handle 对应的那一层，而不会误关栈顶其它浮层。
-  void close([Object? result]) {
+  void close() {
     final route = _route;
     final navigator = route?.navigator ?? _lastNavigator;
     if (!isShowing || route == null || navigator == null) {
@@ -112,7 +114,6 @@ class TPopupHandle {
       navigator: navigator,
       route: route,
       trigger: TPopupTrigger.api,
-      result: result,
     );
   }
 
@@ -136,15 +137,14 @@ class TPopupHandle {
     required NavigatorState navigator,
     required _PopupNavigatorRoute<dynamic> route,
     required TPopupTrigger trigger,
-    Object? result,
   }) {
     _markClosing();
     route.fireCloseStart(trigger);
     if (identical(_PopupTracker.top(navigator), this)) {
-      navigator.pop(result);
+      navigator.pop();
       return;
     }
-    navigator.removeRoute(route, result);
+    navigator.removeRoute(route);
   }
 
   void _detachRoute(_PopupNavigatorRoute<dynamic> route) {

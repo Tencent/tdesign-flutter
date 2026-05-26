@@ -44,7 +44,6 @@ void main() {
                             options: TPopupOptions.bottom(
                               height: 120,
                               showOverlay: false,
-                              closeOnOverlayClick: false,
                               modal: true,
                               cancelBuilder: null,
                               confirmBuilder: null,
@@ -115,7 +114,6 @@ void main() {
                             options: TPopupOptions.bottom(
                               height: 120,
                               showOverlay: false,
-                              closeOnOverlayClick: false,
                               modal: false,
                               cancelBuilder: null,
                               confirmBuilder: null,
