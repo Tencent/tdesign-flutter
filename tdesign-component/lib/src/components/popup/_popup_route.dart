@@ -2,9 +2,6 @@ part of 't_popup.dart';
 
 /// 库内 [PopupRoute]；由 [TPopupHandle.open] push，勿在外部直接构造。
 class _PopupNavigatorRoute<T> extends PopupRoute<T> {
-  static const ValueKey<String> transparentInteractionBarrierKey =
-      ValueKey<String>('tpopup-transparent-interaction-barrier');
-
   _PopupNavigatorRoute({
     required this.options,
     required this.onCloseWithTrigger,
@@ -25,6 +22,15 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   bool _closedFired = false;
   bool _closeStartFired = false;
   String? _barrierSemanticsLabel;
+
+  _PopupBarrierMode get _barrierMode {
+    if (!options.modal) {
+      return _PopupBarrierMode.nonModal;
+    }
+    return options.showOverlay
+        ? _PopupBarrierMode.modalOverlay
+        : _PopupBarrierMode.modalTransparent;
+  }
 
   Color get _barrierColor {
     if (!options.showOverlay) {
@@ -63,10 +69,24 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildModalBarrier() {
-    // Popup 自己在 buildTransitions 里管理遮罩与透明交互层，
-    // 这里返回空节点，避免 PopupRoute 默认的 ModalBarrier
-    // 在 showOverlay=false 时仍偷偷阻断底层交互。
-    return const SizedBox.shrink();
+    if (_barrierMode == _PopupBarrierMode.nonModal) {
+      return const SizedBox.shrink();
+    }
+    if (_barrierMode == _PopupBarrierMode.modalOverlay &&
+        options.closeOnOverlayClick) {
+      return ModalBarrier(
+        color: Colors.transparent,
+        dismissible: true,
+        onDismiss: _handleOverlayTap,
+        semanticsLabel: _resolveBarrierSemanticsLabel(navigator!.context),
+        barrierSemanticsDismissible: true,
+      );
+    }
+    return ModalBarrier(
+      color: Colors.transparent,
+      dismissible: false,
+      barrierSemanticsDismissible: false,
+    );
   }
 
   /// 关闭开始前统一入口：触发 [TPopupOptions.onClose]、[onVisibleChange](false, …)。
@@ -101,10 +121,6 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       reverseCurve: Curves.easeOut,
     );
 
-    if (options.showOverlay) {
-      _barrierSemanticsLabel ??=
-          MaterialLocalizations.of(context).modalBarrierDismissLabel;
-    }
     _layout = PopupLayout(
       placement: options.placement,
       inset: options.inset,
@@ -139,16 +155,14 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        if (options.showOverlay) barrier,
-        if (!options.showOverlay && options.preventScrollThrough)
-          _buildTransparentInteractionBarrier(),
+        if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
         positioned,
       ],
     );
   }
 
   Widget _buildBarrier(BuildContext context, double t) {
-    Widget barrier = GestureDetector(
+    return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _handleOverlayTap,
       child: Container(
@@ -157,21 +171,11 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         ),
       ),
     );
-    if (options.showOverlay) {
-      barrier = Semantics(
-        label: _barrierSemanticsLabel!,
-        button: true,
-        child: barrier,
-      );
-    }
-    return barrier;
   }
 
-  Widget _buildTransparentInteractionBarrier() {
-    return const AbsorbPointer(
-      key: transparentInteractionBarrierKey,
-      child: SizedBox.expand(),
-    );
+  String _resolveBarrierSemanticsLabel(BuildContext context) {
+    return _barrierSemanticsLabel ??=
+        MaterialLocalizations.of(context).modalBarrierDismissLabel;
   }
 
   void _handleOverlayTap() {
@@ -234,3 +238,5 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     super.dispose();
   }
 }
+
+enum _PopupBarrierMode { modalOverlay, modalTransparent, nonModal }

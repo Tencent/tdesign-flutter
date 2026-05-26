@@ -461,7 +461,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           options: TPopupOptions.bottom(
               height: 280,
               showOverlay: false,
-              // 无蒙层时无法点遮罩关闭，须保留操作栏取消（或其它关闭入口）
+              closeOnOverlayClick: false,
+              modal: true,
+              // 无蒙层但仍保持模态；须保留操作栏取消（或其它关闭入口）
               titleWidget: const TText('无蒙层'),
               child: Container(
                 height: 200,
@@ -610,6 +612,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 自定义 builder 只负责替换内容，框架不会自动补点击行为；如果需要点击关闭，请在 builder 内绑定 `close`。
 
  生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
+
+## 模态与蒙层
+
+| 参数组合 | 效果 |
+|----------|------|
+| `modal: true, showOverlay: true` | 标准模态弹层：显示遮罩，阻断背景交互与底层语义/焦点 |
+| `modal: true, showOverlay: false` | 透明模态弹层：不显示遮罩，但仍阻断背景交互与底层语义/焦点 |
+| `modal: false, showOverlay: false` | 非模态浮层：不显示遮罩，允许背景继续交互 |
+
+`showOverlay: true, modal: false` 不属于支持组合；`showOverlay: false` 时需同时设置 `closeOnOverlayClick: false`。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -634,7 +646,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 [TPopupPlacement.bottom]。 |
-| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
+| modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。 |
@@ -665,7 +677,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
+| modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -694,7 +706,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
+| modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -722,7 +734,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
+| modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -750,7 +762,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
+| modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -778,7 +790,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
+| modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |

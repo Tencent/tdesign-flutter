@@ -625,7 +625,7 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('showOverlay false 且 preventScrollThrough', (tester) async {
+    testWidgets('showOverlay false 且 modal=true', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -635,14 +635,15 @@ void main() {
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 showOverlay: false,
-                preventScrollThrough: true,
+                closeOnOverlayClick: false,
+                modal: true,
                 child: const SizedBox(height: 60)),
           );
         },
       );
       await tester.pumpAndSettle();
       expect(
-        find.byType(AbsorbPointer),
+        find.byType(ModalBarrier),
         findsWidgets,
       );
     });

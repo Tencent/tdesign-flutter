@@ -7,6 +7,7 @@ void main() {
     test('默认 placement 为 bottom，4 个 builder 默认 sentinel', () {
       final options = TPopupOptions(child: const SizedBox()).normalized();
       expect(options.placement, TPopupPlacement.bottom);
+      expect(options.modal, isTrue);
       expect(options.usesDefaultHeader, isTrue);
       expect(options.usesDefaultCancel, isTrue);
       expect(options.usesDefaultConfirm, isTrue);
@@ -166,6 +167,22 @@ void main() {
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
+      expect(
+        () => TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: true,
+          modal: false,
+        ).assertPlacementParams(),
+        throwsA(isA<FlutterError>()),
+      );
+      expect(
+        () => TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          closeOnOverlayClick: true,
+        ).assertPlacementParams(),
+        throwsA(isA<FlutterError>()),
+      );
     });
 
     test('assertPlacementParams 各 placement 的 inset 类型错位也抛错', () {
@@ -215,6 +232,15 @@ void main() {
           placement: TPopupPlacement.left,
           width: 280,
           inset: const TPopupLeftInset(top: 10, bottom: 10),
+        ).assertPlacementParams(),
+        returnsNormally,
+      );
+      expect(
+        () => TPopupOptions(
+          child: const SizedBox(),
+          showOverlay: false,
+          closeOnOverlayClick: false,
+          modal: false,
         ).assertPlacementParams(),
         returnsNormally,
       );

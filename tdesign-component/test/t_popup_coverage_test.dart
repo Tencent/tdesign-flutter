@@ -569,7 +569,7 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('preventScrollThrough 为 false 仍可打开关闭', (tester) async {
+    testWidgets('modal 为 false 仍可打开关闭', (tester) async {
       TPopupHandle? handle;
       await openPopup(
         tester,
@@ -579,7 +579,9 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
-                preventScrollThrough: false,
+                showOverlay: false,
+                closeOnOverlayClick: false,
+                modal: false,
                 child: const SizedBox(height: 60)),
           );
         },
@@ -782,6 +784,7 @@ void main() {
         child: const SizedBox(),
         animationDuration: const Duration(milliseconds: 500),
         showOverlay: false,
+        closeOnOverlayClick: false,
         overlayOpacity: 0.5,
         destroyOnClose: true,
         onVisibleChange: (_, __) => visibleChanges++,

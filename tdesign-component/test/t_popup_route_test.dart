@@ -9,7 +9,7 @@ void main() {
   tearDown(resetPopupTestResource);
 
   group('Popup 路由层行为（通过 TPopup.show 验证）', () {
-    testWidgets('无蒙层 + preventScrollThrough=true 时阻断底层点击与滚动',
+    testWidgets('无蒙层 + modal=true 时阻断底层点击与滚动',
         (tester) async {
       final controller = ScrollController();
       var backgroundTapCount = 0;
@@ -44,7 +44,8 @@ void main() {
                             options: TPopupOptions.bottom(
                               height: 120,
                               showOverlay: false,
-                              preventScrollThrough: true,
+                              closeOnOverlayClick: false,
+                              modal: true,
                               cancelBuilder: null,
                               confirmBuilder: null,
                               child: const SizedBox(height: 60),
@@ -79,7 +80,7 @@ void main() {
       expect(controller.offset, 0);
     });
 
-    testWidgets('无蒙层 + preventScrollThrough=false 时允许底层点击与滚动',
+    testWidgets('无蒙层 + modal=false 时允许底层点击与滚动',
         (tester) async {
       final controller = ScrollController();
       var backgroundTapCount = 0;
@@ -114,7 +115,8 @@ void main() {
                             options: TPopupOptions.bottom(
                               height: 120,
                               showOverlay: false,
-                              preventScrollThrough: false,
+                              closeOnOverlayClick: false,
+                              modal: false,
                               cancelBuilder: null,
                               confirmBuilder: null,
                               child: const SizedBox(height: 60),

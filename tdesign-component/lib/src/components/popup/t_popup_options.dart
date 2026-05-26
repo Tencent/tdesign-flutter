@@ -50,7 +50,7 @@ class TPopupOptions {
     this.closeOnOverlayClick = true,
     this.overlayColor,
     this.overlayOpacity,
-    this.preventScrollThrough = true,
+    this.modal = true,
     this.destroyOnClose = false,
     this.animationDuration = const Duration(milliseconds: 240),
     this.headerBuilder = _kPopupDefaultHeader,
@@ -84,7 +84,7 @@ class TPopupOptions {
     bool closeOnOverlayClick = true,
     Color? overlayColor,
     double? overlayOpacity,
-    bool preventScrollThrough = true,
+    bool modal = true,
     bool destroyOnClose = false,
     Duration animationDuration = const Duration(milliseconds: 240),
     VoidCallback? onOpen,
@@ -109,7 +109,7 @@ class TPopupOptions {
         closeOnOverlayClick: closeOnOverlayClick,
         overlayColor: overlayColor,
         overlayOpacity: overlayOpacity,
-        preventScrollThrough: preventScrollThrough,
+        modal: modal,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -134,7 +134,7 @@ class TPopupOptions {
     bool closeOnOverlayClick = true,
     Color? overlayColor,
     double? overlayOpacity,
-    bool preventScrollThrough = true,
+    bool modal = true,
     bool destroyOnClose = false,
     Duration animationDuration = const Duration(milliseconds: 240),
     VoidCallback? onOpen,
@@ -156,7 +156,7 @@ class TPopupOptions {
         closeOnOverlayClick: closeOnOverlayClick,
         overlayColor: overlayColor,
         overlayOpacity: overlayOpacity,
-        preventScrollThrough: preventScrollThrough,
+        modal: modal,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -180,7 +180,7 @@ class TPopupOptions {
     bool closeOnOverlayClick = true,
     Color? overlayColor,
     double? overlayOpacity,
-    bool preventScrollThrough = true,
+    bool modal = true,
     bool destroyOnClose = false,
     Duration animationDuration = const Duration(milliseconds: 240),
     VoidCallback? onOpen,
@@ -201,7 +201,7 @@ class TPopupOptions {
         closeOnOverlayClick: closeOnOverlayClick,
         overlayColor: overlayColor,
         overlayOpacity: overlayOpacity,
-        preventScrollThrough: preventScrollThrough,
+        modal: modal,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -225,7 +225,7 @@ class TPopupOptions {
     bool closeOnOverlayClick = true,
     Color? overlayColor,
     double? overlayOpacity,
-    bool preventScrollThrough = true,
+    bool modal = true,
     bool destroyOnClose = false,
     Duration animationDuration = const Duration(milliseconds: 240),
     VoidCallback? onOpen,
@@ -246,7 +246,7 @@ class TPopupOptions {
         closeOnOverlayClick: closeOnOverlayClick,
         overlayColor: overlayColor,
         overlayOpacity: overlayOpacity,
-        preventScrollThrough: preventScrollThrough,
+        modal: modal,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -270,7 +270,7 @@ class TPopupOptions {
     bool closeOnOverlayClick = true,
     Color? overlayColor,
     double? overlayOpacity,
-    bool preventScrollThrough = true,
+    bool modal = true,
     bool destroyOnClose = false,
     Duration animationDuration = const Duration(milliseconds: 240),
     VoidCallback? onOpen,
@@ -291,7 +291,7 @@ class TPopupOptions {
         closeOnOverlayClick: closeOnOverlayClick,
         overlayColor: overlayColor,
         overlayOpacity: overlayOpacity,
-        preventScrollThrough: preventScrollThrough,
+        modal: modal,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -329,10 +329,12 @@ class TPopupOptions {
   /// 内容区背景色，默认主题容器色。
   final Color? backgroundColor;
 
-  /// 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。
+  /// 是否绘制半透明蒙层。
+  ///
+  /// 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。
   final bool showOverlay;
 
-  /// 点击蒙层是否关闭（须 [showOverlay] 为 true）。
+  /// 点击可见蒙层是否关闭（须 [showOverlay] 为 true）。
   final bool closeOnOverlayClick;
 
   /// 蒙层颜色，默认 black54。
@@ -341,8 +343,13 @@ class TPopupOptions {
   /// 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。
   final double? overlayOpacity;
 
-  /// 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。
-  final bool preventScrollThrough;
+  /// 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。
+  ///
+  /// 结合 [showOverlay] 可表达三种模式：
+  /// * `modal=true, showOverlay=true`：标准模态弹层
+  /// * `modal=true, showOverlay=false`：透明模态弹层
+  /// * `modal=false, showOverlay=false`：非模态浮层
+  final bool modal;
 
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
   final bool destroyOnClose;
@@ -406,7 +413,7 @@ class TPopupOptions {
     bool? closeOnOverlayClick,
     Object? overlayColor = _unset,
     Object? overlayOpacity = _unset,
-    bool? preventScrollThrough,
+    bool? modal,
     bool? destroyOnClose,
     Duration? animationDuration,
     Object? headerBuilder = _unset,
@@ -444,7 +451,7 @@ class TPopupOptions {
       overlayOpacity: identical(overlayOpacity, _unset)
           ? this.overlayOpacity
           : (overlayOpacity as num?)?.toDouble(),
-      preventScrollThrough: preventScrollThrough ?? this.preventScrollThrough,
+      modal: modal ?? this.modal,
       destroyOnClose: destroyOnClose ?? this.destroyOnClose,
       animationDuration: animationDuration ?? this.animationDuration,
       headerBuilder: identical(headerBuilder, _unset)
@@ -497,7 +504,7 @@ class TPopupOptions {
       closeOnOverlayClick: closeOnOverlayClick,
       overlayColor: overlayColor,
       overlayOpacity: overlayOpacity,
-      preventScrollThrough: preventScrollThrough,
+      modal: modal,
       destroyOnClose: destroyOnClose,
       animationDuration: animationDuration,
       headerBuilder: isBottom ? headerBuilder : null,
@@ -625,6 +632,12 @@ class TPopupOptions {
         !_isPopupDefaultClose(closeBuilder)) {
       return 'closeBuilder only applies to placement=center '
           '(got placement=$placement).';
+    }
+    if (showOverlay && !modal) {
+      return 'showOverlay=true requires modal=true.';
+    }
+    if (!showOverlay && closeOnOverlayClick) {
+      return 'closeOnOverlayClick requires showOverlay=true.';
     }
     return null;
   }
