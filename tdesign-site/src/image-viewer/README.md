@@ -75,10 +75,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  bool? loop,  bool? autoplay,  int? duration,  Color? bgColor,  Color? navBarBgColor,  Color? iconColor,  TextStyle? labelStyle,  TextStyle? indexStyle,  Color? modalBarrierColor,  bool? barrierDismissible,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  bool? ignoreDeleteError,  OnImageTap? onTap,  OnLongPress? onLongPress,  LeftItemBuilder? leftItemBuilder,  RightItemBuilder? rightItemBuilder, | 显示图片预览 |
+| showImageViewer | void | required BuildContext context, required List<dynamic> images, List<String>? labels, bool? closeBtn, bool? deleteBtn, bool? showIndex, bool? loop, bool? autoplay, int? duration, Color? bgColor, Color? navBarBgColor, Color? iconColor, TextStyle? labelStyle, TextStyle? indexStyle, Color? modalBarrierColor, bool? barrierDismissible, int? defaultIndex, double? width, double? height, OnIndexChange? onIndexChange, OnClose? onClose, OnDelete? onDelete, bool? ignoreDeleteError, OnImageTap? onTap, OnLongPress? onLongPress, LeftItemBuilder? leftItemBuilder, RightItemBuilder? rightItemBuilder | 显示图片预览 |
 
-```
-```
 
 ### TImageViewerWidget
 #### 默认构造方法
@@ -96,7 +94,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | ignoreDeleteError | bool? | false | 是否忽略单张图片删除错误提示 |
 | images | List<dynamic> | - | 图片数组 |
 | indexStyle | TextStyle? | - | 页码样式 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | labels | List<String>? | - | 图片描述 |
 | labelStyle | TextStyle? | - | label文字样式 |
 | leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
@@ -110,6 +108,62 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightItemBuilder | RightItemBuilder? | - | 右侧自定义操作 |
 | showIndex | bool? | - | 是否显示页码 |
 | width | double? | - | 图片宽度 |
+
+
+### OnIndexChange
+#### 类型定义
+
+```dart
+typedef OnIndexChange =  Function(int index);
+```
+
+
+### OnClose
+#### 类型定义
+
+```dart
+typedef OnClose =  Function(int index);
+```
+
+
+### OnDelete
+#### 类型定义
+
+```dart
+typedef OnDelete =  Function(int index);
+```
+
+
+### OnImageTap
+#### 类型定义
+
+```dart
+typedef OnImageTap =  Function(int index);
+```
+
+
+### OnLongPress
+#### 类型定义
+
+```dart
+typedef OnLongPress =  Function(int index);
+```
+
+
+### LeftItemBuilder
+#### 类型定义
+
+```dart
+typedef LeftItemBuilder = Widget Function(BuildContext context, int index);
+```
+
+
+### RightItemBuilder
+#### 类型定义
+
+```dart
+typedef RightItemBuilder = Widget Function(BuildContext context, int index);
+```
 
 
   

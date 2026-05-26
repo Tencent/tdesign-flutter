@@ -152,12 +152,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | height | double | 0.5 | 高度，横向线条使用 |
 | hideLine | bool | false | 隐藏线条，使用纯文本分割 |
 | isDashed | bool | false | 是否为虚线 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | margin | EdgeInsetsGeometry? | - | 外部填充 |
 | text | String? | - | 文本字符串，使用默认样式 |
 | textStyle | TextStyle? | - | 自定义文本样式 |
 | widget | Widget? | - | 中间控件，可自定义样式 |
 | width | double? | - | 宽度，需要竖向线条时使用 |
+
+
+### TextAlignment
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| left | - |
+| center | - |
+| right | - |
 
 
   

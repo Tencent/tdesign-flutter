@@ -325,24 +325,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | indicatorPadding | EdgeInsets? | - | 引导padding |
 | indicatorWidth | double? | - | tabBar下标宽度 |
 | isScrollable | bool | false | 是否滚动 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | labelColor | Color? | - | tabBar 已选标签颜色 |
 | labelPadding | EdgeInsetsGeometry? | - | tab间距 |
 | labelStyle | TextStyle? | - | 已选label字体 |
-| onTap |  Function(int)? | - | 点击事件 |
+| onTap | Function(int)? | - | 点击事件 |
 | outlineType | TTabBarOutlineType | TTabBarOutlineType.filled | 选项卡样式 |
 | physics | ScrollPhysics? | - | 自定义滑动 |
 | selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
 | showIndicator | bool | false | 是否展示引导控件 |
-| tabAlignment |  | - |  |
+| tabAlignment | TabAlignment? | - | - |
 | tabs | List<TTab> | - | tab数组 |
 | unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
 | unselectedLabelColor | Color? | - | tabBar未选标签颜色 |
 | unselectedLabelStyle | TextStyle? | - | unselectedLabel字体 |
 | width | double? | - | tabBar宽度 |
 
-```
-```
 
 ### TTab
 #### 默认构造方法
@@ -356,14 +354,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | height | double? | - | tab高度 |
 | icon | Widget? | - | 图标 |
 | iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | outlineType | TTabOutlineType | TTabOutlineType.filled | 选项卡样式 |
 | size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
 | textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
 
-```
-```
 
 ### TTabBarView
 #### 默认构造方法
@@ -373,7 +369,39 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | children | List<Widget> | - | 子widget列表 |
 | controller | TabController? | - | 控制器 |
 | isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+
+
+### TTabSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| large | - |
+| small | - |
+
+
+### TTabOutlineType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 填充样式 |
+| capsule | 胶囊样式 |
+| card | 卡片 |
+
+
+### TTabBarOutlineType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 填充样式 |
+| capsule | 胶囊样式 |
+| card | 卡片 |
 
 
   

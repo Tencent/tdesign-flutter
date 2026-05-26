@@ -271,7 +271,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | inputDecoration | InputDecoration? | - | 自定义输入框TextField组件样式 |
 | inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
 | inputType | TextInputType? | - | 键盘类型，数字、字母 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 输入框标题 |
 | labelIcon | Widget? | - | 输入框标题图标 |
 | labelStyle | TextStyle? | - | 左侧标签文本样式 |
@@ -296,6 +296,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | textStyle | TextStyle? | - | 文本颜色 |
 | width | double? | - | 输入框宽度 |
+
+
+### TTextareaLayout
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| vertical | - |
+| horizontal | - |
 
 
   

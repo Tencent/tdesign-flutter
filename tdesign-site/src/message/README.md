@@ -295,7 +295,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | content | String? | - | 通知内容 |
 | duration | int? | 3000 | 消息内置计时器 |
 | icon | dynamic | true | 自定义消息前面的图标 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | link | dynamic | - | 链接名称 |
 | marquee | MessageMarquee? | - | 跑马灯效果 |
 | offset | List<double>? | - | 相对于 placement 的偏移量 |
@@ -310,10 +310,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showMessage |  |   required BuildContext context,  String? content,  bool? visible,  int? duration,  dynamic closeBtn,  dynamic icon,  dynamic link,  MessageMarquee? marquee,  List<double>? offset,  MessageTheme? theme,  VoidCallback? onCloseBtnClick,  VoidCallback? onDurationEnd,  VoidCallback? onLinkClick, |  |
+| showMessage | void | required BuildContext context, String? content, bool? visible, int? duration, dynamic closeBtn, dynamic icon, dynamic link, MessageMarquee? marquee, List<double>? offset, MessageTheme? theme, VoidCallback? onCloseBtnClick, VoidCallback? onDurationEnd, VoidCallback? onLinkClick | - |
 
-```
-```
 
 ### MessageMarquee
 #### 默认构造方法
@@ -324,8 +322,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | loop | int? | - | 循环次数 |
 | speed | int? | - | 速度 |
 
-```
-```
 
 ### MessageLink
 #### 默认构造方法
@@ -335,6 +331,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | color | Color? | - | 颜色 |
 | name | String | - | 名称 |
 | uri | Uri? | - | 资源链接 |
+
+
+### MessageTheme
+#### 简介
+定义消息主题枚举
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| info | 普通通知 |
+| success | 成功通知 |
+| warning | 警示通知 |
+| error | 错误通知 |
 
 
   
