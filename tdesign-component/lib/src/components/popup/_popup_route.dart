@@ -36,10 +36,10 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Duration get transitionDuration => options.duration;
+  Duration get transitionDuration => options.animationDuration;
 
   @override
-  Duration get reverseTransitionDuration => options.duration;
+  Duration get reverseTransitionDuration => options.animationDuration;
 
   @override
   bool get barrierDismissible => false;

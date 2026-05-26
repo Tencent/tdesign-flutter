@@ -776,17 +776,17 @@ void main() {
       }
     });
 
-    test('factory 透传通用字段：duration / overlay / callbacks', () {
+    test('factory 透传通用字段：animationDuration / overlay / callbacks', () {
       var visibleChanges = 0;
       final opts = TPopupOptions.bottom(
         child: const SizedBox(),
-        duration: const Duration(milliseconds: 500),
+        animationDuration: const Duration(milliseconds: 500),
         showOverlay: false,
         overlayOpacity: 0.5,
         destroyOnClose: true,
         onVisibleChange: (_, __) => visibleChanges++,
       );
-      expect(opts.duration, const Duration(milliseconds: 500));
+      expect(opts.animationDuration, const Duration(milliseconds: 500));
       expect(opts.showOverlay, isFalse);
       expect(opts.overlayOpacity, 0.5);
       expect(opts.destroyOnClose, isTrue);

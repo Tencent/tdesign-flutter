@@ -498,7 +498,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildApiDuration(BuildContext context) {
     return TButton(
-      text: 'duration: 600ms',
+      text: 'animationDuration: 600ms',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -508,7 +508,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           options: TPopupOptions.bottom(
               height: 240,
-              duration: const Duration(milliseconds: 600),
+              animationDuration: const Duration(milliseconds: 600),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
@@ -606,7 +606,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | confirmBuilder | TPopupSlotBuilder? | _kPopupDefaultConfirm | bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
-| duration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
+| animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。 |
 | height | double? | - | 高度；[TPopupPlacement.top]、[TPopupPlacement.bottom] 生效；[TPopupPlacement.center] 约束面板尺寸。 |
 | inset | TPopupInset? | - | 交叉轴边缘留白；具体类型由 [placement] 决定。 |
