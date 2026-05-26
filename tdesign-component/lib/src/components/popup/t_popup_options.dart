@@ -29,7 +29,7 @@ const Object _unset = Object();
 /// |----------|------|
 /// | 省略（使用默认值） | 渲染内置 UI |
 /// | 显式 `null` | 隐藏该区域 |
-/// | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
+/// | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；需自行提供交互与语义，可调用 `close` 关闭浮层 |
 ///
 /// [titleWidget] 默认为 `null`，表示无标题内容。
 ///
@@ -341,7 +341,7 @@ class TPopupOptions {
   /// 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。
   final double? overlayOpacity;
 
-  /// 是否拦截底层滚动；无蒙层时用透明层吸收滚动。
+  /// 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。
   final bool preventScrollThrough;
 
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。

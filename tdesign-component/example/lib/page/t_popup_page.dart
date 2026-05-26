@@ -103,15 +103,31 @@ class TPopupPage extends StatelessWidget {
                   options: TPopupOptions.bottom(
                       height: 280,
                       titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
-                      cancelBuilder: (_, __) => TText(
-                            '点这里确认!',
-                            textColor: TTheme.of(context).brandNormalColor,
-                            font: TTheme.of(context).fontBodyLarge,
+                      cancelBuilder: (_, close) => GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: close,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: TText(
+                                '点这里确认!',
+                                textColor: TTheme.of(context).brandNormalColor,
+                                font: TTheme.of(context).fontBodyLarge,
+                              ),
+                            ),
                           ),
-                      confirmBuilder: (_, __) => TText(
-                            '关闭',
-                            textColor: TTheme.of(context).errorNormalColor,
-                            font: TTheme.of(context).fontBodyLarge,
+                      confirmBuilder: (_, close) => GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: close,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: TText(
+                                '关闭',
+                                textColor: TTheme.of(context).errorNormalColor,
+                                font: TTheme.of(context).fontBodyLarge,
+                              ),
+                            ),
                           ),
                       child: Container(height: 200)),
                 );
@@ -182,15 +198,31 @@ class TPopupPage extends StatelessWidget {
                           height: 280,
                           radius: 6,
                           titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
-                          cancelBuilder: (_, __) => TText(
-                                '点这里确认!',
-                                textColor: TTheme.of(context).brandNormalColor,
-                                font: TTheme.of(context).fontBodyLarge,
+                          cancelBuilder: (_, close) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: close,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 8),
+                                  child: TText(
+                                    '点这里确认!',
+                                    textColor: TTheme.of(context).brandNormalColor,
+                                    font: TTheme.of(context).fontBodyLarge,
+                                  ),
+                                ),
                               ),
-                          confirmBuilder: (_, __) => TText(
-                                '关闭',
-                                textColor: TTheme.of(context).errorNormalColor,
-                                font: TTheme.of(context).fontBodyLarge,
+                          confirmBuilder: (_, close) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: close,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 8),
+                                  child: TText(
+                                    '关闭',
+                                    textColor: TTheme.of(context).errorNormalColor,
+                                    font: TTheme.of(context).fontBodyLarge,
+                                  ),
+                                ),
                               ),
                           child: Container(height: 200)),
                     );
@@ -492,10 +524,17 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.bottom(
               height: 280,
-              cancelBuilder: (_, __) => TText(
-                    '关闭',
-                    textColor: TTheme.of(context).textColorSecondary,
-                    font: TTheme.of(context).fontBodyLarge,
+              cancelBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '关闭',
+                        textColor: TTheme.of(context).textColorSecondary,
+                        font: TTheme.of(context).fontBodyLarge,
+                      ),
+                    ),
                   ),
               titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -510,11 +549,18 @@ class TPopupPage extends StatelessWidget {
                   ),
                 ],
               ),
-              confirmBuilder: (_, __) => TText(
-                    '完成',
-                    textColor: TTheme.of(context).brandNormalColor,
-                    font: TTheme.of(context).fontTitleMedium,
-                    fontWeight: FontWeight.w600,
+              confirmBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '完成',
+                        textColor: TTheme.of(context).brandNormalColor,
+                        font: TTheme.of(context).fontTitleMedium,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
               child: Container(height: 200)),
         );

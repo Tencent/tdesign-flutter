@@ -74,17 +74,12 @@ final class TPopup {
     bool useRootNavigator = false,
   }) {
     final navContext = navigatorContext ?? context;
-    final navigator = Navigator.of(
-      navContext,
-      rootNavigator: useRootNavigator,
-    );
-
     final handle = TPopupHandle._(
       options: options,
       navigatorContext: navigatorContext,
       useRootNavigator: useRootNavigator,
     );
-    handle.open(context);
+    handle.open(navContext);
     return handle;
   }
 }

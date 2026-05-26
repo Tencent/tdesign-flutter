@@ -62,10 +62,8 @@ class _DefaultHeader extends StatelessWidget {
         if (showCancel)
           Padding(
             padding: EdgeInsets.only(left: theme.spacer8),
-            child: Semantics(
-              button: true,
-              label: _cancelSemanticsLabel(context, options),
-              excludeSemantics: true,
+            child: _wrapDefaultCancelSemantics(
+              context: context,
               child: _buildCancel(context, theme),
             ),
           )
@@ -79,16 +77,44 @@ class _DefaultHeader extends StatelessWidget {
         if (showConfirm)
           Padding(
             padding: EdgeInsets.only(right: theme.spacer8),
-            child: Semantics(
-              button: true,
-              label: _confirmSemanticsLabel(context, options),
-              excludeSemantics: true,
+            child: _wrapDefaultConfirmSemantics(
+              context: context,
               child: _buildConfirm(context, theme),
             ),
           )
         else
           SizedBox(width: theme.spacer16),
       ],
+    );
+  }
+
+  Widget _wrapDefaultCancelSemantics({
+    required BuildContext context,
+    required Widget child,
+  }) {
+    if (!_isPopupDefaultCancel(options.cancelBuilder)) {
+      return child;
+    }
+    return Semantics(
+      button: true,
+      label: _cancelSemanticsLabel(context, options),
+      excludeSemantics: true,
+      child: child,
+    );
+  }
+
+  Widget _wrapDefaultConfirmSemantics({
+    required BuildContext context,
+    required Widget child,
+  }) {
+    if (!_isPopupDefaultConfirm(options.confirmBuilder)) {
+      return child;
+    }
+    return Semantics(
+      button: true,
+      label: _confirmSemanticsLabel(context, options),
+      excludeSemantics: true,
+      child: child,
     );
   }
 

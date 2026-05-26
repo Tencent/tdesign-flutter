@@ -216,10 +216,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           options: TPopupOptions.bottom(
               height: 280,
-              cancelBuilder: (_, __) => TText(
-                    '关闭',
-                    textColor: TTheme.of(context).textColorSecondary,
-                    font: TTheme.of(context).fontBodyLarge,
+              cancelBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '关闭',
+                        textColor: TTheme.of(context).textColorSecondary,
+                        font: TTheme.of(context).fontBodyLarge,
+                      ),
+                    ),
                   ),
               titleWidget: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -234,11 +241,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   ),
                 ],
               ),
-              confirmBuilder: (_, __) => TText(
-                    '完成',
-                    textColor: TTheme.of(context).brandNormalColor,
-                    font: TTheme.of(context).fontTitleMedium,
-                    fontWeight: FontWeight.w600,
+              confirmBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '完成',
+                        textColor: TTheme.of(context).brandNormalColor,
+                        font: TTheme.of(context).fontTitleMedium,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
               child: Container(height: 200)),
         );
@@ -556,6 +570,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | show | TPopupHandle | required BuildContext context, required TPopupOptions options, BuildContext? navigatorContext, bool useRootNavigator | 打开浮层并压入独立 [PopupRoute]。 [context] 用于查找 [Navigator] 并展示浮层。 [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。 返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、 [TPopupHandle.isShowing] 控制与查询。 重复调用会继续 push 新的浮层；若需互斥请在业务层管理。 [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。 [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。 |
 
+嵌套导航场景下，若触发控件位于内层 `Navigator` 中：
+- 传 `navigatorContext` 可显式指定浮层挂载到哪个 `Navigator`
+- 仅需挂载到根路由时可直接使用 `useRootNavigator: true`
+
 
 ### TPopupOptions
 #### 简介
@@ -585,9 +603,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
  |----------|------|
  | 省略（使用默认值） | 渲染内置 UI |
  | 显式 `null` | 隐藏该区域 |
- | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；可调用 `close` 关闭浮层 |
+| 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；需自行提供交互与语义，可调用 `close` 关闭浮层 |
 
  [titleWidget] 默认为 `null`，表示无标题内容。
+
+自定义 builder 只负责替换内容，框架不会自动补点击行为；如果需要点击关闭，请在 builder 内绑定 `close`。
 
  生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
 #### 默认构造方法
@@ -614,7 +634,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 [TPopupPlacement.bottom]。 |
-| preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
+| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层；为 false 时须保留其它关闭入口。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。 |
@@ -645,7 +665,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
+| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -674,7 +694,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
+| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -702,7 +722,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
+| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -730,7 +750,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
+| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -758,7 +778,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭（须 [showOverlay] 为 true）。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。 |
-| preventScrollThrough | bool | true | 是否拦截底层滚动；无蒙层时用透明层吸收滚动。 |
+| preventScrollThrough | bool | true | 是否阻断底层交互；无蒙层时用透明交互层拦截点击、拖拽与滚动。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
@@ -787,9 +807,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| isShowing | bool | - | 浮层是否仍在展示（路由在栈中且未进入关闭流程）。 |
 | navigatorContext | BuildContext? | - | 与 [TPopup.show] 的 [navigatorContext] 相同。 |
 | options | TPopupOptions | - | 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。 |
 | useRootNavigator | bool | - | 与 [TPopup.show] 的 [useRootNavigator] 相同。 |
+
+
+#### 实例方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| open | void | BuildContext? context | 打开或重新打开浮层。首次调用须能解析 [Navigator]（传入 [context] 或依赖 [navigatorContext]）；后续可省略以复用缓存的 [NavigatorState]。 |
+| close | void | Object? result | 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为 [TPopupTrigger.api]。 |
 
 
 #### 工厂构造方法

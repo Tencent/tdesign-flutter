@@ -34,6 +34,8 @@ typedef TPopupHeaderBuilder = Widget Function(
 ///
 /// * [context] 构建上下文
 /// * [close] 关闭浮层；触发源与槽位语义保持一致
+///
+/// 自定义 builder 需自行提供交互与无障碍语义；框架仅为内置默认控件补充默认语义。
 typedef TPopupSlotBuilder = Widget Function(
   BuildContext context,
   VoidCallback close,

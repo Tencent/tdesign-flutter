@@ -2,6 +2,9 @@ part of 't_popup.dart';
 
 /// 库内 [PopupRoute]；由 [TPopupHandle.open] push，勿在外部直接构造。
 class _PopupNavigatorRoute<T> extends PopupRoute<T> {
+  static const ValueKey<String> transparentInteractionBarrierKey =
+      ValueKey<String>('tpopup-transparent-interaction-barrier');
+
   _PopupNavigatorRoute({
     required this.options,
     required this.onCloseWithTrigger,
@@ -49,7 +52,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       options.showOverlay ? _barrierSemanticsLabel : null;
 
   @override
-  Color get barrierColor => Colors.transparent;
+  Color? get barrierColor => null;
 
   /// 非 opaque，避免透明区域露出 Modal 默认底色。
   @override
@@ -57,6 +60,14 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   bool get maintainState => !options.destroyOnClose;
+
+  @override
+  Widget buildModalBarrier() {
+    // Popup 自己在 buildTransitions 里管理遮罩与透明交互层，
+    // 这里返回空节点，避免 PopupRoute 默认的 ModalBarrier
+    // 在 showOverlay=false 时仍偷偷阻断底层交互。
+    return const SizedBox.shrink();
+  }
 
   /// 关闭开始前统一入口：触发 [TPopupOptions.onClose]、[onVisibleChange](false, …)。
   void fireCloseStart(TPopupTrigger trigger) {
@@ -130,7 +141,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       children: [
         if (options.showOverlay) barrier,
         if (!options.showOverlay && options.preventScrollThrough)
-          _scrollBlocker(child: const SizedBox.expand()),
+          _buildTransparentInteractionBarrier(),
         positioned,
       ],
     );
@@ -153,16 +164,13 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         child: barrier,
       );
     }
-    if (options.preventScrollThrough) {
-      barrier = _scrollBlocker(child: barrier);
-    }
     return barrier;
   }
 
-  Widget _scrollBlocker({required Widget child}) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (_) => true,
-      child: child,
+  Widget _buildTransparentInteractionBarrier() {
+    return const AbsorbPointer(
+      key: transparentInteractionBarrierKey,
+      child: SizedBox.expand(),
     );
   }
 

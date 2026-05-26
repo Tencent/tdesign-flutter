@@ -5,6 +5,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'helpers/popup_test_helpers.dart';
 import 'helpers/popup_test_resource.dart';
 
+class _RecordingNavigatorObserver extends NavigatorObserver {
+  final List<Route<dynamic>> pushedRoutes = <Route<dynamic>>[];
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    pushedRoutes.add(route);
+    super.didPush(route, previousRoute);
+  }
+
+  int get popupPushCount =>
+      pushedRoutes.where((route) => route is PopupRoute<dynamic>).length;
+}
+
 void main() {
   tearDown(resetPopupTestResource);
 
@@ -179,6 +192,131 @@ void main() {
       handle!.close();
       await tester.pumpAndSettle();
       expect(closeCount, 1);
+    });
+  });
+
+  group('TPopup Navigator 选择', () {
+    testWidgets('navigatorContext 首次 show 挂载到指定 Navigator，且 handle.open 复用缓存',
+        (tester) async {
+      final rootObserver = _RecordingNavigatorObserver();
+      final nestedObserver = _RecordingNavigatorObserver();
+      late BuildContext rootContext;
+      late BuildContext nestedContext;
+      late TPopupHandle handle;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorObservers: [rootObserver],
+          home: TTheme(
+            data: TThemeData.defaultData(),
+            child: Builder(
+              builder: (rootCtx) {
+                rootContext = rootCtx;
+                return Navigator(
+                  observers: [nestedObserver],
+                  onGenerateRoute: (_) {
+                    return MaterialPageRoute<void>(
+                      builder: (nestedCtx) {
+                        nestedContext = nestedCtx;
+                        return Scaffold(
+                          body: ElevatedButton(
+                            onPressed: () {
+                              handle = TPopup.show(
+                                nestedContext,
+                                navigatorContext: rootContext,
+                                options: TPopupOptions.bottom(
+                                  height: 120,
+                                  cancelBuilder: null,
+                                  confirmBuilder: null,
+                                  child: const SizedBox(
+                                    height: 60,
+                                    child: Text('root popup'),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text('open via root'),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('open via root'));
+      await tester.pumpAndSettle();
+      expect(rootObserver.popupPushCount, 1);
+      expect(nestedObserver.popupPushCount, 0);
+      expect(find.text('root popup'), findsOneWidget);
+
+      handle.close();
+      await tester.pumpAndSettle();
+      expect(find.text('root popup'), findsNothing);
+
+      handle.open();
+      await tester.pumpAndSettle();
+      expect(rootObserver.popupPushCount, 2);
+      expect(nestedObserver.popupPushCount, 0);
+      expect(find.text('root popup'), findsOneWidget);
+    });
+
+    testWidgets('useRootNavigator=true 会挂载到根 Navigator', (tester) async {
+      final rootObserver = _RecordingNavigatorObserver();
+      final nestedObserver = _RecordingNavigatorObserver();
+      late BuildContext nestedContext;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorObservers: [rootObserver],
+          home: TTheme(
+            data: TThemeData.defaultData(),
+            child: Navigator(
+              observers: [nestedObserver],
+              onGenerateRoute: (_) {
+                return MaterialPageRoute<void>(
+                  builder: (ctx) {
+                    nestedContext = ctx;
+                    return Scaffold(
+                      body: ElevatedButton(
+                        onPressed: () {
+                          TPopup.show(
+                            nestedContext,
+                            useRootNavigator: true,
+                            options: TPopupOptions.center(
+                              width: 120,
+                              height: 80,
+                              closeBuilder: null,
+                              child: const SizedBox(
+                                width: 120,
+                                height: 80,
+                                child: Text('root navigator popup'),
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text('open root navigator'),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('open root navigator'));
+      await tester.pumpAndSettle();
+      expect(rootObserver.popupPushCount, 1);
+      expect(nestedObserver.popupPushCount, 0);
+      expect(find.text('root navigator popup'), findsOneWidget);
     });
   });
 
@@ -504,7 +642,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(
-        find.byType(NotificationListener<ScrollNotification>),
+        find.byType(AbsorbPointer),
         findsWidgets,
       );
     });
@@ -712,6 +850,41 @@ void main() {
       await tester.pumpAndSettle();
       expect(handle!.isShowing, isTrue);
       expect(find.text('panel'), findsOneWidget);
+    });
+
+    testWidgets('关闭动画未结束时重新 open 不会被旧 route 回调误清理', (tester) async {
+      late BuildContext hostContext;
+      TPopupHandle? handle;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          handle = TPopup.show(
+            hostContext,
+            options: TPopupOptions.bottom(
+              height: 100,
+              cancelBuilder: null,
+              confirmBuilder: null,
+              animationDuration: const Duration(milliseconds: 300),
+              child: const SizedBox(height: 60, child: Text('race panel')),
+            ),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isTrue);
+
+      handle!.close();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      handle!.open(hostContext);
+      await tester.pump();
+      expect(handle!.isShowing, isTrue);
+
+      await tester.pumpAndSettle();
+      expect(handle!.isShowing, isTrue);
+      expect(find.text('race panel'), findsOneWidget);
     });
 
     testWidgets('handle.open 在已展示时无副作用', (tester) async {
@@ -1008,6 +1181,41 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('自定义取消'), findsOneWidget);
       expect(find.text('自定义确认'), findsOneWidget);
+    });
+
+    testWidgets('自定义 cancelBuilder 保留业务侧语义', (tester) async {
+      final semanticsHandle = tester.ensureSemantics();
+      try {
+        await openPopup(
+          tester,
+          onPressed: () {
+            TPopup.show(
+              tester.element(find.text('open')),
+              options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 200,
+                confirmBuilder: null,
+                cancelBuilder: (_, close) => Semantics(
+                  container: true,
+                  label: '自定义取消语义',
+                  button: true,
+                  child: GestureDetector(
+                    onTap: close,
+                    child: const Text('自定义取消'),
+                  ),
+                ),
+                child: const SizedBox(height: 60),
+              ),
+            );
+          },
+        );
+        await tester.pumpAndSettle();
+        final semanticsNode = tester.getSemantics(find.text('自定义取消'));
+        expect(semanticsNode.label, contains('自定义取消语义'));
+        expect(semanticsNode.label, isNot('取消'));
+      } finally {
+        semanticsHandle.dispose();
+      }
     });
   });
 }

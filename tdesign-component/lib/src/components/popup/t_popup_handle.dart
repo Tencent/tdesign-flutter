@@ -88,7 +88,10 @@ class TPopupHandle {
 
     navigator.push(route).whenComplete(() {
       _PopupTracker.remove(navigator, this);
-      _detachRoute();
+      final completedRoute = route;
+      if (completedRoute != null) {
+        _detachRoute(completedRoute);
+      }
     });
   }
 
@@ -144,7 +147,10 @@ class TPopupHandle {
     navigator.removeRoute(route, result);
   }
 
-  void _detachRoute() {
+  void _detachRoute(_PopupNavigatorRoute<dynamic> route) {
+    if (!identical(_route, route)) {
+      return;
+    }
     _isClosed = true;
     _route = null;
   }
