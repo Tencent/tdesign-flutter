@@ -465,7 +465,7 @@ Widget _buildLunar(BuildContext context) {
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  int anchorRevision,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? onCellClick,  bool autoClose,  bool draggable,  TCalendarCellBuilder? cellBuilder,  TCalendarSubtitleBuilder? subtitleBuilder,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。   弹窗内点选过程无 [onChange]；实时联动请用 [popupBottomBuilder] 的 `dates`，   或自行用 [TCalendarInherited] 监听 [TCalendarInherited.selectedListenable]。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]   + [TSlidePopupRoute] 自行组装。 |
+| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  int anchorRevision,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupBottomBuilder,  ValueListenable<bool>? popupBottomExpanded,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? onCellClick,  bool autoClose,  bool draggable,  TCalendarCellBuilder? cellBuilder,  TCalendarSubtitleBuilder? subtitleBuilder,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。   弹窗内点选过程无 [onChange]；实时联动请用 [popupBottomBuilder] 的 `dates`，   或自行用 [TCalendarInherited] 监听 [TCalendarInherited.selectedListenable]。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopup.show] / [TPopupOptions.bottom] 自行组装。 |
 
 ```
 ```
@@ -537,6 +537,3 @@ Widget _buildLunar(BuildContext context) {
 | date |  | - |  |
 | isLastDayOfMonth |  | - |  |
 | typeNotifier |  | - |  |
-
-
-  

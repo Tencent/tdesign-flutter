@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
@@ -60,7 +62,7 @@ class TCalendarInherited extends InheritedWidget {
   /// 是否由 [TCalendar] 自行渲染关闭按钮和标题行。
   ///
   /// 为 `true`（默认）时 [TCalendar] 渲染关闭按钮与标题行；
-  /// 为 `false` 时由外层面板（如 [TPopupBottomDisplayPanel]）承载。
+  /// 为 `false` 时由外层弹窗容器承载。
   final bool popupControls;
 
   /// 是否由 [TCalendar] 渲染底部确认按钮。
@@ -275,8 +277,8 @@ class TCalendar extends StatefulWidget {
   /// }
   /// ```
   ///
-  /// 若需完全自定义布局，请直接使用 [TCalendar] + [TPopupBottomDisplayPanel]
-  /// + [TSlidePopupRoute] 自行组装。
+  /// 若需完全自定义布局，请直接使用 [TCalendar] + [TPopup.show]
+  /// / [TPopupOptions.bottom] 自行组装。
   static Future<List<DateTime>?> showPopup(
     BuildContext context, {
     /// 弹窗标题组件
@@ -352,64 +354,88 @@ class TCalendar extends StatefulWidget {
     Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder,
   }) async {
     final selected = ValueNotifier<List<DateTime>>(initialValue ?? []);
+    final completer = Completer<List<DateTime>?>();
+    TPopupHandle? handle;
     List<DateTime>? result;
-    var closing = false;
+    var closed = false;
 
-    void doClose(NavigatorState nav) {
-      if (closing) {
+    void closePopup() {
+      if (closed) {
         return;
       }
-      closing = true;
-      nav.pop();
+      handle?.close();
     }
 
-    await Navigator.of(context).push(TSlidePopupRoute(
-      isDismissible: autoClose,
-      slideTransitionFrom: SlideTransitionFrom.bottom,
-      builder: (ctx) {
-        final nav = Navigator.of(context);
-        final safeBottom = MediaQuery.of(ctx).padding.bottom;
-        final screenHeight = MediaQuery.of(ctx).size.height;
+    void completeClose() {
+      if (closed) {
+        return;
+      }
+      closed = true;
+      onClose?.call();
+      if (!completer.isCompleted) {
+        completer.complete(result);
+      }
+    }
 
-        final panelHeight =
-            popupHeight ?? _calcDefaultHeight(safeBottom, screenHeight);
+    final mediaQuery = MediaQuery.of(context);
+    final panelHeight = popupHeight ??
+        _calcDefaultHeight(mediaQuery.padding.bottom, mediaQuery.size.height);
+    final calendarHeight =
+        (panelHeight - _kPanelHeaderHeight).clamp(0.0, double.infinity);
 
-        // 提取标题文字给 TPopupBottomDisplayPanel
-        String? panelTitle;
-        if (titleWidget != null) {
-          panelTitle = _extractTextFromWidget(titleWidget);
-        }
-
-        return TCalendarInherited(
-          selected: selected,
-          usePopup: true,
-          popupControls: false,
-          popupConfirmBtn: true,
-          confirmBtnBuilder: confirmBtnBuilder,
-          popupBottomBuilder: popupBottomBuilder,
-          popupBottomExpanded: popupBottomExpanded,
-          onClose: () {
-            if (autoClose) {
-              doClose(nav);
-            }
-          },
-          onConfirm: () {
-            result = List<DateTime>.from(selected.value);
-            onConfirm?.call(result!);
-            if (autoClose) {
-              doClose(nav);
-            }
-          },
-          child: TPopupBottomDisplayPanel(
-            title: panelTitle,
-            draggable: draggable,
-            fixedHeight: panelHeight,
-            closeClick: () {
+    handle = TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        headerBuilder: (ctx, close) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (titleWidget != null) Center(child: titleWidget),
+              if (autoClose)
+                Positioned(
+                  right: -8,
+                  child: IconButton(
+                    icon: Icon(
+                      TIcons.close,
+                      color: style?.titleCloseColor,
+                    ),
+                    onPressed: close,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        titleWidget: null,
+        cancelBuilder: null,
+        confirmBuilder: null,
+        height: panelHeight,
+        closeOnOverlayClick: autoClose,
+        onClosed: completeClose,
+        child: PopScope(
+          canPop: autoClose,
+          child: TCalendarInherited(
+            selected: selected,
+            usePopup: true,
+            popupControls: false,
+            popupConfirmBtn: true,
+            confirmBtnBuilder: confirmBtnBuilder,
+            popupBottomBuilder: popupBottomBuilder,
+            popupBottomExpanded: popupBottomExpanded,
+            onClose: () {
               if (autoClose) {
-                doClose(nav);
+                closePopup();
+              }
+            },
+            onConfirm: () {
+              result = List<DateTime>.from(selected.value);
+              onConfirm?.call(result!);
+              if (autoClose) {
+                closePopup();
               }
             },
             child: TCalendar(
+              height: calendarHeight,
               titleWidget: titleWidget,
               type: type,
               initialValue: initialValue,
@@ -428,27 +454,11 @@ class TCalendar extends StatefulWidget {
               monthTitleBuilder: monthTitleBuilder,
             ),
           ),
-        );
-      },
-    ));
+        ),
+      ),
+    );
 
-    onClose?.call();
-    return result;
-  }
-
-  /// 尝试从 Widget 中提取文本内容，用于 TPopupBottomDisplayPanel 的标题。
-  /// 仅支持 Text 和 RichText 两种常见情况。
-  static String? _extractTextFromWidget(Widget widget) {
-    if (widget is Text) {
-      return widget.data;
-    }
-    if (widget is RichText) {
-      final text = widget.text;
-      if (text is TextSpan) {
-        return text.toPlainText();
-      }
-    }
-    return null;
+    return completer.future;
   }
 
   @override

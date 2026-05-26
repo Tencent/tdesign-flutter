@@ -3,15 +3,176 @@
 
 #### 静态方法
 
-| 名称 | 返回类型 | 参数 | 说明 |
+##### TToast.dismissAll
+
+关闭所有Toast
+
+返回类型：`void`
+
+##### TToast.dismissLoading
+
+关闭加载Toast（向后兼容）
+
+返回类型：`void`
+
+##### TToast.dismissToast
+
+关闭指定的Toast
+
+返回类型：`void`
+
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| dismissAll |  |  | 关闭所有Toast |
-| dismissLoading |  |  | 关闭加载Toast（向后兼容） |
-| dismissToast |  |   required String toastId, | 关闭指定的Toast |
-| showFail |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 失败提示Toast |
-| showIconText |  |   required String? text,  IconData? icon,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 带图标的Toast |
-| showLoading |  |   required BuildContext context,  String? text,  Duration duration,  bool? preventTap,  Widget? customWidget,  Color? backgroundColor,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 带文案的加载Toast |
-| showLoadingWithoutText |  |   required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  double? iconSize,  Color? iconColor,  String? toastId, | 不带文案的加载Toast |
-| showSuccess |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 成功提示Toast |
-| showText |  |   required String? text,  required BuildContext context,  Duration duration,  int? maxLines,  BoxConstraints? constraints,  bool? preventTap,  Widget? customWidget,  Color? backgroundColor,  TextStyle? textStyle,  String? toastId, | 普通文本Toast |
-| showWarning |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 警告Toast |
+| toastId | String | - | - |
+
+
+##### TToast.showFail
+
+失败提示Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | - |
+| direction | IconTextDirection | IconTextDirection.horizontal | - |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 3000) | - |
+| preventTap | bool? | - | - |
+| backgroundColor | Color? | - | - |
+| maxLines | int? | - | - |
+| textStyle | TextStyle? | - | - |
+| iconSize | double? | - | - |
+| iconColor | Color? | - | - |
+| toastId | String? | - | - |
+
+
+##### TToast.showIconText
+
+带图标的Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | - |
+| icon | IconData? | - | - |
+| direction | IconTextDirection | IconTextDirection.horizontal | - |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 3000) | - |
+| preventTap | bool? | - | - |
+| backgroundColor | Color? | - | - |
+| maxLines | int? | - | - |
+| textStyle | TextStyle? | - | - |
+| iconSize | double? | - | - |
+| iconColor | Color? | - | - |
+| toastId | String? | - | - |
+
+
+##### TToast.showLoading
+
+带文案的加载Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| text | String? | - | - |
+| duration | Duration | const Duration(seconds: 99999999) | - |
+| preventTap | bool? | - | - |
+| customWidget | Widget? | - | - |
+| backgroundColor | Color? | - | - |
+| textStyle | TextStyle? | - | - |
+| iconSize | double? | - | - |
+| iconColor | Color? | - | - |
+| toastId | String? | - | - |
+
+
+##### TToast.showLoadingWithoutText
+
+不带文案的加载Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(seconds: 99999999) | - |
+| preventTap | bool? | - | - |
+| backgroundColor | Color? | - | - |
+| iconSize | double? | - | - |
+| iconColor | Color? | - | - |
+| toastId | String? | - | - |
+
+
+##### TToast.showSuccess
+
+成功提示Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | - |
+| direction | IconTextDirection | IconTextDirection.horizontal | - |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 3000) | - |
+| preventTap | bool? | - | - |
+| backgroundColor | Color? | - | - |
+| maxLines | int? | - | - |
+| textStyle | TextStyle? | - | - |
+| iconSize | double? | - | - |
+| iconColor | Color? | - | - |
+| toastId | String? | - | - |
+
+
+##### TToast.showText
+
+普通文本Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | - |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 3000) | - |
+| maxLines | int? | - | - |
+| constraints | BoxConstraints? | - | - |
+| preventTap | bool? | - | - |
+| customWidget | Widget? | - | - |
+| backgroundColor | Color? | - | - |
+| textStyle | TextStyle? | - | - |
+| toastId | String? | - | - |
+
+
+##### TToast.showWarning
+
+警告Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | - |
+| direction | IconTextDirection | IconTextDirection.horizontal | - |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 3000) | - |
+| preventTap | bool? | - | - |
+| backgroundColor | Color? | - | - |
+| maxLines | int? | - | - |
+| textStyle | TextStyle? | - | - |
+| iconSize | double? | - | - |
+| iconColor | Color? | - | - |
+| toastId | String? | - | - |
+
+
+### IconTextDirection
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| horizontal | 横向 |
+| vertical | 竖向 |

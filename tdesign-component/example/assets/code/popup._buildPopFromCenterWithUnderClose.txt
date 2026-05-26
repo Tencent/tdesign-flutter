@@ -1,25 +1,31 @@
 
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
     return TButton(
-      text: '居中弹出层-关闭在下方',
+      text: '居中弹出层-自定义下方按钮',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              isDismissible: false,
-              slideTransitionFrom: SlideTransitionFrom.center,
-              builder: (context) {
-                return TPopupCenterPanel(
-                  closeUnderBottom: true,
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: const SizedBox(width: 240, height: 240),
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.center(
+              closeOnOverlayClick: true,
+              width: 240,
+              height: 200,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.poweroff,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 36,
+                    ),
+                    onPressed: close,
+                  ),
+              child: Container(
+                width: 240,
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
         );
       },
     );

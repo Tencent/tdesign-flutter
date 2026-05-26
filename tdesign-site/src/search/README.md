@@ -130,7 +130,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | enabled | bool? | - | 是否禁用 |
 | focusNode | FocusNode? | - | 自定义焦点 |
 | inputAction | TextInputAction? | - | 键盘动作类型 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mediumStyle | bool | false | 是否在导航栏中的样式 |
 | needCancel | bool | false | 是否需要取消按钮 |
 | onActionClick | TSearchBarEvent? | - | 自定义操作回调 |
@@ -144,6 +144,54 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | placeHolder | String? | - | 预设文案 |
 | readOnly | bool? | - | 是否只读 |
 | style | TSearchStyle? | TSearchStyle.square | 样式 |
+
+
+### TSearchStyle
+#### 简介
+搜索框的样式
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| square | 方形 |
+| round | 圆形 |
+
+
+### TSearchAlignment
+#### 简介
+搜索框对齐方式
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| left | 默认头部对齐 |
+| center | 居中 |
+
+
+### TSearchBarEvent
+#### 类型定义
+
+```dart
+typedef TSearchBarEvent = void Function(String value);
+```
+
+
+### TSearchBarClearEvent
+#### 类型定义
+
+```dart
+typedef TSearchBarClearEvent = bool? Function(String value);
+```
+
+
+### TSearchBarCallBack
+#### 类型定义
+
+```dart
+typedef TSearchBarCallBack = void Function();
+```
 
 
   

@@ -1,0 +1,22 @@
+
+  Widget _buildApiDuration(BuildContext context) {
+    return TButton(
+      text: 'animationDuration: 600ms',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 240,
+              animationDuration: const Duration(milliseconds: 600),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        );
+      },
+    );
+  }

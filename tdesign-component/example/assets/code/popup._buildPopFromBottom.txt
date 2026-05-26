@@ -7,15 +7,15 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return Container(
-                  color: TTheme.of(context).bgColorContainer,
-                  height: 240,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 240,
+              headerBuilder: null,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+                height: 240,
+              )),
         );
       },
     );

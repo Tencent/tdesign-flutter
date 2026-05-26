@@ -227,7 +227,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeText | String? | - | 关闭文案 |
 | enable | bool | true | 是否可点击 |
 | isOn | bool | false | 是否打开 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | OnSwitchChanged? | - | 改变事件 |
 | openText | String? | - | 打开文案 |
 | size | TSwitchSize? | TSwitchSize.medium | 尺寸：大、中、小 |
@@ -238,6 +238,39 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | trackOffColor | Color? | - | 关闭时轨道颜色 |
 | trackOnColor | Color? | - | 开启时轨道颜色 |
 | type | TSwitchType? | TSwitchType.fill | 类型：填充、文本、加载 |
+
+
+### TSwitchSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| large | - |
+| medium | - |
+| small | - |
+
+
+### TSwitchType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| fill | - |
+| text | - |
+| loading | - |
+| icon | - |
+
+
+### OnSwitchChanged
+#### 简介
+开关改变事件处理
+#### 类型定义
+
+```dart
+typedef OnSwitchChanged = bool Function(bool value);
+```
 
 
   
