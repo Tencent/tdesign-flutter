@@ -645,7 +645,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | controller | TSideBarController? | - | 控制器 |
 | defaultValue | int? | - | 默认值 |
 | height | double? | - | 高度 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | loading | bool? | - | 加载效果 |
 | loadingWidget | Widget? | - | 自定义加载动画 |
 | onChanged | ValueChanged<int>? | - | 选中值发生变化（Controller控制） |
@@ -658,8 +658,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | unSelectedColor | Color? | - | 未选中颜色 |
 | value | int? | - | 选项值 |
 
-```
-```
 
 ### TSideBarItem
 #### 默认构造方法
@@ -669,10 +667,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | badge | TBadge? | - | 徽标 |
 | disabled | bool | false | 是否禁用 |
 | icon | IconData? | - | 图标 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String | '' | 标签 |
 | textStyle | TextStyle? | - | 标签样式 |
 | value | int | -1 | 值 |
+
+
+### TSideBarStyle
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | - |
+| outline | - |
 
 
   

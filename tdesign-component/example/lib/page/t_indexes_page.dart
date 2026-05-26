@@ -157,28 +157,22 @@ Widget _buildSimple(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               builderContent: (context, index) {
                 final list = _list.firstWhere(
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );
@@ -195,12 +189,12 @@ Widget _buildOther(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               capsuleTheme: true,
               builderContent: (context, index) {
@@ -208,16 +202,10 @@ Widget _buildOther(BuildContext context) {
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );
@@ -234,16 +222,16 @@ Widget _buildCustomIndexes(BuildContext context) {
     theme: TButtonTheme.primary,
     type: TButtonType.outline,
     onTap: () {
-      Navigator.of(context).push(
-        TSlidePopupRoute(
-          slideTransitionFrom: SlideTransitionFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return TIndexes(
+      TPopup.show(
+        context,
+        options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox?.size.height ?? 0),
+            child: TIndexes(
               indexList: indexList,
               builderIndex: (context, index, isActive) {
                 return TText(
-                  '自定义 ${index}',
+                  '自定义 $index',
                   textColor: isActive
                       ? TTheme.of(context).brandNormalColor
                       : TTheme.of(context).textColorPrimary,
@@ -254,16 +242,10 @@ Widget _buildCustomIndexes(BuildContext context) {
                         (element) => element['index'] == index)['children']
                     as List<String>;
                 return TCellGroup(
-                  cells: list
-                      .map((e) => TCell(
-                            title: e,
-                          ))
-                      .toList(),
+                  cells: list.map((e) => TCell(title: e)).toList(),
                 );
               },
-            );
-          },
-        ),
+            )),
       );
     },
   );

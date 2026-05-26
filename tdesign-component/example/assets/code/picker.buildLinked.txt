@@ -4,12 +4,16 @@
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: linkedItems, initialValue: const ['GD', 'SZ', 'NS'],
-              onChange: (v) => setState(() => selectedLinked = v.labels.join(' / '))),
+          child: TPicker(
+              items: linkedItems,
+              initialValue: const ['GD', 'SZ', 'NS'],
+              onChange: (v) =>
+                  setState(() => selectedLinked = v.labels.join(' / '))),
         ),
       ],
     );

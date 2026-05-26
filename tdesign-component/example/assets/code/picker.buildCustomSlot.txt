@@ -17,8 +17,7 @@
             titleWidget: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(TIcons.location,
-                    size: 18, color: theme.brandNormalColor),
+                Icon(TIcons.location, size: 18, color: theme.brandNormalColor),
                 const SizedBox(width: 4),
                 Text('选择地区',
                     style: TextStyle(
@@ -29,7 +28,8 @@
               ],
             ),
             cancel: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
-            confirm: Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
+            confirm:
+                Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
           ),
         ),
       ],

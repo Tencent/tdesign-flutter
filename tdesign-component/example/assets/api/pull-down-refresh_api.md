@@ -8,38 +8,38 @@ TDesign刷新头部
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 背景颜色 |
-| clamping |  | - |  |
+| clamping | bool? | - | - |
 | completeDuration | Duration? | - | 完成延时 |
 | enableHapticFeedback | bool | true | 开启震动反馈 |
 | enableInfiniteRefresh | bool | false | 是否开启无限刷新 |
 | extent | double? | 48.0 | Header容器高度 |
 | float | bool | false | 是否悬浮 |
-| frictionFactor |  | - |  |
-| hapticFeedback |  | - |  |
-| hitOver |  | - |  |
-| horizontalFrictionFactor |  | - |  |
-| horizontalReadySpringBuilder |  | - |  |
-| horizontalSpring |  | - |  |
-| infiniteHitOver |  | - |  |
+| frictionFactor | - | - | - |
+| hapticFeedback | bool? | - | - |
+| hitOver | - | - | - |
+| horizontalFrictionFactor | - | - | - |
+| horizontalReadySpringBuilder | - | - | - |
+| horizontalSpring | - | - | - |
+| infiniteHitOver | bool? | - | - |
 | infiniteOffset | double? | - | 无限刷新偏移量 |
 | key | Key? | - | Key |
-| listenable |  | - |  |
+| listenable | - | - | - |
 | loadingIcon | TLoadingIcon | TLoadingIcon.circle | loading样式 |
-| maxOverOffset |  | - |  |
-| notifyWhenInvisible |  | - |  |
+| maxOverOffset | - | - | - |
+| notifyWhenInvisible | - | - | - |
 | overScroll | bool | true | 越界滚动([enableInfiniteRefresh]为true或[infiniteOffset]有值时生效) |
-| position |  | - |  |
-| processedDuration |  | - |  |
-| readySpringBuilder |  | - |  |
-| safeArea |  | false |  |
-| secondaryCloseTriggerOffset |  | - |  |
-| secondaryDimension |  | - |  |
-| secondaryTriggerOffset |  | - |  |
-| secondaryVelocity |  | - |  |
-| spring |  | - |  |
-| springRebound |  | - |  |
+| position | - | - | - |
+| processedDuration | Duration? | - | - |
+| readySpringBuilder | - | - | - |
+| safeArea | - | false | - |
+| secondaryCloseTriggerOffset | - | - | - |
+| secondaryDimension | - | - | - |
+| secondaryTriggerOffset | - | - | - |
+| secondaryVelocity | - | - | - |
+| spring | - | - | - |
+| springRebound | - | - | - |
 | triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同[triggerOffset] |
-| triggerOffset |  | - |  |
-| triggerWhenReach |  | - |  |
-| triggerWhenRelease |  | - |  |
-| triggerWhenReleaseNoWait |  | - |  |
+| triggerOffset | double? | - | - |
+| triggerWhenReach | - | - | - |
+| triggerWhenRelease | - | - | - |
+| triggerWhenReleaseNoWait | - | - | - |
