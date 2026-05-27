@@ -16,21 +16,21 @@ DateTime _day(int y, int m, int d) => DateTime(y, m, d);
 
 void main() {
   // -----------------------------------------------------------------------
-  // popupBottomBuilder / popupBottomExpanded（仅 TCalendarInherited / showPopup）
+  // popupOverlayBuilder / popupOverlayExpanded（仅 TCalendarInherited / showPopup）
   // -----------------------------------------------------------------------
-  group('TCalendar — popupBottom / popupBottomExpanded', () {
-    test('popupBottomExpanded 未配合 popupBottomBuilder 时触发 assert', () {
+  group('TCalendar — popupOverlay / popupOverlayExpanded', () {
+    test('popupOverlayExpanded 未配合 popupOverlayBuilder 时触发 assert', () {
       expect(
         () => TCalendarInherited(
           selected: ValueNotifier<List<DateTime>>([]),
-          popupBottomExpanded: ValueNotifier<bool>(false),
+          popupOverlayExpanded: ValueNotifier<bool>(false),
           child: const SizedBox(),
         ),
         throwsAssertionError,
       );
     });
 
-    testWidgets('内嵌模式无法通过 TCalendar 传入 popupBottomBuilder', (tester) async {
+    testWidgets('内嵌模式无法通过 TCalendar 传入 popupOverlayBuilder', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
@@ -43,13 +43,13 @@ void main() {
       expect(find.text('底部'), findsNothing);
     });
 
-    testWidgets('非弹窗 Inherited 不渲染 popupBottomBuilder', (tester) async {
+    testWidgets('非弹窗 Inherited 不渲染 popupOverlayBuilder', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendarInherited(
             selected: ValueNotifier<List<DateTime>>([]),
             usePopup: false,
-            popupBottomBuilder: (_, __) => const Text('底部'),
+            popupOverlayBuilder: (_, __) => const Text('底部'),
             child: TCalendar(
               titleWidget: const Text('测试'),
               height: 640,
@@ -61,7 +61,7 @@ void main() {
       expect(find.text('底部'), findsNothing);
     });
 
-    testWidgets('popup 内选中变化时 popupBottomBuilder 会重建', (tester) async {
+    testWidgets('popup 内选中变化时 popupOverlayBuilder 会重建', (tester) async {
       final day = _day(2024, 6, 15);
       final selected = ValueNotifier<List<DateTime>>([day]);
 
@@ -70,7 +70,7 @@ void main() {
           TCalendarInherited(
             selected: selected,
             usePopup: true,
-            popupBottomBuilder: (_, dates) => Text('days:${dates.length}'),
+            popupOverlayBuilder: (_, dates) => Text('days:${dates.length}'),
             child: TCalendar(
               titleWidget: const Text('测试'),
               height: 640,
@@ -89,7 +89,7 @@ void main() {
       expect(find.text('days:2'), findsOneWidget);
     });
 
-    testWidgets('popup 内 popupBottomExpanded 为 false 时处于收起偏移', (tester) async {
+    testWidgets('popup 内 popupOverlayExpanded 为 false 时处于收起偏移', (tester) async {
       final expanded = ValueNotifier<bool>(false);
       final selected = ValueNotifier<List<DateTime>>([]);
 
@@ -98,8 +98,8 @@ void main() {
           TCalendarInherited(
             selected: selected,
             usePopup: true,
-            popupBottomExpanded: expanded,
-            popupBottomBuilder: (_, __) => const Text('底部内容'),
+            popupOverlayExpanded: expanded,
+            popupOverlayBuilder: (_, __) => const Text('底部内容'),
             child: TCalendar(
               titleWidget: const Text('测试'),
               height: 640,
@@ -654,7 +654,7 @@ void main() {
       expect(popupResult!.single, day20);
     });
 
-    testWidgets('popupBottomBuilder 与确认按钮区域不重叠', (tester) async {
+    testWidgets('popupOverlayBuilder 与确认按钮区域不重叠', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           Builder(
@@ -667,7 +667,7 @@ void main() {
                   minDate: _day(2024, 6, 1),
                   maxDate: _day(2024, 6, 30),
                   popupHeight: 640,
-                  popupBottomBuilder: (_, __) => const Text('底部区域'),
+                  popupOverlayBuilder: (_, __) => const Text('底部区域'),
                 );
               },
               child: const Text('open'),

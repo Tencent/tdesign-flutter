@@ -10,7 +10,7 @@ class TCalendarBody extends StatefulWidget {
     this.maxDate,
     this.minDate,
     required this.type,
-    this.value,
+    this.initialValue,
     required this.firstDayOfWeek,
     required this.builder,
     required this.bodyPadding,
@@ -31,7 +31,7 @@ class TCalendarBody extends StatefulWidget {
   final DateTime? maxDate;
   final DateTime? minDate;
   final CalendarType type;
-  final List<DateTime>? value;
+  final List<DateTime>? initialValue;
   final DateTime? anchorDate;
   final int firstDayOfWeek;
   final Widget Function(
@@ -113,9 +113,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       widget.onCacheInvalidated?.call();
       _lastNotifiedMonthKey = null;
       _initMonths();
-    } else if (!_listEqualsDate(oldWidget.value, widget.value)) {
-      // 选中值由上层更新（initialValue / _cachedValueDates）时清空月份缓存，
-      // 让所有 cell 基于新 value 重建 typeNotifier，避免 single/multiple/range 残留旧态。
+    } else if (!_listEqualsDate(
+        oldWidget.initialValue, widget.initialValue)) {
+      // 选中值由上层更新（TCalendar.initialValue / _cachedValueDates）时清空月份缓存，
+      // 让所有 cell 基于新 initialValue 重建 typeNotifier，避免 single/multiple/range 残留旧态。
       _data.clear();
       widget.onCacheInvalidated?.call();
     }
@@ -220,10 +221,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   double _calcScrollOffset() {
     var scrollToDate = widget.anchorDate;
     if (scrollToDate == null) {
-      if (widget.value == null || widget.value!.isEmpty) {
+      if (widget.initialValue == null || widget.initialValue!.isEmpty) {
         return 0.0;
       }
-      scrollToDate = widget.value!.reduce((a, b) => a.isBefore(b) ? a : b);
+      scrollToDate = widget.initialValue!.reduce((a, b) => a.isBefore(b) ? a : b);
     }
     if (_months.isEmpty) {
       return 0.0;
@@ -513,27 +514,27 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       if (date.compareTo(min) == -1 || date.compareTo(max) == 1) {
         selectType = DateSelectType.disabled;
       } else if (widget.type == CalendarType.single &&
-          (widget.value?.length ?? 0) >= 1) {
-        if (date.compareTo(widget.value![0]) == 0) {
+          (widget.initialValue?.length ?? 0) >= 1) {
+        if (date.compareTo(widget.initialValue![0]) == 0) {
           selectType = DateSelectType.selected;
         }
       } else if (widget.type == CalendarType.multiple &&
-          widget.value != null) {
-        if (widget.value!.isContains((e) => date.compareTo(e) == 0)) {
+          widget.initialValue != null) {
+        if (widget.initialValue!.isContains((e) => date.compareTo(e) == 0)) {
           selectType = DateSelectType.selected;
         }
       } else if (widget.type == CalendarType.range &&
-          (widget.value?.length ?? 0) >= 1) {
+          (widget.initialValue?.length ?? 0) >= 1) {
         final end =
-            (widget.value?.length ?? 0) > 1 ? widget.value![1] : null;
-        if (date.compareTo(widget.value![0]) == 0) {
+            (widget.initialValue?.length ?? 0) > 1 ? widget.initialValue![1] : null;
+        if (date.compareTo(widget.initialValue![0]) == 0) {
           selectType = DateSelectType.start;
         }
-        if (end != null && widget.value![0].compareTo(end) < 0) {
+        if (end != null && widget.initialValue![0].compareTo(end) < 0) {
           if (date.compareTo(end) == 0) {
             selectType = DateSelectType.end;
           }
-          if (date.compareTo(widget.value![0]) == 1 &&
+          if (date.compareTo(widget.initialValue![0]) == 1 &&
               date.compareTo(end) == -1) {
             selectType = DateSelectType.centre;
           }

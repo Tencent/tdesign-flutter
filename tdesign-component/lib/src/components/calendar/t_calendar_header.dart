@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 't_calendar_cell.dart';
 
+/// 为 [TCalendar.titleWidget] 应用 [TCalendarStyle.titleStyle] / [titleMaxLine]。
+Widget? wrapCalendarTitleWidget(
+  Widget? titleWidget, {
+  TextStyle? titleStyle,
+  int? titleMaxLine,
+  TextOverflow titleOverflow = TextOverflow.ellipsis,
+}) {
+  if (titleWidget == null) {
+    return null;
+  }
+  if (titleStyle == null && titleMaxLine == null) {
+    return titleWidget;
+  }
+  return DefaultTextStyle.merge(
+    style: titleStyle,
+    maxLines: titleMaxLine,
+    overflow: titleOverflow,
+    textAlign: TextAlign.center,
+    child: titleWidget,
+  );
+}
+
 class TCalendarHeader extends StatelessWidget {
   const TCalendarHeader({
     Key? key,
@@ -59,7 +81,14 @@ class TCalendarHeader extends StatelessWidget {
                   if (closeBtn) const SizedBox(width: 24),
                   Expanded(
                     child: Center(
-                      child: titleWidget ?? const SizedBox.shrink(),
+                      child: wrapCalendarTitleWidget(
+                            titleWidget,
+                            titleStyle: titleStyle,
+                            titleMaxLine: titleMaxLine,
+                            titleOverflow:
+                                titleOverflow ?? TextOverflow.ellipsis,
+                          ) ??
+                          const SizedBox.shrink(),
                     ),
                   ),
                   if (closeBtn)

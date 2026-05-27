@@ -38,12 +38,12 @@ class TCalendarInherited extends InheritedWidget {
     this.popupConfirmBtn,
     this.onConfirm,
     this.confirmBtnBuilder,
-    this.popupBottomBuilder,
-    this.popupBottomExpanded,
+    this.popupOverlayBuilder,
+    this.popupOverlayExpanded,
     Key? key,
   })  : assert(
-          popupBottomExpanded == null || popupBottomBuilder != null,
-          'popupBottomExpanded 需配合 popupBottomBuilder 使用',
+          popupOverlayExpanded == null || popupOverlayBuilder != null,
+          'popupOverlayExpanded 需配合 popupOverlayBuilder 使用',
         ),
         super(child: child, key: key);
 
@@ -78,18 +78,20 @@ class TCalendarInherited extends InheritedWidget {
   /// 自定义确认按钮；[onConfirm] 与默认确认按钮一致（回传选中值并关闭弹窗）。
   final Widget Function(VoidCallback onConfirm)? confirmBtnBuilder;
 
-  /// 弹窗底部自定义区域构建器（仅弹窗模式，由 [TCalendar.showPopup] 或手动
-  /// [TCalendarInherited] 注入）。
+  /// 弹窗模式下日历内容区底部浮层构建器（非 [TPopup] 面板底部）。
+  ///
+  /// 由 [TCalendar.showPopup] 或手动 [TCalendarInherited] 注入；
+  /// [selectedDates] 随点选实时更新。
   final Widget Function(BuildContext context, List<DateTime> selectedDates)?
-      popupBottomBuilder;
+      popupOverlayBuilder;
 
-  /// 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。
-  final ValueListenable<bool>? popupBottomExpanded;
+  /// 浮层是否展开（响应式），需配合 [popupOverlayBuilder]。
+  final ValueListenable<bool>? popupOverlayExpanded;
 
   /// 仅当 Inherited 上的**静态配置**变化时通知依赖方重建。
   ///
   /// [selected] 为 [ValueNotifier]，变更走 [selectedListenable]，不依赖本方法。
-  /// 若返回 `false`，在运行期替换 [popupBottomBuilder] 等回调时，子树不会自动重建，
+  /// 若返回 `false`，在运行期替换 [popupOverlayBuilder] 等回调时，子树不会自动重建，
   /// 弹窗场景一般在 push 时一次性注入，内嵌高级用法请整体替换 Inherited。
   @override
   bool updateShouldNotify(covariant TCalendarInherited oldWidget) {
@@ -99,8 +101,8 @@ class TCalendarInherited extends InheritedWidget {
         oldWidget.onClose != onClose ||
         oldWidget.onConfirm != onConfirm ||
         oldWidget.confirmBtnBuilder != confirmBtnBuilder ||
-        oldWidget.popupBottomBuilder != popupBottomBuilder ||
-        oldWidget.popupBottomExpanded != popupBottomExpanded;
+        oldWidget.popupOverlayBuilder != popupOverlayBuilder ||
+        oldWidget.popupOverlayExpanded != popupOverlayExpanded;
   }
 
   static TCalendarInherited? of(BuildContext context) {
@@ -263,7 +265,7 @@ class TCalendar extends StatefulWidget {
   /// 弹出日历选择器，返回选中的日期列表。
   ///
   /// 取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。
-  /// 弹窗内点选过程无 [onChange]；实时联动请用 [popupBottomBuilder] 的 `dates`，
+  /// 弹窗内点选过程无 [onChange]；实时联动请用 [popupOverlayBuilder] 的 `dates`，
   /// 或自行用 [TCalendarInherited] 监听 [TCalendarInherited.selectedListenable]。
   ///
   /// ```dart
@@ -281,7 +283,7 @@ class TCalendar extends StatefulWidget {
   /// / [TPopupOptions.bottom] 自行组装。
   static Future<List<DateTime>?> showPopup(
     BuildContext context, {
-    /// 弹窗标题组件
+    /// 弹窗标题组件，由 [TPopupOptions.bottom] 头部承载（不传入内层 [TCalendar]）。
     Widget? titleWidget,
 
     /// 日历选择模式
@@ -314,12 +316,12 @@ class TCalendar extends StatefulWidget {
     /// 自定义样式
     TCalendarStyle? style,
 
-    /// 弹窗底部自定义区域构建器（经 [TCalendarInherited] 注入，仅弹窗内生效）。
+    /// 弹窗模式下日历内容区底部浮层（经 [TCalendarInherited] 注入，仅弹窗内生效）。
     Widget Function(BuildContext context, List<DateTime> selectedDates)?
-        popupBottomBuilder,
+        popupOverlayBuilder,
 
-    /// 弹窗底部区域是否展开（响应式），需配合 [popupBottomBuilder]。
-    ValueListenable<bool>? popupBottomExpanded,
+    /// 浮层是否展开（响应式），需配合 [popupOverlayBuilder]。
+    ValueListenable<bool>? popupOverlayExpanded,
 
     /// 自定义确认按钮，[onConfirm] 与默认确认按钮一致。
     Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,
@@ -336,9 +338,6 @@ class TCalendar extends StatefulWidget {
       DateSelectType selectType,
       TCalendarCellModel cell,
     )? onCellClick,
-
-    /// 点击遮罩或物理返回是否关闭
-    bool autoClose = true,
 
     TCalendarCellBuilder? cellBuilder,
     TCalendarSubtitleBuilder? subtitleBuilder,
@@ -379,61 +378,48 @@ class TCalendar extends StatefulWidget {
         _calcDefaultHeight(mediaQuery.padding.bottom, mediaQuery.size.height);
     final calendarHeight =
         (panelHeight - _kPanelHeaderHeight).clamp(0.0, double.infinity);
+    final resolvedStyle = style ?? TCalendarStyle.generateStyle(context);
+    final popupTitleWidget = wrapCalendarTitleWidget(
+      titleWidget,
+      titleStyle: resolvedStyle.titleStyle,
+      titleMaxLine: resolvedStyle.titleMaxLine,
+    );
 
     handle = TPopup.show(
       context,
       options: TPopupOptions.bottom(
-        headerBuilder: (ctx, close) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              if (titleWidget != null) Center(child: titleWidget),
-              if (autoClose)
-                Positioned(
-                  right: -8,
-                  child: IconButton(
-                    icon: Icon(
-                      TIcons.close,
-                      color: style?.titleCloseColor,
-                    ),
-                    onPressed: close,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        titleWidget: null,
+        titleWidget: popupTitleWidget,
         cancelBuilder: null,
-        confirmBuilder: null,
+        confirmBuilder: (ctx, close) => IconButton(
+          icon: Icon(
+            TIcons.close,
+            color: style?.titleCloseColor,
+          ),
+          onPressed: close,
+        ),
         height: panelHeight,
-        closeOnOverlayClick: autoClose,
+        closeOnOverlayClick: true,
         onClosed: completeClose,
         child: PopScope(
-          canPop: autoClose,
+          canPop: true,
           child: TCalendarInherited(
             selected: selected,
             usePopup: true,
             popupControls: false,
             popupConfirmBtn: true,
             confirmBtnBuilder: confirmBtnBuilder,
-            popupBottomBuilder: popupBottomBuilder,
-            popupBottomExpanded: popupBottomExpanded,
+            popupOverlayBuilder: popupOverlayBuilder,
+            popupOverlayExpanded: popupOverlayExpanded,
             onClose: () {
-              if (autoClose) {
-                closePopup();
-              }
+              closePopup();
             },
             onConfirm: () {
               result = List<DateTime>.from(selected.value);
               onConfirm?.call(result!);
-              if (autoClose) {
-                closePopup();
-              }
+              closePopup();
             },
             child: TCalendar(
               height: calendarHeight,
-              titleWidget: titleWidget,
               type: type,
               initialValue: initialValue,
               minDate: minDate,
@@ -562,10 +548,10 @@ class _TCalendarState extends State<TCalendar> {
   @override
   Widget build(BuildContext context) {
     final verticalGap = _style.verticalGap ?? TTheme.of(context).spacer8;
-    final popupBottomBuilder = inherited?.popupBottomBuilder;
-    final popupBottomExpanded = inherited?.popupBottomExpanded;
+    final popupOverlayBuilder = inherited?.popupOverlayBuilder;
+    final popupOverlayExpanded = inherited?.popupOverlayExpanded;
     final hasBottom =
-        inherited?.usePopup == true && popupBottomBuilder != null;
+        inherited?.usePopup == true && popupOverlayBuilder != null;
 
     Widget stackContent(bool bottomExpanded) {
       return Stack(
@@ -577,9 +563,9 @@ class _TCalendarState extends State<TCalendar> {
       );
     }
 
-    final child = hasBottom && popupBottomExpanded != null
+    final child = hasBottom && popupOverlayExpanded != null
         ? ValueListenableBuilder<bool>(
-            valueListenable: popupBottomExpanded,
+            valueListenable: popupOverlayExpanded,
             builder: (context, expanded, _) => stackContent(expanded),
           )
         : stackContent(hasBottom);
@@ -662,7 +648,7 @@ class _TCalendarState extends State<TCalendar> {
     if (!hasBottom) {
       return body;
     }
-    if (inherited?.popupBottomExpanded == null) {
+    if (inherited?.popupOverlayExpanded == null) {
       return Padding(
         padding: const EdgeInsets.only(bottom: _bottomPeekHeight),
         child: body,
@@ -686,7 +672,7 @@ class _TCalendarState extends State<TCalendar> {
       anchorDate: widget.anchorDate,
       anchorRevision: widget.anchorRevision,
       minDate: widget.minDate,
-      value: _cachedValueDates,
+      initialValue: _cachedValueDates,
       bodyPadding: _style.bodyPadding ?? TTheme.of(context).spacer16,
       monthNames: monthNames,
       monthTitleStyle: _style.monthTitleStyle,
@@ -723,7 +709,7 @@ class _TCalendarState extends State<TCalendar> {
   ///
   /// single：每月最多一个 selected，遇到即覆盖 _selectedSingleRef。
   /// multiple：把当月所有 selected 的引用按 date 写入 map。
-  /// range：本身走 widget.value 重建路径，不需要登记。
+  /// range：本身走 initialValue 重建路径，不需要登记。
   void _handleCellGenerated(DateTime monthDate, List<TCalendarCellModel?> cells) {
     if (widget.type == CalendarType.range) {
       return;
@@ -835,22 +821,22 @@ class _TCalendarState extends State<TCalendar> {
     return [tapped];
   }
 
-  // 行为约定详见 [TCalendarInherited.popupBottomBuilder]。
+  // 行为约定详见 [TCalendarInherited.popupOverlayBuilder]。
   Widget _buildBottom(bool bottomExpanded) {
-    final popupBottomBuilder = inherited!.popupBottomBuilder!;
+    final popupOverlayBuilder = inherited!.popupOverlayBuilder!;
     final bottomOffset = _calcBottomOffset();
 
     final content = ValueListenableBuilder<List<DateTime>>(
       valueListenable: inherited!.selected,
       builder: (context, selectedDates, _) {
-        return popupBottomBuilder(
+        return popupOverlayBuilder(
           context,
           List<DateTime>.unmodifiable(selectedDates),
         );
       },
     );
 
-    if (inherited!.popupBottomExpanded != null) {
+    if (inherited!.popupOverlayExpanded != null) {
       return Positioned(
         left: 0,
         right: 0,
@@ -885,7 +871,7 @@ class _TCalendarState extends State<TCalendar> {
       final btnPadding = widget.safeAreaInset
           ? TTheme.of(context).spacer16
           : TTheme.of(context).spacer16 * 2;
-      // 默认与自定义确认按钮均预留固定高度，避免 popupBottomBuilder 浮层重叠。
+      // 默认与自定义确认按钮均预留固定高度，避免 popupOverlayBuilder 浮层重叠。
       // 若自定义按钮更高，请在 popupHeight 中额外预留空间。
       return safeBottom + btnPadding + _confirmBtnHeight;
     }
