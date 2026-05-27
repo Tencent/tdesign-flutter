@@ -190,6 +190,89 @@ void main() {
       expect(center.child, isA<SizedBox>());
     });
 
+    test('safePaddingFor 按 placement 提取 MediaQuery.padding', () {
+      const media = EdgeInsets.fromLTRB(11, 22, 33, 44);
+      expect(
+        PopupLayout.safePaddingFor(TPopupPlacement.top, media, true),
+        const EdgeInsets.only(top: 22),
+      );
+      expect(
+        PopupLayout.safePaddingFor(TPopupPlacement.bottom, media, true),
+        const EdgeInsets.only(bottom: 44),
+      );
+      expect(
+        PopupLayout.safePaddingFor(TPopupPlacement.left, media, true),
+        const EdgeInsets.only(left: 11, top: 22, bottom: 44),
+      );
+      expect(
+        PopupLayout.safePaddingFor(TPopupPlacement.right, media, true),
+        const EdgeInsets.only(right: 33, top: 22, bottom: 44),
+      );
+      expect(
+        PopupLayout.safePaddingFor(TPopupPlacement.center, media, true),
+        EdgeInsets.zero,
+      );
+      expect(
+        PopupLayout.safePaddingFor(TPopupPlacement.bottom, media, false),
+        EdgeInsets.zero,
+      );
+    });
+
+    testWidgets('bottom 应用 safePadding 时贴安全区上沿', (tester) async {
+      const safeBottom = 34.0;
+      final layout = PopupLayout(
+        placement: TPopupPlacement.bottom,
+        height: 200,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(
+              children: [
+                layout.wrapPositioned(
+                  child: const SizedBox(),
+                  safePadding: const EdgeInsets.only(bottom: safeBottom),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      final positioned = tester.widget<Positioned>(find.byType(Positioned));
+      expect(positioned.bottom, safeBottom);
+      expect(positioned.height, 200);
+    });
+
+    testWidgets('top 应用 safePadding 时 left/right 与 inset 叠加', (tester) async {
+      final layout = PopupLayout(
+        placement: TPopupPlacement.top,
+        inset: const TPopupTopInset(left: 8, right: 12),
+        height: 100,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(
+              children: [
+                layout.wrapPositioned(
+                  child: const SizedBox(),
+                  safePadding: const EdgeInsets.only(
+                    top: 20,
+                    left: 4,
+                    right: 6,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      final positioned = tester.widget<Positioned>(find.byType(Positioned));
+      expect(positioned.top, 20);
+      expect(positioned.left, 12);
+      expect(positioned.right, 18);
+    });
+
     test('alignment 各方向', () {
       expect(
         PopupLayout(

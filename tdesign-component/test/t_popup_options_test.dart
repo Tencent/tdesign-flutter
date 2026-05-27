@@ -8,6 +8,7 @@ void main() {
       final options = TPopupOptions(child: const SizedBox()).normalized();
       expect(options.placement, TPopupPlacement.bottom);
       expect(options.modal, isTrue);
+      expect(options.useSafeArea, isTrue);
       expect(options.closeOnOverlayClick, isTrue);
       expect(options.usesDefaultHeader, isTrue);
       expect(options.usesDefaultCancel, isTrue);
@@ -375,6 +376,12 @@ void main() {
         ).assertPlacementParams(),
         returnsNormally,
       );
+    });
+
+    test('copyWith 可更新 useSafeArea', () {
+      final options = TPopupOptions(child: const SizedBox())
+          .copyWith(useSafeArea: false);
+      expect(options.useSafeArea, isFalse);
     });
 
     test('copyWith(closeOnOverlayClick: null) 可恢复为跟随 showOverlay 的默认值', () {
