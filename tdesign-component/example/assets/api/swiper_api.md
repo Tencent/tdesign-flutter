@@ -24,14 +24,6 @@ TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 ### TPageTransformer
 #### 简介
 TD默认PageTransformer
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| fade | double? | - | 淡化比例 |
-| margin | double? | - | 左右间隔 |
-| scale | double? | - | 缩放比例 |
-
 
 #### 工厂构造方法
 
@@ -52,3 +44,11 @@ TD默认PageTransformer
 | --- | --- | --- | --- |
 | fade | double? | 1 | 淡化比例 |
 | scale | double? | 0.8 | 缩放比例 |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| fade | double? | - | 淡化比例 |
+| margin | double? | - | 左右间隔 |
+| scale | double? | - | 缩放比例 |

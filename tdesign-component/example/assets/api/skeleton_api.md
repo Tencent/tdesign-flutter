@@ -1,5 +1,19 @@
 ## API
 ### TSkeleton
+
+#### 工厂构造方法
+
+##### TSkeleton.fromRowCol
+
+从行列框架创建骨架屏
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| animation | TSkeletonAnimation? | - | 动画效果 |
+| delay | int | 0 | 延迟显示加载时间 |
+| rowCol | TSkeletonRowCol | - | 自定义行列数量、宽度高度、间距等 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -16,21 +30,9 @@
 | rowCol | TSkeletonRowCol | - | 自定义行列数量、宽度高度、间距等 |
 
 
-#### 工厂构造方法
-
-##### TSkeleton.fromRowCol
-
-从行列框架创建骨架屏
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| animation | TSkeletonAnimation? | - | 动画效果 |
-| delay | int | 0 | 延迟显示加载时间 |
-| rowCol | TSkeletonRowCol | - | 自定义行列数量、宽度高度、间距等 |
-
-
 ### TSkeletonRowColStyle
+#### 简介
+骨架屏样式
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -39,6 +41,8 @@
 
 
 ### TSkeletonRowCol
+#### 简介
+骨架屏行列框架
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -48,13 +52,8 @@
 
 
 ### TSkeletonRowColObjStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| background | Color Function(BuildContext) | _defaultBackground | 背景颜色 |
-| borderRadius | double Function(BuildContext) | _textBorderRadius | 圆角 |
-
+#### 简介
+骨架屏元素样式
 
 #### 工厂构造方法
 
@@ -88,18 +87,17 @@
 | --- | --- | --- | --- |
 | background | Color Function(BuildContext) | _defaultBackground | 背景颜色 |
 
-
-### TSkeletonRowColObj
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| flex | int? | 1 | 弹性因子 |
-| height | double? | 16 | 高度 |
-| margin | EdgeInsets | EdgeInsets.zero | 间距 |
-| style | TSkeletonRowColObjStyle | const TSkeletonRowColObjStyle() | 样式 |
-| width | double? | - | 宽度 |
+| background | Color Function(BuildContext) | _defaultBackground | 背景颜色 |
+| borderRadius | double Function(BuildContext) | _textBorderRadius | 圆角 |
 
+
+### TSkeletonRowColObj
+#### 简介
+骨架屏元素
 
 #### 工厂构造方法
 
@@ -152,6 +150,16 @@
 | flex | int? | 1 | 弹性因子 |
 | margin | EdgeInsets | EdgeInsets.zero | 间距 |
 | style | TSkeletonRowColObjStyle | const TSkeletonRowColObjStyle.text() | 样式 |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| flex | int? | 1 | 弹性因子 |
+| height | double? | 16 | 高度 |
+| margin | EdgeInsets | EdgeInsets.zero | 间距 |
+| style | TSkeletonRowColObjStyle | const TSkeletonRowColObjStyle() | 样式 |
+| width | double? | - | 宽度 |
 
 
 ### TSkeletonAnimation

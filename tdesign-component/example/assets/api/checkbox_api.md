@@ -1,5 +1,9 @@
 ## API
 ### TCheckbox
+#### 简介
+复选框组件。
+FuiCheckbox支持3种内置样式的的复选框，还支持各种自定义样式，除了提供勾选之外还提供了内
+容选项，内容包含一个主标题和副标题，并且支持完全自定义内容，支持指定内容的方向等等
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -34,6 +38,25 @@
 
 
 ### TCheckboxGroup
+#### 简介
+CheckBox组，可以通过控制器控制组内的多个CheckBox的选择状态
+child的属性可以是任意包含TCheckBox的容器组件，例如：
+```dart
+TCheckboxGroup(
+  child: Row(
+    children: [
+      TCheckBox(),
+      Column(
+        children: [
+          TCheckBox()
+          ...
+        ]
+      )
+      ...
+    ]
+  )
+)
+```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

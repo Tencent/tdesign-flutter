@@ -17,7 +17,7 @@
 | prefixIcon | IconData? | - | 左侧图标 |
 | right | Widget? | - | 右侧内容（自定义右侧内容，优先级高于suffixIcon） |
 | speed | double? | 50 | 滚动速度 |
-| style | TNoticeBarStyle? | - | 公告栏样式 [TNoticeBarStyle] |
+| style | TNoticeBarStyle? | - | 公告栏样式 `TNoticeBarStyle` |
 | suffixIcon | IconData? | - | 右侧图标 |
 | theme | TNoticeBarTheme? | TNoticeBarTheme.info | 主题 |
 
@@ -25,17 +25,6 @@
 ### TNoticeBarStyle
 #### 简介
 公告栏样式
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 公告栏背景色 |
-| context | BuildContext? | - | 上下文 |
-| leftIconColor | Color? | - | 公告栏左侧图标颜色 |
-| padding | EdgeInsetsGeometry? | - | 公告栏内边距 |
-| rightIconColor | Color? | - | 公告栏右侧图标颜色 |
-| textStyle | TextStyle? | - | 公告栏内容样式 |
-
 
 #### 工厂构造方法
 
@@ -47,6 +36,17 @@
 | --- | --- | --- | --- |
 | context | BuildContext | - | 上下文 |
 | theme | TNoticeBarTheme? | TNoticeBarTheme.info | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 公告栏背景色 |
+| context | BuildContext? | - | 上下文 |
+| leftIconColor | Color? | - | 公告栏左侧图标颜色 |
+| padding | EdgeInsetsGeometry? | - | 公告栏内边距 |
+| rightIconColor | Color? | - | 公告栏右侧图标颜色 |
+| textStyle | TextStyle? | - | 公告栏内容样式 |
 
 
 ### TNoticeBarType

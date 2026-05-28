@@ -84,7 +84,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 ### TRefreshHeader
 #### 简介
 TDesign刷新头部
- 结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
+结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -109,7 +109,7 @@ TDesign刷新头部
 | loadingIcon | TLoadingIcon | TLoadingIcon.circle | loading样式 |
 | maxOverOffset | - | - | - |
 | notifyWhenInvisible | - | - | - |
-| overScroll | bool | true | 越界滚动([enableInfiniteRefresh]为true或[infiniteOffset]有值时生效) |
+| overScroll | bool | true | 越界滚动(`enableInfiniteRefresh`为true或`infiniteOffset`有值时生效) |
 | position | - | - | - |
 | processedDuration | Duration? | - | - |
 | readySpringBuilder | - | - | - |
@@ -120,7 +120,7 @@ TDesign刷新头部
 | secondaryVelocity | - | - | - |
 | spring | - | - | - |
 | springRebound | - | - | - |
-| triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同[triggerOffset] |
+| triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同`triggerOffset` |
 | triggerOffset | double? | - | - |
 | triggerWhenReach | - | - | - |
 | triggerWhenRelease | - | - | - |

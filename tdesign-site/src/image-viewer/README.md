@@ -70,6 +70,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TImageViewer
+#### 简介
+图片预览工具
 
 #### 静态方法
 

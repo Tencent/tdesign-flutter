@@ -275,7 +275,7 @@ TDropdownMenu _buildGroup(BuildContext context) {
 | --- | --- | --- | --- |
 | arrowColor | Color? | - | 自定义箭头颜色 |
 | arrowIcon | IconData? | - | 自定义箭头图标 |
-| builder | TDropdownItemBuilder? | - | 下拉菜单构建器，优先级高于[items] |
+| builder | TDropdownItemBuilder? | - | 下拉菜单构建器，优先级高于`items` |
 | closeOnClickOverlay | bool? | true | 是否在点击遮罩层后关闭菜单 |
 | decoration | Decoration? | - | 下拉菜单的装饰器 |
 | direction | TDropdownMenuDirection? | TDropdownMenuDirection.auto | 菜单展开方向（down、up、auto） |
@@ -288,7 +288,7 @@ TDropdownMenu _buildGroup(BuildContext context) {
 | onMenuClosed | ValueChanged<int>? | - | 关闭菜单事件 |
 | onMenuOpened | ValueChanged<int>? | - | 展开菜单事件 |
 | showOverlay | bool? | true | 是否显示遮罩层 |
-| tabBarAlign | MainAxisAlignment? | MainAxisAlignment.center | [TDropdownItem.label]和[arrowIcon]/[TDropdownItem.arrowIcon]的对齐方式 |
+| tabBarAlign | MainAxisAlignment? | MainAxisAlignment.center | `TDropdownItem.label`和`arrowIcon`/`TDropdownItem.arrowIcon`的对齐方式 |
 | width | double? | - | menu的宽度 |
 
 
@@ -314,9 +314,9 @@ TDropdownMenu _buildGroup(BuildContext context) {
 | onReset | VoidCallback? | - | 点击重置时触发 |
 | options | List<TDropdownItemOption>? | const [] | 选项数据 |
 | optionsColumns | int? | 1 | 选项分栏（1-3） |
-| tabBarAlign | MainAxisAlignment? | - | [label]和[arrowIcon]/[TDropdownMenu.arrowIcon]的对齐方式 |
-| tabBarFlex | int? | 1 | 该item在menu上的宽度占比，仅在[TDropdownMenu.isScrollable]为false时有效 |
-| tabBarWidth | double? | - | 该item在menu上的宽度，仅在[TDropdownMenu.isScrollable]为true时有效 |
+| tabBarAlign | MainAxisAlignment? | - | `label`和`arrowIcon`/`TDropdownMenu.arrowIcon`的对齐方式 |
+| tabBarFlex | int? | 1 | 该item在menu上的宽度占比，仅在`TDropdownMenu.isScrollable`为false时有效 |
+| tabBarWidth | double? | - | 该item在menu上的宽度，仅在`TDropdownMenu.isScrollable`为true时有效 |
 
 #### 静态成员
 

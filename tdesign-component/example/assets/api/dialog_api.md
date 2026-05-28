@@ -1,5 +1,34 @@
 ## API
 ### TAlertDialog
+#### 简介
+弹窗控件
+支持横向或竖向摆放按钮
+横向最多摆放两个按钮
+
+#### 工厂构造方法
+
+##### TAlertDialog.vertical
+
+纵向按钮排列的对话框
+`buttons`参数是必须的，纵向按钮默认样式都是`TButtonTheme.primary`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| buttons | List<TDialogButtonOptions> | - | - |
+| backgroundColor | Color? | - | 背景颜色 |
+| radius | double | 12.0 | 圆角 |
+| title | String? | - | 标题 |
+| titleColor | Color? | - | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
+| content | String? | - | 内容 |
+| contentColor | Color? | - | 内容颜色 |
+| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -24,33 +53,10 @@
 | titleColor | Color? | - | 标题颜色 |
 
 
-#### 工厂构造方法
-
-##### TAlertDialog.vertical
-
-纵向按钮排列的对话框
-
- [buttons]参数是必须的，纵向按钮默认样式都是[TButtonTheme.primary]
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| buttons | List<TDialogButtonOptions> | - | - |
-| backgroundColor | Color? | - | 背景颜色 |
-| radius | double | 12.0 | 圆角 |
-| title | String? | - | 标题 |
-| titleColor | Color? | - | 标题颜色 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| contentWidget | Widget? | - | 内容Widget |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-
-
 ### TConfirmDialog
+#### 简介
+只有一个按钮的弹窗控件
+按钮样式支持普通和文字
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -77,6 +83,8 @@
 
 
 ### TDialogButtonOptions
+#### 简介
+弹窗按钮配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -93,6 +101,8 @@
 
 
 ### TDialogScaffold
+#### 简介
+TDialog手脚架
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -106,6 +116,8 @@
 
 
 ### TDialogTitle
+#### 简介
+弹窗标题
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -116,6 +128,8 @@
 
 
 ### TDialogContent
+#### 简介
+弹窗内容
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -126,6 +140,8 @@
 
 
 ### TDialogInfoWidget
+#### 简介
+弹窗信息
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -142,6 +158,8 @@
 
 
 ### HorizontalNormalButtons
+#### 简介
+横向排列的两个按钮
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -152,6 +170,8 @@
 
 
 ### HorizontalTextButtons
+#### 简介
+左右横向文字按钮，顶部和中间有分割线
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -162,6 +182,8 @@
 
 
 ### TDialogButton
+#### 简介
+弹窗标题
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -181,6 +203,8 @@
 
 
 ### TImageDialog
+#### 简介
+带有图片的弹窗控件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -204,6 +228,8 @@
 
 
 ### TInputDialog
+#### 简介
+带有输入框的弹窗
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -230,9 +256,8 @@
 ### TDialogButtonStyle
 #### 简介
 Dialog按钮样式
-
- 用于在Dialog层面配置按钮样式
- Dialog内支持配置每个按钮的样式
+用于在Dialog层面配置按钮样式
+Dialog内支持配置每个按钮的样式
 #### 枚举值
 
 
