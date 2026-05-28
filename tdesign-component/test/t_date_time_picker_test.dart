@@ -82,7 +82,7 @@ void main() {
       ]);
     });
 
-    test('combined：date 与 time 同时为 null 触发 assert', () {
+    test('combined：dateMode 与 timeMode 同时为 null 触发 assert', () {
       expect(
         () => DateTimePickerMode.combined(),
         throwsAssertionError,
@@ -493,7 +493,7 @@ void main() {
         ),
       ));
       await tester.pumpAndSettle();
-      // 列数：年 + 月 + 日（star，不再有独立 week 列）
+      // 列数：年 + 月 + 日（不再有独立 week 列）
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
       // 2026-05-15 是周五；中央选中日的 label 应含「周五」
       expect(find.textContaining('周五'), findsWidgets);

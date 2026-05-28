@@ -49,7 +49,9 @@ class TDateTimePicker extends StatefulWidget {
   /// 首次构建时的默认选中值；缺省为 DateTime.now；超出 [start, end] 会钳制；滚动后改此值需配合 Key 重建。
   final DateTime? defaultValue;
 
-  /// 日列 label 是否附加星期（如 19日 周六）；仅影响展示，星期值用 toDateTime().weekday。
+  /// 日列 label 是否附加星期（如 19日 周六）；仅影响展示。
+  ///
+  /// 回调结果不含独立星期字段，请用 [TDateTimePickerValue.toDateTime].weekday。
   final bool showWeek;
 
   /// 点击「取消」按钮的回调。
@@ -58,7 +60,7 @@ class TDateTimePicker extends StatefulWidget {
   /// 选中值变化回调（滚动稳定后实时触发）；参数为 [TDateTimePickerValue]，仅含当前 mode 对应列；相同值不重复触发。
   final void Function(TDateTimePickerValue result)? onChange;
 
-  /// 点击「确定」按钮的回调。
+  /// 点击「确定」按钮的回调；参数为 [TDateTimePickerValue]。
   final void Function(TDateTimePickerValue result)? onConfirm;
 
   /// 工具栏中部标题文本。

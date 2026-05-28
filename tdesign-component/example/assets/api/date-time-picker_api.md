@@ -17,8 +17,8 @@
 | mode | DateTimePickerMode | - | 列结构（必填）。详见 `DateTimePickerMode`。 |
 | onCancel | VoidCallback? | - | 点击「取消」按钮的回调。 |
 | onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调（滚动稳定后实时触发）；参数为 `TDateTimePickerValue`，仅含当前 mode 对应列；相同值不重复触发。 |
-| onConfirm | void Function(TDateTimePickerValue result)? | - | 点击「确定」按钮的回调。 |
-| showWeek | bool | false | 日列 label 是否附加星期（如 19日 周六）；仅影响展示，星期值用 toDateTime().weekday。 |
+| onConfirm | void Function(TDateTimePickerValue result)? | - | 点击「确定」按钮的回调；参数为 `TDateTimePickerValue`。 |
+| showWeek | bool | false | 日列 label 是否附加星期（如 19日 周六）；仅影响展示。 回调结果不含独立星期字段，请用 `TDateTimePickerValue.toDateTime`.weekday。 |
 | start | DateTime? | - | 可选范围下界（闭区间）；null 时年列下界为打开时锚定年份 - 10（不随滚动漂移）。 |
 | title | String? | - | 工具栏中部标题文本。 |
 | titleWidget | Widget? | - | 工具栏中部自定义标题组件（优先级高于 `title`）。 |
@@ -33,6 +33,8 @@
 ### DateTimePickerMode
 #### 简介
 列结构模式。快捷常量见下方静态成员；自定义组合用 `DateTimePickerMode.combined`。
+注意：`hour` / `minute` / `second` 快捷常量含完整年月日；仅时间列（如只要时分）请用
+`combined(timeMode: TimeMode.minute)` 等。
 
 #### 工厂构造方法
 
@@ -50,10 +52,10 @@
 
 | 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| hour | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时（日期 + 小时）。 |
-| minute | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时 + 分（日期 + 时分）。 |
+| hour | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时（含完整年月日 + 时）。 若只要「时」一列或不含日期段，请用 `DateTimePickerMode.combined`。 |
+| minute | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时 + 分（含完整年月日 + 时分）。 若只要「时分」两列，请用 `combined(timeMode: TimeMode.minute)`。 |
 | month | DateTimePickerMode | - | 快捷模式：年 + 月（只选年月）。 |
-| second | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时 + 分 + 秒（日期 + 时分秒）。 |
+| second | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时 + 分 + 秒（含完整年月日 + 时分秒）。 若只要时间列组合，请用 `combined(timeMode: TimeMode.second)` 等。 |
 | year | DateTimePickerMode | - | 快捷模式：年（只选年份）。 |
 | ymd | DateTimePickerMode | - | 快捷模式：年月日（Year-Month-Day，对齐 mobile-vue `mode: 'date'`）；等价于 `combined(dateMode: DateMode.date)`。 |
 
@@ -62,12 +64,14 @@
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| columns | List<DateTimeColumn> | - | 解析列结构（内部使用，业务方请用快捷常量或 `DateTimePickerMode.combined`）。 |
+| columns | List<DateTimeColumn> | - | 将 mode 解析为按显示顺序的列列表；一般业务只需把 mode 传给 `TDateTimePicker`。 |
 
 
 ### TDateTimePickerValue
 #### 简介
-选择结果；字段为 null 表示当前 `DateTimePickerMode` 不含该列；需 `DateTime` 时调用 `toDateTime`。
+选择结果；字段为 null 表示当前 `DateTimePickerMode` 不含该列。
+需 `DateTime` 时调用 `toDateTime`（缺列由 `fallback` 补齐，部分列场景建议传安全 fallback）。
+需星期请用 `toDateTime`.weekday（`TDateTimePicker.showWeek` 仅影响日列展示）。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

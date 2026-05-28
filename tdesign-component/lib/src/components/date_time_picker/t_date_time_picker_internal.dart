@@ -93,7 +93,10 @@ List<DateTimeColumn> _expand(DateMode? date, TimeMode? time) {
     case null:
       break;
   }
-  assert(cols.isNotEmpty, 'DateTimePickerMode: 至少需要包含 date 或 time');
+  assert(
+    cols.isNotEmpty,
+    'DateTimePickerMode: dateMode 与 timeMode 不能同时为 null',
+  );
   return List<DateTimeColumn>.unmodifiable(cols);
 }
 
