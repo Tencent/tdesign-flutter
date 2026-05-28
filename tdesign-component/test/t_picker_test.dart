@@ -399,8 +399,7 @@ void main() {
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
     });
 
-    testWidgets('初始值非首项 - onChange 返回正确值（多列独立）',
-        (WidgetTester tester) async {
+    testWidgets('初始值非首项 - onChange 返回正确值（多列独立）', (WidgetTester tester) async {
       TPickerValue? captured;
       const testData = [
         [
@@ -438,8 +437,7 @@ void main() {
       expect(captured!.labels[1], 'B2');
     });
 
-    testWidgets('初始值非首项 - 联动模式 onChange 返回正确值',
-        (WidgetTester tester) async {
+    testWidgets('初始值非首项 - 联动模式 onChange 返回正确值', (WidgetTester tester) async {
       TPickerValue? captured;
       final linkedData = {
         const TPickerOption(label: '广东省', value: 'GD'): {
@@ -478,8 +476,7 @@ void main() {
       expect(captured!.values[1], 'SZ');
     });
 
-    testWidgets('disabled 项修正 - 独立模式滚动不会 crash',
-        (WidgetTester tester) async {
+    testWidgets('disabled 项修正 - 独立模式滚动不会 crash', (WidgetTester tester) async {
       TPickerValue? captured;
       const testData = [
         [
@@ -512,8 +509,7 @@ void main() {
       }
     });
 
-    testWidgets('didUpdateWidget - items 变化触发重建',
-        (WidgetTester tester) async {
+    testWidgets('didUpdateWidget - items 变化触发重建', (WidgetTester tester) async {
       const testData1 = [
         [TPickerOption(label: 'A', value: 'a')],
       ];
@@ -548,8 +544,7 @@ void main() {
       expect(find.byType(TPicker), findsOneWidget);
     });
 
-    testWidgets('didUpdateWidget - items 变化触发重建',
-        (WidgetTester tester) async {
+    testWidgets('didUpdateWidget - items 变化触发重建', (WidgetTester tester) async {
       const testData = [
         [
           TPickerOption(label: 'A', value: 'a'),
@@ -629,8 +624,7 @@ void main() {
       expect(find.byType(TPicker), findsOneWidget);
     });
 
-    testWidgets('联动模式 - 列数变化后能恢复',
-        (WidgetTester tester) async {
+    testWidgets('联动模式 - 列数变化后能恢复', (WidgetTester tester) async {
       final linkedData = {
         const TPickerOption(label: '广东省', value: 'GD'): {
           const TPickerOption(label: '深圳市', value: 'SZ'): const [
@@ -679,8 +673,7 @@ void main() {
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
     });
 
-    testWidgets('联动模式 - 滚动后新列选中首项',
-        (WidgetTester tester) async {
+    testWidgets('联动模式 - 滚动后新列选中首项', (WidgetTester tester) async {
       TPickerValue? captured;
       final linkedData = {
         const TPickerOption(label: '广东省', value: 'GD'): {
@@ -689,7 +682,8 @@ void main() {
             TPickerOption(label: '福田区', value: 'FT'),
             TPickerOption(label: '罗湖区', value: 'LL'),
           ],
-          const TPickerOption(label: '广州市', value: 'GZ'): const <TPickerOption>[],
+          const TPickerOption(label: '广州市', value: 'GZ'):
+              const <TPickerOption>[],
         },
       };
 
@@ -723,8 +717,7 @@ void main() {
       expect(captured!.values[2], 'NS');
     });
 
-    testWidgets('onLoad 回调 - 滚动时触发',
-        (WidgetTester tester) async {
+    testWidgets('onLoad 回调 - 滚动时触发', (WidgetTester tester) async {
       var loadCallCount = 0;
       int? capturedColumn;
       int? capturedRemaining;
@@ -765,8 +758,7 @@ void main() {
       expect(capturedRemaining, greaterThanOrEqualTo(0));
     });
 
-    testWidgets('onLoad 回调 - 联动模式 parentValue 正确',
-        (WidgetTester tester) async {
+    testWidgets('onLoad 回调 - 联动模式 parentValue 正确', (WidgetTester tester) async {
       dynamic capturedParentValue;
       int? capturedColumn;
       final linkedData = {
@@ -915,7 +907,8 @@ void main() {
         [TPickerOption(label: 'A', value: 'a')],
         [TPickerOption(label: 'B', value: 'b')],
       ];
-      final result = TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
       expect(identical(result, input), true);
     });
 
@@ -923,7 +916,8 @@ void main() {
       final input = <TPickerOption, dynamic>{
         const TPickerOption(label: 'A', value: 'a'): null,
       };
-      final result = TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
       expect(identical(result, input), true);
     });
 
@@ -937,7 +931,8 @@ void main() {
           {'label': 'C', 'value': 'c'},
         ],
       ];
-      final result = TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
       expect(result, isA<List<List<TPickerOption>>>());
       expect(result.length, 2);
       expect(result[0].length, 2);
@@ -952,7 +947,8 @@ void main() {
           ],
         },
       };
-      final result = TPickerNormalize.normalizeLinked(input, const TPickerKeys(label: 'label', value: 'value'));
+      final result = TPickerNormalize.normalizeLinked(
+          input, const TPickerKeys(label: 'label', value: 'value'));
       expect(result, isA<Map<TPickerOption, dynamic>>());
     });
 
@@ -966,7 +962,8 @@ void main() {
           ],
         },
       };
-      final result = TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
       expect(result, isA<Map<TPickerOption, dynamic>>());
 
       final keyA = result.keys.first;
@@ -1009,8 +1006,7 @@ void main() {
       expect(find.byType(TPicker), findsOneWidget);
     });
 
-    testWidgets('disabled 项修正 - 正向查找最近 enabled',
-        (WidgetTester tester) async {
+    testWidgets('disabled 项修正 - 正向查找最近 enabled', (WidgetTester tester) async {
       TPickerValue? captured;
       const testData = [
         [
@@ -1042,8 +1038,7 @@ void main() {
       }
     });
 
-    testWidgets('disabled 项修正 - 反向查找最近 enabled',
-        (WidgetTester tester) async {
+    testWidgets('disabled 项修正 - 反向查找最近 enabled', (WidgetTester tester) async {
       TPickerValue? captured;
       const testData = [
         [
@@ -1080,7 +1075,8 @@ void main() {
         ['北京', '上海', '广州'],
         ['朝阳区', '浦东'],
       ];
-      final result = TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
       expect(result, isA<List<List<TPickerOption>>>());
       expect(result[0][0].label, '北京');
       expect(result[0][0].value, '北京'); // 纯字符串时 value == label
@@ -1088,21 +1084,26 @@ void main() {
     });
 
     test('TPickerNormalize - 空列表归一化', () {
-      final result = TPickerNormalize.normalizeColumns([], TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeColumns([], TPickerKeys.defaults);
       expect(result, isA<List<List<TPickerOption>>>());
       expect(result.isEmpty, true);
     });
 
     test('TPickerNormalize - 空 Map 归一化', () {
-      final result =
-          TPickerNormalize.normalizeLinked(<String, dynamic>{}, TPickerKeys.defaults);
+      final result = TPickerNormalize.normalizeLinked(
+          <String, dynamic>{}, TPickerKeys.defaults);
       expect(result, isA<Map<TPickerOption, dynamic>>());
       expect(result.isEmpty, true);
     });
 
     test('TPickerNormalize - List 中包含非 List 元素得到空列', () {
-      final input = ['not_a_list', ['A', 'B']];
-      final result = TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
+      final input = [
+        'not_a_list',
+        ['A', 'B']
+      ];
+      final result =
+          TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
       expect(result, isA<List<List<TPickerOption>>>());
       expect(result[0], isEmpty); // 非 List 元素归一化为空列
       expect(result[1].length, 2);
@@ -1115,7 +1116,8 @@ void main() {
           {'name': '广州', 'code': 'GZ'},
         ],
       ];
-      const keys = TPickerKeys(label: 'name', value: 'code', disabled: 'readonly');
+      const keys =
+          TPickerKeys(label: 'name', value: 'code', disabled: 'readonly');
       final result = TPickerNormalize.normalizeColumns(input, keys);
       expect(result[0][0].label, '深圳');
       expect(result[0][0].value, 'SZ');
@@ -1127,7 +1129,8 @@ void main() {
       final input = <String, dynamic>{
         'A': ['X', 'Y'],
       };
-      final result = TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
       expect(result, isA<Map<TPickerOption, dynamic>>());
       final keyA = result.keys.first;
       expect(keyA.label, 'A');
@@ -1141,7 +1144,8 @@ void main() {
       final input = <String, dynamic>{
         'A': 12345, // 既不是 Map 也不是 List
       };
-      final result = TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
       final child = result[result.keys.first];
       expect(child, isA<List<TPickerOption>>());
       expect((child as List).isEmpty, true);
@@ -1154,7 +1158,8 @@ void main() {
           {'label': 'Y', 'value': 'y'},
         ],
       ];
-      final result = TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeColumns(input, TPickerKeys.defaults);
       expect(result[0][0].label, 'X');
       expect(result[0][1].label, 'Y');
     });
@@ -1163,7 +1168,8 @@ void main() {
       final input = <dynamic, dynamic>{
         null: ['child1'],
       };
-      final result = TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
+      final result =
+          TPickerNormalize.normalizeLinked(input, TPickerKeys.defaults);
       final key = result.keys.first;
       expect(key.label, '');
       expect(key.value, null);
@@ -1250,14 +1256,18 @@ void main() {
       expect(columns.columns[0][0].label, '北京');
 
       final linked = TPickerLinked.fromRaw(const {
-        '广东': {'深圳': ['南山']},
+        '广东': {
+          '深圳': ['南山']
+        },
       });
       expect(linked.tree.keys.first.label, '广东');
     });
 
     test('TPickerKeys - 值相同的不同实例 hashCode 一致', () {
-      const a = TPickerKeys(label: 'x', value: 'y', disabled: 'd', children: 'c');
-      const b = TPickerKeys(label: 'x', value: 'y', disabled: 'd', children: 'c');
+      const a =
+          TPickerKeys(label: 'x', value: 'y', disabled: 'd', children: 'c');
+      const b =
+          TPickerKeys(label: 'x', value: 'y', disabled: 'd', children: 'c');
       expect(a == b, true);
       expect(a.hashCode, b.hashCode);
     });
@@ -1292,7 +1302,8 @@ void main() {
                     Text('selected: $selected'),
                     TPicker(
                       items: const TPickerColumns(testData),
-                      onChange: (v) => setState(() => selected = v.values.first as String),
+                      onChange: (v) =>
+                          setState(() => selected = v.values.first as String),
                     ),
                   ],
                 );
@@ -1349,7 +1360,8 @@ void main() {
                     TPicker(
                       items: TPickerLinked(linkedData),
                       initialValue: const ['GD', 'SZ', 'NS'],
-                      onChange: (v) => setState(() => selected = v.labels.join(' / ')),
+                      onChange: (v) =>
+                          setState(() => selected = v.labels.join(' / ')),
                     ),
                   ],
                 );
@@ -1413,8 +1425,7 @@ void main() {
       expect(a == c, false);
     });
 
-    testWidgets('工具栏 - 默认显示取消/确认按钮',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - 默认显示取消/确认按钮', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -1435,8 +1446,7 @@ void main() {
       expect(find.text('确认'), findsOneWidget);
     });
 
-    testWidgets('工具栏 - 设置 title 后中部显示标题',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - 设置 title 后中部显示标题', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -1459,8 +1469,7 @@ void main() {
       expect(find.text('请选择'), findsOneWidget);
     });
 
-    testWidgets('工具栏 - 点击取消触发 onCancel',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - 点击取消触发 onCancel', (WidgetTester tester) async {
       var cancelled = false;
       await tester.pumpWidget(
         MaterialApp(
@@ -1481,8 +1490,7 @@ void main() {
       expect(cancelled, true);
     });
 
-    testWidgets('工具栏 - 点击确认触发 onConfirm 并携带选中值',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - 点击确认触发 onConfirm 并携带选中值', (WidgetTester tester) async {
       TPickerValue? confirmedValue;
       await tester.pumpWidget(
         MaterialApp(
@@ -1533,8 +1541,7 @@ void main() {
       expect(find.text('确认'), findsNothing);
     });
 
-    testWidgets('工具栏 - cancel 自定义插槽（图标）',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - cancel 自定义插槽（图标）', (WidgetTester tester) async {
       var cancelled = false;
       await tester.pumpWidget(
         MaterialApp(
@@ -1558,8 +1565,7 @@ void main() {
       expect(cancelled, true);
     });
 
-    testWidgets('工具栏 - confirm 自定义插槽（图标）',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - confirm 自定义插槽（图标）', (WidgetTester tester) async {
       TPickerValue? confirmedValue;
       await tester.pumpWidget(
         MaterialApp(
@@ -1590,8 +1596,7 @@ void main() {
       expect(confirmedValue!.labels.first, 'Y');
     });
 
-    testWidgets('工具栏 - titleWidget 自定义标题插槽',
-        (WidgetTester tester) async {
+    testWidgets('工具栏 - titleWidget 自定义标题插槽', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

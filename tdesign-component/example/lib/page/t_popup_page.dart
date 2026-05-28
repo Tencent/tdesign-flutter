@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
@@ -8,6 +9,44 @@ import '../base/example_widget.dart';
 ///
 class TPopupPage extends StatelessWidget {
   const TPopupPage({super.key});
+
+  static const double _headerHeight = 58;
+
+  /// 底部标题 + 关闭（自定义 headerBuilder：标题居中 + 右侧关闭图标）。
+  static TPopupHeaderBuilder _bottomTitleCloseHeader({
+    String? title,
+  }) {
+    return (BuildContext ctx, VoidCallback close) {
+      final theme = TTheme.of(ctx);
+      final headerTitle = (title != null && title.isNotEmpty)
+          ? TText(
+              title,
+              textColor: theme.textColorPrimary,
+              font: theme.fontTitleLarge,
+              fontWeight: FontWeight.w700,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null;
+      return SizedBox(
+        height: _headerHeight,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: Center(child: headerTitle ?? const SizedBox.shrink()),
+              ),
+              IconButton(
+                icon: Icon(TIcons.close, color: theme.textColorSecondary),
+                onPressed: close,
+              ),
+            ],
+          ),
+        ),
+      );
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,190 +71,211 @@ class TPopupPage extends StatelessWidget {
           title: '组件示例',
           children: [
             ExampleItem(builder: _buildPopFromBottomWithOperationAndTitle),
-            ExampleItem(builder: _buildPopFromBottomWithOperation),
             ExampleItem(builder: _buildPopFromBottomWithCloseAndTitle),
-            ExampleItem(builder: _buildPopFromBottomWithCloseAndLeftTitle),
-            ExampleItem(builder: _buildPopFromBottomWithClose),
-            ExampleItem(builder: _buildPopFromBottomWithTitle),
             ExampleItem(builder: _buildPopFromCenterWithClose),
             ExampleItem(builder: _buildPopFromCenterWithUnderClose),
+            ExampleItem(builder: _buildNestedPopup),
+          ],
+        ),
+        ExampleModule(
+          title: '更多 API',
+          children: [
+            ExampleItem(builder: _buildApiInset),
+            ExampleItem(builder: _buildApiShowOverlayFalse),
+            ExampleItem(builder: _buildApiOnOverlayClick),
+            ExampleItem(builder: _buildApiDuration),
           ],
         ),
       ],
       test: [
         ExampleItem(
-            desc: '操作栏超长文本,指定颜色',
-            builder: (_) {
-              return TButton(
-                text: '底部弹出层-带标题及操作',
-                isBlock: true,
-                theme: TButtonTheme.primary,
-                type: TButtonType.outline,
-                size: TButtonSize.large,
-                onTap: () {
-                  Navigator.of(context).push(
-                    TSlidePopupRoute(
-                      slideTransitionFrom: SlideTransitionFrom.bottom,
-                      builder: (context) {
-                        return TPopupBottomConfirmPanel(
-                          title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                          leftText: '点这里确认!',
-                          leftTextColor: TTheme.of(context).brandNormalColor,
-                          leftClick: () {
-                            TToast.showText('确认', context: context);
-                            Navigator.maybePop(context);
-                          },
-                          rightText: '关闭',
-                          rightTextColor: TTheme.of(context).errorNormalColor,
-                          rightClick: () => Navigator.maybePop(context),
-                          child: Container(height: 200),
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            }),
+          desc: '操作栏超长文本,指定颜色',
+          builder: (_) {
+            return TButton(
+              text: '底部弹出层-带标题及操作',
+              isBlock: true,
+              theme: TButtonTheme.primary,
+              type: TButtonType.outline,
+              size: TButtonSize.large,
+              onTap: () {
+                TPopup.show(
+                  context,
+                  options: TPopupOptions.bottom(
+                      height: 280,
+                      titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
+                      cancelBuilder: (_, close) => GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: close,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: TText(
+                                '点这里确认!',
+                                textColor: TTheme.of(context).brandNormalColor,
+                                font: TTheme.of(context).fontBodyLarge,
+                              ),
+                            ),
+                          ),
+                      confirmBuilder: (_, close) => GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: close,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: TText(
+                                '关闭',
+                                textColor: TTheme.of(context).errorNormalColor,
+                                font: TTheme.of(context).fontBodyLarge,
+                              ),
+                            ),
+                          ),
+                      child: Container(height: 200)),
+                );
+              },
+            );
+          },
+        ),
         ExampleItem(
-            desc: '带关闭超长文本',
-            builder: (_) {
-              return TButton(
-                text: '底部弹出层-带标题及操作',
-                isBlock: true,
-                theme: TButtonTheme.primary,
-                type: TButtonType.outline,
-                size: TButtonSize.large,
-                onTap: () {
-                  Navigator.of(context).push(
-                    TSlidePopupRoute(
-                        slideTransitionFrom: SlideTransitionFrom.bottom,
-                        builder: (context) {
-                          return TPopupBottomDisplayPanel(
+          desc: '带关闭超长文本',
+          builder: (_) {
+            return TButton(
+              text: '底部弹出层-带标题及关闭',
+              isBlock: true,
+              theme: TButtonTheme.primary,
+              type: TButtonType.outline,
+              size: TButtonSize.large,
+              onTap: () {
+                TPopup.show(
+                  context,
+                  options: TPopupOptions.bottom(
+                      height: 280,
+                      headerBuilder: _bottomTitleCloseHeader(
+                        title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                      ),
+                      child: Container(height: 200)),
+                );
+              },
+            );
+          },
+        ),
+        ExampleItem(
+          desc: '修改圆角',
+          builder: (_) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TButton(
+                  text: '底部弹出层-修改圆角',
+                  isBlock: true,
+                  theme: TButtonTheme.primary,
+                  type: TButtonType.outline,
+                  size: TButtonSize.large,
+                  onTap: () {
+                    TPopup.show(
+                      context,
+                      options: TPopupOptions.bottom(
+                          height: 280,
+                          radius: 6,
+                          headerBuilder: _bottomTitleCloseHeader(
                             title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                            closeColor: TTheme.of(context).errorNormalColor,
-                            closeClick: () => Navigator.maybePop(context),
-                            child: Container(height: 200),
-                          );
-                        }),
-                  );
-                },
-              );
-            }),
-        ExampleItem(
-            desc: '修改圆角',
-            builder: (_) {
-              return Column(
-                // spacing: 16,
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TButton(
-                    text: '底部弹出层-修改圆角',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.bottom,
-                            builder: (context) {
-                              return TPopupBottomDisplayPanel(
-                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                                closeColor:
-                                    TTheme.of(context).errorNormalColor,
-                                closeClick: () => Navigator.maybePop(context),
-                                child: Container(height: 200),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TButton(
-                    text: '底部弹出层-修改圆角',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.bottom,
-                            builder: (context) {
-                              return TPopupBottomConfirmPanel(
-                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                                leftText: '点这里确认!',
-                                leftTextColor:
-                                    TTheme.of(context).brandNormalColor,
-                                leftClick: () {
-                                  TToast.showText('确认', context: context);
-                                  Navigator.maybePop(context);
-                                },
-                                rightText: '关闭',
-                                rightTextColor:
-                                    TTheme.of(context).errorNormalColor,
-                                rightClick: () => Navigator.maybePop(context),
-                                child: Container(height: 200),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TButton(
-                    text: '居中弹出层-修改圆角',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.center,
-                            builder: (context) {
-                              return TPopupCenterPanel(
-                                closeColor:
-                                    TTheme.of(context).errorNormalColor,
-                                closeClick: () {
-                                  Navigator.maybePop(context);
-                                },
-                                child: const SizedBox(height: 240, width: 240),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TButton(
-                    text: '居中弹出层-底部关闭-修改圆角',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.center,
-                            builder: (context) {
-                              return TPopupCenterPanel(
-                                closeUnderBottom: true,
-                                closeClick: () {
-                                  Navigator.maybePop(context);
-                                },
-                                child: const SizedBox(height: 240, width: 240),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                ],
-              );
-            }),
+                          ),
+                          child: Container(height: 200)),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                TButton(
+                  text: '底部弹出层-修改圆角',
+                  isBlock: true,
+                  theme: TButtonTheme.primary,
+                  type: TButtonType.outline,
+                  size: TButtonSize.large,
+                  onTap: () {
+                    TPopup.show(
+                      context,
+                      options: TPopupOptions.bottom(
+                          height: 280,
+                          radius: 6,
+                          titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
+                          cancelBuilder: (_, close) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: close,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 8),
+                                  child: TText(
+                                    '点这里确认!',
+                                    textColor: TTheme.of(context).brandNormalColor,
+                                    font: TTheme.of(context).fontBodyLarge,
+                                  ),
+                                ),
+                              ),
+                          confirmBuilder: (_, close) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: close,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 8),
+                                  child: TText(
+                                    '关闭',
+                                    textColor: TTheme.of(context).errorNormalColor,
+                                    font: TTheme.of(context).fontBodyLarge,
+                                  ),
+                                ),
+                              ),
+                          child: Container(height: 200)),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                TButton(
+                  text: '居中弹出层-修改圆角',
+                  isBlock: true,
+                  theme: TButtonTheme.primary,
+                  type: TButtonType.outline,
+                  size: TButtonSize.large,
+                  onTap: () {
+                    TPopup.show(
+                      context,
+                      options: TPopupOptions.center(
+                          width: 240,
+                          height: 240,
+                          radius: 6,
+                          closeBuilder: (_, close) => IconButton(
+                                icon: Icon(
+                                  TIcons.close_circle,
+                                  color: TTheme.of(context).errorNormalColor,
+                                  size: 32,
+                                ),
+                                onPressed: close,
+                              ),
+                          child: const SizedBox(height: 240, width: 240)),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                TButton(
+                  text: '居中弹出层-底部关闭-修改圆角',
+                  isBlock: true,
+                  theme: TButtonTheme.primary,
+                  type: TButtonType.outline,
+                  size: TButtonSize.large,
+                  onTap: () {
+                    TPopup.show(
+                      context,
+                      options: TPopupOptions.center(
+                          width: 240,
+                          height: 240,
+                          radius: 6,
+                          child: const SizedBox(height: 240, width: 240)),
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        ),
         ExampleItem(
           desc: '自定义位置',
           builder: (_) {
@@ -226,243 +286,26 @@ class TPopupPage extends StatelessWidget {
               type: TButtonType.outline,
               size: TButtonSize.large,
               onTap: () {
-                var renderBox =
+                final renderBox =
                     navBarkey.currentContext!.findRenderObject() as RenderBox;
-                Navigator.of(context).push(
-                  TSlidePopupRoute(
-                    slideTransitionFrom: SlideTransitionFrom.right,
-                    modalTop: renderBox.size.height,
-                    builder: (context) {
-                      return Container(
+                TPopup.show(
+                  context,
+                  options: TPopupOptions.right(
+                      width: 280,
+                      inset: TPopupRightInset(top: renderBox.size.height),
+                      child: Container(
                         color: TTheme.of(context).bgColorContainer,
-                        width: 280,
-                      );
-                    },
-                  ),
+                      )),
                 );
               },
             );
           },
         ),
-        ExampleItem(
-            desc: '弹出层包含输入框且不会被键盘遮挡',
-            builder: (_) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // spacing: 16,
-                children: [
-                  TButton(
-                    text: '底部弹出层-键盘弹出默认遮挡',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.bottom,
-                            builder: (context) {
-                              return TPopupBottomDisplayPanel(
-                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                                closeColor:
-                                    TTheme.of(context).errorNormalColor,
-                                closeClick: () => Navigator.maybePop(context),
-                                child: Material(
-                                  child: SizedBox(
-                                    height: 100,
-                                    child: TInput(
-                                      type: TInputType.normal,
-                                      leftLabel: '标签文字',
-                                      hintText: '请输入文字',
-                                      maxLength: 10,
-                                      additionInfo: '最大输入10个字符',
-                                    ),
-                                  ),
-                                ),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TButton(
-                    text: '底部弹出层-键盘弹出不遮挡',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.bottom,
-                            focusMove: true,
-                            builder: (context) {
-                              return TPopupBottomDisplayPanel(
-                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                                closeColor:
-                                    TTheme.of(context).errorNormalColor,
-                                closeClick: () {
-                                  Navigator.maybePop(context);
-                                },
-                                child: Material(
-                                  child: SizedBox(
-                                    height: 100,
-                                    child: TInput(
-                                      type: TInputType.normal,
-                                      leftLabel: '标签文字',
-                                      hintText: '请输入文字',
-                                      maxLength: 10,
-                                      additionInfo: '最大输入10个字符',
-                                    ),
-                                  ),
-                                ),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TButton(
-                    text: '居中弹出层-键盘弹出不遮挡',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.center,
-                            focusMove: true,
-                            builder: (context) {
-                              return TPopupCenterPanel(
-                                closeColor:
-                                    TTheme.of(context).errorNormalColor,
-                                closeClick: () {
-                                  Navigator.maybePop(context);
-                                },
-                                child: SizedBox(
-                                  height: 348,
-                                  child: Column(
-                                    children: [
-                                      TInput(
-                                        type: TInputType.normal,
-                                        leftLabel: '标签文字1',
-                                        hintText: '请输入文字1',
-                                        maxLength: 10,
-                                      ),
-                                      TInput(
-                                        type: TInputType.normal,
-                                        leftLabel: '标签文字2',
-                                        hintText: '请输入文字2',
-                                        maxLength: 10,
-                                      ),
-                                      TInput(
-                                        type: TInputType.normal,
-                                        leftLabel: '标签文字3',
-                                        hintText: '请输入文字3',
-                                        maxLength: 10,
-                                      ),
-                                      TInput(
-                                        type: TInputType.normal,
-                                        leftLabel: '标签文字4',
-                                        hintText: '请输入文字4',
-                                        maxLength: 10,
-                                      ),
-                                      TInput(
-                                        type: TInputType.normal,
-                                        leftLabel: '会被键盘遮挡的输入框1',
-                                        hintText: '会被键盘遮挡小部分',
-                                        maxLength: 10,
-                                      ),
-                                      TInput(
-                                        type: TInputType.normal,
-                                        leftLabel: '会被键盘遮挡的输入框2',
-                                        hintText: '会被键盘遮挡全遮挡',
-                                        maxLength: 10,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                radius: 6,
-                              );
-                            }),
-                      );
-                    },
-                  )
-                ],
-              );
-            }),
-        ExampleItem(
-          /// todo fix 动画闪烁
-          desc: '可拖动全屏',
-          builder: (_) {
-            return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // spacing: 16,
-                children: [
-                  TButton(
-                    text: '可拖动全屏',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.bottom,
-                            builder: (context) {
-                              return TPopupBottomDisplayPanel(
-                                title: '标题文字',
-                                draggable: true,
-                                closeColor:
-                                    TTheme.of(context).errorNormalColor,
-                                closeClick: () {
-                                  Navigator.maybePop(context);
-                                },
-                                child: Container(height: 200),
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TButton(
-                    text: '可拖动全屏-带标题及操作',
-                    isBlock: true,
-                    theme: TButtonTheme.primary,
-                    type: TButtonType.outline,
-                    size: TButtonSize.large,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        TSlidePopupRoute(
-                            slideTransitionFrom: SlideTransitionFrom.bottom,
-                            builder: (context) {
-                              return TPopupBottomConfirmPanel(
-                                title: '标题文字',
-                                draggable: true,
-                                leftClick: () {
-                                  Navigator.maybePop(context);
-                                },
-                                rightClick: () {
-                                  TToast.showText('确定', context: context);
-                                  Navigator.maybePop(context);
-                                },
-                                child: Container(height: 200),
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                ]);
-          },
-        ),
       ],
     );
   }
+
+  // --- 01 组件类型（保持原 Demo 文案与交互）---
 
   @Demo(group: 'popup')
   Widget _buildPopFromTop(BuildContext context) {
@@ -473,21 +316,16 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.top,
-              open: () {
-                print('open');
-              },
-              opened: () {
-                print('opened');
-              },
-              builder: (context) {
-                return Container(
-                  color: TTheme.of(context).bgColorContainer,
-                  height: 240,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.top(
+              height: 240,
+              onOpen: () => print('open'),
+              onOpened: () => print('opened'),
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+                height: 240,
+              )),
         );
       },
     );
@@ -502,15 +340,13 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.left,
-              builder: (context) {
-                return Container(
-                  color: TTheme.of(context).bgColorContainer,
-                  width: 280,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.left(
+              width: 280,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+              )),
         );
       },
     );
@@ -525,20 +361,19 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.center,
-              builder: (context) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: TTheme.of(context).bgColorContainer,
-                    borderRadius:
-                        BorderRadius.circular(TTheme.of(context).radiusLarge),
-                  ),
-                  width: 240,
-                  height: 240,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.center(
+              closeBuilder: null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: TTheme.of(context).bgColorContainer,
+                  borderRadius:
+                      BorderRadius.circular(TTheme.of(context).radiusLarge),
+                ),
+                width: 240,
+                height: 240,
+              )),
         );
       },
     );
@@ -553,15 +388,15 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return Container(
-                  color: TTheme.of(context).bgColorContainer,
-                  height: 240,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 240,
+              headerBuilder: null,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+                height: 240,
+              )),
         );
       },
     );
@@ -576,15 +411,81 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.right,
-              builder: (context) {
-                return Container(
-                  color: TTheme.of(context).bgColorContainer,
-                  width: 280,
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.right(
+              width: 280,
+              child: Container(
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        );
+      },
+    );
+  }
+
+  // --- 02 组件示例 ---
+
+  /// 外层 Popup 的 child 内再 `TPopup.show(innerContext, options: …)`：用各自 [TPopupHandle] 关闭。
+  @Demo(group: 'popup')
+  Widget _buildNestedPopup(BuildContext context) {
+    return TButton(
+      text: '内层再弹一层（嵌套叠加）',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopupHandle? outerHandle;
+        outerHandle = TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 360,
+              headerBuilder: null,
+              child: Builder(
+                builder: (innerContext) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TText(
+                          '外层：headerBuilder: null，仅 child',
+                          textColor: TTheme.of(innerContext).textColorSecondary,
+                        ),
+                        const SizedBox(height: 16),
+                        TButton(
+                          text: '打开内层 Popup',
+                          isBlock: true,
+                          theme: TButtonTheme.primary,
+                          size: TButtonSize.large,
+                          onTap: () {
+                            TPopup.show(
+                              innerContext,
+                              options: TPopupOptions.bottom(
+                                height: 280,
+                                titleWidget: const TText('内层标题'),
+                                child: Container(
+                                  height: 160,
+                                  color: TTheme.of(innerContext)
+                                      .bgColorSecondaryContainer,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TButton(
+                          text: '关闭外层',
+                          isBlock: true,
+                          type: TButtonType.outline,
+                          size: TButtonSize.large,
+                          onTap: () => outerHandle?.close(),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )),
         );
       },
     );
@@ -599,54 +500,13 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-            slideTransitionFrom: SlideTransitionFrom.bottom,
-            builder: (context) {
-              return TPopupBottomConfirmPanel(
-                title: '标题文字',
-                leftClick: () {
-                  Navigator.maybePop(context);
-                },
-                rightClick: () {
-                  TToast.showText('确定', context: context);
-                  Navigator.maybePop(context);
-                },
-                child: Container(height: 200),
-              );
-            },
-          ),
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 280,
+              titleWidget: TText('标题文字'),
+              child: Container(height: 200)),
         );
-      },
-    );
-  }
-
-  @Demo(group: 'popup')
-  Widget _buildPopFromBottomWithOperation(BuildContext context) {
-    return TButton(
-      text: '底部弹出层-带操作',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        Navigator.of(context).push(TSlidePopupRoute(
-            modalBarrierColor: TTheme.of(context).fontGyColor2,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
-            builder: (context) {
-              return TPopupBottomConfirmPanel(
-                leftClick: () {
-                  Navigator.maybePop(context);
-                },
-                rightClick: () {
-                  TToast.showText('确定', context: context);
-                  Navigator.maybePop(context);
-                },
-                child: Container(
-                  height: 200,
-                ),
-              );
-            }));
       },
     );
   }
@@ -660,97 +520,49 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return TPopupBottomDisplayPanel(
-                  title: '标题文字',
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: Container(height: 200),
-                );
-              }),
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'popup')
-  Widget _buildPopFromBottomWithCloseAndLeftTitle(BuildContext context) {
-    return TButton(
-      text: '底部弹出层-带左边标题及关闭',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return TPopupBottomDisplayPanel(
-                  title: '标题文字',
-                  titleLeft: true,
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: Container(height: 200),
-                );
-              }),
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'popup')
-  Widget _buildPopFromBottomWithClose(BuildContext context) {
-    return TButton(
-      text: '底部弹出层-带关闭',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return TPopupBottomDisplayPanel(
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: Container(height: 200),
-                );
-              }),
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'popup')
-  Widget _buildPopFromBottomWithTitle(BuildContext context) {
-    return TButton(
-      text: '底部弹出层-仅标题',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return TPopupBottomDisplayPanel(
-                  title: '标题文字',
-                  hideClose: true,
-                  // closeClick: () {
-                  //   Navigator.maybePop(context);
-                  // },
-                  child: Container(height: 200),
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 280,
+              cancelBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '关闭',
+                        textColor: TTheme.of(context).textColorSecondary,
+                        font: TTheme.of(context).fontBodyLarge,
+                      ),
+                    ),
+                  ),
+              titleWidget: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(TIcons.info_circle,
+                      color: TTheme.of(context).brandNormalColor, size: 18),
+                  const SizedBox(width: 4),
+                  TText(
+                    '自定义标题',
+                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TTheme.of(context).fontTitleMedium,
+                  ),
+                ],
+              ),
+              confirmBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '完成',
+                        textColor: TTheme.of(context).brandNormalColor,
+                        font: TTheme.of(context).fontTitleMedium,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+              child: Container(height: 200)),
         );
       },
     );
@@ -765,18 +577,21 @@ class TPopupPage extends StatelessWidget {
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              isDismissible: false,
-              slideTransitionFrom: SlideTransitionFrom.center,
-              builder: (context) {
-                return TPopupCenterPanel(
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: const SizedBox(width: 240, height: 240),
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.center(
+              closeOnOverlayClick: false,
+              width: 240,
+              height: 240,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.close_circle,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 32,
+                    ),
+                    onPressed: close,
+                  ),
+              child: const SizedBox(width: 240, height: 240)),
         );
       },
     );
@@ -785,25 +600,129 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
     return TButton(
-      text: '居中弹出层-关闭在下方',
+      text: '居中弹出层-自定义下方按钮',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              isDismissible: false,
-              slideTransitionFrom: SlideTransitionFrom.center,
-              builder: (context) {
-                return TPopupCenterPanel(
-                  closeUnderBottom: true,
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: const SizedBox(width: 240, height: 240),
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.center(
+              closeOnOverlayClick: true,
+              width: 240,
+              height: 200,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.poweroff,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 36,
+                    ),
+                    onPressed: close,
+                  ),
+              child: Container(
+                width: 240,
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        );
+      },
+    );
+  }
+
+  // --- 更多 API ---
+
+  @Demo(group: 'popup')
+  Widget _buildApiInset(BuildContext context) {
+    return TButton(
+      text: 'bottom inset.left/right',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 320,
+              inset: const TPopupBottomInset(left: 16, right: 16),
+              titleWidget: TText('左右留白'),
+              child: Container(
+                height: 240,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildApiShowOverlayFalse(BuildContext context) {
+    return TButton(
+      text: 'showOverlay: false（透明模态）',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 280,
+              showOverlay: false,
+              modal: true,
+              // 不显示可见蒙层，但仍阻断背景交互；须保留其它关闭入口。
+              titleWidget: const TText('透明模态'),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildApiOnOverlayClick(BuildContext context) {
+    return TButton(
+      text: 'onOverlayClick',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 260,
+              onOverlayClick: () => TToast.showText('点击蒙层', context: context),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildApiDuration(BuildContext context) {
+    return TButton(
+      text: 'animationDuration: 600ms',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 240,
+              animationDuration: const Duration(milliseconds: 600),
+              child: Container(
+                height: 200,
+                color: TTheme.of(context).bgColorContainer,
+              )),
         );
       },
     );

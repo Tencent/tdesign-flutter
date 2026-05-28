@@ -3,15 +3,20 @@
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        Text(
+            '选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 4),
         Text('提示: 标灰的选项不可选（第1列「保密」、第2列「A排1座/A排6座/A排7座/A排8座/A排12座」）',
-            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+            style: TextStyle(
+                fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: itemDisabledItems, initialValue: const ['M', 'A5'],
+          child: TPicker(
+              items: itemDisabledItems,
+              initialValue: const ['M', 'A5'],
               onChange: (v) => setState(() =>
                   selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
         ),

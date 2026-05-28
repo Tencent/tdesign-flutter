@@ -8,6 +8,10 @@ on:
     types:
       - completed
 
+permissions:
+  actions: read
+  pull-requests: write
+
 jobs:
   preview-success-web:
     runs-on: ubuntu-latest
@@ -74,7 +78,7 @@ jobs:
           echo "APK download URL: $APK_URL"
 
       - name: update status comment
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -90,7 +94,7 @@ jobs:
 
       - name: The job failed
         if: ${{ failure() }}
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -122,7 +126,7 @@ jobs:
           done < build-env.txt
 
       - name: The job failed
-        uses: actions-cool/maintain-one-comment@v3
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |

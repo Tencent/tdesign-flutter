@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
-import '../popup/t_popup_route.dart';
 import 't_image_viewer_widget.dart';
 
 /// 图片预览工具

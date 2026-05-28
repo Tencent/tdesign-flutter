@@ -7,18 +7,49 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: (context) {
-                return TPopupBottomDisplayPanel(
-                  title: '标题文字',
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: Container(height: 200),
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 280,
+              cancelBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '关闭',
+                        textColor: TTheme.of(context).textColorSecondary,
+                        font: TTheme.of(context).fontBodyLarge,
+                      ),
+                    ),
+                  ),
+              titleWidget: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(TIcons.info_circle,
+                      color: TTheme.of(context).brandNormalColor, size: 18),
+                  const SizedBox(width: 4),
+                  TText(
+                    '自定义标题',
+                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TTheme.of(context).fontTitleMedium,
+                  ),
+                ],
+              ),
+              confirmBuilder: (_, close) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: close,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: TText(
+                        '完成',
+                        textColor: TTheme.of(context).brandNormalColor,
+                        font: TTheme.of(context).fontTitleMedium,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+              child: Container(height: 200)),
         );
       },
     );

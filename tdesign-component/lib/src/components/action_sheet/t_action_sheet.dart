@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
-import '../popup/t_popup_route.dart';
+import '../popup/t_popup.dart';
 import 't_action_sheet.dart';
 import 't_action_sheet_grid.dart';
 import 't_action_sheet_group.dart';
@@ -9,7 +9,8 @@ import 't_action_sheet_list.dart';
 
 export 't_action_sheet_item.dart';
 
-typedef TActionSheetItemCallback = void Function(TActionSheetItem item, int index);
+typedef TActionSheetItemCallback = void Function(
+    TActionSheetItem item, int index);
 
 enum TActionSheetTheme { list, grid, group }
 
@@ -112,7 +113,7 @@ class TActionSheet {
   /// 使用安全区域
   final bool useSafeArea;
 
-  static TSlidePopupRoute? _actionSheetRoute;
+  static TPopupHandle? _actionSheetHandle;
 
   /// 显示列表类型面板
   static void showListActionSheet(
@@ -253,9 +254,7 @@ class TActionSheet {
 
   @mustCallSuper
   void close() {
-    if (_actionSheetRoute != null) {
-      Navigator.of(context).pop();
-    }
+    _actionSheetHandle?.close();
   }
 
   /// 创建路由
@@ -280,66 +279,70 @@ class TActionSheet {
     VoidCallback? onClose,
     bool useSafeArea = true,
   }) {
-    if (_actionSheetRoute != null) {
+    if (_actionSheetHandle?.isShowing == true) {
       return;
     }
 
     cancelText = cancelText ?? context.resource.cancel;
 
-    _actionSheetRoute = TSlidePopupRoute(
-      slideTransitionFrom: SlideTransitionFrom.bottom,
-      isDismissible: showOverlay ? closeOnOverlayClick : false,
-      modalBarrierColor: showOverlay ? null : Colors.transparent,
-      builder: (context) {
-        switch (theme) {
-          case TActionSheetTheme.list:
-            return TActionSheetList(
-              items: items,
-              align: align,
-              cancelText: cancelText,
-              description: description,
-              showCancel: showCancel,
-              onCancel: onCancel,
-              onSelected: onSelected,
-              useSafeArea: useSafeArea,
-            );
-          case TActionSheetTheme.grid:
-            return TActionSheetGrid(
-              items: items,
-              align: align,
-              onSelected: onSelected,
-              showCancel: showCancel,
-              showPagination: showPagination,
-              scrollable: scrollable,
-              cancelText: cancelText,
-              description: description,
-              count: count,
-              rows: rows,
-              onCancel: onCancel,
-              itemHeight: itemHeight,
-              itemMinWidth: itemMinWidth,
-              useSafeArea: useSafeArea,
-            );
-          case TActionSheetTheme.group:
-            return TActionSheetGroup(
-              items: items,
-              align: align,
-              cancelText: cancelText,
-              showCancel: showCancel,
-              onCancel: onCancel,
-              onSelected: onSelected,
-              itemHeight: itemHeight,
-              itemMinWidth: itemMinWidth,
-              useSafeArea: useSafeArea,
-            );
-          default:
-            return const SizedBox.shrink();
-        }
-      },
+    Widget sheetChild;
+    switch (theme) {
+      case TActionSheetTheme.list:
+        sheetChild = TActionSheetList(
+          items: items,
+          align: align,
+          cancelText: cancelText,
+          description: description,
+          showCancel: showCancel,
+          onCancel: onCancel,
+          onSelected: onSelected,
+          useSafeArea: useSafeArea,
+        );
+        break;
+      case TActionSheetTheme.grid:
+        sheetChild = TActionSheetGrid(
+          items: items,
+          align: align,
+          onSelected: onSelected,
+          showCancel: showCancel,
+          showPagination: showPagination,
+          scrollable: scrollable,
+          cancelText: cancelText,
+          description: description,
+          count: count,
+          rows: rows,
+          onCancel: onCancel,
+          itemHeight: itemHeight,
+          itemMinWidth: itemMinWidth,
+          useSafeArea: useSafeArea,
+        );
+        break;
+      case TActionSheetTheme.group:
+        sheetChild = TActionSheetGroup(
+          items: items,
+          align: align,
+          cancelText: cancelText,
+          showCancel: showCancel,
+          onCancel: onCancel,
+          onSelected: onSelected,
+          itemHeight: itemHeight,
+          itemMinWidth: itemMinWidth,
+          useSafeArea: useSafeArea,
+        );
+        break;
+    }
+
+    _actionSheetHandle = TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        cancelBuilder: null,
+        confirmBuilder: null,
+        showOverlay: showOverlay,
+        closeOnOverlayClick: showOverlay && closeOnOverlayClick,
+        overlayColor: showOverlay ? null : Colors.transparent,
+        onClosed: onClose,
+        child: sheetChild,
+      ),
     );
-    Navigator.of(context).push(_actionSheetRoute!).then((_) {
-      _actionSheetRoute = null;
-      onClose?.call();
-    });
   }
 }

@@ -7,7 +7,7 @@ import '../cell/t_cell.dart';
 import '../cell/t_cell_group.dart';
 import '../cell/t_cell_style.dart';
 import '../icon/t_icons.dart';
-import '../popup/t_popup_route.dart';
+import '../popup/t_popup.dart';
 import 't_drawer_widget.dart';
 
 /// 抽屉方向
@@ -98,25 +98,33 @@ class TDrawer {
   /// 是否显示最后一行分割线
   final bool? isShowLastBordered;
 
-  TSlidePopupRoute? _drawerRoute;
+  TPopupHandle? _drawerHandle;
 
   void show() {
-    if (_drawerRoute != null) {
-      return; // 如果抽屉已经显示了，就不要再显示
+    if (_drawerHandle?.isShowing == true) {
+      return;
     }
 
     final overlayEnabled = showOverlay ?? true;
     final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
+    final popupPlacement = placement == TDrawerPlacement.right
+        ? TPopupPlacement.right
+        : TPopupPlacement.left;
+    final popupInset = placement == TDrawerPlacement.right
+        ? TPopupRightInset(top: drawerTop ?? 0)
+        : TPopupLeftInset(top: drawerTop ?? 0);
 
-    _drawerRoute = TSlidePopupRoute(
-      slideTransitionFrom: placement == TDrawerPlacement.right
-          ? SlideTransitionFrom.right
-          : SlideTransitionFrom.left,
-      isDismissible: dismissible,
-      modalBarrierColor: overlayEnabled ? null : Colors.transparent,
-      modalTop: drawerTop,
-      builder: (context) {
-        return TDrawerWidget(
+    _drawerHandle = TPopup.show(
+      context,
+      options: TPopupOptions(
+        placement: popupPlacement,
+        width: width,
+        inset: popupInset,
+        showOverlay: overlayEnabled,
+        closeOnOverlayClick: dismissible,
+        overlayColor: overlayEnabled ? null : Colors.transparent,
+        onClosed: _deleteRouter,
+        child: TDrawerWidget(
           footer: footer,
           items: items,
           contentWidget: contentWidget,
@@ -129,14 +137,9 @@ class TDrawer {
           backgroundColor: backgroundColor,
           bordered: bordered,
           isShowLastBordered: isShowLastBordered,
-        );
-      },
+        ),
+      ),
     );
-
-    Navigator.of(context).push(_drawerRoute!).then((_) {
-      // 当抽屉关闭时，将_drawerRoute置为null
-      _deleteRouter();
-    });
   }
 
   void open() {
@@ -145,14 +148,11 @@ class TDrawer {
 
   @mustCallSuper
   void close() {
-    if (_drawerRoute != null) {
-      Navigator.of(context).pop();
-      _deleteRouter();
-    }
+    _drawerHandle?.close();
   }
 
   void _deleteRouter() {
-    _drawerRoute = null;
+    _drawerHandle = null;
     onClose?.call();
   }
 }

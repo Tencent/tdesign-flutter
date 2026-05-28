@@ -3,8 +3,6 @@ import '../../../tdesign_flutter.dart';
 
 typedef CalendarBuilder = Widget Function(BuildContext context);
 
-enum CalendarTrigger { closeBtn, confirmBtn, overlay }
-
 /// 单元格组件popup模式
 class TCalendarPopup {
   TCalendarPopup(
@@ -53,7 +51,7 @@ class TCalendarPopup {
   /// 点击确认按钮时触发
   final void Function(List<int> value)? onConfirm;
 
-  static TSlidePopupRoute? _calendarPopup;
+  static TPopupHandle? _calendarHandle;
 
   /// 当前选中值
   final ValueNotifier<List<int>> _selected = ValueNotifier<List<int>>([]);
@@ -65,33 +63,43 @@ class TCalendarPopup {
 
   /// 打开日历
   void show() {
-    if (_calendarPopup != null) {
+    if (_calendarHandle?.isShowing == true) {
       return;
     }
-    _calendarPopup = TSlidePopupRoute(
-      isDismissible: false,
-      slideTransitionFrom: SlideTransitionFrom.bottom,
-      modalTop: top,
-      barrierClick: () {
-        if (_autoClose) {
-          close();
-        }
-      },
-      builder: (context) {
-        final childWidget = builder?.call(context) ?? child;
-        return TCalendarInherited(
+    final childWidget = builder?.call(context) ?? child;
+    final topInset = top?.clamp(0.0, double.infinity).toDouble();
+    final maxHeight = topInset == null
+        ? null
+        : (MediaQuery.sizeOf(context).height - topInset)
+            .clamp(0.0, double.infinity)
+            .toDouble();
+    _calendarHandle = TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        cancelBuilder: null,
+        confirmBuilder: null,
+        closeOnOverlayClick: false,
+        onOverlayClick: () {
+          if (_autoClose) {
+            close();
+          }
+        },
+        onClosed: _deleteRouter,
+        child: TCalendarInherited(
           selected: _selected,
           usePopup: true,
           confirmBtn: confirmBtn,
           onClose: _onClose,
           onConfirm: _onConfirm,
-          child: childWidget!,
-        );
-      },
+          child: maxHeight == null
+              ? childWidget!
+              : ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: maxHeight),
+                  child: childWidget!,
+                ),
+        ),
+      ),
     );
-    Navigator.of(context).push(_calendarPopup!).then((_) {
-      _deleteRouter();
-    });
   }
 
   void _onClose() {
@@ -109,14 +117,11 @@ class TCalendarPopup {
 
   /// 关闭日历
   void close() {
-    if (_calendarPopup != null) {
-      Navigator.of(context).pop();
-      // _deleteRouter();
-    }
+    _calendarHandle?.close();
   }
 
   void _deleteRouter() {
-    _calendarPopup = null;
+    _calendarHandle = null;
     onClose?.call();
   }
 }
