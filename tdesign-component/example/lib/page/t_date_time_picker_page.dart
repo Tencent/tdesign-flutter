@@ -17,6 +17,8 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   TDateTimePickerValue? _timeSelected;
   TDateTimePickerValue? _rangeSelected;
   TDateTimePickerValue? _weekSelected;
+  final ValueNotifier<TDateTimePickerValue?> _inlineSelectedNotifier =
+      ValueNotifier<TDateTimePickerValue?>(null);
 
   /// 复用上次选择结果回放为 `defaultValue` 时使用的固定 fallback。
   ///
@@ -26,6 +28,12 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   static final _kReplayFallback = DateTime(2000, 1, 1);
 
   @override
+  void dispose() {
+    _inlineSelectedNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
@@ -33,6 +41,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
       exampleCodeGroup: 'date-time-picker',
       children: [
         ExampleModule(title: '基础用法', children: [
+          ExampleItem(desc: '不使用弹窗（内嵌）', builder: _buildInline),
           ExampleItem(desc: '年月日选择器', builder: _buildBase),
           ExampleItem(desc: '选择年月', builder: _buildYearMonth),
           ExampleItem(desc: '选择时分', builder: _buildTime),
@@ -48,13 +57,54 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     );
   }
 
+  @Demo(group: 'date-time-picker')
+  Widget _buildInline(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: ValueListenableBuilder<TDateTimePickerValue?>(
+              valueListenable: _inlineSelectedNotifier,
+              builder: (context, selected, _) => TText(
+                '当前选择：${_formatResult(selected)}',
+                textColor: TTheme.of(context).textColorSecondary,
+              ),
+            ),
+          ),
+          TDateTimePicker(
+            mode: DateTimePickerMode.combined(
+              dateMode: DateMode.date,
+              timeMode: TimeMode.minute,
+            ),
+            title: '内嵌日期时间选择',
+            defaultValue:
+                _inlineSelectedNotifier.value
+                        ?.toDateTime(fallback: _kReplayFallback) ??
+                    DateTime.now(),
+            onChange: (result) => _inlineSelectedNotifier.value = result,
+            onConfirm: (result) => _inlineSelectedNotifier.value = result,
+          ),
+        ],
+      ),
+    );
+  }
+
   /// 弹窗工具方法：从底部滑入选择器面板
   void _showPickerPopup(BuildContext context, {required Widget picker}) {
-    Navigator.of(context).push(
-      TSlidePopupRoute(
-        slideTransitionFrom: SlideTransitionFrom.bottom,
-        builder: (ctx) => Material(
-          color: TTheme.of(ctx).bgColorContainer,
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        cancelBuilder: null,
+        confirmBuilder: null,
+        child: Material(
+          color: TTheme.of(context).bgColorContainer,
           child: SafeArea(top: false, child: picker),
         ),
       ),
@@ -113,7 +163,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.date,
+            mode: DateTimePickerMode.ymd,
             title: '请选择日期',
             defaultValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
@@ -166,7 +216,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.combined(time: TimeMode.minute),
+            mode: DateTimePickerMode.combined(timeMode: TimeMode.minute),
             title: '请选择时分',
             defaultValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
@@ -193,8 +243,8 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode.combined(
-              date: DateMode.date,
-              time: TimeMode.minute,
+              dateMode: DateMode.date,
+              timeMode: TimeMode.minute,
             ),
             title: '2024 ~ 2026',
             start: DateTime(2024, 1, 1),
@@ -225,7 +275,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.date,
+            mode: DateTimePickerMode.ymd,
             showWeek: true,
             title: '请选择日期',
             defaultValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),

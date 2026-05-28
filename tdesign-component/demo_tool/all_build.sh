@@ -48,6 +48,8 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/checkbox" --name TCheckbox,TCheckboxGroup --folder-name checkbox --output "$PARENT_DIR/example/assets/api/" --only-api
 # picker
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TPickerOption,TPickerValue,TPickerLoadEvent,TPickerColumns,TPickerLinked,TPickerItems,TPickerKeys --folder-name picker --output "$PARENT_DIR/example/assets/api/" --only-api
+# date-time-picker
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/date_time_picker" --name TDateTimePicker,DateTimePickerMode,TDateTimePickerValue --folder-name date-time-picker --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # form
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/form" --name TForm,TFormItem,TFormItemType,TFormValidation --folder-name form --output "$PARENT_DIR/example/assets/api/" --only-api
 # input

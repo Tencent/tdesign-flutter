@@ -8,7 +8,7 @@
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.date,
+            mode: DateTimePickerMode.ymd,
             showWeek: true,
             title: '请选择日期',
             defaultValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),

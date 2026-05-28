@@ -9,8 +9,8 @@
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode.combined(
-              date: DateMode.date,
-              time: TimeMode.minute,
+              dateMode: DateMode.date,
+              timeMode: TimeMode.minute,
             ),
             title: '2024 ~ 2026',
             start: DateTime(2024, 1, 1),

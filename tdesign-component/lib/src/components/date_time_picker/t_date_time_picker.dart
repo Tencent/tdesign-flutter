@@ -3,100 +3,15 @@ import 'package:flutter/material.dart';
 import '../picker/t_picker.dart';
 import '../picker/t_picker_items.dart';
 import '../picker/t_picker_value.dart';
+import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
 import 't_date_time_picker_model.dart';
 
+export 't_date_time_picker_enums.dart';
 export 't_date_time_picker_model.dart';
 
 /// 日期/时间选择器。
-///
-/// 基于 [TPicker] 的薄适配组件——仅持有一个 [DateTimePickerSnapshot] 单一
-/// 真相源，所有 UI 渲染、滚轮交互、工具栏插槽完全委托给 [TPicker]。
-///
-/// 通过 [mode] 控制列结构（快捷模式或 [DateTimePickerMode.combined]），通过
-/// [start] / [end] 限制各列可选范围，通过 [format] 自定义 label 显示。
-///
-/// ## 快速上手
-///
-/// ```dart
-/// // 年月日
-/// TDateTimePicker(
-///   mode: DateTimePickerMode.date,
-///   onConfirm: (v) {
-///     final dt = v.toDateTime(); // → DateTime(2026, 5, 15)
-///   },
-/// )
-///
-/// // 只时分
-/// TDateTimePicker(
-///   mode: DateTimePickerMode.combined(time: TimeMode.minute),
-///   onConfirm: (v) => print('${v.hour}:${v.minute}'),
-/// )
-///
-/// // 年月日 + 显示星期
-/// TDateTimePicker(
-///   mode: DateTimePickerMode.date,
-///   showWeek: true,                    // 日列 label 变为 "19日 周六"
-///   onConfirm: (v) => print(v.toDateTime().weekday),
-/// )
-/// ```
-///
-/// ## 弹窗
-///
-/// 本组件**不内置弹窗**。需要从底部滑出时业务方自行包 `TSlidePopupRoute`：
-///
-/// ```dart
-/// Navigator.of(context).push(TSlidePopupRoute(
-///   slideTransitionFrom: SlideTransitionFrom.bottom,
-///   builder: (ctx) => TDateTimePicker(
-///     mode: DateTimePickerMode.date,
-///     onCancel: () => Navigator.pop(ctx),
-///     onConfirm: (v) {
-///       setState(() => _date = v.toDateTime());
-///       Navigator.pop(ctx);
-///     },
-///   ),
-/// ));
-/// ```
-///
-/// ## 与 TDesign mobile-vue API 对齐情况
-///
-/// 本组件在保持 Flutter 习惯的前提下尽量对齐 mobile-vue：
-///
-/// - `mode` 语义完全对齐（`year/month/date/hour/minute/second` + `combined`）；
-/// - `start / end / showWeek / title / format / onCancel / onChange / onConfirm`
-///   语义对齐；
-/// - `defaultValue` 命名对齐 mobile-vue `defaultValue`（Flutter 习惯为
-///   `initialValue`，此处优先对齐跨端语义）；
-/// - `cancelText / confirmText` 命名对齐 mobile-vue `cancelBtn / confirmBtn`；
-/// - 同时保留 `cancel / confirm` 高级 Widget 插槽（Flutter idiom）。
-///
-/// ## 可选范围 [start] / [end] 的语义
-///
-/// 用于限制各列**可选条目**，规则由 [DateTimePickerSnapshot.toPickerColumns] 实现。
-/// 简言之：
-///
-/// - **年列**：`[start.year, end.year]`；缺省一侧时按默认偏移推算。
-/// - **月/日/时/分/秒列**：仅在「当前年/日/时刻」与边界对齐时收紧，否则保持完整范围。
-///
-/// 组件内部会自动将选中值钳制到 `[start, end]` 闭区间内，因此任意确认结果都不会越界。
-///
-/// ## 非法范围
-///
-/// 当 `start.isAfter(end)` 时：debug 下触发 `assert`；release 下忽略 [end]，
-/// 仅以 [start] 作为下界。
 class TDateTimePicker extends StatefulWidget {
-  /// 星期 label，下标 = `weekday - 1`，固定顺序「周一 … 周日」。
-  ///
-  /// 与 `showWeek` 显示的星期文案一致。业务方做自定义 label 或外部展示星期
-  /// （如 cell 注脚）时可直接复用本常量，避免重复维护：
-  ///
-  /// ```dart
-  /// final dt = value.toDateTime();
-  /// final weekText = TDateTimePicker.weekLabels[dt.weekday - 1];
-  /// ```
-  static const List<String> weekLabels = DateTimePickerSnapshot.weekLabels;
-
   const TDateTimePicker({
     super.key,
     required this.mode,
@@ -111,58 +26,36 @@ class TDateTimePicker extends StatefulWidget {
     this.title,
     this.titleWidget,
     this.cancel,
-    this.cancelText,
     this.confirm,
-    this.confirmText,
     this.height,
     this.itemCount,
   });
 
-  /// 列结构模式（必填）。详见 [DateTimePickerMode]。
+  /// 星期 label，下标 = weekday - 1（周一 … 周日），与 [showWeek] 日列文案一致。
+  static const List<String> weekLabels = DateTimePickerSnapshot.weekLabels;
+
+  /// 列结构（必填）。详见 [DateTimePickerMode]。
   final DateTimePickerMode mode;
 
-  /// 自定义列 label 文案。
-  ///
-  /// 仅影响显示（[TPickerOption.label]），不影响回调中的 value。返回 `null`
-  /// 时使用默认格式（数字 + 中文单位，如 `"2026年"`、`"5月"`）。
-  ///
-  /// **性能提示**：每次 [format] 引用变化都会触发列重建；如在 `build` 内联
-  /// 函数，请确保父级 rebuild 不频繁，或将 [format] 提到 `State` 字段以稳定引用。
+  /// 自定义列 label（仅影响展示，不影响回调 value）；返回 null 用默认格式；format 引用变化会触发列重建，宜提到 State 字段。
   final String Function(DateTimeColumn column, int value)? format;
 
-  /// 可选范围起始（闭区间下界）。
-  ///
-  /// `null` 时年列下界为「打开时锚定年份 − 10」（锚定于首次打开时的选中年，
-  /// 不随滚动年份漂移）。
+  /// 可选范围下界（闭区间）；null 时年列下界为打开时锚定年份 - 10（不随滚动漂移）。
   final DateTime? start;
 
-  /// 可选范围结束（闭区间上界）。
-  ///
-  /// `null` 时年列上界为「打开时锚定年份 + 10」（锚定于首次打开时的选中年，
-  /// 不随滚动年份漂移）。
+  /// 可选范围上界（闭区间）；null 时年列上界为打开时锚定年份 + 10（不随滚动漂移）。
   final DateTime? end;
 
-  /// 默认选中值（非受控属性，命名对齐 mobile-vue `defaultValue`）。
-  ///
-  /// 缺省时使用 [DateTime.now]。若超出 `[start, end]` 范围，会自动钳制到边界。
-  /// 业务方想"受控"展示时，请使用 [Key] 强制重建 + 新 [defaultValue]。
+  /// 首次构建时的默认选中值；缺省为 DateTime.now；超出 [start, end] 会钳制；滚动后改此值需配合 Key 重建。
   final DateTime? defaultValue;
 
-  /// 是否在日列附加显示星期文字（如 `"19日 周六"`）。
-  ///
-  /// 仅影响**日列**的默认 label，对 value 无影响。`true` 时滚动日列会跟随
-  /// 切换显示对应的星期。如需独立查询星期，请用 `toDateTime().weekday`。
-  ///
-  /// 与 TDesign mobile-vue `showWeek` 语义对齐。
+  /// 日列 label 是否附加星期（如 19日 周六）；仅影响展示，星期值用 toDateTime().weekday。
   final bool showWeek;
 
   /// 点击「取消」按钮的回调。
   final VoidCallback? onCancel;
 
-  /// 选中值变化回调（滚动稳定后实时触发）。
-  ///
-  /// 回调参数为 [TDateTimePickerValue]，仅当前 [mode] 涉及的列字段有值。
-  /// 内部已对规范化值做去重，相同值不会重复触发。
+  /// 选中值变化回调（滚动稳定后实时触发）；参数为 [TDateTimePickerValue]，仅含当前 mode 对应列；相同值不重复触发。
   final void Function(TDateTimePickerValue result)? onChange;
 
   /// 点击「确定」按钮的回调。
@@ -174,21 +67,11 @@ class TDateTimePicker extends StatefulWidget {
   /// 工具栏中部自定义标题组件（优先级高于 [title]）。
   final Widget? titleWidget;
 
-  /// 工具栏左侧自定义插槽（Widget；优先级高于 [cancelText]）。
+  /// 工具栏左侧插槽（Widget）；null 时使用 [TPicker] 默认取消文案。
   final Widget? cancel;
 
-  /// 工具栏左侧文字（命名对齐 mobile-vue `cancelBtn`）。
-  ///
-  /// 仅当 [cancel] 为 `null` 时生效。两者都为 `null` 时使用框架内置文案。
-  final String? cancelText;
-
-  /// 工具栏右侧自定义插槽（Widget；优先级高于 [confirmText]）。
+  /// 工具栏右侧插槽（Widget）；null 时使用 [TPicker] 默认确认文案。
   final Widget? confirm;
-
-  /// 工具栏右侧文字（命名对齐 mobile-vue `confirmBtn`）。
-  ///
-  /// 仅当 [confirm] 为 `null` 时生效。两者都为 `null` 时使用框架内置文案。
-  final String? confirmText;
 
   /// 面板视窗高度（不含工具栏），默认 200。
   final double? height;
@@ -370,8 +253,8 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       initialValue: _pickerInitialValue,
       title: widget.title,
       titleWidget: widget.titleWidget,
-      cancel: _resolveSlot(widget.cancel, widget.cancelText),
-      confirm: _resolveSlot(widget.confirm, widget.confirmText),
+      cancel: _resolveSlot(widget.cancel),
+      confirm: _resolveSlot(widget.confirm),
       height: widget.height ?? 200,
       itemCount: widget.itemCount ?? 5,
       onCancel: widget.onCancel,
@@ -380,13 +263,10 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     );
   }
 
-  /// 工具栏插槽优先级：自定义 [slot] > 文字 [text] > `null`（让上层用默认文案）。
-  static Widget? _resolveSlot(Widget? slot, String? text) {
+  /// 工具栏插槽：返回自定义 [slot]，否则交给上层使用默认文案。
+  static Widget? _resolveSlot(Widget? slot) {
     if (slot != null) {
       return slot;
-    }
-    if (text != null) {
-      return Text(text);
     }
     return null;
   }

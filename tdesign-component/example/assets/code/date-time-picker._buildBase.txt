@@ -8,7 +8,7 @@
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.date,
+            mode: DateTimePickerMode.ymd,
             title: '请选择日期',
             defaultValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),

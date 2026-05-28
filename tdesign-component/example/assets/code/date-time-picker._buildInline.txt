@@ -1,0 +1,38 @@
+
+  Widget _buildInline(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: ValueListenableBuilder<TDateTimePickerValue?>(
+              valueListenable: _inlineSelectedNotifier,
+              builder: (context, selected, _) => TText(
+                '当前选择：${_formatResult(selected)}',
+                textColor: TTheme.of(context).textColorSecondary,
+              ),
+            ),
+          ),
+          TDateTimePicker(
+            mode: DateTimePickerMode.combined(
+              dateMode: DateMode.date,
+              timeMode: TimeMode.minute,
+            ),
+            title: '内嵌日期时间选择',
+            defaultValue:
+                _inlineSelectedNotifier.value
+                        ?.toDateTime(fallback: _kReplayFallback) ??
+                    DateTime.now(),
+            onChange: (result) => _inlineSelectedNotifier.value = result,
+            onConfirm: (result) => _inlineSelectedNotifier.value = result,
+          ),
+        ],
+      ),
+    );
+  }

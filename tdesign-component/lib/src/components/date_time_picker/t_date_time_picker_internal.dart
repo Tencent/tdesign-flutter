@@ -3,17 +3,18 @@ import 'package:meta/meta.dart';
 
 import '../picker/t_picker_items.dart';
 import '../picker/t_picker_option.dart';
+import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_model.dart';
 
 // =============================================================================
 // DateTimePickerMode 的内部子类实现（@internal）
 // =============================================================================
 //
-// 业务方通过 `DateTimePickerMode.year / .month / ... / .combined(...)` 访问，
+// 业务方通过 `DateTimePickerMode.year / .month / .ymd / ... / .combined(...)` 访问，
 // 不应直接构造这两个类型。整个文件 **不被 umbrella 导出**——外部即使想 import
 // 也只能走 `package:tdesign_flutter/src/...` 这种私有路径，并会被 lint 警告。
 
-/// 快捷模式：`DateTimePickerMode.year / .month / .date / .hour / .minute / .second`
+/// 快捷模式：`DateTimePickerMode.year / .month / .ymd / .hour / .minute / .second`
 /// 静态常量背后的实现。
 ///
 /// 与 [CombinedMode] 语义等价（都是「date 粒度 + time 粒度」展开成列），
@@ -38,7 +39,7 @@ class ShortcutMode extends DateTimePickerMode {
   int get hashCode => Object.hash(runtimeType, date, time);
 }
 
-/// 组合模式：`DateTimePickerMode.combined(date: ..., time: ...)` 工厂的返回值。
+/// 组合模式：`DateTimePickerMode.combined(dateMode: ..., timeMode: ...)` 工厂的返回值。
 @internal
 @immutable
 class CombinedMode extends DateTimePickerMode {
