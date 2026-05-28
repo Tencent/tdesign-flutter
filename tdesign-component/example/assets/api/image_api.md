@@ -16,7 +16,7 @@
 | excludeFromSemantics | bool | false | - |
 | filterQuality | FilterQuality | FilterQuality.low | - |
 | fit | BoxFit? | - | 适配样式 |
-| frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统[Image]中注释 |
+| frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统`Image`中注释 |
 | gaplessPlayback | bool | false | - |
 | height | double? | - | 自定义高 |
 | imageFile | File? | - | 图片文件路径 |

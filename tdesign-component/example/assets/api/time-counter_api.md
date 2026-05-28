@@ -29,6 +29,20 @@
 ### TTimeCounterStyle
 #### 简介
 计时组件样式
+
+#### 工厂构造方法
+
+##### TTimeCounterStyle.generateStyle
+
+生成默认样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| size | TTimeCounterSize? | - | - |
+| theme | TTimeCounterTheme? | - | - |
+| splitWithUnit | bool? | - | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -48,20 +62,6 @@
 | timeMargin | EdgeInsets? | - | 时间容器外边距 |
 | timePadding | EdgeInsets? | - | 时间容器内边距 |
 | timeWidth | double? | - | 时间容器宽度 |
-
-
-#### 工厂构造方法
-
-##### TTimeCounterStyle.generateStyle
-
-生成默认样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| size | TTimeCounterSize? | - | - |
-| theme | TTimeCounterTheme? | - | - |
-| splitWithUnit | bool? | - | - |
 
 
 ### TTimeCounterStatus

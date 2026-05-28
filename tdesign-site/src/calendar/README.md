@@ -1446,6 +1446,8 @@ Widget _buildLunar(BuildContext context) {
 
 ## API
 ### TCalendar
+#### 简介
+日历组件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -1486,13 +1488,15 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TCalendarPopup
+#### 简介
+单元格组件popup模式
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | context | BuildContext | - | 上下文 |
 | autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于`child` |
 | child | TCalendar? | - | 日历控件 |
 | confirmBtn | Widget? | - | 自定义确认按钮 |
 | onClose | VoidCallback? | - | 关闭时触发 |
@@ -1502,30 +1506,8 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TCalendarStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| decoration | BoxDecoration? | - | - |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TCalendar.title]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TCalendar.title]的样式 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-
-#### 公开属性
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| bodyPadding | double? | - | 月与月之间的垂直间距 |
-| todayStyle | TextStyle? | - | 当天日期样式 |
-| verticalGap | double? | - | 日期垂直间距，水平间距为[verticalGap] / 2 |
-
+#### 简介
+日历组件样式
 
 #### 工厂构造方法
 
@@ -1547,29 +1529,55 @@ Widget _buildLunar(BuildContext context) {
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| cellDecoration | BoxDecoration? | - | 日期decoration |
+| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
+| cellStyle | TextStyle? | - | 日期样式 |
+| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
+| centreColor | Color? | - | 日期范围内背景样式 |
+| decoration | BoxDecoration? | - | - |
+| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
+| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
+| titleMaxLine | int? | - | header区域 `TCalendar.title`的行数 |
+| titleStyle | TextStyle? | - | header区域 `TCalendar.title`的样式 |
+| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
+
+#### 公开属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| bodyPadding | double? | - | 月与月之间的垂直间距 |
+| todayStyle | TextStyle? | - | 当天日期样式 |
+| verticalGap | double? | - | 日期垂直间距，水平间距为`verticalGap` / 2 |
+
 
 ### TCalendarDataSource
 #### 简介
 日历数据源接口
- 
- 开发者需要实现此接口来提供农历转换能力。
- 组件内部不包含农历算法和数据，完全依赖外部实现。
+
+开发者需要实现此接口来提供农历转换能力。
+组件内部不包含农历算法和数据，完全依赖外部实现。
 
 #### 方法
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| getLunarInfo | TLunarInfo? | required DateTime solarDate | 获取指定阳历日期的农历信息 [solarDate] 阳历日期 返回 null 表示不显示农历信息 |
-| formatDate | String | required DateTime date, required TCalendarDateType type, TLunarInfo? lunarInfo | 格式化日期文本 [date] 阳历日期 [type] 日历类型 [lunarInfo] 农历信息（可选） 返回格式化后的日期字符串 |
-| getSolarTerm | String? | required DateTime date | 获取节气信息（可选实现） [date] 阳历日期 返回节气名称，如"春分"、"秋分"等，无节气则返回 null |
-| getFestival | String? | required DateTime date, TLunarInfo? lunarInfo | 获取节日信息（可选实现） [date] 阳历日期 [lunarInfo] 农历信息（可选） 返回节日名称，如"春节"、"中秋节"等，无节日则返回 null |
-| getHolidayInfo | Map<String, String>? | required DateTime date | 获取假期信息（可选实现） [date] 阳历日期 返回假期类型和名称： - 'holiday': 法定节假日/公共假期（如"国庆节"） - 'workday': 调休工作日（如"补班"） - null: 正常日期 示例返回值： - {'type': 'holiday', 'name': '国庆节'} - {'type': 'workday', 'name': '补班'} - null |
-| formatYear | String | required int year, required TCalendarDateType type | 格式化年份文本 [year] 年份 [type] 日历类型 返回格式化后的年份字符串 阳历示例：2025 -> "2025年" 阴历示例：2025 -> "二〇二五年" |
-| formatMonth | String | required int month, required TCalendarDateType type, bool isLeapMonth | 格式化月份文本 [month] 月份（1-12） [type] 日历类型 [isLeapMonth] 是否是闰月（仅农历有效） 返回格式化后的月份字符串 阳历示例：3 -> "3月" 阴历示例：3 -> "三月"，闰3月 -> "闰三月" |
-| formatDay | String | required int day, required TCalendarDateType type | 格式化日期文本 [day] 日期（1-31） [type] 日历类型 返回格式化后的日期字符串 阳历示例：7 -> "7日" 阴历示例：7 -> "初七" |
+| getLunarInfo | TLunarInfo? | required DateTime solarDate | 获取指定阳历日期的农历信息 返回 null 表示不显示农历信息 |
+| formatDate | String | required DateTime date, required TCalendarDateType type, TLunarInfo? lunarInfo | 格式化日期文本 返回格式化后的日期字符串 |
+| getSolarTerm | String? | required DateTime date | 获取节气信息（可选实现） 返回节气名称，如"春分"、"秋分"等，无节气则返回 null |
+| getFestival | String? | required DateTime date, TLunarInfo? lunarInfo | 获取节日信息（可选实现） 返回节日名称，如"春节"、"中秋节"等，无节日则返回 null |
+| getHolidayInfo | Map<String, String>? | required DateTime date | 获取假期信息（可选实现） 返回假期类型和名称： - 'holiday': 法定节假日/公共假期（如"国庆节"） - 'workday': 调休工作日（如"补班"） - null: 正常日期 示例返回值： - {'type': 'holiday', 'name': '国庆节'} - {'type': 'workday', 'name': '补班'} - null |
+| formatYear | String | required int year, required TCalendarDateType type | 格式化年份文本 返回格式化后的年份字符串 阳历示例：2025 -> "2025年" 阴历示例：2025 -> "二〇二五年" |
+| formatMonth | String | required int month, required TCalendarDateType type, bool isLeapMonth | 格式化月份文本 返回格式化后的月份字符串 阳历示例：3 -> "3月" 阴历示例：3 -> "三月"，闰3月 -> "闰三月" |
+| formatDay | String | required int day, required TCalendarDateType type | 格式化日期文本 返回格式化后的日期字符串 阳历示例：7 -> "7日" 阴历示例：7 -> "初七" |
 
 
 ### TLunarInfo
+#### 简介
+农历日期信息模型
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

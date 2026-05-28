@@ -1,5 +1,8 @@
 ## API
 ### TTag
+#### 简介
+展示型标签组件，仅展示，内部不可更改自身状态
+支持样式：方形/圆角/半圆/带关闭图标
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -28,6 +31,9 @@
 
 
 ### TSelectTag
+#### 简介
+点击型标签组件，点击时内部更改自身状态
+支持样式：方形/圆角/半圆/带关闭图标
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -55,25 +61,8 @@
 
 
 ### TTagStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| border | double | 0 | 线框粗细 |
-| borderColor | Color? | - | 边框颜色 |
-| borderRadius | BorderRadiusGeometry? | - | 圆角 |
-| context | BuildContext? | - | 上下文，方便获取主题内容 |
-| font | Font? | - | 字体尺寸 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| textColor | Color? | - | 文字颜色 |
-
-#### 公开属性
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| closeIconColor | Color? | - | 关闭图标颜色 |
-
+#### 简介
+标签样式
 
 #### 工厂构造方法
 
@@ -111,6 +100,25 @@
 | theme | TTagTheme? | - | - |
 | light | bool | - | - |
 | shape | TTagShape | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| border | double | 0 | 线框粗细 |
+| borderColor | Color? | - | 边框颜色 |
+| borderRadius | BorderRadiusGeometry? | - | 圆角 |
+| context | BuildContext? | - | 上下文，方便获取主题内容 |
+| font | Font? | - | 字体尺寸 |
+| fontWeight | FontWeight? | - | 字体粗细 |
+| textColor | Color? | - | 文字颜色 |
+
+#### 公开属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| closeIconColor | Color? | - | 关闭图标颜色 |
 
 
 ### TTagTheme

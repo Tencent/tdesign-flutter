@@ -739,6 +739,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TButton
+#### 简介
+TD常规按钮
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -771,17 +773,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TButtonStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| frameColor | Color? | - | 边框颜色 |
-| frameWidth | double? | - | 边框宽度 |
-| gradient | Gradient? | - | 渐变背景色 |
-| radius | BorderRadiusGeometry? | - | 自定义圆角 |
-| textColor | Color? | - | 文字颜色 |
-
+#### 简介
+TButton按钮样式
 
 #### 工厂构造方法
 
@@ -827,6 +820,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | context | BuildContext | - | - |
 | theme | TButtonTheme? | - | - |
 | status | TButtonStatus | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| frameColor | Color? | - | 边框颜色 |
+| frameWidth | double? | - | 边框宽度 |
+| gradient | Gradient? | - | 渐变背景色 |
+| radius | BorderRadiusGeometry? | - | 自定义圆角 |
+| textColor | Color? | - | 文字颜色 |
 
 
 ### TButtonSize
