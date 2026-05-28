@@ -302,6 +302,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TTableCol
+#### 简介
+表格列配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -321,6 +323,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TTableEmpty
+#### 简介
+空数据状态
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

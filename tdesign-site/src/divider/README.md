@@ -141,6 +141,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TDivider
+#### 简介
+分割线
+对于非flutter原有的控件，则只需满足TDesign规范即可；
+如果有业务在实际使用，还需兼容实际业务场景。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

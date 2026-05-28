@@ -368,10 +368,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### TRadioGroup
 #### 简介
 RadioGroup分组对象，继承自TCheckboxGroup，字段含义与父类一致
- RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
-
- cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
- 组合为横向、纵向卡片，同时需要在每个TRadio上设置cardMode参数。
+RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
+cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
+组合为横向、纵向卡片，同时需要在每个TRadio上设置cardMode参数。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

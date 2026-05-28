@@ -1,106 +1,209 @@
 ## API
 ### TCalendar
+#### 简介
+日历组件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| anchorDate | DateTime? | - | 锚点日期，打开时滚动到该日期所在月份。 |
-| anchorRevision | int | 0 | 锚点滚动触发序号，默认 `0`。 |
-| animateTo | bool | false | 滚动到选中日期/锚点日期所在月份时是否使用动画，默认 false |
-| cellBuilder | TCalendarCellBuilder? | - | 整格自定义；设置后不再使用默认主区/副标题布局。 |
-| cellHeight | double? | - | 日期单元格高度，默认 60。如需更大行高可传入自定义值（如 80） |
-| dataSource | TCalendarDataSource? | - | 可选数据源，提供副标题字符串（无 [subtitleBuilder] 时生效）。 |
-| firstDayOfWeek | int | 0 | 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。 |
-| height | double? | - | 高度，不传时内嵌模式自动按 5 行日期计算 |
-| initialValue | List<DateTime>? | - | 初始选中日期列表，不传则默认今天。 |
-| key |  | - |  |
-| maxDate | DateTime? | - | 最大可选的日期，不传则默认 2100-12-31 |
-| minDate | DateTime? | - | 最小可选的日期，不传则默认 1970-01-01 |
+| anchorDate | DateTime? | - | 锚点日期 |
+| animateTo | bool? | false | 动画滚动到指定位置 |
+| cellHeight | double? | 60 | 日期高度 |
+| cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
+| dataSource | TCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
+| dateType | TCalendarDateType | TCalendarDateType.solar | 日历类型：阳历或农历 |
+| displayFormat | String? | 'year month' | 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格 |
+| firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
+| format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
+| height | double? | - | 高度 |
+| isTimeUnit | bool? | true | 是否显示时间单位 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认半年后 |
+| minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认今天 |
 | monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
-| monthTitleHeight | double | 22 | 每月标题行高度（如 '2025年6月' 所在行），默认 22 |
-| onCellClick | void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? | - | 点击日期时触发 |
-| onChange | void Function(List<DateTime> value)? | - | 选中值变化时触发 |
+| monthTitleHeight | double? | 22 | 月标题高度 |
+| onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
+| onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
+| onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
+| onHeaderClick | void Function(int index, String week)? | - | 点击周时触发 |
 | onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
-| safeAreaInset | bool | true | 是否适配底部安全区域（如 iPhone Home Indicator），默认 true |
+| pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
+| pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
+| showLunarInfo | bool | false | 阳历模式下是否显示农历信息作为副标题 |
 | style | TCalendarStyle? | - | 自定义样式 |
-| subtitleBuilder | TCalendarSubtitleBuilder? | - | 副标题完全自定义；未设置时可使用 [dataSource.getSubtitle]。 |
-| titleWidget | Widget? | - | 标题组件，可传入 Text 或自定义 Widget |
-| type | CalendarType | CalendarType.single | 日历的选择模式，决定点击日期后的选中行为： |
+| timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
+| title | String? | - | 标题 |
+| titleWidget | Widget? | - | 标题组件 |
+| type | CalendarType? | CalendarType.single | 日历的选择类型，single = 单选；multiple = 多选；range = 区间选择 |
+| useSafeArea | bool? | true | 是否使用安全区域，默认true |
+| useTimePicker | bool? | false | 是否显示时间选择器 |
+| value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
+| width | double? | - | 宽度 |
 
 
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| showPopup |  |   required BuildContext context,  Widget? titleWidget,  CalendarType type,  List<DateTime>? initialValue,  DateTime? minDate,  DateTime? maxDate,  DateTime? anchorDate,  int anchorRevision,  double? popupHeight,  int firstDayOfWeek,  double? cellHeight,  TCalendarStyle? style,  Widget Function(BuildContext context, List<DateTime> selectedDates)? popupOverlayBuilder,  ValueListenable<bool>? popupOverlayExpanded,  Widget Function(VoidCallback onConfirm)? confirmBtnBuilder,  void Function(List<DateTime>)? onConfirm,  VoidCallback? onClose,  void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? onCellClick,  TCalendarCellBuilder? cellBuilder,  TCalendarSubtitleBuilder? subtitleBuilder,  TCalendarDataSource? dataSource,  ValueChanged<DateTime>? onMonthChange,  Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder, | 弹出日历选择器，返回选中的日期列表。     取消或关闭弹窗时返回 `null`；点击确认时返回选中的 [DateTime] 列表。   弹窗内点选过程无 [onChange]；实时联动请用 [popupOverlayBuilder] 的 `dates`，   或自行用 [TCalendarInherited] 监听 [TCalendarInherited.selectedListenable]。     ```dart   final result = await TCalendar.showPopup(     context,     titleWidget: Text('请选择日期'),     type: CalendarType.single,   );   if (result != null) {     print('选中了: $result');   }   ```     若需完全自定义布局，请直接使用 [TCalendar] + [TPopup.show]   / [TPopupOptions.bottom] 自行组装。 |
-
-```
-```
-
-### TCalendarInherited
+### TCalendarPopup
+#### 简介
+单元格组件popup模式
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| child |  | - |  |
-| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | 自定义确认按钮；[onConfirm] 与默认确认按钮一致（回传选中值并关闭弹窗）。 |
-| key |  | - |  |
-| onClose |  | - |  |
-| onConfirm |  | - |  |
-| popupOverlayBuilder | Widget Function(BuildContext context, List<DateTime> selectedDates)? | - | 弹窗模式下日历内容区底部浮层构建器（非 TPopup 面板底部），由 [TCalendar.showPopup] 或手动 |
-| popupOverlayExpanded | ValueListenable<bool>? | - | 浮层是否展开（响应式），需配合 [popupOverlayBuilder]。 |
-| popupConfirmBtn | bool? | - | 是否由 [TCalendar] 渲染底部确认按钮。 |
-| popupControls | bool | true | 是否由 [TCalendar] 自行渲染关闭按钮和标题行。 |
-| selected | ValueNotifier<List<DateTime>> | - | 选中态的可写引用（仅供 [TCalendar] 内部更新使用）。 |
-| usePopup |  | true |  |
+| context | BuildContext | - | 上下文 |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于`child` |
+| child | TCalendar? | - | 日历控件 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| top | double? | - | 距离顶部的距离 |
+| visible | bool? | - | 默认是否显示日历 |
 
-
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| of |  |   required BuildContext context, |  |
-
-```
-```
 
 ### TCalendarStyle
+#### 简介
+日历组件样式
+
+#### 工厂构造方法
+
+##### TCalendarStyle.cellStyle
+
+日期样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| type | DateSelectType? | - | - |
+
+
+##### TCalendarStyle.generateStyle
+
+生成默认样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | cellDecoration | BoxDecoration? | - | 日期decoration |
+| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
+| cellStyle | TextStyle? | - | 日期样式 |
+| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
 | centreColor | Color? | - | 日期范围内背景样式 |
-| dayStyle | TextStyle? | - | 日期主区（默认阳历日数字）样式 |
-| decoration |  | - |  |
+| decoration | BoxDecoration? | - | - |
 | monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| subtitleStyle | TextStyle? | - | 副标题样式（仅 [TCalendarDataSource.getSubtitle] 字符串路径使用） |
 | titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TCalendar.titleWidget]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TCalendar.titleWidget]的样式 |
-| todayDayStyle | TextStyle? | - | 今天日期主区样式 |
+| titleMaxLine | int? | - | header区域 `TCalendar.title`的行数 |
+| titleStyle | TextStyle? | - | header区域 `TCalendar.title`的样式 |
 | weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
 
+#### 公开属性
 
-#### 工厂构造方法
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| bodyPadding | double? | - | 月与月之间的垂直间距 |
+| todayStyle | TextStyle? | - | 当天日期样式 |
+| verticalGap | double? | - | 日期垂直间距，水平间距为`verticalGap` / 2 |
 
-| 名称  | 说明 |
-| --- |  --- |
-| TCalendarStyle.forSelectType  | 按选中态生成单元格样式 |
-| TCalendarStyle.generateStyle  | 生成默认样式 |
-
-```
-```
 
 ### TCalendarDataSource
-```
-```
+#### 简介
+日历数据源接口
 
-### TCalendarCellModel
+开发者需要实现此接口来提供农历转换能力。
+组件内部不包含农历算法和数据，完全依赖外部实现。
+
+#### 方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| getLunarInfo | TLunarInfo? | required DateTime solarDate | 获取指定阳历日期的农历信息 返回 null 表示不显示农历信息 |
+| formatDate | String | required DateTime date, required TCalendarDateType type, TLunarInfo? lunarInfo | 格式化日期文本 返回格式化后的日期字符串 |
+| getSolarTerm | String? | required DateTime date | 获取节气信息（可选实现） 返回节气名称，如"春分"、"秋分"等，无节气则返回 null |
+| getFestival | String? | required DateTime date, TLunarInfo? lunarInfo | 获取节日信息（可选实现） 返回节日名称，如"春节"、"中秋节"等，无节日则返回 null |
+| getHolidayInfo | Map<String, String>? | required DateTime date | 获取假期信息（可选实现） 返回假期类型和名称： - 'holiday': 法定节假日/公共假期（如"国庆节"） - 'workday': 调休工作日（如"补班"） - null: 正常日期 示例返回值： - {'type': 'holiday', 'name': '国庆节'} - {'type': 'workday', 'name': '补班'} - null |
+| formatYear | String | required int year, required TCalendarDateType type | 格式化年份文本 返回格式化后的年份字符串 阳历示例：2025 -> "2025年" 阴历示例：2025 -> "二〇二五年" |
+| formatMonth | String | required int month, required TCalendarDateType type, bool isLeapMonth | 格式化月份文本 返回格式化后的月份字符串 阳历示例：3 -> "3月" 阴历示例：3 -> "三月"，闰3月 -> "闰三月" |
+| formatDay | String | required int day, required TCalendarDateType type | 格式化日期文本 返回格式化后的日期字符串 阳历示例：7 -> "7日" 阴历示例：7 -> "初七" |
+
+
+### TLunarInfo
+#### 简介
+农历日期信息模型
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| date |  | - |  |
-| isLastDayOfMonth |  | - |  |
-| typeNotifier |  | - |  |
+| day | int | - | 农历日期（数字，1-30） |
+| dayText | String | - | 日期文本（如：初七） |
+| isLeapMonth | bool | false | 是否是闰月 |
+| month | int | - | 农历月份（数字，1-12） |
+| monthText | String | - | 月份文本（如：三月、闰三月） |
+| year | int | - | 农历年份（数字） |
+| yearText | String | - | 年份文本（如：二〇二五） |
+
+
+### TCalendarDateType
+#### 简介
+日历类型枚举
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| solar | 阳历（公历） |
+| lunar | 阴历（农历） |
+
+
+### CalendarType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| single | - |
+| multiple | - |
+| range | - |
+
+
+### CalendarTrigger
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| closeBtn | - |
+| confirmBtn | - |
+| overlay | - |
+
+
+### DateSelectType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| selected | - |
+| disabled | - |
+| start | - |
+| centre | - |
+| end | - |
+| empty | - |
+
+
+### CalendarFormat
+#### 类型定义
+
+```dart
+typedef CalendarFormat = TDate? Function(TDate? day);
+```
+
+
+### CalendarBuilder
+#### 类型定义
+
+```dart
+typedef CalendarBuilder = Widget Function(BuildContext context);
+```

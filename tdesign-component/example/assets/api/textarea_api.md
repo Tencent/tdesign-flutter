@@ -8,9 +8,9 @@
 | --- | --- | --- | --- |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
-| allowInputOverMax | bool? | false | 超出[maxLength]之后是否还允许输入 |
+| allowInputOverMax | bool? | false | 超出`maxLength`之后是否还允许输入 |
 | autofocus | bool? | false | 是否自动获取焦点 |
-| autosize | bool? | - | 是否自动增高，值为 true 时，[maxLines]不生效 |
+| autosize | bool? | - | 是否自动增高，值为 true 时，`maxLines`不生效 |
 | backgroundColor | Color? | - | 输入框背景色 |
 | bordered | bool? | - | 是否显示外边框 |
 | controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
