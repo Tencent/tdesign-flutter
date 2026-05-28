@@ -1,7 +1,5 @@
 ## API
 ### TTheme
-#### 简介
-主题控件
 
 #### 静态方法
 
@@ -70,8 +68,6 @@ needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回
 
 
 ### TThemeData
-#### 简介
-主题数据
 
 #### 静态方法
 

@@ -287,8 +287,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TMessage
-#### 简介
-TMessage 组件
 
 #### 静态方法
 
@@ -332,8 +330,6 @@ TMessage 组件
 
 
 ### MessageMarquee
-#### 简介
-跑马灯配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -344,8 +340,6 @@ TMessage 组件
 
 
 ### MessageLink
-#### 简介
-链接设置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -356,8 +350,6 @@ TMessage 组件
 
 
 ### MessageTheme
-#### 简介
-定义消息主题枚举
 #### 枚举值
 
 

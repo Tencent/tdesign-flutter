@@ -358,22 +358,6 @@ TDropdownMenu _buildGroup(BuildContext context) {
 | auto | 根据内容高度动态展示方向 |
 
 
-### TDropdownItemContentBuilder
-#### 类型定义
-
-```dart
-typedef TDropdownItemContentBuilder = Widget Function(BuildContext context, _TDropdownItemState itemState, TDropdownPopup? popupState);
-```
-
-
-### TDropdownItemOptionsCallback
-#### 类型定义
-
-```dart
-typedef TDropdownItemOptionsCallback = void Function(List<TDropdownItemOption>? options);
-```
-
-
 ### TDropdownItemBuilder
 #### 简介
 下拉菜单构建器
@@ -391,6 +375,22 @@ typedef TDropdownItemBuilder = List<TDropdownItem> Function(BuildContext context
 
 ```dart
 typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
+```
+
+
+### TDropdownItemContentBuilder
+#### 类型定义
+
+```dart
+typedef TDropdownItemContentBuilder = Widget Function(BuildContext context, _TDropdownItemState itemState, TDropdownPopup? popupState);
+```
+
+
+### TDropdownItemOptionsCallback
+#### 类型定义
+
+```dart
+typedef TDropdownItemOptionsCallback = void Function(List<TDropdownItemOption>? options);
 ```
 
 
