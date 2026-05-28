@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/date_time_picker/t_date_time_picker_internal.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import 'helpers/popup_test_resource.dart';
+
 void main() {
   // ===========================================================================
   // DateTimePickerMode 契约
@@ -136,6 +138,25 @@ void main() {
         DateTimePickerMode.combined(timeMode: TimeMode.minute),
         isNot(equals(DateTimePickerMode.combined(timeMode: TimeMode.hour))),
       );
+    });
+  });
+
+  group('DateTimePickerLabels', () {
+    test('fromResource：中文与 defaults 一致', () {
+      final labels =
+          DateTimePickerLabels.fromResource(PopupTestResourceDelegate.zh());
+      expect(labels, equals(DateTimePickerLabels.defaults));
+      expect(labels.formatColumn(DateTimeColumn.year, 2026), '2026年');
+      expect(labels.weekdayLabel(5), '周五');
+    });
+
+    test('fromResource：英文缩写', () {
+      final labels =
+          DateTimePickerLabels.fromResource(PopupTestResourceDelegate.en());
+      expect(labels.formatColumn(DateTimeColumn.year, 2026), '2026y');
+      expect(labels.formatColumn(DateTimeColumn.day, 15), '15d');
+      expect(labels.formatColumn(DateTimeColumn.hour, 10), '10h');
+      expect(labels.weekdayLabel(5), 'FRI');
     });
   });
 
@@ -658,8 +679,9 @@ void main() {
       expect(find.text('BASE2026'), findsNothing);
     });
 
-    testWidgets('TDateTimePicker.weekLabels 与 showWeek 文案一致', (tester) async {
-      expect(TDateTimePicker.weekLabels, DateTimePickerSnapshot.weekLabels);
+    testWidgets('英文 resource 下渲染英文列 label', (tester) async {
+      bindPopupTestResource(PopupTestResourceDelegate.en());
+      addTearDown(resetPopupTestResource);
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
@@ -670,10 +692,23 @@ void main() {
         ),
       ));
       await tester.pumpAndSettle();
-      expect(
-        find.textContaining(TDateTimePicker.weekLabels[4]), // 2026-05-15 周五
-        findsWidgets,
-      );
+      expect(find.textContaining('2026y'), findsWidgets);
+      expect(find.textContaining('FRI'), findsWidgets);
+    });
+
+    testWidgets('showWeek 默认中文日列 label 含周几', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: TDateTimePicker(
+            mode: DateTimePickerMode.ymd,
+            initialValue: DateTime(2026, 5, 15),
+            showWeek: true,
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      // 2026-05-15 是周五
+      expect(find.textContaining('周五'), findsWidgets);
     });
 
     testWidgets('onChange 对非法日期先回弹，再在有效变化时触发回调', (tester) async {

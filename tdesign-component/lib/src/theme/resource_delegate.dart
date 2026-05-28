@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../tdesign_flutter.dart';
 
@@ -42,6 +43,10 @@ class TResourceManager {
 
   /// 获取资源
   static final _defaultDelegate = _DefaultResourceDelegate();
+
+  /// 库内未注入 [setResourceBuilder] 时使用的默认文案（中文）。
+  @internal
+  static TResourceDelegate get defaultDelegate => _defaultDelegate;
 
   /// 设置资源代理
   void setResourceBuilder(TResourceBuilder delegate, needAlwaysBuild) {
@@ -97,28 +102,28 @@ abstract class TResourceDelegate {
   /// [TTimeCounter] 天
   String get days;
 
-  /// [TTimeCounter] 时
+  /// [TTimeCounter] 时 / [TDateTimePicker] 时列
   String get hours;
 
-  /// [TTimeCounter] 分
+  /// [TTimeCounter] 分 / [TDateTimePicker] 分列
   String get minutes;
 
-  /// [TTimeCounter] 秒
+  /// [TTimeCounter] 秒 / [TDateTimePicker] 秒列
   String get seconds;
 
   /// [TTimeCounter] 毫秒
   String get milliseconds;
 
-  /// [TDatePicker]  年
+  /// [TDatePicker] / [TDateTimePicker] 年
   String get yearLabel;
 
-  /// [TDatePicker]  月
+  /// [TDatePicker] / [TDateTimePicker] 月
   String get monthLabel;
 
-  /// [TDatePicker] 日
+  /// [TDatePicker] / [TDateTimePicker] 日
   String get dateLabel;
 
-  /// [TDatePicker] 周
+  /// [TDatePicker] / [TDateTimePicker] 周
   String get weeksLabel;
 
   /// [TCalendarHeader] 星期日

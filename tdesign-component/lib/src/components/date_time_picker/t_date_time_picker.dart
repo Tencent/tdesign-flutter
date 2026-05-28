@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../util/context_extension.dart';
 import '../picker/t_picker.dart';
 import '../picker/t_picker_items.dart';
 import '../picker/t_picker_value.dart';
@@ -11,6 +12,10 @@ export 't_date_time_picker_enums.dart';
 export 't_date_time_picker_model.dart';
 
 /// 日期/时间选择器。
+///
+/// 列 label 文案默认从 [TResourceDelegate]（`context.resource`）读取，与
+/// [TPicker]、[TTimeCounter] 一致；接入方通过 [TTheme.setResourceBuilder] 注入多语言。
+/// 自定义 label 请用 [format]。
 class TDateTimePicker extends StatefulWidget {
   const TDateTimePicker({
     super.key,
@@ -30,9 +35,6 @@ class TDateTimePicker extends StatefulWidget {
     this.height,
     this.itemCount,
   });
-
-  /// 星期 label，下标 = weekday - 1（周一 … 周日），与 [showWeek] 日列文案一致。
-  static const List<String> weekLabels = DateTimePickerSnapshot.weekLabels;
 
   /// 列结构（必填）。详见 [DateTimePickerMode]。
   final DateTimePickerMode mode;
@@ -227,11 +229,13 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final labels = DateTimePickerLabels.fromResource(context.resource);
     final nextColumns = _snapshot.toPickerColumns(
       start: widget.start,
       end: widget.end,
       format: widget.format,
       showWeek: widget.showWeek,
+      labels: labels,
     );
     if (_cachedPickerColumns == null ||
         _cachedPickerColumns != nextColumns) {
@@ -249,6 +253,8 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
           widget.initialValue,
           widget.showWeek,
           widget.format,
+          labels,
+          Localizations.localeOf(context),
         ),
       ),
       items: _cachedPickerColumns!,

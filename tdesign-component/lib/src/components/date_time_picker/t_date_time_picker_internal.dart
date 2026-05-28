@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
+import '../../theme/resource_delegate.dart';
 import '../picker/t_picker_items.dart';
 import '../picker/t_picker_option.dart';
 import 't_date_time_picker_enums.dart';
@@ -13,6 +14,75 @@ import 't_date_time_picker_model.dart';
 // 业务方通过 `DateTimePickerMode.year / .month / .ymd / ... / .combined(...)` 访问，
 // 不应直接构造这两个类型。整个文件 **不被 umbrella 导出**——外部即使想 import
 // 也只能走 `package:tdesign_flutter/src/...` 这种私有路径，并会被 lint 警告。
+
+/// [TDateTimePicker] 各列默认 label 的文案配置（@internal）。
+///
+/// build 时由 [fromResource] 从 [TResourceDelegate] 生成；缺省文案见
+/// [TResourceManager.defaultDelegate]（[_DefaultResourceDelegate]）。
+@internal
+@immutable
+class DateTimePickerLabels {
+  const DateTimePickerLabels({
+    required this.unitSuffix,
+    required this.weekLabels,
+  });
+
+  /// 未注入 [TResourceManager.setResourceBuilder] 时的 label（派生自 [_DefaultResourceDelegate]）。
+  static final DateTimePickerLabels defaults =
+      DateTimePickerLabels.fromResource(TResourceManager.defaultDelegate);
+
+  final Map<DateTimeColumn, String> unitSuffix;
+  final List<String> weekLabels;
+
+  factory DateTimePickerLabels.fromResource(TResourceDelegate resource) {
+    return DateTimePickerLabels(
+      unitSuffix: {
+        DateTimeColumn.year: resource.yearLabel,
+        DateTimeColumn.month: resource.monthLabel,
+        DateTimeColumn.day: resource.dateLabel,
+        DateTimeColumn.hour: resource.hours,
+        DateTimeColumn.minute: resource.minutes,
+        DateTimeColumn.second: resource.seconds,
+      },
+      weekLabels: _weekLabelsFromResource(resource),
+    );
+  }
+
+  String formatColumn(DateTimeColumn column, int value) =>
+      '$value${unitSuffix[column]}';
+
+  String weekdayLabel(int weekday) => weekLabels[weekday - 1];
+
+  static List<String> _weekLabelsFromResource(TResourceDelegate resource) {
+    String label(String shortName) {
+      if (shortName.length == 1 && resource.weeksLabel.isNotEmpty) {
+        return '${resource.weeksLabel}$shortName';
+      }
+      return shortName;
+    }
+
+    return [
+      label(resource.monday),
+      label(resource.tuesday),
+      label(resource.wednesday),
+      label(resource.thursday),
+      label(resource.friday),
+      label(resource.saturday),
+      label(resource.sunday),
+    ];
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DateTimePickerLabels &&
+          mapEquals(unitSuffix, other.unitSuffix) &&
+          listEquals(weekLabels, other.weekLabels);
+
+  @override
+  int get hashCode =>
+      Object.hash(Object.hashAll(unitSuffix.entries), Object.hashAll(weekLabels));
+}
 
 /// 快捷模式：`DateTimePickerMode.year / .month / .ymd / .hour / .minute / .second`
 /// 静态常量背后的实现。
@@ -234,12 +304,15 @@ class DateTimePickerSnapshot {
   ///
   /// [showWeek] 为 `true` 时，**日列**的默认 label 追加星期（如 "19日 周六"）；
   /// 自定义 [format] 优先于本规则。
+  /// [labels] 缺省时使用 [DateTimePickerLabels.defaults]。
   TPickerColumns toPickerColumns({
     DateTime? start,
     DateTime? end,
     String Function(DateTimeColumn column, int value)? format,
     bool showWeek = false,
+    DateTimePickerLabels? labels,
   }) {
+    final resolvedLabels = labels ?? DateTimePickerLabels.defaults;
     final safeEnd =
         (start != null && end != null && start.isAfter(end)) ? null : end;
     final cols = <List<TPickerOption>>[];
@@ -251,6 +324,7 @@ class DateTimePickerSnapshot {
         current,
         yearAnchor,
         format,
+        labels: resolvedLabels,
         showWeek: showWeek,
       ));
     }
@@ -329,30 +403,6 @@ class DateTimePickerSnapshot {
   /// 年范围相对当前年份的默认偏移（前后各 10 年）。
   static const int _kDefaultYearOffset = 10;
 
-  /// 各列单位后缀（label fallback）。
-  static const Map<DateTimeColumn, String> _unitSuffix = {
-    DateTimeColumn.year: '年',
-    DateTimeColumn.month: '月',
-    DateTimeColumn.day: '日',
-    DateTimeColumn.hour: '时',
-    DateTimeColumn.minute: '分',
-    DateTimeColumn.second: '秒',
-  };
-
-  /// 星期 label，下标 = `weekday - 1`，固定顺序「周一 … 周日」。
-  ///
-  /// 公开供 `showWeek` 显示及业务侧自定义 label 时复用——业务侧通常通过
-  /// `TDateTimePicker.weekLabels` 访问，本字段保留供 internal 实现共享。
-  static const List<String> weekLabels = [
-    '周一',
-    '周二',
-    '周三',
-    '周四',
-    '周五',
-    '周六',
-    '周日',
-  ];
-
   /// 把 [dt] 钳制到 `[start, end]` 闭区间。
   static DateTime _clamp(DateTime dt, {DateTime? start, DateTime? end}) {
     if (start != null && dt.isBefore(start)) {
@@ -427,6 +477,7 @@ class DateTimePickerSnapshot {
     DateTime current,
     int yearAnchor,
     String Function(DateTimeColumn, int)? format, {
+    required DateTimePickerLabels labels,
     required bool showWeek,
   }) {
     return switch (col) {
@@ -435,12 +486,14 @@ class DateTimePickerSnapshot {
           start?.year ?? (yearAnchor - _kDefaultYearOffset),
           end?.year ?? (yearAnchor + _kDefaultYearOffset),
           format,
+          labels,
         ),
       DateTimeColumn.month => _buildIntRange(
           col,
           (start != null && current.year == start.year) ? start.month : 1,
           (end != null && current.year == end.year) ? end.month : 12,
           format,
+          labels,
         ),
       DateTimeColumn.day => () {
           final maxDay = _daysInMonth(current.year, current.month);
@@ -450,26 +503,35 @@ class DateTimePickerSnapshot {
           final endDay = (end != null && _isSameMonth(current, end))
               ? end.day.clamp(1, maxDay)
               : maxDay;
-          return _buildDayRange(current, startDay, endDay, format,
-              showWeek: showWeek);
+          return _buildDayRange(
+            current,
+            startDay,
+            endDay,
+            format,
+            labels: labels,
+            showWeek: showWeek,
+          );
         }(),
       DateTimeColumn.hour => _buildIntRange(
           col,
           (start != null && _isSameDate(current, start)) ? start.hour : 0,
           (end != null && _isSameDate(current, end)) ? end.hour : 23,
           format,
+          labels,
         ),
       DateTimeColumn.minute => _buildIntRange(
           col,
           (start != null && _isSameHour(current, start)) ? start.minute : 0,
           (end != null && _isSameHour(current, end)) ? end.minute : 59,
           format,
+          labels,
         ),
       DateTimeColumn.second => _buildIntRange(
           col,
           (start != null && _isSameMinute(current, start)) ? start.second : 0,
           (end != null && _isSameMinute(current, end)) ? end.second : 59,
           format,
+          labels,
         ),
     };
   }
@@ -479,6 +541,7 @@ class DateTimePickerSnapshot {
     int start,
     int end,
     String Function(DateTimeColumn, int)? format,
+    DateTimePickerLabels labels,
   ) {
     if (end < start) {
       // 防御：极端范围导致空列。回填单元素保证 TPickerColumns 非空约束。
@@ -487,7 +550,7 @@ class DateTimePickerSnapshot {
     return [
       for (var v = start; v <= end; v++)
         TPickerOption(
-          label: format?.call(column, v) ?? '$v${_unitSuffix[column]}',
+          label: format?.call(column, v) ?? labels.formatColumn(column, v),
           value: v,
         ),
     ];
@@ -499,6 +562,7 @@ class DateTimePickerSnapshot {
     int startDay,
     int endDay,
     String Function(DateTimeColumn, int)? format, {
+    required DateTimePickerLabels labels,
     required bool showWeek,
   }) {
     if (endDay < startDay) {
@@ -508,19 +572,31 @@ class DateTimePickerSnapshot {
       for (var d = startDay; d <= endDay; d++)
         TPickerOption(
           label: format?.call(DateTimeColumn.day, d) ??
-              _defaultDayLabel(current.year, current.month, d, showWeek),
+              _defaultDayLabel(
+                current.year,
+                current.month,
+                d,
+                showWeek,
+                labels,
+              ),
           value: d,
         ),
     ];
   }
 
-  static String _defaultDayLabel(int year, int month, int day, bool showWeek) {
-    final base = '$day${_unitSuffix[DateTimeColumn.day]}';
+  static String _defaultDayLabel(
+    int year,
+    int month,
+    int day,
+    bool showWeek,
+    DateTimePickerLabels labels,
+  ) {
+    final base = labels.formatColumn(DateTimeColumn.day, day);
     if (!showWeek) {
       return base;
     }
     final weekday = DateTime(year, month, day).weekday;
-    return '$base ${weekLabels[weekday - 1]}';
+    return '$base ${labels.weekdayLabel(weekday)}';
   }
 
   static int _daysInMonth(int year, int month) =>

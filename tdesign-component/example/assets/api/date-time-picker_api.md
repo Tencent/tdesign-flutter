@@ -1,7 +1,7 @@
 ## API
 ### TDateTimePicker
 #### 简介
-日期/时间选择器。
+日期/时间选择器。列 label 与工具栏文案默认从 `TResourceDelegate`（`context.resource`）读取，与 `TPicker` 一致；接入方通过 `TTheme.setResourceBuilder` 注入多语言。自定义 label 请用 `format`。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -18,17 +18,10 @@
 | onCancel | VoidCallback? | - | 点击「取消」按钮的回调。 |
 | onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调（滚动稳定后实时触发）；参数为 `TDateTimePickerValue`，仅含当前 mode 对应列；相同值不重复触发。 |
 | onConfirm | void Function(TDateTimePickerValue result)? | - | 点击「确定」按钮的回调；参数为 `TDateTimePickerValue`。 |
-| showWeek | bool | false | 日列 label 是否附加星期（如 19日 周六）；仅影响展示。 回调结果不含独立星期字段，请用 `TDateTimePickerValue.toDateTime`.weekday。 |
+| showWeek | bool | false | 日列 label 是否附加星期（如 19日 周六 / 15d FRI）；仅影响展示。 回调结果不含独立星期字段，请用 `TDateTimePickerValue.toDateTime`.weekday。 |
 | start | DateTime? | - | 可选范围下界（闭区间）；null 时年列下界为打开时锚定年份 - 10（不随滚动漂移）。 |
 | title | String? | - | 工具栏中部标题文本。 |
 | titleWidget | Widget? | - | 工具栏中部自定义标题组件（优先级高于 `title`）。 |
-
-#### 静态成员
-
-| 名称 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| weekLabels | List<String> | - | 星期 label，下标 = weekday - 1（周一 … 周日），与 `showWeek` 日列文案一致。 |
-
 
 ### DateTimePickerMode
 #### 简介

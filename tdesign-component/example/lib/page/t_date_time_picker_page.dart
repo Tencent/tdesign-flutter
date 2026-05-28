@@ -269,7 +269,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   Widget _buildWeek(BuildContext context) {
     return TCell(
       title: '年月日 + 星期',
-      note: _formatWeekResult(_weekSelected),
+      note: _formatWeekResult(context, _weekSelected),
       arrow: true,
       onClick: (_) {
         _showPickerPopup(
@@ -291,13 +291,33 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   }
 
   /// 星期信息从 [TDateTimePickerValue.toDateTime] 派生（weekday 1=周一…7=周日）。
-  String _formatWeekResult(TDateTimePickerValue? v) {
+  String _formatWeekResult(BuildContext context, TDateTimePickerValue? v) {
     if (v == null) {
       return '请选择';
     }
     final base = _formatResult(v);
     final dt = v.toDateTime(fallback: _kReplayFallback);
-    final week = TDateTimePicker.weekLabels[dt.weekday - 1];
+    final week = _weekdayLabel(context, dt.weekday);
     return '$base $week';
+  }
+
+  String _weekdayLabel(BuildContext context, int weekday) {
+    final r = context.resource;
+    String compose(String shortName) {
+      if (shortName.length == 1 && r.weeksLabel.isNotEmpty) {
+        return '${r.weeksLabel}$shortName';
+      }
+      return shortName;
+    }
+    final names = [
+      r.monday,
+      r.tuesday,
+      r.wednesday,
+      r.thursday,
+      r.friday,
+      r.saturday,
+      r.sunday,
+    ];
+    return compose(names[weekday - 1]);
   }
 }
