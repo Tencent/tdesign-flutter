@@ -217,6 +217,17 @@ Widget _buildCard(BuildContext context) {
 ### TCellStyle
 #### 简介
 单元格组件样式
+
+#### 工厂构造方法
+
+##### TCellStyle.cellStyle
+
+生成单元格默认样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 传递context，会生成默认样式 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -239,17 +250,6 @@ Widget _buildCard(BuildContext context) {
 | titleBackgroundColor | Color? | - | 单元格组标题背景颜色 |
 | titlePadding | EdgeInsets? | - | 单元格组标题内边距 |
 | titleStyle | TextStyle? | - | 标题文字样式 |
-
-
-#### 工厂构造方法
-
-##### TCellStyle.cellStyle
-
-生成单元格默认样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | 传递context，会生成默认样式 |
 
 
 ### TCellAlign
