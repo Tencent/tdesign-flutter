@@ -296,7 +296,7 @@ Widget _buildBottomSimple(BuildContext context) {
 | backgroundColor | Color? | - | 组件背景颜色 |
 | bordered | bool? | true | 是否显示边框 |
 | closeOnOverlayClick | bool? | true | 点击蒙层时是否关闭抽屉 |
-| contentWidget | Widget? | - | 自定义内容，优先级高于[items]/[footer]/[title] |
+| contentWidget | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | drawerTop | double? | - | 距离顶部的距离 |
 | footer | Widget? | - | 抽屉的底部 |
 | hover | bool? | true | 是否开启点击反馈 |
@@ -316,14 +316,14 @@ Widget _buildBottomSimple(BuildContext context) {
 ### TDrawerWidget
 #### 简介
 抽屉内容组件
- 可用于 Scaffold 中的 drawer 属性
+可用于 Scaffold 中的 drawer 属性
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 组件背景颜色 |
 | bordered | bool? | true | 是否显示边框 |
-| contentWidget | Widget? | - | 自定义内容，优先级高于[items]/[footer]/[title] |
+| contentWidget | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | footer | Widget? | - | 抽屉的底部 |
 | hover | bool? | true | 是否开启点击反馈 |
 | isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
