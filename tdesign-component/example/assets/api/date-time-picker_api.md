@@ -8,10 +8,10 @@
 | --- | --- | --- | --- |
 | cancel | Widget? | - | 工具栏左侧插槽（Widget）；null 时使用 `TPicker` 默认取消文案。 |
 | confirm | Widget? | - | 工具栏右侧插槽（Widget）；null 时使用 `TPicker` 默认确认文案。 |
-| initialValue | DateTime? | - | 首次构建时的初始选中值；缺省为 DateTime.now；超出 `start, end` 会钳制；滚动后改此值需配合 Key 重建。 |
 | end | DateTime? | - | 可选范围上界（闭区间）；null 时年列上界为打开时锚定年份 + 10（不随滚动漂移）。 |
 | format | String Function(DateTimeColumn column, int value)? | - | 自定义列 label（仅影响展示，不影响回调 value）；返回 null 用默认格式；format 引用变化会触发列重建，宜提到 State 字段。 |
 | height | double? | - | 面板视窗高度（不含工具栏），默认 200。 |
+| initialValue | DateTime? | - | 首次构建时的初始选中值；缺省为 DateTime.now；超出 `start, end` 会钳制；滚动后改此值需配合 Key 重建。 |
 | itemCount | int? | - | 每屏可见条目数量，默认 5。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mode | DateTimePickerMode | - | 列结构（必填）。详见 `DateTimePickerMode`。 |
@@ -33,7 +33,8 @@
 ### DateTimePickerMode
 #### 简介
 列结构模式。快捷常量见下方静态成员；自定义组合用 `DateTimePickerMode.combined`。
-相同 `dateMode` + `timeMode` 配置的 mode 在 `==` / `hashCode` 上视为相等（如 `ymd` 与 `combined(dateMode: DateMode.date)`）；比较列结构也可用 `.columns`。
+相同 `dateGranularity` + `timeGranularity` 配置的 mode 在 `==` / `hashCode` 上视为相等
+（如 `ymd` 与 `combined(dateMode: DateMode.date)`）；比较列结构也可用 `columns`。
 注意：`hour` / `minute` / `second` 快捷常量含完整年月日；仅时间列（如只要时分）请用
 `combined(timeMode: TimeMode.minute)` 等。
 
@@ -65,7 +66,11 @@
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
+| dateGranularity | DateMode? | - | 日期段粒度（`ShortcutMode` / `CombinedMode` 共用，供判等）。 |
+| timeGranularity | TimeMode? | - | 时间段粒度（`ShortcutMode` / `CombinedMode` 共用，供判等）。 |
 | columns | List<DateTimeColumn> | - | 将 mode 解析为按显示顺序的列列表；一般业务只需把 mode 传给 `TDateTimePicker`。 |
+| == | bool | required Object other | - |
+| hashCode | int | - | - |
 
 
 ### TDateTimePickerValue
