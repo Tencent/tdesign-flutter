@@ -10,7 +10,7 @@
           picker: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
             title: '请选择日期',
-            defaultValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {
               setState(() => _baseSelected = result);

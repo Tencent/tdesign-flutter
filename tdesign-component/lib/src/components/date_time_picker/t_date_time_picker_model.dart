@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
@@ -9,10 +10,21 @@ import 't_date_time_picker_internal.dart';
 
 /// 列结构模式。快捷常量见下方静态成员；自定义组合用 [DateTimePickerMode.combined]。
 ///
+/// 相同 [dateGranularity] + [timeGranularity] 配置的 mode 在 `==` / `hashCode` 上视为相等
+///（如 [ymd] 与 `combined(dateMode: DateMode.date)`）；比较列结构也可用 [columns]。
+///
 /// 注意：`hour` / `minute` / `second` 快捷常量含完整年月日；仅时间列（如只要时分）请用
 /// `combined(timeMode: TimeMode.minute)` 等。
 abstract class DateTimePickerMode {
   const DateTimePickerMode();
+
+  /// 日期段粒度（[ShortcutMode] / [CombinedMode] 共用，供判等）。
+  @protected
+  DateMode? get dateGranularity;
+
+  /// 时间段粒度（[ShortcutMode] / [CombinedMode] 共用，供判等）。
+  @protected
+  TimeMode? get timeGranularity;
 
   /// 快捷模式：年（只选年份）。
   static const DateTimePickerMode year = ShortcutMode(date: DateMode.year);
@@ -57,6 +69,16 @@ abstract class DateTimePickerMode {
 
   /// 将 mode 解析为按显示顺序的列列表；一般业务只需把 mode 传给 [TDateTimePicker]。
   List<DateTimeColumn> get columns;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DateTimePickerMode &&
+          dateGranularity == other.dateGranularity &&
+          timeGranularity == other.timeGranularity;
+
+  @override
+  int get hashCode => Object.hash(dateGranularity, timeGranularity);
 }
 
 // =============================================================================

@@ -11,7 +11,7 @@
             mode: DateTimePickerMode.ymd,
             showWeek: true,
             title: '请选择日期',
-            defaultValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {
               setState(() => _weekSelected = result);

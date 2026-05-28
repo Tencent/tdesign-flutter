@@ -10,7 +10,7 @@
           picker: TDateTimePicker(
             mode: DateTimePickerMode.month,
             title: '请选择年月',
-            defaultValue:
+            initialValue:
                 _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {

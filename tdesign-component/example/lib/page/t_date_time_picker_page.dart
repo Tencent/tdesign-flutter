@@ -20,7 +20,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   final ValueNotifier<TDateTimePickerValue?> _inlineSelectedNotifier =
       ValueNotifier<TDateTimePickerValue?>(null);
 
-  /// 复用上次选择结果回放为 `defaultValue` 时使用的固定 fallback。
+  /// 复用上次选择结果回放为 `initialValue` 时使用的固定 fallback。
   ///
   /// 避免 [TDateTimePickerValue.toDateTime] 在缺字段时用 `DateTime.now()`
   /// 回填导致 Dart 的 [DateTime] 静默溢出（典型场景：年月模式下今日为 31 日，
@@ -84,7 +84,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
               timeMode: TimeMode.minute,
             ),
             title: '内嵌日期时间选择',
-            defaultValue:
+            initialValue:
                 _inlineSelectedNotifier.value
                         ?.toDateTime(fallback: _kReplayFallback) ??
                     DateTime.now(),
@@ -165,7 +165,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           picker: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
             title: '请选择日期',
-            defaultValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {
               setState(() => _baseSelected = result);
@@ -191,7 +191,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           picker: TDateTimePicker(
             mode: DateTimePickerMode.month,
             title: '请选择年月',
-            defaultValue:
+            initialValue:
                 _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {
@@ -218,7 +218,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           picker: TDateTimePicker(
             mode: DateTimePickerMode.combined(timeMode: TimeMode.minute),
             title: '请选择时分',
-            defaultValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {
               setState(() => _timeSelected = result);
@@ -249,7 +249,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
             title: '2024 ~ 2026',
             start: DateTime(2024, 1, 1),
             end: DateTime(2026, 12, 31, 23, 59),
-            defaultValue:
+            initialValue:
                 _rangeSelected?.toDateTime(fallback: _kReplayFallback) ??
                     DateTime(2025, 6, 15, 12, 30),
             onCancel: () => Navigator.of(context).pop(),
@@ -278,7 +278,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
             mode: DateTimePickerMode.ymd,
             showWeek: true,
             title: '请选择日期',
-            defaultValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
             onConfirm: (result) {
               setState(() => _weekSelected = result);

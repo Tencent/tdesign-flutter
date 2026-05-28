@@ -18,7 +18,7 @@ class TDateTimePicker extends StatefulWidget {
     this.format,
     this.start,
     this.end,
-    this.defaultValue,
+    this.initialValue,
     this.showWeek = false,
     this.onCancel,
     this.onChange,
@@ -46,8 +46,8 @@ class TDateTimePicker extends StatefulWidget {
   /// 可选范围上界（闭区间）；null 时年列上界为打开时锚定年份 + 10（不随滚动漂移）。
   final DateTime? end;
 
-  /// 首次构建时的默认选中值；缺省为 DateTime.now；超出 [start, end] 会钳制；滚动后改此值需配合 Key 重建。
-  final DateTime? defaultValue;
+  /// 首次构建时的初始选中值；缺省为 DateTime.now；超出 [start, end] 会钳制；滚动后改此值需配合 Key 重建。
+  final DateTime? initialValue;
 
   /// 日列 label 是否附加星期（如 19日 周六）；仅影响展示。
   ///
@@ -102,7 +102,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     super.initState();
     _snapshot = DateTimePickerSnapshot.initial(
       columns: widget.mode.columns,
-      initial: widget.defaultValue,
+      initial: widget.initialValue,
       start: widget.start,
       end: widget.end,
     );
@@ -113,14 +113,14 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     super.didUpdateWidget(oldWidget);
     final modeChanged = !_listEqualInt(
         oldWidget.mode.columns, widget.mode.columns);
-    final defaultChanged = oldWidget.defaultValue != widget.defaultValue;
+    final initialChanged = oldWidget.initialValue != widget.initialValue;
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
     final showWeekChanged = oldWidget.showWeek != widget.showWeek;
     final formatChanged = oldWidget.format != widget.format;
 
     if (!modeChanged &&
-        !defaultChanged &&
+        !initialChanged &&
         !rangeChanged &&
         !showWeekChanged &&
         !formatChanged) {
@@ -129,17 +129,17 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
 
     if (formatChanged &&
         !modeChanged &&
-        !defaultChanged &&
+        !initialChanged &&
         !rangeChanged &&
         !showWeekChanged) {
       _invalidatePickerCache();
       return;
     }
 
-    if (modeChanged || defaultChanged) {
+    if (modeChanged || initialChanged) {
       _snapshot = DateTimePickerSnapshot.initial(
         columns: widget.mode.columns,
-        initial: defaultChanged ? widget.defaultValue : _snapshot.current,
+        initial: initialChanged ? widget.initialValue : _snapshot.current,
         start: widget.start,
         end: widget.end,
       );
@@ -239,14 +239,14 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       _pickerInitialValue = List<dynamic>.from(_snapshot.values);
     }
     return TPicker(
-      // 外部输入（mode/start/end/defaultValue/showWeek/format）变化时强制重建
+      // 外部输入（mode/start/end/initialValue/showWeek/format）变化时强制重建
       // TPicker。内部 setState 不会改变 key，故联动刷新走 didUpdateWidget 路径。
       key: ValueKey<int>(
         Object.hash(
           Object.hashAll(widget.mode.columns),
           widget.start,
           widget.end,
-          widget.defaultValue,
+          widget.initialValue,
           widget.showWeek,
           widget.format,
         ),

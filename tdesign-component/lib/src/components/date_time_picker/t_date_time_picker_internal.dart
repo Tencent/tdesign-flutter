@@ -17,8 +17,8 @@ import 't_date_time_picker_model.dart';
 /// 快捷模式：`DateTimePickerMode.year / .month / .ymd / .hour / .minute / .second`
 /// 静态常量背后的实现。
 ///
-/// 与 [CombinedMode] 语义等价（都是「date 粒度 + time 粒度」展开成列），
-/// 但作为独立类型存在便于编译期分辨「快捷常量」与「显式组合」。
+/// 与 [CombinedMode] 语义等价（都是「date 粒度 + time 粒度」展开成列）；
+/// 判等由 [DateTimePickerMode] 基类按 [dateGranularity] / [timeGranularity] 统一处理。
 @internal
 @immutable
 class ShortcutMode extends DateTimePickerMode {
@@ -28,15 +28,13 @@ class ShortcutMode extends DateTimePickerMode {
   final TimeMode? time;
 
   @override
+  DateMode? get dateGranularity => date;
+
+  @override
+  TimeMode? get timeGranularity => time;
+
+  @override
   List<DateTimeColumn> get columns => _expand(date, time);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ShortcutMode && date == other.date && time == other.time;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, date, time);
 }
 
 /// 组合模式：`DateTimePickerMode.combined(dateMode: ..., timeMode: ...)` 工厂的返回值。
@@ -49,15 +47,13 @@ class CombinedMode extends DateTimePickerMode {
   final TimeMode? time;
 
   @override
+  DateMode? get dateGranularity => date;
+
+  @override
+  TimeMode? get timeGranularity => time;
+
+  @override
   List<DateTimeColumn> get columns => _expand(date, time);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CombinedMode && date == other.date && time == other.time;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, date, time);
 }
 
 /// 把日期粒度 + 时间粒度展开成 [DateTimeColumn] 序列。

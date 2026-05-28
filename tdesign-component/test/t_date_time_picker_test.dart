@@ -89,15 +89,53 @@ void main() {
       );
     });
 
-    test('快捷模式与组合模式具备稳定相等性与 hashCode', () {
+    test('同配置的 ShortcutMode 与 CombinedMode 在 == / hashCode 上一致', () {
       final a = ShortcutMode(date: DateMode.date, time: TimeMode.minute);
       final b = ShortcutMode(date: DateMode.date, time: TimeMode.minute);
       final c = CombinedMode(date: DateMode.date, time: TimeMode.minute);
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
-      expect(a, isNot(equals(c)));
+      expect(a, equals(c));
+      expect(a.hashCode, equals(c.hashCode));
       final c2 = CombinedMode(date: DateMode.date, time: TimeMode.minute);
       expect(c.hashCode, equals(c2.hashCode));
+    });
+
+    test('快捷常量与 combined 在 == / hashCode 上一致', () {
+      expect(
+        DateTimePickerMode.ymd,
+        equals(DateTimePickerMode.combined(dateMode: DateMode.date)),
+      );
+      expect(
+        DateTimePickerMode.ymd.hashCode,
+        DateTimePickerMode.combined(dateMode: DateMode.date).hashCode,
+      );
+      expect(
+        DateTimePickerMode.minute,
+        equals(DateTimePickerMode.combined(
+          dateMode: DateMode.date,
+          timeMode: TimeMode.minute,
+        )),
+      );
+    });
+
+    test('同配置 mode 在 Set 中去重', () {
+      final modes = {
+        DateTimePickerMode.ymd,
+        DateTimePickerMode.combined(dateMode: DateMode.date),
+      };
+      expect(modes.length, 1);
+    });
+
+    test('不同配置的 mode 仍不相等', () {
+      expect(
+        DateTimePickerMode.ymd,
+        isNot(equals(DateTimePickerMode.month)),
+      );
+      expect(
+        DateTimePickerMode.combined(timeMode: TimeMode.minute),
+        isNot(equals(DateTimePickerMode.combined(timeMode: TimeMode.hour))),
+      );
     });
   });
 
@@ -460,7 +498,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 5, 15),
+            initialValue: DateTime(2026, 5, 15),
           ),
         ),
       ));
@@ -474,7 +512,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.combined(timeMode: TimeMode.minute),
-            defaultValue: DateTime(2026, 5, 15, 10, 30),
+            initialValue: DateTime(2026, 5, 15, 10, 30),
           ),
         ),
       ));
@@ -487,7 +525,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 5, 15),
+            initialValue: DateTime(2026, 5, 15),
             showWeek: true,
           ),
         ),
@@ -505,7 +543,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 5, 15),
+            initialValue: DateTime(2026, 5, 15),
             confirm: const Text('确定'),
             onConfirm: (v) => captured = v,
           ),
@@ -524,7 +562,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 5, 15),
+            initialValue: DateTime(2026, 5, 15),
             confirm: const Icon(Icons.check),
             onConfirm: (_) => confirmed = true,
           ),
@@ -536,13 +574,13 @@ void main() {
       expect(confirmed, isTrue);
     });
 
-    testWidgets('defaultValue 超过 end 时被钳制到 end', (tester) async {
+    testWidgets('initialValue 超过 end 时被钳制到 end', (tester) async {
       TDateTimePickerValue? captured;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2030, 12, 31),
+            initialValue: DateTime(2030, 12, 31),
             end: DateTime(2026, 12, 31),
             confirm: const Text('确定'),
             onConfirm: (v) => captured = v,
@@ -559,7 +597,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.combined(dateMode: DateMode.year),
-            defaultValue: DateTime(2026, 1, 1),
+            initialValue: DateTime(2026, 1, 1),
             format: (col, v) => 'Y$v',
           ),
         ),
@@ -574,7 +612,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 5, 15),
+            initialValue: DateTime(2026, 5, 15),
             cancel: const Text('取消'),
             onCancel: () => cancelled = true,
           ),
@@ -599,7 +637,7 @@ void main() {
                   ),
                   TDateTimePicker(
                     mode: DateTimePickerMode.combined(dateMode: DateMode.year),
-                    defaultValue: DateTime(2026, 1, 1),
+                    initialValue: DateTime(2026, 1, 1),
                     format: useAltFormat
                         ? (col, v) => 'ALT$v'
                         : (col, v) => 'BASE$v',
@@ -626,7 +664,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 5, 15),
+            initialValue: DateTime(2026, 5, 15),
             showWeek: true,
           ),
         ),
@@ -644,7 +682,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 2, 28),
+            initialValue: DateTime(2026, 2, 28),
             onChange: (v) => changed = v,
           ),
         ),
@@ -670,7 +708,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode.ymd,
-            defaultValue: DateTime(2026, 2, 28),
+            initialValue: DateTime(2026, 2, 28),
             onConfirm: (v) => confirmed = v,
           ),
         ),
@@ -683,9 +721,9 @@ void main() {
       expect(confirmed?.day, 1);
     });
 
-    testWidgets('mode/defaultValue 变化会触发内部重建并更新 initialValue', (tester) async {
+    testWidgets('mode/initialValue 变化会触发内部重建并更新 initialValue', (tester) async {
       var useMonth = false;
-      var defaultValue = DateTime(2026, 5, 15);
+      var initialValue = DateTime(2026, 5, 15);
       await tester.pumpWidget(MaterialApp(
         home: StatefulBuilder(
           builder: (context, setState) => Scaffold(
@@ -694,13 +732,13 @@ void main() {
                 TextButton(
                   onPressed: () => setState(() {
                     useMonth = true;
-                    defaultValue = DateTime(2027, 6, 1);
+                    initialValue = DateTime(2027, 6, 1);
                   }),
                   child: const Text('switch'),
                 ),
                 TDateTimePicker(
                   mode: useMonth ? DateTimePickerMode.month : DateTimePickerMode.ymd,
-                  defaultValue: defaultValue,
+                  initialValue: initialValue,
                 ),
               ],
             ),
@@ -731,7 +769,7 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode.ymd,
-                  defaultValue: DateTime(2026, 5, 15),
+                  initialValue: DateTime(2026, 5, 15),
                   start: start,
                   end: end,
                 ),

@@ -25,7 +25,7 @@
               timeMode: TimeMode.minute,
             ),
             title: '内嵌日期时间选择',
-            defaultValue:
+            initialValue:
                 _inlineSelectedNotifier.value
                         ?.toDateTime(fallback: _kReplayFallback) ??
                     DateTime.now(),
