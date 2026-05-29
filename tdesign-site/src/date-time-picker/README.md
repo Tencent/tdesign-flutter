@@ -50,10 +50,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            initialValue:
-                _inlineSelectedNotifier.value
-                        ?.toDateTime(fallback: _kReplayFallback) ??
-                    DateTime.now(),
+            initialValue: _kInlineInitialValue,
             onChange: (result) => _inlineSelectedNotifier.value = result,
           ),
         ],
