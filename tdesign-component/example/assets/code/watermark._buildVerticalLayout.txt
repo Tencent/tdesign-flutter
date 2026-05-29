@@ -1,0 +1,15 @@
+
+  Widget _buildVerticalLayout(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '机密',
+        layout: TWatermarkLayout.vertical,
+        gapY: 80,
+      ),
+    );
+  }

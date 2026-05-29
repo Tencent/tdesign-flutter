@@ -1,0 +1,42 @@
+
+  Widget _buildFormWatermark(BuildContext context) {
+    return Container(
+      height: 350,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '草稿',
+        opacity: 0.08,
+        textSize: 48,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              TInput(
+                leftLabel: '姓名',
+                hintText: '请输入姓名',
+              ),
+              const SizedBox(height: 16),
+              TInput(
+                leftLabel: '邮箱',
+                hintText: '请输入邮箱',
+              ),
+              const SizedBox(height: 16),
+              TInput(
+                leftLabel: '电话',
+                hintText: '请输入电话号码',
+              ),
+              const SizedBox(height: 16),
+              TButton(
+                text: '提交',
+                theme: TButtonTheme.primary,
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }

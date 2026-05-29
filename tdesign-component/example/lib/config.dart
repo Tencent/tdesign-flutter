@@ -67,6 +67,7 @@ import 'page/t_time_counter_page.dart';
 import 'page/t_toast_page.dart';
 import 'page/t_tree_select_page.dart';
 import 'page/t_upload_page.dart';
+import 'page/t_watermark_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -282,6 +283,10 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Tag 标签',
         name: 'tag',
         pageBuilder: _wrapInheritedTheme((context) => const TTagPage())),
+    ExamplePageModel(
+        text: 'Watermark 水印',
+        name: 'watermark',
+        pageBuilder: _wrapInheritedTheme((context) => const TWatermarkPage())),
   ],
   '反馈': [
     ExamplePageModel(

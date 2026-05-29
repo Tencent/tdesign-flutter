@@ -110,6 +110,7 @@ export 'src/components/time_counter/t_time_counter_style.dart';
 export 'src/components/toast/t_toast.dart';
 export 'src/components/tree/t_tree_select.dart';
 export 'src/components/upload/t_upload.dart';
+export 'src/components/watermark/t_watermark.dart';
 export 'src/theme/basic.dart';
 export 'src/theme/resource_delegate.dart';
 export 'src/theme/t_colors.dart';

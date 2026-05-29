@@ -1,0 +1,16 @@
+
+  Widget _buildCustomRotate(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '旋转45度',
+        rotate: -45,
+        gapX: 150,
+        gapY: 100,
+      ),
+    );
+  }

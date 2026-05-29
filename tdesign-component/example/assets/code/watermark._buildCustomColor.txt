@@ -1,0 +1,15 @@
+
+  Widget _buildCustomColor(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TWatermark(
+        text: '保密文档',
+        textColor: TTheme.of(context).errorNormalColor,
+        opacity: 0.2,
+      ),
+    );
+  }
