@@ -24,13 +24,11 @@
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            title: '内嵌日期时间选择',
             initialValue:
                 _inlineSelectedNotifier.value
                         ?.toDateTime(fallback: _kReplayFallback) ??
                     DateTime.now(),
             onChange: (result) => _inlineSelectedNotifier.value = result,
-            onConfirm: (result) => _inlineSelectedNotifier.value = result,
           ),
         ],
       ),

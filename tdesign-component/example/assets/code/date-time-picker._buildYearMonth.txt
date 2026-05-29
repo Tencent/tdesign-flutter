@@ -9,14 +9,9 @@
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            title: '请选择年月',
             initialValue:
                 _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),
-            onCancel: () => Navigator.of(context).pop(),
-            onConfirm: (result) {
-              setState(() => _yearMonthSelected = result);
-              Navigator.of(context).pop();
-            },
+            onChange: (result) => setState(() => _yearMonthSelected = result),
           ),
         );
       },

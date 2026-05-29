@@ -9,13 +9,8 @@
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            title: '请选择时分',
             initialValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
-            onCancel: () => Navigator.of(context).pop(),
-            onConfirm: (result) {
-              setState(() => _timeSelected = result);
-              Navigator.of(context).pop();
-            },
+            onChange: (result) => setState(() => _timeSelected = result),
           ),
         );
       },

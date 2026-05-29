@@ -10,13 +10,8 @@
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
-            title: '请选择日期',
             initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
-            onCancel: () => Navigator.of(context).pop(),
-            onConfirm: (result) {
-              setState(() => _weekSelected = result);
-              Navigator.of(context).pop();
-            },
+            onChange: (result) => setState(() => _weekSelected = result),
           ),
         );
       },
