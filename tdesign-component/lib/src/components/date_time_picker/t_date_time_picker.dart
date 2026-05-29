@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
-import '../picker/t_picker.dart';
-import '../picker/t_picker_items.dart';
-import '../picker/t_picker_value.dart';
 import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
 import 't_date_time_picker_model.dart';
+import 't_date_time_picker_wheel.dart';
 
 export 't_date_time_picker_enums.dart';
 export 't_date_time_picker_model.dart';
@@ -93,24 +91,33 @@ class TDateTimePicker extends StatefulWidget {
 
 class _TDateTimePickerState extends State<TDateTimePicker> {
   late DateTimePickerSnapshot _snapshot;
-
-  TPickerColumns? _cachedPickerColumns;
-
-  List<dynamic>? _pickerInitialValue;
+  late int _wheelGeneration;
 
   TDateTimePickerValue? _lastNotifiedValue;
 
   @override
   void initState() {
     super.initState();
-    _snapshot = DateTimePickerSnapshot.initial(
+    _wheelGeneration = 0;
+    _snapshot = _createSnapshot();
+    _lastNotifiedValue = _snapshot.toResult();
+  }
+
+  DateTimePickerSnapshot _createSnapshot() {
+    return DateTimePickerSnapshot.initial(
       columns: widget.mode.columns,
       initial: widget.initialValue,
       start: widget.start,
       end: widget.end,
       steps: widget.steps,
     );
-    _lastNotifiedValue = _snapshot.toResult();
+  }
+
+  void _resetWheel({bool clearLastNotified = false}) {
+    if (clearLastNotified) {
+      _lastNotifiedValue = null;
+    }
+    _wheelGeneration++;
   }
 
   @override
@@ -134,18 +141,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       return;
     }
 
-    if (renderLabelChanged &&
-        !modeChanged &&
-        !initialChanged &&
-        !rangeChanged &&
-        !stepsChanged &&
-        !showWeekChanged) {
-      _invalidatePickerCache();
-      return;
-    }
-
     if (modeChanged || initialChanged) {
-      _lastNotifiedValue = null;
       _snapshot = DateTimePickerSnapshot.initial(
         columns: widget.mode.columns,
         initial: initialChanged ? widget.initialValue : _snapshot.current,
@@ -153,7 +149,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
         end: widget.end,
         steps: widget.steps,
       );
-      _invalidatePickerCache();
+      _resetWheel(clearLastNotified: true);
     } else {
       _snapshot = _snapshot.rebuildFor(
         columns: widget.mode.columns,
@@ -161,49 +157,20 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
         end: widget.end,
         steps: widget.steps,
       );
-      _invalidatePickerCache();
+      _resetWheel();
     }
   }
 
-  void _invalidatePickerCache() {
-    _cachedPickerColumns = null;
-    _pickerInitialValue = null;
-  }
-
-  void _handleChange(TPickerValue pickerValue) {
-    final rawValues = DateTimePickerSnapshot.coerceRawValues(
-      pickerValue.values,
-      expectedLength: _snapshot.columns.length,
-    );
-    final next = _snapshot.applySelection(
-      rawValues: rawValues,
-      start: widget.start,
-      end: widget.end,
-      steps: widget.steps,
-    );
-    final result = next.toResult();
-    final selectionChanged = next != _snapshot;
-    final pickerOutOfSync = !_listEqualInt(rawValues, next.values);
-    final needsRebuild =
-        next.needsColumnRebuildFrom(_snapshot, showWeek: widget.showWeek) ||
-            pickerOutOfSync;
-    final valueChanged =
-        _lastNotifiedValue == null || result != _lastNotifiedValue;
-
-    if (!selectionChanged && !needsRebuild) {
+  void _handleWheelChanged(
+    DateTimePickerSnapshot snapshot,
+    TDateTimePickerValue result,
+  ) {
+    _snapshot = snapshot;
+    if (_lastNotifiedValue != null && result == _lastNotifiedValue) {
       return;
     }
-
-    _snapshot = next;
-
-    if (valueChanged) {
-      _lastNotifiedValue = result;
-      widget.onChange?.call(result);
-    }
-
-    if (needsRebuild) {
-      setState(() {});
-    }
+    _lastNotifiedValue = result;
+    widget.onChange?.call(result);
   }
 
   static bool _listEqualInt(List<dynamic> a, List<dynamic> b) {
@@ -224,26 +191,13 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
   @override
   Widget build(BuildContext context) {
     final labels = DateTimePickerLabels.fromResource(context.resource);
-    final nextColumns = _snapshot.toPickerColumns(
-      start: widget.start,
-      end: widget.end,
-      showWeek: widget.showWeek,
-      labels: labels,
-      renderLabel: widget.renderLabel,
-      steps: widget.steps,
-    );
-    if (_cachedPickerColumns == null ||
-        _cachedPickerColumns != nextColumns) {
-      _cachedPickerColumns = nextColumns;
-      _pickerInitialValue = List<dynamic>.from(_snapshot.values);
-    }
-    return TPicker(
-      key: ValueKey<int>(
+    return DateTimePickerWheel(
+      key: ValueKey<Object>(
         Object.hash(
+          _wheelGeneration,
           Object.hashAll(widget.mode.columns),
           widget.start,
           widget.end,
-          widget.initialValue,
           widget.showWeek,
           widget.renderLabel,
           widget.steps,
@@ -251,12 +205,16 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
           Localizations.localeOf(context),
         ),
       ),
-      items: _cachedPickerColumns!,
-      initialValue: _pickerInitialValue,
-      showToolbar: false,
+      snapshot: _snapshot,
+      labels: labels,
+      start: widget.start,
+      end: widget.end,
+      showWeek: widget.showWeek,
+      steps: widget.steps,
+      renderLabel: widget.renderLabel,
       height: widget.height ?? 200,
       itemCount: widget.itemCount ?? 5,
-      onChange: _handleChange,
+      onChanged: _handleWheelChanged,
     );
   }
 }

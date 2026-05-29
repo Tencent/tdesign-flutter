@@ -5,6 +5,7 @@ import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/t_toolbar_pressable.dart';
 import 'no_wave_behavior.dart';
+import 'picker_column_wheel.dart';
 
 // =============== 文件级常量（魔法数字归一） ===============
 
@@ -19,9 +20,6 @@ const int _kCorrectAnimLongMs = 350;
 
 /// 距离阈值：≤ 2 使用短动画，> 2 使用长动画
 const int _kCorrectAnimDistanceThreshold = 2;
-
-/// 滚轮透视比例（越大越平）
-const double _kWheelDiameterRatio = 3;
 
 /// 默认字号（fontTitleMedium fallback）
 const double _kDefaultFontSize = 16;
@@ -244,6 +242,8 @@ class _TPickerState extends State<TPicker> {
   final Set<int> _animatingCols = {};
   /// 复用同一实例，避免每次 _buildColumn 都 new
   final _scrollBehavior = NoWaveBehavior();
+  /// 各列滚轮子组件 key，用于单列数据/位置更新而不重建整表
+  final List<GlobalKey<PickerColumnWheelState>> _columnKeys = [];
 
   /// 工具栏按钮按压态（参考 TCheckbox 的反馈方式）
 
@@ -258,12 +258,45 @@ class _TPickerState extends State<TPicker> {
   @override
   void didUpdateWidget(covariant TPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final itemsChanged = oldWidget.items != widget.items;
     final initChanged =
         !listEquals(oldWidget.initialValue, widget.initialValue);
-    if (itemsChanged || initChanged) {
+
+    if (oldWidget.items.runtimeType != widget.items.runtimeType) {
       _disposeAllControllers();
       _initState();
+      return;
+    }
+
+    switch (widget.items) {
+      case TPickerColumns(:final columns):
+        if (oldWidget.items is! TPickerColumns) {
+          _disposeAllControllers();
+          _initState();
+          return;
+        }
+        final oldColumns = (oldWidget.items as TPickerColumns).columns;
+        if (oldColumns.length != columns.length) {
+          _disposeAllControllers();
+          _initState();
+          return;
+        }
+        var columnDataChanged = false;
+        for (var i = 0; i < columns.length; i++) {
+          if (!listEquals(oldColumns[i], columns[i])) {
+            _replaceColumnData(i, columns[i]);
+            columnDataChanged = true;
+          }
+        }
+        if (!columnDataChanged && initChanged) {
+          _syncControllersToInitialValue();
+        }
+        return;
+      case TPickerLinked():
+        final itemsChanged = oldWidget.items != widget.items;
+        if (itemsChanged || initChanged) {
+          _disposeAllControllers();
+          _initState();
+        }
     }
   }
 
@@ -275,9 +308,12 @@ class _TPickerState extends State<TPicker> {
 
   /// 释放所有 scroll controller（不清理其它并列数组，由调用方负责）
   void _disposeAllControllers() {
-    for (final c in _controllers) {
-      c.dispose();
-    }
+    final toDispose = List<FixedExtentScrollController>.from(_controllers);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final c in toDispose) {
+        c.dispose();
+      }
+    });
   }
 
   void _initState() {
@@ -298,20 +334,109 @@ class _TPickerState extends State<TPicker> {
   }
 
   void _initColumns(List<List<TPickerOption>> columns) {
-    _columns = columns;
+    _columns = columns.map((c) => List<TPickerOption>.from(c)).toList();
+    _columnKeys
+      ..clear()
+      ..addAll(
+        List.generate(_columns.length, (_) => GlobalKey<PickerColumnWheelState>()),
+      );
 
     final initValues = widget.initialValue;
     _controllers = List.generate(_columns.length, (i) {
-      var index = 0;
-      if (initValues != null && i < initValues.length) {
-        final targetIdx =
-            _columns[i].indexWhere((o) => o.value == initValues[i]);
-        if (targetIdx >= 0) {
-          index = targetIdx;
-        }
-      }
-      return FixedExtentScrollController(initialItem: index);
+      return FixedExtentScrollController(
+        initialItem: _indexForColumnValue(
+          i,
+          initValues != null && i < initValues.length ? initValues[i] : null,
+          duringInit: true,
+        ),
+      );
     });
+  }
+
+  /// 单列数据更新（仅刷新该列滚轮，不 setState 整表）。
+  void _replaceColumnData(
+    int col,
+    List<TPickerOption> newData, {
+    dynamic syncValue,
+  }) {
+    final oldData = _columns[col];
+    _columns[col] = newData;
+
+    dynamic targetValue = syncValue;
+    if (targetValue == null) {
+      final initValues = widget.initialValue;
+      targetValue = initValues != null && col < initValues.length
+          ? initValues[col]
+          : _valueAtController(col);
+    }
+    final targetIdx = _indexForColumnValue(col, targetValue);
+
+    FixedExtentScrollController controller;
+    if (oldData.length != newData.length) {
+      controller = FixedExtentScrollController(initialItem: targetIdx);
+      _controllers[col] = controller;
+    } else {
+      controller = _controllers[col];
+      if (controller.selectedItem != targetIdx) {
+        controller.jumpToItem(targetIdx);
+      }
+    }
+
+    _columnKeys[col].currentState?.applyColumnUpdate(
+          options: newData,
+          controller: controller,
+        );
+  }
+
+  /// 仅同步滚轮位置到 [initialValue]（options 未变时）。
+  void _syncControllersToInitialValue() {
+    final initValues = widget.initialValue;
+    if (initValues == null) {
+      return;
+    }
+    for (var i = 0; i < _controllers.length; i++) {
+      if (i >= initValues.length) {
+        break;
+      }
+      final targetIdx = _indexForColumnValue(i, initValues[i]);
+      if (_controllers[i].selectedItem != targetIdx) {
+        _controllers[i].jumpToItem(targetIdx);
+      }
+    }
+  }
+
+  int _indexForColumnValue(int col, dynamic value, {bool duringInit = false}) {
+    if (_columns[col].isEmpty) {
+      return 0;
+    }
+    if (value != null) {
+      final found = _columns[col].indexWhere((o) => o.value == value);
+      if (found >= 0) {
+        return found;
+      }
+    }
+    if (!duringInit && col < _controllers.length) {
+      final current = _controllers[col].selectedItem;
+      return current.clamp(0, _columns[col].length - 1);
+    }
+    return 0;
+  }
+
+  dynamic _valueAtController(int col) {
+    final idx = _controllers[col].selectedItem;
+    if (idx < 0 || idx >= _columns[col].length) {
+      return null;
+    }
+    return _columns[col][idx].value;
+  }
+
+  void _ensureColumnKeys() {
+    while (_columnKeys.length < _controllers.length) {
+      _columnKeys.add(GlobalKey<PickerColumnWheelState>());
+    }
+    if (_columnKeys.length > _controllers.length) {
+      _columnKeys.removeRange(_controllers.length, _columnKeys.length);
+    }
   }
 
   void _initLinked(Map<TPickerOption, dynamic> tree) {
@@ -348,6 +473,7 @@ class _TPickerState extends State<TPicker> {
 
   /// 构建滚轮主体（含禁用状态遮罩与中央高亮条）
   Widget _buildWheel(BuildContext context, TThemeData theme) {
+    _ensureColumnKeys();
     return Opacity(
       opacity: widget.disabled ? _kDisabledOpacity : 1.0,
       child: AbsorbPointer(
@@ -377,7 +503,21 @@ class _TPickerState extends State<TPicker> {
                 child: Row(
                   children: [
                     for (var i = 0; i < _controllers.length; i++)
-                      Expanded(child: _buildColumn(i)),
+                      Expanded(
+                        child: PickerColumnWheel(
+                          key: _columnKeys[i],
+                          colIndex: i,
+                          options: _columns[i],
+                          controller: _controllers[i],
+                          itemHeight: _itemHeight,
+                          disabled: widget.disabled,
+                          scrollBehavior: _scrollBehavior,
+                          itemBuilder: widget.itemBuilder,
+                          itemDistanceCalculator: widget.itemDistanceCalculator,
+                          onItemSelected: _onItemSelected,
+                          onScrollEnd: _onScrollNotification,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -445,49 +585,6 @@ class _TPickerState extends State<TPicker> {
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Widget _buildColumn(int colIndex) {
-    final data = _columns[colIndex];
-    if (data.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: ScrollConfiguration(
-        behavior: _scrollBehavior,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (notification) =>
-              _onScrollNotification(notification, colIndex, data),
-          child: ListWheelScrollView.useDelegate(
-            itemExtent: _itemHeight,
-            diameterRatio: _kWheelDiameterRatio,
-            controller: _controllers[colIndex],
-            physics: widget.disabled
-                ? const NeverScrollableScrollPhysics()
-                : const FixedExtentScrollPhysics(),
-            onSelectedItemChanged: widget.disabled
-                ? null
-                : (index) => _onItemSelected(colIndex, index, data),
-            childDelegate: ListWheelChildBuilderDelegate(
-              childCount: data.length,
-              builder: (_, index) => TItemWidget(
-                content: data[index].label,
-                fixedExtentScrollController: _controllers[colIndex],
-                colIndex: colIndex,
-                index: index,
-                itemHeight: _itemHeight,
-                disabled: data[index].disabled,
-                itemBuilder: widget.itemBuilder,
-                itemDistanceCalculator: widget.itemDistanceCalculator,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -627,13 +724,19 @@ class _TPickerState extends State<TPicker> {
     if (col >= _columns.length - 1) {
       return;
     }
-    for (var i = col + 1; i < _controllers.length; i++) {
-      _controllers[i].dispose();
-    }
+    final toDispose = _controllers.sublist(col + 1);
     _columns.removeRange(col + 1, _columns.length);
     _controllers.removeRange(col + 1, _controllers.length);
     _selectedPath.removeRange(col + 1, _selectedPath.length);
     _mapStack.removeRange(col + 1, _mapStack.length);
+    if (_columnKeys.length > _controllers.length) {
+      _columnKeys.removeRange(_controllers.length, _columnKeys.length);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final c in toDispose) {
+        c.dispose();
+      }
+    });
   }
 
   /// 通用的联动列展开器：从给定的起点 options/parent 开始，把后续每一层都 push 进

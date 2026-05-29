@@ -533,6 +533,33 @@ class DateTimePickerSnapshot {
     return TPickerColumns(cols);
   }
 
+  /// 构建单列 options（供滚轮局部更新）。
+  List<TPickerOption> columnOptionsAt(
+    int index, {
+    DateTime? start,
+    DateTime? end,
+    bool showWeek = false,
+    DateTimePickerLabels? labels,
+    DateTimePickerRenderLabel? renderLabel,
+    DateTimePickerSteps? steps,
+  }) {
+    assert(index >= 0 && index < columns.length);
+    final resolvedLabels = labels ?? DateTimePickerLabels.defaults;
+    final safeEnd = _safeEnd(start, end);
+    return _buildColumnOptions(
+      columns[index],
+      start: start,
+      end: safeEnd,
+      current: current,
+      yearAnchor: yearAnchor,
+      columns: columns,
+      labels: resolvedLabels,
+      showWeek: showWeek,
+      renderLabel: renderLabel,
+      steps: steps,
+    );
+  }
+
   /// 转换为业务侧的 [TDateTimePickerValue]。
   TDateTimePickerValue toResult() {
     int? y, m, d, h, mi, s;
@@ -565,24 +592,109 @@ class DateTimePickerSnapshot {
 
   /// 判断从 [other] → `this`，picker 的列结构是否需要重建。
   ///
-  /// 列结构变化触发条件：
-  /// - **年 / 月**变化（日列天数可能变）；
-  /// - [showWeek] 为 true 时，**年 / 月 / 日**任一变化（日列 label 含周几）。
+  /// 等价于 [columnIndicesWithChangedOptions] 非空（保留旧 API 语义）。
   bool needsColumnRebuildFrom(
     DateTimePickerSnapshot other, {
     bool showWeek = false,
+    DateTime? start,
+    DateTime? end,
+  }) =>
+      columnIndicesWithChangedOptions(
+        other,
+        showWeek: showWeek,
+        start: start,
+        end: end,
+      ).isNotEmpty;
+
+  /// 从 [other] → `this` 时，选项列表发生变化的列索引（按 [columns] 顺序）。
+  ///
+  /// 依据各列 [columnBounds] 是否变化；[showWeek] 时日列在「日」变化时也会重建 label。
+  Set<int> columnIndicesWithChangedOptions(
+    DateTimePickerSnapshot other, {
+    bool showWeek = false,
+    DateTime? start,
+    DateTime? end,
   }) {
     if (!listEquals(columns, other.columns)) {
-      return true;
+      return {for (var i = 0; i < columns.length; i++) i};
     }
-    if (current.year != other.current.year ||
-        current.month != other.current.month) {
-      return true;
+    final safeEnd = _safeEnd(start, end);
+    final changed = <int>{};
+    for (var i = 0; i < columns.length; i++) {
+      final col = columns[i];
+      if (col == DateTimeColumn.day &&
+          showWeek &&
+          current.day != other.current.day) {
+        changed.add(i);
+        continue;
+      }
+      final ob = columnBounds(
+        col,
+        current: other.current,
+        start: start,
+        end: safeEnd,
+        yearAnchor: yearAnchor,
+        columns: columns,
+      );
+      final tb = columnBounds(
+        col,
+        current: current,
+        start: start,
+        end: safeEnd,
+        yearAnchor: yearAnchor,
+        columns: columns,
+      );
+      if (ob.min != tb.min || ob.max != tb.max) {
+        changed.add(i);
+      }
     }
-    if (showWeek && current.day != other.current.day) {
-      return true;
+    return changed;
+  }
+
+  /// 在 [previous] 基础上仅重建 [rebuildIndices] 指明的列，其余列复用引用。
+  TPickerColumns toPickerColumnsMerged({
+    required TPickerColumns? previous,
+    required Set<int> rebuildIndices,
+    DateTime? start,
+    DateTime? end,
+    bool showWeek = false,
+    DateTimePickerLabels? labels,
+    DateTimePickerRenderLabel? renderLabel,
+    DateTimePickerSteps? steps,
+  }) {
+    if (previous == null ||
+        previous.columns.length != columns.length ||
+        rebuildIndices.length == columns.length) {
+      return toPickerColumns(
+        start: start,
+        end: end,
+        showWeek: showWeek,
+        labels: labels,
+        renderLabel: renderLabel,
+        steps: steps,
+      );
     }
-    return false;
+    final resolvedLabels = labels ?? DateTimePickerLabels.defaults;
+    final safeEnd = _safeEnd(start, end);
+    final merged = List<List<TPickerOption>>.from(previous.columns);
+    for (final i in rebuildIndices) {
+      if (i < 0 || i >= columns.length) {
+        continue;
+      }
+      merged[i] = _buildColumnOptions(
+        columns[i],
+        start: start,
+        end: safeEnd,
+        current: current,
+        yearAnchor: yearAnchor,
+        columns: columns,
+        labels: resolvedLabels,
+        showWeek: showWeek,
+        renderLabel: renderLabel,
+        steps: steps,
+      );
+    }
+    return TPickerColumns(merged);
   }
 
   @override

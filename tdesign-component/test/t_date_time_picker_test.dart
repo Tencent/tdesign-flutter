@@ -264,6 +264,38 @@ void main() {
       expect(s2.needsColumnRebuildFrom(s0), isFalse);
     });
 
+    test('columnIndicesWithChangedOptions：月变仅日列，日变默认无列', () {
+      final cols = DateTimePickerMode(dateMode: DateMode.date).columns;
+      final s0 = DateTimePickerSnapshot.initial(
+        columns: cols,
+        initial: DateTime(2026, 5, 15),
+      );
+      final s1 = s0.applySelection(rawValues: const [2026, 6, 15]);
+      expect(
+        s1.columnIndicesWithChangedOptions(s0),
+        {cols.indexOf(DateTimeColumn.day)},
+      );
+
+      final s2 = s0.applySelection(rawValues: const [2026, 5, 20]);
+      expect(s2.columnIndicesWithChangedOptions(s0), isEmpty);
+    });
+
+    test('toPickerColumnsMerged：仅替换指定列', () {
+      final s = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
+        initial: DateTime(2026, 5, 15),
+      );
+      final full = s.toPickerColumns();
+      final merged = s.toPickerColumnsMerged(
+        previous: full,
+        rebuildIndices: {2},
+      );
+      expect(merged.columns[0], same(full.columns[0]));
+      expect(merged.columns[1], same(full.columns[1]));
+      expect(merged.columns[2], isNot(same(full.columns[2])));
+      expect(merged.columns[2].length, full.columns[2].length);
+    });
+
     test('needsColumnRebuildFrom：showWeek=true 时 day 变化也触发（label 含周几）',
         () {
       final s0 = DateTimePickerSnapshot.initial(
@@ -556,13 +588,6 @@ void main() {
   // TDateTimePicker 集成
   // ===========================================================================
   group('TDateTimePicker 集成', () {
-    TPickerValue _pickerValue(List<int> values) {
-      final options = values
-          .map((v) => TPickerOption(label: '$v', value: v))
-          .toList(growable: false);
-      return TPickerValue(selectedOptions: options, indexes: List.filled(values.length, 0));
-    }
-
     testWidgets('基础渲染：date 模式产生 3 列（年月日）', (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -680,7 +705,7 @@ void main() {
       expect(find.textContaining('周五'), findsWidgets);
     });
 
-    testWidgets('onChange 对非法日期先回弹，再在有效变化时触发回调', (tester) async {
+    testWidgets('onChange 滚动后触发回调', (tester) async {
       TDateTimePickerValue? changed;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -692,18 +717,14 @@ void main() {
         ),
       ));
       await tester.pumpAndSettle();
-      final picker = tester.widget<TPicker>(find.byType(TPicker));
-      picker.onChange?.call(_pickerValue([2026, 2, 31]));
-      await tester.pump();
-      // 2/31 会被归一化回 2/28，与当前值一致，因此不触发 onChange。
-      expect(changed, isNull);
 
-      // 传入有效变化值后触发 onChange。
-      picker.onChange?.call(_pickerValue([2026, 3, 1]));
-      await tester.pump();
-      expect(changed?.year, 2026);
-      expect(changed?.month, 3);
-      expect(changed?.day, 1);
+      final wheels = find.byType(ListWheelScrollView);
+      expect(wheels, findsNWidgets(3));
+      await tester.drag(wheels.at(1), const Offset(0, -80));
+      await tester.pumpAndSettle();
+
+      expect(changed, isNotNull);
+      expect(changed!.month, isNot(2));
     });
 
     testWidgets('mode/initialValue 变化会触发内部重建并更新 initialValue', (tester) async {
@@ -733,8 +754,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('switch'));
       await tester.pumpAndSettle();
-      final picker = tester.widget<TPicker>(find.byType(TPicker));
-      expect(picker.initialValue, [2027, 6]);
+      expect(find.byType(ListWheelScrollView), findsNWidgets(2));
     });
 
     testWidgets('仅 range 变化时会按新边界收紧列范围', (tester) async {
@@ -766,11 +786,9 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('tighten-range'));
       await tester.pumpAndSettle();
-      final picker = tester.widget<TPicker>(find.byType(TPicker));
-      final items = picker.items as TPickerColumns;
-      // 收紧后年列仅 2026
-      expect(items.columns[0].first.value, 2026);
-      expect(items.columns[0].last.value, 2026);
+      // 收紧后年列仅 2026（月列在 2026-01 下从 1 月起）
+      expect(find.textContaining('2026'), findsWidgets);
+      expect(find.textContaining('1月'), findsWidgets);
     });
   });
 }

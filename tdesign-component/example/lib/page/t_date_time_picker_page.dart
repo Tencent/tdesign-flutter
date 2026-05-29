@@ -27,6 +27,9 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   /// 选 2 月后再次打开 → `DateTime(2026, 2, 31)` 会溢出成 `2026-03-03`）。
   static final _kReplayFallback = DateTime(2000, 1, 1);
 
+  /// 内嵌滚轮首次展示的默认值（固定，勿与 [onChange] 写回绑定）。
+  static final _kInlineInitialValue = DateTime(2026, 5, 15, 12, 30);
+
   @override
   void dispose() {
     _inlineSelectedNotifier.dispose();
@@ -82,10 +85,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            initialValue:
-                _inlineSelectedNotifier.value
-                        ?.toDateTime(fallback: _kReplayFallback) ??
-                    DateTime.now(),
+            initialValue: _kInlineInitialValue,
             onChange: (result) => _inlineSelectedNotifier.value = result,
           ),
         ],
