@@ -13,74 +13,78 @@ export 't_date_time_picker_model.dart';
 
 /// 日期/时间选择器。
 ///
-/// 列 label 文案默认从 [TResourceDelegate]（`context.resource`）读取，与
-/// [TPicker]、[TTimeCounter] 一致；接入方通过 [TTheme.setResourceBuilder] 注入多语言。
-/// 自定义 label 请用 [format]。
+/// 纯滚轮 UI，无顶部取消/确定栏。滚轮中心项变化时通过 [onChange] 通知选中结果，
+/// 与上次 [TDateTimePickerValue] 相同时不重复触发。弹窗场景的关闭与提交由
+/// [TPopup] 或页面逻辑处理。
+///
+/// ```dart
+/// TDateTimePicker(
+///   mode: DateTimePickerMode(dateMode: DateMode.date),
+///   initialValue: DateTime.now(),
+///   onChange: (result) {},
+/// )
+/// ```
 class TDateTimePicker extends StatefulWidget {
-  const TDateTimePicker({
+  /// 创建日期/时间选择器。
+  ///
+  /// [mode] 缺省为 `DateTimePickerMode(dateMode: DateMode.date)`。
+  TDateTimePicker({
     super.key,
-    required this.mode,
-    this.format,
+    DateTimePickerMode? mode,
+    this.renderLabel,
     this.start,
     this.end,
+    this.steps,
     this.initialValue,
     this.showWeek = false,
-    this.onCancel,
     this.onChange,
-    this.onConfirm,
-    this.title,
-    this.titleWidget,
-    this.cancel,
-    this.confirm,
     this.height,
     this.itemCount,
-  });
+  }) : mode = mode ?? DateTimePickerMode(dateMode: DateMode.date);
 
-  /// 列结构（必填）。详见 [DateTimePickerMode]。
+  /// 列结构。
   final DateTimePickerMode mode;
 
-  /// 自定义列 label（仅影响展示，不影响回调 value）；返回 null 用默认格式；format 引用变化会触发列重建，宜提到 State 字段。
-  final String Function(DateTimeColumn column, int value)? format;
+  /// 自定义列 label，仅影响展示；返回 `null` 时使用 [TResourceDelegate] 默认文案。
+  final DateTimePickerRenderLabel? renderLabel;
 
-  /// 可选范围下界（闭区间）；null 时年列下界为打开时锚定年份 - 10（不随滚动漂移）。
+  /// 可选范围下界（闭区间）。
+  ///
+  /// 为 `null` 时年列下界为组件打开时锚定年份 − 10，且不随年列滚动漂移。
+  /// 若 [start] 晚于 [end]，debug 下 assert，release 下忽略 [end]。
   final DateTime? start;
 
-  /// 可选范围上界（闭区间）；null 时年列上界为打开时锚定年份 + 10（不随滚动漂移）。
+  /// 可选范围上界（闭区间）。
+  ///
+  /// 为 `null` 时年列上界为组件打开时锚定年份 + 10，且不随年列滚动漂移。
+  /// 若 [start] 晚于 [end]，debug 下 assert，release 下忽略 [end]。
   final DateTime? end;
 
-  /// 首次构建时的初始选中值；缺省为 DateTime.now；超出 [start, end] 会钳制；滚动后改此值需配合 Key 重建。
+  /// 各列选项步进，如 `DateTimePickerSteps(minute: 5)`；未配置的列步进为 1。
+  final DateTimePickerSteps? steps;
+
+  /// 默认选中时间。
+  ///
+  /// 缺省为 [DateTime.now]；超出 [start]、[end] 时钳制到范围内。
+  /// 用于首次展示或父组件更新时重置；滚动中的当前值请通过 [onChange] 获取，
+  /// 勿将 [onChange] 的结果同步回本参数并触发父组件重建。
   final DateTime? initialValue;
 
-  /// 日列 label 是否附加星期（如 19日 周六）；仅影响展示。
+  /// 是否在日列 label 附加星期（如 `19日 周六`），仅影响展示。
   ///
-  /// 回调结果不含独立星期字段，请用 [TDateTimePickerValue.toDateTime].weekday。
+  /// 回调结果无星期字段，请用 [TDateTimePickerValue.toDateTime].weekday。
   final bool showWeek;
 
-  /// 点击「取消」按钮的回调。
-  final VoidCallback? onCancel;
-
-  /// 选中值变化回调（滚动稳定后实时触发）；参数为 [TDateTimePickerValue]，仅含当前 mode 对应列；相同值不重复触发。
+  /// 选中值变化回调。
+  ///
+  /// [TDateTimePickerValue] 仅包含当前 [mode] 中存在的列；
+  /// 与上一次回调结果相同时不触发。
   final void Function(TDateTimePickerValue result)? onChange;
 
-  /// 点击「确定」按钮的回调；参数为 [TDateTimePickerValue]。
-  final void Function(TDateTimePickerValue result)? onConfirm;
-
-  /// 工具栏中部标题文本。
-  final String? title;
-
-  /// 工具栏中部自定义标题组件（优先级高于 [title]）。
-  final Widget? titleWidget;
-
-  /// 工具栏左侧插槽（Widget）；null 时使用 [TPicker] 默认取消文案。
-  final Widget? cancel;
-
-  /// 工具栏右侧插槽（Widget）；null 时使用 [TPicker] 默认确认文案。
-  final Widget? confirm;
-
-  /// 面板视窗高度（不含工具栏），默认 200。
+  /// 滚轮视窗高度，默认 200。
   final double? height;
 
-  /// 每屏可见条目数量，默认 5。
+  /// 每屏可见条目数，默认 5。
   final int? itemCount;
 
   @override
@@ -88,16 +92,13 @@ class TDateTimePicker extends StatefulWidget {
 }
 
 class _TDateTimePickerState extends State<TDateTimePicker> {
-  /// **唯一**状态字段。所有派生信息（initial value / picker columns / 回调
-  /// 结果）都从这里出发，杜绝旧设计「四字段并行」的脱节风险。
   late DateTimePickerSnapshot _snapshot;
 
-  /// 上次传给 [TPicker] 的 items（深比较），用于避免列数据未变时触发全量重建。
   TPickerColumns? _cachedPickerColumns;
 
-  /// 仅在 [_cachedPickerColumns] 结构变化时同步给 [TPicker.initialValue]，
-  /// 避免滚动年份时因 initialValue 变化导致年列滚轮被重置。
   List<dynamic>? _pickerInitialValue;
+
+  TDateTimePickerValue? _lastNotifiedValue;
 
   @override
   void initState() {
@@ -107,52 +108,58 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       initial: widget.initialValue,
       start: widget.start,
       end: widget.end,
+      steps: widget.steps,
     );
+    _lastNotifiedValue = _snapshot.toResult();
   }
 
   @override
   void didUpdateWidget(covariant TDateTimePicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final modeChanged = !_listEqualInt(
-        oldWidget.mode.columns, widget.mode.columns);
+    final modeChanged =
+        !_listEqualInt(oldWidget.mode.columns, widget.mode.columns);
     final initialChanged = oldWidget.initialValue != widget.initialValue;
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
+    final stepsChanged = oldWidget.steps != widget.steps;
     final showWeekChanged = oldWidget.showWeek != widget.showWeek;
-    final formatChanged = oldWidget.format != widget.format;
+    final renderLabelChanged = oldWidget.renderLabel != widget.renderLabel;
 
     if (!modeChanged &&
         !initialChanged &&
         !rangeChanged &&
+        !stepsChanged &&
         !showWeekChanged &&
-        !formatChanged) {
+        !renderLabelChanged) {
       return;
     }
 
-    if (formatChanged &&
+    if (renderLabelChanged &&
         !modeChanged &&
         !initialChanged &&
         !rangeChanged &&
+        !stepsChanged &&
         !showWeekChanged) {
       _invalidatePickerCache();
       return;
     }
 
     if (modeChanged || initialChanged) {
+      _lastNotifiedValue = null;
       _snapshot = DateTimePickerSnapshot.initial(
         columns: widget.mode.columns,
         initial: initialChanged ? widget.initialValue : _snapshot.current,
         start: widget.start,
         end: widget.end,
+        steps: widget.steps,
       );
       _invalidatePickerCache();
     } else {
-      // 仅 range / showWeek / format 变化：保留 current，重新钳制；列 label
-      // 由 build 内 toPickerColumns 按新 showWeek / format 生成。
       _snapshot = _snapshot.rebuildFor(
         columns: widget.mode.columns,
         start: widget.start,
         end: widget.end,
+        steps: widget.steps,
       );
       _invalidatePickerCache();
     }
@@ -172,12 +179,16 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       rawValues: rawValues,
       start: widget.start,
       end: widget.end,
+      steps: widget.steps,
     );
+    final result = next.toResult();
     final selectionChanged = next != _snapshot;
     final pickerOutOfSync = !_listEqualInt(rawValues, next.values);
     final needsRebuild =
         next.needsColumnRebuildFrom(_snapshot, showWeek: widget.showWeek) ||
             pickerOutOfSync;
+    final valueChanged =
+        _lastNotifiedValue == null || result != _lastNotifiedValue;
 
     if (!selectionChanged && !needsRebuild) {
       return;
@@ -185,31 +196,14 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
 
     _snapshot = next;
 
-    if (selectionChanged) {
-      widget.onChange?.call(next.toResult());
+    if (valueChanged) {
+      _lastNotifiedValue = result;
+      widget.onChange?.call(result);
     }
 
-    // 仅当列结构需要重建（年/月变化、含 showWeek 时日变化、或 picker 报值
-    // 偏离归一化结果需要回弹）时才 setState；否则只静默更新内部 snapshot。
     if (needsRebuild) {
       setState(() {});
     }
-  }
-
-  void _handleConfirm(TPickerValue pickerValue) {
-    final rawValues = DateTimePickerSnapshot.coerceRawValues(
-      pickerValue.values,
-      expectedLength: _snapshot.columns.length,
-    );
-    final next = _snapshot.applySelection(
-      rawValues: rawValues,
-      start: widget.start,
-      end: widget.end,
-    );
-    if (next != _snapshot) {
-      _snapshot = next;
-    }
-    widget.onConfirm?.call(_snapshot.toResult());
   }
 
   static bool _listEqualInt(List<dynamic> a, List<dynamic> b) {
@@ -233,9 +227,10 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     final nextColumns = _snapshot.toPickerColumns(
       start: widget.start,
       end: widget.end,
-      format: widget.format,
       showWeek: widget.showWeek,
       labels: labels,
+      renderLabel: widget.renderLabel,
+      steps: widget.steps,
     );
     if (_cachedPickerColumns == null ||
         _cachedPickerColumns != nextColumns) {
@@ -243,8 +238,6 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       _pickerInitialValue = List<dynamic>.from(_snapshot.values);
     }
     return TPicker(
-      // 外部输入（mode/start/end/initialValue/showWeek/format）变化时强制重建
-      // TPicker。内部 setState 不会改变 key，故联动刷新走 didUpdateWidget 路径。
       key: ValueKey<int>(
         Object.hash(
           Object.hashAll(widget.mode.columns),
@@ -252,30 +245,18 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
           widget.end,
           widget.initialValue,
           widget.showWeek,
-          widget.format,
+          widget.renderLabel,
+          widget.steps,
           labels,
           Localizations.localeOf(context),
         ),
       ),
       items: _cachedPickerColumns!,
       initialValue: _pickerInitialValue,
-      title: widget.title,
-      titleWidget: widget.titleWidget,
-      cancel: _resolveSlot(widget.cancel),
-      confirm: _resolveSlot(widget.confirm),
+      showToolbar: false,
       height: widget.height ?? 200,
       itemCount: widget.itemCount ?? 5,
-      onCancel: widget.onCancel,
       onChange: _handleChange,
-      onConfirm: _handleConfirm,
     );
-  }
-
-  /// 工具栏插槽：返回自定义 [slot]，否则交给上层使用默认文案。
-  static Widget? _resolveSlot(Widget? slot) {
-    if (slot != null) {
-      return slot;
-    }
-    return null;
   }
 }

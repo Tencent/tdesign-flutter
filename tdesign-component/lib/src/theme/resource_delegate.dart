@@ -123,28 +123,28 @@ abstract class TResourceDelegate {
   /// [TDatePicker] / [TDateTimePicker] 日
   String get dateLabel;
 
-  /// [TDatePicker] / [TDateTimePicker] 周
+  /// [TDatePicker] / [TDateTimePicker.showWeek] 周前缀
   String get weeksLabel;
 
-  /// [TCalendarHeader] 星期日
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期日
   String get sunday;
 
-  /// [TCalendarHeader] 星期一
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期一
   String get monday;
 
-  /// [TCalendarHeader] 星期二
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期二
   String get tuesday;
 
-  /// [TCalendarHeader] 星期三
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期三
   String get wednesday;
 
-  /// [TCalendarHeader] 星期四
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期四
   String get thursday;
 
-  /// [TCalendarHeader] 星期五
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期五
   String get friday;
 
-  /// [TCalendarHeader] 星期六
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期六
   String get saturday;
 
   /// [TCalendarBody] 年

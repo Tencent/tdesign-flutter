@@ -8,7 +8,7 @@
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.month,
+            mode: DateTimePickerMode(dateMode: DateMode.month),
             title: '请选择年月',
             initialValue:
                 _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),

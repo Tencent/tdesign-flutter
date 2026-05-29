@@ -67,6 +67,7 @@ class TPicker extends StatefulWidget {
     this.titleWidget,
     this.onCancel,
     this.onConfirm,
+    this.showToolbar = true,
   });
 
   /// 数据源（必填）
@@ -134,10 +135,15 @@ class TPicker extends StatefulWidget {
   /// 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化）
   final ItemDistanceCalculator? itemDistanceCalculator;
 
+  /// 是否显示顶部工具栏（取消 / 标题 / 确认）；默认 `true`。
+  ///
+  /// 为 `false` 时仅渲染滚轮，选中变化请使用 [onChange]。
+  final bool showToolbar;
+
   /// 工具栏中部标题（可选，不传时中部留白）
   ///
-  /// 顶部工具栏永远显示，包含「取消」「标题」「确认」三块。
-  /// 用户点击「取消」触发 [onCancel]，点击「确认」触发 [onConfirm]。
+  /// 仅当 [showToolbar] 为 `true` 时显示。用户点击「取消」触发 [onCancel]，
+  /// 点击「确认」触发 [onConfirm]。
   /// 选择器与弹窗（popup）完全解耦——关闭/打开弹窗的逻辑由业务层在
   /// 这两个回调中自行控制。
   ///
@@ -334,7 +340,7 @@ class _TPickerState extends State<TPicker> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildToolbar(theme),
+        if (widget.showToolbar) _buildToolbar(theme),
         _buildWheel(context, theme),
       ],
     );

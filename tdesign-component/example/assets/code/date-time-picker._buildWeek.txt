@@ -2,13 +2,13 @@
   Widget _buildWeek(BuildContext context) {
     return TCell(
       title: '年月日 + 星期',
-      note: _formatWeekResult(_weekSelected),
+      note: _formatWeekResult(context, _weekSelected),
       arrow: true,
       onClick: (_) {
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
             title: '请选择日期',
             initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),

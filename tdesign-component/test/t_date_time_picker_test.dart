@@ -11,26 +11,26 @@ void main() {
   // DateTimePickerMode 契约
   // ===========================================================================
   group('DateTimePickerMode', () {
-    test('快捷常量按粒度展开（与 mobile-vue 完全等价）', () {
-      expect(DateTimePickerMode.year.columns, [DateTimeColumn.year]);
-      expect(DateTimePickerMode.month.columns,
+    test('dateMode / timeMode 组合展开列（与 mobile-vue 等价）', () {
+      expect(DateTimePickerMode(dateMode: DateMode.year).columns, [DateTimeColumn.year]);
+      expect(DateTimePickerMode(dateMode: DateMode.month).columns,
           [DateTimeColumn.year, DateTimeColumn.month]);
-      expect(DateTimePickerMode.ymd.columns,
+      expect(DateTimePickerMode(dateMode: DateMode.date).columns,
           [DateTimeColumn.year, DateTimeColumn.month, DateTimeColumn.day]);
-      expect(DateTimePickerMode.hour.columns, [
+      expect(DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.hour).columns, [
         DateTimeColumn.year,
         DateTimeColumn.month,
         DateTimeColumn.day,
         DateTimeColumn.hour,
       ]);
-      expect(DateTimePickerMode.minute.columns, [
+      expect(DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute).columns, [
         DateTimeColumn.year,
         DateTimeColumn.month,
         DateTimeColumn.day,
         DateTimeColumn.hour,
         DateTimeColumn.minute,
       ]);
-      expect(DateTimePickerMode.second.columns, [
+      expect(DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns, [
         DateTimeColumn.year,
         DateTimeColumn.month,
         DateTimeColumn.day,
@@ -42,36 +42,36 @@ void main() {
 
     test('combined：仅 date 段', () {
       expect(
-        DateTimePickerMode.combined(dateMode: DateMode.year).columns,
+        DateTimePickerMode(dateMode: DateMode.year).columns,
         [DateTimeColumn.year],
       );
       expect(
-        DateTimePickerMode.combined(dateMode: DateMode.month).columns,
+        DateTimePickerMode(dateMode: DateMode.month).columns,
         [DateTimeColumn.year, DateTimeColumn.month],
       );
       expect(
-        DateTimePickerMode.combined(dateMode: DateMode.date).columns,
+        DateTimePickerMode(dateMode: DateMode.date).columns,
         [DateTimeColumn.year, DateTimeColumn.month, DateTimeColumn.day],
       );
     });
 
     test('combined：仅 time 段（对齐 mobile-vue [null, mode]）', () {
       expect(
-        DateTimePickerMode.combined(timeMode: TimeMode.hour).columns,
+        DateTimePickerMode(timeMode: TimeMode.hour).columns,
         [DateTimeColumn.hour],
       );
       expect(
-        DateTimePickerMode.combined(timeMode: TimeMode.minute).columns,
+        DateTimePickerMode(timeMode: TimeMode.minute).columns,
         [DateTimeColumn.hour, DateTimeColumn.minute],
       );
       expect(
-        DateTimePickerMode.combined(timeMode: TimeMode.second).columns,
+        DateTimePickerMode(timeMode: TimeMode.second).columns,
         [DateTimeColumn.hour, DateTimeColumn.minute, DateTimeColumn.second],
       );
     });
 
     test('combined：date + time 组合按 date→time 顺序拼接', () {
-      final cols = DateTimePickerMode.combined(
+      final cols = DateTimePickerMode(
         dateMode: DateMode.date,
         timeMode: TimeMode.minute,
       ).columns;
@@ -86,35 +86,23 @@ void main() {
 
     test('combined：dateMode 与 timeMode 同时为 null 触发 assert', () {
       expect(
-        () => DateTimePickerMode.combined(),
+        () => DateTimePickerMode(),
         throwsAssertionError,
       );
     });
 
-    test('同配置的 ShortcutMode 与 CombinedMode 在 == / hashCode 上一致', () {
-      final a = ShortcutMode(date: DateMode.date, time: TimeMode.minute);
-      final b = ShortcutMode(date: DateMode.date, time: TimeMode.minute);
-      final c = CombinedMode(date: DateMode.date, time: TimeMode.minute);
-      expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
-      expect(a, equals(c));
-      expect(a.hashCode, equals(c.hashCode));
-      final c2 = CombinedMode(date: DateMode.date, time: TimeMode.minute);
-      expect(c.hashCode, equals(c2.hashCode));
-    });
-
-    test('快捷常量与 combined 在 == / hashCode 上一致', () {
+    test('同配置 factory 在 == / hashCode 上一致', () {
       expect(
-        DateTimePickerMode.ymd,
-        equals(DateTimePickerMode.combined(dateMode: DateMode.date)),
+        DateTimePickerMode(dateMode: DateMode.date),
+        equals(DateTimePickerMode(dateMode: DateMode.date)),
       );
       expect(
-        DateTimePickerMode.ymd.hashCode,
-        DateTimePickerMode.combined(dateMode: DateMode.date).hashCode,
+        DateTimePickerMode(dateMode: DateMode.date).hashCode,
+        DateTimePickerMode(dateMode: DateMode.date).hashCode,
       );
       expect(
-        DateTimePickerMode.minute,
-        equals(DateTimePickerMode.combined(
+        DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute),
+        equals(DateTimePickerMode(
           dateMode: DateMode.date,
           timeMode: TimeMode.minute,
         )),
@@ -123,20 +111,20 @@ void main() {
 
     test('同配置 mode 在 Set 中去重', () {
       final modes = {
-        DateTimePickerMode.ymd,
-        DateTimePickerMode.combined(dateMode: DateMode.date),
+        DateTimePickerMode(dateMode: DateMode.date),
+        DateTimePickerMode(dateMode: DateMode.date),
       };
       expect(modes.length, 1);
     });
 
     test('不同配置的 mode 仍不相等', () {
       expect(
-        DateTimePickerMode.ymd,
-        isNot(equals(DateTimePickerMode.month)),
+        DateTimePickerMode(dateMode: DateMode.date),
+        isNot(equals(DateTimePickerMode(dateMode: DateMode.month))),
       );
       expect(
-        DateTimePickerMode.combined(timeMode: TimeMode.minute),
-        isNot(equals(DateTimePickerMode.combined(timeMode: TimeMode.hour))),
+        DateTimePickerMode(timeMode: TimeMode.minute),
+        isNot(equals(DateTimePickerMode(timeMode: TimeMode.hour))),
       );
     });
   });
@@ -201,7 +189,7 @@ void main() {
   group('DateTimePickerSnapshot', () {
     test('initial 创建时把 current 钳制到 [start, end]', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2030, 1, 1),
         end: DateTime(2026, 12, 31),
       );
@@ -211,7 +199,7 @@ void main() {
     test('initial 在 start > end 时 debug 下抛 assert', () {
       expect(
         () => DateTimePickerSnapshot.initial(
-          columns: DateTimePickerMode.ymd.columns,
+          columns: DateTimePickerMode(dateMode: DateMode.date).columns,
           start: DateTime(2027),
           end: DateTime(2025),
         ),
@@ -221,7 +209,7 @@ void main() {
 
     test('values 按 columns 投影 current', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.minute.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute).columns,
         initial: DateTime(2026, 5, 15, 10, 30),
       );
       expect(s.values, [2026, 5, 15, 10, 30]);
@@ -229,7 +217,7 @@ void main() {
 
     test('applySelection：picker rawValues 合并到 snapshot，自动处理日溢出', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 31),
       );
       // 切到 2 月，应自动 clamp 到 28 日（非闰年）
@@ -239,7 +227,7 @@ void main() {
 
     test('applySelection：钳制到 [start, end]', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
         start: DateTime(2026, 5, 10),
         end: DateTime(2026, 5, 20),
@@ -254,11 +242,11 @@ void main() {
 
     test('相等性：同 columns + 同 current → 相等', () {
       final a = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final b = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       expect(a, equals(b));
@@ -266,7 +254,7 @@ void main() {
 
     test('needsColumnRebuildFrom：年/月变化触发', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final s1 = s0.applySelection(rawValues: const [2026, 6, 15]);
@@ -279,7 +267,7 @@ void main() {
     test('needsColumnRebuildFrom：showWeek=true 时 day 变化也触发（label 含周几）',
         () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final s1 = s0.applySelection(rawValues: const [2026, 5, 20]);
@@ -299,7 +287,7 @@ void main() {
 
     test('滚动年份后年列范围不随 current.year 漂移', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final s1 = s0.applySelection(rawValues: const [2020, 5, 15]);
@@ -351,7 +339,7 @@ void main() {
     test('toPickerColumns：showWeek=true 时日列 label 含周几', () {
       // 2026-05-15 是周五
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final cols = s.toPickerColumns(showWeek: true);
@@ -362,7 +350,7 @@ void main() {
 
     test('toPickerColumns：showWeek=false 时日列 label 仅含「N日」', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final cols = s.toPickerColumns();
@@ -372,7 +360,7 @@ void main() {
 
     test('toResult 把 snapshot 转回 TDateTimePickerValue（无 week 字段）', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final r = s.toResult();
@@ -385,7 +373,7 @@ void main() {
 
     test('toResult 在 second 模式返回完整时分秒', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.second.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
         initial: DateTime(2026, 5, 15, 10, 20, 30),
       );
       final r = s.toResult();
@@ -428,22 +416,22 @@ void main() {
 
     test('rebuildFor 会保留 yearAnchor 并按新范围钳制 current', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final s1 = s0.rebuildFor(
-        columns: DateTimePickerMode.second.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
         start: DateTime(2026, 6, 1),
         end: DateTime(2026, 6, 30, 23, 59, 59),
       );
       expect(s1.yearAnchor, s0.yearAnchor);
       expect(s1.current, DateTime(2026, 6, 1));
-      expect(s1.columns, DateTimePickerMode.second.columns);
+      expect(s1.columns, DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns);
     });
 
     test('toPickerColumns 在时分秒边界上按同日/同小时/同分钟收紧', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.second.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
         initial: DateTime(2026, 5, 15, 10, 20, 35),
         start: DateTime(2026, 5, 15, 10, 20, 30),
         end: DateTime(2026, 5, 15, 10, 20, 40),
@@ -469,7 +457,7 @@ void main() {
 
     test('second 模式 applySelection 会解析时分秒列', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.second.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
         initial: DateTime(2026, 5, 15, 10, 20, 30),
       );
       final s1 = s0.applySelection(
@@ -478,14 +466,14 @@ void main() {
       expect(s1.current, DateTime(2026, 5, 15, 12, 34, 56));
     });
 
-    test('day 列自定义 format 优先于默认文案（含 showWeek）', () {
+    test('renderLabel 优先于默认文案（含 showWeek）', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final cols = s.toPickerColumns(
         showWeek: true,
-        format: (column, value) =>
+        renderLabel: (column, value) =>
             column == DateTimeColumn.day ? 'D$value' : '$value',
       );
       final option15 = cols.columns[2].firstWhere((o) => o.value == 15);
@@ -494,12 +482,73 @@ void main() {
 
     test('toString 包含关键字段', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode.ymd.columns,
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
       );
       final text = s.toString();
       expect(text, contains('DateTimePickerSnapshot(columns:'));
       expect(text, contains('yearAnchor: 2026'));
+    });
+
+    test('steps：分钟步进 5 且 respect start/end', () {
+      final s = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(timeMode: TimeMode.minute).columns,
+        initial: DateTime(2000, 1, 1, 10, 7),
+        start: DateTime(2000, 1, 1, 9, 30),
+        end: DateTime(2000, 1, 1, 10, 45),
+        steps: const DateTimePickerSteps(minute: 5),
+      );
+      final cols = s.toPickerColumns(
+        start: DateTime(2000, 1, 1, 9, 30),
+        end: DateTime(2000, 1, 1, 10, 45),
+        steps: const DateTimePickerSteps(minute: 5),
+      );
+      final minuteValues = cols.columns[1].map((o) => o.value).toList();
+      expect(minuteValues, [0, 5, 10, 15, 20, 25, 30, 35, 40, 45]);
+      expect(s.current.minute, 5);
+    });
+
+    test('steps：applySelection 吸附到最近步进点', () {
+      final s0 = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(timeMode: TimeMode.minute).columns,
+        initial: DateTime(2000, 1, 1, 10, 0),
+        steps: const DateTimePickerSteps(minute: 5),
+      );
+      final s1 = s0.applySelection(
+        rawValues: const [10, 7],
+        steps: const DateTimePickerSteps(minute: 5),
+      );
+      expect(s1.current.minute, 5);
+    });
+
+    test('仅时分模式：start/end 按时钟分量收紧', () {
+      final s = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(timeMode: TimeMode.minute).columns,
+        initial: DateTime(2000, 1, 1, 10, 30),
+        start: DateTime(2000, 1, 1, 9, 0),
+        end: DateTime(2000, 1, 1, 18, 0),
+      );
+      final cols = s.toPickerColumns(
+        start: DateTime(2000, 1, 1, 9, 0),
+        end: DateTime(2000, 1, 1, 18, 0),
+      );
+      expect(cols.columns[0].first.value, 9);
+      expect(cols.columns[0].last.value, 18);
+    });
+
+    test('边界年：起始年月份从 start.month 起', () {
+      final s = DateTimePickerSnapshot.initial(
+        columns: const [DateTimeColumn.year, DateTimeColumn.month],
+        initial: DateTime(2024, 8, 1),
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2026, 8, 31),
+      );
+      final cols = s.toPickerColumns(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2026, 8, 31),
+      );
+      expect(cols.columns[1].first.value, 6);
+      expect(cols.columns[1].last.value, 12);
     });
   });
 
@@ -518,7 +567,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             initialValue: DateTime(2026, 5, 15),
           ),
         ),
@@ -532,7 +581,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.combined(timeMode: TimeMode.minute),
+            mode: DateTimePickerMode(timeMode: TimeMode.minute),
             initialValue: DateTime(2026, 5, 15, 10, 30),
           ),
         ),
@@ -545,7 +594,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             initialValue: DateTime(2026, 5, 15),
             showWeek: true,
           ),
@@ -558,125 +607,45 @@ void main() {
       expect(find.textContaining('周五'), findsWidgets);
     });
 
-    testWidgets('点 confirm 插槽派发 TDateTimePickerValue', (tester) async {
-      TDateTimePickerValue? captured;
+    testWidgets('不渲染确定/取消工具栏', (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             initialValue: DateTime(2026, 5, 15),
-            confirm: const Text('确定'),
-            onConfirm: (v) => captured = v,
           ),
         ),
       ));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('确定'));
-      expect(captured?.year, 2026);
-      expect(captured?.month, 5);
-      expect(captured?.day, 15);
+      expect(find.text('确定'), findsNothing);
+      expect(find.text('取消'), findsNothing);
     });
 
-    testWidgets('confirm Widget 插槽可正常显示并触发', (tester) async {
-      var confirmed = false;
+    testWidgets('mode 缺省为 date（年月日）', (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
             initialValue: DateTime(2026, 5, 15),
-            confirm: const Icon(Icons.check),
-            onConfirm: (_) => confirmed = true,
           ),
         ),
       ));
       await tester.pumpAndSettle();
-      expect(find.byIcon(Icons.check), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.check));
-      expect(confirmed, isTrue);
+      expect(find.byType(ListWheelScrollView), findsNWidgets(3));
     });
 
-    testWidgets('initialValue 超过 end 时被钳制到 end', (tester) async {
-      TDateTimePickerValue? captured;
+    testWidgets('renderLabel 自定义列 label', (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
-            initialValue: DateTime(2030, 12, 31),
-            end: DateTime(2026, 12, 31),
-            confirm: const Text('确定'),
-            onConfirm: (v) => captured = v,
-          ),
-        ),
-      ));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('确定'));
-      expect(captured?.year, 2026);
-    });
-
-    testWidgets('format 自定义列 label', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TDateTimePicker(
-            mode: DateTimePickerMode.combined(dateMode: DateMode.year),
+            mode: DateTimePickerMode(dateMode: DateMode.year),
             initialValue: DateTime(2026, 1, 1),
-            format: (col, v) => 'Y$v',
+            renderLabel: (column, v) =>
+                column == DateTimeColumn.year ? 'Y$v' : null,
           ),
         ),
       ));
       await tester.pumpAndSettle();
       expect(find.text('Y2026'), findsWidgets);
-    });
-
-    testWidgets('onCancel 点击取消按钮触发回调', (tester) async {
-      var cancelled = false;
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
-            initialValue: DateTime(2026, 5, 15),
-            cancel: const Text('取消'),
-            onCancel: () => cancelled = true,
-          ),
-        ),
-      ));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('取消'));
-      expect(cancelled, isTrue);
-    });
-
-    testWidgets('format 变更后 label 随之更新', (tester) async {
-      var useAltFormat = false;
-      await tester.pumpWidget(MaterialApp(
-        home: StatefulBuilder(
-          builder: (context, setState) {
-            return Scaffold(
-              body: Column(
-                children: [
-                  TextButton(
-                    onPressed: () => setState(() => useAltFormat = true),
-                    child: const Text('toggle-format'),
-                  ),
-                  TDateTimePicker(
-                    mode: DateTimePickerMode.combined(dateMode: DateMode.year),
-                    initialValue: DateTime(2026, 1, 1),
-                    format: useAltFormat
-                        ? (col, v) => 'ALT$v'
-                        : (col, v) => 'BASE$v',
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ));
-      await tester.pumpAndSettle();
-      expect(find.text('BASE2026'), findsWidgets);
-      expect(find.text('ALT2026'), findsNothing);
-
-      await tester.tap(find.text('toggle-format'));
-      await tester.pumpAndSettle();
-      expect(find.text('ALT2026'), findsWidgets);
-      expect(find.text('BASE2026'), findsNothing);
     });
 
     testWidgets('英文 resource 下渲染英文列 label', (tester) async {
@@ -685,7 +654,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             initialValue: DateTime(2026, 5, 15),
             showWeek: true,
           ),
@@ -700,7 +669,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             initialValue: DateTime(2026, 5, 15),
             showWeek: true,
           ),
@@ -716,7 +685,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             initialValue: DateTime(2026, 2, 28),
             onChange: (v) => changed = v,
           ),
@@ -737,25 +706,6 @@ void main() {
       expect(changed?.day, 1);
     });
 
-    testWidgets('onConfirm 在值变化时采用归一化结果', (tester) async {
-      TDateTimePickerValue? confirmed;
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
-            initialValue: DateTime(2026, 2, 28),
-            onConfirm: (v) => confirmed = v,
-          ),
-        ),
-      ));
-      await tester.pumpAndSettle();
-      final picker = tester.widget<TPicker>(find.byType(TPicker));
-      picker.onConfirm?.call(_pickerValue([2026, 3, 1]));
-      await tester.pump();
-      expect(confirmed?.month, 3);
-      expect(confirmed?.day, 1);
-    });
-
     testWidgets('mode/initialValue 变化会触发内部重建并更新 initialValue', (tester) async {
       var useMonth = false;
       var initialValue = DateTime(2026, 5, 15);
@@ -772,7 +722,7 @@ void main() {
                   child: const Text('switch'),
                 ),
                 TDateTimePicker(
-                  mode: useMonth ? DateTimePickerMode.month : DateTimePickerMode.ymd,
+                  mode: useMonth ? DateTimePickerMode(dateMode: DateMode.month) : DateTimePickerMode(dateMode: DateMode.date),
                   initialValue: initialValue,
                 ),
               ],
@@ -803,7 +753,7 @@ void main() {
                   child: const Text('tighten-range'),
                 ),
                 TDateTimePicker(
-                  mode: DateTimePickerMode.ymd,
+                  mode: DateTimePickerMode(dateMode: DateMode.date),
                   initialValue: DateTime(2026, 5, 15),
                   start: start,
                   end: end,

@@ -20,7 +20,7 @@
             ),
           ),
           TDateTimePicker(
-            mode: DateTimePickerMode.combined(
+            mode: DateTimePickerMode(
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),

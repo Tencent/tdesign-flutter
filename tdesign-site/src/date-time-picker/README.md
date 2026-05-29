@@ -46,7 +46,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             ),
           ),
           TDateTimePicker(
-            mode: DateTimePickerMode.combined(
+            mode: DateTimePickerMode(
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
@@ -80,7 +80,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             title: '请选择日期',
             initialValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
@@ -111,7 +111,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.month,
+            mode: DateTimePickerMode(dateMode: DateMode.month),
             title: '请选择年月',
             initialValue:
                 _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),
@@ -143,7 +143,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.combined(timeMode: TimeMode.minute),
+            mode: DateTimePickerMode(timeMode: TimeMode.minute),
             title: '请选择时分',
             initialValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
             onCancel: () => Navigator.of(context).pop(),
@@ -174,7 +174,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.combined(
+            mode: DateTimePickerMode(
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
@@ -212,7 +212,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         _showPickerPopup(
           context,
           picker: TDateTimePicker(
-            mode: DateTimePickerMode.ymd,
+            mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
             title: '请选择日期',
             initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
@@ -242,14 +242,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | cancel | Widget? | - | 工具栏左侧插槽（Widget）；null 时使用 `TPicker` 默认取消文案。 |
 | confirm | Widget? | - | 工具栏右侧插槽（Widget）；null 时使用 `TPicker` 默认确认文案。 |
 | end | DateTime? | - | 可选范围上界（闭区间）；null 时年列上界为打开时锚定年份 + 10（不随滚动漂移）。 |
-| format | String Function(DateTimeColumn column, int value)? | - | 自定义列 label（仅影响展示，不影响回调 value）；返回 null 用默认格式；format 引用变化会触发列重建，宜提到 State 字段。 |
 | height | double? | - | 面板视窗高度（不含工具栏），默认 200。 |
-| initialValue | DateTime? | - | 首次构建时的初始选中值；缺省为 DateTime.now；超出 `start, end` 会钳制；滚动后改此值需配合 Key 重建。 |
+| initialValue | DateTime? | - | 默认选中时间；缺省 DateTime.now，超出 `start, end` 会钳制。用于首次展示或外部重置，当前选中通过 `onChange` 获取。 |
 | itemCount | int? | - | 每屏可见条目数量，默认 5。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mode | DateTimePickerMode | - | 列结构（必填）。详见 `DateTimePickerMode`。 |
 | onCancel | VoidCallback? | - | 点击「取消」按钮的回调。 |
-| onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调（滚动稳定后实时触发）；参数为 `TDateTimePickerValue`，仅含当前 mode 对应列；相同值不重复触发。 |
+| onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调；`TDateTimePickerValue` 仅含当前 mode 对应列，与上次结果相同时不触发。 |
 | onConfirm | void Function(TDateTimePickerValue result)? | - | 点击「确定」按钮的回调；参数为 `TDateTimePickerValue`。 |
 | showWeek | bool | false | 日列 label 是否附加星期（如 19日 周六）；仅影响展示。 回调结果不含独立星期字段，请用 `TDateTimePickerValue.toDateTime`.weekday。 |
 | start | DateTime? | - | 可选范围下界（闭区间）；null 时年列下界为打开时锚定年份 - 10（不随滚动漂移）。 |
@@ -267,7 +266,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 #### 简介
 列结构模式。快捷常量见下方静态成员；自定义组合用 `DateTimePickerMode.combined`。
 相同 `dateGranularity` + `timeGranularity` 配置的 mode 在 `==` / `hashCode` 上视为相等
-（如 `ymd` 与 `combined(dateMode: DateMode.date)`）；比较列结构也可用 `columns`。
+（如 `date` 与 `combined(dateMode: DateMode.date)`）；比较列结构也可用 `columns`。
 注意：`hour` / `minute` / `second` 快捷常量含完整年月日；仅时间列（如只要时分）请用
 `combined(timeMode: TimeMode.minute)` 等。
 
@@ -292,7 +291,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | month | DateTimePickerMode | - | 快捷模式：年 + 月（只选年月）。 |
 | second | DateTimePickerMode | - | 快捷模式：年 + 月 + 日 + 时 + 分 + 秒（含完整年月日 + 时分秒）。 若只要时间列组合，请用 `combined(timeMode: TimeMode.second)` 等。 |
 | year | DateTimePickerMode | - | 快捷模式：年（只选年份）。 |
-| ymd | DateTimePickerMode | - | 快捷模式：年月日（Year-Month-Day，对齐 mobile-vue `mode: 'date'`）；等价于 `combined(dateMode: DateMode.date)`。 |
+| date | DateTimePickerMode | - | 快捷模式：年月日（对齐 mobile-vue `mode: 'date'`）；等价于 `combined(dateMode: DateMode.date)`。 |
 
 
 #### 方法
