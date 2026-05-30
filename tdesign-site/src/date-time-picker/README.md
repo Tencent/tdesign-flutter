@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_date_time_picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_date_time_picker_page.dart)
+[td_date-time-picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_date-time-picker_page.dart)
 
 ### 1 基础用法
 
@@ -305,3 +305,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | hour | 时。 |
 | minute | 时 + 分。 |
 | second | 时 + 分 + 秒。 |
+
+
+  
