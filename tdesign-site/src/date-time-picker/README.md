@@ -243,8 +243,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| dateMode | DateMode? | - | 日期段粒度，见 `DateMode`；与 `timeMode` 至少传其一。 |
-| timeMode | TimeMode? | - | 时间段粒度，见 `TimeMode`；与 `dateMode` 至少传其一。 |
+| dateMode | DateMode? | - | - |
+| timeMode | TimeMode? | - | - |
 
 
 ### TDateTimePickerValue
@@ -262,13 +262,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | month | int? | - | 月。 |
 | second | int? | - | 秒。 |
 | year | int? | - | 年。 |
-
-
-#### 方法
-
-| 名称 | 类型 | 说明 |
-| --- | --- | --- |
-| toDateTime | DateTime Function({DateTime? fallback}) | 转为 `DateTime`；六元组完整时直接构造，partial 值须显式传入 `fallback`，否则抛出 `ArgumentError`。 |
 
 
 ### DateTimePickerSteps
@@ -337,3 +330,5 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 typedef DateTimePickerRenderLabel = String? Function(DateTimeColumn column, int value);
 ```
 
+
+  
