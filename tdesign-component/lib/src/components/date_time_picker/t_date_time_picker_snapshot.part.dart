@@ -263,7 +263,7 @@ class DateTimePickerSnapshot {
 
   /// 从 [other] → `this` 时，选项列表发生变化的列索引（按 [columns] 顺序）。
   ///
-  /// 依据各列 [columnBounds] 是否变化；[showWeek] 时日列在「日」变化时也会重建 label。
+  /// 依据各列 [columnBounds] 是否变化；[showWeek] 时日列在年/月/日任一变化时也会重建 label（星期随完整日期变化）。
   Set<int> columnIndicesWithChangedOptions(
     DateTimePickerSnapshot other, {
     bool showWeek = false,
@@ -279,7 +279,9 @@ class DateTimePickerSnapshot {
       final col = columns[i];
       if (col == DateTimeColumn.day &&
           showWeek &&
-          current.day != other.current.day) {
+          (current.year != other.current.year ||
+              current.month != other.current.month ||
+              current.day != other.current.day)) {
         changed.add(i);
         continue;
       }

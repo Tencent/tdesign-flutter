@@ -10,24 +10,11 @@
           picker: TDateTimePicker(
             mode: DateTimePickerMode(
               dateMode: DateMode.date,
-              timeMode: TimeMode.minute,
+              timeMode: TimeMode.second,
             ),
-            start: const TDateTimePickerValue(year: 2024, month: 1, day: 1),
-            end: const TDateTimePickerValue(
-              year: 2026,
-              month: 12,
-              day: 31,
-              hour: 23,
-              minute: 59,
-            ),
-            initialValue: _rangeSelected ??
-                const TDateTimePickerValue(
-                  year: 2025,
-                  month: 6,
-                  day: 15,
-                  hour: 12,
-                  minute: 30,
-                ),
+            start: _kRangeStart,
+            end: _kRangeEnd,
+            initialValue: _rangeSelected ?? _kRangeInitial,
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );

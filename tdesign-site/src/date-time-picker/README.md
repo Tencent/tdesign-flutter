@@ -139,7 +139,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
-自定义选择范围（2024–2026）；各列在 [start, end] 内按当前选中上下文收紧
+自定义选择范围（2025-06-10 09:30:00 ~ 2025-08-25 18:45:30）；月/日/时/分/秒在边界上下文收紧
             
 <td-code-block panel="Dart">
 
@@ -155,24 +155,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           picker: TDateTimePicker(
             mode: DateTimePickerMode(
               dateMode: DateMode.date,
-              timeMode: TimeMode.minute,
+              timeMode: TimeMode.second,
             ),
-            start: const TDateTimePickerValue(year: 2024, month: 1, day: 1),
-            end: const TDateTimePickerValue(
-              year: 2026,
-              month: 12,
-              day: 31,
-              hour: 23,
-              minute: 59,
-            ),
-            initialValue: _rangeSelected ??
-                const TDateTimePickerValue(
-                  year: 2025,
-                  month: 6,
-                  day: 15,
-                  hour: 12,
-                  minute: 30,
-                ),
+            start: _kRangeStart,
+            end: _kRangeEnd,
+            initialValue: _rangeSelected ?? _kRangeInitial,
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );

@@ -29,6 +29,34 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     minute: 30,
   );
 
+  /// 自定义范围 demo：start/end 须含完整年月日时分秒，各级在边界日按时序收紧。
+  static const _kRangeStart = TDateTimePickerValue(
+    year: 2025,
+    month: 2,
+    day: 10,
+    hour: 9,
+    minute: 30,
+    second: 0,
+  );
+
+  static const _kRangeEnd = TDateTimePickerValue(
+    year: 2028,
+    month: 8,
+    day: 25,
+    hour: 18,
+    minute: 45,
+    second: 30,
+  );
+
+  static const _kRangeInitial = TDateTimePickerValue(
+    year: 2025,
+    month: 7,
+    day: 15,
+    hour: 12,
+    minute: 0,
+    second: 0,
+  );
+
   @override
   void dispose() {
     _inlineSelectedNotifier.dispose();
@@ -49,7 +77,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           ExampleItem(desc: '选择时分', builder: _buildTime),
           ExampleItem(
             desc:
-                '自定义选择范围（2024–2026）；各列在 [start, end] 内按当前选中上下文收紧',
+                '自定义选择范围（2025-06-10 09:30:00 ~ 2025-08-25 18:45:30）；月/日/时/分/秒在边界上下文收紧',
             builder: _buildCustomRange,
           ),
           ExampleItem(desc: '年月日 + 星期', builder: _buildWeek),
@@ -224,24 +252,11 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           picker: TDateTimePicker(
             mode: DateTimePickerMode(
               dateMode: DateMode.date,
-              timeMode: TimeMode.minute,
+              timeMode: TimeMode.second,
             ),
-            start: const TDateTimePickerValue(year: 2024, month: 1, day: 1),
-            end: const TDateTimePickerValue(
-              year: 2026,
-              month: 12,
-              day: 31,
-              hour: 23,
-              minute: 59,
-            ),
-            initialValue: _rangeSelected ??
-                const TDateTimePickerValue(
-                  year: 2025,
-                  month: 6,
-                  day: 15,
-                  hour: 12,
-                  minute: 30,
-                ),
+            start: _kRangeStart,
+            end: _kRangeEnd,
+            initialValue: _rangeSelected ?? _kRangeInitial,
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );
