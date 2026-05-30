@@ -427,10 +427,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TCheckbox
-#### 简介
-复选框组件。
-FuiCheckbox支持3种内置样式的的复选框，还支持各种自定义样式，除了提供勾选之外还提供了内
-容选项，内容包含一个主标题和副标题，并且支持完全自定义内容，支持指定内容的方向等等
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -465,25 +461,6 @@ FuiCheckbox支持3种内置样式的的复选框，还支持各种自定义样�
 
 
 ### TCheckboxGroup
-#### 简介
-CheckBox组，可以通过控制器控制组内的多个CheckBox的选择状态
-child的属性可以是任意包含TCheckBox的容器组件，例如：
-```dart
-TCheckboxGroup(
-  child: Row(
-    children: [
-      TCheckBox(),
-      Column(
-        children: [
-          TCheckBox()
-          ...
-        ]
-      )
-      ...
-    ]
-  )
-)
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -504,8 +481,6 @@ TCheckboxGroup(
 
 
 ### TCheckboxStyle
-#### 简介
-选择框的样式
 #### 枚举值
 
 
@@ -517,8 +492,6 @@ TCheckboxGroup(
 
 
 ### TContentDirection
-#### 简介
-内容相对icon的位置，上、下、左、右，默认内容在icon的右边
 #### 枚举值
 
 
@@ -539,8 +512,6 @@ TCheckboxGroup(
 
 
 ### IconBuilder
-#### 简介
-自定义Icon
 #### 类型定义
 
 ```dart
@@ -549,8 +520,6 @@ typedef IconBuilder = Widget? Function(BuildContext context, bool checked);
 
 
 ### ContentBuilder
-#### 简介
-自定义Content
 #### 类型定义
 
 ```dart
@@ -567,8 +536,6 @@ typedef OnCheckValueChanged = void Function(bool selected);
 
 
 ### OnGroupChange
-#### 简介
-CheckBoxGroup变化监听器
 #### 类型定义
 
 ```dart

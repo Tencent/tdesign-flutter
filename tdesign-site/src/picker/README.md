@@ -435,21 +435,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TPicker
-#### 简介
-纯滚轮选择器组件
-数据决定形态（编译期类型安全）：
-- `TPickerColumns` → 多列独立选择
-- `TPickerLinked` → 联动选择
-```dart
-// 多列独立
-TPicker(
-  items: TPickerColumns.fromRaw([['北京', '上海', '广州']]),
-)
-// 联动
-TPicker(
-  items: TPickerLinked.fromRaw({'广东': {'深圳': ['南山', '福田']}}),
-)
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -461,18 +446,10 @@ TPicker(
 | itemCount | int | 5 | 每屏显示 item 数，默认 5 |
 | items | TPickerItems | - | 数据源（必填） 使用密封类 `TPickerItems` 编译期强制二选一： - `TPickerColumns` → 多列独立选择 - `TPickerLinked` → 联动选择 自由结构数据通过 `.fromRaw()` 工厂构造归一化。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 **注意**：此回调代表"滚动时实时变化"，不代表"用户已确认选择"。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 按需加载：根据 `TPickerValue.indexes` 判断是否接近列底，请求后更新 `items`。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 **注意**：此回调代表"滚动时实时变化"，不代表"用户已确认选择"。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 按需加载更多：在回调里根据 `TPickerValue.indexes` 判断是否接近列底， 请求完成后更新 `items` 即可（无需组件内置加载 API）。 |
 
 
 ### TPickerOption
-#### 简介
-选择器选项
-label 用于显示，value 用于 onChange 返回，两者分离以便自定义展示
-（emoji、单位、国际化）同时保持纯净的业务值。
-```dart
-TPickerOption(label: '👨 男性', value: 'M')
-TPickerOption(label: '广东省', value: 'GD', disabled: true)
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -483,12 +460,6 @@ TPickerOption(label: '广东省', value: 'GD', disabled: true)
 
 
 ### TPickerValue
-#### 简介
-onChange 回调返回的选中信息
-```dart
-onChange: (v) => setState(() => _lastValue = v);
-Text(_lastValue?.labels.join(' / ') ?? '');
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -505,16 +476,6 @@ Text(_lastValue?.labels.join(' / ') ?? '');
 
 
 ### TPickerColumns
-#### 简介
-多列独立选择的数据源
-```dart
-TPicker(
-  items: TPickerColumns([
-    [TPickerOption(label: '北京', value: 'BJ'), ...],
-    [TPickerOption(label: '朝阳区', value: 'CY'), ...],
-  ]),
-)
-```
 
 #### 工厂构造方法
 
@@ -541,19 +502,6 @@ TPickerColumns.fromRaw(
 
 
 ### TPickerLinked
-#### 简介
-联动选择的数据源
-```dart
-TPicker(
-  items: TPickerLinked({
-    TPickerOption(label: '广东', value: 'GD'): {
-      TPickerOption(label: '深圳', value: 'SZ'): [
-        TPickerOption(label: '南山', value: 'NS'),
-      ],
-    },
-  }),
-)
-```
 
 #### 工厂构造方法
 
@@ -580,20 +528,8 @@ TPickerLinked.fromRaw({
 
 
 ### TPickerItems
-#### 简介
-选择器数据源密封类
-编译期强制二选一，消除运行时类型错误：
-- `TPickerColumns` → 多列独立选择
-- `TPickerLinked` → 联动选择
 
 ### TPickerKeys
-#### 简介
-字段映射配置
-当 picker 数据源不是 `TPickerOption` 时，用于声明原始结构中的字段名。
-```dart
-// 数据：[{ id: '1', name: '选项A', readonly: false }]
-const keys = TPickerKeys(label: 'name', value: 'id', disabled: 'readonly');
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

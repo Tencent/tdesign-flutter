@@ -147,8 +147,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TSearchStyle
-#### 简介
-搜索框的样式
 #### 枚举值
 
 
@@ -159,8 +157,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TSearchAlignment
-#### 简介
-搜索框对齐方式
 #### 枚举值
 
 
