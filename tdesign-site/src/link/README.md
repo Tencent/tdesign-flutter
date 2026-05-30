@@ -212,8 +212,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### LinkClick
-#### 简介
-限制Function类型，防止传递错误的Function，导致参数对不上
 #### 类型定义
 
 ```dart

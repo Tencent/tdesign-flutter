@@ -1446,8 +1446,6 @@ Widget _buildLunar(BuildContext context) {
 
 ## API
 ### TCalendar
-#### 简介
-日历组件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -1488,8 +1486,6 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TCalendarPopup
-#### 简介
-单元格组件popup模式
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -1506,8 +1502,6 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TCalendarStyle
-#### 简介
-日历组件样式
 
 #### 工厂构造方法
 
@@ -1555,11 +1549,6 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TCalendarDataSource
-#### 简介
-日历数据源接口
-
-开发者需要实现此接口来提供农历转换能力。
-组件内部不包含农历算法和数据，完全依赖外部实现。
 
 #### 方法
 
@@ -1576,8 +1565,6 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TLunarInfo
-#### 简介
-农历日期信息模型
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -1592,8 +1579,6 @@ Widget _buildLunar(BuildContext context) {
 
 
 ### TCalendarDateType
-#### 简介
-日历类型枚举
 #### 枚举值
 
 
@@ -1639,19 +1624,19 @@ Widget _buildLunar(BuildContext context) {
 | empty | - |
 
 
-### CalendarFormat
-#### 类型定义
-
-```dart
-typedef CalendarFormat = TDate? Function(TDate? day);
-```
-
-
 ### CalendarBuilder
 #### 类型定义
 
 ```dart
 typedef CalendarBuilder = Widget Function(BuildContext context);
+```
+
+
+### CalendarFormat
+#### 类型定义
+
+```dart
+typedef CalendarFormat = TDate? Function(TDate? day);
 ```
 
 

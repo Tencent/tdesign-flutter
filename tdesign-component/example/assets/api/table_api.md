@@ -26,8 +26,6 @@
 
 
 ### TTableCol
-#### 简介
-表格列配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -47,8 +45,6 @@
 
 
 ### TTableEmpty
-#### 简介
-空数据状态
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -77,22 +73,6 @@
 | left | - |
 | center | - |
 | right | - |
-
-
-### SelectableFunc
-#### 类型定义
-
-```dart
-typedef SelectableFunc = bool Function(int index, dynamic row);
-```
-
-
-### RowCheckFunc
-#### 类型定义
-
-```dart
-typedef RowCheckFunc = bool Function(int index, dynamic row);
-```
 
 
 ### OnCellTap
@@ -124,4 +104,20 @@ typedef OnSelect = void Function(List<dynamic>? data);
 
 ```dart
 typedef OnRowSelect = void Function(int index, bool checked);
+```
+
+
+### SelectableFunc
+#### 类型定义
+
+```dart
+typedef SelectableFunc = bool Function(int index, dynamic row);
+```
+
+
+### RowCheckFunc
+#### 类型定义
+
+```dart
+typedef RowCheckFunc = bool Function(int index, dynamic row);
 ```

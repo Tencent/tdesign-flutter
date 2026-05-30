@@ -508,21 +508,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TPicker
-#### 简介
-纯滚轮选择器组件
-数据决定形态（编译期类型安全）：
-- `TPickerColumns` → 多列独立选择
-- `TPickerLinked` → 联动选择
-```dart
-// 多列独立
-TPicker(
-  items: TPickerColumns.fromRaw([['北京', '上海', '广州']]),
-)
-// 联动
-TPicker(
-  items: TPickerLinked.fromRaw({'广东': {'深圳': ['南山', '福田']}}),
-)
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -546,14 +531,6 @@ TPicker(
 
 
 ### TPickerOption
-#### 简介
-选择器选项
-label 用于显示，value 用于 onChange 返回，两者分离以便自定义展示
-（emoji、单位、国际化）同时保持纯净的业务值。
-```dart
-TPickerOption(label: '👨 男性', value: 'M')
-TPickerOption(label: '广东省', value: 'GD', disabled: true)
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -564,12 +541,6 @@ TPickerOption(label: '广东省', value: 'GD', disabled: true)
 
 
 ### TPickerValue
-#### 简介
-onChange 回调返回的选中信息
-```dart
-onChange: (v) => setState(() => _lastValue = v);
-Text(_lastValue?.labels.join(' / ') ?? '');
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -586,12 +557,6 @@ Text(_lastValue?.labels.join(' / ') ?? '');
 
 
 ### TPickerLoadEvent
-#### 简介
-列选中变化的事件参数
-每当用户在某一列滚动到一个 enabled 项后，`TPicker.onLoad` 会收到一个该事件实例。
-事件里携带了"列索引、当前列总数、距底部剩余项数、联动模式下父级选中值"等
-上下文信息，业务层据此自行决定是否加载更多数据（例如：
-`if (e.remaining > 5) return;`）。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -603,16 +568,6 @@ Text(_lastValue?.labels.join(' / ') ?? '');
 
 
 ### TPickerColumns
-#### 简介
-多列独立选择的数据源
-```dart
-TPicker(
-  items: TPickerColumns([
-    [TPickerOption(label: '北京', value: 'BJ'), ...],
-    [TPickerOption(label: '朝阳区', value: 'CY'), ...],
-  ]),
-)
-```
 
 #### 工厂构造方法
 
@@ -639,19 +594,6 @@ TPickerColumns.fromRaw(
 
 
 ### TPickerLinked
-#### 简介
-联动选择的数据源
-```dart
-TPicker(
-  items: TPickerLinked({
-    TPickerOption(label: '广东', value: 'GD'): {
-      TPickerOption(label: '深圳', value: 'SZ'): [
-        TPickerOption(label: '南山', value: 'NS'),
-      ],
-    },
-  }),
-)
-```
 
 #### 工厂构造方法
 
@@ -678,20 +620,8 @@ TPickerLinked.fromRaw({
 
 
 ### TPickerItems
-#### 简介
-选择器数据源密封类
-编译期强制二选一，消除运行时类型错误：
-- `TPickerColumns` → 多列独立选择
-- `TPickerLinked` → 联动选择
 
 ### TPickerKeys
-#### 简介
-字段映射配置
-当 picker 数据源不是 `TPickerOption` 时，用于声明原始结构中的字段名。
-```dart
-// 数据：[{ id: '1', name: '选项A', readonly: false }]
-const keys = TPickerKeys(label: 'name', value: 'id', disabled: 'readonly');
-```
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
