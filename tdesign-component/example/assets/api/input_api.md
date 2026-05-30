@@ -37,6 +37,7 @@
 | leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
 | maxLength | int? | 500 | 最大字数限制 |
 | maxLines | int? | 1 | 最大输入行数 |
+| minLines | int? | 1 | 最小输入行数 |
 | needClear | bool | true | 是否需要右侧按钮变为删除 |
 | obscureText | bool | false | 是否隐藏输入的文字，一般用在密码输入框中 |
 | onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |

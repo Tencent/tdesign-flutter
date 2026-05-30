@@ -41,6 +41,7 @@ class TInput extends StatelessWidget {
     this.inputFormatters,
     this.inputDecoration,
     this.maxLines = 1,
+    this.minLines = 1,
     this.focusNode,
     this.controller,
     this.cursorColor,
@@ -123,6 +124,9 @@ class TInput extends StatelessWidget {
 
   /// 最大输入行数
   final int? maxLines;
+
+  /// 最小输入行数
+  final int? minLines;
 
   /// 获取或者取消焦点使用
   final FocusNode? focusNode;
@@ -417,6 +421,7 @@ class TInput extends StatelessWidget {
                       inputFormatters: inputFormatters,
                       inputDecoration: inputDecoration,
                       maxLines: maxLines,
+                      minLines: minLines,
                       maxLength: maxLength,
                       focusNode: focusNode,
                       isCollapsed: true,
@@ -656,6 +661,7 @@ class TInput extends StatelessWidget {
                         inputDecoration: inputDecoration,
                         isCollapsed: true,
                         maxLines: maxLines,
+                        minLines: minLines,
                         focusNode: focusNode,
                         hintTextStyle: hintTextStyle ??
                             TextStyle(
@@ -783,6 +789,7 @@ class TInput extends StatelessWidget {
                   [LengthLimitingTextInputFormatter(maxLength)],
               inputDecoration: inputDecoration,
               maxLines: maxLines,
+              minLines: minLines,
               focusNode: focusNode,
               hintTextStyle: hintTextStyle ??
                   TextStyle(color: TTheme.of(context).textColorPlaceholder),
@@ -872,6 +879,7 @@ class TInput extends StatelessWidget {
                     inputFormatters: inputFormatters,
                     inputDecoration: inputDecoration,
                     maxLines: maxLines,
+                    minLines: minLines,
                     focusNode: focusNode,
                     isCollapsed: true,
                     hintTextStyle: hintTextStyle ??

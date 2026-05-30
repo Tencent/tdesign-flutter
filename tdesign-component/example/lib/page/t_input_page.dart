@@ -114,7 +114,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
           ExampleItem(
               desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside),
           ExampleItem(
-              desc: '设置contentPadding内容与分割线对齐', builder: _contentPadding)
+              desc: '设置contentPadding内容与分割线对齐', builder: _contentPadding),
+          ExampleItem(desc: '设置最小输入行数', builder: _minLinesInput),
         ],
       );
     };
@@ -970,6 +971,24 @@ class _TInputViewPageState extends State<TInputViewPage> {
           ),
         ],
       ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _minLinesInput(BuildContext context) {
+    return TInput(
+      leftLabel: '备注',
+      controller: controller[28],
+      hintText: '请输入至少两行高度的内容',
+      maxLines: 4,
+      minLines: 2,
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller[28].clear();
+        setState(() {});
+      },
     );
   }
 

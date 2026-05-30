@@ -1,0 +1,17 @@
+
+  Widget _minLinesInput(BuildContext context) {
+    return TInput(
+      leftLabel: '备注',
+      controller: controller[28],
+      hintText: '请输入至少两行高度的内容',
+      maxLines: 4,
+      minLines: 2,
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller[28].clear();
+        setState(() {});
+      },
+    );
+  }
