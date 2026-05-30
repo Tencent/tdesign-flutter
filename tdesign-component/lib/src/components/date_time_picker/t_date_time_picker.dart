@@ -13,8 +13,16 @@ export 't_date_time_picker_internal.dart' show DateTimePickerRenderLabel;
 export 't_date_time_picker_model.dart';
 
 /// 日期/时间滚轮选择器。
+///
+/// 纯滚轮组件：不含工具栏、确认按钮或弹窗；选中变化通过 [onChange] 实时回调
+///（无 [TPicker.onConfirm] 语义）。弹窗与确认请配合 [TPopup] 等自行组装。
+///
+/// [initialValue] 为非受控初始值；外部重置选中请变更 [initialValue] 或 [key]。
+/// 与 [TPicker] 不同，本组件不提供受控 `value` 参数。
 class TDateTimePicker extends StatefulWidget {
   /// 创建日期/时间选择器。
+  ///
+  /// [mode] 默认年月日；[height] 默认 200；[itemCount] 默认 5。
   TDateTimePicker({
     super.key,
     DateTimePickerMode? mode,
@@ -50,7 +58,7 @@ class TDateTimePicker extends StatefulWidget {
   /// 日列是否显示星期，默认 false。
   final bool showWeek;
 
-  /// 选中值变化回调，返回 [TDateTimePickerValue]。
+  /// 选中值变化回调（滚动实时触发，无确认语义），返回 [TDateTimePickerValue]。
   final void Function(TDateTimePickerValue result)? onChange;
 
   /// 滚轮视窗高度，默认 200。
@@ -87,9 +95,11 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     );
   }
 
-  DateTime? _resolveBound(TDateTimePickerValue? bound) => bound?.toDateTime();
+  DateTime? _resolveBound(TDateTimePickerValue? bound) =>
+      bound?.toDateTime(fallback: kDateTimePickerDefaultFallback);
 
-  DateTime? _resolveInitialDateTime() => widget.initialValue?.toDateTime();
+  DateTime? _resolveInitialDateTime() =>
+      widget.initialValue?.toDateTime(fallback: kDateTimePickerDefaultFallback);
 
   void _resetWheel({bool clearLastNotified = false}) {
     if (clearLastNotified) {
@@ -145,6 +155,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     DateTimePickerSnapshot snapshot,
     TDateTimePickerValue result,
   ) {
+    // dateTimePicker: 滚动时仅同步 snapshot，不 setState；Wheel 自持 UI 状态。
     _snapshot = snapshot;
     if (_lastNotifiedValue != null && result == _lastNotifiedValue) {
       return;

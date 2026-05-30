@@ -21,8 +21,12 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
       ValueNotifier<TDateTimePickerValue?>(null);
 
   /// 内嵌滚轮首次展示的默认值（固定，勿与 [onChange] 写回绑定）。
-  static final _kInlineInitialValue = TDateTimePickerValue.fromDateTime(
-    DateTime(2026, 5, 15, 12, 30),
+  static const _kInlineInitialValue = TDateTimePickerValue(
+    year: 2026,
+    month: 5,
+    day: 15,
+    hour: 12,
+    minute: 30,
   );
 
   @override
@@ -222,13 +226,21 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            start: TDateTimePickerValue.fromDateTime(DateTime(2024, 1, 1)),
-            end: TDateTimePickerValue.fromDateTime(
-              DateTime(2026, 12, 31, 23, 59),
+            start: const TDateTimePickerValue(year: 2024, month: 1, day: 1),
+            end: const TDateTimePickerValue(
+              year: 2026,
+              month: 12,
+              day: 31,
+              hour: 23,
+              minute: 59,
             ),
             initialValue: _rangeSelected ??
-                TDateTimePickerValue.fromDateTime(
-                  DateTime(2025, 6, 15, 12, 30),
+                const TDateTimePickerValue(
+                  year: 2025,
+                  month: 6,
+                  day: 15,
+                  hour: 12,
+                  minute: 30,
                 ),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
@@ -267,7 +279,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     final base = _formatResult(v);
     final week = _weekdayLabel(
       context,
-      v.toDateTime().weekday,
+      v.toDateTime(fallback: DateTime(2000, 1, 1)).weekday,
     );
     return '$base $week';
   }

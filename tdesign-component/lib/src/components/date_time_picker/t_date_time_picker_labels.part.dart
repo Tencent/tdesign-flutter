@@ -1,7 +1,11 @@
 part of 't_date_time_picker_internal.dart';
 
+/// 自定义滚轮列展示文案；返回 null 时使用默认文案。
 typedef DateTimePickerRenderLabel = String? Function(
+  /// 当前列，见 [DateTimeColumn]。
   DateTimeColumn column,
+
+  /// 列数值。
   int value,
 );
 
@@ -88,13 +92,12 @@ class DateTimePickerLabels {
 /// `DateTimePickerMode(...)` 工厂返回值。
 @internal
 @immutable
-class CombinedMode extends DateTimePickerMode {
-  const CombinedMode({this.date, this.time}) : super.forImplementation();
+class CombinedMode implements DateTimePickerMode {
+  const CombinedMode({this.date, this.time});
 
   final DateMode? date;
   final TimeMode? time;
 
-  @override
   List<DateTimeColumn> get columns => _expand(date, time);
 
   @override
@@ -110,6 +113,38 @@ class CombinedMode extends DateTimePickerMode {
 @internal
 extension DateTimePickerModeColumns on DateTimePickerMode {
   List<DateTimeColumn> get columns => (this as CombinedMode).columns;
+}
+
+/// 把 bool 列开关展开为 [DateTimeColumn] 序列（供 Calendar [DatePickerModel] 使用）。
+@internal
+List<DateTimeColumn> dateTimeColumnsFromPickerFlags({
+  required bool useYear,
+  required bool useMonth,
+  required bool useDay,
+  required bool useHour,
+  required bool useMinute,
+  required bool useSecond,
+}) {
+  final cols = <DateTimeColumn>[];
+  if (useYear) {
+    cols.add(DateTimeColumn.year);
+  }
+  if (useMonth) {
+    cols.add(DateTimeColumn.month);
+  }
+  if (useDay) {
+    cols.add(DateTimeColumn.day);
+  }
+  if (useHour) {
+    cols.add(DateTimeColumn.hour);
+  }
+  if (useMinute) {
+    cols.add(DateTimeColumn.minute);
+  }
+  if (useSecond) {
+    cols.add(DateTimeColumn.second);
+  }
+  return cols;
 }
 
 /// 把日期粒度 + 时间粒度展开成 [DateTimeColumn] 序列。

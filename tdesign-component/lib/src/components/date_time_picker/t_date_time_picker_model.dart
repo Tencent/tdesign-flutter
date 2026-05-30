@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
@@ -10,14 +9,11 @@ import 't_date_time_picker_internal.dart';
 
 /// 滚轮列结构，由 [DateMode]、[TimeMode] 组合；通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造。
 abstract class DateTimePickerMode {
-  @internal
-  const DateTimePickerMode.forImplementation();
-
   /// 组合列结构，[dateMode]、[timeMode] 至少传其一。
-  ///
-  /// [dateMode] 日期段粒度，见 [DateMode]。
-  /// [timeMode] 时间段粒度，见 [TimeMode]。
-  factory DateTimePickerMode({DateMode? dateMode, TimeMode? timeMode}) {
+  factory DateTimePickerMode({
+    DateMode? dateMode,
+    TimeMode? timeMode,
+  }) {
     assert(
       dateMode != null || timeMode != null,
       'DateTimePickerMode: dateMode 与 timeMode 不能同时为 null',
@@ -31,7 +27,9 @@ abstract class DateTimePickerMode {
 // =============================================================================
 
 /// [TDateTimePicker.onChange] 返回值；`null` 字段表示当前 mode 不含该列。
-/// 提交后端时调用 [toDateTime]；从 [DateTime] 初始化用 [fromDateTime]。
+///
+/// 初始化 [TDateTimePicker.initialValue]、[start]、[end] 时仅传相关字段即可；
+/// 提交后端时使用 [toDateTime]，partial 值须显式传入 [fallback]。
 @immutable
 class TDateTimePickerValue {
   /// 创建选中值，仅传当前 mode 涉及的字段。
@@ -43,18 +41,6 @@ class TDateTimePickerValue {
     this.minute,
     this.second,
   });
-
-  /// 从 [DateTime] 构造，用于 [TDateTimePicker.initialValue] 或 [TDateTimePicker.start]/[end]。
-  factory TDateTimePickerValue.fromDateTime(DateTime dateTime) {
-    return TDateTimePickerValue(
-      year: dateTime.year,
-      month: dateTime.month,
-      day: dateTime.day,
-      hour: dateTime.hour,
-      minute: dateTime.minute,
-      second: dateTime.second,
-    );
-  }
 
   /// 年。
   final int? year;
@@ -74,28 +60,30 @@ class TDateTimePickerValue {
   /// 秒。
   final int? second;
 
-  /// 年月日时分秒是否均已选中。
-  bool get isComplete =>
-      year != null &&
-      month != null &&
-      day != null &&
-      hour != null &&
-      minute != null &&
-      second != null;
-
-  /// 转为 [DateTime]；提交后端时使用，partial 值缺字段用 [fallback] 补齐。
+  /// 转为 [DateTime]；六元组完整时直接构造，否则用 [fallback] 补齐缺字段。
+  ///
+  /// partial 值未传 [fallback] 时将抛出 [ArgumentError]。
   DateTime toDateTime({DateTime? fallback}) {
-    if (isComplete) {
+    if (year != null &&
+        month != null &&
+        day != null &&
+        hour != null &&
+        minute != null &&
+        second != null) {
       return DateTime(year!, month!, day!, hour!, minute!, second!);
     }
-    final resolved = fallback ?? kDateTimePickerDefaultFallback;
+    if (fallback == null) {
+      throw ArgumentError(
+        'TDateTimePickerValue 为 partial 值，调用 toDateTime 须显式传入 fallback',
+      );
+    }
     return DateTime(
-      year ?? resolved.year,
-      month ?? resolved.month,
-      day ?? resolved.day,
-      hour ?? resolved.hour,
-      minute ?? resolved.minute,
-      second ?? resolved.second,
+      year ?? fallback.year,
+      month ?? fallback.month,
+      day ?? fallback.day,
+      hour ?? fallback.hour,
+      minute ?? fallback.minute,
+      second ?? fallback.second,
     );
   }
 

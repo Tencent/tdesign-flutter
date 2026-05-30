@@ -157,13 +157,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            start: TDateTimePickerValue.fromDateTime(DateTime(2024, 1, 1)),
-            end: TDateTimePickerValue.fromDateTime(
-              DateTime(2026, 12, 31, 23, 59),
+            start: const TDateTimePickerValue(year: 2024, month: 1, day: 1),
+            end: const TDateTimePickerValue(
+              year: 2026,
+              month: 12,
+              day: 31,
+              hour: 23,
+              minute: 59,
             ),
             initialValue: _rangeSelected ??
-                TDateTimePickerValue.fromDateTime(
-                  DateTime(2025, 6, 15, 12, 30),
+                const TDateTimePickerValue(
+                  year: 2025,
+                  month: 6,
+                  day: 15,
+                  hour: 12,
+                  minute: 30,
                 ),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
@@ -207,6 +215,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### TDateTimePicker
 #### 简介
 日期/时间滚轮选择器。
+纯滚轮组件：不含工具栏、确认按钮或弹窗；选中变化通过 `onChange` 实时回调
+（无 `TPicker.onConfirm` 语义）。弹窗与确认请配合 `TPopup` 等自行组装。
+`initialValue` 为非受控初始值；外部重置选中请变更 `initialValue` 或 `key`。
+与 `TPicker` 不同，本组件不提供受控 `value` 参数。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -217,7 +229,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | itemCount | int? | - | 每屏可见条目数，默认 5。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mode | DateTimePickerMode? | - | 滚轮列结构；通过 `DateTimePickerMode` 组合 `DateMode`、`TimeMode`，默认年月日。 |
-| onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调，返回 `TDateTimePickerValue`。 |
+| onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调（滚动实时触发，无确认语义），返回 `TDateTimePickerValue`。 |
 | renderLabel | DateTimePickerRenderLabel? | - | 自定义列展示文案；`column` 为 `DateTimeColumn`，`value` 为数值，返回 null 用默认文案。 |
 | showWeek | bool | false | 日列是否显示星期，默认 false。 |
 | start | TDateTimePickerValue? | - | 可选范围下限，类型同 `initialValue`。 |
@@ -227,33 +239,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### DateTimePickerMode
 #### 简介
 滚轮列结构，由 `DateMode`、`TimeMode` 组合；通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造。
-
-#### 工厂构造方法
-
-##### DateTimePickerMode.forImplementation
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| dateMode | DateMode? | - | - |
-| timeMode | TimeMode? | - | - |
+| dateMode | DateMode? | - | 日期段粒度，见 `DateMode`；与 `timeMode` 至少传其一。 |
+| timeMode | TimeMode? | - | 时间段粒度，见 `TimeMode`；与 `dateMode` 至少传其一。 |
 
 
 ### TDateTimePickerValue
 #### 简介
 `TDateTimePicker.onChange` 返回值；`null` 字段表示当前 mode 不含该列。
-提交后端时调用 `toDateTime`；从 `DateTime` 初始化用 `fromDateTime`。
-
-#### 工厂构造方法
-
-##### TDateTimePickerValue.fromDateTime
-
-从 `DateTime` 构造，用于 `TDateTimePicker.initialValue` 或 `TDateTimePicker.start`/`end`。
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| dateTime | DateTime | - | - |
-
+初始化 `TDateTimePicker.initialValue`、`start`、`end` 时仅传相关字段即可；
+提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -264,6 +262,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | month | int? | - | 月。 |
 | second | int? | - | 秒。 |
 | year | int? | - | 年。 |
+
+
+#### 方法
+
+| 名称 | 类型 | 说明 |
+| --- | --- | --- |
+| toDateTime | DateTime Function({DateTime? fallback}) | 转为 `DateTime`；六元组完整时直接构造，partial 值须显式传入 `fallback`，否则抛出 `ArgumentError`。 |
 
 
 ### DateTimePickerSteps
@@ -307,4 +312,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | second | 时 + 分 + 秒。 |
 
 
-  
+### DateTimeColumn
+#### 简介
+滚轮列标识，用于 `DateTimePickerRenderLabel` 回调与 `DateTimePickerMode` 列展开。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| year | 年列。 |
+| month | 月列。 |
+| day | 日列。 |
+| hour | 时列。 |
+| minute | 分列。 |
+| second | 秒列。 |
+
+
+### DateTimePickerRenderLabel
+#### 简介
+自定义滚轮列展示文案；返回 null 时使用默认文案。
+#### 类型定义
+
+```dart
+typedef DateTimePickerRenderLabel = String? Function(DateTimeColumn column, int value);
+```
+

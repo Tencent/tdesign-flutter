@@ -22,7 +22,7 @@
 | 表现 | 日列 label 后缀（如 `15日 周五`） | **独立 week 列** |
 | 选中值 | `TDateTimePickerValue` 无 week 字段 | `selected['week']` |
 
-**迁移建议**：Legacy 的 `useWeekDay` 改为 `showWeek` + Snapshot 路径；week 展示用 `toDateTime().weekday` 派生。
+**迁移建议**：Legacy 的 `useWeekDay` 改为 `showWeek` + Snapshot 路径；week 展示用 `toDateTime(fallback: ...).weekday` 派生。
 
 ### 2. 列过滤
 
@@ -45,6 +45,18 @@
 
 **迁移建议**：`DatePickerModel.selected` 可继续提供 `Map` 适配，内部统一 `snapshot.toResult()`（已实现）。
 
+## 公开 API 决策（TDateTimePicker）
+
+以下能力经评估**暂不公开**，以保持组件职责单一：
+
+| 能力 | 决策 | 理由 |
+|------|------|------|
+| 受控 `value` | **不新增** | 与 `TPicker` 滚轮-only 用法一致；外部重置用 `initialValue` / `key` |
+| `filterItems` | **不新增** | 易导致第二套实现分叉；优先用 `start`/`end`/`renderLabel`/`steps` 组合 |
+| `onConfirm` | **不新增** | 纯滚轮定位，确认语义由 `TPopup` + 业务层承担 |
+
+若业务需要「表单回显 + 外部 reset」，推荐：`key: ValueKey(externalId)` 或在 `initialValue` 变化时 remount。
+
 ## 迁移阶段
 
 ### 阶段 1（当前，已完成）
@@ -53,11 +65,12 @@
 - [x] `TDateTimePicker` 与 Calendar 共享 `DateTimePickerWheel`
 - [x] 单元测试覆盖 Snapshot 边界与 widget 集成
 
-### 阶段 2（建议）
+### 阶段 2（进行中）
 
-1. 盘点 TCalendar 中 `useWeekDay: true` 的调用点，改为 `showWeek` + Snapshot 路径。
-2. 为 `filterItems` 场景建立用例清单，逐个评估能否用 `start`/`end`/`renderLabel` 替代。
-3. 补充 `DatePickerModel` Legacy 路径 widget 测试（当前覆盖薄）。
+1. [x] 盘点 TCalendar 中 `useWeekDay: true` 的调用点 — **当前代码库无 `useWeekDay: true` 调用**
+2. [x] 列展开逻辑收敛至 `dateTimeColumnsFromPickerFlags`（Calendar bool 开关）与 `CombinedMode._expand`（mode 组合）
+3. [x] 补充 `DatePickerModel` Legacy 路径单测（`useWeekDay`、`filterItems`）
+4. [x] 补充 `toPickerColumns` 与 `columnOptionsAt` 一致性单测
 
 ### 阶段 3（可选）
 

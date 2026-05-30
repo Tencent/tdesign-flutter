@@ -136,28 +136,15 @@ class DatePickerModel {
     return map;
   }
 
-  List<DateTimeColumn> _buildSnapshotColumns() {
-    final cols = <DateTimeColumn>[];
-    if (useYear) {
-      cols.add(DateTimeColumn.year);
-    }
-    if (useMonth) {
-      cols.add(DateTimeColumn.month);
-    }
-    if (useDay) {
-      cols.add(DateTimeColumn.day);
-    }
-    if (useHour) {
-      cols.add(DateTimeColumn.hour);
-    }
-    if (useMinute) {
-      cols.add(DateTimeColumn.minute);
-    }
-    if (useSecond) {
-      cols.add(DateTimeColumn.second);
-    }
-    return cols;
-  }
+  List<DateTimeColumn> _buildSnapshotColumns() =>
+      dateTimeColumnsFromPickerFlags(
+        useYear: useYear,
+        useMonth: useMonth,
+        useDay: useDay,
+        useHour: useHour,
+        useMinute: useMinute,
+        useSecond: useSecond,
+      );
 
   static DateTime? _partsToDateTime(List<int>? parts) {
     if (parts == null || parts.isEmpty) {
@@ -265,7 +252,7 @@ class DatePickerModel {
 
   void _rebuildLegacyDataFromSnapshot() {
     final snap = _snapshot!;
-    data = List.generate(snap.columns.length, (_) => <int>[]);
+    data = [];
     controllers = [];
     for (var i = 0; i < snap.columns.length; i++) {
       final options = snap.columnOptionsAt(
@@ -298,12 +285,14 @@ class DatePickerModel {
     }
 
     final years = _legacyYears();
-    final yearIdx = useYear
+    final yearIdx = useYear && controllers.isNotEmpty && controllers[0].hasClients
         ? controllers[0].selectedItem.clamp(0, years.length - 1)
         : 0;
     final monthCol = useYear ? 1 : 0;
     final months = _legacyMonths();
-    final monthIdx = useMonth
+    final monthIdx = useMonth &&
+            monthCol < controllers.length &&
+            controllers[monthCol].hasClients
         ? controllers[monthCol].selectedItem.clamp(0, months.length - 1)
         : 0;
     final year = useYear ? years[yearIdx] : DateTime.now().year;

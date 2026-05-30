@@ -49,7 +49,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # picker
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/picker" --name TPicker,TPickerOption,TPickerValue,TPickerLoadEvent,TPickerColumns,TPickerLinked,TPickerItems,TPickerKeys --folder-name picker --output "$PARENT_DIR/example/assets/api/" --only-api
 # date-time-picker
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/date_time_picker" --name TDateTimePicker,DateTimePickerMode,TDateTimePickerValue,DateTimePickerSteps,DateMode,TimeMode --folder-name date-time-picker --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/date_time_picker" --name TDateTimePicker,DateTimePickerMode,TDateTimePickerValue,DateTimePickerSteps,DateMode,TimeMode,DateTimeColumn,DateTimePickerRenderLabel --folder-name date-time-picker --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # form
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/form" --name TForm,TFormItem,TFormItemType,TFormValidation --folder-name form --output "$PARENT_DIR/example/assets/api/" --only-api
 # input
