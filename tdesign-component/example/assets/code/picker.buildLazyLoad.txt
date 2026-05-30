@@ -1,45 +1,41 @@
 
   Widget buildLazyLoad(BuildContext context) {
-    return StatefulBuilder(
-      builder: (ctx, setInner) {
+    const initialPrimaryValue = 'cat_1';
+    final initialLinked = [
+      for (int i = 1; i <= _kLazyDemoPageSize; i++)
+        TPickerOption(
+          label: '分类1 · 条目 $i',
+          value: '${initialPrimaryValue}_item_$i',
+        ),
+    ];
+
+    return LinkedLazyPickerScope(
+      threshold: 5,
+      primaryLabel: '分类',
+      linkedLabel: '条目',
+      initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
+      initialPrimaryValue: initialPrimaryValue,
+      initialLinked: initialLinked,
+      onLoadPrimary: (nextStart) async {
+        await Future.delayed(const Duration(milliseconds: 1200));
+        return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
+      },
+      onLoadLinked: (primaryValue, nextStart) =>
+          _mockLazyItems(primaryValue, nextStart, _kLazyDemoPageSize),
+      builder: (ctx, vm) {
+        final loadingHint = vm.loadingHint;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _lazyData.isEmpty
-                  ? '暂无数据'
-                  : '已加载 ${_lazyData.length} 条（滚动到底部自动加载更多）',
+              vm.statusLine,
               style: TextStyle(
                   fontSize: 14, color: TTheme.of(context).textColorSecondary),
             ),
             const SizedBox(height: 8),
-            _pickerCard(
-              context,
-              child: TPicker(
-                items: TPickerColumns([_lazyData]),
-                onLoad: (e) async {
-                  // 业务层自行判断触发时机：距底部 5 项以内 + 未在加载中
-                  if (e.remaining > 5 || _isLoading) {
-                    return;
-                  }
-                  setInner(() => _isLoading = true);
-                  // 模拟网络请求延迟 1.5s
-                  await Future.delayed(const Duration(milliseconds: 1500));
-                  final start = _lazyData.length + 1;
-                  final more = [
-                    for (int i = start; i < start + 20; i++)
-                      TPickerOption(label: '选项 $i', value: 'opt_$i'),
-                  ];
-                  setInner(() {
-                    _lazyData.addAll(more);
-                    _isLoading = false;
-                  });
-                },
-                onChange: (v) => debugPrint('选中: ${v.labels.first}'),
-              ),
-            ),
+            _pickerCard(context, child: vm.buildPicker()),
             const SizedBox(height: 4),
-            if (_isLoading)
+            if (loadingHint != null)
               Row(
                 children: [
                   const SizedBox(
@@ -48,17 +44,21 @@
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                   const SizedBox(width: 6),
-                  Text('正在加载更多数据...',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: TTheme.of(context).textColorPlaceholder)),
+                  Text(
+                    '正在加载$loadingHint...',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: TTheme.of(context).textColorPlaceholder),
+                  ),
                 ],
               )
             else
-              Text('在 onLoad 里判断 e.remaining <= 5 时加载，模拟 1.5s 网络延迟',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: TTheme.of(context).textColorPlaceholder)),
+              Text(
+                '业务封装 LinkedLazyPickerScope：TPicker 仍只用 items / initialValue / onChange',
+                style: TextStyle(
+                    fontSize: 12,
+                    color: TTheme.of(context).textColorPlaceholder),
+              ),
           ],
         );
       },

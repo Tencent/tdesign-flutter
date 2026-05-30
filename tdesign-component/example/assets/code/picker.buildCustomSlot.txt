@@ -1,37 +1,52 @@
 
   Widget buildCustomSlot(BuildContext context) {
     final theme = TTheme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'cancel / confirm / titleWidget 参数类型均为 Widget，可自定义图标、文字或组合',
-          style: TextStyle(fontSize: 12, color: theme.textColorPlaceholder),
-        ),
-        const SizedBox(height: 8),
-        _pickerCard(
+    return TButton(
+      text: '打开自定义头部弹窗',
+      isBlock: true,
+      type: TButtonType.outline,
+      onTap: () {
+        TPickerValue? draft;
+        const initial = ['GD', 'SZ', 'NS'];
+        TPopup.show(
           context,
-          child: TPicker(
-            items: linkedItems,
-            initialValue: const ['GD', 'SZ', 'NS'],
+          options: TPopupOptions.bottom(
             titleWidget: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(TIcons.location, size: 18, color: theme.brandNormalColor),
                 const SizedBox(width: 4),
-                Text('选择地区',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: theme.fontGyColor1,
-                    )),
+                Text(
+                  '选择地区',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.fontGyColor1,
+                  ),
+                ),
               ],
             ),
-            cancel: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
-            confirm:
-                Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
+            cancelBuilder: (_, close) => TToolbarPressable(
+              onTap: close,
+              child: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
+            ),
+            confirmBuilder: (_, close) => TToolbarPressable(
+              onTap: close,
+              child: Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
+            ),
+            child: Material(
+              color: theme.bgColorContainer,
+              child: SafeArea(
+                top: false,
+                child: TPicker(
+                  items: linkedItems,
+                  initialValue: initial,
+                  onChange: (value) => draft = value,
+                ),
+              ),
+            ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
