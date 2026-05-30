@@ -12,10 +12,14 @@
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            start: DateTime(2024, 1, 1),
-            end: DateTime(2026, 12, 31, 23, 59),
-            initialValue: _rangeSelected?.toDateTime() ??
-                DateTime(2025, 6, 15, 12, 30),
+            start: TDateTimePickerValue.fromDateTime(DateTime(2024, 1, 1)),
+            end: TDateTimePickerValue.fromDateTime(
+              DateTime(2026, 12, 31, 23, 59),
+            ),
+            initialValue: _rangeSelected ??
+                TDateTimePickerValue.fromDateTime(
+                  DateTime(2025, 6, 15, 12, 30),
+                ),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );

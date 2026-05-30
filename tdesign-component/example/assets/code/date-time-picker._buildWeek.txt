@@ -10,7 +10,7 @@
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
-            initialValue: _weekSelected?.toDateTime(),
+            initialValue: _weekSelected,
             onChange: (result) => setState(() => _weekSelected = result),
           ),
         );

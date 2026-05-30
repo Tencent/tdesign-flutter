@@ -1,39 +1,13 @@
 // =============================================================================
-// 枚举：列类型 / 日期·时间粒度 / 步进 / 自定义 label
+// 枚举：日期·时间粒度 / 步进
 // =============================================================================
 
 import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
-/// 自定义列 label。
-///
-/// [column] 为列类型，[value] 为该列数值；返回 `null` 时使用默认文案。
-typedef DateTimePickerRenderLabel = String? Function(
-  DateTimeColumn column,
-  int value,
-);
+import 't_date_time_picker_column.dart';
 
-/// 选择器列类型。
-enum DateTimeColumn {
-  /// 年。
-  year,
-
-  /// 月（1–12）。
-  month,
-
-  /// 日（1–31，按该年该月实际天数）。
-  day,
-
-  /// 时（0–23）。
-  hour,
-
-  /// 分（0–59）。
-  minute,
-
-  /// 秒（0–59）。
-  second,
-}
-
-/// [DateTimePickerMode] 的日期段粒度。
+/// 日期段粒度，用于 [DateTimePickerMode] 的 [DateMode] 参数。
 enum DateMode {
   /// 年。
   year,
@@ -45,7 +19,7 @@ enum DateMode {
   date,
 }
 
-/// [DateTimePickerMode] 的时间段粒度。
+/// 时间段粒度，用于 [DateTimePickerMode] 的 [TimeMode] 参数。
 enum TimeMode {
   /// 时。
   hour,
@@ -57,11 +31,7 @@ enum TimeMode {
   second,
 }
 
-/// 各列选项步进。
-///
-/// 对齐 mobile-vue `steps`（如 `{ minute: 5 }`）。未配置的列步进为 1。
-/// 与 [TDateTimePicker.start]、[end] 同时使用时，在闭区间内按步进生成选项，
-/// 选中值吸附到最近合法步进点。
+/// 各列选项步进，未配置的列步进为 1。
 @immutable
 class DateTimePickerSteps {
   /// 创建步进配置。
@@ -92,7 +62,7 @@ class DateTimePickerSteps {
   /// 秒列步进。
   final int? second;
 
-  /// 返回 [column] 对应步进，最小为 1。
+  @internal
   int forColumn(DateTimeColumn column) {
     final step = switch (column) {
       DateTimeColumn.year => year,

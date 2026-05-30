@@ -21,7 +21,9 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
       ValueNotifier<TDateTimePickerValue?>(null);
 
   /// 内嵌滚轮首次展示的默认值（固定，勿与 [onChange] 写回绑定）。
-  static final _kInlineInitialValue = DateTime(2026, 5, 15, 12, 30);
+  static final _kInlineInitialValue = TDateTimePickerValue.fromDateTime(
+    DateTime(2026, 5, 15, 12, 30),
+  );
 
   @override
   void dispose() {
@@ -154,7 +156,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: _baseSelected?.toDateTime(),
+            initialValue: _baseSelected,
             onChange: (result) => setState(() => _baseSelected = result),
           ),
         );
@@ -175,7 +177,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            initialValue: _yearMonthSelected?.toDateTime(),
+            initialValue: _yearMonthSelected,
             onChange: (result) => setState(() => _yearMonthSelected = result),
           ),
         );
@@ -196,7 +198,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: _timeSelected?.toDateTime(),
+            initialValue: _timeSelected,
             onChange: (result) => setState(() => _timeSelected = result),
           ),
         );
@@ -220,10 +222,14 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            start: DateTime(2024, 1, 1),
-            end: DateTime(2026, 12, 31, 23, 59),
-            initialValue: _rangeSelected?.toDateTime() ??
-                DateTime(2025, 6, 15, 12, 30),
+            start: TDateTimePickerValue.fromDateTime(DateTime(2024, 1, 1)),
+            end: TDateTimePickerValue.fromDateTime(
+              DateTime(2026, 12, 31, 23, 59),
+            ),
+            initialValue: _rangeSelected ??
+                TDateTimePickerValue.fromDateTime(
+                  DateTime(2025, 6, 15, 12, 30),
+                ),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );
@@ -245,7 +251,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
-            initialValue: _weekSelected?.toDateTime(),
+            initialValue: _weekSelected,
             onChange: (result) => setState(() => _weekSelected = result),
           ),
         );

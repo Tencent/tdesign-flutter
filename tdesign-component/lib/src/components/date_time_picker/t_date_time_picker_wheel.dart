@@ -8,6 +8,7 @@ import '../../theme/t_theme.dart';
 import '../picker/no_wave_behavior.dart';
 import '../picker/picker_column_wheel.dart';
 import '../picker/t_picker_option.dart';
+import 't_date_time_picker_column.dart';
 import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
 import 't_date_time_picker_model.dart';
@@ -218,7 +219,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
           options: newData,
           controller: controller,
         );
-    // dateTimePicker: 列尚未挂载时由本层延迟释放旧 controller，避免与 applyColumnUpdate 重复 dispose
+    //列尚未挂载时由本层延迟释放旧 controller，避免与 applyColumnUpdate 重复 dispose
     if (oldData.length != newData.length &&
         columnState == null &&
         !identical(previousController, controller)) {
@@ -317,7 +318,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     );
   }
 
-  /// dateTimePicker: 单列无障碍包装（边界处不提供 increase/decrease）
+  ///单列无障碍包装（边界处不提供 increase/decrease）
   Widget _buildColumnSemantics(int col) {
     final value = _columnSemanticsValue(col);
     final increased = _columnSemanticsAdjustedValue(col, 1);
@@ -344,7 +345,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     );
   }
 
-  /// dateTimePicker: 列无障碍 label
+  ///列无障碍 label
   String _columnSemanticsLabel(int col) {
     final column = _snapshot.columns[col];
     final suffix = _labels.unitSuffix[column] ?? '';
@@ -358,7 +359,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     };
   }
 
-  /// dateTimePicker: 列当前选中值的无障碍文案
+  ///列当前选中值的无障碍文案
   String _columnSemanticsValue(int col) {
     if (_columns[col].isEmpty) {
       return '';
@@ -367,7 +368,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     return _columns[col][idx].label;
   }
 
-  /// dateTimePicker: 增减一格后的无障碍预览文案
+  ///增减一格后的无障碍预览文案
   String? _columnSemanticsAdjustedValue(int col, int delta) {
     if (_columns[col].isEmpty) {
       return null;

@@ -170,7 +170,6 @@ void main() {
     test('toDateTime partial 缺字段时使用 defaultFallback', () {
       const v = TDateTimePickerValue(year: 2026, month: 2);
       expect(v.toDateTime(), DateTime(2026, 2, 1));
-      expect(v.toDateTime(), v.toDateTime(fallback: TDateTimePickerValue.defaultFallback));
     });
 
     test('toDateTime(fallback) 用户传入时覆盖 defaultFallback', () {
@@ -201,6 +200,17 @@ void main() {
         v.toDateTime(fallback: DateTime(2000, 1, 1)),
         DateTime(2026, 5, 15, 10, 30, 0),
       );
+    });
+
+    test('fromDateTime 构造六元组', () {
+      final v = TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15, 10, 30, 5));
+      expect(v.year, 2026);
+      expect(v.month, 5);
+      expect(v.day, 15);
+      expect(v.hour, 10);
+      expect(v.minute, 30);
+      expect(v.second, 5);
+      expect(v.isComplete, isTrue);
     });
 
     test('相等性比较包含全部字段', () {
@@ -309,22 +319,6 @@ void main() {
 
       final s2 = s0.applySelection(rawValues: const [2026, 5, 20]);
       expect(s2.columnIndicesWithChangedOptions(s0), isEmpty);
-    });
-
-    test('toPickerColumnsMerged：仅替换指定列', () {
-      final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
-        initial: DateTime(2026, 5, 15),
-      );
-      final full = s.toPickerColumns();
-      final merged = s.toPickerColumnsMerged(
-        previous: full,
-        rebuildIndices: {2},
-      );
-      expect(merged.columns[0], same(full.columns[0]));
-      expect(merged.columns[1], same(full.columns[1]));
-      expect(merged.columns[2], isNot(same(full.columns[2])));
-      expect(merged.columns[2].length, full.columns[2].length);
     });
 
     test('needsColumnRebuildFrom：showWeek=true 时 day 变化也触发（label 含周几）',
@@ -666,7 +660,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -680,7 +674,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: DateTime(2026, 5, 15, 10, 30),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15, 10, 30)),
           ),
         ),
       ));
@@ -693,7 +687,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
             showWeek: true,
           ),
         ),
@@ -710,7 +704,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -723,7 +717,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -736,7 +730,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.year),
-            initialValue: DateTime(2026, 1, 1),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 1, 1)),
             renderLabel: (column, v) =>
                 column == DateTimeColumn.year ? 'Y$v' : null,
           ),
@@ -753,7 +747,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
             showWeek: true,
           ),
         ),
@@ -768,7 +762,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
             showWeek: true,
           ),
         ),
@@ -784,7 +778,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 2, 28),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 2, 28)),
             onChange: (v) => changed = v,
           ),
         ),
@@ -813,7 +807,7 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: DateTime(2026, 5, 15),
+                  initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
                   onChange: (_) => callCount++,
                 ),
               ],
@@ -835,7 +829,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: DateTime(2026, 5, 15),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -851,8 +845,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            initialValue:
-                const TDateTimePickerValue(year: 2026, month: 2).toDateTime(),
+            initialValue: const TDateTimePickerValue(year: 2026, month: 2),
           ),
         ),
       ));
@@ -861,7 +854,75 @@ void main() {
       expect(find.textContaining('2月'), findsWidgets);
     });
 
-    testWidgets('initialValue 从 toDateTime 变化会重置滚轮选中', (tester) async {
+    testWidgets('mode 从 date 切换为 time 时滚轮重建', (tester) async {
+      var mode = DateTimePickerMode(dateMode: DateMode.date);
+      await tester.pumpWidget(MaterialApp(
+        home: StatefulBuilder(
+          builder: (context, setState) => Scaffold(
+            body: Column(
+              children: [
+                TextButton(
+                  onPressed: () => setState(() {
+                    mode = DateTimePickerMode(timeMode: TimeMode.minute);
+                  }),
+                  child: const Text('to-time'),
+                ),
+                TDateTimePicker(
+                  mode: mode,
+                  initialValue: TDateTimePickerValue.fromDateTime(
+                    DateTime(2026, 5, 15, 10, 30),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.byType(ListWheelScrollView), findsNWidgets(3));
+
+      await tester.tap(find.text('to-time'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ListWheelScrollView), findsNWidgets(2));
+    });
+
+    testWidgets('滚动日列触发 onChange 并更新 day', (tester) async {
+      TDateTimePickerValue? changed;
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: TDateTimePicker(
+            mode: DateTimePickerMode(dateMode: DateMode.date),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2024, 2, 15)),
+            onChange: (v) => changed = v,
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      final wheels = find.byType(ListWheelScrollView);
+      await tester.drag(wheels.at(2), const Offset(0, -80));
+      await tester.pumpAndSettle();
+
+      expect(changed, isNotNull);
+      expect(changed!.day, isNot(15));
+    });
+
+    testWidgets('steps 分钟步进 5 时滚轮仍正常渲染', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: TDateTimePicker(
+            mode: DateTimePickerMode(timeMode: TimeMode.minute),
+            initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15, 10, 30)),
+            steps: const DateTimePickerSteps(minute: 5),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.byType(ListWheelScrollView), findsNWidgets(2));
+      expect(find.textContaining('30分'), findsWidgets);
+    });
+
+    testWidgets('initialValue 变化会重置滚轮选中', (tester) async {
       TDateTimePickerValue? initial =
           const TDateTimePickerValue(year: 2026, month: 5, day: 15);
       await tester.pumpWidget(MaterialApp(
@@ -877,7 +938,7 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: initial?.toDateTime(),
+                  initialValue: initial,
                 ),
               ],
             ),
@@ -895,7 +956,7 @@ void main() {
 
     testWidgets('mode/initialValue 变化会触发内部重建并更新 initialValue', (tester) async {
       var useMonth = false;
-      var initialValue = DateTime(2026, 5, 15);
+      var initialValue = TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15));
       await tester.pumpWidget(MaterialApp(
         home: StatefulBuilder(
           builder: (context, setState) => Scaffold(
@@ -904,7 +965,7 @@ void main() {
                 TextButton(
                   onPressed: () => setState(() {
                     useMonth = true;
-                    initialValue = DateTime(2027, 6, 1);
+                    initialValue = TDateTimePickerValue.fromDateTime(DateTime(2027, 6, 1));
                   }),
                   child: const Text('switch'),
                 ),
@@ -924,8 +985,8 @@ void main() {
     });
 
     testWidgets('仅 range 变化时会按新边界收紧列范围', (tester) async {
-      DateTime start = DateTime(2024, 1, 1);
-      DateTime end = DateTime(2026, 12, 31);
+      var start = TDateTimePickerValue.fromDateTime(DateTime(2024, 1, 1));
+      var end = TDateTimePickerValue.fromDateTime(DateTime(2026, 12, 31));
       await tester.pumpWidget(MaterialApp(
         home: StatefulBuilder(
           builder: (context, setState) => Scaffold(
@@ -933,14 +994,14 @@ void main() {
               children: [
                 TextButton(
                   onPressed: () => setState(() {
-                    start = DateTime(2026, 1, 1);
-                    end = DateTime(2026, 1, 31);
+                    start = TDateTimePickerValue.fromDateTime(DateTime(2026, 1, 1));
+                    end = TDateTimePickerValue.fromDateTime(DateTime(2026, 1, 31));
                   }),
                   child: const Text('tighten-range'),
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: DateTime(2026, 5, 15),
+                  initialValue: TDateTimePickerValue.fromDateTime(DateTime(2026, 5, 15)),
                   start: start,
                   end: end,
                 ),

@@ -9,7 +9,7 @@
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            initialValue: _yearMonthSelected?.toDateTime(),
+            initialValue: _yearMonthSelected,
             onChange: (result) => setState(() => _yearMonthSelected = result),
           ),
         );

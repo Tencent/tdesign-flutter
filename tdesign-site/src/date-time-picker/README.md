@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_date-time-picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_date-time-picker_page.dart)
+[t_date_time_picker_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_date_time_picker_page.dart)
 
 ### 1 基础用法
 
@@ -76,7 +76,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: _baseSelected?.toDateTime(),
+            initialValue: _baseSelected,
             onChange: (result) => setState(() => _baseSelected = result),
           ),
         );
@@ -102,7 +102,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            initialValue: _yearMonthSelected?.toDateTime(),
+            initialValue: _yearMonthSelected,
             onChange: (result) => setState(() => _yearMonthSelected = result),
           ),
         );
@@ -128,7 +128,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: _timeSelected?.toDateTime(),
+            initialValue: _timeSelected,
             onChange: (result) => setState(() => _timeSelected = result),
           ),
         );
@@ -157,10 +157,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            start: DateTime(2024, 1, 1),
-            end: DateTime(2026, 12, 31, 23, 59),
-            initialValue: _rangeSelected?.toDateTime() ??
-                DateTime(2025, 6, 15, 12, 30),
+            start: TDateTimePickerValue.fromDateTime(DateTime(2024, 1, 1)),
+            end: TDateTimePickerValue.fromDateTime(
+              DateTime(2026, 12, 31, 23, 59),
+            ),
+            initialValue: _rangeSelected ??
+                TDateTimePickerValue.fromDateTime(
+                  DateTime(2025, 6, 15, 12, 30),
+                ),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );
@@ -187,7 +191,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
-            initialValue: _weekSelected?.toDateTime(),
+            initialValue: _weekSelected,
             onChange: (result) => setState(() => _weekSelected = result),
           ),
         );
@@ -202,39 +206,27 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## API
 ### TDateTimePicker
 #### 简介
-日期/时间选择器。
-纯滚轮 UI，无顶部取消/确定栏。选中值通过 `onChange` 实时通知；
-弹窗的关闭与是否「确定提交」由 `TPopup` 或页面逻辑处理。
-**参数分工**
-| 参数 | 作用 | 何时设置 |
-|------|------|----------|
-| `onChange` | 滚动时输出当前 `TDateTimePickerValue` | 需要知道选中值时 |
-| `initialValue` | 打开/重建时滚轮初始位置 | 弹窗回显或指定首次默认值 |
-**集成示例**
-
-**注意**：勿将 `onChange` 结果写回 `initialValue` 并重建本组件，会导致滚轮跳动。
+日期/时间滚轮选择器。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| end | DateTime? | - | 可选范围上界（闭区间）。 为 `null` 时年列上界为组件打开时锚定年份 + 10，且不随年列滚动漂移。 若 `start` 晚于 `end`，debug 下 assert，release 下忽略 `end`。 |
+| end | TDateTimePickerValue? | - | 可选范围上限，类型同 `initialValue`。 |
 | height | double? | - | 滚轮视窗高度，默认 200。 |
-| initialValue | DateTime? | - | dateTimePicker: 非受控初始选中时间。 仅决定「打开/重建时滚轮停在哪」，**不是**受控绑定；滚动中的当前值请用 `onChange`。 **行为** - 缺省为 `DateTime.now`；超出 `start`、`end` 时钳制到范围内； - `mode` 或本参数变化时滚轮重置；仅 `start`/`end`/`steps`/`showWeek` 变化时保留选中； - **勿**将 `onChange` 结果写回本参数并 rebuild（滚轮会跳动）。 **弹窗回显** ```dart initialValue: _selected?.toDateTime() ``` `TDateTimePickerValue.toDateTime` 对 partial 值用 `TDateTimePickerValue.defaultFallback` 补齐缺字段；需自定义补齐规则时传 `toDateTime(fallback: ...)`。 **首次打开** ```dart initialValue: DateTime(2026, 5, 15) // 或省略，默认 now ``` |
+| initialValue | TDateTimePickerValue? | - | 初始选中值（非受控）；缺省为当前时间。 |
 | itemCount | int? | - | 每屏可见条目数，默认 5。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| mode | DateTimePickerMode? | - | 列结构。 |
-| onChange | void Function(TDateTimePickerValue result)? | - | dateTimePicker: 滚轮中心项变化时的选中值回调。 **触发时机**：用户滚动且中心选中项与上次不同时；挂载瞬间不触发。 **返回值**：`TDateTimePickerValue` 仅含当前 `mode` 存在的列（partial）。 建议原样存入 state，用于 Cell 展示、弹窗回显（配合 `initialValue`）、提交时再 `TDateTimePickerValue.toDateTime`。 ```dart // 弹窗滚动即 commit onChange: (v) => setState(() => _selected = v), // 确定/取消：只更新草稿，点确定再写入 _committed onChange: (v) => _draft = v, ``` |
-| renderLabel | DateTimePickerRenderLabel? | - | 自定义列 label，仅影响展示；返回 `null` 时使用 `TResourceDelegate` 默认文案。 |
-| showWeek | bool | false | dateTimePicker: 是否在日列 label 附加星期（如 `19日 周六`），仅影响展示。 `onChange` 结果无星期字段；需展示星期时用 `result.toDateTime().weekday` 派生（partial 值默认补齐，见 `TDateTimePickerValue.defaultFallback`）。 |
-| start | DateTime? | - | 可选范围下界（闭区间）。 为 `null` 时年列下界为组件打开时锚定年份 − 10，且不随年列滚动漂移。 若 `start` 晚于 `end`，debug 下 assert，release 下忽略 `end`。 |
-| steps | DateTimePickerSteps? | - | 各列选项步进，如 `DateTimePickerSteps(minute: 5)`；未配置的列步进为 1。 |
+| mode | DateTimePickerMode? | - | 滚轮列结构；通过 `DateTimePickerMode` 组合 `DateMode`、`TimeMode`，默认年月日。 |
+| onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调，返回 `TDateTimePickerValue`。 |
+| renderLabel | DateTimePickerRenderLabel? | - | 自定义列展示文案；`column` 为 `DateTimeColumn`，`value` 为数值，返回 null 用默认文案。 |
+| showWeek | bool | false | 日列是否显示星期，默认 false。 |
+| start | TDateTimePickerValue? | - | 可选范围下限，类型同 `initialValue`。 |
+| steps | DateTimePickerSteps? | - | 各列选项步进。 |
 
 
 ### DateTimePickerMode
 #### 简介
-列结构模式。
-通过 `DateMode`、`TimeMode` 组合列，至少传其一。相同列配置在 `==` / `hashCode`
-上相等。
+滚轮列结构，由 `DateMode`、`TimeMode` 组合；通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造。
 
 #### 工厂构造方法
 
@@ -247,47 +239,36 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | timeMode | TimeMode? | - | - |
 
 
-#### 方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| columns | List<DateTimeColumn> | - | 按显示顺序展开的列列表。 |
-| == | bool | required Object other | - |
-| hashCode | int | - | - |
-
-
 ### TDateTimePickerValue
 #### 简介
-`TDateTimePicker.onChange` 回调结果。
-字段为 `null` 表示当前 `DateTimePickerMode` 不含该列（partial 值）。
-**与 `TDateTimePicker.initialValue` 的分工**
-- `onChange`：滚动过程中「当前选中了什么」，应原样存入 state；
-- `initialValue`：打开/重建时「滚轮从哪开始」，仅读一次，勿写回。
-**典型用法**
+`TDateTimePicker.onChange` 返回值；`null` 字段表示当前 mode 不含该列。
+提交后端时调用 `toDateTime`；从 `DateTime` 初始化用 `fromDateTime`。
+
+#### 工厂构造方法
+
+##### TDateTimePickerValue.fromDateTime
+
+从 `DateTime` 构造，用于 `TDateTimePicker.initialValue` 或 `TDateTimePicker.start`/`end`。
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| dateTime | DateTime | - | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| day | int? | - | 选中的日（1–31）；当前 mode 不含该列时为 `null`。 |
-| hour | int? | - | 选中的时（0–23）；当前 mode 不含该列时为 `null`。 |
-| minute | int? | - | 选中的分（0–59）；当前 mode 不含该列时为 `null`。 |
-| month | int? | - | 选中的月（1–12）；当前 mode 不含该列时为 `null`。 |
-| second | int? | - | 选中的秒（0–59）；当前 mode 不含该列时为 `null`。 |
-| year | int? | - | 选中的年；当前 mode 不含该列时为 `null`。 |
-
-#### 静态成员
-
-| 名称 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| defaultFallback | DateTime | - | dateTimePickerValue: `toDateTime` 未传 `fallback` 时使用的默认补齐值。 固定为 `2000-01-01 00:00:00`（1 月 1 日），避免用「今天」作日字段导致月份溢出。 仅用于弹窗回显、派生 weekday 等「不关心缺字段语义」的场景； 业务提交若 fallback 有特定含义，请显式传入 `toDateTime` 的 `fallback`。 |
+| day | int? | - | 日。 |
+| hour | int? | - | 时。 |
+| minute | int? | - | 分。 |
+| month | int? | - | 月。 |
+| second | int? | - | 秒。 |
+| year | int? | - | 年。 |
 
 
 ### DateTimePickerSteps
 #### 简介
-各列选项步进。
-对齐 mobile-vue `steps`（如 `{ minute: 5 }`）。未配置的列步进为 1。
-与 `TDateTimePicker.start`、`end` 同时使用时，在闭区间内按步进生成选项，
-选中值吸附到最近合法步进点。
+各列选项步进，未配置的列步进为 1。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -300,25 +281,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | year | int? | - | 年列步进。 |
 
 
-### DateTimeColumn
-#### 简介
-选择器列类型。
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| year | 年。 |
-| month | 月（1–12）。 |
-| day | 日（1–31，按该年该月实际天数）。 |
-| hour | 时（0–23）。 |
-| minute | 分（0–59）。 |
-| second | 秒（0–59）。 |
-
-
 ### DateMode
 #### 简介
-`DateTimePickerMode` 的日期段粒度。
+日期段粒度，用于 `DateTimePickerMode` 的 `DateMode` 参数。
 #### 枚举值
 
 
@@ -331,7 +296,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### TimeMode
 #### 简介
-`DateTimePickerMode` 的时间段粒度。
+时间段粒度，用于 `DateTimePickerMode` 的 `TimeMode` 参数。
 #### 枚举值
 
 
@@ -340,17 +305,3 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | hour | 时。 |
 | minute | 时 + 分。 |
 | second | 时 + 分 + 秒。 |
-
-
-### DateTimePickerRenderLabel
-#### 简介
-自定义列 label。
-`column` 为列类型，`value` 为该列数值；返回 `null` 时使用默认文案。
-#### 类型定义
-
-```dart
-typedef DateTimePickerRenderLabel = String? Function(DateTimeColumn column, int value);
-```
-
-
-  
