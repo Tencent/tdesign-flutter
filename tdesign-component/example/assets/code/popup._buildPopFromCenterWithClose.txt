@@ -7,18 +7,21 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-              isDismissible: false,
-              slideTransitionFrom: SlideTransitionFrom.center,
-              builder: (context) {
-                return TPopupCenterPanel(
-                  closeClick: () {
-                    Navigator.maybePop(context);
-                  },
-                  child: const SizedBox(width: 240, height: 240),
-                );
-              }),
+        TPopup.show(
+          context,
+          options: TPopupOptions.center(
+              closeOnOverlayClick: false,
+              width: 240,
+              height: 240,
+              closeBuilder: (_, close) => IconButton(
+                    icon: Icon(
+                      TIcons.close_circle,
+                      color: TTheme.of(context).fontWhColor1,
+                      size: 32,
+                    ),
+                    onPressed: close,
+                  ),
+              child: const SizedBox(width: 240, height: 240)),
         );
       },
     );

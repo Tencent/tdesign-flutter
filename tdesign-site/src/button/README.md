@@ -739,6 +739,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TButton
+#### 简介
+TD常规按钮
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -755,7 +757,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | iconTextSpacing | double? | - | 自定义图标与文本之间距离 |
 | iconWidget | Widget? | - | 自定义图标 icon 控件 |
 | isBlock | bool | false | 是否为通栏按钮 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | margin | EdgeInsetsGeometry? | - | 自定义 margin |
 | onLongPress | TButtonEvent? | - | 长按事件 |
 | onTap | TButtonEvent? | - | 点击事件 |
@@ -769,10 +771,56 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | type | TButtonType | TButtonType.fill | 类型：填充，描边，文字 |
 | width | double? | - | 自定义宽度 |
 
-```
-```
 
 ### TButtonStyle
+#### 简介
+TButton按钮样式
+
+#### 工厂构造方法
+
+##### TButtonStyle.generateFillStyleByTheme
+
+生成不同主题的填充按钮样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| theme | TButtonTheme? | - | - |
+| status | TButtonStatus | - | - |
+
+
+##### TButtonStyle.generateGhostStyleByTheme
+
+生成不同主题的幽灵按钮样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| theme | TButtonTheme? | - | - |
+| status | TButtonStatus | - | - |
+
+
+##### TButtonStyle.generateOutlineStyleByTheme
+
+生成不同主题的描边按钮样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| theme | TButtonTheme? | - | - |
+| status | TButtonStatus | - | - |
+
+
+##### TButtonStyle.generateTextStyleByTheme
+
+生成不同主题的文本按钮样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| theme | TButtonTheme? | - | - |
+| status | TButtonStatus | - | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -785,14 +833,82 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | textColor | Color? | - | 文字颜色 |
 
 
-#### 工厂构造方法
+### TButtonSize
+#### 枚举值
 
-| 名称  | 说明 |
-| --- |  --- |
-| TButtonStyle.generateFillStyleByTheme  | 生成不同主题的填充按钮样式 |
-| TButtonStyle.generateGhostStyleByTheme  | 生成不同主题的幽灵按钮样式 |
-| TButtonStyle.generateOutlineStyleByTheme  | 生成不同主题的描边按钮样式 |
-| TButtonStyle.generateTextStyleByTheme  | 生成不同主题的文本按钮样式 |
+
+| 名称 | 说明 |
+| --- | --- |
+| large | - |
+| medium | - |
+| small | - |
+| extraSmall | - |
+
+
+### TButtonType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| fill | - |
+| outline | - |
+| text | - |
+| ghost | - |
+
+
+### TButtonShape
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| rectangle | - |
+| round | - |
+| square | - |
+| circle | - |
+| filled | - |
+
+
+### TButtonTheme
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| defaultTheme | - |
+| primary | - |
+| danger | - |
+| light | - |
+
+
+### TButtonStatus
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| defaultState | - |
+| active | - |
+| disable | - |
+
+
+### TButtonIconPosition
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| left | - |
+| right | - |
+
+
+### TButtonEvent
+#### 类型定义
+
+```dart
+typedef TButtonEvent = void Function();
+```
 
 
   

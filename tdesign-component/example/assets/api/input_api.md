@@ -27,7 +27,7 @@
 | inputDecoration | InputDecoration? | - | 自定义输入框样式，默认圆角 |
 | inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
 | inputType | TextInputType? | - | 键盘类型，数字、字母 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | labelWidget | Widget? | - | leftLabel右侧组件，支持自定义 |
 | leftContentSpace | double? | - | 输入框内容左侧间距 |
 | leftIcon | Widget? | - | 带图标的输入框 |
@@ -52,9 +52,44 @@
 | selectionControls | TextSelectionControls? | - | 自定义选择控制器 |
 | showBottomDivider | bool | true | 是否展示底部分割线 |
 | size | TInputSize | TInputSize.large | 输入框规格 |
-| spacer | TInputSpacer | - | 组件各模块间间距 |
+| spacer | TInputSpacer? | - | 组件各模块间间距 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | textStyle | TextStyle? | - | 文本颜色 |
 | type | TInputType | TInputType.normal | 输入框类型 |
 | width | double? | - | 输入框宽度(TCardStyle时必须设置该参数) |
+
+
+### TInputType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | - |
+| twoLine | - |
+| longText | - |
+| special | - |
+| normalMaxTwoLine | - |
+| cardStyle | - |
+
+
+### TInputSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| small | - |
+| large | - |
+
+
+### TCardStyle
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| topText | - |
+| topTextWithBlueBorder | - |
+| errorStyle | - |

@@ -7,23 +7,12 @@
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(
-          TSlidePopupRoute(
-            slideTransitionFrom: SlideTransitionFrom.bottom,
-            builder: (context) {
-              return TPopupBottomConfirmPanel(
-                title: '标题文字',
-                leftClick: () {
-                  Navigator.maybePop(context);
-                },
-                rightClick: () {
-                  TToast.showText('确定', context: context);
-                  Navigator.maybePop(context);
-                },
-                child: Container(height: 200),
-              );
-            },
-          ),
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+              height: 280,
+              titleWidget: TText('标题文字'),
+              child: Container(height: 200)),
         );
       },
     );

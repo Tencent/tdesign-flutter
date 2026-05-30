@@ -303,7 +303,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | centerTitle | bool | true | 标题是否居中 |
 | flexibleSpace | Widget? | - | 固定背景 |
 | height | double | 48 | 高度 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | leftBarItems | List<TNavBarItem>? | - | 左边操作项 |
 | onBack | VoidCallback? | - | 返回事件 |
 | opacity | double | 1.0 | 透明度 |
@@ -320,8 +320,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | useDefaultBack | bool | true | 是否使用默认的返回 |
 
-```
-```
 
 ### TNavBarItem
 #### 默认构造方法
@@ -334,7 +332,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | iconColor | Color? | - | 图标颜色 |
 | iconSize | double? | 24.0 | 图标尺寸 |
 | iconWidget | Widget? | - | 图标组件，优先级高于 icon |
-| padding | EdgeInsetsGeometry? | - |  |
+| padding | EdgeInsetsGeometry? | - | 内部填充 |
+
+
+### TBarItemAction
+#### 类型定义
+
+```dart
+typedef TBarItemAction = void Function();
+```
 
 
   

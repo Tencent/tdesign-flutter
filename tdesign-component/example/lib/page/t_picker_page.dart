@@ -33,13 +33,16 @@ class _TPickerPageState extends State<TPickerPage> {
 
   final timeItems = TPickerColumns([
     [
-      for (int i = 0; i < 24; i++) TPickerOption(label: '${i.toString().padLeft(2, '0')}时', value: i),
+      for (int i = 0; i < 24; i++)
+        TPickerOption(label: '${i.toString().padLeft(2, '0')}时', value: i),
     ],
     [
-      for (int i = 0; i < 60; i++) TPickerOption(label: '${i.toString().padLeft(2, '0')}分', value: i),
+      for (int i = 0; i < 60; i++)
+        TPickerOption(label: '${i.toString().padLeft(2, '0')}分', value: i),
     ],
     [
-      for (int i = 0; i < 60; i++) TPickerOption(label: '${i.toString().padLeft(2, '0')}秒', value: i),
+      for (int i = 0; i < 60; i++)
+        TPickerOption(label: '${i.toString().padLeft(2, '0')}秒', value: i),
     ],
   ]);
 
@@ -101,18 +104,18 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
     // 第2列：开头 + 中间 + 结尾 各 1 个禁用（稀疏分布，留足操作空间）
     [
-      TPickerOption(label: 'A排1座', value: 'A1', disabled: true),   // 开头禁用
+      TPickerOption(label: 'A排1座', value: 'A1', disabled: true), // 开头禁用
       TPickerOption(label: 'A排2座', value: 'A2'),
       TPickerOption(label: 'A排3座', value: 'A3'),
       TPickerOption(label: 'A排4座', value: 'A4'),
       TPickerOption(label: 'A排5座', value: 'A5'),
       TPickerOption(label: 'A排6座', value: 'A6', disabled: true),
-      TPickerOption(label: 'A排7座', value: 'A7', disabled: true),   // 中间偏后禁用
-      TPickerOption(label: 'A排8座', value: 'A8', disabled: true),   // 新增禁用
+      TPickerOption(label: 'A排7座', value: 'A7', disabled: true), // 中间偏后禁用
+      TPickerOption(label: 'A排8座', value: 'A8', disabled: true), // 新增禁用
       TPickerOption(label: 'A排9座', value: 'A9'),
       TPickerOption(label: 'A排10座', value: 'A10'),
       TPickerOption(label: 'A排11座', value: 'A11'),
-      TPickerOption(label: 'A排12座', value: 'A12', disabled: true),  // 结尾禁用
+      TPickerOption(label: 'A排12座', value: 'A12', disabled: true), // 结尾禁用
     ],
   ]);
 
@@ -157,7 +160,8 @@ class _TPickerPageState extends State<TPickerPage> {
         ]),
         ExampleModule(title: '禁用状态', children: [
           ExampleItem(desc: '项级 disabled（部分选项不可选）', builder: buildItemDisabled),
-          ExampleItem(desc: '全局 disabled（整组不可操作）', builder: buildGlobalDisabled),
+          ExampleItem(
+              desc: '全局 disabled（整组不可操作）', builder: buildGlobalDisabled),
         ]),
         ExampleModule(title: '弹窗模式(TPopup)', children: [
           ExampleItem(desc: '弹窗-联动选择(省市区)', builder: buildPopupLinked),
@@ -167,11 +171,13 @@ class _TPickerPageState extends State<TPickerPage> {
           ExampleItem(desc: '自定义按钮（图标 / 文字）', builder: buildCustomSlot),
         ]),
         ExampleModule(title: '自定义字段映射(keys)', children: [
-          ExampleItem(desc: '数据字段非 label/value 时，用 keys 映射', builder: buildCustomKeys),
+          ExampleItem(
+              desc: '数据字段非 label/value 时，用 keys 映射', builder: buildCustomKeys),
         ]),
         ExampleModule(title: '尺寸与样式', children: [
           ExampleItem(desc: '自定义高度和每屏显示数量', builder: buildCustomSize),
-          ExampleItem(desc: '自定义子项渲染（itemBuilder）', builder: buildCustomItemBuilder),
+          ExampleItem(
+              desc: '自定义子项渲染（itemBuilder）', builder: buildCustomItemBuilder),
         ]),
       ],
     );
@@ -184,17 +190,18 @@ class _TPickerPageState extends State<TPickerPage> {
   /// TPicker 自带「取消 / 标题 / 确认」工具栏，业务方在 onCancel/onConfirm
   /// 中自行决定是否调用 Navigator.pop 关闭弹窗。
   void _showPickerPopup(BuildContext context, {required Widget picker}) {
-    Navigator.of(context).push(
-      TSlidePopupRoute(
-        slideTransitionFrom: SlideTransitionFrom.bottom,
-        builder: (ctx) => Material(
-          color: TTheme.of(ctx).bgColorContainer,
-          child: SafeArea(
-            top: false,
-            child: picker,
-          ),
-        ),
-      ),
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+          cancelBuilder: null,
+          confirmBuilder: null,
+          child: Material(
+            color: TTheme.of(context).bgColorContainer,
+            child: SafeArea(
+              top: false,
+              child: picker,
+            ),
+          )),
     );
   }
 
@@ -219,11 +226,13 @@ class _TPickerPageState extends State<TPickerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中城市: ${selectedCity.isEmpty ? "未选择" : selectedCity}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: cityItems,
+          child: TPicker(
+              items: cityItems,
               onChange: (v) => setState(() => selectedCity = v.labels.first)),
         ),
       ],
@@ -236,13 +245,16 @@ class _TPickerPageState extends State<TPickerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中时间: ${selectedTime.isEmpty ? "未选择" : selectedTime}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: timeItems, itemCount: 5,
-              onChange: (v) => setState(() =>
-                  selectedTime = '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
+          child: TPicker(
+              items: timeItems,
+              itemCount: 5,
+              onChange: (v) => setState(() => selectedTime =
+                  '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
         ),
       ],
     );
@@ -254,12 +266,16 @@ class _TPickerPageState extends State<TPickerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: linkedItems, initialValue: const ['GD', 'SZ', 'NS'],
-              onChange: (v) => setState(() => selectedLinked = v.labels.join(' / '))),
+          child: TPicker(
+              items: linkedItems,
+              initialValue: const ['GD', 'SZ', 'NS'],
+              onChange: (v) =>
+                  setState(() => selectedLinked = v.labels.join(' / '))),
         ),
       ],
     );
@@ -272,15 +288,20 @@ class _TPickerPageState extends State<TPickerPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
-            style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        Text(
+            '选中: ${selectedItemDisabled.isEmpty ? "未选择" : selectedItemDisabled}',
+            style: TextStyle(
+                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
         const SizedBox(height: 4),
         Text('提示: 标灰的选项不可选（第1列「保密」、第2列「A排1座/A排6座/A排7座/A排8座/A排12座」）',
-            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+            style: TextStyle(
+                fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: itemDisabledItems, initialValue: const ['M', 'A5'],
+          child: TPicker(
+              items: itemDisabledItems,
+              initialValue: const ['M', 'A5'],
               onChange: (v) => setState(() =>
                   selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
         ),
@@ -311,13 +332,16 @@ class _TPickerPageState extends State<TPickerPage> {
         const SizedBox(height: 8),
         _pickerCard(
           context,
-          child: TPicker(items: cityItems, initialValue: const ['GZ'],
+          child: TPicker(
+              items: cityItems,
+              initialValue: const ['GZ'],
               onChange: (v) => debugPrint('选中: $v'),
               disabled: globalDisabled),
         ),
         const SizedBox(height: 4),
         Text('切换开关可控制整个选择器的禁用/启用状态',
-            style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
+            style: TextStyle(
+                fontSize: 12, color: TTheme.of(context).textColorPlaceholder)),
       ],
     );
   }
@@ -372,8 +396,7 @@ class _TPickerPageState extends State<TPickerPage> {
             titleWidget: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(TIcons.location,
-                    size: 18, color: theme.brandNormalColor),
+                Icon(TIcons.location, size: 18, color: theme.brandNormalColor),
                 const SizedBox(width: 4),
                 Text('选择地区',
                     style: TextStyle(
@@ -384,7 +407,8 @@ class _TPickerPageState extends State<TPickerPage> {
               ],
             ),
             cancel: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
-            confirm: Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
+            confirm:
+                Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
           ),
         ),
       ],
@@ -502,7 +526,7 @@ class _TPickerPageState extends State<TPickerPage> {
       {'code': 'BJ', 'city': '北京', 'readonly': false},
       {'code': 'SH', 'city': '上海', 'readonly': false},
       {'code': 'GZ', 'city': '广州', 'readonly': false},
-      {'code': 'SZ', 'city': '深圳', 'readonly': true},  // 演示禁用映射
+      {'code': 'SZ', 'city': '深圳', 'readonly': true}, // 演示禁用映射
       {'code': 'CD', 'city': '成都', 'readonly': false},
       {'code': 'HZ', 'city': '杭州', 'readonly': false},
     ],
@@ -515,19 +539,22 @@ class _TPickerPageState extends State<TPickerPage> {
   @Demo(group: 'picker')
   Widget buildCustomKeys(BuildContext context) {
     // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
-    const keys = TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
+    const keys =
+        TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
     final label = _customKeysValue?.labels.join() ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '后端原始字段：city / code / readonly。通过 keys(label: "city") 映射为 label',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
           '当前选中：${label.isEmpty ? "未选择" : label}',
-          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
         const SizedBox(height: 8),
         _pickerCard(
@@ -551,7 +578,8 @@ class _TPickerPageState extends State<TPickerPage> {
       children: [
         Text(
           '示例：height(300) + itemCount(7)，每屏显示 7 项',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 8),
         _pickerCard(
@@ -576,12 +604,14 @@ class _TPickerPageState extends State<TPickerPage> {
       children: [
         Text(
           '示例：itemBuilder 自定义子项渲染，可添加图标、背景色等',
-          style: TextStyle(fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
           '选中: ${_customItemBuilderValue.isEmpty ? "未选择" : _customItemBuilderValue}',
-          style: TextStyle(fontSize: 14, color: TTheme.of(context).textColorSecondary),
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
         const SizedBox(height: 8),
         _pickerCard(
@@ -607,15 +637,19 @@ class _TPickerPageState extends State<TPickerPage> {
                       content,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                        color: selected ? theme.brandNormalColor : theme.fontGyColor1,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.normal,
+                        color: selected
+                            ? theme.brandNormalColor
+                            : theme.fontGyColor1,
                       ),
                     ),
                   ],
                 ),
               );
             },
-            onChange: (v) => setState(() => _customItemBuilderValue = v.labels.first),
+            onChange: (v) =>
+                setState(() => _customItemBuilderValue = v.labels.first),
           ),
         ),
       ],

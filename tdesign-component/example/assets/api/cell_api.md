@@ -18,7 +18,7 @@
 | imageCircle | double? | 50 | 主图圆角，默认50（圆形） |
 | imageSize | double? | - | 主图尺寸 |
 | imageWidget | Widget? | - | 主图组件 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | leftIcon | IconData? | - | 左侧图标，出现在单元格标题的左侧 |
 | leftIconWidget | Widget? | - | 左侧图标组件 |
 | note | String? | - | 和标题同行的说明文字 |
@@ -35,8 +35,6 @@
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |
 
-```
-```
 
 ### TCellGroup
 #### 简介
@@ -49,19 +47,28 @@
 | builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
 | cells | List<TCell> | - | 单元格列表 |
 | isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
-| key |  | - |  |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | scrollable | bool? | false | 可滚动 |
 | style | TCellStyle? | - | 自定义样式 |
 | theme | TCellGroupTheme? | TCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
 | title | String? | - | 单元格组标题 |
 | titleWidget | Widget? | - | 单元格组标题组件 |
 
-```
-```
 
 ### TCellStyle
 #### 简介
 单元格组件样式
+
+#### 工厂构造方法
+
+##### TCellStyle.cellStyle
+
+生成单元格默认样式
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 传递context，会生成默认样式 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -86,8 +93,38 @@
 | titleStyle | TextStyle? | - | 标题文字样式 |
 
 
-#### 工厂构造方法
+### TCellAlign
+#### 枚举值
 
-| 名称  | 说明 |
-| --- |  --- |
-| TCellStyle.cellStyle  | 生成单元格默认样式 |
+
+| 名称 | 说明 |
+| --- | --- |
+| top | - |
+| middle | - |
+| bottom | - |
+
+
+### TCellGroupTheme
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| defaultTheme | - |
+| cardTheme | - |
+
+
+### TCellClick
+#### 类型定义
+
+```dart
+typedef TCellClick = void Function(TCell cell);
+```
+
+
+### CellBuilder
+#### 类型定义
+
+```dart
+typedef CellBuilder = Widget Function(BuildContext context, TCell cell, int index);
+```

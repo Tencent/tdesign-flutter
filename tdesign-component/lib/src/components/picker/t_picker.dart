@@ -3,18 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
+import '../../util/t_toolbar_pressable.dart';
 import 'no_wave_behavior.dart';
 
 // =============== 文件级常量（魔法数字归一） ===============
 
 /// 工具栏高度（px）
 const double _kToolbarHeight = 48;
-
-/// 按钮按压态动画时长
-const Duration _kPressAnimDuration = Duration(milliseconds: 100);
-
-/// 按钮按压态透明度
-const double _kPressedOpacity = 0.5;
 
 /// disabled 项修正动画 - 距离 ≤ 2 时的时长
 const int _kCorrectAnimShortMs = 200;
@@ -245,8 +240,6 @@ class _TPickerState extends State<TPicker> {
   final _scrollBehavior = NoWaveBehavior();
 
   /// 工具栏按钮按压态（参考 TCheckbox 的反馈方式）
-  bool _cancelPressed = false;
-  bool _confirmPressed = false;
 
   double get _itemHeight => widget.height / widget.itemCount;
 
@@ -399,23 +392,31 @@ class _TPickerState extends State<TPicker> {
         padding: EdgeInsets.symmetric(horizontal: theme.spacer16),
         child: Row(
           children: [
-            _buildToolbarButton(
-              theme: theme,
-              pressed: _cancelPressed,
-              onPressChange: (v) => setState(() => _cancelPressed = v),
-              onTap: () => widget.onCancel?.call(),
-              defaultColor: theme.fontGyColor2,
+            TToolbarPressable(
+              onTap: widget.onCancel,
+              mergeTextStyle: TextStyle(
+                fontSize: theme.fontTitleMedium?.size ?? _kDefaultFontSize,
+                color: theme.fontGyColor2,
+              ),
+              mergeIconTheme: IconThemeData(
+                color: theme.fontGyColor2,
+                size: _kDefaultIconSize,
+              ),
               child: cancelText,
             ),
             Expanded(
               child: Center(child: _buildTitle(theme)),
             ),
-            _buildToolbarButton(
-              theme: theme,
-              pressed: _confirmPressed,
-              onPressChange: (v) => setState(() => _confirmPressed = v),
+            TToolbarPressable(
               onTap: () => widget.onConfirm?.call(_buildValue()),
-              defaultColor: theme.brandNormalColor,
+              mergeTextStyle: TextStyle(
+                fontSize: theme.fontTitleMedium?.size ?? _kDefaultFontSize,
+                color: theme.brandNormalColor,
+              ),
+              mergeIconTheme: IconThemeData(
+                color: theme.brandNormalColor,
+                size: _kDefaultIconSize,
+              ),
               child: confirmText,
             ),
           ],
@@ -438,48 +439,6 @@ class _TPickerState extends State<TPicker> {
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  /// 带按压反馈的工具栏按钮
-  ///
-  /// - 按下时 [AnimatedOpacity] 平滑过渡到 [_kPressedOpacity]
-  /// - [DefaultTextStyle] / [IconTheme] 为默认 [Text] / [Icon] 提供统一样式，
-  ///   用户传入的 Widget 若已指定样式，会优先采用自己的样式（merge 语义）
-  Widget _buildToolbarButton({
-    required TThemeData theme,
-    required bool pressed,
-    required ValueChanged<bool> onPressChange,
-    required VoidCallback onTap,
-    required Color defaultColor,
-    required Widget child,
-  }) {
-    final styledChild = DefaultTextStyle.merge(
-      style: TextStyle(
-        fontSize: theme.fontTitleMedium?.size ?? _kDefaultFontSize,
-        color: defaultColor,
-      ),
-      child: IconTheme.merge(
-        data: IconThemeData(color: defaultColor, size: _kDefaultIconSize),
-        child: child,
-      ),
-    );
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTapDown: (_) => onPressChange(true),
-      onTapUp: (_) => onPressChange(false),
-      onTapCancel: () => onPressChange(false),
-      onTap: onTap,
-      child: AnimatedOpacity(
-        duration: _kPressAnimDuration,
-        opacity: pressed ? _kPressedOpacity : 1.0,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: theme.spacer8, vertical: theme.spacer12),
-          child: styledChild,
-        ),
-      ),
     );
   }
 
