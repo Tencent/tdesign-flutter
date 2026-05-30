@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 // 测试在包内，可以直接 import @internal 的 Snapshot 做白盒测试。
+import 'package:tdesign_flutter/src/components/calendar/date_picker_model.dart';
 import 'package:tdesign_flutter/src/components/date_time_picker/t_date_time_picker_internal.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -158,7 +159,7 @@ void main() {
       expect(dt, DateTime(2026, 2, 1));
     });
 
-    test('toDateTime 字段溢出陷阱：不带安全 fallback 时可能漂移', () {
+    test('toDateTime 字段溢出陷阱：不安全 fallback 仍可能漂移', () {
       // fallback 为 5/31，month=2 但 day 沿用 31 → 溢出到 3/3
       const v = TDateTimePickerValue(year: 2026, month: 2);
       final dt = v.toDateTime(fallback: DateTime(2026, 5, 31));
@@ -166,10 +167,40 @@ void main() {
       expect(dt.day, 3);
     });
 
-    test('toDateTime().weekday 用于派生星期', () {
+    test('toDateTime partial 缺字段时使用 defaultFallback', () {
+      const v = TDateTimePickerValue(year: 2026, month: 2);
+      expect(v.toDateTime(), DateTime(2026, 2, 1));
+      expect(v.toDateTime(), v.toDateTime(fallback: TDateTimePickerValue.defaultFallback));
+    });
+
+    test('toDateTime(fallback) 用户传入时覆盖 defaultFallback', () {
+      const v = TDateTimePickerValue(year: 2026, month: 2);
+      expect(v.toDateTime(), DateTime(2026, 2, 1));
+      expect(
+        v.toDateTime(fallback: DateTime(2000, 1, 15, 12, 0, 0)),
+        DateTime(2026, 2, 15, 12, 0, 0),
+      );
+    });
+
+    test('toDateTime(fallback) 用于派生 weekday', () {
       const v = TDateTimePickerValue(year: 2026, month: 5, day: 15);
       // 2026-05-15 是周五
-      expect(v.toDateTime().weekday, 5);
+      expect(v.toDateTime(fallback: DateTime(2000, 1, 1)).weekday, 5);
+    });
+
+    test('toDateTime 完整六元组忽略 fallback', () {
+      const v = TDateTimePickerValue(
+        year: 2026,
+        month: 5,
+        day: 15,
+        hour: 10,
+        minute: 30,
+        second: 0,
+      );
+      expect(
+        v.toDateTime(fallback: DateTime(2000, 1, 1)),
+        DateTime(2026, 5, 15, 10, 30, 0),
+      );
     });
 
     test('相等性比较包含全部字段', () {
@@ -585,6 +616,48 @@ void main() {
   });
 
   // ===========================================================================
+  // DatePickerModel（Calendar 适配层）
+  // ===========================================================================
+  group('DatePickerModel', () {
+    test('init 基于 DateTimePickerSnapshot 生成时分列', () {
+      final model = DatePickerModel(
+        useYear: false,
+        useMonth: false,
+        useDay: false,
+        useHour: true,
+        useMinute: true,
+        dateStart: [1999, 1, 1, 9, 0],
+        dateEnd: [1999, 1, 1, 18, 59],
+        dateInitial: [1999, 1, 1, 10, 30],
+      )..init();
+
+      final hourCol = model.snapshot!.columnOptionsAt(
+        0,
+        start: DateTime(1999, 1, 1, 9, 0),
+        end: DateTime(1999, 1, 1, 18, 59),
+      );
+      expect(hourCol.first.value, 9);
+      expect(hourCol.last.value, 18);
+      expect(model.selected['hour'], 10);
+      expect(model.selected['minute'], 30);
+    });
+
+    test('init 闰年 2 月日列范围为 29', () {
+      final model = DatePickerModel(
+        useYear: true,
+        useMonth: true,
+        useDay: true,
+        dateInitial: [2024, 2, 15],
+      )..init();
+
+      final dayCol = model.snapshot!.columnOptionsAt(2);
+      expect(dayCol.last.value, 29);
+      expect(model.selected['month'], 2);
+      expect(model.selected['day'], 15);
+    });
+  });
+
+  // ===========================================================================
   // TDateTimePicker 集成
   // ===========================================================================
   group('TDateTimePicker 集成', () {
@@ -725,6 +798,99 @@ void main() {
 
       expect(changed, isNotNull);
       expect(changed!.month, isNot(2));
+    });
+
+    testWidgets('onChange 初始挂载与相同 props 的父 rebuild 不重复触发', (tester) async {
+      var callCount = 0;
+      await tester.pumpWidget(MaterialApp(
+        home: StatefulBuilder(
+          builder: (context, setState) => Scaffold(
+            body: Column(
+              children: [
+                TextButton(
+                  onPressed: () => setState(() {}),
+                  child: const Text('rebuild'),
+                ),
+                TDateTimePicker(
+                  mode: DateTimePickerMode(dateMode: DateMode.date),
+                  initialValue: DateTime(2026, 5, 15),
+                  onChange: (_) => callCount++,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(callCount, 0);
+
+      await tester.tap(find.text('rebuild'));
+      await tester.pumpAndSettle();
+      expect(callCount, 0);
+    });
+
+    testWidgets('onChange 为滚轮列提供 Semantics', (tester) async {
+      final semanticsHandle = tester.ensureSemantics();
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: TDateTimePicker(
+            mode: DateTimePickerMode(dateMode: DateMode.date),
+            initialValue: DateTime(2026, 5, 15),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.bySemanticsLabel('日期时间选择器'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('年份')), findsWidgets);
+      semanticsHandle.dispose();
+    });
+
+    testWidgets('initialValue partial 年月回显到滚轮', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: TDateTimePicker(
+            mode: DateTimePickerMode(dateMode: DateMode.month),
+            initialValue:
+                const TDateTimePickerValue(year: 2026, month: 2).toDateTime(),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('2026'), findsWidgets);
+      expect(find.textContaining('2月'), findsWidgets);
+    });
+
+    testWidgets('initialValue 从 toDateTime 变化会重置滚轮选中', (tester) async {
+      TDateTimePickerValue? initial =
+          const TDateTimePickerValue(year: 2026, month: 5, day: 15);
+      await tester.pumpWidget(MaterialApp(
+        home: StatefulBuilder(
+          builder: (context, setState) => Scaffold(
+            body: Column(
+              children: [
+                TextButton(
+                  onPressed: () => setState(() {
+                    initial = const TDateTimePickerValue(year: 2027, month: 6, day: 1);
+                  }),
+                  child: const Text('reset-picker'),
+                ),
+                TDateTimePicker(
+                  mode: DateTimePickerMode(dateMode: DateMode.date),
+                  initialValue: initial?.toDateTime(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('2026'), findsWidgets);
+
+      await tester.tap(find.text('reset-picker'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('2027'), findsWidgets);
+      expect(find.textContaining('6月'), findsWidgets);
     });
 
     testWidgets('mode/initialValue 变化会触发内部重建并更新 initialValue', (tester) async {

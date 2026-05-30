@@ -20,13 +20,6 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   final ValueNotifier<TDateTimePickerValue?> _inlineSelectedNotifier =
       ValueNotifier<TDateTimePickerValue?>(null);
 
-  /// 复用上次选择结果回放为 `initialValue` 时使用的固定 fallback。
-  ///
-  /// 避免 [TDateTimePickerValue.toDateTime] 在缺字段时用 `DateTime.now()`
-  /// 回填导致 Dart 的 [DateTime] 静默溢出（典型场景：年月模式下今日为 31 日，
-  /// 选 2 月后再次打开 → `DateTime(2026, 2, 31)` 会溢出成 `2026-03-03`）。
-  static final _kReplayFallback = DateTime(2000, 1, 1);
-
   /// 内嵌滚轮首次展示的默认值（固定，勿与 [onChange] 写回绑定）。
   static final _kInlineInitialValue = DateTime(2026, 5, 15, 12, 30);
 
@@ -93,7 +86,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     );
   }
 
-  /// 弹窗：仅承载滚轮选择器，选中值由 [TDateTimePicker.onChange] 实时更新，点遮罩关闭。
+  /// dateTimePicker: 弹窗承载滚轮；选中值由 [TDateTimePicker.onChange] 实时写入 state，点遮罩关闭。
   void _showPickerPopup(BuildContext context, {required Widget picker}) {
     TPopup.show(
       context,
@@ -108,9 +101,9 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     );
   }
 
-  /// 将 [TDateTimePickerValue] 渲染为示例页展示文案。
+  /// dateTimePicker: 将 [TDateTimePicker.onChange] 存下的 partial 值格式化为展示文案。
   ///
-  /// 仅展示当前 mode 涉及的字段（其它字段为 null 时不显示）。
+  /// 仅拼接非 null 字段；无需 [TDateTimePickerValue.toDateTime]。
   String _formatResult(TDateTimePickerValue? v) {
     if (v == null) {
       return '请选择';
@@ -161,7 +154,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _baseSelected?.toDateTime(),
             onChange: (result) => setState(() => _baseSelected = result),
           ),
         );
@@ -182,8 +175,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            initialValue:
-                _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _yearMonthSelected?.toDateTime(),
             onChange: (result) => setState(() => _yearMonthSelected = result),
           ),
         );
@@ -204,7 +196,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _timeSelected?.toDateTime(),
             onChange: (result) => setState(() => _timeSelected = result),
           ),
         );
@@ -230,9 +222,8 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
             ),
             start: DateTime(2024, 1, 1),
             end: DateTime(2026, 12, 31, 23, 59),
-            initialValue:
-                _rangeSelected?.toDateTime(fallback: _kReplayFallback) ??
-                    DateTime(2025, 6, 15, 12, 30),
+            initialValue: _rangeSelected?.toDateTime() ??
+                DateTime(2025, 6, 15, 12, 30),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
         );
@@ -254,7 +245,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
-            initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _weekSelected?.toDateTime(),
             onChange: (result) => setState(() => _weekSelected = result),
           ),
         );
@@ -262,14 +253,16 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     );
   }
 
-  /// 星期信息从 [TDateTimePickerValue.toDateTime] 派生（weekday 1=周一…7=周日）。
+  /// dateTimePicker: 星期由 [TDateTimePickerValue.toDateTime] 派生（weekday 1=周一…7=周日）。
   String _formatWeekResult(BuildContext context, TDateTimePickerValue? v) {
     if (v == null) {
       return '请选择';
     }
     final base = _formatResult(v);
-    final dt = v.toDateTime(fallback: _kReplayFallback);
-    final week = _weekdayLabel(context, dt.weekday);
+    final week = _weekdayLabel(
+      context,
+      v.toDateTime().weekday,
+    );
     return '$base $week';
   }
 

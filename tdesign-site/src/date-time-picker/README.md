@@ -76,7 +76,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: _baseSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _baseSelected?.toDateTime(),
             onChange: (result) => setState(() => _baseSelected = result),
           ),
         );
@@ -103,7 +103,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
             initialValue:
-                _yearMonthSelected?.toDateTime(fallback: _kReplayFallback),
+                _yearMonthSelected?.toDateTime(),
             onChange: (result) => setState(() => _yearMonthSelected = result),
           ),
         );
@@ -129,7 +129,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _timeSelected?.toDateTime(),
             onChange: (result) => setState(() => _timeSelected = result),
           ),
         );
@@ -161,7 +161,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             start: DateTime(2024, 1, 1),
             end: DateTime(2026, 12, 31, 23, 59),
             initialValue:
-                _rangeSelected?.toDateTime(fallback: _kReplayFallback) ??
+                _rangeSelected?.toDateTime() ??
                     DateTime(2025, 6, 15, 12, 30),
             onChange: (result) => setState(() => _rangeSelected = result),
           ),
@@ -189,7 +189,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           picker: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
             showWeek: true,
-            initialValue: _weekSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _weekSelected?.toDateTime(),
             onChange: (result) => setState(() => _weekSelected = result),
           ),
         );

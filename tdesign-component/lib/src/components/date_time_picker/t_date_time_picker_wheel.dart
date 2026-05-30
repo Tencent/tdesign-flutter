@@ -94,6 +94,34 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   }
 
   @override
+  void didUpdateWidget(covariant DateTimePickerWheel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.snapshot == widget.snapshot &&
+        oldWidget.showWeek == widget.showWeek &&
+        oldWidget.start == widget.start &&
+        oldWidget.end == widget.end &&
+        oldWidget.steps == widget.steps &&
+        oldWidget.renderLabel == widget.renderLabel &&
+        oldWidget.labels == widget.labels &&
+        oldWidget.height == widget.height &&
+        oldWidget.itemCount == widget.itemCount) {
+      return;
+    }
+    final previousControllers = List<FixedExtentScrollController>.from(
+      _controllers,
+    );
+    _snapshot = widget.snapshot;
+    _initColumns();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final c in previousControllers) {
+        if (!_controllers.contains(c)) {
+          c.dispose();
+        }
+      }
+    });
+  }
+
+  @override
   void dispose() {
     for (final c in _controllers) {
       c.dispose();
@@ -142,7 +170,21 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       _syncColumn(i, next.values[i]);
     }
 
+    setState(() {});
     widget.onChanged(next, next.toResult());
+  }
+
+  void _nudgeColumn(int col, int delta) {
+    if (col < 0 || col >= _columns.length || _columns[col].isEmpty) {
+      return;
+    }
+    final maxIndex = _columns[col].length - 1;
+    final currentIdx = _indexForValue(col, _snapshot.values[col]);
+    final nextIdx = (currentIdx + delta).clamp(0, maxIndex);
+    if (nextIdx == currentIdx) {
+      return;
+    }
+    _onItemSelected(col, nextIdx, _columns[col]);
   }
 
   void _replaceColumn(int col, {required int syncValue}) {
@@ -159,6 +201,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     _columns[col] = newData;
 
     final targetIdx = _indexForValue(col, syncValue);
+    final previousController = _controllers[col];
     FixedExtentScrollController controller;
     if (oldData.length != newData.length) {
       controller = FixedExtentScrollController(initialItem: targetIdx);
@@ -170,10 +213,21 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       }
     }
 
-    _columnKeys[col].currentState?.applyColumnUpdate(
+    final columnState = _columnKeys[col].currentState;
+    columnState?.applyColumnUpdate(
           options: newData,
           controller: controller,
         );
+    // dateTimePicker: 列尚未挂载时由本层延迟释放旧 controller，避免与 applyColumnUpdate 重复 dispose
+    if (oldData.length != newData.length &&
+        columnState == null &&
+        !identical(previousController, controller)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!identical(_controllers[col], previousController)) {
+          previousController.dispose();
+        }
+      });
+    }
   }
 
   void _syncColumn(int col, int syncValue) {
@@ -227,46 +281,102 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   @override
   Widget build(BuildContext context) {
     final theme = TTheme.of(context);
-    return SizedBox(
-      height: widget.height,
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            top: (widget.height - _itemHeight) / 2,
-            left: theme.spacer16,
-            right: theme.spacer16,
-            child: Container(
-              height: _itemHeight,
-              decoration: BoxDecoration(
-                color: theme.bgColorSecondaryContainer,
-                borderRadius: BorderRadius.circular(theme.radiusDefault),
+    return Semantics(
+      label: '日期时间选择器',
+      container: true,
+      child: SizedBox(
+        height: widget.height,
+        width: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              top: (widget.height - _itemHeight) / 2,
+              left: theme.spacer16,
+              right: theme.spacer16,
+              child: Container(
+                height: _itemHeight,
+                decoration: BoxDecoration(
+                  color: theme.bgColorSecondaryContainer,
+                  borderRadius: BorderRadius.circular(theme.radiusDefault),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: theme.spacer32),
-            child: Row(
-              children: [
-                for (var i = 0; i < _controllers.length; i++)
-                  Expanded(
-                    child: PickerColumnWheel(
-                      key: _columnKeys[i],
-                      colIndex: i,
-                      options: _columns[i],
-                      controller: _controllers[i],
-                      itemHeight: _itemHeight,
-                      disabled: false,
-                      scrollBehavior: _scrollBehavior,
-                      onItemSelected: _onItemSelected,
-                    ),
-                  ),
-              ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: theme.spacer32),
+              child: Row(
+                children: [
+                  for (var i = 0; i < _controllers.length; i++)
+                    Expanded(child: _buildColumnSemantics(i)),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  /// dateTimePicker: 单列无障碍包装（边界处不提供 increase/decrease）
+  Widget _buildColumnSemantics(int col) {
+    final value = _columnSemanticsValue(col);
+    final increased = _columnSemanticsAdjustedValue(col, 1);
+    final decreased = _columnSemanticsAdjustedValue(col, -1);
+    return Semantics(
+      label: _columnSemanticsLabel(col),
+      value: value,
+      onIncrease: increased != null ? () => _nudgeColumn(col, 1) : null,
+      increasedValue: increased,
+      onDecrease: decreased != null ? () => _nudgeColumn(col, -1) : null,
+      decreasedValue: decreased,
+      child: ExcludeSemantics(
+        child: PickerColumnWheel(
+          key: _columnKeys[col],
+          colIndex: col,
+          options: _columns[col],
+          controller: _controllers[col],
+          itemHeight: _itemHeight,
+          disabled: false,
+          scrollBehavior: _scrollBehavior,
+          onItemSelected: _onItemSelected,
+        ),
+      ),
+    );
+  }
+
+  /// dateTimePicker: 列无障碍 label
+  String _columnSemanticsLabel(int col) {
+    final column = _snapshot.columns[col];
+    final suffix = _labels.unitSuffix[column] ?? '';
+    return switch (column) {
+      DateTimeColumn.year => '年份$suffix',
+      DateTimeColumn.month => '月份$suffix',
+      DateTimeColumn.day => '日期$suffix',
+      DateTimeColumn.hour => '小时$suffix',
+      DateTimeColumn.minute => '分钟$suffix',
+      DateTimeColumn.second => '秒$suffix',
+    };
+  }
+
+  /// dateTimePicker: 列当前选中值的无障碍文案
+  String _columnSemanticsValue(int col) {
+    if (_columns[col].isEmpty) {
+      return '';
+    }
+    final idx = _indexForValue(col, _snapshot.values[col]);
+    return _columns[col][idx].label;
+  }
+
+  /// dateTimePicker: 增减一格后的无障碍预览文案
+  String? _columnSemanticsAdjustedValue(int col, int delta) {
+    if (_columns[col].isEmpty) {
+      return null;
+    }
+    final currentIdx = _indexForValue(col, _snapshot.values[col]);
+    final nextIdx = (currentIdx + delta).clamp(0, _columns[col].length - 1);
+    if (nextIdx == currentIdx) {
+      return null;
+    }
+    return _columns[col][nextIdx].label;
   }
 }

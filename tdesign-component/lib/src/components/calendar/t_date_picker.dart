@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
+import '../date_time_picker/t_date_time_picker_internal.dart';
+import '../date_time_picker/t_date_time_picker_wheel.dart';
 import '../picker/no_wave_behavior.dart';
 import 'date_picker_model.dart';
 
 /// 日期/时间选择器（供 TCalendar 内部使用）
 ///
-/// 精简版，仅提供 TCalendar 时间选择器所需功能（自绘滚轮 + [DatePickerModel]）。
-/// 新代码请直接使用 [TDateTimePicker]（基于 [TPicker] 与 `DateTimePickerSnapshot`）。
-///
-/// 与对外选择器并存期间，若修正日期范围、闰月等边界行为，请评估是否需同步修改
-/// `DateTimePickerSnapshot`，直至日历迁移到共享数据层。
+/// 默认复用 [DateTimePickerWheel] 与 `DateTimePickerSnapshot` 数据层；
+/// `useWeekDay` / [DatePickerModel.filterItems] 非空时回退自绘滚轮。
+/// 新代码请直接使用 [TDateTimePicker]。
 class TDatePicker extends StatefulWidget {
   final String? title;
   final String? leftText;
@@ -42,11 +42,13 @@ class TDatePicker extends StatefulWidget {
 
 class _TDatePickerState extends State<TDatePicker> {
   late double _pickerHeight;
+  late int _itemCount;
 
   @override
   void initState() {
     super.initState();
     _pickerHeight = widget.pickerHeight ?? 178;
+    _itemCount = widget.pickerItemCount ?? 5;
     widget.model.init();
   }
 
@@ -55,75 +57,109 @@ class _TDatePickerState extends State<TDatePicker> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.title != null)
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: TTheme.of(context).spacer16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Text(
-                    widget.leftText ?? context.resource.cancel,
-                    style: TextStyle(
-                        color: TTheme.of(context).textColorSecondary),
-                  ),
-                ),
-                Text(
-                  widget.title ?? '',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    widget.onConfirm?.call(widget.model.selected);
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    widget.rightText ?? context.resource.confirm,
-                    style: TextStyle(
-                        color: TTheme.of(context).brandNormalColor),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        SizedBox(
-          height: _pickerHeight,
-          width: double.infinity,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: (_pickerHeight - 40) / 2,
-                left: 16,
-                right: 16,
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: TTheme.of(context).bgColorSecondaryContainer,
-                    borderRadius: BorderRadius.circular(
-                        TTheme.of(context).radiusDefault),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Row(
-                  children: List.generate(
-                    widget.model.controllers.length,
-                    (i) => Expanded(child: _buildColumn(i)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        if (widget.title != null) _buildToolbar(context),
+        if (widget.model.usesLegacyWheel)
+          _buildLegacyWheel()
+        else
+          _buildSnapshotWheel(context),
       ],
     );
   }
 
-  Widget _buildColumn(int colIndex) {
+  Widget _buildToolbar(BuildContext context) {
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: TTheme.of(context).spacer16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Text(
+              widget.leftText ?? context.resource.cancel,
+              style: TextStyle(color: TTheme.of(context).textColorSecondary),
+            ),
+          ),
+          Text(
+            widget.title ?? '',
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          GestureDetector(
+            onTap: () {
+              widget.onConfirm?.call(widget.model.selected);
+              Navigator.pop(context);
+            },
+            child: Text(
+              widget.rightText ?? context.resource.confirm,
+              style: TextStyle(color: TTheme.of(context).brandNormalColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSnapshotWheel(BuildContext context) {
+    final snapshot = widget.model.snapshot;
+    if (snapshot == null) {
+      return SizedBox(height: _pickerHeight);
+    }
+    final labels = DateTimePickerLabels.fromResource(context.resource);
+    return DateTimePickerWheel(
+      snapshot: snapshot,
+      labels: labels,
+      start: widget.model.rangeStart,
+      end: widget.model.rangeEnd,
+      showWeek: false,
+      steps: null,
+      renderLabel: null,
+      height: _pickerHeight,
+      itemCount: _itemCount,
+      onChanged: (next, _) {
+        widget.model.applySnapshot(next);
+        widget.onSelectedItemChanged?.call(0, 0);
+      },
+    );
+  }
+
+  Widget _buildLegacyWheel() {
+    return SizedBox(
+      height: _pickerHeight,
+      width: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: (_pickerHeight - _pickerHeight / _itemCount) / 2,
+            left: 16,
+            right: 16,
+            child: Builder(
+              builder: (context) => Container(
+                height: _pickerHeight / _itemCount,
+                decoration: BoxDecoration(
+                  color: TTheme.of(context).bgColorSecondaryContainer,
+                  borderRadius: BorderRadius.circular(
+                    TTheme.of(context).radiusDefault,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Row(
+              children: List.generate(
+                widget.model.controllers.length,
+                (i) => Expanded(child: _buildLegacyColumn(i)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLegacyColumn(int colIndex) {
     final data = widget.model.data[colIndex];
     if (data.isEmpty) {
       return const SizedBox.shrink();
@@ -135,13 +171,11 @@ class _TDatePickerState extends State<TDatePicker> {
       child: ScrollConfiguration(
         behavior: NoWaveBehavior(),
         child: ListWheelScrollView.useDelegate(
-          itemExtent:
-              _pickerHeight / (widget.pickerItemCount ?? 5),
+          itemExtent: _pickerHeight / _itemCount,
           diameterRatio: 100,
           controller: widget.model.controllers[colIndex],
           physics: const FixedExtentScrollPhysics(),
           onSelectedItemChanged: (index) {
-            // 联动刷新
             if (colIndex < widget.model.data.length - 1) {
               widget.model.refreshDataAndController(colIndex);
             }
@@ -163,11 +197,7 @@ class _TDatePickerState extends State<TDatePicker> {
   }
 }
 
-/// 私有：calendar 内嵌选择器的单 item 渲染。
-///
-/// 与对外的 `TItemWidget` 行为一致（选中加粗 + 主色，非选中常规字重 + 占位
-/// 色），但不依赖其 API——这里只在 calendar 私有 picker 用，没必要绑定
-/// 上层 ValueListenable / styleResolver 协议。
+/// 私有：calendar 遗留自绘滚轮的单 item 渲染。
 class _TDatePickerItem extends StatelessWidget {
   const _TDatePickerItem({
     required this.content,

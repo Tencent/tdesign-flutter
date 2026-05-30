@@ -48,9 +48,34 @@ abstract class DateTimePickerMode {
 // 回调结果
 // =============================================================================
 
-/// 选择结果。
+/// [TDateTimePicker.onChange] 回调结果。
 ///
-/// 字段为 `null` 表示当前 [DateTimePickerMode] 不含该列。
+/// 字段为 `null` 表示当前 [DateTimePickerMode] 不含该列（partial 值）。
+///
+/// **与 [TDateTimePicker.initialValue] 的分工**
+/// - [onChange]：滚动过程中「当前选中了什么」，应原样存入 state；
+/// - [initialValue]：打开/重建时「滚轮从哪开始」，仅读一次，勿写回。
+///
+/// **典型用法**
+///
+/// ```dart
+/// TDateTimePickerValue? _selected;
+///
+/// // 1. 存值（弹窗滚动即生效）
+/// onChange: (v) => setState(() => _selected = v),
+///
+/// // 2. 页面展示（读非 null 字段，不必 toDateTime）
+/// Text('${_selected?.year}-${_selected?.month}'),
+///
+/// // 3. 弹窗再次打开时回显滚轮
+/// initialValue: _selected?.toDateTime(),
+///
+/// // 4. 提交后端（六元组完整）
+/// if (_selected!.isComplete) api.save(_selected!.toDateTime());
+///
+/// // 5. 提交 partial 且需 DateTime（自定义补齐语义）
+/// api.save(_selected!.toDateTime(fallback: DateTime(1970, 1, 1)));
+/// ```
 @immutable
 class TDateTimePickerValue {
   /// 创建选择结果。
@@ -81,20 +106,58 @@ class TDateTimePickerValue {
   /// 选中的秒（0–59）；当前 mode 不含该列时为 `null`。
   final int? second;
 
-  /// 重组为 [DateTime]。
+  /// dateTimePickerValue: 年/月/日/时/分/秒均已选中时为 `true`。
   ///
-  /// mode 未包含的字段由 [fallback] 补齐；[fallback] 为 `null` 时使用 [DateTime.now]。
-  /// 仅含部分列时建议传入安全 fallback（如 `DateTime(2000, 1, 1)`），
-  /// 避免缺字段导致日期静默溢出。
+  /// 为 `true` 时 [toDateTime] 可直接构造完整 [DateTime]，无需 [fallback]。
+  bool get isComplete =>
+      year != null &&
+      month != null &&
+      day != null &&
+      hour != null &&
+      minute != null &&
+      second != null;
+
+  /// dateTimePickerValue: [toDateTime] 未传 [fallback] 时使用的默认补齐值。
+  ///
+  /// 固定为 `2000-01-01 00:00:00`（1 月 1 日），避免用「今天」作日字段导致月份溢出。
+  /// 仅用于弹窗回显、派生 weekday 等「不关心缺字段语义」的场景；
+  /// 业务提交若 fallback 有特定含义，请显式传入 [toDateTime] 的 [fallback]。
+  static final DateTime defaultFallback = DateTime(2000, 1, 1);
+
+  /// dateTimePickerValue: 将 partial 选中结果重组为 [DateTime]。
+  ///
+  /// **补齐规则**
+  /// - 非 null 字段取自本值；
+  /// - null 字段取自 [fallback]；[fallback] 为 `null` 时用 [defaultFallback]；
+  /// - [isComplete] 为 `true` 时忽略 [fallback]，直接构造六元组。
+  ///
+  /// **用法示例**
+  ///
+  /// ```dart
+  /// // 弹窗回显（默认补齐，最常用）
+  /// initialValue: _selected?.toDateTime()
+  ///
+  /// // 仅年月 mode：2026-05 → 2026-05-01 00:00:00
+  /// const TDateTimePickerValue(year: 2026, month: 5).toDateTime()
+  ///
+  /// // 自定义补齐（如业务表示「当月 15 号 12 点」）
+  /// v.toDateTime(fallback: DateTime(1970, 1, 15, 12, 0))
+  ///
+  /// // 六元组完整，直接转换
+  /// v.toDateTime()
+  /// ```
   DateTime toDateTime({DateTime? fallback}) {
-    final fb = fallback ?? DateTime.now();
+    if (isComplete) {
+      return DateTime(year!, month!, day!, hour!, minute!, second!);
+    }
+    final resolved = fallback ?? defaultFallback;
     return DateTime(
-      year ?? fb.year,
-      month ?? fb.month,
-      day ?? fb.day,
-      hour ?? fb.hour,
-      minute ?? fb.minute,
-      second ?? fb.second,
+      year ?? resolved.year,
+      month ?? resolved.month,
+      day ?? resolved.day,
+      hour ?? resolved.hour,
+      minute ?? resolved.minute,
+      second ?? resolved.second,
     );
   }
 

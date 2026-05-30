@@ -9,7 +9,7 @@
           context,
           picker: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: _timeSelected?.toDateTime(fallback: _kReplayFallback),
+            initialValue: _timeSelected?.toDateTime(),
             onChange: (result) => setState(() => _timeSelected = result),
           ),
         );

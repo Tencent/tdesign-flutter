@@ -11,13 +11,14 @@
 | --- | --- | --- | --- |
 | end | DateTime? | - | 可选范围上界（闭区间）。 为 `null` 时年列上界为组件打开时锚定年份 + 10，且不随年列滚动漂移。 若 `start` 晚于 `end`，debug 下 assert，release 下忽略 `end`。 |
 | height | double? | - | 滚轮视窗高度，默认 200。 |
-| initialValue | DateTime? | - | 默认选中时间。 缺省为 `DateTime.now`；超出 `start`、`end` 时钳制到范围内。 用于首次展示或父组件更新时重置；滚动中的当前值请通过 `onChange` 获取， 勿将 `onChange` 的结果同步回本参数并触发父组件重建。 |
+| initialPickerValue | TDateTimePickerValue? | - | 非受控初始选中结果（与 `onChange` 同类型，推荐弹窗回显）。 与 `initialValue` 二选一；同时传入时在 debug 下 assert。 partial 值内部用 `TDateTimePickerValue.replayFallback` 补齐缺字段后再驱动滚轮。 |
+| initialValue | DateTime? | - | 非受控初始选中时间（uncontrolled initial value）。 **语义**：本参数仅决定「打开/重建时滚轮默认停在哪」，不是受控绑定。 - 首次挂载：缺省为 `DateTime.now`，超出 `start`、`end` 时钳制到范围内； - 父组件变更 `mode` 或初始参数：滚轮重置为新初始值； - 父组件仅变更 `start`/`end`/`steps`/`showWeek`：保留当前选中并收紧列范围； - 滚动过程中的实时值请通过 `onChange` 获取，**勿**将 `onChange` 结果写回 `initialPickerValue` / 本参数并触发父组件重建（会导致滚轮跳动）。 与 `initialPickerValue` 二选一；弹窗回显上次 `onChange` 结果时优先用 `initialPickerValue`，类型与回调一致，无需手动 `TDateTimePickerValue.toDateTime`。 |
 | itemCount | int? | - | 每屏可见条目数，默认 5。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mode | DateTimePickerMode? | - | 列结构。 |
 | onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调。 `TDateTimePickerValue` 仅包含当前 `mode` 中存在的列； 与上一次回调结果相同时不触发。 |
 | renderLabel | DateTimePickerRenderLabel? | - | 自定义列 label，仅影响展示；返回 `null` 时使用 `TResourceDelegate` 默认文案。 |
-| showWeek | bool | false | 是否在日列 label 附加星期（如 `19日 周六`），仅影响展示。 回调结果无星期字段，请用 `TDateTimePickerValue.toDateTime`.weekday。 |
+| showWeek | bool | false | 是否在日列 label 附加星期（如 `19日 周六`），仅影响展示。 回调结果无星期字段，请用 `TDateTimePickerValue.toInitialDateTime`.weekday。 |
 | start | DateTime? | - | 可选范围下界（闭区间）。 为 `null` 时年列下界为组件打开时锚定年份 − 10，且不随年列滚动漂移。 若 `start` 晚于 `end`，debug 下 assert，release 下忽略 `end`。 |
 | steps | DateTimePickerSteps? | - | 各列选项步进，如 `DateTimePickerSteps(minute: 5)`；未配置的列步进为 1。 |
 
@@ -62,6 +63,12 @@
 | month | int? | - | 选中的月（1–12）；当前 mode 不含该列时为 `null`。 |
 | second | int? | - | 选中的秒（0–59）；当前 mode 不含该列时为 `null`。 |
 | year | int? | - | 选中的年；当前 mode 不含该列时为 `null`。 |
+
+#### 静态成员
+
+| 名称 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| replayFallback | DateTime | - | 回放 partial 初始值时的安全 fallback（固定 1 月 1 日，避免日字段从「今天」溢出）。 `toInitialDateTime`、`TDateTimePicker.initialPickerValue` 内部使用。 |
 
 
 ### DateTimePickerSteps
