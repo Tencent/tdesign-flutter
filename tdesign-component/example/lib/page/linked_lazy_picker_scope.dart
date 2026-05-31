@@ -14,6 +14,8 @@ typedef LinkedLazyLinkedLoader = Future<List<TPickerOption>> Function(
 
 /// LinkedLazyPickerScope: 双列联动按需加载的演示层封装（不扩展 TPicker API）
 ///
+/// 适用于首列/子列数据量大或需接口分页的场景；静态多级联动请用 [TPickerLinked]。
+///
 /// - 第 0 列：滚近底部时分页
 /// - 第 1 列：随第 0 列 value 拉取/读缓存，并支持当前主项下分页
 class LinkedLazyPickerScope extends StatefulWidget {

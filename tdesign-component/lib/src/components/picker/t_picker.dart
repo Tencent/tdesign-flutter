@@ -24,9 +24,18 @@ const double _kDisabledOpacity = 0.5;
 
 /// 纯滚轮选择器组件
 ///
-/// 数据决定形态（编译期类型安全）：
-/// - [TPickerColumns] → 多列独立选择
-/// - [TPickerLinked] → 联动选择
+/// 不包含工具栏、确认按钮或内置 loading；弹窗场景请配合 [TPopup] 在用户确认后再提交。
+///
+/// 数据形态（编译期二选一）：
+/// - [TPickerColumns]：多列独立，各列选项互不影响
+/// - [TPickerLinked]：联动树，上游变更后下游列裁剪并按新分支展开，默认选中各列首项
+///
+/// [items] 或 [initialValue] 相对上一帧值不相等时会释放全部 ScrollController 并重新初始化；
+/// 内容相等的新实例不会触发重建。分页追加后请同步更新 [initialValue] 以恢复选中。
+///
+/// [onChange] 为滚动实时回调，不代表用户已确认；如需去抖请在业务层自行处理。
+///
+/// 详细选型与能力边界见站点文档「Picker - 能力边界」。
 ///
 /// ```dart
 /// // 多列独立
@@ -58,9 +67,13 @@ class TPicker extends StatefulWidget {
   /// - [TPickerLinked] → 联动选择
   ///
   /// 自由结构数据通过 `.fromRaw()` 工厂构造归一化。
+  ///
+  /// 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。
   final TPickerItems items;
 
-  /// 初始选中值列表（按 value 匹配）
+  /// 初始选中值列表（按 value 匹配各列）
+  ///
+  /// 与 [items] 一并参与重建判断：相对上一帧值不相等时会重新初始化。
   final List<dynamic>? initialValue;
 
   /// 值改变回调（滚动时实时触发）
@@ -69,7 +82,7 @@ class TPicker extends StatefulWidget {
   /// - 用户滚动经过某个 enabled 项并稳定时
   /// - disabled 修正动画完成后，回调最终落点
   ///
-  /// **注意**：此回调代表"滚动时实时变化"，不代表"用户已确认选择"。
+  /// 注意：此回调代表滚动时实时变化，不代表用户已确认选择。
   /// 弹窗场景请配合 [TPopup] 头部确认按钮，在关闭前读取 draft 值提交。
   ///
   /// 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。
@@ -388,7 +401,7 @@ class _TPickerState extends State<TPicker> {
   }
 
   /// 联动刷新：变更 [col] 后，裁剪其下所有列并按新分支重新展开；
-  /// 下游每一列均为新数据且默认选中首项（如切换第 1 级则第 2–6 级全部换新）。
+  /// 下游每一列均为新数据且默认选中首项（如切换第 1 级，其下所有下游列全部换新）。
   void _refreshLinked(int col, int newIndex) {
     setState(() {
       final selectedOpt = _columns[col][newIndex];

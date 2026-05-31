@@ -49,6 +49,31 @@ class _TPickerPageState extends State<TPickerPage> {
 
   String selectedTime = '0:00:00';
 
+  // ========== 月日联动（模拟平年：2 月 28 天，大小月 30/31 天）==========
+
+  /// 平年各月天数（demo 不做闰年，2 月固定 28 天）
+  static int _daysInMonth(int month) {
+    const thirtyOneMonths = {1, 3, 5, 7, 8, 10, 12};
+    if (month == 2) {
+      return 28;
+    }
+    if (thirtyOneMonths.contains(month)) {
+      return 31;
+    }
+    return 30;
+  }
+
+  /// 月 → 日联动树：滚月后日列由 [TPickerLinked] 内部自动刷新
+  final _monthDayItems = TPickerLinked({
+    for (int month = 1; month <= 12; month++)
+      TPickerOption(label: '$month月', value: month): [
+        for (int day = 1; day <= _daysInMonth(month); day++)
+          TPickerOption(label: '$day日', value: day),
+      ],
+  });
+
+  String selectedMonthDay = '1月 / 1日';
+
   // ========== 联动数据（省市区）==========
 
   final linkedItems = TPickerLinked({
@@ -92,19 +117,17 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
   });
 
-  String selectedLinked = '广东省 / 深圳市 / 南山区';
+  // ========== 五级联动（大区 → 省份 → 城市 → 区县 → 街道）==========
+  static const _kFiveLevelNames = ['大区', '省份', '城市', '区县', '街道'];
 
-  /// 六级联动层级名称（大区 → 街道）
-  static const _kSixLevelNames = ['大区', '国家', '省份', '城市', '区县', '街道'];
-
-  /// 六级联动 mock 树：前 5 级为 Map，第 6 级为叶子 List
+  /// 五级联动 mock 树：前 4 级为 Map，第 5 级为叶子 List
   ///
   /// label 采用层级编号（1 → 1.1 → 1.1.1 …），便于在窄列中完整展示；
   /// 切换第 1 级后下游各列数据均与新区间绑定且互不相同。
-  final _sixLevelItems = TPickerLinked(_sixLevelNode(1));
+  final _fiveLevelItems = TPickerLinked(_fiveLevelNode(1));
 
-  static dynamic _sixLevelNode(int depth, [String codePrefix = '']) {
-    if (depth == 6) {
+  static dynamic _fiveLevelNode(int depth, [String codePrefix = '']) {
+    if (depth == 5) {
       return [
         for (int i = 1; i <= 5; i++)
           TPickerOption(
@@ -119,12 +142,12 @@ class _TPickerPageState extends State<TPickerPage> {
         TPickerOption(
           label: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
           value: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
-        ): _sixLevelNode(
+        ): _fiveLevelNode(
             depth + 1, codePrefix.isEmpty ? '$i' : '$codePrefix.$i'),
     };
   }
 
-  String selectedSixLevel = '1 / 1.1 / 1.1.1 / 1.1.1.1 / 1.1.1.1.1 / 1.1.1.1.1.1';
+  String selectedFiveLevel = '1 / 1.1 / 1.1.1 / 1.1.1.1 / 1.1.1.1.1';
 
   // ========== 项级 disabled 数据（覆盖开头/中间/结尾禁用）==========
 
@@ -168,8 +191,8 @@ class _TPickerPageState extends State<TPickerPage> {
         ExampleModule(title: '基础用法', children: [
           ExampleItem(desc: '单列选择', builder: buildSingleColumn),
           ExampleItem(desc: '时间选择(时分秒)', builder: buildTimeSelect),
-          ExampleItem(desc: '联动选择(省市区)', builder: buildLinked),
-          ExampleItem(desc: '六级联动选择', builder: buildLinkedSixLevel),
+          ExampleItem(desc: '月日选择(联动)', builder: buildMonthDaySelect),
+          ExampleItem(desc: '五级联动选择', builder: buildLinkedFiveLevel),
         ]),
         ExampleModule(title: '按需请求', children: [
           ExampleItem(
@@ -290,6 +313,36 @@ class _TPickerPageState extends State<TPickerPage> {
   }
 
   @Demo(group: 'picker')
+  Widget buildMonthDaySelect(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'TPickerLinked：切换月份后日列自动变为 28 / 30 / 31 天（demo 平年，2 月固定 28 天）',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedMonthDay.isEmpty ? "未选择" : selectedMonthDay}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: _monthDayItems,
+            initialValue: const [1, 1],
+            onChange: (v) =>
+                setState(() => selectedMonthDay = v.labels.join(' / ')),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'picker')
   Widget buildTimeSelect(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,39 +364,24 @@ class _TPickerPageState extends State<TPickerPage> {
   }
 
   @Demo(group: 'picker')
-  Widget buildLinked(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
-            style: TextStyle(
-                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
-        const SizedBox(height: 8),
-        _pickerCard(
-          context,
-          child: TPicker(
-              items: linkedItems,
-              initialValue: const ['GD', 'SZ', 'NS'],
-              onChange: (v) =>
-                  setState(() => selectedLinked = v.labels.join(' / '))),
-        ),
-      ],
-    );
-  }
-
-  @Demo(group: 'picker')
-  Widget buildLinkedSixLevel(BuildContext context) {
+  Widget buildLinkedFiveLevel(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '六级联动：${_kSixLevelNames.join(' → ')}（切换第 1 级后，第 2–6 级数据全部刷新）',
+          '五级联动：${_kFiveLevelNames.join(' → ')}（切换第 1 级后，第 2–5 级数据全部刷新）',
           style: TextStyle(
               fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
-          '选中: ${selectedSixLevel.isEmpty ? "未选择" : selectedSixLevel}',
+          '适用 TPickerLinked 静态树：整树在内存、每级项数可控；label 用 1 / 1.1 / 1.1.1 便于窄列展示',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedFiveLevel.isEmpty ? "未选择" : selectedFiveLevel}',
           style: TextStyle(
               fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
@@ -351,17 +389,16 @@ class _TPickerPageState extends State<TPickerPage> {
         _pickerCard(
           context,
           child: TPicker(
-            items: _sixLevelItems,
+            items: _fiveLevelItems,
             initialValue: const [
               '1',
               '1.1',
               '1.1.1',
               '1.1.1.1',
               '1.1.1.1.1',
-              '1.1.1.1.1.1',
             ],
             onChange: (v) =>
-                setState(() => selectedSixLevel = v.labels.join(' / ')),
+                setState(() => selectedFiveLevel = v.labels.join(' / ')),
           ),
         ),
       ],

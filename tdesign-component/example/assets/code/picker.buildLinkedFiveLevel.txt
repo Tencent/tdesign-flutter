@@ -1,16 +1,22 @@
 
-  Widget buildLinkedSixLevel(BuildContext context) {
+  Widget buildLinkedFiveLevel(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '六级联动：${_kSixLevelNames.join(' → ')}（切换第 1 级后，第 2–6 级数据全部刷新）',
+          '五级联动：${_kFiveLevelNames.join(' → ')}（切换第 1 级后，第 2–5 级数据全部刷新）',
           style: TextStyle(
               fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
         const SizedBox(height: 4),
         Text(
-          '选中: ${selectedSixLevel.isEmpty ? "未选择" : selectedSixLevel}',
+          '适用 TPickerLinked 静态树：整树在内存、每级项数可控；label 用 1 / 1.1 / 1.1.1 便于窄列展示',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedFiveLevel.isEmpty ? "未选择" : selectedFiveLevel}',
           style: TextStyle(
               fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
@@ -18,17 +24,16 @@
         _pickerCard(
           context,
           child: TPicker(
-            items: _sixLevelItems,
+            items: _fiveLevelItems,
             initialValue: const [
               '1',
               '1.1',
               '1.1.1',
               '1.1.1.1',
               '1.1.1.1.1',
-              '1.1.1.1.1.1',
             ],
             onChange: (v) =>
-                setState(() => selectedSixLevel = v.labels.join(' / ')),
+                setState(() => selectedFiveLevel = v.labels.join(' / ')),
           ),
         ),
       ],
