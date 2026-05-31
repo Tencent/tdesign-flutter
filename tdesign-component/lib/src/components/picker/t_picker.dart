@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import 'no_wave_behavior.dart';
+import 't_item_widget.dart';
 
 // =============== 文件级常量（魔法数字归一） ===============
 

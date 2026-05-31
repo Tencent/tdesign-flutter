@@ -26,7 +26,7 @@ const double _kDisabledItemOpacity = 0.5;
 /// 基础字号 fallback（theme.fontBodyLarge.size 为 null 时使用）
 const double _kBaseFontSize = 16.0;
 
-/// 选择器的子项组件
+/// 选择器的子项组件（包内复用，不对外暴露）
 class TItemWidget extends StatelessWidget {
   const TItemWidget({
     required this.fixedExtentScrollController,

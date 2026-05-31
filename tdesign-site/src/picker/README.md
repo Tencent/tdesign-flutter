@@ -101,9 +101,46 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+六级联动选择
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildLinkedSixLevel(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '六级联动：${_kSixLevelNames.join(' → ')}',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedSixLevel.isEmpty ? "未选择" : selectedSixLevel}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: _sixLevelItems,
+            initialValue: const ['L1_1', 'L2_1', 'L3_1', 'L4_1', 'L5_1', 'L6_1'],
+            onChange: (v) =>
+                setState(() => selectedSixLevel = v.labels.join(' / ')),
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 按需请求
 
-联动按需加载（第1列分页，第2列跟第1列）
+滚近底部自动分页（主列 + 联动子列）
             
 <td-code-block panel="Dart">
 
@@ -119,14 +156,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     ];
 
     return LinkedLazyPickerScope(
-      threshold: 5,
+      threshold: 8,
       primaryLabel: '分类',
       linkedLabel: '条目',
       initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
       initialPrimaryValue: initialPrimaryValue,
       initialLinked: initialLinked,
       onLoadPrimary: (nextStart) async {
-        await Future.delayed(const Duration(milliseconds: 1200));
+        await Future.delayed(_kLazyDemoLoadDelay);
         return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
       },
       onLoadLinked: (primaryValue, nextStart) =>
@@ -137,37 +174,67 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              '在 onChange 里判断 indexes 接近列底后更新 items，无需 TPicker 内置 onLoad',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
+            const SizedBox(height: 4),
+            Text(
               vm.statusLine,
               style: TextStyle(
                   fontSize: 14, color: TTheme.of(context).textColorSecondary),
             ),
             const SizedBox(height: 8),
-            _pickerCard(context, child: vm.buildPicker()),
+            Stack(
+              children: [
+                _pickerCard(context, child: vm.buildPicker()),
+                if (loadingHint != null)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 8,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: TTheme.of(context)
+                              .fontGyColor1
+                              .withOpacity(0.72),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '加载$loadingHint…',
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: 4),
-            if (loadingHint != null)
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '正在加载$loadingHint...',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: TTheme.of(context).textColorPlaceholder),
-                  ),
-                ],
-              )
-            else
-              Text(
-                '业务封装 LinkedLazyPickerScope：TPicker 仍只用 items / initialValue / onChange',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: TTheme.of(context).textColorPlaceholder),
-              ),
+            Text(
+              '滚近底部自动追加；切换分类时子列读缓存或按需拉取（示例封装见 LinkedLazyPickerScope）',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
           ],
         );
       },
@@ -345,7 +412,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '示例：height(300) + itemCount(7)，每屏显示 7 项',
+          '示例：height(350) + itemCount(7)，每屏显示 7 项',
           style: TextStyle(
               fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
@@ -354,7 +421,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           child: TPicker(
             items: cityItems,
-            height: 300,
+            height: 350,
             itemCount: 7,
             onChange: (v) => debugPrint('选中: ${v.labels.first}'),
           ),

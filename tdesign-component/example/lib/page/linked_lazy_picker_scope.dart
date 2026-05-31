@@ -98,14 +98,14 @@ class LinkedLazyPickerViewModel {
       .label;
 
   String get statusLine =>
-      '$primaryLabel ${primaryOptions.length} 条 · $activePrimaryLabel 下$linkedLabel ${linkedOptions.length} 条';
+      '已加载 $primaryLabel ${primaryOptions.length} 条 · 当前 $activePrimaryLabel · $linkedLabel ${linkedOptions.length} 条';
 
   String? get loadingHint {
     if (loadingCols.isEmpty) {
       return null;
     }
     return loadingCols
-        .map((col) => col == 0 ? primaryLabel : linkedLabel)
+        .map((col) => col == 0 ? '$primaryLabel下一页' : '$linkedLabel')
         .join('、');
   }
 }

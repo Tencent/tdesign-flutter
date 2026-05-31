@@ -94,6 +94,30 @@ class _TPickerPageState extends State<TPickerPage> {
 
   String selectedLinked = '广东省 / 深圳市 / 南山区';
 
+  /// 六级联动层级名称（大区 → 街道）
+  static const _kSixLevelNames = ['大区', '国家', '省份', '城市', '区县', '街道'];
+
+  /// 六级联动 mock 树：前 5 级为 Map，第 6 级为叶子 List
+  TPickerLinked get _sixLevelItems => TPickerLinked(_sixLevelNode(1));
+
+  dynamic _sixLevelNode(int depth) {
+    if (depth == 6) {
+      return [
+        for (int i = 1; i <= 5; i++)
+          TPickerOption(label: '街道$i号', value: 'L6_$i'),
+      ];
+    }
+    final name = _kSixLevelNames[depth - 1];
+    final branchCount = depth <= 2 ? 2 : 3;
+    return {
+      for (int i = 1; i <= branchCount; i++)
+        TPickerOption(label: '$name$i', value: 'L${depth}_$i'):
+            _sixLevelNode(depth + 1),
+    };
+  }
+
+  String selectedSixLevel = '大区1 / 国家1 / 省份1 / 城市1 / 区县1 / 街道1号';
+
   // ========== 项级 disabled 数据（覆盖开头/中间/结尾禁用）==========
 
   final itemDisabledItems = const TPickerColumns([
@@ -137,10 +161,11 @@ class _TPickerPageState extends State<TPickerPage> {
           ExampleItem(desc: '单列选择', builder: buildSingleColumn),
           ExampleItem(desc: '时间选择(时分秒)', builder: buildTimeSelect),
           ExampleItem(desc: '联动选择(省市区)', builder: buildLinked),
+          ExampleItem(desc: '六级联动选择', builder: buildLinkedSixLevel),
         ]),
         ExampleModule(title: '按需请求', children: [
           ExampleItem(
-              desc: '联动按需加载（第1列分页，第2列跟第1列）',
+              desc: '滚近底部自动分页（主列 + 联动子列）',
               builder: buildLazyLoad),
         ]),
         ExampleModule(title: '禁用状态', children: [
@@ -298,6 +323,36 @@ class _TPickerPageState extends State<TPickerPage> {
     );
   }
 
+  @Demo(group: 'picker')
+  Widget buildLinkedSixLevel(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '六级联动：${_kSixLevelNames.join(' → ')}',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedSixLevel.isEmpty ? "未选择" : selectedSixLevel}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: _sixLevelItems,
+            initialValue: const ['L1_1', 'L2_1', 'L3_1', 'L4_1', 'L5_1', 'L6_1'],
+            onChange: (v) =>
+                setState(() => selectedSixLevel = v.labels.join(' / ')),
+          ),
+        ),
+      ],
+    );
+  }
+
   // ========== 禁用状态 ==========
 
   @Demo(group: 'picker')
@@ -400,7 +455,8 @@ class _TPickerPageState extends State<TPickerPage> {
     );
   }
 
-  static const _kLazyDemoPageSize = 15;
+  static const _kLazyDemoPageSize = 20;
+  static const _kLazyDemoLoadDelay = Duration(milliseconds: 350);
 
   int _lazyCategoryNumber(dynamic categoryValue) {
     final raw = categoryValue.toString().replaceFirst('cat_', '');
@@ -419,7 +475,7 @@ class _TPickerPageState extends State<TPickerPage> {
     int start,
     int count,
   ) async {
-    await Future.delayed(const Duration(milliseconds: 1200));
+    await Future.delayed(_kLazyDemoLoadDelay);
     final catNum = _lazyCategoryNumber(categoryValue);
     return [
       for (int i = start; i < start + count; i++)
@@ -442,14 +498,14 @@ class _TPickerPageState extends State<TPickerPage> {
     ];
 
     return LinkedLazyPickerScope(
-      threshold: 5,
+      threshold: 8,
       primaryLabel: '分类',
       linkedLabel: '条目',
       initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
       initialPrimaryValue: initialPrimaryValue,
       initialLinked: initialLinked,
       onLoadPrimary: (nextStart) async {
-        await Future.delayed(const Duration(milliseconds: 1200));
+        await Future.delayed(_kLazyDemoLoadDelay);
         return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
       },
       onLoadLinked: (primaryValue, nextStart) =>
@@ -460,37 +516,67 @@ class _TPickerPageState extends State<TPickerPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              '在 onChange 里判断 indexes 接近列底后更新 items，无需 TPicker 内置 onLoad',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
+            const SizedBox(height: 4),
+            Text(
               vm.statusLine,
               style: TextStyle(
                   fontSize: 14, color: TTheme.of(context).textColorSecondary),
             ),
             const SizedBox(height: 8),
-            _pickerCard(context, child: vm.buildPicker()),
+            Stack(
+              children: [
+                _pickerCard(context, child: vm.buildPicker()),
+                if (loadingHint != null)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 8,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: TTheme.of(context)
+                              .fontGyColor1
+                              .withOpacity(0.72),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '加载$loadingHint…',
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: 4),
-            if (loadingHint != null)
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '正在加载$loadingHint...',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: TTheme.of(context).textColorPlaceholder),
-                  ),
-                ],
-              )
-            else
-              Text(
-                '业务封装 LinkedLazyPickerScope：TPicker 仍只用 items / initialValue / onChange',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: TTheme.of(context).textColorPlaceholder),
-              ),
+            Text(
+              '滚近底部自动追加；切换分类时子列读缓存或按需拉取（示例封装见 LinkedLazyPickerScope）',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
           ],
         );
       },
@@ -573,7 +659,7 @@ class _TPickerPageState extends State<TPickerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '示例：height(300) + itemCount(7)，每屏显示 7 项',
+          '示例：height(350) + itemCount(7)，每屏显示 7 项',
           style: TextStyle(
               fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
@@ -582,7 +668,7 @@ class _TPickerPageState extends State<TPickerPage> {
           context,
           child: TPicker(
             items: cityItems,
-            height: 300,
+            height: 350,
             itemCount: 7,
             onChange: (v) => debugPrint('选中: ${v.labels.first}'),
           ),
