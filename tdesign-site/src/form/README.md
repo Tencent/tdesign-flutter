@@ -767,9 +767,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TFormValidation
-#### 简介
-实现普通表单项的校验
-校验规则 和 错误提醒
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -780,8 +777,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TFormItemType
-#### 简介
-表格单元选用组件类型的枚举
 #### 枚举值
 
 

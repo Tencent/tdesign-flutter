@@ -372,6 +372,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 
 
+### TTabBarOutlineType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 填充样式 |
+| capsule | 胶囊样式 |
+| card | 卡片 |
+
+
 ### TTabSize
 #### 枚举值
 
@@ -383,17 +394,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TTabOutlineType
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| filled | 填充样式 |
-| capsule | 胶囊样式 |
-| card | 卡片 |
-
-
-### TTabBarOutlineType
 #### 枚举值
 
 
