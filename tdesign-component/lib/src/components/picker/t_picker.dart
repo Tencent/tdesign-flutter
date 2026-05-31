@@ -387,6 +387,8 @@ class _TPickerState extends State<TPicker> {
     return -1;
   }
 
+  /// 联动刷新：变更 [col] 后，裁剪其下所有列并按新分支重新展开；
+  /// 下游每一列均为新数据且默认选中首项（如切换第 1 级则第 2–6 级全部换新）。
   void _refreshLinked(int col, int newIndex) {
     setState(() {
       final selectedOpt = _columns[col][newIndex];

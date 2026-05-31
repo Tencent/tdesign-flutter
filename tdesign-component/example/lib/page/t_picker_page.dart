@@ -98,25 +98,33 @@ class _TPickerPageState extends State<TPickerPage> {
   static const _kSixLevelNames = ['大区', '国家', '省份', '城市', '区县', '街道'];
 
   /// 六级联动 mock 树：前 5 级为 Map，第 6 级为叶子 List
-  TPickerLinked get _sixLevelItems => TPickerLinked(_sixLevelNode(1));
+  ///
+  /// label 采用层级编号（1 → 1.1 → 1.1.1 …），便于在窄列中完整展示；
+  /// 切换第 1 级后下游各列数据均与新区间绑定且互不相同。
+  final _sixLevelItems = TPickerLinked(_sixLevelNode(1));
 
-  dynamic _sixLevelNode(int depth) {
+  static dynamic _sixLevelNode(int depth, [String codePrefix = '']) {
     if (depth == 6) {
       return [
         for (int i = 1; i <= 5; i++)
-          TPickerOption(label: '街道$i号', value: 'L6_$i'),
+          TPickerOption(
+            label: '$codePrefix.$i',
+            value: '$codePrefix.$i',
+          ),
       ];
     }
-    final name = _kSixLevelNames[depth - 1];
     final branchCount = depth <= 2 ? 2 : 3;
     return {
       for (int i = 1; i <= branchCount; i++)
-        TPickerOption(label: '$name$i', value: 'L${depth}_$i'):
-            _sixLevelNode(depth + 1),
+        TPickerOption(
+          label: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+          value: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+        ): _sixLevelNode(
+            depth + 1, codePrefix.isEmpty ? '$i' : '$codePrefix.$i'),
     };
   }
 
-  String selectedSixLevel = '大区1 / 国家1 / 省份1 / 城市1 / 区县1 / 街道1号';
+  String selectedSixLevel = '1 / 1.1 / 1.1.1 / 1.1.1.1 / 1.1.1.1.1 / 1.1.1.1.1.1';
 
   // ========== 项级 disabled 数据（覆盖开头/中间/结尾禁用）==========
 
@@ -329,7 +337,7 @@ class _TPickerPageState extends State<TPickerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '六级联动：${_kSixLevelNames.join(' → ')}',
+          '六级联动：${_kSixLevelNames.join(' → ')}（切换第 1 级后，第 2–6 级数据全部刷新）',
           style: TextStyle(
               fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
@@ -344,7 +352,14 @@ class _TPickerPageState extends State<TPickerPage> {
           context,
           child: TPicker(
             items: _sixLevelItems,
-            initialValue: const ['L1_1', 'L2_1', 'L3_1', 'L4_1', 'L5_1', 'L6_1'],
+            initialValue: const [
+              '1',
+              '1.1',
+              '1.1.1',
+              '1.1.1.1',
+              '1.1.1.1.1',
+              '1.1.1.1.1.1',
+            ],
             onChange: (v) =>
                 setState(() => selectedSixLevel = v.labels.join(' / ')),
           ),

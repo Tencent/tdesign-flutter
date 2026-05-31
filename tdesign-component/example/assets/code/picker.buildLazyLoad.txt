@@ -10,14 +10,14 @@
     ];
 
     return LinkedLazyPickerScope(
-      threshold: 5,
+      threshold: 8,
       primaryLabel: '分类',
       linkedLabel: '条目',
       initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
       initialPrimaryValue: initialPrimaryValue,
       initialLinked: initialLinked,
       onLoadPrimary: (nextStart) async {
-        await Future.delayed(const Duration(milliseconds: 1200));
+        await Future.delayed(_kLazyDemoLoadDelay);
         return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
       },
       onLoadLinked: (primaryValue, nextStart) =>
@@ -28,37 +28,67 @@
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              '在 onChange 里判断 indexes 接近列底后更新 items，无需 TPicker 内置 onLoad',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
+            const SizedBox(height: 4),
+            Text(
               vm.statusLine,
               style: TextStyle(
                   fontSize: 14, color: TTheme.of(context).textColorSecondary),
             ),
             const SizedBox(height: 8),
-            _pickerCard(context, child: vm.buildPicker()),
+            Stack(
+              children: [
+                _pickerCard(context, child: vm.buildPicker()),
+                if (loadingHint != null)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 8,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: TTheme.of(context)
+                              .fontGyColor1
+                              .withOpacity(0.72),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '加载$loadingHint…',
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: 4),
-            if (loadingHint != null)
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '正在加载$loadingHint...',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: TTheme.of(context).textColorPlaceholder),
-                  ),
-                ],
-              )
-            else
-              Text(
-                '业务封装 LinkedLazyPickerScope：TPicker 仍只用 items / initialValue / onChange',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: TTheme.of(context).textColorPlaceholder),
-              ),
+            Text(
+              '滚近底部自动追加；切换分类时子列读缓存或按需拉取（示例封装见 LinkedLazyPickerScope）',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
           ],
         );
       },

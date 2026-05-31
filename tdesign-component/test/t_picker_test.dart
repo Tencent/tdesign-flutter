@@ -636,6 +636,68 @@ void main() {
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
     });
 
+    testWidgets('联动模式 - 6级切换第1级后下游列全部换新并重置首项',
+        (WidgetTester tester) async {
+      TPickerValue? captured;
+
+      dynamic sixLevelNode(int depth, [String codePrefix = '']) {
+        if (depth == 6) {
+          return [
+            for (int i = 1; i <= 2; i++)
+              TPickerOption(
+                label: '$codePrefix.$i',
+                value: '$codePrefix.$i',
+              ),
+          ];
+        }
+        return {
+          for (int i = 1; i <= 2; i++)
+            TPickerOption(
+              label: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+              value: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+            ): sixLevelNode(
+                depth + 1, codePrefix.isEmpty ? '$i' : '$codePrefix.$i'),
+        };
+      }
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TPicker(
+              items: TPickerLinked(sixLevelNode(1)),
+              initialValue: const [
+                '1',
+                '1.1',
+                '1.1.1',
+                '1.1.1.1',
+                '1.1.1.1.1',
+                '1.1.1.1.1.1',
+              ],
+              onChange: (v) => captured = v,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(ListWheelScrollView), findsNWidgets(6));
+
+      await tester.drag(
+        find.byType(ListWheelScrollView).first,
+        const Offset(0, -40), // 第 1 级切换到 2
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ListWheelScrollView), findsNWidgets(6));
+      expect(captured, isNotNull);
+      expect(captured!.values[0], '2');
+      expect(captured!.values[1], '2.1');
+      expect(captured!.values[2], '2.1.1');
+      expect(captured!.values[3], '2.1.1.1');
+      expect(captured!.values[4], '2.1.1.1.1');
+      expect(captured!.values[5], '2.1.1.1.1.1');
+      expect(captured!.indexes, const [1, 0, 0, 0, 0, 0]);
+    });
+
     testWidgets('联动模式 - 滚动后新列选中首项', (WidgetTester tester) async {
       TPickerValue? captured;
       final linkedData = {
