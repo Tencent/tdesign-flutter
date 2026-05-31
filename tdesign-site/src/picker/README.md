@@ -74,6 +74,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
+月日选择(联动)
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildMonthDaySelect(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'TPickerLinked：切换月份后日列自动变为 28 / 30 / 31 天（demo 平年，2 月固定 28 天）',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedMonthDay.isEmpty ? "未选择" : selectedMonthDay}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: _monthDayItems,
+            initialValue: const [1, 1],
+            onChange: (v) =>
+                setState(() => selectedMonthDay = v.labels.join(' / ')),
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
 五级联动选择
             
 <td-code-block panel="Dart">
@@ -484,45 +521,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 
-## 能力边界
-
-`TPicker` 是**纯滚轮内核**：只负责渲染与滚动联动，不包含工具栏、确认按钮或内置 loading API。以下说明常见选型与注意事项。
-
-### 何时用哪种数据源
-
-| 场景 | 推荐 | 说明 |
-| --- | --- | --- |
-| 多列互不依赖（时分秒、独立维度） | `TPickerColumns` | 各列数据独立维护 |
-| 整棵联动树已在内存（省市区、月日、多级地址且每列项数可控） | `TPickerLinked` | 上游变更后下游列自动裁剪并刷新，默认选中各列首项 |
-| 首列或子列数据量大、需接口分页 | `TPickerColumns` + 业务 Scope | 参考 example 中 `LinkedLazyPickerScope`：在 `onChange` 里判断 `indexes` 接近列底后更新 `items` |
-| 多级均需远程逐级拉取 | 业务层 Scope 封装 | 不建议扩展 `TPicker` 内核；在 Scope 中维护路径缓存并喂给 `TPickerColumns` |
-
-### 静态联动树（`TPickerLinked`）适用条件
-
-- 联动树可在客户端一次性构建或打包（如省市区 JSON）
-- 级数适中（如五级地址链），每列候选项在百级以内（滚轮懒构建，性能可接受）
-- 上游选中变化时，接受下游**全部换新并重置为首项**
-- 联动 Map 的**展示顺序等于插入顺序**；子节点 lookup 依赖 `TPickerOption` 的 value 相等
-
-### `items` 更新行为
-
-当传入的 `items`（或 `initialValue`）与上一帧**值不相等**时，组件会释放全部 ScrollController 并重新初始化。分页追加数据后，请同步传入新的 `initialValue` 以恢复选中项（见 `LinkedLazyPickerScope` 示例）。
-
-### `onChange` 与确认提交
-
-- `onChange`：滚动经过 enabled 项并稳定时**实时触发**，不代表用户已确认
-- 弹窗场景：在 `onChange` 中写入 draft 变量，用户点击 `TPopup` 确认后再提交（见弹窗示例）
-- 网络请求 / 埋点：请在业务层自行 debounce，避免滚动过程中频繁触发
-
-### 未内置的能力
-
-以下能力 intentionally 留在外围集成，可按 example Recipe 自行封装：
-
-- N 列异步联动（当前 example 仅示范双列 `LinkedLazyPickerScope`）
-- 编辑态按 value 路径反向串行回显
-- 挂载后 programmatic 改选中项（需通过更新 `initialValue` + `items` 触发重建）
-
-
 ## API
 ### TPicker
 #### 默认构造方法
@@ -531,12 +529,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
 | height | double | 200 | 视窗高度，默认 200 |
-| initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配） |
+| initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配各列） 与 `items` 一并参与重建判断：相对上一帧值不相等时会重新初始化。 |
 | itemBuilder | ItemBuilderType? | - | 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder） |
 | itemCount | int | 5 | 每屏显示 item 数，默认 5 |
-| items | TPickerItems | - | 数据源（必填） 使用密封类 `TPickerItems` 编译期强制二选一： - `TPickerColumns` → 多列独立选择 - `TPickerLinked` → 联动选择 自由结构数据通过 `.fromRaw()` 工厂构造归一化。 |
+| items | TPickerItems | - | 数据源（必填） 使用密封类 `TPickerItems` 编译期强制二选一： - `TPickerColumns` → 多列独立选择 - `TPickerLinked` → 联动选择 自由结构数据通过 `.fromRaw()` 工厂构造归一化。 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 **注意**：此回调代表"滚动时实时变化"，不代表"用户已确认选择"。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 按需加载更多：在回调里根据 `TPickerValue.indexes` 判断是否接近列底， 请求完成后更新 `items` 即可（无需组件内置加载 API）。 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 注意：此回调代表滚动时实时变化，不代表用户已确认选择。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 按需加载更多：在回调里根据 `TPickerValue.indexes` 判断是否接近列底， 请求完成后更新 `items` 即可（无需组件内置加载 API）。 |
 
 
 ### TPickerOption
