@@ -468,6 +468,49 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
+  Widget _buildApiLifecycle(BuildContext context) {
+    final theme = TTheme.of(context);
+    return TButton(
+      text: '生命周期',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: 300,
+            titleWidget: const TText('生命周期'),
+            onOpen: () => _lifecycleToast(context, 'onOpen'),
+            onOpened: () => _lifecycleToast(context, 'onOpened'),
+            onClose: () => _lifecycleToast(context, 'onClose'),
+            onClosed: () => _lifecycleToast(context, 'onClosed'),
+            child: ColoredBox(
+              color: theme.bgColorContainer,
+              child: Center(
+                child: TText(
+                  '打开：onOpen → onOpened\n关闭：onClose → onClosed',
+                  textColor: theme.textColorSecondary,
+                  font: theme.fontBodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
   Widget _buildApiCustomPosition(BuildContext context) {
     return TButton(
       text: 'right inset.top',
