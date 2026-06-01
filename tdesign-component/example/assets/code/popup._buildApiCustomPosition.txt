@@ -1,0 +1,24 @@
+
+  Widget _buildApiCustomPosition(BuildContext context) {
+    return TButton(
+      text: 'right inset.top',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        final renderBox =
+            navBarkey.currentContext!.findRenderObject() as RenderBox;
+        TPopup.show(
+          context,
+          options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox.size.height),
+            child: Container(
+              color: TTheme.of(context).bgColorContainer,
+            ),
+          ),
+        );
+      },
+    );
+  }

@@ -264,8 +264,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### OnSwitchChanged
-#### 简介
-开关改变事件处理
 #### 类型定义
 
 ```dart

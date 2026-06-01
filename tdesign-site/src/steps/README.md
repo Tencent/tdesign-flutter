@@ -704,8 +704,6 @@ Vertical Customize Steps 垂直自定义步骤条
 
 ## API
 ### TSteps
-#### 简介
-Steps步骤条
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -721,8 +719,6 @@ Steps步骤条
 
 
 ### TStepsItemData
-#### 简介
-Steps步骤条数据类型
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -736,8 +732,6 @@ Steps步骤条数据类型
 
 
 ### TStepsDirection
-#### 简介
-Steps步骤条方向
 #### 枚举值
 
 
@@ -748,8 +742,6 @@ Steps步骤条方向
 
 
 ### TStepsStatus
-#### 简介
-steps步骤条状态
 #### 枚举值
 
 
