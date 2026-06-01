@@ -383,8 +383,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TToast
-#### 简介
-改进的Toast组件，支持多个实例和独立样式
 
 #### 静态方法
 
