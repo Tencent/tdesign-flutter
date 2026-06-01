@@ -1,7 +1,7 @@
 
   Widget _buildNestedPopup(BuildContext context) {
     return TButton(
-      text: '内层再弹一层（嵌套叠加）',
+      text: '嵌套 show',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -26,7 +26,7 @@
                         ),
                         const SizedBox(height: 16),
                         TButton(
-                          text: '打开内层 Popup',
+                          text: '内层 bottom',
                           isBlock: true,
                           theme: TButtonTheme.primary,
                           size: TButtonSize.large,
@@ -47,11 +47,15 @@
                         ),
                         const SizedBox(height: 12),
                         TButton(
-                          text: '关闭外层',
+                          text: 'Handle.close',
                           isBlock: true,
                           type: TButtonType.outline,
                           size: TButtonSize.large,
-                          onTap: () => outerHandle?.close(),
+                          onTap: () => _toastThen(
+                            innerContext,
+                            '点击：关闭外层',
+                            () => outerHandle?.close(),
+                          ),
                         ),
                       ],
                     ),

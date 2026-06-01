@@ -1,7 +1,7 @@
 
   Widget _buildPopFromTop(BuildContext context) {
     return TButton(
-      text: '顶部弹出',
+      text: 'top',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -11,8 +11,6 @@
           context,
           options: TPopupOptions.top(
               height: 240,
-              onOpen: () => print('open'),
-              onOpened: () => print('opened'),
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,

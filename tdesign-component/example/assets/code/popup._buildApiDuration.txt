@@ -1,7 +1,7 @@
 
   Widget _buildApiDuration(BuildContext context) {
     return TButton(
-      text: 'animationDuration: 600ms',
+      text: 'duration 600ms',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,

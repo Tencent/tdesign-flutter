@@ -1,7 +1,7 @@
 
   Widget _buildPopFromCenter(BuildContext context) {
     return TButton(
-      text: '中间弹出',
+      text: 'center',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -10,15 +10,10 @@
         TPopup.show(
           context,
           options: TPopupOptions.center(
-              closeBuilder: null,
+              width: 240,
+              height: 240,
               child: Container(
-                decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
-                  borderRadius:
-                      BorderRadius.circular(TTheme.of(context).radiusLarge),
-                ),
-                width: 240,
-                height: 240,
+                color: TTheme.of(context).bgColorContainer,
               )),
         );
       },
