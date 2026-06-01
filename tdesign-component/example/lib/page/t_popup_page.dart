@@ -22,6 +22,20 @@ class TPopupPage extends StatelessWidget {
     action();
   }
 
+  static const String _lifecycleToastId = 'popup_lifecycle';
+
+  /// 生命周期演示 Toast：复用同一实例，避免连续回调叠多层。
+  static void _lifecycleToast(BuildContext context, String message) {
+    TToast.dismissToast(_lifecycleToastId);
+    TToast.showText(
+      message,
+      context: context,
+      toastId: _lifecycleToastId,
+      duration: const Duration(milliseconds: 2000),
+      maxLines: 1,
+    );
+  }
+
   /// 内置头部左右操作槽（左 cancel / 右 confirm）。
   static TPopupSlotBuilder _bottomHeaderActionSlot({
     required String label,
@@ -147,6 +161,7 @@ class TPopupPage extends StatelessWidget {
         ExampleModule(
           title: '更多 API',
           children: [
+            ExampleItem(builder: _buildApiLifecycle),
             ExampleItem(builder: _buildApiCustomPosition),
             ExampleItem(builder: _buildApiShowOverlayFalse),
             ExampleItem(builder: _buildApiOnOverlayClick),
@@ -669,6 +684,43 @@ class TPopupPage extends StatelessWidget {
   }
 
   // --- 更多 API ---
+
+  /// onOpen / onOpened / onClose / onClosed，Toast 观察调用顺序。
+  @Demo(group: 'popup')
+  Widget _buildApiLifecycle(BuildContext context) {
+    final theme = TTheme.of(context);
+    return TButton(
+      text: '生命周期',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: 300,
+            titleWidget: const TText('生命周期'),
+            onOpen: () => _lifecycleToast(context, 'onOpen'),
+            onOpened: () => _lifecycleToast(context, 'onOpened'),
+            onClose: () => _lifecycleToast(context, 'onClose'),
+            onClosed: () => _lifecycleToast(context, 'onClosed'),
+            child: ColoredBox(
+              color: theme.bgColorContainer,
+              child: Center(
+                child: TText(
+                  '打开：onOpen → onOpened\n关闭：onClose → onClosed',
+                  textColor: theme.textColorSecondary,
+                  font: theme.fontBodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @Demo(group: 'popup')
   Widget _buildApiCustomPosition(BuildContext context) {
