@@ -384,6 +384,73 @@ void main() {
       expect(options.useSafeArea, isFalse);
     });
 
+    test('normalized 保留 useSafeArea', () {
+      final options = TPopupOptions(
+        child: const SizedBox(),
+        useSafeArea: false,
+      ).normalized();
+      expect(options.useSafeArea, isFalse);
+    });
+
+    test('bottom 工厂可关闭 useSafeArea', () {
+      final options = TPopupOptions.bottom(
+        child: const SizedBox(),
+        useSafeArea: false,
+      );
+      expect(options.useSafeArea, isFalse);
+    });
+
+    group('useSafeArea 边界', () {
+      test('各命名工厂默认 useSafeArea 为 true', () {
+        const child = SizedBox();
+        expect(TPopupOptions.bottom(child: child).useSafeArea, isTrue);
+        expect(TPopupOptions.top(child: child).useSafeArea, isTrue);
+        expect(TPopupOptions.left(child: child).useSafeArea, isTrue);
+        expect(TPopupOptions.right(child: child).useSafeArea, isTrue);
+        expect(TPopupOptions.center(child: child).useSafeArea, isTrue);
+      });
+
+      test('各命名工厂可显式关闭 useSafeArea', () {
+        const child = SizedBox();
+        expect(
+          TPopupOptions.top(child: child, useSafeArea: false).useSafeArea,
+          isFalse,
+        );
+        expect(
+          TPopupOptions.left(child: child, useSafeArea: false).useSafeArea,
+          isFalse,
+        );
+        expect(
+          TPopupOptions.right(child: child, useSafeArea: false).useSafeArea,
+          isFalse,
+        );
+        expect(
+          TPopupOptions.center(child: child, useSafeArea: false).useSafeArea,
+          isFalse,
+        );
+      });
+
+      test('copyWith 未传 useSafeArea 时保留原值', () {
+        final original = TPopupOptions(
+          child: const SizedBox(),
+          useSafeArea: false,
+        );
+        final copied = original.copyWith(height: 100);
+        expect(copied.useSafeArea, isFalse);
+        expect(copied.height, 100);
+      });
+
+      test('copyWith 变更 placement 时仍保留 useSafeArea', () {
+        final options = TPopupOptions(
+          child: const SizedBox(),
+          placement: TPopupPlacement.bottom,
+          useSafeArea: false,
+        ).copyWith(placement: TPopupPlacement.top);
+        expect(options.placement, TPopupPlacement.top);
+        expect(options.useSafeArea, isFalse);
+      });
+    });
+
     test('copyWith(closeOnOverlayClick: null) 可恢复为跟随 showOverlay 的默认值', () {
       final options = TPopupOptions(
         child: const SizedBox(),
