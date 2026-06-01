@@ -128,7 +128,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     );
 
     final t = curved.value;
-    final shell = PopupShell(
+    final panel = PopupShell(
       options: options,
       onCloseWithTrigger: onCloseWithTrigger,
     );
@@ -138,16 +138,24 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       popupContent = Transform.scale(
         scale: t,
         alignment: Alignment.center,
-        child: shell,
+        child: panel,
       );
     } else {
       popupContent = FractionalTranslation(
         translation: _layout.slideOffset(t),
-        child: shell,
+        child: panel,
       );
     }
 
-    final positioned = _layout.wrapPositioned(child: popupContent);
+    final safePadding = PopupLayout.safePaddingFor(
+      options.placement,
+      MediaQuery.paddingOf(context),
+      options.useSafeArea,
+    );
+    final positioned = _layout.wrapPositioned(
+      child: popupContent,
+      safePadding: safePadding,
+    );
 
     final barrier = _buildBarrier(context, t);
 

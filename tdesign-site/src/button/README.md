@@ -739,8 +739,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TButton
-#### 简介
-TD常规按钮
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -773,8 +771,6 @@ TD常规按钮
 
 
 ### TButtonStyle
-#### 简介
-TButton按钮样式
 
 #### 工厂构造方法
 

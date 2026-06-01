@@ -252,6 +252,16 @@ Widget _buildCard(BuildContext context) {
 | titleStyle | TextStyle? | - | 标题文字样式 |
 
 
+### TCellGroupTheme
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| defaultTheme | - |
+| cardTheme | - |
+
+
 ### TCellAlign
 #### 枚举值
 
@@ -263,14 +273,12 @@ Widget _buildCard(BuildContext context) {
 | bottom | - |
 
 
-### TCellGroupTheme
-#### 枚举值
+### CellBuilder
+#### 类型定义
 
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultTheme | - |
-| cardTheme | - |
+```dart
+typedef CellBuilder = Widget Function(BuildContext context, TCell cell, int index);
+```
 
 
 ### TCellClick
@@ -278,14 +286,6 @@ Widget _buildCard(BuildContext context) {
 
 ```dart
 typedef TCellClick = void Function(TCell cell);
-```
-
-
-### CellBuilder
-#### 类型定义
-
-```dart
-typedef CellBuilder = Widget Function(BuildContext context, TCell cell, int index);
 ```
 
 
