@@ -1,7 +1,7 @@
 
   Widget _buildApiShowOverlayFalse(BuildContext context) {
     return TButton(
-      text: 'showOverlay: false（透明模态）',
+      text: 'showOverlay false',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,

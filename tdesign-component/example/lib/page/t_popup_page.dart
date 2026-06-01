@@ -12,6 +12,62 @@ class TPopupPage extends StatelessWidget {
 
   static const double _headerHeight = 58;
 
+  /// 浮层内交互（取消/确定/关闭/蒙层等）时弹出 [TToast]。
+  static void _toastThen(
+    BuildContext context,
+    String message,
+    VoidCallback action,
+  ) {
+    TToast.showText(message, context: context);
+    action();
+  }
+
+  /// 内置头部左右操作槽（左 cancel / 右 confirm）。
+  static TPopupSlotBuilder _bottomHeaderActionSlot({
+    required String label,
+    required String toastMessage,
+    required Color Function(BuildContext ctx) textColor,
+    FontWeight fontWeight = FontWeight.normal,
+  }) {
+    return (ctx, close) => GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => _toastThen(ctx, toastMessage, close),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            child: TText(
+              label,
+              textColor: textColor(ctx),
+              font: TTheme.of(ctx).fontBodyLarge,
+              fontWeight: fontWeight,
+            ),
+          ),
+        );
+  }
+
+  static TPopupSlotBuilder get _bottomCancelSlot => _bottomHeaderActionSlot(
+        label: '取消',
+        toastMessage: '点击：取消',
+        textColor: (ctx) => TTheme.of(ctx).textColorSecondary,
+      );
+
+  static TPopupSlotBuilder get _bottomConfirmSlot => _bottomHeaderActionSlot(
+        label: '确定',
+        toastMessage: '点击：确定',
+        textColor: (ctx) => TTheme.of(ctx).brandNormalColor,
+        fontWeight: FontWeight.w600,
+      );
+
+  /// center 面板下关闭区自定义（默认内置为 [TIcons.close_circle]）。
+  static TPopupSlotBuilder get _centerCustomCloseSlot =>
+      (ctx, close) => IconButton(
+            icon: Icon(
+              TIcons.poweroff,
+              color: TTheme.of(ctx).warningNormalColor,
+              size: 36,
+            ),
+            onPressed: () => _toastThen(ctx, '点击：关闭', close),
+          );
+
   /// 底部标题 + 关闭（自定义 headerBuilder：标题居中 + 右侧关闭图标）。
   static TPopupHeaderBuilder _bottomTitleCloseHeader({
     String? title,
@@ -39,7 +95,7 @@ class TPopupPage extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(TIcons.close, color: theme.textColorSecondary),
-                onPressed: close,
+                onPressed: () => _toastThen(ctx, '点击：头部关闭', close),
               ),
             ],
           ),
@@ -58,7 +114,7 @@ class TPopupPage extends StatelessWidget {
       navBarKey: navBarkey,
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: '弹出位置',
           children: [
             ExampleItem(builder: _buildPopFromTop),
             ExampleItem(builder: _buildPopFromLeft),
@@ -68,249 +124,46 @@ class TPopupPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '组件示例',
+          title: '头部与操作',
           children: [
-            ExampleItem(builder: _buildPopFromBottomWithOperationAndTitle),
-            ExampleItem(builder: _buildPopFromBottomWithCloseAndTitle),
-            ExampleItem(builder: _buildPopFromCenterWithClose),
-            ExampleItem(builder: _buildPopFromCenterWithUnderClose),
+            ExampleItem(builder: _buildBottomBuiltInHeaderDemos),
+            ExampleItem(builder: _buildPopFromBottomWithHeaderClose),
+            ExampleItem(builder: _buildPopFromCenterClose),
             ExampleItem(builder: _buildNestedPopup),
+          ],
+        ),
+        ExampleModule(
+          title: '安全区域',
+          children: [
+            ExampleItem(builder: _buildApiUseSafeAreaCompare),
+          ],
+        ),
+        ExampleModule(
+          title: '圆角',
+          children: [
+            ExampleItem(builder: _buildApiRadiusCompare),
           ],
         ),
         ExampleModule(
           title: '更多 API',
           children: [
-            ExampleItem(builder: _buildApiInset),
+            ExampleItem(builder: _buildApiCustomPosition),
             ExampleItem(builder: _buildApiShowOverlayFalse),
             ExampleItem(builder: _buildApiOnOverlayClick),
             ExampleItem(builder: _buildApiDuration),
           ],
         ),
       ],
-      test: [
-        ExampleItem(
-          desc: '操作栏超长文本,指定颜色',
-          builder: (_) {
-            return TButton(
-              text: '底部弹出层-带标题及操作',
-              isBlock: true,
-              theme: TButtonTheme.primary,
-              type: TButtonType.outline,
-              size: TButtonSize.large,
-              onTap: () {
-                TPopup.show(
-                  context,
-                  options: TPopupOptions.bottom(
-                      height: 280,
-                      titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
-                      cancelBuilder: (_, close) => GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: close,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                              child: TText(
-                                '点这里确认!',
-                                textColor: TTheme.of(context).brandNormalColor,
-                                font: TTheme.of(context).fontBodyLarge,
-                              ),
-                            ),
-                          ),
-                      confirmBuilder: (_, close) => GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: close,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                              child: TText(
-                                '关闭',
-                                textColor: TTheme.of(context).errorNormalColor,
-                                font: TTheme.of(context).fontBodyLarge,
-                              ),
-                            ),
-                          ),
-                      child: Container(height: 200)),
-                );
-              },
-            );
-          },
-        ),
-        ExampleItem(
-          desc: '带关闭超长文本',
-          builder: (_) {
-            return TButton(
-              text: '底部弹出层-带标题及关闭',
-              isBlock: true,
-              theme: TButtonTheme.primary,
-              type: TButtonType.outline,
-              size: TButtonSize.large,
-              onTap: () {
-                TPopup.show(
-                  context,
-                  options: TPopupOptions.bottom(
-                      height: 280,
-                      headerBuilder: _bottomTitleCloseHeader(
-                        title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                      ),
-                      child: Container(height: 200)),
-                );
-              },
-            );
-          },
-        ),
-        ExampleItem(
-          desc: '修改圆角',
-          builder: (_) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TButton(
-                  text: '底部弹出层-修改圆角',
-                  isBlock: true,
-                  theme: TButtonTheme.primary,
-                  type: TButtonType.outline,
-                  size: TButtonSize.large,
-                  onTap: () {
-                    TPopup.show(
-                      context,
-                      options: TPopupOptions.bottom(
-                          height: 280,
-                          radius: 6,
-                          headerBuilder: _bottomTitleCloseHeader(
-                            title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                          ),
-                          child: Container(height: 200)),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                TButton(
-                  text: '底部弹出层-修改圆角',
-                  isBlock: true,
-                  theme: TButtonTheme.primary,
-                  type: TButtonType.outline,
-                  size: TButtonSize.large,
-                  onTap: () {
-                    TPopup.show(
-                      context,
-                      options: TPopupOptions.bottom(
-                          height: 280,
-                          radius: 6,
-                          titleWidget: TText('标题文字标题文字标题文字标题文字标题文字标题文字标题文字'),
-                          cancelBuilder: (_, close) => GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: close,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 8),
-                                  child: TText(
-                                    '点这里确认!',
-                                    textColor: TTheme.of(context).brandNormalColor,
-                                    font: TTheme.of(context).fontBodyLarge,
-                                  ),
-                                ),
-                              ),
-                          confirmBuilder: (_, close) => GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: close,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 8),
-                                  child: TText(
-                                    '关闭',
-                                    textColor: TTheme.of(context).errorNormalColor,
-                                    font: TTheme.of(context).fontBodyLarge,
-                                  ),
-                                ),
-                              ),
-                          child: Container(height: 200)),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                TButton(
-                  text: '居中弹出层-修改圆角',
-                  isBlock: true,
-                  theme: TButtonTheme.primary,
-                  type: TButtonType.outline,
-                  size: TButtonSize.large,
-                  onTap: () {
-                    TPopup.show(
-                      context,
-                      options: TPopupOptions.center(
-                          width: 240,
-                          height: 240,
-                          radius: 6,
-                          closeBuilder: (_, close) => IconButton(
-                                icon: Icon(
-                                  TIcons.close_circle,
-                                  color: TTheme.of(context).errorNormalColor,
-                                  size: 32,
-                                ),
-                                onPressed: close,
-                              ),
-                          child: const SizedBox(height: 240, width: 240)),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                TButton(
-                  text: '居中弹出层-底部关闭-修改圆角',
-                  isBlock: true,
-                  theme: TButtonTheme.primary,
-                  type: TButtonType.outline,
-                  size: TButtonSize.large,
-                  onTap: () {
-                    TPopup.show(
-                      context,
-                      options: TPopupOptions.center(
-                          width: 240,
-                          height: 240,
-                          radius: 6,
-                          child: const SizedBox(height: 240, width: 240)),
-                    );
-                  },
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: '自定义位置',
-          builder: (_) {
-            return TButton(
-              text: '自定义位置',
-              isBlock: true,
-              theme: TButtonTheme.primary,
-              type: TButtonType.outline,
-              size: TButtonSize.large,
-              onTap: () {
-                final renderBox =
-                    navBarkey.currentContext!.findRenderObject() as RenderBox;
-                TPopup.show(
-                  context,
-                  options: TPopupOptions.right(
-                      width: 280,
-                      inset: TPopupRightInset(top: renderBox.size.height),
-                      child: Container(
-                        color: TTheme.of(context).bgColorContainer,
-                      )),
-                );
-              },
-            );
-          },
-        ),
-      ],
+      test: const [],
     );
   }
 
-  // --- 01 组件类型（保持原 Demo 文案与交互）---
+  // --- 弹出位置 ---
 
   @Demo(group: 'popup')
   Widget _buildPopFromTop(BuildContext context) {
     return TButton(
-      text: '顶部弹出',
+      text: 'top',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -320,8 +173,6 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.top(
               height: 240,
-              onOpen: () => print('open'),
-              onOpened: () => print('opened'),
               child: Container(
                 color: TTheme.of(context).bgColorContainer,
                 height: 240,
@@ -334,7 +185,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromLeft(BuildContext context) {
     return TButton(
-      text: '左侧弹出',
+      text: 'left',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -355,7 +206,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromCenter(BuildContext context) {
     return TButton(
-      text: '中间弹出',
+      text: 'center',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -364,15 +215,10 @@ class TPopupPage extends StatelessWidget {
         TPopup.show(
           context,
           options: TPopupOptions.center(
-              closeBuilder: null,
+              width: 240,
+              height: 240,
               child: Container(
-                decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
-                  borderRadius:
-                      BorderRadius.circular(TTheme.of(context).radiusLarge),
-                ),
-                width: 240,
-                height: 240,
+                color: TTheme.of(context).bgColorContainer,
               )),
         );
       },
@@ -382,7 +228,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromBottom(BuildContext context) {
     return TButton(
-      text: '底部弹出',
+      text: 'bottom',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -405,7 +251,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromRight(BuildContext context) {
     return TButton(
-      text: '右侧弹出',
+      text: 'right',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -423,13 +269,13 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
-  // --- 02 组件示例 ---
+  // --- 头部与操作 ---
 
   /// 外层 Popup 的 child 内再 `TPopup.show(innerContext, options: …)`：用各自 [TPopupHandle] 关闭。
   @Demo(group: 'popup')
   Widget _buildNestedPopup(BuildContext context) {
     return TButton(
-      text: '内层再弹一层（嵌套叠加）',
+      text: '嵌套 show',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -454,7 +300,7 @@ class TPopupPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         TButton(
-                          text: '打开内层 Popup',
+                          text: '内层 bottom',
                           isBlock: true,
                           theme: TButtonTheme.primary,
                           size: TButtonSize.large,
@@ -475,11 +321,15 @@ class TPopupPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         TButton(
-                          text: '关闭外层',
+                          text: 'Handle.close',
                           isBlock: true,
                           type: TButtonType.outline,
                           size: TButtonSize.large,
-                          onTap: () => outerHandle?.close(),
+                          onTap: () => _toastThen(
+                            innerContext,
+                            '点击：关闭外层',
+                            () => outerHandle?.close(),
+                          ),
                         ),
                       ],
                     ),
@@ -491,87 +341,80 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
+  /// 内置头左右槽：默认文案 vs 自定义 cancelBuilder / confirmBuilder。
   @Demo(group: 'popup')
-  Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
-    return TButton(
-      text: '底部弹出层-带标题及操作',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-              height: 280,
-              titleWidget: TText('标题文字'),
-              child: Container(height: 200)),
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'popup')
-  Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
-    return TButton(
-      text: '底部弹出层-带标题及关闭',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-              height: 280,
-              cancelBuilder: (_, close) => GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: close,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: TText(
-                        '关闭',
-                        textColor: TTheme.of(context).textColorSecondary,
-                        font: TTheme.of(context).fontBodyLarge,
-                      ),
-                    ),
-                  ),
-              titleWidget: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(TIcons.info_circle,
-                      color: TTheme.of(context).brandNormalColor, size: 18),
-                  const SizedBox(width: 4),
-                  TText(
-                    '自定义标题',
-                    textColor: TTheme.of(context).brandNormalColor,
-                    font: TTheme.of(context).fontTitleMedium,
-                  ),
-                ],
+  Widget _buildBottomBuiltInHeaderDemos(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TButton(
+          text: '操作槽 默认',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () {
+            TPopup.show(
+              context,
+              options: TPopupOptions.bottom(
+                height: 280,
+                titleWidget: const TText('标题'),
+                child: Container(height: 200),
               ),
-              confirmBuilder: (_, close) => GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: close,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: TText(
-                        '完成',
-                        textColor: TTheme.of(context).brandNormalColor,
-                        font: TTheme.of(context).fontTitleMedium,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-              child: Container(height: 200)),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: '操作槽 自定义',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () {
+            TPopup.show(
+              context,
+              options: TPopupOptions.bottom(
+                height: 280,
+                titleWidget: const TText('标题'),
+                cancelBuilder: _bottomCancelSlot,
+                confirmBuilder: _bottomConfirmSlot,
+                child: Container(height: 200),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  /// 自定义 headerBuilder：标题居中 + 右侧关闭图标。
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithHeaderClose(BuildContext context) {
+    return TButton(
+      text: 'headerBuilder',
+      isBlock: true,
+      theme: TButtonTheme.primary,
+      type: TButtonType.outline,
+      size: TButtonSize.large,
+      onTap: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: 280,
+            headerBuilder: _bottomTitleCloseHeader(title: '标题文字'),
+            child: Container(height: 200),
+          ),
         );
       },
     );
   }
 
+  /// center：自定义 closeBuilder（面板下方）；默认关闭见「center」。
   @Demo(group: 'popup')
-  Widget _buildPopFromCenterWithClose(BuildContext context) {
+  Widget _buildPopFromCenterClose(BuildContext context) {
     return TButton(
-      text: '居中弹出层-带关闭',
+      text: 'closeBuilder 自定义',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -580,77 +423,273 @@ class TPopupPage extends StatelessWidget {
         TPopup.show(
           context,
           options: TPopupOptions.center(
-              closeOnOverlayClick: false,
-              width: 240,
-              height: 240,
-              closeBuilder: (_, close) => IconButton(
-                    icon: Icon(
-                      TIcons.close_circle,
-                      color: TTheme.of(context).fontWhColor1,
-                      size: 32,
-                    ),
-                    onPressed: close,
-                  ),
-              child: const SizedBox(width: 240, height: 240)),
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'popup')
-  Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
-    return TButton(
-      text: '居中弹出层-自定义下方按钮',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.center(
-              closeOnOverlayClick: true,
+            width: 240,
+            height: 200,
+            closeBuilder: _centerCustomCloseSlot,
+            child: Container(
               width: 240,
               height: 200,
-              closeBuilder: (_, close) => IconButton(
-                    icon: Icon(
-                      TIcons.poweroff,
-                      color: TTheme.of(context).fontWhColor1,
-                      size: 36,
-                    ),
-                    onPressed: close,
-                  ),
-              child: Container(
-                width: 240,
-                height: 200,
-                color: TTheme.of(context).bgColorContainer,
-              )),
+              color: TTheme.of(context).bgColorContainer,
+            ),
+          ),
         );
       },
+    );
+  }
+
+  // --- 安全区域 ---
+
+  /// 底部弹出对比 [useSafeArea] 开启/关闭；橙色条为面板底边标记。
+  static void _showSafeAreaBottomPopup(
+    BuildContext context, {
+    required bool useSafeArea,
+  }) {
+    final theme = TTheme.of(context);
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: 300,
+        useSafeArea: useSafeArea,
+        headerBuilder: null,
+        child: ColoredBox(
+          color: theme.bgColorContainer,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+                child: TText(
+                  useSafeArea ? 'useSafeArea: true（默认）' : 'useSafeArea: false',
+                  textColor: theme.textColorPrimary,
+                  font: theme.fontTitleMedium,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TText(
+                  useSafeArea
+                      ? '面板底边在 Home 指示条上方，橙色标记线不会被遮挡'
+                      : '面板底边贴屏幕底边，橙色标记线可能落在 Home 指示条区域',
+                  textColor: theme.textColorSecondary,
+                  font: theme.fontBodyMedium,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                height: 14,
+                alignment: Alignment.center,
+                color: theme.warningNormalColor,
+                child: TText(
+                  '面板底边标记',
+                  textColor: theme.fontWhColor1,
+                  font: theme.fontBodySmall,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildApiUseSafeAreaCompare(BuildContext context) {
+    final theme = TTheme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TText(
+          'useSafeArea，真机看橙色底边标记',
+          textColor: theme.textColorSecondary,
+          font: theme.fontBodyMedium,
+        ),
+        const SizedBox(height: 16),
+        TButton(
+          text: 'useSafeArea 开',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          size: TButtonSize.large,
+          onTap: () => _showSafeAreaBottomPopup(context, useSafeArea: true),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'useSafeArea 关',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showSafeAreaBottomPopup(context, useSafeArea: false),
+        ),
+      ],
+    );
+  }
+
+  // --- 圆角 ---
+
+  /// 底部弹层对比 [radius]；配合 [TPopupBottomInset] 留白，顶部圆角更易观察。
+  static void _showRadiusBottomPopup(
+    BuildContext context, {
+    double? radius,
+  }) {
+    final theme = TTheme.of(context);
+    final defaultRadius = theme.radiusExtraLarge;
+    final String label;
+    if (radius == null) {
+      label = '默认圆角 radiusExtraLarge = $defaultRadius';
+    } else if (radius == 0) {
+      label = '直角 radius = 0';
+    } else {
+      label = '大圆角 radius = ${radius.toStringAsFixed(0)}';
+    }
+
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: 220,
+        radius: radius,
+        inset: const TPopupBottomInset(left: 32, right: 32),
+        headerBuilder: null,
+        child: ColoredBox(
+          color: theme.brandNormalColor.withValues(alpha: 0.14),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TText(
+                  label,
+                  textColor: theme.textColorPrimary,
+                  font: theme.fontTitleMedium,
+                  fontWeight: FontWeight.w600,
+                ),
+                const SizedBox(height: 8),
+                TText(
+                  '左右留白 32px，请对比面板顶部左右两角的弧度',
+                  textColor: theme.textColorSecondary,
+                  font: theme.fontBodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 居中弹层对比 [radius]；四角均为圆角。
+  static void _showRadiusCenterPopup(
+    BuildContext context, {
+    double? radius,
+  }) {
+    final theme = TTheme.of(context);
+    final defaultRadius = theme.radiusExtraLarge;
+    final label = radius == null
+        ? '默认圆角 $defaultRadius'
+        : '大圆角 radius = ${radius.toStringAsFixed(0)}';
+
+    TPopup.show(
+      context,
+      options: TPopupOptions.center(
+        width: 280,
+        height: 180,
+        radius: radius,
+        child: ColoredBox(
+          color: theme.brandNormalColor.withValues(alpha: 0.14),
+          child: Center(
+            child: TText(
+              label,
+              textColor: theme.textColorPrimary,
+              font: theme.fontTitleMedium,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildApiRadiusCompare(BuildContext context) {
+    final theme = TTheme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TText(
+          'radius + bottom inset',
+          textColor: theme.textColorSecondary,
+          font: theme.fontBodyMedium,
+        ),
+        const SizedBox(height: 16),
+        TButton(
+          text: 'radius 默认',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusBottomPopup(context),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'radius 0',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusBottomPopup(context, radius: 0),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'radius 28',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusBottomPopup(context, radius: 28),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'center radius',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusCenterPopup(context),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'center r32',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusCenterPopup(context, radius: 32),
+        ),
+      ],
     );
   }
 
   // --- 更多 API ---
 
   @Demo(group: 'popup')
-  Widget _buildApiInset(BuildContext context) {
+  Widget _buildApiCustomPosition(BuildContext context) {
     return TButton(
-      text: 'bottom inset.left/right',
+      text: 'right inset.top',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
       size: TButtonSize.large,
       onTap: () {
+        final renderBox =
+            navBarkey.currentContext!.findRenderObject() as RenderBox;
         TPopup.show(
           context,
-          options: TPopupOptions.bottom(
-              height: 320,
-              inset: const TPopupBottomInset(left: 16, right: 16),
-              titleWidget: TText('左右留白'),
-              child: Container(
-                height: 240,
-                color: TTheme.of(context).bgColorContainer,
-              )),
+          options: TPopupOptions.right(
+            width: 280,
+            inset: TPopupRightInset(top: renderBox.size.height),
+            child: Container(
+              color: TTheme.of(context).bgColorContainer,
+            ),
+          ),
         );
       },
     );
@@ -659,7 +698,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiShowOverlayFalse(BuildContext context) {
     return TButton(
-      text: 'showOverlay: false（透明模态）',
+      text: 'showOverlay false',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -695,7 +734,8 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.bottom(
               height: 260,
-              onOverlayClick: () => TToast.showText('点击蒙层', context: context),
+              onOverlayClick: () =>
+                  TToast.showText('点击蒙层', context: context),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,
@@ -708,7 +748,7 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiDuration(BuildContext context) {
     return TButton(
-      text: 'animationDuration: 600ms',
+      text: 'duration 600ms',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
