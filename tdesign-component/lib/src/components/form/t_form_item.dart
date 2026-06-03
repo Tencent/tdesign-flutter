@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 't_form_inherited.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
+
 import '../../../tdesign_flutter.dart';
+import 't_form_inherited.dart';
 
 /// 表格单元选用组件类型的枚举
 enum TFormItemType {
@@ -338,8 +340,7 @@ class _TFormItemState extends State<TFormItem> {
                       ),
                     ),
                     _buildTipRow(
-                        left: 0,
-                        top: TFormItemType.rate == widget.type ? 4 : 0)
+                        left: 0, top: TFormItemType.rate == widget.type ? 4 : 0)
                   ],
                 )));
       case TFormItemType.radios:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import 't_cell_inherited.dart';
@@ -132,7 +133,6 @@ class _TCellState extends State<TCell> {
     return widget.disabled ?? false;
   }
 
-
   @override
   Widget build(BuildContext context) {
     final theme = TTheme.of(context);
@@ -145,11 +145,11 @@ class _TCellState extends State<TCell> {
         : style.clickBackgroundColor;
     final border = (widget.showBottomBorder ?? false)
         ? Border(
-      bottom: BorderSide(
-        width: 0.5,
-        color: style.borderedColor ?? theme.componentStrokeColor,
-      ),
-    )
+            bottom: BorderSide(
+              width: 0.5,
+              color: style.borderedColor ?? theme.componentStrokeColor,
+            ),
+          )
         : null;
 
     return GestureDetector(
@@ -202,8 +202,10 @@ class _TCellState extends State<TCell> {
                               TText(' *', style: style.requiredStyle),
                           ],
                         ),
-                        if ((widget.titleWidget != null || widget.title != null) &&
-                            (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
+                        if ((widget.titleWidget != null ||
+                                widget.title != null) &&
+                            (widget.descriptionWidget != null ||
+                                widget.description?.isNotEmpty == true))
                           SizedBox(height: TTheme.of(context).spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
@@ -238,8 +240,7 @@ class _TCellState extends State<TCell> {
                 else if (widget.rightIcon != null)
                   Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
                 if (widget.arrow ?? false)
-                  Icon(TIcons.chevron_right,
-                      size: 24, color: style.arrowColor),
+                  Icon(TIcons.chevron_right, size: 24, color: style.arrowColor),
               ],
             ),
           ],

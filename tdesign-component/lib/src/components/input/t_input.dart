@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../dialog/t_dialog_widget.dart';
 
 enum TInputType {
   normal,
@@ -403,8 +403,7 @@ class TInput extends StatelessWidget {
                   children: [
                     TInputView(
                       textStyle: textStyle ??
-                          TextStyle(
-                              color: TTheme.of(context).textColorPrimary),
+                          TextStyle(color: TTheme.of(context).textColorPrimary),
                       readOnly: readOnly,
                       autofocus: autofocus,
                       obscureText: obscureText,
@@ -552,8 +551,8 @@ class TInput extends StatelessWidget {
         case TCardStyle.errorStyle:
           cardStyleDecoration = BoxDecoration(
               color: TTheme.of(context).bgColorContainer,
-              border: Border.all(
-                  color: TTheme.of(context).errorColor6, width: 1.5),
+              border:
+                  Border.all(color: TTheme.of(context).errorColor6, width: 1.5),
               borderRadius:
                   BorderRadius.circular(TTheme.of(context).radiusDefault));
           break;
@@ -659,8 +658,7 @@ class TInput extends StatelessWidget {
                         focusNode: focusNode,
                         hintTextStyle: hintTextStyle ??
                             TextStyle(
-                                color:
-                                    TTheme.of(context).textColorPlaceholder),
+                                color: TTheme.of(context).textColorPlaceholder),
                         cursorColor: cursorColor,
                         textInputBackgroundColor: textInputBackgroundColor,
                         controller: controller,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
@@ -149,8 +150,7 @@ class _TBackTopState extends State<TBackTop> {
               color: _bgColor,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(TTheme.of(context).radiusCircle),
-                  bottomLeft:
-                      Radius.circular(TTheme.of(context).radiusCircle)),
+                  bottomLeft: Radius.circular(TTheme.of(context).radiusCircle)),
               border: Border.all(color: _borderColor, width: 0.5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,

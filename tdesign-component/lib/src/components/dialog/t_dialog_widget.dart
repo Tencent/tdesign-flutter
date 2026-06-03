@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import 't_dialog.dart';
@@ -43,8 +44,7 @@ class TDialogScaffold extends StatelessWidget {
         child: Container(
           width: width ?? 311,
           decoration: BoxDecoration(
-            color:
-                backgroundColor ?? TTheme.of(context).bgColorContainer, // 底色
+            color: backgroundColor ?? TTheme.of(context).bgColorContainer, // 底色
             borderRadius: BorderRadius.all(Radius.circular(radius)),
           ),
           child: Stack(

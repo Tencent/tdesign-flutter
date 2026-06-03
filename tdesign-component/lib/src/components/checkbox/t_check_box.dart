@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
+import '../../../tdesign_flutter.dart';
 import '../../util/auto_size.dart';
 
 ///

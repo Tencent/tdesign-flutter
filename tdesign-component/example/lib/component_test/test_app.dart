@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-
-import 'tabbar_test.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 void main() async {
   kTextNeedGlobalFontFamily = true;

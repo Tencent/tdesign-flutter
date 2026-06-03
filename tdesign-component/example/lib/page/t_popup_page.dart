@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
@@ -786,8 +787,7 @@ class TPopupPage extends StatelessWidget {
           context,
           options: TPopupOptions.bottom(
               height: 260,
-              onOverlayClick: () =>
-                  TToast.showText('点击蒙层', context: context),
+              onOverlayClick: () => TToast.showText('点击蒙层', context: context),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,

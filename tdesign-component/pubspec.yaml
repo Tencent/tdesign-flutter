@@ -12,6 +12,9 @@ dependencies:
     sdk: flutter
   collection:
 
+  # 图标库
+  tdesign_icons: ^0.0.4
+
   # 轮播图组件
   flutter_swiper_null_safety: ^1.0.2
 
@@ -45,9 +48,6 @@ flutter:
   # adding or updating assets for this project.
   uses-material-design: true
   fonts:
-    - family: TIcons
-      fonts:
-        - asset: assets/tdesign/t_icons.ttf
     - family: TCloudNumber
       fonts:
         - asset: assets/tdesign/TCloudNumberVF.ttf

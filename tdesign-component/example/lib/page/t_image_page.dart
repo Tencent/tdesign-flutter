@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';

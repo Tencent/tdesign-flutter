@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';

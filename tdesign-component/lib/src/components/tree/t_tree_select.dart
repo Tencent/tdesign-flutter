@@ -1,6 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 
@@ -172,9 +171,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
                   // 判断上一个和下一个选项是否被选中
                   final isPrevSelected = index > 0 &&
                       firstValue == widget.options[index - 1].value;
-                  final isNextSelected =
-                      index < widget.options.length - 1 &&
-                          firstValue == widget.options[index + 1].value;
+                  final isNextSelected = index < widget.options.length - 1 &&
+                      firstValue == widget.options[index + 1].value;
 
                   return GestureDetector(
                     onTap: () {
@@ -233,10 +231,10 @@ class _TTreeSelectState extends State<TTreeSelect> {
                             top: 0,
                             right: 0,
                             child: CustomPaint(
-                              size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
+                              size: Size(widget.outwardCornerRadius,
+                                  widget.outwardCornerRadius),
                               painter: _OutwardCornerPainter(
-                                color:
-                                    TTheme.of(context).bgColorContainer,
+                                color: TTheme.of(context).bgColorContainer,
                                 corner: _Corner.topRight,
                               ),
                             ),
@@ -247,10 +245,10 @@ class _TTreeSelectState extends State<TTreeSelect> {
                             bottom: 0,
                             right: 0,
                             child: CustomPaint(
-                              size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
+                              size: Size(widget.outwardCornerRadius,
+                                  widget.outwardCornerRadius),
                               painter: _OutwardCornerPainter(
-                                color:
-                                    TTheme.of(context).bgColorContainer,
+                                color: TTheme.of(context).bgColorContainer,
                                 corner: _Corner.bottomRight,
                               ),
                             ),
@@ -367,7 +365,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
                               var hasContains = (values[1] as List<dynamic>)
                                   .contains(currentValue);
                               if (hasContains) {
-                                (values[1] as List<dynamic>).remove(currentValue);
+                                (values[1] as List<dynamic>)
+                                    .remove(currentValue);
                               } else {
                                 (values[1] as List<dynamic>).add(currentValue);
                               }
@@ -397,7 +396,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
                               var hasContains = (values[2] as List<dynamic>)
                                   .contains(currentValue);
                               if (hasContains) {
-                                (values[2] as List<dynamic>).remove(currentValue);
+                                (values[2] as List<dynamic>)
+                                    .remove(currentValue);
                               } else {
                                 (values[2] as List<dynamic>).add(currentValue);
                               }

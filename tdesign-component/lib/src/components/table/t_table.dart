@@ -1,5 +1,5 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
@@ -173,8 +173,8 @@ class TTableState extends State<TTable> {
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
-              const TLoading(size: TLoadingSize.large),
+          child:
+              widget.loadingWidget ?? const TLoading(size: TLoadingSize.large),
         ),
       );
     }
@@ -211,7 +211,7 @@ class TTableState extends State<TTable> {
         child: Row(children: row),
       ));
     }
-    if (widget.footerWidget != null){
+    if (widget.footerWidget != null) {
       cells.add(widget.footerWidget!);
     }
     return Column(
@@ -220,8 +220,8 @@ class TTableState extends State<TTable> {
   }
 
   /// 获取单元格
-  Widget _getCell(TTableCol col, bool isHeader, dynamic data, int index,
-      bool fixedBorder) {
+  Widget _getCell(
+      TTableCol col, bool isHeader, dynamic data, int index, bool fixedBorder) {
     var title = isHeader ? (col.title ?? '') : (data[col.colKey] ?? '');
     var ellipsis = (isHeader ? col.ellipsisTitle : col.ellipsis) ?? false;
     var sortable = col.sortable ?? false;
@@ -366,8 +366,8 @@ class TTableState extends State<TTable> {
   }
 
   /// 获取单元格内容
-  Widget _getCellText(TTableCol col, String title, bool ellipsis,
-      bool isHeader, bool sortable, int index) {
+  Widget _getCellText(TTableCol col, String title, bool ellipsis, bool isHeader,
+      bool sortable, int index) {
     var overflow = ellipsis ? TextOverflow.ellipsis : TextOverflow.visible;
     var titleWidget = TText(title,
         maxLines: 1,
@@ -517,8 +517,7 @@ class TTableState extends State<TTable> {
   }
 
   /// 生成固定列的表头单元格
-  List<Widget> _getFixedHeaderCells(
-      List<TTableCol> cols, double cellWidth) {
+  List<Widget> _getFixedHeaderCells(List<TTableCol> cols, double cellWidth) {
     var headers = <Widget>[];
     for (var i = 0; i < cols.length; i++) {
       var col = cols[i];
@@ -542,19 +541,17 @@ class TTableState extends State<TTable> {
   }
 
   /// 生成固定列的数据单元格（按列组织，每列一个Column，无height时使用）
-  List<Widget> _getFixedDataCols(
-      List<TTableCol> cols, double cellWidth) {
+  List<Widget> _getFixedDataCols(List<TTableCol> cols, double cellWidth) {
     var colWidgets = <Widget>[];
     for (var i = 0; i < cols.length; i++) {
       var col = cols[i];
       var cells = <Widget>[];
       for (var j = 0; j < (widget.data?.length ?? 0); j++) {
-        var cell = _getCell(
-            col, false, widget.data?[j], j, i == cols.length - 1);
+        var cell =
+            _getCell(col, false, widget.data?[j], j, i == cols.length - 1);
         cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
       }
-      colWidgets
-          .add(Column(mainAxisSize: MainAxisSize.min, children: cells));
+      colWidgets.add(Column(mainAxisSize: MainAxisSize.min, children: cells));
     }
     return colWidgets;
   }
@@ -586,8 +583,7 @@ class TTableState extends State<TTable> {
     }
 
     // 是否需要横向滚动
-    var needHorizontalScroll =
-        (width - fixedCellsWidth) < fixedNonCellsWidth;
+    var needHorizontalScroll = (width - fixedCellsWidth) < fixedNonCellsWidth;
 
     // 生成表头
     var headerLeftCells = _getFixedHeaderCells(fixedLeftCol, cellWidth);
@@ -629,8 +625,8 @@ class TTableState extends State<TTable> {
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
-              const TLoading(size: TLoadingSize.large),
+          child:
+              widget.loadingWidget ?? const TLoading(size: TLoadingSize.large),
         ),
       );
     } else if (widget.data == null || widget.data!.isEmpty) {

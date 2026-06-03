@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
@@ -87,8 +88,7 @@ class TRatePageState extends State<TRatePage> {
     return const TCellGroup(cells: [
       TCell(title: '顶部显示', noteWidget: TRate(placement: PlacementEnum.top)),
       TCell(title: '不显示', noteWidget: TRate(placement: PlacementEnum.none)),
-      TCell(
-          title: '底部显示', noteWidget: TRate(placement: PlacementEnum.bottom)),
+      TCell(title: '底部显示', noteWidget: TRate(placement: PlacementEnum.bottom)),
     ]);
   }
 

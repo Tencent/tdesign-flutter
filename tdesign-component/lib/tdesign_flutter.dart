@@ -29,7 +29,6 @@ export 'src/components/footer/t_footer.dart';
 export 'src/components/form/t_form.dart';
 export 'src/components/form/t_form_item.dart';
 export 'src/components/form/t_form_validation.dart';
-export 'src/components/icon/t_icons.dart';
 export 'src/components/image/image_widget.dart';
 export 'src/components/image/t_image.dart';
 export 'src/components/image_viewer/t_image_viewer.dart';

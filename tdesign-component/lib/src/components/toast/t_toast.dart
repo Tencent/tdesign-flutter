@@ -1,6 +1,8 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
+
 import '../../../tdesign_flutter.dart';
 import '../../util/auto_size.dart';
 import '../../util/context_extension.dart';
@@ -315,7 +317,7 @@ class TToast {
         .where((entry) => entry.key.startsWith('toast_'))
         .map((entry) => entry.key)
         .toList();
-    
+
     for (final id in loadingIds) {
       dismissToast(id);
     }
@@ -330,7 +332,7 @@ class TToast {
   }) {
     // 不自动关闭之前的Toast，支持多个Toast同时显示
     final overlayState = Overlay.of(context);
-    
+
     OverlayEntry overlayEntry;
     if (preventTap ?? false) {
       overlayEntry = OverlayEntry(
@@ -367,7 +369,7 @@ class TToast {
         if (instance != null && instance.showing) {
           instance.showing = false;
           overlayEntry.markNeedsBuild();
-          
+
           disposeTimer = Timer(const Duration(milliseconds: 200), () {
             overlayEntry.remove();
             _toastInstances.remove(toastId);

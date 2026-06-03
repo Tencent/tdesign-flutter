@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 
@@ -357,10 +358,11 @@ class _TBottomTabBarState extends State<TBottomTabBar>
                         : null,
                     border: widget.showTopBorder! && !isCapsuleOutlineType
                         ? Border(
-                        top: widget.topBorder ??
-                            BorderSide(
-                                color: TTheme.of(context).componentStrokeColor,
-                                width: 0.5))
+                            top: widget.topBorder ??
+                                BorderSide(
+                                    color:
+                                        TTheme.of(context).componentStrokeColor,
+                                    width: 0.5))
                         : null,
                     boxShadow: isCapsuleOutlineType
                         ? TTheme.of(context).shadowsTop
@@ -372,7 +374,7 @@ class _TBottomTabBarState extends State<TBottomTabBar>
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children:
-                      List.generate(widget.navigationTabs.length, (index) {
+                          List.generate(widget.navigationTabs.length, (index) {
                         return _item(index, itemWidth);
                       })),
                   // 分割线（在最上层）
@@ -382,7 +384,8 @@ class _TBottomTabBarState extends State<TBottomTabBar>
               if (widget.placeholder) {
                 result = Container(
                   padding: EdgeInsets.only(bottom: safeAreaBottomHeight),
-                  color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
+                  color: widget.backgroundColor ??
+                      TTheme.of(context).bgColorContainer,
                   child: result,
                 );
               } else {
@@ -466,7 +469,7 @@ class _TBottomTabBarState extends State<TBottomTabBar>
 
     // 计算高度
     final height = widget.basicType == TBottomTabBarBasicType.text ||
-        widget.basicType == TBottomTabBarBasicType.expansionPanel
+            widget.basicType == TBottomTabBarBasicType.expansionPanel
         ? 32.0
         : null;
 
@@ -515,7 +518,7 @@ class _TBottomTabBarState extends State<TBottomTabBar>
 
     // 计算高度
     final height = widget.basicType == TBottomTabBarBasicType.text ||
-        widget.basicType == TBottomTabBarBasicType.expansionPanel
+            widget.basicType == TBottomTabBarBasicType.expansionPanel
         ? 32.0
         : null;
 
@@ -557,7 +560,7 @@ class _TBottomTabBarState extends State<TBottomTabBar>
           centerDistance: widget.centerDistance ?? 0,
           needInkWell: widget.needInkWell,
           showItemBackground:
-          widget.indicatorAnimation == TBottomTabBarIndicatorAnimation.none,
+              widget.indicatorAnimation == TBottomTabBarIndicatorAnimation.none,
           onTap: () {
             _onTap(index);
           },
@@ -670,8 +673,7 @@ class TBottomTabBarItemWithBadge extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             // 只在无动画模式下显示 item 自身的背景
-            if (showItemBackground &&
-                (isSelected || unselectedBgColor != null))
+            if (showItemBackground && (isSelected || unselectedBgColor != null))
               Visibility(
                 visible: componentType == TBottomTabBarComponentType.label,
                 child: Container(
@@ -709,8 +711,8 @@ class TBottomTabBarItemWithBadge extends StatelessWidget {
       BuildContext context, BadgeConfig? badgeConfig, bool isInOrOutCapsule) {
     Widget child = Container();
     if (basicType == TBottomTabBarBasicType.text) {
-      child = _textItem(context, itemConfig, isSelected,
-          TTheme.of(context).fontTitleMedium!);
+      child = _textItem(
+          context, itemConfig, isSelected, TTheme.of(context).fontTitleMedium!);
     }
     if (basicType == TBottomTabBarBasicType.expansionPanel) {
       if (itemConfig.popUpButtonConfig != null) {

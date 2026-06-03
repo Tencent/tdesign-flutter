@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
+
 import '../../../tdesign_flutter.dart';
 
 typedef TBarItemAction = void Function();
@@ -295,8 +297,7 @@ class TNavBarItem {
     this.iconSize = 24.0,
     this.padding,
     this.customWidget,
-    @Deprecated('Use customWidget instead')
-    this.iconWidget,
+    @Deprecated('Use customWidget instead') this.iconWidget,
   });
 
   Widget toWidget(BuildContext context, {bool isLeft = true}) =>
@@ -308,7 +309,8 @@ class TNavBarItem {
               (isLeft
                   ? EdgeInsets.only(right: TTheme.of(context).spacer8)
                   : EdgeInsets.only(left: TTheme.of(context).spacer8)),
-          child: customWidget ?? iconWidget ??
+          child: customWidget ??
+              iconWidget ??
               Icon(
                 icon,
                 size: iconSize,

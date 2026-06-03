@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
+
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
@@ -90,7 +92,10 @@ class _TButtonPageState extends State<TButtonPage> {
                   ),
                 );
               }),
-          ExampleItem(ignoreCode: true, desc: '组合按钮', builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
+          ExampleItem(
+              ignoreCode: true,
+              desc: '组合按钮',
+              builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
           ExampleItem(desc: '通栏按钮', builder: _buildFilledFillButton),
         ]),
         ExampleModule(title: '组件状态', children: [
@@ -233,7 +238,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 ),
               );
             }),
-        ExampleItem(ignoreCode: true, desc: '各种按钮状态测试', builder: _buildStatusDisplay),
+        ExampleItem(
+            ignoreCode: true, desc: '各种按钮状态测试', builder: _buildStatusDisplay),
         ExampleItem(
             ignoreCode: true,
             desc: '按钮中路由跳转',
@@ -243,7 +249,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 size: TButtonSize.large,
                 shape: TButtonShape.rectangle,
                 onTap: () async {
-                  var result = await Navigator.of(context).pushNamedAndRemoveUntil('divider', (router) {
+                  var result = await Navigator.of(context)
+                      .pushNamedAndRemoveUntil('divider', (router) {
                     return true;
                   });
                   print('pushNamedAndRemoveUntil result: $result');
@@ -725,7 +732,9 @@ class _TButtonPageState extends State<TButtonPage> {
           theme: TButtonTheme.primary,
           iconPosition: TButtonIconPosition.right,
           gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              colors: [Colors.red, Colors.blue],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
         ),
         TButton(
           text: '间距20',
@@ -737,7 +746,9 @@ class _TButtonPageState extends State<TButtonPage> {
           iconPosition: TButtonIconPosition.right,
           iconTextSpacing: 20,
           gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue], begin: Alignment.centerRight, end: Alignment.centerLeft),
+              colors: [Colors.red, Colors.blue],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft),
         )
       ],
     );
@@ -766,7 +777,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.primary,
-                style: TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
+                style: TButtonStyle.generateFillStyleByTheme(
+                    context, TButtonTheme.primary, TButtonStatus.active),
               ),
               const TButton(
                 icon: TIcons.app,
@@ -793,7 +805,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.light,
-                style: TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
+                style: TButtonStyle.generateFillStyleByTheme(
+                    context, TButtonTheme.light, TButtonStatus.active),
               ),
               const TButton(
                 icon: TIcons.app,
@@ -820,8 +833,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.defaultTheme,
-                style:
-                    TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.defaultTheme, TButtonStatus.active),
+                style: TButtonStyle.generateFillStyleByTheme(
+                    context, TButtonTheme.defaultTheme, TButtonStatus.active),
               ),
               const TButton(
                 icon: TIcons.app,
@@ -848,7 +861,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.danger,
-                style: TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
+                style: TButtonStyle.generateFillStyleByTheme(
+                    context, TButtonTheme.danger, TButtonStatus.active),
               ),
               const TButton(
                 icon: TIcons.app,
@@ -878,7 +892,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.primary,
-                style: TButtonStyle.generateOutlineStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
+                style: TButtonStyle.generateOutlineStyleByTheme(
+                    context, TButtonTheme.primary, TButtonStatus.active),
                 type: TButtonType.outline,
               ),
               const TButton(
@@ -908,7 +923,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.light,
-                style: TButtonStyle.generateOutlineStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
+                style: TButtonStyle.generateOutlineStyleByTheme(
+                    context, TButtonTheme.light, TButtonStatus.active),
                 type: TButtonType.outline,
               ),
               const TButton(
@@ -969,7 +985,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.danger,
-                style: TButtonStyle.generateOutlineStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
+                style: TButtonStyle.generateOutlineStyleByTheme(
+                    context, TButtonTheme.danger, TButtonStatus.active),
                 type: TButtonType.outline,
               ),
               const TButton(
@@ -1001,7 +1018,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.primary,
-                style: TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
+                style: TButtonStyle.generateTextStyleByTheme(
+                    context, TButtonTheme.primary, TButtonStatus.active),
                 type: TButtonType.text,
               ),
               const TButton(
@@ -1031,7 +1049,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.light,
-                style: TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
+                style: TButtonStyle.generateTextStyleByTheme(
+                    context, TButtonTheme.light, TButtonStatus.active),
                 type: TButtonType.text,
               ),
               const TButton(
@@ -1061,8 +1080,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.defaultTheme,
-                style:
-                    TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.defaultTheme, TButtonStatus.active),
+                style: TButtonStyle.generateTextStyleByTheme(
+                    context, TButtonTheme.defaultTheme, TButtonStatus.active),
                 type: TButtonType.text,
               ),
               const TButton(
@@ -1092,7 +1111,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.danger,
-                style: TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
+                style: TButtonStyle.generateTextStyleByTheme(
+                    context, TButtonTheme.danger, TButtonStatus.active),
                 type: TButtonType.text,
               ),
               const TButton(
@@ -1125,7 +1145,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.primary,
-                style: TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
+                style: TButtonStyle.generateGhostStyleByTheme(
+                    context, TButtonTheme.primary, TButtonStatus.active),
                 type: TButtonType.ghost,
               ),
               const TButton(
@@ -1156,7 +1177,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.light,
-                style: TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
+                style: TButtonStyle.generateGhostStyleByTheme(
+                    context, TButtonTheme.light, TButtonStatus.active),
                 type: TButtonType.ghost,
               ),
               const TButton(
@@ -1187,8 +1209,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.defaultTheme,
-                style:
-                    TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.defaultTheme, TButtonStatus.active),
+                style: TButtonStyle.generateGhostStyleByTheme(
+                    context, TButtonTheme.defaultTheme, TButtonStatus.active),
                 type: TButtonType.ghost,
               ),
               const TButton(
@@ -1219,7 +1241,8 @@ class _TButtonPageState extends State<TButtonPage> {
                 icon: TIcons.app,
                 text: 'Button',
                 theme: TButtonTheme.danger,
-                style: TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
+                style: TButtonStyle.generateGhostStyleByTheme(
+                    context, TButtonTheme.danger, TButtonStatus.active),
                 type: TButtonType.ghost,
               ),
               const TButton(

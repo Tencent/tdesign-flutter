@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import './t_progress_circular.dart';
@@ -380,8 +381,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       builder: (context, child) {
         final progressWidth = _animation.value * maxWidth;
         return ClipRRect(
-            borderRadius:
-                BorderRadius.circular(TTheme.of(context).radiusRound),
+            borderRadius: BorderRadius.circular(TTheme.of(context).radiusRound),
             child: Stack(
               children: [
                 _buildBackgroundContainer(),

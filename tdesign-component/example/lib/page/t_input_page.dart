@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
@@ -467,22 +467,27 @@ class _TInputViewPageState extends State<TInputViewPage> {
           contextMenuBuilder: (context, editableTextState) {
             final List<ContextMenuButtonItem> buttonItems =
                 editableTextState.contextMenuButtonItems;
-            if (!buttonItems.any((item) => item.type == ContextMenuButtonType.copy)) {
-              buttonItems.insert(0, ContextMenuButtonItem(
-                onPressed: () {
-                  final selection = editableTextState.textEditingValue.selection;
-                  final text = editableTextState.textEditingValue.text;
-                  if (selection.isValid && !selection.isCollapsed) {
-                    final selectedText = text.substring(selection.start, selection.end);
-                    Clipboard.setData(ClipboardData(text: selectedText));
-                  } else {
-                    // 如果没有选中文本，则复制全部
-                    Clipboard.setData(ClipboardData(text: text));
-                  }
-                  editableTextState.hideToolbar();
-                },
-                type: ContextMenuButtonType.copy,
-              ));
+            if (!buttonItems
+                .any((item) => item.type == ContextMenuButtonType.copy)) {
+              buttonItems.insert(
+                  0,
+                  ContextMenuButtonItem(
+                    onPressed: () {
+                      final selection =
+                          editableTextState.textEditingValue.selection;
+                      final text = editableTextState.textEditingValue.text;
+                      if (selection.isValid && !selection.isCollapsed) {
+                        final selectedText =
+                            text.substring(selection.start, selection.end);
+                        Clipboard.setData(ClipboardData(text: selectedText));
+                      } else {
+                        // 如果没有选中文本，则复制全部
+                        Clipboard.setData(ClipboardData(text: text));
+                      }
+                      editableTextState.hideToolbar();
+                    },
+                    type: ContextMenuButtonType.copy,
+                  ));
             }
             return AdaptiveTextSelectionToolbar.buttonItems(
               anchors: editableTextState.contextMenuAnchors,

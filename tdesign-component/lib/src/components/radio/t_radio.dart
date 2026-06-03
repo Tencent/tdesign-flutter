@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/auto_size.dart';
@@ -263,8 +264,7 @@ class TRadioGroup extends TCheckboxGroup {
               // if use cardMode at TRadioGroup, then every TRadio should
               // set it's own carMode to true.
               if (element.cardMode == false) {
-                throw FlutterError(
-                    'if use cardMode at TRadioGroup, then every '
+                throw FlutterError('if use cardMode at TRadioGroup, then every '
                     'TRadio should set it\'s own carMode to true.');
               }
               if (element.subTitle != null && direction == Axis.horizontal) {
@@ -350,8 +350,8 @@ class TRadioGroup extends TCheckboxGroup {
                                       if (end > directionalTdRadios.length) {
                                         end = directionalTdRadios.length;
                                       }
-                                      var subList = directionalTdRadios
-                                          .sublist(start, end);
+                                      var subList = directionalTdRadios.sublist(
+                                          start, end);
                                       return Row(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:

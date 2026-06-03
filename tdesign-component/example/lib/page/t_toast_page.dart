@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/src/util/auto_size.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
@@ -38,7 +39,8 @@ class TToastPage extends StatelessWidget {
       test: [
         ExampleItem(desc: '禁止滚动+点击', builder: _preventTapToast),
         ExampleItem(desc: '自定义宽度+行数', builder: _customMultipleToast),
-        ExampleItem(desc: 'Long Text Success Toast', builder: _longTextSuccessToast),
+        ExampleItem(
+            desc: 'Long Text Success Toast', builder: _longTextSuccessToast),
       ],
     );
   }

@@ -6,14 +6,13 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
-import '../page/t_theme_page.dart';
 import '../provider/theme_mode_provider.dart';
-import 'syntax_highlighter.dart';
-import 'api_widget.dart';
 import 'example_base.dart';
 import 'example_route.dart';
 import 'notification_center.dart';
+import 'syntax_highlighter.dart';
 import 'web_md_tool.dart';
 
 var navBarkey = GlobalKey();

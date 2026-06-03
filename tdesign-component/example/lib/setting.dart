@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import 'l10n/app_localizations.dart';
 import 'provider/locale_provider.dart';
@@ -45,9 +46,9 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-
     themeModeProvider = Provider.of<ThemeModeProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
+
     /// 获取系统主题
     systemBrightness = MediaQuery.platformBrightnessOf(context);
     return Scaffold(
@@ -68,46 +69,46 @@ class _SettingPageState extends State<SettingPage> {
                   }),
             ],
           ),
-        TCellGroup(
-          theme: TCellGroupTheme.cardTheme,
-          title: '暗色模式',
-          cells: [
-            TCell(
-              title: '跟随系统',
-              description: '开启后，将跟随系统打开或关闭深色模式。',
-              rightIconWidget: TSwitch(
-                isOn: themeModeProvider.themeMode == ThemeMode.system,
-                onChanged: (isOn) {
-                  if (isOn) {
-                    themeModeProvider.themeMode = ThemeMode.system;
-                  } else if (systemBrightness == Brightness.dark) {
-                    themeModeProvider.themeMode = ThemeMode.dark;
-                  } else {
-                    themeModeProvider.themeMode = ThemeMode.light;
-                  }
-                  return isOn;
+          TCellGroup(
+            theme: TCellGroupTheme.cardTheme,
+            title: '暗色模式',
+            cells: [
+              TCell(
+                title: '跟随系统',
+                description: '开启后，将跟随系统打开或关闭深色模式。',
+                rightIconWidget: TSwitch(
+                  isOn: themeModeProvider.themeMode == ThemeMode.system,
+                  onChanged: (isOn) {
+                    if (isOn) {
+                      themeModeProvider.themeMode = ThemeMode.system;
+                    } else if (systemBrightness == Brightness.dark) {
+                      themeModeProvider.themeMode = ThemeMode.dark;
+                    } else {
+                      themeModeProvider.themeMode = ThemeMode.light;
+                    }
+                    return isOn;
+                  },
+                ),
+                disabled: true,
+              ),
+              TCell(
+                title: '浅色模式',
+                leftIcon: TIcons.mode_light,
+                rightIcon: enabledModeCheckIcon(ThemeMode.light),
+                onClick: (cell) {
+                  themeModeProvider.themeMode = ThemeMode.light;
                 },
               ),
-              disabled: true,
-            ),
-            TCell(
-              title: '浅色模式',
-              leftIcon: TIcons.mode_light,
-              rightIcon: enabledModeCheckIcon(ThemeMode.light),
-              onClick: (cell) {
-                themeModeProvider.themeMode = ThemeMode.light;
-              },
-            ),
-            TCell(
-              title: '深色模式',
-              leftIcon: TIcons.mode_dark,
-              rightIcon: enabledModeCheckIcon(ThemeMode.dark),
-              onClick: (cell) {
-                themeModeProvider.themeMode = ThemeMode.dark;
-              },
-            ),
-          ],
-        ),
+              TCell(
+                title: '深色模式',
+                leftIcon: TIcons.mode_dark,
+                rightIcon: enabledModeCheckIcon(ThemeMode.dark),
+                onClick: (cell) {
+                  themeModeProvider.themeMode = ThemeMode.dark;
+                },
+              ),
+            ],
+          ),
           TCellGroup(
             title: AppLocalizations.of(context)?.about ?? '关于我们',
             theme: TCellGroupTheme.cardTheme,
@@ -127,11 +128,11 @@ class _SettingPageState extends State<SettingPage> {
 
   enabledModeCheckIcon(ThemeMode mode) {
     return themeModeProvider.themeMode == mode ||
-        (themeModeProvider.themeMode == ThemeMode.system &&
-            systemBrightness ==
-                (mode == ThemeMode.light
-                    ? Brightness.light
-                    : Brightness.dark))
+            (themeModeProvider.themeMode == ThemeMode.system &&
+                systemBrightness ==
+                    (mode == ThemeMode.light
+                        ? Brightness.light
+                        : Brightness.dark))
         ? TIcons.check
         : null;
   }

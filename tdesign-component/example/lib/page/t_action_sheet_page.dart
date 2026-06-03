@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
+
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
@@ -268,7 +270,9 @@ Widget _buildItemDescriptionListActionSheet(BuildContext context) {
       TActionSheet(
         context,
         visible: true,
-        items: _nums.map((e) => TActionSheetItem(label: '选项$e',description: '描述$e')).toList(),
+        items: _nums
+            .map((e) => TActionSheetItem(label: '选项$e', description: '描述$e'))
+            .toList(),
       );
     },
   );
@@ -458,8 +462,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
             icon: Image.asset('assets/img/t_action_sheet_1.png'),
             badge: const TBadge(TBadgeType.message, count: 'NEW')),
         TActionSheetItem(
-            label: '朋友圈',
-            icon: Image.asset('assets/img/t_action_sheet_2.png')),
+            label: '朋友圈', icon: Image.asset('assets/img/t_action_sheet_2.png')),
         TActionSheetItem(
             label: 'QQ', icon: Image.asset('assets/img/t_action_sheet_3.png')),
         TActionSheetItem(

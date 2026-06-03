@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
@@ -11,9 +12,7 @@ import 'l10n/app_localizations.dart';
 var _kShowTodoComponent = false;
 
 /// 切换主题的回调
-typedef OnThemeChange = Function(
-  TThemeData themeData
-);
+typedef OnThemeChange = Function(TThemeData themeData);
 
 /// 切换语言的回调
 typedef OnLocaleChange = Function(Locale locale);
@@ -65,7 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.only(
                       right: 16,
                     ),
-                    child: Icon(TIcons.setting, color: TTheme.of(context).whiteColor1,),
+                    child: Icon(
+                      TIcons.setting,
+                      color: TTheme.of(context).whiteColor1,
+                    ),
                   ),
                   onTap: () {
                     focusNode.unfocus();
@@ -93,8 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           text: AppLocalizations.of(context)?.defaultTheme,
                           theme: TButtonTheme.primary,
                           onTap: () async {
-                            widget.onThemeChange?.call(
-                                TThemeData.defaultData());
+                            widget.onThemeChange
+                                ?.call(TThemeData.defaultData());
                           },
                         ),
                       ),
@@ -108,7 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             var jsonString = await rootBundle
                                 .loadString('assets/theme.json');
                             var themeData = TThemeData.fromJson(
-                                    'green', jsonString, darkName: 'greenDark') ??
+                                    'green', jsonString,
+                                    darkName: 'greenDark') ??
                                 TThemeData.defaultData();
                             widget.onThemeChange?.call(
                               themeData,
@@ -125,9 +128,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () async {
                             var jsonString = await rootBundle
                                 .loadString('assets/theme.json');
-                            var themeData =
-                                TThemeData.fromJson('red', jsonString, darkName: 'redDark') ??
-                                    TThemeData.defaultData();
+                            var themeData = TThemeData.fromJson(
+                                    'red', jsonString,
+                                    darkName: 'redDark') ??
+                                TThemeData.defaultData();
                             widget.onThemeChange?.call(
                               themeData,
                             );

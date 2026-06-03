@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
+
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
@@ -224,13 +226,10 @@ class TNavBarPage extends StatelessWidget {
         screenAdaptation: false,
         leftBarItems: [
           TNavBarItem(
-              icon: TIcons.chevron_left,
-              iconSize: 24,
-              iconColor: Colors.white),
+              icon: TIcons.chevron_left, iconSize: 24, iconColor: Colors.white),
         ],
         rightBarItems: [
-          TNavBarItem(
-              icon: TIcons.home, iconSize: 24, iconColor: Colors.white),
+          TNavBarItem(icon: TIcons.home, iconSize: 24, iconColor: Colors.white),
           TNavBarItem(
               icon: TIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
         ]);

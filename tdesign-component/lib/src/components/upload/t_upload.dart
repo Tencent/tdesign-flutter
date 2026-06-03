@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 
@@ -66,29 +68,29 @@ typedef TUploadValueChangedEvent = void Function(
 typedef TUploadValidatorEvent = void Function(TUploadValidatorError e);
 
 class TUpload extends StatefulWidget {
-  const TUpload({
-    Key? key,
-    this.max = 0,
-    this.mediaType = const [TUploadMediaType.image, TUploadMediaType.video],
-    this.sizeLimit,
-    this.onCancel,
-    this.onError,
-    this.onValidate,
-    this.onClick,
-    this.onMaxLimitReached,
-    required this.files,
-    this.onChange,
-    this.multiple = false,
-    this.width = 80.0,
-    this.height = 80.0,
-    this.type = TUploadBoxType.roundedSquare,
-    this.disabled = false,
-    this.enabledReplaceType = false,
-    this.wrapSpacing,
-    this.wrapRunSpacing,
-    this.wrapAlignment,
-    this.onUploadTap
-  }) : super(key: key);
+  const TUpload(
+      {Key? key,
+      this.max = 0,
+      this.mediaType = const [TUploadMediaType.image, TUploadMediaType.video],
+      this.sizeLimit,
+      this.onCancel,
+      this.onError,
+      this.onValidate,
+      this.onClick,
+      this.onMaxLimitReached,
+      required this.files,
+      this.onChange,
+      this.multiple = false,
+      this.width = 80.0,
+      this.height = 80.0,
+      this.type = TUploadBoxType.roundedSquare,
+      this.disabled = false,
+      this.enabledReplaceType = false,
+      this.wrapSpacing,
+      this.wrapRunSpacing,
+      this.wrapAlignment,
+      this.onUploadTap})
+      : super(key: key);
 
   /// 控制展示的文件列表
   final List<TUploadFile> files;

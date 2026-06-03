@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
@@ -76,8 +77,10 @@ class _TBottomTabBarPageState extends State<TBottomTabBarPage> {
         ExampleItem(desc: '外部设置tabbar的选中项', builder: _setCurrentIndexToTabBar),
         ExampleItem(desc: 'onTap支持重复触发', builder: _allowMultipleTaps),
         ExampleItem(desc: '支持水波纹效果', builder: _needInkWellTabBar),
-        ExampleItem(desc: 'tabbar切换线性滑动效果', builder: _indicatorLinearAnimationTabBar),
-        ExampleItem(desc: 'tabbar切换弹性动画效果', builder: _indicatorElasticAnimationTabBar),
+        ExampleItem(
+            desc: 'tabbar切换线性滑动效果', builder: _indicatorLinearAnimationTabBar),
+        ExampleItem(
+            desc: 'tabbar切换弹性动画效果', builder: _indicatorElasticAnimationTabBar),
       ],
     );
   }

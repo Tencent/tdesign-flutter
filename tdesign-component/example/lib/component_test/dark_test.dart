@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../l10n/app_localizations.dart';
 import '../provider/theme_mode_provider.dart';
@@ -18,11 +19,14 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
+
   /// 开启多套主题功能
   TTheme.needMultiTheme(true);
+
   /// 默认浅色主题,dark为深色主题
-  themeData = TThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
-      TTheme.defaultData();
+  themeData =
+      TThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
+          TTheme.defaultData();
 
   runApp(const App());
 }
@@ -57,13 +61,15 @@ class App extends StatelessWidget {
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
                 barBackgroundColor: themeData.bgColorContainer.withOpacity(0.5),
               ),
+
               /// ... 更多重载主题
             ),
 
             /// 深色模式
             darkTheme: themeData.systemThemeDataDark?.copyWith(
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-                barBackgroundColor: themeData.dark?.grayColor13.withOpacity(0.5),
+                barBackgroundColor:
+                    themeData.dark?.grayColor13.withOpacity(0.5),
               ),
 
               /// ... 更多重载主题

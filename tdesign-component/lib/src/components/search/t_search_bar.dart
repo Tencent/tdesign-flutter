@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
@@ -130,8 +131,7 @@ class TSearchBar extends StatefulWidget {
   State<StatefulWidget> createState() => _TSearchBarState();
 }
 
-class _TSearchBarState extends State<TSearchBar>
-    with TickerProviderStateMixin {
+class _TSearchBarState extends State<TSearchBar> with TickerProviderStateMixin {
   late FocusNode focusNode = FocusNode();
   final TextEditingController controller = TextEditingController();
   final GlobalKey _textFieldKey = GlobalKey();
@@ -250,10 +250,9 @@ class _TSearchBarState extends State<TSearchBar>
                           autofocus: widget.autoFocus,
                           cursorColor: TTheme.of(context).brandNormalColor,
                           cursorHeight: widget.cursorHeight,
-                          textAlign:
-                              widget.alignment == TSearchAlignment.center
-                                  ? TextAlign.center
-                                  : TextAlign.left,
+                          textAlign: widget.alignment == TSearchAlignment.center
+                              ? TextAlign.center
+                              : TextAlign.left,
                           focusNode: focusNode,
                           onTap: widget.onInputClick,
                           onChanged: widget.onTextChanged,

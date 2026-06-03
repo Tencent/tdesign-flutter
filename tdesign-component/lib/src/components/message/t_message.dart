@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/binding.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
 
@@ -414,8 +414,8 @@ class _TMessageState extends State<TMessage> with TickerProviderStateMixin {
                 padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
                 decoration: BoxDecoration(
                     color: TTheme.of(context).bgColorContainer,
-                    borderRadius: BorderRadius.circular(
-                        TTheme.of(context).radiusDefault),
+                    borderRadius:
+                        BorderRadius.circular(TTheme.of(context).radiusDefault),
                     boxShadow: TTheme.of(context).shadowsMiddle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

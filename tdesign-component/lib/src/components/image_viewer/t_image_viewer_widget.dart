@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../navbar/t_nav_bar.dart';
 
 typedef OnIndexChange = Function(int index);
 typedef OnClose = Function(int index);
@@ -333,8 +332,8 @@ class _TImageViewerWidgetState extends State<TImageViewerWidget> {
         ),
         SafeArea(
           child: Container(
-            color: widget.navBarBgColor ??
-                TTheme.of(context).textColorPlaceholder,
+            color:
+                widget.navBarBgColor ?? TTheme.of(context).textColorPlaceholder,
             height: 44,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
