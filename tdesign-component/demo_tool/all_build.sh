@@ -11,8 +11,6 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/divider/t_divider.dart" --name TDivider --folder-name divider --output "$PARENT_DIR/example/assets/api/" --only-api
 # fab
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/fab/t_fab.dart" --name TFab --folder-name fab --output "$PARENT_DIR/example/assets/api/" --only-api
-# icon
-dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/icon/t_icons.dart" --name TIcons --folder-name icon --output "$PARENT_DIR/example/assets/api/" --only-api
 # link
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/link/t_link.dart" --name TLink --folder-name link --output "$PARENT_DIR/example/assets/api/" --only-api
 # text
