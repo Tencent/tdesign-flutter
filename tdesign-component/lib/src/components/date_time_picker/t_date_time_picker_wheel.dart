@@ -15,7 +15,7 @@ import 't_date_time_picker_model.dart';
 
 /// 日期/时间专用多列滚轮（@internal）。
 ///
-/// 列联动、options 局部更新均在内部完成，滚动时不触发外层 [setState]。
+/// 列联动、options 局部更新均在内部完成，滚动时不触发外层 `setState`。
 @internal
 class DateTimePickerWheel extends StatefulWidget {
   const DateTimePickerWheel({

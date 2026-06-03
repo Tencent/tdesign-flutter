@@ -26,10 +26,10 @@ abstract class DateTimePickerMode {
 // 回调结果
 // =============================================================================
 
-/// [TDateTimePicker.onChange] 返回值；`null` 字段表示当前 mode 不含该列。
+/// `TDateTimePicker.onChange` 返回值；`null` 字段表示当前 mode 不含该列。
 ///
-/// 初始化 [TDateTimePicker.initialValue]、[start]、[end] 时仅传相关字段即可；
-/// 提交后端时使用 [toDateTime]，partial 值须显式传入 [fallback]。
+/// 初始化 `TDateTimePicker.initialValue`、`start`、`end` 时仅传相关字段即可；
+/// 提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 @immutable
 class TDateTimePickerValue {
   /// 创建选中值，仅传当前 mode 涉及的字段。

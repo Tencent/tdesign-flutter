@@ -11,7 +11,7 @@ part of 't_date_time_picker_internal.dart';
 ///
 /// - 任何中间派生值（picker initial values / picker columns / 回调结果）
 ///   都是 snapshot 的派生方法，单一真相源；
-/// - 用户选了新值时，调用 [applySelection] 得到一个**新的** snapshot；
+/// - 用户选了新值时，调用 `applySelection` 得到一个**新的** snapshot；
 ///   旧 snapshot 与新 snapshot 之间用 `==` 比较即可决定是否需要 setState。
 @internal
 @immutable
@@ -60,24 +60,24 @@ class DateTimePickerSnapshot {
     );
   }
 
-  /// 显示的列结构（按显示顺序，与 [DateTimePickerMode.columns] 等价）。
+  /// 显示的列结构（按显示顺序，与 `DateTimePickerMode.columns` 等价）。
   final List<DateTimeColumn> columns;
 
   /// 当前选中的完整 [DateTime]。
   final DateTime current;
 
-  /// 年列默认 ±[_kDefaultYearOffset] 范围的锚定年份（打开时确定，随滚动不变）。
+  /// 年列默认 ±`defaultYearOffset` 范围的锚定年份（打开时确定，随滚动不变）。
   ///
-  /// 仅当未提供 [start]/[end] 的年边界时使用；避免 `current.year ± 10` 随滚动漂移。
+  /// 仅当未提供 `start`/`end` 的年边界时使用；避免 `current.year ± 10` 随滚动漂移。
   final int yearAnchor;
 
-  /// 各列对应的选中值数组（顺序与 [columns] 一致）。
-  /// 等价于把 [current] 按 [columns] 投影一遍。
+  /// 各列对应的选中值数组（顺序与 `columns` 一致）。
+  /// 等价于把 `current` 按 `columns` 投影一遍。
   final List<int> values;
 
-  /// 将 [TPicker] 回调中的原始值列表规范为 `int`（与 [columns] 长度对齐）。
+  /// 将 `TPicker` 回调中的原始值列表规范为 `int`（与 `columns` 长度对齐）。
   ///
-  /// 列 value 约定为 `int`；若收到 [num] 会取整。类型不符时抛出 [ArgumentError]。
+  /// 列 value 约定为 `int`；若收到 `num` 会取整。类型不符时抛出 `ArgumentError`。
   static List<int> coerceRawValues(
     List<dynamic> raw, {
     required int expectedLength,
@@ -154,12 +154,12 @@ class DateTimePickerSnapshot {
 
   /// 根据当前快照计算 `TPickerColumns`（给 picker 的 items）。
   ///
-  /// 各列范围在 `[start, end]` 闭区间内按当前选中上下文收紧（见 [columnBounds]）。
-  /// 仅含时间列时，按 [start]/[end] 的时钟分量收紧。
+  /// 各列范围在 `[start, end]` 闭区间内按当前选中上下文收紧（见 `columnBounds`）。
+  /// 仅含时间列时，按 `start`/`end` 的时钟分量收紧。
   ///
-  /// [showWeek] 为 `true` 时，**日列**的默认 label 追加星期（如 "19日 周六"）。
-  /// [renderLabel] 返回非 null 时优先于默认文案；日列返回非 null 时不追加星期。
-  /// [labels] 缺省时使用 [DateTimePickerLabels.defaults]。
+  /// `showWeek` 为 `true` 时，**日列**的默认 label 追加星期（如 "19日 周六"）。
+  /// `renderLabel` 返回非 null 时优先于默认文案；日列返回非 null 时不追加星期。
+  /// `labels` 缺省时使用 `DateTimePickerLabels.defaults`。
   TPickerColumns toPickerColumns({
     DateTime? start,
     DateTime? end,
@@ -215,7 +215,7 @@ class DateTimePickerSnapshot {
     );
   }
 
-  /// 转换为业务侧的 [TDateTimePickerValue]。
+  /// 转换为业务侧的 `TDateTimePickerValue`。
   TDateTimePickerValue toResult() {
     int? y, m, d, h, mi, s;
     for (var i = 0; i < columns.length; i++) {
@@ -245,9 +245,9 @@ class DateTimePickerSnapshot {
     );
   }
 
-  /// 判断从 [other] → `this`，picker 的列结构是否需要重建。
+  /// 判断从 `other` → `this`，picker 的列结构是否需要重建。
   ///
-  /// 等价于 [columnIndicesWithChangedOptions] 非空（保留旧 API 语义）。
+  /// 等价于 `columnIndicesWithChangedOptions` 非空（保留旧 API 语义）。
   bool needsColumnRebuildFrom(
     DateTimePickerSnapshot other, {
     bool showWeek = false,
@@ -261,9 +261,9 @@ class DateTimePickerSnapshot {
         end: end,
       ).isNotEmpty;
 
-  /// 从 [other] → `this` 时，选项列表发生变化的列索引（按 [columns] 顺序）。
+  /// 从 `other` → `this` 时，选项列表发生变化的列索引（按 `columns` 顺序）。
   ///
-  /// 依据各列 [columnBounds] 是否变化；[showWeek] 时日列在年/月/日任一变化时也会重建 label（星期随完整日期变化）。
+  /// 依据各列 `columnBounds` 是否变化；`showWeek` 时日列在年/月/日任一变化时也会重建 label（星期随完整日期变化）。
   Set<int> columnIndicesWithChangedOptions(
     DateTimePickerSnapshot other, {
     bool showWeek = false,

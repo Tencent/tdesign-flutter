@@ -1,4 +1,4 @@
-/// 滚轮列标识，用于 [DateTimePickerRenderLabel] 回调与 [DateTimePickerMode] 列展开。
+/// 滚轮列标识，用于 `DateTimePickerRenderLabel` 回调与 `DateTimePickerMode` 列展开。
 enum DateTimeColumn {
   /// 年列。
   year,

@@ -2,12 +2,11 @@
 // 枚举：日期·时间粒度 / 步进
 // =============================================================================
 
-import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 import 't_date_time_picker_column.dart';
 
-/// 日期段粒度，用于 [DateTimePickerMode] 的 [DateMode] 参数。
+/// 日期段粒度，用于 `DateTimePickerMode` 的 `DateMode` 参数。
 enum DateMode {
   /// 年。
   year,
@@ -19,7 +18,7 @@ enum DateMode {
   date,
 }
 
-/// 时间段粒度，用于 [DateTimePickerMode] 的 [TimeMode] 参数。
+/// 时间段粒度，用于 `DateTimePickerMode` 的 `TimeMode` 参数。
 enum TimeMode {
   /// 时。
   hour,

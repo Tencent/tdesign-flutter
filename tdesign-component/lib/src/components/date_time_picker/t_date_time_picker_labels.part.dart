@@ -2,14 +2,14 @@ part of 't_date_time_picker_internal.dart';
 
 /// 自定义滚轮列展示文案；返回 null 时使用默认文案。
 typedef DateTimePickerRenderLabel = String? Function(
-  /// 当前列，见 [DateTimeColumn]。
+  /// 当前列，见 `DateTimeColumn`。
   DateTimeColumn column,
 
   /// 列数值。
   int value,
 );
 
-/// [TDateTimePickerValue.toDateTime] 未传 fallback 时的缺省补齐值。
+/// `TDateTimePickerValue.toDateTime` 未传 fallback 时的缺省补齐值。
 @internal
 final kDateTimePickerDefaultFallback = DateTime(2000, 1, 1);
 
@@ -18,12 +18,12 @@ final kDateTimePickerDefaultFallback = DateTime(2000, 1, 1);
 // =============================================================================
 //
 // 业务方通过 `DateTimePickerMode(dateMode: ..., timeMode: ...)` 访问；
-// [CombinedMode] 不应直接构造。整个文件 **不被 umbrella 导出**。
+// `CombinedMode` 不应直接构造。整个文件 **不被 umbrella 导出**。
 
-/// [TDateTimePicker] 各列默认 label 的文案配置（@internal）。
+/// `TDateTimePicker` 各列默认 label 的文案配置（@internal）。
 ///
-/// build 时由 [fromResource] 从 [TResourceDelegate] 生成；缺省文案见
-/// [TResourceManager.defaultDelegate]（[_DefaultResourceDelegate]）。
+/// build 时由 `fromResource` 从 `TResourceDelegate` 生成；缺省文案见
+/// `TResourceManager.defaultDelegate`（`_DefaultResourceDelegate`）。
 @internal
 @immutable
 class DateTimePickerLabels {
@@ -32,7 +32,7 @@ class DateTimePickerLabels {
     required this.weekLabels,
   });
 
-  /// 未注入 [TResourceManager.setResourceBuilder] 时的 label（派生自 [_DefaultResourceDelegate]）。
+  /// 未注入 `TResourceManager.setResourceBuilder` 时的 label（派生自 `_DefaultResourceDelegate`）。
   static final DateTimePickerLabels defaults =
       DateTimePickerLabels.fromResource(TResourceManager.defaultDelegate);
 
@@ -109,13 +109,13 @@ class CombinedMode implements DateTimePickerMode {
   int get hashCode => Object.hash(date, time);
 }
 
-/// 包内读取 [DateTimePickerMode] 展开后的列列表。
+/// 包内读取 `DateTimePickerMode` 展开后的列列表。
 @internal
 extension DateTimePickerModeColumns on DateTimePickerMode {
   List<DateTimeColumn> get columns => (this as CombinedMode).columns;
 }
 
-/// 把 bool 列开关展开为 [DateTimeColumn] 序列（供 Calendar [DatePickerModel] 使用）。
+/// 把 bool 列开关展开为 `DateTimeColumn` 序列（供 Calendar `DatePickerModel` 使用）。
 @internal
 List<DateTimeColumn> dateTimeColumnsFromPickerFlags({
   required bool useYear,
@@ -147,7 +147,7 @@ List<DateTimeColumn> dateTimeColumnsFromPickerFlags({
   return cols;
 }
 
-/// 把日期粒度 + 时间粒度展开成 [DateTimeColumn] 序列。
+/// 把日期粒度 + 时间粒度展开成 `DateTimeColumn` 序列。
 List<DateTimeColumn> _expand(DateMode? date, TimeMode? time) {
   final cols = <DateTimeColumn>[];
   switch (date) {

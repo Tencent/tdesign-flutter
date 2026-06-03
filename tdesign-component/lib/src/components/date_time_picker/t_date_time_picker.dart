@@ -14,15 +14,15 @@ export 't_date_time_picker_model.dart';
 
 /// 日期/时间滚轮选择器。
 ///
-/// 纯滚轮组件：不含工具栏、确认按钮或弹窗；选中变化通过 [onChange] 实时回调
-///（无 [TPicker.onConfirm] 语义）。弹窗与确认请配合 [TPopup] 等自行组装。
+/// 纯滚轮组件：不含工具栏、确认按钮或弹窗；选中变化通过 `onChange` 实时回调
+///（无 `TPicker.onConfirm` 语义）。弹窗与确认请配合 `TPopup` 等自行组装。
 ///
-/// [initialValue] 为非受控初始值；外部重置选中请变更 [initialValue] 或 [key]。
-/// 与 [TPicker] 不同，本组件不提供受控 `value` 参数。
+/// `initialValue` 为非受控初始值；外部重置选中请变更 `initialValue` 或 `key`。
+/// 与 `TPicker` 不同，本组件不提供受控 `value` 参数。
 class TDateTimePicker extends StatefulWidget {
   /// 创建日期/时间选择器。
   ///
-  /// [mode] 默认年月日；[height] 默认 200；[itemCount] 默认 5。
+  /// `mode` 默认年月日；`height` 默认 200；`itemCount` 默认 5。
   TDateTimePicker({
     super.key,
     DateTimePickerMode? mode,
@@ -37,16 +37,16 @@ class TDateTimePicker extends StatefulWidget {
     this.itemCount,
   }) : mode = mode ?? DateTimePickerMode(dateMode: DateMode.date);
 
-  /// 滚轮列结构；通过 [DateTimePickerMode] 组合 [DateMode]、[TimeMode]，默认年月日。
+  /// 滚轮列结构；通过 `DateTimePickerMode` 组合 `DateMode`、`TimeMode`，默认年月日。
   final DateTimePickerMode mode;
 
-  /// 自定义列展示文案；`column` 为 [DateTimeColumn]，`value` 为数值，返回 null 用默认文案。
+  /// 自定义列展示文案；`column` 为 `DateTimeColumn`，`value` 为数值，返回 null 用默认文案。
   final DateTimePickerRenderLabel? renderLabel;
 
-  /// 可选范围下限，类型同 [initialValue]。
+  /// 可选范围下限，类型同 `initialValue`。
   final TDateTimePickerValue? start;
 
-  /// 可选范围上限，类型同 [initialValue]。
+  /// 可选范围上限，类型同 `initialValue`。
   final TDateTimePickerValue? end;
 
   /// 各列选项步进。
@@ -58,7 +58,7 @@ class TDateTimePicker extends StatefulWidget {
   /// 日列是否显示星期，默认 false。
   final bool showWeek;
 
-  /// 选中值变化回调（滚动实时触发，无确认语义），返回 [TDateTimePickerValue]。
+  /// 选中值变化回调（滚动实时触发，无确认语义），返回 `TDateTimePickerValue`。
   final void Function(TDateTimePickerValue result)? onChange;
 
   /// 滚轮视窗高度，默认 200。
