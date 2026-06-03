@@ -8,11 +8,17 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+`tdesign_flutter` 中已引入 [`tdesign_icons`](https://pub.dev/packages/tdesign_icons) 图标库，无需额外安装，直接使用即可：
 
 ```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart';
 ```
+
+当然，你也可以在不使用 `tdesign_flutter` 组件库的情况下，单独使用 [`tdesign_icons`](https://pub.dev/packages/tdesign_icons) 图标库。
+
+所有图标详见TDesign官网: https://tdesign.tencent.com/icons
+
+注：需将icon名称改为下划线形式，如：`logo-tdesign` 对应 `TIcons.logo_tdesign`。
 
 ## 代码演示
 

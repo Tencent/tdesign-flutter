@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'example_base.dart';
 import 'example_widget.dart';
@@ -27,7 +26,7 @@ class WebMdTool {
       var exampleCodeSb = StringBuffer();
       var count = 1;
       if (singleChild != null) {
-        await writeSingleCode(exampleCodeSb, exampleCodeGroup,pageName);
+        await writeSingleCode(exampleCodeSb, exampleCodeGroup, pageName);
       } else {
         for (var module in exampleModuleList) {
           exampleCodeSb.writeln('### $count ${module.title}');
@@ -47,14 +46,19 @@ class WebMdTool {
       } catch (e) {
         print(e);
       }
-      var mdContent = _getTemplate(model.text, description,
-          model.spline ?? 'other', exampleCodeSb.toString(), api.toString(), pageName);
-      print('生成演示代码成功：\n${mdContent.substring(0,50)}...');
+      var mdContent = _getTemplate(
+          model.text,
+          description,
+          model.spline ?? 'other',
+          exampleCodeSb.toString(),
+          api.toString(),
+          pageName);
+      print('生成演示代码成功：\n${mdContent.substring(0, 50)}...');
 
-      var path = "";
-      if(Platform.environment['FLUTTER_TEST'] == 'true'){
-
-        var baseDir = Platform.script.toFilePath().split('/tdesign-component')[0];
+      var path = '';
+      if (Platform.environment['FLUTTER_TEST'] == 'true') {
+        var baseDir =
+            Platform.script.toFilePath().split('/tdesign-component')[0];
         path = '$baseDir/tdesign-site/src/${model.name}/README.md';
         // path = '$baseDir/test/src/${model.name}/README.md';
         // File
@@ -69,8 +73,8 @@ class WebMdTool {
     }
   }
 
-  static Future<void> writeSingleCode(
-      StringBuffer exampleCodeSb, String? exampleCodeGroup, String? pageName) async {
+  static Future<void> writeSingleCode(StringBuffer exampleCodeSb,
+      String? exampleCodeGroup, String? pageName) async {
     var hasCodeSuccess = false;
 
     var list = manualExampleCode[exampleCodeGroup];
@@ -184,22 +188,14 @@ class WebMdTool {
     return '';
   }
 
-  static String getSpline(String key) {
-    switch (key) {
-      case '基础':
-        return 'base';
-      case '导航':
-        return 'base';
-      case '输入':
-        return 'base';
-      case '数据展示':
-        return 'base';
-      case '反馈':
-        return 'base';
-      default:
-        return 'other';
-    }
-  }
+  static String getSpline(String key) => switch (key) {
+        '基础' => 'base',
+        '导航' => 'navigation',
+        '输入' => 'form',
+        '数据展示' => 'data',
+        '反馈' => 'message',
+        _ => 'other',
+      };
 
   static String getItemKey(exampleCodeGroup, moduleTitle, itemDesc) {
     return '${exampleCodeGroup}_${moduleTitle}_${itemDesc}';
@@ -211,7 +207,7 @@ class WebMdTool {
     String spline,
     String exampleCode,
     String api,
-      String pageName,
+    String pageName,
   ) =>
       '''
 ---
@@ -224,11 +220,7 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
-
-```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart';${_getExtraImport(title)}
-```
+${_getImport(title)}
 
 ## 代码演示
 
@@ -242,22 +234,46 @@ ${api}
 
   static var manualExampleCode = <String, List<String>>{};
 
+  static _getImport(String title) {
+    if (title == 'Icon 图标') {
+      return '''
+`tdesign_flutter` 中已引入 [`tdesign_icons`](https://pub.dev/packages/tdesign_icons) 图标库，无需额外安装，直接使用即可：
+
+```dart
+import 'package:tdesign_icons/tdesign_icons.dart';
+```
+
+当然，你也可以在不使用 `tdesign_flutter` 组件库的情况下，单独使用 [`tdesign_icons`](https://pub.dev/packages/tdesign_icons) 图标库。
+
+所有图标详见TDesign官网: https://tdesign.tencent.com/icons
+
+注：需将icon名称改为下划线形式，如：`logo-tdesign` 对应 `TIcons.logo_tdesign`。
+      ''';
+    }
+    return '''
+在 `tdesign_flutter/tdesign_flutter.dart` 中有所有组件的路径。
+
+```dart
+import 'package:tdesign_flutter/tdesign_flutter.dart';${_getExtraImport(title)}
+```
+''';
+  }
+
   static _getExtraImport(String title) {
-    if(title == 'Swiper 轮播图'){
+    if (title == 'Swiper 轮播图') {
       return '''
  
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';''';
-    } else if(title == 'PullDownRefresh 下拉刷新'){
+    } else if (title == 'PullDownRefresh 下拉刷新') {
       return '''
  
 import 'package:easy_refresh/easy_refresh.dart';''';
-
     }
     return '';
   }
 
   static _getPageCode(String pageName) {
-    if(pageName == 'td_side-bar_page'){
+    if (pageName == 'td_side-bar_page') {
       return '''
 [t_sidebar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page.dart)
 
