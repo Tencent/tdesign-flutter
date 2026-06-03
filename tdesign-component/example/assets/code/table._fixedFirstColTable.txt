@@ -4,7 +4,11 @@
       bordered: true,
       height: 240,
       columns: [
-        TTableCol(title: '固定列', colKey: 'title1', fixed: TTableColFixed.left, width: 100),
+        TTableCol(
+            title: '固定列',
+            colKey: 'title1',
+            fixed: TTableColFixed.left,
+            width: 100),
         TTableCol(title: '标题二', colKey: 'title2', width: 160),
         TTableCol(title: '标题三', colKey: 'title3', width: 160),
         TTableCol(title: '标题四', colKey: 'title4', width: 160),

@@ -23,7 +23,9 @@
           theme: TButtonTheme.primary,
           iconPosition: TButtonIconPosition.right,
           gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              colors: [Colors.red, Colors.blue],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
         ),
         TButton(
           text: '间距20',
@@ -35,7 +37,9 @@
           iconPosition: TButtonIconPosition.right,
           iconTextSpacing: 20,
           gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue], begin: Alignment.centerRight, end: Alignment.centerLeft),
+              colors: [Colors.red, Colors.blue],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft),
         )
       ],
     );

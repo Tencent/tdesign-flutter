@@ -82,14 +82,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 TText(
                   '修改',
                   style: TextStyle(
-                      color: TTheme.of(context).brandNormalColor,
-                      fontSize: 14),
+                      color: TTheme.of(context).brandNormalColor, fontSize: 14),
                 ),
                 TText(
                   '通过',
                   style: TextStyle(
-                      color: TTheme.of(context).brandNormalColor,
-                      fontSize: 14),
+                      color: TTheme.of(context).brandNormalColor, fontSize: 14),
                 ),
               ],
             );
@@ -147,7 +145,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       bordered: true,
       height: 240,
       columns: [
-        TTableCol(title: '固定列', colKey: 'title1', fixed: TTableColFixed.left, width: 100),
+        TTableCol(
+            title: '固定列',
+            colKey: 'title1',
+            fixed: TTableColFixed.left,
+            width: 100),
         TTableCol(title: '标题二', colKey: 'title2', width: 160),
         TTableCol(title: '标题三', colKey: 'title3', width: 160),
         TTableCol(title: '标题四', colKey: 'title4', width: 160),

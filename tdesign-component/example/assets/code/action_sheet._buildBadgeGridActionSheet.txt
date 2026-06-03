@@ -13,8 +13,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
             icon: Image.asset('assets/img/t_action_sheet_1.png'),
             badge: const TBadge(TBadgeType.message, count: 'NEW')),
         TActionSheetItem(
-            label: '朋友圈',
-            icon: Image.asset('assets/img/t_action_sheet_2.png')),
+            label: '朋友圈', icon: Image.asset('assets/img/t_action_sheet_2.png')),
         TActionSheetItem(
             label: 'QQ', icon: Image.asset('assets/img/t_action_sheet_3.png')),
         TActionSheetItem(

@@ -89,8 +89,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const TCellGroup(cells: [
       TCell(title: '顶部显示', noteWidget: TRate(placement: PlacementEnum.top)),
       TCell(title: '不显示', noteWidget: TRate(placement: PlacementEnum.none)),
-      TCell(
-          title: '底部显示', noteWidget: TRate(placement: PlacementEnum.bottom)),
+      TCell(title: '底部显示', noteWidget: TRate(placement: PlacementEnum.bottom)),
     ]);
   }</pre>
 

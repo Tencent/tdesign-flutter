@@ -588,8 +588,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           options: TPopupOptions.bottom(
               height: 260,
-              onOverlayClick: () =>
-                  TToast.showText('点击蒙层', context: context),
+              onOverlayClick: () => TToast.showText('点击蒙层', context: context),
               child: Container(
                 height: 200,
                 color: TTheme.of(context).bgColorContainer,

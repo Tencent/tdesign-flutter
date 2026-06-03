@@ -15,14 +15,12 @@
                 TText(
                   '修改',
                   style: TextStyle(
-                      color: TTheme.of(context).brandNormalColor,
-                      fontSize: 14),
+                      color: TTheme.of(context).brandNormalColor, fontSize: 14),
                 ),
                 TText(
                   '通过',
                   style: TextStyle(
-                      color: TTheme.of(context).brandNormalColor,
-                      fontSize: 14),
+                      color: TTheme.of(context).brandNormalColor, fontSize: 14),
                 ),
               ],
             );
