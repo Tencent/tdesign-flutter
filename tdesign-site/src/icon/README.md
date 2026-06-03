@@ -8,13 +8,11 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-`tdesign_flutter` 中已引入 [`tdesign_icons`](https://pub.dev/packages/tdesign_icons) 图标库，无需额外安装，直接使用即可：
+在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
-import 'package:tdesign_icons/tdesign_icons.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
-
-当然，你也可以在不使用 `tdesign_flutter` 组件库的情况下，单独使用 [`tdesign_icons`](https://pub.dev/packages/tdesign_icons) 图标库。
 
 ## 代码演示
 
@@ -22,11 +20,7 @@ import 'package:tdesign_icons/tdesign_icons.dart';
 
 ### 1 icon示例
 
-icon数量: 2340+
-
-所有图标详见TDesign官网: https://tdesign.tencent.com/icons
-
-注：需将icon名称改为下划线形式，如：`logo-tdesign` 对应 `TIcons.logo_tdesign`。
+icon数量: 2350
             
 <td-code-block panel="Dart">
 
@@ -42,8 +36,7 @@ icon数量: 2340+
             child: const Wrap(
               children: [
                 TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText(
-                    'https://tdesign.tencent.com/icons')
+                SelectableText('https://tdesign.tencent.com/icons')
               ],
             ),
           ),
@@ -55,10 +48,10 @@ icon数量: 2340+
                 isLoading = true;
               });
               Future.delayed(const Duration(milliseconds: 30), () {
-                var list = [];
-                TIcons.all.forEach((key, value) {
-                  if (value.name.contains(text)) {
-                    list.add(value);
+                var list = <MapEntry<String, IconData>>[];
+                TIcons.allIconsMap.entries.forEach((entry) {
+                  if (entry.key.contains(text)) {
+                    list.add(entry);
                   }
                 });
                 setState(() {
@@ -69,7 +62,7 @@ icon数量: 2340+
             },
             onClearClick: (_) {
               setState(() {
-                iconList = TIcons.all.values;
+                iconList = TIcons.allIconsMap.entries.toList();
               });
             },
           ),
@@ -90,8 +83,7 @@ icon数量: 2340+
               return Container(
                 height: 300,
                 alignment: Alignment.center,
-                child:
-                    isLoading ? const TText('加载中...') : const TText('暂无内容'),
+                child: isLoading ? const TText('加载中...') : const TText('暂无内容'),
               );
             }
 
@@ -116,9 +108,9 @@ icon数量: 2340+
                                       ? TTheme.of(context).brandDisabledColor
                                       : Colors.transparent,
                                 ),
-                                child: Icon(item, size: 32),
+                                child: Icon(item.value, size: 32),
                               ),
-                              TText(item.name)
+                              TText(item.key)
                             ],
                           ),
                         );
@@ -132,3 +124,11 @@ icon数量: 2340+
 
 </td-code-block>
                                   
+
+
+## API
+
+暂无对应api
+
+
+  
