@@ -1,0 +1,58 @@
+
+  Widget _buildApiRadiusCompare(BuildContext context) {
+    final theme = TTheme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TText(
+          'radius + bottom inset',
+          textColor: theme.textColorSecondary,
+          font: theme.fontBodyMedium,
+        ),
+        const SizedBox(height: 16),
+        TButton(
+          text: 'radius 默认',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusBottomPopup(context),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'radius 0',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusBottomPopup(context, radius: 0),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'radius 28',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusBottomPopup(context, radius: 28),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'center radius',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusCenterPopup(context),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: 'center r32',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () => _showRadiusCenterPopup(context, radius: 32),
+        ),
+      ],
+    );
+  }

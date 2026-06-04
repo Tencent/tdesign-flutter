@@ -1,0 +1,19 @@
+
+  Widget _buildWeek(BuildContext context) {
+    return TCell(
+      title: '年月日 + 星期',
+      note: _formatWeekResult(context, _weekSelected),
+      arrow: true,
+      onClick: (_) {
+        _showPickerPopup(
+          context,
+          picker: TDateTimePicker(
+            mode: DateTimePickerMode(dateMode: DateMode.date),
+            showWeek: true,
+            initialValue: _weekSelected,
+            onChange: (result) => setState(() => _weekSelected = result),
+          ),
+        );
+      },
+    );
+  }

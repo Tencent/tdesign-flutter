@@ -77,6 +77,13 @@ class TPickerColumns extends TPickerItems {
 
 /// 联动选择的数据源
 ///
+/// 适用于整棵联动树已在内存的场景（如省市区、月日联动、多级地址）；
+/// 每列候选项建议在百级以内。上游列变更后，[TPicker] 会裁剪下游列并按新分支
+/// 重新展开，默认选中各列首项。
+///
+/// 若需接口分页或远程逐级拉取，请改用 [TPickerColumns] 并在业务层封装 Scope
+/// （见 example LinkedLazyPickerScope）。
+///
 /// ```dart
 /// TPicker(
 ///   items: TPickerLinked({

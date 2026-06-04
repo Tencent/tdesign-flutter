@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../tdesign_flutter.dart';
 
@@ -42,6 +43,10 @@ class TResourceManager {
 
   /// 获取资源
   static final _defaultDelegate = _DefaultResourceDelegate();
+
+  /// 库内未注入 [setResourceBuilder] 时使用的默认文案（供 date-time-picker 等组件）。
+  @internal
+  static TResourceDelegate get defaultDelegate => _defaultDelegate;
 
   /// 设置资源代理
   void setResourceBuilder(TResourceBuilder delegate, needAlwaysBuild) {

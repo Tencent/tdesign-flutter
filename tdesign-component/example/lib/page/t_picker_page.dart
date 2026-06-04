@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
+import 'linked_lazy_picker_scope.dart';
 
 class TPickerPage extends StatefulWidget {
   const TPickerPage({Key? key}) : super(key: key);
@@ -48,6 +49,31 @@ class _TPickerPageState extends State<TPickerPage> {
 
   String selectedTime = '0:00:00';
 
+  // ========== 月日联动（模拟平年：2 月 28 天，大小月 30/31 天）==========
+
+  /// 平年各月天数（demo 不做闰年，2 月固定 28 天）
+  static int _daysInMonth(int month) {
+    const thirtyOneMonths = {1, 3, 5, 7, 8, 10, 12};
+    if (month == 2) {
+      return 28;
+    }
+    if (thirtyOneMonths.contains(month)) {
+      return 31;
+    }
+    return 30;
+  }
+
+  /// 月 → 日联动树：滚月后日列由 [TPickerLinked] 内部自动刷新
+  final _monthDayItems = TPickerLinked({
+    for (int month = 1; month <= 12; month++)
+      TPickerOption(label: '$month月', value: month): [
+        for (int day = 1; day <= _daysInMonth(month); day++)
+          TPickerOption(label: '$day日', value: day),
+      ],
+  });
+
+  String selectedMonthDay = '1月 / 1日';
+
   // ========== 联动数据（省市区）==========
 
   final linkedItems = TPickerLinked({
@@ -91,7 +117,37 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
   });
 
-  String selectedLinked = '广东省 / 深圳市 / 南山区';
+  // ========== 五级联动（大区 → 省份 → 城市 → 区县 → 街道）==========
+  static const _kFiveLevelNames = ['大区', '省份', '城市', '区县', '街道'];
+
+  /// 五级联动 mock 树：前 4 级为 Map，第 5 级为叶子 List
+  ///
+  /// label 采用层级编号（1 → 1.1 → 1.1.1 …），便于在窄列中完整展示；
+  /// 切换第 1 级后下游各列数据均与新区间绑定且互不相同。
+  final _fiveLevelItems = TPickerLinked(_fiveLevelNode(1));
+
+  static dynamic _fiveLevelNode(int depth, [String codePrefix = '']) {
+    if (depth == 5) {
+      return [
+        for (int i = 1; i <= 5; i++)
+          TPickerOption(
+            label: '$codePrefix.$i',
+            value: '$codePrefix.$i',
+          ),
+      ];
+    }
+    final branchCount = depth <= 2 ? 2 : 3;
+    return {
+      for (int i = 1; i <= branchCount; i++)
+        TPickerOption(
+          label: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+          value: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+        ): _fiveLevelNode(
+            depth + 1, codePrefix.isEmpty ? '$i' : '$codePrefix.$i'),
+    };
+  }
+
+  String selectedFiveLevel = '1 / 1.1 / 1.1.1 / 1.1.1.1 / 1.1.1.1.1';
 
   // ========== 项级 disabled 数据（覆盖开头/中间/结尾禁用）==========
 
@@ -125,25 +181,7 @@ class _TPickerPageState extends State<TPickerPage> {
 
   bool globalDisabled = false;
 
-  // ========== 性别+偏好数据（弹窗专用）==========
-
-  final preferenceData = [
-    [
-      const TPickerOption(label: '男', value: 'M'),
-      const TPickerOption(label: '女', value: 'F'),
-      const TPickerOption(label: '其他', value: 'O'),
-    ],
-    [
-      const TPickerOption(label: '科技', value: 'tech'),
-      const TPickerOption(label: '运动', value: 'sport'),
-      const TPickerOption(label: '音乐', value: 'music'),
-      const TPickerOption(label: '阅读', value: 'book'),
-      const TPickerOption(label: '旅行', value: 'travel'),
-      const TPickerOption(label: '美食', value: 'food'),
-    ],
-  ];
-
-  @override
+  // ========== 全局 disabled 开关 ==========
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
@@ -153,10 +191,13 @@ class _TPickerPageState extends State<TPickerPage> {
         ExampleModule(title: '基础用法', children: [
           ExampleItem(desc: '单列选择', builder: buildSingleColumn),
           ExampleItem(desc: '时间选择(时分秒)', builder: buildTimeSelect),
-          ExampleItem(desc: '联动选择(省市区)', builder: buildLinked),
+          ExampleItem(desc: '月日选择(联动)', builder: buildMonthDaySelect),
+          ExampleItem(desc: '五级联动选择', builder: buildLinkedFiveLevel),
         ]),
         ExampleModule(title: '按需请求', children: [
-          ExampleItem(desc: '模拟网络请求加载更多', builder: buildLazyLoad),
+          ExampleItem(
+              desc: '滚近底部自动分页（主列 + 联动子列）',
+              builder: buildLazyLoad),
         ]),
         ExampleModule(title: '禁用状态', children: [
           ExampleItem(desc: '项级 disabled（部分选项不可选）', builder: buildItemDisabled),
@@ -165,10 +206,6 @@ class _TPickerPageState extends State<TPickerPage> {
         ]),
         ExampleModule(title: '弹窗模式(TPopup)', children: [
           ExampleItem(desc: '弹窗-联动选择(省市区)', builder: buildPopupLinked),
-          ExampleItem(desc: '弹窗-多列选择(性别/偏好)', builder: buildPopupMultiColumn),
-        ]),
-        ExampleModule(title: '自定义按钮/标题插槽', children: [
-          ExampleItem(desc: '自定义按钮（图标 / 文字）', builder: buildCustomSlot),
         ]),
         ExampleModule(title: '自定义字段映射(keys)', children: [
           ExampleItem(
@@ -185,24 +222,60 @@ class _TPickerPageState extends State<TPickerPage> {
 
   // ========== 弹窗工具方法 ==========
 
-  /// 弹窗工具方法：把 TPicker（自带工具栏）从底部滑入
+  /// 弹窗工具方法：TPopup 提供头部，TPicker 仅负责滚轮与 onChange
   ///
-  /// TPicker 自带「取消 / 标题 / 确认」工具栏，业务方在 onCancel/onConfirm
-  /// 中自行决定是否调用 Navigator.pop 关闭弹窗。
-  void _showPickerPopup(BuildContext context, {required Widget picker}) {
+  /// [onConfirm] 在用户点击弹窗「确认」时触发（关闭前），用于提交 draft 值。
+  void _showPickerPopup(
+    BuildContext context, {
+    required String title,
+    required Widget picker,
+    required VoidCallback onConfirm,
+  }) {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-          cancelBuilder: null,
-          confirmBuilder: null,
-          child: Material(
-            color: TTheme.of(context).bgColorContainer,
-            child: SafeArea(
-              top: false,
-              child: picker,
-            ),
-          )),
+        titleWidget: Text(title),
+        onVisibleChange: (visible, trigger) {
+          if (!visible && trigger == TPopupTrigger.confirm) {
+            onConfirm();
+          }
+        },
+        child: Material(
+          color: TTheme.of(context).bgColorContainer,
+          child: SafeArea(
+            top: false,
+            child: picker,
+          ),
+        ),
+      ),
     );
+  }
+
+  /// 联动：按 value 路径解析为 [TPickerValue]（用户未滚动直接确认时使用）
+  TPickerValue _linkedValueFromPath(
+    Map<TPickerOption, dynamic> tree,
+    List<dynamic> path,
+  ) {
+    final selectedOptions = <TPickerOption>[];
+    final indexes = <int>[];
+    var currentMap = tree;
+    for (var depth = 0; depth < path.length; depth++) {
+      final options = currentMap.keys.toList();
+      final idx = options.indexWhere((o) => o.value == path[depth]);
+      if (idx < 0) {
+        break;
+      }
+      final selected = options[idx];
+      indexes.add(idx);
+      selectedOptions.add(selected);
+      final child = currentMap[selected];
+      if (child is Map<TPickerOption, dynamic>) {
+        currentMap = child;
+      } else {
+        break;
+      }
+    }
+    return TPickerValue(selectedOptions: selectedOptions, indexes: indexes);
   }
 
   // ========== 嵌入式容器 ==========
@@ -240,6 +313,36 @@ class _TPickerPageState extends State<TPickerPage> {
   }
 
   @Demo(group: 'picker')
+  Widget buildMonthDaySelect(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'TPickerLinked：切换月份后日列自动变为 28 / 30 / 31 天（demo 平年，2 月固定 28 天）',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedMonthDay.isEmpty ? "未选择" : selectedMonthDay}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: _monthDayItems,
+            initialValue: const [1, 1],
+            onChange: (v) =>
+                setState(() => selectedMonthDay = v.labels.join(' / ')),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'picker')
   Widget buildTimeSelect(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,21 +364,42 @@ class _TPickerPageState extends State<TPickerPage> {
   }
 
   @Demo(group: 'picker')
-  Widget buildLinked(BuildContext context) {
+  Widget buildLinkedFiveLevel(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('选中地区: ${selectedLinked.isEmpty ? "未选择" : selectedLinked}',
-            style: TextStyle(
-                fontSize: 14, color: TTheme.of(context).textColorSecondary)),
+        Text(
+          '五级联动：${_kFiveLevelNames.join(' → ')}（切换第 1 级后，第 2–5 级数据全部刷新）',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '适用 TPickerLinked 静态树：整树在内存、每级项数可控；label 用 1 / 1.1 / 1.1.1 便于窄列展示',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedFiveLevel.isEmpty ? "未选择" : selectedFiveLevel}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
         const SizedBox(height: 8),
         _pickerCard(
           context,
           child: TPicker(
-              items: linkedItems,
-              initialValue: const ['GD', 'SZ', 'NS'],
-              onChange: (v) =>
-                  setState(() => selectedLinked = v.labels.join(' / '))),
+            items: _fiveLevelItems,
+            initialValue: const [
+              '1',
+              '1.1',
+              '1.1.1',
+              '1.1.1.1',
+              '1.1.1.1.1',
+            ],
+            onChange: (v) =>
+                setState(() => selectedFiveLevel = v.labels.join(' / ')),
+          ),
         ),
       ],
     );
@@ -360,159 +484,152 @@ class _TPickerPageState extends State<TPickerPage> {
       note: label.isEmpty ? '请选择' : label,
       arrow: true,
       onClick: (_) {
+        TPickerValue? draft;
+        final initial =
+            _popupLinkedValue?.values ?? List<dynamic>.from(_popupLinkedInitial);
         _showPickerPopup(
           context,
+          title: '请选择地区',
+          onConfirm: () {
+            setState(() {
+              _popupLinkedValue = draft ??
+                  _popupLinkedValue ??
+                  _linkedValueFromPath(linkedItems.tree, initial);
+            });
+          },
           picker: TPicker(
             items: linkedItems,
-            initialValue: _popupLinkedValue?.values ?? _popupLinkedInitial,
-            title: '请选择地区',
-            onCancel: () => Navigator.of(context).pop(),
-            onConfirm: (value) {
-              setState(() => _popupLinkedValue = value);
-              Navigator.of(context).pop();
-            },
+            initialValue: initial,
+            onChange: (value) => draft = value,
           ),
         );
       },
     );
   }
 
-  @Demo(group: 'picker')
-  Widget buildCustomSlot(BuildContext context) {
-    final theme = TTheme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'cancel / confirm / titleWidget 参数类型均为 Widget，可自定义图标、文字或组合',
-          style: TextStyle(fontSize: 12, color: theme.textColorPlaceholder),
-        ),
-        const SizedBox(height: 8),
-        _pickerCard(
-          context,
-          child: TPicker(
-            items: linkedItems,
-            initialValue: const ['GD', 'SZ', 'NS'],
-            titleWidget: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(TIcons.location, size: 18, color: theme.brandNormalColor),
-                const SizedBox(width: 4),
-                Text('选择地区',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: theme.fontGyColor1,
-                    )),
-              ],
-            ),
-            cancel: Icon(TIcons.close, size: 22, color: theme.fontGyColor2),
-            confirm:
-                Icon(TIcons.check, size: 22, color: theme.brandNormalColor),
-          ),
-        ),
-      ],
-    );
+  static const _kLazyDemoPageSize = 20;
+  static const _kLazyDemoLoadDelay = Duration(milliseconds: 350);
+
+  int _lazyCategoryNumber(dynamic categoryValue) {
+    final raw = categoryValue.toString().replaceFirst('cat_', '');
+    return int.tryParse(raw) ?? 0;
   }
 
-  /// 弹窗多列独立模式：缓存完整 TPickerValue
-  TPickerValue? _popupMultiColValue;
-  final List<dynamic> _popupMultiColInitial = ['M', 'tech'];
+  List<TPickerOption> _mockLazyCategories(int start, int count) {
+    return [
+      for (int i = start; i < start + count; i++)
+        TPickerOption(label: '分类 $i', value: 'cat_$i'),
+    ];
+  }
 
-  /// 按需请求：模拟网络延迟加载更多数据
-  final List<TPickerOption> _lazyData = [
-    for (int i = 1; i <= 20; i++)
-      TPickerOption(label: '选项 $i', value: 'opt_$i'),
-  ];
-  bool _isLoading = false;
+  Future<List<TPickerOption>> _mockLazyItems(
+    dynamic categoryValue,
+    int start,
+    int count,
+  ) async {
+    await Future.delayed(_kLazyDemoLoadDelay);
+    final catNum = _lazyCategoryNumber(categoryValue);
+    return [
+      for (int i = start; i < start + count; i++)
+        TPickerOption(
+          label: '分类$catNum · 条目 $i',
+          value: '${categoryValue}_item_$i',
+        ),
+    ];
+  }
 
   @Demo(group: 'picker')
   Widget buildLazyLoad(BuildContext context) {
-    return StatefulBuilder(
-      builder: (ctx, setInner) {
+    const initialPrimaryValue = 'cat_1';
+    final initialLinked = [
+      for (int i = 1; i <= _kLazyDemoPageSize; i++)
+        TPickerOption(
+          label: '分类1 · 条目 $i',
+          value: '${initialPrimaryValue}_item_$i',
+        ),
+    ];
+
+    return LinkedLazyPickerScope(
+      threshold: 8,
+      primaryLabel: '分类',
+      linkedLabel: '条目',
+      initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
+      initialPrimaryValue: initialPrimaryValue,
+      initialLinked: initialLinked,
+      onLoadPrimary: (nextStart) async {
+        await Future.delayed(_kLazyDemoLoadDelay);
+        return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
+      },
+      onLoadLinked: (primaryValue, nextStart) =>
+          _mockLazyItems(primaryValue, nextStart, _kLazyDemoPageSize),
+      builder: (ctx, vm) {
+        final loadingHint = vm.loadingHint;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _lazyData.isEmpty
-                  ? '暂无数据'
-                  : '已加载 ${_lazyData.length} 条（滚动到底部自动加载更多）',
+              '在 onChange 里判断 indexes 接近列底后更新 items，无需 TPicker 内置 onLoad',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              vm.statusLine,
               style: TextStyle(
                   fontSize: 14, color: TTheme.of(context).textColorSecondary),
             ),
             const SizedBox(height: 8),
-            _pickerCard(
-              context,
-              child: TPicker(
-                items: TPickerColumns([_lazyData]),
-                onLoad: (e) async {
-                  // 业务层自行判断触发时机：距底部 5 项以内 + 未在加载中
-                  if (e.remaining > 5 || _isLoading) {
-                    return;
-                  }
-                  setInner(() => _isLoading = true);
-                  // 模拟网络请求延迟 1.5s
-                  await Future.delayed(const Duration(milliseconds: 1500));
-                  final start = _lazyData.length + 1;
-                  final more = [
-                    for (int i = start; i < start + 20; i++)
-                      TPickerOption(label: '选项 $i', value: 'opt_$i'),
-                  ];
-                  setInner(() {
-                    _lazyData.addAll(more);
-                    _isLoading = false;
-                  });
-                },
-                onChange: (v) => debugPrint('选中: ${v.labels.first}'),
-              ),
+            Stack(
+              children: [
+                _pickerCard(context, child: vm.buildPicker()),
+                if (loadingHint != null)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 8,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: TTheme.of(context)
+                              .fontGyColor1
+                              .withOpacity(0.72),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '加载$loadingHint…',
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 4),
-            if (_isLoading)
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  const SizedBox(width: 6),
-                  Text('正在加载更多数据...',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: TTheme.of(context).textColorPlaceholder)),
-                ],
-              )
-            else
-              Text('在 onLoad 里判断 e.remaining <= 5 时加载，模拟 1.5s 网络延迟',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: TTheme.of(context).textColorPlaceholder)),
+            Text(
+              '滚近底部自动追加；切换分类时子列读缓存或按需拉取（示例封装见 LinkedLazyPickerScope）',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: TTheme.of(context).textColorPlaceholder),
+            ),
           ],
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'picker')
-  Widget buildPopupMultiColumn(BuildContext context) {
-    final label = _popupMultiColValue?.labels.join(' ') ?? '';
-    return TCell(
-      title: '弹窗-多列选择(性别/偏好)',
-      note: label.isEmpty ? '请选择' : label,
-      arrow: true,
-      onClick: (_) {
-        _showPickerPopup(
-          context,
-          picker: TPicker(
-            items: TPickerColumns(preferenceData),
-            initialValue: _popupMultiColValue?.values ?? _popupMultiColInitial,
-            title: '选择性别和偏好',
-            onCancel: () => Navigator.of(context).pop(),
-            onConfirm: (value) {
-              setState(() => _popupMultiColValue = value);
-              Navigator.of(context).pop();
-            },
-          ),
         );
       },
     );
@@ -536,12 +653,29 @@ class _TPickerPageState extends State<TPickerPage> {
   TPickerValue? _customKeysValue;
   final List<dynamic> _customKeysInitial = ['BJ'];
 
+  /// 自定义字段映射：展示 city（label）与 code（value）
+  String _customKeysSelectionText() {
+    if (_customKeysValue != null) {
+      final label = _customKeysValue!.labels.first;
+      final value = _customKeysValue!.values.first;
+      return 'city=$label，code=$value';
+    }
+    if (_customKeysInitial.isNotEmpty) {
+      final code = _customKeysInitial.first;
+      for (final row in _rawCityData[0]) {
+        if (row['code'] == code) {
+          return 'city=${row['city']}，code=${row['code']}';
+        }
+      }
+    }
+    return '未选择';
+  }
+
   @Demo(group: 'picker')
   Widget buildCustomKeys(BuildContext context) {
     // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
     const keys =
         TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
-    final label = _customKeysValue?.labels.join() ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -552,7 +686,7 @@ class _TPickerPageState extends State<TPickerPage> {
         ),
         const SizedBox(height: 4),
         Text(
-          '当前选中：${label.isEmpty ? "未选择" : label}',
+          '当前选中：${_customKeysSelectionText()}',
           style: TextStyle(
               fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),
@@ -577,7 +711,7 @@ class _TPickerPageState extends State<TPickerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '示例：height(300) + itemCount(7)，每屏显示 7 项',
+          '示例：height(350) + itemCount(7)，每屏显示 7 项',
           style: TextStyle(
               fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
         ),
@@ -586,7 +720,7 @@ class _TPickerPageState extends State<TPickerPage> {
           context,
           child: TPicker(
             items: cityItems,
-            height: 300,
+            height: 350,
             itemCount: 7,
             onChange: (v) => debugPrint('选中: ${v.labels.first}'),
           ),

@@ -602,8 +602,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### BadgeConfig
-#### 简介
-飘新配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -615,8 +613,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TBottomTabBarTabConfig
-#### 简介
-单个 tab 配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -634,8 +630,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TBottomTabBarPopUpBtnConfig
-#### 简介
-展开项配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -646,8 +640,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TBottomTabBarPopUpShapeConfig
-#### 简介
-弹窗UI配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -661,8 +653,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### PopUpMenuItem
-#### 简介
-弹窗菜单item
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

@@ -704,10 +704,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## API
 ### TAlertDialog
-#### 简介
-弹窗控件
-支持横向或竖向摆放按钮
-横向最多摆放两个按钮
 
 #### 工厂构造方法
 
@@ -758,9 +754,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TConfirmDialog
-#### 简介
-只有一个按钮的弹窗控件
-按钮样式支持普通和文字
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -787,8 +780,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TDialogButtonOptions
-#### 简介
-弹窗按钮配置
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -805,8 +796,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ### TDialogScaffold
-#### 简介
-TDialog手脚架
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -820,8 +809,6 @@ TDialog手脚架
 
 
 ### TDialogTitle
-#### 简介
-弹窗标题
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -832,8 +819,6 @@ TDialog手脚架
 
 
 ### TDialogContent
-#### 简介
-弹窗内容
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -844,8 +829,6 @@ TDialog手脚架
 
 
 ### TDialogInfoWidget
-#### 简介
-弹窗信息
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -862,8 +845,6 @@ TDialog手脚架
 
 
 ### HorizontalNormalButtons
-#### 简介
-横向排列的两个按钮
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -874,8 +855,6 @@ TDialog手脚架
 
 
 ### HorizontalTextButtons
-#### 简介
-左右横向文字按钮，顶部和中间有分割线
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -886,8 +865,6 @@ TDialog手脚架
 
 
 ### TDialogButton
-#### 简介
-弹窗标题
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -907,8 +884,6 @@ TDialog手脚架
 
 
 ### TImageDialog
-#### 简介
-带有图片的弹窗控件
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -932,8 +907,6 @@ TDialog手脚架
 
 
 ### TInputDialog
-#### 简介
-带有输入框的弹窗
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -958,10 +931,6 @@ TDialog手脚架
 
 
 ### TDialogButtonStyle
-#### 简介
-Dialog按钮样式
-用于在Dialog层面配置按钮样式
-Dialog内支持配置每个按钮的样式
 #### 枚举值
 
 

@@ -75,6 +75,7 @@
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 `overlayColor` 的 alpha 相乘后用于绘制。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； 与 `inset` 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。 |
 
 
 ##### TPopupOptions.bottom
@@ -175,6 +176,7 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 `headerBuilder` 为内置默认时生效。`null` 表示无标题。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； 与 `inset` 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 |
 
 
