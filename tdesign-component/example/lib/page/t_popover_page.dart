@@ -41,157 +41,152 @@ class _TPopoverPage extends State<TPopoverPage> {
             ExampleItem(desc: '自定义内容弹出气泡', builder: _buildNCustomPopover),
           ],
         ),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(
-            ignoreCode: true,
-            builder: (context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  children: [
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: CodeWrapper(builder: _buildDarkPopover),
-                        ),
-                        Expanded(
-                          child: CodeWrapper(builder: _buildLightPopover),
-                        ),
-                        Expanded(
-                          child: CodeWrapper(builder: _buildInfoPopover),
-                        ),
-                      ],
-                    ),
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: CodeWrapper(builder: _buildSuccessPopover),
-                        ),
-                        Expanded(
-                          child: CodeWrapper(builder: _buildWarningPopover),
-                        ),
-                        Expanded(
-                          child: CodeWrapper(builder: _buildErrorPopover),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-          ExampleItem(
-            desc: '顶部弹出气泡',
-            ignoreCode: true,
-            builder: (context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                      child: CodeWrapper(builder: _buildTopLeftPopover),
-                    ),
-                    Expanded(
-                      child: CodeWrapper(builder: _buildTopPopover),
-                    ),
-                    Expanded(
-                      child: CodeWrapper(builder: _buildTopRightPopover),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          ExampleItem(
-            desc: '底部弹出气泡',
-            ignoreCode: true,
-            builder: (context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                      child: CodeWrapper(builder: _buildBottomLeftPopover),
-                    ),
-                    Expanded(
-                      child: CodeWrapper(builder: _buildBottomPopover),
-                    ),
-                    Expanded(
-                      child: CodeWrapper(builder: _buildBottomRightPopover),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          ExampleItem(
-            desc: '右侧弹出气泡',
-            ignoreCode: true,
-            builder: (context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                      child: Column(
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              ignoreCode: true,
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Flex(
+                        direction: Axis.horizontal,
                         children: [
-                          CodeWrapper(builder: _buildRightTopPopover),
-                          CodeWrapper(builder: _buildRightPopover),
-                          CodeWrapper(builder: _buildRightBottomPopover),
+                          Expanded(
+                            child: CodeWrapper(builder: _buildDarkPopover),
+                          ),
+                          Expanded(
+                            child: CodeWrapper(builder: _buildLightPopover),
+                          ),
+                          Expanded(
+                            child: CodeWrapper(builder: _buildInfoPopover),
+                          ),
                         ],
                       ),
-                    ),
-                    const Expanded(child: SizedBox()),
-                  ],
-                ),
-              );
-            },
-          ),
-          ExampleItem(
-            desc: '左侧弹出气泡',
-            ignoreCode: true,
-            builder: (context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    const Expanded(child: SizedBox()),
-                    Expanded(
-                      child: Column(
+                      Flex(
+                        direction: Axis.horizontal,
                         children: [
-                          CodeWrapper(builder: _buildLeftTopPopover),
-                          CodeWrapper(builder: _buildLeftPopover),
-                          CodeWrapper(builder: _buildLeftBottomPopover),
+                          Expanded(
+                            child: CodeWrapper(builder: _buildSuccessPopover),
+                          ),
+                          Expanded(
+                            child: CodeWrapper(builder: _buildWarningPopover),
+                          ),
+                          Expanded(
+                            child: CodeWrapper(builder: _buildErrorPopover),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ])
+                    ],
+                  ),
+                );
+              },
+            ),
+            ExampleItem(
+              desc: '顶部弹出气泡',
+              ignoreCode: true,
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      Expanded(
+                        child: CodeWrapper(builder: _buildTopLeftPopover),
+                      ),
+                      Expanded(child: CodeWrapper(builder: _buildTopPopover)),
+                      Expanded(
+                        child: CodeWrapper(builder: _buildTopRightPopover),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            ExampleItem(
+              desc: '底部弹出气泡',
+              ignoreCode: true,
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      Expanded(
+                        child: CodeWrapper(builder: _buildBottomLeftPopover),
+                      ),
+                      Expanded(
+                        child: CodeWrapper(builder: _buildBottomPopover),
+                      ),
+                      Expanded(
+                        child: CodeWrapper(builder: _buildBottomRightPopover),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            ExampleItem(
+              desc: '右侧弹出气泡',
+              ignoreCode: true,
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            CodeWrapper(builder: _buildRightTopPopover),
+                            CodeWrapper(builder: _buildRightPopover),
+                            CodeWrapper(builder: _buildRightBottomPopover),
+                          ],
+                        ),
+                      ),
+                      const Expanded(child: SizedBox()),
+                    ],
+                  ),
+                );
+              },
+            ),
+            ExampleItem(
+              desc: '左侧弹出气泡',
+              ignoreCode: true,
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      const Expanded(child: SizedBox()),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            CodeWrapper(builder: _buildLeftTopPopover),
+                            CodeWrapper(builder: _buildLeftPopover),
+                            CodeWrapper(builder: _buildLeftBottomPopover),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ],
       test: [
-        ExampleItem(
-          desc: '显示多行内容',
-          builder: _buildMultiLinePopover,
-        ),
-        ExampleItem(
-          desc: '自定义圆角',
-          builder: _buildCustomRadiusPopover,
-        )
+        ExampleItem(desc: '显示多行内容', builder: _buildMultiLinePopover),
+        ExampleItem(desc: '自定义圆角', builder: _buildCustomRadiusPopover),
       ],
     );
   }
@@ -209,7 +204,10 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                  context: _, content: '弹出气泡内容', theme: theme);
+                context: context,
+                content: '弹出气泡内容',
+                theme: theme,
+              );
             },
           );
         },
@@ -228,7 +226,11 @@ class _TPopoverPage extends State<TPopoverPage> {
           theme: TButtonTheme.primary,
           onTap: () {
             TPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
+              context: context,
+              content: '弹出气泡内容',
+              showArrow: false,
+              theme: theme,
+            );
           },
         );
       },
@@ -238,9 +240,10 @@ class _TPopoverPage extends State<TPopoverPage> {
   @Demo(group: 'popover')
   Widget _buildNCustomPopover(BuildContext context) {
     var textStyle = TextStyle(
-        color: theme == TPopoverTheme.light
-            ? TTheme.of(context).fontGyColor1
-            : TTheme.of(context).fontWhColor1);
+      color: theme == TPopoverTheme.light
+          ? TTheme.of(context).fontGyColor1
+          : TTheme.of(context).fontWhColor1,
+    );
     return LayoutBuilder(
       builder: (_, constrains) {
         return TButton(
@@ -249,7 +252,7 @@ class _TPopoverPage extends State<TPopoverPage> {
           theme: TButtonTheme.primary,
           onTap: () {
             TPopover.showPopover(
-              context: _,
+              context: context,
               padding: const EdgeInsets.all(0),
               theme: theme,
               width: 108,
@@ -257,17 +260,26 @@ class _TPopoverPage extends State<TPopoverPage> {
               contentWidget: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项1', style: textStyle),
                   ),
                   const TDivider(height: 0.5),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项2', style: textStyle),
                   ),
                   const TDivider(height: 0.5),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项3', style: textStyle),
                   ),
                 ],
@@ -292,10 +304,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             type: TButtonType.outline,
             theme: TButtonTheme.primary,
             onTap: () {
-              TPopover.showPopover(
-                context: _,
-                content: '弹出气泡内容',
-              );
+              TPopover.showPopover(context: context, content: '弹出气泡内容');
             },
           );
         },
@@ -317,7 +326,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.light,
               );
@@ -342,7 +351,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.info,
               );
@@ -367,7 +376,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.success,
               );
@@ -392,7 +401,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.warning,
               );
@@ -417,7 +426,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.error,
               );
@@ -442,7 +451,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topLeft,
                 theme: theme,
@@ -468,7 +477,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.top,
                 theme: theme,
@@ -494,7 +503,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topRight,
                 theme: theme,
@@ -520,7 +529,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomLeft,
                 theme: theme,
@@ -546,7 +555,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottom,
                 theme: theme,
@@ -572,7 +581,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomRight,
                 theme: theme,
@@ -598,7 +607,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightTop,
                 theme: theme,
@@ -624,7 +633,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.right,
                 theme: theme,
@@ -650,7 +659,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightBottom,
                 theme: theme,
@@ -676,7 +685,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftTop,
                 theme: theme,
@@ -702,7 +711,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.left,
                 theme: theme,
@@ -728,7 +737,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftBottom,
                 theme: theme,
@@ -754,7 +763,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 width: 200,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
                 theme: theme,
@@ -780,7 +789,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 width: 200,
                 radius: BorderRadius.circular(16),
                 theme: theme,

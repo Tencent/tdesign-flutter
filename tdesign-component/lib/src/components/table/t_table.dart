@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
@@ -156,8 +155,9 @@ class TTableState extends State<TTable> {
     for (var i = 0; i < fixedRightCol.length; i++) {
       var cell = _getCell(fixedRightCol[i], true, null, start, i == 0);
       if (fixedRightCol[i].width != null) {
-        fixedRightCells
-            .add(SizedBox(width: fixedRightCol[i].width, child: cell));
+        fixedRightCells.add(
+          SizedBox(width: fixedRightCol[i].width, child: cell),
+        );
       } else {
         fixedRightCells.add(Expanded(flex: 1, child: cell));
       }
@@ -173,8 +173,8 @@ class TTableState extends State<TTable> {
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
-              const TLoading(size: TLoadingSize.large),
+          child:
+              widget.loadingWidget ?? const TLoading(size: TLoadingSize.large),
         ),
       );
     }
@@ -204,33 +204,42 @@ class TTableState extends State<TTable> {
           row.add(Expanded(flex: 1, child: cell));
         }
       }
-      cells.add(Container(
-        color: (widget.stripe ?? false) && i % 2 == 0
-            ? TTheme.of(context).bgColorSecondaryContainer
-            : TTheme.of(context).bgColorContainer,
-        child: Row(children: row),
-      ));
+      cells.add(
+        Container(
+          color: (widget.stripe ?? false) && i % 2 == 0
+              ? TTheme.of(context).bgColorSecondaryContainer
+              : TTheme.of(context).bgColorContainer,
+          child: Row(children: row),
+        ),
+      );
     }
-    if (widget.footerWidget != null){
+    if (widget.footerWidget != null) {
       cells.add(widget.footerWidget!);
     }
-    return Column(
-      children: cells,
-    );
+    return Column(children: cells);
   }
 
   /// 获取单元格
-  Widget _getCell(TTableCol col, bool isHeader, dynamic data, int index,
-      bool fixedBorder) {
+  Widget _getCell(
+    TTableCol col,
+    bool isHeader,
+    dynamic data,
+    int index,
+    bool fixedBorder,
+  ) {
     var title = isHeader ? (col.title ?? '') : (data[col.colKey] ?? '');
     var ellipsis = (isHeader ? col.ellipsisTitle : col.ellipsis) ?? false;
     var sortable = col.sortable ?? false;
 
     // 单元格边框
-    var halfBorder =
-        BorderSide(width: 0.5, color: TTheme.of(context).componentStrokeColor);
-    var doubleBorder =
-        BorderSide(width: 1, color: TTheme.of(context).componentStrokeColor);
+    var halfBorder = BorderSide(
+      width: 0.5,
+      color: TTheme.of(context).componentStrokeColor,
+    );
+    var doubleBorder = BorderSide(
+      width: 1,
+      color: TTheme.of(context).componentStrokeColor,
+    );
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
@@ -259,14 +268,19 @@ class TTableState extends State<TTable> {
           enable: enable,
           customIconBuilder: (context, checked) {
             if (checked) {
-              return Icon(TIcons.check_rectangle_filled,
-                  size: 16, color: TTheme.of(context).brandNormalColor);
-            }
-            return Icon(TIcons.rectangle,
+              return Icon(
+                TIcons.check_rectangle_filled,
                 size: 16,
-                color: enable
-                    ? TTheme.of(context).textColorPrimary
-                    : TTheme.of(context).textColorPlaceholder);
+                color: TTheme.of(context).brandNormalColor,
+              );
+            }
+            return Icon(
+              TIcons.rectangle,
+              size: 16,
+              color: enable
+                  ? TTheme.of(context).textColorPrimary
+                  : TTheme.of(context).textColorPlaceholder,
+            );
           },
           onCheckBoxChanged: (checked) {
             setState(() {
@@ -327,12 +341,7 @@ class TTableState extends State<TTable> {
         );
       }
 
-      content = Row(
-        children: [
-          checkBox,
-          text,
-        ],
-      );
+      content = Row(children: [checkBox, text]);
     }
 
     // 单元格构建
@@ -343,43 +352,52 @@ class TTableState extends State<TTable> {
         }
       },
       child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: topBorder,
-              right: rightBorder,
-              bottom: bottomBorder,
-              left: leftBorder,
+        decoration: BoxDecoration(
+          border: Border(
+            top: topBorder,
+            right: rightBorder,
+            bottom: bottomBorder,
+            left: leftBorder,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: SizedBox(
+            height: widget.rowHeight ?? 22,
+            child: Align(
+              alignment: _getVerticalAlign(col.align!),
+              child: content,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: SizedBox(
-              height: widget.rowHeight ?? 22,
-              child: Align(
-                alignment: _getVerticalAlign(col.align!),
-                child: content,
-              ),
-            ),
-          )),
+        ),
+      ),
     );
     return cell;
   }
 
   /// 获取单元格内容
-  Widget _getCellText(TTableCol col, String title, bool ellipsis,
-      bool isHeader, bool sortable, int index) {
+  Widget _getCellText(
+    TTableCol col,
+    String title,
+    bool ellipsis,
+    bool isHeader,
+    bool sortable,
+    int index,
+  ) {
     var overflow = ellipsis ? TextOverflow.ellipsis : TextOverflow.visible;
-    var titleWidget = TText(title,
-        maxLines: 1,
-        overflow: overflow,
-        style: TextStyle(
-          color: isHeader
-              ? TTheme.of(context).textColorPlaceholder
-              : TTheme.of(context).textColorPrimary,
-          fontSize: 14,
-          height: 1,
-          letterSpacing: 0,
-        ));
+    var titleWidget = TText(
+      title,
+      maxLines: 1,
+      overflow: overflow,
+      style: TextStyle(
+        color: isHeader
+            ? TTheme.of(context).textColorPlaceholder
+            : TTheme.of(context).textColorPrimary,
+        fontSize: 14,
+        height: 1,
+        letterSpacing: 0,
+      ),
+    );
 
     // 表头（需考虑排序模式）
     if (isHeader) {
@@ -429,13 +447,13 @@ class TTableState extends State<TTable> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       );
     }
     // 自定义单元格内容
     if (col.cellBuilder != null) {
-      return Builder(builder: (_) => col.cellBuilder!(_, index));
+      return Builder(builder: (_) => col.cellBuilder!(context, index));
     }
     return titleWidget;
   }
@@ -517,8 +535,7 @@ class TTableState extends State<TTable> {
   }
 
   /// 生成固定列的表头单元格
-  List<Widget> _getFixedHeaderCells(
-      List<TTableCol> cols, double cellWidth) {
+  List<Widget> _getFixedHeaderCells(List<TTableCol> cols, double cellWidth) {
     var headers = <Widget>[];
     for (var i = 0; i < cols.length; i++) {
       var col = cols[i];
@@ -530,31 +547,42 @@ class TTableState extends State<TTable> {
 
   /// 生成固定列的单行数据单元格（按列返回一行中各列的Widget）
   List<Widget> _getFixedRowCells(
-      List<TTableCol> cols, double cellWidth, int rowIndex) {
+    List<TTableCol> cols,
+    double cellWidth,
+    int rowIndex,
+  ) {
     var cells = <Widget>[];
     for (var i = 0; i < cols.length; i++) {
       var col = cols[i];
       var cell = _getCell(
-          col, false, widget.data?[rowIndex], rowIndex, i == cols.length - 1);
+        col,
+        false,
+        widget.data?[rowIndex],
+        rowIndex,
+        i == cols.length - 1,
+      );
       cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
     }
     return cells;
   }
 
   /// 生成固定列的数据单元格（按列组织，每列一个Column，无height时使用）
-  List<Widget> _getFixedDataCols(
-      List<TTableCol> cols, double cellWidth) {
+  List<Widget> _getFixedDataCols(List<TTableCol> cols, double cellWidth) {
     var colWidgets = <Widget>[];
     for (var i = 0; i < cols.length; i++) {
       var col = cols[i];
       var cells = <Widget>[];
       for (var j = 0; j < (widget.data?.length ?? 0); j++) {
         var cell = _getCell(
-            col, false, widget.data?[j], j, i == cols.length - 1);
+          col,
+          false,
+          widget.data?[j],
+          j,
+          i == cols.length - 1,
+        );
         cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
       }
-      colWidgets
-          .add(Column(mainAxisSize: MainAxisSize.min, children: cells));
+      colWidgets.add(Column(mainAxisSize: MainAxisSize.min, children: cells));
     }
     return colWidgets;
   }
@@ -586,8 +614,7 @@ class TTableState extends State<TTable> {
     }
 
     // 是否需要横向滚动
-    var needHorizontalScroll =
-        (width - fixedCellsWidth) < fixedNonCellsWidth;
+    var needHorizontalScroll = (width - fixedCellsWidth) < fixedNonCellsWidth;
 
     // 生成表头
     var headerLeftCells = _getFixedHeaderCells(fixedLeftCol, cellWidth);
@@ -614,11 +641,7 @@ class TTableState extends State<TTable> {
       );
     } else {
       headerRow = Row(
-        children: [
-          ...headerLeftCells,
-          ...headerNonCells,
-          ...headerRightCells,
-        ],
+        children: [...headerLeftCells, ...headerNonCells, ...headerRightCells],
       );
     }
 
@@ -629,8 +652,8 @@ class TTableState extends State<TTable> {
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
-              const TLoading(size: TLoadingSize.large),
+          child:
+              widget.loadingWidget ?? const TLoading(size: TLoadingSize.large),
         ),
       );
     } else if (widget.data == null || widget.data!.isEmpty) {
@@ -661,11 +684,7 @@ class TTableState extends State<TTable> {
         );
       } else {
         dataRow = Row(
-          children: [
-            ...dataLeftCols,
-            ...dataNonCols,
-            ...dataRightCols,
-          ],
+          children: [...dataLeftCols, ...dataNonCols, ...dataRightCols],
         );
       }
 
@@ -690,10 +709,7 @@ class TTableState extends State<TTable> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.showHeader == true) headerRow,
-            SizedBox(
-              height: widget.height,
-              child: dataBody,
-            ),
+            SizedBox(height: widget.height, child: dataBody),
           ],
         ),
       );
@@ -705,10 +721,7 @@ class TTableState extends State<TTable> {
       color: widget.backgroundColor ?? TTheme.of(context).bgColorContainer,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.showHeader == true) headerRow,
-          dataBody,
-        ],
+        children: [if (widget.showHeader == true) headerRow, dataBody],
       ),
     );
   }
@@ -744,15 +757,16 @@ class TTableState extends State<TTable> {
   /// 半选图标
   Widget getAllIcon(bool checked, bool halfSelected) {
     return Icon(
-        checked
-            ? TIcons.check_rectangle_filled
-            : halfSelected
-                ? TIcons.minus_rectangle_filled
-                : TIcons.check_rectangle,
-        size: 16,
-        color: (checked || halfSelected)
-            ? TTheme.of(context).brandNormalColor
-            : TTheme.of(context).textDisabledColor);
+      checked
+          ? TIcons.check_rectangle_filled
+          : halfSelected
+          ? TIcons.minus_rectangle_filled
+          : TIcons.check_rectangle,
+      size: 16,
+      color: (checked || halfSelected)
+          ? TTheme.of(context).brandNormalColor
+          : TTheme.of(context).textDisabledColor,
+    );
   }
 
   @override
@@ -764,7 +778,7 @@ class TTableState extends State<TTable> {
     var width = widget.width ?? MediaQuery.of(context).size.width;
     var fixedCols = [
       ..._getCol(TTableColFixed.left),
-      ..._getCol(TTableColFixed.right)
+      ..._getCol(TTableColFixed.right),
     ];
 
     // 存在固定列
@@ -793,7 +807,7 @@ class TTableState extends State<TTable> {
                   physics: const BouncingScrollPhysics(),
                   child: _getTableContent(context),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -815,7 +829,7 @@ class TTableState extends State<TTable> {
               physics: const BouncingScrollPhysics(),
               child: _getTableContent(context),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -823,10 +837,7 @@ class TTableState extends State<TTable> {
 }
 
 class ChevronPainter extends CustomPainter {
-  ChevronPainter({
-    required this.upColor,
-    required this.downColor,
-  });
+  ChevronPainter({required this.upColor, required this.downColor});
 
   /// 线条颜色（向上）
   final Color upColor;
