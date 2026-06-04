@@ -1,0 +1,29 @@
+
+  Widget buildMonthDaySelect(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'TPickerLinked：切换月份后日列自动变为 28 / 30 / 31 天（demo 平年，2 月固定 28 天）',
+          style: TextStyle(
+              fontSize: 12, color: TTheme.of(context).textColorPlaceholder),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '选中: ${selectedMonthDay.isEmpty ? "未选择" : selectedMonthDay}',
+          style: TextStyle(
+              fontSize: 14, color: TTheme.of(context).textColorSecondary),
+        ),
+        const SizedBox(height: 8),
+        _pickerCard(
+          context,
+          child: TPicker(
+            items: _monthDayItems,
+            initialValue: const [1, 1],
+            onChange: (v) =>
+                setState(() => selectedMonthDay = v.labels.join(' / ')),
+          ),
+        ),
+      ],
+    );
+  }

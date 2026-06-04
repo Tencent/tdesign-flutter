@@ -6,17 +6,23 @@
       note: label.isEmpty ? '请选择' : label,
       arrow: true,
       onClick: (_) {
+        TPickerValue? draft;
+        final initial =
+            _popupLinkedValue?.values ?? List<dynamic>.from(_popupLinkedInitial);
         _showPickerPopup(
           context,
+          title: '请选择地区',
+          onConfirm: () {
+            setState(() {
+              _popupLinkedValue = draft ??
+                  _popupLinkedValue ??
+                  _linkedValueFromPath(linkedItems.tree, initial);
+            });
+          },
           picker: TPicker(
             items: linkedItems,
-            initialValue: _popupLinkedValue?.values ?? _popupLinkedInitial,
-            title: '请选择地区',
-            onCancel: () => Navigator.of(context).pop(),
-            onConfirm: (value) {
-              setState(() => _popupLinkedValue = value);
-              Navigator.of(context).pop();
-            },
+            initialValue: initial,
+            onChange: (value) => draft = value,
           ),
         );
       },

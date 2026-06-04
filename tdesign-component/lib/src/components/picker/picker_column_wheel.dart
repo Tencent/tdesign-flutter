@@ -20,7 +20,6 @@ class PickerColumnWheel extends StatefulWidget {
     required this.onItemSelected,
     this.scrollBehavior,
     this.itemBuilder,
-    this.itemDistanceCalculator,
     this.onScrollEnd,
   });
 
@@ -31,7 +30,6 @@ class PickerColumnWheel extends StatefulWidget {
   final bool disabled;
   final ScrollBehavior? scrollBehavior;
   final ItemBuilderType? itemBuilder;
-  final ItemDistanceCalculator? itemDistanceCalculator;
   final void Function(int col, int index, List<TPickerOption> data)
       onItemSelected;
   final bool Function(
@@ -123,7 +121,6 @@ class PickerColumnWheelState extends State<PickerColumnWheel> {
           itemHeight: widget.itemHeight,
           disabled: _options[index].disabled,
           itemBuilder: widget.itemBuilder,
-          itemDistanceCalculator: widget.itemDistanceCalculator,
         ),
       ),
     );

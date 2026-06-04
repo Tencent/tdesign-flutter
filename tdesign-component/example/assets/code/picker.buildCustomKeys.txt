@@ -3,7 +3,6 @@
     // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
     const keys =
         TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
-    final label = _customKeysValue?.labels.join() ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -14,7 +13,7 @@
         ),
         const SizedBox(height: 4),
         Text(
-          '当前选中：${label.isEmpty ? "未选择" : label}',
+          '当前选中：${_customKeysSelectionText()}',
           style: TextStyle(
               fontSize: 14, color: TTheme.of(context).textColorSecondary),
         ),

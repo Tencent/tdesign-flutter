@@ -2,15 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
-import '../../util/t_toolbar_pressable.dart';
 import 'no_wave_behavior.dart';
-import 'picker_column_wheel.dart';
+import 't_item_widget.dart';
 
 // =============== 文件级常量（魔法数字归一） ===============
-
-/// 工具栏高度（px）
-const double _kToolbarHeight = 48;
 
 /// disabled 项修正动画 - 距离 ≤ 2 时的时长
 const int _kCorrectAnimShortMs = 200;
@@ -21,20 +16,26 @@ const int _kCorrectAnimLongMs = 350;
 /// 距离阈值：≤ 2 使用短动画，> 2 使用长动画
 const int _kCorrectAnimDistanceThreshold = 2;
 
-/// 默认字号（fontTitleMedium fallback）
-const double _kDefaultFontSize = 16;
-
-/// 默认图标大小
-const double _kDefaultIconSize = 22;
+/// 滚轮透视比例（越大越平）
+const double _kWheelDiameterRatio = 3;
 
 /// 整组禁用时的透明度
 const double _kDisabledOpacity = 0.5;
 
 /// 纯滚轮选择器组件
 ///
-/// 数据决定形态（编译期类型安全）：
-/// - [TPickerColumns] → 多列独立选择
-/// - [TPickerLinked] → 联动选择
+/// 不包含工具栏、确认按钮或内置 loading；弹窗场景请配合 [TPopup] 在用户确认后再提交。
+///
+/// 数据形态（编译期二选一）：
+/// - [TPickerColumns]：多列独立，各列选项互不影响
+/// - [TPickerLinked]：联动树，上游变更后下游列裁剪并按新分支展开，默认选中各列首项
+///
+/// [items] 或 [initialValue] 相对上一帧值不相等时会释放全部 ScrollController 并重新初始化；
+/// 内容相等的新实例不会触发重建。分页追加后请同步更新 [initialValue] 以恢复选中。
+///
+/// [onChange] 为滚动实时回调，不代表用户已确认；如需去抖请在业务层自行处理。
+///
+/// 详细选型与能力边界见站点文档「Picker - 能力边界」。
 ///
 /// ```dart
 /// // 多列独立
@@ -53,19 +54,10 @@ class TPicker extends StatefulWidget {
     required this.items,
     this.initialValue,
     this.onChange,
-    this.onLoad,
     this.height = 200,
     this.itemCount = 5,
     this.disabled = false,
     this.itemBuilder,
-    this.itemDistanceCalculator,
-    this.title,
-    this.cancel,
-    this.confirm,
-    this.titleWidget,
-    this.onCancel,
-    this.onConfirm,
-    this.showToolbar = true,
   });
 
   /// 数据源（必填）
@@ -75,9 +67,13 @@ class TPicker extends StatefulWidget {
   /// - [TPickerLinked] → 联动选择
   ///
   /// 自由结构数据通过 `.fromRaw()` 工厂构造归一化。
+  ///
+  /// 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。
   final TPickerItems items;
 
-  /// 初始选中值列表（按 value 匹配）
+  /// 初始选中值列表（按 value 匹配各列）
+  ///
+  /// 与 [items] 一并参与重建判断：相对上一帧值不相等时会重新初始化。
   final List<dynamic>? initialValue;
 
   /// 值改变回调（滚动时实时触发）
@@ -86,37 +82,14 @@ class TPicker extends StatefulWidget {
   /// - 用户滚动经过某个 enabled 项并稳定时
   /// - disabled 修正动画完成后，回调最终落点
   ///
-  /// **注意**：此回调代表"滚动时实时变化"，不代表"用户已确认选择"。
-  /// 如需"已确认"语义，请使用 [onConfirm]。
+  /// 注意：此回调代表滚动时实时变化，不代表用户已确认选择。
+  /// 弹窗场景请配合 [TPopup] 头部确认按钮，在关闭前读取 draft 值提交。
   ///
   /// 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。
+  ///
+  /// 按需加载更多：在回调里根据 [TPickerValue.indexes] 判断是否接近列底，
+  /// 请求完成后更新 [items] 即可（无需组件内置加载 API）。
   final void Function(TPickerValue)? onChange;
-
-  /// 列选中项变化的事件回调
-  ///
-  /// **触发时机**：每次用户滚动到一个 enabled 项后都会触发（联动模式下还会
-  /// 在新展开的列就位后触发）。组件本身不做"距底部多少项"的阈值判断——把
-  /// 决策权交给业务层。
-  ///
-  /// **事件参数**包含：
-  /// - [TPickerLoadEvent.column]：触发列索引
-  /// - [TPickerLoadEvent.remaining]：当前列距底部剩余项数
-  /// - [TPickerLoadEvent.displayedCount]：当前列总项数
-  /// - [TPickerLoadEvent.parentValue]：联动模式下父级选中值（首列为 null）
-  ///
-  /// **典型用法**：业务层根据 [TPickerLoadEvent.remaining] 自行判断是否加载更多。
-  /// ```dart
-  /// onLoad: (e) async {
-  ///   if (e.remaining > 5 || _isLoading) return; // 距底部还远 / 已在加载，跳过
-  ///   _isLoading = true;
-  ///   final more = await fetchMore(parent: e.parentValue);
-  ///   setState(() {
-  ///     _data.addAll(more);
-  ///     _isLoading = false;
-  ///   });
-  /// }
-  /// ```
-  final void Function(TPickerLoadEvent)? onLoad;
 
   /// 视窗高度，默认 200
   final double height;
@@ -129,102 +102,6 @@ class TPicker extends StatefulWidget {
 
   /// 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder）
   final ItemBuilderType? itemBuilder;
-
-  /// 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化）
-  final ItemDistanceCalculator? itemDistanceCalculator;
-
-  /// 是否显示顶部工具栏（取消 / 标题 / 确认）；默认 `true`。
-  ///
-  /// 为 `false` 时仅渲染滚轮，选中变化请使用 [onChange]。
-  final bool showToolbar;
-
-  /// 工具栏中部标题（可选，不传时中部留白）
-  ///
-  /// 仅当 [showToolbar] 为 `true` 时显示。用户点击「取消」触发 [onCancel]，
-  /// 点击「确认」触发 [onConfirm]。
-  /// 选择器与弹窗（popup）完全解耦——关闭/打开弹窗的逻辑由业务层在
-  /// 这两个回调中自行控制。
-  ///
-  /// 典型用法（与 popup 弹窗组合）：
-  /// ```dart
-  /// TPicker(
-  ///   items: items,
-  ///   title: '请选择地区',
-  ///   onCancel: () => setState(() => visible = false),
-  ///   onConfirm: (value) {
-  ///     setState(() {
-  ///       selected = value;
-  ///       visible = false;
-  ///     });
-  ///   },
-  /// )
-  /// ```
-  final String? title;
-
-  /// 工具栏左侧自定义插槽，默认使用 [TResourceDelegate.cancel]
-  ///
-  /// 可用于渲染图标、图标+文字组合等。点击事件依然由外层 [GestureDetector]
-  /// 处理，触发 [onCancel] 回调——所以插槽内的 Widget 不需要自己处理点击。
-  ///
-  /// ```dart
-  /// // 简单改文字
-  /// TPicker(
-  ///   cancel: const Text('关闭'),
-  ///   onCancel: () => Navigator.of(context).pop(),
-  /// )
-  ///
-  /// // 带图标
-  /// TPicker(
-  ///   cancel: const Icon(Icons.close, size: 22),
-  ///   onCancel: () => Navigator.of(context).pop(),
-  /// )
-  /// ```
-  final Widget? cancel;
-
-  /// 工具栏右侧自定义插槽，默认使用 [TResourceDelegate.confirm]
-  ///
-  /// 可用于渲染图标、图标+文字组合等。点击事件依然由外层 [GestureDetector]
-  /// 处理，触发 [onConfirm] 回调——所以插槽内的 Widget 不需要自己处理点击。
-  ///
-  /// ```dart
-  /// // 简单改文字
-  /// TPicker(
-  ///   confirm: const Text('确定'),
-  ///   onConfirm: (v) => Navigator.of(context).pop(v),
-  /// )
-  ///
-  /// // 带图标
-  /// TPicker(
-  ///   confirm: const Icon(Icons.check, size: 22),
-  ///   onConfirm: (v) => Navigator.of(context).pop(v),
-  /// )
-  /// ```
-  final Widget? confirm;
-
-  /// 工具栏中部自定义标题插槽
-  ///
-  /// 传入后会**完全替换**默认的 [title] 文字，可用于渲染更复杂的标题（副标题、图标+文字等）。
-  /// 标题区域不响应点击。
-  final Widget? titleWidget;
-
-  /// 点击「取消」按钮回调
-  ///
-  /// 仅作为点击事件通知，不携带任何参数。组件本身不会做任何 popup
-  /// 操作，业务层可在此自行决定是否关闭弹窗、重置状态等。
-  final VoidCallback? onCancel;
-
-  /// 点击「确认」按钮回调
-  ///
-  /// 携带当前选中的完整 [TPickerValue]，包含：
-  /// - `selectedOptions`: 当前选中的所有 [TPickerOption]
-  /// - `values`: 各列选中项的 value 列表
-  /// - `labels`: 各列选中项的 label 列表
-  /// - `indexes`: 各列选中项的索引
-  ///
-  /// 与 [onChange] 不同——只有用户点击「确认」时才触发，代表"已确认选择"。
-  /// 组件本身不会做任何 popup 操作，业务层可在此自行决定是否关闭弹窗、
-  /// 提交表单等。
-  final void Function(TPickerValue)? onConfirm;
 
   @override
   State<TPicker> createState() => _TPickerState();
@@ -242,10 +119,6 @@ class _TPickerState extends State<TPicker> {
   final Set<int> _animatingCols = {};
   /// 复用同一实例，避免每次 _buildColumn 都 new
   final _scrollBehavior = NoWaveBehavior();
-  /// 各列滚轮子组件 key，用于单列数据/位置更新而不重建整表
-  final List<GlobalKey<PickerColumnWheelState>> _columnKeys = [];
-
-  /// 工具栏按钮按压态（参考 TCheckbox 的反馈方式）
 
   double get _itemHeight => widget.height / widget.itemCount;
 
@@ -258,45 +131,12 @@ class _TPickerState extends State<TPicker> {
   @override
   void didUpdateWidget(covariant TPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final itemsChanged = oldWidget.items != widget.items;
     final initChanged =
         !listEquals(oldWidget.initialValue, widget.initialValue);
-
-    if (oldWidget.items.runtimeType != widget.items.runtimeType) {
+    if (itemsChanged || initChanged) {
       _disposeAllControllers();
       _initState();
-      return;
-    }
-
-    switch (widget.items) {
-      case TPickerColumns(:final columns):
-        if (oldWidget.items is! TPickerColumns) {
-          _disposeAllControllers();
-          _initState();
-          return;
-        }
-        final oldColumns = (oldWidget.items as TPickerColumns).columns;
-        if (oldColumns.length != columns.length) {
-          _disposeAllControllers();
-          _initState();
-          return;
-        }
-        var columnDataChanged = false;
-        for (var i = 0; i < columns.length; i++) {
-          if (!listEquals(oldColumns[i], columns[i])) {
-            _replaceColumnData(i, columns[i]);
-            columnDataChanged = true;
-          }
-        }
-        if (!columnDataChanged && initChanged) {
-          _syncControllersToInitialValue();
-        }
-        return;
-      case TPickerLinked():
-        final itemsChanged = oldWidget.items != widget.items;
-        if (itemsChanged || initChanged) {
-          _disposeAllControllers();
-          _initState();
-        }
     }
   }
 
@@ -308,12 +148,9 @@ class _TPickerState extends State<TPicker> {
 
   /// 释放所有 scroll controller（不清理其它并列数组，由调用方负责）
   void _disposeAllControllers() {
-    final toDispose = List<FixedExtentScrollController>.from(_controllers);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (final c in toDispose) {
-        c.dispose();
-      }
-    });
+    for (final c in _controllers) {
+      c.dispose();
+    }
   }
 
   void _initState() {
@@ -334,109 +171,20 @@ class _TPickerState extends State<TPicker> {
   }
 
   void _initColumns(List<List<TPickerOption>> columns) {
-    _columns = columns.map((c) => List<TPickerOption>.from(c)).toList();
-    _columnKeys
-      ..clear()
-      ..addAll(
-        List.generate(_columns.length, (_) => GlobalKey<PickerColumnWheelState>()),
-      );
+    _columns = columns;
 
     final initValues = widget.initialValue;
     _controllers = List.generate(_columns.length, (i) {
-      return FixedExtentScrollController(
-        initialItem: _indexForColumnValue(
-          i,
-          initValues != null && i < initValues.length ? initValues[i] : null,
-          duringInit: true,
-        ),
-      );
+      var index = 0;
+      if (initValues != null && i < initValues.length) {
+        final targetIdx =
+            _columns[i].indexWhere((o) => o.value == initValues[i]);
+        if (targetIdx >= 0) {
+          index = targetIdx;
+        }
+      }
+      return FixedExtentScrollController(initialItem: index);
     });
-  }
-
-  /// 单列数据更新（仅刷新该列滚轮，不 setState 整表）。
-  void _replaceColumnData(
-    int col,
-    List<TPickerOption> newData, {
-    dynamic syncValue,
-  }) {
-    final oldData = _columns[col];
-    _columns[col] = newData;
-
-    dynamic targetValue = syncValue;
-    if (targetValue == null) {
-      final initValues = widget.initialValue;
-      targetValue = initValues != null && col < initValues.length
-          ? initValues[col]
-          : _valueAtController(col);
-    }
-    final targetIdx = _indexForColumnValue(col, targetValue);
-
-    FixedExtentScrollController controller;
-    if (oldData.length != newData.length) {
-      controller = FixedExtentScrollController(initialItem: targetIdx);
-      _controllers[col] = controller;
-    } else {
-      controller = _controllers[col];
-      if (controller.selectedItem != targetIdx) {
-        controller.jumpToItem(targetIdx);
-      }
-    }
-
-    _columnKeys[col].currentState?.applyColumnUpdate(
-          options: newData,
-          controller: controller,
-        );
-  }
-
-  /// 仅同步滚轮位置到 [initialValue]（options 未变时）。
-  void _syncControllersToInitialValue() {
-    final initValues = widget.initialValue;
-    if (initValues == null) {
-      return;
-    }
-    for (var i = 0; i < _controllers.length; i++) {
-      if (i >= initValues.length) {
-        break;
-      }
-      final targetIdx = _indexForColumnValue(i, initValues[i]);
-      if (_controllers[i].selectedItem != targetIdx) {
-        _controllers[i].jumpToItem(targetIdx);
-      }
-    }
-  }
-
-  int _indexForColumnValue(int col, dynamic value, {bool duringInit = false}) {
-    if (_columns[col].isEmpty) {
-      return 0;
-    }
-    if (value != null) {
-      final found = _columns[col].indexWhere((o) => o.value == value);
-      if (found >= 0) {
-        return found;
-      }
-    }
-    if (!duringInit && col < _controllers.length) {
-      final current = _controllers[col].selectedItem;
-      return current.clamp(0, _columns[col].length - 1);
-    }
-    return 0;
-  }
-
-  dynamic _valueAtController(int col) {
-    final idx = _controllers[col].selectedItem;
-    if (idx < 0 || idx >= _columns[col].length) {
-      return null;
-    }
-    return _columns[col][idx].value;
-  }
-
-  void _ensureColumnKeys() {
-    while (_columnKeys.length < _controllers.length) {
-      _columnKeys.add(GlobalKey<PickerColumnWheelState>());
-    }
-    if (_columnKeys.length > _controllers.length) {
-      _columnKeys.removeRange(_controllers.length, _columnKeys.length);
-    }
   }
 
   void _initLinked(Map<TPickerOption, dynamic> tree) {
@@ -461,19 +209,11 @@ class _TPickerState extends State<TPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (widget.showToolbar) _buildToolbar(theme),
-        _buildWheel(context, theme),
-      ],
-    );
+    return _buildWheel(context, TTheme.of(context));
   }
 
   /// 构建滚轮主体（含禁用状态遮罩与中央高亮条）
   Widget _buildWheel(BuildContext context, TThemeData theme) {
-    _ensureColumnKeys();
     return Opacity(
       opacity: widget.disabled ? _kDisabledOpacity : 1.0,
       child: AbsorbPointer(
@@ -503,21 +243,7 @@ class _TPickerState extends State<TPicker> {
                 child: Row(
                   children: [
                     for (var i = 0; i < _controllers.length; i++)
-                      Expanded(
-                        child: PickerColumnWheel(
-                          key: _columnKeys[i],
-                          colIndex: i,
-                          options: _columns[i],
-                          controller: _controllers[i],
-                          itemHeight: _itemHeight,
-                          disabled: widget.disabled,
-                          scrollBehavior: _scrollBehavior,
-                          itemBuilder: widget.itemBuilder,
-                          itemDistanceCalculator: widget.itemDistanceCalculator,
-                          onItemSelected: _onItemSelected,
-                          onScrollEnd: _onScrollNotification,
-                        ),
-                      ),
+                      Expanded(child: _buildColumn(i)),
                   ],
                 ),
               ),
@@ -528,63 +254,45 @@ class _TPickerState extends State<TPicker> {
     );
   }
 
-  /// 构建顶部工具栏（取消 / 标题 / 确认）
-  Widget _buildToolbar(TThemeData theme) {
-    final cancelText = widget.cancel ?? Text(context.resource.cancel);
-    final confirmText = widget.confirm ?? Text(context.resource.confirm);
-    return SizedBox(
-      height: _kToolbarHeight,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: theme.spacer16),
-        child: Row(
-          children: [
-            TToolbarPressable(
-              onTap: widget.onCancel,
-              mergeTextStyle: TextStyle(
-                fontSize: theme.fontTitleMedium?.size ?? _kDefaultFontSize,
-                color: theme.fontGyColor2,
+  Widget _buildColumn(int colIndex) {
+    final data = _columns[colIndex];
+    if (data.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: ScrollConfiguration(
+        behavior: _scrollBehavior,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (notification) =>
+              _onScrollNotification(notification, colIndex, data),
+          child: ListWheelScrollView.useDelegate(
+            itemExtent: _itemHeight,
+            diameterRatio: _kWheelDiameterRatio,
+            controller: _controllers[colIndex],
+            physics: widget.disabled
+                ? const NeverScrollableScrollPhysics()
+                : const FixedExtentScrollPhysics(),
+            onSelectedItemChanged: widget.disabled
+                ? null
+                : (index) => _onItemSelected(colIndex, index, data),
+            childDelegate: ListWheelChildBuilderDelegate(
+              childCount: data.length,
+              builder: (_, index) => TItemWidget(
+                content: data[index].label,
+                fixedExtentScrollController: _controllers[colIndex],
+                colIndex: colIndex,
+                index: index,
+                itemHeight: _itemHeight,
+                disabled: data[index].disabled,
+                itemBuilder: widget.itemBuilder,
               ),
-              mergeIconTheme: IconThemeData(
-                color: theme.fontGyColor2,
-                size: _kDefaultIconSize,
-              ),
-              child: cancelText,
             ),
-            Expanded(
-              child: Center(child: _buildTitle(theme)),
-            ),
-            TToolbarPressable(
-              onTap: () => widget.onConfirm?.call(_buildValue()),
-              mergeTextStyle: TextStyle(
-                fontSize: theme.fontTitleMedium?.size ?? _kDefaultFontSize,
-                color: theme.brandNormalColor,
-              ),
-              mergeIconTheme: IconThemeData(
-                color: theme.brandNormalColor,
-                size: _kDefaultIconSize,
-              ),
-              child: confirmText,
-            ),
-          ],
+          ),
         ),
       ),
-    );
-  }
-
-  /// 构建工具栏标题（优先自定义 [TPicker.titleWidget]，其次 [TPicker.title] 文字）
-  Widget _buildTitle(TThemeData theme) {
-    if (widget.titleWidget != null) {
-      return widget.titleWidget!;
-    }
-    return Text(
-      widget.title ?? '',
-      style: TextStyle(
-        fontSize: theme.fontTitleMedium?.size ?? _kDefaultFontSize,
-        fontWeight: FontWeight.w600,
-        color: theme.fontGyColor1,
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -668,12 +376,10 @@ class _TPickerState extends State<TPicker> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           _notifyChange();
-          _notifyLoadEvent(col, index, data.length);
         }
       });
     } else {
       _notifyChange();
-      _notifyLoadEvent(col, index, data.length);
     }
   }
 
@@ -694,6 +400,8 @@ class _TPickerState extends State<TPicker> {
     return -1;
   }
 
+  /// 联动刷新：变更 [col] 后，裁剪其下所有列并按新分支重新展开；
+  /// 下游每一列均为新数据且默认选中首项（如切换第 1 级，其下所有下游列全部换新）。
   void _refreshLinked(int col, int newIndex) {
     setState(() {
       final selectedOpt = _columns[col][newIndex];
@@ -724,19 +432,13 @@ class _TPickerState extends State<TPicker> {
     if (col >= _columns.length - 1) {
       return;
     }
-    final toDispose = _controllers.sublist(col + 1);
+    for (var i = col + 1; i < _controllers.length; i++) {
+      _controllers[i].dispose();
+    }
     _columns.removeRange(col + 1, _columns.length);
     _controllers.removeRange(col + 1, _controllers.length);
     _selectedPath.removeRange(col + 1, _selectedPath.length);
     _mapStack.removeRange(col + 1, _mapStack.length);
-    if (_columnKeys.length > _controllers.length) {
-      _columnKeys.removeRange(_controllers.length, _columnKeys.length);
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (final c in toDispose) {
-        c.dispose();
-      }
-    });
   }
 
   /// 通用的联动列展开器：从给定的起点 options/parent 开始，把后续每一层都 push 进
@@ -824,27 +526,6 @@ class _TPickerState extends State<TPicker> {
 
   void _notifyChange() {
     widget.onChange?.call(_buildValue());
-  }
-
-  /// 派发 [TPickerLoadEvent] 给 [TPicker.onLoad]
-  ///
-  /// 组件本身不做"接近底部"的阈值判断，每次选中变化都会派发；业务层
-  /// 通过 [TPickerLoadEvent.remaining] 等字段自行决定是否加载更多。
-  void _notifyLoadEvent(int col, int currentIndex, int total) {
-    final onLoad = widget.onLoad;
-    if (onLoad == null) {
-      return;
-    }
-    final remaining = total - currentIndex - 1;
-    if (remaining < 0) {
-      return;
-    }
-    onLoad(TPickerLoadEvent(
-      column: col,
-      parentValue: col > 0 ? _selectedPath[col - 1] : null,
-      displayedCount: total,
-      remaining: remaining,
-    ));
   }
 }
 
