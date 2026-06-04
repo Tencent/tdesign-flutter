@@ -39,15 +39,6 @@
 | labels | List<String> | - | 所有选中项的 label（展示用） 顺序与列顺序对应，可直接用于 UI 展示。 懒计算并缓存，生命周期内只计算一次。 |
 | values | List<dynamic> | - | 所有选中项的 value（提交表单用） 顺序与列顺序对应，可直接用于表单提交。 懒计算并缓存，生命周期内只计算一次。 |
 
-### TPickerLoadEvent
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| column | int | - | 触发事件的列索引（0 表示第一列） |
-| displayedCount | int | - | 当前列已展示的选项总数 |
-| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） 第一列时为 null；业务层可用此值从原始数据中筛选子级选项。 |
-| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
 
 ### TPickerColumns
 
