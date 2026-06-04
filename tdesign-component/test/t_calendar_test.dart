@@ -16,122 +16,6 @@ DateTime _day(int y, int m, int d) => DateTime(y, m, d);
 
 void main() {
   // -----------------------------------------------------------------------
-  // popupOverlayBuilder / popupOverlayExpanded（仅 TCalendarInherited / showPopup）
-  // -----------------------------------------------------------------------
-  group('TCalendar — popupOverlay / popupOverlayExpanded', () {
-    test('popupOverlayExpanded 未配合 popupOverlayBuilder 时触发 assert', () {
-      expect(
-        () => TCalendarInherited(
-          selected: ValueNotifier<List<DateTime>>([]),
-          popupOverlayExpanded: ValueNotifier<bool>(false),
-          child: const SizedBox(),
-        ),
-        throwsAssertionError,
-      );
-    });
-
-    testWidgets('内嵌模式无法通过 TCalendar 传入 popupOverlayBuilder', (tester) async {
-      await tester.pumpWidget(
-        _buildTestApp(
-          TCalendar(
-            titleWidget: const Text('测试'),
-            height: 640,
-          ),
-        ),
-      );
-
-      expect(find.text('底部'), findsNothing);
-    });
-
-    testWidgets('非弹窗 Inherited 不渲染 popupOverlayBuilder', (tester) async {
-      await tester.pumpWidget(
-        _buildTestApp(
-          TCalendarInherited(
-            selected: ValueNotifier<List<DateTime>>([]),
-            usePopup: false,
-            popupOverlayBuilder: (_, __) => const Text('底部'),
-            child: TCalendar(
-              titleWidget: const Text('测试'),
-              height: 640,
-            ),
-          ),
-        ),
-      );
-
-      expect(find.text('底部'), findsNothing);
-    });
-
-    testWidgets('popup 内选中变化时 popupOverlayBuilder 会重建', (tester) async {
-      final day = _day(2024, 6, 15);
-      final selected = ValueNotifier<List<DateTime>>([day]);
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          TCalendarInherited(
-            selected: selected,
-            usePopup: true,
-            popupOverlayBuilder: (_, dates) => Text('days:${dates.length}'),
-            child: TCalendar(
-              titleWidget: const Text('测试'),
-              height: 640,
-              initialValue: selected.value,
-            ),
-          ),
-        ),
-      );
-
-      expect(find.text('days:1'), findsOneWidget);
-
-      final day2 = day.add(const Duration(days: 1));
-      selected.value = [day, _day(day2.year, day2.month, day2.day)];
-      await tester.pump();
-
-      expect(find.text('days:2'), findsOneWidget);
-    });
-
-    testWidgets('popup 内 popupOverlayExpanded 为 false 时处于收起偏移', (tester) async {
-      final expanded = ValueNotifier<bool>(false);
-      final selected = ValueNotifier<List<DateTime>>([]);
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          TCalendarInherited(
-            selected: selected,
-            usePopup: true,
-            popupOverlayExpanded: expanded,
-            popupOverlayBuilder: (_, __) => const Text('底部内容'),
-            child: TCalendar(
-              titleWidget: const Text('测试'),
-              height: 640,
-            ),
-          ),
-        ),
-      );
-      await tester.pump();
-
-      var slide = tester.widget<SlideTransition>(
-        find.descendant(
-          of: find.byType(TCalendar),
-          matching: find.byType(SlideTransition),
-        ),
-      );
-      expect(slide.position.value.dy, 1.0);
-
-      expanded.value = true;
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 250));
-
-      slide = tester.widget<SlideTransition>(
-        find.descendant(
-          of: find.byType(TCalendar),
-          matching: find.byType(SlideTransition),
-        ),
-      );
-      expect(slide.position.value.dy, 0.0);
-    });
-  });
-
-  // -----------------------------------------------------------------------
   // 单选
   // -----------------------------------------------------------------------
   group('TCalendar — 单选 (single)', () {
@@ -354,62 +238,125 @@ void main() {
   });
 
   // -----------------------------------------------------------------------
-  // initialValue / anchorRevision
+  // initialValue / anchorDate
   // -----------------------------------------------------------------------
-  group('TCalendar — initialValue 与 anchorRevision', () {
-    testWidgets('运行期更新 initialValue 会同步选中 UI（single）', (tester) async {
+  group('TCalendar — initialValue 与 anchorDate', () {
+    testWidgets('运行期变更 initialValue 不会覆盖内部选中态', (tester) async {
       final day15 = _day(2024, 6, 15);
       final day10 = _day(2024, 6, 10);
+      final day20 = _day(2024, 6, 20);
       final minDate = _day(2024, 6, 1);
       final maxDate = _day(2024, 6, 30);
-      var selected = [day15];
       var onChangeCount = 0;
 
-      Future<void> pumpCalendar() {
-        return tester.pumpWidget(
-          _buildTestApp(
-            TCalendar(
-              height: 640,
-              type: CalendarType.single,
-              initialValue: List<DateTime>.from(selected),
-              minDate: minDate,
-              maxDate: maxDate,
-              onChange: (_) => onChangeCount++,
-            ),
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            height: 640,
+            type: CalendarType.single,
+            initialValue: [day15],
+            minDate: minDate,
+            maxDate: maxDate,
+            onChange: (_) => onChangeCount++,
           ),
-        );
-      }
+        ),
+      );
+      await tester.pumpAndSettle();
 
-      await pumpCalendar();
+      // 父级改 initialValue 为 10，但内部仍保持挂载时的 15
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            height: 640,
+            type: CalendarType.single,
+            initialValue: [day10],
+            minDate: minDate,
+            maxDate: maxDate,
+            onChange: (_) => onChangeCount++,
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('15'));
       await tester.pump();
       expect(onChangeCount, 0);
 
-      selected = [day10];
-      await pumpCalendar();
-      await tester.pumpAndSettle();
-
-      final countAfterReset = onChangeCount;
-      await tester.tap(find.text('10'));
+      await tester.tap(find.text('20'));
       await tester.pump();
-      expect(onChangeCount, countAfterReset);
-
-      await tester.tap(find.text('15'));
-      await tester.pump();
-      expect(onChangeCount, countAfterReset + 1);
+      expect(onChangeCount, 1);
+      expect(find.text('20'), findsWidgets);
     });
 
-    testWidgets('anchorRevision 递增可重复触发锚点滚动', (tester) async {
+    testWidgets('更换 Key 后 initialValue 重新生效', (tester) async {
+      final day15 = _day(2024, 6, 15);
+      final day10 = _day(2024, 6, 10);
+      final minDate = _day(2024, 6, 1);
+      final maxDate = _day(2024, 6, 30);
+      var onChangeCount = 0;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            key: const Key('cal-a'),
+            height: 640,
+            type: CalendarType.single,
+            initialValue: [day15],
+            minDate: minDate,
+            maxDate: maxDate,
+            onChange: (_) => onChangeCount++,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            key: const Key('cal-b'),
+            height: 640,
+            type: CalendarType.single,
+            initialValue: [day10],
+            minDate: minDate,
+            maxDate: maxDate,
+            onChange: (_) => onChangeCount++,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('10'));
+      await tester.pump();
+      expect(onChangeCount, 0);
+    });
+
+    testWidgets('仅 anchorDate、无 initialValue 时首屏定位到锚点月', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
-            anchorDate: _day(2024, 6, 1),
-            anchorRevision: 0,
+            type: CalendarType.single,
+            anchorDate: _day(2026, 1, 1),
+            onChange: (_) {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // 默认 minDate 为 1970-01；若 anchor 未下发 body，首屏会停在 1970 年。
+      expect(find.textContaining('1970'), findsNothing);
+      expect(find.textContaining('2026'), findsWidgets);
+    });
+
+    testWidgets('运行期更新 anchorDate 可重新滚动到目标月', (tester) async {
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            height: 640,
+            anchorDate: _day(2024, 1, 1),
             minDate: _day(2024, 1, 1),
             maxDate: _day(2024, 12, 31),
+            onChange: (_) {},
           ),
         ),
       );
@@ -420,13 +367,15 @@ void main() {
           TCalendar(
             height: 640,
             anchorDate: _day(2024, 6, 1),
-            anchorRevision: 1,
             minDate: _day(2024, 1, 1),
             maxDate: _day(2024, 12, 31),
+            onChange: (_) {},
           ),
         ),
       );
       await tester.pumpAndSettle();
+
+      expect(find.text('6'), findsWidgets);
     });
   });
 
@@ -442,6 +391,7 @@ void main() {
             type: CalendarType.single,
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
+            onChange: (_) {},
           ),
         ),
       );
@@ -461,6 +411,7 @@ void main() {
             initialValue: const [],
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
+            onChange: (_) {},
           ),
         ),
       );
@@ -469,11 +420,10 @@ void main() {
       expect(find.text('15'), findsOneWidget);
     });
 
-    testWidgets('onCellClick 回调携带正确参数', (tester) async {
+    testWidgets('onCellTap 回调携带正确 cell 模型', (tester) async {
       final minDate = _day(2024, 6, 1);
       final maxDate = _day(2024, 6, 30);
-      DateTime? clickedValue;
-      DateSelectType? clickedType;
+      TCalendarCellModel? tappedCell;
 
       await tester.pumpWidget(
         _buildTestApp(
@@ -482,10 +432,8 @@ void main() {
             type: CalendarType.single,
             minDate: minDate,
             maxDate: maxDate,
-            onCellClick: (value, type, tdate) {
-              clickedValue = value;
-              clickedType = type;
-            },
+            onChange: (_) {},
+            onCellTap: (cell) => tappedCell = cell,
           ),
         ),
       );
@@ -494,25 +442,27 @@ void main() {
       await tester.tap(find.text('15'));
       await tester.pump();
 
-      expect(clickedValue, _day(2024, 6, 15));
-      expect(clickedType, DateSelectType.selected);
+      expect(tappedCell, isNotNull);
+      expect(tappedCell!.date, _day(2024, 6, 15));
+      expect(tappedCell!.selectType, DateSelectType.selected);
     });
 
-    testWidgets('单月范围（minDate == maxDate 同月）正常渲染', (tester) async {
+    testWidgets('可选范围仅相邻两天时正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             height: 640,
             type: CalendarType.single,
             minDate: _day(2024, 6, 1),
-            maxDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 2),
+            onChange: (_) {},
           ),
         ),
       );
       await tester.pumpAndSettle();
 
-      // 只有 1 号可选，其余 disabled
       expect(find.text('1'), findsWidgets);
+      expect(find.text('2'), findsWidgets);
     });
 
     testWidgets('firstDayOfWeek = 1（周一开始）正常渲染', (tester) async {
@@ -524,170 +474,13 @@ void main() {
             firstDayOfWeek: 1,
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
+            onChange: (_) {},
           ),
         ),
       );
       await tester.pumpAndSettle();
 
       expect(find.text('15'), findsOneWidget);
-    });
-  });
-
-  // -----------------------------------------------------------------------
-  // showPopup 集成
-  // -----------------------------------------------------------------------
-  group('TCalendar.showPopup', () {
-    testWidgets('选中新日期并确认后返回选中列表', (tester) async {
-      final day15 = _day(2024, 6, 15);
-      final day20 = _day(2024, 6, 20);
-      List<DateTime>? popupResult;
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () async {
-                popupResult = await TCalendar.showPopup(
-                  context,
-                  titleWidget: const Text('选择日期'),
-                  type: CalendarType.single,
-                  initialValue: [day15],
-                  minDate: _day(2024, 6, 1),
-                  maxDate: _day(2024, 6, 30),
-                );
-              },
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('选择日期'), findsOneWidget);
-
-      await tester.tap(find.text('20'));
-      await tester.pump();
-
-      await tester.tap(find.text('确定'));
-      await tester.pumpAndSettle();
-
-      expect(popupResult, isNotNull);
-      expect(popupResult!.length, 1);
-      expect(popupResult!.first, day20);
-    });
-
-    testWidgets('点击关闭按钮未确认时返回 null', (tester) async {
-      List<DateTime>? popupResult;
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () async {
-                popupResult = await TCalendar.showPopup(
-                  context,
-                  titleWidget: const Text('选择日期'),
-                  type: CalendarType.single,
-                  minDate: _day(2024, 6, 1),
-                  maxDate: _day(2024, 6, 30),
-                );
-              },
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byType(IconButton));
-      await tester.pumpAndSettle();
-
-      expect(popupResult, isNull);
-    });
-
-    testWidgets('自定义 confirmBtnBuilder 点击后返回选中值并关闭弹窗', (tester) async {
-      final day15 = _day(2024, 6, 15);
-      final day20 = _day(2024, 6, 20);
-      List<DateTime>? popupResult;
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () async {
-                popupResult = await TCalendar.showPopup(
-                  context,
-                  titleWidget: const Text('选择日期'),
-                  type: CalendarType.single,
-                  initialValue: [day15],
-                  minDate: _day(2024, 6, 1),
-                  maxDate: _day(2024, 6, 30),
-                  confirmBtnBuilder: (onConfirm) => Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: GestureDetector(
-                      onTap: onConfirm,
-                      child: const Text('ok'),
-                    ),
-                  ),
-                );
-              },
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('20'));
-      await tester.pump();
-
-      await tester.tap(find.text('ok'));
-      await tester.pumpAndSettle();
-
-      expect(popupResult, isNotNull);
-      expect(popupResult!.single, day20);
-    });
-
-    testWidgets('popupOverlayBuilder 与确认按钮区域不重叠', (tester) async {
-      await tester.pumpWidget(
-        _buildTestApp(
-          Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () async {
-                await TCalendar.showPopup(
-                  context,
-                  titleWidget: const Text('选择日期'),
-                  type: CalendarType.single,
-                  minDate: _day(2024, 6, 1),
-                  maxDate: _day(2024, 6, 30),
-                  popupHeight: 640,
-                  popupOverlayBuilder: (_, __) => const Text('底部区域'),
-                );
-              },
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
-
-      final positioned = tester
-          .widgetList<Positioned>(
-            find.ancestor(
-              of: find.text('底部区域'),
-              matching: find.byType(Positioned),
-            ),
-          )
-          .firstWhere((p) => (p.bottom ?? 0) > 0);
-      expect(positioned.bottom, greaterThan(0));
     });
   });
 }

@@ -1,14 +1,13 @@
 ---
 title: Calendar 日历
-description: 按照日历形式展示数据或日期的容器。
-spline: base
+description: 按照日历形式展示数据或日期的容器；纯日历面板，不含内置弹窗。
+spline: data
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+在 `tdesign_flutter/tdesign_flutter.dart` 中导出 [TCalendar]。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,656 +15,86 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_calendar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_calendar_page.dart)
+完整示例：[t_calendar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_calendar_page.dart)
 
-### 1 组件类型
+| 场景 | 说明 |
+| --- | --- |
+| 单选 / 多选 / 区间 | [TCell] + 底部弹层；弹层内独立 [TCalendar] 实例，`onConfirm` 回写 |
+| 锚点对比 | 无 `anchorDate` vs 有 `anchorDate` 的首屏月份 |
+| 自定义副标题 | [subtitleBuilder] |
+| 自定义单元格 | [cellBuilder] |
+| 农历 | [subtitleBuilder] + 外置控制栏改 [anchorDate] |
 
-
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildSimple(BuildContext context) {
-  return const _SimpleDemo();
-}</pre>
-
-</td-code-block>
-                
-### 1 组件样式
-
-自定义文案、按钮、单元格
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildStyle(BuildContext context) {
-  const map = {
-    1: '初一',
-    2: '初二',
-    3: '初三',
-    14: '情人节',
-    15: '元宵节',
-  };
-
-  final customTextSelected =
-      ValueNotifier<List<DateTime>>([DateTime(2022, 1, 15)]);
-  final customBtnSelected =
-      ValueNotifier<List<DateTime>>([DateTime.now()]);
-  final customCellSelected = ValueNotifier<List<DateTime>>(
-      [DateTime.now().add(const Duration(days: 30))]);
-
-  return ValueListenableBuilder(
-    valueListenable: customTextSelected,
-    builder: (context, textSelected, _) {
-      return ValueListenableBuilder(
-        valueListenable: customBtnSelected,
-        builder: (context, btnSelected, _) {
-          return ValueListenableBuilder(
-            valueListenable: customCellSelected,
-            builder: (context, cellValue, _) {
-              final cellDate = cellValue[0];
-              return TCellGroup(
-                cells: [
-          // 1. 自定义文案（cellBuilder，仅 showPopup 弹窗模式）
-          TCell(
-            title: '自定义文案',
-            arrow: true,
-            note: _formatYmd(textSelected),
-            onClick: (_) {
-              TCalendar.showPopup(
-                context,
-                titleWidget: const Text('请选择日期'),
-                initialValue: textSelected,
-                minDate: DateTime(2022, 1, 1),
-                maxDate: DateTime(2022, 2, 15),
-                onConfirm: (value) => customTextSelected.value = value,
-                cellBuilder: (context, cell) {
-                  final isSpecial = cell.date.month == 2 &&
-                      map.keys.contains(cell.date.day);
-                  final sub = isSpecial ? '¥100' : '¥60';
-                  final top = isSpecial ? map[cell.date.day] : null;
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (top != null)
-                        Text(top,
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: isSpecial
-                                  ? TTheme.of(context).errorColor6
-                                  : null,
-                            )),
-                      Text(
-                        cell.date.day.toString(),
-                        style: TextStyle(
-                          color: cell.selectType == DateSelectType.selected
-                              ? TTheme.of(context).fontWhColor1
-                              : isSpecial
-                                  ? TTheme.of(context).errorColor6
-                                  : null,
-                        ),
-                      ),
-                      Text(sub,
-                          style: TextStyle(
-                            fontSize: 9,
-                            color: cell.selectType == DateSelectType.selected
-                                ? TTheme.of(context).fontWhColor1
-                                : isSpecial
-                                    ? TTheme.of(context).errorColor6
-                                    : null,
-                          )),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-
-          // 2. 自定义确认按钮
-          TCell(
-            title: '自定义按钮',
-            arrow: true,
-            note: _formatYmd(btnSelected),
-            onClick: (_) {
-              TCalendar.showPopup(
-                context,
-                titleWidget: const Text('请选择日期'),
-                initialValue: btnSelected,
-                confirmBtnBuilder: (onConfirm) => Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: TTheme.of(context).spacer16),
-                  child: TButton(
-                    theme: TButtonTheme.danger,
-                    shape: TButtonShape.round,
-                    text: 'ok',
-                    isBlock: true,
-                    size: TButtonSize.large,
-                    onTap: onConfirm,
-                  ),
-                ),
-                onConfirm: (value) => customBtnSelected.value = value,
-              );
-            },
-          ),
-
-          // 3. 自定义日期单元格（cellBuilder 回调）
-          TCell(
-            title: '自定义日期单元格',
-            arrow: true,
-            note: '${cellDate.year}-${cellDate.month}-${cellDate.day}',
-            onClick: (cell) {
-              TCalendar.showPopup(
-                context,
-                titleWidget: const Text('请选择日期'),
-                initialValue: cellValue,
-                cellHeight: 80,
-                onConfirm: (value) => customCellSelected.value = value,
-                cellBuilder: (context, cell) {
-                  final today = DateTime.now();
-                  final isToday = cell.date ==
-                      DateTime(today.year, today.month, today.day);
-
-                  if (isToday && cell.selectType != DateSelectType.selected) {
-                    return _CustomCellContainer(
-                      color: TTheme.of(context).brandColor4,
-                      child: const Text('今天',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    );
-                  }
-                  if (cell.selectType == DateSelectType.selected) {
-                    return _CustomCellContainer(
-                      color: TTheme.of(context).successColor8,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('${cell.date.day}',
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                          const Text('已选',
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.white)),
-                        ],
-                      ),
-                    );
-                  }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${cell.date.day}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      const Text('自定义', style: TextStyle(fontSize: 8)),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-                ],
-              );
-            },
-          );
-        },
-      );
-    },
-  );
-}</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildStyle(BuildContext context) {
-  const map = {
-    1: '初一',
-    2: '初二',
-    3: '初三',
-    14: '情人节',
-    15: '元宵节',
-  };
-
-  final customTextSelected =
-      ValueNotifier<List<DateTime>>([DateTime(2022, 1, 15)]);
-  final customBtnSelected =
-      ValueNotifier<List<DateTime>>([DateTime.now()]);
-  final customCellSelected = ValueNotifier<List<DateTime>>(
-      [DateTime.now().add(const Duration(days: 30))]);
-
-  return ValueListenableBuilder(
-    valueListenable: customTextSelected,
-    builder: (context, textSelected, _) {
-      return ValueListenableBuilder(
-        valueListenable: customBtnSelected,
-        builder: (context, btnSelected, _) {
-          return ValueListenableBuilder(
-            valueListenable: customCellSelected,
-            builder: (context, cellValue, _) {
-              final cellDate = cellValue[0];
-              return TCellGroup(
-                cells: [
-          // 1. 自定义文案（cellBuilder，仅 showPopup 弹窗模式）
-          TCell(
-            title: '自定义文案',
-            arrow: true,
-            note: _formatYmd(textSelected),
-            onClick: (_) {
-              TCalendar.showPopup(
-                context,
-                titleWidget: const Text('请选择日期'),
-                initialValue: textSelected,
-                minDate: DateTime(2022, 1, 1),
-                maxDate: DateTime(2022, 2, 15),
-                onConfirm: (value) => customTextSelected.value = value,
-                cellBuilder: (context, cell) {
-                  final isSpecial = cell.date.month == 2 &&
-                      map.keys.contains(cell.date.day);
-                  final sub = isSpecial ? '¥100' : '¥60';
-                  final top = isSpecial ? map[cell.date.day] : null;
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (top != null)
-                        Text(top,
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: isSpecial
-                                  ? TTheme.of(context).errorColor6
-                                  : null,
-                            )),
-                      Text(
-                        cell.date.day.toString(),
-                        style: TextStyle(
-                          color: cell.selectType == DateSelectType.selected
-                              ? TTheme.of(context).fontWhColor1
-                              : isSpecial
-                                  ? TTheme.of(context).errorColor6
-                                  : null,
-                        ),
-                      ),
-                      Text(sub,
-                          style: TextStyle(
-                            fontSize: 9,
-                            color: cell.selectType == DateSelectType.selected
-                                ? TTheme.of(context).fontWhColor1
-                                : isSpecial
-                                    ? TTheme.of(context).errorColor6
-                                    : null,
-                          )),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-
-          // 2. 自定义确认按钮
-          TCell(
-            title: '自定义按钮',
-            arrow: true,
-            note: _formatYmd(btnSelected),
-            onClick: (_) {
-              TCalendar.showPopup(
-                context,
-                titleWidget: const Text('请选择日期'),
-                initialValue: btnSelected,
-                confirmBtnBuilder: (onConfirm) => Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: TTheme.of(context).spacer16),
-                  child: TButton(
-                    theme: TButtonTheme.danger,
-                    shape: TButtonShape.round,
-                    text: 'ok',
-                    isBlock: true,
-                    size: TButtonSize.large,
-                    onTap: onConfirm,
-                  ),
-                ),
-                onConfirm: (value) => customBtnSelected.value = value,
-              );
-            },
-          ),
-
-          // 3. 自定义日期单元格（cellBuilder 回调）
-          TCell(
-            title: '自定义日期单元格',
-            arrow: true,
-            note: '${cellDate.year}-${cellDate.month}-${cellDate.day}',
-            onClick: (cell) {
-              TCalendar.showPopup(
-                context,
-                titleWidget: const Text('请选择日期'),
-                initialValue: cellValue,
-                cellHeight: 80,
-                onConfirm: (value) => customCellSelected.value = value,
-                cellBuilder: (context, cell) {
-                  final today = DateTime.now();
-                  final isToday = cell.date ==
-                      DateTime(today.year, today.month, today.day);
-
-                  if (isToday && cell.selectType != DateSelectType.selected) {
-                    return _CustomCellContainer(
-                      color: TTheme.of(context).brandColor4,
-                      child: const Text('今天',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    );
-                  }
-                  if (cell.selectType == DateSelectType.selected) {
-                    return _CustomCellContainer(
-                      color: TTheme.of(context).successColor8,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('${cell.date.day}',
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                          const Text('已选',
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.white)),
-                        ],
-                      ),
-                    );
-                  }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${cell.date.day}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      const Text('自定义', style: TextStyle(fontSize: 8)),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-                ],
-              );
-            },
-          );
-        },
-      );
-    },
-  );
-}</pre>
-
-</td-code-block>
-                
-
-农历日历
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildLunar(BuildContext context) {
-  return const _LunarCalendarDemo();
-}</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildLunar(BuildContext context) {
-  return const _LunarCalendarDemo();
-}</pre>
-
-</td-code-block>
-                
-
+弹层请使用 `showModalBottomSheet`（或 [TPopup]）自行组装，**不再提供** `TCalendar.showPopup`。
 
 ## API
+
+<!-- 与 tdesign-component/example/assets/api/calendar_api.md 同步，由 tdesign_flutter_tools 生成 -->
+
 ### TCalendar
+
 #### 简介
-日历组件
 
-#### 静态方法
+日历组件（纯日历面板，不含弹窗、表单等封装）。
 
-##### TCalendar.showPopup
+#### 状态约定
 
-弹出日历选择器，返回选中的日期列表。
-取消或关闭弹窗时返回 `null`；点击确认时返回选中的 `DateTime` 列表。
-弹窗内点选过程无 `onChange`；实时联动请用 `popupOverlayBuilder` 的 `dates`，
-或自行用 `TCalendarInherited` 监听 `TCalendarInherited.selectedListenable`。
-```dart
-final result = await TCalendar.showPopup(
-  context,
-  titleWidget: Text('请选择日期'),
-  type: CalendarType.single,
-);
-if (result != null) {
-  print('选中了: $result');
-}
-```
-若需完全自定义布局，请直接使用 `TCalendar` + `TPopup.show`
-/ `TPopupOptions.bottom` 自行组装。
+- `initialValue`：**非受控**，仅在组件首次挂载时写入选中态；运行期修改不会同步到界面。外部重置选中请更换 `Key` 或销毁后重建（如弹层关闭再打开）。
+- `onChange`：用户点选导致选中变化时触发；挂载阶段不会调用。选中高亮由组件内部维护。
+- `anchorDate`：首屏及运行期可更新的**滚动锚点**，滚到该日所在月份，不自动改选中。
+- `onMonthChanged`：用户滑动导致可见月份变化时触发，便于外置年月条同步文案。
 
-返回类型：`Future<List<DateTime>?>`
+#### 自定义展示
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| titleWidget | Widget? | - | 标题组件，可传入 Text 或自定义 Widget |
-| type | CalendarType | CalendarType.single | 日历的选择模式，决定点击日期后的选中行为： - `CalendarType.single`：单选，点击新日期取消旧选中 - `CalendarType.multiple`：多选，点击切换选中/取消 - `CalendarType.range`：区间选择，依次选起止日期 |
-| initialValue | List<DateTime>? | - | 初始选中日期列表，不传则默认今天。 **非受控语义**：仅用于首次挂载；用户点选后以 `onChange` 为准，由调用方自行 `setState` 保存。若父组件在运行期修改本参数，会同步选中态并刷新格子（与 range 行为一致）。 列表长度与 `type` 对应： - `CalendarType.single`：1 个元素（选中日期） - `CalendarType.multiple`：N 个元素（所有选中日期） - `CalendarType.range`：2 个元素（起始、结束日期） |
-| minDate | DateTime? | - | 最小可选的日期，不传则默认 1970-01-01 |
-| maxDate | DateTime? | - | 最大可选的日期，不传则默认 2100-12-31 |
-| anchorDate | DateTime? | - | 锚点日期，打开时滚动到该日期所在月份。 |
-| anchorRevision | int | 0 | 锚点滚动触发序号，默认 `0`。 与 `anchorDate` 配合：序号递增可重复滚到同一月份；仅改月份时也可只更新 `anchorDate`。 |
-| popupHeight | double? | - | - |
-| firstDayOfWeek | int | 0 | 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。 |
-| cellHeight | double? | - | 日期单元格高度，默认 60。如需更大行高可传入自定义值（如 80） |
-| style | TCalendarStyle? | - | 自定义样式 |
-| popupOverlayBuilder | Widget Function(BuildContext context, List<DateTime> selectedDates)? | - | - |
-| popupOverlayExpanded | ValueListenable<bool>? | - | - |
-| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | - |
-| onConfirm | void Function(List<DateTime>)? | - | - |
-| onClose | VoidCallback? | - | - |
-| onCellClick | void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? | - | 点击日期时触发 |
-| cellBuilder | TCalendarCellBuilder? | - | 整格自定义；设置后不再使用默认主区/副标题布局。 |
-| subtitleBuilder | TCalendarSubtitleBuilder? | - | 副标题完全自定义；未设置时可使用 `dataSource.getSubtitle`。 |
-| dataSource | TCalendarDataSource? | - | 可选数据源，提供副标题字符串（无 `subtitleBuilder` 时生效）。 |
-| onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
-| monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
+- `subtitleBuilder`：日期主数字下方的**副标题**（农历、价格、节日等）。
+- `cellBuilder`：**整格**自定义，设置后不再渲染默认主数字与副标题布局。
+- `monthTitleBuilder`：每个月份区块顶部的年月标题。
+
+弹层场景请自行 `showModalBottomSheet` 包裹本组件，并用新 `Key` 或新实例传入 `initialValue`；外置月份导航请更新 `anchorDate` 而非回写 `initialValue`。
 
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| anchorDate | DateTime? | - | 锚点日期，打开时滚动到该日期所在月份。 |
-| anchorRevision | int | 0 | 锚点滚动触发序号，默认 `0`。 与 `anchorDate` 配合：序号递增可重复滚到同一月份；仅改月份时也可只更新 `anchorDate`。 |
-| animateTo | bool | false | 滚动到选中日期/锚点日期所在月份时是否使用动画，默认 false |
-| cellBuilder | TCalendarCellBuilder? | - | 整格自定义；设置后不再使用默认主区/副标题布局。 |
-| cellHeight | double? | - | 日期单元格高度，默认 60。如需更大行高可传入自定义值（如 80） |
-| dataSource | TCalendarDataSource? | - | 可选数据源，提供副标题字符串（无 `subtitleBuilder` 时生效）。 |
-| firstDayOfWeek | int | 0 | 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。 |
-| height | double? | - | 高度，不传时内嵌模式自动按 5 行日期计算 |
-| initialValue | List<DateTime>? | - | 初始选中日期列表，不传则默认今天。 **非受控语义**：仅用于首次挂载；用户点选后以 `onChange` 为准，由调用方自行 `setState` 保存。若父组件在运行期修改本参数，会同步选中态并刷新格子（与 range 行为一致）。 列表长度与 `type` 对应： - `CalendarType.single`：1 个元素（选中日期） - `CalendarType.multiple`：N 个元素（所有选中日期） - `CalendarType.range`：2 个元素（起始、结束日期） |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxDate | DateTime? | - | 最大可选的日期，不传则默认 2100-12-31 |
-| minDate | DateTime? | - | 最小可选的日期，不传则默认 1970-01-01 |
-| monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
-| monthTitleHeight | double | 22 | 每月标题行高度（如 '2025年6月' 所在行），默认 22 |
-| onCellClick | void Function(DateTime value, DateSelectType selectType, TCalendarCellModel cell)? | - | 点击日期时触发 |
-| onChange | void Function(List<DateTime> value)? | - | 选中值变化时触发 |
-| onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
-| safeAreaInset | bool | true | 是否适配底部安全区域（如 iPhone Home Indicator），默认 true |
+| anchorDate | DateTime? | - | 滚动锚点日期：将列表定位到该日**所在月份**的首屏位置。**不**自动把该日设为选中。运行期更新本参数会重新滚动（见 `animateTo`）。未设置时：有非空 `initialValue` 则滚到其中最早一日所在月，否则滚到 `minDate` 首月。 |
+| animateTo | bool | false | `anchorDate` 或首屏定位变更导致滚动时，是否使用动画，默认 false。 |
+| cellBuilder | TCalendarCellBuilder? | - | 整格自定义构建器；与 `subtitleBuilder` 互斥。 |
+| firstDayOfWeek | int | 0 | 第一天从星期几开始，0 = 周日 … 6 = 周六。 |
+| height | double? | - | 高度，不传时自动按 5 行日期计算 |
+| initialValue | List&lt;DateTime&gt;? | - | 初始选中（**非受控**，仅挂载生效）。不传时内部选中为空。 |
+| key | Key? | - | 组件标识；重置选中时请更换 Key |
+| maxDate | DateTime? | - | 最大可选日期，默认 2100-12-31 |
+| minDate | DateTime? | - | 最小可选日期，默认 1970-01-01 |
+| monthTitleBuilder | TCalendarMonthTitleBuilder? | - | 月标题构建器 |
+| onCellTap | void Function(TCalendarCellModel cell)? | - | 每次点击日期格；选中结果以 `onChange` 为准 |
+| onChange | ValueChanged&lt;List&lt;DateTime&gt;&gt; | - | 选中变化（必填）；挂载时不调用 |
+| onMonthChanged | ValueChanged&lt;DateTime&gt;? | - | 可见月份变化（当月 1 日） |
 | style | TCalendarStyle? | - | 自定义样式 |
-| subtitleBuilder | TCalendarSubtitleBuilder? | - | 副标题完全自定义；未设置时可使用 `dataSource.getSubtitle`。 |
-| titleWidget | Widget? | - | 标题组件，可传入 Text 或自定义 Widget |
-| type | CalendarType | CalendarType.single | 日历的选择模式，决定点击日期后的选中行为： - `CalendarType.single`：单选，点击新日期取消旧选中 - `CalendarType.multiple`：多选，点击切换选中/取消 - `CalendarType.range`：区间选择，依次选起止日期 |
-
-
-### TCalendarInherited
-#### 简介
-日历弹窗状态的 InheritedWidget 容器。
-由上层（如 `TSlidePopupRoute` 的 builder）包裹在 `TCalendar` 外侧，
-将选中态、确认/关闭回调等注入子树。
-
-#### 静态方法
-
-##### TCalendarInherited.of
-
-返回类型：`TCalendarInherited?`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget | - | - |
-| confirmBtnBuilder | Widget Function(VoidCallback onConfirm)? | - | 自定义确认按钮；`onConfirm` 与默认确认按钮一致（回传选中值并关闭弹窗）。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onClose | VoidCallback? | - | - |
-| onConfirm | VoidCallback? | - | - |
-| popupConfirmBtn | bool? | - | 是否由 `TCalendar` 渲染底部确认按钮。 为 `null`（默认）时跟随 `popupControls`；显式设置时覆盖。 |
-| popupControls | bool | true | 是否由 `TCalendar` 自行渲染关闭按钮和标题行。 为 `true`（默认）时 `TCalendar` 渲染关闭按钮与标题行； 为 `false` 时由外层弹窗容器承载。 |
-| popupOverlayBuilder | Widget Function(BuildContext context, List<DateTime> selectedDates)? | - | 弹窗模式下日历内容区底部浮层构建器（非 `TPopup` 面板底部）。 由 `TCalendar.showPopup` 或手动 `TCalendarInherited` 注入； `selectedDates` 随点选实时更新。 |
-| popupOverlayExpanded | ValueListenable<bool>? | - | 浮层是否展开（响应式），需配合 `popupOverlayBuilder`。 |
-| selected | ValueNotifier<List<DateTime>> | - | 选中态的可写引用（仅供 `TCalendar` 内部更新使用）。 对外消费方请使用 `selectedListenable` 这一只读视图。 |
-| usePopup | bool? | true | - |
-
+| subtitleBuilder | TCalendarSubtitleBuilder? | - | 副标题构建器 |
+| type | CalendarType | CalendarType.single | single / multiple / range |
 
 ### TCalendarStyle
-#### 简介
-日历组件样式
 
-#### 工厂构造方法
+`TCalendar` 的样式配置。使用 `TCalendarStyle.generateStyle` 获取主题默认样式，再用 `forSelectType` 按 `DateSelectType` 区分各态样式。
 
-##### TCalendarStyle.forSelectType
+### CalendarType / DateSelectType
 
-按选中态生成单元格样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| type | DateSelectType? | - | - |
-
-
-##### TCalendarStyle.generateStyle
-
-生成默认样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| dayStyle | TextStyle? | - | 日期主区（默认阳历日数字）样式 |
-| decoration | BoxDecoration? | - | - |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| subtitleStyle | TextStyle? | - | 副标题样式（仅 `TCalendarDataSource.getSubtitle` 字符串路径使用） |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 `TCalendar.titleWidget`的行数 |
-| titleStyle | TextStyle? | - | header区域 `TCalendar.titleWidget`的样式 |
-| todayDayStyle | TextStyle? | - | 今天日期主区样式 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-
-#### 公开属性
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| bodyPadding | double? | - | 月与月之间的垂直间距 |
-| verticalGap | double? | - | 日期垂直间距，水平间距为`verticalGap` / 2 |
-
-
-### TCalendarDataSource
-#### 简介
-日历可选数据源：仅提供副标题文案（无 `subtitleBuilder` 时使用）。
-农历、节气、节日等均由接入方在 `TCalendar.subtitleBuilder` 或
-`getSubtitle` 中自行处理；组件主区默认只渲染阳历日数字。
-
-#### 方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| getSubtitle | String? | required DateTime date | 副标题文案；返回 null 或空字符串时不显示副标题行。 |
-
-
-### TCalendarCellModel
-#### 简介
-单个日期格数据（只读，选中态通过 `typeNotifier` 更新）
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| date | DateTime | - | - |
-| isLastDayOfMonth | bool | - | - |
-| typeNotifier | DateSelectTypeNotifier | - | - |
-
-
-### CalendarType
-#### 简介
-日历选择模式
-#### 枚举值
-
-
-| 名称 | 说明 |
+| CalendarType | 说明 |
 | --- | --- |
-| single | 单选：点击新日期时自动取消旧日期的选中状态 |
-| multiple | 多选：点击日期切换选中/取消，可同时选中多个日期 |
-| range | 区间选择：第一次点击选起点，第二次点击选终点，中间自动填充 |
+| single | 单选 |
+| multiple | 多选 |
+| range | 区间 |
 
-
-### DateSelectType
-#### 简介
-日期在日历格中的选中/展示状态
-#### 枚举值
-
-
-| 名称 | 说明 |
+| DateSelectType | 说明 |
 | --- | --- |
-| selected | - |
-| disabled | - |
-| start | - |
-| centre | - |
-| end | - |
-| empty | - |
+| selected | 选中 |
+| disabled | 禁用 |
+| start / centre / end | 区间起止与中间 |
+| empty | 未选中 |
 
+### TCalendarSubtitleBuilder / TCalendarCellBuilder
 
-### TCalendarSubtitleBuilder
-#### 简介
-副标题完全自定义
-#### 类型定义
+- `TCalendarSubtitleBuilder`：副标题；返回 `null` 不显示副标题行。
+- `TCalendarCellBuilder`：整格自定义；返回非 null 时替换默认格布局。
 
-```dart
-typedef TCalendarSubtitleBuilder = Widget? Function(BuildContext context, TCalendarSubtitleContext subtitleContext);
-```
-
-
-### TCalendarCellBuilder
-#### 简介
-整格自定义（主区 + 副标题均由接入方绘制）
-#### 类型定义
-
-```dart
-typedef TCalendarCellBuilder = Widget? Function(BuildContext context, TCalendarCellModel cell);
-```
-
-
-  
+完整参数表见仓库内 `tdesign-component/example/assets/api/calendar_api.md`，可用 `tdesign_flutter_tools` 从源码注释重新生成。

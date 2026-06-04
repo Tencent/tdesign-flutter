@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
-import 't_calendar_cell.dart';
 
+/// 日历滚动主体（月份列表 + 日期格），由 [TCalendar] 内部组装，一般无需直接使用。
 class TCalendarBody extends StatefulWidget {
   const TCalendarBody({
     Key? key,
-    this.maxDate,
-    this.minDate,
     required this.type,
     this.initialValue,
     required this.firstDayOfWeek,
+    required this.minDate,
+    required this.maxDate,
     required this.builder,
     required this.bodyPadding,
     required this.monthNames,
@@ -23,17 +23,20 @@ class TCalendarBody extends StatefulWidget {
     required this.animateTo,
     this.onMonthChange,
     this.anchorDate,
-    this.anchorRevision = 0,
     this.onCellGenerated,
     this.onCacheInvalidated,
   }) : super(key: key);
 
-  final DateTime? maxDate;
-  final DateTime? minDate;
   final CalendarType type;
+
+  /// 用于新建单元格时标记选中/区间态的快照（来自 [TCalendar] 内部缓存，非运行期受控 prop）。
   final List<DateTime>? initialValue;
+
+  /// 首屏及运行期滚动目标月份；优先于 [initialValue] 决定 [_calcScrollOffset]。
   final DateTime? anchorDate;
   final int firstDayOfWeek;
+  final DateTime minDate;
+  final DateTime maxDate;
   final Widget Function(
     TCalendarCellModel? cell,
     List<TCalendarCellModel?> dateList,
@@ -52,11 +55,6 @@ class TCalendarBody extends StatefulWidget {
   final double cellHeight;
   final bool animateTo;
   final ValueChanged<DateTime>? onMonthChange;
-
-  /// 锚点滚动触发序号。与 [anchorDate] 配合：序号变化或锚点目标月份变化时滚动。
-  ///
-  /// 重复导航到同一月份时递增即可，无需每次 `new DateTime`。
-  final int anchorRevision;
 
   /// 在每个月份的单元格列表新生成时回调，便于上层登记选中引用。
   final void Function(DateTime monthDate, List<TCalendarCellModel?> cells)?
@@ -106,17 +104,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   @override
   void didUpdateWidget(covariant TCalendarBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.minDate != widget.minDate ||
-        oldWidget.maxDate != widget.maxDate) {
-      _monthHeight.clear();
-      _data.clear();
-      widget.onCacheInvalidated?.call();
-      _lastNotifiedMonthKey = null;
-      _initMonths();
-    } else if (!_listEqualsDate(
+    if (!_listEqualsDate(
         oldWidget.initialValue, widget.initialValue)) {
-      // 选中值由上层更新（TCalendar.initialValue / _cachedValueDates）时清空月份缓存，
-      // 让所有 cell 基于新 initialValue 重建 typeNotifier，避免 single/multiple/range 残留旧态。
+      // 选中缓存变更（如 range 模式内部 setState）时清空月份缓存，
+      // 让 cell 基于新选中列表重建 typeNotifier，避免残留旧态。
       _data.clear();
       widget.onCacheInvalidated?.call();
     }
@@ -129,9 +120,6 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     final anchor = widget.anchorDate;
     if (anchor == null) {
       return false;
-    }
-    if (widget.anchorRevision != oldWidget.anchorRevision) {
-      return true;
     }
     final oldAnchor = oldWidget.anchorDate;
     if (oldAnchor == null) {
@@ -166,8 +154,8 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   }
 
   void _initMonths() {
-    _min = _getDefDate(widget.minDate);
-    _max = _getDefDate(widget.maxDate, true);
+    _min = widget.minDate;
+    _max = widget.maxDate;
     _months = _monthsBetween(_min, _max);
     _rebuildIndex();
   }
@@ -212,12 +200,9 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     return lo;
   }
 
-  /// 计算目标日期所在月份的滚动偏移量
+  /// 计算首屏滚动偏移：优先 [anchorDate]，否则取 [initialValue] 最早一日，再否则为 0。
   ///
-  /// 越界处理策略：
-  /// - 早于 minDate → clamp 到第一个月
-  /// - 晚于 maxDate → clamp 到最后一个月
-  /// 这样上层即使传入越界 anchorDate，也不会出现"静默回到顶部"的异常表现。
+  /// 越界时 clamp 到 [minDate]/[maxDate] 对应的首尾月，避免锚点落在范围外时静默回顶。
   double _calcScrollOffset() {
     var scrollToDate = widget.anchorDate;
     if (scrollToDate == null) {
@@ -483,13 +468,6 @@ class _TCalendarBodyState extends State<TCalendarBody> {
         _onScroll();
       }
     });
-  }
-
-  DateTime _getDefDate(DateTime? date, [bool isMax = false]) {
-    if (date != null) {
-      return DateTime(date.year, date.month, date.day);
-    }
-    return isMax ? DateTime(2100, 12, 31) : DateTime(1970);
   }
 
   List<DateTime> _monthsBetween(DateTime min, DateTime max) {

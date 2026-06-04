@@ -1,19 +1,34 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  group('TCalendarDataSource', () {
-    test('getSubtitle 默认返回 null', () {
-      final dataSource = _MockDataSource();
-      expect(dataSource.getSubtitle(DateTime(2025, 6, 15)), isNull);
-    });
+  group('TCalendarSubtitleBuilder', () {
+    testWidgets('subtitleBuilder 收到当前格日期', (tester) async {
+      final seenDates = <DateTime>[];
 
-    test('getSubtitle 可返回自定义副标题', () {
-      final dataSource = _SubtitleDataSource();
-      expect(
-        dataSource.getSubtitle(DateTime(2025, 6, 15)),
-        '初七',
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TCalendar(
+              type: CalendarType.single,
+              minDate: DateTime(2025, 6, 1),
+              maxDate: DateTime(2025, 6, 30),
+              initialValue: [DateTime(2025, 6, 15)],
+              onChange: (_) {},
+              subtitleBuilder: (context, ctx) {
+                seenDates.add(ctx.date);
+                return TText('副-${ctx.date.day}');
+              },
+            ),
+          ),
+        ),
       );
+      await tester.pumpAndSettle();
+
+      expect(seenDates, isNotEmpty);
+      expect(seenDates.every((d) => d.year == 2025 && d.month == 6), isTrue);
+      expect(find.textContaining('副-'), findsWidgets);
     });
   });
 
@@ -30,11 +45,4 @@ void main() {
       expect(cell.selectType, DateSelectType.selected);
     });
   });
-}
-
-class _MockDataSource extends TCalendarDataSource {}
-
-class _SubtitleDataSource extends TCalendarDataSource {
-  @override
-  String? getSubtitle(DateTime date) => '初七';
 }

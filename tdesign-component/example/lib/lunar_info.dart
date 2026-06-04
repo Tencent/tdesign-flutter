@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 /// 农历日期信息（仅示例用，业务请自行定义模型）。
 ///
-/// 日历组件只要求 [TCalendarDataSource.getSubtitle] 返回字符串；
+/// 日历副标题由 [TCalendar.subtitleBuilder] 按 [TCalendarSubtitleContext.date] 渲染；
 /// 本类演示如何从农历库组装副标题，非 `tdesign_flutter` 公共 API。
 @immutable
 class LunarInfo {

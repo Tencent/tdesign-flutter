@@ -1,91 +1,118 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
-import 't_calendar_cell.dart';
 
-/// 日历组件样式
+// ---------------------------------------------------------------------------
+// TCalendarStyle — 日历样式配置
+// ---------------------------------------------------------------------------
+
+/// [TCalendar] 的样式配置，通过 [TCalendar.style] 传入。
+///
+/// 使用 [TCalendarStyle.generateStyle] 获取主题默认样式，
+/// 再用 [forSelectType] 按 [DateSelectType] 区分选中/区间等态下的文字与装饰。
 class TCalendarStyle {
-  TCalendarStyle({
+  const TCalendarStyle({
     this.decoration,
-    this.titleStyle,
-    this.titleMaxLine,
-    this.titleCloseColor,
     this.weekdayStyle,
     this.monthTitleStyle,
     this.dayStyle,
     this.todayDayStyle,
-    this.centreColor,
     this.cellDecoration,
     this.subtitleStyle,
+    this.cellHeight = 60,
+    this.monthTitleHeight = 22,
+    this.verticalGap,
+    this.bodyPadding,
+    this.weekdayGap,
   });
 
-  BoxDecoration? decoration;
+  /// 组件容器装饰
+  final BoxDecoration? decoration;
 
-  /// header区域 [TCalendar.titleWidget]的样式
-  TextStyle? titleStyle;
+  /// 星期文字样式
+  final TextStyle? weekdayStyle;
 
-  /// header区域 [TCalendar.titleWidget]的行数
-  int? titleMaxLine;
+  /// 月份标题文字样式
+  final TextStyle? monthTitleStyle;
 
-  /// header区域 关闭图标的颜色
-  Color? titleCloseColor;
+  /// 日期数字样式
+  final TextStyle? dayStyle;
 
-  /// header区域 周 文字样式
-  TextStyle? weekdayStyle;
+  /// 今天日期数字样式
+  final TextStyle? todayDayStyle;
 
-  /// body区域 年月文字样式
-  TextStyle? monthTitleStyle;
+  /// 日期单元格装饰（选中状态）
+  final BoxDecoration? cellDecoration;
 
-  /// 日期主区（默认阳历日数字）样式
-  TextStyle? dayStyle;
+  /// 副标题样式
+  final TextStyle? subtitleStyle;
 
-  /// 今天日期主区样式
-  TextStyle? todayDayStyle;
+  /// 日期单元格高度，默认 60
+  final double cellHeight;
 
-  /// 日期decoration
-  BoxDecoration? cellDecoration;
+  /// 月份标题高度，默认 22
+  final double monthTitleHeight;
 
-  /// 日期范围内背景样式
-  Color? centreColor;
+  /// 日期格垂直间距，水平间距为 [verticalGap] / 2
+  final double? verticalGap;
 
-  /// 副标题样式（仅 [TCalendarDataSource.getSubtitle] 字符串路径使用）
-  TextStyle? subtitleStyle;
+  /// 内边距
+  final double? bodyPadding;
 
-  /// 日期垂直间距，水平间距为[verticalGap] / 2
-  double? verticalGap;
+  /// 星期之间的水平间距
+  final double? weekdayGap;
 
-  /// 月与月之间的垂直间距
-  double? bodyPadding;
+  /// 区间选中中间态的背景色
+  Color get centreColor {
+    // 默认返回一个浅灰色，实际使用时应通过 context 获取
+    return const Color(0xFFF0F0F0);
+  }
+
+  /// 星期标题高度
+  double get weekdayHeight => _kDefaultWeekdayHeight;
+
+  static const _kDefaultWeekdayHeight = 46.0;
 
   /// 生成默认样式
-  TCalendarStyle.generateStyle(BuildContext context) {
-    decoration = BoxDecoration(
-      color: TTheme.of(context).bgColorContainer,
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(TTheme.of(context).radiusExtraLarge),
+  static TCalendarStyle generateStyle({BuildContext? context}) {
+    if (context == null) {
+      return const TCalendarStyle();
+    }
+    return TCalendarStyle(
+      decoration: BoxDecoration(
+        color: TTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(TTheme.of(context).radiusExtraLarge),
+        ),
       ),
+      weekdayStyle: TextStyle(
+        fontSize: TTheme.of(context).fontTitleSmall?.size,
+        color: TTheme.of(context).textColorSecondary,
+      ),
+      monthTitleStyle: TextStyle(
+        fontSize: TTheme.of(context).fontMarkMedium?.size,
+        fontWeight: TTheme.of(context).fontMarkMedium?.fontWeight,
+        color: TTheme.of(context).textColorPrimary,
+      ),
+      dayStyle: TextStyle(
+        fontSize: TTheme.of(context).fontTitleMedium?.size,
+        height: TTheme.of(context).fontTitleMedium?.height,
+        fontWeight: TTheme.of(context).fontTitleMedium?.fontWeight,
+        color: TTheme.of(context).textColorPrimary,
+      ),
+      todayDayStyle: TextStyle(
+        fontSize: TTheme.of(context).fontTitleMedium?.size,
+        height: TTheme.of(context).fontTitleMedium?.height,
+        fontWeight: TTheme.of(context).fontTitleMedium?.fontWeight,
+        color: TTheme.of(context).brandNormalColor,
+      ),
+      verticalGap: TTheme.of(context).spacer8,
+      bodyPadding: TTheme.of(context).spacer16,
+      weekdayGap: TTheme.of(context).spacer4,
     );
-    titleStyle = TextStyle(
-      fontSize: TTheme.of(context).fontTitleLarge?.size,
-      fontWeight: TTheme.of(context).fontTitleLarge?.fontWeight,
-      color: TTheme.of(context).textColorPrimary,
-    );
-    titleMaxLine = 1;
-    titleCloseColor = titleStyle?.color;
-    weekdayStyle = TextStyle(
-      fontSize: TTheme.of(context).fontTitleSmall?.size,
-      color: TTheme.of(context).textColorSecondary,
-    );
-    monthTitleStyle = TextStyle(
-      fontSize: TTheme.of(context).fontMarkMedium?.size,
-      fontWeight: TTheme.of(context).fontMarkMedium?.fontWeight,
-      color: TTheme.of(context).textColorPrimary,
-    );
-    verticalGap = TTheme.of(context).spacer8;
-    bodyPadding = TTheme.of(context).spacer16;
   }
 
   /// 按选中态生成单元格样式
-  TCalendarStyle.forSelectType(BuildContext context, DateSelectType? type) {
+  TCalendarStyle forSelectType(BuildContext context, DateSelectType? type) {
     final radius6 = TTheme.of(context).radiusDefault;
     final defStyle = TextStyle(
       fontSize: TTheme.of(context).fontTitleMedium?.size,
@@ -97,65 +124,67 @@ class TCalendarStyle {
       height: TTheme.of(context).fontBodyExtraSmall?.height,
       fontWeight: FontWeight.w400,
     );
-    centreColor = TTheme.of(context).brandLightColor;
+    final centreColor = TTheme.of(context).brandLightColor;
     switch (type) {
       case DateSelectType.empty:
-        dayStyle =
-            defStyle.copyWith(color: TTheme.of(context).textColorPrimary);
-        todayDayStyle =
-            defStyle.copyWith(color: TTheme.of(context).brandNormalColor);
-        subtitleStyle = subtitleBase.copyWith(
-            color: TTheme.of(context).textColorPlaceholder);
-        cellDecoration = null;
-        break;
+        return TCalendarStyle(
+          dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorPrimary),
+          todayDayStyle:
+              defStyle.copyWith(color: TTheme.of(context).brandNormalColor),
+          subtitleStyle: subtitleBase.copyWith(
+              color: TTheme.of(context).textColorPlaceholder),
+          cellDecoration: null,
+        );
       case DateSelectType.disabled:
-        dayStyle =
-            defStyle.copyWith(color: TTheme.of(context).textDisabledColor);
-        todayDayStyle =
-            defStyle.copyWith(color: TTheme.of(context).brandDisabledColor);
-        subtitleStyle =
-            subtitleBase.copyWith(color: TTheme.of(context).textDisabledColor);
-        cellDecoration = null;
-        break;
+        return TCalendarStyle(
+          dayStyle: defStyle.copyWith(color: TTheme.of(context).textDisabledColor),
+          todayDayStyle:
+              defStyle.copyWith(color: TTheme.of(context).brandDisabledColor),
+          subtitleStyle:
+              subtitleBase.copyWith(color: TTheme.of(context).textDisabledColor),
+          cellDecoration: null,
+        );
       case DateSelectType.selected:
-        dayStyle = defStyle.copyWith(color: TTheme.of(context).textColorAnti);
-        subtitleStyle =
-            subtitleBase.copyWith(color: TTheme.of(context).textColorAnti);
-        cellDecoration = BoxDecoration(
-          borderRadius: BorderRadius.circular(radius6),
-          color: TTheme.of(context).brandNormalColor,
+        return TCalendarStyle(
+          dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorAnti),
+          subtitleStyle:
+              subtitleBase.copyWith(color: TTheme.of(context).textColorAnti),
+          cellDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius6),
+            color: TTheme.of(context).brandNormalColor,
+          ),
         );
-        break;
       case DateSelectType.centre:
-        dayStyle =
-            defStyle.copyWith(color: TTheme.of(context).textColorPrimary);
-        subtitleStyle = subtitleBase.copyWith(
-            color: TTheme.of(context).textColorPlaceholder);
-        cellDecoration = BoxDecoration(
-          color: centreColor,
+        return TCalendarStyle(
+          dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorPrimary),
+          subtitleStyle: subtitleBase.copyWith(
+              color: TTheme.of(context).textColorPlaceholder),
+          cellDecoration: BoxDecoration(
+            color: centreColor,
+          ),
         );
-        break;
       case DateSelectType.start:
-        dayStyle = defStyle.copyWith(color: TTheme.of(context).textColorAnti);
-        subtitleStyle =
-            subtitleBase.copyWith(color: TTheme.of(context).textColorAnti);
-        cellDecoration = BoxDecoration(
-          color: TTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.horizontal(left: Radius.circular(radius6)),
+        return TCalendarStyle(
+          dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorAnti),
+          subtitleStyle:
+              subtitleBase.copyWith(color: TTheme.of(context).textColorAnti),
+          cellDecoration: BoxDecoration(
+            color: TTheme.of(context).brandNormalColor,
+            borderRadius: BorderRadius.horizontal(left: Radius.circular(radius6)),
+          ),
         );
-        break;
       case DateSelectType.end:
-        dayStyle = defStyle.copyWith(color: TTheme.of(context).textColorAnti);
-        subtitleStyle =
-            subtitleBase.copyWith(color: TTheme.of(context).textColorAnti);
-        cellDecoration = BoxDecoration(
-          color: TTheme.of(context).brandNormalColor,
-          borderRadius:
-              BorderRadius.horizontal(right: Radius.circular(radius6)),
+        return TCalendarStyle(
+          dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorAnti),
+          subtitleStyle:
+              subtitleBase.copyWith(color: TTheme.of(context).textColorAnti),
+          cellDecoration: BoxDecoration(
+            color: TTheme.of(context).brandNormalColor,
+            borderRadius: BorderRadius.horizontal(right: Radius.circular(radius6)),
+          ),
         );
-        break;
       default:
-        break;
+        return this;
     }
   }
 }

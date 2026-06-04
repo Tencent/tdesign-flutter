@@ -1,33 +1,70 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/iterable_ext.dart';
-import 't_calendar_data_source.dart';
-import 't_calendar_style.dart';
+
+export 't_calendar_style.dart' show TCalendarStyle;
 
 /// 日期在日历格中的选中/展示状态
-enum DateSelectType { selected, disabled, start, centre, end, empty }
+enum DateSelectType {
+  /// 单选 / 多选下的选中
+  selected,
 
-/// 副标题构建上下文
+  /// 不可选（超出 [TCalendar.minDate] / [TCalendar.maxDate]）
+  disabled,
+
+  /// 区间起点
+  start,
+
+  /// 区间中间日期
+  centre,
+
+  /// 区间终点
+  end,
+
+  /// 未选中且可选
+  empty,
+}
+
+/// 副标题构建上下文：告知 [TCalendarSubtitleBuilder] 当前渲染哪一格。
 class TCalendarSubtitleContext {
   const TCalendarSubtitleContext({
     required this.date,
     required this.selectType,
   });
 
+  /// 当前格子的阳历日期（仅年月日，无时分秒）。
   final DateTime date;
+
+  /// 当前格的选中/区间/禁用等展示状态，便于按态设置副标题样式。
   final DateSelectType selectType;
 }
 
-/// 副标题完全自定义
+/// 副标题构建器；每个日期格渲染时调用一次。
+///
+/// 通过 [TCalendarSubtitleContext] 获取日期与选中态；返回 `null` 表示不显示副标题行。
+///
+/// ```dart
+/// subtitleBuilder: (context, ctx) {
+///   final text = lunarLabel(ctx.date);
+///   if (text == null) return null;
+///   return TText(text, style: TextStyle(fontSize: 9));
+/// },
+/// ```
 typedef TCalendarSubtitleBuilder = Widget? Function(
   BuildContext context,
   TCalendarSubtitleContext subtitleContext,
 );
 
-/// 整格自定义（主区 + 副标题均由接入方绘制）
+/// 整格自定义构建器；返回非 null 时该格由接入方完全绘制（含主数字与副标题）。
 typedef TCalendarCellBuilder = Widget? Function(
   BuildContext context,
   TCalendarCellModel cell,
+);
+
+/// 月标题构建器；[monthDate] 为当月 1 日。
+typedef TCalendarMonthTitleBuilder = Widget Function(
+  BuildContext context,
+  DateTime monthDate,
 );
 
 /// 单个日期格数据（只读，选中态通过 [typeNotifier] 更新）
@@ -70,7 +107,6 @@ class TCalendarCell extends StatefulWidget {
     required this.dateList,
     this.cellBuilder,
     this.subtitleBuilder,
-    this.dataSource,
     this.dayStyle,
     this.todayDayStyle,
     this.subtitleStyle,
@@ -87,7 +123,6 @@ class TCalendarCell extends StatefulWidget {
   final List<TCalendarCellModel?> dateList;
   final TCalendarCellBuilder? cellBuilder;
   final TCalendarSubtitleBuilder? subtitleBuilder;
-  final TCalendarDataSource? dataSource;
   final TextStyle? dayStyle;
   final TextStyle? todayDayStyle;
   final TextStyle? subtitleStyle;
@@ -137,7 +172,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     }
 
     final themedStyle =
-        TCalendarStyle.forSelectType(context, cell.selectType);
+        TCalendarStyle.generateStyle(context: null).forSelectType(context, cell.selectType);
     final decoration =
         themedStyle.cellDecoration;
     final positionColor = _rangeBridgeColor(themedStyle, decoration);
@@ -174,7 +209,13 @@ class _TCalendarCellState extends State<TCalendarCell> {
   }
 
   void _onSelectTypeChange() {
-    setState(() {});
+    // 使用 addPostFrameCallback 避免在 build 期间调用 setState
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
   }
 
   Color? _rangeBridgeColor(
@@ -239,27 +280,12 @@ class _TCalendarCellState extends State<TCalendarCell> {
     TCalendarCellModel cell,
     TCalendarStyle cellStyle,
   ) {
-    if (widget.subtitleBuilder != null) {
-      return widget.subtitleBuilder!(
-        context,
-        TCalendarSubtitleContext(
-          date: cell.date,
-          selectType: cell.selectType,
-        ),
-      );
-    }
-
-    final text = widget.dataSource?.getSubtitle(cell.date);
-    if (text == null || text.isEmpty) {
-      return null;
-    }
-
-    return TText(
-      text,
-      style: cellStyle.subtitleStyle ??
-          widget.subtitleStyle?.copyWith(fontSize: 9),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+    return widget.subtitleBuilder?.call(
+      context,
+      TCalendarSubtitleContext(
+        date: cell.date,
+        selectType: cell.selectType,
+      ),
     );
   }
 }

@@ -1,28 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
-import 't_calendar_cell.dart';
 
-/// 为 [TCalendar.titleWidget] 应用 [TCalendarStyle.titleStyle] / [titleMaxLine]。
-Widget? wrapCalendarTitleWidget(
-  Widget? titleWidget, {
-  TextStyle? titleStyle,
-  int? titleMaxLine,
-  TextOverflow titleOverflow = TextOverflow.ellipsis,
-}) {
-  if (titleWidget == null) {
-    return null;
-  }
-  if (titleStyle == null && titleMaxLine == null) {
-    return titleWidget;
-  }
-  return DefaultTextStyle.merge(
-    style: titleStyle,
-    maxLines: titleMaxLine,
-    overflow: titleOverflow,
-    textAlign: TextAlign.center,
-    child: titleWidget,
-  );
-}
+// ---------------------------------------------------------------------------
+// TCalendarHeader — 星期标题栏
+// ---------------------------------------------------------------------------
 
 class TCalendarHeader extends StatelessWidget {
   const TCalendarHeader({
@@ -32,31 +13,28 @@ class TCalendarHeader extends StatelessWidget {
     required this.padding,
     this.weekdayStyle,
     required this.weekdayHeight,
-    this.titleWidget,
-    this.titleStyle,
-    this.titleMaxLine,
-    this.titleOverflow,
-    this.closeBtn = true,
-    this.closeColor,
-    this.onClose,
     required this.weekdayNames,
   }) : super(key: key);
 
+  /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。
   final int firstDayOfWeek;
+
+  /// 星期之间的水平间距
   final double weekdayGap;
+
+  /// 内边距
   final double padding;
+
+  /// 星期文字样式
   final TextStyle? weekdayStyle;
+
+  /// 星期行高度
   final double weekdayHeight;
-  final Widget? titleWidget;
-  final TextStyle? titleStyle;
-  final int? titleMaxLine;
-  final TextOverflow? titleOverflow;
-  final bool closeBtn;
-  final Color? closeColor;
-  final VoidCallback? onClose;
+
+  /// 星期名称列表（内部自动获取）
   final List<String> weekdayNames;
 
-  List<String> _getWeeks(BuildContext context) {
+  List<String> _getWeeks() {
     final ans = <String>[];
     var i = firstDayOfWeek % 7;
     while (ans.length < 7) {
@@ -68,60 +46,25 @@ class TCalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list = _getWeeks(context);
+    final list = _getWeeks();
     return Container(
       padding: EdgeInsets.symmetric(horizontal: padding),
-      child: Column(
+      child: Row(
         children: [
-          if (titleWidget != null || closeBtn)
-            Container(
-              padding: EdgeInsets.symmetric(vertical: padding),
-              child: Row(
-                children: [
-                  if (closeBtn) const SizedBox(width: 24),
-                  Expanded(
-                    child: Center(
-                      child: wrapCalendarTitleWidget(
-                            titleWidget,
-                            titleStyle: titleStyle,
-                            titleMaxLine: titleMaxLine,
-                            titleOverflow:
-                                titleOverflow ?? TextOverflow.ellipsis,
-                          ) ??
-                          const SizedBox.shrink(),
-                    ),
-                  ),
-                  if (closeBtn)
-                    SizedBox(
-                      width: 24,
-                      child: GestureDetector(
-                        child: Icon(TIcons.close, color: closeColor),
-                        onTap: () {
-                          onClose?.call();
-                        },
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          Row(
-            children: [
-              for (int index = 0; index < list.length; index++) ...[
-                if (index != 0) SizedBox(width: weekdayGap),
-                Expanded(
-                  child: SizedBox(
-                    height: weekdayHeight,
-                    child: Center(
-                      child: TText(
-                        list[index],
-                        style: weekdayStyle,
-                      ),
-                    ),
+          for (int index = 0; index < list.length; index++) ...[
+            if (index != 0) SizedBox(width: weekdayGap),
+            Expanded(
+              child: SizedBox(
+                height: weekdayHeight,
+                child: Center(
+                  child: TText(
+                    list[index],
+                    style: weekdayStyle,
                   ),
                 ),
-              ]
-            ],
-          ),
+              ),
+            ),
+          ]
         ],
       ),
     );

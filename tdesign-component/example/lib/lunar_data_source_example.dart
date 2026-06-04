@@ -1,10 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:lunar/lunar.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'lunar_info.dart';
 
-/// 基于 lunar 库的农历示例：副标题由 [getSubtitle] 或 [subtitleBuilder] 接入。
-class LunarDataSourceExample extends TCalendarDataSource {
+/// 农历示例数据：为 [TCalendar.subtitleBuilder] 提供节日 / 节气 / 农历日副标题文案。
+///
+/// 接入方式：`subtitleBuilder: lunarExample.buildSubtitle`。
+/// 控制栏切换月份请改 [TCalendar.anchorDate]，勿用 [TCalendar.initialValue] 驱动滚动。
+class LunarDataSourceExample {
   static String convertToChineseNumber(int number) {
     const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
     return number
@@ -88,8 +92,8 @@ class LunarDataSourceExample extends TCalendarDataSource {
     }
   }
 
-  @override
-  String? getSubtitle(DateTime date) {
+  /// 按阳历日期解析副标题文案；无内容时返回 null。
+  String? subtitleTextFor(DateTime date) {
     final lunar = getLunarInfo(date);
     final festival = festivalOf(date, lunar);
     if (festival != null && festival.isNotEmpty) {
@@ -100,6 +104,25 @@ class LunarDataSourceExample extends TCalendarDataSource {
       return term;
     }
     return lunar?.dayText;
+  }
+
+  /// 供 [TCalendar.subtitleBuilder] 使用，按格子的 [TCalendarSubtitleContext] 渲染副标题。
+  Widget? buildSubtitle(
+    BuildContext context,
+    TCalendarSubtitleContext subtitleContext,
+  ) {
+    final text = subtitleTextFor(subtitleContext.date);
+    if (text == null || text.isEmpty) {
+      return null;
+    }
+    final cellStyle = TCalendarStyle.generateStyle(context: null)
+        .forSelectType(context, subtitleContext.selectType);
+    return TText(
+      text,
+      style: cellStyle.subtitleStyle?.copyWith(fontSize: 9),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 
   String formatYear(int year, {bool lunar = false}) {
@@ -144,16 +167,32 @@ class LunarDataSourceExample extends TCalendarDataSource {
   }
 
   String? festivalOf(DateTime date, [LunarInfo? lunarInfo]) {
-    if (date.month == 1 && date.day == 1) return '元旦';
-    if (date.month == 2 && date.day == 14) return '情人节';
-    if (date.month == 5 && date.day == 1) return '劳动节';
-    if (date.month == 10 && date.day == 1) return '国庆节';
+    if (date.month == 1 && date.day == 1) {
+      return '元旦';
+    }
+    if (date.month == 2 && date.day == 14) {
+      return '情人节';
+    }
+    if (date.month == 5 && date.day == 1) {
+      return '劳动节';
+    }
+    if (date.month == 10 && date.day == 1) {
+      return '国庆节';
+    }
 
     if (lunarInfo != null) {
-      if (lunarInfo.month == 1 && lunarInfo.day == 1) return '春节';
-      if (lunarInfo.month == 1 && lunarInfo.day == 15) return '元宵节';
-      if (lunarInfo.month == 5 && lunarInfo.day == 5) return '端午节';
-      if (lunarInfo.month == 8 && lunarInfo.day == 15) return '中秋节';
+      if (lunarInfo.month == 1 && lunarInfo.day == 1) {
+        return '春节';
+      }
+      if (lunarInfo.month == 1 && lunarInfo.day == 15) {
+        return '元宵节';
+      }
+      if (lunarInfo.month == 5 && lunarInfo.day == 5) {
+        return '端午节';
+      }
+      if (lunarInfo.month == 8 && lunarInfo.day == 15) {
+        return '中秋节';
+      }
     }
     return null;
   }
