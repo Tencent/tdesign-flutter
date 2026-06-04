@@ -1,23 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'picker_item.dart';
+import 'wheel_column.dart';
 import '../../../tdesign_flutter.dart';
-import 'no_wave_behavior.dart';
-import 't_item_widget.dart';
-
-// =============== 文件级常量（魔法数字归一） ===============
-
-/// disabled 项修正动画 - 距离 ≤ 2 时的时长
-const int _kCorrectAnimShortMs = 200;
-
-/// disabled 项修正动画 - 距离 > 2 时的时长
-const int _kCorrectAnimLongMs = 350;
-
-/// 距离阈值：≤ 2 使用短动画，> 2 使用长动画
-const int _kCorrectAnimDistanceThreshold = 2;
-
-/// 滚轮透视比例（越大越平）
-const double _kWheelDiameterRatio = 3;
 
 /// 整组禁用时的透明度
 const double _kDisabledOpacity = 0.5;
@@ -27,8 +13,8 @@ const double _kDisabledOpacity = 0.5;
 /// 不包含工具栏、确认按钮或内置 loading；弹窗场景请配合 [TPopup] 在用户确认后再提交。
 ///
 /// 数据形态（编译期二选一）：
-/// - [TPickerColumns]：多列独立，各列选项互不影响
-/// - [TPickerLinked]：联动树，上游变更后下游列裁剪并按新分支展开，默认选中各列首项
+/// - [PickerColumns]：多列独立，各列选项互不影响
+/// - [PickerLinked]：联动树，上游变更后下游列裁剪并按新分支展开，默认选中各列首项
 ///
 /// [items] 或 [initialValue] 相对上一帧值不相等时会释放全部 ScrollController 并重新初始化；
 /// 内容相等的新实例不会触发重建。分页追加后请同步更新 [initialValue] 以恢复选中。
@@ -40,12 +26,12 @@ const double _kDisabledOpacity = 0.5;
 /// ```dart
 /// // 多列独立
 /// TPicker(
-///   items: TPickerColumns.fromRaw([['北京', '上海', '广州']]),
+///   items: PickerColumns.fromRaw([['北京', '上海', '广州']]),
 /// )
 ///
 /// // 联动
 /// TPicker(
-///   items: TPickerLinked.fromRaw({'广东': {'深圳': ['南山', '福田']}}),
+///   items: PickerLinked.fromRaw({'广东': {'深圳': ['南山', '福田']}}),
 /// )
 /// ```
 class TPicker extends StatefulWidget {
@@ -62,14 +48,14 @@ class TPicker extends StatefulWidget {
 
   /// 数据源（必填）
   ///
-  /// 使用密封类 [TPickerItems] 编译期强制二选一：
-  /// - [TPickerColumns] → 多列独立选择
-  /// - [TPickerLinked] → 联动选择
+  /// 使用密封类 [PickerItems] 编译期强制二选一：
+  /// - [PickerColumns] → 多列独立选择
+  /// - [PickerLinked] → 联动选择
   ///
   /// 自由结构数据通过 `.fromRaw()` 工厂构造归一化。
   ///
   /// 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。
-  final TPickerItems items;
+  final PickerItems items;
 
   /// 初始选中值列表（按 value 匹配各列）
   ///
@@ -87,9 +73,9 @@ class TPicker extends StatefulWidget {
   ///
   /// 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。
   ///
-  /// 按需加载更多：在回调里根据 [TPickerValue.indexes] 判断是否接近列底，
+  /// 按需加载更多：在回调里根据 [PickerValue.indexes] 判断是否接近列底，
   /// 请求完成后更新 [items] 即可（无需组件内置加载 API）。
-  final void Function(TPickerValue)? onChange;
+  final void Function(PickerValue)? onChange;
 
   /// 视窗高度，默认 200
   final double height;
@@ -109,16 +95,17 @@ class TPicker extends StatefulWidget {
 
 class _TPickerState extends State<TPicker> {
   late bool _isLinked;
-  late List<List<TPickerOption>> _columns;
+  late List<List<PickerOption>> _columns;
   late List<FixedExtentScrollController> _controllers;
+
   /// 联动模式：每层选中的 value 路径（长度 == _columns.length）
   late List<dynamic> _selectedPath;
+
   /// 联动模式：每列对应的父级 Map，叶子列为 null（长度 == _columns.length）
-  late List<Map<TPickerOption, dynamic>?> _mapStack;
-  /// 标记某列正在动画修正中，防止重复触发
-  final Set<int> _animatingCols = {};
-  /// 复用同一实例，避免每次 _buildColumn 都 new
-  final _scrollBehavior = NoWaveBehavior();
+  late List<Map<PickerOption, dynamic>?> _mapStack;
+
+  /// 用于命令式控制各列的 State
+  late List<GlobalKey<WheelColumnState>> _columnKeys;
 
   double get _itemHeight => widget.height / widget.itemCount;
 
@@ -158,20 +145,21 @@ class _TPickerState extends State<TPicker> {
     _controllers = [];
     _selectedPath = [];
     _mapStack = [];
-    _animatingCols.clear();
+    _columnKeys = [];
 
     switch (widget.items) {
-      case TPickerColumns(:final columns):
+      case PickerColumns(:final columns):
         _isLinked = false;
         _initColumns(columns);
-      case TPickerLinked(:final tree):
+      case PickerLinked(:final tree):
         _isLinked = true;
         _initLinked(tree);
     }
   }
 
-  void _initColumns(List<List<TPickerOption>> columns) {
+  void _initColumns(List<List<PickerOption>> columns) {
     _columns = columns;
+    _columnKeys = List.generate(columns.length, (_) => GlobalKey());
 
     final initValues = widget.initialValue;
     _controllers = List.generate(_columns.length, (i) {
@@ -187,7 +175,7 @@ class _TPickerState extends State<TPicker> {
     });
   }
 
-  void _initLinked(Map<TPickerOption, dynamic> tree) {
+  void _initLinked(Map<PickerOption, dynamic> tree) {
     final options = tree.keys.toList();
     if (options.isEmpty) {
       return;
@@ -260,114 +248,27 @@ class _TPickerState extends State<TPicker> {
       return const SizedBox.shrink();
     }
 
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: ScrollConfiguration(
-        behavior: _scrollBehavior,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (notification) =>
-              _onScrollNotification(notification, colIndex, data),
-          child: ListWheelScrollView.useDelegate(
-            itemExtent: _itemHeight,
-            diameterRatio: _kWheelDiameterRatio,
-            controller: _controllers[colIndex],
-            physics: widget.disabled
-                ? const NeverScrollableScrollPhysics()
-                : const FixedExtentScrollPhysics(),
-            onSelectedItemChanged: widget.disabled
-                ? null
-                : (index) => _onItemSelected(colIndex, index, data),
-            childDelegate: ListWheelChildBuilderDelegate(
-              childCount: data.length,
-              builder: (_, index) => TItemWidget(
-                content: data[index].label,
-                fixedExtentScrollController: _controllers[colIndex],
-                colIndex: colIndex,
-                index: index,
-                itemHeight: _itemHeight,
-                disabled: data[index].disabled,
-                itemBuilder: widget.itemBuilder,
-              ),
-            ),
-          ),
-        ),
+    return ExcludeSemantics(
+      child: WheelColumn(
+        key: _columnKeys[colIndex],
+        colIndex: colIndex,
+        options: data,
+        controller: _controllers[colIndex],
+        itemHeight: _itemHeight,
+        disabled: false,
+        itemBuilder: widget.itemBuilder,
+        onItemSelected: (col, index, _) => _onColumnItemSelected(col, index),
+        onAnimationComplete: (col, index, _) =>
+            _onColumnAnimationComplete(col, index),
       ),
     );
   }
 
-  bool _onScrollNotification(
-      ScrollNotification notification, int col, List<TPickerOption> data) {
-    // 仅处理"滚动结束"事件
-    if (notification is! ScrollEndNotification) {
-      return false;
-    }
-
-    final controller = _controllers[col];
-    final currentIndex = controller.selectedItem;
-
-    // 当前位置越界或非 disabled 项：无需修正
-    if (currentIndex < 0 ||
-        currentIndex >= data.length ||
-        !data[currentIndex].disabled) {
-      return false;
-    }
-
-    final target = _nearestEnabled(data, currentIndex);
-    // 找不到可用项或目标就是自己：无需修正
-    if (target < 0 || target == currentIndex) {
-      return false;
-    }
-
-    // 同一列若已在修正动画中，跳过
-    if (!_animatingCols.add(col)) {
-      return false;
-    }
-
-    _animateCorrect(col, data, currentIndex, target);
-    return false;
-  }
-
-  /// 把某列从 [from] 动画滚动到 [to]，并在动画完成后派发 [TPicker.onChange]
-  void _animateCorrect(
-      int col, List<TPickerOption> data, int from, int to) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      final c = _controllers[col];
-
-      // 动画调度到这一帧前，用户可能已经手动滚到 enabled 项了
-      final newIndex = c.selectedItem;
-      if (newIndex >= 0 && newIndex < data.length && !data[newIndex].disabled) {
-        _animatingCols.remove(col);
-        return;
-      }
-
-      final distance = (to - from).abs();
-      final ms = distance <= _kCorrectAnimDistanceThreshold
-          ? _kCorrectAnimShortMs
-          : _kCorrectAnimLongMs;
-      c
-          .animateToItem(
-        to,
-        duration: Duration(milliseconds: ms),
-        curve: Curves.easeOutCubic,
-      )
-          .then((_) {
-        if (mounted) {
-          _animatingCols.remove(col);
-          _notifyChange();
-        }
-      }).catchError((Object e, StackTrace stack) {
-        debugPrint('TPicker animation interrupted: $e');
-        _animatingCols.remove(col);
-      });
-    });
-  }
-
-  void _onItemSelected(int col, int index, List<TPickerOption> data) {
+  void _onColumnItemSelected(int col, int index) {
+    final data = _columns[col];
     if (data[index].disabled) {
+      // 触发 WheelColumn 的禁用项修正动画
+      _columnKeys[col].currentState?.animateToNearestEnabled();
       return;
     }
 
@@ -383,21 +284,9 @@ class _TPickerState extends State<TPicker> {
     }
   }
 
-  /// 从 [start] 出发双向搜索最近一个 enabled 索引，全 disabled 时返回 -1
-  ///
-  /// 双向同时推进，先命中者胜出；若同距离，偏向前向。
-  int _nearestEnabled(List<TPickerOption> data, int start) {
-    for (var step = 1; step < data.length; step++) {
-      final forward = start + step;
-      if (forward < data.length && !data[forward].disabled) {
-        return forward;
-      }
-      final backward = start - step;
-      if (backward >= 0 && !data[backward].disabled) {
-        return backward;
-      }
-    }
-    return -1;
+  void _onColumnAnimationComplete(int col, int index) {
+    // 动画完成后触发 onChange
+    _notifyChange();
   }
 
   /// 联动刷新：变更 [col] 后，裁剪其下所有列并按新分支重新展开；
@@ -439,6 +328,7 @@ class _TPickerState extends State<TPicker> {
     _controllers.removeRange(col + 1, _controllers.length);
     _selectedPath.removeRange(col + 1, _selectedPath.length);
     _mapStack.removeRange(col + 1, _mapStack.length);
+    _columnKeys.removeRange(col + 1, _columnKeys.length);
   }
 
   /// 通用的联动列展开器：从给定的起点 options/parent 开始，把后续每一层都 push 进
@@ -448,9 +338,9 @@ class _TPickerState extends State<TPicker> {
   ///   - 初始化场景：按 `widget.initialValue` 匹配
   ///   - 滚动刷新场景：固定返回 0（首项）
   void _appendLinkedColumns({
-    required List<TPickerOption> firstOptions,
-    required Map<TPickerOption, dynamic>? firstParent,
-    required int Function(int depth, List<TPickerOption> options) initialIdxAt,
+    required List<PickerOption> firstOptions,
+    required Map<PickerOption, dynamic>? firstParent,
+    required int Function(int depth, List<PickerOption> options) initialIdxAt,
   }) {
     var options = firstOptions;
     var parentMap = firstParent;
@@ -465,6 +355,7 @@ class _TPickerState extends State<TPicker> {
       _controllers.add(FixedExtentScrollController(initialItem: safeIdx));
       _mapStack.add(parentMap);
       _selectedPath.add(options[safeIdx].value);
+      _columnKeys.add(GlobalKey());
 
       // 已是叶子，无需再下钻
       if (parentMap == null) {
@@ -484,13 +375,13 @@ class _TPickerState extends State<TPicker> {
   /// 把一个 childData（来自 `Map[option]` 的取值结果）归一为下一列所需的
   /// options + parentMap；返回 null 表示不可构建下一列（空/非法/数据耗尽）。
   _ChildColumn? _resolveChildColumn(dynamic childData) {
-    if (childData is Map<TPickerOption, dynamic>) {
+    if (childData is Map<PickerOption, dynamic>) {
       if (childData.isEmpty) {
         return null;
       }
       return (options: childData.keys.toList(), parentMap: childData);
     }
-    if (childData is List<TPickerOption>) {
+    if (childData is List<PickerOption>) {
       if (childData.isEmpty) {
         return null;
       }
@@ -499,9 +390,9 @@ class _TPickerState extends State<TPicker> {
     return null;
   }
 
-  /// 读取当前选中态，disabled 项就地修正到最近 enabled
-  TPickerValue _buildValue() {
-    final selectedOptions = <TPickerOption>[];
+  /// 读取当前选中态
+  PickerValue _buildValue() {
+    final selectedOptions = <PickerOption>[];
     final indexes = <int>[];
 
     for (var i = 0; i < _controllers.length; i++) {
@@ -512,7 +403,7 @@ class _TPickerState extends State<TPicker> {
       var idx = _controllers[i].selectedItem.clamp(0, column.length - 1);
       // disabled 项就地修正到最近 enabled（找不到则保持原位）
       if (column[idx].disabled) {
-        final fixed = _nearestEnabled(column, idx);
+        final fixed = WheelColumnState.nearestEnabledIndex(column, idx);
         if (fixed >= 0) {
           idx = fixed;
         }
@@ -521,7 +412,7 @@ class _TPickerState extends State<TPicker> {
       selectedOptions.add(column[idx]);
     }
 
-    return TPickerValue(selectedOptions: selectedOptions, indexes: indexes);
+    return PickerValue(selectedOptions: selectedOptions, indexes: indexes);
   }
 
   void _notifyChange() {
@@ -531,4 +422,7 @@ class _TPickerState extends State<TPicker> {
 
 /// 联动模式下一列的归一化结果 Record。
 /// `options` 是该列候选项，`parentMap` 是该列的父级 Map（叶子列为 null）。
-typedef _ChildColumn = ({List<TPickerOption> options, Map<TPickerOption, dynamic>? parentMap});
+typedef _ChildColumn = ({
+  List<PickerOption> options,
+  Map<PickerOption, dynamic>? parentMap
+});

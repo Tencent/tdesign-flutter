@@ -27,8 +27,8 @@ const double _kDisabledItemOpacity = 0.5;
 const double _kBaseFontSize = 16.0;
 
 /// 选择器的子项组件（包内复用，不对外暴露）
-class TItemWidget extends StatelessWidget {
-  const TItemWidget({
+class PickerItemWidget extends StatelessWidget {
+  const PickerItemWidget({
     required this.fixedExtentScrollController,
     required this.colIndex,
     required this.index,

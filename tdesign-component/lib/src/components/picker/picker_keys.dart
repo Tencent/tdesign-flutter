@@ -2,15 +2,15 @@ import 'package:flutter/foundation.dart';
 
 /// 字段映射配置
 ///
-/// 当 picker 数据源不是 `TPickerOption` 时，用于声明原始结构中的字段名。
+/// 当 picker 数据源不是 `PickerOption` 时，用于声明原始结构中的字段名。
 ///
 /// ```dart
 /// // 数据：[{ id: '1', name: '选项A', readonly: false }]
-/// const keys = TPickerKeys(label: 'name', value: 'id', disabled: 'readonly');
+/// const keys = PickerKeys(label: 'name', value: 'id', disabled: 'readonly');
 /// ```
 @immutable
-class TPickerKeys {
-  const TPickerKeys({
+class PickerKeys {
+  const PickerKeys({
     this.label = 'label',
     this.value = 'value',
     this.disabled = 'disabled',
@@ -30,12 +30,12 @@ class TPickerKeys {
   final String children;
 
   /// 默认配置（`label / value / disabled / children`）
-  static const TPickerKeys defaults = TPickerKeys();
+  static const PickerKeys defaults = PickerKeys();
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TPickerKeys &&
+      other is PickerKeys &&
           runtimeType == other.runtimeType &&
           label == other.label &&
           value == other.value &&
@@ -47,5 +47,5 @@ class TPickerKeys {
 
   @override
   String toString() =>
-      'TPickerKeys(label: $label, value: $value, disabled: $disabled, children: $children)';
+      'PickerKeys(label: $label, value: $value, disabled: $disabled, children: $children)';
 }

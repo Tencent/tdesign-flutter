@@ -4,7 +4,7 @@ import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../date_time_picker/t_date_time_picker_internal.dart';
 import '../date_time_picker/t_date_time_picker_wheel.dart';
-import '../picker/no_wave_behavior.dart';
+import '../picker/wheel_behavior.dart';
 import 'date_picker_model.dart';
 
 /// 日期/时间选择器（供 TCalendar 内部使用）
@@ -68,8 +68,7 @@ class _TDatePickerState extends State<TDatePicker> {
 
   Widget _buildToolbar(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: TTheme.of(context).spacer16),
+      padding: EdgeInsets.symmetric(horizontal: TTheme.of(context).spacer16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -169,7 +168,7 @@ class _TDatePickerState extends State<TDatePicker> {
       context: context,
       removeTop: true,
       child: ScrollConfiguration(
-        behavior: NoWaveBehavior(),
+        behavior: WheelBehavior(),
         child: ListWheelScrollView.useDelegate(
           itemExtent: _pickerHeight / _itemCount,
           diameterRatio: 100,

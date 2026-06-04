@@ -7,7 +7,7 @@ import '../../util/platform_util.dart';
 ///
 /// 水波纹会与 [ListWheelScrollView] 的弧形外观产生视觉冲突。
 /// iOS / 桌面端保持系统默认行为。
-class NoWaveBehavior extends ScrollBehavior {
+class WheelBehavior extends ScrollBehavior {
   @override
   Widget buildOverscrollIndicator(
       BuildContext context, Widget child, ScrollableDetails details) {

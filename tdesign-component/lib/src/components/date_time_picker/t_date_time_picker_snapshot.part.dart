@@ -152,7 +152,7 @@ class DateTimePickerSnapshot {
     );
   }
 
-  /// 根据当前快照计算 `TPickerColumns`（给 picker 的 items）。
+  /// 根据当前快照计算 `PickerColumns`（给 picker 的 items）。
   ///
   /// 各列范围在 `[start, end]` 闭区间内按当前选中上下文收紧（见 `columnBounds`）。
   /// 仅含时间列时，按 `start`/`end` 的时钟分量收紧。
@@ -160,7 +160,7 @@ class DateTimePickerSnapshot {
   /// `showWeek` 为 `true` 时，**日列**的默认 label 追加星期（如 "19日 周六"）。
   /// `renderLabel` 返回非 null 时优先于默认文案；日列返回非 null 时不追加星期。
   /// `labels` 缺省时使用 `DateTimePickerLabels.defaults`。
-  TPickerColumns toPickerColumns({
+  PickerColumns toPickerColumns({
     DateTime? start,
     DateTime? end,
     bool showWeek = false,
@@ -170,7 +170,7 @@ class DateTimePickerSnapshot {
   }) {
     final resolvedLabels = labels ?? DateTimePickerLabels.defaults;
     final safeEnd = _safeEnd(start, end);
-    final cols = <List<TPickerOption>>[];
+    final cols = <List<PickerOption>>[];
     for (final col in columns) {
       cols.add(_buildColumnOptions(
         col,
@@ -185,11 +185,11 @@ class DateTimePickerSnapshot {
         steps: steps,
       ));
     }
-    return TPickerColumns(cols);
+    return PickerColumns(cols);
   }
 
   /// 构建单列 options（供滚轮局部更新）。
-  List<TPickerOption> columnOptionsAt(
+  List<PickerOption> columnOptionsAt(
     int index, {
     DateTime? start,
     DateTime? end,
@@ -317,8 +317,7 @@ class DateTimePickerSnapshot {
           yearAnchor == other.yearAnchor;
 
   @override
-  int get hashCode =>
-      Object.hash(Object.hashAll(columns), current, yearAnchor);
+  int get hashCode => Object.hash(Object.hashAll(columns), current, yearAnchor);
 
   @override
   String toString() =>
@@ -339,7 +338,8 @@ class DateTimePickerSnapshot {
     return dt;
   }
 
-  static int daysInMonth(int year, int month) => DateTime(year, month + 1, 0).day;
+  static int daysInMonth(int year, int month) =>
+      DateTime(year, month + 1, 0).day;
 
   /// 按 [columns] 把 [current] 投影成 int 数组。
   static List<int> _extractValues(
@@ -396,7 +396,7 @@ class DateTimePickerSnapshot {
   /// 单列 option 构造。
   ///
   /// [showWeek] 仅影响 [DateTimeColumn.day] 列的 label——`"19日"` → `"19日 周六"`。
-  static List<TPickerOption> _buildColumnOptions(
+  static List<PickerOption> _buildColumnOptions(
     DateTimeColumn col, {
     required DateTime? start,
     required DateTime? end,
@@ -419,7 +419,7 @@ class DateTimePickerSnapshot {
       );
       if (!bounds.isValid) {
         return [
-          TPickerOption(
+          PickerOption(
             label: _resolveColumnLabel(
               col,
               current.day,
@@ -459,7 +459,7 @@ class DateTimePickerSnapshot {
         DateTimeColumn.day => current.day,
       };
       return [
-        TPickerOption(
+        PickerOption(
           label: _resolveColumnLabel(col, v, labels, renderLabel: renderLabel),
           value: v,
         ),
@@ -488,7 +488,7 @@ class DateTimePickerSnapshot {
     return labels.formatColumn(column, value);
   }
 
-  static List<TPickerOption> _buildIntRange(
+  static List<PickerOption> _buildIntRange(
     DateTimeColumn column,
     int min,
     int max,
@@ -505,7 +505,7 @@ class DateTimePickerSnapshot {
     if (step <= 1) {
       return [
         for (var v = min; v <= max; v++)
-          TPickerOption(
+          PickerOption(
             label: _resolveColumnLabel(
               column,
               v,
@@ -520,7 +520,7 @@ class DateTimePickerSnapshot {
     if (first > max) {
       final only = min.clamp(min, max);
       return [
-        TPickerOption(
+        PickerOption(
           label: _resolveColumnLabel(
             column,
             only,
@@ -533,7 +533,7 @@ class DateTimePickerSnapshot {
     }
     return [
       for (var v = first; v <= max; v += step)
-        TPickerOption(
+        PickerOption(
           label: _resolveColumnLabel(
             column,
             v,
@@ -546,7 +546,7 @@ class DateTimePickerSnapshot {
   }
 
   /// 日列专用构造：在 [showWeek] = true 时把对应日期的星期附加到 label 末尾。
-  static List<TPickerOption> _buildDayRange(
+  static List<PickerOption> _buildDayRange(
     DateTime current,
     int startDay,
     int endDay, {
@@ -565,7 +565,7 @@ class DateTimePickerSnapshot {
     if (first > endDay) {
       final only = startDay;
       return [
-        TPickerOption(
+        PickerOption(
           label: _dayOptionLabel(
             current.year,
             current.month,
@@ -580,7 +580,7 @@ class DateTimePickerSnapshot {
     }
     return [
       for (var d = first; d <= endDay; d += step)
-        TPickerOption(
+        PickerOption(
           label: _dayOptionLabel(
             current.year,
             current.month,
@@ -623,5 +623,4 @@ class DateTimePickerSnapshot {
     final weekday = DateTime(year, month, day).weekday;
     return '$base ${labels.weekdayLabel(weekday)}';
   }
-
 }

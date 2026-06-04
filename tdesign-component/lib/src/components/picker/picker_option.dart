@@ -6,12 +6,12 @@ import 'package:flutter/foundation.dart';
 /// （emoji、单位、国际化）同时保持纯净的业务值。
 ///
 /// ```dart
-/// TPickerOption(label: '👨 男性', value: 'M')
-/// TPickerOption(label: '广东省', value: 'GD', disabled: true)
+/// PickerOption(label: '👨 男性', value: 'M')
+/// PickerOption(label: '广东省', value: 'GD', disabled: true)
 /// ```
 @immutable
-class TPickerOption {
-  const TPickerOption({
+class PickerOption {
+  const PickerOption({
     required this.label,
     required this.value,
     this.disabled = false,
@@ -29,7 +29,7 @@ class TPickerOption {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TPickerOption &&
+      other is PickerOption &&
           runtimeType == other.runtimeType &&
           label == other.label &&
           value == other.value &&
@@ -39,5 +39,5 @@ class TPickerOption {
   int get hashCode => Object.hash(label, value, disabled);
 
   @override
-  String toString() => 'TPickerOption($label, $value)';
+  String toString() => 'PickerOption($label, $value)';
 }

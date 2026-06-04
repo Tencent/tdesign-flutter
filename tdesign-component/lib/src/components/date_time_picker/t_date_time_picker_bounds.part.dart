@@ -46,13 +46,15 @@ _IntRange columnBounds(
   final safeEnd = _safeEnd(start, end);
 
   if (_isTimeOnlyColumns(columns)) {
-    return _timeOnlyColumnBounds(col, current: current, start: start, end: safeEnd);
+    return _timeOnlyColumnBounds(col,
+        current: current, start: start, end: safeEnd);
   }
 
   return switch (col) {
     DateTimeColumn.year => _IntRange(
         start?.year ?? (yearAnchor - DateTimePickerSnapshot.defaultYearOffset),
-        safeEnd?.year ?? (yearAnchor + DateTimePickerSnapshot.defaultYearOffset),
+        safeEnd?.year ??
+            (yearAnchor + DateTimePickerSnapshot.defaultYearOffset),
       ),
     DateTimeColumn.month => _IntRange(
         (start != null && current.year == start.year) ? start.month : 1,
@@ -76,7 +78,9 @@ _IntRange columnBounds(
       ),
     DateTimeColumn.minute => _IntRange(
         (start != null && _isSameHour(current, start)) ? start.minute : 0,
-        (safeEnd != null && _isSameHour(current, safeEnd)) ? safeEnd.minute : 59,
+        (safeEnd != null && _isSameHour(current, safeEnd))
+            ? safeEnd.minute
+            : 59,
       ),
     DateTimeColumn.second => _IntRange(
         (start != null && _isSameMinute(current, start)) ? start.second : 0,
@@ -160,7 +164,8 @@ DateTime normalizePickerDateTime(
   required int yearAnchor,
 }) {
   final safeEnd = _safeEnd(start, end);
-  var result = DateTimePickerSnapshot.clampDateTime(dt, start: start, end: safeEnd);
+  var result =
+      DateTimePickerSnapshot.clampDateTime(dt, start: start, end: safeEnd);
 
   var y = result.year;
   var m = result.month;
@@ -204,5 +209,6 @@ DateTime normalizePickerDateTime(
     d = maxDay;
   }
   result = DateTime(y, m, d, h, mi, s);
-  return DateTimePickerSnapshot.clampDateTime(result, start: start, end: safeEnd);
+  return DateTimePickerSnapshot.clampDateTime(result,
+      start: start, end: safeEnd);
 }

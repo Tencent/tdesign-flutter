@@ -132,9 +132,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     if (modeChanged || initialChanged) {
       _snapshot = DateTimePickerSnapshot.initial(
         columns: widget.mode.columns,
-        initial: initialChanged
-            ? _resolveInitialDateTime()
-            : _snapshot.current,
+        initial: initialChanged ? _resolveInitialDateTime() : _snapshot.current,
         start: _resolveBound(widget.start),
         end: _resolveBound(widget.end),
         steps: widget.steps,

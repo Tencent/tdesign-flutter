@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 't_picker_option.dart';
+import 'picker_option.dart';
 
 /// onChange 回调返回的选中信息
 ///
@@ -9,14 +9,14 @@ import 't_picker_option.dart';
 /// Text(_lastValue?.labels.join(' / ') ?? '');
 /// ```
 @immutable
-class TPickerValue {
-  TPickerValue({
+class PickerValue {
+  PickerValue({
     required this.selectedOptions,
     required this.indexes,
   });
 
   /// 每列选中的完整 option
-  final List<TPickerOption> selectedOptions;
+  final List<PickerOption> selectedOptions;
 
   /// 每列选中项的索引
   final List<int> indexes;
@@ -37,5 +37,5 @@ class TPickerValue {
 
   @override
   String toString() =>
-      'TPickerValue(labels: $labels, values: $values, indexes: $indexes)';
+      'PickerValue(labels: $labels, values: $values, indexes: $indexes)';
 }

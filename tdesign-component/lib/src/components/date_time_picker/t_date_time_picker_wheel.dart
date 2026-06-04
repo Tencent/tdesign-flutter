@@ -5,9 +5,9 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../picker/no_wave_behavior.dart';
-import '../picker/picker_column_wheel.dart';
-import '../picker/t_picker_option.dart';
+import '../picker/picker_option.dart';
+import '../picker/wheel_behavior.dart';
+import '../picker/wheel_column.dart';
 import 't_date_time_picker_column.dart';
 import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
@@ -52,11 +52,11 @@ class DateTimePickerWheel extends StatefulWidget {
 
 class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   late DateTimePickerSnapshot _snapshot;
-  late List<List<TPickerOption>> _columns;
+  late List<List<PickerOption>> _columns;
   late List<FixedExtentScrollController> _controllers;
-  late List<GlobalKey<PickerColumnWheelState>> _columnKeys;
+  late List<GlobalKey<WheelColumnState>> _columnKeys;
   bool _controllersReady = false;
-  final _scrollBehavior = NoWaveBehavior();
+  final _scrollBehavior = WheelBehavior();
 
   double get _itemHeight => widget.height / widget.itemCount;
 
@@ -84,7 +84,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     );
     _columnKeys = List.generate(
       _columns.length,
-      (_) => GlobalKey<PickerColumnWheelState>(),
+      (_) => GlobalKey<WheelColumnState>(),
     );
     _controllers = List.generate(_columns.length, (i) {
       return FixedExtentScrollController(
@@ -130,7 +130,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     super.dispose();
   }
 
-  void _onItemSelected(int col, int index, List<TPickerOption> data) {
+  void _onItemSelected(int col, int index, List<PickerOption> data) {
     final rawValues = List<int>.from(_snapshot.values);
     final value = data[index].value;
     if (value is! int) {
@@ -216,9 +216,9 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
 
     final columnState = _columnKeys[col].currentState;
     columnState?.applyColumnUpdate(
-          options: newData,
-          controller: controller,
-        );
+      options: newData,
+      controller: controller,
+    );
     //列尚未挂载时由本层延迟释放旧 controller，避免与 applyColumnUpdate 重复 dispose
     if (oldData.length != newData.length &&
         columnState == null &&
@@ -249,9 +249,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       }
     }
     if (_controllersReady && col < _controllers.length) {
-      return _controllers[col]
-          .selectedItem
-          .clamp(0, _columns[col].length - 1);
+      return _controllers[col].selectedItem.clamp(0, _columns[col].length - 1);
     }
     return 0;
   }
@@ -269,7 +267,8 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   }
 
   static Set<int> _outOfSyncIndices(List<int> raw, List<int> normalized) {
-    final count = raw.length < normalized.length ? raw.length : normalized.length;
+    final count =
+        raw.length < normalized.length ? raw.length : normalized.length;
     final out = <int>{};
     for (var i = 0; i < count; i++) {
       if (raw[i] != normalized[i]) {
@@ -331,7 +330,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       onDecrease: decreased != null ? () => _nudgeColumn(col, -1) : null,
       decreasedValue: decreased,
       child: ExcludeSemantics(
-        child: PickerColumnWheel(
+        child: WheelColumn(
           key: _columnKeys[col],
           colIndex: col,
           options: _columns[col],
