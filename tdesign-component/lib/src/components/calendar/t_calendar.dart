@@ -391,15 +391,10 @@ class _TCalendarState extends State<TCalendar> {
       return dateValue;
     }
     final milliseconds = timePickerModelList.map((model) {
-      final hour = model.useHour
-          ? model.hourFixedExtentScrollController.selectedItem
-          : 0;
-      final minute = model.useMinute
-          ? model.minuteFixedExtentScrollController.selectedItem
-          : 0;
-      final second = model.useSecond
-          ? model.secondFixedExtentScrollController.selectedItem
-          : 0;
+      final selected = model.selected;
+      final hour = selected['hour'] ?? 0;
+      final minute = selected['minute'] ?? 0;
+      final second = selected['second'] ?? 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
     }).toList();
     if (widget.type == CalendarType.range && dateValue.length == 1) {

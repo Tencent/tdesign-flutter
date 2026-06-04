@@ -7,7 +7,34 @@ class PopupTestResourceDelegate extends TResourceDelegate {
     required this.cancelText,
     required this.confirmText,
     required this.locale,
-  });
+    String yearLabel = '年',
+    String monthLabel = '月',
+    String dateLabel = '日',
+    String hours = '时',
+    String minutes = '分',
+    String seconds = '秒',
+    String weeksLabel = '周',
+    String monday = '一',
+    String tuesday = '二',
+    String wednesday = '三',
+    String thursday = '四',
+    String friday = '五',
+    String saturday = '六',
+    String sunday = '日',
+  })  : _yearLabel = yearLabel,
+        _monthLabel = monthLabel,
+        _dateLabel = dateLabel,
+        _hours = hours,
+        _minutes = minutes,
+        _seconds = seconds,
+        _weeksLabel = weeksLabel,
+        _monday = monday,
+        _tuesday = tuesday,
+        _wednesday = wednesday,
+        _thursday = thursday,
+        _friday = friday,
+        _saturday = saturday,
+        _sunday = sunday;
 
   factory PopupTestResourceDelegate.zh() => PopupTestResourceDelegate(
         cancelText: '取消',
@@ -19,11 +46,39 @@ class PopupTestResourceDelegate extends TResourceDelegate {
         cancelText: 'Cancel',
         confirmText: 'Confirm',
         locale: const Locale('en'),
+        yearLabel: 'y',
+        monthLabel: 'm',
+        dateLabel: 'd',
+        hours: 'h',
+        minutes: 'min',
+        seconds: 's',
+        weeksLabel: 'w',
+        monday: 'MON',
+        tuesday: 'TUE',
+        wednesday: 'WED',
+        thursday: 'THU',
+        friday: 'FRI',
+        saturday: 'SAT',
+        sunday: 'SUN',
       );
 
   final String cancelText;
   final String confirmText;
   final Locale locale;
+  final String _yearLabel;
+  final String _monthLabel;
+  final String _dateLabel;
+  final String _hours;
+  final String _minutes;
+  final String _seconds;
+  final String _weeksLabel;
+  final String _monday;
+  final String _tuesday;
+  final String _wednesday;
+  final String _thursday;
+  final String _friday;
+  final String _saturday;
+  final String _sunday;
 
   @override
   String get cancel => cancelText;
@@ -71,49 +126,49 @@ class PopupTestResourceDelegate extends TResourceDelegate {
   String get days => '天';
 
   @override
-  String get hours => '时';
+  String get hours => _hours;
 
   @override
-  String get minutes => '分';
+  String get minutes => _minutes;
 
   @override
-  String get seconds => '秒';
+  String get seconds => _seconds;
 
   @override
   String get milliseconds => '毫秒';
 
   @override
-  String get yearLabel => '年';
+  String get yearLabel => _yearLabel;
 
   @override
-  String get monthLabel => '月';
+  String get monthLabel => _monthLabel;
 
   @override
-  String get dateLabel => '日';
+  String get dateLabel => _dateLabel;
 
   @override
-  String get weeksLabel => '周';
+  String get weeksLabel => _weeksLabel;
 
   @override
-  String get sunday => '日';
+  String get sunday => _sunday;
 
   @override
-  String get monday => '一';
+  String get monday => _monday;
 
   @override
-  String get tuesday => '二';
+  String get tuesday => _tuesday;
 
   @override
-  String get wednesday => '三';
+  String get wednesday => _wednesday;
 
   @override
-  String get thursday => '四';
+  String get thursday => _thursday;
 
   @override
-  String get friday => '五';
+  String get friday => _friday;
 
   @override
-  String get saturday => '六';
+  String get saturday => _saturday;
 
   @override
   String get year => ' 年';

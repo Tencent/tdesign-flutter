@@ -81,8 +81,9 @@ class IntlResourceDelegate extends TResourceDelegate {
   String get dateLabel => AppLocalizations.of(context)!.dateLabel;
 
   @override
-  String get weeksLabel => AppLocalizations.of(context)!.dateLabel;
+  String get weeksLabel => AppLocalizations.of(context)!.weeks;
 
+  @override
   String get friday => AppLocalizations.of(context)!.friday;
 
   @override
