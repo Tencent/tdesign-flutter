@@ -260,29 +260,6 @@ void main() {
       expect(find.byType(TPicker), findsOneWidget);
     });
 
-    testWidgets('onLoad 回调 - 按需加载', (WidgetTester tester) async {
-      final lazyData = [
-        List.generate(
-          20,
-          (i) => TPickerOption(label: '选项 $i', value: 'opt_$i'),
-        ),
-      ];
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: TPickerColumns(lazyData),
-              onLoad: (event) {},
-              onChange: (value) {},
-            ),
-          ),
-        ),
-      );
-
-      expect(find.byType(TPicker), findsOneWidget);
-    });
-
     test('TPickerOption - 基础属性', () {
       const option = TPickerOption(
         label: '测试',
@@ -308,20 +285,6 @@ void main() {
       expect(value.indexes, indexes);
       expect(value.values, const [1, 2]);
       expect(value.labels, const ['A', 'B']);
-    });
-
-    test('TPickerLoadEvent - 基础属性', () {
-      const event = TPickerLoadEvent(
-        column: 0,
-        parentValue: null,
-        displayedCount: 10,
-        remaining: 5,
-      );
-
-      expect(event.column, 0);
-      expect(event.parentValue, null);
-      expect(event.displayedCount, 10);
-      expect(event.remaining, 5);
     });
 
     testWidgets('空数据处理 - 单列空列表', (WidgetTester tester) async {
@@ -673,6 +636,66 @@ void main() {
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
     });
 
+    testWidgets('联动模式 - 5级切换第1级后下游列全部换新并重置首项',
+        (WidgetTester tester) async {
+      TPickerValue? captured;
+
+      dynamic fiveLevelNode(int depth, [String codePrefix = '']) {
+        if (depth == 5) {
+          return [
+            for (int i = 1; i <= 2; i++)
+              TPickerOption(
+                label: '$codePrefix.$i',
+                value: '$codePrefix.$i',
+              ),
+          ];
+        }
+        return {
+          for (int i = 1; i <= 2; i++)
+            TPickerOption(
+              label: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+              value: codePrefix.isEmpty ? '$i' : '$codePrefix.$i',
+            ): fiveLevelNode(
+                depth + 1, codePrefix.isEmpty ? '$i' : '$codePrefix.$i'),
+        };
+      }
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TPicker(
+              items: TPickerLinked(fiveLevelNode(1)),
+              initialValue: const [
+                '1',
+                '1.1',
+                '1.1.1',
+                '1.1.1.1',
+                '1.1.1.1.1',
+              ],
+              onChange: (v) => captured = v,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(ListWheelScrollView), findsNWidgets(5));
+
+      await tester.drag(
+        find.byType(ListWheelScrollView).first,
+        const Offset(0, -40), // 第 1 级切换到 2
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ListWheelScrollView), findsNWidgets(5));
+      expect(captured, isNotNull);
+      expect(captured!.values[0], '2');
+      expect(captured!.values[1], '2.1');
+      expect(captured!.values[2], '2.1.1');
+      expect(captured!.values[3], '2.1.1.1');
+      expect(captured!.values[4], '2.1.1.1.1');
+      expect(captured!.indexes, const [1, 0, 0, 0, 0]);
+    });
+
     testWidgets('联动模式 - 滚动后新列选中首项', (WidgetTester tester) async {
       TPickerValue? captured;
       final linkedData = {
@@ -715,105 +738,6 @@ void main() {
 
       expect(captured, isNotNull);
       expect(captured!.values[2], 'NS');
-    });
-
-    testWidgets('onLoad 回调 - 滚动时触发', (WidgetTester tester) async {
-      var loadCallCount = 0;
-      int? capturedColumn;
-      int? capturedRemaining;
-
-      final testData = [
-        List.generate(
-          100,
-          (i) => TPickerOption(label: '选项 $i', value: 'opt_$i'),
-        ),
-      ];
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: TPickerColumns(testData),
-              onLoad: (event) {
-                loadCallCount++;
-                capturedColumn = event.column;
-                capturedRemaining = event.remaining;
-              },
-              onChange: (v) {},
-            ),
-          ),
-        ),
-      );
-
-      expect(find.byType(TPicker), findsOneWidget);
-
-      await tester.drag(
-        find.byType(ListWheelScrollView).first,
-        const Offset(0, -80), // 向上拖：选中下一项
-      );
-      await tester.pumpAndSettle();
-
-      expect(loadCallCount, greaterThan(0));
-      expect(capturedColumn, 0);
-      expect(capturedRemaining, greaterThanOrEqualTo(0));
-    });
-
-    testWidgets('onLoad 回调 - 联动模式 parentValue 正确', (WidgetTester tester) async {
-      dynamic capturedParentValue;
-      int? capturedColumn;
-      final linkedData = {
-        const TPickerOption(label: '广东省', value: 'GD'): {
-          const TPickerOption(label: '深圳市', value: 'SZ'): const [
-            TPickerOption(label: '南山区', value: 'NS'),
-            TPickerOption(label: '福田区', value: 'FT'),
-            TPickerOption(label: '罗湖区', value: 'LL'),
-          ],
-          const TPickerOption(label: '广州市', value: 'GZ'): const [
-            TPickerOption(label: '天河区', value: 'TH'),
-            TPickerOption(label: '越秀区', value: 'YX'),
-          ],
-        },
-        const TPickerOption(label: '浙江省', value: 'ZJ'): {
-          const TPickerOption(label: '杭州市', value: 'HZ'): const [
-            TPickerOption(label: '西湖区', value: 'XH'),
-          ],
-        },
-      };
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: TPickerLinked(linkedData),
-              initialValue: const ['GD', 'SZ', 'NS'],
-              onLoad: (event) {
-                capturedColumn = event.column;
-                capturedParentValue = event.parentValue;
-              },
-              onChange: (v) {},
-            ),
-          ),
-        ),
-      );
-
-      expect(find.byType(TPicker), findsOneWidget);
-      expect(find.byType(ListWheelScrollView), findsNWidgets(3));
-
-      await tester.drag(
-        find.byType(ListWheelScrollView).at(2),
-        const Offset(0, -40), // 选中下一项（FT）
-      );
-      await tester.pumpAndSettle();
-      expect(capturedColumn, 2);
-      expect(capturedParentValue, 'SZ');
-
-      await tester.drag(
-        find.byType(ListWheelScrollView).at(1),
-        const Offset(0, -40), // 选中下一项（GZ）
-      );
-      await tester.pumpAndSettle();
-      expect(capturedColumn, 1);
-      expect(capturedParentValue, 'GD');
     });
 
     test('TPickerKeys - 默认值和自定义值', () {
@@ -885,21 +809,6 @@ void main() {
       expect(str, contains('B'));
       expect(str, contains('1'));
       expect(str, contains('2'));
-    });
-
-    test('TPickerLoadEvent - toString', () {
-      const event = TPickerLoadEvent(
-        column: 1,
-        parentValue: 'GD',
-        displayedCount: 20,
-        remaining: 3,
-      );
-
-      final str = event.toString();
-      expect(str, contains('1'));
-      expect(str, contains('GD'));
-      expect(str, contains('20'));
-      expect(str, contains('3'));
     });
 
     test('TPickerNormalize - 已是 List<List<TPickerOption>>', () {
@@ -1195,18 +1104,6 @@ void main() {
       expect(value.toString(), contains('[]'));
     });
 
-    test('TPickerLoadEvent - parentValue 为 Map', () {
-      const event = TPickerLoadEvent(
-        column: 2,
-        parentValue: {'id': 'SZ', 'name': '深圳'},
-        displayedCount: 15,
-        remaining: 0,
-      );
-      expect(event.parentValue, isA<Map>());
-      expect(event.remaining, 0);
-      expect(event.toString(), contains('15'));
-    });
-
     test('TPickerKeys - children 字段完整性', () {
       const keys = TPickerKeys(children: 'subItems');
       expect(keys.children, 'subItems');
@@ -1230,21 +1127,6 @@ void main() {
       expect(str, contains('SZ'));
       expect(str, contains('0'));
       expect(str, contains('1'));
-    });
-
-    test('TPickerLoadEvent - 首列 parentValue 为 null', () {
-      const event = TPickerLoadEvent(
-        column: 0,
-        parentValue: null,
-        displayedCount: 5,
-        remaining: 4,
-      );
-      expect(event.parentValue, isNull);
-      expect(event.column, 0);
-      final str = event.toString();
-      expect(str, contains('null'));
-      expect(str, contains('5'));
-      expect(str, contains('4'));
     });
 
     test('TPickerColumns.fromRaw / TPickerLinked.fromRaw 工厂方法', () {
@@ -1425,7 +1307,7 @@ void main() {
       expect(a == c, false);
     });
 
-    testWidgets('工具栏 - 默认显示取消/确认按钮', (WidgetTester tester) async {
+    testWidgets('纯滚轮 - 不渲染工具栏按钮', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -1442,186 +1324,8 @@ void main() {
         ),
       );
 
-      expect(find.text('取消'), findsOneWidget);
-      expect(find.text('确认'), findsOneWidget);
-    });
-
-    testWidgets('工具栏 - 设置 title 后中部显示标题', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: const TPickerColumns([
-                [
-                  TPickerOption(label: 'A', value: 'a'),
-                  TPickerOption(label: 'B', value: 'b'),
-                ],
-              ]),
-              title: '请选择',
-              onChange: (v) {},
-            ),
-          ),
-        ),
-      );
-
-      expect(find.text('取消'), findsOneWidget);
-      expect(find.text('确认'), findsOneWidget);
-      expect(find.text('请选择'), findsOneWidget);
-    });
-
-    testWidgets('工具栏 - 点击取消触发 onCancel', (WidgetTester tester) async {
-      var cancelled = false;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: const TPickerColumns([
-                [TPickerOption(label: 'A', value: 'a')],
-              ]),
-              onCancel: () => cancelled = true,
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('取消'));
-      await tester.pumpAndSettle();
-
-      expect(cancelled, true);
-    });
-
-    testWidgets('工具栏 - 点击确认触发 onConfirm 并携带选中值', (WidgetTester tester) async {
-      TPickerValue? confirmedValue;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: const TPickerColumns([
-                [
-                  TPickerOption(label: 'A', value: 'a'),
-                  TPickerOption(label: 'B', value: 'b'),
-                  TPickerOption(label: 'C', value: 'c'),
-                ],
-              ]),
-              initialValue: const ['b'],
-              onConfirm: (v) => confirmedValue = v,
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('确认'));
-      await tester.pumpAndSettle();
-
-      expect(confirmedValue, isNotNull);
-      expect(confirmedValue!.values.first, 'b');
-      expect(confirmedValue!.labels.first, 'B');
-      expect(confirmedValue!.selectedOptions.length, 1);
-    });
-
-    testWidgets('工具栏 - 自定义 cancelText / confirmText',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: TPickerColumns([
-                [TPickerOption(label: 'A', value: 'a')],
-              ]),
-              cancel: Text('关闭'),
-              confirm: Text('完成'),
-            ),
-          ),
-        ),
-      );
-
-      expect(find.text('关闭'), findsOneWidget);
-      expect(find.text('完成'), findsOneWidget);
       expect(find.text('取消'), findsNothing);
       expect(find.text('确认'), findsNothing);
-    });
-
-    testWidgets('工具栏 - cancel 自定义插槽（图标）', (WidgetTester tester) async {
-      var cancelled = false;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: const TPickerColumns([
-                [TPickerOption(label: 'A', value: 'a')],
-              ]),
-              cancel: const Icon(Icons.close, key: ValueKey('custom-cancel')),
-              onCancel: () => cancelled = true,
-            ),
-          ),
-        ),
-      );
-
-      expect(find.byKey(const ValueKey('custom-cancel')), findsOneWidget);
-      expect(find.text('取消'), findsNothing);
-
-      await tester.tap(find.byKey(const ValueKey('custom-cancel')));
-      await tester.pumpAndSettle();
-      expect(cancelled, true);
-    });
-
-    testWidgets('工具栏 - confirm 自定义插槽（图标）', (WidgetTester tester) async {
-      TPickerValue? confirmedValue;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: const TPickerColumns([
-                [
-                  TPickerOption(label: 'X', value: 'x'),
-                  TPickerOption(label: 'Y', value: 'y'),
-                ],
-              ]),
-              initialValue: const ['y'],
-              confirm: const Icon(Icons.check, key: ValueKey('custom-confirm')),
-              onConfirm: (v) => confirmedValue = v,
-            ),
-          ),
-        ),
-      );
-
-      expect(find.byKey(const ValueKey('custom-confirm')), findsOneWidget);
-      expect(find.text('确认'), findsNothing);
-
-      await tester.tap(find.byKey(const ValueKey('custom-confirm')));
-      await tester.pumpAndSettle();
-
-      expect(confirmedValue, isNotNull);
-      expect(confirmedValue!.values.first, 'y');
-      expect(confirmedValue!.labels.first, 'Y');
-    });
-
-    testWidgets('工具栏 - titleWidget 自定义标题插槽', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: TPicker(
-              items: TPickerColumns([
-                [TPickerOption(label: 'A', value: 'a')],
-              ]),
-              title: '旧标题（应被忽略）',
-              titleWidget: Row(
-                key: ValueKey('custom-title'),
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.star),
-                  SizedBox(width: 4),
-                  Text('自定义标题'),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-
-      expect(find.byKey(const ValueKey('custom-title')), findsOneWidget);
-      expect(find.text('自定义标题'), findsOneWidget);
-      expect(find.text('旧标题（应被忽略）'), findsNothing);
     });
   });
 }

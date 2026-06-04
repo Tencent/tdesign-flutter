@@ -355,7 +355,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | header | bool | true | 是否显示头部内容 |
 | isTimeUnit | bool? | - | 是否时间显示 |
 | itemBuilder | ItemBuilderType? | - | 自定义item构建 |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 根据距离计算字体颜色、透明度、粗细 |
 | key |  | - |  |
 | leftPadding | double? | - | 左边填充 |
 | leftText | String? | - | 左侧按钮文案 |

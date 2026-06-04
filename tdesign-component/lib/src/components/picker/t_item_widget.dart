@@ -7,7 +7,7 @@ import '../../../tdesign_flutter.dart';
 /// [content] 文字内容
 /// [colIndex] 列号
 /// [index] 行号
-/// [itemDistanceCalculator] 根据距离计算字体颜色、透明度、粗细
+/// [calculator] 默认距离样式计算器，可在自定义渲染中复用
 /// [distance] 子项此时离中心的距离
 typedef ItemBuilderType = Widget? Function(
   BuildContext context,
@@ -26,7 +26,7 @@ const double _kDisabledItemOpacity = 0.5;
 /// 基础字号 fallback（theme.fontBodyLarge.size 为 null 时使用）
 const double _kBaseFontSize = 16.0;
 
-/// 选择器的子项组件
+/// 选择器的子项组件（包内复用，不对外暴露）
 class TItemWidget extends StatelessWidget {
   const TItemWidget({
     required this.fixedExtentScrollController,
@@ -35,7 +35,6 @@ class TItemWidget extends StatelessWidget {
     required this.content,
     required this.itemHeight,
     this.disabled = false,
-    this.itemDistanceCalculator,
     this.itemBuilder,
     super.key,
   });
@@ -58,18 +57,14 @@ class TItemWidget extends StatelessWidget {
   /// 是否禁用（置灰且不响应选中）
   final bool disabled;
 
-  /// 距离到样式的映射计算器，null 时使用默认实现
-  final ItemDistanceCalculator? itemDistanceCalculator;
-
   /// 自定义子项构建器，null 时使用默认 [TText] 渲染
   final ItemBuilderType? itemBuilder;
 
-  ItemDistanceCalculator get _calculator =>
-      itemDistanceCalculator ?? const ItemDistanceCalculator();
+  static const _calculator = ItemDistanceCalculator();
 
   @override
   Widget build(BuildContext context) {
-    final calc = _calculator;
+    const calc = _calculator;
 
     if (disabled) {
       return Center(
@@ -125,10 +120,10 @@ class TItemWidget extends StatelessWidget {
   }
 }
 
-/// 距离到样式的映射器
+/// 距离到样式的映射器（内部默认渲染与 [ItemBuilderType] 回调共用）
 ///
-/// 默认采用 4 档离散赋值（0=选中, 1=紧邻, 2=近边, 3+=远边），
-/// 可继承此类自定义颜色/字号/透明度过渡曲线。
+/// 默认采用 4 档离散赋值（0=选中, 1=紧邻, 2=近边, 3+=远边）。
+/// 在 [ItemBuilderType] 中可继承此类自定义颜色/字号/透明度过渡曲线。
 class ItemDistanceCalculator {
   const ItemDistanceCalculator();
 
