@@ -37,7 +37,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                  context: _, content: '弹出气泡内容', theme: theme);
+                context: context,
+                content: '弹出气泡内容',
+                theme: theme,
+              );
             },
           );
         },
@@ -63,7 +66,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           theme: TButtonTheme.primary,
           onTap: () {
             TPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
+              context: context,
+              content: '弹出气泡内容',
+              showArrow: false,
+              theme: theme,
+            );
           },
         );
       },
@@ -80,9 +87,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildNCustomPopover(BuildContext context) {
     var textStyle = TextStyle(
-        color: theme == TPopoverTheme.light
-            ? TTheme.of(context).fontGyColor1
-            : TTheme.of(context).fontWhColor1);
+      color: theme == TPopoverTheme.light
+          ? TTheme.of(context).fontGyColor1
+          : TTheme.of(context).fontWhColor1,
+    );
     return LayoutBuilder(
       builder: (_, constrains) {
         return TButton(
@@ -91,7 +99,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           theme: TButtonTheme.primary,
           onTap: () {
             TPopover.showPopover(
-              context: _,
+              context: context,
               padding: const EdgeInsets.all(0),
               theme: theme,
               width: 108,
@@ -99,17 +107,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               contentWidget: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项1', style: textStyle),
                   ),
                   const TDivider(height: 0.5),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项2', style: textStyle),
                   ),
                   const TDivider(height: 0.5),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项3', style: textStyle),
                   ),
                 ],
@@ -143,10 +160,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             type: TButtonType.outline,
             theme: TButtonTheme.primary,
             onTap: () {
-              TPopover.showPopover(
-                context: _,
-                content: '弹出气泡内容',
-              );
+              TPopover.showPopover(context: context, content: '弹出气泡内容');
             },
           );
         },
@@ -174,7 +188,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.light,
               );
@@ -205,7 +219,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.info,
               );
@@ -236,7 +250,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.success,
               );
@@ -267,7 +281,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.warning,
               );
@@ -298,7 +312,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.error,
               );
@@ -328,10 +342,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             type: TButtonType.outline,
             theme: TButtonTheme.primary,
             onTap: () {
-              TPopover.showPopover(
-                context: _,
-                content: '弹出气泡内容',
-              );
+              TPopover.showPopover(context: context, content: '弹出气泡内容');
             },
           );
         },
@@ -359,7 +370,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.light,
               );
@@ -390,7 +401,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.info,
               );
@@ -421,7 +432,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.success,
               );
@@ -452,7 +463,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.warning,
               );
@@ -483,7 +494,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 theme: TPopoverTheme.error,
               );
@@ -516,7 +527,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topLeft,
                 theme: theme,
@@ -548,7 +559,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.top,
                 theme: theme,
@@ -580,7 +591,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topRight,
                 theme: theme,
@@ -612,7 +623,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topLeft,
                 theme: theme,
@@ -644,7 +655,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.top,
                 theme: theme,
@@ -676,7 +687,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topRight,
                 theme: theme,
@@ -710,7 +721,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomLeft,
                 theme: theme,
@@ -742,7 +753,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottom,
                 theme: theme,
@@ -774,7 +785,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomRight,
                 theme: theme,
@@ -806,7 +817,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomLeft,
                 theme: theme,
@@ -838,7 +849,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottom,
                 theme: theme,
@@ -870,7 +881,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomRight,
                 theme: theme,
@@ -904,7 +915,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightTop,
                 theme: theme,
@@ -936,7 +947,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.right,
                 theme: theme,
@@ -968,7 +979,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightBottom,
                 theme: theme,
@@ -1000,7 +1011,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightTop,
                 theme: theme,
@@ -1032,7 +1043,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.right,
                 theme: theme,
@@ -1064,7 +1075,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightBottom,
                 theme: theme,
@@ -1098,7 +1109,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftTop,
                 theme: theme,
@@ -1130,7 +1141,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.left,
                 theme: theme,
@@ -1162,7 +1173,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftBottom,
                 theme: theme,
@@ -1194,7 +1205,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftTop,
                 theme: theme,
@@ -1226,7 +1237,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.left,
                 theme: theme,
@@ -1258,7 +1269,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftBottom,
                 theme: theme,

@@ -12,7 +12,7 @@
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightTop,
                 theme: theme,

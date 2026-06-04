@@ -9,7 +9,11 @@
           theme: TButtonTheme.primary,
           onTap: () {
             TPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
+              context: context,
+              content: '弹出气泡内容',
+              showArrow: false,
+              theme: theme,
+            );
           },
         );
       },

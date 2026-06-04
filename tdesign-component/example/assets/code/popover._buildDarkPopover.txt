@@ -11,10 +11,7 @@
             type: TButtonType.outline,
             theme: TButtonTheme.primary,
             onTap: () {
-              TPopover.showPopover(
-                context: _,
-                content: '弹出气泡内容',
-              );
+              TPopover.showPopover(context: context, content: '弹出气泡内容');
             },
           );
         },

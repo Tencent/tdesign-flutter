@@ -12,7 +12,7 @@
             theme: TButtonTheme.primary,
             onTap: () {
               TPopover.showPopover(
-                context: _,
+                context: context,
                 width: 200,
                 radius: BorderRadius.circular(16),
                 theme: theme,
