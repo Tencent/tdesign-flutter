@@ -1,7 +1,7 @@
 
-  Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
+  Widget _buildPopFromBottomWithHeaderClose(BuildContext context) {
     return TButton(
-      text: '底部弹出层-带标题及操作',
+      text: 'headerBuilder',
       isBlock: true,
       theme: TButtonTheme.primary,
       type: TButtonType.outline,
@@ -10,9 +10,10 @@
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
-              height: 280,
-              titleWidget: TText('标题文字'),
-              child: Container(height: 200)),
+            height: 280,
+            headerBuilder: _bottomTitleCloseHeader(title: '标题文字'),
+            child: Container(height: 200),
+          ),
         );
       },
     );

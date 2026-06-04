@@ -1,0 +1,45 @@
+
+  Widget _buildBottomBuiltInHeaderDemos(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TButton(
+          text: '操作槽 默认',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () {
+            TPopup.show(
+              context,
+              options: TPopupOptions.bottom(
+                height: 280,
+                titleWidget: const TText('标题'),
+                child: Container(height: 200),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          text: '操作槽 自定义',
+          isBlock: true,
+          theme: TButtonTheme.primary,
+          type: TButtonType.outline,
+          size: TButtonSize.large,
+          onTap: () {
+            TPopup.show(
+              context,
+              options: TPopupOptions.bottom(
+                height: 280,
+                titleWidget: const TText('标题'),
+                cancelBuilder: _bottomCancelSlot,
+                confirmBuilder: _bottomConfirmSlot,
+                child: Container(height: 200),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }

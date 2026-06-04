@@ -68,6 +68,7 @@ class TPopupOptions {
     this.onClosed,
     this.onVisibleChange,
     this.onOverlayClick,
+    this.useSafeArea = true,
   }) : _closeOnOverlayClick = closeOnOverlayClick;
 
   /// 创建 [TPopupPlacement.bottom] 配置。
@@ -97,6 +98,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     VoidCallback? onOverlayClick,
+    bool useSafeArea = true,
   }) =>
       TPopupOptions(
         child: child,
@@ -122,6 +124,7 @@ class TPopupOptions {
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
         onOverlayClick: onOverlayClick,
+        useSafeArea: useSafeArea,
       );
 
   /// 创建 [TPopupPlacement.center] 配置。
@@ -147,6 +150,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     VoidCallback? onOverlayClick,
+    bool useSafeArea = true,
   }) =>
       TPopupOptions(
         child: child,
@@ -169,6 +173,7 @@ class TPopupOptions {
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
         onOverlayClick: onOverlayClick,
+        useSafeArea: useSafeArea,
       );
 
   /// 创建 [TPopupPlacement.top] 配置。
@@ -193,6 +198,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     VoidCallback? onOverlayClick,
+    bool useSafeArea = true,
   }) =>
       TPopupOptions(
         child: child,
@@ -214,6 +220,7 @@ class TPopupOptions {
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
         onOverlayClick: onOverlayClick,
+        useSafeArea: useSafeArea,
       );
 
   /// 创建 [TPopupPlacement.left] 配置。
@@ -238,6 +245,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     VoidCallback? onOverlayClick,
+    bool useSafeArea = true,
   }) =>
       TPopupOptions(
         child: child,
@@ -259,6 +267,7 @@ class TPopupOptions {
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
         onOverlayClick: onOverlayClick,
+        useSafeArea: useSafeArea,
       );
 
   /// 创建 [TPopupPlacement.right] 配置。
@@ -283,6 +292,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     VoidCallback? onOverlayClick,
+    bool useSafeArea = true,
   }) =>
       TPopupOptions(
         child: child,
@@ -304,6 +314,7 @@ class TPopupOptions {
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
         onOverlayClick: onOverlayClick,
+        useSafeArea: useSafeArea,
       );
 
   /// 浮层主体内容（必填）。
@@ -408,6 +419,12 @@ class TPopupOptions {
   /// 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。
   final VoidCallback? onOverlayClick;
 
+  /// 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。
+  ///
+  /// 为 true 时通过 [Positioned] 偏移使面板不侵入刘海、Home Indicator 等区域；
+  /// 与 [inset] 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。
+  final bool useSafeArea;
+
   /// 返回配置副本。
   ///
   /// 未传入的字段保持原值；对头部/关闭相关插槽显式传入 `null` 表示隐藏该区域。
@@ -437,6 +454,7 @@ class TPopupOptions {
     Object? onClosed = _unset,
     Object? onVisibleChange = _unset,
     Object? onOverlayClick = _unset,
+    bool? useSafeArea,
   }) {
     return TPopupOptions(
       child: child ?? this.child,
@@ -496,6 +514,7 @@ class TPopupOptions {
       onOverlayClick: identical(onOverlayClick, _unset)
           ? this.onOverlayClick
           : onOverlayClick as VoidCallback?,
+      useSafeArea: useSafeArea ?? this.useSafeArea,
     );
   }
 
@@ -530,6 +549,7 @@ class TPopupOptions {
       onClosed: onClosed,
       onVisibleChange: onVisibleChange,
       onOverlayClick: onOverlayClick,
+      useSafeArea: useSafeArea,
     );
   }
 
