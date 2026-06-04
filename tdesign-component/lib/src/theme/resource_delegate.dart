@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../tdesign_flutter.dart';
 
@@ -42,6 +43,10 @@ class TResourceManager {
 
   /// 获取资源
   static final _defaultDelegate = _DefaultResourceDelegate();
+
+  /// 库内未注入 [setResourceBuilder] 时使用的默认文案（中文）。
+  @internal
+  static TResourceDelegate get defaultDelegate => _defaultDelegate;
 
   /// 设置资源代理
   void setResourceBuilder(TResourceBuilder delegate, needAlwaysBuild) {
@@ -97,49 +102,49 @@ abstract class TResourceDelegate {
   /// [TTimeCounter] 天
   String get days;
 
-  /// [TTimeCounter] 时
+  /// [TTimeCounter] 时 / [TDateTimePicker] 时列
   String get hours;
 
-  /// [TTimeCounter] 分
+  /// [TTimeCounter] 分 / [TDateTimePicker] 分列
   String get minutes;
 
-  /// [TTimeCounter] 秒
+  /// [TTimeCounter] 秒 / [TDateTimePicker] 秒列
   String get seconds;
 
   /// [TTimeCounter] 毫秒
   String get milliseconds;
 
-  /// [TDatePicker]  年
+  /// [TDatePicker] / [TDateTimePicker] 年
   String get yearLabel;
 
-  /// [TDatePicker]  月
+  /// [TDatePicker] / [TDateTimePicker] 月
   String get monthLabel;
 
-  /// [TDatePicker] 日
+  /// [TDatePicker] / [TDateTimePicker] 日
   String get dateLabel;
 
-  /// [TDatePicker] 周
+  /// [TDatePicker] / [TDateTimePicker.showWeek] 周前缀
   String get weeksLabel;
 
-  /// [TCalendarHeader] 星期日
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期日
   String get sunday;
 
-  /// [TCalendarHeader] 星期一
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期一
   String get monday;
 
-  /// [TCalendarHeader] 星期二
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期二
   String get tuesday;
 
-  /// [TCalendarHeader] 星期三
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期三
   String get wednesday;
 
-  /// [TCalendarHeader] 星期四
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期四
   String get thursday;
 
-  /// [TCalendarHeader] 星期五
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期五
   String get friday;
 
-  /// [TCalendarHeader] 星期六
+  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期六
   String get saturday;
 
   /// [TCalendarBody] 年

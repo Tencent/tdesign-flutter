@@ -20,6 +20,7 @@ import 'page/t_cascader_page.dart';
 import 'page/t_cell_page.dart';
 import 'page/t_checkbox_page.dart';
 import 'page/t_collapse_page.dart';
+import 'page/t_date_time_picker_page.dart';
 import 'page/t_dialog_page.dart';
 import 'page/t_divider_page.dart';
 import 'page/t_drawer_page.dart';
@@ -147,6 +148,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Calendar 日历',
         name: 'calendar',
         pageBuilder: _wrapInheritedTheme((context) => const TCalendarPage())),
+    ExamplePageModel(
+        text: 'DateTimePicker 时间选择器',
+        name: 'date-time-picker',
+        pageBuilder:
+            _wrapInheritedTheme((context) => const TDateTimePickerPage())),
     ExamplePageModel(
         text: 'Cascader 级联选择器',
         name: 'cascader',
