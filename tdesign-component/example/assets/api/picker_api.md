@@ -4,22 +4,14 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| cancel | Widget? | - | 工具栏左侧自定义插槽，默认使用 `TResourceDelegate.cancel` 可用于渲染图标、图标+文字组合等。点击事件依然由外层 `GestureDetector` 处理，触发 `onCancel` 回调——所以插槽内的 Widget 不需要自己处理点击。 ```dart // 简单改文字 TPicker( cancel: const Text('关闭'), onCancel: () => Navigator.of(context).pop(), ) // 带图标 TPicker( cancel: const Icon(Icons.close, size: 22), onCancel: () => Navigator.of(context).pop(), ) ``` |
-| confirm | Widget? | - | 工具栏右侧自定义插槽，默认使用 `TResourceDelegate.confirm` 可用于渲染图标、图标+文字组合等。点击事件依然由外层 `GestureDetector` 处理，触发 `onConfirm` 回调——所以插槽内的 Widget 不需要自己处理点击。 ```dart // 简单改文字 TPicker( confirm: const Text('确定'), onConfirm: (v) => Navigator.of(context).pop(v), ) // 带图标 TPicker( confirm: const Icon(Icons.check, size: 22), onConfirm: (v) => Navigator.of(context).pop(v), ) ``` |
 | disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false |
 | height | double | 200 | 视窗高度，默认 200 |
-| initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配） |
+| initialValue | List<dynamic>? | - | 初始选中值列表（按 value 匹配各列） 与 `items` 一并参与重建判断：相对上一帧值不相等时会重新初始化。 |
 | itemBuilder | ItemBuilderType? | - | 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder） |
 | itemCount | int | 5 | 每屏显示 item 数，默认 5 |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 自定义距离计算器（控制颜色/字重/字号随"离中心距离"的变化） |
-| items | TPickerItems | - | 数据源（必填） 使用密封类 `TPickerItems` 编译期强制二选一： - `TPickerColumns` → 多列独立选择 - `TPickerLinked` → 联动选择 自由结构数据通过 `.fromRaw()` 工厂构造归一化。 |
+| items | TPickerItems | - | 数据源（必填） 使用密封类 `TPickerItems` 编译期强制二选一： - `TPickerColumns` → 多列独立选择 - `TPickerLinked` → 联动选择 自由结构数据通过 `.fromRaw()` 工厂构造归一化。 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onCancel | VoidCallback? | - | 点击「取消」按钮回调 仅作为点击事件通知，不携带任何参数。组件本身不会做任何 popup 操作，业务层可在此自行决定是否关闭弹窗、重置状态等。 |
-| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 **注意**：此回调代表"滚动时实时变化"，不代表"用户已确认选择"。 如需"已确认"语义，请使用 `onConfirm`。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 |
-| onConfirm | void Function(TPickerValue)? | - | 点击「确认」按钮回调 携带当前选中的完整 `TPickerValue`，包含： - `selectedOptions`: 当前选中的所有 `TPickerOption` - `values`: 各列选中项的 value 列表 - `labels`: 各列选中项的 label 列表 - `indexes`: 各列选中项的索引 与 `onChange` 不同——只有用户点击「确认」时才触发，代表"已确认选择"。 组件本身不会做任何 popup 操作，业务层可在此自行决定是否关闭弹窗、 提交表单等。 |
-| onLoad | void Function(TPickerLoadEvent)? | - | 列选中项变化的事件回调 **触发时机**：每次用户滚动到一个 enabled 项后都会触发（联动模式下还会 在新展开的列就位后触发）。组件本身不做"距底部多少项"的阈值判断——把 决策权交给业务层。 **事件参数**包含： - `TPickerLoadEvent.column`：触发列索引 - `TPickerLoadEvent.remaining`：当前列距底部剩余项数 - `TPickerLoadEvent.displayedCount`：当前列总项数 - `TPickerLoadEvent.parentValue`：联动模式下父级选中值（首列为 null） **典型用法**：业务层根据 `TPickerLoadEvent.remaining` 自行判断是否加载更多。 ```dart onLoad: (e) async { if (e.remaining > 5 \|\| _isLoading) return; // 距底部还远 / 已在加载，跳过 _isLoading = true; final more = await fetchMore(parent: e.parentValue); setState(() { _data.addAll(more); _isLoading = false; }); } ``` |
-| title | String? | - | 工具栏中部标题（可选，不传时中部留白） 顶部工具栏永远显示，包含「取消」「标题」「确认」三块。 用户点击「取消」触发 `onCancel`，点击「确认」触发 `onConfirm`。 选择器与弹窗（popup）完全解耦——关闭/打开弹窗的逻辑由业务层在 这两个回调中自行控制。 典型用法（与 popup 弹窗组合）： ```dart TPicker( items: items, title: '请选择地区', onCancel: () => setState(() => visible = false), onConfirm: (value) { setState(() { selected = value; visible = false; }); }, ) ``` |
-| titleWidget | Widget? | - | 工具栏中部自定义标题插槽 传入后会**完全替换**默认的 `title` 文字，可用于渲染更复杂的标题（副标题、图标+文字等）。 标题区域不响应点击。 |
+| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 注意：此回调代表滚动时实时变化，不代表用户已确认选择。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 按需加载更多：在回调里根据 `TPickerValue.indexes` 判断是否接近列底， 请求完成后更新 `items` 即可（无需组件内置加载 API）。 |
 
 
 ### TPickerOption
@@ -46,17 +38,6 @@
 | --- | --- | --- | --- |
 | labels | List<String> | - | 所有选中项的 label（展示用） 顺序与列顺序对应，可直接用于 UI 展示。 懒计算并缓存，生命周期内只计算一次。 |
 | values | List<dynamic> | - | 所有选中项的 value（提交表单用） 顺序与列顺序对应，可直接用于表单提交。 懒计算并缓存，生命周期内只计算一次。 |
-
-
-### TPickerLoadEvent
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| column | int | - | 触发事件的列索引（0 表示第一列） |
-| displayedCount | int | - | 当前列已展示的选项总数 |
-| parentValue | dynamic | - | 当前列的父级选中值（联动模式下使用） 第一列时为 null；业务层可用此值从原始数据中筛选子级选项。 |
-| remaining | int | - | 距底部剩余的选项数（业务可用此值做"接近底部时加载"判断） |
 
 
 ### TPickerColumns
