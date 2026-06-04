@@ -1,19 +1,5 @@
 ## API
 ### TCalendar
-#### 简介
-日历组件（纯日历面板，不含弹窗、表单等封装）。
-## 状态约定
-- `initialValue`：**非受控**，仅在组件首次挂载时写入选中态；运行期修改本参数不会
-同步到界面。外部重置选中请更换 `Key` 或销毁后重建（如弹层关闭再打开）。
-- `onChange`：用户点选导致选中变化时触发；挂载阶段不会调用。选中高亮由组件内部维护。
-- `anchorDate`：首屏及运行期可更新的**滚动锚点**，滚到该日所在月份，不自动改选中。
-- `onMonthChanged`：用户滑动导致可见月份变化时触发，便于外置年月条同步文案。
-## 自定义展示
-- `subtitleBuilder`：日期主数字下方的**副标题**（农历、价格、节日等）。
-- `cellBuilder`：**整格**自定义，设置后不再渲染默认主数字与副标题布局。
-- `monthTitleBuilder`：每个月份区块顶部的年月标题。
-弹层场景请自行 `showModalBottomSheet` 包裹本组件，并用新 `Key` 或新实例传入
-`initialValue`；外置月份导航请更新 `anchorDate` 而非回写 `initialValue`。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -37,10 +23,6 @@
 
 
 ### TCalendarStyle
-#### 简介
-`TCalendar` 的样式配置，通过 `TCalendar.style` 传入。
-使用 `TCalendarStyle.generateStyle` 获取主题默认样式，
-再用 `forSelectType` 按 `DateSelectType` 区分选中/区间等态下的文字与装饰。
 
 #### 静态方法
 
@@ -73,8 +55,6 @@
 
 
 ### TCalendarCellModel
-#### 简介
-单个日期格数据（只读，选中态通过 `typeNotifier` 更新）
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -85,8 +65,6 @@
 
 
 ### TCalendarSubtitleContext
-#### 简介
-副标题构建上下文：告知 `TCalendarSubtitleBuilder` 当前渲染哪一格。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -95,22 +73,7 @@
 | selectType | DateSelectType | - | 当前格的选中/区间/禁用等展示状态，便于按态设置副标题样式。 |
 
 
-### CalendarType
-#### 简介
-日历选择模式
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| single | 单选：点击新日期时自动取消旧日期的选中状态 |
-| multiple | 多选：点击日期切换选中/取消，可同时选中多个日期 |
-| range | 区间选择：第一次点击选起点，第二次点击选终点，中间自动填充区间 |
-
-
 ### DateSelectType
-#### 简介
-日期在日历格中的选中/展示状态
 #### 枚举值
 
 
@@ -124,10 +87,18 @@
 | empty | 未选中且可选 |
 
 
+### CalendarType
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| single | 单选：点击新日期时自动取消旧日期的选中状态 |
+| multiple | 多选：点击日期切换选中/取消，可同时选中多个日期 |
+| range | 区间选择：第一次点击选起点，第二次点击选终点，中间自动填充区间 |
+
+
 ### TCalendarSubtitleBuilder
-#### 简介
-副标题构建器；每个日期格渲染时调用一次。
-通过 `TCalendarSubtitleContext` 获取日期与选中态；返回 `null` 表示不显示副标题行。
 #### 类型定义
 
 ```dart
@@ -136,8 +107,6 @@ typedef TCalendarSubtitleBuilder = Widget? Function(BuildContext context, TCalen
 
 
 ### TCalendarCellBuilder
-#### 简介
-整格自定义构建器；返回非 null 时该格由接入方完全绘制（含主数字与副标题）。
 #### 类型定义
 
 ```dart
@@ -146,8 +115,6 @@ typedef TCalendarCellBuilder = Widget? Function(BuildContext context, TCalendarC
 
 
 ### TCalendarMonthTitleBuilder
-#### 简介
-月标题构建器；`monthDate` 为当月 1 日。
 #### 类型定义
 
 ```dart
