@@ -8,7 +8,10 @@ import '../../../tdesign_flutter.dart';
 /// 整组禁用时的透明度
 const double _kDisabledOpacity = 0.5;
 
-/// 纯滚轮选择器组件
+/// 纯滚轮选择器组件。
+///
+/// 与 [`TCalendar`]、[`TDateTimePicker`] 为三个独立对外组件；[`TDateTimePicker`]
+/// 经内部滚轮复用本组件能力，[`TCalendar`] 与本组件无代码耦合。
 ///
 /// 不包含工具栏、确认按钮或内置 loading；弹窗场景请配合 [TPopup] 在用户确认后再提交。
 ///

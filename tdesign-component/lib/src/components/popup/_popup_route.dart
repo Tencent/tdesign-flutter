@@ -159,15 +159,12 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
     final barrier = _buildBarrier(context, t);
 
-    return Material(
-      type: MaterialType.transparency,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
-          positioned,
-        ],
-      ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
+        positioned,
+      ],
     );
   }
 
