@@ -2,6 +2,8 @@
 ### TDateTimePicker
 #### 简介
 日期/时间滚轮选择器。
+与 ``TCalendar``、``TPicker`` 为三个独立对外组件；本组件底层复用 ``TPicker``
+滚轮能力（经内部 ``DateTimePickerWheel``），与 ``TCalendar`` 无代码耦合。
 纯滚轮组件：不含工具栏、确认按钮或弹窗；选中变化通过 `onChange` 实时回调
 （无 `TPicker.onConfirm` 语义）。弹窗与确认请配合 `TPopup` 等自行组装。
 `initialValue` 为非受控初始值；外部重置选中请变更 `initialValue` 或 `key`。

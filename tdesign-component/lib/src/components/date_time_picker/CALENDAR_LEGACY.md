@@ -1,90 +1,58 @@
-# Calendar 滚轮 Legacy 路径迁移规划
+# Picker / DateTimePicker / Calendar 组件边界
 
-## 背景
+## 三个独立组件
 
-`TDateTimePicker` 已统一为 **Snapshot + DateTimePickerWheel** 架构。  
-`TCalendar` 内部仍通过 [`DatePickerModel`](../calendar/date_picker_model.dart) 使用滚轮，存在双轨实现：
+| 组件 | 职责 | 代码依赖 |
+|------|------|----------|
+| [`TPicker`](../picker/t_picker.dart) | 通用多列滚轮（独立选项或联动树） | 无 |
+| [`TDateTimePicker`](t_date_time_picker.dart) | 日期/时间滚轮（年月日、时分秒及组合） | **仅依赖** `TPicker` 滚轮能力（`DateTimePickerWheel` → `picker_column_wheel` 等） |
+| [`TCalendar`](../calendar/t_calendar.dart) | 月历格点选（单选 / 多选 / 区间、锚点、副标题） | 无 |
 
-| 路径 | 触发条件 | UI | 数据层 |
-|------|----------|-----|--------|
-| **Snapshot** | `useWeekDay == false` 且 `filterItems == null` | `DateTimePickerWheel` | `DateTimePickerSnapshot` |
-| **Legacy** | `useWeekDay == true` 或 `filterItems != null` | `TDatePicker._buildLegacyWheel` 自绘 `ListWheelScrollView` | `DatePickerModel.data` / `controllers` |
+`TCalendar` 与 `TDateTimePicker` **互不依赖**；业务侧可按场景分别或组合使用（弹层、表单等自行组装）。
 
-新接入业务应直接使用 `TDateTimePicker`，勿再扩展 Legacy 路径。
+## 业务选型
 
-## 语义差异（迁移时需对齐）
+| 场景 | 组件 |
+|------|------|
+| 月历格点选日期 | `TCalendar` |
+| 滚轮选年月日 / 时分秒 | `TDateTimePicker` |
+| 非日期时间的通用滚轮 | `TPicker` |
 
-### 1. 星期展示
+三者均无内置确认或弹窗；与 `TPopup` / `showModalBottomSheet` 等由业务层组合。
 
-| | TDateTimePicker | Calendar Legacy |
-|--|-----------------|-----------------|
-| API | `showWeek: true` | `useWeekDay: true` |
-| 表现 | 日列 label 后缀（如 `15日 周五`） | **独立 week 列** |
-| 选中值 | `TDateTimePickerValue` 无 week 字段 | `selected['week']` |
+## 已移除的日历内嵌滚轮（develop 遗留）
 
-**迁移建议**：Legacy 的 `useWeekDay` 改为 `showWeek` + Snapshot 路径；week 展示用 `toDateTime(fallback: ...).weekday` 派生。
+以下文件为旧「日历内嵌滚轮」路径，**勿再恢复**：
 
-### 2. 列过滤
+- `calendar/date_picker_model.dart`
+- `calendar/t_date_picker.dart`
 
-| | TDateTimePicker | Calendar Legacy |
-|--|-----------------|-----------------|
-| API | 无 `filterItems` | `filterItems(key, items)` 回调 |
-| 表现 | 边界由 `start`/`end` + Snapshot 收紧 | 按列 key 过滤 options |
+## TDateTimePicker 约定
 
-**迁移建议**：
+- `initialValue` 非受控；重置用 `key` 或 remount。
+- 列边界用 `start` / `end` / `steps` / `renderLabel`。
+- Snapshot 经 `toPickerColumns` 转为 `TPickerColumns` 后交给内部滚轮渲染。
 
-- 短期：保留 Legacy，文档标明仅 TCalendar 内部兼容。
-- 长期：评估是否用 `renderLabel` + `start`/`end` 覆盖常见过滤场景；无法覆盖时再设计公开 API（避免回调式 `filterItems` 泄漏到 `TDateTimePicker`）。
+## TCalendar 约定
 
-### 3. 数据类型
+- **选中**：`initialValue` 仅首挂载生效；运行期同步靠 `onChange`；重置选中用 `Key` 或 remount（与 `TDateTimePicker` 不同，后者 `didUpdateWidget` 会响应 `initialValue` 变更）。
+- **滚动**：`anchorDate` 运行期可更新，只滚月份、不改选中；首屏优先级 `anchorDate` > `initialValue` 最早日 > `minDate` 首月。
+- **区间**（`CalendarType.range`）：两次点击定区间；终点须晚于起点，否则以新点击重开区间。
+- **站点文档**：非受控说明、range 规则、与 Picker 族对比见 `tdesign-site/src/calendar/README.md` 中「使用约定」。
 
-| | TDateTimePicker | Calendar (`TDatePicker`) |
-|--|-----------------|--------------------------|
-| 选中结果 | `TDateTimePickerValue` | `Map<String, int>` via `model.selected` |
-| 范围 | `TDateTimePickerValue?` start/end | `List<int>?` dateStart/dateEnd |
+### 按日禁用（`disableDate`）评估结论
 
-**迁移建议**：`DatePickerModel.selected` 可继续提供 `Map` 适配，内部统一 `snapshot.toResult()`（已实现）。
+暂不新增 `disableDate(DateTime) => bool` 公开 API：
 
-## 公开 API 决策（TDateTimePicker）
-
-以下能力经评估**暂不公开**，以保持组件职责单一：
-
-| 能力 | 决策 | 理由 |
-|------|------|------|
-| 受控 `value` | **不新增** | 与 `TPicker` 滚轮-only 用法一致；外部重置用 `initialValue` / `key` |
-| `filterItems` | **不新增** | 易导致第二套实现分叉；优先用 `start`/`end`/`renderLabel`/`steps` 组合 |
-| `onConfirm` | **不新增** | 纯滚轮定位，确认语义由 `TPopup` + 业务层承担 |
-
-若业务需要「表单回显 + 外部 reset」，推荐：`key: ValueKey(externalId)` 或在 `initialValue` 变化时 remount。
-
-## 迁移阶段
-
-### 阶段 1（当前，已完成）
-
-- [x] Snapshot 路径作为 `DatePickerModel` 默认（无 week / 无 filter）
-- [x] `TDateTimePicker` 与 Calendar 共享 `DateTimePickerWheel`
-- [x] 单元测试覆盖 Snapshot 边界与 widget 集成
-
-### 阶段 2（进行中）
-
-1. [x] 盘点 TCalendar 中 `useWeekDay: true` 的调用点 — **当前代码库无 `useWeekDay: true` 调用**
-2. [x] 列展开逻辑收敛至 `dateTimeColumnsFromPickerFlags`（Calendar bool 开关）与 `CombinedMode._expand`（mode 组合）
-3. [x] 补充 `DatePickerModel` Legacy 路径单测（`useWeekDay`、`filterItems`）
-4. [x] 补充 `toPickerColumns` 与 `columnOptionsAt` 一致性单测
-
-### 阶段 3（可选）
-
-1. 删除 `_buildLegacyWheel` 与 `DatePickerModel` 中 `data`/`controllers` 遗留字段。
-2. `TDatePicker` 标记 `@Deprecated`，引导使用 `TDateTimePicker` + `TPopup`。
-
-## 风险
-
-- Legacy 与 Snapshot 在闰月、步进、range 收紧上行为可能不一致，迁移需逐场景回归 TCalendar 演示页。
-- `filterItems` 若无法替代，需单独设计 API，避免再次分叉实现。
+| 方案 | 说明 |
+|------|------|
+| 现状 | `minDate`/`maxDate` 控制可选区间；业务禁用用 `subtitleBuilder`/`cellBuilder` 自定义展示与点击 |
+| 暂缓内置 | 需定义与 min/max 优先级、range 模式交互等，扩大 primitive 表面积；有明确需求再单独立项 |
 
 ## 相关文件
 
-- [`t_date_time_picker.dart`](t_date_time_picker.dart) — 对外组件
-- [`t_date_time_picker_internal.dart`](t_date_time_picker_internal.dart) — Snapshot / 边界（part 拆分）
-- [`t_date_picker.dart`](../calendar/t_date_picker.dart) — Calendar 内嵌选择器
-- [`date_picker_model.dart`](../calendar/date_picker_model.dart) — 双轨入口
+- [`t_date_time_picker.dart`](t_date_time_picker.dart)
+- [`t_date_time_picker_internal.dart`](t_date_time_picker_internal.dart)
+- [`t_date_time_picker_wheel.dart`](t_date_time_picker_wheel.dart)
+- [`../picker/t_picker.dart`](../picker/t_picker.dart)
+- [`../calendar/t_calendar.dart`](../calendar/t_calendar.dart)

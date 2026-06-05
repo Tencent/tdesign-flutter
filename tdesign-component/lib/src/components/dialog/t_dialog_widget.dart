@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import 't_dialog.dart';
 
 /// TDialog手脚架
 class TDialogScaffold extends StatelessWidget {

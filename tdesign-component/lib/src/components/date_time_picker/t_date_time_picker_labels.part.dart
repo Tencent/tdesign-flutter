@@ -115,38 +115,6 @@ extension DateTimePickerModeColumns on DateTimePickerMode {
   List<DateTimeColumn> get columns => (this as CombinedMode).columns;
 }
 
-/// 把 bool 列开关展开为 `DateTimeColumn` 序列（供 Calendar `DatePickerModel` 使用）。
-@internal
-List<DateTimeColumn> dateTimeColumnsFromPickerFlags({
-  required bool useYear,
-  required bool useMonth,
-  required bool useDay,
-  required bool useHour,
-  required bool useMinute,
-  required bool useSecond,
-}) {
-  final cols = <DateTimeColumn>[];
-  if (useYear) {
-    cols.add(DateTimeColumn.year);
-  }
-  if (useMonth) {
-    cols.add(DateTimeColumn.month);
-  }
-  if (useDay) {
-    cols.add(DateTimeColumn.day);
-  }
-  if (useHour) {
-    cols.add(DateTimeColumn.hour);
-  }
-  if (useMinute) {
-    cols.add(DateTimeColumn.minute);
-  }
-  if (useSecond) {
-    cols.add(DateTimeColumn.second);
-  }
-  return cols;
-}
-
 /// 把日期粒度 + 时间粒度展开成 `DateTimeColumn` 序列。
 List<DateTimeColumn> _expand(DateMode? date, TimeMode? time) {
   final cols = <DateTimeColumn>[];

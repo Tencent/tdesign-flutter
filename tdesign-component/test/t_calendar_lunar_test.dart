@@ -1,226 +1,48 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  group('TLunarInfo', () {
-    test('should create lunar info correctly', () {
-      final lunarInfo = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 7,
-        yearText: '二〇二五',
-        monthText: '三月',
-        dayText: '初七',
+  group('TCalendarSubtitleBuilder', () {
+    testWidgets('subtitleBuilder 收到当前格日期', (tester) async {
+      final seenDates = <DateTime>[];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TCalendar(
+              type: CalendarType.single,
+              minDate: DateTime(2025, 6, 1),
+              maxDate: DateTime(2025, 6, 30),
+              initialValue: [DateTime(2025, 6, 15)],
+              onChange: (_) {},
+              subtitleBuilder: (context, ctx) {
+                seenDates.add(ctx.date);
+                return TText('副-${ctx.date.day}');
+              },
+            ),
+          ),
+        ),
       );
+      await tester.pumpAndSettle();
 
-      expect(lunarInfo.year, 2025);
-      expect(lunarInfo.month, 3);
-      expect(lunarInfo.day, 7);
-      expect(lunarInfo.isLeapMonth, false);
-      expect(lunarInfo.yearText, '二〇二五');
-      expect(lunarInfo.monthText, '三月');
-      expect(lunarInfo.dayText, '初七');
-      expect(lunarInfo.fullText, '二〇二五年 三月初七');
-    });
-
-    test('should handle leap month correctly', () {
-      final lunarInfo = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 7,
-        isLeapMonth: true,
-        yearText: '二〇二五',
-        monthText: '闰三月',
-        dayText: '初七',
-      );
-
-      expect(lunarInfo.isLeapMonth, true);
-      expect(lunarInfo.monthText, '闰三月');
-      expect(lunarInfo.fullText, '二〇二五年 闰三月初七');
-    });
-
-    test('should compare lunar info correctly', () {
-      final info1 = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 7,
-        yearText: '二〇二五',
-        monthText: '三月',
-        dayText: '初七',
-      );
-
-      final info2 = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 7,
-        yearText: '二〇二五',
-        monthText: '三月',
-        dayText: '初七',
-      );
-
-      final info3 = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 8,
-        yearText: '二〇二五',
-        monthText: '三月',
-        dayText: '初八',
-      );
-
-      expect(info1, equals(info2));
-      expect(info1, isNot(equals(info3)));
-      expect(info1.hashCode, equals(info2.hashCode));
+      expect(seenDates, isNotEmpty);
+      expect(seenDates.every((d) => d.year == 2025 && d.month == 6), isTrue);
+      expect(find.textContaining('副-'), findsWidgets);
     });
   });
 
-  group('TCalendarDataSource', () {
-    test('should format year correctly', () {
-      final dataSource = _MockDataSource();
-
-      // 阳历
-      expect(
-        dataSource.formatYear(2025, TCalendarDateType.solar),
-        '2025年',
-      );
-
-      // 农历
-      expect(
-        dataSource.formatYear(2025, TCalendarDateType.lunar),
-        '二〇二五年',
-      );
-    });
-
-    test('should format month correctly', () {
-      final dataSource = _MockDataSource();
-
-      // 阳历
-      expect(
-        dataSource.formatMonth(3, TCalendarDateType.solar),
-        '3月',
-      );
-
-      // 农历
-      expect(
-        dataSource.formatMonth(1, TCalendarDateType.lunar),
-        '正月',
-      );
-      expect(
-        dataSource.formatMonth(3, TCalendarDateType.lunar),
-        '三月',
-      );
-      expect(
-        dataSource.formatMonth(11, TCalendarDateType.lunar),
-        '冬月',
-      );
-      expect(
-        dataSource.formatMonth(12, TCalendarDateType.lunar),
-        '腊月',
-      );
-
-      // 闰月
-      expect(
-        dataSource.formatMonth(3, TCalendarDateType.lunar, true),
-        '闰三月',
-      );
-    });
-
-    test('should format day correctly', () {
-      final dataSource = _MockDataSource();
-
-      // 阳历
-      expect(
-        dataSource.formatDay(7, TCalendarDateType.solar),
-        '7日',
-      );
-
-      // 农历
-      expect(
-        dataSource.formatDay(1, TCalendarDateType.lunar),
-        '初一',
-      );
-      expect(
-        dataSource.formatDay(7, TCalendarDateType.lunar),
-        '初七',
-      );
-      expect(
-        dataSource.formatDay(15, TCalendarDateType.lunar),
-        '十五',
-      );
-      expect(
-        dataSource.formatDay(21, TCalendarDateType.lunar),
-        '廿一',
-      );
-      expect(
-        dataSource.formatDay(30, TCalendarDateType.lunar),
-        '三十',
-      );
-    });
-  });
-
-  group('TDate with LunarInfo', () {
-    test('should create TDate with lunar info', () {
-      final lunarInfo = TLunarInfo(
-        year: 2025,
-        month: 3,
-        day: 7,
-        yearText: '二〇二五',
-        monthText: '三月',
-        dayText: '初七',
-      );
-
-      final tdate = TDate(
-        date: DateTime(2025, 4, 5),
-        typeNotifier: DateSelectTypeNotifier(DateSelectType.empty),
-        isLastDayOfMonth: false,
-        lunarInfo: lunarInfo,
-      );
-
-      expect(tdate.date, DateTime(2025, 4, 5));
-      expect(tdate.lunarInfo, lunarInfo);
-      expect(tdate.lunarInfo?.dayText, '初七');
-    });
-
-    test('should create TDate without lunar info', () {
-      final tdate = TDate(
-        date: DateTime(2025, 4, 5),
+  group('TCalendarCellModel', () {
+    test('selectType 随 typeNotifier 更新', () {
+      final cell = TCalendarCellModel(
+        date: DateTime(2025, 6, 15),
         typeNotifier: DateSelectTypeNotifier(DateSelectType.empty),
         isLastDayOfMonth: false,
       );
 
-      expect(tdate.date, DateTime(2025, 4, 5));
-      expect(tdate.lunarInfo, isNull);
+      expect(cell.selectType, DateSelectType.empty);
+      cell.typeNotifier.setType(DateSelectType.selected);
+      expect(cell.selectType, DateSelectType.selected);
     });
   });
-}
-
-/// Mock 数据源用于测试
-class _MockDataSource extends TCalendarDataSource {
-  @override
-  TLunarInfo? getLunarInfo(DateTime solarDate) {
-    // 简单的 mock 实现
-    return TLunarInfo(
-      year: 2025,
-      month: 3,
-      day: 7,
-      yearText: '二〇二五',
-      monthText: '三月',
-      dayText: '初七',
-    );
-  }
-
-  @override
-  String formatDate(
-    DateTime date,
-    TCalendarDateType type, [
-    TLunarInfo? lunarInfo,
-  ]) {
-    if (type == TCalendarDateType.solar) {
-      return '${date.year}年${date.month}月${date.day}日';
-    } else {
-      if (lunarInfo != null) {
-        return '${lunarInfo.yearText} ${lunarInfo.monthText}${lunarInfo.dayText}';
-      }
-      return '${date.year}年${date.month}月${date.day}日';
-    }
-  }
 }
