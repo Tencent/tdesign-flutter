@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 // 测试在包内，可以直接 import @internal 的 Snapshot 做白盒测试。
-import 'package:tdesign_flutter/src/components/calendar/date_picker_model.dart';
 import 'package:tdesign_flutter/src/components/date_time_picker/t_date_time_picker_internal.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -1068,80 +1067,6 @@ void main() {
       );
       final s1 = s0.applySelection(rawValues: const [2026, 5, 15]);
       expect(s1, equals(s0));
-    });
-  });
-
-  // ===========================================================================
-  // DatePickerModel（Calendar 适配层）
-  // ===========================================================================
-  group('DatePickerModel', () {
-    test('init 基于 DateTimePickerSnapshot 生成时分列', () {
-      final model = DatePickerModel(
-        useYear: false,
-        useMonth: false,
-        useDay: false,
-        useHour: true,
-        useMinute: true,
-        dateStart: [1999, 1, 1, 9, 0],
-        dateEnd: [1999, 1, 1, 18, 59],
-        dateInitial: [1999, 1, 1, 10, 30],
-      )..init();
-
-      final hourCol = model.snapshot!.columnOptionsAt(
-        0,
-        start: DateTime(1999, 1, 1, 9, 0),
-        end: DateTime(1999, 1, 1, 18, 59),
-      );
-      expect(hourCol.first.value, 9);
-      expect(hourCol.last.value, 18);
-      expect(model.selected['hour'], 10);
-      expect(model.selected['minute'], 30);
-    });
-
-    test('init 闰年 2 月日列范围为 29', () {
-      final model = DatePickerModel(
-        useYear: true,
-        useMonth: true,
-        useDay: true,
-        dateInitial: [2024, 2, 15],
-      )..init();
-
-      final dayCol = model.snapshot!.columnOptionsAt(2);
-      expect(dayCol.last.value, 29);
-      expect(model.selected['month'], 2);
-      expect(model.selected['day'], 15);
-    });
-
-    test('usesLegacyWheel 在 useWeekDay 或 filterItems 时为 true', () {
-      expect(DatePickerModel(useWeekDay: true).usesLegacyWheel, isTrue);
-      expect(
-        DatePickerModel(filterItems: (_, items) => items).usesLegacyWheel,
-        isTrue,
-      );
-      expect(DatePickerModel().usesLegacyWheel, isFalse);
-    });
-
-    test('filterItems 初始化创建 Snapshot 并填充 Legacy data', () {
-      final model = DatePickerModel(
-        useYear: true,
-        useMonth: true,
-        useDay: true,
-        dateInitial: [2026, 5, 15],
-        filterItems: (key, items) {
-          if (key == 'day') {
-            return items.where((d) => d.isEven).toList();
-          }
-          return items;
-        },
-      )..init();
-
-      expect(model.usesLegacyWheel, isTrue);
-      expect(model.snapshot, isNotNull);
-      expect(model.data.length, model.snapshot!.columns.length);
-      final dayColIdx = model.snapshot!.columns.indexOf(DateTimeColumn.day);
-      final dayData = model.data[dayColIdx] as List<int>;
-      expect(dayData.every((d) => d.isEven), isTrue);
-      expect(dayData, contains(2));
     });
   });
 

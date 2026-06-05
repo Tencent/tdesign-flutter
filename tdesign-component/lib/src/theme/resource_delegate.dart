@@ -44,7 +44,7 @@ class TResourceManager {
   /// 获取资源
   static final _defaultDelegate = _DefaultResourceDelegate();
 
-  /// 库内未注入 [setResourceBuilder] 时使用的默认文案（中文）。
+  /// 库内未注入 [setResourceBuilder] 时使用的默认文案（供 date-time-picker 等组件）。
   @internal
   static TResourceDelegate get defaultDelegate => _defaultDelegate;
 
@@ -102,88 +102,88 @@ abstract class TResourceDelegate {
   /// [TTimeCounter] 天
   String get days;
 
-  /// [TTimeCounter] 时 / [TDateTimePicker] 时列
+  /// [TTimeCounter] 时
   String get hours;
 
-  /// [TTimeCounter] 分 / [TDateTimePicker] 分列
+  /// [TTimeCounter] 分
   String get minutes;
 
-  /// [TTimeCounter] 秒 / [TDateTimePicker] 秒列
+  /// [TTimeCounter] 秒
   String get seconds;
 
   /// [TTimeCounter] 毫秒
   String get milliseconds;
 
-  /// [TDatePicker] / [TDateTimePicker] 年
+  /// 年
   String get yearLabel;
 
-  /// [TDatePicker] / [TDateTimePicker] 月
+  /// 月
   String get monthLabel;
 
-  /// [TDatePicker] / [TDateTimePicker] 日
+  /// 日
   String get dateLabel;
 
-  /// [TDatePicker] / [TDateTimePicker.showWeek] 周前缀
+  /// 周
   String get weeksLabel;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期日
+  /// [TCalendar] 星期日
   String get sunday;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期一
+  /// [TCalendar] 星期一
   String get monday;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期二
+  /// [TCalendar] 星期二
   String get tuesday;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期三
+  /// [TCalendar] 星期三
   String get wednesday;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期四
+  /// [TCalendar] 星期四
   String get thursday;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期五
+  /// [TCalendar] 星期五
   String get friday;
 
-  /// [TCalendarHeader] / [TDateTimePicker.showWeek] 星期六
+  /// [TCalendar] 星期六
   String get saturday;
 
-  /// [TCalendarBody] 年
+  /// [TCalendar] 年
   String get year;
 
-  /// [TCalendarBody] 一月
+  /// [TCalendar] 一月
   String get january;
 
-  /// [TCalendarBody] 二月
+  /// [TCalendar] 二月
   String get february;
 
-  /// [TCalendarBody] 三月
+  /// [TCalendar] 三月
   String get march;
 
-  /// [TCalendarBody] 四月
+  /// [TCalendar] 四月
   String get april;
 
-  /// [TCalendarBody] 五月
+  /// [TCalendar] 五月
   String get may;
 
-  /// [TCalendarBody] 六月
+  /// [TCalendar] 六月
   String get june;
 
-  /// [TCalendarBody] 七月
+  /// [TCalendar] 七月
   String get july;
 
-  /// [TCalendarBody] 八月
+  /// [TCalendar] 八月
   String get august;
 
-  /// [TCalendarBody] 九月
+  /// [TCalendar] 九月
   String get september;
 
-  /// [TCalendarBody] 十月
+  /// [TCalendar] 十月
   String get october;
 
-  /// [TCalendarBody] 十一月
+  /// [TCalendar] 十一月
   String get november;
 
-  /// [TCalendarBody] 十二月
+  /// [TCalendar] 十二月
   String get december;
 
   /// [TCalendar] 时间
