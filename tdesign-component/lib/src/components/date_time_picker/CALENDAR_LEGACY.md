@@ -33,6 +33,22 @@
 - 列边界用 `start` / `end` / `steps` / `renderLabel`。
 - Snapshot 经 `toPickerColumns` 转为 `TPickerColumns` 后交给内部滚轮渲染。
 
+## TCalendar 约定
+
+- **选中**：`initialValue` 仅首挂载生效；运行期同步靠 `onChange`；重置选中用 `Key` 或 remount（与 `TDateTimePicker` 不同，后者 `didUpdateWidget` 会响应 `initialValue` 变更）。
+- **滚动**：`anchorDate` 运行期可更新，只滚月份、不改选中；首屏优先级 `anchorDate` > `initialValue` 最早日 > `minDate` 首月。
+- **区间**（`CalendarType.range`）：两次点击定区间；终点须晚于起点，否则以新点击重开区间。
+- **站点文档**：非受控说明、range 规则、与 Picker 族对比见 `tdesign-site/src/calendar/README.md` 中「使用约定」。
+
+### 按日禁用（`disableDate`）评估结论
+
+暂不新增 `disableDate(DateTime) => bool` 公开 API：
+
+| 方案 | 说明 |
+|------|------|
+| 现状 | `minDate`/`maxDate` 控制可选区间；业务禁用用 `subtitleBuilder`/`cellBuilder` + `onCellTap` 拦截 |
+| 暂缓内置 | 需定义与 min/max 优先级、range 模式交互等，扩大 primitive 表面积；有明确需求再单独立项 |
+
 ## 相关文件
 
 - [`t_date_time_picker.dart`](t_date_time_picker.dart)

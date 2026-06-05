@@ -29,7 +29,7 @@ enum CalendarType {
   /// 多选：点击日期切换选中/取消，可同时选中多个日期
   multiple,
 
-  /// 区间选择：第一次点击选起点，第二次点击选终点，中间自动填充区间
+  /// 区间选择：两次点击定区间；终点须晚于起点，否则以新点击重开区间
   range,
 }
 
@@ -54,6 +54,16 @@ enum CalendarType {
 ///
 /// 弹层场景请自行 `showModalBottomSheet` 包裹本组件，并用新 [Key] 或新实例传入
 /// [initialValue]；外置月份导航请更新 [anchorDate] 而非回写 [initialValue]。
+///
+/// ## 区间模式（[CalendarType.range]）点击规则
+///
+/// 两次点击定区间：无起点时本次为起点；有起点无终点且本次晚于起点时为终点；
+/// 其余情况（含点击早于等于起点、区间已完成后再点）以本次点击重新开始为起点。
+///
+/// ## 按日禁用
+///
+/// 区间外日期由 [minDate]/[maxDate] 置为禁用。
+/// 请用 [subtitleBuilder]/[cellBuilder] 与 [onCellTap]；详见站点文档「使用约定」。
 class TCalendar extends StatefulWidget {
   TCalendar({
     Key? key,

@@ -180,7 +180,7 @@ Widget _buildLunar(BuildContext context) {
 | --- | --- |
 | single | 单选：点击新日期时自动取消旧日期的选中状态 |
 | multiple | 多选：点击日期切换选中/取消，可同时选中多个日期 |
-| range | 区间选择：第一次点击选起点，第二次点击选终点，中间自动填充区间 |
+| range | 区间选择：两次点击定区间；终点须晚于起点，否则以新点击重开区间。详见上文「`CalendarType.range` 点击规则」 |
 
 
 ### TCalendarSubtitleBuilder
