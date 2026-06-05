@@ -14,8 +14,7 @@
 | maxDate | DateTime? | - | 最大可选的日期，默认 2100-12-31 |
 | minDate | DateTime? | - | 最小可选的日期，默认 1970-01-01 |
 | monthTitleBuilder | TCalendarMonthTitleBuilder? | - | 月标题构建器，参数 `DateTime` 为当月 1 日（仅年月有效）。 |
-| onCellTap | void Function(TCalendarCellModel cell)? | - | 每次点击日期格时触发（含禁用格、单选重复点击已选格）。 仅用于埋点、提示等副作用；**选中结果以 `onChange` 为准**。 |
-| onChange | ValueChanged<List<DateTime>> | - | 选中结果变化时触发（单选立即触发；多选每次切换；区间在端点变化时触发）。 用于同步业务侧 State 或 `ValueNotifier`；勿依赖运行期回写 `initialValue` 驱动 UI。 组件挂载时不会调用本回调。 |
+| onChange | ValueChanged<List<DateTime>> | - | 选中结果变化时触发（单选立即触发；多选每次切换；区间在端点变化时触发）。 用于同步业务侧 State 或 `ValueNotifier`；勿依赖运行期回写 `initialValue` 驱动 UI。 组件挂载时不会调用本回调。点击禁用格或单选重复点已选格时不触发。 |
 | onMonthChanged | ValueChanged<DateTime>? | - | 可见月份变化时触发（用户滑动或程序化滚动结束后），参数为当月 1 日。 外置控制栏可只更新自身文案，避免为同步月份对 `TCalendar` 整组件 `setState`。 |
 | style | TCalendarStyle? | - | 自定义样式（包含 cellHeight、monthTitleHeight 等布局参数） |
 | subtitleBuilder | TCalendarSubtitleBuilder? | - | 副标题构建器，在日期主数字下方渲染自定义内容。 `TCalendarSubtitleContext.date` 为当前格日期； `TCalendarSubtitleContext.selectType` 为选中/区间/禁用等态。返回 null 不显示副标题行。 |
@@ -43,6 +42,7 @@
 | bodyPadding | double? | - | 内边距 |
 | cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） |
 | cellHeight | double | 60 | 日期单元格高度，默认 60 |
+| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色；`forSelectType` 中设为 `TTheme.brandLightColor`。 |
 | dayStyle | TextStyle? | - | 日期数字样式 |
 | decoration | BoxDecoration? | - | 组件容器装饰 |
 | monthTitleHeight | double | 22 | 月份标题高度，默认 22 |
