@@ -178,17 +178,17 @@
 | empty | - |
 
 
-### CalendarBuilder
-#### 类型定义
-
-```dart
-typedef CalendarBuilder = Widget Function(BuildContext context);
-```
-
-
 ### CalendarFormat
 #### 类型定义
 
 ```dart
 typedef CalendarFormat = TDate? Function(TDate? day);
+```
+
+
+### CalendarBuilder
+#### 类型定义
+
+```dart
+typedef CalendarBuilder = Widget Function(BuildContext context);
 ```

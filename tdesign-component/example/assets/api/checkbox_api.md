@@ -84,6 +84,22 @@
 | small | - |
 
 
+### OnGroupChange
+#### 类型定义
+
+```dart
+typedef OnGroupChange = void Function(List<String> checkedIds);
+```
+
+
+### OnCheckBoxGroupChange
+#### 类型定义
+
+```dart
+typedef OnCheckBoxGroupChange = void Function(List<String> ids);
+```
+
+
 ### IconBuilder
 #### 类型定义
 
@@ -105,20 +121,4 @@ typedef ContentBuilder = Widget Function(BuildContext context, bool checked, Str
 
 ```dart
 typedef OnCheckValueChanged = void Function(bool selected);
-```
-
-
-### OnGroupChange
-#### 类型定义
-
-```dart
-typedef OnGroupChange = void Function(List<String> checkedIds);
-```
-
-
-### OnCheckBoxGroupChange
-#### 类型定义
-
-```dart
-typedef OnCheckBoxGroupChange = void Function(List<String> ids);
 ```
