@@ -104,10 +104,30 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   @override
   void didUpdateWidget(covariant TCalendarBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!_listEqualsDate(
-        oldWidget.initialValue, widget.initialValue)) {
-      // 选中缓存变更（如 range 模式内部 setState）时清空月份缓存，
-      // 让 cell 基于新选中列表重建 typeNotifier，避免残留旧态。
+    final rangeChanged = oldWidget.minDate != widget.minDate ||
+        oldWidget.maxDate != widget.maxDate;
+    final weekStartChanged =
+        oldWidget.firstDayOfWeek != widget.firstDayOfWeek;
+    final layoutMetricsChanged = oldWidget.cellHeight != widget.cellHeight ||
+        oldWidget.monthTitleHeight != widget.monthTitleHeight ||
+        oldWidget.verticalGap != widget.verticalGap ||
+        oldWidget.bodyPadding != widget.bodyPadding;
+    final selectionChanged =
+        !_listEqualsDate(oldWidget.initialValue, widget.initialValue);
+
+    if (rangeChanged) {
+      // 可选范围变更：重建月份列表并清空格点/高度缓存，与 refactor 前行为一致。
+      _monthHeight.clear();
+      _data.clear();
+      widget.onCacheInvalidated?.call();
+      _lastNotifiedMonthKey = null;
+      _initMonths();
+    } else if (selectionChanged || weekStartChanged || layoutMetricsChanged) {
+      // 选中、周起始或布局参数变更：重建格点；布局变更时同步月份高度缓存。
+      if (layoutMetricsChanged) {
+        _monthHeight.clear();
+        _rebuildIndex();
+      }
       _data.clear();
       widget.onCacheInvalidated?.call();
     }

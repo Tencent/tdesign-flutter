@@ -420,33 +420,6 @@ void main() {
       expect(find.text('15'), findsOneWidget);
     });
 
-    testWidgets('onCellTap 回调携带正确 cell 模型', (tester) async {
-      final minDate = _day(2024, 6, 1);
-      final maxDate = _day(2024, 6, 30);
-      TCalendarCellModel? tappedCell;
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            minDate: minDate,
-            maxDate: maxDate,
-            onChange: (_) {},
-            onCellTap: (cell) => tappedCell = cell,
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('15'));
-      await tester.pump();
-
-      expect(tappedCell, isNotNull);
-      expect(tappedCell!.date, _day(2024, 6, 15));
-      expect(tappedCell!.selectType, DateSelectType.selected);
-    });
-
     testWidgets('可选范围仅相邻两天时正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
@@ -463,6 +436,70 @@ void main() {
 
       expect(find.text('1'), findsWidgets);
       expect(find.text('2'), findsWidgets);
+    });
+
+    testWidgets('运行期收窄 maxDate 后超出范围日期不可选', (tester) async {
+      List<DateTime>? result;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          _RuntimeMaxDateHarness(onChange: (v) => result = v),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('15'));
+      await tester.pump();
+      expect(result, isNotNull);
+      expect(result!.single, _day(2024, 6, 15));
+
+      await tester.tap(find.text('收窄范围'));
+      await tester.pumpAndSettle();
+
+      result = null;
+      await tester.tap(find.text('25'));
+      await tester.pump();
+      expect(result, isNull);
+    });
+
+    testWidgets('运行期变更 firstDayOfWeek 后仍可正常点选', (tester) async {
+      List<DateTime>? result;
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          _RuntimeWeekStartHarness(onChange: (v) => result = v),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('切到周一'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('15'));
+      await tester.pump();
+      expect(result, isNotNull);
+      expect(result!.single, _day(2024, 6, 15));
+    });
+
+    testWidgets('运行期变更 style.cellHeight 后格高更新', (tester) async {
+      await tester.pumpWidget(
+        _buildTestApp(const _RuntimeStyleHarness()),
+      );
+      await tester.pumpAndSettle();
+
+      final cellGesture = find
+          .descendant(
+            of: find.byType(TCalendar),
+            matching: find.byType(GestureDetector),
+          )
+          .first;
+      final heightBefore = tester.getSize(cellGesture).height;
+
+      await tester.tap(find.text('加高'));
+      await tester.pumpAndSettle();
+
+      final heightAfter = tester.getSize(cellGesture).height;
+      expect(heightAfter, greaterThan(heightBefore));
     });
 
     testWidgets('firstDayOfWeek = 1（周一开始）正常渲染', (tester) async {
@@ -483,4 +520,123 @@ void main() {
       expect(find.text('15'), findsOneWidget);
     });
   });
+}
+
+/// 运行期收窄 [TCalendar.maxDate] 的测试夹具。
+class _RuntimeMaxDateHarness extends StatefulWidget {
+  const _RuntimeMaxDateHarness({required this.onChange});
+
+  final ValueChanged<List<DateTime>> onChange;
+
+  @override
+  State<_RuntimeMaxDateHarness> createState() => _RuntimeMaxDateHarnessState();
+}
+
+class _RuntimeMaxDateHarnessState extends State<_RuntimeMaxDateHarness> {
+  DateTime _maxDate = _day(2024, 6, 30);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextButton(
+          onPressed: () => setState(() => _maxDate = _day(2024, 6, 20)),
+          child: const Text('收窄范围'),
+        ),
+        Expanded(
+          child: TCalendar(
+            height: 600,
+            type: CalendarType.single,
+            minDate: _day(2024, 6, 1),
+            maxDate: _maxDate,
+            onChange: widget.onChange,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 运行期切换 [TCalendar.firstDayOfWeek] 的测试夹具。
+class _RuntimeWeekStartHarness extends StatefulWidget {
+  const _RuntimeWeekStartHarness({required this.onChange});
+
+  final ValueChanged<List<DateTime>> onChange;
+
+  @override
+  State<_RuntimeWeekStartHarness> createState() =>
+      _RuntimeWeekStartHarnessState();
+}
+
+class _RuntimeWeekStartHarnessState extends State<_RuntimeWeekStartHarness> {
+  int _firstDayOfWeek = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextButton(
+          onPressed: () => setState(() => _firstDayOfWeek = 1),
+          child: const Text('切到周一'),
+        ),
+        Expanded(
+          child: TCalendar(
+            height: 600,
+            type: CalendarType.single,
+            firstDayOfWeek: _firstDayOfWeek,
+            minDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 30),
+            onChange: widget.onChange,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 运行期变更 [TCalendar.style] 的测试夹具。
+class _RuntimeStyleHarness extends StatefulWidget {
+  const _RuntimeStyleHarness();
+
+  @override
+  State<_RuntimeStyleHarness> createState() => _RuntimeStyleHarnessState();
+}
+
+class _RuntimeStyleHarnessState extends State<_RuntimeStyleHarness> {
+  double _cellHeight = 60;
+
+  /// 与 [TCalendar] 内联默认高度公式一致，避免格高变大后 body 溢出。
+  double _calendarHeightFor(double cellHeight) {
+    const weekdayHeight = 46.0;
+    const monthTitleHeight = 22.0;
+    const bodyPadding = 16.0;
+    const verticalGap = 8.0;
+    const visibleRows = 5;
+    return weekdayHeight +
+        monthTitleHeight +
+        visibleRows * (cellHeight + verticalGap) +
+        bodyPadding * 2;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextButton(
+          onPressed: () => setState(() => _cellHeight = 80),
+          child: const Text('加高'),
+        ),
+        SizedBox(
+          height: _calendarHeightFor(_cellHeight),
+          child: TCalendar(
+            type: CalendarType.single,
+            minDate: _day(2024, 6, 1),
+            maxDate: _day(2024, 6, 30),
+            style: TCalendarStyle(cellHeight: _cellHeight),
+            onChange: (_) {},
+          ),
+        ),
+      ],
+    );
+  }
 }

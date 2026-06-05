@@ -9,9 +9,9 @@ import '../lunar_info.dart';
 ///
 /// ## 组件类型
 ///
-/// 通过 [TCell] 打开底部弹层，弹层内为独立 [TCalendar] 实例：
+/// 通过 [TCell] 以 [TPopup.show] 打开底部浮层，浮层内为独立 [TCalendar] 实例：
 /// - 单选 / 多选 / 区间：确认后回写业务 State（[initialValue] 仅打开时生效）
-/// - 锚点对比：无锚点 vs [anchorDate] 首屏月份差异
+/// - 锚点：有 initialValue 时首屏跟已选月，无则跟 anchorDate
 ///
 /// ## 组件样式
 ///
@@ -76,7 +76,7 @@ Widget _buildSimple(BuildContext context) {
 /// 1. 单选 + 天气信息展示
 /// 2. 多选 + 已选汇总
 /// 3. 区间选择 + 区间摘要
-/// 4. 锚点：对比「无锚点 / 有锚点」打开时首屏月份
+/// 4. 锚点与 initialValue：同一入口，靠是否传入 initialValue 区分首屏逻辑
 class _SimpleDemo extends StatelessWidget {
   const _SimpleDemo();
 
@@ -87,26 +87,26 @@ class _SimpleDemo extends StatelessWidget {
         _SingleCalendarCell(),
         _MultipleCalendarCell(),
         _RangeCalendarCell(),
-        _AnchorCompareSection(),
+        _AnchorCalendarCell(),
       ],
     );
   }
 }
 
-// ========================= 弹层日历（新实例 + 弹层内选中，确认后回写业务 State） =========================
+// ========================= 弹层日历（TPopup + 新 TCalendar 实例，确认后回写业务 State） =========================
 
-/// 底部弹层内的日历选择器。
+/// [TPopup] 浮层内容区：日历 + 可选 footer。
 ///
-/// - [TCalendar.initialValue] 仅在弹层打开时传入一次（非受控）
-/// - 点选过程在弹层内更新 `_pending`，避免外层 `setState` 重建日历
-/// - **单选**：点选即确认并关闭
-/// - **多选 / 区间**：底部「确认」后 [onConfirm] 回写
-class _CalendarPickerSheet extends StatefulWidget {
-  const _CalendarPickerSheet({
-    required this.title,
+/// - [seedInitial] 非 null 时传给 [TCalendar.initialValue]（仅首挂载）
+/// - [pending] 记录点选草稿，供 footer 与头部「确认」读取
+/// - **单选**且 [autoPopOnSingleSelect]：在 [onChange] 内 [onConfirm] 并 [closePopup]
+class _CalendarPickerPanel extends StatelessWidget {
+  const _CalendarPickerPanel({
     required this.type,
-    this.initialValue,
+    this.seedInitial,
+    required this.pending,
     required this.onConfirm,
+    required this.closePopup,
     this.anchorDate,
     this.animateTo = false,
     this.footer,
@@ -116,15 +116,13 @@ class _CalendarPickerSheet extends StatefulWidget {
     this.subtitleBuilder,
     this.cellBuilder,
     this.autoPopOnSingleSelect = true,
-    bool? showConfirmButton,
-  }) : showConfirmButton = showConfirmButton ??
-            (type != CalendarType.single || !autoPopOnSingleSelect);
+  });
 
-  final String title;
   final CalendarType type;
-  /// 打开弹层时的初值；不传则日历无预选（对应 [TCalendar.initialValue] 为 null）。
-  final List<DateTime>? initialValue;
+  final List<DateTime>? seedInitial;
+  final ValueNotifier<List<DateTime>> pending;
   final ValueChanged<List<DateTime>> onConfirm;
+  final VoidCallback closePopup;
   final DateTime? anchorDate;
   final bool animateTo;
   final Widget Function(List<DateTime> selected)? footer;
@@ -133,109 +131,46 @@ class _CalendarPickerSheet extends StatefulWidget {
   final TCalendarStyle? style;
   final TCalendarSubtitleBuilder? subtitleBuilder;
   final TCalendarCellBuilder? cellBuilder;
-
-  /// 单选模式下点选日期后是否自动关闭弹层并回传，默认 true。
   final bool autoPopOnSingleSelect;
-
-  /// 是否展示底部「确认」按钮。
-  ///
-  /// 默认：单选且 [autoPopOnSingleSelect] 时不展示（点选即确认）；
-  /// 多选 / 区间始终展示，用于在弹层内完成选点后一次性回写。
-  final bool showConfirmButton;
-
-  @override
-  State<_CalendarPickerSheet> createState() => _CalendarPickerSheetState();
-}
-
-class _CalendarPickerSheetState extends State<_CalendarPickerSheet> {
-  late List<DateTime> _pending;
-
-  @override
-  void initState() {
-    super.initState();
-    _pending = widget.initialValue != null
-        ? List<DateTime>.from(widget.initialValue!)
-        : <DateTime>[];
-  }
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      minChildSize: 0.5,
-      maxChildSize: 0.8,
-      expand: false,
-      builder: (ctx, scrollController) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+    return Column(
+      children: [
+        Expanded(
+          child: TCalendar(
+            type: type,
+            initialValue: seedInitial != null
+                ? List<DateTime>.from(seedInitial!)
+                : null,
+            minDate: minDate,
+            maxDate: maxDate,
+            style: style,
+            anchorDate: anchorDate,
+            animateTo: animateTo,
+            subtitleBuilder: subtitleBuilder,
+            cellBuilder: cellBuilder,
+            onChange: (value) {
+              final dates = _normalizeDateList(value);
+              pending.value = dates;
+              if (type == CalendarType.single && autoPopOnSingleSelect) {
+                onConfirm(dates);
+                closePopup();
+              }
+            },
           ),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.pop(ctx),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: TCalendar(
-                  type: widget.type,
-                  initialValue: widget.initialValue != null ? _pending : null,
-                  minDate: widget.minDate,
-                  maxDate: widget.maxDate,
-                  style: widget.style,
-                  anchorDate: widget.anchorDate,
-                  animateTo: widget.animateTo,
-                  subtitleBuilder: widget.subtitleBuilder,
-                  cellBuilder: widget.cellBuilder,
-                  onChange: (value) {
-                    final dates = _normalizeDateList(value);
-                    setState(() => _pending = dates);
-                    if (widget.type == CalendarType.single &&
-                        widget.autoPopOnSingleSelect) {
-                      widget.onConfirm(dates);
-                      Navigator.pop(ctx);
-                    }
-                  },
-                ),
-              ),
-              if (widget.footer != null) widget.footer!(_pending),
-              if (widget.showConfirmButton)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TButton(
-                    text: '确认',
-                    theme: TButtonTheme.primary,
-                    isBlock: true,
-                    onTap: () {
-                      widget.onConfirm(_pending);
-                      Navigator.pop(ctx);
-                    },
-                  ),
-                ),
-            ],
+        ),
+        if (footer != null)
+          ValueListenableBuilder<List<DateTime>>(
+            valueListenable: pending,
+            builder: (context, selected, _) => footer!(selected),
           ),
-        );
-      },
+      ],
     );
   }
 }
 
+/// 命令式打开底部日历浮层（与 picker / date-time-picker 示例一致，使用 [TPopup]）。
 void _showCalendarPickerSheet({
   required BuildContext context,
   required String title,
@@ -252,26 +187,67 @@ void _showCalendarPickerSheet({
   TCalendarCellBuilder? cellBuilder,
   bool autoPopOnSingleSelect = true,
 }) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (_) => _CalendarPickerSheet(
-      title: title,
-      type: type,
-      initialValue: initialValue,
-      onConfirm: onConfirm,
-      anchorDate: anchorDate,
-      animateTo: animateTo,
-      footer: footer,
-      minDate: minDate,
-      maxDate: maxDate,
-      style: style,
-      subtitleBuilder: subtitleBuilder,
-      cellBuilder: cellBuilder,
-      autoPopOnSingleSelect: autoPopOnSingleSelect,
+  final pending = ValueNotifier<List<DateTime>>(
+    initialValue != null ? List<DateTime>.from(initialValue) : <DateTime>[],
+  );
+  final showHeaderConfirm =
+      type != CalendarType.single || !autoPopOnSingleSelect;
+  final sheetHeight = MediaQuery.sizeOf(context).height * 0.6;
+
+  final popupHandles = <TPopupHandle>[];
+  final panel = Material(
+    color: TTheme.of(context).bgColorContainer,
+    child: SafeArea(
+      top: false,
+      child: _CalendarPickerPanel(
+        type: type,
+        seedInitial: initialValue,
+        pending: pending,
+        onConfirm: onConfirm,
+        closePopup: () => popupHandles.first.close(),
+        anchorDate: anchorDate,
+        animateTo: animateTo,
+        footer: footer,
+        minDate: minDate,
+        maxDate: maxDate,
+        style: style,
+        subtitleBuilder: subtitleBuilder,
+        cellBuilder: cellBuilder,
+        autoPopOnSingleSelect: autoPopOnSingleSelect,
+      ),
     ),
   );
+
+  void onVisibleChange(bool visible, TPopupTrigger trigger) {
+    if (!visible) {
+      if (trigger == TPopupTrigger.confirm) {
+        onConfirm(_normalizeDateList(pending.value));
+      }
+      pending.dispose();
+    }
+  }
+
+  final handle = showHeaderConfirm
+      ? TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: sheetHeight,
+            titleWidget: TText(title),
+            onVisibleChange: onVisibleChange,
+            child: panel,
+          ),
+        )
+      : TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: sheetHeight,
+            titleWidget: TText(title),
+            confirmBuilder: null,
+            onVisibleChange: onVisibleChange,
+            child: panel,
+          ),
+        );
+  popupHandles.add(handle);
 }
 
 // ========================= 1. 单选 + 天气 =========================
@@ -379,55 +355,76 @@ class _RangeCalendarCellState extends State<_RangeCalendarCell> {
   }
 }
 
-// ========================= 4. 锚点 =========================
+// ========================= 4. 锚点与 initialValue =========================
 
-/// 锚点对比 demo 常量：无锚点场景的初值 2026-05-01；有锚点场景 anchor 为 2026-01。
+/// 演示首屏定位：有 [initialValue] 时滚到已选所在月，否则用 [anchorDate]（2026-01）。
 class _AnchorDemoData {
-  static final selected = [DateTime(2026, 5, 1)];
+  static final initialSelected = [DateTime(2026, 5, 1)];
   static final anchorMonth = DateTime(2026, 1, 1);
 }
 
-/// 锚点对比区：「无锚点」打开弹层时带入 [initialValue]（仅新实例生效）；
-/// 「有锚点」仅 [anchorDate]，不设 initialValue。
-class _AnchorCompareSection extends StatefulWidget {
-  const _AnchorCompareSection();
+/// 同一弹层入口：是否传入 initialValue 决定首屏月份逻辑。
+class _AnchorCalendarCell extends StatefulWidget {
+  const _AnchorCalendarCell();
 
   @override
-  State<_AnchorCompareSection> createState() => _AnchorCompareSectionState();
+  State<_AnchorCalendarCell> createState() => _AnchorCalendarCellState();
 }
 
-class _AnchorCompareSectionState extends State<_AnchorCompareSection> {
-  List<DateTime> _selected = List<DateTime>.from(_AnchorDemoData.selected);
+class _AnchorCalendarCellState extends State<_AnchorCalendarCell> {
+  List<DateTime> _selected = List<DateTime>.from(_AnchorDemoData.initialSelected);
 
   void _clearSelected() => setState(() => _selected = const <DateTime>[]);
 
+  void _openPicker() {
+    final hasInitial = _selected.isNotEmpty;
+    final anchorLabel =
+        '${_AnchorDemoData.anchorMonth.year}年${_AnchorDemoData.anchorMonth.month}月';
+    _showCalendarPickerSheet(
+      context: context,
+      title: hasInitial ? '选择日期' : '选择日期（$anchorLabel）',
+      type: CalendarType.single,
+      initialValue: hasInitial ? _selected : null,
+      anchorDate: hasInitial ? null : _AnchorDemoData.anchorMonth,
+      animateTo: !hasInitial,
+      onConfirm: (value) => setState(() => _selected = value),
+      footer: (_) => _AnchorPickerHint(
+        anchorMonth: _AnchorDemoData.anchorMonth,
+        hasInitialValue: hasInitial,
+        selected: _selected,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final hasSelected = _selected.isNotEmpty;
-    final selectedNote = hasSelected ? _formatYmd(_selected) : '无';
+    final hasInitial = _selected.isNotEmpty;
+    final selectedNote = hasInitial ? _formatYmd(_selected) : '无';
+    final anchorLabel =
+        '${_AnchorDemoData.anchorMonth.year}年${_AnchorDemoData.anchorMonth.month}月';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (hasSelected)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: TButton(
-              text: '清除已选',
-              size: TButtonSize.small,
-              theme: TButtonTheme.defaultTheme,
-              isBlock: true,
-              onTap: _clearSelected,
-            ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          child: TButton(
+            text: '清除已选',
+            size: TButtonSize.small,
+            theme: TButtonTheme.defaultTheme,
+            isBlock: true,
+            disabled: !hasInitial,
+            onTap: _clearSelected,
           ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              hasSelected
-                  ? '当前 initialValue：$selectedNote（与 anchor 1 月错开）'
-                  : '当前 initialValue：空（仅观察 anchor / 首屏月份）',
+              hasInitial
+                  ? '已选 $selectedNote：打开日历会滚到该日所在月份'
+                  : '未选日期：打开日历会滚到锚点月份 $anchorLabel（不自动选中）',
               style: TextStyle(
                 fontSize: 12,
                 color: TTheme.of(context).fontGyColor3,
@@ -436,80 +433,43 @@ class _AnchorCompareSectionState extends State<_AnchorCompareSection> {
           ),
         ),
         TCell(
-          title: '无锚点',
+          title: '锚点',
           arrow: true,
-          note: hasSelected
-              ? '已选 $selectedNote，首屏应为 5 月'
-              : '无已选，首屏为日历范围首月',
-          onClick: (_) {
-            _showCalendarPickerSheet(
-              context: context,
-              title: '无锚点：首屏 = 已选日期所在月',
-              type: CalendarType.single,
-              initialValue: _selected,
-              onConfirm: (value) => setState(() => _selected = value),
-              footer: (_) => _AnchorCompareHint(
-                anchorMonth: _AnchorDemoData.anchorMonth,
-                selected: _selected,
-                useAnchor: false,
-              ),
-            );
-          },
-        ),
-        TCell(
-          title: '有锚点',
-          arrow: true,
-          note: '无 initialValue，首屏 = anchor 1 月',
-          onClick: (_) {
-            _showCalendarPickerSheet(
-              context: context,
-              title: '有锚点：首屏 = anchorDate 所在月',
-              type: CalendarType.single,
-              anchorDate: _AnchorDemoData.anchorMonth,
-              animateTo: true,
-              onConfirm: (_) {},
-              footer: (_) => _AnchorCompareHint(
-                anchorMonth: _AnchorDemoData.anchorMonth,
-                useAnchor: true,
-              ),
-            );
-          },
+          note: hasInitial
+              ? '已选 $selectedNote，打开显示该日所在月'
+              : '未选日期，打开显示 $anchorLabel',
+          onClick: (_) => _openPicker(),
         ),
       ],
     );
   }
 }
 
-/// 弹层底部说明：区分 [anchorDate]（首屏月份）与 [initialValue]（预选日期，仅无锚点 demo）。
-class _AnchorCompareHint extends StatelessWidget {
-  const _AnchorCompareHint({
+/// 弹层底部说明：本次打开是否传入 initialValue / anchorDate。
+class _AnchorPickerHint extends StatelessWidget {
+  const _AnchorPickerHint({
     required this.anchorMonth,
+    required this.hasInitialValue,
     this.selected = const <DateTime>[],
-    required this.useAnchor,
   });
 
   final DateTime anchorMonth;
+  final bool hasInitialValue;
   final List<DateTime> selected;
-  final bool useAnchor;
 
   @override
   Widget build(BuildContext context) {
     final theme = TTheme.of(context);
     final anchorLabel = '${anchorMonth.year}年${anchorMonth.month}月';
-    final hasSelected = selected.isNotEmpty;
     final selectedLabel = _formatYmd(selected);
 
-    final scrollLine = useAnchor
-        ? 'anchorDate：打开定位到 $anchorLabel'
-        : hasSelected
-            ? '无 anchorDate：打开定位到已选 ${selected.first.month} 月'
-            : '无 anchorDate 且无已选：打开定位到日历范围首月';
+    final scrollLine = hasInitialValue
+        ? '打开后滚到已选日期所在月（${selected.first.month}月）'
+        : '打开后滚到锚点月份 $anchorLabel';
 
-    final selectedLine = useAnchor
-        ? '未设置 initialValue — 首屏仅由 anchorDate 决定'
-        : hasSelected
-            ? 'initialValue：$selectedLabel'
-            : 'initialValue：空 — 首屏由已选或范围首月决定';
+    final selectedLine = hasInitialValue
+        ? '已预选 $selectedLabel'
+        : '未预选日期，仅按锚点月份定位';
 
     return Container(
       width: double.infinity,
@@ -1005,7 +965,6 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
             _selected = dates;
             _selectedDisplay.value = dates;
           },
-          // 需要「每次点格」的副作用时用 onCellTap；选中结果仍以 onChange 为准
         ),
         ValueListenableBuilder<List<DateTime>>(
           valueListenable: _selectedDisplay,

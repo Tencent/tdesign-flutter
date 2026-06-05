@@ -46,7 +46,7 @@
 
 | 方案 | 说明 |
 |------|------|
-| 现状 | `minDate`/`maxDate` 控制可选区间；业务禁用用 `subtitleBuilder`/`cellBuilder` + `onCellTap` 拦截 |
+| 现状 | `minDate`/`maxDate` 控制可选区间；业务禁用用 `subtitleBuilder`/`cellBuilder` 自定义展示与点击 |
 | 暂缓内置 | 需定义与 min/max 优先级、range 模式交互等，扩大 primitive 表面积；有明确需求再单独立项 |
 
 ## 相关文件

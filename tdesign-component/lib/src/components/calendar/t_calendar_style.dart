@@ -23,6 +23,7 @@ class TCalendarStyle {
     this.verticalGap,
     this.bodyPadding,
     this.weekdayGap,
+    this.centreColor,
   });
 
   /// 组件容器装饰
@@ -61,11 +62,8 @@ class TCalendarStyle {
   /// 星期之间的水平间距
   final double? weekdayGap;
 
-  /// 区间选中中间态的背景色
-  Color get centreColor {
-    // 默认返回一个浅灰色，实际使用时应通过 context 获取
-    return const Color(0xFFF0F0F0);
-  }
+  /// 区间中间格背景与格间衔接条颜色；[forSelectType] 中设为 [TTheme.brandLightColor]。
+  final Color? centreColor;
 
   /// 星期标题高度
   double get weekdayHeight => _kDefaultWeekdayHeight;
@@ -124,10 +122,11 @@ class TCalendarStyle {
       height: TTheme.of(context).fontBodyExtraSmall?.height,
       fontWeight: FontWeight.w400,
     );
-    final centreColor = TTheme.of(context).brandLightColor;
+    final rangeCentreColor = TTheme.of(context).brandLightColor;
     switch (type) {
       case DateSelectType.empty:
         return TCalendarStyle(
+          centreColor: rangeCentreColor,
           dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorPrimary),
           todayDayStyle:
               defStyle.copyWith(color: TTheme.of(context).brandNormalColor),
@@ -137,6 +136,7 @@ class TCalendarStyle {
         );
       case DateSelectType.disabled:
         return TCalendarStyle(
+          centreColor: rangeCentreColor,
           dayStyle: defStyle.copyWith(color: TTheme.of(context).textDisabledColor),
           todayDayStyle:
               defStyle.copyWith(color: TTheme.of(context).brandDisabledColor),
@@ -146,6 +146,7 @@ class TCalendarStyle {
         );
       case DateSelectType.selected:
         return TCalendarStyle(
+          centreColor: rangeCentreColor,
           dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorAnti),
           subtitleStyle:
               subtitleBase.copyWith(color: TTheme.of(context).textColorAnti),
@@ -156,15 +157,17 @@ class TCalendarStyle {
         );
       case DateSelectType.centre:
         return TCalendarStyle(
+          centreColor: rangeCentreColor,
           dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorPrimary),
           subtitleStyle: subtitleBase.copyWith(
               color: TTheme.of(context).textColorPlaceholder),
           cellDecoration: BoxDecoration(
-            color: centreColor,
+            color: rangeCentreColor,
           ),
         );
       case DateSelectType.start:
         return TCalendarStyle(
+          centreColor: rangeCentreColor,
           dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorAnti),
           subtitleStyle:
               subtitleBase.copyWith(color: TTheme.of(context).textColorAnti),
@@ -175,6 +178,7 @@ class TCalendarStyle {
         );
       case DateSelectType.end:
         return TCalendarStyle(
+          centreColor: rangeCentreColor,
           dayStyle: defStyle.copyWith(color: TTheme.of(context).textColorAnti),
           subtitleStyle:
               subtitleBase.copyWith(color: TTheme.of(context).textColorAnti),

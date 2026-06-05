@@ -172,10 +172,10 @@ class _TCalendarCellState extends State<TCalendarCell> {
     }
 
     final themedStyle =
-        TCalendarStyle.generateStyle(context: null).forSelectType(context, cell.selectType);
+        TCalendarStyle.generateStyle(context: context).forSelectType(context, cell.selectType);
     final decoration =
         themedStyle.cellDecoration;
-    final positionColor = _rangeBridgeColor(themedStyle, decoration);
+    final positionColor = _rangeBridgeColor(context, themedStyle, decoration);
 
     final content = widget.cellBuilder?.call(context, cell) ??
         _buildDefaultCell(context, cell, themedStyle);
@@ -219,8 +219,13 @@ class _TCalendarCellState extends State<TCalendarCell> {
   }
 
   Color? _rangeBridgeColor(
-      TCalendarStyle cellStyle, BoxDecoration? decoration) {
+    BuildContext context,
+    TCalendarStyle cellStyle,
+    BoxDecoration? decoration,
+  ) {
     _positionOffset = 0;
+    final bridgeColor =
+        cellStyle.centreColor ?? TTheme.of(context).brandLightColor;
     final next = _nextDay();
     if (widget.cell?.selectType == DateSelectType.start) {
       if (widget.cell?.isLastDayOfMonth == true) {
@@ -231,11 +236,11 @@ class _TCalendarCellState extends State<TCalendarCell> {
         return decoration?.color;
       }
       if (next?.selectType == DateSelectType.centre) {
-        return cellStyle.centreColor;
+        return bridgeColor;
       }
     }
     if (widget.cell?.selectType == DateSelectType.centre) {
-      return cellStyle.centreColor;
+      return bridgeColor;
     }
     return null;
   }

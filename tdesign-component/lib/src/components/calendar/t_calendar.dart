@@ -62,8 +62,7 @@ enum CalendarType {
 ///
 /// ## 按日禁用
 ///
-/// 区间外日期由 [minDate]/[maxDate] 置为禁用。
-/// 请用 [subtitleBuilder]/[cellBuilder] 与 [onCellTap]；详见站点文档「使用约定」。
+/// 区间外日期由 [minDate]/[maxDate] 置为禁用；业务侧额外禁用可在 [cellBuilder] 内自行处理点击。
 class TCalendar extends StatefulWidget {
   TCalendar({
     Key? key,
@@ -75,7 +74,6 @@ class TCalendar extends StatefulWidget {
     this.height,
     TCalendarStyle? style,
     required this.onChange,
-    this.onCellTap,
     this.onMonthChanged,
     TCalendarMonthTitleBuilder? monthTitleBuilder,
     this.cellBuilder,
@@ -125,13 +123,8 @@ class TCalendar extends StatefulWidget {
   /// 选中结果变化时触发（单选立即触发；多选每次切换；区间在端点变化时触发）。
   ///
   /// 用于同步业务侧 State 或 [ValueNotifier]；勿依赖运行期回写 [initialValue] 驱动 UI。
-  /// 组件挂载时不会调用本回调。
+  /// 组件挂载时不会调用本回调。点击禁用格或单选重复点已选格时不触发。
   final ValueChanged<List<DateTime>> onChange;
-
-  /// 每次点击日期格时触发（含禁用格、单选重复点击已选格）。
-  ///
-  /// 仅用于埋点、提示等副作用；**选中结果以 [onChange] 为准**。
-  final void Function(TCalendarCellModel cell)? onCellTap;
 
   /// 可见月份变化时触发（用户滑动或程序化滚动结束后），参数为当月 1 日。
   ///
@@ -266,6 +259,14 @@ class _TCalendarState extends State<TCalendar> {
   }
 
   @override
+  void didUpdateWidget(covariant TCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.style != widget.style) {
+      setState(() => _style = widget.style);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final verticalGap = _style.verticalGap ?? TTheme.of(context).spacer8;
 
@@ -363,21 +364,18 @@ class _TCalendarState extends State<TCalendar> {
     final curDate = cell.date;
 
     if (selectType == DateSelectType.disabled) {
-      widget.onCellTap?.call(cell);
       return;
     }
 
     switch (widget.type) {
       case CalendarType.single:
         if (identical(_selectedSingleRef, cell)) {
-          widget.onCellTap?.call(cell);
           return;
         }
         _selectedSingleRef?.typeNotifier.setType(DateSelectType.empty);
         cell.typeNotifier.setType(DateSelectType.selected);
         _selectedSingleRef = cell;
         _emitSelection([curDate], rebuild: false);
-        widget.onCellTap?.call(cell);
         break;
       case CalendarType.multiple:
         final existing = _selectedMultipleRefs[curDate];
@@ -391,12 +389,10 @@ class _TCalendarState extends State<TCalendar> {
         }
         nextValue = _selectedMultipleRefs.keys.toList()..sort();
         _emitSelection(nextValue, rebuild: false);
-        widget.onCellTap?.call(cell);
         break;
       case CalendarType.range:
         final resolved = _resolveRangeSelection([curDate]);
         _emitSelection(resolved, rebuild: true);
-        widget.onCellTap?.call(cell);
         break;
     }
   }
