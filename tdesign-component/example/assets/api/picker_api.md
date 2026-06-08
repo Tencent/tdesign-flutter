@@ -26,15 +26,15 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false - **禁用态**：同时屏蔽无障碍手势（`onIncrease` / `onDecrease` 不再触发） - **视觉**：组件整体叠加 `_kDisabledOpacity` 透明层 |
+| disabled | bool | false | 是否禁用整个选择器（禁止滚动和操作），默认 false - **禁用态**：同时屏蔽无障碍手势与列级语义聚焦（`Semantics.enabled = false`） - **视觉**：组件整体叠加 `_kDisabledOpacity` 透明层 |
 | height | double | 200 | 滚轮视窗高度（像素），默认 200 |
 | initialValue | List<dynamic>? | - | 初始选中值列表（按 `value` 匹配各列），仅在首次构建时生效。 - **语义**：initState-only —— 仅首次构建生效，后续传入被忽略 - **机制**：`FixedExtentScrollController` 拥有滚动位置所有权，频繁回灌会触发 `dispose+reinit`，破坏惯性滚动 - **典型症状**：滚轮"每次只能滚 1 项" - **正确做法**：选中态用 `onChange` 维护 draft；"重置"时用 `Key` 强制重建；数据源变更时改 `items` |
 | itemBuilder | ItemBuilderType? | - | 自定义子项构建器 - **不接管**：disabled 项仍由内部统一渲染，不会走此 builder - **典型用法**：emoji、单位、富文本、动态颜色等场景 - **距离样式**：通过回调的 `itemDistanceCalculator` 参数复用 4 档默认颜色/字号 |
 | itemCount | int | 5 | 每屏显示 item 数（奇数更利于中央高亮），默认 5 |
 | items | TPickerItems | - | 数据源（必填） - **类型**：密封类 `TPickerItems`，编译期强制二选一 - **多列独立**：`TPickerColumns` —— 各列候选项互不影响 - **联动选择**：`TPickerLinked` —— 上游列变更后下游列自动裁剪并按新分支展开 - **自由结构**：通过 `.fromRaw()` 工厂构造并自动归一化 - **重建语义**：实例值与上一帧不等时整组重初始化；内容相等的新实例不重建 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChange | void Function(int col, TPickerValue value)? | - | 值改变回调（滚动时实时触发，不代表用户已确认选择） - **触发时机**：用户滚动经过 enabled 项时 / disabled 修正动画完成后 - **`col`**：本次触发的列索引（0-based），联动模式下仅指用户实际滚动的列（下游列联动刷新是结果，不是触发源） - **`value`**：当前各列选中快照 - **典型用法**：维护 draft 状态 / 联动缓存 / 列底分页判定 - **弹窗建议**：配合 `TPopup` 头部确认按钮，关闭前读取 draft 提交 |
-| onColumnScrollEnd | void Function(int col, TPickerValue value)? | - | 指定列滚动结束回调（惯性停止或手指抬起后） - **`col`**：列索引 - **`value`**：当前各列选中快照 - **典型用法**：判断 `value.indexes[col]` 是否接近列底并触发分页，避免在 `onChange` 里对每一项做高频加载判定 |
+| onChange | void Function(int col, TPickerValue value)? | - | 值改变回调（滚动时实时触发，不代表用户已确认选择） - **触发时机**：用户滚动经过 enabled 项时 / disabled 修正动画完成后 - **频率**：多列独立模式下惯性滚动可能连续触发多次（每经过一项一次）； 联动模式同帧内合并为一次，且相同 `TPickerValue` 快照不会重复通知 - **`col`**：本次触发的列索引（0-based）；联动模式下仅指用户手滚列 - **`value`**：当前各列选中快照 - **与 `onColumnScrollEnd` 关系**：两者独立、互不阻塞；同一次滚动可能先多次 `onChange` 再触发一次 `onColumnScrollEnd`（滚停时） - **典型用法**：维护 draft 状态 / 联动缓存 - **分页加载**：更推荐 `onColumnScrollEnd` 在滚停后判定列底 |
+| onColumnScrollEnd | void Function(int col, TPickerValue value)? | - | 指定列滚动结束回调（惯性停止或手指抬起后） - **触发时机**：该列 `ScrollEndNotification` 到达时，每列独立 - **`col`**：滚停的那一列索引 - **`value`**：滚停时刻的各列选中快照（与最后一次 `onChange` 通常一致） - **与 `onChange` 关系**：两者独立；本回调仅在滚停时触发一次，适合分页加载 - **典型用法**：判断 `value.indexes[col]` 是否接近列底并触发分页 |
 
 
 ### TPickerOption
