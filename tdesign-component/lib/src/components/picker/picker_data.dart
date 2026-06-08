@@ -7,8 +7,13 @@ import 'picker_option.dart';
 /// 选择器数据源密封类
 ///
 /// 编译期强制二选一，消除运行时类型错误：
-/// - [TPickerColumns] → 多列独立选择
-/// - [TPickerLinked] → 联动选择
+/// - [TPickerColumns] → 多列独立选择（各列候选项互不影响）
+/// - [TPickerLinked] → 联动选择（上游列变更后下游列自动裁剪并按新分支展开）
+///
+/// 自由结构数据（`List<List<String>>` / `Map<String, dynamic>` 等）请用
+/// 对应子类的 `.fromRaw(...)` 工厂，**避免在 build 阶段直接 `new` 出已
+/// 规范化的实例** —— `.fromRaw` 内部会做类型短路，传入已规范化的实例
+/// 不产生额外拷贝；手动 `new` 时需要自行保证数据形态合规。
 @immutable
 sealed class TPickerItems {
   const TPickerItems();
@@ -30,6 +35,10 @@ class TPickerColumns extends TPickerItems {
 
   /// 从自由结构的 raw 数据创建，自动归一化
   ///
+  /// [rawColumns] 原始多列数据；每列元素可为 `String` / `Map` / [TPickerOption]。
+  ///
+  /// [keys] 字段映射配置，默认 [TPickerKeys.defaults]。
+  ///
   /// ```dart
   /// TPickerColumns.fromRaw(
   ///   [['北京', '上海', '广州']],
@@ -45,6 +54,10 @@ class TPickerColumns extends TPickerItems {
   }
 
   /// 每列的选项列表
+  ///
+  /// - **类型**：`List<List<TPickerOption>>`（外层为列，内层为该列候选项）
+  /// - **空列**：保留列数与位置；组件内会做范围保护，越界访问回落首项
+  /// - **不可变**：内容比较用 `==` 判等，原地 `addAll` 与 immutable 追加都会触发"列增长"路径
   final List<List<TPickerOption>> columns;
 
   @override
@@ -78,11 +91,11 @@ class TPickerColumns extends TPickerItems {
 /// 联动选择的数据源
 ///
 /// 适用于整棵联动树已在内存的场景（如省市区、月日联动、多级地址）；
-/// 每列候选项建议在百级以内。上游列变更后，[TPicker] 会裁剪下游列并按新分支
+/// 每列候选项建议在百级以内。上游列变更后，`TPicker` 会裁剪下游列并按新分支
 /// 重新展开，默认选中各列首项。
 ///
 /// 若需接口分页或远程逐级拉取，请改用 [TPickerColumns] 并在业务层封装 Scope
-/// （见 example LinkedLazyPickerScope）。
+/// （见 example `LinkedLazyPickerScope`）。
 ///
 /// ```dart
 /// TPicker(
@@ -101,6 +114,10 @@ class TPickerLinked extends TPickerItems {
 
   /// 从自由结构的 raw Map 数据创建，自动归一化
   ///
+  /// [rawTree] 原始联动树；key / value 可为 `String` / `Map` / `List` / [TPickerOption]。
+  ///
+  /// [keys] 字段映射配置，默认 [TPickerKeys.defaults]。
+  ///
   /// ```dart
   /// TPickerLinked.fromRaw({
   ///   '广东': {'深圳': ['南山', '福田'], '广州': ['天河']},
@@ -117,9 +134,10 @@ class TPickerLinked extends TPickerItems {
 
   /// 联动树结构：`Map<TPickerOption, dynamic>`
   ///
-  /// value 可以是：
-  /// - `Map<TPickerOption, dynamic>` → 下一级联动
-  /// - `List<TPickerOption>` → 叶子级选项
+  /// - **类型**：`Map<TPickerOption, dynamic>`，key 为该列候选项
+  /// - **下一级联动**：value 为 `Map<TPickerOption, dynamic>` 时继续下钻
+  /// - **叶子级选项**：value 为 `List<TPickerOption>` 时结束递归
+  /// - **顺序敏感**：插入顺序即展示顺序；`==` 判等按 entry 顺序遍历
   final Map<TPickerOption, dynamic> tree;
 
   @override

@@ -66,61 +66,54 @@ class TPicker extends StatefulWidget {
 
   /// 数据源（必填）
   ///
-  /// 使用密封类 [TPickerItems] 编译期强制二选一：
-  /// - [TPickerColumns] → 多列独立选择
-  /// - [TPickerLinked] → 联动选择
-  ///
-  /// 自由结构数据通过 `.fromRaw()` 工厂构造归一化。
-  ///
-  /// 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。
+  /// - **类型**：密封类 [TPickerItems]，编译期强制二选一
+  /// - **多列独立**：[TPickerColumns] —— 各列候选项互不影响
+  /// - **联动选择**：[TPickerLinked] —— 上游列变更后下游列自动裁剪并按新分支展开
+  /// - **自由结构**：通过 `.fromRaw()` 工厂构造并自动归一化
+  /// - **重建语义**：实例值与上一帧不等时整组重初始化；内容相等的新实例不重建
   final TPickerItems items;
 
-  /// 初始选中值列表（按 value 匹配各列）
+  /// 初始选中值列表（按 `value` 匹配各列），仅在首次构建时生效。
   ///
-  /// **严格 initState-only 语义**：仅在组件首次构建时生效，决定各列初始滚动
-  /// 位置。父级后续重建传入不同的 `initialValue` 会被忽略——TPicker 内部
-  /// `FixedExtentScrollController` 拥有滚动位置的所有权，频繁回灌会触发
-  /// `dispose+reinit`，破坏惯性滚动（典型症状：滚轮"每次只能滚 1 项"）。
-  ///
-  /// 正确做法：
-  /// - 选中态展示用 `onChange` 维护 draft，不要回灌
-  /// - 需要"重置"时配合 [Key] 强制重建本组件
-  /// - 数据源整体变更时修改 [items]，会触发整组重置
+  /// - **语义**：initState-only —— 仅首次构建生效，后续传入被忽略
+  /// - **机制**：`FixedExtentScrollController` 拥有滚动位置所有权，频繁回灌会触发 `dispose+reinit`，破坏惯性滚动
+  /// - **典型症状**：滚轮"每次只能滚 1 项"
+  /// - **正确做法**：选中态用 [onChange] 维护 draft；"重置"时用 [Key] 强制重建；数据源变更时改 [items]
   final List<dynamic>? initialValue;
 
-  /// 值改变回调（滚动时实时触发）
+  /// 值改变回调（滚动时实时触发，不代表用户已确认选择）
   ///
-  /// 触发时机：
-  /// - 用户滚动经过某个 enabled 项时
-  /// - disabled 修正动画完成后，回调最终落点
-  ///
-  /// `col` 为本次触发的列索引（0-based，从左到右），联动模式下也仅指用户实际
-  /// 滚动的列（下游列联动刷新是结果，不是触发源）。可用于按列精确响应。
-  /// `value` 为当前各列选中快照。
-  ///
-  /// 注意：此回调代表滚动时实时变化，不代表用户已确认选择。
-  /// 弹窗场景请配合 [TPopup] 头部确认按钮，在关闭前读取 draft 值提交。
-  ///
-  /// 按需加载：在此维护 draft / 联动缓存；列底分页见 [onColumnScrollEnd]。
+  /// - **触发时机**：用户滚动经过 enabled 项时 / disabled 修正动画完成后
+  /// - **`col`**：本次触发的列索引（0-based），联动模式下仅指用户实际滚动的列（下游列联动刷新是结果，不是触发源）
+  /// - **`value`**：当前各列选中快照
+  /// - **典型用法**：维护 draft 状态 / 联动缓存 / 列底分页判定
+  /// - **弹窗建议**：配合 [TPopup] 头部确认按钮，关闭前读取 draft 提交
   final void Function(int col, TPickerValue value)? onChange;
 
-  /// 指定列滚动结束回调（惯性滚动停止或手指抬起后）
+  /// 指定列滚动结束回调（惯性停止或手指抬起后）
   ///
-  /// `col` 为列索引；`value` 为当前各列选中快照。
-  /// 适合在业务层判断 `value.indexes[col]` 是否接近列底并触发分页，避免在
-  /// [onChange] 里对每一项选中变化都做加载判定。
+  /// - **`col`**：列索引
+  /// - **`value`**：当前各列选中快照
+  /// - **典型用法**：判断 `value.indexes[col]` 是否接近列底并触发分页，避免在 [onChange] 里对每一项做高频加载判定
   final void Function(int col, TPickerValue value)? onColumnScrollEnd;
 
-  /// 视窗高度，默认 200
+  /// 滚轮视窗高度（像素），默认 200
   final double height;
 
-  /// 每屏显示 item 数，默认 5
+  /// 每屏显示 item 数（奇数更利于中央高亮），默认 5
   final int itemCount;
 
   /// 是否禁用整个选择器（禁止滚动和操作），默认 false
+  ///
+  /// - **禁用态**：同时屏蔽无障碍手势（`onIncrease` / `onDecrease` 不再触发）
+  /// - **视觉**：组件整体叠加 `_kDisabledOpacity` 透明层
   final bool disabled;
 
-  /// 自定义子项构建器（disabled 项仍由内部统一渲染，不会走此 builder）
+  /// 自定义子项构建器
+  ///
+  /// - **不接管**：disabled 项仍由内部统一渲染，不会走此 builder
+  /// - **典型用法**：emoji、单位、富文本、动态颜色等场景
+  /// - **距离样式**：通过回调的 `itemDistanceCalculator` 参数复用 4 档默认颜色/字号
   final ItemBuilderType? itemBuilder;
 
   @override
@@ -141,7 +134,10 @@ class _TPickerState extends State<TPicker> {
   /// 用于命令式控制各列的 State
   late List<GlobalKey<WheelColumnState>> _columnKeys;
 
-  /// 各列项数快照，用于检测外部原地 addAll（oldWidget 与 widget 共享同一 List 引用）
+  /// 各列项数快照，用于在 [didUpdateWidget] 中检测"外部原地 `addAll`"——
+  /// 此时 `oldWidget.items` 与 `widget.items` 共享同一 `List` 引用，
+  /// 仅靠 `==` 比对会漏判；比较 `[i].length` 才能识别"列尾追加"路径。
+  /// 也用于 `_trySwapDependentColumns` 中"哪些列实际未变"的快速筛选。
   List<int> _columnLengths = [];
 
   double get _itemHeight => widget.height / widget.itemCount;

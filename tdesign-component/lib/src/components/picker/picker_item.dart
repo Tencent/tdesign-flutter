@@ -6,12 +6,13 @@ import '../text/t_text.dart';
 
 /// 自定义子项构建器类型
 ///
-/// [context] 上下文
-/// [content] 文字内容
-/// [colIndex] 列号
-/// [index] 行号
-/// [calculator] 默认距离样式计算器，可在自定义渲染中复用
-/// [distance] 子项此时离中心的距离
+/// - **`context`**：构建上下文
+/// - **`content`**：文字内容（已由内部组合 label 与单位）
+/// - **`colIndex`**：列号
+/// - **`index`**：行号
+/// - **`itemDistanceCalculator`**：默认距离样式计算器，可在自定义渲染中复用 4 档默认颜色/字号
+/// - **`distance`**：子项此时离中心的距离（0 = 选中项）
+/// - **返回**：`null` 时回退到默认 [TText] 渲染
 typedef ItemBuilderType = Widget? Function(
   BuildContext context,
   String content,
