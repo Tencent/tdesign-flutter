@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
+import 'linked_lazy_picker_policy.dart';
 import 'linked_lazy_picker_scope.dart';
 
 class TPickerPage extends StatefulWidget {
@@ -234,7 +235,7 @@ class _TPickerPageState extends State<TPickerPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-        titleWidget: Text(title),
+        titleWidget: TText(title, font: TTheme.of(context).fontTitleMedium),
         onVisibleChange: (visible, trigger) {
           if (!visible && trigger == TPopupTrigger.confirm) {
             onConfirm();
@@ -306,7 +307,7 @@ class _TPickerPageState extends State<TPickerPage> {
           context,
           child: TPicker(
               items: cityItems,
-              onChange: (v) => setState(() => selectedCity = v.labels.first)),
+              onChange: (_, v) => setState(() => selectedCity = v.labels.first)),
         ),
       ],
     );
@@ -334,7 +335,7 @@ class _TPickerPageState extends State<TPickerPage> {
           child: TPicker(
             items: _monthDayItems,
             initialValue: const [1, 1],
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => selectedMonthDay = v.labels.join(' / ')),
           ),
         ),
@@ -356,7 +357,7 @@ class _TPickerPageState extends State<TPickerPage> {
           child: TPicker(
               items: timeItems,
               itemCount: 5,
-              onChange: (v) => setState(() => selectedTime =
+              onChange: (_, v) => setState(() => selectedTime =
                   '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
         ),
       ],
@@ -397,7 +398,7 @@ class _TPickerPageState extends State<TPickerPage> {
               '1.1.1.1',
               '1.1.1.1.1',
             ],
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => selectedFiveLevel = v.labels.join(' / ')),
           ),
         ),
@@ -426,7 +427,7 @@ class _TPickerPageState extends State<TPickerPage> {
           child: TPicker(
               items: itemDisabledItems,
               initialValue: const ['M', 'A5'],
-              onChange: (v) => setState(() =>
+              onChange: (_, v) => setState(() =>
                   selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
         ),
       ],
@@ -459,7 +460,7 @@ class _TPickerPageState extends State<TPickerPage> {
           child: TPicker(
               items: cityItems,
               initialValue: const ['GZ'],
-              onChange: (v) => debugPrint('选中: $v'),
+              onChange: (_, v) => debugPrint('选中: $v'),
               disabled: globalDisabled),
         ),
         const SizedBox(height: 4),
@@ -500,14 +501,14 @@ class _TPickerPageState extends State<TPickerPage> {
           picker: TPicker(
             items: linkedItems,
             initialValue: initial,
-            onChange: (value) => draft = value,
+            onChange: (_, value) => draft = value,
           ),
         );
       },
     );
   }
 
-  static const _kLazyDemoPageSize = 20;
+  static const _kLazyDemoPageSize = 10;
   static const _kLazyDemoLoadDelay = Duration(milliseconds: 350);
 
   int _lazyCategoryNumber(dynamic categoryValue) {
@@ -522,20 +523,32 @@ class _TPickerPageState extends State<TPickerPage> {
     ];
   }
 
-  Future<List<TPickerOption>> _mockLazyItems(
+  /// 模拟主列分页：每页固定 [_kLazyDemoPageSize] 条，无总量上限
+  Future<LazyLoadPage> _mockLazyPrimaryPage(int nextStart) async {
+    await Future.delayed(_kLazyDemoLoadDelay);
+    return LazyLoadPage(
+      items: _mockLazyCategories(nextStart, _kLazyDemoPageSize),
+      hasMore: true,
+    );
+  }
+
+  /// 模拟子列分页：每页固定 [_kLazyDemoPageSize] 条，无总量上限
+  Future<LazyLoadPage> _mockLazyLinkedPage(
     dynamic categoryValue,
-    int start,
-    int count,
+    int nextStart,
   ) async {
     await Future.delayed(_kLazyDemoLoadDelay);
     final catNum = _lazyCategoryNumber(categoryValue);
-    return [
-      for (int i = start; i < start + count; i++)
-        TPickerOption(
-          label: '分类$catNum · 条目 $i',
-          value: '${categoryValue}_item_$i',
-        ),
-    ];
+    return LazyLoadPage(
+      items: [
+        for (int i = nextStart; i < nextStart + _kLazyDemoPageSize; i++)
+          TPickerOption(
+            label: '分类$catNum · 条目 $i',
+            value: '${categoryValue}_item_$i',
+          ),
+      ],
+      hasMore: true,
+    );
   }
 
   @Demo(group: 'picker')
@@ -556,19 +569,15 @@ class _TPickerPageState extends State<TPickerPage> {
       initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
       initialPrimaryValue: initialPrimaryValue,
       initialLinked: initialLinked,
-      onLoadPrimary: (nextStart) async {
-        await Future.delayed(_kLazyDemoLoadDelay);
-        return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
-      },
-      onLoadLinked: (primaryValue, nextStart) =>
-          _mockLazyItems(primaryValue, nextStart, _kLazyDemoPageSize),
+      onLoadPrimary: _mockLazyPrimaryPage,
+      onLoadLinked: _mockLazyLinkedPage,
       builder: (ctx, vm) {
         final loadingHint = vm.loadingHint;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '在 onChange 里判断 indexes 接近列底后更新 items，无需 TPicker 内置 onLoad',
+              '在 onColumnScrollEnd 里判断接近列底后 append items；onChange 仅维护 draft',
               style: TextStyle(
                   fontSize: 12,
                   color: TTheme.of(context).textColorPlaceholder),
@@ -624,7 +633,7 @@ class _TPickerPageState extends State<TPickerPage> {
             ),
             const SizedBox(height: 4),
             Text(
-              '滚近底部自动追加；切换分类时子列读缓存或按需拉取（示例封装见 LinkedLazyPickerScope）',
+              '滚近底部每次追加 10 条（无总量上限）；切换分类时子列读缓存或按需拉取',
               style: TextStyle(
                   fontSize: 12,
                   color: TTheme.of(context).textColorPlaceholder),
@@ -638,7 +647,7 @@ class _TPickerPageState extends State<TPickerPage> {
   // ========== 自定义字段映射（keys） ==========
 
   /// 模拟后端返回的"原始"数据：字段名是 city / code / readonly，而不是 label / value / disabled
-  final List<List<Map<String, dynamic>>> _rawCityData = [
+  static const _kRawCityData = [
     [
       {'code': 'BJ', 'city': '北京', 'readonly': false},
       {'code': 'SH', 'city': '上海', 'readonly': false},
@@ -649,9 +658,24 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
   ];
 
+  /// 后端字段映射声明：city → label, code → value, readonly → disabled
+  static const _kCustomKeys = TPickerKeys(
+    label: 'city',
+    value: 'code',
+    disabled: 'readonly',
+  );
+
+  /// 把 raw 数据归一化一次后缓存为稳定实例。
+  ///
+  /// 若在 build() 里调用 fromRaw，惯性滚动期间 onChange 60+ Hz 触发父级 setState，
+  /// 会反复分配 6 个 TPickerOption + 嵌套 List，导致滚轮不流畅。
+  /// 缓存为同一实例后，TPicker.didUpdateWidget 走 identical() 短路，连值比较都省了。
+  static final _customKeysItems =
+      TPickerColumns.fromRaw(_kRawCityData, keys: _kCustomKeys);
+
   /// 自定义字段映射场景：缓存完整 TPickerValue
   TPickerValue? _customKeysValue;
-  final List<dynamic> _customKeysInitial = ['BJ'];
+  static const _kCustomKeysInitial = <dynamic>['BJ'];
 
   /// 自定义字段映射：展示 city（label）与 code（value）
   String _customKeysSelectionText() {
@@ -660,12 +684,10 @@ class _TPickerPageState extends State<TPickerPage> {
       final value = _customKeysValue!.values.first;
       return 'city=$label，code=$value';
     }
-    if (_customKeysInitial.isNotEmpty) {
-      final code = _customKeysInitial.first;
-      for (final row in _rawCityData[0]) {
-        if (row['code'] == code) {
-          return 'city=${row['city']}，code=${row['code']}';
-        }
+    final code = _kCustomKeysInitial.first;
+    for (final row in _kRawCityData[0]) {
+      if (row['code'] == code) {
+        return 'city=${row['city']}，code=$code';
       }
     }
     return '未选择';
@@ -673,9 +695,6 @@ class _TPickerPageState extends State<TPickerPage> {
 
   @Demo(group: 'picker')
   Widget buildCustomKeys(BuildContext context) {
-    // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
-    const keys =
-        TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -694,9 +713,9 @@ class _TPickerPageState extends State<TPickerPage> {
         _pickerCard(
           context,
           child: TPicker(
-            items: TPickerColumns.fromRaw(_rawCityData, keys: keys),
-            initialValue: _customKeysValue?.values ?? _customKeysInitial,
-            onChange: (v) => setState(() => _customKeysValue = v),
+            items: _customKeysItems,
+            initialValue: _kCustomKeysInitial,
+            onChange: (_, v) => setState(() => _customKeysValue = v),
           ),
         ),
       ],
@@ -722,7 +741,7 @@ class _TPickerPageState extends State<TPickerPage> {
             items: cityItems,
             height: 350,
             itemCount: 7,
-            onChange: (v) => debugPrint('选中: ${v.labels.first}'),
+            onChange: (_, v) => debugPrint('选中: ${v.labels.first}'),
           ),
         ),
       ],
@@ -782,11 +801,12 @@ class _TPickerPageState extends State<TPickerPage> {
                 ),
               );
             },
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => _customItemBuilderValue = v.labels.first),
           ),
         ),
       ],
     );
   }
-}
+
+  }

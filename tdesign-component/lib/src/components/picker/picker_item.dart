@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 
 /// 自定义子项构建器类型
 ///

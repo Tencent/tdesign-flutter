@@ -451,6 +451,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Data'**
   String get emptyData;
+
+  /// No description provided for @picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Picker'**
+  String get picker;
+
+  /// No description provided for @pickerColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Column {colIndex}'**
+  String pickerColumn(Object colIndex);
 }
 
 class _AppLocalizationsDelegate

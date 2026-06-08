@@ -37,7 +37,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           context,
           child: TPicker(
               items: cityItems,
-              onChange: (v) => setState(() => selectedCity = v.labels.first)),
+              onChange: (_, v) => setState(() => selectedCity = v.labels.first)),
         ),
       ],
     );
@@ -64,7 +64,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TPicker(
               items: timeItems,
               itemCount: 5,
-              onChange: (v) => setState(() => selectedTime =
+              onChange: (_, v) => setState(() => selectedTime =
                   '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
         ),
       ],
@@ -100,7 +100,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TPicker(
             items: _monthDayItems,
             initialValue: const [1, 1],
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => selectedMonthDay = v.labels.join(' / ')),
           ),
         ),
@@ -149,7 +149,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               '1.1.1.1',
               '1.1.1.1.1',
             ],
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => selectedFiveLevel = v.labels.join(' / ')),
           ),
         ),
@@ -289,7 +289,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TPicker(
               items: itemDisabledItems,
               initialValue: const ['M', 'A5'],
-              onChange: (v) => setState(() =>
+              onChange: (_, v) => setState(() =>
                   selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
         ),
       ],
@@ -329,7 +329,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TPicker(
               items: cityItems,
               initialValue: const ['GZ'],
-              onChange: (v) => debugPrint('选中: $v'),
+              onChange: (_, v) => debugPrint('选中: $v'),
               disabled: globalDisabled),
         ),
         const SizedBox(height: 4),
@@ -372,7 +372,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           picker: TPicker(
             items: linkedItems,
             initialValue: initial,
-            onChange: (value) => draft = value,
+            onChange: (_, value) => draft = value,
           ),
         );
       },
@@ -412,7 +412,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TPicker(
             items: TPickerColumns.fromRaw(_rawCityData, keys: keys),
             initialValue: _customKeysValue?.values ?? _customKeysInitial,
-            onChange: (v) => setState(() => _customKeysValue = v),
+            onChange: (_, v) => setState(() => _customKeysValue = v),
           ),
         ),
       ],
@@ -444,7 +444,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             items: cityItems,
             height: 350,
             itemCount: 7,
-            onChange: (v) => debugPrint('选中: ${v.labels.first}'),
+            onChange: (_, v) => debugPrint('选中: ${v.labels.first}'),
           ),
         ),
       ],
@@ -509,7 +509,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 ),
               );
             },
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => _customItemBuilderValue = v.labels.first),
           ),
         ),
@@ -534,7 +534,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | itemCount | int | 5 | 每屏显示 item 数，默认 5 |
 | items | TPickerItems | - | 数据源（必填） 使用密封类 `TPickerItems` 编译期强制二选一： - `TPickerColumns` → 多列独立选择 - `TPickerLinked` → 联动选择 自由结构数据通过 `.fromRaw()` 工厂构造归一化。 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChange | void Function(TPickerValue)? | - | 值改变回调（滚动时实时触发） 触发时机： - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 注意：此回调代表滚动时实时变化，不代表用户已确认选择。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 按需加载更多：在回调里根据 `TPickerValue.indexes` 判断是否接近列底， 请求完成后更新 `items` 即可（无需组件内置加载 API）。 |
+| onChange | void Function(int col, TPickerValue value)? | - | 值改变回调（滚动时实时触发） **参数：** - `col`：本次触发的列索引（0-based，从左到右），联动模式下也仅指用户实际滚动的列。 - `value`：当前各列选中快照。 **触发时机：** - 用户滚动经过某个 enabled 项并稳定时 - disabled 修正动画完成后，回调最终落点 注意：此回调代表滚动时实时变化，不代表用户已确认选择。 弹窗场景请配合 `TPopup` 头部确认按钮，在关闭前读取 draft 值提交。 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。 按需加载更多：在回调里根据 `col` 与 `value.values[col]` 联动换子列；列底分页见 `onColumnScrollEnd`。 |
 
 
 ### TPickerOption

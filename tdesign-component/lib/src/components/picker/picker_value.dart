@@ -5,18 +5,18 @@ import 'picker_option.dart';
 /// onChange 回调返回的选中信息
 ///
 /// ```dart
-/// onChange: (v) => setState(() => _lastValue = v);
+/// onChange: (col, v) => setState(() => _lastValue = v);
 /// Text(_lastValue?.labels.join(' / ') ?? '');
 /// ```
 @immutable
-class PickerValue {
-  PickerValue({
+class TPickerValue {
+  TPickerValue({
     required this.selectedOptions,
     required this.indexes,
   });
 
   /// 每列选中的完整 option
-  final List<PickerOption> selectedOptions;
+  final List<TPickerOption> selectedOptions;
 
   /// 每列选中项的索引
   final List<int> indexes;
@@ -37,5 +37,5 @@ class PickerValue {
 
   @override
   String toString() =>
-      'PickerValue(labels: $labels, values: $values, indexes: $indexes)';
+      'TPickerValue(labels: $labels, values: $values, indexes: $indexes)';
 }

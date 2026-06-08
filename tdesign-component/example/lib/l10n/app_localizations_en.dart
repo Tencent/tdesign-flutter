@@ -184,4 +184,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyData => 'No Data';
+
+  @override
+  String get picker => 'Picker';
+
+  @override
+  String pickerColumn(Object colIndex) {
+    return 'Column $colIndex';
+  }
 }

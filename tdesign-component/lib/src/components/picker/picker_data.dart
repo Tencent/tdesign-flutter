@@ -7,56 +7,56 @@ import 'picker_option.dart';
 /// 选择器数据源密封类
 ///
 /// 编译期强制二选一，消除运行时类型错误：
-/// - [PickerColumns] → 多列独立选择
-/// - [PickerLinked] → 联动选择
+/// - [TPickerColumns] → 多列独立选择
+/// - [TPickerLinked] → 联动选择
 @immutable
-sealed class PickerItems {
-  const PickerItems();
+sealed class TPickerItems {
+  const TPickerItems();
 }
 
 /// 多列独立选择的数据源
 ///
 /// ```dart
 /// TPicker(
-///   items: PickerColumns([
-///     [PickerOption(label: '北京', value: 'BJ'), ...],
-///     [PickerOption(label: '朝阳区', value: 'CY'), ...],
+///   items: TPickerColumns([
+///     [TPickerOption(label: '北京', value: 'BJ'), ...],
+///     [TPickerOption(label: '朝阳区', value: 'CY'), ...],
 ///   ]),
 /// )
 /// ```
 @immutable
-class PickerColumns extends PickerItems {
-  const PickerColumns(this.columns);
+class TPickerColumns extends TPickerItems {
+  const TPickerColumns(this.columns);
 
   /// 从自由结构的 raw 数据创建，自动归一化
   ///
   /// ```dart
-  /// PickerColumns.fromRaw(
+  /// TPickerColumns.fromRaw(
   ///   [['北京', '上海', '广州']],
-  ///   keys: const PickerKeys(label: 'name', value: 'code'),
+  ///   keys: const TPickerKeys(label: 'name', value: 'code'),
   /// )
   /// ```
-  factory PickerColumns.fromRaw(
+  factory TPickerColumns.fromRaw(
     List rawColumns, {
-    PickerKeys keys = PickerKeys.defaults,
+    TPickerKeys keys = TPickerKeys.defaults,
   }) {
-    final normalized = PickerNormalize.normalizeColumns(rawColumns, keys);
-    return PickerColumns(normalized);
+    final normalized = TPickerNormalize.normalizeColumns(rawColumns, keys);
+    return TPickerColumns(normalized);
   }
 
   /// 每列的选项列表
-  final List<List<PickerOption>> columns;
+  final List<List<TPickerOption>> columns;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PickerColumns &&
+      other is TPickerColumns &&
           runtimeType == other.runtimeType &&
           _columnsEqual(columns, other.columns);
 
   /// 比较两个「多列独立」数据源是否相等（外层长度 + 内层逐元素）
   static bool _columnsEqual(
-      List<List<PickerOption>> a, List<List<PickerOption>> b) {
+      List<List<TPickerOption>> a, List<List<TPickerOption>> b) {
     if (identical(a, b)) {
       return true;
     }
@@ -81,51 +81,51 @@ class PickerColumns extends PickerItems {
 /// 每列候选项建议在百级以内。上游列变更后，[TPicker] 会裁剪下游列并按新分支
 /// 重新展开，默认选中各列首项。
 ///
-/// 若需接口分页或远程逐级拉取，请改用 [PickerColumns] 并在业务层封装 Scope
+/// 若需接口分页或远程逐级拉取，请改用 [TPickerColumns] 并在业务层封装 Scope
 /// （见 example LinkedLazyPickerScope）。
 ///
 /// ```dart
 /// TPicker(
-///   items: PickerLinked({
-///     PickerOption(label: '广东', value: 'GD'): {
-///       PickerOption(label: '深圳', value: 'SZ'): [
-///         PickerOption(label: '南山', value: 'NS'),
+///   items: TPickerLinked({
+///     TPickerOption(label: '广东', value: 'GD'): {
+///       TPickerOption(label: '深圳', value: 'SZ'): [
+///         TPickerOption(label: '南山', value: 'NS'),
 ///       ],
 ///     },
 ///   }),
 /// )
 /// ```
 @immutable
-class PickerLinked extends PickerItems {
-  const PickerLinked(this.tree);
+class TPickerLinked extends TPickerItems {
+  const TPickerLinked(this.tree);
 
   /// 从自由结构的 raw Map 数据创建，自动归一化
   ///
   /// ```dart
-  /// PickerLinked.fromRaw({
+  /// TPickerLinked.fromRaw({
   ///   '广东': {'深圳': ['南山', '福田'], '广州': ['天河']},
   ///   '浙江': {'杭州': ['西湖']},
   /// })
   /// ```
-  factory PickerLinked.fromRaw(
+  factory TPickerLinked.fromRaw(
     Map rawTree, {
-    PickerKeys keys = PickerKeys.defaults,
+    TPickerKeys keys = TPickerKeys.defaults,
   }) {
-    final normalized = PickerNormalize.normalizeLinked(rawTree, keys);
-    return PickerLinked(normalized);
+    final normalized = TPickerNormalize.normalizeLinked(rawTree, keys);
+    return TPickerLinked(normalized);
   }
 
-  /// 联动树结构：`Map<PickerOption, dynamic>`
+  /// 联动树结构：`Map<TPickerOption, dynamic>`
   ///
   /// value 可以是：
-  /// - `Map<PickerOption, dynamic>` → 下一级联动
-  /// - `List<PickerOption>` → 叶子级选项
-  final Map<PickerOption, dynamic> tree;
+  /// - `Map<TPickerOption, dynamic>` → 下一级联动
+  /// - `List<TPickerOption>` → 叶子级选项
+  final Map<TPickerOption, dynamic> tree;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PickerLinked &&
+      other is TPickerLinked &&
           runtimeType == other.runtimeType &&
           _treeEqual(tree, other.tree);
 
@@ -135,7 +135,7 @@ class PickerLinked extends PickerItems {
   /// 所以这里按**顺序**对比 key-value 对（效率高且符合业务语义）。
   /// 若业务层确实需要无序比较，请自行在调用前归一化。
   static bool _treeEqual(
-      Map<PickerOption, dynamic> a, Map<PickerOption, dynamic> b) {
+      Map<TPickerOption, dynamic> a, Map<TPickerOption, dynamic> b) {
     if (identical(a, b)) {
       return true;
     }
@@ -157,10 +157,10 @@ class PickerLinked extends PickerItems {
     if (identical(a, b)) {
       return true;
     }
-    if (a is Map<PickerOption, dynamic> && b is Map<PickerOption, dynamic>) {
+    if (a is Map<TPickerOption, dynamic> && b is Map<TPickerOption, dynamic>) {
       return _treeEqual(a, b);
     }
-    if (a is List<PickerOption> && b is List<PickerOption>) {
+    if (a is List<TPickerOption> && b is List<TPickerOption>) {
       return listEquals(a, b);
     }
     return a == b;

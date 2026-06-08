@@ -24,7 +24,7 @@
           child: TPicker(
               items: cityItems,
               initialValue: const ['GZ'],
-              onChange: (v) => debugPrint('选中: $v'),
+              onChange: (_, v) => debugPrint('选中: $v'),
               disabled: globalDisabled),
         ),
         const SizedBox(height: 4),

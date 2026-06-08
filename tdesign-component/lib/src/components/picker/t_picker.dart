@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'picker_item.dart';
-import 'wheel_column.dart';
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
+import 'multi_wheel_layout.dart';
+import 'wheel_column.dart';
 
 /// 整组禁用时的透明度
 const double _kDisabledOpacity = 0.5;
@@ -16,25 +17,38 @@ const double _kDisabledOpacity = 0.5;
 /// 不包含工具栏、确认按钮或内置 loading；弹窗场景请配合 [TPopup] 在用户确认后再提交。
 ///
 /// 数据形态（编译期二选一）：
-/// - [PickerColumns]：多列独立，各列选项互不影响
-/// - [PickerLinked]：联动树，上游变更后下游列裁剪并按新分支展开，默认选中各列首项
+/// - [TPickerColumns]：多列独立，各列选项互不影响
+/// - [TPickerLinked]：联动树，上游变更后下游列裁剪并按新分支展开，默认选中各列首项
 ///
-/// [items] 或 [initialValue] 相对上一帧值不相等时会释放全部 ScrollController 并重新初始化；
-/// 内容相等的新实例不会触发重建。分页追加后请同步更新 [initialValue] 以恢复选中。
+/// [items] 相对上一帧值不相等时会释放全部 ScrollController 并重新初始化；
+/// 内容相等的新实例不会触发重建。
 ///
-/// [onChange] 为滚动实时回调，不代表用户已确认；如需去抖请在业务层自行处理。
+/// ### 多列独立模式（[TPickerColumns]）数据更新契约
+///
+/// | 场景 | 推荐做法 | 避免 |
+/// |------|----------|------|
+/// | 列尾分页 append | 原地 `addAll` 或 immutable 追加；组件会走列增长路径 | 每帧回写 [initialValue] |
+/// | 联动换子列 | 仅替换后续某一列；旧 controller 位置会被 clamp 到新列范围 | 双列全量替换导致主列 controller 重建 |
+/// | 实时选中 | 由 [onChange] / 业务 draft 维护 | 用 [initialValue] 当滚动中的选中源 |
+///
+/// 多列独立模式下若仅为列尾追加，会原地刷新 [WheelColumn] 并保留当前滚动位置；
+/// 若首列不变且仅后续某一列整列替换，则只刷新该列并保留首列 ScrollController。
+///
+/// [onChange] 在选中项变化时触发（惯性滚动中会多次回调），适合维护 draft；
+/// `col` 为本次触发的列索引（0-based，从左到右），可用于按列响应；
+/// 按需分页加载更推荐配合 [onColumnScrollEnd] 在滚动结束时判定是否接近列底。
 ///
 /// 详细选型与能力边界见站点文档「Picker - 能力边界」。
 ///
 /// ```dart
 /// // 多列独立
 /// TPicker(
-///   items: PickerColumns.fromRaw([['北京', '上海', '广州']]),
+///   items: TPickerColumns.fromRaw([['北京', '上海', '广州']]),
 /// )
 ///
 /// // 联动
 /// TPicker(
-///   items: PickerLinked.fromRaw({'广东': {'深圳': ['南山', '福田']}}),
+///   items: TPickerLinked.fromRaw({'广东': {'深圳': ['南山', '福田']}}),
 /// )
 /// ```
 class TPicker extends StatefulWidget {
@@ -43,6 +57,7 @@ class TPicker extends StatefulWidget {
     required this.items,
     this.initialValue,
     this.onChange,
+    this.onColumnScrollEnd,
     this.height = 200,
     this.itemCount = 5,
     this.disabled = false,
@@ -51,34 +66,50 @@ class TPicker extends StatefulWidget {
 
   /// 数据源（必填）
   ///
-  /// 使用密封类 [PickerItems] 编译期强制二选一：
-  /// - [PickerColumns] → 多列独立选择
-  /// - [PickerLinked] → 联动选择
+  /// 使用密封类 [TPickerItems] 编译期强制二选一：
+  /// - [TPickerColumns] → 多列独立选择
+  /// - [TPickerLinked] → 联动选择
   ///
   /// 自由结构数据通过 `.fromRaw()` 工厂构造归一化。
   ///
   /// 相对上一帧值不相等时会触发组件重新初始化；内容相等的新实例不会重建。
-  final PickerItems items;
+  final TPickerItems items;
 
   /// 初始选中值列表（按 value 匹配各列）
   ///
-  /// 与 [items] 一并参与重建判断：相对上一帧值不相等时会重新初始化。
+  /// **严格 initState-only 语义**：仅在组件首次构建时生效，决定各列初始滚动
+  /// 位置。父级后续重建传入不同的 `initialValue` 会被忽略——TPicker 内部
+  /// `FixedExtentScrollController` 拥有滚动位置的所有权，频繁回灌会触发
+  /// `dispose+reinit`，破坏惯性滚动（典型症状：滚轮"每次只能滚 1 项"）。
+  ///
+  /// 正确做法：
+  /// - 选中态展示用 `onChange` 维护 draft，不要回灌
+  /// - 需要"重置"时配合 [Key] 强制重建本组件
+  /// - 数据源整体变更时修改 [items]，会触发整组重置
   final List<dynamic>? initialValue;
 
   /// 值改变回调（滚动时实时触发）
   ///
   /// 触发时机：
-  /// - 用户滚动经过某个 enabled 项并稳定时
+  /// - 用户滚动经过某个 enabled 项时
   /// - disabled 修正动画完成后，回调最终落点
+  ///
+  /// `col` 为本次触发的列索引（0-based，从左到右），联动模式下也仅指用户实际
+  /// 滚动的列（下游列联动刷新是结果，不是触发源）。可用于按列精确响应。
+  /// `value` 为当前各列选中快照。
   ///
   /// 注意：此回调代表滚动时实时变化，不代表用户已确认选择。
   /// 弹窗场景请配合 [TPopup] 头部确认按钮，在关闭前读取 draft 值提交。
   ///
-  /// 如需做网络请求/埋点等去抖处理，请在业务层自行 debounce。
+  /// 按需加载：在此维护 draft / 联动缓存；列底分页见 [onColumnScrollEnd]。
+  final void Function(int col, TPickerValue value)? onChange;
+
+  /// 指定列滚动结束回调（惯性滚动停止或手指抬起后）
   ///
-  /// 按需加载更多：在回调里根据 [PickerValue.indexes] 判断是否接近列底，
-  /// 请求完成后更新 [items] 即可（无需组件内置加载 API）。
-  final void Function(PickerValue)? onChange;
+  /// `col` 为列索引；`value` 为当前各列选中快照。
+  /// 适合在业务层判断 `value.indexes[col]` 是否接近列底并触发分页，避免在
+  /// [onChange] 里对每一项选中变化都做加载判定。
+  final void Function(int col, TPickerValue value)? onColumnScrollEnd;
 
   /// 视窗高度，默认 200
   final double height;
@@ -98,17 +129,20 @@ class TPicker extends StatefulWidget {
 
 class _TPickerState extends State<TPicker> {
   late bool _isLinked;
-  late List<List<PickerOption>> _columns;
+  late List<List<TPickerOption>> _columns;
   late List<FixedExtentScrollController> _controllers;
 
   /// 联动模式：每层选中的 value 路径（长度 == _columns.length）
   late List<dynamic> _selectedPath;
 
   /// 联动模式：每列对应的父级 Map，叶子列为 null（长度 == _columns.length）
-  late List<Map<PickerOption, dynamic>?> _mapStack;
+  late List<Map<TPickerOption, dynamic>?> _mapStack;
 
   /// 用于命令式控制各列的 State
   late List<GlobalKey<WheelColumnState>> _columnKeys;
+
+  /// 各列项数快照，用于检测外部原地 addAll（oldWidget 与 widget 共享同一 List 引用）
+  List<int> _columnLengths = [];
 
   double get _itemHeight => widget.height / widget.itemCount;
 
@@ -121,13 +155,138 @@ class _TPickerState extends State<TPicker> {
   @override
   void didUpdateWidget(covariant TPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (!_isLinked && widget.items is TPickerColumns) {
+      final newCols = (widget.items as TPickerColumns).columns;
+      if (_tryGrowColumns(newCols)) {
+        return;
+      }
+      if (_trySwapDependentColumns(newCols)) {
+        return;
+      }
+    }
+
+    // initialValue 严格 initState-only：它在 didUpdateWidget 中不被读取，
+    // 也**不**参与重建判断。即便父级回灌一个新 initialValue，TPicker 也不
+    // 重建 controller —— 因为重建会 dispose 正在动画的 ScrollController，
+    // 把滚轮钉死。这条约束让"onChange → setState → 父级重建"的反馈环
+    // 不再破坏滚动惯性。
+    //
+    // 若需要"重置"语义，配合 `Key` 强制重建本组件；或修改 [items] 触发
+    // 整组重建（合理的数据重置场景）。
     final itemsChanged = oldWidget.items != widget.items;
-    final initChanged =
-        !listEquals(oldWidget.initialValue, widget.initialValue);
-    if (itemsChanged || initChanged) {
+    if (itemsChanged) {
       _disposeAllControllers();
       _initState();
     }
+  }
+
+  /// 多列独立模式：仅列尾追加时刷新 WheelColumn，保留 ScrollController 与选中位置。
+  bool _tryGrowColumns(List<List<TPickerOption>> newCols) {
+    if (newCols.length != _columns.length ||
+        _columnLengths.length != _columns.length) {
+      return false;
+    }
+
+    var anyGrew = false;
+    for (var i = 0; i < newCols.length; i++) {
+      final prevLen = _columnLengths[i];
+      final newCol = newCols[i];
+      final newLen = newCol.length;
+      if (newLen < prevLen) {
+        return false;
+      }
+      if (newLen == prevLen) {
+        if (!listEquals(_columns[i], newCol)) {
+          return false;
+        }
+        continue;
+      }
+      if (!listEquals(_columns[i], newCol.sublist(0, prevLen))) {
+        return false;
+      }
+      anyGrew = true;
+    }
+
+    if (!anyGrew) {
+      return false;
+    }
+
+    setState(() {
+      for (var i = 0; i < newCols.length; i++) {
+        _columns[i] = newCols[i];
+        _columnLengths[i] = newCols[i].length;
+        _columnKeys[i].currentState?.applyColumnUpdate(
+          options: newCols[i],
+          controller: _controllers[i],
+        );
+      }
+    });
+    return true;
+  }
+
+  /// 多列独立模式：首列数据不变、仅后续某一列整列替换时，保留首列 ScrollController。
+  ///
+  /// 替换列的目标选中项：保留旧 controller 位置（clamp 到新列长度），避免业务
+  /// 滚动过程中被任何外部"目标值"反向回写。这是 `initialValue` initState-only
+  /// 语义的延伸：滚动位置的所有权在组件内部，不接受外部事后干预。
+  bool _trySwapDependentColumns(List<List<TPickerOption>> newCols) {
+    if (_columns.isEmpty ||
+        newCols.length != _columns.length ||
+        _columnLengths.length != _columns.length ||
+        _columns.length < 2) {
+      return false;
+    }
+
+    if (!listEquals(_columns[0], newCols[0])) {
+      return false;
+    }
+
+    var changedCol = -1;
+    for (var i = 1; i < newCols.length; i++) {
+      if (listEquals(_columns[i], newCols[i])) {
+        continue;
+      }
+      if (changedCol >= 0) {
+        return false;
+      }
+      changedCol = i;
+    }
+
+    if (changedCol < 0) {
+      return false;
+    }
+
+    final newCol = newCols[changedCol];
+    if (newCol.isEmpty) {
+      return false;
+    }
+
+    // 始终保留旧 controller 位置，clamp 到新列范围
+    final targetIndex = _controllers[changedCol]
+        .selectedItem
+        .clamp(0, newCol.length - 1);
+
+    final jumpIndex = targetIndex;
+    setState(() {
+      _columns[changedCol] = newCol;
+      _columnLengths[changedCol] = newCol.length;
+      _columnKeys[changedCol].currentState?.applyColumnUpdate(
+        options: newCol,
+        controller: _controllers[changedCol],
+      );
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final c = _controllers[changedCol];
+      final idx = jumpIndex.clamp(0, newCol.length - 1);
+      if (c.selectedItem != idx) {
+        c.jumpToItem(idx);
+      }
+    });
+    return true;
   }
 
   @override
@@ -149,19 +308,21 @@ class _TPickerState extends State<TPicker> {
     _selectedPath = [];
     _mapStack = [];
     _columnKeys = [];
+    _columnLengths = [];
 
     switch (widget.items) {
-      case PickerColumns(:final columns):
+      case TPickerColumns(:final columns):
         _isLinked = false;
         _initColumns(columns);
-      case PickerLinked(:final tree):
+      case TPickerLinked(:final tree):
         _isLinked = true;
         _initLinked(tree);
     }
   }
 
-  void _initColumns(List<List<PickerOption>> columns) {
+  void _initColumns(List<List<TPickerOption>> columns) {
     _columns = columns;
+    _columnLengths = columns.map((c) => c.length).toList();
     _columnKeys = List.generate(columns.length, (_) => GlobalKey());
 
     final initValues = widget.initialValue;
@@ -178,7 +339,7 @@ class _TPickerState extends State<TPicker> {
     });
   }
 
-  void _initLinked(Map<PickerOption, dynamic> tree) {
+  void _initLinked(Map<TPickerOption, dynamic> tree) {
     final options = tree.keys.toList();
     if (options.isEmpty) {
       return;
@@ -200,44 +361,28 @@ class _TPickerState extends State<TPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildWheel(context, TTheme.of(context));
+    return _buildWheel(context);
   }
 
   /// 构建滚轮主体（含禁用状态遮罩与中央高亮条）
-  Widget _buildWheel(BuildContext context, TThemeData theme) {
-    return Opacity(
-      opacity: widget.disabled ? _kDisabledOpacity : 1.0,
-      child: AbsorbPointer(
-        absorbing: widget.disabled,
-        child: SizedBox(
-          height: widget.height,
-          width: double.infinity,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // 中央选中行高亮背景
-              Positioned(
-                top: (widget.height - _itemHeight) / 2,
-                left: theme.spacer16,
-                right: theme.spacer16,
-                child: Container(
-                  height: _itemHeight,
-                  decoration: BoxDecoration(
-                    color: theme.bgColorSecondaryContainer,
-                    borderRadius: BorderRadius.circular(theme.radiusDefault),
-                  ),
-                ),
-              ),
-              // 各列滚轮
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: theme.spacer32),
-                child: Row(
-                  children: [
-                    for (var i = 0; i < _controllers.length; i++)
-                      Expanded(child: _buildColumn(i)),
-                  ],
-                ),
-              ),
+  Widget _buildWheel(BuildContext context) {
+    return Semantics(
+      // container: true 让本节点作为容器（语义不向下合并到 wheelColumn 子树）；
+      // explicitChildNodes: true 阻止列 Semantics 向上合并到本节点 label，
+      // 否则单列场景下 "选择器" 与 "第 1 列" 会被合并成同一 label。
+      container: true,
+      explicitChildNodes: true,
+      label: context.resource.picker,
+      child: Opacity(
+        opacity: widget.disabled ? _kDisabledOpacity : 1.0,
+        child: AbsorbPointer(
+          absorbing: widget.disabled,
+          child: MultiWheelLayout(
+            height: widget.height,
+            itemHeight: _itemHeight,
+            columns: [
+              for (var i = 0; i < _controllers.length; i++)
+                _buildColumn(context, i),
             ],
           ),
         ),
@@ -245,33 +390,129 @@ class _TPickerState extends State<TPicker> {
     );
   }
 
-  Widget _buildColumn(int colIndex) {
+  Widget _buildColumn(BuildContext context, int colIndex) {
     final data = _columns[colIndex];
     if (data.isEmpty) {
       return const SizedBox.shrink();
     }
-
-    return ExcludeSemantics(
-      child: WheelColumn(
-        key: _columnKeys[colIndex],
-        colIndex: colIndex,
-        options: data,
-        controller: _controllers[colIndex],
-        itemHeight: _itemHeight,
-        disabled: false,
-        itemBuilder: widget.itemBuilder,
-        onItemSelected: (col, index, _) => _onColumnItemSelected(col, index),
-        onAnimationComplete: (col, index, _) =>
-            _onColumnAnimationComplete(col, index),
-      ),
+    // 列的 a11y 包装放在父组件（TPicker）：H1 修复 + 严格 ±1 nudge 入口
+    // 在此计算与暴露，WheelColumn 只负责纯渲染。ListenableBuilder 让
+    // a11y value/preview 跟随 controller 滚动更新。
+    return ListenableBuilder(
+      listenable: _controllers[colIndex],
+      builder: (context, _) {
+        final value = _a11yValue(colIndex);
+        final inc = _a11yPreviewValue(colIndex, 1);
+        final dec = _a11yPreviewValue(colIndex, -1);
+        return Semantics(
+          // container + explicitChildNodes 阻止列 label 与外层 "选择器"
+          // label 合并；excludeSemantics 屏蔽列内 TText 节点。
+          container: true,
+          explicitChildNodes: true,
+          label: context.resource.pickerColumn(colIndex + 1),
+          value: value,
+          onIncrease:
+              inc != null ? () => _nudgeColumn(colIndex, 1) : null,
+          increasedValue: inc ?? '',
+          onDecrease:
+              dec != null ? () => _nudgeColumn(colIndex, -1) : null,
+          decreasedValue: dec ?? '',
+          child: ExcludeSemantics(
+            child: WheelColumn(
+              key: _columnKeys[colIndex],
+              colIndex: colIndex,
+              options: data,
+              controller: _controllers[colIndex],
+              itemHeight: _itemHeight,
+              disabled: false,
+              itemBuilder: widget.itemBuilder,
+              onItemSelected: (col, index, _) => _onColumnItemSelected(col, index),
+              onScrollEnd: _onColumnScrollEnd,
+              onAnimationComplete: (col, index, _) =>
+                  _onColumnAnimationComplete(col, index),
+            ),
+          ),
+        );
+      },
     );
+  }
+
+  /// 无障碍手势：将指定列沿 [delta]（+1/-1）方向移动一格（严格单步，不跨
+  /// disabled —— 与 Flutter `CupertinoPicker._handleIncrease` 同款契约）。
+  /// 委托给 [WheelColumnState.nudge]；本方法无需 setState。
+  void _nudgeColumn(int col, int delta) {
+    if (col < 0 || col >= _columnKeys.length) {
+      return;
+    }
+    final state = _columnKeys[col].currentState;
+    if (state == null) {
+      return;
+    }
+    state.nudge(delta);
+  }
+
+  /// H1 修复：当前列的无障碍 `value` 文案。
+  ///
+  /// 若当前选中项是 disabled（处于回弹动画过程中），回退到最近 enabled
+  /// 项的 label —— 与 `_buildValue` 物理语义一致。
+  ///
+  /// 注：首次 build 时 `controller` 尚未 attach 到 ListWheelScrollView
+  /// （`hasClients == false`），此时回退到首项 label，与 `WheelColumn.
+  /// currentSelectedIndex` 同款防御。
+  String _a11yValue(int colIndex) {
+    final data = _columns[colIndex];
+    if (data.isEmpty) {
+      return '';
+    }
+    final c = _controllers[colIndex];
+    final idx = c.hasClients
+        ? c.selectedItem.clamp(0, data.length - 1)
+        : 0;
+    if (!data[idx].disabled) {
+      return data[idx].label;
+    }
+    final nearest = WheelColumnState.nearestEnabledIndex(data, idx);
+    if (nearest < 0) {
+      return data[idx].label;
+    }
+    return data[nearest].label;
+  }
+
+  /// 严格 ±1 步进的预览文案（不跨 disabled）。越界返回 null。
+  ///
+  /// 同样在 controller 无 client 时回退到首项（与 `_a11yValue` 保持一致），
+  /// 保证首屏 a11y 文本与视觉一致。
+  String? _a11yPreviewValue(int colIndex, int delta) {
+    final data = _columns[colIndex];
+    if (data.isEmpty) {
+      return null;
+    }
+    final c = _controllers[colIndex];
+    final idx = c.hasClients
+        ? c.selectedItem.clamp(0, data.length - 1)
+        : 0;
+    final next = idx + delta;
+    if (next < 0 || next >= data.length) {
+      return null;
+    }
+    return data[next].label;
+  }
+
+  bool _onColumnScrollEnd(
+    ScrollNotification notification,
+    int col,
+    List<TPickerOption> data,
+  ) {
+    if (notification is ScrollEndNotification) {
+      widget.onColumnScrollEnd?.call(col, _buildValue());
+    }
+    return false;
   }
 
   void _onColumnItemSelected(int col, int index) {
     final data = _columns[col];
+    // 滚动过程中经过 disabled 不立刻修正，等 WheelColumn scroll end 再处理
     if (data[index].disabled) {
-      // 触发 WheelColumn 的禁用项修正动画
-      _columnKeys[col].currentState?.animateToNearestEnabled();
       return;
     }
 
@@ -279,17 +520,17 @@ class _TPickerState extends State<TPicker> {
       _refreshLinked(col, index);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          _notifyChange();
+          _notifyChange(col);
         }
       });
     } else {
-      _notifyChange();
+      _notifyChange(col);
     }
   }
 
   void _onColumnAnimationComplete(int col, int index) {
     // 动画完成后触发 onChange
-    _notifyChange();
+    _notifyChange(col);
   }
 
   /// 联动刷新：变更 [col] 后，裁剪其下所有列并按新分支重新展开；
@@ -341,9 +582,9 @@ class _TPickerState extends State<TPicker> {
   ///   - 初始化场景：按 `widget.initialValue` 匹配
   ///   - 滚动刷新场景：固定返回 0（首项）
   void _appendLinkedColumns({
-    required List<PickerOption> firstOptions,
-    required Map<PickerOption, dynamic>? firstParent,
-    required int Function(int depth, List<PickerOption> options) initialIdxAt,
+    required List<TPickerOption> firstOptions,
+    required Map<TPickerOption, dynamic>? firstParent,
+    required int Function(int depth, List<TPickerOption> options) initialIdxAt,
   }) {
     var options = firstOptions;
     var parentMap = firstParent;
@@ -378,13 +619,13 @@ class _TPickerState extends State<TPicker> {
   /// 把一个 childData（来自 `Map[option]` 的取值结果）归一为下一列所需的
   /// options + parentMap；返回 null 表示不可构建下一列（空/非法/数据耗尽）。
   _ChildColumn? _resolveChildColumn(dynamic childData) {
-    if (childData is Map<PickerOption, dynamic>) {
+    if (childData is Map<TPickerOption, dynamic>) {
       if (childData.isEmpty) {
         return null;
       }
       return (options: childData.keys.toList(), parentMap: childData);
     }
-    if (childData is List<PickerOption>) {
+    if (childData is List<TPickerOption>) {
       if (childData.isEmpty) {
         return null;
       }
@@ -394,8 +635,8 @@ class _TPickerState extends State<TPicker> {
   }
 
   /// 读取当前选中态
-  PickerValue _buildValue() {
-    final selectedOptions = <PickerOption>[];
+  TPickerValue _buildValue() {
+    final selectedOptions = <TPickerOption>[];
     final indexes = <int>[];
 
     for (var i = 0; i < _controllers.length; i++) {
@@ -415,17 +656,17 @@ class _TPickerState extends State<TPicker> {
       selectedOptions.add(column[idx]);
     }
 
-    return PickerValue(selectedOptions: selectedOptions, indexes: indexes);
+    return TPickerValue(selectedOptions: selectedOptions, indexes: indexes);
   }
 
-  void _notifyChange() {
-    widget.onChange?.call(_buildValue());
+  void _notifyChange(int col) {
+    widget.onChange?.call(col, _buildValue());
   }
 }
 
 /// 联动模式下一列的归一化结果 Record。
 /// `options` 是该列候选项，`parentMap` 是该列的父级 Map（叶子列为 null）。
 typedef _ChildColumn = ({
-  List<PickerOption> options,
-  Map<PickerOption, dynamic>? parentMap
+  List<TPickerOption> options,
+  Map<TPickerOption, dynamic>? parentMap
 });
