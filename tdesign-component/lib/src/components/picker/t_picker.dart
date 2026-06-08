@@ -84,17 +84,23 @@ class TPicker extends StatefulWidget {
   /// 值改变回调（滚动时实时触发，不代表用户已确认选择）
   ///
   /// - **触发时机**：用户滚动经过 enabled 项时 / disabled 修正动画完成后
-  /// - **`col`**：本次触发的列索引（0-based），联动模式下仅指用户实际滚动的列（下游列联动刷新是结果，不是触发源）
+  /// - **频率**：多列独立模式下惯性滚动可能连续触发多次（每经过一项一次）；
+  ///   联动模式同帧内合并为一次，且相同 [TPickerValue] 快照不会重复通知
+  /// - **`col`**：本次触发的列索引（0-based）；联动模式下仅指用户手滚列
   /// - **`value`**：当前各列选中快照
-  /// - **典型用法**：维护 draft 状态 / 联动缓存 / 列底分页判定
-  /// - **弹窗建议**：配合 [TPopup] 头部确认按钮，关闭前读取 draft 提交
+  /// - **与 [onColumnScrollEnd] 关系**：两者独立、互不阻塞；同一次滚动可能先多次
+  ///   [onChange] 再触发一次 [onColumnScrollEnd]（滚停时）
+  /// - **典型用法**：维护 draft 状态 / 联动缓存
+  /// - **分页加载**：更推荐 [onColumnScrollEnd] 在滚停后判定列底
   final void Function(int col, TPickerValue value)? onChange;
 
   /// 指定列滚动结束回调（惯性停止或手指抬起后）
   ///
-  /// - **`col`**：列索引
-  /// - **`value`**：当前各列选中快照
-  /// - **典型用法**：判断 `value.indexes[col]` 是否接近列底并触发分页，避免在 [onChange] 里对每一项做高频加载判定
+  /// - **触发时机**：该列 [ScrollEndNotification] 到达时，每列独立
+  /// - **`col`**：滚停的那一列索引
+  /// - **`value`**：滚停时刻的各列选中快照（与最后一次 [onChange] 通常一致）
+  /// - **与 [onChange] 关系**：两者独立；本回调仅在滚停时触发一次，适合分页加载
+  /// - **典型用法**：判断 `value.indexes[col]` 是否接近列底并触发分页
   final void Function(int col, TPickerValue value)? onColumnScrollEnd;
 
   /// 滚轮视窗高度（像素），默认 200
@@ -105,7 +111,7 @@ class TPicker extends StatefulWidget {
 
   /// 是否禁用整个选择器（禁止滚动和操作），默认 false
   ///
-  /// - **禁用态**：同时屏蔽无障碍手势（`onIncrease` / `onDecrease` 不再触发）
+  /// - **禁用态**：同时屏蔽无障碍手势与列级语义聚焦（`Semantics.enabled = false`）
   /// - **视觉**：组件整体叠加 `_kDisabledOpacity` 透明层
   final bool disabled;
 
@@ -140,6 +146,16 @@ class _TPickerState extends State<TPicker> {
   /// 也用于 `_trySwapDependentColumns` 中"哪些列实际未变"的快速筛选。
   List<int> _columnLengths = [];
 
+  /// 联动刷新窗口内用户实际滚动的列索引；下游列 attach 触发的
+  /// `onSelectedItemChanged` 应忽略，确保 [onChange] 的 `col` 仅来自用户手滚列。
+  int? _linkedNotifyOriginCol;
+
+  /// 联动模式：同帧内是否已排队 [onChange] 通知（合并多次选中事件）
+  bool _linkedNotifyScheduled = false;
+
+  /// 上次已通过 [onChange] 通知的快照；相同快照不重复回调
+  TPickerValue? _lastNotifiedValue;
+
   double get _itemHeight => widget.height / widget.itemCount;
 
   @override
@@ -171,6 +187,7 @@ class _TPickerState extends State<TPicker> {
     // 整组重建（合理的数据重置场景）。
     final itemsChanged = oldWidget.items != widget.items;
     if (itemsChanged) {
+      _lastNotifiedValue = null;
       _disposeAllControllers();
       _initState();
     }
@@ -368,6 +385,7 @@ class _TPickerState extends State<TPicker> {
       // 否则单列场景下 "选择器" 与 "第 1 列" 会被合并成同一 label。
       container: true,
       explicitChildNodes: true,
+      enabled: !widget.disabled,
       label: context.resource.picker,
       child: Opacity(
         opacity: widget.disabled ? _kDisabledOpacity : 1.0,
@@ -405,13 +423,16 @@ class _TPickerState extends State<TPicker> {
           // label 合并；excludeSemantics 屏蔽列内 TText 节点。
           container: true,
           explicitChildNodes: true,
+          enabled: !widget.disabled,
           label: context.resource.pickerColumn(colIndex + 1),
           value: value,
-          onIncrease:
-              inc != null ? () => _nudgeColumn(colIndex, 1) : null,
+          onIncrease: !widget.disabled && inc != null
+              ? () => _nudgeColumn(colIndex, 1)
+              : null,
           increasedValue: inc ?? '',
-          onDecrease:
-              dec != null ? () => _nudgeColumn(colIndex, -1) : null,
+          onDecrease: !widget.disabled && dec != null
+              ? () => _nudgeColumn(colIndex, -1)
+              : null,
           decreasedValue: dec ?? '',
           child: ExcludeSemantics(
             child: WheelColumn(
@@ -420,7 +441,7 @@ class _TPickerState extends State<TPicker> {
               options: data,
               controller: _controllers[colIndex],
               itemHeight: _itemHeight,
-              disabled: false,
+              disabled: widget.disabled,
               itemBuilder: widget.itemBuilder,
               onItemSelected: (col, index, _) => _onColumnItemSelected(col, index),
               onScrollEnd: _onColumnScrollEnd,
@@ -437,6 +458,9 @@ class _TPickerState extends State<TPicker> {
   /// disabled —— 与 Flutter `CupertinoPicker._handleIncrease` 同款契约）。
   /// 委托给 [WheelColumnState.nudge]；本方法无需 setState。
   void _nudgeColumn(int col, int delta) {
+    if (widget.disabled) {
+      return;
+    }
     if (col < 0 || col >= _columnKeys.length) {
       return;
     }
@@ -499,7 +523,7 @@ class _TPickerState extends State<TPicker> {
     int col,
     List<TPickerOption> data,
   ) {
-    if (notification is ScrollEndNotification) {
+    if (notification is ScrollEndNotification && !widget.disabled) {
       widget.onColumnScrollEnd?.call(col, _buildValue());
     }
     return false;
@@ -513,18 +537,43 @@ class _TPickerState extends State<TPicker> {
     }
 
     if (_isLinked) {
+      // 联动刷新期间：吞掉 origin 列下游 attach 触发的选中事件
+      if (_linkedNotifyOriginCol != null && col > _linkedNotifyOriginCol!) {
+        return;
+      }
+      _linkedNotifyOriginCol = col;
       _refreshLinked(col, index);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _notifyChange(col);
-        }
-      });
+      _scheduleLinkedNotify();
     } else {
       _notifyChange(col);
     }
   }
 
+  /// 联动模式：下一帧再通知，同帧内多次选中事件合并为一次 [onChange]
+  void _scheduleLinkedNotify() {
+    if (_linkedNotifyScheduled) {
+      return;
+    }
+    _linkedNotifyScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _linkedNotifyScheduled = false;
+      if (!mounted) {
+        return;
+      }
+      final notifyCol = _linkedNotifyOriginCol;
+      _linkedNotifyOriginCol = null;
+      if (notifyCol != null) {
+        _notifyChange(notifyCol);
+      }
+    });
+  }
+
   void _onColumnAnimationComplete(int col, int index) {
+    if (_isLinked &&
+        _linkedNotifyOriginCol != null &&
+        col > _linkedNotifyOriginCol!) {
+      return;
+    }
     // 动画完成后触发 onChange
     _notifyChange(col);
   }
@@ -656,7 +705,12 @@ class _TPickerState extends State<TPicker> {
   }
 
   void _notifyChange(int col) {
-    widget.onChange?.call(col, _buildValue());
+    final value = _buildValue();
+    if (_lastNotifiedValue == value) {
+      return;
+    }
+    _lastNotifiedValue = value;
+    widget.onChange?.call(col, value);
   }
 }
 

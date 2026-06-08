@@ -732,6 +732,83 @@ void main() {
       expect(captured!.indexes, const [1, 0, 0, 0, 0]);
     });
 
+    testWidgets('联动模式 - mount 后不触发 onChange', (WidgetTester tester) async {
+      var changeCount = 0;
+      final linkedData = {
+        const TPickerOption(label: '广东省', value: 'GD'): {
+          const TPickerOption(label: '深圳市', value: 'SZ'): const [
+            TPickerOption(label: '南山区', value: 'NS'),
+          ],
+        },
+        const TPickerOption(label: '浙江省', value: 'ZJ'): {
+          const TPickerOption(label: '杭州市', value: 'HZ'): const [
+            TPickerOption(label: '西湖区', value: 'XH'),
+          ],
+        },
+      };
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TPicker(
+              items: TPickerLinked(linkedData),
+              initialValue: const ['GD', 'SZ', 'NS'],
+              onChange: (_, __) => changeCount++,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(changeCount, 0);
+    });
+
+    testWidgets('联动模式 - onChange 的 col 仅来自用户滚动的列',
+        (WidgetTester tester) async {
+      final notifyCols = <int>[];
+      final linkedData = {
+        const TPickerOption(label: '广东省', value: 'GD'): {
+          const TPickerOption(label: '深圳市', value: 'SZ'): const [
+            TPickerOption(label: '南山区', value: 'NS'),
+            TPickerOption(label: '福田区', value: 'FT'),
+          ],
+          const TPickerOption(label: '广州市', value: 'GZ'): const [
+            TPickerOption(label: '天河区', value: 'TH'),
+          ],
+        },
+        const TPickerOption(label: '浙江省', value: 'ZJ'): {
+          const TPickerOption(label: '杭州市', value: 'HZ'): const [
+            TPickerOption(label: '西湖区', value: 'XH'),
+          ],
+        },
+      };
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TPicker(
+              items: TPickerLinked(linkedData),
+              initialValue: const ['GD', 'SZ', 'NS'],
+              onChange: (col, _) => notifyCols.add(col),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      notifyCols.clear();
+
+      await tester.drag(
+        find.byType(ListWheelScrollView).first,
+        const Offset(0, -80), // 第 1 级切换到 浙江省
+      );
+      await tester.pumpAndSettle();
+
+      expect(notifyCols, isNotEmpty);
+      expect(notifyCols.every((c) => c == 0), isTrue,
+          reason: '切换第 1 级时 onChange 的 col 应均为 0，'
+              '不应出现下游列 attach 触发的 col');
+    });
+
     testWidgets('联动模式 - 滚动后新列选中首项', (WidgetTester tester) async {
       TPickerValue? captured;
       final linkedData = {
@@ -1707,6 +1784,59 @@ void main() {
         expect(node1.value, '北京');
         final node2 = tester.getSemantics(find.bySemanticsLabel('第 2 列'));
         expect(node2.value, 'A 区');
+        h.dispose();
+      });
+
+      testWidgets('全局 disabled 时列级 a11y 动作不可用', (tester) async {
+        final h = tester.ensureSemantics();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: TPicker(
+                items: const TPickerColumns([
+                  [
+                    TPickerOption(label: '北京', value: 'BJ'),
+                    TPickerOption(label: '上海', value: 'SH'),
+                  ],
+                ]),
+                disabled: true,
+                onChange: (_, __) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final node = tester.getSemantics(find.bySemanticsLabel('第 1 列'));
+        final data = node.getSemanticsData();
+        expect(data.hasAction(SemanticsAction.increase), isFalse);
+        expect(data.hasAction(SemanticsAction.decrease), isFalse);
+        h.dispose();
+      });
+
+      testWidgets('全局 disabled 时列级 Semantics 不可聚焦', (tester) async {
+        final h = tester.ensureSemantics();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: TPicker(
+                items: const TPickerColumns([
+                  [
+                    TPickerOption(label: '北京', value: 'BJ'),
+                    TPickerOption(label: '上海', value: 'SH'),
+                  ],
+                ]),
+                disabled: true,
+                onChange: (_, __) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final node = tester.getSemantics(find.bySemanticsLabel('第 1 列'));
+        final data = node.getSemanticsData();
+        expect(data.hasFlag(SemanticsFlag.isEnabled), isFalse);
         h.dispose();
       });
 
