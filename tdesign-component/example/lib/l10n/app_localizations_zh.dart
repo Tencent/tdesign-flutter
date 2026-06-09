@@ -184,4 +184,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get emptyData => '暂无数据';
+
+  @override
+  String get picker => '选择器';
+
+  @override
+  String pickerColumn(Object colIndex) {
+    return '第 $colIndex 列';
+  }
 }

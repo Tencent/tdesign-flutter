@@ -16,19 +16,15 @@
       initialPrimary: _mockLazyCategories(1, _kLazyDemoPageSize),
       initialPrimaryValue: initialPrimaryValue,
       initialLinked: initialLinked,
-      onLoadPrimary: (nextStart) async {
-        await Future.delayed(_kLazyDemoLoadDelay);
-        return _mockLazyCategories(nextStart, _kLazyDemoPageSize);
-      },
-      onLoadLinked: (primaryValue, nextStart) =>
-          _mockLazyItems(primaryValue, nextStart, _kLazyDemoPageSize),
+      onLoadPrimary: _mockLazyPrimaryPage,
+      onLoadLinked: _mockLazyLinkedPage,
       builder: (ctx, vm) {
         final loadingHint = vm.loadingHint;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '在 onChange 里判断 indexes 接近列底后更新 items，无需 TPicker 内置 onLoad',
+              '在 onColumnScrollEnd 里判断接近列底后 append items；onChange 仅维护 draft',
               style: TextStyle(
                   fontSize: 12,
                   color: TTheme.of(context).textColorPlaceholder),
@@ -84,7 +80,7 @@
             ),
             const SizedBox(height: 4),
             Text(
-              '滚近底部自动追加；切换分类时子列读缓存或按需拉取（示例封装见 LinkedLazyPickerScope）',
+              '滚近底部每次追加 10 条（无总量上限）；切换分类时子列读缓存或按需拉取',
               style: TextStyle(
                   fontSize: 12,
                   color: TTheme.of(context).textColorPlaceholder),

@@ -167,4 +167,10 @@ class IntlResourceDelegate extends TResourceDelegate {
   @override
   String get emptyData => AppLocalizations.of(context)!.emptyData;
 
+  @override
+  String get picker => AppLocalizations.of(context)!.picker;
+
+  @override
+  String pickerColumn(int colIndex) =>
+      AppLocalizations.of(context)!.pickerColumn(colIndex);
 }

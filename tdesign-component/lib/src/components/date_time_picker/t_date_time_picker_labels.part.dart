@@ -85,8 +85,8 @@ class DateTimePickerLabels {
           listEquals(weekLabels, other.weekLabels);
 
   @override
-  int get hashCode =>
-      Object.hash(Object.hashAll(unitSuffix.entries), Object.hashAll(weekLabels));
+  int get hashCode => Object.hash(
+      Object.hashAll(unitSuffix.entries), Object.hashAll(weekLabels));
 }
 
 /// `DateTimePickerMode(...)` 工厂返回值。

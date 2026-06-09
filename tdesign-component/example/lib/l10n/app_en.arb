@@ -61,5 +61,7 @@
   "weeks": "w",
   "back": "BACK",
   "top": "TOP",
-  "emptyData": "No Data"
+  "emptyData": "No Data",
+  "picker": "Picker",
+  "pickerColumn": "Column {colIndex}"
 }

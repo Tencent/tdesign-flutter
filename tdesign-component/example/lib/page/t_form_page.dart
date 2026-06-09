@@ -98,7 +98,9 @@ class _TFormPageState extends State<TFormPage> {
               TPicker(
                 items: TPickerColumns([yearItems, monthItems, dayItems]),
                 initialValue: [year, month, day],
-                onChange: (v) => onConfirm(
+                // onChange 签名: (int col, TPickerValue value)
+                // col 为本次触发的列索引,这里不关心;value.values 是各列 value 列表
+                onChange: (_, v) => onConfirm(
                   [for (final x in v.values) x as int],
                 ),
               ),

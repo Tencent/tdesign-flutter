@@ -20,7 +20,7 @@
           child: TPicker(
             items: _monthDayItems,
             initialValue: const [1, 1],
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => selectedMonthDay = v.labels.join(' / ')),
           ),
         ),

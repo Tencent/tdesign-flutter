@@ -15,7 +15,7 @@
             items: cityItems,
             height: 350,
             itemCount: 7,
-            onChange: (v) => debugPrint('选中: ${v.labels.first}'),
+            onChange: (_, v) => debugPrint('选中: ${v.labels.first}'),
           ),
         ),
       ],
