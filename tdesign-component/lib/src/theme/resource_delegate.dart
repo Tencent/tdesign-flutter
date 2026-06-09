@@ -209,6 +209,12 @@ abstract class TResourceDelegate {
 
   /// [TTable] 空数据
   String get emptyData;
+
+  /// [TPicker] 整组无障碍容器 label
+  String get picker;
+
+  /// [TPicker] 第 [colIndex] 列（1-based）的无障碍 label
+  String pickerColumn(int colIndex);
 }
 
 /// 如果用户要重写，就应该全部重写，不开放只重新部分资源
@@ -366,4 +372,10 @@ class _DefaultResourceDelegate extends TResourceDelegate {
 
   @override
   String get emptyData => '暂无数据';
+
+  @override
+  String get picker => '选择器';
+
+  @override
+  String pickerColumn(int colIndex) => '第 $colIndex 列';
 }

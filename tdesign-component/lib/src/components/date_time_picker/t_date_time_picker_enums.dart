@@ -71,7 +71,11 @@ class DateTimePickerSteps {
       DateTimeColumn.minute => minute,
       DateTimeColumn.second => second,
     };
-    return step == null ? 1 : step < 1 ? 1 : step;
+    return step == null
+        ? 1
+        : step < 1
+            ? 1
+            : step;
   }
 
   @override
@@ -86,6 +90,5 @@ class DateTimePickerSteps {
           second == other.second;
 
   @override
-  int get hashCode =>
-      Object.hash(year, month, day, hour, minute, second);
+  int get hashCode => Object.hash(year, month, day, hour, minute, second);
 }

@@ -61,5 +61,7 @@
   "weeks": "周",
   "back": "返回",
   "top": "顶部",
-  "emptyData": "暂无数据"
+  "emptyData": "暂无数据",
+  "picker": "选择器",
+  "pickerColumn": "第 {colIndex} 列"
 }

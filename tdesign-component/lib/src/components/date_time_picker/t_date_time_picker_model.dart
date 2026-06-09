@@ -7,9 +7,16 @@ import 't_date_time_picker_internal.dart';
 // 模式
 // =============================================================================
 
-/// 滚轮列结构，由 [DateMode]、[TimeMode] 组合；通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造。
+/// 滚轮列结构，由 [DateMode]、[TimeMode] 组合。
+///
+/// 通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造，至少传其一：
+/// - `dateMode`：日期段粒度（年 / 年月 / 年月日）；不传则不展示日期列
+/// - `timeMode`：时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列
 abstract class DateTimePickerMode {
-  /// 组合列结构，[dateMode]、[timeMode] 至少传其一。
+  /// 组合日期段与时间段的滚轮列结构；[dateMode]、[timeMode] 至少传其一。
+  ///
+  /// [dateMode] 日期段粒度（年 / 年月 / 年月日）；不传则不展示日期列。
+  /// [timeMode] 时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列。
   factory DateTimePickerMode({
     DateMode? dateMode,
     TimeMode? timeMode,
@@ -32,7 +39,6 @@ abstract class DateTimePickerMode {
 /// 提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 @immutable
 class TDateTimePickerValue {
-  /// 创建选中值，仅传当前 mode 涉及的字段。
   const TDateTimePickerValue({
     this.year,
     this.month,
@@ -42,27 +48,29 @@ class TDateTimePickerValue {
     this.second,
   });
 
-  /// 年。
+  /// 年（1–9999）；当前 mode 不含年列或未赋值时为 null。
   final int? year;
 
-  /// 月。
+  /// 月（1–12）；当前 mode 不含月列或未赋值时为 null。
   final int? month;
 
-  /// 日。
+  /// 日（1–31）；当前 mode 不含日列或未赋值时为 null。
   final int? day;
 
-  /// 时。
+  /// 时（0–23）；当前 mode 不含时列或未赋值时为 null。
   final int? hour;
 
-  /// 分。
+  /// 分（0–59）；当前 mode 不含分列或未赋值时为 null。
   final int? minute;
 
-  /// 秒。
+  /// 秒（0–59）；当前 mode 不含秒列或未赋值时为 null。
   final int? second;
 
-  /// 转为 [DateTime]；六元组完整时直接构造，否则用 [fallback] 补齐缺字段。
+  /// 转为 [DateTime]
   ///
-  /// partial 值未传 [fallback] 时将抛出 [ArgumentError]。
+  /// - **完整值**：六元组均有值时直接构造
+  /// - **partial 值**：缺字段用 [fallback] 补齐；未传 [fallback] 时抛出 [ArgumentError]
+  /// - **典型用法**：提交后端前调用；partial 值须传入业务基准 [fallback]
   DateTime toDateTime({DateTime? fallback}) {
     if (year != null &&
         month != null &&

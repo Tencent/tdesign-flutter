@@ -12,7 +12,7 @@
           child: TPicker(
               items: timeItems,
               itemCount: 5,
-              onChange: (v) => setState(() => selectedTime =
+              onChange: (_, v) => setState(() => selectedTime =
                   '${v.values[0]}:${v.values[1].toString().padLeft(2, '0')}:${v.values[2].toString().padLeft(2, '0')}')),
         ),
       ],

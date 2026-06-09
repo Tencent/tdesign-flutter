@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 
-/// 自定义子项构建器类型
-///
-/// [context] 上下文
-/// [content] 文字内容
-/// [colIndex] 列号
-/// [index] 行号
-/// [calculator] 默认距离样式计算器，可在自定义渲染中复用
-/// [distance] 子项此时离中心的距离
+// 自定义子项构建器类型别名，见 [TPicker.itemBuilder] 字段说明
 typedef ItemBuilderType = Widget? Function(
   BuildContext context,
   String content,
@@ -27,8 +23,8 @@ const double _kDisabledItemOpacity = 0.5;
 const double _kBaseFontSize = 16.0;
 
 /// 选择器的子项组件（包内复用，不对外暴露）
-class TItemWidget extends StatelessWidget {
-  const TItemWidget({
+class PickerItemWidget extends StatelessWidget {
+  const PickerItemWidget({
     required this.fixedExtentScrollController,
     required this.colIndex,
     required this.index,

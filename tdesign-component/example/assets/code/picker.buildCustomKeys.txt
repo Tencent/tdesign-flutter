@@ -1,8 +1,5 @@
 
   Widget buildCustomKeys(BuildContext context) {
-    // 用 keys 告诉组件「city 映射为 label，code 是 value，readonly 是 disabled」
-    const keys =
-        TPickerKeys(label: 'city', value: 'code', disabled: 'readonly');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -21,9 +18,9 @@
         _pickerCard(
           context,
           child: TPicker(
-            items: TPickerColumns.fromRaw(_rawCityData, keys: keys),
-            initialValue: _customKeysValue?.values ?? _customKeysInitial,
-            onChange: (v) => setState(() => _customKeysValue = v),
+            items: _customKeysItems,
+            initialValue: _kCustomKeysInitial,
+            onChange: (_, v) => setState(() => _customKeysValue = v),
           ),
         ),
       ],

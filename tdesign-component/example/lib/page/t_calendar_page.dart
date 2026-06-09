@@ -411,7 +411,7 @@ class _AnchorCalendarCellState extends State<_AnchorCalendarCell> {
           child: TButton(
             text: '清除已选',
             size: TButtonSize.small,
-            theme: TButtonTheme.defaultTheme,
+            theme: TButtonTheme.light,
             isBlock: true,
             disabled: !hasInitial,
             onTap: _clearSelected,
@@ -872,20 +872,16 @@ class _StyleDemoState extends State<_StyleDemo> {
 }
 
 /// 「组件样式 - 农历日历」
-///
-/// 非弹窗内嵌模式，通过 [subtitleBuilder] 展示农历副标题，
-/// 支持月份切换、年份/月份弹窗选择。
 @Demo(group: 'calendar')
 Widget _buildLunar(BuildContext context) {
   return const _LunarCalendarDemo();
 }
 
-/// 农历日历内嵌演示
+/// 农历内嵌 demo：外置控制栏驱动 [TCalendar.anchorDate] 滚动，点格走 [TCalendar.onChange]。
 ///
-/// 控制栏与 [TCalendar] 分工（常见「外置导航 + 内嵌日历」模式）：
-/// - 控制栏改月 / 选年选月 → 更新 [anchorDate]，由日历滚动到对应月份
-/// - 手指滑动日历 → [onMonthChanged] 只同步控制栏文案，不重建 [TCalendar]
-/// - 点选日期 → [onChange] 回传选中值；[initialValue] 仅挂载生效，勿指望运行期回写同步选中
+/// - 控制栏改月 / 选年选月 → 父级更新 [anchorDate]，日历滚到对应月
+/// - 手指滑日历 → [onMonthChanged] 只同步控制栏文案，不写 anchor
+/// - 点选日期 → [onChange] 回传选中；[initialValue] 仅首挂载生效
 class _LunarCalendarDemo extends StatefulWidget {
   const _LunarCalendarDemo();
 
@@ -989,10 +985,10 @@ class _LunarCalendarDemoState extends State<_LunarCalendarDemo> {
   }
 }
 
-/// 农历日历控制栏
+/// 农历 demo 外置控制栏（◀ 年 月 ▶）。
 ///
-/// 独立管理 _currentMonth 状态，滑动日历时只更新本 Widget，
-/// 不触发上层日历重建，避免跳动。
+/// 切换操作经 [onNavigate] 交给父级写 [TCalendar.anchorDate]；
+/// [currentMonth] 由父级传入，滑动日历时仅同步展示文案。
 class _LunarControlBar extends StatefulWidget {
   const _LunarControlBar({
     required this.currentMonth,
@@ -1007,7 +1003,6 @@ class _LunarControlBar extends StatefulWidget {
   final DateTime minDate;
   final DateTime maxDate;
 
-  /// 控制栏切换月份时回调，由父级更新 [TCalendar.anchorDate] 驱动日历滚动。
   final ValueChanged<DateTime> onNavigate;
 
   @override
@@ -1210,6 +1205,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = TTheme.of(context);
     final lunarInfo = widget.getLunarInfo(_currentMonth);
     final lunarMonth = lunarInfo != null
         ? '${lunarInfo.yearText}年 ${lunarInfo.monthText}'
@@ -1228,7 +1224,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
             child: lunarMonth.isNotEmpty
                 ? Text(
                     lunarMonth,
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    style: TextStyle(fontSize: 12, color: theme.fontGyColor2),
                   )
                 : const SizedBox.shrink(),
           ),

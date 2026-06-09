@@ -1,41 +1,25 @@
 import 'package:flutter/foundation.dart';
 
-import 't_picker_keys.dart';
-import 't_picker_normalize.dart';
-import 't_picker_option.dart';
+import 'picker_keys.dart';
+import 'picker_normalize.dart';
+import 'picker_option.dart';
 
-/// 选择器数据源密封类
-///
-/// 编译期强制二选一，消除运行时类型错误：
-/// - [TPickerColumns] → 多列独立选择
-/// - [TPickerLinked] → 联动选择
+// 数据源密封基类（包内类型标记）；业务请用 [TPickerColumns] 或 [TPickerLinked]
 @immutable
 sealed class TPickerItems {
   const TPickerItems();
 }
 
-/// 多列独立选择的数据源
-///
-/// ```dart
-/// TPicker(
-///   items: TPickerColumns([
-///     [TPickerOption(label: '北京', value: 'BJ'), ...],
-///     [TPickerOption(label: '朝阳区', value: 'CY'), ...],
-///   ]),
-/// )
-/// ```
+/// 多列独立数据源，各列互不影响。松散数据（String/Map 等）用 `fromRaw`；已全是 [TPickerOption] 时用 `TPickerColumns([...])`。
 @immutable
 class TPickerColumns extends TPickerItems {
   const TPickerColumns(this.columns);
 
-  /// 从自由结构的 raw 数据创建，自动归一化
+  /// 松散数据入口：将多列原始数据归一化为 [TPickerOption]
   ///
-  /// ```dart
-  /// TPickerColumns.fromRaw(
-  ///   [['北京', '上海', '广州']],
-  ///   keys: const TPickerKeys(label: 'name', value: 'code'),
-  /// )
-  /// ```
+  /// [rawColumns] 外层为列，内层元素可为 String / Map / [TPickerOption]。
+  ///
+  /// [keys] 接口字段名映射，默认 [TPickerKeys.defaults]。
   factory TPickerColumns.fromRaw(
     List rawColumns, {
     TPickerKeys keys = TPickerKeys.defaults,
@@ -44,7 +28,7 @@ class TPickerColumns extends TPickerItems {
     return TPickerColumns(normalized);
   }
 
-  /// 每列的选项列表
+  /// 每列候选项（外层列、内层选项）
   final List<List<TPickerOption>> columns;
 
   @override
@@ -54,7 +38,7 @@ class TPickerColumns extends TPickerItems {
           runtimeType == other.runtimeType &&
           _columnsEqual(columns, other.columns);
 
-  /// 比较两个「多列独立」数据源是否相等（外层长度 + 内层逐元素）
+  // 比较两个多列数据源是否相等
   static bool _columnsEqual(
       List<List<TPickerOption>> a, List<List<TPickerOption>> b) {
     if (identical(a, b)) {
@@ -75,38 +59,16 @@ class TPickerColumns extends TPickerItems {
   int get hashCode => Object.hashAll(columns);
 }
 
-/// 联动选择的数据源
-///
-/// 适用于整棵联动树已在内存的场景（如省市区、月日联动、多级地址）；
-/// 每列候选项建议在百级以内。上游列变更后，[TPicker] 会裁剪下游列并按新分支
-/// 重新展开，默认选中各列首项。
-///
-/// 若需接口分页或远程逐级拉取，请改用 [TPickerColumns] 并在业务层封装 Scope
-/// （见 example LinkedLazyPickerScope）。
-///
-/// ```dart
-/// TPicker(
-///   items: TPickerLinked({
-///     TPickerOption(label: '广东', value: 'GD'): {
-///       TPickerOption(label: '深圳', value: 'SZ'): [
-///         TPickerOption(label: '南山', value: 'NS'),
-///       ],
-///     },
-///   }),
-/// )
-/// ```
+/// 联动树数据源，改上游会刷新下游列。整树在内存时用（如省市区）；远程分页请改用 [TPickerColumns]。
 @immutable
 class TPickerLinked extends TPickerItems {
   const TPickerLinked(this.tree);
 
-  /// 从自由结构的 raw Map 数据创建，自动归一化
+  /// 松散数据入口：将嵌套 Map/List 联动树归一化为 [TPickerOption]
   ///
-  /// ```dart
-  /// TPickerLinked.fromRaw({
-  ///   '广东': {'深圳': ['南山', '福田'], '广州': ['天河']},
-  ///   '浙江': {'杭州': ['西湖']},
-  /// })
-  /// ```
+  /// [rawTree] Map 为上级，子 Map 继续下钻，List 为叶子列；元素可为 String / Map / List / [TPickerOption]。
+  ///
+  /// [keys] 接口字段名映射，默认 [TPickerKeys.defaults]。
   factory TPickerLinked.fromRaw(
     Map rawTree, {
     TPickerKeys keys = TPickerKeys.defaults,
@@ -115,11 +77,7 @@ class TPickerLinked extends TPickerItems {
     return TPickerLinked(normalized);
   }
 
-  /// 联动树结构：`Map<TPickerOption, dynamic>`
-  ///
-  /// value 可以是：
-  /// - `Map<TPickerOption, dynamic>` → 下一级联动
-  /// - `List<TPickerOption>` → 叶子级选项
+  /// 联动树；key 为候选项，value 为子级 Map 或叶子 List
   final Map<TPickerOption, dynamic> tree;
 
   @override
@@ -129,11 +87,7 @@ class TPickerLinked extends TPickerItems {
           runtimeType == other.runtimeType &&
           _treeEqual(tree, other.tree);
 
-  /// 比较两个联动树是否相等
-  ///
-  /// 注意：Map 的语义上是无序的，但联动选择器场景下 **插入顺序就是展示顺序**，
-  /// 所以这里按**顺序**对比 key-value 对（效率高且符合业务语义）。
-  /// 若业务层确实需要无序比较，请自行在调用前归一化。
+  // 按插入顺序比较联动树（展示顺序即插入顺序）
   static bool _treeEqual(
       Map<TPickerOption, dynamic> a, Map<TPickerOption, dynamic> b) {
     if (identical(a, b)) {
