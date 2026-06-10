@@ -232,6 +232,12 @@ class PopupTestResourceDelegate extends TResourceDelegate {
 
   @override
   String get emptyData => '暂无数据';
+
+  @override
+  String get picker => '选择器';
+
+  @override
+  String pickerColumn(int colIndex) => '第 $colIndex 列';
 }
 
 /// 在测试中注入 [resource]；与业务侧 `TTheme.setResourceBuilder` 用法一致。

@@ -17,7 +17,7 @@
           child: TPicker(
               items: itemDisabledItems,
               initialValue: const ['M', 'A5'],
-              onChange: (v) => setState(() =>
+              onChange: (_, v) => setState(() =>
                   selectedItemDisabled = '${v.labels.first} ${v.labels.last}')),
         ),
       ],

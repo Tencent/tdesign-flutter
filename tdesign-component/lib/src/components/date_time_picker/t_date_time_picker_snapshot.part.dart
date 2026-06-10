@@ -317,8 +317,7 @@ class DateTimePickerSnapshot {
           yearAnchor == other.yearAnchor;
 
   @override
-  int get hashCode =>
-      Object.hash(Object.hashAll(columns), current, yearAnchor);
+  int get hashCode => Object.hash(Object.hashAll(columns), current, yearAnchor);
 
   @override
   String toString() =>
@@ -339,7 +338,8 @@ class DateTimePickerSnapshot {
     return dt;
   }
 
-  static int daysInMonth(int year, int month) => DateTime(year, month + 1, 0).day;
+  static int daysInMonth(int year, int month) =>
+      DateTime(year, month + 1, 0).day;
 
   /// 按 [columns] 把 [current] 投影成 int 数组。
   static List<int> _extractValues(
@@ -623,5 +623,4 @@ class DateTimePickerSnapshot {
     final weekday = DateTime(year, month, day).weekday;
     return '$base ${labels.weekdayLabel(weekday)}';
   }
-
 }

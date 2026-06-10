@@ -11,7 +11,7 @@
           context,
           child: TPicker(
               items: cityItems,
-              onChange: (v) => setState(() => selectedCity = v.labels.first)),
+              onChange: (_, v) => setState(() => selectedCity = v.labels.first)),
         ),
       ],
     );

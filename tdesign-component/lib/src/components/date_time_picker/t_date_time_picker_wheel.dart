@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../theme/t_colors.dart';
-import '../../theme/t_radius.dart';
-import '../../theme/t_spacers.dart';
-import '../../theme/t_theme.dart';
-import '../picker/no_wave_behavior.dart';
-import '../picker/picker_column_wheel.dart';
-import '../picker/t_picker_option.dart';
+import '../picker/multi_wheel_layout.dart';
+import '../picker/picker_option.dart';
+import '../picker/wheel_behavior.dart';
+import '../picker/wheel_column.dart';
 import 't_date_time_picker_column.dart';
 import 't_date_time_picker_enums.dart';
 import 't_date_time_picker_internal.dart';
@@ -15,8 +12,9 @@ import 't_date_time_picker_model.dart';
 
 /// 日期/时间专用多列滚轮（@internal）。
 ///
-/// 复用 [`TPicker`] 的 [`PickerColumnWheel`] 渲染单列；列联动、options 局部更新
-/// 均在内部完成，滚动时不触发外层 `setState`。与 [`TCalendar`] 无耦合。
+/// 复用 [`WheelColumn`] 渲染单列，外壳由 [`MultiWheelLayout`] 提供；
+/// 列联动、options 局部更新均在内部完成，滚动时不触发外层 `setState`。
+/// 与 [`TCalendar`] 无耦合。
 @internal
 class DateTimePickerWheel extends StatefulWidget {
   const DateTimePickerWheel({
@@ -55,9 +53,9 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   late DateTimePickerSnapshot _snapshot;
   late List<List<TPickerOption>> _columns;
   late List<FixedExtentScrollController> _controllers;
-  late List<GlobalKey<PickerColumnWheelState>> _columnKeys;
+  late List<GlobalKey<WheelColumnState>> _columnKeys;
   bool _controllersReady = false;
-  final _scrollBehavior = NoWaveBehavior();
+  final _scrollBehavior = WheelBehavior();
 
   double get _itemHeight => widget.height / widget.itemCount;
 
@@ -85,7 +83,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     );
     _columnKeys = List.generate(
       _columns.length,
-      (_) => GlobalKey<PickerColumnWheelState>(),
+      (_) => GlobalKey<WheelColumnState>(),
     );
     _controllers = List.generate(_columns.length, (i) {
       return FixedExtentScrollController(
@@ -134,6 +132,9 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   void _onItemSelected(int col, int index, List<TPickerOption> data) {
     final rawValues = List<int>.from(_snapshot.values);
     final value = data[index].value;
+    // 防御性 short-circuit：日期/时间列的 TPickerOption.value 始终是 int（年份/月份/
+    // 日期/小时/分钟/秒），但 TPickerOption 本身类型上是 dynamic；遇到非 int 的极端
+    // 情况（如业务方误传）静默忽略，避免污染快照与回调。
     if (value is! int) {
       return;
     }
@@ -217,9 +218,9 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
 
     final columnState = _columnKeys[col].currentState;
     columnState?.applyColumnUpdate(
-          options: newData,
-          controller: controller,
-        );
+      options: newData,
+      controller: controller,
+    );
     //列尚未挂载时由本层延迟释放旧 controller，避免与 applyColumnUpdate 重复 dispose
     if (oldData.length != newData.length &&
         columnState == null &&
@@ -250,9 +251,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       }
     }
     if (_controllersReady && col < _controllers.length) {
-      return _controllers[col]
-          .selectedItem
-          .clamp(0, _columns[col].length - 1);
+      return _controllers[col].selectedItem.clamp(0, _columns[col].length - 1);
     }
     return 0;
   }
@@ -270,7 +269,8 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   }
 
   static Set<int> _outOfSyncIndices(List<int> raw, List<int> normalized) {
-    final count = raw.length < normalized.length ? raw.length : normalized.length;
+    final count =
+        raw.length < normalized.length ? raw.length : normalized.length;
     final out = <int>{};
     for (var i = 0; i < count; i++) {
       if (raw[i] != normalized[i]) {
@@ -282,39 +282,16 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
     return Semantics(
       label: '日期时间选择器',
       container: true,
-      child: SizedBox(
+      child: MultiWheelLayout(
         height: widget.height,
-        width: double.infinity,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-              top: (widget.height - _itemHeight) / 2,
-              left: theme.spacer16,
-              right: theme.spacer16,
-              child: Container(
-                height: _itemHeight,
-                decoration: BoxDecoration(
-                  color: theme.bgColorSecondaryContainer,
-                  borderRadius: BorderRadius.circular(theme.radiusDefault),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: theme.spacer32),
-              child: Row(
-                children: [
-                  for (var i = 0; i < _controllers.length; i++)
-                    Expanded(child: _buildColumnSemantics(i)),
-                ],
-              ),
-            ),
-          ],
-        ),
+        itemHeight: _itemHeight,
+        columns: [
+          for (var i = 0; i < _controllers.length; i++)
+            _buildColumnSemantics(i),
+        ],
       ),
     );
   }
@@ -332,7 +309,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       onDecrease: decreased != null ? () => _nudgeColumn(col, -1) : null,
       decreasedValue: decreased,
       child: ExcludeSemantics(
-        child: PickerColumnWheel(
+        child: WheelColumn(
           key: _columnKeys[col],
           colIndex: col,
           options: _columns[col],

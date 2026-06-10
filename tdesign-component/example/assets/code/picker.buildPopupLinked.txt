@@ -22,7 +22,7 @@
           picker: TPicker(
             items: linkedItems,
             initialValue: initial,
-            onChange: (value) => draft = value,
+            onChange: (_, value) => draft = value,
           ),
         );
       },

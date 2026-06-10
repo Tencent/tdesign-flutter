@@ -49,7 +49,7 @@
                 ),
               );
             },
-            onChange: (v) =>
+            onChange: (_, v) =>
                 setState(() => _customItemBuilderValue = v.labels.first),
           ),
         ),
