@@ -1,15 +1,15 @@
 
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
-      text: '加载中',
-      iconWidget: TLoading(
+      child: const Text('加载中'),
+      icon: TLoading(
         size: TLoadingSize.small,
         icon: TLoadingIcon.circle,
         iconColor: TTheme.of(context).whiteColor1,
       ),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }

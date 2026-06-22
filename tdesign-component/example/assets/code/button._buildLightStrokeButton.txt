@@ -1,10 +1,10 @@
 
   TButton _buildLightStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }

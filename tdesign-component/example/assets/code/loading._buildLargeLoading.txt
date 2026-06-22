@@ -1,9 +1,0 @@
-
-  Widget _buildLargeLoading(BuildContext context) {
-    return const TLoading(
-      size: TLoadingSize.large,
-      icon: TLoadingIcon.circle,
-      text: '加载中…',
-      axis: Axis.horizontal,
-    );
-  }

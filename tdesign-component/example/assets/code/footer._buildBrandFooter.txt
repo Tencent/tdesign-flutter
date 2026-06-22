@@ -1,8 +1,0 @@
-
-  Widget _buildBrandFooter(BuildContext context) {
-    return const TFooter(
-      TFooterType.brand,
-      logo: 'assets/img/t_brand.png',
-      width: 204,
-    );
-  }

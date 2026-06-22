@@ -1,8 +1,0 @@
-
-  TResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TResult(
-      title: '成功状态',
-      theme: TResultTheme.success,
-      description: '描述文字',
-    );
-  }

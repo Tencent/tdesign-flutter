@@ -1,11 +1,10 @@
 
   TButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }

@@ -1,9 +1,0 @@
-
-  Widget _buildWarningInside(BuildContext context) {
-    return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.warning,
-      value: value,
-      progressLabelPosition: TProgressLabelPosition.inside,
-    );
-  }

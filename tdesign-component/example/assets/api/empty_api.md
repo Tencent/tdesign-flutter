@@ -13,7 +13,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onTapEvent | TTapEvent? | - | 点击事件 |
 | operationText | String? | - | 操作按钮文案 |
-| operationTheme | TButtonTheme? | - | 操作按钮文案主题色 |
+| operationTheme | TButtonColorScheme? | - | 操作按钮文案主题色 |
 | type | TEmptyType | TEmptyType.plain | 类型，为operation有操作按钮，plain无按钮 |
 
 

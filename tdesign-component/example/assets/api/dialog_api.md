@@ -6,7 +6,7 @@
 ##### TAlertDialog.vertical
 
 纵向按钮排列的对话框
-`buttons`参数是必须的，纵向按钮默认样式都是`TButtonTheme.primary`
+`buttons`参数是必须的，纵向按钮默认样式都是`TButtonColorScheme.primary`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -57,7 +57,7 @@
 | action | Function()? | - | 点击 |
 | backgroundColor | Color? | - | 背景颜色 |
 | buttonStyle | TDialogButtonStyle | TDialogButtonStyle.normal | 按钮样式 |
-| buttonStyleCustom | TButtonStyle? | - | 按钮自定义样式属性，背景色、边框... |
+| buttonStyleCustom | ButtonStyle? | - | 按钮自定义样式属性（V1.0: 改用 ButtonStyle） |
 | buttonText | String? | - | 按钮文字 |
 | buttonTextColor | Color? | - | 按钮文字颜色 |
 | buttonWidget | Widget? | - | 自定义按钮 |
@@ -83,12 +83,12 @@
 | action | Function()? | - | 点击操作 |
 | fontWeight | FontWeight? | - | 字体粗细 |
 | height | double? | - | 按钮高度 建议使用默认高度 |
-| style | TButtonStyle? | - | 按钮样式 设置单个按钮的样式会覆盖Dialog的默认样式 |
-| theme | TButtonTheme? | - | 按钮类型 |
+| style | ButtonStyle? | - | 按钮样式（V1.0: 改用 ButtonStyle 替代 TButtonStyle） |
+| theme | TButtonColorScheme? | - | 按钮配色方案 |
 | title | String | - | 标题内容 |
 | titleColor | Color? | - | 标题颜色 |
 | titleSize | double? | - | 字体大小 |
-| type | TButtonType? | - | 按钮类型 |
+| type | TButtonVariant? | - | 按钮变体类型 |
 
 
 ### TDialogScaffold
@@ -165,17 +165,17 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| buttonStyle | TButtonStyle? | - | 按钮样式 |
+| buttonColorScheme | TButtonColorScheme? | - | 按钮配色方案 |
+| buttonStyle | ButtonStyle? | - | 按钮样式（P0 逃逸舱） |
 | buttonText | String? | - | 按钮文字 |
 | buttonTextColor | Color? | - | 按钮文字颜色 |
 | buttonTextFontWeight | FontWeight? | FontWeight.w600 | 按钮文字粗细 |
 | buttonTextSize | double? | - | 按钮文字大小 |
-| buttonTheme | TButtonTheme? | - | 按钮主题 |
-| buttonType | TButtonType? | - | 按钮类型 |
+| buttonVariant | TButtonVariant? | - | 按钮变体类型 |
 | height | double? | 40.0 | 按钮高度 |
-| isBlock | bool | true | 按钮高度 |
+| isBlock | bool | true | 是否通栏 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onPressed | Function() | - | 点击 |
+| onPressed | Function() | - | 点击回调 |
 | width | double? | - | 按钮宽度 |
 
 

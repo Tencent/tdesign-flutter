@@ -1,4 +1,0 @@
-
-  TTag _buildSimpleFillTag(BuildContext context) {
-    return const TTag('标签文字');
-  }

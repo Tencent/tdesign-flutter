@@ -1,4 +1,0 @@
-
-  Widget _buildFilledRate(BuildContext context) {
-    return const TCell(title: '实心评分', noteWidget: TRate(value: 3));
-  }

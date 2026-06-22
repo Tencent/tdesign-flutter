@@ -1,10 +1,10 @@
 
   TButton _buildDefaultGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }

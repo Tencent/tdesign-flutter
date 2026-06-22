@@ -1,7 +1,0 @@
-
-  Widget _buildSizeRate(BuildContext context) {
-    return const TCellGroup(cells: [
-      TCell(title: '默认尺寸24', noteWidget: TRate(value: 3)),
-      TCell(title: '小尺寸20', noteWidget: TRate(value: 3, size: 20)),
-    ]);
-  }

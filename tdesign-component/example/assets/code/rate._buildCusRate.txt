@@ -1,5 +1,0 @@
-
-  Widget _buildCusRate(BuildContext context) {
-    return const TCell(
-        title: '自定义评分', noteWidget: TRate(value: 3, icon: [TIcons.thumb_up]));
-  }
