@@ -6,7 +6,7 @@ PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
 # 基础
 # button
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/button" --name TButton,TButtonStyle --folder-name button --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/button" --name TButton,TButtonThemeData,TButtonResolve --folder-name button --output "$PARENT_DIR/example/assets/api/" --only-api
 # divider
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/divider/t_divider.dart" --name TDivider --folder-name divider --output "$PARENT_DIR/example/assets/api/" --only-api
 # fab

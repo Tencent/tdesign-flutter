@@ -409,12 +409,12 @@ class _AnchorCalendarCellState extends State<_AnchorCalendarCell> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: TButton(
-            text: '清除已选',
+            child: Text('清除已选'),
             size: TButtonSize.small,
-            theme: TButtonTheme.light,
+            colorScheme: TButtonColorScheme.light,
             isBlock: true,
             disabled: !hasInitial,
-            onTap: _clearSelected,
+            onPressed: _clearSelected,
           ),
         ),
         Padding(
@@ -1096,7 +1096,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
             children: [
               const Padding(
                 padding: EdgeInsets.all(16),
-                child: Text('选择年份',
+                child: Text('选择年份'),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               Expanded(
@@ -1117,7 +1117,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                       trailing: isSelected
                           ? const Icon(Icons.check, color: Colors.blue)
                           : null,
-                      onTap: () => Navigator.pop(ctx, y),
+                      onPressed: () => Navigator.pop(ctx, y),
                     );
                   },
                 ),
@@ -1146,7 +1146,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
             children: [
               const Padding(
                 padding: EdgeInsets.all(16),
-                child: Text('选择月份',
+                child: Text('选择月份'),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               Expanded(
@@ -1173,7 +1173,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                         ? Colors.grey.shade400
                         : (isSelected ? Colors.white : Colors.black);
                     return InkWell(
-                      onTap: isDisabled
+                      onPressed: isDisabled
                           ? null
                           : () => Navigator.pop(ctx, month),
                       child: Container(
@@ -1182,7 +1182,7 @@ class _LunarControlBarState extends State<_LunarControlBar> {
                           color: bgColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text('$month月',
+                        child: Text('$month月'),
                             style: TextStyle(
                               color: fgColor,
                               fontWeight:
@@ -1231,11 +1231,11 @@ class _LunarControlBarState extends State<_LunarControlBar> {
           Row(
             children: [
               TButton(
-                text: '◀',
+                child: Text('◀'),
                 size: TButtonSize.small,
-                theme: TButtonTheme.defaultTheme,
+                colorScheme: TButtonColorScheme.defaultTheme,
                 disabled: !canPrev,
-                onTap: canPrev
+                onPressed: canPrev
                     ? () => _navigateTo(DateTime(
                         _currentMonth.year, _currentMonth.month - 1, 1))
                     : null,
@@ -1243,28 +1243,28 @@ class _LunarControlBarState extends State<_LunarControlBar> {
               const SizedBox(width: 4),
               Expanded(
                 child: TButton(
-                  text: '${_currentMonth.year}年',
+                  child: Text('${_currentMonth.year}年'),
                   size: TButtonSize.small,
-                  theme: TButtonTheme.defaultTheme,
-                  onTap: _pickYear,
+                  colorScheme: TButtonColorScheme.defaultTheme,
+                  onPressed: _pickYear,
                 ),
               ),
               const SizedBox(width: 4),
               Expanded(
                 child: TButton(
-                  text: '${_currentMonth.month}月',
+                  child: Text('${_currentMonth.month}月'),
                   size: TButtonSize.small,
-                  theme: TButtonTheme.defaultTheme,
-                  onTap: _pickMonth,
+                  colorScheme: TButtonColorScheme.defaultTheme,
+                  onPressed: _pickMonth,
                 ),
               ),
               const SizedBox(width: 4),
               TButton(
-                text: '▶',
+                child: Text('▶'),
                 size: TButtonSize.small,
-                theme: TButtonTheme.defaultTheme,
+                colorScheme: TButtonColorScheme.defaultTheme,
                 disabled: !canNext,
-                onTap: canNext
+                onPressed: canNext
                     ? () => _navigateTo(DateTime(
                         _currentMonth.year, _currentMonth.month + 1, 1))
                     : null,

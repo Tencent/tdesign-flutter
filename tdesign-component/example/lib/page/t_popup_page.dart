@@ -45,7 +45,7 @@ class TPopupPage extends StatelessWidget {
   }) {
     return (ctx, close) => GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => _toastThen(ctx, toastMessage, close),
+          onPressed: () => _toastThen(ctx, toastMessage, close),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: TText(
@@ -178,12 +178,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromTop(BuildContext context) {
     return TButton(
-      text: 'top',
+      child: Text('top'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.top(
@@ -200,12 +200,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromLeft(BuildContext context) {
     return TButton(
-      text: 'left',
+      child: Text('left'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.left(
@@ -221,12 +221,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromCenter(BuildContext context) {
     return TButton(
-      text: 'center',
+      child: Text('center'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.center(
@@ -243,12 +243,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromBottom(BuildContext context) {
     return TButton(
-      text: 'bottom',
+      child: Text('bottom'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
@@ -266,12 +266,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromRight(BuildContext context) {
     return TButton(
-      text: 'right',
+      child: Text('right'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.right(
@@ -290,12 +290,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildNestedPopup(BuildContext context) {
     return TButton(
-      text: '嵌套 show',
+      child: Text('嵌套 show'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopupHandle? outerHandle;
         outerHandle = TPopup.show(
           context,
@@ -315,11 +315,11 @@ class TPopupPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         TButton(
-                          text: '内层 bottom',
+                          child: Text('内层 bottom'),
                           isBlock: true,
-                          theme: TButtonTheme.primary,
+                          colorScheme: TButtonColorScheme.primary,
                           size: TButtonSize.large,
-                          onTap: () {
+                          onPressed: () {
                             TPopup.show(
                               innerContext,
                               options: TPopupOptions.bottom(
@@ -336,11 +336,11 @@ class TPopupPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         TButton(
-                          text: 'Handle.close',
+                          child: Text('Handle.close'),
                           isBlock: true,
-                          type: TButtonType.outline,
+                          variant: TButtonVariant.outline,
                           size: TButtonSize.large,
-                          onTap: () => _toastThen(
+                          onPressed: () => _toastThen(
                             innerContext,
                             '点击：关闭外层',
                             () => outerHandle?.close(),
@@ -363,12 +363,12 @@ class TPopupPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TButton(
-          text: '操作槽 默认',
+          child: Text('操作槽 默认'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () {
+          onPressed: () {
             TPopup.show(
               context,
               options: TPopupOptions.bottom(
@@ -381,12 +381,12 @@ class TPopupPage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         TButton(
-          text: '操作槽 自定义',
+          child: Text('操作槽 自定义'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () {
+          onPressed: () {
             TPopup.show(
               context,
               options: TPopupOptions.bottom(
@@ -407,12 +407,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithHeaderClose(BuildContext context) {
     return TButton(
-      text: 'headerBuilder',
+      child: Text('headerBuilder'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
@@ -429,12 +429,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildPopFromCenterClose(BuildContext context) {
     return TButton(
-      text: 'closeBuilder 自定义',
+      child: Text('closeBuilder 自定义'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.center(
@@ -521,20 +521,20 @@ class TPopupPage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         TButton(
-          text: 'useSafeArea 开',
+          child: Text('useSafeArea 开'),
           isBlock: true,
-          theme: TButtonTheme.primary,
+          colorScheme: TButtonColorScheme.primary,
           size: TButtonSize.large,
-          onTap: () => _showSafeAreaBottomPopup(context, useSafeArea: true),
+          onPressed: () => _showSafeAreaBottomPopup(context, useSafeArea: true),
         ),
         const SizedBox(height: 12),
         TButton(
-          text: 'useSafeArea 关',
+          child: Text('useSafeArea 关'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () => _showSafeAreaBottomPopup(context, useSafeArea: false),
+          onPressed: () => _showSafeAreaBottomPopup(context, useSafeArea: false),
         ),
       ],
     );
@@ -637,47 +637,47 @@ class TPopupPage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         TButton(
-          text: 'radius 默认',
+          child: Text('radius 默认'),
           isBlock: true,
-          theme: TButtonTheme.primary,
+          colorScheme: TButtonColorScheme.primary,
           size: TButtonSize.large,
-          onTap: () => _showRadiusBottomPopup(context),
+          onPressed: () => _showRadiusBottomPopup(context),
         ),
         const SizedBox(height: 12),
         TButton(
-          text: 'radius 0',
+          child: Text('radius 0'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () => _showRadiusBottomPopup(context, radius: 0),
+          onPressed: () => _showRadiusBottomPopup(context, radius: 0),
         ),
         const SizedBox(height: 12),
         TButton(
-          text: 'radius 28',
+          child: Text('radius 28'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () => _showRadiusBottomPopup(context, radius: 28),
+          onPressed: () => _showRadiusBottomPopup(context, radius: 28),
         ),
         const SizedBox(height: 12),
         TButton(
-          text: 'center radius',
+          child: Text('center radius'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () => _showRadiusCenterPopup(context),
+          onPressed: () => _showRadiusCenterPopup(context),
         ),
         const SizedBox(height: 12),
         TButton(
-          text: 'center r32',
+          child: Text('center r32'),
           isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
+          colorScheme: TButtonColorScheme.primary,
+          variant: TButtonVariant.outline,
           size: TButtonSize.large,
-          onTap: () => _showRadiusCenterPopup(context, radius: 32),
+          onPressed: () => _showRadiusCenterPopup(context, radius: 32),
         ),
       ],
     );
@@ -690,12 +690,12 @@ class TPopupPage extends StatelessWidget {
   Widget _buildApiLifecycle(BuildContext context) {
     final theme = TTheme.of(context);
     return TButton(
-      text: '生命周期',
+      child: Text('生命周期'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
@@ -725,12 +725,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiCustomPosition(BuildContext context) {
     return TButton(
-      text: 'right inset.top',
+      child: Text('right inset.top'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         final renderBox =
             navBarkey.currentContext!.findRenderObject() as RenderBox;
         TPopup.show(
@@ -750,12 +750,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiShowOverlayFalse(BuildContext context) {
     return TButton(
-      text: 'showOverlay false',
+      child: Text('showOverlay false'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
@@ -776,12 +776,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiOnOverlayClick(BuildContext context) {
     return TButton(
-      text: 'onOverlayClick',
+      child: Text('onOverlayClick'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
@@ -800,12 +800,12 @@ class TPopupPage extends StatelessWidget {
   @Demo(group: 'popup')
   Widget _buildApiDuration(BuildContext context) {
     return TButton(
-      text: 'duration 600ms',
+      child: Text('duration 600ms'),
       isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
       size: TButtonSize.large,
-      onTap: () {
+      onPressed: () {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(

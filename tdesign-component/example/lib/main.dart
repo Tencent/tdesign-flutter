@@ -34,7 +34,8 @@ Future<void> main() async {
       examplePageList.add(model);
     });
   });
-  sideBarExamplePage.forEach(examplePageList.add);
+  // TODO: V1.0 升级后取消注释
+  // sideBarExamplePage.forEach(examplePageList.add);
 }
 
 class MyApp extends StatefulWidget {

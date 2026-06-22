@@ -60,11 +60,11 @@ class TResultPage extends StatelessWidget {
 
   Widget _buildPageExample(BuildContext context) {
     return TButton(
-      text: '页面示例跳转',
-      theme: TButtonTheme.primary,
+      child: Text('页面示例跳转'),
+      colorScheme: TButtonColorScheme.primary,
       size: TButtonSize.large,
       isBlock: true,
-      onTap: () {
+      onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -83,11 +83,11 @@ class TResultPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 48),
                   TButton(
-                    text: '返回',
-                    theme: TButtonTheme.primary,
+                    child: Text('返回'),
+                    colorScheme: TButtonColorScheme.primary,
                     size: TButtonSize.large,
                     isBlock: true,
-                    onTap: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),

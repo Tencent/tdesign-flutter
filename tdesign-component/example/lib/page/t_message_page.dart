@@ -36,11 +36,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildPlainTextMessage(BuildContext context) {
     return TButton(
       isBlock: true,
-      text: '纯文字的通知',
+      child: Text('纯文字的通知',
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: () {
         TMessage.showMessage(
           context: context,
           content: _commonContent,
@@ -60,11 +60,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildIconTextMessage(BuildContext context) {
     return TButton(
         isBlock: true,
-        text: '带图标的通知',
+        child: Text('带图标的通知',
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
           TMessage.showMessage(
             context: context,
             content: _commonContent,
@@ -80,11 +80,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildMessageWithCloseButton(BuildContext context) {
     return TButton(
         isBlock: true,
-        text: '带关闭的通知',
+        child: Text('带关闭的通知',
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
           TMessage.showMessage(
             context: context,
             visible: true,
@@ -105,11 +105,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildRollingMessage(BuildContext context) {
     return TButton(
         isBlock: true,
-        text: '可滚动的通知',
+        child: Text('可滚动的通知',
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
           TMessage.showMessage(
               context: context,
               visible: true,
@@ -128,11 +128,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildLinkMessage(BuildContext context) {
     return TButton(
         isBlock: true,
-        text: '带按钮的通知',
+        child: Text('带按钮的通知',
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
           TMessage.showMessage(
               context: context,
               visible: true,
@@ -154,11 +154,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildInfoMessage(BuildContext context) {
     return TButton(
       isBlock: true,
-      text: '普通通知',
+      child: Text('普通通知',
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: () {
         TMessage.showMessage(
           context: context,
           visible: true,
@@ -175,11 +175,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildSuccessMessage(BuildContext context) {
     return TButton(
       isBlock: true,
-      text: '成功通知',
+      child: Text('成功通知',
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: () {
         TMessage.showMessage(
           context: context,
           visible: true,
@@ -196,11 +196,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildWarningMessage(BuildContext context) {
     return TButton(
         isBlock: true,
-        text: '警示通知',
+        child: Text('警示通知',
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
           TMessage.showMessage(
             context: context,
             visible: true,
@@ -216,11 +216,11 @@ class TMessagePage extends StatelessWidget {
   Widget _buildErrorMessage(BuildContext context) {
     return TButton(
         isBlock: true,
-        text: '错误通知',
+        child: Text('错误通知',
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
           TMessage.showMessage(
             context: context,
             visible: true,

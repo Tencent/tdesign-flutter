@@ -242,8 +242,8 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonTextColor: leftBtn.titleColor,
               buttonTextSize: leftBtn.titleSize,
               buttonStyle: leftBtn.style,
-              buttonType: leftBtn.type,
-              buttonTheme: leftBtn.theme,
+              buttonVariant: leftBtn.type,
+              buttonColorScheme: leftBtn.theme,
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
@@ -266,8 +266,8 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonTextColor: rightBtn.titleColor,
               buttonTextSize: rightBtn.titleSize,
               buttonStyle: rightBtn.style,
-              buttonType: rightBtn.type,
-              buttonTheme: rightBtn.theme,
+              buttonVariant: rightBtn.type,
+              buttonColorScheme: rightBtn.theme,
               height: rightBtn.height,
               buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
@@ -314,8 +314,8 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonTextColor: leftBtn.titleColor,
                 buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
-                buttonType: leftBtn.type ?? TButtonType.text,
-                buttonTheme: leftBtn.theme,
+                buttonVariant: leftBtn.type ?? TButtonVariant.text,
+                buttonColorScheme: leftBtn.theme,
                 // fix： The button height does not fill the container.
                 height: 56,
                 buttonTextFontWeight: leftBtn.fontWeight,
@@ -338,8 +338,8 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonTextColor: rightBtn.titleColor,
                 buttonTextSize: rightBtn.titleSize,
                 buttonStyle: rightBtn.style,
-                buttonType: rightBtn.type ?? TButtonType.text,
-                buttonTheme: rightBtn.theme ?? TButtonTheme.primary,
+                buttonVariant: rightBtn.type ?? TButtonVariant.text,
+                buttonColorScheme: rightBtn.theme ?? TButtonColorScheme.primary,
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
@@ -367,8 +367,8 @@ class TDialogButton extends StatelessWidget {
     this.buttonTextSize,
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
-    this.buttonType,
-    this.buttonTheme,
+    this.buttonVariant,
+    this.buttonColorScheme,
     required this.onPressed,
     this.height = 40.0,
     this.width,
@@ -387,14 +387,14 @@ class TDialogButton extends StatelessWidget {
   /// 按钮文字粗细
   final FontWeight? buttonTextFontWeight;
 
-  /// 按钮样式
-  final TButtonStyle? buttonStyle;
+  /// 按钮样式（P0 逃逸舱）
+  final ButtonStyle? buttonStyle;
 
-  /// 按钮类型
-  final TButtonType? buttonType;
+  /// 按钮变体类型
+  final TButtonVariant? buttonVariant;
 
-  /// 按钮主题
-  final TButtonTheme? buttonTheme;
+  /// 按钮配色方案
+  final TButtonColorScheme? buttonColorScheme;
 
   /// 按钮宽度
   final double? width;
@@ -402,28 +402,37 @@ class TDialogButton extends StatelessWidget {
   /// 按钮高度
   final double? height;
 
-  /// 按钮高度
+  /// 是否通栏
   final bool isBlock;
 
-  /// 点击
+  /// 点击回调
   final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return TButton(
-      onTap: onPressed,
+    final button = TButton(
+      onPressed: onPressed,
       style: buttonStyle,
-      type: buttonType ?? TButtonType.fill,
-      theme: buttonTheme,
-      text: buttonText,
-      textStyle: TextStyle(
+      variant: buttonVariant ?? TButtonVariant.fill,
+      colorScheme: buttonColorScheme,
+      child: Text(
+        buttonText ?? '',
+        style: TextStyle(
           fontWeight: buttonTextFontWeight,
           color: buttonTextColor,
-          fontSize: buttonTextSize),
-      width: width,
-      height: height,
-      isBlock: isBlock,
-      margin: EdgeInsets.zero,
+          fontSize: buttonTextSize,
+        ),
+      ),
     );
+
+    // 通栏布局或自定义尺寸
+    if (isBlock || width != null || height != null) {
+      return SizedBox(
+        width: isBlock ? double.infinity : width,
+        height: height,
+        child: button,
+      );
+    }
+    return button;
   }
 }

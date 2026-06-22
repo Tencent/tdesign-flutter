@@ -52,14 +52,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
                   icon: TLoadingIcon.circle,
                   size: TLoadingSize.small,
                   axis: Axis.horizontal,
-                  text: '加载失败',
+                  child: Text('加载失败'),
                   refreshWidget: GestureDetector(
                     child: TText(
                       '刷新',
                       font: TTheme.of(context).fontBodySmall,
                       textColor: TTheme.of(context).brandNormalColor,
                     ),
-                    onTap: () {
+                    onPressed: () {
                       TToast.showText('刷新', context: context);
                     },
                   ),
@@ -75,14 +75,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
                 child: TLoading(
                   icon: TLoadingIcon.circle,
                   size: TLoadingSize.small,
-                  text: '加载失败',
+                  child: Text('加载失败'),
                   refreshWidget: GestureDetector(
                     child: TText(
                       '刷新',
                       font: TTheme.of(context).fontBodySmall,
                       textColor: TTheme.of(context).brandNormalColor,
                     ),
-                    onTap: () {
+                    onPressed: () {
                       TToast.showText('刷新', context: context);
                     },
                   ),
@@ -100,14 +100,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
                     TLoading(
                       size: TLoadingSize.large,
                       icon: TLoadingIcon.circle,
-                      text: '加载中…',
+                      child: Text('加载中…'),
                       axis: Axis.vertical,
                     ),
                     SizedBox(width: 36),
                     TLoading(
                       size: TLoadingSize.large,
                       icon: TLoadingIcon.activity,
-                      text: '加载中…',
+                      child: Text('加载中…'),
                       axis: Axis.vertical,
                     ),
                   ]);
@@ -121,17 +121,17 @@ class _TLoadingPageState extends State<TLoadingPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TButton(
-                    text: '展示Loading',
-                    theme: TButtonTheme.primary,
-                    onTap: () {
+                    child: Text('展示Loading'),
+                    colorScheme: TButtonColorScheme.primary,
+                    onPressed: () {
                       TLoadingController.show(context);
                     },
                   ),
                   const SizedBox(width: 36),
                   const TButton(
-                    text: '隐藏Loading',
-                    theme: TButtonTheme.primary,
-                    onTap: TLoadingController.dismiss,
+                    child: Text('隐藏Loading'),
+                    colorScheme: TButtonColorScheme.primary,
+                    onPressed: TLoadingController.dismiss,
                   ),
                 ],
               );
@@ -176,14 +176,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
         TLoading(
           size: TLoadingSize.small,
           icon: TLoadingIcon.circle,
-          text: '加载中…',
+          child: Text('加载中…'),
           axis: Axis.horizontal,
         ),
         const SizedBox(width: 36),
         TLoading(
           size: TLoadingSize.small,
           icon: TLoadingIcon.activity,
-          text: '加载中…',
+          child: Text('加载中…'),
           axis: Axis.horizontal,
         ),
       ],
@@ -200,14 +200,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
         TLoading(
           size: TLoadingSize.small,
           icon: TLoadingIcon.circle,
-          text: '加载中…',
+          child: Text('加载中…'),
           axis: Axis.vertical,
         ),
         SizedBox(width: 36),
         TLoading(
           size: TLoadingSize.small,
           icon: TLoadingIcon.activity,
-          text: '加载中…',
+          child: Text('加载中…'),
           axis: Axis.vertical,
         ),
       ],
@@ -223,25 +223,25 @@ class _TLoadingPageState extends State<TLoadingPage> {
       children: [
         const TLoading(
           size: TLoadingSize.small,
-          text: '加载中…',
+          child: Text('加载中…'),
         ),
         const SizedBox(width: 36),
         TLoading(
           size: TLoadingSize.small,
-          text: '加载失败',
+          child: Text('加载失败'),
           textColor: TTheme.of(context).textColorPlaceholder,
         ),
         const SizedBox(width: 36),
         TLoading(
           size: TLoadingSize.small,
-          text: '加载失败',
+          child: Text('加载失败'),
           refreshWidget: GestureDetector(
             child: TText(
               '刷新',
               font: TTheme.of(context).fontBodySmall,
               textColor: TTheme.of(context).brandNormalColor,
             ),
-            onTap: () {
+            onPressed: () {
               TToast.showText('刷新', context: context);
             },
           ),
@@ -256,7 +256,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
     return const TLoading(
       size: TLoadingSize.large,
       icon: TLoadingIcon.circle,
-      text: '加载中…',
+      child: Text('加载中…'),
       axis: Axis.horizontal,
     );
   }
@@ -267,7 +267,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
     return const TLoading(
       size: TLoadingSize.medium,
       icon: TLoadingIcon.circle,
-      text: '加载中…',
+      child: Text('加载中…'),
       axis: Axis.horizontal,
     );
   }
@@ -278,7 +278,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
     return const TLoading(
       size: TLoadingSize.small,
       icon: TLoadingIcon.circle,
-      text: '加载中…',
+      child: Text('加载中…'),
       axis: Axis.horizontal,
     );
   }
@@ -296,7 +296,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
           size: TLoadingSize.small,
           icon: TLoadingIcon.circle,
           axis: Axis.horizontal,
-          text: '加载中…',
+          child: Text('加载中…'),
           duration: _currentSliderValue.round(),
         ),
         const SizedBox(height: 16),

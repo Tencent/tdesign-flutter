@@ -48,15 +48,14 @@ class TDialogButtonOptions {
   /// 字体粗细
   final FontWeight? fontWeight;
 
-  /// 按钮样式
-  /// 设置单个按钮的样式会覆盖Dialog的默认样式
-  final TButtonStyle? style;
+  /// 按钮样式（V1.0: 改用 ButtonStyle 替代 TButtonStyle）
+  final ButtonStyle? style;
 
-  /// 按钮类型
-  final TButtonType? type;
+  /// 按钮变体类型
+  final TButtonVariant? type;
 
-  /// 按钮类型
-  final TButtonTheme? theme;
+  /// 按钮配色方案
+  final TButtonColorScheme? theme;
 
   /// 按钮高度
   /// 建议使用默认高度

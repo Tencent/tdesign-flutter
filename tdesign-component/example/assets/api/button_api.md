@@ -1,168 +1,138 @@
 ## API
+
 ### TButton
-#### 默认构造方法
+
+TD 常规按钮（V1.0），Material 薄包装。`onPressed: null` 表示禁用。
+
+#### 构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| activeStyle | TButtonStyle? | - | 自定义点击样式，有则优先用它，没有则根据 type 和 theme 选取 |
-| child | Widget? | - | 自控件 |
-| disabled | bool | false | 禁止点击 |
-| disableStyle | TButtonStyle? | - | 自定义禁用样式，有则优先用它，没有则根据 type 和 theme 选取 |
-| disableTextStyle | TextStyle? | - | 自定义不可点击状态文本样式 |
-| gradient | Gradient? | - | 渐变背景色，优先级高于backgroundColor |
-| height | double? | - | 自定义高度 |
-| icon | IconData? | - | 图标icon |
-| iconPosition | TButtonIconPosition? | TButtonIconPosition.left | 图标位置 |
-| iconTextSpacing | double? | - | 自定义图标与文本之间距离 |
-| iconWidget | Widget? | - | 自定义图标 icon 控件 |
-| isBlock | bool | false | 是否为通栏按钮 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| margin | EdgeInsetsGeometry? | - | 自定义 margin |
-| onLongPress | TButtonEvent? | - | 长按事件 |
-| onTap | TButtonEvent? | - | 点击事件 |
-| padding | EdgeInsetsGeometry? | - | 自定义 padding |
-| shape | TButtonShape | TButtonShape.rectangle | 形状：圆角，胶囊，方形，圆形，填充 |
-| size | TButtonSize | TButtonSize.medium | 尺寸 |
-| style | TButtonStyle? | - | 自定义样式，有则优先用它，没有则根据 type 和 theme 选取。如果设置了 style，则 activeStyle 和 disableStyle 也应该设置 |
-| text | String? | - | 文本内容 |
-| textStyle | TextStyle? | - | 自定义可点击状态文本样式 |
-| theme | TButtonTheme? | - | 主题 |
-| type | TButtonType | TButtonType.fill | 类型：填充，描边，文字 |
-| width | double? | - | 自定义宽度 |
+| child | Widget? | - | 内容，纯文案用 `Text('...')` |
+| colorScheme | TButtonColorScheme? | Theme | 配色方案（primary / danger / light / defaultTheme） |
+| icon | Widget? | - | 图标（Widget 类型，IconData 需包裹为 `Icon(...)`） |
+| iconPosition | TButtonIconPosition | TButtonIconPosition.left | 图标位置（left / right） |
+| key | Key? | - | 组件标识，用于区分或保留组件状态 |
+| onPressed | VoidCallback? | - | 点击回调，`null` 表示禁用（替代 0.2.x 的 `disabled: true`） |
+| size | TButtonSize | TButtonSize.medium | 尺寸（large / medium / small / extraSmall） |
+| style | ButtonStyle? | - | P0 逃逸舱，覆盖所有 resolve 结果（非日常使用） |
+| variant | TButtonVariant? | Theme defaultVariant | 变体类型（fill / outline / text / ghost） |
 
+**已移除（0.2.x → V1.0）：**
+- `text` → 改用 `child: Text('...')`
+- `disabled` → 改用 `onPressed: null`
+- `type` / `TButtonType` → 改用 `variant` / `TButtonVariant`
+- `theme` / `TButtonTheme` → 改用 `colorScheme` / `TButtonColorScheme`
+- `onTap` / `TButtonEvent` → 改用 `onPressed` / `VoidCallback?`
+- `shape` / `TButtonShape` → 迁入 Theme `TButtonThemeData.shape`
+- `isBlock` → 布局外包 `SizedBox(width: double.infinity)`
+- `onLongPress` → 外包 `GestureDetector`
+- `style` / `activeStyle` / `disableStyle`（`TButtonStyle`）→ 迁入 `TButtonThemeData`
+- `width` / `height` → 外包 `SizedBox` 或 P0 `style`
+- `padding` / `margin` / `gradient` / `textStyle` / `disableTextStyle` → 迁入 `TButtonThemeData`
+- `iconTextSpacing` → 迁入 Theme `iconSpacing`
+- `iconWidget` → 合并到 `icon`
 
-### TButtonStyle
+---
 
-#### 工厂构造方法
+### TButtonThemeData
 
-##### TButtonStyle.generateFillStyleByTheme
+TButton 组件级 ThemeExtension。通过 `Theme.of(context).copyWith(extensions: [...])` 注入子树。
 
-生成不同主题的填充按钮样式
+#### 字段
 
-| 参数 | 类型 | 默认值 | 说明 |
+| 字段 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
+| defaultVariant | TButtonVariant | fill | 未传 `variant` 时的默认变体 |
+| defaultSize | TButtonSize | medium | 未传 `size` 时的默认尺寸 |
+| filledStyle | ButtonStyle? | - | P2 色板：fill 变体（仅颜色，不含 shape） |
+| outlinedStyle | ButtonStyle? | - | P2 色板：outline 变体（仅颜色，不含 shape） |
+| textButtonStyle | ButtonStyle? | - | P2 色板：text 变体（仅颜色，不含 shape） |
+| ghostStyle | ButtonStyle? | - | P2 色板：ghost 变体（仅颜色，不含 shape） |
+| shape | TButtonShape? | rectangle | 外形枚举（展开进 resolved ButtonStyle.shape，不对外 export） |
+| padding | EdgeInsetsGeometry? | - | 覆盖默认 padding |
+| margin | EdgeInsetsGeometry? | - | 外边距 |
+| iconSpacing | double? | 8 | 图标与文案之间的间距 |
+| gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） |
+| textStyle | TextStyle? | - | 默认文案样式 |
 
+**覆盖顺序：** P0 `style` > resolve > Token
 
-##### TButtonStyle.generateGhostStyleByTheme
+---
 
-生成不同主题的幽灵按钮样式
+### TButtonResolve
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
+按钮样式解析器（内部类，不对外构造）。唯一的 `ButtonStyle` merge 入口。
 
+#### 静态方法
 
-##### TButtonStyle.generateOutlineStyleByTheme
+| 方法 | 返回类型 | 说明 |
+| --- | --- | --- |
+| resolve(...) | ButtonStyle | 按优先级链合并：shape → P2 色板 → colorScheme 覆色 → size 尺寸 → Theme padding → P0 style |
 
-生成不同主题的描边按钮样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
-
-
-##### TButtonStyle.generateTextStyleByTheme
-
-生成不同主题的文本按钮样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| frameColor | Color? | - | 边框颜色 |
-| frameWidth | double? | - | 边框宽度 |
-| gradient | Gradient? | - | 渐变背景色 |
-| radius | BorderRadiusGeometry? | - | 自定义圆角 |
-| textColor | Color? | - | 文字颜色 |
-
+---
 
 ### TButtonSize
+
 #### 枚举值
 
+| 名称 | 对应高度 | 说明 |
+| --- | --- | --- |
+| large | 48 | 大尺寸 |
+| medium | 40 | 中尺寸（默认） |
+| small | 32 | 小尺寸 |
+| extraSmall | 28 | 极小尺寸 |
+
+---
+
+### TButtonVariant
+
+> 0.2.x `TButtonType` → V1.0 `TButtonVariant`
+
+#### 枚举值
 
 | 名称 | 说明 |
 | --- | --- |
-| large | - |
-| medium | - |
-| small | - |
-| extraSmall | - |
+| fill | 填充按钮（实心背景） |
+| outline | 描边按钮（边框 + 透明背景） |
+| text | 文字按钮（无边框无背景） |
+| ghost | 幽灵按钮（深色背景上使用） |
 
+---
 
-### TButtonType
+### TButtonColorScheme
+
+> 0.2.x `TButtonTheme` → V1.0 `TButtonColorScheme`
+
 #### 枚举值
-
 
 | 名称 | 说明 |
 | --- | --- |
-| fill | - |
-| outline | - |
-| text | - |
-| ghost | - |
+| defaultTheme | 默认配色 |
+| primary | 品牌色 |
+| danger | 危险色 |
+| light | 浅色 |
 
-
-### TButtonShape
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| rectangle | - |
-| round | - |
-| square | - |
-| circle | - |
-| filled | - |
-
-
-### TButtonTheme
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultTheme | - |
-| primary | - |
-| danger | - |
-| light | - |
-
-
-### TButtonStatus
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultState | - |
-| active | - |
-| disable | - |
-
+---
 
 ### TButtonIconPosition
-#### 枚举值
 
+#### 枚举值
 
 | 名称 | 说明 |
 | --- | --- |
-| left | - |
-| right | - |
+| left | 图标在文本左侧（默认） |
+| right | 图标在文本右侧 |
 
+---
 
-### TButtonEvent
-#### 类型定义
+### 已移除的类型（0.2.x）
 
-```dart
-typedef TButtonEvent = void Function();
-```
+| 0.2.x 类型 | V1.0 替代 | 说明 |
+| --- | --- | --- |
+| TButtonType | TButtonVariant | 换名 |
+| TButtonTheme | TButtonColorScheme | 换名 |
+| TButtonEvent | VoidCallback? | 换型 |
+| TButtonStatus | — | 不 export，内部由 WidgetState 处理 |
+| TButtonShape | TButtonThemeData.shape | 迁入 Theme，不对外 export |
+| TButtonStyle | TButtonThemeData | 整类删除，样式迁入 Theme |

@@ -15,7 +15,7 @@ class _TStepperPageState extends State<TStepperPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onPressed: () {
         var currentFocus = FocusScope.of(context);
 
         if (!currentFocus.hasPrimaryFocus &&
@@ -69,15 +69,15 @@ class _TStepperPageState extends State<TStepperPage> {
     return _buildRow(context, [
       const TStepper(
         theme: TStepperTheme.filled,
-        disabled: true,
+        onPressed: null,
       ),
       const TStepper(
         theme: TStepperTheme.outline,
-        disabled: true,
+        onPressed: null,
       ),
       const TStepper(
         theme: TStepperTheme.normal,
-        disabled: true,
+        onPressed: null,
       ),
     ]);
   }
@@ -140,8 +140,8 @@ class _TStepperPageState extends State<TStepperPage> {
             controller: controller,
           ),
           TButton(
-            text: 'value * 2',
-            onTap: () {
+            child: Text('value * 2'),
+            onPressed: () {
               controller.value *= 2;
             },
           )

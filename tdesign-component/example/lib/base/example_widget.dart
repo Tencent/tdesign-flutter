@@ -138,9 +138,9 @@ class _ExamplePageState extends State<ExamplePage> {
                                           child: Column(
                                             children: [
                                               TButton(
-                                                text: '生成Web使用md',
-                                                type: TButtonType.fill,
-                                                onTap: () =>
+                                                child: Text('生成Web使用md'),
+                                                variant: TButtonVariant.fill,
+                                                onPressed: () =>
                                                     WebMdTool.generateWebMd(
                                                         model: model,
                                                         description:
@@ -156,9 +156,9 @@ class _ExamplePageState extends State<ExamplePage> {
                                                             : null),
                                               ),
                                               TButton(
-                                                text: '返回首页',
-                                                type: TButtonType.fill,
-                                                onTap: () =>
+                                                child: Text('返回首页'),
+                                                variant: TButtonVariant.fill,
+                                                onPressed: () =>
                                                     Navigator.of(context)
                                                         .maybePop(),
                                               ),
@@ -201,9 +201,9 @@ class _ExamplePageState extends State<ExamplePage> {
               child: Column(
                 children: [
                   TButton(
-                    text: '生成Web使用md',
-                    type: TButtonType.fill,
-                    onTap: () => WebMdTool.generateWebMd(
+                    child: Text('生成Web使用md'),
+                    variant: TButtonVariant.fill,
+                    onPressed: () => WebMdTool.generateWebMd(
                         model: model,
                         description: widget.desc,
                         exampleCodeGroup: widget.exampleCodeGroup,
@@ -213,9 +213,9 @@ class _ExamplePageState extends State<ExamplePage> {
                             widget.showSingleChild ? widget.singleChild : null),
                   ),
                   TButton(
-                    text: '返回首页',
-                    type: TButtonType.fill,
-                    onTap: () => Navigator.of(context).maybePop(),
+                    child: Text('返回首页'),
+                    variant: TButtonVariant.fill,
+                    onPressed: () => Navigator.of(context).maybePop(),
                   ),
                 ],
               )),

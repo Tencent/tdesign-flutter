@@ -46,12 +46,12 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @Demo(group: 'image_viewer')
   Widget _basicImageViewer(BuildContext context) {
     return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
       isBlock: true,
       size: TButtonSize.large,
-      text: '基础图片预览',
-      onTap: () {
+      child: Text('基础图片预览'),
+      onPressed: () {
         TImageViewer.showImageViewer(context: context, images: images);
       },
     );
@@ -60,12 +60,12 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @Demo(group: 'image_viewer')
   Widget _actionImageViewer(BuildContext context) {
     return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
       isBlock: true,
       size: TButtonSize.large,
-      text: '带操作图片预览',
-      onTap: () {
+      child: Text('带操作图片预览'),
+      onPressed: () {
         TImageViewer.showImageViewer(
           context: context,
           images: images,
@@ -79,12 +79,12 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @Demo(group: 'image_viewer')
   Widget _longPressImageViewer(BuildContext context) {
     return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
       isBlock: true,
       size: TButtonSize.large,
-      text: '长按图片',
-      onTap: () {
+      child: Text('长按图片'),
+      onPressed: () {
         TImageViewer.showImageViewer(
           context: context,
           images: images,
@@ -105,12 +105,12 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @Demo(group: 'image_viewer')
   Widget _ultraWidthImageViewer(BuildContext context) {
     return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
       isBlock: true,
       size: TButtonSize.large,
-      text: '图片超宽情况',
-      onTap: () {
+      child: Text('图片超宽情况'),
+      onPressed: () {
         TImageViewer.showImageViewer(
           context: context,
           images: images,
@@ -131,12 +131,12 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @Demo(group: 'image_viewer')
   Widget _ultraHeightImageViewer(BuildContext context) {
     return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
       isBlock: true,
       size: TButtonSize.large,
-      text: '图片超高情况',
-      onTap: () {
+      child: Text('图片超高情况'),
+      onPressed: () {
         TImageViewer.showImageViewer(
           context: context,
           images: images,
@@ -157,12 +157,12 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
   @Demo(group: 'image_viewer')
   Widget _descImageViewer(BuildContext context) {
     return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
       isBlock: true,
       size: TButtonSize.large,
-      text: '带图片标题',
-      onTap: () {
+      child: Text('带图片标题'),
+      onPressed: () {
         TImageViewer.showImageViewer(
           context: context,
           images: images,

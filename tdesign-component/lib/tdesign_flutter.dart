@@ -3,7 +3,7 @@ export 'src/components/avatar/t_avatar.dart';
 export 'src/components/backtop/t_backtop.dart';
 export 'src/components/badge/t_badge.dart';
 export 'src/components/button/t_button.dart';
-export 'src/components/button/t_button_style.dart';
+export 'src/components/button/t_button_theme_data.dart' show TButtonThemeData;
 export 'src/components/calendar/t_calendar.dart';
 export 'src/components/cascader/t_cascader.dart';
 export 'src/components/cascader/t_cascader_action.dart';

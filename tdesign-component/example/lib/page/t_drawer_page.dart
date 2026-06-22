@@ -69,12 +69,12 @@ Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TButton(
-    text: '基础抽屉',
+    child: Text('基础抽屉'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TDrawer(
         context,
         visible: true,
@@ -94,12 +94,12 @@ Widget _buildIconSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TButton(
-    text: '带图标抽屉',
+    child: Text('带图标抽屉'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TDrawer(
         context,
         visible: true,
@@ -118,12 +118,12 @@ Widget _buildTitleSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TButton(
-    text: '带图标抽屉',
+    child: Text('带图标抽屉'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TDrawer(
         context,
         visible: true,
@@ -142,12 +142,12 @@ Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TButton(
-    text: '带底部插槽样式',
+    child: Text('带底部插槽样式'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TDrawer(
         context,
         visible: true,
@@ -157,8 +157,8 @@ Widget _buildBottomSimple(BuildContext context) {
         items: List.generate(
             drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
         footer: const TButton(
-          text: '操作',
-          type: TButtonType.outline,
+          child: Text('操作'),
+          variant: TButtonVariant.outline,
           width: double.infinity,
           size: TButtonSize.large,
         ),
@@ -175,12 +175,12 @@ Widget _buildColorSimple(BuildContext context) {
   tCellStyle.backgroundColor = TTheme.of(context).brandNormalColor;
 
   return TButton(
-    text: '自定义背景色',
+    child: Text('自定义背景色'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TDrawer(
         context,
         visible: true,

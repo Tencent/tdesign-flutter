@@ -170,9 +170,9 @@ class _TBadgePageState extends State<TBadgePage> {
           TButton(
             width: 80,
             height: 48,
-            text: '按钮',
+            child: Text('按钮'),
             size: TButtonSize.large,
-            type: TButtonType.fill,
+            variant: TButtonVariant.fill,
           ),
           Positioned(
             child: TBadge(TBadgeType.redPoint),
@@ -233,7 +233,7 @@ class _TBadgePageState extends State<TBadgePage> {
           const TButton(
             width: 80,
             height: 48,
-            text: '按钮',
+            child: Text('按钮'),
             size: TButtonSize.large,
           ),
           Positioned(

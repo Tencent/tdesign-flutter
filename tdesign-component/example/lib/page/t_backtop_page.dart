@@ -128,10 +128,10 @@ class _TBackTopPageState extends State<TBackTopPage> {
       text: text,
       isBlock: true,
       size: TButtonSize.large,
-      type: TButtonType.outline,
+      variant: TButtonVariant.outline,
       shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      onTap: onTap,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: onTap,
     );
   }
 

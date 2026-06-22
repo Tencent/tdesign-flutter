@@ -204,10 +204,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '带箭头',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('带箭头'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                   context: _, content: '弹出气泡内容', theme: theme);
             },
@@ -223,10 +223,10 @@ class _TPopoverPage extends State<TPopoverPage> {
       builder: (_, constrains) {
         return TButton(
           size: TButtonSize.medium,
-          text: '不带箭头',
-          type: TButtonType.outline,
-          theme: TButtonTheme.primary,
-          onTap: () {
+          child: Text('不带箭头'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
             TPopover.showPopover(
                 context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
           },
@@ -244,10 +244,10 @@ class _TPopoverPage extends State<TPopoverPage> {
     return LayoutBuilder(
       builder: (_, constrains) {
         return TButton(
-          text: '自定义内容',
-          type: TButtonType.outline,
-          theme: TButtonTheme.primary,
-          onTap: () {
+          child: Text('自定义内容'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
             TPopover.showPopover(
               context: _,
               padding: const EdgeInsets.all(0),
@@ -288,10 +288,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '深色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('深色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -312,10 +312,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '浅色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('浅色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -337,10 +337,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '品牌色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('品牌色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -362,10 +362,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '成功色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('成功色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -387,10 +387,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '警告色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('警告色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -412,10 +412,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '错误色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('错误色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -437,10 +437,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '顶部左',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('顶部左'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -463,10 +463,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '顶部中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('顶部中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -489,10 +489,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '顶部右',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('顶部右'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -515,10 +515,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '底部左',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('底部左'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -541,10 +541,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '底部中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('底部中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -567,10 +567,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '底部右',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('底部右'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -593,10 +593,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '右侧上',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('右侧上'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -619,10 +619,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '右侧中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('右侧中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -645,10 +645,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '右侧下',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('右侧下'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -671,10 +671,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧上',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('左侧上'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -697,10 +697,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('左侧中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -723,10 +723,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧下',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('左侧下'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -749,10 +749,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '多行内容',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('多行内容'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 width: 200,
@@ -775,10 +775,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '自定义圆角',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: Text('自定义圆角'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 width: 200,

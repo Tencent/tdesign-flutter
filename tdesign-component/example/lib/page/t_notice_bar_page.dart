@@ -100,9 +100,9 @@ Widget _entranceNoticeBar1(BuildContext context) {
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     right: TButton(
-      text: '文字按钮',
-      type: TButtonType.text,
-      theme: TButtonTheme.primary,
+      child: Text('文字按钮'),
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
       size: TButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -227,7 +227,7 @@ Widget _tapNoticeBar(BuildContext context) {
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.chevron_right,
-    onTap: (trigger) {
+    onPressed: (trigger) {
       TToast.showText('tap:$trigger', context: context);
     },
   );
@@ -239,9 +239,9 @@ Widget _leftNoticeBar(BuildContext context) {
     content: '这是一条普通的通知信息',
     suffixIcon: TIcons.chevron_right,
     left: TButton(
-      text: '文本',
-      type: TButtonType.text,
-      theme: TButtonTheme.primary,
+      child: Text('文本'),
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
       size: TButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),

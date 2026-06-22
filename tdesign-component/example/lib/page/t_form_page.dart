@@ -63,7 +63,7 @@ class _TFormPageState extends State<TFormPage> {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                       child: Text(
                         '取消',
                         style: TextStyle(
@@ -83,7 +83,7 @@ class _TFormPageState extends State<TFormPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                       child: Text(
                         '确认',
                         style: TextStyle(
@@ -387,7 +387,7 @@ class _TFormPageState extends State<TFormPage> {
             child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                  hintText: '请输入用户名',
+                  hintchild: Text('请输入用户名'),
                   border: InputBorder.none,
                   hintStyle: TextStyle(
                     color: TTheme.of(context).textColorPlaceholder,
@@ -415,7 +415,7 @@ class _TFormPageState extends State<TFormPage> {
             child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                  hintText: '请输入密码',
+                  hintchild: Text('请输入密码'),
                   border: InputBorder.none,
                   hintStyle: TextStyle(
                     color: TTheme.of(context).textColorPlaceholder,
@@ -474,7 +474,7 @@ class _TFormPageState extends State<TFormPage> {
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
-            hintText: '请输入内容',
+            hintchild: Text('请输入内容'),
             select: _selected_1,
             selectFn: (BuildContext context) {
               if (_formDisableState) {
@@ -500,7 +500,7 @@ class _TFormPageState extends State<TFormPage> {
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
-            hintText: '请输入内容',
+            hintchild: Text('请输入内容'),
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
@@ -582,7 +582,7 @@ class _TFormPageState extends State<TFormPage> {
                     EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
                 child: TTextarea(
                   backgroundColor: Colors.red,
-                  hintText: '请输入个人简介',
+                  hintchild: Text('请输入个人简介'),
                   maxLength: 500,
                   indicator: true,
                   readOnly: _formDisableState,
@@ -630,13 +630,13 @@ class _TFormPageState extends State<TFormPage> {
                 children: [
                   Expanded(
                       child: TButton(
-                    text: '重置',
+                    child: Text('重置'),
                     size: TButtonSize.large,
-                    type: TButtonType.fill,
-                    theme: TButtonTheme.light,
+                    variant: TButtonVariant.fill,
+                    colorScheme: TButtonColorScheme.light,
                     shape: TButtonShape.rectangle,
                     disabled: _formDisableState,
-                    onTap: () {
+                    onPressed: () {
                       //用户名称
                       _controller[0].clear();
                       //密码
@@ -676,12 +676,12 @@ class _TFormPageState extends State<TFormPage> {
                   ),
                   Expanded(
                       child: TButton(
-                          text: '提交',
+                          child: Text('提交'),
                           size: TButtonSize.large,
-                          type: TButtonType.fill,
-                          theme: TButtonTheme.primary,
+                          variant: TButtonVariant.fill,
+                          colorScheme: TButtonColorScheme.primary,
                           shape: TButtonShape.rectangle,
-                          onTap: _onSubmit,
+                          onPressed: _onSubmit,
                           disabled: _formDisableState)),
                 ],
               ))
@@ -719,7 +719,7 @@ class _TFormPageState extends State<TFormPage> {
             child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                    hintText: '请输入用户名',
+                    hintchild: Text('请输入用户名'),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.all(0),
                     hintStyle: TextStyle(
@@ -749,7 +749,7 @@ class _TFormPageState extends State<TFormPage> {
             child: TInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                    hintText: '请输入密码',
+                    hintchild: Text('请输入密码'),
                     border: InputBorder.none,
                     hintStyle: TextStyle(
                         color:
@@ -812,7 +812,7 @@ class _TFormPageState extends State<TFormPage> {
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
-            hintText: '请输入内容',
+            hintchild: Text('请输入内容'),
             select: _selected_1,
             selectFn: (BuildContext context) {
               if (_formDisableState) {
@@ -889,7 +889,7 @@ class _TFormPageState extends State<TFormPage> {
                 child: TTextarea(
                   backgroundColor: Colors.red,
                   padding: const EdgeInsets.all(0),
-                  hintText: '请输入个人简介',
+                  hintchild: Text('请输入个人简介'),
                   maxLength: 500,
                   indicator: true,
                   readOnly: _formDisableState,
@@ -965,14 +965,14 @@ class _TFormPageState extends State<TFormPage> {
           children: [
             Expanded(
               child: TButton(
-                text: '水平排布',
+                child: Text('水平排布'),
                 shape: TButtonShape.round,
                 style: TButtonStyle(backgroundColor: horizontalButtonColor),
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: horizontalTextColor,
                 ),
-                onTap: () {
+                onPressed: () {
                   setState(() {
                     if (horizontalButton) {
                       /// 置换按钮状态
@@ -998,14 +998,14 @@ class _TFormPageState extends State<TFormPage> {
             const SizedBox(width: 8),
             Expanded(
               child: TButton(
-                text: '竖直排布',
+                child: Text('竖直排布'),
                 shape: TButtonShape.round,
                 style: TButtonStyle(backgroundColor: verticalButtonColor),
                 textStyle: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: verticalTextColor,
                 ),
-                onTap: () {
+                onPressed: () {
                   setState(() {
                     if (verticalButton) {
                       /// 置换按钮状态

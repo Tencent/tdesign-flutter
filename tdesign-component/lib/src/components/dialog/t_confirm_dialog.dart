@@ -84,8 +84,8 @@ class TConfirmDialog extends StatelessWidget {
   /// 自定义按钮
   final Widget? buttonWidget;
 
-  /// 按钮自定义样式属性，背景色、边框...
-  final TButtonStyle? buttonStyleCustom;
+  /// 按钮自定义样式属性（V1.0: 改用 ButtonStyle）
+  final ButtonStyle? buttonStyleCustom;
 
   final double? width;
 
@@ -102,8 +102,8 @@ class TConfirmDialog extends StatelessWidget {
           TDialogButton(
             buttonText: buttonText ?? context.resource.knew,
             buttonTextColor: buttonTextColor,
-            buttonType: TButtonType.text,
-            buttonTheme: TButtonTheme.primary,
+            buttonVariant: TButtonVariant.text,
+            buttonColorScheme: TButtonColorScheme.primary,
             height: 56,
             buttonStyle: buttonStyleCustom,
             onPressed: () {
@@ -122,7 +122,7 @@ class TConfirmDialog extends StatelessWidget {
         child: TDialogButton(
           buttonText: buttonText ?? context.resource.knew,
           buttonTextColor: buttonTextColor,
-          buttonTheme: TButtonTheme.primary,
+          buttonColorScheme: TButtonColorScheme.primary,
           buttonStyle: buttonStyleCustom,
           onPressed: () {
             if (action != null) {

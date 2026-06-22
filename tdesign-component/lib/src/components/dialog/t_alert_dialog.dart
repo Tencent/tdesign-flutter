@@ -45,7 +45,7 @@ class TAlertDialog extends StatelessWidget {
 
   /// 纵向按钮排列的对话框
   ///
-  /// [buttons]参数是必须的，纵向按钮默认样式都是[TButtonTheme.primary]
+  /// [buttons]参数是必须的，纵向按钮默认样式都是[TButtonColorScheme.primary]
   const TAlertDialog.vertical({
     Key? key,
     required List<TDialogButtonOptions> buttons,
@@ -161,12 +161,12 @@ class TAlertDialog extends StatelessWidget {
     final left = leftBtn ??
         TDialogButtonOptions(
             title: context.resource.cancel,
-            theme: TButtonTheme.light,
+            theme: TButtonColorScheme.light,
             action: leftBtnAction);
     final right = rightBtn ??
         TDialogButtonOptions(
             title: context.resource.confirm,
-            theme: TButtonTheme.primary,
+            theme: TButtonColorScheme.primary,
             action: rightBtnAction);
     return _buttonStyle == TDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
@@ -186,8 +186,8 @@ class TAlertDialog extends StatelessWidget {
         height: value.height,
         buttonTextFontWeight: value.fontWeight ?? FontWeight.w600,
         buttonStyle: value.style,
-        buttonTheme: value.theme,
-        buttonType: value.type,
+        buttonColorScheme: value.theme,
+        buttonVariant: value.type,
         onPressed: () {
           if (value.action != null) {
             value.action!();

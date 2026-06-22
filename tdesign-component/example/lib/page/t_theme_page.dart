@@ -254,8 +254,8 @@ class TestWidget extends StatelessWidget {
                 TTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
           ),
           const TButton(
-            text: '使用内层赋值主题',
-            theme: TButtonTheme.primary,
+            child: Text('使用内层赋值主题'),
+            colorScheme: TButtonColorScheme.primary,
           ),
           TText(
             '使用默认主题',

@@ -164,12 +164,12 @@ class TActionSheetPage extends StatelessWidget {
 @Demo(group: 'action_sheet')
 Widget _buildBaseListActionSheet(BuildContext context) {
   return TButton(
-    text: '常规列表',
+    child: Text('常规列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -182,12 +182,12 @@ Widget _buildBaseListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildDescListActionSheet(BuildContext context) {
   return TButton(
-    text: '带描述列表',
+    child: Text('带描述列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -201,12 +201,12 @@ Widget _buildDescListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListActionSheet(BuildContext context) {
   return TButton(
-    text: '带图标列表',
+    child: Text('带图标列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -224,12 +224,12 @@ Widget _buildIconListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeListActionSheet(BuildContext context) {
   return TButton(
-    text: '带徽标列表',
+    child: Text('带徽标列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -259,12 +259,12 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildItemDescriptionListActionSheet(BuildContext context) {
   return TButton(
-    text: '带Cell描述常规列表',
+    child: Text('带Cell描述常规列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -277,12 +277,12 @@ Widget _buildItemDescriptionListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBaseGridActionSheet(BuildContext context) {
   return TButton(
-    text: '常规宫格',
+    child: Text('常规宫格'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -297,12 +297,12 @@ Widget _buildBaseGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildDescGridActionSheet(BuildContext context) {
   return TButton(
-    text: '带描述宫格',
+    child: Text('带描述宫格'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -318,12 +318,12 @@ Widget _buildDescGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildPaginationGridActionSheet(BuildContext context) {
   return TButton(
-    text: '带翻页宫格',
+    child: Text('带翻页宫格'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -357,12 +357,12 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildScrollGridActionSheet(BuildContext context) {
   return TButton(
-    text: '多行滚动宫格',
+    child: Text('多行滚动宫格'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -400,12 +400,12 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildMultiScrollGridActionSheet(BuildContext context) {
   return TButton(
-    text: '带描述多行滚动宫格',
+    child: Text('带描述多行滚动宫格'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet.showGroupActionSheet(context, items: [
         TActionSheetItem(
           label: 'Allen',
@@ -446,12 +446,12 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeGridActionSheet(BuildContext context) {
   return TButton(
-    text: '带徽标宫格型',
+    child: Text('带徽标宫格型'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet.showGridActionSheet(context, items: [
         TActionSheetItem(
             label: '微信',
@@ -485,12 +485,12 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBaseListStateActionSheet(BuildContext context) {
   return TButton(
-    text: '列表型选项状态',
+    child: Text('列表型选项状态'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -506,7 +506,7 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
           ),
           TActionSheetItem(
             label: '失效选项',
-            disabled: true,
+            onPressed: null,
           ),
           TActionSheetItem(
             label: '警告选项',
@@ -526,12 +526,12 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListStateActionSheet(BuildContext context) {
   return TButton(
-    text: '列表型带图标状态',
+    child: Text('列表型带图标状态'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -550,7 +550,7 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
           TActionSheetItem(
             label: '失效选项',
             icon: const Icon(TIcons.app),
-            disabled: true,
+            onPressed: null,
           ),
           TActionSheetItem(
             label: '警告选项',
@@ -571,12 +571,12 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeListCenterActionSheet(BuildContext context) {
   return TButton(
-    text: '居中带徽标列表',
+    child: Text('居中带徽标列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -609,12 +609,12 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListCenterActionSheet(BuildContext context) {
   return TButton(
-    text: '居中带图标列表',
+    child: Text('居中带图标列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -633,12 +633,12 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeListLeftActionSheet(BuildContext context) {
   return TButton(
-    text: '左对齐带徽标列表',
+    child: Text('左对齐带徽标列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,
@@ -658,12 +658,12 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListLeftActionSheet(BuildContext context) {
   return TButton(
-    text: '左对齐带图标列表',
+    child: Text('左对齐带图标列表'),
     isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
     size: TButtonSize.large,
-    onTap: () {
+    onPressed: () {
       TActionSheet(
         context,
         visible: true,

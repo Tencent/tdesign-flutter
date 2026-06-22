@@ -43,7 +43,7 @@ class TEmpty extends StatelessWidget {
   final String? operationText;
 
   /// 操作按钮文案主题色
-  final TButtonTheme? operationTheme;
+  final TButtonColorScheme? operationTheme;
 
   /// 类型，为operation有操作按钮，plain无按钮
   final TEmptyType type;
@@ -77,11 +77,10 @@ class TEmpty extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.only(top: 32),
                       child: TButton(
-                        text: operationText ?? '',
+                        child: Text(operationText ?? ''),
                         size: TButtonSize.large,
-                        theme: operationTheme ?? TButtonTheme.primary,
-                        width: 179,
-                        onTap: () {
+                        colorScheme: operationTheme ?? TButtonColorScheme.primary,
+                        onPressed: () {
                           if (onTapEvent != null) {
                             onTapEvent!();
                           }

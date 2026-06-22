@@ -1,0 +1,84 @@
+# 测试与注释（v1.0）
+
+> v1.0 测试门槛与注释规范。  
+> 环境 / 命令 → [developer-guide.md](./developer-guide.md) · 组件 **§4** 写法 → [component-doc.md §2](./component-doc.md#2-章节结构s1-三板)
+
+---
+
+## 1. CI 与覆盖率 {#1-ci-与覆盖率}
+
+| 项 | v1.0 目标 |
+|---|---|
+| Flutter SDK | ≥ **3.32.0**（最低）；CI **3.32** + **3.44** 双矩阵 |
+| 覆盖率 | `lib/src` 行覆盖率 ≥ **95%** |
+| 真机 / 模拟器 | `example` 至少在 **Android 16（API 36）**、**iOS 26** 各跑通一轮 |
+| CI | `flutter test` + `example` 可构建 |
+
+---
+
+## 2. 测试分层
+
+| 层级 | 写什么 | 在哪 |
+|---|---|---|
+| **全局** | 控制类通用必测、Golden 优先级、Form、注释规则 | **本文 §3–§5** |
+| **组件专项** | resolve/绘制单路径、该组件必测表、Example 契约 | 组件 md **§4**（S1 样板：[button.md](../components/01-base/button.md)） |
+
+**原则**：§4 **不重复**本文 CI/覆盖率条文；文首链 `testing.md` 一句 + §4.2 专项表。无 §4 的组件按本文 §3 + Tier 验收。
+
+---
+
+## 3. Widget 必测（按控制类）
+
+> 禁用写法 → [api.md §5](../foundation/api.md#5-禁用0.2x--v10) · 控制类 → [controlled.md](../foundation/controlled.md)
+
+| 控制类 | 代表 | 至少覆盖 |
+|---|---|---|
+| **A** | Button、Link、Cell | `onPressed` / `onTap` 主路径；**`null` = 禁用**（无 `disabled` 构造器） |
+| **B/C** | Switch、Slider、Rate | `value` + `onChanged` 受控；**`onChanged: null` = 禁用** |
+| **D** | Input、Textarea | `controller` 主路径；`enabled: false` / `readOnly: true`（**勿**用 `onChanged: null` 表禁用） |
+| **E** | Popup、Dialog、Toast | `show()` / `visible` 显隐；浮层**无** Widget 级 `disabled` |
+| **F** | Picker、Calendar | `value` + `onChanged`；`onChanged: null`；项级 `*.disabled` **KEEP** |
+
+**Tier1** 额外要求：**Theme 子树** `mergeExtension(T{Xxx}ThemeData)` 覆盖构造器未传项（见 [theme.md §3](../foundation/theme.md#3-子树覆盖)）。
+
+**Form**：容器 `submit` / `reset` / `validate`；字段 + Form 至少一条 **`rules` 失败态** → [form.md](../foundation/form.md)。
+
+---
+
+## 4. Golden {#4-golden}
+
+| 优先级 | 组件 | 说明 |
+|---|---|---|
+| **P0** | TButton | 默认 · primary · danger · disabled · 纯 `icon` + `shape: circle` 等（见 [button.md §4.2](../components/01-base/button.md#42-测试与-example-契约)） |
+| **P0** | TSlider | normal / capsule 等关键态 |
+| **P0** | TTabBar | `outlineType` 等关键组合 |
+| **P1** | 其余 | 按组件 md **§4.2**「Golden」行；无 §4 则 Sprint 排期后补 |
+
+Golden 文件放 `test/`，与 Widget 测试同 PR 维护。
+
+---
+
+## 5. 注释与文档生成 {#5-注释与文档生成}
+
+| 项 | v1.0 |
+|---|---|
+| 扫描范围 | 仅 `tdesign_flutter.dart` **export** 符号 |
+| 语言 | 中文 `///` 注释 |
+| 对齐 | 注释 ↔ 组件 md **§1** |
+| 废弃 | 注释不写「仍可使用」 |
+
+流程、登记、`all_build.sh`、排错 → **[doc-generation.md](./doc-generation.md)**
+
+---
+
+## 6. 发布前（单组件）{#6-发布前单组件}
+
+| 步 | 检查项 |
+|---|---|
+| 1 | `example` 该页 **v1.0 API** 可跑；**Android 16** / **iOS 26** 各验证一次（见 [§1](#1-ci-与覆盖率)） |
+| 2 | Widget：本文 [§3](#3-widget-必测按控制类)（+ 组件 **§4.2** 若有） |
+| 3 | Golden：本文 [§4](#4-golden)（+ 组件 **§4.2** 若有） |
+| 4 | export 与 [api.md §8](../foundation/api.md#8-exportv10-公开面) · [附录 C](../../v1.0-redesign-spec.md#附录-cexport-审计表) 一致 |
+| 5 | 文档生成：`all_build.sh` 跑通、Example「i」与 §1 一致（见 [doc-generation.md §6](./doc-generation.md#6-发布前文档)） |
+
+**§4 已含专项契约的组件**：Button · Divider · Fab · BackTop（实现时以各 md §4.2 为准）。

@@ -355,9 +355,9 @@ class _TDropdownItemState extends State<TDropdownItem> {
         children: [
           Expanded(
             child: TButton(
-              text: context.resource.reset,
-              theme: TButtonTheme.light,
-              onTap: () {
+              child: Text(context.resource.reset),
+              colorScheme: TButtonColorScheme.light,
+              onPressed: () {
                 reset();
                 widget.onReset?.call();
               },
@@ -366,9 +366,9 @@ class _TDropdownItemState extends State<TDropdownItem> {
           SizedBox(width: TTheme.of(context).spacer16),
           Expanded(
             child: TButton(
-              text: context.resource.confirm,
-              theme: TButtonTheme.primary,
-              onTap: () {
+              child: Text(context.resource.confirm),
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
                 _handleClose();
                 widget.onConfirm?.call(
                     _getSelected(widget.options).map((e) => e!.value).toList());

@@ -138,7 +138,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: 'Label Text',
           controller: controller[0],
-          hintText: 'Please enter text',
+          hintchild: Text('Please enter text'),
           onChanged: (text) {
             setState(() {});
           },
@@ -162,7 +162,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           leftLabel: '标签文字',
           required: true,
           controller: controller[1],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -185,7 +185,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: '标签文字',
           controller: controller[2],
-          hintText: '请输入文字(选填)',
+          hintchild: Text('请输入文字(选填)'),
           onChanged: (text) {
             setState(() {});
           },
@@ -207,7 +207,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       children: [
         TInput(
           controller: controller[3],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -229,7 +229,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[4],
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       additionInfo: '辅助说明',
       onChanged: (text) {
         setState(() {});
@@ -249,7 +249,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           type: TInputType.normal,
           leftLabel: '标签文字',
           controller: controller[5],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           maxLength: 10,
           additionInfo: '最大输入10个字符',
           onChanged: (text) {
@@ -273,7 +273,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[6],
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       inputFormatters: [Chinese2Formatter(10)],
       additionInfo: '最大输入10个字符，汉字算两个',
       onChanged: (text) {
@@ -293,7 +293,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: '标签文字',
           controller: controller[7],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           rightBtn: Icon(
             TIcons.error_circle_filled,
             color: TTheme.of(context).textColorPlaceholder,
@@ -323,7 +323,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: '标签文字',
           controller: controller[8],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           rightBtn: Container(
             alignment: Alignment.center,
             width: 73,
@@ -333,9 +333,9 @@ class _TInputViewPageState extends State<TInputViewPage> {
               color: TTheme.of(context).brandNormalColor,
             ),
             child: const TButton(
-              text: '操作按钮',
+              child: Text('操作按钮'),
               size: TButtonSize.extraSmall,
-              theme: TButtonTheme.primary,
+              colorScheme: TButtonColorScheme.primary,
             ),
           ),
           onBtnTap: () {
@@ -355,7 +355,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
     return TInput(
       leftLabel: '标签文字',
       controller: controller[9],
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       rightBtn: Icon(
         TIcons.user_avatar,
         color: TTheme.of(context).textColorPlaceholder,
@@ -381,7 +381,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           leftIcon: const Icon(TIcons.app),
           leftLabel: '标签文字',
           controller: controller[10],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -404,7 +404,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftIcon: const Icon(TIcons.app),
           controller: controller[11],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -429,7 +429,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           controller: controller[12],
           obscureText: !browseOn,
           leftLabel: '输入密码',
-          hintText: '请输入密码',
+          hintchild: Text('请输入密码'),
           rightBtn: browseOn
               ? Icon(
                   TIcons.browse,
@@ -463,7 +463,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           obscureText: true,
           enableInteractiveSelection: true,
           leftLabel: '密码复制粘贴',
-          hintText: '此密码框允许长按复制粘贴',
+          hintchild: Text('此密码框允许长按复制粘贴'),
           contextMenuBuilder: (context, editableTextState) {
             final List<ContextMenuButtonItem> buttonItems =
                 editableTextState.contextMenuButtonItems;
@@ -506,7 +506,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           size: TInputSize.small,
           controller: controller[13],
           leftLabel: '验证码',
-          hintText: '输入验证码',
+          hintchild: Text('输入验证码'),
           rightBtn: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -545,7 +545,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           type: TInputType.normal,
           controller: controller[14],
           leftLabel: '手机号',
-          hintText: '输入手机号',
+          hintchild: Text('输入手机号'),
           rightBtn: SizedBox(
             width: 98,
             child: Row(
@@ -595,7 +595,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           type: TInputType.special,
           controller: controller[15],
           leftLabel: '价格',
-          hintText: '0.00',
+          hintchild: Text('0.00'),
           textAlign: TextAlign.end,
           rightWidget:
               TText('元', textColor: TTheme.of(context).textColorPrimary),
@@ -613,7 +613,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       type: TInputType.special,
       controller: controller[16],
       leftLabel: '数量',
-      hintText: '填写个数',
+      hintchild: Text('填写个数'),
       textAlign: TextAlign.end,
       rightWidget: TText('个', textColor: TTheme.of(context).textColorPrimary),
     );
@@ -626,7 +626,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: '标签文字',
           controller: controller[17],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           additionInfo: '错误提示说明',
           additionInfoColor: TTheme.of(context).errorColor6,
           onChanged: (text) {
@@ -650,7 +650,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       leftLabel: '标签文字',
       readOnly: true,
       // 不可编辑文字 则不必带入controller
-      hintText: '不可编辑文字',
+      hintchild: Text('不可编辑文字'),
     );
   }
 
@@ -663,7 +663,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           spacer: TInputSpacer(iconLabelSpace: 4),
           leftLabel: '标签超长时最多十个字',
           controller: controller[18],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -685,7 +685,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       type: TInputType.normal,
       leftLabel: '标签文字',
       controller: controller[19],
-      hintText: '输入文字超长不超过两行输入文字超长不超过两行',
+      hintchild: Text('输入文字超长不超过两行输入文字超长不超过两行'),
       hintTextStyle: TextStyle(
         color: TTheme.of(context).textColorPrimary,
       ),
@@ -700,7 +700,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       type: TInputType.twoLine,
       leftLabel: '标签文字',
       controller: controller[20],
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       rightBtn: Icon(
         TIcons.error_circle_filled,
         color: TTheme.of(context).textColorPlaceholder,
@@ -725,7 +725,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       width: MediaQuery.of(context).size.width - 32,
       leftLabel: '标签文字',
       controller: controller[21],
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       onChanged: (text) {
         setState(() {});
       },
@@ -746,9 +746,9 @@ class _TInputViewPageState extends State<TInputViewPage> {
         type: TInputType.cardStyle,
         cardStyle: TCardStyle.topText,
         width: MediaQuery.of(context).size.width - 32,
-        cardStyleTopText: '标签文字',
+        cardStyleTopchild: Text('标签文字'),
         controller: controller[22],
-        hintText: '请输入文字',
+        hintchild: Text('请输入文字'),
         rightBtn: Icon(
           TIcons.error_circle_filled,
           color: TTheme.of(context).textColorPlaceholder,
@@ -774,7 +774,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: '左对齐',
           controller: controller[23],
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -798,7 +798,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           leftLabel: '居中',
           controller: controller[24],
           contentAlignment: TextAlign.center,
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -822,7 +822,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           leftLabel: '右对齐',
           controller: controller[25],
           contentAlignment: TextAlign.end,
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onChanged: (text) {
             setState(() {});
           },
@@ -846,7 +846,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       backgroundColor: TTheme.of(context).grayColor12,
       leftLabelStyle: TextStyle(color: TTheme.of(context).fontWhColor1),
       textStyle: TextStyle(color: TTheme.of(context).fontWhColor1),
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       hintTextStyle: TextStyle(color: TTheme.of(context).fontWhColor3),
       onChanged: (text) {
         setState(() {});
@@ -870,9 +870,9 @@ class _TInputViewPageState extends State<TInputViewPage> {
           type: TInputType.longText,
           cardStyle: TCardStyle.topText,
           width: MediaQuery.of(context).size.width - 32,
-          cardStyleTopText: '标签文字',
+          cardStyleTopchild: Text('标签文字'),
           controller: controller,
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           rightBtn: Icon(
             TIcons.error_circle_filled,
             color: TTheme.of(context).textColorPlaceholder,
@@ -889,7 +889,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
     return TInput(
       leftLabel: '标签文字',
       controller: controller,
-      hintText: '请输入文字',
+      hintchild: Text('请输入文字'),
       showBottomDivider: false,
     );
   }
@@ -907,7 +907,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           size: TInputSize.small,
           leftLabel: '标签文字',
           controller: controller,
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           needClear: true,
         ),
       ),
@@ -927,7 +927,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           size: TInputSize.small,
           leftLabel: '标签文字',
           controller: controller,
-          hintText: '请输入文字',
+          hintchild: Text('请输入文字'),
           onTapOutside: (event) {
             TToast.showText('点击输入框外部区域', context: context);
             print('on tap outside ${event}');
@@ -950,7 +950,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
             controller: controller,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            hintText: '请输入文字',
+            hintchild: Text('请输入文字'),
           ),
           TInput(
             type: TInputType.twoLine,
@@ -958,7 +958,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
             controller: controller,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-            hintText: '请输入文字',
+            hintchild: Text('请输入文字'),
           ),
           TInput(
             type: TInputType.normalMaxTwoLine,
@@ -966,7 +966,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
             controller: controller,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
-            hintText: '请输入文字',
+            hintchild: Text('请输入文字'),
           ),
         ],
       ),
@@ -980,7 +980,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TInput(
           leftLabel: '地址',
           controller: controller[27],
-          hintText: '请输入地址，高度自适应',
+          hintchild: Text('请输入地址，高度自适应'),
           maxLines: null,
           onChanged: (text) {
             setState(() {});

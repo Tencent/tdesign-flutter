@@ -175,12 +175,12 @@ class TImageDialog extends StatelessWidget {
     final left = leftBtn ??
         TDialogButtonOptions(
             title: context.resource.cancel,
-            theme: TButtonTheme.light,
+            theme: TButtonColorScheme.light,
             action: null);
     final right = rightBtn ??
         TDialogButtonOptions(
             title: context.resource.confirm,
-            theme: TButtonTheme.primary,
+            theme: TButtonColorScheme.primary,
             action: null);
     return HorizontalNormalButtons(
       leftBtn: left,

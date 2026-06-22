@@ -33,7 +33,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
   Widget _iconEmpty(BuildContext context) {
     return const TEmpty(
       type: TEmptyType.plain,
-      emptyText: '描述文字',
+      emptychild: Text('描述文字'),
     );
   }
 
@@ -42,7 +42,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
     return const TEmpty(
       type: TEmptyType.plain,
       icon: Icons.hourglass_empty_sharp,
-      emptyText: '描述文字',
+      emptychild: Text('描述文字'),
     );
   }
 
@@ -50,7 +50,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
   Widget _imageEmpty(BuildContext context) {
     return TEmpty(
       type: TEmptyType.plain,
-      emptyText: '描述文字',
+      emptychild: Text('描述文字'),
       image: Container(
         decoration: BoxDecoration(
           color: TTheme.of(context).bgColorComponent,
@@ -69,8 +69,8 @@ class _TEmptyPageState extends State<TEmptyPage> {
   Widget _operationEmpty(BuildContext context) {
     return const TEmpty(
       type: TEmptyType.operation,
-      operationText: '操作按钮',
-      emptyText: '描述文字',
+      operationchild: Text('操作按钮'),
+      emptychild: Text('描述文字'),
     );
   }
 
@@ -78,15 +78,15 @@ class _TEmptyPageState extends State<TEmptyPage> {
   Widget _operationCustomEmpty(BuildContext context) {
     return TEmpty(
       type: TEmptyType.operation,
-      emptyText: '描述文字',
+      emptychild: Text('描述文字'),
       customOperationWidget: Padding(
         padding: const EdgeInsets.only(top: 32),
         child: TButton(
-          text: '自定义操作按钮',
+          child: Text('自定义操作按钮'),
           size: TButtonSize.medium,
-          theme: TButtonTheme.danger,
+          colorScheme: TButtonColorScheme.danger,
           width: 160,
-          onTap: () {},
+          onPressed: () {},
         ),
       ),
     );

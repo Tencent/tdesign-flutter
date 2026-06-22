@@ -11,19 +11,11 @@ class TButtonPage extends StatefulWidget {
 }
 
 class _TButtonPageState extends State<TButtonPage> {
-  void onTap() {
-    TToast.showText('点击了按钮', context: context);
-  }
-
-  void onLongPress() {
-    TToast.showText('长按了按钮', context: context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
+      desc: '用于开启一个闭环的操作任务，如"删除"对象、"购买"商品等。',
       exampleCodeGroup: 'button',
       children: [
         ExampleModule(title: '组件类型', children: [
@@ -91,7 +83,7 @@ class _TButtonPageState extends State<TButtonPage> {
                 );
               }),
           ExampleItem(ignoreCode: true, desc: '组合按钮', builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
-          ExampleItem(desc: '通栏按钮', builder: _buildFilledFillButton),
+          ExampleItem(desc: '通栏按钮', builder: _buildBlockFillButton),
         ]),
         ExampleModule(title: '组件状态', children: [
           ExampleItem(
@@ -194,40 +186,51 @@ class _TButtonPageState extends State<TButtonPage> {
             }),
         ExampleItem(
             ignoreCode: true,
-            desc: '通栏按钮测试',
+            desc: '通栏按钮测试（V1.0 外包布局）',
             builder: (context) {
               return Container(
                 color: TTheme.of(context).bgColorContainer,
-                padding: const EdgeInsets.only(top: 16, bottom: 16),
-                child: const Column(
+                padding: const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  // spacing: 16,
                   children: [
-                    TButton(
-                      isBlock: true,
-                      text: '填充block按钮',
-                      theme: TButtonTheme.primary,
+                    SizedBox(
+                      width: double.infinity,
+                      child: TButton(
+                        child: const Text('填充通栏按钮'),
+                        colorScheme: TButtonColorScheme.primary,
+                        onPressed: _onTap,
+                      ),
                     ),
-                    SizedBox(height: 16),
-                    TButton(
-                      isBlock: true,
-                      text: '描边block按钮',
-                      type: TButtonType.outline,
-                      theme: TButtonTheme.primary,
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TButton(
+                        child: const Text('描边通栏按钮'),
+                        variant: TButtonVariant.outline,
+                        colorScheme: TButtonColorScheme.primary,
+                        onPressed: _onTap,
+                      ),
                     ),
-                    SizedBox(height: 16),
-                    TButton(
-                      isBlock: true,
-                      text: '文字block按钮',
-                      type: TButtonType.text,
-                      theme: TButtonTheme.primary,
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TButton(
+                        child: const Text('文字通栏按钮'),
+                        variant: TButtonVariant.text,
+                        colorScheme: TButtonColorScheme.primary,
+                        onPressed: _onTap,
+                      ),
                     ),
-                    SizedBox(height: 16),
-                    TButton(
-                      isBlock: true,
-                      text: '幽灵block按钮',
-                      type: TButtonType.ghost,
-                      theme: TButtonTheme.primary,
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TButton(
+                        child: const Text('幽灵通栏按钮'),
+                        variant: TButtonVariant.ghost,
+                        colorScheme: TButtonColorScheme.primary,
+                        onPressed: _onTap,
+                      ),
                     ),
                   ],
                 ),
@@ -239,10 +242,9 @@ class _TButtonPageState extends State<TButtonPage> {
             desc: '按钮中路由跳转',
             builder: (context) {
               return TButton(
-                text: '点击跳转',
+                child: const Text('点击跳转'),
                 size: TButtonSize.large,
-                shape: TButtonShape.rectangle,
-                onTap: () async {
+                onPressed: () async {
                   var result = await Navigator.of(context).pushNamedAndRemoveUntil('divider', (router) {
                     return true;
                   });
@@ -266,334 +268,347 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
+  void _onTap() {
+    TToast.showText('点击了按钮', context: context);
+  }
+
+  /// 合并 TButtonThemeData 到当前 Theme 子树（替代 mergeExtension）
+  static ThemeData _mergeButtonTheme(BuildContext context, TButtonThemeData buttonTheme) {
+    final existingExtensions = List<ThemeExtension>.from(
+      Theme.of(context).extensions.values,
+    );
+    // 移除旧的 TButtonThemeData（如果存在）
+    existingExtensions.removeWhere((e) => e is TButtonThemeData);
+    existingExtensions.add(buttonTheme);
+    return Theme.of(context).copyWith(extensions: existingExtensions);
+  }
+
   @Demo(group: 'button')
   TButton _buildLightTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildLightStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDangerTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDangerStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDangerFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDefaultTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDefaultStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildFilledButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.filled,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildCircleButton(BuildContext context) {
     return const TButton(
-      icon: TIcons.app,
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.circle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildRoundButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.round,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildExtraSmallButton(BuildContext context) {
     return const TButton(
-      text: '按钮28',
+      child: Text('按钮28'),
       size: TButtonSize.extraSmall,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildSmallButton(BuildContext context) {
     return const TButton(
-      text: '按钮32',
+      child: Text('按钮32'),
       size: TButtonSize.small,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildMediumButton(BuildContext context) {
     return const TButton(
-      text: '按钮40',
+      child: Text('按钮40'),
       size: TButtonSize.medium,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildLargeButton(BuildContext context) {
     return const TButton(
-      text: '按钮48',
+      child: Text('按钮48'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDisableDefaultFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDisableLightFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
-  TButton _buildFilledFillButton(BuildContext context) {
-    return const TButton(
-      text: '填充按钮',
-      icon: TIcons.app,
-      size: TButtonSize.large,
-      type: TButtonType.fill,
-      theme: TButtonTheme.primary,
-      isBlock: true,
+  Widget _buildBlockFillButton(BuildContext context) {
+    return const SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text('填充按钮'),
+        icon: Icon(TIcons.app),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: null,
+      ),
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDefaultGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDangerGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildPrimaryGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildSquareIconButton(BuildContext context) {
     return const TButton(
-      icon: TIcons.app,
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.square,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
-      text: '加载中',
-      iconWidget: TLoading(
+      child: const Text('加载中'),
+      icon: TLoading(
         size: TLoadingSize.small,
         icon: TLoadingIcon.circle,
         iconColor: TTheme.of(context).whiteColor1,
       ),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildRectangleIconButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
-      icon: TIcons.app,
+      child: Text('填充按钮'),
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildPrimaryTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildPrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildDefaultFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }
 
@@ -601,22 +616,22 @@ class _TButtonPageState extends State<TButtonPage> {
   @Demo(group: 'button')
   TButton _buildPrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   TButton _buildLightFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }
 
@@ -625,25 +640,24 @@ class _TButtonPageState extends State<TButtonPage> {
     return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          // spacing: 16,
           children: [
             Expanded(
               child: TButton(
-                text: '填充按钮',
+                child: Text('填充按钮'),
                 size: TButtonSize.large,
-                type: TButtonType.fill,
-                shape: TButtonShape.rectangle,
-                theme: TButtonTheme.light,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.light,
+                onPressed: null,
               ),
             ),
             SizedBox(width: 16),
             Expanded(
               child: TButton(
-                text: '填充按钮',
+                child: Text('填充按钮'),
                 size: TButtonSize.large,
-                type: TButtonType.fill,
-                shape: TButtonShape.rectangle,
-                theme: TButtonTheme.primary,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: null,
               ),
             ),
           ],
@@ -654,47 +668,46 @@ class _TButtonPageState extends State<TButtonPage> {
   Widget _buildChildTestButton(BuildContext context) {
     return TButton(
       child: Container(
-        // 高度被按钮约束了
         height: 48,
         width: 48,
         color: Colors.red,
       ),
+      onPressed: null,
     );
   }
 
   @Demo(group: 'button')
   Widget _buildRightIconButton(BuildContext context) {
-    return const Wrap(
+    return Wrap(
       spacing: 16,
       runSpacing: 16,
       alignment: WrapAlignment.center,
-      children: [
+      children: const [
         TButton(
-          text: '填充按钮',
-          icon: TIcons.app,
+          child: Text('填充按钮'),
+          icon: Icon(TIcons.app),
           size: TButtonSize.large,
-          type: TButtonType.fill,
-          shape: TButtonShape.rectangle,
-          theme: TButtonTheme.primary,
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
+          onPressed: null,
         ),
         TButton(
-          icon: TIcons.app,
+          icon: Icon(TIcons.app),
           size: TButtonSize.large,
-          type: TButtonType.fill,
-          shape: TButtonShape.rectangle,
-          theme: TButtonTheme.primary,
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
+          onPressed: null,
         ),
         TButton(
-          text: '间距20',
-          icon: TIcons.app,
+          child: Text('间距20'),
+          icon: Icon(TIcons.app),
           size: TButtonSize.large,
-          type: TButtonType.fill,
-          shape: TButtonShape.rectangle,
-          theme: TButtonTheme.primary,
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
-          iconTextSpacing: 20,
+          onPressed: null,
         )
       ],
     );
@@ -702,42 +715,66 @@ class _TButtonPageState extends State<TButtonPage> {
 
   @Demo(group: 'button')
   Widget _buildGradientButton(BuildContext context) {
-    return const Wrap(
+    return Wrap(
       spacing: 16,
       runSpacing: 16,
       alignment: WrapAlignment.center,
       children: [
-        TButton(
-          text: '填充按钮',
-          icon: TIcons.app,
-          size: TButtonSize.large,
-          type: TButtonType.fill,
-          shape: TButtonShape.rectangle,
-          theme: TButtonTheme.primary,
-          iconPosition: TButtonIconPosition.right,
-          gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+        Theme(
+          data: _mergeButtonTheme(
+            context,
+            const TButtonThemeData(
+              gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+            ),
+          ),
+          child: const TButton(
+            child: Text('填充按钮'),
+            icon: Icon(TIcons.app),
+            size: TButtonSize.large,
+            variant: TButtonVariant.fill,
+            colorScheme: TButtonColorScheme.primary,
+            iconPosition: TButtonIconPosition.right,
+            onPressed: null,
+          ),
         ),
-        TButton(
-          icon: TIcons.app,
-          size: TButtonSize.large,
-          type: TButtonType.fill,
-          shape: TButtonShape.rectangle,
-          theme: TButtonTheme.primary,
-          iconPosition: TButtonIconPosition.right,
-          gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+        Theme(
+          data: _mergeButtonTheme(
+            context,
+            const TButtonThemeData(
+              gradient: LinearGradient(
+                  colors: [Colors.red, Colors.blue],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter),
+            ),
+          ),
+          child: const TButton(
+            icon: Icon(TIcons.app),
+            size: TButtonSize.large,
+            variant: TButtonVariant.fill,
+            colorScheme: TButtonColorScheme.primary,
+            iconPosition: TButtonIconPosition.right,
+            onPressed: null,
+          ),
         ),
-        TButton(
-          text: '间距20',
-          icon: TIcons.app,
-          size: TButtonSize.large,
-          type: TButtonType.fill,
-          shape: TButtonShape.rectangle,
-          theme: TButtonTheme.primary,
-          iconPosition: TButtonIconPosition.right,
-          iconTextSpacing: 20,
-          gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue], begin: Alignment.centerRight, end: Alignment.centerLeft),
+        Theme(
+          data: _mergeButtonTheme(
+            context,
+            const TButtonThemeData(
+              gradient: LinearGradient(
+                  colors: [Colors.red, Colors.blue],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft),
+            ),
+          ),
+          child: const TButton(
+            child: Text('间距20'),
+            icon: Icon(TIcons.app),
+            size: TButtonSize.large,
+            variant: TButtonVariant.fill,
+            colorScheme: TButtonColorScheme.primary,
+            iconPosition: TButtonIconPosition.right,
+            onPressed: null,
+          ),
         )
       ],
     );
@@ -749,490 +786,179 @@ class _TButtonPageState extends State<TButtonPage> {
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: [
-        /// fill
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                style: TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                disabled: true,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                style: TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                disabled: true,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                style:
-                    TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.defaultTheme, TButtonStatus.active),
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                disabled: true,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                style: TButtonStyle.generateFillStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                disabled: true,
-              ),
-            ],
-          ),
-        ),
+        // fill 变体
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.light,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.defaultTheme,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.danger,
+        ), context),
 
-        /// outline
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                type: TButtonType.outline,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                style: TButtonStyle.generateOutlineStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
-                type: TButtonType.outline,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                disabled: true,
-                type: TButtonType.outline,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                type: TButtonType.outline,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                style: TButtonStyle.generateOutlineStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
-                type: TButtonType.outline,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                disabled: true,
-                type: TButtonType.outline,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                type: TButtonType.outline,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                style: TButtonStyle.generateOutlineStyleByTheme(
-                    context, TButtonTheme.defaultTheme, TButtonStatus.active),
-                type: TButtonType.outline,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                disabled: true,
-                type: TButtonType.outline,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                type: TButtonType.outline,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                style: TButtonStyle.generateOutlineStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
-                type: TButtonType.outline,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                disabled: true,
-                type: TButtonType.outline,
-              ),
-            ],
-          ),
-        ),
+        // outline 变体
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.light,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.defaultTheme,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.danger,
+        ), context),
 
-        /// text
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                type: TButtonType.text,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                style: TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
-                type: TButtonType.text,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                disabled: true,
-                type: TButtonType.text,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                type: TButtonType.text,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                style: TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
-                type: TButtonType.text,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                disabled: true,
-                type: TButtonType.text,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                type: TButtonType.text,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                style:
-                    TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.defaultTheme, TButtonStatus.active),
-                type: TButtonType.text,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                disabled: true,
-                type: TButtonType.text,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                type: TButtonType.text,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                style: TButtonStyle.generateTextStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
-                type: TButtonType.text,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                disabled: true,
-                type: TButtonType.text,
-              ),
-            ],
-          ),
-        ),
+        // text 变体
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.text,
+          colorScheme: TButtonColorScheme.primary,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.text,
+          colorScheme: TButtonColorScheme.light,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.text,
+          colorScheme: TButtonColorScheme.defaultTheme,
+        ), context),
+        _buildStatusRow(const TButton(
+          icon: Icon(TIcons.app),
+          child: Text('Button'),
+          variant: TButtonVariant.text,
+          colorScheme: TButtonColorScheme.danger,
+        ), context),
 
-        /// ghost
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          color: Colors.black,
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                type: TButtonType.ghost,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                style: TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.primary, TButtonStatus.active),
-                type: TButtonType.ghost,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.primary,
-                disabled: true,
-                type: TButtonType.ghost,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          color: Colors.black,
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                type: TButtonType.ghost,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                style: TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.light, TButtonStatus.active),
-                type: TButtonType.ghost,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.light,
-                disabled: true,
-                type: TButtonType.ghost,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          color: Colors.black,
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                type: TButtonType.ghost,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                style:
-                    TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.defaultTheme, TButtonStatus.active),
-                type: TButtonType.ghost,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.defaultTheme,
-                disabled: true,
-                type: TButtonType.ghost,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          color: Colors.black,
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                type: TButtonType.ghost,
-              ),
-              TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                style: TButtonStyle.generateGhostStyleByTheme(context, TButtonTheme.danger, TButtonStatus.active),
-                type: TButtonType.ghost,
-              ),
-              const TButton(
-                icon: TIcons.app,
-                text: 'Button',
-                theme: TButtonTheme.danger,
-                disabled: true,
-                type: TButtonType.ghost,
-              ),
-            ],
-          ),
-        ),
+        // ghost 变体（深色背景）
+        ..._buildGhostStatusRows(context),
       ],
+    );
+  }
+
+  Widget _buildStatusRow(TButton template, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        alignment: WrapAlignment.center,
+        children: [
+          // 默认态（无交互）
+          TButton(
+            icon: template.icon,
+            child: template.child,
+            variant: template.variant,
+            colorScheme: template.colorScheme,
+            size: template.size,
+            onPressed: null,
+          ),
+          // 可交互态（按压由 Material WidgetState 自动处理）
+          TButton(
+            icon: template.icon,
+            child: template.child,
+            variant: template.variant,
+            colorScheme: template.colorScheme,
+            size: template.size,
+            onPressed: _onTap,
+          ),
+          // 禁用态
+          TButton(
+            icon: template.icon,
+            child: template.child,
+            variant: template.variant,
+            colorScheme: template.colorScheme,
+            size: template.size,
+            onPressed: null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildGhostStatusRows(BuildContext context) {
+    final themes = [
+      TButtonColorScheme.primary,
+      TButtonColorScheme.light,
+      TButtonColorScheme.defaultTheme,
+      TButtonColorScheme.danger,
+    ];
+    return themes.map((scheme) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        color: Colors.black,
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          alignment: WrapAlignment.center,
+          children: [
+            const TButton(
+              icon: Icon(TIcons.app),
+              child: Text('Button'),
+              variant: TButtonVariant.ghost,
+            ).copyWithColorScheme(scheme, onPressed: null),
+            const TButton(
+              icon: Icon(TIcons.app),
+              child: Text('Button'),
+              variant: TButtonVariant.ghost,
+            ).copyWithColorScheme(scheme, onPressed: _onTap),
+            const TButton(
+              icon: Icon(TIcons.app),
+              child: Text('Button'),
+              variant: TButtonVariant.ghost,
+            ).copyWithColorScheme(scheme, onPressed: null),
+          ],
+        ),
+      );
+    }).toList();
+  }
+}
+
+extension _TButtonCopy on TButton {
+  TButton copyWithColorScheme(TButtonColorScheme scheme, {VoidCallback? onPressed}) {
+    return TButton(
+      icon: icon,
+      child: child,
+      variant: variant,
+      colorScheme: scheme,
+      size: size,
+      iconPosition: iconPosition,
+      onPressed: onPressed,
+      style: style,
     );
   }
 }
