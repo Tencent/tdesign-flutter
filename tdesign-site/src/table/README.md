@@ -351,6 +351,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | right | - |
 
 
+### SelectableFunc
+#### 类型定义
+
+```dart
+typedef SelectableFunc = bool Function(int index, dynamic row);
+```
+
+
+### RowCheckFunc
+#### 类型定义
+
+```dart
+typedef RowCheckFunc = bool Function(int index, dynamic row);
+```
+
+
 ### OnCellTap
 #### 类型定义
 
@@ -380,22 +396,6 @@ typedef OnSelect = void Function(List<dynamic>? data);
 
 ```dart
 typedef OnRowSelect = void Function(int index, bool checked);
-```
-
-
-### SelectableFunc
-#### 类型定义
-
-```dart
-typedef SelectableFunc = bool Function(int index, dynamic row);
-```
-
-
-### RowCheckFunc
-#### 类型定义
-
-```dart
-typedef RowCheckFunc = bool Function(int index, dynamic row);
 ```
 
 

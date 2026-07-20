@@ -673,6 +673,21 @@ TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 | timeWidth | double? | - | 时间容器宽度 |
 
 
+### TTimeCounterStatus
+#### 简介
+计时组件控制器转态
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| start | 开始 |
+| pause | 暂停 |
+| resume | 继续 |
+| reset | 重置 |
+| idle | 空，默认值 |
+
+
 ### TTimeCounterDirection
 #### 简介
 计时组件计时方向
@@ -709,21 +724,6 @@ TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 | defaultTheme | 默认 |
 | round | 圆形 |
 | square | 方形 |
-
-
-### TTimeCounterStatus
-#### 简介
-计时组件控制器转态
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| start | 开始 |
-| pause | 暂停 |
-| resume | 继续 |
-| reset | 重置 |
-| idle | 空，默认值 |
 
 
   

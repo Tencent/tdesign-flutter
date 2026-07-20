@@ -93,16 +93,6 @@
 | titleStyle | TextStyle? | - | 标题文字样式 |
 
 
-### TCellGroupTheme
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultTheme | - |
-| cardTheme | - |
-
-
 ### TCellAlign
 #### 枚举值
 
@@ -114,12 +104,14 @@
 | bottom | - |
 
 
-### CellBuilder
-#### 类型定义
+### TCellGroupTheme
+#### 枚举值
 
-```dart
-typedef CellBuilder = Widget Function(BuildContext context, TCell cell, int index);
-```
+
+| 名称 | 说明 |
+| --- | --- |
+| defaultTheme | - |
+| cardTheme | - |
 
 
 ### TCellClick
@@ -127,4 +119,12 @@ typedef CellBuilder = Widget Function(BuildContext context, TCell cell, int inde
 
 ```dart
 typedef TCellClick = void Function(TCell cell);
+```
+
+
+### CellBuilder
+#### 类型定义
+
+```dart
+typedef CellBuilder = Widget Function(BuildContext context, TCell cell, int index);
 ```
