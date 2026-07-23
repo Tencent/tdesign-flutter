@@ -31,6 +31,7 @@ class TTextPage extends StatelessWidget {
               desc: '中文居中:（带有英文可能不居中）', builder: _buildVerticalCenterText),
           ExampleItem(desc: '自定义内部padding:', builder: _buildCustomPaddingText),
           ExampleItem(desc: '删除线:', builder: _buildTextThrough),
+          ExampleItem(desc: 'v1.0 Theme默认:', builder: _buildThemeDemo),
         ]),
       ],
       test: [
@@ -38,7 +39,7 @@ class TTextPage extends StatelessWidget {
             desc: '中文居中-系统字体',
             builder: (context) {
               return Container(
-                color: TTheme.of(context).brandFocusColor,
+                color: context.tTheme.brandFocusColor,
                 child: Text(exampleTxt),
               );
             }),
@@ -46,7 +47,7 @@ class TTextPage extends StatelessWidget {
             desc: '中文居中-TD字体',
             builder: (context) {
               return Container(
-                color: TTheme.of(context).brandFocusColor,
+                color: context.tTheme.brandFocusColor,
                 child: TText(
                   exampleTxt,
                   forceVerticalCenter: true,
@@ -75,9 +76,9 @@ class TTextPage extends StatelessWidget {
   Widget _buildGeneralProp(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontHeadlineLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      backgroundColor: TTheme.of(context).brandFocusColor,
+      font: context.tTheme.fontHeadlineLarge,
+      textColor: context.tTheme.brandNormalColor,
+      backgroundColor: context.tTheme.brandFocusColor,
     );
   }
 
@@ -85,9 +86,9 @@ class TTextPage extends StatelessWidget {
   Widget _buildStyleCoverColor(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style: TextStyle(color: TTheme.of(context).errorNormalColor),
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(color: context.tTheme.errorNormalColor),
     );
   }
 
@@ -95,8 +96,13 @@ class TTextPage extends StatelessWidget {
   Widget _buildStyleCoverColorAndFont(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(
+        color: context.tTheme.errorNormalColor,
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -106,25 +112,24 @@ class TTextPage extends StatelessWidget {
       TextSpan(children: [
         TTextSpan(
             text: 'TTextSpan1',
-            font: TTheme.of(context).fontTitleExtraLarge,
-            textColor: TTheme.of(context).warningNormalColor,
+            font: context.tTheme.fontTitleExtraLarge,
+            textColor: context.tTheme.warningNormalColor,
             isTextThrough: true,
-            lineThroughColor: TTheme.of(context).brandNormalColor,
-            style: TextStyle(color: TTheme.of(context).errorNormalColor)),
+            lineThroughColor: context.tTheme.brandNormalColor,
+            style: TextStyle(color: context.tTheme.errorNormalColor)),
         TextSpan(
             text: 'TextSpan2',
             style: TextStyle(
-                fontSize: 14, color: TTheme.of(context).brandNormalColor)),
+                fontSize: 14, color: context.tTheme.brandNormalColor)),
         const WidgetSpan(
             child: Icon(
           TIcons.setting,
           size: 24,
         )),
       ]),
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style:
-          TextStyle(color: TTheme.of(context).errorNormalColor, fontSize: 32),
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(color: context.tTheme.errorNormalColor, fontSize: 32),
     );
   }
 
@@ -132,7 +137,7 @@ class TTextPage extends StatelessWidget {
   Widget _getSystemText(BuildContext context) {
     return TText(
       exampleTxt,
-      backgroundColor: TTheme.of(context).brandFocusColor,
+      backgroundColor: context.tTheme.brandFocusColor,
     ).getRawText(context: context);
   }
 
@@ -142,7 +147,7 @@ class TTextPage extends StatelessWidget {
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: TTheme.of(context).brandFocusColor,
+      backgroundColor: context.tTheme.brandFocusColor,
     );
   }
 
@@ -158,6 +163,40 @@ class TTextPage extends StatelessWidget {
   Widget _buildTextThrough(BuildContext context) {
     return TText(exampleTxt, isTextThrough: true);
   }
+
+  @Demo(group: 'text')
+  Widget _buildThemeDemo(BuildContext context) {
+    // v1.0 新增：通过 TTextThemeData 统一控制子树 TText 默认样式
+    return Theme(
+      data: Theme.of(context).copyWith(
+        extensions: [
+          ...Theme.of(context).extensions.values,
+          TTextThemeData(
+            defaultTextColor: context.tTheme.brandNormalColor,
+            forceVerticalCenter: true,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: context.tTheme.brandFocusColor,
+            child: TText(exampleTxt),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '↑ 继承 TTextThemeData 默认颜色和强制居中',
+            style: TextStyle(
+              fontSize: 12,
+              color: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 /// 自定义控件，内部的context可拿到外部TTextConfiguration的配置信息
@@ -172,13 +211,13 @@ class CustomPaddingText extends StatelessWidget {
         TText(
           '中华人民共和国腾讯科技fgjpqy',
           forceVerticalCenter: true,
-          backgroundColor: TTheme.of(context).brandFocusColor,
+          backgroundColor: context.tTheme.brandFocusColor,
         ),
         TText(
           'English',
-          font: TTheme.of(context).fontHeadlineLarge,
+          font: context.tTheme.fontHeadlineLarge,
           forceVerticalCenter: true,
-          backgroundColor: TTheme.of(context).brandFocusColor,
+          backgroundColor: context.tTheme.brandFocusColor,
         ),
       ],
     );
@@ -188,8 +227,16 @@ class CustomPaddingText extends StatelessWidget {
 /// 重写内部padding方法
 class CustomTextPaddingConfig extends TTextPaddingConfig {
   @override
-  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
-    var supperPadding = super.getPadding(data, fontSize, height);
+  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height,
+      {String? fontFamily,
+      FontWeight? fontWeight,
+      double? textScale,
+      TTextPaddingConfig? paddingConfig}) {
+    var supperPadding = super.getPadding(data, fontSize, height,
+        fontFamily: fontFamily,
+        fontWeight: fontWeight,
+        textScale: textScale,
+        paddingConfig: paddingConfig);
     return EdgeInsets.only(left: 30, top: supperPadding.vertical.toDouble());
   }
 }

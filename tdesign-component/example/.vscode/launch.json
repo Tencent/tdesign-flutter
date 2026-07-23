@@ -1,0 +1,26 @@
+{
+  // Flutter Web 调试配置
+  // 使用 --no-web-resources-cdn 避免 CanvasKit 从 gstatic.com 加载（国内网络超时导致页面空白）
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "example (web, no CDN)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--no-web-resources-cdn"
+      ]
+    },
+    {
+      "name": "example (web, no CDN, skwasm)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--no-web-resources-cdn",
+        "--wasm"
+      ]
+    }
+  ]
+}

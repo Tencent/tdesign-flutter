@@ -1,6 +1,6 @@
 ---
-title: Button 按钮
-description: 用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。
+title: Button 按钮 (V1.0)
+description: 用于开启一个闭环的操作任务，如"删除"对象、"购买"商品等。
 spline: base
 isComponent: true
 ---
@@ -29,11 +29,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   @Demo(group: 'button')
   TButton _buildPrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -46,11 +46,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildLightFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }</pre>
 
@@ -63,11 +63,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDefaultFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }</pre>
 
@@ -80,11 +80,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildPrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -97,11 +97,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildPrimaryTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -116,12 +116,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildRectangleIconButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
-      icon: TIcons.app,
+      child: Text('填充按钮'),
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -134,11 +134,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildSquareIconButton(BuildContext context) {
     return const TButton(
-      icon: TIcons.app,
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.square,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -151,16 +151,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
-      text: '加载中',
-      iconWidget: TLoading(
+      child: const Text('加载中'),
+      icon: TLoading(
         size: TLoadingSize.small,
         icon: TLoadingIcon.circle,
         iconColor: TTheme.of(context).whiteColor1,
       ),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -175,11 +175,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildPrimaryGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -192,11 +192,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDangerGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }</pre>
 
@@ -209,11 +209,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDefaultGhostButton(BuildContext context) {
     return const TButton(
-      text: '幽灵按钮',
+      child: Text('幽灵按钮'),
       size: TButtonSize.large,
-      type: TButtonType.ghost,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.ghost,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }</pre>
 
@@ -230,25 +230,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          // spacing: 16,
           children: [
             Expanded(
               child: TButton(
-                text: '填充按钮',
+                child: Text('填充按钮'),
                 size: TButtonSize.large,
-                type: TButtonType.fill,
-                shape: TButtonShape.rectangle,
-                theme: TButtonTheme.light,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.light,
+                onPressed: null,
               ),
             ),
             SizedBox(width: 16),
             Expanded(
               child: TButton(
-                text: '填充按钮',
+                child: Text('填充按钮'),
                 size: TButtonSize.large,
-                type: TButtonType.fill,
-                shape: TButtonShape.rectangle,
-                theme: TButtonTheme.primary,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: null,
               ),
             ),
           ],
@@ -263,14 +262,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  TButton _buildFilledFillButton(BuildContext context) {
-    return const TButton(
-      text: '填充按钮',
-      icon: TIcons.app,
-      size: TButtonSize.large,
-      type: TButtonType.fill,
-      theme: TButtonTheme.primary,
-      isBlock: true,
+  Widget _buildBlockFillButton(BuildContext context) {
+    return const SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text('填充按钮'),
+        icon: Icon(TIcons.app),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: null,
+      ),
     );
   }</pre>
 
@@ -286,12 +288,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -304,12 +305,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDisableLightFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }</pre>
 
@@ -322,12 +322,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDisableDefaultFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }</pre>
 
@@ -340,12 +339,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -358,12 +356,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -379,11 +376,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildLargeButton(BuildContext context) {
     return const TButton(
-      text: '按钮48',
+      child: Text('按钮48'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -396,11 +393,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildMediumButton(BuildContext context) {
     return const TButton(
-      text: '按钮40',
+      child: Text('按钮40'),
       size: TButtonSize.medium,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -413,11 +410,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildSmallButton(BuildContext context) {
     return const TButton(
-      text: '按钮32',
+      child: Text('按钮32'),
       size: TButtonSize.small,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -430,11 +427,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildExtraSmallButton(BuildContext context) {
     return const TButton(
-      text: '按钮28',
+      child: Text('按钮28'),
       size: TButtonSize.extraSmall,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -450,11 +447,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   @Demo(group: 'button')
   TButton _buildPrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -467,11 +464,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildSquareIconButton(BuildContext context) {
     return const TButton(
-      icon: TIcons.app,
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.square,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -484,11 +481,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildRoundButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.round,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -501,11 +498,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildCircleButton(BuildContext context) {
     return const TButton(
-      icon: TIcons.app,
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.circle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -518,11 +515,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildFilledButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.filled,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -537,11 +534,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDefaultFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }</pre>
 
@@ -554,11 +551,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDefaultStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }</pre>
 
@@ -571,11 +568,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDefaultTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: null,
     );
   }</pre>
 
@@ -589,11 +586,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   @Demo(group: 'button')
   TButton _buildPrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -606,11 +603,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildPrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -623,11 +620,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildPrimaryTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }</pre>
 
@@ -640,11 +637,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDangerFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }</pre>
 
@@ -657,11 +654,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDangerStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }</pre>
 
@@ -674,11 +671,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildDangerTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.danger,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.danger,
+      onPressed: null,
     );
   }</pre>
 
@@ -691,11 +688,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildLightFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }</pre>
 
@@ -708,11 +705,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildLightStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }</pre>
 
@@ -725,11 +722,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   TButton _buildLightTextButton(BuildContext context) {
     return const TButton(
-      text: '文字按钮',
+      child: Text('文字按钮'),
       size: TButtonSize.large,
-      type: TButtonType.text,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
     );
   }</pre>
 
@@ -743,114 +740,56 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| activeStyle | TButtonStyle? | - | 自定义点击样式，有则优先用它，没有则根据 type 和 theme 选取 |
-| child | Widget? | - | 自控件 |
-| disabled | bool | false | 禁止点击 |
-| disableStyle | TButtonStyle? | - | 自定义禁用样式，有则优先用它，没有则根据 type 和 theme 选取 |
-| disableTextStyle | TextStyle? | - | 自定义不可点击状态文本样式 |
-| gradient | Gradient? | - | 渐变背景色，优先级高于backgroundColor |
-| height | double? | - | 自定义高度 |
-| icon | IconData? | - | 图标icon |
-| iconPosition | TButtonIconPosition? | TButtonIconPosition.left | 图标位置 |
-| iconTextSpacing | double? | - | 自定义图标与文本之间距离 |
-| iconWidget | Widget? | - | 自定义图标 icon 控件 |
-| isBlock | bool | false | 是否为通栏按钮 |
+| child | Widget? | - | 内容（纯文案用 `Text('...')`） |
+| colorScheme | TButtonColorScheme? | - | 配色方案，未传时使用 Theme 默认解析 |
+| icon | Widget? | - | 图标（Widget 类型，IconData 需包裹为 `Icon(...)`） |
+| iconPosition | TButtonIconPosition | TButtonIconPosition.left | 图标位置 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| margin | EdgeInsetsGeometry? | - | 自定义 margin |
-| onLongPress | TButtonEvent? | - | 长按事件 |
-| onTap | TButtonEvent? | - | 点击事件 |
-| padding | EdgeInsetsGeometry? | - | 自定义 padding |
-| shape | TButtonShape | TButtonShape.rectangle | 形状：圆角，胶囊，方形，圆形，填充 |
-| size | TButtonSize | TButtonSize.medium | 尺寸 |
-| style | TButtonStyle? | - | 自定义样式，有则优先用它，没有则根据 type 和 theme 选取。如果设置了 style，则 activeStyle 和 disableStyle 也应该设置 |
-| text | String? | - | 文本内容 |
-| textStyle | TextStyle? | - | 自定义可点击状态文本样式 |
-| theme | TButtonTheme? | - | 主题 |
-| type | TButtonType | TButtonType.fill | 类型：填充，描边，文字 |
-| width | double? | - | 自定义宽度 |
+| onPressed | VoidCallback? | - | 点击回调，`null` 表示禁用 |
+| size | TButtonSize | TButtonSize.medium | 尺寸，未传时使用 Theme `TButtonThemeData.defaultSize` |
+| style | ButtonStyle? | - | P0 逃逸舱：`ButtonStyle` 覆盖所有 resolve 结果 |
+| variant | TButtonVariant? | - | 变体（fill / outline / text / ghost），未传时使用 Theme `TButtonThemeData.defaultVariant` |
 
 
-### TButtonStyle
-
-#### 工厂构造方法
-
-##### TButtonStyle.generateFillStyleByTheme
-
-生成不同主题的填充按钮样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
-
-
-##### TButtonStyle.generateGhostStyleByTheme
-
-生成不同主题的幽灵按钮样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
-
-
-##### TButtonStyle.generateOutlineStyleByTheme
-
-生成不同主题的描边按钮样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
-
-
-##### TButtonStyle.generateTextStyleByTheme
-
-生成不同主题的文本按钮样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| theme | TButtonTheme? | - | - |
-| status | TButtonStatus | - | - |
-
+### TButtonThemeData
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| frameColor | Color? | - | 边框颜色 |
-| frameWidth | double? | - | 边框宽度 |
-| gradient | Gradient? | - | 渐变背景色 |
-| radius | BorderRadiusGeometry? | - | 自定义圆角 |
-| textColor | Color? | - | 文字颜色 |
+| defaultSize | TButtonSize | TButtonSize.medium | 未传 `TButton.size` 时的默认尺寸 |
+| defaultVariant | TButtonVariant | TButtonVariant.fill | 未传 `TButton.variant` 时的默认变体 |
+| filledStyle | ButtonStyle? | - | P2 色板：fill 变体的 `ButtonStyle`（仅颜色相关字段，不含 shape） |
+| ghostStyle | ButtonStyle? | - | P2 色板：ghost 变体的 `ButtonStyle`（仅颜色相关字段，不含 shape） |
+| gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） |
+| iconSpacing | double? | - | 图标与文案之间的间距 |
+| margin | EdgeInsetsGeometry? | - | 外边距 |
+| outlinedStyle | ButtonStyle? | - | P2 色板：outline 变体的 `ButtonStyle`（仅颜色相关字段，不含 shape） |
+| padding | EdgeInsetsGeometry? | - | 覆盖默认 padding（null 时由 resolve 按 size/shape 推导） |
+| shape | TButtonShape? | - | 外形，会展开进 resolves `ButtonStyle.shape` |
+| textButtonStyle | ButtonStyle? | - | P2 色板：text 变体的 `ButtonStyle`（仅颜色相关字段，不含 shape） |
+| textStyle | TextStyle? | - | 默认文案样式 |
 
 
-### TButtonSize
-#### 枚举值
+### TButtonResolve
 
+#### 静态方法
 
-| 名称 | 说明 |
-| --- | --- |
-| large | - |
-| medium | - |
-| small | - |
-| extraSmall | - |
+##### TButtonResolve.resolve
 
+解析最终的 `ButtonStyle`
 
-### TButtonType
-#### 枚举值
+返回类型：`ButtonStyle`
 
-
-| 名称 | 说明 |
-| --- | --- |
-| fill | - |
-| outline | - |
-| text | - |
-| ghost | - |
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| variant | TButtonVariant | - | - |
+| colorScheme | TButtonColorScheme? | - | - |
+| size | TButtonSize | - | - |
+| icon | Widget? | - | - |
+| iconPosition | TButtonIconPosition | - | - |
+| theme | TButtonThemeData? | - | - |
+| instanceStyle | ButtonStyle? | - | - |
+| context | BuildContext | - | - |
 
 
 ### TButtonShape
@@ -866,7 +805,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | filled | - |
 
 
-### TButtonTheme
+### TButtonSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| large | - |
+| medium | - |
+| small | - |
+| extraSmall | - |
+
+
+### TButtonVariant
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| fill | - |
+| outline | - |
+| text | - |
+| ghost | - |
+
+
+### TButtonColorScheme
 #### 枚举值
 
 
@@ -878,17 +841,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | light | - |
 
 
-### TButtonStatus
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultState | - |
-| active | - |
-| disable | - |
-
-
 ### TButtonIconPosition
 #### 枚举值
 
@@ -897,14 +849,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- |
 | left | - |
 | right | - |
-
-
-### TButtonEvent
-#### 类型定义
-
-```dart
-typedef TButtonEvent = void Function();
-```
 
 
   

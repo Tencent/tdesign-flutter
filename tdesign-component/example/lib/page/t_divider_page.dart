@@ -15,9 +15,9 @@ class TDividerPage extends StatelessWidget {
         exampleCodeGroup: 'divider',
         children: [
           ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '水平分割线', builder: _verticalDivider),
-            ExampleItem(desc: '带文字水平分割线', builder: _verticalTextDivider),
-            ExampleItem(desc: '垂直分割', builder: _horizontalTextDivider),
+            ExampleItem(desc: '水平分割线', builder: _horizontalDivider),
+            ExampleItem(desc: '带文字水平分割线', builder: _horizontalTextDivider),
+            ExampleItem(desc: '垂直分割', builder: _verticalDivider),
           ]),
           ExampleModule(title: '组件状态', children: [
             ExampleItem(desc: '虚线样式', builder: _dashedDivider),
@@ -26,37 +26,36 @@ class TDividerPage extends StatelessWidget {
   }
 
   @Demo(group: 'divider')
-  Widget _verticalDivider(BuildContext context) {
+  Widget _horizontalDivider(BuildContext context) {
     return Container(
-      height: 20,
       alignment: Alignment.center,
       child: const TDivider(),
     );
   }
 
   @Demo(group: 'divider')
-  Widget _verticalTextDivider(BuildContext context) {
+  Widget _horizontalTextDivider(BuildContext context) {
     return const Wrap(
       runSpacing: 20,
       children: [
         TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.left,
+          child: Text('文字信息'),
+          align: TDividerAlign.left,
         ),
         TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.center,
+          child: Text('文字信息'),
+          align: TDividerAlign.center,
         ),
         TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.right,
+          child: Text('文字信息'),
+          align: TDividerAlign.right,
         ),
       ],
     );
   }
 
   @Demo(group: 'divider')
-  Widget _horizontalTextDivider(BuildContext context) {
+  Widget _verticalDivider(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.only(left: 16),
@@ -66,22 +65,24 @@ class TDividerPage extends StatelessWidget {
         children: [
           TText(
             '文字信息',
-            textColor: TTheme.of(context).textColorPlaceholder,
+            textColor: context.tTheme.textColorPlaceholder,
           ),
-          const TDivider(
-            width: 0.5,
-            height: 12,
-            margin: EdgeInsets.symmetric(horizontal: 8),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: SizedBox(
+              child: TDivider(layout: TDividerLayout.vertical),
+            ),
           ),
-          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
-          const TDivider(
-            width: 0.5,
-            height: 12,
-            margin: EdgeInsets.symmetric(horizontal: 8),
-            isDashed: true,
-            direction: Axis.vertical,
+          TText('文字信息',
+              textColor: context.tTheme.textColorPlaceholder),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: SizedBox(
+              child: TDivider(layout: TDividerLayout.vertical),
+            ),
           ),
-          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
+          TText('文字信息',
+              textColor: context.tTheme.textColorPlaceholder),
         ],
       ),
     );
@@ -92,23 +93,21 @@ class TDividerPage extends StatelessWidget {
     return const Wrap(
       runSpacing: 20,
       children: [
+        TDivider(dashed: true),
         TDivider(
-          isDashed: true,
+          child: Text('文字信息'),
+          align: TDividerAlign.left,
+          dashed: true,
         ),
         TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.left,
-          isDashed: true,
+          child: Text('文字信息'),
+          align: TDividerAlign.center,
+          dashed: true,
         ),
         TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.center,
-          isDashed: true,
-        ),
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.right,
-          isDashed: true,
+          child: Text('文字信息'),
+          align: TDividerAlign.right,
+          dashed: true,
         ),
       ],
     );

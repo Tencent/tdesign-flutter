@@ -27,6 +27,9 @@ class ExamplePageModel {
   String? pageName;
   bool isTodo;
   final PageBuilder pageBuilder;
+
+  String get displayText =>
+      text.replaceFirst(RegExp(r'\s*\(V?1\.0\)\s*$', caseSensitive: false), '');
 }
 
 /// 存储主题数据的内部控件
