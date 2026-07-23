@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+
+import '../button/t_button.dart';
+import '../button/t_button_theme_data.dart';
+import '../button/t_button_types.dart';
+
+/// 拖拽轴向
+enum TFabDragAxis {
+  /// 允许水平和垂直方向拖拽
+  all,
+
+  /// 仅允许垂直方向拖拽
+  vertical,
+
+  /// 仅允许水平方向拖拽
+  horizontal,
+}
+
+/// 吸附方向
+enum TFabMagnet {
+  /// 拖拽结束后吸附到左侧边界
+  left,
+
+  /// 拖拽结束后吸附到右侧边界
+  right,
+}
+
+/// 拖拽边界限制
+class TFabBounds {
+  /// 起点留白（水平：left，垂直：top）
+  final double start;
+
+  /// 终点留白（水平：right，垂直：bottom）
+  final double end;
+
+  const TFabBounds({required this.start, required this.end});
+}
+
+/// Fab 内嵌按钮配置透传类型
+///
+/// 字段与 [TButton] 构造参数对齐，不含 onPressed / child / icon。
+class TButtonProps {
+  /// 按钮尺寸
+  final TButtonSize? size;
+
+  /// 按钮变体
+  final TButtonVariant? variant;
+
+  /// 按钮配色方案
+  final TButtonColorScheme? colorScheme;
+
+  /// 按钮形状
+  final TButtonShape? shape;
+
+  /// P0 按钮样式覆盖
+  final ButtonStyle? style;
+
+  const TButtonProps({
+    this.size,
+    this.variant,
+    this.colorScheme,
+    this.shape,
+    this.style,
+  });
+}
+
+/// 拖拽回调详情
+class TFabDragDetails {
+  /// 当前位置（相对父 Stack 内容区）
+  final Offset position;
+
+  /// 拖拽开始详情
+  final DragStartDetails? start;
+
+  /// 拖拽结束详情
+  final DragEndDetails? end;
+
+  const TFabDragDetails({
+    required this.position,
+    this.start,
+    this.end,
+  });
+}
+
+/// 拖拽回调
+typedef TFabDragCallback = void Function(TFabDragDetails details);
+
+/// Fab 定位层内部模型
+///
+/// 由构造器扁平参数经 resolveLayout 组装，内部使用，不 export。
+class TFabLayout {
+  final double right;
+  final double bottom;
+  final TFabDragAxis? draggable; // null = false
+  final TFabMagnet? magnet; // null = false
+  final TFabBounds? xBounds;
+  final TFabBounds? yBounds;
+
+  const TFabLayout({
+    required this.right,
+    required this.bottom,
+    this.draggable,
+    this.magnet,
+    this.xBounds,
+    this.yBounds,
+  });
+}

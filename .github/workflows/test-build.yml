@@ -2,13 +2,11 @@ name: test-build
 
 on:
   pull_request:
-    branches: [develop]
     paths-ignore:
       - "tdesign-site/**"
       - "tdesign-adaptation/**"
       - "*.md"
   push:
-    branches: [develop]
     paths-ignore:
       - "tdesign-site/**"
       - "tdesign-adaptation/**"
@@ -19,7 +17,36 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'develop' }}
 
 jobs:
+  example-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Flutter
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        with:
+          flutter-version: 3.32.0
+          cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
+
+      - name: tdesign-adaptation
+        run: sh ./tdesign-component/init.sh
+
+      - name: generate api md
+        working-directory: ./tdesign-component
+        run: sh ./demo_tool/all_build.sh
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component/example
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: flutter test example demos
+        working-directory: ./tdesign-component/example
+        run: flutter test test/sidebar_anchor_test.dart --reporter compact
+
   build:
+    needs: example-test
     strategy:
       fail-fast: false
       matrix:

@@ -9,6 +9,10 @@
 .history
 .svn/
 
+# Root-level temporary / test output text files (e.g. test_output.txt, _dbg.txt, _snap.txt)
+# 仅忽略仓库根目录，避免误伤子目录中需保留的 .txt（如 example/assets/code/*.txt）
+/*.txt
+
 
 # Site
 tdesign-site/node_modules/
@@ -93,3 +97,5 @@ build/
 # Cursor harness generated artifacts
 /.cursor/
 /AGENTS.md
+tdesign-component/docs/v1.0/TDesign_Flutter_V1_0_工时评估表_优化版.html
+tdesign-component/docs/v1.0/TDesign_Flutter_V1_0_工时评估表_优化版.xlsx

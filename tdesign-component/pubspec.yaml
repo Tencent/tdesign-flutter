@@ -5,15 +5,17 @@ homepage: https://github.com/Tencent/tdesign-flutter
 
 environment:
   sdk: ">=3.2.6 <4.0.0"
-  flutter: ">=3.16.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   flutter:
     sdk: flutter
   collection:
 
+  # TDesign 图标资源包（v1.0 剥离内嵌资源）
+  tdesign_icons: ^0.0.4
+
   # 轮播图组件
-  flutter_swiper_null_safety: ^1.0.2
 
   # 下拉刷新组件
   easy_refresh: ^3.4.0
@@ -29,6 +31,7 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+  image_picker_platform_interface: 2.11.1
   tdesign_flutter_tools:
     git:
       url: https://github.com/TDesignOteam/tdesign-flutter-tools.git
@@ -45,9 +48,6 @@ flutter:
   # adding or updating assets for this project.
   uses-material-design: true
   fonts:
-    - family: TIcons
-      fonts:
-        - asset: assets/tdesign/t_icons.ttf
     - family: TCloudNumber
       fonts:
         - asset: assets/tdesign/TCloudNumberVF.ttf
