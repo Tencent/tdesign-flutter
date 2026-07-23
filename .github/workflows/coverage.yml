@@ -1,7 +1,9 @@
 name: Flutter Coverage
 
+# TEMPORARY MIGRATION COMPATIBILITY: Limit coverage to Theme and the migrated
+# base components. Expand this list as later component PRs are merged.
 on:
-  workflow_dispatch: # 手动在 Actions 页面触发
+  workflow_dispatch:
   push:
     branches: ['**']
 
@@ -12,25 +14,30 @@ jobs:
       run:
         working-directory: tdesign-component
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 安装 Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.9'
+          flutter-version: '3.32.0'
           channel: 'stable'
           cache: true
 
-      - name: 获取依赖
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: 运行测试并采集覆盖率
-        # 即便有少量用例失败也继续，确保产出 lcov
-        continue-on-error: true
-        run: flutter test --coverage --reporter expanded
+      - name: Run base component tests with coverage
+        run: >-
+          flutter test --coverage --reporter expanded
+          test/components/button
+          test/components/divider
+          test/components/fab
+          test/components/icon
+          test/components/link
+          test/components/text
 
-      - name: 上传 lcov 产物
+      - name: Upload lcov artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
