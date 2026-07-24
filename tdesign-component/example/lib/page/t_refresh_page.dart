@@ -45,30 +45,28 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           // spacing: 16,
           children: [
             Container(
-              height: 171,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
+                  color: context.tTheme.bgColorContainer,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(TTheme.of(context).radiusLarge))),
+                      Radius.circular(context.tTheme.radiusLarge))),
               child: TText(
                 PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
-                font: TTheme.of(context).fontBodyLarge,
-                textColor: TTheme.of(context).textColorPlaceholder,
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 16),
             Container(
-              height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
+                  color: context.tTheme.bgColorContainer,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(TTheme.of(context).radiusLarge))),
+                      Radius.circular(context.tTheme.radiusLarge))),
               child: TText(
                 '下拉刷新次数：${count}',
-                font: TTheme.of(context).fontBodyLarge,
-                textColor: TTheme.of(context).textColorPlaceholder,
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 500),

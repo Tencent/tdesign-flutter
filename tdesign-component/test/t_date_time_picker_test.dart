@@ -17,25 +17,52 @@ TDateTimePickerValue valueFromDateTime(DateTime dt) => TDateTimePickerValue(
     );
 
 /// dateMode × timeMode 全组合及期望列数。
-final _allModeColumnCases = <({DateTimePickerMode mode, int columns, String label})>[
-  (mode: DateTimePickerMode(dateMode: DateMode.year), columns: 1, label: 'year'),
-  (mode: DateTimePickerMode(dateMode: DateMode.month), columns: 2, label: 'month'),
-  (mode: DateTimePickerMode(dateMode: DateMode.date), columns: 3, label: 'date'),
-  (mode: DateTimePickerMode(timeMode: TimeMode.hour), columns: 1, label: 'hour'),
-  (mode: DateTimePickerMode(timeMode: TimeMode.minute), columns: 2, label: 'minute'),
-  (mode: DateTimePickerMode(timeMode: TimeMode.second), columns: 3, label: 'second'),
+final _allModeColumnCases =
+    <({DateTimePickerMode mode, int columns, String label})>[
+  (
+    mode: DateTimePickerMode(dateMode: DateMode.year),
+    columns: 1,
+    label: 'year'
+  ),
+  (
+    mode: DateTimePickerMode(dateMode: DateMode.month),
+    columns: 2,
+    label: 'month'
+  ),
+  (
+    mode: DateTimePickerMode(dateMode: DateMode.date),
+    columns: 3,
+    label: 'date'
+  ),
+  (
+    mode: DateTimePickerMode(timeMode: TimeMode.hour),
+    columns: 1,
+    label: 'hour'
+  ),
+  (
+    mode: DateTimePickerMode(timeMode: TimeMode.minute),
+    columns: 2,
+    label: 'minute'
+  ),
+  (
+    mode: DateTimePickerMode(timeMode: TimeMode.second),
+    columns: 3,
+    label: 'second'
+  ),
   (
     mode: DateTimePickerMode(dateMode: DateMode.year, timeMode: TimeMode.hour),
     columns: 2,
     label: 'year+hour',
   ),
   (
-    mode: DateTimePickerMode(dateMode: DateMode.year, timeMode: TimeMode.minute),
+    mode:
+        DateTimePickerMode(dateMode: DateMode.year, timeMode: TimeMode.minute),
     columns: 3,
     label: 'year+minute',
   ),
   (
-    mode: DateTimePickerMode(dateMode: DateMode.year, timeMode: TimeMode.second),
+    mode:
+        DateTimePickerMode(dateMode: DateMode.year, timeMode: TimeMode.second),
     columns: 4,
     label: 'year+second',
   ),
@@ -45,12 +72,14 @@ final _allModeColumnCases = <({DateTimePickerMode mode, int columns, String labe
     label: 'month+hour',
   ),
   (
-    mode: DateTimePickerMode(dateMode: DateMode.month, timeMode: TimeMode.minute),
+    mode:
+        DateTimePickerMode(dateMode: DateMode.month, timeMode: TimeMode.minute),
     columns: 4,
     label: 'month+minute',
   ),
   (
-    mode: DateTimePickerMode(dateMode: DateMode.month, timeMode: TimeMode.second),
+    mode:
+        DateTimePickerMode(dateMode: DateMode.month, timeMode: TimeMode.second),
     columns: 5,
     label: 'month+second',
   ),
@@ -60,12 +89,14 @@ final _allModeColumnCases = <({DateTimePickerMode mode, int columns, String labe
     label: 'date+hour',
   ),
   (
-    mode: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute),
+    mode:
+        DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute),
     columns: 5,
     label: 'date+minute',
   ),
   (
-    mode: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second),
+    mode:
+        DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second),
     columns: 6,
     label: 'date+second',
   ),
@@ -75,29 +106,33 @@ final _allModeColumnCases = <({DateTimePickerMode mode, int columns, String labe
 Future<void> pumpDateTimePicker(
   WidgetTester tester, {
   required DateTimePickerMode mode,
-  TDateTimePickerValue? initialValue,
+  TDateTimePickerValue? value,
   TDateTimePickerValue? start,
   TDateTimePickerValue? end,
   bool showWeek = false,
   DateTimePickerSteps? steps,
   DateTimePickerRenderLabel? renderLabel,
-  void Function(TDateTimePickerValue)? onChange,
+  void Function(TDateTimePickerValue)? onChanged,
   double? height,
   int? itemCount,
 }) async {
   await tester.pumpWidget(MaterialApp(
+    theme: ThemeData(
+      extensions: [
+        TThemeData.defaultData(),
+        TPickerThemeData(height: height, itemCount: itemCount),
+      ],
+    ),
     home: Scaffold(
       body: TDateTimePicker(
         mode: mode,
-        initialValue: initialValue,
+        value: value ?? valueFromDateTime(DateTime(2025, 1, 1)),
         start: start,
         end: end,
         showWeek: showWeek,
         steps: steps,
         renderLabel: renderLabel,
-        onChange: onChange,
-        height: height,
-        itemCount: itemCount,
+        onChanged: onChanged,
       ),
     ),
   ));
@@ -110,32 +145,42 @@ void main() {
   // ===========================================================================
   group('DateTimePickerMode', () {
     test('dateMode / timeMode 组合展开列（与 mobile-vue 等价）', () {
-      expect(DateTimePickerMode(dateMode: DateMode.year).columns, [DateTimeColumn.year]);
+      expect(DateTimePickerMode(dateMode: DateMode.year).columns,
+          [DateTimeColumn.year]);
       expect(DateTimePickerMode(dateMode: DateMode.month).columns,
           [DateTimeColumn.year, DateTimeColumn.month]);
       expect(DateTimePickerMode(dateMode: DateMode.date).columns,
           [DateTimeColumn.year, DateTimeColumn.month, DateTimeColumn.day]);
-      expect(DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.hour).columns, [
-        DateTimeColumn.year,
-        DateTimeColumn.month,
-        DateTimeColumn.day,
-        DateTimeColumn.hour,
-      ]);
-      expect(DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute).columns, [
-        DateTimeColumn.year,
-        DateTimeColumn.month,
-        DateTimeColumn.day,
-        DateTimeColumn.hour,
-        DateTimeColumn.minute,
-      ]);
-      expect(DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns, [
-        DateTimeColumn.year,
-        DateTimeColumn.month,
-        DateTimeColumn.day,
-        DateTimeColumn.hour,
-        DateTimeColumn.minute,
-        DateTimeColumn.second,
-      ]);
+      expect(
+          DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.hour)
+              .columns,
+          [
+            DateTimeColumn.year,
+            DateTimeColumn.month,
+            DateTimeColumn.day,
+            DateTimeColumn.hour,
+          ]);
+      expect(
+          DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute)
+              .columns,
+          [
+            DateTimeColumn.year,
+            DateTimeColumn.month,
+            DateTimeColumn.day,
+            DateTimeColumn.hour,
+            DateTimeColumn.minute,
+          ]);
+      expect(
+          DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second)
+              .columns,
+          [
+            DateTimeColumn.year,
+            DateTimeColumn.month,
+            DateTimeColumn.day,
+            DateTimeColumn.hour,
+            DateTimeColumn.minute,
+            DateTimeColumn.second,
+          ]);
     });
 
     test('combined：仅 date 段', () {
@@ -184,7 +229,7 @@ void main() {
 
     test('combined：dateMode 与 timeMode 同时为 null 触发 assert', () {
       expect(
-        () => DateTimePickerMode(),
+        DateTimePickerMode.new,
         throwsAssertionError,
       );
     });
@@ -346,9 +391,9 @@ void main() {
     });
 
     test('相等性比较包含全部字段', () {
-      final a = TDateTimePickerValue(year: 2026, month: 5, day: 15);
-      final b = TDateTimePickerValue(year: 2026, month: 5, day: 15);
-      final c = TDateTimePickerValue(year: 2026, month: 5, day: 16);
+      const a = TDateTimePickerValue(year: 2026, month: 5, day: 15);
+      const b = TDateTimePickerValue(year: 2026, month: 5, day: 15);
+      const c = TDateTimePickerValue(year: 2026, month: 5, day: 16);
       expect(a, equals(b));
       expect(a, isNot(equals(c)));
       expect(a.hashCode, equals(b.hashCode));
@@ -382,7 +427,9 @@ void main() {
 
     test('values 按 columns 投影 current', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.minute).columns,
+        columns: DateTimePickerMode(
+                dateMode: DateMode.date, timeMode: TimeMode.minute)
+            .columns,
         initial: DateTime(2026, 5, 15, 10, 30),
       );
       expect(s.values, [2026, 5, 15, 10, 30]);
@@ -453,8 +500,36 @@ void main() {
       expect(s2.columnIndicesWithChangedOptions(s0), isEmpty);
     });
 
-    test('needsColumnRebuildFrom：showWeek=true 时 day 变化也触发（label 含周几）',
-        () {
+    test('columnIndicesWithChangedOptions：列结构变化返回全部新列', () {
+      final date = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(dateMode: DateMode.date).columns,
+        initial: DateTime(2026, 5, 15),
+      );
+      final month = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(dateMode: DateMode.month).columns,
+        initial: DateTime(2026, 5, 1),
+      );
+
+      expect(month.columnIndicesWithChangedOptions(date), {0, 1});
+    });
+
+    test('窄范围内没有步进倍数时保留范围起点', () {
+      final snapshot = DateTimePickerSnapshot.initial(
+        columns: DateTimePickerMode(timeMode: TimeMode.minute).columns,
+        initial: DateTime(2026, 1, 1, 10, 2),
+        start: DateTime(2026, 1, 1, 10, 2),
+        end: DateTime(2026, 1, 1, 10, 3),
+      );
+      final columns = snapshot.toPickerColumns(
+        start: DateTime(2026, 1, 1, 10, 2),
+        end: DateTime(2026, 1, 1, 10, 3),
+        steps: const DateTimePickerSteps(minute: 5),
+      );
+
+      expect(columns.columns.last.single.value, 2);
+    });
+
+    test('needsColumnRebuildFrom：showWeek=true 时 day 变化也触发（label 含周几）', () {
       final s0 = DateTimePickerSnapshot.initial(
         columns: DateTimePickerMode(dateMode: DateMode.date).columns,
         initial: DateTime(2026, 5, 15),
@@ -592,7 +667,9 @@ void main() {
 
     test('toResult 在 second 模式返回完整时分秒', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
+        columns: DateTimePickerMode(
+                dateMode: DateMode.date, timeMode: TimeMode.second)
+            .columns,
         initial: DateTime(2026, 5, 15, 10, 20, 30),
       );
       final r = s.toResult();
@@ -639,18 +716,25 @@ void main() {
         initial: DateTime(2026, 5, 15),
       );
       final s1 = s0.rebuildFor(
-        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
+        columns: DateTimePickerMode(
+                dateMode: DateMode.date, timeMode: TimeMode.second)
+            .columns,
         start: DateTime(2026, 6, 1),
         end: DateTime(2026, 6, 30, 23, 59, 59),
       );
       expect(s1.yearAnchor, s0.yearAnchor);
       expect(s1.current, DateTime(2026, 6, 1));
-      expect(s1.columns, DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns);
+      expect(
+          s1.columns,
+          DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second)
+              .columns);
     });
 
     test('toPickerColumns 在时分秒边界上按同日/同小时/同分钟收紧', () {
       final s = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
+        columns: DateTimePickerMode(
+                dateMode: DateMode.date, timeMode: TimeMode.second)
+            .columns,
         initial: DateTime(2026, 5, 15, 10, 20, 35),
         start: DateTime(2026, 5, 15, 10, 20, 30),
         end: DateTime(2026, 5, 15, 10, 20, 40),
@@ -676,7 +760,9 @@ void main() {
 
     test('second 模式 applySelection 会解析时分秒列', () {
       final s0 = DateTimePickerSnapshot.initial(
-        columns: DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second).columns,
+        columns: DateTimePickerMode(
+                dateMode: DateMode.date, timeMode: TimeMode.second)
+            .columns,
         initial: DateTime(2026, 5, 15, 10, 20, 30),
       );
       final s1 = s0.applySelection(
@@ -1039,14 +1125,18 @@ void main() {
         start: DateTime(2000, 1, 1, 9, 15, 0),
         end: DateTime(2000, 1, 1, 10, 45, 50),
       );
-      final minuteCol = s1.toPickerColumns(
-        start: DateTime(2000, 1, 1, 9, 15, 0),
-        end: DateTime(2000, 1, 1, 10, 45, 50),
-      ).columns[1];
-      final secondCol = s1.toPickerColumns(
-        start: DateTime(2000, 1, 1, 9, 15, 0),
-        end: DateTime(2000, 1, 1, 10, 45, 50),
-      ).columns[2];
+      final minuteCol = s1
+          .toPickerColumns(
+            start: DateTime(2000, 1, 1, 9, 15, 0),
+            end: DateTime(2000, 1, 1, 10, 45, 50),
+          )
+          .columns[1];
+      final secondCol = s1
+          .toPickerColumns(
+            start: DateTime(2000, 1, 1, 9, 15, 0),
+            end: DateTime(2000, 1, 1, 10, 45, 50),
+          )
+          .columns[2];
       expect(minuteCol.first.value, 15);
       expect(minuteCol.last.value, 59);
       expect(secondCol.first.value, 0);
@@ -1079,7 +1169,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -1087,13 +1177,14 @@ void main() {
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
     });
 
-    testWidgets('combined(timeMode: minute)：只渲染 2 列（时分），对齐 mobile-vue [null, "minute"]',
+    testWidgets(
+        'combined(timeMode: minute)：只渲染 2 列（时分），对齐 mobile-vue [null, "minute"]',
         (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
+            value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
           ),
         ),
       ));
@@ -1106,7 +1197,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
             showWeek: true,
           ),
         ),
@@ -1123,7 +1214,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -1136,7 +1227,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -1149,7 +1240,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.year),
-            initialValue: valueFromDateTime(DateTime(2026, 1, 1)),
+            value: valueFromDateTime(DateTime(2026, 1, 1)),
             renderLabel: (column, v) =>
                 column == DateTimeColumn.year ? 'Y$v' : null,
           ),
@@ -1166,7 +1257,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
             showWeek: true,
           ),
         ),
@@ -1181,7 +1272,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
             showWeek: true,
           ),
         ),
@@ -1191,14 +1282,14 @@ void main() {
       expect(find.textContaining('周五'), findsWidgets);
     });
 
-    testWidgets('onChange 滚动后触发回调', (tester) async {
+    testWidgets('onChanged 滚动后触发回调', (tester) async {
       TDateTimePickerValue? changed;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 2, 28)),
-            onChange: (v) => changed = v,
+            value: valueFromDateTime(DateTime(2026, 2, 28)),
+            onChanged: (v) => changed = v,
           ),
         ),
       ));
@@ -1213,7 +1304,7 @@ void main() {
       expect(changed!.month, isNot(2));
     });
 
-    testWidgets('onChange 初始挂载与相同 props 的父 rebuild 不重复触发', (tester) async {
+    testWidgets('onChanged 初始挂载与相同 props 的父 rebuild 不重复触发', (tester) async {
       var callCount = 0;
       await tester.pumpWidget(MaterialApp(
         home: StatefulBuilder(
@@ -1226,8 +1317,8 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
-                  onChange: (_) => callCount++,
+                  value: valueFromDateTime(DateTime(2026, 5, 15)),
+                  onChanged: (_) => callCount++,
                 ),
               ],
             ),
@@ -1242,13 +1333,13 @@ void main() {
       expect(callCount, 0);
     });
 
-    testWidgets('onChange 为滚轮列提供 Semantics', (tester) async {
+    testWidgets('onChanged 为滚轮列提供 Semantics', (tester) async {
       final semanticsHandle = tester.ensureSemantics();
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+            value: valueFromDateTime(DateTime(2026, 5, 15)),
           ),
         ),
       ));
@@ -1259,12 +1350,12 @@ void main() {
       semanticsHandle.dispose();
     });
 
-    testWidgets('initialValue partial 年月回显到滚轮', (tester) async {
+    testWidgets('partial value 年月回显到滚轮', (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.month),
-            initialValue: const TDateTimePickerValue(year: 2026, month: 2),
+            value: const TDateTimePickerValue(year: 2026, month: 2),
           ),
         ),
       ));
@@ -1288,7 +1379,7 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: mode,
-                  initialValue: valueFromDateTime(
+                  value: valueFromDateTime(
                     DateTime(2026, 5, 15, 10, 30),
                   ),
                 ),
@@ -1305,14 +1396,14 @@ void main() {
       expect(find.byType(ListWheelScrollView), findsNWidgets(2));
     });
 
-    testWidgets('滚动日列触发 onChange 并更新 day', (tester) async {
+    testWidgets('滚动日列触发 onChanged 并更新 day', (tester) async {
       TDateTimePickerValue? changed;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2024, 2, 15)),
-            onChange: (v) => changed = v,
+            value: valueFromDateTime(DateTime(2024, 2, 15)),
+            onChanged: (v) => changed = v,
           ),
         ),
       ));
@@ -1331,7 +1422,7 @@ void main() {
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
+            value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
             steps: const DateTimePickerSteps(minute: 5),
           ),
         ),
@@ -1341,9 +1432,8 @@ void main() {
       expect(find.textContaining('30分'), findsWidgets);
     });
 
-    testWidgets('initialValue 变化会重置滚轮选中', (tester) async {
-      TDateTimePickerValue? initial =
-          const TDateTimePickerValue(year: 2026, month: 5, day: 15);
+    testWidgets('value 变化会同步滚轮选中', (tester) async {
+      var value = const TDateTimePickerValue(year: 2026, month: 5, day: 15);
       await tester.pumpWidget(MaterialApp(
         home: StatefulBuilder(
           builder: (context, setState) => Scaffold(
@@ -1351,13 +1441,14 @@ void main() {
               children: [
                 TextButton(
                   onPressed: () => setState(() {
-                    initial = const TDateTimePickerValue(year: 2027, month: 6, day: 1);
+                    value = const TDateTimePickerValue(
+                        year: 2027, month: 6, day: 1);
                   }),
                   child: const Text('reset-picker'),
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: initial,
+                  value: value,
                 ),
               ],
             ),
@@ -1373,9 +1464,9 @@ void main() {
       expect(find.textContaining('6月'), findsWidgets);
     });
 
-    testWidgets('mode/initialValue 变化会触发内部重建并更新 initialValue', (tester) async {
+    testWidgets('mode/value 变化会同步重建滚轮', (tester) async {
       var useMonth = false;
-      var initialValue = valueFromDateTime(DateTime(2026, 5, 15));
+      var value = valueFromDateTime(DateTime(2026, 5, 15));
       await tester.pumpWidget(MaterialApp(
         home: StatefulBuilder(
           builder: (context, setState) => Scaffold(
@@ -1384,13 +1475,15 @@ void main() {
                 TextButton(
                   onPressed: () => setState(() {
                     useMonth = true;
-                    initialValue = valueFromDateTime(DateTime(2027, 6, 1));
+                    value = valueFromDateTime(DateTime(2027, 6, 1));
                   }),
                   child: const Text('switch'),
                 ),
                 TDateTimePicker(
-                  mode: useMonth ? DateTimePickerMode(dateMode: DateMode.month) : DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: initialValue,
+                  mode: useMonth
+                      ? DateTimePickerMode(dateMode: DateMode.month)
+                      : DateTimePickerMode(dateMode: DateMode.date),
+                  value: value,
                 ),
               ],
             ),
@@ -1420,7 +1513,7 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+                  value: valueFromDateTime(DateTime(2026, 5, 15)),
                   start: start,
                   end: end,
                 ),
@@ -1437,15 +1530,15 @@ void main() {
       expect(find.textContaining('1月'), findsWidgets);
     });
 
-    testWidgets('滚回同一选中值时不重复触发 onChange', (tester) async {
+    testWidgets('滚回同一选中值时不重复触发 onChanged', (tester) async {
       var changeCount = 0;
       TDateTimePickerValue? last;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
-            initialValue: valueFromDateTime(DateTime(2024, 2, 15)),
-            onChange: (v) {
+            value: valueFromDateTime(DateTime(2024, 2, 15)),
+            onChanged: (v) {
               changeCount++;
               last = v;
             },
@@ -1472,13 +1565,13 @@ void main() {
         await pumpDateTimePicker(
           tester,
           mode: c.mode,
-          initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30, 45)),
+          value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30, 45)),
         );
         expect(find.byType(ListWheelScrollView), findsNWidgets(c.columns));
       });
     }
 
-    testWidgets('date+second 模式滚动时列触发 onChange', (tester) async {
+    testWidgets('date+second 模式滚动时列触发 onChanged', (tester) async {
       TDateTimePickerValue? changed;
       await pumpDateTimePicker(
         tester,
@@ -1486,8 +1579,8 @@ void main() {
           dateMode: DateMode.date,
           timeMode: TimeMode.second,
         ),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30, 0)),
-        onChange: (v) => changed = v,
+        value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30, 0)),
+        onChanged: (v) => changed = v,
       );
       final wheels = find.byType(ListWheelScrollView);
       expect(wheels, findsNWidgets(6));
@@ -1506,7 +1599,7 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(dateMode: DateMode.date),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+        value: valueFromDateTime(DateTime(2026, 5, 15)),
         showWeek: true,
       );
       expect(find.textContaining('周五'), findsWidgets);
@@ -1521,7 +1614,7 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(dateMode: DateMode.month),
-        initialValue: const TDateTimePickerValue(year: 2026, month: 5),
+        value: const TDateTimePickerValue(year: 2026, month: 5),
         showWeek: true,
       );
       expect(find.byType(ListWheelScrollView), findsNWidgets(2));
@@ -1541,7 +1634,7 @@ void main() {
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(dateMode: DateMode.date),
-                  initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+                  value: valueFromDateTime(DateTime(2026, 5, 15)),
                   showWeek: showWeek,
                 ),
               ],
@@ -1561,7 +1654,7 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(dateMode: DateMode.date),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+        value: valueFromDateTime(DateTime(2026, 5, 15)),
         start: const TDateTimePickerValue(year: 2026, month: 5, day: 10),
         end: const TDateTimePickerValue(year: 2026, month: 5, day: 20),
       );
@@ -1569,13 +1662,13 @@ void main() {
       expect(find.textContaining('5月'), findsWidgets);
     });
 
-    testWidgets('onChange 按 mode 仅返回相关字段', (tester) async {
+    testWidgets('onChanged 按 mode 仅返回相关字段', (tester) async {
       TDateTimePickerValue? yearResult;
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(dateMode: DateMode.year),
-        initialValue: valueFromDateTime(DateTime(2026, 1, 1)),
-        onChange: (v) => yearResult = v,
+        value: valueFromDateTime(DateTime(2026, 1, 1)),
+        onChanged: (v) => yearResult = v,
       );
       final wheels = find.byType(ListWheelScrollView);
       await tester.drag(wheels.first, const Offset(0, -80));
@@ -1589,8 +1682,8 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(timeMode: TimeMode.minute),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
-        onChange: (v) => timeResult = v,
+        value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
+        onChanged: (v) => timeResult = v,
       );
       final timeWheels = find.byType(ListWheelScrollView);
       await tester.drag(timeWheels.at(1), const Offset(0, -80));
@@ -1605,18 +1698,20 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(dateMode: DateMode.date),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+        value: valueFromDateTime(DateTime(2026, 5, 15)),
         height: 240,
         itemCount: 7,
       );
       expect(find.byType(ListWheelScrollView), findsNWidgets(3));
       final sizedBox = tester.widget<SizedBox>(
-        find.descendant(
-          of: find.byType(TDateTimePicker),
-          matching: find.byWidgetPredicate(
-            (w) => w is SizedBox && w.height == 240,
-          ),
-        ).first,
+        find
+            .descendant(
+              of: find.byType(TDateTimePicker),
+              matching: find.byWidgetPredicate(
+                (w) => w is SizedBox && w.height == 240,
+              ),
+            )
+            .first,
       );
       expect(sizedBox.height, 240);
     });
@@ -1629,13 +1724,13 @@ void main() {
             body: Column(
               children: [
                 TextButton(
-                  onPressed: () =>
-                      setState(() => steps = const DateTimePickerSteps(minute: 15)),
+                  onPressed: () => setState(
+                      () => steps = const DateTimePickerSteps(minute: 15)),
                   child: const Text('change-steps'),
                 ),
                 TDateTimePicker(
                   mode: DateTimePickerMode(timeMode: TimeMode.minute),
-                  initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
+                  value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
                   steps: steps,
                 ),
               ],
@@ -1651,7 +1746,7 @@ void main() {
       expect(find.textContaining('30分'), findsWidgets);
     });
 
-    testWidgets('month+minute 组合滚动月列触发 onChange', (tester) async {
+    testWidgets('month+minute 组合滚动月列触发 onChanged', (tester) async {
       TDateTimePickerValue? changed;
       await pumpDateTimePicker(
         tester,
@@ -1659,8 +1754,8 @@ void main() {
           dateMode: DateMode.month,
           timeMode: TimeMode.minute,
         ),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
-        onChange: (v) => changed = v,
+        value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
+        onChanged: (v) => changed = v,
       );
       expect(find.byType(ListWheelScrollView), findsNWidgets(4));
 
@@ -1679,7 +1774,7 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(timeMode: TimeMode.minute),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
+        value: valueFromDateTime(DateTime(2026, 5, 15, 10, 30)),
       );
       expect(find.bySemanticsLabel(RegExp('小时')), findsWidgets);
       semanticsHandle.dispose();
@@ -1690,9 +1785,9 @@ void main() {
       await pumpDateTimePicker(
         tester,
         mode: DateTimePickerMode(dateMode: DateMode.date),
-        initialValue: valueFromDateTime(DateTime(2026, 5, 15)),
+        value: valueFromDateTime(DateTime(2026, 5, 15)),
         showWeek: true,
-        onChange: (v) => changed = v,
+        onChanged: (v) => changed = v,
       );
       final wheels = find.byType(ListWheelScrollView);
       await tester.drag(wheels.at(0), const Offset(0, 80));

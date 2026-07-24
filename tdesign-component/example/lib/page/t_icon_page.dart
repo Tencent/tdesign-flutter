@@ -14,7 +14,7 @@ class TIconPage extends StatefulWidget {
 class _TIconPageState extends State<TIconPage> {
   bool showBorder = false;
 
-  Iterable iconList = [];
+  List<MapEntry<String, IconData>> iconList = [];
 
   var isLoading = false;
 
@@ -22,7 +22,7 @@ class _TIconPageState extends State<TIconPage> {
   void initState() {
     super.initState();
 
-    iconList = TIcons.all.values;
+    iconList = TIcons.allIconsMap.entries.toList();
   }
 
   @override
@@ -33,15 +33,153 @@ class _TIconPageState extends State<TIconPage> {
         exampleCodeGroup: 'icon',
         children: [
           ExampleModule(
+            title: 'v1.0 新特性',
+            children: [
+              ExampleItem(desc: 'TIcon 基础用法:', builder: _buildBasicTIcon),
+              ExampleItem(desc: '指定 size 和 color:', builder: _buildSizedTIcon),
+              ExampleItem(
+                  desc: 'TIcon.fromName 通过名称:', builder: _buildFromName),
+              ExampleItem(
+                  desc: 'v1.0 Theme 默认 size/color:', builder: _buildThemeDemo),
+              ExampleItem(desc: '构造器优先级覆盖 Theme:', builder: _buildPriorityDemo),
+            ],
+          ),
+          ExampleModule(
             title: 'icon示例',
             children: [
               ExampleItem(
-                desc: 'icon数量: ${iconList.length}',
+                desc: 'icon数量: ${TIcons.allIconsMap.length}',
                 builder: _showAllIcons,
               )
             ],
           )
         ]);
+  }
+
+  @Demo(group: 'icon')
+  Widget _buildBasicTIcon(BuildContext context) {
+    // v1.0 新增：TIcon Widget（Material Icon 薄包装）
+    return const Row(
+      children: [
+        TIcon(TIcons.home_filled),
+        SizedBox(width: 16),
+        TIcon(TIcons.setting),
+        SizedBox(width: 16),
+        TIcon(TIcons.notification),
+      ],
+    );
+  }
+
+  @Demo(group: 'icon')
+  Widget _buildSizedTIcon(BuildContext context) {
+    // 构造器参数 size/color 直接生效
+    return Row(
+      children: [
+        TIcon(TIcons.home_filled,
+            size: 32, color: context.tTheme.brandNormalColor),
+        const SizedBox(width: 16),
+        TIcon(TIcons.setting, size: 28, color: context.tTheme.errorNormalColor),
+        const SizedBox(width: 16),
+        TIcon(TIcons.notification,
+            size: 24, color: context.tTheme.warningNormalColor),
+      ],
+    );
+  }
+
+  @Demo(group: 'icon')
+  Widget _buildFromName(BuildContext context) {
+    // 通过图标名查找（内部查找 TIcons.allIconsMap）
+    return Row(
+      children: [
+        TIcon.fromName('home_filled'),
+        const SizedBox(width: 16),
+        TIcon.fromName('heart_filled', color: context.tTheme.errorNormalColor),
+        const SizedBox(width: 16),
+        TIcon.fromName('star_filled', color: context.tTheme.warningNormalColor),
+      ],
+    );
+  }
+
+  @Demo(group: 'icon')
+  Widget _buildThemeDemo(BuildContext context) {
+    // v1.0 新增：通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
+    return Theme(
+      data: Theme.of(context).copyWith(
+        extensions: [
+          ...Theme.of(context).extensions.values,
+          TIconThemeData(
+            size: 36,
+            color: context.tTheme.brandNormalColor,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              TIcon(TIcons.home_filled),
+              SizedBox(width: 16),
+              TIcon(TIcons.setting),
+              SizedBox(width: 16),
+              TIcon(TIcons.notification),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '↑ 继承 TIconThemeData 默认 size=36 和品牌色',
+            style: TextStyle(
+              fontSize: 12,
+              color: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'icon')
+  Widget _buildPriorityDemo(BuildContext context) {
+    // 优先级链：构造器参数 > TIconThemeData > IconTheme
+    // 子树 TIconThemeData 设置 size=36，但构造器指定 size=20 会覆盖
+    return Theme(
+      data: Theme.of(context).copyWith(
+        extensions: [
+          ...Theme.of(context).extensions.values,
+          TIconThemeData(
+            size: 36,
+            color: context.tTheme.brandNormalColor,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              // 构造器 size 覆盖 Theme 的 36
+              const TIcon(TIcons.home_filled, size: 20),
+              const SizedBox(width: 16),
+              // 构造器 color 覆盖 Theme 的品牌色
+              TIcon(TIcons.setting, color: context.tTheme.errorNormalColor),
+              const SizedBox(width: 16),
+              // 无构造器参数，继承 Theme 默认
+              const TIcon(TIcons.notification),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '↑ 前两个图标构造器覆盖 Theme，第三个继承 Theme',
+            style: TextStyle(
+              fontSize: 12,
+              color: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @Demo(group: 'icon')
@@ -56,56 +194,55 @@ class _TIconPageState extends State<TIconPage> {
             child: const Wrap(
               children: [
                 TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText(
-                    'https://tdesign.tencent.com/icons')
+                SelectableText('https://tdesign.tencent.com/icons')
               ],
             ),
           ),
           TSearchBar(
-            action: '搜索',
-            onActionClick: (text) {
+            hintText: '搜索',
+            onSubmitted: (text) {
               setState(() {
                 iconList = [];
                 isLoading = true;
               });
               Future.delayed(const Duration(milliseconds: 30), () {
-                var list = [];
-                TIcons.all.forEach((key, value) {
-                  if (value.name.contains(text)) {
-                    list.add(value);
+                var list = <MapEntry<String, IconData>>[];
+                TIcons.allIconsMap.forEach((key, value) {
+                  if (key.contains(text)) {
+                    list.add(MapEntry(key, value));
                   }
                 });
+                if (!mounted) {
+                  return;
+                }
                 setState(() {
                   iconList = list;
                   isLoading = false;
                 });
               });
             },
-            onClearClick: (_) {
+            onClearPressed: () {
               setState(() {
-                iconList = TIcons.all.values;
+                iconList = TIcons.allIconsMap.entries.toList();
               });
             },
           ),
           TCell(
-            title: '显示边框',
-            noteWidget: TSwitch(
-              isOn: showBorder,
+            title: const Text('显示边框'),
+            note: TSwitch(
+              value: showBorder,
               onChanged: (value) {
                 setState(() {
                   showBorder = value;
                 });
-                return value;
               },
             ),
           ),
           Builder(builder: (context) {
             if (iconList.isEmpty) {
               return Container(
-                height: 300,
                 alignment: Alignment.center,
-                child:
-                    isLoading ? const TText('加载中...') : const TText('暂无内容'),
+                child: isLoading ? const TText('加载中...') : const TText('暂无内容'),
               );
             }
 
@@ -127,12 +264,12 @@ class _TIconPageState extends State<TIconPage> {
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   color: showBorder
-                                      ? TTheme.of(context).brandDisabledColor
+                                      ? context.tTheme.brandDisabledColor
                                       : Colors.transparent,
                                 ),
-                                child: Icon(item, size: 32),
+                                child: TIcon(item.value, size: 32),
                               ),
-                              TText(item.name)
+                              TText(item.key)
                             ],
                           ),
                         );

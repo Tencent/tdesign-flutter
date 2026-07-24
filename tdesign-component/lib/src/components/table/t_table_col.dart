@@ -1,64 +1,66 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-enum TTableColFixed { left, right, none }
+/// 固定列位置。
+enum TTableColumnFixed {
+  /// 固定在左侧。
+  left,
 
-enum TTableColAlign { left, center, right }
+  /// 固定在右侧。
+  right,
 
-typedef SelectableFunc = bool Function(int index, dynamic row);
-typedef RowCheckFunc = bool Function(int index, dynamic row);
+  /// 跟随中间区域水平滚动。
+  none,
+}
 
-/// 表格列配置
-class TTableCol {
-  TTableCol({
-    this.title,
-    this.colKey,
-    this.width,
-    this.fixed = TTableColFixed.none,
-    this.ellipsis,
-    this.ellipsisTitle,
-    this.cellBuilder,
-    this.align = TTableColAlign.left,
-    this.sortable = false,
-    this.selection,
-    this.selectable,
-    this.checked,
-  });
+/// 列内容对齐方式。
+enum TTableColumnAlign {
+  /// 左对齐。
+  left,
 
-  /// 行是否显示复选框，自定义列时无效
-  bool? selection;
+  /// 居中对齐。
+  center,
 
-  /// 表头标题
-  String? title;
+  /// 右对齐。
+  right,
+}
 
-  /// 列取值字段
-  String? colKey;
+/// 单元格构建器。
+typedef TTableCellBuilder<T> = Widget Function(
+  BuildContext context,
+  T row,
+  int rowIndex,
+);
 
-  /// 列宽
-  double? width;
+/// 强类型表格列配置。
+class TTableColumn<T> {
+  const TTableColumn({
+    required this.id,
+    required this.header,
+    required this.cellBuilder,
+    this.width = 120,
+    this.fixed = TTableColumnFixed.none,
+    this.align = TTableColumnAlign.left,
+    this.comparator,
+  }) : assert(width > 0);
 
-  /// 固定列
-  TTableColFixed? fixed;
+  /// 列唯一标识，用于受控排序。
+  final String id;
 
-  /// 列内容超出时是否省略
-  bool? ellipsis;
+  /// 表头内容。
+  final Widget header;
 
-  /// 列标题超出时显示省略内容
-  bool? ellipsisTitle;
+  /// 单元格构建器。
+  final TTableCellBuilder<T> cellBuilder;
 
-  /// 自定义列
-  IndexedWidgetBuilder? cellBuilder;
+  /// 列宽。
+  final double width;
 
-  /// 列内容横向对齐方式
-  TTableColAlign? align;
+  /// 固定位置。
+  final TTableColumnFixed fixed;
 
-  /// 是否可排序
-  bool? sortable;
+  /// 内容对齐方式。
+  final TTableColumnAlign align;
 
-  /// 当前行CheckBox是否可选，仅selection：true有效
-  SelectableFunc? selectable;
-
-  /// 当前行是否选中
-  RowCheckFunc? checked;
-
-  double? get widthPx => width;
+  /// 排序比较器；为空时该列不可排序。
+  final Comparator<T>? comparator;
 }

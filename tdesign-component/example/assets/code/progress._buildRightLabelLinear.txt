@@ -1,9 +1,0 @@
-
-  Widget _buildRightLabelLinear(BuildContext context) {
-    return TProgress(
-      type: TProgressType.linear,
-      value: value,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
-    );
-  }

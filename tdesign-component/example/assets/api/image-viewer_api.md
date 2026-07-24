@@ -1,128 +1,60 @@
 ## API
 ### TImageViewer
+#### 简介
+命令式图片预览工具。
 
 #### 静态方法
 
-##### TImageViewer.showImageViewer
+##### TImageViewer.show
 
-显示图片预览
+显示全屏图片预览。
 
-返回类型：`void`
+返回类型：`Future<void>`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| images | List<dynamic> | - | 图片数组 |
-| labels | List<String>? | - | 图片描述 |
-| closeBtn | bool? | true | 是否展示关闭按钮 |
-| deleteBtn | bool? | false | 是否显示删除操作 |
-| showIndex | bool? | false | 是否显示页码 |
-| loop | bool? | false | 图片是否循环 |
-| autoplay | bool? | false | 图片轮播是否自动播放 |
-| duration | int? | - | 自动播放间隔 |
-| bgColor | Color? | - | 背景色 |
-| navBarBgColor | Color? | - | 导航栏背景色 |
-| iconColor | Color? | - | 图标颜色 |
-| labelStyle | TextStyle? | - | label文字样式 |
-| indexStyle | TextStyle? | - | 页码样式 |
-| modalBarrierColor | Color? | - | - |
-| barrierDismissible | bool? | - | - |
-| defaultIndex | int? | - | 默认预览图片所在的下标 |
-| width | double? | - | 图片宽度 |
-| height | double? | - | 图片高度 |
-| onIndexChange | OnIndexChange? | - | 预览图片切换回调 |
-| onClose | OnClose? | - | 关闭点击 |
-| onDelete | OnDelete? | - | 删除点击 |
-| ignoreDeleteError | bool? | - | 是否忽略单张图片删除错误提示 |
-| onTap | OnImageTap? | - | 点击图片 |
-| onLongPress | OnLongPress? | - | 长按图片 |
-| leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
-| rightItemBuilder | RightItemBuilder? | - | 右侧自定义操作 |
+| context | BuildContext | - | 用于展示预览弹窗。 |
+| images | List<ImageProvider<Object>> | - | 是待预览的图片列表，不能为空。 |
+| labels | List<String>? | - | 是与图片一一对应的标签文案。 |
+| initialIndex | int | 0 | 设置初始展示的图片索引。 |
+| showClose | bool | true | 控制关闭按钮是否显示。 |
+| showDelete | bool | false | 控制删除按钮是否显示。 |
+| showIndex | bool | true | 控制当前页码是否显示。 |
+| loop | bool | false | 控制是否循环切换图片。 |
+| autoplay | bool | false | 控制是否自动切换图片。 |
+| autoplayInterval | Duration | const Duration(seconds: 3) | 设置自动切换图片的时间间隔。 |
+| barrierDismissible | bool | true | 控制点击弹窗外区域时是否关闭预览。 |
+| onIndexChanged | ValueChanged<int>? | - | 在当前图片索引变化时触发。 |
+| onClose | VoidCallback? | - | 在预览关闭时触发。 |
+| onDelete | ValueChanged<int>? | - | 在点击删除按钮时触发，仅通知当前索引。 |
+| onTap | ValueChanged<int>? | - | 在点击当前图片时触发。 |
+| onLongPress | ValueChanged<int>? | - | 在长按当前图片时触发。 |
+| leadingBuilder | TImageViewerItemBuilder? | - | 构建导航栏起始区域。 |
+| trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 |
 
 
-### TImageViewerWidget
+### TImageViewerThemeData
+#### 简介
+图片预览组件级 ThemeExtension
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoplay | bool? | - | 图片轮播是否自动播放 |
-| bgColor | Color? | - | 背景色 |
-| closeBtn | bool? | - | 是否展示关闭按钮 |
-| defaultIndex | int? | - | 默认预览图片所在的下标 |
-| deleteBtn | bool? | - | 是否显示删除操作 |
-| duration | int? | - | 自动播放间隔 |
-| height | double? | - | 图片高度 |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 |
+| backgroundColor | Color? | - | 预览页背景色 |
+| barrierColor | Color? | - | 蒙层颜色 |
 | iconColor | Color? | - | 图标颜色 |
-| ignoreDeleteError | bool? | false | 是否忽略单张图片删除错误提示 |
-| images | List<dynamic> | - | 图片数组 |
-| indexStyle | TextStyle? | - | 页码样式 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| labels | List<String>? | - | 图片描述 |
-| labelStyle | TextStyle? | - | label文字样式 |
-| leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
-| loop | bool? | - | 图片是否循环 |
-| navBarBgColor | Color? | - | 导航栏背景色 |
-| onClose | OnClose? | - | 关闭点击 |
-| onDelete | OnDelete? | - | 删除点击 |
-| onIndexChange | OnIndexChange? | - | 预览图片切换回调 |
-| onLongPress | OnLongPress? | - | 长按图片 |
-| onTap | OnImageTap? | - | 点击图片 |
-| rightItemBuilder | RightItemBuilder? | - | 右侧自定义操作 |
-| showIndex | bool? | - | 是否显示页码 |
-| width | double? | - | 图片宽度 |
+| indexStyle | TextStyle? | - | 页码文字样式 |
+| labelStyle | TextStyle? | - | 标签文字样式 |
+| viewerHeight | double? | - | 预览区默认高度 |
+| viewerWidth | double? | - | 预览区默认宽度 |
 
 
-### OnIndexChange
+### TImageViewerItemBuilder
+#### 简介
+图片预览导航栏槽位构建器。
 #### 类型定义
 
 ```dart
-typedef OnIndexChange =  Function(int index);
-```
-
-
-### OnClose
-#### 类型定义
-
-```dart
-typedef OnClose =  Function(int index);
-```
-
-
-### OnDelete
-#### 类型定义
-
-```dart
-typedef OnDelete =  Function(int index);
-```
-
-
-### OnImageTap
-#### 类型定义
-
-```dart
-typedef OnImageTap =  Function(int index);
-```
-
-
-### OnLongPress
-#### 类型定义
-
-```dart
-typedef OnLongPress =  Function(int index);
-```
-
-
-### LeftItemBuilder
-#### 类型定义
-
-```dart
-typedef LeftItemBuilder = Widget Function(BuildContext context, int index);
-```
-
-
-### RightItemBuilder
-#### 类型定义
-
-```dart
-typedef RightItemBuilder = Widget Function(BuildContext context, int index);
+typedef TImageViewerItemBuilder = Widget Function(BuildContext context, int index);
 ```

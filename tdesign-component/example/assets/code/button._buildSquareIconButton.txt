@@ -1,10 +1,10 @@
 
   TButton _buildSquareIconButton(BuildContext context) {
     return const TButton(
-      icon: TIcons.app,
+      icon: Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.square,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }

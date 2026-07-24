@@ -1,9 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/demo.dart';
+import '../../base/example_base.dart';
 import '../../base/example_widget.dart';
+
+import 't_sidebar_page_anchor.dart';
+import 't_sidebar_page_custom.dart';
+import 't_sidebar_page_icon.dart';
+import 't_sidebar_page_loading.dart';
+import 't_sidebar_page_outline.dart';
+import 't_sidebar_page_pagination.dart';
+import 't_sidebar_page_unselected_color.dart';
 
 ///
 /// TSideBarPage演示
@@ -29,6 +37,7 @@ class TSideBarPageState extends State<TSideBarPage> {
       title: tTitle(),
       exampleCodeGroup: 'sideBar',
       desc: '用于内容分类后的展示切换。',
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(
@@ -107,21 +116,69 @@ class TSideBarPageState extends State<TSideBarPage> {
     );
   }
 
-  TButton getCustomButton(
-      BuildContext context, String text, String routeName) {
-    return TButton(
-      text: text,
-      isBlock: true,
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          PlatformUtil.isWeb ? routeName : '$routeName',
-        );
-      },
+  Widget getCustomButton(BuildContext context, String text, String routeName) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(text),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () => _openSideBarDemo(context, routeName),
+      ),
+    );
+  }
+
+  void _openSideBarDemo(BuildContext context, String routeName) {
+    Widget? page;
+    var title = '';
+
+    switch (routeName) {
+      case 'SideBarAnchor':
+        title = 'SideBar 锚点';
+        page = const TSideBarAnchorPage();
+        break;
+      case 'SideBarPagination':
+        title = 'SideBar 切页';
+        page = const TSideBarPaginationPage();
+        break;
+      case 'SideBarIcon':
+        title = 'SideBar 带图标';
+        page = const TSideBarIconPage();
+        break;
+      case 'SideBarOutline':
+        title = 'SideBar 非通栏选项样式';
+        page = const TSideBarOutlinePage();
+        break;
+      case 'SideBarCustom':
+        title = 'SideBar 自定义样式';
+        page = const TSideBarCustomPage();
+        break;
+      case 'SideBarLoading':
+        title = 'SideBar 延迟加载';
+        page = const TSideBarLoadingPage();
+        break;
+      case 'SideBarUnselectedColor':
+        title = 'SideBar 自定义未选中颜色';
+        page = const TSideBarUnSelectedColorPage();
+        break;
+    }
+    if (page == null) {
+      return;
+    }
+    final model = ExamplePageModel(
+      text: title,
+      name: routeName,
+      showAction: false,
+      pageBuilder: (_, __) => page!,
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ExamplePageInheritedTheme(
+          model: model,
+          child: page!,
+        ),
+      ),
     );
   }
 }

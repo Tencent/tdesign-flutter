@@ -45,13 +45,13 @@ class WebMdTool {
       try {
         api = await rootBundle.loadString('assets/api/${model.name}_api.md');
       } catch (e) {
-        print(e);
+        debugPrint('$e');
       }
       var mdContent = _getTemplate(model.text, description,
           model.spline ?? 'other', exampleCodeSb.toString(), api.toString(), pageName);
-      print('生成演示代码成功：\n${mdContent.substring(0,50)}...');
+      debugPrint('生成演示代码成功：\n${mdContent.substring(0,50)}...');
 
-      var path = "";
+      var path = '';
       if(Platform.environment['FLUTTER_TEST'] == 'true'){
 
         var baseDir = Platform.script.toFilePath().split('/tdesign-component')[0];
@@ -88,7 +88,7 @@ class WebMdTool {
       });
       hasCodeSuccess = true;
     } else {
-      print('error item:singleChild_${exampleCodeGroup},已忽略代码，请手动处理');
+      debugPrint('error item:singleChild_${exampleCodeGroup},已忽略代码，请手动处理');
     }
 
     if (!hasCodeSuccess) {
@@ -126,7 +126,7 @@ class WebMdTool {
             hasCodeSuccess = true;
           }
         } catch (e) {
-          print(e);
+          debugPrint('$e');
         }
       }
     } else {
@@ -146,7 +146,7 @@ class WebMdTool {
         });
         hasCodeSuccess = true;
       } else {
-        print(
+        debugPrint(
             'error item:${exampleCodeGroup}_${module.title}_${item.desc},已忽略代码，请手动处理');
       }
     }
@@ -178,7 +178,7 @@ class WebMdTool {
       }
     }
     if (methodName.isNotEmpty && group.isNotEmpty) {
-      print('example code methodName: $methodName');
+      debugPrint('example code methodName: $methodName');
       return 'assets/code/${group}.$methodName.txt';
     }
     return '';
@@ -216,7 +216,7 @@ class WebMdTool {
       '''
 ---
 title: $title
-description: ${description}
+subtitle: ${description}
 spline: ${spline}
 isComponent: true
 ---
@@ -246,7 +246,7 @@ ${api}
     if(title == 'Swiper 轮播图'){
       return '''
  
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';''';
+''';
     } else if(title == 'PullDownRefresh 下拉刷新'){
       return '''
  

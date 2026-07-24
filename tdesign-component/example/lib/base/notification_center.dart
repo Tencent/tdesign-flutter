@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
+
 typedef Observer = void Function(dynamic arguments);
 
 /// 广播工具
@@ -55,7 +57,7 @@ class TNotification {
       try {
         observer(arguments['argumentsObj']);
       } catch (e) {
-        print('TNotification postNotificationCallHandler $key error: $e');
+        debugPrint('TNotification postNotificationCallHandler $key error: $e');
       }
     });
   }

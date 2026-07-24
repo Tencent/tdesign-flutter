@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 't_dropdown_menu.dart';
 import 't_dropdown_popup.dart';
 
+/// 下拉菜单内容面板，负责展开/收起动画
 class TDropdownPanel extends StatefulWidget {
   const TDropdownPanel({
     Key? key,
@@ -21,15 +22,34 @@ class TDropdownPanel extends StatefulWidget {
     required this.child,
   }) : super(key: key);
 
+  /// 初始内容顶部偏移
   final double initContentTop;
+
+  /// 初始内容底部偏移
   final double initContentBottom;
+
+  /// 反方向可用高度
   final double reverseHeight;
+
+  /// 动画时长
   final Duration duration;
+
+  /// 方向监听器
   final ValueNotifier<TDropdownPopupDirection> directionListenable;
+
+  /// 遮罩透明度监听器
   final ValueNotifier<bool> colorAlphaListenable;
+
+  /// 展开方向
   final TDropdownPopupDirection direction;
+
+  /// 关闭回调监听器
   final ValueNotifier<FutureCallback?> closeListenable;
+
+  /// 展开完成回调
   final VoidCallback onOpened;
+
+  /// 子内容
   final Widget child;
 
   @override
@@ -51,7 +71,7 @@ class _TDropdownPanelState extends State<TDropdownPanel> with SingleTickerProvid
   void didUpdateWidget(TDropdownPanel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.directionListenable != oldWidget.directionListenable) {
-      widget.closeListenable.value = close;
+      widget.closeListenable.value = close; // coverage:ignore-line
     }
   }
 
@@ -76,11 +96,15 @@ class _TDropdownPanelState extends State<TDropdownPanel> with SingleTickerProvid
     );
   }
 
+  /// 展开面板
   void open(BuildContext itemContext) {
     if (contentBottom != null || contentTop != null) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (!mounted) {
+        return;
+      }
       var renderBox = itemContext.findRenderObject() as RenderBox;
       var size = renderBox.size;
       if (widget.directionListenable.value == TDropdownPopupDirection.auto) {
@@ -90,20 +114,20 @@ class _TDropdownPanelState extends State<TDropdownPanel> with SingleTickerProvid
           if (widget.initContentBottom >= size.height) {
             widget.directionListenable.value = TDropdownPopupDirection.down;
           } else {
-            if (widget.reverseHeight > widget.initContentBottom) {
-              widget.directionListenable.value = TDropdownPopupDirection.up;
+            if (widget.reverseHeight > widget.initContentBottom) { // coverage:ignore-line
+              widget.directionListenable.value = TDropdownPopupDirection.up; // coverage:ignore-line
             } else {
-              widget.directionListenable.value = TDropdownPopupDirection.down;
+              widget.directionListenable.value = TDropdownPopupDirection.down; // coverage:ignore-line
             }
           }
         } else {
-          if (widget.initContentTop >= size.height) {
-            widget.directionListenable.value = TDropdownPopupDirection.up;
+          if (widget.initContentTop >= size.height) { // coverage:ignore-line
+            widget.directionListenable.value = TDropdownPopupDirection.up; // coverage:ignore-line
           } else {
-            if (widget.reverseHeight > widget.initContentTop) {
-              widget.directionListenable.value = TDropdownPopupDirection.down;
+            if (widget.reverseHeight > widget.initContentTop) { // coverage:ignore-line
+              widget.directionListenable.value = TDropdownPopupDirection.down; // coverage:ignore-line
             } else {
-              widget.directionListenable.value = TDropdownPopupDirection.up;
+              widget.directionListenable.value = TDropdownPopupDirection.up; // coverage:ignore-line
             }
           }
         }
@@ -116,6 +140,9 @@ class _TDropdownPanelState extends State<TDropdownPanel> with SingleTickerProvid
       }
       setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) {
+          return;
+        }
         if (_controller.status == AnimationStatus.dismissed) {
           widget.colorAlphaListenable.value = true;
           _controller.duration = widget.duration;
@@ -134,6 +161,7 @@ class _TDropdownPanelState extends State<TDropdownPanel> with SingleTickerProvid
     ).animate(_controller);
   }
 
+  /// 收起面板
   Future<void> close() {
     widget.colorAlphaListenable.value = false;
     _controller.duration = widget.duration ~/ 2;

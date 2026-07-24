@@ -1,4 +1,0 @@
-
-  Widget _buildTextSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.text);
-  }

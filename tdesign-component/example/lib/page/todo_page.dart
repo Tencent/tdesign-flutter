@@ -11,7 +11,7 @@ class TodoPage extends StatelessWidget {
     return Scaffold(
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
-                trackVisibility: MaterialStateProperty.all(true)),
+                trackVisibility: WidgetStateProperty.all(true)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

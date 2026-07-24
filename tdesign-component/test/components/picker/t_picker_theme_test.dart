@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/picker/t_picker_theme_data.dart';
+
+/// TPickerThemeData 纯函数覆盖（copyWith / lerp），用于提升覆盖率。
+void main() {
+  group('TPickerThemeData 纯函数', () {
+    const theme = TPickerThemeData(
+      height: 200,
+      itemCount: 5,
+    );
+
+    test('copyWith 覆盖字段', () {
+      final copied = theme.copyWith(height: 300, itemCount: 7);
+      expect(copied, isA<TPickerThemeData>());
+      expect(copied.height, 300);
+      expect(copied.itemCount, 7);
+      // 未覆盖字段保持原值
+      expect(copied.height, isNotNull);
+      expect(theme.copyWith().height, 200);
+      expect(theme.copyWith().itemCount, 5);
+    });
+
+    test('lerp 在 t=0 / 0.5 / 1 返回 TPickerThemeData', () {
+      const other = TPickerThemeData(height: 400, itemCount: 9);
+      final at0 = theme.lerp(other, 0);
+      final atHalf = theme.lerp(other, 0.5);
+      final at1 = theme.lerp(other, 1);
+      expect(at0, isA<TPickerThemeData>());
+      expect(atHalf, isA<TPickerThemeData>());
+      expect(at1, isA<TPickerThemeData>());
+      // itemCount 在 t<0.5 取 this，t>=0.5 取 other
+      expect(atHalf.itemCount, 9);
+      expect(at1.itemCount, 9);
+    });
+
+    test('lerp other 非同类型时返回 this', () {
+      expect(theme.lerp(null, 0.5), theme);
+    });
+  });
+}

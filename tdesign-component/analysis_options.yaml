@@ -1,6 +1,4 @@
 analyzer:
-  enable-experiment:
-    - extension-methods
   errors:
     unused_import: ignore
     camel_case_types: warning
@@ -53,7 +51,6 @@ linter:
     #1.21 【可选】顺序
     - directives_ordering
     #2.22 【推荐】 公开接口要有注释
-    - package_api_docs
     #3.32【必须】组合字符串统一使用插值的形式${param}，并避免在字符串插值中使用不必要的大括号
     - prefer_interpolation_to_compose_strings
     #3.41 【必须】尽可能使用字面量初始化集合
@@ -62,8 +59,6 @@ linter:
     - prefer_is_empty
     #3.51 【必须】不要使用lambda表达式来替代tear-off
     - unnecessary_lambdas
-    #3.61 【必须】参数默认值用=号
-    - prefer_equal_for_default_values
     #3.71 【必须】不要把变量初始化为null
     - avoid_init_to_null
     #3.82 【必须】去掉不必要的setter和getter
@@ -75,7 +70,6 @@ linter:
     #4.55【必须】不给setter方法指定返回值
     - avoid_return_types_on_setters
     #4.56【必须】基础数据类型的返回值不要返回null
-    - avoid_returning_null
     #4.57 【必须】不要返回this来实现链式调用
     - avoid_returning_this
     #4.61 【必须】添加必要的类型注解 TODO 讨论是否有替代方案
@@ -95,7 +89,6 @@ linter:
     # separate the control structure expression from its statement
     - always_put_control_body_on_new_line
     # 声明了@required的参数，需要有assert(param != null)
-    - always_require_non_null_named_parameters
     # 注释重写的方法和参数
     - annotate_overrides
     # 避免空的else
@@ -105,7 +98,6 @@ linter:
     # 避免以相对路径方式引入文件
     - avoid_relative_lib_imports
     # 避免返回null给future
-    - avoid_returning_null_for_future
     # 避免复写相同的参数类型
     - avoid_shadowing_type_parameters
     # 避免使用同步的文件操作
@@ -132,14 +124,10 @@ linter:
     - empty_constructor_bodies
     # 避免使用空语句
     - empty_statements
-    # 不要出现可以在编译阶段推算出恒true或者false的条件判断
-    - invariant_booleans
     # 当contains方法的参数和可枚举的类型不同，不要触发可枚举类型的contains方法
-    - iterable_contains_unrelated_type
     # 用小写加下划线做库的命名
     - library_prefixes
     # 当remove方法的参数和List的类型不同，不要触发remove方法
-    - list_remove_unrelated_type
     # 不要出现只有一种情况的boolean表达式
     - literal_only_boolean_expressions
     # 不要在list内用临近字符串方式
@@ -199,7 +187,6 @@ linter:
     # 避免无关类型的相等检查
     - unrelated_type_equality_checks
     # 避免直接插入html
-    - unsafe_html
     # 用类函数语法作为参数
     - use_function_type_syntax_for_parameters
     # 用rethrow去重新抛出错误

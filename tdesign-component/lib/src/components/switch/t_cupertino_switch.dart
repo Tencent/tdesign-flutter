@@ -68,8 +68,10 @@ class TCupertinoSwitch extends StatefulWidget {
     this.trackColor,
     this.thumbColor,
     this.thumbView,
+    this.disabledOpacity = _kTDCupertinoSwitchDisabledOpacity,
     this.dragStartBehavior = DragStartBehavior.start,
-  }) : super(key: key);
+  })  : assert(disabledOpacity >= 0 && disabledOpacity <= 1),
+        super(key: key);
 
   /// Whether this switch is on or off.
   ///
@@ -118,6 +120,12 @@ class TCupertinoSwitch extends StatefulWidget {
 
   /// The custom widget over the thumb.
   final Widget? thumbView;
+
+  /// Opacity applied while [onChanged] is null.
+  ///
+  /// The default preserves the standalone Cupertino-style disabled appearance.
+  /// Parents that supply their own disabled treatment can set this to `1`.
+  final double disabledOpacity;
 
   /// {@template flutter.cupertino.TCupertinoSwitch.dragStartBehavior}
   /// Determines the way that drag start behavior is handled.
@@ -318,8 +326,7 @@ class _TCupertinoSwitchState extends State<TCupertinoSwitch>
           ? SystemMouseCursors.click
           : MouseCursor.defer,
       child: Opacity(
-        opacity:
-            widget.onChanged == null ? _kTDCupertinoSwitchDisabledOpacity : 1.0,
+        opacity: widget.onChanged == null ? widget.disabledOpacity : 1.0,
         child: _TCupertinoSwitchRenderObjectWidget(
           value: widget.value,
           activeColor: CupertinoDynamicColor.resolve(
@@ -418,8 +425,10 @@ const double _kTDCupertinoSwitchDisabledOpacity = 0.5;
 // Same size as if there is a child widget on thumb.
 const double _kSwitchOnThumbRadius = 11;
 const double _kSwitchOffThumbRadius = 8;
-const double _kSwitchOnThumbMargin = (_kTrackHeight - _kSwitchOnThumbRadius * 2) / 2;
-const double _kSwitchOffThumbMargin = (_kTrackHeight - _kSwitchOffThumbRadius * 2) / 2;
+const double _kSwitchOnThumbMargin =
+    (_kTrackHeight - _kSwitchOnThumbRadius * 2) / 2;
+const double _kSwitchOffThumbMargin =
+    (_kTrackHeight - _kSwitchOffThumbRadius * 2) / 2;
 
 const Duration _kReactionDuration = Duration(milliseconds: 300);
 const Duration _kToggleDuration = Duration(milliseconds: 200);
@@ -524,14 +533,15 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
   double get thumbRadius {
     if (child == null) {
       final value = _state.position.value;
-      return (_kSwitchOnThumbRadius - _kSwitchOffThumbRadius) * value + _kSwitchOffThumbRadius;
+      return (_kSwitchOnThumbRadius - _kSwitchOffThumbRadius) * value +
+          _kSwitchOffThumbRadius;
     }
     return _kSwitchOnThumbRadius;
   }
 
   double get thumbMargin {
     if (child == null) {
-      return value ? _kSwitchOffThumbMargin : _kSwitchOffThumbMargin;
+      return _kSwitchOffThumbMargin;
     }
     return _kSwitchOnThumbMargin;
   }
@@ -616,7 +626,13 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
       _thumbPainter.paint(innerContext.canvas, thumbBounds);
     }, oldLayer: _clipRRectLayer.layer);
     if (child != null) {
-      context.paintChild(child!, Offset(thumbBounds.left + thumbMargin, 0));
+      context.paintChild(
+        child!,
+        Offset(
+          thumbBounds.left + thumbMargin,
+          thumbBounds.top + (thumbBounds.height - child!.size.height) / 2,
+        ),
+      );
     }
   }
 

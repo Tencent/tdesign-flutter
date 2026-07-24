@@ -1,305 +1,370 @@
+import 'dart:async';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_theme.dart';
+import 't_swiper_theme_data.dart';
+import 't_swiper_types.dart';
 
-const _kAminatedDuration = 100;
+/// 受控轮播组件。
+///
+/// 当前页只由 [value] 决定。用户滑动、自动播放和控制按钮仅通过 [onChanged]
+/// 请求新页，不在组件内缓存业务页码。
+class TSwiper extends StatefulWidget {
+  const TSwiper({
+    this.children,
+    this.itemBuilder,
+    this.itemCount,
+    this.value = 0,
+    this.onChanged,
+    this.loop = false,
+    this.autoplay = false,
+    this.autoplayInterval = const Duration(seconds: 3),
+    this.pagination,
+    this.paginationAlignment = Alignment.bottomCenter,
+    this.pageEffect,
+    this.scrollDirection = Axis.horizontal,
+    this.physics,
+    this.pageSnapping = true,
+    this.padEnds = true,
+    this.clipBehavior = Clip.hardEdge,
+    this.reverse = false,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.allowImplicitScrolling = false,
+    super.key,
+  })  : assert((children == null) != (itemBuilder == null)),
+        assert(children == null || itemCount == null),
+        assert(itemBuilder == null || itemCount != null),
+        assert(itemCount == null || itemCount > 0),
+        assert(value >= 0),
+        assert(!autoplay || onChanged != null);
 
-/// TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
-class TSwiperPagination extends SwiperPlugin {
-  const TSwiperPagination({
-    this.alignment,
-    this.key,
-    this.margin = const EdgeInsets.all(10.0),
-    this.builder = TSwiperPagination.dots,
-  });
+  /// 页面列表；与 [itemBuilder] 二选一。
+  final List<Widget>? children;
 
-  /// 圆点样式
-  static const SwiperPlugin dots = TSwiperDotsPagination();
+  /// 页面构建器；与 [children] 二选一。
+  final IndexedWidgetBuilder? itemBuilder;
 
-  /// 圆角矩形 + 圆点样式 默认宽度20，高度6
-  static const SwiperPlugin dotsBar =
-      TSwiperDotsPagination(roundedRectangleWidth: 20);
+  /// 构建器模式的页面数量。
+  final int? itemCount;
 
-  /// 数字样式
-  static const SwiperPlugin fraction = TFractionPagination();
+  /// 当前受控页索引。
+  final int value;
 
-  /// 箭头样式
-  static const SwiperPlugin controls = TSwiperArrowPagination();
+  /// 请求切换页面的回调；为空时禁用手势与自动播放。
+  final ValueChanged<int>? onChanged;
 
-  /// 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter
-  /// 当 scrollDirection== Axis.vertical 时，默认Alignment.centerRight
-  final Alignment? alignment;
+  /// 是否循环切换。
+  final bool loop;
 
-  /// 指示器和container之间的距离
-  final EdgeInsetsGeometry margin;
+  /// 是否自动请求下一页。
+  final bool autoplay;
 
-  /// 具体样式
-  final SwiperPlugin builder;
+  /// 自动播放间隔。
+  final Duration autoplayInterval;
 
-  final Key? key;
+  /// 指示器形态；未设置时读取 Theme 和圆点默认值。
+  final TSwiperPaginationVariant? pagination;
+
+  /// 指示器对齐方式。
+  final AlignmentGeometry paginationAlignment;
+
+  /// 页面切换效果；未设置时读取 Theme。
+  final TSwiperPageEffect? pageEffect;
+
+  /// 滚动方向。
+  final Axis scrollDirection;
+
+  /// 滚动物理效果。
+  final ScrollPhysics? physics;
+
+  /// 是否吸附到整页。
+  final bool pageSnapping;
+
+  /// 是否在首尾页面添加视口边距。
+  final bool padEnds;
+
+  /// 裁剪行为。
+  final Clip clipBehavior;
+
+  /// 是否反向滚动。
+  final bool reverse;
+
+  /// 拖动开始行为。
+  final DragStartBehavior dragStartBehavior;
+
+  /// 是否允许隐式滚动。
+  final bool allowImplicitScrolling;
+
+  int get resolvedItemCount => children?.length ?? itemCount!;
 
   @override
-  Widget build(BuildContext context, SwiperPluginConfig config) {
-    var alignment = this.alignment ??
-        (config.scrollDirection == Axis.horizontal
-            ? Alignment.bottomCenter
-            : Alignment.centerRight);
-    Widget child = Container(
-      margin: margin,
-      child: builder.build(context, config),
-    );
-    if (!config.outer) {
-      child = Align(
-        key: key,
-        alignment: alignment,
-        child: child,
-      );
-    }
-    return child;
-  }
+  State<TSwiper> createState() => _TSwiperState();
 }
 
-/// 圆点指示器
-class TSwiperDotsPagination extends SwiperPlugin {
-  /// 当前展示的索引，如果未设置，则为Theme.of(context).primaryColor
-  final Color? activeColor;
+class _TSwiperState extends State<TSwiper> {
+  static const _loopAnchor = 10000;
 
-  /// 如果未设置，则为 Theme.of(context).scaffoldBackgroundColor
-  final Color? color;
+  late PageController _controller;
+  Timer? _timer;
 
-  /// 选中状态圆点尺寸
-  final double activeSize;
+  int get _count => widget.resolvedItemCount;
 
-  /// 圆点尺寸
-  final double size;
+  int _normalize(int page) => page % _count;
 
-  /// 圆点间距
-  final double space;
-
-  /// 圆角矩形宽度（高度仍为activeSize）
-  final double? roundedRectangleWidth;
-
-  /// 动画效果 默认100ms，设置为 0 则无动画
-  final int? animationDuration;
-
-  final Key? key;
-
-  const TSwiperDotsPagination({
-    this.activeColor,
-    this.color,
-    this.key,
-    this.size = 6.0,
-    this.activeSize = 6.0,
-    this.space = 8.0,
-    this.roundedRectangleWidth,
-    this.animationDuration,
-  });
+  int _initialPage() {
+    if (!widget.loop) {
+      return widget.value;
+    }
+    final anchor = _loopAnchor - (_loopAnchor % _count);
+    return anchor + widget.value;
+  }
 
   @override
-  Widget build(BuildContext context, SwiperPluginConfig config) {
-    if (config.itemCount > 20) {
-      print('warning: The itemCount is too big, '
-          'we suggest use TFractionPaginationBuilder');
-    }
-    var activeColor = this.activeColor ??
-        (config.outer
-            ? TTheme.of(context).brandNormalColor
-            : TTheme.of(context).whiteColor1);
-    var color = this.color ??
-        (config.outer
-            ? TTheme.of(context).bgColorComponentHover
-            : TTheme.of(context).fontWhColor2);
+  void initState() {
+    super.initState();
+    assert(widget.value < _count);
+    _controller = PageController(initialPage: _initialPage());
+    _syncTimer();
+  }
 
-    if (config.indicatorLayout != PageIndicatorLayout.NONE &&
-        config.layout == SwiperLayout.DEFAULT) {
-      return PageIndicator(
-        count: config.itemCount,
-        controller: config.pageController,
-        layout: config.indicatorLayout,
-        size: size,
-        activeColor: activeColor,
-        color: color,
-        space: space,
+  @override
+  void didUpdateWidget(TSwiper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    assert(widget.value < _count);
+    if (oldWidget.loop != widget.loop ||
+        oldWidget.resolvedItemCount != _count) {
+      _controller.dispose();
+      _controller = PageController(initialPage: _initialPage());
+    } else if (_controller.hasClients &&
+        _normalize(_controller.page?.round() ?? 0) != widget.value) {
+      final current = _controller.page?.round() ?? _initialPage();
+      final target = widget.loop
+          ? current + (widget.value - _normalize(current))
+          : widget.value;
+      _controller.animateToPage(
+        target,
+        duration: kThemeAnimationDuration,
+        curve: Curves.easeInOut,
       );
     }
+    if (oldWidget.autoplay != widget.autoplay ||
+        oldWidget.autoplayInterval != widget.autoplayInterval ||
+        oldWidget.onChanged != widget.onChanged) {
+      _syncTimer();
+    }
+  }
 
-    var list = <Widget>[];
+  void _syncTimer() {
+    _timer?.cancel();
+    if (!widget.autoplay || widget.onChanged == null || _count < 2) {
+      return;
+    }
+    _timer = Timer.periodic(widget.autoplayInterval, (_) {
+      final next = widget.value + 1;
+      if (next < _count) {
+        widget.onChanged!(next);
+      } else if (widget.loop) {
+        widget.onChanged!(0);
+      }
+    });
+  }
 
-    var itemCount = config.itemCount;
-    var activeIndex = config.activeIndex;
+  void _handlePageChanged(int page) {
+    final value = _normalize(page);
+    if (value != widget.value) {
+      widget.onChanged?.call(value);
+    }
+  }
 
-    for (var i = 0; i < itemCount; ++i) {
-      var active = i == activeIndex;
-      var isActivityRectangle =
-          roundedRectangleWidth != null && roundedRectangleWidth! > 0 && active;
-      double? scalableLen;
-      double? fixedLen;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TSwiperThemeData>();
+    final pagination =
+        widget.pagination ?? theme?.pagination ?? TSwiperPaginationVariant.dots;
+    final effect =
+        widget.pageEffect ?? theme?.pageEffect ?? TSwiperPageEffect.none;
+    final pageView = PageView.builder(
+      controller: _controller,
+      itemCount: widget.loop ? null : _count,
+      onPageChanged: _handlePageChanged,
+      scrollDirection: widget.scrollDirection,
+      physics: widget.onChanged == null
+          ? const NeverScrollableScrollPhysics()
+          : widget.physics,
+      pageSnapping: widget.pageSnapping,
+      padEnds: widget.padEnds,
+      clipBehavior: widget.clipBehavior,
+      reverse: widget.reverse,
+      dragStartBehavior: widget.dragStartBehavior,
+      allowImplicitScrolling: widget.allowImplicitScrolling,
+      itemBuilder: (context, page) => _buildPage(context, page, effect),
+    );
 
-      scalableLen = isActivityRectangle
-          ? roundedRectangleWidth
-          : (active ? activeSize : size);
-      fixedLen = active ? activeSize : size;
-
-      list.add(Container(
-        key: Key('pagination_$i'),
-        margin: EdgeInsets.all(space),
-        child: AnimatedContainer(
-          duration:
-              Duration(milliseconds: animationDuration ?? _kAminatedDuration),
-          width: config.scrollDirection == Axis.horizontal
-              ? scalableLen
-              : fixedLen,
-          height: config.scrollDirection == Axis.horizontal
-              ? fixedLen
-              : scalableLen,
-          decoration: BoxDecoration(
-              color: active ? activeColor : color,
-              borderRadius: BorderRadius.circular(activeSize / 2)),
+    if (pagination == TSwiperPaginationVariant.none || _count < 2) {
+      return pageView;
+    }
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        pageView,
+        Align(
+          alignment: widget.paginationAlignment,
+          child: Padding(
+            padding: theme?.paginationMargin ?? const EdgeInsets.all(10),
+            child: _buildPagination(context, pagination, theme),
+          ),
         ),
-      ));
-    }
-
-    return Flex(
-      direction: config.scrollDirection,
-      // spacing: space,
-      key: key,
-      mainAxisSize: MainAxisSize.min,
-      children: list,
+      ],
     );
   }
-}
 
-/// 数字指示器
-class TFractionPagination extends SwiperPlugin {
-  /// container宽度
-  final double? width;
+  Widget _buildPage(
+    BuildContext context,
+    int page,
+    TSwiperPageEffect effect,
+  ) {
+    final child = widget.children?[_normalize(page)] ??
+        widget.itemBuilder!(context, _normalize(page));
+    if (effect == TSwiperPageEffect.none) {
+      return child;
+    }
+    return AnimatedBuilder(
+      animation: _controller,
+      child: child,
+      builder: (context, child) {
+        final current = _controller.hasClients
+            ? _controller.page ?? _controller.initialPage.toDouble()
+            : _controller.initialPage.toDouble();
+        final distance = (current - page).abs().clamp(0.0, 1.0);
+        switch (effect) {
+          case TSwiperPageEffect.none:
+            return child!;
+          case TSwiperPageEffect.cardMargin:
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6 + distance * 6),
+              child: child,
+            );
+          case TSwiperPageEffect.scaleAndFade:
+            return Opacity(
+              opacity: 1 - distance * 0.3,
+              child: Transform.scale(scale: 1 - distance * 0.2, child: child),
+            );
+        }
+      },
+    );
+  }
 
-  /// container高度
-  final double? height;
+  Widget _buildPagination(
+    BuildContext context,
+    TSwiperPaginationVariant variant,
+    TSwiperThemeData? theme,
+  ) {
+    switch (variant) {
+      case TSwiperPaginationVariant.none:
+        return const SizedBox.shrink();
+      case TSwiperPaginationVariant.fraction:
+        return _buildFraction(context, theme);
+      case TSwiperPaginationVariant.controls:
+        return _buildControls(context, theme);
+      case TSwiperPaginationVariant.dots:
+      case TSwiperPaginationVariant.dotsBar:
+        return _buildDots(context, variant, theme);
+    }
+  }
 
-  /// 圆角角度
-  final double? borderRadius;
+  Widget _buildDots(
+    BuildContext context,
+    TSwiperPaginationVariant variant,
+    TSwiperThemeData? theme,
+  ) {
+    final size = theme?.dotSize ?? 6;
+    final spacing = theme?.dotSpacing ?? 4;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var index = 0; index < _count; index++)
+          AnimatedContainer(
+            key: ValueKey('swiper-dot-$index'),
+            duration: kThemeAnimationDuration,
+            width: index == widget.value &&
+                    variant == TSwiperPaginationVariant.dotsBar
+                ? theme?.activeDotWidth ?? 20
+                : size,
+            height: size,
+            margin: EdgeInsets.symmetric(horizontal: spacing),
+            decoration: BoxDecoration(
+              color: index == widget.value
+                  ? theme?.activeColor ?? context.tTheme.brandNormalColor
+                  : theme?.inactiveColor ??
+                      context.tTheme.bgColorComponentHover,
+              borderRadius: BorderRadius.circular(size / 2),
+            ),
+          ),
+      ],
+    );
+  }
 
-  /// 背景色
-  final Color? backgroundColor;
-
-  /// 如果未设置，则为 Theme.of(context).scaffoldBackgroundColor
-  final Color? color;
-
-  /// 当前展示的索引，如果未设置，则为Theme.of(context).primaryColor
-  final Color? activeColor;
-
-  final TextStyle? textStyle;
-
-  final TextStyle? activeTextStyle;
-
-  final Key? key;
-
-  const TFractionPagination({
-    this.width,
-    this.height,
-    this.borderRadius,
-    this.backgroundColor,
-    this.color = Colors.white,
-    this.textStyle = const TextStyle(fontSize: 12.0, color: Colors.white),
-    this.activeTextStyle = const TextStyle(fontSize: 12.0, color: Colors.white),
-    this.key,
-    this.activeColor = Colors.white,
-  });
-
-  @override
-  Widget build(BuildContext context, SwiperPluginConfig config) {
-    return Container(
-      width: width ?? 37,
-      height: height ?? 24,
-      alignment: Alignment.center,
+  Widget _buildFraction(BuildContext context, TSwiperThemeData? theme) {
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: backgroundColor ?? TTheme.of(context).textColorPlaceholder,
-        borderRadius: BorderRadius.circular(
-            borderRadius ?? TTheme.of(context).radiusRound),
+        color: theme?.fractionBackgroundColor ??
+            context.tTheme.textColorPlaceholder,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
       ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        child: Text(
+          '${widget.value + 1}/$_count',
+          style: theme?.fractionStyle ??
+              TextStyle(
+                color: context.tTheme.textColorAnti,
+                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildControls(BuildContext context, TSwiperThemeData? theme) {
+    final canGoBack = widget.loop || widget.value > 0;
+    final canGoForward = widget.loop || widget.value < _count - 1;
+    return SizedBox(
+      width: double.infinity,
       child: Row(
-        key: key,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('${config.activeIndex + 1}', style: activeTextStyle),
-          Text('/${config.itemCount}', style: textStyle)
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            tooltip: 'Previous',
+            onPressed: widget.onChanged != null && canGoBack
+                ? () => widget.onChanged!(
+                      widget.value == 0 ? _count - 1 : widget.value - 1,
+                    )
+                : null,
+            icon: const Icon(Icons.chevron_left),
+          ),
+          IconButton(
+            tooltip: 'Next',
+            onPressed: widget.onChanged != null && canGoForward
+                ? () => widget.onChanged!(
+                      widget.value == _count - 1 ? 0 : widget.value + 1,
+                    )
+                : null,
+            icon: const Icon(Icons.chevron_right),
+          ),
         ],
       ),
     );
   }
-}
-
-/// 箭头指示器
-class TSwiperArrowPagination extends SwiperPlugin {
-  /// 当设置 loop = false 时，滑动到边界是否自动隐藏边界箭头
-  final bool? autoHideWhenAtBoundary;
-
-  /// 左箭头widget
-  final Widget? backArrow;
-
-  /// 右箭头widget
-  final Widget? forwardArrow;
-
-  /// 背景圆形半径
-  final double? radius;
-
-  /// 背景圆形颜色
-  final Color? backgroundColor;
-
-  const TSwiperArrowPagination({
-    this.radius,
-    this.backgroundColor,
-    this.backArrow,
-    this.forwardArrow,
-    this.autoHideWhenAtBoundary = true,
-  });
 
   @override
-  Widget build(BuildContext context, SwiperPluginConfig config) {
-    var itemCount = config.itemCount;
-    var activeIndex = config.activeIndex;
-
-    return Row(children: [
-      _buildIcon(
-        context,
-        visible: config.loop ||
-            ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
-        arrowWidget: backArrow,
-        icon: Icons.arrow_back_ios_outlined,
-        onTap: config.controller.previous,
-      ),
-      const Spacer(),
-      _buildIcon(
-        context,
-        visible: config.loop ||
-            ((autoHideWhenAtBoundary ?? false) && activeIndex != itemCount - 1),
-        arrowWidget: forwardArrow,
-        icon: Icons.arrow_forward_ios_outlined,
-        onTap: config.controller.next,
-      ),
-    ]);
-  }
-
-  Widget _buildIcon(
-    BuildContext context, {
-    Widget? arrowWidget,
-    required IconData icon,
-    required bool visible,
-    required Function() onTap,
-  }) {
-    return Visibility(
-      visible: visible,
-      child: GestureDetector(
-        child: CircleAvatar(
-          radius: radius ?? 10.0,
-          backgroundColor:
-              backgroundColor ?? TTheme.of(context).textColorPlaceholder,
-          child: arrowWidget ?? Icon(icon, color: Colors.white, size: 10.0),
-        ),
-        onTap: onTap,
-      ),
-    );
+  void dispose() {
+    _timer?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 }

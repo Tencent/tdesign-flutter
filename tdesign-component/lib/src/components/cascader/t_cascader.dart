@@ -1,43 +1,268 @@
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
+import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_theme.dart';
+import 't_cascader_theme_data.dart';
 
-class TCascader {
-  /// 显示多级选择器
-  static void showMultiCascader(context,
-      {String? title,
-      required List<Map> data,
-      List<int>? initialIndexes,
-      String? theme,
-      required onChange,
-      Duration duration = const Duration(milliseconds: 100),
-      Color? barrierColor,
-      double cascaderHeight = 500,
-      String? initialData,
-      String? closeText,
-      bool isLetterSort = false,
-      List<String>? subTitles,
-      TCascaderAction? action,
-      Function? onClose}) {
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        barrierColor:
-            barrierColor ?? TTheme.of(context).fontGyColor2.withOpacity(0.6),
-        builder: (context) {
-          return TMultiCascader(
-              title: title,
-              onClose: onClose,
-              data: data,
-              initialIndexes: initialIndexes,
-              cascaderHeight: cascaderHeight,
-              initialData: initialData,
-              onChange: onChange,
-              closeText: closeText,
-              action: action,
-              theme: theme,
-              isLetterSort: isLetterSort,
-              subTitles: subTitles);
-        });
+/// 不可变的级联选项。
+class TCascaderOption {
+  const TCascaderOption({
+    /// 展示文案。
+    required this.label,
+
+    /// 选项值。
+    required this.value,
+
+    /// 子选项。
+    this.children = const [],
+
+    /// 是否禁用。
+    this.disabled = false,
+  });
+
+  /// 展示文案。
+  final String label;
+
+  /// 选项值。
+  final Object? value;
+
+  /// 子选项。
+  final List<TCascaderOption> children;
+
+  /// 是否禁用。
+  final bool disabled;
+}
+
+/// 严格受控的级联选择器。
+class TCascader extends StatefulWidget {
+  const TCascader({
+    super.key,
+
+    /// 根选项列表。
+    required this.options,
+
+    /// 受控选中路径。
+    required this.value,
+
+    /// 选中路径变化回调；为 null 时禁用。
+    this.onChanged,
+
+    /// 导航展示形态。
+    this.variant = TCascaderVariant.tab,
+
+    /// 未选择层级的占位文案。
+    this.placeholder = '请选择',
+  });
+
+  /// 根选项列表。
+  final List<TCascaderOption> options;
+
+  /// 受控选中路径。
+  final List<Object?> value;
+
+  /// 选中路径变化回调；为 null 时禁用。
+  final ValueChanged<List<Object?>>? onChanged;
+
+  /// 导航展示形态。
+  final TCascaderVariant variant;
+
+  /// 未选择层级的占位文案。
+  final String placeholder;
+
+  @override
+  State<TCascader> createState() => _TCascaderState();
+}
+
+class _TCascaderState extends State<TCascader> {
+  late int _activeLevel;
+
+  bool get _enabled => widget.onChanged != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeLevel = _initialActiveLevel();
+  }
+
+  @override
+  void didUpdateWidget(covariant TCascader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(oldWidget.value, widget.value) ||
+        oldWidget.options != widget.options) {
+      final maxLevel = _availableDepth();
+      if (_activeLevel > maxLevel) {
+        _activeLevel = maxLevel;
+      }
+    }
+  }
+
+  int _initialActiveLevel() {
+    if (widget.value.isEmpty) {
+      return 0;
+    }
+    final selected = _selectedOptions();
+    if (selected.isEmpty) {
+      return 0;
+    }
+    return selected.isNotEmpty && selected.last.children.isNotEmpty
+        ? selected.length
+        : selected.length - 1;
+  }
+
+  int _availableDepth() => _selectedOptions().length;
+
+  List<TCascaderOption> _selectedOptions() {
+    var options = widget.options;
+    final selected = <TCascaderOption>[];
+    for (final value in widget.value) {
+      final index = options.indexWhere((option) => option.value == value);
+      if (index < 0) {
+        break;
+      }
+      final option = options[index];
+      selected.add(option);
+      options = option.children;
+    }
+    return selected;
+  }
+
+  List<TCascaderOption> _optionsAt(int level) {
+    var options = widget.options;
+    for (var index = 0; index < level; index++) {
+      if (index >= widget.value.length) {
+        return const [];
+      }
+      final selected = options.where(
+        (option) => option.value == widget.value[index],
+      );
+      if (selected.isEmpty) {
+        return const [];
+      }
+      options = selected.first.children;
+    }
+    return options;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TCascaderThemeData>();
+    final selected = _selectedOptions();
+    final options = _optionsAt(_activeLevel);
+    return Semantics(
+      enabled: _enabled,
+      child: AnimatedOpacity(
+        opacity: _enabled ? 1 : 0.5,
+        duration: const Duration(milliseconds: 150),
+        child: AbsorbPointer(
+          absorbing: !_enabled,
+          child: Container(
+            height: theme?.height ?? 360,
+            decoration: BoxDecoration(
+              color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
+              borderRadius: BorderRadius.circular(
+                theme?.borderRadius ?? context.tTheme.radiusDefault,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNavigation(context, selected, theme),
+                Divider(height: 1, color: theme?.dividerColor),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: options.length,
+                    itemBuilder: (context, index) =>
+                        _buildOption(context, options[index], theme),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavigation(
+    BuildContext context,
+    List<TCascaderOption> selected,
+    TCascaderThemeData? theme,
+  ) {
+    final entries = <Widget>[
+      for (var index = 0; index < selected.length; index++)
+        TextButton(
+          onPressed: () => setState(() => _activeLevel = index),
+          child: Text(
+            selected[index].label,
+            style: index == _activeLevel
+                ? theme?.activeTextStyle
+                : theme?.textStyle,
+          ),
+        ),
+      if (selected.isEmpty || selected.last.children.isNotEmpty)
+        TextButton(
+          onPressed: () => setState(() => _activeLevel = selected.length),
+          child: Text(
+            widget.placeholder,
+            style: selected.length == _activeLevel
+                ? theme?.activeTextStyle
+                : theme?.textStyle,
+          ),
+        ),
+    ];
+    if (widget.variant == TCascaderVariant.step) {
+      return Padding(
+        padding: theme?.navigationPadding ?? const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: entries,
+        ),
+      );
+    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: theme?.navigationPadding,
+      child: Row(children: entries),
+    );
+  }
+
+  Widget _buildOption(
+    BuildContext context,
+    TCascaderOption option,
+    TCascaderThemeData? theme,
+  ) {
+    final selected = _activeLevel < widget.value.length &&
+        widget.value[_activeLevel] == option.value;
+    return ListTile(
+      key: ValueKey('cascader-${option.value}'),
+      enabled: !option.disabled,
+      selected: selected,
+      title: Text(
+        option.label,
+        style: option.disabled
+            ? theme?.disabledTextStyle ??
+                TextStyle(color: context.tTheme.textDisabledColor)
+            : selected
+                ? theme?.activeTextStyle
+                : theme?.textStyle,
+      ),
+      trailing:
+          option.children.isEmpty ? null : const Icon(TIcons.chevron_right),
+      onTap: option.disabled
+          ? null
+          : () {
+              final next = <Object?>[
+                ...widget.value.take(_activeLevel),
+                option.value,
+              ];
+              if (option.children.isNotEmpty) {
+                setState(() => _activeLevel += 1);
+              }
+              widget.onChanged?.call(List.unmodifiable(next));
+            },
+    );
   }
 }

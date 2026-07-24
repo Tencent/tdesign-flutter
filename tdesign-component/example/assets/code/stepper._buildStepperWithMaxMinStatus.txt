@@ -1,7 +1,0 @@
-
-  Widget _buildStepperWithMaxMinStatus(BuildContext context) {
-    return _buildRow(context, [
-      const TStepper(theme: TStepperTheme.filled, value: 0, min: 0),
-      const TStepper(theme: TStepperTheme.filled, value: 999, max: 999),
-    ]);
-  }

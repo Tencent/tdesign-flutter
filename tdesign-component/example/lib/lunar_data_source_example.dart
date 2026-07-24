@@ -7,7 +7,7 @@ import 'lunar_info.dart';
 /// 农历示例数据：为 [TCalendar.subtitleBuilder] 提供节日 / 节气 / 农历日副标题文案。
 ///
 /// 接入方式：`subtitleBuilder: lunarExample.buildSubtitle`。
-/// 控制栏切换月份请改 [TCalendar.anchorDate]，勿用 [TCalendar.initialValue] 驱动滚动。
+/// 控制栏通过 `anchorDate` 切换月份，`initialValue` 仅设置初始日期。
 class LunarDataSourceExample {
   static String convertToChineseNumber(int number) {
     const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -115,11 +115,23 @@ class LunarDataSourceExample {
     if (text == null || text.isEmpty) {
       return null;
     }
-    final cellStyle = TCalendarStyle.generateStyle(context: null)
-        .forSelectType(context, subtitleContext.selectType);
+    // 根据 selectType 解析副标题颜色（对齐 TCalendarStyle.forSelectType 逻辑）
+    final Color subtitleColor;
+    switch (subtitleContext.selectType) {
+      case DateSelectType.selected:
+      case DateSelectType.start:
+      case DateSelectType.end:
+        subtitleColor = context.tTheme.textColorAnti;
+        break;
+      case DateSelectType.disabled:
+        subtitleColor = context.tTheme.textDisabledColor;
+        break;
+      default:
+        subtitleColor = context.tTheme.textColorPlaceholder;
+    }
     return TText(
       text,
-      style: cellStyle.subtitleStyle?.copyWith(fontSize: 9),
+      style: TextStyle(fontSize: 9, color: subtitleColor),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

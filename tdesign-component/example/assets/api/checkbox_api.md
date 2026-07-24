@@ -1,124 +1,113 @@
 ## API
 ### TCheckbox
+#### 简介
+严格受控的复选框；`onChanged` 为 null 时禁用。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| cardMode | bool | false | 展示为卡片模式 |
-| checkBoxLeftSpace | double? | - | 选项框左侧间距 |
-| checked | bool | false | 选中状态。默认为`false` 当FuiCheckBox嵌入到FuiCheckBoxGroup的时候，这个值表示初始状态，后续的状态会由Group管理 |
-| contentDirection | TContentDirection | TContentDirection.right | 文字相对icon的方位 |
-| customContentBuilder | ContentBuilder? | - | 完全自定义内容 |
-| customIconBuilder | IconBuilder? | - | 自定义Checkbox显示样式 |
-| customSpace | EdgeInsetsGeometry? | - | 自定义组件间距 |
-| disableColor | Color? | - | 禁用选择颜色 |
-| enable | bool | true | 不可用 |
-| id | String? | - | id 当FuiCheckBox嵌入到FuiCheckBoxGroup内时，这个值需要赋值，否则不会被纳入Group管理 |
-| insetSpacing | double? | 16 | 文字和非图标侧的距离 |
+| cardMode | bool | false | 是否使用卡片模式。 |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 |
+| customIconBuilder | TCheckboxIconBuilder? | - | 自定义复选框指示器。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onCheckBoxChanged | OnCheckValueChanged? | - | 切换监听 |
-| selectColor | Color? | - | 选择颜色 |
-| showDivider | bool | true | 是否展示分割线 |
-| size | TCheckBoxSize | TCheckBoxSize.small | 复选框大小 |
-| spacing | double? | - | icon和文字的距离 |
-| style | TCheckboxStyle? | - | 复选框样式：圆形或方形 |
-| subTitle | String? | - | 辅助文字 |
-| subTitleColor | Color? | - | 副标题文字颜色 |
-| subTitleFont | Font? | - | 副标题字体大小 |
-| subTitleMaxLine | int? | 1 | 辅助文字的行数 |
-| title | String? | - | 文本 |
-| titleColor | Color? | - | 标题文字颜色 |
-| titleFont | Font? | - | 标题字体大小 |
-| titleMaxLine | int? | - | 标题的行数 |
+| onChanged | ValueChanged<bool?>? | - | 选中态变更回调；为 null 时禁用。 |
+| showDivider | bool | false | 是否显示底部分割线。 |
+| size | TCheckboxSize | TCheckboxSize.medium | 复选框尺寸。 |
+| subTitle | String? | - | 副标题文案。 |
+| subTitleMaxLines | int | 1 | 副标题最大行数。 |
+| title | String? | - | 主标题文案。 |
+| titleMaxLines | int | 1 | 主标题最大行数。 |
+| value | bool? | - | 受控选中态；null 表示半选。 |
 
 
 ### TCheckboxGroup
+#### 简介
+数据驱动且严格受控的复选框组。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| checkedIds | List<String>? | - | 勾选的CheckBox id列表 |
-| child | Widget | - | 可以是任意包含TCheckBox的容器，比如： ``` Row( children: [ TCheckBox(), TCheckBox(), ... ] ) ``` |
-| contentDirection | TContentDirection? | - | 文字相对icon的方位 |
-| controller | TCheckboxGroupController? | - | 可以通过控制器操作勾选状态 |
-| customContentBuilder | ContentBuilder? | - | CheckBox完全自定义内容 |
-| customIconBuilder | IconBuilder? | - | 自定义选择icon的样式 |
+| cardMode | bool | false | 是否使用卡片模式。 |
+| columns | int | 1 | 每行列数。 |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 |
+| direction | Axis | Axis.vertical | 排列方向。 |
+| itemBuilder | TCheckboxOptionBuilder<T>? | - | 自定义数据项视觉；交互仍由组接管。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxChecked | int? | - | 最多可以勾选多少 |
-| onChangeGroup | OnGroupChange? | - | 状态变化监听器 |
-| onOverloadChecked | VoidCallback? | - | 超过最大可勾选的个数 |
-| spacing | double? | - | CheckBoxicon和文字的距离 |
-| style | TCheckboxStyle? | - | CheckBox复选框样式：圆形或方形 |
-| titleMaxLine | int? | - | CheckBox标题的行数 |
+| maxSelected | int? | - | 最多可选数量。 |
+| onChanged | ValueChanged<List<T>>? | - | 选中项列表变更回调；为 null 时整组禁用。 |
+| onMaxSelected | VoidCallback? | - | 超过最多可选数量时触发。 |
+| options | List<TCheckboxOption<T>> | - | 复选框数据项。 |
+| showDivider | bool | false | 是否显示项间分割线。 |
+| size | TCheckboxSize | TCheckboxSize.medium | 复选框尺寸。 |
+| value | List<T> | - | 受控选中项列表。 |
 
 
-### TCheckboxStyle
-#### 枚举值
+### TCheckboxOption
+#### 简介
+复选框组的数据项。
+#### 默认构造方法
 
-
-| 名称 | 说明 |
-| --- | --- |
-| circle | - |
-| square | - |
-| check | - |
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disabled | bool | false | 是否禁用该项。 |
+| label | String | - | 主文案。 |
+| subTitle | String? | - | 副文案。 |
+| value | T | - | 选项值。 |
 
 
 ### TContentDirection
+#### 简介
+选择控件相对于文案的排列方向。
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| left | - |
-| right | - |
+| left | 控件位于文案右侧。 |
+| right | 控件位于文案左侧。 |
 
 
-### TCheckBoxSize
+### TCheckboxSize
+#### 简介
+复选框指示器尺寸。
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| large | - |
-| small | - |
+| small | 小尺寸。 |
+| medium | 中尺寸。 |
+| large | 大尺寸。 |
 
 
-### IconBuilder
+### TCheckboxVariant
+#### 简介
+复选框指示器的视觉变体。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| circle | 圆形指示器。 |
+| square | 方形指示器。 |
+| check | 仅显示勾选或半选图标。 |
+
+
+### TCheckboxIconBuilder
+#### 简介
+自定义复选框指示器构建器。
 #### 类型定义
 
 ```dart
-typedef IconBuilder = Widget? Function(BuildContext context, bool checked);
+typedef TCheckboxIconBuilder = Widget Function(BuildContext context, bool? value, bool disabled);
 ```
 
 
-### ContentBuilder
+### TCheckboxOptionBuilder
+#### 简介
+自定义复选框组数据项构建器。
 #### 类型定义
 
 ```dart
-typedef ContentBuilder = Widget Function(BuildContext context, bool checked, String? content);
-```
-
-
-### OnCheckValueChanged
-#### 类型定义
-
-```dart
-typedef OnCheckValueChanged = void Function(bool selected);
-```
-
-
-### OnGroupChange
-#### 类型定义
-
-```dart
-typedef OnGroupChange = void Function(List<String> checkedIds);
-```
-
-
-### OnCheckBoxGroupChange
-#### 类型定义
-
-```dart
-typedef OnCheckBoxGroupChange = void Function(List<String> ids);
+typedef TCheckboxOptionBuilder = Widget Function(BuildContext context, TCheckboxOption<T> option, bool selected, bool disabled);
 ```

@@ -1,7 +1,0 @@
-
-  Widget _buildMarkFillTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.mark,
-    );
-  }

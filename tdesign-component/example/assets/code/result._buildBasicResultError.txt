@@ -1,7 +1,0 @@
-
-  TResult _buildBasicResultError(BuildContext context) {
-    return const TResult(
-      title: '失败状态',
-      theme: TResultTheme.error,
-    );
-  }

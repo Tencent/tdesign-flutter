@@ -1,54 +1,46 @@
 import 'package:flutter/material.dart';
+import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import 't_loading.dart';
+import 't_loading_theme_data.dart';
 
 class TLoadingController {
-  static BuildContext? _context;
   static OverlayEntry? _overlayEntry;
 
   static bool _isShowing = false;
 
   // 展示
   static void show(BuildContext context,
-      {Widget? child,
+    {Widget? child,
       TLoadingSize size = TLoadingSize.medium,
       TLoadingIcon? icon = TLoadingIcon.circle,
-      Color? iconColor,
       String? text,
-      Widget? refreshWidget,
-      Color? textColor,
-      Axis axis = Axis.vertical,
-      Widget? customIcon,
-      int duration = 2000}) {
+      TLoadingThemeData? theme}) {
     if (_isShowing) {
-      print('warn: TLoading is showing!');
+      debugPrint('warn: TLoading is showing!');
       return;
     }
 
     _overlayEntry = OverlayEntry(builder: (context) {
+      final loadingWidget = child ??
+          TLoading(
+            size: size,
+            icon: icon,
+            text: text ?? context.resource.loading,
+          );
+      if (theme == null) {
+        return Center(child: loadingWidget);
+      }
       return Center(
-        child: child ??
-            TLoading(
-              size: size,
-              icon: icon,
-              customIcon: customIcon,
-              text: text ?? context.resource.loading,
-              textColor: textColor,
-              refreshWidget: refreshWidget,
-              duration: duration,
-              iconColor: iconColor,
-              axis: axis,
-            ),
+        child: Theme(
+          data: Theme.of(context).mergeExtension(theme),
+          child: loadingWidget,
+        ),
       );
     });
 
-    _context = context;
-    if (_context == null || _overlayEntry == null) {
-      print('error: TLoading is not init!:${_context} ${_overlayEntry}');
-      return;
-    }
     _isShowing = true;
-    Overlay.of(_context!).insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   // 消失

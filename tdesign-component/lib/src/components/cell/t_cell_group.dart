@@ -1,156 +1,125 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import 't_cell_inherited.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import 't_cell.dart';
+import 't_cell_theme_data.dart';
 
-typedef CellBuilder = Widget Function(
+/// 单元格包装构建器。
+typedef TCellGroupBuilder = Widget Function(
   BuildContext context,
   TCell cell,
   int index,
 );
 
-enum TCellGroupTheme { defaultTheme, cardTheme }
-
-/// 单元格组组件
-class TCellGroup extends StatefulWidget {
+/// 单元格组。
+class TCellGroup extends StatelessWidget {
   const TCellGroup({
-    Key? key,
-    this.bordered = false,
-    this.theme = TCellGroupTheme.defaultTheme,
-    this.title,
     required this.cells,
+    this.title,
+    this.variant,
     this.builder,
-    this.style,
-    this.titleWidget,
     this.scrollable = false,
-    this.isShowLastBordered = false,
-  }) : super(key: key);
+    super.key,
+  });
 
-  /// 是否显示组边框
-  final bool? bordered;
-
-  /// 单元格组风格。可选项：default/card
-  final TCellGroupTheme? theme;
-
-  /// 单元格组标题
-  final String? title;
-
-  /// 单元格组标题组件
-  final Widget? titleWidget;
-
-  /// 单元格列表
+  /// 单元格列表。
   final List<TCell> cells;
 
-  /// cell构建器，可自定义cell父组件，如Dismissible
-  final CellBuilder? builder;
+  /// 组标题。
+  final Widget? title;
 
-  /// 自定义样式
-  final TCellStyle? style;
+  /// 组视觉形态；未设置时读取 Theme。
+  final TCellGroupVariant? variant;
 
-  /// 可滚动
-  final bool? scrollable;
+  /// 自定义单元格外层构建器。
+  final TCellGroupBuilder? builder;
 
-  /// 是否显示最后一个cell的下边框
-  final bool? isShowLastBordered;
+  /// 是否使用可滚动列表。
+  final bool scrollable;
 
-  @override
-  _TCellGroupState createState() => _TCellGroupState();
-}
-
-class _TCellGroupState extends State<TCellGroup> {
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TCellStyle.cellStyle(context);
-    var itemCount = widget.cells.length;
-    var radius = _getBorderRadius(style);
-    return TCellInherited(
-      style: style,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.title != null || widget.titleWidget != null)
-            Container(
-              width: double.infinity,
-              padding: style.titlePadding,
-              child: widget.titleWidget ??
-                  TText(widget.title!, style: style.groupTitleStyle),
-            ),
-          Flexible(
-            child: Container(
-              padding: widget.theme == TCellGroupTheme.cardTheme
-                  ? style.cardPadding
-                  : EdgeInsets.zero,
-              decoration: BoxDecoration(
-                  border: _getBordered(style), borderRadius: radius),
-              child: ClipRRect(
-                borderRadius: radius,
-                child: ListView.separated(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: widget.scrollable == false,
-                  // 设置为true以避免无限制地增长
-                  physics: widget.scrollable == false
-                      ? const NeverScrollableScrollPhysics()
-                      : null,
-                  // 禁用ListView的滚动
-                  itemCount: itemCount,
-                  itemBuilder: (context, index) {
-                    final item = widget.cells[index];
-                    final cell = widget.builder == null
-                        ? item
-                        : widget.builder!(context, item, index);
-                    if (itemCount - 1 == index &&
-                        (widget.isShowLastBordered ?? false)) {
-                      return Column(children: [cell, _borderWidget(style)]);
-                    }
-                    return cell;
-                  },
-                  separatorBuilder: (context, index) {
-                    if (!(widget.cells[index].bordered ?? true)) {
-                      return const SizedBox.shrink();
-                    }
-                    return _borderWidget(style);
-                  },
-                ),
-              ),
+    final theme = Theme.of(context).extension<TCellThemeData>();
+    final resolvedVariant =
+        variant ?? theme?.groupVariant ?? TCellGroupVariant.standard;
+    final children = [
+      for (var index = 0; index < cells.length; index++)
+        _withDivider(
+          context,
+          theme,
+          builder?.call(context, cells[index], index) ?? cells[index],
+          index,
+        ),
+    ];
+    final list = scrollable
+        ? ListView(children: children)
+        : Column(mainAxisSize: MainAxisSize.min, children: children);
+    final content = Container(
+      padding: resolvedVariant == TCellGroupVariant.card
+          ? theme?.cardPadding ?? const EdgeInsets.symmetric(horizontal: 16)
+          : null,
+      decoration: BoxDecoration(
+        border: theme?.groupBordered ?? false
+            ? Border.all(
+                color: theme?.groupBorderColor ??
+                    context.tTheme.componentStrokeColor,
+              )
+            : null,
+        borderRadius: resolvedVariant == TCellGroupVariant.card
+            ? theme?.cardBorderRadius ?? BorderRadius.circular(8)
+            : null,
+      ),
+      clipBehavior: resolvedVariant == TCellGroupVariant.card
+          ? Clip.antiAlias
+          : Clip.none,
+      child: list,
+    );
+    return Column(
+      mainAxisSize: scrollable ? MainAxisSize.max : MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (title != null)
+          Padding(
+            padding: theme?.titlePadding ?? const EdgeInsets.all(16),
+            child: DefaultTextStyle.merge(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: theme?.groupTitleStyle ??
+                  TextStyle(
+                    color: context.tTheme.textColorPrimary,
+                    fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                    height: context.tTheme.fontBodyMedium?.height,
+                  ),
+              child: title!,
             ),
           ),
-        ],
-      ),
+        if (scrollable) Expanded(child: content) else content,
+      ],
     );
   }
 
-  BoxBorder? _getBordered(TCellStyle style) {
-    if (!(widget.bordered ?? false)) {
-      return null;
+  Widget _withDivider(
+    BuildContext context,
+    TCellThemeData? theme,
+    Widget child,
+    int index,
+  ) {
+    final isLast = index == cells.length - 1;
+    if (isLast && !(theme?.showLastDivider ?? false)) {
+      return child;
     }
-    var color =
-        style.groupBorderedColor ?? TTheme.of(context).componentStrokeColor;
-    return Border.all(
-      color: color,
-      width: 1,
-    );
-  }
-
-  BorderRadiusGeometry _getBorderRadius(TCellStyle style) {
-    if (widget.theme == TCellGroupTheme.cardTheme) {
-      return style.cardBorderRadius ?? BorderRadius.zero;
-    }
-    return BorderRadius.zero;
-  }
-
-  Widget _borderWidget(TCellStyle style) {
-    return Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-            height: 0.5,
-            width: TTheme.of(context).spacer16,
-            color: style.backgroundColor),
-        Expanded(
-          child: Container(
-              height: 0.5,
-              color: style.borderedColor ??
-                  TTheme.of(context).componentStrokeColor),
+        child,
+        Divider(
+          height: 0.5,
+          thickness: 0.5,
+          indent: 16,
+          color: theme?.borderColor ?? context.tTheme.componentStrokeColor,
         ),
       ],
     );

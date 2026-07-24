@@ -1,486 +1,204 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import '../../util/auto_size.dart';
-import '../../util/map_ext.dart';
 import 't_check_box.dart';
+import 't_selection_card.dart';
 
-///
-/// CheckBoxGroup变化监听器
-///
-typedef OnGroupChange = void Function(List<String> checkedIds);
+@immutable
 
-///
-/// 控制CheckBoxGroup
-///
-class TCheckboxGroupController {
-  TCheckboxGroupState? _state;
+/// 复选框组的数据项。
+class TCheckboxOption<T> {
+  const TCheckboxOption({
+    /// 选项值。
+    required this.value,
 
-  ///
-  /// 选择全部
-  /// 这个方法会忽略最大可够选数
-  ///
-  void toggleAll(bool check) {
-    _state?.toggleAll(check);
-  }
+    /// 主文案。
+    required this.label,
 
-  ///
-  /// 反选
-  ///
-  void reverseAll() {
-    _state?._reverseAll();
-  }
+    /// 副文案。
+    this.subTitle,
 
-  ///
-  /// 选中某一个选项
-  ///
-  void toggle(String id, bool check) {
-    _state?.toggle(id, check, true);
-  }
+    /// 是否禁用该项。
+    this.disabled = false,
+  });
 
-  ///
-  /// 打勾的选项
-  ///
-  List<String> allChecked() {
-    return _state?.checkBoxStates.where((k, v) => v).keys.toList() ?? [];
-  }
+  /// 选项值。
+  final T value;
 
-  ///
-  /// 某一项的选中状态
-  ///
-  bool checked(String id) {
-    var list = allChecked();
-    return list.contains(id);
-  }
+  /// 主文案。
+  final String label;
+
+  /// 副文案。
+  final String? subTitle;
+
+  /// 是否禁用该项。
+  final bool disabled;
 }
 
-///
-/// CheckBox组，可以通过控制器控制组内的多个CheckBox的选择状态
-///
-/// child的属性可以是任意包含TCheckBox的容器组件，例如：
-/// ```dart
-/// TCheckboxGroup(
-///   child: Row(
-///     children: [
-///       TCheckBox(),
-///       Column(
-///         children: [
-///           TCheckBox()
-///           ...
-///         ]
-///       )
-///       ...
-///     ]
-///   )
-/// )
-/// ```
-///
-///
-class TCheckboxGroup extends StatefulWidget {
+/// 自定义复选框组数据项构建器。
+typedef TCheckboxOptionBuilder<T> = Widget Function(
+  BuildContext context,
+  TCheckboxOption<T> option,
+  bool selected,
+  bool disabled,
+);
 
-  const TCheckboxGroup(
-      {required this.child,
-        Key? key,
-        this.onChangeGroup,
-        this.controller,
-        this.checkedIds,
-        this.maxChecked,
-        this.titleMaxLine,
-        this.customContentBuilder,
-        this.contentDirection,
-        this.style,
-        this.spacing,
-        this.customIconBuilder,
-        this.onOverloadChecked}) : super(key: key);
+/// 数据驱动且严格受控的复选框组。
+class TCheckboxGroup<T> extends StatelessWidget {
+  const TCheckboxGroup({
+    super.key,
 
-  ///
-  /// 可以是任意包含TCheckBox的容器，比如：
-  /// ```
-  /// Row(
-  ///   children: [
-  ///     TCheckBox(),
-  ///     TCheckBox(),
-  ///     ...
-  ///   ]
-  /// )
-  /// ```
-  ///
-  final Widget child;
+    /// 受控选中项列表。
+    required this.value,
 
-  /// 状态变化监听器
-  final OnGroupChange? onChangeGroup;
+    /// 复选框数据项。
+    required this.options,
 
-  /// 可以通过控制器操作勾选状态
-  final TCheckboxGroupController? controller;
+    /// 选中项列表变更回调；为 null 时整组禁用。
+    this.onChanged,
 
-  /// 最多可以勾选多少
-  final int? maxChecked;
+    /// 排列方向。
+    this.direction = Axis.vertical,
 
-  /// 勾选的CheckBox id列表
-  final List<String>? checkedIds;
+    /// 每行列数，必须大于 0。
+    this.columns = 1,
 
-  /// 超过最大可勾选的个数
-  final VoidCallback? onOverloadChecked;
+    /// 是否使用卡片模式。
+    this.cardMode = false,
 
-  /// CheckBox标题的行数
-  final int? titleMaxLine;
+    /// 是否显示项间分割线。
+    this.showDivider = false,
 
+    /// 控件与文案排列方向。
+    this.contentDirection = TContentDirection.right,
 
-  /// CheckBox完全自定义内容
-  final ContentBuilder? customContentBuilder;
+    /// 复选框尺寸。
+    this.size = TCheckboxSize.medium,
 
-  /// CheckBoxicon和文字的距离
-  final double? spacing;
+    /// 最多可选数量。
+    this.maxSelected,
 
-  /// CheckBox复选框样式：圆形或方形
-  final TCheckboxStyle? style;
+    /// 超过最多可选数量时触发。
+    this.onMaxSelected,
 
-  /// 文字相对icon的方位
-  final TContentDirection? contentDirection;
+    /// 自定义数据项视觉；交互仍由组接管。
+    this.itemBuilder,
+  }) : assert(columns > 0);
 
-  /// 自定义选择icon的样式
-  final IconBuilder? customIconBuilder;
+  /// 受控选中项列表。
+  final List<T> value;
 
-  @override
-  State<StatefulWidget> createState() {
-    return TCheckboxGroupState();
-  }
-}
+  /// 复选框数据项。
+  final List<TCheckboxOption<T>> options;
 
+  /// 选中项列表变更回调；为 null 时整组禁用。
+  final ValueChanged<List<T>>? onChanged;
 
-class TCheckboxGroupState extends State<TCheckboxGroup> {
-  ///
-  /// 管理所有子CheckBox的状态
-  ///
-  Map<String, bool> checkBoxStates = {};
+  /// 排列方向。
+  final Axis direction;
 
-  @override
-  void initState() {
-    super.initState();
-    // 如果有controller的话，把state设置给controller
-    widget.controller?._state = this;
+  /// 每行列数。
+  final int columns;
 
-    _syncCheckState(widget.checkedIds);
-  }
+  /// 是否使用卡片模式。
+  final bool cardMode;
 
-  /// 把group中配置的默认选中id，同步到状态中
-  void _syncCheckState(List<String>? checkIds) {
-    checkBoxStates.clear();
-    checkIds?.forEach((element) {
-      checkBoxStates[element] = true;
-    });
-  }
+  /// 是否显示项间分割线。
+  final bool showDivider;
 
+  /// 控件与文案排列方向。
+  final TContentDirection contentDirection;
 
-  @override
-  void didUpdateWidget(TCheckboxGroup oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final oldCheckIds = oldWidget.checkedIds;
-    final newCheckIds = widget.checkedIds;
-    if (oldCheckIds != newCheckIds) {
-      _syncCheckState(newCheckIds);
-    }
-  }
+  /// 复选框尺寸。
+  final TCheckboxSize size;
 
+  /// 最多可选数量。
+  final int? maxSelected;
 
-  ///
-  /// 根据id获取CheckBox的勾选状态
-  ///
-  ///
-  bool getCheckBoxStateById(String id, bool checked) {
-    if (checkBoxStates[id] == null) {
-      // checkBox本身的状态
-      checkBoxStates[id] = checked;
-    }
-    return checkBoxStates[id]!;
-  }
+  /// 超过最多可选数量时触发。
+  final VoidCallback? onMaxSelected;
 
-  /// 勾选单个CheckBox
-  bool toggle(String id, bool check, [bool notify = false]) {
-    // 检查是否超过用户设置的最大可勾选数
-    if (widget.maxChecked != null && check) {
-      if (checkBoxStates.count((k, v) => v) >= widget.maxChecked!) {
-        widget.onOverloadChecked?.call();
-        return false;
-      }
-    }
-    checkBoxStates[id] = check;
-    if (notify) {
-      setState(() {});
-    }
-    _notifyChange();
-    return true;
-  }
-
-  /// 操作所有CheckBox
-  void toggleAll(bool check, [bool notify = true]) {
-    var isChanged = false;
-    checkBoxStates.forEachCanBreak((k, v) {
-      if (check) {
-        if (!toggle(k, check)) {
-          // 勾选失败，退出循环
-          return true;
-        }
-      } else {
-        toggle(k, check);
-      }
-      isChanged = true;
-      return false;
-    });
-
-    if (isChanged && notify) {
-      setState(() {});
-      _notifyChange();
-    }
-  }
-
-  /// 反选
-  void _reverseAll() {
-    final reverseValue =
-    checkBoxStates.map((key, value) => MapEntry(key, !value));
-    checkBoxStates.forEach((key, value) {
-      checkBoxStates[key] = false;
-    });
-    checkBoxStates.forEach((k, v) {
-      var check = reverseValue[k] ?? false;
-      toggle(k, check);
-    });
-    setState(() {});
-    _notifyChange();
-  }
-
-  void _notifyChange() {
-    final change = widget.onChangeGroup;
-    if (change != null) {
-      final checkedIds = checkBoxStates.where((k, v) => v).keys.toList();
-      change.call(checkedIds);
-    }
-  }
+  /// 自定义数据项视觉；交互仍由组接管。
+  final TCheckboxOptionBuilder<T>? itemBuilder;
 
   @override
   Widget build(BuildContext context) {
-    return TCheckboxGroupInherited(this, widget.child);
-  }
-}
-
-class TCheckboxGroupInherited extends InheritedWidget {
-  final TCheckboxGroupState state;
-
-  ///
-  /// 获取树上的Group节点
-  ///
-  static TCheckboxGroupInherited? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TCheckboxGroupInherited>();
-  }
-
-  const TCheckboxGroupInherited(this.state, Widget child, {Key? key}) : super(child: child, key: key);
-
-  @override
-  bool updateShouldNotify(covariant TCheckboxGroupInherited oldWidget) {
-    return true;
-  }
-}
-
-
-class TCheckboxGroupContainer extends TCheckboxGroup {
-
-  TCheckboxGroupContainer({
-    Key? key,
-    Widget? child, // 使用child 则请勿设置direction
-    Axis? direction, // direction 对 directionalTdRadios 起作用
-    List<TCheckbox>? directionalTdCheckboxes,
-    List<String>? selectIds, // 默认选择项的id组
-    bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
-    bool cardMode = false,
-    int? titleMaxLine, // item的行数
-    int? maxSelected, // 最大勾选数
-    TCheckboxStyle? style,// 勾选样式
-    TCheckboxGroupController? controller,
-    IconBuilder? customIconBuilder,
-    ContentBuilder? customContentBuilder,
-    double? spacing, // icon和文字距离
-    TContentDirection? contentDirection,
-    OnCheckBoxGroupChange? onCheckBoxGroupChange,
-    VoidCallback? onOverloadChecked,
-    int? rowCount,
-  })  : assert(() {
-    // 使用direction属性则必须配合directionalTdCheckboxes，child字段无效
-    if (direction != null && directionalTdCheckboxes == null) {
-      throw FlutterError(
-          '[TCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time');
-    }
-    // 未使用direction则必须设置child
-    if (direction == null && child == null) {
-      throw FlutterError(
-          '[TCheckboxGroupContainer] direction means use child as the exact one, but child is null');
-    }
-    // 横向单选框 每个选项有字数限制
-    if (direction == Axis.horizontal && directionalTdCheckboxes != null) {
-      directionalTdCheckboxes.forEach((element) {
-        if (element.subTitle != null) {
-          throw FlutterError(
-              'horizontal checkbox style should not have subTilte, '
-                  'because there left no room for it');
-        }
-      });
-      var maxWordCount = 2;
-      var tips =
-          '[TCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
-          '2tabs: 7words maximum\n'
-          '3tabs: 4words maximum\n'
-          '4tabs: 2words maximum';
-      var length = directionalTdCheckboxes.length;
-      if (rowCount != null && rowCount > 1) {
-        length = rowCount;
-      }
-      if (length == 2) {
-        maxWordCount = 7;
-      }
-      if (length == 3) {
-        maxWordCount = 4;
-      }
-      if (length == 4) {
-        maxWordCount = 2;
-      }
-      directionalTdCheckboxes.forEach((checkbox) {
-        if ((checkbox.title?.length ?? 0) > maxWordCount) {
-          throw FlutterError(tips);
-        }
-      });
-    }
-    // 卡片模式要求每个TRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
-    if (cardMode == true) {
-      assert(direction != null && directionalTdCheckboxes != null);
-      directionalTdCheckboxes!.forEach((element) {
-        // if use cardMode at TRadioGroup, then every TRadio should
-        // set it's own carMode to true.
-        if (element.cardMode == false) {
-          throw FlutterError(
-              'if use cardMode at TCheckboxGroupContainer, then every '
-                  'TCheckbox should set it\'s own carMode to true.');
-        }
-        if (element.subTitle != null && direction == Axis.horizontal) {
-          throw FlutterError(
-              'horizontal card style should not have subTilte, '
-                  'because there left no room for it');
-        }
-      });
-    }
-    return true;
-  }()),
-        super(
-        child: Container(
-          clipBehavior: (passThrough ?? false) && direction != Axis.horizontal
-              ? Clip.hardEdge
-              : Clip.none,
-          decoration: (passThrough ?? false) && direction != Axis.horizontal
-              ? BoxDecoration(borderRadius: BorderRadius.circular(10))
-              : null,
-          margin: (passThrough ?? false) && direction != Axis.horizontal
-              ? const EdgeInsets.symmetric(horizontal: 16)
-              : null,
-          child: direction == null
-              ? child!
-              : (direction == Axis.vertical
-              ? ListView.separated(
-            padding: const EdgeInsets.all(0),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: cardMode
-                    ? const EdgeInsets.symmetric(horizontal: 16)
-                    : null,
-                height: cardMode ? 82 : null,
-                child: directionalTdCheckboxes[index],
-              );
-            },
-            itemCount: directionalTdCheckboxes!.length,
-            separatorBuilder: (BuildContext context, int index) {
-              if (cardMode) {
-                return const SizedBox(
-                  height: 12,
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          )
-              : Container(
-            margin: cardMode
-                ? EdgeInsets.symmetric(horizontal: 16.scale)
-                : null,
-            alignment: cardMode ? Alignment.topLeft : null,
-            child: cardMode
-                ? Wrap(
-              spacing: 12.scale,
-              runSpacing: 12,
-              runAlignment: WrapAlignment.spaceEvenly,
-              children: directionalTdCheckboxes!.map((element) {
-                return SizedBox(
-                  width: 106.3.scale,
-                  height: 56,
-                  child: element,
-                );
-              }).toList(),
-            )
-                : rowCount != null && rowCount > 1
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                            (directionalTdCheckboxes!.length / rowCount).ceil(),
-                            (index) {
-                          var start = index * rowCount;
-                          var end = (index + 1) * rowCount;
-                          if (end > directionalTdCheckboxes.length) {
-                            end = directionalTdCheckboxes.length;
-                          }
-                          var subList =
-                              directionalTdCheckboxes.sublist(start, end);
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ...subList.map((e) => Expanded(child: e)),
-                              if (subList.length < rowCount)
-                                ...List.generate(
-                                    rowCount - subList.length,
-                                    (index) =>
-                                        const Expanded(child: SizedBox()))
-                            ],
-                          );
-                        }))
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: directionalTdCheckboxes!
-                            .map((e) => Expanded(child: e))
-                            .toList(),
-                      ),
-          )),
-        ),
-        key: key,
-        onChangeGroup: (ids) {
-          selectIds = ids;
-          onCheckBoxGroupChange?.call(ids);
-        },
-        onOverloadChecked: onOverloadChecked,
-        controller: controller,
-        checkedIds: selectIds,
-        maxChecked: maxSelected,
-        titleMaxLine: titleMaxLine,
-        contentDirection: contentDirection,
-        customIconBuilder: customIconBuilder,
-        customContentBuilder: customContentBuilder,
-        style: style,
-        spacing: spacing,
+    if (cardMode) {
+      return TSelectionCardGroupLayout(
+        direction: direction,
+        columns: columns,
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
+        itemHasSubtitles: [
+          for (final option in options) option.subTitle?.isNotEmpty == true,
+        ],
       );
+    }
+    if (direction == Axis.vertical && columns == 1) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
+      );
+    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth.isFinite
+            ? constraints.maxWidth / columns
+            : null;
+        return Wrap(
+          children: List.generate(options.length, (index) {
+            final child = _buildItem(context, options[index], index);
+            return width == null ? child : SizedBox(width: width, child: child);
+          }),
+        );
+      },
+    );
+  }
 
-  @override
-  State<StatefulWidget> createState() {
-    return TCheckboxGroupContainerState();
+  Widget _buildItem(
+      BuildContext context, TCheckboxOption<T> option, int index) {
+    final selected = value.contains(option.value);
+    final disabled = onChanged == null || option.disabled;
+    if (itemBuilder != null) {
+      final child = itemBuilder!(context, option, selected, disabled);
+      return Semantics(
+        enabled: !disabled,
+        checked: selected,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: disabled ? null : () => _toggle(option, selected),
+          child: child,
+        ),
+      );
+    }
+    return TCheckbox(
+      value: selected,
+      onChanged: disabled ? null : (_) => _toggle(option, selected),
+      title: option.label,
+      subTitle: option.subTitle,
+      cardMode: cardMode,
+      showDivider: showDivider && index < options.length - 1,
+      contentDirection: contentDirection,
+      size: size,
+    );
+  }
+
+  void _toggle(TCheckboxOption<T> option, bool selected) {
+    final next = value.toSet();
+    if (selected) {
+      next.remove(option.value);
+    } else {
+      if (maxSelected != null && next.length >= maxSelected!) {
+        onMaxSelected?.call();
+        return;
+      }
+      next.add(option.value);
+    }
+    onChanged?.call([
+      for (final item in options)
+        if (next.contains(item.value)) item.value,
+    ]);
   }
 }
-
-class TCheckboxGroupContainerState extends TCheckboxGroupState {
-
-}
-
-typedef OnCheckBoxGroupChange = void Function(List<String> ids);

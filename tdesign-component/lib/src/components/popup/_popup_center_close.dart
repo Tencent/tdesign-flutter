@@ -8,7 +8,7 @@ Widget buildPopupCenterCloseControl({
   required void Function(TPopupTrigger trigger) onCloseWithTrigger,
 }) {
   if (_isPopupDefaultClose(options.closeBuilder)) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     return IconButton(
       tooltip: context.resource.close,
       icon: Icon(
@@ -31,8 +31,13 @@ class PopupCenterUnderClose extends StatelessWidget {
     required this.onCloseWithTrigger,
   });
 
+  /// 弹出层配置
   final TPopupOptions options;
+
+  /// 内容组件
   final Widget content;
+
+  /// 关闭回调（携带触发源）
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   @override

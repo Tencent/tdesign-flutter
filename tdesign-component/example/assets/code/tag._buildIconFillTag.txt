@@ -1,7 +1,0 @@
-
-  Widget _buildIconFillTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      icon: TIcons.discount,
-    );
-  }

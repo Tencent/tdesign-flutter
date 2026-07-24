@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
 
-enum TPopoverTheme {
-  /// 暗色
-  dark,
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
+import '../text/t_text.dart';
+import 't_popover_theme_data.dart';
 
-  /// 亮色
-  light,
-
-  /// 品牌色
-  info,
-
-  /// 成功
-  success,
-
-  /// 警告
-  warning,
-
-  /// 错误
-  error
-}
-
+/// 气泡弹层定位方向
 enum TPopoverPlacement {
   /// 上左
   topLeft,
@@ -59,20 +47,24 @@ enum TPopoverPlacement {
   leftTop
 }
 
-typedef OnTap = Function(String? content);
-typedef OnLongTap = Function(String? content);
+/// 点击事件回调
+typedef TPopoverTapCallback = void Function(String? content);
 
+/// 长按事件回调
+typedef TPopoverLongPressCallback = void Function(String? content);
+
+/// 气泡弹层 Widget
 class TPopoverWidget extends StatefulWidget {
   const TPopoverWidget({
     super.key,
     required this.context,
     this.content,
     this.contentWidget,
-    this.offset = 4,
-    this.theme,
+    this.offset,
+    this.colorScheme,
     this.placement,
-    this.showArrow = true,
-    this.arrowSize = 8,
+    this.showArrow,
+    this.arrowSize,
     this.padding,
     this.width,
     this.height,
@@ -91,10 +83,10 @@ class TPopoverWidget extends StatefulWidget {
   final Widget? contentWidget;
 
   /// 偏移
-  final double offset;
+  final double? offset;
 
   /// 弹出气泡主题
-  final TPopoverTheme? theme;
+  final TPopoverColorScheme? colorScheme;
 
   /// 浮层出现位置
   final TPopoverPlacement? placement;
@@ -103,7 +95,7 @@ class TPopoverWidget extends StatefulWidget {
   final bool? showArrow;
 
   /// 箭头大小
-  final double arrowSize;
+  final double? arrowSize;
 
   /// 内容内边距
   final EdgeInsetsGeometry? padding;
@@ -115,10 +107,10 @@ class TPopoverWidget extends StatefulWidget {
   final double? height;
 
   /// 点击事件
-  final OnTap? onTap;
+  final TPopoverTapCallback? onTap;
 
   /// 长按事件
-  final OnLongTap? onLongTap;
+  final TPopoverLongPressCallback? onLongTap;
 
   /// 圆角
   final BorderRadius? radius;
@@ -128,6 +120,46 @@ class TPopoverWidget extends StatefulWidget {
 }
 
 class _TPopoverWidgetState extends State<TPopoverWidget> {
+  TPopoverThemeData get _theme =>
+      Theme.of(context).extension<TPopoverThemeData>() ??
+      const TPopoverThemeData();
+
+  double get _effectiveOffset => widget.offset ?? _theme.offset ?? 4;
+
+  bool get _effectiveShowArrow => widget.showArrow ?? _theme.showArrow ?? true;
+
+  double get _effectiveArrowSize => widget.arrowSize ?? _theme.arrowSize ?? 8;
+
+  EdgeInsetsGeometry? get _effectivePadding => widget.padding ?? _theme.padding;
+
+  double? get _effectiveWidth => widget.width ?? _theme.minWidth;
+
+  double? get _effectiveHeight => widget.height ?? _theme.maxHeight;
+
+  BorderRadius? get _effectiveRadius =>
+      widget.radius ??
+      (_theme.borderRadius == null
+          ? null
+          : BorderRadius.circular(_theme.borderRadius!));
+
+  static const List<BoxShadow> _defaultBoxShadow = [
+    BoxShadow(
+        color: Color(0x0d000000),
+        offset: Offset(0, 6),
+        blurRadius: 30,
+        spreadRadius: 5),
+    BoxShadow(
+        color: Color(0x0a000000),
+        offset: Offset(0, 16),
+        blurRadius: 24,
+        spreadRadius: 2),
+    BoxShadow(
+        color: Color(0x14000000),
+        offset: Offset(0, 8),
+        blurRadius: 10,
+        spreadRadius: -5),
+  ];
+
   late Color _color;
 
   late Color _backgroundColor;
@@ -137,11 +169,11 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     super.initState();
     _initTheme();
     if (widget.contentWidget != null) {
-      if (widget.width == null) {
+      if (_effectiveWidth == null) {
         throw FlutterError(
             'width must not be null when contentWidget is not null');
       }
-      if (widget.height == null) {
+      if (_effectiveHeight == null) {
         throw FlutterError(
             'height must not be null when contentWidget is not null');
       }
@@ -152,17 +184,17 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   Widget _drawArrow() {
     var border = Border(
         right: BorderSide(
-          width: widget.arrowSize,
+          width: _effectiveArrowSize,
           color: Colors.transparent,
           style: BorderStyle.solid,
         ),
         bottom: BorderSide(
-          width: widget.arrowSize,
+          width: _effectiveArrowSize,
           color: _backgroundColor,
           style: BorderStyle.solid,
         ),
         left: BorderSide(
-          width: widget.arrowSize,
+          width: _effectiveArrowSize,
           color: Colors.transparent,
           style: BorderStyle.solid,
         ));
@@ -171,17 +203,17 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.placement == TPopoverPlacement.bottomRight) {
       border = Border(
           top: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: _backgroundColor,
             style: BorderStyle.solid,
           ),
           right: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: Colors.transparent,
             style: BorderStyle.solid,
           ),
           left: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: Colors.transparent,
             style: BorderStyle.solid,
           ));
@@ -190,17 +222,17 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.placement == TPopoverPlacement.leftBottom) {
       border = Border(
           top: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: Colors.transparent,
             style: BorderStyle.solid,
           ),
           bottom: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: Colors.transparent,
             style: BorderStyle.solid,
           ),
           right: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: _backgroundColor,
             style: BorderStyle.solid,
           ));
@@ -209,17 +241,17 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.placement == TPopoverPlacement.rightBottom) {
       border = Border(
           top: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: Colors.transparent,
             style: BorderStyle.solid,
           ),
           bottom: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: Colors.transparent,
             style: BorderStyle.solid,
           ),
           left: BorderSide(
-            width: widget.arrowSize,
+            width: _effectiveArrowSize,
             color: _backgroundColor,
             style: BorderStyle.solid,
           ));
@@ -233,30 +265,30 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   /// 初始化主题
   void _initTheme() {
-    switch (widget.theme) {
-      case TPopoverTheme.info:
-        _color = TTheme.of(widget.context).brandNormalColor;
-        _backgroundColor = TTheme.of(widget.context).brandLightColor;
+    switch (widget.colorScheme) {
+      case TPopoverColorScheme.info:
+        _color = widget.context.tTheme.brandNormalColor;
+        _backgroundColor = widget.context.tTheme.brandLightColor;
         break;
-      case TPopoverTheme.success:
-        _color = TTheme.of(widget.context).successNormalColor;
-        _backgroundColor = TTheme.of(widget.context).successLightColor;
+      case TPopoverColorScheme.success:
+        _color = widget.context.tTheme.successNormalColor;
+        _backgroundColor = widget.context.tTheme.successLightColor;
         break;
-      case TPopoverTheme.warning:
-        _color = TTheme.of(widget.context).warningNormalColor;
-        _backgroundColor = TTheme.of(widget.context).warningLightColor;
+      case TPopoverColorScheme.warning:
+        _color = widget.context.tTheme.warningNormalColor;
+        _backgroundColor = widget.context.tTheme.warningLightColor;
         break;
-      case TPopoverTheme.error:
-        _color = TTheme.of(widget.context).errorNormalColor;
-        _backgroundColor = TTheme.of(widget.context).errorLightColor;
+      case TPopoverColorScheme.error:
+        _color = widget.context.tTheme.errorNormalColor;
+        _backgroundColor = widget.context.tTheme.errorLightColor;
         break;
-      case TPopoverTheme.light:
-        _color = TTheme.of(widget.context).grayColor14;
-        _backgroundColor = TTheme.of(widget.context).whiteColor1;
+      case TPopoverColorScheme.light:
+        _color = widget.context.tTheme.grayColor14;
+        _backgroundColor = widget.context.tTheme.whiteColor1;
         break;
       default:
-        _color = TTheme.of(widget.context).whiteColor1;
-        _backgroundColor = TTheme.of(widget.context).grayColor14;
+        _color = widget.context.tTheme.textColorAnti;
+        _backgroundColor = widget.context.tTheme.grayColor14;
         break;
     }
   }
@@ -277,16 +309,16 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   double _getOffsetTop(Offset? widgetLocalToGlobal) {
     var widgetBounds = _getWidgetBounds(widget.context);
     var dy = widgetLocalToGlobal?.dy ?? 0;
-    var arrowSize = widget.showArrow ?? false ? widget.arrowSize : 0;
+    var arrowSize = _effectiveShowArrow ? _effectiveArrowSize : 0;
     var contentSize = _getContentSize();
-    var popoverHeight = widget.height ??
-        (widget.padding != null ? widget.padding!.vertical : 24) +
-            (widget.height ?? contentSize.height);
+    var popoverHeight = _effectiveHeight ??
+        (_effectivePadding != null ? _effectivePadding!.vertical : 24) +
+            contentSize.height;
     switch (widget.placement) {
       case TPopoverPlacement.bottomLeft:
       case TPopoverPlacement.bottom:
       case TPopoverPlacement.bottomRight:
-        return dy + (widgetBounds?.height ?? 0) + widget.offset;
+        return dy + (widgetBounds?.height ?? 0) + _effectiveOffset;
       case TPopoverPlacement.rightTop:
       case TPopoverPlacement.leftTop:
         return dy;
@@ -297,7 +329,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       case TPopoverPlacement.left:
         return dy - (popoverHeight - (widgetBounds?.height ?? 0)) / 2;
       default:
-        return dy - popoverHeight - widget.offset - arrowSize;
+        return dy - popoverHeight - _effectiveOffset - arrowSize;
     }
   }
 
@@ -306,8 +338,8 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var widgetBounds = _getWidgetBounds(widget.context);
     var widgetWidth = widgetBounds?.width ?? 0;
     var contentSize = _getContentSize();
-    var popoverWidth = widget.width ??
-        (widget.padding != null ? widget.padding!.horizontal : 24) +
+    var popoverWidth = _effectiveWidth ??
+        (_effectivePadding != null ? _effectivePadding!.horizontal : 24) +
             contentSize.width;
     var dx = widgetLocalToGlobal?.dx ?? 0;
     switch (widget.placement) {
@@ -320,11 +352,11 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       case TPopoverPlacement.rightTop:
       case TPopoverPlacement.right:
       case TPopoverPlacement.rightBottom:
-        return dx + widgetWidth + widget.offset;
+        return dx + widgetWidth + _effectiveOffset;
       case TPopoverPlacement.leftTop:
       case TPopoverPlacement.left:
       case TPopoverPlacement.leftBottom:
-        return dx - popoverWidth - widget.arrowSize - widget.offset;
+        return dx - popoverWidth - _effectiveArrowSize - _effectiveOffset;
       default:
         return dx - (popoverWidth - widgetWidth) / 2;
     }
@@ -333,51 +365,51 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   /// 获取箭头Widget
   /// todo 通过 CustomPainter 绘制箭头进行优化
   Widget _getArrowWidget() {
-    var margin = EdgeInsets.only(top: widget.arrowSize);
+    var margin = EdgeInsets.only(top: _effectiveArrowSize);
     switch (widget.placement) {
       case TPopoverPlacement.topLeft:
-        margin =
-            EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 12);
+        margin = EdgeInsets.only(
+            top: _effectiveArrowSize, left: _effectiveArrowSize + 12);
         break;
       case TPopoverPlacement.topRight:
         margin = EdgeInsets.only(
-            top: widget.arrowSize, right: widget.arrowSize + 12);
+            top: _effectiveArrowSize, right: _effectiveArrowSize + 12);
         break;
       case TPopoverPlacement.bottomLeft:
         margin = EdgeInsets.only(
-            bottom: widget.arrowSize, left: widget.arrowSize + 12);
+            bottom: _effectiveArrowSize, left: _effectiveArrowSize + 12);
         break;
       case TPopoverPlacement.bottom:
-        margin = EdgeInsets.only(bottom: widget.arrowSize);
+        margin = EdgeInsets.only(bottom: _effectiveArrowSize);
         break;
       case TPopoverPlacement.bottomRight:
         margin = EdgeInsets.only(
-            bottom: widget.arrowSize, right: widget.arrowSize + 12);
+            bottom: _effectiveArrowSize, right: _effectiveArrowSize + 12);
         break;
       case TPopoverPlacement.rightTop:
-        margin =
-            EdgeInsets.only(top: widget.arrowSize + 6, right: widget.arrowSize);
+        margin = EdgeInsets.only(
+            top: _effectiveArrowSize + 6, right: _effectiveArrowSize);
         break;
       case TPopoverPlacement.right:
-        margin = EdgeInsets.only(right: widget.arrowSize);
+        margin = EdgeInsets.only(right: _effectiveArrowSize);
         break;
       case TPopoverPlacement.rightBottom:
         margin = EdgeInsets.only(
-            bottom: widget.arrowSize + 6, right: widget.arrowSize);
+            bottom: _effectiveArrowSize + 6, right: _effectiveArrowSize);
         break;
       case TPopoverPlacement.leftTop:
-        margin =
-            EdgeInsets.only(top: widget.arrowSize + 6, left: widget.arrowSize);
+        margin = EdgeInsets.only(
+            top: _effectiveArrowSize + 6, left: _effectiveArrowSize);
         break;
       case TPopoverPlacement.left:
-        margin = EdgeInsets.only(left: widget.arrowSize);
+        margin = EdgeInsets.only(left: _effectiveArrowSize);
         break;
       case TPopoverPlacement.leftBottom:
         margin = EdgeInsets.only(
-            bottom: widget.arrowSize + 6, left: widget.arrowSize);
+            bottom: _effectiveArrowSize + 6, left: _effectiveArrowSize);
         break;
       default:
-        margin = EdgeInsets.only(top: widget.arrowSize);
+        margin = EdgeInsets.only(top: _effectiveArrowSize);
     }
     return Container(
       margin: margin,
@@ -388,65 +420,59 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   /// 获取弹出内容大小
   Size _getContentSize() {
     if (widget.contentWidget != null) {
-      return Size(widget.width!, widget.height!);
+      return Size(_effectiveWidth!, _effectiveHeight!);
     }
     return _getTextSize();
   }
 
   /// 获取文本内容大小
   Size _getTextSize() {
+    final font = context.tTheme.fontBodyLarge;
     var textPainter = TextPainter(
       text: TextSpan(
         text: widget.content,
         style: TextStyle(
           color: _color,
           letterSpacing: 0,
-          fontSize: 16,
-          height: 1.5,
+          fontSize: font?.size ?? 16,
+          height: font?.height ?? 1.5,
         ),
       ),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
     )..layout(
-        maxWidth: (widget.width ?? 300) -
-            (widget.padding != null ? widget.padding!.horizontal : 24));
+        maxWidth: (_effectiveWidth ?? 300) -
+            (_effectivePadding != null ? _effectivePadding!.horizontal : 24));
     return textPainter.size;
   }
 
   Widget _getContainerWidget() {
+    // 当未指定 width 且使用纯文本内容时，用 TextPainter 测量的宽度作为约束，
+    // 确保长文本能在 maxWidth 范围内换行（否则 Container 无宽度约束，Text 会单行无限延伸）
+    var effectiveWidth = _effectiveWidth;
+    if (effectiveWidth == null && widget.contentWidget == null) {
+      final textWidth = _getTextSize().width;
+      final paddingHorizontal =
+          _effectivePadding != null ? _effectivePadding!.horizontal : 24;
+      effectiveWidth = textWidth + paddingHorizontal;
+    }
     return Container(
-      width: widget.width,
-      height: widget.height,
-      padding: widget.padding ?? const EdgeInsets.all(12),
+      width: effectiveWidth,
+      height: _effectiveHeight,
+      padding: _effectivePadding ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          borderRadius: widget.radius ??
-              BorderRadius.circular(TTheme.of(context).radiusDefault),
+          borderRadius: _effectiveRadius ??
+              BorderRadius.circular(context.tTheme.radiusDefault),
           color: _backgroundColor,
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x0d000000),
-                offset: Offset(0, 6),
-                blurRadius: 30,
-                spreadRadius: 5),
-            BoxShadow(
-                color: Color(0x0a000000),
-                offset: Offset(0, 16),
-                blurRadius: 24,
-                spreadRadius: 2),
-            BoxShadow(
-                color: Color(0x14000000),
-                offset: Offset(0, 8),
-                blurRadius: 10,
-                spreadRadius: -5),
-          ]),
+          boxShadow: _theme.boxShadow ?? _defaultBoxShadow),
       child: widget.contentWidget != null
           ? widget.contentWidget!
           : TText(widget.content,
               style: TextStyle(
                 color: _color,
                 letterSpacing: 0,
-                fontSize: 16,
-                height: 1.5,
+                fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+                height: context.tTheme.fontBodyLarge?.height ?? 1.5,
               )),
     );
   }
@@ -456,7 +482,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var children = [
       _getContainerWidget(),
       Visibility(
-        visible: widget.showArrow ?? false,
+        visible: _effectiveShowArrow,
         child: _getArrowWidget(),
       )
     ];
@@ -477,7 +503,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         /// 反转内容和箭头
         children = [
           Visibility(
-            visible: widget.showArrow ?? false,
+            visible: _effectiveShowArrow,
             child: _getArrowWidget(),
           ),
           _getContainerWidget(),

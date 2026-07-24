@@ -2,55 +2,26 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import 't_horizontal_tab_bar.dart';
+import 't_tab.dart';
+import 't_tab_bar_theme_data.dart';
 
-enum TTabBarOutlineType {
-  /// 填充样式
-  filled,
-
-  /// 胶囊样式
-  capsule,
-
-  /// 卡片
-  card
-}
-
-class TTabBar extends StatefulWidget {
-  const TTabBar({
+/// 标签栏
+///
+/// 支持滚动、指示器自定义、胶囊/填充/卡片样式等。
+class TTabsBar extends StatelessWidget {
+  const TTabsBar({
     Key? key,
     required this.tabs,
     this.controller,
     this.decoration,
-    this.backgroundColor,
-    this.indicatorColor,
-    this.indicatorWidth,
-    this.indicatorHeight,
-    this.labelColor,
-    this.unselectedLabelColor,
     this.isScrollable = false,
-    this.unselectedLabelStyle,
-    this.labelStyle,
-    this.width,
-    this.height,
-    this.indicatorPadding,
-    this.labelPadding,
     this.indicator,
-    this.physics,
     this.onTap,
-    this.outlineType = TTabBarOutlineType.filled,
-    this.showIndicator = false,
-    this.dividerColor,
-    this.dividerHeight = 0.5,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
-    this.tabAlignment,
-  })  : assert(
-          backgroundColor == null || decoration == null,
-          'Cannot provide both a backgroundColor and a decoration\n'
-          'To provide both, use "decoration: BoxDecoration(color: color)".',
-        ),
-        super(key: key);
+    this.variant = TTabsBarVariant.filled,
+  }) : super(key: key);
 
   /// tab数组
   final List<TTab> tabs;
@@ -58,190 +29,108 @@ class TTabBar extends StatefulWidget {
   /// tab控制器
   final TabController? controller;
 
-  /// tabBar修饰
+  /// tabBar 修饰；非空时覆盖 Theme 的背景和分割线。
   final Decoration? decoration;
 
-  /// tabBar背景色，当outlineType为card时控制选中tab颜色
-  final Color? backgroundColor;
-
-  /// tabBar下标颜色
-  final Color? indicatorColor;
-
-  /// tabBar下标高度
-  final double? indicatorHeight;
-
-  /// tabBar下标宽度
-  final double? indicatorWidth;
-
-  /// tabBar 已选标签颜色
-  final Color? labelColor;
-
-  /// tabBar未选标签颜色
-  final Color? unselectedLabelColor;
-
-  /// 是否滚动
+  /// 是否横向滚动。
   final bool isScrollable;
 
-  /// 已选label字体
-  final TextStyle? labelStyle;
-
-  /// unselectedLabel字体
-  final TextStyle? unselectedLabelStyle;
-
-  /// tabBar宽度
-  final double? width;
-
-  /// tabBar高度
-  final double? height;
-
-  /// 引导padding
-  final EdgeInsets? indicatorPadding;
-
-  /// 自定义引导控件
+  /// 自定义指示器；非空时覆盖 Theme 指示器。
   final Decoration? indicator;
 
-  /// 是否展示引导控件
-  final bool showIndicator;
-
-  /// 自定义滑动
-  final ScrollPhysics? physics;
-
   /// 点击事件
-  final Function(int)? onTap;
+  final ValueChanged<int>? onTap;
 
-  /// tab间距
-  final EdgeInsetsGeometry? labelPadding;
-
-  /// 选项卡样式
-  final TTabBarOutlineType outlineType;
-
-  /// 分割线颜色
-  final Color? dividerColor;
-
-  /// 分割线高度,小于等于0则不展示分割线
-  final double dividerHeight;
-
-  /// 被选中背景色，只有outlineType为capsule时有效
-  final Color? selectedBgColor;
-
-  /// 未选中背景色，只有outlineType为capsule时有效
-  final Color? unSelectedBgColor;
-
-  final TabAlignment? tabAlignment;
-
-  @override
-  State<StatefulWidget> createState() => _TTabBarState();
-}
-
-class _TTabBarState extends State<TTabBar> {
-  /// 默认高度
-  static const double _defaultHeight = 48;
+  /// 选项卡样式。
+  final TTabsBarVariant variant;
+  TTabsBarThemeData _themeData(BuildContext context) =>
+      Theme.of(context).extension<TTabsBarThemeData>() ??
+      const TTabsBarThemeData();
 
   @override
   Widget build(BuildContext context) {
+    final themeData = _themeData(context);
+    final dividerHeight = themeData.dividerHeight ?? 0.5;
+    final backgroundColor =
+        themeData.backgroundColor ?? context.tTheme.bgColorContainer;
     return Container(
-      width: widget.width ?? MediaQuery.of(context).size.width,
-      height: widget.height ?? _defaultHeight,
-      decoration: widget.decoration ??
-          (widget.outlineType == TTabBarOutlineType.card
-              ? BoxDecoration(
-                  color: widget.backgroundColor ??
-                      TTheme.of(context).bgColorContainer)
+      height: 48,
+      decoration: decoration ??
+          (variant == TTabsBarVariant.card
+              ? BoxDecoration(color: backgroundColor)
               : BoxDecoration(
-                  color: widget.backgroundColor ??
-                      TTheme.of(context).bgColorContainer,
-                  border: widget.dividerHeight <= 0
+                  color: backgroundColor,
+                  border: dividerHeight <= 0
                       ? null
                       : Border(
                           bottom: BorderSide(
-                              color: widget.dividerColor ??
-                                  TTheme.of(context).componentStrokeColor,
-                              width: widget.dividerHeight)))),
+                              color: themeData.dividerColor ??
+                                  context.tTheme.componentStrokeColor,
+                              width: dividerHeight)))),
       child: THorizontalTabBar(
-        physics: widget.physics,
-        isScrollable: widget.isScrollable,
-        indicator: widget.indicator ?? _getIndicator(),
-        indicatorColor: widget.indicatorColor,
-        unselectedLabelColor: widget.unselectedLabelColor,
-        labelColor: widget.labelColor ?? TTheme.of(context).brandNormalColor,
-        labelStyle: widget.labelStyle ?? _getLabelStyle(),
-        labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
+        isScrollable: isScrollable,
+        indicator: indicator ?? themeData.indicator ?? _TNoneIndicator(),
+        labelStyle: themeData.labelStyle ?? _getLabelStyle(context),
+        labelPadding: themeData.labelPadding ?? const EdgeInsets.all(8),
         unselectedLabelStyle:
-            widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(),
-        tabs: widget.tabs,
-        indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
-        outlineType: widget.outlineType,
-        controller: widget.controller,
-        backgroundColor: widget.backgroundColor,
-        selectedBgColor: widget.selectedBgColor,
-        unSelectedBgColor: widget.unSelectedBgColor ??
-            TTheme.of(context).bgColorSecondaryContainer,
-        tabAlignment: widget.tabAlignment,
+            themeData.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
+        tabs: tabs,
+        variant: variant,
+        controller: controller,
+        backgroundColor: themeData.backgroundColor,
+        selectedBgColor: themeData.selectedBgColor,
+        unSelectedBgColor: themeData.unSelectedBgColor ??
+            context.tTheme.bgColorSecondaryContainer,
+        tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
         onTap: (index) {
-          widget.onTap?.call(index);
+          onTap?.call(index);
         },
       ),
     );
   }
 
-  TextStyle _getUnSelectLabelStyle() {
+  TextStyle _getUnSelectLabelStyle(BuildContext context) {
     return TextStyle(
-        fontWeight: FontWeight.w400,
-        color: TTheme.of(context).textColorPrimary);
+        fontWeight: FontWeight.w400, color: context.tTheme.textColorPrimary);
   }
 
-  TextStyle _getLabelStyle() {
+  TextStyle _getLabelStyle(BuildContext context) {
     return TextStyle(
-        fontWeight: FontWeight.w600,
-        color: TTheme.of(context).textColorPrimary);
-  }
-
-  Decoration _getIndicator() {
-    return widget.showIndicator
-        ? TTabBarIndicator(
-            context: context,
-            indicatorHeight: widget.indicatorHeight,
-            indicatorWidth: widget.indicatorWidth,
-            indicatorColor: widget.indicatorColor,
-          )
-        : TNoneIndicator();
+        fontWeight: FontWeight.w600, color: context.tTheme.textColorPrimary);
   }
 }
 
 /// TDesign自定义下标
-class TTabBarIndicator extends Decoration {
-  final BuildContext? context;
+class TTabsBarIndicator extends Decoration {
+  /// 指示器宽度
   final double? indicatorWidth;
-  final double? indicatorHeight;
-  final Color? indicatorColor;
 
-  const TTabBarIndicator({
-    this.context,
+  /// 指示器高度
+  final double? indicatorHeight;
+
+  /// 指示器颜色
+  final Color indicatorColor;
+
+  const TTabsBarIndicator({
+    required this.indicatorColor,
     this.indicatorWidth,
     this.indicatorHeight,
-    this.indicatorColor,
   });
 
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TTabBarIndicatorPainter(this, onChanged!);
+      _TTabsBarIndicatorPainter(this, onChanged);
 }
 
-class _TTabBarIndicatorPainter extends BoxPainter {
-  /// 下标宽度
+class _TTabsBarIndicatorPainter extends BoxPainter {
   static const double _defaultIndicatorWidth = 16;
-
-  /// 下标高度
   static const double _defaultIndicatorHeight = 3;
 
-  final TTabBarIndicator decoration;
-
+  final TTabsBarIndicator decoration;
   final _paint = Paint();
 
-  _TTabBarIndicatorPainter(this.decoration, VoidCallback onChanged) {
-    /// 下标颜色
-    _paint.color = decoration.indicatorColor ??
-        TTheme.of(decoration.context).brandNormalColor;
+  _TTabsBarIndicatorPainter(this.decoration, VoidCallback? onChanged) {
+    _paint.color = decoration.indicatorColor;
     _paint.strokeCap = StrokeCap.round;
   }
 
@@ -262,63 +151,8 @@ class _TTabBarIndicatorPainter extends BoxPainter {
       decoration.indicatorWidth ?? _defaultIndicatorWidth;
 }
 
-/// TDesign自定义下标 竖向
-class TTabBarVerticalIndicator extends Decoration {
-  final BuildContext? context;
-  final double? indicatorWidth;
-  final double? indicatorHeight;
-
-  const TTabBarVerticalIndicator({
-    this.context,
-    this.indicatorWidth,
-    this.indicatorHeight,
-  });
-
-  @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TTabBarVerticalIndicatorPainter(this, onChanged!);
-}
-
-class _TTabBarVerticalIndicatorPainter extends BoxPainter {
-  /// 下标宽度
-  static const double _defaultIndicatorWidth = 1.5;
-
-  /// 下标高度
-  static const double _defaultIndicatorHeight = 54;
-
-  final TTabBarVerticalIndicator decoration;
-
-  final _paint = Paint();
-
-  _TTabBarVerticalIndicatorPainter(this.decoration, VoidCallback onChanged) {
-    /// 下标颜色
-    _paint.color = TTheme.of(decoration.context).brandNormalColor;
-    _paint.strokeCap = StrokeCap.round;
-  }
-
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    canvas.drawLine(
-        Offset(
-          0 + _indicatorWidth() / 2,
-          offset.dx + (configuration.size!.width - _indicatorHeight()) / 2,
-        ),
-        Offset(
-          0 + _indicatorWidth() / 2,
-          offset.dx + (configuration.size!.width + _indicatorHeight()) / 2,
-        ),
-        _paint..strokeWidth = _indicatorWidth());
-  }
-
-  double _indicatorHeight() =>
-      decoration.indicatorHeight ?? _defaultIndicatorHeight;
-
-  double _indicatorWidth() =>
-      decoration.indicatorWidth ?? _defaultIndicatorWidth;
-}
-
-/// TDesign不展示下标
-class TNoneIndicator extends Decoration {
+/// 空指示器（不渲染任何内容）
+class _TNoneIndicator extends Decoration {
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
       _TNoneIndicatorPainter();

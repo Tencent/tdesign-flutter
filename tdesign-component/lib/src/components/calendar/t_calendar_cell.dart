@@ -1,29 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
+import '../text/t_text.dart';
+import 't_calendar_style.dart';
+import 't_calendar_types.dart';
 
-export 't_calendar_style.dart' show TCalendarStyle;
-
-/// 日期在日历格中的选中/展示状态
-enum DateSelectType {
-  /// 单选 / 多选下的选中
-  selected,
-
-  /// 不可选（超出 [TCalendar.minDate] / [TCalendar.maxDate]）
-  disabled,
-
-  /// 区间起点
-  start,
-
-  /// 区间中间日期
-  centre,
-
-  /// 区间终点
-  end,
-
-  /// 未选中且可选
-  empty,
-}
+export 't_calendar_types.dart' show DateSelectType;
 
 /// 副标题构建上下文：告知 [TCalendarSubtitleBuilder] 当前渲染哪一格。
 class TCalendarSubtitleContext {
@@ -75,8 +58,13 @@ class TCalendarCellModel {
     required this.isLastDayOfMonth,
   });
 
+  /// 当前日期。
   final DateTime date;
+
+  /// 日期选择状态通知器。
   final DateSelectTypeNotifier typeNotifier;
+
+  /// 是否为当月最后一天。
   final bool isLastDayOfMonth;
 
   DateSelectType get selectType => typeNotifier.value;
@@ -160,8 +148,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
 
   bool _checkIsToday() {
     final today = DateTime.now();
-    return widget.cell?.date ==
-        DateTime(today.year, today.month, today.day);
+    return widget.cell?.date == DateTime(today.year, today.month, today.day);
   }
 
   @override
@@ -171,10 +158,9 @@ class _TCalendarCellState extends State<TCalendarCell> {
       return const SizedBox.shrink();
     }
 
-    final themedStyle =
-        TCalendarStyle.generateStyle(context: context).forSelectType(context, cell.selectType);
-    final decoration =
-        themedStyle.cellDecoration;
+    final themedStyle = TCalendarStyle.generateStyle(context: context)
+        .forSelectType(context, cell.selectType);
+    final decoration = themedStyle.cellDecoration;
     final positionColor = _rangeBridgeColor(context, themedStyle, decoration);
 
     final content = widget.cellBuilder?.call(context, cell) ??
@@ -209,7 +195,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
   }
 
   void _onSelectTypeChange() {
-    // 使用 addPostFrameCallback 避免在 build 期间调用 setState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -224,8 +209,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     BoxDecoration? decoration,
   ) {
     _positionOffset = 0;
-    final bridgeColor =
-        cellStyle.centreColor ?? TTheme.of(context).brandLightColor;
+    final bridgeColor = cellStyle.centreColor ?? context.tTheme.brandLightColor;
     final next = _nextDay();
     if (widget.cell?.selectType == DateSelectType.start) {
       if (widget.cell?.isLastDayOfMonth == true) {

@@ -174,7 +174,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -190,7 +190,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -212,7 +212,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 0,
+      value: 0,
     );
   }
 
@@ -239,7 +239,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -271,7 +271,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -285,7 +285,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 0,
+      value: 0,
       // 简略模式
       simple: true,
     );
@@ -302,7 +302,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
       // 简略模式
       simple: true,
     );
@@ -320,7 +320,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
       // 简略模式
       simple: true,
     );
@@ -338,7 +338,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
       // 错误状态
       status: TStepsStatus.error,
     );
@@ -373,7 +373,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
       // 错误状态
       status: TStepsStatus.error,
     );
@@ -408,7 +408,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
       // 错误状态
       status: TStepsStatus.error,
       // 简略模式
@@ -428,7 +428,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -460,7 +460,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -491,7 +491,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
       // 简略模式
       simple: true,
     );
@@ -509,7 +509,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
       // 错误状态
       status: TStepsStatus.error,
     );
@@ -544,7 +544,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
       // 错误状态
       status: TStepsStatus.error,
     );
@@ -578,7 +578,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
       // 简略模式
       simple: true,
       // 错误状态
@@ -607,7 +607,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -623,8 +623,8 @@ class _TStepsPageState extends State<TStepsPage> {
           customContent: Container(
             margin: const EdgeInsets.only(bottom: 16, top: 4),
             child: const TImage(
-              assetUrl: 'assets/img/image.png',
-              type: TImageType.roundedSquare,
+              src: 'assets/img/image.png',
+              variant: TImageVariant.roundedSquare,
             ),
           ),
         ),
@@ -633,7 +633,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
     );
   }
 
@@ -664,7 +664,7 @@ class _TStepsPageState extends State<TStepsPage> {
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 0,
+      value: 0,
       // 只读模式
       readOnly: true,
     );
@@ -684,7 +684,7 @@ class _TStepsPageState extends State<TStepsPage> {
       direction: TStepsDirection.vertical,
       // 简略模式
       simple: true,
-      activeIndex: 3,
+      value: 3,
       // 步骤条垂直自定义步骤条选择模式
       verticalSelect: true,
     );

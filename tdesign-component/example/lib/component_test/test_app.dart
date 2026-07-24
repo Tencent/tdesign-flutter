@@ -6,14 +6,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'tabbar_test.dart';
 
 void main() async {
-  kTextNeedGlobalFontFamily = true;
   WidgetsFlutterBinding.ensureInitialized();
 
   var jsonString = await rootBundle.loadString('assets/theme.json');
   print('jsonString:$jsonString');
-  TTheme.needMultiTheme(true);
   var themeData =
-      TThemeData.fromJson('greenLight', jsonString) ?? TTheme.defaultData();
+      TThemeData.fromJson('greenLight', jsonString) ?? TThemeData.defaultData();
   await TFontLoader.load(
       name: 'test1',
       fontFamilyUrl:
@@ -34,7 +32,7 @@ void main() async {
               // appBar: _buildAppBar(context),
               // body: StudyDetail(),
               body: body(context),
-              bottomNavigationBar: _buildBottomTabBar(),
+              bottomNavigationBar: _buildTabBar(),
             );
           },
         ),
@@ -50,8 +48,8 @@ Padding body(BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TButton(
-          text: '按钮 ',
-          onTap: () {
+          child: const Text('按钮 '),
+          onPressed: () {
             TLoadingController.show(context);
             TLoadingController.dismiss();
           },
@@ -59,7 +57,7 @@ Padding body(BuildContext context) {
         // 先显示再加载
         TText(
           '测试文案',
-          textColor: TTheme.of(context).brandNormalColor,
+          textColor: context.tTheme.brandNormalColor,
           fontFamilyUrl:
               'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
           fontFamily: FontFamily(fontFamily: 'test'),
@@ -70,26 +68,14 @@ Padding body(BuildContext context) {
         //   initialData: false,
         //   builder: (_,data)=>TText(
         //     (data.data ?? false) ? '测试文案' : '',
-        //     textColor: TTheme.of(context).brandNormalColor,
+        //     textColor: context.tTheme.brandNormalColor,
         //     fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
         //     fontFamily: FontFamily(fontFamily: 'test1'),
         //   ),
         // ),
-        TInput(
-          // leftLabel: '标签文字',
-          // controller: controller[0],
-          type: TInputType.cardStyle,
-          backgroundColor: Colors.white,
-          cardStyle: TCardStyle.topTextWithBlueBorder,
+        const TInput(
+          label: '标签文字',
           hintText: '请输入文字',
-          cardStyleTopText: '标签文字',
-          // onChanged: (text) {
-          //   setState(() {});
-          // },
-          // onClearTap: () {
-          //   controller[0].clear();
-          //   setState(() {});
-          // },
         ),
         const SizedBox(height: 16),
         const TTextarea(
@@ -98,12 +84,7 @@ Padding body(BuildContext context) {
           maxLines: 4,
           minLines: 4,
           maxLength: 500,
-          padding: EdgeInsets.zero,
-          indicator: true,
-          // backgroundColor: Colors.white,
-          // textInputBackgroundColor: Colors.white,
-          layout: TTextareaLayout.vertical,
-          bordered: true,
+          decoration: InputDecoration(border: OutlineInputBorder()),
         )
       ],
     ),
@@ -120,37 +101,41 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
         ),
       ),
       // opacity: 0,
-      backgroundColor: Colors.red,
       centerTitle: false,
       titleMargin: 0,
-      titleWidget: TSearchBar(
-        needCancel: false,
-        autoHeight: true,
-        backgroundColor: Colors.transparent,
-        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-        placeHolder: '搜索预设文案',
-        mediumStyle: true,
-        style: TSearchStyle.round,
-        onTextChanged: (String text) {
-          print('input：$text');
-        },
+      titleWidget: Theme(
+        data: Theme.of(context).mergeExtension(
+          const TSearchBarThemeData(
+            variant: TSearchBarVariant.round,
+            padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+            autoHeight: true,
+          ),
+        ),
+        child: TSearchBar(
+          needCancel: false,
+          hintText: '搜索预设文案',
+          onChanged: (String text) {
+            print('input：$text');
+          },
+        ),
       ),
-      rightBarItems: [
+      actions: [
         TNavBarItem(icon: TIcons.home, iconSize: 24),
         TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
       ]);
 }
 
-TBottomTabBar _buildBottomTabBar() {
+TTabBar _buildTabBar() {
   var iconSize = 39 * 60 / 98;
   var textSize = 8.0;
-  return TBottomTabBar(
-    TBottomTabBarBasicType.iconText,
-    componentType: TBottomTabBarComponentType.normal,
+  return TTabBar(
+    variant: TTabBarVariant.weakIconText,
+    value: 0,
+    onChanged: (_) {},
     useVerticalDivider: false,
     barHeight: 98 * 60 / 98,
     navigationTabs: [
-      TBottomTabBarTabConfig(
+      TTabBarItemConfig(
         selectedIcon: Icon(TIcons.home, size: iconSize, color: Colors.red),
         unselectedIcon: Icon(
           TIcons.home,
@@ -161,13 +146,12 @@ TBottomTabBar _buildBottomTabBar() {
         selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
         unselectTabTextStyle: TextStyle(
           fontSize: textSize,
-          color: Colors.black,
         ),
         onTap: () {
           // context.read<CurrentIndexProvider>().changeIndex(0);
         },
       ),
-      TBottomTabBarTabConfig(
+      TTabBarItemConfig(
         selectedIcon: Icon(TIcons.app, size: iconSize, color: Colors.red),
         unselectedIcon: Icon(
           TIcons.app,
@@ -182,7 +166,7 @@ TBottomTabBar _buildBottomTabBar() {
           // context.read<CurrentIndexProvider>().changeIndex(1);
         },
       ),
-      TBottomTabBarTabConfig(
+      TTabBarItemConfig(
         selectedIcon: Icon(TIcons.user, size: iconSize, color: Colors.red),
         unselectedIcon: Icon(
           TIcons.user,
@@ -193,7 +177,6 @@ TBottomTabBar _buildBottomTabBar() {
         selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
         unselectTabTextStyle: TextStyle(
           fontSize: textSize,
-          color: Colors.black,
         ),
         onTap: () {
           // context.read<CurrentIndexProvider>().changeIndex(2);

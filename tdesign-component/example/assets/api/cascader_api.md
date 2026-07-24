@@ -1,30 +1,56 @@
 ## API
-### TMultiCascader
+### TCascader
+#### 简介
+严格受控的级联选择器。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action | TCascaderAction? | - | 自定义选择器右上角按钮 |
-| backgroundColor | Color? | - | 背景颜色 |
-| cascaderHeight | double | - | 选择器List的视窗高度，默认200 |
-| closeText | String? | - | 关闭按钮文本 |
-| data | List<Map> | - | 选择器的数据源 |
-| initialData | String? | - | 初始化数据 |
-| initialIndexes | List<int>? | - | 若为null表示全部从零开始 |
-| isLetterSort | bool | false | 是否开启字母排序 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChange | MultiCascaderCallback | - | 值发生变更时触发 |
-| onClose | Function? | - | 选择器关闭按钮回调 |
-| subTitles | List<String>? | - | 每级展示的次标题 |
-| theme | String? | - | 展示风格 可选项：step/tab |
-| title | String? | - | 选择器标题 |
-| titleStyle | TextStyle? | - | 标题样式 |
-| topRadius | double? | - | 顶部圆角 |
+| onChanged | ValueChanged<List<Object?>>? | - | 选中路径变化回调；为 null 时禁用。 |
+| options | List<TCascaderOption> | - | 根选项列表。 |
+| placeholder | String | '请选择' | 未选择层级的占位文案。 |
+| value | List<Object?> | - | 受控选中路径。 |
+| variant | TCascaderVariant | TCascaderVariant.tab | 导航展示形态。 |
 
 
-### MultiCascaderCallback
-#### 类型定义
+### TCascaderOption
+#### 简介
+不可变的级联选项。
+#### 默认构造方法
 
-```dart
-typedef MultiCascaderCallback = void Function(List<MultiCascaderListModel> selected);
-```
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | List<TCascaderOption> | const [] | 子选项。 |
+| disabled | bool | false | 是否禁用。 |
+| label | String | - | 展示文案。 |
+| value | Object? | - | 选项值。 |
+
+
+### TCascaderThemeData
+#### 简介
+TCascader 组件级 ThemeExtension。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| activeTextStyle | TextStyle? | - | 当前选中文案样式。 |
+| backgroundColor | Color? | - | 背景色。 |
+| borderRadius | double? | - | 圆角。 |
+| disabledTextStyle | TextStyle? | - | 禁用文案样式。 |
+| dividerColor | Color? | - | 分隔线颜色。 |
+| height | double? | - | 组件高度。 |
+| navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 |
+| textStyle | TextStyle? | - | 普通文案样式。 |
+
+
+### TCascaderVariant
+#### 简介
+级联导航展示形态。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| step | 纵向步骤导航。 |
+| tab | 横向标签导航。 |

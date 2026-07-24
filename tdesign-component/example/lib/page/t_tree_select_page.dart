@@ -1,267 +1,85 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
+/// TTreeSelect 演示。
 class TTreeSelectPage extends StatefulWidget {
-  const TTreeSelectPage({Key? key}) : super(key: key);
+  const TTreeSelectPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TTreeSelectPageState();
+  State<TTreeSelectPage> createState() => _TTreeSelectPageState();
 }
 
 class _TTreeSelectPageState extends State<TTreeSelectPage> {
-  String? inputText;
-  List<dynamic> values1 = [
-    1,
-    11,
+  static const _options = [
+    TTreeSelectOption(
+      label: '水果',
+      value: 'fruit',
+      children: [
+        TTreeSelectOption(label: '苹果', value: 'apple'),
+        TTreeSelectOption(label: '香蕉', value: 'banana'),
+      ],
+    ),
+    TTreeSelectOption(
+      label: '城市',
+      value: 'city',
+      children: [
+        TTreeSelectOption(
+          label: '广东',
+          value: 'guangdong',
+          children: [
+            TTreeSelectOption(label: '深圳', value: 'shenzhen'),
+            TTreeSelectOption(label: '广州', value: 'guangzhou'),
+          ],
+        ),
+      ],
+    ),
   ];
-  List<dynamic> values2 = [
-    1,
-    [11, 12, 13],
+
+  List<List<Object?>> _singleValue = [
+    ['fruit', 'apple'],
   ];
-  List<dynamic> values3 = [1, 11, 111];
-
-  // 异步加载的数据
-  List<TSelectOption> asyncOptions = [];
-  List<dynamic> asyncValues = [1];
-
-  // String类型ID的数据
-  List<TSelectOption> stringOptions = [];
-  List<dynamic> stringValues = ['guid_1', 'guid_1_1'];
-
-  @override
-  void initState() {
-    super.initState();
-    // 初始化异步数据
-    asyncOptions = [
-      TSelectOption(label: '异步加载一级', value: 1, children: []),
-      TSelectOption(label: '静态数据一级', value: 2, children: [
-        TSelectOption(label: '静态数据二级', value: 21),
-      ]),
-    ];
-
-    // 初始化String ID数据
-    stringOptions = [
-      TSelectOption(label: 'String ID 1', value: 'guid_1', children: [
-        TSelectOption(label: 'Child 1-1', value: 'guid_1_1'),
-        TSelectOption(label: 'Child 1-2', value: 'guid_1_2'),
-      ]),
-      TSelectOption(label: 'String ID 2', value: 'guid_2', children: [
-        TSelectOption(label: 'Child 2-1', value: 'guid_2_1'),
-      ]),
-    ];
-  }
+  List<List<Object?>> _multipleValue = [];
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '适用于选择树形的数据结构',
-      exampleCodeGroup: 'tree',
+      desc: '用于从层级数据中选择一个或多个叶子节点。',
+      exampleCodeGroup: 'tree-select',
       children: [
-        ExampleModule(
-          title: '组件类型',
-          children: [
-            ExampleItem(desc: '基础树形选择', builder: _buildDefaultTreeSelect),
-            ExampleItem(desc: '多选树形选择', builder: _buildMultipleTreeSelect),
-            ExampleItem(desc: '异步加载(问题1)', builder: _buildAsyncTreeSelect),
-            ExampleItem(desc: 'String类型ID(问题3)', builder: _buildStringValueTreeSelect),
-          ],
-        ),
-        ExampleModule(
-          title: '组件状态',
-          children: [
-            ExampleItem(desc: '三级树形选择(长文字问题2)', builder: _buildThirdTreeSelect),
-          ],
-        ),
-      ],
-      test: [
-        ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect),
-        ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect2),
+        ExampleModule(title: '基础能力', children: [
+          ExampleItem(desc: '单选', builder: _buildSingle),
+          ExampleItem(desc: '多选', builder: _buildMultiple),
+          ExampleItem(desc: '禁用', builder: _buildDisabled),
+        ]),
       ],
     );
   }
 
-  @Demo(group: 'tree')
-  Widget _buildAsyncTreeSelect(BuildContext context) {
+  @Demo(group: 'tree-select')
+  Widget _buildSingle(BuildContext context) {
     return TTreeSelect(
-      options: asyncOptions,
-      defaultValue: asyncValues,
-      onChange: (val, level) {
-        print('Async change: $val, level: $level');
-        if (level == 1 && val.isNotEmpty) {
-          var firstVal = val[0];
-          var index = asyncOptions.indexWhere((element) => element.value == firstVal);
-          if (index != -1 && asyncOptions[index].children.isEmpty) {
-             // 模拟异步加载
-             Future.delayed(const Duration(seconds: 1), () {
-               if(mounted) {
-                 setState(() {
-                   asyncOptions[index].children = [
-                     TSelectOption(label: '异步加载二级-1', value: 101),
-                     TSelectOption(label: '异步加载二级-2', value: 102),
-                   ];
-                 });
-               }
-             });
-          }
-        }
-      },
+      options: _options,
+      value: _singleValue,
+      onChanged: (value) => setState(() => _singleValue = value),
     );
   }
 
-  @Demo(group: 'tree')
-  Widget _buildStringValueTreeSelect(BuildContext context) {
+  @Demo(group: 'tree-select')
+  Widget _buildMultiple(BuildContext context) {
     return TTreeSelect(
-      options: stringOptions,
-      defaultValue: stringValues,
-      onChange: (val, level) {
-        print('String ID change: $val, level: $level');
-      },
-    );
-  }
-
-  @Demo(group: 'tree')
-  Widget _buildDefaultTreeSelect(BuildContext context) {
-    var options = <TSelectOption>[];
-
-    for (var i = 1; i <= 10; i++) {
-      options.add(TSelectOption(label: '选项$i', value: i, children: []));
-
-      for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(TSelectOption(
-              label: '选项$i.$j',
-              value: i * 10 + j,
-              children: [],
-            ));
-      }
-    }
-
-    return TTreeSelect(
-      options: options,
-      defaultValue: values1,
-      onChange: (val, level) {
-        print('$val, $level');
-      },
-    );
-  }
-
-  @Demo(group: 'tree')
-  Widget _buildMultipleTreeSelect(BuildContext context) {
-    var options = <TSelectOption>[];
-
-    for (var i = 1; i <= 10; i++) {
-      options.add(TSelectOption(label: '选项$i', value: i, children: []));
-
-      for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(
-            TSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
-      }
-    }
-
-    return TTreeSelect(
-      options: options,
-      defaultValue: values2,
+      options: _options,
+      value: _multipleValue,
       multiple: true,
-      onChange: (val, level) {
-        print('$val, $level');
-      },
+      onChanged: (value) => setState(() => _multipleValue = value),
     );
   }
 
-  @Demo(group: 'tree')
-  Widget _buildThirdTreeSelect(BuildContext context) {
-    var options = <TSelectOption>[];
-    for (var i = 1; i <= 3; i++) {
-      options.add(TSelectOption(
-        label: '${i == 1 ? '超长一级选项名称超长一级选项名称' : '选项$i'}',
-        value: i,
-        maxLines: 2,
-        //columnWidth: i == 1 ? 106 : null,
-        children: [],
-      ));
-
-      for (var j = 1; j <= 3; j++) {
-        options[i - 1].children.add(TSelectOption(
-              label: '${j == 1 ? '特别长的二级选项特别长的二级选项特别长的二级选项' : '选项$i.$j'}',
-              value: i * 10 + j,
-              maxLines: 2,
-              columnWidth: j == 1 ? 180 : null,
-              children: [],
-            ));
-
-        for (var k = 1; k <= 3; k++) {
-          options[i - 1].children[j - 1].children.add(TSelectOption(
-                label:
-                    '${k == 1 ? '非常长的三级选项名称非常长的三级选项名称非常长的三级选项名称' : '选项$i.$j.$k'}',
-                value: i * 100 + j * 10 + k,
-                maxLines: 2,
-                //columnWidth: k == 1 ? 102 : null,
-              ));
-        }
-      }
-    }
-    return TTreeSelect(
-      options: options,
-      defaultValue: values3,
-      onChange: (val, level) {
-        print('$val, $level');
-      },
-    );
-  }
-
-  @Demo(group: 'tree')
-  Widget _buildPartMultipleTreeSelect(BuildContext context) {
-    var options = <TSelectOption>[];
-
-    for (var i = 1; i <= 2; i++) {
-      options.add(TSelectOption(
-          label: '${i == 1 ? '单选' : '多选'}', value: i, children: []));
-
-      for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(TSelectOption(
-            label: '选项$i.$j',
-            value: i * 10 + j,
-            children: [],
-            multiple: i == 2));
-      }
-    }
-
-    return TTreeSelect(
-      options: options,
-      defaultValue: values1,
-      onChange: (val, level) {
-        print('$val, $level');
-      },
-    );
-  }
-
-  @Demo(group: 'tree')
-  Widget _buildPartMultipleTreeSelect2(BuildContext context) {
-    var options = <TSelectOption>[];
-
-    for (var i = 1; i <= 2; i++) {
-      options.add(TSelectOption(
-          label: '${i == 1 ? '单选' : '多选'}', value: i, children: []));
-
-      for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(TSelectOption(
-            label: '选项$i.$j',
-            value: i * 10 + j,
-            children: [],
-            multiple: i == 2));
-      }
-    }
-
-    return TTreeSelect(
-      options: options,
-      defaultValue: values1,
-      style: TTreeSelectStyle.outline,
-      onChange: (val, level) {
-        print('$val, $level');
-      },
-    );
+  @Demo(group: 'tree-select')
+  Widget _buildDisabled(BuildContext context) {
+    return TTreeSelect(options: _options, value: _singleValue);
   }
 }

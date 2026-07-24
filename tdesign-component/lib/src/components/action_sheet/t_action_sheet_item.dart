@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../badge/t_badge.dart';
-import 't_action_sheet.dart';
 
 /// 动作面板项目
 class TActionSheetItem {
@@ -10,7 +9,7 @@ class TActionSheetItem {
     this.textStyle,
     this.icon,
     this.badge,
-    this.description,
+    this.subtitle,
     this.disabled = false,
     this.iconSize,
     this.group,
@@ -35,11 +34,9 @@ class TActionSheetItem {
   final double? iconSize;
 
   /// 分组，用于带描述多行滚动宫格
-  /// 当[TActionSheet.theme]等于[TActionSheetTheme.group]时有效
-  /// 有效时，如果该值未配置整个[TActionSheetItem]会被忽略，即不会展示
+  /// 仅分组动作面板使用；未配置时该项目不会进入任何分组
   final String? group;
 
   /// 描述信息
-  final String? description;
+  final String? subtitle;
 }
-

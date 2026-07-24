@@ -1,100 +1,90 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
+import '../badge/t_badge.dart';
+import '../loading/t_loading.dart';
+import 't_sidebar_item.dart';
+import 't_sidebar_theme_data.dart';
 import 't_wrap_sidebar_item.dart';
 
-enum TSideBarStyle {
-  normal,
-  outline,
-}
-
-class SideItemProps {
-  int index;
-  int value;
-  bool? disabled;
-  IconData? icon;
-  String? label;
-  TBadge? badge;
-  TextStyle? textStyle;
-
-  SideItemProps({
+class _SideBarItemData {
+  _SideBarItemData({
     required this.value,
     required this.index,
+    required this.key,
     this.disabled,
     this.icon,
     this.label,
     this.badge,
     this.textStyle,
   });
+
+  final int index;
+  final int value;
+  final GlobalKey key;
+  final bool? disabled;
+  final IconData? icon;
+  final String? label;
+  final TBadge? badge;
+  final TextStyle? textStyle;
 }
 
 class TSideBar extends StatefulWidget {
   const TSideBar({
     Key? key,
-    this.value,
-    this.defaultValue,
+    required this.value,
     this.selectedColor,
     this.children = const [],
     this.onChanged,
-    this.onSelected,
     this.height,
-    this.controller,
     this.contentPadding,
     this.selectedTextStyle,
-    this.style = TSideBarStyle.normal,
-    this.loading,
+    this.style,
+    this.loading = false,
     this.loadingWidget,
     this.selectedBgColor,
     this.unSelectedBgColor,
     this.unSelectedColor,
   }) : super(key: key);
 
-  /// 选项值
-  final int? value;
+  /// 当前选中项值。
+  final int value;
 
-  /// 默认值
-  final int? defaultValue;
-
-  /// 单项
+  /// 侧边栏项。
   final List<TSideBarItem> children;
 
-  /// 选中值发生变化（Controller控制）
+  /// 选中值变化回调；为 null 时禁用整栏。
   final ValueChanged<int>? onChanged;
 
-  /// 选中值发生变化（点击事件）
-  final ValueChanged<int>? onSelected;
-
-  /// 选中值后颜色
+  /// 选中值后颜色（优先级高于 ThemeData）。
   final Color? selectedColor;
 
-  /// 未选中颜色
+  /// 未选中颜色（优先级高于 ThemeData）。
   final Color? unSelectedColor;
 
-  /// 选中样式
+  /// 选中样式（优先级高于 ThemeData）。
   final TextStyle? selectedTextStyle;
 
-  /// 样式
-  final TSideBarStyle style;
+  /// 样式（优先级高于 ThemeData）。
+  final TSideBarVariant? style;
 
-  /// 高度
+  /// 高度（优先级高于 ThemeData）。
   final double? height;
 
-  /// 自定义文本框内边距
+  /// 自定义文本框内边距（优先级高于 ThemeData）。
   final EdgeInsetsGeometry? contentPadding;
 
-  /// 控制器
-  final TSideBarController? controller;
+  /// 是否展示加载态。
+  final bool loading;
 
-  /// 加载效果
-  final bool? loading;
-
-  /// 自定义加载动画
+  /// 自定义加载态内容。
   final Widget? loadingWidget;
 
-  /// 选择的背景颜色
+  /// 选择的背景颜色（优先级高于 ThemeData）。
   final Color? selectedBgColor;
 
-  /// 未选择的背景颜色
+  /// 未选择的背景颜色（优先级高于 ThemeData）。
   final Color? unSelectedBgColor;
 
   @override
@@ -102,214 +92,221 @@ class TSideBar extends StatefulWidget {
 }
 
 class _TSideBarState extends State<TSideBar> {
-  late List<SideItemProps> displayChildren;
-  late int? currentValue;
-  late int? currentIndex;
-  final _scrollerController = ScrollController();
-  final GlobalKey globalKey = GlobalKey();
-  final double itemHeight = 56.0;
-  bool _loading = false;
+  static const _estimatedItemHeight = 56.0;
 
-  // 查找某值对应项
-  SideItemProps findSideItem(int value) {
+  late List<_SideBarItemData> displayChildren;
+  int? currentValue;
+  int? currentIndex;
+  final _scrollerController = ScrollController();
+  final Map<int, GlobalKey> _itemKeys = {};
+
+  TSideBarThemeData _resolveTheme() {
+    return Theme.of(context).extension<TSideBarThemeData>() ??
+        const TSideBarThemeData();
+  }
+
+  void _syncSelectedValue(int value) {
+    for (final item in displayChildren) {
+      if (item.value == value) {
+        currentValue = item.value;
+        currentIndex = item.index;
+        return;
+      }
+    }
+    currentValue = null;
+    currentIndex = null;
+  }
+
+  _SideBarItemData findSideItem(int value) {
     return displayChildren.where((element) => element.value == value).first;
   }
 
-  // 选中某值
   void selectValue(int value, {bool needScroll = false}) {
-    SideItemProps? item;
-    for (var element in displayChildren) {
+    _SideBarItemData? item;
+    for (final element in displayChildren) {
       if (element.value == value) {
         item = element;
       }
     }
 
     if (needScroll && item != null) {
-      try {
-        var height = globalKey.currentContext!.size!.height;
-        var offset = _scrollerController.offset;
-        var distance = item.index * itemHeight - offset;
-        if (distance + itemHeight > height) {
-          _scrollerController.animateTo(offset + itemHeight,
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeIn);
-        } else if (distance < 0) {
-          _scrollerController.animateTo(offset - itemHeight,
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeIn);
-        }
-      } catch (e) {
-        print(e);
-      }
+      _scrollToItem(item);
+    }
+  }
+
+  Future<void> _scrollToItem(_SideBarItemData item) async {
+    final itemContext = item.key.currentContext;
+    if (itemContext != null) {
+      await _ensureItemVisible(itemContext);
+      return;
+    }
+    if (!_scrollerController.hasClients) {
+      return;
     }
 
-    if (item != null) {
-      onSelect(item, isController: true);
+    // ListView 会延迟创建视口外条目。先按默认行高接近目标，再以实际位置校正。
+    final position = _scrollerController.position;
+    final estimatedOffset = (item.index * _estimatedItemHeight).clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+    await _scrollerController.animateTo(
+      estimatedOffset,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeInOut,
+    );
+    if (!mounted) {
+      return;
     }
+
+    final resolvedContext = item.key.currentContext;
+    if (resolvedContext != null) {
+      await _ensureItemVisible(resolvedContext);
+    }
+  }
+
+  Future<void> _ensureItemVisible(BuildContext context) {
+    return Scrollable.ensureVisible(
+      context,
+      alignment: 0.5,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   void initState() {
     super.initState();
-
-    _loading = widget.loading ?? widget.controller?.loading ?? false;
-    // controller注册事件
-    if (widget.controller != null) {
-      widget.controller!.addListener(() {
-        selectValue(widget.controller!.currentValue, needScroll: true);
-        _loading = widget.controller!.loading;
-        getDisplayChildren();
-        setState(() {});
-      });
-    }
-
-    displayChildren = widget.children
-        .asMap()
-        .entries
-        .map((entry) => SideItemProps(
-            index: entry.key,
-            disabled: entry.value.disabled,
-            value: entry.value.value,
-            icon: entry.value.icon,
-            label: entry.value.label,
-            textStyle: entry.value.textStyle,
-            badge: entry.value.badge))
-        .toList();
-
-    currentValue = widget.value ??
-        widget.defaultValue ??
-        (displayChildren.isNotEmpty ? displayChildren[0].value : null);
-    if (currentValue != null) {
-      try {
-        final item = findSideItem(currentValue!);
-        currentIndex = item.index;
-      } catch (e) {
-        currentIndex = null;
-        currentValue = null;
-      }
-    } else {
-      currentIndex = null;
-    }
+    getDisplayChildren();
+    _syncSelectedValue(widget.value);
   }
 
   void getDisplayChildren() {
-    if (widget.controller != null && widget.controller!.children.isNotEmpty) {
-      displayChildren = widget.controller!.children
-          .asMap()
-          .entries
-          .map((entry) => SideItemProps(
+    displayChildren = widget.children
+        .asMap()
+        .entries
+        .map((entry) => _SideBarItemData(
               index: entry.key,
+              key: _itemKeys.putIfAbsent(entry.value.value, GlobalKey.new),
               disabled: entry.value.disabled,
               value: entry.value.value,
               icon: entry.value.icon,
               label: entry.value.label,
               textStyle: entry.value.textStyle,
-              badge: entry.value.badge))
-          .toList();
-    } else if (widget.children.isNotEmpty) {
-      displayChildren = widget.children
-          .asMap()
-          .entries
-          .map((entry) => SideItemProps(
-              index: entry.key,
-              disabled: entry.value.disabled,
-              value: entry.value.value,
-              icon: entry.value.icon,
-              label: entry.value.label,
-              textStyle: entry.value.textStyle,
-              badge: entry.value.badge))
-          .toList();
-    } else {
-      displayChildren = [];
-    }
+              badge: entry.value.badge,
+            ))
+        .toList();
   }
 
-  // 选中某项
-  void onSelect(SideItemProps item, {isController = false}) {
-    if (currentIndex != item.index) {
-      if (isController) {
-        if (widget.onChanged != null) {
-          widget.onChanged!(item.value);
-        }
-      } else {
-        if (widget.onSelected != null) {
-          widget.onSelected!(item.value);
-        }
-      }
-
-      setState(() {
-        currentIndex = item.index;
-      });
+  void onSelect(_SideBarItemData item) {
+    if (currentIndex == item.index) {
+      return;
     }
+    widget.onChanged?.call(item.value);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      widget.controller?.loading = true;
+    final theme = _resolveTheme();
+    final effectiveStyle =
+        widget.style ?? theme.style ?? TSideBarVariant.normal;
+    if (widget.loading) {
       if (widget.loadingWidget != null) {
         return widget.loadingWidget!;
       }
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Align(
-          child:
-              TLoading(icon: TLoadingIcon.circle, size: TLoadingSize.large),
+          child: TLoading(icon: TLoadingIcon.circle, size: TLoadingSize.large),
         ),
       );
     }
-    return ConstrainedBox(
-        key: globalKey,
-        constraints: BoxConstraints(
-            minWidth: 106,
-            maxHeight: MediaQuery.of(context).size.height -
-                MediaQuery.of(context).padding.top),
-        child: SizedBox(
-            height: widget.height ?? MediaQuery.of(context).size.height,
-            child: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                removeBottom: true,
-                child: ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: displayChildren.length,
-                    controller: _scrollerController,
-                    itemBuilder: (BuildContext context, int index) {
-                      var ele = displayChildren[index];
 
-                      return TWrapSideBarItem(
-                        style: widget.style,
-                        value: ele.value,
-                        icon: ele.icon,
-                        disabled: ele.disabled ?? false,
-                        label: ele.label ?? '',
-                        badge: ele.badge,
-                        textStyle: ele.textStyle,
-                        selected: currentIndex == ele.index,
-                        selectedColor: widget.selectedColor,
-                        unSelectedColor: widget.unSelectedColor,
-                        selectedTextStyle: widget.selectedTextStyle,
-                        contentPadding: widget.contentPadding,
-                        topAdjacent: currentIndex != null &&
-                            currentIndex! + 1 == ele.index,
-                        bottomAdjacent: currentIndex != null &&
-                            currentIndex! - 1 == ele.index,
-                        selectedBgColor: widget.selectedBgColor ??
-                            TTheme.of(context).bgColorContainer,
-                        unSelectedBgColor: widget.unSelectedBgColor ??
-                            TTheme.of(context).bgColorSecondaryContainer,
-                        onTap: () {
-                          if (!(ele.disabled ?? false)) {
-                            onSelect(ele, isController: false);
-                          }
-                        },
-                      );
-                    }))));
+    final sideBar = ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 106,
+        maxHeight: MediaQuery.of(context).size.height -
+            MediaQuery.of(context).padding.top,
+      ),
+      child: SizedBox(
+        height:
+            widget.height ?? theme.height ?? MediaQuery.of(context).size.height,
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          child: ListView.builder(
+            physics: const ClampingScrollPhysics(),
+            itemCount: displayChildren.length,
+            controller: _scrollerController,
+            itemBuilder: (BuildContext context, int index) {
+              final ele = displayChildren[index];
+              return TWrapSideBarItem(
+                key: ele.key,
+                style: effectiveStyle,
+                value: ele.value,
+                icon: ele.icon,
+                disabled: ele.disabled ?? false,
+                label: ele.label ?? '',
+                badge: ele.badge,
+                textStyle: ele.textStyle,
+                selected: currentIndex == ele.index,
+                selectedColor: widget.selectedColor ?? theme.selectedColor,
+                unSelectedColor:
+                    widget.unSelectedColor ?? theme.unSelectedColor,
+                selectedTextStyle:
+                    widget.selectedTextStyle ?? theme.selectedTextStyle,
+                contentPadding: widget.contentPadding ?? theme.contentPadding,
+                topAdjacent:
+                    currentIndex != null && currentIndex! + 1 == ele.index,
+                bottomAdjacent:
+                    currentIndex != null && currentIndex! - 1 == ele.index,
+                selectedBgColor: widget.selectedBgColor ??
+                    theme.selectedBgColor ??
+                    context.tTheme.bgColorContainer,
+                unSelectedBgColor: widget.unSelectedBgColor ??
+                    theme.unSelectedBgColor ??
+                    context.tTheme.bgColorSecondaryContainer,
+                onTap: () {
+                  if (!(ele.disabled ?? false) && widget.onChanged != null) {
+                    onSelect(ele);
+                  }
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    final isDisabled = widget.onChanged == null;
+    return Semantics(
+      enabled: !isDisabled,
+      child: AnimatedOpacity(
+        opacity: isDisabled ? 0.4 : 1,
+        duration: const Duration(milliseconds: 150),
+        child: AbsorbPointer(absorbing: isDisabled, child: sideBar),
+      ),
+    );
   }
 
   @override
   void didUpdateWidget(covariant TSideBar oldWidget) {
-    getDisplayChildren();
     super.didUpdateWidget(oldWidget);
+    getDisplayChildren();
+    _syncSelectedValue(widget.value);
+    if (oldWidget.value != widget.value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          selectValue(widget.value, needScroll: true);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollerController.dispose();
+    super.dispose();
   }
 }

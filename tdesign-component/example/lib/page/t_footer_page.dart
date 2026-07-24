@@ -30,7 +30,7 @@ class TFooterPage extends StatelessWidget {
   @Demo(group: 'footer')
   Widget _buildFooter(BuildContext context) {
     return const TFooter(
-      TFooterType.text,
+      TFooterVariant.text,
       text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }
@@ -38,15 +38,16 @@ class TFooterPage extends StatelessWidget {
   @Demo(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
     return TFooter(
-      TFooterType.link,
+      TFooterVariant.link,
       links: [
         TLink(
-          label: '底部链接',
-          style: TLinkStyle.primary,
-          type: TLinkType.withSuffixIcon,
+          child: const Text('底部链接'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.icon,
+          suffixIcon: const Icon(TIcons.jump),
           uri: Uri.parse('https://example.com'),
-          linkClick: (link) {
-            print('点击了链接 $link');
+          onPressed: () {
+            print('点击了链接');
           },
         ),
       ],
@@ -57,22 +58,24 @@ class TFooterPage extends StatelessWidget {
   @Demo(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
     return TFooter(
-      TFooterType.link,
+      TFooterVariant.link,
       links: [
         TLink(
-          label: '底部链接1',
-          style: TLinkStyle.primary,
+          child: const Text('底部链接1'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.basic,
           uri: Uri.parse('https://example.com'),
-          linkClick: (link) {
-            print('点击了链接1 $link');
+          onPressed: () {
+            print('点击了链接1');
           },
         ),
         TLink(
-          label: '底部链接2',
-          style: TLinkStyle.primary,
+          child: const Text('底部链接2'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.basic,
           uri: Uri.parse('https://example.com'),
-          linkClick: (link) {
-            print('点击了链接2 $link');
+          onPressed: () {
+            print('点击了链接2');
           },
         ),
       ],
@@ -83,9 +86,8 @@ class TFooterPage extends StatelessWidget {
   @Demo(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
     return const TFooter(
-      TFooterType.brand,
+      TFooterVariant.brand,
       logo: 'assets/img/t_brand.png',
-      width: 204,
     );
   }
 }

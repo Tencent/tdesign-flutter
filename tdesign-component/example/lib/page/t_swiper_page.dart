@@ -1,452 +1,125 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TSwiperPage extends StatelessWidget {
-  const TSwiperPage({Key? key}) : super(key: key);
+class TSwiperPage extends StatefulWidget {
+  const TSwiperPage({super.key});
+
+  @override
+  State<TSwiperPage> createState() => _TSwiperPageState();
+}
+
+class _TSwiperPageState extends State<TSwiperPage> {
+  int _value = 0;
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tTitle(context),
+      title: tTitle(),
       exampleCodeGroup: 'swiper',
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(
-                desc: '点状(dots)',
-                ignoreCode: true,
-                builder: (_) {
-                  return Container(
-                    height: 193,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            TTheme.of(context).radiusLarge)),
-                    child: CodeWrapper(
-                      builder: _buildDotsSwiper,
-                    ),
-                  );
-                }),
-            ExampleItem(
-                desc: '点条状(dots-bar)',
-                ignoreCode: true,
-                builder: (_) {
-                  return Container(
-                    height: 193,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            TTheme.of(context).radiusLarge)),
-                    child: CodeWrapper(
-                      builder: _buildDotsBarSwiper,
-                    ),
-                  );
-                }),
-            ExampleItem(
-                desc: '分式(fraction)',
-                ignoreCode: true,
-                builder: (_) {
-                  return Container(
-                    height: 193,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            TTheme.of(context).radiusLarge)),
-                    child: CodeWrapper(
-                      builder: _buildFractionSwiper,
-                    ),
-                  );
-                }),
-            ExampleItem(
-                desc: '切换按钮(controls)',
-                ignoreCode: true,
-                builder: (_) {
-                  return Container(
-                    height: 193,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            TTheme.of(context).radiusLarge)),
-                    child: CodeWrapper(
-                      builder: _buildControlsSwiper,
-                    ),
-                  );
-                }),
-            ExampleItem(
-                desc: '卡片式(cards)',
-                ignoreCode: true,
-                builder: (_) {
-                  return Container(
-                    height: 193,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            TTheme.of(context).radiusLarge)),
-                    child: CodeWrapper(
-                      builder: _buildCardsSwiper,
-                    ),
-                  );
-                }),
-            ExampleItem(
-                desc: '卡片式(cards)-scale:0.8',
-                ignoreCode: true,
-                builder: (_) {
-                  return Container(
-                    height: 193,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            TTheme.of(context).radiusLarge)),
-                    child: CodeWrapper(
-                      builder: _buildScaleCardsSwiper,
-                    ),
-                  );
-                }),
+            _item('点状', _buildDotsSwiper),
+            _item('点条状', _buildDotsBarSwiper),
+            _item('分式', _buildFractionSwiper),
+            _item('切换按钮', _buildControlsSwiper),
           ],
         ),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(
-              desc: '内部',
-              ignoreCode: true,
-              builder: (_) {
-                return Container(
-                  height: 193,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          TTheme.of(context).radiusLarge)),
-                  child: CodeWrapper(
-                    builder: _buildDotsSwiper,
-                  ),
-                );
-              }),
-          ExampleItem(
-              desc: '外部',
-              ignoreCode: true,
-              builder: (_) {
-                return Container(
-                  height: 193,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          TTheme.of(context).radiusLarge)),
-                  child: CodeWrapper(
-                    builder: _buildOuterDotsSwiper,
-                  ),
-                );
-              }),
-          ExampleItem(
-              desc: '右边(竖向)',
-              ignoreCode: true,
-              builder: (_) {
-                return Container(
-                  height: 193,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          TTheme.of(context).radiusLarge)),
-                  child: CodeWrapper(
-                    builder: _buildRightDotsSwiper,
-                  ),
-                );
-              }),
-        ])
-      ],
-      test: [
-        ExampleItem(
-            desc: '卡片式(cards),只有两张不轮播',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildNotLoopCardsSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            // outer样式不支持竖向布局
-            desc: '点条状outer样式',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildOuterDotsBarSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '分式符位置',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildFractionBarSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '竖向点条状',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(TTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildVerticalDotsBarSwiper,
-                ),
-              );
-            }),
+        ExampleModule(
+          title: '页面效果',
+          children: [
+            _item('卡片间距', _buildCardsSwiper),
+            _item('缩放与淡化', _buildScaleCardsSwiper),
+            _item('竖向轮播', _buildVerticalSwiper),
+          ],
+        ),
       ],
     );
   }
 
-  @Demo(group: 'swiper')
-  Widget _buildDotsSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomCenter,
-        builder: TSwiperPagination.dots,
+  ExampleItem _item(String description, WidgetBuilder builder) {
+    return ExampleItem(
+      desc: description,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      builder: (context) => SizedBox(
+        height: 200,
+        child: CodeWrapper(builder: builder),
       ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
+    );
+  }
+
+  Widget _buildSwiper({
+    TSwiperPaginationVariant pagination = TSwiperPaginationVariant.dots,
+    TSwiperPageEffect pageEffect = TSwiperPageEffect.none,
+    Axis scrollDirection = Axis.horizontal,
+  }) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
+      child: TSwiper(
+        value: _value,
+        onChanged: (value) => setState(() => _value = value),
+        loop: true,
+        pagination: pagination,
+        pageEffect: pageEffect,
+        scrollDirection: scrollDirection,
+        paginationAlignment: scrollDirection == Axis.horizontal
+            ? Alignment.bottomCenter
+            : Alignment.centerRight,
+        children: const [
+          _SwiperImage('assets/img/image.png'),
+          _SwiperImage('assets/img/t_avatar_1.png'),
+          _SwiperImage('assets/img/t_avatar_2.png'),
+        ],
+      ),
     );
   }
 
   @Demo(group: 'swiper')
-  Widget _buildDotsBarSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomCenter,
-        builder: TSwiperPagination.dotsBar,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildDotsSwiper(BuildContext context) => _buildSwiper();
 
   @Demo(group: 'swiper')
-  Widget _buildFractionSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      scrollDirection: Axis.vertical,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomCenter,
-        builder: TSwiperPagination.fraction,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildDotsBarSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.dotsBar,
+      );
 
   @Demo(group: 'swiper')
-  Widget _buildControlsSwiper(BuildContext context) {
-    return Swiper(
-      // autoplay: true,
-      itemCount: 6,
-      loop: false,
-      pagination: const SwiperPagination(
-        alignment: Alignment.center,
-        builder: TSwiperPagination.controls,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildFractionSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.fraction,
+      );
 
   @Demo(group: 'swiper')
-  Widget _buildCardsSwiper(BuildContext context) {
-    return Swiper(
-      viewportFraction: 0.75,
-      outer: true,
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      transformer: TPageTransformer.margin(),
-      pagination: const SwiperPagination(
-        alignment: Alignment.center,
-        builder: TSwiperPagination.dots,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildControlsSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.controls,
+      );
 
   @Demo(group: 'swiper')
-  Widget _buildScaleCardsSwiper(BuildContext context) {
-    return Swiper(
-      viewportFraction: 0.75,
-      outer: true,
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      transformer: TPageTransformer.scaleAndFade(),
-      pagination: const SwiperPagination(
-        alignment: Alignment.center,
-        builder: TSwiperPagination.dots,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildCardsSwiper(BuildContext context) => _buildSwiper(
+        pageEffect: TSwiperPageEffect.cardMargin,
+      );
 
   @Demo(group: 'swiper')
-  Widget _buildOuterDotsSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      outer: true,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomCenter,
-        builder: TSwiperPagination.dots,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildScaleCardsSwiper(BuildContext context) => _buildSwiper(
+        pageEffect: TSwiperPageEffect.scaleAndFade,
+      );
 
   @Demo(group: 'swiper')
-  Widget _buildRightDotsSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      scrollDirection: Axis.vertical,
-      pagination: const SwiperPagination(
-        alignment: Alignment.centerRight,
-        builder: TSwiperPagination.dots,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  Widget _buildVerticalSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.dotsBar,
+        scrollDirection: Axis.vertical,
+      );
+}
 
-  @Demo(group: 'swiper')
-  Widget _buildNotLoopCardsSwiper(BuildContext context) {
-    return Swiper(
-      viewportFraction: 0.75,
-      scale: 0.8,
-      outer: true,
-      autoplay: true,
-      itemCount: 2,
-      loop: false,
-      pagination: const SwiperPagination(
-        alignment: Alignment.center,
-        builder: TSwiperPagination.dots,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+class _SwiperImage extends StatelessWidget {
+  const _SwiperImage(this.asset);
 
-  @Demo(group: 'swiper')
-  Widget _buildOuterDotsBarSwiper(BuildContext context) {
-    return Swiper(
-      outer: true,
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      pagination: const SwiperPagination(
-        alignment: Alignment.topLeft,
-        builder: TSwiperPagination.dotsBar,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+  final String asset;
 
-  @Demo(group: 'swiper')
-  Widget _buildFractionBarSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomRight,
-        builder: TSwiperPagination.fraction,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'swiper')
-  Widget _buildVerticalDotsBarSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      scrollDirection: Axis.vertical,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomRight,
-        builder: TSwiperPagination.dotsBar,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(asset, fit: BoxFit.cover);
   }
 }

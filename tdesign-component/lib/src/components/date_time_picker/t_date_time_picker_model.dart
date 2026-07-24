@@ -12,30 +12,49 @@ import 't_date_time_picker_internal.dart';
 /// 通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造，至少传其一：
 /// - `dateMode`：日期段粒度（年 / 年月 / 年月日）；不传则不展示日期列
 /// - `timeMode`：时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列
-abstract class DateTimePickerMode {
-  /// 组合日期段与时间段的滚轮列结构；[dateMode]、[timeMode] 至少传其一。
-  ///
-  /// [dateMode] 日期段粒度（年 / 年月 / 年月日）；不传则不展示日期列。
-  /// [timeMode] 时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列。
+@immutable
+class DateTimePickerMode {
+  /// 创建滚轮列结构；[dateMode]、[timeMode] 至少传其一。
   factory DateTimePickerMode({
+    /// 日期段粒度；为 null 时不展示日期列。
     DateMode? dateMode,
+
+    /// 时间段粒度；为 null 时不展示时间列。
     TimeMode? timeMode,
   }) {
     assert(
       dateMode != null || timeMode != null,
       'DateTimePickerMode: dateMode 与 timeMode 不能同时为 null',
     );
-    return CombinedMode(date: dateMode, time: timeMode);
+    return DateTimePickerMode._(dateMode, timeMode);
   }
+
+  const DateTimePickerMode._(this.dateMode, this.timeMode);
+
+  /// 日期段粒度；为 null 时不展示日期列。
+  final DateMode? dateMode;
+
+  /// 时间段粒度；为 null 时不展示时间列。
+  final TimeMode? timeMode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DateTimePickerMode &&
+          dateMode == other.dateMode &&
+          timeMode == other.timeMode;
+
+  @override
+  int get hashCode => Object.hash(dateMode, timeMode);
 }
 
 // =============================================================================
 // 回调结果
 // =============================================================================
 
-/// `TDateTimePicker.onChange` 返回值；`null` 字段表示当前 mode 不含该列。
+/// `TDateTimePicker.onChanged` 返回值；`null` 字段表示当前 mode 不含该列。
 ///
-/// 初始化 `TDateTimePicker.initialValue`、`start`、`end` 时仅传相关字段即可；
+/// 初始化 `TDateTimePicker.value`、`start`、`end` 时仅传相关字段即可；
 /// 提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 @immutable
 class TDateTimePickerValue {

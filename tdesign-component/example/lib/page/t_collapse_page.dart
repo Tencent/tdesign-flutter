@@ -20,6 +20,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   final List<CollapseDataItem> _cardStyleData = generateItems(5);
   final List<CollapseDataItem> _blockStyleWithOpText = generateItems(5);
   final List<CollapseDataItem> _accordionData = generateItems(5);
+  String? _accordionValue;
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +59,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   @Demo(group: 'collapse')
   Widget _buildBasicCollapse(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _basicData[index].isExpanded = !isExpanded;
         });
@@ -79,8 +79,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   @Demo(group: 'collapse')
   Widget _buildBlockStyleCollapse(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _blockStyleData[index].isExpanded = !isExpanded;
         });
@@ -100,8 +99,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   @Demo(group: 'collapse')
   Widget _buildCardCollapse(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.card,
-      expansionCallback: (int index, bool isExpanded) {
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _cardStyleData[index].isExpanded = !isExpanded;
         });
@@ -121,8 +119,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   @Demo(group: 'collapse')
   Widget _buildCollapseWithOperationText(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _blockStyleWithOpText[index].isExpanded = !isExpanded;
         });
@@ -144,13 +141,10 @@ class TCollapsePageState extends State<TCollapsePage> {
 
   @Demo(group: 'collapse')
   Widget _buildAccordionCollapse(BuildContext context) {
-    return TCollapse.accordion(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          _accordionData[index].isExpanded = !isExpanded;
-        });
-      },
+    return TCollapse<String>(
+      mode: TCollapseMode.accordion,
+      value: _accordionValue,
+      onChanged: (value) => setState(() => _accordionValue = value),
       children: _accordionData.map((CollapseDataItem item) {
         return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {

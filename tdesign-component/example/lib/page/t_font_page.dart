@@ -20,13 +20,13 @@ class TFontPage extends StatelessWidget {
                 ignoreCode: true,
                 builder: (context) {
                   var children = <Widget>[];
-                  TTheme.of(context).fontMap.forEach((key, value) {
+                  context.tTheme.fontMap.forEach((key, value) {
                     children.add(Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                              color: TTheme.of(context).componentBorderColor,
+                              color: context.tTheme.componentBorderColor,
                               width: 0.5),
                         ),
                       ),
@@ -40,7 +40,7 @@ class TFontPage extends StatelessWidget {
                                 ? TextDecoration.underline
                                 : null,
                             decorationColor:
-                                TTheme.of(context).textColorPrimary),
+                                context.tTheme.textColorPrimary),
                       ),
                     ));
                   });
@@ -62,25 +62,25 @@ class TFontPage extends StatelessWidget {
                 children: [
                   TText(
                     '使用主题字体：fontBodySmall',
-                    font: TTheme.of(context).fontBodySmall,
+                    font: context.tTheme.fontBodySmall,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '使用主题字体：fontBodyLarge',
-                    font: TTheme.of(context).fontBodyLarge,
+                    font: context.tTheme.fontBodyLarge,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '不使用数字字体：1234567890abcd',
-                    font: TTheme.defaultData().fontTitleSmall,
-                    textColor: TTheme.of(context).brandNormalColor,
+                    font: TThemeData.defaultData().fontTitleSmall,
+                    textColor: context.tTheme.brandNormalColor,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '使用数字字体：1234567890abcd',
-                    font: TTheme.defaultData().fontTitleSmall,
-                    textColor: TTheme.of(context).brandNormalColor,
-                    fontFamily: TTheme.defaultData().numberFontFamily,
+                    font: TThemeData.defaultData().fontTitleSmall,
+                    textColor: context.tTheme.brandNormalColor,
+                    fontFamily: TThemeData.defaultData().numberFontFamily,
                   )
                 ],
               );
@@ -96,31 +96,31 @@ class TFontPage extends StatelessWidget {
                   TText(
                     '延14字号',
                     style: const TextStyle(fontSize: 14),
-                    font: TTheme.of(context).fontMarkLarge,
+                    font: context.tTheme.fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '延15字号',
                     style: const TextStyle(fontSize: 15),
-                    font: TTheme.of(context).fontMarkLarge,
+                    font: context.tTheme.fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '延16字号',
                     style: const TextStyle(fontSize: 16),
-                    font: TTheme.of(context).fontMarkLarge,
+                    font: context.tTheme.fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '延17字号',
                     style: const TextStyle(fontSize: 17),
-                    font: TTheme.of(context).fontMarkLarge,
+                    font: context.tTheme.fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
                   TText(
                     '延18字号',
                     style: const TextStyle(fontSize: 18),
-                    font: TTheme.of(context).fontMarkLarge,
+                    font: context.tTheme.fontMarkLarge,
                   ),
                   const SizedBox(height: 16),
                   const Text('延-系统字体16字号', style: TextStyle(fontSize: 18)),

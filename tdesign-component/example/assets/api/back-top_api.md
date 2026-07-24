@@ -4,29 +4,11 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| colorScheme | TBackTopColorScheme? | - | 配色方案（light / dark）；未传时取 Theme `colorScheme` |
 | controller | ScrollController? | - | 页面滚动的控制器 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onClick | VoidCallback? | - | 按钮点击事件 |
-| showText | bool | false | 是否展示文字 |
-| style | TBackTopStyle | TBackTopStyle.circle | 样式，圆形和半圆 |
-| theme | TBackTopTheme | TBackTopTheme.light | 主题 |
-
-
-### TBackTopTheme
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| light | - |
-| dark | - |
-
-
-### TBackTopStyle
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| circle | - |
-| halfCircle | - |
+| onPressed | VoidCallback? | - | 点击回调；`null` 表示禁用（A 类） |
+| shape | TBackTopShape? | - | 形状（circle / halfCircle）；未传时取 Theme `shape` |
+| showText | bool | false | 是否展示文案（i18n 走 `context.resource`） |
+| tooltip | String? | - | 读屏 / `Tooltip` 提示；未传时可回退资源文案 |
+| visibilityOffset | double? | - | 绑定 `controller` 时，偏移 ≥ 阈值才显示；未传时取 Theme `defaultVisibilityOffset`，Theme 也未配时始终可见 |

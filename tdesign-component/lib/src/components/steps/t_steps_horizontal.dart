@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import 't_steps.dart';
 import 't_steps_horizontal_item.dart';
 
 /// Steps步骤条，水平步骤
 class TStepsHorizontal extends StatelessWidget {
+  /// 步骤条数据列表
   final List<TStepsItemData> steps;
+
+  /// 当前激活的步骤索引
   final int activeIndex;
+
+  /// 步骤条状态
   final TStepsStatus status;
+
+  /// 是否为简略模式
   final bool simple;
+
+  /// 是否为只读模式（纯展示）
   final bool readOnly;
 
   const TStepsHorizontal({

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popup/t_popup.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'helpers/popup_test_helpers.dart';
 

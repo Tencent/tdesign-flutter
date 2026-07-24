@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
+import '../text/t_text.dart';
+import 't_calendar_cell.dart';
+import 't_calendar_theme_data.dart';
 
-/// 日历滚动主体（月份列表 + 日期格），由 [TCalendar] 内部组装，一般无需直接使用。
+/// 日历滚动主体（月份列表 + 日期格）。
 class TCalendarBody extends StatefulWidget {
   const TCalendarBody({
     Key? key,
     required this.type,
-    this.initialValue,
+    this.value,
     required this.firstDayOfWeek,
     required this.minDate,
     required this.maxDate,
@@ -27,12 +30,12 @@ class TCalendarBody extends StatefulWidget {
     this.onCacheInvalidated,
   }) : super(key: key);
 
-  final CalendarType type;
+  final TCalendarVariant type;
 
-  /// 用于新建单元格时标记选中/区间态的快照（来自 [TCalendar] 内部缓存，非运行期受控 prop）。
-  final List<DateTime>? initialValue;
+  /// 受控选中日期，用于生成日期格状态。
+  final List<DateTime>? value;
 
-  /// 首屏及运行期滚动目标月份；优先于 [initialValue] 决定 [_calcScrollOffset]。
+  /// 首屏及运行期滚动目标月份；优先于 [value] 决定滚动位置。
   final DateTime? anchorDate;
   final int firstDayOfWeek;
   final DateTime minDate;
@@ -106,14 +109,12 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     super.didUpdateWidget(oldWidget);
     final rangeChanged = oldWidget.minDate != widget.minDate ||
         oldWidget.maxDate != widget.maxDate;
-    final weekStartChanged =
-        oldWidget.firstDayOfWeek != widget.firstDayOfWeek;
+    final weekStartChanged = oldWidget.firstDayOfWeek != widget.firstDayOfWeek;
     final layoutMetricsChanged = oldWidget.cellHeight != widget.cellHeight ||
         oldWidget.monthTitleHeight != widget.monthTitleHeight ||
         oldWidget.verticalGap != widget.verticalGap ||
         oldWidget.bodyPadding != widget.bodyPadding;
-    final selectionChanged =
-        !_listEqualsDate(oldWidget.initialValue, widget.initialValue);
+    final selectionChanged = !_listEqualsDate(oldWidget.value, widget.value);
 
     if (rangeChanged) {
       // 可选范围变更：重建月份列表并清空格点/高度缓存，与 refactor 前行为一致。
@@ -220,16 +221,16 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     return lo;
   }
 
-  /// 计算首屏滚动偏移：优先 [anchorDate]，否则取 [initialValue] 最早一日，再否则为 0。
+  /// 计算首屏滚动偏移：优先 anchorDate，否则取 value 最早一日。
   ///
-  /// 越界时 clamp 到 [minDate]/[maxDate] 对应的首尾月，避免锚点落在范围外时静默回顶。
+  /// 越界时 clamp 到 minDate/maxDate 对应的首尾月，避免锚点落在范围外时静默回顶。
   double _calcScrollOffset() {
     var scrollToDate = widget.anchorDate;
     if (scrollToDate == null) {
-      if (widget.initialValue == null || widget.initialValue!.isEmpty) {
+      if (widget.value == null || widget.value!.isEmpty) {
         return 0.0;
       }
-      scrollToDate = widget.initialValue!.reduce((a, b) => a.isBefore(b) ? a : b);
+      scrollToDate = widget.value!.reduce((a, b) => a.isBefore(b) ? a : b);
     }
     if (_months.isEmpty) {
       return 0.0;
@@ -431,9 +432,8 @@ class _TCalendarBodyState extends State<TCalendarBody> {
 
     if (viewport > 0 && delta > viewport * thresholdInViewports) {
       // 朝目标方向跳到距离目标 1 屏的位置，给最后一段留出动画空间
-      final preJump = target > position.pixels
-          ? target - viewport
-          : target + viewport;
+      final preJump =
+          target > position.pixels ? target - viewport : target + viewport;
       _scrollController.jumpTo(preJump.clamp(
         position.minScrollExtent,
         position.maxScrollExtent,
@@ -511,28 +511,27 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       var selectType = DateSelectType.empty;
       if (date.compareTo(min) == -1 || date.compareTo(max) == 1) {
         selectType = DateSelectType.disabled;
-      } else if (widget.type == CalendarType.single &&
-          (widget.initialValue?.length ?? 0) >= 1) {
-        if (date.compareTo(widget.initialValue![0]) == 0) {
+      } else if (widget.type == TCalendarVariant.single &&
+          (widget.value?.length ?? 0) >= 1) {
+        if (date.compareTo(widget.value![0]) == 0) {
           selectType = DateSelectType.selected;
         }
-      } else if (widget.type == CalendarType.multiple &&
-          widget.initialValue != null) {
-        if (widget.initialValue!.isContains((e) => date.compareTo(e) == 0)) {
+      } else if (widget.type == TCalendarVariant.multiple &&
+          widget.value != null) {
+        if (widget.value!.isContains((e) => date.compareTo(e) == 0)) {
           selectType = DateSelectType.selected;
         }
-      } else if (widget.type == CalendarType.range &&
-          (widget.initialValue?.length ?? 0) >= 1) {
-        final end =
-            (widget.initialValue?.length ?? 0) > 1 ? widget.initialValue![1] : null;
-        if (date.compareTo(widget.initialValue![0]) == 0) {
+      } else if (widget.type == TCalendarVariant.range &&
+          (widget.value?.length ?? 0) >= 1) {
+        final end = (widget.value?.length ?? 0) > 1 ? widget.value![1] : null;
+        if (date.compareTo(widget.value![0]) == 0) {
           selectType = DateSelectType.start;
         }
-        if (end != null && widget.initialValue![0].compareTo(end) < 0) {
+        if (end != null && widget.value![0].compareTo(end) < 0) {
           if (date.compareTo(end) == 0) {
             selectType = DateSelectType.end;
           }
-          if (date.compareTo(widget.initialValue![0]) == 1 &&
+          if (date.compareTo(widget.value![0]) == 1 &&
               date.compareTo(end) == -1) {
             selectType = DateSelectType.centre;
           }

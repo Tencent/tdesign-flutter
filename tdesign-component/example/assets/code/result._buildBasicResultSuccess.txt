@@ -1,7 +1,0 @@
-
-  TResult _buildBasicResultSuccess(BuildContext context) {
-    return const TResult(
-      title: '成功状态',
-      theme: TResultTheme.success,
-    );
-  }

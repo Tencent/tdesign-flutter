@@ -1,6 +1,0 @@
-
-  Widget _buildCloseOutlineTag(BuildContext context) {
-    return TTag('标签文字', needCloseIcon: true, isOutline: true, onCloseTap: () {
-      TToast.showText('点击关闭', context: context);
-    });
-  }

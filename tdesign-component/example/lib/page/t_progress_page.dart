@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -16,13 +14,9 @@ class TProgressPage extends StatefulWidget {
 }
 
 class _TProgressPageState extends State<TProgressPage> {
-  TLabelWidget buttonLabel = const TTextLabel('开始');
-  double progressValue = 0.0;
-  Timer? _timer;
-  bool isProgressing = false;
-  bool isPlaying = false;
-  double microProgressValue = 0.3;
-  Timer? _microTimer;
+  final Widget buttonLabel = const Text('进行中');
+  final double progressValue = 0.4;
+  final double microProgressValue = 0.3;
 
   double value = 0.1;
 
@@ -82,34 +76,30 @@ class _TProgressPageState extends State<TProgressPage> {
   @Demo(group: 'progress')
   Widget _buildRightLabelLinear(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
+      variant: TProgressVariant.linear,
       value: value,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildInsideLabelLinear(BuildContext context) {
-    return TProgress(type: TProgressType.linear, value: value);
+    return TProgress(variant: TProgressVariant.linear, value: value);
   }
 
   @Demo(group: 'progress')
   Widget _buildCircle(BuildContext context) {
-    return TProgress(type: TProgressType.circular, value: value);
+    return TProgress(variant: TProgressVariant.circular, value: value);
   }
 
   @Demo(group: 'progress')
   Widget _buildMicro(BuildContext context) {
-    return TProgress(type: TProgressType.micro, value: value);
+    return TProgress(variant: TProgressVariant.micro, value: value);
   }
 
   @Demo(group: 'progress')
   Widget _buildButton(BuildContext context) {
     return TProgress(
-      type: TProgressType.button,
-      onTap: _toggleProgress,
-      onLongPress: _resetProgress,
+      variant: TProgressVariant.button,
       value: progressValue,
       label: buttonLabel,
     );
@@ -118,12 +108,11 @@ class _TProgressPageState extends State<TProgressPage> {
   @Demo(group: 'progress')
   Widget _buildMicroButton(BuildContext context) {
     return TProgress(
-      type: TProgressType.micro,
+      variant: TProgressVariant.micro,
       value: microProgressValue,
-      onTap: _toggleMicroProgress,
-      label: TIconLabel(
-        isPlaying ? Icons.pause : Icons.play_arrow,
-        color: TTheme.of(context).brandNormalColor,
+      label: Icon(
+        Icons.play_arrow,
+        color: context.tTheme.brandNormalColor,
       ),
     );
   }
@@ -131,92 +120,71 @@ class _TProgressPageState extends State<TProgressPage> {
   @Demo(group: 'progress')
   Widget _buildPrimary(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.primary,
+      variant: TProgressVariant.linear,
       value: value,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildWarning(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.warning,
+      variant: TProgressVariant.linear,
       value: value,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildDanger(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.danger,
+      variant: TProgressVariant.linear,
       value: value,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildSuccess(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.success,
+      variant: TProgressVariant.linear,
       value: 1,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildPrimaryInside(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.primary,
+      variant: TProgressVariant.linear,
       value: value,
-      progressLabelPosition: TProgressLabelPosition.inside,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildWarningInside(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.warning,
+      variant: TProgressVariant.linear,
       value: value,
-      progressLabelPosition: TProgressLabelPosition.inside,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildDangerInside(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.danger,
+      variant: TProgressVariant.linear,
       value: value,
-      progressLabelPosition: TProgressLabelPosition.inside,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildSuccessInside(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.success,
+      variant: TProgressVariant.linear,
       value: 1,
-      progressLabelPosition: TProgressLabelPosition.inside,
     );
   }
 
   @Demo(group: 'progress')
   Widget _buildCirclePrimary(BuildContext context) {
     return TProgress(
-      type: TProgressType.circular,
-      progressStatus: TProgressStatus.primary,
+      variant: TProgressVariant.circular,
       value: value,
     );
   }
@@ -224,8 +192,7 @@ class _TProgressPageState extends State<TProgressPage> {
   @Demo(group: 'progress')
   Widget _buildCircleWarning(BuildContext context) {
     return TProgress(
-      type: TProgressType.circular,
-      progressStatus: TProgressStatus.warning,
+      variant: TProgressVariant.circular,
       value: value,
     );
   }
@@ -233,8 +200,7 @@ class _TProgressPageState extends State<TProgressPage> {
   @Demo(group: 'progress')
   Widget _buildCircleDanger(BuildContext context) {
     return TProgress(
-      type: TProgressType.circular,
-      progressStatus: TProgressStatus.danger,
+      variant: TProgressVariant.circular,
       value: value,
     );
   }
@@ -242,68 +208,8 @@ class _TProgressPageState extends State<TProgressPage> {
   @Demo(group: 'progress')
   Widget _buildCircleSuccess(BuildContext context) {
     return TProgress(
-      type: TProgressType.circular,
-      progressStatus: TProgressStatus.success,
+      variant: TProgressVariant.circular,
       value: 1,
     );
-  }
-
-  void _toggleProgress() {
-    if (isProgressing) {
-      // 暂停进度
-      _timer?.cancel();
-      setState(() {
-        buttonLabel = const TTextLabel('继续');
-        isProgressing = false;
-      });
-    } else {
-      // 开始或继续进度
-      _timer?.cancel();
-      _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-        setState(() {
-          if (progressValue < 1.0) {
-            progressValue += 0.01;
-            buttonLabel = TTextLabel('${(progressValue * 100).toInt()}%');
-          } else {
-            _timer?.cancel();
-            buttonLabel = const TTextLabel('完成');
-            isProgressing = false;
-          }
-        });
-      });
-      setState(() {
-        isProgressing = true;
-      });
-    }
-  }
-
-  void _resetProgress() {
-    _timer?.cancel();
-    setState(() {
-      progressValue = 0.0;
-      buttonLabel = const TTextLabel('开始');
-      isProgressing = false;
-    });
-  }
-
-  void _toggleMicroProgress() {
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-    if (isPlaying) {
-      _microTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-        setState(() {
-          if (microProgressValue < 1.0) {
-            microProgressValue += 0.01;
-          } else {
-            _microTimer?.cancel();
-            isPlaying = false;
-            microProgressValue = 0.0;
-          }
-        });
-      });
-    } else {
-      _microTimer?.cancel();
-    }
   }
 }

@@ -66,10 +66,10 @@ abstract class TResourceDelegate {
   /// [TBadge]为0时的默认文案
   String get badgeZero;
 
-  /// [TAlertDialog]等 取消
+  /// TDialog等 取消
   String get cancel;
 
-  /// [TAlertDialog]等 确认
+  /// TDialog等 确认
   String get confirm;
 
   /// [TDropdownMenu] 其他
@@ -220,7 +220,7 @@ abstract class TResourceDelegate {
 /// 如果用户要重写，就应该全部重写，不开放只重新部分资源
 /// todo 这里默认为中文，推荐使用 Material 本地化作为备用，如 MaterialLocalizations.of(context).cancelButtonLabel
 class _DefaultResourceDelegate extends TResourceDelegate {
-  @override
+  @override // coverage:ignore-line
   String get open => '开';
 
   @override
@@ -235,7 +235,7 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   @override
   String get confirm => '确定';
 
-  @override
+  @override // coverage:ignore-line
   String get other => '其它';
 
   @override
@@ -244,7 +244,7 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   @override
   String get loading => '加载中';
 
-  @override
+  @override // coverage:ignore-line
   String get loadingWithPoint => '加载中...';
 
   @override
@@ -256,10 +256,10 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   @override
   String get releaseRefresh => '松开刷新';
 
-  @override
+  @override // coverage:ignore-line
   String get pullToRefresh => '下拉刷新';
 
-  @override
+  @override // coverage:ignore-line
   String get completeRefresh => '刷新完成';
 
   @override
@@ -349,13 +349,13 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   @override
   String get december => '12 月';
 
-  @override
+  @override // coverage:ignore-line
   String get time => '时间';
 
-  @override
+  @override // coverage:ignore-line
   String get start => '开始';
 
-  @override
+  @override // coverage:ignore-line
   String get end => '结束';
 
   @override

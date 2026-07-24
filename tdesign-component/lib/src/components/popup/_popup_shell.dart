@@ -14,7 +14,7 @@ class PopupShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     final radius = options.radius ?? theme.radiusExtraLarge;
     final backgroundColor = options.backgroundColor ?? theme.bgColorContainer;
     final borderRadius = _borderRadius(options.placement, radius);

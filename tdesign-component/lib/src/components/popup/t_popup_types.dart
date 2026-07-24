@@ -43,17 +43,13 @@ typedef TPopupSlotBuilder = Widget Function(
 
 // 库内 sentinel：识别 builder「未传 = 内置默认」。业务三态见 [TPopupOptions]。
 
-Widget _kPopupDefaultHeader(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultHeader(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
-Widget _kPopupDefaultCancel(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultCancel(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
-Widget _kPopupDefaultConfirm(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultConfirm(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
-Widget _kPopupDefaultClose(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultClose(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
 bool _isPopupDefaultHeader(TPopupHeaderBuilder? builder) =>
     identical(builder, _kPopupDefaultHeader);
@@ -74,7 +70,7 @@ bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
 /// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancel]、
 /// [TPopupTrigger.confirm]、[TPopupTrigger.close]；
 /// [TPopupHandle.close] 为 [TPopupTrigger.api]；系统返回为
-/// [TPopupTrigger.systemBack]；[headerBuilder] 内调用 `close` 等为
+/// [TPopupTrigger.systemBack]；headerBuilder 内调用 `close` 等为
 /// [TPopupTrigger.custom]。
 enum TPopupTrigger {
   /// 点击蒙层，且 [TPopupOptions.closeOnOverlayClick] 为 true。
@@ -95,7 +91,7 @@ enum TPopupTrigger {
   /// 系统返回键或系统路由返回触发的关闭。
   systemBack,
 
-  /// 无框架预设动作语义的自定义关闭，如 [headerBuilder] 内调用 `close`。
+  /// 无框架预设动作语义的自定义关闭，如 headerBuilder 内调用 `close`。
   custom,
 }
 

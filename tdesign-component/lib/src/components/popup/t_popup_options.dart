@@ -51,12 +51,14 @@ class TPopupOptions {
     this.radius,
     this.backgroundColor,
     this.showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     this.overlayColor,
     this.overlayOpacity,
     this.modal = true,
     this.destroyOnClose = false,
-    this.animationDuration = const Duration(milliseconds: 240),
+    this.animationDuration,
     this.headerBuilder = _kPopupDefaultHeader,
     this.titleWidget,
     this.cancelBuilder = _kPopupDefaultCancel,
@@ -86,12 +88,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -138,12 +142,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -186,12 +192,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -233,12 +241,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -280,12 +290,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -374,7 +386,7 @@ class TPopupOptions {
   final bool destroyOnClose;
 
   /// 打开/关闭动画时长。
-  final Duration animationDuration;
+  final Duration? animationDuration;
 
   /// bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。
   ///
@@ -518,7 +530,6 @@ class TPopupOptions {
     );
   }
 
-  /// {@nodoc}
   TPopupOptions normalized() {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;
@@ -553,42 +564,33 @@ class TPopupOptions {
     );
   }
 
-  /// {@nodoc}
   bool get usesDefaultHeader => _isPopupDefaultHeader(headerBuilder);
 
-  /// {@nodoc}
   bool get usesDefaultCancel => _isPopupDefaultCancel(cancelBuilder);
 
-  /// {@nodoc}
   bool get usesDefaultConfirm => _isPopupDefaultConfirm(confirmBuilder);
 
-  /// {@nodoc}
   bool get usesDefaultClose => _isPopupDefaultClose(closeBuilder);
 
-  /// {@nodoc}
   bool get useCustomHeader =>
       placement == TPopupPlacement.bottom &&
       headerBuilder != null &&
       !_isPopupDefaultHeader(headerBuilder);
 
-  /// {@nodoc}
   bool get useDefaultHeader =>
       placement == TPopupPlacement.bottom &&
       _isPopupDefaultHeader(headerBuilder);
 
-  /// {@nodoc}
   bool get showCancelSlot =>
       placement == TPopupPlacement.bottom &&
       useDefaultHeader &&
       cancelBuilder != null;
 
-  /// {@nodoc}
   bool get showConfirmSlot =>
       placement == TPopupPlacement.bottom &&
       useDefaultHeader &&
       confirmBuilder != null;
 
-  /// {@nodoc}
   bool get hasBuiltInHeader {
     if (placement != TPopupPlacement.bottom || headerBuilder == null) {
       return false;
@@ -601,7 +603,6 @@ class TPopupOptions {
         titleWidget != null;
   }
 
-  /// {@nodoc}
   void assertPlacementParams() {
     assert(() {
       final err = _validatePlacementParams();

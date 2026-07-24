@@ -8,7 +8,9 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
 
 class TCircleIndicator extends StatefulWidget {
   const TCircleIndicator({
@@ -64,7 +66,7 @@ class _TCircleIndicatorState extends State<TCircleIndicator>
   @override
   Widget build(BuildContext context) {
     var value = (_animation1.value) * 2 * pi;
-    var paintColor = widget.color ?? TTheme.of(context).brandNormalColor;
+    var paintColor = widget.color ?? context.tTheme.brandNormalColor;
     return Transform(
       transform: Matrix4.identity()..rotateZ(value),
       alignment: FractionalOffset.center,

@@ -1,8 +1,0 @@
-
-  Widget _buildCircleOutlineTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.round,
-      isOutline: true,
-    );
-  }

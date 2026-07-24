@@ -6,206 +6,117 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
-///
-/// TSideBarLoadingPage演示
-///
+/// TSideBarLoadingPage 演示。
 class TSideBarLoadingPage extends StatefulWidget {
-  const TSideBarLoadingPage({Key? key}) : super(key: key);
+  const TSideBarLoadingPage({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return TSideBarLoadingPageState();
-  }
+  State<TSideBarLoadingPage> createState() => TSideBarLoadingPageState();
 }
 
 class TSideBarLoadingPageState extends State<TSideBarLoadingPage> {
-  var currentValue = 1;
-  var itemHeight = 278.5;
-  final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TSideBarController();
-  static const threshold = 50;
-  var lock = false;
+  static const _items = [
+    TSideBarItem(value: 0, label: '推荐'),
+    TSideBarItem(value: 1, label: '饮品'),
+    TSideBarItem(value: 2, label: '甜品'),
+    TSideBarItem(value: 3, label: '小食'),
+  ];
+
+  var _currentValue = 0;
+  var _loading = true;
+  Timer? _loadTimer;
 
   @override
   void initState() {
     super.initState();
-
-    _demoScroller.addListener(() {
-      if (lock) {
-        return;
-      }
-
-      var scrollTop = _demoScroller.offset;
-      var index = (scrollTop + threshold) ~/ itemHeight;
-
-      if (currentValue != index) {
-        setState(() {
-          _sideBarController.selectTo(index);
-        });
-      }
-    });
+    _loadItems();
   }
 
-  Future<void> onSelected(int value) async {
-    if (currentValue != value) {
-      setState(() {
-        currentValue = value;
-      });
-
-      lock = true;
-      await _demoScroller.animateTo(value.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
-      lock = false;
-    }
+  @override
+  void dispose() {
+    _loadTimer?.cancel();
+    super.dispose();
   }
 
-  void onChanged(int value) {
-    setState(() {
-      currentValue = value;
+  void _loadItems() {
+    _loadTimer?.cancel();
+    setState(() => _loading = true);
+    _loadTimer = Timer(const Duration(milliseconds: 1200), () {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var current = buildWidget(context);
-    return current;
-  }
-
-  Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 延迟加载',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildLoadingSideBar,
-        ));
-  }
-
-  List<SideItemProps> list = <SideItemProps>[];
-  List<Widget> pages = <Widget>[];
-
-  void _initData() {
-    list = [];
-    pages = [];
-    for (var i = 0; i < 20; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项 $i',
-        value: i,
-      ));
-      pages.add(getLoadingDemo(i));
-    }
-
-    pages.add(Container(
-      height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
-    ));
-
-    list[1].badge = const TBadge(TBadgeType.redPoint);
-    list[2].badge = const TBadge(
-      TBadgeType.message,
-      count: '8',
+      title: 'SideBar 延迟加载',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      singleChild: CodeWrapper(
+        isCenter: false,
+        builder: _buildLoadingSideBar,
+      ),
     );
-    if (_sideBarController.loading) {
-      _sideBarController.init(list);
-      _sideBarController.selectTo(currentValue);
-      // 初始化时避免右侧内容与左侧item不匹配
-      _demoScroller.animateTo(currentValue.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
-    }
   }
 
   @Demo(group: 'sideBar')
   Widget _buildLoadingSideBar(BuildContext context) {
-    // 延迟加载
-    Future.delayed(const Duration(seconds: 3), _initData);
-    var size = MediaQuery.of(context).size;
-
-    return Row(
+    final label = _items[_currentValue].label;
+    return Column(
       children: [
-        SizedBox(
-          width: list.isEmpty ? size.width : 110,
-          child: TSideBar(
-            style: TSideBarStyle.normal,
-            value: currentValue,
-            controller: _sideBarController,
-            loading: true,
-            children: list
-                .map((ele) => TSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
-                .toList(),
-            onChanged: onChanged,
-            onSelected: onSelected,
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: TButton(
+              size: TButtonSize.small,
+              variant: TButtonVariant.outline,
+              onPressed: _loadItems,
+              child: const Text('重新加载'),
+            ),
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
-            ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 106,
+                child: TSideBar(
+                  value: _currentValue,
+                  children: _items,
+                  loading: _loading,
+                  onChanged: (value) => setState(() => _currentValue = value),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: context.tTheme.bgColorContainer,
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.all(20),
+                  child: _loading
+                      ? const TLoading(
+                          icon: TLoadingIcon.circle,
+                          size: TLoadingSize.large,
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TText(label, font: context.tTheme.fontTitleMedium),
+                            const SizedBox(height: 4),
+                            TText(
+                              '导航数据加载完成后可选择分类',
+                              textColor: context.tTheme.textColorSecondary,
+                            ),
+                          ],
+                        ),
+                ),
+              ),
+            ],
           ),
-        )
+        ),
       ],
-    );
-  }
-
-  Widget getLoadingDemo(int index) {
-    return Container(
-      decoration: BoxDecoration(color: TTheme.of(context).bgColorContainer),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: displayImageList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget displayImageList() {
-    return Column(
-      children: [
-        displayImageItem(),
-        const TDivider(),
-        displayImageItem(),
-        const TDivider(),
-        displayImageItem(),
-        const TDivider(),
-      ],
-    );
-  }
-
-  Widget displayImageItem() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        // spacing: 16,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TImage(
-            assetUrl: 'assets/img/empty.png',
-            type: TImageType.roundedSquare,
-            width: 48,
-            height: 48,
-          ),
-          SizedBox(width: 16),
-          TText('标题', style: TextStyle(fontSize: 16))
-        ],
-      ),
     );
   }
 }

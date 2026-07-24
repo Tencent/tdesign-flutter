@@ -3,16 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  testWidgets('挂载时 onChange 不应在 build 阶段触发', (tester) async {
+  testWidgets('挂载时 onChanged 不应在 build 阶段触发', (tester) async {
     var onChangeCount = 0;
 
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: TCalendar(
-            type: CalendarType.multiple,
-            initialValue: const [],
-            onChange: (_) => onChangeCount++,
+            variant: TCalendarVariant.multiple,
+            value: const [],
+            onChanged: (_) => onChangeCount++,
           ),
         ),
       ),
@@ -22,7 +22,7 @@ void main() {
     expect(onChangeCount, 0);
   });
 
-  /// 弹层内 [TCalendar] 为独立实例；多选靠组件内部态累加，勿在 onChange 中回写 initialValue 受控。
+  /// 弹层维护独立受控值，连续选择必须基于父级回灌后的 value。
   testWidgets('弹层内多选可累加选中', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -30,8 +30,8 @@ void main() {
           builder: (context) {
             return Scaffold(
               body: TCell(
-                title: '打开',
-                onClick: (_) {
+                title: const Text('打开'),
+                onTap: () {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -66,8 +66,8 @@ void main() {
     await tester.tap(day16.first);
     await tester.pump();
 
-    final sheetState =
-        tester.state(find.byType(_TestMultipleSheet)) as _TestMultipleSheetState;
+    final sheetState = tester.state(find.byType(_TestMultipleSheet))
+        as _TestMultipleSheetState;
     expect(sheetState.pending.length, 2);
   });
 }
@@ -88,9 +88,9 @@ class _TestMultipleSheetState extends State<_TestMultipleSheet> {
       child: SizedBox(
         height: 500,
         child: TCalendar(
-          type: CalendarType.multiple,
-          initialValue: pending,
-          onChange: (v) => setState(() => pending = v),
+          variant: TCalendarVariant.multiple,
+          value: pending,
+          onChanged: (v) => setState(() => pending = v),
         ),
       ),
     );

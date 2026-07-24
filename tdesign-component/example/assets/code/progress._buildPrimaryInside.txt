@@ -1,9 +1,0 @@
-
-  Widget _buildPrimaryInside(BuildContext context) {
-    return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.primary,
-      value: value,
-      progressLabelPosition: TProgressLabelPosition.inside,
-    );
-  }

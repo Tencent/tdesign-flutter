@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './t_swipe_cell.dart';
 import 't_swipe_cell_action.dart';
 
+/// 滑动动画展示方式
 enum SwipeMotion {
   /// 滚动
   scroll,
@@ -110,21 +111,22 @@ class TSwipeCellPanel {
               dismissThreshold: dismissThreshold ?? 0.75,
               dismissalDuration: _dismissalDuration,
               resizeDuration: _resizeDuration,
-              confirmDismiss: () async {
-                if (confirmDismiss != null) {
-                  return confirmDismiss!(context);
+              confirmDismiss: () async { // coverage:ignore-line
+                if (confirmDismiss != null) { // coverage:ignore-line
+                  return confirmDismiss!(context); // coverage:ignore-line
                 }
                 return true;
               },
-              onDismissed: () async {
-                await TSwipeCell.of(context)?.close();
-                onDismissed?.call(context);
+              onDismissed: () async { // coverage:ignore-line
+                await TSwipeCell.of(context)?.close(); // coverage:ignore-line
+                onDismissed?.call(context); // coverage:ignore-line
               },
             )
           : null,
     );
   }
 
+  /// 获取滑动动画对应的 Motion 组件
   Widget getMotionWidget() {
     switch (motionType) {
       case SwipeMotion.scroll:

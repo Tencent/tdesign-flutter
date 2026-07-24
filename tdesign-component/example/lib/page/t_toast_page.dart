@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/util/auto_size.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
+import '../base/example_widget.dart';
 
+/// Toast 轻提示示例页面
 class TToastPage extends StatelessWidget {
   const TToastPage({super.key});
 
@@ -12,344 +12,151 @@ class TToastPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '用于轻量级反馈或提示，不会打断用户操作。',
+      desc: '轻量级反馈/提示，可快速在屏幕中间展示简要信息并自动消失。',
       exampleCodeGroup: 'toast',
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '纯文字', builder: _textToast),
-          ExampleItem(desc: '多行文字', builder: _multipleToast),
-          ExampleItem(desc: '带横向图标', builder: _horizontalIconToast),
-          ExampleItem(desc: '带竖向图标', builder: _verticalIconToast),
-          ExampleItem(desc: '加载状态', builder: _loadingToast),
-          ExampleItem(desc: '加载状态自定义', builder: _loadingCustomToast),
-          ExampleItem(desc: '加载状态(无文字)', builder: _loadingWithoutTextToast),
-          ExampleItem(desc: '停止加载', builder: _dismissLoadingToast),
-          ExampleItem(desc: '自定义纯文字', builder: _textCustomToast),
+          ExampleItem(desc: '纯文字', builder: _buildTextToast),
+          ExampleItem(desc: '带图标', builder: _buildIconToast),
+          ExampleItem(desc: '加载中', builder: _buildLoadingToast),
         ]),
         ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '成功提示', builder: _successToast),
-          ExampleItem(desc: '成功提示(竖向)', builder: _successVerticalToast),
-          ExampleItem(desc: '警告提示', builder: _warningToast),
-          ExampleItem(desc: '警告提示(竖向)', builder: _warningVerticalToast),
-          ExampleItem(desc: '失败提示', builder: _failToast),
-          ExampleItem(desc: '失败提示(竖向)', builder: _failVerticalToast),
-        ])
-      ],
-      test: [
-        ExampleItem(desc: '禁止滚动+点击', builder: _preventTapToast),
-        ExampleItem(desc: '自定义宽度+行数', builder: _customMultipleToast),
-        ExampleItem(desc: 'Long Text Success Toast', builder: _longTextSuccessToast),
+          ExampleItem(desc: '成功', builder: _buildSuccessToast),
+          ExampleItem(desc: '警告', builder: _buildWarningToast),
+          ExampleItem(desc: '失败', builder: _buildFailToast),
+        ]),
+        ExampleModule(title: '展示时长', children: [
+          ExampleItem(desc: '自定义时长', builder: _buildCustomDurationToast),
+        ]),
       ],
     );
   }
 
   @Demo(group: 'toast')
-  Widget _longTextSuccessToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showSuccess(
-          '这是一个非常长的成功提示文案，用来测试文字溢出的问题。这是一个非常长的成功提示文案，用来测试文字溢出的问题。',
-          context: context,
-          maxLines: 10,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '长文本成功提示',
+  Widget _buildTextToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('纯文字'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText('这是一条纯文字提示', context: context);
+        },
+      ),
     );
   }
 
   @Demo(group: 'toast')
-  Widget _textToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showText('轻提示文字内容', context: context);
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '纯文字',
+  Widget _buildIconToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('带图标'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showIconText(
+            '这是一条带图标的提示',
+            icon: TIcons.info_circle,
+            context: context,
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'toast')
-  Widget _textCustomToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showText(
-          '自定义纯文字',
-          context: context,
-          customWidget: Container(
-            width: 50,
-            height: 20,
-            child: const TText('自定义纯文字'),
-            color: TTheme.of(context).brandClickColor,
-          ),
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '纯文字',
+  Widget _buildLoadingToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('加载中'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = TToast.showLoading(
+            context: context,
+            text: '加载中...',
+          );
+          // 2 秒后关闭
+          Future.delayed(const Duration(seconds: 2), () {
+            TToast.dismissToast(id);
+          });
+        },
+      ),
     );
   }
 
   @Demo(group: 'toast')
-  Widget _multipleToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '多行文字',
+  Widget _buildSuccessToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('成功'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showSuccess('操作成功', context: context);
+        },
+      ),
     );
   }
 
   @Demo(group: 'toast')
-  Widget _horizontalIconToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showIconText(
-          '带横向图标',
-          icon: TIcons.check_circle,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '带横向图标',
+  Widget _buildWarningToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('警告'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.danger,
+        onPressed: () {
+          TToast.showWarning('请注意风险', context: context);
+        },
+      ),
     );
   }
 
   @Demo(group: 'toast')
-  Widget _verticalIconToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showIconText(
-          '带竖向图标',
-          icon: TIcons.check_circle,
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '带竖向图标',
+  Widget _buildFailToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('失败'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.danger,
+        onPressed: () {
+          TToast.showFail('操作失败', context: context);
+        },
+      ),
     );
   }
 
   @Demo(group: 'toast')
-  Widget _loadingToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showLoading(context: context);
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '加载状态',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _loadingCustomToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showLoading(
-          context: context,
-          customWidget: Container(
-            width: 50,
-            height: 20,
-            child: const TText('自定义加载'),
-            color: TTheme.of(context).brandColor1,
-          ),
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '加载状态',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _loadingWithoutTextToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showLoadingWithoutText(context: context);
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '加载状态（无文案）',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _dismissLoadingToast(BuildContext context) {
-    return const TButton(
-      onTap: TToast.dismissLoading,
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '停止加载',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _successToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showSuccess('成功文案', context: context);
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '成功提示',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _successVerticalToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showSuccess(
-          '成功文案',
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '成功提示(竖向)',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _warningToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showWarning(
-          '警告文案',
-          direction: IconTextDirection.horizontal,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '警告提示',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _warningVerticalToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showWarning(
-          '警告文案',
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '警告提示(竖向)',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _failToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showFail(
-          '失败文案',
-          direction: IconTextDirection.horizontal,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '失败提示',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _failVerticalToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showFail(
-          '失败文案',
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '失败提示(竖向)',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _preventTapToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showText(
-          '轻提示文字内容',
-          context: context,
-          preventTap: true,
-          backgroundColor: Colors.black.withOpacity(0.7),
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '禁止滚动+点击',
-    );
-  }
-
-  @Demo(group: 'toast')
-  Widget _customMultipleToast(BuildContext context) {
-    return TButton(
-      onTap: () {
-        TToast.showText(
-          '最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字',
-          context: context,
-          constraints: BoxConstraints(maxWidth: 350.scale),
-          maxLines: 5,
-        );
-      },
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      text: '多行文字',
+  Widget _buildCustomDurationToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('自定义时长（5秒）'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '这条提示将显示 5 秒',
+            context: context,
+            duration: const Duration(seconds: 5),
+          );
+        },
+      ),
     );
   }
 }

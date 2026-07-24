@@ -34,7 +34,12 @@ class TPopupHandle {
   int _openEpoch = 0;
 
   /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
-  bool get isShowing => _route != null && !_isClosed;
+  ///
+  /// 额外校验 [Route.isActive]：当路由被外部移除（如 Navigator 被销毁或
+  /// 路由被直接 pop）时，[_route] 引用可能残留，此时应视为未展示，
+  /// 避免句柄常驻为“展示中”而阻断后续 open。
+  bool get isShowing =>
+      _route != null && !_isClosed && (_route?.isActive ?? false);
 
   /// 打开或重新打开浮层。
   ///

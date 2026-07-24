@@ -1,220 +1,141 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 
-import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
+import '../loading/t_circle_indicator.dart';
+import '../text/t_text.dart';
 import 't_cupertino_switch.dart';
+import 't_switch_resolve.dart';
+import 't_switch_theme_data.dart';
+import 't_switch_types.dart';
 
-/// 开关改变事件处理
-typedef OnSwitchChanged = bool Function(bool value);
+export 't_switch_types.dart';
 
-enum TSwitchSize { large, medium, small }
-
-enum TSwitchType { fill, text, loading, icon }
-
-class TSwitch extends StatefulWidget {
+/// 严格受控的开关组件。
+///
+/// [value] 由父级持有；[onChanged] 为 null 时禁用。文字、图标和加载形态
+/// 无法由 Material Switch 完整表达，因此底层保留 TDesign 自定义开关实现。
+class TSwitch extends StatelessWidget {
   const TSwitch({
-    Key? key,
-    this.enable = true,
-    this.isOn = false,
-    this.size = TSwitchSize.medium,
-    this.type = TSwitchType.fill,
-    this.trackOnColor,
-    this.trackOffColor,
-    this.thumbContentOnColor,
-    this.thumbContentOffColor,
-    this.thumbContentOnFont,
-    this.thumbContentOffFont,
+    super.key,
+
+    /// 受控开关状态。
+    required this.value,
+
+    /// 开关状态变更回调；为 null 时禁用。
     this.onChanged,
+
+    /// 开关尺寸；未传时读取 [TSwitchThemeData.defaultSize]。
+    this.size,
+
+    /// 开关内容形态；未传时读取 [TSwitchThemeData.defaultVariant]。
+    this.variant,
+
+    /// text 形态的开启文案。
     this.openText,
+
+    /// text 形态的关闭文案。
     this.closeText,
-  }) : super(key: key);
+  });
 
-  /// 是否可点击
-  final bool enable;
+  /// 受控开关状态。
+  final bool value;
 
-  /// 是否打开
-  final bool isOn;
+  /// 开关状态变更回调；为 null 时禁用。
+  final ValueChanged<bool>? onChanged;
 
-  /// 开启时轨道颜色
-  final Color? trackOnColor;
-
-  /// 关闭时轨道颜色
-  final Color? trackOffColor;
-
-  /// 开启时ThumbView的颜色
-  final Color? thumbContentOnColor;
-
-  /// 关闭时ThumbView的颜色
-  final Color? thumbContentOffColor;
-
-  /// 开启时ThumbView的字体样式
-  final TextStyle? thumbContentOnFont;
-
-  /// 关闭时ThumbView的字体样式
-  final TextStyle? thumbContentOffFont;
-
-  /// 尺寸：大、中、小
+  /// 开关尺寸。
   final TSwitchSize? size;
 
-  /// 类型：填充、文本、加载
-  final TSwitchType? type;
+  /// 开关内容形态。
+  final TSwitchVariant? variant;
 
-  /// 改变事件
-  final OnSwitchChanged? onChanged;
-
-  /// 打开文案
+  /// text 形态的开启文案。
   final String? openText;
 
-  /// 关闭文案
+  /// text 形态的关闭文案。
   final String? closeText;
 
   @override
-  State<StatefulWidget> createState() {
-    return TSwitchState();
-  }
-}
-
-class TSwitchState extends State<TSwitch> {
-  bool isOn = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isOn = widget.isOn;
-  }
-
-  @override
-  void didUpdateWidget(covariant TSwitch oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    isOn = widget.isOn;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
-    final switchEnable = widget.enable && widget.type != TSwitchType.loading;
-    final trackOnColor = widget.trackOnColor ?? theme.brandNormalColor;
-    final trackOffColor = widget.trackOffColor ?? theme.textDisabledColor;
-    final thumbContentOnColor =
-        widget.thumbContentOnColor ?? theme.brandNormalColor;
-    final thumbContentOffColor =
-        widget.thumbContentOffColor ?? theme.textDisabledColor;
-    final thumbContentOnFont =
-        widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
-    final thumbContentOffFont =
-        widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
+    final theme = Theme.of(context).extension<TSwitchThemeData>();
+    final resolvedSize = size ?? theme?.defaultSize ?? TSwitchSize.medium;
+    final resolvedVariant =
+        variant ?? theme?.defaultVariant ?? TSwitchVariant.filled;
+    final enabled =
+        onChanged != null && resolvedVariant != TSwitchVariant.loading;
+    final resolved = TSwitchResolve.resolve(context: context, theme: theme);
+
     Widget current = TCupertinoSwitch(
-      value: isOn,
-      activeColor: trackOnColor,
-      trackColor: trackOffColor,
-      onChanged: (value) {
-        var process = widget.onChanged?.call(value) ?? false;
-        // 如果外部未处理，才需要自定刷新开关，如果已处理则不需要刷新
-        if (!process) {
-          isOn = value;
-          setState(() {});
-        }
-      },
-      thumbView: _getThumbView(
-        thumbContentOnColor,
-        thumbContentOffColor,
-        thumbContentOnFont,
-        thumbContentOffFont,
+      value: value,
+      activeColor: resolved.trackOnColor,
+      trackColor: resolved.trackOffColor,
+      onChanged: enabled ? onChanged : null,
+      // TSwitch owns its disabled appearance below. Avoid multiplying it by
+      // TCupertinoSwitch's standalone disabled opacity.
+      disabledOpacity: 1,
+      thumbView: _buildThumb(
+        resolved: resolved,
+        variant: resolvedVariant,
+        openText: openText ?? theme?.openText,
+        closeText: closeText ?? theme?.closeText,
       ),
     );
-    if (!switchEnable) {
+
+    if (!enabled) {
       current = Opacity(
         opacity: 0.4,
-        child: IgnorePointer(
-          ignoring: !switchEnable,
-          child: current,
-        ),
+        child: IgnorePointer(ignoring: true, child: current),
       );
     }
-    return SizedBox(
-      width: _getWidth(),
-      height: _getHeight(),
-      child: FittedBox(
-        child: current,
+
+    return Semantics(
+      enabled: enabled,
+      toggled: value,
+      child: SizedBox(
+        width: TSwitchResolve.width(resolvedSize),
+        height: TSwitchResolve.height(resolvedSize),
+        child: FittedBox(child: current),
       ),
     );
-    // return ConstrainedBox( _getWidth(), height: _getHeight(), child: current);
   }
 
-  double _getWidth() {
-    switch (widget.size) {
-      case TSwitchSize.large:
-        return 52;
-      case TSwitchSize.medium:
-        return 45;
-      case TSwitchSize.small:
-        return 39;
-      default:
-        return 45;
-    }
-  }
-
-  double _getHeight() {
-    switch (widget.size) {
-      case TSwitchSize.large:
-        return 32;
-      case TSwitchSize.medium:
-        return 28;
-      case TSwitchSize.small:
-        return 24;
-      default:
-        return 28;
-    }
-  }
-
-  Widget? _getThumbView(
-    Color thumbContentOnColor,
-    Color thumbContentOffColor,
-    TextStyle thumbContentOnFont,
-    TextStyle thumbContentOffFont,
-  ) {
-    switch (widget.type) {
-      case TSwitchType.text:
-        return Stack(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              width: 16,
-              child: TText(
-                isOn
-                    ? (widget.openText ?? context.resource.open)
-                    : (widget.closeText ?? context.resource.close),
-                textColor: isOn ? thumbContentOnColor : thumbContentOffColor,
-                forceVerticalCenter: true,
-                maxLines: 1,
-                style: isOn ? thumbContentOnFont : thumbContentOffFont,
-              ),
-            )
-          ],
-        );
-      case TSwitchType.loading:
-        return Container(
-          alignment: Alignment.centerLeft,
-          child: TCircleIndicator(
-            color: thumbContentOnColor,
-            size: 16,
-            lineWidth: 3,
+  Widget? _buildThumb({
+    required TSwitchResolvedStyle resolved,
+    required TSwitchVariant variant,
+    required String? openText,
+    required String? closeText,
+  }) {
+    return switch (variant) {
+      TSwitchVariant.text => SizedBox(
+          width: 16,
+          child: Center(
+            child: TText(
+              value ? (openText ?? '开') : (closeText ?? '关'),
+              textColor: value
+                  ? resolved.thumbContentOnColor
+                  : resolved.thumbContentOffColor,
+              forceVerticalCenter: true,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: value
+                  ? resolved.thumbContentOnFont
+                  : resolved.thumbContentOffFont,
+            ),
           ),
-        );
-      case TSwitchType.icon:
-        return Container(
-          alignment: Alignment.centerLeft,
-          child: Icon(
-            isOn ? TIcons.check : TIcons.close,
-            size: 16,
-            color: isOn ? thumbContentOnColor : thumbContentOffColor,
-          ),
-        );
-      case TSwitchType.fill:
-      default:
-        return null;
-    }
+        ),
+      TSwitchVariant.loading => TCircleIndicator(
+          color: resolved.thumbContentOnColor,
+          size: 16,
+          lineWidth: 3,
+        ),
+      TSwitchVariant.icon => Icon(
+          value ? TIcons.check : TIcons.close,
+          size: 16,
+          color: value
+              ? resolved.thumbContentOnColor
+              : resolved.thumbContentOffColor,
+        ),
+      TSwitchVariant.filled => null,
+    };
   }
 }

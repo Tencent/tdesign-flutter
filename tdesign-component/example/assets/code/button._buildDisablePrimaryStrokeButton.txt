@@ -1,11 +1,10 @@
 
   TButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      text: '描边按钮',
+      child: Text('描边按钮'),
       size: TButtonSize.large,
-      type: TButtonType.outline,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }

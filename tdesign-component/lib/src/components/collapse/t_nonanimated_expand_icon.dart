@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
+
 class TNonAnimatedExpandIcon extends StatelessWidget {
   const TNonAnimatedExpandIcon({
     required this.isExpanded,
@@ -10,21 +13,12 @@ class TNonAnimatedExpandIcon extends StatelessWidget {
   final bool isExpanded;
   final EdgeInsets padding;
 
-  Color getIconColor(BuildContext context) {
-    switch (Theme.of(context).brightness) {
-      case Brightness.light:
-        return Colors.black54;
-      case Brightness.dark:
-        return Colors.white60;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return IconButton(
       padding: padding,
       iconSize: 24.0,
-      color: getIconColor(context),
+      color: context.tTheme.textColorSecondary,
       onPressed: null,
       icon: isExpanded
           ? const Icon(Icons.expand_less)

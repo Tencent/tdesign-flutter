@@ -2,27 +2,21 @@
 ### TDateTimePicker
 #### 简介
 日期/时间滚轮选择器。
-与 ``TCalendar``、``TPicker`` 为三个独立对外组件；本组件底层复用 ``TPicker``
-滚轮能力（经内部 ``DateTimePickerWheel``），与 ``TCalendar`` 无代码耦合。
-纯滚轮组件：不含工具栏、确认按钮或弹窗；选中变化通过 `onChange` 实时回调
-（无 `TPicker.onConfirm` 语义）。弹窗与确认请配合 `TPopup` 等自行组装。
-`initialValue` 为非受控初始值；外部重置选中请变更 `initialValue` 或 `key`。
-与 `TPicker` 不同，本组件不提供受控 `value` 参数。
+纯滚轮组件，不包含工具栏、确认按钮或弹窗。
+`value` 与 `onChanged` 构成严格受控状态；`onChanged` 为 null 时禁用。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | end | TDateTimePickerValue? | - | 可选范围上限 - **类型**：`TDateTimePickerValue`，仅传当前 mode 涉及的字段即可 - **语义**：超出范围的候选项会被裁剪；变更会触发列重建 |
-| height | double? | - | 滚轮视窗高度（像素），默认 200 |
-| initialValue | TDateTimePickerValue? | - | 初始选中值（非受控） - **默认**：未传时使用当前系统时间 - **语义**：非受控 —— 运行期变更会重建滚轮并同步到新初始值（与 `TPicker.initialValue` 的 initState-only 不同） - **重置**：配合 `Key` 强制重建，或直接变更本参数 - **partial**：仅传当前 mode 涉及的字段，缺字段由内部 fallback 补齐 |
-| itemCount | int? | - | 每屏显示 item 数（奇数更利于中央高亮），默认 5 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mode | DateTimePickerMode? | - | 滚轮列结构（必填） - **类型**：`DateTimePickerMode`，通过 `DateMode`、`TimeMode` 组合列 - **默认**：未传时等价于 `DateTimePickerMode(dateMode: DateMode.date)`（年月日） - **变更语义**：列结构变化会重建滚轮并清空上次通知值 |
-| onChange | void Function(TDateTimePickerValue result)? | - | 选中值变化回调（滚动时实时触发，不代表用户已确认选择） - **触发时机**：滚轮选中变化且结果与上次通知值不同时 - **返回值**：`TDateTimePickerValue`；不含的列字段为 null - **典型用法**：维护 draft 状态；弹窗场景配合 `TPopup` 确认后再提交 |
+| onChanged | void Function(TDateTimePickerValue result)? | - | 选中值变化回调（滚动时实时触发，不代表用户已确认选择） - **触发时机**：滚轮选中变化且结果与上次通知值不同时 - **返回值**：`TDateTimePickerValue`；不含的列字段为 null - **典型用法**：维护业务侧受控状态 |
 | renderLabel | DateTimePickerRenderLabel? | - | 自定义列展示文案 - **回调参数**：`column` 为 `DateTimeColumn`，`value` 为列数值 - **回退**：返回 null 时使用内置默认文案（含国际化单位后缀） |
 | showWeek | bool | false | 日列是否在 label 后附加星期，默认 false - **生效范围**：仅 `DateTimeColumn.day` 列 - **变更语义**：变更会触发列重建 |
 | start | TDateTimePickerValue? | - | 可选范围下限 - **类型**：`TDateTimePickerValue`，仅传当前 mode 涉及的字段即可 - **语义**：超出范围的候选项会被裁剪；变更会触发列重建 |
 | steps | DateTimePickerSteps? | - | 各列选项步进 - **类型**：`DateTimePickerSteps`；未配置的列步进为 1 - **变更语义**：变更会触发列重建，保留当前选中时刻（在合法范围内 clamp） |
+| value | TDateTimePickerValue | - | 受控选中值。 |
 
 
 ### DateTimePickerMode
@@ -35,14 +29,14 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| dateMode | DateMode? | - | - |
-| timeMode | TimeMode? | - | - |
+| dateMode | DateMode? | - | 日期段粒度；为 null 时不展示日期列。 |
+| timeMode | TimeMode? | - | 时间段粒度；为 null 时不展示时间列。 |
 
 
 ### TDateTimePickerValue
 #### 简介
-`TDateTimePicker.onChange` 返回值；`null` 字段表示当前 mode 不含该列。
-初始化 `TDateTimePicker.initialValue`、`start`、`end` 时仅传相关字段即可；
+`TDateTimePicker.onChanged` 返回值；`null` 字段表示当前 mode 不含该列。
+初始化 `TDateTimePicker.value`、`start`、`end` 时仅传相关字段即可；
 提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 #### 默认构造方法
 

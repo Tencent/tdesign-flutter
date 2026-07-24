@@ -108,30 +108,32 @@ class _TBadgePageState extends State<TBadgePage> {
           builder: _buildMoreThanMaxCountBadge,
         )
       ],
-      floatingActionButton: TFab(
-          theme: TFabTheme.primary,
-          onClick: () {
-            setState(() {
-              num = num + 1;
-            });
-          }),
+      // 注意：TFab 内部返回 Positioned widget，不能传给 Scaffold.floatingActionButton
+      // （会导致布局异常和白色遮罩）。改用原生 FloatingActionButton。
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            num = num + 1;
+          });
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
   @Demo(group: 'badge')
   Widget _buildRedPointMessageBadge(BuildContext context) {
     return SizedBox(
-      width: 40,
-      height: 24,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           TText(
             '消息',
-            font: TTheme.of(context).fontBodyLarge,
+            font: context.tTheme.fontBodyLarge,
           ),
           const Positioned(
-            child: TBadge(TBadgeType.redPoint),
+            child: TBadge(variant: TBadgeVariant.dot),
             right: 0,
             top: 0,
           )
@@ -143,14 +145,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildRedPointIconBadge(BuildContext context) {
     return const SizedBox(
-      width: 27,
-      height: 27,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           Icon(TIcons.notification),
           Positioned(
-            child: TBadge(TBadgeType.redPoint),
+            child: TBadge(variant: TBadgeVariant.dot),
             right: 0,
             top: 0,
           )
@@ -162,20 +163,19 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildRedPointButtonBadge(BuildContext context) {
     return const SizedBox(
-      width: 83,
-      height: 48,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
-          TButton(
-            width: 80,
-            height: 48,
-            text: '按钮',
-            size: TButtonSize.large,
-            type: TButtonType.fill,
+          SizedBox(
+            child: TButton(
+              child: Text('按钮'),
+              size: TButtonSize.large,
+              variant: TButtonVariant.fill,
+            ),
           ),
           Positioned(
-            child: TBadge(TBadgeType.redPoint),
+            child: TBadge(variant: TBadgeVariant.dot),
             right: 0,
             top: 0,
           )
@@ -187,14 +187,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildMessageNumberBadge(BuildContext context) {
     return SizedBox(
-      width: 56,
-      height: 36,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
-          TText('消息', font: TTheme.of(context).fontBodyLarge),
+          TText('消息', font: context.tTheme.fontBodyLarge),
           Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
+            child: TBadge(count: num),
             left: 28,
             bottom: 18,
           )
@@ -206,14 +205,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildIconNumberBadge(BuildContext context) {
     return SizedBox(
-      width: 46,
-      height: 36,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           const Icon(TIcons.notification),
           Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
+            child: TBadge(count: num),
             left: 18,
             bottom: 18,
           )
@@ -225,19 +223,18 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildButtonNumberBadge(BuildContext context) {
     return SizedBox(
-      width: 86,
-      height: 54,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
-          const TButton(
-            width: 80,
-            height: 48,
-            text: '按钮',
-            size: TButtonSize.large,
+          const SizedBox(
+            child: TButton(
+              child: Text('按钮'),
+              size: TButtonSize.large,
+            ),
           ),
           Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
+            child: TBadge(count: num),
             right: 0,
             top: 0,
           )
@@ -249,22 +246,19 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCustomBadgeShowingNumber(BuildContext context) {
     return SizedBox(
-      width: 64,
-      height: 56,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           Container(
             child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
+                color: context.tTheme.bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
           ),
           Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
+            child: TBadge(count: num),
             right: 0,
             top: 0,
           )
@@ -276,22 +270,19 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
     return SizedBox(
-      width: 64,
-      height: 56,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           Container(
             child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
+                color: context.tTheme.bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
           ),
           const Positioned(
-            child: TBadge(TBadgeType.message, count: '0'),
+            child: TBadge(count: 0),
             right: 0,
             top: 0,
           )
@@ -303,23 +294,20 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
     return SizedBox(
-      width: 64,
-      height: 56,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           Container(
             child: const Icon(TIcons.notification),
             decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
+                color: context.tTheme.bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
           ),
           const Positioned(
             // 不显示 0
-            child: TBadge(TBadgeType.message, count: '0', showZero: false),
+            child: TBadge(count: 0),
             right: 0,
             top: 0,
           )
@@ -331,14 +319,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
     return SizedBox(
-      width: 48,
-      height: 34,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           const Icon(TIcons.notification),
           Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
+            child: TBadge(count: num),
             left: 18,
             bottom: 18,
           )
@@ -350,18 +337,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
     return SizedBox(
-      width: 48,
-      height: 34,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           const Icon(TIcons.notification),
           Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              border: TBadgeBorder.small,
-              count: num.toString(),
-            ),
+            child: TBadge(count: num, border: true),
             left: 20,
             bottom: 18,
           )
@@ -373,22 +355,19 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildBubbleBadge(BuildContext context) {
     return SizedBox(
-      width: 67,
-      height: 56,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
           Container(
             child: const Icon(TIcons.shop),
             decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
+                color: context.tTheme.bgColorComponent,
                 borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
           ),
           const Positioned(
-            child: TBadge(TBadgeType.bubble, count: '领积分'),
+            child: TBadge(count: 1, variant: TBadgeVariant.small),
             right: 0,
             top: 0,
           )
@@ -400,10 +379,11 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildSubscriptBadge(BuildContext context) {
     return const Stack(
+      clipBehavior: Clip.none,
       alignment: Alignment.topRight,
       children: [
-        TCell(title: '单行标题'),
-        TBadge(TBadgeType.subscript, message: 'NEW'),
+        TCell(title: Text('单行标题')),
+        TBadge(variant: TBadgeVariant.dot),
       ],
     );
   }
@@ -411,15 +391,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
     return SizedBox(
-      width: 80,
-      height: 68,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
-          const TAvatar(size: TAvatarSize.large, type: TAvatarType.icon),
+          const TAvatar(size: TAvatarSize.large),
           Positioned(
-            child: TBadge(TBadgeType.message,
-                size: TBadgeSize.large, count: num.toString()),
+            child: TBadge(count: num),
             left: 48,
             bottom: 48,
           )
@@ -431,14 +409,13 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildMediumBadge(BuildContext context) {
     return SizedBox(
-      width: 72,
-      height: 54,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.bottomLeft,
         children: [
-          const TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
+          const TAvatar(size: TAvatarSize.medium),
           Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
+            child: TBadge(count: num),
             left: 36,
             bottom: 36,
           )
@@ -450,9 +427,8 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildLessThanMaxCountBadge(BuildContext context) {
     return const SizedBox(
-      width: 60,
-      height: 50,
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Positioned(
             left: 0,
@@ -460,13 +436,7 @@ class _TBadgePageState extends State<TBadgePage> {
             child: Icon(TIcons.notification),
           ),
           Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              count: '8888',
-              maxCount: '9000',
-              size: TBadgeSize.large,
-              border: TBadgeBorder.large,
-            ),
+            child: TBadge(count: 8888, maxCount: 9000),
             left: 18,
             bottom: 18,
           ),
@@ -478,19 +448,12 @@ class _TBadgePageState extends State<TBadgePage> {
   @Demo(group: 'badge')
   Widget _buildMoreThanMaxCountBadge(BuildContext context) {
     return const SizedBox(
-      width: 60,
-      height: 50,
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Positioned(left: 0, bottom: 0, child: Icon(TIcons.notification)),
           Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              count: '888',
-              maxCount: '99',
-              size: TBadgeSize.large,
-              border: TBadgeBorder.large,
-            ),
+            child: TBadge(count: 888, maxCount: 99),
             left: 18,
             bottom: 18,
           ),

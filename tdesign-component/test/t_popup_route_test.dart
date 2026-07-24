@@ -16,8 +16,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TTheme(
-            data: TThemeData.defaultData(),
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
             child: Scaffold(
               body: Builder(
                 builder: (context) {
@@ -86,8 +86,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TTheme(
-            data: TThemeData.defaultData(),
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
             child: Scaffold(
               body: Builder(
                 builder: (context) {
@@ -457,10 +457,10 @@ void main() {
           onPressed: () {
             TPopup.show(
               tester.element(find.text('open')),
-              options: TPopupOptions(
+              options: const TPopupOptions(
                 placement: TPopupPlacement.top,
                 height: 90,
-                child: const SizedBox(height: 50),
+                child: SizedBox(height: 50),
               ),
             );
           },

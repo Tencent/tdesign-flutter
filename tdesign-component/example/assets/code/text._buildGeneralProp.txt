@@ -1,9 +1,0 @@
-
-  Widget _buildGeneralProp(BuildContext context) {
-    return TText(
-      exampleTxt,
-      font: TTheme.of(context).fontHeadlineLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      backgroundColor: TTheme.of(context).brandFocusColor,
-    );
-  }

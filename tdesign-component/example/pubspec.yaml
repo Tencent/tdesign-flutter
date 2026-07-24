@@ -33,7 +33,6 @@ dependencies:
   web: any
 
   #轮播图组件
-  flutter_swiper_null_safety: ^1.0.2
   intl: any
   
   # 农历支持
@@ -124,7 +123,7 @@ flutter:
 
 # 生成演示代码
 AOPRegistry:
-  enable: true
+  enable: false
   compileTarget: frontend_server, dart2js
   versions:
     negativeInfinity~3.0.0:

@@ -80,7 +80,7 @@ class PopupLayout {
     }
   }
 
-  /// 按 [placement] 从 [MediaQuery.padding] 提取需避让的安全区内边距。
+  /// 按 [placement] 从 MediaQuery.padding 提取需避让的安全区内边距。
   static EdgeInsets safePaddingFor(
     TPopupPlacement placement,
     EdgeInsets mediaPadding,

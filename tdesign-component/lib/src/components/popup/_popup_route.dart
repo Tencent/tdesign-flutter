@@ -44,10 +44,11 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Duration get transitionDuration => options.animationDuration;
+  Duration get transitionDuration =>
+      options.animationDuration ?? const Duration(milliseconds: 240);
 
   @override
-  Duration get reverseTransitionDuration => options.animationDuration;
+  Duration get reverseTransitionDuration => transitionDuration;
 
   @override
   bool get barrierDismissible => false;
@@ -81,7 +82,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         barrierSemanticsDismissible: true,
       );
     }
-    return ModalBarrier(
+    return const ModalBarrier(
       color: Colors.transparent,
       dismissible: false,
       barrierSemanticsDismissible: false,

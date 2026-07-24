@@ -1,4 +1,0 @@
-
-  Widget _buildCircle(BuildContext context) {
-    return TProgress(type: TProgressType.circular, value: value);
-  }

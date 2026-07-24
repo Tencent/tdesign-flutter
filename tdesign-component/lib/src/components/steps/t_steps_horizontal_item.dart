@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
+
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
+import 't_steps.dart';
 
 /// Steps步骤条，水平步骤item
 class TStepsHorizontalItem extends StatelessWidget {
+  /// 步骤条数据
   final TStepsItemData data;
+
+  /// 当前步骤索引
   final int index;
+
+  /// 步骤总数
   final int stepsCount;
+
+  /// 当前激活的步骤索引
   final int activeIndex;
+
+  /// 步骤条状态
   final TStepsStatus status;
+
+  /// 是否为简略模式
   final bool simple;
+
+  /// 是否为只读模式（纯展示）
   final bool readOnly;
 
   const TStepsHorizontalItem({
@@ -24,7 +43,7 @@ class TStepsHorizontalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
 
     /// 步骤条数字背景色
     var stepsNumberBgColor = theme.brandNormalColor;
@@ -72,7 +91,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       style: TextStyle(
         color: stepsNumberTextColor,
         fontWeight: FontWeight.w400,
-        fontSize: 14,
+        fontSize: theme.fontBodyMedium?.size ?? 14,
       ),
     );
 
@@ -217,8 +236,10 @@ class TStepsHorizontalItem extends StatelessWidget {
               ? FontWeight.w600
               : FontWeight.w400,
           color: stepsTitleColor,
-          fontSize: 14,
+          fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
         ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
@@ -233,9 +254,11 @@ class TStepsHorizontalItem extends StatelessWidget {
             data.content ?? '',
             style: TextStyle(
               fontWeight: FontWeight.w400,
-              color: TTheme.of(context).textColorPlaceholder,
-              fontSize: 12,
+              color: context.tTheme.textColorPlaceholder,
+              fontSize: context.tTheme.fontBodySmall?.size ?? 12,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
     );
   }

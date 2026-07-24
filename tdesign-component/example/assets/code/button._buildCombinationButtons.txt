@@ -3,25 +3,24 @@
     return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          // spacing: 16,
           children: [
             Expanded(
               child: TButton(
-                text: '填充按钮',
+                child: Text('填充按钮'),
                 size: TButtonSize.large,
-                type: TButtonType.fill,
-                shape: TButtonShape.rectangle,
-                theme: TButtonTheme.light,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.light,
+                onPressed: null,
               ),
             ),
             SizedBox(width: 16),
             Expanded(
               child: TButton(
-                text: '填充按钮',
+                child: Text('填充按钮'),
                 size: TButtonSize.large,
-                type: TButtonType.fill,
-                shape: TButtonShape.rectangle,
-                theme: TButtonTheme.primary,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: null,
               ),
             ),
           ],

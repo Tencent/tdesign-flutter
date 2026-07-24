@@ -4,57 +4,41 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| color | Color? | - | link 文本的颜色，如果不设置则根据状态和风格进行计算 |
-| fontSize | double? | - | link 文本的字体大小，如果不设置则根据状态和风格进行计算 |
-| iconSize | double? | - | link icon 大小，如果不设置则根据状态和风格进行计算 |
+| child | Widget? | - | 链接内容，一般是 `Text` |
+| colorScheme | TLinkColorScheme? | - | 语义颜色方案 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String | - | link 展示的文本 |
-| leftGapWithIcon | double? | - | 前置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算 |
-| linkClick | LinkClick? | - | link 被点击之后所采取的动作，会将uri当做参数传入到该方法当中 |
-| prefixIcon | Icon? | - | 前置 icon |
-| rightGapWithIcon | double? | - | 后置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算 |
-| size | TLinkSize | TLinkSize.medium | link 大小 |
-| state | TLinkState | TLinkState.normal | link 状态 |
-| style | TLinkStyle | TLinkStyle.defaultStyle | link 风格 |
-| suffixIcon | Icon? | - | 后置 icon |
-| type | TLinkType | TLinkType.basic | link 类型 |
-| uri | Uri? | - | link 跳转的uri |
+| onPressed | VoidCallback? | - | 点击回调。为 null 时链接为禁用态 |
+| prefixIcon | Widget? | - | 前置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
+| semanticLabel | String? | - | 语义标签（无障碍） |
+| size | TLinkSize | TLinkSize.medium | 尺寸 |
+| suffixIcon | Widget? | - | 后置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
+| tooltip | String? | - | 悬浮提示 |
+| uri | Uri? | - | 跳转 URI |
+| variant | TLinkVariant | TLinkVariant.basic | 链接形态 |
 
 
-### TLinkType
+### TLinkVariant
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| basic | - |
-| withUnderline | - |
-| withPrefixIcon | - |
-| withSuffixIcon | - |
+| basic | 纯文本链接 |
+| underline | 下划线链接 |
+| icon | 带图标链接（通过 prefixIcon / suffixIcon 区分前后） |
 
 
-### TLinkStyle
+### TLinkColorScheme
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| primary | - |
-| defaultStyle | - |
-| danger | - |
-| warning | - |
-| success | - |
-
-
-### TLinkState
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| normal | - |
-| active | - |
-| disabled | - |
+| primary | 品牌主色链接 |
+| defaultTheme | 默认文本色链接 |
+| danger | 危险操作链接 |
+| warning | 警告提示链接 |
+| success | 成功状态链接 |
 
 
 ### TLinkSize
@@ -63,14 +47,6 @@
 
 | 名称 | 说明 |
 | --- | --- |
-| small | - |
-| medium | - |
-| large | - |
-
-
-### LinkClick
-#### 类型定义
-
-```dart
-typedef LinkClick =  Function(Uri? uri);
-```
+| small | 小尺寸链接 |
+| medium | 中尺寸链接 |
+| large | 大尺寸链接 |
