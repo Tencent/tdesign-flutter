@@ -1,7 +1,5 @@
 ## API
 ### TSlider
-#### 简介
-基于 Material `Slider` 的严格受控单值滑块。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -17,8 +15,6 @@
 
 
 ### TRangeSlider
-#### 简介
-基于 Material `RangeSlider` 的严格受控范围滑块。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

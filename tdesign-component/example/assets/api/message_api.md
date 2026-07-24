@@ -1,7 +1,5 @@
 ## API
 ### TMessage
-#### 简介
-顶部消息组件
 
 #### 静态方法
 
@@ -13,7 +11,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | 用于查找 Overlay 的上下文。 |
+| context | BuildContext | - | - |
 | content | String | '' | 通知内容 |
 | duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 表示不自动关闭 |
 | showIcon | bool | true | 是否显示前置图标 |
@@ -49,31 +47,3 @@
 | showIcon | bool | true | 是否显示前置图标 |
 | variant | TMessageVariant | TMessageVariant.info | 消息语义色 |
 | visible | bool | true | 是否显示 |
-
-
-### TMessageHandle
-#### 简介
-命令式消息句柄
-
-### TMessageLink
-#### 简介
-消息中的链接配置
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| color | Color? | - | 链接颜色 |
-| name | String | - | 链接文案 |
-| uri | Uri? | - | 链接地址 |
-
-
-### TMessageMarquee
-#### 简介
-跑马灯配置
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| delay | Duration | Duration.zero | 开始滚动前的延迟 |
-| duration | Duration | const Duration(seconds: 10) | 单次滚动时长 |
-| repeat | bool | false | 是否循环滚动 |

@@ -1,7 +1,5 @@
 ## API
 ### TImage
-#### 简介
-统一展示网络、asset 或本地文件图片。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -25,27 +23,7 @@
 | width | double? | - | 图片宽度。 |
 
 
-### TImageThemeData
-#### 简介
-图片组件的视觉和解码默认值。
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| cacheHeight | int? | - | 解码缓存高度。 |
-| cacheWidth | int? | - | 解码缓存宽度。 |
-| centerSlice | Rect? | - | 九宫格中心切片。 |
-| color | Color? | - | 图片叠加色。 |
-| colorBlendMode | BlendMode? | - | 颜色混合模式。 |
-| excludeFromSemantics | bool? | - | 是否从语义树排除图片。 |
-| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 |
-| isAntiAlias | bool? | - | 是否启用抗锯齿。 |
-| matchTextDirection | bool? | - | 是否匹配文字方向。 |
-
-
 ### TImageVariant
-#### 简介
-图片裁剪形态。
 #### 枚举值
 
 

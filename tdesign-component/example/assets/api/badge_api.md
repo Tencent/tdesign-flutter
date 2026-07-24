@@ -1,7 +1,5 @@
 ## API
 ### TBadge
-#### 简介
-在内容右上角展示数字或圆点状态。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -16,20 +14,7 @@
 | variant | TBadgeVariant | TBadgeVariant.normal | 徽标形态。 |
 
 
-### TBadgeThemeData
-#### 简介
-Material `BadgeThemeData` 未覆盖的 TDesign 徽标视觉默认值。
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| borderColor | Color? | - | 开启边框时使用的颜色。 |
-| borderWidth | double? | - | 开启边框时使用的宽度。 |
-
-
 ### TBadgeVariant
-#### 简介
-徽标形态。
 #### 枚举值
 
 

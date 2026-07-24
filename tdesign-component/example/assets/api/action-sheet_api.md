@@ -93,26 +93,3 @@
 | onCancel | VoidCallback? | - | 点击取消时回调。 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 |
 | onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
-
-
-### TActionSheetAlign
-#### 简介
-动作面板内容对齐方式
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| center | 居中对齐 |
-| left | 左对齐 |
-| right | 右对齐 |
-
-
-### TActionSheetOnChanged
-#### 简介
-选择动作面板项目时触发
-#### 类型定义
-
-```dart
-typedef TActionSheetOnChanged = void Function(TActionSheetItem item, int index);
-```

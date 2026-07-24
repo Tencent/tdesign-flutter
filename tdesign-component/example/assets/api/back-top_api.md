@@ -4,7 +4,6 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| colorScheme | TBackTopColorScheme? | - | 配色方案（light / dark）；未传时取 Theme `colorScheme` |
 | controller | ScrollController? | - | 页面滚动的控制器 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onPressed | VoidCallback? | - | 点击回调；`null` 表示禁用（A 类） |

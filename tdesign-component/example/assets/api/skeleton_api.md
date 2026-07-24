@@ -18,10 +18,10 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animation | TSkeletonAnimation? | - | 动画效果 |
-| delay | int | 0 | 延迟显示加载时间 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| variant | TSkeletonVariant | TSkeletonVariant.text | 预设骨架图形态；自定义行列模式下为空。 |
+| animation | TSkeletonAnimation? | - | 设置动画效果。 |
+| delay | int | 0 | 设置延迟显示的毫秒数。 |
+| key | Key? | - | 用于区分或保留组件状态。 |
+| variant | TSkeletonVariant | TSkeletonVariant.text | 设置预设骨架图形态。 |
 
 #### 公开属性
 
@@ -31,8 +31,6 @@
 
 
 ### TSkeletonRowColStyle
-#### 简介
-骨架屏行布局样式。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -41,8 +39,6 @@
 
 
 ### TSkeletonRowCol
-#### 简介
-骨架屏行列布局。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -52,8 +48,6 @@
 
 
 ### TSkeletonRowColObjStyle
-#### 简介
-单个骨架块的视觉样式。
 
 #### 工厂构造方法
 
@@ -94,8 +88,6 @@
 
 
 ### TSkeletonRowColObj
-#### 简介
-骨架屏元素。
 
 #### 工厂构造方法
 
@@ -161,23 +153,18 @@
 | width | double? | - | 宽度。 |
 
 
-### TSkeletonThemeData
-#### 简介
-骨架屏组件级 ThemeExtension。
-仅保存占位块的视觉默认值。布局、动画类型和延迟均由实例决定。
-#### 默认构造方法
+### TSkeletonBlockShape
+#### 枚举值
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| blockColor | Color? | - | 占位块背景色。 |
-| borderRadius | double? | - | 普通占位块圆角。 |
-| highlightColor | Color? | - | 渐变动画高亮色。 |
-| rowSpacing | double? | - | 多行布局的默认行间距。 |
+
+| 名称 | 说明 |
+| --- | --- |
+| rounded | 读取 Theme 默认圆角。 |
+| circle | 圆形。 |
+| square | 无圆角矩形。 |
 
 
 ### TSkeletonAnimation
-#### 简介
-骨架图动画
 #### 枚举值
 
 
@@ -188,8 +175,6 @@
 
 
 ### TSkeletonVariant
-#### 简介
-骨架图风格
 #### 枚举值
 
 
@@ -199,16 +184,3 @@
 | image | 图片 |
 | text | 文本 |
 | paragraph | 段落 |
-
-
-### TSkeletonBlockShape
-#### 简介
-骨架块形状。
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| rounded | 读取 Theme 默认圆角。 |
-| circle | 圆形。 |
-| square | 无圆角矩形。 |

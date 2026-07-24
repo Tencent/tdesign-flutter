@@ -101,6 +101,6 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | child | Widget | - | 子树内容，配置会作用于该子树内的 TText。 |
-| globalFontFamily | FontFamily? | - | 全局字体族，设置后子树中所有 TText 将默认使用此字体 始终作为子树配置参与样式 resolve。 |
+| globalFontFamily | FontFamily? | - | 全局字体族，设置后子树中所有 TText 将默认使用此字体。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| paddingConfig | TTextPaddingConfig? | - | forceVerticalCenter=true 时，内置 padding 配置 |
+| paddingConfig | TTextPaddingConfig? | - | forceVerticalCenter=true 时，内置 padding 配置。 |

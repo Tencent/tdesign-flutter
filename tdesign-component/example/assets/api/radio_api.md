@@ -29,7 +29,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | cardMode | bool | false | 是否使用卡片模式。 |
-| columns | int | 1 | 每行列数。 |
+| columns | int | 1 | 每行列数，必须大于 0。 |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 |
 | direction | Axis | Axis.vertical | 排列方向。 |
 | itemBuilder | TRadioOptionBuilder<T>? | - | 自定义数据项视觉；交互仍由组接管。 |
@@ -39,19 +39,6 @@
 | showDivider | bool | false | 是否显示项间分割线。 |
 | size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
 | value | T? | - | 受控选中值。 |
-
-
-### TRadioOption
-#### 简介
-单选框组的数据项。
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| disabled | bool | false | 是否禁用该项。 |
-| label | String | - | 主文案。 |
-| subTitle | String? | - | 副文案。 |
-| value | T | - | 选项值。 |
 
 
 ### TRadioSize

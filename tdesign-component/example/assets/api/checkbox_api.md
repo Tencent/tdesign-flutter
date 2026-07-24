@@ -1,7 +1,5 @@
 ## API
 ### TCheckbox
-#### 简介
-严格受控的复选框；`onChanged` 为 null 时禁用。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -21,14 +19,12 @@
 
 
 ### TCheckboxGroup
-#### 简介
-数据驱动且严格受控的复选框组。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | cardMode | bool | false | 是否使用卡片模式。 |
-| columns | int | 1 | 每行列数。 |
+| columns | int | 1 | 每行列数，必须大于 0。 |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 |
 | direction | Axis | Axis.vertical | 排列方向。 |
 | itemBuilder | TCheckboxOptionBuilder<T>? | - | 自定义数据项视觉；交互仍由组接管。 |
@@ -42,22 +38,7 @@
 | value | List<T> | - | 受控选中项列表。 |
 
 
-### TCheckboxOption
-#### 简介
-复选框组的数据项。
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| disabled | bool | false | 是否禁用该项。 |
-| label | String | - | 主文案。 |
-| subTitle | String? | - | 副文案。 |
-| value | T | - | 选项值。 |
-
-
 ### TContentDirection
-#### 简介
-选择控件相对于文案的排列方向。
 #### 枚举值
 
 
@@ -68,8 +49,6 @@
 
 
 ### TCheckboxSize
-#### 简介
-复选框指示器尺寸。
 #### 枚举值
 
 
@@ -80,22 +59,7 @@
 | large | 大尺寸。 |
 
 
-### TCheckboxVariant
-#### 简介
-复选框指示器的视觉变体。
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| circle | 圆形指示器。 |
-| square | 方形指示器。 |
-| check | 仅显示勾选或半选图标。 |
-
-
 ### TCheckboxIconBuilder
-#### 简介
-自定义复选框指示器构建器。
 #### 类型定义
 
 ```dart
@@ -104,8 +68,6 @@ typedef TCheckboxIconBuilder = Widget Function(BuildContext context, bool? value
 
 
 ### TCheckboxOptionBuilder
-#### 简介
-自定义复选框组数据项构建器。
 #### 类型定义
 
 ```dart

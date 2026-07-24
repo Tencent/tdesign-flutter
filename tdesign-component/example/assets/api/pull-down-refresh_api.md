@@ -19,7 +19,7 @@ TDesign刷新头部
 | hitOver | bool? | - | 滚动自身到达边界时是否判定越界。 |
 | horizontalFrictionFactor | FrictionFactor? | - | 横向越界滚动摩擦系数。 |
 | horizontalReadySpringBuilder | SpringBuilder? | - | 横向 ready 状态的弹簧构建器。 |
-| horizontalSpring | SpringDescription? | - | 横向回弹弹簧配置。 |
+| horizontalSpring | physics.SpringDescription? | - | 横向回弹弹簧配置。 |
 | infiniteHitOver | bool? | - | 无限刷新是否允许越界命中。 |
 | infiniteOffset | double? | - | 无限刷新触发偏移量。 |
 | key | Key? | - | Key |
@@ -36,7 +36,7 @@ TDesign刷新头部
 | secondaryDimension | double? | - | 二楼尺寸。 |
 | secondaryTriggerOffset | double? | - | 二楼触发偏移量。 |
 | secondaryVelocity | double | kDefaultSecondaryVelocity | 二楼打开速度。 |
-| spring | SpringDescription? | - | 回弹弹簧配置。 |
+| spring | physics.SpringDescription? | - | 回弹弹簧配置。 |
 | springRebound | bool | true | 弹簧是否允许回弹。 |
 | triggerDistance | double? | - | 触发刷新任务的偏移量。 |
 | triggerWhenReach | bool | false | 到达触发距离时是否立即触发。 |

@@ -12,19 +12,7 @@
 | width | double? | - | 自定义图片宽 |
 
 
-### TFooterThemeData
-#### 简介
-页脚组件级 ThemeExtension
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| height | double? | - | 默认高度 |
-
-
 ### TFooterVariant
-#### 简介
-页脚形态
 #### 枚举值
 
 

@@ -13,8 +13,6 @@
 
 
 ### TLoadingSize
-#### 简介
-Loading 尺寸
 #### 枚举值
 
 
@@ -26,8 +24,6 @@ Loading 尺寸
 
 
 ### TLoadingIcon
-#### 简介
-Loading图标
 #### 枚举值
 
 

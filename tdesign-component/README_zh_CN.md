@@ -138,7 +138,7 @@ MaterialApp(
 
 1. **生成**：进入 [TDesign 主题生成器](https://tdesign.tencent.com/vue/custom-theme)，点击下方的主题生成器，在右边生成器里选择想要的颜色，点击下载。
 
-2. **转换**：此时你得到一个 `theme.css` 文件，将该文件放到 `tdesign-component/example/shell/theme/` 文件夹下，修改该文件夹下的 `css2json_theme.dart` 为你自己的文件名、主题名和输出路径，即可得到一个 `theme.json` 文件。
+2. **转换**：此时你得到一个 `theme.css` 文件，将该文件放到 `tdesign-component/example/shell/theme/` 文件夹下，修改该文件夹下的 `css2JsonTheme.dart` 为你自己的文件名、主题名和输出路径，即可得到一个 `theme.json` 文件。
 
 ![img.png](https://tdesign.tencent.com/flutter/assets/dart_modify.png)
 
@@ -266,7 +266,7 @@ TDesign 还提供其他平台和框架的组件库：
 
 创建 [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues) 或扫描二维码加入用户群：
 
-<img src="https://tdesign.tencent.com/flutter/assets/qrcode/feedback.png" width="200" />
+<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/site-components/src/images/groups/flutter-group.png" width="200" />
 
 ## 🙏 致谢
 

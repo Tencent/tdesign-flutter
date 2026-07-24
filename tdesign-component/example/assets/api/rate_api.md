@@ -1,7 +1,5 @@
 ## API
 ### TRate
-#### 简介
-严格受控的评分组件。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -17,27 +15,7 @@
 | value | double | - | 受控评分值。 |
 
 
-### TRateThemeData
-#### 简介
-TRate 组件级 ThemeExtension。
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| iconGap | double? | - | 图标间距。 |
-| iconSize | double? | - | 图标尺寸。 |
-| inactiveStarColor | Color? | - | 未选中星标颜色。 |
-| showText | bool? | - | 是否显示评分文案。 |
-| starColor | Color? | - | 选中星标颜色。 |
-| textGap | double? | - | 图标与文案间距。 |
-| textStyle | TextStyle? | - | 文案样式。 |
-| textWidth | double? | - | 文案宽度。 |
-
-
 ### TRateIconBuilder
-#### 简介
-自定义评分图标构建器。
-`filled` 表示构建选中或未选中图标；半星由组件裁剪选中图标实现。
 #### 类型定义
 
 ```dart

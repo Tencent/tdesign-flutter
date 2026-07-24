@@ -82,6 +82,16 @@
 | auto | 根据内容高度动态展示方向 |
 
 
+### TDropdownItemContentBuilder
+#### 简介
+下拉菜单自定义内容构建器
+#### 类型定义
+
+```dart
+typedef TDropdownItemContentBuilder = Widget Function(BuildContext context);
+```
+
+
 ### TDropdownItemBuilder
 #### 简介
 下拉菜单构建器
@@ -99,14 +109,4 @@ typedef TDropdownItemBuilder = List<TDropdownItem<T>> Function(BuildContext cont
 
 ```dart
 typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
-```
-
-
-### TDropdownItemContentBuilder
-#### 简介
-下拉菜单自定义内容构建器
-#### 类型定义
-
-```dart
-typedef TDropdownItemContentBuilder = Widget Function(BuildContext context);
 ```

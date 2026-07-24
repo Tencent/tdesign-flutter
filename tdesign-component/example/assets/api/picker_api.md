@@ -60,18 +60,6 @@
 | options | List<TPickerOption> | - | 根选项。 |
 
 
-### TPickerThemeData
-#### 简介
-TPicker 组件级 ThemeExtension
-被 TPicker 和 TDateTimePicker 共用。
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| height | double? | - | 滚轮视窗高度（像素） |
-| itemCount | int? | - | 每屏显示项数 |
-
-
 ### TPickerItemBuilder
 #### 简介
 选择器子项构建器。

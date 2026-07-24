@@ -1,9 +1,5 @@
 ## API
 ### TInput
-#### 简介
-基于 Material `TextField` 的 v1 文本输入框。
-`controller` 是主控制路径；未传时由组件创建内部 controller，并使用
-`initialValue` 初始化一次。两者不能同时传入。
 
 #### 工厂构造方法
 
@@ -24,9 +20,9 @@
 | label | String? | - | 标签文案。 |
 | hintText | String? | - | 占位提示文案。 |
 | prefix | Widget? | - | 前缀组件。 |
-| suffix | Widget? | - | 后缀组件。 |
-| maxLines | int? | - | 最大行数。 |
-| minLines | int? | - | 最小行数。 |
+| suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
+| maxLines | int? | - | 最大行数；null 表示不限制。 |
+| minLines | int? | - | 最小行数；未传时读取 Theme 默认值。 |
 | maxLength | int? | - | 最大字符数。 |
 | autofocus | bool | false | 是否自动聚焦。 |
 | focusNode | FocusNode? | - | 焦点节点。 |
@@ -61,5 +57,5 @@
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |
 | prefix | Widget? | - | 前缀组件。 |
 | readOnly | bool | false | 是否只读。 |
-| suffix | Widget? | - | 后缀组件。 |
+| suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
