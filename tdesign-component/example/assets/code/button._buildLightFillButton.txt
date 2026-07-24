@@ -1,0 +1,10 @@
+
+  TButton _buildLightFillButton(BuildContext context) {
+    return const TButton(
+      child: Text('填充按钮'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: null,
+    );
+  }
