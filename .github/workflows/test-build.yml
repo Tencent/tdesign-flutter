@@ -54,6 +54,19 @@ jobs:
           aop-registry: true
           aop-project-path: ./tdesign-component/example
 
+      - name: Diagnose iOS toolchain
+        if: matrix.platform == 'ios'
+        run: |
+          sw_vers
+          xcode-select -p
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-path
+          pod --version
+          flutter --version
+          git -C "$FLUTTER_ROOT" rev-parse HEAD
+          git -C "$FLUTTER_ROOT" diff --stat
+          git -C "$FLUTTER_ROOT" status --short
+
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
@@ -65,6 +78,18 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
+      - name: Diagnose iOS linker settings
+        if: matrix.platform == 'ios'
+        working-directory: ./tdesign-component/example
+        run: |
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release -sdk iphoneos -showBuildSettings | \
+            grep -E 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES|LIBRARY_SEARCH_PATHS|OTHER_LDFLAGS|SWIFT_VERSION'
+
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
+        run: |
+          if [ "${{ matrix.platform }}" = "ios" ]; then
+            ${{ matrix.build }} --verbose
+          else
+            ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
+          fi
