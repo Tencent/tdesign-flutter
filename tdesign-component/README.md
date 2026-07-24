@@ -138,7 +138,7 @@ If you don't want to customize too many colors but still want a beautiful custom
 
 1. **Generate**: Visit [TDesign Theme Generator](https://tdesign.tencent.com/vue/custom-theme), click the theme generator below, select your desired colors in the generator on the right, and click download.
 
-2. **Convert**: You will get a `theme.css` file. Place it in `tdesign-component/example/shell/theme/`, modify `css2JsonTheme.dart` with your file name, theme name, and output path to generate a `theme.json` file.
+2. **Convert**: You will get a `theme.css` file. Place it in `tdesign-component/example/shell/theme/`, modify `css2_json_theme.dart` with your file name, theme name, and output path to generate a `theme.json` file.
 
 ![img.png](https://tdesign.tencent.com/flutter/assets/dart_modify.png)
 
