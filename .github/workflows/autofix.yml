@@ -39,10 +39,6 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter pub get
 
-      - name: clean up code txt file
-        working-directory: ./tdesign-component/example/assets/code
-        run: rm -f *.txt
-
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build apk -t ./lib/main.dart --release
