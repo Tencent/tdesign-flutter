@@ -1,0 +1,10 @@
+
+  TButton _buildMediumButton(BuildContext context) {
+    return const TButton(
+      child: Text('按钮40'),
+      size: TButtonSize.medium,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
+    );
+  }

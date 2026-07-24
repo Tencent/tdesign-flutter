@@ -1,0 +1,16 @@
+
+  Widget _buildCustomTheme(BuildContext context) {
+    /// 开启多主题
+    TTheme.needMultiTheme(true);
+
+    /// 此处替换主题
+    return TTheme(
+        // 替换fonts和colors，其他主题从父类拷贝
+        data: TTheme.of(context).copyWithTThemeData('custom', fontMap: {
+          'fontBodyLarge': Font(size: 40, lineHeight: 80),
+        }, colorMap: {
+          'brandNormalColor': Colors.red
+        }),
+        // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此读不到最新数据
+        child: const TestWidget());
+  }

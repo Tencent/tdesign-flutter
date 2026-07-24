@@ -1,0 +1,10 @@
+
+  TButton _buildCircleButton(BuildContext context) {
+    return const TButton(
+      icon: Icon(TIcons.app),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
+    );
+  }

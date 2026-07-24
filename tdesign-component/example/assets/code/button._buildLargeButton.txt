@@ -1,0 +1,10 @@
+
+  TButton _buildLargeButton(BuildContext context) {
+    return const TButton(
+      child: Text('按钮48'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
+    );
+  }

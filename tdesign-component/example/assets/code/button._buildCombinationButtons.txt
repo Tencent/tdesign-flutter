@@ -1,0 +1,28 @@
+
+  Widget _buildCombinationButtons(BuildContext context) {
+    return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: TButton(
+                child: Text('填充按钮'),
+                size: TButtonSize.large,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.light,
+                onPressed: null,
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: TButton(
+                child: Text('填充按钮'),
+                size: TButtonSize.large,
+                variant: TButtonVariant.fill,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: null,
+              ),
+            ),
+          ],
+        ));
+  }
