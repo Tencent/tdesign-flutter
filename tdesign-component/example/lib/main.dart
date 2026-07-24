@@ -34,7 +34,8 @@ Future<void> main() async {
       examplePageList.add(model);
     });
   });
-  sideBarExamplePage.forEach(examplePageList.add);
+  // TEMPORARY MIGRATION COMPATIBILITY:
+  // Sidebar demo 暂未纳入本基础组件 PR，后续 Sidebar 迁移后恢复注册。
 }
 
 class MyApp extends StatefulWidget {

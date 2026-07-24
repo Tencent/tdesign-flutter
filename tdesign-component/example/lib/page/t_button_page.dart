@@ -277,7 +277,9 @@ class _TButtonPageState extends State<TButtonPage> {
   }
 
   void _onTap() {
-    TToast.showText('点击了按钮', context: context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('点击了按钮')),
+    );
   }
 
   /// 为子树注入 [TButtonThemeData.shape]（v1.0 外形走 Theme）
@@ -610,13 +612,15 @@ class _TButtonPageState extends State<TButtonPage> {
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
       child: const Text('加载中'),
-      icon: Theme(
-        // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
-        data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(iconColor: context.tTheme.whiteColor1)),
-        child: const TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.circle,
+      icon: SizedBox(
+        // TEMPORARY MIGRATION COMPATIBILITY:
+        // Loading 暂未纳入本基础组件 PR，先用 Flutter 原生 loading 图标支撑 Button demo 编译。
+        // 后续 Loading 组件迁移后恢复为 TLoading。
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(context.tTheme.whiteColor1),
         ),
       ),
       size: TButtonSize.large,

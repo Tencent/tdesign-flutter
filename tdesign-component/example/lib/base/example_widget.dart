@@ -321,60 +321,77 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''', builder: (_) => const TDivider());
 
   Widget _buildNavBar() {
-    var leftBarItems = <TNavBarItem>[];
-    var rightBarItems = <TNavBarItem>[];
-
     // web端示例页不展示标题栏
     if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
       return Container();
     }
+
+    final actions = <Widget>[];
     if (showAction) {
       // Web 端和移动端都显示 API 按钮
-      rightBarItems.add(TNavBarItem(
-          icon: TIcons.info_circle,
-          action: () {
-            Navigator.pushNamed(context, TExampleRoute.getApiPath(model));
-          }));
+      actions.add(IconButton(
+        icon: const Icon(TIcons.info_circle),
+        onPressed: () {
+          Navigator.pushNamed(context, TExampleRoute.getApiPath(model));
+        },
+      ));
       if (!PlatformUtil.isWeb) {
-        rightBarItems.add(TNavBarItem(
-            icon: TIcons.code,
-            action: () {
-              setState(() {
-                apiVisible = !apiVisible;
-                if (model != null) {
-                  model!.apiVisible = apiVisible;
-                }
-              });
-              TNotification.postNotification(
-                  'onApiVisibleChange', {'apiVisible': apiVisible});
-            }));
+        actions.add(IconButton(
+          icon: const Icon(TIcons.code),
+          onPressed: () {
+            setState(() {
+              apiVisible = !apiVisible;
+              if (model != null) {
+                model!.apiVisible = apiVisible;
+              }
+            });
+            TNotification.postNotification(
+                'onApiVisibleChange', {'apiVisible': apiVisible});
+          },
+        ));
       }
     }
-    if (!PlatformUtil.isWeb) {
-      var themeModeProvider = Provider.of<ThemeModeProvider>(context);
-      // 获取系统主题
-      // Brightness systemBrightness = MediaQuery.platformBrightnessOf(context);
 
-      leftBarItems.add(
-        TNavBarItem(
-          icon: themeModeProvider.themeMode == ThemeMode.light
-              ? TIcons.mode_light
-              : TIcons.mode_dark,
-          action: () {
-            themeModeProvider.themeMode =
-                themeModeProvider.themeMode == ThemeMode.light
-                    ? ThemeMode.dark
-                    : ThemeMode.light;
-          },
-        ),
+    Widget? leading;
+    if (!PlatformUtil.isWeb) {
+      final themeModeProvider = Provider.of<ThemeModeProvider>(context);
+      leading = IconButton(
+        icon: Icon(themeModeProvider.themeMode == ThemeMode.light
+            ? TIcons.mode_light
+            : TIcons.mode_dark),
+        onPressed: () {
+          themeModeProvider.themeMode =
+              themeModeProvider.themeMode == ThemeMode.light
+                  ? ThemeMode.dark
+                  : ThemeMode.light;
+        },
       );
     }
 
-    return TNavBar(
+    return Material(
       key: widget.navBarKey,
-      title: widget.title,
-      leading: leftBarItems,
-      actions: rightBarItems,
+      color: context.tTheme.bgColorContainer,
+      elevation: 1,
+      // TEMPORARY MIGRATION COMPATIBILITY:
+      // NavBar 暂未纳入本基础组件 PR，先用 Flutter 原生栏承载基础组件 demo。
+      // 后续 NavBar 组件迁移后恢复为 TNavBar。
+      child: SizedBox(
+        height: 56,
+        child: NavigationToolbar(
+          leading: leading,
+          middle: Text(
+            widget.title,
+            style: TextStyle(
+              color: context.tTheme.textColorPrimary,
+              fontSize: context.tTheme.fontTitleLarge?.size,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          trailing: actions.isEmpty
+              ? null
+              : Row(mainAxisSize: MainAxisSize.min, children: actions),
+        ),
+      ),
     );
   }
 

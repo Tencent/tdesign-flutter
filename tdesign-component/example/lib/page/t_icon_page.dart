@@ -25,6 +25,28 @@ class _TIconPageState extends State<TIconPage> {
     iconList = TIcons.allIconsMap.entries.toList();
   }
 
+  void _searchIcons(String text) {
+    setState(() {
+      iconList = [];
+      isLoading = true;
+    });
+    Future.delayed(const Duration(milliseconds: 30), () {
+      final list = <MapEntry<String, IconData>>[];
+      TIcons.allIconsMap.forEach((key, value) {
+        if (key.contains(text)) {
+          list.add(MapEntry(key, value));
+        }
+      });
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        iconList = list;
+        isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -198,45 +220,27 @@ class _TIconPageState extends State<TIconPage> {
               ],
             ),
           ),
-          TSearchBar(
-            hintText: '搜索',
-            onSubmitted: (text) {
-              setState(() {
-                iconList = [];
-                isLoading = true;
-              });
-              Future.delayed(const Duration(milliseconds: 30), () {
-                var list = <MapEntry<String, IconData>>[];
-                TIcons.allIconsMap.forEach((key, value) {
-                  if (key.contains(text)) {
-                    list.add(MapEntry(key, value));
-                  }
-                });
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  iconList = list;
-                  isLoading = false;
-                });
-              });
-            },
-            onClearPressed: () {
-              setState(() {
-                iconList = TIcons.allIconsMap.entries.toList();
-              });
-            },
-          ),
-          TCell(
-            title: const Text('显示边框'),
-            note: TSwitch(
-              value: showBorder,
-              onChanged: (value) {
-                setState(() {
-                  showBorder = value;
-                });
-              },
+          Padding(
+            // TEMPORARY MIGRATION COMPATIBILITY:
+            // SearchBar / Cell / Switch 暂未纳入本基础组件 PR，先使用 Flutter 原生控件承载 Icon demo。
+            // 后续对应组件迁移后恢复为 TDesign demo 控件。
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              decoration: const InputDecoration(
+                hintText: '搜索',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onSubmitted: _searchIcons,
             ),
+          ),
+          SwitchListTile(
+            title: const Text('显示边框'),
+            value: showBorder,
+            onChanged: (value) {
+              setState(() {
+                showBorder = value;
+              });
+            },
           ),
           Builder(builder: (context) {
             if (iconList.isEmpty) {

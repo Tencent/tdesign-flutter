@@ -13,7 +13,9 @@ class TLinkViewPage extends StatefulWidget {
 
 class _TLinkViewPageState extends State<TLinkViewPage> {
   void _onLinkPressed() {
-    TToast.showText('点击了链接', context: context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('点击了链接')),
+    );
   }
 
   @override

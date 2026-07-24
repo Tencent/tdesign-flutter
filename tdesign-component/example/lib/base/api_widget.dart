@@ -63,16 +63,17 @@ class _ApiWidgetState extends State<ApiWidget> {
             ),
           );
         } else {
-          return Center(
-            child: Theme(
-              // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
-              data: Theme.of(context)
-                  .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-              child: const TLoading(
-                size: TLoadingSize.large,
-                icon: TLoadingIcon.circle,
-                text: '加载中…',
-              ),
+          return const Center(
+            // TEMPORARY MIGRATION COMPATIBILITY:
+            // Loading 暂未纳入本基础组件 PR，先使用 Flutter 原生 loading 占位。
+            // 后续 Loading 组件迁移后恢复为 TLoading。
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 8),
+                Text('加载中…'),
+              ],
             ),
           );
         }

@@ -43,7 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     TExampleRoute.init();
-    sideBarExamplePage.forEach(TExampleRoute.add);
+    // TEMPORARY MIGRATION COMPATIBILITY:
+    // Sidebar demo 暂未纳入本基础组件 PR，后续 Sidebar 迁移后恢复注册。
   }
 
   @override
@@ -139,14 +140,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            TSearchBar(
-              placeHolder: '请输入组件名称',
-              focusNode: focusNode,
-              onTextChanged: (value) {
-                setState(() {
-                  searchText = value;
-                });
-              },
+            Padding(
+              // TEMPORARY MIGRATION COMPATIBILITY:
+              // SearchBar 暂未纳入本基础组件 PR，先用 Flutter 原生输入框承载首页筛选。
+              // 后续 SearchBar 组件迁移后恢复为 TSearchBar。
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: TextField(
+                focusNode: focusNode,
+                decoration: const InputDecoration(
+                  hintText: '请输入组件名称',
+                  prefixIcon: Icon(Icons.search),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    searchText = value;
+                  });
+                },
+              ),
             ),
             Expanded(
               child: SingleChildScrollView(

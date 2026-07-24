@@ -13,7 +13,9 @@ class TFabPage extends StatefulWidget {
 
 class _TFabPageState extends State<TFabPage> {
   void _onFabPressed() {
-    TToast.showText('点击了悬浮按钮', context: context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('点击了悬浮按钮')),
+    );
   }
 
   @override
