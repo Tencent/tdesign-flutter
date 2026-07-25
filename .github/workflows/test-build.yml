@@ -36,7 +36,7 @@ jobs:
             os: ubuntu-latest
             build: flutter build apk -t ./lib/main.dart --release
           - platform: ios
-            os: macos-latest
+            os: macos-14
             build: flutter build ios -t ./lib/main.dart --no-codesign --release
           - platform: web
             os: ubuntu-latest
