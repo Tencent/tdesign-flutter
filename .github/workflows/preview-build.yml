@@ -78,12 +78,12 @@ jobs:
       - name: Build Flutter apk
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter clean
+          flutter clean > /dev/null 2>&1
 
           cd ${{ github.workspace }}/tdesign-component/example/android/app
           STORE_PASSWORD="tdesign123456"
           KEY_PASSWORD="tdesign123456"
-          keytool -genkeypair \
+          keytool -genkeypair 2>/dev/null \
             -alias tdesign_flutter_debug_key \
             -keypass "$KEY_PASSWORD" \
             -keystore keystore.jks \
@@ -127,7 +127,7 @@ jobs:
       - name: Generate web documentation from demo code
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter test test/widget_test.dart --reporter expanded || true
+          flutter test test/widget_test.dart --reporter compact || true
 
       - name: Build site
         working-directory: ./tdesign-site
