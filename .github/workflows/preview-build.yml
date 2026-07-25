@@ -7,7 +7,7 @@ on:
 
 jobs:
   tdesign-flutter-site:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     # Skip workflow if commit message contains [skip ci] or [ci skip]
     if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
     permissions:
@@ -48,17 +48,12 @@ jobs:
         env:
           SKIP_JDK_VERSION_CHECK: true
 
-      - name: Select Xcode 16 for iOS build
-        run: sudo xcode-select -s /Applications/Xcode_16.3.app
-
       - name: Set up Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: 3.32.0
           channel: stable
           cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
 
       - name: Extract version
         id: version
