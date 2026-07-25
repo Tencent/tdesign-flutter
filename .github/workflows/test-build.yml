@@ -46,6 +46,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Select Xcode 16 (iOS only)
+        if: matrix.platform == 'ios'
+        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+
       - name: Setup Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
@@ -57,15 +61,10 @@ jobs:
       - name: Diagnose iOS toolchain
         if: matrix.platform == 'ios'
         run: |
-          sw_vers
           xcode-select -p
           xcodebuild -version
-          xcrun --sdk iphoneos --show-sdk-path
           pod --version
           flutter --version
-          git -C "$FLUTTER_ROOT" rev-parse HEAD
-          git -C "$FLUTTER_ROOT" diff --stat
-          git -C "$FLUTTER_ROOT" status --short
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
@@ -80,16 +79,7 @@ jobs:
 
       - name: Diagnose iOS linker settings
         if: matrix.platform == 'ios'
-        working-directory: ./tdesign-component/example
-        run: |
-          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release -sdk iphoneos -showBuildSettings | \
-            grep -E 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES|LIBRARY_SEARCH_PATHS|OTHER_LDFLAGS|SWIFT_VERSION'
-
+        run: echo "Xcode ${{ matrix.platform }} ready"
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: |
-          if [ "${{ matrix.platform }}" = "ios" ]; then
-            ${{ matrix.build }} --verbose
-          else
-            ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
-          fi
+        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
