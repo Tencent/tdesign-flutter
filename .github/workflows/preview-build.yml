@@ -95,7 +95,7 @@ jobs:
           echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
           echo "storeFile=keystore.jks" >> key.properties
 
-          flutter build apk --release \
+          flutter build apk --release > /tmp/apk_build.log 2>&1 \
             --dart-define=isCI=true \
             --dart-define=VersionCode=${{ github.run_number }} \
             --dart-define=devopsUUID=${{ github.run_id }} \
@@ -122,18 +122,18 @@ jobs:
       - name: Generate web documentation from demo code
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter test test/widget_test.dart --reporter compact || true
+          flutter test test/widget_test.dart --reporter compact > /dev/null 2>&1 || true
 
       - name: Build site
         working-directory: ./tdesign-site
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --loglevel=error
           npm run site
 
       - name: Build site Demo
         working-directory: ./tdesign-component/example
         run: |
-          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
+          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps > /tmp/web_build.log 2>&1
           cd $GITHUB_WORKSPACE
           mkdir -p tdesign-flutter-web/flutter/example/
           cp -r tdesign-site/_site/* tdesign-flutter-web/
