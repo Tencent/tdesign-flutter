@@ -8,6 +8,10 @@ const titleText = '标题文字';
 class TNavBarPage extends StatelessWidget {
   const TNavBarPage({Key? key}) : super(key: key);
 
+  void _showAction(BuildContext context, String label) {
+    TToast.showText('点击了$label', context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -57,10 +61,18 @@ class TNavBarPage extends StatelessWidget {
         titleFontWeight: FontWeight.w600,
         useDefaultBack: true,
         leading: [
-          TNavBarItem(icon: TIcons.close, iconSize: 24),
+          TNavBarItem(
+            icon: TIcons.close,
+            iconSize: 24,
+            onTap: () => _showAction(context, '关闭'),
+          ),
         ],
         actions: [
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
         ],
       ),
     );
@@ -75,8 +87,16 @@ class TNavBarPage extends StatelessWidget {
         titleFontWeight: FontWeight.w600,
         useDefaultBack: true,
         actions: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
         ],
       ),
     );
@@ -105,8 +125,16 @@ class TNavBarPage extends StatelessWidget {
         ),
       ),
       actions: [
-        TNavBarItem(icon: TIcons.home, iconSize: 24),
-        TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
       ],
     );
   }
@@ -125,8 +153,16 @@ class TNavBarPage extends StatelessWidget {
         fit: BoxFit.contain,
       ),
       actions: [
-        TNavBarItem(icon: TIcons.home, iconSize: 24),
-        TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
       ],
     );
   }
@@ -138,8 +174,16 @@ class TNavBarPage extends StatelessWidget {
       titleFontWeight: FontWeight.w600,
       useDefaultBack: true,
       actions: [
-        TNavBarItem(icon: TIcons.home, iconSize: 24),
-        TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
       ],
     );
   }
@@ -155,8 +199,16 @@ class TNavBarPage extends StatelessWidget {
         titleMargin: 0,
         useDefaultBack: true,
         actions: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
         ],
       ),
     );
@@ -169,8 +221,16 @@ class TNavBarPage extends StatelessWidget {
       titleFontWeight: FontWeight.w600,
       useDefaultBack: true,
       actions: [
-        TNavBarItem(icon: TIcons.home, iconSize: 24),
-        TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
       ],
     );
   }
@@ -196,11 +256,23 @@ class TNavBarPage extends StatelessWidget {
         titleMargin: 8,
         useDefaultBack: false,
         leading: [
-          TNavBarItem(icon: TIcons.chevron_left, iconSize: 24),
+          TNavBarItem(
+            icon: TIcons.chevron_left,
+            iconSize: 24,
+            onTap: () => _showAction(context, '返回'),
+          ),
         ],
         actions: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
         ],
       ),
     );
@@ -219,6 +291,7 @@ class TNavBarPage extends StatelessWidget {
           icon: TIcons.chevron_left,
           iconSize: 24,
           iconColor: Colors.white,
+          onTap: () => _showAction(context, '返回'),
         ),
       ],
       actions: [
@@ -226,11 +299,13 @@ class TNavBarPage extends StatelessWidget {
           icon: TIcons.home,
           iconSize: 24,
           iconColor: Colors.white,
+          onTap: () => _showAction(context, '首页'),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
           iconColor: Colors.white,
+          onTap: () => _showAction(context, '更多'),
         ),
       ],
     );

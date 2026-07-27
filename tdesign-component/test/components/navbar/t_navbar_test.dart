@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// TNavBar V1.0 Widget 测试
 ///
 /// 覆盖标题渲染、titleWidget 优先级、leading/actions、useDefaultBack、
-/// onBack 回调、A 类禁用（action: null）、Theme 各字段覆盖、preferredSize。
+/// onBack 回调、A 类禁用（onTap: null）、Theme 各字段覆盖、preferredSize。
 void main() {
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TNavBarThemeData? navBarTheme}) {
@@ -77,7 +77,7 @@ void main() {
           title: '测试',
           useDefaultBack: false,
           actions: [
-            TNavBarItem(icon: TIcons.ellipsis, action: () {}),
+            TNavBarItem(icon: TIcons.ellipsis, onTap: () {}),
           ],
         ),
       ));
@@ -90,7 +90,7 @@ void main() {
           title: '测试',
           useDefaultBack: false,
           leading: [
-            TNavBarItem(icon: TIcons.chevron_left, action: () {}),
+            TNavBarItem(icon: TIcons.chevron_left, onTap: () {}),
           ],
         ),
       ));
@@ -99,7 +99,7 @@ void main() {
   });
 
   group('TNavBar A 类禁用', () {
-    testWidgets('action: null 时操作项不响应点击', (tester) async {
+    testWidgets('onTap: null 时操作项不响应点击', (tester) async {
       var tapCount = 0;
       await tester.pumpWidget(wrapWithTheme(
         TNavBar(
@@ -108,7 +108,7 @@ void main() {
           actions: [
             TNavBarItem(
               icon: TIcons.ellipsis,
-              action: () => tapCount++,
+              onTap: () => tapCount++,
             ),
           ],
         ),
@@ -117,13 +117,13 @@ void main() {
       await tester.pump();
       expect(tapCount, 1);
 
-      // action: null 表示禁用
+      // onTap: null 表示禁用
       await tester.pumpWidget(wrapWithTheme(
         TNavBar(
           title: '测试',
           useDefaultBack: false,
           actions: [
-            TNavBarItem(icon: TIcons.ellipsis, action: null),
+            TNavBarItem(icon: TIcons.ellipsis, onTap: null),
           ],
         ),
       ));
@@ -199,8 +199,8 @@ void main() {
           title: '边框测试',
           useDefaultBack: false,
           actions: [
-            TNavBarItem(icon: TIcons.ellipsis, action: () {}),
-            TNavBarItem(icon: TIcons.setting, action: () {}),
+            TNavBarItem(icon: TIcons.ellipsis, onTap: () {}),
+            TNavBarItem(icon: TIcons.setting, onTap: () {}),
           ],
           useBorderStyle: true,
         ),

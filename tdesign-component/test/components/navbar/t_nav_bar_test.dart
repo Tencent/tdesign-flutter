@@ -252,26 +252,26 @@ void main() {
       expect(item.icon, TIcons.home);
     });
 
-    test('action: null 禁用', () {
-      final item = TNavBarItem(icon: TIcons.home, action: null);
-      expect(item.action, null);
+    test('onTap: null 禁用', () {
+      final item = TNavBarItem(icon: TIcons.home, onTap: null);
+      expect(item.onTap, null);
     });
 
-    testWidgets('item 点击触发 action', (tester) async {
+    testWidgets('item 点击触发 onTap', (tester) async {
       var called = false;
       await tester.pumpWidget(wrapWithTheme(TNavBar(
         title: '标题',
         useDefaultBack: false,
         actions: [
           TNavBarItem(
-              icon: TIcons.home, iconSize: 24, action: () => called = true),
+              icon: TIcons.home, iconSize: 24, onTap: () => called = true),
         ],
       )));
       await tester.tap(find.byIcon(TIcons.home));
       expect(called, true);
     });
 
-    testWidgets('action: null 的操作项在完整主题下使用禁用色', (tester) async {
+    testWidgets('onTap: null 的操作项在完整主题下使用禁用色', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrapWithTheme(TNavBar(
         title: '标题',

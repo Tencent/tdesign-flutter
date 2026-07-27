@@ -120,8 +120,16 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
         ),
       ),
       actions: [
-        TNavBarItem(icon: TIcons.home, iconSize: 24),
-        TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => TToast.showText('点击了首页', context: context),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => TToast.showText('点击了更多', context: context),
+        ),
       ]);
 }
 

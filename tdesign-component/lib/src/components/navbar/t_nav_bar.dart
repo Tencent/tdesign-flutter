@@ -14,7 +14,7 @@ typedef TBarItemAction = void Function();
 /// NavBar 组件 v1.0
 ///
 /// Material AppBar 薄包装（NavigationToolbar 实现）。
-/// - A 类禁用：操作项 `action: null`。
+/// - A 类禁用：操作项 `onTap: null`。
 /// - L4 样式（标题颜色/字体、背景、内边距等）→ [TNavBarThemeData]。
 class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   const TNavBar({
@@ -213,7 +213,7 @@ class _TNavBarState extends State<TNavBar> {
       icon: TIcons.chevron_left,
       iconSize: 28.0,
       iconColor: iconColor,
-      action: () {
+      onTap: () {
         widget.onBack?.call();
         Navigator.maybePop(context);
       },
@@ -335,8 +335,8 @@ class TNavBarItem {
   /// 图标颜色
   final Color? iconColor;
 
-  /// 操作回调；`null` 表示禁用
-  final TBarItemAction? action;
+  /// 点击回调；`null` 表示禁用
+  final TBarItemAction? onTap;
 
   /// 图标尺寸
   final double? iconSize;
@@ -350,17 +350,17 @@ class TNavBarItem {
   TNavBarItem({
     this.icon,
     this.iconColor,
-    this.action,
+    this.onTap,
     this.iconSize = 24.0,
     this.padding,
     this.customWidget,
   });
 
   Widget toWidget(BuildContext context, {bool isLeading = true}) {
-    final isDisabled = action == null;
+    final isDisabled = onTap == null;
     final item = GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: action,
+      onTap: onTap,
       child: Padding(
         padding: padding ??
             (isLeading

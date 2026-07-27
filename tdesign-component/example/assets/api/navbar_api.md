@@ -34,7 +34,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action | TBarItemAction? | - | 操作回调；`null` 表示禁用 |
+| onTap | TBarItemAction? | - | 点击回调；`null` 表示禁用 |
 | customWidget | Widget? | - | 自定义组件，优先级高于 icon，可以是任意 Widget |
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |

@@ -332,13 +332,13 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       // Web 端和移动端都显示 API 按钮
       rightBarItems.add(TNavBarItem(
           icon: TIcons.info_circle,
-          action: () {
+          onTap: () {
             Navigator.pushNamed(context, TExampleRoute.getApiPath(model));
           }));
       if (!PlatformUtil.isWeb) {
         rightBarItems.add(TNavBarItem(
             icon: TIcons.code,
-            action: () {
+            onTap: () {
               setState(() {
                 apiVisible = !apiVisible;
                 if (model != null) {
@@ -360,7 +360,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           icon: themeModeProvider.themeMode == ThemeMode.light
               ? TIcons.mode_light
               : TIcons.mode_dark,
-          action: () {
+          onTap: () {
             themeModeProvider.themeMode =
                 themeModeProvider.themeMode == ThemeMode.light
                     ? ThemeMode.dark
