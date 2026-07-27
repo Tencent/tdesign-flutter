@@ -6,6 +6,7 @@ import '../../theme/t_theme.dart';
 import '../cell/t_cell.dart';
 import '../cell/t_cell_group.dart';
 import '../cell/t_cell_theme_data.dart';
+import '../text/t_text.dart';
 import 't_drawer.dart';
 import 't_drawer_theme_data.dart';
 
@@ -92,7 +93,7 @@ class TDrawerWidget extends StatelessWidget {
                 title: item.content ??
                     (item.title == null
                         ? null
-                        : Text(
+                        : TText(
                             item.title!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

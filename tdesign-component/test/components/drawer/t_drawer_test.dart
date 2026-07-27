@@ -158,6 +158,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('菜单1'), findsOneWidget);
       expect(find.text('菜单2'), findsOneWidget);
+      expect(find.byType(TText), findsNWidgets(2));
     });
 
     testWidgets('默认 item title 长文案保持单行省略', (tester) async {
@@ -310,6 +311,35 @@ void main() {
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       expect(find.text('菜单1'), findsOneWidget);
+    });
+
+    testWidgets('默认避让系统安全区', (tester) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(padding: EdgeInsets.only(top: 24)),
+          child: MaterialApp(
+            theme: fullTheme(),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => TButton(
+                  child: const Text('打开'),
+                  onPressed: () {
+                    TDrawer(
+                      context,
+                      child: const SizedBox.expand(),
+                    ).show();
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+
+      expect(tester.getTopLeft(find.byType(TDrawerWidget)).dy, 24);
     });
 
     testWidgets('show 返回 handle 并可关闭抽屉', (tester) async {
