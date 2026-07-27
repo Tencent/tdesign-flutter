@@ -107,12 +107,7 @@ class TDrawer {
           child: child,
           title: title,
           onItemClick: onItemClick,
-          width: width ?? theme.width ?? 280,
-          style: theme.style,
-          hover: theme.hover ?? true,
-          backgroundColor: theme.backgroundColor,
-          bordered: theme.bordered ?? true,
-          isShowLastBordered: theme.isShowLastBordered ?? true,
+          width: width,
         ),
       ),
     );

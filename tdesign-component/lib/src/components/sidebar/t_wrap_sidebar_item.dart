@@ -95,18 +95,18 @@ class TWrapSideBarItem extends StatelessWidget {
     return ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 56),
         child: Container(
-          // height: 86,
-          decoration:
-              BoxDecoration(color: context.tTheme.bgColorSecondaryContainer),
-          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: unSelectedBgColor ??
+                  context.tTheme.bgColorSecondaryContainer),
+          padding: contentPadding ?? const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
                 color: selected && !disabled
-                    ? context.tTheme.bgColorContainer
+                    ? selectedBgColor ?? context.tTheme.bgColorContainer
                     : null,
                 borderRadius:
                     BorderRadius.circular(context.tTheme.radiusDefault)),
-            padding: const EdgeInsets.all(8),
+            padding: contentPadding ?? const EdgeInsets.all(8),
             child: renderMainContent(context),
           ),
         ));

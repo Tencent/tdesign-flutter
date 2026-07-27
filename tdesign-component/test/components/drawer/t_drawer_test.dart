@@ -253,6 +253,18 @@ void main() {
       expect(container.color, Colors.yellow);
     });
 
+    testWidgets('直接使用组件时读取 Drawer ThemeData', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TDrawerWidget(child: SizedBox.expand()),
+        drawerTheme: const TDrawerThemeData(
+          width: 320,
+          backgroundColor: Colors.green,
+        ),
+      ));
+      final container = drawerContainer(tester, color: Colors.green);
+      expect(container.constraints?.maxWidth, 320);
+    });
+
     testWidgets('点击列表项触发 onItemClick', (tester) async {
       int? clickedIndex;
       TDrawerItem? clickedItem;

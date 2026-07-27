@@ -293,8 +293,7 @@ void main() {
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
     });
 
-    testWidgets('默认文案样式来自全局字体 token', (tester) async {
-      final token = TThemeData.defaultData();
+    testWidgets('默认文案样式尊重 Flutter TextTheme', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
         const TWrapSideBarItem(
           style: TSideBarVariant.normal,
@@ -305,8 +304,9 @@ void main() {
       ));
 
       final text = tester.widget<Text>(find.text('默认'));
-      expect(text.style?.fontSize, token.fontBodyLarge?.size);
-      expect(text.style?.height, token.fontBodyLarge?.height);
+      final textTheme = Theme.of(tester.element(find.text('默认'))).textTheme;
+      expect(text.style?.fontSize, textTheme.bodyMedium?.fontSize);
+      expect(text.style?.height, textTheme.bodyMedium?.height);
     });
 
     testWidgets('选中且设置 selectedTextStyle 颜色', (tester) async {

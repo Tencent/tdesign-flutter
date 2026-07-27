@@ -238,12 +238,12 @@ class TTabBar extends StatefulWidget {
     Key? key,
     required this.variant,
     required this.navigationTabs,
-    this.barHeight = _kDefaultTabBarHeight,
+    this.barHeight,
     this.useVerticalDivider,
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.showTopBorder = true,
+    this.showTopBorder,
     this.topBorder,
     this.useSafeArea = true,
     this.placeholder = true,
@@ -251,10 +251,10 @@ class TTabBar extends StatefulWidget {
     this.unselectedBgColor,
     this.backgroundColor,
     this.centerDistance,
-    this.needInkWell = false,
+    this.needInkWell,
     this.indicatorAnimation = TTabBarIndicatorAnimation.none,
-    this.animationDuration = const Duration(milliseconds: 300),
-    this.animationCurve = Curves.easeInOutCubic,
+    this.animationDuration,
+    this.animationCurve,
     required this.value,
     this.onChanged,
   })  : assert(() {
@@ -348,16 +348,16 @@ class TTabBar extends StatefulWidget {
   final double? centerDistance;
 
   /// 是否需要水波纹效果
-  final bool needInkWell;
+  final bool? needInkWell;
 
   /// 指示器动画类型
   final TTabBarIndicatorAnimation indicatorAnimation;
 
   /// 动画时长
-  final Duration animationDuration;
+  final Duration? animationDuration;
 
   /// 动画曲线
-  final Curve animationCurve;
+  final Curve? animationCurve;
 
   /// 选中的 index
   final int value;
@@ -387,6 +387,8 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   late bool _effectiveShowTopBorder;
   late BorderSide? _effectiveTopBorder;
   late bool _effectiveNeedInkWell;
+  late Duration _effectiveAnimationDuration;
+  late Curve _effectiveAnimationCurve;
 
   @override
   void initState() {
@@ -395,7 +397,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
     // 初始化动画控制器
     _animationController = AnimationController(
-      duration: widget.animationDuration,
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
@@ -405,27 +407,26 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
       end: _selectedIndex.toDouble(),
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: widget.animationCurve,
+      curve: Curves.easeInOutCubic,
     ));
   }
 
   @override
   void didUpdateWidget(covariant TTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _resolveEffectiveValues();
     if (widget.value != _selectedIndex) {
       _animateToIndex(widget.value);
-    }
-
-    // 更新动画时长和曲线
-    if (oldWidget.animationDuration != widget.animationDuration) {
-      _animationController.duration = widget.animationDuration;
     }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // P1: 组件级 ThemeExtension 回退
+    _resolveEffectiveValues();
+  }
+
+  void _resolveEffectiveValues() {
     final theme = Theme.of(context).extension<TTabBarThemeData>();
     _effectiveBarHeight =
         widget.barHeight ?? theme?.barHeight ?? _kDefaultTabBarHeight;
@@ -451,7 +452,13 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     _effectiveShowTopBorder =
         widget.showTopBorder ?? theme?.showTopBorder ?? true;
     _effectiveTopBorder = widget.topBorder ?? theme?.topBorder;
-    _effectiveNeedInkWell = widget.needInkWell; // 非空字段，构造器默认 false
+    _effectiveNeedInkWell = widget.needInkWell ?? theme?.needInkWell ?? false;
+    _effectiveAnimationDuration = widget.animationDuration ??
+        theme?.animationDuration ??
+        const Duration(milliseconds: 300);
+    _effectiveAnimationCurve =
+        widget.animationCurve ?? theme?.animationCurve ?? Curves.easeInOutCubic;
+    _animationController.duration = _effectiveAnimationDuration;
   }
 
   @override
@@ -572,7 +579,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
       end: index.toDouble(),
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: widget.animationCurve,
+      curve: _effectiveAnimationCurve,
     ));
 
     // 播放动画

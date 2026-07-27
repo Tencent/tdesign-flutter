@@ -266,16 +266,11 @@ void main() {
   });
 
   group('TBackTop 主题颜色', () {
-    testWidgets('全局品牌 ColorScheme 驱动默认背景和内容色', (tester) async {
-      const colorScheme = ColorScheme.light(
-        primary: Colors.red,
-        primaryContainer: Colors.redAccent,
-        onPrimaryContainer: Colors.white,
-      );
+    testWidgets('裸 TThemeData 驱动默认背景和内容色', (tester) async {
+      final token = TThemeData.defaultData();
       await tester.pumpWidget(MaterialApp(
         theme: ThemeData(
-          colorScheme: colorScheme,
-          extensions: [TThemeData.defaultData()],
+          extensions: [token],
         ),
         home: const Scaffold(body: TBackTop(onPressed: _noop)),
       ));
@@ -285,10 +280,12 @@ void main() {
           .map((container) => container.decoration)
           .whereType<BoxDecoration>()
           .first;
-      expect(decoration.color, Colors.redAccent);
-      expect(decoration.border?.top.color, Colors.red);
+      expect(decoration.color, token.brandLightColor);
+      expect(decoration.border?.top.color, token.brandNormalColor);
       expect(
-          tester.widget<Icon>(find.byIcon(TIcons.backtop)).color, Colors.white);
+        tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
+        token.textColorAnti,
+      );
     });
 
     testWidgets('组件 Theme 颜色覆盖全局品牌色', (tester) async {
@@ -339,9 +336,6 @@ void main() {
       expect(theme.borderColor, null);
       expect(theme.contentColor, null);
       expect(theme.defaultVisibilityOffset, null);
-      expect(theme.defaultRight, null);
-      expect(theme.defaultBottom, null);
-      expect(theme.halfCircleRightInset, null);
     });
 
     test('copyWith 部分覆盖', () {
@@ -447,30 +441,21 @@ void main() {
     });
   });
 
-  // 补充覆盖：Theme 定位字段
-  group('TBackTop Theme 定位字段', () {
-    testWidgets('Theme.defaultRight 生效', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(),
-        backTopTheme: const TBackTopThemeData(defaultRight: 24),
-      ));
-      expect(find.byType(TBackTop), findsOneWidget);
-    });
-
-    testWidgets('Theme.defaultBottom 生效', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(),
-        backTopTheme: const TBackTopThemeData(defaultBottom: 48),
-      ));
-      expect(find.byType(TBackTop), findsOneWidget);
-    });
-
-    testWidgets('Theme.halfCircleRightInset 生效', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(shape: TBackTopShape.halfCircle),
-        backTopTheme: const TBackTopThemeData(halfCircleRightInset: 0),
-      ));
-      expect(find.byType(TBackTop), findsOneWidget);
+  group('TBackTop Theme 颜色', () {
+    testWidgets('裸 TThemeData 提供颜色 token 兜底', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(wrapWithTheme(const TBackTop()));
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .first;
+      expect(decoration.color, token.brandLightColor);
+      expect(decoration.border?.top.color, token.brandNormalColor);
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
+        token.textColorAnti,
+      );
     });
 
     testWidgets('Theme 颜色字段注入生效', (tester) async {
@@ -484,10 +469,7 @@ void main() {
     testWidgets('半圆形 + showText + Theme 注入', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
         const TBackTop(shape: TBackTopShape.halfCircle, showText: true),
-        backTopTheme: const TBackTopThemeData(
-          shape: TBackTopShape.halfCircle,
-          halfCircleRightInset: 8,
-        ),
+        backTopTheme: const TBackTopThemeData(shape: TBackTopShape.halfCircle),
       ));
       expect(find.text('返回'), findsOneWidget);
       expect(find.text('顶部'), findsOneWidget);

@@ -7,6 +7,7 @@ import '../cell/t_cell.dart';
 import '../cell/t_cell_group.dart';
 import '../cell/t_cell_theme_data.dart';
 import 't_drawer.dart';
+import 't_drawer_theme_data.dart';
 
 typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
 
@@ -20,12 +21,12 @@ class TDrawerWidget extends StatelessWidget {
     this.child,
     this.title,
     this.onItemClick,
-    this.width = 280,
+    this.width,
     this.style,
-    this.hover = true,
+    this.hover,
     this.backgroundColor,
-    this.bordered = true,
-    this.isShowLastBordered = true,
+    this.bordered,
+    this.isShowLastBordered,
   });
 
   /// 抽屉的底部
@@ -63,13 +64,24 @@ class TDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final drawerTheme = Theme.of(context).extension<TDrawerThemeData>();
+    final effectiveWidth = width ?? drawerTheme?.width ?? 280;
+    final effectiveHover = hover ?? drawerTheme?.hover ?? true;
+    final effectiveBackgroundColor = backgroundColor ??
+        drawerTheme?.backgroundColor ??
+        context.tTheme.bgColorContainer;
+    final effectiveBordered = bordered ?? drawerTheme?.bordered ?? true;
+    final effectiveShowLastBordered =
+        isShowLastBordered ?? drawerTheme?.isShowLastBordered ?? true;
+    final effectiveStyle = style ?? drawerTheme?.style;
     var content = child;
     if (content == null) {
       final inheritedCellTheme = Theme.of(context).extension<TCellThemeData>();
       final cellStyle =
-          (style ?? inheritedCellTheme ?? const TCellThemeData()).copyWith(
-        groupBordered: bordered,
-        showLastDivider: isShowLastBordered,
+          (effectiveStyle ?? inheritedCellTheme ?? const TCellThemeData())
+              .copyWith(
+        groupBordered: effectiveBordered,
+        showLastDivider: effectiveShowLastBordered,
       );
       var cells = items
           ?.asMap()
@@ -86,7 +98,7 @@ class TDrawerWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           )),
                 prefix: item.icon,
-                enableFeedback: hover ?? true,
+                enableFeedback: effectiveHover,
                 onTap: () {
                   if (onItemClick == null) {
                     return;
@@ -120,8 +132,8 @@ class TDrawerWidget extends StatelessWidget {
     }
 
     return Container(
-      color: backgroundColor ?? context.tTheme.bgColorContainer,
-      width: width ?? 280,
+      color: effectiveBackgroundColor,
+      width: effectiveWidth,
       height: double.infinity,
       child: content,
     );

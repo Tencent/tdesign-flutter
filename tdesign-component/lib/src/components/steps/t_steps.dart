@@ -65,10 +65,10 @@ class TSteps extends StatefulWidget {
     required this.steps,
     this.value = 0,
     this.direction = TStepsDirection.horizontal,
-    this.status = TStepsStatus.success,
-    this.simple = false,
-    this.readOnly = false,
-    this.verticalSelect = false,
+    this.status,
+    this.simple,
+    this.readOnly,
+    this.verticalSelect,
   });
 
   /// 步骤条数据
@@ -81,16 +81,16 @@ class TSteps extends StatefulWidget {
   final int value;
 
   /// 步骤条状态（优先级高于 ThemeData）
-  final TStepsStatus status;
+  final TStepsStatus? status;
 
   /// 步骤条simple模式（优先级高于 ThemeData）
-  final bool simple;
+  final bool? simple;
 
   /// 步骤条readOnly模式（优先级高于 ThemeData）
-  final bool readOnly;
+  final bool? readOnly;
 
   /// 步骤条垂直自定义步骤条选择模式（优先级高于 ThemeData）
-  final bool verticalSelect;
+  final bool? verticalSelect;
 
   /// 子树级主题数据（v1.0 新增）
 
@@ -111,11 +111,14 @@ class _TStepsState extends State<TSteps> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TStepsThemeData>();
     final effectiveIndex = widget.value;
-    final effectiveStatus = widget.status;
-    final effectiveSimple = widget.simple;
-    final effectiveReadOnly = widget.readOnly;
-    final effectiveVerticalSelect = widget.verticalSelect;
+    final effectiveStatus =
+        widget.status ?? theme?.status ?? TStepsStatus.success;
+    final effectiveSimple = widget.simple ?? theme?.simple ?? false;
+    final effectiveReadOnly = widget.readOnly ?? theme?.readOnly ?? false;
+    final effectiveVerticalSelect =
+        widget.verticalSelect ?? theme?.verticalSelect ?? false;
 
     /// 当前激活的step索引
     final currentActiveIndex = _clampActiveIndex(

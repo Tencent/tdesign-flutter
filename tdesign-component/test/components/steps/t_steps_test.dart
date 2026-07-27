@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/src/components/steps/t_steps_vertical_item.dart';
 
 void main() {
   Widget wrapWithTheme(Widget child, {TStepsThemeData? stepsTheme}) {
@@ -184,10 +185,31 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(
         TSteps(
           steps: buildSteps(3),
+          direction: TStepsDirection.vertical,
         ),
         stepsTheme: const TStepsThemeData(simple: true),
       ));
-      expect(find.byType(TSteps), findsOneWidget);
+      final item = tester.widget<TStepsVerticalItem>(
+        find.byType(TStepsVerticalItem).first,
+      );
+      expect(item.simple, isTrue);
+    });
+
+    testWidgets('构造器参数覆盖 ThemeData', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        TSteps(
+          steps: buildSteps(3),
+          direction: TStepsDirection.vertical,
+          simple: false,
+          readOnly: true,
+        ),
+        stepsTheme: const TStepsThemeData(simple: true, readOnly: false),
+      ));
+      final item = tester.widget<TStepsVerticalItem>(
+        find.byType(TStepsVerticalItem).first,
+      );
+      expect(item.simple, isFalse);
+      expect(item.readOnly, isTrue);
     });
   });
 

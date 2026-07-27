@@ -261,7 +261,34 @@ void main() {
         ),
         indexesTheme: const TIndexesThemeData(capsuleTheme: true),
       ));
-      expect(find.byType(TIndexes), findsOneWidget);
+      final header = tester.widget<SliverStickyHeader>(
+        find.byType(SliverStickyHeader).first,
+      );
+      expect(header.sticky, isTrue);
+      expect(header.pinnedOffset, TThemeData.defaultData().spacer8);
+    });
+
+    testWidgets('Theme 控制滚动方向和 sticky，构造器优先', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        TIndexes(
+          indexList: const ['A', 'B'],
+          sticky: true,
+          builderContent: (context, index) => Text(index),
+        ),
+        indexesTheme: const TIndexesThemeData(sticky: false, reverse: true),
+      ));
+
+      expect(
+          tester
+              .widget<CustomScrollView>(find.byType(CustomScrollView))
+              .reverse,
+          isTrue);
+      expect(
+        tester
+            .widget<SliverStickyHeader>(find.byType(SliverStickyHeader).first)
+            .sticky,
+        isTrue,
+      );
     });
 
     // 补充用例至 ≥15

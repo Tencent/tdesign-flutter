@@ -33,7 +33,7 @@ class _TBackTopPageState extends State<TBackTopPage> {
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                  right: const TBackTopThemeData().halfCircleRightInset ?? -16,
+                  right: -16,
                   bottom: 10,
                   child: TBackTop(
                     controller: controller,

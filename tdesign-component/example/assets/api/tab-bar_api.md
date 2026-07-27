@@ -4,10 +4,10 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animationCurve | Curve | Curves.easeInOutCubic | 动画曲线 |
-| animationDuration | Duration | const Duration(milliseconds: 300) | 动画时长 |
+| animationCurve | Curve? | - | 动画曲线 |
+| animationDuration | Duration? | - | 动画时长 |
 | backgroundColor | Color? | - | 背景颜色 （可选） |
-| barHeight | double? | _kDefaultTabBarHeight | tab高度 |
+| barHeight | double? | - | tab高度 |
 | centerDistance | double? | - | icon与文本中间距离（可选） |
 | dividerColor | Color? | - | 分割线颜色（可选） |
 | dividerHeight | double? | - | 分割线高度（可选） |
@@ -15,11 +15,11 @@
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | navigationTabs | List<TTabBarItemConfig> | - | tabs配置 |
-| needInkWell | bool | false | 是否需要水波纹效果 |
+| needInkWell | bool? | - | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
 | placeholder | bool | true | 是否添加安全区域占位 |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
-| showTopBorder | bool? | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
+| showTopBorder | bool? | - | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
 | topBorder | BorderSide? | - | 上边线样式 |
 | unselectedBgColor | Color? | - | 未选中时背景颜色 |
 | useSafeArea | bool | true | 使用安全区域 |

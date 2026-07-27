@@ -15,7 +15,7 @@ typedef TBarItemAction = void Function();
 ///
 /// Material AppBar 薄包装（NavigationToolbar 实现）。
 /// - A 类禁用：操作项 `action: null`。
-/// - L4 样式（标题颜色/字体、背景、高度、内边距等）→ [TNavBarThemeData]。
+/// - L4 样式（标题颜色/字体、背景、内边距等）→ [TNavBarThemeData]。
 class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   const TNavBar({
     Key? key,
@@ -330,22 +330,22 @@ class _TNavBarState extends State<TNavBar> {
 /// NavBar 操作项
 class TNavBarItem {
   /// 图标
-  IconData? icon;
+  final IconData? icon;
 
   /// 图标颜色
-  Color? iconColor;
+  final Color? iconColor;
 
   /// 操作回调；`null` 表示禁用
-  TBarItemAction? action;
+  final TBarItemAction? action;
 
   /// 图标尺寸
-  double? iconSize;
+  final double? iconSize;
 
   /// 内部填充
-  EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? padding;
 
   /// 自定义组件，优先级高于 icon，可以是任意 Widget
-  Widget? customWidget;
+  final Widget? customWidget;
 
   TNavBarItem({
     this.icon,

@@ -399,6 +399,28 @@ void main() {
       ));
 
       expect(find.byType(TTabBar), findsOneWidget);
+      expect(find.byType(InkWell), findsNWidgets(3));
+      expect(tester.getSize(find.byType(TTabBar)).height, 60);
+    });
+
+    testWidgets('构造器参数覆盖 ThemeData 动画和水波纹', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        TTabBar(
+          variant: TTabBarVariant.text,
+          value: 0,
+          navigationTabs: textTabs(),
+          needInkWell: false,
+          animationDuration: const Duration(milliseconds: 20),
+          animationCurve: Curves.linear,
+          onChanged: (_) {},
+        ),
+        tabBarTheme: const TTabBarThemeData(
+          needInkWell: true,
+          animationDuration: Duration(seconds: 1),
+          animationCurve: Curves.bounceIn,
+        ),
+      ));
+      expect(find.byType(InkWell), findsNothing);
     });
   });
 }

@@ -33,9 +33,9 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # steps
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/steps" --name TSteps,TStepsItemData --folder-name steps --output "$PARENT_DIR/example/assets/api/" --only-api
 # tabbar
-dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/tabbar/t_bottom_tab_bar.dart" --name TBottomTabBar,BadgeConfig,TBottomTabBarTabConfig,TBottomTabBarPopUpBtnConfig,TBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tab-bar --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/tabbar" --name TTabBar,TTabBarBadgeConfig,TTabBarItemConfig,TTabBarPopUpBtnConfig,TTabBarPopUpShapeConfig,TTabBarMenuItem --folder-name tab-bar --output "$PARENT_DIR/example/assets/api/" --only-api
 # tabs
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/tabs" --name TTabBar,TTab,TTabBarView --folder-name tabs --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/tabs" --name TTabsBar,TTab,TTabsBarView,TTabsBarIndicator --folder-name tabs --output "$PARENT_DIR/example/assets/api/" --only-api
 
 
 # 输入
