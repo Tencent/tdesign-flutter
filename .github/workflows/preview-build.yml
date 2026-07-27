@@ -24,6 +24,23 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Prepare preview metadata
+        run: |
+          VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
+          {
+            echo "PR_NUMBER=${{ github.event.pull_request.number }}"
+            echo "VERSION=$VERSION"
+            echo "BUILD_NUMBER=${{ github.run_number }}"
+          } > build-env.txt
+
+      - name: Upload preview metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-env
+          path: build-env.txt
+          retention-days: 5
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -158,4 +175,3 @@ jobs:
           name: tdesign-flutter-web
           path: ${{ github.workspace }}/tdesign-flutter-web
           retention-days: 5
-
