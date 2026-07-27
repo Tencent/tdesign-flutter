@@ -1,0 +1,18 @@
+Widget _buildCardCollapse(BuildContext context) {
+    return TCollapse(
+      onExpansionChanged: (int index, bool isExpanded) {
+        setState(() {
+          _cardStyleData[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _cardStyleData.map((CollapseDataItem item) {
+        return TCollapsePanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Text(item.headerValue);
+          },
+          isExpanded: item.isExpanded,
+          body: const Text(randomString),
+        );
+      }).toList(),
+    );
+  }

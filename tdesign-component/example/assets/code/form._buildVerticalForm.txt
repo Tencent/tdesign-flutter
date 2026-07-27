@@ -1,0 +1,22 @@
+Widget _buildVerticalForm(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TFormThemeData(
+          layout: TFormLayout.vertical,
+          showColon: true,
+          itemSpacing: 8,
+        ),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(16),
+        child: TFormItem(
+          label: '备注',
+          help: '最多 100 个字符',
+          child: TInput.multiline(
+            maxLength: 100,
+            hintText: '请输入备注',
+          ),
+        ),
+      ),
+    );
+  }

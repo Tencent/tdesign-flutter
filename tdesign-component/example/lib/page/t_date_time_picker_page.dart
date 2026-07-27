@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TDateTimePickerPage extends StatefulWidget {
@@ -88,7 +88,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     );
   }
 
-  @Demo(group: 'date-time-picker')
+  @ExampleCode(group: 'date-time-picker')
   Widget _buildInline(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -179,7 +179,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
 
   // ========== Demo: base ==========
 
-  @Demo(group: 'date-time-picker')
+  @ExampleCode(group: 'date-time-picker')
   Widget _buildBase(BuildContext context) {
     return TCell(
       title: const Text('年月日选择器'),
@@ -200,7 +200,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
 
   // ========== Demo: year-month ==========
 
-  @Demo(group: 'date-time-picker')
+  @ExampleCode(group: 'date-time-picker')
   Widget _buildYearMonth(BuildContext context) {
     return TCell(
       title: const Text('选择年月'),
@@ -221,7 +221,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
 
   // ========== Demo: time ==========
 
-  @Demo(group: 'date-time-picker')
+  @ExampleCode(group: 'date-time-picker')
   Widget _buildTime(BuildContext context) {
     return TCell(
       title: const Text('选择时分'),
@@ -242,7 +242,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
 
   // ========== Demo: custom-range ==========
 
-  @Demo(group: 'date-time-picker')
+  @ExampleCode(group: 'date-time-picker')
   Widget _buildCustomRange(BuildContext context) {
     return TCell(
       title: const Text('自定义选择范围'),
@@ -268,7 +268,7 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
 
   // ========== Demo: week ==========
 
-  @Demo(group: 'date-time-picker')
+  @ExampleCode(group: 'date-time-picker')
   Widget _buildWeek(BuildContext context) {
     return TCell(
       title: const Text('年月日 + 星期'),

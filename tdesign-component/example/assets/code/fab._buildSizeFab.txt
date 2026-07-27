@@ -1,0 +1,24 @@
+Widget _buildSizeFab(BuildContext context) {
+    return _buildRowDemo([
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.large),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
+      ),
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.medium),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
+      ),
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.small),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
+      ),
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.extraSmall),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
+      ),
+    ]);
+  }

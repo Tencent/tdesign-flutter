@@ -1,0 +1,10 @@
+Widget _list(BuildContext context) {
+    return TButton(
+      child: const Text('打开列表面板'),
+      onPressed: () => TActionSheet.showList(
+        context,
+        items: _items,
+        onChanged: (item, index) => debugPrint('$index: ${item.label}'),
+      ),
+    );
+  }

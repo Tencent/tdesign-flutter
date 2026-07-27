@@ -1,0 +1,9 @@
+Widget _buildShadowsTop(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorContainer,
+        boxShadow: context.tTheme.shadowsTop,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+      ),
+    );
+  }

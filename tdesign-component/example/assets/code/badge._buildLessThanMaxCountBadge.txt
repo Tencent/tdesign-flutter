@@ -1,0 +1,19 @@
+Widget _buildLessThanMaxCountBadge(BuildContext context) {
+    return const SizedBox(
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Icon(TIcons.notification),
+          ),
+          Positioned(
+            child: TBadge(count: 8888, maxCount: 9000),
+            left: 18,
+            bottom: 18,
+          ),
+        ],
+      ),
+    );
+  }

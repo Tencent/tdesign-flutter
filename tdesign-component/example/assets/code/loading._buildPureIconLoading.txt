@@ -1,0 +1,29 @@
+/// 纯图标
+    Widget _buildPureIconLoading(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
+        ),
+        const SizedBox(width: 36),
+        const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.activity,
+        ),
+        const SizedBox(width: 36),
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(
+              iconColor: context.tTheme.brandNormalColor,
+            ),
+          ),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            icon: TLoadingIcon.point,
+          ),
+        ),
+      ],
+    );
+  }

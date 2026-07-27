@@ -1,11 +1,6 @@
-
-  Widget _buildChildTestButton(BuildContext context) {
+Widget _buildChildTestButton(BuildContext context) {
     return TButton(
-      child: Container(
-        height: 48,
-        width: 48,
-        color: Colors.red,
-      ),
+      child: Container(),
       onPressed: null,
     );
   }

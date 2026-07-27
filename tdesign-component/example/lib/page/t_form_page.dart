@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TForm、TFormItem 与 TFormField 组合示例。
@@ -40,7 +40,7 @@ class _TFormPageState extends State<TFormPage> {
     );
   }
 
-  @Demo(group: 'form')
+  @ExampleCode(group: 'form')
   Widget _buildForm(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -116,7 +116,7 @@ class _TFormPageState extends State<TFormPage> {
     );
   }
 
-  @Demo(group: 'form')
+  @ExampleCode(group: 'form')
   Widget _buildVerticalForm(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(

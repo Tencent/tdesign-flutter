@@ -1,0 +1,7 @@
+Widget _buildLoading(BuildContext context) {
+    return _frame(TTable(
+      columns: _columns,
+      data: _rows,
+      loading: true,
+    ));
+  }

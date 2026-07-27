@@ -1,0 +1,24 @@
+Widget _buildItemWithLogo(BuildContext context) {
+    var tabs = [
+      const TTab(
+        text: '选项1',
+        icon: Icon(TIcons.app, size: 18),
+        badge: TBadge(variant: TBadgeVariant.dot),
+      ),
+      const TTab(
+        text: '选项2',
+        icon: Icon(TIcons.app, size: 18),
+        badge: TBadge(count: 8),
+      ),
+      const TTab(
+        text: '选项3',
+        icon: Icon(TIcons.app, size: 18),
+        badge: TBadge(variant: TBadgeVariant.dot),
+      ),
+    ];
+    return TTabsBar(
+      tabs: tabs,
+      controller: _demoController('logo', tabs.length),
+      indicator: _indicator(context),
+    );
+  }

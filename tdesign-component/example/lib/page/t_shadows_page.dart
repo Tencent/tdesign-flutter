@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 /// 圆角示例页面
@@ -22,7 +22,7 @@ class TShadowsPage extends StatelessWidget {
         ]);
   }
 
-  @Demo(group: 'shadows')
+  @ExampleCode(group: 'shadows')
   Widget _buildShadowsBase(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -33,7 +33,7 @@ class TShadowsPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'shadows')
+  @ExampleCode(group: 'shadows')
   Widget _buildShadowsMiddle(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -44,7 +44,7 @@ class TShadowsPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'shadows')
+  @ExampleCode(group: 'shadows')
   Widget _buildShadowsTop(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

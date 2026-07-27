@@ -1,0 +1,6 @@
+Widget _buildPrimaryInside(BuildContext context) {
+    return TProgress(
+      variant: TProgressVariant.linear,
+      value: value,
+    );
+  }

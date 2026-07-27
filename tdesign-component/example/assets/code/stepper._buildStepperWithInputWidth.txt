@@ -1,0 +1,20 @@
+Widget _buildStepperWithInputWidth(BuildContext context) {
+    return _buildRow(context, [
+      _themedStepper(
+        theme: const TStepperThemeData(
+          variant: TStepperVariant.filled,
+          inputWidth: 72,
+        ),
+        value: _wideValue,
+        onChanged: (value) => setState(() => _wideValue = value),
+      ),
+      _themedStepper(
+        theme: const TStepperThemeData(
+          variant: TStepperVariant.filled,
+          inputWidth: 36,
+        ),
+        value: _narrowValue,
+        onChanged: (value) => setState(() => _narrowValue = value),
+      ),
+    ]);
+  }

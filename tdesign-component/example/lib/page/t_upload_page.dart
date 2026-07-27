@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TUpload 演示。
@@ -56,7 +56,7 @@ class _TUploadPageState extends State<TUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
+  @ExampleCode(group: 'upload')
   Widget _buildBasic(BuildContext context) {
     return _section(
       TUpload(
@@ -70,7 +70,7 @@ class _TUploadPageState extends State<TUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
+  @ExampleCode(group: 'upload')
   Widget _buildStatus(BuildContext context) {
     return _section(
       TUpload(
@@ -82,7 +82,7 @@ class _TUploadPageState extends State<TUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
+  @ExampleCode(group: 'upload')
   Widget _buildCircle(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
@@ -102,7 +102,7 @@ class _TUploadPageState extends State<TUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
+  @ExampleCode(group: 'upload')
   Widget _buildDisabled(BuildContext context) {
     return _section(TUpload(files: _disabledFiles, maxFiles: 4));
   }

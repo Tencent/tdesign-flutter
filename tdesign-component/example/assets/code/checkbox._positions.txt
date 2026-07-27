@@ -1,0 +1,21 @@
+Widget _positions(BuildContext context) {
+    return Column(
+      children: [
+        TCheckbox(
+          value: _leftPositionValue,
+          title: '图标在左',
+          onChanged: (value) {
+            setState(() => _leftPositionValue = value == true);
+          },
+        ),
+        TCheckbox(
+          value: _rightPositionValue,
+          title: '图标在右',
+          contentDirection: TContentDirection.left,
+          onChanged: (value) {
+            setState(() => _rightPositionValue = value == true);
+          },
+        ),
+      ],
+    );
+  }

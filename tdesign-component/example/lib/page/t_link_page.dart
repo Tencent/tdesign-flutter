@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TLinkViewPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
         ]);
   }
 
-  @Demo(group: 'link')
+  @ExampleCode(group: 'link')
   Widget _buildBasicLinks(BuildContext context) {
     return Container(
         color: context.tTheme.bgColorContainer,
@@ -48,7 +48,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
         ));
   }
 
-  @Demo(group: 'link')
+  @ExampleCode(group: 'link')
   Widget _buildUnderlineLinks(BuildContext context) {
     return Container(
         color: context.tTheme.bgColorContainer,
@@ -58,7 +58,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
         ));
   }
 
-  @Demo(group: 'link')
+  @ExampleCode(group: 'link')
   Widget _buildIconLinks(BuildContext context) {
     return Container(
         color: context.tTheme.bgColorContainer,
@@ -87,7 +87,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
     ];
   }
 
-  @Demo(group: 'link')
+  @ExampleCode(group: 'link')
   Widget _buildColorSchemeLinks(BuildContext context) {
     return Column(
       children: [
@@ -117,7 +117,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
     );
   }
 
-  @Demo(group: 'link')
+  @ExampleCode(group: 'link')
   Widget _buildDisabledLinks(BuildContext context) {
     return Column(
       children: [
@@ -163,7 +163,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
     );
   }
 
-  @Demo(group: 'link')
+  @ExampleCode(group: 'link')
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
         color: context.tTheme.bgColorContainer,

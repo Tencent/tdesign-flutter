@@ -1,0 +1,17 @@
+Widget _buildYearMonth(BuildContext context) {
+    return TCell(
+      title: const Text('选择年月'),
+      note: Text(_formatResult(_yearMonthSelected)),
+      arrow: true,
+      onTap: () {
+        _showPickerPopup(
+          context,
+          picker: TDateTimePicker(
+            mode: DateTimePickerMode(dateMode: DateMode.month),
+            value: _yearMonthSelected,
+            onChanged: (result) => setState(() => _yearMonthSelected = result),
+          ),
+        );
+      },
+    );
+  }

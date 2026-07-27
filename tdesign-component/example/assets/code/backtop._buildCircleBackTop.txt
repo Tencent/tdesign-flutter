@@ -1,0 +1,7 @@
+Widget _buildCircleBackTop(BuildContext context) {
+    return getCustomButton(
+      context,
+      '圆形返回顶部',
+      () => _showBackTop(TBackTopShape.circle),
+    );
+  }

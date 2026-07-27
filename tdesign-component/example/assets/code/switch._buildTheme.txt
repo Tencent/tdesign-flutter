@@ -1,0 +1,9 @@
+Widget _buildTheme(BuildContext context) => TCell(
+        title: const Text('主题颜色'),
+        note: Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSwitchThemeData(trackOnColor: Colors.green),
+          ),
+          child: const _StatefulSwitch(initialValue: true),
+        ),
+      );

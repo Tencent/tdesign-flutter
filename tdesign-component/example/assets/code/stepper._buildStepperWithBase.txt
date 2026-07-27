@@ -1,0 +1,8 @@
+Widget _buildStepperWithBase(BuildContext context) {
+    return _buildRow(context, [
+      _filledStepper(
+        value: _baseValue,
+        onChanged: (value) => setState(() => _baseValue = value),
+      ),
+    ]);
+  }

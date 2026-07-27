@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TFooterPage extends StatelessWidget {
   const TFooterPage({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class TFooterPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'footer')
+  @ExampleCode(group: 'footer')
   Widget _buildFooter(BuildContext context) {
     return const TFooter(
       TFooterVariant.text,
@@ -35,7 +35,7 @@ class TFooterPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'footer')
+  @ExampleCode(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
     return TFooter(
       TFooterVariant.link,
@@ -54,7 +54,7 @@ class TFooterPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'footer')
+  @ExampleCode(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
     return TFooter(
       TFooterVariant.link,
@@ -80,7 +80,7 @@ class TFooterPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'footer')
+  @ExampleCode(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
     return const TFooter(
       TFooterVariant.brand,

@@ -1,0 +1,11 @@
+Widget _buildDivisions(BuildContext context) => _withValueLabel(
+        context,
+        label: '当前刻度：${value.toStringAsFixed(0)}',
+        child: TSlider(
+          value: value,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          onChanged: (next) => setState(() => value = next),
+        ),
+      );

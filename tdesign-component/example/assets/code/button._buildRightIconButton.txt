@@ -1,35 +1,34 @@
-
-  Widget _buildRightIconButton(BuildContext context) {
+Widget _buildRightIconButton(BuildContext context) {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
       alignment: WrapAlignment.center,
-      children: const [
+      children: [
         TButton(
-          child: Text('填充按钮'),
-          icon: Icon(TIcons.app),
+          child: const Text('填充按钮'),
+          icon: const Icon(TIcons.app),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
-          onPressed: null,
+          onPressed: _onTap,
         ),
         TButton(
-          icon: Icon(TIcons.app),
+          icon: const Icon(TIcons.app),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
-          onPressed: null,
+          onPressed: _onTap,
         ),
         TButton(
-          child: Text('间距20'),
-          icon: Icon(TIcons.app),
+          child: const Text('间距20'),
+          icon: const Icon(TIcons.app),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
-          onPressed: null,
+          onPressed: _onTap,
         )
       ],
     );

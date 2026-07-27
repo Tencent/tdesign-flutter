@@ -1,0 +1,8 @@
+Widget _buildGeneralProp(BuildContext context) {
+    return TText(
+      exampleTxt,
+      font: context.tTheme.fontHeadlineLarge,
+      textColor: context.tTheme.brandNormalColor,
+      backgroundColor: context.tTheme.brandFocusColor,
+    );
+  }

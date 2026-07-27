@@ -1,0 +1,10 @@
+Widget _iconNoticeBar(BuildContext context) {
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(prefixIcon: TIcons.error_circle_filled),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条普通的通知信息',
+    ),
+  );
+}

@@ -1,0 +1,4 @@
+Widget _buildSimpleFillTag(BuildContext context) {
+    // 基础填充标签（默认 defaultTheme 语义色）
+    return const TTag('标签文字');
+  }

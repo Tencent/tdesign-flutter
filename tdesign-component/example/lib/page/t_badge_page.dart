@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TBadgePage extends StatefulWidget {
   const TBadgePage({Key? key}) : super(key: key);
@@ -121,7 +121,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildRedPointMessageBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -142,7 +142,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildRedPointIconBadge(BuildContext context) {
     return const SizedBox(
       child: Stack(
@@ -160,7 +160,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildRedPointButtonBadge(BuildContext context) {
     return const SizedBox(
       child: Stack(
@@ -184,7 +184,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildMessageNumberBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -202,7 +202,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildIconNumberBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -220,7 +220,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildButtonNumberBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -243,7 +243,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildCustomBadgeShowingNumber(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -267,7 +267,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -291,7 +291,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -316,7 +316,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -334,7 +334,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -352,7 +352,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildBubbleBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -376,7 +376,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildSubscriptBadge(BuildContext context) {
     return const Stack(
       clipBehavior: Clip.none,
@@ -388,7 +388,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -406,7 +406,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildMediumBadge(BuildContext context) {
     return SizedBox(
       child: Stack(
@@ -424,7 +424,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildLessThanMaxCountBadge(BuildContext context) {
     return const SizedBox(
       child: Stack(
@@ -445,7 +445,7 @@ class _TBadgePageState extends State<TBadgePage> {
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildMoreThanMaxCountBadge(BuildContext context) {
     return const SizedBox(
       child: Stack(

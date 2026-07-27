@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TFabPage extends StatefulWidget {
@@ -110,14 +110,14 @@ class _TFabPageState extends State<TFabPage> {
     );
   }
 
-  @Demo(group: 'fab')
+  @ExampleCode(group: 'fab')
   Widget _buildPureIconFab(BuildContext context) {
     return _buildPageDemo(
       fab: TFab(right: 16, bottom: 16, onPressed: _onFabPressed),
     );
   }
 
-  @Demo(group: 'fab')
+  @ExampleCode(group: 'fab')
   Widget _buildTextFab(BuildContext context) {
     return _buildPageDemo(
       fab: TFab(
@@ -129,7 +129,7 @@ class _TFabPageState extends State<TFabPage> {
     );
   }
 
-  @Demo(group: 'fab')
+  @ExampleCode(group: 'fab')
   Widget _buildColorSchemeFab(BuildContext context) {
     final theme = context.tTheme;
     return _buildRowDemo([
@@ -167,7 +167,7 @@ class _TFabPageState extends State<TFabPage> {
     ]);
   }
 
-  @Demo(group: 'fab')
+  @ExampleCode(group: 'fab')
   Widget _buildSizeFab(BuildContext context) {
     return _buildRowDemo([
       _withButtonTheme(
@@ -193,7 +193,7 @@ class _TFabPageState extends State<TFabPage> {
     ]);
   }
 
-  @Demo(group: 'fab')
+  @ExampleCode(group: 'fab')
   Widget _buildDraggableFab(BuildContext context) {
     return _buildPageDemo(
       fab: TFab(

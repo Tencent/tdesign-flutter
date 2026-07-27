@@ -1,0 +1,6 @@
+Widget _buildBasic(BuildContext context) {
+    return const TCell(
+      title: Text('单行标题'),
+      arrow: true,
+    );
+  }

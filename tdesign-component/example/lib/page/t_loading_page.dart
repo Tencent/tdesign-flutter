@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TLoadingPage extends StatefulWidget {
   const TLoadingPage({Key? key}) : super(key: key);
@@ -90,8 +90,8 @@ class _TLoadingPageState extends State<TLoadingPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Theme(
-                      data: Theme.of(context)
-                          .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+                      data: Theme.of(context).mergeExtension(
+                          const TLoadingThemeData(axis: Axis.vertical)),
                       child: const TLoading(
                         size: TLoadingSize.large,
                         icon: TLoadingIcon.circle,
@@ -100,8 +100,8 @@ class _TLoadingPageState extends State<TLoadingPage> {
                     ),
                     const SizedBox(width: 36),
                     Theme(
-                      data: Theme.of(context)
-                          .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+                      data: Theme.of(context).mergeExtension(
+                          const TLoadingThemeData(axis: Axis.vertical)),
                       child: const TLoading(
                         size: TLoadingSize.large,
                         icon: TLoadingIcon.activity,
@@ -138,7 +138,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 纯图标
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildPureIconLoading(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +169,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 图标加文字横向
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -198,7 +198,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 图标加文字竖向
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildTextIconVerticalLoading(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +227,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 纯文字
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildPureTextLoading(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -264,7 +264,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 大尺寸
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildLargeLoading(BuildContext context) {
     return Theme(
       data: Theme.of(context)
@@ -278,7 +278,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 中尺寸
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildMediumLoading(BuildContext context) {
     return Theme(
       data: Theme.of(context)
@@ -292,7 +292,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   }
 
   /// 小尺寸
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildSmallLoading(BuildContext context) {
     return Theme(
       data: Theme.of(context)
@@ -308,7 +308,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   double _currentSliderValue = 1000;
 
   /// 自定义尺寸
-  @Demo(group: 'loading')
+  @ExampleCode(group: 'loading')
   Widget _buildCustomSpeedLoading(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

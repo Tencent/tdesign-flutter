@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TStepperPage extends StatefulWidget {
@@ -56,7 +56,7 @@ class _TStepperPageState extends State<TStepperPage> {
     );
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _buildStepperWithBase(BuildContext context) {
     return _buildRow(context, [
       _filledStepper(
@@ -66,7 +66,7 @@ class _TStepperPageState extends State<TStepperPage> {
     ]);
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _buildStepperWithMaxMinStatus(BuildContext context) {
     return _buildRow(context, [
       _filledStepper(
@@ -82,7 +82,7 @@ class _TStepperPageState extends State<TStepperPage> {
     ]);
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _buildStepperWithDisableStatus(BuildContext context) {
     return _buildRow(context, const [
       TStepper(value: 1),
@@ -91,7 +91,7 @@ class _TStepperPageState extends State<TStepperPage> {
     ]);
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _buildStepperWithTheme(BuildContext context) {
     return _buildRow(context, [
       _filledStepper(
@@ -105,7 +105,7 @@ class _TStepperPageState extends State<TStepperPage> {
     ]);
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _buildStepperWithInputWidth(BuildContext context) {
     return _buildRow(context, [
       _themedStepper(
@@ -127,7 +127,7 @@ class _TStepperPageState extends State<TStepperPage> {
     ]);
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _buildRow(BuildContext context, List<Widget> stepperItems) {
     final theme = context.tTheme;
 
@@ -146,7 +146,7 @@ class _TStepperPageState extends State<TStepperPage> {
     );
   }
 
-  @Demo(group: 'stepper')
+  @ExampleCode(group: 'stepper')
   Widget _customStepperValue(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),

@@ -1,0 +1,6 @@
+TTimeCounter _buildCustomUnitSimple(BuildContext context) {
+  return const TTimeCounter(
+    time: 60 * 60 * 1000,
+    splitWithUnit: true,
+  );
+}

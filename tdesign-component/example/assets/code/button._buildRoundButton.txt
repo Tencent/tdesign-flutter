@@ -1,10 +1,13 @@
-
-  TButton _buildRoundButton(BuildContext context) {
-    return const TButton(
-      child: Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: null,
+Widget _buildRoundButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.round,
+      TButton(
+        child: const Text('圆角'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
     );
   }

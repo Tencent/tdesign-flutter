@@ -1,0 +1,10 @@
+Widget _buildSubscriptBadge(BuildContext context) {
+    return const Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.topRight,
+      children: [
+        TCell(title: Text('单行标题')),
+        TBadge(variant: TBadgeVariant.dot),
+      ],
+    );
+  }

@@ -1,0 +1,8 @@
+Widget _buildRadiusSmall(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.tTheme.brandNormalColor,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
+      ),
+    );
+  }

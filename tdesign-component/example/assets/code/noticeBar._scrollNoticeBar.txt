@@ -1,0 +1,12 @@
+Widget _scrollNoticeBar(BuildContext context) {
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(),
+    ),
+    child: const TNoticeBar(
+      content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+      marquee: true,
+      speed: 50,
+    ),
+  );
+}

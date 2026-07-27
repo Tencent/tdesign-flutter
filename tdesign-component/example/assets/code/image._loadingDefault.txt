@@ -1,0 +1,34 @@
+Widget _loadingDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TText(
+            '加载默认提示',
+            font: context.tTheme.fontBodyMedium,
+          ),
+        ),
+        Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: context.tTheme.bgColorContainerHover,
+                child: Icon(
+                  TIcons.ellipsis,
+                  size: 22,
+                  color: context.tTheme.textColorPlaceholder,
+                ))),
+
+        /// @tips 实际组件写法如下：上面仅为加载展示
+        // const TImage(
+        //   src:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   variant: TImageVariant.roundedSquare,
+        // ),
+      ],
+    );
+  }

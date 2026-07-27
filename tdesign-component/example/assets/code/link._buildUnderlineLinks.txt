@@ -1,0 +1,8 @@
+Widget _buildUnderlineLinks(BuildContext context) {
+    return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: _buildLinksWithVariant(TLinkVariant.underline),
+        ));
+  }

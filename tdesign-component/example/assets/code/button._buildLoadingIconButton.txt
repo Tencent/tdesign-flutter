@@ -1,15 +1,18 @@
-
-  TButton _buildLoadingIconButton(BuildContext context) {
+TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
       child: const Text('加载中'),
-      icon: TLoading(
-        size: TLoadingSize.small,
-        icon: TLoadingIcon.circle,
-        iconColor: TTheme.of(context).whiteColor1,
+      icon: Theme(
+        // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
+        data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(iconColor: context.tTheme.whiteColor1)),
+        child: const TLoading(
+          size: TLoadingSize.small,
+          icon: TLoadingIcon.circle,
+        ),
       ),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: null,
+      onPressed: _onTap,
     );
   }

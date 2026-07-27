@@ -1,0 +1,10 @@
+Widget _buildTextFab(BuildContext context) {
+    return _buildPageDemo(
+      fab: TFab(
+        text: 'Floating',
+        right: 16,
+        bottom: 16,
+        onPressed: _onFabPressed,
+      ),
+    );
+  }

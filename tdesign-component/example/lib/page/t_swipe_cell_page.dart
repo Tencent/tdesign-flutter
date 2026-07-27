@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TSwipeCellPage extends StatelessWidget {
@@ -31,7 +31,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiperCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -94,7 +94,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiperMuliCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Theme(
@@ -120,7 +120,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiper3Cell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Theme(
@@ -150,7 +150,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiperRightCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Theme(
@@ -172,7 +172,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiperRightLeftCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Theme(
@@ -207,7 +207,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiperIconCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
@@ -294,7 +294,7 @@ class TSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'SwipeCell')
+  @ExampleCode(group: 'SwipeCell')
   Widget _buildSwiperConfirmCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Theme(

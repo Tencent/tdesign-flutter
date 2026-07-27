@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TCascader 演示。
@@ -56,7 +56,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
     );
   }
 
-  @Demo(group: 'cascader')
+  @ExampleCode(group: 'cascader')
   Widget _buildTab(BuildContext context) {
     return TCascader(
       options: _options,
@@ -65,7 +65,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
     );
   }
 
-  @Demo(group: 'cascader')
+  @ExampleCode(group: 'cascader')
   Widget _buildStep(BuildContext context) {
     return TCascader(
       options: _options,
@@ -75,7 +75,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
     );
   }
 
-  @Demo(group: 'cascader')
+  @ExampleCode(group: 'cascader')
   Widget _buildDisabled(BuildContext context) {
     return TCascader(options: _options, value: _value);
   }

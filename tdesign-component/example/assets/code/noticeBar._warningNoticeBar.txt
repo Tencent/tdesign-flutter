@@ -1,0 +1,13 @@
+Widget _warningNoticeBar(BuildContext context) {
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.warning,
+        prefixIcon: TIcons.error_circle_filled,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条警示的通知信息',
+    ),
+  );
+}

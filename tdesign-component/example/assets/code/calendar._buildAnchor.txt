@@ -1,0 +1,43 @@
+Widget _buildAnchor(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            IconButton(
+              tooltip: '上个月',
+              icon: const Icon(Icons.chevron_left),
+              onPressed: () => setState(() {
+                _anchorDate = DateTime(
+                  _anchorDate.year,
+                  _anchorDate.month - 1,
+                );
+              }),
+            ),
+            Expanded(
+              child: Text(
+                '${_anchorDate.year}-${_anchorDate.month.toString().padLeft(2, '0')}',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            IconButton(
+              tooltip: '下个月',
+              icon: const Icon(Icons.chevron_right),
+              onPressed: () => setState(() {
+                _anchorDate = DateTime(
+                  _anchorDate.year,
+                  _anchorDate.month + 1,
+                );
+              }),
+            ),
+          ],
+        ),
+        TCalendar(
+          value: _singleValue,
+          anchorDate: _anchorDate,
+          animateTo: true,
+          onChanged: (value) => setState(() => _singleValue = value),
+          onMonthChanged: (month) => _anchorDate = month,
+        ),
+      ],
+    );
+  }

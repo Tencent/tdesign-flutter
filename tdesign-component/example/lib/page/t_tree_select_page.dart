@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TTreeSelect 演示。
@@ -59,7 +59,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
     );
   }
 
-  @Demo(group: 'tree-select')
+  @ExampleCode(group: 'tree-select')
   Widget _buildSingle(BuildContext context) {
     return TTreeSelect(
       options: _options,
@@ -68,7 +68,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
     );
   }
 
-  @Demo(group: 'tree-select')
+  @ExampleCode(group: 'tree-select')
   Widget _buildMultiple(BuildContext context) {
     return TTreeSelect(
       options: _options,
@@ -78,7 +78,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
     );
   }
 
-  @Demo(group: 'tree-select')
+  @ExampleCode(group: 'tree-select')
   Widget _buildDisabled(BuildContext context) {
     return TTreeSelect(options: _options, value: _singleValue);
   }

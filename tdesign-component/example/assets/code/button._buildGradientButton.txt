@@ -1,5 +1,4 @@
-
-  Widget _buildGradientButton(BuildContext context) {
+Widget _buildGradientButton(BuildContext context) {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
@@ -12,14 +11,14 @@
               gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
             ),
           ),
-          child: const TButton(
-            child: Text('填充按钮'),
-            icon: Icon(TIcons.app),
+          child: TButton(
+            child: const Text('填充按钮'),
+            icon: const Icon(TIcons.app),
             size: TButtonSize.large,
             variant: TButtonVariant.fill,
             colorScheme: TButtonColorScheme.primary,
             iconPosition: TButtonIconPosition.right,
-            onPressed: null,
+            onPressed: _onTap,
           ),
         ),
         Theme(
@@ -32,13 +31,13 @@
                   end: Alignment.bottomCenter),
             ),
           ),
-          child: const TButton(
-            icon: Icon(TIcons.app),
+          child: TButton(
+            icon: const Icon(TIcons.app),
             size: TButtonSize.large,
             variant: TButtonVariant.fill,
             colorScheme: TButtonColorScheme.primary,
             iconPosition: TButtonIconPosition.right,
-            onPressed: null,
+            onPressed: _onTap,
           ),
         ),
         Theme(
@@ -51,14 +50,14 @@
                   end: Alignment.centerLeft),
             ),
           ),
-          child: const TButton(
-            child: Text('间距20'),
-            icon: Icon(TIcons.app),
+          child: TButton(
+            child: const Text('间距20'),
+            icon: const Icon(TIcons.app),
             size: TButtonSize.large,
             variant: TButtonVariant.fill,
             colorScheme: TButtonColorScheme.primary,
             iconPosition: TButtonIconPosition.right,
-            onPressed: null,
+            onPressed: _onTap,
           ),
         )
       ],

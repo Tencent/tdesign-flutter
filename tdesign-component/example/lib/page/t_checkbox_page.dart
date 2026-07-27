@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TCheckboxPage extends StatefulWidget {
@@ -69,7 +69,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _verticalCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
       value: _verticalValue,
@@ -79,7 +79,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _horizontalCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
       value: _horizontalValue,
@@ -90,7 +90,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _checkAll(BuildContext context) {
     final enabledValues = _options.map((option) => option.value).toList();
     final allSelected = _verticalValue.length == enabledValues.length;
@@ -119,7 +119,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _singleCheckbox(BuildContext context) {
     return TCheckbox(
       value: _singleValue,
@@ -129,7 +129,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _disabledCheckbox(BuildContext context) {
     return const Column(
       children: [
@@ -140,7 +140,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _itemDisabledCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
       value: const ['b'],
@@ -153,7 +153,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _variants(BuildContext context) {
     return Column(
       children: [
@@ -176,7 +176,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _positions(BuildContext context) {
     return Column(
       children: [
@@ -199,7 +199,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _density(BuildContext context) {
     final compactTheme = CheckboxTheme.of(context).copyWith(
       visualDensity: VisualDensity.compact,
@@ -233,7 +233,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _verticalCardCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
       value: _cardValue,
@@ -243,7 +243,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _horizontalCardCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
       value: _cardValue,
@@ -255,7 +255,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @Demo(group: 'checkbox')
+  @ExampleCode(group: 'checkbox')
   Widget _mixedCardCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
       value: _cardValue,

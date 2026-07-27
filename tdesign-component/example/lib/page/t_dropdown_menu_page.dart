@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TDropdownMenuPage extends StatelessWidget {
@@ -28,7 +28,7 @@ class TDropdownMenuPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dropdown_menu')
+  @ExampleCode(group: 'dropdown_menu')
   Widget _single(BuildContext context) {
     return TDropdownMenu<String>(
       items: [
@@ -42,7 +42,7 @@ class TDropdownMenuPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dropdown_menu')
+  @ExampleCode(group: 'dropdown_menu')
   Widget _multiple(BuildContext context) {
     return TDropdownMenu<String>(
       items: [

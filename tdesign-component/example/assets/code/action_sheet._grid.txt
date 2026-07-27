@@ -1,0 +1,10 @@
+Widget _grid(BuildContext context) {
+    return TButton(
+      child: const Text('打开宫格面板'),
+      onPressed: () => TActionSheet.showGrid(
+        context,
+        items: _items,
+        showPagination: true,
+      ),
+    );
+  }

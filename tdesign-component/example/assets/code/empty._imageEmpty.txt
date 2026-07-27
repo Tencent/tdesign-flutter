@@ -1,0 +1,15 @@
+Widget _imageEmpty(BuildContext context) {
+    return TEmpty(
+      variant: TEmptyVariant.plain,
+      image: Container(
+        decoration: BoxDecoration(
+          color: context.tTheme.bgColorComponent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const TImage(
+          src: 'assets/img/empty.png',
+          variant: TImageVariant.fitWidth,
+        ),
+      ),
+    );
+  }

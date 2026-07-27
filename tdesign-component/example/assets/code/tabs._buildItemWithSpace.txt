@@ -1,0 +1,8 @@
+Widget _buildItemWithSpace(BuildContext context) {
+    return TTabsBar(
+      tabs: subList(16),
+      controller: _demoController('space', 16),
+      indicator: _indicator(context),
+      isScrollable: true,
+    );
+  }

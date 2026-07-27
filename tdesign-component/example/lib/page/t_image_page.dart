@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TImagePage extends StatefulWidget {
   const TImagePage({Key? key}) : super(key: key);
@@ -208,7 +208,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 图片裁剪 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageClip(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +229,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 图片拉伸 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageStretch(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +258,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 图片适应高 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageFitHeight(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,7 +282,7 @@ class TImageState extends State<TImagePage>
   }
 
   /* 图片适应宽 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageFitWidth(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,7 +306,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 方形 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +327,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 圆角方形 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageRoundedSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,7 +348,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 圆形 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageCircle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -369,7 +369,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 加载默认提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _loadingDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -406,7 +406,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 加载自定义提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _loadingCustom(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -453,7 +453,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 失败默认提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _failDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -474,7 +474,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 失败自定义提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _failCustom(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -499,7 +499,7 @@ class TImageState extends State<TImagePage>
     );
   }
 
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageFile(BuildContext context) {
     return SizedBox(
       child: TImage(

@@ -1,0 +1,7 @@
+TTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
+  return const TTimeCounter(
+    time: 60 * 60 * 1000,
+    size: TTimeCounterSize.medium,
+    splitWithUnit: true,
+  );
+}

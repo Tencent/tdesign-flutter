@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// 主题颜色示例页
@@ -90,7 +90,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
     });
   }
 
-  @Demo(group: 'theme')
+  @ExampleCode(group: 'theme')
   Widget _buildDefaultTheme(BuildContext context) {
     // 通过context.tTheme.xxx使用公共主题属性
     return Container(
@@ -104,13 +104,12 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
       child: TText(
         '使用外层默认主题',
         font: context.tTheme.fontBodyLarge, // 字体，业务方使用时，
-        textColor:
-            context.tTheme.brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
+        textColor: context.tTheme.brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
       ),
     );
   }
 
-  @Demo(group: 'theme')
+  @ExampleCode(group: 'theme')
   Widget _buildCustomTheme(BuildContext context) {
     /// 此处替换主题
     return Theme(
@@ -157,8 +156,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
             }
             if (index < 10) {
               return Container(
-                color: context.tTheme
-                    .colorMap['${function}Color${index + 1}'],
+                color: context.tTheme.colorMap['${function}Color${index + 1}'],
                 child: TText('${function}Color${index + 1}'),
               );
             } else {
@@ -191,8 +189,8 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             color: type == 0 ? Colors.white : Colors.black,
             child: Container(
-              color: context.tTheme
-                  .colorMap['font${function}Color${index + 1}'],
+              color:
+                  context.tTheme.colorMap['font${function}Color${index + 1}'],
               child: TText(
                 'font${function}Color${index + 1}',
                 textColor: light ? Colors.black : Colors.white,
@@ -242,14 +240,12 @@ class TestWidget extends StatelessWidget {
           TText(
             '使用内层赋值主题',
             font: context.tTheme.fontBodyLarge, //明确使用内层主题，必须传context
-            textColor:
-                context.tTheme.brandNormalColor, // 明确使用内层主题，必须传context
+            textColor: context.tTheme.brandNormalColor, // 明确使用内层主题，必须传context
           ),
           TText(
             '使用内层不赋值主题',
             font: context.tTheme.fontTitleExtraLarge, //明确使用内层主题，必须传context
-            textColor:
-                context.tTheme.successNormalColor, // 明确使用内层主题，必须传context
+            textColor: context.tTheme.successNormalColor, // 明确使用内层主题，必须传context
           ),
           const TButton(
             child: Text('使用内层赋值主题'),
@@ -257,8 +253,8 @@ class TestWidget extends StatelessWidget {
           ),
           TText(
             '使用默认主题',
-            font:
-                TThemeData.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
+            font: TThemeData.defaultData()
+                .fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
             textColor: TThemeData.defaultData().brandNormalColor,
           ),
         ],

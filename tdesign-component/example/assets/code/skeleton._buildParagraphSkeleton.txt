@@ -1,0 +1,3 @@
+Widget _buildParagraphSkeleton(BuildContext context) {
+    return TSkeleton(variant: TSkeletonVariant.paragraph);
+  }

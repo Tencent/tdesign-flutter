@@ -1,0 +1,14 @@
+/// 图标头像
+    Widget _buildIconAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        TAvatar(size: TAvatarSize.medium),
+        SizedBox(width: 32),
+        TAvatar(
+          size: TAvatarSize.medium,
+          variant: TAvatarVariant.square,
+        ),
+      ],
+    );
+  }

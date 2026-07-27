@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TInput 示例页。
@@ -57,13 +57,13 @@ class _TInputViewPageState extends State<TInputViewPage> {
     );
   }
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildBasic(BuildContext context) => TInput(
         controller: controller,
         hintText: '请输入文字',
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildSlots(BuildContext context) => const TInput(
         label: '手机号',
         hintText: '请输入手机号',
@@ -72,7 +72,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         inputType: TextInputType.phone,
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildPassword(BuildContext context) => const TInput(
         label: '密码',
         hintText: '请输入密码',
@@ -80,26 +80,26 @@ class _TInputViewPageState extends State<TInputViewPage> {
         inputType: TextInputType.visiblePassword,
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildDisabled(BuildContext context) => const TInput(
         initialValue: '不可编辑',
         enabled: false,
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildReadOnly(BuildContext context) => const TInput(
         initialValue: '可选择复制',
         readOnly: true,
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildFormatter(BuildContext context) => TInput(
         hintText: '最多 10 个字符',
         maxLength: 10,
         inputFormatters: [LengthLimitingTextInputFormatter(10)],
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildTheme(BuildContext context) => Theme(
         data: Theme.of(context).mergeExtension(
           const TInputThemeData(showClearButton: false),
@@ -107,7 +107,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         child: const TInput(initialValue: '无清除按钮'),
       );
 
-  @Demo(group: 'input')
+  @ExampleCode(group: 'input')
   Widget _buildMultiline(BuildContext context) => const TInput.multiline(
         hintText: '请输入多行内容',
         maxLength: 200,

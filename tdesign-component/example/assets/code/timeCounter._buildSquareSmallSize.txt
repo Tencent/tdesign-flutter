@@ -1,0 +1,7 @@
+TTimeCounter _buildSquareSmallSize(BuildContext context) {
+  return const TTimeCounter(
+    time: 60 * 60 * 1000,
+    size: TTimeCounterSize.small,
+    variant: TTimeCounterVariant.square,
+  );
+}

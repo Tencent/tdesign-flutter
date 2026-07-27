@@ -29,7 +29,6 @@ jobs:
           - web
         flutter-version:
           - 3.32.0
-          # 当前对于 3.4x.x 版本，AOP 有问题先忽略
           # - 3.x
         include:
           - platform: apk
@@ -57,8 +56,6 @@ jobs:
         with:
           flutter-version: ${{ matrix.flutter-version }}
           cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
 
       - name: Diagnose iOS toolchain
         if: matrix.platform == 'ios'
@@ -74,6 +71,10 @@ jobs:
       - name: generate api md
         working-directory: ./tdesign-component
         run: sh ./demo_tool/all_build.sh
+
+      - name: Check example code snippets
+        working-directory: ./tdesign-component
+        run: dart run tool/generate_example_code.dart --check
 
       - name: flutter pub get
         working-directory: ./tdesign-component/example

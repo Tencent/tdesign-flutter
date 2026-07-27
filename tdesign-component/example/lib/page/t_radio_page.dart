@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TRadioPage extends StatefulWidget {
@@ -59,7 +59,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _verticalRadios(BuildContext context) {
     return TRadioGroup<String>(
       value: _verticalValue,
@@ -69,7 +69,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _horizontalRadios(BuildContext context) {
     return TRadioGroup<String>(
       value: _horizontalValue,
@@ -80,7 +80,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _disabledRadios(BuildContext context) {
     return const TRadioGroup<String>(
       value: 'a',
@@ -88,7 +88,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _itemDisabledRadios(BuildContext context) {
     return TRadioGroup<String>(
       value: 'b',
@@ -101,7 +101,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _positions(BuildContext context) {
     return Column(
       children: [
@@ -122,7 +122,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _verticalCardRadios(BuildContext context) {
     return TRadioGroup<String>(
       value: _cardValue,
@@ -132,7 +132,7 @@ class _TRadioPageState extends State<TRadioPage> {
     );
   }
 
-  @Demo(group: 'radio')
+  @ExampleCode(group: 'radio')
   Widget _horizontalCardRadios(BuildContext context) {
     return TRadioGroup<String>(
       value: _cardValue,

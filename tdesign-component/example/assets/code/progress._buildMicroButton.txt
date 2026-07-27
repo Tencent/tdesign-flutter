@@ -1,0 +1,10 @@
+Widget _buildMicroButton(BuildContext context) {
+    return TProgress(
+      variant: TProgressVariant.micro,
+      value: microProgressValue,
+      label: Icon(
+        Icons.play_arrow,
+        color: context.tTheme.brandNormalColor,
+      ),
+    );
+  }

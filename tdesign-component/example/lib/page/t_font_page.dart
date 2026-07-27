@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 /// 字体示例页面
@@ -39,8 +39,7 @@ class TFontPage extends StatelessWidget {
                             decoration: key.contains('Link')
                                 ? TextDecoration.underline
                                 : null,
-                            decorationColor:
-                                context.tTheme.textColorPrimary),
+                            decorationColor: context.tTheme.textColorPrimary),
                       ),
                     ));
                   });

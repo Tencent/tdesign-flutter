@@ -1,0 +1,23 @@
+Widget _buildWarningPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TButton(
+            size: TButtonSize.medium,
+            child: const Text('警告色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
+              TPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                colorScheme: TPopoverColorScheme.warning,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }

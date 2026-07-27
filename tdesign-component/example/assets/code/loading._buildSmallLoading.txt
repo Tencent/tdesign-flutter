@@ -1,0 +1,12 @@
+/// 小尺寸
+    Widget _buildSmallLoading(BuildContext context) {
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+      child: const TLoading(
+        size: TLoadingSize.small,
+        icon: TLoadingIcon.circle,
+        text: '加载中…',
+      ),
+    );
+  }

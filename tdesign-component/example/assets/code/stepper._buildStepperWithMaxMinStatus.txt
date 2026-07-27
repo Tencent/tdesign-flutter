@@ -1,0 +1,14 @@
+Widget _buildStepperWithMaxMinStatus(BuildContext context) {
+    return _buildRow(context, [
+      _filledStepper(
+        value: _minValue,
+        min: 0,
+        onChanged: (value) => setState(() => _minValue = value),
+      ),
+      _filledStepper(
+        value: _maxValue,
+        max: 999,
+        onChanged: (value) => setState(() => _maxValue = value),
+      ),
+    ]);
+  }

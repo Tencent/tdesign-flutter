@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TMessagePage extends StatelessWidget {
@@ -15,10 +15,18 @@ class TMessagePage extends StatelessWidget {
       exampleCodeGroup: 'message',
       children: [
         ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '普通消息', builder: (context) => _button(context, TMessageVariant.info)),
-          ExampleItem(desc: '成功消息', builder: (context) => _button(context, TMessageVariant.success)),
-          ExampleItem(desc: '警告消息', builder: (context) => _button(context, TMessageVariant.warning)),
-          ExampleItem(desc: '错误消息', builder: (context) => _button(context, TMessageVariant.error)),
+          ExampleItem(
+              desc: '普通消息',
+              builder: (context) => _button(context, TMessageVariant.info)),
+          ExampleItem(
+              desc: '成功消息',
+              builder: (context) => _button(context, TMessageVariant.success)),
+          ExampleItem(
+              desc: '警告消息',
+              builder: (context) => _button(context, TMessageVariant.warning)),
+          ExampleItem(
+              desc: '错误消息',
+              builder: (context) => _button(context, TMessageVariant.error)),
           ExampleItem(desc: '跑马灯消息', builder: _marquee),
         ]),
       ],
@@ -39,7 +47,7 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'message')
+  @ExampleCode(group: 'message')
   Widget _marquee(BuildContext context) {
     return TButton(
       child: const Text('显示跑马灯'),

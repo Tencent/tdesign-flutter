@@ -1,0 +1,16 @@
+Widget _buildThemedRate(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TRateThemeData(
+          starColor: Colors.green,
+          inactiveStarColor: Color(0xFFDCDCDC),
+          iconSize: 30,
+          iconGap: 4,
+        ),
+      ),
+      child: _rateCell(
+        title: '主题定制',
+        rate: const TRate(value: 4),
+      ),
+    );
+  }

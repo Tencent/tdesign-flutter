@@ -1,0 +1,26 @@
+Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TText(
+            '拉伸',
+            font: context.tTheme.fontBodyMedium,
+          ),
+        ),
+        Container(
+          color: context.tTheme.bgColorContainerHover,
+          child: const Stack(
+            alignment: Alignment.center,
+            children: [
+              TImage(
+                src: 'assets/img/image.png',
+                variant: TImageVariant.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }

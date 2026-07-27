@@ -1,0 +1,23 @@
+Widget _dashedDivider(BuildContext context) {
+    return const Wrap(
+      runSpacing: 20,
+      children: [
+        TDivider(dashed: true),
+        TDivider(
+          child: Text('文字信息'),
+          align: TDividerAlign.left,
+          dashed: true,
+        ),
+        TDivider(
+          child: Text('文字信息'),
+          align: TDividerAlign.center,
+          dashed: true,
+        ),
+        TDivider(
+          child: Text('文字信息'),
+          align: TDividerAlign.right,
+          dashed: true,
+        ),
+      ],
+    );
+  }

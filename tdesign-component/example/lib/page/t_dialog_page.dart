@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// Dialog 弹窗示例页面
@@ -29,7 +29,7 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dialog')
+  @ExampleCode(group: 'dialog')
   Widget _buildConfirmDialog(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -51,7 +51,7 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dialog')
+  @ExampleCode(group: 'dialog')
   Widget _buildTextButtonDialog(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -74,7 +74,7 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dialog')
+  @ExampleCode(group: 'dialog')
   Widget _buildWithTitle(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -98,7 +98,7 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dialog')
+  @ExampleCode(group: 'dialog')
   Widget _buildNoTitle(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -119,7 +119,7 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'dialog')
+  @ExampleCode(group: 'dialog')
   Widget _buildWithClose(BuildContext context) {
     return SizedBox(
       width: double.infinity,

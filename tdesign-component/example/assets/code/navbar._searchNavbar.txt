@@ -1,0 +1,35 @@
+Widget _searchNavbar(BuildContext context) {
+    return TNavBar(
+      useDefaultBack: false,
+      centerTitle: false,
+      titleMargin: 0,
+      titleWidget: Theme(
+        data: Theme.of(context).mergeExtension(
+          const TSearchBarThemeData(
+            variant: TSearchBarVariant.round,
+            padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+            autoHeight: true,
+          ),
+        ),
+        child: TSearchBar(
+          needCancel: false,
+          hintText: '搜索预设文案',
+          onChanged: (String text) {
+            print('input：$text');
+          },
+        ),
+      ),
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
+  }

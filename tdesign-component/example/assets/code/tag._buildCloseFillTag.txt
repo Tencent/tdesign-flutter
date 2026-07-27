@@ -1,0 +1,3 @@
+Widget _buildCloseFillTag(BuildContext context) {
+    return TTag('标签文字', needCloseIcon: true, onCloseTap: () {});
+  }

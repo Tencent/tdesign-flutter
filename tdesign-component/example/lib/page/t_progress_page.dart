@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TProgressPage extends StatefulWidget {
@@ -73,7 +73,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildRightLabelLinear(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -81,22 +81,22 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildInsideLabelLinear(BuildContext context) {
     return TProgress(variant: TProgressVariant.linear, value: value);
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildCircle(BuildContext context) {
     return TProgress(variant: TProgressVariant.circular, value: value);
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildMicro(BuildContext context) {
     return TProgress(variant: TProgressVariant.micro, value: value);
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.button,
@@ -105,7 +105,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildMicroButton(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.micro,
@@ -117,7 +117,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildPrimary(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -125,7 +125,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildWarning(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -133,7 +133,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildDanger(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -141,7 +141,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildSuccess(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -149,7 +149,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildPrimaryInside(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -157,7 +157,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildWarningInside(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -165,7 +165,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildDangerInside(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -173,7 +173,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildSuccessInside(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.linear,
@@ -181,7 +181,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildCirclePrimary(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.circular,
@@ -189,7 +189,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildCircleWarning(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.circular,
@@ -197,7 +197,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildCircleDanger(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.circular,
@@ -205,7 +205,7 @@ class _TProgressPageState extends State<TProgressPage> {
     );
   }
 
-  @Demo(group: 'progress')
+  @ExampleCode(group: 'progress')
   Widget _buildCircleSuccess(BuildContext context) {
     return TProgress(
       variant: TProgressVariant.circular,

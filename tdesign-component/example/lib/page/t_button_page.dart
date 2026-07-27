@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TButtonPage extends StatefulWidget {
@@ -304,7 +304,7 @@ class _TButtonPageState extends State<TButtonPage> {
     return Theme.of(context).copyWith(extensions: existingExtensions);
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildLightTextButton(BuildContext context) {
     return TButton(
       child: const Text('文字按钮'),
@@ -315,7 +315,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildLightStrokeButton(BuildContext context) {
     return TButton(
       child: const Text('描边按钮'),
@@ -326,7 +326,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDangerTextButton(BuildContext context) {
     return TButton(
       child: const Text('文字按钮'),
@@ -337,7 +337,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDangerStrokeButton(BuildContext context) {
     return TButton(
       child: const Text('描边按钮'),
@@ -348,7 +348,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDangerFillButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
@@ -359,7 +359,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDefaultTextButton(BuildContext context) {
     return TButton(
       child: const Text('文字按钮'),
@@ -370,7 +370,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDefaultStrokeButton(BuildContext context) {
     return TButton(
       child: const Text('描边按钮'),
@@ -381,7 +381,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildRectangleShapeButton(BuildContext context) {
     return _withButtonShape(
       context,
@@ -396,7 +396,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildFilledButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -414,7 +414,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildCircleButton(BuildContext context) {
     return _withButtonShape(
       context,
@@ -429,7 +429,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildRoundButton(BuildContext context) {
     return _withButtonShape(
       context,
@@ -444,7 +444,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildExtraSmallButton(BuildContext context) {
     return TButton(
       child: const Text('按钮28'),
@@ -455,7 +455,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildSmallButton(BuildContext context) {
     return TButton(
       child: const Text('按钮32'),
@@ -466,7 +466,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildMediumButton(BuildContext context) {
     return TButton(
       child: const Text('按钮40'),
@@ -477,7 +477,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildLargeButton(BuildContext context) {
     return TButton(
       child: const Text('按钮48'),
@@ -488,7 +488,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TButton(
       child: Text('文字按钮'),
@@ -499,7 +499,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TButton(
       child: Text('描边按钮'),
@@ -510,7 +510,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDisableDefaultFillButton(BuildContext context) {
     return const TButton(
       child: Text('填充按钮'),
@@ -521,7 +521,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDisableLightFillButton(BuildContext context) {
     return const TButton(
       child: Text('填充按钮'),
@@ -532,7 +532,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TButton(
       child: Text('填充按钮'),
@@ -543,7 +543,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildBlockFillButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -558,7 +558,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDefaultGhostButton(BuildContext context) {
     return TButton(
       child: const Text('幽灵按钮'),
@@ -569,7 +569,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDangerGhostButton(BuildContext context) {
     return TButton(
       child: const Text('幽灵按钮'),
@@ -580,7 +580,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildPrimaryGhostButton(BuildContext context) {
     return TButton(
       child: const Text('幽灵按钮'),
@@ -591,7 +591,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildSquareIconButton(BuildContext context) {
     return _withButtonShape(
       context,
@@ -606,7 +606,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
       child: const Text('加载中'),
@@ -626,7 +626,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildRectangleIconButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
@@ -638,7 +638,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildPrimaryTextButton(BuildContext context) {
     return TButton(
       child: const Text('文字按钮'),
@@ -649,7 +649,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildPrimaryStrokeButton(BuildContext context) {
     return TButton(
       child: const Text('描边按钮'),
@@ -660,7 +660,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildDefaultFillButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
@@ -671,7 +671,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildPrimaryFillButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
@@ -682,7 +682,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   TButton _buildLightFillButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
@@ -693,7 +693,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildCombinationButtons(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -722,7 +722,7 @@ class _TButtonPageState extends State<TButtonPage> {
         ));
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildChildTestButton(BuildContext context) {
     return TButton(
       child: Container(),
@@ -730,7 +730,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildRightIconButton(BuildContext context) {
     return Wrap(
       spacing: 16,
@@ -767,7 +767,7 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @Demo(group: 'button')
+  @ExampleCode(group: 'button')
   Widget _buildGradientButton(BuildContext context) {
     return Wrap(
       spacing: 16,

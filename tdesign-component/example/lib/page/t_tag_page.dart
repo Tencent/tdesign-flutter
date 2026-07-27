@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TTagPage extends StatefulWidget {
   const TTagPage({Key? key}) : super(key: key);
@@ -166,13 +166,13 @@ class _TTagPageState extends State<TTagPage> {
 
   // ============ 组件类型 ============
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildSimpleFillTag(BuildContext context) {
     // 基础填充标签（默认 defaultTheme 语义色）
     return const TTag('标签文字');
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildSimpleOutlineTag(BuildContext context) {
     // 描边标签：通过 TTagThemeData(isOutline: true) 子树注入
     return Theme(
@@ -182,7 +182,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCircleFillTag(BuildContext context) {
     // 圆弧标签：通过 TTagThemeData(shape: TTagShape.round) 子树注入
     return Theme(
@@ -192,7 +192,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCircleOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
@@ -201,7 +201,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildMarkFillTag(BuildContext context) {
     // Mark 标签：左圆角右直角
     return Theme(
@@ -211,7 +211,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildMarkOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
@@ -220,13 +220,13 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildIconFillTag(BuildContext context) {
     // 带图标的标签：通过构造器 icon 参数传入 IconData
     return const TTag('标签文字', icon: TIcons.discount);
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildIconOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context)
@@ -235,12 +235,12 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCloseFillTag(BuildContext context) {
     return TTag('标签文字', needCloseIcon: true, onCloseTap: () {});
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCloseOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context)
@@ -251,7 +251,7 @@ class _TTagPageState extends State<TTagPage> {
 
   // ============ 组件状态（主题） ============
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildDarkShowTags(BuildContext context) {
     // 非浅色填充各主题
     return const Wrap(
@@ -266,7 +266,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildLightShowTags(BuildContext context) {
     // 浅色填充各主题
     return Theme(
@@ -285,7 +285,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildOutlineShowTags(BuildContext context) {
     // 非浅色描边各主题
     return Theme(
@@ -304,7 +304,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildLightOutlineShowTags(BuildContext context) {
     // 浅色描边各主题
     return Theme(
@@ -325,7 +325,7 @@ class _TTagPageState extends State<TTagPage> {
 
   // ============ 组件尺寸 ============
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildAllSizeTags(BuildContext context) {
     return const Wrap(
       spacing: 8,
@@ -339,7 +339,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildSelectDefault(BuildContext context) {
     return Wrap(
       spacing: 8,
@@ -357,7 +357,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildSelectColorSchemes(BuildContext context) {
     return Wrap(
       spacing: 8,
@@ -382,7 +382,7 @@ class _TTagPageState extends State<TTagPage> {
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildSelectDisabled(BuildContext context) {
     return const TSelectTag('禁用标签', value: false, onChanged: null);
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TSearchBarPage extends StatefulWidget {
@@ -48,7 +48,7 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildDefaultSearchBar(BuildContext context) {
     return TSearchBar(
       hintText: '搜索预设文案',
@@ -60,7 +60,7 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildFocusSearchBar(BuildContext context) {
     return const TSearchBar(
       hintText: '搜索预设文案',
@@ -69,7 +69,7 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildSearchBarWithShape(BuildContext context) {
     return Column(
       children: [
@@ -99,7 +99,7 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildCenterSearchBar(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
@@ -116,7 +116,7 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildSearchBarWithAction(BuildContext context) {
     return Column(
       children: [
@@ -154,7 +154,7 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildFocusSearchBarWithAction(BuildContext context) {
     return TSearchBar(
       hintText: '搜索预设文案',

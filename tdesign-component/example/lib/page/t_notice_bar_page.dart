@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TNoticeBarPage extends StatelessWidget {
@@ -18,14 +18,12 @@ class TNoticeBarPage extends StatelessWidget {
           ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
           ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
           ExampleItem(
-              padding: EdgeInsets.only(top: 16),
-              builder: _scrollIconNoticeBar),
+              padding: EdgeInsets.only(top: 16), builder: _scrollIconNoticeBar),
           ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
           ExampleItem(desc: '带关闭的公告栏', builder: _closeNoticeBar),
           ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
           ExampleItem(
-              padding: EdgeInsets.only(top: 16),
-              builder: _entranceNoticeBar2),
+              padding: EdgeInsets.only(top: 16), builder: _entranceNoticeBar2),
           ExampleItem(desc: '自定义样式的公告栏', builder: _customNoticeBar),
         ]),
         ExampleModule(title: '组件状态', children: [
@@ -47,14 +45,14 @@ class TNoticeBarPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _textNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '这是一条普通的通知信息',
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _scrollNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -68,7 +66,7 @@ Widget _scrollNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _scrollIconNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -84,7 +82,7 @@ Widget _scrollIconNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _iconNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -96,7 +94,7 @@ Widget _iconNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _closeNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -111,7 +109,7 @@ Widget _closeNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _entranceNoticeBar1(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -129,7 +127,7 @@ Widget _entranceNoticeBar1(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _entranceNoticeBar2(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -144,7 +142,7 @@ Widget _entranceNoticeBar2(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _customNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -161,7 +159,7 @@ Widget _customNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _normalNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -176,7 +174,7 @@ Widget _normalNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _successNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -191,7 +189,7 @@ Widget _successNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _warningNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -206,7 +204,7 @@ Widget _warningNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _errorNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -221,13 +219,12 @@ Widget _errorNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _cardNoticeBar(BuildContext context) {
   var size = MediaQuery.of(context).size;
-  final resolvedBg =
-      const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
-          .resolve(context)
-          .backgroundColor;
+  final resolvedBg = const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
+      .resolve(context)
+      .backgroundColor;
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
@@ -285,7 +282,7 @@ Widget _cardNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _tapNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -303,7 +300,7 @@ Widget _tapNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _leftNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
@@ -321,7 +318,7 @@ Widget _leftNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _stepNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(

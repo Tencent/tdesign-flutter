@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TAvatarPage extends StatefulWidget {
   const TAvatarPage({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 图片头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildImageAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
@@ -72,7 +72,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 字符头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildTextAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
@@ -92,7 +92,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 图标头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildIconAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
@@ -108,7 +108,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 带徽标头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildBadgeAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
@@ -162,7 +162,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 纯展示的头像组
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildDisplayAvatar(BuildContext context) {
     return const TAvatarGroup(
       maxCount: 4,
@@ -178,7 +178,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 带操作的头像组
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildOperationAvatar(BuildContext context) {
     return TAvatarGroup(
       children: [
@@ -193,7 +193,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 组件尺寸 大尺寸
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildLargeAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
@@ -214,7 +214,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 组件尺寸 中尺寸
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildMediumAvatar(BuildContext context) {
     return const Row(
       // spacing: 48,
@@ -235,7 +235,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 组件尺寸 小尺寸
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildSmallAvatar(BuildContext context) {
     return const Row(
       // spacing: 56,

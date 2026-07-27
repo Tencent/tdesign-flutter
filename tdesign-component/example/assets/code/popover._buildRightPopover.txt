@@ -1,0 +1,24 @@
+Widget _buildRightPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TButton(
+            size: TButtonSize.medium,
+            child: const Text('右侧中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
+              TPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TPopoverPlacement.right,
+                colorScheme: theme,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }

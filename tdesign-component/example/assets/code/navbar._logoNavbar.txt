@@ -1,0 +1,26 @@
+Widget _logoNavbar(BuildContext context) {
+    return TNavBar(
+      useDefaultBack: false,
+      centerTitle: false,
+      titleMargin: 0,
+      titleWidget: const TImage(
+        src: 'assets/img/t_brand.png',
+        width: 120,
+        height: 32,
+        variant: TImageVariant.fitWidth,
+        fit: BoxFit.contain,
+      ),
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
+  }

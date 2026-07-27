@@ -1,0 +1,20 @@
+Widget _allowMultipleTaps(BuildContext context) {
+    return _ExampleTabBar(
+        variant: TTabBarVariant.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TTabBarItemConfig(
+            allowMultipleTaps: true,
+            tabText: '支持重复点击',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TTabBarItemConfig(
+            tabText: '不支持重复点击',
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
+  }

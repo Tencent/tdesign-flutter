@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TDividerPage extends StatelessWidget {
   const TDividerPage({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class TDividerPage extends StatelessWidget {
         ]);
   }
 
-  @Demo(group: 'divider')
+  @ExampleCode(group: 'divider')
   Widget _horizontalDivider(BuildContext context) {
     return Container(
       alignment: Alignment.center,
@@ -33,7 +33,7 @@ class TDividerPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'divider')
+  @ExampleCode(group: 'divider')
   Widget _horizontalTextDivider(BuildContext context) {
     return const Wrap(
       runSpacing: 20,
@@ -54,7 +54,7 @@ class TDividerPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'divider')
+  @ExampleCode(group: 'divider')
   Widget _verticalDivider(BuildContext context) {
     return Container(
       alignment: Alignment.center,
@@ -73,22 +73,20 @@ class TDividerPage extends StatelessWidget {
               child: TDivider(layout: TDividerLayout.vertical),
             ),
           ),
-          TText('文字信息',
-              textColor: context.tTheme.textColorPlaceholder),
+          TText('文字信息', textColor: context.tTheme.textColorPlaceholder),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
               child: TDivider(layout: TDividerLayout.vertical),
             ),
           ),
-          TText('文字信息',
-              textColor: context.tTheme.textColorPlaceholder),
+          TText('文字信息', textColor: context.tTheme.textColorPlaceholder),
         ],
       ),
     );
   }
 
-  @Demo(group: 'divider')
+  @ExampleCode(group: 'divider')
   Widget _dashedDivider(BuildContext context) {
     return const Wrap(
       runSpacing: 20,

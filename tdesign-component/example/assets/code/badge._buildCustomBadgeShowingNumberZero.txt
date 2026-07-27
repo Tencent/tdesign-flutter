@@ -1,0 +1,22 @@
+Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
+    return SizedBox(
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomLeft,
+        children: [
+          Container(
+            child: const Icon(TIcons.notification),
+            decoration: BoxDecoration(
+                color: context.tTheme.bgColorComponent,
+                borderRadius:
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
+          ),
+          const Positioned(
+            child: TBadge(count: 0),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }

@@ -72,8 +72,14 @@ jobs:
           flutter-version: 3.32.0
           channel: stable
           cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
+
+      - name: Get component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: Check example code snippets
+        working-directory: ./tdesign-component
+        run: dart run tool/generate_example_code.dart --check
 
       - name: Extract version
         id: version

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 ///
@@ -62,7 +62,7 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
         ));
   }
 
-  @Demo(group: 'sideBar')
+  @ExampleCode(group: 'sideBar')
   Widget _buildPaginationSideBar(BuildContext context) {
     // 切页用法
     final list = <TSideBarItem>[];

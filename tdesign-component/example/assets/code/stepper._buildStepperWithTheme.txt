@@ -1,0 +1,12 @@
+Widget _buildStepperWithTheme(BuildContext context) {
+    return _buildRow(context, [
+      _filledStepper(
+        value: _filledValue,
+        onChanged: (value) => setState(() => _filledValue = value),
+      ),
+      TStepper(
+        value: _normalValue,
+        onChanged: (value) => setState(() => _normalValue = value),
+      ),
+    ]);
+  }

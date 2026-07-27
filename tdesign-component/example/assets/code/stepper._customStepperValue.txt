@@ -1,0 +1,24 @@
+Widget _customStepperValue(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _filledStepper(
+            value: _customValue,
+            step: 2,
+            max: 99,
+            onChanged: (value) => setState(() => _customValue = value),
+          ),
+          TButton(
+            child: const Text('value * 2'),
+            onPressed: () {
+              setState(() {
+                _customValue = (_customValue * 2).clamp(0, 99);
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }

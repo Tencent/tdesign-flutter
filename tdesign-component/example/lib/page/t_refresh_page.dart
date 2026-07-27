@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TPullDownRefreshPage extends StatefulWidget {
   const TPullDownRefreshPage({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
     );
   }
 
-  @Demo(group: 'refresh')
+  @ExampleCode(group: 'refresh')
   Widget _buildRefresh(BuildContext context) {
     return EasyRefresh(
       // 下拉样式

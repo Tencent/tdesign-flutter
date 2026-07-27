@@ -1,0 +1,11 @@
+Widget _buildRange(BuildContext context) => _withValueLabel(
+        context,
+        label:
+            '当前范围：${range.start.toStringAsFixed(0)} - ${range.end.toStringAsFixed(0)}',
+        child: TRangeSlider(
+          value: range,
+          min: 0,
+          max: 100,
+          onChanged: (next) => setState(() => range = next),
+        ),
+      );

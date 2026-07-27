@@ -1,0 +1,19 @@
+/// 组件尺寸 小尺寸
+    Widget _buildSmallAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 56,
+      children: [
+        TAvatar(
+          size: TAvatarSize.small,
+          image: AssetImage('assets/img/t_avatar_1.png'),
+        ),
+        SizedBox(width: 56),
+        TAvatar(
+          size: TAvatarSize.small,
+          child: Text('A'),
+        ),
+        SizedBox(width: 56),
+        TAvatar(size: TAvatarSize.small),
+      ],
+    );
+  }

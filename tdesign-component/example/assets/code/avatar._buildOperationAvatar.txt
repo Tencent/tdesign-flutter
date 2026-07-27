@@ -1,0 +1,13 @@
+/// 带操作的头像组
+    Widget _buildOperationAvatar(BuildContext context) {
+    return TAvatarGroup(
+      children: [
+        const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        const TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(
+          child: const Icon(Icons.add),
+          onTap: () => TToast.showText('点击了操作', context: context),
+        ),
+      ],
+    );
+  }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 const _list = [
   {
@@ -147,7 +147,7 @@ class TIndexesPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'indexes')
+@ExampleCode(group: 'indexes')
 Widget _buildSimple(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();
   return SizedBox(
@@ -181,7 +181,7 @@ Widget _buildSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'indexes')
+@ExampleCode(group: 'indexes')
 Widget _buildOther(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();
   return SizedBox(
@@ -216,7 +216,7 @@ Widget _buildOther(BuildContext context) {
   );
 }
 
-@Demo(group: 'indexes')
+@ExampleCode(group: 'indexes')
 Widget _buildCustomIndexes(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();
   return SizedBox(

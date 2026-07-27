@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 /// TSideBarUnSelectedColorPage 演示。
@@ -38,7 +38,7 @@ class TSideBarUnSelectedColorPageState
     );
   }
 
-  @Demo(group: 'sideBar')
+  @ExampleCode(group: 'sideBar')
   Widget _buildUnselectedColorSideBar(BuildContext context) {
     final label = _items[_currentValue].label;
     return Row(

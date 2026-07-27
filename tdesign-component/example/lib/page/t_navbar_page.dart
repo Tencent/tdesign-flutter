@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 const titleText = '标题文字';
 
@@ -43,7 +43,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
       titleFontWeight: FontWeight.w600,
@@ -52,7 +52,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _leftMultiAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
@@ -78,7 +78,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _rightMultiAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
@@ -102,7 +102,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _searchNavbar(BuildContext context) {
     return TNavBar(
       useDefaultBack: false,
@@ -139,7 +139,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _logoNavbar(BuildContext context) {
     return TNavBar(
       useDefaultBack: false,
@@ -167,7 +167,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleCenterNavbar(BuildContext context) {
     return TNavBar(
       title: titleText,
@@ -188,7 +188,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleLeftNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
@@ -214,7 +214,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleNormalNavbar(BuildContext context) {
     return TNavBar(
       title: titleText,
@@ -235,7 +235,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleBelowNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
@@ -278,7 +278,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
       title: titleText,
@@ -311,7 +311,7 @@ class TNavBarPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _shadowNavbar(BuildContext context) {
     return TNavBar(
       titleFontWeight: FontWeight.w600,

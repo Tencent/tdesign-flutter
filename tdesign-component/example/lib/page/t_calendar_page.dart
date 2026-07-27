@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TCalendar 演示。
@@ -35,7 +35,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
     );
   }
 
-  @Demo(group: 'calendar')
+  @ExampleCode(group: 'calendar')
   Widget _buildSingle(BuildContext context) {
     return TCalendar(
       value: _singleValue,
@@ -43,7 +43,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
     );
   }
 
-  @Demo(group: 'calendar')
+  @ExampleCode(group: 'calendar')
   Widget _buildMultiple(BuildContext context) {
     return TCalendar(
       value: _multipleValue,
@@ -52,7 +52,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
     );
   }
 
-  @Demo(group: 'calendar')
+  @ExampleCode(group: 'calendar')
   Widget _buildRange(BuildContext context) {
     return TCalendar(
       value: _rangeValue,
@@ -61,7 +61,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
     );
   }
 
-  @Demo(group: 'calendar')
+  @ExampleCode(group: 'calendar')
   Widget _buildAnchor(BuildContext context) {
     return Column(
       children: [

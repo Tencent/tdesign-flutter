@@ -1,0 +1,7 @@
+Widget _buildCircleOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+          const TTagThemeData(shape: TTagShape.round, isOutline: true)),
+      child: const TTag('标签文字'),
+    );
+  }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 /// TPicker 演示。
@@ -79,7 +79,7 @@ class _TPickerPageState extends State<TPickerPage> {
     );
   }
 
-  @Demo(group: 'picker')
+  @ExampleCode(group: 'picker')
   Widget _buildColumns(BuildContext context) {
     return TPicker(
       items: _columns,
@@ -88,7 +88,7 @@ class _TPickerPageState extends State<TPickerPage> {
     );
   }
 
-  @Demo(group: 'picker')
+  @ExampleCode(group: 'picker')
   Widget _buildLinked(BuildContext context) {
     return TPicker(
       items: _linked,
@@ -97,12 +97,12 @@ class _TPickerPageState extends State<TPickerPage> {
     );
   }
 
-  @Demo(group: 'picker')
+  @ExampleCode(group: 'picker')
   Widget _buildDisabled(BuildContext context) {
     return TPicker(items: _columns, value: _columnValue);
   }
 
-  @Demo(group: 'picker')
+  @ExampleCode(group: 'picker')
   Widget _buildThemed(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(

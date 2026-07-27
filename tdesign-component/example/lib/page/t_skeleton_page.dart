@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TSkeletonPage extends StatelessWidget {
@@ -89,27 +89,27 @@ class TSkeletonPage extends StatelessWidget {
                 : builder(context),
           );
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildAvatarSkeleton(BuildContext context) {
     return TSkeleton(variant: TSkeletonVariant.avatar);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildImageSkeleton(BuildContext context) {
     return TSkeleton(variant: TSkeletonVariant.image);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildTextSkeleton(BuildContext context) {
     return TSkeleton(variant: TSkeletonVariant.text);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildParagraphSkeleton(BuildContext context) {
     return TSkeleton(variant: TSkeletonVariant.paragraph);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildCellSkeleton(BuildContext context) {
     final rowColsAvatar = TSkeleton(variant: TSkeletonVariant.avatar);
     final rowColsImage = TSkeleton.fromRowCol(
@@ -150,7 +150,7 @@ class TSkeletonPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildGridSkeleton(BuildContext context) {
     return Row(
       // spacing: 16,
@@ -166,7 +166,7 @@ class TSkeletonPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildCombineSkeleton(BuildContext context) {
     Widget buildRowCols() {
       return Expanded(
@@ -206,7 +206,7 @@ class TSkeletonPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildGradientSkeleton(BuildContext context) {
     return TSkeleton(
       animation: TSkeletonAnimation.gradient,
@@ -214,7 +214,7 @@ class TSkeletonPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildFlashedSkeleton(BuildContext context) {
     return TSkeleton(
       animation: TSkeletonAnimation.flashed,

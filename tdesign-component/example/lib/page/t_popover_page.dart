@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TPopoverPage extends StatefulWidget {
@@ -196,7 +196,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -217,7 +217,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildNoArrowPopover(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constrains) {
@@ -228,14 +228,17 @@ class _TPopoverPage extends State<TPopoverPage> {
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
             TPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false, colorScheme: theme);
+                context: _,
+                content: '弹出气泡内容',
+                showArrow: false,
+                colorScheme: theme);
           },
         );
       },
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildNCustomPopover(BuildContext context) {
     var textStyle = TextStyle(
         color: theme == TPopoverColorScheme.light
@@ -258,17 +261,20 @@ class _TPopoverPage extends State<TPopoverPage> {
               contentWidget: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
                     child: TText('选项1', style: textStyle),
                   ),
                   const TDivider(),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
                     child: TText('选项2', style: textStyle),
                   ),
                   const TDivider(),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
                     child: TText('选项3', style: textStyle),
                   ),
                 ],
@@ -280,7 +286,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildDarkPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -304,7 +310,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -329,7 +335,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildInfoPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -354,7 +360,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildSuccessPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -379,7 +385,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildWarningPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -404,7 +410,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildErrorPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -429,7 +435,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildTopLeftPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -455,7 +461,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -481,7 +487,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildTopRightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -507,7 +513,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildBottomLeftPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -533,7 +539,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildBottomPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -559,7 +565,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildBottomRightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -585,7 +591,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildRightTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -611,7 +617,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildRightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -637,7 +643,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildRightBottomPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -663,7 +669,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLeftTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -689,7 +695,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLeftPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -715,7 +721,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLeftBottomPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -741,7 +747,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildMultiLinePopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -766,7 +772,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildCustomRadiusPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),

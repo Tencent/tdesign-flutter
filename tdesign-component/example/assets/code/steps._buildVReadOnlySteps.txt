@@ -1,0 +1,16 @@
+/// Read-only Steps 纯展示垂直步骤条
+    Widget _buildVReadOnlySteps(BuildContext context) {
+    return TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(title: 'Process', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+      ],
+      // 垂直方向
+      direction: TStepsDirection.vertical,
+      value: 0,
+      // 只读模式
+      readOnly: true,
+    );
+  }

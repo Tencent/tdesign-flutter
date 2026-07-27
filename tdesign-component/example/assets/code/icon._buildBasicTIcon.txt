@@ -1,0 +1,12 @@
+Widget _buildBasicTIcon(BuildContext context) {
+    // v1.0 新增：TIcon Widget（Material Icon 薄包装）
+    return const Row(
+      children: [
+        TIcon(TIcons.home_filled),
+        SizedBox(width: 16),
+        TIcon(TIcons.setting),
+        SizedBox(width: 16),
+        TIcon(TIcons.notification),
+      ],
+    );
+  }

@@ -1,0 +1,16 @@
+Widget _buildCircleBadge(BuildContext context) {
+    return SizedBox(
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomLeft,
+        children: [
+          const Icon(TIcons.notification),
+          Positioned(
+            child: TBadge(count: num),
+            left: 18,
+            bottom: 18,
+          )
+        ],
+      ),
+    );
+  }

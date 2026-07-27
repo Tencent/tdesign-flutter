@@ -1,0 +1,7 @@
+Widget _buildCloseOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: TTag('标签文字', needCloseIcon: true, onCloseTap: () {}),
+    );
+  }

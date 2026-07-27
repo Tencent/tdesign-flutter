@@ -1,0 +1,13 @@
+Widget _group(BuildContext context) {
+    return TButton(
+      child: const Text('打开分组面板'),
+      onPressed: () => TActionSheet.showGroup(
+        context,
+        items: [
+          TActionSheetItem(label: '微信', group: '分享'),
+          TActionSheetItem(label: '朋友圈', group: '分享'),
+          TActionSheetItem(label: '复制', group: '操作'),
+        ],
+      ),
+    );
+  }

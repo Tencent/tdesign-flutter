@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// Popup 弹出层示例页面
@@ -27,7 +27,7 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'popup')
+  @ExampleCode(group: 'popup')
   Widget _buildBottomPopup(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -49,7 +49,7 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'popup')
+  @ExampleCode(group: 'popup')
   Widget _buildTopPopup(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -74,7 +74,7 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'popup')
+  @ExampleCode(group: 'popup')
   Widget _buildLeftPopup(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -98,7 +98,7 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'popup')
+  @ExampleCode(group: 'popup')
   Widget _buildRightPopup(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -122,7 +122,7 @@ class TPopupPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'popup')
+  @ExampleCode(group: 'popup')
   Widget _buildCenterPopup(BuildContext context) {
     return SizedBox(
       width: double.infinity,

@@ -1,0 +1,7 @@
+TTimeCounter _buildRoundSmallSize(BuildContext context) {
+  return const TTimeCounter(
+    time: 60 * 60 * 1000,
+    size: TTimeCounterSize.small,
+    variant: TTimeCounterVariant.round,
+  );
+}

@@ -1,0 +1,14 @@
+Widget _multiple(BuildContext context) {
+    return TDropdownMenu<String>(
+      items: [
+        TDropdownItem<String>(
+          label: '筛选',
+          multiple: true,
+          options: options,
+          values: const {'all'},
+          onValuesChanged: (_) {},
+          onConfirm: (_) {},
+        ),
+      ],
+    );
+  }

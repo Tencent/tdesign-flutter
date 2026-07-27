@@ -1,0 +1,9 @@
+Widget _buildRadiusRound(BuildContext context) {
+    // 胶囊型，数值设置较大
+    return Container(
+      decoration: BoxDecoration(
+        color: context.tTheme.brandNormalColor,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
+      ),
+    );
+  }

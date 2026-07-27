@@ -1,0 +1,32 @@
+Widget _buildThemeDemo(BuildContext context) {
+    // v1.0 新增：通过 TTextThemeData 统一控制子树 TText 默认样式
+    return Theme(
+      data: Theme.of(context).copyWith(
+        extensions: [
+          ...Theme.of(context).extensions.values,
+          TTextThemeData(
+            defaultTextColor: context.tTheme.brandNormalColor,
+            forceVerticalCenter: true,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: context.tTheme.brandFocusColor,
+            child: TText(exampleTxt),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '↑ 继承 TTextThemeData 默认颜色和强制居中',
+            style: TextStyle(
+              fontSize: 12,
+              color: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }

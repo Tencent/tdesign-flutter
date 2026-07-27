@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TTextarea 示例页。
@@ -28,12 +28,12 @@ class TTextareaPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'textarea')
+  @ExampleCode(group: 'textarea')
   Widget _buildBasic(BuildContext context) => const TTextarea(
         hintText: '请输入内容',
       );
 
-  @Demo(group: 'textarea')
+  @ExampleCode(group: 'textarea')
   Widget _buildLabel(BuildContext context) => const TTextarea(
         label: '备注',
         hintText: '请输入备注',
@@ -42,7 +42,7 @@ class TTextareaPage extends StatelessWidget {
         maxLines: 6,
       );
 
-  @Demo(group: 'textarea')
+  @ExampleCode(group: 'textarea')
   Widget _buildReadOnly(BuildContext context) => const TTextarea(
         initialValue: '只读内容',
         readOnly: true,

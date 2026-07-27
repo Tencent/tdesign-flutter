@@ -1,0 +1,21 @@
+Widget _variants(BuildContext context) {
+    return Column(
+      children: [
+        for (final entry in const [
+          (TCheckboxVariant.square, '方形'),
+        ])
+          Theme(
+            data: Theme.of(context).mergeExtension(
+              TCheckboxThemeData(variant: entry.$1),
+            ),
+            child: TCheckbox(
+              value: _variantValues[entry.$1],
+              title: entry.$2,
+              onChanged: (value) {
+                setState(() => _variantValues[entry.$1] = value == true);
+              },
+            ),
+          ),
+      ],
+    );
+  }

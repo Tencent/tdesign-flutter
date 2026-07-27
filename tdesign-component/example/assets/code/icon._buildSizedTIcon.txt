@@ -1,0 +1,14 @@
+Widget _buildSizedTIcon(BuildContext context) {
+    // 构造器参数 size/color 直接生效
+    return Row(
+      children: [
+        TIcon(TIcons.home_filled,
+            size: 32, color: context.tTheme.brandNormalColor),
+        const SizedBox(width: 16),
+        TIcon(TIcons.setting, size: 28, color: context.tTheme.errorNormalColor),
+        const SizedBox(width: 16),
+        TIcon(TIcons.notification,
+            size: 24, color: context.tTheme.warningNormalColor),
+      ],
+    );
+  }

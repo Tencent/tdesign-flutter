@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TActionSheetPage extends StatelessWidget {
@@ -29,7 +29,7 @@ class TActionSheetPage extends StatelessWidget {
         TActionSheetItem(label: '删除', icon: const Icon(Icons.delete)),
       ];
 
-  @Demo(group: 'action_sheet')
+  @ExampleCode(group: 'action_sheet')
   Widget _list(BuildContext context) {
     return TButton(
       child: const Text('打开列表面板'),
@@ -41,7 +41,7 @@ class TActionSheetPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'action_sheet')
+  @ExampleCode(group: 'action_sheet')
   Widget _grid(BuildContext context) {
     return TButton(
       child: const Text('打开宫格面板'),
@@ -53,7 +53,7 @@ class TActionSheetPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'action_sheet')
+  @ExampleCode(group: 'action_sheet')
   Widget _group(BuildContext context) {
     return TButton(
       child: const Text('打开分组面板'),

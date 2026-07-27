@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 /// TSideBarLoadingPage 演示。
@@ -61,7 +61,7 @@ class TSideBarLoadingPageState extends State<TSideBarLoadingPage> {
     );
   }
 
-  @Demo(group: 'sideBar')
+  @ExampleCode(group: 'sideBar')
   Widget _buildLoadingSideBar(BuildContext context) {
     final label = _items[_currentValue].label;
     return Column(

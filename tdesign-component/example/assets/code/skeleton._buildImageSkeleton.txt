@@ -1,0 +1,3 @@
+Widget _buildImageSkeleton(BuildContext context) {
+    return TSkeleton(variant: TSkeletonVariant.image);
+  }

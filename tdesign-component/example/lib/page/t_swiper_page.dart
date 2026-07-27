@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TSwiperPage extends StatefulWidget {
   const TSwiperPage({super.key});
@@ -78,35 +78,35 @@ class _TSwiperPageState extends State<TSwiperPage> {
     );
   }
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildDotsSwiper(BuildContext context) => _buildSwiper();
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildDotsBarSwiper(BuildContext context) => _buildSwiper(
         pagination: TSwiperPaginationVariant.dotsBar,
       );
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildFractionSwiper(BuildContext context) => _buildSwiper(
         pagination: TSwiperPaginationVariant.fraction,
       );
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildControlsSwiper(BuildContext context) => _buildSwiper(
         pagination: TSwiperPaginationVariant.controls,
       );
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildCardsSwiper(BuildContext context) => _buildSwiper(
         pageEffect: TSwiperPageEffect.cardMargin,
       );
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildScaleCardsSwiper(BuildContext context) => _buildSwiper(
         pageEffect: TSwiperPageEffect.scaleAndFade,
       );
 
-  @Demo(group: 'swiper')
+  @ExampleCode(group: 'swiper')
   Widget _buildVerticalSwiper(BuildContext context) => _buildSwiper(
         pagination: TSwiperPaginationVariant.dotsBar,
         scrollDirection: Axis.vertical,

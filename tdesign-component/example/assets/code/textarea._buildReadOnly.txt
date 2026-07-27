@@ -1,0 +1,4 @@
+Widget _buildReadOnly(BuildContext context) => const TTextarea(
+        initialValue: '只读内容',
+        readOnly: true,
+      );

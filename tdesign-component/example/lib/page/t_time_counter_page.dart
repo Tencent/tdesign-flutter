@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TTimeCounterPage extends StatelessWidget {
   const TTimeCounterPage({super.key});
@@ -209,12 +209,12 @@ class TTimeCounterPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSimple(BuildContext context) {
   return const TTimeCounter(time: 60 * 60 * 1000);
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildMillisecondSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -222,7 +222,7 @@ TTimeCounter _buildMillisecondSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUpSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -231,7 +231,7 @@ TTimeCounter _buildUpSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -239,7 +239,7 @@ TTimeCounter _buildSquareSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -247,7 +247,7 @@ TTimeCounter _buildRoundSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -256,7 +256,7 @@ TTimeCounter _buildUnitSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -264,7 +264,7 @@ TTimeCounter _buildCustomUnitSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -272,7 +272,7 @@ TTimeCounter _buildSmallSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -280,7 +280,7 @@ TTimeCounter _buildMediumSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -288,7 +288,7 @@ TTimeCounter _buildLargeSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -297,7 +297,7 @@ TTimeCounter _buildSquareSmallSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -306,7 +306,7 @@ TTimeCounter _buildSquareMediumSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -315,7 +315,7 @@ TTimeCounter _buildSquareLargeSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -324,7 +324,7 @@ TTimeCounter _buildRoundSmallSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -333,7 +333,7 @@ TTimeCounter _buildRoundMediumSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -342,7 +342,7 @@ TTimeCounter _buildRoundLargeSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -352,7 +352,7 @@ TTimeCounter _buildUnitSmallSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -362,7 +362,7 @@ TTimeCounter _buildUnitMediumSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -372,7 +372,7 @@ TTimeCounter _buildUnitLargeSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -381,7 +381,7 @@ TTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -390,7 +390,7 @@ TTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -399,7 +399,7 @@ TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 Widget _buildControl(BuildContext context) {
   var controller = TTimeCounterController();
   return Wrap(
@@ -446,7 +446,7 @@ Widget _buildControl(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomNum(BuildContext context) {
   return const TTimeCounter(
     time: 2000 * 60 * 1000,

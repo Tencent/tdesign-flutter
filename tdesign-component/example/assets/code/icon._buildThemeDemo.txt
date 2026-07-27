@@ -1,0 +1,37 @@
+Widget _buildThemeDemo(BuildContext context) {
+    // v1.0 新增：通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
+    return Theme(
+      data: Theme.of(context).copyWith(
+        extensions: [
+          ...Theme.of(context).extensions.values,
+          TIconThemeData(
+            size: 36,
+            color: context.tTheme.brandNormalColor,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              TIcon(TIcons.home_filled),
+              SizedBox(width: 16),
+              TIcon(TIcons.setting),
+              SizedBox(width: 16),
+              TIcon(TIcons.notification),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '↑ 继承 TIconThemeData 默认 size=36 和品牌色',
+            style: TextStyle(
+              fontSize: 12,
+              color: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }

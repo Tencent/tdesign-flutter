@@ -1,0 +1,32 @@
+Widget _density(BuildContext context) {
+    final compactTheme = CheckboxTheme.of(context).copyWith(
+      visualDensity: VisualDensity.compact,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.tTheme.componentBorderColor),
+          ),
+          child: TCheckbox(
+            value: _singleValue,
+            onChanged: (value) => setState(() => _singleValue = value),
+          ),
+        ),
+        Theme(
+          data: Theme.of(context).copyWith(checkboxTheme: compactTheme),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(color: context.tTheme.componentBorderColor),
+            ),
+            child: TCheckbox(
+              value: _singleValue,
+              onChanged: (value) => setState(() => _singleValue = value),
+            ),
+          ),
+        ),
+      ],
+    );
+  }

@@ -1,0 +1,33 @@
+/// 水平错误状态图标步骤条
+    Widget _buildHErrorSteps2(BuildContext context) {
+    return TSteps(
+      steps: [
+        TStepsItemData(
+          title: 'Steps1',
+          content: 'Content1',
+          successIcon: TIcons.cart,
+        ),
+        TStepsItemData(
+          title: 'Error',
+          content: 'Content2',
+          successIcon: TIcons.cart,
+          errorIcon: TIcons.close_circle,
+        ),
+        TStepsItemData(
+          title: 'Steps3',
+          content: 'Content3',
+          successIcon: TIcons.cart,
+        ),
+        TStepsItemData(
+          title: 'Steps4',
+          content: 'Content4',
+          successIcon: TIcons.cart,
+        ),
+      ],
+      // 水平方向
+      direction: TStepsDirection.horizontal,
+      value: 1,
+      // 错误状态
+      status: TStepsStatus.error,
+    );
+  }

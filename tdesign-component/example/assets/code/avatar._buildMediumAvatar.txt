@@ -1,0 +1,19 @@
+/// 组件尺寸 中尺寸
+    Widget _buildMediumAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 48,
+      children: [
+        TAvatar(
+          size: TAvatarSize.medium,
+          image: AssetImage('assets/img/t_avatar_1.png'),
+        ),
+        SizedBox(width: 48),
+        TAvatar(
+          size: TAvatarSize.medium,
+          child: Text('A'),
+        ),
+        SizedBox(width: 48),
+        TAvatar(size: TAvatarSize.medium),
+      ],
+    );
+  }

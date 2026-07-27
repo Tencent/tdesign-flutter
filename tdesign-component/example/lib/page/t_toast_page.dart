@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// Toast 轻提示示例页面
@@ -33,7 +33,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildTextToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -49,7 +49,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildIconToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -69,7 +69,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildLoadingToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -92,7 +92,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildSuccessToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -108,7 +108,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildWarningToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -124,7 +124,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildFailToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -140,7 +140,7 @@ class TToastPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'toast')
+  @ExampleCode(group: 'toast')
   Widget _buildCustomDurationToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,

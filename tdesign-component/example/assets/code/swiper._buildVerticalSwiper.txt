@@ -1,0 +1,4 @@
+Widget _buildVerticalSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.dotsBar,
+        scrollDirection: Axis.vertical,
+      );

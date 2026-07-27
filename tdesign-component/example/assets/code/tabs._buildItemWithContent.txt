@@ -1,0 +1,25 @@
+Widget _buildItemWithContent(BuildContext context) {
+    final tabController = _demoController('content', 3);
+    return SizedBox(
+      height: 120 + 48,
+      child: Column(
+        children: [
+          TTabsBar(
+            tabs: subList(3),
+            controller: tabController,
+            isScrollable: false,
+            indicator: _indicator(context),
+          ),
+          Expanded(
+            child: Container(
+              color: context.tTheme.bgColorContainer,
+              child: TTabsBarView(
+                children: _getTabViews(),
+                controller: tabController,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }

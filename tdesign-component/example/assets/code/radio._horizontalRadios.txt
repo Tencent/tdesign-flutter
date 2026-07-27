@@ -1,0 +1,9 @@
+Widget _horizontalRadios(BuildContext context) {
+    return TRadioGroup<String>(
+      value: _horizontalValue,
+      options: _options,
+      direction: Axis.horizontal,
+      columns: 2,
+      onChanged: (value) => setState(() => _horizontalValue = value),
+    );
+  }

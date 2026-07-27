@@ -1,0 +1,8 @@
+Widget _verticalCardCheckbox(BuildContext context) {
+    return TCheckboxGroup<String>(
+      value: _cardValue,
+      options: _verticalCardOptions,
+      cardMode: true,
+      onChanged: (value) => setState(() => _cardValue = value),
+    );
+  }

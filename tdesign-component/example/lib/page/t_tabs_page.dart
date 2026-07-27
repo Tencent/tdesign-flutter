@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TTabsPage extends StatefulWidget {
   const TTabsPage({Key? key}) : super(key: key);
@@ -144,7 +144,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit1(BuildContext context) {
     return TTabsBar(
       tabs: subList(2),
@@ -153,7 +153,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit2(BuildContext context) {
     return TTabsBar(
       tabs: subList(3),
@@ -162,7 +162,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit3(BuildContext context) {
     return TTabsBar(
       tabs: subList(4),
@@ -171,7 +171,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit4(BuildContext context) {
     return TTabsBar(
       tabs: subList(5),
@@ -180,7 +180,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSpace(BuildContext context) {
     return TTabsBar(
       tabs: subList(16),
@@ -190,7 +190,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = List.generate(3, (index) {
       final text = '选项${index + 1}';
@@ -206,7 +206,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
       const TTab(
@@ -232,7 +232,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithContent(BuildContext context) {
     final tabController = _demoController('content', 3);
     return SizedBox(
@@ -259,7 +259,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
       const TTab(text: '选中'),
@@ -273,7 +273,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
       const TTab(text: '选项1'),
@@ -288,7 +288,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
       const TTab(text: '选项1'),

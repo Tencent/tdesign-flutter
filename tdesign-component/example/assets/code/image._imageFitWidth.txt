@@ -1,0 +1,21 @@
+Widget _imageFitWidth(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TText(
+            '适应宽',
+            font: context.tTheme.fontBodyMedium,
+          ),
+        ),
+        Container(
+          color: context.tTheme.bgColorContainerHover,
+          child: const TImage(
+            src: 'assets/img/image.png',
+            variant: TImageVariant.fitWidth,
+          ),
+        ),
+      ],
+    );
+  }

@@ -1,0 +1,19 @@
+Widget _buildPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TButton(
+            size: TButtonSize.medium,
+            child: const Text('带箭头'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
+              TPopover.showPopover(
+                  context: _, content: '弹出气泡内容', colorScheme: theme);
+            },
+          );
+        },
+      ),
+    );
+  }

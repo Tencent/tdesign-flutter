@@ -1,0 +1,16 @@
+Widget _buildDecoration(BuildContext context) => Theme(
+        data: Theme.of(context).mergeExtension(
+          TSliderThemeData(
+            decoration: BoxDecoration(
+              color: context.tTheme.bgColorSecondaryContainer,
+              borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+            ),
+          ),
+        ),
+        child: TRangeSlider(
+          value: range,
+          min: 0,
+          max: 100,
+          onChanged: (next) => setState(() => range = next),
+        ),
+      );

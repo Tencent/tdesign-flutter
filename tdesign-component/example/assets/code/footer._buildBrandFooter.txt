@@ -1,0 +1,6 @@
+Widget _buildBrandFooter(BuildContext context) {
+    return const TFooter(
+      TFooterVariant.brand,
+      logo: 'assets/img/t_brand.png',
+    );
+  }

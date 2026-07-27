@@ -1,0 +1,24 @@
+Widget _buildLinksFooter(BuildContext context) {
+    return TFooter(
+      TFooterVariant.link,
+      links: [
+        TLink(
+          child: const Text('底部链接1'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.basic,
+          onPressed: () {
+            print('点击了链接1');
+          },
+        ),
+        TLink(
+          child: const Text('底部链接2'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.basic,
+          onPressed: () {
+            print('点击了链接2');
+          },
+        ),
+      ],
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+    );
+  }

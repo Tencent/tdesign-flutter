@@ -1,0 +1,8 @@
+Widget _verticalCheckbox(BuildContext context) {
+    return TCheckboxGroup<String>(
+      value: _verticalValue,
+      options: _options,
+      onChanged: (value) => setState(() => _verticalValue = value),
+      showDivider: true,
+    );
+  }

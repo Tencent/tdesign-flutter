@@ -1,0 +1,12 @@
+Widget _buildLinkSizes(BuildContext context) {
+    return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildLinkWithSize(TLinkSize.small),
+            _buildLinkWithSize(TLinkSize.medium),
+            _buildLinkWithSize(TLinkSize.large),
+          ],
+        ));
+  }

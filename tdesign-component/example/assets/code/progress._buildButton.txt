@@ -1,0 +1,7 @@
+Widget _buildButton(BuildContext context) {
+    return TProgress(
+      variant: TProgressVariant.button,
+      value: progressValue,
+      label: buttonLabel,
+    );
+  }

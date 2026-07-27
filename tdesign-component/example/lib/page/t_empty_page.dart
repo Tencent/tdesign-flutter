@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TEmptyPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
         ]);
   }
 
-  @Demo(group: 'empty')
+  @ExampleCode(group: 'empty')
   Widget _iconEmpty(BuildContext context) {
     return const TEmpty(
       variant: TEmptyVariant.plain,
@@ -37,7 +37,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
     );
   }
 
-  @Demo(group: 'empty')
+  @ExampleCode(group: 'empty')
   Widget _iconEmptyCustom(BuildContext context) {
     return const TEmpty(
       variant: TEmptyVariant.plain,
@@ -46,7 +46,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
     );
   }
 
-  @Demo(group: 'empty')
+  @ExampleCode(group: 'empty')
   Widget _imageEmpty(BuildContext context) {
     return TEmpty(
       variant: TEmptyVariant.plain,
@@ -63,7 +63,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
     );
   }
 
-  @Demo(group: 'empty')
+  @ExampleCode(group: 'empty')
   Widget _operationEmpty(BuildContext context) {
     return const TEmpty(
       variant: TEmptyVariant.operation,
@@ -72,7 +72,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
     );
   }
 
-  @Demo(group: 'empty')
+  @ExampleCode(group: 'empty')
   Widget _operationCustomEmpty(BuildContext context) {
     return TEmpty(
       variant: TEmptyVariant.operation,

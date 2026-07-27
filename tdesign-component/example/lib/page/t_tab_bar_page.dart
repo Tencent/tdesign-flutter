@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 Widget? _selectedIcon;
@@ -159,7 +159,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _textTypeTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.text,
@@ -176,7 +176,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _textTypeTabBar3tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.text,
@@ -194,7 +194,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _textTypeTabBar4tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.text,
@@ -211,7 +211,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _textTypeTabBar5tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.text,
@@ -228,7 +228,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTextTypeTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.iconText,
@@ -247,7 +247,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.iconText,
@@ -266,7 +266,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.iconText,
@@ -285,7 +285,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.iconText,
@@ -304,7 +304,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTypeTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.icon,
@@ -321,7 +321,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTypeTabBar3tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.icon,
@@ -338,7 +338,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTypeTabBar4tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.icon,
@@ -355,7 +355,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _iconTypeTabBar5tabs(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.icon,
@@ -372,7 +372,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _expansionPanelTypeTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.expansionPanel,
@@ -421,7 +421,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _weakSelectTextTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.weakText,
@@ -455,7 +455,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _weakSelectIconTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.weakIcon,
@@ -495,7 +495,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _weakSelectIconTextTabBar(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.weakIconText,
@@ -535,7 +535,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _capsuleTabBar(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.capsule,
@@ -553,7 +553,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
         }));
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _capsuleTabBarOnLongPress(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.capsule,
@@ -575,7 +575,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
         }));
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _disabledTabBar(BuildContext context) {
     return TTabBar(
       variant: TTabBarVariant.iconText,
@@ -591,7 +591,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _buildCustomTopStyle(BuildContext context) {
     return _ExampleTabBar(
       variant: TTabBarVariant.weakIconText,
@@ -633,7 +633,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _customBgColor(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.iconText,
@@ -653,7 +653,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
         }));
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _customBgTypeTabBar(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.text,
@@ -681,7 +681,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
 
   var _tabBarValue = 0;
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _setValueToTabBar(BuildContext context) {
     return SizedBox(
       height: 220,
@@ -720,7 +720,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
     );
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _allowMultipleTaps(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.text,
@@ -742,7 +742,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
         ]);
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _needInkWellTabBar(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.iconText,
@@ -775,7 +775,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
         ]);
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _indicatorLinearAnimationTabBar(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.text,
@@ -808,7 +808,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
         ]);
   }
 
-  @Demo(group: 'tabBar')
+  @ExampleCode(group: 'tabBar')
   Widget _indicatorElasticAnimationTabBar(BuildContext context) {
     return _ExampleTabBar(
         variant: TTabBarVariant.text,

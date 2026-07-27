@@ -1,0 +1,22 @@
+Widget _rightMultiAction(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TNavBar(
+        title: titleText,
+        titleFontWeight: FontWeight.w600,
+        useDefaultBack: true,
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
+    );
+  }

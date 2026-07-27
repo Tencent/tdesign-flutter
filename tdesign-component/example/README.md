@@ -1,16 +1,23 @@
-# tdesign_flutter_example
+# TDesign Flutter Example
 
-A new Flutter application.
+组件示例 App，同时承载组件代码查看和 Web 文档示例代码。
 
-## Getting Started
+## 示例代码片段
 
-This project is a starting point for a Flutter application.
+为需要展示源码的方法添加 `@ExampleCode(group: '...')`。`group` 必须与所在页面的 `ExamplePage.exampleCodeGroup` 一致，生成器会输出 `assets/code/<group>.<method>.txt`。
 
-A few resources to get you started if this is your first Flutter project:
+```dart
+@ExampleCode(group: 'button')
+Widget _buildPrimaryButton(BuildContext context) {
+  return const TButton(child: TText('按钮'));
+}
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+从 `tdesign-component` 目录运行：
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+dart run tool/generate_example_code.dart
+dart run tool/generate_example_code.dart --check
+```
+
+提交示例改动时，必须一并提交生成的 `assets/code/*.txt`。`--check` 不写文件，CI 使用它检查源码片段是否过期。

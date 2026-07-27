@@ -1,0 +1,6 @@
+Widget _buildSuccess(BuildContext context) {
+    return TProgress(
+      variant: TProgressVariant.linear,
+      value: 1,
+    );
+  }

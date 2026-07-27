@@ -1,0 +1,22 @@
+Widget _buildBubbleBadge(BuildContext context) {
+    return SizedBox(
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomLeft,
+        children: [
+          Container(
+            child: const Icon(TIcons.shop),
+            decoration: BoxDecoration(
+                color: context.tTheme.bgColorComponent,
+                borderRadius:
+                    BorderRadius.circular(context.tTheme.radiusDefault)),
+          ),
+          const Positioned(
+            child: TBadge(count: 1, variant: TBadgeVariant.small),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }

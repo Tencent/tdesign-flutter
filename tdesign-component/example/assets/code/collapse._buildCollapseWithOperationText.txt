@@ -1,0 +1,21 @@
+Widget _buildCollapseWithOperationText(BuildContext context) {
+    return TCollapse(
+      onExpansionChanged: (int index, bool isExpanded) {
+        setState(() {
+          _blockStyleWithOpText[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _blockStyleWithOpText.map((CollapseDataItem item) {
+        return TCollapsePanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Text(item.headerValue);
+          },
+          expandIconTextBuilder: (BuildContext context, bool isExpanded) {
+            return isExpanded ? '收起' : '展开';
+          },
+          isExpanded: item.isExpanded,
+          body: const Text(randomString),
+        );
+      }).toList(),
+    );
+  }

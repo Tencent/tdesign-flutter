@@ -1,0 +1,8 @@
+Widget _buildSimpleOutlineTag(BuildContext context) {
+    // 描边标签：通过 TTagThemeData(isOutline: true) 子树注入
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: const TTag('标签文字'),
+    );
+  }

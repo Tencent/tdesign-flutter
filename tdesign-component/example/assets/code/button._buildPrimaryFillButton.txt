@@ -1,11 +1,9 @@
-
-  @Demo(group: 'button')
-  TButton _buildPrimaryFillButton(BuildContext context) {
-    return const TButton(
-      child: Text('填充按钮'),
+TButton _buildPrimaryFillButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: null,
+      onPressed: _onTap,
     );
   }

@@ -1,0 +1,8 @@
+Widget _buildStyleCoverColor(BuildContext context) {
+    return TText(
+      exampleTxt,
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(color: context.tTheme.errorNormalColor),
+    );
+  }

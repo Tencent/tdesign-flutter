@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TIconPage extends StatefulWidget {
   const TIconPage({Key? key}) : super(key: key);
@@ -56,7 +56,7 @@ class _TIconPageState extends State<TIconPage> {
         ]);
   }
 
-  @Demo(group: 'icon')
+  @ExampleCode(group: 'icon')
   Widget _buildBasicTIcon(BuildContext context) {
     // v1.0 新增：TIcon Widget（Material Icon 薄包装）
     return const Row(
@@ -70,7 +70,7 @@ class _TIconPageState extends State<TIconPage> {
     );
   }
 
-  @Demo(group: 'icon')
+  @ExampleCode(group: 'icon')
   Widget _buildSizedTIcon(BuildContext context) {
     // 构造器参数 size/color 直接生效
     return Row(
@@ -86,7 +86,7 @@ class _TIconPageState extends State<TIconPage> {
     );
   }
 
-  @Demo(group: 'icon')
+  @ExampleCode(group: 'icon')
   Widget _buildFromName(BuildContext context) {
     // 通过图标名查找（内部查找 TIcons.allIconsMap）
     return Row(
@@ -100,7 +100,7 @@ class _TIconPageState extends State<TIconPage> {
     );
   }
 
-  @Demo(group: 'icon')
+  @ExampleCode(group: 'icon')
   Widget _buildThemeDemo(BuildContext context) {
     // v1.0 新增：通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
     return Theme(
@@ -139,7 +139,7 @@ class _TIconPageState extends State<TIconPage> {
     );
   }
 
-  @Demo(group: 'icon')
+  @ExampleCode(group: 'icon')
   Widget _buildPriorityDemo(BuildContext context) {
     // 优先级链：构造器参数 > TIconThemeData > IconTheme
     // 子树 TIconThemeData 设置 size=36，但构造器指定 size=20 会覆盖
@@ -182,7 +182,7 @@ class _TIconPageState extends State<TIconPage> {
     );
   }
 
-  @Demo(group: 'icon')
+  @ExampleCode(group: 'icon')
   Widget _showAllIcons(BuildContext context) {
     return Container(
       alignment: Alignment.center,

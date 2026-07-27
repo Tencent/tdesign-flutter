@@ -1,0 +1,14 @@
+/// 纯展示的头像组
+    Widget _buildDisplayAvatar(BuildContext context) {
+    return const TAvatarGroup(
+      maxCount: 4,
+      overflow: TAvatar(child: Text('+1')),
+      children: [
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+      ],
+    );
+  }

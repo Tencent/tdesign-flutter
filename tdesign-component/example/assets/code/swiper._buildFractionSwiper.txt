@@ -1,0 +1,3 @@
+Widget _buildFractionSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.fraction,
+      );

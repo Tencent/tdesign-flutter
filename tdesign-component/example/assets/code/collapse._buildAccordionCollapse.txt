@@ -1,0 +1,17 @@
+Widget _buildAccordionCollapse(BuildContext context) {
+    return TCollapse<String>(
+      mode: TCollapseMode.accordion,
+      value: _accordionValue,
+      onChanged: (value) => setState(() => _accordionValue = value),
+      children: _accordionData.map((CollapseDataItem item) {
+        return TCollapsePanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Text(item.headerValue);
+          },
+          isExpanded: item.isExpanded,
+          body: const Text(randomString),
+          value: item.expandedValue,
+        );
+      }).toList(),
+    );
+  }

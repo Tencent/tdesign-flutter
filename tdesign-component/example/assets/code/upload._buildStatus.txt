@@ -1,0 +1,10 @@
+Widget _buildStatus(BuildContext context) {
+    return _section(
+      TUpload(
+        files: _statusFiles,
+        maxFiles: 4,
+        onRetry: (file) => _show('重试 ${file.name}'),
+        onChanged: (files) => setState(() => _statusFiles = files),
+      ),
+    );
+  }

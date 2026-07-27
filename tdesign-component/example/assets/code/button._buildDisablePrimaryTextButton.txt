@@ -1,5 +1,4 @@
-
-  TButton _buildDisablePrimaryTextButton(BuildContext context) {
+TButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TButton(
       child: Text('文字按钮'),
       size: TButtonSize.large,

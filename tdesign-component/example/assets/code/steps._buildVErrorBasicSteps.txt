@@ -1,0 +1,16 @@
+/// 垂直错误状态基本步骤条
+    Widget _buildVErrorBasicSteps(BuildContext context) {
+    return TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(title: 'Process', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+      ],
+      // 垂直方向
+      direction: TStepsDirection.vertical,
+      value: 1,
+      // 错误状态
+      status: TStepsStatus.error,
+    );
+  }

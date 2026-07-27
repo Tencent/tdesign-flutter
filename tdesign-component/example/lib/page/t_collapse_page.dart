@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TCollapsePage extends StatefulWidget {
@@ -56,7 +56,7 @@ class TCollapsePageState extends State<TCollapsePage> {
         ]);
   }
 
-  @Demo(group: 'collapse')
+  @ExampleCode(group: 'collapse')
   Widget _buildBasicCollapse(BuildContext context) {
     return TCollapse(
       onExpansionChanged: (int index, bool isExpanded) {
@@ -76,7 +76,7 @@ class TCollapsePageState extends State<TCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
+  @ExampleCode(group: 'collapse')
   Widget _buildBlockStyleCollapse(BuildContext context) {
     return TCollapse(
       onExpansionChanged: (int index, bool isExpanded) {
@@ -96,7 +96,7 @@ class TCollapsePageState extends State<TCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
+  @ExampleCode(group: 'collapse')
   Widget _buildCardCollapse(BuildContext context) {
     return TCollapse(
       onExpansionChanged: (int index, bool isExpanded) {
@@ -116,7 +116,7 @@ class TCollapsePageState extends State<TCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
+  @ExampleCode(group: 'collapse')
   Widget _buildCollapseWithOperationText(BuildContext context) {
     return TCollapse(
       onExpansionChanged: (int index, bool isExpanded) {
@@ -139,7 +139,7 @@ class TCollapsePageState extends State<TCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
+  @ExampleCode(group: 'collapse')
   Widget _buildAccordionCollapse(BuildContext context) {
     return TCollapse<String>(
       mode: TCollapseMode.accordion,

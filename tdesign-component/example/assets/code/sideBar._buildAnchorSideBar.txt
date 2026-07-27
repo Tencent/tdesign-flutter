@@ -1,0 +1,73 @@
+Widget _buildAnchorSideBar(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 80,
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: double.infinity,
+            child: TButton(
+              child: const Text('更新children'),
+              onPressed: () {
+                setState(() {
+                  final children = list
+                      .asMap()
+                      .entries
+                      .map((entry) => TSideBarItem(
+                            label: '变更${entry.key}',
+                            badge: entry.value.badge,
+                            value: entry.value.value,
+                            icon: entry.value.icon,
+                          ))
+                      .toList();
+                  list = children;
+                });
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              SizedBox(
+                width: 106,
+                child: TSideBar(
+                  style: widget.style,
+                  value: currentValue,
+                  children: list,
+                  onChanged: handleSidebarChange,
+                ),
+              ),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        _syncTrailingExtent();
+                      }
+                    });
+                    return SingleChildScrollView(
+                      key: _contentViewportKey,
+                      controller: _demoScroller,
+                      child: Container(
+                        color: context.tTheme.bgColorContainer,
+                        child: Column(
+                          children: [
+                            for (var index = 0;
+                                index < _headerKeys.length;
+                                index++)
+                              getAnchorDemo(index),
+                            SizedBox(height: _trailingExtent),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }

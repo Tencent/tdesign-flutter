@@ -1,0 +1,65 @@
+Widget _buildPaginationSideBar(BuildContext context) {
+    // 切页用法
+    final list = <TSideBarItem>[];
+    final pages = <Widget>[];
+
+    for (var i = 0; i < _pageTitles.length; i++) {
+      list.add(TSideBarItem(
+        label: _pageTitles[i],
+        value: i,
+      ));
+      pages.add(getPageDemo(context, i));
+    }
+
+    list[1] = TSideBarItem(
+      label: list[1].label,
+      value: list[1].value,
+      icon: list[1].icon,
+      textStyle: list[1].textStyle,
+      badge: const TBadge(variant: TBadgeVariant.dot),
+    );
+    list[2] = TSideBarItem(
+      label: list[2].label,
+      value: list[2].value,
+      icon: list[2].icon,
+      textStyle: list[2].textStyle,
+      badge: const TBadge(count: 8),
+    );
+
+    void setCurrentValue(int value) {
+      _pageController.jumpToPage(value);
+      if (currentValue != value) {
+        setState(() {
+          currentValue = value;
+        });
+      }
+    }
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 106,
+          child: TSideBar(
+            style: TSideBarVariant.normal,
+            value: currentValue,
+            children: list
+                .map((ele) => TSideBarItem(
+                    label: ele.label,
+                    badge: ele.badge,
+                    value: ele.value,
+                    icon: ele.icon))
+                .toList(),
+            onChanged: setCurrentValue,
+          ),
+        ),
+        Expanded(
+          child: PageView(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            children: pages,
+            physics: const NeverScrollableScrollPhysics(),
+          ),
+        )
+      ],
+    );
+  }

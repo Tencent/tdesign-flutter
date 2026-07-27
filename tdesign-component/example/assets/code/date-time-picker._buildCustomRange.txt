@@ -1,0 +1,22 @@
+Widget _buildCustomRange(BuildContext context) {
+    return TCell(
+      title: const Text('自定义选择范围'),
+      note: Text(_formatResult(_rangeSelected)),
+      arrow: true,
+      onTap: () {
+        _showPickerPopup(
+          context,
+          picker: TDateTimePicker(
+            mode: DateTimePickerMode(
+              dateMode: DateMode.date,
+              timeMode: TimeMode.second,
+            ),
+            start: _kRangeStart,
+            end: _kRangeEnd,
+            value: _rangeSelected ?? _kRangeInitial,
+            onChanged: (result) => setState(() => _rangeSelected = result),
+          ),
+        );
+      },
+    );
+  }

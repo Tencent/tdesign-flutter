@@ -1,0 +1,19 @@
+Widget _horizontalTextDivider(BuildContext context) {
+    return const Wrap(
+      runSpacing: 20,
+      children: [
+        TDivider(
+          child: Text('文字信息'),
+          align: TDividerAlign.left,
+        ),
+        TDivider(
+          child: Text('文字信息'),
+          align: TDividerAlign.center,
+        ),
+        TDivider(
+          child: Text('文字信息'),
+          align: TDividerAlign.right,
+        ),
+      ],
+    );
+  }

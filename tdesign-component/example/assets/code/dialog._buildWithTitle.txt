@@ -1,0 +1,22 @@
+Widget _buildWithTitle(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('带标题弹窗'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => TConfirmDialog(
+              title: '弹窗标题',
+              content: '告知当前状态、信息和解决方法，等内容较长时换行展示',
+              buttonText: '知道了',
+              onPressed: () => Navigator.pop(context),
+            ),
+          );
+        },
+      ),
+    );
+  }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TSlider 示例页。
@@ -44,7 +44,7 @@ class _TSliderPageState extends State<TSliderPage> {
     );
   }
 
-  @Demo(group: 'slider')
+  @ExampleCode(group: 'slider')
   Widget _buildSingle(BuildContext context) => _withValueLabel(
         context,
         label: '当前值：${value.toStringAsFixed(0)}',
@@ -56,7 +56,7 @@ class _TSliderPageState extends State<TSliderPage> {
         ),
       );
 
-  @Demo(group: 'slider')
+  @ExampleCode(group: 'slider')
   Widget _buildRange(BuildContext context) => _withValueLabel(
         context,
         label:
@@ -69,7 +69,7 @@ class _TSliderPageState extends State<TSliderPage> {
         ),
       );
 
-  @Demo(group: 'slider')
+  @ExampleCode(group: 'slider')
   Widget _buildDivisions(BuildContext context) => _withValueLabel(
         context,
         label: '当前刻度：${value.toStringAsFixed(0)}',
@@ -82,14 +82,14 @@ class _TSliderPageState extends State<TSliderPage> {
         ),
       );
 
-  @Demo(group: 'slider')
+  @ExampleCode(group: 'slider')
   Widget _buildDisabled(BuildContext context) => const TSlider(
         value: 40,
         min: 0,
         max: 100,
       );
 
-  @Demo(group: 'slider')
+  @ExampleCode(group: 'slider')
   Widget _buildMaterialTheme(BuildContext context) => SliderTheme(
         data: SliderTheme.of(context).copyWith(
           activeTrackColor: context.tTheme.successNormalColor,
@@ -104,7 +104,7 @@ class _TSliderPageState extends State<TSliderPage> {
         ),
       );
 
-  @Demo(group: 'slider')
+  @ExampleCode(group: 'slider')
   Widget _buildDecoration(BuildContext context) => Theme(
         data: Theme.of(context).mergeExtension(
           TSliderThemeData(

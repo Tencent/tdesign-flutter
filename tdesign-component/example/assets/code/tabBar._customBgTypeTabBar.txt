@@ -1,0 +1,24 @@
+Widget _customBgTypeTabBar(BuildContext context) {
+    return _ExampleTabBar(
+        variant: TTabBarVariant.text,
+        backgroundColor: context.tTheme.successNormalColor,
+        selectedBgColor: context.tTheme.errorLightColor,
+        unselectedBgColor: context.tTheme.brandLightColor,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TTabBarItemConfig(
+            tabText: '标签1',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TTabBarItemConfig(
+            tabText: '标签2',
+            unselectTabTextStyle:
+                TextStyle(color: context.tTheme.textColorBrand),
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
+  }

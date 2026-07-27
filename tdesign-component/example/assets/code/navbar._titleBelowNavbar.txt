@@ -1,0 +1,41 @@
+Widget _titleBelowNavbar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TNavBar(
+        height: 80,
+        title: '返回',
+        titleColor: context.tTheme.textColorPrimary,
+        belowTitleWidget: SizedBox(
+          height: 36,
+          child: TText(
+            titleText,
+            font: Font(size: 28, lineHeight: 36),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        titleFont: Font(size: 16, lineHeight: 24),
+        centerTitle: false,
+        titleMargin: 8,
+        useDefaultBack: false,
+        leading: [
+          TNavBarItem(
+            icon: TIcons.chevron_left,
+            iconSize: 24,
+            onTap: () => _showAction(context, '返回'),
+          ),
+        ],
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
+    );
+  }

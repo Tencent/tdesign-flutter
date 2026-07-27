@@ -1,0 +1,5 @@
+Widget _buildFormatter(BuildContext context) => TInput(
+        hintText: '最多 10 个字符',
+        maxLength: 10,
+        inputFormatters: [LengthLimitingTextInputFormatter(10)],
+      );

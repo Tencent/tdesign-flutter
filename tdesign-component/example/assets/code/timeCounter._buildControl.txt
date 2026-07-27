@@ -1,0 +1,45 @@
+Widget _buildControl(BuildContext context) {
+  var controller = TTimeCounterController();
+  return Wrap(
+    direction: Axis.vertical,
+    crossAxisAlignment: WrapCrossAlignment.center,
+    spacing: 8,
+    children: [
+      TTimeCounter(
+        time: 60 * 60 * 1000,
+        controller: controller,
+        // autoStart: false,
+      ),
+      Wrap(
+        spacing: 8,
+        children: [
+          TButton(
+            child: const Text('开始'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.start(),
+          ),
+          TButton(
+            child: const Text('结束'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.reset(0),
+          ),
+          TButton(
+            child: const Text('重置'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.reset(),
+          ),
+          TButton(
+            child: const Text('暂停'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.pause(),
+          ),
+          TButton(
+            child: const Text('继续'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.resume(),
+          ),
+        ],
+      )
+    ],
+  );
+}

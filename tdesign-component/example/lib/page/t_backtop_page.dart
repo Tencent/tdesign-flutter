@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TBackTopPage extends StatefulWidget {
@@ -64,7 +64,7 @@ class _TBackTopPageState extends State<TBackTopPage> {
     );
   }
 
-  @Demo(group: 'backtop')
+  @ExampleCode(group: 'backtop')
   Widget _buildCircleBackTop(BuildContext context) {
     return getCustomButton(
       context,
@@ -73,7 +73,7 @@ class _TBackTopPageState extends State<TBackTopPage> {
     );
   }
 
-  @Demo(group: 'backtop')
+  @ExampleCode(group: 'backtop')
   Widget _buildHalfCircleBackTop(BuildContext context) {
     return Column(
       children: [
@@ -94,7 +94,7 @@ class _TBackTopPageState extends State<TBackTopPage> {
     );
   }
 
-  @Demo(group: 'backtop')
+  @ExampleCode(group: 'backtop')
   Widget _buildScrollableContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),

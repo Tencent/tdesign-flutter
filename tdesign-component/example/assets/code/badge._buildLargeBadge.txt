@@ -1,0 +1,16 @@
+Widget _buildLargeBadge(BuildContext context) {
+    return SizedBox(
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomLeft,
+        children: [
+          const TAvatar(size: TAvatarSize.large),
+          Positioned(
+            child: TBadge(count: num),
+            left: 48,
+            bottom: 48,
+          )
+        ],
+      ),
+    );
+  }

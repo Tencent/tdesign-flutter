@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TRate 演示。
@@ -39,7 +39,7 @@ class _TRatePageState extends State<TRatePage> {
     );
   }
 
-  @Demo(group: 'rate')
+  @ExampleCode(group: 'rate')
   Widget _buildBasicRate(BuildContext context) {
     return _rateCell(
       title: '基础评分',
@@ -50,7 +50,7 @@ class _TRatePageState extends State<TRatePage> {
     );
   }
 
-  @Demo(group: 'rate')
+  @ExampleCode(group: 'rate')
   Widget _buildHalfRate(BuildContext context) {
     return _rateCell(
       title: '半星评分',
@@ -74,7 +74,7 @@ class _TRatePageState extends State<TRatePage> {
     );
   }
 
-  @Demo(group: 'rate')
+  @ExampleCode(group: 'rate')
   Widget _buildCustomRate(BuildContext context) {
     return _rateCell(
       title: '自定义图标',
@@ -89,7 +89,7 @@ class _TRatePageState extends State<TRatePage> {
     );
   }
 
-  @Demo(group: 'rate')
+  @ExampleCode(group: 'rate')
   Widget _buildTextRate(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
@@ -106,7 +106,7 @@ class _TRatePageState extends State<TRatePage> {
     );
   }
 
-  @Demo(group: 'rate')
+  @ExampleCode(group: 'rate')
   Widget _buildDisabledRate(BuildContext context) {
     return _rateCell(
       title: '禁用状态',
@@ -114,7 +114,7 @@ class _TRatePageState extends State<TRatePage> {
     );
   }
 
-  @Demo(group: 'rate')
+  @ExampleCode(group: 'rate')
   Widget _buildThemedRate(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(

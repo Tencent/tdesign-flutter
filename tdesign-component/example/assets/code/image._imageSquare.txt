@@ -1,0 +1,18 @@
+Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TText(
+            '方形',
+            font: context.tTheme.fontBodyMedium,
+          ),
+        ),
+        const TImage(
+          src: 'assets/img/image.png',
+          variant: TImageVariant.square,
+        ),
+      ],
+    );
+  }

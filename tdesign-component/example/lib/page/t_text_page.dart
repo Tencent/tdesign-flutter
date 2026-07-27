@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TTextPage extends StatelessWidget {
@@ -58,21 +58,21 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildNormalTText(BuildContext context) {
     return TText(
       exampleTxt,
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildSystemText(BuildContext context) {
     return Text(
       exampleTxt,
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildGeneralProp(BuildContext context) {
     return TText(
       exampleTxt,
@@ -82,7 +82,7 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildStyleCoverColor(BuildContext context) {
     return TText(
       exampleTxt,
@@ -92,7 +92,7 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildStyleCoverColorAndFont(BuildContext context) {
     return TText(
       exampleTxt,
@@ -106,7 +106,7 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildRichText(BuildContext context) {
     return TText.rich(
       TextSpan(children: [
@@ -133,7 +133,7 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _getSystemText(BuildContext context) {
     return TText(
       exampleTxt,
@@ -141,7 +141,7 @@ class TTextPage extends StatelessWidget {
     ).getRawText(context: context);
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildVerticalCenterText(BuildContext context) {
     return TText(
       '中华人民共和国腾讯科技',
@@ -151,7 +151,7 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildCustomPaddingText(BuildContext context) {
     return TTextConfiguration(
       paddingConfig: CustomTextPaddingConfig(),
@@ -159,12 +159,12 @@ class TTextPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildTextThrough(BuildContext context) {
     return TText(exampleTxt, isTextThrough: true);
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildThemeDemo(BuildContext context) {
     // v1.0 新增：通过 TTextThemeData 统一控制子树 TText 默认样式
     return Theme(

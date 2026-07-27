@@ -1,0 +1,3 @@
+Widget _buildControlsSwiper(BuildContext context) => _buildSwiper(
+        pagination: TSwiperPaginationVariant.controls,
+      );

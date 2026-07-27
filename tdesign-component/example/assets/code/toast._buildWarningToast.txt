@@ -1,0 +1,14 @@
+Widget _buildWarningToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('警告'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.danger,
+        onPressed: () {
+          TToast.showWarning('请注意风险', context: context);
+        },
+      ),
+    );
+  }

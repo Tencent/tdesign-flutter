@@ -1,0 +1,6 @@
+Widget _buildCircleDanger(BuildContext context) {
+    return TProgress(
+      variant: TProgressVariant.circular,
+      value: value,
+    );
+  }

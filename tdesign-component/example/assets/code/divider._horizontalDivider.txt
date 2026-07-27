@@ -1,0 +1,6 @@
+Widget _horizontalDivider(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: const TDivider(),
+    );
+  }

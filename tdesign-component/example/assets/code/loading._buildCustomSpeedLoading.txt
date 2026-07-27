@@ -1,0 +1,33 @@
+/// 自定义尺寸
+    Widget _buildCustomSpeedLoading(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(
+              axis: Axis.horizontal,
+              duration: _currentSliderValue.round(),
+            ),
+          ),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            icon: TLoadingIcon.circle,
+            text: '加载中…',
+          ),
+        ),
+        const SizedBox(height: 16),
+        TSlider(
+          value: _currentSliderValue,
+          min: -20,
+          max: 2000,
+          divisions: 100,
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        )
+      ],
+    );
+  }

@@ -1,0 +1,19 @@
+Widget _positions(BuildContext context) {
+    return Column(
+      children: [
+        TRadio<String>(
+          value: 'left',
+          groupValue: _positionValue,
+          title: '图标在左',
+          onChanged: (value) => setState(() => _positionValue = value),
+        ),
+        TRadio<String>(
+          value: 'right',
+          groupValue: _positionValue,
+          title: '图标在右',
+          contentDirection: TContentDirection.left,
+          onChanged: (value) => setState(() => _positionValue = value),
+        ),
+      ],
+    );
+  }

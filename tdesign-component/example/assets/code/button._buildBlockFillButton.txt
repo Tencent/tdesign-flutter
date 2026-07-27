@@ -1,14 +1,13 @@
-
-  Widget _buildBlockFillButton(BuildContext context) {
-    return const SizedBox(
+Widget _buildBlockFillButton(BuildContext context) {
+    return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text('填充按钮'),
-        icon: Icon(TIcons.app),
+        child: const Text('填充按钮'),
+        icon: const Icon(TIcons.app),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: null,
+        onPressed: _onTap,
       ),
     );
   }

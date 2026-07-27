@@ -1,0 +1,3 @@
+Widget _buildCircle(BuildContext context) {
+    return TProgress(variant: TProgressVariant.circular, value: value);
+  }

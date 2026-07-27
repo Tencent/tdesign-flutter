@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TTablePage extends StatefulWidget {
@@ -75,12 +75,12 @@ class _TTablePageState extends State<TTablePage> {
         child: child,
       );
 
-  @Demo(group: 'table')
+  @ExampleCode(group: 'table')
   Widget _buildBasic(BuildContext context) {
     return _frame(TTable(columns: _columns, data: _rows));
   }
 
-  @Demo(group: 'table')
+  @ExampleCode(group: 'table')
   Widget _buildSortable(BuildContext context) {
     return _frame(TTable(
       columns: _columns,
@@ -90,7 +90,7 @@ class _TTablePageState extends State<TTablePage> {
     ));
   }
 
-  @Demo(group: 'table')
+  @ExampleCode(group: 'table')
   Widget _buildSelectable(BuildContext context) {
     return _frame(TTable(
       columns: _columns,
@@ -101,7 +101,7 @@ class _TTablePageState extends State<TTablePage> {
     ));
   }
 
-  @Demo(group: 'table')
+  @ExampleCode(group: 'table')
   Widget _buildFixed(BuildContext context) {
     final columns = [
       TTableColumn<_ExampleRow>(
@@ -122,7 +122,7 @@ class _TTablePageState extends State<TTablePage> {
     return _frame(TTable(columns: columns, data: _rows));
   }
 
-  @Demo(group: 'table')
+  @ExampleCode(group: 'table')
   Widget _buildLoading(BuildContext context) {
     return _frame(TTable(
       columns: _columns,
@@ -131,7 +131,7 @@ class _TTablePageState extends State<TTablePage> {
     ));
   }
 
-  @Demo(group: 'table')
+  @ExampleCode(group: 'table')
   Widget _buildEmpty(BuildContext context) {
     return _frame(TTable<_ExampleRow>(
       columns: _columns,

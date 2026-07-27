@@ -1,0 +1,20 @@
+Widget _buildTitleSimple(BuildContext context) {
+  return SizedBox(
+    width: double.infinity,
+    child: TButton(
+      child: const TText('带图标抽屉'),
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      size: TButtonSize.large,
+      onPressed: () {
+        TDrawer(
+          context,
+          title: const TText('标题'),
+          placement: TDrawerPlacement.left,
+          items: List.generate(drawerItemLength,
+              (index) => TDrawerItem(title: '菜单${index + 1}')),
+        ).show();
+      },
+    ),
+  );
+}

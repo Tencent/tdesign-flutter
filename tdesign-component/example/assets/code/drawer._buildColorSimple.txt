@@ -1,0 +1,33 @@
+Widget _buildColorSimple(BuildContext context) {
+  final tCellStyle =
+      TCellThemeData(backgroundColor: context.tTheme.brandNormalColor);
+
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      TDrawerThemeData(
+        backgroundColor: context.tTheme.bgColorSecondaryContainer,
+        style: tCellStyle,
+      ),
+    ),
+    child: Builder(
+      builder: (drawerContext) => SizedBox(
+        width: double.infinity,
+        child: TButton(
+          child: const TText('自定义背景色'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          size: TButtonSize.large,
+          onPressed: () {
+            TDrawer(
+              drawerContext,
+              title: const TText('标题'),
+              placement: TDrawerPlacement.right,
+              items: List.generate(drawerItemLength,
+                  (index) => TDrawerItem(title: '菜单${index + 1}')),
+            ).show();
+          },
+        ),
+      ),
+    ),
+  );
+}

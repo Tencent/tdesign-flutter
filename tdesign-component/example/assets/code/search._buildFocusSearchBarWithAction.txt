@@ -1,0 +1,21 @@
+Widget _buildFocusSearchBarWithAction(BuildContext context) {
+    return TSearchBar(
+      hintText: '搜索预设文案',
+      needCancel: true,
+      cancelText: '关闭',
+      controller: inputController,
+      onCancelPressed: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TConfirmDialog(
+              content: inputController.text.isNotEmpty
+                  ? '搜索关键词：${inputController.text}'
+                  : '搜索关键词为空',
+            );
+          },
+        );
+      },
+    );
+  }

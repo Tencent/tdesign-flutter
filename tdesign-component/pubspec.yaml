@@ -28,6 +28,7 @@ dependencies:
   image_picker: 1.1.2
 
 dev_dependencies:
+  analyzer: ^6.11.0
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter

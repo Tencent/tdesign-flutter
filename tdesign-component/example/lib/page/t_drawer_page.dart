@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 const drawerItemLength = 30;
@@ -72,7 +72,7 @@ class TDrawerPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'drawer')
+@ExampleCode(group: 'drawer')
 Widget _buildBaseSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
@@ -95,7 +95,7 @@ Widget _buildBaseSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'drawer')
+@ExampleCode(group: 'drawer')
 Widget _buildIconSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
@@ -117,7 +117,7 @@ Widget _buildIconSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'drawer')
+@ExampleCode(group: 'drawer')
 Widget _buildTitleSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
@@ -139,7 +139,7 @@ Widget _buildTitleSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'drawer')
+@ExampleCode(group: 'drawer')
 Widget _buildBottomSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
@@ -170,7 +170,7 @@ Widget _buildBottomSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'drawer')
+@ExampleCode(group: 'drawer')
 Widget _buildColorSimple(BuildContext context) {
   final tCellStyle =
       TCellThemeData(backgroundColor: context.tTheme.brandNormalColor);
@@ -205,7 +205,7 @@ Widget _buildColorSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'drawer')
+@ExampleCode(group: 'drawer')
 Widget _buildChildSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,

@@ -1,0 +1,12 @@
+/// 大尺寸
+    Widget _buildLargeLoading(BuildContext context) {
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+      child: const TLoading(
+        size: TLoadingSize.large,
+        icon: TLoadingIcon.circle,
+        text: '加载中…',
+      ),
+    );
+  }

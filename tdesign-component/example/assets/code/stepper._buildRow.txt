@@ -1,0 +1,17 @@
+Widget _buildRow(BuildContext context, List<Widget> stepperItems) {
+    final theme = context.tTheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.bgColorContainer,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: stepperItems,
+        ),
+      ),
+    );
+  }
