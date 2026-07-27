@@ -407,7 +407,6 @@ class _TMessageState extends State<TMessage>
       ),
       colorScheme: TLinkColorScheme.primary,
       variant: TLinkVariant.basic,
-      uri: link.uri,
       size: TLinkSize.medium,
       onPressed: widget.onLinkPressed,
     );

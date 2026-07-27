@@ -63,9 +63,6 @@ class TFabResolve {
       child: hasText ? Text(text) : null,
       icon: effectiveIcon,
       onPressed: onPressed,
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
     );
 
     // TButton 的 shape 由 TButtonThemeData.shape 控制

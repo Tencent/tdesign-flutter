@@ -5,8 +5,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | bottom | double? | - | 距屏幕底部偏移（默认 32） |
-| buttonProps | TButtonProps? | - | 内嵌 TButton 的部分配置透传 |
-| child | Widget? | - | 自定义内容；有则替代默认内嵌 TButton，忽略 `buttonProps` |
+| child | Widget? | - | 自定义内容；有则替代默认内嵌 TButton |
 | draggable | TFabDragAxis? | - | 拖拽轴向；null 表示不启用拖拽，`TFabDragAxis.all` 表示全向拖拽 |
 | icon | Widget? | - | 图标；未传时默认 `Icons.add` |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |

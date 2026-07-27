@@ -13,5 +13,4 @@
 | size | TLinkSize? | - | 尺寸；未传时读取 `TLinkThemeData.defaultSize`，再回退 medium。 |
 | suffixIcon | Widget? | - | 后置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
 | tooltip | String? | - | 悬浮提示 |
-| uri | Uri? | - | 链接 URI。 该字段仅作为链接目标数据保留；组件不引入平台跳转依赖。 如需打开链接，请在 `onPressed` 中自行处理。 |
 | variant | TLinkVariant? | - | 链接形态；未传时读取 `TLinkThemeData.defaultVariant`，再回退 basic。 |

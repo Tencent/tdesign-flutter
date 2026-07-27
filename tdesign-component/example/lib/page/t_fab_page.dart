@@ -63,6 +63,22 @@ class _TFabPageState extends State<TFabPage> {
     );
   }
 
+  Widget _withButtonTheme(
+    BuildContext context,
+    TButtonThemeData buttonTheme,
+    Widget child,
+  ) {
+    final extensions = List<ThemeExtension>.from(
+      Theme.of(context).extensions.values,
+    );
+    extensions.removeWhere((extension) => extension is TButtonThemeData);
+    extensions.add(buttonTheme);
+    return Theme(
+      data: Theme.of(context).copyWith(extensions: extensions),
+      child: child,
+    );
+  }
+
   /// 真实页面 demo 容器：大 Stack 模拟页面悬浮效果
   ///
   /// TFab 自带 Positioned 定位，放在 Stack 顶层即可悬浮在右下角
@@ -115,31 +131,38 @@ class _TFabPageState extends State<TFabPage> {
 
   @Demo(group: 'fab')
   Widget _buildColorSchemeFab(BuildContext context) {
+    final theme = context.tTheme;
     return _buildRowDemo([
       TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(
-          colorScheme: TButtonColorScheme.defaultTheme,
+      _withButtonTheme(
+        context,
+        TButtonThemeData(
+          filledStyle: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(theme.bgColorContainer),
+            foregroundColor: WidgetStatePropertyAll(theme.textColorPrimary),
+          ),
         ),
-        onPressed: _onFabPressed,
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(
-          colorScheme: TButtonColorScheme.light,
+      _withButtonTheme(
+        context,
+        TButtonThemeData(
+          filledStyle: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(theme.brandHoverColor),
+            foregroundColor: WidgetStatePropertyAll(theme.textColorAnti),
+          ),
         ),
-        onPressed: _onFabPressed,
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(
-          colorScheme: TButtonColorScheme.danger,
+      _withButtonTheme(
+        context,
+        TButtonThemeData(
+          filledStyle: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(theme.errorNormalColor),
+            foregroundColor: WidgetStatePropertyAll(theme.textColorAnti),
+          ),
         ),
-        onPressed: _onFabPressed,
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
     ]);
   }
@@ -147,29 +170,25 @@ class _TFabPageState extends State<TFabPage> {
   @Demo(group: 'fab')
   Widget _buildSizeFab(BuildContext context) {
     return _buildRowDemo([
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(size: TButtonSize.large),
-        onPressed: _onFabPressed,
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.large),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(size: TButtonSize.medium),
-        onPressed: _onFabPressed,
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.medium),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(size: TButtonSize.small),
-        onPressed: _onFabPressed,
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.small),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
-      TFab(
-        right: 8,
-        bottom: 8,
-        buttonProps: const TButtonProps(size: TButtonSize.extraSmall),
-        onPressed: _onFabPressed,
+      _withButtonTheme(
+        context,
+        const TButtonThemeData(defaultSize: TButtonSize.extraSmall),
+        TFab(right: 8, bottom: 8, onPressed: _onFabPressed),
       ),
     ]);
   }
