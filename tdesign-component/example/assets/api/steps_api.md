@@ -6,12 +6,12 @@
 | --- | --- | --- | --- |
 | direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| readOnly | bool | false | 步骤条readOnly模式（优先级高于 ThemeData） |
-| simple | bool | false | 步骤条simple模式（优先级高于 ThemeData） |
-| status | TStepsStatus | TStepsStatus.success | 步骤条状态（优先级高于 ThemeData） |
+| readOnly | bool? | - | 步骤条readOnly模式（优先级高于 ThemeData） |
+| simple | bool? | - | 步骤条simple模式（优先级高于 ThemeData） |
+| status | TStepsStatus? | - | 步骤条状态（优先级高于 ThemeData） |
 | steps | List<TStepsItemData> | - | 步骤条数据 |
 | value | int | 0 | 步骤条当前激活的索引 |
-| verticalSelect | bool | false | 步骤条垂直自定义步骤条选择模式（优先级高于 ThemeData） |
+| verticalSelect | bool? | - | 步骤条垂直自定义步骤条选择模式（优先级高于 ThemeData） |
 
 
 ### TStepsItemData

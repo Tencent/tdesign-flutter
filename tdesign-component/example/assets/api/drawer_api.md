@@ -29,17 +29,17 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 组件背景颜色 |
-| bordered | bool? | true | 是否显示边框 |
+| bordered | bool? | - | 是否显示边框 |
 | child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | footer | Widget? | - | 抽屉的底部 |
-| hover | bool? | true | 是否开启点击反馈 |
-| isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
+| hover | bool? | - | 是否开启点击反馈 |
+| isShowLastBordered | bool? | - | 是否显示最后一行分割线 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
 | style | TCellThemeData? | - | 列表自定义样式 |
 | title | Widget? | - | 抽屉的标题组件 |
-| width | double? | 280 | 宽度 |
+| width | double? | - | 宽度 |
 
 
 ### TDrawerItem
