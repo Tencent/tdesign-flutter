@@ -55,8 +55,8 @@ jobs:
 
       - uses: actions/setup-java@v5
         with:
-          distribution: "jetbrains"
-          java-version: "17.0.12-b1207.37"
+          distribution: "temurin"
+          java-version: "17.0.19+10"
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Android SDK
