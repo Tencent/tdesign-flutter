@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../button/t_button.dart';
-import '../button/t_button_theme_data.dart';
-import '../button/t_button_types.dart';
-
 /// 拖拽轴向
 enum TFabDragAxis {
   /// 允许水平和垂直方向拖拽
@@ -34,34 +30,6 @@ class TFabBounds {
   final double end;
 
   const TFabBounds({required this.start, required this.end});
-}
-
-/// Fab 内嵌按钮配置透传类型
-///
-/// 字段与 [TButton] 构造参数对齐，不含 onPressed / child / icon。
-class TButtonProps {
-  /// 按钮尺寸
-  final TButtonSize? size;
-
-  /// 按钮变体
-  final TButtonVariant? variant;
-
-  /// 按钮配色方案
-  final TButtonColorScheme? colorScheme;
-
-  /// 按钮形状
-  final TButtonShape? shape;
-
-  /// P0 按钮样式覆盖
-  final ButtonStyle? style;
-
-  const TButtonProps({
-    this.size,
-    this.variant,
-    this.colorScheme,
-    this.shape,
-    this.style,
-  });
 }
 
 /// 拖拽回调详情

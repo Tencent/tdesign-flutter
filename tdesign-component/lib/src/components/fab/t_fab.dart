@@ -11,7 +11,6 @@ export 't_fab_layout.dart'
         TFabDragAxis,
         TFabMagnet,
         TFabBounds,
-        TButtonProps,
         TFabDragDetails,
         TFabDragCallback;
 
@@ -27,10 +26,9 @@ export 't_fab_layout.dart'
 ///   const TFab(),
 /// ])
 ///
-/// // 图标 + 文字 + 自定义配色
+/// // 图标 + 文字
 /// TFab(
 ///   text: '发布',
-///   buttonProps: TButtonProps(colorScheme: TButtonColorScheme.danger),
 /// )
 ///
 /// // 可拖拽悬浮按钮
@@ -45,7 +43,6 @@ class TFab extends StatelessWidget {
     this.text = '',
     this.icon,
     this.child,
-    this.buttonProps,
     this.onPressed,
     this.tooltip,
     this.semanticLabel,
@@ -65,11 +62,8 @@ class TFab extends StatelessWidget {
   /// 图标；未传时默认 [Icons.add]
   final Widget? icon;
 
-  /// 自定义内容；有则替代默认内嵌 TButton，忽略 [buttonProps]
+  /// 自定义内容；有则替代默认内嵌 TButton
   final Widget? child;
-
-  /// 内嵌 TButton 的部分配置透传
-  final TButtonProps? buttonProps;
 
   /// 点击回调，null 时禁用
   final VoidCallback? onPressed;
@@ -139,7 +133,6 @@ class TFab extends StatelessWidget {
       actionChild = TFabResolve.resolveButton(
         text: text,
         icon: icon,
-        buttonProps: buttonProps,
         onPressed: onPressed,
         context: context,
       );

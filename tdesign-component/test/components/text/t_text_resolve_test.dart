@@ -42,6 +42,19 @@ void main() {
     return tester.element(find.byWidget(configuration.child));
   }
 
+  Future<BuildContext> _ctxWithThemeData(
+    WidgetTester tester,
+    ThemeData theme, {
+    Widget Function(Widget child)? wrapChild,
+  }) async {
+    final child = Builder(builder: (_) => const SizedBox());
+    await tester.pumpWidget(MaterialApp(
+      theme: theme,
+      home: Scaffold(body: wrapChild?.call(child) ?? child),
+    ));
+    return tester.element(find.byWidget(child));
+  }
+
   group('TTextResolve', () {
     testWidgets('resolve 完整覆盖链（style/糖/Theme/Token）', (tester) async {
       final context = await _ctx(tester);
@@ -75,6 +88,100 @@ void main() {
       expect(style.color, token.textColorPrimary);
       expect(style.fontSize, token.fontBodyLarge?.size);
       expect(style.height, token.fontBodyLarge?.height);
+    });
+
+    testWidgets('resolve 读取 DefaultTextStyle 作为 Flutter 子树默认', (tester) async {
+      final context = await _ctxWithThemeData(
+        tester,
+        ThemeData(extensions: [TThemeData.defaultData()]),
+        wrapChild: (child) => DefaultTextStyle(
+          style: const TextStyle(
+            color: Colors.pink,
+            fontSize: 21,
+            height: 1.7,
+          ),
+          child: child,
+        ),
+      );
+      final style = TTextResolve.resolve(context: context);
+      expect(style.color, Colors.pink);
+      expect(style.fontSize, 21);
+      expect(style.height, 1.7);
+    });
+
+    testWidgets('resolve 读取 ThemeData.textTheme 作为 Material 全局默认',
+        (tester) async {
+      final context = await _ctxWithThemeData(
+        tester,
+        ThemeData(
+          extensions: [TThemeData.defaultData()],
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(
+              color: Colors.indigo,
+              fontSize: 19,
+              height: 1.4,
+            ),
+          ),
+        ),
+      );
+      final style = TTextResolve.resolve(context: context);
+      expect(style.color, Colors.indigo);
+      expect(style.fontSize, 19);
+      expect(style.height, 1.4);
+    });
+
+    testWidgets('resolve TTextThemeData 覆盖 DefaultTextStyle/TextTheme',
+        (tester) async {
+      final context = await _ctxWithThemeData(
+        tester,
+        ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            TTextThemeData(
+              defaultFont: Font(size: 23, lineHeight: 31),
+              defaultTextColor: Colors.orange,
+            ),
+          ],
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(color: Colors.indigo, fontSize: 19),
+          ),
+        ),
+        wrapChild: (child) => DefaultTextStyle(
+          style: const TextStyle(color: Colors.pink, fontSize: 21),
+          child: child,
+        ),
+      );
+      final style = TTextResolve.resolve(context: context);
+      expect(style.color, Colors.orange);
+      expect(style.fontSize, 23);
+      expect(style.height, 31 / 23);
+    });
+
+    testWidgets('resolve 构造器糖和 style 覆盖所有下层主题', (tester) async {
+      final context = await _ctxWithThemeData(
+        tester,
+        ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            TTextThemeData(
+              defaultFont: Font(size: 23, lineHeight: 31),
+              defaultTextColor: Colors.orange,
+            ),
+          ],
+        ),
+        wrapChild: (child) => DefaultTextStyle(
+          style: const TextStyle(color: Colors.pink, fontSize: 21),
+          child: child,
+        ),
+      );
+      final style = TTextResolve.resolve(
+        context: context,
+        style: const TextStyle(color: Colors.red),
+        font: Font(size: 18, lineHeight: 26),
+      );
+      expect(style.color, Colors.red);
+      expect(style.fontSize, 18);
+      expect(style.height, 26 / 18);
     });
 
     testWidgets('resolve 读取 Theme 默认字体族', (tester) async {

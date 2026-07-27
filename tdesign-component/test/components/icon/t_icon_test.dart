@@ -122,6 +122,22 @@ void main() {
     expect(icon.color, Colors.green);
   });
 
+  testWidgets('T04a - 裸 TThemeData 注入时颜色兜底到 token', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(MaterialApp(
+      theme: ThemeData(
+        extensions: [token],
+        iconTheme: const IconThemeData(),
+      ),
+      home: const Scaffold(
+        body: Center(child: TIcon(TIcons.check)),
+      ),
+    ));
+
+    final icon = tester.widget<Icon>(find.byType(Icon));
+    expect(icon.color, token.textColorPrimary);
+  });
+
   testWidgets('T04b - 完整主题下仍尊重局部 IconTheme', (tester) async {
     await tester.pumpWidget(wrapWithTheme(
       const IconTheme(
@@ -133,6 +149,31 @@ void main() {
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, 30.0);
     expect(icon.color, Colors.green);
+  });
+
+  testWidgets('T04c - TIconThemeData 覆盖局部 IconTheme', (tester) async {
+    await tester.pumpWidget(wrapWithTheme(
+      const IconTheme(
+        data: IconThemeData(size: 30.0, color: Colors.green),
+        child: TIcon(TIcons.check),
+      ),
+      iconTheme: const TIconThemeData(size: 22, color: Colors.orange),
+    ));
+
+    final icon = tester.widget<Icon>(find.byType(Icon));
+    expect(icon.size, 22);
+    expect(icon.color, Colors.orange);
+  });
+
+  testWidgets('T04d - 构造器覆盖 TIconThemeData', (tester) async {
+    await tester.pumpWidget(wrapWithTheme(
+      const TIcon(TIcons.check, size: 26, color: Colors.red),
+      iconTheme: const TIconThemeData(size: 22, color: Colors.orange),
+    ));
+
+    final icon = tester.widget<Icon>(find.byType(Icon));
+    expect(icon.size, 26);
+    expect(icon.color, Colors.red);
   });
 
   // ============================================================

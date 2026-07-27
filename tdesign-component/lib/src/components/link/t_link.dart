@@ -12,7 +12,6 @@ class TLink extends StatelessWidget {
   const TLink({
     Key? key,
     this.child,
-    this.uri,
     this.prefixIcon,
     this.suffixIcon,
     this.variant,
@@ -25,12 +24,6 @@ class TLink extends StatelessWidget {
 
   /// 链接内容，一般是 [Text]
   final Widget? child;
-
-  /// 链接 URI。
-  ///
-  /// 该字段仅作为链接目标数据保留；组件不引入平台跳转依赖。
-  /// 如需打开链接，请在 [onPressed] 中自行处理。
-  final Uri? uri;
 
   /// 链接形态；未传时读取 [TLinkThemeData.defaultVariant]，再回退 basic。
   final TLinkVariant? variant;

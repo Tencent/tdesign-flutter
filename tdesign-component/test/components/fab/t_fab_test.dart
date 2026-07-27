@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TFab V1.0 Widget 测试
 ///
-/// 覆盖：默认渲染、buttonProps merge、text 推导、onPressed 禁用、
+/// 覆盖：默认渲染、text 推导、onPressed 禁用、
 /// child 模式、拖拽阈值、resolveLayout + 安全区。
 void main() {
   Finder fabTapTarget() {
@@ -94,42 +94,6 @@ void main() {
       ));
       await tester.tap(fabTapOnlyTarget());
       expect(tapped, true);
-    });
-  });
-
-  group('TFab buttonProps', () {
-    testWidgets('buttonProps.colorScheme 覆盖默认 primary', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          buttonProps: TButtonProps(
-            colorScheme: TButtonColorScheme.danger,
-          ),
-        ),
-      ));
-      expect(find.byType(TFab), findsOneWidget);
-      expect(find.byType(TButton), findsOneWidget);
-    });
-
-    testWidgets('buttonProps.size 覆盖默认 large', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          buttonProps: TButtonProps(size: TButtonSize.small),
-        ),
-      ));
-      expect(find.byType(TButton), findsOneWidget);
-    });
-
-    testWidgets('buttonProps 多字段同时覆盖', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          buttonProps: TButtonProps(
-            colorScheme: TButtonColorScheme.light,
-            size: TButtonSize.medium,
-          ),
-          text: '操作',
-        ),
-      ));
-      expect(find.text('操作'), findsOneWidget);
     });
   });
 
@@ -260,39 +224,6 @@ void main() {
     });
   });
 
-  group('TButtonProps', () {
-    test('全 null 构造', () {
-      const props = TButtonProps();
-      expect(props.size, null);
-      expect(props.variant, null);
-      expect(props.colorScheme, null);
-      expect(props.shape, null);
-      expect(props.style, null);
-    });
-
-    test('带值构造', () {
-      const props = TButtonProps(
-        size: TButtonSize.medium,
-        colorScheme: TButtonColorScheme.danger,
-      );
-      expect(props.size, TButtonSize.medium);
-      expect(props.colorScheme, TButtonColorScheme.danger);
-    });
-
-    test('全字段构造', () {
-      const props = TButtonProps(
-        size: TButtonSize.small,
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.danger,
-        shape: TButtonShape.circle,
-      );
-      expect(props.size, TButtonSize.small);
-      expect(props.variant, TButtonVariant.outline);
-      expect(props.colorScheme, TButtonColorScheme.danger);
-      expect(props.shape, TButtonShape.circle);
-    });
-  });
-
   // ============================================================
   // 补充：TFabResolve.resolveLayout 全分支（通过 Widget 验证内部行为）
   // ============================================================
@@ -348,43 +279,11 @@ void main() {
       expect(find.text('发布'), findsOneWidget);
     });
 
-    testWidgets('buttonProps.shape 显式覆盖默认', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          text: '发布',
-          buttonProps: TButtonProps(shape: TButtonShape.circle),
-        ),
-      ));
-      expect(find.text('发布'), findsOneWidget);
-    });
-
     testWidgets('自定义 icon 覆盖默认 Icons.add', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
         const TFab(icon: Icon(Icons.edit)),
       ));
       expect(find.byIcon(Icons.edit), findsOneWidget);
-    });
-
-    testWidgets('buttonProps.variant 透传', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          buttonProps: TButtonProps(variant: TButtonVariant.outline),
-        ),
-      ));
-      expect(find.byType(TButton), findsOneWidget);
-    });
-
-    testWidgets('buttonProps.style 透传', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          buttonProps: TButtonProps(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.red),
-            ),
-          ),
-        ),
-      ));
-      expect(find.byType(TButton), findsOneWidget);
     });
   });
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_icons/tdesign_icons.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import 't_icon_theme_data.dart';
 
 /// TIcon — v1.0 图标组件
@@ -8,7 +10,9 @@ import 't_icon_theme_data.dart';
 /// Material [Icon] 的薄包装（T2 纯展示），提供组件级 Theme 注入能力。
 /// 图标数据由 `tdesign_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。
 ///
-/// 优先级链：构造器参数 > [TIconThemeData] > [IconTheme]
+/// 优先级链：
+/// 构造器参数 > [TIconThemeData] > [IconTheme] > ThemeData.iconTheme >
+/// TDesign token 颜色兜底。
 ///
 /// 示例：
 /// ```dart
@@ -36,7 +40,7 @@ class TIcon extends StatelessWidget {
   /// 图标尺寸（优先于 [TIconThemeData.size] 和 [IconTheme.of]）
   final double? size;
 
-  /// 图标颜色（优先于 [TIconThemeData.color] 和 [IconTheme.of]）
+  /// 图标颜色（优先于 [TIconThemeData.color]、[IconTheme.of] 和 token 兜底）
   final Color? color;
 
   /// 无障碍语义标签
@@ -76,12 +80,21 @@ class TIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 读取 TIconThemeData（子树注入）
-    final theme = Theme.of(context).extension<TIconThemeData>();
+    final materialTheme = Theme.of(context);
+    final theme = materialTheme.extension<TIconThemeData>();
+    final iconTheme = IconTheme.of(context);
+    final materialIconTheme = materialTheme.iconTheme;
+    final inheritedIconColor =
+        materialIconTheme.color == null ? null : iconTheme.color;
 
-    // 优先级合并：构造器 > TIconThemeData > IconTheme
-    final effectiveSize = size ?? theme?.size ?? IconTheme.of(context).size;
-    final effectiveColor = color ?? theme?.color ?? IconTheme.of(context).color;
+    // 尺寸不硬造 token 映射，颜色必须兜到 TDesign token。
+    final effectiveSize =
+        size ?? theme?.size ?? iconTheme.size ?? materialIconTheme.size;
+    final effectiveColor = color ??
+        theme?.color ??
+        inheritedIconColor ??
+        materialIconTheme.color ??
+        context.tTheme.textColorPrimary;
 
     return Icon(
       icon,

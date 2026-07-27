@@ -208,6 +208,66 @@ void main() {
     expect(text.style?.fontFamily, 'GlobalFont');
   });
 
+  testWidgets('T05d - DefaultTextStyle 控制未显式指定的文本样式', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: ThemeData(extensions: [TThemeData.defaultData()]),
+      home: const Scaffold(
+        body: DefaultTextStyle(
+          style: TextStyle(color: Colors.pink, fontSize: 21, height: 1.7),
+          child: TText('Flutter默认文本'),
+        ),
+      ),
+    ));
+
+    final text = tester.widget<Text>(find.text('Flutter默认文本'));
+    expect(text.style?.color, Colors.pink);
+    expect(text.style?.fontSize, 21);
+    expect(text.style?.height, 1.7);
+  });
+
+  testWidgets('T05e - ThemeData.textTheme 控制未显式指定的文本样式', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: ThemeData(
+        extensions: [TThemeData.defaultData()],
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.indigo, fontSize: 19),
+        ),
+      ),
+      home: const Scaffold(body: TText('Material默认文本')),
+    ));
+
+    final text = tester.widget<Text>(find.text('Material默认文本'));
+    expect(text.style?.color, Colors.indigo);
+    expect(text.style?.fontSize, 19);
+  });
+
+  testWidgets('T05f - TTextThemeData 既有字段作为子树默认值生效', (tester) async {
+    const textHeightBehavior = TextHeightBehavior(
+      applyHeightToFirstAscent: false,
+      applyHeightToLastDescent: false,
+    );
+    const strutStyle = StrutStyle(fontSize: 17, height: 1.3);
+    await tester.pumpWidget(wrapWithTheme(
+      const TText('主题字段'),
+      textTheme: const TTextThemeData(
+        defaultBackgroundColor: Colors.cyan,
+        strutStyle: strutStyle,
+        textWidthBasis: TextWidthBasis.longestLine,
+        textHeightBehavior: textHeightBehavior,
+        textScaleFactor: 1.2,
+      ),
+    ));
+
+    final container = tester.widget<Container>(find.byType(Container).first);
+    expect(container.color, Colors.cyan);
+
+    final text = tester.widget<Text>(find.text('主题字段'));
+    expect(text.strutStyle, strutStyle);
+    expect(text.textWidthBasis, TextWidthBasis.longestLine);
+    expect(text.textHeightBehavior, textHeightBehavior);
+    expect(text.textScaler?.scale(10), 12);
+  });
+
   // ============================================================
   // T06 – TTextConfiguration.updateShouldNotify
   // ============================================================

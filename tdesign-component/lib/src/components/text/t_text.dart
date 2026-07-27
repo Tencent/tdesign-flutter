@@ -191,11 +191,13 @@ class TText extends StatelessWidget {
       var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
 
-      var textFont = font ??
+      final resolvedStyle = getTextStyle(context)!;
+      final textFont = font ??
+          themeExtension?.defaultFont ??
           context.tTheme.fontBodyLarge ??
           Font(size: 16, lineHeight: 24); // coverage:ignore-line
-      var fontSize = style?.fontSize ?? textFont.size;
-      var height = style?.height ?? textFont.height;
+      var fontSize = resolvedStyle.fontSize ?? textFont.size;
+      var height = resolvedStyle.height ?? textFont.height;
 
       // Web 端高度校准
       if (PlatformUtil.isWeb) {
@@ -211,9 +213,11 @@ class TText extends StatelessWidget {
           data,
           fontSize,
           height,
-          fontFamily: fontFamily?.fontFamily,
-          fontWeight: fontWeight,
-          textScale: MediaQuery.of(context).textScaler.scale(1.0),
+          fontFamily: resolvedStyle.fontFamily,
+          fontWeight: resolvedStyle.fontWeight,
+          textScale: MediaQuery.of(context).textScaler.scale(
+                _effectiveTextScaleFactor(themeExtension),
+              ),
           paddingConfig: paddingConfig,
         ),
         child: _getRawText(
@@ -221,7 +225,9 @@ class TText extends StatelessWidget {
             textStyle: getTextStyle(context, overrideHeight: height)),
       );
     }
-    var bgColor = style?.backgroundColor ?? backgroundColor;
+    var bgColor = style?.backgroundColor ??
+        backgroundColor ??
+        themeExtension?.defaultBackgroundColor;
     if (bgColor == null) {
       return _getRawText(context: context);
     }
@@ -275,35 +281,51 @@ class TText extends StatelessWidget {
             style: textStyle ??
                 getTextStyle(context,
                     textStyleBackgroundColor: textStyleBackgroundColor),
-            strutStyle: strutStyle,
+            strutStyle: strutStyle ?? _textTheme(context)?.strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
             locale: locale,
             softWrap: softWrap,
             overflow: overflow,
-            textScaler: TextScaler.linear(textScaleFactor ?? 1.0),
+            textScaler: TextScaler.linear(
+              textScaleFactor ?? _textTheme(context)?.textScaleFactor ?? 1.0,
+            ),
             maxLines: maxLines,
             semanticsLabel: semanticsLabel,
-            textWidthBasis: textWidthBasis,
-            textHeightBehavior: textHeightBehavior,
+            textWidthBasis:
+                textWidthBasis ?? _textTheme(context)?.textWidthBasis,
+            textHeightBehavior:
+                textHeightBehavior ?? _textTheme(context)?.textHeightBehavior,
           )
         : Text.rich(
             textSpan!,
             style: textStyle ??
                 getTextStyle(context,
                     textStyleBackgroundColor: textStyleBackgroundColor),
-            strutStyle: strutStyle,
+            strutStyle: strutStyle ?? _textTheme(context)?.strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
             locale: locale,
             softWrap: softWrap,
             overflow: overflow,
-            textScaler: TextScaler.linear(textScaleFactor ?? 1.0),
+            textScaler: TextScaler.linear(
+              textScaleFactor ?? _textTheme(context)?.textScaleFactor ?? 1.0,
+            ),
             maxLines: maxLines,
             semanticsLabel: semanticsLabel,
-            textWidthBasis: textWidthBasis,
-            textHeightBehavior: textHeightBehavior,
+            textWidthBasis:
+                textWidthBasis ?? _textTheme(context)?.textWidthBasis,
+            textHeightBehavior:
+                textHeightBehavior ?? _textTheme(context)?.textHeightBehavior,
           );
+  }
+
+  TTextThemeData? _textTheme(BuildContext context) {
+    return Theme.of(context).extension<TTextThemeData>();
+  }
+
+  double _effectiveTextScaleFactor(TTextThemeData? themeExtension) {
+    return textScaleFactor ?? themeExtension?.textScaleFactor ?? 1.0;
   }
 }
 

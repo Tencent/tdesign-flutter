@@ -10,7 +10,7 @@ import 't_fab_layout.dart';
 /// TFab 唯一样式 resolve 入口
 ///
 /// - [resolveLayout]：将构造器扁平参数 + Theme + 安全区组装为 [TFabLayout]
-/// - [resolveButton]：将默认配置 + [TButtonProps] + text/icon 组装为一颗 [TButton]
+/// - [resolveButton]：将 Fab 默认配置 + text/icon 组装为一颗 [TButton]
 class TFabResolve {
   TFabResolve._(); // coverage:ignore-line
 
@@ -47,29 +47,25 @@ class TFabResolve {
   /// shape 推导（对齐 fab.md §1）：
   /// - 纯图标（text 空）→ `TButtonShape.circle`
   /// - 有 text → `TButtonShape.round`
-  /// - `buttonProps.shape` 显式传入时覆盖默认
   static Widget resolveButton({
     required String? text,
     required Widget? icon,
-    required TButtonProps? buttonProps,
     required VoidCallback? onPressed,
     required BuildContext context,
   }) {
     final hasText = text != null && text.isNotEmpty;
     final effectiveIcon = icon ?? const Icon(TFabDefaults.defaultIconData);
 
-    // shape 推导：纯图标=圆形，有文字=胶囊形；buttonProps.shape 覆盖
-    final effectiveShape = buttonProps?.shape ??
-        (hasText ? TButtonShape.round : TButtonShape.circle);
+    // shape 推导：纯图标=圆形，有文字=胶囊形。
+    final effectiveShape = hasText ? TButtonShape.round : TButtonShape.circle;
 
     final tButton = TButton(
       child: hasText ? Text(text) : null,
       icon: effectiveIcon,
       onPressed: onPressed,
-      size: buttonProps?.size ?? TButtonSize.large,
-      variant: buttonProps?.variant ?? TButtonVariant.fill,
-      colorScheme: buttonProps?.colorScheme ?? TButtonColorScheme.primary,
-      style: buttonProps?.style,
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
     );
 
     // TButton 的 shape 由 TButtonThemeData.shape 控制

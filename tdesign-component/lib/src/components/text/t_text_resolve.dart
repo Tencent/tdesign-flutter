@@ -16,16 +16,18 @@ import 't_text_theme_data.dart';
 /// 优先级链：
 /// P0 [TextStyle] style 实例
 ///  > 构造器糖（font/textColor/fontWeight/fontFamily/isTextThrough 等）
-///  > [TTextConfiguration]（globalFontFamily · paddingConfig）
+///  > [TTextConfiguration]（globalFontFamily）
 ///  > [TTextThemeData]（ThemeExtension）
-///  > [TextTheme] / DefaultTextStyle（Material P2）
+///  > [DefaultTextStyle]（Flutter 子树默认）
+///  > [TextTheme]（Material 全局默认）
 ///  > Token 默认值（P4）
 class TTextResolve {
   TTextResolve._(); // coverage:ignore-line
 
   /// 解析 [TText] 的最终 [TextStyle]
   ///
-  /// 含完整覆盖链：P0 style > 构造器糖 > TTextConfiguration > TTextThemeData > Token。
+  /// 含完整覆盖链：style > 构造器糖 > TTextConfiguration >
+  /// TTextThemeData > DefaultTextStyle > TextTheme > Token。
   static TextStyle resolve({
     required BuildContext context,
     // P0 实例
@@ -45,33 +47,52 @@ class TTextResolve {
     Color? textStyleBackgroundColor,
   }) {
     final tTheme = context.tTheme;
+    final materialTheme = Theme.of(context);
     final themeExtension = Theme.of(context).extension<TTextThemeData>();
+    final defaultTextStyle = DefaultTextStyle.of(context).style;
+    final materialTextStyle =
+        materialTheme.textTheme.bodyLarge ?? materialTheme.textTheme.bodyMedium;
     final configuration =
         context.dependOnInheritedWidgetOfExactType<TTextConfiguration>();
 
-    // 1. 基准 Font：构造器 > Theme > Token
-    final textFont = font ??
-        themeExtension?.defaultFont ??
-        tTheme.fontBodyLarge ??
+    final fallbackFont = tTheme.fontBodyLarge ??
         Font(size: 16, lineHeight: 24); // coverage:ignore-line
 
-    // 2. fontSize：P0 style > 构造器糖（font.size）> Theme > Token
-    final fontSize = style?.fontSize ?? textFont.size;
+    // 1. 基准 Font：构造器 > 组件 Theme > Token
+    final textFont = font ?? themeExtension?.defaultFont ?? fallbackFont;
 
-    // 3. height：overrideHeight（forceVerticalCenter 分支传入）> P0 style.height > 构造器糖（font.height）> Token
-    final resolvedHeight = overrideHeight ?? style?.height ?? textFont.height;
+    // 2. fontSize：style > 构造器糖 > 组件 Theme > DefaultTextStyle > TextTheme > Token
+    final fontSize = style?.fontSize ??
+        font?.size ??
+        themeExtension?.defaultFont?.size ??
+        defaultTextStyle.fontSize ??
+        materialTextStyle?.fontSize ??
+        fallbackFont.size;
 
-    // 4. fontWeight：P0 style > 构造器糖 > Theme > Token
+    // 3. height：forceVerticalCenter 覆写 > style > 构造器糖 > 组件 Theme > DefaultTextStyle > TextTheme > Token
+    final resolvedHeight = overrideHeight ??
+        style?.height ??
+        font?.height ??
+        themeExtension?.defaultFont?.height ??
+        defaultTextStyle.height ??
+        materialTextStyle?.height ??
+        fallbackFont.height;
+
+    // 4. fontWeight：style > 构造器糖 > 组件 Theme > DefaultTextStyle > TextTheme > Token
     final resolvedFontWeight = style?.fontWeight ??
         fontWeight ??
         themeExtension?.defaultFontWeight ??
+        defaultTextStyle.fontWeight ??
+        materialTextStyle?.fontWeight ??
         textFont.fontWeight;
 
-    // 5. 字体族解析（含 globalFontFamily 注入 + iOS PingFang 回退 + Theme 回退）
+    // 5. 字体族解析（含 globalFontFamily 注入 + iOS PingFang 回退 + Flutter Theme 回退）
     final resolvedFontFamily = _resolveFontFamily(
       style: style,
       fontFamily: fontFamily,
       themeFontFamily: themeExtension?.defaultFontFamily,
+      defaultTextStyle: defaultTextStyle,
+      materialTextStyle: materialTextStyle,
       configuration: configuration,
       resolvedFontWeight: resolvedFontWeight,
     );
@@ -83,10 +104,12 @@ class TTextResolve {
       isInFontLoader: isInFontLoader,
     );
 
-    // 6. 颜色：P0 style.color > 构造器糖 textColor > Theme > Token
+    // 6. 颜色：style > 构造器糖 > 组件 Theme > DefaultTextStyle > TextTheme > Token
     final color = style?.color ??
         textColor ??
         themeExtension?.defaultTextColor ??
+        defaultTextStyle.color ??
+        materialTextStyle?.color ??
         tTheme.textColorPrimary;
 
     // 7. 删除线：P0 style.decoration > 构造器糖 isTextThrough > Theme
@@ -107,24 +130,45 @@ class TTextResolve {
       backgroundColor: textStyleBackgroundColor,
       fontSize: fontSize,
       fontWeight: resolvedFontWeight,
-      fontStyle: style?.fontStyle,
-      letterSpacing: style?.letterSpacing,
-      wordSpacing: style?.wordSpacing,
-      textBaseline: style?.textBaseline,
+      fontStyle: style?.fontStyle ??
+          defaultTextStyle.fontStyle ??
+          materialTextStyle?.fontStyle,
+      letterSpacing: style?.letterSpacing ??
+          defaultTextStyle.letterSpacing ??
+          materialTextStyle?.letterSpacing,
+      wordSpacing: style?.wordSpacing ??
+          defaultTextStyle.wordSpacing ??
+          materialTextStyle?.wordSpacing,
+      textBaseline: style?.textBaseline ??
+          defaultTextStyle.textBaseline ??
+          materialTextStyle?.textBaseline,
       height: resolvedHeight,
-      leadingDistribution: style?.leadingDistribution,
-      locale: style?.locale,
-      foreground: style?.foreground,
-      background: style?.background,
-      shadows: style?.shadows,
-      fontFeatures: style?.fontFeatures,
+      leadingDistribution: style?.leadingDistribution ??
+          defaultTextStyle.leadingDistribution ??
+          materialTextStyle?.leadingDistribution,
+      locale:
+          style?.locale ?? defaultTextStyle.locale ?? materialTextStyle?.locale,
+      foreground: style?.foreground ??
+          defaultTextStyle.foreground ??
+          materialTextStyle?.foreground,
+      background: style?.background ??
+          defaultTextStyle.background ??
+          materialTextStyle?.background,
+      shadows: style?.shadows ??
+          defaultTextStyle.shadows ??
+          materialTextStyle?.shadows,
+      fontFeatures: style?.fontFeatures ??
+          defaultTextStyle.fontFeatures ??
+          materialTextStyle?.fontFeatures,
       decoration: decoration,
       decorationColor: decorationColor,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
       fontFamily: resolvedFontFamily,
-      fontFamilyFallback: style?.fontFamilyFallback,
+      fontFamilyFallback: style?.fontFamilyFallback ??
+          defaultTextStyle.fontFamilyFallback ??
+          materialTextStyle?.fontFamilyFallback,
       package: resolvedPackage,
     );
   }
@@ -223,6 +267,8 @@ class TTextResolve {
     required TextStyle? style,
     required FontFamily? fontFamily,
     FontFamily? themeFontFamily,
+    TextStyle? defaultTextStyle,
+    TextStyle? materialTextStyle,
     TTextConfiguration? configuration,
     required FontWeight? resolvedFontWeight,
   }) {
@@ -230,7 +276,9 @@ class TTextResolve {
     final styleFontFamily = style?.fontFamily ??
         fontFamily?.fontFamily ??
         globalFontFamily?.fontFamily ??
-        themeFontFamily?.fontFamily;
+        themeFontFamily?.fontFamily ??
+        defaultTextStyle?.fontFamily ??
+        materialTextStyle?.fontFamily;
 
     // iOS FontWeight≤w500 且无 fontFamily → 回退 PingFang SC
     if (PlatformUtil.isIOS &&
