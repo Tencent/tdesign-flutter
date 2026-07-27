@@ -280,11 +280,11 @@ void main() {
           .map((container) => container.decoration)
           .whereType<BoxDecoration>()
           .first;
-      expect(decoration.color, token.brandLightColor);
-      expect(decoration.border?.top.color, token.brandNormalColor);
+      expect(decoration.color, token.bgColorContainer);
+      expect(decoration.border?.top.color, token.componentBorderColor);
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
-        token.textColorAnti,
+        token.textColorPrimary,
       );
     });
 
@@ -450,11 +450,11 @@ void main() {
           .map((container) => container.decoration)
           .whereType<BoxDecoration>()
           .first;
-      expect(decoration.color, token.brandLightColor);
-      expect(decoration.border?.top.color, token.brandNormalColor);
+      expect(decoration.color, token.bgColorContainer);
+      expect(decoration.border?.top.color, token.componentBorderColor);
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
-        token.textColorAnti,
+        token.textColorPrimary,
       );
     });
 

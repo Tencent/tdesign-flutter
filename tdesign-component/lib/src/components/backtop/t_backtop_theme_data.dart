@@ -20,13 +20,13 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
   /// 默认形状（circle / halfCircle）
   final TBackTopShape? shape;
 
-  /// 背景色；未设置时读取 TDesign 品牌浅色 token。
+  /// 背景色；未设置时读取 TDesign 容器背景 token。
   final Color? backgroundColor;
 
-  /// 边框色；未设置时读取 TDesign 品牌色 token。
+  /// 边框色；未设置时读取 TDesign 组件边框 token。
   final Color? borderColor;
 
-  /// 图标和文字颜色；未设置时读取 TDesign 反色文字 token。
+  /// 图标和文字颜色；未设置时读取 TDesign 主文本 token。
   final Color? contentColor;
 
   /// 默认显示阈值（未传 [TBackTop.visibilityOffset] 时，滚动偏移 ≥ 此值才显示）

@@ -134,9 +134,10 @@ class _TBackTopState extends State<TBackTop> {
   }
 
   void _initColors() {
-    _bgColor = _themeData.backgroundColor ?? context.tTheme.brandLightColor;
-    _borderColor = _themeData.borderColor ?? context.tTheme.brandNormalColor;
-    _fontColor = _themeData.contentColor ?? context.tTheme.textColorAnti;
+    _bgColor = _themeData.backgroundColor ?? context.tTheme.bgColorContainer;
+    _borderColor =
+        _themeData.borderColor ?? context.tTheme.componentBorderColor;
+    _fontColor = _themeData.contentColor ?? context.tTheme.textColorPrimary;
   }
 
   void _refreshVisibility() {
