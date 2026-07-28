@@ -13,8 +13,13 @@ class TSliderPage extends StatefulWidget {
 }
 
 class _TSliderPageState extends State<TSliderPage> {
-  double value = 35;
-  RangeValues range = const RangeValues(20, 70);
+  double singleValue = 35;
+  RangeValues rangeValue = const RangeValues(20, 70);
+  double advancedValue = 65;
+  RangeValues advancedRange = const RangeValues(25, 80);
+  double themedValue = 50;
+  String singleEventText = '拖动滑块查看 onChangeStart / onChangeEnd';
+  String rangeEventText = '拖动范围滑块查看生命周期回调';
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +29,24 @@ class _TSliderPageState extends State<TSliderPage> {
       exampleCodeGroup: 'slider',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: '基础类型',
           children: [
-            ExampleItem(desc: '单值', builder: _buildSingle),
-            ExampleItem(desc: '范围', builder: _buildRange),
-            ExampleItem(desc: '离散刻度', builder: _buildDivisions),
+            ExampleItem(desc: '单值滑块', builder: _buildSingle),
+            ExampleItem(desc: '范围滑块（整数步进）', builder: _buildRange),
+          ],
+        ),
+        ExampleModule(
+          title: '能力组合',
+          children: [
+            ExampleItem(desc: '单值：拇指值与刻度值', builder: _buildAdvanced),
+            ExampleItem(desc: '范围：拇指值与刻度值', builder: _buildAdvancedRange),
           ],
         ),
         ExampleModule(
           title: '状态与主题',
           children: [
-            ExampleItem(desc: '禁用', builder: _buildDisabled),
-            ExampleItem(desc: 'Material Theme', builder: _buildMaterialTheme),
-            ExampleItem(desc: '外层装饰', builder: _buildDecoration),
+            ExampleItem(desc: '禁用状态', builder: _buildDisabled),
+            ExampleItem(desc: '全局与局部主题', builder: _buildTheme),
           ],
         ),
       ],
@@ -47,12 +57,12 @@ class _TSliderPageState extends State<TSliderPage> {
   @ExampleCode(group: 'slider')
   Widget _buildSingle(BuildContext context) => _withValueLabel(
         context,
-        label: '当前值：${value.toStringAsFixed(0)}',
+        label: '当前值：${singleValue.toStringAsFixed(0)}',
         child: TSlider(
-          value: value,
+          value: singleValue,
           min: 0,
           max: 100,
-          onChanged: (next) => setState(() => value = next),
+          onChanged: (next) => setState(() => singleValue = next),
         ),
       );
 
@@ -60,67 +70,99 @@ class _TSliderPageState extends State<TSliderPage> {
   Widget _buildRange(BuildContext context) => _withValueLabel(
         context,
         label:
-            '当前范围：${range.start.toStringAsFixed(0)} - ${range.end.toStringAsFixed(0)}',
+            '当前范围：${rangeValue.start.toStringAsFixed(0)} - ${rangeValue.end.toStringAsFixed(0)}',
         child: TRangeSlider(
-          value: range,
+          value: rangeValue,
           min: 0,
           max: 100,
-          onChanged: (next) => setState(() => range = next),
+          divisions: 100,
+          onChanged: (next) => setState(() => rangeValue = next),
         ),
       );
 
   @ExampleCode(group: 'slider')
-  Widget _buildDivisions(BuildContext context) => _withValueLabel(
+  Widget _buildAdvanced(BuildContext context) => _withValueLabel(
         context,
-        label: '当前刻度：${value.toStringAsFixed(0)}',
+        label: singleEventText,
         child: TSlider(
-          value: value,
+          value: advancedValue,
           min: 0,
           max: 100,
           divisions: 5,
-          onChanged: (next) => setState(() => value = next),
+          showThumbValue: true,
+          thumbFormatter: _formatPercent,
+          showScaleValue: true,
+          scaleFormatter: _formatPercent,
+          onChanged: (next) => setState(() => advancedValue = next),
+          onChangeStart: (_) =>
+              setState(() => singleEventText = 'onChangeStart'),
+          onChangeEnd: (_) => setState(() => singleEventText = 'onChangeEnd'),
         ),
       );
 
   @ExampleCode(group: 'slider')
-  Widget _buildDisabled(BuildContext context) => const TSlider(
-        value: 40,
-        min: 0,
-        max: 100,
+  Widget _buildAdvancedRange(BuildContext context) => _withValueLabel(
+        context,
+        label: rangeEventText,
+        child: TRangeSlider(
+          value: advancedRange,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          showThumbValue: true,
+          thumbFormatter: _formatPercent,
+          showScaleValue: true,
+          scaleFormatter: _formatPercent,
+          onChanged: (next) => setState(() => advancedRange = next),
+          onChangeStart: (_) =>
+              setState(() => rangeEventText = '范围 onChangeStart'),
+          onChangeEnd: (_) => setState(() => rangeEventText = '范围 onChangeEnd'),
+        ),
       );
 
   @ExampleCode(group: 'slider')
-  Widget _buildMaterialTheme(BuildContext context) => SliderTheme(
+  Widget _buildDisabled(BuildContext context) => const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TSlider(value: 40, min: 0, max: 100),
+          TRangeSlider(
+            value: RangeValues(20, 70),
+            min: 0,
+            max: 100,
+          ),
+        ],
+      );
+
+  @ExampleCode(group: 'slider')
+  Widget _buildTheme(BuildContext context) {
+    final decoration = TSliderThemeData(
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+      ),
+    );
+    return Theme(
+      data: Theme.of(context).mergeExtension(decoration),
+      child: SliderTheme(
         data: SliderTheme.of(context).copyWith(
           activeTrackColor: context.tTheme.successNormalColor,
           thumbColor: context.tTheme.successNormalColor,
           trackHeight: 6,
         ),
         child: TSlider(
-          value: value,
+          value: themedValue,
           min: 0,
           max: 100,
-          onChanged: (next) => setState(() => value = next),
+          divisions: 5,
+          showScaleValue: true,
+          scaleFormatter: _formatPercent,
+          onChanged: (next) => setState(() => themedValue = next),
         ),
-      );
+      ),
+    );
+  }
 
-  @ExampleCode(group: 'slider')
-  Widget _buildDecoration(BuildContext context) => Theme(
-        data: Theme.of(context).mergeExtension(
-          TSliderThemeData(
-            decoration: BoxDecoration(
-              color: context.tTheme.bgColorSecondaryContainer,
-              borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-            ),
-          ),
-        ),
-        child: TRangeSlider(
-          value: range,
-          min: 0,
-          max: 100,
-          onChanged: (next) => setState(() => range = next),
-        ),
-      );
+  String _formatPercent(double value) => '${value.toInt()}%';
 
   Widget _withValueLabel(
     BuildContext context, {

@@ -52,6 +52,36 @@ void main() {
       expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNull);
     });
 
+    testWidgets('uses TDesign token colors when SliderTheme is unspecified',
+        (tester) async {
+      await tester.pumpWidget(wrap(const TSlider(value: 0.5)));
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.activeTrackColor, TThemeData.defaultData().brandNormalColor);
+      expect(theme.thumbColor, TThemeData.defaultData().brandNormalColor);
+    });
+
+    testWidgets('preserves local SliderTheme color overrides', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            extensions: [TThemeData.defaultData()],
+            sliderTheme: const SliderThemeData(
+              activeTrackColor: Colors.red,
+            ),
+          ),
+          home: const Scaffold(
+            body:
+                Center(child: SizedBox(width: 320, child: TSlider(value: 0.5))),
+          ),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.activeTrackColor, Colors.red);
+      expect(theme.thumbColor, TThemeData.defaultData().brandNormalColor);
+    });
+
     testWidgets('Theme decoration wraps the slider', (tester) async {
       await tester.pumpWidget(wrap(
         const TSlider(value: 0.5),
@@ -62,10 +92,58 @@ void main() {
       expect(find.byType(DecoratedBox), findsOneWidget);
     });
 
+    testWidgets('showThumbValue forwards formatted label and value indicator',
+        (tester) async {
+      await tester.pumpWidget(wrap(TSlider(
+        value: 40,
+        min: 0,
+        max: 100,
+        showThumbValue: true,
+        thumbFormatter: (value) => '${value.toInt()}%',
+      )));
+
+      final slider = tester.widget<Slider>(find.byType(Slider));
+      expect(slider.label, '40%');
+      expect(
+        SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
+        ShowValueIndicator.always,
+      );
+    });
+
+    testWidgets('showScaleValue renders formatted scale labels',
+        (tester) async {
+      await tester.pumpWidget(wrap(TSlider(
+        value: 40,
+        min: 0,
+        max: 100,
+        divisions: 4,
+        showScaleValue: true,
+        scaleFormatter: (value) => '${value.toInt()}%',
+      )));
+
+      expect(find.text('0%'), findsOneWidget);
+      expect(find.text('50%'), findsOneWidget);
+      expect(find.text('100%'), findsOneWidget);
+    });
+
+    testWidgets('showThumbValue defaults to two decimal places',
+        (tester) async {
+      await tester.pumpWidget(wrap(const TSlider(
+        value: 0.4,
+        showThumbValue: true,
+      )));
+
+      expect(tester.widget<Slider>(find.byType(Slider)).label, '0.40');
+    });
+
     test('rejects invalid values and ranges', () {
       expect(() => TSlider(value: 2), throwsAssertionError);
       expect(() => TSlider(value: 0, min: 1, max: 1), throwsAssertionError);
       expect(() => TSlider(value: 0.5, divisions: 0), throwsAssertionError);
+      expect(
+        () => TSlider(value: 0.5, showScaleValue: true),
+        throwsAssertionError,
+      );
     });
   });
 
@@ -113,6 +191,54 @@ void main() {
         isNull,
       );
       expect(find.byType(DecoratedBox), findsOneWidget);
+    });
+
+    testWidgets('showThumbValue forwards formatted range labels',
+        (tester) async {
+      await tester.pumpWidget(wrap(TRangeSlider(
+        value: const RangeValues(20, 60),
+        min: 0,
+        max: 100,
+        showThumbValue: true,
+        thumbFormatter: (value) => '${value.toInt()}%',
+      )));
+
+      final slider = tester.widget<RangeSlider>(find.byType(RangeSlider));
+      expect(slider.labels, const RangeLabels('20%', '60%'));
+      expect(
+        SliderTheme.of(tester.element(find.byType(RangeSlider)))
+            .showValueIndicator,
+        ShowValueIndicator.always,
+      );
+    });
+
+    testWidgets('showScaleValue renders formatted range scale labels',
+        (tester) async {
+      await tester.pumpWidget(wrap(TRangeSlider(
+        value: const RangeValues(20, 60),
+        min: 0,
+        max: 100,
+        divisions: 4,
+        showScaleValue: true,
+        scaleFormatter: (value) => '${value.toInt()}%',
+      )));
+
+      expect(find.text('0%'), findsOneWidget);
+      expect(find.text('50%'), findsOneWidget);
+      expect(find.text('100%'), findsOneWidget);
+    });
+
+    testWidgets('range showThumbValue defaults to two decimal places',
+        (tester) async {
+      await tester.pumpWidget(wrap(const TRangeSlider(
+        value: RangeValues(0.2, 0.6),
+        showThumbValue: true,
+      )));
+
+      expect(
+        tester.widget<RangeSlider>(find.byType(RangeSlider)).labels,
+        const RangeLabels('0.20', '0.60'),
+      );
     });
 
     test('rejects invalid bounds and divisions', () {
