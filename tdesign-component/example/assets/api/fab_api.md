@@ -7,6 +7,7 @@
 | icon | Icon? | - | 图标 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onClick | VoidCallback? | - | 点击事件 |
+| onLongPress | VoidCallback? | - | 长按回调 |
 | shape | TFabShape | TFabShape.circle | 形状 |
 | size | TFabSize | TFabSize.large | 大小 |
 | text | String? | - | 文本 |
