@@ -17,6 +17,7 @@
 | placement | TDrawerPlacement? | TDrawerPlacement.right | 抽屉方向 |
 | showOverlay | bool? | true | 是否显示遮罩层 |
 | title | Widget? | - | 抽屉的标题组件 |
+| useSafeArea | bool | true | 是否避让系统安全区域 |
 | width | double? | - | 宽度（优先级高于 ThemeData） |
 
 

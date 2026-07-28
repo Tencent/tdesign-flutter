@@ -31,7 +31,6 @@
 | semanticsLabel | String? | - | 透传至系统 `Text.semanticsLabel` 的无障碍标签 |
 | textWidthBasis | TextWidthBasis? | - | 透传至系统 `Text.textWidthBasis` 的宽度计算基准 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 透传至系统 `Text.textHeightBehavior` 的高度行为 |
-| forceVerticalCenter | bool | false | 是否强制居中 |
 | isInFontLoader | bool | false | 是否在 FontLoader 中使用 |
 | fontFamilyUrl | String? | - | 是否禁用懒加载 FontFamily 的能力 |
 
@@ -45,7 +44,6 @@
 | fontFamily | FontFamily? | - | 字体ttf |
 | fontFamilyUrl | String? | - | 是否禁用懒加载 FontFamily 的能力 |
 | fontWeight | FontWeight? | - | 字体粗细 |
-| forceVerticalCenter | bool | false | 是否强制居中 |
 | isInFontLoader | bool | false | 是否在 FontLoader 中使用 |
 | isTextThrough | bool? | false | 是否是横线穿过样式（删除线） |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
@@ -103,4 +101,3 @@
 | child | Widget | - | 子树内容，配置会作用于该子树内的 TText。 |
 | globalFontFamily | FontFamily? | - | 全局字体族，设置后子树中所有 TText 将默认使用此字体。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| paddingConfig | TTextPaddingConfig? | - | forceVerticalCenter=true 时，内置 padding 配置。 |
