@@ -36,6 +36,9 @@ class TStepsVerticalItem extends StatelessWidget {
   /// item 标题组件插槽
   final Widget? titleWidget;
 
+  /// 点击回调。
+  final VoidCallback? onTap;
+
   const TStepsVerticalItem({
     super.key,
     required this.data,
@@ -47,6 +50,7 @@ class TStepsVerticalItem extends StatelessWidget {
     required this.readOnly,
     required this.verticalSelect,
     this.titleWidget,
+    this.onTap,
   });
 
   @override
@@ -178,7 +182,7 @@ class TStepsVerticalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
-    return Container(
+    final content = Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: IntrinsicHeight(
         child: Row(
@@ -255,6 +259,13 @@ class TStepsVerticalItem extends StatelessWidget {
         ),
       ),
     );
+    return onTap == null
+        ? content
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTap,
+            child: content,
+          );
   }
 
   Widget _buildLineWidget(BuildContext context) {

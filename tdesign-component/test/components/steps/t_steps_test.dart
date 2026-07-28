@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps_vertical_item.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   Widget wrapWithTheme(Widget child, {TStepsThemeData? stepsTheme}) {
@@ -122,6 +122,34 @@ void main() {
         TSteps(steps: buildSteps(3), value: 2),
       ));
       expect(find.byType(TSteps), findsOneWidget);
+    });
+
+    testWidgets('horizontal 通过 onChange 通知受控父级', (tester) async {
+      int? selectedIndex;
+      await tester.pumpWidget(wrapWithTheme(
+        TSteps(
+          steps: buildSteps(3),
+          onChange: (index) => selectedIndex = index,
+        ),
+      ));
+
+      await tester.tap(find.text('步骤2'));
+      expect(selectedIndex, 1);
+    });
+
+    testWidgets('verticalSelect 通过 onChange 通知受控父级', (tester) async {
+      int? selectedIndex;
+      await tester.pumpWidget(wrapWithTheme(
+        TSteps(
+          steps: buildSteps(3),
+          direction: TStepsDirection.vertical,
+          verticalSelect: true,
+          onChange: (index) => selectedIndex = index,
+        ),
+      ));
+
+      await tester.tap(find.text('步骤3'));
+      expect(selectedIndex, 2);
     });
   });
 

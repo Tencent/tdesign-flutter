@@ -20,6 +20,9 @@ class TStepsHorizontal extends StatelessWidget {
   /// 是否为只读模式（纯展示）
   final bool readOnly;
 
+  /// 选择步骤回调。
+  final ValueChanged<int>? onChange;
+
   const TStepsHorizontal({
     super.key,
     required this.steps,
@@ -27,6 +30,7 @@ class TStepsHorizontal extends StatelessWidget {
     required this.status,
     required this.simple,
     required this.readOnly,
+    this.onChange,
   });
 
   @override
@@ -44,6 +48,7 @@ class TStepsHorizontal extends StatelessWidget {
           status: status,
           simple: simple,
           readOnly: readOnly,
+          onTap: readOnly ? null : () => onChange?.call(item.key),
         ),
       );
     }).toList();

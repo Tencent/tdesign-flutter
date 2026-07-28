@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| onChange | ValueChanged<int>? | - | 用户选择步骤时触发；通过更新 `value` 实现受控模式。 |
 | readOnly | bool? | - | 步骤条readOnly模式（优先级高于 ThemeData） |
 | simple | bool? | - | 步骤条simple模式（优先级高于 ThemeData） |
 | status | TStepsStatus? | - | 步骤条状态（优先级高于 ThemeData） |

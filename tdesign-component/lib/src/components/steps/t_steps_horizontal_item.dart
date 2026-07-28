@@ -30,6 +30,9 @@ class TStepsHorizontalItem extends StatelessWidget {
   /// 是否为只读模式（纯展示）
   final bool readOnly;
 
+  /// 点击回调。
+  final VoidCallback? onTap;
+
   const TStepsHorizontalItem({
     super.key,
     required this.data,
@@ -39,6 +42,7 @@ class TStepsHorizontalItem extends StatelessWidget {
     required this.status,
     required this.simple,
     required this.readOnly,
+    this.onTap,
   });
 
   @override
@@ -173,7 +177,7 @@ class TStepsHorizontalItem extends StatelessWidget {
         ? theme.brandNormalColor
         : theme.componentBorderColor;
 
-    return Column(
+    final content = Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -198,6 +202,13 @@ class TStepsHorizontalItem extends StatelessWidget {
         _buildContentWidget(context)
       ],
     );
+    return onTap == null
+        ? content
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTap,
+            child: content,
+          );
   }
 
   /// 构建步骤条横线组件

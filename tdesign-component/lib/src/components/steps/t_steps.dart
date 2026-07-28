@@ -69,6 +69,7 @@ class TSteps extends StatefulWidget {
     this.simple,
     this.readOnly,
     this.verticalSelect,
+    this.onChange,
   });
 
   /// 步骤条数据
@@ -91,6 +92,9 @@ class TSteps extends StatefulWidget {
 
   /// 步骤条垂直自定义步骤条选择模式（优先级高于 ThemeData）
   final bool? verticalSelect;
+
+  /// 用户选择步骤时触发；通过更新 [value] 实现受控模式。
+  final ValueChanged<int>? onChange;
 
   /// 子树级主题数据（v1.0 新增）
 
@@ -132,7 +136,8 @@ class _TStepsState extends State<TSteps> {
             activeIndex: currentActiveIndex,
             status: effectiveStatus,
             simple: effectiveSimple,
-            readOnly: effectiveReadOnly)
+            readOnly: effectiveReadOnly,
+            onChange: widget.onChange)
         : TStepsVertical(
             steps: widget.steps,
             activeIndex: currentActiveIndex,
@@ -140,6 +145,7 @@ class _TStepsState extends State<TSteps> {
             simple: effectiveSimple,
             readOnly: effectiveReadOnly,
             verticalSelect: effectiveVerticalSelect,
+            onChange: widget.onChange,
           );
   }
 }

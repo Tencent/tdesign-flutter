@@ -23,6 +23,9 @@ class TStepsVertical extends StatelessWidget {
   /// 垂直模式下是否可点击选择
   final bool verticalSelect;
 
+  /// 选择步骤回调。
+  final ValueChanged<int>? onChange;
+
   const TStepsVertical({
     super.key,
     required this.steps,
@@ -31,6 +34,7 @@ class TStepsVertical extends StatelessWidget {
     required this.simple,
     required this.readOnly,
     required this.verticalSelect,
+    this.onChange,
   });
 
   @override
@@ -46,6 +50,8 @@ class TStepsVertical extends StatelessWidget {
         simple: simple,
         readOnly: readOnly,
         verticalSelect: verticalSelect,
+        onTap:
+            readOnly || !verticalSelect ? null : () => onChange?.call(item.key),
       );
     }).toList();
 
