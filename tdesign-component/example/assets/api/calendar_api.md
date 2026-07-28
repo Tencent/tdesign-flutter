@@ -40,7 +40,7 @@
 | bodyPadding | double? | - | 内边距 |
 | cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） |
 | cellHeight | double | 60 | 日期单元格高度，默认 60 |
-| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色；`forSelectType` 中设为 TTheme.brandLightColor。 |
+| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色。 |
 | dayStyle | TextStyle? | - | 日期数字样式 |
 | decoration | BoxDecoration? | - | 组件容器装饰 |
 | monthTitleHeight | double | 22 | 月份标题高度，默认 22 |
