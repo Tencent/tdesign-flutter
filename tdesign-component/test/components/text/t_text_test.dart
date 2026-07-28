@@ -30,16 +30,18 @@ void main() {
     expect(find.byType(TText), findsOneWidget);
   });
 
-  testWidgets('T01b - 完整主题下默认文本样式来自 token', (tester) async {
-    final token = TThemeData.defaultData();
+  testWidgets('T01b - 完整主题下默认文本样式尊重 Flutter DefaultTextStyle',
+      (tester) async {
     await tester.pumpWidget(wrapWithTheme(
       const TText('Token 文本'),
     ));
 
     final text = tester.widget<Text>(find.text('Token 文本'));
-    expect(text.style?.color, token.textColorPrimary);
-    expect(text.style?.fontSize, token.fontBodyLarge?.size);
-    expect(text.style?.height, token.fontBodyLarge?.height);
+    final defaultStyle =
+        DefaultTextStyle.of(tester.element(find.text('Token 文本'))).style;
+    expect(text.style?.color, defaultStyle.color);
+    expect(text.style?.fontSize, defaultStyle.fontSize);
+    expect(text.style?.height, defaultStyle.height);
   });
 
   // ============================================================

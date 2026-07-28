@@ -81,19 +81,29 @@ void main() {
       expect(style.fontSize, isNotNull);
     });
 
-    testWidgets('resolve 完整主题默认值来自 token', (tester) async {
-      final token = TThemeData.defaultData();
-      final context = await _ctx(tester);
-      final style = TTextResolve.resolve(context: context);
-      expect(style.color, token.textColorPrimary);
-      expect(style.fontSize, token.fontBodyLarge?.size);
-      expect(style.height, token.fontBodyLarge?.height);
-    });
-
     testWidgets('resolve 读取 DefaultTextStyle 作为 Flutter 子树默认', (tester) async {
       final context = await _ctxWithThemeData(
         tester,
         ThemeData(extensions: [TThemeData.defaultData()]),
+        wrapChild: (child) => DefaultTextStyle(
+          style: const TextStyle(
+            color: Colors.pink,
+            fontSize: 21,
+            height: 1.7,
+          ),
+          child: child,
+        ),
+      );
+      final style = TTextResolve.resolve(context: context);
+      expect(style.color, Colors.pink);
+      expect(style.fontSize, 21);
+      expect(style.height, 1.7);
+    });
+
+    testWidgets('TMaterialThemeBuilder 不遮蔽 DefaultTextStyle', (tester) async {
+      final context = await _ctxWithThemeData(
+        tester,
+        TThemeBuilder.light(TThemeData.defaultData()),
         wrapChild: (child) => DefaultTextStyle(
           style: const TextStyle(
             color: Colors.pink,

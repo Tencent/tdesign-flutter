@@ -368,11 +368,10 @@ class TMaterialThemeBuilder {
     );
   }
 
-  TTextThemeData _textExtension(TThemeData token) {
-    return TTextThemeData(
-      defaultFont: token.fontBodyLarge,
-      defaultTextColor: token.textColorPrimary,
-    );
+  TTextThemeData _textExtension(TThemeData _) {
+    // Token defaults are exposed through Material TextTheme and TText's final
+    // fallback. Keeping this extension empty lets local DefaultTextStyle work.
+    return const TTextThemeData();
   }
 
   TIconThemeData _iconTheme(TThemeData _) {
