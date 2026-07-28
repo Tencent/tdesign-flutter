@@ -1,0 +1,20 @@
+Widget _buildStates(BuildContext context) => _buildRow(context, [
+        TStepper(
+          value: _minValue,
+          min: 0,
+          max: 10,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _minValue = value),
+        ),
+        TStepper(
+          value: _maxValue,
+          min: 0,
+          max: 10,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _maxValue = value),
+        ),
+        const TStepper(
+          value: 5,
+          variant: TStepperVariant.filled,
+        ),
+      ]);

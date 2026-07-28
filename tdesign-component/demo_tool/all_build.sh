@@ -63,7 +63,7 @@ dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/compone
 # slider
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/slider/t_slider.dart" --name TSlider,TRangeSlider,TSliderThemeData --folder-name slider --output "$PARENT_DIR/example/assets/api/" --only-api
 # stepper
-dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/stepper/t_stepper.dart" --name TStepper --folder-name stepper --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/stepper" --name TStepper,TStepperThemeData,TStepperSize,TStepperVariant --folder-name stepper --output "$PARENT_DIR/example/assets/api/" --only-api
 # switch
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/switch/t_switch.dart" --name TSwitch --folder-name switch --output "$PARENT_DIR/example/assets/api/" --only-api
 # textarea

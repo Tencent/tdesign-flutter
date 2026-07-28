@@ -1,0 +1,18 @@
+Widget _buildAdvanced(BuildContext context) => _withValueLabel(
+        context,
+        label: singleEventText,
+        child: TSlider(
+          value: advancedValue,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          showThumbValue: true,
+          thumbFormatter: _formatPercent,
+          showScaleValue: true,
+          scaleFormatter: _formatPercent,
+          onChanged: (next) => setState(() => advancedValue = next),
+          onChangeStart: (_) =>
+              setState(() => singleEventText = 'onChangeStart'),
+          onChangeEnd: (_) => setState(() => singleEventText = 'onChangeEnd'),
+        ),
+      );

@@ -1,0 +1,20 @@
+Widget _buildSizes(BuildContext context) => _buildRow(context, [
+        TStepper(
+          value: _smallValue,
+          size: TStepperSize.small,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _smallValue = value),
+        ),
+        TStepper(
+          value: _mediumValue,
+          size: TStepperSize.medium,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _mediumValue = value),
+        ),
+        TStepper(
+          value: _largeValue,
+          size: TStepperSize.large,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _largeValue = value),
+        ),
+      ]);

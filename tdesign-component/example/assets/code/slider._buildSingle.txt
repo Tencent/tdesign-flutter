@@ -1,10 +1,10 @@
 Widget _buildSingle(BuildContext context) => _withValueLabel(
         context,
-        label: '当前值：${value.toStringAsFixed(0)}',
+        label: '当前值：${singleValue.toStringAsFixed(0)}',
         child: TSlider(
-          value: value,
+          value: singleValue,
           min: 0,
           max: 100,
-          onChanged: (next) => setState(() => value = next),
+          onChanged: (next) => setState(() => singleValue = next),
         ),
       );

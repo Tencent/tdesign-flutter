@@ -1,7 +1,0 @@
-Widget _buildStepperWithDisableStatus(BuildContext context) {
-    return _buildRow(context, const [
-      TStepper(value: 1),
-      TStepper(value: 3),
-      TStepper(value: 5),
-    ]);
-  }

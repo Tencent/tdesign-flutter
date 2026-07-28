@@ -1,11 +1,12 @@
 Widget _buildRange(BuildContext context) => _withValueLabel(
         context,
         label:
-            '当前范围：${range.start.toStringAsFixed(0)} - ${range.end.toStringAsFixed(0)}',
+            '当前范围：${rangeValue.start.toStringAsFixed(0)} - ${rangeValue.end.toStringAsFixed(0)}',
         child: TRangeSlider(
-          value: range,
+          value: rangeValue,
           min: 0,
           max: 100,
-          onChanged: (next) => setState(() => range = next),
+          divisions: 100,
+          onChanged: (next) => setState(() => rangeValue = next),
         ),
       );
