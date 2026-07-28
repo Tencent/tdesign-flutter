@@ -37,7 +37,6 @@
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
-| style | TCellThemeData? | - | 列表自定义样式 |
 | title | Widget? | - | 抽屉的标题组件 |
 | width | double? | - | 宽度 |
 
