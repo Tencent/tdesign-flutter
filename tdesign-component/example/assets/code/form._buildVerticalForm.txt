@@ -53,16 +53,16 @@ Widget _buildVerticalForm(BuildContext context) {
             child: TRate(value: value, allowHalf: true, onChanged: onChanged),
           ),
         ),
-        TFormField<List<Object?>>(
-          name: 'region',
-          value: _region,
-          onChanged: (value) => setState(() => _region = value),
-          required: true,
-          requiredMessage: '请选择地区',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '地区',
-            child: SizedBox(
-              height: 160,
+        ValueListenableBuilder<List<Object?>>(
+          valueListenable: _region,
+          builder: (context, region, child) => TFormField<List<Object?>>(
+            name: 'region',
+            value: region,
+            onChanged: (value) => _region.value = value,
+            required: true,
+            requiredMessage: '请选择地区',
+            builder: (context, value, onChanged, errorText) => TFormItem(
+              label: '地区',
               child: TPicker(
                 items: _regionItems,
                 value: value,
@@ -71,17 +71,18 @@ Widget _buildVerticalForm(BuildContext context) {
             ),
           ),
         ),
-        TFormField<TDateTimePickerValue>(
-          name: 'appointment',
-          value: _selectedAppointment,
-          onChanged: (value) => setState(() => _selectedAppointment = value),
-          required: true,
-          requiredMessage: '请选择预约时间',
-          rules: [(value) => value?.year == null ? '请选择预约时间' : null],
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '预约时间',
-            child: SizedBox(
-              height: 160,
+        ValueListenableBuilder<TDateTimePickerValue>(
+          valueListenable: _selectedAppointment,
+          builder: (context, appointment, child) =>
+              TFormField<TDateTimePickerValue>(
+            name: 'appointment',
+            value: appointment,
+            onChanged: (value) => _selectedAppointment.value = value,
+            required: true,
+            requiredMessage: '请选择预约时间',
+            rules: [(value) => value?.year == null ? '请选择预约时间' : null],
+            builder: (context, value, onChanged, errorText) => TFormItem(
+              label: '预约时间',
               child: TDateTimePicker(
                 mode: DateTimePickerMode(
                   dateMode: DateMode.date,

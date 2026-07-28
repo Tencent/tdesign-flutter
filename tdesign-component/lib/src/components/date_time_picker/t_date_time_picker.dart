@@ -141,6 +141,16 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
 
     final controlledValueDiverged =
         valueChanged && widget.value != _snapshot.toResult();
+    final configurationChanged = modeChanged ||
+        rangeChanged ||
+        stepsChanged ||
+        showWeekChanged ||
+        renderLabelChanged;
+    if (valueChanged && !controlledValueDiverged && !configurationChanged) {
+      // 父级接受滚轮刚发出的受控值时，内部 snapshot 已经是最新状态。
+      // 保留当前 wheel 与 controller，避免每变一格都销毁并中断惯性滚动。
+      return;
+    }
     if (modeChanged || controlledValueDiverged) {
       _snapshot = DateTimePickerSnapshot.initial(
         columns: widget.mode.columns,

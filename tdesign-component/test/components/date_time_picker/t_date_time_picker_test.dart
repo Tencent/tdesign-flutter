@@ -53,6 +53,36 @@ void main() {
     expect(changed, greaterThanOrEqualTo(0));
   });
 
+  testWidgets('父级接受受控值时保留滚轮并支持连续惯性滚动', (tester) async {
+    var value = const TDateTimePickerValue(year: 2024, month: 1, day: 1);
+    var changes = 0;
+
+    await tester.pumpWidget(wrap(StatefulBuilder(
+      builder: (context, setState) => TDateTimePicker(
+        value: value,
+        mode: DateTimePickerMode(dateMode: DateMode.date),
+        start: const TDateTimePickerValue(year: 2020, month: 1, day: 1),
+        end: const TDateTimePickerValue(year: 2030, month: 12, day: 31),
+        onChanged: (next) => setState(() {
+          value = next;
+          changes++;
+        }),
+      ),
+    )));
+
+    final wheelState = tester.state(find.byType(DateTimePickerWheel));
+    await tester.fling(
+      find.byType(ListWheelScrollView).first,
+      const Offset(0, -240),
+      1200,
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.state(find.byType(DateTimePickerWheel)), same(wheelState));
+    expect(changes, greaterThan(1));
+    expect(value.year, isNot(2024));
+  });
+
   testWidgets('时间模式和禁用态', (tester) async {
     await tester.pumpWidget(wrap(
       TDateTimePicker(

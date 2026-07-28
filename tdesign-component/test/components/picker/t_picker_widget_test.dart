@@ -81,6 +81,59 @@ void main() {
       );
     });
 
+    testWidgets(
+        'nested page scrolling does not interrupt controlled wheel drag',
+        (tester) async {
+      final pageController = ScrollController();
+      final options = List<TPickerOption>.generate(
+        8,
+        (index) => TPickerOption(label: 'Item $index', value: index),
+      );
+      var value = <Object?>[0];
+      var changes = 0;
+
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(extensions: [TThemeData.defaultData()]),
+        home: Scaffold(
+          body: CustomScrollView(
+            controller: pageController,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 240),
+                    StatefulBuilder(
+                      builder: (context, setState) => TPicker(
+                        items: TPickerColumns([options]),
+                        value: value,
+                        onChanged: (next) => setState(() {
+                          value = next.values;
+                          changes++;
+                        }),
+                      ),
+                    ),
+                    const SizedBox(height: 480),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ));
+
+      await tester.fling(
+        find.byType(ListWheelScrollView),
+        const Offset(0, -240),
+        1200,
+      );
+      await tester.pumpAndSettle();
+
+      expect(pageController.offset, 0);
+      expect(changes, greaterThan(1));
+      expect(value.single, isNot(0));
+    });
+
     testWidgets('onChanged null disables interaction', (tester) async {
       await tester.pumpWidget(wrap(const TPicker(
         items: columns,

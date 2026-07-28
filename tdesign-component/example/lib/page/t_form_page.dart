@@ -17,10 +17,16 @@ class _TFormPageState extends State<TFormPage> {
     [
       TPickerOption(label: '广东', value: 'guangdong'),
       TPickerOption(label: '浙江', value: 'zhejiang'),
+      TPickerOption(label: '江苏', value: 'jiangsu'),
+      TPickerOption(label: '四川', value: 'sichuan'),
+      TPickerOption(label: '北京', value: 'beijing'),
     ],
     [
       TPickerOption(label: '深圳', value: 'shenzhen'),
       TPickerOption(label: '杭州', value: 'hangzhou'),
+      TPickerOption(label: '南京', value: 'nanjing'),
+      TPickerOption(label: '成都', value: 'chengdu'),
+      TPickerOption(label: '北京', value: 'beijing-city'),
     ],
   ]);
 
@@ -44,8 +50,13 @@ class _TFormPageState extends State<TFormPage> {
   num _quantity = 2;
   double _progress = 60;
   double _rating = 3;
-  List<Object?> _region = ['guangdong', 'shenzhen'];
-  TDateTimePickerValue _selectedAppointment = _appointment;
+  final _region = ValueNotifier<List<Object?>>([
+    'guangdong',
+    'shenzhen',
+  ]);
+  final _selectedAppointment = ValueNotifier<TDateTimePickerValue>(
+    _appointment,
+  );
   String _submittedLayout = '';
   Map<String, Object?> _submittedValues = const {};
 
@@ -54,6 +65,8 @@ class _TFormPageState extends State<TFormPage> {
     _nameController.dispose();
     _passwordController.dispose();
     _noteController.dispose();
+    _region.dispose();
+    _selectedAppointment.dispose();
     super.dispose();
   }
 
@@ -239,16 +252,16 @@ class _TFormPageState extends State<TFormPage> {
             child: TRate(value: value, allowHalf: true, onChanged: onChanged),
           ),
         ),
-        TFormField<List<Object?>>(
-          name: 'region',
-          value: _region,
-          onChanged: (value) => setState(() => _region = value),
-          required: true,
-          requiredMessage: '请选择地区',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '地区',
-            child: SizedBox(
-              height: 160,
+        ValueListenableBuilder<List<Object?>>(
+          valueListenable: _region,
+          builder: (context, region, child) => TFormField<List<Object?>>(
+            name: 'region',
+            value: region,
+            onChanged: (value) => _region.value = value,
+            required: true,
+            requiredMessage: '请选择地区',
+            builder: (context, value, onChanged, errorText) => TFormItem(
+              label: '地区',
               child: TPicker(
                 items: _regionItems,
                 value: value,
@@ -257,17 +270,18 @@ class _TFormPageState extends State<TFormPage> {
             ),
           ),
         ),
-        TFormField<TDateTimePickerValue>(
-          name: 'appointment',
-          value: _selectedAppointment,
-          onChanged: (value) => setState(() => _selectedAppointment = value),
-          required: true,
-          requiredMessage: '请选择预约时间',
-          rules: [(value) => value?.year == null ? '请选择预约时间' : null],
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '预约时间',
-            child: SizedBox(
-              height: 160,
+        ValueListenableBuilder<TDateTimePickerValue>(
+          valueListenable: _selectedAppointment,
+          builder: (context, appointment, child) =>
+              TFormField<TDateTimePickerValue>(
+            name: 'appointment',
+            value: appointment,
+            onChanged: (value) => _selectedAppointment.value = value,
+            required: true,
+            requiredMessage: '请选择预约时间',
+            rules: [(value) => value?.year == null ? '请选择预约时间' : null],
+            builder: (context, value, onChanged, errorText) => TFormItem(
+              label: '预约时间',
               child: TDateTimePicker(
                 mode: DateTimePickerMode(
                   dateMode: DateMode.date,
@@ -466,8 +480,8 @@ class _TFormPageState extends State<TFormPage> {
       _quantity = 2;
       _progress = 60;
       _rating = 3;
-      _region = ['guangdong', 'shenzhen'];
-      _selectedAppointment = _appointment;
+      _region.value = ['guangdong', 'shenzhen'];
+      _selectedAppointment.value = _appointment;
       _submittedLayout = '';
       _submittedValues = const {};
     });
@@ -488,8 +502,14 @@ class _TFormPageState extends State<TFormPage> {
       const labels = {
         'guangdong': '广东',
         'zhejiang': '浙江',
+        'jiangsu': '江苏',
+        'sichuan': '四川',
+        'beijing': '北京',
         'shenzhen': '深圳',
         'hangzhou': '杭州',
+        'nanjing': '南京',
+        'chengdu': '成都',
+        'beijing-city': '北京',
       };
       return value.map((item) => labels[item] ?? '$item').join('、');
     }

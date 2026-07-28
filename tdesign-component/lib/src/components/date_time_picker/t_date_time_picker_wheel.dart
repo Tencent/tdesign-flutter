@@ -96,7 +96,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   @override
   void didUpdateWidget(covariant DateTimePickerWheel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.snapshot == widget.snapshot &&
+    if (_snapshot == widget.snapshot &&
         oldWidget.showWeek == widget.showWeek &&
         oldWidget.start == widget.start &&
         oldWidget.end == widget.end &&

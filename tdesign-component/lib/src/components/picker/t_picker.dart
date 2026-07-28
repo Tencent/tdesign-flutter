@@ -56,6 +56,7 @@ class _TPickerState extends State<TPicker> {
   late List<List<TPickerOption>> _columns;
   late List<FixedExtentScrollController> _controllers;
   late List<GlobalKey<WheelColumnState>> _columnKeys;
+  List<Object?>? _pendingValue;
 
   bool get _enabled => widget.onChanged != null;
 
@@ -77,8 +78,14 @@ class _TPickerState extends State<TPicker> {
   @override
   void didUpdateWidget(covariant TPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final acceptsPendingValue =
+        _pendingValue != null && listEquals(widget.value, _pendingValue);
+    if (acceptsPendingValue) {
+      _pendingValue = null;
+    }
     if (oldWidget.items != widget.items ||
-        !listEquals(widget.value, _snapshot().values)) {
+        (!acceptsPendingValue &&
+            !listEquals(widget.value, _snapshot().values))) {
       final previousControllers = _controllers;
       _initialize();
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -232,6 +239,9 @@ class _TPickerState extends State<TPicker> {
         ? _linkedSnapshot(columnIndex, itemIndex)
         : _snapshot(overrideColumn: columnIndex, overrideIndex: itemIndex);
     if (!listEquals(value.values, widget.value)) {
+      // 父级同步受控值时，滚轮的本帧位置尚未必然反映到 controller；
+      // 标记该用户发起的快照，避免 didUpdateWidget 错误重建滚轮并中断拖动。
+      _pendingValue = value.values;
       widget.onChanged?.call(value);
     }
   }
