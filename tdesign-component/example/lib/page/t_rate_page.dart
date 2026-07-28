@@ -63,12 +63,7 @@ class _TRatePageState extends State<TRatePage> {
             onChanged: (value) => setState(() => _halfValue = value),
           ),
           const SizedBox(width: 8),
-          TText(
-            _halfValue.toStringAsFixed(1),
-            textColor: context.tTheme.textColorPlaceholder,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          TText(_halfValue.toStringAsFixed(1)),
         ],
       ),
     );
