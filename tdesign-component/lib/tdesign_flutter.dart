@@ -60,8 +60,8 @@ export 'src/components/fab/t_fab.dart';
 export 'src/components/fab/t_fab_theme_data.dart' show TFabThemeData;
 export 'src/components/footer/t_footer.dart';
 export 'src/components/footer/t_footer_theme_data.dart' show TFooterThemeData;
-export 'src/components/form/t_form.dart';
-export 'src/components/form/t_form_item.dart';
+export 'src/components/form/t_form.dart' hide TFormFieldScope;
+export 'src/components/form/t_form_item.dart' hide TFormItemScope;
 export 'src/components/form/t_form_theme_data.dart'
     show TFormLayout, TFormThemeData;
 export 'src/components/icon/t_icon.dart';

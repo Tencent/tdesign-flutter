@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 
+import '../form/t_form.dart';
+import '../form/t_form_item.dart';
 import 't_input_resolve.dart';
 import 't_input_theme_data.dart';
 
@@ -280,6 +282,14 @@ class _TInputState extends State<TInput> {
       prefix: widget.prefix,
       suffix: widget.suffix ?? clearButton,
     );
+    final formErrorText = TFormFieldScope.maybeOf(context)?.errorText;
+    final itemScope = TFormItemScope.maybeOf(context);
+    final effectiveDecoration = formErrorText != null &&
+            itemScope?.presentsError != true &&
+            decoration.errorText == null &&
+            decoration.error == null
+        ? decoration.copyWith(errorText: formErrorText)
+        : decoration;
 
     return TextField(
       controller: _controller,
@@ -299,7 +309,7 @@ class _TInputState extends State<TInput> {
       textAlign: widget.textAlign,
       obscureText: widget.obscureText,
       inputFormatters: widget.inputFormatters,
-      decoration: decoration,
+      decoration: effectiveDecoration,
     );
   }
 

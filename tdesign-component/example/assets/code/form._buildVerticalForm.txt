@@ -1,22 +1,98 @@
 Widget _buildVerticalForm(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        const TFormThemeData(
-          layout: TFormLayout.vertical,
-          showColon: true,
-          itemSpacing: 8,
-        ),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.all(16),
-        child: TFormItem(
-          label: '备注',
-          help: '最多 100 个字符',
-          child: TInput.multiline(
-            maxLength: 100,
-            hintText: '请输入备注',
+    return _buildForm(
+      context,
+      controller: _verticalController,
+      layout: TFormLayout.vertical,
+      children: [
+        TFormField<String>(
+          name: 'note',
+          value: _noteController.text,
+          onChanged: (_) => setState(() {}),
+          required: true,
+          requiredMessage: '请输入备注',
+          builder: (context, value, onChanged, errorText) => TFormItem(
+            label: '备注',
+            child: TInput.multiline(
+              controller: _noteController,
+              maxLength: 100,
+              hintText: '请输入备注',
+              onChanged: onChanged,
+            ),
           ),
         ),
-      ),
+        TFormField<double>(
+          name: 'progress',
+          value: _progress,
+          onChanged: (value) => setState(() => _progress = value),
+          rules: [
+            (value) => value != null && value >= 0 && value <= 100
+                ? null
+                : '范围为 0 到 100',
+          ],
+          builder: (context, value, onChanged, errorText) => TFormItem(
+            label: '进度',
+            child: TSlider(
+              value: value,
+              min: 0,
+              max: 100,
+              divisions: 10,
+              showThumbValue: true,
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+        TFormField<double>(
+          name: 'rating',
+          value: _rating,
+          onChanged: (value) => setState(() => _rating = value),
+          required: true,
+          requiredMessage: '请选择评分',
+          rules: [(value) => value == 0 ? '请选择评分' : null],
+          builder: (context, value, onChanged, errorText) => TFormItem(
+            label: '评分',
+            child: TRate(value: value, allowHalf: true, onChanged: onChanged),
+          ),
+        ),
+        TFormField<List<Object?>>(
+          name: 'region',
+          value: _region,
+          onChanged: (value) => setState(() => _region = value),
+          required: true,
+          requiredMessage: '请选择地区',
+          builder: (context, value, onChanged, errorText) => TFormItem(
+            label: '地区',
+            child: SizedBox(
+              height: 160,
+              child: TPicker(
+                items: _regionItems,
+                value: value,
+                onChanged: (pickerValue) => onChanged?.call(pickerValue.values),
+              ),
+            ),
+          ),
+        ),
+        TFormField<TDateTimePickerValue>(
+          name: 'appointment',
+          value: _selectedAppointment,
+          onChanged: (value) => setState(() => _selectedAppointment = value),
+          required: true,
+          requiredMessage: '请选择预约时间',
+          rules: [(value) => value?.year == null ? '请选择预约时间' : null],
+          builder: (context, value, onChanged, errorText) => TFormItem(
+            label: '预约时间',
+            child: SizedBox(
+              height: 160,
+              child: TDateTimePicker(
+                mode: DateTimePickerMode(
+                  dateMode: DateMode.date,
+                  timeMode: TimeMode.minute,
+                ),
+                value: value,
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
