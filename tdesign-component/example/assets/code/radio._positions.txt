@@ -14,6 +14,19 @@ Widget _positions(BuildContext context) {
           contentDirection: TContentDirection.left,
           onChanged: (value) => setState(() => _positionValue = value),
         ),
+        TRadio<String>(
+          value: 'custom',
+          groupValue: _positionValue,
+          title: '自定义指示器',
+          customIconBuilder: (context, selected, disabled) => Icon(
+            selected ? Icons.check_circle : Icons.radio_button_unchecked,
+            color: disabled
+                ? context.tTheme.brandDisabledColor
+                : context.tTheme.brandNormalColor,
+            size: 24,
+          ),
+          onChanged: (value) => setState(() => _positionValue = value),
+        ),
       ],
     );
   }

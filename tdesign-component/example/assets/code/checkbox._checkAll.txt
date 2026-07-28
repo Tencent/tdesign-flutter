@@ -1,26 +1,26 @@
 Widget _checkAll(BuildContext context) {
     final enabledValues = _options.map((option) => option.value).toList();
-    final allSelected = _verticalValue.length == enabledValues.length;
+    final allSelected = _checkAllValue.length == enabledValues.length;
     return Column(
       children: [
         TCheckbox(
           value: allSelected
               ? true
-              : _verticalValue.isEmpty
+              : _checkAllValue.isEmpty
                   ? false
                   : null,
           title: '全选',
           onChanged: (checked) {
             setState(() {
-              _verticalValue = checked == true ? enabledValues : [];
+              _checkAllValue = checked == true ? enabledValues : [];
             });
           },
           showDivider: true,
         ),
         TCheckboxGroup<String>(
-          value: _verticalValue,
+          value: _checkAllValue,
           options: _options,
-          onChanged: (value) => setState(() => _verticalValue = value),
+          onChanged: (value) => setState(() => _checkAllValue = value),
         ),
       ],
     );

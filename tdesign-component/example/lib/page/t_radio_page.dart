@@ -18,22 +18,18 @@ class _TRadioPageState extends State<TRadioPage> {
     TRadioOption(value: 'c', label: '单选 C'),
     TRadioOption(value: 'd', label: '单选 D'),
   ];
-  static const _horizontalCardOptions = [
-    TRadioOption(value: 'a', label: '单选'),
-    TRadioOption(value: 'b', label: '单选'),
-    TRadioOption(value: 'c', label: '单选'),
-  ];
-  static const _verticalCardOptions = [
+  static const _cardOptions = [
     TRadioOption(value: 'a', label: '单选', subTitle: '描述信息'),
     TRadioOption(value: 'b', label: '单选', subTitle: '描述信息'),
     TRadioOption(value: 'c', label: '单选', subTitle: '描述信息'),
-    TRadioOption(value: 'd', label: '单选', subTitle: '描述信息'),
   ];
 
   String? _verticalValue = 'a';
   String? _horizontalValue = 'b';
-  String? _cardValue = 'c';
+  String? _verticalCardValue = 'a';
+  String? _horizontalCardValue = 'b';
   String? _positionValue = 'left';
+  String? _itemDisabledValue = 'c';
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +43,12 @@ class _TRadioPageState extends State<TRadioPage> {
           ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
         ]),
         ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '整组禁用', builder: _disabledRadios),
-          ExampleItem(desc: '单项禁用', builder: _itemDisabledRadios),
+          ExampleItem(desc: '禁用状态', builder: _disabledRadios),
         ]),
         ExampleModule(title: '组件样式', children: [
           ExampleItem(desc: '勾选显示位置', builder: _positions),
-          ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardRadios),
-          ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardRadios),
+          ExampleItem(desc: '纵向一列卡片单选框', builder: _verticalCardRadios),
+          ExampleItem(desc: '横向两列卡片单选框', builder: _horizontalCardRadios),
         ]),
       ],
     );
@@ -82,22 +77,27 @@ class _TRadioPageState extends State<TRadioPage> {
 
   @ExampleCode(group: 'radio')
   Widget _disabledRadios(BuildContext context) {
-    return const TRadioGroup<String>(
-      value: 'a',
-      options: _options,
-    );
-  }
-
-  @ExampleCode(group: 'radio')
-  Widget _itemDisabledRadios(BuildContext context) {
-    return TRadioGroup<String>(
-      value: 'b',
-      options: const [
-        TRadioOption(value: 'a', label: '正常选项'),
-        TRadioOption(value: 'b', label: '禁用-已选', disabled: true),
-        TRadioOption(value: 'c', label: '禁用-未选', disabled: true),
+    return Column(
+      children: [
+        const TRadioGroup<String>(
+          value: 'a',
+          options: [
+            TRadioOption(value: 'a', label: '整组禁用'),
+            TRadioOption(value: 'b', label: '不可选择'),
+          ],
+        ),
+        const SizedBox(height: 16),
+        TRadioGroup<String>(
+          value: _itemDisabledValue,
+          options: const [
+            TRadioOption(value: 'a', label: '正常选项 A'),
+            TRadioOption(value: 'b', label: '正常选项 B'),
+            TRadioOption(value: 'c', label: '禁用-已选', disabled: true),
+            TRadioOption(value: 'd', label: '禁用-未选', disabled: true),
+          ],
+          onChanged: (value) => setState(() => _itemDisabledValue = value),
+        ),
       ],
-      onChanged: (_) {},
     );
   }
 
@@ -118,6 +118,19 @@ class _TRadioPageState extends State<TRadioPage> {
           contentDirection: TContentDirection.left,
           onChanged: (value) => setState(() => _positionValue = value),
         ),
+        TRadio<String>(
+          value: 'custom',
+          groupValue: _positionValue,
+          title: '自定义指示器',
+          customIconBuilder: (context, selected, disabled) => Icon(
+            selected ? Icons.check_circle : Icons.radio_button_unchecked,
+            color: disabled
+                ? context.tTheme.brandDisabledColor
+                : context.tTheme.brandNormalColor,
+            size: 24,
+          ),
+          onChanged: (value) => setState(() => _positionValue = value),
+        ),
       ],
     );
   }
@@ -125,22 +138,22 @@ class _TRadioPageState extends State<TRadioPage> {
   @ExampleCode(group: 'radio')
   Widget _verticalCardRadios(BuildContext context) {
     return TRadioGroup<String>(
-      value: _cardValue,
-      options: _verticalCardOptions,
+      value: _verticalCardValue,
+      options: _cardOptions,
       cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
+      onChanged: (value) => setState(() => _verticalCardValue = value),
     );
   }
 
   @ExampleCode(group: 'radio')
   Widget _horizontalCardRadios(BuildContext context) {
     return TRadioGroup<String>(
-      value: _cardValue,
-      options: _horizontalCardOptions,
-      direction: Axis.horizontal,
-      columns: 3,
+      value: _horizontalCardValue,
+      options: _cardOptions,
       cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
+      direction: Axis.horizontal,
+      columns: 2,
+      onChanged: (value) => setState(() => _horizontalCardValue = value),
     );
   }
 }

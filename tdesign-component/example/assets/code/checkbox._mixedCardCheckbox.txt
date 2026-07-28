@@ -1,8 +1,0 @@
-Widget _mixedCardCheckbox(BuildContext context) {
-    return TCheckboxGroup<String>(
-      value: _cardValue,
-      options: _options,
-      cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
-    );
-  }

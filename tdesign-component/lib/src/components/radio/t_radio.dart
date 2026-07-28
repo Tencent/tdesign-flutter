@@ -280,6 +280,13 @@ class TRadio<T> extends StatelessWidget {
     if (title == null && subTitle == null) {
       return null;
     }
+    final materialTextTheme = Theme.of(context).textTheme;
+    final titleStyle = materialTextTheme.bodyLarge ??
+        materialTextTheme.bodyMedium ??
+        TextStyle(fontSize: context.tTheme.fontBodyLarge?.size ?? 16);
+    final subTitleStyle = materialTextTheme.bodyMedium ??
+        materialTextTheme.bodySmall ??
+        TextStyle(fontSize: context.tTheme.fontBodyMedium?.size ?? 14);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -289,11 +296,12 @@ class TRadio<T> extends StatelessWidget {
             title!,
             maxLines: titleMaxLines,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: titleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.titleColor ?? context.tTheme.textColorPrimary),
-              fontSize: context.tTheme.fontBodyLarge?.size,
+                  : (theme?.titleColor ??
+                      titleStyle.color ??
+                      context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -303,12 +311,12 @@ class TRadio<T> extends StatelessWidget {
             subTitle!,
             maxLines: subTitleMaxLines,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: subTitleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.subTitleColor ??
+                      subTitleStyle.color ??
                       context.tTheme.textColorPlaceholder),
-              fontSize: context.tTheme.fontBodyMedium?.size,
             ),
           ),
       ],

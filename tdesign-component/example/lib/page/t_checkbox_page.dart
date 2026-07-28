@@ -32,8 +32,11 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
 
   List<String> _verticalValue = ['b'];
   List<String> _horizontalValue = ['a', 'c'];
-  List<String> _cardValue = ['b'];
+  List<String> _checkAllValue = ['b'];
+  List<String> _verticalCardValue = ['b'];
+  List<String> _horizontalCardValue = ['a'];
   bool? _singleValue = false;
+  bool? _densityValue = false;
   final Map<TCheckboxVariant, bool> _variantValues = {
     TCheckboxVariant.square: true,
   };
@@ -62,8 +65,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
           ExampleItem(desc: '勾选显示位置', builder: _positions),
           ExampleItem(desc: '点击热区密度', builder: _density),
           ExampleItem(desc: '纵向卡片多选框', builder: _verticalCardCheckbox),
-          ExampleItem(desc: '混合内容纵向卡片', builder: _mixedCardCheckbox),
-          ExampleItem(desc: '横向卡片多选框', builder: _horizontalCardCheckbox),
+          ExampleItem(desc: '横向两列卡片多选框', builder: _horizontalCardCheckbox),
         ]),
       ],
     );
@@ -93,27 +95,27 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   @ExampleCode(group: 'checkbox')
   Widget _checkAll(BuildContext context) {
     final enabledValues = _options.map((option) => option.value).toList();
-    final allSelected = _verticalValue.length == enabledValues.length;
+    final allSelected = _checkAllValue.length == enabledValues.length;
     return Column(
       children: [
         TCheckbox(
           value: allSelected
               ? true
-              : _verticalValue.isEmpty
+              : _checkAllValue.isEmpty
                   ? false
                   : null,
           title: '全选',
           onChanged: (checked) {
             setState(() {
-              _verticalValue = checked == true ? enabledValues : [];
+              _checkAllValue = checked == true ? enabledValues : [];
             });
           },
           showDivider: true,
         ),
         TCheckboxGroup<String>(
-          value: _verticalValue,
+          value: _checkAllValue,
           options: _options,
-          onChanged: (value) => setState(() => _verticalValue = value),
+          onChanged: (value) => setState(() => _checkAllValue = value),
         ),
       ],
     );
@@ -213,8 +215,8 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
             border: Border.all(color: context.tTheme.componentBorderColor),
           ),
           child: TCheckbox(
-            value: _singleValue,
-            onChanged: (value) => setState(() => _singleValue = value),
+            value: _densityValue,
+            onChanged: (value) => setState(() => _densityValue = value),
           ),
         ),
         Theme(
@@ -224,8 +226,8 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
               border: Border.all(color: context.tTheme.componentBorderColor),
             ),
             child: TCheckbox(
-              value: _singleValue,
-              onChanged: (value) => setState(() => _singleValue = value),
+              value: _densityValue,
+              onChanged: (value) => setState(() => _densityValue = value),
             ),
           ),
         ),
@@ -236,32 +238,22 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   @ExampleCode(group: 'checkbox')
   Widget _verticalCardCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
-      value: _cardValue,
+      value: _verticalCardValue,
       options: _verticalCardOptions,
       cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
+      onChanged: (value) => setState(() => _verticalCardValue = value),
     );
   }
 
   @ExampleCode(group: 'checkbox')
   Widget _horizontalCardCheckbox(BuildContext context) {
     return TCheckboxGroup<String>(
-      value: _cardValue,
+      value: _horizontalCardValue,
       options: _horizontalCardOptions,
       direction: Axis.horizontal,
-      columns: 3,
+      columns: 2,
       cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
-    );
-  }
-
-  @ExampleCode(group: 'checkbox')
-  Widget _mixedCardCheckbox(BuildContext context) {
-    return TCheckboxGroup<String>(
-      value: _cardValue,
-      options: _options,
-      cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
+      onChanged: (value) => setState(() => _horizontalCardValue = value),
     );
   }
 }

@@ -1,10 +1,10 @@
 Widget _horizontalCardRadios(BuildContext context) {
     return TRadioGroup<String>(
-      value: _cardValue,
-      options: _horizontalCardOptions,
-      direction: Axis.horizontal,
-      columns: 3,
+      value: _horizontalCardValue,
+      options: _cardOptions,
       cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
+      direction: Axis.horizontal,
+      columns: 2,
+      onChanged: (value) => setState(() => _horizontalCardValue = value),
     );
   }

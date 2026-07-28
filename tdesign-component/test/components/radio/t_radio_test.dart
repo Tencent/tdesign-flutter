@@ -92,6 +92,38 @@ void main() {
   });
 
   group('TRadio v1 视觉参数', () {
+    testWidgets('文本样式继承 Material TextTheme 的字号、行高和字重', (tester) async {
+      const globalStyle = TextStyle(
+        fontSize: 22,
+        height: 1.4,
+        fontWeight: FontWeight.w600,
+      );
+      var theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        textTheme: const TextTheme(bodyLarge: globalStyle),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: TRadio<String>(
+              value: 'a',
+              groupValue: 'a',
+              title: '全局样式',
+              subTitle: '副标题',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final title = tester.widget<Text>(find.text('全局样式'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.style?.fontSize, 22);
+      expect(title.style?.height, 1.4);
+      expect(title.style?.fontWeight, FontWeight.w600);
+      expect(subTitle.style?.fontSize, 14);
+    });
+
     testWidgets('完整主题下选中指示器使用品牌色并保持 24 尺寸', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrap(TRadio<String>(

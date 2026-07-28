@@ -11,8 +11,8 @@ Widget _density(BuildContext context) {
             border: Border.all(color: context.tTheme.componentBorderColor),
           ),
           child: TCheckbox(
-            value: _singleValue,
-            onChanged: (value) => setState(() => _singleValue = value),
+            value: _densityValue,
+            onChanged: (value) => setState(() => _densityValue = value),
           ),
         ),
         Theme(
@@ -22,8 +22,8 @@ Widget _density(BuildContext context) {
               border: Border.all(color: context.tTheme.componentBorderColor),
             ),
             child: TCheckbox(
-              value: _singleValue,
-              onChanged: (value) => setState(() => _singleValue = value),
+              value: _densityValue,
+              onChanged: (value) => setState(() => _densityValue = value),
             ),
           ),
         ),

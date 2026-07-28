@@ -1,8 +1,8 @@
 Widget _verticalCardRadios(BuildContext context) {
     return TRadioGroup<String>(
-      value: _cardValue,
-      options: _verticalCardOptions,
+      value: _verticalCardValue,
+      options: _cardOptions,
       cardMode: true,
-      onChanged: (value) => setState(() => _cardValue = value),
+      onChanged: (value) => setState(() => _verticalCardValue = value),
     );
   }
