@@ -240,7 +240,6 @@ Widget _buildCustomIndexes(BuildContext context) {
                   child: Center(
                     child: TText(
                       '自定义 $index',
-                      forceVerticalCenter: true,
                       textColor: isActive
                           ? context.tTheme.brandNormalColor
                           : context.tTheme.textColorPrimary,

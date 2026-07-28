@@ -27,34 +27,11 @@ class TTextPage extends StatelessWidget {
               builder: _buildStyleCoverColorAndFont),
           ExampleItem(desc: 'TText.rich测试:', builder: _buildRichText),
           ExampleItem(desc: '获取系统Text:', builder: _getSystemText),
-          ExampleItem(
-              desc: '中文居中:（带有英文可能不居中）', builder: _buildVerticalCenterText),
-          ExampleItem(desc: '自定义内部padding:', builder: _buildCustomPaddingText),
           ExampleItem(desc: '删除线:', builder: _buildTextThrough),
           ExampleItem(desc: 'v1.0 Theme默认:', builder: _buildThemeDemo),
         ]),
       ],
-      test: [
-        ExampleItem(
-            desc: '中文居中-系统字体',
-            builder: (context) {
-              return Container(
-                color: context.tTheme.brandFocusColor,
-                child: Text(exampleTxt),
-              );
-            }),
-        ExampleItem(
-            desc: '中文居中-TD字体',
-            builder: (context) {
-              return Container(
-                color: context.tTheme.brandFocusColor,
-                child: TText(
-                  exampleTxt,
-                  forceVerticalCenter: true,
-                ),
-              );
-            }),
-      ],
+      test: const [],
     );
   }
 
@@ -142,24 +119,6 @@ class TTextPage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'text')
-  Widget _buildVerticalCenterText(BuildContext context) {
-    return TText(
-      '中华人民共和国腾讯科技',
-      // font: Font(size: 100, lineHeight: 100),
-      forceVerticalCenter: true,
-      backgroundColor: context.tTheme.brandFocusColor,
-    );
-  }
-
-  @ExampleCode(group: 'text')
-  Widget _buildCustomPaddingText(BuildContext context) {
-    return TTextConfiguration(
-      paddingConfig: CustomTextPaddingConfig(),
-      child: const CustomPaddingText(),
-    );
-  }
-
-  @ExampleCode(group: 'text')
   Widget _buildTextThrough(BuildContext context) {
     return TText(exampleTxt, isTextThrough: true);
   }
@@ -173,7 +132,6 @@ class TTextPage extends StatelessWidget {
           ...Theme.of(context).extensions.values,
           TTextThemeData(
             defaultTextColor: context.tTheme.brandNormalColor,
-            forceVerticalCenter: true,
           ),
         ],
       ),
@@ -187,7 +145,7 @@ class TTextPage extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '↑ 继承 TTextThemeData 默认颜色和强制居中',
+            '↑ 继承 TTextThemeData 默认颜色',
             style: TextStyle(
               fontSize: 12,
               color: context.tTheme.textColorSecondary,
@@ -196,47 +154,5 @@ class TTextPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-/// 自定义控件，内部的context可拿到外部TTextConfiguration的配置信息
-class CustomPaddingText extends StatelessWidget {
-  const CustomPaddingText({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TText(
-          '中华人民共和国腾讯科技fgjpqy',
-          forceVerticalCenter: true,
-          backgroundColor: context.tTheme.brandFocusColor,
-        ),
-        TText(
-          'English',
-          font: context.tTheme.fontHeadlineLarge,
-          forceVerticalCenter: true,
-          backgroundColor: context.tTheme.brandFocusColor,
-        ),
-      ],
-    );
-  }
-}
-
-/// 重写内部padding方法
-class CustomTextPaddingConfig extends TTextPaddingConfig {
-  @override
-  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height,
-      {String? fontFamily,
-      FontWeight? fontWeight,
-      double? textScale,
-      TTextPaddingConfig? paddingConfig}) {
-    var supperPadding = super.getPadding(data, fontSize, height,
-        fontFamily: fontFamily,
-        fontWeight: fontWeight,
-        textScale: textScale,
-        paddingConfig: paddingConfig);
-    return EdgeInsets.only(left: 30, top: supperPadding.vertical.toDouble());
   }
 }

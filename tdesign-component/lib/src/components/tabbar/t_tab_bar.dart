@@ -961,7 +961,6 @@ class TTabBarItemWithBadge extends StatelessWidget {
       textColor: isSelected
           ? context.tTheme.brandNormalColor
           : context.tTheme.textColorPrimary,
-      forceVerticalCenter: true,
     );
   }
 

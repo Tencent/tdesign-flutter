@@ -170,7 +170,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
     controller.animateTo(offset,
         duration: const Duration(seconds: 1), curve: Curves.linear);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (!mounted || _scrollController == null || !_scrollController!.hasClients) {
+      if (!mounted ||
+          _scrollController == null ||
+          !_scrollController!.hasClients) {
         timer.cancel();
         return;
       }
@@ -289,7 +291,6 @@ class _TNoticeBarState extends State<TNoticeBar> {
             displayText,
             style: _resolved.textStyle,
             maxLines: _effectiveMarquee ? 1 : widget.maxLines,
-            forceVerticalCenter: true,
           ),
         ),
       );

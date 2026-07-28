@@ -6,7 +6,6 @@ Widget _buildThemeDemo(BuildContext context) {
           ...Theme.of(context).extensions.values,
           TTextThemeData(
             defaultTextColor: context.tTheme.brandNormalColor,
-            forceVerticalCenter: true,
           ),
         ],
       ),
@@ -20,7 +19,7 @@ Widget _buildThemeDemo(BuildContext context) {
           ),
           const SizedBox(height: 4),
           Text(
-            '↑ 继承 TTextThemeData 默认颜色和强制居中',
+            '↑ 继承 TTextThemeData 默认颜色',
             style: TextStyle(
               fontSize: 12,
               color: context.tTheme.textColorSecondary,

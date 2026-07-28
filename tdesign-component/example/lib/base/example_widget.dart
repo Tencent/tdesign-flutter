@@ -88,6 +88,8 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   double _keyboardInset = 0;
   double? _scrollOffsetBeforeKeyboard;
   bool _userScrolledWithKeyboard = false;
+  double? _keyboardDismissStartInset;
+  double? _scrollOffsetAtKeyboardDismissStart;
 
   @override
   void initState() {
@@ -109,8 +111,11 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _view = View.of(context);
-    _keyboardInset = _readKeyboardInset();
+    final nextView = View.of(context);
+    if (!identical(_view, nextView)) {
+      _view = nextView;
+      _keyboardInset = _readKeyboardInset();
+    }
   }
 
   @override
@@ -123,6 +128,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       _setScrollController(widget.scrollController);
       _scrollOffsetBeforeKeyboard = null;
       _userScrolledWithKeyboard = false;
+      _cancelKeyboardRestore();
     }
   }
 
@@ -132,33 +138,55 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     final wasVisible = _keyboardInset > 0;
     final isVisible = nextInset > 0;
     if (!wasVisible && isVisible && _scrollController.hasClients) {
+      _cancelKeyboardRestore();
       _scrollOffsetBeforeKeyboard = _scrollController.offset;
       _userScrolledWithKeyboard = false;
+    } else if (wasVisible &&
+        isVisible &&
+        nextInset < _keyboardInset &&
+        !_userScrolledWithKeyboard) {
+      final restoreOffset = _scrollOffsetBeforeKeyboard;
+      if (restoreOffset != null && _scrollController.hasClients) {
+        _keyboardDismissStartInset ??= _keyboardInset;
+        _scrollOffsetAtKeyboardDismissStart ??= _scrollController.offset;
+        final startInset = _keyboardDismissStartInset!;
+        final startOffset = _scrollOffsetAtKeyboardDismissStart!;
+        final remaining = (nextInset / startInset).clamp(0.0, 1.0);
+        _restoreKeyboardOffset(
+          restoreOffset + (startOffset - restoreOffset) * remaining,
+        );
+      }
+    } else if (wasVisible && isVisible && nextInset > _keyboardInset) {
+      _cancelKeyboardRestore();
     } else if (wasVisible && !isVisible) {
       final restoreOffset = _scrollOffsetBeforeKeyboard;
       _scrollOffsetBeforeKeyboard = null;
       if (!_userScrolledWithKeyboard && restoreOffset != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted || !_scrollController.hasClients) {
-            return;
-          }
-          final position = _scrollController.position;
-          final target = restoreOffset.clamp(
-            position.minScrollExtent,
-            position.maxScrollExtent,
-          );
-          if ((position.pixels - target).abs() < 0.5) {
-            return;
-          }
-          _scrollController.animateTo(
-            target,
-            duration: const Duration(milliseconds: 160),
-            curve: Curves.easeOutCubic,
-          );
-        });
+        _restoreKeyboardOffset(restoreOffset);
       }
+      _keyboardDismissStartInset = null;
+      _scrollOffsetAtKeyboardDismissStart = null;
     }
     _keyboardInset = nextInset;
+  }
+
+  void _restoreKeyboardOffset(double target) {
+    if (_userScrolledWithKeyboard || !_scrollController.hasClients) {
+      return;
+    }
+    final position = _scrollController.position;
+    final clampedTarget = target.clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+    if ((position.pixels - clampedTarget).abs() >= 0.5) {
+      _scrollController.jumpTo(clampedTarget);
+    }
+  }
+
+  void _cancelKeyboardRestore() {
+    _keyboardDismissStartInset = null;
+    _scrollOffsetAtKeyboardDismissStart = null;
   }
 
   @override
@@ -219,6 +247,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       onNotification: (notification) {
         if (_keyboardInset > 0 && notification.dragDetails != null) {
           _userScrolledWithKeyboard = true;
+          _cancelKeyboardRestore();
         }
         return false;
       },

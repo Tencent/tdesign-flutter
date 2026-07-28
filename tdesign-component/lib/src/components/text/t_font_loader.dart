@@ -109,8 +109,6 @@ class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
       isTextThrough: textWidget.isTextThrough, // coverage:ignore-line
       lineThroughColor: textWidget.lineThroughColor, // coverage:ignore-line
       package: textWidget.package, // coverage:ignore-line
-      forceVerticalCenter:
-          textWidget.forceVerticalCenter, // coverage:ignore-line
       style: textWidget.style, // coverage:ignore-line
       strutStyle: textWidget.strutStyle, // coverage:ignore-line
       textAlign: textWidget.textAlign, // coverage:ignore-line

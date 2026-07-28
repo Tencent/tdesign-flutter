@@ -135,7 +135,6 @@ class _TIndexesListState extends State<TIndexesList> {
                                   child: Center(
                                     child: TText(
                                       e,
-                                      forceVerticalCenter: true,
                                       font: context.tTheme.fontTitleExtraLarge,
                                       textColor:
                                           context.tTheme.brandNormalColor,
@@ -163,7 +162,6 @@ class _TIndexesListState extends State<TIndexesList> {
                                   child: Center(
                                     child: TText(
                                       e,
-                                      forceVerticalCenter: true,
                                       font: isActive
                                           ? context.tTheme.fontMarkSmall
                                           : context.tTheme.fontLinkSmall,

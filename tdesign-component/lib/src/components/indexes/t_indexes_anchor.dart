@@ -47,8 +47,7 @@ class TIndexesAnchor extends StatelessWidget {
                   vertical: context.tTheme.spacer4,
                   horizontal: context.tTheme.spacer16),
               margin: capsuleTheme
-                  ? EdgeInsets.symmetric(
-                      horizontal: context.tTheme.spacer8)
+                  ? EdgeInsets.symmetric(horizontal: context.tTheme.spacer8)
                   : null,
               decoration: BoxDecoration(
                 color: isPinned
@@ -59,8 +58,7 @@ class TIndexesAnchor extends StatelessWidget {
                     : null,
                 border: isPinned
                     ? capsuleTheme
-                        ? Border.all(
-                            color: context.tTheme.componentStrokeColor)
+                        ? Border.all(color: context.tTheme.componentStrokeColor)
                         : Border(
                             bottom: BorderSide(
                                 color: context.tTheme.componentStrokeColor,
@@ -69,7 +67,6 @@ class TIndexesAnchor extends StatelessWidget {
               ),
               child: TText(
                 text,
-                forceVerticalCenter: true,
                 font: isPinned
                     ? context.tTheme.fontMarkMedium
                     : context.tTheme.fontTitleSmall,

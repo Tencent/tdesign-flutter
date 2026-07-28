@@ -41,9 +41,7 @@ class TTextResolve {
     Color? lineThroughColor,
     String? package,
     bool isInFontLoader = false,
-    // 强制居中时由 build 传入覆写 height
-    double? overrideHeight,
-    // TextStyle.backgroundColor（TText 不以此为块背景，但与 forceVerticalCenter 分支共用 Container 时传入）
+    // TextStyle.backgroundColor（TText 块背景由外层 Container 处理）
     Color? textStyleBackgroundColor,
   }) {
     final tTheme = context.tTheme;
@@ -69,9 +67,8 @@ class TTextResolve {
         materialTextStyle?.fontSize ??
         fallbackFont.size;
 
-    // 3. height：forceVerticalCenter 覆写 > style > 构造器糖 > 组件 Theme > DefaultTextStyle > TextTheme > Token
-    final resolvedHeight = overrideHeight ??
-        style?.height ??
+    // 3. height：style > 构造器糖 > 组件 Theme > DefaultTextStyle > TextTheme > Token
+    final resolvedHeight = style?.height ??
         font?.height ??
         themeExtension?.defaultFont?.height ??
         defaultTextStyle.height ??
@@ -125,8 +122,7 @@ class TTextResolve {
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: color,
-      // TText 不用 TextStyle.backgroundColor 做块背景（改用 Container），
-      // 仅 forceVerticalCenter 分支 Container 传入时作为 TextStyle 背景（非块背景用途）
+      // TText 不用 TextStyle.backgroundColor 做块背景（改用 Container）。
       backgroundColor: textStyleBackgroundColor,
       fontSize: fontSize,
       fontWeight: resolvedFontWeight,

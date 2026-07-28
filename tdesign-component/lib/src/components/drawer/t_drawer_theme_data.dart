@@ -25,6 +25,9 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   /// 是否默认开启点击反馈
   final bool? hover;
 
+  /// 抽屉标题样式。
+  final TextStyle? titleStyle;
+
   /// 菜单正文样式。
   final TextStyle? itemTextStyle;
 
@@ -47,6 +50,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     this.bordered,
     this.isShowLastBordered,
     this.hover,
+    this.titleStyle,
     this.itemTextStyle,
     this.itemBackgroundColor,
     this.itemPressedColor,
@@ -62,6 +66,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     bool? bordered,
     bool? isShowLastBordered,
     bool? hover,
+    TextStyle? titleStyle,
     TextStyle? itemTextStyle,
     Color? itemBackgroundColor,
     Color? itemPressedColor,
@@ -75,6 +80,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
       bordered: bordered ?? this.bordered,
       isShowLastBordered: isShowLastBordered ?? this.isShowLastBordered,
       hover: hover ?? this.hover,
+      titleStyle: titleStyle ?? this.titleStyle,
       itemTextStyle: itemTextStyle ?? this.itemTextStyle,
       itemBackgroundColor: itemBackgroundColor ?? this.itemBackgroundColor,
       itemPressedColor: itemPressedColor ?? this.itemPressedColor,
@@ -96,6 +102,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
       isShowLastBordered:
           t < 0.5 ? isShowLastBordered : other.isShowLastBordered,
       hover: t < 0.5 ? hover : other.hover,
+      titleStyle: TextStyle.lerp(titleStyle, other.titleStyle, t),
       itemTextStyle: TextStyle.lerp(itemTextStyle, other.itemTextStyle, t),
       itemBackgroundColor:
           Color.lerp(itemBackgroundColor, other.itemBackgroundColor, t),

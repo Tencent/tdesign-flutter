@@ -62,6 +62,7 @@ void main() {
       expect(data.bordered, null);
       expect(data.isShowLastBordered, null);
       expect(data.hover, null);
+      expect(data.titleStyle, null);
       expect(data.itemTextStyle, null);
       expect(data.itemBackgroundColor, null);
       expect(data.itemPressedColor, null);
@@ -100,6 +101,7 @@ void main() {
         bordered: true,
         isShowLastBordered: true,
         hover: true,
+        titleStyle: TextStyle(fontWeight: FontWeight.w500),
         itemTextStyle: TextStyle(fontWeight: FontWeight.w400),
         itemBackgroundColor: Colors.black,
         itemPressedColor: Colors.grey,
@@ -110,6 +112,7 @@ void main() {
         drawerTop: 24,
         bordered: false,
         hover: false,
+        titleStyle: const TextStyle(fontWeight: FontWeight.w600),
         itemTextStyle: const TextStyle(fontWeight: FontWeight.w500),
         itemBackgroundColor: Colors.green,
         itemPressedColor: Colors.blue,
@@ -119,6 +122,7 @@ void main() {
       expect(copied.drawerTop, 24);
       expect(copied.bordered, false);
       expect(copied.hover, false);
+      expect(copied.titleStyle?.fontWeight, FontWeight.w600);
       expect(copied.itemTextStyle?.fontWeight, FontWeight.w500);
       expect(copied.itemBackgroundColor, Colors.green);
       expect(copied.itemPressedColor, Colors.blue);
@@ -132,6 +136,7 @@ void main() {
         bordered: false,
         isShowLastBordered: false,
         hover: false,
+        titleStyle: TextStyle(fontWeight: FontWeight.w700),
         itemTextStyle: TextStyle(fontWeight: FontWeight.w600),
         itemBackgroundColor: Colors.white,
         itemPressedColor: Colors.black,
@@ -143,6 +148,7 @@ void main() {
       expect(lerped.drawerTop, 16);
       expect(lerped.bordered, false);
       expect(lerped.hover, false);
+      expect(lerped.titleStyle?.fontWeight, FontWeight.w600);
       expect(lerped.itemTextStyle?.fontWeight, FontWeight.w500);
       expect(lerped.itemBackgroundColor, isNotNull);
       expect(lerped.itemPressedColor, isNotNull);
@@ -260,6 +266,36 @@ void main() {
       expect(find.text('标题'), findsOneWidget);
     });
 
+    testWidgets('标题使用 Drawer ThemeData 且不继承外层调试前景色', (tester) async {
+      const titleStyle = TextStyle(
+        color: Colors.blue,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: fullTheme(
+            drawerTheme: const TDrawerThemeData(titleStyle: titleStyle),
+          ),
+          home: Scaffold(
+            body: DefaultTextStyle(
+              style: TextStyle(foreground: Paint()..color = Colors.red),
+              child: const TDrawerWidget(
+                title: TText('标题'),
+                items: [],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final title = tester.widget<Text>(find.text('标题'));
+      expect(title.style?.color, Colors.blue);
+      expect(title.style?.foreground, isNull);
+      expect(title.style?.fontWeight, FontWeight.w600);
+    });
+
     testWidgets('使用 footer 渲染底部', (tester) async {
       const footerKey = Key('footer');
       await tester.pumpWidget(wrapWithTheme(
@@ -370,6 +406,7 @@ void main() {
                   onPressed: () {
                     TDrawer(
                       context,
+                      title: const TText('标题'),
                       items: [TDrawerItem(title: '菜单1')],
                     ).show();
                   },
@@ -382,6 +419,9 @@ void main() {
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       expect(find.text('菜单1'), findsOneWidget);
+      final title = tester.widget<Text>(find.text('标题'));
+      expect(title.style?.color, fullTheme().textTheme.titleLarge?.color);
+      expect(title.style?.foreground, isNull);
     });
 
     testWidgets('默认避让系统安全区', (tester) async {
@@ -411,6 +451,36 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.getTopLeft(find.byType(TDrawerWidget)).dy, 24);
+    });
+
+    testWidgets('useSafeArea false 时不避让系统安全区', (tester) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(padding: EdgeInsets.only(top: 24)),
+          child: MaterialApp(
+            theme: fullTheme(),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => TButton(
+                  child: const Text('打开'),
+                  onPressed: () {
+                    TDrawer(
+                      context,
+                      useSafeArea: false,
+                      child: const SizedBox.expand(),
+                    ).show();
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+
+      expect(tester.getTopLeft(find.byType(TDrawerWidget)).dy, 0);
     });
 
     testWidgets('show 返回 handle 并可关闭抽屉', (tester) async {

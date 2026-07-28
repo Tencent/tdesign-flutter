@@ -490,7 +490,6 @@ class TImageState extends State<TImagePage>
           src: 'error',
           errorWidget: TText(
             '加载失败',
-            forceVerticalCenter: true,
             font: context.tTheme.fontBodyExtraSmall,
           ),
           variant: TImageVariant.roundedSquare,

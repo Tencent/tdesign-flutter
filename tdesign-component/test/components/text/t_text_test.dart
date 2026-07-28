@@ -30,8 +30,7 @@ void main() {
     expect(find.byType(TText), findsOneWidget);
   });
 
-  testWidgets('T01b - 完整主题下默认文本样式尊重 Flutter DefaultTextStyle',
-      (tester) async {
+  testWidgets('T01b - 完整主题下默认文本样式尊重 Flutter DefaultTextStyle', (tester) async {
     await tester.pumpWidget(wrapWithTheme(
       const TText('Token 文本'),
     ));
@@ -74,17 +73,6 @@ void main() {
 
     final text = tester.widget<Text>(find.text('删除线文本'));
     expect(text.style?.decoration, TextDecoration.lineThrough);
-  });
-
-  testWidgets('T02d - 构造器糖：forceVerticalCenter 触发 Container 包装',
-      (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('居中文本', forceVerticalCenter: true),
-    ));
-
-    // forceVerticalCenter 应该用 Container 包裹
-    expect(find.byType(Container), findsWidgets);
-    expect(find.text('居中文本'), findsOneWidget);
   });
 
   // ============================================================
@@ -139,17 +127,6 @@ void main() {
 
     final text = tester.widget<Text>(find.text('覆盖主题'));
     expect(text.style?.color, Colors.green); // 构造器优先于 Theme
-  });
-
-  testWidgets('T04c - TTextThemeData.forceVerticalCenter 默认启用', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('居中主题'),
-      textTheme: const TTextThemeData(forceVerticalCenter: true),
-    ));
-
-    // 应该触发 Container 包装
-    expect(find.byType(Container), findsWidgets);
-    expect(find.text('居中主题'), findsOneWidget);
   });
 
   testWidgets('T04d - TTextThemeData.defaultFont 覆盖 Token', (tester) async {
@@ -350,90 +327,26 @@ void main() {
   test('T08 - copyWith 部分覆写', () {
     const original = TTextThemeData(
       defaultTextColor: Colors.red,
-      forceVerticalCenter: true,
+      defaultFontWeight: FontWeight.w600,
     );
     final copied = original.copyWith(defaultTextColor: Colors.blue);
 
     expect(copied.defaultTextColor, Colors.blue);
-    expect(copied.forceVerticalCenter, true); // 未覆写的保留
+    expect(copied.defaultFontWeight, FontWeight.w600);
     expect(copied.defaultFont, isNull);
   });
 
   test('T08b - lerp 过渡计算', () {
     const red = Color(0xFFF44336);
     const blue = Color(0xFF2196F3);
-    const a = TTextThemeData(defaultTextColor: red, forceVerticalCenter: false);
-    const b = TTextThemeData(defaultTextColor: blue, forceVerticalCenter: true);
+    const a = TTextThemeData(defaultTextColor: red);
+    const b = TTextThemeData(defaultTextColor: blue);
 
     final lerped = a.lerp(b, 0.0);
     expect(lerped.defaultTextColor, red);
-    expect(lerped.forceVerticalCenter, false);
 
     final lerped2 = a.lerp(b, 1.0);
     expect(lerped2.defaultTextColor, blue);
-    expect(lerped2.forceVerticalCenter, true);
-  });
-
-  // ============================================================
-  // T09 – forceVerticalCenter height 语义统一
-  // ============================================================
-  testWidgets(
-      'T09 - forceVerticalCenter 使用统一 height（非 min(heightRate, height)）',
-      (tester) async {
-    // v1.0 修复：Container 和 TextStyle 使用相同 height
-    await tester.pumpWidget(wrapWithTheme(
-      TText(
-        'height测试',
-        forceVerticalCenter: true,
-        font: Font(size: 16, lineHeight: 24),
-      ),
-    ));
-
-    // 验证 Container 存在且有约束
-    // Font(size: 16, lineHeight: 24) → height 因子 = 24/16 = 1.5
-    // Container.height = fontSize * height 因子 = 16 * 1.5 = 24
-    final container = tester.widget<Container>(find.byType(Container).first);
-    expect(container.constraints?.maxHeight, 24.0);
-
-    final text = tester.widget<Text>(find.text('height测试'));
-    // TextStyle.height 应与统一 height 因子一致
-    expect(text.style?.height, 24 / 16);
-  });
-
-  // ============================================================
-  // T10 – Padding 缓存扩容（fontFamily/fontWeight/textScale 参与 key）
-  // ============================================================
-  testWidgets('T10 - fontFamily 变更导致不同 padding', (tester) async {
-    // 默认字体
-    await tester.pumpWidget(wrapWithTheme(
-      const TText(
-        'padding测试A',
-        forceVerticalCenter: true,
-      ),
-    ));
-
-    final container1 = tester.widget<Container>(find.byType(Container).first);
-    final padding1 = container1.padding;
-
-    // 不同字体
-    await tester.pumpWidget(wrapWithTheme(
-      TTextConfiguration(
-        globalFontFamily: FontFamily(fontFamily: 'Courier'),
-        child: const TText(
-          'padding测试B',
-          forceVerticalCenter: true,
-        ),
-      ),
-    ));
-
-    final container2 = tester.widget<Container>(find.byType(Container).first);
-    final padding2 = container2.padding;
-
-    // v1.0 缓存扩容后，不同字体应有独立缓存条目，
-    // 在基准测试环境下 padding 可能不同（取决于字体 metrics）
-    // 至少确保两边都能正常渲染
-    expect(padding1, isNotNull);
-    expect(padding2, isNotNull);
   });
 
   // ============================================================
@@ -454,36 +367,6 @@ void main() {
     expect(find.text('原始文本'), findsOneWidget);
     // getRawText 返回的是系统 Text（非 TText）
     expect(find.byType(TText), findsNothing);
-  });
-
-  // ============================================================
-  // T12 – 删除全局变量后行为正常
-  // ============================================================
-  testWidgets('T12 - 无 kTextForceVerticalCenterEnable 仍正常工作', (tester) async {
-    // v1.0 删除全局变量后，实例 forceVerticalCenter 仍应生效
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('强制居中', forceVerticalCenter: true),
-    ));
-
-    expect(find.text('强制居中'), findsOneWidget);
-    // 应该被 Container 包裹
-    expect(find.byType(Container), findsWidgets);
-  });
-
-  testWidgets('T12b - 无 kTextForceVerticalCenterEnable 默认不居中', (tester) async {
-    // 默认 forceVerticalCenter=false，TTextThemeData 也默认 false
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('默认不居中'),
-    ));
-
-    // 不应该有 Container 包裹（除非 forceVerticalCenter=true）
-    expect(find.text('默认不居中'), findsOneWidget);
-  });
-
-  test('T12c - kTextNeedGlobalFontFamily 已删除（编译期检查）', () {
-    // 此测试仅验证代码编译通过，
-    // TTextConfiguration.globalFontFamily 始终生效，无需全局开关
-    expect(true, isTrue);
   });
 
   // ============================================================

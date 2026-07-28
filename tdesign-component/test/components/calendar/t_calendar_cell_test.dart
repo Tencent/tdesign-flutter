@@ -67,7 +67,6 @@ void main() {
     expect(decoration.borderRadius, BorderRadius.circular(token.radiusDefault));
 
     final dayText = tester.widget<TText>(_calendarTextFinder('8'));
-    expect(dayText.forceVerticalCenter, isTrue);
     expect(dayText.style?.color, token.textColorAnti);
     expect(dayText.style?.fontSize, token.fontTitleMedium?.size);
     expect(dayText.style?.height, token.fontTitleMedium?.height);

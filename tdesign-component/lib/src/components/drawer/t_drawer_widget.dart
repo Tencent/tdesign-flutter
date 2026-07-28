@@ -74,7 +74,10 @@ class TDrawerWidget extends StatelessWidget {
             if (title != null)
               Padding(
                 padding: EdgeInsets.all(context.tTheme.spacer16),
-                child: title,
+                child: DefaultTextStyle(
+                  style: _titleTextStyle(context, drawerTheme),
+                  child: title!,
+                ),
               ),
             Expanded(
               child: Container(
@@ -142,6 +145,22 @@ class TDrawerWidget extends StatelessWidget {
           fontSize: tokenFont?.size ?? 14,
           height: tokenFont?.height,
           fontWeight: tokenFont?.fontWeight ?? FontWeight.w400,
+        );
+  }
+
+  TextStyle _titleTextStyle(
+    BuildContext context,
+    TDrawerThemeData? drawerTheme,
+  ) {
+    final materialStyle = Theme.of(context).textTheme.titleLarge;
+    final tokenFont = context.tTheme.fontTitleLarge;
+    return drawerTheme?.titleStyle ??
+        materialStyle ??
+        TextStyle(
+          color: context.tTheme.textColorPrimary,
+          fontSize: tokenFont?.size ?? 20,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight ?? FontWeight.w600,
         );
   }
 }

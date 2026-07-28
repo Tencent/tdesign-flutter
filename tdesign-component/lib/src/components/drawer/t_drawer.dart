@@ -27,6 +27,7 @@ class TDrawer {
     this.onItemClick,
     this.width,
     this.drawerTop,
+    this.useSafeArea = true,
     this.child,
   });
 
@@ -66,6 +67,9 @@ class TDrawer {
   /// 距离顶部的距离
   final double? drawerTop;
 
+  /// 是否避让系统安全区域
+  final bool useSafeArea;
+
   TPopupHandle? _drawerHandle;
 
   /// 从 ThemeData 解析有效值
@@ -99,15 +103,18 @@ class TDrawer {
         showOverlay: overlayEnabled,
         closeOnOverlayClick: dismissible,
         overlayColor: overlayEnabled ? null : Colors.transparent,
-        useSafeArea: true,
+        useSafeArea: useSafeArea,
         onClosed: _deleteRouter,
-        child: TDrawerWidget(
-          footer: footer,
-          items: items,
-          child: child,
-          title: title,
-          onItemClick: onItemClick,
-          width: width,
+        child: Theme(
+          data: Theme.of(context),
+          child: TDrawerWidget(
+            footer: footer,
+            items: items,
+            child: child,
+            title: title,
+            onItemClick: onItemClick,
+            width: width,
+          ),
         ),
       ),
     );

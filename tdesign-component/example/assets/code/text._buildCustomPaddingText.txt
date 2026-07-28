@@ -1,6 +1,0 @@
-Widget _buildCustomPaddingText(BuildContext context) {
-    return TTextConfiguration(
-      paddingConfig: CustomTextPaddingConfig(),
-      child: const CustomPaddingText(),
-    );
-  }

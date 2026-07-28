@@ -15,7 +15,6 @@ import '../../theme/basic.dart';
 /// Theme.of(context).mergeExtension(
 ///   TTextThemeData(
 ///     defaultFont: Font(size: 18, lineHeight: 26),
-///     forceVerticalCenter: true,
 ///   ),
 /// )
 /// ```
@@ -28,11 +27,6 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
 
   /// 默认背景颜色
   final Color? defaultBackgroundColor;
-
-  /// 是否默认启用强制垂直居中
-  ///
-  /// 默认值为 false，可通过子树 mergeExtension 全局开启。
-  final bool forceVerticalCenter;
 
   /// 是否默认显示删除线
   final bool isTextThrough;
@@ -70,7 +64,6 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
     this.defaultFont,
     this.defaultTextColor,
     this.defaultBackgroundColor,
-    this.forceVerticalCenter = false,
     this.isTextThrough = false,
     this.lineThroughColor,
     this.defaultFontWeight,
@@ -88,7 +81,6 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
     Font? defaultFont,
     Color? defaultTextColor,
     Color? defaultBackgroundColor,
-    bool? forceVerticalCenter,
     bool? isTextThrough,
     Color? lineThroughColor,
     FontWeight? defaultFontWeight,
@@ -105,7 +97,6 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
       defaultTextColor: defaultTextColor ?? this.defaultTextColor,
       defaultBackgroundColor:
           defaultBackgroundColor ?? this.defaultBackgroundColor,
-      forceVerticalCenter: forceVerticalCenter ?? this.forceVerticalCenter,
       isTextThrough: isTextThrough ?? this.isTextThrough,
       lineThroughColor: lineThroughColor ?? this.lineThroughColor,
       defaultFontWeight: defaultFontWeight ?? this.defaultFontWeight,
@@ -126,22 +117,17 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
     }
     return TTextThemeData(
       defaultFont: t < 0.5 ? defaultFont : other.defaultFont,
-      defaultTextColor:
-          Color.lerp(defaultTextColor, other.defaultTextColor, t),
-      defaultBackgroundColor: Color.lerp(
-          defaultBackgroundColor, other.defaultBackgroundColor, t),
-      forceVerticalCenter: t < 0.5 ? forceVerticalCenter : other.forceVerticalCenter,
+      defaultTextColor: Color.lerp(defaultTextColor, other.defaultTextColor, t),
+      defaultBackgroundColor:
+          Color.lerp(defaultBackgroundColor, other.defaultBackgroundColor, t),
       isTextThrough: t < 0.5 ? isTextThrough : other.isTextThrough,
-      lineThroughColor:
-          Color.lerp(lineThroughColor, other.lineThroughColor, t),
+      lineThroughColor: Color.lerp(lineThroughColor, other.lineThroughColor, t),
       defaultFontWeight: t < 0.5 ? defaultFontWeight : other.defaultFontWeight,
       defaultFontFamily: t < 0.5 ? defaultFontFamily : other.defaultFontFamily,
       defaultPackage: t < 0.5 ? defaultPackage : other.defaultPackage,
-      isInFontLoader:
-          t < 0.5 ? isInFontLoader : other.isInFontLoader,
+      isInFontLoader: t < 0.5 ? isInFontLoader : other.isInFontLoader,
       strutStyle: t < 0.5 ? strutStyle : other.strutStyle,
-      textWidthBasis:
-          t < 0.5 ? textWidthBasis : other.textWidthBasis,
+      textWidthBasis: t < 0.5 ? textWidthBasis : other.textWidthBasis,
       textHeightBehavior:
           t < 0.5 ? textHeightBehavior : other.textHeightBehavior,
       textScaleFactor: lerpDouble(textScaleFactor, other.textScaleFactor, t),

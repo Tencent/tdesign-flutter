@@ -99,6 +99,31 @@ void main() {
       expect(find.text('NO'), findsOneWidget);
     });
 
+    testWidgets('text stays centered in the active and inactive thumb',
+        (tester) async {
+      for (final value in [false, true]) {
+        await tester.pumpWidget(wrap(TCell(
+          title: const Text('文字开关'),
+          note: TSwitch(
+            value: value,
+            variant: TSwitchVariant.text,
+            onChanged: _noop,
+          ),
+        )));
+        await tester.pumpAndSettle();
+
+        final switchRect = tester.getRect(find.byType(TSwitch));
+        final text = tester.widget<Text>(find.text(value ? '开' : '关'));
+        final textRect = tester.getRect(find.text(value ? '开' : '关'));
+        final expectedCenterX = switchRect.left + (value ? 31.0 : 14.0);
+
+        expect(text.style?.height, 1);
+        expect(textRect.height, lessThanOrEqualTo(16));
+        expect(textRect.center.dx, closeTo(expectedCenterX, 0.5));
+        expect(textRect.center.dy, closeTo(switchRect.center.dy, 0.5));
+      }
+    });
+
     testWidgets('text variant keeps long labels inside the thumb',
         (tester) async {
       await tester.pumpWidget(wrap(const TSwitch(

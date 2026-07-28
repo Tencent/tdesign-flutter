@@ -252,7 +252,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
       children: [
         TText(
           dayText,
-          forceVerticalCenter: subtitle == null,
           style: dayTextStyle,
         ),
         if (subtitle != null)

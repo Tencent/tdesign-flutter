@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import '../../theme/basic.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
-import '../../util/platform_util.dart';
 import 't_font_loader.dart';
 import 't_text_resolve.dart';
 import 't_text_theme_data.dart';
@@ -58,7 +57,6 @@ class TText extends StatelessWidget {
     this.semanticsLabel,
     this.textWidthBasis,
     this.textHeightBehavior,
-    this.forceVerticalCenter = false,
     this.isInFontLoader = false,
     this.fontFamilyUrl,
     Key? key,
@@ -89,7 +87,6 @@ class TText extends StatelessWidget {
     this.semanticsLabel,
     this.textWidthBasis,
     this.textHeightBehavior,
-    this.forceVerticalCenter = false,
     this.isInFontLoader = false,
     this.fontFamilyUrl,
   })  : data = null,
@@ -161,9 +158,6 @@ class TText extends StatelessWidget {
   /// 透传至系统 [Text.rich] 的富文本片段
   final InlineSpan? textSpan;
 
-  /// 是否强制居中
-  final bool forceVerticalCenter;
-
   /// 是否在 FontLoader 中使用
   final bool isInFontLoader;
 
@@ -172,9 +166,6 @@ class TText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 读取 ThemeExtension，结合实例参数决定最终行为
-    final themeExtension = Theme.of(context).extension<TTextThemeData>();
-
     if (fontFamilyUrl?.isNotEmpty ?? false) {
       // 如果设置了 Url，则使用 TGFontLoader
       return TFontLoaderWidget(
@@ -184,47 +175,7 @@ class TText extends StatelessWidget {
       );
     }
 
-    // TTextThemeData.forceVerticalCenter 作为子树级默认，实例参数可覆盖。
-    final effectiveVC =
-        forceVerticalCenter || (themeExtension?.forceVerticalCenter ?? false);
-    if (effectiveVC) {
-      var config = getConfiguration(context);
-      var paddingConfig = config?.paddingConfig;
-
-      final resolvedStyle = getTextStyle(context)!;
-      final textFont = font ??
-          themeExtension?.defaultFont ??
-          context.tTheme.fontBodyLarge ??
-          Font(size: 16, lineHeight: 24); // coverage:ignore-line
-      var fontSize = resolvedStyle.fontSize ?? textFont.size;
-      var height = resolvedStyle.height ?? textFont.height;
-
-      // Web 端高度校准
-      if (PlatformUtil.isWeb) {
-        // Web 端行高系数微调，避免高度过大导致居中偏移
-        height = height * 0.98; // coverage:ignore-line
-      }
-
-      paddingConfig ??= TTextPaddingConfig.getDefaultConfig();
-      return Container(
-        color: style?.backgroundColor ?? backgroundColor,
-        height: fontSize * height,
-        padding: paddingConfig.getPadding(
-          data,
-          fontSize,
-          height,
-          fontFamily: resolvedStyle.fontFamily,
-          fontWeight: resolvedStyle.fontWeight,
-          textScale: MediaQuery.of(context).textScaler.scale(
-                _effectiveTextScaleFactor(themeExtension),
-              ),
-          paddingConfig: paddingConfig,
-        ),
-        child: _getRawText(
-            context: context,
-            textStyle: getTextStyle(context, overrideHeight: height)),
-      );
-    }
+    final themeExtension = Theme.of(context).extension<TTextThemeData>();
     var bgColor = style?.backgroundColor ??
         backgroundColor ??
         themeExtension?.defaultBackgroundColor;
@@ -237,16 +188,11 @@ class TText extends StatelessWidget {
     );
   }
 
-  /// 提取成方法，允许业务定义自己的 TTextConfiguration
-  TTextConfiguration? getConfiguration(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TTextConfiguration>();
-  }
-
   /// 获取最终的 [TextStyle]，委托 [TTextResolve.resolve] 统一处理
   ///
   /// TText 与 TTextSpan 统一走单路径 Resolve。
   TextStyle? getTextStyle(BuildContext context,
-      {double? overrideHeight, Color? textStyleBackgroundColor}) {
+      {Color? textStyleBackgroundColor}) {
     return TTextResolve.resolve(
       context: context,
       style: style,
@@ -258,7 +204,6 @@ class TText extends StatelessWidget {
       lineThroughColor: lineThroughColor,
       package: package,
       isInFontLoader: isInFontLoader,
-      overrideHeight: overrideHeight,
       textStyleBackgroundColor: textStyleBackgroundColor,
     );
   }
@@ -322,10 +267,6 @@ class TText extends StatelessWidget {
 
   TTextThemeData? _textTheme(BuildContext context) {
     return Theme.of(context).extension<TTextThemeData>();
-  }
-
-  double _effectiveTextScaleFactor(TTextThemeData? themeExtension) {
-    return textScaleFactor ?? themeExtension?.textScaleFactor ?? 1.0;
   }
 }
 
@@ -436,9 +377,6 @@ class TTextSpan extends TextSpan {
 
 /// 存储可以自定义 TText 居中算法数据的内部控件
 class TTextConfiguration extends InheritedWidget {
-  /// forceVerticalCenter=true 时，内置 padding 配置
-  final TTextPaddingConfig? paddingConfig;
-
   /// 全局字体族，设置后子树中所有 TText 将默认使用此字体
   ///
   /// 始终作为子树配置参与样式 resolve。
@@ -447,7 +385,6 @@ class TTextConfiguration extends InheritedWidget {
   /// 构造 TText 子树配置。
   ///
   /// [child] 子树内容，配置会作用于该子树内的 TText。
-  /// [paddingConfig] forceVerticalCenter=true 时，内置 padding 配置。
   /// [globalFontFamily] 全局字体族，设置后子树中所有 TText 将默认使用此字体。
   const TTextConfiguration({
     Key? key,
@@ -455,116 +392,12 @@ class TTextConfiguration extends InheritedWidget {
     /// 子树内容，配置会作用于该子树内的 TText。
     required Widget child,
 
-    /// forceVerticalCenter=true 时，内置 padding 配置。
-    this.paddingConfig,
-
     /// 全局字体族，设置后子树中所有 TText 将默认使用此字体。
     this.globalFontFamily,
   }) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(covariant TTextConfiguration oldWidget) {
-    return paddingConfig != oldWidget.paddingConfig ||
-        globalFontFamily != oldWidget.globalFontFamily;
+    return globalFontFamily != oldWidget.globalFontFamily;
   }
-}
-
-/// 通过 Padding 自定义 TText 居中算法
-class TTextPaddingConfig {
-  static TTextPaddingConfig? _defaultConfig;
-
-  /// 缓存 key 包含字体、字重、缩放和配置，避免字体切换或缩放变化后命中过期缓存。
-  static final Map<(double, double, String?, int?, double, int),
-      EdgeInsetsGeometry> _cacheMap = {};
-
-  /// 获取默认配置
-  static TTextPaddingConfig getDefaultConfig() {
-    _defaultConfig ??= TTextPaddingConfig();
-    return _defaultConfig!;
-  }
-
-  /// 获取 padding
-  ///
-  /// [fontFamily]、[fontWeight]、[textScale]、[paddingConfig] 参与缓存 key 计算。
-  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height,
-      {String? fontFamily,
-      FontWeight? fontWeight,
-      double? textScale,
-      TTextPaddingConfig? paddingConfig}) {
-    final key = (
-      fontSize,
-      height,
-      fontFamily,
-      fontWeight?.value,
-      textScale ?? 1.0,
-      paddingConfig?.hashCode ?? 0,
-    );
-    var cache = _cacheMap[key];
-    if (cache != null) {
-      return cache;
-    }
-
-    EdgeInsetsGeometry padding;
-
-    // 端单独的居中逻辑
-    if (PlatformUtil.isWeb) {
-      // Web 端垂直居中核心：基于实际文字高度动态计算
-      final totalHeight = fontSize * height; // coverage:ignore-line
-      // Web 端文字实际占用高度约为 fontSize 的 0.9 倍（实测值，可微调）
-      final textActualHeight = fontSize * 0.9; // coverage:ignore-line
-      // 计算垂直居中需要的 top padding
-      final webPaddingTop =
-          (totalHeight - textActualHeight) / 2; // coverage:ignore-line
-      // 当前 Flutter 版本使用固定系数。
-      const adjustRate = -0.05;
-      final finalTop =
-          webPaddingTop + (fontSize * adjustRate); // coverage:ignore-line
-
-      padding = EdgeInsets.only(
-          top: finalTop.clamp(0, double.infinity)); // coverage:ignore-line
-    } else {
-      // 移动端原有逻辑
-      var paddingFont = fontSize * paddingRate;
-      var paddingLeading;
-      if (height < heightRate) {
-        paddingLeading = 0;
-      } else {
-        if (PlatformUtil.isIOS || PlatformUtil.isAndroid) {
-          paddingLeading = (height * 0.5 - paddingExtraRate) *
-              fontSize; // coverage:ignore-line
-        } else {
-          paddingLeading = 0;
-        }
-      }
-      var paddingTop = paddingFont + paddingLeading;
-      if (paddingTop < 0) {
-        paddingTop = 0;
-      }
-      padding = EdgeInsets.only(top: paddingTop);
-    }
-
-    // 记录缓存
-    _cacheMap[key] = padding;
-    return padding;
-  }
-
-  /// 以多个汉字测量计算的平均值，Android为Pixel 4 模拟器，iOS 为 iphone 8 plus 模拟器
-  ///
-  /// 当前 Flutter 版本使用 Dart 3.2.0+ 系数。
-  double get paddingRate {
-    return PlatformUtil.isWeb
-        ? 0.0 // Web 端单独逻辑处理
-        : PlatformUtil.isAndroid
-            ? -20 / 128 // coverage:ignore-line
-            : PlatformUtil.isOhos
-                ? 43 / 128 // coverage:ignore-line
-                : -10 / 128;
-  }
-
-  /// 以多个汉字测量计算的平均值，Android 为 Pixel 4 模拟器，iOS 为 iphone 8 plus 模拟器
-  double get paddingExtraRate =>
-      PlatformUtil.isAndroid ? 115 / 256 : 97 / 240; // coverage:ignore-line
-
-  /// height比 率，因为设置 1 时，Android 文字可能显示不全，默认为 1.1
-  double get heightRate => PlatformUtil.isAndroid ? 1.1 : 1;
 }
