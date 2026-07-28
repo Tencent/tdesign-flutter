@@ -49,7 +49,7 @@ export 'src/components/divider/t_divider_theme_data.dart'
 export 'src/components/drawer/t_drawer.dart';
 export 'src/components/drawer/t_drawer_theme_data.dart' show TDrawerThemeData;
 export 'src/components/drawer/t_drawer_widget.dart'
-    show TDrawerItem, TDrawerItemClickCallback;
+    show TDrawerWidget, TDrawerItem, TDrawerItemClickCallback;
 export 'src/components/dropdown_menu/t_dropdown_item.dart';
 export 'src/components/dropdown_menu/t_dropdown_menu.dart';
 export 'src/components/dropdown_menu/t_dropdown_theme_data.dart'

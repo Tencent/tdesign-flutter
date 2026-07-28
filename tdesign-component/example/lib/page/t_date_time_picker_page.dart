@@ -72,8 +72,10 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
       desc: '纯滚轮选择日期/时间，选中值通过 onChanged 回调。',
       exampleCodeGroup: 'date-time-picker',
       children: [
-        ExampleModule(title: '基础用法', children: [
+        ExampleModule(title: '内嵌用法', children: [
           ExampleItem(desc: '不使用弹窗（内嵌）', builder: _buildInline),
+        ]),
+        ExampleModule(title: '弹出层用法', children: [
           ExampleItem(desc: '年月日选择器', builder: _buildBase),
           ExampleItem(desc: '选择年月', builder: _buildYearMonth),
           ExampleItem(desc: '选择时分', builder: _buildTime),

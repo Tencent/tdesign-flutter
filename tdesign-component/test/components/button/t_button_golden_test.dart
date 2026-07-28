@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -9,12 +10,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖 primary 默认态、danger、disabled、纯 icon + circle 等关键态。
 /// 首次运行用 `flutter test --update-goldens` 生成基线。
 void main() {
+  setUpAll(() async {
+    final flutterBin =
+        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final robotoFile = File(
+      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+    );
+    await (FontLoader('Roboto')
+          ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView)))
+        .load();
+  });
+
   Widget wrapWithTheme(Widget child, {TButtonThemeData? buttonTheme}) {
     return MaterialApp(
-      theme: ThemeData(extensions: [
-        TThemeData.defaultData(),
-        if (buttonTheme != null) buttonTheme,
-      ]),
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          labelLarge: TextStyle(fontFamily: 'Roboto'),
+        ),
+        extensions: [
+          TThemeData.defaultData(),
+          if (buttonTheme != null) buttonTheme,
+        ],
+      ),
       home: Scaffold(
         backgroundColor: Colors.white,
         body: Center(child: child),
@@ -22,8 +39,6 @@ void main() {
     );
   }
 
-  // golden 基线在 Windows 上生成；Linux/WSL 字体渲染与 Windows 有像素级差异，
-  // 跨平台比对会失败，故非 Windows 平台跳过整组（源码行已被非 golden 测试覆盖）。
   group('TButton Golden', () {
     testWidgets('primary 默认态', (tester) async {
       tester.view.physicalSize = const Size(400, 200);
@@ -32,9 +47,10 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          child: Text('按钮'),
+          child: Text('Button'),
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
+          onPressed: _noop,
         ),
       ));
       await expectLater(
@@ -50,9 +66,10 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          child: Text('危险'),
+          child: Text('Danger'),
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.danger,
+          onPressed: _noop,
         ),
       ));
       await expectLater(
@@ -68,7 +85,7 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          child: Text('禁用'),
+          child: Text('Disabled'),
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
           onPressed: null,
@@ -90,6 +107,7 @@ void main() {
           icon: Icon(Icons.add),
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
+          onPressed: _noop,
         ),
         buttonTheme: const TButtonThemeData(shape: TButtonShape.circle),
       ));
@@ -106,9 +124,10 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          child: Text('描边'),
+          child: Text('Outline'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
+          onPressed: _noop,
         ),
       ));
       await expectLater(
@@ -124,9 +143,10 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          child: Text('文字'),
+          child: Text('Text'),
           variant: TButtonVariant.text,
           colorScheme: TButtonColorScheme.primary,
+          onPressed: _noop,
         ),
       ));
       await expectLater(
@@ -134,5 +154,7 @@ void main() {
         matchesGoldenFile('goldens/t_button_text.png'),
       );
     });
-  }, skip: !Platform.isWindows);
+  });
 }
+
+void _noop() {}

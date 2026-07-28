@@ -90,13 +90,19 @@ class TTabsBar extends StatelessWidget {
   }
 
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
-    return TextStyle(
-        fontWeight: FontWeight.w400, color: context.tTheme.textColorPrimary);
+    return (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
+        .copyWith(
+      fontWeight: FontWeight.w400,
+      color: context.tTheme.textColorPrimary,
+    );
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
-    return TextStyle(
-        fontWeight: FontWeight.w600, color: context.tTheme.textColorPrimary);
+    return (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
+        .copyWith(
+      fontWeight: FontWeight.w600,
+      color: context.tTheme.textColorPrimary,
+    );
   }
 }
 

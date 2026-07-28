@@ -40,6 +40,30 @@ void main() {
   });
 
   group('TTabsBar', () {
+    testWidgets('default labels inherit ThemeData bodyMedium font family',
+        (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(fontFamily: 'TestFont'),
+          ),
+          extensions: [TThemeData.defaultData()],
+        ),
+        home: Scaffold(
+          body: DefaultTabController(
+            length: 3,
+            child: TTabsBar(tabs: tabs()),
+          ),
+        ),
+      ));
+
+      final tabBar = tester.widget<THorizontalTabBar>(
+        find.byType(THorizontalTabBar),
+      );
+      expect(tabBar.labelStyle?.fontFamily, 'TestFont');
+      expect(tabBar.unselectedLabelStyle?.fontFamily, 'TestFont');
+    });
+
     testWidgets('renders all supported variants', (tester) async {
       for (final variant in TTabsBarVariant.values) {
         await tester.pumpWidget(wrapWithTheme(

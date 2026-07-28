@@ -423,8 +423,10 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           if (WebMdTool.needGenerateWebMd) const TText('WebGenTag'),
           TText(
             widget.title,
-            font: context.tTheme.fontHeadlineSmall,
-            textColor: context.tTheme.textColorPrimary,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: context.tTheme.textColorPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
           ),
           Container(
             margin: const EdgeInsets.only(
@@ -447,8 +449,10 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
       child: TText(
         '${index < 10 ? "0$index" : index} ${data.title}',
-        font: context.tTheme.fontTitleLarge,
-        fontWeight: FontWeight.bold,
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: context.tTheme.textColorPrimary,
+              fontWeight: FontWeight.w600,
+            ),
       ),
     );
   }

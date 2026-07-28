@@ -6,6 +6,26 @@ void main() {
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
   group('TButton widget 级用例', () {
+    testWidgets('默认文字样式继承 ThemeData labelLarge 字体族', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(
+          textTheme: const TextTheme(
+            labelLarge: TextStyle(fontFamily: 'TestFont'),
+          ),
+          extensions: [TThemeData.defaultData()],
+        ),
+        home: const Scaffold(
+          body: TButton(child: Text('Button'), onPressed: _noop),
+        ),
+      ));
+
+      final text = tester.widget<Text>(find.text('Button'));
+      final defaultStyle =
+          DefaultTextStyle.of(tester.element(find.text('Button')));
+      expect(text.style, isNull);
+      expect(defaultStyle.style.fontFamily, 'TestFont');
+    });
+
     testWidgets('fill 主色可构建', (tester) async {
       await tester.pumpWidget(wrap(const TButton(
         child: Text('填充'),

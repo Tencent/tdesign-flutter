@@ -88,7 +88,9 @@ class TButtonResolve {
     // 4.5 textStyle → 覆盖 M3 labelLarge 默认字号
     final textStyleStyle = ButtonStyle(
       textStyle: WidgetStatePropertyAll<TextStyle>(
-        TextStyle(fontSize: _fontSizeForSize(size)),
+        (Theme.of(context).textTheme.labelLarge ?? const TextStyle()).copyWith(
+          fontSize: _fontSizeForSize(size),
+        ),
       ),
     );
 

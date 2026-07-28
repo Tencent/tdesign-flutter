@@ -42,6 +42,9 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
     ['fruit', 'apple'],
   ];
   List<List<Object?>> _multipleValue = [];
+  List<List<Object?>> _popupValue = [
+    ['fruit', 'banana'],
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,9 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
       desc: '用于从层级数据中选择一个或多个叶子节点。',
       exampleCodeGroup: 'tree-select',
       children: [
+        ExampleModule(title: '弹出层用法', children: [
+          ExampleItem(desc: '底部弹出多选', builder: _buildPopup),
+        ]),
         ExampleModule(title: '基础能力', children: [
           ExampleItem(desc: '单选', builder: _buildSingle),
           ExampleItem(desc: '多选', builder: _buildMultiple),
@@ -81,5 +87,47 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
   @ExampleCode(group: 'tree-select')
   Widget _buildDisabled(BuildContext context) {
     return TTreeSelect(options: _options, value: _singleValue);
+  }
+
+  @ExampleCode(group: 'tree-select')
+  Widget _buildPopup(BuildContext context) {
+    return TCell(
+      title: const TText('选择分类'),
+      trailing: TText(
+        '已选择 ${_popupValue.length} 项',
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      arrow: true,
+      onTap: () {
+        var draft = [
+          for (final path in _popupValue) List<Object?>.of(path),
+        ];
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            titleWidget: const TText('选择分类'),
+            child: StatefulBuilder(
+              builder: (context, setPopupState) => TTreeSelect(
+                options: _options,
+                value: draft,
+                multiple: true,
+                onChanged: (value) {
+                  setPopupState(() => draft = value);
+                },
+              ),
+            ),
+            onVisibleChange: (visible, trigger) {
+              if (!visible && trigger == TPopupTrigger.confirm) {
+                setState(() {
+                  _popupValue = [
+                    for (final path in draft) List<Object?>.of(path),
+                  ];
+                });
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 }

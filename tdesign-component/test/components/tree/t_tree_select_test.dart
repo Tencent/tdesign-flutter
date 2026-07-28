@@ -60,8 +60,6 @@ void main() {
       ),
     )));
 
-    await tester.tap(find.text('Fruit'));
-    await tester.pump();
     expect(find.text('Apple'), findsOneWidget);
     expect(calls, 0);
 
@@ -83,8 +81,6 @@ void main() {
         onChanged: (next) => setState(() => value = next),
       ),
     )));
-    await tester.tap(find.text('Fruit'));
-    await tester.pump();
     await tester.tap(find.text('Apple'));
     await tester.pump();
     await tester.tap(find.text('Banana'));
@@ -148,7 +144,7 @@ void main() {
       onChanged: _ignore,
     )));
     expect(find.text('Fruit'), findsOneWidget);
-    expect(find.text('Apple'), findsNothing);
+    expect(find.text('Apple'), findsOneWidget);
   });
 
   testWidgets('default visual style matches develop tree select layout',
@@ -189,21 +185,23 @@ void main() {
       ),
       findsOneWidget,
     );
+    final rootStyle = tester.widget<Text>(find.text('Fruit')).style;
+    expect(rootStyle?.color, token.brandNormalColor);
+    expect(rootStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
+    expect(rootStyle?.fontWeight, FontWeight.w600);
+    final leafStyle = tester.widget<Text>(find.text('Apple')).style;
+    expect(leafStyle?.color, token.textColorPrimary);
+    expect(leafStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
+    expect(leafStyle?.fontWeight, FontWeight.w400);
     expect(
-      tester.widget<Text>(find.text('Fruit')).style,
-      TextStyle(
-        color: token.brandNormalColor,
-        fontSize: token.fontBodyLarge?.size ?? 16,
-        fontWeight: FontWeight.w600,
+      find.byWidgetPredicate(
+        (widget) => widget is TText && widget.data == 'Apple',
       ),
+      findsOneWidget,
     );
     expect(
-      tester.widget<Text>(find.text('Apple')).style,
-      TextStyle(
-        color: token.textColorPrimary,
-        fontSize: token.fontBodyLarge?.size ?? 16,
-        fontWeight: FontWeight.w400,
-      ),
+      tester.widget<Text>(find.text('Apple')).style?.color,
+      isNot(token.textDisabledColor),
     );
     final checkIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
     expect(checkIcon.size, 24);
@@ -262,13 +260,15 @@ void main() {
     );
   });
 
-  testWidgets('does not auto-select and null onChanged disables the panel',
+  testWidgets(
+      'opens the first branch without selecting and null callback disables',
       (tester) async {
     await tester.pumpWidget(wrap(const TTreeSelect(
       options: options,
       value: [],
     )));
-    expect(find.text('Apple'), findsNothing);
+    expect(find.text('Apple'), findsOneWidget);
+    expect(find.byIcon(TIcons.check), findsNothing);
     final tree = find.byType(TTreeSelect);
     expect(
       tester
@@ -278,6 +278,37 @@ void main() {
           .absorbing,
       isTrue,
     );
+  });
+
+  testWidgets('empty value skips disabled roots when opening a branch',
+      (tester) async {
+    const disabledFirst = [
+      TTreeSelectOption(
+        label: 'Disabled branch',
+        value: 'disabled-branch',
+        disabled: true,
+        children: [
+          TTreeSelectOption(label: 'Hidden leaf', value: 'hidden'),
+        ],
+      ),
+      TTreeSelectOption(
+        label: 'Enabled branch',
+        value: 'enabled-branch',
+        children: [
+          TTreeSelectOption(label: 'Visible leaf', value: 'visible'),
+        ],
+      ),
+    ];
+
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: disabledFirst,
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    expect(find.text('Hidden leaf'), findsNothing);
+    expect(find.text('Visible leaf'), findsOneWidget);
+    expect(find.byIcon(TIcons.check), findsNothing);
   });
 
   testWidgets('disabled options do not emit', (tester) async {
@@ -317,7 +348,8 @@ void main() {
       ),
     ));
 
-    expect(tester.widget<Text>(find.text('Apple')).style, selectedStyle);
+    expect(tester.widget<Text>(find.text('Apple')).style?.color,
+        selectedStyle.color);
     expect(find.byIcon(TIcons.check), findsOneWidget);
     expect(tester.widget<Icon>(find.byIcon(TIcons.check)).color, Colors.green);
     expect(

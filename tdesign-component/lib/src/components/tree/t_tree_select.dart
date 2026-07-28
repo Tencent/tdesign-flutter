@@ -5,6 +5,7 @@ import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 import 't_tree_select_theme_data.dart';
 
 const _kTreeSelectHeight = 336.0;
@@ -86,6 +87,11 @@ class _TTreeSelectState extends State<TTreeSelect> {
 
   bool get _enabled => widget.onChanged != null;
 
+  List<Object?> get _effectiveActivePath =>
+      _activePath.isEmpty && widget.value.isEmpty
+          ? _defaultActivePath()
+          : _activePath;
+
   @override
   void initState() {
     super.initState();
@@ -103,15 +109,17 @@ class _TTreeSelectState extends State<TTreeSelect> {
 
   List<Object?> _initialActivePath() {
     if (widget.value.isEmpty) {
-      return const [];
+      return _defaultActivePath();
     }
     final active = <Object?>[];
     var options = widget.options;
+    var matched = false;
     for (final value in widget.value.first) {
       final index = options.indexWhere((option) => option.value == value);
       if (index < 0) {
         break;
       }
+      matched = true;
       final option = options[index];
       if (option.children.isEmpty) {
         break;
@@ -119,20 +127,30 @@ class _TTreeSelectState extends State<TTreeSelect> {
       active.add(option.value);
       options = option.children;
     }
-    return active;
+    return matched ? active : _defaultActivePath();
+  }
+
+  List<Object?> _defaultActivePath() {
+    for (final option in widget.options) {
+      if (!option.disabled && option.children.isNotEmpty) {
+        return List<Object?>.unmodifiable([option.value]);
+      }
+    }
+    return const [];
   }
 
   List<List<TTreeSelectOption>> _visibleColumns() {
     final columns = <List<TTreeSelectOption>>[];
+    final activePath = _effectiveActivePath;
     var options = widget.options;
     var level = 0;
     while (options.isNotEmpty) {
       columns.add(options);
-      if (level >= _activePath.length) {
+      if (level >= activePath.length) {
         break;
       }
       final index = options.indexWhere(
-        (option) => option.value == _activePath[level],
+        (option) => option.value == activePath[level],
       );
       if (index < 0 || options[index].children.isEmpty) {
         break;
@@ -230,6 +248,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
     double width,
     TTreeSelectThemeData? theme,
   ) {
+    final activePath = _effectiveActivePath;
     final backgroundColor = level == 0
         ? theme?.rootBackgroundColor ?? context.tTheme.bgColorSecondaryContainer
         : theme?.backgroundColor ?? context.tTheme.bgColorContainer;
@@ -242,32 +261,34 @@ class _TTreeSelectState extends State<TTreeSelect> {
         itemBuilder: (context, index) {
           final option = options[index];
           final path = <Object?>[
-            ..._activePath.take(level),
+            ...activePath.take(level),
             option.value,
           ];
           final isBranch = option.children.isNotEmpty;
           final selected = isBranch
-              ? level < _activePath.length && _activePath[level] == option.value
+              ? level < activePath.length && activePath[level] == option.value
               : widget.value.any((value) => listEquals(value, path));
           final previousSelected = level == 0 &&
               index > 0 &&
               _isColumnOptionSelected(
                 options[index - 1],
                 [
-                  ..._activePath.take(level),
+                  ...activePath.take(level),
                   options[index - 1].value,
                 ],
                 level,
+                activePath,
               );
           final nextSelected = level == 0 &&
               index < options.length - 1 &&
               _isColumnOptionSelected(
                 options[index + 1],
                 [
-                  ..._activePath.take(level),
+                  ...activePath.take(level),
                   options[index + 1].value,
                 ],
                 level,
+                activePath,
               );
           return _buildOption(
             context,
@@ -289,10 +310,11 @@ class _TTreeSelectState extends State<TTreeSelect> {
     TTreeSelectOption option,
     List<Object?> path,
     int level,
+    List<Object?> activePath,
   ) {
     final isBranch = option.children.isNotEmpty;
     return isBranch
-        ? level < _activePath.length && _activePath[level] == option.value
+        ? level < activePath.length && activePath[level] == option.value
         : widget.value.any((value) => listEquals(value, path));
   }
 
@@ -476,7 +498,7 @@ class _TreeOptionTile extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, right: 12),
-                    child: Text(
+                    child: TText(
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

@@ -151,6 +151,25 @@ void main() {
       expect(text.style?.fontWeight, FontWeight.w600);
     });
 
+    testWidgets('trailing 可展示较小字号的普通正文值', (tester) async {
+      const value = 'Selected value';
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(app(Builder(
+        builder: (context) => TCell(
+          title: const TText('Select'),
+          trailing: TText(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+      )));
+
+      final text = tester.widget<Text>(find.text(value));
+      expect(text.style?.fontSize, token.fontBodyMedium?.size);
+      expect(text.style?.color, token.textColorPrimary);
+      expect(text.style?.color, isNot(token.textDisabledColor));
+    });
+
     testWidgets('默认标题不继承外层粗体', (tester) async {
       const title = 'Normal cell title';
       await tester.pumpWidget(app(const DefaultTextStyle(

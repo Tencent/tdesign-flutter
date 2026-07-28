@@ -35,6 +35,38 @@ void main() {
       expect(find.byType(TCalendar), findsOneWidget);
     });
 
+    testWidgets('TCalendarThemeData selected decoration reaches calendar cells',
+        (tester) async {
+      final theme =
+          TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+        const TCalendarThemeData(
+          cellDecoration: BoxDecoration(color: Colors.orange),
+          centreColor: Colors.green,
+        ),
+      );
+      await tester.pumpWidget(MaterialApp(
+        theme: theme,
+        home: Scaffold(
+          body: TCalendar(
+            minDate: DateTime(2026, 6, 1),
+            maxDate: DateTime(2026, 6, 30),
+            anchorDate: DateTime(2026, 6, 1),
+            value: [DateTime(2026, 6, 15)],
+            onChanged: (_) {},
+          ),
+        ),
+      ));
+      await tester.pump();
+
+      final themedCell = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.decoration is BoxDecoration &&
+            (widget.decoration! as BoxDecoration).color == Colors.orange,
+      );
+      expect(themedCell, findsOneWidget);
+    });
+
     testWidgets('cellBuilder 自定义整格可构建', (tester) async {
       await tester.pumpWidget(wrap(TCalendar(
         value: const [],

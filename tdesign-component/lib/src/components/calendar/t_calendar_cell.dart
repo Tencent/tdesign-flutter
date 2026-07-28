@@ -98,6 +98,8 @@ class TCalendarCell extends StatefulWidget {
     this.dayStyle,
     this.todayDayStyle,
     this.subtitleStyle,
+    this.cellDecoration,
+    this.centreColor,
   }) : super(key: key);
 
   final TCalendarCellModel? cell;
@@ -114,6 +116,8 @@ class TCalendarCell extends StatefulWidget {
   final TextStyle? dayStyle;
   final TextStyle? todayDayStyle;
   final TextStyle? subtitleStyle;
+  final BoxDecoration? cellDecoration;
+  final Color? centreColor;
 
   @override
   State<TCalendarCell> createState() => _TCalendarCellState();
@@ -158,8 +162,14 @@ class _TCalendarCellState extends State<TCalendarCell> {
       return const SizedBox.shrink();
     }
 
-    final themedStyle = TCalendarStyle.generateStyle(context: context)
-        .forSelectType(context, cell.selectType);
+    final defaults = TCalendarStyle.generateStyle(context: context);
+    final themedStyle = TCalendarStyle(
+      dayStyle: widget.dayStyle ?? defaults.dayStyle,
+      todayDayStyle: widget.todayDayStyle ?? defaults.todayDayStyle,
+      subtitleStyle: widget.subtitleStyle ?? defaults.subtitleStyle,
+      cellDecoration: widget.cellDecoration,
+      centreColor: widget.centreColor,
+    ).forSelectType(context, cell.selectType);
     final decoration = themedStyle.cellDecoration;
     final positionColor = _rangeBridgeColor(context, themedStyle, decoration);
 
@@ -240,10 +250,8 @@ class _TCalendarCellState extends State<TCalendarCell> {
     TCalendarStyle cellStyle,
   ) {
     final dayText = cell.date.day.toString();
-    final dayTextStyle = (_isToday ? cellStyle.todayDayStyle : null) ??
-        widget.todayDayStyle ??
-        cellStyle.dayStyle ??
-        widget.dayStyle;
+    final dayTextStyle =
+        (_isToday ? cellStyle.todayDayStyle : null) ?? cellStyle.dayStyle;
 
     final subtitle = _buildSubtitle(context, cell, cellStyle);
 
@@ -268,12 +276,19 @@ class _TCalendarCellState extends State<TCalendarCell> {
     TCalendarCellModel cell,
     TCalendarStyle cellStyle,
   ) {
-    return widget.subtitleBuilder?.call(
+    final subtitle = widget.subtitleBuilder?.call(
       context,
       TCalendarSubtitleContext(
         date: cell.date,
         selectType: cell.selectType,
       ),
+    );
+    if (subtitle == null) {
+      return null;
+    }
+    return DefaultTextStyle.merge(
+      style: cellStyle.subtitleStyle,
+      child: subtitle,
     );
   }
 }

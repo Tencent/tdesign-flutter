@@ -48,6 +48,7 @@ class _TUploadPageState extends State<TUploadPage> {
       children: [
         ExampleModule(title: '基础能力', children: [
           ExampleItem(desc: '图片选择', builder: _buildBasic),
+          ExampleItem(desc: '空态可用与禁用', builder: _buildEmptyStates),
           ExampleItem(desc: '上传状态', builder: _buildStatus),
           ExampleItem(desc: '圆形主题', builder: _buildCircle),
           ExampleItem(desc: '禁用状态', builder: _buildDisabled),
@@ -66,6 +67,41 @@ class _TUploadPageState extends State<TUploadPage> {
         onValidationError: (error) => _show('$error'),
         onError: (error) => _show('$error'),
         onChanged: (files) => setState(() => _files = files),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'upload')
+  Widget _buildEmptyStates(BuildContext context) {
+    return _section(
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                const TText('可用'),
+                const SizedBox(height: 8),
+                TUpload(
+                  files: const [],
+                  maxFiles: 1,
+                  picker: () async => const [],
+                  onChanged: (_) {},
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              children: [
+                const TText('禁用'),
+                const SizedBox(height: 8),
+                TUpload(files: const [], maxFiles: 1),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

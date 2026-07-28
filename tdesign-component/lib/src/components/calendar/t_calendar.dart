@@ -294,6 +294,8 @@ class _TCalendarState extends State<TCalendar> {
           dayStyle: _style.dayStyle,
           todayDayStyle: _style.todayDayStyle,
           subtitleStyle: _style.subtitleStyle,
+          cellDecoration: _style.cellDecoration,
+          centreColor: _style.centreColor,
         );
       },
     );

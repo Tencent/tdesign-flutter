@@ -14,7 +14,7 @@ Widget _buildAnchor(BuildContext context) {
               }),
             ),
             Expanded(
-              child: Text(
+              child: TText(
                 '${_anchorDate.year}-${_anchorDate.month.toString().padLeft(2, '0')}',
                 textAlign: TextAlign.center,
               ),

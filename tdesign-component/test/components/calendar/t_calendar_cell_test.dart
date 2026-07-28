@@ -73,6 +73,101 @@ void main() {
     expect(dayText.style?.fontWeight, token.fontTitleMedium?.fontWeight);
   });
 
+  testWidgets('selected today keeps selected contrast instead of today color',
+      (tester) async {
+    final token = TThemeData.defaultData();
+    final now = DateTime.now();
+    final today = TCalendarCellModel(
+      date: DateTime(now.year, now.month, now.day),
+      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      isLastDayOfMonth: false,
+    );
+
+    await tester.pumpWidget(wrap(TCalendarCell(
+      cell: today,
+      height: 48,
+      padding: 4,
+      rowIndex: 0,
+      colIndex: 0,
+      dateList: [today],
+    )));
+
+    final dayText =
+        tester.widget<TText>(_calendarTextFinder(today.date.day.toString()));
+    expect(dayText.style?.color, token.textColorAnti);
+    expect(dayText.style?.color, isNot(token.brandNormalColor));
+  });
+
+  testWidgets('component cell styles reach selected content and decoration',
+      (tester) async {
+    final token = TThemeData.defaultData();
+    final selected = TCalendarCellModel(
+      date: DateTime(2024, 1, 8),
+      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      isLastDayOfMonth: false,
+    );
+
+    await tester.pumpWidget(wrap(TCalendarCell(
+      cell: selected,
+      height: 48,
+      padding: 4,
+      rowIndex: 0,
+      colIndex: 0,
+      dateList: [selected],
+      dayStyle: const TextStyle(
+        fontFamily: 'custom',
+        fontSize: 19,
+        fontWeight: FontWeight.w700,
+        color: Colors.red,
+      ),
+      cellDecoration: const BoxDecoration(color: Colors.orange),
+    )));
+
+    final dayText = tester.widget<TText>(_calendarTextFinder('8'));
+    expect(dayText.style?.fontFamily, 'custom');
+    expect(dayText.style?.fontSize, 19);
+    expect(dayText.style?.fontWeight, FontWeight.w700);
+    expect(dayText.style?.color, token.textColorAnti);
+
+    final decoration = tester
+        .widget<Container>(_cellBackgroundFinder())
+        .decoration! as BoxDecoration;
+    expect(decoration.color, Colors.orange);
+    expect(decoration.borderRadius, BorderRadius.circular(token.radiusDefault));
+  });
+
+  testWidgets('subtitle inherits the resolved state subtitle style',
+      (tester) async {
+    final selected = TCalendarCellModel(
+      date: DateTime(2024, 1, 8),
+      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      isLastDayOfMonth: false,
+    );
+
+    await tester.pumpWidget(wrap(TCalendarCell(
+      cell: selected,
+      height: 48,
+      padding: 4,
+      rowIndex: 0,
+      colIndex: 0,
+      dateList: [selected],
+      subtitleStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+      subtitleBuilder: (context, value) => const Text('subtitle'),
+    )));
+
+    final inherited = tester.widget<DefaultTextStyle>(
+      find
+          .ancestor(
+            of: find.text('subtitle'),
+            matching: find.byType(DefaultTextStyle),
+          )
+          .first,
+    );
+    expect(inherited.style.fontSize, 11);
+    expect(inherited.style.fontWeight, FontWeight.w600);
+    expect(inherited.style.color, TThemeData.defaultData().textColorAnti);
+  });
+
   testWidgets('range bridge uses token light color and preserves cell height',
       (tester) async {
     final token = TThemeData.defaultData();
@@ -94,10 +189,12 @@ void main() {
       rowIndex: 0,
       colIndex: 0,
       dateList: [start, centre],
+      centreColor: Colors.green,
     )));
 
     final bridge = tester.widget<Container>(_rangeBridgeFinder());
-    expect(bridge.color, token.brandLightColor);
+    expect(bridge.color, Colors.green);
+    expect(bridge.color, isNot(token.brandLightColor));
     expect(tester.getSize(_rangeBridgeFinder()), const Size(4, 48));
   });
 }

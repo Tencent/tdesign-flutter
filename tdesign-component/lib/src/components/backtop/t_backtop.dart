@@ -220,7 +220,7 @@ class _TBackTopState extends State<TBackTop> {
     return Container(
       width: 48,
       height: 48,
-      padding: EdgeInsets.symmetric(vertical: widget.showText ? 6 : 13),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
         border: Border.all(color: _borderColor, width: 0.5),

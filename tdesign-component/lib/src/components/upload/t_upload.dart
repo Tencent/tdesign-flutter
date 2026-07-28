@@ -119,6 +119,7 @@ class TUpload extends StatelessWidget {
         : context.tTheme.textDisabledColor;
     return Semantics(
       button: true,
+      enabled: _enabled,
       label: '选择文件',
       child: GestureDetector(
         key: const ValueKey('upload-add'),

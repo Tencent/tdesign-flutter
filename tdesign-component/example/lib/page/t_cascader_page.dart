@@ -39,6 +39,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
   ];
 
   List<Object?> _value = const [];
+  List<Object?> _popupValue = const ['gd', 'sz', 'ns'];
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,9 @@ class _TCascaderPageState extends State<TCascaderPage> {
       desc: '用于从层级数据中选择一条路径。',
       exampleCodeGroup: 'cascader',
       children: [
+        ExampleModule(title: '弹出层用法', children: [
+          ExampleItem(desc: '底部弹出选择', builder: _buildPopup),
+        ]),
         ExampleModule(title: '基础能力', children: [
           ExampleItem(desc: '标签导航', builder: _buildTab),
           ExampleItem(desc: '步骤导航', builder: _buildStep),
@@ -78,5 +82,52 @@ class _TCascaderPageState extends State<TCascaderPage> {
   @ExampleCode(group: 'cascader')
   Widget _buildDisabled(BuildContext context) {
     return TCascader(options: _options, value: _value);
+  }
+
+  @ExampleCode(group: 'cascader')
+  Widget _buildPopup(BuildContext context) {
+    List<String> selectedLabels(List<Object?> value) {
+      var options = _options;
+      final labels = <String>[];
+      for (final selectedValue in value) {
+        final matches =
+            options.where((option) => option.value == selectedValue).toList();
+        if (matches.isEmpty) {
+          break;
+        }
+        labels.add(matches.first.label);
+        options = matches.first.children;
+      }
+      return labels;
+    }
+
+    return TCell(
+      title: const TText('选择地区'),
+      note: TText(selectedLabels(_popupValue).join(' / ')),
+      arrow: true,
+      onTap: () {
+        var draft = List<Object?>.of(_popupValue);
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            titleWidget: const TText('选择地区'),
+            child: StatefulBuilder(
+              builder: (context, setPopupState) => TCascader(
+                options: _options,
+                value: draft,
+                onChanged: (value) {
+                  setPopupState(() => draft = value);
+                },
+              ),
+            ),
+            onVisibleChange: (visible, trigger) {
+              if (!visible && trigger == TPopupTrigger.confirm) {
+                setState(() => _popupValue = List<Object?>.of(draft));
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 }

@@ -156,6 +156,57 @@ void main() {
       expect(changed, isFalse);
     });
 
+    testWidgets('empty add uses distinct enabled and disabled token styles',
+        (tester) async {
+      final token = TThemeData.defaultData();
+
+      await tester.pumpWidget(wrap(TUpload(files: const [])));
+      final disabledAdd = find.byKey(const ValueKey('upload-add'));
+      final disabledContainer = tester.widget<Container>(
+        find.descendant(
+          of: disabledAdd,
+          matching: find.byType(Container),
+        ),
+      );
+      final disabledIcon = tester.widget<Icon>(find.descendant(
+        of: disabledAdd,
+        matching: find.byType(Icon),
+      ));
+
+      await tester.pumpWidget(wrap(TUpload(
+        files: const [],
+        picker: () async => const [],
+        onChanged: (_) {},
+      )));
+      final enabledAdd = find.byKey(const ValueKey('upload-add'));
+      final enabledContainer = tester.widget<Container>(
+        find.descendant(
+          of: enabledAdd,
+          matching: find.byType(Container),
+        ),
+      );
+      final enabledIcon = tester.widget<Icon>(find.descendant(
+        of: enabledAdd,
+        matching: find.byType(Icon),
+      ));
+
+      expect(
+        (disabledContainer.decoration! as BoxDecoration).color,
+        token.bgColorComponentDisabled,
+      );
+      expect(disabledIcon.color, token.textDisabledColor);
+      expect(
+        (enabledContainer.decoration! as BoxDecoration).color,
+        token.bgColorSecondaryContainer,
+      );
+      expect(enabledIcon.color, token.textColorPlaceholder);
+      expect(disabledIcon.color, isNot(enabledIcon.color));
+      expect(
+        (disabledContainer.decoration! as BoxDecoration).color,
+        isNot((enabledContainer.decoration! as BoxDecoration).color),
+      );
+    });
+
     testWidgets('validates maximum count and byte size', (tester) async {
       TUploadValidationError? error;
       await tester.pumpWidget(wrap(TUpload(

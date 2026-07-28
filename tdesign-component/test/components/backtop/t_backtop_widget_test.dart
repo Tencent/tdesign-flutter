@@ -11,6 +11,15 @@ void main() {
       expect(find.byType(TBackTop), findsOneWidget);
     });
 
+    testWidgets('圆形展示文字时保持 48px 且不溢出', (tester) async {
+      await tester.pumpWidget(wrap(
+        const TBackTop(showText: true, onPressed: _noop),
+      ));
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TBackTop)), const Size(48, 48));
+    });
+
     testWidgets('halfCircle / tooltip 可构建', (tester) async {
       await tester.pumpWidget(wrap(const TBackTop(
         shape: TBackTopShape.halfCircle,
