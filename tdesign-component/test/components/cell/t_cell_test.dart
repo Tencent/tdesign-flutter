@@ -130,6 +130,27 @@ void main() {
       expect(tester.getSize(find.byType(TCell)), const Size(800, 80));
     });
 
+    testWidgets('TText 标题继承 TCellThemeData.titleStyle', (tester) async {
+      const title = 'Cell TText title';
+      await tester.pumpWidget(app(
+        const TCell(title: TText(title)),
+        cellTheme: const TCellThemeData(
+          titleStyle: TextStyle(
+            color: Colors.deepPurple,
+            fontSize: 18,
+            height: 1.5,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ));
+
+      final text = tester.widget<Text>(find.text(title));
+      expect(text.style?.color, Colors.deepPurple);
+      expect(text.style?.fontSize, 18);
+      expect(text.style?.height, 1.5);
+      expect(text.style?.fontWeight, FontWeight.w600);
+    });
+
     testWidgets('默认文本使用 token 字体并限制横向溢出', (tester) async {
       const title = 'Very long title that should stay on one visual line';
       const subtitle = 'Subtitle keeps its natural wrapping behavior';
