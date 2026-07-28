@@ -137,6 +137,9 @@ class _TCellState extends State<TCell> {
                                 fontSize:
                                     context.tTheme.fontBodyLarge?.size ?? 16,
                                 height: context.tTheme.fontBodyLarge?.height,
+                                fontWeight:
+                                    context.tTheme.fontBodyLarge?.fontWeight ??
+                                        FontWeight.w400,
                               ),
                           child: widget.title!,
                         ),
@@ -158,6 +161,9 @@ class _TCellState extends State<TCell> {
                           color: context.tTheme.textColorSecondary,
                           fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
                           height: context.tTheme.fontBodyMedium?.height,
+                          fontWeight:
+                              context.tTheme.fontBodyMedium?.fontWeight ??
+                                  FontWeight.w400,
                         ),
                     child: widget.subtitle!,
                   ),
@@ -176,6 +182,8 @@ class _TCellState extends State<TCell> {
                       color: context.tTheme.textColorPlaceholder,
                       fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
                       height: context.tTheme.fontBodyMedium?.height,
+                      fontWeight: context.tTheme.fontBodyMedium?.fontWeight ??
+                          FontWeight.w400,
                     ),
                 child: widget.note!,
               ),

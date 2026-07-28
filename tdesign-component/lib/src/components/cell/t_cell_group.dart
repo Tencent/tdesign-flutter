@@ -92,6 +92,8 @@ class TCellGroup extends StatelessWidget {
                     color: context.tTheme.textColorPrimary,
                     fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
                     height: context.tTheme.fontBodyMedium?.height,
+                    fontWeight: context.tTheme.fontBodyMedium?.fontWeight ??
+                        FontWeight.w400,
                   ),
               child: title!,
             ),

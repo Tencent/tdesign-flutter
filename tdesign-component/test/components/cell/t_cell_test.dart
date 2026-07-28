@@ -151,6 +151,17 @@ void main() {
       expect(text.style?.fontWeight, FontWeight.w600);
     });
 
+    testWidgets('默认标题不继承外层粗体', (tester) async {
+      const title = 'Normal cell title';
+      await tester.pumpWidget(app(const DefaultTextStyle(
+        style: TextStyle(fontWeight: FontWeight.w700),
+        child: TCell(title: TText(title)),
+      )));
+
+      final text = tester.widget<Text>(find.text(title));
+      expect(text.style?.fontWeight, FontWeight.w400);
+    });
+
     testWidgets('默认文本使用 token 字体并限制横向溢出', (tester) async {
       const title = 'Very long title that should stay on one visual line';
       const subtitle = 'Subtitle keeps its natural wrapping behavior';
