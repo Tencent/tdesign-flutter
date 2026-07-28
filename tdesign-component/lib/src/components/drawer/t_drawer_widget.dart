@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../cell/t_cell.dart';
-import '../cell/t_cell_group.dart';
-import '../cell/t_cell_theme_data.dart';
 import '../text/t_text.dart';
 import 't_drawer.dart';
 import 't_drawer_theme_data.dart';
@@ -23,7 +21,6 @@ class TDrawerWidget extends StatelessWidget {
     this.title,
     this.onItemClick,
     this.width,
-    this.style,
     this.hover,
     this.backgroundColor,
     this.bordered,
@@ -48,9 +45,6 @@ class TDrawerWidget extends StatelessWidget {
   /// 宽度
   final double? width;
 
-  /// 列表自定义样式
-  final TCellThemeData? style;
-
   /// 是否开启点击反馈
   final bool? hover;
 
@@ -74,63 +68,58 @@ class TDrawerWidget extends StatelessWidget {
     final effectiveBordered = bordered ?? drawerTheme?.bordered ?? true;
     final effectiveShowLastBordered =
         isShowLastBordered ?? drawerTheme?.isShowLastBordered ?? true;
-    final effectiveStyle = style ?? drawerTheme?.style;
-    var content = child;
-    if (content == null) {
-      final inheritedCellTheme = Theme.of(context).extension<TCellThemeData>();
-      final cellStyle =
-          (effectiveStyle ?? inheritedCellTheme ?? const TCellThemeData())
-              .copyWith(
-        groupBordered: effectiveBordered,
-        showLastDivider: effectiveShowLastBordered,
-      );
-      var cells = items
-          ?.asMap()
-          .map(
-            (index, item) => MapEntry(
-              index,
-              TCell(
-                title: item.content ??
-                    (item.title == null
-                        ? null
-                        : TText(
-                            item.title!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                prefix: item.icon,
-                enableFeedback: effectiveHover,
-                onTap: () {
-                  if (onItemClick == null) {
-                    return;
-                  }
-                  onItemClick!(index, items![index]);
-                },
+    final content = child ??
+        Column(
+          children: [
+            if (title != null)
+              Padding(
+                padding: EdgeInsets.all(context.tTheme.spacer16),
+                child: title,
+              ),
+            Expanded(
+              child: Container(
+                decoration: effectiveBordered
+                    ? BoxDecoration(
+                        border: Border.all(
+                          color: drawerTheme?.dividerColor ??
+                              context.tTheme.componentStrokeColor,
+                        ),
+                      )
+                    : null,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: items?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final item = items![index];
+                    return _DrawerMenuItem(
+                      item: item,
+                      onTap: onItemClick == null
+                          ? null
+                          : () => onItemClick!(index, item),
+                      enableFeedback: effectiveHover,
+                      textStyle: _itemTextStyle(context, drawerTheme),
+                      backgroundColor: drawerTheme?.itemBackgroundColor ??
+                          context.tTheme.bgColorContainer,
+                      pressedColor: drawerTheme?.itemPressedColor ??
+                          context.tTheme.bgColorContainerHover,
+                      padding: drawerTheme?.itemPadding ??
+                          EdgeInsets.all(context.tTheme.spacer16),
+                      dividerColor: drawerTheme?.dividerColor ??
+                          context.tTheme.componentStrokeColor,
+                      showDivider: index < (items?.length ?? 0) - 1 ||
+                          effectiveShowLastBordered,
+                    );
+                  },
+                ),
               ),
             ),
-          )
-          .values
-          .toList();
-      content = Column(
-        children: [
-          Expanded(
-            child: Theme(
-              data: Theme.of(context).mergeExtension(cellStyle),
-              child: TCellGroup(
-                title: title,
-                scrollable: true,
-                cells: cells ?? [],
+            if (footer != null)
+              Container(
+                padding: EdgeInsets.all(context.tTheme.spacer16),
+                child: footer,
               ),
-            ),
-          ),
-          if (footer != null)
-            Container(
-              padding: EdgeInsets.all(context.tTheme.spacer16),
-              child: footer,
-            ),
-        ],
-      );
-    }
+          ],
+        );
 
     return Container(
       color: effectiveBackgroundColor,
@@ -138,6 +127,112 @@ class TDrawerWidget extends StatelessWidget {
       height: double.infinity,
       child: content,
     );
+  }
+
+  TextStyle _itemTextStyle(
+    BuildContext context,
+    TDrawerThemeData? drawerTheme,
+  ) {
+    final materialStyle = Theme.of(context).textTheme.bodyMedium;
+    final tokenFont = context.tTheme.fontBodyMedium;
+    return drawerTheme?.itemTextStyle ??
+        materialStyle ??
+        TextStyle(
+          color: context.tTheme.textColorPrimary,
+          fontSize: tokenFont?.size ?? 14,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight ?? FontWeight.w400,
+        );
+  }
+}
+
+class _DrawerMenuItem extends StatefulWidget {
+  const _DrawerMenuItem({
+    required this.item,
+    required this.onTap,
+    required this.enableFeedback,
+    required this.textStyle,
+    required this.backgroundColor,
+    required this.pressedColor,
+    required this.padding,
+    required this.dividerColor,
+    required this.showDivider,
+  });
+
+  final TDrawerItem item;
+  final VoidCallback? onTap;
+  final bool enableFeedback;
+  final TextStyle textStyle;
+  final Color backgroundColor;
+  final Color pressedColor;
+  final EdgeInsetsGeometry padding;
+  final Color dividerColor;
+  final bool showDivider;
+
+  @override
+  State<_DrawerMenuItem> createState() => _DrawerMenuItemState();
+}
+
+class _DrawerMenuItemState extends State<_DrawerMenuItem> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = Container(
+      color: _pressed ? widget.pressedColor : widget.backgroundColor,
+      padding: widget.padding,
+      child: Row(
+        children: [
+          if (widget.item.icon != null) ...[
+            widget.item.icon!,
+            SizedBox(width: context.tTheme.spacer12),
+          ],
+          Expanded(
+            child: widget.item.content ??
+                (widget.item.title == null
+                    ? const SizedBox.shrink()
+                    : TText(
+                        widget.item.title!,
+                        style: widget.textStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+          ),
+        ],
+      ),
+    );
+    final item = widget.onTap == null
+        ? content
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onTap,
+            onTapDown: widget.enableFeedback ? (_) => _setPressed(true) : null,
+            onTapUp: widget.enableFeedback ? (_) => _setPressed(false) : null,
+            onTapCancel:
+                widget.enableFeedback ? () => _setPressed(false) : null,
+            child: content,
+          );
+    if (!widget.showDivider) {
+      return item;
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        item,
+        Divider(
+          height: 0.5,
+          thickness: 0.5,
+          indent: 16,
+          color: widget.dividerColor,
+        ),
+      ],
+    );
+  }
+
+  void _setPressed(bool value) {
+    if (_pressed != value && mounted) {
+      setState(() => _pressed = value);
+    }
   }
 }
 

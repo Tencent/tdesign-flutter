@@ -172,14 +172,11 @@ Widget _buildBottomSimple(BuildContext context) {
 
 @ExampleCode(group: 'drawer')
 Widget _buildColorSimple(BuildContext context) {
-  final tCellStyle =
-      TCellThemeData(backgroundColor: context.tTheme.brandNormalColor);
-
   return Theme(
     data: Theme.of(context).mergeExtension(
       TDrawerThemeData(
         backgroundColor: context.tTheme.bgColorSecondaryContainer,
-        style: tCellStyle,
+        itemBackgroundColor: context.tTheme.brandNormalColor,
       ),
     ),
     child: Builder(

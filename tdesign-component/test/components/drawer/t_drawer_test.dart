@@ -62,7 +62,11 @@ void main() {
       expect(data.bordered, null);
       expect(data.isShowLastBordered, null);
       expect(data.hover, null);
-      expect(data.style, null);
+      expect(data.itemTextStyle, null);
+      expect(data.itemBackgroundColor, null);
+      expect(data.itemPressedColor, null);
+      expect(data.itemPadding, null);
+      expect(data.dividerColor, null);
     });
 
     test('带参数构造', () {
@@ -96,15 +100,30 @@ void main() {
         bordered: true,
         isShowLastBordered: true,
         hover: true,
+        itemTextStyle: TextStyle(fontWeight: FontWeight.w400),
+        itemBackgroundColor: Colors.black,
+        itemPressedColor: Colors.grey,
+        itemPadding: EdgeInsets.all(8),
+        dividerColor: Colors.white,
       );
       final copied = base.copyWith(
         drawerTop: 24,
         bordered: false,
         hover: false,
+        itemTextStyle: const TextStyle(fontWeight: FontWeight.w500),
+        itemBackgroundColor: Colors.green,
+        itemPressedColor: Colors.blue,
+        itemPadding: const EdgeInsets.all(12),
+        dividerColor: Colors.yellow,
       );
       expect(copied.drawerTop, 24);
       expect(copied.bordered, false);
       expect(copied.hover, false);
+      expect(copied.itemTextStyle?.fontWeight, FontWeight.w500);
+      expect(copied.itemBackgroundColor, Colors.green);
+      expect(copied.itemPressedColor, Colors.blue);
+      expect(copied.itemPadding, const EdgeInsets.all(12));
+      expect(copied.dividerColor, Colors.yellow);
 
       const other = TDrawerThemeData(
         width: 320,
@@ -113,12 +132,22 @@ void main() {
         bordered: false,
         isShowLastBordered: false,
         hover: false,
+        itemTextStyle: TextStyle(fontWeight: FontWeight.w600),
+        itemBackgroundColor: Colors.white,
+        itemPressedColor: Colors.black,
+        itemPadding: EdgeInsets.all(16),
+        dividerColor: Colors.black,
       );
       final lerped = base.lerp(other, 0.5);
       expect(lerped.width, 300);
       expect(lerped.drawerTop, 16);
       expect(lerped.bordered, false);
       expect(lerped.hover, false);
+      expect(lerped.itemTextStyle?.fontWeight, FontWeight.w500);
+      expect(lerped.itemBackgroundColor, isNotNull);
+      expect(lerped.itemPressedColor, isNotNull);
+      expect(lerped.itemPadding, const EdgeInsets.all(12));
+      expect(lerped.dividerColor, isNotNull);
     });
 
     test('lerp', () {
@@ -159,6 +188,12 @@ void main() {
       expect(find.text('菜单1'), findsOneWidget);
       expect(find.text('菜单2'), findsOneWidget);
       expect(find.byType(TText), findsNWidgets(2));
+      expect(find.byType(TCell), findsNothing);
+      expect(find.byType(TCellGroup), findsNothing);
+
+      final title = tester.widget<Text>(find.text('菜单1'));
+      expect(title.style?.fontSize, 14);
+      expect(title.style?.fontWeight, FontWeight.w400);
     });
 
     testWidgets('默认 item title 长文案保持单行省略', (tester) async {
@@ -176,6 +211,42 @@ void main() {
       final title = tester.widget<Text>(find.text(longTitle));
       expect(title.maxLines, 1);
       expect(title.overflow, TextOverflow.ellipsis);
+    });
+
+    testWidgets('菜单正文继承全局 TextTheme，并由 Drawer Theme 覆盖', (tester) async {
+      const globalStyle =
+          TextStyle(color: Colors.red, fontWeight: FontWeight.w500);
+      final baseTheme = fullTheme();
+      final globalTheme = baseTheme.copyWith(
+        textTheme: baseTheme.textTheme.copyWith(bodyMedium: globalStyle),
+      );
+      await tester.pumpWidget(MaterialApp(
+        theme: globalTheme,
+        home: Scaffold(
+          body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      var title = tester.widget<Text>(find.text('菜单1'));
+      expect(title.style?.color, globalStyle.color);
+      expect(title.style?.fontWeight, globalStyle.fontWeight);
+
+      const drawerStyle =
+          TextStyle(color: Colors.blue, fontWeight: FontWeight.w600);
+      await tester.pumpWidget(MaterialApp(
+        theme: globalTheme.mergeExtension(
+          const TDrawerThemeData(itemTextStyle: drawerStyle),
+        ),
+        home: Scaffold(
+          body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      title = tester.widget<Text>(find.text('菜单1'));
+      expect(title.style?.color, drawerStyle.color);
+      expect(title.style?.fontWeight, drawerStyle.fontWeight);
     });
 
     testWidgets('使用 title 渲染标题', (tester) async {

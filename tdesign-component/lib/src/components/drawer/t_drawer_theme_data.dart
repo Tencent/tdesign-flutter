@@ -2,8 +2,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-import '../cell/t_cell_theme_data.dart';
-
 /// 抽屉组件 ThemeExtension
 ///
 /// 管理 TDrawer 的子树级默认样式（宽度、背景色、边框、点击反馈等）。
@@ -27,8 +25,20 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   /// 是否默认开启点击反馈
   final bool? hover;
 
-  /// 默认列表自定义样式
-  final TCellThemeData? style;
+  /// 菜单正文样式。
+  final TextStyle? itemTextStyle;
+
+  /// 菜单项背景色。
+  final Color? itemBackgroundColor;
+
+  /// 菜单项按压背景色。
+  final Color? itemPressedColor;
+
+  /// 菜单项内边距。
+  final EdgeInsetsGeometry? itemPadding;
+
+  /// 菜单项分隔线颜色。
+  final Color? dividerColor;
 
   const TDrawerThemeData({
     this.width,
@@ -37,7 +47,11 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     this.bordered,
     this.isShowLastBordered,
     this.hover,
-    this.style,
+    this.itemTextStyle,
+    this.itemBackgroundColor,
+    this.itemPressedColor,
+    this.itemPadding,
+    this.dividerColor,
   });
 
   @override
@@ -48,7 +62,11 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     bool? bordered,
     bool? isShowLastBordered,
     bool? hover,
-    TCellThemeData? style,
+    TextStyle? itemTextStyle,
+    Color? itemBackgroundColor,
+    Color? itemPressedColor,
+    EdgeInsetsGeometry? itemPadding,
+    Color? dividerColor,
   }) {
     return TDrawerThemeData(
       width: width ?? this.width,
@@ -57,7 +75,11 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
       bordered: bordered ?? this.bordered,
       isShowLastBordered: isShowLastBordered ?? this.isShowLastBordered,
       hover: hover ?? this.hover,
-      style: style ?? this.style,
+      itemTextStyle: itemTextStyle ?? this.itemTextStyle,
+      itemBackgroundColor: itemBackgroundColor ?? this.itemBackgroundColor,
+      itemPressedColor: itemPressedColor ?? this.itemPressedColor,
+      itemPadding: itemPadding ?? this.itemPadding,
+      dividerColor: dividerColor ?? this.dividerColor,
     );
   }
 
@@ -74,7 +96,12 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
       isShowLastBordered:
           t < 0.5 ? isShowLastBordered : other.isShowLastBordered,
       hover: t < 0.5 ? hover : other.hover,
-      style: t < 0.5 ? style : other.style,
+      itemTextStyle: TextStyle.lerp(itemTextStyle, other.itemTextStyle, t),
+      itemBackgroundColor:
+          Color.lerp(itemBackgroundColor, other.itemBackgroundColor, t),
+      itemPressedColor: Color.lerp(itemPressedColor, other.itemPressedColor, t),
+      itemPadding: EdgeInsetsGeometry.lerp(itemPadding, other.itemPadding, t),
+      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
     );
   }
 }
