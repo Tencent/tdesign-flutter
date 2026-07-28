@@ -35,6 +35,12 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
     /// 默认前景色。
     this.foregroundColor,
 
+    /// 禁用背景色。
+    this.disabledBackgroundColor,
+
+    /// 禁用前景色。
+    this.disabledForegroundColor,
+
     /// 状态遮罩颜色。
     this.overlayColor,
 
@@ -81,6 +87,12 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
   /// 默认前景色。
   final Color? foregroundColor;
 
+  /// 禁用背景色。
+  final Color? disabledBackgroundColor;
+
+  /// 禁用前景色。
+  final Color? disabledForegroundColor;
+
   /// 状态遮罩颜色。
   final Color? overlayColor;
 
@@ -114,6 +126,8 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
     WrapAlignment? alignment,
     Color? backgroundColor,
     Color? foregroundColor,
+    Color? disabledBackgroundColor,
+    Color? disabledForegroundColor,
     Color? overlayColor,
     TextStyle? statusTextStyle,
     double? borderRadius,
@@ -131,6 +145,10 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
       alignment: alignment ?? this.alignment,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       foregroundColor: foregroundColor ?? this.foregroundColor,
+      disabledBackgroundColor:
+          disabledBackgroundColor ?? this.disabledBackgroundColor,
+      disabledForegroundColor:
+          disabledForegroundColor ?? this.disabledForegroundColor,
       overlayColor: overlayColor ?? this.overlayColor,
       statusTextStyle: statusTextStyle ?? this.statusTextStyle,
       borderRadius: borderRadius ?? this.borderRadius,
@@ -155,6 +173,10 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
       alignment: t < 0.5 ? alignment : other.alignment,
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       foregroundColor: Color.lerp(foregroundColor, other.foregroundColor, t),
+      disabledBackgroundColor:
+          Color.lerp(disabledBackgroundColor, other.disabledBackgroundColor, t),
+      disabledForegroundColor:
+          Color.lerp(disabledForegroundColor, other.disabledForegroundColor, t),
       overlayColor: Color.lerp(overlayColor, other.overlayColor, t),
       statusTextStyle:
           TextStyle.lerp(statusTextStyle, other.statusTextStyle, t),

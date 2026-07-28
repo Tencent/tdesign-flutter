@@ -196,10 +196,18 @@ void main() {
       );
       expect(disabledIcon.color, token.textDisabledColor);
       expect(
+        (disabledContainer.decoration! as BoxDecoration).border,
+        isNull,
+      );
+      expect(
         (enabledContainer.decoration! as BoxDecoration).color,
         token.bgColorSecondaryContainer,
       );
       expect(enabledIcon.color, token.textColorPlaceholder);
+      expect(
+        (enabledContainer.decoration! as BoxDecoration).border,
+        isNull,
+      );
       expect(disabledIcon.color, isNot(enabledIcon.color));
       expect(
         (disabledContainer.decoration! as BoxDecoration).color,
@@ -401,6 +409,8 @@ void main() {
           alignment: WrapAlignment.center,
           backgroundColor: Colors.green,
           foregroundColor: Colors.red,
+          disabledBackgroundColor: Colors.brown,
+          disabledForegroundColor: Colors.pink,
           overlayColor: Colors.blue,
           statusTextStyle: statusStyle,
           borderRadius: 12,
@@ -425,6 +435,30 @@ void main() {
         ),
       );
       expect((add.decoration as BoxDecoration).shape, BoxShape.circle);
+
+      await tester.pumpWidget(wrap(
+        TUpload(files: const []),
+        uploadTheme: const TUploadThemeData(
+          disabledBackgroundColor: Colors.brown,
+          disabledForegroundColor: Colors.pink,
+        ),
+      ));
+      final disabledAdd = tester.widget<Container>(
+        find.descendant(
+          of: find.byKey(const ValueKey('upload-add')),
+          matching: find.byType(Container),
+        ),
+      );
+      final disabledIcon = tester.widget<Icon>(
+        find.descendant(
+          of: find.byKey(const ValueKey('upload-add')),
+          matching: find.byType(Icon),
+        ),
+      );
+      final disabledDecoration = disabledAdd.decoration! as BoxDecoration;
+      expect(disabledDecoration.color, Colors.brown);
+      expect(disabledDecoration.border, isNull);
+      expect(disabledIcon.color, Colors.pink);
     });
   });
 
@@ -557,6 +591,8 @@ void main() {
       alignment: WrapAlignment.start,
       backgroundColor: Colors.white,
       foregroundColor: Colors.black,
+      disabledBackgroundColor: Colors.grey,
+      disabledForegroundColor: Colors.blueGrey,
       overlayColor: Colors.black54,
       statusTextStyle: TextStyle(fontSize: 10),
       borderRadius: 4,
@@ -574,6 +610,8 @@ void main() {
       alignment: WrapAlignment.end,
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
+      disabledBackgroundColor: Colors.brown,
+      disabledForegroundColor: Colors.pink,
       overlayColor: Colors.blue,
       statusTextStyle: TextStyle(fontSize: 14),
       borderRadius: 12,
@@ -585,10 +623,21 @@ void main() {
     );
     expect(base.copyWith().itemSize, 80);
     expect(base.copyWith(itemSize: 90).itemSize, 90);
+    expect(base.copyWith().disabledForegroundColor, Colors.blueGrey);
+    expect(
+      base
+          .copyWith(disabledForegroundColor: Colors.green)
+          .disabledForegroundColor,
+      Colors.green,
+    );
     expect(base.lerp(null, 0.5), same(base));
     expect(base.lerp(other, 0.25).variant, TUploadVariant.square);
     expect(base.lerp(other, 0.75).variant, TUploadVariant.circle);
     expect(base.lerp(other, 0.5).itemSize, 100);
+    expect(
+      base.lerp(other, 0.5).disabledBackgroundColor,
+      Color.lerp(Colors.grey, Colors.brown, 0.5),
+    );
   });
 }
 

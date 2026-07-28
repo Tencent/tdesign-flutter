@@ -14,6 +14,7 @@ class TUploadPage extends StatefulWidget {
 
 class _TUploadPageState extends State<TUploadPage> {
   List<TUploadFile> _files = [];
+  List<TUploadFile> _emptyFiles = [];
   List<TUploadFile> _statusFiles = const [
     TUploadFile(
       id: 'uploading',
@@ -83,10 +84,9 @@ class _TUploadPageState extends State<TUploadPage> {
                 const TText('可用'),
                 const SizedBox(height: 8),
                 TUpload(
-                  files: const [],
+                  files: _emptyFiles,
                   maxFiles: 1,
-                  picker: () async => const [],
-                  onChanged: (_) {},
+                  onChanged: (files) => setState(() => _emptyFiles = files),
                 ),
               ],
             ),

@@ -9,10 +9,9 @@ Widget _buildEmptyStates(BuildContext context) {
                 const TText('可用'),
                 const SizedBox(height: 8),
                 TUpload(
-                  files: const [],
+                  files: _emptyFiles,
                   maxFiles: 1,
-                  picker: () async => const [],
-                  onChanged: (_) {},
+                  onChanged: (files) => setState(() => _emptyFiles = files),
                 ),
               ],
             ),

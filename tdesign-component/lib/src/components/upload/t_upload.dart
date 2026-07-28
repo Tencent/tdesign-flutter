@@ -113,10 +113,11 @@ class TUpload extends StatelessWidget {
   ) {
     final backgroundColor = _enabled
         ? (theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer)
-        : context.tTheme.bgColorComponentDisabled;
+        : (theme?.disabledBackgroundColor ??
+            context.tTheme.bgColorComponentDisabled);
     final foregroundColor = _enabled
         ? (theme?.foregroundColor ?? context.tTheme.textColorPlaceholder)
-        : context.tTheme.textDisabledColor;
+        : (theme?.disabledForegroundColor ?? context.tTheme.textDisabledColor);
     return Semantics(
       button: true,
       enabled: _enabled,
