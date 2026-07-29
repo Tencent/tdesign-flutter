@@ -139,7 +139,7 @@ void main() {
       expect(theme.extension<TDialogThemeData>(), isNull);
       expect(theme.extension<TDividerThemeData>(), isNotNull);
       expect(theme.extension<TDrawerThemeData>(), isNotNull);
-      expect(theme.extension<TDropdownThemeData>(), isNotNull);
+      expect(theme.extension<TDropdownThemeData>(), isNull);
       expect(theme.extension<TEmptyThemeData>(), isNotNull);
       expect(theme.extension<TFabThemeData>(), isNotNull);
       expect(theme.extension<TFooterThemeData>(), isNotNull);

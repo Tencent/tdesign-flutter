@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -9,350 +7,242 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../../util/list_ext.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
-import '../checkbox/t_check_box.dart' show TContentDirection;
-import '../radio/t_radio.dart';
-import '../text/t_text.dart';
-import 't_dropdown_inherited.dart';
 import 't_dropdown_menu.dart';
-import 't_dropdown_popup.dart';
+import 't_dropdown_theme_data.dart';
 
-/// 下拉菜单自定义内容构建器
-typedef TDropdownItemContentBuilder = Widget Function(BuildContext context);
-
-/// 下拉菜单内容
-class TDropdownItem<T> extends StatefulWidget {
-  /// 创建下拉菜单内容
-  const TDropdownItem({
-    super.key,
+/// 下拉筛选面板中的不可变选项。
+class TDropdownMenuOption<T> {
+  const TDropdownMenuOption({
+    required this.value,
+    required this.label,
     this.disabled = false,
-    this.label,
-    this.arrowIcon,
-    this.arrowColor,
-    this.multiple = false,
-    this.options = const [],
-    this.value,
-    this.values = const {},
-    this.builder,
-    this.optionsColumns = 1,
-    this.onChanged,
-    this.onValuesChanged,
-    this.onConfirm,
-    this.onReset,
-    this.minHeight,
-    this.maxHeight,
-    this.tabBarWidth,
-    this.tabBarAlign,
-    this.tabBarFlex = 1,
-  })  : assert(optionsColumns >= 1 && optionsColumns <= 3),
-        assert(tabBarFlex > 0);
+    this.group,
+  });
 
-  /// 是否禁用
+  final T value;
+  final String label;
   final bool disabled;
-
-  /// 标题
-  final String? label;
-
-  /// 自定义箭头图标
-  final IconData? arrowIcon;
-
-  /// 自定义箭头颜色
-  final Color? arrowColor;
-
-  /// 是否多选
-  final bool multiple;
-
-  /// 不可变选项数据
-  final List<TDropdownItemOption<T>> options;
-
-  /// 单选值
-  final T? value;
-
-  /// 多选值
-  final Set<T> values;
-
-  /// 完全自定义展示内容
-  final TDropdownItemContentBuilder? builder;
-
-  /// 选项分栏数
-  final int optionsColumns;
-
-  /// 单选值变化
-  final ValueChanged<T?>? onChanged;
-
-  /// 多选值变化
-  final ValueChanged<Set<T>>? onValuesChanged;
-
-  /// 点击确认时触发
-  final ValueChanged<Set<T>>? onConfirm;
-
-  /// 点击重置时触发
-  final VoidCallback? onReset;
-
-  /// 内容最小高度
-  final double? minHeight;
-
-  /// 内容最大高度
-  final double? maxHeight;
-
-  /// item 在可滚动菜单栏中的宽度
-  final double? tabBarWidth;
-
-  /// 标签和箭头的对齐方式
-  final MainAxisAlignment? tabBarAlign;
-
-  /// item 在非滚动菜单栏中的宽度占比
-  final int tabBarFlex;
-
-  /// 多选模式下重置和确认操作区的固定高度。
-  static const double operateHeight = 73;
-
-  double? get minContentHeight =>
-      multiple && minHeight != null ? minHeight! + operateHeight : minHeight;
-
-  double? get maxContentHeight =>
-      multiple && maxHeight != null ? maxHeight! + operateHeight : maxHeight;
-
-  /// 菜单栏展示文案
-  String getLabel() {
-    if (multiple) {
-      return label ?? '';
-    }
-    for (final option in options) {
-      if (option.value == value) {
-        return option.label;
-      }
-    }
-    return label ?? '';
-  }
-
-  @override
-  State<TDropdownItem<T>> createState() => _TDropdownItemState<T>();
+  final String? group;
 }
 
-class _TDropdownItemState<T> extends State<TDropdownItem<T>> {
-  late TDropdownPopup<T> popup;
-  late ValueNotifier<TDropdownMenuDirection> directionListenable;
+/// 单选筛选面板。选择有效选项后立即提交并关闭。
+class TDropdownSingleSelectPanel<T> extends StatelessWidget {
+  const TDropdownSingleSelectPanel({
+    super.key,
+    required this.controller,
+    required this.options,
+    required this.value,
+    required this.onChanged,
+    this.maxHeight,
+  });
+
+  final TDropdownMenuPanelController controller;
+  final List<TDropdownMenuOption<T>> options;
+  final T? value;
+  final ValueChanged<T> onChanged;
+  final double? maxHeight;
 
   @override
   Widget build(BuildContext context) {
-    final inherited = TDropdownInherited.of<T>(context)!;
-    popup = inherited.popupState;
-    directionListenable = inherited.directionListenable;
-    if (widget.builder != null) {
-      return widget.builder!(context);
-    }
-    return widget.multiple || widget.optionsColumns > 1
-        ? _buildCheckboxList()
-        : _buildRadioList();
-  }
-
-  Widget _buildCheckboxList() {
-    final padding = context.tTheme.spacer16;
-    final grouped = _groupedRows();
-    final maxHeight = widget.maxContentHeight ??
-        (directionListenable.value == TDropdownMenuDirection.auto
-            ? double.infinity
-            : max<double>(
-                popup.maxContentHeight - TDropdownItem.operateHeight,
-                0,
-              ));
-    return Column(
-      children: [
-        Container(
-          color: context.tTheme.bgColorContainer,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: widget.minContentHeight ?? 0,
-              maxHeight: maxHeight,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (final entry in grouped.entries) ...[
-                    if (grouped.length > 1 || entry.key != null)
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.fromLTRB(
-                          padding,
-                          padding,
-                          padding,
-                          0,
-                        ),
-                        color: context.tTheme.bgColorContainer,
-                        child: TText(
-                          entry.key ?? context.resource.other,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    Container(
-                      padding: EdgeInsets.all(padding),
-                      color: context.tTheme.bgColorContainer,
-                      child: Column(
-                        children: [
-                          for (var rowIndex = 0;
-                              rowIndex < entry.value.length;
-                              rowIndex++)
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: rowIndex == entry.value.length - 1
-                                    ? 0
-                                    : context.tTheme.spacer12,
-                              ),
-                              child: _buildOptionRow(entry.value[rowIndex]),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        ),
-        if (widget.multiple) _buildOperations(),
-      ],
-    );
-  }
-
-  Widget _buildOptionRow(List<TDropdownItemOption<T>> options) {
-    return Row(
-      children: [
-        for (var index = 0; index < widget.optionsColumns; index++)
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: index == widget.optionsColumns - 1
-                    ? 0
-                    : context.tTheme.spacer12,
-              ),
-              child: index < options.length
-                  ? _buildCheckboxOption(options[index])
-                  : const SizedBox.shrink(),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildCheckboxOption(TDropdownItemOption<T> option) {
-    final selected = widget.multiple
-        ? widget.values.contains(option.value)
-        : widget.value == option.value;
-    final disabled = option.disabled;
-    return Semantics(
-      enabled: !disabled,
-      checked: selected,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: disabled ? null : () => _selectCheckbox(option),
-        child: Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: disabled
-                ? context.tTheme.bgColorSecondaryContainerHover
-                : selected
-                    ? context.tTheme.brandLightColor
-                    : context.tTheme.bgColorSecondaryContainer,
-            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-          ),
-          alignment: Alignment.center,
-          child: TText(
-            option.label,
-            textColor: disabled
-                ? option.disabledColor ?? context.tTheme.textDisabledColor
-                : selected
-                    ? option.selectedColor ?? context.tTheme.brandColor7
-                    : context.tTheme.textColorPrimary,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+    final theme = Theme.of(context).extension<TDropdownThemeData>() ??
+        const TDropdownThemeData();
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: maxHeight ?? MediaQuery.sizeOf(context).height,
       ),
-    );
-  }
-
-  Widget _buildRadioList() {
-    final radios = TRadioGroup<T>(
-      value: widget.value,
-      onChanged: _selectRadio,
-      options: [
-        for (final option in widget.options)
-          TRadioOption<T>(
-            value: option.value,
+      child: ListView.builder(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        itemCount: options.length,
+        itemBuilder: (context, index) {
+          final option = options[index];
+          final selected = option.value == value;
+          return _DropdownOptionRow(
             label: option.label,
+            selected: selected,
             disabled: option.disabled,
-          ),
-      ],
-      contentDirection: TContentDirection.left,
-      itemBuilder: (context, option, selected, disabled) {
-        final source = widget.options.firstWhere(
-          (item) => item.value == option.value,
-        );
-        return Container(
-          height: 56,
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
-          color: context.tTheme.bgColorContainer,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: TText(
-                  option.label,
-                  textColor: disabled
-                      ? context.tTheme.textDisabledColor
-                      : context.tTheme.textColorPrimary,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+            height: theme.optionHeight ?? 56,
+            padding: theme.optionPadding ??
+                EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+            onTap: option.disabled
+                ? null
+                : () {
+                    onChanged(option.value);
+                    unawaited(
+                      controller.close(TDropdownMenuCloseReason.selection),
+                    );
+                  },
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// 多选筛选面板。
+///
+/// [values] 仅作为每次打开时的已提交值。选项点击只更新面板内部草稿，
+/// 点击确认后才通过 [onConfirm] 提交。
+class TDropdownMultiSelectPanel<T> extends StatefulWidget {
+  const TDropdownMultiSelectPanel({
+    super.key,
+    required this.controller,
+    required this.options,
+    required this.values,
+    required this.onConfirm,
+    this.columns = 1,
+    this.maxHeight,
+  }) : assert(columns >= 1 && columns <= 3);
+
+  final TDropdownMenuPanelController controller;
+  final List<TDropdownMenuOption<T>> options;
+  final Set<T> values;
+  final ValueChanged<Set<T>> onConfirm;
+  final int columns;
+  final double? maxHeight;
+
+  @override
+  State<TDropdownMultiSelectPanel<T>> createState() =>
+      _TDropdownMultiSelectPanelState<T>();
+}
+
+class _TDropdownMultiSelectPanelState<T>
+    extends State<TDropdownMultiSelectPanel<T>> {
+  late Set<T> _draft;
+  late Set<T> _sourceValues;
+
+  @override
+  void initState() {
+    super.initState();
+    _sourceValues = Set<T>.of(widget.values);
+    _draft = Set<T>.of(widget.values);
+  }
+
+  @override
+  void didUpdateWidget(TDropdownMultiSelectPanel<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final changed = !_setEquals(widget.values, _sourceValues);
+    final dirty = !_setEquals(_draft, _sourceValues);
+    if (changed) {
+      _sourceValues = Set<T>.of(widget.values);
+      if (!dirty) {
+        _draft = Set<T>.of(widget.values);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TDropdownThemeData>() ??
+        const TDropdownThemeData();
+    final groups = _groupedOptions();
+    final availableHeight =
+        widget.maxHeight ?? MediaQuery.sizeOf(context).height;
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: availableHeight),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            fit: FlexFit.loose,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(context.tTheme.spacer16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final entry in groups.entries) ...[
+                      if (entry.key != null)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            bottom: context.tTheme.spacer12,
+                          ),
+                          child: Text(
+                            entry.key!,
+                            style: theme.optionTextStyle ??
+                                DefaultTextStyle.of(context).style,
+                          ),
+                        ),
+                      ..._buildRows(context, entry.value, theme),
+                      if (entry.key != groups.keys.last)
+                        SizedBox(height: context.tTheme.spacer16),
+                    ],
+                  ],
                 ),
               ),
-              if (selected)
-                Icon(
-                  Icons.check,
-                  color: disabled
-                      ? context.tTheme.textDisabledColor
-                      : source.selectedColor ?? context.tTheme.brandNormalColor,
-                ),
-            ],
+            ),
           ),
-        );
-      },
-    );
-    if (widget.minContentHeight == null && widget.maxContentHeight == null) {
-      return radios;
-    }
-    return Container(
-      color: context.tTheme.bgColorContainer,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: widget.minContentHeight ?? 0,
-          maxHeight: widget.maxContentHeight ?? double.infinity,
-        ),
-        child: widget.maxContentHeight == null
-            ? radios
-            : SingleChildScrollView(child: radios),
+          _buildOperations(context, theme),
+        ],
       ),
     );
   }
 
-  Widget _buildOperations() {
+  List<Widget> _buildRows(
+    BuildContext context,
+    List<TDropdownMenuOption<T>> options,
+    TDropdownThemeData theme,
+  ) {
+    final rows = <Widget>[];
+    for (var start = 0; start < options.length; start += widget.columns) {
+      final rowOptions = options.skip(start).take(widget.columns).toList();
+      rows.add(
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: start + widget.columns >= options.length
+                ? 0
+                : context.tTheme.spacer12,
+          ),
+          child: Row(
+            children: List<Widget>.generate(widget.columns, (column) {
+              if (column >= rowOptions.length) {
+                return const Expanded(child: SizedBox.shrink());
+              }
+              final option = rowOptions[column];
+              final selected = _draft.contains(option.value);
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.only(
+                    end: column == widget.columns - 1
+                        ? 0
+                        : context.tTheme.spacer12,
+                  ),
+                  child: _DropdownOptionChip(
+                    label: option.label,
+                    selected: selected,
+                    disabled: option.disabled,
+                    theme: theme,
+                    onTap: option.disabled ? null : () => _toggle(option.value),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      );
+    }
+    return rows;
+  }
+
+  Widget _buildOperations(
+    BuildContext context,
+    TDropdownThemeData theme,
+  ) {
     return Container(
-      height: TDropdownItem.operateHeight,
-      padding: EdgeInsets.all(context.tTheme.spacer16),
+      padding:
+          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer16),
       decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
+        color:
+            theme.panelBackgroundColor ?? Theme.of(context).colorScheme.surface,
         border: Border(
-          top:
-              BorderSide(color: context.tTheme.componentStrokeColor, width: .5),
-          bottom: directionListenable.value == TDropdownMenuDirection.up
-              ? BorderSide(
-                  color: context.tTheme.componentStrokeColor,
-                  width: .5,
-                )
-              : BorderSide.none,
+          top: BorderSide(
+            color: theme.dividerColor ??
+                DividerTheme.of(context).color ??
+                Theme.of(context).dividerColor,
+            width: 0.5,
+          ),
         ),
       ),
       child: Row(
@@ -360,32 +250,23 @@ class _TDropdownItemState<T> extends State<TDropdownItem<T>> {
           Expanded(
             child: TButton(
               colorScheme: TButtonColorScheme.light,
-              onPressed: () {
-                widget.onValuesChanged?.call(Set<T>.unmodifiable(<T>[]));
-                widget.onReset?.call();
-              },
-              child: Text(
-                context.resource.reset,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-              ),
+              onPressed: () => setState(_draft.clear),
+              child: Text(context.resource.reset),
             ),
           ),
-          SizedBox(width: context.tTheme.spacer16),
+          SizedBox(width: theme.actionGap ?? context.tTheme.spacer16),
           Expanded(
             child: TButton(
               colorScheme: TButtonColorScheme.primary,
               onPressed: () {
-                widget.onConfirm?.call(Set<T>.unmodifiable(widget.values));
-                unawaited(_close());
+                widget.onConfirm(Set<T>.unmodifiable(_draft));
+                unawaited(
+                  widget.controller.close(
+                    TDropdownMenuCloseReason.confirm,
+                  ),
+                );
               },
-              child: Text(
-                context.resource.confirm,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-              ),
+              child: Text(context.resource.confirm),
             ),
           ),
         ],
@@ -393,86 +274,152 @@ class _TDropdownItemState<T> extends State<TDropdownItem<T>> {
     );
   }
 
-  Map<String?, List<List<TDropdownItemOption<T>>>> _groupedRows() {
-    final grouped = SplayTreeMap<String?, List<TDropdownItemOption<T>>>(
-      (a, b) {
-        if (a == b) {
-          return 0;
-        }
-        if (a == null) {
-          return 1;
-        }
-        if (b == null) {
-          return -1;
-        }
-        return a.compareTo(b);
-      },
-    );
+  Map<String?, List<TDropdownMenuOption<T>>> _groupedOptions() {
+    final groups = <String?, List<TDropdownMenuOption<T>>>{};
     for (final option in widget.options) {
-      grouped.putIfAbsent(option.group, () => []).add(option);
+      groups.putIfAbsent(option.group, () => <TDropdownMenuOption<T>>[]).add(
+            option,
+          );
     }
-    return <String?, List<List<TDropdownItemOption<T>>>>{
-      for (final entry in grouped.entries)
-        entry.key: entry.value.chunk(widget.optionsColumns),
-    };
+    return groups;
   }
 
-  void _selectRadio(T? value) {
-    widget.onChanged?.call(value);
-    if (value != null) {
-      unawaited(_close());
-    }
+  void _toggle(T value) {
+    setState(() {
+      if (!_draft.add(value)) {
+        _draft.remove(value);
+      }
+    });
   }
 
-  void _selectCheckbox(TDropdownItemOption<T> option) {
-    if (!widget.multiple) {
-      _selectRadio(option.value);
-      return;
-    }
-    final next = Set<T>.of(widget.values);
-    if (!next.add(option.value)) {
-      next.remove(option.value);
-    }
-    widget.onValuesChanged?.call(Set<T>.unmodifiable(next));
-  }
+  bool _setEquals(Set<T> left, Set<T> right) =>
+      left.length == right.length && left.containsAll(right);
+}
 
-  Future<void> _close() async {
-    if (!widget.multiple || widget.optionsColumns > 1) {
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-    }
-    if (mounted) {
-      await Navigator.maybePop(context);
-    }
+class _DropdownOptionRow extends StatelessWidget {
+  const _DropdownOptionRow({
+    required this.label,
+    required this.selected,
+    required this.disabled,
+    required this.height,
+    required this.padding,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final bool disabled;
+  final double height;
+  final EdgeInsetsGeometry padding;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TDropdownThemeData>() ??
+        const TDropdownThemeData();
+    final base = theme.optionTextStyle ?? DefaultTextStyle.of(context).style;
+    final style = disabled
+        ? theme.disabledOptionTextStyle ??
+            base.copyWith(color: Theme.of(context).disabledColor)
+        : selected
+            ? theme.selectedOptionTextStyle ??
+                base.copyWith(color: Theme.of(context).colorScheme.primary)
+            : base;
+    return Semantics(
+      selected: selected,
+      enabled: !disabled,
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: height,
+          child: Padding(
+            padding: padding,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: style,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (selected)
+                  Icon(
+                    Icons.check,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
-/// 不可变下拉选项
-class TDropdownItemOption<T> {
-  /// 创建下拉选项
-  const TDropdownItemOption({
-    required this.value,
+class _DropdownOptionChip extends StatelessWidget {
+  const _DropdownOptionChip({
     required this.label,
-    this.disabled = false,
-    this.group,
-    this.selectedColor,
-    this.disabledColor,
+    required this.selected,
+    required this.disabled,
+    required this.theme,
+    required this.onTap,
   });
 
-  /// 选项值
-  final T value;
-
-  /// 选项标题
   final String label;
-
-  /// 是否禁用
+  final bool selected;
   final bool disabled;
+  final TDropdownThemeData theme;
+  final VoidCallback? onTap;
 
-  /// 分组名
-  final String? group;
-
-  /// 选中颜色
-  final Color? selectedColor;
-
-  /// 禁用颜色
-  final Color? disabledColor;
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = disabled
+        ? theme.disabledOptionColor ??
+            Theme.of(context).disabledColor.withValues(alpha: 0.12)
+        : selected
+            ? theme.selectedOptionColor ??
+                Theme.of(context).colorScheme.primaryContainer
+            : theme.optionColor ??
+                Theme.of(context).colorScheme.surfaceContainerHighest;
+    final base = theme.optionTextStyle ?? DefaultTextStyle.of(context).style;
+    final style = disabled
+        ? theme.disabledOptionTextStyle ??
+            base.copyWith(color: Theme.of(context).disabledColor)
+        : selected
+            ? theme.selectedOptionTextStyle ??
+                base.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                )
+            : base;
+    return Semantics(
+      selected: selected,
+      enabled: !disabled,
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: theme.optionBorderRadius ??
+            BorderRadius.circular(context.tTheme.radiusDefault),
+        child: Container(
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: theme.optionBorderRadius ??
+                BorderRadius.circular(context.tTheme.radiusDefault),
+          ),
+          padding: theme.optionPadding ??
+              EdgeInsets.symmetric(horizontal: context.tTheme.spacer8),
+          child: Text(
+            label,
+            style: style,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    );
+  }
 }

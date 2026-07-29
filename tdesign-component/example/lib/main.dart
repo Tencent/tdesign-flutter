@@ -27,6 +27,7 @@ Future<void> main() async {
     });
   });
   sideBarExamplePage.forEach(examplePageList.add);
+  TExampleRoute.init();
 
   runApp(const MyApp());
 

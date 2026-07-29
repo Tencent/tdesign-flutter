@@ -1,313 +1,785 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tdesign_icons/tdesign_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
-import './t_dropdown_item.dart';
-import 't_dropdown_popup.dart';
 import 't_dropdown_theme_data.dart';
 
-/// 菜单展开方向
-enum TDropdownMenuDirection {
-  /// 向下
-  down,
+/// 下拉筛选面板相对筛选栏的展开位置。
+enum TDropdownMenuPlacement { auto, below, above }
 
-  /// 向上
-  up,
-
-  /// 根据内容高度动态展示方向
-  auto,
+/// 下拉筛选面板关闭的原因。
+enum TDropdownMenuCloseReason {
+  selection,
+  confirm,
+  cancel,
+  overlay,
+  back,
+  trigger,
+  controller,
+  switchItem,
 }
 
-/// 下拉菜单构建器
-typedef TDropdownItemBuilder<T> = List<TDropdownItem<T>> Function(
-    BuildContext context);
+/// 下拉筛选面板关闭回调。
+typedef TDropdownMenuClosedCallback = void Function(
+  int index,
+  TDropdownMenuCloseReason reason,
+);
 
-/// 自定义标签内容
-typedef LabelBuilder = Widget Function(
-    BuildContext context, String label, bool isOpened, int index);
+/// 默认触发项的面板构建器。
+typedef TDropdownMenuPanelBuilder = Widget Function(
+  BuildContext context,
+  TDropdownMenuPanelController controller,
+);
 
-/// 下拉菜单
-class TDropdownMenu<T> extends StatefulWidget {
+/// 自定义触发项构建器。
+typedef TDropdownMenuTriggerBuilder = Widget Function(
+  BuildContext context,
+  TDropdownMenuTriggerState state,
+);
+
+/// 自定义触发项可读取的不可变状态。
+class TDropdownMenuTriggerState {
+  const TDropdownMenuTriggerState({
+    required this.index,
+    required this.isOpen,
+    required this.enabled,
+    required this.toggle,
+  });
+
+  final int index;
+  final bool isOpen;
+  final bool enabled;
+  final VoidCallback toggle;
+}
+
+/// 当前面板可使用的局部控制器。
+class TDropdownMenuPanelController {
+  const TDropdownMenuPanelController._({
+    required this.index,
+    required Future<void> Function(TDropdownMenuCloseReason reason) close,
+  }) : _close = close;
+
+  final int index;
+  final Future<void> Function(TDropdownMenuCloseReason reason) _close;
+
+  Future<void> close([
+    TDropdownMenuCloseReason reason = TDropdownMenuCloseReason.cancel,
+  ]) =>
+      _close(reason);
+}
+
+/// 一个筛选触发项及其对应面板。
+class TDropdownMenuItem {
+  const TDropdownMenuItem({
+    required this.label,
+    required this.panelBuilder,
+    this.enabled = true,
+    this.flex = 1,
+    this.width,
+  })  : triggerBuilder = null,
+        assert(flex > 0);
+
+  const TDropdownMenuItem.custom({
+    required this.triggerBuilder,
+    required this.panelBuilder,
+    this.enabled = true,
+    this.flex = 1,
+    this.width,
+  })  : label = null,
+        assert(flex > 0);
+
+  final String? label;
+  final TDropdownMenuTriggerBuilder? triggerBuilder;
+  final TDropdownMenuPanelBuilder panelBuilder;
+  final bool enabled;
+  final int flex;
+  final double? width;
+}
+
+/// 类型安全的下拉筛选栏控制器。
+class TDropdownMenuController extends ChangeNotifier {
+  Future<void> Function(int index)? _openCallback;
+  Future<void> Function(TDropdownMenuCloseReason reason)? _closeCallback;
+  Future<void> Function(int index)? _toggleCallback;
+  int? _openIndex;
+
+  int? get openIndex => _openIndex;
+  bool get isOpen => _openIndex != null;
+
+  Future<void> open(int index) async {
+    await _openCallback?.call(index);
+  }
+
+  Future<void> close() async {
+    await _closeCallback?.call(TDropdownMenuCloseReason.controller);
+  }
+
+  Future<void> toggle(int index) async {
+    await _toggleCallback?.call(index);
+  }
+
+  void _attach({
+    required Future<void> Function(int index) open,
+    required Future<void> Function(TDropdownMenuCloseReason reason) close,
+    required Future<void> Function(int index) toggle,
+  }) {
+    _openCallback = open;
+    _closeCallback = close;
+    _toggleCallback = toggle;
+  }
+
+  void _detach() {
+    _openCallback = null;
+    _closeCallback = null;
+    _toggleCallback = null;
+    _openIndex = null;
+  }
+
+  void _setOpenIndex(int? value) {
+    if (_openIndex == value) {
+      return;
+    }
+    _openIndex = value;
+    notifyListeners();
+  }
+}
+
+/// 用于页面内容排序、筛选的横向下拉筛选栏。
+class TDropdownMenu extends StatefulWidget {
   const TDropdownMenu({
-    Key? key,
-    this.builder,
-    this.items,
-    this.closeOnClickOverlay = true,
-    this.direction = TDropdownMenuDirection.auto,
-    this.duration = 200.0,
+    super.key,
+    required this.items,
+    this.controller,
+    this.placement = TDropdownMenuPlacement.auto,
+    this.scrollable = false,
     this.showOverlay = true,
-    this.isScrollable = false,
-    this.labelBuilder,
-    this.onMenuOpened,
-    this.onMenuClosed,
-  }) : super(key: key);
+    this.closeOnOverlayTap = true,
+    this.useRootOverlay = false,
+    this.animationDuration = const Duration(milliseconds: 200),
+    this.onOpened,
+    this.onClosed,
+  });
 
-  /// 下拉菜单构建器，优先级高于[items]
-  final TDropdownItemBuilder<T>? builder;
-
-  /// 下拉菜单
-  final List<TDropdownItem<T>>? items;
-
-  /// 是否在点击遮罩层后关闭菜单
-  final bool? closeOnClickOverlay;
-
-  /// 菜单展开方向（down、up、auto）
-  final TDropdownMenuDirection? direction;
-
-  /// 动画时长，毫秒
-  final double? duration;
-
-  /// 是否显示遮罩层
-  final bool? showOverlay;
-
-  /// 自定义标签内容
-  final LabelBuilder? labelBuilder;
-
-  /// 展开菜单事件
-  final ValueChanged<int>? onMenuOpened;
-
-  /// 关闭菜单事件
-  final ValueChanged<int>? onMenuClosed;
-
-  /// 是否开启滚动列表
-  final bool? isScrollable;
+  final List<TDropdownMenuItem> items;
+  final TDropdownMenuController? controller;
+  final TDropdownMenuPlacement placement;
+  final bool scrollable;
+  final bool showOverlay;
+  final bool closeOnOverlayTap;
+  final bool useRootOverlay;
+  final Duration animationDuration;
+  final ValueChanged<int>? onOpened;
+  final TDropdownMenuClosedCallback? onClosed;
 
   @override
-  State<TDropdownMenu<T>> createState() => _TDropdownMenuState<T>();
+  State<TDropdownMenu> createState() => _TDropdownMenuState();
 }
 
-class _TDropdownMenuState<T> extends State<TDropdownMenu<T>>
-    with TickerProviderStateMixin {
-  List<TDropdownItem<T>>? _items;
-  List<AnimationController>? _iconControllers;
-  late List<Animation<double>> _iconAnimations;
-  late List<bool> _isOpened;
-  TDropdownPopup<T>? _dropdownPopup;
+class _TDropdownMenuState extends State<TDropdownMenu>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  final LayerLink _layerLink = LayerLink();
+  final GlobalKey _barKey = GlobalKey();
+  final GlobalKey _panelKey = GlobalKey();
+  final FocusNode _panelFocusNode =
+      FocusNode(debugLabel: 'TDropdownMenu panel');
+  late AnimationController _animationController;
+  late TDropdownMenuController _controller;
+  late bool _ownsController;
+  List<FocusNode> _triggerFocusNodes = <FocusNode>[];
+  OverlayEntry? _overlayEntry;
+  OverlayState? _overlayState;
+  CapturedThemes? _capturedThemes;
+  ScrollPosition? _scrollPosition;
+  int _operationEpoch = 0;
+  bool _disposing = false;
+  bool _overlayRefreshScheduled = false;
+  bool _placementCheckScheduled = false;
+  bool _autoOpensAbove = false;
+
+  TDropdownThemeData get _theme =>
+      Theme.of(context).extension<TDropdownThemeData>() ??
+      const TDropdownThemeData();
+
+  Duration get _duration =>
+      widget.animationDuration == const Duration(milliseconds: 200)
+          ? _theme.animationDuration ?? widget.animationDuration
+          : widget.animationDuration;
 
   @override
   void initState() {
     super.initState();
-    _init();
+    WidgetsBinding.instance.addObserver(this);
+    _animationController =
+        AnimationController(vsync: this, duration: widget.animationDuration);
+    _bindController(widget.controller);
+    _syncFocusNodes();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final next = Scrollable.maybeOf(context)?.position;
+    if (!identical(next, _scrollPosition)) {
+      _scrollPosition?.removeListener(_refreshOverlay);
+      _scrollPosition = next;
+      _scrollPosition?.addListener(_refreshOverlay);
+    }
+    _animationController.duration = _duration;
+    final overlay = _overlayState;
+    if (overlay != null) {
+      _capturedThemes = InheritedTheme.capture(
+        from: context,
+        to: overlay.context,
+      );
+    }
+    _refreshOverlay();
+  }
+
+  @override
+  void didUpdateWidget(TDropdownMenu oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    var controllerWasOpen = false;
+    if (!identical(widget.controller, oldWidget.controller)) {
+      controllerWasOpen = _controller.isOpen;
+      if (controllerWasOpen) {
+        _operationEpoch++;
+        _animationController.stop();
+        _removeOverlay();
+      }
+      _controller._detach();
+      if (_ownsController) {
+        _controller.dispose();
+      }
+      _bindController(widget.controller);
+      if (controllerWasOpen) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && !_controller.isOpen) {
+            _animationController.value = 0;
+          }
+        });
+      }
+    }
+    if (widget.items.length != oldWidget.items.length) {
+      _syncFocusNodes();
+    }
+    _animationController.duration = _duration;
+    final openIndex = _controller.openIndex;
+    if (openIndex != null &&
+        (openIndex >= widget.items.length ||
+            !widget.items[openIndex].enabled)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || _controller.openIndex != openIndex) {
+          return;
+        }
+        if (openIndex >= widget.items.length ||
+            !widget.items[openIndex].enabled) {
+          unawaited(_close(TDropdownMenuCloseReason.cancel));
+        }
+      });
+    } else if (openIndex != null &&
+        widget.useRootOverlay != oldWidget.useRootOverlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _controller.openIndex == openIndex) {
+          _insertOverlay();
+        }
+      });
+    } else {
+      _refreshOverlay();
+    }
+  }
+
+  @override
+  void didChangeMetrics() {
+    _refreshOverlay();
   }
 
   @override
   void dispose() {
-    _iconControllers?.forEach((controller) {
-      controller.dispose();
-    });
+    _disposing = true;
+    WidgetsBinding.instance.removeObserver(this);
+    _scrollPosition?.removeListener(_refreshOverlay);
+    _operationEpoch++;
+    _overlayEntry?.remove();
+    _overlayEntry?.dispose();
+    _overlayEntry = null;
+    _overlayState = null;
+    _capturedThemes = null;
+    _controller._detach();
+    if (_ownsController) {
+      _controller.dispose();
+    }
+    for (final node in _triggerFocusNodes) {
+      node.dispose();
+    }
+    _panelFocusNode.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
-  @override
-  void didUpdateWidget(TDropdownMenu<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.builder != oldWidget.builder ||
-        widget.items != oldWidget.items) {
-      _init();
+  void _bindController(TDropdownMenuController? external) {
+    _ownsController = external == null;
+    _controller = external ?? TDropdownMenuController();
+    _controller._attach(open: _open, close: _close, toggle: _toggle);
+  }
+
+  void _syncFocusNodes() {
+    final old = _triggerFocusNodes;
+    _triggerFocusNodes = List<FocusNode>.generate(
+      widget.items.length,
+      (index) => index < old.length
+          ? old[index]
+          : FocusNode(debugLabel: 'TDropdownMenu trigger $index'),
+    );
+    for (var index = widget.items.length; index < old.length; index++) {
+      old[index].dispose();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<TDropdownThemeData>() ??
-        const TDropdownThemeData();
-    var tabBar = widget.isScrollable == true
+    final theme = _theme;
+    final bar = widget.scrollable
         ? SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
             child: Row(
-              children: List.generate(
-                _items?.length ?? 0,
+              children: List<Widget>.generate(
+                widget.items.length,
                 (index) => SizedBox(
-                  width: _items![index].tabBarWidth,
-                  child: _tabBarContent(index),
+                  width: widget.items[index].width ?? 112,
+                  child: _buildTrigger(index),
                 ),
               ),
             ),
           )
-        : Row(
-            children: List.generate(
-              _items?.length ?? 0,
-              (index) {
-                return Expanded(
-                  flex: _items![index].tabBarFlex,
-                  child: _tabBarContent(index),
+        : LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.hasBoundedWidth) {
+                return Row(
+                  children: List<Widget>.generate(
+                    widget.items.length,
+                    (index) => Expanded(
+                      flex: widget.items[index].flex,
+                      child: _buildTrigger(index),
+                    ),
+                  ),
                 );
-              },
-            ),
+              }
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List<Widget>.generate(
+                  widget.items.length,
+                  (index) => SizedBox(
+                    width: widget.items[index].width ?? 112,
+                    child: _buildTrigger(index),
+                  ),
+                ),
+              );
+            },
           );
-    return Container(
-      height: theme.height ?? 48,
-      width: theme.width ?? double.infinity,
-      decoration: theme.decoration ??
-          BoxDecoration(
-            color: context.tTheme.bgColorContainer,
+
+    return PopScope<void>(
+      canPop: !_controller.isOpen,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && _controller.isOpen) {
+          unawaited(_close(TDropdownMenuCloseReason.back));
+        }
+      },
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: Container(
+          key: _barKey,
+          height: theme.barHeight ?? 48,
+          decoration: BoxDecoration(
+            color: theme.barBackgroundColor ??
+                Theme.of(context).colorScheme.surface,
             border: Border(
               bottom: BorderSide(
-                color: context.tTheme.componentStrokeColor,
+                color: theme.dividerColor ??
+                    DividerTheme.of(context).color ??
+                    Theme.of(context).dividerColor,
                 width: 0.5,
               ),
             ),
           ),
-      child: tabBar,
-    );
-  }
-
-  void _init() {
-    var items = widget.builder?.call(context) ?? widget.items ?? [];
-    if (items.length == _items?.length) {
-      _items = items;
-      return;
-    }
-    _isOpened = List.filled(items.length, false);
-    _items = items;
-    _iconControllers?.forEach((controller) {
-      controller.dispose();
-    });
-    _iconControllers = List.generate(
-        _items?.length ?? 0,
-        (index) => AnimationController(
-              duration:
-                  Duration(milliseconds: (widget.duration ?? 200).toInt()),
-              vsync: this,
-            ));
-    _iconAnimations = _iconControllers
-            ?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e))
-            .toList() ??
-        [];
-  }
-
-  Widget _tabBarContent(int index) {
-    final color = _disabled(index)
-        ? context.tTheme.textDisabledColor
-        : _isOpened[index]
-            ? context.tTheme.brandNormalColor
-            : context.tTheme.textColorPrimary;
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () async {
-        if (_disabled(index)) {
-          return;
-        }
-        _isOpened[index] ? await Navigator.maybePop(context) : _openMenu(index);
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: _items![index].tabBarAlign ??
-            Theme.of(context).extension<TDropdownThemeData>()?.tabBarAlign ??
-            MainAxisAlignment.center,
-        children: [
-          Flexible(child: _getText(index, color)),
-          _getIcon(index, color)
-        ],
+          child: bar,
+        ),
       ),
     );
   }
 
-  Widget _getText(int index, Color color) {
-    final label = _items![index].getLabel();
-    if (widget.labelBuilder != null) {
-      return widget.labelBuilder!(context, label, _isOpened[index], index);
+  Widget _buildTrigger(int index) {
+    final item = widget.items[index];
+    final isOpen = _controller.openIndex == index;
+    final onTap = item.enabled ? () => unawaited(_toggle(index)) : null;
+    if (item.triggerBuilder != null) {
+      return Semantics(
+        button: true,
+        enabled: item.enabled,
+        expanded: isOpen,
+        child: Focus(
+          focusNode: _triggerFocusNodes[index],
+          child: item.triggerBuilder!(
+            context,
+            TDropdownMenuTriggerState(
+              index: index,
+              isOpen: isOpen,
+              enabled: item.enabled,
+              toggle: onTap ?? () {},
+            ),
+          ),
+        ),
+      );
     }
-    return TText(
-      label,
-      font: context.tTheme.fontBodyMedium,
-      textColor: color,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+
+    final theme = _theme;
+    final inheritedStyle = DefaultTextStyle.of(context).style;
+    final baseStyle = theme.textStyle ?? inheritedStyle;
+    final style = !item.enabled
+        ? theme.disabledTextStyle ??
+            baseStyle.copyWith(color: Theme.of(context).disabledColor)
+        : isOpen
+            ? theme.activeTextStyle ??
+                baseStyle.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                )
+            : baseStyle.copyWith(
+                color: baseStyle.color ?? context.tTheme.textColorPrimary,
+              );
+    final iconColor = !item.enabled
+        ? theme.disabledIconColor ?? Theme.of(context).disabledColor
+        : isOpen
+            ? theme.activeIconColor ?? Theme.of(context).colorScheme.primary
+            : theme.iconColor ??
+                IconTheme.of(context).color ??
+                context.tTheme.textColorPrimary;
+
+    return Semantics(
+      button: true,
+      enabled: item.enabled,
+      expanded: isOpen,
+      child: InkWell(
+        focusNode: _triggerFocusNodes[index],
+        onTap: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                item.label!,
+                style: style,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            AnimatedRotation(
+              turns: isOpen ? 0.5 : 0,
+              duration: _duration,
+              child: Icon(
+                TIcons.caret_down_small,
+                size: theme.iconSize ?? 20,
+                color: iconColor,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _getIcon(int index, Color color) {
-    var arrowIcon = _items![index].arrowIcon ??
-        Theme.of(context).extension<TDropdownThemeData>()?.arrowIcon ??
-        (widget.direction == TDropdownMenuDirection.up
-            ? TIcons.caret_up_small
-            : TIcons.caret_down_small);
-    return RotationTransition(
-      turns: _iconAnimations[index],
-      child: Icon(arrowIcon,
-          size: 20,
-          color: _items![index].arrowColor ??
-              Theme.of(context).extension<TDropdownThemeData>()?.arrowColor ??
-              color),
-    );
-  }
-
-  bool _disabled(int index) {
-    return _items![index].disabled == true;
-  }
-
-  /// 打开指定索引的菜单
-  Future<void> openMenu(int index) async {
-    await _openMenu(index);
-  }
-
-  /// 关闭菜单
-  Future<void> closeMenu() async {
-    if (_isOpened.contains(true)) {
-      await Navigator.maybePop(context);
-    }
-  }
-
-  /// 打开菜单
-  Future<void> _openMenu(int index) async {
-    /// 如果已经打开了，则关闭
-    if (_isOpened.contains(true)) {
-      await closeMenu();
-    }
-    _dropdownPopup ??= TDropdownPopup<T>(
-      child: _items![index],
-      parentContext: context,
-      handleClose: _closeMenu,
-      direction: widget.direction,
-      showOverlay: widget.showOverlay,
-      overlayColor:
-          Theme.of(context).extension<TDropdownThemeData>()?.overlayColor,
-      closeOnClickOverlay: widget.closeOnClickOverlay,
-      duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
-    );
-    unawaited(_dropdownPopup!.add(_items![index]).then((value) {
-      widget.onMenuOpened?.call(index);
-    }));
-
-    _isOpened = List.filled(_items?.length ?? 0, false);
-    _isOpened[index] = true;
-    setState(() {});
-    _iconControllers?.asMap().forEach((key, value) {
-      if (value.status == AnimationStatus.completed) {
-        value.reverse();
-      } else if (key == index) {
-        value.forward();
-      }
-    });
-  }
-
-  /// 关闭菜单
-  Future<void> _closeMenu() async {
-    var index = _isOpened.indexOf(true);
-    if (index < 0) {
+  Future<void> _toggle(int index) async {
+    if (_controller.openIndex == index) {
+      await _close(TDropdownMenuCloseReason.trigger);
       return;
     }
-    _isOpened = List.filled(_items?.length ?? 0, false);
+    await _open(index);
+  }
+
+  Future<void> _open(int index) async {
+    if (!mounted ||
+        index < 0 ||
+        index >= widget.items.length ||
+        !widget.items[index].enabled) {
+      return;
+    }
+    if (_controller.openIndex == index) {
+      return;
+    }
+    if (_controller.isOpen) {
+      await _close(TDropdownMenuCloseReason.switchItem);
+      if (!mounted) {
+        return;
+      }
+    }
+
+    final epoch = ++_operationEpoch;
+    _autoOpensAbove = false;
+    _controller._setOpenIndex(index);
     setState(() {});
-    _iconControllers?.forEach((value) {
-      if (value.status == AnimationStatus.completed) {
-        value.reverse();
+    _insertOverlay();
+    _animationController.duration = _duration;
+    await _animationController.forward(from: 0);
+    if (!mounted ||
+        epoch != _operationEpoch ||
+        _controller.openIndex != index) {
+      return;
+    }
+    _panelFocusNode.requestFocus();
+    widget.onOpened?.call(index);
+  }
+
+  Future<void> _close(TDropdownMenuCloseReason reason) async {
+    final index = _controller.openIndex;
+    if (index == null) {
+      return;
+    }
+    final epoch = ++_operationEpoch;
+    await _animationController.reverse();
+    if (epoch != _operationEpoch) {
+      return;
+    }
+    _removeOverlay();
+    _autoOpensAbove = false;
+    _controller._setOpenIndex(null);
+    if (mounted) {
+      setState(() {});
+      if (index < _triggerFocusNodes.length) {
+        _triggerFocusNodes[index].requestFocus();
+      }
+      widget.onClosed?.call(index, reason);
+    }
+  }
+
+  void _insertOverlay() {
+    _removeOverlay();
+    final overlay = Overlay.of(context, rootOverlay: widget.useRootOverlay);
+    _overlayState = overlay;
+    _capturedThemes = InheritedTheme.capture(
+      from: context,
+      to: overlay.context,
+    );
+    _overlayEntry = OverlayEntry(builder: _buildOverlay);
+    overlay.insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry?.dispose();
+    _overlayEntry = null;
+    _overlayState = null;
+    _capturedThemes = null;
+    _placementCheckScheduled = false;
+  }
+
+  void _refreshOverlay() {
+    if (_disposing ||
+        _overlayRefreshScheduled ||
+        _overlayEntry?.mounted != true) {
+      return;
+    }
+    _overlayRefreshScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _overlayRefreshScheduled = false;
+      if (!_disposing && _overlayEntry?.mounted == true) {
+        _overlayEntry?.markNeedsBuild();
       }
     });
-    final popup = _dropdownPopup;
-    if (popup != null) {
-      unawaited(popup.remove());
+  }
+
+  Rect? _anchorRect(RenderBox overlayBox) {
+    final renderObject = _barKey.currentContext?.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.attached) {
+      return null;
     }
-    if (index >= 0 && widget.onMenuClosed != null) {
-      widget.onMenuClosed!(index);
+    final topLeft =
+        renderObject.localToGlobal(Offset.zero, ancestor: overlayBox);
+    return topLeft & renderObject.size;
+  }
+
+  void _scheduleAutoPlacementCheck({
+    required double above,
+    required double below,
+  }) {
+    if (_placementCheckScheduled ||
+        widget.placement != TDropdownMenuPlacement.auto) {
+      return;
     }
+    _placementCheckScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _placementCheckScheduled = false;
+      if (_disposing || _overlayEntry?.mounted != true) {
+        return;
+      }
+      final renderObject = _panelKey.currentContext?.findRenderObject();
+      if (renderObject is! RenderBox || !renderObject.hasSize) {
+        return;
+      }
+      final shouldOpenAbove = renderObject.size.height > below && above > below;
+      if (_autoOpensAbove != shouldOpenAbove) {
+        _autoOpensAbove = shouldOpenAbove;
+        _overlayEntry?.markNeedsBuild();
+      }
+    });
+  }
+
+  Widget _buildOverlay(BuildContext overlayContext) {
+    final overlayBox = _overlayState?.context.findRenderObject();
+    if (overlayBox is! RenderBox) {
+      return const SizedBox.shrink();
+    }
+    final rect = _anchorRect(overlayBox);
+    final index = _controller.openIndex;
+    if (rect == null || index == null || index >= widget.items.length) {
+      return const SizedBox.shrink();
+    }
+    final media = MediaQuery.of(context);
+    final view = View.of(context);
+    final keyboardInset = math.max(
+      media.viewInsets.bottom,
+      view.viewInsets.bottom / view.devicePixelRatio,
+    );
+    final safeTop = media.padding.top;
+    final safeBottom =
+        overlayBox.size.height - media.padding.bottom - keyboardInset;
+    final above = (rect.top - safeTop).clamp(0.0, double.infinity);
+    final below = (safeBottom - rect.bottom).clamp(0.0, double.infinity);
+    final opensAbove = switch (widget.placement) {
+      TDropdownMenuPlacement.above => true,
+      TDropdownMenuPlacement.below => false,
+      TDropdownMenuPlacement.auto => _autoOpensAbove,
+    };
+    final maxHeight = widget.placement == TDropdownMenuPlacement.auto
+        ? math.max(above, below)
+        : opensAbove
+            ? above
+            : below;
+    final theme = _theme;
+    final panelController = TDropdownMenuPanelController._(
+      index: index,
+      close: _close,
+    );
+    final panel = ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      child: Material(
+        key: _panelKey,
+        color:
+            theme.panelBackgroundColor ?? Theme.of(context).colorScheme.surface,
+        child: Focus(
+          focusNode: _panelFocusNode,
+          autofocus: true,
+          onKeyEvent: (node, event) {
+            if (event is KeyDownEvent &&
+                event.logicalKey == LogicalKeyboardKey.escape) {
+              unawaited(_close(TDropdownMenuCloseReason.cancel));
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: FocusScope(
+            child: widget.items[index].panelBuilder(context, panelController),
+          ),
+        ),
+      ),
+    );
+    final animatedPanel = SizeTransition(
+      sizeFactor: CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.decelerate,
+        reverseCurve: Curves.easeOut,
+      ),
+      axisAlignment: opensAbove ? 1 : -1,
+      child: SizedBox(width: rect.width, child: panel),
+    );
+    final captured = _capturedThemes;
+    _scheduleAutoPlacementCheck(above: above, below: below);
+
+    Widget barrierRegion({
+      required double left,
+      required double top,
+      required double width,
+      required double height,
+    }) {
+      if (width <= 0 || height <= 0) {
+        return const SizedBox.shrink();
+      }
+      return Positioned(
+        left: left,
+        top: top,
+        width: width,
+        height: height,
+        child: Semantics(
+          label: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          button: widget.closeOnOverlayTap,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.closeOnOverlayTap
+                ? () => unawaited(
+                      _close(TDropdownMenuCloseReason.overlay),
+                    )
+                : null,
+            child: ColoredBox(
+              color: widget.showOverlay
+                  ? (theme.overlayColor ?? Colors.black54)
+                      .withValues(alpha: 0.6 * _animationController.value)
+                  : Colors.transparent,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        final regions = <Widget>[
+          barrierRegion(
+            left: 0,
+            top: 0,
+            width: overlayBox.size.width,
+            height: rect.top,
+          ),
+          barrierRegion(
+            left: 0,
+            top: rect.top,
+            width: rect.left,
+            height: rect.height,
+          ),
+          barrierRegion(
+            left: rect.right,
+            top: rect.top,
+            width: overlayBox.size.width - rect.right,
+            height: rect.height,
+          ),
+          barrierRegion(
+            left: 0,
+            top: rect.bottom,
+            width: overlayBox.size.width,
+            height: overlayBox.size.height - rect.bottom,
+          ),
+        ];
+        return captured!.wrap(
+          Stack(
+            children: [
+              ...regions,
+              CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                targetAnchor:
+                    opensAbove ? Alignment.topLeft : Alignment.bottomLeft,
+                followerAnchor:
+                    opensAbove ? Alignment.bottomLeft : Alignment.topLeft,
+                child: animatedPanel,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
