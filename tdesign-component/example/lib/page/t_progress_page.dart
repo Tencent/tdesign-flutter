@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -14,13 +16,24 @@ class TProgressPage extends StatefulWidget {
 }
 
 class _TProgressPageState extends State<TProgressPage> {
-  final Widget buttonLabel = const Text('进行中');
-  final double progressValue = 0.4;
-  final double microProgressValue = 0.3;
+  Widget buttonLabel = const Text('开始');
+  double progressValue = 0.0;
+  double microProgressValue = 0.3;
+  Timer? _buttonTimer;
+  Timer? _microTimer;
+  bool _isProgressing = false;
+  bool _isMicroPlaying = false;
 
   double value = 0.1;
 
   bool isPlusOperation = true;
+
+  @override
+  void dispose() {
+    _buttonTimer?.cancel();
+    _microTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +115,7 @@ class _TProgressPageState extends State<TProgressPage> {
       variant: TProgressVariant.button,
       value: progressValue,
       label: buttonLabel,
+      onTap: _toggleProgress,
     );
   }
 
@@ -111,10 +125,70 @@ class _TProgressPageState extends State<TProgressPage> {
       variant: TProgressVariant.micro,
       value: microProgressValue,
       label: Icon(
-        Icons.play_arrow,
+        _isMicroPlaying ? Icons.pause : Icons.play_arrow,
         color: context.tTheme.brandNormalColor,
       ),
+      onTap: _toggleMicroProgress,
     );
+  }
+
+  void _toggleProgress() {
+    if (_isProgressing) {
+      _buttonTimer?.cancel();
+      setState(() {
+        _isProgressing = false;
+        buttonLabel = const Text('继续');
+      });
+      return;
+    }
+
+    setState(() {
+      _isProgressing = true;
+      buttonLabel = const Text('进行中');
+    });
+    _buttonTimer?.cancel();
+    _buttonTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        progressValue += 0.01;
+        if (progressValue >= 1) {
+          progressValue = 1;
+          buttonLabel = const Text('完成');
+          _isProgressing = false;
+          timer.cancel();
+        } else {
+          buttonLabel = Text('${(progressValue * 100).round()}%');
+        }
+      });
+    });
+  }
+
+  void _toggleMicroProgress() {
+    if (_isMicroPlaying) {
+      _microTimer?.cancel();
+      setState(() => _isMicroPlaying = false);
+      return;
+    }
+
+    setState(() => _isMicroPlaying = true);
+    _microTimer?.cancel();
+    _microTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        microProgressValue += 0.01;
+        if (microProgressValue >= 1) {
+          microProgressValue = 0;
+          _isMicroPlaying = false;
+          timer.cancel();
+        }
+      });
+    });
   }
 
   @ExampleCode(group: 'progress')

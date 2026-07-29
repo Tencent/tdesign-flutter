@@ -3,8 +3,9 @@ Widget _buildMicroButton(BuildContext context) {
       variant: TProgressVariant.micro,
       value: microProgressValue,
       label: Icon(
-        Icons.play_arrow,
+        _isMicroPlaying ? Icons.pause : Icons.play_arrow,
         color: context.tTheme.brandNormalColor,
       ),
+      onTap: _toggleMicroProgress,
     );
   }

@@ -120,6 +120,62 @@ void main() {
     });
   });
 
+  group('TProgress 交互形态', () {
+    testWidgets('button variant 支持点击', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(wrapWithTheme(
+        SizedBox(
+          width: 200,
+          child: TProgress(
+            variant: TProgressVariant.button,
+            value: 0.5,
+            onTap: () => taps++,
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(TProgress));
+      await tester.pump();
+      expect(taps, 1);
+    });
+
+    testWidgets('micro variant 支持点击', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(wrapWithTheme(
+        TProgress(
+          variant: TProgressVariant.micro,
+          value: 0.5,
+          onTap: () => taps++,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(TProgress));
+      await tester.pump();
+      expect(taps, 1);
+    });
+
+    testWidgets('linear variant 不响应交互回调', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(wrapWithTheme(
+        SizedBox(
+          width: 200,
+          child: TProgress(
+            variant: TProgressVariant.linear,
+            value: 0.5,
+            onTap: () => taps++,
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(TProgress));
+      await tester.pump();
+      expect(taps, 0);
+    });
+  });
+
   group('TProgress label 显示', () {
     testWidgets('linear value=0.5 显示 50%', (tester) async {
       await tester.pumpWidget(wrapWithTheme(

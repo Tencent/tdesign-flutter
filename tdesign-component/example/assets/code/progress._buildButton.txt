@@ -3,5 +3,6 @@ Widget _buildButton(BuildContext context) {
       variant: TProgressVariant.button,
       value: progressValue,
       label: buttonLabel,
+      onTap: _toggleProgress,
     );
   }

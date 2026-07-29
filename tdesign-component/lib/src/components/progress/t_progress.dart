@@ -18,7 +18,7 @@ enum TProgressVariant {
   /// 紧凑环形进度条。
   micro,
 
-  /// 按钮外观的线性进度条，不提供点击行为。
+  /// 按钮外观的线性进度条。
   button,
 }
 
@@ -34,13 +34,14 @@ enum TProgressLabelPosition {
   right,
 }
 
-/// 展示确定或不确定任务进度的非交互组件。
+/// 展示确定或不确定任务进度的组件。
 class TProgress extends StatelessWidget {
   TProgress({
     Key? key,
     required this.variant,
     double? value,
     this.label,
+    this.onTap,
   })  : value = _validateProgress(value),
         super(key: key);
 
@@ -52,6 +53,11 @@ class TProgress extends StatelessWidget {
 
   /// 进度条标签。
   final Widget? label;
+
+  /// 点击 `button` 或 `micro` 进度条时触发。
+  ///
+  /// 这两个形态提供了可操作的视觉样式；线性和环形形态不会响应点击。
+  final VoidCallback? onTap;
 
   static double? _validateProgress(double? value) => value?.clamp(0.0, 1.0);
 
@@ -82,6 +88,7 @@ class TProgress extends StatelessWidget {
     return _ProgressIndicator(
       value: value,
       label: label,
+      onTap: onTap,
       progressLabelPosition: progressLabelPosition,
       strokeWidth: strokeWidth,
       circleRadius: circleRadius,
@@ -148,6 +155,7 @@ class _DefaultValues {
 class _ProgressIndicator extends StatefulWidget {
   final double? value;
   final Widget? label;
+  final VoidCallback? onTap;
   final TProgressLabelPosition progressLabelPosition;
   final double strokeWidth;
   final double circleRadius;
@@ -164,6 +172,7 @@ class _ProgressIndicator extends StatefulWidget {
     Key? key,
     this.value,
     this.label,
+    this.onTap,
     this.progressLabelPosition = TProgressLabelPosition.inside,
     required this.strokeWidth,
     required this.linearBorderRadius,
@@ -519,13 +528,16 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     return AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              _buildMicroOutline(),
-              if (widget.showLabel)
-                _buildLabelWidget(context.tTheme.textColorPrimary),
-            ],
+          return GestureDetector(
+            onTap: widget.onTap,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildMicroOutline(),
+                if (widget.showLabel)
+                  _buildLabelWidget(context.tTheme.textColorPrimary),
+              ],
+            ),
           );
         });
   }
@@ -557,12 +569,15 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
               final progressWidth = maxWidth * _animation.value;
               return ClipRRect(
                 borderRadius: widget.linearBorderRadius,
-                child: Stack(
-                  children: [
-                    _buildBackgroundContainer(),
-                    _buildButtonActiveContainer(progressWidth),
-                    if (widget.showLabel) _buildButtonLabel(maxWidth),
-                  ],
+                child: GestureDetector(
+                  onTap: widget.onTap,
+                  child: Stack(
+                    children: [
+                      _buildBackgroundContainer(),
+                      _buildButtonActiveContainer(progressWidth),
+                      if (widget.showLabel) _buildButtonLabel(maxWidth),
+                    ],
+                  ),
                 ),
               );
             });
