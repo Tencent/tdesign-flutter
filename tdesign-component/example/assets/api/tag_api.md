@@ -10,7 +10,7 @@
 | icon | IconData? | - | 图标内容，可随状态改变颜色 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | needCloseIcon | bool | false | 是否显示关闭图标。 |
-| onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
+| onCloseTap | GestureTapCallback? | - | 关闭图标点击事件。 标签本身不持有列表状态；需要移除标签时，请在此回调中更新父组件的 数据源并触发重建。 |
 | onTap | GestureTapCallback? | - | 标签点击回调；为空时不创建标签点击行为。 |
 | size | TTagSize | TTagSize.medium | 标签大小 |
 
