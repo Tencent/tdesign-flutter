@@ -14,3 +14,4 @@
 | onChanged | ValueChanged<T?>? | - | 手风琴模式下 value 变更回调 |
 | onExpansionChanged | ExpansionPanelCallback? | - | 折叠面板列表的回调函数； 回调时，入参为当前点击的折叠面板的索引 index 和是否展开的状态 isExpanded |
 | value | T? | - | 手风琴模式下当前展开面板的 value |
+| variant | TCollapseVariant? | - | 折叠面板视觉形态。未设置时从 `TCollapseThemeData.variant` 读取。 |
