@@ -3,10 +3,10 @@ Widget _buildGridSkeleton(BuildContext context) {
       // spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
-        return TSkeleton.fromRowCol(
-          rowCol: TSkeletonRowCol(objects: const [
-            [TSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-            [TSkeletonRowColObj.text(width: 48, flex: null)],
+        return const TSkeleton.custom(
+          layout: TSkeletonLayout(rows: [
+            [TSkeletonBlock.rectangle(width: 48, height: 48, flex: null)],
+            [TSkeletonBlock.line(width: 48, flex: null)],
           ]),
         );
       }),

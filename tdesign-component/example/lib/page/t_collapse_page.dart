@@ -19,6 +19,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   final List<CollapseDataItem> _blockStyleData = generateItems(5);
   final List<CollapseDataItem> _cardStyleData = generateItems(5);
   final List<CollapseDataItem> _blockStyleWithOpText = generateItems(5);
+  final List<CollapseDataItem> _topPlacementData = generateItems(3);
   final List<CollapseDataItem> _accordionData = generateItems(5);
   String? _accordionValue;
 
@@ -37,6 +38,10 @@ class TCollapsePageState extends State<TCollapsePage> {
             ExampleItem(
               desc: 'with Operation Instructions 带操作说明',
               builder: _buildCollapseWithOperationText,
+            ),
+            ExampleItem(
+              desc: 'Upward 向上展开',
+              builder: _buildTopPlacementCollapse,
             ),
             ExampleItem(
               desc: 'Accordion 手风琴式',
@@ -99,6 +104,7 @@ class TCollapsePageState extends State<TCollapsePage> {
   @ExampleCode(group: 'collapse')
   Widget _buildCardCollapse(BuildContext context) {
     return TCollapse(
+      variant: TCollapseVariant.card,
       onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _cardStyleData[index].isExpanded = !isExpanded;
@@ -133,6 +139,27 @@ class TCollapsePageState extends State<TCollapsePage> {
             return isExpanded ? '收起' : '展开';
           },
           isExpanded: item.isExpanded,
+          body: const Text(randomString),
+        );
+      }).toList(),
+    );
+  }
+
+  @ExampleCode(group: 'collapse')
+  Widget _buildTopPlacementCollapse(BuildContext context) {
+    return TCollapse(
+      onExpansionChanged: (int index, bool isExpanded) {
+        setState(() {
+          _topPlacementData[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _topPlacementData.map((CollapseDataItem item) {
+        return TCollapsePanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Text(item.headerValue);
+          },
+          isExpanded: item.isExpanded,
+          placement: TCollapsePlacement.top,
           body: const Text(randomString),
         );
       }).toList(),

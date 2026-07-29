@@ -15,3 +15,12 @@ enum TCollapseVariant {
   /// 卡片形态。
   card,
 }
+
+/// 折叠内容相对标题的展开方向。
+enum TCollapsePlacement {
+  /// 内容在标题下方展开。
+  bottom,
+
+  /// 内容在标题上方展开。
+  top,
+}

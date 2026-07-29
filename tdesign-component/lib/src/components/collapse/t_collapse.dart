@@ -5,11 +5,11 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_collapse_panel.dart';
-import 't_collapse_salted_key.dart';
 import 't_collapse_theme_data.dart';
 import 't_collapse_types.dart';
 import 't_inset_divider.dart';
@@ -20,6 +20,7 @@ class TCollapse<T extends Object> extends StatefulWidget {
   const TCollapse({
     required this.children,
     this.mode = TCollapseMode.multiple,
+    this.variant,
     this.onExpansionChanged,
     this.animationDuration,
     this.elevation,
@@ -33,6 +34,9 @@ class TCollapse<T extends Object> extends StatefulWidget {
 
   /// 折叠面板模式
   final TCollapseMode mode;
+
+  /// 折叠面板视觉形态。未设置时从 [TCollapseThemeData.variant] 读取。
+  final TCollapseVariant? variant;
 
   /// 折叠面板列表的回调函数；
   /// 回调时，入参为当前点击的折叠面板的索引 index 和是否展开的状态 isExpanded
@@ -63,7 +67,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
 
   bool _isCardStyle(BuildContext context) {
     final theme = _theme(context);
-    return theme?.variant == TCollapseVariant.card;
+    return (widget.variant ?? theme?.variant ?? TCollapseVariant.block) ==
+        TCollapseVariant.card;
   }
 
   @override
@@ -101,129 +106,94 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         theme?.animationDuration ??
         kThemeAnimationDuration;
     final elevation = widget.elevation ?? theme?.elevation ?? 0;
-    final items = <MergeableMaterialItem>[];
+    final panels = <Widget>[];
 
     for (var index = 0; index < widget.children.length; index += 1) {
-      if (_isChildExpanded(index) &&
-          index != 0 &&
-          !_isChildExpanded(index - 1)) {
-        items.add(_buildGap(context, index * 2 - 1));
-      }
-
       final isLastChild = index == widget.children.length - 1;
       final child = widget.children[index];
-
-      final titleWidget = _buildTitleWidget(context, child, index);
-      final expandIconWidget = _buildExpandIconWidget(context, child, index);
-
-      final borderRadius =
-          _isCardStyle(context) ? _createRadius(index) : BorderRadius.zero;
-
+      final isExpanded = _isChildExpanded(index);
+      final isInteractive = !child.disabled &&
+          (widget.onExpansionChanged != null ||
+              (_isAccordion && widget.onChanged != null));
+      final cardBorderRadius = theme?.cardBorderRadius ??
+          BorderRadius.circular(context.tTheme.radiusLarge);
+      final borderRadius = _isCardStyle(context)
+          ? _createRadius(index, cardBorderRadius)
+          : BorderRadius.zero;
       final bgColor = child.backgroundColor ??
           theme?.backgroundColor ??
           context.tTheme.bgColorContainer;
-
-      items.add(
-        MaterialSlice(
-            key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
-            color: bgColor,
-            child: Column(
-              key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
-              children: [
-                MergeSemantics(
-                  child: InkWell(
-                    borderRadius: borderRadius,
-                    onTap: () => _handlePressed(index, _isChildExpanded(index)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: AnimatedContainer(
-                            duration: animationDuration,
-                            curve: Curves.fastOutSlowIn,
-                            margin: EdgeInsets.zero,
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                minHeight: kMinInteractiveDimension,
-                              ),
-                              child: titleWidget,
-                            ),
-                          ),
-                        ),
-                        expandIconWidget,
-                      ],
-                    ),
-                  ),
-                ),
-                AnimatedCrossFade(
-                  firstChild: Container(height: 0.0),
-                  secondChild: Column(
-                    children: [
-                      const TInsetDivider(),
-                      Container(
-                        padding: EdgeInsets.all(context.tTheme.spacer16),
-                        child: child.body,
-                      ),
-                    ],
-                  ),
-                  firstCurve:
-                      const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-                  secondCurve:
-                      const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
-                  sizeCurve: Curves.fastOutSlowIn,
-                  crossFadeState: _isChildExpanded(index)
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  duration: animationDuration,
-                ),
-                if (!isLastChild) const TInsetDivider()
-              ],
-            )),
+      final childValue = child.value;
+      final panelKey = child.key ??
+          (_isAccordion && childValue != null
+              ? ValueKey<T>(childValue)
+              : ValueKey<int>(index));
+      final header = _buildHeader(
+        context,
+        child,
+        index,
+        isExpanded,
+        isInteractive,
+        animationDuration,
+        borderRadius,
       );
+      final body =
+          _buildBody(context, child, isExpanded, animationDuration, theme);
 
-      if (_isChildExpanded(index) && !isLastChild) {
-        items.add(_buildGap(context, index * 2 + 1));
-      }
+      panels.add(Material(
+        key: panelKey,
+        color: bgColor,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (child.placement == TCollapsePlacement.top) body,
+            header,
+            if (child.placement == TCollapsePlacement.bottom) body,
+            if (!isLastChild)
+              TInsetDivider(color: _dividerColor(context, theme)),
+          ],
+        ),
+      ));
     }
 
-    Widget collapse = MergeableMaterial(
-      hasDividers: false,
+    final cardBorderRadius = theme?.cardBorderRadius ??
+        BorderRadius.circular(context.tTheme.radiusLarge);
+    Widget collapse = Material(
       elevation: elevation,
-      children: items,
+      color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
+      borderRadius: _isCardStyle(context) ? cardBorderRadius : null,
+      clipBehavior: _isCardStyle(context) ? Clip.antiAlias : Clip.none,
+      child: Column(mainAxisSize: MainAxisSize.min, children: panels),
     );
 
     if (_isCardStyle(context)) {
-      collapse = Container(
-        child: ClipRRect(
-          child: collapse,
-          borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
-        ),
-        margin: EdgeInsets.symmetric(
-          horizontal: context.tTheme.spacer16,
-        ),
+      collapse = Padding(
+        padding: theme?.cardMargin ??
+            EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+        child: collapse,
       );
     }
 
     return collapse;
   }
 
-  MergeableMaterialItem _buildGap(BuildContext context, int value) {
-    return MaterialGap(
-      size: 0.0,
-      key: TCollapseSaltedKey<BuildContext, int>(context, value),
-    );
-  }
-
-  BorderRadius _createRadius(int index) {
-    final radius = Radius.circular(context.tTheme.radiusLarge);
-
+  BorderRadius _createRadius(int index, BorderRadius radius) {
     final isFirst = index == 0;
-    if (isFirst) {
-      return BorderRadius.only(topLeft: radius, topRight: radius);
-    }
-
     final isLast = index == widget.children.length - 1;
+    if (isFirst && isLast) {
+      return radius;
+    }
+    if (isFirst) {
+      return BorderRadius.only(
+        topLeft: radius.topLeft,
+        topRight: radius.topRight,
+      );
+    }
     if (isLast) {
-      return BorderRadius.only(bottomLeft: radius, bottomRight: radius);
+      return BorderRadius.only(
+        bottomLeft: radius.bottomLeft,
+        bottomRight: radius.bottomRight,
+      );
     }
 
     return BorderRadius.zero;
@@ -249,43 +219,170 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     widget.onChanged?.call(isExpanded ? null : widget.children[index].value);
   }
 
+  Widget _buildHeader(
+    BuildContext context,
+    TCollapsePanel<T> child,
+    int index,
+    bool isExpanded,
+    bool isInteractive,
+    Duration animationDuration,
+    BorderRadius borderRadius,
+  ) {
+    final titleWidget = _buildTitleWidget(context, child, isExpanded);
+    final expandIconWidget = _buildExpandIconWidget(context, child, isExpanded);
+    final onTap =
+        isInteractive ? () => _handlePressed(index, isExpanded) : null;
+    final hasExplicitSemanticsLabel = child.semanticsLabel != null;
+    return MergeSemantics(
+      child: Semantics(
+        label: child.semanticsLabel,
+        button: true,
+        enabled: isInteractive,
+        expanded: isExpanded,
+        onTap: hasExplicitSemanticsLabel ? onTap : null,
+        child: InkWell(
+          borderRadius: borderRadius,
+          excludeFromSemantics: hasExplicitSemanticsLabel,
+          onTap: onTap,
+          child: ExcludeSemantics(
+            excluding: hasExplicitSemanticsLabel,
+            child: Row(
+              children: [
+                Expanded(
+                  child: AnimatedContainer(
+                    duration: animationDuration,
+                    curve: Curves.fastOutSlowIn,
+                    constraints: const BoxConstraints(
+                        minHeight: kMinInteractiveDimension),
+                    child: titleWidget,
+                  ),
+                ),
+                expandIconWidget,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    TCollapsePanel<T> child,
+    bool isExpanded,
+    Duration animationDuration,
+    TCollapseThemeData? theme,
+  ) {
+    final content = DefaultTextStyle(
+      style: _contentTextStyle(context, theme),
+      child: Padding(
+        padding:
+            theme?.contentPadding ?? EdgeInsets.all(context.tTheme.spacer16),
+        child: child.body,
+      ),
+    );
+    final divider = TInsetDivider(color: _dividerColor(context, theme));
+    return AnimatedCrossFade(
+      firstChild: const SizedBox.shrink(),
+      secondChild: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: child.placement == TCollapsePlacement.top
+            ? [content, divider]
+            : [divider, content],
+      ),
+      firstCurve: const Interval(0, 0.6, curve: Curves.fastOutSlowIn),
+      secondCurve: const Interval(0.4, 1, curve: Curves.fastOutSlowIn),
+      sizeCurve: Curves.fastOutSlowIn,
+      crossFadeState:
+          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: animationDuration,
+    );
+  }
+
   Widget _buildTitleWidget(
-      BuildContext context, TCollapsePanel<T> child, int index) {
-    final titleWidget = child.headerBuilder(context, _isChildExpanded(index));
+      BuildContext context, TCollapsePanel<T> child, bool isExpanded) {
+    final theme = _theme(context);
+    final style = child.disabled
+        ? _disabledHeaderTextStyle(context, theme)
+        : _headerTextStyle(context, theme);
     return ListTile(
-      title: titleWidget,
+      title: DefaultTextStyle(
+        style: style,
+        child: child.headerBuilder(context, isExpanded),
+      ),
     );
   }
 
   Widget _buildExpandIconWidget(
-      BuildContext context, TCollapsePanel<T> child, int index) {
-    Widget expandedIcon = Container(
-      key: TCollapseSaltedKey<BuildContext, int>(context, index * 2),
-      margin: const EdgeInsetsDirectional.all(0.0),
-      child: TNonAnimatedExpandIcon(
-        isExpanded: _isChildExpanded(index),
-        padding: child.expandIconTextBuilder != null
-            ? EdgeInsets.only(
-                right: context.tTheme.spacer16,
-                top: context.tTheme.spacer16,
-                bottom: context.tTheme.spacer16,
-                left: 0,
-              )
-            : EdgeInsets.all(context.tTheme.spacer16),
-      ),
+    BuildContext context, TCollapsePanel<T> child, bool isExpanded) {
+    final theme = _theme(context);
+    final iconColor = child.disabled
+        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
+    final expandedIcon = TNonAnimatedExpandIcon(
+      isExpanded: isExpanded,
+      color: iconColor,
+      padding: child.expandIconTextBuilder != null
+          ? EdgeInsetsDirectional.only(
+              end: context.tTheme.spacer16,
+              top: context.tTheme.spacer16,
+              bottom: context.tTheme.spacer16,
+            )
+          : EdgeInsets.all(context.tTheme.spacer16),
     );
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (child.expandIconTextBuilder != null)
-          Text(child.expandIconTextBuilder!(context, _isChildExpanded(index)),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: context.tTheme.textColorPlaceholder,
-              )),
+          Text(
+            child.expandIconTextBuilder!(context, isExpanded),
+            textAlign: TextAlign.end,
+            style: TextStyle(color: iconColor),
+          ),
         expandedIcon,
       ],
     );
+  }
+
+  TextStyle _headerTextStyle(BuildContext context, TCollapseThemeData? theme) {
+    final font = context.tTheme.fontBodyLarge;
+    final tokenStyle = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: font?.size ?? 16,
+      height: font?.height ?? 1.5,
+      fontWeight: font?.fontWeight ?? FontWeight.w400,
+    );
+    final materialStyle = ListTileTheme.of(context).titleTextStyle ??
+        Theme.of(context).textTheme.titleMedium;
+    return tokenStyle.merge(materialStyle).merge(theme?.headerTextStyle);
+  }
+
+  TextStyle _disabledHeaderTextStyle(
+      BuildContext context, TCollapseThemeData? theme) {
+    return _headerTextStyle(context, theme)
+        .copyWith(color: context.tTheme.textDisabledColor)
+        .merge(theme?.disabledHeaderTextStyle);
+  }
+
+  TextStyle _contentTextStyle(BuildContext context, TCollapseThemeData? theme) {
+    final font = context.tTheme.fontBodyMedium;
+    final tokenStyle = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: font?.size ?? 14,
+      height: font?.height ?? 1.5,
+      fontWeight: font?.fontWeight ?? FontWeight.w400,
+    );
+    return tokenStyle
+        .merge(Theme.of(context).textTheme.bodyMedium)
+        .merge(DefaultTextStyle.of(context).style)
+        .merge(theme?.contentTextStyle);
+  }
+
+  Color _dividerColor(BuildContext context, TCollapseThemeData? theme) {
+    return theme?.dividerColor ??
+        DividerTheme.of(context).color ??
+        context.tTheme.componentStrokeColor;
   }
 
   bool _allPanelsHaveValue() {

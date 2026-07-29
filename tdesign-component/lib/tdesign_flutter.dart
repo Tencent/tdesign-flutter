@@ -136,7 +136,7 @@ export 'src/components/sidebar/t_sidebar_item.dart';
 export 'src/components/sidebar/t_sidebar_theme_data.dart'
     show TSideBarThemeData, TSideBarVariant;
 export 'src/components/skeleton/t_skeleton.dart';
-export 'src/components/skeleton/t_skeleton_rowcol.dart';
+export 'src/components/skeleton/t_skeleton_layout.dart';
 export 'src/components/skeleton/t_skeleton_theme_data.dart'
     show TSkeletonThemeData;
 export 'src/components/slider/t_slider.dart';
@@ -153,8 +153,7 @@ export 'src/components/swipe_cell/t_swipe_cell_panel.dart';
 export 'src/components/swipe_cell/t_swipe_cell_theme_data.dart'
     show TSwipeCellThemeData;
 export 'src/components/swiper/t_swiper.dart';
-export 'src/components/swiper/t_swiper_theme_data.dart'
-    show TSwiperThemeData;
+export 'src/components/swiper/t_swiper_theme_data.dart' show TSwiperThemeData;
 export 'src/components/swiper/t_swiper_types.dart';
 export 'src/components/switch/t_switch.dart';
 export 'src/components/switch/t_switch_theme_data.dart' show TSwitchThemeData;

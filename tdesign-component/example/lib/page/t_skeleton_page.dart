@@ -91,59 +91,62 @@ class TSkeletonPage extends StatelessWidget {
 
   @ExampleCode(group: 'skeleton')
   Widget _buildAvatarSkeleton(BuildContext context) {
-    return TSkeleton(variant: TSkeletonVariant.avatar);
+    return const TSkeleton(variant: TSkeletonVariant.avatar);
   }
 
   @ExampleCode(group: 'skeleton')
   Widget _buildImageSkeleton(BuildContext context) {
-    return TSkeleton(variant: TSkeletonVariant.image);
+    return const TSkeleton(variant: TSkeletonVariant.image);
   }
 
   @ExampleCode(group: 'skeleton')
   Widget _buildTextSkeleton(BuildContext context) {
-    return TSkeleton(variant: TSkeletonVariant.text);
+    return const TSkeleton(variant: TSkeletonVariant.text);
   }
 
   @ExampleCode(group: 'skeleton')
   Widget _buildParagraphSkeleton(BuildContext context) {
-    return TSkeleton(variant: TSkeletonVariant.paragraph);
+    return const TSkeleton(variant: TSkeletonVariant.paragraph);
   }
 
   @ExampleCode(group: 'skeleton')
   Widget _buildCellSkeleton(BuildContext context) {
-    final rowColsAvatar = TSkeleton(variant: TSkeletonVariant.avatar);
-    final rowColsImage = TSkeleton.fromRowCol(
-      rowCol: TSkeletonRowCol(objects: const [
-        [TSkeletonRowColObj.rect(width: 48, height: 48)]
-      ]),
-    );
-    final rowColsContent = TSkeleton.fromRowCol(
-      rowCol: TSkeletonRowCol(
-        objects: const [
-          [TSkeletonRowColObj(), TSkeletonRowColObj.spacer(flex: 1)],
-          [TSkeletonRowColObj()]
-        ],
-      ),
-    );
-
-    return Column(
+    return const Column(
       // spacing: 16,
-      children: [
+      children: <Widget>[
         Row(
           // spacing: 12,
-          children: [
-            rowColsAvatar,
-            const SizedBox(width: 12),
-            Expanded(child: rowColsContent),
+          children: <Widget>[
+            TSkeleton(variant: TSkeletonVariant.avatar),
+            SizedBox(width: 12),
+            Expanded(
+              child: TSkeleton.custom(
+                layout: TSkeletonLayout(rows: [
+                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                  [TSkeletonBlock.line()]
+                ]),
+              ),
+            ),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Row(
           // spacing: 12,
-          children: [
-            rowColsImage,
-            const SizedBox(width: 12),
-            Expanded(child: rowColsContent),
+          children: <Widget>[
+            TSkeleton.custom(
+              layout: TSkeletonLayout(rows: [
+                [TSkeletonBlock.rectangle(width: 48, height: 48)]
+              ]),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: TSkeleton.custom(
+                layout: TSkeletonLayout(rows: [
+                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                  [TSkeletonBlock.line()]
+                ]),
+              ),
+            ),
           ],
         ),
       ],
@@ -156,10 +159,10 @@ class TSkeletonPage extends StatelessWidget {
       // spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
-        return TSkeleton.fromRowCol(
-          rowCol: TSkeletonRowCol(objects: const [
-            [TSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-            [TSkeletonRowColObj.text(width: 48, flex: null)],
+        return const TSkeleton.custom(
+          layout: TSkeletonLayout(rows: [
+            [TSkeletonBlock.rectangle(width: 48, height: 48, flex: null)],
+            [TSkeletonBlock.line(width: 48, flex: null)],
           ]),
         );
       }),
@@ -171,23 +174,23 @@ class TSkeletonPage extends StatelessWidget {
     Widget buildRowCols() {
       return Expanded(
         child: LayoutBuilder(
-          builder: (context, constraints) => TSkeleton.fromRowCol(
-            rowCol: TSkeletonRowCol(
-              objects: [
+          builder: (context, constraints) => TSkeleton.custom(
+            layout: TSkeletonLayout(
+              rows: [
                 [
-                  TSkeletonRowColObj(
+                  TSkeletonBlock(
                     width: constraints.maxWidth,
                     height: constraints.maxWidth,
                     flex: null,
-                    style: TSkeletonRowColObjStyle(
+                    style: TSkeletonBlockStyle(
                       borderRadius: context.tTheme.radiusExtraLarge,
                     ),
                   ),
                 ],
-                [TSkeletonRowColObj.text(width: constraints.maxWidth)],
+                [TSkeletonBlock.line(width: constraints.maxWidth)],
                 const [
-                  TSkeletonRowColObj.text(),
-                  TSkeletonRowColObj.spacer(flex: 1),
+                  TSkeletonBlock.line(),
+                  TSkeletonBlock.spacer(flex: 1),
                 ],
               ],
             ),
@@ -208,7 +211,7 @@ class TSkeletonPage extends StatelessWidget {
 
   @ExampleCode(group: 'skeleton')
   Widget _buildGradientSkeleton(BuildContext context) {
-    return TSkeleton(
+    return const TSkeleton(
       animation: TSkeletonAnimation.gradient,
       variant: TSkeletonVariant.paragraph,
     );
@@ -216,7 +219,7 @@ class TSkeletonPage extends StatelessWidget {
 
   @ExampleCode(group: 'skeleton')
   Widget _buildFlashedSkeleton(BuildContext context) {
-    return TSkeleton(
+    return const TSkeleton(
       animation: TSkeletonAnimation.flashed,
       variant: TSkeletonVariant.paragraph,
     );

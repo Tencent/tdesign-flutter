@@ -2,9 +2,5 @@ Widget _buildEmpty(BuildContext context) {
     return _frame(TTable<_ExampleRow>(
       columns: _columns,
       data: const [],
-      empty: const Padding(
-        padding: EdgeInsets.all(24),
-        child: Text('暂无数据'),
-      ),
     ));
   }

@@ -2,23 +2,23 @@ Widget _buildCombineSkeleton(BuildContext context) {
     Widget buildRowCols() {
       return Expanded(
         child: LayoutBuilder(
-          builder: (context, constraints) => TSkeleton.fromRowCol(
-            rowCol: TSkeletonRowCol(
-              objects: [
+          builder: (context, constraints) => TSkeleton.custom(
+            layout: TSkeletonLayout(
+              rows: [
                 [
-                  TSkeletonRowColObj(
+                  TSkeletonBlock(
                     width: constraints.maxWidth,
                     height: constraints.maxWidth,
                     flex: null,
-                    style: TSkeletonRowColObjStyle(
+                    style: TSkeletonBlockStyle(
                       borderRadius: context.tTheme.radiusExtraLarge,
                     ),
                   ),
                 ],
-                [TSkeletonRowColObj.text(width: constraints.maxWidth)],
+                [TSkeletonBlock.line(width: constraints.maxWidth)],
                 const [
-                  TSkeletonRowColObj.text(),
-                  TSkeletonRowColObj.spacer(flex: 1),
+                  TSkeletonBlock.line(),
+                  TSkeletonBlock.spacer(flex: 1),
                 ],
               ],
             ),

@@ -1,37 +1,40 @@
 Widget _buildCellSkeleton(BuildContext context) {
-    final rowColsAvatar = TSkeleton(variant: TSkeletonVariant.avatar);
-    final rowColsImage = TSkeleton.fromRowCol(
-      rowCol: TSkeletonRowCol(objects: const [
-        [TSkeletonRowColObj.rect(width: 48, height: 48)]
-      ]),
-    );
-    final rowColsContent = TSkeleton.fromRowCol(
-      rowCol: TSkeletonRowCol(
-        objects: const [
-          [TSkeletonRowColObj(), TSkeletonRowColObj.spacer(flex: 1)],
-          [TSkeletonRowColObj()]
-        ],
-      ),
-    );
-
-    return Column(
+    return const Column(
       // spacing: 16,
-      children: [
+      children: <Widget>[
         Row(
           // spacing: 12,
-          children: [
-            rowColsAvatar,
-            const SizedBox(width: 12),
-            Expanded(child: rowColsContent),
+          children: <Widget>[
+            TSkeleton(variant: TSkeletonVariant.avatar),
+            SizedBox(width: 12),
+            Expanded(
+              child: TSkeleton.custom(
+                layout: TSkeletonLayout(rows: [
+                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                  [TSkeletonBlock.line()]
+                ]),
+              ),
+            ),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Row(
           // spacing: 12,
-          children: [
-            rowColsImage,
-            const SizedBox(width: 12),
-            Expanded(child: rowColsContent),
+          children: <Widget>[
+            TSkeleton.custom(
+              layout: TSkeletonLayout(rows: [
+                [TSkeletonBlock.rectangle(width: 48, height: 48)]
+              ]),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: TSkeleton.custom(
+                layout: TSkeletonLayout(rows: [
+                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                  [TSkeletonBlock.line()]
+                ]),
+              ),
+            ),
           ],
         ),
       ],

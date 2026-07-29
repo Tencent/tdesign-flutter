@@ -1,3 +1,3 @@
 Widget _buildTextSkeleton(BuildContext context) {
-    return TSkeleton(variant: TSkeletonVariant.text);
+    return const TSkeleton(variant: TSkeletonVariant.text);
   }

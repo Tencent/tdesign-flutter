@@ -48,6 +48,19 @@ void main() {
       expect(find.text('40'), findsOneWidget);
     });
 
+    testWidgets('默认展示横向分割线', (tester) async {
+      await tester.pumpWidget(app(TTable(columns: columns(), data: rows)));
+      final borders = _tableBorders(tester).toList();
+      expect(
+        borders.any(
+          (border) =>
+              border.bottom.style == BorderStyle.solid &&
+              border.left.style == BorderStyle.none,
+        ),
+        isTrue,
+      );
+    });
+
     testWidgets('showHeader=false 隐藏表头', (tester) async {
       await tester.pumpWidget(app(TTable(
         columns: columns(),
@@ -58,15 +71,28 @@ void main() {
       expect(find.text('Alice'), findsOneWidget);
     });
 
-    testWidgets('loading 优先于数据并支持自定义 Widget', (tester) async {
+    testWidgets('loading 仅遮罩表体并保留已有数据', (tester) async {
+      var taps = 0;
       await tester.pumpWidget(app(TTable(
         columns: columns(),
         data: rows,
         loading: true,
         loadingWidget: const Text('Loading'),
+        footer: const Text('Footer'),
+        onCellTap: (_, __, ___) => taps++,
       )));
       expect(find.text('Loading'), findsOneWidget);
-      expect(find.text('Alice'), findsNothing);
+      expect(find.text('Name'), findsOneWidget);
+      expect(find.text('Alice'), findsOneWidget);
+      final header = tester.getRect(find.text('Name'));
+      final overlay = tester.getRect(find.byWidgetPredicate(
+        (widget) => widget is AbsorbPointer && widget.absorbing,
+      ));
+      final footer = tester.getRect(find.text('Footer'));
+      expect(overlay.top, greaterThanOrEqualTo(header.bottom));
+      expect(overlay.bottom, lessThanOrEqualTo(footer.top));
+      await tester.tap(find.text('Alice'), warnIfMissed: false);
+      expect(taps, 0);
     });
 
     testWidgets('loading 默认显示 CircularProgressIndicator', (tester) async {
@@ -78,6 +104,20 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
+    testWidgets('空数据 loading 保留表头并提供有限表体高度', (tester) async {
+      await tester.pumpWidget(app(TTable<_Row>(
+        columns: columns(),
+        data: const [],
+        loading: true,
+      )));
+      final header = tester.getRect(find.text('Name'));
+      final overlay = tester.getRect(find.byWidgetPredicate(
+        (widget) => widget is AbsorbPointer && widget.absorbing,
+      ));
+      expect(overlay.top, greaterThanOrEqualTo(header.bottom));
+      expect(overlay.height, greaterThanOrEqualTo(96));
+    });
+
     testWidgets('空数据使用 empty 槽位', (tester) async {
       await tester.pumpWidget(app(TTable<_Row>(
         columns: columns(),
@@ -87,12 +127,13 @@ void main() {
       expect(find.text('Empty'), findsOneWidget);
     });
 
-    testWidgets('空数据无 empty 时保持空白', (tester) async {
+    testWidgets('空数据默认使用本地化 TEmpty', (tester) async {
       await tester.pumpWidget(app(TTable<_Row>(
         columns: columns(),
         data: const [],
       )));
-      expect(find.byType(TTable<_Row>), findsOneWidget);
+      expect(find.byType(TEmpty), findsOneWidget);
+      expect(find.text('暂无数据'), findsOneWidget);
     });
 
     testWidgets('footer 渲染在表格底部', (tester) async {
@@ -131,6 +172,50 @@ void main() {
       expect(find.text('Left'), findsOneWidget);
       expect(find.text('Center'), findsOneWidget);
       expect(find.text('Right'), findsOneWidget);
+    });
+
+    testWidgets('表头与表体中间列共享横向滚动偏移', (tester) async {
+      final fixedColumns = [
+        TTableColumn<_Row>(
+          id: 'left',
+          header: const Text('Left'),
+          fixed: TTableColumnFixed.left,
+          width: 60,
+          cellBuilder: (_, row, __) => Text('L-${row.name}'),
+        ),
+        TTableColumn<_Row>(
+          id: 'first',
+          header: const Text('Center A'),
+          width: 160,
+          cellBuilder: (_, row, __) => Text('A-${row.name}'),
+        ),
+        TTableColumn<_Row>(
+          id: 'second',
+          header: const Text('Center B'),
+          width: 160,
+          cellBuilder: (_, row, __) => Text('B-${row.name}'),
+        ),
+        TTableColumn<_Row>(
+          id: 'right',
+          header: const Text('Right'),
+          fixed: TTableColumnFixed.right,
+          width: 60,
+          cellBuilder: (_, row, __) => Text('R-${row.name}'),
+        ),
+      ];
+      await tester.pumpWidget(app(TTable(columns: fixedColumns, data: rows)));
+      final headerStart = tester.getTopLeft(find.text('Center A')).dx;
+      final rowStart = tester.getTopLeft(find.text('A-Alice')).dx;
+      final fixedStart = tester.getTopLeft(find.text('Left')).dx;
+      await tester.drag(find.text('Center A'), const Offset(-80, 0));
+      await tester.pump();
+      expect(tester.getTopLeft(find.text('Center A')).dx - headerStart,
+          lessThan(0));
+      expect(
+        tester.getTopLeft(find.text('A-Alice')).dx - rowStart,
+        tester.getTopLeft(find.text('Center A')).dx - headerStart,
+      );
+      expect(tester.getTopLeft(find.text('Left')).dx, fixedStart);
     });
 
     testWidgets('三种对齐方式进入单元格布局', (tester) async {
@@ -187,19 +272,30 @@ void main() {
       expect(texts.indexOf('Carol'), lessThan(texts.indexOf('Alice')));
     });
 
-    testWidgets('点击排序列请求升序和降序', (tester) async {
+    testWidgets('点击排序列按升序、降序、未排序请求状态', (tester) async {
       TTableSort? requested;
-      await tester.pumpWidget(app(TTable(
-        columns: columns(),
-        data: rows,
-        sort: const TTableSort(
-          columnId: 'age',
-          direction: TTableSortDirection.ascending,
-        ),
-        onSortChanged: (value) => requested = value,
-      )));
+      Future<void> pump(TTableSort? sort) => tester.pumpWidget(app(TTable(
+            columns: columns(),
+            data: rows,
+            sort: sort,
+            onSortChanged: (value) => requested = value,
+          )));
+
+      await pump(null);
       await tester.tap(find.text('Age'));
-      expect(requested?.direction, TTableSortDirection.descending);
+      expect(requested,
+          const TTableSort(columnId: 'age', direction: TTableSortDirection.ascending));
+
+      await pump(requested);
+      await tester.tap(find.text('Age'));
+      expect(requested,
+          const TTableSort(columnId: 'age', direction: TTableSortDirection.descending));
+
+      await pump(requested);
+      await tester.tap(find.text('Age'));
+      expect(requested, isNull);
+
+      await pump(null);
       await tester.tap(find.text('Name'));
       expect(requested?.columnId, 'name');
       expect(requested?.direction, TTableSortDirection.ascending);
@@ -376,19 +472,65 @@ void main() {
       expect(tappedColumn, 'name');
     });
 
-    testWidgets('固定高度产生垂直滚动并通知', (tester) async {
+    testWidgets('maxHeight 仅约束表体并产生垂直滚动通知', (tester) async {
       var notifications = 0;
       await tester.pumpWidget(app(
         TTable(
           columns: columns(),
           data: List.generate(20, (index) => _Row('R$index', index)),
+          maxHeight: 160,
           onScroll: (_) => notifications++,
         ),
-        tableTheme: const TTableThemeData(height: 160),
       ));
       await tester.drag(find.byType(ListView), const Offset(0, -200));
       await tester.pump();
       expect(notifications, greaterThan(0));
+    });
+
+    testWidgets('表头与表体紧邻且 maxHeight 不影响表头', (tester) async {
+      await tester.pumpWidget(app(TTable(
+        columns: columns(),
+        data: List.generate(20, (index) => _Row('R$index', index)),
+        maxHeight: 120,
+      )));
+      final header = tester.getRect(find.text('Name'));
+      final body = tester.getRect(find.byType(ListView));
+      expect(body.top, greaterThanOrEqualTo(header.bottom));
+      expect(body.height, lessThanOrEqualTo(120));
+    });
+
+    testWidgets('表体不继承 MediaQuery 顶部安全区留白', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                padding: const EdgeInsets.only(top: 80),
+              ),
+              child: SizedBox(
+                width: 360,
+                child: TTable(columns: columns(), data: rows),
+              ),
+            ),
+          ),
+        ),
+      ));
+      final header = tester.getRect(find.text('Name'));
+      final firstCell = tester.getRect(find.text('Alice'));
+      expect(firstCell.top - header.bottom, lessThan(40));
+    });
+
+    testWidgets('无 maxHeight 时可放入外层滚动容器', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: TTable(columns: columns(), data: rows),
+          ),
+        ),
+      ));
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('Theme 控制边框、斑马纹、尺寸和颜色', (tester) async {
@@ -408,6 +550,12 @@ void main() {
         ),
       ));
       expect(find.byType(TTable<_Row>), findsOneWidget);
+      expect(
+        _tableBorders(tester).any(
+          (border) => border.left.style == BorderStyle.solid,
+        ),
+        isTrue,
+      );
       expect(tester.takeException(), isNull);
     });
   });
@@ -418,7 +566,6 @@ void main() {
       stripe: false,
       rowHeight: 40,
       headerHeight: 44,
-      height: 200,
       width: 300,
       backgroundColor: Colors.white,
       headerColor: Colors.red,
@@ -431,7 +578,6 @@ void main() {
       stripe: true,
       rowHeight: 60,
       headerHeight: 64,
-      height: 400,
       width: 500,
       backgroundColor: Colors.black,
       headerColor: Colors.blue,
@@ -446,7 +592,6 @@ void main() {
       expect(value.stripe, a.stripe);
       expect(value.rowHeight, 48);
       expect(value.headerHeight, a.headerHeight);
-      expect(value.height, a.height);
       expect(value.width, a.width);
       expect(value.backgroundColor, a.backgroundColor);
       expect(value.headerColor, a.headerColor);
@@ -456,7 +601,6 @@ void main() {
       final all = a.copyWith(
         stripe: true,
         headerHeight: 50,
-        height: 250,
         width: 350,
         backgroundColor: Colors.red,
         headerColor: Colors.green,
@@ -466,7 +610,6 @@ void main() {
       );
       expect(all.stripe, true);
       expect(all.headerHeight, 50);
-      expect(all.height, 250);
       expect(all.width, 350);
       expect(all.backgroundColor, Colors.red);
       expect(all.headerColor, Colors.green);
@@ -481,7 +624,6 @@ void main() {
       expect(value.stripe, true);
       expect(value.rowHeight, 50);
       expect(value.headerHeight, 54);
-      expect(value.height, 300);
       expect(value.width, 400);
       expect(value.backgroundColor, isNotNull);
       expect(value.headerColor, isNotNull);
@@ -513,8 +655,22 @@ void main() {
         ),
         throwsAssertionError,
       );
+      expect(
+        () => TTable(columns: columns(), data: rows, maxHeight: 0),
+        throwsAssertionError,
+      );
     });
   });
+}
+
+Iterable<Border> _tableBorders(WidgetTester tester) sync* {
+  for (final container
+      in tester.widgetList<Container>(find.byType(Container))) {
+    final decoration = container.decoration;
+    if (decoration is BoxDecoration && decoration.border is Border) {
+      yield decoration.border! as Border;
+    }
+  }
 }
 
 class _Row {

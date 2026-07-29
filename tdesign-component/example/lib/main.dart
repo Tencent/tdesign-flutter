@@ -21,6 +21,13 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
+  exampleMap.forEach((key, value) {
+    value.forEach((model) {
+      examplePageList.add(model);
+    });
+  });
+  sideBarExamplePage.forEach(examplePageList.add);
+
   runApp(const MyApp());
 
   /*SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -28,13 +35,6 @@ Future<void> main() async {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
   ));*/
-
-  exampleMap.forEach((key, value) {
-    value.forEach((model) {
-      examplePageList.add(model);
-    });
-  });
-  sideBarExamplePage.forEach(examplePageList.add);
 }
 
 class MyApp extends StatefulWidget {
@@ -51,7 +51,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _themeData = TThemeData.defaultData();
-    print('_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
+    print(
+        '_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
   }
 
   @override

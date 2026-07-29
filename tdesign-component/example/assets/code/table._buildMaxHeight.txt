@@ -1,0 +1,10 @@
+Widget _buildMaxHeight(BuildContext context) {
+    return _frame(TTable(
+      columns: _columns,
+      data: List.generate(
+        12,
+        (index) => _ExampleRow('用户 ${index + 1}', '成员', 20 + index),
+      ),
+      maxHeight: 192,
+    ));
+  }

@@ -1,5 +1,5 @@
 Widget _buildGradientSkeleton(BuildContext context) {
-    return TSkeleton(
+    return const TSkeleton(
       animation: TSkeletonAnimation.gradient,
       variant: TSkeletonVariant.paragraph,
     );

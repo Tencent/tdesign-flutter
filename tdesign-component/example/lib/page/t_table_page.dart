@@ -54,7 +54,7 @@ class _TTablePageState extends State<TTablePage> {
           title: '基础能力',
           children: [
             ExampleItem(desc: '基础表格', builder: _buildBasic),
-            ExampleItem(desc: '受控排序', builder: _buildSortable),
+            ExampleItem(desc: '受控三态排序', builder: _buildSortable),
             ExampleItem(desc: '受控多选', builder: _buildSelectable),
           ],
         ),
@@ -62,8 +62,16 @@ class _TTablePageState extends State<TTablePage> {
           title: '布局与状态',
           children: [
             ExampleItem(desc: '固定列', builder: _buildFixed),
+            ExampleItem(desc: '受限高度滚动', builder: _buildMaxHeight),
             ExampleItem(desc: '加载状态', builder: _buildLoading),
             ExampleItem(desc: '空状态', builder: _buildEmpty),
+          ],
+        ),
+        ExampleModule(
+          title: '样式',
+          children: [
+            ExampleItem(desc: '带边框表格', builder: _buildBordered),
+            ExampleItem(desc: '斑马纹表格', builder: _buildStriped),
           ],
         ),
       ],
@@ -123,6 +131,18 @@ class _TTablePageState extends State<TTablePage> {
   }
 
   @ExampleCode(group: 'table')
+  Widget _buildMaxHeight(BuildContext context) {
+    return _frame(TTable(
+      columns: _columns,
+      data: List.generate(
+        12,
+        (index) => _ExampleRow('用户 ${index + 1}', '成员', 20 + index),
+      ),
+      maxHeight: 192,
+    ));
+  }
+
+  @ExampleCode(group: 'table')
   Widget _buildLoading(BuildContext context) {
     return _frame(TTable(
       columns: _columns,
@@ -136,10 +156,26 @@ class _TTablePageState extends State<TTablePage> {
     return _frame(TTable<_ExampleRow>(
       columns: _columns,
       data: const [],
-      empty: const Padding(
-        padding: EdgeInsets.all(24),
-        child: Text('暂无数据'),
+    ));
+  }
+
+  @ExampleCode(group: 'table')
+  Widget _buildBordered(BuildContext context) {
+    return _frame(Theme(
+      data: Theme.of(context).mergeExtension(
+        const TTableThemeData(bordered: true),
       ),
+      child: TTable(columns: _columns, data: _rows),
+    ));
+  }
+
+  @ExampleCode(group: 'table')
+  Widget _buildStriped(BuildContext context) {
+    return _frame(Theme(
+      data: Theme.of(context).mergeExtension(
+        const TTableThemeData(stripe: true),
+      ),
+      child: TTable(columns: _columns, data: _rows),
     ));
   }
 }

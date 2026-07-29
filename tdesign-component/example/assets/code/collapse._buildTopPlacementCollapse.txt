@@ -1,17 +1,17 @@
-Widget _buildCardCollapse(BuildContext context) {
+Widget _buildTopPlacementCollapse(BuildContext context) {
     return TCollapse(
-      variant: TCollapseVariant.card,
       onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
-          _cardStyleData[index].isExpanded = !isExpanded;
+          _topPlacementData[index].isExpanded = !isExpanded;
         });
       },
-      children: _cardStyleData.map((CollapseDataItem item) {
+      children: _topPlacementData.map((CollapseDataItem item) {
         return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },
           isExpanded: item.isExpanded,
+          placement: TCollapsePlacement.top,
           body: const Text(randomString),
         );
       }).toList(),

@@ -102,7 +102,7 @@ dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/compone
 # result
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/result/t_result.dart" --name TResult --folder-name result --output "$PARENT_DIR/example/assets/api/" --only-api
 # skeleton
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/skeleton" --name TSkeleton,TSkeletonRowColStyle,TSkeletonRowCol,TSkeletonRowColObjStyle,TSkeletonRowColObj --folder-name skeleton --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/skeleton" --name TSkeleton,TSkeletonLayout,TSkeletonBlockStyle,TSkeletonBlock --folder-name skeleton --output "$PARENT_DIR/example/assets/api/" --only-api
 
 # sticky
 # swiper

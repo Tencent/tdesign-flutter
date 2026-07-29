@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
+import '../empty/t_empty.dart';
 import 't_table_col.dart';
 import 't_table_theme_data.dart';
 import 't_table_types.dart';
@@ -14,7 +16,7 @@ typedef TTableCellTap<T> = void Function(
 );
 
 /// 强类型、受控排序与选择的表格组件。
-class TTable<T> extends StatelessWidget {
+class TTable<T> extends StatefulWidget {
   const TTable({
     required this.columns,
     required this.data,
@@ -29,10 +31,12 @@ class TTable<T> extends StatelessWidget {
     this.empty,
     this.footer,
     this.showHeader = true,
+    this.maxHeight,
     this.onCellTap,
     this.onScroll,
     super.key,
   })  : assert(columns.length > 0),
+        assert(maxHeight == null || maxHeight > 0),
         assert(selectionMode == TTableSelectionMode.none ||
             onSelectionChanged != null);
 
@@ -60,7 +64,7 @@ class TTable<T> extends StatelessWidget {
   /// 请求更新排序值。
   final ValueChanged<TTableSort?>? onSortChanged;
 
-  /// 是否显示加载状态。
+  /// 是否在表体上显示加载遮罩。
   final bool loading;
 
   /// 自定义加载内容。
@@ -75,74 +79,69 @@ class TTable<T> extends StatelessWidget {
   /// 是否显示表头。
   final bool showHeader;
 
+  /// 表体的最大可视高度；内容超过此高度时在表体内滚动。
+  final double? maxHeight;
+
   /// 单元格点击回调。
   final TTableCellTap<T>? onCellTap;
 
   /// 垂直滚动通知。
   final ValueChanged<ScrollNotification>? onScroll;
 
-  bool get _selectable => selectionMode == TTableSelectionMode.multiple;
+  @override
+  State<TTable<T>> createState() => _TTableState<T>();
+}
+
+class _TTableState<T> extends State<TTable<T>> {
+  static const _loadingBodyHeight = 96.0;
+
+  final _horizontalScroll = _TableScrollCoordinator();
+
+  bool get _selectable => widget.selectionMode == TTableSelectionMode.multiple;
+
+  @override
+  void dispose() {
+    _horizontalScroll.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TTableThemeData>();
     final rows = _sortedData();
-    final left = columns
+    final left = widget.columns
         .where((column) => column.fixed == TTableColumnFixed.left)
         .toList();
-    final center = columns
+    final center = widget.columns
         .where((column) => column.fixed == TTableColumnFixed.none)
         .toList();
-    final right = columns
+    final right = widget.columns
         .where((column) => column.fixed == TTableColumnFixed.right)
         .toList();
-    final content = loading
-        ? _buildLoading()
-        : rows.isEmpty
-            ? _buildEmpty()
-            : _buildRows(context, theme, rows, left, center, right);
 
-    final header = showHeader
-        ? _buildHeader(context, theme, rows, left, center, right)
-        : null;
-    Widget table;
-    if (theme?.height != null) {
-      table = SizedBox(
-        height: theme!.height,
-        child: Column(
-          children: [
-            if (header != null) header,
-            Expanded(child: content),
-            if (footer != null) footer!,
-          ],
-        ),
-      );
-    } else {
-      table = Column(
+    return SizedBox(
+      width: theme?.width,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (header != null) header,
-          content,
-          if (footer != null) footer!,
+          if (widget.showHeader)
+            _buildHeader(context, theme, rows, left, center, right),
+          _buildBody(context, theme, rows, left, center, right),
+          if (widget.footer != null) widget.footer!,
         ],
-      );
-    }
-    return SizedBox(width: theme?.width, child: table);
+      ),
+    );
   }
 
   List<T> _sortedData() {
-    final rows = List<T>.of(data);
-    final currentSort = sort;
+    final rows = List<T>.of(widget.data);
+    final currentSort = widget.sort;
     if (currentSort == null) {
       return rows;
     }
-    TTableColumn<T>? column;
-    for (final candidate in columns) {
-      if (candidate.id == currentSort.columnId) {
-        column = candidate;
-        break;
-      }
-    }
+    final column = widget.columns
+        .where((candidate) => candidate.id == currentSort.columnId)
+        .firstOrNull;
     final comparator = column?.comparator;
     if (comparator == null) {
       return rows;
@@ -151,16 +150,6 @@ class TTable<T> extends StatelessWidget {
         ? comparator
         : (a, b) => comparator(b, a));
     return rows;
-  }
-
-  Widget _buildLoading() {
-    return Center(
-      child: loadingWidget ?? const CircularProgressIndicator(),
-    );
-  }
-
-  Widget _buildEmpty() {
-    return Center(child: empty ?? const SizedBox.shrink());
   }
 
   Widget _buildHeader(
@@ -181,6 +170,7 @@ class TTable<T> extends StatelessWidget {
             ...left.map((column) => _buildHeaderCell(context, theme, column)),
             Expanded(
               child: SingleChildScrollView(
+                controller: _horizontalScroll.headerController,
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: center
@@ -196,6 +186,54 @@ class TTable<T> extends StatelessWidget {
     );
   }
 
+  Widget _buildBody(
+    BuildContext context,
+    TTableThemeData? theme,
+    List<T> rows,
+    List<TTableColumn<T>> left,
+    List<TTableColumn<T>> center,
+    List<TTableColumn<T>> right,
+  ) {
+    var content = rows.isEmpty
+        ? widget.loading
+            ? const SizedBox.shrink()
+            : _buildEmpty(context)
+        : _buildRows(context, theme, rows, left, center, right);
+    if (widget.maxHeight != null && rows.isNotEmpty) {
+      content = ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: widget.maxHeight!),
+        child: content,
+      );
+    }
+    if (widget.loading && rows.isEmpty) {
+      content = SizedBox(height: _loadingBodyHeight, child: content);
+    }
+    if (!widget.loading) {
+      return content;
+    }
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        content,
+        Positioned.fill(
+          child: AbsorbPointer(
+            child: ColoredBox(
+              color: (theme?.backgroundColor ?? context.tTheme.bgColorContainer)
+                  .withValues(alpha: 0.72),
+              child: Center(
+                child:
+                    widget.loadingWidget ?? const CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmpty(BuildContext context) => Center(
+      child: widget.empty ?? TEmpty(emptyText: context.resource.emptyData));
+
   Widget _buildRows(
     BuildContext context,
     TTableThemeData? theme,
@@ -205,7 +243,8 @@ class TTable<T> extends StatelessWidget {
     List<TTableColumn<T>> right,
   ) {
     final body = ListView.builder(
-      shrinkWrap: theme?.height == null,
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
       itemCount: rows.length,
       itemBuilder: (context, index) {
         final row = rows[index];
@@ -224,6 +263,7 @@ class TTable<T> extends StatelessWidget {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _horizontalScroll.rowController(index),
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: center
@@ -242,12 +282,14 @@ class TTable<T> extends StatelessWidget {
         );
       },
     );
-    if (onScroll == null) {
+    if (widget.onScroll == null) {
       return body;
     }
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
-        onScroll!(notification);
+        if (notification.metrics.axis == Axis.vertical) {
+          widget.onScroll!(notification);
+        }
         return false;
       },
       child: body,
@@ -259,14 +301,14 @@ class TTable<T> extends StatelessWidget {
     TTableThemeData? theme,
     TTableColumn<T> column,
   ) {
-    final active = sort?.columnId == column.id;
+    final active = widget.sort?.columnId == column.id;
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(child: column.header),
         if (column.comparator != null)
           Icon(
-            active && sort?.direction == TTableSortDirection.descending
+            active && widget.sort?.direction == TTableSortDirection.descending
                 ? Icons.arrow_downward
                 : Icons.arrow_upward,
             size: 16,
@@ -278,7 +320,7 @@ class TTable<T> extends StatelessWidget {
       theme,
       column.width,
       column.align,
-      column.comparator == null
+      child: column.comparator == null
           ? content
           : InkWell(onTap: () => _requestSort(column), child: content),
     );
@@ -297,10 +339,10 @@ class TTable<T> extends StatelessWidget {
       theme,
       column.width,
       column.align,
-      onCellTap == null
+      child: widget.onCellTap == null
           ? content
           : InkWell(
-              onTap: () => onCellTap!(rowIndex, row, column),
+              onTap: () => widget.onCellTap!(rowIndex, row, column),
               child: content,
             ),
     );
@@ -310,9 +352,9 @@ class TTable<T> extends StatelessWidget {
     BuildContext context,
     TTableThemeData? theme,
     double width,
-    TTableColumnAlign align,
-    Widget child,
-  ) {
+    TTableColumnAlign align, {
+    required Widget child,
+  }) {
     final alignment = switch (align) {
       TTableColumnAlign.left => Alignment.centerLeft,
       TTableColumnAlign.center => Alignment.center,
@@ -324,13 +366,7 @@ class TTable<T> extends StatelessWidget {
       alignment: alignment,
       padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        border: theme?.bordered ?? false
-            ? Border.all(
-                color:
-                    theme?.borderColor ?? context.tTheme.componentStrokeColor,
-                width: 0.5,
-              )
-            : null,
+        border: _cellBorder(context, theme),
       ),
       child: child,
     );
@@ -339,9 +375,10 @@ class TTable<T> extends StatelessWidget {
   Widget _buildSelectAll(BuildContext context, List<T> rows) {
     final selectableRows = <T>{
       for (var index = 0; index < rows.length; index++)
-        if (rowSelectable?.call(rows[index], index) ?? true) rows[index],
+        if (widget.rowSelectable?.call(rows[index], index) ?? true) rows[index],
     };
-    final selectedCount = selectableRows.intersection(selectedRows).length;
+    final selectedCount =
+        selectableRows.intersection(widget.selectedRows).length;
     return _selectionFrame(
       context,
       value:
@@ -349,31 +386,31 @@ class TTable<T> extends StatelessWidget {
       tristate: selectedCount > 0 && selectedCount < selectableRows.length,
       enabled: selectableRows.isNotEmpty,
       onChanged: (checked) {
-        final next = Set<T>.of(selectedRows);
+        final next = Set<T>.of(widget.selectedRows);
         if (checked == true) {
           next.addAll(selectableRows);
         } else {
           next.removeAll(selectableRows);
         }
-        onSelectionChanged!(next);
+        widget.onSelectionChanged!(next);
       },
     );
   }
 
   Widget _buildRowSelection(BuildContext context, T row, int index) {
-    final enabled = rowSelectable?.call(row, index) ?? true;
+    final enabled = widget.rowSelectable?.call(row, index) ?? true;
     return _selectionFrame(
       context,
-      value: selectedRows.contains(row),
+      value: widget.selectedRows.contains(row),
       enabled: enabled,
       onChanged: (checked) {
-        final next = Set<T>.of(selectedRows);
+        final next = Set<T>.of(widget.selectedRows);
         if (checked == true) {
           next.add(row);
         } else {
           next.remove(row);
         }
-        onSelectionChanged!(next);
+        widget.onSelectionChanged!(next);
       },
     );
   }
@@ -385,9 +422,10 @@ class TTable<T> extends StatelessWidget {
     required ValueChanged<bool?> onChanged,
     bool tristate = false,
   }) {
-    return SizedBox(
+    return Container(
       width: 48,
       height: double.infinity,
+      decoration: BoxDecoration(border: _cellBorder(context, null)),
       child: CheckboxTheme(
         data: const CheckboxThemeData(
           visualDensity: VisualDensity.compact,
@@ -404,14 +442,83 @@ class TTable<T> extends StatelessWidget {
     );
   }
 
+  Border _cellBorder(BuildContext context, TTableThemeData? theme) {
+    final resolvedTheme =
+        theme ?? Theme.of(context).extension<TTableThemeData>();
+    final side = BorderSide(
+      color: resolvedTheme?.borderColor ?? context.tTheme.componentStrokeColor,
+      width: 0.5,
+    );
+    return resolvedTheme?.bordered ?? false
+        ? Border.all(color: side.color, width: side.width)
+        : Border(bottom: side);
+  }
+
   void _requestSort(TTableColumn<T> column) {
-    if (onSortChanged == null) {
+    if (widget.onSortChanged == null) {
       return;
     }
-    final nextDirection = sort?.columnId == column.id &&
-            sort?.direction == TTableSortDirection.ascending
-        ? TTableSortDirection.descending
-        : TTableSortDirection.ascending;
-    onSortChanged!(TTableSort(columnId: column.id, direction: nextDirection));
+    final currentSort = widget.sort;
+    final TTableSort? nextSort;
+    if (currentSort == null || currentSort.columnId != column.id) {
+      nextSort = TTableSort(
+        columnId: column.id,
+        direction: TTableSortDirection.ascending,
+      );
+    } else if (currentSort.direction == TTableSortDirection.ascending) {
+      nextSort = TTableSort(
+        columnId: column.id,
+        direction: TTableSortDirection.descending,
+      );
+    } else {
+      nextSort = null;
+    }
+    widget.onSortChanged!(nextSort);
+  }
+}
+
+/// 让表头和每个表体行共享横向偏移的私有协调器。
+class _TableScrollCoordinator {
+  final Map<int, ScrollController> _rowControllers = {};
+  late final ScrollController headerController = _createController();
+
+  double _offset = 0;
+  bool _syncing = false;
+
+  ScrollController rowController(int index) =>
+      _rowControllers.putIfAbsent(index, _createController);
+
+  ScrollController _createController() {
+    final controller = ScrollController(initialScrollOffset: _offset);
+    controller.addListener(() => _synchronize(controller));
+    return controller;
+  }
+
+  void _synchronize(ScrollController source) {
+    if (_syncing || !source.hasClients) {
+      return;
+    }
+    _syncing = true;
+    _offset = source.offset;
+    for (final controller in [headerController, ..._rowControllers.values]) {
+      if (identical(controller, source) || !controller.hasClients) {
+        continue;
+      }
+      final target = _offset.clamp(
+        controller.position.minScrollExtent,
+        controller.position.maxScrollExtent,
+      );
+      if (controller.offset != target) {
+        controller.jumpTo(target);
+      }
+    }
+    _syncing = false;
+  }
+
+  void dispose() {
+    headerController.dispose();
+    for (final controller in _rowControllers.values) {
+      controller.dispose();
+    }
   }
 }

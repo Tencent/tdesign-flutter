@@ -233,7 +233,6 @@ class TMaterialThemeBuilder {
       const TResultThemeData(),
       const TSearchBarThemeData(),
       const TSideBarThemeData(),
-      const TSkeletonThemeData(),
       const TSliderThemeData(),
       const TStepperThemeData(),
       const TStepsThemeData(),

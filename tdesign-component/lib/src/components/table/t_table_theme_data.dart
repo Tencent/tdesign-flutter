@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 
 /// 表格组件级 ThemeExtension。
 ///
-/// 仅保存表格的视觉和尺寸默认值。
+/// 仅保存表格的视觉默认值。
 class TTableThemeData extends ThemeExtension<TTableThemeData> {
   const TTableThemeData({
     this.bordered,
     this.stripe,
     this.rowHeight,
     this.headerHeight,
-    this.height,
     this.width,
     this.backgroundColor,
     this.headerColor,
@@ -31,9 +30,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
 
   /// 表头高度。
   final double? headerHeight;
-
-  /// 表格最大高度。
-  final double? height;
 
   /// 表格宽度。
   final double? width;
@@ -59,7 +55,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
     bool? stripe,
     double? rowHeight,
     double? headerHeight,
-    double? height,
     double? width,
     Color? backgroundColor,
     Color? headerColor,
@@ -72,7 +67,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
       stripe: stripe ?? this.stripe,
       rowHeight: rowHeight ?? this.rowHeight,
       headerHeight: headerHeight ?? this.headerHeight,
-      height: height ?? this.height,
       width: width ?? this.width,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       headerColor: headerColor ?? this.headerColor,
@@ -92,7 +86,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
       stripe: t < 0.5 ? stripe : other.stripe,
       rowHeight: lerpDouble(rowHeight, other.rowHeight, t),
       headerHeight: lerpDouble(headerHeight, other.headerHeight, t),
-      height: lerpDouble(height, other.height, t),
       width: lerpDouble(width, other.width, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       headerColor: Color.lerp(headerColor, other.headerColor, t),

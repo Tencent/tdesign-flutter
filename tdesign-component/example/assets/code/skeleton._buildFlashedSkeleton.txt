@@ -1,5 +1,5 @@
 Widget _buildFlashedSkeleton(BuildContext context) {
-    return TSkeleton(
+    return const TSkeleton(
       animation: TSkeletonAnimation.flashed,
       variant: TSkeletonVariant.paragraph,
     );
