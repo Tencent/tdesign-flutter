@@ -18,7 +18,7 @@
 | onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 |
 | repeat | ImageRepeat | ImageRepeat.noRepeat | 图片重复方式。 |
 | semanticLabel | String? | - | 无障碍标签。 |
-| src | String? | - | 网络 URL 或 asset 路径。 |
+| src | String? | - | 网络 URL 或 asset 路径；空字符串显示加载占位。 |
 | variant | TImageVariant | TImageVariant.roundedSquare | 图片裁剪形态。 |
 | width | double? | - | 图片宽度。 |
 
