@@ -74,7 +74,11 @@ class PopupLayout {
           child: child,
         );
       case TPopupPlacement.center:
-        return Positioned.fill(
+        return Positioned(
+          top: safePadding.top,
+          bottom: safePadding.bottom,
+          left: safePadding.left,
+          right: safePadding.right,
           child: Center(child: child),
         );
     }
@@ -107,8 +111,7 @@ class PopupLayout {
           bottom: mediaPadding.bottom,
         );
       case TPopupPlacement.center:
-        // center 不参与贴边避让，由面板尺寸自然落在可视区中部。
-        return EdgeInsets.zero;
+        return mediaPadding;
     }
   }
 

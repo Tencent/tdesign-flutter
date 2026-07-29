@@ -8,7 +8,6 @@ class TSwipeCellInherited extends InheritedWidget {
   const TSwipeCellInherited({
     Key? key,
     required Widget child,
-    required this.cellClick,
     required this.actionClick,
     required this.duration,
     required this.controller,
@@ -16,9 +15,6 @@ class TSwipeCellInherited extends InheritedWidget {
 
   /// 滑动动画时长
   final Duration duration;
-
-  /// 单元格点击回调
-  final void Function() cellClick;
 
   /// 操作按钮点击回调，返回 true 表示触发二次确认
   final bool Function(TSwipeCellAction action) actionClick;

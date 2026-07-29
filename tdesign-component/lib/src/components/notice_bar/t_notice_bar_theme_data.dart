@@ -115,7 +115,7 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     return copyWith(
       backgroundColor: resolvedBg,
       leftIconColor: resolvedLeftIcon,
-      rightIconColor: rightIconColor ?? t.textColorPlaceholder,
+      rightIconColor: rightIconColor ?? t.textColorSecondary,
       textStyle: textStyle ??
           TextStyle(
             color: t.textColorPrimary,

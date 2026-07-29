@@ -20,7 +20,7 @@ class TNoticeBarPage extends StatelessWidget {
           ExampleItem(
               padding: EdgeInsets.only(top: 16), builder: _scrollIconNoticeBar),
           ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
-          ExampleItem(desc: '带关闭的公告栏', builder: _closeNoticeBar),
+          ExampleItem(desc: '带可点击后缀图标的公告栏', builder: _closeNoticeBar),
           ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
           ExampleItem(
               padding: EdgeInsets.only(top: 16), builder: _entranceNoticeBar2),
@@ -103,8 +103,13 @@ Widget _closeNoticeBar(BuildContext context) {
         suffixIcon: TIcons.close,
       ),
     ),
-    child: const TNoticeBar(
+    child: TNoticeBar(
       content: '这是一条普通的通知信息',
+      onPressed: (target) {
+        if (target == TNoticeBarTapTarget.suffix) {
+          TToast.showText('点击了关闭按钮', context: context);
+        }
+      },
     ),
   );
 }
@@ -115,13 +120,14 @@ Widget _entranceNoticeBar1(BuildContext context) {
     data: Theme.of(context).mergeExtension(
       const TNoticeBarThemeData(prefixIcon: TIcons.error_circle_filled),
     ),
-    child: const TNoticeBar(
+    child: TNoticeBar(
       content: '这是一条普通的通知信息',
       right: TButton(
-        child: Text('文字按钮'),
+        child: const Text('文字按钮'),
         variant: TButtonVariant.text,
         colorScheme: TButtonColorScheme.primary,
         size: TButtonSize.extraSmall,
+        onPressed: () => TToast.showText('点击了文字按钮', context: context),
       ),
     ),
   );
@@ -136,8 +142,13 @@ Widget _entranceNoticeBar2(BuildContext context) {
         suffixIcon: TIcons.chevron_right,
       ),
     ),
-    child: const TNoticeBar(
+    child: TNoticeBar(
       content: '这是一条普通的通知信息',
+      onPressed: (target) {
+        if (target == TNoticeBarTapTarget.suffix) {
+          TToast.showText('点击了入口图标', context: context);
+        }
+      },
     ),
   );
 }
@@ -306,14 +317,20 @@ Widget _leftNoticeBar(BuildContext context) {
     data: Theme.of(context).mergeExtension(
       const TNoticeBarThemeData(suffixIcon: TIcons.chevron_right),
     ),
-    child: const TNoticeBar(
+    child: TNoticeBar(
       content: '这是一条普通的通知信息',
       left: TButton(
-        child: Text('文本'),
+        child: const Text('文本'),
         variant: TButtonVariant.text,
         colorScheme: TButtonColorScheme.primary,
         size: TButtonSize.extraSmall,
+        onPressed: () => TToast.showText('点击了文字按钮', context: context),
       ),
+      onPressed: (target) {
+        if (target == TNoticeBarTapTarget.suffix) {
+          TToast.showText('点击了入口图标', context: context);
+        }
+      },
     ),
   );
 }

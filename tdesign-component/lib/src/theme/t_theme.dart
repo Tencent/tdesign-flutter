@@ -209,7 +209,6 @@ class TMaterialThemeBuilder {
       const TCellThemeData(),
       const TCheckboxThemeData(),
       const TCollapseThemeData(),
-      const TDialogThemeData(),
       const TDrawerThemeData(),
       const TDropdownThemeData(),
       const TEmptyThemeData(),

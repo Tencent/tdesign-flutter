@@ -12,7 +12,6 @@ void main() {
   TSwipeCellInherited makeInherited(SlidableController controller) {
     return TSwipeCellInherited(
       child: const SizedBox(),
-      cellClick: () {},
       actionClick: (_) => false,
       duration: const Duration(milliseconds: 200),
       controller: controller,
@@ -41,7 +40,6 @@ void main() {
                   return const SizedBox();
                 },
               ),
-              cellClick: () {},
               actionClick: (_) => false,
               duration: const Duration(milliseconds: 200),
               controller: controller,

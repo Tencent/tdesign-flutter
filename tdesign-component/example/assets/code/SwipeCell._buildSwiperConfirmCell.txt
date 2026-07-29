@@ -5,7 +5,7 @@ Widget _buildSwiperConfirmCell(BuildContext context) {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 120 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -25,7 +25,7 @@ Widget _buildSwiperConfirmCell(BuildContext context) {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左滑操作'), note: Text('二次确认')),
+        child: const TCell(title: Text('左滑操作'), note: Text('二次确认')),
       ),
     );
   }

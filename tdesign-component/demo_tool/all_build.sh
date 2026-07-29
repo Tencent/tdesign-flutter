@@ -118,7 +118,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # action_sheet
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/action_sheet" --name TActionSheetItem,TActionSheet --folder-name action-sheet --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # dialog
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dialog" --name TAlertDialog,TConfirmDialog,TDialogButtonOptions,TDialogButtonStyle,TDialogScaffold,TDialogTitle,TDialogContent,TDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDialogButton,TDialogImagePosition,TImageDialog,TInputDialog --folder-name dialog --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dialog" --name TDialog,TDialogAction,TDialogActionRole,TConfirmDialog,TDialogThemeData --folder-name dialog --output "$PARENT_DIR/example/assets/api/" --only-api
 # dropdown_menu
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dropdown_menu" --name TDropdownMenu,TDropdownMenuDirection,TDropdownItem,TDropdownItemOption,TDropdownItemController --folder-name dropdown-menu --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # loading
@@ -135,7 +135,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # refresh
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/refresh/t_refresh_header.dart" --name TRefreshHeader --folder-name pull-down-refresh --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # swipecell
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swipe_cell" --name TSwipeAction,TSwipeAutoClose,TSwipeCell,TSwipePanel --folder-name swipe-cell --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swipe_cell" --name TSwipeCell,TSwipeCellPanel,TSwipeCellAction,TSwipeCellSide,TSwipeCellChanged,SwipeMotion --folder-name swipe-cell --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # toast
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/toast/t_toast.dart" --name TToast --folder-name toast --output "$PARENT_DIR/example/assets/api/" --only-api
 

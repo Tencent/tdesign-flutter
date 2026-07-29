@@ -1,0 +1,20 @@
+Widget _buildLongContentDialog(BuildContext context) {
+    return _trigger(
+      text: '长内容滚动',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: TDialog(
+            title: const Text('服务说明'),
+            content: Text(List.filled(12, '这是一段需要滚动阅读的说明内容。').join()),
+            actions: const [
+              TDialogAction(
+                child: Text('知道了'),
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }

@@ -8,6 +8,8 @@
 /// * [TPopupHeaderBuilder]、[TPopupSlotBuilder]、[TPopupVisibleChangeCallback] — 构建器类型
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_icons/tdesign_icons.dart';
 
@@ -79,8 +81,7 @@ final class TPopup {
     final theme = Theme.of(context).extension<TPopupThemeData>();
     final resolvedOptions = options.copyWith(
       radius: options.radius ?? theme?.panelRadius,
-      backgroundColor:
-          options.backgroundColor ?? theme?.panelBackgroundColor,
+      backgroundColor: options.backgroundColor ?? theme?.panelBackgroundColor,
       overlayColor: options.overlayColor ?? theme?.barrierColor,
       overlayOpacity: options.overlayOpacity ?? theme?.barrierOpacity,
       animationDuration: options.animationDuration ??
@@ -91,6 +92,7 @@ final class TPopup {
       options: resolvedOptions,
       navigatorContext: navigatorContext,
       useRootNavigator: useRootNavigator,
+      themeContext: context,
     );
     handle.open(navContext);
     return handle;

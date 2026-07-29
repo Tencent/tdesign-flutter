@@ -379,7 +379,18 @@ class _TNoticeBarState extends State<TNoticeBar> {
     return child;
   }
 
-  void _onTap(TNoticeBarTapTarget target) => widget.onPressed?.call(target);
+  Widget _buildBuiltInTapTarget(
+    TNoticeBarTapTarget target,
+    Widget child,
+  ) {
+    if (widget.onPressed == null) {
+      return child;
+    }
+    return GestureDetector(
+      onTap: () => widget.onPressed!(target),
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -398,9 +409,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
           if (widget.left != null)
             widget.left!
           else if (prefixIcon != null)
-            GestureDetector(
-              onTap: () => _onTap(TNoticeBarTapTarget.prefix),
-              child: Container(
+            _buildBuiltInTapTarget(
+              TNoticeBarTapTarget.prefix,
+              Container(
                 margin: const EdgeInsets.only(right: 8),
                 child: Icon(
                   prefixIcon,
@@ -413,9 +424,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
           /// 中间内容
           Expanded(
             key: _contentKey,
-            child: GestureDetector(
-              onTap: () => _onTap(TNoticeBarTapTarget.content),
-              child: _contentWidget(),
+            child: _buildBuiltInTapTarget(
+              TNoticeBarTapTarget.content,
+              _contentWidget(),
             ),
           ),
 
@@ -423,16 +434,17 @@ class _TNoticeBarState extends State<TNoticeBar> {
           if (widget.right != null)
             widget.right!
           else if (suffixIcon != null)
-            GestureDetector(
-                onTap: () => _onTap(TNoticeBarTapTarget.suffix),
-                child: Container(
-                  margin: const EdgeInsets.only(left: 8),
-                  child: Icon(
-                    suffixIcon,
-                    color: _resolved.rightIconColor,
-                    size: _effectiveHeight,
-                  ),
-                )),
+            _buildBuiltInTapTarget(
+              TNoticeBarTapTarget.suffix,
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: Icon(
+                  suffixIcon,
+                  color: _resolved.rightIconColor,
+                  size: _effectiveHeight,
+                ),
+              ),
+            ),
         ],
       ),
     );

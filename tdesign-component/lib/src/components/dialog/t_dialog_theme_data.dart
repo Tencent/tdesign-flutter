@@ -14,9 +14,6 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
   /// 阴影（对应 Material [DialogThemeData.elevation]）
   final double? elevation;
 
-  /// 蒙层色（对应 [showDialog] 的 barrierColor）
-  final Color? barrierColor;
-
   /// 标题文案样式（对应 Material [DialogThemeData.titleTextStyle]）
   final TextStyle? titleTextStyle;
 
@@ -26,8 +23,8 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
   /// 内容内边距（对应 Material [Dialog] 的 contentPadding；TDesign 扩展）
   final EdgeInsetsGeometry? contentPadding;
 
-  /// 内容最大高度（TDesign 扩展，0 表示不限制）
-  final double? contentMaxHeight;
+  /// 面板最大高度。
+  final double? maxHeight;
 
   /// 按钮区样式（对应 Material [TextButtonThemeData]；TDesign 扩展）
   final ButtonStyle? actionButtonStyle;
@@ -39,11 +36,10 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     this.backgroundColor,
     this.shape,
     this.elevation,
-    this.barrierColor,
     this.titleTextStyle,
     this.contentTextStyle,
     this.contentPadding,
-    this.contentMaxHeight,
+    this.maxHeight,
     this.actionButtonStyle,
     this.width,
   });
@@ -57,11 +53,10 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
       backgroundColor: other.backgroundColor ?? backgroundColor,
       shape: other.shape ?? shape,
       elevation: other.elevation ?? elevation,
-      barrierColor: other.barrierColor ?? barrierColor,
       titleTextStyle: other.titleTextStyle ?? titleTextStyle,
       contentTextStyle: other.contentTextStyle ?? contentTextStyle,
       contentPadding: other.contentPadding ?? contentPadding,
-      contentMaxHeight: other.contentMaxHeight ?? contentMaxHeight,
+      maxHeight: other.maxHeight ?? maxHeight,
       actionButtonStyle: other.actionButtonStyle ?? actionButtonStyle,
       width: other.width ?? width,
     );
@@ -72,11 +67,10 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     Color? backgroundColor,
     ShapeBorder? shape,
     double? elevation,
-    Color? barrierColor,
     TextStyle? titleTextStyle,
     TextStyle? contentTextStyle,
     EdgeInsetsGeometry? contentPadding,
-    double? contentMaxHeight,
+    double? maxHeight,
     ButtonStyle? actionButtonStyle,
     double? width,
   }) {
@@ -84,11 +78,10 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       shape: shape ?? this.shape,
       elevation: elevation ?? this.elevation,
-      barrierColor: barrierColor ?? this.barrierColor,
       titleTextStyle: titleTextStyle ?? this.titleTextStyle,
       contentTextStyle: contentTextStyle ?? this.contentTextStyle,
       contentPadding: contentPadding ?? this.contentPadding,
-      contentMaxHeight: contentMaxHeight ?? this.contentMaxHeight,
+      maxHeight: maxHeight ?? this.maxHeight,
       actionButtonStyle: actionButtonStyle ?? this.actionButtonStyle,
       width: width ?? this.width,
     );
@@ -103,13 +96,12 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       shape: ShapeBorder.lerp(shape, other.shape, t),
       elevation: lerpDouble(elevation, other.elevation, t),
-      barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
       titleTextStyle: TextStyle.lerp(titleTextStyle, other.titleTextStyle, t),
       contentTextStyle:
           TextStyle.lerp(contentTextStyle, other.contentTextStyle, t),
       contentPadding:
           EdgeInsetsGeometry.lerp(contentPadding, other.contentPadding, t),
-      contentMaxHeight: lerpDouble(contentMaxHeight, other.contentMaxHeight, t),
+      maxHeight: lerpDouble(maxHeight, other.maxHeight, t),
       actionButtonStyle:
           ButtonStyle.lerp(actionButtonStyle, other.actionButtonStyle, t),
       width: lerpDouble(width, other.width, t),

@@ -5,7 +5,7 @@ Widget _buildSwiperRightLeftCell(BuildContext context) {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        left: TSwipeCellPanel(
+        start: TSwipeCellPanel(
           extentRatio: 60 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -14,7 +14,7 @@ Widget _buildSwiperRightLeftCell(BuildContext context) {
             ),
           ],
         ),
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 120 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -27,7 +27,7 @@ Widget _buildSwiperRightLeftCell(BuildContext context) {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左右滑操作'), note: Text('辅助信息')),
+        child: const TCell(title: Text('左右滑操作'), note: Text('辅助信息')),
       ),
     );
   }

@@ -148,7 +148,6 @@ export 'src/components/steps/t_steps.dart';
 export 'src/components/steps/t_steps_theme_data.dart' show TStepsThemeData;
 export 'src/components/swipe_cell/t_swipe_cell.dart';
 export 'src/components/swipe_cell/t_swipe_cell_action.dart';
-export 'src/components/swipe_cell/t_swipe_cell_inherited.dart';
 export 'src/components/swipe_cell/t_swipe_cell_panel.dart';
 export 'src/components/swipe_cell/t_swipe_cell_theme_data.dart'
     show TSwipeCellThemeData;

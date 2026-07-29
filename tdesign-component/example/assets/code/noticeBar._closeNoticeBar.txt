@@ -6,8 +6,13 @@ Widget _closeNoticeBar(BuildContext context) {
         suffixIcon: TIcons.close,
       ),
     ),
-    child: const TNoticeBar(
+    child: TNoticeBar(
       content: '这是一条普通的通知信息',
+      onPressed: (target) {
+        if (target == TNoticeBarTapTarget.suffix) {
+          TToast.showText('点击了关闭按钮', context: context);
+        }
+      },
     ),
   );
 }

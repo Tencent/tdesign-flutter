@@ -9,8 +9,7 @@ void main() {
   tearDown(resetPopupTestResource);
 
   group('Popup 路由层行为（通过 TPopup.show 验证）', () {
-    testWidgets('无蒙层 + modal=true 时阻断底层点击与滚动',
-        (tester) async {
+    testWidgets('无蒙层 + modal=true 时阻断底层点击与滚动', (tester) async {
       final controller = ScrollController();
       var backgroundTapCount = 0;
 
@@ -79,8 +78,7 @@ void main() {
       expect(controller.offset, 0);
     });
 
-    testWidgets('无蒙层 + modal=false 时允许底层点击与滚动',
-        (tester) async {
+    testWidgets('无蒙层 + modal=false 时允许底层点击与滚动', (tester) async {
       final controller = ScrollController();
       var backgroundTapCount = 0;
 
@@ -471,7 +469,7 @@ void main() {
         expect(positioned.top, safeTop);
       });
 
-      testWidgets('center 忽略 useSafeArea', (tester) async {
+      testWidgets('center 默认避让全部安全区', (tester) async {
         await openPopup(
           tester,
           mediaPadding: const EdgeInsets.only(bottom: 34, top: 44),
@@ -492,9 +490,9 @@ void main() {
         expect(find.byType(Positioned), findsOneWidget);
         final positioned = tester.widget<Positioned>(find.byType(Positioned));
         expect(positioned.left, 0);
-        expect(positioned.top, 0);
+        expect(positioned.top, 44);
         expect(positioned.right, 0);
-        expect(positioned.bottom, 0);
+        expect(positioned.bottom, 34);
       });
 
       testWidgets('center 在 useSafeArea=false 时仍为全屏 fill', (tester) async {

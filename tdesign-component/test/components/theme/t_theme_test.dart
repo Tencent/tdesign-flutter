@@ -136,7 +136,7 @@ void main() {
       expect(theme.extension<TCellThemeData>(), isNotNull);
       expect(theme.extension<TCheckboxThemeData>(), isNotNull);
       expect(theme.extension<TCollapseThemeData>(), isNotNull);
-      expect(theme.extension<TDialogThemeData>(), isNotNull);
+      expect(theme.extension<TDialogThemeData>(), isNull);
       expect(theme.extension<TDividerThemeData>(), isNotNull);
       expect(theme.extension<TDrawerThemeData>(), isNotNull);
       expect(theme.extension<TDropdownThemeData>(), isNotNull);

@@ -5,15 +5,18 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   _PopupNavigatorRoute({
     required this.options,
     required this.onCloseWithTrigger,
-  }) : _layout = PopupLayout(
+    required this.capturedThemes,
+  })  : _layout = PopupLayout(
           placement: options.placement,
           inset: options.inset,
           width: options.width,
           height: options.height,
-        );
+        ),
+        super(traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop);
 
   final TPopupOptions options;
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
+  final CapturedThemes? capturedThemes;
 
   late PopupLayout _layout;
   bool _animationListenerAttached = false;
@@ -160,13 +163,14 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
     final barrier = _buildBarrier(context, t);
 
-    return Stack(
+    final content = Stack(
       fit: StackFit.expand,
       children: [
         if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
         positioned,
       ],
     );
+    return capturedThemes?.wrap(content) ?? content;
   }
 
   Widget _buildBarrier(BuildContext context, double t) {

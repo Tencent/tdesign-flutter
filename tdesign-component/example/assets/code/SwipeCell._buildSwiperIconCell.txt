@@ -8,7 +8,7 @@ Widget _buildSwiperIconCell(BuildContext context) {
             const TSwipeCellThemeData(),
           ),
           child: TSwipeCell(
-            right: TSwipeCellPanel(
+            end: TSwipeCellPanel(
               extentRatio: 160 / screenWidth,
               children: [
                 TSwipeCellAction(
@@ -23,7 +23,7 @@ Widget _buildSwiperIconCell(BuildContext context) {
                 ),
               ],
             ),
-            cell: const TCell(title: Text('左滑操作'), note: Text('图标+文字（横向）')),
+            child: const TCell(title: Text('左滑操作'), note: Text('图标+文字（横向）')),
           ),
         ),
         const SizedBox(height: 16),
@@ -32,7 +32,7 @@ Widget _buildSwiperIconCell(BuildContext context) {
             const TSwipeCellThemeData(),
           ),
           child: TSwipeCell(
-            right: TSwipeCellPanel(
+            end: TSwipeCellPanel(
               extentRatio: 120 / screenWidth,
               children: [
                 TSwipeCellAction(
@@ -45,7 +45,7 @@ Widget _buildSwiperIconCell(BuildContext context) {
                 ),
               ],
             ),
-            cell: const TCell(title: Text('左滑操作'), note: Text('仅图标')),
+            child: const TCell(title: Text('左滑操作'), note: Text('仅图标')),
           ),
         ),
         const SizedBox(height: 16),
@@ -54,7 +54,7 @@ Widget _buildSwiperIconCell(BuildContext context) {
             const TSwipeCellThemeData(),
           ),
           child: TSwipeCell(
-            right: TSwipeCellPanel(
+            end: TSwipeCellPanel(
               extentRatio: 120 / screenWidth,
               children: [
                 TSwipeCellAction(
@@ -73,7 +73,7 @@ Widget _buildSwiperIconCell(BuildContext context) {
                 ),
               ],
             ),
-            cell: const TCell(
+            child: const TCell(
               title: Text('左滑操作'),
               note: Text('图标+文字（纵向）'),
               subtitle: Text('一段很长很长的内容文字'),

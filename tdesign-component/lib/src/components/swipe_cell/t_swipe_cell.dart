@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../util/list_ext.dart';
-import '../cell/t_cell.dart';
 import 't_swipe_cell_action.dart';
 import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_panel.dart';
@@ -11,69 +10,61 @@ import 't_swipe_cell_theme_data.dart';
 
 export 'package:flutter_slidable/flutter_slidable.dart';
 
-/// 滑动方向
-enum TSwipeDirection { right, left }
+/// 操作面板所在侧。
+enum TSwipeCellSide { start, end }
 
 /// 滑动展开状态变化回调
 typedef TSwipeCellChanged = void Function(
-  TSwipeDirection direction,
-  bool open,
+  TSwipeCellSide side,
+  bool isOpen,
 );
 
 /// 滑动单元格组件
 class TSwipeCell extends StatefulWidget {
   const TSwipeCell({
     Key? key,
-    required this.cell,
+    required this.child,
     this.enabled = true,
-    this.right,
-    this.left,
-    this.onChanged,
+    this.start,
+    this.end,
+    this.onOpenChanged,
     this.controller,
     this.direction = Axis.horizontal,
-    this.slidableKey,
-    this.opened = const <bool>[false, false],
+    this.initialOpenSide,
     this.groupTag,
     this.closeWhenOpened = false,
-    this.closeWhenTapped = false,
     this.dragStartBehavior = DragStartBehavior.start,
   }) : super(key: key);
 
-  /// 单元格 [TCell]
-  final Widget cell;
+  /// 要增强为可滑动单元格的内容。
+  final Widget child;
 
   /// 是否启用滑动（默认 true，false 表示禁用）
   final bool enabled;
 
-  /// 右侧滑动操作项面板
-  final TSwipeCellPanel? right;
+  /// 起始侧滑动操作项面板。
+  final TSwipeCellPanel? start;
 
-  /// 左侧滑动操作项面板
-  final TSwipeCellPanel? left;
+  /// 结束侧滑动操作项面板。
+  final TSwipeCellPanel? end;
 
   /// 滑动展开事件
-  final TSwipeCellChanged? onChanged;
+  final TSwipeCellChanged? onOpenChanged;
 
   /// 自定义控制滑动窗口
   final SlidableController? controller;
 
   /// 可拖动的方向
-  final Axis? direction;
+  final Axis direction;
 
-  /// 底层滑动组件的 Key
-  final Key? slidableKey;
-
-  /// 初始展开状态，依次表示左侧和右侧面板
-  final List<bool> opened;
+  /// 初始展开的面板；为空时保持关闭。
+  final TSwipeCellSide? initialOpenSide;
 
   /// 互斥滑动组标识
   final Object? groupTag;
 
   /// 展开时是否关闭同组其他单元格
   final bool closeWhenOpened;
-
-  /// 点击单元格时是否关闭同组单元格
-  final bool closeWhenTapped;
 
   /// 拖动开始行为
   final DragStartBehavior dragStartBehavior;
@@ -96,8 +87,12 @@ class TSwipeCell extends StatefulWidget {
       return;
     }
     if (del) {
-      if (_controllers.keys.contains(tag)) {
-        _controllers[tag]!.remove(controller); // coverage:ignore-line
+      final controllers = _controllers[tag];
+      if (controllers != null) {
+        controllers.remove(controller); // coverage:ignore-line
+        if (controllers.isEmpty) {
+          _controllers.remove(tag); // coverage:ignore-line
+        }
       }
     } else {
       if (_controllers.keys.contains(tag)) {
@@ -149,7 +144,7 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
   late SlidableController controller;
   bool _ownsController = false;
   final confirmListenable = ValueNotifier<TSwipeCellAction?>(null);
-  TSwipeDirection? openDirection;
+  TSwipeCellSide? openSide;
 
   /// 缓存生效的 groupTag，避免在 dispose() 中访问 InheritedWidget 祖先
   Object? _groupTag;
@@ -162,12 +157,13 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
       if (!mounted) {
         return;
       }
-      final opened = widget.opened;
-      if (opened.isNotEmpty && opened[0]) {
-        controller.openStartActionPane(duration: widget.getDuration(context));
-      }
-      if (opened.length > 1 && opened[1]) {
-        controller.openEndActionPane(duration: widget.getDuration(context));
+      switch (widget.initialOpenSide) {
+        case TSwipeCellSide.start:
+          controller.openStartActionPane(duration: widget.getDuration(context));
+        case TSwipeCellSide.end:
+          controller.openEndActionPane(duration: widget.getDuration(context));
+        case null:
+          break;
       }
     });
   }
@@ -231,41 +227,33 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final rightConfirmLength = widget.right?.confirms?.length ?? 0;
-    final leftConfirmLength = widget.left?.confirms?.length ?? 0;
+    final endConfirmLength = widget.end?.confirms?.length ?? 0;
+    final startConfirmLength = widget.start?.confirms?.length ?? 0;
 
     final slidable = Slidable(
-      key: widget.slidableKey ?? UniqueKey(),
       closeOnScroll: false,
-      child: widget.cell,
+      child: widget.child,
       controller: controller,
       enabled: widget.enabled,
       groupTag: widget.groupTag,
-      startActionPane: widget.left?.build(context),
-      endActionPane: widget.right?.build(context),
+      startActionPane: widget.start?.build(context),
+      endActionPane: widget.end?.build(context),
       dragStartBehavior: widget.dragStartBehavior,
-      direction: widget.direction ?? Axis.horizontal,
+      direction: widget.direction,
     );
     return TSwipeCellInherited(
       duration: widget.getDuration(context),
       controller: controller,
-      cellClick: () {
-        // coverage:ignore-line
-        if (widget.closeWhenTapped) {
-          // coverage:ignore-line
-          TSwipeCell.close(widget.groupTag); // coverage:ignore-line
-        }
-      },
       actionClick: (action) {
-        final isLeft = openDirection == TSwipeDirection.left;
-        final panel = isLeft ? widget.left! : widget.right!;
+        final panel =
+            openSide == TSwipeCellSide.start ? widget.start! : widget.end!;
         final index = panel.children.indexOf(action);
         final confirm = panel.confirms
             ?.find((element) => element.confirmIndex?.contains(index) == true);
         confirmListenable.value = confirm;
         return confirm != null;
       },
-      child: rightConfirmLength > 0 || leftConfirmLength > 0
+      child: endConfirmLength > 0 || startConfirmLength > 0
           ? ValueListenableBuilder(
               valueListenable: confirmListenable,
               builder: (BuildContext context, value, Widget? child) {
@@ -283,14 +271,14 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
 
   Widget _confirmWidget() {
     final isHorizontal = widget.direction == Axis.horizontal;
-    final isLeft = openDirection == TSwipeDirection.left;
-    final pane = isLeft ? widget.left : widget.right;
+    final isStart = openSide == TSwipeCellSide.start;
+    final pane = isStart ? widget.start : widget.end;
     final extentRatio = pane?.extentRatio ?? 0.3;
     return Positioned.fill(
       child: FractionallySizedBox(
         alignment: isHorizontal
-            ? (isLeft ? Alignment.centerLeft : Alignment.centerRight)
-            : (isLeft ? Alignment.topCenter : Alignment.bottomCenter),
+            ? (isStart ? Alignment.centerLeft : Alignment.centerRight)
+            : (isStart ? Alignment.topCenter : Alignment.bottomCenter),
         widthFactor: isHorizontal ? extentRatio : null,
         heightFactor: isHorizontal ? null : extentRatio,
         child: AnimatedSwitcher(
@@ -299,8 +287,8 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
             return SlideTransition(
               child: child,
               position: Tween<Offset>(
-                begin: isLeft ? const Offset(-1, 0) : const Offset(1, 0),
-                end: isLeft ? const Offset(0, 0) : const Offset(0, 0),
+                begin: isStart ? const Offset(-1, 0) : const Offset(1, 0),
+                end: const Offset(0, 0),
               ).animate(animation),
             );
           },
@@ -313,25 +301,25 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
   void _handleActionPanelTypeChanged() {
     switch (controller.actionPaneType.value) {
       case ActionPaneType.none:
-        final direction = openDirection;
-        if (direction != null) {
-          widget.onChanged?.call(direction, false);
+        final side = openSide;
+        if (side != null) {
+          widget.onOpenChanged?.call(side, false);
         }
-        openDirection = null;
+        openSide = null;
         break;
       case ActionPaneType.start:
         if (widget.closeWhenOpened) {
           TSwipeCell.close(widget.groupTag, current: controller);
         }
-        openDirection = TSwipeDirection.left;
-        widget.onChanged?.call(openDirection!, true);
+        openSide = TSwipeCellSide.start;
+        widget.onOpenChanged?.call(openSide!, true);
         break;
       case ActionPaneType.end:
         if (widget.closeWhenOpened) {
           TSwipeCell.close(widget.groupTag, current: controller);
         }
-        openDirection = TSwipeDirection.right;
-        widget.onChanged?.call(openDirection!, true);
+        openSide = TSwipeCellSide.end;
+        widget.onOpenChanged?.call(openSide!, true);
         break;
     }
   }

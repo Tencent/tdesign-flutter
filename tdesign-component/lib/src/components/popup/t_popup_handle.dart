@@ -15,12 +15,16 @@ part of 't_popup.dart';
 class TPopupHandle {
   TPopupHandle._({
     required this.options,
+    required this.themeContext,
     this.navigatorContext,
     this.useRootNavigator = false,
   });
 
   /// 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。
   final TPopupOptions options;
+
+  /// 用于捕获调用点局部 Theme 的 context。
+  final BuildContext themeContext;
 
   /// 与 [TPopup.show] 的 [navigatorContext] 相同。
   final BuildContext? navigatorContext;
@@ -32,6 +36,13 @@ class TPopupHandle {
   NavigatorState? _lastNavigator;
   bool _isClosed = false;
   int _openEpoch = 0;
+  Completer<Object?>? _resultCompleter;
+
+  /// 当前这次打开结束后的路由结果。
+  ///
+  /// 每次 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
+  Future<Object?> get result =>
+      (_resultCompleter ??= Completer<Object?>()).future;
 
   /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
   ///
@@ -72,6 +83,15 @@ class TPopupHandle {
     final normalized = options.normalized();
     final onClosed = normalized.onClosed;
     final openEpoch = ++_openEpoch;
+    final resultCompleter = Completer<Object?>();
+    _resultCompleter = resultCompleter;
+    final captureFrom = context?.mounted == true ? context! : themeContext;
+    final capturedThemes = captureFrom.mounted
+        ? InheritedTheme.capture(
+            from: captureFrom,
+            to: navigator.context,
+          )
+        : null;
 
     _isClosed = false;
     _lastNavigator = navigator;
@@ -99,12 +119,17 @@ class TPopupHandle {
         },
       ),
       onCloseWithTrigger: closeWithTrigger,
+      capturedThemes: capturedThemes,
     );
     _route = route;
 
     _PopupTracker.push(navigator, this);
 
-    navigator.push(route).whenComplete(() {
+    navigator.push(route).then((result) {
+      if (!resultCompleter.isCompleted) {
+        resultCompleter.complete(result);
+      }
+    }).whenComplete(() {
       _PopupTracker.remove(navigator, this);
       final completedRoute = route;
       if (completedRoute != null) {
@@ -118,7 +143,7 @@ class TPopupHandle {
   ///
   /// 已关闭或未展示时调用无副作用。
   /// 嵌套浮层场景下会关闭当前 handle 对应的那一层，而不会误关栈顶其它浮层。
-  void close() {
+  void close([Object? result]) {
     final route = _route;
     final navigator = route?.navigator ?? _lastNavigator;
     if (!isShowing || route == null || navigator == null) {
@@ -128,6 +153,7 @@ class TPopupHandle {
       navigator: navigator,
       route: route,
       trigger: TPopupTrigger.api,
+      result: result,
     );
   }
 
@@ -158,14 +184,15 @@ class TPopupHandle {
     required NavigatorState navigator,
     required _PopupNavigatorRoute<dynamic> route,
     required TPopupTrigger trigger,
+    Object? result,
   }) {
     _markClosing();
     route.fireCloseStart(trigger);
     if (identical(_PopupTracker.top(navigator), this)) {
-      navigator.pop();
+      navigator.pop(result);
       return;
     }
-    navigator.removeRoute(route);
+    navigator.removeRoute(route, result);
   }
 
   void _detachRoute(_PopupNavigatorRoute<dynamic> route) {

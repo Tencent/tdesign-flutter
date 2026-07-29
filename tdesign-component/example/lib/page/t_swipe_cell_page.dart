@@ -15,15 +15,21 @@ class TSwipeCellPage extends StatelessWidget {
       desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定、高度根据列表高度而变化。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'TCell 单元格操作',
           children: [
-            ExampleItem(desc: '左滑单操作', builder: _buildSwiperCell),
+            ExampleItem(desc: '列表滑动操作', builder: _buildSwiperCell),
             ExampleItem(desc: '左滑双操作', builder: _buildSwiperMuliCell),
             ExampleItem(desc: '左滑三操作', builder: _buildSwiper3Cell),
             ExampleItem(desc: '右滑单操作', builder: _buildSwiperRightCell),
             ExampleItem(desc: '左右滑操作', builder: _buildSwiperRightLeftCell),
             ExampleItem(desc: '带图标的滑动操作', builder: _buildSwiperIconCell),
             ExampleItem(desc: '带二次确认的操作', builder: _buildSwiperConfirmCell),
+          ],
+        ),
+        ExampleModule(
+          title: '自定义内容',
+          children: [
+            ExampleItem(desc: '自定义卡片操作', builder: _buildCustomContentCell),
           ],
         ),
       ],
@@ -35,14 +41,15 @@ class TSwipeCellPage extends StatelessWidget {
   Widget _buildSwiperCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    var list = [
-      {'id': '1', 'title': '左滑单操作', 'note': '辅助信息', 'description': ''},
+    final list = [
+      {'id': '1', 'title': '项目进度', 'note': '待处理', 'description': '今天完成设计评审'},
       {
         'id': '2',
-        'title': '左滑单操作',
-        'note': '辅助信息',
-        'description': '一段很长很长的内容文字'
+        'title': '迭代任务',
+        'note': '进行中',
+        'description': '实现 SwipeCell 的组件重构'
       },
+      {'id': '3', 'title': '周报草稿', 'note': '未提交', 'description': '整理本周工作内容'},
     ];
     final cellLength = ValueNotifier<int>(list.length);
     return ValueListenableBuilder(
@@ -61,31 +68,37 @@ class TSwipeCellPage extends StatelessWidget {
                 const TSwipeCellThemeData(),
               ),
               child: TSwipeCell(
-                onChanged: (direction, open) {
-                  print('打开方向：$direction');
+                groupTag: 'cell-list',
+                closeWhenOpened: true,
+                onOpenChanged: (side, open) {
+                  print('打开方向：$side');
                   print('打开转态$open');
                 },
-                right: TSwipeCellPanel(
-                  extentRatio: 60 / screenWidth,
+                end: TSwipeCellPanel(
+                  extentRatio: 140 / screenWidth,
                   onDismissed: (context) {
                     list.removeAt(index);
                     cellLength.value = list.length;
                   },
                   children: [
                     TSwipeCellAction(
+                      backgroundColor: context.tTheme.warningNormalColor,
+                      label: '编辑',
+                      onPressed: (_) {},
+                    ),
+                    TSwipeCellAction(
                       backgroundColor: context.tTheme.errorNormalColor,
                       label: '删除',
                       onPressed: (context) {
                         print('点击action');
                         print(TSwipeCell.of(context));
-                        print(TSwipeCellInherited.of(context)?.controller);
                         list.removeAt(index);
                         cellLength.value = list.length;
                       },
                     ),
                   ],
                 ),
-                cell: cell,
+                child: cell,
               ),
             );
           },
@@ -102,7 +115,7 @@ class TSwipeCellPage extends StatelessWidget {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 120 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -115,7 +128,7 @@ class TSwipeCellPage extends StatelessWidget {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左滑双操作'), note: Text('辅助信息')),
+        child: const TCell(title: Text('左滑双操作'), note: Text('辅助信息')),
       ),
     );
   }
@@ -128,7 +141,7 @@ class TSwipeCellPage extends StatelessWidget {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 180 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -145,7 +158,7 @@ class TSwipeCellPage extends StatelessWidget {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左滑三操作'), note: Text('辅助信息')),
+        child: const TCell(title: Text('左滑三操作'), note: Text('辅助信息')),
       ),
     );
   }
@@ -158,7 +171,7 @@ class TSwipeCellPage extends StatelessWidget {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        left: TSwipeCellPanel(
+        start: TSwipeCellPanel(
           extentRatio: 60 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -167,7 +180,7 @@ class TSwipeCellPage extends StatelessWidget {
             ),
           ],
         ),
-        cell: const TCell(title: Text('右滑操作'), note: Text('辅助信息')),
+        child: const TCell(title: Text('右滑操作'), note: Text('辅助信息')),
       ),
     );
   }
@@ -180,7 +193,7 @@ class TSwipeCellPage extends StatelessWidget {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        left: TSwipeCellPanel(
+        start: TSwipeCellPanel(
           extentRatio: 60 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -189,7 +202,7 @@ class TSwipeCellPage extends StatelessWidget {
             ),
           ],
         ),
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 120 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -202,7 +215,7 @@ class TSwipeCellPage extends StatelessWidget {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左右滑操作'), note: Text('辅助信息')),
+        child: const TCell(title: Text('左右滑操作'), note: Text('辅助信息')),
       ),
     );
   }
@@ -218,7 +231,7 @@ class TSwipeCellPage extends StatelessWidget {
             const TSwipeCellThemeData(),
           ),
           child: TSwipeCell(
-            right: TSwipeCellPanel(
+            end: TSwipeCellPanel(
               extentRatio: 160 / screenWidth,
               children: [
                 TSwipeCellAction(
@@ -233,7 +246,7 @@ class TSwipeCellPage extends StatelessWidget {
                 ),
               ],
             ),
-            cell: const TCell(title: Text('左滑操作'), note: Text('图标+文字（横向）')),
+            child: const TCell(title: Text('左滑操作'), note: Text('图标+文字（横向）')),
           ),
         ),
         const SizedBox(height: 16),
@@ -242,7 +255,7 @@ class TSwipeCellPage extends StatelessWidget {
             const TSwipeCellThemeData(),
           ),
           child: TSwipeCell(
-            right: TSwipeCellPanel(
+            end: TSwipeCellPanel(
               extentRatio: 120 / screenWidth,
               children: [
                 TSwipeCellAction(
@@ -255,7 +268,7 @@ class TSwipeCellPage extends StatelessWidget {
                 ),
               ],
             ),
-            cell: const TCell(title: Text('左滑操作'), note: Text('仅图标')),
+            child: const TCell(title: Text('左滑操作'), note: Text('仅图标')),
           ),
         ),
         const SizedBox(height: 16),
@@ -264,7 +277,7 @@ class TSwipeCellPage extends StatelessWidget {
             const TSwipeCellThemeData(),
           ),
           child: TSwipeCell(
-            right: TSwipeCellPanel(
+            end: TSwipeCellPanel(
               extentRatio: 120 / screenWidth,
               children: [
                 TSwipeCellAction(
@@ -283,7 +296,7 @@ class TSwipeCellPage extends StatelessWidget {
                 ),
               ],
             ),
-            cell: const TCell(
+            child: const TCell(
               title: Text('左滑操作'),
               note: Text('图标+文字（纵向）'),
               subtitle: Text('一段很长很长的内容文字'),
@@ -302,7 +315,7 @@ class TSwipeCellPage extends StatelessWidget {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 120 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -322,7 +335,67 @@ class TSwipeCellPage extends StatelessWidget {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左滑操作'), note: Text('二次确认')),
+        child: const TCell(title: Text('左滑操作'), note: Text('二次确认')),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'SwipeCell')
+  Widget _buildCustomContentCell(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return TSwipeCell(
+      groupTag: 'custom-content',
+      closeWhenOpened: true,
+      start: TSwipeCellPanel(
+        extentRatio: 76 / screenWidth,
+        children: [
+          TSwipeCellAction(
+            backgroundColor: context.tTheme.brandNormalColor,
+            icon: TIcons.check,
+            label: '完成',
+            onPressed: (_) {},
+          ),
+        ],
+      ),
+      end: TSwipeCellPanel(
+        extentRatio: 152 / screenWidth,
+        children: [
+          TSwipeCellAction(
+            backgroundColor: context.tTheme.warningNormalColor,
+            label: '编辑',
+            onPressed: (_) {},
+          ),
+          TSwipeCellAction(
+            backgroundColor: context.tTheme.errorNormalColor,
+            label: '删除',
+            onPressed: (_) {},
+          ),
+        ],
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: Border.all(color: Theme.of(context).dividerColor),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Row(
+          children: [
+            CircleAvatar(child: Icon(Icons.description_outlined)),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('自定义任务卡片'),
+                  SizedBox(height: 4),
+                  Text('这是任意 Widget 内容，不依赖 TCell。'),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right),
+          ],
+        ),
       ),
     );
   }

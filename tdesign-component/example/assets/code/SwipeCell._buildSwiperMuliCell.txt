@@ -5,7 +5,7 @@ Widget _buildSwiperMuliCell(BuildContext context) {
         const TSwipeCellThemeData(),
       ),
       child: TSwipeCell(
-        right: TSwipeCellPanel(
+        end: TSwipeCellPanel(
           extentRatio: 120 / screenWidth,
           children: [
             TSwipeCellAction(
@@ -18,7 +18,7 @@ Widget _buildSwiperMuliCell(BuildContext context) {
             ),
           ],
         ),
-        cell: const TCell(title: Text('左滑双操作'), note: Text('辅助信息')),
+        child: const TCell(title: Text('左滑双操作'), note: Text('辅助信息')),
       ),
     );
   }

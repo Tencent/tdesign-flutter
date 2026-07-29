@@ -199,6 +199,18 @@ void main() {
   });
 
   group('TNoticeBar onPressed 回调', () {
+    testWidgets('未提供 onPressed 时内置区域不创建点击手势', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TNoticeBar(content: '静态公告'),
+        noticeBarTheme: const TNoticeBarThemeData(
+          prefixIcon: Icons.info,
+          suffixIcon: Icons.close,
+        ),
+      ));
+
+      expect(find.byType(GestureDetector), findsNothing);
+    });
+
     testWidgets('点击内容区域触发 onPressed', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(wrapWithTheme(
@@ -235,6 +247,34 @@ void main() {
       ));
       await tester.tap(find.byIcon(Icons.close));
       expect(triggered, TNoticeBarTapTarget.suffix);
+    });
+
+    testWidgets('自定义左右插槽由自身处理点击且不触发公告栏回调',
+        (tester) async {
+      var leftPressed = 0;
+      var rightPressed = 0;
+      var noticeBarPressed = 0;
+      await tester.pumpWidget(wrapWithTheme(
+        TNoticeBar(
+          content: '内容',
+          left: TButton(
+            child: const Text('左侧按钮'),
+            onPressed: () => leftPressed++,
+          ),
+          right: TButton(
+            child: const Text('右侧按钮'),
+            onPressed: () => rightPressed++,
+          ),
+          onPressed: (_) => noticeBarPressed++,
+        ),
+      ));
+
+      await tester.tap(find.text('左侧按钮'));
+      await tester.tap(find.text('右侧按钮'));
+
+      expect(leftPressed, 1);
+      expect(rightPressed, 1);
+      expect(noticeBarPressed, 0);
     });
   });
 

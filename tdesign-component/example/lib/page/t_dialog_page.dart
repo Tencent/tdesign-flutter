@@ -12,18 +12,19 @@ class TDialogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '用于显示重要提示信息，用户必须点击按钮才能关闭。',
+      desc: '用于显示重要提示或请求用户完成关键操作。',
       exampleCodeGroup: 'dialog',
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '确认弹窗', builder: _buildConfirmDialog),
-          ExampleItem(desc: '文字按钮弹窗', builder: _buildTextButtonDialog),
+          ExampleItem(desc: '单操作确认弹窗', builder: _buildConfirmDialog),
+          ExampleItem(desc: '双操作弹窗', builder: _buildActionDialog),
+          ExampleItem(desc: '危险操作弹窗', builder: _buildDangerDialog),
         ]),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '带标题弹窗', builder: _buildWithTitle),
-          ExampleItem(desc: '无标题弹窗', builder: _buildNoTitle),
-          ExampleItem(desc: '带关闭按钮', builder: _buildWithClose),
+        ExampleModule(title: '内容与状态', children: [
+          ExampleItem(desc: '自定义内容', builder: _buildCustomContentDialog),
+          ExampleItem(desc: '长内容滚动', builder: _buildLongContentDialog),
+          ExampleItem(desc: '带关闭按钮', builder: _buildCloseDialog),
         ]),
       ],
     );
@@ -31,113 +32,155 @@ class TDialogPage extends StatelessWidget {
 
   @ExampleCode(group: 'dialog')
   Widget _buildConfirmDialog(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: const Text('确认弹窗'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => const TConfirmDialog(
-              title: '弹窗标题',
-              content: '告知当前状态、信息和解决方法',
-            ),
-          );
-        },
-      ),
+    return _trigger(
+      text: '单操作确认弹窗',
+      onPressed: () {
+        TDialog.show<bool>(
+          context,
+          dialog: const TConfirmDialog(
+            title: '弹窗标题',
+            content: '告知当前状态、信息和解决方法',
+          ),
+        );
+      },
     );
   }
 
   @ExampleCode(group: 'dialog')
-  Widget _buildTextButtonDialog(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: const Text('文字按钮弹窗'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => const TConfirmDialog(
-              title: '弹窗标题',
-              content: '告知当前状态、信息和解决方法',
-              buttonStyle: TDialogButtonStyle.text,
-            ),
-          );
-        },
-      ),
+  Widget _buildActionDialog(BuildContext context) {
+    return _trigger(
+      text: '双操作弹窗',
+      onPressed: () async {
+        final confirmed = await TDialog.show<bool>(
+          context,
+          dialog: const TDialog(
+            title: Text('提交修改？'),
+            content: Text('提交后将立即同步给团队成员。'),
+            actions: [
+              TDialogAction(child: Text('取消'), result: false),
+              TDialogAction(
+                child: Text('确认'),
+                result: true,
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+        debugPrint('Dialog result: $confirmed');
+      },
     );
   }
 
   @ExampleCode(group: 'dialog')
-  Widget _buildWithTitle(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: const Text('带标题弹窗'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => TConfirmDialog(
-              title: '弹窗标题',
-              content: '告知当前状态、信息和解决方法，等内容较长时换行展示',
-              buttonText: '知道了',
-              onPressed: () => Navigator.pop(context),
-            ),
-          );
-        },
-      ),
+  Widget _buildDangerDialog(BuildContext context) {
+    return _trigger(
+      text: '危险操作弹窗',
+      onPressed: () {
+        TDialog.show<bool>(
+          context,
+          dialog: const TDialog(
+            title: Text('删除项目？'),
+            content: Text('删除后无法恢复，请谨慎操作。'),
+            actions: [
+              TDialogAction(child: Text('取消'), result: false),
+              TDialogAction(
+                child: Text('删除'),
+                result: true,
+                role: TDialogActionRole.destructive,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   @ExampleCode(group: 'dialog')
-  Widget _buildNoTitle(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: const Text('无标题弹窗'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => const TConfirmDialog(
-              content: '告知当前状态、信息和解决方法',
+  Widget _buildCustomContentDialog(BuildContext context) {
+    return _trigger(
+      text: '自定义内容',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: const TDialog(
+            title: Text('选择通知方式'),
+            content: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.email_outlined),
+                  title: Text('邮件通知'),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.sms_outlined),
+                  title: Text('短信通知'),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+            actions: [
+              TDialogAction(
+                child: Text('完成'),
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   @ExampleCode(group: 'dialog')
-  Widget _buildWithClose(BuildContext context) {
+  Widget _buildLongContentDialog(BuildContext context) {
+    return _trigger(
+      text: '长内容滚动',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: TDialog(
+            title: const Text('服务说明'),
+            content: Text(List.filled(12, '这是一段需要滚动阅读的说明内容。').join()),
+            actions: const [
+              TDialogAction(
+                child: Text('知道了'),
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @ExampleCode(group: 'dialog')
+  Widget _buildCloseDialog(BuildContext context) {
+    return _trigger(
+      text: '带关闭按钮',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: const TDialog(
+            title: Text('弹窗标题'),
+            content: Text('可通过右上角按钮关闭。'),
+            showCloseButton: true,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _trigger({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('带关闭按钮'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => const TConfirmDialog(
-              title: '弹窗标题',
-              content: '告知当前状态、信息和解决方法',
-              showCloseButton: true,
-            ),
-          );
-        },
+        onPressed: onPressed,
+        child: Text(text),
       ),
     );
   }
