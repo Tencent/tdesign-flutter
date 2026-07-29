@@ -381,26 +381,10 @@ class TImageState extends State<TImagePage>
             font: context.tTheme.fontBodyMedium,
           ),
         ),
-        Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(context.tTheme.radiusDefault)),
-            child: Container(
-                alignment: Alignment.center,
-                color: context.tTheme.bgColorContainerHover,
-                child: Icon(
-                  TIcons.ellipsis,
-                  size: 22,
-                  color: context.tTheme.textColorPlaceholder,
-                ))),
-
-        /// @tips 实际组件写法如下：上面仅为加载展示
-        // const TImage(
-        //   src:
-        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   variant: TImageVariant.roundedSquare,
-        // ),
+        const TImage(
+          src: '',
+          variant: TImageVariant.roundedSquare,
+        ),
       ],
     );
   }
@@ -418,36 +402,19 @@ class TImageState extends State<TImagePage>
             font: context.tTheme.fontBodyMedium,
           ),
         ),
-        Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(context.tTheme.radiusDefault)),
-            child: Container(
-                alignment: Alignment.center,
-                color: context.tTheme.bgColorContainerHover,
-                child: RotationTransition(
-                    turns: animation,
-                    alignment: Alignment.center,
-                    child: TCircleIndicator(
-                      color: context.tTheme.brandNormalColor,
-                      size: 18,
-                      lineWidth: 3,
-                    )))),
-        // 实际组件写法如下：上面仅为加载展示
-        // TImage(
-        //   src:
-        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   loadingWidget: RotationTransition(
-        //       turns: animation,
-        //       alignment: Alignment.center,
-        //       child: TCircleIndicator(
-        //         color: context.tTheme.brandNormalColor,
-        //         size: 18,
-        //         lineWidth: 3,
-        //       )),
-        //   variant: TImageVariant.roundedSquare,
-        // ),
+        TImage(
+          src: '',
+          loadingWidget: RotationTransition(
+            turns: animation,
+            alignment: Alignment.center,
+            child: TCircleIndicator(
+              color: context.tTheme.brandNormalColor,
+              size: 18,
+              lineWidth: 3,
+            ),
+          ),
+          variant: TImageVariant.roundedSquare,
+        ),
       ],
     );
   }

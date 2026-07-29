@@ -56,7 +56,7 @@ class TImage extends StatelessWidget {
           'Exactly one of src or imageFile must be provided',
         );
 
-  /// 网络 URL 或 asset 路径。
+  /// 网络 URL 或 asset 路径；空字符串显示加载占位。
   final String? src;
 
   /// 本地图片文件；不能与 [src] 同时提供。
@@ -130,7 +130,7 @@ class TImage extends StatelessWidget {
     return GestureDetector(onTap: onTap, child: clipped);
   }
 
-  Image _buildImage(
+  Widget _buildImage(
     BuildContext context,
     TImageThemeData? theme, {
     required double width,
@@ -141,6 +141,8 @@ class TImage extends StatelessWidget {
         (_, __, ___) => _placeholder(
               context,
               errorWidget ?? const Icon(Icons.broken_image_outlined),
+              width: width,
+              height: height,
             );
     final excludeFromSemantics = theme?.excludeFromSemantics ?? false;
     final color = theme?.color;
@@ -176,6 +178,14 @@ class TImage extends StatelessWidget {
     }
 
     final value = src!;
+    if (value.isEmpty) {
+      return _placeholder(
+        context,
+        loadingWidget ?? const Icon(Icons.more_horiz),
+        width: width,
+        height: height,
+      );
+    }
     final uri = Uri.tryParse(value);
     final isNetwork = uri != null &&
         (uri.scheme.toLowerCase() == 'http' ||
@@ -193,6 +203,8 @@ class TImage extends StatelessWidget {
                 : _placeholder(
                     context,
                     loadingWidget ?? const Icon(Icons.more_horiz),
+                    width: width,
+                    height: height,
                   ),
         errorBuilder: fallbackErrorBuilder,
         semanticLabel: semanticLabel,
@@ -234,10 +246,24 @@ class TImage extends StatelessWidget {
     );
   }
 
-  Widget _placeholder(BuildContext context, Widget child) {
-    return ColoredBox(
-      color: context.tTheme.bgColorComponent,
-      child: Center(child: child),
+  Widget _placeholder(
+    BuildContext context,
+    Widget child, {
+    required double width,
+    required double height,
+  }) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ColoredBox(
+        color: context.tTheme.bgColorComponent,
+        child: Center(
+          child: IconTheme.merge(
+            data: IconThemeData(color: context.tTheme.textColorPlaceholder),
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 

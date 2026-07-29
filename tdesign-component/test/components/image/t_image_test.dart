@@ -54,9 +54,61 @@ void main() {
     final failed = image.errorBuilder!(context, StateError('failed'), null);
     await tester.pumpWidget(app(loading));
     expect(find.text('loading'), findsOneWidget);
+    expect(tester.getSize(find.text('loading')), isNot(Size.zero));
+    expect(
+      tester.getSize(find
+          .ancestor(
+            of: find.text('loading'),
+            matching: find.byType(SizedBox),
+          )
+          .first),
+      const Size(72, 72),
+    );
 
     await tester.pumpWidget(app(failed));
     expect(find.text('error'), findsOneWidget);
+    expect(
+      tester.getSize(find
+          .ancestor(
+            of: find.text('error'),
+            matching: find.byType(SizedBox),
+          )
+          .first),
+      const Size(72, 72),
+    );
+  });
+
+  testWidgets('empty source renders stable default and custom loading states',
+      (tester) async {
+    await tester.pumpWidget(app(const TImage(src: '')));
+    expect(find.byType(Image), findsNothing);
+    expect(find.byIcon(Icons.more_horiz), findsOneWidget);
+    expect(tester.getSize(find.byType(TImage)), const Size(72, 72));
+
+    await tester.pumpWidget(app(const TImage(
+      src: '',
+      width: 96,
+      height: 64,
+      loadingWidget: Text('custom loading'),
+    )));
+    expect(find.text('custom loading'), findsOneWidget);
+    expect(tester.getSize(find.byType(TImage)), const Size(96, 64));
+  });
+
+  testWidgets('failed rounded image keeps resolved bounds and clipping',
+      (tester) async {
+    await tester.pumpWidget(app(const TImage(
+      src: 'missing-asset.png',
+      width: 96,
+      height: 64,
+      errorWidget: Text('failed'),
+    )));
+    await tester.pump();
+
+    expect(find.text('failed'), findsOneWidget);
+    expect(find.byType(ClipRRect), findsOneWidget);
+    expect(tester.getSize(find.byType(TImage)), const Size(96, 64));
+    expect(tester.getSize(find.byType(ClipRRect)), const Size(96, 64));
   });
 
   testWidgets('placeholder uses TDesign token instead of Material surface',
