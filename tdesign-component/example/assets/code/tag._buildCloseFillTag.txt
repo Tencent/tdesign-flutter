@@ -1,3 +1,12 @@
 Widget _buildCloseFillTag(BuildContext context) {
-    return TTag('标签文字', needCloseIcon: true, onCloseTap: () {});
+    return Wrap(
+      spacing: 8,
+      children: _closableTags
+          .map((text) => TTag(
+                text,
+                needCloseIcon: true,
+                onCloseTap: () => setState(() => _closableTags.remove(text)),
+              ))
+          .toList(),
+    );
   }

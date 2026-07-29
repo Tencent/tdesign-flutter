@@ -2,6 +2,16 @@ Widget _buildCloseOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context)
           .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: TTag('标签文字', needCloseIcon: true, onCloseTap: () {}),
+      child: Wrap(
+        spacing: 8,
+        children: _closableOutlineTags
+            .map((text) => TTag(
+                  text,
+                  needCloseIcon: true,
+                  onCloseTap: () =>
+                      setState(() => _closableOutlineTags.remove(text)),
+                ))
+            .toList(),
+      ),
     );
   }
