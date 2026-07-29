@@ -1,13 +1,83 @@
 Widget _group(BuildContext context) {
-    return TButton(
-      child: const Text('打开分组面板'),
+    Widget actionIcon(
+      IconData icon, {
+      required Color backgroundColor,
+      required Color foregroundColor,
+    }) {
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Icon(icon, size: 24, color: foregroundColor),
+      );
+    }
+
+    return _trigger(
+      label: '编辑图片',
       onPressed: () => TActionSheet.showGroup(
         context,
         items: [
-          TActionSheetItem(label: '微信', group: '分享'),
-          TActionSheetItem(label: '朋友圈', group: '分享'),
-          TActionSheetItem(label: '复制', group: '操作'),
+          TActionSheetItem(
+            label: '旋转',
+            group: '图片处理',
+            icon: actionIcon(
+              TIcons.rotate,
+              backgroundColor: context.tTheme.bgColorComponent,
+              foregroundColor: context.tTheme.textColorPrimary,
+            ),
+          ),
+          TActionSheetItem(
+            label: '裁剪',
+            group: '图片处理',
+            icon: actionIcon(
+              TIcons.cut,
+              backgroundColor: context.tTheme.bgColorComponent,
+              foregroundColor: context.tTheme.textColorPrimary,
+            ),
+          ),
+          TActionSheetItem(
+            label: '滤镜',
+            group: '图片处理',
+            icon: actionIcon(
+              TIcons.filter,
+              backgroundColor: context.tTheme.bgColorComponent,
+              foregroundColor: context.tTheme.textColorPrimary,
+            ),
+          ),
+          TActionSheetItem(
+            label: '分享',
+            group: '分享与导出',
+            icon: actionIcon(
+              TIcons.share,
+              backgroundColor: context.tTheme.brandLightColor,
+              foregroundColor: context.tTheme.brandNormalColor,
+            ),
+          ),
+          TActionSheetItem(
+            label: '保存副本',
+            group: '分享与导出',
+            icon: actionIcon(
+              TIcons.download,
+              backgroundColor: context.tTheme.warningLightColor,
+              foregroundColor: context.tTheme.warningNormalColor,
+            ),
+          ),
+          TActionSheetItem(
+            label: '删除图片',
+            group: '危险操作',
+            icon: actionIcon(
+              TIcons.delete,
+              backgroundColor: context.tTheme.errorLightColor,
+              foregroundColor: context.tTheme.errorNormalColor,
+            ),
+          ),
         ],
+        onChanged: (item, _) =>
+            TToast.showText('已选择：${item.label}', context: context),
       ),
     );
   }

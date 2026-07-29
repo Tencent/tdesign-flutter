@@ -364,16 +364,23 @@ void main() {
         itemHeight: 80,
         count: 4,
         barrierColor: Colors.black,
+        iconSize: 24,
+        iconColor: Colors.blue,
       );
       const override = TActionSheetThemeData(
         itemHeight: 96,
         panelRadius: 12,
+        gridIconExtent: 56,
+        iconColor: Colors.red,
       );
 
       final merged = base.merge(override);
       expect(merged.defaultAlign, TActionSheetAlign.left);
       expect(merged.itemHeight, 96);
       expect(merged.panelRadius, 12);
+      expect(merged.iconSize, 24);
+      expect(merged.gridIconExtent, 56);
+      expect(merged.iconColor, Colors.red);
 
       final copied = merged.copyWith(rows: 3);
       expect(copied.rows, 3);

@@ -200,7 +200,6 @@ class TMaterialThemeBuilder {
       _dividerTheme(token),
       _linkTheme(token),
       const TFabThemeData(),
-      const TActionSheetThemeData(),
       const TAvatarThemeData(),
       const TBackTopThemeData(),
       const TBadgeThemeData(),

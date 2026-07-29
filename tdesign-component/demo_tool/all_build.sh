@@ -116,7 +116,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 
 # 反馈
 # action_sheet
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/action_sheet" --name TActionSheetItem,TActionSheet --folder-name action-sheet --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/action_sheet" --name TActionSheetItem,TActionSheet,TActionSheetThemeData,TActionSheetAlign --folder-name action-sheet --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # dialog
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dialog" --name TDialog,TDialogAction,TDialogActionRole,TConfirmDialog,TDialogThemeData --folder-name dialog --output "$PARENT_DIR/example/assets/api/" --only-api
 # dropdown_menu

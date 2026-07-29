@@ -25,6 +25,7 @@ class TDialogPage extends StatelessWidget {
           ExampleItem(desc: '自定义内容', builder: _buildCustomContentDialog),
           ExampleItem(desc: '长内容滚动', builder: _buildLongContentDialog),
           ExampleItem(desc: '带关闭按钮', builder: _buildCloseDialog),
+          ExampleItem(desc: '点击蒙层关闭', builder: _buildBarrierDismissDialog),
         ]),
       ],
     );
@@ -139,7 +140,20 @@ class TDialogPage extends StatelessWidget {
           context,
           dialog: TDialog(
             title: const Text('服务说明'),
-            content: Text(List.filled(12, '这是一段需要滚动阅读的说明内容。').join()),
+            maxHeight: 320,
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                18,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    '${index + 1}. 这是一段需要滚动阅读的服务说明，'
+                    '请确认你已了解相关规则和注意事项。',
+                  ),
+                ),
+              ),
+            ),
             actions: const [
               TDialogAction(
                 child: Text('知道了'),
@@ -163,6 +177,23 @@ class TDialogPage extends StatelessWidget {
             title: Text('弹窗标题'),
             content: Text('可通过右上角按钮关闭。'),
             showCloseButton: true,
+          ),
+        );
+      },
+    );
+  }
+
+  @ExampleCode(group: 'dialog')
+  Widget _buildBarrierDismissDialog(BuildContext context) {
+    return _trigger(
+      text: '点击蒙层关闭',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          barrierDismissible: true,
+          dialog: const TDialog(
+            title: Text('点击外部区域即可关闭'),
+            content: Text('适合非关键提示或可随时取消的辅助信息。'),
           ),
         );
       },

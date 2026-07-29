@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_icons/tdesign_icons.dart';
@@ -627,39 +628,46 @@ class _TToastLoading extends StatelessWidget {
     final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
             const TToastThemeData())
         .merge(config);
-    return Container(
-        height: 110,
-        width: 110,
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
-          borderRadius: BorderRadius.circular(
-            toastTheme.borderRadius ?? theme.radiusDefault,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            TCircleIndicator(
-              color: toastTheme.iconColor ?? theme.textColorAnti,
-              size: toastTheme.iconSize ?? 32,
-              lineWidth: 4,
+    final maxWidth = math.max(110.0, toastTheme.maxWidth ?? 191.0);
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 110,
+        minHeight: 110,
+        maxWidth: maxWidth,
+      ),
+      child: Container(
+          padding: toastTheme.padding ?? const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+            borderRadius: BorderRadius.circular(
+              toastTheme.borderRadius ?? theme.radiusDefault,
             ),
-            const SizedBox(height: 8),
-            customWidget ??
-                TText(
-                  text ?? context.resource.loadingWithPoint,
-                  font: toastTheme.textStyle != null
-                      ? null
-                      : theme.fontBodyMedium,
-                  style: toastTheme.textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-                )
-          ],
-        ));
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TCircleIndicator(
+                color: toastTheme.iconColor ?? theme.textColorAnti,
+                size: toastTheme.iconSize ?? 32,
+                lineWidth: 4,
+              ),
+              const SizedBox(height: 8),
+              customWidget ??
+                  TText(
+                    text ?? context.resource.loadingWithPoint,
+                    font: toastTheme.textStyle != null
+                        ? null
+                        : theme.fontBodyMedium,
+                    style: toastTheme.textStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textColor:
+                        toastTheme.textStyle?.color ?? theme.textColorAnti,
+                  )
+            ],
+          )),
+    );
   }
 }
 
@@ -676,20 +684,21 @@ class _TToastLoadingWithoutText extends StatelessWidget {
     final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
             const TToastThemeData())
         .merge(config);
-    return Container(
-      width: 80,
-      height: 80,
-      padding: toastTheme.padding ?? const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: toastTheme.backgroundColor ?? theme.fontGyColor1,
-        borderRadius: BorderRadius.circular(
-          toastTheme.borderRadius ?? theme.radiusDefault,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
+      child: Container(
+        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          borderRadius: BorderRadius.circular(
+            toastTheme.borderRadius ?? theme.radiusDefault,
+          ),
         ),
-      ),
-      child: TCircleIndicator(
-        color: toastTheme.iconColor ?? theme.textColorAnti,
-        size: toastTheme.iconSize ?? 32,
-        lineWidth: 4,
+        child: TCircleIndicator(
+          color: toastTheme.iconColor ?? theme.textColorAnti,
+          size: toastTheme.iconSize ?? 32,
+          lineWidth: 4,
+        ),
       ),
     );
   }

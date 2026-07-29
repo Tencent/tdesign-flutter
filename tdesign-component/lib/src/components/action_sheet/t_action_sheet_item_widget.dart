@@ -7,6 +7,7 @@ import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
+import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
 
 /// 动作面板单个项目组件
@@ -34,6 +35,15 @@ class TActionSheetItemWidget extends StatelessWidget {
     if (item == null) {
       return const SizedBox.shrink();
     }
+    final actionSheetTheme =
+        Theme.of(context).extension<TActionSheetThemeData>();
+    final iconSize = actionSheetTheme?.iconSize ?? 24;
+    final iconExtent = actionSheetTheme?.gridIconExtent ?? 48;
+    final iconColor = item!.disabled
+        ? context.tTheme.textDisabledColor
+        : (item!.textStyle?.color ??
+            actionSheetTheme?.iconColor ??
+            context.tTheme.textColorPrimary);
     late ValueNotifier<List<double>> _offsetValue;
     late GlobalKey _offsetKey;
     if (item!.badge != null) {
@@ -54,12 +64,15 @@ class TActionSheetItemWidget extends StatelessWidget {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                SizedBox(
-                  width: item!.iconSize ?? 40,
-                  height: item!.iconSize ?? 40,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: item!.icon!,
+                IconTheme(
+                  data: IconThemeData(
+                    color: iconColor,
+                    size: iconSize,
+                  ),
+                  child: SizedBox(
+                    width: iconExtent,
+                    height: iconExtent,
+                    child: Center(child: item!.icon!),
                   ),
                 ),
                 if (item!.badge != null)

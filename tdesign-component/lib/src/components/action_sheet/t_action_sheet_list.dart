@@ -9,6 +9,7 @@ import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
+import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
 
 /// 列表类型动作面板
@@ -116,6 +117,9 @@ class TActionSheetList extends StatelessWidget {
 
   /// 构建选项列表
   Widget _buildOptionsList(BuildContext context) {
+    final actionSheetTheme =
+        Theme.of(context).extension<TActionSheetThemeData>();
+    final iconSize = actionSheetTheme?.iconSize ?? 24;
     return Container(
       color: context.tTheme.bgColorContainer,
       child: ListView.builder(
@@ -154,17 +158,16 @@ class TActionSheetList extends StatelessWidget {
                         IconTheme(
                           data: IconThemeData(
                             color: item.disabled
-                                // 禁用状态下的图标颜色
                                 ? context.tTheme.textDisabledColor
                                 : (item.textStyle?.color ??
-                                    // 正常状态下的图标颜色
+                                    actionSheetTheme?.iconColor ??
                                     context.tTheme.textColorPrimary),
-                            size: item.textStyle?.fontSize,
+                            size: iconSize,
                           ),
                           child: SizedBox(
-                            width: item.iconSize ?? 24,
-                            height: item.iconSize ?? 24,
-                            child: item.icon!,
+                            width: iconSize,
+                            height: iconSize,
+                            child: Center(child: item.icon!),
                           ),
                         ),
                         SizedBox(width: context.tTheme.spacer8),

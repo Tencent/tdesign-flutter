@@ -21,14 +21,17 @@ void main() {
     return theme;
   }
 
-  Widget wrapWithTheme() {
+  Widget wrapWithTheme({TextScaler textScaler = TextScaler.noScaling}) {
     return MaterialApp(
       theme: fullTheme(),
-      home: Scaffold(
-        body: Center(
-          child: Builder(
-            key: const Key('toast_host'),
-            builder: (_) => const SizedBox(),
+      home: MediaQuery(
+        data: MediaQueryData(textScaler: textScaler),
+        child: Scaffold(
+          body: Center(
+            child: Builder(
+              key: const Key('toast_host'),
+              builder: (_) => const SizedBox(),
+            ),
           ),
         ),
       ),
@@ -418,6 +421,49 @@ void main() {
       await tester.pump();
       // 不带文案，不应出现加载文案
       expect(find.text('加载中'), findsNothing);
+      TToast.dismissToast(id);
+      await tester.pump();
+    });
+
+    testWidgets('大字号和长文案下 loading 自适应高度且不溢出', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(textScaler: const TextScaler.linear(2.5)),
+      );
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      final id = TToast.showLoading(
+        context: context,
+        text: '正在加载较长的内容',
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      final box = toastBoxFinder('正在加载较长的内容').first;
+      expect(tester.getSize(box).height, greaterThanOrEqualTo(110));
+
+      TToast.dismissToast(id);
+      await tester.pump();
+    });
+
+    testWidgets('无文案 loading 在自定义大图标下自适应尺寸', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      final id = TToast.showLoadingWithoutText(
+        context: context,
+        iconSize: 64,
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      final indicator = find.byType(TCircleIndicator);
+      final decoratedBox = find.ancestor(
+        of: indicator,
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Container && widget.decoration is BoxDecoration,
+        ),
+      );
+      expect(
+          tester.getSize(decoratedBox.first).height, greaterThanOrEqualTo(112));
+
       TToast.dismissToast(id);
       await tester.pump();
     });

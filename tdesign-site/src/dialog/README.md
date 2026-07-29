@@ -49,9 +49,42 @@ await TDialog.show<bool>(
 );
 ```
 
+长内容通过 `maxHeight` 限制内容视口，标题和操作区保持固定：
+
+```dart
+await TDialog.show<void>(
+  context,
+  dialog: TDialog(
+    title: const Text('服务说明'),
+    maxHeight: 320,
+    content: Column(
+      children: List.generate(
+        18,
+        (index) => Text('${index + 1}. 需要滚动阅读的说明内容'),
+      ),
+    ),
+    actions: const [
+      TDialogAction(child: Text('知道了'), role: TDialogActionRole.primary),
+    ],
+  ),
+);
+```
+
 ## 行为说明
 
 - Dialog 默认不允许点击蒙层关闭；通过 `barrierDismissible: true` 开启。
+- 非关键提示可以允许点击蒙层关闭：
+
+  ```dart
+  TDialog.show<void>(
+    context,
+    barrierDismissible: true,
+    dialog: const TDialog(
+      title: Text('提示'),
+      content: Text('点击对话框外部区域即可关闭。'),
+    ),
+  );
+  ```
 - 一到两个 action 横向排列，三个及以上 action 纵向排列。
 - `TDialogActionRole` 提供次要、主要和危险操作的默认按钮语义。
 - `closeOnPressed` 控制 action 点击后是否自动关闭；关闭结果来自 `result`。

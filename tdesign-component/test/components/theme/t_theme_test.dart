@@ -126,7 +126,7 @@ void main() {
     test('buildLight 注入当前组件 ThemeData 默认定义', () {
       final theme = TThemeBuilder.light(TThemeData.defaultData());
 
-      expect(theme.extension<TActionSheetThemeData>(), isNotNull);
+      expect(theme.extension<TActionSheetThemeData>(), isNull);
       expect(theme.extension<TAvatarThemeData>(), isNotNull);
       expect(theme.extension<TBackTopThemeData>(), isNotNull);
       expect(theme.extension<TBadgeThemeData>(), isNotNull);

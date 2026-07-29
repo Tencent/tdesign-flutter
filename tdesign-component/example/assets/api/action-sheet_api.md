@@ -9,8 +9,7 @@
 | badge | TBadge? | - | 角标 |
 | disabled | bool | false | 是否禁用 |
 | group | String? | - | 分组，用于带描述多行滚动宫格 仅分组动作面板使用；未配置时该项目不会进入任何分组 |
-| icon | Widget? | - | 图标 |
-| iconSize | double? | - | 图标大小 |
+| icon | Widget? | - | 图标槽位；调用方拥有其背景、形状和显式尺寸。 未显式设置尺寸或颜色的 `Icon` 会继承 `TActionSheetThemeData`。 |
 | label | String | - | 标题 |
 | subtitle | String? | - | 描述信息 |
 | textStyle | TextStyle? | - | 标题样式 |
@@ -93,3 +92,48 @@
 | onCancel | VoidCallback? | - | 点击取消时回调。 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 |
 | onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
+
+
+### TActionSheetThemeData
+#### 简介
+TActionSheet 组件级 ThemeExtension
+
+#### 静态方法
+
+##### TActionSheetThemeData.lerpDouble
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | - |
+| b | double? | - | - |
+| t | double | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| barrierColor | Color? | - | 蒙层颜色 |
+| count | int? | - | 宫格列数 |
+| defaultAlign | TActionSheetAlign? | - | 默认对齐 |
+| gridIconExtent | double? | - | 宫格和分组布局的图标槽位尺寸。 |
+| iconColor | Color? | - | 默认图标颜色。 |
+| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 |
+| itemHeight | double? | - | 项高度 |
+| itemMinWidth | double? | - | 项最小宽度 |
+| panelRadius | double? | - | 面板圆角 |
+| rows | int? | - | 宫格行数 |
+
+
+### TActionSheetAlign
+#### 简介
+动作面板内容对齐方式
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| center | 居中对齐 |
+| left | 左对齐 |
+| right | 右对齐 |

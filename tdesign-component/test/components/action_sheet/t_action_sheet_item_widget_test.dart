@@ -5,9 +5,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TActionSheetItemWidget 组件测试
 void main() {
-  Widget wrapWithTheme(Widget child) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TActionSheetThemeData? actionSheetTheme,
+  }) {
     return MaterialApp(
-      theme: ThemeData(extensions: [TThemeData.defaultData()]),
+      theme: ThemeData(extensions: [
+        TThemeData.defaultData(),
+        if (actionSheetTheme != null) actionSheetTheme,
+      ]),
       home: Scaffold(body: child),
     );
   }
@@ -73,19 +79,80 @@ void main() {
       expect(changed, 2);
     });
 
-    testWidgets('自定义 iconSize + textStyle', (tester) async {
+    testWidgets('默认图标字形和宫格槽位尺寸分离', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
         TActionSheetItemWidget(
           item: TActionSheetItem(
             label: '样式',
             icon: const Icon(Icons.star),
-            iconSize: 24,
             textStyle: const TextStyle(fontSize: 12),
           ),
           index: 0,
         ),
       ));
       expect(find.text('样式'), findsOneWidget);
+      final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
+      expect(iconTheme.data.size, 24);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.width == 48 && widget.height == 48,
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Theme 控制默认字形、槽位和颜色', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TActionSheetItemWidget(
+            item: TActionSheetItem(
+              label: '图标',
+              icon: const Icon(Icons.star),
+            ),
+            index: 0,
+          ),
+          actionSheetTheme: const TActionSheetThemeData(
+            iconSize: 32,
+            gridIconExtent: 56,
+            iconColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
+      expect(iconTheme.data.size, 32);
+      expect(iconTheme.data.color, Colors.purple);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.width == 56 && widget.height == 56,
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('自定义 icon Widget 的显式尺寸和颜色不被 Theme 覆盖', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TActionSheetItemWidget(
+            item: TActionSheetItem(
+              label: '自定义图标',
+              icon: const Icon(Icons.star, size: 18, color: Colors.green),
+            ),
+            index: 0,
+          ),
+          actionSheetTheme: const TActionSheetThemeData(
+            iconSize: 32,
+            iconColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final icon = tester.widget<Icon>(find.byIcon(Icons.star));
+      expect(icon.size, 18);
+      expect(icon.color, Colors.green);
+      expect(find.byType(FittedBox), findsNothing);
     });
   });
 

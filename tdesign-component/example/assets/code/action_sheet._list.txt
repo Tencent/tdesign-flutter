@@ -1,10 +1,21 @@
 Widget _list(BuildContext context) {
-    return TButton(
-      child: const Text('打开列表面板'),
+    return _trigger(
+      label: '管理项目',
       onPressed: () => TActionSheet.showList(
         context,
-        items: _items,
-        onChanged: (item, index) => debugPrint('$index: ${item.label}'),
+        subtitle: '报告-2026-Q3.pdf',
+        items: [
+          TActionSheetItem(label: '编辑内容', icon: const Icon(TIcons.edit)),
+          TActionSheetItem(label: '复制链接', icon: const Icon(TIcons.link)),
+          TActionSheetItem(label: '移动到文件夹', icon: const Icon(TIcons.folder)),
+          TActionSheetItem(
+            label: '删除文件',
+            icon: const Icon(TIcons.delete),
+            disabled: true,
+          ),
+        ],
+        onChanged: (item, _) =>
+            TToast.showText('已选择：${item.label}', context: context),
       ),
     );
   }

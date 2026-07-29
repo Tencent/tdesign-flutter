@@ -8,9 +8,20 @@ Widget _buildCustomDurationToast(BuildContext context) {
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
           TToast.showText(
-            '这条提示将显示 5 秒',
+            null,
             context: context,
             duration: const Duration(seconds: 5),
+            customWidget: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 5, end: 0),
+              duration: const Duration(seconds: 5),
+              builder: (context, remaining, _) {
+                return TText(
+                  '${remaining.ceil()} 秒后关闭',
+                  font: context.tTheme.fontBodyMedium,
+                  textColor: context.tTheme.textColorAnti,
+                );
+              },
+            ),
           );
         },
       ),

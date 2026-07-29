@@ -7,11 +7,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ///
 /// 覆盖图标/副标题/徽标分支、禁用项、取消按钮、useSafeArea=false。
 void main() {
-  Widget wrap(Widget child) {
+  Widget wrap(
+    Widget child, {
+    TActionSheetThemeData actionSheetTheme = const TActionSheetThemeData(),
+  }) {
     return MaterialApp(
       theme: ThemeData(extensions: [
         TThemeData.defaultData(),
-        const TActionSheetThemeData(),
+        actionSheetTheme,
       ]),
       home: Scaffold(body: child),
     );
@@ -35,6 +38,25 @@ void main() {
       ],
     )));
     expect(find.byType(TActionSheetList), findsOneWidget);
+  });
+
+  testWidgets('列表图标尺寸来自 Theme 而不是文本字号', (tester) async {
+    await tester.pumpWidget(wrap(
+      TActionSheetList(
+        items: [
+          TActionSheetItem(
+            label: '图标',
+            icon: const Icon(Icons.star),
+            textStyle: const TextStyle(fontSize: 12),
+          ),
+        ],
+        showCancel: false,
+      ),
+      actionSheetTheme: const TActionSheetThemeData(iconSize: 32),
+    ));
+
+    final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
+    expect(iconTheme.data.size, 32);
   });
 
   testWidgets('禁用项 onTap 为 null（点击不触发回调）', (tester) async {
