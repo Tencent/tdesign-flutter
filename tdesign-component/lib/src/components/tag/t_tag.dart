@@ -45,7 +45,10 @@ class TTag extends StatelessWidget {
   /// 标签点击回调；为空时不创建标签点击行为。
   final GestureTapCallback? onTap;
 
-  /// 关闭图标点击事件
+  /// 关闭图标点击事件。
+  ///
+  /// 标签本身不持有列表状态；需要移除标签时，请在此回调中更新父组件的
+  /// 数据源并触发重建。
   final GestureTapCallback? onCloseTap;
 
   /// 从 Theme 子树读取 L4 默认值
@@ -76,7 +79,8 @@ class TTag extends StatelessWidget {
     final borderRadius = _resolveBorderRadius(context, shape);
 
     var child = _buildLabel(
-      textColor: textColor ?? colors.textColor,
+      // 禁用态应始终使用禁用 token，避免普通 ThemeExtension 的颜色覆盖状态。
+      textColor: enabled ? textColor ?? colors.textColor : colors.textColor,
       font: font ?? _getFont(context),
       fontWeight: fontWeight,
       overflow: overflow ?? TextOverflow.ellipsis,
@@ -104,7 +108,7 @@ class TTag extends StatelessWidget {
             size: 14,
           ),
         );
-        children.add(onCloseTap == null
+        children.add(onCloseTap == null || !enabled
             ? closeIcon
             : GestureDetector(onTap: onCloseTap, child: closeIcon));
       }
@@ -120,7 +124,9 @@ class TTag extends StatelessWidget {
       height: maxLines == 1 ? _getTagHeight(context, effectivePadding) : null,
       padding: effectivePadding,
       decoration: BoxDecoration(
-          color: backgroundColor ?? colors.backgroundColor,
+          color: enabled
+              ? backgroundColor ?? colors.backgroundColor
+              : colors.backgroundColor,
           border:
               Border.all(width: isOutline ? 1 : 0, color: colors.borderColor),
           borderRadius: borderRadius),
@@ -130,7 +136,7 @@ class TTag extends StatelessWidget {
         child: child,
       ),
     );
-    if (onTap == null) {
+    if (onTap == null || !enabled) {
       return result;
     }
     return GestureDetector(onTap: onTap, child: result);

@@ -49,6 +49,7 @@ class TSelectTag extends StatelessWidget {
         colorScheme: effectiveColorScheme,
         icon: icon,
         size: size,
+        enabled: onChanged != null,
         onTap: onChanged == null ? null : () => onChanged!(!value),
       ),
     );

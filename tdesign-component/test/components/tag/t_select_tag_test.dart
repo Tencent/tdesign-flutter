@@ -22,6 +22,23 @@ void main() {
       ));
       expect(find.byType(TSelectTag), findsOneWidget);
       expect(find.text('标签'), findsOneWidget);
+
+      final token = TThemeData.defaultData();
+      final tagContainer = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TSelectTag),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is BoxDecoration,
+              ),
+            )
+            .first,
+      );
+      final decoration = tagContainer.decoration as BoxDecoration;
+      final text = tester.widget<Text>(find.text('标签'));
+      expect(decoration.color, token.bgColorComponentDisabled);
+      expect(text.style?.color, token.textDisabledColor);
     });
 
     testWidgets('文字垂直居中且宽度按内容自适应', (tester) async {
@@ -63,8 +80,7 @@ void main() {
       expect(changed, isTrue);
     });
 
-    testWidgets('选中态带 colorScheme/icon/size 且 onChanged 为 null',
-        (tester) async {
+    testWidgets('无 onChanged 时使用禁用态，即使 value 为 true', (tester) async {
       await tester.pumpWidget(wrap(
         const TSelectTag(
           '选中',
@@ -92,10 +108,9 @@ void main() {
       final text = tester.widget<Text>(find.text('选中'));
       final icon = tester.widget<Icon>(find.byIcon(Icons.check));
 
-      expect(decoration.color, token.errorNormalColor);
-      expect(text.style?.color, token.textColorAnti);
-      expect(icon.color, token.textColorAnti);
-      expect(text.style?.color, isNot(token.textDisabledColor));
+      expect(decoration.color, token.bgColorComponentDisabled);
+      expect(text.style?.color, token.textDisabledColor);
+      expect(icon.color, token.textDisabledColor);
     });
   });
 }

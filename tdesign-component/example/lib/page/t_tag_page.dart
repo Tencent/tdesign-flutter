@@ -14,6 +14,12 @@ class _TTagPageState extends State<TTagPage> {
   bool _selected1 = false;
   bool _selected2 = true;
   bool _selected3 = false;
+  bool _primarySelected = true;
+  bool _successSelected = true;
+  bool _warningSelected = true;
+  bool _dangerSelected = true;
+  final List<String> _closableTags = ['标签文字'];
+  final List<String> _closableOutlineTags = ['标签文字'];
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +243,16 @@ class _TTagPageState extends State<TTagPage> {
 
   @ExampleCode(group: 'tag')
   Widget _buildCloseFillTag(BuildContext context) {
-    return TTag('标签文字', needCloseIcon: true, onCloseTap: () {});
+    return Wrap(
+      spacing: 8,
+      children: _closableTags
+          .map((text) => TTag(
+                text,
+                needCloseIcon: true,
+                onCloseTap: () => setState(() => _closableTags.remove(text)),
+              ))
+          .toList(),
+    );
   }
 
   @ExampleCode(group: 'tag')
@@ -245,7 +260,17 @@ class _TTagPageState extends State<TTagPage> {
     return Theme(
       data: Theme.of(context)
           .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: TTag('标签文字', needCloseIcon: true, onCloseTap: () {}),
+      child: Wrap(
+        spacing: 8,
+        children: _closableOutlineTags
+            .map((text) => TTag(
+                  text,
+                  needCloseIcon: true,
+                  onCloseTap: () =>
+                      setState(() => _closableOutlineTags.remove(text)),
+                ))
+            .toList(),
+      ),
     );
   }
 
@@ -364,20 +389,20 @@ class _TTagPageState extends State<TTagPage> {
       children: [
         TSelectTag('主要',
             colorScheme: TTagColorScheme.primary,
-            value: true,
-            onChanged: (_) {}),
+            value: _primarySelected,
+            onChanged: (value) => setState(() => _primarySelected = value)),
         TSelectTag('成功',
             colorScheme: TTagColorScheme.success,
-            value: true,
-            onChanged: (_) {}),
+            value: _successSelected,
+            onChanged: (value) => setState(() => _successSelected = value)),
         TSelectTag('警告',
             colorScheme: TTagColorScheme.warning,
-            value: true,
-            onChanged: (_) {}),
+            value: _warningSelected,
+            onChanged: (value) => setState(() => _warningSelected = value)),
         TSelectTag('危险',
             colorScheme: TTagColorScheme.danger,
-            value: true,
-            onChanged: (_) {}),
+            value: _dangerSelected,
+            onChanged: (value) => setState(() => _dangerSelected = value)),
       ],
     );
   }

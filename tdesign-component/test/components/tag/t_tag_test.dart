@@ -211,11 +211,26 @@ void main() {
       expect(find.text('描边浅色'), findsOneWidget);
     });
 
-    testWidgets('disable 禁用状态渲染', (tester) async {
+    testWidgets('disable 禁用状态使用禁用色且不响应点击', (tester) async {
+      var tapped = false;
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('禁用', enabled: false),
+        TTag('禁用', enabled: false, onTap: () => tapped = true),
       ));
-      expect(find.text('禁用'), findsOneWidget);
+
+      final token = TThemeData.defaultData();
+      final tagContainer = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      final decoration = tagContainer.decoration as BoxDecoration;
+      final text = tester.widget<Text>(find.text('禁用'));
+
+      expect(decoration.color, token.bgColorComponentDisabled);
+      expect(text.style?.color, token.textDisabledColor);
+      await tester.tap(find.byType(TTag), warnIfMissed: false);
+      await tester.pump();
+      expect(tapped, isFalse);
     });
 
     testWidgets('disable + isOutline 禁用描边渲染', (tester) async {
