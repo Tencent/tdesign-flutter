@@ -1,21 +1,9 @@
 Widget _buildButtonNumberBadge(BuildContext context) {
-    return SizedBox(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomLeft,
-        children: [
-          const SizedBox(
-            child: TButton(
-              child: Text('按钮'),
-              size: TButtonSize.large,
-            ),
-          ),
-          Positioned(
-            child: TBadge(count: num),
-            right: 0,
-            top: 0,
-          )
-        ],
+    return TBadge(
+      count: num,
+      child: const TButton(
+        child: Text('按钮'),
+        size: TButtonSize.large,
       ),
     );
   }

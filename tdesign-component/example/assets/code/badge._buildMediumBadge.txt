@@ -1,16 +1,6 @@
 Widget _buildMediumBadge(BuildContext context) {
-    return SizedBox(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomLeft,
-        children: [
-          const TAvatar(size: TAvatarSize.medium),
-          Positioned(
-            child: TBadge(count: num),
-            left: 36,
-            bottom: 36,
-          )
-        ],
-      ),
+    return TBadge(
+      count: num,
+      child: const TAvatar(size: TAvatarSize.medium),
     );
   }

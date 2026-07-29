@@ -1,16 +1,6 @@
 Widget _buildRedPointIconBadge(BuildContext context) {
-    return const SizedBox(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomLeft,
-        children: [
-          Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(variant: TBadgeVariant.dot),
-            right: 0,
-            top: 0,
-          )
-        ],
-      ),
+    return const TBadge(
+      variant: TBadgeVariant.dot,
+      child: Icon(TIcons.notification),
     );
   }

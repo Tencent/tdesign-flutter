@@ -1,22 +1,10 @@
 Widget _buildRedPointButtonBadge(BuildContext context) {
-    return const SizedBox(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomLeft,
-        children: [
-          SizedBox(
-            child: TButton(
-              child: Text('按钮'),
-              size: TButtonSize.large,
-              variant: TButtonVariant.fill,
-            ),
-          ),
-          Positioned(
-            child: TBadge(variant: TBadgeVariant.dot),
-            right: 0,
-            top: 0,
-          )
-        ],
+    return const TBadge(
+      variant: TBadgeVariant.dot,
+      child: TButton(
+        child: Text('按钮'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
       ),
     );
   }

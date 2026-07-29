@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
 import 't_badge_theme_data.dart';
 
 /// 徽标形态。
@@ -51,27 +54,77 @@ class TBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final badgeTheme = BadgeTheme.of(context);
+    final materialTheme = Theme.of(context);
+    final localBadgeTheme =
+        context.dependOnInheritedWidgetOfExactType<BadgeTheme>()?.data;
+    final globalBadgeTheme = materialTheme.badgeTheme;
     final tTheme = Theme.of(context).extension<TBadgeThemeData>();
+    final token = context.tTheme;
+    final backgroundColor = localBadgeTheme?.backgroundColor ??
+        globalBadgeTheme.backgroundColor ??
+        token.errorNormalColor;
+    final textColor = localBadgeTheme?.textColor ??
+        globalBadgeTheme.textColor ??
+        token.textColorAnti;
+    final smallSize =
+        localBadgeTheme?.smallSize ?? globalBadgeTheme.smallSize ?? 6;
+    final largeSize =
+        localBadgeTheme?.largeSize ?? globalBadgeTheme.largeSize ?? 16;
+    final textStyle = localBadgeTheme?.textStyle ??
+        globalBadgeTheme.textStyle ??
+        materialTheme.textTheme.labelSmall ??
+        TextStyle(
+          color: textColor,
+          fontSize: token.fontMarkExtraSmall?.size,
+          height: token.fontMarkExtraSmall?.height,
+          fontWeight: token.fontMarkExtraSmall?.fontWeight,
+        );
+    final padding = localBadgeTheme?.padding ??
+        globalBadgeTheme.padding ??
+        const EdgeInsets.symmetric(horizontal: 4);
+    final alignment = localBadgeTheme?.alignment ?? globalBadgeTheme.alignment;
+    final offset = localBadgeTheme?.offset ?? globalBadgeTheme.offset;
     final visible = variant == TBadgeVariant.dot || showZero || count != 0;
-    final standaloneSize = badgeTheme.largeSize ?? 16;
-    final content = child ?? SizedBox.square(dimension: standaloneSize);
+    final effectiveLargeSize =
+        variant == TBadgeVariant.small ? smallSize * 2 : largeSize;
+    final isDot = variant == TBadgeVariant.dot;
+    final isSmall = variant == TBadgeVariant.small;
+    final text = count > maxCount ? '$maxCount+' : '$count';
+    final textLabel = Text(text);
+    final label = isDot
+        ? null
+        : isSmall
+            ? _buildCompactLabel(
+                textLabel,
+                effectiveLargeSize,
+                isSingleCharacter: text.length == 1,
+              )
+            : textLabel;
+    final effectivePadding = isSmall || isDot ? EdgeInsets.zero : padding;
+    final effectiveLabel = border
+        ? _buildBorderedLabel(
+            label: label,
+            backgroundColor: backgroundColor,
+            borderColor:
+                tTheme?.borderColor ?? materialTheme.colorScheme.surface,
+            borderWidth: tTheme?.borderWidth ?? 1,
+            padding: effectivePadding,
+            minHeight: isDot ? smallSize : effectiveLargeSize,
+            minWidth: isDot ? smallSize : 0,
+          )
+        : label;
     final badge = Badge(
       isLabelVisible: visible,
-      alignment: badgeTheme.alignment,
-      offset: badgeTheme.offset,
-      backgroundColor: border ? Colors.transparent : badgeTheme.backgroundColor,
-      textColor: badgeTheme.textColor,
-      textStyle: badgeTheme.textStyle,
-      padding: badgeTheme.padding,
-      largeSize: variant == TBadgeVariant.small
-          ? (badgeTheme.smallSize ?? 6) * 2
-          : badgeTheme.largeSize,
-      smallSize: badgeTheme.smallSize,
-      label: variant == TBadgeVariant.dot
-          ? null
-          : _buildLabel(context, badgeTheme, tTheme),
-      child: content,
+      alignment: alignment,
+      offset: offset,
+      backgroundColor: border ? Colors.transparent : backgroundColor,
+      textColor: textColor,
+      textStyle: textStyle,
+      padding: border ? EdgeInsets.zero : effectivePadding,
+      largeSize: isDot && border ? smallSize : effectiveLargeSize,
+      smallSize: smallSize,
+      label: effectiveLabel,
+      child: child,
     );
 
     if (onTap == null) {
@@ -80,31 +133,58 @@ class TBadge extends StatelessWidget {
     return GestureDetector(onTap: onTap, child: badge);
   }
 
-  Widget _buildLabel(
-    BuildContext context,
-    BadgeThemeData badgeTheme,
-    TBadgeThemeData? tTheme,
-  ) {
-    final text = count > maxCount ? '$maxCount+' : '$count';
-    if (!border) {
-      return Text(text);
+  Widget _buildCompactLabel(
+    Widget label,
+    double height, {
+    required bool isSingleCharacter,
+  }) {
+    final fittedLabel = FittedBox(
+      fit: BoxFit.scaleDown,
+      child: label,
+    );
+    if (isSingleCharacter) {
+      return SizedBox.square(
+        dimension: height,
+        child: fittedLabel,
+      );
     }
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color:
-            badgeTheme.backgroundColor ?? Theme.of(context).colorScheme.error,
-        border: Border.all(
-          color: tTheme?.borderColor ?? Theme.of(context).colorScheme.surface,
-          width: tTheme?.borderWidth ?? 1,
+    return SizedBox(
+      height: height,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: label,
         ),
-        borderRadius: BorderRadius.circular(999),
       ),
-      child: Padding(
-        padding:
-            badgeTheme.padding ?? const EdgeInsets.symmetric(horizontal: 4),
-        child: Text(
-          text,
-          style: badgeTheme.textStyle?.copyWith(color: badgeTheme.textColor),
+    );
+  }
+
+  Widget _buildBorderedLabel({
+    required Widget? label,
+    required Color backgroundColor,
+    required Color borderColor,
+    required double borderWidth,
+    required EdgeInsetsGeometry padding,
+    required double minHeight,
+    required double minWidth,
+  }) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: minHeight, minWidth: minWidth),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: Border.all(
+            color: borderColor,
+            width: borderWidth,
+          ),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Padding(
+          padding: padding,
+          child: Center(
+            child: label,
+          ),
         ),
       ),
     );

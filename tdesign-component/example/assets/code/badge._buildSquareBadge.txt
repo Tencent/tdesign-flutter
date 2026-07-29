@@ -1,16 +1,7 @@
 Widget _buildSquareBadge(BuildContext context) {
-    return SizedBox(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomLeft,
-        children: [
-          const Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(count: num, border: true),
-            left: 20,
-            bottom: 18,
-          )
-        ],
-      ),
+    return TBadge(
+      count: num,
+      border: true,
+      child: const Icon(TIcons.notification),
     );
   }
