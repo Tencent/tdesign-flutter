@@ -189,6 +189,7 @@
 | --- | --- | --- | --- |
 | navigatorContext | BuildContext? | - | 与 `TPopup.show` 的 `navigatorContext` 相同。 |
 | options | TPopupOptions | - | 创建时传入的配置；每次 `open` 会按 `TPopupOptions.placement` 裁剪无效字段后使用。 |
+| themeContext | BuildContext | - | 用于捕获调用点局部 Theme 的 context。 |
 | useRootNavigator | bool | - | 与 `TPopup.show` 的 `useRootNavigator` 相同。 |
 
 
