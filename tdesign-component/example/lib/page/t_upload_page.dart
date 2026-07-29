@@ -15,6 +15,20 @@ class TUploadPage extends StatefulWidget {
 class _TUploadPageState extends State<TUploadPage> {
   List<TUploadFile> _files = [];
   List<TUploadFile> _emptyFiles = [];
+  List<TUploadFile> _previewFiles = const [
+    TUploadFile(
+      id: 'preview-1',
+      name: 'preview-1.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'preview-2',
+      name: 'preview-2.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example2.png',
+      status: TUploadFileStatus.success,
+    ),
+  ];
   List<TUploadFile> _statusFiles = const [
     TUploadFile(
       id: 'uploading',
@@ -49,6 +63,7 @@ class _TUploadPageState extends State<TUploadPage> {
       children: [
         ExampleModule(title: '基础能力', children: [
           ExampleItem(desc: '图片选择', builder: _buildBasic),
+          ExampleItem(desc: '图片预览', builder: _buildPreview),
           ExampleItem(desc: '空态可用与禁用', builder: _buildEmptyStates),
           ExampleItem(desc: '上传状态', builder: _buildStatus),
           ExampleItem(desc: '圆形主题', builder: _buildCircle),
@@ -107,6 +122,18 @@ class _TUploadPageState extends State<TUploadPage> {
   }
 
   @ExampleCode(group: 'upload')
+  Widget _buildPreview(BuildContext context) {
+    return _section(
+      TUpload(
+        files: _previewFiles,
+        maxFiles: 4,
+        onChanged: (files) => setState(() => _previewFiles = files),
+        onPreview: (file) => _showPreview(context, file),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'upload')
   Widget _buildStatus(BuildContext context) {
     return _section(
       TUpload(
@@ -145,6 +172,29 @@ class _TUploadPageState extends State<TUploadPage> {
 
   Widget _section(Widget child) {
     return Padding(padding: const EdgeInsets.all(16), child: child);
+  }
+
+  void _showPreview(BuildContext context, TUploadFile file) {
+    final previewFiles = _previewFiles
+        .where((item) => item.bytes != null || item.url != null)
+        .toList();
+    final index = previewFiles.indexWhere((item) => item.id == file.id);
+    if (index < 0) {
+      return;
+    }
+    TImageViewer.show(
+      context: context,
+      images: previewFiles.map(_toImageProvider).toList(),
+      initialIndex: index,
+      showIndex: true,
+    );
+  }
+
+  ImageProvider<Object> _toImageProvider(TUploadFile file) {
+    if (file.bytes != null) {
+      return MemoryImage(file.bytes!);
+    }
+    return NetworkImage(file.url!);
   }
 
   void _show(String message) {

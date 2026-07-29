@@ -145,47 +145,49 @@ class TUpload extends StatelessWidget {
   ) {
     return SizedBox.square(
       dimension: size,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          GestureDetector(
-            key: ValueKey('upload-file-${file.id}'),
-            onTap:
-                _enabled && onPreview != null ? () => onPreview!(file) : null,
-            child: ClipRRect(
-              borderRadius: _borderRadius(context, theme),
+      child: ClipRRect(
+        borderRadius: _borderRadius(context, theme),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            GestureDetector(
+              key: ValueKey('upload-file-${file.id}'),
+              onTap:
+                  _enabled && onPreview != null ? () => onPreview!(file) : null,
               child: _preview(context, file, theme),
             ),
-          ),
-          if (file.status != TUploadFileStatus.ready &&
-              file.status != TUploadFileStatus.success)
-            _statusOverlay(context, file, theme),
-          if (_enabled && file.canRemove)
-            Positioned(
-              right: 0,
-              top: 0,
-              child: GestureDetector(
-                key: ValueKey('upload-remove-${file.id}'),
-                onTap: () => onChanged!(
-                  List.unmodifiable(files.where((item) => item.id != file.id)),
-                ),
-                child: Container(
-                  width: theme?.removeButtonSize ?? 22,
-                  height: theme?.removeButtonSize ?? 22,
-                  decoration: BoxDecoration(
-                    color: theme?.removeButtonColor ??
-                        context.tTheme.textDisabledColor,
-                    shape: BoxShape.circle,
+            if (file.status != TUploadFileStatus.ready &&
+                file.status != TUploadFileStatus.success)
+              _statusOverlay(context, file, theme),
+            if (_enabled && file.canRemove)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: GestureDetector(
+                  key: ValueKey('upload-remove-${file.id}'),
+                  onTap: () => onChanged!(
+                    List.unmodifiable(
+                      files.where((item) => item.id != file.id),
+                    ),
                   ),
-                  child: Icon(
-                    TIcons.close,
-                    size: theme?.removeIconSize ?? 14,
-                    color: context.tTheme.textColorAnti,
+                  child: Container(
+                    width: theme?.removeButtonSize ?? 22,
+                    height: theme?.removeButtonSize ?? 22,
+                    decoration: BoxDecoration(
+                      color: theme?.removeButtonColor ??
+                          context.tTheme.textDisabledColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      TIcons.close,
+                      size: theme?.removeIconSize ?? 14,
+                      color: context.tTheme.textColorAnti,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -236,7 +238,7 @@ class TUpload extends StatelessWidget {
           ? () => onRetry!(file)
           : null,
       child: ColoredBox(
-        color: theme?.overlayColor ?? Colors.black54,
+        color: theme?.overlayColor ?? context.tTheme.fontGyColor3,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

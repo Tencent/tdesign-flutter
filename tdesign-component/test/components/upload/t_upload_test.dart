@@ -344,6 +344,20 @@ void main() {
         ),
       );
       final statusText = tester.widget<Text>(find.text('上传失败'));
+      final statusOverlay = tester.widget<ColoredBox>(
+        find.descendant(
+          of: find.byKey(const ValueKey('upload-status-error')),
+          matching: find.byType(ColoredBox),
+        ),
+      );
+      final statusClip = tester.widget<ClipRRect>(
+        find
+            .ancestor(
+              of: find.byKey(const ValueKey('upload-status-error')),
+              matching: find.byType(ClipRRect),
+            )
+            .first,
+      );
 
       expect(indicator.color, token.textColorAnti);
       expect(refreshIcon.color, token.textColorAnti);
@@ -353,6 +367,9 @@ void main() {
       expect(statusText.style?.color, token.textColorAnti);
       expect(statusText.style?.fontSize, token.fontBodySmall?.size);
       expect(statusText.style?.height, token.fontBodySmall?.height);
+      expect(statusOverlay.color, token.fontGyColor3);
+      expect(
+          statusClip.borderRadius, BorderRadius.circular(token.radiusDefault));
     });
 
     testWidgets('renders bytes, network and placeholder preview branches',
@@ -428,6 +445,15 @@ void main() {
           ),
           findsOneWidget);
       expect(tester.widget<Text>(find.text('上传失败')).style, statusStyle);
+      final statusClip = tester.widget<ClipRRect>(
+        find
+            .ancestor(
+              of: find.byKey(const ValueKey('upload-status-error')),
+              matching: find.byType(ClipRRect),
+            )
+            .first,
+      );
+      expect(statusClip.borderRadius, BorderRadius.circular(999));
       final add = tester.widget<Container>(
         find.descendant(
           of: find.byKey(const ValueKey('upload-add')),
