@@ -14,7 +14,17 @@ class PopupLayout {
   final double? width;
   final double? height;
 
+  /// top / bottom 未指定高度时的默认面板高度。
+  static const double defaultEdgeHeight = 240;
+
+  /// left / right 未指定宽度时的默认抽屉宽度。
   static const double defaultDrawerWidth = 280;
+
+  /// center 未指定尺寸时的默认面板宽度。
+  static const double defaultCenterWidth = 240;
+
+  /// center 未指定尺寸时的默认面板高度。
+  static const double defaultCenterHeight = 240;
 
   Widget wrapPositioned({
     required Widget child,
@@ -28,27 +38,18 @@ class PopupLayout {
           top: safePadding.top,
           left: (inset?.left ?? 0) + safePadding.left,
           right: (inset?.right ?? 0) + safePadding.right,
-          height: height,
+          height: height ?? defaultEdgeHeight,
           child: child,
         );
       case TPopupPlacement.bottom:
         final inset = this.inset is TPopupBottomInset
             ? this.inset as TPopupBottomInset
             : null;
-        final bottomHeight = _bottomHeight();
-        if (bottomHeight != null) {
-          return Positioned(
-            left: (inset?.left ?? 0) + safePadding.left,
-            right: (inset?.right ?? 0) + safePadding.right,
-            bottom: safePadding.bottom,
-            height: bottomHeight,
-            child: child,
-          );
-        }
         return Positioned(
           left: (inset?.left ?? 0) + safePadding.left,
           right: (inset?.right ?? 0) + safePadding.right,
           bottom: safePadding.bottom,
+          height: height ?? defaultEdgeHeight,
           child: child,
         );
       case TPopupPlacement.left:
@@ -113,13 +114,6 @@ class PopupLayout {
       case TPopupPlacement.center:
         return mediaPadding;
     }
-  }
-
-  double? _bottomHeight() {
-    if (height != null) {
-      return height;
-    }
-    return null;
   }
 
   Alignment get alignment {

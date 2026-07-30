@@ -5,19 +5,20 @@ part of 't_popup.dart';
 /// 与 [TPopupOptions] 类文档中的「字段与 placement」表对应。
 /// 方向固定时请用 [TPopupOptions.bottom]、[TPopupOptions.center] 等命名工厂。
 enum TPopupPlacement {
-  /// 自顶部滑入；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupTopInset]）。
+  /// 自顶部滑入；默认高 240，使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupTopInset]）覆盖。
   top,
 
-  /// 自左侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupLeftInset]）。
+  /// 自左侧滑入；默认宽 280，使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupLeftInset]）覆盖。
   left,
 
-  /// 自右侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupRightInset]）。
+  /// 自右侧滑入；默认宽 280，使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupRightInset]）覆盖。
   right,
 
-  /// 自底部滑入；默认内置头部；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）。
+  /// 自底部滑入；默认高 240 且带内置头部；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）覆盖。
   bottom,
 
-  /// 屏幕居中；使用 [TPopupOptions.closeBuilder] 控制面板外下方关闭区。
+  /// 屏幕居中；默认 240 × 240，使用 [TPopupOptions.width]、[TPopupOptions.height] 覆盖；
+  /// 使用 [TPopupOptions.closeBuilder] 控制面板外下方关闭区。
   center,
 }
 

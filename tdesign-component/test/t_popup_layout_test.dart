@@ -50,7 +50,7 @@ void main() {
       expect(positioned.height, 200);
     });
 
-    testWidgets('bottom 无 height 时贴底', (tester) async {
+    testWidgets('bottom 无 height 时使用默认高度并贴底', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
       );
@@ -68,7 +68,21 @@ void main() {
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.bottom, 0);
       expect(positioned.top, isNull);
-      expect(positioned.height, isNull);
+      expect(positioned.height, PopupLayout.defaultEdgeHeight);
+    });
+
+    testWidgets('top 无 height 时使用默认高度', (tester) async {
+      final layout = PopupLayout(placement: TPopupPlacement.top);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(children: [layout.wrapPositioned(child: const SizedBox())]),
+          ),
+        ),
+      );
+      final positioned = tester.widget<Positioned>(find.byType(Positioned));
+      expect(positioned.top, 0);
+      expect(positioned.height, PopupLayout.defaultEdgeHeight);
     });
 
     testWidgets('left / right 使用默认或自定义 width 与上下 inset', (tester) async {
@@ -230,7 +244,7 @@ void main() {
           kPopupTestMediaPadding,
           true,
         ),
-        EdgeInsets.zero,
+        kPopupTestMediaPadding,
       );
       expect(
         PopupLayout.safePaddingFor(
@@ -287,7 +301,7 @@ void main() {
         expect(positioned.right, 0);
       });
 
-      testWidgets('center 忽略传入的 safePadding，仍为 Positioned.fill',
+      testWidgets('center 应用完整 safePadding，在安全区内居中',
           (tester) async {
         final layout = PopupLayout(placement: TPopupPlacement.center);
         await tester.pumpWidget(
@@ -305,10 +319,10 @@ void main() {
           ),
         );
         final positioned = tester.widget<Positioned>(find.byType(Positioned));
-        expect(positioned.left, 0);
-        expect(positioned.top, 0);
-        expect(positioned.right, 0);
-        expect(positioned.bottom, 0);
+        expect(positioned.left, kPopupTestMediaPadding.left);
+        expect(positioned.top, kPopupTestMediaPadding.top);
+        expect(positioned.right, kPopupTestMediaPadding.right);
+        expect(positioned.bottom, kPopupTestMediaPadding.bottom);
         expect(find.byKey(const ValueKey('panel')), findsOneWidget);
       });
 
@@ -575,7 +589,7 @@ void main() {
       expect(positioned.height, 180);
     });
 
-    testWidgets('bottom 无 height 时 safePadding 仍贴安全区上沿', (tester) async {
+    testWidgets('bottom 无 height 时使用默认高度并贴安全区上沿', (tester) async {
       const safeBottom = 21.0;
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
@@ -596,7 +610,7 @@ void main() {
       );
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.bottom, safeBottom);
-      expect(positioned.height, isNull);
+      expect(positioned.height, PopupLayout.defaultEdgeHeight);
     });
 
     testWidgets('left/right 应用 safePadding 时避让侧栏与上下安全区', (tester) async {

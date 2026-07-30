@@ -86,4 +86,45 @@ void main() {
     expect(confirm.maxLines, 1);
     expect(confirm.overflow, TextOverflow.ellipsis);
   });
+
+  testWidgets('center 默认尺寸为 240 且保留面板下方关闭区', (tester) async {
+    const contentKey = ValueKey('center-default-content');
+    await tester.pumpWidget(MaterialApp(
+      theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
+      home: Scaffold(
+        body: Center(
+          child: PopupShell(
+            options: TPopupOptions.center(
+              child: const SizedBox.expand(key: contentKey),
+            ),
+            onCloseWithTrigger: (_) {},
+          ),
+        ),
+      ),
+    ));
+
+    expect(tester.getSize(find.byKey(contentKey)), const Size(240, 240));
+    expect(find.byIcon(td.TIcons.close_circle), findsOneWidget);
+  });
+
+  testWidgets('center 显式尺寸覆盖默认值', (tester) async {
+    const contentKey = ValueKey('center-custom-content');
+    await tester.pumpWidget(MaterialApp(
+      theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
+      home: Scaffold(
+        body: Center(
+          child: PopupShell(
+            options: TPopupOptions.center(
+              width: 180,
+              height: 160,
+              child: const SizedBox.expand(key: contentKey),
+            ),
+            onCloseWithTrigger: (_) {},
+          ),
+        ),
+      ),
+    ));
+
+    expect(tester.getSize(find.byKey(contentKey)), const Size(180, 160));
+  });
 }

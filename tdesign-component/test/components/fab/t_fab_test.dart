@@ -252,13 +252,15 @@ void main() {
       expect(find.byType(TFab), findsOneWidget);
     });
 
-    testWidgets('safePadding.bottom 叠加到 bottom', (tester) async {
+    testWidgets('safePadding.right/bottom 叠加到固定定位', (tester) async {
       // 通过 MediaQuery 注入非零安全区
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
           home: const MediaQuery(
-            data: MediaQueryData(padding: EdgeInsets.only(bottom: 34)),
+            data: MediaQueryData(
+              padding: EdgeInsets.only(right: 20, bottom: 34),
+            ),
             child: Scaffold(
               body: Stack(
                 fit: StackFit.expand,
@@ -269,8 +271,36 @@ void main() {
         ),
       );
       final positioned = fabPositioned(tester);
-      expect(positioned.right, 16);
+      expect(positioned.right, 36);
       expect(positioned.bottom, 66);
+    });
+
+    testWidgets('useSafeArea=false 保留原始 right/bottom', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: const MediaQuery(
+            data: MediaQueryData(
+              padding: EdgeInsets.only(right: 20, bottom: 34),
+            ),
+            child: Scaffold(
+              body: Stack(
+                fit: StackFit.expand,
+                children: [
+                  TFab(
+                    right: 24,
+                    bottom: 48,
+                    useSafeArea: false,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      final positioned = fabPositioned(tester);
+      expect(positioned.right, 24);
+      expect(positioned.bottom, 48);
     });
   });
 
@@ -469,6 +499,113 @@ void main() {
       await tester.pumpAndSettle();
       final positioned = fabPositioned(tester);
       expect(positioned.right, 16);
+    });
+
+    testWidgets('拖拽与左右吸附避让四侧安全区', (tester) async {
+      Widget host(TFabMagnet magnet) {
+        return MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: MediaQuery(
+            data: const MediaQueryData(
+              size: Size(400, 800),
+              padding: EdgeInsets.fromLTRB(20, 30, 24, 34),
+            ),
+            child: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      TFab(
+                        draggable: TFabDragAxis.all,
+                        magnet: magnet,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(host(TFabMagnet.right));
+      await tester.timedDrag(
+        fabDragTarget(),
+        const Offset(1000, 1000),
+        const Duration(milliseconds: 200),
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pumpAndSettle();
+      var positioned = fabPositioned(tester);
+      expect(positioned.right, 40);
+      expect(positioned.bottom, 34);
+
+      await tester.pumpWidget(host(TFabMagnet.left));
+      await tester.timedDrag(
+        fabDragTarget(),
+        const Offset(-1000, -1000),
+        const Duration(milliseconds: 200),
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pumpAndSettle();
+      positioned = fabPositioned(tester);
+      expect(positioned.right, 316);
+      expect(positioned.bottom, 422);
+    });
+
+    testWidgets('自定义拖拽边界叠加对应安全区', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: const MediaQuery(
+            data: MediaQueryData(
+              size: Size(400, 800),
+              padding: EdgeInsets.fromLTRB(20, 30, 24, 34),
+            ),
+            child: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      TFab(
+                        draggable: TFabDragAxis.all,
+                        xBounds: TFabBounds(start: 8, end: 12),
+                        yBounds: TFabBounds(start: 4, end: 6),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.timedDrag(
+        fabDragTarget(),
+        const Offset(1000, 1000),
+        const Duration(milliseconds: 200),
+      );
+      await tester.pumpAndSettle();
+      var positioned = fabPositioned(tester);
+      expect(positioned.right, 32);
+      expect(positioned.bottom, 38);
+
+      await tester.timedDrag(
+        fabDragTarget(),
+        const Offset(-1000, -1000),
+        const Duration(milliseconds: 200),
+      );
+      await tester.pumpAndSettle();
+      positioned = fabPositioned(tester);
+      expect(positioned.right, 320);
+      expect(positioned.bottom, 416);
     });
 
     testWidgets('拖拽 + xBounds/yBounds 边界限制', (tester) async {

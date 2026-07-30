@@ -30,15 +30,17 @@ class TFabResolve {
   }) {
     final effectiveRight = right ?? themeDefaultRight ?? 16;
     final effectiveBottom = bottom ?? themeDefaultBottom ?? 32;
+    final adjustedRight = effectiveRight + safePadding.right;
     final adjustedBottom = effectiveBottom + safePadding.bottom;
 
     return TFabLayout(
-      right: effectiveRight,
+      right: adjustedRight,
       bottom: adjustedBottom,
       draggable: draggable,
       magnet: magnet,
       xBounds: xBounds ?? themeDefaultXBounds,
       yBounds: yBounds ?? themeDefaultYBounds,
+      safePadding: safePadding,
     );
   }
 

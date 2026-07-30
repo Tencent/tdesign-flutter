@@ -42,14 +42,11 @@ class PopupCenterUnderClose extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var panel = content;
-    if (options.width != null || options.height != null) {
-      panel = SizedBox(
-        width: options.width,
-        height: options.height,
-        child: content,
-      );
-    }
+    final panel = SizedBox(
+      width: options.width ?? PopupLayout.defaultCenterWidth,
+      height: options.height ?? PopupLayout.defaultCenterHeight,
+      child: content,
+    );
 
     void onCloseSlotTap() => onCloseWithTrigger(TPopupTrigger.close);
 

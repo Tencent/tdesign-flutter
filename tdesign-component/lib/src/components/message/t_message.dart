@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_icons/tdesign_icons.dart';
@@ -89,6 +90,7 @@ class TMessage extends StatefulWidget {
     this.onDurationEnd,
     this.onLinkPressed,
     this.onDismissed,
+    this.useSafeArea = true,
   });
 
   /// 通知内容
@@ -118,8 +120,13 @@ class TMessage extends StatefulWidget {
   /// 跑马灯配置
   final TMessageMarquee? marquee;
 
-  /// 相对屏幕左上角的偏移
+  /// 期望的屏幕绝对坐标。
+  ///
+  /// [useSafeArea] 为 true 时，最终消息矩形会被约束在安全可视区域内。
   final Offset? offset;
+
+  /// 是否避让系统安全区，默认为 true。
+  final bool useSafeArea;
 
   /// 消息语义色
   final TMessageVariant variant;
@@ -154,6 +161,7 @@ class TMessage extends StatefulWidget {
     VoidCallback? onDurationEnd,
     VoidCallback? onLinkPressed,
     VoidCallback? onDismissed,
+    bool useSafeArea = true,
   }) {
     final handle = TMessageHandle._();
     late OverlayEntry entry;
@@ -182,6 +190,7 @@ class TMessage extends StatefulWidget {
         onDurationEnd: onDurationEnd,
         onLinkPressed: onLinkPressed,
         onDismissed: removeEntry,
+        useSafeArea: useSafeArea,
       ),
     );
     handle._entry = entry;
@@ -212,16 +221,50 @@ class _TMessageState extends State<TMessage>
       Theme.of(context).extension<TMessageThemeData>() ??
       const TMessageThemeData();
 
+  EdgeInsets get _safePadding =>
+      widget.useSafeArea ? MediaQuery.paddingOf(context) : EdgeInsets.zero;
+
+  double get _minimumLeft => math.max(_horizontalMargin, _safePadding.left);
+
+  double get _maximumRight =>
+      MediaQuery.sizeOf(context).width -
+      math.max(_horizontalMargin, _safePadding.right);
+
   double get _effectiveWidth {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    return _width.clamp(0, screenWidth - _horizontalMargin * 2).toDouble();
+    final availableWidth = math.max(0.0, _maximumRight - _minimumLeft);
+    return math.min(_width, availableWidth);
+  }
+
+  double _safeTop(double desiredTop) {
+    if (!widget.useSafeArea) {
+      return desiredTop;
+    }
+    final minimumTop = _safePadding.top;
+    final maximumTop = math.max(
+      minimumTop,
+      MediaQuery.sizeOf(context).height - _safePadding.bottom - 48,
+    );
+    return desiredTop.clamp(minimumTop, maximumTop).toDouble();
   }
 
   Offset get _effectiveOffset {
     final configured = widget.offset ?? _theme.defaultOffset;
-    return configured ??
-        Offset((MediaQuery.sizeOf(context).width - _effectiveWidth) / 2,
-            _defaultTop);
+    final desired = configured ??
+        Offset(
+          _minimumLeft + (_maximumRight - _minimumLeft - _effectiveWidth) / 2,
+          _defaultTop,
+        );
+    if (!widget.useSafeArea) {
+      return desired;
+    }
+    final maximumLeft = math.max(
+      _minimumLeft,
+      _maximumRight - _effectiveWidth,
+    );
+    return Offset(
+      desired.dx.clamp(_minimumLeft, maximumLeft).toDouble(),
+      _safeTop(desired.dy),
+    );
   }
 
   @override
@@ -259,6 +302,10 @@ class _TMessageState extends State<TMessage>
       _closing = false;
       _isVisible = true;
       _scheduleDurationClose();
+    }
+    if (oldWidget.offset != widget.offset ||
+        oldWidget.useSafeArea != widget.useSafeArea) {
+      _top = _effectiveOffset.dy;
     }
   }
 
@@ -445,7 +492,7 @@ class _TMessageState extends State<TMessage>
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      top: _top,
+      top: _safeTop(_top),
       left: offset.dx,
       child: _isVisible
           ? Material(

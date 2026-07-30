@@ -289,6 +289,12 @@ void main() {
         showCancel: false,
       );
       await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<TActionSheetList>(find.byType(TActionSheetList))
+            .useSafeArea,
+        isFalse,
+      );
       final safePositioned = tester.widgetList<Positioned>(
         find.ancestor(
           of: find.byType(TActionSheetList),
@@ -306,6 +312,12 @@ void main() {
         useSafeArea: false,
       );
       await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<TActionSheetList>(find.byType(TActionSheetList))
+            .useSafeArea,
+        isFalse,
+      );
       final unsafePositioned = tester.widgetList<Positioned>(
         find.ancestor(
           of: find.byType(TActionSheetList),

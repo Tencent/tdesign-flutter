@@ -210,7 +210,8 @@ final class TActionSheet {
           showCancel: showCancel,
           onCancel: onCancel,
           onChanged: onChanged,
-          useSafeArea: useSafeArea,
+          // 命令式入口由 Popup 统一避让安全区，避免 List 重复添加底部内边距。
+          useSafeArea: false,
         ),
       _TActionSheetLayout.grid => TActionSheetGrid(
           items: items,

@@ -190,28 +190,32 @@ class _FabDraggableState extends State<_FabDraggable> {
 
   double _minX() {
     final bounds = widget.layout.xBounds;
-    return bounds?.start ?? 16;
+    return (bounds?.start ?? 16) + widget.layout.safePadding.right;
   }
 
   double _maxX() {
     final width = _stackSize().width;
     final bounds = widget.layout.xBounds;
     final fabWidth = _fabSize().width;
-    return width - (bounds?.end ?? 16) - fabWidth;
+    return width -
+        (bounds?.end ?? 16) -
+        fabWidth -
+        widget.layout.safePadding.left;
   }
 
   double _minY() {
     final bounds = widget.layout.yBounds;
-    return bounds?.start ?? 0;
+    return (bounds?.start ?? 0) + widget.layout.safePadding.bottom;
   }
 
   double _maxY() {
     final height = _stackSize().height;
     final bounds = widget.layout.yBounds;
     final fabHeight = _fabSize().height;
-    // 当父级是真实全屏 Stack 时，需扣除底部安全区；小容器场景安全区为 0
-    final padding = MediaQuery.of(context).padding.bottom;
-    return height - (bounds?.end ?? 0) - fabHeight - padding;
+    return height -
+        (bounds?.end ?? 0) -
+        fabHeight -
+        widget.layout.safePadding.top;
   }
 
   Size _fabSize() {

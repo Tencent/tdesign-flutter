@@ -63,6 +63,7 @@ class TFabLayout {
   final TFabMagnet? magnet; // null = false
   final TFabBounds? xBounds;
   final TFabBounds? yBounds;
+  final EdgeInsets safePadding;
 
   const TFabLayout({
     required this.right,
@@ -71,5 +72,6 @@ class TFabLayout {
     this.magnet,
     this.xBounds,
     this.yBounds,
+    this.safePadding = EdgeInsets.zero,
   });
 }

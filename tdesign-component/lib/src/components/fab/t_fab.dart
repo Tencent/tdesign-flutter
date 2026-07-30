@@ -54,6 +54,7 @@ class TFab extends StatelessWidget {
     this.yBounds,
     this.onDragStart,
     this.onDragEnd,
+    this.useSafeArea = true,
   });
 
   /// 图标 + 文字形态；非空时内嵌 TButton 为 round 形状
@@ -98,11 +99,18 @@ class TFab extends StatelessWidget {
   /// 拖拽结束回调
   final TFabDragCallback? onDragEnd;
 
+  /// 是否避让系统安全区。
+  ///
+  /// 默认为 true。固定定位的 [right]、[bottom] 从安全边界起算；
+  /// 拖拽与吸附范围同时避让四侧安全区。
+  final bool useSafeArea;
+
   @override
   Widget build(BuildContext context) {
     // ---- resolve Theme ----
     final theme = Theme.of(context).extension<TFabThemeData>();
-    final safePadding = MediaQuery.of(context).padding;
+    final safePadding =
+        useSafeArea ? MediaQuery.paddingOf(context) : EdgeInsets.zero;
 
     // ---- resolveLayout ----
     final layout = TFabResolve.resolveLayout(

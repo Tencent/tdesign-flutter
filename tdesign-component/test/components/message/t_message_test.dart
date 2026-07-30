@@ -7,6 +7,7 @@ void main() {
     Widget child, {
     TMessageThemeData? messageTheme,
     Size mediaSize = const Size(375, 812),
+    EdgeInsets mediaPadding = EdgeInsets.zero,
   }) {
     return MaterialApp(
       theme: messageTheme == null
@@ -14,7 +15,7 @@ void main() {
           : TThemeBuilder.light(TThemeData.defaultData())
               .mergeExtension(messageTheme),
       home: MediaQuery(
-        data: MediaQueryData(size: mediaSize),
+        data: MediaQueryData(size: mediaSize, padding: mediaPadding),
         child: Scaffold(body: Stack(children: [child])),
       ),
     );
@@ -127,9 +128,7 @@ void main() {
       final box = tester.widget<SizedBox>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox &&
-              widget.height == 48 &&
-              widget.width == 288,
+              widget is SizedBox && widget.height == 48 && widget.width == 288,
         ),
       );
       expect(box.width, 288);
@@ -212,8 +211,92 @@ void main() {
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      expect(positioned.left, 20);
+      // 343 宽消息在 375 宽屏幕中最多只能位于 left=16，安全区会收口
+      // Theme 提供的期望坐标，避免右侧越出可视区域。
+      expect(positioned.left, 16);
       expect(positioned.top, 40);
+    });
+
+    testWidgets('默认位置仅在与顶部安全区冲突时调整', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(content: '默认安全位置', duration: null),
+          mediaPadding: const EdgeInsets.only(top: 44),
+        ),
+      );
+      await tester.pump();
+      var positioned = tester.widget<AnimatedPositioned>(
+        find.byType(AnimatedPositioned),
+      );
+      expect(positioned.top, 80);
+
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(content: '更高安全区', duration: null),
+          mediaPadding: const EdgeInsets.only(top: 100),
+        ),
+      );
+      positioned = tester.widget<AnimatedPositioned>(
+        find.byType(AnimatedPositioned),
+      );
+      expect(positioned.top, 100);
+    });
+
+    testWidgets('显式 offset 被钳制在四侧安全可视区域内', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: '安全偏移',
+            duration: null,
+            offset: Offset(999, 999),
+          ),
+          mediaSize: const Size(375, 200),
+          mediaPadding: const EdgeInsets.fromLTRB(24, 44, 30, 20),
+        ),
+      );
+      await tester.pump();
+
+      final positioned = tester.widget<AnimatedPositioned>(
+        find.byType(AnimatedPositioned),
+      );
+      final messageBox = tester.widget<SizedBox>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.height == 48 && widget.width == 321,
+        ),
+      );
+      expect(messageBox.width, 321);
+      expect(positioned.left, 24);
+      expect(positioned.top, 132);
+    });
+
+    testWidgets('useSafeArea=false 保留绝对 offset 与原始宽度', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: '关闭安全区',
+            duration: null,
+            offset: Offset.zero,
+            useSafeArea: false,
+          ),
+          mediaSize: const Size(375, 200),
+          mediaPadding: const EdgeInsets.fromLTRB(24, 44, 30, 20),
+        ),
+      );
+      await tester.pump();
+
+      final positioned = tester.widget<AnimatedPositioned>(
+        find.byType(AnimatedPositioned),
+      );
+      expect(positioned.left, 0);
+      expect(positioned.top, 0);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.height == 48 && widget.width == 343,
+        ),
+        findsOneWidget,
+      );
     });
   });
 
@@ -340,11 +423,46 @@ void main() {
       expect(ended, isTrue);
       expect(dismissed, isTrue);
     });
+
+    testWidgets('透传 useSafeArea=false', (tester) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(
+            size: Size(375, 812),
+            padding: EdgeInsets.only(top: 44),
+          ),
+          child: MaterialApp(
+            theme: TThemeBuilder.light(TThemeData.defaultData()),
+            home: Scaffold(body: SizedBox(key: key)),
+          ),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: 'Overlay 关闭安全区',
+        duration: null,
+        offset: Offset.zero,
+        useSafeArea: false,
+      );
+      await tester.pumpAndSettle();
+
+      final message = tester.widget<TMessage>(find.byType(TMessage));
+      final positioned = tester.widget<AnimatedPositioned>(
+        find.byType(AnimatedPositioned),
+      );
+      expect(message.useSafeArea, isFalse);
+      expect(positioned.top, 0);
+
+      handle.dismiss();
+      await tester.pump();
+    });
   });
 
   test('ThemeData 纯函数', () {
     const base = TMessageThemeData(backgroundColor: Colors.white, elevation: 1);
-    const other = TMessageThemeData(backgroundColor: Colors.black, elevation: 3);
+    const other =
+        TMessageThemeData(backgroundColor: Colors.black, elevation: 3);
     expect(base.merge(null), same(base));
     expect(base.merge(other).elevation, 3);
     expect(base.copyWith(elevation: 2).elevation, 2);

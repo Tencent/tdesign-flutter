@@ -42,6 +42,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.useBorderStyle,
     this.border,
     this.boxShadow,
+    this.useSafeArea = true,
   }) : super(key: key);
 
   /// 标题文案
@@ -111,6 +112,12 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 底部阴影
   final List<BoxShadow>? boxShadow;
+
+  /// 是否避让顶部系统安全区。
+  ///
+  /// 默认为 true。安全区高度只计入实际渲染高度，不计入 [preferredSize]；
+  /// [height] 始终表示导航栏内容高度。
+  final bool useSafeArea;
 
   @override
   State<StatefulWidget> createState() => _TNavBarState();
@@ -301,8 +308,8 @@ class _TNavBarState extends State<TNavBar> {
       _backgroundColor = _backgroundColor.withValues(alpha: _effectiveOpacity);
     }
 
-    // screenAdaptation 由外层处理，组件不做自动适配
-    var paddingTop = 0.0;
+    final paddingTop =
+        widget.useSafeArea ? MediaQuery.paddingOf(context).top : 0.0;
     var padding = _effectivePadding;
     Widget appBar = Container(
       height: _effectiveHeight + paddingTop,

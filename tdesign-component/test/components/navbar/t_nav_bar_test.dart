@@ -245,6 +245,73 @@ void main() {
     });
   });
 
+  group('TNavBar 安全区', () {
+    Widget safeAreaHost({
+      required Widget child,
+      EdgeInsets padding = const EdgeInsets.only(top: 24),
+    }) {
+      return MediaQuery(
+        data: MediaQueryData(
+          size: const Size(375, 812),
+          padding: padding,
+        ),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: child),
+        ),
+      );
+    }
+
+    testWidgets('standalone 默认将顶部安全区加入实际高度', (tester) async {
+      const navBar = TNavBar(title: '安全区');
+      await tester.pumpWidget(safeAreaHost(child: navBar));
+
+      expect(navBar.preferredSize.height, 48);
+      expect(tester.getSize(find.byType(TNavBar)).height, 72);
+      expect(tester.getTopLeft(find.text('安全区')).dy, greaterThan(24));
+    });
+
+    testWidgets('useSafeArea=false 保持内容高度', (tester) async {
+      const navBar = TNavBar(title: '关闭安全区', useSafeArea: false);
+      await tester.pumpWidget(safeAreaHost(child: navBar));
+
+      expect(navBar.preferredSize.height, 48);
+      expect(tester.getSize(find.byType(TNavBar)).height, 48);
+    });
+
+    testWidgets('自定义 height 不包含顶部安全区', (tester) async {
+      const navBar = TNavBar(title: '自定义高度', height: 64);
+      await tester.pumpWidget(safeAreaHost(child: navBar));
+
+      expect(navBar.preferredSize.height, 64);
+      expect(tester.getSize(find.byType(TNavBar)).height, 88);
+    });
+
+    testWidgets('Scaffold.appBar 只计算一次顶部安全区', (tester) async {
+      const navBar = TNavBar(title: 'AppBar 安全区');
+      final bodyKey = GlobalKey();
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(
+            size: Size(375, 812),
+            padding: EdgeInsets.only(top: 24),
+          ),
+          child: MaterialApp(
+            theme: TThemeBuilder.light(TThemeData.defaultData()),
+            home: Scaffold(
+              appBar: navBar,
+              body: SizedBox(key: bodyKey),
+            ),
+          ),
+        ),
+      );
+
+      expect(navBar.preferredSize.height, 48);
+      expect(tester.getSize(find.byType(TNavBar)).height, 72);
+      expect(tester.getTopLeft(find.byKey(bodyKey)).dy, 72);
+    });
+  });
+
   group('TNavBarItem', () {
     test('默认 iconSize 为 24', () {
       final item = TNavBarItem(icon: TIcons.home);
