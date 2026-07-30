@@ -332,7 +332,7 @@ void main() {
           value: 3,
           disabled: false,
           icon: Icons.star,
-          badge: TBadge(count: 1),
+          badge: TBadge(label: '1'),
         ),
       ));
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
@@ -350,7 +350,7 @@ void main() {
           label: '很长很长的标签内容xxx',
           value: 4,
           disabled: false,
-          badge: TBadge(count: 9),
+          badge: TBadge(label: '9'),
         ),
       ));
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
@@ -369,7 +369,7 @@ void main() {
               label: '这是一个非常非常长的侧边栏标题',
               value: 5,
               disabled: false,
-              badge: TBadge(count: 9),
+              badge: TBadge(label: '9'),
             ),
           ),
         ),

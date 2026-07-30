@@ -217,7 +217,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
       const TTab(
         text: '选项2',
         icon: Icon(TIcons.app, size: 18),
-        badge: TBadge(count: 8),
+        badge: TBadge(label: '8'),
       ),
       const TTab(
         text: '选项3',

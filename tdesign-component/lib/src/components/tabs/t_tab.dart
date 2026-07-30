@@ -68,8 +68,7 @@ class TTab extends Tab {
       // positioned standalone badge does not contribute to Stack's size and
       // can cover an icon or label.
       label = TBadge(
-        count: badge!.count,
-        maxCount: badge!.maxCount,
+        label: badge!.label,
         variant: badge!.variant,
         border: badge!.border,
         showZero: badge!.showZero,

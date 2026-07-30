@@ -6,11 +6,10 @@
 | --- | --- | --- | --- |
 | border | bool | false | 是否为徽标增加对比色描边。 |
 | child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
-| count | int | 0 | 当前数量。 |
+| label | String? | '0' | 徽标实际展示的短文本，例如 `8`、`99+` 或 `NEW`。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxCount | int | 99 | 最大显示数量，超出后显示 `[maxCount]+`。 |
 | onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击语义。 |
-| showZero | bool | true | `count` 为 0 时是否显示徽标。 |
+| showZero | bool | true | `label` 为 `0` 时是否显示徽标。 |
 | variant | TBadgeVariant | TBadgeVariant.normal | 徽标形态。 |
 
 

@@ -37,36 +37,36 @@ void main() {
   group('数量与可见性', () {
     testWidgets('显示普通数量并保留 child', (tester) async {
       await tester.pumpWidget(app(
-        const TBadge(count: 8, child: Text('Inbox')),
+        const TBadge(label: '8', child: Text('Inbox')),
       ));
 
       expect(find.text('8'), findsOneWidget);
       expect(find.text('Inbox'), findsOneWidget);
     });
 
-    testWidgets('count 等于 maxCount 时不追加加号', (tester) async {
+    testWidgets('label 原样展示数字', (tester) async {
       await tester.pumpWidget(app(
-        const TBadge(count: 99, maxCount: 99),
+        const TBadge(label: '99'),
       ));
 
       expect(find.text('99'), findsOneWidget);
       expect(find.text('99+'), findsNothing);
     });
 
-    testWidgets('count 超过 maxCount 时显示上限', (tester) async {
+    testWidgets('label 支持 99+ 等自定义文本', (tester) async {
       await tester.pumpWidget(app(
-        const TBadge(count: 120, maxCount: 99),
+        const TBadge(label: '99+'),
       ));
 
       expect(find.text('99+'), findsOneWidget);
       expect(find.text('120'), findsNothing);
     });
 
-    testWidgets('count 更新后同步标签', (tester) async {
-      await tester.pumpWidget(app(const TBadge(count: 8)));
+    testWidgets('label 更新后同步展示', (tester) async {
+      await tester.pumpWidget(app(const TBadge(label: '8')));
       expect(find.text('8'), findsOneWidget);
 
-      await tester.pumpWidget(app(const TBadge(count: 10)));
+      await tester.pumpWidget(app(const TBadge(label: '10')));
       expect(find.text('8'), findsNothing);
       expect(find.text('10'), findsOneWidget);
     });
@@ -75,7 +75,7 @@ void main() {
       const childKey = Key('badge-child');
       await tester.pumpWidget(app(
         const TBadge(
-          count: 0,
+          label: '0',
           showZero: false,
           child: SizedBox(key: childKey, width: 24, height: 20),
         ),
@@ -85,7 +85,7 @@ void main() {
       expect(find.text('0'), findsNothing);
       expect(tester.getSize(find.byKey(childKey)), const Size(24, 20));
 
-      await tester.pumpWidget(app(const TBadge(count: 0)));
+      await tester.pumpWidget(app(const TBadge(label: '0')));
       expect(badgeOf(tester).isLabelVisible, isTrue);
       expect(find.text('0'), findsOneWidget);
     });
@@ -93,8 +93,7 @@ void main() {
     testWidgets('dot 忽略 showZero 并始终不创建文字标签', (tester) async {
       await tester.pumpWidget(app(
         const TBadge(
-          count: 0,
-          maxCount: 1,
+          label: '0',
           variant: TBadgeVariant.dot,
           showZero: false,
         ),
@@ -106,15 +105,17 @@ void main() {
       expect(find.text('0'), findsNothing);
     });
 
-    test('非法数量和上限会被拒绝', () {
-      expect(() => TBadge(count: -1), throwsAssertionError);
-      expect(() => TBadge(maxCount: 0), throwsAssertionError);
+    testWidgets('label 支持任意短文本和空值隐藏', (tester) async {
+      expect(const TBadge(label: 'NEW').label, 'NEW');
+
+      await tester.pumpWidget(app(const TBadge(label: null)));
+      expect(badgeOf(tester).isLabelVisible, isFalse);
     });
   });
 
   group('布局与形态', () {
     testWidgets('无 child 时 normal 是独立徽标', (tester) async {
-      await tester.pumpWidget(app(const TBadge(count: 8)));
+      await tester.pumpWidget(app(const TBadge(label: '8')));
 
       final size = tester.getSize(find.byType(Badge));
       expect(size.height, 16);
@@ -139,7 +140,7 @@ void main() {
 
     testWidgets('small 使用紧凑数字徽标尺寸', (tester) async {
       await tester.pumpWidget(app(
-        const TBadge(count: 8, variant: TBadgeVariant.small),
+        const TBadge(label: '8', variant: TBadgeVariant.small),
       ));
 
       expect(badgeOf(tester).largeSize, 12);
@@ -161,7 +162,7 @@ void main() {
               ),
               child: TBadge(
                 key: topEndKey,
-                count: 8,
+                label: '8',
                 child: SizedBox.square(dimension: 40),
               ),
             ),
@@ -173,7 +174,7 @@ void main() {
               ),
               child: TBadge(
                 key: bottomStartKey,
-                count: 8,
+                label: '8',
                 child: SizedBox.square(dimension: 40),
               ),
             ),
@@ -185,7 +186,7 @@ void main() {
               ),
               child: TBadge(
                 key: offsetKey,
-                count: 8,
+                label: '8',
                 child: SizedBox.square(dimension: 40),
               ),
             ),
@@ -220,13 +221,13 @@ void main() {
           children: [
             TBadge(
               key: standardKey,
-              count: 8,
+              label: '8',
               child: SizedBox.square(dimension: 40),
             ),
             SizedBox(width: 32),
             TBadge(
               key: customKey,
-              count: 8,
+              label: '8',
               child: DecoratedBox(
                 decoration: BoxDecoration(color: Colors.blue),
                 child: SizedBox.square(dimension: 40),
@@ -258,9 +259,9 @@ void main() {
         const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TBadge(key: plainKey, count: 88),
+            TBadge(key: plainKey, label: '88'),
             SizedBox(width: 20),
-            TBadge(key: borderedKey, count: 88, border: true),
+            TBadge(key: borderedKey, label: '88', border: true),
           ],
         ),
       ));
@@ -289,7 +290,7 @@ void main() {
   group('主题解析', () {
     testWidgets('完整 TDesign Theme 映射默认视觉 token', (tester) async {
       await tester.pumpWidget(app(
-        const TBadge(count: 8),
+        const TBadge(label: '8'),
       ));
 
       final badge = badgeOf(tester);
@@ -304,7 +305,7 @@ void main() {
 
     testWidgets('裸 TThemeData 仍兜底颜色和基础尺寸', (tester) async {
       await tester.pumpWidget(app(
-        const TBadge(count: 8),
+        const TBadge(label: '8'),
         theme: bareTokenTheme(),
       ));
 
@@ -328,7 +329,7 @@ void main() {
         offset: Offset(2, 3),
       );
       await tester.pumpWidget(app(
-        const TBadge(count: 8, child: SizedBox(width: 24, height: 24)),
+        const TBadge(label: '8', child: SizedBox(width: 24, height: 24)),
         theme: fullTheme(badgeTheme: badgeTheme),
       ));
 
@@ -355,7 +356,7 @@ void main() {
         offset: Offset(1, 2),
       );
       await tester.pumpWidget(app(
-        const TBadge(count: 8, child: SizedBox(width: 24, height: 24)),
+        const TBadge(label: '8', child: SizedBox(width: 24, height: 24)),
         theme: fullTheme(badgeTheme: globalTheme),
         localBadgeTheme: const BadgeThemeData(
           backgroundColor: Colors.green,
@@ -380,7 +381,7 @@ void main() {
         textTheme: const TextTheme(labelSmall: labelStyle),
       );
       await tester.pumpWidget(app(
-        const TBadge(count: 8),
+        const TBadge(label: '8'),
         theme: theme,
       ));
 
@@ -394,7 +395,7 @@ void main() {
         borderWidth: 2,
       );
       await tester.pumpWidget(app(
-        const TBadge(count: 2, border: true),
+        const TBadge(label: '2', border: true),
         theme: fullTheme().mergeExtension(extension),
         localBadgeTheme: const BadgeThemeData(
           backgroundColor: Colors.orange,
@@ -420,7 +421,7 @@ void main() {
     testWidgets('onTap 是唯一交互开关', (tester) async {
       var taps = 0;
       await tester.pumpWidget(app(
-        TBadge(count: 1, onTap: () => taps++),
+        TBadge(label: '1', onTap: () => taps++),
       ));
 
       await tester.tap(find.byType(TBadge));
@@ -433,7 +434,7 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.pumpWidget(app(const TBadge(count: 1)));
+      await tester.pumpWidget(app(const TBadge(label: '1')));
       expect(
         find.descendant(
           of: find.byType(TBadge),

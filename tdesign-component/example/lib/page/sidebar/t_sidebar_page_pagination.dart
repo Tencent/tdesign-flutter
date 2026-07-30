@@ -88,7 +88,7 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
       value: list[2].value,
       icon: list[2].icon,
       textStyle: list[2].textStyle,
-      badge: const TBadge(count: 8),
+      badge: const TBadge(label: '8'),
     );
 
     void setCurrentValue(int value) {

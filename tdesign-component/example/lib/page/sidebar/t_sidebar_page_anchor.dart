@@ -70,7 +70,7 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
       value: list[2].value,
       icon: list[2].icon,
       textStyle: list[2].textStyle,
-      badge: const TBadge(count: 8),
+      badge: const TBadge(label: '8'),
     );
   }
 

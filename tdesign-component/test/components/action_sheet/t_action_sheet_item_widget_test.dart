@@ -56,7 +56,7 @@ void main() {
           item: TActionSheetItem(
             label: '带角标',
             icon: const Icon(Icons.star),
-            badge: const TBadge(count: 3),
+            badge: const TBadge(label: '3'),
           ),
           index: 0,
         ),

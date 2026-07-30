@@ -7,35 +7,30 @@ import 't_badge_theme_data.dart';
 
 /// 徽标形态。
 enum TBadgeVariant {
-  /// 标准数字徽标。
+  /// 标准文本徽标。
   normal,
 
-  /// 紧凑数字徽标。
+  /// 紧凑文本徽标。
   small,
 
-  /// 不显示数字的圆点徽标。
+  /// 不显示文本的圆点徽标。
   dot,
 }
 
-/// 在内容右上角展示数字或圆点状态。
+/// 在内容右上角展示短文本或圆点状态。
 class TBadge extends StatelessWidget {
   const TBadge({
     super.key,
-    this.count = 0,
-    this.maxCount = 99,
+    this.label = '0',
     this.variant = TBadgeVariant.normal,
     this.border = false,
     this.showZero = true,
     this.child,
     this.onTap,
-  })  : assert(count >= 0, 'count must not be negative'),
-        assert(maxCount > 0, 'maxCount must be greater than zero');
+  });
 
-  /// 当前数量。
-  final int count;
-
-  /// 最大显示数量，超出后显示 `[maxCount]+`。
-  final int maxCount;
+  /// 徽标实际展示的短文本，例如 `8`、`99+` 或 `NEW`。
+  final String? label;
 
   /// 徽标形态。
   final TBadgeVariant variant;
@@ -43,7 +38,7 @@ class TBadge extends StatelessWidget {
   /// 是否为徽标增加对比色描边。
   final bool border;
 
-  /// [count] 为 0 时是否显示徽标。
+  /// [label] 为 `0` 时是否显示徽标。
   final bool showZero;
 
   /// 被徽标标记的内容；为空时徽标可独立展示。
@@ -84,14 +79,15 @@ class TBadge extends StatelessWidget {
         const EdgeInsets.symmetric(horizontal: 4);
     final alignment = localBadgeTheme?.alignment ?? globalBadgeTheme.alignment;
     final offset = localBadgeTheme?.offset ?? globalBadgeTheme.offset;
-    final visible = variant == TBadgeVariant.dot || showZero || count != 0;
+    final visible = variant == TBadgeVariant.dot ||
+        (this.label != null && (showZero || this.label != '0'));
     final effectiveLargeSize =
         variant == TBadgeVariant.small ? smallSize * 2 : largeSize;
     final isDot = variant == TBadgeVariant.dot;
     final isSmall = variant == TBadgeVariant.small;
-    final text = count > maxCount ? '$maxCount+' : '$count';
+    final text = this.label ?? '';
     final textLabel = Text(text);
-    final label = isDot
+    final Widget? badgeLabel = isDot
         ? null
         : isSmall
             ? _buildCompactLabel(
@@ -101,9 +97,9 @@ class TBadge extends StatelessWidget {
               )
             : textLabel;
     final effectivePadding = isSmall || isDot ? EdgeInsets.zero : padding;
-    final effectiveLabel = border
+    final Widget? effectiveLabel = border
         ? _buildBorderedLabel(
-            label: label,
+            label: badgeLabel,
             backgroundColor: backgroundColor,
             borderColor:
                 tTheme?.borderColor ?? materialTheme.colorScheme.surface,
@@ -112,7 +108,7 @@ class TBadge extends StatelessWidget {
             minHeight: isDot ? smallSize : effectiveLargeSize,
             minWidth: isDot ? smallSize : 0,
           )
-        : label;
+        : badgeLabel;
     final badge = Badge(
       isLabelVisible: visible,
       alignment: alignment,

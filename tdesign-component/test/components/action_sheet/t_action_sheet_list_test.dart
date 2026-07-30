@@ -32,7 +32,7 @@ void main() {
           label: '带图标',
           icon: const Icon(Icons.star),
           subtitle: '副标题内容',
-          badge: const TBadge(count: 1),
+          badge: const TBadge(label: '1'),
         ),
         TActionSheetItem(label: '普通项'),
       ],

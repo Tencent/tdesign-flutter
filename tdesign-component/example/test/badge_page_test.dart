@@ -39,7 +39,7 @@ void main() {
 
     final zeroBadges = tester
         .widgetList<TBadge>(find.byType(TBadge))
-        .where((badge) => badge.count == 0 && badge.child is Container)
+        .where((badge) => badge.label == '0' && badge.child is Container)
         .toList();
 
     expect(zeroBadges, hasLength(2));

@@ -136,7 +136,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
                 child: Text('A'),
               ),
               Positioned(
-                child: TBadge(count: 8),
+                child: TBadge(label: '8'),
                 right: 0,
                 top: 0,
               )
@@ -150,7 +150,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
             children: [
               TAvatar(size: TAvatarSize.medium),
               Positioned(
-                child: TBadge(count: 12),
+                child: TBadge(label: '12'),
                 right: 0,
                 top: 0,
               )

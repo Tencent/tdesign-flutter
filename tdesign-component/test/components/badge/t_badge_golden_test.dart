@@ -71,22 +71,22 @@ class _BadgeScene extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          TBadge(count: 8),
+                          TBadge(label: '8'),
                           SizedBox(width: 24),
-                          TBadge(count: 120),
+                          TBadge(label: '99+'),
                           SizedBox(width: 24),
-                          TBadge(count: 8, variant: TBadgeVariant.small),
+                          TBadge(label: '8', variant: TBadgeVariant.small),
                           SizedBox(width: 24),
                           TBadge(variant: TBadgeVariant.dot),
                           SizedBox(width: 24),
-                          TBadge(count: 8, border: true),
+                          TBadge(label: '8', border: true),
                         ],
                       ),
                       SizedBox(height: 32),
                       Row(
                         children: [
                           TBadge(
-                            count: 8,
+                            label: '8',
                             child: _BadgeTarget(label: 'A'),
                           ),
                           SizedBox(width: 32),
@@ -96,7 +96,7 @@ class _BadgeScene extends StatelessWidget {
                           ),
                           SizedBox(width: 32),
                           TBadge(
-                            count: 0,
+                            label: '0',
                             showZero: false,
                             child: _BadgeTarget(label: 'C'),
                           ),
@@ -107,7 +107,7 @@ class _BadgeScene extends StatelessWidget {
                               offset: Offset(2, 2),
                             ),
                             child: TBadge(
-                              count: 8,
+                              label: '8',
                               child: _BadgeTarget(label: 'D'),
                             ),
                           ),

@@ -18,7 +18,7 @@ class TSideBarUnSelectedColorPageState
   static const _items = [
     TSideBarItem(value: 0, label: '首页', icon: TIcons.app),
     TSideBarItem(
-        value: 1, label: '消息', icon: TIcons.app, badge: TBadge(count: 3)),
+        value: 1, label: '消息', icon: TIcons.app, badge: TBadge(label: '3')),
     TSideBarItem(value: 2, label: '收藏', icon: TIcons.app),
     TSideBarItem(value: 3, label: '设置', icon: TIcons.app),
   ];

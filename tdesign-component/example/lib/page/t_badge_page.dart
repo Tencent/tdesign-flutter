@@ -19,7 +19,7 @@ class _TBadgePageState extends State<TBadgePage> {
 
     return ExamplePage(
       title: tTitle(),
-      desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
+      desc: '用于告知用户，该区域的状态变化或者待处理任务的数量或状态。',
       exampleCodeGroup: 'badge',
       children: [
         ExampleModule(
@@ -155,7 +155,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildMessageNumberBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: TText('消息', font: context.tTheme.fontBodyLarge),
     );
   }
@@ -163,7 +163,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildIconNumberBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const Icon(TIcons.notification),
     );
   }
@@ -171,7 +171,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildButtonNumberBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const TButton(
         child: Text('按钮'),
         size: TButtonSize.large,
@@ -182,7 +182,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildCustomChildShowingNumber(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: Container(
         width: 40,
         height: 40,
@@ -198,7 +198,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildCustomChildShowingNumberZero(BuildContext context) {
     return TBadge(
-      count: 0,
+      label: '0',
       child: Container(
         width: 40,
         height: 40,
@@ -214,7 +214,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildCustomChildWithoutShowingNumberZero(BuildContext context) {
     return TBadge(
-      count: 0,
+      label: '0',
       showZero: false,
       child: Container(
         width: 40,
@@ -231,7 +231,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const Icon(TIcons.notification),
     );
   }
@@ -239,7 +239,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       border: true,
       child: const Icon(TIcons.notification),
     );
@@ -248,7 +248,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildBubbleBadge(BuildContext context) {
     return TBadge(
-      count: 1,
+      label: '1',
       variant: TBadgeVariant.small,
       child: Container(
         child: const Icon(TIcons.shop),
@@ -270,7 +270,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const TAvatar(size: TAvatarSize.large),
     );
   }
@@ -278,7 +278,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildMediumBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const TAvatar(size: TAvatarSize.medium),
     );
   }
@@ -286,8 +286,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildLessThanMaxCountBadge(BuildContext context) {
     return const TBadge(
-      count: 8888,
-      maxCount: 9000,
+      label: '8888',
       child: Icon(TIcons.notification),
     );
   }
@@ -295,8 +294,7 @@ class _TBadgePageState extends State<TBadgePage> {
   @ExampleCode(group: 'badge')
   Widget _buildMoreThanMaxCountBadge(BuildContext context) {
     return const TBadge(
-      count: 888,
-      maxCount: 99,
+      label: '99+',
       child: Icon(TIcons.notification),
     );
   }
