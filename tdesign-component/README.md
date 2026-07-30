@@ -48,8 +48,8 @@ Download link: [tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/t
 ### SDK Requirements
 
 ```yaml
-dart: ">=3.8.0 <4.0.0"
-flutter: ">=3.32.0"
+dart: ">=3.2.6 <4.0.0"
+flutter: ">=3.16.0"
 ```
 
 ### Add Dependency
@@ -58,7 +58,7 @@ Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  tdesign_flutter: ^1.0.0
+  tdesign_flutter: ^0.2.7
 ```
 
 ### Import
@@ -273,6 +273,7 @@ Create [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues) or sca
 TDesign Flutter depends on the following component libraries. We appreciate the authors for their open-source contributions:
 
 - [easy_refresh](https://pub.dev/packages/easy_refresh)
+- [flutter_swiper](https://pub.dev/packages/flutter_swiper)
 - [flutter_slidable](https://pub.dev/packages/flutter_slidable)
 - [image_picker](https://pub.dev/packages/image_picker)
 

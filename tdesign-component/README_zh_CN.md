@@ -48,8 +48,8 @@
 ### SDK 版本要求
 
 ```yaml
-dart: ">=3.8.0 <4.0.0"
-flutter: ">=3.32.0"
+dart: ">=3.2.6 <4.0.0"
+flutter: ">=3.16.0"
 ```
 
 ### 添加依赖
@@ -58,7 +58,7 @@ flutter: ">=3.32.0"
 
 ```yaml
 dependencies:
-  tdesign_flutter: ^1.0.0
+  tdesign_flutter: ^0.2.7
 ```
 
 ### 引入
@@ -273,6 +273,7 @@ TDesign 还提供其他平台和框架的组件库：
 TDesign Flutter 依赖以下组件库，感谢作者的开源贡献：
 
 - [easy_refresh](https://pub.dev/packages/easy_refresh)
+- [flutter_swiper](https://pub.dev/packages/flutter_swiper)
 - [flutter_slidable](https://pub.dev/packages/flutter_slidable)
 - [image_picker](https://pub.dev/packages/image_picker)
 
