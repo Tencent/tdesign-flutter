@@ -37,8 +37,9 @@ void main() {
       expect(lightTheme.inputDecorationTheme.filled, isFalse);
       expect(lightTheme.inputDecorationTheme.fillColor, Colors.transparent);
       expect(lightTheme.extension<TButtonThemeData>(), isNotNull);
-      expect(lightTheme.extension<TTextThemeData>()?.defaultFont?.size,
-          token.fontBodyLarge?.size);
+      // 字体 Token 已映射到 Material TextTheme；组件扩展保持为空，
+      // 避免覆盖局部 DefaultTextStyle。
+      expect(lightTheme.extension<TTextThemeData>()?.defaultFont, isNull);
       expect(lightTheme.extension<TIconThemeData>()?.color, isNull);
       expect(lightTheme.filledButtonTheme.style?.backgroundColor?.resolve({}),
           token.brandNormalColor);

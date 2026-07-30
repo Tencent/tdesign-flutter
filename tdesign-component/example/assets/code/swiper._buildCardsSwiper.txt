@@ -1,3 +1,5 @@
 Widget _buildCardsSwiper(BuildContext context) => _buildSwiper(
+        context,
         pageEffect: TSwiperPageEffect.cardMargin,
+        viewportFraction: 0.86,
       );

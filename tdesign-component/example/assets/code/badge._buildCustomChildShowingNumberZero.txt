@@ -1,6 +1,6 @@
 Widget _buildCustomChildShowingNumberZero(BuildContext context) {
     return TBadge(
-      count: 0,
+      label: '0',
       child: Container(
         width: 40,
         height: 40,

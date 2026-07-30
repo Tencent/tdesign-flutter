@@ -266,15 +266,17 @@ void main() {
           return const SizedBox.shrink();
         }),
       ));
-      expect(() => TImageViewer.show(context: context, images: const []),
-          throwsAssertionError);
+      expect(
+        () => TImageViewer.show(context: context, images: const []),
+        throwsArgumentError,
+      );
       expect(
         () => TImageViewer.show(
           context: context,
           images: images,
           initialIndex: 3,
         ),
-        throwsAssertionError,
+        throwsRangeError,
       );
       expect(
         () => TImageViewer.show(
@@ -282,7 +284,15 @@ void main() {
           images: images,
           labels: const ['one'],
         ),
-        throwsAssertionError,
+        throwsArgumentError,
+      );
+      expect(
+        () => TImageViewer.show(
+          context: context,
+          images: images,
+          autoplayInterval: Duration.zero,
+        ),
+        throwsArgumentError,
       );
     });
   });

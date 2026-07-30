@@ -1,3 +1,4 @@
 Widget _buildDotsBarSwiper(BuildContext context) => _buildSwiper(
+        context,
         pagination: TSwiperPaginationVariant.dotsBar,
       );

@@ -6,26 +6,39 @@ Widget _density(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(color: context.tTheme.componentBorderColor),
-          ),
-          child: TCheckbox(
-            value: _densityValue,
-            onChanged: (value) => setState(() => _densityValue = value),
-          ),
+        Column(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: context.tTheme.componentBorderColor),
+              ),
+              child: TCheckbox(
+                value: _densityValue,
+                onChanged: (value) => setState(() => _densityValue = value),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text('默认 48×48'),
+          ],
         ),
-        Theme(
-          data: Theme.of(context).copyWith(checkboxTheme: compactTheme),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: context.tTheme.componentBorderColor),
+        Column(
+          children: [
+            Theme(
+              data: Theme.of(context).copyWith(checkboxTheme: compactTheme),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(color: context.tTheme.componentBorderColor),
+                ),
+                child: TCheckbox(
+                  value: _densityValue,
+                  onChanged: (value) => setState(() => _densityValue = value),
+                ),
+              ),
             ),
-            child: TCheckbox(
-              value: _densityValue,
-              onChanged: (value) => setState(() => _densityValue = value),
-            ),
-          ),
+            const SizedBox(height: 8),
+            const Text('紧凑 24×24'),
+          ],
         ),
       ],
     );

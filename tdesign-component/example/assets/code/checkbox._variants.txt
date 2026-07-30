@@ -3,6 +3,8 @@ Widget _variants(BuildContext context) {
       children: [
         for (final entry in const [
           (TCheckboxVariant.square, '方形'),
+          (TCheckboxVariant.circle, '圆形'),
+          (TCheckboxVariant.check, '仅勾选'),
         ])
           Theme(
             data: Theme.of(context).mergeExtension(

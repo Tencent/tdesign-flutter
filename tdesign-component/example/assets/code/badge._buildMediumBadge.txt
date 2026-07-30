@@ -1,6 +1,6 @@
 Widget _buildMediumBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const TAvatar(size: TAvatarSize.medium),
     );
   }

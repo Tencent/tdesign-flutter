@@ -58,9 +58,31 @@ class TImageViewer {
     TImageViewerItemBuilder? leadingBuilder,
     TImageViewerItemBuilder? trailingBuilder,
   }) {
-    assert(images.isNotEmpty);
-    assert(initialIndex >= 0 && initialIndex < images.length);
-    assert(labels == null || labels.length == images.length);
+    if (images.isEmpty) {
+      throw ArgumentError.value(images, 'images', 'must not be empty');
+    }
+    if (initialIndex < 0 || initialIndex >= images.length) {
+      throw RangeError.range(
+        initialIndex,
+        0,
+        images.length - 1,
+        'initialIndex',
+      );
+    }
+    if (labels != null && labels.length != images.length) {
+      throw ArgumentError.value(
+        labels,
+        'labels',
+        'must have the same length as images',
+      );
+    }
+    if (autoplayInterval <= Duration.zero) {
+      throw ArgumentError.value(
+        autoplayInterval,
+        'autoplayInterval',
+        'must be positive',
+      );
+    }
     final theme = Theme.of(context).extension<TImageViewerThemeData>();
     return showDialog<void>(
       context: context,
@@ -132,6 +154,14 @@ class _TImageViewerView extends StatefulWidget {
 
 class _TImageViewerViewState extends State<_TImageViewerView> {
   late int _index = widget.initialIndex;
+  late final TSwiperController _swiperController =
+      TSwiperController(initialIndex: widget.initialIndex);
+
+  @override
+  void dispose() {
+    _swiperController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +175,7 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
             padding:
                 EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 44),
             child: TSwiper(
-              value: _index,
+              controller: _swiperController,
               onChanged: _changeIndex,
               loop: widget.loop,
               autoplay: widget.autoplay,
@@ -249,7 +279,7 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
       return const SizedBox.shrink();
     }
     return IconButton(
-      tooltip: 'Close',
+      tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
       onPressed: () {
         widget.onClose?.call();
         Navigator.of(context).pop();
@@ -266,7 +296,7 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
       return const SizedBox.shrink();
     }
     return IconButton(
-      tooltip: 'Delete',
+      tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
       onPressed:
           widget.onDelete == null ? null : () => widget.onDelete!(_index),
       icon: Icon(

@@ -1,6 +1,6 @@
 Widget _buildBubbleBadge(BuildContext context) {
     return TBadge(
-      count: 1,
+      label: '1',
       variant: TBadgeVariant.small,
       child: Container(
         child: const Icon(TIcons.shop),

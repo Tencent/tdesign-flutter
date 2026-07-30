@@ -80,14 +80,14 @@ class TBadge extends StatelessWidget {
     final alignment = localBadgeTheme?.alignment ?? globalBadgeTheme.alignment;
     final offset = localBadgeTheme?.offset ?? globalBadgeTheme.offset;
     final visible = variant == TBadgeVariant.dot ||
-        (this.label != null && (showZero || this.label != '0'));
+        (label != null && (showZero || label != '0'));
     final effectiveLargeSize =
         variant == TBadgeVariant.small ? smallSize * 2 : largeSize;
     final isDot = variant == TBadgeVariant.dot;
     final isSmall = variant == TBadgeVariant.small;
-    final text = this.label ?? '';
+    final text = label ?? '';
     final textLabel = Text(text);
-    final Widget? badgeLabel = isDot
+    final badgeLabel = isDot
         ? null
         : isSmall
             ? _buildCompactLabel(
@@ -97,7 +97,7 @@ class TBadge extends StatelessWidget {
               )
             : textLabel;
     final effectivePadding = isSmall || isDot ? EdgeInsets.zero : padding;
-    final Widget? effectiveLabel = border
+    final effectiveLabel = border
         ? _buildBorderedLabel(
             label: badgeLabel,
             backgroundColor: backgroundColor,

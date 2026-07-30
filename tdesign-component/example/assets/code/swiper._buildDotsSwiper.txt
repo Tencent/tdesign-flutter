@@ -1,1 +1,1 @@
-Widget _buildDotsSwiper(BuildContext context) => _buildSwiper();
+Widget _buildDotsSwiper(BuildContext context) => _buildSwiper(context);

@@ -1,6 +1,6 @@
 Widget _buildCircleBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const Icon(TIcons.notification),
     );
   }

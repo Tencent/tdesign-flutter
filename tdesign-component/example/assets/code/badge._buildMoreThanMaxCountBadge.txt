@@ -1,7 +1,0 @@
-Widget _buildMoreThanMaxCountBadge(BuildContext context) {
-    return const TBadge(
-      count: 888,
-      maxCount: 99,
-      child: Icon(TIcons.notification),
-    );
-  }

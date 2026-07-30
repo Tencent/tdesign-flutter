@@ -25,6 +25,7 @@ void main() {
         const TRangeSlider(value: RangeValues(0.3, 0.7)),
       ],
     )));
+    await tester.pumpAndSettle();
     await expectLater(
       find.byType(Column),
       matchesGoldenFile('goldens/t_slider_material.png'),

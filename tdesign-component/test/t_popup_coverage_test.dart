@@ -366,8 +366,7 @@ void main() {
   });
 
   group('TPopup 覆盖率深化', () {
-    testWidgets('headerBuilder 自定义内容可正常渲染',
-        (tester) async {
+    testWidgets('headerBuilder 自定义内容可正常渲染', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -640,7 +639,7 @@ void main() {
   });
 
   group('PopupLayout 覆盖率补充', () {
-    testWidgets('bottom 无 height 时贴底', (tester) async {
+    testWidgets('bottom 无 height 时使用默认高度并贴底', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
       );
@@ -658,7 +657,7 @@ void main() {
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.bottom, 0);
       expect(positioned.top, isNull);
-      expect(positioned.height, isNull);
+      expect(positioned.height, 240);
     });
 
     test('alignment center', () {

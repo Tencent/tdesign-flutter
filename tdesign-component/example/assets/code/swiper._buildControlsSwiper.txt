@@ -1,3 +1,6 @@
 Widget _buildControlsSwiper(BuildContext context) => _buildSwiper(
+        context,
         pagination: TSwiperPaginationVariant.controls,
+        previousIcon: const Icon(Icons.arrow_back_rounded),
+        nextIcon: const Icon(Icons.arrow_forward_rounded),
       );

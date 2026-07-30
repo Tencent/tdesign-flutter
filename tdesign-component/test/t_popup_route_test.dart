@@ -217,7 +217,7 @@ void main() {
         expect(positioned.bottom, 0);
       });
 
-      testWidgets('bottom 无固定 height 时仍避让底部安全区', (tester) async {
+      testWidgets('bottom 默认高度仍避让底部安全区', (tester) async {
         const safeBottom = 34.0;
         await openPopup(
           tester,
@@ -237,7 +237,7 @@ void main() {
 
         final positioned = findPopupPanelPositioned(tester);
         expect(positioned.bottom, safeBottom);
-        expect(positioned.height, isNull);
+        expect(positioned.height, 240);
       });
 
       testWidgets('bottom inset 与安全区在路由层叠加', (tester) async {

@@ -1,6 +1,6 @@
 Widget _buildLargeBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const TAvatar(size: TAvatarSize.large),
     );
   }

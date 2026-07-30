@@ -1,6 +1,6 @@
 Widget _buildCustomChildShowingNumber(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: Container(
         width: 40,
         height: 40,

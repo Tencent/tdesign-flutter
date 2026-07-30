@@ -99,13 +99,13 @@ class _TBadgePageState extends State<TBadgePage> {
       test: [
         ExampleItem(
           ignoreCode: true,
-          desc: '未超过上限',
-          builder: _buildLessThanMaxCountBadge,
+          desc: '数字文本',
+          builder: _buildNumericLabelBadge,
         ),
         ExampleItem(
           ignoreCode: true,
-          desc: '超过上限',
-          builder: _buildMoreThanMaxCountBadge,
+          desc: '自定义溢出文本',
+          builder: _buildOverflowLabelBadge,
         )
       ],
       // 注意：TFab 内部返回 Positioned widget，不能传给 Scaffold.floatingActionButton
@@ -284,7 +284,7 @@ class _TBadgePageState extends State<TBadgePage> {
   }
 
   @ExampleCode(group: 'badge')
-  Widget _buildLessThanMaxCountBadge(BuildContext context) {
+  Widget _buildNumericLabelBadge(BuildContext context) {
     return const TBadge(
       label: '8888',
       child: Icon(TIcons.notification),
@@ -292,7 +292,7 @@ class _TBadgePageState extends State<TBadgePage> {
   }
 
   @ExampleCode(group: 'badge')
-  Widget _buildMoreThanMaxCountBadge(BuildContext context) {
+  Widget _buildOverflowLabelBadge(BuildContext context) {
     return const TBadge(
       label: '99+',
       child: Icon(TIcons.notification),

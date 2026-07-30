@@ -106,7 +106,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 
 # sticky
 # swiper
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swiper" --name TSwiperPagination,TPageTransformer --folder-name swiper --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swiper" --name TSwiper,TSwiperController,TSwiperThemeData,TSwiperPaginationVariant,TSwiperPaginationPlacement,TSwiperPaginationItemDetails,TSwiperPageEffect --folder-name swiper --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # table
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/table" --name TTable,TTableCol,TTableEmpty --folder-name table --output "$PARENT_DIR/example/assets/api/" --only-api
 # tag

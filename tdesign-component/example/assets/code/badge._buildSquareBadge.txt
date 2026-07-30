@@ -1,6 +1,6 @@
 Widget _buildSquareBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       border: true,
       child: const Icon(TIcons.notification),
     );

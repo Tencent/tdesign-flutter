@@ -1,6 +1,6 @@
 Widget _buildButtonNumberBadge(BuildContext context) {
     return TBadge(
-      count: num,
+      label: '$num',
       child: const TButton(
         child: Text('按钮'),
         size: TButtonSize.large,
