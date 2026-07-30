@@ -168,11 +168,7 @@ class TRadio<T> extends StatelessWidget {
     ];
     final constraints = hasContent
         ? BoxConstraints(
-            minHeight: switch (size) {
-              TRadioSize.small => 40.0,
-              TRadioSize.medium => 48.0,
-              TRadioSize.large => 56.0,
-            },
+            minHeight: _contentMinHeight,
           )
         : _resolveTapTargetConstraints(context);
     final tileContent = Container(
@@ -191,6 +187,9 @@ class TRadio<T> extends StatelessWidget {
                   : Colors.transparent,
             ),
       child: Row(
+        mainAxisSize: hasContent ? MainAxisSize.max : MainAxisSize.min,
+        mainAxisAlignment:
+            hasContent ? MainAxisAlignment.start : MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: contentDirection == TContentDirection.right
             ? children
@@ -233,6 +232,12 @@ class TRadio<T> extends StatelessWidget {
       ),
     );
   }
+
+  double get _contentMinHeight => switch (size) {
+        TRadioSize.small => 40.0,
+        TRadioSize.medium => 48.0,
+        TRadioSize.large => 56.0,
+      };
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = RadioTheme.of(context);

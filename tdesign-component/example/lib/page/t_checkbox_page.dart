@@ -39,6 +39,8 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   bool? _densityValue = false;
   final Map<TCheckboxVariant, bool> _variantValues = {
     TCheckboxVariant.square: true,
+    TCheckboxVariant.circle: true,
+    TCheckboxVariant.check: true,
   };
   bool _leftPositionValue = true;
   bool _rightPositionValue = true;
@@ -161,6 +163,8 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
       children: [
         for (final entry in const [
           (TCheckboxVariant.square, '方形'),
+          (TCheckboxVariant.circle, '圆形'),
+          (TCheckboxVariant.check, '仅勾选'),
         ])
           Theme(
             data: Theme.of(context).mergeExtension(
@@ -210,26 +214,39 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(color: context.tTheme.componentBorderColor),
-          ),
-          child: TCheckbox(
-            value: _densityValue,
-            onChanged: (value) => setState(() => _densityValue = value),
-          ),
+        Column(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: context.tTheme.componentBorderColor),
+              ),
+              child: TCheckbox(
+                value: _densityValue,
+                onChanged: (value) => setState(() => _densityValue = value),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text('默认 48×48'),
+          ],
         ),
-        Theme(
-          data: Theme.of(context).copyWith(checkboxTheme: compactTheme),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: context.tTheme.componentBorderColor),
+        Column(
+          children: [
+            Theme(
+              data: Theme.of(context).copyWith(checkboxTheme: compactTheme),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(color: context.tTheme.componentBorderColor),
+                ),
+                child: TCheckbox(
+                  value: _densityValue,
+                  onChanged: (value) => setState(() => _densityValue = value),
+                ),
+              ),
             ),
-            child: TCheckbox(
-              value: _densityValue,
-              onChanged: (value) => setState(() => _densityValue = value),
-            ),
-          ),
+            const SizedBox(height: 8),
+            const Text('紧凑 24×24'),
+          ],
         ),
       ],
     );

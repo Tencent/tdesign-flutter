@@ -117,6 +117,7 @@ class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       spacing: lerpDouble(spacing, other.spacing, t),
       insetSpacing: lerpDouble(insetSpacing, other.insetSpacing, t),
+      customSpace: EdgeInsetsGeometry.lerp(customSpace, other.customSpace, t),
     );
   }
 }

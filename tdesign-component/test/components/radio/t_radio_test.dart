@@ -92,6 +92,70 @@ void main() {
   });
 
   group('TRadio v1 视觉参数', () {
+    testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
+      await tester.pumpWidget(wrap(TRadio<String>(
+        value: 'a',
+        groupValue: 'b',
+        onChanged: (_) {},
+      )));
+
+      final radio = find.byType(TRadio<String>);
+      final gesture = find.descendant(
+        of: radio,
+        matching: find.byType(GestureDetector),
+      );
+      final indicator = find.descendant(
+        of: radio,
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint &&
+              widget.painter.runtimeType.toString() ==
+                  '_TRadioIndicatorPainter',
+        ),
+      );
+
+      expect(tester.getSize(gesture), const Size.square(48));
+      expect(tester.getCenter(indicator), tester.getCenter(gesture));
+    });
+
+    testWidgets('纯指示器在紧凑 24×24 热区内居中', (tester) async {
+      final compactTheme =
+          TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        radioTheme: const RadioThemeData(
+          visualDensity: VisualDensity.compact,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      );
+      await tester.pumpWidget(MaterialApp(
+        theme: compactTheme,
+        home: Scaffold(
+          body: TRadio<String>(
+            value: 'a',
+            groupValue: 'b',
+            onChanged: (_) {},
+          ),
+        ),
+      ));
+
+      final radio = find.byType(TRadio<String>);
+      final gesture = find.descendant(
+        of: radio,
+        matching: find.byType(GestureDetector),
+      );
+      final indicator = find.descendant(
+        of: radio,
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint &&
+              widget.painter.runtimeType.toString() ==
+                  '_TRadioIndicatorPainter',
+        ),
+      );
+
+      expect(tester.getSize(gesture), const Size.square(24));
+      expect(tester.getCenter(indicator), tester.getCenter(gesture));
+    });
+
     testWidgets('文本样式继承 Material TextTheme 的字号、行高和字重', (tester) async {
       const globalStyle = TextStyle(
         fontSize: 22,

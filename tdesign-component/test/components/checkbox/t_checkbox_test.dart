@@ -75,6 +75,49 @@ void main() {
   });
 
   group('TCheckbox v1 视觉参数', () {
+    testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
+      await tester.pumpWidget(wrap(TCheckbox(
+        value: false,
+        onChanged: (_) {},
+      )));
+
+      final checkbox = find.byType(TCheckbox);
+      final gesture = find.descendant(
+        of: checkbox,
+        matching: find.byType(GestureDetector),
+      );
+      final indicator = find.byIcon(TIcons.rectangle);
+
+      expect(tester.getSize(gesture), const Size.square(48));
+      expect(tester.getCenter(indicator), tester.getCenter(gesture));
+    });
+
+    testWidgets('纯指示器在紧凑 24×24 热区内居中', (tester) async {
+      final compactTheme =
+          TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        checkboxTheme: const CheckboxThemeData(
+          visualDensity: VisualDensity.compact,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      );
+      await tester.pumpWidget(MaterialApp(
+        theme: compactTheme,
+        home: Scaffold(
+          body: TCheckbox(value: false, onChanged: (_) {}),
+        ),
+      ));
+
+      final checkbox = find.byType(TCheckbox);
+      final gesture = find.descendant(
+        of: checkbox,
+        matching: find.byType(GestureDetector),
+      );
+      final indicator = find.byIcon(TIcons.rectangle);
+
+      expect(tester.getSize(gesture), const Size.square(24));
+      expect(tester.getCenter(indicator), tester.getCenter(gesture));
+    });
+
     testWidgets('完整主题下默认选中图标使用品牌色且不受全局 IconTheme 污染', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrap(TCheckbox(
@@ -137,6 +180,51 @@ void main() {
       expect(icon.color, Colors.red);
       expect(title.style?.color, Colors.green);
       expect(spacing.width, 12);
+    });
+
+    testWidgets('文案继承 Flutter TextTheme 且组件颜色优先', (tester) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData())
+          .copyWith(
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(
+                color: Colors.orange,
+                fontSize: 18,
+                height: 1.4,
+                fontWeight: FontWeight.w600,
+              ),
+              bodyMedium: TextStyle(
+                color: Colors.purple,
+                fontSize: 15,
+                height: 1.3,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          )
+          .mergeExtension(
+            const TCheckboxThemeData(titleColor: Colors.green),
+          );
+      await tester.pumpWidget(MaterialApp(
+        theme: theme,
+        home: Scaffold(
+          body: TCheckbox(
+            value: false,
+            title: '标题',
+            subTitle: '副标题',
+            onChanged: (_) {},
+          ),
+        ),
+      ));
+
+      final title = tester.widget<Text>(find.text('标题')).style!;
+      final subTitle = tester.widget<Text>(find.text('副标题')).style!;
+      expect(title.color, Colors.green);
+      expect(title.fontSize, 18);
+      expect(title.height, 1.4);
+      expect(title.fontWeight, FontWeight.w600);
+      expect(subTitle.color, Colors.purple);
+      expect(subTitle.fontSize, 15);
+      expect(subTitle.height, 1.3);
+      expect(subTitle.fontWeight, FontWeight.w500);
     });
 
     testWidgets('标题、副标题、分割线可渲染', (tester) async {
@@ -241,11 +329,13 @@ void main() {
         variant: TCheckboxVariant.square,
         selectColor: Colors.red,
         spacing: 4,
+        customSpace: EdgeInsets.all(4),
       );
       const b = TCheckboxThemeData(
         variant: TCheckboxVariant.circle,
         selectColor: Colors.blue,
         spacing: 8,
+        customSpace: EdgeInsets.all(12),
       );
 
       expect(a.lerp(null, 0.5), same(a));
@@ -254,6 +344,7 @@ void main() {
       final mid = a.lerp(b, 0.75);
       expect(mid.variant, TCheckboxVariant.circle);
       expect(mid.spacing, 7);
+      expect(mid.customSpace, const EdgeInsets.all(10));
     });
 
     testWidgets('Theme 注入可渲染', (tester) async {
