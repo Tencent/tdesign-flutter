@@ -75,7 +75,7 @@
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 `overlayColor` 的 alpha 相乘后用于绘制。 |
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
-| useSafeArea | bool | true | 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； 与 `inset` 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
 
 
 ##### TPopupOptions.bottom
@@ -88,7 +88,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 |
+| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 |
 | inset | TPopupBottomInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 |
 | headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 `TPopupPlacement.bottom` 生效。三态见类文档「Builder 三态」。 自定义时忽略 `titleWidget`、`cancelBuilder`、`confirmBuilder`。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 `headerBuilder` 为内置默认时生效。`null` 表示无标题。 |
@@ -105,8 +105,8 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 |
-| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 |
+| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 |
+| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 |
 | closeBuilder | TPopupSlotBuilder? | _kPopupDefaultClose | center 面板外下方关闭区；仅 `TPopupPlacement.center` 生效。三态见类文档「Builder 三态」。 内置默认点击触发 `TPopupTrigger.close`。 |
 
 
@@ -119,7 +119,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 |
+| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 |
 | inset | TPopupLeftInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 |
 
 
@@ -132,7 +132,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 |
+| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 |
 | inset | TPopupRightInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 |
 
 
@@ -145,7 +145,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 |
+| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 |
 | inset | TPopupTopInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 |
 
 #### 默认构造方法
@@ -161,7 +161,7 @@
 | confirmBuilder | TPopupSlotBuilder? | _kPopupDefaultConfirm | bottom 右侧操作槽；仅 `headerBuilder` 为内置默认时生效。 内置默认为「确定」，点击触发 `TPopupTrigger.confirm`。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | headerBuilder | TPopupHeaderBuilder? | _kPopupDefaultHeader | bottom 头部；仅 `TPopupPlacement.bottom` 生效。三态见类文档「Builder 三态」。 自定义时忽略 `titleWidget`、`cancelBuilder`、`confirmBuilder`。 |
-| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 |
+| height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 |
 | inset | TPopupInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 |
 | modal | bool | true | 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。 结合 `showOverlay` 可表达三种模式： * `modal=true, showOverlay=true`：标准模态弹层 * `modal=true, showOverlay=false`：透明模态弹层 * `modal=false, showOverlay=false`：非模态浮层 |
 | onClose | VoidCallback? | - | 开始关闭（与 `onVisibleChange` 的 `visible: false` 同期）。 |
@@ -176,8 +176,8 @@
 | radius | double? | - | 内容区圆角，默认主题大圆角。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 `headerBuilder` 为内置默认时生效。`null` 表示无标题。 |
-| useSafeArea | bool | true | 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； 与 `inset` 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。 |
-| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
+| width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 |
 
 
 ### TPopupHandle
@@ -203,11 +203,11 @@
 
 | 名称 | 说明 |
 | --- | --- |
-| top | 自顶部滑入；使用 `TPopupOptions.height`、`TPopupOptions.inset`（`TPopupTopInset`）。 |
-| left | 自左侧滑入；使用 `TPopupOptions.width`、`TPopupOptions.inset`（`TPopupLeftInset`）。 |
-| right | 自右侧滑入；使用 `TPopupOptions.width`、`TPopupOptions.inset`（`TPopupRightInset`）。 |
-| bottom | 自底部滑入；默认内置头部；使用 `TPopupOptions.height`、`TPopupOptions.inset`（`TPopupBottomInset`）。 |
-| center | 屏幕居中；使用 `TPopupOptions.closeBuilder` 控制面板外下方关闭区。 |
+| top | 自顶部滑入；默认高 240，使用 `TPopupOptions.height`、`TPopupOptions.inset`（`TPopupTopInset`）覆盖。 |
+| left | 自左侧滑入；默认宽 280，使用 `TPopupOptions.width`、`TPopupOptions.inset`（`TPopupLeftInset`）覆盖。 |
+| right | 自右侧滑入；默认宽 280，使用 `TPopupOptions.width`、`TPopupOptions.inset`（`TPopupRightInset`）覆盖。 |
+| bottom | 自底部滑入；默认高 240 且带内置头部；使用 `TPopupOptions.height`、`TPopupOptions.inset`（`TPopupBottomInset`）覆盖。 |
+| center | 屏幕居中；默认 240 × 240，使用 `TPopupOptions.width`、`TPopupOptions.height` 覆盖； 使用 `TPopupOptions.closeBuilder` 控制面板外下方关闭区。 |
 
 
 ### TPopupTrigger

@@ -17,5 +17,6 @@
 | semanticLabel | String? | - | 读屏标签 |
 | text | String | '' | 图标 + 文字形态；非空时内嵌 TButton 为 round 形状 |
 | tooltip | String? | - | 纯图标 Fab 的 tooltip 提示 |
+| useSafeArea | bool | true | 是否避让系统安全区。 默认为 true。固定定位的 `right`、`bottom` 从安全边界起算； 拖拽与吸附范围同时避让四侧安全区。 |
 | xBounds | TFabBounds? | - | 水平拖拽边界限制 |
 | yBounds | TFabBounds? | - | 垂直拖拽边界限制 |
