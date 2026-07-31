@@ -1,34 +1,27 @@
 import 'package:flutter/material.dart';
 
+/// 不带旋转动画的折叠面板展开状态图标。
 class TNonAnimatedExpandIcon extends StatelessWidget {
   const TNonAnimatedExpandIcon({
     required this.isExpanded,
     required this.padding,
+    required this.color,
     Key? key,
   }) : super(key: key);
 
   final bool isExpanded;
-  final EdgeInsets padding;
-
-  Color getIconColor(BuildContext context) {
-    switch (Theme.of(context).brightness) {
-      case Brightness.light:
-        return Colors.black54;
-      case Brightness.dark:
-        return Colors.white60;
-    }
-  }
+  final EdgeInsetsGeometry padding;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
+    return Padding(
       padding: padding,
-      iconSize: 24.0,
-      color: getIconColor(context),
-      onPressed: null,
-      icon: isExpanded
-          ? const Icon(Icons.expand_less)
-          : const Icon(Icons.expand_more),
+      child: Icon(
+        isExpanded ? Icons.expand_less : Icons.expand_more,
+        size: 24,
+        color: color,
+      ),
     );
   }
 }

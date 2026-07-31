@@ -1,21 +1,26 @@
-
-  Widget _buildTextIconHorizontalLoading(BuildContext context) {
-    return const Row(
-      // spacing: 36,
+/// 图标加文字横向
+    Widget _buildTextIconHorizontalLoading(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.circle,
-          text: '加载中…',
-          axis: Axis.horizontal,
+        Theme(
+          data: Theme.of(context)
+              .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            icon: TLoadingIcon.circle,
+            text: '加载中…',
+          ),
         ),
         const SizedBox(width: 36),
-        TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.activity,
-          text: '加载中…',
-          axis: Axis.horizontal,
+        Theme(
+          data: Theme.of(context)
+              .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            icon: TLoadingIcon.activity,
+            text: '加载中…',
+          ),
         ),
       ],
     );

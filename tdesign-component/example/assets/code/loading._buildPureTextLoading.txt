@@ -1,7 +1,6 @@
-
-  Widget _buildPureTextLoading(BuildContext context) {
+/// 纯文字
+    Widget _buildPureTextLoading(BuildContext context) {
     return Row(
-      // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const TLoading(
@@ -9,24 +8,26 @@
           text: '加载中…',
         ),
         const SizedBox(width: 36),
-        TLoading(
-          size: TLoadingSize.small,
-          text: '加载失败',
-          textColor: TTheme.of(context).textColorPlaceholder,
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(
+              textColor: context.tTheme.textColorPlaceholder,
+            ),
+          ),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            text: '加载失败',
+          ),
         ),
         const SizedBox(width: 36),
-        TLoading(
-          size: TLoadingSize.small,
-          text: '加载失败',
-          refreshWidget: GestureDetector(
-            child: TText(
-              '刷新',
-              font: TTheme.of(context).fontBodySmall,
-              textColor: TTheme.of(context).brandNormalColor,
-            ),
-            onTap: () {
-              TToast.showText('刷新', context: context);
-            },
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TLoadingThemeData(),
+          ),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            text: '加载失败',
+            refreshWidget: Text('刷新'),
           ),
         ),
       ],

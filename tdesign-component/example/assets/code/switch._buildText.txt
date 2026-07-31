@@ -1,0 +1,9 @@
+Widget _buildText(BuildContext context) => const TCell(
+        title: Text('文字开关'),
+        note: _StatefulSwitch(
+          initialValue: true,
+          variant: TSwitchVariant.text,
+          openText: '开',
+          closeText: '关',
+        ),
+      );

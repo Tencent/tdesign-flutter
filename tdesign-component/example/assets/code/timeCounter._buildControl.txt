@@ -1,4 +1,3 @@
-
 Widget _buildControl(BuildContext context) {
   var controller = TTimeCounterController();
   return Wrap(
@@ -15,29 +14,29 @@ Widget _buildControl(BuildContext context) {
         spacing: 8,
         children: [
           TButton(
-            text: '开始',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.start(),
+            child: const Text('开始'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.start(),
           ),
           TButton(
-            text: '结束',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.reset(0),
+            child: const Text('结束'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.reset(0),
           ),
           TButton(
-            text: '重置',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.reset(),
+            child: const Text('重置'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.reset(),
           ),
           TButton(
-            text: '暂停',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.pause(),
+            child: const Text('暂停'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.pause(),
           ),
           TButton(
-            text: '继续',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.resume(),
+            child: const Text('继续'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.resume(),
           ),
         ],
       )

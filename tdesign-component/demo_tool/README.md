@@ -71,7 +71,7 @@
 
 ### 生成逻辑
 
-演示代码依赖 Flutter AOP 能力，通过解析 `@Demo` 注解所在的方法自动生成。因此，组件示例的写法要求将可显示的部分提取成独立方法，并添加 `@Demo` 注解。示例：
+演示代码由普通 Dart analyzer 脚本生成。组件示例的写法要求将可显示的部分提取成独立方法，并添加 `@ExampleCode` 注解。示例：
 
 ```dart
 @Override
@@ -92,7 +92,7 @@ Widget build(BuildContext context) {
   );
 }
 
-@Demo(group: 'button')
+@ExampleCode(group: 'button')
 TButton _buildNormalClickButton(BuildContext context) {
   return TButton(
     content: '强按钮',
@@ -105,6 +105,11 @@ TButton _buildNormalClickButton(BuildContext context) {
 
 其中，`group` 参数需与 `exampleCodeGroup` 参数一致，为直接的字符串赋值，不能是变量引用或者字符串拼接。
 
-## Flutter AOP
+生成或校验示例代码片段：
 
-提交 PR 后，将会触发流水线自动打包 APK，流水线配置了 AOP 能力。
+```bash
+dart run tool/generate_example_code.dart
+dart run tool/generate_example_code.dart --check
+```
+
+生成的 `example/assets/code/*.txt` 需要与源码一同提交；CI 会使用 `--check` 校验它们是否同步。

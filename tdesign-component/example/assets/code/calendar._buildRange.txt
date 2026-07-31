@@ -1,0 +1,7 @@
+Widget _buildRange(BuildContext context) {
+    return TCalendar(
+      value: _rangeValue,
+      variant: TCalendarVariant.range,
+      onChanged: (value) => setState(() => _rangeValue = value),
+    );
+  }

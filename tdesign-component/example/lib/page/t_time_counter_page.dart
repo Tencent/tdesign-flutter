@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TTimeCounterPage extends StatelessWidget {
   const TTimeCounterPage({super.key});
@@ -209,65 +209,62 @@ class TTimeCounterPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSimple(BuildContext context) {
   return const TTimeCounter(time: 60 * 60 * 1000);
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildMillisecondSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
-    millisecond: true,
+    showMillisecond: true,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUpSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
-    millisecond: true,
+    showMillisecond: true,
     direction: TTimeCounterDirection.up,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TTimeCounterTheme.round,
+    variant: TTimeCounterVariant.round,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitSimple(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitSimple(BuildContext context) {
-  var style = TTimeCounterStyle.generateStyle(context);
-  style.timeColor = TTheme.of(context).errorNormalColor;
-  return TTimeCounter(
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
-    style: style,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -275,7 +272,7 @@ TTimeCounter _buildSmallSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -283,7 +280,7 @@ TTimeCounter _buildMediumSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
@@ -291,127 +288,118 @@ TTimeCounter _buildLargeSize(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.small,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.medium,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildSquareLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.large,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.small,
-    theme: TTimeCounterTheme.round,
+    variant: TTimeCounterVariant.round,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.medium,
-    theme: TTimeCounterTheme.round,
+    variant: TTimeCounterVariant.round,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildRoundLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.large,
-    theme: TTimeCounterTheme.round,
+    variant: TTimeCounterVariant.round,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitSmallSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.small,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitMediumSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.medium,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildUnitLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.large,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
-  var style =
-      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.small);
-  style.timeColor = TTheme.of(context).errorNormalColor;
-  return TTimeCounter(
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
+    size: TTimeCounterSize.small,
     splitWithUnit: true,
-    style: style,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
-  var style =
-      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.medium);
-  style.timeColor = TTheme.of(context).errorNormalColor;
-  return TTimeCounter(
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
+    size: TTimeCounterSize.medium,
     splitWithUnit: true,
-    style: style,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
-  var style =
-      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.large);
-  style.timeColor = TTheme.of(context).errorNormalColor;
-  return TTimeCounter(
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
+    size: TTimeCounterSize.large,
     splitWithUnit: true,
-    style: style,
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 Widget _buildControl(BuildContext context) {
   var controller = TTimeCounterController();
   return Wrap(
@@ -428,29 +416,29 @@ Widget _buildControl(BuildContext context) {
         spacing: 8,
         children: [
           TButton(
-            text: '开始',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.start(),
+            child: const Text('开始'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.start(),
           ),
           TButton(
-            text: '结束',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.reset(0),
+            child: const Text('结束'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.reset(0),
           ),
           TButton(
-            text: '重置',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.reset(),
+            child: const Text('重置'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.reset(),
           ),
           TButton(
-            text: '暂停',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.pause(),
+            child: const Text('暂停'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.pause(),
           ),
           TButton(
-            text: '继续',
-            theme: TButtonTheme.primary,
-            onTap: () => controller.resume(),
+            child: const Text('继续'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () => controller.resume(),
           ),
         ],
       )
@@ -458,7 +446,7 @@ Widget _buildControl(BuildContext context) {
   );
 }
 
-@Demo(group: 'timeCounter')
+@ExampleCode(group: 'timeCounter')
 TTimeCounter _buildCustomNum(BuildContext context) {
   return const TTimeCounter(
     time: 2000 * 60 * 1000,

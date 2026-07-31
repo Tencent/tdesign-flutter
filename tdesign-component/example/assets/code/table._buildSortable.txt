@@ -1,0 +1,8 @@
+Widget _buildSortable(BuildContext context) {
+    return _frame(TTable(
+      columns: _columns,
+      data: _rows,
+      sort: _sort,
+      onSortChanged: (value) => setState(() => _sort = value),
+    ));
+  }

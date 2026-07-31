@@ -266,7 +266,7 @@ Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTIN
 
 Create [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues) or scan the QR code to join our user groups:
 
-<img src="https://tdesign.tencent.com/flutter/assets/qrcode/feedback.png" width="200" />
+<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/site-components/src/images/groups/flutter-group.png" width="200" />
 
 ## 🙏 Acknowledgements
 

@@ -1,821 +1,218 @@
-/*
- * Created by haozhicao@tencent.com on 6/17/22.
- * t_dialog_page.dart
- * 
- */
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
+import '../base/example_widget.dart';
 
-class TDialogPage extends StatefulWidget {
-  const TDialogPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _TDialogPageState();
-}
-
-class _TDialogPageState extends State<TDialogPage> {
-  final _dialogTitle = '对话框标题';
-  final _commonContent = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
-  final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
-  final _inputHint = '请输入文字';
-
-  final _demoImage = Image.asset(
-    'assets/img/image.png',
-  );
+/// Dialog 弹窗示例页面
+class TDialogPage extends StatelessWidget {
+  const TDialogPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tTitle(),
-      desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
+      title: tTitle(context),
+      desc: '用于显示重要提示或请求用户完成关键操作。',
       exampleCodeGroup: 'dialog',
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '反馈类对话框', builder: _buildFeedbackNormal),
-          ExampleItem(builder: _buildFeedbackNoTitle),
-          ExampleItem(builder: _buildFeedbackOnlyTitle),
-          ExampleItem(builder: _buildFeedbackLongContent),
-          ExampleItem(desc: '确认类对话框', builder: _buildConfirmNormal),
-          ExampleItem(builder: _buildConfirmNoTitle),
-          ExampleItem(builder: _buildConfirmOnlyTitle),
-          ExampleItem(desc: '输入类对话框', builder: _buildInputNormal),
-          ExampleItem(builder: _buildInputNoContent),
-          ExampleItem(desc: '带图片的对话框', builder: _buildImageTop),
-          ExampleItem(builder: _buildImageTopNoTitle),
-          ExampleItem(builder: _buildImageTopOnlyTitle),
-          ExampleItem(builder: _buildImageMiddle),
-          ExampleItem(builder: _buildImageMiddleOnlyTitle),
-          ExampleItem(builder: _buildImageMiddleOnlyImage),
+          ExampleItem(desc: '单操作确认弹窗', builder: _buildConfirmDialog),
+          ExampleItem(desc: '双操作弹窗', builder: _buildActionDialog),
+          ExampleItem(desc: '危险操作弹窗', builder: _buildDangerDialog),
         ]),
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '文字按钮', builder: _buildTextButtonSingle),
-          ExampleItem(builder: _buildTextButtonDouble),
-          ExampleItem(desc: '横向基础按钮', builder: _buildNormalButtonSingle),
-          ExampleItem(builder: _buildNormalButtonDouble),
-          ExampleItem(desc: '纵向基础按钮', builder: _buildVerticalButtonDouble),
-          ExampleItem(builder: _buildVerticalButtonTriple),
-          ExampleItem(desc: '带关闭按钮的对话框', builder: _buildDialogWithCloseButton),
+        ExampleModule(title: '内容与状态', children: [
+          ExampleItem(desc: '自定义内容', builder: _buildCustomContentDialog),
+          ExampleItem(desc: '长内容滚动', builder: _buildLongContentDialog),
+          ExampleItem(desc: '带关闭按钮', builder: _buildCloseDialog),
+          ExampleItem(desc: '点击蒙层关闭', builder: _buildBarrierDismissDialog),
         ]),
       ],
-      test: [
-        ExampleItem(desc: '自定义标题对齐和内容组件', builder: _customFeedbackNormal),
-        ExampleItem(builder: _customConfirmNormal),
-        ExampleItem(builder: _customConfirmVertical),
-        ExampleItem(builder: _customImageTop),
-        ExampleItem(desc: '自定义边距和按钮', builder: _customContentAndBtn),
-        ExampleItem(desc: '自定义宽度弹窗', builder: _customWidthDialog),
-        ExampleItem(desc: '自定义按钮样式', builder: _customButtonStyleDialog)
-      ],
     );
   }
 
-  // 反馈类
-  @Demo(group: 'dialog')
-  Widget _buildFeedbackNormal(BuildContext context) {
-    return TButton(
-      text: '反馈类-带标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
+  @ExampleCode(group: 'dialog')
+  Widget _buildConfirmDialog(BuildContext context) {
+    return _trigger(
+      text: '单操作确认弹窗',
+      onPressed: () {
+        TDialog.show<bool>(
+          context,
+          dialog: const TConfirmDialog(
+            title: '弹窗标题',
+            content: '告知当前状态、信息和解决方法',
+          ),
         );
       },
     );
   }
 
-  @Demo(group: 'dialog')
-  Widget _buildFeedbackNoTitle(BuildContext context) {
-    return TButton(
-      text: '反馈类-无标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildFeedbackOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '反馈类-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildFeedbackLongContent(BuildContext context) {
-    return TButton(
-      text: '反馈类-内容超长',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _longContent,
-              contentMaxHeight: 300,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 确认类
-  @Demo(group: 'dialog')
-  Widget _buildConfirmNormal(BuildContext context) {
-    return TButton(
-      text: '确认类-带标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildConfirmNoTitle(BuildContext context) {
-    return TButton(
-      text: '确认类-无标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildConfirmOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '确认类-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 输入类
-  @Demo(group: 'dialog')
-  Widget _buildInputNormal(BuildContext context) {
-    return TButton(
-      text: '输入类-带描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TInputDialog(
-              textEditingController: TextEditingController(),
-              title: _dialogTitle,
-              content: _commonContent,
-              hintText: _inputHint,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildInputNoContent(BuildContext context) {
-    return TButton(
-      text: '输入类-无描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TInputDialog(
-              textEditingController: TextEditingController(),
-              title: _dialogTitle,
-              hintText: _inputHint,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 图片类型
-  @Demo(group: 'dialog')
-  Widget _buildImageTop(BuildContext context) {
-    return TButton(
-      text: '图片置顶-带标题描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildImageTopNoTitle(BuildContext context) {
-    return TButton(
-      text: '图片置顶-无标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildImageTopOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '图片置顶-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildImageMiddle(BuildContext context) {
-    return TButton(
-      text: '图片居中-带标题描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              content: _commonContent,
-              imagePosition: TDialogImagePosition.middle,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildImageMiddleOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '图片居中-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              imagePosition: TDialogImagePosition.middle,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildImageMiddleOnlyImage(BuildContext context) {
-    return TButton(
-      text: '图片居中-纯图片',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              imagePosition: TDialogImagePosition.middle,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 文字按钮
-  @Demo(group: 'dialog')
-  Widget _buildTextButtonSingle(BuildContext context) {
-    return TButton(
-      text: '单个文字按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-              buttonStyle: TDialogButtonStyle.text,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildTextButtonDouble(BuildContext context) {
-    return TButton(
-      text: '左右文字按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-              buttonStyle: TDialogButtonStyle.text,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 横向基础按钮
-  @Demo(group: 'dialog')
-  Widget _buildNormalButtonSingle(BuildContext context) {
-    return TButton(
-      text: '单个横向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildNormalButtonDouble(BuildContext context) {
-    return TButton(
-      text: '左右横向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 纵向基础按钮
-  @Demo(group: 'dialog')
-  Widget _buildVerticalButtonDouble(BuildContext context) {
-    return TButton(
-      text: '两个纵向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog.vertical(
-                title: _dialogTitle,
-                content: _commonContent,
-                buttons: [
-                  TDialogButtonOptions(
-                      title: '主要按钮',
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.primary),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                ]);
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildVerticalButtonTriple(BuildContext context) {
-    return TButton(
-      text: '三个纵向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog.vertical(
-                title: _dialogTitle,
-                content: _commonContent,
-                buttons: [
-                  TDialogButtonOptions(
-                      title: '主要按钮',
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.primary),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                ]);
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _buildDialogWithCloseButton(BuildContext context) {
-    return TButton(
-      text: '带关闭按钮的对话框',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-              showCloseButton: true,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // 反馈类
-  @Demo(group: 'dialog')
-  Widget _customFeedbackNormal(BuildContext context) {
-    return TButton(
-      text: '反馈类-标题偏左',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              titleAlignment: Alignment.centerLeft,
-              contentWidget: TText.rich(TTextSpan(children: [
-                TTextSpan(text: '红色文字', textColor: Colors.red),
-                TTextSpan(text: '绿色文字', textColor: Colors.green),
-              ])),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _customConfirmNormal(BuildContext context) {
-    return TButton(
-      text: '确认类-标题偏右',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              titleAlignment: Alignment.centerRight,
-              contentWidget: TText.rich(TTextSpan(children: [
-                TTextSpan(text: '红色文字', textColor: Colors.red),
-                TTextSpan(text: '绿色文字', textColor: Colors.green),
-              ])),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _customConfirmVertical(BuildContext context) {
-    return TButton(
-      text: '纵向按钮-自定义内容',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog.vertical(
-                title: _dialogTitle,
-                contentWidget: TText.rich(TTextSpan(children: [
-                  TTextSpan(text: '红色文字', textColor: Colors.red),
-                  TTextSpan(text: '绿色文字', textColor: Colors.green),
-                ])),
-                buttons: [
-                  TDialogButtonOptions(
-                      title: '主要按钮',
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.primary),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                ]);
-          },
-        );
-      },
-    );
-  }
-
-  @Demo(group: 'dialog')
-  Widget _customImageTop(BuildContext context) {
-    return TButton(
-      text: '图片置顶-自定义列表内容',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              contentWidget: ListView(
-                shrinkWrap: true,
-                children: const [
-                  TText('红色文字', textColor: Colors.red),
-                  TText('绿色文字', textColor: Colors.green),
-                ],
+  @ExampleCode(group: 'dialog')
+  Widget _buildActionDialog(BuildContext context) {
+    return _trigger(
+      text: '双操作弹窗',
+      onPressed: () async {
+        final confirmed = await TDialog.show<bool>(
+          context,
+          dialog: const TDialog(
+            title: Text('提交修改？'),
+            content: Text('提交后将立即同步给团队成员。'),
+            actions: [
+              TDialogAction(child: Text('取消'), result: false),
+              TDialogAction(
+                child: Text('确认'),
+                result: true,
+                role: TDialogActionRole.primary,
               ),
-            );
-          },
+            ],
+          ),
+        );
+        debugPrint('Dialog result: $confirmed');
+      },
+    );
+  }
+
+  @ExampleCode(group: 'dialog')
+  Widget _buildDangerDialog(BuildContext context) {
+    return _trigger(
+      text: '危险操作弹窗',
+      onPressed: () {
+        TDialog.show<bool>(
+          context,
+          dialog: const TDialog(
+            title: Text('删除项目？'),
+            content: Text('删除后无法恢复，请谨慎操作。'),
+            actions: [
+              TDialogAction(child: Text('取消'), result: false),
+              TDialogAction(
+                child: Text('删除'),
+                result: true,
+                role: TDialogActionRole.destructive,
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
-  @Demo(group: 'dialog')
-  Widget _customContentAndBtn(BuildContext context) {
-    return TButton(
-        text: '自定义边距和按钮',
-        size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
-          showGeneralDialog(
-              context: context,
-              pageBuilder: (BuildContext buildContext,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
-                return TConfirmDialog(
-                  title: _dialogTitle,
-                  content: _commonContent,
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  buttonWidget: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                    child: TButton(
-                      text: '自定义按钮',
-                      theme: TButtonTheme.primary,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                );
-              });
-        });
+  @ExampleCode(group: 'dialog')
+  Widget _buildCustomContentDialog(BuildContext context) {
+    return _trigger(
+      text: '自定义内容',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: const TDialog(
+            title: Text('选择通知方式'),
+            content: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.email_outlined),
+                  title: Text('邮件通知'),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.sms_outlined),
+                  title: Text('短信通知'),
+                ),
+              ],
+            ),
+            actions: [
+              TDialogAction(
+                child: Text('完成'),
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  @Demo(group: 'dialog')
-  Widget _customWidthDialog(BuildContext context) {
-    return TButton(
-        text: '自定义弹窗宽度',
-        size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
-          showGeneralDialog(
-              context: context,
-              pageBuilder: (BuildContext buildContext,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
-                return TConfirmDialog(
-                  width: 500,
-                  title: _dialogTitle,
-                  content: _commonContent,
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  buttonWidget: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                    child: TButton(
-                      text: '自定义按钮',
-                      theme: TButtonTheme.primary,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
+  @ExampleCode(group: 'dialog')
+  Widget _buildLongContentDialog(BuildContext context) {
+    return _trigger(
+      text: '长内容滚动',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: TDialog(
+            title: const Text('服务说明'),
+            maxHeight: 320,
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                18,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    '${index + 1}. 这是一段需要滚动阅读的服务说明，'
+                    '请确认你已了解相关规则和注意事项。',
                   ),
-                );
-              });
-        });
+                ),
+              ),
+            ),
+            actions: const [
+              TDialogAction(
+                child: Text('知道了'),
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  @Demo(group: 'dialog')
-  Widget _customButtonStyleDialog(BuildContext context) {
-    return TButton(
-        text: '自定义按钮样式',
+  @ExampleCode(group: 'dialog')
+  Widget _buildCloseDialog(BuildContext context) {
+    return _trigger(
+      text: '带关闭按钮',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          dialog: const TDialog(
+            title: Text('弹窗标题'),
+            content: Text('可通过右上角按钮关闭。'),
+            showCloseButton: true,
+          ),
+        );
+      },
+    );
+  }
+
+  @ExampleCode(group: 'dialog')
+  Widget _buildBarrierDismissDialog(BuildContext context) {
+    return _trigger(
+      text: '点击蒙层关闭',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          barrierDismissible: true,
+          dialog: const TDialog(
+            title: Text('点击外部区域即可关闭'),
+            content: Text('适合非关键提示或可随时取消的辅助信息。'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _trigger({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
         size: TButtonSize.large,
-        type: TButtonType.outline,
-        theme: TButtonTheme.primary,
-        onTap: () {
-          showGeneralDialog(
-              context: context,
-              pageBuilder: (BuildContext buildContext,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
-                return TConfirmDialog(
-                  title: _dialogTitle,
-                  content: _commonContent,
-                  buttonStyleCustom: TButtonStyle(
-                      backgroundColor: TTheme.of(context).errorClickColor,
-                      textColor: TTheme.of(context).whiteColor1,
-                      frameWidth: 1,
-                      frameColor: TTheme.of(context).successClickColor),
-                );
-              });
-        });
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
   }
 }

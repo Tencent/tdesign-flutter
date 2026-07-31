@@ -1,0 +1,23 @@
+Widget _buildActionDialog(BuildContext context) {
+    return _trigger(
+      text: '双操作弹窗',
+      onPressed: () async {
+        final confirmed = await TDialog.show<bool>(
+          context,
+          dialog: const TDialog(
+            title: Text('提交修改？'),
+            content: Text('提交后将立即同步给团队成员。'),
+            actions: [
+              TDialogAction(child: Text('取消'), result: false),
+              TDialogAction(
+                child: Text('确认'),
+                result: true,
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+        debugPrint('Dialog result: $confirmed');
+      },
+    );
+  }

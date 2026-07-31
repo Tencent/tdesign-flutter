@@ -1,20 +1,5 @@
-
-  Widget _buildCardsSwiper(BuildContext context) {
-    return Swiper(
-      viewportFraction: 0.75,
-      outer: true,
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      transformer: TPageTransformer.margin(),
-      pagination: const SwiperPagination(
-        alignment: Alignment.center,
-        builder: TSwiperPagination.dots,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+Widget _buildCardsSwiper(BuildContext context) => _buildSwiper(
+        context,
+        pageEffect: TSwiperPageEffect.cardMargin,
+        viewportFraction: 0.86,
+      );

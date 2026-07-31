@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 const titleText = '标题文字';
 
 class TNavBarPage extends StatelessWidget {
   const TNavBarPage({Key? key}) : super(key: key);
+
+  void _showAction(BuildContext context, String label) {
+    TToast.showText('点击了$label', context: context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,225 +35,296 @@ class TNavBarPage extends StatelessWidget {
           ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
           ExampleItem(builder: _titleBelowNavbar),
           ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
-        ])
-      ],
-      test: [
-        ExampleItem(desc: '底部阴影', builder: _shadowNavbar),
+        ]),
+        ExampleModule(title: '其他', children: [
+          ExampleItem(desc: '底部阴影', builder: _shadowNavbar),
+        ]),
       ],
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
-      height: 48,
+      key: Key('navbar-demo-base'),
       titleFontWeight: FontWeight.w600,
       title: titleText,
-      screenAdaptation: false,
       useDefaultBack: true,
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _leftMultiAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-          height: 48,
-          title: titleText,
-          titleFontWeight: FontWeight.w600,
-          screenAdaptation: false,
-          useDefaultBack: true,
-          leftBarItems: [
-            TNavBarItem(icon: TIcons.close, iconSize: 24),
-          ],
-          rightBarItems: [
-            TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-          ]),
+        title: titleText,
+        titleFontWeight: FontWeight.w600,
+        useDefaultBack: true,
+        leading: [
+          TNavBarItem(
+            icon: TIcons.close,
+            iconSize: 24,
+            onTap: () => _showAction(context, '关闭'),
+          ),
+        ],
+        actions: [
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _rightMultiAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-          height: 48,
-          title: titleText,
-          titleFontWeight: FontWeight.w600,
-          screenAdaptation: false,
-          useDefaultBack: true,
-          rightBarItems: [
-            TNavBarItem(
-              icon: TIcons.home,
-              iconSize: 24,
-            ),
-            TNavBarItem(
-              icon: TIcons.ellipsis,
-              iconSize: 24,
-            )
-          ]),
+        title: titleText,
+        titleFontWeight: FontWeight.w600,
+        useDefaultBack: true,
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _searchNavbar(BuildContext context) {
     return TNavBar(
-        useDefaultBack: false,
-        screenAdaptation: false,
-        centerTitle: false,
-        titleMargin: 0,
-        titleWidget: TSearchBar(
+      useDefaultBack: false,
+      centerTitle: false,
+      titleMargin: 0,
+      titleWidget: Theme(
+        data: Theme.of(context).mergeExtension(
+          const TSearchBarThemeData(
+            variant: TSearchBarVariant.round,
+            padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+            autoHeight: true,
+          ),
+        ),
+        child: TSearchBar(
           needCancel: false,
-          autoHeight: true,
-          padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-          placeHolder: '搜索预设文案',
-          mediumStyle: true,
-          style: TSearchStyle.round,
-          onTextChanged: (String text) {
+          hintText: '搜索预设文案',
+          onChanged: (String text) {
             print('input：$text');
           },
         ),
-        rightBarItems: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-        ]);
+      ),
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _logoNavbar(BuildContext context) {
     return TNavBar(
-        useDefaultBack: false,
-        screenAdaptation: false,
-        centerTitle: false,
-        titleMargin: 0,
-        titleWidget: const TImage(
-          assetUrl: 'assets/img/t_brand.png',
-          width: 102,
-          height: 24,
+      useDefaultBack: false,
+      centerTitle: false,
+      titleMargin: 0,
+      titleWidget: const TImage(
+        src: 'assets/img/t_brand.png',
+        width: 120,
+        height: 32,
+        variant: TImageVariant.fitWidth,
+        fit: BoxFit.contain,
+      ),
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
         ),
-        rightBarItems: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-        ]);
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleCenterNavbar(BuildContext context) {
     return TNavBar(
-        height: 48,
-        title: titleText,
-        titleFontWeight: FontWeight.w600,
-        screenAdaptation: false,
-        useDefaultBack: true,
-        rightBarItems: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-        ]);
+      title: titleText,
+      titleFontWeight: FontWeight.w600,
+      useDefaultBack: true,
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleLeftNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-          height: 48,
-          title: titleText,
-          titleFontWeight: FontWeight.w600,
-          centerTitle: false,
-          titleMargin: 0,
-          screenAdaptation: false,
-          useDefaultBack: true,
-          rightBarItems: [
-            TNavBarItem(icon: TIcons.home, iconSize: 24),
-            TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-          ]),
+        title: titleText,
+        titleFontWeight: FontWeight.w600,
+        centerTitle: false,
+        titleMargin: 0,
+        useDefaultBack: true,
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleNormalNavbar(BuildContext context) {
     return TNavBar(
-        height: 48,
-        title: titleText,
-        titleFontWeight: FontWeight.w600,
-        screenAdaptation: false,
-        useDefaultBack: true,
-        rightBarItems: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-        ]);
+      title: titleText,
+      titleFontWeight: FontWeight.w600,
+      useDefaultBack: true,
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _titleBelowNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-          height: 104,
-          title: '返回',
-          titleColor: TTheme.of(context).textColorPrimary,
-          belowTitleWidget: SizedBox(
-            height: 56,
-            child: TText(
-              titleText,
-              font: Font(size: 28, lineHeight: 52),
-              fontWeight: FontWeight.w600,
-            ),
+        key: const Key('navbar-demo-custom-height'),
+        height: 80,
+        title: '返回',
+        titleColor: context.tTheme.textColorPrimary,
+        belowTitleWidget: SizedBox(
+          height: 36,
+          child: TText(
+            titleText,
+            font: Font(size: 28, lineHeight: 36),
+            fontWeight: FontWeight.w600,
           ),
-          titleFont: Font(size: 16, lineHeight: 24),
-          centerTitle: false,
-          titleMargin: 0,
-          screenAdaptation: false,
-          useDefaultBack: false,
-          leftBarItems: [
-            TNavBarItem(icon: TIcons.chevron_left, iconSize: 24),
-          ],
-          rightBarItems: [
-            TNavBarItem(icon: TIcons.home, iconSize: 24),
-            TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-          ]),
+        ),
+        titleFont: Font(size: 16, lineHeight: 24),
+        centerTitle: false,
+        titleMargin: 8,
+        useDefaultBack: false,
+        leading: [
+          TNavBarItem(
+            icon: TIcons.chevron_left,
+            iconSize: 24,
+            onTap: () => _showAction(context, '返回'),
+          ),
+        ],
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
     );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
-        height: 48,
-        title: titleText,
-        titleColor: Colors.white,
-        backgroundColor: TTheme.of(context).brandNormalColor,
-        titleFontWeight: FontWeight.w600,
-        useDefaultBack: false,
-        screenAdaptation: false,
-        leftBarItems: [
-          TNavBarItem(
-              icon: TIcons.chevron_left,
-              iconSize: 24,
-              iconColor: Colors.white),
-        ],
-        rightBarItems: [
-          TNavBarItem(
-              icon: TIcons.home, iconSize: 24, iconColor: Colors.white),
-          TNavBarItem(
-              icon: TIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
-        ]);
+      title: titleText,
+      titleColor: Colors.white,
+      backgroundColor: context.tTheme.brandNormalColor,
+      titleFontWeight: FontWeight.w600,
+      useDefaultBack: false,
+      leading: [
+        TNavBarItem(
+          icon: TIcons.chevron_left,
+          iconSize: 24,
+          iconColor: Colors.white,
+          onTap: () => _showAction(context, '返回'),
+        ),
+      ],
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          iconColor: Colors.white,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          iconColor: Colors.white,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }
 
-  @Demo(group: 'navbar')
+  @ExampleCode(group: 'navbar')
   Widget _shadowNavbar(BuildContext context) {
     return TNavBar(
-      height: 48,
       titleFontWeight: FontWeight.w600,
       title: titleText,
-      screenAdaptation: false,
       useDefaultBack: true,
       boxShadow: [
         BoxShadow(
           blurRadius: 4,
           offset: const Offset(0, 4),
-          color: TTheme.of(context).componentBorderColor,
-        )
+          color: context.tTheme.componentBorderColor,
+        ),
       ],
     );
   }

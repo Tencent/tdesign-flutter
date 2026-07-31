@@ -1,0 +1,18 @@
+Widget _buildIconToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('带图标'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showIconText(
+            '这是一条带图标的提示',
+            icon: TIcons.info_circle,
+            context: context,
+          );
+        },
+      ),
+    );
+  }

@@ -1,201 +1,151 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
-///
-/// TSwitchPage演示
-///
-class TSwitchPage extends StatefulWidget {
-  const TSwitchPage({Key? key}) : super(key: key);
+/// TSwitch 示例页。
+class TSwitchPage extends StatelessWidget {
+  const TSwitchPage({super.key});
 
-  @override
-  State<StatefulWidget> createState() {
-    return TSwitchPageState();
-  }
-}
-
-class TSwitchPageState extends State<TSwitchPage> {
   @override
   Widget build(BuildContext context) {
-    var current = ExamplePage(
-      title: tTitle(),
+    return ExamplePage(
+      title: tTitle(context),
       exampleCodeGroup: 'switch',
       desc: '用于控制某个功能的开启和关闭。',
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: '基础开关', builder: _buildSwitchWithBase),
-            ExampleItem(desc: '带描述开关', builder: _buildSwitchWithText),
-            ExampleItem(builder: _buildSwitchWithIcon),
-            ExampleItem(desc: '自定义颜色开关', builder: _buildSwitchWithColor),
+            ExampleItem(desc: '基础开关', builder: _buildBasic),
+            ExampleItem(desc: '文字开关', builder: _buildText),
+            ExampleItem(desc: '图标开关', builder: _buildIcon),
+            ExampleItem(desc: '主题颜色', builder: _buildTheme),
           ],
         ),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
-          ExampleItem(builder: _buildSwitchWithLoadingOn),
-          ExampleItem(desc: '禁用状态', builder: _buildSwitchWithDisableOff),
-          ExampleItem(builder: _buildSwitchWithDisableOn),
-        ]),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
-          ExampleItem(builder: _buildSwitchWithSizeMed),
-          ExampleItem(builder: _buildSwitchWithSizeSmall),
-        ]),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(desc: '加载状态', builder: _buildLoading),
+            ExampleItem(desc: '禁用状态', builder: _buildDisabled),
+          ],
+        ),
+        ExampleModule(
+          title: '组件尺寸',
+          children: [
+            ExampleItem(desc: '大', builder: _buildLarge),
+            ExampleItem(desc: '中', builder: _buildMedium),
+            ExampleItem(desc: '小', builder: _buildSmall),
+          ],
+        ),
       ],
-      test: [
-        ExampleItem(desc: '自定义开关文案-通常只支持一个字符,超出部分无法展示', builder: _customText),
-        ExampleItem(desc: '自定义带文字开关的字体大小', builder: _customTextFont),
-      ],
-    );
-    return current;
-  }
-
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithBase(BuildContext context) {
-    return const TCell(
-      title: '基础开关',
-      noteWidget: TSwitch(),
+      test: const [],
     );
   }
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithText(BuildContext context) {
-    return const TCell(
-      title: '带文字开关',
-      noteWidget: TSwitch(
-        isOn: true,
-        type: TSwitchType.text,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildBasic(BuildContext context) => const TCell(
+        title: Text('基础开关'),
+        note: _StatefulSwitch(),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithIcon(BuildContext context) {
-    return const TCell(
-      title: '带图标开关',
-      noteWidget: TSwitch(
-        isOn: true,
-        type: TSwitchType.icon,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildText(BuildContext context) => const TCell(
+        title: Text('文字开关'),
+        note: _StatefulSwitch(
+          initialValue: true,
+          variant: TSwitchVariant.text,
+          openText: '开',
+          closeText: '关',
+        ),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithColor(BuildContext context) {
-    return const TCell(
-      title: '自定义颜色开关',
-      noteWidget: TSwitch(
-        isOn: true,
-        trackOnColor: Colors.green,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildIcon(BuildContext context) => const TCell(
+        title: Text('图标开关'),
+        note: _StatefulSwitch(
+          initialValue: true,
+          variant: TSwitchVariant.icon,
+        ),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithLoadingOff(BuildContext context) {
-    return const TCell(
-      title: '加载状态',
-      noteWidget: TSwitch(
-        isOn: false,
-        type: TSwitchType.loading,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildTheme(BuildContext context) => TCell(
+        title: const Text('主题颜色'),
+        note: Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSwitchThemeData(trackOnColor: Colors.green),
+          ),
+          child: const _StatefulSwitch(initialValue: true),
+        ),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithLoadingOn(BuildContext context) {
-    return const TCell(
-      title: '加载状态',
-      noteWidget: TSwitch(
-        isOn: true,
-        type: TSwitchType.loading,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildLoading(BuildContext context) => const TCell(
+        title: Text('加载状态'),
+        note: TSwitch(
+          value: true,
+          variant: TSwitchVariant.loading,
+        ),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithDisableOff(BuildContext context) {
-    return const TCell(
-      title: '禁用状态',
-      noteWidget: TSwitch(
-        enable: false,
-        isOn: false,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildDisabled(BuildContext context) => const TCell(
+        title: Text('禁用状态'),
+        note: TSwitch(value: false),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithDisableOn(BuildContext context) {
-    return const TCell(
-      title: '禁用状态',
-      noteWidget: TSwitch(
-        enable: false,
-        isOn: true,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildLarge(BuildContext context) => const TCell(
+        title: Text('大尺寸'),
+        note: _StatefulSwitch(size: TSwitchSize.large),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithSizeLarge(BuildContext context) {
-    return const TCell(
-      title: '大尺寸32',
-      noteWidget: TSwitch(
-        size: TSwitchSize.large,
-        isOn: true,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildMedium(BuildContext context) => const TCell(
+        title: Text('中尺寸'),
+        note: _StatefulSwitch(size: TSwitchSize.medium),
+      );
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithSizeMed(BuildContext context) {
-    return const TCell(
-      title: '中尺寸28',
-      noteWidget: TSwitch(
-        size: TSwitchSize.medium,
-        isOn: true,
-      ),
-    );
-  }
+  @ExampleCode(group: 'switch')
+  Widget _buildSmall(BuildContext context) => const TCell(
+        title: Text('小尺寸'),
+        note: _StatefulSwitch(size: TSwitchSize.small),
+      );
+}
 
-  @Demo(group: 'switch')
-  Widget _buildSwitchWithSizeSmall(BuildContext context) {
-    return const TCell(
-      title: '小尺寸24',
-      noteWidget: TSwitch(
-        size: TSwitchSize.small,
-        isOn: true,
-      ),
-    );
-  }
+class _StatefulSwitch extends StatefulWidget {
+  const _StatefulSwitch({
+    this.initialValue = false,
+    this.size,
+    this.variant,
+    this.openText,
+    this.closeText,
+  });
 
-  @Demo(group: 'switch')
-  Widget _customText(BuildContext context) {
-    return const TCell(
-      title: '基础开关',
-      noteWidget: TSwitch(
-        type: TSwitchType.text,
-        openText: '1111',
-        closeText: '—',
-      ),
-    );
-  }
+  final bool initialValue;
+  final TSwitchSize? size;
+  final TSwitchVariant? variant;
+  final String? openText;
+  final String? closeText;
 
-  @Demo(group: 'switch')
-  Widget _customTextFont(BuildContext context) {
-    return const TCell(
-      title: '基础开关',
-      noteWidget: TSwitch(
-        type: TSwitchType.text,
-        openText: '开',
-        closeText: '关',
-        thumbContentOffColor: Colors.red,
-        thumbContentOnColor: Colors.green,
-        thumbContentOnFont: TextStyle(fontSize: 18),
-        thumbContentOffFont: TextStyle(fontSize: 12),
-      ),
+  @override
+  State<_StatefulSwitch> createState() => _StatefulSwitchState();
+}
+
+class _StatefulSwitchState extends State<_StatefulSwitch> {
+  late bool value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return TSwitch(
+      value: value,
+      size: widget.size,
+      variant: widget.variant,
+      openText: widget.openText,
+      closeText: widget.closeText,
+      onChanged: (next) => setState(() => value = next),
     );
   }
 }

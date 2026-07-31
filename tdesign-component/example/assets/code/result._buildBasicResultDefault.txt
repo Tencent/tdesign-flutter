@@ -1,7 +1,0 @@
-
-  TResult _buildBasicResultDefault(BuildContext context) {
-    return const TResult(
-      title: '默认状态',
-      theme: TResultTheme.defaultTheme,
-    );
-  }

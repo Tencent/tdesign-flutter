@@ -1,11 +1,10 @@
-
-  TButton _buildRectangleIconButton(BuildContext context) {
-    return const TButton(
-      text: '填充按钮',
-      icon: TIcons.app,
+TButton _buildRectangleIconButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
+      icon: const Icon(TIcons.app),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: _onTap,
     );
   }

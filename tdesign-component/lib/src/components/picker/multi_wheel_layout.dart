@@ -29,7 +29,7 @@ class MultiWheelLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     return SizedBox(
       height: height,
       width: double.infinity,

@@ -381,6 +381,29 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 
+### 自定义时长与倒计时
+
+`duration` 控制 Toast 自动关闭时间；需要让用户感知剩余时间时，可以通过 `customWidget` 在同一个 Toast 内更新内容，无需重复创建 Overlay。
+
+```dart
+TToast.showText(
+  null,
+  context: context,
+  duration: const Duration(seconds: 5),
+  customWidget: TweenAnimationBuilder<double>(
+    tween: Tween(begin: 5, end: 0),
+    duration: const Duration(seconds: 5),
+    builder: (context, remaining, _) {
+      return TText(
+        '${remaining.ceil()} 秒后关闭',
+        font: context.tTheme.fontBodyMedium,
+        textColor: context.tTheme.textColorAnti,
+      );
+    },
+  ),
+);
+```
+
 ## API
 ### TToast
 
@@ -560,5 +583,3 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | horizontal | 横向 |
 | vertical | 竖向 |
 
-
-  

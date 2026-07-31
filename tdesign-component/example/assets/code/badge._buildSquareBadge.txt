@@ -1,22 +1,7 @@
-
-  Widget _buildSquareBadge(BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 34,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              border: TBadgeBorder.small,
-              count: num.toString(),
-            ),
-            left: 20,
-            bottom: 18,
-          )
-        ],
-      ),
+Widget _buildSquareBadge(BuildContext context) {
+    return TBadge(
+      label: '$num',
+      border: true,
+      child: const Icon(TIcons.notification),
     );
   }

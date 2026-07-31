@@ -1,0 +1,6 @@
+Widget _buildDisabledRate(BuildContext context) {
+    return _rateCell(
+      title: '禁用状态',
+      rate: const TRate(value: 3),
+    );
+  }

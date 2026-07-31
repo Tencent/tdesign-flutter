@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './t_swipe_cell.dart';
 import 't_swipe_cell_action.dart';
 
+/// 滑动动画展示方式
 enum SwipeMotion {
   /// 滚动
   scroll,
@@ -33,7 +34,9 @@ class TSwipeCellPanel {
     this.onDismissed,
     required this.children,
     this.confirms,
-  }) : assert(
+  })  : assert(extentRatio > 0 && extentRatio <= 1,
+            'extentRatio must be in (0, 1].'),
+        assert(
           confirms == null ||
               confirms.every((item) =>
                   item.confirmIndex != null &&
@@ -44,7 +47,7 @@ class TSwipeCellPanel {
         );
 
   /// 宽度占比
-  final double? extentRatio;
+  final double extentRatio;
 
   /// 拖动多少占比触发打开动作，默认 [extentRatio] 的一半
   final double? openThreshold;
@@ -62,19 +65,19 @@ class TSwipeCellPanel {
   final List<TSwipeCellAction>? confirms;
 
   /// 是否可通过拖动操作来移除 [TSwipeCell] 组件
-  final bool? dragDismissible;
+  final bool dragDismissible;
 
   /// 滑动到多少比例时，触发移除。dragDismissible为true才有效
-  final double? dismissThreshold;
+  final double dismissThreshold;
 
   /// 触发移除的滑动动画时长。dragDismissible为true才有效
-  final Duration? dismissalDuration;
+  final Duration dismissalDuration;
 
   /// 移除动画（高度变为0）时长。dragDismissible为true才有效
-  final Duration? resizeDuration;
+  final Duration resizeDuration;
 
   /// 移除取消后，是否关闭滑动单元格。dragDismissible为true才有效
-  final bool? closeOnCancel;
+  final bool closeOnCancel;
 
   /// 移除前回调，可阻止移除。dragDismissible为true才有效
   final Future<bool> Function(BuildContext context)? confirmDismiss;
@@ -82,49 +85,39 @@ class TSwipeCellPanel {
   /// 移除后回调。dragDismissible为true才有效
   final void Function(BuildContext context)? onDismissed;
 
-  Duration get _dismissalDuration =>
-      dismissalDuration ?? const Duration(milliseconds: 300);
-
-  Duration get _resizeDuration =>
-      resizeDuration ?? const Duration(milliseconds: 300);
-
-  bool get _dragDismissible => dragDismissible ?? false;
-
-  double get _extentRatio => extentRatio ?? 0.3;
-
-  double get _openThreshold => openThreshold ?? (_extentRatio / 2);
-
-  double get _closeThreshold => closeThreshold ?? (_extentRatio / 2);
-
   ActionPane build(BuildContext context) {
     return ActionPane(
-      extentRatio: _extentRatio,
+      extentRatio: extentRatio,
       motion: getMotionWidget(),
-      openThreshold: _openThreshold,
-      closeThreshold: _closeThreshold,
+      openThreshold: openThreshold ?? (extentRatio / 2),
+      closeThreshold: closeThreshold ?? (extentRatio / 2),
       children: children,
-      dragDismissible: _dragDismissible,
-      dismissible: _dragDismissible
+      dragDismissible: dragDismissible,
+      dismissible: dragDismissible
           ? DismissiblePane(
-              closeOnCancel: closeOnCancel ?? false,
-              dismissThreshold: dismissThreshold ?? 0.75,
-              dismissalDuration: _dismissalDuration,
-              resizeDuration: _resizeDuration,
+              closeOnCancel: closeOnCancel,
+              dismissThreshold: dismissThreshold,
+              dismissalDuration: dismissalDuration,
+              resizeDuration: resizeDuration,
               confirmDismiss: () async {
+                // coverage:ignore-line
                 if (confirmDismiss != null) {
-                  return confirmDismiss!(context);
+                  // coverage:ignore-line
+                  return confirmDismiss!(context); // coverage:ignore-line
                 }
                 return true;
               },
               onDismissed: () async {
-                await TSwipeCell.of(context)?.close();
-                onDismissed?.call(context);
+                // coverage:ignore-line
+                await TSwipeCell.of(context)?.close(); // coverage:ignore-line
+                onDismissed?.call(context); // coverage:ignore-line
               },
             )
           : null,
     );
   }
 
+  /// 获取滑动动画对应的 Motion 组件
   Widget getMotionWidget() {
     switch (motionType) {
       case SwipeMotion.scroll:

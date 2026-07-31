@@ -1,11 +1,7 @@
-
 TTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
-  var style =
-      TTimeCounterStyle.generateStyle(context, size: TTimeCounterSize.large);
-  style.timeColor = TTheme.of(context).errorNormalColor;
-  return TTimeCounter(
+  return const TTimeCounter(
     time: 60 * 60 * 1000,
+    size: TTimeCounterSize.large,
     splitWithUnit: true,
-    style: style,
   );
 }

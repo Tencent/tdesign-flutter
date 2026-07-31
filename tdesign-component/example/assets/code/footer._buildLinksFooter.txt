@@ -1,22 +1,21 @@
-
-  Widget _buildLinksFooter(BuildContext context) {
+Widget _buildLinksFooter(BuildContext context) {
     return TFooter(
-      TFooterType.link,
+      TFooterVariant.link,
       links: [
         TLink(
-          label: '底部链接1',
-          style: TLinkStyle.primary,
-          uri: Uri.parse('https://example.com'),
-          linkClick: (link) {
-            print('点击了链接1 $link');
+          child: const Text('底部链接1'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.basic,
+          onPressed: () {
+            print('点击了链接1');
           },
         ),
         TLink(
-          label: '底部链接2',
-          style: TLinkStyle.primary,
-          uri: Uri.parse('https://example.com'),
-          linkClick: (link) {
-            print('点击了链接2 $link');
+          child: const Text('底部链接2'),
+          colorScheme: TLinkColorScheme.primary,
+          variant: TLinkVariant.basic,
+          onPressed: () {
+            print('点击了链接2');
           },
         ),
       ],

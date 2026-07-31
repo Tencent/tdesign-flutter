@@ -7,24 +7,18 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | context | BuildContext | - | 上下文 |
-| backgroundColor | Color? | - | 组件背景颜色 |
-| bordered | bool? | true | 是否显示边框 |
+| child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | closeOnOverlayClick | bool? | true | 点击蒙层时是否关闭抽屉 |
-| contentWidget | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | drawerTop | double? | - | 距离顶部的距离 |
 | footer | Widget? | - | 抽屉的底部 |
-| hover | bool? | true | 是否开启点击反馈 |
-| isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | onClose | VoidCallback? | - | 关闭时触发 |
 | onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
 | placement | TDrawerPlacement? | TDrawerPlacement.right | 抽屉方向 |
 | showOverlay | bool? | true | 是否显示遮罩层 |
-| style | TCellStyle? | - | 列表自定义样式 |
-| title | String? | - | 抽屉的标题 |
-| titleWidget | Widget? | - | 抽屉的标题组件 |
-| visible | bool? | - | 组件是否可见 |
-| width | double? | 280 | 宽度 |
+| title | Widget? | - | 抽屉的标题组件 |
+| useSafeArea | bool | true | 是否避让系统安全区域 |
+| width | double? | - | 宽度（优先级高于 ThemeData） |
 
 
 ### TDrawerWidget
@@ -36,18 +30,16 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 组件背景颜色 |
-| bordered | bool? | true | 是否显示边框 |
-| contentWidget | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
+| bordered | bool? | - | 是否显示边框 |
+| child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | footer | Widget? | - | 抽屉的底部 |
-| hover | bool? | true | 是否开启点击反馈 |
-| isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
+| hover | bool? | - | 是否开启点击反馈 |
+| isShowLastBordered | bool? | - | 是否显示最后一行分割线 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
-| style | TCellStyle? | - | 列表自定义样式 |
-| title | String? | - | 抽屉的标题 |
-| titleWidget | Widget? | - | 抽屉的标题组件 |
-| width | double? | 280 | 宽度 |
+| title | Widget? | - | 抽屉的标题组件 |
+| width | double? | - | 宽度 |
 
 
 ### TDrawerItem
@@ -70,11 +62,14 @@
 
 | 名称 | 说明 |
 | --- | --- |
-| left | - |
-| right | - |
+| left | 从左侧滑出 |
+| right | 从右侧滑出 |
 
 
 ### TDrawerItemClickCallback
+#### 简介
+点击抽屉列表项时的回调。
+`index` 是列表下标，`item` 是被点击的配置项。
 #### 类型定义
 
 ```dart

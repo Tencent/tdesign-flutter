@@ -1,0 +1,4 @@
+Widget _buildLarge(BuildContext context) => const TCell(
+        title: Text('大尺寸'),
+        note: _StatefulSwitch(size: TSwitchSize.large),
+      );

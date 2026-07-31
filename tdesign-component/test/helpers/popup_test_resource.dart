@@ -240,12 +240,12 @@ class PopupTestResourceDelegate extends TResourceDelegate {
   String pickerColumn(int colIndex) => '第 $colIndex 列';
 }
 
-/// 在测试中注入 [resource]；与业务侧 `TTheme.setResourceBuilder` 用法一致。
+/// 在测试中注入 [resource]；与业务侧 `setTResourceBuilder` 用法一致。
 void bindPopupTestResource(PopupTestResourceDelegate resource) {
-  TTheme.setResourceBuilder((_) => resource, needAlwaysBuild: true);
+  setTResourceBuilder((_) => resource, needAlwaysBuild: true);
 }
 
 /// 恢复为库内默认资源（中文 cancel/confirm）。
 void resetPopupTestResource() {
-  TTheme.setResourceBuilder((_) => null, needAlwaysBuild: false);
+  setTResourceBuilder((_) => null, needAlwaysBuild: false);
 }

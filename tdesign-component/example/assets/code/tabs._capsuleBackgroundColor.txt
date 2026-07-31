@@ -1,9 +1,0 @@
-
-  Widget _capsuleBackgroundColor(BuildContext context) {
-    return TTabBar(
-      tabs: subList(2),
-      controller: _tabController1,
-      backgroundColor: Colors.red,
-      outlineType: TTabBarOutlineType.capsule,
-    );
-  }

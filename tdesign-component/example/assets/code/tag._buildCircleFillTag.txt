@@ -1,7 +1,8 @@
-
-  Widget _buildCircleFillTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.round,
+Widget _buildCircleFillTag(BuildContext context) {
+    // 圆弧标签：通过 TTagThemeData(shape: TTagShape.round) 子树注入
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(shape: TTagShape.round)),
+      child: const TTag('标签文字'),
     );
   }

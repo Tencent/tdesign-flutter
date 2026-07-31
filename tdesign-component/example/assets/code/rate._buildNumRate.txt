@@ -1,9 +1,0 @@
-
-  Widget _buildNumRate(BuildContext context) {
-    return const TCell(
-        title: '自定义评分数量',
-        noteWidget: TRate(
-          value: 2,
-          count: 3,
-        ));
-  }

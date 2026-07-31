@@ -1,0 +1,10 @@
+Widget _buildScrollableContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 24,
+        children: List.generate(12, (_) => getDemoBox(context)),
+      ),
+    );
+  }

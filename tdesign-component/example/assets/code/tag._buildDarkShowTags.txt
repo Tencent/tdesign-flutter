@@ -1,25 +1,13 @@
-
-  Widget _buildDarkShowTags(BuildContext context) {
+Widget _buildDarkShowTags(BuildContext context) {
+    // 非浅色填充各主题
     return const Wrap(
       spacing: 8,
       children: [
-        TTag('默认'),
-        TTag(
-          '主要',
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          theme: TTagTheme.success,
-        ),
+        TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+        TTag('主要', colorScheme: TTagColorScheme.primary),
+        TTag('警告', colorScheme: TTagColorScheme.warning),
+        TTag('危险', colorScheme: TTagColorScheme.danger),
+        TTag('成功', colorScheme: TTagColorScheme.success),
       ],
     );
   }

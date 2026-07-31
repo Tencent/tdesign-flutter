@@ -1,3 +1,22 @@
+## 🌈 1.0.0 `2026-07-31`
+
+### 💥 Breaking Changes
+
+- 完成 v1 正式 API 迁移，组件统一使用 `T` 前缀并移除旧版兼容参数。
+- 组件视觉默认值统一接入 Flutter `ThemeData` 与 TDesign ThemeExtension。
+- `TSwiper` 改为 `TSwiperController` 驱动；`TBadge` 使用语义化 `label` 展示数字或自定义短文本。
+
+### 🚀 Features
+
+- `TSwiper` 支持 autoplay 生命周期管理、真实卡片视口、横竖布局、外置分页、自定义标记和自定义前后按钮。
+- Popup、ActionSheet、NavBar、FAB 与 Message 统一安全区契约，默认启用且支持显式关闭。
+
+### 🐞 Bug Fixes
+
+- 修复 Popup 五向默认尺寸与 center 安全区行为。
+- 修复 Checkbox、Radio 热区未围绕视觉控件居中的问题。
+- 修复 ImageViewer 与 Swiper 实际页码、Controller 生命周期和动态数据同步。
+
 ## 🌈 0.2.7 `2026-01-21`
 ### 🚀 Features
 

@@ -265,7 +265,7 @@ TDesign 还提供其他平台和框架的组件库：
 
 创建 [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues) 或扫描二维码加入用户群：
 
-<img src="https://tdesign.tencent.com/flutter/assets/qrcode/feedback.png" width="200" />
+<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/site-components/src/images/groups/flutter-group.png" width="200" />
 
 ## 🙏 致谢
 

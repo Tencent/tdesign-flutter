@@ -1,0 +1,22 @@
+Widget _buildDangerDialog(BuildContext context) {
+    return _trigger(
+      text: '危险操作弹窗',
+      onPressed: () {
+        TDialog.show<bool>(
+          context,
+          dialog: const TDialog(
+            title: Text('删除项目？'),
+            content: Text('删除后无法恢复，请谨慎操作。'),
+            actions: [
+              TDialogAction(child: Text('取消'), result: false),
+              TDialogAction(
+                child: Text('删除'),
+                result: true,
+                role: TDialogActionRole.destructive,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }

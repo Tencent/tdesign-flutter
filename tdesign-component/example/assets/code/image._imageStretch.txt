@@ -1,5 +1,4 @@
-
-  Widget _imageStretch(BuildContext context) {
+Widget _imageStretch(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -7,21 +6,17 @@
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '拉伸',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         Container(
-          color: TTheme.of(context).bgColorContainerHover,
-          width: 121,
-          height: 72,
+          color: context.tTheme.bgColorContainerHover,
           child: const Stack(
             alignment: Alignment.center,
             children: [
               TImage(
-                assetUrl: 'assets/img/image.png',
-                width: 121,
-                height: 50,
-                type: TImageType.stretch,
+                src: 'assets/img/image.png',
+                variant: TImageVariant.stretch,
               ),
             ],
           ),

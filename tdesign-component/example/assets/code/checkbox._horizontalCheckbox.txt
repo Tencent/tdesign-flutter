@@ -1,30 +1,9 @@
-
-  Widget _horizontalCheckbox(BuildContext context) {
-    return TCheckboxGroupContainer(
-      selectIds: const ['1'],
+Widget _horizontalCheckbox(BuildContext context) {
+    return TCheckboxGroup<String>(
+      value: _horizontalValue,
+      options: _options,
       direction: Axis.horizontal,
-      directionalTdCheckboxes: const [
-        TCheckbox(
-          id: '0',
-          title: '多选标题',
-          style: TCheckboxStyle.circle,
-          insetSpacing: 12,
-          showDivider: false,
-        ),
-        TCheckbox(
-          id: '1',
-          title: '多选标题',
-          style: TCheckboxStyle.circle,
-          insetSpacing: 12,
-          showDivider: false,
-        ),
-        TCheckbox(
-          id: '2',
-          title: '上限四字',
-          style: TCheckboxStyle.circle,
-          insetSpacing: 12,
-          showDivider: false,
-        ),
-      ],
+      columns: 2,
+      onChanged: (value) => setState(() => _horizontalValue = value),
     );
   }

@@ -1,18 +1,24 @@
-
-  Widget _titleLeftNavbar(BuildContext context) {
+Widget _titleLeftNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-          height: 48,
-          title: titleText,
-          titleFontWeight: FontWeight.w600,
-          centerTitle: false,
-          titleMargin: 0,
-          screenAdaptation: false,
-          useDefaultBack: true,
-          rightBarItems: [
-            TNavBarItem(icon: TIcons.home, iconSize: 24),
-            TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-          ]),
+        title: titleText,
+        titleFontWeight: FontWeight.w600,
+        centerTitle: false,
+        titleMargin: 0,
+        useDefaultBack: true,
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => _showAction(context, '首页'),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => _showAction(context, '更多'),
+          ),
+        ],
+      ),
     );
   }

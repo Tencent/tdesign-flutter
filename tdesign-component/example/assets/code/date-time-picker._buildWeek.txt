@@ -1,18 +1,17 @@
-
-  Widget _buildWeek(BuildContext context) {
+Widget _buildWeek(BuildContext context) {
     return TCell(
-      title: '年月日 + 星期',
-      note: _formatWeekResult(context, _weekSelected),
+      key: const Key('date-time-picker-week-trigger'),
+      title: const Text('年月日 + 星期'),
+      note: Text(_formatWeekResult(context, _weekSelected)),
       arrow: true,
-      onClick: (_) {
+      onTap: () {
         _showPickerPopup(
           context,
-          picker: TDateTimePicker(
-            mode: DateTimePickerMode(dateMode: DateMode.date),
-            showWeek: true,
-            initialValue: _weekSelected,
-            onChange: (result) => setState(() => _weekSelected = result),
-          ),
+          title: '选择日期',
+          mode: DateTimePickerMode(dateMode: DateMode.date),
+          showWeek: true,
+          value: _weekSelected,
+          onConfirm: (result) => setState(() => _weekSelected = result),
         );
       },
     );

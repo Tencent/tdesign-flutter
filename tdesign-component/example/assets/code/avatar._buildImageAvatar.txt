@@ -1,19 +1,17 @@
-
-  Widget _buildImageAvatar(BuildContext context) {
+/// 图片头像
+    Widget _buildImageAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.normal,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.normal,
-          shape: TAvatarShape.square,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          variant: TAvatarVariant.square,
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
       ],
     );

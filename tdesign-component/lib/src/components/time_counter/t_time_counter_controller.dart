@@ -44,7 +44,7 @@ class TTimeCounterController extends ValueNotifier<TTimeCounterStatus> {
   /// 重置
   void reset([int? time]) {
     if (value == TTimeCounterStatus.reset) {
-       _time = time;
+      _time = time;
       notifyListeners();
     } else {
       _time = time;

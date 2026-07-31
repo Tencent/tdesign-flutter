@@ -1,19 +1,12 @@
-
-
-
-
-
 import 'dart:convert';
 
 ///
 /// Map的一些扩展工具方法
 ///
 extension MapExt<K, V> on Map<K, V> {
-
-
   /// 获取整形值
   int getInt(String key, {int defaultValue = 0}) {
-    var r =  getNum(key, defaultValue: defaultValue);
+    var r = getNum(key, defaultValue: defaultValue);
     if (r is int) {
       return r;
     }
@@ -52,7 +45,7 @@ extension MapExt<K, V> on Map<K, V> {
   ///
   /// get bool value from map
   ///
-  /// 该方法兼容字符串'true'和'false'
+  /// 该方法支持字符串 'true' 和 'false'。
   ///
   bool getBool(String key, {bool defaultValue = false}) {
     final value = this[key];
@@ -69,14 +62,12 @@ extension MapExt<K, V> on Map<K, V> {
         }
       }
 
-      if ('true' == value){
+      if ('true' == value) {
         return true;
       }
       if ('false' == value) {
         return false;
       }
-
-
     } catch (e) {
       return defaultValue;
     }
@@ -147,7 +138,6 @@ extension MapExt<K, V> on Map<K, V> {
       }
     }
 
-
     return defaultValue;
   }
 
@@ -174,12 +164,11 @@ extension MapExt<K, V> on Map<K, V> {
       if (value is T) {
         r = value;
       }
-    } catch(e) {
+    } catch (e) {
       // ignore
     }
     return r;
   }
-
 
   ///
   /// 格式化map
@@ -187,14 +176,18 @@ extension MapExt<K, V> on Map<K, V> {
   /// -  divider 分割符
   /// -
   ///
-  String join2({String divider = ', ', String? prefix, String? suffix , String Function(K key, V? value)? convert}){
+  String join2(
+      {String divider = ', ',
+      String? prefix,
+      String? suffix,
+      String Function(K key, V? value)? convert}) {
     var sb = StringBuffer();
     if (prefix != null) {
       sb.write(prefix);
     }
 
     final keys = this.keys;
-    for (var i=0; i<keys.length; i++) {
+    for (var i = 0; i < keys.length; i++) {
       final key = keys.elementAt(i);
       final value = this[key];
       sb.write(convert != null ? convert(key, value) : value.toString());
@@ -210,8 +203,6 @@ extension MapExt<K, V> on Map<K, V> {
     return sb.toString();
   }
 
-
-
   ///
   /// 获取字典中满足条件的元素的个数
   ///
@@ -219,7 +210,7 @@ extension MapExt<K, V> on Map<K, V> {
     var count = 0;
     forEach((key, value) {
       if (test(key, value)) {
-        count ++;
+        count++;
       }
     });
     return count;

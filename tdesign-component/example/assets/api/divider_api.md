@@ -4,27 +4,29 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| alignment | TextAlignment | TextAlignment.center | 文字位置 |
-| color | Color? | - | 线条颜色 |
-| direction | Axis | Axis.horizontal | 方向，竖直虚线必须传 |
-| gapPadding | EdgeInsetsGeometry? | - | 线条和中间文本之间的填充 |
-| height | double | 0.5 | 高度，横向线条使用 |
-| hideLine | bool | false | 隐藏线条，使用纯文本分割 |
-| isDashed | bool | false | 是否为虚线 |
+| align | TDividerAlign? | - | 中间内容在线条中的位置，默认 `TDividerAlign.center` 仅 `TDividerLayout.horizontal` 生效 |
+| child | Widget? | - | 中间子元素 纯文案用 `child: Text('……')` |
+| dashed | bool? | - | 是否为虚线，默认 false 仅 `TDividerLayout.horizontal` 生效 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| margin | EdgeInsetsGeometry? | - | 外部填充 |
-| text | String? | - | 文本字符串，使用默认样式 |
-| textStyle | TextStyle? | - | 自定义文本样式 |
-| widget | Widget? | - | 中间控件，可自定义样式 |
-| width | double? | - | 宽度，需要竖向线条时使用 |
+| layout | TDividerLayout? | - | 横/竖分割线，默认 `TDividerLayout.horizontal` |
 
 
-### TextAlignment
+### TDividerLayout
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| left | - |
-| center | - |
-| right | - |
+| horizontal | 水平分割线 |
+| vertical | 垂直分割线 |
+
+
+### TDividerAlign
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| left | 内容靠左 |
+| center | 内容居中 |
+| right | 内容靠右 |

@@ -1,27 +1,25 @@
-
-  Widget _buildRichText(BuildContext context) {
+Widget _buildRichText(BuildContext context) {
     return TText.rich(
       TextSpan(children: [
         TTextSpan(
             text: 'TTextSpan1',
-            font: TTheme.of(context).fontTitleExtraLarge,
-            textColor: TTheme.of(context).warningNormalColor,
+            font: context.tTheme.fontTitleExtraLarge,
+            textColor: context.tTheme.warningNormalColor,
             isTextThrough: true,
-            lineThroughColor: TTheme.of(context).brandNormalColor,
-            style: TextStyle(color: TTheme.of(context).errorNormalColor)),
+            lineThroughColor: context.tTheme.brandNormalColor,
+            style: TextStyle(color: context.tTheme.errorNormalColor)),
         TextSpan(
             text: 'TextSpan2',
             style: TextStyle(
-                fontSize: 14, color: TTheme.of(context).brandNormalColor)),
+                fontSize: 14, color: context.tTheme.brandNormalColor)),
         const WidgetSpan(
             child: Icon(
           TIcons.setting,
           size: 24,
         )),
       ]),
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style:
-          TextStyle(color: TTheme.of(context).errorNormalColor, fontSize: 32),
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(color: context.tTheme.errorNormalColor, fontSize: 32),
     );
   }

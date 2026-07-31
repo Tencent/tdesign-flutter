@@ -1,4 +1,0 @@
-
-Widget _buildSimple(BuildContext context) {
-  return const _SimpleDemo();
-}

@@ -1,0 +1,4 @@
+Widget _buildBasic(BuildContext context) => TInput(
+        controller: controller,
+        hintText: '请输入文字',
+      );

@@ -1,0 +1,6 @@
+Widget _buildBase(BuildContext context) => _buildRow(context, [
+        TStepper(
+          value: _baseValue,
+          onChanged: (value) => setState(() => _baseValue = value),
+        ),
+      ]);

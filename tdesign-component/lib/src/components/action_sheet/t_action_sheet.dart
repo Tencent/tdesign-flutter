@@ -2,346 +2,272 @@ import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
 import '../popup/t_popup.dart';
-import 't_action_sheet.dart';
 import 't_action_sheet_grid.dart';
 import 't_action_sheet_group.dart';
+import 't_action_sheet_item.dart';
 import 't_action_sheet_list.dart';
+import 't_action_sheet_theme_data.dart';
+import 't_action_sheet_types.dart';
 
 export 't_action_sheet_item.dart';
+export 't_action_sheet_types.dart';
 
-typedef TActionSheetItemCallback = void Function(
-    TActionSheetItem item, int index);
+enum _TActionSheetLayout { list, grid, group }
 
-enum TActionSheetTheme { list, grid, group }
+/// 动作面板命令式入口
+final class TActionSheet {
+  const TActionSheet._();
 
-enum TActionSheetAlign { center, left, right }
-
-/// 动作面板
-class TActionSheet {
-  TActionSheet(
-    this.context, {
-    this.align = TActionSheetAlign.center,
-    this.cancelText,
-    this.count = 8,
-    this.rows = 2,
-    this.itemHeight = 96.0,
-    this.itemMinWidth = 80.0,
-    this.description,
-    required this.items,
-    this.showCancel = true,
-    this.showPagination = false,
-    this.scrollable = false,
-    this.theme = TActionSheetTheme.list,
-    this.visible = false,
-    this.onCancel,
-    this.onClose,
-    this.onSelected,
-    this.showOverlay = true,
-    this.closeOnOverlayClick = true,
-    this.useSafeArea = true,
-  }) {
-    if (visible) {
-      show();
-    }
-  }
-
-  /// 上下文
-  final BuildContext context;
-
-  /// 对齐方式
-  final TActionSheetAlign align;
-
-  /// 取消按钮的文本
-  final String? cancelText;
-
-  /// 每页显示的项目数
-  /// 当[theme]等于[TActionSheetTheme.grid]且[showPagination]为true时有效
-  final int count;
-
-  /// 显示的行数
-  /// 当[theme]等于[TActionSheetTheme.grid]时有效
-  final int rows;
-
-  /// 项目的行高
-  /// 当[theme]等于[TActionSheetTheme.grid]或[theme]等于[TActionSheetTheme.group]时有效
-  final double itemHeight;
-
-  /// 项目的最小宽度
-  /// 当[theme]等于[TActionSheetTheme.grid]且[scrollable]为true时有效
-  /// 或当[theme]等于[TActionSheetTheme.group]时有效
-  final double itemMinWidth;
-
-  /// 描述文本
-  /// 当[theme]等于[TActionSheetTheme.grid]或[theme]等于[TActionSheetTheme.list]时有效
-  final String? description;
-
-  /// ActionSheet的项目列表
-  final List<TActionSheetItem> items;
-
-  /// 是否显示取消按钮
-  final bool showCancel;
-
-  /// 是否显示遮罩层
-  final bool showOverlay;
-
-  /// 点击蒙层时是否关闭
-  final bool closeOnOverlayClick;
-
-  /// 主题样式
-  final TActionSheetTheme theme;
-
-  /// 是否立即显示
-  final bool visible;
-
-  /// 是否显示分页
-  /// 当[theme]等于[TActionSheetTheme.grid]时有效
-  final bool showPagination;
-
-  /// 是否可以横向滚动
-  /// 当[theme]等于[TActionSheetTheme.grid]且[showPagination]为false时有效
-  final bool scrollable;
-
-  /// 取消按钮的回调函数
-  final VoidCallback? onCancel;
-
-  /// 关闭时的回调函数
-  final VoidCallback? onClose;
-
-  /// 选择项目时的回调函数
-  final TActionSheetItemCallback? onSelected;
-
-  /// 使用安全区域
-  final bool useSafeArea;
-
-  static TPopupHandle? _actionSheetHandle;
-
-  /// 显示列表类型面板
-  static void showListActionSheet(
+  /// 显示列表动作面板
+  /// [context] 用于查找承载弹层的 Navigator。
+  /// [items] 列表中的动作项目。
+  /// [align] 项目文字对齐方式。
+  /// [cancelText] 取消按钮文字。
+  /// [subtitle] 面板副标题。
+  /// [showCancel] 是否显示取消按钮。
+  /// [showOverlay] 是否显示蒙层。
+  /// [closeOnOverlayClick] 点击蒙层是否关闭。
+  /// [useSafeArea] 是否避让系统安全区。
+  /// [onCancel] 点击取消时回调。
+  /// [onClosed] 面板关闭后回调。
+  /// [onChanged] 点击动作时回调。
+  static TPopupHandle showList(
     BuildContext context, {
     required List<TActionSheetItem> items,
-    TActionSheetAlign align = TActionSheetAlign.center,
+    TActionSheetAlign? align,
     String? cancelText,
+    String? subtitle,
     bool showCancel = true,
-    VoidCallback? onCancel,
-    TActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
-    VoidCallback? onClose,
     bool useSafeArea = true,
+    VoidCallback? onCancel,
+    VoidCallback? onClosed,
+    TActionSheetOnChanged? onChanged,
   }) {
-    _createRoute(
+    return _show(
       context,
-      theme: TActionSheetTheme.list,
+      layout: _TActionSheetLayout.list,
       items: items,
       align: align,
       cancelText: cancelText,
+      subtitle: subtitle,
       showCancel: showCancel,
-      onSelected: onSelected,
-      onCancel: onCancel,
       showOverlay: showOverlay,
       closeOnOverlayClick: closeOnOverlayClick,
-      onClose: onClose,
       useSafeArea: useSafeArea,
+      onCancel: onCancel,
+      onClosed: onClosed,
+      onChanged: onChanged,
     );
   }
 
-  /// 显示宫格类型面板
-  static void showGridActionSheet(
+  /// 显示宫格动作面板
+  /// [context] 用于查找承载弹层的 Navigator。
+  /// [items] 宫格中的动作项目。
+  /// [align] 项目对齐方式。
+  /// [cancelText] 取消按钮文字。
+  /// [subtitle] 面板副标题。
+  /// [showCancel] 是否显示取消按钮。
+  /// [showOverlay] 是否显示蒙层。
+  /// [closeOnOverlayClick] 点击蒙层是否关闭。
+  /// [useSafeArea] 是否避让系统安全区。
+  /// [showPagination] 是否显示分页指示器。
+  /// [scrollable] 是否允许滚动。
+  /// [count] 每页项目数。
+  /// [rows] 宫格行数。
+  /// [itemHeight] 项目高度。
+  /// [itemMinWidth] 项目最小宽度。
+  /// [onCancel] 点击取消时回调。
+  /// [onClosed] 面板关闭后回调。
+  /// [onChanged] 点击动作时回调。
+  static TPopupHandle showGrid(
     BuildContext context, {
     required List<TActionSheetItem> items,
-    TActionSheetAlign align = TActionSheetAlign.center,
+    TActionSheetAlign? align,
     String? cancelText,
+    String? subtitle,
     bool showCancel = true,
-    TActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
-    int count = 8,
-    int rows = 2,
-    double itemHeight = 96.0,
-    double itemMinWidth = 80.0,
-    bool scrollable = false,
-    bool showPagination = false,
-    VoidCallback? onCancel,
-    String? description,
-    VoidCallback? onClose,
     bool useSafeArea = true,
+    bool showPagination = false,
+    bool scrollable = false,
+    int? count,
+    int? rows,
+    double? itemHeight,
+    double? itemMinWidth,
+    VoidCallback? onCancel,
+    VoidCallback? onClosed,
+    TActionSheetOnChanged? onChanged,
   }) {
-    _createRoute(
+    return _show(
       context,
-      theme: TActionSheetTheme.grid,
+      layout: _TActionSheetLayout.grid,
       items: items,
       align: align,
       cancelText: cancelText,
+      subtitle: subtitle,
       showCancel: showCancel,
-      onSelected: onSelected,
-      onCancel: onCancel,
       showOverlay: showOverlay,
       closeOnOverlayClick: closeOnOverlayClick,
+      useSafeArea: useSafeArea,
+      showPagination: showPagination,
+      scrollable: scrollable,
       count: count,
       rows: rows,
       itemHeight: itemHeight,
       itemMinWidth: itemMinWidth,
-      scrollable: scrollable,
-      showPagination: showPagination,
-      description: description,
-      onClose: onClose,
-      useSafeArea: useSafeArea,
+      onCancel: onCancel,
+      onClosed: onClosed,
+      onChanged: onChanged,
     );
   }
 
-  /// 显示分组类型面板
-  static void showGroupActionSheet(
+  /// 显示分组动作面板
+  /// [context] 用于查找承载弹层的 Navigator。
+  /// [items] 分组中的动作项目。
+  /// [align] 项目对齐方式。
+  /// [cancelText] 取消按钮文字。
+  /// [showCancel] 是否显示取消按钮。
+  /// [showOverlay] 是否显示蒙层。
+  /// [closeOnOverlayClick] 点击蒙层是否关闭。
+  /// [useSafeArea] 是否避让系统安全区。
+  /// [itemHeight] 项目高度。
+  /// [itemMinWidth] 项目最小宽度。
+  /// [onCancel] 点击取消时回调。
+  /// [onClosed] 面板关闭后回调。
+  /// [onChanged] 点击动作时回调。
+  static TPopupHandle showGroup(
     BuildContext context, {
     required List<TActionSheetItem> items,
-    TActionSheetAlign align = TActionSheetAlign.left,
+    TActionSheetAlign? align,
     String? cancelText,
     bool showCancel = true,
-    TActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
-    double itemHeight = 96.0,
-    double itemMinWidth = 80.0,
-    VoidCallback? onCancel,
-    VoidCallback? onClose,
     bool useSafeArea = true,
+    double? itemHeight,
+    double? itemMinWidth,
+    VoidCallback? onCancel,
+    VoidCallback? onClosed,
+    TActionSheetOnChanged? onChanged,
   }) {
-    _createRoute(
+    return _show(
       context,
-      theme: TActionSheetTheme.group,
+      layout: _TActionSheetLayout.group,
       items: items,
       align: align,
       cancelText: cancelText,
       showCancel: showCancel,
-      onSelected: onSelected,
-      onCancel: onCancel,
       showOverlay: showOverlay,
       closeOnOverlayClick: closeOnOverlayClick,
+      useSafeArea: useSafeArea,
       itemHeight: itemHeight,
       itemMinWidth: itemMinWidth,
-      onClose: onClose,
-      useSafeArea: useSafeArea,
+      onCancel: onCancel,
+      onClosed: onClosed,
+      onChanged: onChanged,
     );
   }
 
-  /// 显示动作面板
-  void show() {
-    TActionSheet._createRoute(
-      context,
-      theme: theme,
-      items: items,
-      align: align,
-      cancelText: cancelText,
-      showCancel: showCancel,
-      onSelected: onSelected,
-      onCancel: onCancel,
-      showOverlay: showOverlay,
-      closeOnOverlayClick: closeOnOverlayClick,
-      count: count,
-      rows: rows,
-      itemHeight: itemHeight,
-      itemMinWidth: itemMinWidth,
-      scrollable: scrollable,
-      showPagination: showPagination,
-      description: description,
-      onClose: onClose,
-      useSafeArea: useSafeArea,
-    );
-  }
-
-  void open() {
-    show();
-  }
-
-  @mustCallSuper
-  void close() {
-    _actionSheetHandle?.close();
-  }
-
-  /// 创建路由
-  static void _createRoute(
+  static TPopupHandle _show(
     BuildContext context, {
-    required TActionSheetTheme theme,
+    required _TActionSheetLayout layout,
     required List<TActionSheetItem> items,
-    TActionSheetAlign align = TActionSheetAlign.center,
+    TActionSheetAlign? align,
     String? cancelText,
+    String? subtitle,
     bool showCancel = true,
-    TActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
-    int count = 8,
-    int rows = 2,
-    double itemHeight = 96.0,
-    double itemMinWidth = 80.0,
-    bool scrollable = false,
+    bool useSafeArea = true,
     bool showPagination = false,
+    bool scrollable = false,
+    int? count,
+    int? rows,
+    double? itemHeight,
+    double? itemMinWidth,
     VoidCallback? onCancel,
-    String? description,
-    VoidCallback? onClose,
-    bool useSafeArea = true,
+    VoidCallback? onClosed,
+    TActionSheetOnChanged? onChanged,
   }) {
-    if (_actionSheetHandle?.isShowing == true) {
-      return;
-    }
+    final theme = Theme.of(context).extension<TActionSheetThemeData>();
+    final effectiveAlign =
+        align ?? theme?.defaultAlign ?? TActionSheetAlign.center;
+    final effectiveCancelText = cancelText ?? context.resource.cancel;
+    final effectiveCount = count ?? theme?.count ?? 8;
+    final effectiveRows = rows ?? theme?.rows ?? 2;
+    final effectiveItemHeight = itemHeight ?? theme?.itemHeight ?? 96;
+    final effectiveItemMinWidth = itemMinWidth ?? theme?.itemMinWidth ?? 80;
+    final popupHeight = layout == _TActionSheetLayout.grid
+        ? TActionSheetGrid.preferredPopupHeight(
+            context,
+            subtitle: subtitle,
+            rows: effectiveRows,
+            itemHeight: effectiveItemHeight,
+            showPagination: showPagination,
+            showCancel: showCancel,
+          )
+        : null;
 
-    cancelText = cancelText ?? context.resource.cancel;
-
-    Widget sheetChild;
-    switch (theme) {
-      case TActionSheetTheme.list:
-        sheetChild = TActionSheetList(
+    final child = switch (layout) {
+      _TActionSheetLayout.list => TActionSheetList(
           items: items,
-          align: align,
-          cancelText: cancelText,
-          description: description,
+          align: effectiveAlign,
+          cancelText: effectiveCancelText,
+          subtitle: subtitle,
           showCancel: showCancel,
           onCancel: onCancel,
-          onSelected: onSelected,
-          useSafeArea: useSafeArea,
-        );
-        break;
-      case TActionSheetTheme.grid:
-        sheetChild = TActionSheetGrid(
+          onChanged: onChanged,
+          // 命令式入口由 Popup 统一避让安全区，避免 List 重复添加底部内边距。
+          useSafeArea: false,
+        ),
+      _TActionSheetLayout.grid => TActionSheetGrid(
           items: items,
-          align: align,
-          onSelected: onSelected,
+          align: effectiveAlign,
+          cancelText: effectiveCancelText,
+          subtitle: subtitle,
           showCancel: showCancel,
           showPagination: showPagination,
           scrollable: scrollable,
-          cancelText: cancelText,
-          description: description,
-          count: count,
-          rows: rows,
+          count: effectiveCount,
+          rows: effectiveRows,
+          itemHeight: effectiveItemHeight,
+          itemMinWidth: effectiveItemMinWidth,
           onCancel: onCancel,
-          itemHeight: itemHeight,
-          itemMinWidth: itemMinWidth,
-          useSafeArea: useSafeArea,
-        );
-        break;
-      case TActionSheetTheme.group:
-        sheetChild = TActionSheetGroup(
+          onChanged: onChanged,
+          // 命令式入口由 Popup 统一避让安全区，避免 Grid 重复添加底部内边距。
+          useSafeArea: false,
+        ),
+      _TActionSheetLayout.group => TActionSheetGroup(
           items: items,
-          align: align,
-          cancelText: cancelText,
+          align: effectiveAlign,
+          cancelText: effectiveCancelText,
           showCancel: showCancel,
+          itemHeight: effectiveItemHeight,
+          itemMinWidth: effectiveItemMinWidth,
           onCancel: onCancel,
-          onSelected: onSelected,
-          itemHeight: itemHeight,
-          itemMinWidth: itemMinWidth,
-          useSafeArea: useSafeArea,
-        );
-        break;
-    }
+          onChanged: onChanged,
+          // 命令式入口由 Popup 统一避让安全区，避免 Group 重复添加底部内边距。
+          useSafeArea: false,
+        ),
+    };
 
-    _actionSheetHandle = TPopup.show(
+    return TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height: popupHeight,
+        headerBuilder: null,
         cancelBuilder: null,
         confirmBuilder: null,
         showOverlay: showOverlay,
         closeOnOverlayClick: showOverlay && closeOnOverlayClick,
-        overlayColor: showOverlay ? null : Colors.transparent,
-        onClosed: onClose,
-        child: sheetChild,
+        overlayColor: showOverlay ? theme?.barrierColor : Colors.transparent,
+        radius: theme?.panelRadius,
+        useSafeArea: useSafeArea,
+        onClosed: onClosed,
+        child: child,
       ),
     );
   }

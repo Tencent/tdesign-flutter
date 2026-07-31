@@ -1,0 +1,13 @@
+Widget _buildRectangleShapeButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.rectangle,
+      TButton(
+        child: const Text('矩形'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }

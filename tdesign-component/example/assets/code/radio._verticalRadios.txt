@@ -1,24 +1,8 @@
-
-  Widget _verticalRadios(BuildContext context) {
-    return TCell(
-      title: '单选标题',
-      hover: false,
-      required: true,
-      descriptionWidget: TRadioGroup(
-        selectId: '0',
-        direction: Axis.horizontal,
-        directionalTdRadios: const [
-          TRadio(
-            id: '0',
-            title: '单选标题0',
-            showDivider: false,
-          ),
-          TRadio(
-            id: '1',
-            title: '单选标题1',
-            showDivider: false,
-          ),
-        ],
-      ),
+Widget _verticalRadios(BuildContext context) {
+    return TRadioGroup<String>(
+      value: _verticalValue,
+      options: _options,
+      onChanged: (value) => setState(() => _verticalValue = value),
+      showDivider: true,
     );
   }

@@ -1,95 +1,65 @@
 ## API
 ### TInput
+
+#### 工厂构造方法
+
+##### TInput.multiline
+
+创建多行输入框。
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| controller | TextEditingController? | - | 文本控制器。 |
+| initialValue | String? | - | 内部控制器的初始文本，仅初始化一次。 |
+| onChanged | ValueChanged<String>? | - | 文本变化通知。 |
+| onSubmitted | ValueChanged<String>? | - | 提交回调。 |
+| onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
+| enabled | bool | true | 是否可交互。 |
+| readOnly | bool | false | 是否只读。 |
+| label | String? | - | 标签文案。 |
+| hintText | String? | - | 占位提示文案。 |
+| prefix | Widget? | - | 前缀组件。 |
+| suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
+| maxLines | int? | - | 最大行数；null 表示不限制。 |
+| minLines | int? | - | 最小行数；未传时读取 Theme 默认值。 |
+| maxLength | int? | - | 最大字符数。 |
+| autofocus | bool | false | 是否自动聚焦。 |
+| focusNode | FocusNode? | - | 焦点节点。 |
+| inputType | TextInputType | TextInputType.multiline | 键盘类型。 |
+| inputAction | TextInputAction? | - | 键盘动作。 |
+| textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
+| inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
+| decoration | InputDecoration? | - | Material 输入装饰逃逸口。 |
+| style | TextStyle? | - | 输入文本样式。 |
+| cursorColor | Color? | - | 光标颜色。 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| additionInfo | String? | '' | 错误提示信息 |
-| additionInfoColor | Color? | - | 错误提示颜色 |
-| autofocus | bool | false | 是否自动获取焦点 |
-| backgroundColor | Color? | - | 输入框背景色 |
-| cardStyle | TCardStyle? | - | 卡片默认样式 |
-| cardStyleBottomText | String? | - | 卡片模式下方文字 |
-| cardStyleTopText | String? | - | 卡片模式上方文字 |
-| clearBtnColor | Color? | - | 右侧删除按钮颜色 |
-| clearIconSize | double? | - | 清除按钮图标大小 |
-| contentAlignment | TextAlign | TextAlign.start | 内容对齐方向 |
-| contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
-| contextMenuBuilder | EditableTextContextMenuBuilder? | - | 自定义上下文菜单构建器 |
-| controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
-| cursorColor | Color? | - | 游标颜色 |
-| decoration | Decoration? | - | 输入框样式 |
-| enableInteractiveSelection | bool? | - | 是否启用交互式选择 |
-| focusNode | FocusNode? | - | 获取或者取消焦点使用 |
-| hintText | String? | - | 提示文案 |
-| hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
-| inputAction | TextInputAction? | - | 键盘动作类型 |
-| inputDecoration | InputDecoration? | - | 自定义输入框样式，默认圆角 |
-| inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
-| inputType | TextInputType? | - | 键盘类型，数字、字母 |
+| autofocus | bool | false | 是否自动聚焦。 |
+| controller | TextEditingController? | - | 文本控制器。 |
+| cursorColor | Color? | - | 光标颜色。 |
+| decoration | InputDecoration? | - | Material 输入装饰逃逸口。 |
+| enabled | bool | true | 是否可交互。 |
+| focusNode | FocusNode? | - | 焦点节点。 |
+| hintText | String? | - | 占位提示文案。 |
+| initialValue | String? | - | 内部控制器的初始文本，仅初始化一次。 |
+| inputAction | TextInputAction? | - | 键盘动作。 |
+| inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
+| inputType | TextInputType | TextInputType.text | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| labelWidget | Widget? | - | leftLabel右侧组件，支持自定义 |
-| leftContentSpace | double? | - | 输入框内容左侧间距 |
-| leftIcon | Widget? | - | 带图标的输入框 |
-| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
-| leftLabel | String? | - | 输入框左侧文案 |
-| leftLabelSpace | double? | - | 输入框左侧文案间距 |
-| leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
-| maxLength | int? | 500 | 最大字数限制 |
-| maxLines | int? | 1 | 最大输入行数 |
-| needClear | bool | true | 是否需要右侧按钮变为删除 |
-| obscureText | bool | false | 是否隐藏输入的文字，一般用在密码输入框中 |
-| onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |
-| onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
-| onClearTap | GestureTapCallback? | - | 右侧删除点击 |
-| onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
-| onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
-| onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
-| readOnly | bool | false | 是否只读 |
-| required | bool? | - | 是否必填标志（红色*） |
-| rightBtn | Widget? | - | 右侧按钮 |
-| rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
-| selectionControls | TextSelectionControls? | - | 自定义选择控制器 |
-| showBottomDivider | bool | true | 是否展示底部分割线 |
-| size | TInputSize | TInputSize.large | 输入框规格 |
-| spacer | TInputSpacer? | - | 组件各模块间间距 |
-| textAlign | TextAlign? | - | 文字对齐方向 |
-| textInputBackgroundColor | Color? | - | 文本框背景色 |
-| textStyle | TextStyle? | - | 文本颜色 |
-| type | TInputType | TInputType.normal | 输入框类型 |
-| width | double? | - | 输入框宽度(TCardStyle时必须设置该参数) |
-
-
-### TInputType
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| normal | - |
-| twoLine | - |
-| longText | - |
-| special | - |
-| normalMaxTwoLine | - |
-| cardStyle | - |
-
-
-### TInputSize
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| small | - |
-| large | - |
-
-
-### TCardStyle
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| topText | - |
-| topTextWithBlueBorder | - |
-| errorStyle | - |
+| label | String? | - | 标签文案。 |
+| maxLength | int? | - | 最大字符数。 |
+| maxLines | int? | 1 | 最大行数。 |
+| minLines | int? | - | 最小行数。 |
+| obscureText | bool | false | 是否隐藏输入文本。 |
+| onChanged | ValueChanged<String>? | - | 文本变化通知。 |
+| onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
+| onSubmitted | ValueChanged<String>? | - | 提交回调。 |
+| prefix | Widget? | - | 前缀组件。 |
+| readOnly | bool | false | 是否只读。 |
+| style | TextStyle? | - | 输入文本样式。 |
+| suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
+| textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |

@@ -1,0 +1,58 @@
+Widget _buildCustomContentCell(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return TSwipeCell(
+      groupTag: 'custom-content',
+      closeWhenOpened: true,
+      start: TSwipeCellPanel(
+        extentRatio: 76 / screenWidth,
+        children: [
+          TSwipeCellAction(
+            backgroundColor: context.tTheme.brandNormalColor,
+            icon: TIcons.check,
+            label: '完成',
+            onPressed: (_) {},
+          ),
+        ],
+      ),
+      end: TSwipeCellPanel(
+        extentRatio: 152 / screenWidth,
+        children: [
+          TSwipeCellAction(
+            backgroundColor: context.tTheme.warningNormalColor,
+            label: '编辑',
+            onPressed: (_) {},
+          ),
+          TSwipeCellAction(
+            backgroundColor: context.tTheme.errorNormalColor,
+            label: '删除',
+            onPressed: (_) {},
+          ),
+        ],
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: Border.all(color: Theme.of(context).dividerColor),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Row(
+          children: [
+            CircleAvatar(child: Icon(Icons.description_outlined)),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('自定义任务卡片'),
+                  SizedBox(height: 4),
+                  Text('这是任意 Widget 内容，不依赖 TCell。'),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right),
+          ],
+        ),
+      ),
+    );
+  }

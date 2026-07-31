@@ -1,5 +1,5 @@
-
-  Widget _buildHReadOnlySteps(BuildContext context) {
+/// Read-only Steps 纯展示水平步骤条
+    Widget _buildHReadOnlySteps(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(title: 'Finish', content: 'content'),

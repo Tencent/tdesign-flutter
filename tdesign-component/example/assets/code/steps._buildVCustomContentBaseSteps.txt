@@ -1,5 +1,5 @@
-
-  Widget _buildVCustomContentBaseSteps(BuildContext context) {
+/// 垂直自定义内容基本步骤条
+    Widget _buildVCustomContentBaseSteps(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(title: 'Finish', content: 'Customize content'),
@@ -9,8 +9,8 @@
           customContent: Container(
             margin: const EdgeInsets.only(bottom: 16, top: 4),
             child: const TImage(
-              assetUrl: 'assets/img/image.png',
-              type: TImageType.roundedSquare,
+              src: 'assets/img/image.png',
+              variant: TImageVariant.roundedSquare,
             ),
           ),
         ),
@@ -19,6 +19,6 @@
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
     );
   }

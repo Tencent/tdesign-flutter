@@ -1,462 +1,164 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../theme/basic.dart';
-import '../../theme/t_colors.dart';
-import '../../theme/t_font_family.dart';
-import '../../theme/t_fonts.dart';
-import '../../theme/t_radius.dart';
-import '../../theme/t_spacers.dart';
-import '../../theme/t_theme.dart';
-import '../input/input_view.dart';
 import '../input/t_input.dart';
-import '../text/t_text.dart';
 
-enum TTextareaLayout { vertical, horizontal }
+/// [TInput.multiline] 的语义别名。
+class TTextarea extends StatelessWidget {
+  const TTextarea({
+    super.key,
 
-/// 用于多行文本信息输入
-class TTextarea extends StatefulWidget {
-  const TTextarea(
-      {Key? key,
-      this.width,
-      this.textStyle,
-      this.backgroundColor,
-      this.decoration,
-      this.labelStyle,
-      this.required,
-      this.readOnly = false,
-      this.autofocus = false,
-      this.onEditingComplete,
-      this.onSubmitted,
-      this.hintText,
-      this.inputType,
-      this.onChanged,
-      this.inputFormatters,
-      this.inputDecoration,
-      this.maxLines,
-      this.minLines = 4,
-      this.focusNode,
-      this.controller,
-      this.cursorColor,
-      this.hintTextStyle,
-      this.labelWidget,
-      this.textInputBackgroundColor,
-      this.size = TInputSize.large,
-      this.maxLength,
-      this.maxLengthEnforcement,
-      this.allowInputOverMax = false,
-      this.additionInfo = '',
-      this.additionInfoColor,
-      this.textAlign,
-      this.label,
-      this.indicator = false,
-      this.layout = TTextareaLayout.horizontal,
-      this.autosize,
-      this.labelIcon,
-      this.labelWidth,
-      this.margin,
-      this.padding,
-      this.textareaDecoration,
-      this.bordered,
-      this.showBottomDivider = true})
-      : super(key: key);
+    /// 文本控制器。
+    this.controller,
 
-  /// 输入框宽度
-  final double? width;
+    /// 内部控制器的初始文本，仅初始化一次。
+    this.initialValue,
 
-  /// 输入框背景色
-  final Color? backgroundColor;
+    /// 文本变化通知。
+    this.onChanged,
 
-  /// 输入框样式(包括标签)
-  final Decoration? decoration;
+    /// 提交回调。
+    this.onSubmitted,
 
-  /// 输入框样式(不包括标签)
-  final Decoration? textareaDecoration;
+    /// 编辑完成回调。
+    this.onEditingComplete,
 
-  /// 输入框标题
-  final String? label;
+    /// 是否可交互。
+    this.enabled = true,
 
-  /// 输入框标题图标
-  final Widget? labelIcon;
+    /// 是否只读。
+    this.readOnly = false,
 
-  /// 输入框标题宽度
-  final double? labelWidth;
+    /// 标签文案。
+    this.label,
 
-  /// label组件，支持自定义
-  final Widget? labelWidget;
+    /// 占位提示文案。
+    this.hintText,
 
-  /// 是否必填标志（红色*）
-  final bool? required;
+    /// 前缀组件。
+    this.prefix,
 
-  /// 是否只读
-  final bool? readOnly;
+    /// 后缀组件。
+    this.suffix,
 
-  /// 提示文案
-  final String? hintText;
+    /// 最大行数；null 表示不限制。
+    this.maxLines,
 
-  /// 键盘类型，数字、字母
-  final TextInputType? inputType;
+    /// 最小行数；未传时读取 Theme 默认值。
+    this.minLines,
 
-  /// 输入文本变化时回调
-  final ValueChanged<String>? onChanged;
+    /// 最大字符数。
+    this.maxLength,
 
-  /// 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6))
-  final List<TextInputFormatter>? inputFormatters;
+    /// 是否自动聚焦。
+    this.autofocus = false,
 
-  /// controller 用户获取或者赋值输入内容
+    /// 焦点节点。
+    this.focusNode,
+
+    /// 键盘类型。
+    this.inputType = TextInputType.multiline,
+
+    /// 键盘动作。
+    this.inputAction,
+
+    /// 文本对齐方式。
+    this.textAlign = TextAlign.start,
+
+    /// 输入格式化器。
+    this.inputFormatters,
+
+    /// Material 输入装饰逃逸口。
+    this.decoration,
+  }) : assert(controller == null || initialValue == null);
+
+  /// 文本控制器。
   final TextEditingController? controller;
 
-  /// 最大输入行数
-  final int? maxLines;
+  /// 内部控制器的初始文本，仅初始化一次。
+  final String? initialValue;
 
-  /// 最小输入行数
-  final int? minLines;
+  /// 文本变化通知。
+  final ValueChanged<String>? onChanged;
 
-  /// 获取或者取消焦点使用
-  final FocusNode? focusNode;
-
-  /// 是否自动获取焦点
-  final bool? autofocus;
-
-  /// 点击键盘完成按钮时触发的回调
-  final VoidCallback? onEditingComplete;
-
-  /// 点击键盘完成按钮时触发的回调, 参数值为输入的内容
+  /// 提交回调。
   final ValueChanged<String>? onSubmitted;
 
-  /// 自定义输入框TextField组件样式
-  final InputDecoration? inputDecoration;
+  /// 编辑完成回调。
+  final VoidCallback? onEditingComplete;
 
-  /// 文本颜色
-  final TextStyle? textStyle;
+  /// 是否可交互。
+  final bool enabled;
 
-  /// 提示文本颜色，默认为文本颜色
-  final TextStyle? hintTextStyle;
+  /// 是否只读。
+  final bool readOnly;
 
-  /// 文本框背景色
-  final Color? textInputBackgroundColor;
+  /// 标签文案。
+  final String? label;
 
-  /// 游标颜色
-  final Color? cursorColor;
+  /// 占位提示文案。
+  final String? hintText;
 
-  /// 输入框规格
-  final TInputSize? size;
+  /// 前缀组件。
+  final Widget? prefix;
 
-  /// 最大字数限制
+  /// 后缀组件。
+  final Widget? suffix;
+
+  /// 最大行数；null 表示不限制。
+  final int? maxLines;
+
+  /// 最小行数；未传时读取 Theme 默认值。
+  final int? minLines;
+
+  /// 最大字符数。
   final int? maxLength;
 
-  /// 如何执行输入长度限制
-  final MaxLengthEnforcement? maxLengthEnforcement;
+  /// 是否自动聚焦。
+  final bool autofocus;
 
-  /// 超出[maxLength]之后是否还允许输入
-  final bool? allowInputOverMax;
+  /// 焦点节点。
+  final FocusNode? focusNode;
 
-  /// 错误提示信息
-  final String? additionInfo;
+  /// 键盘类型。
+  final TextInputType inputType;
 
-  /// 错误提示颜色
-  final Color? additionInfoColor;
+  /// 键盘动作。
+  final TextInputAction? inputAction;
 
-  /// 文字对齐方向
-  final TextAlign? textAlign;
+  /// 文本对齐方式。
+  final TextAlign textAlign;
 
-  /// 左侧标签文本样式
-  final TextStyle? labelStyle;
+  /// 输入格式化器。
+  final List<TextInputFormatter>? inputFormatters;
 
-  /// 否显示文本计数器，如 0/140（必须设置maxLength）
-  final bool? indicator;
-
-  /// 标题输入框布局方式。可选项：vertical/horizontal
-  final TTextareaLayout? layout;
-
-  /// 是否自动增高，值为 true 时，[maxLines]不生效
-  final bool? autosize;
-
-  /// 外边距
-  final EdgeInsetsGeometry? margin;
-
-  /// 内边距
-  final EdgeInsetsGeometry? padding;
-
-  /// 是否显示外边框
-  final bool? bordered;
-
-  /// 边框外部下划线
-  final bool? showBottomDivider;
-
-  @override
-  _TTextareaState createState() => _TTextareaState();
-}
-
-class _TTextareaState extends State<TTextarea> {
-  final _hasFocus = ValueNotifier<bool>(false);
-  late FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = widget.focusNode ?? FocusNode();
-    _focusNode.addListener(_focusListener);
-  }
-
-  @override
-  void dispose() {
-    _focusNode.removeListener(_focusListener);
-    if (widget.focusNode == null) {
-      _focusNode.dispose();
-    }
-    super.dispose();
-  }
-
-  void _focusListener() {
-    _hasFocus.value = _focusNode.hasFocus;
-  }
+  /// Material 输入装饰逃逸口。
+  final InputDecoration? decoration;
 
   @override
   Widget build(BuildContext context) {
-    var padding = _getInputPadding(context);
-    var textareaView = _getTextareaView(
-        context, _getInputView(context), _getIndicatorView(context));
-    var container =
-        _getContainer(context, _getLabelView(context), textareaView);
-    if (widget.bordered == true || widget.decoration != null) {
-      return container;
-    }
-    return Stack(
-      children: [
-        container,
-        if (widget.showBottomDivider != null &&
-            widget!.showBottomDivider == true)
-          Positioned(
-              bottom: 0,
-              left: padding,
-              right: 0,
-              child: Divider(
-                height: 0.5,
-                color: TTheme.of(context).componentStrokeColor,
-              )),
-      ],
+    return TInput.multiline(
+      controller: controller,
+      initialValue: initialValue,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      onEditingComplete: onEditingComplete,
+      enabled: enabled,
+      readOnly: readOnly,
+      label: label,
+      hintText: hintText,
+      prefix: prefix,
+      suffix: suffix,
+      maxLines: maxLines,
+      minLines: minLines,
+      maxLength: maxLength,
+      autofocus: autofocus,
+      focusNode: focusNode,
+      inputType: inputType,
+      inputAction: inputAction,
+      textAlign: textAlign,
+      inputFormatters: inputFormatters,
+      decoration: decoration,
     );
-  }
-
-  Widget _getLabelView(BuildContext context) {
-    var padding = _getInputPadding(context);
-    var isHorizontal = widget.layout == TTextareaLayout.horizontal;
-    var fontSize = isHorizontal
-        ? TTheme.of(context).fontBodyLarge?.size
-        : TTheme.of(context).fontBodyMedium?.size;
-    if ((widget.label == null || widget.label == '') &&
-        widget.labelIcon == null &&
-        widget.labelWidget == null) {
-      return const SizedBox.shrink();
-    }
-    return Container(
-      width: widget.labelWidth,
-      padding: isHorizontal
-          ? EdgeInsets.only(right: padding)
-          : EdgeInsets.only(bottom: TTheme.of(context).spacer8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          widget.labelIcon ?? const SizedBox.shrink(),
-          widget.label != null && widget.label != ''
-              ? Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: widget.labelIcon != null
-                            ? TTheme.of(context).spacer4
-                            : 0),
-                    child: TText(
-                      widget.label!,
-                      maxLines: isHorizontal ? 2 : 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: widget.labelStyle ?? TextStyle(fontSize: fontSize),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
-          widget.labelWidget ?? const SizedBox.shrink(),
-          widget.required == true
-              ? Padding(
-                  padding: EdgeInsets.only(left: TTheme.of(context).spacer4),
-                  child: TText(
-                    '*',
-                    style: TextStyle(
-                        color: TTheme.of(context).errorColor6,
-                        fontSize: fontSize,
-                        height: 1.3),
-                  ),
-                )
-              : const SizedBox.shrink(),
-        ],
-      ),
-    );
-  }
-
-  Widget _getInputView(BuildContext context) {
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 24), // 设置最小高度为24
-        child: TInputView(
-          textStyle: widget.textStyle ??
-              TextStyle(color: TTheme.of(context).textColorPrimary),
-          readOnly: widget.readOnly ?? false,
-          autofocus: widget.autofocus ?? false,
-          onEditingComplete: widget.onEditingComplete,
-          onSubmitted: widget.onSubmitted,
-          hintText: widget.hintText,
-          inputType: widget.inputType,
-          textAlign: widget.textAlign,
-          onChanged: (val) {
-            setState(() {});
-            if (widget.onChanged != null) {
-              widget.onChanged!(val);
-            }
-          },
-          inputFormatters: [
-            ...(widget.inputFormatters ?? []),
-            ...(widget.maxLength != null && !(widget.allowInputOverMax ?? false)
-                ? [
-                    LengthLimitingTextInputFormatter(
-                      widget.maxLength,
-                      maxLengthEnforcement: widget.maxLengthEnforcement,
-                    )
-                  ]
-                : [])
-          ],
-          inputDecoration: widget.inputDecoration,
-          minLines: widget.minLines,
-          maxLines: widget.autosize == true ? null : widget.maxLines,
-          focusNode: _focusNode,
-          isCollapsed: true,
-          hintTextStyle: widget.hintTextStyle ??
-              TextStyle(
-                  color: widget.readOnly == true
-                      ? TTheme.of(context).textDisabledColor
-                      : TTheme.of(context).textColorPlaceholder),
-          cursorColor: widget.cursorColor,
-          textInputBackgroundColor: widget.textInputBackgroundColor,
-          controller: widget.controller,
-          contentPadding: EdgeInsets.zero,
-        ),
-      ),
-    );
-  }
-
-  Widget _getIndicatorView(BuildContext context) {
-    var padding = _getInputPadding(context);
-    var showAdditionInfo =
-        widget.additionInfo != '' && widget.additionInfo != null;
-    var showIndicator = widget.indicator == true && widget.maxLength != null;
-    var widgetList = <Widget>[];
-    if (showAdditionInfo) {
-      widgetList.add(
-        Expanded(
-          child: ValueListenableBuilder(
-            valueListenable: _hasFocus,
-            builder: (context, value, child) {
-              return Opacity(
-                opacity: value ? 0 : 1,
-                child: TText(
-                  widget.additionInfo!,
-                  style: TextStyle(
-                    fontSize: TTheme.of(context).fontBodySmall?.size,
-                    color: widget.additionInfoColor ??
-                        TTheme.of(context).textColorPlaceholder,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      );
-    }
-    if (showAdditionInfo && showIndicator) {
-      widgetList.add(SizedBox(width: padding));
-    }
-    if (showIndicator) {
-      widgetList.add(TText(
-        '${widget.controller?.text.length ?? 0}/${widget.maxLength}',
-        style: TextStyle(
-            fontSize: TTheme.of(context).fontBodySmall?.size,
-            color: TTheme.of(context).textColorPlaceholder),
-      ));
-    }
-    return Visibility(
-      visible: showIndicator || showAdditionInfo,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: widgetList,
-      ),
-    );
-  }
-
-  Widget _getTextareaView(
-      BuildContext context, Widget inputView, Widget indicatorView) {
-    var padding = _getInputPadding(context);
-    return Container(
-      decoration: widget.textareaDecoration ??
-          (widget.bordered == true
-              ? BoxDecoration(
-                  color: widget.decoration != null
-                      ? null
-                      : (widget.backgroundColor ??
-                          TTheme.of(context).bgColorContainer),
-                  borderRadius:
-                      BorderRadius.circular(TTheme.of(context).radiusDefault),
-                  border: Border.all(
-                      color: TTheme.of(context).componentBorderColor),
-                )
-              : null),
-      padding: widget.bordered == true ? EdgeInsets.all(padding) : null,
-      child: Column(
-        children: [
-          inputView,
-          indicatorView,
-        ],
-      ),
-    );
-  }
-
-  Widget _getContainer(
-      BuildContext context, Widget labelView, Widget textareaView) {
-    var padding = _getInputPadding(context);
-    var isHorizontal = widget.layout == TTextareaLayout.horizontal;
-    return Container(
-      width: widget.width,
-      decoration: widget.decoration,
-      padding: widget.padding ?? EdgeInsets.all(padding),
-      margin: widget.margin,
-      child: isHorizontal
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                labelView,
-                Expanded(
-                  child: textareaView,
-                ),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                labelView,
-                textareaView,
-              ],
-            ),
-    );
-  }
-
-  /// 获取输入框规格
-  double _getInputPadding(BuildContext context) {
-    switch (widget.size) {
-      case TInputSize.small:
-        return TTheme.of(context).spacer12;
-      case TInputSize.large:
-        return TTheme.of(context).spacer16;
-      default:
-        return TTheme.of(context).spacer16;
-    }
   }
 }

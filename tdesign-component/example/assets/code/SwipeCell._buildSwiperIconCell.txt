@@ -1,72 +1,84 @@
-
-  Widget _buildSwiperIconCell(BuildContext context) {
-    // 屏幕宽度
+Widget _buildSwiperIconCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
-      // spacing: 16,
       children: [
-        TSwipeCell(
-          groupTag: 'test',
-          right: TSwipeCellPanel(
-            extentRatio: 160 / screenWidth,
-            children: [
-              TSwipeCellAction(
-                backgroundColor: TTheme.of(context).warningNormalColor,
-                icon: TIcons.edit,
-                label: '编辑',
-              ),
-              TSwipeCellAction(
-                backgroundColor: TTheme.of(context).errorNormalColor,
-                icon: TIcons.delete,
-                label: '删除',
-              ),
-            ],
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSwipeCellThemeData(),
           ),
-          cell: const TCell(title: '左滑操作', note: '图标+文字（横向）'),
+          child: TSwipeCell(
+            end: TSwipeCellPanel(
+              extentRatio: 160 / screenWidth,
+              children: [
+                TSwipeCellAction(
+                  backgroundColor: context.tTheme.warningNormalColor,
+                  icon: TIcons.edit,
+                  label: '编辑',
+                ),
+                TSwipeCellAction(
+                  backgroundColor: context.tTheme.errorNormalColor,
+                  icon: TIcons.delete,
+                  label: '删除',
+                ),
+              ],
+            ),
+            child: const TCell(title: Text('左滑操作'), note: Text('图标+文字（横向）')),
+          ),
         ),
         const SizedBox(height: 16),
-        TSwipeCell(
-          groupTag: 'test',
-          right: TSwipeCellPanel(
-            extentRatio: 120 / screenWidth,
-            children: [
-              TSwipeCellAction(
-                backgroundColor: TTheme.of(context).warningNormalColor,
-                icon: TIcons.edit,
-              ),
-              TSwipeCellAction(
-                backgroundColor: TTheme.of(context).errorNormalColor,
-                icon: TIcons.delete,
-              ),
-            ],
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSwipeCellThemeData(),
           ),
-          cell: const TCell(title: '左滑操作', note: '仅图标'),
+          child: TSwipeCell(
+            end: TSwipeCellPanel(
+              extentRatio: 120 / screenWidth,
+              children: [
+                TSwipeCellAction(
+                  backgroundColor: context.tTheme.warningNormalColor,
+                  icon: TIcons.edit,
+                ),
+                TSwipeCellAction(
+                  backgroundColor: context.tTheme.errorNormalColor,
+                  icon: TIcons.delete,
+                ),
+              ],
+            ),
+            child: const TCell(title: Text('左滑操作'), note: Text('仅图标')),
+          ),
         ),
         const SizedBox(height: 16),
-        TSwipeCell(
-          groupTag: 'test',
-          right: TSwipeCellPanel(
-            extentRatio: 120 / screenWidth,
-            children: [
-              TSwipeCellAction(
-                flex: 60,
-                backgroundColor: TTheme.of(context).warningNormalColor,
-                direction: Axis.vertical,
-                icon: TIcons.edit,
-                label: '编辑',
-              ),
-              TSwipeCellAction(
-                flex: 60,
-                backgroundColor: TTheme.of(context).errorNormalColor,
-                direction: Axis.vertical,
-                icon: TIcons.delete,
-                label: '删除',
-              ),
-            ],
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSwipeCellThemeData(),
           ),
-          cell: const TCell(
-              title: '左滑操作', note: '图标+文字（纵向）', description: '一段很长很长的内容文字'),
+          child: TSwipeCell(
+            end: TSwipeCellPanel(
+              extentRatio: 120 / screenWidth,
+              children: [
+                TSwipeCellAction(
+                  flex: 60,
+                  backgroundColor: context.tTheme.warningNormalColor,
+                  direction: Axis.vertical,
+                  icon: TIcons.edit,
+                  label: '编辑',
+                ),
+                TSwipeCellAction(
+                  flex: 60,
+                  backgroundColor: context.tTheme.errorNormalColor,
+                  direction: Axis.vertical,
+                  icon: TIcons.delete,
+                  label: '删除',
+                ),
+              ],
+            ),
+            child: const TCell(
+              title: Text('左滑操作'),
+              note: Text('图标+文字（纵向）'),
+              subtitle: Text('一段很长很长的内容文字'),
+            ),
+          ),
         )
       ],
     );

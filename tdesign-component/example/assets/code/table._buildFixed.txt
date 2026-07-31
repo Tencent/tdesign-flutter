@@ -1,0 +1,19 @@
+Widget _buildFixed(BuildContext context) {
+    final columns = [
+      TTableColumn<_ExampleRow>(
+        id: 'name',
+        header: const Text('姓名'),
+        fixed: TTableColumnFixed.left,
+        cellBuilder: (_, row, __) => Text(row.name),
+      ),
+      ..._columns.skip(1),
+      TTableColumn<_ExampleRow>(
+        id: 'action',
+        header: const Text('操作'),
+        fixed: TTableColumnFixed.right,
+        cellBuilder: (_, __, ___) => const Icon(Icons.more_horiz),
+        width: 64,
+      ),
+    ];
+    return _frame(TTable(columns: columns, data: _rows));
+  }

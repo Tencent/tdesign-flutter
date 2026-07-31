@@ -1,0 +1,17 @@
+Widget _buildVariants(BuildContext context) => _buildRow(context, [
+        TStepper(
+          value: _normalValue,
+          variant: TStepperVariant.normal,
+          onChanged: (value) => setState(() => _normalValue = value),
+        ),
+        TStepper(
+          value: _filledValue,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _filledValue = value),
+        ),
+        TStepper(
+          value: _outlineValue,
+          variant: TStepperVariant.outline,
+          onChanged: (value) => setState(() => _outlineValue = value),
+        ),
+      ]);

@@ -1,29 +1,17 @@
-
-  Widget _buildLightShowTags(BuildContext context) {
-    return const Wrap(
-      spacing: 8,
-      children: [
-        TTag('默认', isLight: true),
-        TTag(
-          '主要',
-          isLight: true,
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          isLight: true,
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          isLight: true,
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          isLight: true,
-          theme: TTagTheme.success,
-        ),
-      ],
+Widget _buildLightShowTags(BuildContext context) {
+    // 浅色填充各主题
+    return Theme(
+      data:
+          Theme.of(context).mergeExtension(const TTagThemeData(isLight: true)),
+      child: const Wrap(
+        spacing: 8,
+        children: [
+          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+          TTag('主要', colorScheme: TTagColorScheme.primary),
+          TTag('警告', colorScheme: TTagColorScheme.warning),
+          TTag('危险', colorScheme: TTagColorScheme.danger),
+          TTag('成功', colorScheme: TTagColorScheme.success),
+        ],
+      ),
     );
   }

@@ -1,0 +1,32 @@
+Widget _weakSelectTextTabBar(BuildContext context) {
+    return _ExampleTabBar(
+      variant: TTabBarVariant.weakText,
+      useVerticalDivider: true,
+      navigationTabs: [
+        TTabBarItemConfig(
+          badgeConfig: TTabBarBadgeConfig(
+            showBadge: true,
+            tBadge: const TBadge(variant: TBadgeVariant.dot),
+            badgeTopOffset: -2,
+            badgeRightOffset: -10,
+          ),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签1');
+          },
+        ),
+        TTabBarItemConfig(
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签2');
+          },
+        ),
+        TTabBarItemConfig(
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签3');
+          },
+        ),
+      ],
+    );
+  }

@@ -1,0 +1,10 @@
+Widget _buildLeading(BuildContext context) {
+    return const TCell(
+      image: CircleAvatar(
+        backgroundImage: AssetImage('assets/img/t_avatar_1.png'),
+      ),
+      prefix: Icon(Icons.person),
+      title: Text('用户信息'),
+      trailing: Icon(Icons.more_horiz),
+    );
+  }

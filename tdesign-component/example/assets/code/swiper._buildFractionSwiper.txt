@@ -1,18 +1,4 @@
-
-  Widget _buildFractionSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      scrollDirection: Axis.vertical,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomCenter,
-        builder: TSwiperPagination.fraction,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+Widget _buildFractionSwiper(BuildContext context) => _buildSwiper(
+        context,
+        pagination: TSwiperPaginationVariant.fraction,
+      );

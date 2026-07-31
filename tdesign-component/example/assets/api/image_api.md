@@ -4,45 +4,38 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| alignment | AlignmentGeometry | Alignment.center | - |
-| assetUrl | String? | - | 本地素材地址 |
-| cacheHeight | int? | - | - |
-| cacheWidth | int? | - | - |
-| centerSlice | Rect? | - | - |
-| color | Color? | - | - |
-| colorBlendMode | BlendMode? | - | - |
-| errorBuilder | ImageErrorWidgetBuilder? | - | - |
-| errorWidget | Widget? | - | 失败自定义提示 |
-| excludeFromSemantics | bool | false | - |
-| filterQuality | FilterQuality | FilterQuality.low | - |
-| fit | BoxFit? | - | 适配样式 |
-| frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统`Image`中注释 |
-| gaplessPlayback | bool | false | - |
-| height | double? | - | 自定义高 |
-| imageFile | File? | - | 图片文件路径 |
-| imgUrl | String? | - | 图片地址 |
-| isAntiAlias | bool | false | - |
+| alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 |
+| cacheHeight | int? | - | 解码缓存高度。 |
+| cacheWidth | int? | - | 解码缓存宽度。 |
+| errorBuilder | ImageErrorWidgetBuilder? | - | 图片错误构建器。 |
+| errorWidget | Widget? | - | 默认错误占位内容。 |
+| excludeFromSemantics | bool | false | 是否从语义树排除图片。 |
+| filterQuality | FilterQuality | FilterQuality.low | 图片滤镜质量。 |
+| fit | BoxFit? | - | 图片适配方式；优先于 `variant` 的默认适配方式。 |
+| frameBuilder | ImageFrameBuilder? | - | 图片帧构建器。 |
+| height | double? | - | 图片高度。 |
+| imageFile | File? | - | 本地图片文件；不能与 `src` 同时提供。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| loadingBuilder | ImageLoadingBuilder? | - | - |
-| loadingWidget | Widget? | - | 加载自定义提示 |
-| matchTextDirection | bool | false | - |
-| opacity | Animation<double>? | - | - |
-| repeat | ImageRepeat | ImageRepeat.noRepeat | - |
-| semanticLabel | String? | - | - |
-| type | TImageType | TImageType.roundedSquare | 图片类型 |
-| width | double? | - | 自定义宽 |
+| loadingBuilder | ImageLoadingBuilder? | - | 网络图片加载进度构建器。 |
+| loadingWidget | Widget? | - | 默认加载占位内容。 |
+| onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 |
+| repeat | ImageRepeat | ImageRepeat.noRepeat | 图片重复方式。 |
+| semanticLabel | String? | - | 无障碍标签。 |
+| src | String? | - | 网络 URL 或 asset 路径；空字符串显示加载占位。 |
+| variant | TImageVariant | TImageVariant.roundedSquare | 图片裁剪形态。 |
+| width | double? | - | 图片宽度。 |
 
 
-### TImageType
+### TImageVariant
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| clip | 裁剪 |
-| fitHeight | 适应高 |
-| fitWidth | 适应宽 |
-| stretch | 拉伸 |
-| square | 方形, |
-| roundedSquare | 圆角方形 |
-| circle | 圆形 |
+| clip | 保持原始尺寸并裁剪。 |
+| fitHeight | 适应高度。 |
+| fitWidth | 适应宽度。 |
+| stretch | 拉伸填充。 |
+| square | 方形裁剪。 |
+| roundedSquare | 圆角方形裁剪。 |
+| circle | 圆形裁剪。 |

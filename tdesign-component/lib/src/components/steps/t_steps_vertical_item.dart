@@ -1,19 +1,43 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
+
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
+import 't_steps.dart';
 
 /// Steps步骤条，垂直步骤item
 class TStepsVerticalItem extends StatelessWidget {
+  /// 步骤条数据
   final TStepsItemData data;
+
+  /// 当前步骤索引
   final int index;
+
+  /// 步骤总数
   final int stepsCount;
+
+  /// 当前激活的步骤索引
   final int activeIndex;
+
+  /// 步骤条状态
   final TStepsStatus status;
+
+  /// 是否为简略模式
   final bool simple;
+
+  /// 是否为只读模式（纯展示）
   final bool readOnly;
+
+  /// 垂直模式下是否可点击选择
   final bool verticalSelect;
 
   /// item 标题组件插槽
   final Widget? titleWidget;
+
+  /// 点击回调。
+  final VoidCallback? onTap;
 
   const TStepsVerticalItem({
     super.key,
@@ -26,11 +50,12 @@ class TStepsVerticalItem extends StatelessWidget {
     required this.readOnly,
     required this.verticalSelect,
     this.titleWidget,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
 
     /// 步骤条数字背景色
     var stepsNumberBgColor = theme.brandNormalColor;
@@ -78,7 +103,7 @@ class TStepsVerticalItem extends StatelessWidget {
       style: TextStyle(
         color: stepsNumberTextColor,
         fontWeight: FontWeight.w400,
-        fontSize: 14,
+        fontSize: theme.fontBodyMedium?.size ?? 14,
       ),
     );
 
@@ -157,7 +182,7 @@ class TStepsVerticalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
-    return Container(
+    final content = Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: IntrinsicHeight(
         child: Row(
@@ -209,7 +234,7 @@ class TStepsVerticalItem extends StatelessWidget {
                                     ? FontWeight.w600
                                     : FontWeight.w400,
                                 color: stepsTitleColor,
-                                fontSize: 14,
+                                fontSize: theme.fontBodyMedium?.size ?? 14,
                                 height: 1.2,
                               ),
                               softWrap: true,
@@ -234,6 +259,13 @@ class TStepsVerticalItem extends StatelessWidget {
         ),
       ),
     );
+    return onTap == null
+        ? content
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTap,
+            child: content,
+          );
   }
 
   Widget _buildLineWidget(BuildContext context) {
@@ -245,8 +277,8 @@ class TStepsVerticalItem extends StatelessWidget {
           width: 1,
           height: double.infinity,
           color: (activeIndex > index || readOnly)
-              ? TTheme.of(context).brandNormalColor
-              : TTheme.of(context).componentBorderColor,
+              ? context.tTheme.brandNormalColor
+              : context.tTheme.componentBorderColor,
         ),
       ),
     );
@@ -264,8 +296,8 @@ class TStepsVerticalItem extends StatelessWidget {
             data.content!,
             style: TextStyle(
               fontWeight: FontWeight.w400,
-              color: TTheme.of(context).textColorPlaceholder,
-              fontSize: 12,
+              color: context.tTheme.textColorPlaceholder,
+              fontSize: context.tTheme.fontBodySmall?.size ?? 12,
             ),
           ),
       ],

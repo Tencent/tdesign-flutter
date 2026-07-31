@@ -1,22 +1,21 @@
-
-  Widget _buildCustomRange(BuildContext context) {
+Widget _buildCustomRange(BuildContext context) {
     return TCell(
-      title: '自定义选择范围',
-      note: _formatResult(_rangeSelected),
+      key: const Key('date-time-picker-range-trigger'),
+      title: const Text('自定义选择范围'),
+      note: Text(_formatResult(_rangeSelected)),
       arrow: true,
-      onClick: (_) {
+      onTap: () {
         _showPickerPopup(
           context,
-          picker: TDateTimePicker(
-            mode: DateTimePickerMode(
-              dateMode: DateMode.date,
-              timeMode: TimeMode.second,
-            ),
-            start: _kRangeStart,
-            end: _kRangeEnd,
-            initialValue: _rangeSelected ?? _kRangeInitial,
-            onChange: (result) => setState(() => _rangeSelected = result),
+          title: '选择日期和时间',
+          mode: DateTimePickerMode(
+            dateMode: DateMode.date,
+            timeMode: TimeMode.second,
           ),
+          start: _kRangeStart,
+          end: _kRangeEnd,
+          value: _rangeSelected ?? _kRangeInitial,
+          onConfirm: (result) => setState(() => _rangeSelected = result),
         );
       },
     );

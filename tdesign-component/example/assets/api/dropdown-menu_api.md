@@ -1,127 +1,80 @@
 ## API
 ### TDropdownMenu
 #### 简介
-下拉菜单
+用于页面内容排序、筛选的横向下拉筛选栏。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| arrowColor | Color? | - | 自定义箭头颜色 |
-| arrowIcon | IconData? | - | 自定义箭头图标 |
-| builder | TDropdownItemBuilder? | - | 下拉菜单构建器，优先级高于`items` |
-| closeOnClickOverlay | bool? | true | 是否在点击遮罩层后关闭菜单 |
-| decoration | Decoration? | - | 下拉菜单的装饰器 |
-| direction | TDropdownMenuDirection? | TDropdownMenuDirection.auto | 菜单展开方向（down、up、auto） |
-| duration | double? | 200.0 | 动画时长，毫秒 |
-| height | double? | 48 | menu的高度 |
-| isScrollable | bool? | false | 是否开启滚动列表 |
-| items | List<TDropdownItem>? | - | 下拉菜单 |
+| animationDuration | Duration | const Duration(milliseconds: 200) | - |
+| closeOnOverlayTap | bool | true | - |
+| controller | TDropdownMenuController? | - | - |
+| items | List<TDropdownMenuItem> | - | - |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| labelBuilder | LabelBuilder? | - | 自定义标签内容 |
-| onMenuClosed | ValueChanged<int>? | - | 关闭菜单事件 |
-| onMenuOpened | ValueChanged<int>? | - | 展开菜单事件 |
-| showOverlay | bool? | true | 是否显示遮罩层 |
-| tabBarAlign | MainAxisAlignment? | MainAxisAlignment.center | `TDropdownItem.label`和`arrowIcon`/`TDropdownItem.arrowIcon`的对齐方式 |
-| width | double? | - | menu的宽度 |
+| onClosed | TDropdownMenuClosedCallback? | - | - |
+| onOpened | ValueChanged<int>? | - | - |
+| placement | TDropdownMenuPlacement | TDropdownMenuPlacement.auto | - |
+| scrollable | bool | false | - |
+| showOverlay | bool | true | - |
+| useRootOverlay | bool | false | - |
 
 
-### TDropdownItem
+### TDropdownMenuPlacement
 #### 简介
-下拉菜单内容
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| arrowColor | Color? | - | 自定义箭头颜色 |
-| arrowIcon | IconData? | - | 自定义箭头图标 |
-| builder | TDropdownItemContentBuilder? | - | 完全自定义展示内容 |
-| controller | TDropdownItemController? | - | 下拉菜单控制器 |
-| disabled | bool? | false | 是否禁用 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String? | - | 标题 |
-| maxHeight | double? | - | 内容最大高度 |
-| minHeight | double? | - | 内容最小高度 |
-| multiple | bool? | false | 是否多选 |
-| onChange | ValueChanged<T?>? | - | 值改变时触发 |
-| onConfirm | ValueChanged<T?>? | - | 点击确认时触发 |
-| onReset | VoidCallback? | - | 点击重置时触发 |
-| options | List<TDropdownItemOption>? | const [] | 选项数据 |
-| optionsColumns | int? | 1 | 选项分栏（1-3） |
-| tabBarAlign | MainAxisAlignment? | - | `label`和`arrowIcon`/`TDropdownMenu.arrowIcon`的对齐方式 |
-| tabBarFlex | int? | 1 | 该item在menu上的宽度占比，仅在`TDropdownMenu.isScrollable`为false时有效 |
-| tabBarWidth | double? | - | 该item在menu上的宽度，仅在`TDropdownMenu.isScrollable`为true时有效 |
-
-#### 静态成员
-
-| 名称 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| operateHeight | double | - | - |
-
-
-### TDropdownItemOption
-#### 简介
-选项数据
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| disabled | bool? | false | 是否禁用 |
-| disabledColor | Color? | - | 禁用颜色 |
-| group | String? | - | 分组，相同的为一组 |
-| label | String | - | 选项标题 |
-| selected | bool | false | 是否选中 |
-| selectedColor | Color? | - | 选中颜色 |
-| value | String | - | 选项值 |
-
-
-### TDropdownItemController
-#### 简介
-下拉菜单控制器
-
-### TDropdownMenuDirection
-#### 简介
-菜单展开方向
+下拉筛选面板相对筛选栏的展开位置。
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| down | 向下 |
-| up | 向上 |
-| auto | 根据内容高度动态展示方向 |
+| auto | - |
+| below | - |
+| above | - |
 
 
-### TDropdownItemBuilder
+### TDropdownMenuCloseReason
 #### 简介
-下拉菜单构建器
-#### 类型定义
-
-```dart
-typedef TDropdownItemBuilder = List<TDropdownItem> Function(BuildContext context);
-```
+下拉筛选面板关闭的原因。
+#### 枚举值
 
 
-### LabelBuilder
+| 名称 | 说明 |
+| --- | --- |
+| selection | - |
+| confirm | - |
+| cancel | - |
+| overlay | - |
+| back | - |
+| trigger | - |
+| controller | - |
+| switchItem | - |
+
+
+### TDropdownMenuClosedCallback
 #### 简介
-自定义标签内容
+下拉筛选面板关闭回调。
 #### 类型定义
 
 ```dart
-typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
+typedef TDropdownMenuClosedCallback = void Function(int index, TDropdownMenuCloseReason reason);
 ```
 
 
-### TDropdownItemContentBuilder
+### TDropdownMenuPanelBuilder
+#### 简介
+默认触发项的面板构建器。
 #### 类型定义
 
 ```dart
-typedef TDropdownItemContentBuilder = Widget Function(BuildContext context, _TDropdownItemState itemState, TDropdownPopup? popupState);
+typedef TDropdownMenuPanelBuilder = Widget Function(BuildContext context, TDropdownMenuPanelController controller);
 ```
 
 
-### TDropdownItemOptionsCallback
+### TDropdownMenuTriggerBuilder
+#### 简介
+自定义触发项构建器。
 #### 类型定义
 
 ```dart
-typedef TDropdownItemOptionsCallback = void Function(List<TDropdownItemOption>? options);
+typedef TDropdownMenuTriggerBuilder = Widget Function(BuildContext context, TDropdownMenuTriggerState state);
 ```

@@ -1,0 +1,15 @@
+Widget _buildTextRate(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TRateThemeData(showText: true, textWidth: 64),
+      ),
+      child: _rateCell(
+        title: '评分文案',
+        rate: TRate(
+          value: _textValue,
+          texts: const ['很差', '较差', '一般', '满意', '惊喜'],
+          onChanged: (value) => setState(() => _textValue = value),
+        ),
+      ),
+    );
+  }

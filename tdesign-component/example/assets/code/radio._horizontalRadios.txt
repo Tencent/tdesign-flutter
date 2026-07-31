@@ -1,27 +1,9 @@
-
-  Widget _horizontalRadios(BuildContext context) {
-    return TRadioGroup(
-      selectId: 'index:1',
+Widget _horizontalRadios(BuildContext context) {
+    return TRadioGroup<String>(
+      value: _horizontalValue,
+      options: _options,
       direction: Axis.horizontal,
-      directionalTdRadios: const [
-        TRadio(
-          id: '0',
-          title: '单选标题',
-          radioStyle: TRadioStyle.circle,
-          showDivider: false,
-        ),
-        TRadio(
-          id: '1',
-          title: '单选标题',
-          radioStyle: TRadioStyle.circle,
-          showDivider: false,
-        ),
-        TRadio(
-          id: '2',
-          title: '上限四字',
-          radioStyle: TRadioStyle.circle,
-          showDivider: false,
-        ),
-      ],
+      columns: 2,
+      onChanged: (value) => setState(() => _horizontalValue = value),
     );
   }

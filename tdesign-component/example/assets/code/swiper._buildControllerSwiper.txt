@@ -1,0 +1,2 @@
+Widget _buildControllerSwiper(BuildContext context) =>
+      const _ControlledSwiperExample();

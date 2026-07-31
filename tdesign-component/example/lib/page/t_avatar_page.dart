@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TAvatarPage extends StatefulWidget {
   const TAvatarPage({Key? key}) : super(key: key);
@@ -52,104 +52,91 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 图片头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildImageAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.normal,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.normal,
-          shape: TAvatarShape.square,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          variant: TAvatarVariant.square,
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
       ],
     );
   }
 
   /// 字符头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildTextAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.customText,
-          text: 'A',
+          child: Text('A'),
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.customText,
-          shape: TAvatarShape.square,
-          text: 'A',
+          variant: TAvatarVariant.square,
+          child: Text('A'),
         ),
       ],
     );
   }
 
   /// 图标头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildIconAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
-        TAvatar(
-          size: TAvatarSize.medium,
-          type: TAvatarType.icon,
-        ),
+        TAvatar(size: TAvatarSize.medium),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.icon,
-          shape: TAvatarShape.square,
+          variant: TAvatarVariant.square,
         ),
       ],
     );
   }
 
   /// 带徽标头像
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildBadgeAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         SizedBox(
-          height: 51,
-          width: 51,
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(
                 size: TAvatarSize.medium,
-                type: TAvatarType.normal,
-                defaultUrl: 'assets/img/t_avatar_1.png',
+                image: AssetImage('assets/img/t_avatar_1.png'),
               ),
-              Positioned(child: TBadge(TBadgeType.redPoint), right: 0, top: 0)
+              Positioned(
+                  child: TBadge(variant: TBadgeVariant.dot), right: 0, top: 0)
             ],
           ),
         ),
         SizedBox(width: 32),
         SizedBox(
-          height: 51,
-          width: 51,
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(
                 size: TAvatarSize.medium,
-                type: TAvatarType.customText,
-                text: 'A',
+                child: Text('A'),
               ),
               Positioned(
-                child: TBadge(TBadgeType.message, count: '8'),
+                child: TBadge(label: '8'),
                 right: 0,
                 top: 0,
               )
@@ -158,14 +145,12 @@ class _TAvatarPageState extends State<TAvatarPage> {
         ),
         SizedBox(width: 32),
         SizedBox(
-          width: 51,
-          height: 51,
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
+              TAvatar(size: TAvatarSize.medium),
               Positioned(
-                child: TBadge(TBadgeType.message, count: '12'),
+                child: TBadge(label: '12'),
                 right: 0,
                 top: 0,
               )
@@ -177,109 +162,95 @@ class _TAvatarPageState extends State<TAvatarPage> {
   }
 
   /// 纯展示的头像组
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildDisplayAvatar(BuildContext context) {
-    var assetUrl = 'assets/img/t_avatar_1.png';
-    var assetUrl2 = 'assets/img/t_avatar_2.png';
-    var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
-    return TAvatar(
-      size: TAvatarSize.medium,
-      type: TAvatarType.display,
-      displayText: '+5',
-      avatarDisplayListAsset: avatarList,
+    return const TAvatarGroup(
+      maxCount: 4,
+      overflow: TAvatar(child: Text('+1')),
+      children: [
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+      ],
     );
   }
 
   /// 带操作的头像组
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildOperationAvatar(BuildContext context) {
-    var assetUrl = 'assets/img/t_avatar_1.png';
-    var assetUrl2 = 'assets/img/t_avatar_2.png';
-    var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
-    return TAvatar(
-      size: TAvatarSize.medium,
-      type: TAvatarType.operation,
-      avatarDisplayListAsset: avatarList,
-      onTap: () {
-        TToast.showText('点击了操作', context: context);
-      },
+    return TAvatarGroup(
+      children: [
+        const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        const TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(
+          child: const Icon(Icons.add),
+          onTap: () => TToast.showText('点击了操作', context: context),
+        ),
+      ],
     );
   }
 
   /// 组件尺寸 大尺寸
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildLargeAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         TAvatar(
           size: TAvatarSize.large,
-          type: TAvatarType.normal,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.large,
-          type: TAvatarType.customText,
-          text: 'A',
+          child: Text('A'),
         ),
         SizedBox(width: 32),
-        TAvatar(
-          size: TAvatarSize.large,
-          type: TAvatarType.icon,
-        ),
+        TAvatar(size: TAvatarSize.large),
       ],
     );
   }
 
   /// 组件尺寸 中尺寸
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildMediumAvatar(BuildContext context) {
     return const Row(
       // spacing: 48,
       children: [
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.normal,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
         SizedBox(width: 48),
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.customText,
-          text: 'A',
+          child: Text('A'),
         ),
         SizedBox(width: 48),
-        TAvatar(
-          size: TAvatarSize.medium,
-          type: TAvatarType.icon,
-        ),
+        TAvatar(size: TAvatarSize.medium),
       ],
     );
   }
 
   /// 组件尺寸 小尺寸
-  @Demo(group: 'avatar')
+  @ExampleCode(group: 'avatar')
   Widget _buildSmallAvatar(BuildContext context) {
     return const Row(
       // spacing: 56,
       children: [
         TAvatar(
           size: TAvatarSize.small,
-          type: TAvatarType.normal,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
         SizedBox(width: 56),
         TAvatar(
           size: TAvatarSize.small,
-          type: TAvatarType.customText,
-          text: 'A',
+          child: Text('A'),
         ),
         SizedBox(width: 56),
-        TAvatar(
-          size: TAvatarSize.small,
-          type: TAvatarType.icon,
-        ),
+        TAvatar(size: TAvatarSize.small),
       ],
     );
   }

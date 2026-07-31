@@ -1,4 +1,3 @@
-
-  Widget _buildMicro(BuildContext context) {
-    return TProgress(type: TProgressType.micro, value: value);
+Widget _buildMicro(BuildContext context) {
+    return TProgress(variant: TProgressVariant.micro, value: value);
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+
+import '../text/t_text.dart';
 
 // ---------------------------------------------------------------------------
 // TCalendarHeader — 星期标题栏
 // ---------------------------------------------------------------------------
 
+/// 日历的星期标题栏。
 class TCalendarHeader extends StatelessWidget {
   const TCalendarHeader({
     Key? key,

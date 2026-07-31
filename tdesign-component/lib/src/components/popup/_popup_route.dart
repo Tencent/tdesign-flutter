@@ -5,15 +5,18 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   _PopupNavigatorRoute({
     required this.options,
     required this.onCloseWithTrigger,
+    required this.capturedThemes,
   }) : _layout = PopupLayout(
-          placement: options.placement,
-          inset: options.inset,
-          width: options.width,
-          height: options.height,
-        );
+         placement: options.placement,
+         inset: options.inset,
+         width: options.width,
+         height: options.height,
+       ),
+       super(traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop);
 
   final TPopupOptions options;
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
+  final CapturedThemes? capturedThemes;
 
   late PopupLayout _layout;
   bool _animationListenerAttached = false;
@@ -44,10 +47,11 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Duration get transitionDuration => options.animationDuration;
+  Duration get transitionDuration =>
+      options.animationDuration ?? const Duration(milliseconds: 240);
 
   @override
-  Duration get reverseTransitionDuration => options.animationDuration;
+  Duration get reverseTransitionDuration => transitionDuration;
 
   @override
   bool get barrierDismissible => false;
@@ -81,7 +85,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         barrierSemanticsDismissible: true,
       );
     }
-    return ModalBarrier(
+    return const ModalBarrier(
       color: Colors.transparent,
       dismissible: false,
       barrierSemanticsDismissible: false,
@@ -114,12 +118,6 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    final curved = CurvedAnimation(
-      parent: animation,
-      curve: Curves.decelerate,
-      reverseCurve: Curves.easeOut,
-    );
-
     _layout = PopupLayout(
       placement: options.placement,
       inset: options.inset,
@@ -127,7 +125,9 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       height: options.height,
     );
 
-    final t = curved.value;
+    final t = animation.status == AnimationStatus.reverse
+        ? Curves.easeOut.transform(animation.value)
+        : Curves.decelerate.transform(animation.value);
     final panel = PopupShell(
       options: options,
       onCloseWithTrigger: onCloseWithTrigger,
@@ -155,17 +155,22 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     final positioned = _layout.wrapPositioned(
       child: popupContent,
       safePadding: safePadding,
+      availableSize: MediaQuery.sizeOf(context),
     );
 
     final barrier = _buildBarrier(context, t);
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
-        positioned,
-      ],
+    final content = IgnorePointer(
+      ignoring: animation.status == AnimationStatus.reverse,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
+          positioned,
+        ],
+      ),
     );
+    return capturedThemes?.wrap(content) ?? content;
   }
 
   Widget _buildBarrier(BuildContext context, double t) {
@@ -173,16 +178,15 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       behavior: HitTestBehavior.opaque,
       onTap: _handleOverlayTap,
       child: Container(
-        color: _barrierColor.withValues(
-          alpha: _barrierColor.a * t,
-        ),
+        color: _barrierColor.withValues(alpha: _barrierColor.a * t),
       ),
     );
   }
 
   String _resolveBarrierSemanticsLabel(BuildContext context) {
-    return _barrierSemanticsLabel ??=
-        MaterialLocalizations.of(context).modalBarrierDismissLabel;
+    return _barrierSemanticsLabel ??= MaterialLocalizations.of(
+      context,
+    ).modalBarrierDismissLabel;
   }
 
   void _handleOverlayTap() {

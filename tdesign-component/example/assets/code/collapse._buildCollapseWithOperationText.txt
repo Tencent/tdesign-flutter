@@ -1,8 +1,6 @@
-
-  Widget _buildCollapseWithOperationText(BuildContext context) {
+Widget _buildCollapseWithOperationText(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _blockStyleWithOpText[index].isExpanded = !isExpanded;
         });

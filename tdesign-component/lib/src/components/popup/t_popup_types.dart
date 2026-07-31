@@ -5,19 +5,20 @@ part of 't_popup.dart';
 /// 与 [TPopupOptions] 类文档中的「字段与 placement」表对应。
 /// 方向固定时请用 [TPopupOptions.bottom]、[TPopupOptions.center] 等命名工厂。
 enum TPopupPlacement {
-  /// 自顶部滑入；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupTopInset]）。
+  /// 自顶部滑入；默认高 240，使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupTopInset]）覆盖。
   top,
 
-  /// 自左侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupLeftInset]）。
+  /// 自左侧滑入；默认宽 280，使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupLeftInset]）覆盖。
   left,
 
-  /// 自右侧滑入；使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupRightInset]）。
+  /// 自右侧滑入；默认宽 280，使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupRightInset]）覆盖。
   right,
 
-  /// 自底部滑入；默认内置头部；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）。
+  /// 自底部滑入；默认高 240 且带内置头部；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）覆盖。
   bottom,
 
-  /// 屏幕居中；使用 [TPopupOptions.closeBuilder] 控制面板外下方关闭区。
+  /// 屏幕居中；默认 240 × 240，使用 [TPopupOptions.width]、[TPopupOptions.height] 覆盖；
+  /// 使用 [TPopupOptions.closeBuilder] 控制面板外下方关闭区。
   center,
 }
 
@@ -43,17 +44,13 @@ typedef TPopupSlotBuilder = Widget Function(
 
 // 库内 sentinel：识别 builder「未传 = 内置默认」。业务三态见 [TPopupOptions]。
 
-Widget _kPopupDefaultHeader(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultHeader(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
-Widget _kPopupDefaultCancel(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultCancel(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
-Widget _kPopupDefaultConfirm(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultConfirm(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
-Widget _kPopupDefaultClose(BuildContext context, VoidCallback close) =>
-    const SizedBox.shrink();
+Widget _kPopupDefaultClose(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
 
 bool _isPopupDefaultHeader(TPopupHeaderBuilder? builder) =>
     identical(builder, _kPopupDefaultHeader);
@@ -74,7 +71,7 @@ bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
 /// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancel]、
 /// [TPopupTrigger.confirm]、[TPopupTrigger.close]；
 /// [TPopupHandle.close] 为 [TPopupTrigger.api]；系统返回为
-/// [TPopupTrigger.systemBack]；[headerBuilder] 内调用 `close` 等为
+/// [TPopupTrigger.systemBack]；headerBuilder 内调用 `close` 等为
 /// [TPopupTrigger.custom]。
 enum TPopupTrigger {
   /// 点击蒙层，且 [TPopupOptions.closeOnOverlayClick] 为 true。
@@ -95,7 +92,7 @@ enum TPopupTrigger {
   /// 系统返回键或系统路由返回触发的关闭。
   systemBack,
 
-  /// 无框架预设动作语义的自定义关闭，如 [headerBuilder] 内调用 `close`。
+  /// 无框架预设动作语义的自定义关闭，如 headerBuilder 内调用 `close`。
   custom,
 }
 

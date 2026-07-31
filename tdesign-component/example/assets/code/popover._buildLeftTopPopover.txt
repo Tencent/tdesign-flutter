@@ -1,5 +1,4 @@
-
-  Widget _buildLeftTopPopover(BuildContext context) {
+Widget _buildLeftTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -7,15 +6,15 @@
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧上',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('左侧上'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftTop,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );

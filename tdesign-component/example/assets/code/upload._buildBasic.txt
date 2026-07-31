@@ -1,0 +1,12 @@
+Widget _buildBasic(BuildContext context) {
+    return _section(
+      TUpload(
+        files: _files,
+        maxFiles: 4,
+        maxFileSize: 5 * 1024 * 1024,
+        onValidationError: (error) => _show('$error'),
+        onError: (error) => _show('$error'),
+        onChanged: (files) => setState(() => _files = files),
+      ),
+    );
+  }

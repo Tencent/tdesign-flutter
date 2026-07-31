@@ -1,58 +1,69 @@
-
-  Widget _buildAnchorSideBar(BuildContext context) {
-    var demoHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        titleBarHeight -
-        testButtonHeight;
-
+Widget _buildAnchorSideBar(BuildContext context) {
     return Column(
       children: [
         Container(
-          height: testButtonHeight,
+          height: 80,
           padding: const EdgeInsets.all(16),
-          child: TButton(
-            text: '更新children',
-            onTap: () {
-              setState(() {
-                var children = list
-                    .map((e) => SideItemProps(
-                        index: e.index,
-                        label: '变更${e.index}',
-                        badge: e.badge,
-                        value: e.value,
-                        icon: e.icon))
-                    .toList();
-                _sideBarController.children = children;
-                setState(() {});
-              });
-            },
+          child: SizedBox(
+            width: double.infinity,
+            child: TButton(
+              child: const Text('更新children'),
+              onPressed: () {
+                setState(() {
+                  final children = list
+                      .asMap()
+                      .entries
+                      .map((entry) => TSideBarItem(
+                            label: '变更${entry.key}',
+                            badge: entry.value.badge,
+                            value: entry.value.value,
+                            icon: entry.value.icon,
+                          ))
+                      .toList();
+                  list = children;
+                });
+              },
+            ),
           ),
         ),
         Expanded(
           child: Row(
             children: [
               SizedBox(
-                width: 110,
+                width: 106,
                 child: TSideBar(
-                  style: TSideBarStyle.normal,
+                  style: widget.style,
                   value: currentValue,
-                  controller: _sideBarController,
-                  onChanged: onChanged,
-                  onSelected: onSelected,
+                  children: list,
+                  onChanged: handleSidebarChange,
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                    controller: _demoScroller,
-                    child: Container(
-                      color: TTheme.of(context).bgColorContainer,
-                      child: Column(
-                        children: [
-                          ...pages,
-                          Container(height: demoHeight - itemHeight)
-                        ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        _syncTrailingExtent();
+                      }
+                    });
+                    return SingleChildScrollView(
+                      key: _contentViewportKey,
+                      controller: _demoScroller,
+                      child: Container(
+                        color: context.tTheme.bgColorContainer,
+                        child: Column(
+                          children: [
+                            for (var index = 0;
+                                index < _headerKeys.length;
+                                index++)
+                              getAnchorDemo(index),
+                            SizedBox(height: _trailingExtent),
+                          ],
+                        ),
                       ),
-                    )),
+                    );
+                  },
+                ),
               )
             ],
           ),

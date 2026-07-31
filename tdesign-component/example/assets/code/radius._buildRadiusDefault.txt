@@ -1,11 +1,8 @@
-
-  Widget _buildRadiusDefault(BuildContext context) {
+Widget _buildRadiusDefault(BuildContext context) {
     return Container(
-      width: 100,
-      height: 50,
       decoration: BoxDecoration(
-        color: TTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
+        color: context.tTheme.brandNormalColor,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
     );
   }

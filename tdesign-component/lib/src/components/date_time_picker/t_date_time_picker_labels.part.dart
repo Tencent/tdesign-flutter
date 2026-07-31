@@ -13,13 +13,6 @@ typedef DateTimePickerRenderLabel = String? Function(
 @internal
 final kDateTimePickerDefaultFallback = DateTime(2000, 1, 1);
 
-// =============================================================================
-// DateTimePickerMode 的内部子类实现（@internal）
-// =============================================================================
-//
-// 业务方通过 `DateTimePickerMode(dateMode: ..., timeMode: ...)` 访问；
-// `CombinedMode` 不应直接构造。整个文件 **不被 umbrella 导出**。
-
 /// `TDateTimePicker` 各列默认 label 的文案配置（@internal）。
 ///
 /// build 时由 `fromResource` 从 `TResourceDelegate` 生成；缺省文案见
@@ -86,33 +79,19 @@ class DateTimePickerLabels {
 
   @override
   int get hashCode => Object.hash(
-      Object.hashAll(unitSuffix.entries), Object.hashAll(weekLabels));
-}
-
-/// `DateTimePickerMode(...)` 工厂返回值。
-@internal
-@immutable
-class CombinedMode implements DateTimePickerMode {
-  const CombinedMode({this.date, this.time});
-
-  final DateMode? date;
-  final TimeMode? time;
-
-  List<DateTimeColumn> get columns => _expand(date, time);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CombinedMode && date == other.date && time == other.time;
-
-  @override
-  int get hashCode => Object.hash(date, time);
+        Object.hashAll(
+          unitSuffix.entries.map(
+            (entry) => Object.hash(entry.key, entry.value),
+          ),
+        ),
+        Object.hashAll(weekLabels),
+      );
 }
 
 /// 包内读取 `DateTimePickerMode` 展开后的列列表。
 @internal
 extension DateTimePickerModeColumns on DateTimePickerMode {
-  List<DateTimeColumn> get columns => (this as CombinedMode).columns;
+  List<DateTimeColumn> get columns => _expand(dateMode, timeMode);
 }
 
 /// 把日期粒度 + 时间粒度展开成 `DateTimeColumn` 序列。

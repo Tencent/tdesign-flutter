@@ -1,0 +1,14 @@
+Widget _buildTextToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('纯文字'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText('这是一条纯文字提示', context: context);
+        },
+      ),
+    );
+  }

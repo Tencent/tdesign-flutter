@@ -1,8 +1,7 @@
-
-  Widget _buildMarkOutlineTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.mark,
-      isOutline: true,
+Widget _buildMarkOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+          const TTagThemeData(shape: TTagShape.mark, isOutline: true)),
+      child: const TTag('标签文字'),
     );
   }

@@ -1,0 +1,15 @@
+Widget _buildBarrierDismissDialog(BuildContext context) {
+    return _trigger(
+      text: '点击蒙层关闭',
+      onPressed: () {
+        TDialog.show<void>(
+          context,
+          barrierDismissible: true,
+          dialog: const TDialog(
+            title: Text('点击外部区域即可关闭'),
+            content: Text('适合非关键提示或可随时取消的辅助信息。'),
+          ),
+        );
+      },
+    );
+  }

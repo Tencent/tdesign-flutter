@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../tdesign_flutter.dart' show TPicker, TPopup;
 import '../theme/t_spacers.dart';
 import '../theme/t_theme.dart';
 
@@ -57,14 +58,14 @@ class _TToolbarPressableState extends State<TToolbarPressable> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     final padding = widget.padding ??
         EdgeInsets.symmetric(
           horizontal: theme.spacer8,
           vertical: theme.spacer12,
         );
 
-    Widget child = widget.child;
+    var child = widget.child;
     if (widget.mergeTextStyle != null) {
       child = DefaultTextStyle.merge(
         style: widget.mergeTextStyle!,

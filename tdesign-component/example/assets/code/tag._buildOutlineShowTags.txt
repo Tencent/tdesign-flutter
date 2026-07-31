@@ -1,29 +1,17 @@
-
-  Widget _buildOutlineShowTags(BuildContext context) {
-    return const Wrap(
-      spacing: 8,
-      children: [
-        TTag('默认', isOutline: true),
-        TTag(
-          '主要',
-          isOutline: true,
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          isOutline: true,
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          isOutline: true,
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          isOutline: true,
-          theme: TTagTheme.success,
-        ),
-      ],
+Widget _buildOutlineShowTags(BuildContext context) {
+    // 非浅色描边各主题
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: const Wrap(
+        spacing: 8,
+        children: [
+          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+          TTag('主要', colorScheme: TTagColorScheme.primary),
+          TTag('警告', colorScheme: TTagColorScheme.warning),
+          TTag('危险', colorScheme: TTagColorScheme.danger),
+          TTag('成功', colorScheme: TTagColorScheme.success),
+        ],
+      ),
     );
   }

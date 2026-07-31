@@ -1,62 +1,39 @@
-
-  Widget _buildUnselectedColorSideBar(BuildContext context) {
-    var demoHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        titleBarHeight -
-        testButtonHeight;
-
-    return Column(
+Widget _buildUnselectedColorSideBar(BuildContext context) {
+    final label = _items[_currentValue].label;
+    return Row(
       children: [
-        Container(
-          height: testButtonHeight,
-          padding: const EdgeInsets.all(16),
-          child: TButton(
-            text: '更新children',
-            onTap: () {
-              setState(() {
-                var children = list
-                    .map((e) => SideItemProps(
-                        index: e.index,
-                        label: '变更${e.index}',
-                        badge: e.badge,
-                        value: e.value,
-                        icon: e.icon))
-                    .toList();
-                _sideBarController.children = children;
-                setState(() {});
-              });
-            },
+        SizedBox(
+          width: 116,
+          child: TSideBar(
+            value: _currentValue,
+            children: _items,
+            selectedColor: context.tTheme.brandNormalColor,
+            selectedBgColor: context.tTheme.brandLightColor,
+            unSelectedColor: context.tTheme.textColorSecondary,
+            unSelectedBgColor: context.tTheme.bgColorContainer,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+            onChanged: (value) => setState(() => _currentValue = value),
           ),
         ),
         Expanded(
-            child: Row(
-          children: [
-            SizedBox(
-              width: 110,
-              child: TSideBar(
-                unSelectedColor: Colors.red,
-                style: TSideBarStyle.normal,
-                value: currentValue,
-                controller: _sideBarController,
-                onChanged: onChanged,
-                onSelected: onSelected,
-              ),
+          child: Container(
+            color: context.tTheme.bgColorContainer,
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TText(label, font: context.tTheme.fontTitleMedium),
+                const SizedBox(height: 4),
+                TText(
+                  '未选中项使用次级文字色，选中项保留品牌色。',
+                  textColor: context.tTheme.textColorSecondary,
+                ),
+              ],
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                  controller: _demoScroller,
-                  child: Container(
-                    color: TTheme.of(context).bgColorContainer,
-                    child: Column(
-                      children: [
-                        ...pages,
-                        Container(height: demoHeight - itemHeight)
-                      ],
-                    ),
-                  )),
-            )
-          ],
-        ))
+          ),
+        ),
       ],
     );
   }

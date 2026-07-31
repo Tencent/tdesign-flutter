@@ -1,0 +1,16 @@
+Widget _buildSelectDefault(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: [
+        TSelectTag('标签一',
+            value: _selected1,
+            onChanged: (v) => setState(() => _selected1 = v)),
+        TSelectTag('标签二',
+            value: _selected2,
+            onChanged: (v) => setState(() => _selected2 = v)),
+        TSelectTag('标签三',
+            value: _selected3,
+            onChanged: (v) => setState(() => _selected3 = v)),
+      ],
+    );
+  }

@@ -1,0 +1,30 @@
+Widget _buildPopup(BuildContext context) {
+    return TCell(
+      title: const TText('选择地区'),
+      note: TText(_popupValue.join(' / ')),
+      arrow: true,
+      onTap: () {
+        var draft = List<dynamic>.of(_popupValue);
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            titleWidget: const TText('选择地区'),
+            child: StatefulBuilder(
+              builder: (context, setPopupState) => TPicker(
+                items: _linked,
+                value: draft,
+                onChanged: (value) {
+                  setPopupState(() => draft = value.values);
+                },
+              ),
+            ),
+            onVisibleChange: (visible, trigger) {
+              if (!visible && trigger == TPopupTrigger.confirm) {
+                setState(() => _popupValue = List<dynamic>.of(draft));
+              }
+            },
+          ),
+        );
+      },
+    );
+  }

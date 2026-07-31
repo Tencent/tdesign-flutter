@@ -1,8 +1,7 @@
-
-  Widget _buildItemWithSplit4(BuildContext context) {
-    return TTabBar(
+Widget _buildItemWithSplit4(BuildContext context) {
+    return TTabsBar(
       tabs: subList(5),
       controller: _tabController4,
-      showIndicator: true,
+      indicator: _indicator(context),
     );
   }

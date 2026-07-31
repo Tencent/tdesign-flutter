@@ -1,14 +1,11 @@
 ---
 title: Dialog 对话框
-description: 用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。
+description: 用于显示重要提示或请求用户完成关键操作的居中模态视图。
 spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,938 +13,121 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_dialog_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_dialog_page.dart)
-
-### 1 组件类型
-
-反馈类对话框
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFeedbackNormal(BuildContext context) {
-    return TButton(
-      text: '反馈类-带标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFeedbackNoTitle(BuildContext context) {
-    return TButton(
-      text: '反馈类-无标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFeedbackOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '反馈类-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFeedbackLongContent(BuildContext context) {
-    return TButton(
-      text: '反馈类-内容超长',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _longContent,
-              contentMaxHeight: 300,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-确认类对话框
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildConfirmNormal(BuildContext context) {
-    return TButton(
-      text: '确认类-带标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildConfirmNoTitle(BuildContext context) {
-    return TButton(
-      text: '确认类-无标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildConfirmOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '确认类-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-输入类对话框
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildInputNormal(BuildContext context) {
-    return TButton(
-      text: '输入类-带描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TInputDialog(
-              textEditingController: TextEditingController(),
-              title: _dialogTitle,
-              content: _commonContent,
-              hintText: _inputHint,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildInputNoContent(BuildContext context) {
-    return TButton(
-      text: '输入类-无描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TInputDialog(
-              textEditingController: TextEditingController(),
-              title: _dialogTitle,
-              hintText: _inputHint,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-带图片的对话框
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildImageTop(BuildContext context) {
-    return TButton(
-      text: '图片置顶-带标题描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildImageTopNoTitle(BuildContext context) {
-    return TButton(
-      text: '图片置顶-无标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildImageTopOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '图片置顶-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildImageMiddle(BuildContext context) {
-    return TButton(
-      text: '图片居中-带标题描述',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              content: _commonContent,
-              imagePosition: TDialogImagePosition.middle,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildImageMiddleOnlyTitle(BuildContext context) {
-    return TButton(
-      text: '图片居中-纯标题',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              title: _dialogTitle,
-              imagePosition: TDialogImagePosition.middle,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildImageMiddleOnlyImage(BuildContext context) {
-    return TButton(
-      text: '图片居中-纯图片',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TImageDialog(
-              image: _demoImage,
-              imagePosition: TDialogImagePosition.middle,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件类型
-
-文字按钮
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildTextButtonSingle(BuildContext context) {
-    return TButton(
-      text: '单个文字按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-              buttonStyle: TDialogButtonStyle.text,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildTextButtonDouble(BuildContext context) {
-    return TButton(
-      text: '左右文字按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-              buttonStyle: TDialogButtonStyle.text,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-横向基础按钮
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildNormalButtonSingle(BuildContext context) {
-    return TButton(
-      text: '单个横向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildNormalButtonDouble(BuildContext context) {
-    return TButton(
-      text: '左右横向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-纵向基础按钮
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVerticalButtonDouble(BuildContext context) {
-    return TButton(
-      text: '两个纵向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog.vertical(
-                title: _dialogTitle,
-                content: _commonContent,
-                buttons: [
-                  TDialogButtonOptions(
-                      title: '主要按钮',
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.primary),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                ]);
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVerticalButtonTriple(BuildContext context) {
-    return TButton(
-      text: '三个纵向基础按钮',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TAlertDialog.vertical(
-                title: _dialogTitle,
-                content: _commonContent,
-                buttons: [
-                  TDialogButtonOptions(
-                      title: '主要按钮',
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.primary),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                  TDialogButtonOptions(
-                      title: '次要按钮',
-                      titleColor: TTheme.of(context).brandColor7,
-                      action: () {
-                        Navigator.pop(context);
-                      },
-                      theme: TButtonTheme.light),
-                ]);
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-带关闭按钮的对话框
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildDialogWithCloseButton(BuildContext context) {
-    return TButton(
-      text: '带关闭按钮的对话框',
-      size: TButtonSize.large,
-      type: TButtonType.outline,
-      theme: TButtonTheme.primary,
-      onTap: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              title: _dialogTitle,
-              content: _commonContent,
-              showCloseButton: true,
-            );
-          },
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+[t_dialog_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_dialog_page.dart)
+
+## 基本使用
+
+`TDialog` 负责标题、内容和操作区，打开时复用 `TPopup` 的居中模态路由。操作结果通过 `Future<T?>` 返回。
+
+```dart
+final confirmed = await TDialog.show<bool>(
+  context,
+  dialog: const TDialog(
+    title: Text('提交修改？'),
+    content: Text('提交后将立即同步给团队成员。'),
+    actions: [
+      TDialogAction(child: Text('取消'), result: false),
+      TDialogAction(
+        child: Text('确认'),
+        result: true,
+        role: TDialogActionRole.primary,
+      ),
+    ],
+  ),
+);
+```
+
+单操作场景可使用 `TConfirmDialog`：
+
+```dart
+await TDialog.show<bool>(
+  context,
+  dialog: const TConfirmDialog(
+    title: '提示',
+    content: '操作已完成。',
+  ),
+);
+```
+
+长内容通过 `maxHeight` 限制内容视口，标题和操作区保持固定：
+
+```dart
+await TDialog.show<void>(
+  context,
+  dialog: TDialog(
+    title: const Text('服务说明'),
+    maxHeight: 320,
+    content: Column(
+      children: List.generate(
+        18,
+        (index) => Text('${index + 1}. 需要滚动阅读的说明内容'),
+      ),
+    ),
+    actions: const [
+      TDialogAction(child: Text('知道了'), role: TDialogActionRole.primary),
+    ],
+  ),
+);
+```
+
+## 行为说明
+
+- Dialog 默认不允许点击蒙层关闭；通过 `barrierDismissible: true` 开启。
+- 非关键提示可以允许点击蒙层关闭：
+
+  ```dart
+  TDialog.show<void>(
+    context,
+    barrierDismissible: true,
+    dialog: const TDialog(
+      title: Text('提示'),
+      content: Text('点击对话框外部区域即可关闭。'),
+    ),
+  );
+  ```
+- 一到两个 action 横向排列，三个及以上 action 纵向排列。
+- `TDialogActionRole` 提供次要、主要和危险操作的默认按钮语义。
+- `closeOnPressed` 控制 action 点击后是否自动关闭；关闭结果来自 `result`。
+- 内容区只有一个滚动视口，超长文字和自定义 Widget 使用同一套高度约束。
+- Popup 负责蒙层、动画、安全区、局部 Theme 捕获、焦点闭环和路由生命周期。
+
+## 主题
+
+解析顺序为：实例参数 > `TDialogThemeData` > Flutter `DialogThemeData` > TDesign token。
+
+`TDialogThemeData` 支持背景色、shape、elevation、标题/内容文字样式、内容内边距、最大高度、action 按钮样式和宽度。蒙层样式由共享的 `TPopupThemeData` 控制，也可在 `TDialog.show` 中显式传入 `barrierColor`。
 
 ## API
-### TAlertDialog
 
-#### 工厂构造方法
-
-##### TAlertDialog.vertical
-
-纵向按钮排列的对话框
-`buttons`参数是必须的，纵向按钮默认样式都是`TButtonTheme.primary`
+### TDialog
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| buttons | List<TDialogButtonOptions> | - | - |
-| backgroundColor | Color? | - | 背景颜色 |
-| radius | double | 12.0 | 圆角 |
-| title | String? | - | 标题 |
-| titleColor | Color? | - | 标题颜色 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| contentWidget | Widget? | - | 内容Widget |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| buttonWidget | Widget? | - | 自定义按钮 |
+| title | Widget? | - | 标题槽位。 |
+| content | Widget? | - | 内容槽位。 |
+| actions | List&lt;TDialogAction&gt; | const [] | 操作列表。 |
+| actionsWidget | Widget? | - | 完全自定义操作区，与 actions 互斥。 |
+| showCloseButton | bool | false | 是否显示右上角关闭按钮。 |
+| semanticLabel | String? | - | 对话框语义标签。 |
+| backgroundColor | Color? | - | 面板背景色。 |
+| shape | ShapeBorder? | - | 面板形状。 |
+| elevation | double? | - | 阴影高度。 |
+| width | double? | - | 面板宽度。 |
+| maxHeight | double? | - | 面板最大高度。 |
+| contentPadding | EdgeInsetsGeometry? | - | 标题和内容区域内边距。 |
+| actionsPadding | EdgeInsetsGeometry | EdgeInsets.fromLTRB(24, 24, 24, 24) | 操作区内边距。 |
+| actionSpacing | double | 12 | 操作间距。 |
 
-#### 默认构造方法
+### TDialog.show
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonStyle | TDialogButtonStyle | TDialogButtonStyle.normal | - |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
-| leftBtnAction | Function()? | - | 左侧按钮默认点击 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
-| rightBtnAction | Function()? | - | 右侧按钮默认点击 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
+返回 `Future<T?>`。支持 `barrierDismissible`、`barrierColor`、`useRootNavigator` 和 `useSafeArea`。
 
+### TDialogAction
+
+通过 `child` 定义内容，`result` 定义关闭结果，`role` 定义默认视觉；可使用 `onPressed`、`closeOnPressed`、`disabled`、`variant`、`colorScheme` 和 `style` 控制行为与外观。
 
 ### TConfirmDialog
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| action | Function()? | - | 点击 |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonStyle | TDialogButtonStyle | TDialogButtonStyle.normal | 按钮样式 |
-| buttonStyleCustom | TButtonStyle? | - | 按钮自定义样式属性，背景色、边框... |
-| buttonText | String? | - | 按钮文字 |
-| buttonTextColor | Color? | - | 按钮文字颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| showCloseButton | bool? | - | 右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-| width | double? | - | - |
+单操作便捷层，支持字符串标题、字符串或 Widget 内容、按钮文字/回调/结果，以及 `TDialog` 的主要视觉与布局参数。
 
-
-### TDialogButtonOptions
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| action | Function()? | - | 点击操作 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| height | double? | - | 按钮高度 建议使用默认高度 |
-| style | TButtonStyle? | - | 按钮样式 设置单个按钮的样式会覆盖Dialog的默认样式 |
-| theme | TButtonTheme? | - | 按钮类型 |
-| title | String | - | 标题内容 |
-| titleColor | Color? | - | 标题颜色 |
-| titleSize | double? | - | 字体大小 |
-| type | TButtonType? | - | 按钮类型 |
-
-
-### TDialogScaffold
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色 |
-| body | Widget | - | Dialog主体 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| radius | double | 12.0 | 圆角 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| width | double? | - | 弹窗宽度 |
-
-
-### TDialogTitle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| title | String? | - | 标题文字 |
-| titleColor | Color? | - | 标题颜色 |
-
-
-### TDialogContent
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| content | String? | - | 标题文字 |
-| contentColor | Color? | - | 标题颜色 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-
-
-### TDialogInfoWidget
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| padding | EdgeInsetsGeometry? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容的内边距 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-
-### HorizontalNormalButtons
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| leftBtn | TDialogButtonOptions | - | 左按钮 |
-| rightBtn | TDialogButtonOptions | - | 右按钮 |
-
-
-### HorizontalTextButtons
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| leftBtn | TDialogButtonOptions | - | 左按钮 |
-| rightBtn | TDialogButtonOptions | - | 右按钮 |
-
-
-### TDialogButton
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| buttonStyle | TButtonStyle? | - | 按钮样式 |
-| buttonText | String? | - | 按钮文字 |
-| buttonTextColor | Color? | - | 按钮文字颜色 |
-| buttonTextFontWeight | FontWeight? | FontWeight.w600 | 按钮文字粗细 |
-| buttonTextSize | double? | - | 按钮文字大小 |
-| buttonTheme | TButtonTheme? | - | 按钮主题 |
-| buttonType | TButtonType? | - | 按钮类型 |
-| height | double? | 40.0 | 按钮高度 |
-| isBlock | bool | true | 按钮高度 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onPressed | Function() | - | 点击 |
-| width | double? | - | 按钮宽度 |
-
-
-### TImageDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentWidget | Widget? | - | 内容Widget |
-| image | Image | - | 图片 |
-| imagePosition | TDialogImagePosition? | TDialogImagePosition.top | 图片位置 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
-| padding | EdgeInsets? | - | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-
-### TInputDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentWidget | Widget? | - | 内容Widget |
-| customInputWidget | Widget? | - | 自定义输入框 |
-| hintText | String? | '' | 输入提示 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| leftBtn | TDialogButtonOptions? | - | 左侧按钮配置 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| textEditingController | TextEditingController | - | 输入controller |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-
-### TDialogButtonStyle
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| normal | - |
-| text | - |
-
-
-### TDialogImagePosition
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| top | - |
-| middle | - |
-
-
-  
+v1 不提供历史专用 Dialog 类型或旧按钮配置对象的兼容别名。

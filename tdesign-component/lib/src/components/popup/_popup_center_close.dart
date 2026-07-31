@@ -8,14 +8,10 @@ Widget buildPopupCenterCloseControl({
   required void Function(TPopupTrigger trigger) onCloseWithTrigger,
 }) {
   if (_isPopupDefaultClose(options.closeBuilder)) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     return IconButton(
       tooltip: context.resource.close,
-      icon: Icon(
-        TIcons.close_circle,
-        color: theme.fontWhColor1,
-        size: 32,
-      ),
+      icon: Icon(TIcons.close_circle, color: theme.fontWhColor1, size: 32),
       onPressed: () => onCloseWithTrigger(TPopupTrigger.close),
     );
   }
@@ -31,20 +27,22 @@ class PopupCenterUnderClose extends StatelessWidget {
     required this.onCloseWithTrigger,
   });
 
+  /// 弹出层配置
   final TPopupOptions options;
+
+  /// 内容组件
   final Widget content;
+
+  /// 关闭回调（携带触发源）
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   @override
   Widget build(BuildContext context) {
-    var panel = content;
-    if (options.width != null || options.height != null) {
-      panel = SizedBox(
-        width: options.width,
-        height: options.height,
-        child: content,
-      );
-    }
+    final panel = SizedBox(
+      width: options.width ?? PopupLayout.defaultCenterWidth,
+      height: options.height ?? PopupLayout.defaultCenterHeight,
+      child: content,
+    );
 
     void onCloseSlotTap() => onCloseWithTrigger(TPopupTrigger.close);
 
@@ -55,15 +53,23 @@ class PopupCenterUnderClose extends StatelessWidget {
       onCloseWithTrigger: onCloseWithTrigger,
     );
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 40),
-        panel,
-        const SizedBox(height: 24),
-        closeControl,
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final children = <Widget>[
+          const SizedBox(height: 40),
+          if (constraints.hasBoundedHeight)
+            Flexible(fit: FlexFit.loose, child: panel)
+          else
+            panel,
+          const SizedBox(height: 24),
+          closeControl,
+        ];
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
+        );
+      },
     );
   }
 }

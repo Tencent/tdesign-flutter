@@ -1,0 +1,21 @@
+Widget _buildChildSimple(BuildContext context) {
+  return SizedBox(
+    width: double.infinity,
+    child: TButton(
+      child: const TText('使用 child 自定义内容'),
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      size: TButtonSize.large,
+      onPressed: () {
+        TDrawer(
+          context,
+          title: const TText('标题'),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: const TText('这是通过 child 传入的自定义内容'),
+          ),
+        ).show();
+      },
+    ),
+  );
+}

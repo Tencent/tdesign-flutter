@@ -1,13 +1,7 @@
-/// @Type Flutter
-/// @Author lwb
-/// @Date 2024/5/28
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TNoticeBarPage extends StatelessWidget {
@@ -26,7 +20,7 @@ class TNoticeBarPage extends StatelessWidget {
           ExampleItem(
               padding: EdgeInsets.only(top: 16), builder: _scrollIconNoticeBar),
           ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
-          ExampleItem(desc: '带关闭的公告栏', builder: _closeNoticeBar),
+          ExampleItem(desc: '带可点击后缀图标的公告栏', builder: _closeNoticeBar),
           ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
           ExampleItem(
               padding: EdgeInsets.only(top: 16), builder: _entranceNoticeBar2),
@@ -51,14 +45,14 @@ class TNoticeBarPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _textNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '这是一条普通的通知信息',
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _scrollNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
@@ -67,17 +61,17 @@ Widget _scrollNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _scrollIconNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
-    speed: 50,
     prefixIcon: TIcons.sound,
     marquee: true,
+    speed: 50,
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _iconNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '这是一条普通的通知信息',
@@ -85,94 +79,136 @@ Widget _iconNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _closeNoticeBar(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.close,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了关闭按钮', context: context);
+      }
+    },
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _entranceNoticeBar1(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     right: TButton(
-      text: '文字按钮',
-      type: TButtonType.text,
-      theme: TButtonTheme.primary,
+      child: const Text('文字按钮'),
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
       size: TButtonSize.extraSmall,
-      height: 22,
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+      onPressed: () => TToast.showText('点击了文字按钮', context: context),
     ),
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _entranceNoticeBar2(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    suffixIcon: TIcons.chevron_right,
-  );
-}
-
-@Demo(group: 'noticeBar')
-Widget _customNoticeBar(BuildContext context) {
   return TNoticeBar(
     content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.notification,
+    prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.chevron_right,
-    style: TNoticeBarStyle.generateTheme(context, theme: TNoticeBarTheme.info)
-      ..backgroundColor = TTheme.of(context).bgColorComponent,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了入口图标', context: context);
+      }
+    },
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
+Widget _customNoticeBar(BuildContext context) {
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      TNoticeBarThemeData(
+        variant: TNoticeBarVariant.info,
+        backgroundColor: context.tTheme.bgColorComponent,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.notification,
+      suffixIcon: TIcons.chevron_right,
+    ),
+  );
+}
+
+@ExampleCode(group: 'noticeBar')
 Widget _normalNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.info,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.info,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _successNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条成功的通知信息',
-    prefixIcon: TIcons.check_circle_filled,
-    theme: TNoticeBarTheme.success,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.success,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条成功的通知信息',
+      prefixIcon: TIcons.check_circle_filled,
+    ),
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _warningNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条警示的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.warning,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.warning,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条警示的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _errorNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条错误的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.error,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.error,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条错误的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _cardNoticeBar(BuildContext context) {
   var size = MediaQuery.of(context).size;
+  final resolvedBg = const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
+      .resolve(context)
+      .backgroundColor;
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: TNoticeBarStyle.generateTheme(context).backgroundColor,
+      color: resolvedBg,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       boxShadow: const [
         BoxShadow(
@@ -210,9 +246,8 @@ Widget _cardNoticeBar(BuildContext context) {
           ),
         ),
         Container(
-          height: 150,
           decoration: BoxDecoration(
-            color: TTheme.of(context).bgColorContainer,
+            color: context.tTheme.bgColorContainer,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
         )
@@ -221,45 +256,49 @@ Widget _cardNoticeBar(BuildContext context) {
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _tapNoticeBar(BuildContext context) {
   return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.chevron_right,
-    onTap: (trigger) {
+    onPressed: (trigger) {
       TToast.showText('tap:$trigger', context: context);
     },
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _leftNoticeBar(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     suffixIcon: TIcons.chevron_right,
     left: TButton(
-      text: '文本',
-      type: TButtonType.text,
-      theme: TButtonTheme.primary,
+      child: const Text('文本'),
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
       size: TButtonSize.extraSmall,
-      height: 22,
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+      onPressed: () => TToast.showText('点击了文字按钮', context: context),
     ),
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了入口图标', context: context);
+      }
+    },
   );
 }
 
-@Demo(group: 'noticeBar')
+@ExampleCode(group: 'noticeBar')
 Widget _stepNoticeBar(BuildContext context) {
   return const TNoticeBar(
-    context: [
+    prefixIcon: TIcons.sound,
+    items: [
       '君不见黄河之水天上来',
       '奔流到海不复回',
       '君不见',
       '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试'
     ],
     direction: Axis.vertical,
-    prefixIcon: TIcons.sound,
     marquee: true,
   );
 }

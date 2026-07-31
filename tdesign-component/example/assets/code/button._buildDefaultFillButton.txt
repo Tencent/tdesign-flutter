@@ -1,10 +1,9 @@
-
-  TButton _buildDefaultFillButton(BuildContext context) {
-    return const TButton(
-      text: '填充按钮',
+TButton _buildDefaultFillButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.defaultTheme,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: _onTap,
     );
   }

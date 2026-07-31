@@ -1,0 +1,14 @@
+Widget _buildCustomChildShowingNumber(BuildContext context) {
+    return TBadge(
+      label: '$num',
+      child: Container(
+        width: 40,
+        height: 40,
+        alignment: Alignment.center,
+        child: const Icon(TIcons.notification),
+        decoration: BoxDecoration(
+            color: context.tTheme.bgColorComponent,
+            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault)),
+      ),
+    );
+  }

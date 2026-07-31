@@ -1,97 +1,59 @@
-
-  Widget _showAllIcons(BuildContext context) {
+Widget _showAllIcons(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            alignment: Alignment.topLeft,
-            child: const Wrap(
-              children: [
-                TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText(
-                    'https://tdesign.tencent.com/icons')
-              ],
+          RepaintBoundary(
+            key: const Key('icon-official-link-section'),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.topLeft,
+              color: context.tTheme.bgColorContainer,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TText('筛选 Icon 请前往 TDesign 官网：'),
+                  const SizedBox(height: 4),
+                  Link(
+                    key: const Key('icon-official-link'),
+                    uri: Uri.parse('https://tdesign.tencent.com/icons'),
+                    target: LinkTarget.blank,
+                    builder: (context, followLink) => TLink(
+                      child: const Text('https://tdesign.tencent.com/icons'),
+                      variant: TLinkVariant.icon,
+                      colorScheme: TLinkColorScheme.primary,
+                      semanticLabel: '打开 TDesign 图标官网',
+                      onPressed: followLink,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           TSearchBar(
-            action: '搜索',
-            onActionClick: (text) {
+            hintText: '搜索',
+            onChanged: (text) {
+              final query = text.trim().toLowerCase();
               setState(() {
-                iconList = [];
-                isLoading = true;
-              });
-              Future.delayed(const Duration(milliseconds: 30), () {
-                var list = [];
-                TIcons.all.forEach((key, value) {
-                  if (value.name.contains(text)) {
-                    list.add(value);
-                  }
-                });
-                setState(() {
-                  iconList = list;
-                  isLoading = false;
-                });
+                iconList = query.isEmpty
+                    ? TIcons.allIconsMap.entries.toList()
+                    : TIcons.allIconsMap.entries
+                        .where((item) => item.key.toLowerCase().contains(query))
+                        .toList();
               });
             },
-            onClearClick: (_) {
-              setState(() {
-                iconList = TIcons.all.values;
-              });
-            },
-          ),
-          TCell(
-            title: '显示边框',
-            noteWidget: TSwitch(
-              isOn: showBorder,
-              onChanged: (value) {
-                setState(() {
-                  showBorder = value;
-                });
-                return value;
-              },
-            ),
           ),
           Builder(builder: (context) {
             if (iconList.isEmpty) {
-              return Container(
-                height: 300,
-                alignment: Alignment.center,
-                child:
-                    isLoading ? const TText('加载中...') : const TText('暂无内容'),
+              return const SizedBox(
+                height: 96,
+                child: Center(child: TText('暂无内容')),
               );
             }
 
-            var width = MediaQuery.of(context).size.width * 0.4;
-
-            return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: SingleChildScrollView(
-                  child: Wrap(
-                      spacing: 16,
-                      runSpacing: 18,
-                      children: iconList.map((item) {
-                        return SizedBox(
-                          width: width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: showBorder
-                                      ? TTheme.of(context).brandDisabledColor
-                                      : Colors.transparent,
-                                ),
-                                child: Icon(item, size: 32),
-                              ),
-                              TText(item.name)
-                            ],
-                          ),
-                        );
-                      }).toList()),
-                ));
+            return IconCatalogGrid(
+              icons: iconList,
+            );
           })
         ],
       ),

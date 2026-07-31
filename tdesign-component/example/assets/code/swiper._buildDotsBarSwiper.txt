@@ -1,17 +1,4 @@
-
-  Widget _buildDotsBarSwiper(BuildContext context) {
-    return Swiper(
-      autoplay: true,
-      itemCount: 6,
-      loop: true,
-      pagination: const SwiperPagination(
-        alignment: Alignment.bottomCenter,
-        builder: TSwiperPagination.dotsBar,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return const TImage(
-          assetUrl: 'assets/img/image.png',
-        );
-      },
-    );
-  }
+Widget _buildDotsBarSwiper(BuildContext context) => _buildSwiper(
+        context,
+        pagination: TSwiperPaginationVariant.dotsBar,
+      );

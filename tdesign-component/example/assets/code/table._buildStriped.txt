@@ -1,0 +1,8 @@
+Widget _buildStriped(BuildContext context) {
+    return _frame(Theme(
+      data: Theme.of(context).mergeExtension(
+        const TTableThemeData(stripe: true),
+      ),
+      child: TTable(columns: _columns, data: _rows),
+    ));
+  }

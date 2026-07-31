@@ -1,0 +1,22 @@
+Widget _buildRightPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('右侧弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.right(
+              child: Container(
+                alignment: Alignment.center,
+                child: const TText('右侧弹出层内容'),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

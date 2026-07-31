@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TBadgePage extends StatefulWidget {
   const TBadgePage({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _TBadgePageState extends State<TBadgePage> {
 
     return ExamplePage(
       title: tTitle(),
-      desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
+      desc: '用于告知用户，该区域的状态变化或者待处理任务的数量或状态。',
       exampleCodeGroup: 'badge',
       children: [
         ExampleModule(
@@ -60,7 +60,7 @@ class _TBadgePageState extends State<TBadgePage> {
                   );
                 }),
             ExampleItem(
-                desc: '自定义徽标',
+                desc: '自定义被标记内容',
                 ignoreCode: true,
                 padding: padding,
                 builder: (context) {
@@ -68,12 +68,12 @@ class _TBadgePageState extends State<TBadgePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     // spacing: 32,
                     children: [
-                      CodeWrapper(builder: _buildCustomBadgeShowingNumber),
+                      CodeWrapper(builder: _buildCustomChildShowingNumber),
                       const SizedBox(width: 32),
-                      CodeWrapper(builder: _buildCustomBadgeShowingNumberZero),
+                      CodeWrapper(builder: _buildCustomChildShowingNumberZero),
                       const SizedBox(width: 32),
                       CodeWrapper(
-                          builder: _buildCustomBadgeWithoutShowingNumberZero),
+                          builder: _buildCustomChildWithoutShowingNumberZero),
                     ],
                   );
                 }),
@@ -99,403 +99,203 @@ class _TBadgePageState extends State<TBadgePage> {
       test: [
         ExampleItem(
           ignoreCode: true,
-          desc: '未超过上限',
-          builder: _buildLessThanMaxCountBadge,
+          desc: '数字文本',
+          builder: _buildNumericLabelBadge,
         ),
         ExampleItem(
           ignoreCode: true,
-          desc: '超过上限',
-          builder: _buildMoreThanMaxCountBadge,
+          desc: '自定义溢出文本',
+          builder: _buildOverflowLabelBadge,
         )
       ],
-      floatingActionButton: TFab(
-          theme: TFabTheme.primary,
-          onClick: () {
-            setState(() {
-              num = num + 1;
-            });
-          }),
+      // 注意：TFab 内部返回 Positioned widget，不能传给 Scaffold.floatingActionButton
+      // （会导致布局异常和白色遮罩）。改用原生 FloatingActionButton。
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            num = num + 1;
+          });
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildRedPointMessageBadge(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      height: 24,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          TText(
-            '消息',
-            font: TTheme.of(context).fontBodyLarge,
-          ),
-          const Positioned(
-            child: TBadge(TBadgeType.redPoint),
-            right: 0,
-            top: 0,
-          )
-        ],
+    return TBadge(
+      variant: TBadgeVariant.dot,
+      child: TText(
+        '消息',
+        font: context.tTheme.fontBodyLarge,
       ),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildRedPointIconBadge(BuildContext context) {
-    return const SizedBox(
-      width: 27,
-      height: 27,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(TBadgeType.redPoint),
-            right: 0,
-            top: 0,
-          )
-        ],
-      ),
+    return const TBadge(
+      variant: TBadgeVariant.dot,
+      child: Icon(TIcons.notification),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildRedPointButtonBadge(BuildContext context) {
-    return const SizedBox(
-      width: 83,
-      height: 48,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          TButton(
-            width: 80,
-            height: 48,
-            text: '按钮',
-            size: TButtonSize.large,
-            type: TButtonType.fill,
-          ),
-          Positioned(
-            child: TBadge(TBadgeType.redPoint),
-            right: 0,
-            top: 0,
-          )
-        ],
+    return const TBadge(
+      variant: TBadgeVariant.dot,
+      child: TButton(
+        child: Text('按钮'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
       ),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildMessageNumberBadge(BuildContext context) {
-    return SizedBox(
-      width: 56,
-      height: 36,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          TText('消息', font: TTheme.of(context).fontBodyLarge),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            left: 28,
-            bottom: 18,
-          )
-        ],
-      ),
+    return TBadge(
+      label: '$num',
+      child: TText('消息', font: context.tTheme.fontBodyLarge),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildIconNumberBadge(BuildContext context) {
-    return SizedBox(
-      width: 46,
-      height: 36,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            left: 18,
-            bottom: 18,
-          )
-        ],
-      ),
+    return TBadge(
+      label: '$num',
+      child: const Icon(TIcons.notification),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildButtonNumberBadge(BuildContext context) {
-    return SizedBox(
-      width: 86,
-      height: 54,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const TButton(
-            width: 80,
-            height: 48,
-            text: '按钮',
-            size: TButtonSize.large,
-          ),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            right: 0,
-            top: 0,
-          )
-        ],
+    return TBadge(
+      label: '$num',
+      child: const TButton(
+        child: Text('按钮'),
+        size: TButtonSize.large,
       ),
     );
   }
 
-  @Demo(group: 'badge')
-  Widget _buildCustomBadgeShowingNumber(BuildContext context) {
-    return SizedBox(
-      width: 64,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Container(
-            child: const Icon(TIcons.notification),
-            decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
-                borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
-          ),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            right: 0,
-            top: 0,
-          )
-        ],
+  @ExampleCode(group: 'badge')
+  Widget _buildCustomChildShowingNumber(BuildContext context) {
+    return TBadge(
+      label: '$num',
+      child: Container(
+        width: 40,
+        height: 40,
+        alignment: Alignment.center,
+        child: const Icon(TIcons.notification),
+        decoration: BoxDecoration(
+            color: context.tTheme.bgColorComponent,
+            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault)),
       ),
     );
   }
 
-  @Demo(group: 'badge')
-  Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
-    return SizedBox(
-      width: 64,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Container(
-            child: const Icon(TIcons.notification),
-            decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
-                borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
-          ),
-          const Positioned(
-            child: TBadge(TBadgeType.message, count: '0'),
-            right: 0,
-            top: 0,
-          )
-        ],
+  @ExampleCode(group: 'badge')
+  Widget _buildCustomChildShowingNumberZero(BuildContext context) {
+    return TBadge(
+      label: '0',
+      child: Container(
+        width: 40,
+        height: 40,
+        alignment: Alignment.center,
+        child: const Icon(TIcons.notification),
+        decoration: BoxDecoration(
+            color: context.tTheme.bgColorComponent,
+            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault)),
       ),
     );
   }
 
-  @Demo(group: 'badge')
-  Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
-    return SizedBox(
-      width: 64,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Container(
-            child: const Icon(TIcons.notification),
-            decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
-                borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
-          ),
-          const Positioned(
-            // 不显示 0
-            child: TBadge(TBadgeType.message, count: '0', showZero: false),
-            right: 0,
-            top: 0,
-          )
-        ],
+  @ExampleCode(group: 'badge')
+  Widget _buildCustomChildWithoutShowingNumberZero(BuildContext context) {
+    return TBadge(
+      label: '0',
+      showZero: false,
+      child: Container(
+        width: 40,
+        height: 40,
+        alignment: Alignment.center,
+        child: const Icon(TIcons.notification),
+        decoration: BoxDecoration(
+            color: context.tTheme.bgColorComponent,
+            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault)),
       ),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 34,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            left: 18,
-            bottom: 18,
-          )
-        ],
-      ),
+    return TBadge(
+      label: '$num',
+      child: const Icon(TIcons.notification),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 34,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const Icon(TIcons.notification),
-          Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              border: TBadgeBorder.small,
-              count: num.toString(),
-            ),
-            left: 20,
-            bottom: 18,
-          )
-        ],
-      ),
+    return TBadge(
+      label: '$num',
+      border: true,
+      child: const Icon(TIcons.notification),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildBubbleBadge(BuildContext context) {
-    return SizedBox(
-      width: 67,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Container(
-            child: const Icon(TIcons.shop),
-            decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorComponent,
-                borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            height: 48,
-            width: 48,
-          ),
-          const Positioned(
-            child: TBadge(TBadgeType.bubble, count: '领积分'),
-            right: 0,
-            top: 0,
-          )
-        ],
+    return TBadge(
+      label: '1',
+      variant: TBadgeVariant.small,
+      child: Container(
+        child: const Icon(TIcons.shop),
+        decoration: BoxDecoration(
+            color: context.tTheme.bgColorComponent,
+            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault)),
       ),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildSubscriptBadge(BuildContext context) {
-    return const Stack(
-      alignment: Alignment.topRight,
-      children: [
-        TCell(title: '单行标题'),
-        TBadge(TBadgeType.subscript, message: 'NEW'),
-      ],
+    return const TBadge(
+      variant: TBadgeVariant.dot,
+      child: TCell(title: Text('单行标题')),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
-    return SizedBox(
-      width: 80,
-      height: 68,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const TAvatar(size: TAvatarSize.large, type: TAvatarType.icon),
-          Positioned(
-            child: TBadge(TBadgeType.message,
-                size: TBadgeSize.large, count: num.toString()),
-            left: 48,
-            bottom: 48,
-          )
-        ],
-      ),
+    return TBadge(
+      label: '$num',
+      child: const TAvatar(size: TAvatarSize.large),
     );
   }
 
-  @Demo(group: 'badge')
+  @ExampleCode(group: 'badge')
   Widget _buildMediumBadge(BuildContext context) {
-    return SizedBox(
-      width: 72,
-      height: 54,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            left: 36,
-            bottom: 36,
-          )
-        ],
-      ),
+    return TBadge(
+      label: '$num',
+      child: const TAvatar(size: TAvatarSize.medium),
     );
   }
 
-  @Demo(group: 'badge')
-  Widget _buildLessThanMaxCountBadge(BuildContext context) {
-    return const SizedBox(
-      width: 60,
-      height: 50,
-      child: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            bottom: 0,
-            child: Icon(TIcons.notification),
-          ),
-          Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              count: '8888',
-              maxCount: '9000',
-              size: TBadgeSize.large,
-              border: TBadgeBorder.large,
-            ),
-            left: 18,
-            bottom: 18,
-          ),
-        ],
-      ),
+  @ExampleCode(group: 'badge')
+  Widget _buildNumericLabelBadge(BuildContext context) {
+    return const TBadge(
+      label: '8888',
+      child: Icon(TIcons.notification),
     );
   }
 
-  @Demo(group: 'badge')
-  Widget _buildMoreThanMaxCountBadge(BuildContext context) {
-    return const SizedBox(
-      width: 60,
-      height: 50,
-      child: Stack(
-        children: [
-          Positioned(left: 0, bottom: 0, child: Icon(TIcons.notification)),
-          Positioned(
-            child: TBadge(
-              TBadgeType.square,
-              count: '888',
-              maxCount: '99',
-              size: TBadgeSize.large,
-              border: TBadgeBorder.large,
-            ),
-            left: 18,
-            bottom: 18,
-          ),
-        ],
-      ),
+  @ExampleCode(group: 'badge')
+  Widget _buildOverflowLabelBadge(BuildContext context) {
+    return const TBadge(
+      label: '99+',
+      child: Icon(TIcons.notification),
     );
   }
 }

@@ -1,60 +1,30 @@
 ## API
 ### TTextarea
 #### 简介
-用于多行文本信息输入
+`TInput.multiline` 的语义别名。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| additionInfo | String? | '' | 错误提示信息 |
-| additionInfoColor | Color? | - | 错误提示颜色 |
-| allowInputOverMax | bool? | false | 超出`maxLength`之后是否还允许输入 |
-| autofocus | bool? | false | 是否自动获取焦点 |
-| autosize | bool? | - | 是否自动增高，值为 true 时，`maxLines`不生效 |
-| backgroundColor | Color? | - | 输入框背景色 |
-| bordered | bool? | - | 是否显示外边框 |
-| controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
-| cursorColor | Color? | - | 游标颜色 |
-| decoration | Decoration? | - | 输入框样式(包括标签) |
-| focusNode | FocusNode? | - | 获取或者取消焦点使用 |
-| hintText | String? | - | 提示文案 |
-| hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
-| indicator | bool? | false | 否显示文本计数器，如 0/140（必须设置maxLength） |
-| inputDecoration | InputDecoration? | - | 自定义输入框TextField组件样式 |
-| inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
-| inputType | TextInputType? | - | 键盘类型，数字、字母 |
+| autofocus | bool | false | 是否自动聚焦。 |
+| controller | TextEditingController? | - | 文本控制器。 |
+| decoration | InputDecoration? | - | Material 输入装饰逃逸口。 |
+| enabled | bool | true | 是否可交互。 |
+| focusNode | FocusNode? | - | 焦点节点。 |
+| hintText | String? | - | 占位提示文案。 |
+| initialValue | String? | - | 内部控制器的初始文本，仅初始化一次。 |
+| inputAction | TextInputAction? | - | 键盘动作。 |
+| inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
+| inputType | TextInputType | TextInputType.multiline | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String? | - | 输入框标题 |
-| labelIcon | Widget? | - | 输入框标题图标 |
-| labelStyle | TextStyle? | - | 左侧标签文本样式 |
-| labelWidget | Widget? | - | label组件，支持自定义 |
-| labelWidth | double? | - | 输入框标题宽度 |
-| layout | TTextareaLayout? | TTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
-| margin | EdgeInsetsGeometry? | - | 外边距 |
-| maxLength | int? | - | 最大字数限制 |
-| maxLengthEnforcement | MaxLengthEnforcement? | - | 如何执行输入长度限制 |
-| maxLines | int? | - | 最大输入行数 |
-| minLines | int? | 4 | 最小输入行数 |
-| onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
-| onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
-| onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
-| padding | EdgeInsetsGeometry? | - | 内边距 |
-| readOnly | bool? | false | 是否只读 |
-| required | bool? | - | 是否必填标志（红色*） |
-| showBottomDivider | bool? | true | 边框外部下划线 |
-| size | TInputSize? | TInputSize.large | 输入框规格 |
-| textAlign | TextAlign? | - | 文字对齐方向 |
-| textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
-| textInputBackgroundColor | Color? | - | 文本框背景色 |
-| textStyle | TextStyle? | - | 文本颜色 |
-| width | double? | - | 输入框宽度 |
-
-
-### TTextareaLayout
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| vertical | - |
-| horizontal | - |
+| label | String? | - | 标签文案。 |
+| maxLength | int? | - | 最大字符数。 |
+| maxLines | int? | - | 最大行数；null 表示不限制。 |
+| minLines | int? | - | 最小行数；未传时读取 Theme 默认值。 |
+| onChanged | ValueChanged<String>? | - | 文本变化通知。 |
+| onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
+| onSubmitted | ValueChanged<String>? | - | 提交回调。 |
+| prefix | Widget? | - | 前缀组件。 |
+| readOnly | bool | false | 是否只读。 |
+| suffix | Widget? | - | 后缀组件。 |
+| textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |

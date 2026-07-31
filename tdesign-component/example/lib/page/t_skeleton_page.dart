@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TSkeletonPage extends StatelessWidget {
@@ -79,143 +79,149 @@ class TSkeletonPage extends StatelessWidget {
       (context) => Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.fromLTRB(
-              TTheme.of(context).spacer16,
+              context.tTheme.spacer16,
               0,
-              TTheme.of(context).spacer16,
+              context.tTheme.spacer16,
               0,
             ),
             child: isFlexible
-                ? Row(children: [builder(context)])
+                ? Row(children: [Expanded(child: builder(context))])
                 : builder(context),
           );
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildAvatarSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.avatar);
+    return const TSkeleton(variant: TSkeletonVariant.avatar);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildImageSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.image);
+    return const TSkeleton(variant: TSkeletonVariant.image);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildTextSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.text);
+    return const TSkeleton(variant: TSkeletonVariant.text);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildParagraphSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.paragraph);
+    return const TSkeleton(variant: TSkeletonVariant.paragraph);
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildCellSkeleton(BuildContext context) {
-    final rowColsAvatar = TSkeleton(theme: TSkeletonTheme.avatar);
-    final rowColsImage = TSkeleton.fromRowCol(
-      rowCol: TSkeletonRowCol(objects: const [
-        [TSkeletonRowColObj.rect(width: 48, height: 48)]
-      ]),
-    );
-    final rowColsContent = TSkeleton.fromRowCol(
-      rowCol: TSkeletonRowCol(
-        objects: const [
-          [TSkeletonRowColObj(), TSkeletonRowColObj.spacer(flex: 1)],
-          [TSkeletonRowColObj()]
-        ],
-      ),
-    );
-
-    return Column(
+    return const Column(
       // spacing: 16,
-      children: [
+      children: <Widget>[
         Row(
           // spacing: 12,
-          children: [
-            rowColsAvatar,
-            const SizedBox(width: 12),
-            rowColsContent,
+          children: <Widget>[
+            TSkeleton(variant: TSkeletonVariant.avatar),
+            SizedBox(width: 12),
+            Expanded(
+              child: TSkeleton.custom(
+                layout: TSkeletonLayout(rows: [
+                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                  [TSkeletonBlock.line()]
+                ]),
+              ),
+            ),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Row(
           // spacing: 12,
-          children: [
-            rowColsImage,
-            const SizedBox(width: 12),
-            rowColsContent,
+          children: <Widget>[
+            TSkeleton.custom(
+              layout: TSkeletonLayout(rows: [
+                [TSkeletonBlock.rectangle(width: 48, height: 48)]
+              ]),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: TSkeleton.custom(
+                layout: TSkeletonLayout(rows: [
+                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                  [TSkeletonBlock.line()]
+                ]),
+              ),
+            ),
           ],
         ),
       ],
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildGridSkeleton(BuildContext context) {
     return Row(
       // spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
-        return TSkeleton.fromRowCol(
-          rowCol: TSkeletonRowCol(objects: const [
-            [TSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-            [TSkeletonRowColObj.text(width: 48, flex: null)],
+        return const TSkeleton.custom(
+          layout: TSkeletonLayout(rows: [
+            [TSkeletonBlock.rectangle(width: 48, height: 48, flex: null)],
+            [TSkeletonBlock.line(width: 48, flex: null)],
           ]),
         );
       }),
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildCombineSkeleton(BuildContext context) {
-    final rowCols = Flexible(
+    Widget buildRowCols() {
+      return Expanded(
         child: LayoutBuilder(
-            builder: (context, constraints) => Row(children: [
-                  TSkeleton.fromRowCol(
-                    rowCol: TSkeletonRowCol(
-                      objects: [
-                        [
-                          TSkeletonRowColObj(
-                              width: constraints.maxWidth,
-                              height: constraints.maxWidth,
-                              flex: null,
-                              style: TSkeletonRowColObjStyle(
-                                  borderRadius: (context) =>
-                                      TTheme.of(context).radiusExtraLarge))
-                        ],
-                        [TSkeletonRowColObj.text(width: constraints.maxWidth)],
-                        const [
-                          TSkeletonRowColObj.text(),
-                          TSkeletonRowColObj.spacer(flex: 1),
-                        ],
-                      ],
+          builder: (context, constraints) => TSkeleton.custom(
+            layout: TSkeletonLayout(
+              rows: [
+                [
+                  TSkeletonBlock(
+                    width: constraints.maxWidth,
+                    height: constraints.maxWidth,
+                    flex: null,
+                    style: TSkeletonBlockStyle(
+                      borderRadius: context.tTheme.radiusExtraLarge,
                     ),
-                  )
-                ])));
+                  ),
+                ],
+                [TSkeletonBlock.line(width: constraints.maxWidth)],
+                const [
+                  TSkeletonBlock.line(),
+                  TSkeletonBlock.spacer(flex: 1),
+                ],
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Row(
-      // spacing: TTheme.of(context).spacer16,
+      // spacing: context.tTheme.spacer16,
       children: [
-        rowCols,
-        SizedBox(width: TTheme.of(context).spacer16),
-        rowCols,
+        buildRowCols(),
+        SizedBox(width: context.tTheme.spacer16),
+        buildRowCols(),
       ],
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildGradientSkeleton(BuildContext context) {
-    return TSkeleton(
+    return const TSkeleton(
       animation: TSkeletonAnimation.gradient,
-      theme: TSkeletonTheme.paragraph,
+      variant: TSkeletonVariant.paragraph,
     );
   }
 
-  @Demo(group: 'skeleton')
+  @ExampleCode(group: 'skeleton')
   Widget _buildFlashedSkeleton(BuildContext context) {
-    return TSkeleton(
+    return const TSkeleton(
       animation: TSkeletonAnimation.flashed,
-      theme: TSkeletonTheme.paragraph,
+      variant: TSkeletonVariant.paragraph,
     );
   }
 }

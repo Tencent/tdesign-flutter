@@ -8,7 +8,10 @@ class PopupHeader extends StatelessWidget {
     required this.onCloseWithTrigger,
   });
 
+  /// 弹出层配置
   final TPopupOptions options;
+
+  /// 关闭回调（携带触发源）
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
 
   static const double headerHeight = 58;
@@ -51,7 +54,7 @@ class _DefaultHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     final showCancel = options.cancelBuilder != null;
     final showConfirm = options.confirmBuilder != null;
 
@@ -140,6 +143,8 @@ class _DefaultHeader extends StatelessWidget {
           context.resource.cancel,
           textColor: theme.textColorSecondary,
           font: theme.fontBodyLarge,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       );
     }
@@ -158,6 +163,8 @@ class _DefaultHeader extends StatelessWidget {
           textColor: theme.brandNormalColor,
           font: theme.fontTitleMedium,
           fontWeight: FontWeight.w600,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       );
     }

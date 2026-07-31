@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 
-class TTabBarView extends TabBarView {
+/// TabBarView 组件 v1.0
+///
+/// Material TabBarView 薄包装。
+/// `physics` 为空时默认不可滑动。
+class TTabsBarView extends StatefulWidget {
   /// 子widget列表
-  @override
   final List<Widget> children;
 
   /// 控制器
-  @override
   final TabController? controller;
 
-  /// 是否可以滑动切换
-  final bool isSlideSwitch;
+  /// 滑动物理特性；未传时默认不可滑动。
+  final ScrollPhysics? physics;
 
-  @override
-  const TTabBarView({
+  const TTabsBarView({
     Key? key,
     required this.children,
     this.controller,
-    this.isSlideSwitch = false,
-  }) : super(
-            key: key,
-            children: children,
-            controller: controller,
-            physics: isSlideSwitch
-                ? const ScrollPhysics()
-                : const NeverScrollableScrollPhysics());
+    this.physics,
+  }) : super(key: key);
 
+  @override
+  State<TTabsBarView> createState() => _TTabsBarViewState();
+}
+
+class _TTabsBarViewState extends State<TTabsBarView> {
+  @override
   Widget build(BuildContext context) {
     return TabBarView(
-      children: children,
-      controller: controller,
+      physics: widget.physics ?? const NeverScrollableScrollPhysics(),
+      controller: widget.controller,
+      children: widget.children,
     );
   }
 }

@@ -1,72 +1,4 @@
 ## API
-### TTheme
-
-#### 静态方法
-
-##### TTheme.defaultData
-
-获取默认主题数据，全局唯一
-
-返回类型：`TThemeData`
-
-##### TTheme.needMultiTheme
-
-开启多套主题功能
-
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| value | bool | true | - |
-
-
-##### TTheme.of
-
-获取主题数据，如果未传context则获取全局唯一的默认数据,
-传了context，则获取最近的主题，取不到则会获取全局唯一默认数据
-
-返回类型：`TThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext? | - | - |
-
-
-##### TTheme.ofNullable
-
-获取主题数据，取不到则可空
-传了context，则获取最近的主题，取不到或未传context则返回null,
-
-返回类型：`TThemeData?`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext? | - | - |
-
-
-##### TTheme.setResourceBuilder
-
-设置资源代理,
-needAlwaysBuild=true:每次都会走build方法;如果全局有多个Delegate,需要区分情况去获取,则可以设置needAlwaysBuild为true,业务自己判断返回哪个delegate
-needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回了
-
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| delegate | TResourceBuilder | - | - |
-| needAlwaysBuild | bool | false | - |
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget | - | 子控件 |
-| data | TThemeData | - | 主题数据 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| systemData | ThemeData? | - | Flutter系统主题数据 |
-
-
 ### TThemeData
 
 #### 静态方法
@@ -92,8 +24,8 @@ needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回
 | --- | --- | --- | --- |
 | name | String | - | 主题名称，目前只支持一级键 |
 | themeJson | String | - | 主题json字符串，要求json配置必须正确 |
-| darkName | String? | - | - |
-| recoverDefault | - | false | 是否恢复为默认主题数据 |
+| darkName | String? | - | 暗色主题名称；为空时使用 `${name}Dark`。 |
+| recoverDefault | bool | false | 是否恢复为默认主题数据 |
 | extraThemeData | TExtraThemeData? | - | 额外扩展的主题数据 |
 
 
@@ -104,7 +36,7 @@ needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | name | String | - | 名称 |
-| themeConfig | - | - | - |
+| themeConfig | dynamic | - | 已解析的主题 JSON 配置。 |
 | extraThemeData | TExtraThemeData? | - | 额外定义的结构 |
 
 #### 默认构造方法

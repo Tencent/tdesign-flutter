@@ -1,17 +1,14 @@
-
-  Widget _shadowNavbar(BuildContext context) {
+Widget _shadowNavbar(BuildContext context) {
     return TNavBar(
-      height: 48,
       titleFontWeight: FontWeight.w600,
       title: titleText,
-      screenAdaptation: false,
       useDefaultBack: true,
       boxShadow: [
         BoxShadow(
           blurRadius: 4,
           offset: const Offset(0, 4),
-          color: TTheme.of(context).componentBorderColor,
-        )
+          color: context.tTheme.componentBorderColor,
+        ),
       ],
     );
   }

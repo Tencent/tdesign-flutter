@@ -1,4 +1,3 @@
-
-  Widget _buildParagraphSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.paragraph);
+Widget _buildParagraphSkeleton(BuildContext context) {
+    return const TSkeleton(variant: TSkeletonVariant.paragraph);
   }

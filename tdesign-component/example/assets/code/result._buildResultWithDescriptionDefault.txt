@@ -1,8 +1,0 @@
-
-  TResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TResult(
-      title: '默认状态',
-      theme: TResultTheme.defaultTheme,
-      description: '描述文字',
-    );
-  }

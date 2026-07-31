@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TPopoverPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class TPopoverPage extends StatefulWidget {
 }
 
 class _TPopoverPage extends State<TPopoverPage> {
-  TPopoverTheme theme = TPopoverTheme.light;
+  TPopoverColorScheme theme = TPopoverColorScheme.light;
 
   @override
   void initState() {
@@ -20,8 +20,8 @@ class _TPopoverPage extends State<TPopoverPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
-            ? TPopoverTheme.light
-            : TPopoverTheme.dark;
+            ? TPopoverColorScheme.light
+            : TPopoverColorScheme.dark;
       });
     });
   }
@@ -196,7 +196,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -204,12 +204,12 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '带箭头',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('带箭头'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
-                  context: _, content: '弹出气泡内容', theme: theme);
+                  context: _, content: '弹出气泡内容', colorScheme: theme);
             },
           );
         },
@@ -217,57 +217,64 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildNoArrowPopover(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constrains) {
         return TButton(
           size: TButtonSize.medium,
-          text: '不带箭头',
-          type: TButtonType.outline,
-          theme: TButtonTheme.primary,
-          onTap: () {
+          child: const Text('不带箭头'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
             TPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
+                context: _,
+                content: '弹出气泡内容',
+                showArrow: false,
+                colorScheme: theme);
           },
         );
       },
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildNCustomPopover(BuildContext context) {
     var textStyle = TextStyle(
-        color: theme == TPopoverTheme.light
-            ? TTheme.of(context).fontGyColor1
-            : TTheme.of(context).fontWhColor1);
+        color: theme == TPopoverColorScheme.light
+            ? context.tTheme.fontGyColor1
+            : context.tTheme.fontWhColor1);
     return LayoutBuilder(
       builder: (_, constrains) {
         return TButton(
-          text: '自定义内容',
-          type: TButtonType.outline,
-          theme: TButtonTheme.primary,
-          onTap: () {
+          child: const Text('自定义内容'),
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
             TPopover.showPopover(
               context: _,
               padding: const EdgeInsets.all(0),
-              theme: theme,
-              width: 108,
-              height: 152,
+              colorScheme: theme,
+              // contentWidget 模式下必须指定 width 和 height（组件 initState 断言要求）
+              width: 150,
+              height: 146,
               contentWidget: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
                     child: TText('选项1', style: textStyle),
                   ),
-                  const TDivider(height: 0.5),
+                  const TDivider(),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
                     child: TText('选项2', style: textStyle),
                   ),
-                  const TDivider(height: 0.5),
+                  const TDivider(),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 24),
                     child: TText('选项3', style: textStyle),
                   ),
                 ],
@@ -279,7 +286,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildDarkPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -288,10 +295,10 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '深色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('深色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
@@ -303,7 +310,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -312,14 +319,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '浅色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('浅色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
-                theme: TPopoverTheme.light,
+                colorScheme: TPopoverColorScheme.light,
               );
             },
           );
@@ -328,7 +335,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildInfoPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -337,14 +344,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '品牌色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('品牌色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
-                theme: TPopoverTheme.info,
+                colorScheme: TPopoverColorScheme.info,
               );
             },
           );
@@ -353,7 +360,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildSuccessPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -362,14 +369,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '成功色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('成功色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
-                theme: TPopoverTheme.success,
+                colorScheme: TPopoverColorScheme.success,
               );
             },
           );
@@ -378,7 +385,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildWarningPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -387,14 +394,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '警告色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('警告色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
-                theme: TPopoverTheme.warning,
+                colorScheme: TPopoverColorScheme.warning,
               );
             },
           );
@@ -403,7 +410,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildErrorPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -412,14 +419,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '错误色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('错误色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
-                theme: TPopoverTheme.error,
+                colorScheme: TPopoverColorScheme.error,
               );
             },
           );
@@ -428,7 +435,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildTopLeftPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -437,15 +444,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '顶部左',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('顶部左'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topLeft,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -454,7 +461,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -463,15 +470,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '顶部中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('顶部中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.top,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -480,7 +487,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildTopRightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -489,15 +496,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '顶部右',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('顶部右'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.topRight,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -506,7 +513,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildBottomLeftPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -515,15 +522,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '底部左',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('底部左'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomLeft,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -532,7 +539,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildBottomPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -541,15 +548,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '底部中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('底部中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottom,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -558,7 +565,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildBottomRightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -567,15 +574,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '底部右',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('底部右'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.bottomRight,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -584,7 +591,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildRightTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -593,15 +600,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '右侧上',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('右侧上'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightTop,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -610,7 +617,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildRightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -619,15 +626,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '右侧中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('右侧中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.right,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -636,7 +643,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildRightBottomPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -645,15 +652,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '右侧下',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('右侧下'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.rightBottom,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -662,7 +669,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLeftTopPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -671,15 +678,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧上',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('左侧上'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftTop,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -688,7 +695,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLeftPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -697,15 +704,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧中',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('左侧中'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.left,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -714,7 +721,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildLeftBottomPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -723,15 +730,15 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '左侧下',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('左侧下'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TPopoverPlacement.leftBottom,
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -740,7 +747,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildMultiLinePopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -749,15 +756,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '多行内容',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('多行内容'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
-                width: 200,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
-                theme: theme,
+                colorScheme: theme,
               );
             },
           );
@@ -766,7 +772,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @Demo(group: 'popover')
+  @ExampleCode(group: 'popover')
   Widget _buildCustomRadiusPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -775,15 +781,14 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '自定义圆角',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('自定义圆角'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
-                width: 200,
                 radius: BorderRadius.circular(16),
-                theme: theme,
+                colorScheme: theme,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
               );
             },

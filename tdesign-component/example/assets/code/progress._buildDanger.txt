@@ -1,10 +1,6 @@
-
-  Widget _buildDanger(BuildContext context) {
+Widget _buildDanger(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.danger,
+      variant: TProgressVariant.linear,
       value: value,
-      strokeWidth: 6,
-      progressLabelPosition: TProgressLabelPosition.right,
     );
   }

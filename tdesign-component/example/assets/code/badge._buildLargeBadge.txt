@@ -1,19 +1,6 @@
-
-  Widget _buildLargeBadge(BuildContext context) {
-    return SizedBox(
-      width: 80,
-      height: 68,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          const TAvatar(size: TAvatarSize.large, type: TAvatarType.icon),
-          Positioned(
-            child: TBadge(TBadgeType.message,
-                size: TBadgeSize.large, count: num.toString()),
-            left: 48,
-            bottom: 48,
-          )
-        ],
-      ),
+Widget _buildLargeBadge(BuildContext context) {
+    return TBadge(
+      label: '$num',
+      child: const TAvatar(size: TAvatarSize.large),
     );
   }

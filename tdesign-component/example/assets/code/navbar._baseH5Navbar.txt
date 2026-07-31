@@ -1,10 +1,8 @@
-
-  Widget _baseH5Navbar(BuildContext context) {
+Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
-      height: 48,
+      key: Key('navbar-demo-base'),
       titleFontWeight: FontWeight.w600,
       title: titleText,
-      screenAdaptation: false,
       useDefaultBack: true,
     );
   }

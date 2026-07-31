@@ -1,4 +1,3 @@
-
-  Widget _buildImageSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.image);
+Widget _buildImageSkeleton(BuildContext context) {
+    return const TSkeleton(variant: TSkeletonVariant.image);
   }
