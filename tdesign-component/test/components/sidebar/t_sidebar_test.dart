@@ -110,6 +110,25 @@ void main() {
       expect(find.byType(TSideBar), findsOneWidget);
     });
 
+    testWidgets('重复 value 不复用 GlobalKey', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TSideBar(
+            value: -1,
+            children: const [
+              TSideBarItem(label: '默认一'),
+              TSideBarItem(label: '默认二'),
+            ],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(find.text('默认一'), findsOneWidget);
+      expect(find.text('默认二'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('value 无匹配项时不选中', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

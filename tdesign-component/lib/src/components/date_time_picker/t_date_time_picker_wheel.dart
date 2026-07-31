@@ -43,7 +43,8 @@ class DateTimePickerWheel extends StatefulWidget {
   final void Function(
     DateTimePickerSnapshot snapshot,
     TDateTimePickerValue result,
-  ) onChanged;
+  )
+  onChanged;
 
   @override
   State<DateTimePickerWheel> createState() => _DateTimePickerWheelState();
@@ -154,8 +155,9 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       end: widget.end,
     );
     final outOfSync = !_valuesEqual(rawValues, next.values);
-    final syncIndices =
-        outOfSync ? _outOfSyncIndices(rawValues, next.values) : const <int>{};
+    final syncIndices = outOfSync
+        ? _outOfSyncIndices(rawValues, next.values)
+        : const <int>{};
 
     if (next == prev && rebuildIndices.isEmpty && syncIndices.isEmpty) {
       return;
@@ -217,10 +219,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     }
 
     final columnState = _columnKeys[col].currentState;
-    columnState?.applyColumnUpdate(
-      options: newData,
-      controller: controller,
-    );
+    columnState?.applyColumnUpdate(options: newData, controller: controller);
     if (oldData.length != newData.length &&
         !identical(previousController, controller)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -250,11 +249,14 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
         return found;
       }
     }
-    if (_controllersReady && col < _controllers.length) {
+    if (_controllersReady &&
+        col < _controllers.length &&
+        _controllers[col].hasClients) {
       // coverage:ignore-line
-      return _controllers[col]
-          .selectedItem
-          .clamp(0, _columns[col].length - 1); // coverage:ignore-line
+      return _controllers[col].selectedItem.clamp(
+        0,
+        _columns[col].length - 1,
+      ); // coverage:ignore-line
     }
     return 0;
   }
@@ -272,8 +274,9 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   }
 
   static Set<int> _outOfSyncIndices(List<int> raw, List<int> normalized) {
-    final count =
-        raw.length < normalized.length ? raw.length : normalized.length;
+    final count = raw.length < normalized.length
+        ? raw.length
+        : normalized.length;
     final out = <int>{};
     for (var i = 0; i < count; i++) {
       if (raw[i] != normalized[i]) {

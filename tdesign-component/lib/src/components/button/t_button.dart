@@ -166,11 +166,13 @@ class _TButtonState extends State<TButton> {
       // 渐变按钮保留自绘装饰层，同时复用 resolvedStyle 中的 P0/ButtonStyle 结果。
       final isDisabled = widget.onPressed == null;
       final states = <WidgetState>{if (isDisabled) WidgetState.disabled};
-      final shape = resolvedStyle.shape?.resolve(states) ??
+      final shape =
+          resolvedStyle.shape?.resolve(states) ??
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               _borderRadiusForShape(
-                  theme?.effectiveShape ?? TButtonShape.rectangle),
+                theme?.effectiveShape ?? TButtonShape.rectangle,
+              ),
             ),
           );
       final side = resolvedStyle.side?.resolve(states);
@@ -178,16 +180,19 @@ class _TButtonState extends State<TButton> {
       final backgroundColor = resolvedStyle.backgroundColor?.resolve(states);
       final foregroundColor = resolvedStyle.foregroundColor?.resolve(states);
 
-      final textStyle = resolvedStyle.textStyle?.resolve(states) ??
+      final textStyle =
+          resolvedStyle.textStyle?.resolve(states) ??
           TextStyle(fontSize: _fontSizeForButton(effectiveSize));
-      final padding = resolvedStyle.padding?.resolve(states) ??
+      final padding =
+          resolvedStyle.padding?.resolve(states) ??
           _gradientPadding(
             effectiveSize,
             widget.icon != null,
             widget.child != null,
             theme?.effectiveShape ?? TButtonShape.rectangle,
           );
-      final minimumSize = resolvedStyle.minimumSize?.resolve(states) ??
+      final minimumSize =
+          resolvedStyle.minimumSize?.resolve(states) ??
           Size(0, _sideLengthForSize(effectiveSize));
       final maximumSize = resolvedStyle.maximumSize?.resolve(states);
       final fixedSize = resolvedStyle.fixedSize?.resolve(states);
@@ -225,10 +230,7 @@ class _TButtonState extends State<TButton> {
             overlayColor: resolvedStyle.overlayColor,
             onTap: widget.onPressed,
             onLongPress: widget.onPressed == null ? null : widget.onLongPress,
-            child: Padding(
-              padding: padding,
-              child: styledContent,
-            ),
+            child: Padding(padding: padding, child: styledContent),
           ),
         ),
       );
@@ -289,7 +291,7 @@ class _TButtonState extends State<TButton> {
       if (useDefaultSize || useDefaultColor) {
         final iconSize = _iconSizeForButton(effectiveSize);
         return Icon(
-          icon.icon!,
+          icon.icon,
           size: useDefaultSize ? iconSize : icon.size, // coverage:ignore-line
           color: useDefaultColor ? null : icon.color, // coverage:ignore-line
         );
@@ -320,14 +322,17 @@ class _TButtonState extends State<TButton> {
       TButtonShape.round => tTheme.radiusRound, // coverage:ignore-line
       TButtonShape.square ||
       TButtonShape.filled ||
-      TButtonShape.circle =>
-        0, // coverage:ignore-line
+      TButtonShape.circle => 0, // coverage:ignore-line
     };
   }
 
   /// 渐变模式下根据 size 计算 padding（与 _resolveSize 对齐）
   EdgeInsets _gradientPadding(
-      TButtonSize size, bool hasIcon, bool hasChild, TButtonShape shape) {
+    TButtonSize size,
+    bool hasIcon,
+    bool hasChild,
+    TButtonShape shape,
+  ) {
     final isSquareOrCircle =
         shape == TButtonShape.square || shape == TButtonShape.circle;
     final onlyIcon = hasIcon && !hasChild;

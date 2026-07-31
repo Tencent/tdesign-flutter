@@ -35,23 +35,26 @@ class _ToastInstance {
 
   _ToastInstance({required this.overlayEntry, this.timer});
 
+  void _removeEntry() {
+    if (removed) {
+      return;
+    }
+    overlayEntry.remove();
+    overlayEntry.dispose();
+    removed = true;
+  }
+
   void cancel() {
     timer?.cancel();
     disposeTimer?.cancel();
-    if (!removed) {
-      overlayEntry.remove();
-      removed = true;
-    }
+    _removeEntry();
     showing = false;
   }
 
   void scheduleDispose(String toastId) {
     disposeTimer?.cancel();
     disposeTimer = Timer(const Duration(milliseconds: 200), () {
-      if (!removed) {
-        overlayEntry.remove();
-        removed = true;
-      }
+      _removeEntry();
       TToast._toastInstances.remove(toastId);
     });
   }
@@ -453,8 +456,13 @@ class TToast {
     bool? preventTap,
     required String toastId,
   }) {
-    // 不自动关闭之前的Toast，支持多个Toast同时显示
-    final overlayState = Overlay.of(context);
+    // 不同 ID 的 Toast 可以并存；同 ID 采用替换语义。
+    _toastInstances.remove(toastId)?.cancel();
+    final overlayState = Overlay.maybeOf(context);
+    if (overlayState == null) {
+      debugPrint('warn: TToast requires an Overlay ancestor.');
+      return;
+    }
     final captured = InheritedTheme.capture(
       from: context,
       to: overlayState.context,

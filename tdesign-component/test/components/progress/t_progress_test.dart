@@ -24,9 +24,9 @@ void main() {
 
   group('TProgress 基础渲染', () {
     testWidgets('linear variant 默认渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.linear, value: 0.5),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(TProgress(variant: TProgressVariant.linear, value: 0.5)),
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
@@ -35,36 +35,48 @@ void main() {
       final progress = TProgress(variant: TProgressVariant.linear);
       expect(progress.value, isNull);
       await tester.pumpWidget(wrapWithTheme(progress));
-      expect(find.byType(LinearProgressIndicator), findsOneWidget);
+      expect(find.byType(LinearProgressIndicator), findsNothing);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('value 被 clamp 到 0-1 范围', (tester) async {
       final progress = TProgress(variant: TProgressVariant.linear, value: 1.5);
       expect(progress.value, 1.0);
 
-      final progress2 =
-          TProgress(variant: TProgressVariant.linear, value: -0.5);
+      final progress2 = TProgress(
+        variant: TProgressVariant.linear,
+        value: -0.5,
+      );
       expect(progress2.value, 0.0);
     });
 
-    testWidgets('circular null value renders indeterminate indicator',
-        (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.circular),
-      ));
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    testWidgets('circular null value renders indeterminate indicator', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(TProgress(variant: TProgressVariant.circular)),
+      );
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TProgress),
+          matching: find.byType(RotationTransition),
+        ),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('value, color and label updates refresh resolved state',
-        (tester) async {
+    testWidgets('value, color and label updates refresh resolved state', (
+      tester,
+    ) async {
       Widget build(double value, Color color, Widget label) => wrapWithTheme(
-            TProgress(
-              variant: TProgressVariant.circular,
-              value: value,
-              label: label,
-            ),
-            progressTheme: TProgressThemeData(color: color),
-          );
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: value,
+          label: label,
+        ),
+        progressTheme: TProgressThemeData(color: color),
+      );
 
       await tester.pumpWidget(build(0.2, Colors.red, const Text('old')));
       await tester.pumpWidget(build(0.8, Colors.blue, const Text('new')));
@@ -77,44 +89,47 @@ void main() {
 
   group('TProgress variant 四档', () {
     testWidgets('variant: linear 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
           ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('variant: circular 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.circular, value: 0.6),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(variant: TProgressVariant.circular, value: 0.6),
+        ),
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('variant: micro 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.micro, value: 0.3),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(TProgress(variant: TProgressVariant.micro, value: 0.3)),
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('variant: button 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(variant: TProgressVariant.button, value: 0.7),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.button, value: 0.7),
+          ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
@@ -123,16 +138,18 @@ void main() {
   group('TProgress 交互形态', () {
     testWidgets('button variant 支持点击', (tester) async {
       var taps = 0;
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(
-            variant: TProgressVariant.button,
-            value: 0.5,
-            onTap: () => taps++,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.button,
+              value: 0.5,
+              onTap: () => taps++,
+            ),
           ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(TProgress));
@@ -142,13 +159,15 @@ void main() {
 
     testWidgets('micro variant 支持点击', (tester) async {
       var taps = 0;
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(
-          variant: TProgressVariant.micro,
-          value: 0.5,
-          onTap: () => taps++,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(
+            variant: TProgressVariant.micro,
+            value: 0.5,
+            onTap: () => taps++,
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(TProgress));
@@ -159,17 +178,19 @@ void main() {
     testWidgets('button variant 支持独立长按且不触发点击', (tester) async {
       var taps = 0;
       var longPresses = 0;
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(
-            variant: TProgressVariant.button,
-            value: 0.5,
-            onTap: () => taps++,
-            onLongPress: () => longPresses++,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.button,
+              value: 0.5,
+              onTap: () => taps++,
+              onLongPress: () => longPresses++,
+            ),
           ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.longPress(find.byType(TProgress));
@@ -180,13 +201,15 @@ void main() {
 
     testWidgets('micro variant 仅提供 onLongPress 时仍可长按', (tester) async {
       var longPresses = 0;
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(
-          variant: TProgressVariant.micro,
-          value: 0.5,
-          onLongPress: () => longPresses++,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(
+            variant: TProgressVariant.micro,
+            value: 0.5,
+            onLongPress: () => longPresses++,
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.longPress(find.byType(TProgress));
@@ -197,17 +220,19 @@ void main() {
     testWidgets('linear variant 不响应交互回调', (tester) async {
       var taps = 0;
       var longPresses = 0;
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
-            onTap: () => taps++,
-            onLongPress: () => longPresses++,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.5,
+              onTap: () => taps++,
+              onLongPress: () => longPresses++,
+            ),
           ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(TProgress));
@@ -221,106 +246,105 @@ void main() {
 
   group('TProgress label 显示', () {
     testWidgets('linear value=0.5 显示 50%', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
           ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.text('50%'), findsWidgets);
     });
 
     testWidgets('linear value=0.0 不显示百分比文字', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.0,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.0),
           ),
         ),
-      ));
+      );
       await tester.pump();
       // value 不为 null 时（即使是 0.0）getAutoText 仍渲染 "0%" 文本
       expect(find.text('0%'), findsWidgets);
     });
 
     testWidgets('labelPosition: left 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(
+            progressLabelPosition: TProgressLabelPosition.left,
           ),
         ),
-        progressTheme: const TProgressThemeData(
-          progressLabelPosition: TProgressLabelPosition.left,
-        ),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('labelPosition: right 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(
+            progressLabelPosition: TProgressLabelPosition.right,
           ),
         ),
-        progressTheme: const TProgressThemeData(
-          progressLabelPosition: TProgressLabelPosition.right,
-        ),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('showLabel: false 隐藏标签', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
           ),
+          progressTheme: const TProgressThemeData(showLabel: false),
         ),
-        progressTheme: const TProgressThemeData(showLabel: false),
-      ));
+      );
       await tester.pump();
       expect(find.text('50%'), findsNothing);
     });
 
     testWidgets('自定义 Text 标签', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
-            label: const Text('自定义'),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.5,
+              label: const Text('自定义'),
+            ),
           ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.text('自定义'), findsWidgets);
     });
 
     testWidgets('Icon 标签渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(
-          variant: TProgressVariant.circular,
-          value: 0.5,
-          label: const Icon(Icons.star),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(
+            variant: TProgressVariant.circular,
+            value: 0.5,
+            label: const Icon(Icons.star),
+          ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.byIcon(Icons.star), findsWidgets);
     });
@@ -328,80 +352,142 @@ void main() {
 
   group('TProgress Theme', () {
     testWidgets('Theme.color 覆盖进度条颜色', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(color: Colors.red),
         ),
-        progressTheme: const TProgressThemeData(color: Colors.red),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('Theme.strokeWidth 覆盖粗细', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(strokeWidth: 10),
         ),
-        progressTheme: const TProgressThemeData(strokeWidth: 10),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('Theme.backgroundColor 覆盖背景色', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(backgroundColor: Colors.grey),
         ),
-        progressTheme: const TProgressThemeData(backgroundColor: Colors.grey),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('Theme.circleRadius 覆盖环形半径', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.circular, value: 0.5),
-        progressTheme: const TProgressThemeData(circleRadius: 150),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(variant: TProgressVariant.circular, value: 0.5),
+          progressTheme: const TProgressThemeData(circleRadius: 150),
+        ),
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('实例 label 与 Theme 位置配合渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(
-            variant: TProgressVariant.linear,
-            value: 0.5,
-            label: const Text('加载中'),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.5,
+              label: const Text('加载中'),
+            ),
+          ),
+          progressTheme: const TProgressThemeData(
+            progressLabelPosition: TProgressLabelPosition.left,
           ),
         ),
-        progressTheme: const TProgressThemeData(
-          progressLabelPosition: TProgressLabelPosition.left,
-        ),
-      ));
+      );
       await tester.pump();
       expect(find.text('加载中'), findsOneWidget);
     });
 
     testWidgets('Theme.animationDuration 覆盖动画时长', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(
+            animationDuration: Duration(milliseconds: 500),
+          ),
         ),
-        progressTheme: const TProgressThemeData(
-          animationDuration: Duration(milliseconds: 500),
-        ),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
+    });
+
+    testWidgets('Theme.fallbackLinearWidth 解决横向无界布局', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(fallbackLinearWidth: 180),
+        ),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TProgress)).width, 180);
+    });
+
+    testWidgets('有界布局忽略 fallbackLinearWidth 并保持父级宽度', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+          ),
+          progressTheme: const TProgressThemeData(fallbackLinearWidth: 180),
+        ),
+      );
+      await tester.pump();
+
+      expect(tester.getSize(find.byType(TProgress)).width, 300);
+    });
+
+    testWidgets('未配置无界兜底宽度时使用 MediaQuery 视口宽度', (tester) async {
+      tester.view.physicalSize = const Size(420, 300);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: TProgress(variant: TProgressVariant.button, value: 0.5),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TProgress)).width, 420);
     });
   });
 
@@ -411,11 +497,15 @@ void main() {
         strokeWidth: 5,
         color: Colors.red,
         circleRadius: 100,
+        indeterminateLinearSegmentFraction: 0.4,
+        fallbackLinearWidth: 180,
       );
       final copied = theme.copyWith(strokeWidth: 10);
       expect(copied.strokeWidth, 10);
       expect(copied.color, Colors.red);
       expect(copied.circleRadius, 100);
+      expect(copied.indeterminateLinearSegmentFraction, 0.4);
+      expect(copied.fallbackLinearWidth, 180);
     });
 
     test('copyWith 不覆盖时保持原值', () {
@@ -441,13 +531,39 @@ void main() {
       expect(result.strokeWidth, 20);
     });
 
+    test('lerp fallbackLinearWidth 插值', () {
+      const a = TProgressThemeData(fallbackLinearWidth: 100);
+      const b = TProgressThemeData(fallbackLinearWidth: 300);
+      final result = a.lerp(b, 0.5);
+      expect(result.fallbackLinearWidth, 200);
+    });
+
     test('lerp animationDuration 插值', () {
-      const a =
-          TProgressThemeData(animationDuration: Duration(milliseconds: 100));
-      const b =
-          TProgressThemeData(animationDuration: Duration(milliseconds: 300));
+      const a = TProgressThemeData(
+        animationDuration: Duration(milliseconds: 100),
+      );
+      const b = TProgressThemeData(
+        animationDuration: Duration(milliseconds: 300),
+      );
       final result = a.lerp(b, 0.5);
       expect(result.animationDuration?.inMilliseconds, 200);
+    });
+
+    test('lerp 不确定态动画与几何字段', () {
+      const a = TProgressThemeData(
+        indeterminateAnimationDuration: Duration(milliseconds: 800),
+        indeterminateLinearSegmentFraction: 0.2,
+        indeterminateCircularValue: 0.2,
+      );
+      const b = TProgressThemeData(
+        indeterminateAnimationDuration: Duration(milliseconds: 1200),
+        indeterminateLinearSegmentFraction: 0.4,
+        indeterminateCircularValue: 0.4,
+      );
+      final result = a.lerp(b, 0.5);
+      expect(result.indeterminateAnimationDuration?.inMilliseconds, 1000);
+      expect(result.indeterminateLinearSegmentFraction, closeTo(0.3, 0.001));
+      expect(result.indeterminateCircularValue, closeTo(0.3, 0.001));
     });
 
     test('lerp 两端 animationDuration 均为 null 返回 null', () {
@@ -459,15 +575,17 @@ void main() {
 
     test('lerp a animationDuration 为 null 返回 b 值', () {
       const a = TProgressThemeData();
-      const b =
-          TProgressThemeData(animationDuration: Duration(milliseconds: 200));
+      const b = TProgressThemeData(
+        animationDuration: Duration(milliseconds: 200),
+      );
       final result = a.lerp(b, 0.5);
       expect(result.animationDuration?.inMilliseconds, 200);
     });
 
     test('lerp b animationDuration 为 null 返回 a 值', () {
-      const a =
-          TProgressThemeData(animationDuration: Duration(milliseconds: 100));
+      const a = TProgressThemeData(
+        animationDuration: Duration(milliseconds: 100),
+      );
       const b = TProgressThemeData();
       final result = a.lerp(b, 0.5);
       expect(result.animationDuration?.inMilliseconds, 100);
@@ -476,40 +594,46 @@ void main() {
 
   group('TProgress 边界情况', () {
     testWidgets('value=1.0 满进度渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 200,
-          child: TProgress(variant: TProgressVariant.linear, value: 1.0),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 1.0),
+          ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.text('100%'), findsWidgets);
     });
 
     testWidgets('value=0.05 小进度走 outside label 路径', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        SizedBox(
-          width: 300,
-          child: TProgress(variant: TProgressVariant.linear, value: 0.05),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 300,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.05),
+          ),
         ),
-      ));
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });
 
     testWidgets('micro variant 不显示百分比文字', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.micro, value: 0.5),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(TProgress(variant: TProgressVariant.micro, value: 0.5)),
+      );
       await tester.pump();
       // micro 类型不显示自动文字
       expect(find.text('50%'), findsNothing);
     });
 
     testWidgets('circular variant 中心显示标签', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TProgress(variant: TProgressVariant.circular, value: 0.5),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(variant: TProgressVariant.circular, value: 0.5),
+        ),
+      );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
     });

@@ -80,6 +80,13 @@ class _TRateState extends State<TRate> {
   double? _pendingHalfChoiceValue;
 
   bool get _enabled => widget.onChanged != null;
+  int get _effectiveCount => widget.count < 1 ? 1 : widget.count;
+  double get _effectiveValue {
+    if (!widget.value.isFinite) {
+      return 0;
+    }
+    return widget.value.clamp(0, _effectiveCount).toDouble();
+  }
 
   @override
   void didUpdateWidget(TRate oldWidget) {
@@ -104,7 +111,7 @@ class _TRateState extends State<TRate> {
 
     return Semantics(
       enabled: _enabled,
-      value: widget.value.toString(),
+      value: _effectiveValue.toString(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -117,7 +124,7 @@ class _TRateState extends State<TRate> {
                       iconSize,
                       iconGap,
                     );
-                    widget.onChangeStart?.call(widget.value);
+                    widget.onChangeStart?.call(_effectiveValue);
                   }
                 : null,
             onTapUp: _enabled
@@ -144,8 +151,8 @@ class _TRateState extends State<TRate> {
                 : null,
             onHorizontalDragStart: _enabled
                 ? (_) {
-                    _lastInteractionValue = widget.value;
-                    widget.onChangeStart?.call(widget.value);
+                    _lastInteractionValue = _effectiveValue;
+                    widget.onChangeStart?.call(_effectiveValue);
                   }
                 : null,
             onHorizontalDragUpdate: _enabled
@@ -161,15 +168,15 @@ class _TRateState extends State<TRate> {
                 : null,
             onHorizontalDragEnd: _enabled
                 ? (_) => widget.onChangeEnd?.call(
-                    _lastInteractionValue ?? widget.value,
+                    _lastInteractionValue ?? _effectiveValue,
                   )
                 : null,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (var index = 0; index < widget.count; index++) ...[
+                for (var index = 0; index < _effectiveCount; index++) ...[
                   _buildItem(context, index, iconSize, theme),
-                  if (index < widget.count - 1) SizedBox(width: iconGap),
+                  if (index < _effectiveCount - 1) SizedBox(width: iconGap),
                 ],
               ],
             ),
@@ -204,7 +211,7 @@ class _TRateState extends State<TRate> {
     double iconSize,
     TRateThemeData? theme,
   ) {
-    final fill = (widget.value - index).clamp(0, 1).toDouble();
+    final fill = (_effectiveValue - index).clamp(0, 1).toDouble();
     final selectedColor = _enabled
         ? (theme?.starColor ?? context.tTheme.warningColor5)
         : context.tTheme.textDisabledColor;
@@ -238,8 +245,8 @@ class _TRateState extends State<TRate> {
 
   double _valueAt(double dx, double iconSize, double iconGap) {
     final itemExtent = iconSize + iconGap;
-    final clamped = dx.clamp(0, itemExtent * widget.count - iconGap);
-    final index = (clamped / itemExtent).floor().clamp(0, widget.count - 1);
+    final clamped = dx.clamp(0, itemExtent * _effectiveCount - iconGap);
+    final index = (clamped / itemExtent).floor().clamp(0, _effectiveCount - 1);
     final local = clamped - index * itemExtent;
     final fraction = widget.allowHalf && local <= iconSize / 2 ? 0.5 : 1.0;
     return index + fraction;
@@ -403,14 +410,13 @@ class _TRateState extends State<TRate> {
 
   String _resolveText() {
     final texts = widget.texts;
-    if (widget.value <= 0 || texts == null || texts.isEmpty) {
-      return widget.value.toString();
+    final value = _effectiveValue;
+    if (value <= 0 || texts == null || texts.isEmpty) {
+      return value.toString();
     }
-    final halfIndex = (widget.value * 2).ceil() - 1;
-    final wholeIndex = widget.value.ceil() - 1;
-    final index = texts.length >= widget.count * 2 ? halfIndex : wholeIndex;
-    return index >= 0 && index < texts.length
-        ? texts[index]
-        : widget.value.toString();
+    final halfIndex = (value * 2).ceil() - 1;
+    final wholeIndex = value.ceil() - 1;
+    final index = texts.length >= _effectiveCount * 2 ? halfIndex : wholeIndex;
+    return index >= 0 && index < texts.length ? texts[index] : value.toString();
   }
 }

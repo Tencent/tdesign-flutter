@@ -89,8 +89,10 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
     final borderRadius = Radius.circular(context.tTheme.radiusExtraLarge);
     return Container(
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        borderRadius: BorderRadius.only(
+          topLeft: borderRadius,
+          topRight: borderRadius,
+        ),
         color: context.tTheme.bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
@@ -150,10 +152,7 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
   }
 
   Widget _gridWrap(Widget child) {
-    return SizedBox(
-      height: widget.rows * widget.itemHeight,
-      child: child,
-    );
+    return SizedBox(height: widget.rows * widget.itemHeight, child: child);
   }
 
   Widget _buildPaginationGrid(BuildContext context) {
@@ -181,9 +180,13 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
   }
 
   Widget _buildScrollGrid(BuildContext context) {
-    final chunks =
-        widget.items.chunk((widget.items.length / widget.rows).ceil());
-    final itemCount = chunks[0].length;
+    if (widget.items.isEmpty) {
+      return _gridWrap(const SizedBox.shrink());
+    }
+    final chunks = widget.items.chunk(
+      (widget.items.length / widget.rows).ceil(),
+    );
+    final itemCount = chunks.first.length;
     return _gridWrap(
       ListView.builder(
         itemCount: itemCount,
@@ -250,8 +253,9 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
   Widget _buildPaginationDots(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children:
-          List.generate((widget.items.length / widget.count).ceil(), (index) {
+      children: List.generate((widget.items.length / widget.count).ceil(), (
+        index,
+      ) {
         return Container(
           margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
           width: 8.0,

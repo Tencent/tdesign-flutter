@@ -107,8 +107,21 @@ class TProgress extends StatelessWidget {
         context.tTheme.brandNormalColor;
     final animationDuration =
         theme?.animationDuration ?? const Duration(milliseconds: 300);
+    final indeterminateAnimationDuration =
+        theme?.indeterminateAnimationDuration ??
+        const Duration(milliseconds: 1200);
+    if (indeterminateAnimationDuration <= Duration.zero) {
+      throw FlutterError(
+        'TProgressThemeData.indeterminateAnimationDuration must be '
+        'greater than zero.',
+      );
+    }
+    final indeterminateLinearSegmentFraction =
+        theme?.indeterminateLinearSegmentFraction ?? 0.32;
+    final indeterminateCircularValue =
+        theme?.indeterminateCircularValue ?? 0.25;
 
-    return _ProgressIndicator(
+    final indicator = _ProgressIndicator(
       value: value,
       label: label,
       onTap: onTap,
@@ -124,6 +137,33 @@ class TProgress extends StatelessWidget {
       labelWidgetWidth: labelWidgetWidth,
       labelWidgetAlignment: labelWidgetAlignment,
       animationDuration: animationDuration,
+      indeterminateAnimationDuration: indeterminateAnimationDuration,
+      indeterminateLinearSegmentFraction: indeterminateLinearSegmentFraction,
+      indeterminateCircularValue: indeterminateCircularValue,
+    );
+    if (variant != TProgressVariant.linear &&
+        variant != TProgressVariant.button) {
+      return indicator;
+    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.hasBoundedWidth) {
+          return indicator;
+        }
+        final fallbackWidth =
+            theme?.fallbackLinearWidth ??
+            MediaQuery.maybeSizeOf(context)?.width;
+        if (fallbackWidth == null ||
+            !fallbackWidth.isFinite ||
+            fallbackWidth <= 0) {
+          throw FlutterError(
+            'TProgress requires a bounded width, a positive '
+            'TProgressThemeData.fallbackLinearWidth, or a MediaQuery '
+            'viewport width.',
+          );
+        }
+        return SizedBox(width: fallbackWidth, child: indicator);
+      },
     );
   }
 
@@ -194,6 +234,9 @@ class _ProgressIndicator extends StatefulWidget {
   final double? labelWidgetWidth;
   final Alignment? labelWidgetAlignment;
   final Duration animationDuration;
+  final Duration indeterminateAnimationDuration;
+  final double indeterminateLinearSegmentFraction;
+  final double indeterminateCircularValue;
 
   const _ProgressIndicator({
     Key? key,
@@ -212,6 +255,9 @@ class _ProgressIndicator extends StatefulWidget {
     this.labelWidgetWidth,
     this.labelWidgetAlignment,
     this.animationDuration = const Duration(milliseconds: 300),
+    this.indeterminateAnimationDuration = const Duration(milliseconds: 1200),
+    this.indeterminateLinearSegmentFraction = 0.32,
+    this.indeterminateCircularValue = 0.25,
   }) : super(key: key);
 
   @override
@@ -240,7 +286,10 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
   @override
   void didUpdateWidget(_ProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.value != widget.value) {
+    if (oldWidget.value != widget.value ||
+        oldWidget.animationDuration != widget.animationDuration ||
+        oldWidget.indeterminateAnimationDuration !=
+            widget.indeterminateAnimationDuration) {
       _updateAnimation(oldWidgetValue: oldWidget.value);
       _updateEffectiveLabel();
     }
@@ -261,9 +310,17 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
   }
 
   void _updateAnimation({double? oldWidgetValue}) {
+    _animationController.stop();
+    if (widget.value == null) {
+      _animationController.duration = widget.indeterminateAnimationDuration;
+      _animation = _animationController;
+      _animationController.repeat();
+      return;
+    }
+    _animationController.duration = widget.animationDuration;
     _animation = Tween<double>(
-      begin: oldWidgetValue ?? _animationController.value,
-      end: widget.value ?? 0,
+      begin: oldWidgetValue ?? 0,
+      end: widget.value!,
     ).animate(_animationController);
     _animationController.forward(from: 0);
   }
@@ -309,25 +366,83 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     switch (widget.type) {
       case TProgressVariant.linear:
       case TProgressVariant.button:
-        return LinearProgressIndicator(
-          minHeight: widget.strokeWidth,
-          color: _effectiveColor,
-          backgroundColor: widget.backgroundColor,
-          borderRadius: widget.linearBorderRadius is BorderRadius
-              ? widget.linearBorderRadius as BorderRadius
-              : null,
-        );
+        final progress = _buildIndeterminateLinear();
+        if (widget.type == TProgressVariant.button) {
+          return GestureDetector(
+            onTap: widget.onTap,
+            onLongPress: widget.onLongPress,
+            child: progress,
+          );
+        }
+        return progress;
       case TProgressVariant.circular:
       case TProgressVariant.micro:
-        return SizedBox.square(
-          dimension: widget.circleRadius,
-          child: CircularProgressIndicator(
-            strokeWidth: widget.strokeWidth,
-            color: _effectiveColor,
-            backgroundColor: widget.backgroundColor,
+        final progress = RotationTransition(
+          turns: _animationController,
+          child: SizedBox.square(
+            dimension: widget.circleRadius,
+            child: Padding(
+              padding: EdgeInsets.all(widget.strokeWidth / 2),
+              child: TProgressCircular(
+                strokeWidth: widget.strokeWidth,
+                circleRadius: widget.circleRadius,
+                value: widget.indeterminateCircularValue,
+                backgroundColor: widget.backgroundColor,
+                valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+              ),
+            ),
           ),
         );
+        if (widget.type == TProgressVariant.micro) {
+          return GestureDetector(
+            onTap: widget.onTap,
+            onLongPress: widget.onLongPress,
+            child: progress,
+          );
+        }
+        return progress;
     }
+  }
+
+  Widget _buildIndeterminateLinear() {
+    return ClipRRect(
+      borderRadius: widget.linearBorderRadius.resolve(
+        Directionality.of(context),
+      ),
+      child: SizedBox(
+        height: widget.strokeWidth,
+        child: ColoredBox(
+          color: widget.backgroundColor,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  final segmentWidth =
+                      constraints.maxWidth *
+                      widget.indeterminateLinearSegmentFraction;
+                  final left =
+                      (constraints.maxWidth + segmentWidth) *
+                          _animationController.value -
+                      segmentWidth;
+                  return Stack(
+                    children: [
+                      Positioned(
+                        left: left,
+                        width: segmentWidth,
+                        top: 0,
+                        bottom: 0,
+                        child: ColoredBox(color: _effectiveColor),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildLinearProgress() {

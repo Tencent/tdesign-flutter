@@ -27,17 +27,15 @@ void main() {
       )
       .first;
 
-  Container inputContainer(WidgetTester tester) => tester.widget<Container>(
-        inputContainerFinder(),
-      );
+  Container inputContainer(WidgetTester tester) =>
+      tester.widget<Container>(inputContainerFinder());
 
   group('TSearchBar v1 behavior', () {
     testWidgets('renders hint and controller text', (tester) async {
       final controller = TextEditingController(text: 'initial');
-      await tester.pumpWidget(wrap(TSearchBar(
-        controller: controller,
-        hintText: 'search',
-      )));
+      await tester.pumpWidget(
+        wrap(TSearchBar(controller: controller, hintText: 'search')),
+      );
 
       expect(find.byType(TSearchBar), findsOneWidget);
       expect(find.text('initial'), findsOneWidget);
@@ -45,8 +43,9 @@ void main() {
       controller.dispose();
     });
 
-    testWidgets('initialValue initializes internal controller once',
-        (tester) async {
+    testWidgets('initialValue initializes internal controller once', (
+      tester,
+    ) async {
       await tester.pumpWidget(wrap(const TSearchBar(initialValue: 'first')));
       expect(find.text('first'), findsOneWidget);
 
@@ -58,10 +57,14 @@ void main() {
     testWidgets('onChanged and onSubmitted are forwarded', (tester) async {
       String? changed;
       String? submitted;
-      await tester.pumpWidget(wrap(TSearchBar(
-        onChanged: (value) => changed = value,
-        onSubmitted: (value) => submitted = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TSearchBar(
+            onChanged: (value) => changed = value,
+            onSubmitted: (value) => submitted = value,
+          ),
+        ),
+      );
 
       await tester.enterText(find.byType(TextField), 'hello');
       await tester.testTextInput.receiveAction(TextInputAction.search);
@@ -72,32 +75,37 @@ void main() {
     });
 
     testWidgets('enabled false disables input', (tester) async {
-      await tester.pumpWidget(wrap(const TSearchBar(
-        initialValue: 'disabled',
-        enabled: false,
-      )));
+      await tester.pumpWidget(
+        wrap(const TSearchBar(initialValue: 'disabled', enabled: false)),
+      );
 
       expect(textField(tester).enabled, isFalse);
       expect(find.byIcon(TIcons.close_circle_filled), findsOneWidget);
     });
 
-    testWidgets('readOnly true keeps input focusable but not editable by user',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TSearchBar(readOnly: true)));
+    testWidgets(
+      'readOnly true keeps input focusable but not editable by user',
+      (tester) async {
+        await tester.pumpWidget(wrap(const TSearchBar(readOnly: true)));
 
-      expect(textField(tester).readOnly, isTrue);
-      expect(textField(tester).enabled, isTrue);
-    });
+        expect(textField(tester).readOnly, isTrue);
+        expect(textField(tester).enabled, isTrue);
+      },
+    );
 
     testWidgets('clear button clears text and fires callbacks', (tester) async {
       final controller = TextEditingController(text: 'content');
       var cleared = false;
       String? changed;
-      await tester.pumpWidget(wrap(TSearchBar(
-        controller: controller,
-        onClearPressed: () => cleared = true,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TSearchBar(
+            controller: controller,
+            onClearPressed: () => cleared = true,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
       await tester.pump();
 
       await tester.tap(find.byIcon(TIcons.close_circle_filled));
@@ -109,18 +117,23 @@ void main() {
       controller.dispose();
     });
 
-    testWidgets('cancel button appears on focus and clears text',
-        (tester) async {
+    testWidgets('cancel button appears on focus and clears text', (
+      tester,
+    ) async {
       final controller = TextEditingController(text: 'query');
       var cancelled = false;
       String? changed;
-      await tester.pumpWidget(wrap(TSearchBar(
-        controller: controller,
-        needCancel: true,
-        cancelText: '取消',
-        onCancelPressed: () => cancelled = true,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TSearchBar(
+            controller: controller,
+            needCancel: true,
+            cancelText: '取消',
+            onCancelPressed: () => cancelled = true,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
 
       await tester.tap(find.byType(TextField));
       await tester.pumpAndSettle();
@@ -135,23 +148,22 @@ void main() {
       controller.dispose();
     });
 
-    testWidgets('updates controller and focusNode when widgets change',
-        (tester) async {
+    testWidgets('updates controller and focusNode when widgets change', (
+      tester,
+    ) async {
       final firstController = TextEditingController(text: 'first');
       final secondController = TextEditingController(text: 'second');
       final firstFocus = FocusNode();
       final secondFocus = FocusNode();
 
-      await tester.pumpWidget(wrap(TSearchBar(
-        controller: firstController,
-        focusNode: firstFocus,
-      )));
+      await tester.pumpWidget(
+        wrap(TSearchBar(controller: firstController, focusNode: firstFocus)),
+      );
       expect(find.text('first'), findsOneWidget);
 
-      await tester.pumpWidget(wrap(TSearchBar(
-        controller: secondController,
-        focusNode: secondFocus,
-      )));
+      await tester.pumpWidget(
+        wrap(TSearchBar(controller: secondController, focusNode: secondFocus)),
+      );
       expect(find.text('second'), findsOneWidget);
 
       firstController.dispose();
@@ -162,33 +174,68 @@ void main() {
   });
 
   group('TSearchBar theme', () {
-    testWidgets('theme controls variant, alignment, padding, and height',
-        (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSearchBar(hintText: 'theme'),
-        searchTheme: const TSearchBarThemeData(
-          variant: TSearchBarVariant.round,
-          textAlignment: TSearchBarAlignment.center,
-          padding: EdgeInsets.all(20),
-          backgroundColor: Colors.red,
-          cursorHeight: 24,
-          autoHeight: true,
+    testWidgets('theme controls variant, alignment, padding, and height', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSearchBar(hintText: 'theme'),
+          searchTheme: const TSearchBarThemeData(
+            variant: TSearchBarVariant.round,
+            textAlignment: TSearchBarAlignment.center,
+            padding: EdgeInsets.all(20),
+            backgroundColor: Colors.red,
+            cursorHeight: 24,
+            autoHeight: true,
+          ),
         ),
-      ));
+      );
 
       expect(textField(tester).textAlign, TextAlign.center);
       expect(textField(tester).cursorHeight, 24);
       expect(find.byType(TSearchBar), findsOneWidget);
     });
 
-    testWidgets('uses develop search field icon sizing', (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSearchBar(hintText: 'theme'),
-        searchTheme: const TSearchBarThemeData(
-          variant: TSearchBarVariant.round,
-          textAlignment: TSearchBarAlignment.center,
+    testWidgets('autoHeight 在纵向无界时回退默认高度', (tester) async {
+      final theme = TThemeBuilder.light(
+        TThemeData.defaultData(),
+      ).mergeExtension(const TSearchBarThemeData(autoHeight: true));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: SingleChildScrollView(
+              child: TSearchBar(hintText: 'unbounded'),
+            ),
+          ),
         ),
-      ));
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TSearchBar)).height, 56);
+    });
+
+    testWidgets('autoHeight 在有界父级中填满高度', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const SizedBox(height: 120, child: TSearchBar(hintText: 'bounded')),
+          searchTheme: const TSearchBarThemeData(autoHeight: true),
+        ),
+      );
+
+      expect(tester.getSize(find.byType(TSearchBar)).height, 120);
+    });
+
+    testWidgets('uses develop search field icon sizing', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSearchBar(hintText: 'theme'),
+          searchTheme: const TSearchBarThemeData(
+            variant: TSearchBarVariant.round,
+            textAlignment: TSearchBarAlignment.center,
+          ),
+        ),
+      );
 
       final token = TThemeData.defaultData();
       final inputDecoration =
@@ -226,16 +273,17 @@ void main() {
       expect(fieldDecoration?.contentPadding, EdgeInsets.zero);
     });
 
-    testWidgets('custom decoration still keeps collapsed search layout',
-        (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSearchBar(
-          hintText: 'custom',
-          decoration: InputDecoration(
-            helperText: 'helper',
+    testWidgets('custom decoration still keeps collapsed search layout', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSearchBar(
+            hintText: 'custom',
+            decoration: InputDecoration(helperText: 'helper'),
           ),
         ),
-      ));
+      );
 
       final fieldDecoration = textField(tester).decoration;
       expect(fieldDecoration?.helperText, 'helper');
@@ -264,8 +312,10 @@ void main() {
         autoHeight: true,
       );
 
-      expect(base.copyWith(variant: TSearchBarVariant.round).variant,
-          TSearchBarVariant.round);
+      expect(
+        base.copyWith(variant: TSearchBarVariant.round).variant,
+        TSearchBarVariant.round,
+      );
       expect(base.copyWith().variant, TSearchBarVariant.square);
       expect(base.lerp(null, 0.5), same(base));
       expect(base.lerp(other, 0.25).textAlignment, TSearchBarAlignment.left);

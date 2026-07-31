@@ -19,12 +19,14 @@ class TFontLoader {
         // coverage:ignore-line
         var fontLoader = FontLoader(name); // coverage:ignore-line
 
-        fontLoader.addFont(Future(() async {
-          // coverage:ignore-line
-          var uri = Uri.parse(fontFamilyUrl); // coverage:ignore-line
-          var bundle = NetworkAssetBundle(uri); // coverage:ignore-line
-          return await bundle.load(''); // coverage:ignore-line
-        }));
+        fontLoader.addFont(
+          Future(() async {
+            // coverage:ignore-line
+            var uri = Uri.parse(fontFamilyUrl); // coverage:ignore-line
+            var bundle = NetworkAssetBundle(uri); // coverage:ignore-line
+            return await bundle.load(''); // coverage:ignore-line
+          }),
+        );
 
         await fontLoader.load(); // coverage:ignore-line
         _record[name] = true; // coverage:ignore-line
@@ -53,15 +55,13 @@ class TFontLoaderWidget extends StatefulWidget {
   final String fontFamilyUrl;
 
   @override // coverage:ignore-line
-  State<TFontLoaderWidget> createState() =>
-      _TFontLoaderWidgetState(); // coverage:ignore-line
+  State<TFontLoaderWidget> createState() => _TFontLoaderWidgetState(); // coverage:ignore-line
 }
 
 class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
   var _fontFamilyLoaded = false;
 
   @override // coverage:ignore-line
-
   void initState() {
     super.initState(); // coverage:ignore-line
     loadFont(); // coverage:ignore-line
@@ -75,10 +75,11 @@ class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
       // coverage:ignore-line
       try {
         if (await TFontLoader.load(
-            // coverage:ignore-line
-            name: widget
-                .textWidget.fontFamily!.fontFamily, // coverage:ignore-line
-            fontFamilyUrl: widget.fontFamilyUrl)) {
+          // coverage:ignore-line
+          name:
+              widget.textWidget.fontFamily!.fontFamily, // coverage:ignore-line
+          fontFamilyUrl: widget.fontFamilyUrl,
+        )) {
           // coverage:ignore-start
           _fontFamilyLoaded = true;
           if (!mounted) {
@@ -97,12 +98,9 @@ class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
   Widget build(BuildContext context) {
     final textWidget = widget.textWidget; // coverage:ignore-line
 
-    return TText(
-      // coverage:ignore-line
-      textWidget.data, // coverage:ignore-line
+    final common = (
       font: textWidget.font, // coverage:ignore-line
-      fontWeight:
-          textWidget.fontWeight ?? FontWeight.w400, // coverage:ignore-line
+      fontWeight: textWidget.fontWeight, // coverage:ignore-line
       fontFamily: textWidget.fontFamily, // coverage:ignore-line
       textColor: textWidget.textColor, // coverage:ignore-line
       backgroundColor: textWidget.backgroundColor, // coverage:ignore-line
@@ -122,6 +120,57 @@ class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
       textWidthBasis: textWidget.textWidthBasis, // coverage:ignore-line
       textHeightBehavior: textWidget.textHeightBehavior, // coverage:ignore-line
       isInFontLoader: !_fontFamilyLoaded,
+    );
+    final span = textWidget.textSpan;
+    if (span != null) {
+      return TText.rich(
+        span,
+        font: common.font,
+        fontWeight: common.fontWeight,
+        fontFamily: common.fontFamily,
+        textColor: common.textColor,
+        backgroundColor: common.backgroundColor,
+        isTextThrough: common.isTextThrough,
+        lineThroughColor: common.lineThroughColor,
+        package: common.package,
+        style: common.style,
+        strutStyle: common.strutStyle,
+        textAlign: common.textAlign,
+        textDirection: common.textDirection,
+        locale: common.locale,
+        softWrap: common.softWrap,
+        overflow: common.overflow,
+        textScaleFactor: common.textScaleFactor,
+        maxLines: common.maxLines,
+        semanticsLabel: common.semanticsLabel,
+        textWidthBasis: common.textWidthBasis,
+        textHeightBehavior: common.textHeightBehavior,
+        isInFontLoader: common.isInFontLoader,
+      );
+    }
+    return TText(
+      textWidget.data,
+      font: common.font,
+      fontWeight: common.fontWeight,
+      fontFamily: common.fontFamily,
+      textColor: common.textColor,
+      backgroundColor: common.backgroundColor,
+      isTextThrough: common.isTextThrough,
+      lineThroughColor: common.lineThroughColor,
+      package: common.package,
+      style: common.style,
+      strutStyle: common.strutStyle,
+      textAlign: common.textAlign,
+      textDirection: common.textDirection,
+      locale: common.locale,
+      softWrap: common.softWrap,
+      overflow: common.overflow,
+      textScaleFactor: common.textScaleFactor,
+      maxLines: common.maxLines,
+      semanticsLabel: common.semanticsLabel,
+      textWidthBasis: common.textWidthBasis,
+      textHeightBehavior: common.textHeightBehavior,
+      isInFontLoader: common.isInFontLoader,
     );
   }
 }

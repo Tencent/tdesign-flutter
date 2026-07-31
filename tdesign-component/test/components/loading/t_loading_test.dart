@@ -196,6 +196,41 @@ void main() {
   // TLoadingController
   // ============================================================
   group('TLoadingController', () {
+    testWidgets('缺少 Overlay 时不污染后续显示状态', (tester) async {
+      late BuildContext bareContext;
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Builder(
+            builder: (context) {
+              bareContext = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      TLoadingController.show(bareContext, text: '不可显示');
+      expect(tester.takeException(), isNull);
+
+      late BuildContext overlayContext;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              overlayContext = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(overlayContext, text: '可以显示');
+      await tester.pump();
+      expect(find.text('可以显示'), findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
     testWidgets('show + dismiss', (tester) async {
       late BuildContext ctx;
       await tester.pumpWidget(

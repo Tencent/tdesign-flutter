@@ -33,6 +33,7 @@ class TSwipeCell extends StatefulWidget {
     this.initialOpenSide,
     this.groupTag,
     this.closeWhenOpened = false,
+    this.closeOnScroll = true,
     this.dragStartBehavior = DragStartBehavior.start,
   }) : super(key: key);
 
@@ -65,6 +66,9 @@ class TSwipeCell extends StatefulWidget {
 
   /// 展开时是否关闭同组其他单元格
   final bool closeWhenOpened;
+
+  /// 祖先滚动容器开始滚动时是否关闭已展开的操作区。
+  final bool closeOnScroll;
 
   /// 拖动开始行为
   final DragStartBehavior dragStartBehavior;
@@ -231,7 +235,7 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
     final startConfirmLength = widget.start?.confirms?.length ?? 0;
 
     final slidable = Slidable(
-      closeOnScroll: false,
+      closeOnScroll: widget.closeOnScroll,
       child: widget.child,
       controller: controller,
       enabled: widget.enabled,

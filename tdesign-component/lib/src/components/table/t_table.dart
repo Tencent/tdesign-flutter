@@ -9,11 +9,8 @@ import 't_table_theme_data.dart';
 import 't_table_types.dart';
 
 /// 单元格点击回调。
-typedef TTableCellTap<T> = void Function(
-  int rowIndex,
-  T row,
-  TTableColumn<T> column,
-);
+typedef TTableCellTap<T> =
+    void Function(int rowIndex, T row, TTableColumn<T> column);
 
 /// 强类型、受控排序与选择的表格组件。
 class TTable<T> extends StatefulWidget {
@@ -35,10 +32,12 @@ class TTable<T> extends StatefulWidget {
     this.onCellTap,
     this.onScroll,
     super.key,
-  })  : assert(columns.length > 0),
-        assert(maxHeight == null || maxHeight > 0),
-        assert(selectionMode == TTableSelectionMode.none ||
-            onSelectionChanged != null);
+  }) : assert(columns.length > 0),
+       assert(maxHeight == null || maxHeight > 0),
+       assert(
+         selectionMode == TTableSelectionMode.none ||
+             onSelectionChanged != null,
+       );
 
   /// 列配置。
   final List<TTableColumn<T>> columns;
@@ -94,6 +93,7 @@ class TTable<T> extends StatefulWidget {
 
 class _TTableState<T> extends State<TTable<T>> {
   static const _loadingBodyHeight = 96.0;
+  static const _selectionColumnWidth = 48.0;
 
   final _horizontalScroll = _TableScrollCoordinator();
 
@@ -119,17 +119,31 @@ class _TTableState<T> extends State<TTable<T>> {
         .where((column) => column.fixed == TTableColumnFixed.right)
         .toList();
 
-    return SizedBox(
-      width: theme?.width,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.showHeader)
-            _buildHeader(context, theme, rows, left, center, right),
-          _buildBody(context, theme, rows, left, center, right),
-          if (widget.footer != null) widget.footer!,
-        ],
-      ),
+    final naturalWidth =
+        widget.columns.fold<double>(
+          0,
+          (total, column) => total + column.width,
+        ) +
+        (_selectable ? _selectionColumnWidth : 0);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width =
+            theme?.width ??
+            (constraints.hasBoundedWidth ? constraints.maxWidth : naturalWidth);
+        return SizedBox(
+          width: width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (widget.showHeader)
+                _buildHeader(context, theme, rows, left, center, right),
+              _buildBody(context, theme, rows, left, center, right),
+              if (widget.footer != null) widget.footer!,
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -146,9 +160,11 @@ class _TTableState<T> extends State<TTable<T>> {
     if (comparator == null) {
       return rows;
     }
-    rows.sort(currentSort.direction == TTableSortDirection.ascending
-        ? comparator
-        : (a, b) => comparator(b, a));
+    rows.sort(
+      currentSort.direction == TTableSortDirection.ascending
+          ? comparator
+          : (a, b) => comparator(b, a),
+    );
     return rows;
   }
 
@@ -196,8 +212,8 @@ class _TTableState<T> extends State<TTable<T>> {
   ) {
     var content = rows.isEmpty
         ? widget.loading
-            ? const SizedBox.shrink()
-            : _buildEmpty(context)
+              ? const SizedBox.shrink()
+              : _buildEmpty(context)
         : _buildRows(context, theme, rows, left, center, right);
     if (widget.maxHeight != null && rows.isNotEmpty) {
       content = ConstrainedBox(
@@ -232,7 +248,8 @@ class _TTableState<T> extends State<TTable<T>> {
   }
 
   Widget _buildEmpty(BuildContext context) => Center(
-      child: widget.empty ?? TEmpty(emptyText: context.resource.emptyData));
+    child: widget.empty ?? TEmpty(emptyText: context.resource.emptyData),
+  );
 
   Widget _buildRows(
     BuildContext context,
@@ -267,8 +284,10 @@ class _TTableState<T> extends State<TTable<T>> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: center
-                          .map((column) =>
-                              _buildCell(context, theme, row, index, column))
+                          .map(
+                            (column) =>
+                                _buildCell(context, theme, row, index, column),
+                          )
                           .toList(),
                     ),
                   ),
@@ -365,9 +384,7 @@ class _TTableState<T> extends State<TTable<T>> {
       height: double.infinity,
       alignment: alignment,
       padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        border: _cellBorder(context, theme),
-      ),
+      decoration: BoxDecoration(border: _cellBorder(context, theme)),
       child: child,
     );
   }
@@ -377,8 +394,9 @@ class _TTableState<T> extends State<TTable<T>> {
       for (var index = 0; index < rows.length; index++)
         if (widget.rowSelectable?.call(rows[index], index) ?? true) rows[index],
     };
-    final selectedCount =
-        selectableRows.intersection(widget.selectedRows).length;
+    final selectedCount = selectableRows
+        .intersection(widget.selectedRows)
+        .length;
     return _selectionFrame(
       context,
       value:
@@ -423,7 +441,7 @@ class _TTableState<T> extends State<TTable<T>> {
     bool tristate = false,
   }) {
     return Container(
-      width: 48,
+      width: _selectionColumnWidth,
       height: double.infinity,
       decoration: BoxDecoration(border: _cellBorder(context, null)),
       child: CheckboxTheme(

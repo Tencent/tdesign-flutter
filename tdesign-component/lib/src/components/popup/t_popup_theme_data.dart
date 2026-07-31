@@ -20,13 +20,26 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   /// 内容区背景色
   final Color? panelBackgroundColor;
 
+  /// top / bottom 未显式传入高度时的默认面板高度
+  final double? edgeHeight;
+
+  /// left / right 未显式传入宽度时的默认抽屉宽度
+  final double? drawerWidth;
+
+  /// center 未显式传入宽高时的默认面板尺寸
+  final Size? centerSize;
+
   const TPopupThemeData({
     this.barrierColor,
     this.barrierOpacity,
     this.transitionDuration,
     this.panelRadius,
     this.panelBackgroundColor,
-  });
+    this.edgeHeight,
+    this.drawerWidth,
+    this.centerSize,
+  }) : assert(edgeHeight == null || edgeHeight > 0),
+       assert(drawerWidth == null || drawerWidth > 0);
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
   TPopupThemeData merge(TPopupThemeData? other) {
@@ -39,6 +52,9 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
       transitionDuration: other.transitionDuration ?? transitionDuration,
       panelRadius: other.panelRadius ?? panelRadius,
       panelBackgroundColor: other.panelBackgroundColor ?? panelBackgroundColor,
+      edgeHeight: other.edgeHeight ?? edgeHeight,
+      drawerWidth: other.drawerWidth ?? drawerWidth,
+      centerSize: other.centerSize ?? centerSize,
     );
   }
 
@@ -49,6 +65,9 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     Duration? transitionDuration,
     double? panelRadius,
     Color? panelBackgroundColor,
+    double? edgeHeight,
+    double? drawerWidth,
+    Size? centerSize,
   }) {
     return TPopupThemeData(
       barrierColor: barrierColor ?? this.barrierColor,
@@ -56,6 +75,9 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
       transitionDuration: transitionDuration ?? this.transitionDuration,
       panelRadius: panelRadius ?? this.panelRadius,
       panelBackgroundColor: panelBackgroundColor ?? this.panelBackgroundColor,
+      edgeHeight: edgeHeight ?? this.edgeHeight,
+      drawerWidth: drawerWidth ?? this.drawerWidth,
+      centerSize: centerSize ?? this.centerSize,
     );
   }
 
@@ -67,11 +89,18 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     return TPopupThemeData(
       barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
       barrierOpacity: lerpDouble(barrierOpacity, other.barrierOpacity, t),
-      transitionDuration:
-          t < 0.5 ? transitionDuration : other.transitionDuration,
+      transitionDuration: t < 0.5
+          ? transitionDuration
+          : other.transitionDuration,
       panelRadius: lerpDouble(panelRadius, other.panelRadius, t),
-      panelBackgroundColor:
-          Color.lerp(panelBackgroundColor, other.panelBackgroundColor, t),
+      panelBackgroundColor: Color.lerp(
+        panelBackgroundColor,
+        other.panelBackgroundColor,
+        t,
+      ),
+      edgeHeight: lerpDouble(edgeHeight, other.edgeHeight, t),
+      drawerWidth: lerpDouble(drawerWidth, other.drawerWidth, t),
+      centerSize: Size.lerp(centerSize, other.centerSize, t),
     );
   }
 

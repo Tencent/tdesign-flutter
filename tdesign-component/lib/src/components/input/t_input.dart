@@ -395,6 +395,13 @@ class _TInputState extends State<TInput> {
           underline(context.tTheme.errorNormalColor),
     );
 
+    final configuredMinLines =
+        widget.minLines ??
+        (widget._multiline ? theme?.multilineMinLines ?? 4 : null);
+    final minLines = configuredMinLines == null || widget.maxLines == null
+        ? configuredMinLines
+        : configuredMinLines.clamp(1, widget.maxLines!);
+
     return TextField(
       controller: _controller,
       focusNode: widget.focusNode,
@@ -404,9 +411,7 @@ class _TInputState extends State<TInput> {
       enabled: widget.enabled,
       readOnly: widget.readOnly,
       maxLines: widget.maxLines,
-      minLines:
-          widget.minLines ??
-          (widget._multiline ? theme?.multilineMinLines ?? 4 : null),
+      minLines: minLines,
       maxLength: widget.maxLength,
       autofocus: widget.autofocus,
       keyboardType: widget.inputType,

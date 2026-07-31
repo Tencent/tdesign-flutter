@@ -52,9 +52,9 @@ class TImage extends StatelessWidget {
     this.repeat = ImageRepeat.noRepeat,
     this.onTap,
   }) : assert(
-          (src == null) != (imageFile == null),
-          'Exactly one of src or imageFile must be provided',
-        );
+         (src == null) != (imageFile == null),
+         'Exactly one of src or imageFile must be provided',
+       );
 
   /// 网络 URL 或 asset 路径；空字符串显示加载占位。
   final String? src;
@@ -137,13 +137,14 @@ class TImage extends StatelessWidget {
     required double height,
     required BoxFit fit,
   }) {
-    final fallbackErrorBuilder = errorBuilder ??
+    final fallbackErrorBuilder =
+        errorBuilder ??
         (_, __, ___) => _placeholder(
-              context,
-              errorWidget ?? const Icon(Icons.broken_image_outlined),
-              width: width,
-              height: height,
-            );
+          context,
+          errorWidget ?? const Icon(Icons.broken_image_outlined),
+          width: width,
+          height: height,
+        );
     final excludeFromSemantics = theme?.excludeFromSemantics ?? false;
     final color = theme?.color;
     final colorBlendMode = theme?.colorBlendMode;
@@ -177,7 +178,15 @@ class TImage extends StatelessWidget {
       );
     }
 
-    final value = src!;
+    final value = src;
+    if (value == null) {
+      return _placeholder(
+        context,
+        loadingWidget ?? const Icon(Icons.more_horiz),
+        width: width,
+        height: height,
+      );
+    }
     if (value.isEmpty) {
       return _placeholder(
         context,
@@ -187,7 +196,8 @@ class TImage extends StatelessWidget {
       );
     }
     final uri = Uri.tryParse(value);
-    final isNetwork = uri != null &&
+    final isNetwork =
+        uri != null &&
         (uri.scheme.toLowerCase() == 'http' ||
             uri.scheme.toLowerCase() == 'https');
     if (isNetwork) {
@@ -197,7 +207,8 @@ class TImage extends StatelessWidget {
         height: height,
         fit: fit,
         frameBuilder: frameBuilder,
-        loadingBuilder: loadingBuilder ??
+        loadingBuilder:
+            loadingBuilder ??
             (context, child, progress) => progress == null
                 ? child
                 : _placeholder(

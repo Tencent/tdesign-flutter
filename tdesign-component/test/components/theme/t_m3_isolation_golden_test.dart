@@ -24,7 +24,7 @@ void main() {
   testWidgets('implicit Material defaults do not change TDesign visuals', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(760, 700);
+    tester.view.physicalSize = const Size(760, 740);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
 
@@ -106,6 +106,8 @@ class _ControlColumn extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TProgress(variant: TProgressVariant.linear, value: 0.6),
+              const SizedBox(height: 12),
+              TProgress(variant: TProgressVariant.linear),
               const SizedBox(height: 20),
               const TLoading(size: TLoadingSize.medium, text: 'Loading'),
               const SizedBox(height: 12),

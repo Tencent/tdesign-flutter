@@ -24,7 +24,8 @@ void main() {
         if (widget is! Container) {
           return false;
         }
-        if (widget.constraints?.maxHeight != double.infinity) {
+        if (widget.constraints?.hasBoundedHeight != true ||
+            widget.constraints?.hasBoundedWidth != true) {
           return false;
         }
         if (color != null && widget.color != color) {
@@ -172,23 +173,53 @@ void main() {
   group('TDrawerWidget', () {
     testWidgets('使用 child 渲染自定义内容', (tester) async {
       const testKey = Key('custom-child');
-      await tester.pumpWidget(wrapWithTheme(
-        const TDrawerWidget(
-          child: Text('自定义内容', key: testKey),
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TDrawerWidget(child: Text('自定义内容', key: testKey))),
+      );
       expect(find.byKey(testKey), findsOneWidget);
     });
 
-    testWidgets('使用 items 渲染列表项', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TDrawerWidget(
-          items: [
-            TDrawerItem(title: '菜单1'),
-            TDrawerItem(title: '菜单2'),
-          ],
+    testWidgets('纵向无界时使用页面视口高度', (tester) async {
+      tester.view.physicalSize = const Size(400, 640);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const SingleChildScrollView(
+            child: TDrawerWidget(child: SizedBox.expand()),
+          ),
         ),
-      ));
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TDrawerWidget)).height, 640);
+    });
+
+    testWidgets('有界时填满父级高度', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const SizedBox(
+            height: 240,
+            child: TDrawerWidget(child: SizedBox.expand()),
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byType(TDrawerWidget)).height, 240);
+    });
+
+    testWidgets('使用 items 渲染列表项', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            items: [
+              TDrawerItem(title: '菜单1'),
+              TDrawerItem(title: '菜单2'),
+            ],
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.text('菜单1'), findsOneWidget);
       expect(find.text('菜单2'), findsOneWidget);
@@ -203,14 +234,11 @@ void main() {
 
     testWidgets('默认 item title 长文案保持单行省略', (tester) async {
       const longTitle = '这是一个非常非常长的抽屉菜单标题用于验证不溢出';
-      await tester.pumpWidget(wrapWithTheme(
-        TDrawerWidget(
-          width: 120,
-          items: [
-            TDrawerItem(title: longTitle),
-          ],
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(width: 120, items: [TDrawerItem(title: longTitle)]),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       final title = tester.widget<Text>(find.text(longTitle));
@@ -219,34 +247,42 @@ void main() {
     });
 
     testWidgets('菜单正文继承全局 TextTheme，并由 Drawer Theme 覆盖', (tester) async {
-      const globalStyle =
-          TextStyle(color: Colors.red, fontWeight: FontWeight.w500);
+      const globalStyle = TextStyle(
+        color: Colors.red,
+        fontWeight: FontWeight.w500,
+      );
       final baseTheme = fullTheme();
       final globalTheme = baseTheme.copyWith(
         textTheme: baseTheme.textTheme.copyWith(bodyMedium: globalStyle),
       );
-      await tester.pumpWidget(MaterialApp(
-        theme: globalTheme,
-        home: Scaffold(
-          body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: globalTheme,
+          home: Scaffold(
+            body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       var title = tester.widget<Text>(find.text('菜单1'));
       expect(title.style?.color, globalStyle.color);
       expect(title.style?.fontWeight, globalStyle.fontWeight);
 
-      const drawerStyle =
-          TextStyle(color: Colors.blue, fontWeight: FontWeight.w600);
-      await tester.pumpWidget(MaterialApp(
-        theme: globalTheme.mergeExtension(
-          const TDrawerThemeData(itemTextStyle: drawerStyle),
+      const drawerStyle = TextStyle(
+        color: Colors.blue,
+        fontWeight: FontWeight.w600,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: globalTheme.mergeExtension(
+            const TDrawerThemeData(itemTextStyle: drawerStyle),
+          ),
+          home: Scaffold(
+            body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
+          ),
         ),
-        home: Scaffold(
-          body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
-        ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       title = tester.widget<Text>(find.text('菜单1'));
@@ -255,12 +291,14 @@ void main() {
     });
 
     testWidgets('使用 title 渲染标题', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TDrawerWidget(
-          title: const Text('标题'),
-          items: [TDrawerItem(title: '菜单1')],
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            title: const Text('标题'),
+            items: [TDrawerItem(title: '菜单1')],
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       expect(find.text('标题'), findsOneWidget);
     });
@@ -279,10 +317,7 @@ void main() {
           home: Scaffold(
             body: DefaultTextStyle(
               style: TextStyle(foreground: Paint()..color = Colors.red),
-              child: const TDrawerWidget(
-                title: TText('标题'),
-                items: [],
-              ),
+              child: const TDrawerWidget(title: TText('标题'), items: []),
             ),
           ),
         ),
@@ -297,35 +332,37 @@ void main() {
 
     testWidgets('使用 footer 渲染底部', (tester) async {
       const footerKey = Key('footer');
-      await tester.pumpWidget(wrapWithTheme(
-        TDrawerWidget(
-          footer: const Text('底部', key: footerKey),
-          items: [TDrawerItem(title: '菜单1')],
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            footer: const Text('底部', key: footerKey),
+            items: [TDrawerItem(title: '菜单1')],
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       expect(find.byKey(footerKey), findsOneWidget);
     });
 
     testWidgets('child 优先级高于 items', (tester) async {
       const childKey = Key('child');
-      await tester.pumpWidget(wrapWithTheme(
-        TDrawerWidget(
-          child: const Text('自定义', key: childKey),
-          items: [TDrawerItem(title: '菜单1')],
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            child: const Text('自定义', key: childKey),
+            items: [TDrawerItem(title: '菜单1')],
+          ),
         ),
-      ));
+      );
       expect(find.byKey(childKey), findsOneWidget);
       expect(find.text('菜单1'), findsNothing);
     });
 
     testWidgets('默认容器使用完整主题背景色和默认宽度', (tester) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(wrapWithTheme(
-        const TDrawerWidget(
-          child: SizedBox.expand(),
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TDrawerWidget(child: SizedBox.expand())),
+      );
 
       final container = drawerContainer(tester, color: token.bgColorContainer);
       expect(container.constraints?.maxWidth, 280);
@@ -333,41 +370,46 @@ void main() {
     });
 
     testWidgets('自定义宽度', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TDrawerWidget(
-          width: 300,
-          child: SizedBox.expand(),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TDrawerWidget(width: 300, child: SizedBox.expand()),
         ),
-      ));
+      );
       final container = tester.widget<Container>(
         find
             .ancestor(
-                of: find.byType(SizedBox), matching: find.byType(Container))
+              of: find.byType(SizedBox),
+              matching: find.byType(Container),
+            )
             .first,
       );
       expect(container.constraints?.maxWidth, 300);
     });
 
     testWidgets('构造器背景色覆盖默认主题背景色', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TDrawerWidget(
-          backgroundColor: Colors.yellow,
-          child: SizedBox.expand(),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TDrawerWidget(
+            backgroundColor: Colors.yellow,
+            child: SizedBox.expand(),
+          ),
         ),
-      ));
+      );
 
       final container = drawerContainer(tester, color: Colors.yellow);
       expect(container.color, Colors.yellow);
     });
 
     testWidgets('直接使用组件时读取 Drawer ThemeData', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TDrawerWidget(child: SizedBox.expand()),
-        drawerTheme: const TDrawerThemeData(
-          width: 320,
-          backgroundColor: Colors.green,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TDrawerWidget(child: SizedBox.expand()),
+          drawerTheme: const TDrawerThemeData(
+            width: 320,
+            backgroundColor: Colors.green,
+          ),
         ),
-      ));
+      );
       final container = drawerContainer(tester, color: Colors.green);
       expect(container.constraints?.maxWidth, 320);
     });
@@ -375,15 +417,17 @@ void main() {
     testWidgets('点击列表项触发 onItemClick', (tester) async {
       int? clickedIndex;
       TDrawerItem? clickedItem;
-      await tester.pumpWidget(wrapWithTheme(
-        TDrawerWidget(
-          items: [TDrawerItem(title: '菜单1')],
-          onItemClick: (index, item) {
-            clickedIndex = index;
-            clickedItem = item;
-          },
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            items: [TDrawerItem(title: '菜单1')],
+            onItemClick: (index, item) {
+              clickedIndex = index;
+              clickedItem = item;
+            },
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('菜单1'));
       await tester.pumpAndSettle();
@@ -434,10 +478,7 @@ void main() {
                 builder: (context) => TButton(
                   child: const Text('打开'),
                   onPressed: () {
-                    TDrawer(
-                      context,
-                      child: const SizedBox.expand(),
-                    ).show();
+                    TDrawer(context, child: const SizedBox.expand()).show();
                   },
                 ),
               ),
@@ -587,10 +628,7 @@ void main() {
                 return TButton(
                   child: const Text('打开'),
                   onPressed: () {
-                    TDrawer(
-                      context,
-                      items: [TDrawerItem(title: '菜单1')],
-                    ).show();
+                    TDrawer(context, items: [TDrawerItem(title: '菜单1')]).show();
                   },
                 );
               },
@@ -609,9 +647,7 @@ void main() {
     testWidgets('构造器参数优先级高于 Theme', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: fullTheme(
-            drawerTheme: const TDrawerThemeData(width: 320),
-          ),
+          theme: fullTheme(drawerTheme: const TDrawerThemeData(width: 320)),
           home: Scaffold(
             body: Builder(
               builder: (context) {

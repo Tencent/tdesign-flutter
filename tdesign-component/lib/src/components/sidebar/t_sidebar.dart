@@ -186,19 +186,22 @@ class _TSideBarState extends State<TSideBar> {
   }
 
   void getDisplayChildren() {
+    _itemKeys.removeWhere((index, _) => index >= widget.children.length);
     displayChildren = widget.children
         .asMap()
         .entries
-        .map((entry) => _SideBarItemData(
-              index: entry.key,
-              key: _itemKeys.putIfAbsent(entry.value.value, GlobalKey.new),
-              disabled: entry.value.disabled,
-              value: entry.value.value,
-              icon: entry.value.icon,
-              label: entry.value.label,
-              textStyle: entry.value.textStyle,
-              badge: entry.value.badge,
-            ))
+        .map(
+          (entry) => _SideBarItemData(
+            index: entry.key,
+            key: _itemKeys.putIfAbsent(entry.key, GlobalKey.new),
+            disabled: entry.value.disabled,
+            value: entry.value.value,
+            icon: entry.value.icon,
+            label: entry.value.label,
+            textStyle: entry.value.textStyle,
+            badge: entry.value.badge,
+          ),
+        )
         .toList();
   }
 
@@ -229,7 +232,8 @@ class _TSideBarState extends State<TSideBar> {
     final sideBar = ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: 106,
-        maxHeight: MediaQuery.of(context).size.height -
+        maxHeight:
+            MediaQuery.of(context).size.height -
             MediaQuery.of(context).padding.top,
       ),
       child: SizedBox(
@@ -265,10 +269,12 @@ class _TSideBarState extends State<TSideBar> {
                     currentIndex != null && currentIndex! + 1 == ele.index,
                 bottomAdjacent:
                     currentIndex != null && currentIndex! - 1 == ele.index,
-                selectedBgColor: widget.selectedBgColor ??
+                selectedBgColor:
+                    widget.selectedBgColor ??
                     theme.selectedBgColor ??
                     context.tTheme.bgColorContainer,
-                unSelectedBgColor: widget.unSelectedBgColor ??
+                unSelectedBgColor:
+                    widget.unSelectedBgColor ??
                     theme.unSelectedBgColor ??
                     context.tTheme.bgColorSecondaryContainer,
                 onTap: () {

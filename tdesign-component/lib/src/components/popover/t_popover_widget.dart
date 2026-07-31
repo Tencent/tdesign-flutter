@@ -9,6 +9,9 @@ import '../../util/context_extension.dart';
 import '../text/t_text.dart';
 import 't_popover_theme_data.dart';
 
+const double _kDefaultPopoverMaxWidth = 300;
+const EdgeInsets _kDefaultPopoverPadding = EdgeInsets.all(12);
+
 /// 气泡弹层定位方向
 enum TPopoverPlacement {
   /// 上左
@@ -80,7 +83,10 @@ class TPopoverWidget extends StatefulWidget {
   /// 显示内容
   final String? content;
 
-  /// 自定义内容
+  /// 自定义内容。
+  ///
+  /// 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 [width]/[height]
+  /// 或组件主题提供确定尺寸。
   final Widget? contentWidget;
 
   /// 偏移
@@ -101,10 +107,10 @@ class TPopoverWidget extends StatefulWidget {
   /// 内容内边距
   final EdgeInsetsGeometry? padding;
 
-  /// 内容宽度（包含padding，实际高度：height - paddingLeft - paddingRight）
+  /// 内容外框宽度（包含 padding）。
   final double? width;
 
-  /// 内容高度（包含padding，实际高度：height - paddingTop - paddingBottom）
+  /// 内容外框高度（包含 padding）。
   final double? height;
 
   /// 点击事件
@@ -137,6 +143,11 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   double? get _effectiveHeight => widget.height ?? _theme.maxHeight;
 
+  double get _effectiveMaxWidth => _theme.maxWidth ?? _kDefaultPopoverMaxWidth;
+
+  EdgeInsetsGeometry get _resolvedPadding =>
+      _effectivePadding ?? _kDefaultPopoverPadding;
+
   BorderRadius? get _effectiveRadius =>
       widget.radius ??
       (_theme.borderRadius == null
@@ -151,17 +162,18 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   void initState() {
     super.initState();
     _initTheme();
-    if (widget.contentWidget != null) {
-      if (_effectiveWidth == null) {
-        throw FlutterError(
-          'width must not be null when contentWidget is not null',
-        );
-      }
-      if (_effectiveHeight == null) {
-        throw FlutterError(
-          'height must not be null when contentWidget is not null',
-        );
-      }
+    _validateContentSizeContract();
+  }
+
+  void _validateContentSizeContract() {
+    if (widget.contentWidget == null) {
+      return;
+    }
+    if (_effectiveWidth == null || _effectiveHeight == null) {
+      throw FlutterError(
+        'TPopover custom content requires a deterministic outer size. '
+        'Provide both width and height through TPopover or TPopoverThemeData.',
+      );
     }
   }
 
@@ -284,14 +296,30 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   /// 获取触发元素大小
   Rect? _getWidgetBounds(BuildContext context) {
-    final box = context.findRenderObject() as RenderBox?;
-    return box?.semanticBounds;
+    if (context case final Element element when !element.mounted) {
+      return null;
+    }
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox ||
+        !renderObject.attached ||
+        !renderObject.hasSize) {
+      return null;
+    }
+    return Offset.zero & renderObject.size;
   }
 
   /// 获取触发元素坐标
   Offset? _getWidgetLocalToGlobal(BuildContext context) {
-    final box = context.findRenderObject() as RenderBox?;
-    return box?.localToGlobal(Offset.zero);
+    if (context case final Element element when !element.mounted) {
+      return null;
+    }
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox ||
+        !renderObject.attached ||
+        !renderObject.hasSize) {
+      return null;
+    }
+    return renderObject.localToGlobal(Offset.zero);
   }
 
   /// 获取Y坐标
@@ -299,11 +327,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var widgetBounds = _getWidgetBounds(widget.context);
     var dy = widgetLocalToGlobal?.dy ?? 0;
     var arrowSize = _effectiveShowArrow ? _effectiveArrowSize : 0;
-    var contentSize = _getContentSize();
-    var popoverHeight =
-        _effectiveHeight ??
-        (_effectivePadding != null ? _effectivePadding!.vertical : 24) +
-            contentSize.height;
+    final popoverHeight = _resolvedPopoverSize().height;
     switch (widget.placement) {
       case TPopoverPlacement.bottomLeft:
       case TPopoverPlacement.bottom:
@@ -327,11 +351,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   double _getOffsetLeft(Offset? widgetLocalToGlobal) {
     var widgetBounds = _getWidgetBounds(widget.context);
     var widgetWidth = widgetBounds?.width ?? 0;
-    var contentSize = _getContentSize();
-    var popoverWidth =
-        _effectiveWidth ??
-        (_effectivePadding != null ? _effectivePadding!.horizontal : 24) +
-            contentSize.width;
+    final popoverWidth = _resolvedPopoverSize().width;
     var dx = widgetLocalToGlobal?.dx ?? 0;
     switch (widget.placement) {
       case TPopoverPlacement.topLeft:
@@ -421,53 +441,45 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     return Container(margin: margin, child: _drawArrow());
   }
 
-  /// 获取弹出内容大小
-  Size _getContentSize() {
+  /// 解析包含 padding 的弹层外框尺寸，供布局和定位共同使用。
+  Size _resolvedPopoverSize() {
     if (widget.contentWidget != null) {
       return Size(_effectiveWidth!, _effectiveHeight!);
     }
-    return _getTextSize();
+    final textSize = _getTextSize();
+    return Size(
+      _effectiveWidth ?? textSize.width + _resolvedPadding.horizontal,
+      _effectiveHeight ?? textSize.height + _resolvedPadding.vertical,
+    );
   }
 
   /// 获取文本内容大小
   Size _getTextSize() {
     final font = context.tTheme.fontBodyLarge;
-    var textPainter =
-        TextPainter(
-          text: TextSpan(
-            text: widget.content,
-            style: TextStyle(
-              color: _color,
-              letterSpacing: 0,
-              fontSize: font?.size ?? 16,
-              height: font?.height ?? 1.5,
-            ),
-          ),
-          locale: Localizations.localeOf(context),
-          textDirection: TextDirection.ltr,
-        )..layout(
-          maxWidth:
-              (_effectiveWidth ?? 300) -
-              (_effectivePadding != null ? _effectivePadding!.horizontal : 24),
-        );
+    final contentMaxWidth =
+        (_effectiveWidth ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
+    var textPainter = TextPainter(
+      text: TextSpan(
+        text: widget.content,
+        style: TextStyle(
+          color: _color,
+          letterSpacing: 0,
+          fontSize: font?.size ?? 16,
+          height: font?.height ?? 1.5,
+        ),
+      ),
+      locale: Localizations.localeOf(context),
+      textDirection: Directionality.of(context),
+    )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
     return textPainter.size;
   }
 
   Widget _getContainerWidget() {
-    // 当未指定 width 且使用纯文本内容时，用 TextPainter 测量的宽度作为约束，
-    // 确保长文本能在 maxWidth 范围内换行（否则 Container 无宽度约束，Text 会单行无限延伸）
-    var effectiveWidth = _effectiveWidth;
-    if (effectiveWidth == null && widget.contentWidget == null) {
-      final textWidth = _getTextSize().width;
-      final paddingHorizontal = _effectivePadding != null
-          ? _effectivePadding!.horizontal
-          : 24;
-      effectiveWidth = textWidth + paddingHorizontal;
-    }
+    final resolvedSize = _resolvedPopoverSize();
     return Container(
-      width: effectiveWidth,
-      height: _effectiveHeight,
-      padding: _effectivePadding ?? const EdgeInsets.all(12),
+      width: resolvedSize.width,
+      height: resolvedSize.height,
+      padding: _resolvedPadding,
       decoration: BoxDecoration(
         borderRadius:
             _effectiveRadius ??
@@ -563,6 +575,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   @override
   Widget build(BuildContext context) {
     _initTheme();
+    _validateContentSizeContract();
     var widgetLocalToGlobal = _getWidgetLocalToGlobal(widget.context);
     var top = _getOffsetTop(widgetLocalToGlobal);
     var left = _getOffsetLeft(widgetLocalToGlobal);

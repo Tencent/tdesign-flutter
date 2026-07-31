@@ -15,8 +15,9 @@ void main() {
       MaterialApp(
         theme: theme == null
             ? TThemeBuilder.light(TThemeData.defaultData())
-            : TThemeBuilder.light(TThemeData.defaultData())
-                .mergeExtension(theme),
+            : TThemeBuilder.light(
+                TThemeData.defaultData(),
+              ).mergeExtension(theme),
         home: Scaffold(body: SizedBox(key: key)),
       ),
     );
@@ -24,9 +25,9 @@ void main() {
   }
 
   List<TActionSheetItem> items() => [
-        TActionSheetItem(label: '拍照'),
-        TActionSheetItem(label: '相册'),
-      ];
+    TActionSheetItem(label: '拍照'),
+    TActionSheetItem(label: '相册'),
+  ];
 
   group('TActionSheet 命令式入口', () {
     testWidgets('showList 返回句柄并在选择后关闭', (tester) async {
@@ -55,6 +56,25 @@ void main() {
       expect(handle.isShowing, isFalse);
     });
 
+    testWidgets('关闭动画期间重复点击不会重复回调或弹出宿主页', (tester) async {
+      final context = await pumpHost(tester);
+      var changedCount = 0;
+      TActionSheet.showList(
+        context,
+        items: items(),
+        onChanged: (_, __) => changedCount++,
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('拍照'));
+      await tester.tap(find.text('拍照'), warnIfMissed: false);
+      await tester.pumpAndSettle();
+
+      expect(changedCount, 1);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('showList 继承 popup 视觉契约并收口溢出', (tester) async {
       final context = await pumpHost(
         tester,
@@ -74,10 +94,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final barrier =
-          tester.widgetList<Container>(find.byType(Container)).firstWhere(
-                (container) => container.color == Colors.black38,
-              );
+      final barrier = tester
+          .widgetList<Container>(find.byType(Container))
+          .firstWhere((container) => container.color == Colors.black38);
       expect(barrier.color, Colors.black38);
 
       final shell = tester
@@ -127,19 +146,23 @@ void main() {
         ),
       );
       expect(
-        itemContainers.any((container) =>
-            container.constraints?.minHeight == 56 &&
-            container.constraints?.maxHeight == 56 &&
-            container.decoration is BoxDecoration &&
-            (container.decoration! as BoxDecoration).border != null),
+        itemContainers.any(
+          (container) =>
+              container.constraints?.minHeight == 56 &&
+              container.constraints?.maxHeight == 56 &&
+              container.decoration is BoxDecoration &&
+              (container.decoration! as BoxDecoration).border != null,
+        ),
         isTrue,
       );
       expect(
-        itemContainers.any((container) =>
-            container.constraints?.minHeight == 78 &&
-            container.constraints?.maxHeight == 78 &&
-            container.decoration is BoxDecoration &&
-            (container.decoration! as BoxDecoration).border != null),
+        itemContainers.any(
+          (container) =>
+              container.constraints?.minHeight == 78 &&
+              container.constraints?.maxHeight == 78 &&
+              container.decoration is BoxDecoration &&
+              (container.decoration! as BoxDecoration).border != null,
+        ),
         isTrue,
       );
 

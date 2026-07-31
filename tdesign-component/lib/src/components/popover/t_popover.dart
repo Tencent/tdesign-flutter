@@ -32,10 +32,13 @@ class TPopover {
     /// 内容内边距。
     EdgeInsetsGeometry? padding,
 
-    /// 内容宽度。
+    /// 内容外框宽度（包含 padding）。
+    ///
+    /// 使用 `contentWidget` 时必须同时提供 `width` 和 `height`，也可以由
+    /// [TPopoverThemeData] 提供对应尺寸。
     double? width,
 
-    /// 内容高度。
+    /// 内容外框高度（包含 padding）。
     double? height,
 
     /// 蒙层颜色。
@@ -46,31 +49,37 @@ class TPopover {
     /// 气泡圆角。
     BorderRadius? radius,
   }) {
-    final theme = Theme.of(context).extension<TPopoverThemeData>() ??
+    final theme =
+        Theme.of(context).extension<TPopoverThemeData>() ??
         const TPopoverThemeData();
+    final capturedTheme = Theme.of(context);
     return showDialog(
       barrierDismissible: closeOnClickOutside,
       barrierColor: overlayColor ?? theme.barrierColor ?? Colors.transparent,
       useSafeArea: false,
       context: context,
-      builder: (ctx) => TPopoverWidget(
-        context: context,
-        content: content,
-        contentWidget: contentWidget,
-        offset: offset ?? theme.offset,
-        colorScheme: colorScheme ?? theme.colorScheme,
-        placement: placement,
-        showArrow: showArrow ?? theme.showArrow,
-        arrowSize: arrowSize ?? theme.arrowSize,
-        padding: padding ?? theme.padding,
-        width: width ?? theme.minWidth,
-        height: height ?? theme.maxHeight,
-        onTap: onTap,
-        onLongTap: onLongTap,
-        radius: radius ??
-            (theme.borderRadius == null
-                ? null
-                : BorderRadius.circular(theme.borderRadius!)),
+      builder: (ctx) => Theme(
+        data: capturedTheme,
+        child: TPopoverWidget(
+          context: context,
+          content: content,
+          contentWidget: contentWidget,
+          offset: offset ?? theme.offset,
+          colorScheme: colorScheme ?? theme.colorScheme,
+          placement: placement,
+          showArrow: showArrow ?? theme.showArrow,
+          arrowSize: arrowSize ?? theme.arrowSize,
+          padding: padding ?? theme.padding,
+          width: width ?? theme.minWidth,
+          height: height ?? theme.maxHeight,
+          onTap: onTap,
+          onLongTap: onLongTap,
+          radius:
+              radius ??
+              (theme.borderRadius == null
+                  ? null
+                  : BorderRadius.circular(theme.borderRadius!)),
+        ),
       ),
     );
   }

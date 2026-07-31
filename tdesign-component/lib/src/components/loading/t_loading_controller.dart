@@ -24,7 +24,11 @@ class TLoadingController {
       return;
     }
 
-    final overlay = Overlay.of(context);
+    final overlay = Overlay.maybeOf(context);
+    if (overlay == null) {
+      debugPrint('warn: TLoading requires an Overlay ancestor.');
+      return;
+    }
     final captured = InheritedTheme.capture(from: context, to: overlay.context);
     final loadingText = text ?? context.resource.loading;
     _overlayEntry = OverlayEntry(
@@ -47,8 +51,15 @@ class TLoadingController {
       ),
     );
 
-    _isShowing = true;
-    overlay.insert(_overlayEntry!);
+    final entry = _overlayEntry!;
+    try {
+      overlay.insert(entry);
+      _isShowing = true;
+    } catch (_) {
+      _overlayEntry = null;
+      _isShowing = false;
+      rethrow;
+    }
   }
 
   // 消失
@@ -56,6 +67,7 @@ class TLoadingController {
     if (_isShowing) {
       if (_overlayEntry != null) {
         _overlayEntry?.remove();
+        _overlayEntry?.dispose();
         _overlayEntry = null;
       }
       _isShowing = false;

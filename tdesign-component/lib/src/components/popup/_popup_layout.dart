@@ -2,12 +2,7 @@ part of 't_popup.dart';
 
 /// 按 [TPopupPlacement] 计算 [Positioned]；center 仅居中，尺寸由 [PopupShell] 约束。
 class PopupLayout {
-  PopupLayout({
-    required this.placement,
-    this.inset,
-    this.width,
-    this.height,
-  });
+  PopupLayout({required this.placement, this.inset, this.width, this.height});
 
   final TPopupPlacement placement;
   final TPopupInset? inset;
@@ -29,16 +24,40 @@ class PopupLayout {
   Widget wrapPositioned({
     required Widget child,
     EdgeInsets safePadding = EdgeInsets.zero,
+    Size? availableSize,
   }) {
+    double clampHeight(double preferred) {
+      if (availableSize == null) {
+        return preferred;
+      }
+      final availableHeight = math.max(
+        0.0,
+        availableSize.height - safePadding.vertical,
+      );
+      return math.min(preferred, availableHeight);
+    }
+
+    double clampWidth(double preferred) {
+      if (availableSize == null) {
+        return preferred;
+      }
+      final availableWidth = math.max(
+        0.0,
+        availableSize.width - safePadding.horizontal,
+      );
+      return math.min(preferred, availableWidth);
+    }
+
     switch (placement) {
       case TPopupPlacement.top:
-        final inset =
-            this.inset is TPopupTopInset ? this.inset as TPopupTopInset : null;
+        final inset = this.inset is TPopupTopInset
+            ? this.inset as TPopupTopInset
+            : null;
         return Positioned(
           top: safePadding.top,
           left: (inset?.left ?? 0) + safePadding.left,
           right: (inset?.right ?? 0) + safePadding.right,
-          height: height ?? defaultEdgeHeight,
+          height: clampHeight(height ?? defaultEdgeHeight),
           child: child,
         );
       case TPopupPlacement.bottom:
@@ -49,7 +68,7 @@ class PopupLayout {
           left: (inset?.left ?? 0) + safePadding.left,
           right: (inset?.right ?? 0) + safePadding.right,
           bottom: safePadding.bottom,
-          height: height ?? defaultEdgeHeight,
+          height: clampHeight(height ?? defaultEdgeHeight),
           child: child,
         );
       case TPopupPlacement.left:
@@ -60,7 +79,7 @@ class PopupLayout {
           top: (inset?.top ?? 0) + safePadding.top,
           bottom: (inset?.bottom ?? 0) + safePadding.bottom,
           left: safePadding.left,
-          width: width ?? defaultDrawerWidth,
+          width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
         );
       case TPopupPlacement.right:
@@ -71,7 +90,7 @@ class PopupLayout {
           top: (inset?.top ?? 0) + safePadding.top,
           bottom: (inset?.bottom ?? 0) + safePadding.bottom,
           right: safePadding.right,
-          width: width ?? defaultDrawerWidth,
+          width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
         );
       case TPopupPlacement.center:

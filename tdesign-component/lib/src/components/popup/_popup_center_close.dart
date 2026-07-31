@@ -11,11 +11,7 @@ Widget buildPopupCenterCloseControl({
     final theme = context.tTheme;
     return IconButton(
       tooltip: context.resource.close,
-      icon: Icon(
-        TIcons.close_circle,
-        color: theme.fontWhColor1,
-        size: 32,
-      ),
+      icon: Icon(TIcons.close_circle, color: theme.fontWhColor1, size: 32),
       onPressed: () => onCloseWithTrigger(TPopupTrigger.close),
     );
   }
@@ -57,15 +53,23 @@ class PopupCenterUnderClose extends StatelessWidget {
       onCloseWithTrigger: onCloseWithTrigger,
     );
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 40),
-        panel,
-        const SizedBox(height: 24),
-        closeControl,
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final children = <Widget>[
+          const SizedBox(height: 40),
+          if (constraints.hasBoundedHeight)
+            Flexible(fit: FlexFit.loose, child: panel)
+          else
+            panel,
+          const SizedBox(height: 24),
+          closeControl,
+        ];
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
+        );
+      },
     );
   }
 }

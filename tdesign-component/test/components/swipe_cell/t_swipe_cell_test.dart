@@ -53,6 +53,31 @@ void main() {
       expect(slidable.endActionPane, isNotNull);
     });
 
+    testWidgets('默认在祖先滚动时关闭，并允许实例关闭该行为', (tester) async {
+      await tester.pumpWidget(app(
+        TSwipeCell(
+          child: const TCell(title: Text('Default')),
+          end: panel('End'),
+        ),
+      ));
+      expect(
+        tester.widget<Slidable>(find.byType(Slidable)).closeOnScroll,
+        isTrue,
+      );
+
+      await tester.pumpWidget(app(
+        TSwipeCell(
+          child: const TCell(title: Text('Explicit')),
+          end: panel('End'),
+          closeOnScroll: false,
+        ),
+      ));
+      expect(
+        tester.widget<Slidable>(find.byType(Slidable)).closeOnScroll,
+        isFalse,
+      );
+    });
+
     testWidgets('onOpenChanged 使用 start/end 语义', (tester) async {
       TSwipeCellSide? side;
       bool? isOpen;

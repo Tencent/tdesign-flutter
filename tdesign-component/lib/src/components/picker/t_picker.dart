@@ -83,7 +83,10 @@ class _TPickerState extends State<TPicker> {
     if (acceptsPendingValue) {
       _pendingValue = null;
     }
+    final linkedValueAccepted =
+        acceptsPendingValue && widget.items is TPickerLinked;
     if (oldWidget.items != widget.items ||
+        linkedValueAccepted ||
         (!acceptsPendingValue &&
             !listEquals(widget.value, _snapshot().values))) {
       final previousControllers = _controllers;
@@ -189,8 +192,9 @@ class _TPickerState extends State<TPicker> {
       listenable: _controllers[columnIndex],
       builder: (context, _) {
         final currentIndex = _selectedIndex(columnIndex);
-        final previous =
-            currentIndex > 0 ? options[currentIndex - 1].label : null;
+        final previous = currentIndex > 0
+            ? options[currentIndex - 1].label
+            : null;
         final next = currentIndex < options.length - 1
             ? options[currentIndex + 1].label
             : null;
@@ -292,8 +296,11 @@ class _TPickerState extends State<TPicker> {
       var index = columnIndex == changedColumn
           ? changedIndex
           : columnIndex < changedColumn
-              ? _selectedIndex(columnIndex)
-              : _firstEnabledIndex(options);
+          ? _selectedIndex(columnIndex)
+          : _firstEnabledIndex(options);
+      if (index < 0 || index >= options.length) {
+        index = _firstEnabledIndex(options);
+      }
       if (options[index].disabled) {
         index = _firstEnabledIndex(options);
       }

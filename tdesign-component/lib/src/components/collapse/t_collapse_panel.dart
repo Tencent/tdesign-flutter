@@ -6,14 +6,15 @@ import 'package:flutter/material.dart';
 import 't_collapse_types.dart';
 
 /// 根据折叠状态构建面板操作文字的回调。
-typedef TCollapseIconTextBuilder = String Function(
-    BuildContext context, bool isExpanded);
+typedef TCollapseIconTextBuilder =
+    String Function(BuildContext context, bool isExpanded);
 
 /// 折叠面板配置。
 class TCollapsePanel<T extends Object> {
   const TCollapsePanel({
     required this.headerBuilder,
     required this.body,
+    this.bodyHeight,
     this.key,
     this.isExpanded = false,
     this.disabled = false,
@@ -22,7 +23,10 @@ class TCollapsePanel<T extends Object> {
     this.expandIconTextBuilder,
     this.value,
     this.backgroundColor,
-  });
+  }) : assert(
+         bodyHeight == null || (bodyHeight > 0 && bodyHeight < double.infinity),
+         'bodyHeight must be a finite value greater than zero',
+       );
 
   /// 面板标识，用于列表插入、删除和重排时保留内容状态。
   final Key? key;
@@ -32,6 +36,11 @@ class TCollapsePanel<T extends Object> {
 
   /// 折叠面板的内容组件。
   final Widget body;
+
+  /// 展开内容区域的固定高度（包含内容内边距）。
+  ///
+  /// 适用于 [ListView] 等需要有界高度的内容；为空时由内容自然决定高度。
+  final double? bodyHeight;
 
   /// 折叠面板是否展开。
   final bool isExpanded;

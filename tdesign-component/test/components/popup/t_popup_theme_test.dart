@@ -11,18 +11,27 @@ void main() {
       transitionDuration: Duration(milliseconds: 300),
       panelRadius: 8,
       panelBackgroundColor: Colors.white,
+      edgeHeight: 240,
+      drawerWidth: 280,
+      centerSize: Size(240, 240),
     );
 
     test('merge other 优先', () {
       const other = TPopupThemeData(
         barrierColor: Colors.black38,
         panelRadius: 12,
+        edgeHeight: 320,
+        drawerWidth: 360,
+        centerSize: Size(300, 280),
       );
       final merged = theme.merge(other);
       expect(merged, isA<TPopupThemeData>());
       expect(merged.barrierColor, Colors.black38);
       expect(merged.panelRadius, 12);
       expect(merged.panelBackgroundColor, Colors.white);
+      expect(merged.edgeHeight, 320);
+      expect(merged.drawerWidth, 360);
+      expect(merged.centerSize, const Size(300, 280));
     });
 
     test('merge null 返回 this', () {
@@ -33,10 +42,16 @@ void main() {
       final copied = theme.copyWith(
         barrierOpacity: 0.8,
         panelBackgroundColor: Colors.blue,
+        edgeHeight: 300,
+        drawerWidth: 320,
+        centerSize: const Size(260, 220),
       );
       expect(copied, isA<TPopupThemeData>());
       expect(copied.barrierOpacity, 0.8);
       expect(copied.panelBackgroundColor, Colors.blue);
+      expect(copied.edgeHeight, 300);
+      expect(copied.drawerWidth, 320);
+      expect(copied.centerSize, const Size(260, 220));
     });
 
     test('lerp 在 t=0 / 0.5 / 1 返回 TPopupThemeData', () {
@@ -45,6 +60,9 @@ void main() {
         barrierOpacity: 0.2,
         panelRadius: 16,
         panelBackgroundColor: Colors.blue,
+        edgeHeight: 320,
+        drawerWidth: 360,
+        centerSize: Size(320, 280),
       );
       final at0 = theme.lerp(other, 0);
       final atHalf = theme.lerp(other, 0.5);
@@ -54,6 +72,9 @@ void main() {
       expect(at1, isA<TPopupThemeData>());
       expect(atHalf.panelRadius, 12);
       expect(at1.panelRadius, 16);
+      expect(atHalf.edgeHeight, 280);
+      expect(atHalf.drawerWidth, 320);
+      expect(atHalf.centerSize, const Size(280, 260));
     });
 
     test('lerp other 非同类型时返回 this', () {

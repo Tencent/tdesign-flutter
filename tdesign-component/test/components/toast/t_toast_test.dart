@@ -526,6 +526,27 @@ void main() {
   // dismiss 关闭
   // ============================================================
   group('TToast dismiss 关闭', () {
+    testWidgets('同一 toastId 重复展示会替换旧实例', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+
+      TToast.showText(
+        '旧 Toast',
+        context: context,
+        toastId: 'same',
+        preventTap: true,
+      );
+      await tester.pump();
+      TToast.showText('新 Toast', context: context, toastId: 'same');
+      await tester.pump();
+
+      expect(find.text('旧 Toast'), findsNothing);
+      expect(find.text('新 Toast'), findsOneWidget);
+      TToast.dismissToast('same');
+      await tester.pump();
+      expect(find.text('新 Toast'), findsNothing);
+    });
+
     testWidgets('dismissToast 关闭指定 Toast', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));

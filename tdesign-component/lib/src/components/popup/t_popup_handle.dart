@@ -87,10 +87,7 @@ class TPopupHandle {
     _resultCompleter = resultCompleter;
     final captureFrom = context?.mounted == true ? context! : themeContext;
     final capturedThemes = captureFrom.mounted
-        ? InheritedTheme.capture(
-            from: captureFrom,
-            to: navigator.context,
-          )
+        ? InheritedTheme.capture(from: captureFrom, to: navigator.context)
         : null;
 
     _isClosed = false;
@@ -103,11 +100,7 @@ class TPopupHandle {
       if (!isShowing || currentRoute == null) {
         return;
       }
-      _closeRoute(
-        navigator: navigator,
-        route: currentRoute,
-        trigger: trigger,
-      );
+      _closeRoute(navigator: navigator, route: currentRoute, trigger: trigger);
     }
 
     route = _PopupNavigatorRoute<dynamic>(
@@ -125,17 +118,20 @@ class TPopupHandle {
 
     _PopupTracker.push(navigator, this);
 
-    navigator.push(route).then((result) {
-      if (!resultCompleter.isCompleted) {
-        resultCompleter.complete(result);
-      }
-    }).whenComplete(() {
-      _PopupTracker.remove(navigator, this);
-      final completedRoute = route;
-      if (completedRoute != null) {
-        _detachRoute(completedRoute);
-      }
-    });
+    navigator
+        .push(route)
+        .then((result) {
+          if (!resultCompleter.isCompleted) {
+            resultCompleter.complete(result);
+          }
+        })
+        .whenComplete(() {
+          _PopupTracker.remove(navigator, this);
+          final completedRoute = route;
+          if (completedRoute != null) {
+            _detachRoute(completedRoute);
+          }
+        });
   }
 
   /// 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为
@@ -188,7 +184,7 @@ class TPopupHandle {
   }) {
     _markClosing();
     route.fireCloseStart(trigger);
-    if (identical(_PopupTracker.top(navigator), this)) {
+    if (route.isCurrent) {
       navigator.pop(result);
       return;
     }

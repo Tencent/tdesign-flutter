@@ -135,11 +135,18 @@ class TDrawerWidget extends StatelessWidget {
           ],
         );
 
-    return Container(
-      color: effectiveBackgroundColor,
-      width: effectiveWidth,
-      height: double.infinity,
-      child: content,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableHeight = constraints.hasBoundedHeight
+            ? constraints.maxHeight
+            : MediaQuery.sizeOf(context).height;
+        return Container(
+          width: effectiveWidth,
+          height: availableHeight,
+          color: effectiveBackgroundColor,
+          child: content,
+        );
+      },
     );
   }
 

@@ -9,6 +9,7 @@
 library;
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_icons/tdesign_icons.dart';
@@ -79,12 +80,25 @@ final class TPopup {
   }) {
     final navContext = navigatorContext ?? context;
     final theme = Theme.of(context).extension<TPopupThemeData>();
+    final themedWidth = switch (options.placement) {
+      TPopupPlacement.left || TPopupPlacement.right => theme?.drawerWidth,
+      TPopupPlacement.center => theme?.centerSize?.width,
+      TPopupPlacement.top || TPopupPlacement.bottom => null,
+    };
+    final themedHeight = switch (options.placement) {
+      TPopupPlacement.top || TPopupPlacement.bottom => theme?.edgeHeight,
+      TPopupPlacement.center => theme?.centerSize?.height,
+      TPopupPlacement.left || TPopupPlacement.right => null,
+    };
     final resolvedOptions = options.copyWith(
+      width: options.width ?? themedWidth,
+      height: options.height ?? themedHeight,
       radius: options.radius ?? theme?.panelRadius,
       backgroundColor: options.backgroundColor ?? theme?.panelBackgroundColor,
       overlayColor: options.overlayColor ?? theme?.barrierColor,
       overlayOpacity: options.overlayOpacity ?? theme?.barrierOpacity,
-      animationDuration: options.animationDuration ??
+      animationDuration:
+          options.animationDuration ??
           theme?.transitionDuration ??
           const Duration(milliseconds: 240),
     );

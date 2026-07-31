@@ -34,8 +34,8 @@ class TNoticeBar extends StatefulWidget {
     this.speed = 50,
     this.interval = const Duration(seconds: 3),
     this.onPressed,
-  })  : assert(speed > 0, 'speed must be greater than zero'),
-        assert(maxLines > 0, 'maxLines must be greater than zero');
+  }) : assert(speed > 0, 'speed must be greater than zero'),
+       assert(maxLines > 0, 'maxLines must be greater than zero');
 
   /// 单条公告内容
   final String content;
@@ -98,7 +98,8 @@ class _TNoticeBarState extends State<TNoticeBar> {
 
   bool get _effectiveMarquee => widget.marquee;
 
-  double get _effectiveSpeed => widget.speed;
+  double get _effectiveSpeed =>
+      widget.speed.isFinite && widget.speed > 0 ? widget.speed : 50;
 
   Duration get _effectiveInterval => widget.interval;
 
@@ -167,8 +168,11 @@ class _TNoticeBarState extends State<TNoticeBar> {
     var remainder = scrollDistance % _effectiveSpeed;
     controller.jumpTo(0);
     var offset = 0.0 + _effectiveSpeed;
-    controller.animateTo(offset,
-        duration: const Duration(seconds: 1), curve: Curves.linear);
+    controller.animateTo(
+      offset,
+      duration: const Duration(seconds: 1),
+      curve: Curves.linear,
+    );
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (!mounted ||
           _scrollController == null ||
@@ -178,8 +182,11 @@ class _TNoticeBarState extends State<TNoticeBar> {
       }
       if (offset < scrollDistance - remainder) {
         offset += _effectiveSpeed;
-        await _scrollController!.animateTo(offset,
-            duration: const Duration(seconds: 1), curve: Curves.linear);
+        await _scrollController!.animateTo(
+          offset,
+          duration: const Duration(seconds: 1),
+          curve: Curves.linear,
+        );
         if (!mounted) {
           timer.cancel();
           return;
@@ -187,10 +194,11 @@ class _TNoticeBarState extends State<TNoticeBar> {
       } else {
         var time = (remainder / _effectiveSpeed * 1000)
             .round(); // coverage:ignore-line
-        await _scrollController!
-            .animateTo(scrollDistance, // coverage:ignore-line
-                duration: Duration(milliseconds: time),
-                curve: Curves.linear); // coverage:ignore-line
+        await _scrollController!.animateTo(
+          scrollDistance, // coverage:ignore-line
+          duration: Duration(milliseconds: time),
+          curve: Curves.linear,
+        ); // coverage:ignore-line
         if (!mounted) {
           timer.cancel();
           return;
@@ -199,10 +207,11 @@ class _TNoticeBarState extends State<TNoticeBar> {
         offset = _effectiveSpeed - remainder; // coverage:ignore-line
         remainder =
             (scrollDistance - offset) % _effectiveSpeed; // coverage:ignore-line
-        await _scrollController!.animateTo(offset, // coverage:ignore-line
-            duration:
-                Duration(milliseconds: 1000 - time), // coverage:ignore-line
-            curve: Curves.linear);
+        await _scrollController!.animateTo(
+          offset, // coverage:ignore-line
+          duration: Duration(milliseconds: 1000 - time), // coverage:ignore-line
+          curve: Curves.linear,
+        );
         if (!mounted) {
           timer.cancel();
           return;
@@ -219,7 +228,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
       return;
     }
     _timer = Timer.periodic(_effectiveInterval, (timer) {
-      if (!mounted) {
+      if (!mounted ||
+          _scrollController == null ||
+          !_scrollController!.hasClients) {
         timer.cancel();
         return;
       }
@@ -231,8 +242,11 @@ class _TNoticeBarState extends State<TNoticeBar> {
       }
       step++;
       offset += _effectiveHeight;
-      _scrollController!.animateTo(offset,
-          duration: Duration(milliseconds: time), curve: Curves.linear);
+      _scrollController!.animateTo(
+        offset,
+        duration: Duration(milliseconds: time),
+        curve: Curves.linear,
+      );
     });
   }
 
@@ -240,10 +254,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
   Size _getFontSize() {
     final text = _contentList.isEmpty ? '' : _contentList.first;
     final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: _resolved.textStyle,
-      ),
+      text: TextSpan(text: text, style: _resolved.textStyle),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
       maxLines: _effectiveMarquee ? 1 : widget.maxLines,
@@ -315,17 +326,13 @@ class _TNoticeBarState extends State<TNoticeBar> {
           physics: const NeverScrollableScrollPhysics(),
           child: Row(
             children: [
-              SizedBox(
-                key: _key,
-                height: textHeight,
-                child: textWidget,
-              ),
+              SizedBox(key: _key, height: textHeight, child: textWidget),
               SizedBox(width: emptyWidth),
               SizedBox(
                 width: math.max(emptyWidth, contextWidth),
                 height: textHeight,
                 child: textWidget,
-              )
+              ),
             ],
           ),
         );
@@ -342,36 +349,37 @@ class _TNoticeBarState extends State<TNoticeBar> {
             controller: _scrollController,
             scrollDirection: Axis.vertical,
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < content.length; i++)
-                    SizedBox(
-                      height: _effectiveHeight,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TText(
-                          content[i],
-                          style: _resolved.textStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (int i = 0; i < content.length; i++)
                   SizedBox(
-                    key: _key,
                     height: _effectiveHeight,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TText(
-                        content[0],
+                        content[i],
                         style: _resolved.textStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                ]),
+                SizedBox(
+                  key: _key,
+                  height: _effectiveHeight,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TText(
+                      content[0],
+                      style: _resolved.textStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
         break;
@@ -379,10 +387,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
     return child;
   }
 
-  Widget _buildBuiltInTapTarget(
-    TNoticeBarTapTarget target,
-    Widget child,
-  ) {
+  Widget _buildBuiltInTapTarget(TNoticeBarTapTarget target, Widget child) {
     if (widget.onPressed == null) {
       return child;
     }

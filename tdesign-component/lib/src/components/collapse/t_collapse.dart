@@ -79,10 +79,14 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       return;
     }
 
-    assert(_allPanelsHaveValue(),
-        'When allowing only one panel to be open, every panel must have a value.');
-    assert(_allPanelsHaveDistinctValues(),
-        'When allowing only one panel to be open, every panel must have a distinct value.');
+    assert(
+      _allPanelsHaveValue(),
+      'When allowing only one panel to be open, every panel must have a value.',
+    );
+    assert(
+      _allPanelsHaveDistinctValues(),
+      'When allowing only one panel to be open, every panel must have a distinct value.',
+    );
   }
 
   @override
@@ -93,16 +97,21 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       return;
     }
 
-    assert(_allPanelsHaveValue(),
-        'When allowing only one panel to be open, every panel must have a value.');
-    assert(_allPanelsHaveDistinctValues(),
-        'When allowing only one panel to be open, every panel must have a distinct value.');
+    assert(
+      _allPanelsHaveValue(),
+      'When allowing only one panel to be open, every panel must have a value.',
+    );
+    assert(
+      _allPanelsHaveDistinctValues(),
+      'When allowing only one panel to be open, every panel must have a distinct value.',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final animationDuration = widget.animationDuration ??
+    final animationDuration =
+        widget.animationDuration ??
         theme?.animationDuration ??
         kThemeAnimationDuration;
     final elevation = widget.elevation ?? theme?.elevation ?? 0;
@@ -112,19 +121,23 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       final isLastChild = index == widget.children.length - 1;
       final child = widget.children[index];
       final isExpanded = _isChildExpanded(index);
-      final isInteractive = !child.disabled &&
+      final isInteractive =
+          !child.disabled &&
           (widget.onExpansionChanged != null ||
               (_isAccordion && widget.onChanged != null));
-      final cardBorderRadius = theme?.cardBorderRadius ??
+      final cardBorderRadius =
+          theme?.cardBorderRadius ??
           BorderRadius.circular(context.tTheme.radiusLarge);
       final borderRadius = _isCardStyle(context)
           ? _createRadius(index, cardBorderRadius)
           : BorderRadius.zero;
-      final bgColor = child.backgroundColor ??
+      final bgColor =
+          child.backgroundColor ??
           theme?.backgroundColor ??
           context.tTheme.bgColorContainer;
       final childValue = child.value;
-      final panelKey = child.key ??
+      final panelKey =
+          child.key ??
           (_isAccordion && childValue != null
               ? ValueKey<T>(childValue)
               : ValueKey<int>(index));
@@ -137,26 +150,34 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         animationDuration,
         borderRadius,
       );
-      final body =
-          _buildBody(context, child, isExpanded, animationDuration, theme);
+      final body = _buildBody(
+        context,
+        child,
+        isExpanded,
+        animationDuration,
+        theme,
+      );
 
-      panels.add(Material(
-        key: panelKey,
-        color: bgColor,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (child.placement == TCollapsePlacement.top) body,
-            header,
-            if (child.placement == TCollapsePlacement.bottom) body,
-            if (!isLastChild)
-              TInsetDivider(color: _dividerColor(context, theme)),
-          ],
+      panels.add(
+        Material(
+          key: panelKey,
+          color: bgColor,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (child.placement == TCollapsePlacement.top) body,
+              header,
+              if (child.placement == TCollapsePlacement.bottom) body,
+              if (!isLastChild)
+                TInsetDivider(color: _dividerColor(context, theme)),
+            ],
+          ),
         ),
-      ));
+      );
     }
 
-    final cardBorderRadius = theme?.cardBorderRadius ??
+    final cardBorderRadius =
+        theme?.cardBorderRadius ??
         BorderRadius.circular(context.tTheme.radiusLarge);
     Widget collapse = Material(
       elevation: elevation,
@@ -168,7 +189,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
 
     if (_isCardStyle(context)) {
       collapse = Padding(
-        padding: theme?.cardMargin ??
+        padding:
+            theme?.cardMargin ??
             EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
         child: collapse,
       );
@@ -230,8 +252,9 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   ) {
     final titleWidget = _buildTitleWidget(context, child, isExpanded);
     final expandIconWidget = _buildExpandIconWidget(context, child, isExpanded);
-    final onTap =
-        isInteractive ? () => _handlePressed(index, isExpanded) : null;
+    final onTap = isInteractive
+        ? () => _handlePressed(index, isExpanded)
+        : null;
     final hasExplicitSemanticsLabel = child.semanticsLabel != null;
     return MergeSemantics(
       child: Semantics(
@@ -253,7 +276,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
                     duration: animationDuration,
                     curve: Curves.fastOutSlowIn,
                     constraints: const BoxConstraints(
-                        minHeight: kMinInteractiveDimension),
+                      minHeight: kMinInteractiveDimension,
+                    ),
                     child: titleWidget,
                   ),
                 ),
@@ -273,7 +297,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     Duration animationDuration,
     TCollapseThemeData? theme,
   ) {
-    final content = DefaultTextStyle(
+    Widget content = DefaultTextStyle(
       style: _contentTextStyle(context, theme),
       child: Padding(
         padding:
@@ -281,6 +305,9 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         child: child.body,
       ),
     );
+    if (child.bodyHeight != null) {
+      content = SizedBox(height: child.bodyHeight, child: content);
+    }
     final divider = TInsetDivider(color: _dividerColor(context, theme));
     return AnimatedCrossFade(
       firstChild: const SizedBox.shrink(),
@@ -293,14 +320,18 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       firstCurve: const Interval(0, 0.6, curve: Curves.fastOutSlowIn),
       secondCurve: const Interval(0.4, 1, curve: Curves.fastOutSlowIn),
       sizeCurve: Curves.fastOutSlowIn,
-      crossFadeState:
-          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: isExpanded
+          ? CrossFadeState.showSecond
+          : CrossFadeState.showFirst,
       duration: animationDuration,
     );
   }
 
   Widget _buildTitleWidget(
-      BuildContext context, TCollapsePanel<T> child, bool isExpanded) {
+    BuildContext context,
+    TCollapsePanel<T> child,
+    bool isExpanded,
+  ) {
     final theme = _theme(context);
     final style = child.disabled
         ? _disabledHeaderTextStyle(context, theme)
@@ -314,7 +345,10 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   }
 
   Widget _buildExpandIconWidget(
-    BuildContext context, TCollapsePanel<T> child, bool isExpanded) {
+    BuildContext context,
+    TCollapsePanel<T> child,
+    bool isExpanded,
+  ) {
     final theme = _theme(context);
     final iconColor = child.disabled
         ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
@@ -353,13 +387,16 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    final materialStyle = ListTileTheme.of(context).titleTextStyle ??
+    final materialStyle =
+        ListTileTheme.of(context).titleTextStyle ??
         Theme.of(context).tExplicitTextTheme?.titleMedium;
     return tokenStyle.merge(materialStyle).merge(theme?.headerTextStyle);
   }
 
   TextStyle _disabledHeaderTextStyle(
-      BuildContext context, TCollapseThemeData? theme) {
+    BuildContext context,
+    TCollapseThemeData? theme,
+  ) {
     return _headerTextStyle(context, theme)
         .copyWith(color: context.tTheme.textDisabledColor)
         .merge(theme?.disabledHeaderTextStyle);

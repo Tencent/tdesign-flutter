@@ -39,6 +39,20 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 动画持续时间
   final Duration? animationDuration;
 
+  /// 不确定进度完成一次循环的时长。
+  final Duration? indeterminateAnimationDuration;
+
+  /// 不确定线性进度段占轨道宽度的比例。
+  final double? indeterminateLinearSegmentFraction;
+
+  /// 不确定环形进度弧占整圈的比例。
+  final double? indeterminateCircularValue;
+
+  /// 线性和按钮进度条处于横向无界布局时使用的兜底宽度。
+  ///
+  /// 未设置时使用当前 MediaQuery 的视口宽度；有界布局不使用该字段。
+  final double? fallbackLinearWidth;
+
   const TProgressThemeData({
     this.strokeWidth,
     this.color,
@@ -50,7 +64,20 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     this.labelWidgetAlignment,
     this.progressLabelPosition,
     this.animationDuration,
-  });
+    this.indeterminateAnimationDuration,
+    this.indeterminateLinearSegmentFraction,
+    this.indeterminateCircularValue,
+    this.fallbackLinearWidth,
+  }) : assert(fallbackLinearWidth == null || fallbackLinearWidth > 0),
+       assert(
+         indeterminateLinearSegmentFraction == null ||
+             (indeterminateLinearSegmentFraction > 0 &&
+                 indeterminateLinearSegmentFraction <= 1),
+       ),
+       assert(
+         indeterminateCircularValue == null ||
+             (indeterminateCircularValue > 0 && indeterminateCircularValue < 1),
+       );
 
   @override
   TProgressThemeData copyWith({
@@ -64,6 +91,10 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     Alignment? labelWidgetAlignment,
     TProgressLabelPosition? progressLabelPosition,
     Duration? animationDuration,
+    Duration? indeterminateAnimationDuration,
+    double? indeterminateLinearSegmentFraction,
+    double? indeterminateCircularValue,
+    double? fallbackLinearWidth,
   }) {
     return TProgressThemeData(
       strokeWidth: strokeWidth ?? this.strokeWidth,
@@ -77,6 +108,14 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       progressLabelPosition:
           progressLabelPosition ?? this.progressLabelPosition,
       animationDuration: animationDuration ?? this.animationDuration,
+      indeterminateAnimationDuration:
+          indeterminateAnimationDuration ?? this.indeterminateAnimationDuration,
+      indeterminateLinearSegmentFraction:
+          indeterminateLinearSegmentFraction ??
+          this.indeterminateLinearSegmentFraction,
+      indeterminateCircularValue:
+          indeterminateCircularValue ?? this.indeterminateCircularValue,
+      fallbackLinearWidth: fallbackLinearWidth ?? this.fallbackLinearWidth,
     );
   }
 
@@ -90,16 +129,44 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       color: Color.lerp(color, other.color, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       linearBorderRadius: BorderRadiusGeometry.lerp(
-          linearBorderRadius, other.linearBorderRadius, t),
+        linearBorderRadius,
+        other.linearBorderRadius,
+        t,
+      ),
       circleRadius: lerpDouble(circleRadius, other.circleRadius, t),
       showLabel: t < 0.5 ? showLabel : other.showLabel,
       labelWidgetWidth: lerpDouble(labelWidgetWidth, other.labelWidgetWidth, t),
-      labelWidgetAlignment:
-          t < 0.5 ? labelWidgetAlignment : other.labelWidgetAlignment,
-      progressLabelPosition:
-          t < 0.5 ? progressLabelPosition : other.progressLabelPosition,
-      animationDuration:
-          lerpDuration(animationDuration, other.animationDuration, t),
+      labelWidgetAlignment: t < 0.5
+          ? labelWidgetAlignment
+          : other.labelWidgetAlignment,
+      progressLabelPosition: t < 0.5
+          ? progressLabelPosition
+          : other.progressLabelPosition,
+      animationDuration: lerpDuration(
+        animationDuration,
+        other.animationDuration,
+        t,
+      ),
+      indeterminateAnimationDuration: lerpDuration(
+        indeterminateAnimationDuration,
+        other.indeterminateAnimationDuration,
+        t,
+      ),
+      indeterminateLinearSegmentFraction: lerpDouble(
+        indeterminateLinearSegmentFraction,
+        other.indeterminateLinearSegmentFraction,
+        t,
+      ),
+      indeterminateCircularValue: lerpDouble(
+        indeterminateCircularValue,
+        other.indeterminateCircularValue,
+        t,
+      ),
+      fallbackLinearWidth: lerpDouble(
+        fallbackLinearWidth,
+        other.fallbackLinearWidth,
+        t,
+      ),
     );
   }
 }
@@ -116,7 +183,7 @@ Duration? lerpDuration(Duration? a, Duration? b, double t) {
     return a;
   }
   return Duration(
-      milliseconds:
-          (a.inMilliseconds + (b.inMilliseconds - a.inMilliseconds) * t)
-              .round());
+    milliseconds: (a.inMilliseconds + (b.inMilliseconds - a.inMilliseconds) * t)
+        .round(),
+  );
 }

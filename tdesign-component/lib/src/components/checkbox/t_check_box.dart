@@ -120,45 +120,54 @@ class TCheckbox extends StatelessWidget {
         (cardMode ? null : _buildIndicator(context, theme));
     final content = _buildContent(context, theme);
     final hasContent = content != null;
-    final children = <Widget>[
-      if (indicator != null) indicator,
-      if (indicator != null && content != null)
-        SizedBox(
-          width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
-        ),
-      if (content != null) Expanded(child: content),
-    ];
 
     final constraints = hasContent
         ? BoxConstraints(minHeight: _contentMinHeight)
         : _resolveTapTargetConstraints(context);
 
-    final tileContent = Container(
-      constraints: cardMode ? null : constraints,
-      padding: hasContent
-          ? (theme?.customSpace ??
-                EdgeInsets.symmetric(
-                  horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
-                  vertical: context.tTheme.spacer8,
-                ))
-          : EdgeInsets.zero,
-      decoration: cardMode
-          ? null
-          : BoxDecoration(
-              color: hasContent
-                  ? context.tTheme.bgColorContainer
-                  : Colors.transparent,
+    final tileContent = LayoutBuilder(
+      builder: (context, layoutConstraints) {
+        final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
+        final children = <Widget>[
+          if (indicator != null) indicator,
+          if (indicator != null && content != null)
+            SizedBox(
+              width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
             ),
-      child: Row(
-        mainAxisSize: hasContent ? MainAxisSize.max : MainAxisSize.min,
-        mainAxisAlignment: hasContent
-            ? MainAxisAlignment.start
-            : MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: contentDirection == TContentDirection.right
-            ? children
-            : children.reversed.toList(),
-      ),
+          if (content != null)
+            if (hasBoundedWidth) Expanded(child: content) else content,
+        ];
+        return Container(
+          constraints: cardMode ? null : constraints,
+          padding: hasContent
+              ? (theme?.customSpace ??
+                    EdgeInsets.symmetric(
+                      horizontal:
+                          theme?.insetSpacing ?? context.tTheme.spacer16,
+                      vertical: context.tTheme.spacer8,
+                    ))
+              : EdgeInsets.zero,
+          decoration: cardMode
+              ? null
+              : BoxDecoration(
+                  color: hasContent
+                      ? context.tTheme.bgColorContainer
+                      : Colors.transparent,
+                ),
+          child: Row(
+            mainAxisSize: hasContent && hasBoundedWidth
+                ? MainAxisSize.max
+                : MainAxisSize.min,
+            mainAxisAlignment: hasContent
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: contentDirection == TContentDirection.right
+                ? children
+                : children.reversed.toList(),
+          ),
+        );
+      },
     );
     final tile = cardMode
         ? TSelectionCard(
@@ -214,7 +223,8 @@ class TCheckbox extends StatelessWidget {
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = CheckboxTheme.of(context);
     final appTheme = Theme.of(context);
-    final visualDensity = materialTheme.visualDensity ??
+    final visualDensity =
+        materialTheme.visualDensity ??
         appTheme.tExplicitVisualDensity ??
         VisualDensity.standard;
     final tapTargetSize =

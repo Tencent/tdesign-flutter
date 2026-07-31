@@ -61,7 +61,13 @@
   - 同屏渲染 M2/M3。
   - 覆盖 Checkbox、Radio、Switch、Progress、Loading、Link、Tag、Badge、
     Rate、Input、Tabs、Icon、Text、Slider、Button。
+  - Progress 同时覆盖确定态和 TDesign 自绘不确定态。
   - 两侧 TDesign 控件视觉必须一致。
+- `t_popup_progress_layout_golden_test.dart`
+  - 锁定 Popup Theme 尺寸、视口裁剪和 Progress 横向无界宽度。
+- `t_popup_consumers_golden_test.dart`
+  - 通过真实命令式入口锁定 ActionSheet、Dialog、Drawer 的 Popup 路由、
+    蒙层、安全区和面板几何。
 - Overlay 回归测试
   - DropdownMenu、Popup 既有捕获测试。
   - 新增 Rate、LoadingController、Message、Toast 的局部 ThemeExtension
@@ -69,7 +75,7 @@
 - 既有 golden 不做批量更新；仅在人工对比确认视觉正常后，更新
   Button、Base Components、Navigation Components 中由 TDesign Token
   字体度量优先级修正产生的预期基线。
-- 最终验证：`flutter analyze` 无问题；完整 `flutter test` 共 2049 项全部
+- 最终验证：`flutter analyze` 无问题；完整 `flutter test` 共 2088 项全部
   通过；M2/M3 隔离快照已人工核对，颜色、文字、几何和状态一致。
 
 ## 仍需人工决策，但不阻塞本轮样式修复

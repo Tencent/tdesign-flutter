@@ -20,11 +20,11 @@ void main() {
   }
 
   Finder arrowContainerFinder() => find.byWidgetPredicate(
-        (widget) =>
-            widget is Container &&
-            widget.decoration is BoxDecoration &&
-            (widget.decoration as BoxDecoration).border != null,
-      );
+    (widget) =>
+        widget is Container &&
+        widget.decoration is BoxDecoration &&
+        (widget.decoration as BoxDecoration).border != null,
+  );
 
   // ============================================================
   // 枚举验证
@@ -62,16 +62,17 @@ void main() {
   // ============================================================
   group('TPopoverWidget 基础渲染', () {
     testWidgets('渲染文本内容', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '气泡内容',
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(context: context, content: '气泡内容'),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
 
       expect(find.byType(TPopoverWidget), findsOneWidget);
@@ -80,16 +81,17 @@ void main() {
 
     testWidgets('默认文本样式和背景色来自 token', (tester) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '默认气泡',
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(context: context, content: '默认气泡'),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
 
       final text = tester.widget<Text>(find.text('默认气泡'));
@@ -114,16 +116,17 @@ void main() {
 
     testWidgets('长文本默认限制在测量宽度内并允许换行', (tester) async {
       const longContent = '这是一段非常非常非常非常非常非常非常长的气泡内容，用于验证默认宽度不会横向无限延伸';
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: longContent,
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(context: context, content: longContent),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
 
       final containerFinder = find
@@ -145,34 +148,76 @@ void main() {
     });
 
     testWidgets('contentWidget 自定义内容渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              contentWidget: const Text('自定义Widget'),
-              width: 100,
-              height: 50,
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  contentWidget: const Text('自定义Widget'),
+                  width: 100,
+                  height: 50,
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
 
       expect(find.text('自定义Widget'), findsOneWidget);
+      final container = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TPopoverWidget),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is BoxDecoration,
+              ),
+            )
+            .first,
+      );
+      expect(container.constraints?.maxWidth, 100);
+      expect(container.constraints?.maxHeight, 50);
     });
 
-    testWidgets('contentWidget 未指定 width/height 抛出断言', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
-        home: Builder(builder: (context) {
-          return TPopoverWidget(
-            context: context,
-            contentWidget: const Text('无尺寸'),
-          );
-        }),
-      ));
+    testWidgets('contentWidget 未指定 width/height 拒绝构建', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Builder(
+            builder: (context) {
+              return TPopoverWidget(
+                context: context,
+                contentWidget: const Text('无尺寸'),
+              );
+            },
+          ),
+        ),
+      );
 
+      expect(tester.takeException(), isA<FlutterError>());
+    });
+
+    testWidgets('contentWidget 更新为无确定尺寸时仍执行契约校验', (tester) async {
+      Widget build({required bool withSize}) => MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: Builder(
+          builder: (context) {
+            return TPopoverWidget(
+              context: context,
+              contentWidget: const Text('动态内容'),
+              width: withSize ? 100 : null,
+              height: withSize ? 50 : null,
+            );
+          },
+        ),
+      );
+
+      await tester.pumpWidget(build(withSize: true));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(build(withSize: false));
       expect(tester.takeException(), isA<FlutterError>());
     });
   });
@@ -183,17 +228,21 @@ void main() {
   group('TPopoverWidget colorScheme', () {
     for (final scheme in TPopoverColorScheme.values) {
       testWidgets('colorScheme: $scheme 渲染正常', (tester) async {
-        await tester.pumpWidget(wrapWithTheme(
-          Builder(builder: (context) {
-            return Center(
-              child: TPopoverWidget(
-                context: context,
-                content: '${scheme.name}气泡',
-                colorScheme: scheme,
-              ),
-            );
-          }),
-        ));
+        await tester.pumpWidget(
+          wrapWithTheme(
+            Builder(
+              builder: (context) {
+                return Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: '${scheme.name}气泡',
+                    colorScheme: scheme,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
         await tester.pump();
 
         expect(find.text('${scheme.name}气泡'), findsOneWidget);
@@ -207,17 +256,21 @@ void main() {
   group('TPopoverWidget placement', () {
     for (final placement in TPopoverPlacement.values) {
       testWidgets('placement: $placement 渲染正常', (tester) async {
-        await tester.pumpWidget(wrapWithTheme(
-          Builder(builder: (context) {
-            return Center(
-              child: TPopoverWidget(
-                context: context,
-                content: '${placement.name}定位',
-                placement: placement,
-              ),
-            );
-          }),
-        ));
+        await tester.pumpWidget(
+          wrapWithTheme(
+            Builder(
+              builder: (context) {
+                return Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: '${placement.name}定位',
+                    placement: placement,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
         await tester.pump();
 
         expect(find.text('${placement.name}定位'), findsOneWidget);
@@ -230,18 +283,22 @@ void main() {
   // ============================================================
   group('TPopoverWidget 箭头', () {
     testWidgets('showArrow: true 渲染箭头', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '有箭头',
-              placement: TPopoverPlacement.bottom,
-              showArrow: true,
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '有箭头',
+                  placement: TPopoverPlacement.bottom,
+                  showArrow: true,
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
 
       // 箭头使用 Container + BoxDecoration(border:)
@@ -249,35 +306,43 @@ void main() {
     });
 
     testWidgets('showArrow: false 不渲染箭头', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '无箭头',
-              showArrow: false,
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '无箭头',
+                  showArrow: false,
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
 
       expect(find.text('无箭头'), findsOneWidget);
     });
 
     testWidgets('自定义 arrowSize', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '大箭头',
-              arrowSize: 16,
-              placement: TPopoverPlacement.top,
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '大箭头',
+                  arrowSize: 16,
+                  placement: TPopoverPlacement.top,
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
       expect(find.text('大箭头'), findsOneWidget);
     });
@@ -288,70 +353,123 @@ void main() {
   // ============================================================
   group('TPopoverWidget 尺寸', () {
     testWidgets('自定义 padding 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '内边距',
-              padding: const EdgeInsets.all(20),
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '内边距',
+                  padding: const EdgeInsets.all(20),
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
       expect(find.text('内边距'), findsOneWidget);
     });
 
     testWidgets('自定义 width 和 height', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '固定尺寸',
-              width: 200,
-              height: 80,
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '固定尺寸',
+                  width: 200,
+                  height: 80,
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
       expect(find.text('固定尺寸'), findsOneWidget);
+      final container = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TPopoverWidget),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is BoxDecoration,
+              ),
+            )
+            .first,
+      );
+      expect(tester.getSize(find.byWidget(container)), const Size(200, 80));
+    });
+
+    testWidgets('theme maxWidth 约束文本外框宽度', (tester) async {
+      const longContent = '一段足够长的气泡文本，用来验证组件主题能够控制文本气泡最大宽度';
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(context: context, content: longContent),
+              );
+            },
+          ),
+          popoverTheme: const TPopoverThemeData(maxWidth: 180),
+        ),
+      );
+      await tester.pump();
+
+      final containerFinder = find
+          .descendant(
+            of: find.byType(TPopoverWidget),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container && widget.decoration is BoxDecoration,
+            ),
+          )
+          .first;
+      expect(tester.getSize(containerFinder).width, lessThanOrEqualTo(180));
     });
 
     testWidgets('自定义 radius 圆角', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '圆角',
-              radius: BorderRadius.circular(20),
-            ),
-          );
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '圆角',
+                  radius: BorderRadius.circular(20),
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pump();
       expect(find.text('圆角'), findsOneWidget);
     });
 
     testWidgets('theme applies padding, radius and arrow size', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          return Center(
-            child: TPopoverWidget(
-              context: context,
-              content: '主题气泡',
-            ),
-          );
-        }),
-        popoverTheme: const TPopoverThemeData(
-          padding: EdgeInsets.all(10),
-          borderRadius: 20,
-          arrowSize: 16,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(context: context, content: '主题气泡'),
+              );
+            },
+          ),
+          popoverTheme: const TPopoverThemeData(
+            padding: EdgeInsets.all(10),
+            borderRadius: 20,
+            arrowSize: 16,
+          ),
         ),
-      ));
+      );
       await tester.pump();
 
       final container = tester.widget<Container>(
@@ -378,33 +496,38 @@ void main() {
   });
 
   testWidgets('showPopover uses theme barrierColor', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        const TPopoverThemeData(barrierColor: Colors.black54),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(
+          TThemeData.defaultData(),
+        ).mergeExtension(const TPopoverThemeData(barrierColor: Colors.black54)),
+        home: Builder(
+          builder: (context) {
+            return Scaffold(
+              body: Center(
+                child: TextButton(
+                  onPressed: () {
+                    TPopover.showPopover(
+                      context: context,
+                      content: '气泡',
+                      placement: TPopoverPlacement.bottom,
+                    );
+                  },
+                  child: const Text('open'),
+                ),
+              ),
+            );
+          },
+        ),
       ),
-      home: Builder(builder: (context) {
-        return Scaffold(
-          body: Center(
-            child: TextButton(
-              onPressed: () {
-                TPopover.showPopover(
-                  context: context,
-                  content: '气泡',
-                  placement: TPopoverPlacement.bottom,
-                );
-              },
-              child: const Text('open'),
-            ),
-          ),
-        );
-      }),
-    ));
+    );
 
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    final barrier =
-        tester.widgetList<ModalBarrier>(find.byType(ModalBarrier)).last;
+    final barrier = tester
+        .widgetList<ModalBarrier>(find.byType(ModalBarrier))
+        .last;
     expect(barrier.color, Colors.black54);
   });
 
@@ -414,18 +537,24 @@ void main() {
   group('TPopover.showPopover', () {
     testWidgets('showPopover 弹出气泡', (tester) async {
       late BuildContext ctx;
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          ctx = context;
-          return const SizedBox();
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
 
-      unawaited(TPopover.showPopover(
-        context: ctx,
-        content: '弹出气泡',
-        placement: TPopoverPlacement.bottom,
-      ));
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '弹出气泡',
+          placement: TPopoverPlacement.bottom,
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('弹出气泡'), findsOneWidget);
@@ -433,18 +562,24 @@ void main() {
 
     testWidgets('showPopover 带 colorScheme', (tester) async {
       late BuildContext ctx;
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          ctx = context;
-          return const SizedBox();
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
 
-      unawaited(TPopover.showPopover(
-        context: ctx,
-        content: '成功气泡',
-        colorScheme: TPopoverColorScheme.success,
-      ));
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '成功气泡',
+          colorScheme: TPopoverColorScheme.success,
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('成功气泡'), findsOneWidget);
@@ -452,18 +587,24 @@ void main() {
 
     testWidgets('closeOnClickOutside: true 点击外部关闭', (tester) async {
       late BuildContext ctx;
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          ctx = context;
-          return const SizedBox();
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
 
-      unawaited(TPopover.showPopover(
-        context: ctx,
-        content: '可关闭',
-        closeOnClickOutside: true,
-      ));
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '可关闭',
+          closeOnClickOutside: true,
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('可关闭'), findsOneWidget);
@@ -482,38 +623,37 @@ void main() {
   group('TPopover 主题覆盖', () {
     testWidgets('TPopoverThemeData 注入后正常渲染', (tester) async {
       late BuildContext ctx;
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          ctx = context;
-          return const SizedBox();
-        }),
-        popoverTheme: const TPopoverThemeData(
-          colorScheme: TPopoverColorScheme.dark,
-          backgroundColor: Colors.black,
-          borderRadius: 8,
-          arrowSize: 10,
-          minWidth: 50,
-          maxHeight: 200,
-          boxShadow: [
-            BoxShadow(color: Colors.purple, blurRadius: 4),
-          ],
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+          popoverTheme: const TPopoverThemeData(
+            colorScheme: TPopoverColorScheme.dark,
+            backgroundColor: Colors.black,
+            borderRadius: 8,
+            arrowSize: 10,
+            minWidth: 50,
+            maxHeight: 200,
+            boxShadow: [BoxShadow(color: Colors.purple, blurRadius: 4)],
+          ),
         ),
-      ));
+      );
 
-      unawaited(TPopover.showPopover(
-        context: ctx,
-        content: '主题气泡',
-      ));
+      unawaited(TPopover.showPopover(context: ctx, content: '主题气泡'));
       await tester.pumpAndSettle();
 
       expect(find.text('主题气泡'), findsOneWidget);
       final themedContainer = tester
           .widgetList<Container>(find.byType(Container))
           .firstWhere((container) {
-        final decoration = container.decoration;
-        return decoration is BoxDecoration &&
-            decoration.boxShadow?.first.color == Colors.purple;
-      });
+            final decoration = container.decoration;
+            return decoration is BoxDecoration &&
+                decoration.boxShadow?.first.color == Colors.purple;
+          });
       expect(
         (themedContainer.decoration! as BoxDecoration).boxShadow?.first.color,
         Colors.purple,

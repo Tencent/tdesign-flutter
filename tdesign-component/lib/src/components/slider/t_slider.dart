@@ -36,7 +36,8 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
     overlayColor: inherited.overlayColor ?? brand.withAlpha(0x1f),
     valueIndicatorColor: inherited.valueIndicatorColor ?? brand,
     valueIndicatorStrokeColor: inherited.valueIndicatorStrokeColor ?? brand,
-    valueIndicatorTextStyle: inherited.valueIndicatorTextStyle ??
+    valueIndicatorTextStyle:
+        inherited.valueIndicatorTextStyle ??
         TextStyle(
           color: token.textColorAnti,
           fontSize: token.fontBodyLarge?.size,
@@ -83,10 +84,10 @@ class TSlider extends StatelessWidget {
 
     /// 刻度值格式化回调。
     this.scaleFormatter,
-  })  : assert(max > min),
-        assert(value >= min && value <= max),
-        assert(divisions == null || divisions > 0),
-        assert(!showScaleValue || divisions != null);
+  }) : assert(max > min),
+       assert(value >= min && value <= max),
+       assert(divisions == null || divisions > 0),
+       assert(!showScaleValue || divisions != null);
 
   /// 受控滑块值。
   final double value;
@@ -138,14 +139,18 @@ class TSlider extends StatelessWidget {
     final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
       showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
     );
-    final decoration =
-        Theme.of(context).extension<TSliderThemeData>()?.decoration;
+    final decoration = Theme.of(
+      context,
+    ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
-    final content = showScaleValue
+    final safeDivisions = divisions != null && divisions! > 0
+        ? divisions
+        : null;
+    final content = showScaleValue && safeDivisions != null
         ? _SliderWithScaleLabels(
             min: min,
             max: max,
-            divisions: divisions!,
+            divisions: safeDivisions,
             formatter: scaleFormatter,
             slider: themedSlider,
           )
@@ -193,9 +198,9 @@ class TRangeSlider extends StatelessWidget {
 
     /// 刻度值格式化回调。
     this.scaleFormatter,
-  })  : assert(max > min),
-        assert(divisions == null || divisions > 0),
-        assert(!showScaleValue || divisions != null);
+  }) : assert(max > min),
+       assert(divisions == null || divisions > 0),
+       assert(!showScaleValue || divisions != null);
 
   /// 受控范围值。
   final RangeValues value;
@@ -251,14 +256,18 @@ class TRangeSlider extends StatelessWidget {
     final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
       showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
     );
-    final decoration =
-        Theme.of(context).extension<TSliderThemeData>()?.decoration;
+    final decoration = Theme.of(
+      context,
+    ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
-    final content = showScaleValue
+    final safeDivisions = divisions != null && divisions! > 0
+        ? divisions
+        : null;
+    final content = showScaleValue && safeDivisions != null
         ? _SliderWithScaleLabels(
             min: min,
             max: max,
-            divisions: divisions!,
+            divisions: safeDivisions,
             formatter: scaleFormatter,
             slider: themedSlider,
           )

@@ -23,17 +23,24 @@ void main() {
   // T01 – 基础渲染
   // ============================================================
   testWidgets('T01 - 基础渲染：渲染文本内容', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('测试文本'),
-    ));
+    await tester.pumpWidget(wrapWithTheme(const TText('测试文本')));
     expect(find.text('测试文本'), findsOneWidget);
     expect(find.byType(TText), findsOneWidget);
   });
 
-  testWidgets('T01b - 完整主题下过滤 Material 自动 DefaultTextStyle 并使用 Token', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('Token 文本'),
-    ));
+  testWidgets('T01a - GlobalKey 只绑定 TText 自身', (tester) async {
+    final key = GlobalKey();
+    await tester.pumpWidget(wrapWithTheme(TText('唯一 key', key: key)));
+
+    expect(key.currentWidget, isA<TText>());
+    expect(find.text('唯一 key'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('T01b - 完整主题下过滤 Material 自动 DefaultTextStyle 并使用 Token', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrapWithTheme(const TText('Token 文本')));
 
     final text = tester.widget<Text>(find.text('Token 文本'));
     final context = tester.element(find.text('Token 文本'));
@@ -43,23 +50,40 @@ void main() {
     expect(text.style?.height, token.fontBodyLarge?.height);
   });
 
+  testWidgets('T01c - 未显式缩放时继承 MediaQuery 无障碍字号', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: const MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+          child: Scaffold(body: TText('系统缩放')),
+        ),
+      ),
+    );
+
+    final text = tester.widget<Text>(find.text('系统缩放'));
+    final richText = tester.widget<RichText>(find.byType(RichText).last);
+    expect(text.textScaler, isNull);
+    expect(richText.textScaler.scale(10), 20);
+  });
+
   // ============================================================
   // T02 – 构造器糖参数
   // ============================================================
   testWidgets('T02 - 构造器糖：textColor 生效', (tester) async {
     const color = Colors.red;
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('红色文本', textColor: color),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(const TText('红色文本', textColor: color)),
+    );
 
     final text = tester.widget<Text>(find.text('红色文本'));
     expect(text.style?.color, color);
   });
 
   testWidgets('T02b - 构造器糖：font 指定字号和行高', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TText('大号文本', font: Font(size: 20, lineHeight: 28)),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(TText('大号文本', font: Font(size: 20, lineHeight: 28))),
+    );
 
     final text = tester.widget<Text>(find.text('大号文本'));
     expect(text.style?.fontSize, 20);
@@ -67,9 +91,9 @@ void main() {
   });
 
   testWidgets('T02c - 构造器糖：isTextThrough 删除线', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('删除线文本', isTextThrough: true),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(const TText('删除线文本', isTextThrough: true)),
+    );
 
     final text = tester.widget<Text>(find.text('删除线文本'));
     expect(text.style?.decoration, TextDecoration.lineThrough);
@@ -79,26 +103,30 @@ void main() {
   // T03 – 样式优先级：P0 style 覆盖构造器糖
   // ============================================================
   testWidgets('T03 - P0 style.color 覆盖 textColor', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText(
-        '样式覆盖',
-        textColor: Colors.blue,
-        style: TextStyle(color: Colors.red),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TText(
+          '样式覆盖',
+          textColor: Colors.blue,
+          style: TextStyle(color: Colors.red),
+        ),
       ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('样式覆盖'));
     expect(text.style?.color, Colors.red); // P0 style 优先
   });
 
   testWidgets('T03b - P0 style.fontSize 覆盖构造器 Font', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TText(
-        '字体覆盖',
-        font: Font(size: 14, lineHeight: 20),
-        style: const TextStyle(fontSize: 24),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TText(
+          '字体覆盖',
+          font: Font(size: 14, lineHeight: 20),
+          style: const TextStyle(fontSize: 24),
+        ),
       ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('字体覆盖'));
     expect(text.style?.fontSize, 24); // P0 优先
@@ -110,32 +138,36 @@ void main() {
   // T04 – TTextThemeData 子树默认值
   // ============================================================
   testWidgets('T04 - TTextThemeData.context 提供默认颜色', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('主题文本'),
-      textTheme: const TTextThemeData(defaultTextColor: Colors.orange),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TText('主题文本'),
+        textTheme: const TTextThemeData(defaultTextColor: Colors.orange),
+      ),
+    );
 
     final text = tester.widget<Text>(find.text('主题文本'));
     expect(text.style?.color, Colors.orange);
   });
 
   testWidgets('T04b - 构造器 textColor 覆盖 TTextThemeData', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('覆盖主题', textColor: Colors.green),
-      textTheme: const TTextThemeData(defaultTextColor: Colors.orange),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TText('覆盖主题', textColor: Colors.green),
+        textTheme: const TTextThemeData(defaultTextColor: Colors.orange),
+      ),
+    );
 
     final text = tester.widget<Text>(find.text('覆盖主题'));
     expect(text.style?.color, Colors.green); // 构造器优先于 Theme
   });
 
   testWidgets('T04d - TTextThemeData.defaultFont 覆盖 Token', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('字体主题'),
-      textTheme: TTextThemeData(
-        defaultFont: Font(size: 22, lineHeight: 30),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TText('字体主题'),
+        textTheme: TTextThemeData(defaultFont: Font(size: 22, lineHeight: 30)),
       ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('字体主题'));
     expect(text.style?.fontSize, 22);
@@ -146,57 +178,65 @@ void main() {
   // T05 – TTextConfiguration 全局字体注入
   // ============================================================
   testWidgets('T05 - TTextConfiguration.globalFontFamily 生效', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TTextConfiguration(
-        globalFontFamily: FontFamily(fontFamily: 'TestFont'),
-        child: const TText('全局字体'),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TTextConfiguration(
+          globalFontFamily: FontFamily(fontFamily: 'TestFont'),
+          child: const TText('全局字体'),
+        ),
       ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('全局字体'));
     expect(text.style?.fontFamily, 'TestFont');
   });
 
   testWidgets('T05b - 构造器 fontFamily 覆盖 globalFontFamily', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TTextConfiguration(
-        globalFontFamily: FontFamily(fontFamily: 'GlobalFont'),
-        child: TText(
-          '实例字体',
-          fontFamily: FontFamily(fontFamily: 'InstanceFont'),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TTextConfiguration(
+          globalFontFamily: FontFamily(fontFamily: 'GlobalFont'),
+          child: TText(
+            '实例字体',
+            fontFamily: FontFamily(fontFamily: 'InstanceFont'),
+          ),
         ),
       ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('实例字体'));
     expect(text.style?.fontFamily, 'InstanceFont');
   });
 
   testWidgets('T05c - globalFontFamily 覆盖组件 Theme 默认字体', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TTextConfiguration(
-        globalFontFamily: FontFamily(fontFamily: 'GlobalFont'),
-        child: const TText('全局优先'),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TTextConfiguration(
+          globalFontFamily: FontFamily(fontFamily: 'GlobalFont'),
+          child: const TText('全局优先'),
+        ),
+        textTheme: TTextThemeData(
+          defaultFontFamily: FontFamily(fontFamily: 'ThemeFont'),
+        ),
       ),
-      textTheme: TTextThemeData(
-        defaultFontFamily: FontFamily(fontFamily: 'ThemeFont'),
-      ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('全局优先'));
     expect(text.style?.fontFamily, 'GlobalFont');
   });
 
   testWidgets('T05d - DefaultTextStyle 控制未显式指定的文本样式', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      theme: ThemeData(extensions: [TThemeData.defaultData()]),
-      home: const Scaffold(
-        body: DefaultTextStyle(
-          style: TextStyle(color: Colors.pink, fontSize: 21, height: 1.7),
-          child: TText('Flutter默认文本'),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(extensions: [TThemeData.defaultData()]),
+        home: const Scaffold(
+          body: DefaultTextStyle(
+            style: TextStyle(color: Colors.pink, fontSize: 21, height: 1.7),
+            child: TText('Flutter默认文本'),
+          ),
         ),
       ),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('Flutter默认文本'));
     expect(text.style?.color, Colors.pink);
@@ -205,15 +245,17 @@ void main() {
   });
 
   testWidgets('T05e - ThemeData.textTheme 控制未显式指定的文本样式', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      theme: ThemeData(
-        extensions: [TThemeData.defaultData()],
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.indigo, fontSize: 19),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          extensions: [TThemeData.defaultData()],
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(color: Colors.indigo, fontSize: 19),
+          ),
         ),
+        home: const Scaffold(body: TText('Material默认文本')),
       ),
-      home: const Scaffold(body: TText('Material默认文本')),
-    ));
+    );
 
     final text = tester.widget<Text>(find.text('Material默认文本'));
     expect(text.style?.color, Colors.indigo);
@@ -226,16 +268,18 @@ void main() {
       applyHeightToLastDescent: false,
     );
     const strutStyle = StrutStyle(fontSize: 17, height: 1.3);
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('主题字段'),
-      textTheme: const TTextThemeData(
-        defaultBackgroundColor: Colors.cyan,
-        strutStyle: strutStyle,
-        textWidthBasis: TextWidthBasis.longestLine,
-        textHeightBehavior: textHeightBehavior,
-        textScaleFactor: 1.2,
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TText('主题字段'),
+        textTheme: const TTextThemeData(
+          defaultBackgroundColor: Colors.cyan,
+          strutStyle: strutStyle,
+          textWidthBasis: TextWidthBasis.longestLine,
+          textHeightBehavior: textHeightBehavior,
+          textScaleFactor: 1.2,
+        ),
       ),
-    ));
+    );
 
     final container = tester.widget<Container>(find.byType(Container).first);
     expect(container.color, Colors.cyan);
@@ -252,23 +296,27 @@ void main() {
   // ============================================================
   testWidgets('T06 - globalFontFamily 变更触发子树重建', (tester) async {
     const childKey = Key('test_child');
-    await tester.pumpWidget(wrapWithTheme(
-      TTextConfiguration(
-        globalFontFamily: FontFamily(fontFamily: 'FontA'),
-        child: Container(key: childKey, child: const TText('文本')),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TTextConfiguration(
+          globalFontFamily: FontFamily(fontFamily: 'FontA'),
+          child: Container(key: childKey, child: const TText('文本')),
+        ),
       ),
-    ));
+    );
 
     final text1 = tester.widget<Text>(find.text('文本'));
     expect(text1.style?.fontFamily, 'FontA');
 
     // 切换全局字体
-    await tester.pumpWidget(wrapWithTheme(
-      TTextConfiguration(
-        globalFontFamily: FontFamily(fontFamily: 'FontB'),
-        child: Container(key: childKey, child: const TText('文本')),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TTextConfiguration(
+          globalFontFamily: FontFamily(fontFamily: 'FontB'),
+          child: Container(key: childKey, child: const TText('文本')),
+        ),
       ),
-    ));
+    );
 
     final text2 = tester.widget<Text>(find.text('文本'));
     expect(text2.style?.fontFamily, 'FontB');
@@ -302,17 +350,21 @@ void main() {
   });
 
   testWidgets('T07c - TText.rich 正常渲染 TTextSpan', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TText.rich(
-        TextSpan(children: [
-          TTextSpan(
-            text: '富文本',
-            textColor: Colors.teal,
-            font: Font(size: 16, lineHeight: 24),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TText.rich(
+          TextSpan(
+            children: [
+              TTextSpan(
+                text: '富文本',
+                textColor: Colors.teal,
+                font: Font(size: 16, lineHeight: 24),
+              ),
+            ],
           ),
-        ]),
+        ),
       ),
-    ));
+    );
 
     // 验证文本已渲染（TTextSpan 在构造器中已通过 resolveSpan 设置样式）
     expect(find.text('富文本'), findsOneWidget);
@@ -353,16 +405,20 @@ void main() {
   // T11 – getRawText 互操作
   // ============================================================
   testWidgets('T11 - getRawText 返回系统 Text', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      Builder(builder: (context) {
-        final rawText = const TText(
-          '原始文本',
-          backgroundColor: Colors.yellow,
-        ).getRawText(context: context);
+    await tester.pumpWidget(
+      wrapWithTheme(
+        Builder(
+          builder: (context) {
+            final rawText = const TText(
+              '原始文本',
+              backgroundColor: Colors.yellow,
+            ).getRawText(context: context);
 
-        return rawText;
-      }),
-    ));
+            return rawText;
+          },
+        ),
+      ),
+    );
 
     expect(find.text('原始文本'), findsOneWidget);
     // getRawText 返回的是系统 Text（非 TText）
@@ -373,9 +429,9 @@ void main() {
   // T13 – backgroundColor 使用 Container 而非 TextStyle.background
   // ============================================================
   testWidgets('T13 - backgroundColor 通过 Container 渲染', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TText('背景色', backgroundColor: Colors.amber),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(const TText('背景色', backgroundColor: Colors.amber)),
+    );
 
     final container = tester.widget<Container>(find.byType(Container).first);
     expect(container.color, Colors.amber);
@@ -389,14 +445,14 @@ void main() {
   // T14 – TText.rich 父级样式应用到子 Span
   // ============================================================
   testWidgets('T14 - TText.rich 父级 textColor 和 P0 style 传递', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TText.rich(
-        TextSpan(children: [
-          TTextSpan(text: '子文本'),
-        ]),
-        textColor: Colors.teal,
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TText.rich(
+          TextSpan(children: [TTextSpan(text: '子文本')]),
+          textColor: Colors.teal,
+        ),
       ),
-    ));
+    );
 
     final richText = tester.widget<RichText>(find.byType(RichText).last);
     final rootSpan = richText.text as TextSpan;

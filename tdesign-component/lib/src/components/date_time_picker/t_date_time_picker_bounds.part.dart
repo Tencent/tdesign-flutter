@@ -46,48 +46,50 @@ _IntRange columnBounds(
   final safeEnd = _safeEnd(start, end);
 
   if (_isTimeOnlyColumns(columns)) {
-    return _timeOnlyColumnBounds(col,
-        current: current, start: start, end: safeEnd);
+    return _timeOnlyColumnBounds(
+      col,
+      current: current,
+      start: start,
+      end: safeEnd,
+    );
   }
 
   return switch (col) {
     DateTimeColumn.year => _IntRange(
-        start?.year ?? (yearAnchor - DateTimePickerSnapshot.defaultYearOffset),
-        safeEnd?.year ??
-            (yearAnchor + DateTimePickerSnapshot.defaultYearOffset),
-      ),
+      start?.year ?? (yearAnchor - DateTimePickerSnapshot.defaultYearOffset),
+      safeEnd?.year ?? (yearAnchor + DateTimePickerSnapshot.defaultYearOffset),
+    ),
     DateTimeColumn.month => _IntRange(
-        (start != null && current.year == start.year) ? start.month : 1,
-        (safeEnd != null && current.year == safeEnd.year) ? safeEnd.month : 12,
-      ),
+      (start != null && current.year == start.year) ? start.month : 1,
+      (safeEnd != null && current.year == safeEnd.year) ? safeEnd.month : 12,
+    ),
     DateTimeColumn.day => () {
-        final maxDay = DateTimePickerSnapshot.daysInMonth(
-          current.year,
-          current.month,
-        );
-        final startDay =
-            (start != null && _isSameMonth(current, start)) ? start.day : 1;
-        final endDay = (safeEnd != null && _isSameMonth(current, safeEnd))
-            ? safeEnd.day.clamp(1, maxDay)
-            : maxDay;
-        return _IntRange(startDay, endDay);
-      }(),
+      final maxDay = DateTimePickerSnapshot.daysInMonth(
+        current.year,
+        current.month,
+      );
+      final startDay = (start != null && _isSameMonth(current, start))
+          ? start.day
+          : 1;
+      final endDay = (safeEnd != null && _isSameMonth(current, safeEnd))
+          ? safeEnd.day.clamp(1, maxDay)
+          : maxDay;
+      return _IntRange(startDay, endDay);
+    }(),
     DateTimeColumn.hour => _IntRange(
-        (start != null && _isSameDate(current, start)) ? start.hour : 0,
-        (safeEnd != null && _isSameDate(current, safeEnd)) ? safeEnd.hour : 23,
-      ),
+      (start != null && _isSameDate(current, start)) ? start.hour : 0,
+      (safeEnd != null && _isSameDate(current, safeEnd)) ? safeEnd.hour : 23,
+    ),
     DateTimeColumn.minute => _IntRange(
-        (start != null && _isSameHour(current, start)) ? start.minute : 0,
-        (safeEnd != null && _isSameHour(current, safeEnd))
-            ? safeEnd.minute
-            : 59,
-      ),
+      (start != null && _isSameHour(current, start)) ? start.minute : 0,
+      (safeEnd != null && _isSameHour(current, safeEnd)) ? safeEnd.minute : 59,
+    ),
     DateTimeColumn.second => _IntRange(
-        (start != null && _isSameMinute(current, start)) ? start.second : 0,
-        (safeEnd != null && _isSameMinute(current, safeEnd))
-            ? safeEnd.second
-            : 59,
-      ),
+      (start != null && _isSameMinute(current, start)) ? start.second : 0,
+      (safeEnd != null && _isSameMinute(current, safeEnd))
+          ? safeEnd.second
+          : 59,
+    ),
   };
 }
 
@@ -100,13 +102,13 @@ _IntRange _timeOnlyColumnBounds(
   return switch (col) {
     DateTimeColumn.hour => _IntRange(start?.hour ?? 0, end?.hour ?? 23),
     DateTimeColumn.minute => _IntRange(
-        (start != null && current.hour == start.hour) ? start.minute : 0,
-        (end != null && current.hour == end.hour) ? end.minute : 59,
-      ),
+      (start != null && current.hour == start.hour) ? start.minute : 0,
+      (end != null && current.hour == end.hour) ? end.minute : 59,
+    ),
     DateTimeColumn.second => _IntRange(
-        (start != null && _isSameHour(current, start)) ? start.second : 0,
-        (end != null && _isSameHour(current, end)) ? end.second : 59,
-      ),
+      (start != null && _isSameHour(current, start)) ? start.second : 0,
+      (end != null && _isSameHour(current, end)) ? end.second : 59,
+    ),
     _ => const _IntRange(0, 0),
   };
 }
@@ -119,12 +121,15 @@ int _firstStepValue(int min, int step) {
   return rem == 0 ? min : min + (step - rem);
 }
 
-int _lastStepValue(int min, int max, int step) { // coverage:ignore-line
-  if (step <= 1) { // coverage:ignore-line
+int _lastStepValue(int min, int max, int step) {
+  // coverage:ignore-line
+  if (step <= 1) {
+    // coverage:ignore-line
     return max;
   }
   final first = _firstStepValue(min, step); // coverage:ignore-line
-  if (first > max) { // coverage:ignore-line
+  if (first > max) {
+    // coverage:ignore-line
     return min;
   }
   final count = (max - first) ~/ step; // coverage:ignore-line
@@ -138,19 +143,19 @@ int snapToStep(int value, int min, int max, int step) {
   if (step <= 1) {
     return value.clamp(min, max);
   }
+  final first = _firstStepValue(min, step);
   if (value < min) {
-    return _firstStepValue(min, step); // coverage:ignore-line
+    return first > max ? min : first; // coverage:ignore-line
   }
   if (value > max) {
     return _lastStepValue(min, max, step); // coverage:ignore-line
   }
-  final first = _firstStepValue(min, step);
   final snapped = first + (((value - first) / step).round()) * step;
   if (snapped > max) {
     return _lastStepValue(min, max, step); // coverage:ignore-line
   }
   if (snapped < min) {
-    return first;
+    return first > max ? min : first;
   }
   return snapped;
 }
@@ -164,8 +169,11 @@ DateTime normalizePickerDateTime(
   required int yearAnchor,
 }) {
   final safeEnd = _safeEnd(start, end);
-  var result =
-      DateTimePickerSnapshot.clampDateTime(dt, start: start, end: safeEnd);
+  var result = DateTimePickerSnapshot.clampDateTime(
+    dt,
+    start: start,
+    end: safeEnd,
+  );
 
   var y = result.year;
   var m = result.month;
@@ -209,6 +217,9 @@ DateTime normalizePickerDateTime(
     d = maxDay;
   }
   result = DateTime(y, m, d, h, mi, s);
-  return DateTimePickerSnapshot.clampDateTime(result,
-      start: start, end: safeEnd);
+  return DateTimePickerSnapshot.clampDateTime(
+    result,
+    start: start,
+    end: safeEnd,
+  );
 }

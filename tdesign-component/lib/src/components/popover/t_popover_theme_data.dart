@@ -37,6 +37,9 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
   /// 最小宽度
   final double? minWidth;
 
+  /// 文本内容的最大宽度
+  final double? maxWidth;
+
   /// 最大高度
   final double? maxHeight;
 
@@ -63,6 +66,7 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     this.backgroundColor,
     this.padding,
     this.minWidth,
+    this.maxWidth,
     this.maxHeight,
     this.borderRadius,
     this.barrierColor,
@@ -81,6 +85,7 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       backgroundColor: other.backgroundColor ?? backgroundColor,
       padding: other.padding ?? padding,
       minWidth: other.minWidth ?? minWidth,
+      maxWidth: other.maxWidth ?? maxWidth,
       maxHeight: other.maxHeight ?? maxHeight,
       borderRadius: other.borderRadius ?? borderRadius,
       barrierColor: other.barrierColor ?? barrierColor,
@@ -97,6 +102,7 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     Color? backgroundColor,
     EdgeInsetsGeometry? padding,
     double? minWidth,
+    double? maxWidth,
     double? maxHeight,
     double? borderRadius,
     Color? barrierColor,
@@ -110,6 +116,7 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       padding: padding ?? this.padding,
       minWidth: minWidth ?? this.minWidth,
+      maxWidth: maxWidth ?? this.maxWidth,
       maxHeight: maxHeight ?? this.maxHeight,
       borderRadius: borderRadius ?? this.borderRadius,
       barrierColor: barrierColor ?? this.barrierColor,
@@ -130,6 +137,7 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
       minWidth: lerpDouble(minWidth, other.minWidth, t),
+      maxWidth: lerpDouble(maxWidth, other.maxWidth, t),
       maxHeight: lerpDouble(maxHeight, other.maxHeight, t),
       borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
       barrierColor: Color.lerp(barrierColor, other.barrierColor, t),

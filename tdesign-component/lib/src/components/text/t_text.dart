@@ -60,8 +60,8 @@ class TText extends StatelessWidget {
     this.isInFontLoader = false,
     this.fontFamilyUrl,
     Key? key,
-  })  : textSpan = null,
-        super(key: key);
+  }) : textSpan = null,
+       super(key: key);
 
   /// 富文本构造方法
   const TText.rich(
@@ -89,8 +89,8 @@ class TText extends StatelessWidget {
     this.textHeightBehavior,
     this.isInFontLoader = false,
     this.fontFamilyUrl,
-  })  : data = null,
-        super(key: key);
+  }) : data = null,
+       super(key: key);
 
   /// 字体尺寸，包含 大小size 和 行高height
   final Font? font;
@@ -176,7 +176,8 @@ class TText extends StatelessWidget {
     }
 
     final themeExtension = Theme.of(context).extension<TTextThemeData>();
-    var bgColor = style?.backgroundColor ??
+    var bgColor =
+        style?.backgroundColor ??
         backgroundColor ??
         themeExtension?.defaultBackgroundColor;
     if (bgColor == null) {
@@ -191,8 +192,10 @@ class TText extends StatelessWidget {
   /// 获取最终的 [TextStyle]，委托 [TTextResolve.resolve] 统一处理
   ///
   /// TText 与 TTextSpan 统一走单路径 Resolve。
-  TextStyle? getTextStyle(BuildContext context,
-      {Color? textStyleBackgroundColor}) {
+  TextStyle? getTextStyle(
+    BuildContext context, {
+    Color? textStyleBackgroundColor,
+  }) {
     return TTextResolve.resolve(
       context: context,
       style: style,
@@ -212,29 +215,37 @@ class TText extends StatelessWidget {
   /// 转化为系统原始 [Text] 后，将失去 padding 和 background 属性
   Text getRawText({required BuildContext context}) {
     return _getRawText(
-        context: context, textStyleBackgroundColor: backgroundColor);
+      context: context,
+      textStyleBackgroundColor: backgroundColor,
+      includeKey: true,
+    );
   }
 
-  Text _getRawText(
-      {required BuildContext context,
-      TextStyle? textStyle,
-      Color? textStyleBackgroundColor}) {
+  Text _getRawText({
+    required BuildContext context,
+    TextStyle? textStyle,
+    Color? textStyleBackgroundColor,
+    bool includeKey = false,
+  }) {
+    final scale = textScaleFactor ?? _textTheme(context)?.textScaleFactor;
+    final textScaler = scale == null ? null : TextScaler.linear(scale);
     return textSpan == null
         ? Text(
             data ?? '',
-            key: key,
-            style: textStyle ??
-                getTextStyle(context,
-                    textStyleBackgroundColor: textStyleBackgroundColor),
+            key: includeKey ? key : null,
+            style:
+                textStyle ??
+                getTextStyle(
+                  context,
+                  textStyleBackgroundColor: textStyleBackgroundColor,
+                ),
             strutStyle: strutStyle ?? _textTheme(context)?.strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
             locale: locale,
             softWrap: softWrap,
             overflow: overflow,
-            textScaler: TextScaler.linear(
-              textScaleFactor ?? _textTheme(context)?.textScaleFactor ?? 1.0,
-            ),
+            textScaler: textScaler,
             maxLines: maxLines,
             semanticsLabel: semanticsLabel,
             textWidthBasis:
@@ -244,18 +255,20 @@ class TText extends StatelessWidget {
           )
         : Text.rich(
             textSpan!,
-            style: textStyle ??
-                getTextStyle(context,
-                    textStyleBackgroundColor: textStyleBackgroundColor),
+            key: includeKey ? key : null,
+            style:
+                textStyle ??
+                getTextStyle(
+                  context,
+                  textStyleBackgroundColor: textStyleBackgroundColor,
+                ),
             strutStyle: strutStyle ?? _textTheme(context)?.strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
             locale: locale,
             softWrap: softWrap,
             overflow: overflow,
-            textScaler: TextScaler.linear(
-              textScaleFactor ?? _textTheme(context)?.textScaleFactor ?? 1.0,
-            ),
+            textScaler: textScaler,
             maxLines: maxLines,
             semanticsLabel: semanticsLabel,
             textWidthBasis:
@@ -339,16 +352,25 @@ class TTextSpan extends TextSpan {
     /// 无障碍标签，透传至系统 [TextSpan.semanticsLabel]。
     String? semanticsLabel,
   }) : super(
-          text: text,
-          children: children,
-          style: _getTextStyle(context, style, font, fontWeight, fontFamily,
-              textColor, isTextThrough, lineThroughColor, package),
-          recognizer: recognizer,
-          mouseCursor: mouseCursor,
-          onEnter: onEnter,
-          onExit: onExit,
-          semanticsLabel: semanticsLabel,
-        );
+         text: text,
+         children: children,
+         style: _getTextStyle(
+           context,
+           style,
+           font,
+           fontWeight,
+           fontFamily,
+           textColor,
+           isTextThrough,
+           lineThroughColor,
+           package,
+         ),
+         recognizer: recognizer,
+         mouseCursor: mouseCursor,
+         onEnter: onEnter,
+         onExit: onExit,
+         semanticsLabel: semanticsLabel,
+       );
 
   static TextStyle? _getTextStyle(
     BuildContext? context,

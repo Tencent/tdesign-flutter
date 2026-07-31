@@ -89,7 +89,7 @@ enum _TTabBarComponentType {
   normal,
 
   /// 带胶囊背景的item选中样式
-  label
+  label,
 }
 
 /// 底部标签栏选中背景样式
@@ -98,7 +98,7 @@ enum _TTabBarSelectionType {
   filled,
 
   /// 胶囊样式
-  capsule
+  capsule,
 }
 
 /// 指示器动画类型
@@ -177,26 +177,28 @@ class TTabBarBadgeConfig {
 
 /// 单个 tab 配置
 class TTabBarItemConfig {
-  TTabBarItemConfig(
-      {required this.onTap,
-      this.selectedIcon,
-      this.unselectedIcon,
-      this.tabText,
-      this.selectTabTextStyle,
-      this.unselectTabTextStyle,
-      this.badgeConfig,
-      this.popUpButtonConfig,
-      this.onLongPress,
-      this.allowMultipleTaps = false})
-      : assert(() {
-          if (badgeConfig?.showBadge ?? false) {
-            if (badgeConfig?.tBadge == null) {
-              throw FlutterError('[NavigationTab] if set showBadge = true, '
-                  'you must set a tBadge instance');
-            }
-          }
-          return true;
-        }());
+  TTabBarItemConfig({
+    required this.onTap,
+    this.selectedIcon,
+    this.unselectedIcon,
+    this.tabText,
+    this.selectTabTextStyle,
+    this.unselectTabTextStyle,
+    this.badgeConfig,
+    this.popUpButtonConfig,
+    this.onLongPress,
+    this.allowMultipleTaps = false,
+  }) : assert(() {
+         if (badgeConfig?.showBadge ?? false) {
+           if (badgeConfig?.tBadge == null) {
+             throw FlutterError(
+               '[NavigationTab] if set showBadge = true, '
+               'you must set a tBadge instance',
+             );
+           }
+         }
+         return true;
+       }());
 
   /// 选中时图标
   final Widget? selectedIcon;
@@ -257,44 +259,50 @@ class TTabBar extends StatefulWidget {
     this.animationCurve,
     required this.value,
     this.onChanged,
-  })  : assert(() {
-          if (navigationTabs.isEmpty) {
-            throw FlutterError('[TTabBar] please set at least one tab!');
-          }
-          final basicType = variant.basicType;
-          if (basicType == _TTabBarBasicType.text) {
-            for (final item in navigationTabs) {
-              if (item.tabText == null) {
-                throw FlutterError(
-                    '[TTabBar] variant contains text, but not set tabText.');
-              }
-            }
-          }
-          if (basicType == _TTabBarBasicType.icon) {
-            for (final item in navigationTabs) {
-              if (item.selectedIcon == null || item.unselectedIcon == null) {
-                throw FlutterError('[TTabBar] variant contains icon,'
-                    'but has no set icon.');
-              }
-            }
-          }
-          if (basicType == _TTabBarBasicType.iconText) {
-            for (final item in navigationTabs) {
-              if (item.tabText == null ||
-                  item.selectedIcon == null ||
-                  item.unselectedIcon == null) {
-                throw FlutterError('[TTabBar] variant contains iconText,'
-                    'but not set tabText or icon.');
-              }
-            }
-          }
-          if (value < 0 || value >= navigationTabs.length) {
-            throw FlutterError(
-                '[TTabBar] value must in [0,navigationTabs.length)');
-          }
-          return true;
-        }()),
-        super(key: key);
+  }) : assert(() {
+         if (navigationTabs.isEmpty) {
+           throw FlutterError('[TTabBar] please set at least one tab!');
+         }
+         final basicType = variant.basicType;
+         if (basicType == _TTabBarBasicType.text) {
+           for (final item in navigationTabs) {
+             if (item.tabText == null) {
+               throw FlutterError(
+                 '[TTabBar] variant contains text, but not set tabText.',
+               );
+             }
+           }
+         }
+         if (basicType == _TTabBarBasicType.icon) {
+           for (final item in navigationTabs) {
+             if (item.selectedIcon == null || item.unselectedIcon == null) {
+               throw FlutterError(
+                 '[TTabBar] variant contains icon,'
+                 'but has no set icon.',
+               );
+             }
+           }
+         }
+         if (basicType == _TTabBarBasicType.iconText) {
+           for (final item in navigationTabs) {
+             if (item.tabText == null ||
+                 item.selectedIcon == null ||
+                 item.unselectedIcon == null) {
+               throw FlutterError(
+                 '[TTabBar] variant contains iconText,'
+                 'but not set tabText or icon.',
+               );
+             }
+           }
+         }
+         if (value < 0 || value >= navigationTabs.length) {
+           throw FlutterError(
+             '[TTabBar] value must in [0,navigationTabs.length)',
+           );
+         }
+         return true;
+       }()),
+       super(key: key);
 
   /// 标签栏形态
   final TTabBarVariant variant;
@@ -402,13 +410,16 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     );
 
     // 初始化动画（初始位置）
-    _animation = Tween<double>(
-      begin: _selectedIndex.toDouble(),
-      end: _selectedIndex.toDouble(),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOutCubic,
-    ));
+    _animation =
+        Tween<double>(
+          begin: _selectedIndex.toDouble(),
+          end: _selectedIndex.toDouble(),
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOutCubic,
+          ),
+        );
   }
 
   @override
@@ -430,12 +441,14 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     final theme = Theme.of(context).extension<TTabBarThemeData>();
     _effectiveBarHeight =
         widget.barHeight ?? theme?.barHeight ?? _kDefaultTabBarHeight;
-    _effectiveSelectedBgColor = widget.selectedBgColor ??
+    _effectiveSelectedBgColor =
+        widget.selectedBgColor ??
         theme?.selectedBgColor ??
         context.tTheme.brandLightColor;
     _effectiveUnselectedBgColor =
         widget.unselectedBgColor ?? theme?.unselectedBgColor;
-    _effectiveBackgroundColor = widget.backgroundColor ??
+    _effectiveBackgroundColor =
+        widget.backgroundColor ??
         theme?.backgroundColor ??
         context.tTheme.bgColorContainer;
     _effectiveCenterDistance =
@@ -446,14 +459,16 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         widget.dividerHeight ?? theme?.dividerHeight ?? 32;
     _effectiveDividerThickness =
         widget.dividerThickness ?? theme?.dividerThickness ?? 0.5;
-    _effectiveDividerColor = widget.dividerColor ??
+    _effectiveDividerColor =
+        widget.dividerColor ??
         theme?.dividerColor ??
         context.tTheme.componentStrokeColor;
     _effectiveShowTopBorder =
         widget.showTopBorder ?? theme?.showTopBorder ?? true;
     _effectiveTopBorder = widget.topBorder ?? theme?.topBorder;
     _effectiveNeedInkWell = widget.needInkWell ?? theme?.needInkWell ?? false;
-    _effectiveAnimationDuration = widget.animationDuration ??
+    _effectiveAnimationDuration =
+        widget.animationDuration ??
         theme?.animationDuration ??
         const Duration(milliseconds: 300);
     _effectiveAnimationCurve =
@@ -489,39 +504,49 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
             var itemWidth = maxWidth / widget.navigationTabs.length;
 
             Widget result = Container(
-                height: _effectiveBarHeight,
-                alignment: Alignment.center,
-                margin: isCapsuleOutlineType
-                    ? const EdgeInsets.symmetric(horizontal: 16)
+              height: _effectiveBarHeight,
+              alignment: Alignment.center,
+              margin: isCapsuleOutlineType
+                  ? const EdgeInsets.symmetric(horizontal: 16)
+                  : null,
+              decoration: BoxDecoration(
+                color: _effectiveBackgroundColor,
+                borderRadius: isCapsuleOutlineType
+                    ? BorderRadius.circular(context.tTheme.radiusCircle)
                     : null,
-                decoration: BoxDecoration(
-                    color: _effectiveBackgroundColor,
-                    borderRadius: isCapsuleOutlineType
-                        ? BorderRadius.circular(context.tTheme.radiusCircle)
-                        : null,
-                    border: _effectiveShowTopBorder && !isCapsuleOutlineType
-                        ? Border(
-                            top: _effectiveTopBorder ??
-                                BorderSide(
-                                    color: context.tTheme.componentStrokeColor,
-                                    width: 0.5))
-                        : null,
-                    boxShadow: isCapsuleOutlineType
-                        ? context.tTheme.shadowsTop
-                        : null),
-                child: Stack(alignment: Alignment.center, children: [
+                border: _effectiveShowTopBorder && !isCapsuleOutlineType
+                    ? Border(
+                        top:
+                            _effectiveTopBorder ??
+                            BorderSide(
+                              color: context.tTheme.componentStrokeColor,
+                              width: 0.5,
+                            ),
+                      )
+                    : null,
+                boxShadow: isCapsuleOutlineType
+                    ? context.tTheme.shadowsTop
+                    : null,
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
                   // 动画指示器（在底层）
                   _buildAnimatedIndicator(context, itemWidth),
                   // Tab 项（在上层）
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children:
-                          List.generate(widget.navigationTabs.length, (index) {
-                        return _item(index, itemWidth);
-                      })),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(widget.navigationTabs.length, (
+                      index,
+                    ) {
+                      return _item(index, itemWidth);
+                    }),
+                  ),
                   // 分割线（在最上层）
                   _verticalDivider(),
-                ]));
+                ],
+              ),
+            );
             if (widget.useSafeArea) {
               if (widget.placeholder) {
                 result = Container(
@@ -574,13 +599,16 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     }
 
     // 创建新的动画
-    _animation = Tween<double>(
-      begin: oldIndex.toDouble(),
-      end: index.toDouble(),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: _effectiveAnimationCurve,
-    ));
+    _animation =
+        Tween<double>(
+          begin: oldIndex.toDouble(),
+          end: index.toDouble(),
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: _effectiveAnimationCurve,
+          ),
+        );
 
     // 播放动画
     _animationController.forward(from: 0.0);
@@ -612,7 +640,10 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   /// 线性滑动指示器
   Widget _buildLinearIndicator(
-      BuildContext context, double itemWidth, double animValue) {
+    BuildContext context,
+    double itemWidth,
+    double animValue,
+  ) {
     final horizontalPadding = widget.navigationTabs.length > 3 ? 8.0 : 12.0;
     final indicatorWidth = itemWidth - horizontalPadding * 2;
 
@@ -620,7 +651,8 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     final left = animValue * itemWidth + horizontalPadding;
 
     // 计算高度
-    final height = widget._basicType == _TTabBarBasicType.text ||
+    final height =
+        widget._basicType == _TTabBarBasicType.text ||
             widget._basicType == _TTabBarBasicType.expansionPanel
         ? 32.0
         : null;
@@ -640,7 +672,10 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   /// 弹性拉伸指示器
   Widget _buildElasticIndicator(
-      BuildContext context, double itemWidth, double animValue) {
+    BuildContext context,
+    double itemWidth,
+    double animValue,
+  ) {
     final horizontalPadding = widget.navigationTabs.length > 3 ? 8.0 : 12.0;
 
     // 计算起始和目标索引
@@ -655,21 +690,25 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     if (progress < 0.5) {
       // 前半段：从起点向终点拉伸
       final stretchProgress = progress * 2; // 0 -> 1
-      width = (itemWidth - horizontalPadding * 2) *
+      width =
+          (itemWidth - horizontalPadding * 2) *
           (1 + stretchProgress * (toIndex - fromIndex));
       left = fromIndex * itemWidth + horizontalPadding;
     } else {
       // 后半段：从终点收缩到正常宽度
       final shrinkProgress = (progress - 0.5) * 2; // 0 -> 1
-      width = (itemWidth - horizontalPadding * 2) *
+      width =
+          (itemWidth - horizontalPadding * 2) *
           (1 + (1 - shrinkProgress) * (toIndex - fromIndex));
-      left = fromIndex * itemWidth +
+      left =
+          fromIndex * itemWidth +
           horizontalPadding +
           shrinkProgress * (toIndex - fromIndex) * itemWidth;
     }
 
     // 计算高度
-    final height = widget._basicType == _TTabBarBasicType.text ||
+    final height =
+        widget._basicType == _TTabBarBasicType.text ||
             widget._basicType == _TTabBarBasicType.expansionPanel
         ? 32.0
         : null;
@@ -691,44 +730,48 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     var tabItemConfig = widget.navigationTabs[index];
     // iconText 且存在 centerDistance 间距时，压缩上下内边距为图标+文本+间距腾出空间，
     // 避免 Column 内容溢出（centerDistance 默认为 0，不影响常规渲染与 Golden 基线）。
-    final isIconTextWithGap = widget._basicType == _TTabBarBasicType.iconText &&
+    final isIconTextWithGap =
+        widget._basicType == _TTabBarBasicType.iconText &&
         _effectiveCenterDistance > 0;
     return Container(
-        height: _effectiveBarHeight,
-        width: itemWidth,
-        alignment: Alignment.center,
-        padding: EdgeInsets.only(
-            top: isIconTextWithGap ? 4 : 7,
-            bottom: isIconTextWithGap
-                ? 1
-                : (widget._basicType == _TTabBarBasicType.iconText ? 5 : 7)),
-        child: TTabBarItemWithBadge(
-          basicType: widget._basicType,
-          componentType: widget._componentType,
-          selectionType: widget._selectionType,
-          itemConfig: tabItemConfig,
-          isSelected: index == _selectedIndex,
-          itemHeight: _effectiveBarHeight,
-          itemWidth: itemWidth,
-          tabsLength: widget.navigationTabs.length,
-          selectedBgColor: _effectiveSelectedBgColor,
-          unselectedBgColor: _effectiveUnselectedBgColor,
-          centerDistance: _effectiveCenterDistance,
-          needInkWell: _effectiveNeedInkWell,
-          showItemBackground:
-              widget.indicatorAnimation == TTabBarIndicatorAnimation.none,
-          onTap: () {
-            _onTap(index);
-          },
-          onLongPress: () {
-            tabItemConfig.onLongPress?.call();
-          },
-        ));
+      height: _effectiveBarHeight,
+      width: itemWidth,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(
+        top: isIconTextWithGap ? 4 : 7,
+        bottom: isIconTextWithGap
+            ? 1
+            : (widget._basicType == _TTabBarBasicType.iconText ? 5 : 7),
+      ),
+      child: TTabBarItemWithBadge(
+        basicType: widget._basicType,
+        componentType: widget._componentType,
+        selectionType: widget._selectionType,
+        itemConfig: tabItemConfig,
+        isSelected: index == _selectedIndex,
+        itemHeight: _effectiveBarHeight,
+        itemWidth: itemWidth,
+        tabsLength: widget.navigationTabs.length,
+        selectedBgColor: _effectiveSelectedBgColor,
+        unselectedBgColor: _effectiveUnselectedBgColor,
+        centerDistance: _effectiveCenterDistance,
+        needInkWell: _effectiveNeedInkWell,
+        showItemBackground:
+            widget.indicatorAnimation == TTabBarIndicatorAnimation.none,
+        onTap: () {
+          _onTap(index);
+        },
+        onLongPress: () {
+          tabItemConfig.onLongPress?.call();
+        },
+      ),
+    );
   }
 
   Widget _verticalDivider() {
     return Visibility(
-      visible: widget._componentType != _TTabBarComponentType.label &&
+      visible:
+          widget._componentType != _TTabBarComponentType.label &&
           (_effectiveUseVerticalDivider),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -835,7 +878,8 @@ class TTabBarItemWithBadge extends StatelessWidget {
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
-                  height: basicType == _TTabBarBasicType.text ||
+                  height:
+                      basicType == _TTabBarBasicType.text ||
                           basicType == _TTabBarBasicType.expansionPanel
                       ? 32
                       : null,
@@ -863,12 +907,19 @@ class TTabBarItemWithBadge extends StatelessWidget {
     return Container();
   }
 
-  Widget _constructItem(BuildContext context, TTabBarBadgeConfig? badgeConfig,
-      bool isInOrOutCapsule) {
+  Widget _constructItem(
+    BuildContext context,
+    TTabBarBadgeConfig? badgeConfig,
+    bool isInOrOutCapsule,
+  ) {
     Widget child = Container();
     if (basicType == _TTabBarBasicType.text) {
       child = _textItem(
-          context, itemConfig, isSelected, context.tTheme.fontTitleMedium!);
+        context,
+        itemConfig,
+        isSelected,
+        context.tTheme.fontTitleMedium!,
+      );
     }
     if (basicType == _TTabBarBasicType.expansionPanel) {
       if (itemConfig.popUpButtonConfig != null) {
@@ -883,13 +934,21 @@ class TTabBarItemWithBadge extends StatelessWidget {
                   : context.tTheme.textColorPrimary,
             ),
             const SizedBox(width: 5),
-            _textItem(context, itemConfig, isSelected,
-                context.tTheme.fontTitleMedium!)
+            _textItem(
+              context,
+              itemConfig,
+              isSelected,
+              context.tTheme.fontTitleMedium!,
+            ),
           ],
         );
       } else {
         child = _textItem(
-            context, itemConfig, isSelected, context.tTheme.fontTitleMedium!);
+          context,
+          itemConfig,
+          isSelected,
+          context.tTheme.fontTitleMedium!,
+        );
       }
     }
     if (basicType == _TTabBarBasicType.icon) {
@@ -920,10 +979,7 @@ class TTabBarItemWithBadge extends StatelessWidget {
             ),
             child: isSelected ? selectedIcon! : unSelectedIcon!,
           ),
-          if (centerDistance > 0)
-            SizedBox(
-              height: centerDistance,
-            ),
+          if (centerDistance > 0) SizedBox(height: centerDistance),
           itemConfig.tabText?.isNotEmpty ?? false
               ? _textItem(
                   context,
@@ -931,7 +987,7 @@ class TTabBarItemWithBadge extends StatelessWidget {
                   isSelected,
                   context.tTheme.fontBodyExtraSmall!,
                 )
-              : Container()
+              : Container(),
         ],
       );
     }
@@ -943,21 +999,26 @@ class TTabBarItemWithBadge extends StatelessWidget {
       children: [
         child,
         Visibility(
-            visible: badgeConfig?.showBadge ?? false,
-            child:
-                Positioned(top: top, right: right, child: _badge(badgeConfig))),
+          visible: badgeConfig?.showBadge ?? false,
+          child: Positioned(top: top, right: right, child: _badge(badgeConfig)),
+        ),
       ],
     );
   }
 
-  Widget _textItem(BuildContext context, TTabBarItemConfig config,
-      bool isSelected, Font font) {
+  Widget _textItem(
+    BuildContext context,
+    TTabBarItemConfig config,
+    bool isSelected,
+    Font font,
+  ) {
     return TText(
       config.tabText,
       font: font,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      style:
-          isSelected ? config.selectTabTextStyle : config.unselectTabTextStyle,
+      style: isSelected
+          ? config.selectTabTextStyle
+          : config.unselectTabTextStyle,
       textColor: isSelected
           ? context.tTheme.brandNormalColor
           : context.tTheme.textColorPrimary,
@@ -966,7 +1027,8 @@ class TTabBarItemWithBadge extends StatelessWidget {
 
   _buildItem(BuildContext context) {
     var badgeConfig = itemConfig.badgeConfig;
-    var isInOrOutCapsule = componentType == _TTabBarComponentType.label ||
+    var isInOrOutCapsule =
+        componentType == _TTabBarComponentType.label ||
         selectionType == _TTabBarSelectionType.capsule;
 
     // centerDistance > 0 时进一步压缩顶部内边距，为图标与文本的间距腾出空间
@@ -1010,41 +1072,46 @@ class TTabBarItemWithBadge extends StatelessWidget {
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
     if (popUpButtonConfig != null) {
       Navigator.push(
-          context,
-          PopRoute(
-            barrierLabel:
-                MaterialLocalizations.of(context).modalBarrierDismissLabel,
-            child: PopupDialog(
-              itemWidth - _kDefaultMenuItemWidthShrink,
-              btnContext: context,
-              config: popUpButtonConfig.popUpDialogConfig,
-              items: popUpButtonConfig.items,
-              onClickMenu: (value) {
-                popUpButtonConfig.onChanged(value);
-              },
-            ),
-          ));
+        context,
+        PopRoute(
+          barrierLabel: MaterialLocalizations.of(
+            context,
+          ).modalBarrierDismissLabel,
+          child: PopupDialog(
+            itemWidth - _kDefaultMenuItemWidthShrink,
+            btnContext: context,
+            config: popUpButtonConfig.popUpDialogConfig,
+            items: popUpButtonConfig.items,
+            onClickMenu: (value) {
+              popUpButtonConfig.onChanged(value);
+            },
+          ),
+        ),
+      );
     }
   }
 }
 
 /// 展开项配置
 class TTabBarPopUpBtnConfig {
-  TTabBarPopUpBtnConfig(
-      {required this.items, required this.onChanged, this.popUpDialogConfig})
-      : assert(() {
-          if (popUpDialogConfig != null) {
-            if ((popUpDialogConfig.arrowHeight != null &&
-                    popUpDialogConfig.arrowHeight! <= 0.0) ||
-                (popUpDialogConfig.arrowWidth != null &&
-                    popUpDialogConfig.arrowWidth! <= 0.0)) {
-              throw FlutterError(
-                  '[TTabBarPopUpBtnConfig] arrowHeight or arrowHeight can '
-                  'not set less than or equal to zero');
-            }
-          }
-          return true;
-        }());
+  TTabBarPopUpBtnConfig({
+    required this.items,
+    required this.onChanged,
+    this.popUpDialogConfig,
+  }) : assert(() {
+         if (popUpDialogConfig != null) {
+           if ((popUpDialogConfig.arrowHeight != null &&
+                   popUpDialogConfig.arrowHeight! <= 0.0) ||
+               (popUpDialogConfig.arrowWidth != null &&
+                   popUpDialogConfig.arrowWidth! <= 0.0)) {
+             throw FlutterError(
+               '[TTabBarPopUpBtnConfig] arrowHeight or arrowHeight can '
+               'not set less than or equal to zero',
+             );
+           }
+         }
+         return true;
+       }());
 
   /// 选项list
   final List<TTabBarMenuItem> items;
@@ -1058,13 +1125,14 @@ class TTabBarPopUpBtnConfig {
 
 /// 弹窗UI配置
 class TTabBarPopUpShapeConfig {
-  TTabBarPopUpShapeConfig(
-      {this.popUpWidth,
-      this.popUpItemHeight = _kDefaultMenuItemHeight,
-      this.backgroundColor,
-      this.radius,
-      this.arrowWidth,
-      this.arrowHeight});
+  TTabBarPopUpShapeConfig({
+    this.popUpWidth,
+    this.popUpItemHeight = _kDefaultMenuItemHeight,
+    this.backgroundColor,
+    this.radius,
+    this.arrowWidth,
+    this.arrowHeight,
+  });
 
   /// 弹窗宽度（不设置，默认为按钮宽度 - 20）
   final double? popUpWidth;
@@ -1112,7 +1180,8 @@ class TTabBarMenuItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
       alignment: alignment,
-      child: itemWidget ??
+      child:
+          itemWidget ??
           TText(
             value,
             style: TextStyle(
@@ -1133,7 +1202,7 @@ class PopRoute extends PopupRoute {
   final String? _barrierLabel;
 
   PopRoute({required this.child, String? barrierLabel})
-      : _barrierLabel = barrierLabel;
+    : _barrierLabel = barrierLabel;
 
   @override
   Color? get barrierColor => Colors.transparent;
@@ -1145,8 +1214,11 @@ class PopRoute extends PopupRoute {
   String? get barrierLabel => _barrierLabel;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return child;
   }
 
@@ -1171,13 +1243,14 @@ class PopupDialog extends StatefulWidget {
   /// 默认弹窗宽度
   final double defaultPopUpWidth;
 
-  const PopupDialog(this.defaultPopUpWidth,
-      {Key? key,
-      required this.btnContext,
-      required this.onClickMenu,
-      required this.items,
-      required this.config})
-      : super(key: key);
+  const PopupDialog(
+    this.defaultPopUpWidth, {
+    Key? key,
+    required this.btnContext,
+    required this.onClickMenu,
+    required this.items,
+    required this.config,
+  }) : super(key: key);
 
   @override
   PopupDialogState createState() => PopupDialogState();
@@ -1218,41 +1291,47 @@ class PopupDialogState extends State<PopupDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if (position == null || size == null) {
+    if (position == null || size == null || widget.items.isEmpty) {
       return const SizedBox.shrink();
     }
     var popUpItemHeight =
         widget.config?.popUpItemHeight ?? _kDefaultMenuItemHeight;
     var popUpItemWidth = widget.config?.popUpWidth ?? widget.defaultPopUpWidth;
     var menuItems = widget.items
-        .map((e) => GestureDetector(
+        .map(
+          (e) => GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
               widget.onClickMenu(e.value);
               Navigator.of(context).pop();
             },
-            child: SizedBox(
-              height: popUpItemHeight,
-              child: e,
-            )))
+            child: SizedBox(height: popUpItemHeight, child: e),
+          ),
+        )
         .toList();
 
     // 计算弹窗整体高度（含箭头），用于将其约束在视口内避免被裁切到屏幕外
-    final popUpPanelHeight = popUpItemHeight * widget.items.length +
+    final popUpPanelHeight =
+        popUpItemHeight * widget.items.length +
         (widget.config?.arrowHeight ?? _kArrowHeight);
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final rawTop = position!.top -
+    final rawTop =
+        position!.top -
         popUpPanelHeight -
         _kPopupButtonPadding -
         _kPopupArrowGap;
     final maxTop = screenHeight - popUpPanelHeight - _kPopupViewportPadding;
-    final safeTop = rawTop.clamp(_kPopupViewportPadding,
-        maxTop < _kPopupViewportPadding ? _kPopupViewportPadding : maxTop);
+    final safeTop = rawTop.clamp(
+      _kPopupViewportPadding,
+      maxTop < _kPopupViewportPadding ? _kPopupViewportPadding : maxTop,
+    );
     final rawLeft = position!.left + (size!.width - popUpItemWidth) / 2;
     final maxLeft = screenWidth - popUpItemWidth - _kPopupViewportPadding;
-    final safeLeft = rawLeft.clamp(_kPopupViewportPadding,
-        maxLeft < _kPopupViewportPadding ? _kPopupViewportPadding : maxLeft);
+    final safeLeft = rawLeft.clamp(
+      _kPopupViewportPadding,
+      maxLeft < _kPopupViewportPadding ? _kPopupViewportPadding : maxLeft,
+    );
 
     return Material(
       type: MaterialType.transparency,
@@ -1266,49 +1345,54 @@ class PopupDialogState extends State<PopupDialog> {
               color: Colors.transparent,
             ),
             Positioned(
-                top: safeTop,
-                left: safeLeft,
-                child: Container(
-                  width: popUpItemWidth,
-                  height: popUpItemHeight * widget.items.length +
-                      (widget.config?.arrowHeight ?? _kArrowHeight),
-                  decoration:
-                      BoxDecoration(boxShadow: context.tTheme.shadowsTop),
-                  child: CustomPaint(
-                    painter: PanelWithDownArrow(
-                        config: widget.config,
-                        backgroundColor: widget.config?.backgroundColor ??
-                            context.tTheme.bgColorContainer),
+              top: safeTop,
+              left: safeLeft,
+              child: Container(
+                width: popUpItemWidth,
+                height:
+                    popUpItemHeight * widget.items.length +
+                    (widget.config?.arrowHeight ?? _kArrowHeight),
+                decoration: BoxDecoration(boxShadow: context.tTheme.shadowsTop),
+                child: CustomPaint(
+                  painter: PanelWithDownArrow(
+                    config: widget.config,
+                    backgroundColor:
+                        widget.config?.backgroundColor ??
+                        context.tTheme.bgColorContainer,
+                  ),
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: popUpItemHeight * widget.items.length,
                     child: Container(
-                      alignment: Alignment.topCenter,
-                      height: popUpItemHeight * widget.items.length,
-                      child: Container(
-                        constraints: BoxConstraints(
-                            maxHeight: popUpItemHeight * widget.items.length),
-                        child: Stack(
-                          children: [
-                            Column(children: menuItems),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: List.generate(
-                                  widget.items.length - 1,
-                                  (index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Divider(
-                                          thickness: 0.5,
-                                          height: 0.5,
-                                          color: context
-                                              .tTheme.componentStrokeColor,
-                                        ),
-                                      )),
-                            )
-                          ],
-                        ),
+                      constraints: BoxConstraints(
+                        maxHeight: popUpItemHeight * widget.items.length,
+                      ),
+                      child: Stack(
+                        children: [
+                          Column(children: menuItems),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List.generate(
+                              widget.items.length - 1,
+                              (index) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                ),
+                                child: Divider(
+                                  thickness: 0.5,
+                                  height: 0.5,
+                                  color: context.tTheme.componentStrokeColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ))
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -1337,9 +1421,12 @@ class PanelWithDownArrow extends CustomPainter {
     var panelHeight = size.height - (config?.arrowHeight ?? _kArrowHeight);
 
     canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, panelWidth, panelHeight),
-            Radius.circular(config?.radius ?? 0.0)),
-        paint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, panelWidth, panelHeight),
+        Radius.circular(config?.radius ?? 0.0),
+      ),
+      paint,
+    );
 
     /// 下方箭头
     if (config?.arrowWidth != 0.0 && config?.arrowHeight != 0.0) {

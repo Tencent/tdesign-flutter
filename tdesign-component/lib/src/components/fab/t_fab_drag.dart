@@ -81,15 +81,16 @@ class _FabDraggableState extends State<_FabDraggable> {
   @override
   void didUpdateWidget(covariant _FabDraggable oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final positionChanged = oldWidget.layout.right != widget.layout.right ||
+    final positionChanged =
+        oldWidget.layout.right != widget.layout.right ||
         oldWidget.layout.bottom != widget.layout.bottom;
     if (positionChanged) {
-      _right = widget.layout.right;
-      _bottom = widget.layout.bottom;
+      _right = _clampSafe(widget.layout.right, _minX(), _maxX());
+      _bottom = _clampSafe(widget.layout.bottom, _minY(), _maxY());
       return;
     }
-    _right = _right.clamp(_minX(), _maxX());
-    _bottom = _bottom.clamp(_minY(), _maxY());
+    _right = _clampSafe(_right, _minX(), _maxX());
+    _bottom = _clampSafe(_bottom, _minY(), _maxY());
   }
 
   @override
@@ -101,20 +102,16 @@ class _FabDraggableState extends State<_FabDraggable> {
         onPanStart: _onPanStart,
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
-        child: KeyedSubtree(
-          key: _childKey,
-          child: widget.child,
-        ),
+        child: KeyedSubtree(key: _childKey, child: widget.child),
       ),
     );
   }
 
   void _onPanStart(DragStartDetails details) {
     _totalDisplacement = 0;
-    widget.onDragStart?.call(TFabDragDetails(
-      position: Offset(_right, _bottom),
-      start: details,
-    ));
+    widget.onDragStart?.call(
+      TFabDragDetails(position: Offset(_right, _bottom), start: details),
+    );
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -125,16 +122,10 @@ class _FabDraggableState extends State<_FabDraggable> {
 
     setState(() {
       if (axis != TFabDragAxis.vertical) {
-        _right = (_right - delta.dx).clamp(
-          _minX(),
-          _maxX(),
-        );
+        _right = _clampSafe(_right - delta.dx, _minX(), _maxX());
       }
       if (axis != TFabDragAxis.horizontal) {
-        _bottom = (_bottom - delta.dy).clamp(
-          _minY(),
-          _maxY(),
-        );
+        _bottom = _clampSafe(_bottom - delta.dy, _minY(), _maxY());
       }
     });
   }
@@ -147,10 +138,9 @@ class _FabDraggableState extends State<_FabDraggable> {
       if (widget.layout.magnet != null) {
         _snapToEdge();
       }
-      widget.onDragEnd?.call(TFabDragDetails(
-        position: Offset(_right, _bottom),
-        end: details,
-      ));
+      widget.onDragEnd?.call(
+        TFabDragDetails(position: Offset(_right, _bottom), end: details),
+      );
     } else {
       // 点击
       widget.onPressed?.call();
@@ -191,6 +181,10 @@ class _FabDraggableState extends State<_FabDraggable> {
   double _minX() {
     final bounds = widget.layout.xBounds;
     return (bounds?.start ?? 16) + widget.layout.safePadding.right;
+  }
+
+  static double _clampSafe(double value, double min, double max) {
+    return max <= min ? min : value.clamp(min, max);
   }
 
   double _maxX() {
