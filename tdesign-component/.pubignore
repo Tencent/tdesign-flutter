@@ -10,16 +10,9 @@ tool/
 pubspec.lock
 pubspec_overrides.yaml
 local_dependency_override.yaml
+analysis_options.yaml
+init.sh
 
-# The example app and its generated API/code assets are part of the package
-# documentation, but platform build products and local overrides are not.
-example/.dart_tool/
-example/build/
-example/pubspec.lock
-example/pubspec_overrides.yaml
-example/aop_tools/
-example/tdesign-flutter-generator/
-example/android/keystore
-example/tool/
-example/**/ephemeral/
-example/**/.plugin_symlinks/
+# The full Demo application and generated documentation assets are maintained
+# in the repository/site and are not part of the runtime component package.
+example/
