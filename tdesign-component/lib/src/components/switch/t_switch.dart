@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../loading/t_circle_indicator.dart';
 import 't_cupertino_switch.dart';

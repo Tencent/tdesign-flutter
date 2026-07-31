@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_icons/tdesign_icons.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import 't_link_resolve.dart';
 import 't_link_theme_data.dart';

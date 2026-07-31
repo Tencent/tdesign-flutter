@@ -11,8 +11,8 @@ import 'package:url_launcher/link.dart';
 
 void main() {
   setUpAll(() async {
-    final iconFont = FontLoader('packages/tdesign_icons/TIcons')
-      ..addFont(rootBundle.load('packages/tdesign_icons/fonts/t.ttf'));
+    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
+      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
     final flutterBin =
         File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
     final robotoFile = File(

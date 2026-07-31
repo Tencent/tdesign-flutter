@@ -14,7 +14,7 @@ dependencies:
   meta: ^1.16.0
 
   # TDesign 图标资源包（v1.0 剥离内嵌资源）
-  tdesign_icons: ^0.0.4
+  tdesign_flutter_icons: ^0.0.5
 
   # 下拉刷新组件
   easy_refresh: ^3.4.0
