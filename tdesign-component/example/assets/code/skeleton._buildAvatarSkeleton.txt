@@ -1,4 +1,3 @@
-
-  Widget _buildAvatarSkeleton(BuildContext context) {
-    return TSkeleton(theme: TSkeletonTheme.avatar);
+Widget _buildAvatarSkeleton(BuildContext context) {
+    return const TSkeleton(variant: TSkeletonVariant.avatar);
   }

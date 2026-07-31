@@ -1,0 +1,18 @@
+Widget _buildAdvancedRange(BuildContext context) => _withValueLabel(
+        context,
+        label: rangeEventText,
+        child: TRangeSlider(
+          value: advancedRange,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          showThumbValue: true,
+          thumbFormatter: _formatPercent,
+          showScaleValue: true,
+          scaleFormatter: _formatPercent,
+          onChanged: (next) => setState(() => advancedRange = next),
+          onChangeStart: (_) =>
+              setState(() => rangeEventText = '范围 onChangeStart'),
+          onChangeEnd: (_) => setState(() => rangeEventText = '范围 onChangeEnd'),
+        ),
+      );

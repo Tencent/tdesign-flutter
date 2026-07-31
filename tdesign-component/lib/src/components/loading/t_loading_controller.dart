@@ -1,54 +1,65 @@
 import 'package:flutter/material.dart';
+import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import 't_loading.dart';
+import 't_loading_theme_data.dart';
 
+/// 用于命令式显示和关闭加载状态的控制器。
 class TLoadingController {
-  static BuildContext? _context;
   static OverlayEntry? _overlayEntry;
 
   static bool _isShowing = false;
 
   // 展示
-  static void show(BuildContext context,
-      {Widget? child,
-      TLoadingSize size = TLoadingSize.medium,
-      TLoadingIcon? icon = TLoadingIcon.circle,
-      Color? iconColor,
-      String? text,
-      Widget? refreshWidget,
-      Color? textColor,
-      Axis axis = Axis.vertical,
-      Widget? customIcon,
-      int duration = 2000}) {
+  static void show(
+    BuildContext context, {
+    Widget? child,
+    TLoadingSize size = TLoadingSize.medium,
+    TLoadingIcon? icon = TLoadingIcon.circle,
+    String? text,
+    TLoadingThemeData? theme,
+  }) {
     if (_isShowing) {
-      print('warn: TLoading is showing!');
+      debugPrint('warn: TLoading is showing!');
       return;
     }
 
-    _overlayEntry = OverlayEntry(builder: (context) {
-      return Center(
-        child: child ??
-            TLoading(
-              size: size,
-              icon: icon,
-              customIcon: customIcon,
-              text: text ?? context.resource.loading,
-              textColor: textColor,
-              refreshWidget: refreshWidget,
-              duration: duration,
-              iconColor: iconColor,
-              axis: axis,
-            ),
-      );
-    });
-
-    _context = context;
-    if (_context == null || _overlayEntry == null) {
-      print('error: TLoading is not init!:${_context} ${_overlayEntry}');
+    final overlay = Overlay.maybeOf(context);
+    if (overlay == null) {
+      debugPrint('warn: TLoading requires an Overlay ancestor.');
       return;
     }
-    _isShowing = true;
-    Overlay.of(_context!).insert(_overlayEntry!);
+    final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final loadingText = text ?? context.resource.loading;
+    _overlayEntry = OverlayEntry(
+      builder: (overlayContext) => captured.wrap(
+        Builder(
+          builder: (capturedContext) {
+            final loadingWidget =
+                child ?? TLoading(size: size, icon: icon, text: loadingText);
+            if (theme == null) {
+              return Center(child: loadingWidget);
+            }
+            return Center(
+              child: Theme(
+                data: Theme.of(capturedContext).mergeExtension(theme),
+                child: loadingWidget,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
+    final entry = _overlayEntry!;
+    try {
+      overlay.insert(entry);
+      _isShowing = true;
+    } catch (_) {
+      _overlayEntry = null;
+      _isShowing = false;
+      rethrow;
+    }
   }
 
   // 消失
@@ -56,6 +67,7 @@ class TLoadingController {
     if (_isShowing) {
       if (_overlayEntry != null) {
         _overlayEntry?.remove();
+        _overlayEntry?.dispose();
         _overlayEntry = null;
       }
       _isShowing = false;

@@ -1,0 +1,23 @@
+Widget _buildTopPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('顶部弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.top(
+              child: Container(
+                padding: const EdgeInsets.only(top: 40),
+                alignment: Alignment.center,
+                child: const TText('顶部弹出层内容'),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

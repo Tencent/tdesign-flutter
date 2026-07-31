@@ -1,0 +1,78 @@
+Widget _grid(BuildContext context) {
+    Widget shareIcon(
+      IconData icon, {
+      required Color backgroundColor,
+      required Color foregroundColor,
+    }) {
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          shape: BoxShape.circle,
+        ),
+        alignment: Alignment.center,
+        child: Icon(icon, size: 24, color: foregroundColor),
+      );
+    }
+
+    return _trigger(
+      label: '分享照片',
+      onPressed: () => TActionSheet.showGrid(
+        context,
+        subtitle: '选择分享方式',
+        items: [
+          TActionSheetItem(
+            label: '消息',
+            icon: shareIcon(
+              TIcons.chat,
+              backgroundColor: context.tTheme.successLightColor,
+              foregroundColor: context.tTheme.successNormalColor,
+            ),
+          ),
+          TActionSheetItem(
+            label: '邮件',
+            icon: shareIcon(
+              TIcons.mail,
+              backgroundColor: context.tTheme.brandLightColor,
+              foregroundColor: context.tTheme.brandNormalColor,
+            ),
+          ),
+          TActionSheetItem(
+            label: '复制链接',
+            icon: shareIcon(
+              TIcons.link,
+              backgroundColor: context.tTheme.bgColorComponent,
+              foregroundColor: context.tTheme.textColorPrimary,
+            ),
+          ),
+          TActionSheetItem(
+            label: '保存到本地',
+            icon: shareIcon(
+              TIcons.download,
+              backgroundColor: context.tTheme.warningLightColor,
+              foregroundColor: context.tTheme.warningNormalColor,
+            ),
+          ),
+          TActionSheetItem(
+            label: '生成二维码',
+            icon: shareIcon(
+              TIcons.qrcode,
+              backgroundColor: context.tTheme.brandLightColor,
+              foregroundColor: context.tTheme.brandNormalColor,
+            ),
+          ),
+          TActionSheetItem(
+            label: '更多',
+            icon: shareIcon(
+              TIcons.more,
+              backgroundColor: context.tTheme.bgColorComponent,
+              foregroundColor: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+        onChanged: (item, _) =>
+            TToast.showText('已分享到：${item.label}', context: context),
+      ),
+    );
+  }

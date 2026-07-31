@@ -1,37 +1,57 @@
-
-  Widget _buildLoadingSideBar(BuildContext context) {
-    // 延迟加载
-    Future.delayed(const Duration(seconds: 3), _initData);
-    var size = MediaQuery.of(context).size;
-
-    return Row(
+Widget _buildLoadingSideBar(BuildContext context) {
+    final label = _items[_currentValue].label;
+    return Column(
       children: [
-        SizedBox(
-          width: list.isEmpty ? size.width : 110,
-          child: TSideBar(
-            style: TSideBarStyle.normal,
-            value: currentValue,
-            controller: _sideBarController,
-            loading: true,
-            children: list
-                .map((ele) => TSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
-                .toList(),
-            onChanged: onChanged,
-            onSelected: onSelected,
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: TButton(
+              size: TButtonSize.small,
+              variant: TButtonVariant.outline,
+              onPressed: _loadItems,
+              child: const Text('重新加载'),
+            ),
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
-            ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 106,
+                child: TSideBar(
+                  value: _currentValue,
+                  children: _items,
+                  loading: _loading,
+                  onChanged: (value) => setState(() => _currentValue = value),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: context.tTheme.bgColorContainer,
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.all(20),
+                  child: _loading
+                      ? const TLoading(
+                          icon: TLoadingIcon.circle,
+                          size: TLoadingSize.large,
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TText(label, font: context.tTheme.fontTitleMedium),
+                            const SizedBox(height: 4),
+                            TText(
+                              '导航数据加载完成后可选择分类',
+                              textColor: context.tTheme.textColorSecondary,
+                            ),
+                          ],
+                        ),
+                ),
+              ),
+            ],
           ),
-        )
+        ),
       ],
     );
   }

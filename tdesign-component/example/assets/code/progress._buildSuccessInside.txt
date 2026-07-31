@@ -1,9 +1,6 @@
-
-  Widget _buildSuccessInside(BuildContext context) {
+Widget _buildSuccessInside(BuildContext context) {
     return TProgress(
-      type: TProgressType.linear,
-      progressStatus: TProgressStatus.success,
+      variant: TProgressVariant.linear,
       value: 1,
-      progressLabelPosition: TProgressLabelPosition.inside,
     );
   }

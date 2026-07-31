@@ -1,10 +1,9 @@
-
-  Widget _buildInline(BuildContext context) {
+Widget _buildInline(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: TTheme.of(context).bgColorContainer,
-        borderRadius: BorderRadius.circular(TTheme.of(context).radiusDefault),
+        color: context.tTheme.bgColorContainer,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -15,7 +14,7 @@
               valueListenable: _inlineSelectedNotifier,
               builder: (context, selected, _) => TText(
                 '当前选择：${_formatResult(selected)}',
-                textColor: TTheme.of(context).textColorSecondary,
+                textColor: context.tTheme.textColorSecondary,
               ),
             ),
           ),
@@ -24,8 +23,8 @@
               dateMode: DateMode.date,
               timeMode: TimeMode.minute,
             ),
-            initialValue: _kInlineInitialValue,
-            onChange: (result) => _inlineSelectedNotifier.value = result,
+            value: _kInlineValue,
+            onChanged: (result) => _inlineSelectedNotifier.value = result,
           ),
         ],
       ),

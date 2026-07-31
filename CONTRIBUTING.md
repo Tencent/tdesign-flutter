@@ -23,6 +23,26 @@ tdesign-site/       // tdesign flutter 站点
 - 组件内部的固定文案，都应该抽离到 TResourceDelegate 中统一管理，方便业务进行国际化适配。
 - 如果使用的组件 TD 有封装，尽量使用 TD 已有组件，而非直接使用系统组件。
 
+## 示例代码片段
+
+示例 App 的代码查看和 Web Markdown 都读取 `tdesign-component/example/assets/code/` 中的源码片段。将示例方法标记为 `@ExampleCode`，其中 `group` 必须与页面的 `exampleCodeGroup` 完全一致：
+
+```dart
+@ExampleCode(group: 'button')
+Widget _buildPrimaryButton(BuildContext context) {
+  return const TButton(child: TText('按钮'));
+}
+```
+
+在 `tdesign-component` 目录执行以下命令生成片段，并将变更后的 `.txt` 文件与示例源码一起提交：
+
+```bash
+dart run tool/generate_example_code.dart
+dart run tool/generate_example_code.dart --check
+```
+
+第二条命令不会写文件，用于本地和 CI 校验片段是否与源码同步。
+
 ## 贡献指南
 
 请参考：[贡献指南](https://tdesign.tencent.com/flutter/develop)

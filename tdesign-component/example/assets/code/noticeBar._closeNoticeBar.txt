@@ -1,8 +1,12 @@
-
 Widget _closeNoticeBar(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.close,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了关闭按钮', context: context);
+      }
+    },
   );
 }

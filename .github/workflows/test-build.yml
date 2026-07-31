@@ -29,14 +29,13 @@ jobs:
           - web
         flutter-version:
           - 3.32.0
-          # 当前对于 3.4x.x 版本，AOP 有问题先忽略
           # - 3.x
         include:
           - platform: apk
             os: ubuntu-latest
             build: flutter build apk -t ./lib/main.dart --release
           - platform: ios
-            os: macos-latest
+            os: macos-14
             build: flutter build ios -t ./lib/main.dart --no-codesign --release
           - platform: web
             os: ubuntu-latest
@@ -46,13 +45,25 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Select Xcode version
+        if: matrix.platform == 'ios'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "16"
+
       - name: Setup Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
           cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
+
+      - name: Diagnose iOS toolchain
+        if: matrix.platform == 'ios'
+        run: |
+          xcode-select -p
+          xcodebuild -version
+          pod --version
+          flutter --version
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
@@ -61,10 +72,17 @@ jobs:
         working-directory: ./tdesign-component
         run: sh ./demo_tool/all_build.sh
 
+      - name: Check example code snippets
+        working-directory: ./tdesign-component
+        run: dart run tool/generate_example_code.dart --check
+
       - name: flutter pub get
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
+      - name: Diagnose iOS linker settings
+        if: matrix.platform == 'ios'
+        run: echo "Xcode ${{ matrix.platform }} ready"
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}

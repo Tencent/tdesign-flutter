@@ -28,7 +28,7 @@ class _TestPageState extends State<TestPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-          titleWidget: TText('title'),
+          titleWidget: const TText('title'),
           radius: 20,
           backgroundColor: const Color(0xFFFAFFFC),
           child: Container(
@@ -50,7 +50,7 @@ class _TestPageState extends State<TestPage> {
       body: Center(
         child: TButton(
           child: const Text('显示问题弹窗'),
-          onTap: _showProblemDialog,
+          onPressed: _showProblemDialog,
         ),
       ),
     );

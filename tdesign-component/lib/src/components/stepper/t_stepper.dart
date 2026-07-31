@@ -1,521 +1,538 @@
-import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show TextInputFormatter;
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_theme.dart';
+import 't_stepper_theme_data.dart';
+import 't_stepper_types.dart';
 
-enum TStepperSize { small, medium, large }
+export 't_stepper_types.dart';
 
-enum TStepperTheme { normal, filled, outline }
-
-enum TStepperIconType { remove, add }
-
-enum TStepperOverlimitType { minus, plus }
-
-enum TStepperEventType { cleanValue }
-
-typedef TStepperOverlimitFunction = void Function(TStepperOverlimitType type);
-
-/// Stepper控制器
-class TStepperController {
-  _TStepperState? _state;
-
-  int _value = 0;
-
-  int get value => _value;
-
-  set value(int value) {
-    _value = value;
-    _state?.updateUI();
-  }
-
-  void _bindState(_TStepperState _tdStepperState) {
-    _state = _tdStepperState;
-  }
-}
-
-/// 步进器
+/// TDesign 数值步进器。
+///
+/// 组件严格受控：[value] 是唯一数据源，按钮、输入提交及失焦只通过
+/// [onChanged] 请求变更，父组件需要以新 [value] 重建组件。若父组件不接受
+/// 新值，输入内容会恢复为当前 [value]。
+///
+/// [onChanged] 为 null 时输入框和两个按钮整组禁用。样式优先级为实例
+/// [size]/[variant]、[TStepperThemeData]、Flutter 子树及全局 ThemeData，
+/// 最后回退 TDesign token。
 class TStepper extends StatefulWidget {
   const TStepper({
-    Key? key,
-    this.disableInput = false,
-    this.disabled = false,
-    this.inputWidth,
-    this.eventController,
-    this.max = 100,
+    super.key,
+
+    /// 受控数值，必须位于 [min] 与 [max] 之间。
+    required this.value,
+
+    /// 数值变化请求。
+    ///
+    /// 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。
+    /// 为 null 时整组禁用。
+    this.onChanged,
+
+    /// 最小值，必须小于或等于 [max]。
     this.min = 0,
-    this.size = TStepperSize.medium,
+
+    /// 最大值，必须大于或等于 [min]。
+    this.max = 100,
+
+    /// 加减按钮使用的步长，必须大于 0。
+    ///
+    /// 输入提交不要求是步长的整数倍，但会限制在 [min] 与 [max] 之间。
     this.step = 1,
-    this.theme = TStepperTheme.normal,
-    this.value = 0,
-    this.defaultValue = 0,
-    this.onBlur,
-    this.onChange,
-    this.onOverlimit,
-    this.controller,
-  }) : super(key: key);
 
-  /// 禁用输入框
-  final bool disableInput;
+    /// 组件尺寸。
+    ///
+    /// 为空时依次使用 [TStepperThemeData.size] 和
+    /// [TStepperSize.medium]。
+    this.size,
 
-  /// 禁用全部操作
-  final bool disabled;
+    /// 组件形态。
+    ///
+    /// 为空时依次使用 [TStepperThemeData.variant] 和
+    /// [TStepperVariant.normal]。
+    this.variant,
+  }) : assert(min <= max),
+       assert(value >= min && value <= max),
+       assert(step > 0);
 
-  /// 禁用全部操作
-  final double? inputWidth;
+  /// 唯一受控数值，必须位于 [min] 与 [max] 之间。
+  ///
+  /// 父组件需要在 [onChanged] 后以新值重建组件，否则输入内容会恢复。
+  final num value;
 
-  /// 最大值
-  final int max;
+  /// 数值变化请求；一次操作最多触发一次，为 null 时整组禁用。
+  final ValueChanged<num>? onChanged;
 
-  /// 最小值
-  final int min;
+  /// 最小值，必须小于或等于 [max]。
+  final num min;
 
-  /// 组件尺寸
-  final TStepperSize size;
+  /// 最大值，必须大于或等于 [min]。
+  final num max;
 
-  /// 步长
-  final int step;
+  /// 加减按钮使用的正数步长；直接输入不要求是步长的整数倍。
+  final num step;
 
-  /// 组件风格
-  final TStepperTheme theme;
+  /// 组件尺寸；为空时依次使用组件主题和 [TStepperSize.medium]。
+  final TStepperSize? size;
 
-  /// 值
-  final int? value;
-
-  /// 默认值
-  final int? defaultValue;
-
-  /// 输入框失去焦点时触发
-  final VoidCallback? onBlur;
-
-  /// 数值发生变更时触发
-  final ValueChanged<int>? onChange;
-
-  /// 数值超出限制时触发
-  final TStepperOverlimitFunction? onOverlimit;
-
-  /// 事件控制器
-  final StreamController<TStepperEventType>? eventController;
-
-  /// Stepper控制器
-  final TStepperController? controller;
+  /// 组件形态；为空时依次使用组件主题和 [TStepperVariant.normal]。
+  final TStepperVariant? variant;
 
   @override
   State<TStepper> createState() => _TStepperState();
 }
 
 class _TStepperState extends State<TStepper> {
-  late TStepperController _controller;
-  late TextEditingController _textController;
-  final FocusNode _focusNode = FocusNode();
+  late final TextEditingController _textController;
+  late final FocusNode _focusNode;
+  bool _editing = false;
+
+  bool get _disabled => widget.onChanged == null;
+  num get _effectiveMin => widget.min.isNaN ? 0 : widget.min;
+  num get _effectiveMax {
+    final min = _effectiveMin;
+    return widget.max.isNaN || widget.max < min ? min : widget.max;
+  }
 
   @override
   void initState() {
     super.initState();
-    if (widget.controller != null) {
-      _controller = widget.controller!;
-    } else {
-      _controller = TStepperController()
-        ..value = widget.value ?? widget.defaultValue ?? 0;
-    }
-    _controller._bindState(this);
-    if (widget.eventController != null) {
-      widget.eventController?.stream.listen((TStepperEventType event) {
-        if (event == TStepperEventType.cleanValue) {
-          cleanValue();
-        }
-      });
-    }
-    _textController =
-        TextEditingController(text: _controller._value.toString());
+    _textController = TextEditingController(text: _format(widget.value));
+    _focusNode = FocusNode()..addListener(_handleFocusChange);
+  }
 
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
-        if (widget.onBlur != null) {
-          widget.onBlur!();
-        }
-      }
-    });
+  @override
+  void didUpdateWidget(covariant TStepper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      _editing = false;
+      _setText(widget.value);
+    }
   }
 
   @override
   void dispose() {
+    _focusNode
+      ..removeListener(_handleFocusChange)
+      ..dispose();
     _textController.dispose();
-    _focusNode.dispose();
     super.dispose();
   }
 
-  double _getWidth() {
-    if (widget.inputWidth != null && widget.inputWidth! > 0) {
-      return widget.inputWidth!;
-    }
-
-    switch (widget.size) {
-      case TStepperSize.small:
-        return 34;
-      case TStepperSize.medium:
-        return 38;
-      case TStepperSize.large:
-        return 45;
-      default:
-        return 38;
-    }
-  }
-
-  double _getTextWidth() {
-    var textLength = _controller._value.toString().length;
-    return textLength < 4 ? 0 : (textLength - 4) * _getFontSize();
-  }
-
-  double _getHeight() {
-    switch (widget.size) {
-      case TStepperSize.small:
-        return 20;
-      case TStepperSize.medium:
-        return 24;
-      case TStepperSize.large:
-        return 28;
-      default:
-        return 24;
-    }
-  }
-
-  Color? _getBackgroundColor(BuildContext context) {
-    switch (widget.theme) {
-      case TStepperTheme.filled:
-        return widget.disabled
-            ? TTheme.of(context).bgColorComponentDisabled
-            : TTheme.of(context).bgColorSecondaryContainer;
-      case TStepperTheme.outline:
-        return null;
-      case TStepperTheme.normal:
-      default:
-        return null;
-    }
-  }
-
-  double _getFontSize() {
-    switch (widget.size) {
-      case TStepperSize.small:
-        return 10;
-      case TStepperSize.medium:
-        return 12;
-      case TStepperSize.large:
-        return 16;
-      default:
-        return 12;
-    }
-  }
-
-  void onAdd() {
-    if (_controller._value >= widget.max) {
-      return;
-    }
-
-    if (_controller._value + widget.step > widget.max) {
-      setState(() {
-        _controller._value = widget.max;
-      });
-
-      if (widget.onOverlimit != null) {
-        widget.onOverlimit!(TStepperOverlimitType.plus);
-      }
-
-      renderNumber();
-      return;
-    }
-
-    setState(() {
-      _controller._value += widget.step;
-    });
-
-    renderNumber();
-  }
-
-  void onReduce() {
-    if (_controller._value <= widget.min) {
-      return;
-    }
-
-    if (_controller._value - widget.step < widget.min) {
-      setState(() {
-        _controller._value = widget.min;
-      });
-
-      if (widget.onOverlimit != null) {
-        widget.onOverlimit!(TStepperOverlimitType.minus);
-      }
-
-      renderNumber();
-      return;
-    }
-
-    setState(() {
-      _controller._value -= widget.step;
-    });
-    renderNumber();
-  }
-
-  cleanValue() {
-    _controller._value = 0;
-    _textController.value = TextEditingValue(
-        text: _controller._value.toString(),
-        selection: TextSelection.fromPosition(TextPosition(
-          affinity: TextAffinity.downstream,
-          offset: _controller._value.toString().length,
-        )));
-    _focusNode.unfocus();
-  }
-
-  void renderNumber() {
-    _textController.value = TextEditingValue(
-        text: _controller._value.toString(),
-        selection: TextSelection.fromPosition(TextPosition(
-          affinity: TextAffinity.downstream,
-          offset: _controller._value.toString().length,
-        )));
-    _focusNode.unfocus();
-
-    if (widget.onChange != null) {
-      widget.onChange!(_controller._value);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        TStepperIconButton(
-          type: TStepperIconType.remove,
-          disabled: widget.disabled || _controller._value <= widget.min,
-          theme: widget.theme,
-          size: widget.size,
-          onTap: onReduce,
+    final style = _StepperStyle.resolve(context, widget);
+    final canDecrease = !_disabled && widget.value > _effectiveMin;
+    final canIncrease = !_disabled && widget.value < _effectiveMax;
+    final spacing = style.variant == TStepperVariant.outline
+        ? 0.0
+        : style.spacing;
+
+    return Semantics(
+      container: true,
+      enabled: !_disabled,
+      value: _format(widget.value),
+      child: TextFieldTapRegion(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _StepperButton(
+              icon: TIcons.minus,
+              semanticLabel: '减少',
+              position: _StepperButtonPosition.leading,
+              style: style,
+              globallyDisabled: _disabled,
+              actionDisabled: !canDecrease,
+              onPressed: () => _stepBy(-widget.step),
+            ),
+            SizedBox(width: spacing),
+            _buildInput(style),
+            SizedBox(width: spacing),
+            _StepperButton(
+              icon: TIcons.plus,
+              semanticLabel: '增加',
+              position: _StepperButtonPosition.trailing,
+              style: style,
+              globallyDisabled: _disabled,
+              actionDisabled: !canIncrease,
+              onPressed: () => _stepBy(widget.step),
+            ),
+          ],
         ),
-        Container(
-          decoration: BoxDecoration(
-              border: widget.theme == TStepperTheme.outline
-                  ? Border(
-                      top: BorderSide(
-                        color: TTheme.of(context).componentBorderColor,
-                      ),
-                      bottom: BorderSide(
-                        color: TTheme.of(context).componentBorderColor,
-                      ))
-                  : null),
-          child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: widget.theme == TStepperTheme.normal ? 0 : 4),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    minWidth: _getWidth(),
-                    maxWidth: _getWidth() + _getTextWidth()),
-                child: Container(
-                  height: _getHeight(),
-                  alignment: Alignment.center,
-                  decoration:
-                      BoxDecoration(color: _getBackgroundColor(context)),
-                  child: Container(
-                    height: PlatformUtil.isWeb ? _getFontSize() : null,
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: TextField(
-                      controller: _textController,
-                      enabled: !widget.disabled && !widget.disableInput,
-                      focusNode: _focusNode,
-                      style: TextStyle(
-                          fontSize: _getFontSize(),
-                          color: widget.disabled
-                              ? TTheme.of(context).textDisabledColor
-                              : TTheme.of(context).textColorPrimary),
-                      textAlign: TextAlign.center,
-                      textAlignVertical: TextAlignVertical.center,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        TextInputFormatter.withFunction((oldValue, newValue) {
-                          try {
-                            if (newValue.text == '') {
-                              setState(() {
-                                _controller._value = widget.min;
-                              });
-
-                              if (widget.onOverlimit != null) {
-                                widget
-                                    .onOverlimit!(TStepperOverlimitType.minus);
-                              }
-
-                              return newValue.copyWith(
-                                  text: _controller._value.toString(),
-                                  selection: TextSelection.collapsed(
-                                      offset: _controller._value
-                                          .toString()
-                                          .length));
-                            }
-
-                            final newNum = int.parse(newValue.text);
-                            if (newNum < widget.min) {
-                              setState(() {
-                                _controller._value = widget.min;
-                              });
-                              if (widget.onOverlimit != null) {
-                                widget
-                                    .onOverlimit!(TStepperOverlimitType.minus);
-                              }
-                            } else if (newNum > widget.max) {
-                              setState(() {
-                                _controller._value = widget.max;
-                              });
-                              if (widget.onOverlimit != null) {
-                                widget
-                                    .onOverlimit!(TStepperOverlimitType.plus);
-                              }
-                            } else {
-                              setState(() {
-                                _controller._value = newNum;
-                              });
-                            }
-
-                            return newValue.copyWith(
-                                text: _controller._value.toString(),
-                                selection: TextSelection.collapsed(
-                                    offset:
-                                        _controller._value.toString().length));
-                          } catch (e) {
-                            return oldValue;
-                          }
-                        })
-                      ],
-                      onChanged: (newValue) {
-                        final result = int.parse(newValue);
-                        if (widget.onChange != null) {
-                          widget.onChange!(result);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              )),
-        ),
-        TStepperIconButton(
-          type: TStepperIconType.add,
-          disabled: widget.disabled || _controller._value >= widget.max,
-          theme: widget.theme,
-          size: widget.size,
-          onTap: onAdd,
-        )
-      ],
+      ),
     );
   }
 
-  void updateUI() {
-    if (mounted) {
-      _textController.value = TextEditingValue(
-          text: _controller._value.toString(),
-          selection: TextSelection.fromPosition(TextPosition(
-            affinity: TextAffinity.downstream,
-            offset: _controller._value.toString().length,
-          )));
+  Widget _buildInput(_StepperStyle style) {
+    final globallyDisabled = _disabled;
+    final inputTextStyle = globallyDisabled
+        ? style.disabledTextStyle
+        : style.textStyle;
+    final backgroundColor = switch (style.variant) {
+      TStepperVariant.normal => Colors.transparent,
+      TStepperVariant.filled =>
+        globallyDisabled
+            ? style.disabledBackgroundColor
+            : style.backgroundColor,
+      TStepperVariant.outline =>
+        globallyDisabled ? style.disabledBackgroundColor : Colors.transparent,
+    };
+    final border = style.variant == TStepperVariant.outline
+        ? Border(
+            top: BorderSide(color: style.borderColor, width: style.borderWidth),
+            bottom: BorderSide(
+              color: style.borderColor,
+              width: style.borderWidth,
+            ),
+          )
+        : null;
+
+    return SizedBox(
+      width: style.inputWidth,
+      height: style.controlSize,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: border,
+          borderRadius: style.variant == TStepperVariant.outline
+              ? null
+              : style.borderRadius,
+        ),
+        child: IgnorePointer(
+          ignoring: globallyDisabled,
+          child: Center(
+            child: EditableText(
+              controller: _textController,
+              focusNode: _focusNode,
+              readOnly: globallyDisabled,
+              autocorrect: false,
+              enableSuggestions: false,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              strutStyle: StrutStyle.fromTextStyle(
+                inputTextStyle,
+                forceStrutHeight: true,
+              ),
+              keyboardType: TextInputType.numberWithOptions(
+                decimal: true,
+                signed: _effectiveMin < 0,
+              ),
+              style: inputTextStyle,
+              cursorColor: style.foregroundColor,
+              backgroundCursorColor: style.disabledForegroundColor,
+              inputFormatters: [
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  return RegExp(r'^-?\d*\.?\d*$').hasMatch(newValue.text)
+                      ? newValue
+                      : oldValue;
+                }),
+              ],
+              onChanged: (_) => _editing = true,
+              onSubmitted: (_) => _submitDraft(unfocus: true),
+              onTapOutside: (_) => _submitDraft(unfocus: true),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleFocusChange() {
+    if (!_focusNode.hasFocus && _editing) {
+      _submitDraft(unfocus: false);
     }
+  }
+
+  void _stepBy(num delta) {
+    final draft = num.tryParse(_textController.text);
+    final base = _editing && draft != null ? draft : widget.value;
+    _requestChange(_normalizeStepResult(base + delta, base), unfocus: true);
+  }
+
+  void _submitDraft({required bool unfocus}) {
+    final parsed = num.tryParse(_textController.text);
+    if (parsed == null) {
+      _editing = false;
+      _setText(widget.value);
+      if (unfocus) {
+        _focusNode.unfocus();
+      }
+      return;
+    }
+    _requestChange(parsed, unfocus: unfocus);
+  }
+
+  void _requestChange(num next, {required bool unfocus}) {
+    final clamped = next.clamp(_effectiveMin, _effectiveMax);
+    _editing = false;
+    if (unfocus) {
+      _focusNode.unfocus();
+    }
+    if (clamped == widget.value) {
+      _setText(widget.value);
+      return;
+    }
+
+    widget.onChanged?.call(clamped);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_focusNode.hasFocus) {
+        _setText(widget.value);
+      }
+    });
+  }
+
+  num _normalizeStepResult(num value, num base) {
+    final precision = [
+      _decimalPlaces(widget.step),
+      _decimalPlaces(base),
+      _decimalPlaces(widget.min),
+      _decimalPlaces(widget.max),
+    ].reduce(math.max).clamp(0, 12);
+    if (precision == 0) {
+      return value.round();
+    }
+    final rounded = double.parse(value.toStringAsFixed(precision));
+    return rounded % 1 == 0 ? rounded.toInt() : rounded;
+  }
+
+  int _decimalPlaces(num value) {
+    final text = value.abs().toString().toLowerCase();
+    final exponentIndex = text.indexOf('e');
+    final mantissa = exponentIndex == -1
+        ? text
+        : text.substring(0, exponentIndex);
+    final exponent = exponentIndex == -1
+        ? 0
+        : int.tryParse(text.substring(exponentIndex + 1)) ?? 0;
+    final decimalIndex = mantissa.indexOf('.');
+    final decimals = decimalIndex == -1
+        ? 0
+        : mantissa.length - decimalIndex - 1;
+    return math.max(0, decimals - exponent);
+  }
+
+  void _setText(num value) {
+    final text = _format(value);
+    _textController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
+
+  String _format(num value) {
+    if (value is int) {
+      return value.toString();
+    }
+    return value % 1 == 0 ? value.toInt().toString() : value.toString();
   }
 }
 
-typedef TTapFunction = void Function();
+enum _StepperButtonPosition { leading, trailing }
 
-class TStepperIconButton extends StatelessWidget {
-  const TStepperIconButton({
-    Key? key,
-    this.onTap,
-    this.size = TStepperSize.medium,
-    this.disabled = false,
-    this.theme = TStepperTheme.normal,
-    required this.type,
-  }) : super(key: key);
+class _StepperButton extends StatelessWidget {
+  const _StepperButton({
+    required this.icon,
+    required this.semanticLabel,
+    required this.position,
+    required this.style,
+    required this.globallyDisabled,
+    required this.actionDisabled,
+    required this.onPressed,
+  });
 
-  final TTapFunction? onTap;
-  final TStepperSize size;
-  final TStepperIconType type;
-  final bool disabled;
-  final TStepperTheme theme;
-
-  double _getIconSize() {
-    switch (size) {
-      case TStepperSize.large:
-        return 20;
-      case TStepperSize.medium:
-        return 16;
-      case TStepperSize.small:
-        return 12;
-      default:
-        return 16;
-    }
-  }
-
-  Icon _getIcon(context) {
-    var iconType = type == TStepperIconType.add ? Icons.add : Icons.remove;
-
-    return Icon(iconType,
-        size: _getIconSize(),
-        color: disabled
-            ? TTheme.of(context).textDisabledColor
-            : TTheme.of(context).textColorPrimary);
-  }
-
-  Color? _getBackgroundColor(BuildContext context) {
-    switch (theme) {
-      case TStepperTheme.filled:
-        return disabled
-            ? TTheme.of(context).bgColorComponentDisabled
-            : TTheme.of(context).bgColorSecondaryContainer;
-      case TStepperTheme.outline:
-        return disabled ? TTheme.of(context).bgColorComponentDisabled : null;
-      case TStepperTheme.normal:
-      default:
-        return null;
-    }
-  }
-
-  BorderRadiusGeometry? _getBorderRadius(BuildContext context) {
-    if (theme == TStepperTheme.normal) {
-      return null;
-    }
-
-    return type == TStepperIconType.remove
-        ? const BorderRadius.only(
-            topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
-        : const BorderRadius.only(
-            topRight: Radius.circular(3), bottomRight: Radius.circular(3));
-  }
-
-  BoxBorder? _getBoxBorder(BuildContext context) {
-    if (theme == TStepperTheme.outline) {
-      return Border.all(
-        color: TTheme.of(context).componentBorderColor,
-      );
-    }
-
-    return null;
-  }
+  final IconData icon;
+  final String semanticLabel;
+  final _StepperButtonPosition position;
+  final _StepperStyle style;
+  final bool globallyDisabled;
+  final bool actionDisabled;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: disabled ? null : onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _getBackgroundColor(context),
-            borderRadius: _getBorderRadius(context),
-            border: _getBoxBorder(context),
+    final disabled = globallyDisabled || actionDisabled;
+    final backgroundColor = switch (style.variant) {
+      TStepperVariant.normal => Colors.transparent,
+      TStepperVariant.filled =>
+        globallyDisabled
+            ? style.disabledBackgroundColor
+            : style.backgroundColor,
+      TStepperVariant.outline =>
+        globallyDisabled ? style.disabledBackgroundColor : Colors.transparent,
+    };
+    final border = style.variant == TStepperVariant.outline
+        ? Border.all(color: style.borderColor, width: style.borderWidth)
+        : null;
+    final borderRadius = style.variant == TStepperVariant.outline
+        ? BorderRadius.only(
+            topLeft: position == _StepperButtonPosition.leading
+                ? style.borderRadius.topLeft
+                : Radius.zero,
+            bottomLeft: position == _StepperButtonPosition.leading
+                ? style.borderRadius.bottomLeft
+                : Radius.zero,
+            topRight: position == _StepperButtonPosition.trailing
+                ? style.borderRadius.topRight
+                : Radius.zero,
+            bottomRight: position == _StepperButtonPosition.trailing
+                ? style.borderRadius.bottomRight
+                : Radius.zero,
+          )
+        : style.borderRadius;
+
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      enabled: !disabled,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: disabled ? null : onPressed,
+        child: SizedBox.square(
+          dimension: style.controlSize,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              border: border,
+              borderRadius: borderRadius,
+            ),
+            child: Center(
+              child: Icon(
+                icon,
+                size: style.iconSize,
+                color: disabled
+                    ? style.disabledForegroundColor
+                    : style.iconColor,
+              ),
+            ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: _getIcon(context),
-          ),
-        ));
+        ),
+      ),
+    );
+  }
+}
+
+class _StepperStyle {
+  const _StepperStyle({
+    required this.variant,
+    required this.controlSize,
+    required this.inputWidth,
+    required this.iconSize,
+    required this.spacing,
+    required this.borderRadius,
+    required this.borderWidth,
+    required this.foregroundColor,
+    required this.disabledForegroundColor,
+    required this.iconColor,
+    required this.backgroundColor,
+    required this.disabledBackgroundColor,
+    required this.borderColor,
+    required this.textStyle,
+    required this.disabledTextStyle,
+  });
+
+  final TStepperVariant variant;
+  final double controlSize;
+  final double inputWidth;
+  final double iconSize;
+  final double spacing;
+  final BorderRadius borderRadius;
+  final double borderWidth;
+  final Color foregroundColor;
+  final Color disabledForegroundColor;
+  final Color iconColor;
+  final Color backgroundColor;
+  final Color disabledBackgroundColor;
+  final Color borderColor;
+  final TextStyle textStyle;
+  final TextStyle disabledTextStyle;
+
+  static _StepperStyle resolve(BuildContext context, TStepper widget) {
+    final materialTheme = Theme.of(context);
+    final componentTheme = materialTheme.extension<TStepperThemeData>();
+    final token = context.tTheme;
+    final size = widget.size ?? componentTheme?.size ?? TStepperSize.medium;
+    final variant =
+        widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
+    final geometry = switch (size) {
+      TStepperSize.small => const (
+        controlSize: 20.0,
+        inputWidth: 34.0,
+        iconSize: 12.0,
+        fontSize: 10.0,
+      ),
+      TStepperSize.medium => const (
+        controlSize: 24.0,
+        inputWidth: 38.0,
+        iconSize: 16.0,
+        fontSize: 12.0,
+      ),
+      TStepperSize.large => const (
+        controlSize: 26.0,
+        inputWidth: 45.0,
+        iconSize: 20.0,
+        fontSize: 16.0,
+      ),
+    };
+    final defaultTextStyle = context.tExplicitDefaultTextStyle;
+    final materialTextStyle =
+        materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
+    final inheritedFontFamily =
+        defaultTextStyle?.fontFamily ?? materialTextStyle.fontFamily;
+    final foregroundColor =
+        componentTheme?.foregroundColor ??
+        defaultTextStyle?.color ??
+        materialTextStyle.color ??
+        token.textColorPrimary;
+    final disabledForegroundColor =
+        componentTheme?.disabledForegroundColor ?? token.textDisabledColor;
+    final textStyle = materialTextStyle
+        .merge(defaultTextStyle)
+        .copyWith(
+          fontSize: geometry.fontSize,
+          color: foregroundColor,
+          fontFamily: inheritedFontFamily,
+          letterSpacing: 0,
+          height: 1,
+        )
+        .merge(componentTheme?.textStyle);
+    final inputTheme = materialTheme.inputDecorationTheme;
+    final inputFillColor = inputTheme.fillColor;
+    final borderColor =
+        componentTheme?.borderColor ??
+        inputTheme.enabledBorder?.borderSide.color ??
+        token.componentBorderColor;
+
+    return _StepperStyle(
+      variant: variant,
+      controlSize: componentTheme?.controlSize ?? geometry.controlSize,
+      inputWidth: componentTheme?.inputWidth ?? geometry.inputWidth,
+      iconSize: componentTheme?.iconSize ?? geometry.iconSize,
+      spacing: componentTheme?.spacing ?? 4,
+      borderRadius:
+          componentTheme?.borderRadius ??
+          BorderRadius.circular(token.radiusSmall),
+      borderWidth: componentTheme?.borderWidth ?? 1,
+      foregroundColor: foregroundColor,
+      disabledForegroundColor: disabledForegroundColor,
+      iconColor:
+          componentTheme?.foregroundColor ??
+          context.tExplicitIconTheme?.color ??
+          foregroundColor,
+      backgroundColor:
+          componentTheme?.backgroundColor ??
+          (inputFillColor == Colors.transparent ? null : inputFillColor) ??
+          token.bgColorSecondaryContainer,
+      disabledBackgroundColor:
+          componentTheme?.disabledBackgroundColor ??
+          token.bgColorComponentDisabled,
+      borderColor: borderColor,
+      textStyle: textStyle,
+      disabledTextStyle: textStyle.copyWith(color: disabledForegroundColor),
+    );
   }
 }

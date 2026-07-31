@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 Widget _buildTestApp(Widget child) {
-  return TTheme(
-    data: TThemeData.defaultData(),
+  return Theme(
+    data: ThemeData(extensions: [TThemeData.defaultData()]),
     child: MaterialApp(home: Scaffold(body: child)),
   );
 }
@@ -19,7 +20,7 @@ void main() {
   // 单选
   // -----------------------------------------------------------------------
   group('TCalendar — 单选 (single)', () {
-    testWidgets('点击日期触发 onChange', (tester) async {
+    testWidgets('点击日期触发 onChanged', (tester) async {
       final day15 = _day(2024, 6, 15);
       final day20 = _day(2024, 6, 20);
       final minDate = _day(2024, 6, 1);
@@ -29,12 +30,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day15],
+            variant: TCalendarVariant.single,
+            value: [day15],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (v) => result = v,
+            onChanged: (v) => result = v,
           ),
         ),
       );
@@ -49,7 +49,7 @@ void main() {
       expect(result!.first, day20);
     });
 
-    testWidgets('点击已选中日期不重复触发 onChange', (tester) async {
+    testWidgets('点击已选中日期不重复触发 onChanged', (tester) async {
       final day15 = _day(2024, 6, 15);
       final minDate = _day(2024, 6, 1);
       final maxDate = _day(2024, 6, 30);
@@ -58,12 +58,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day15],
+            variant: TCalendarVariant.single,
+            value: [day15],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (_) => callCount++,
+            onChanged: (_) => callCount++,
           ),
         ),
       );
@@ -85,12 +84,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day15],
+            variant: TCalendarVariant.single,
+            value: [day15],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (v) => result = v,
+            onChanged: (v) => result = v,
           ),
         ),
       );
@@ -103,7 +101,7 @@ void main() {
         await tester.pump();
       }
 
-      // onChange 不应被触发
+      // onChanged 不应被触发
       expect(result, isNull);
     });
   });
@@ -121,12 +119,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.multiple,
-            initialValue: [day15],
+            variant: TCalendarVariant.multiple,
+            value: [day15],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (v) => result = v,
+            onChanged: (v) => result = v,
           ),
         ),
       );
@@ -151,12 +148,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.multiple,
-            initialValue: [day15, day20],
+            variant: TCalendarVariant.multiple,
+            value: [day15, day20],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (v) => result = v,
+            onChanged: (v) => result = v,
           ),
         ),
       );
@@ -175,7 +171,7 @@ void main() {
   // 区间选择
   // -----------------------------------------------------------------------
   group('TCalendar — 区间选择 (range)', () {
-    testWidgets('选择 start 和 end 触发 onChange', (tester) async {
+    testWidgets('选择 start 和 end 触发 onChanged', (tester) async {
       final day15 = _day(2024, 6, 15);
       final day20 = _day(2024, 6, 20);
       final minDate = _day(2024, 6, 1);
@@ -185,11 +181,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.range,
+            variant: TCalendarVariant.range,
+            value: const [],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (v) => result = v,
+            onChanged: (v) => result = v,
           ),
         ),
       );
@@ -197,6 +193,18 @@ void main() {
 
       await tester.tap(find.text('15'));
       await tester.pump();
+      await tester.pumpWidget(
+        _buildTestApp(
+          TCalendar(
+            variant: TCalendarVariant.range,
+            value: result!,
+            minDate: minDate,
+            maxDate: maxDate,
+            onChanged: (v) => result = v,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text('20'));
       await tester.pump();
 
@@ -207,7 +215,6 @@ void main() {
     });
 
     testWidgets('end 在 start 之前时重置为新 start', (tester) async {
-      final day15 = _day(2024, 6, 15);
       final day10 = _day(2024, 6, 10);
       final minDate = _day(2024, 6, 1);
       final maxDate = _day(2024, 6, 30);
@@ -216,11 +223,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.range,
+            variant: TCalendarVariant.range,
+            value: const [],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (v) => result = v,
+            onChanged: (v) => result = v,
           ),
         ),
       );
@@ -238,13 +245,12 @@ void main() {
   });
 
   // -----------------------------------------------------------------------
-  // initialValue / anchorDate
+  // value / anchorDate
   // -----------------------------------------------------------------------
-  group('TCalendar — initialValue 与 anchorDate', () {
-    testWidgets('运行期变更 initialValue 不会覆盖内部选中态', (tester) async {
+  group('TCalendar — value 与 anchorDate', () {
+    testWidgets('运行期变更 value 会同步受控选中态', (tester) async {
       final day15 = _day(2024, 6, 15);
       final day10 = _day(2024, 6, 10);
-      final day20 = _day(2024, 6, 20);
       final minDate = _day(2024, 6, 1);
       final maxDate = _day(2024, 6, 30);
       var onChangeCount = 0;
@@ -252,43 +258,41 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day15],
+            variant: TCalendarVariant.single,
+            value: [day15],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (_) => onChangeCount++,
+            onChanged: (_) => onChangeCount++,
           ),
         ),
       );
       await tester.pumpAndSettle();
 
-      // 父级改 initialValue 为 10，但内部仍保持挂载时的 15
+      // 父级改 value 为 10，受控高亮同步更新。
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day10],
+            variant: TCalendarVariant.single,
+            value: [day10],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (_) => onChangeCount++,
+            onChanged: (_) => onChangeCount++,
           ),
         ),
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('15'));
+      await tester.tap(find.text('10'));
       await tester.pump();
       expect(onChangeCount, 0);
 
-      await tester.tap(find.text('20'));
+      await tester.tap(find.text('15'));
       await tester.pump();
       expect(onChangeCount, 1);
       expect(find.text('20'), findsWidgets);
     });
 
-    testWidgets('更换 Key 后 initialValue 重新生效', (tester) async {
+    testWidgets('更换 Key 后仍使用当前受控 value', (tester) async {
       final day15 = _day(2024, 6, 15);
       final day10 = _day(2024, 6, 10);
       final minDate = _day(2024, 6, 1);
@@ -299,12 +303,11 @@ void main() {
         _buildTestApp(
           TCalendar(
             key: const Key('cal-a'),
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day15],
+            variant: TCalendarVariant.single,
+            value: [day15],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (_) => onChangeCount++,
+            onChanged: (_) => onChangeCount++,
           ),
         ),
       );
@@ -314,12 +317,11 @@ void main() {
         _buildTestApp(
           TCalendar(
             key: const Key('cal-b'),
-            height: 640,
-            type: CalendarType.single,
-            initialValue: [day10],
+            variant: TCalendarVariant.single,
+            value: [day10],
             minDate: minDate,
             maxDate: maxDate,
-            onChange: (_) => onChangeCount++,
+            onChanged: (_) => onChangeCount++,
           ),
         ),
       );
@@ -330,14 +332,14 @@ void main() {
       expect(onChangeCount, 0);
     });
 
-    testWidgets('仅 anchorDate、无 initialValue 时首屏定位到锚点月', (tester) async {
+    testWidgets('空 value 时首屏定位到 anchorDate', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
+            variant: TCalendarVariant.single,
+            value: const [],
             anchorDate: _day(2026, 1, 1),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -352,11 +354,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
+            value: const [],
             anchorDate: _day(2024, 1, 1),
             minDate: _day(2024, 1, 1),
             maxDate: _day(2024, 12, 31),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -365,11 +367,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
+            value: const [],
             anchorDate: _day(2024, 6, 1),
             minDate: _day(2024, 1, 1),
             maxDate: _day(2024, 12, 31),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -383,15 +385,15 @@ void main() {
   // 边界条件
   // -----------------------------------------------------------------------
   group('TCalendar — 边界条件', () {
-    testWidgets('不传 initialValue 时正常渲染', (tester) async {
+    testWidgets('空 value 时正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
+            variant: TCalendarVariant.single,
+            value: const [],
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -402,16 +404,15 @@ void main() {
       expect(find.text('30'), findsOneWidget);
     });
 
-    testWidgets('空 initialValue 列表正常渲染', (tester) async {
+    testWidgets('空 value 列表正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
-            initialValue: const [],
+            variant: TCalendarVariant.single,
+            value: const [],
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -424,11 +425,11 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
+            variant: TCalendarVariant.single,
+            value: const [],
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 2),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -443,7 +444,7 @@ void main() {
 
       await tester.pumpWidget(
         _buildTestApp(
-          _RuntimeMaxDateHarness(onChange: (v) => result = v),
+          _RuntimeMaxDateHarness(onChanged: (v) => result = v),
         ),
       );
       await tester.pumpAndSettle();
@@ -467,7 +468,7 @@ void main() {
 
       await tester.pumpWidget(
         _buildTestApp(
-          _RuntimeWeekStartHarness(onChange: (v) => result = v),
+          _RuntimeWeekStartHarness(onChanged: (v) => result = v),
         ),
       );
       await tester.pumpAndSettle();
@@ -506,12 +507,12 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
-            height: 640,
-            type: CalendarType.single,
+            variant: TCalendarVariant.single,
+            value: const [],
             firstDayOfWeek: 1,
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
-            onChange: (_) {},
+            onChanged: (_) {},
           ),
         ),
       );
@@ -524,9 +525,9 @@ void main() {
 
 /// 运行期收窄 [TCalendar.maxDate] 的测试夹具。
 class _RuntimeMaxDateHarness extends StatefulWidget {
-  const _RuntimeMaxDateHarness({required this.onChange});
+  const _RuntimeMaxDateHarness({required this.onChanged});
 
-  final ValueChanged<List<DateTime>> onChange;
+  final ValueChanged<List<DateTime>> onChanged;
 
   @override
   State<_RuntimeMaxDateHarness> createState() => _RuntimeMaxDateHarnessState();
@@ -545,11 +546,11 @@ class _RuntimeMaxDateHarnessState extends State<_RuntimeMaxDateHarness> {
         ),
         Expanded(
           child: TCalendar(
-            height: 600,
-            type: CalendarType.single,
+            variant: TCalendarVariant.single,
+            value: const [],
             minDate: _day(2024, 6, 1),
             maxDate: _maxDate,
-            onChange: widget.onChange,
+            onChanged: widget.onChanged,
           ),
         ),
       ],
@@ -559,9 +560,9 @@ class _RuntimeMaxDateHarnessState extends State<_RuntimeMaxDateHarness> {
 
 /// 运行期切换 [TCalendar.firstDayOfWeek] 的测试夹具。
 class _RuntimeWeekStartHarness extends StatefulWidget {
-  const _RuntimeWeekStartHarness({required this.onChange});
+  const _RuntimeWeekStartHarness({required this.onChanged});
 
-  final ValueChanged<List<DateTime>> onChange;
+  final ValueChanged<List<DateTime>> onChanged;
 
   @override
   State<_RuntimeWeekStartHarness> createState() =>
@@ -581,12 +582,12 @@ class _RuntimeWeekStartHarnessState extends State<_RuntimeWeekStartHarness> {
         ),
         Expanded(
           child: TCalendar(
-            height: 600,
-            type: CalendarType.single,
+            variant: TCalendarVariant.single,
+            value: const [],
             firstDayOfWeek: _firstDayOfWeek,
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
-            onChange: widget.onChange,
+            onChanged: widget.onChanged,
           ),
         ),
       ],
@@ -594,7 +595,7 @@ class _RuntimeWeekStartHarnessState extends State<_RuntimeWeekStartHarness> {
   }
 }
 
-/// 运行期变更 [TCalendar.style] 的测试夹具。
+/// 运行期变更 TCalendar.style 的测试夹具。
 class _RuntimeStyleHarness extends StatefulWidget {
   const _RuntimeStyleHarness();
 
@@ -628,12 +629,17 @@ class _RuntimeStyleHarnessState extends State<_RuntimeStyleHarness> {
         ),
         SizedBox(
           height: _calendarHeightFor(_cellHeight),
-          child: TCalendar(
-            type: CalendarType.single,
-            minDate: _day(2024, 6, 1),
-            maxDate: _day(2024, 6, 30),
-            style: TCalendarStyle(cellHeight: _cellHeight),
-            onChange: (_) {},
+          child: Theme(
+            data: Theme.of(context).mergeExtension(
+              TCalendarThemeData(cellHeight: _cellHeight),
+            ),
+            child: TCalendar(
+              variant: TCalendarVariant.single,
+              value: const [],
+              minDate: _day(2024, 6, 1),
+              maxDate: _day(2024, 6, 30),
+              onChanged: (_) {},
+            ),
           ),
         ),
       ],

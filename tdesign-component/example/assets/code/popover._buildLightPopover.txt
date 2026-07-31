@@ -1,5 +1,4 @@
-
-  Widget _buildLightPopover(BuildContext context) {
+Widget _buildLightPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -7,14 +6,14 @@
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '浅色',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('浅色'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
-                theme: TPopoverTheme.light,
+                colorScheme: TPopoverColorScheme.light,
               );
             },
           );

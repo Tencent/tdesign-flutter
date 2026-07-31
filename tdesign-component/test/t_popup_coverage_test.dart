@@ -17,13 +17,13 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
                 titleWidget: TText('仅标题行'),
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -39,13 +39,13 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
                 titleWidget: TText('左对齐标题'),
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -59,11 +59,11 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
                 confirmBuilder: null,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -78,11 +78,11 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
                 cancelBuilder: null,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -125,11 +125,11 @@ void main() {
           hostContext = tester.element(find.text('open'));
           TPopup.show(
             hostContext,
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 120,
                 height: 120,
-                child: const SizedBox(height: 80, width: 80)),
+                child: SizedBox(height: 80, width: 80)),
           );
         },
       );
@@ -146,11 +146,11 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 80, width: 200)),
+                child: SizedBox(height: 80, width: 200)),
           );
         },
       );
@@ -164,9 +164,9 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.top,
-                child: const SizedBox(height: 60, width: 200)),
+                child: SizedBox(height: 60, width: 200)),
           );
         },
       );
@@ -180,12 +180,12 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 100,
                 height: 100,
                 closeBuilder: null,
-                child: const SizedBox(height: 80, width: 80)),
+                child: SizedBox(height: 80, width: 80)),
           );
         },
       );
@@ -201,12 +201,12 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 40)),
+                child: SizedBox(height: 40)),
           );
         },
       );
@@ -257,8 +257,8 @@ void main() {
       var tapped = false;
       await tester.pumpWidget(
         MaterialApp(
-          home: TTheme(
-            data: TThemeData.defaultData(),
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
             child: Scaffold(
               body: TToolbarPressable(
                 onTap: () => tapped = true,
@@ -274,14 +274,14 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TTheme(
-            data: TThemeData.defaultData(),
-            child: Scaffold(
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
+            child: const Scaffold(
               body: TToolbarPressable(
                 onTap: null,
-                mergeTextStyle: const TextStyle(color: Colors.red),
-                mergeIconTheme: const IconThemeData(color: Colors.red),
-                child: const Icon(Icons.add),
+                mergeTextStyle: TextStyle(color: Colors.red),
+                mergeIconTheme: IconThemeData(color: Colors.red),
+                child: Icon(Icons.add),
               ),
             ),
           ),
@@ -295,10 +295,10 @@ void main() {
   group('TPopupOptions 覆盖率补充', () {
     test('hasBuiltInHeader 识别 titleWidget', () {
       expect(
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.bottom,
-          titleWidget: const Text('w'),
+          titleWidget: Text('w'),
           cancelBuilder: null,
           confirmBuilder: null,
         ).hasBuiltInHeader,
@@ -315,8 +315,8 @@ void main() {
       expect(custom.useCustomHeader, isTrue);
       expect(custom.useDefaultHeader, isFalse);
 
-      final titleOnly = TPopupOptions(
-        child: const SizedBox(),
+      const titleOnly = TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.bottom,
         titleWidget: TText('仅标题'),
         cancelBuilder: null,
@@ -330,8 +330,8 @@ void main() {
     test('assertPlacementParams 覆盖各 placement 的字段提示', () {
       // bottom + width → 抛 FlutterError
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.bottom,
           width: 200,
         ).assertPlacementParams(),
@@ -339,16 +339,16 @@ void main() {
       );
       // top 默认配置 → 不抛
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.top,
         ).assertPlacementParams(),
         returnsNormally,
       );
       // center 合法字段 → 不抛
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.center,
           height: 100,
           closeBuilder: null,
@@ -356,8 +356,8 @@ void main() {
         returnsNormally,
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.center,
         ).assertPlacementParams(),
         returnsNormally,
@@ -366,8 +366,7 @@ void main() {
   });
 
   group('TPopup 覆盖率深化', () {
-    testWidgets('headerBuilder 自定义内容可正常渲染',
-        (tester) async {
+    testWidgets('headerBuilder 自定义内容可正常渲染', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -376,8 +375,8 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                headerBuilder: (ctx, close) => Column(
-                      children: const [
+                headerBuilder: (ctx, close) => const Column(
+                      children: [
                         Text('头Widget'),
                         Row(
                           children: [
@@ -406,9 +405,9 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                headerBuilder: (ctx, close) => Row(
+                headerBuilder: (ctx, close) => const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Text('左槽Widget'),
                         Text('右槽Widget'),
                       ],
@@ -455,7 +454,7 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                titleWidget: TText('标题'),
+                titleWidget: const TText('标题'),
                 onVisibleChange: (visible, trigger) {
                   if (!visible) {
                     hideTriggers.add(trigger);
@@ -537,12 +536,12 @@ void main() {
                       onPressed: () {
                         innerHandle = TPopup.show(
                           ctx,
-                          options: TPopupOptions(
+                          options: const TPopupOptions(
                             placement: TPopupPlacement.bottom,
                             height: 120,
                             cancelBuilder: null,
                             confirmBuilder: null,
-                            child: const Text('内层'),
+                            child: Text('内层'),
                           ),
                         );
                       },
@@ -576,12 +575,12 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
                 showOverlay: false,
                 modal: false,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -596,13 +595,13 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.center,
                 width: 100,
                 height: 100,
                 radius: 4,
                 backgroundColor: Colors.red,
-                child: const SizedBox(height: 60, width: 60)),
+                child: SizedBox(height: 60, width: 60)),
           );
         },
       );
@@ -622,14 +621,14 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
-                inset: const TPopupBottomInset(left: 16, right: 16),
+                inset: TPopupBottomInset(left: 16, right: 16),
                 showOverlay: false,
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -640,7 +639,7 @@ void main() {
   });
 
   group('PopupLayout 覆盖率补充', () {
-    testWidgets('bottom 无 height 时贴底', (tester) async {
+    testWidgets('bottom 无 height 时使用默认高度并贴底', (tester) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.bottom,
       );
@@ -658,7 +657,7 @@ void main() {
       final positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.bottom, 0);
       expect(positioned.top, isNull);
-      expect(positioned.height, isNull);
+      expect(positioned.height, 240);
     });
 
     test('alignment center', () {
@@ -719,8 +718,8 @@ void main() {
         child: const SizedBox(),
         height: 300,
       );
-      final baseOpts = TPopupOptions(
-        child: const SizedBox(),
+      const baseOpts = TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.bottom,
         height: 300,
       );
@@ -801,7 +800,7 @@ void main() {
   // ============================================================
   group('TPopupOptions.copyWith', () {
     test('不传字段 → 完全继承原值（含 sentinel 默认 builder）', () {
-      final base = TPopupOptions(child: const SizedBox());
+      const base = TPopupOptions(child: SizedBox());
       final next = base.copyWith();
       expect(next.placement, base.placement);
       expect(next.height, base.height);
@@ -813,7 +812,7 @@ void main() {
     });
 
     test('显式传 null → 把对应 builder 置为「隐藏」', () {
-      final base = TPopupOptions(child: const SizedBox());
+      const base = TPopupOptions(child: SizedBox());
       final next = base.copyWith(headerBuilder: null, cancelBuilder: null);
       expect(next.headerBuilder, isNull);
       expect(next.cancelBuilder, isNull);
@@ -823,7 +822,7 @@ void main() {
     });
 
     test('传自定义 builder → 替换为自定义', () {
-      final base = TPopupOptions(child: const SizedBox());
+      const base = TPopupOptions(child: SizedBox());
       const titleWidget = Text('t');
       final next = base.copyWith(titleWidget: titleWidget);
       expect(next.titleWidget, same(titleWidget));
@@ -832,12 +831,12 @@ void main() {
     });
 
     test('值类字段（width / height / radius / 颜色 / Color?）三态正确', () {
-      final base = TPopupOptions(
-        child: const SizedBox(),
+      const base = TPopupOptions(
+        child: SizedBox(),
         width: 100,
         height: 200,
         radius: 8,
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: Color(0xFF000000),
       );
       // 不传：继承
       expect(base.copyWith().width, 100);
@@ -870,11 +869,11 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                titleWidget: const Text('再开测试'),
-                child: const SizedBox(height: 60)),
+                titleWidget: Text('再开测试'),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -899,10 +898,10 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 160,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -963,11 +962,11 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 headerBuilder: null,
-                child: const SizedBox(height: 80)),
+                child: SizedBox(height: 80)),
           );
         },
       );
@@ -983,12 +982,12 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 80)),
+                child: SizedBox(height: 80)),
           );
         },
       );
@@ -1005,11 +1004,11 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
-                titleWidget: const Text('标题'),
-                child: const SizedBox(height: 80)),
+                titleWidget: Text('标题'),
+                child: SizedBox(height: 80)),
           );
         },
       );
@@ -1023,12 +1022,12 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 cancelBuilder: null,
-                titleWidget: const Text('标题在'),
-                child: const SizedBox(height: 80)),
+                titleWidget: Text('标题在'),
+                child: SizedBox(height: 80)),
           );
         },
       );
@@ -1044,12 +1043,12 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 180,
                 confirmBuilder: null,
-                titleWidget: const Text('标题在'),
-                child: const SizedBox(height: 80)),
+                titleWidget: Text('标题在'),
+                child: SizedBox(height: 80)),
           );
         },
       );

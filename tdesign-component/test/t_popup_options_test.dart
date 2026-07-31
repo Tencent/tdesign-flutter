@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void main() {
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，4 个 builder 默认 sentinel', () {
-      final options = TPopupOptions(child: const SizedBox()).normalized();
+      final options = const TPopupOptions(child: SizedBox()).normalized();
       expect(options.placement, TPopupPlacement.bottom);
       expect(options.modal, isTrue);
       expect(options.useSafeArea, isTrue);
@@ -17,8 +17,8 @@ void main() {
     });
 
     test('showOverlay=false 且省略 closeOnOverlayClick 时默认按 false 解析', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         showOverlay: false,
       ).normalized();
       expect(options.closeOnOverlayClick, isFalse);
@@ -44,8 +44,8 @@ void main() {
 
       expectValid(
         '标准模态 + 默认蒙层关闭',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: true,
           modal: true,
         ),
@@ -53,8 +53,8 @@ void main() {
       );
       expectValid(
         '标准模态 + 显式禁止蒙层关闭',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: true,
           modal: true,
           closeOnOverlayClick: false,
@@ -63,8 +63,8 @@ void main() {
       );
       expectValid(
         '透明模态 + 默认不允许蒙层关闭',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: true,
         ),
@@ -72,8 +72,8 @@ void main() {
       );
       expectValid(
         '透明模态 + 显式 false 仍合法',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: true,
           closeOnOverlayClick: false,
@@ -82,8 +82,8 @@ void main() {
       );
       expectValid(
         '非模态浮层 + 默认不允许蒙层关闭',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: false,
         ),
@@ -91,8 +91,8 @@ void main() {
       );
       expectValid(
         '非模态浮层 + 显式 false 仍合法',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: false,
           closeOnOverlayClick: false,
@@ -102,8 +102,8 @@ void main() {
     });
 
     test('bottom 默认走内置三段式（useDefaultHeader）', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.bottom,
       ).normalized();
       expect(options.useDefaultHeader, isTrue);
@@ -114,8 +114,8 @@ void main() {
     });
 
     test('cancelBuilder / confirmBuilder 均为 null 时槽位隐藏', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.bottom,
         cancelBuilder: null,
         confirmBuilder: null,
@@ -126,8 +126,8 @@ void main() {
     });
 
     test('headerBuilder null 不显示头部', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.bottom,
         headerBuilder: null,
       ).normalized();
@@ -156,16 +156,16 @@ void main() {
     });
 
     test('center 默认 closeBuilder 为 sentinel（内置图标）', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.center,
       ).normalized();
       expect(options.usesDefaultClose, isTrue);
     });
 
     test('center closeBuilder=null 不显示关闭区', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         placement: TPopupPlacement.center,
         closeBuilder: null,
       ).normalized();
@@ -198,10 +198,10 @@ void main() {
     test('hasBuiltInHeader 内置三段中任一槽非 null 即 true', () {
       // titleWidget 单独存在
       expect(
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.bottom,
-          titleWidget: const Text('x'),
+          titleWidget: Text('x'),
           cancelBuilder: null,
           confirmBuilder: null,
         ).normalized().hasBuiltInHeader,
@@ -209,8 +209,8 @@ void main() {
       );
       // 仅 cancel 默认（其它 null）
       expect(
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.bottom,
           confirmBuilder: null,
         ).normalized().hasBuiltInHeader,
@@ -218,8 +218,8 @@ void main() {
       );
       // 完全无头部
       expect(
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.bottom,
           headerBuilder: null,
         ).normalized().hasBuiltInHeader,
@@ -227,8 +227,8 @@ void main() {
       );
       // 非 bottom 永远 false
       expect(
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.top,
         ).normalized().hasBuiltInHeader,
         isFalse,
@@ -238,8 +238,8 @@ void main() {
     test('assertPlacementParams debug 期对错位字段抛 FlutterError', () {
       // left 不该有 height
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.left,
           height: 100,
         ).assertPlacementParams(),
@@ -247,24 +247,24 @@ void main() {
       );
       // center 不该有 titleWidget（属于 bottom 头部字段）
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.center,
-          titleWidget: const Text('x'),
+          titleWidget: Text('x'),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           showOverlay: true,
           modal: false,
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           closeOnOverlayClick: true,
         ).assertPlacementParams(),
@@ -283,16 +283,16 @@ void main() {
 
       expectInvalid(
         '有蒙层但非模态（默认蒙层关闭值）',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: true,
           modal: false,
         ),
       );
       expectInvalid(
         '有蒙层但非模态（显式 false）',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: true,
           modal: false,
           closeOnOverlayClick: false,
@@ -300,8 +300,8 @@ void main() {
       );
       expectInvalid(
         '透明模态下显式要求蒙层关闭',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: true,
           closeOnOverlayClick: true,
@@ -309,8 +309,8 @@ void main() {
       );
       expectInvalid(
         '非模态浮层下显式要求蒙层关闭',
-        TPopupOptions(
-          child: const SizedBox(),
+        const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: false,
           closeOnOverlayClick: true,
@@ -320,26 +320,26 @@ void main() {
 
     test('assertPlacementParams 各 placement 的 inset 类型错位也抛错', () {
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.top,
-          inset: const TPopupBottomInset(left: 10),
+          inset: TPopupBottomInset(left: 10),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.right,
-          inset: const TPopupLeftInset(top: 10),
+          inset: TPopupLeftInset(top: 10),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.center,
-          inset: const TPopupTopInset(left: 10),
+          inset: TPopupTopInset(left: 10),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
@@ -348,11 +348,11 @@ void main() {
     test('assertPlacementParams 合法配置不抛错', () {
       // 各 placement 用对应合法字段
       expect(
-          () => TPopupOptions(child: const SizedBox()).assertPlacementParams(),
+          () => const TPopupOptions(child: SizedBox()).assertPlacementParams(),
           returnsNormally);
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.center,
           width: 200,
           height: 200,
@@ -360,17 +360,17 @@ void main() {
         returnsNormally,
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.left,
           width: 280,
-          inset: const TPopupLeftInset(top: 10, bottom: 10),
+          inset: TPopupLeftInset(top: 10, bottom: 10),
         ).assertPlacementParams(),
         returnsNormally,
       );
       expect(
-        () => TPopupOptions(
-          child: const SizedBox(),
+        () => const TPopupOptions(
+          child: SizedBox(),
           showOverlay: false,
           modal: false,
         ).assertPlacementParams(),
@@ -379,14 +379,14 @@ void main() {
     });
 
     test('copyWith 可更新 useSafeArea', () {
-      final options = TPopupOptions(child: const SizedBox())
+      final options = const TPopupOptions(child: SizedBox())
           .copyWith(useSafeArea: false);
       expect(options.useSafeArea, isFalse);
     });
 
     test('normalized 保留 useSafeArea', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         useSafeArea: false,
       ).normalized();
       expect(options.useSafeArea, isFalse);
@@ -431,8 +431,8 @@ void main() {
       });
 
       test('copyWith 未传 useSafeArea 时保留原值', () {
-        final original = TPopupOptions(
-          child: const SizedBox(),
+        const original = TPopupOptions(
+          child: SizedBox(),
           useSafeArea: false,
         );
         final copied = original.copyWith(height: 100);
@@ -441,8 +441,8 @@ void main() {
       });
 
       test('copyWith 变更 placement 时仍保留 useSafeArea', () {
-        final options = TPopupOptions(
-          child: const SizedBox(),
+        final options = const TPopupOptions(
+          child: SizedBox(),
           placement: TPopupPlacement.bottom,
           useSafeArea: false,
         ).copyWith(placement: TPopupPlacement.top);
@@ -452,8 +452,8 @@ void main() {
     });
 
     test('copyWith(closeOnOverlayClick: null) 可恢复为跟随 showOverlay 的默认值', () {
-      final options = TPopupOptions(
-        child: const SizedBox(),
+      final options = const TPopupOptions(
+        child: SizedBox(),
         showOverlay: false,
         closeOnOverlayClick: false,
       ).copyWith(closeOnOverlayClick: null);

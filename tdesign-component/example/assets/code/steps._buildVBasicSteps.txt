@@ -1,5 +1,5 @@
-
-  Widget _buildVBasicSteps(BuildContext context) {
+/// 垂直默认步骤条
+    Widget _buildVBasicSteps(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(title: 'Finish', content: 'Customize content'),
@@ -9,6 +9,6 @@
       ],
       // 垂直方向
       direction: TStepsDirection.vertical,
-      activeIndex: 1,
+      value: 1,
     );
   }

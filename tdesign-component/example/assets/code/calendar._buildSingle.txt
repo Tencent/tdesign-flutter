@@ -1,0 +1,6 @@
+Widget _buildSingle(BuildContext context) {
+    return TCalendar(
+      value: _singleValue,
+      onChanged: (value) => setState(() => _singleValue = value),
+    );
+  }

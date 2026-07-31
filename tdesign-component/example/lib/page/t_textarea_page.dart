@@ -1,260 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
+import '../base/example_widget.dart';
 
-class TTextareaPage extends StatefulWidget {
-  const TTextareaPage({Key? key}) : super(key: key);
-
-  @override
-  _TTextareaPageState createState() => _TTextareaPageState();
-}
-
-class _TTextareaPageState extends State<TTextareaPage> {
-  var controller = <TextEditingController>[];
-
-  @override
-  void initState() {
-    for (var i = 0; i < 20; i++) {
-      controller.add(TextEditingController());
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.forEach((element) {
-      element.dispose();
-    });
-    super.dispose();
-  }
+/// TTextarea 示例页。
+class TTextareaPage extends StatelessWidget {
+  const TTextareaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tTitle(),
-      desc: '用于多行文本信息输入。',
+      title: tTitle(context),
       exampleCodeGroup: 'textarea',
+      desc: 'TInput.multiline 的语义别名。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: '多行输入',
           children: [
-            ExampleItem(desc: '基础多文本输入框', builder: _basicType),
-            ExampleItem(desc: '带标题多文本输入框', builder: _basicTypeByTitle),
-            ExampleItem(desc: '自动增高多文本输入框', builder: _autoHeightType),
-            ExampleItem(desc: '设置字符数限制', builder: _maxLengthType),
-          ],
-        ),
-        ExampleModule(
-          title: '组件状态',
-          children: [
-            ExampleItem(desc: '禁用状态', builder: _disabledState),
-          ],
-        ),
-        ExampleModule(
-          title: '组件样式',
-          children: [
-            ExampleItem(desc: '竖排样式', builder: _verticalStyle),
-            ExampleItem(desc: '卡片样式', builder: _cardStyle),
-          ],
-        ),
-        ExampleModule(
-          title: '特殊样式',
-          children: [
-            ExampleItem(desc: '标签外置输入框', builder: _extensionStyle),
-            ExampleItem(desc: '自定义标题', builder: _setLabel),
-            ExampleItem(desc: '必填和辅助说明', builder: _setStatus),
+            ExampleItem(desc: '基础', builder: _buildBasic),
+            ExampleItem(desc: '标签与计数', builder: _buildLabel),
+            ExampleItem(desc: '只读', builder: _buildReadOnly),
           ],
         ),
       ],
-      test: [
-        ExampleItem(desc: '自定义宽度', center: false, builder: _setWidth),
-        ExampleItem(desc: '小尺寸', builder: _smallSize),
-      ],
+      test: const [],
     );
   }
 
-  @Demo(group: 'textarea')
-  Widget _basicType(BuildContext context) {
-    return TTextarea(
-      controller: controller[0],
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      onChanged: (value) {
-        setState(() {});
-      },
-    );
-  }
+  @ExampleCode(group: 'textarea')
+  Widget _buildBasic(BuildContext context) => const TTextarea(
+        hintText: '请输入内容',
+      );
 
-  @Demo(group: 'textarea')
-  Widget _basicTypeByTitle(BuildContext context) {
-    return TTextarea(
-      controller: controller[1],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      onChanged: (value) {},
-    );
-  }
+  @ExampleCode(group: 'textarea')
+  Widget _buildLabel(BuildContext context) => const TTextarea(
+        label: '备注',
+        hintText: '请输入备注',
+        maxLength: 200,
+        minLines: 3,
+        maxLines: 6,
+      );
 
-  @Demo(group: 'textarea')
-  Widget _autoHeightType(BuildContext context) {
-    return TTextarea(
-      controller: controller[2],
-      hintText: '请输入文字',
-      minLines: 1,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _maxLengthType(BuildContext context) {
-    return TTextarea(
-      controller: controller[3],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _disabledState(BuildContext context) {
-    return TTextarea(
-      controller: controller[4],
-      label: '标签文字',
-      hintText: '不可编辑文字',
-      maxLines: 4,
-      minLines: 4,
-      readOnly: true,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _verticalStyle(BuildContext context) {
-    return TTextarea(
-      controller: controller[5],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _cardStyle(BuildContext context) {
-    return TTextarea(
-      controller: controller[6],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      decoration: BoxDecoration(
-        color: TTheme.of(context).bgColorContainer,
-        borderRadius:
-            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
-      ),
-      margin: EdgeInsets.only(
-          right: TTheme.of(context).spacer16,
-          left: TTheme.of(context).spacer16),
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _extensionStyle(BuildContext context) {
-    return TTextarea(
-      controller: controller[7],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      bordered: true,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _setWidth(BuildContext context) {
-    return TTextarea(
-      controller: controller[8],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      width: 200,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _setLabel(BuildContext context) {
-    return TTextarea(
-      controller: controller[9],
-      label: '地址信息',
-      // labelWidth: 100,
-      labelIcon: Icon(
-        TIcons.location,
-        size: 20,
-        color: TTheme.of(context).textColorPrimary,
-      ),
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _setStatus(BuildContext context) {
-    return TTextarea(
-      controller: controller[10],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      required: true,
-      additionInfo: '辅助说明',
-      onChanged: (value) {},
-    );
-  }
-
-  @Demo(group: 'textarea')
-  Widget _smallSize(BuildContext context) {
-    return TTextarea(
-      controller: controller[11],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      size: TInputSize.small,
-      onChanged: (value) {},
-    );
-  }
+  @ExampleCode(group: 'textarea')
+  Widget _buildReadOnly(BuildContext context) => const TTextarea(
+        initialValue: '只读内容',
+        readOnly: true,
+      );
 }

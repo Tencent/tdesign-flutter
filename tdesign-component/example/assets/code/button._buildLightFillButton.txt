@@ -1,10 +1,9 @@
-
-  TButton _buildLightFillButton(BuildContext context) {
-    return const TButton(
-      text: '填充按钮',
+TButton _buildLightFillButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.light,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: _onTap,
     );
   }

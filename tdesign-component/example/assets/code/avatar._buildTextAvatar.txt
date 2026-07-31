@@ -1,19 +1,17 @@
-
-  Widget _buildTextAvatar(BuildContext context) {
+/// 字符头像
+    Widget _buildTextAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.customText,
-          text: 'A',
+          child: Text('A'),
         ),
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          type: TAvatarType.customText,
-          shape: TAvatarShape.square,
-          text: 'A',
+          variant: TAvatarVariant.square,
+          child: Text('A'),
         ),
       ],
     );

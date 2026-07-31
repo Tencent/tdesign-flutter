@@ -1,8 +1,7 @@
-
-  Widget _buildCardCollapse(BuildContext context) {
+Widget _buildCardCollapse(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.card,
-      expansionCallback: (int index, bool isExpanded) {
+      variant: TCollapseVariant.card,
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _cardStyleData[index].isExpanded = !isExpanded;
         });

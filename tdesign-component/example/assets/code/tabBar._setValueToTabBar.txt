@@ -1,0 +1,37 @@
+Widget _setValueToTabBar(BuildContext context) {
+    return SizedBox(
+      height: 220,
+      child: Column(
+        children: [
+          Expanded(
+              child: PageView(
+            children: const [
+              Center(child: TText('页面1，手指左滑查看页面2')),
+              Center(child: TText('页面2，手指右滑查看页面1')),
+            ],
+            onPageChanged: (index) {
+              setState(() {
+                _tabBarValue = index;
+              });
+            },
+          )),
+          _ExampleTabBar(
+              variant: TTabBarVariant.icon, // 设置选中索引
+              value: _tabBarValue,
+              onChanged: (value) {
+                setState(() => _tabBarValue = value);
+              },
+              useVerticalDivider: true,
+              navigationTabs: List.generate(2, (index) {
+                final label = '标签${index + 1}';
+                return TTabBarItemConfig(
+                    selectedIcon: _selectedIcon,
+                    unselectedIcon: _unSelectedIcon,
+                    onTap: () {
+                      onTapTab(context, label);
+                    });
+              }))
+        ],
+      ),
+    );
+  }

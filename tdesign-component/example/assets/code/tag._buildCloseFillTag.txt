@@ -1,10 +1,12 @@
-
-  Widget _buildCloseFillTag(BuildContext context) {
-    return TTag(
-      '标签文字',
-      needCloseIcon: true,
-      onCloseTap: () {
-        TToast.showText('点击关闭', context: context);
-      },
+Widget _buildCloseFillTag(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: _closableTags
+          .map((text) => TTag(
+                text,
+                needCloseIcon: true,
+                onCloseTap: () => setState(() => _closableTags.remove(text)),
+              ))
+          .toList(),
     );
   }

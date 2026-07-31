@@ -35,12 +35,12 @@ class _TestPageState extends State<TestPage> {
         contentWidget: Column(
           children: [
             TInput(
-              leftIcon: const Icon(TIcons.device),
+              prefix: const Icon(TIcons.device),
               controller: _searchNameController,
               hintText: '设备名称',
             ),
             TInput(
-              leftIcon: const Icon(TIcons.pen_quill),
+              prefix: const Icon(TIcons.pen_quill),
               controller: _searchRemarkController,
               hintText: '设备备注',
             ),
@@ -58,7 +58,7 @@ class _TestPageState extends State<TestPage> {
       body: Center(
         child: TButton(
           child: const Text('显示问题弹窗'),
-          onTap: _showProblemDialog,
+          onPressed: _showProblemDialog,
         ),
       ),
     );

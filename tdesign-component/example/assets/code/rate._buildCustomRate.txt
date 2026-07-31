@@ -1,0 +1,13 @@
+Widget _buildCustomRate(BuildContext context) {
+    return _rateCell(
+      title: '自定义图标',
+      rate: TRate(
+        value: _customValue,
+        icon: (filled) => Icon(
+          filled ? Icons.favorite : Icons.favorite_border,
+          color: filled ? Colors.red : context.tTheme.bgColorComponent,
+        ),
+        onChanged: (value) => setState(() => _customValue = value),
+      ),
+    );
+  }

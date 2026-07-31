@@ -1,5 +1,4 @@
-
-  Widget _imageCircle(BuildContext context) {
+Widget _imageCircle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -7,14 +6,12 @@
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '圆形',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          assetUrl: 'assets/img/image.png',
-          width: 72,
-          height: 72,
-          type: TImageType.circle,
+          src: 'assets/img/image.png',
+          variant: TImageVariant.circle,
         ),
       ],
     );

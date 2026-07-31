@@ -51,12 +51,14 @@ class TPopupOptions {
     this.radius,
     this.backgroundColor,
     this.showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     this.overlayColor,
     this.overlayOpacity,
     this.modal = true,
     this.destroyOnClose = false,
-    this.animationDuration = const Duration(milliseconds: 240),
+    this.animationDuration,
     this.headerBuilder = _kPopupDefaultHeader,
     this.titleWidget,
     this.cancelBuilder = _kPopupDefaultCancel,
@@ -86,12 +88,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -138,12 +142,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -186,12 +192,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -233,12 +241,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -280,12 +290,14 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     bool showOverlay = true,
+
+    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
     bool? closeOnOverlayClick,
     Color? overlayColor,
     double? overlayOpacity,
     bool modal = true,
     bool destroyOnClose = false,
-    Duration animationDuration = const Duration(milliseconds: 240),
+    Duration? animationDuration,
     VoidCallback? onOpen,
     VoidCallback? onOpened,
     VoidCallback? onClose,
@@ -324,9 +336,13 @@ class TPopupOptions {
   final TPopupPlacement placement;
 
   /// 宽度；[TPopupPlacement.left]、[TPopupPlacement.right]、[TPopupPlacement.center] 生效。
+  ///
+  /// left / right 未传时默认 280；center 未传时默认 240。
   final double? width;
 
   /// 高度；[TPopupPlacement.top]、[TPopupPlacement.bottom] 生效；[TPopupPlacement.center] 约束面板尺寸。
+  ///
+  /// top / bottom 未传时默认 240；center 未传时默认 240。
   final double? height;
 
   /// 交叉轴边缘留白；具体类型由 [placement] 决定。
@@ -374,7 +390,7 @@ class TPopupOptions {
   final bool destroyOnClose;
 
   /// 打开/关闭动画时长。
-  final Duration animationDuration;
+  final Duration? animationDuration;
 
   /// bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。
   ///
@@ -419,10 +435,10 @@ class TPopupOptions {
   /// 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。
   final VoidCallback? onOverlayClick;
 
-  /// 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。
+  /// 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。
   ///
   /// 为 true 时通过 [Positioned] 偏移使面板不侵入刘海、Home Indicator 等区域；
-  /// 与 [inset] 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。
+  /// top/bottom/left/right 还会与对应 [inset] 叠加。设为 false 可贴满屏幕边缘。
   final bool useSafeArea;
 
   /// 返回配置副本。
@@ -518,7 +534,6 @@ class TPopupOptions {
     );
   }
 
-  /// {@nodoc}
   TPopupOptions normalized() {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;
@@ -553,42 +568,33 @@ class TPopupOptions {
     );
   }
 
-  /// {@nodoc}
   bool get usesDefaultHeader => _isPopupDefaultHeader(headerBuilder);
 
-  /// {@nodoc}
   bool get usesDefaultCancel => _isPopupDefaultCancel(cancelBuilder);
 
-  /// {@nodoc}
   bool get usesDefaultConfirm => _isPopupDefaultConfirm(confirmBuilder);
 
-  /// {@nodoc}
   bool get usesDefaultClose => _isPopupDefaultClose(closeBuilder);
 
-  /// {@nodoc}
   bool get useCustomHeader =>
       placement == TPopupPlacement.bottom &&
       headerBuilder != null &&
       !_isPopupDefaultHeader(headerBuilder);
 
-  /// {@nodoc}
   bool get useDefaultHeader =>
       placement == TPopupPlacement.bottom &&
       _isPopupDefaultHeader(headerBuilder);
 
-  /// {@nodoc}
   bool get showCancelSlot =>
       placement == TPopupPlacement.bottom &&
       useDefaultHeader &&
       cancelBuilder != null;
 
-  /// {@nodoc}
   bool get showConfirmSlot =>
       placement == TPopupPlacement.bottom &&
       useDefaultHeader &&
       confirmBuilder != null;
 
-  /// {@nodoc}
   bool get hasBuiltInHeader {
     if (placement != TPopupPlacement.bottom || headerBuilder == null) {
       return false;
@@ -601,7 +607,6 @@ class TPopupOptions {
         titleWidget != null;
   }
 
-  /// {@nodoc}
   void assertPlacementParams() {
     assert(() {
       final err = _validatePlacementParams();

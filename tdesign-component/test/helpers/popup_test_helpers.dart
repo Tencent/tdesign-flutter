@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -15,8 +17,8 @@ Widget wrapPopupTest(
   bindPopupTestResource(resolved);
   return MaterialApp(
     locale: resolved.locale,
-    home: TTheme(
-      data: TThemeData.defaultData(),
+    home: Theme(
+      data: ThemeData(extensions: [TThemeData.defaultData()]),
       child: Scaffold(body: child),
     ),
   );
@@ -43,7 +45,7 @@ Future<void> openPopup(
   await tester.tap(find.text('open'));
 }
 
-/// 注入 [MediaQuery.padding]，用于安全区相关测试。
+/// 注入 MediaQuery.padding，用于安全区相关测试。
 Widget wrapPopupTestWithMediaPadding(
   Widget child, {
   EdgeInsets mediaPadding = EdgeInsets.zero,
@@ -59,8 +61,8 @@ Widget wrapPopupTestWithMediaPadding(
         child: appChild ?? const SizedBox.shrink(),
       );
     },
-    home: TTheme(
-      data: TThemeData.defaultData(),
+    home: Theme(
+      data: ThemeData(extensions: [TThemeData.defaultData()]),
       child: Scaffold(body: child),
     ),
   );

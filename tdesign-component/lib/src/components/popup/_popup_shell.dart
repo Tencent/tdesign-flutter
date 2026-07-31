@@ -14,7 +14,7 @@ class PopupShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     final radius = options.radius ?? theme.radiusExtraLarge;
     final backgroundColor = options.backgroundColor ?? theme.bgColorContainer;
     final borderRadius = _borderRadius(options.placement, radius);
@@ -44,8 +44,8 @@ class PopupShell extends StatelessWidget {
       );
     }
     return SizedBox(
-      width: options.width,
-      height: options.height,
+      width: options.width ?? PopupLayout.defaultCenterWidth,
+      height: options.height ?? PopupLayout.defaultCenterHeight,
       child: panel,
     );
   }
@@ -55,29 +55,25 @@ class PopupShell extends StatelessWidget {
     BorderRadius? borderRadius,
     Color background,
   ) {
-    final useExpanded = options.placement == TPopupPlacement.left ||
-        options.placement == TPopupPlacement.right ||
-        options.height != null;
-
+    // 四个边缘方向现在都有固定的默认尺寸，主体始终填满剩余空间；
+    // 显式尺寸与默认尺寸的内容布局保持一致。
     final body = options.placement == TPopupPlacement.bottom
         ? Column(
-            mainAxisSize: useExpanded ? MainAxisSize.max : MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               PopupHeader(
                 options: options,
                 onCloseWithTrigger: onCloseWithTrigger,
               ),
-              if (useExpanded) Expanded(child: options.child) else options.child,
+              Expanded(child: options.child),
             ],
           )
-        : (useExpanded
-            ? Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [Expanded(child: options.child)],
-              )
-            : options.child);
+        : Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [Expanded(child: options.child)],
+          );
 
     return Container(
       decoration: BoxDecoration(

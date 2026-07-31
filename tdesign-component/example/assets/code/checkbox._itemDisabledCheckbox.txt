@@ -1,0 +1,11 @@
+Widget _itemDisabledCheckbox(BuildContext context) {
+    return TCheckboxGroup<String>(
+      value: const ['b'],
+      options: const [
+        TCheckboxOption(value: 'a', label: '正常选项'),
+        TCheckboxOption(value: 'b', label: '禁用-已选', disabled: true),
+        TCheckboxOption(value: 'c', label: '禁用-未选', disabled: true),
+      ],
+      onChanged: (value) {},
+    );
+  }

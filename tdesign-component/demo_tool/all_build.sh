@@ -33,9 +33,9 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # steps
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/steps" --name TSteps,TStepsItemData --folder-name steps --output "$PARENT_DIR/example/assets/api/" --only-api
 # tabbar
-dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/tabbar/t_bottom_tab_bar.dart" --name TBottomTabBar,BadgeConfig,TBottomTabBarTabConfig,TBottomTabBarPopUpBtnConfig,TBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tab-bar --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/tabbar" --name TTabBar,TTabBarBadgeConfig,TTabBarItemConfig,TTabBarPopUpBtnConfig,TTabBarPopUpShapeConfig,TTabBarMenuItem --folder-name tab-bar --output "$PARENT_DIR/example/assets/api/" --only-api
 # tabs
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/tabs" --name TTabBar,TTab,TTabBarView --folder-name tabs --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/tabs" --name TTabsBar,TTab,TTabsBarView,TTabsBarIndicator --folder-name tabs --output "$PARENT_DIR/example/assets/api/" --only-api
 
 
 # 输入
@@ -63,7 +63,7 @@ dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/compone
 # slider
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/slider/t_slider.dart" --name TSlider,TRangeSlider,TSliderThemeData --folder-name slider --output "$PARENT_DIR/example/assets/api/" --only-api
 # stepper
-dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/stepper/t_stepper.dart" --name TStepper --folder-name stepper --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/stepper" --name TStepper,TStepperThemeData,TStepperSize,TStepperVariant --folder-name stepper --output "$PARENT_DIR/example/assets/api/" --only-api
 # switch
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/switch/t_switch.dart" --name TSwitch --folder-name switch --output "$PARENT_DIR/example/assets/api/" --only-api
 # textarea
@@ -102,11 +102,11 @@ dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/compone
 # result
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/result/t_result.dart" --name TResult --folder-name result --output "$PARENT_DIR/example/assets/api/" --only-api
 # skeleton
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/skeleton" --name TSkeleton,TSkeletonRowColStyle,TSkeletonRowCol,TSkeletonRowColObjStyle,TSkeletonRowColObj --folder-name skeleton --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/skeleton" --name TSkeleton,TSkeletonLayout,TSkeletonBlockStyle,TSkeletonBlock --folder-name skeleton --output "$PARENT_DIR/example/assets/api/" --only-api
 
 # sticky
 # swiper
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swiper" --name TSwiperPagination,TPageTransformer --folder-name swiper --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swiper" --name TSwiper,TSwiperController,TSwiperThemeData,TSwiperPaginationVariant,TSwiperPaginationPlacement,TSwiperPaginationItemDetails,TSwiperPageEffect --folder-name swiper --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # table
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/table" --name TTable,TTableCol,TTableEmpty --folder-name table --output "$PARENT_DIR/example/assets/api/" --only-api
 # tag
@@ -116,9 +116,9 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 
 # 反馈
 # action_sheet
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/action_sheet" --name TActionSheetItem,TActionSheet --folder-name action-sheet --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/action_sheet" --name TActionSheetItem,TActionSheet,TActionSheetThemeData,TActionSheetAlign --folder-name action-sheet --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # dialog
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dialog" --name TAlertDialog,TConfirmDialog,TDialogButtonOptions,TDialogButtonStyle,TDialogScaffold,TDialogTitle,TDialogContent,TDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDialogButton,TDialogImagePosition,TImageDialog,TInputDialog --folder-name dialog --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dialog" --name TDialog,TDialogAction,TDialogActionRole,TConfirmDialog,TDialogThemeData --folder-name dialog --output "$PARENT_DIR/example/assets/api/" --only-api
 # dropdown_menu
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/dropdown_menu" --name TDropdownMenu,TDropdownMenuDirection,TDropdownItem,TDropdownItemOption,TDropdownItemController --folder-name dropdown-menu --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # loading
@@ -135,7 +135,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 # refresh
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/refresh/t_refresh_header.dart" --name TRefreshHeader --folder-name pull-down-refresh --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # swipecell
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swipe_cell" --name TSwipeAction,TSwipeAutoClose,TSwipeCell,TSwipePanel --folder-name swipe-cell --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/swipe_cell" --name TSwipeCell,TSwipeCellPanel,TSwipeCellAction,TSwipeCellSide,TSwipeCellChanged,SwipeMotion --folder-name swipe-cell --output "$PARENT_DIR/example/assets/api/" --only-api --get-comments
 # toast
 dart run tdesign_flutter_tools:main generate --file "$PARENT_DIR/lib/src/components/toast/t_toast.dart" --name TToast --folder-name toast --output "$PARENT_DIR/example/assets/api/" --only-api
 

@@ -1,0 +1,74 @@
+Widget _buildCalendarTime(BuildContext context) {
+    return TCell(
+      key: const Key('calendar-time-trigger'),
+      title: const Text('日历 + 时间'),
+      note: Text(_formatDateTime(_calendarTimeSelected)),
+      arrow: true,
+      onTap: () {
+        var draftDate = [
+          DateTime(
+            _calendarTimeSelected.year,
+            _calendarTimeSelected.month,
+            _calendarTimeSelected.day,
+          ),
+        ];
+        var draftTime = TDateTimePickerValue(
+          hour: _calendarTimeSelected.hour,
+          minute: _calendarTimeSelected.minute,
+        );
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height,
+            titleWidget: const TText('选择日期和时间'),
+            child: StatefulBuilder(
+              builder: (context, setPopupState) => Column(
+                key: const Key('calendar-time-popup'),
+                children: [
+                  Expanded(
+                    child: TCalendar(
+                      key: const Key('calendar-time-calendar'),
+                      value: draftDate,
+                      anchorDate: draftDate.first,
+                      onChanged: (value) {
+                        setPopupState(() {
+                          draftDate = List<DateTime>.of(value);
+                        });
+                      },
+                    ),
+                  ),
+                  const TDivider(),
+                  TDateTimePicker(
+                    key: const Key('calendar-time-wheel'),
+                    mode: DateTimePickerMode(timeMode: TimeMode.minute),
+                    value: draftTime,
+                    onChanged: (value) {
+                      setPopupState(() => draftTime = value);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            onVisibleChange: (visible, trigger) {
+              if (visible ||
+                  trigger != TPopupTrigger.confirm ||
+                  !mounted ||
+                  draftDate.isEmpty) {
+                return;
+              }
+              final date = draftDate.first;
+              setState(() {
+                _calendarTimeSelected = DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  draftTime.hour ?? _calendarTimeSelected.hour,
+                  draftTime.minute ?? _calendarTimeSelected.minute,
+                );
+              });
+            },
+          ),
+        );
+      },
+    );
+  }

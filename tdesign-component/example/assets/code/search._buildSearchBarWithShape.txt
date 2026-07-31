@@ -1,28 +1,27 @@
-
-  Widget _buildSearchBarWithShape(BuildContext context) {
+Widget _buildSearchBarWithShape(BuildContext context) {
     return Column(
-      // spacing: 16,
       children: [
         TSearchBar(
-          placeHolder: '搜索预设文案',
-          // 方形
-          style: TSearchStyle.square,
-          onTextChanged: (String text) {
+          hintText: '搜索预设文案',
+          onChanged: (String text) {
             setState(() {
               inputText = text;
             });
           },
         ),
         const SizedBox(height: 16),
-        TSearchBar(
-          placeHolder: '搜索预设文案',
-          // 圆形
-          style: TSearchStyle.round,
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSearchBarThemeData(variant: TSearchBarVariant.round),
+          ),
+          child: TSearchBar(
+            hintText: '搜索预设文案',
+            onChanged: (String text) {
+              setState(() {
+                inputText = text;
+              });
+            },
+          ),
         ),
       ],
     );

@@ -1,0 +1,9 @@
+Widget _buildDetail(BuildContext context) {
+    return const TCell(
+      title: Text('单元格标题'),
+      subtitle: Text('描述信息'),
+      note: Text('辅助信息'),
+      required: true,
+      arrow: true,
+    );
+  }

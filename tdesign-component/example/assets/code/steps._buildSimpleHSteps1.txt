@@ -1,5 +1,5 @@
-
-  Widget _buildSimpleHSteps1(BuildContext context) {
+/// 水平简略步骤条1
+    Widget _buildSimpleHSteps1(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(title: 'Steps1', content: 'Content1'),
@@ -7,7 +7,7 @@
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 0,
+      value: 0,
       // 简略模式
       simple: true,
     );

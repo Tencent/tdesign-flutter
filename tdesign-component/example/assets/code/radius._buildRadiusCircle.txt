@@ -1,12 +1,9 @@
-
-  Widget _buildRadiusCircle(BuildContext context) {
+Widget _buildRadiusCircle(BuildContext context) {
     //  圆形与胶囊型一致，如果长宽一致即是圆形
     return Container(
-      width: 50,
-      height: 50,
       decoration: BoxDecoration(
-        color: TTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TTheme.of(context).radiusCircle),
+        color: context.tTheme.brandNormalColor,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
       ),
     );
   }

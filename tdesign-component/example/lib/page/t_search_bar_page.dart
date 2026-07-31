@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TSearchBarPage extends StatefulWidget {
-  const TSearchBarPage({Key? key}) : super(key: key);
+  const TSearchBarPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TSearchBarPageState();
@@ -14,7 +14,13 @@ class TSearchBarPage extends StatefulWidget {
 class _TSearchBarPageState extends State<TSearchBarPage> {
   String? inputText;
   String? searchText;
-  TextEditingController inputController = TextEditingController();
+  final TextEditingController inputController = TextEditingController();
+
+  @override
+  void dispose() {
+    inputController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +42,17 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
         ]),
       ],
       test: [
-        ExampleItem(desc: '获取焦点后显示自定义操作按钮', builder: _buildSearchBarWithAction),
-        ExampleItem(
-            desc: '自定义获取焦点后显示按钮', builder: _buildFocusSearchBarWithAction),
+        ExampleItem(desc: '外部按钮触发搜索', builder: _buildSearchBarWithAction),
+        ExampleItem(desc: '自定义取消按钮文案', builder: _buildFocusSearchBarWithAction),
       ],
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildDefaultSearchBar(BuildContext context) {
     return TSearchBar(
-      placeHolder: '搜索预设文案',
-      onTextChanged: (String text) {
+      hintText: '搜索预设文案',
+      onChanged: (String text) {
         setState(() {
           inputText = text;
         });
@@ -55,96 +60,108 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildFocusSearchBar(BuildContext context) {
     return const TSearchBar(
-      placeHolder: '搜索预设文案',
+      hintText: '搜索预设文案',
       needCancel: true,
       autoFocus: true,
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildSearchBarWithShape(BuildContext context) {
     return Column(
-      // spacing: 16,
       children: [
         TSearchBar(
-          placeHolder: '搜索预设文案',
-          // 方形
-          style: TSearchStyle.square,
-          onTextChanged: (String text) {
+          hintText: '搜索预设文案',
+          onChanged: (String text) {
             setState(() {
               inputText = text;
             });
           },
         ),
         const SizedBox(height: 16),
-        TSearchBar(
-          placeHolder: '搜索预设文案',
-          // 圆形
-          style: TSearchStyle.round,
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSearchBarThemeData(variant: TSearchBarVariant.round),
+          ),
+          child: TSearchBar(
+            hintText: '搜索预设文案',
+            onChanged: (String text) {
+              setState(() {
+                inputText = text;
+              });
+            },
+          ),
         ),
       ],
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildCenterSearchBar(BuildContext context) {
-    return TSearchBar(
-      placeHolder: '搜索预设文案',
-      alignment: TSearchAlignment.center,
-      onTextChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TSearchBarThemeData(textAlignment: TSearchBarAlignment.center),
+      ),
+      child: TSearchBar(
+        hintText: '搜索预设文案',
+        onChanged: (String text) {
+          setState(() {
+            inputText = text;
+          });
+        },
+      ),
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildSearchBarWithAction(BuildContext context) {
     return Column(
-      // spacing: 16,
       children: [
-        TSearchBar(
-          placeHolder: '搜索预设文案',
-          alignment: TSearchAlignment.left,
-          action: '搜索',
-          onActionClick: (String text) {
-            setState(() {
-              searchText = text;
-            });
-          },
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
+        Row(
+          children: [
+            Expanded(
+              child: TSearchBar(
+                hintText: '搜索预设文案',
+                controller: inputController,
+                onChanged: (String text) {
+                  setState(() {
+                    inputText = text;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            TButton(
+              child: const Text('搜索'),
+              onPressed: () {
+                setState(() {
+                  searchText = inputController.text;
+                });
+              },
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.only(left: 15),
           alignment: Alignment.centerLeft,
           child: TText('搜索框输入的内容：${searchText ?? ''}'),
-        )
+        ),
       ],
     );
   }
 
-  @Demo(group: 'search')
+  @ExampleCode(group: 'search')
   Widget _buildFocusSearchBarWithAction(BuildContext context) {
     return TSearchBar(
-      placeHolder: '搜索预设文案',
-      action: '搜索',
+      hintText: '搜索预设文案',
       needCancel: true,
+      cancelText: '关闭',
       controller: inputController,
-      onActionClick: (value) {
+      onCancelPressed: () {
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,

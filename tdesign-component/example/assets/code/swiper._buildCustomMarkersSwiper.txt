@@ -1,0 +1,15 @@
+Widget _buildCustomMarkersSwiper(BuildContext context) => _buildSwiper(
+        context,
+        pagination: TSwiperPaginationVariant.dots,
+        paginationItemBuilder: (context, details) => AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          width: details.isActive ? 20 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: details.isActive
+                ? context.tTheme.brandNormalColor
+                : context.tTheme.bgColorComponentHover,
+            borderRadius: BorderRadius.circular(3),
+          ),
+        ),
+      );

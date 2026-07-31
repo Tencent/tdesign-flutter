@@ -1,4 +1,3 @@
-
 Widget _scrollNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',

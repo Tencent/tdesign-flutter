@@ -1,0 +1,11 @@
+Widget _buildDraggableFab(BuildContext context) {
+    return _buildPageDemo(
+      fab: TFab(
+        right: 16,
+        bottom: 16,
+        draggable: TFabDragAxis.all,
+        magnet: TFabMagnet.right,
+        onPressed: _onFabPressed,
+      ),
+    );
+  }

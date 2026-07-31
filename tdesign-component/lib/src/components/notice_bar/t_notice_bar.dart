@@ -1,47 +1,49 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
+import '../text/t_text.dart';
+import 't_notice_bar_theme_data.dart';
 
+/// 公告栏点击区域
+enum TNoticeBarTapTarget {
+  /// 左侧图标
+  prefix,
+
+  /// 公告内容
+  content,
+
+  /// 右侧图标
+  suffix,
+}
+
+/// 公告栏
 class TNoticeBar extends StatefulWidget {
   const TNoticeBar({
     super.key,
-    this.content,
-    this.context,
-    this.style,
+    this.content = '',
+    this.items = const <String>[],
     this.left,
     this.right,
-    this.speed = 50,
-    this.interval = 3000,
-    this.marquee = false,
-    this.direction = Axis.horizontal,
-    this.theme = TNoticeBarTheme.info,
     this.prefixIcon,
     this.suffixIcon,
-    this.onTap,
-    this.height = 22,
+    this.direction = Axis.horizontal,
     this.maxLines = 1,
-  })  : assert(content == null || content is String || content is List<String>,
-            'content must be String or List<String>'),
-        assert(speed == null || speed >= 0, 'speed must not be less than 0'),
-        assert(interval == null || interval >= 0,
-            'interval must not be less than 0');
+    this.marquee = false,
+    this.speed = 50,
+    this.interval = const Duration(seconds: 3),
+    this.onPressed,
+  }) : assert(speed > 0, 'speed must be greater than zero'),
+       assert(maxLines > 0, 'maxLines must be greater than zero');
 
-  /// 文本内容（请使用content属性）
-  @deprecated
-  final dynamic context;
+  /// 单条公告内容
+  final String content;
 
-  /// 文本内容（字符串或字符串数组等）
-  final dynamic content;
-
-  /// 公告栏样式 [TNoticeBarStyle]
-  final TNoticeBarStyle? style;
+  /// 多条公告内容，主要用于垂直轮播
+  final List<String> items;
 
   /// 左侧内容（自定义左侧内容，优先级高于prefixIcon）
   final Widget? left;
@@ -49,35 +51,29 @@ class TNoticeBar extends StatefulWidget {
   /// 右侧内容（自定义右侧内容，优先级高于suffixIcon）
   final Widget? right;
 
-  /// 跑马灯效果
-  final bool? marquee;
-
-  /// 滚动速度
-  final double? speed;
-
-  /// 步进滚动间隔时间（毫秒）
-  final int? interval;
-
-  /// 滚动方向
-  final Axis? direction;
-
-  /// 主题
-  final TNoticeBarTheme? theme;
-
-  /// 左侧图标
+  /// 左侧图标；[left] 非空时不渲染。
   final IconData? prefixIcon;
 
-  /// 右侧图标
+  /// 右侧图标；[right] 非空时不渲染。
   final IconData? suffixIcon;
 
-  /// 点击事件
-  final ValueChanged? onTap;
-
-  /// 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性）
-  final double height;
+  /// 滚动方向
+  final Axis direction;
 
   /// 文本行数（仅静态有效）
-  final int? maxLines;
+  final int maxLines;
+
+  /// 是否启用滚动展示
+  final bool marquee;
+
+  /// 每秒滚动的逻辑像素
+  final double speed;
+
+  /// 垂直轮播的切换间隔
+  final Duration interval;
+
+  /// 点击事件
+  final ValueChanged<TNoticeBarTapTarget>? onPressed;
 
   @override
   State<StatefulWidget> createState() => _TNoticeBarState();
@@ -88,43 +84,78 @@ class _TNoticeBarState extends State<TNoticeBar> {
   Timer? _timer;
 
   Size? _size;
-  TNoticeBarStyle? _style;
-  Color? _backgroundColor;
+  late TNoticeBarThemeData _resolved;
 
   final GlobalKey _key = GlobalKey();
   final GlobalKey _contentKey = GlobalKey();
 
-  dynamic _content;
+  List<String> get _contentList =>
+      widget.items.isNotEmpty ? widget.items : <String>[widget.content];
 
   @override
   void initState() {
-    /// todo 初始化内容数据，兼用旧版本，后续版本待移除
-    _content = widget.content ?? widget.context;
-
     super.initState();
     _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((time) {
-      if (widget.marquee == true) {
+    _scheduleMarqueeStart();
+  }
+
+  TNoticeBarThemeData get _theme {
+    final ext = Theme.of(context).extension<TNoticeBarThemeData>();
+    return (ext ?? const TNoticeBarThemeData()).resolve(context);
+  }
+
+  bool get _effectiveMarquee => widget.marquee;
+
+  double get _effectiveSpeed =>
+      widget.speed.isFinite && widget.speed > 0 ? widget.speed : 50;
+
+  Duration get _effectiveInterval => widget.interval;
+
+  double get _effectiveHeight => _theme.height ?? 22;
+
+  EdgeInsetsGeometry get _effectivePadding =>
+      _theme.padding ?? TNoticeBarThemeData.defaultPadding;
+
+  void _init() {
+    _resolved = _theme;
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _scrollController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant TNoticeBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.content != widget.content ||
+        oldWidget.items != widget.items ||
+        oldWidget.direction != widget.direction ||
+        oldWidget.maxLines != widget.maxLines ||
+        oldWidget.marquee != widget.marquee ||
+        oldWidget.speed != widget.speed ||
+        oldWidget.interval != widget.interval) {
+      _restartMarquee();
+    }
+  }
+
+  void _scheduleMarqueeStart() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _effectiveMarquee) {
         _startTimer();
       }
     });
   }
 
-  void _init() {
-    // 初始化样式及左右widget
-    if (widget.style != null) {
-      _style = widget.style;
-    } else {
-      _style = TNoticeBarStyle.generateTheme(context, theme: widget.theme);
-    }
-    _backgroundColor = _style!.backgroundColor;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+  void _restartMarquee() {
     _timer?.cancel();
-    _scrollController?.dispose();
+    _timer = null;
+    if (!mounted) {
+      return;
+    }
+    _scheduleMarqueeStart();
   }
 
   void _startTimer() {
@@ -136,35 +167,63 @@ class _TNoticeBarState extends State<TNoticeBar> {
   }
 
   void _scroll() {
+    final controller = _scrollController;
+    if (!mounted || controller == null || !controller.hasClients) {
+      return;
+    }
     var scrollDistance =
-        _getContextWidth() + (_size!.width - _style!.getPadding.horizontal);
-    var remainder = scrollDistance % widget.speed!;
-    _scrollController!.jumpTo(0);
-    var offset = 0.0 + widget.speed!;
-    _scrollController!.animateTo(offset,
-        duration: const Duration(seconds: 1), curve: Curves.linear);
+        _getContextWidth() + (_size!.width - _effectivePadding.horizontal);
+    var remainder = scrollDistance % _effectiveSpeed;
+    controller.jumpTo(0);
+    var offset = 0.0 + _effectiveSpeed;
+    controller.animateTo(
+      offset,
+      duration: const Duration(seconds: 1),
+      curve: Curves.linear,
+    );
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (!mounted ||
+          _scrollController == null ||
+          !_scrollController!.hasClients) {
+        timer.cancel();
+        return;
+      }
       if (offset < scrollDistance - remainder) {
-        offset += widget.speed!;
-        await _scrollController!.animateTo(offset,
-            duration: const Duration(seconds: 1), curve: Curves.linear);
+        offset += _effectiveSpeed;
+        await _scrollController!.animateTo(
+          offset,
+          duration: const Duration(seconds: 1),
+          curve: Curves.linear,
+        );
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
       } else {
-        // 剩余距离小于50 先滚动这部分 然后滚动剩余部分
-        // 剩余距离滚动所需时间
-        var time = (remainder / widget.speed! * 1000).round();
-        // 滚动最后一部分（触底）
-        await _scrollController!.animateTo(scrollDistance,
-            duration: Duration(milliseconds: time), curve: Curves.linear);
-        // 回到顶部（衔接）
-        _scrollController!.jumpTo(0);
-        // 修改起始位置
-        offset = widget.speed! - remainder;
-        // 计算新起点最后阶段滚动距离
-        remainder = (scrollDistance - offset) % widget.speed!;
-        // 滚动至新起点（弥补触底speed滚动长度）
-        await _scrollController!.animateTo(offset,
-            duration: Duration(milliseconds: 1000 - time),
-            curve: Curves.linear);
+        var time = (remainder / _effectiveSpeed * 1000)
+            .round(); // coverage:ignore-line
+        await _scrollController!.animateTo(
+          scrollDistance, // coverage:ignore-line
+          duration: Duration(milliseconds: time),
+          curve: Curves.linear,
+        ); // coverage:ignore-line
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
+        _scrollController!.jumpTo(0); // coverage:ignore-line
+        offset = _effectiveSpeed - remainder; // coverage:ignore-line
+        remainder =
+            (scrollDistance - offset) % _effectiveSpeed; // coverage:ignore-line
+        await _scrollController!.animateTo(
+          offset, // coverage:ignore-line
+          duration: Duration(milliseconds: 1000 - time), // coverage:ignore-line
+          curve: Curves.linear,
+        );
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
       }
     });
   }
@@ -172,35 +231,41 @@ class _TNoticeBarState extends State<TNoticeBar> {
   void _step() {
     var step = 0;
     var offset = 0.0;
-    _timer = Timer.periodic(Duration(milliseconds: widget.interval!), (timer) {
-      var time = (widget.height / widget.speed! * 1000).round();
-      if (step >= _content.length) {
+    final content = _contentList;
+    if (content.isEmpty) {
+      return;
+    }
+    _timer = Timer.periodic(_effectiveInterval, (timer) {
+      if (!mounted ||
+          _scrollController == null ||
+          !_scrollController!.hasClients) {
+        timer.cancel();
+        return;
+      }
+      var time = (_effectiveHeight / _effectiveSpeed * 1000).round();
+      if (step >= content.length) {
         step = 0;
         offset = 0;
         _scrollController!.jumpTo(0);
       }
       step++;
-      // 固定滚动行高（22）
-      offset += widget.height;
-      _scrollController!.animateTo(offset,
-          duration: Duration(milliseconds: time), curve: Curves.linear);
+      offset += _effectiveHeight;
+      _scrollController!.animateTo(
+        offset,
+        duration: Duration(milliseconds: time),
+        curve: Curves.linear,
+      );
     });
   }
 
   /// 获取文本内容尺寸消息
   Size _getFontSize() {
-    var text = _content;
-    if (_content is List<String>) {
-      text = _content[0];
-    }
+    final text = _contentList.isEmpty ? '' : _contentList.first;
     final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: _style!.textStyle,
-      ),
+      text: TextSpan(text: text, style: _resolved.textStyle),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-      maxLines: widget.marquee! ? 1 : widget.maxLines,
+      maxLines: _effectiveMarquee ? 1 : widget.maxLines,
     )..layout(maxWidth: _size!.width);
     return textPainter.size;
   }
@@ -218,11 +283,11 @@ class _TNoticeBarState extends State<TNoticeBar> {
   /// 获取滚动区域宽度
   double _getEmptyWidth() {
     return _contentKey.currentContext
-            ?.findRenderObject()
-            ?.paintBounds
-            .size
-            .width ??
-        (_size!.width - _style!.getPadding.horizontal);
+            ?.findRenderObject() // coverage:ignore-line
+            ?.paintBounds // coverage:ignore-line
+            .size // coverage:ignore-line
+            .width ?? // coverage:ignore-line
+        (_size!.width - _effectivePadding.horizontal);
   }
 
   /// 获取文字高度
@@ -234,12 +299,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
   Widget _contentWidget() {
     Widget? textWidget;
 
-    String? displayText;
-    if (_content is String) {
-      displayText = _content as String;
-    } else if (_content is List<String> && _content.isNotEmpty) {
-      displayText = _content[0];
-    }
+    final displayText = _contentList.isEmpty ? null : _contentList.first;
 
     if (displayText != null) {
       textWidget = SizedBox(
@@ -248,18 +308,16 @@ class _TNoticeBarState extends State<TNoticeBar> {
           alignment: Alignment.centerLeft,
           child: TText(
             displayText,
-            style: _style?.textStyle,
-            maxLines: widget.marquee == true ? 1 : widget.maxLines,
-            forceVerticalCenter: true,
+            style: _resolved.textStyle,
+            maxLines: _effectiveMarquee ? 1 : widget.maxLines,
           ),
         ),
       );
     } else {
-      // 如果 content 类型不支持或为空，返回空容器
       textWidget = const SizedBox.shrink();
     }
 
-    if (widget.marquee == false) {
+    if (!_effectiveMarquee) {
       return textWidget;
     }
 
@@ -276,100 +334,102 @@ class _TNoticeBarState extends State<TNoticeBar> {
           physics: const NeverScrollableScrollPhysics(),
           child: Row(
             children: [
-              SizedBox(
-                key: _key,
-                height: textHeight,
-                child: textWidget,
-              ),
+              SizedBox(key: _key, height: textHeight, child: textWidget),
               SizedBox(width: emptyWidth),
               SizedBox(
                 width: math.max(emptyWidth, contextWidth),
                 height: textHeight,
                 child: textWidget,
-              )
+              ),
             ],
           ),
         );
         break;
       case Axis.vertical:
-        var content = _content as List<String>;
+        var content = _contentList;
+        if (content.isEmpty) {
+          child = textWidget;
+          break;
+        }
         child = SizedBox(
-          height: widget.height,
+          height: _effectiveHeight,
           child: SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.vertical,
-            // physics: const NeverScrollableScrollPhysics(),
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < content.length; i++)
-                    SizedBox(
-                      height: widget.height,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TText(
-                          content[i],
-                          style: _style!.textStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (int i = 0; i < content.length; i++)
                   SizedBox(
-                    key: _key,
-                    height: widget.height,
+                    height: _effectiveHeight,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TText(
-                        content[0],
-                        style: _style?.textStyle,
+                        content[i],
+                        style: _resolved.textStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                ]),
+                SizedBox(
+                  key: _key,
+                  height: _effectiveHeight,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TText(
+                      content[0],
+                      style: _resolved.textStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
-        break;
-      default:
-        child = textWidget;
         break;
     }
     return child;
   }
 
-  void _onTap(trigger) {
-    if (widget.onTap != null) {
-      widget.onTap!(trigger);
+  Widget _buildBuiltInTapTarget(TNoticeBarTapTarget target, Widget child) {
+    if (widget.onPressed == null) {
+      return child;
     }
+    return GestureDetector(
+      onTap: () => widget.onPressed!(target),
+      child: child,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     _init();
     _size = MediaQuery.of(context).size;
+    final prefixIcon = widget.prefixIcon;
+    final suffixIcon = widget.suffixIcon;
     return Container(
-      padding: _style!.getPadding,
-      color: _backgroundColor,
+      padding: _effectivePadding,
+      color: _resolved.backgroundColor,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
-        // spacing: 8,
         children: [
           /// 左侧widget
           if (widget.left != null)
             widget.left!
-          else if (widget.prefixIcon != null)
-            GestureDetector(
-              onTap: () => _onTap('prefix-icon'),
-              child: Container(
+          else if (prefixIcon != null)
+            _buildBuiltInTapTarget(
+              TNoticeBarTapTarget.prefix,
+              Container(
                 margin: const EdgeInsets.only(right: 8),
                 child: Icon(
-                  widget.prefixIcon,
-                  color: _style?.leftIconColor,
-                  size: widget.height,
+                  prefixIcon,
+                  color: _resolved.leftIconColor,
+                  size: _effectiveHeight,
                 ),
               ),
             ),
@@ -377,26 +437,27 @@ class _TNoticeBarState extends State<TNoticeBar> {
           /// 中间内容
           Expanded(
             key: _contentKey,
-            child: GestureDetector(
-              onTap: () => _onTap('context'),
-              child: _contentWidget(),
+            child: _buildBuiltInTapTarget(
+              TNoticeBarTapTarget.content,
+              _contentWidget(),
             ),
           ),
 
-          /// 左侧widget
+          /// 右侧widget
           if (widget.right != null)
             widget.right!
-          else if (widget.suffixIcon != null)
-            GestureDetector(
-                onTap: () => _onTap('suffix-icon'),
-                child: Container(
-                  margin: const EdgeInsets.only(left: 8),
-                  child: Icon(
-                    widget.suffixIcon,
-                    color: _style?.rightIconColor,
-                    size: widget.height,
-                  ),
-                )),
+          else if (suffixIcon != null)
+            _buildBuiltInTapTarget(
+              TNoticeBarTapTarget.suffix,
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: Icon(
+                  suffixIcon,
+                  color: _resolved.rightIconColor,
+                  size: _effectiveHeight,
+                ),
+              ),
+            ),
         ],
       ),
     );

@@ -1,36 +1,17 @@
 ## API
-### TTabBar
+### TTabsBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | tabBar背景色，当outlineType为card时控制选中tab颜色 |
 | controller | TabController? | - | tab控制器 |
-| decoration | Decoration? | - | tabBar修饰 |
-| dividerColor | Color? | - | 分割线颜色 |
-| dividerHeight | double | 0.5 | 分割线高度,小于等于0则不展示分割线 |
-| height | double? | - | tabBar高度 |
-| indicator | Decoration? | - | 自定义引导控件 |
-| indicatorColor | Color? | - | tabBar下标颜色 |
-| indicatorHeight | double? | - | tabBar下标高度 |
-| indicatorPadding | EdgeInsets? | - | 引导padding |
-| indicatorWidth | double? | - | tabBar下标宽度 |
-| isScrollable | bool | false | 是否滚动 |
+| decoration | Decoration? | - | tabBar 修饰；非空时覆盖 Theme 的背景和分割线。 |
+| indicator | Decoration? | - | 自定义指示器；非空时覆盖 Theme 指示器。 |
+| isScrollable | bool | false | 是否横向滚动。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| labelColor | Color? | - | tabBar 已选标签颜色 |
-| labelPadding | EdgeInsetsGeometry? | - | tab间距 |
-| labelStyle | TextStyle? | - | 已选label字体 |
-| onTap | Function(int)? | - | 点击事件 |
-| outlineType | TTabBarOutlineType | TTabBarOutlineType.filled | 选项卡样式 |
-| physics | ScrollPhysics? | - | 自定义滑动 |
-| selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
-| showIndicator | bool | false | 是否展示引导控件 |
-| tabAlignment | TabAlignment? | - | - |
+| onTap | ValueChanged<int>? | - | 点击事件 |
 | tabs | List<TTab> | - | tab数组 |
-| unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
-| unselectedLabelColor | Color? | - | tabBar未选标签颜色 |
-| unselectedLabelStyle | TextStyle? | - | unselectedLabel字体 |
-| width | double? | - | tabBar宽度 |
+| variant | TTabsBarVariant | TTabsBarVariant.filled | 选项卡样式。 |
 
 
 ### TTab
@@ -38,58 +19,30 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TBadge? | - | 图标 |
+| badge | TBadge? | - | 徽标 |
 | child | Widget? | - | 子widget |
-| contentHeight | double? | - | 中间内容高度 |
-| enable | bool | true | 是否可用，默认true |
-| height | double? | - | tab高度 |
+| enabled | bool | true | 是否可用，默认 true；`false` 即禁用 |
 | icon | Widget? | - | 图标 |
-| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| outlineType | TTabOutlineType | TTabOutlineType.filled | 选项卡样式 |
-| size | TTabSize | TTabSize.small | 选项卡尺寸 |
 | text | String? | - | 文字内容 |
-| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
 
 
-### TTabBarView
+### TTabsBarView
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | children | List<Widget> | - | 子widget列表 |
 | controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| physics | ScrollPhysics? | - | 滑动物理特性；未传时默认不可滑动。 |
 
 
-### TTabBarOutlineType
-#### 枚举值
+### TTabsBarIndicator
+#### 默认构造方法
 
-
-| 名称 | 说明 |
-| --- | --- |
-| filled | 填充样式 |
-| capsule | 胶囊样式 |
-| card | 卡片 |
-
-
-### TTabSize
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| large | - |
-| small | - |
-
-
-### TTabOutlineType
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| filled | 填充样式 |
-| capsule | 胶囊样式 |
-| card | 卡片 |
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| indicatorColor | Color | - | 指示器颜色 |
+| indicatorHeight | double? | - | 指示器高度 |
+| indicatorWidth | double? | - | 指示器宽度 |

@@ -1,0 +1,4 @@
+Widget _buildOutsidePaginationSwiper(BuildContext context) => _buildSwiper(
+        context,
+        paginationPlacement: TSwiperPaginationPlacement.outside,
+      );

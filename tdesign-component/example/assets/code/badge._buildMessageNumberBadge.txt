@@ -1,18 +1,6 @@
-
-  Widget _buildMessageNumberBadge(BuildContext context) {
-    return SizedBox(
-      width: 56,
-      height: 36,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          TText('消息', font: TTheme.of(context).fontBodyLarge),
-          Positioned(
-            child: TBadge(TBadgeType.message, count: num.toString()),
-            left: 28,
-            bottom: 18,
-          )
-        ],
-      ),
+Widget _buildMessageNumberBadge(BuildContext context) {
+    return TBadge(
+      label: '$num',
+      child: TText('消息', font: context.tTheme.fontBodyLarge),
     );
   }

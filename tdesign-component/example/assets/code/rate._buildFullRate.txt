@@ -1,4 +1,0 @@
-
-  Widget _buildFullRate(BuildContext context) {
-    return const TCell(title: '点击活滑动', noteWidget: TRate(value: 3));
-  }

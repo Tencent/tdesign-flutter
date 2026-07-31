@@ -1,29 +1,29 @@
-
 Widget _buildBottomSimple(BuildContext context) {
-  /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TButton(
-    text: '带底部插槽样式',
-    isBlock: true,
-    type: TButtonType.outline,
-    theme: TButtonTheme.primary,
-    size: TButtonSize.large,
-    onTap: () {
-      TDrawer(
-        context,
-        visible: true,
-        drawerTop: renderBox?.size.height,
-        title: '标题',
-        placement: TDrawerPlacement.left,
-        items: List.generate(
-            drawerItemLength, (index) => TDrawerItem(title: '菜单${index + 1}')),
-        footer: const TButton(
-          text: '操作',
-          type: TButtonType.outline,
-          width: double.infinity,
-          size: TButtonSize.large,
-        ),
-      );
-    },
+  return SizedBox(
+    width: double.infinity,
+    child: TButton(
+      child: const TText('带底部插槽样式'),
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      size: TButtonSize.large,
+      onPressed: () {
+        TDrawer(
+          context,
+          title: const TText('标题'),
+          placement: TDrawerPlacement.left,
+          items: List.generate(drawerItemLength,
+              (index) => TDrawerItem(title: '菜单${index + 1}')),
+          footer: SizedBox(
+            width: double.infinity,
+            child: TButton(
+              child: const TText('操作'),
+              variant: TButtonVariant.outline,
+              size: TButtonSize.large,
+              onPressed: () {},
+            ),
+          ),
+        ).show();
+      },
+    ),
   );
 }

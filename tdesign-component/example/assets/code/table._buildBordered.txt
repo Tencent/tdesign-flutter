@@ -1,0 +1,8 @@
+Widget _buildBordered(BuildContext context) {
+    return _frame(Theme(
+      data: Theme.of(context).mergeExtension(
+        const TTableThemeData(bordered: true),
+      ),
+      child: TTable(columns: _columns, data: _rows),
+    ));
+  }

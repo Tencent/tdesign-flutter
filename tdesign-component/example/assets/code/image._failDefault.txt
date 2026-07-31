@@ -1,5 +1,4 @@
-
-  Widget _failDefault(BuildContext context) {
+Widget _failDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -7,12 +6,12 @@
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '失败默认提示',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          imgUrl: 'error',
-          type: TImageType.roundedSquare,
+          src: 'error',
+          variant: TImageVariant.roundedSquare,
         ),
       ],
     );

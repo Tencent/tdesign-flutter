@@ -1,18 +1,20 @@
-
-  Widget _buildSwiperRightCell(BuildContext context) {
-    // 屏幕宽度
+Widget _buildSwiperRightCell(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return TSwipeCell(
-      groupTag: 'test',
-      left: TSwipeCellPanel(
-        extentRatio: 60 / screenWidth,
-        children: [
-          TSwipeCellAction(
-            backgroundColor: TTheme.of(context).brandNormalColor,
-            label: '选择',
-          ),
-        ],
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TSwipeCellThemeData(),
       ),
-      cell: const TCell(title: '右滑操作', note: '辅助信息'),
+      child: TSwipeCell(
+        start: TSwipeCellPanel(
+          extentRatio: 60 / screenWidth,
+          children: [
+            TSwipeCellAction(
+              backgroundColor: context.tTheme.brandNormalColor,
+              label: '选择',
+            ),
+          ],
+        ),
+        child: const TCell(title: Text('右滑操作'), note: Text('辅助信息')),
+      ),
     );
   }

@@ -1,29 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
+import '../text/t_text.dart';
+import 't_calendar_style.dart';
+import 't_calendar_types.dart';
 
-export 't_calendar_style.dart' show TCalendarStyle;
-
-/// 日期在日历格中的选中/展示状态
-enum DateSelectType {
-  /// 单选 / 多选下的选中
-  selected,
-
-  /// 不可选（超出 [TCalendar.minDate] / [TCalendar.maxDate]）
-  disabled,
-
-  /// 区间起点
-  start,
-
-  /// 区间中间日期
-  centre,
-
-  /// 区间终点
-  end,
-
-  /// 未选中且可选
-  empty,
-}
+export 't_calendar_types.dart' show DateSelectType;
 
 /// 副标题构建上下文：告知 [TCalendarSubtitleBuilder] 当前渲染哪一格。
 class TCalendarSubtitleContext {
@@ -75,8 +58,13 @@ class TCalendarCellModel {
     required this.isLastDayOfMonth,
   });
 
+  /// 当前日期。
   final DateTime date;
+
+  /// 日期选择状态通知器。
   final DateSelectTypeNotifier typeNotifier;
+
+  /// 是否为当月最后一天。
   final bool isLastDayOfMonth;
 
   DateSelectType get selectType => typeNotifier.value;
@@ -95,6 +83,9 @@ class DateSelectTypeNotifier extends ChangeNotifier {
   }
 }
 
+/// 单个日历日期格。
+///
+/// 默认渲染日期与副标题；可通过日历的 cell builder 覆盖整格内容。
 class TCalendarCell extends StatefulWidget {
   const TCalendarCell({
     Key? key,
@@ -110,6 +101,8 @@ class TCalendarCell extends StatefulWidget {
     this.dayStyle,
     this.todayDayStyle,
     this.subtitleStyle,
+    this.cellDecoration,
+    this.centreColor,
   }) : super(key: key);
 
   final TCalendarCellModel? cell;
@@ -126,6 +119,8 @@ class TCalendarCell extends StatefulWidget {
   final TextStyle? dayStyle;
   final TextStyle? todayDayStyle;
   final TextStyle? subtitleStyle;
+  final BoxDecoration? cellDecoration;
+  final Color? centreColor;
 
   @override
   State<TCalendarCell> createState() => _TCalendarCellState();
@@ -160,8 +155,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
 
   bool _checkIsToday() {
     final today = DateTime.now();
-    return widget.cell?.date ==
-        DateTime(today.year, today.month, today.day);
+    return widget.cell?.date == DateTime(today.year, today.month, today.day);
   }
 
   @override
@@ -171,10 +165,15 @@ class _TCalendarCellState extends State<TCalendarCell> {
       return const SizedBox.shrink();
     }
 
-    final themedStyle =
-        TCalendarStyle.generateStyle(context: context).forSelectType(context, cell.selectType);
-    final decoration =
-        themedStyle.cellDecoration;
+    final defaults = TCalendarStyle.generateStyle(context: context);
+    final themedStyle = TCalendarStyle(
+      dayStyle: widget.dayStyle ?? defaults.dayStyle,
+      todayDayStyle: widget.todayDayStyle ?? defaults.todayDayStyle,
+      subtitleStyle: widget.subtitleStyle ?? defaults.subtitleStyle,
+      cellDecoration: widget.cellDecoration,
+      centreColor: widget.centreColor,
+    ).forSelectType(context, cell.selectType);
+    final decoration = themedStyle.cellDecoration;
     final positionColor = _rangeBridgeColor(context, themedStyle, decoration);
 
     final content = widget.cellBuilder?.call(context, cell) ??
@@ -209,7 +208,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
   }
 
   void _onSelectTypeChange() {
-    // 使用 addPostFrameCallback 避免在 build 期间调用 setState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -224,8 +222,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     BoxDecoration? decoration,
   ) {
     _positionOffset = 0;
-    final bridgeColor =
-        cellStyle.centreColor ?? TTheme.of(context).brandLightColor;
+    final bridgeColor = cellStyle.centreColor ?? context.tTheme.brandLightColor;
     final next = _nextDay();
     if (widget.cell?.selectType == DateSelectType.start) {
       if (widget.cell?.isLastDayOfMonth == true) {
@@ -256,10 +253,8 @@ class _TCalendarCellState extends State<TCalendarCell> {
     TCalendarStyle cellStyle,
   ) {
     final dayText = cell.date.day.toString();
-    final dayTextStyle = (_isToday ? cellStyle.todayDayStyle : null) ??
-        widget.todayDayStyle ??
-        cellStyle.dayStyle ??
-        widget.dayStyle;
+    final dayTextStyle =
+        (_isToday ? cellStyle.todayDayStyle : null) ?? cellStyle.dayStyle;
 
     final subtitle = _buildSubtitle(context, cell, cellStyle);
 
@@ -268,7 +263,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
       children: [
         TText(
           dayText,
-          forceVerticalCenter: subtitle == null,
           style: dayTextStyle,
         ),
         if (subtitle != null)
@@ -285,12 +279,19 @@ class _TCalendarCellState extends State<TCalendarCell> {
     TCalendarCellModel cell,
     TCalendarStyle cellStyle,
   ) {
-    return widget.subtitleBuilder?.call(
+    final subtitle = widget.subtitleBuilder?.call(
       context,
       TCalendarSubtitleContext(
         date: cell.date,
         selectType: cell.selectType,
       ),
+    );
+    if (subtitle == null) {
+      return null;
+    }
+    return DefaultTextStyle.merge(
+      style: cellStyle.subtitleStyle,
+      child: subtitle,
     );
   }
 }

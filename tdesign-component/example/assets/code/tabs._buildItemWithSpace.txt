@@ -1,10 +1,8 @@
-
-  Widget _buildItemWithSpace(BuildContext context) {
-    return TTabBar(
+Widget _buildItemWithSpace(BuildContext context) {
+    return TTabsBar(
       tabs: subList(16),
-      controller: TabController(length: 16, vsync: this),
-      labelPadding: const EdgeInsets.all(10),
-      showIndicator: true,
+      controller: _demoController('space', 16),
+      indicator: _indicator(context),
       isScrollable: true,
     );
   }

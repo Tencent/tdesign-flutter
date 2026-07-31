@@ -63,12 +63,16 @@ class _ApiWidgetState extends State<ApiWidget> {
             ),
           );
         } else {
-          return const Center(
-            child: TLoading(
-              size: TLoadingSize.large,
-              icon: TLoadingIcon.circle,
-              text: '加载中…',
-              axis: Axis.horizontal,
+          return Center(
+            child: Theme(
+              // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
+              data: Theme.of(context)
+                  .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+              child: const TLoading(
+                size: TLoadingSize.large,
+                icon: TLoadingIcon.circle,
+                text: '加载中…',
+              ),
             ),
           );
         }
@@ -92,7 +96,7 @@ class _ApiWidgetState extends State<ApiWidget> {
       result = await rootBundle.loadString('assets/api/${apiName}_api.md');
       lastApiName = widget.apiName;
     } catch (e) {
-      print('getApiData error: $e');
+      debugPrint('getApiData error: $e');
     }
     return result ?? defaultResult;
   }

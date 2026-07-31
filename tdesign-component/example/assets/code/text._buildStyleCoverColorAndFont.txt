@@ -1,8 +1,12 @@
-
-  Widget _buildStyleCoverColorAndFont(BuildContext context) {
+Widget _buildStyleCoverColorAndFont(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(
+        color: context.tTheme.errorNormalColor,
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }

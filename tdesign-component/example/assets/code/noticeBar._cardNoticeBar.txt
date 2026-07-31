@@ -1,10 +1,12 @@
-
 Widget _cardNoticeBar(BuildContext context) {
   var size = MediaQuery.of(context).size;
+  final resolvedBg = const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
+      .resolve(context)
+      .backgroundColor;
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: TNoticeBarStyle.generateTheme(context).backgroundColor,
+      color: resolvedBg,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       boxShadow: const [
         BoxShadow(
@@ -42,9 +44,8 @@ Widget _cardNoticeBar(BuildContext context) {
           ),
         ),
         Container(
-          height: 150,
           decoration: BoxDecoration(
-            color: TTheme.of(context).bgColorContainer,
+            color: context.tTheme.bgColorContainer,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
         )

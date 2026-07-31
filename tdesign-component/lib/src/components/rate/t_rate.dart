@@ -1,455 +1,422 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
-import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
-import '../../util/iterable_ext.dart';
-import '../../util/throttle.dart';
-import 't_rate_overlay.dart';
-import 't_rate_tips.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_shadows.dart';
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
+import 't_rate_theme_data.dart';
 
-enum PlacementEnum {
-  none,
-  top,
-  bottom,
-}
+/// 自定义评分图标构建器。
+///
+/// [filled] 表示构建选中或未选中图标；半星由组件裁剪选中图标实现。
+typedef TRateIconBuilder = Widget Function(bool filled);
 
-/// 评分组件
+/// 严格受控的评分组件。
 class TRate extends StatefulWidget {
   const TRate({
     super.key,
-    this.allowHalf = false,
-    this.color,
+
+    /// 受控评分值。
+    required this.value,
+
+    /// 评分变更回调；为 null 时禁用。
+    this.onChanged,
+
+    /// 开始交互时触发。
+    this.onChangeStart,
+
+    /// 结束交互时触发。
+    this.onChangeEnd,
+
+    /// 评分项数量。
     this.count = 5,
-    this.disabled = false,
-    this.gap,
+
+    /// 是否允许半星。
+    this.allowHalf = false,
+
+    /// 自定义评分图标。
     this.icon,
-    this.placement = PlacementEnum.top,
-    this.showText = false,
-    this.size = 24.0,
-    this.texts = const ['极差', '失望', '一般', '满意', '惊喜'],
-    this.textWidth = 48.0,
-    this.builderText,
-    this.value = 0,
-    this.onChange,
-    this.direction = Axis.horizontal,
-    this.mainAxisAlignment = MainAxisAlignment.start,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
-    this.mainAxisSize = MainAxisSize.min,
-    this.iconTextGap,
-  });
 
-  /// 是否允许半选
-  final bool? allowHalf;
+    /// 各评分对应的文案。
+    this.texts,
+  }) : assert(count > 0),
+       assert(value >= 0 && value <= count);
 
-  /// 评分图标的颜色，示例：[选中颜色] / [选中颜色，未选中颜色]，默认：[TTheme.of(context).warningColor5, TTheme.of(context).grayColor4]
-  final List<Color>? color;
+  /// 受控评分值。
+  final double value;
 
-  /// 评分的数量
-  final int? count;
+  /// 评分变更回调；为 null 时禁用。
+  final ValueChanged<double>? onChanged;
 
-  /// 是否禁用评分
-  final bool? disabled;
+  /// 开始交互时触发。
+  final ValueChanged<double>? onChangeStart;
 
-  /// 评分图标的间距，默认：TTheme.of(context).spacer8
-  final double? gap;
+  /// 结束交互时触发。
+  final ValueChanged<double>? onChangeEnd;
 
-  /// 自定义评分图标，[选中和未选中图标] / [选中图标，未选中图标]，默认：[TIcons.star_filled]
-  final List<IconData>? icon;
+  /// 评分项数量。
+  final int count;
 
-  /// 选择评分弹框的位置，值为[PlacementEnum.none]表示不显示评分弹框。
-  final PlacementEnum? placement;
+  /// 是否允许半星。
+  final bool allowHalf;
 
-  /// 是否显示对应的辅助文字
-  final bool? showText;
+  /// 自定义评分图标。
+  final TRateIconBuilder? icon;
 
-  /// 评分图标的大小
-  final double? size;
-
-  /// 评分等级对应的辅助文字，
-  /// 当[allowHalf]为false时长度应与[count]一致，
-  /// 当[allowHalf]为true时长度应为[count]的两倍，
-  /// 自定义值示例：['1分', '2分', '3分', '4分', '5分']。
+  /// 各评分对应的文案。
   final List<String>? texts;
 
-  /// 评分等级对应的辅助文字宽度
-  final double? textWidth;
-
-  /// 评分等级对应的辅助文字自定义构建，优先级高于[texts]
-  /// 配置后，会忽略[texts],[textWidth],[iconTextGap]
-  final Widget Function(BuildContext context, double value)? builderText;
-
-  /// 选择评分的值
-  final double? value;
-
-  /// 评分数改变时触发
-  final void Function(double value)? onChange;
-
-  /// 评分图标与辅助文字的布局方向
-  final Axis? direction;
-
-  /// 评分图标与辅助文字的主轴对齐方式
-  final MainAxisAlignment? mainAxisAlignment;
-
-  /// 评分图标与辅助文字的交叉轴对齐方式
-  final CrossAxisAlignment? crossAxisAlignment;
-
-  /// 评分图标与辅助文字主轴方向上如何占用空间
-  final MainAxisSize? mainAxisSize;
-
-  /// 评分图标与辅助文字的间距，默认：[TTheme.of(context).spacer16]
-  final double? iconTextGap;
-
   @override
-  _TRateState createState() => _TRateState();
+  State<TRate> createState() => _TRateState();
 }
 
-class _TRateState extends State<TRate> with TickerProviderStateMixin {
-  /// 节流
-  final _throttle = Throttle(delay: const Duration(milliseconds: 100));
+class _TRateState extends State<TRate> {
+  static const _halfChoiceKey = ValueKey<String>('t-rate-half-choice');
 
-  /// 当前选中的评分值
-  late double _activeValue;
+  double? _lastInteractionValue;
+  OverlayEntry? _halfChoiceEntry;
+  double? _pendingHalfChoiceValue;
 
-  /// 根据评分值，获取所在评分的索引
-  int _index([double? value]) => ((value ?? _activeValue) - 0.5).floor();
-
-  /// 每半个评分的GlobalKey
-  late Map<double, GlobalKey> _globalKeys;
-
-  /// 弹框
-  late TRateOverlay _overlay;
-
-  /// 动画
-  late List<AnimationController> _controller;
-  late List<Animation<double>> _animation;
-
-  /// 隐藏弹框的定时器
-  Timer? _hideTipTimer;
-
-  /// 控制显示弹框
-  var _showTip = false;
-
-  /// 弹框的尺寸
-  var _tipSize = Size.zero;
-
-  /// 每个评分(Row)的Size:<索引, Size>
-  final _rateSize = <int, Size>{};
-
-  /// 每个评分(Row)的Offset:<索引, Offset>
-  final _rateOffset = <int, Offset>{};
-
-  /// 是否点击，否则是滑动
-  var _isClick = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _activeValue = widget.value ?? 0;
-    _globalKeys =
-        List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
-            .asMap()
-            .map((index, e) => MapEntry(e, GlobalKey()));
-    _overlay =
-        TRateOverlay(context: context, builder: (context) => _buildOverlay())
-          ..show();
-    _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
-    _controller = List.generate(
-        widget.count ?? 5,
-        ((index) => AnimationController(
-              duration: const Duration(milliseconds: 300),
-              vsync: this,
-            )));
-    _animation = List.generate(
-        widget.count ?? 5,
-        ((index) =>
-            Tween<double>(begin: 1.0, end: 1.33).animate(_controller[index])));
+  bool get _enabled => widget.onChanged != null;
+  int get _effectiveCount => widget.count < 1 ? 1 : widget.count;
+  double get _effectiveValue {
+    if (!widget.value.isFinite) {
+      return 0;
+    }
+    return widget.value.clamp(0, _effectiveCount).toDouble();
   }
 
   @override
   void didUpdateWidget(TRate oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.value != oldWidget.value) {
-      _activeValue = widget.value ?? 0;
-    }
-    if (widget.count != oldWidget.count) {
-      _globalKeys =
-          List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
-              .asMap()
-              .map((index, e) => MapEntry(e, GlobalKey()));
-    }
-    if (widget.allowHalf != oldWidget.allowHalf) {
-      _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
+    if (widget.allowHalf != oldWidget.allowHalf || !_enabled) {
+      _dismissHalfChoice();
     }
   }
 
   @override
   void dispose() {
-    _overlay.hide();
-    _hideTipTimer?.cancel();
-    _controller.forEach((controller) => controller.dispose());
+    _dismissHalfChoice();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Flex(
-      direction: widget.direction ?? Axis.horizontal,
-      mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.start,
-      crossAxisAlignment:
-          widget.crossAxisAlignment ?? CrossAxisAlignment.center,
-      mainAxisSize: widget.mainAxisSize ?? MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTapDown: (event) {
-            if (widget.disabled == true) {
-              return;
-            }
-            _isClick = true;
-          },
-          onTapUp: (details) {
-            if (widget.disabled == true) {
-              return;
-            }
-            _changeSelect(details.globalPosition, true);
-            _hideTip();
-          },
-          onHorizontalDragUpdate: (details) {
-            if (widget.disabled == true) {
-              return;
-            }
-            _isClick = false;
-            _changeSelect(details.globalPosition);
-          },
-          onHorizontalDragEnd: (details) {
-            if (widget.disabled == true) {
-              return;
-            }
-            _hideTip();
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(widget.count ?? 5, (index) {
-              final isLast = index == (widget.count ?? 5) - 1;
-              return Padding(
-                padding: EdgeInsets.only(
-                    right:
-                        isLast ? 0 : widget.gap ?? TTheme.of(context).spacer8),
-                child: AnimatedBuilder(
-                  animation: _animation[index],
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _animation[index].value,
-                      child: child,
+    final theme = Theme.of(context).extension<TRateThemeData>();
+    final iconSize = theme?.iconSize ?? 24;
+    final iconGap = theme?.iconGap ?? context.tTheme.spacer8;
+    final showText = theme?.showText ?? false;
+
+    return Semantics(
+      enabled: _enabled,
+      value: _effectiveValue.toString(),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTapDown: _enabled
+                ? (details) {
+                    _lastInteractionValue = _valueAt(
+                      details.localPosition.dx,
+                      iconSize,
+                      iconGap,
                     );
-                  },
-                  child: Row(
-                    children: [
-                      ClipRect(
-                        key: _globalKeys[index + 0.5],
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          widthFactor: 0.5,
-                          child: Icon(
-                            _getIcon(value: index + 0.5),
-                            size: widget.size ?? 24,
-                            color: _getIconColor(value: index + 0.5),
-                          ),
-                        ),
-                      ),
-                      ClipRect(
-                        key: _globalKeys[index + 1.0],
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          widthFactor: 0.5,
-                          child: Icon(
-                            _getIcon(value: index + 1.0),
-                            size: widget.size ?? 24,
-                            color: _getIconColor(value: index + 1.0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
+                    widget.onChangeStart?.call(_effectiveValue);
+                  }
+                : null,
+            onTapUp: _enabled
+                ? (details) {
+                    final next = _valueAt(
+                      details.localPosition.dx,
+                      iconSize,
+                      iconGap,
+                    );
+                    _lastInteractionValue = next;
+                    widget.onChanged?.call(next);
+                    if (widget.allowHalf) {
+                      _showHalfChoice(
+                        context,
+                        details.globalPosition,
+                        next.ceilToDouble(),
+                        iconSize,
+                      );
+                      _pendingHalfChoiceValue = next;
+                    } else {
+                      widget.onChangeEnd?.call(next);
+                    }
+                  }
+                : null,
+            onHorizontalDragStart: _enabled
+                ? (_) {
+                    _lastInteractionValue = _effectiveValue;
+                    widget.onChangeStart?.call(_effectiveValue);
+                  }
+                : null,
+            onHorizontalDragUpdate: _enabled
+                ? (details) {
+                    final next = _valueAt(
+                      details.localPosition.dx,
+                      iconSize,
+                      iconGap,
+                    );
+                    _lastInteractionValue = next;
+                    widget.onChanged?.call(next);
+                  }
+                : null,
+            onHorizontalDragEnd: _enabled
+                ? (_) => widget.onChangeEnd?.call(
+                    _lastInteractionValue ?? _effectiveValue,
+                  )
+                : null,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var index = 0; index < _effectiveCount; index++) ...[
+                  _buildItem(context, index, iconSize, theme),
+                  if (index < _effectiveCount - 1) SizedBox(width: iconGap),
+                ],
+              ],
+            ),
           ),
-        ),
-        if (widget.showText ?? false)
-          widget.builderText?.call(context, _activeValue) ?? _getDefText()
-      ],
+          if (showText) ...[
+            SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
+            SizedBox(
+              width: theme?.textWidth,
+              child: Text(
+                _resolveText(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    theme?.textStyle ??
+                    TextStyle(
+                      color: _enabled
+                          ? context.tTheme.textColorPrimary
+                          : context.tTheme.textDisabledColor,
+                      fontSize: context.tTheme.fontBodyLarge?.size,
+                    ),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
-  void _changeSelect(Offset globalPosition, [bool? isTap]) {
-    _throttle.call(() {
-      final newIndex = _fingerInsideContainer(globalPosition);
-      if (newIndex == null) {
-        return;
-      }
-      final diff = newIndex != _activeValue;
-      if (diff || isTap == true) {
-        _activeValue = newIndex;
-        _showTip = newIndex == 0 ? false : true;
-        _forward();
-        _overlay.update();
-        if (diff) {
-          setState(() {});
-          widget.onChange?.call(newIndex);
+  Widget _buildItem(
+    BuildContext context,
+    int index,
+    double iconSize,
+    TRateThemeData? theme,
+  ) {
+    final fill = (_effectiveValue - index).clamp(0, 1).toDouble();
+    final selectedColor = _enabled
+        ? (theme?.starColor ?? context.tTheme.warningColor5)
+        : context.tTheme.textDisabledColor;
+    final inactiveColor = _enabled
+        ? (theme?.inactiveStarColor ?? context.tTheme.bgColorComponent)
+        : context.tTheme.bgColorComponentDisabled;
+    final unselected =
+        widget.icon?.call(false) ??
+        Icon(TIcons.star_filled, size: iconSize, color: inactiveColor);
+    final selected =
+        widget.icon?.call(true) ??
+        Icon(TIcons.star_filled, size: iconSize, color: selectedColor);
+
+    return SizedBox.square(
+      dimension: iconSize,
+      child: Stack(
+        children: [
+          Positioned.fill(child: unselected),
+          if (fill > 0)
+            ClipRect(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                widthFactor: fill,
+                child: SizedBox.square(dimension: iconSize, child: selected),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  double _valueAt(double dx, double iconSize, double iconGap) {
+    final itemExtent = iconSize + iconGap;
+    final clamped = dx.clamp(0, itemExtent * _effectiveCount - iconGap);
+    final index = (clamped / itemExtent).floor().clamp(0, _effectiveCount - 1);
+    final local = clamped - index * itemExtent;
+    final fraction = widget.allowHalf && local <= iconSize / 2 ? 0.5 : 1.0;
+    return index + fraction;
+  }
+
+  void _showHalfChoice(
+    BuildContext context,
+    Offset globalPosition,
+    double wholeValue,
+    double iconSize,
+  ) {
+    _dismissHalfChoice();
+    final overlay = Overlay.of(context, rootOverlay: true);
+    final mediaQuery = MediaQuery.of(context);
+    final material = Theme.of(context);
+    final theme = material.extension<TRateThemeData>();
+    final token = context.tTheme;
+    final selectedColor = theme?.starColor ?? token.warningColor5;
+    final inactiveColor = theme?.inactiveStarColor ?? token.bgColorComponent;
+    final popupWidth = iconSize * 2 + 40;
+    final popupHeight = iconSize + 36;
+    final left = (globalPosition.dx - popupWidth / 2)
+        .clamp(8.0, mediaQuery.size.width - popupWidth - 8.0)
+        .toDouble();
+    final preferredTop = globalPosition.dy - popupHeight - 12;
+    final top = preferredTop >= mediaQuery.padding.top
+        ? preferredTop
+        : globalPosition.dy + 12;
+
+    _halfChoiceEntry = OverlayEntry(
+      builder: (overlayContext) => Stack(
+        children: [
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: _completeHalfChoice,
+            ),
+          ),
+          Positioned(
+            left: left,
+            top: top,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                key: _halfChoiceKey,
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color:
+                      material.tExplicitColorScheme?.surface ??
+                      token.bgColorContainer,
+                  borderRadius: BorderRadius.circular(4),
+                  boxShadow:
+                      theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildHalfChoiceButton(
+                      overlayContext,
+                      value: wholeValue - 0.5,
+                      iconSize: iconSize,
+                      isHalf: true,
+                      selectedColor: selectedColor,
+                      inactiveColor: inactiveColor,
+                    ),
+                    const SizedBox(width: 4),
+                    _buildHalfChoiceButton(
+                      overlayContext,
+                      value: wholeValue,
+                      iconSize: iconSize,
+                      isHalf: false,
+                      selectedColor: selectedColor,
+                      inactiveColor: inactiveColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    overlay.insert(_halfChoiceEntry!);
+  }
+
+  Widget _buildHalfChoiceButton(
+    BuildContext context, {
+    required double value,
+    required double iconSize,
+    required bool isHalf,
+    required Color selectedColor,
+    required Color inactiveColor,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        if (_pendingHalfChoiceValue != value) {
+          widget.onChanged?.call(value);
         }
-      }
-    });
-  }
-
-  void _forward() {
-    _controller.forEach((element) {
-      element.reverse();
-    });
-    _controller.getOrNull(_index())?.forward();
-  }
-
-  void _reverse() {
-    _controller.forEach((element) {
-      element.reverse();
-    });
-  }
-
-  double? _fingerInsideContainer(Offset globalPosition) {
-    final rateBox = context.findRenderObject() as RenderBox?;
-    if (rateBox == null) {
-      return null;
-    }
-    final rateOffset = rateBox.localToGlobal(Offset.zero);
-    if (globalPosition.dx < rateOffset.dx) {
-      return 0;
-    }
-    for (var entry in _globalKeys.entries) {
-      final renderBox =
-          entry.value.currentContext?.findRenderObject() as RenderBox?;
-      if (renderBox != null) {
-        final localPosition = renderBox.globalToLocal(globalPosition);
-        final isIn =
-            renderBox.hitTest(BoxHitTestResult(), position: localPosition);
-        if (isIn) {
-          var value = widget.allowHalf == true
-              ? entry.key
-              : entry.key.ceil().toDouble();
-          var index = _index(value);
-          if (!_rateSize.containsKey(index) ||
-              !_rateOffset.containsKey(index)) {
-            final parentRenderBox = renderBox.parent as RenderBox;
-            _rateSize[index] = parentRenderBox.size;
-            _rateOffset[index] = parentRenderBox.localToGlobal(Offset.zero);
-          }
-          return value;
-        }
-      }
-    }
-    return null;
-  }
-
-  void _hideTip() {
-    _hideTipTimer?.cancel();
-    _hideTipTimer = Timer(
-      Duration(
-          milliseconds: _isClick && widget.allowHalf == true ? 3000 : 1000),
-      () {
-        _showTip = false;
-        _isClick = true;
-        _reverse();
-        _overlay.update();
+        _completeHalfChoice(value);
       },
-    );
-  }
-
-  Widget _getDefText() {
-    final notRated = _activeValue == 0;
-    final textIndex =
-        (widget.allowHalf == true ? _activeValue * 2 : _activeValue) - 1;
-    return Padding(
-      padding: widget.direction == Axis.horizontal
-          ? EdgeInsets.only(
-              left: widget.iconTextGap ?? TTheme.of(context).spacer16)
-          : EdgeInsets.only(
-              top: widget.iconTextGap ?? TTheme.of(context).spacer8),
-      child: SizedBox(
-        width: widget.textWidth ?? 50,
-        child: TText(
-          notRated
-              ? context.resource.notRated
-              : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
-          font: notRated
-              ? TTheme.of(context).fontBodyLarge
-              : TTheme.of(context).fontTitleMedium,
-          textColor: notRated
-              ? TTheme.of(context).textDisabledColor
-              : TTheme.of(context).textColorPrimary,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox.square(
+              dimension: iconSize,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Icon(
+                      TIcons.star_filled,
+                      size: iconSize,
+                      color: inactiveColor,
+                    ),
+                  ),
+                  if (isHalf)
+                    ClipRect(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: 0.5,
+                        child: Icon(
+                          TIcons.star_filled,
+                          size: iconSize,
+                          color: selectedColor,
+                        ),
+                      ),
+                    )
+                  else
+                    Positioned.fill(
+                      child: Icon(
+                        TIcons.star_filled,
+                        size: iconSize,
+                        color: selectedColor,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Text(value.toStringAsFixed(1)),
+          ],
         ),
       ),
     );
   }
 
-  Color _getIconColor({double? value, bool? isActive}) {
-    return (value != null && _activeValue >= value) ||
-            (isActive != null && isActive)
-        ? widget.color?.getOrNull(0) ?? TTheme.of(context).warningColor5
-        : widget.color?.getOrNull(1) ?? TTheme.of(context).bgColorComponent;
+  void _dismissHalfChoice() {
+    _halfChoiceEntry?.remove();
+    _halfChoiceEntry = null;
+    _pendingHalfChoiceValue = null;
   }
 
-  IconData _getIcon({double? value, bool? isActive}) {
-    final selectIcon = widget.icon?.getOrNull(0) ?? TIcons.star_filled;
-    final icon = [selectIcon, widget.icon?.getOrNull(1) ?? selectIcon];
-    return (value != null && _activeValue >= value) ||
-            (isActive != null && isActive)
-        ? icon[0]
-        : icon[1];
+  void _completeHalfChoice([double? value]) {
+    final completedValue = value ?? _pendingHalfChoiceValue;
+    _dismissHalfChoice();
+    if (completedValue != null) {
+      widget.onChangeEnd?.call(completedValue);
+    }
   }
 
-  Widget _buildOverlay() {
-    if (widget.placement == PlacementEnum.none ||
-        !_showTip ||
-        _activeValue == 0) {
-      return const SizedBox.shrink();
+  String _resolveText() {
+    final texts = widget.texts;
+    final value = _effectiveValue;
+    if (value <= 0 || texts == null || texts.isEmpty) {
+      return value.toString();
     }
-    var index = _index();
-    var rateSize = _rateSize[index];
-    var rateOffset = _rateOffset[index];
-    if (rateSize == null || rateOffset == null) {
-      return const SizedBox.shrink();
-    }
-    return Positioned(
-      top: widget.placement == PlacementEnum.top
-          ? rateOffset.dy - TTheme.of(context).spacer8 - _tipSize.height
-          : rateOffset.dy + TTheme.of(context).spacer8 + rateSize.height,
-      left: rateOffset.dx - (_tipSize.width - rateSize.width) / 2,
-      child: TRateTips(
-        allowHalf: widget.allowHalf,
-        activeValue: _activeValue,
-        icon: _getIcon(isActive: true),
-        size: widget.size,
-        getIconColor: _getIconColor,
-        isClick: _isClick,
-        sizeCall: (size) {
-          if (_tipSize.width != size.width || _tipSize.height != size.height) {
-            _tipSize = size;
-            _overlay.update();
-          }
-        },
-        tipClick: (value) {
-          _showTip = false;
-          _isClick = true;
-          _reverse();
-          _overlay.update();
-          if (value != _activeValue) {
-            _activeValue = value;
-            setState(() {});
-            widget.onChange?.call(value);
-          }
-        },
-      ),
-    );
+    final halfIndex = (value * 2).ceil() - 1;
+    final wholeIndex = value.ceil() - 1;
+    final index = texts.length >= _effectiveCount * 2 ? halfIndex : wholeIndex;
+    return index >= 0 && index < texts.length ? texts[index] : value.toString();
   }
 }

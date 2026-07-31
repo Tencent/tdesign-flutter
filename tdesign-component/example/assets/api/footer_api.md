@@ -4,8 +4,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| type | TFooterType | - | 样式 |
-| height | double? | - | 自定义图片高 |
+| variant | TFooterVariant | - | 页脚形态 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | links | List<TLink> | const [] | 链接 |
 | logo | String? | - | 品牌图片 |
@@ -13,7 +12,7 @@
 | width | double? | - | 自定义图片宽 |
 
 
-### TFooterType
+### TFooterVariant
 #### 枚举值
 
 

@@ -1,0 +1,27 @@
+Widget _buildTheme(BuildContext context) {
+    final decoration = TSliderThemeData(
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+      ),
+    );
+    return Theme(
+      data: Theme.of(context).mergeExtension(decoration),
+      child: SliderTheme(
+        data: SliderTheme.of(context).copyWith(
+          activeTrackColor: context.tTheme.successNormalColor,
+          thumbColor: context.tTheme.successNormalColor,
+          trackHeight: 6,
+        ),
+        child: TSlider(
+          value: themedValue,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          showScaleValue: true,
+          scaleFormatter: _formatPercent,
+          onChanged: (next) => setState(() => themedValue = next),
+        ),
+      ),
+    );
+  }

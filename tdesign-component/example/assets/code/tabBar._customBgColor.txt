@@ -1,0 +1,18 @@
+Widget _customBgColor(BuildContext context) {
+    return _ExampleTabBar(
+        variant: TTabBarVariant.iconText,
+        useVerticalDivider: false,
+        selectedBgColor: context.tTheme.errorColor3,
+        unselectedBgColor: context.tTheme.bgColorSecondaryContainer,
+        navigationTabs: List.generate(5, (index) {
+          final label = '标签${index + 1}';
+          return TTabBarItemConfig(
+            tabText: label,
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, label);
+            },
+          );
+        }));
+  }

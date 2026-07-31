@@ -1,8 +1,0 @@
-
-  Widget _buildStepperWithTheme(BuildContext context) {
-    return _buildRow(context, [
-      const TStepper(theme: TStepperTheme.filled, value: 3),
-      const TStepper(theme: TStepperTheme.outline, value: 3),
-      const TStepper(theme: TStepperTheme.normal, value: 3),
-    ]);
-  }

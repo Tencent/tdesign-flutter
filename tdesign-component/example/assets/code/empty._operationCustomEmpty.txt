@@ -1,16 +1,14 @@
-
-  Widget _operationCustomEmpty(BuildContext context) {
+Widget _operationCustomEmpty(BuildContext context) {
     return TEmpty(
-      type: TEmptyType.operation,
+      variant: TEmptyVariant.operation,
       emptyText: '描述文字',
       customOperationWidget: Padding(
         padding: const EdgeInsets.only(top: 32),
         child: TButton(
-          text: '自定义操作按钮',
+          child: const Text('自定义操作按钮'),
           size: TButtonSize.medium,
-          theme: TButtonTheme.danger,
-          width: 160,
-          onTap: () {},
+          colorScheme: TButtonColorScheme.danger,
+          onPressed: () {},
         ),
       ),
     );

@@ -7,143 +7,133 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | badge | TBadge? | - | 角标 |
-| description | String? | - | 描述信息 |
 | disabled | bool | false | 是否禁用 |
-| group | String? | - | 分组，用于带描述多行滚动宫格 当`TActionSheet.theme`等于`TActionSheetTheme.group`时有效 有效时，如果该值未配置整个`TActionSheetItem`会被忽略，即不会展示 |
-| icon | Widget? | - | 图标 |
-| iconSize | double? | - | 图标大小 |
+| group | String? | - | 分组，用于带描述多行滚动宫格 仅分组动作面板使用；未配置时该项目不会进入任何分组 |
+| icon | Widget? | - | 图标槽位；调用方拥有其背景、形状和显式尺寸。 未显式设置尺寸或颜色的 `Icon` 会继承 `TActionSheetThemeData`。 |
 | label | String | - | 标题 |
+| subtitle | String? | - | 描述信息 |
 | textStyle | TextStyle? | - | 标题样式 |
 
 
 ### TActionSheet
 #### 简介
-动作面板
+动作面板命令式入口
 
 #### 静态方法
 
-##### TActionSheet.showGridActionSheet
+##### TActionSheet.showGrid
 
-显示宫格类型面板
+显示宫格动作面板
 
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | 上下文 |
-| items | List<TActionSheetItem> | - | ActionSheet的项目列表 |
-| align | TActionSheetAlign | TActionSheetAlign.center | 对齐方式 |
-| cancelText | String? | - | 取消按钮的文本 |
-| showCancel | bool | true | 是否显示取消按钮 |
-| onSelected | TActionSheetItemCallback? | - | 选择项目时的回调函数 |
-| showOverlay | bool | true | 是否显示遮罩层 |
-| closeOnOverlayClick | bool | true | 点击蒙层时是否关闭 |
-| count | int | 8 | 每页显示的项目数 当`theme`等于`TActionSheetTheme.grid`且`showPagination`为true时有效 |
-| rows | int | 2 | 显示的行数 当`theme`等于`TActionSheetTheme.grid`时有效 |
-| itemHeight | double | 96.0 | 项目的行高 当`theme`等于`TActionSheetTheme.grid`或`theme`等于`TActionSheetTheme.group`时有效 |
-| itemMinWidth | double | 80.0 | 项目的最小宽度 当`theme`等于`TActionSheetTheme.grid`且`scrollable`为true时有效 或当`theme`等于`TActionSheetTheme.group`时有效 |
-| scrollable | bool | false | 是否可以横向滚动 当`theme`等于`TActionSheetTheme.grid`且`showPagination`为false时有效 |
-| showPagination | bool | false | 是否显示分页 当`theme`等于`TActionSheetTheme.grid`时有效 |
-| onCancel | VoidCallback? | - | 取消按钮的回调函数 |
-| description | String? | - | 描述文本 当`theme`等于`TActionSheetTheme.grid`或`theme`等于`TActionSheetTheme.list`时有效 |
-| onClose | VoidCallback? | - | 关闭时的回调函数 |
-| useSafeArea | bool | true | 使用安全区域 |
-
-
-##### TActionSheet.showGroupActionSheet
-
-显示分组类型面板
-
-返回类型：`void`
+返回类型：`TPopupHandle`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | 上下文 |
-| items | List<TActionSheetItem> | - | ActionSheet的项目列表 |
-| align | TActionSheetAlign | TActionSheetAlign.left | 对齐方式 |
-| cancelText | String? | - | 取消按钮的文本 |
-| showCancel | bool | true | 是否显示取消按钮 |
-| onSelected | TActionSheetItemCallback? | - | 选择项目时的回调函数 |
-| showOverlay | bool | true | 是否显示遮罩层 |
-| closeOnOverlayClick | bool | true | 点击蒙层时是否关闭 |
-| itemHeight | double | 96.0 | 项目的行高 当`theme`等于`TActionSheetTheme.grid`或`theme`等于`TActionSheetTheme.group`时有效 |
-| itemMinWidth | double | 80.0 | 项目的最小宽度 当`theme`等于`TActionSheetTheme.grid`且`scrollable`为true时有效 或当`theme`等于`TActionSheetTheme.group`时有效 |
-| onCancel | VoidCallback? | - | 取消按钮的回调函数 |
-| onClose | VoidCallback? | - | 关闭时的回调函数 |
-| useSafeArea | bool | true | 使用安全区域 |
+| context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
+| items | List<TActionSheetItem> | - | 宫格中的动作项目。 |
+| align | TActionSheetAlign? | - | 项目对齐方式。 |
+| cancelText | String? | - | 取消按钮文字。 |
+| subtitle | String? | - | 面板副标题。 |
+| showCancel | bool | true | 是否显示取消按钮。 |
+| showOverlay | bool | true | 是否显示蒙层。 |
+| closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
+| useSafeArea | bool | true | 是否避让系统安全区。 |
+| showPagination | bool | false | 是否显示分页指示器。 |
+| scrollable | bool | false | 是否允许滚动。 |
+| count | int? | - | 每页项目数。 |
+| rows | int? | - | 宫格行数。 |
+| itemHeight | double? | - | 项目高度。 |
+| itemMinWidth | double? | - | 项目最小宽度。 |
+| onCancel | VoidCallback? | - | 点击取消时回调。 |
+| onClosed | VoidCallback? | - | 面板关闭后回调。 |
+| onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
 
 
-##### TActionSheet.showListActionSheet
+##### TActionSheet.showGroup
 
-显示列表类型面板
+显示分组动作面板
 
-返回类型：`void`
+返回类型：`TPopupHandle`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | 上下文 |
-| items | List<TActionSheetItem> | - | ActionSheet的项目列表 |
-| align | TActionSheetAlign | TActionSheetAlign.center | 对齐方式 |
-| cancelText | String? | - | 取消按钮的文本 |
-| showCancel | bool | true | 是否显示取消按钮 |
-| onCancel | VoidCallback? | - | 取消按钮的回调函数 |
-| onSelected | TActionSheetItemCallback? | - | 选择项目时的回调函数 |
-| showOverlay | bool | true | 是否显示遮罩层 |
-| closeOnOverlayClick | bool | true | 点击蒙层时是否关闭 |
-| onClose | VoidCallback? | - | 关闭时的回调函数 |
-| useSafeArea | bool | true | 使用安全区域 |
+| context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
+| items | List<TActionSheetItem> | - | 分组中的动作项目。 |
+| align | TActionSheetAlign? | - | 项目对齐方式。 |
+| cancelText | String? | - | 取消按钮文字。 |
+| showCancel | bool | true | 是否显示取消按钮。 |
+| showOverlay | bool | true | 是否显示蒙层。 |
+| closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
+| useSafeArea | bool | true | 是否避让系统安全区。 |
+| itemHeight | double? | - | 项目高度。 |
+| itemMinWidth | double? | - | 项目最小宽度。 |
+| onCancel | VoidCallback? | - | 点击取消时回调。 |
+| onClosed | VoidCallback? | - | 面板关闭后回调。 |
+| onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
+
+
+##### TActionSheet.showList
+
+显示列表动作面板
+
+返回类型：`TPopupHandle`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
+| items | List<TActionSheetItem> | - | 列表中的动作项目。 |
+| align | TActionSheetAlign? | - | 项目文字对齐方式。 |
+| cancelText | String? | - | 取消按钮文字。 |
+| subtitle | String? | - | 面板副标题。 |
+| showCancel | bool | true | 是否显示取消按钮。 |
+| showOverlay | bool | true | 是否显示蒙层。 |
+| closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
+| useSafeArea | bool | true | 是否避让系统安全区。 |
+| onCancel | VoidCallback? | - | 点击取消时回调。 |
+| onClosed | VoidCallback? | - | 面板关闭后回调。 |
+| onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
+
+
+### TActionSheetThemeData
+#### 简介
+TActionSheet 组件级 ThemeExtension
+
+#### 静态方法
+
+##### TActionSheetThemeData.lerpDouble
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | - |
+| b | double? | - | - |
+| t | double | - | - |
 
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | 上下文 |
-| align | TActionSheetAlign | TActionSheetAlign.center | 对齐方式 |
-| cancelText | String? | - | 取消按钮的文本 |
-| closeOnOverlayClick | bool | true | 点击蒙层时是否关闭 |
-| count | int | 8 | 每页显示的项目数 当`theme`等于`TActionSheetTheme.grid`且`showPagination`为true时有效 |
-| description | String? | - | 描述文本 当`theme`等于`TActionSheetTheme.grid`或`theme`等于`TActionSheetTheme.list`时有效 |
-| itemHeight | double | 96.0 | 项目的行高 当`theme`等于`TActionSheetTheme.grid`或`theme`等于`TActionSheetTheme.group`时有效 |
-| itemMinWidth | double | 80.0 | 项目的最小宽度 当`theme`等于`TActionSheetTheme.grid`且`scrollable`为true时有效 或当`theme`等于`TActionSheetTheme.group`时有效 |
-| items | List<TActionSheetItem> | - | ActionSheet的项目列表 |
-| onCancel | VoidCallback? | - | 取消按钮的回调函数 |
-| onClose | VoidCallback? | - | 关闭时的回调函数 |
-| onSelected | TActionSheetItemCallback? | - | 选择项目时的回调函数 |
-| rows | int | 2 | 显示的行数 当`theme`等于`TActionSheetTheme.grid`时有效 |
-| scrollable | bool | false | 是否可以横向滚动 当`theme`等于`TActionSheetTheme.grid`且`showPagination`为false时有效 |
-| showCancel | bool | true | 是否显示取消按钮 |
-| showOverlay | bool | true | 是否显示遮罩层 |
-| showPagination | bool | false | 是否显示分页 当`theme`等于`TActionSheetTheme.grid`时有效 |
-| theme | TActionSheetTheme | TActionSheetTheme.list | 主题样式 |
-| useSafeArea | bool | true | 使用安全区域 |
-| visible | bool | false | 是否立即显示 |
-
-
-### TActionSheetTheme
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| list | - |
-| grid | - |
-| group | - |
+| barrierColor | Color? | - | 蒙层颜色 |
+| count | int? | - | 宫格列数 |
+| defaultAlign | TActionSheetAlign? | - | 默认对齐 |
+| gridIconExtent | double? | - | 宫格和分组布局的图标槽位尺寸。 |
+| iconColor | Color? | - | 默认图标颜色。 |
+| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 |
+| itemHeight | double? | - | 项高度 |
+| itemMinWidth | double? | - | 项最小宽度 |
+| panelRadius | double? | - | 面板圆角 |
+| rows | int? | - | 宫格行数 |
 
 
 ### TActionSheetAlign
+#### 简介
+动作面板内容对齐方式
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| center | - |
-| left | - |
-| right | - |
-
-
-### TActionSheetItemCallback
-#### 类型定义
-
-```dart
-typedef TActionSheetItemCallback = void Function(TActionSheetItem item, int index);
-```
+| center | 居中对齐 |
+| left | 左对齐 |
+| right | 右对齐 |

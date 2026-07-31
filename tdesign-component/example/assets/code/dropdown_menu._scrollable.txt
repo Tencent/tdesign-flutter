@@ -1,0 +1,22 @@
+Widget _scrollable(BuildContext context) {
+    return TDropdownMenu(
+      scrollable: true,
+      items: [
+        for (final label in ['综合', '品牌', '发货地', '服务', '促销'])
+          TDropdownMenuItem(
+            label: label,
+            width: 96,
+            panelBuilder: (context, controller) => Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text('$label筛选内容'),
+            ),
+          ),
+        TDropdownMenuItem(
+          label: '暂不可用',
+          width: 112,
+          enabled: false,
+          panelBuilder: (context, controller) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }

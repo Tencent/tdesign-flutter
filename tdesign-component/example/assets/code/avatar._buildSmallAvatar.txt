@@ -1,24 +1,19 @@
-
-  Widget _buildSmallAvatar(BuildContext context) {
+/// 组件尺寸 小尺寸
+    Widget _buildSmallAvatar(BuildContext context) {
     return const Row(
       // spacing: 56,
       children: [
         TAvatar(
           size: TAvatarSize.small,
-          type: TAvatarType.normal,
-          defaultUrl: 'assets/img/t_avatar_1.png',
+          image: AssetImage('assets/img/t_avatar_1.png'),
         ),
         SizedBox(width: 56),
         TAvatar(
           size: TAvatarSize.small,
-          type: TAvatarType.customText,
-          text: 'A',
+          child: Text('A'),
         ),
         SizedBox(width: 56),
-        TAvatar(
-          size: TAvatarSize.small,
-          type: TAvatarType.icon,
-        ),
+        TAvatar(size: TAvatarSize.small),
       ],
     );
   }

@@ -1,4 +1,0 @@
-
-Widget _buildStyle(BuildContext context) {
-  return const _StyleDemo();
-}

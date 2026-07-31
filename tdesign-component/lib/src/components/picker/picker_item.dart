@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
-
-// 自定义子项构建器类型别名，见 [TPicker.itemBuilder] 字段说明
-typedef ItemBuilderType = Widget? Function(
-  BuildContext context,
-  String content,
-  int colIndex,
-  int index,
-  ItemDistanceCalculator itemDistanceCalculator,
-  double distance,
-);
+import 't_picker.dart' show TPicker;
+import 't_picker_types.dart';
 
 // =============== 样式默认值（可被 ItemDistanceCalculator 继承覆盖） ===============
 
@@ -22,21 +15,21 @@ const double _kDisabledItemOpacity = 0.5;
 /// 基础字号 fallback（theme.fontBodyLarge.size 为 null 时使用）
 const double _kBaseFontSize = 16.0;
 
-/// 选择器的子项组件（包内复用，不对外暴露）
+//// 选择器的子项组件（包内复用，不对外暴露）
 class PickerItemWidget extends StatelessWidget {
   const PickerItemWidget({
     required this.fixedExtentScrollController,
     required this.colIndex,
     required this.index,
-    required this.content,
+    required this.option,
     required this.itemHeight,
     this.disabled = false,
     this.itemBuilder,
     super.key,
   });
 
-  /// 展示文字内容
-  final String content;
+  /// 选项。
+  final TPickerOption option;
 
   /// 所属滚轮的滚动控制器，用于计算离中心的距离
   final FixedExtentScrollController fixedExtentScrollController;
@@ -54,9 +47,9 @@ class PickerItemWidget extends StatelessWidget {
   final bool disabled;
 
   /// 自定义子项构建器，null 时使用默认 [TText] 渲染
-  final ItemBuilderType? itemBuilder;
+  final TPickerItemBuilder? itemBuilder;
 
-  static const _calculator = ItemDistanceCalculator();
+  static const _calculator = _ItemDistanceCalculator();
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +60,13 @@ class PickerItemWidget extends StatelessWidget {
         child: Opacity(
           opacity: _kDisabledItemOpacity,
           child: TText(
-            content,
+            option.label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: calc.calculateFont(context, 0),
-              color: TTheme.of(context).textDisabledColor,
+              color: context.tTheme.textDisabledColor,
             ),
           ),
         ),
@@ -92,14 +85,13 @@ class PickerItemWidget extends StatelessWidget {
               opacity: calc.calculateOpacity(distance),
               child: itemBuilder?.call(
                     context,
-                    content,
+                    option,
                     colIndex,
                     index,
-                    calc,
                     distance,
                   ) ??
                   TText(
-                    content,
+                    option.label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -116,12 +108,11 @@ class PickerItemWidget extends StatelessWidget {
   }
 }
 
-/// 距离到样式的映射器（内部默认渲染与 [ItemBuilderType] 回调共用）
+/// 距离到默认样式的映射器。
 ///
 /// 默认采用 4 档离散赋值（0=选中, 1=紧邻, 2=近边, 3+=远边）。
-/// 在 [ItemBuilderType] 中可继承此类自定义颜色/字号/透明度过渡曲线。
-class ItemDistanceCalculator {
-  const ItemDistanceCalculator();
+class _ItemDistanceCalculator {
+  const _ItemDistanceCalculator();
 
   /// 4 档粗细：选中 → 最远
   static const List<FontWeight> _fontWeightLevels = <FontWeight>[
@@ -142,7 +133,7 @@ class ItemDistanceCalculator {
 
   /// 计算指定距离处的文字颜色
   Color calculateColor(BuildContext context, double distance) {
-    final theme = TTheme.of(context);
+    final theme = context.tTheme;
     final primary = theme.textColorPrimary;
     final placeholder = theme.textColorPlaceholder;
     final mix = _colorMixLevels[_level(distance)];
@@ -161,7 +152,7 @@ class ItemDistanceCalculator {
 
   /// 计算指定距离处的字体大小
   double calculateFont(BuildContext context, double distance) {
-    final baseSize = TTheme.of(context).fontBodyLarge?.size ?? _kBaseFontSize;
+    final baseSize = context.tTheme.fontBodyLarge?.size ?? _kBaseFontSize;
     return baseSize * _fontSizeScales[_level(distance)];
   }
 

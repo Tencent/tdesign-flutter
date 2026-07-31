@@ -1,9 +1,8 @@
-
 TTimeCounter _buildUnitLargeSize(BuildContext context) {
   return const TTimeCounter(
     time: 60 * 60 * 1000,
     size: TTimeCounterSize.large,
-    theme: TTimeCounterTheme.square,
+    variant: TTimeCounterVariant.square,
     splitWithUnit: true,
   );
 }

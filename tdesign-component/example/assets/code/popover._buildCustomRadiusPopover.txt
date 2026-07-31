@@ -1,5 +1,4 @@
-
-  Widget _buildCustomRadiusPopover(BuildContext context) {
+Widget _buildCustomRadiusPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -7,15 +6,14 @@
         builder: (_, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            text: '自定义圆角',
-            type: TButtonType.outline,
-            theme: TButtonTheme.primary,
-            onTap: () {
+            child: const Text('自定义圆角'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
               TPopover.showPopover(
                 context: _,
-                width: 200,
                 radius: BorderRadius.circular(16),
-                theme: theme,
+                colorScheme: theme,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
               );
             },

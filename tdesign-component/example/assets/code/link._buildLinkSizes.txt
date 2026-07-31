@@ -1,14 +1,12 @@
-
-  Widget _buildLinkSizes(BuildContext context) {
+Widget _buildLinkSizes(BuildContext context) {
     return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.small),
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.medium),
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.large),
+            _buildLinkWithSize(TLinkSize.small),
+            _buildLinkWithSize(TLinkSize.medium),
+            _buildLinkWithSize(TLinkSize.large),
           ],
         ));
   }

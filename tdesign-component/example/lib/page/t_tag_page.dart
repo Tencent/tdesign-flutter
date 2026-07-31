@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
-class TTagPage extends StatelessWidget {
+class TTagPage extends StatefulWidget {
   const TTagPage({Key? key}) : super(key: key);
+
+  @override
+  State<TTagPage> createState() => _TTagPageState();
+}
+
+class _TTagPageState extends State<TTagPage> {
+  bool _selected1 = false;
+  bool _selected2 = true;
+  bool _selected3 = false;
+  bool _primarySelected = true;
+  bool _successSelected = true;
+  bool _warningSelected = true;
+  bool _dangerSelected = true;
+  final List<String> _closableTags = ['标签文字'];
+  final List<String> _closableOutlineTags = ['标签文字'];
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tTitle(context),
+        title: tTitle(),
         desc: '用于表明主体的类目，属性或状态',
         exampleCodeGroup: 'tag',
         children: [
@@ -20,13 +35,9 @@ class TTagPage extends StatelessWidget {
                 builder: (context) {
                   return Row(
                     children: [
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildSimpleFillTag),
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildSimpleOutlineTag),
                     ],
                   );
@@ -37,13 +48,9 @@ class TTagPage extends StatelessWidget {
                 builder: (context) {
                   return Row(
                     children: [
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildCircleFillTag),
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildCircleOutlineTag),
                     ],
                   );
@@ -54,13 +61,9 @@ class TTagPage extends StatelessWidget {
                 builder: (context) {
                   return Row(
                     children: [
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildMarkFillTag),
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildMarkOutlineTag),
                     ],
                   );
@@ -71,13 +74,9 @@ class TTagPage extends StatelessWidget {
                 builder: (context) {
                   return Row(
                     children: [
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildIconFillTag),
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildIconOutlineTag),
                     ],
                   );
@@ -88,73 +87,17 @@ class TTagPage extends StatelessWidget {
                 builder: (context) {
                   return Row(
                     children: [
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildCloseFillTag),
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildCloseOutlineTag),
                     ],
-                  );
-                }),
-            ExampleItem(
-                desc: '可选中的标签',
-                ignoreCode: true,
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(left: 16),
-                    child:
-                        Wrap(spacing: 8, direction: Axis.vertical, children: [
-                      // 非浅色填充
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                            child: TText('dark'),
-                          ),
-                          CodeWrapper(builder: _buildDarkSelectTags)
-                        ],
-                      ),
-                      // 浅色填充
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                            child: TText('light'),
-                          ),
-                          CodeWrapper(builder: _buildLightSelectTags)
-                        ],
-                      ),
-                      // 非浅色描边
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                            child: TText('outline'),
-                          ),
-                          CodeWrapper(builder: _buildOutlineSelectTags)
-                        ],
-                      ),
-                      // 浅色描边
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                            child: TText('light-outline'),
-                          ),
-                          CodeWrapper(builder: _buildLightOutlineSelectTags)
-                        ],
-                      ),
-                    ]),
                   );
                 }),
           ]),
           ExampleModule(title: '组件状态（主题）', children: [
             ExampleItem(
-                desc: '展示型标签',
+                desc: '填充型各主题',
                 ignoreCode: true,
                 builder: (context) {
                   return Container(
@@ -164,16 +107,24 @@ class TTagPage extends StatelessWidget {
                       spacing: 8,
                       direction: Axis.vertical,
                       children: [
-                        // 浅色填充
-                        CodeWrapper(builder: _buildLightShowTags),
-
-                        // 非浅色填充
                         CodeWrapper(builder: _buildDarkShowTags),
-
-                        // 非浅色描边
+                        CodeWrapper(builder: _buildLightShowTags),
+                      ],
+                    ),
+                  );
+                }),
+            ExampleItem(
+                desc: '描边型各主题',
+                ignoreCode: true,
+                builder: (context) {
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Wrap(
+                      spacing: 8,
+                      direction: Axis.vertical,
+                      children: [
                         CodeWrapper(builder: _buildOutlineShowTags),
-
-                        // 浅色描边
                         CodeWrapper(builder: _buildLightOutlineShowTags),
                       ],
                     ),
@@ -189,1015 +140,288 @@ class TTagPage extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 16),
                     child:
                         Wrap(spacing: 8, direction: Axis.vertical, children: [
-                      // 不带关闭
                       CodeWrapper(builder: _buildAllSizeTags),
-                      // 带关闭
-                      CodeWrapper(builder: _buildAllSizeCloseTags),
                     ]),
                   );
                 })
-          ])
+          ]),
+          ExampleModule(title: '可选标签', children: [
+            ExampleItem(desc: '默认形态', builder: _buildSelectDefault),
+            ExampleItem(desc: '不同语义色', builder: _buildSelectColorSchemes),
+            ExampleItem(desc: '禁用状态', builder: _buildSelectDisabled),
+          ]),
         ],
         test: [
           ExampleItem(
-              desc: '非浅色填充的各主题展示',
+              desc: '禁用状态',
               ignoreCode: true,
               builder: (context) {
-                return const Wrap(
-                  spacing: 8,
-                  children: [
-                    TTag(
-                      '标签文字',
-                    ),
-                    TTag(
-                      '标签文字',
-                      theme: TTagTheme.primary,
-                    ),
-                    TTag(
-                      '标签文字',
-                      theme: TTagTheme.warning,
-                    ),
-                    TTag(
-                      '标签文字',
-                      theme: TTagTheme.danger,
-                    ),
-                    TTag(
-                      '标签文字',
-                      theme: TTagTheme.success,
-                    ),
-                  ],
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      _buildDisabledTag(context),
+                    ],
+                  ),
                 );
-              }),
-          ExampleItem(
-              desc: '浅色填充的各主题展示',
-              ignoreCode: true,
-              builder: (context) {
-                return const Wrap(
-                  spacing: 8,
-                  children: [
-                    TTag(
-                      '标签文字',
-                      isLight: true,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isLight: true,
-                      theme: TTagTheme.primary,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isLight: true,
-                      theme: TTagTheme.warning,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isLight: true,
-                      theme: TTagTheme.danger,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isLight: true,
-                      theme: TTagTheme.success,
-                    ),
-                  ],
-                );
-              }),
-          ExampleItem(
-              desc: '非浅色描边的各主题展示',
-              ignoreCode: true,
-              builder: (context) {
-                return const Wrap(
-                  spacing: 8,
-                  children: [
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      theme: TTagTheme.primary,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      theme: TTagTheme.warning,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      theme: TTagTheme.danger,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      theme: TTagTheme.success,
-                    ),
-                  ],
-                );
-              }),
-          ExampleItem(
-              desc: '浅色描边的各主题展示',
-              ignoreCode: true,
-              builder: (context) {
-                return const Wrap(
-                  spacing: 8,
-                  children: [
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      isLight: true,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      isLight: true,
-                      theme: TTagTheme.primary,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      isLight: true,
-                      theme: TTagTheme.warning,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      isLight: true,
-                      theme: TTagTheme.danger,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      isLight: true,
-                      theme: TTagTheme.success,
-                    ),
-                  ],
-                );
-              }),
-          ExampleItem(
-              desc: '各主题关闭图标颜色不会变',
-              ignoreCode: true,
-              builder: (context) {
-                return const Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      needCloseIcon: true,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      needCloseIcon: true,
-                      theme: TTagTheme.primary,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      needCloseIcon: true,
-                      theme: TTagTheme.warning,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      needCloseIcon: true,
-                      theme: TTagTheme.danger,
-                    ),
-                    TTag(
-                      '标签文字',
-                      isOutline: true,
-                      needCloseIcon: true,
-                      theme: TTagTheme.success,
-                    ),
-                    TTag(
-                      '标签文字',
-                      needCloseIcon: true,
-                    ),
-                    TTag(
-                      '标签文字',
-                      needCloseIcon: true,
-                      theme: TTagTheme.primary,
-                    ),
-                    TTag(
-                      '标签文字',
-                      needCloseIcon: true,
-                      theme: TTagTheme.warning,
-                    ),
-                    TTag(
-                      '标签文字',
-                      needCloseIcon: true,
-                      theme: TTagTheme.danger,
-                    ),
-                    TTag(
-                      '标签文字',
-                      needCloseIcon: true,
-                      theme: TTagTheme.success,
-                    ),
-                  ],
-                );
-              }),
-          ExampleItem(
-              desc: '带图标可关闭的标签',
-              ignoreCode: true,
-              builder: (context) {
-                return const Row(
-                  children: [
-                    SizedBox(
-                      width: 16,
-                    ),
-                    TTag(
-                      '标签文字',
-                      icon: TIcons.discount,
-                      needCloseIcon: true,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    TTag(
-                      '标签文字',
-                      icon: TIcons.discount,
-                      needCloseIcon: true,
-                      isOutline: true,
-                    ),
-                  ],
-                );
-              }),
-          ExampleItem(
-              desc: '各尺寸测试',
-              ignoreCode: true,
-              builder: (context) {
-                return Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  // 带图标和关闭
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TTag(
-                        '加大尺寸',
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.extraLarge,
-                      ),
-                      TTag(
-                        '大尺寸',
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.large,
-                      ),
-                      TTag(
-                        '中尺寸',
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.medium,
-                      ),
-                      TTag(
-                        '小尺寸',
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.small,
-                      ),
-                    ]),
-                  ),
-                  // 带图标和关闭,描边
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TTag(
-                        '加大尺寸',
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.extraLarge,
-                      ),
-                      TTag(
-                        '大尺寸',
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.large,
-                      ),
-                      TTag(
-                        '中尺寸',
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.medium,
-                      ),
-                      TTag(
-                        '小尺寸',
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        size: TTagSize.small,
-                      ),
-                    ]),
-                  ),
-                ]);
-              }),
-          ExampleItem(
-              desc: '可选各状态测试',
-              ignoreCode: true,
-              builder: (context) {
-                return Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  // Normal
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isSelected: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        disableSelect: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                  // Light
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                        isSelected: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        isLight: true,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                        disableSelect: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                  // Outline
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isSelected: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        isOutline: true,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        disableSelect: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                  // Outline-Light
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        isSelected: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        isOutline: true,
-                        isLight: true,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        disableSelect: true,
-                      ),
-                      TSelectTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                ]);
-              }),
-          ExampleItem(
-              desc: '展示各状态测试',
-              ignoreCode: true,
-              builder: (context) {
-                return Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  // Normal
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        shape: TTagShape.round,
-                        disable: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                  // Light
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        shape: TTagShape.round,
-                        isLight: true,
-                        disable: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                  // Outline
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        shape: TTagShape.round,
-                        isOutline: true,
-                        disable: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                  // Outline-Light
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        shape: TTagShape.mark,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        shape: TTagShape.round,
-                        isOutline: true,
-                        isLight: true,
-                        disable: true,
-                      ),
-                      TTag(
-                        'Tag',
-                        theme: TTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: TIcons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: TTagShape.mark,
-                      ),
-                    ]),
-                  ),
-                ]);
               }),
         ]);
   }
 
-  @Demo(group: 'tag')
-  TTag _buildSimpleOutlineTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      isOutline: true,
-    );
-  }
+  // ============ 组件类型 ============
 
-  @Demo(group: 'tag')
-  TTag _buildSimpleFillTag(BuildContext context) {
+  @ExampleCode(group: 'tag')
+  Widget _buildSimpleFillTag(BuildContext context) {
+    // 基础填充标签（默认 defaultTheme 语义色）
     return const TTag('标签文字');
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
+  Widget _buildSimpleOutlineTag(BuildContext context) {
+    // 描边标签：通过 TTagThemeData(isOutline: true) 子树注入
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: const TTag('标签文字'),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
   Widget _buildCircleFillTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.round,
+    // 圆弧标签：通过 TTagThemeData(shape: TTagShape.round) 子树注入
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(shape: TTagShape.round)),
+      child: const TTag('标签文字'),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCircleOutlineTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.round,
-      isOutline: true,
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+          const TTagThemeData(shape: TTagShape.round, isOutline: true)),
+      child: const TTag('标签文字'),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildMarkFillTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.mark,
+    // Mark 标签：左圆角右直角
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字'),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildMarkOutlineTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      shape: TTagShape.mark,
-      isOutline: true,
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+          const TTagThemeData(shape: TTagShape.mark, isOutline: true)),
+      child: const TTag('标签文字'),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildIconFillTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      icon: TIcons.discount,
-    );
+    // 带图标的标签：通过构造器 icon 参数传入 IconData
+    return const TTag('标签文字', icon: TIcons.discount);
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildIconOutlineTag(BuildContext context) {
-    return const TTag(
-      '标签文字',
-      icon: TIcons.discount,
-      isOutline: true,
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: const TTag('标签文字', icon: TIcons.discount),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCloseFillTag(BuildContext context) {
-    return TTag(
-      '标签文字',
-      needCloseIcon: true,
-      onCloseTap: () {
-        TToast.showText('点击关闭', context: context);
-      },
+    return Wrap(
+      spacing: 8,
+      children: _closableTags
+          .map((text) => TTag(
+                text,
+                needCloseIcon: true,
+                onCloseTap: () => setState(() => _closableTags.remove(text)),
+              ))
+          .toList(),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildCloseOutlineTag(BuildContext context) {
-    return TTag('标签文字', needCloseIcon: true, isOutline: true, onCloseTap: () {
-      TToast.showText('点击关闭', context: context);
-    });
-  }
-
-  @Demo(group: 'tag')
-  Widget _buildDarkSelectTags(BuildContext context) {
-    return const Wrap(spacing: 8, children: [
-      TSelectTag(
-        '未选中态',
-        theme: TTagTheme.primary,
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: Wrap(
+        spacing: 8,
+        children: _closableOutlineTags
+            .map((text) => TTag(
+                  text,
+                  needCloseIcon: true,
+                  onCloseTap: () =>
+                      setState(() => _closableOutlineTags.remove(text)),
+                ))
+            .toList(),
       ),
-      TSelectTag(
-        '已选中态',
-        theme: TTagTheme.primary,
-        isSelected: true,
-      ),
-      TSelectTag(
-        '不可选态',
-        theme: TTagTheme.primary,
-        disableSelect: true,
-      ),
-    ]);
-  }
-
-  @Demo(group: 'tag')
-  Widget _buildLightSelectTags(BuildContext context) {
-    return const Wrap(spacing: 8, children: [
-      TSelectTag(
-        '未选中态',
-        theme: TTagTheme.primary,
-        isLight: true,
-      ),
-      TSelectTag(
-        '已选中态',
-        theme: TTagTheme.primary,
-        isLight: true,
-        isSelected: true,
-      ),
-      TSelectTag(
-        '不可选态',
-        theme: TTagTheme.primary,
-        isLight: true,
-        disableSelect: true,
-      ),
-    ]);
-  }
-
-  @Demo(group: 'tag')
-  Widget _buildOutlineSelectTags(BuildContext context) {
-    return const Wrap(spacing: 8, children: [
-      TSelectTag(
-        '未选中态',
-        theme: TTagTheme.primary,
-        isOutline: true,
-      ),
-      TSelectTag(
-        '已选中态',
-        theme: TTagTheme.primary,
-        isOutline: true,
-        isSelected: true,
-      ),
-      TSelectTag(
-        '不可选态',
-        theme: TTagTheme.primary,
-        isOutline: true,
-        disableSelect: true,
-      ),
-    ]);
-  }
-
-  @Demo(group: 'tag')
-  Widget _buildLightOutlineSelectTags(BuildContext context) {
-    return const Wrap(spacing: 8, children: [
-      TSelectTag(
-        '未选中态',
-        theme: TTagTheme.primary,
-        isOutline: true,
-        isLight: true,
-      ),
-      TSelectTag(
-        '已选中态',
-        theme: TTagTheme.primary,
-        isOutline: true,
-        isLight: true,
-        isSelected: true,
-      ),
-      TSelectTag(
-        '不可选态',
-        theme: TTagTheme.primary,
-        isOutline: true,
-        isLight: true,
-        disableSelect: true,
-      ),
-    ]);
-  }
-
-  @Demo(group: 'tag')
-  Widget _buildLightShowTags(BuildContext context) {
-    return const Wrap(
-      spacing: 8,
-      children: [
-        TTag('默认', isLight: true),
-        TTag(
-          '主要',
-          isLight: true,
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          isLight: true,
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          isLight: true,
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          isLight: true,
-          theme: TTagTheme.success,
-        ),
-      ],
     );
   }
 
-  @Demo(group: 'tag')
+  // ============ 组件状态（主题） ============
+
+  @ExampleCode(group: 'tag')
   Widget _buildDarkShowTags(BuildContext context) {
+    // 非浅色填充各主题
     return const Wrap(
       spacing: 8,
       children: [
-        TTag('默认'),
-        TTag(
-          '主要',
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          theme: TTagTheme.success,
-        ),
+        TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+        TTag('主要', colorScheme: TTagColorScheme.primary),
+        TTag('警告', colorScheme: TTagColorScheme.warning),
+        TTag('危险', colorScheme: TTagColorScheme.danger),
+        TTag('成功', colorScheme: TTagColorScheme.success),
       ],
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
+  Widget _buildLightShowTags(BuildContext context) {
+    // 浅色填充各主题
+    return Theme(
+      data:
+          Theme.of(context).mergeExtension(const TTagThemeData(isLight: true)),
+      child: const Wrap(
+        spacing: 8,
+        children: [
+          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+          TTag('主要', colorScheme: TTagColorScheme.primary),
+          TTag('警告', colorScheme: TTagColorScheme.warning),
+          TTag('危险', colorScheme: TTagColorScheme.danger),
+          TTag('成功', colorScheme: TTagColorScheme.success),
+        ],
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
   Widget _buildOutlineShowTags(BuildContext context) {
-    return const Wrap(
-      spacing: 8,
-      children: [
-        TTag('默认', isOutline: true),
-        TTag(
-          '主要',
-          isOutline: true,
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          isOutline: true,
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          isOutline: true,
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          isOutline: true,
-          theme: TTagTheme.success,
-        ),
-      ],
+    // 非浅色描边各主题
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: const Wrap(
+        spacing: 8,
+        children: [
+          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+          TTag('主要', colorScheme: TTagColorScheme.primary),
+          TTag('警告', colorScheme: TTagColorScheme.warning),
+          TTag('危险', colorScheme: TTagColorScheme.danger),
+          TTag('成功', colorScheme: TTagColorScheme.success),
+        ],
+      ),
     );
   }
 
-  @Demo(group: 'tag')
+  @ExampleCode(group: 'tag')
   Widget _buildLightOutlineShowTags(BuildContext context) {
+    // 浅色描边各主题
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true, isLight: true)),
+      child: const Wrap(
+        spacing: 8,
+        children: [
+          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+          TTag('主要', colorScheme: TTagColorScheme.primary),
+          TTag('警告', colorScheme: TTagColorScheme.warning),
+          TTag('危险', colorScheme: TTagColorScheme.danger),
+          TTag('成功', colorScheme: TTagColorScheme.success),
+        ],
+      ),
+    );
+  }
+
+  // ============ 组件尺寸 ============
+
+  @ExampleCode(group: 'tag')
+  Widget _buildAllSizeTags(BuildContext context) {
     return const Wrap(
       spacing: 8,
+      direction: Axis.vertical,
       children: [
-        TTag('默认', isOutline: true, isLight: true),
-        TTag(
-          '主要',
-          isOutline: true,
-          isLight: true,
-          theme: TTagTheme.primary,
-        ),
-        TTag(
-          '警告',
-          isOutline: true,
-          isLight: true,
-          theme: TTagTheme.warning,
-        ),
-        TTag(
-          '危险',
-          isOutline: true,
-          isLight: true,
-          theme: TTagTheme.danger,
-        ),
-        TTag(
-          '成功',
-          isOutline: true,
-          isLight: true,
-          theme: TTagTheme.success,
-        ),
+        TTag('超大标签', size: TTagSize.extraLarge),
+        TTag('大型标签', size: TTagSize.large),
+        TTag('中等标签', size: TTagSize.medium),
+        TTag('小型标签', size: TTagSize.small),
       ],
     );
   }
 
-  @Demo(group: 'tag')
-  Widget _buildAllSizeTags(BuildContext context) {
-    return const Wrap(spacing: 8, children: [
-      TTag(
-        '加大尺寸',
-        size: TTagSize.extraLarge,
-      ),
-      TTag(
-        '大尺寸',
-        size: TTagSize.large,
-      ),
-      TTag(
-        '中尺寸',
-        size: TTagSize.medium,
-      ),
-      TTag(
-        '小尺寸',
-        size: TTagSize.small,
-      ),
-    ]);
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectDefault(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: [
+        TSelectTag('标签一',
+            value: _selected1,
+            onChanged: (v) => setState(() => _selected1 = v)),
+        TSelectTag('标签二',
+            value: _selected2,
+            onChanged: (v) => setState(() => _selected2 = v)),
+        TSelectTag('标签三',
+            value: _selected3,
+            onChanged: (v) => setState(() => _selected3 = v)),
+      ],
+    );
   }
 
-  @Demo(group: 'tag')
-  Widget _buildAllSizeCloseTags(BuildContext context) {
-    return const Wrap(spacing: 8, children: [
-      TTag(
-        '加大尺寸',
-        needCloseIcon: true,
-        size: TTagSize.extraLarge,
-      ),
-      TTag(
-        '大尺寸',
-        needCloseIcon: true,
-        size: TTagSize.large,
-      ),
-      TTag(
-        '中尺寸',
-        needCloseIcon: true,
-        size: TTagSize.medium,
-      ),
-      TTag(
-        '小尺寸',
-        needCloseIcon: true,
-        size: TTagSize.small,
-      ),
-    ]);
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectColorSchemes(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: [
+        TSelectTag('主要',
+            colorScheme: TTagColorScheme.primary,
+            value: _primarySelected,
+            onChanged: (value) => setState(() => _primarySelected = value)),
+        TSelectTag('成功',
+            colorScheme: TTagColorScheme.success,
+            value: _successSelected,
+            onChanged: (value) => setState(() => _successSelected = value)),
+        TSelectTag('警告',
+            colorScheme: TTagColorScheme.warning,
+            value: _warningSelected,
+            onChanged: (value) => setState(() => _warningSelected = value)),
+        TSelectTag('危险',
+            colorScheme: TTagColorScheme.danger,
+            value: _dangerSelected,
+            onChanged: (value) => setState(() => _dangerSelected = value)),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectDisabled(BuildContext context) {
+    return const TSelectTag('禁用标签', value: false, onChanged: null);
+  }
+
+  // ============ 测试 ============
+
+  Widget _buildDisabledTag(BuildContext context) {
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('禁用', colorScheme: TTagColorScheme.defaultTheme, enabled: false),
+        TTag('禁用', colorScheme: TTagColorScheme.primary, enabled: false),
+        TTag('禁用', colorScheme: TTagColorScheme.danger, enabled: false),
+      ],
+    );
   }
 }

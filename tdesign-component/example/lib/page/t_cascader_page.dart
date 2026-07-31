@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import '../../annotation/demo.dart';
-import '../../base/example_widget.dart';
 
+import '../annotation/example_code.dart';
+import '../base/example_widget.dart';
+
+/// TCascader 演示。
 class TCascaderPage extends StatefulWidget {
   const TCascaderPage({super.key});
 
@@ -14,648 +13,192 @@ class TCascaderPage extends StatefulWidget {
 }
 
 class _TCascaderPageState extends State<TCascaderPage> {
-  String? _initData;
-  String _selected_1 = '';
-  final List<Map> _data = [
-    {
-      'label': '北京市',
-      'value': '110000',
-      'children': [
-        {
-          'value': '110100',
-          'label': '北京市',
-          'children': [
-            {'value': '110101', 'label': '东城区'},
-            {'value': '1101022', 'label': '东区'},
-            {'value': '110102', 'label': '西城区'},
-            {'value': '110105', 'label': '朝阳区'},
-            {'value': '110106', 'label': '丰台区'},
-            {'value': '110107', 'label': '石景山区'},
-            {'value': '110108', 'label': '海淀区'},
-            {'value': '110109', 'label': '门头沟区'},
+  static const _options = [
+    TCascaderOption(
+      label: '广东省',
+      value: 'gd',
+      children: [
+        TCascaderOption(
+          label: '深圳市',
+          value: 'sz',
+          children: [
+            TCascaderOption(label: '南山区', value: 'ns'),
+            TCascaderOption(label: '福田区', value: 'ft'),
           ],
-        },
-      ],
-    },
-    {
-      'label': '天津市',
-      'value': '120000',
-      'children': [
-        {
-          'value': '120100',
-          'label': '天津市',
-          'children': [
-            {
-              'value': '120101',
-              'label': '和平区',
-            },
-            {
-              'value': '120102',
-              'label': '河东区',
-            },
-            {
-              'value': '120103',
-              'label': '河西区',
-            },
-            {
-              'value': '120104',
-              'label': '南开区',
-            },
-            {
-              'value': '120105',
-              'label': '河北区',
-            },
-            {
-              'value': '120106',
-              'label': '红桥区',
-            },
-            {
-              'value': '120110',
-              'label': '东丽区',
-            },
-            {
-              'value': '120111',
-              'label': '西青区',
-            },
-            {
-              'value': '120112',
-              'label': '津南区',
-            },
+        ),
+        TCascaderOption(
+          label: '广州市',
+          value: 'gz',
+          children: [
+            TCascaderOption(label: '越秀区', value: 'yx'),
+            TCascaderOption(label: '天河区', value: 'th'),
           ],
-        },
+        ),
       ],
-    },
+    ),
+    TCascaderOption(
+      label: '浙江省',
+      value: 'zj',
+      children: [
+        TCascaderOption(
+          label: '杭州市',
+          value: 'hz',
+          children: [
+            TCascaderOption(label: '西湖区', value: 'xh'),
+            TCascaderOption(label: '余杭区', value: 'yh'),
+          ],
+        ),
+        TCascaderOption(label: '宁波市', value: 'nb'),
+      ],
+    ),
+    TCascaderOption(label: '香港特别行政区', value: 'hk'),
   ];
 
-  String? _initData_2;
-  String _selected_2 = '';
-  final List<Map> _data_2 = [
-    {
-      'label': '北京市',
-      'value': '110000',
-      'segmentValue': 'B',
-      'children': [
-        {
-          'value': '110100',
-          'label': '北京市',
-          'segmentValue': 'B',
-          'children': [
-            {
-              'value': '110101',
-              'label': '东城区',
-              'segmentValue': 'D',
-            },
-            {'value': '1101022', 'label': '东区', 'segmentValue': 'D'},
-            {'value': '110102', 'label': '西城区', 'segmentValue': 'X'},
-            {'value': '110105', 'label': '朝阳区', 'segmentValue': 'C'},
-            {'value': '110106', 'label': '丰台区', 'segmentValue': 'F'},
-            {'value': '110107', 'label': '石景山区', 'segmentValue': 'S'},
-            {'value': '110108', 'label': '海淀区', 'segmentValue': 'H'},
-            {'value': '110109', 'label': '门头沟区', 'segmentValue': 'M'},
-          ],
-        },
+  static const _optionsWithDisabled = [
+    TCascaderOption(
+      label: '广东省',
+      value: 'gd',
+      children: [
+        TCascaderOption(label: '深圳市', value: 'sz', disabled: true),
+        TCascaderOption(label: '广州市', value: 'gz'),
       ],
-    },
-    {
-      'label': '天津市',
-      'value': '120000',
-      'segmentValue': 'T',
-      'children': [
-        {
-          'value': '120100',
-          'label': '天津市',
-          'segmentValue': 'T',
-          'children': [
-            {
-              'value': '120101',
-              'label': '和平区',
-              'segmentValue': 'H',
-            },
-            {'value': '120102', 'label': '河东区', 'segmentValue': 'H'},
-            {'value': '120103', 'label': '河西区', 'segmentValue': 'H'},
-            {'value': '120104', 'label': '南开区', 'segmentValue': 'N'},
-            {'value': '120105', 'label': '河北区', 'segmentValue': 'H'},
-            {'value': '120106', 'label': '红桥区', 'segmentValue': 'H'},
-            {'value': '120110', 'label': '东丽区', 'segmentValue': 'D'},
-            {'value': '120111', 'label': '西青区', 'segmentValue': 'X'},
-            {'value': '120112', 'label': '津南区', 'segmentValue': 'J'},
-          ],
-        },
-      ],
-    },
+    ),
+    TCascaderOption(label: '暂不可选地区', value: 'disabled', disabled: true),
   ];
 
-  String? _initData_3;
-  String _selected_3 = '';
-  final List<Map> _data_3 = [
-    {
-      'label': '技术部门',
-      'value': '110000',
-      'segmentValue': 'J',
-      'children': [
-        {
-          'value': '110100',
-          'label': '部门一',
-          'segmentValue': 'B',
-          'children': [
-            {'value': '110101', 'label': '洪磊', 'segmentValue': 'H'},
-            {'value': '110102', 'label': '洪磊2', 'segmentValue': 'H'},
-            {'value': '1101022', 'label': '洪磊3', 'segmentValue': 'H'},
-            {'value': '110105', 'label': '洪磊4', 'segmentValue': 'H'},
-            {'value': '110106', 'label': '郭天1', 'segmentValue': 'G'},
-            {'value': '110107', 'label': '郭天2', 'segmentValue': 'G'},
-            {'value': '110109', 'label': '冯笑1', 'segmentValue': 'F'},
-            {'value': '110108', 'label': '郭天3', 'segmentValue': 'G'},
-          ],
-        },
-        {
-          'value': '110200',
-          'label': '部门二',
-          'segmentValue': 'B',
-          'children': [
-            {'value': '110201', 'label': '洪磊', 'segmentValue': 'H'},
-            {'value': '110205', 'label': '洪磊4', 'segmentValue': 'H'},
-            {'value': '110206', 'label': '郭天1', 'segmentValue': 'G'},
-            {'value': '110207', 'label': '郭天2', 'segmentValue': 'G'},
-            {'value': '110208', 'label': '郭天3', 'segmentValue': 'G'},
-            {'value': '110209', 'label': '冯笑1', 'segmentValue': 'F'},
-            {'value': '110202', 'label': '洪磊2', 'segmentValue': 'H'},
-            {'value': '1102022', 'label': '洪磊3', 'segmentValue': 'H'},
-          ],
-        },
-      ],
-    },
-    {
-      'label': '行政部门',
-      'value': '120000',
-      'segmentValue': 'X',
-      'children': [
-        {
-          'value': '120100',
-          'label': '部门一',
-          'segmentValue': 'B',
-          'children': [
-            {'value': '120201', 'label': '洪磊', 'segmentValue': 'H'},
-            {'value': '120205', 'label': '洪磊4', 'segmentValue': 'H'},
-            {'value': '120206', 'label': '郭天1', 'segmentValue': 'G'},
-            {'value': '120207', 'label': '郭天2', 'segmentValue': 'G'},
-            {'value': '120208', 'label': '郭天3', 'segmentValue': 'G'},
-            {'value': '120209', 'label': '冯笑1', 'segmentValue': 'F'},
-            {'value': '120202', 'label': '洪磊2', 'segmentValue': 'H'},
-            {'value': '1202022', 'label': '洪磊3', 'segmentValue': 'H'},
-          ],
-        },
-      ],
-    },
-  ];
-
-  String? _initData_4;
-  String _selected_4 = '';
-  final List<Map> _data_4 = [
-    {
-      'label': '技术部门',
-      'value': '110000',
-      'children': [
-        {
-          'value': '110100',
-          'label': '部门一',
-          'children': [
-            {
-              'value': '110201',
-              'label': '后勤部门',
-              'children': [
-                {
-                  'value': '110301',
-                  'label': '后勤A组',
-                  'children': [
-                    {
-                      'value': '110401',
-                      'label': '一组',
-                      'children': [
-                        {
-                          'value': '110501',
-                          'label': '洪磊',
-                        },
-                        {'value': '110502', 'label': '洪磊2'},
-                        {'value': '110506', 'label': '郭天1'},
-                        {'value': '110507', 'label': '郭天2'},
-                        {'value': '110508', 'label': '郭天3'},
-                        {'value': '110509', 'label': '冯笑1'},
-                        {'value': '1105022', 'label': '洪磊3'},
-                        {'value': '110505', 'label': '洪磊4'},
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-          ],
-        },
-        {
-          'value': '120100',
-          'label': '部门二',
-          'children': [
-            {
-              'value': '120201',
-              'label': '后勤部门',
-              'children': [
-                {
-                  'value': '120301',
-                  'label': '后勤A组',
-                  'children': [
-                    {
-                      'value': '120401',
-                      'label': '一组',
-                      'children': [
-                        {'value': '120501', 'label': '张雷1'},
-                        {'value': '120502', 'label': '张雷2'},
-                        {'value': '1205022', 'label': '张雷3'},
-                        {'value': '120505', 'label': '张雷4'},
-                        {'value': '120506', 'label': '张雷5'},
-                        {'value': '120507', 'label': '张雷6'},
-                        {'value': '120508', 'label': '张雷7'},
-                        {'value': '120509', 'label': '张雷8'},
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-  String? _initData_5;
-  String? _initData_6;
-  
-  // For TDropdownItem example (issue #705 fix verification)
-  String _selectedDept = '请选择部门';
+  List<Object?> _tabValue = const [];
+  List<Object?> _stepValue = const ['gd'];
+  List<Object?> _presetValue = const ['zj', 'hz', 'xh'];
+  List<Object?> _placeholderValue = const ['gd'];
+  List<Object?> _disabledOptionValue = const [];
+  List<Object?> _popupValue = const ['gd', 'sz', 'ns'];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: TTheme.of(context).whiteColor1,
-      child: ExamplePage(
-        title: tTitle(),
-        exampleCodeGroup: 'cascader',
-        desc: '用于多层级数据的逐级选择',
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '垂直级联选择器', builder: _buildVerticalCascader),
-            ExampleItem(desc: '垂直级联选择器-带字母定位', builder: _buildVerticalLetterCascader),
-            ExampleItem(desc: '水平级联选择器', builder: _buildHorizontalCascader),
-            ExampleItem(desc: '水平级联选择器-带字母定位', builder: _buildHorizontalLetterCascader),
-            ExampleItem(desc: '水平级联选择器-部门', builder: _buildHorizontalCompanyCascader),
-            ExampleItem(desc: '垂直级联选择器-部门', builder: _buildVerticalCompanyCascader),
-          ]),
-        ],
-        test: [
-          ExampleItem(desc: '测试使用次标题', builder: _buildVerticalSubTitleCascader),
-          ExampleItem(desc: '垂直级联选择器-部门', builder: _buildTestVerticalCompanyCascader),
-          ExampleItem(desc: '选择任意项', builder: _buildSelectAnyItemCascader),
-          ExampleItem(desc: '使用initialIndexes设置默认值', builder: _buildWithInitialIndexes),
-          ExampleItem(desc: '在TDropdownItem中使用(修复#705)', builder: _buildInDropdownItem),
-        ],
-      ),
+    return ExamplePage(
+      title: tTitle(),
+      desc: '用于从层级数据中选择一条路径。',
+      exampleCodeGroup: 'cascader',
+      children: [
+        ExampleModule(title: '弹出层用法', children: [
+          ExampleItem(desc: '底部弹出选择（确认后提交）', builder: _buildPopup),
+        ]),
+        ExampleModule(title: '基础用法', children: [
+          ExampleItem(desc: '标签导航', builder: _buildTab),
+          ExampleItem(desc: '步骤导航', builder: _buildStep),
+        ]),
+        ExampleModule(title: '选择状态', children: [
+          ExampleItem(desc: '默认选中路径', builder: _buildPreset),
+          ExampleItem(desc: '自定义占位文案', builder: _buildPlaceholder),
+        ]),
+        ExampleModule(title: '禁用状态', children: [
+          ExampleItem(desc: '禁用部分选项', builder: _buildDisabledOption),
+          ExampleItem(desc: '整体禁用', builder: _buildDisabled),
+        ]),
+      ],
     );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildVerticalCascader(BuildContext context) {
-    const title = '选择地址';
-    return TCell(
-        title: title,
-        note: _selected_1,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              data: _data,
-              initialData: _initData,
-              theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_1 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
+  @ExampleCode(group: 'cascader')
+  Widget _buildTab(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _tabValue,
+      onChanged: (value) => setState(() => _tabValue = value),
+    );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildVerticalLetterCascader(BuildContext context) {
-    const title = '选择地址';
-    return TCell(
-        title: title,
-        note: _selected_2,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              data: _data_2,
-              initialData: _initData_2,
-              theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_2 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_2 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
+  @ExampleCode(group: 'cascader')
+  Widget _buildPreset(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _presetValue,
+      onChanged: (value) => setState(() => _presetValue = value),
+    );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildHorizontalCascader(BuildContext context) {
-    const title = '选择地址';
-    return TCell(
-        title: title,
-        note: _selected_1,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              subTitles: ['请选择省份', '请选择城市', '请选择区/县'],
-              data: _data,
-              initialData: _initData,
-              theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_1 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
+  @ExampleCode(group: 'cascader')
+  Widget _buildPlaceholder(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _placeholderValue,
+      placeholder: '请选择下一级',
+      onChanged: (value) => setState(() => _placeholderValue = value),
+    );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildHorizontalLetterCascader(BuildContext context) {
-    const title = '选择地址';
-    return TCell(
-        title: title,
-        note: _selected_2,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              data: _data_2,
-              initialData: _initData_2,
-              isLetterSort: true,
-              theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_2 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_2 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
+  @ExampleCode(group: 'cascader')
+  Widget _buildStep(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _stepValue,
+      variant: TCascaderVariant.step,
+      onChanged: (value) => setState(() => _stepValue = value),
+    );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildHorizontalCompanyCascader(BuildContext context) {
-    const title = '选择部门人员';
-    return TCell(
-        title: title,
-        note: _selected_3,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              data: _data_3,
-              isLetterSort: true,
-              initialData: _initData_3,
-              theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_3 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_3 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
+  @ExampleCode(group: 'cascader')
+  Widget _buildDisabledOption(BuildContext context) {
+    return TCascader(
+      options: _optionsWithDisabled,
+      value: _disabledOptionValue,
+      onChanged: (value) => setState(() => _disabledOptionValue = value),
+    );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildVerticalCompanyCascader(BuildContext context) {
-    const title = '选择部门人员';
-    return TCell(
-        title: title,
-        note: _selected_3,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              data: _data_3,
-              isLetterSort: true,
-              initialData: _initData_3,
-              theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_3 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_3 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
+  @ExampleCode(group: 'cascader')
+  Widget _buildDisabled(BuildContext context) {
+    return const TCascader(
+      options: _options,
+      value: ['gd', 'sz', 'ns'],
+    );
   }
 
-  @Demo(group: 'cascader')
-  Widget _buildVerticalSubTitleCascader(BuildContext context) {
-    const title = '选择地址';
-    return TCell(
-        title: title,
-        note: _selected_1,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              subTitles: ['请选择省份', '请选择城市', '请选择区/县'],
-              data: _data,
-              initialData: _initData_4,
-              theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_4 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_1 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
-  }
+  @ExampleCode(group: 'cascader')
+  Widget _buildPopup(BuildContext context) {
+    List<String> selectedLabels(List<Object?> value) {
+      var options = _options;
+      final labels = <String>[];
+      for (final selectedValue in value) {
+        final matches =
+            options.where((option) => option.value == selectedValue).toList();
+        if (matches.isEmpty) {
+          break;
+        }
+        labels.add(matches.first.label);
+        options = matches.first.children;
+      }
+      return labels;
+    }
 
-  @Demo(group: 'cascader')
-  Widget _buildTestVerticalCompanyCascader(BuildContext context) {
-    const title = '选择部门人员';
     return TCell(
-        title: title,
-        note: _selected_4,
-        arrow: true,
-        onClick: (click) {
-          TCascader.showMultiCascader(context,
-              title: title,
-              data: _data_4,
-              initialData: _initData_5,
-              theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_5 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_4 = result.join('/');
-            });
-          }, onClose: () {
-            Navigator.of(context).pop();
-          });
-        });
-  }
-
-  @Demo(group: 'cascader')
-  Widget _buildSelectAnyItemCascader(BuildContext context) {
-    const title = '请选择数据';
-    return TCell(
-        title: title,
-        note: _selected_1,
-        arrow: true,
-        onClick: (click) {
-          var action = (List<MultiCascaderListModel> selectData) {
-            if (selectData.isEmpty) {
-              TToast.showText(title, context: context);
-              return;
-            }
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData_6 = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_1 = result.join('/');
-            });
-          };
-          TCascader.showMultiCascader(
-            context,
-            title: '选择地址',
-            data: _data,
-            initialData: _initData_6,
-            action: TCascaderAction(onConfirm: action),
-            onChange: action,
-          );
-        });
-  }
-
-  @Demo(group: 'cascader')
-  Widget _buildWithInitialIndexes(BuildContext context) {
-    return TCell(
-      title: '选择地区',
-      note: _selected_1.isEmpty ? '请选择' : _selected_1,
+      title: const TText('选择地区'),
+      note: TText(selectedLabels(_popupValue).join(' / ')),
       arrow: true,
-      onClick: (click) {
-        TCascader.showMultiCascader(
+      onTap: () {
+        var draft = List<Object?>.of(_popupValue);
+        TPopup.show(
           context,
-          title: '选择地址',
-          data: _data,
-          initialIndexes: [0, 0, 1],
-          theme: 'step',
-          onChange: (List<MultiCascaderListModel> selectData) {
-            setState(() {
-              var result = [];
-              var len = selectData.length;
-              _initData = selectData[len - 1].value!;
-              selectData.forEach((element) {
-                result.add(element.label);
-              });
-              _selected_1 = result.join('/');
-            });
-          },
-          onClose: () {
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
-  }
-
-  var resetDropdownMenuValue = 0;
-  @Demo(group: 'cascader')
-  Widget _buildInDropdownItem(BuildContext context) {
-    return TDropdownMenu(
-      key: ValueKey(resetDropdownMenuValue),
-      direction: TDropdownMenuDirection.up,
-      builder: (context) {
-        return [
-          TDropdownItem(
-            label: _selectedDept,
-            builder: (context, itemState, popupState) {
-              return TMultiCascader(
-                title: '选择部门',
-                cascaderHeight: 400,
-                data: _data_3,
-                initialData: _initData_3,
-                theme: 'step',
-                onChange: (List<MultiCascaderListModel> selectData) {
-                  setState(() {
-                    var result = [];
-                    var len = selectData.length;
-                    _initData_3 = selectData[len - 1].value!;
-                    selectData.forEach((element) {
-                      result.add(element.label);
-                    });
-                    _selectedDept = result.join(' / ');
-                    resetDropdownMenuValue++;
-                  });
+          options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height * 0.6,
+            titleWidget: const TText('选择地区'),
+            child: StatefulBuilder(
+              builder: (context, setPopupState) => TCascader(
+                key: const Key('cascader-popup'),
+                options: _options,
+                value: draft,
+                onChanged: (value) {
+                  setPopupState(() => draft = value);
                 },
-                onClose: (){
-                  setState(() {
-                    resetDropdownMenuValue++;
-                  });
-                  Navigator.maybePop(context);
-                },
-              );
+              ),
+            ),
+            onVisibleChange: (visible, trigger) {
+              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
+                setState(() => _popupValue = List<Object?>.of(draft));
+              }
             },
           ),
-        ];
+        );
       },
     );
   }

@@ -1,8 +1,6 @@
-
-  Widget _buildCirclePrimary(BuildContext context) {
+Widget _buildCirclePrimary(BuildContext context) {
     return TProgress(
-      type: TProgressType.circular,
-      progressStatus: TProgressStatus.primary,
+      variant: TProgressVariant.circular,
       value: value,
     );
   }

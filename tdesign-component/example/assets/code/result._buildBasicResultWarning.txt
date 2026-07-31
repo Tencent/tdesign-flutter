@@ -1,7 +1,0 @@
-
-  TResult _buildBasicResultWarning(BuildContext context) {
-    return const TResult(
-      title: '警示状态',
-      theme: TResultTheme.warning,
-    );
-  }

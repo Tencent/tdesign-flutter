@@ -1,0 +1,14 @@
+Widget _buildSuccessToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('成功'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showSuccess('操作成功', context: context);
+        },
+      ),
+    );
+  }

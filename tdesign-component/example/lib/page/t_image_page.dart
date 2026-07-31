@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TImagePage extends StatefulWidget {
   const TImagePage({Key? key}) : super(key: key);
@@ -207,7 +208,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 图片裁剪 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageClip(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,19 +217,19 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '裁剪',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          assetUrl: 'assets/img/image.png',
-          type: TImageType.clip,
+          src: 'assets/img/image.png',
+          variant: TImageVariant.clip,
         ),
       ],
     );
   }
 
 /* 图片拉伸 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageStretch(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,21 +238,17 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '拉伸',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         Container(
-          color: TTheme.of(context).bgColorContainerHover,
-          width: 121,
-          height: 72,
+          color: context.tTheme.bgColorContainerHover,
           child: const Stack(
             alignment: Alignment.center,
             children: [
               TImage(
-                assetUrl: 'assets/img/image.png',
-                width: 121,
-                height: 50,
-                type: TImageType.stretch,
+                src: 'assets/img/image.png',
+                variant: TImageVariant.stretch,
               ),
             ],
           ),
@@ -261,7 +258,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 图片适应高 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageFitHeight(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,16 +267,14 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '适应高',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         Container(
-          width: 89,
-          height: 72,
-          color: TTheme.of(context).bgColorContainerHover,
+          color: context.tTheme.bgColorContainerHover,
           child: const TImage(
-            assetUrl: 'assets/img/image.png',
-            type: TImageType.fitHeight,
+            src: 'assets/img/image.png',
+            variant: TImageVariant.fitHeight,
           ),
         ),
       ],
@@ -287,7 +282,7 @@ class TImageState extends State<TImagePage>
   }
 
   /* 图片适应宽 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageFitWidth(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,16 +291,14 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '适应宽',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         Container(
-          width: 72,
-          height: 89,
-          color: TTheme.of(context).bgColorContainerHover,
+          color: context.tTheme.bgColorContainerHover,
           child: const TImage(
-            assetUrl: 'assets/img/image.png',
-            type: TImageType.fitWidth,
+            src: 'assets/img/image.png',
+            variant: TImageVariant.fitWidth,
           ),
         ),
       ],
@@ -313,7 +306,7 @@ class TImageState extends State<TImagePage>
   }
 
 /* 方形 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,19 +315,19 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '方形',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          assetUrl: 'assets/img/image.png',
-          type: TImageType.square,
+          src: 'assets/img/image.png',
+          variant: TImageVariant.square,
         ),
       ],
     );
   }
 
 /* 圆角方形 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageRoundedSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,21 +336,19 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '圆角方形',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          assetUrl: 'assets/img/image.png',
-          type: TImageType.roundedSquare,
-          width: 72,
-          height: 72,
+          src: 'assets/img/image.png',
+          variant: TImageVariant.roundedSquare,
         ),
       ],
     );
   }
 
 /* 圆形 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageCircle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,21 +357,19 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '圆形',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          assetUrl: 'assets/img/image.png',
-          width: 72,
-          height: 72,
-          type: TImageType.circle,
+          src: 'assets/img/image.png',
+          variant: TImageVariant.circle,
         ),
       ],
     );
   }
 
 /* 加载默认提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _loadingDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -389,37 +378,19 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '加载默认提示',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
-        Container(
-            height: 72,
-            width: 72,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            child: Container(
-                alignment: Alignment.center,
-                color: TTheme.of(context).bgColorContainerHover,
-                child: Icon(
-                  TIcons.ellipsis,
-                  size: 22,
-                  color: TTheme.of(context).textColorPlaceholder,
-                ))),
-
-        /// @tips 实际组件写法如下：上面仅为加载展示
-        // const TImage(
-        //   imgUrl:
-        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   type: TImageType.roundedSquare,
-        // ),
+        const TImage(
+          src: '',
+          variant: TImageVariant.roundedSquare,
+        ),
       ],
     );
   }
 
 /* 加载自定义提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _loadingCustom(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -428,47 +399,28 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '加载自定义提示',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
-        Container(
-            height: 72,
-            width: 72,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TTheme.of(context).radiusDefault)),
-            child: Container(
-                alignment: Alignment.center,
-                color: TTheme.of(context).bgColorContainerHover,
-                child: RotationTransition(
-                    turns: animation,
-                    alignment: Alignment.center,
-                    child: TCircleIndicator(
-                      color: TTheme.of(context).brandNormalColor,
-                      size: 18,
-                      lineWidth: 3,
-                    )))),
-        // 实际组件写法如下：上面仅为加载展示
-        // TImage(
-        //   imgUrl:
-        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   loadingWidget: RotationTransition(
-        //       turns: animation,
-        //       alignment: Alignment.center,
-        //       child: TCircleIndicator(
-        //         color: TTheme.of(context).brandNormalColor,
-        //         size: 18,
-        //         lineWidth: 3,
-        //       )),
-        //   type: TImageType.roundedSquare,
-        // ),
+        TImage(
+          src: '',
+          loadingWidget: RotationTransition(
+            turns: animation,
+            alignment: Alignment.center,
+            child: TCircleIndicator(
+              color: context.tTheme.brandNormalColor,
+              size: 18,
+              lineWidth: 3,
+            ),
+          ),
+          variant: TImageVariant.roundedSquare,
+        ),
       ],
     );
   }
 
 /* 失败默认提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _failDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -477,19 +429,19 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '失败默认提示',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         const TImage(
-          imgUrl: 'error',
-          type: TImageType.roundedSquare,
+          src: 'error',
+          variant: TImageVariant.roundedSquare,
         ),
       ],
     );
   }
 
 /* 失败自定义提示 */
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _failCustom(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -498,30 +450,27 @@ class TImageState extends State<TImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TText(
             '失败自定义提示',
-            font: TTheme.of(context).fontBodyMedium,
+            font: context.tTheme.fontBodyMedium,
           ),
         ),
         TImage(
-          imgUrl: 'error',
+          src: 'error',
           errorWidget: TText(
             '加载失败',
-            forceVerticalCenter: true,
-            font: TTheme.of(context).fontBodyExtraSmall,
+            font: context.tTheme.fontBodyExtraSmall,
           ),
-          type: TImageType.roundedSquare,
+          variant: TImageVariant.roundedSquare,
         ),
       ],
     );
   }
 
-  @Demo(group: 'image')
+  @ExampleCode(group: 'image')
   Widget _imageFile(BuildContext context) {
     return SizedBox(
-      width: 72,
-      height: 72,
       child: TImage(
         imageFile: File('/sdcard/td/test.jpg'),
-        type: TImageType.fitWidth,
+        variant: TImageVariant.fitWidth,
       ),
     );
   }

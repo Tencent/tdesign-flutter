@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   autofix:
@@ -25,8 +25,6 @@ jobs:
         with:
           flutter-version: 3.32.0
           cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
@@ -35,13 +33,13 @@ jobs:
         working-directory: ./tdesign-component
         run: sh ./demo_tool/all_build.sh
 
+      - name: Check example code snippets
+        working-directory: ./tdesign-component
+        run: dart run tool/generate_example_code.dart --check
+
       - name: flutter pub get
         working-directory: ./tdesign-component/example
         run: flutter pub get
-
-      - name: clean up code txt file
-        working-directory: ./tdesign-component/example/assets/code
-        run: rm -f *.txt
 
       - name: flutter build
         working-directory: ./tdesign-component/example

@@ -7,17 +7,38 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
 import '../text/t_text.dart';
-import 't_action_sheet.dart';
+import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
+import 't_action_sheet_theme_data.dart';
+import 't_action_sheet_types.dart';
 
+/// 列表类型动作面板
+///
+/// 以列表布局展示可选项，支持描述文本。
+/// 通常不直接使用，由 `TActionSheet.showList` 创建。
 class TActionSheetList extends StatelessWidget {
+  /// 动作面板的项目列表
   final List<TActionSheetItem> items;
+
+  /// 对齐方式
   final TActionSheetAlign align;
+
+  /// 取消按钮的文本
   final String? cancelText;
-  final String? description;
+
+  /// 描述文本
+  final String? subtitle;
+
+  /// 是否显示取消按钮
   final bool showCancel;
+
+  /// 取消按钮的回调函数
   final VoidCallback? onCancel;
-  final TActionSheetItemCallback? onSelected;
+
+  /// 选择项目时的回调函数
+  final TActionSheetOnChanged? onChanged;
+
+  /// 是否使用安全区域
   final bool useSafeArea;
 
   const TActionSheetList({
@@ -25,30 +46,35 @@ class TActionSheetList extends StatelessWidget {
     required this.items,
     this.align = TActionSheetAlign.center,
     this.cancelText,
-    this.description,
+    this.subtitle,
     this.showCancel = true,
     this.onCancel,
-    this.onSelected,
+    this.onChanged,
     this.useSafeArea = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = Radius.circular(TTheme.of(context).radiusExtraLarge);
+    final borderRadius = Radius.circular(context.tTheme.radiusExtraLarge);
     return Container(
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TTheme.of(context).bgColorPage,
+        color: context.tTheme.bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (description != null) _buildDescription(context),
-          _buildOptionsList(context),
-          if (showCancel) _buildCancelButton(context),
-        ],
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (subtitle != null) _buildDescription(context),
+            Flexible(child: _buildOptionsList(context)),
+            if (showCancel) _buildCancelButton(context),
+          ],
+        ),
       ),
     );
   }
@@ -57,14 +83,14 @@ class TActionSheetList extends StatelessWidget {
   Widget _buildDescription(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: TTheme.of(context).spacer16,
-        vertical: TTheme.of(context).spacer12,
+        horizontal: context.tTheme.spacer16,
+        vertical: context.tTheme.spacer12,
       ),
       decoration: BoxDecoration(
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         border: Border(
           bottom: BorderSide(
-            color: TTheme.of(context).componentStrokeColor,
+            color: context.tTheme.componentStrokeColor,
             width: 0.5,
           ),
         ),
@@ -72,10 +98,17 @@ class TActionSheetList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: getMainAxisAlignment(align),
         children: [
-          TText(
-            description!,
-            font: TTheme.of(context).fontBodyMedium,
-            textColor: TTheme.of(context).textColorSecondary,
+          Flexible(
+            child: TText(
+              subtitle!,
+              font: context.tTheme.fontBodyMedium,
+              textAlign: switch (align) {
+                TActionSheetAlign.left => TextAlign.left,
+                TActionSheetAlign.right => TextAlign.right,
+                TActionSheetAlign.center => TextAlign.center,
+              },
+              textColor: context.tTheme.textColorSecondary,
+            ),
           ),
         ],
       ),
@@ -84,12 +117,14 @@ class TActionSheetList extends StatelessWidget {
 
   /// 构建选项列表
   Widget _buildOptionsList(BuildContext context) {
+    final actionSheetTheme =
+        Theme.of(context).extension<TActionSheetThemeData>();
+    final iconSize = actionSheetTheme?.iconSize ?? 24;
     return Container(
-      color: TTheme.of(context).bgColorContainer,
+      color: context.tTheme.bgColorContainer,
       child: ListView.builder(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        // 禁用滚动
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: items.length,
         padding: EdgeInsets.zero,
         itemBuilder: (context, index) {
@@ -98,19 +133,17 @@ class TActionSheetList extends StatelessWidget {
             onTap: item.disabled
                 ? null // 如果项被禁用，则不设置点击事件
                 : () {
-                    onSelected?.call(item, index); // 触发选中回调
+                    onChanged?.call(item, index); // 触发选中回调
                     Navigator.maybePop(context); // 关闭当前页面
                   },
             child: Container(
-              height: item.description == null || item.description!.isEmpty
-                  ? 56
-                  : 78,
-              padding: EdgeInsets.symmetric(
-                  horizontal: TTheme.of(context).spacer16),
+              height: item.subtitle == null || item.subtitle!.isEmpty ? 56 : 78,
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: TTheme.of(context).componentStrokeColor,
+                    color: context.tTheme.componentStrokeColor,
                     width: 0.5,
                   ),
                 ),
@@ -125,52 +158,49 @@ class TActionSheetList extends StatelessWidget {
                         IconTheme(
                           data: IconThemeData(
                             color: item.disabled
-                                // 禁用状态下的图标颜色
-                                ? TTheme.of(context).textDisabledColor
+                                ? context.tTheme.textDisabledColor
                                 : (item.textStyle?.color ??
-                                    // 正常状态下的图标颜色
-                                    TTheme.of(context).textColorPrimary),
-                            size: item.textStyle?.fontSize,
+                                    actionSheetTheme?.iconColor ??
+                                    context.tTheme.textColorPrimary),
+                            size: iconSize,
                           ),
                           child: SizedBox(
-                            width: item.iconSize ?? 24,
-                            height: item.iconSize ?? 24,
-                            child: item.icon!,
+                            width: iconSize,
+                            height: iconSize,
+                            child: Center(child: item.icon!),
                           ),
                         ),
-                        SizedBox(width: TTheme.of(context).spacer8),
+                        SizedBox(width: context.tTheme.spacer8),
                       ],
                       TText(
                         item.label,
-                        font: TTheme.of(context).fontBodyLarge,
+                        font: context.tTheme.fontBodyLarge,
                         textColor: item.disabled
-                            ? TTheme.of(context)
-                                .textDisabledColor // 禁用状态下的文本颜色
-                            : TTheme.of(context)
-                                .textColorPrimary, // 正常状态下的文本颜色
+                            ? context.tTheme.textDisabledColor // 禁用状态下的文本颜色
+                            : context.tTheme.textColorPrimary, // 正常状态下的文本颜色
                         style: item.textStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
 
                       /// todo 徽标应位于右上角，而不是右边紧挨着，请参考宫格徽标实现
                       if (item.badge != null) ...[
-                        SizedBox(width: TTheme.of(context).spacer8),
+                        SizedBox(width: context.tTheme.spacer8),
                         item.badge!,
                       ],
                     ],
                   ),
-                  if (item.description != null &&
-                      item.description!.isNotEmpty) ...[
-                    SizedBox(height: TTheme.of(context).spacer4),
+                  if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
+                    SizedBox(height: context.tTheme.spacer4),
                     Row(
                         mainAxisAlignment: getMainAxisAlignment(align),
                         children: [
                           Flexible(
-                              child: TText(item.description,
-                                  font: TTheme.of(context).fontBodyMedium,
+                              child: TText(item.subtitle,
+                                  font: context.tTheme.fontBodyMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  textColor:
-                                      TTheme.of(context).textDisabledColor))
+                                  textColor: context.tTheme.textDisabledColor))
                         ])
                   ]
                 ],
@@ -192,20 +222,20 @@ class TActionSheetList extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              color: TTheme.of(context).bgColorContainer,
+              color: context.tTheme.bgColorContainer,
               height: 48,
-              margin: EdgeInsets.only(top: TTheme.of(context).spacer8),
+              margin: EdgeInsets.only(top: context.tTheme.spacer8),
               child: Center(
                 child: TText(
                   cancelText ?? context.resource.cancel,
-                  font: TTheme.of(context).fontBodyLarge,
-                  textColor: TTheme.of(context).textColorPrimary,
+                  font: context.tTheme.fontBodyLarge,
+                  textColor: context.tTheme.textColorPrimary,
                 ),
               ),
             ),
             useSafeArea
                 ? Container(
-                    color: TTheme.of(context).bgColorContainer,
+                    color: context.tTheme.bgColorContainer,
                     height: MediaQuery.of(context).padding.bottom,
                   )
                 : const SizedBox.shrink(),

@@ -1,55 +1,51 @@
-
-  Widget _buildCustomSideBar(BuildContext context) {
+Widget _buildCustomSideBar(BuildContext context) {
     // 自定义样式
-    final list = <SideItemProps>[];
+    final list = <TSideBarItem>[];
     final pages = <Widget>[];
 
-    for (var i = 0; i < 100; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项 $i',
+    for (var i = 0; i < _sections.length; i++) {
+      list.add(TSideBarItem(
+        label: _sections[i],
         value: i,
-        textStyle: TextStyle(color: TTheme.of(context).brandLightColor),
+        textStyle: TextStyle(color: context.tTheme.textColorSecondary),
       ));
-      pages.add(getPageDemo(i));
+      pages.add(getPageDemo(context, i));
     }
-
-    list[1].badge = const TBadge(TBadgeType.redPoint);
-    list[2].badge = const TBadge(
-      TBadgeType.message,
-      count: '8',
-    );
-    list[1].textStyle = const TextStyle(color: Colors.green);
 
     void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
       if (currentValue != value) {
-        currentValue = value;
+        setState(() {
+          currentValue = value;
+        });
       }
     }
 
     return Row(
       children: [
         SizedBox(
-          width: 110,
+          width: 116,
           child: TSideBar(
-            style: TSideBarStyle.normal,
+            style: TSideBarVariant.normal,
             value: currentValue,
-            controller: _sideBarController,
             children: list
                 .map((ele) => TSideBarItem(
-                    label: ele.label ?? '',
+                    label: ele.label,
                     badge: ele.badge,
                     value: ele.value,
                     textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
-            selectedTextStyle: const TextStyle(color: Colors.red),
-            onSelected: setCurrentValue,
+            selectedTextStyle: TextStyle(
+              color: context.tTheme.brandNormalColor,
+              fontWeight: FontWeight.w600,
+            ),
+            onChanged: setCurrentValue,
             contentPadding:
-                const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-            selectedBgColor: Colors.blue,
-            unSelectedBgColor: Colors.yellow,
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+            selectedBgColor: context.tTheme.brandLightColor,
+            unSelectedBgColor: context.tTheme.bgColorContainer,
+            unSelectedColor: context.tTheme.textColorSecondary,
           ),
         ),
         Expanded(

@@ -1,10 +1,9 @@
-
-  TButton _buildSmallButton(BuildContext context) {
-    return const TButton(
-      text: '按钮32',
+TButton _buildSmallButton(BuildContext context) {
+    return TButton(
+      child: const Text('按钮32'),
       size: TButtonSize.small,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: _onTap,
     );
   }

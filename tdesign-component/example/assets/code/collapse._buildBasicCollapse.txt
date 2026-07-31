@@ -1,8 +1,6 @@
-
-  Widget _buildBasicCollapse(BuildContext context) {
+Widget _buildBasicCollapse(BuildContext context) {
     return TCollapse(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
+      onExpansionChanged: (int index, bool isExpanded) {
         setState(() {
           _basicData[index].isExpanded = !isExpanded;
         });

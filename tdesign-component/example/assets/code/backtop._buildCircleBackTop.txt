@@ -1,12 +1,7 @@
-
-  Widget _buildCircleBackTop(BuildContext context) {
-    return getCustomButton(context, '圆形返回顶部', () {
-      setState(() {
-        showBackTop = true;
-        if (controller.hasClients) {
-          controller.jumpTo(500);
-        }
-        style = TBackTopStyle.circle;
-      });
-    });
+Widget _buildCircleBackTop(BuildContext context) {
+    return getCustomButton(
+      context,
+      '圆形返回顶部',
+      () => _showBackTop(TBackTopShape.circle),
+    );
   }

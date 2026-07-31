@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TPullDownRefreshPage extends StatefulWidget {
   const TPullDownRefreshPage({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
     );
   }
 
-  @Demo(group: 'refresh')
+  @ExampleCode(group: 'refresh')
   Widget _buildRefresh(BuildContext context) {
     return EasyRefresh(
       // 下拉样式
@@ -45,30 +45,28 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           // spacing: 16,
           children: [
             Container(
-              height: 171,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
+                  color: context.tTheme.bgColorContainer,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(TTheme.of(context).radiusLarge))),
+                      Radius.circular(context.tTheme.radiusLarge))),
               child: TText(
                 PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
-                font: TTheme.of(context).fontBodyLarge,
-                textColor: TTheme.of(context).textColorPlaceholder,
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 16),
             Container(
-              height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
+                  color: context.tTheme.bgColorContainer,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(TTheme.of(context).radiusLarge))),
+                      Radius.circular(context.tTheme.radiusLarge))),
               child: TText(
                 '下拉刷新次数：${count}',
-                font: TTheme.of(context).fontBodyLarge,
-                textColor: TTheme.of(context).textColorPlaceholder,
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 500),

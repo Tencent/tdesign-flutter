@@ -18,11 +18,11 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
-  /// 开启多套主题功能
-  TTheme.needMultiTheme(true);
+
   /// 默认浅色主题,dark为深色主题
-  themeData = TThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
-      TTheme.defaultData();
+  themeData =
+      TThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
+          TThemeData.defaultData();
 
   runApp(const App());
 }
@@ -52,18 +52,21 @@ class App extends StatelessWidget {
             title: '深色模式切换测试',
 
             /// 默认浅色模式
-            theme: themeData.systemThemeDataLight!.copyWith(
+            theme: TThemeBuilder.light(themeData).copyWith(
               /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-                barBackgroundColor: themeData.bgColorContainer.withOpacity(0.5),
+                barBackgroundColor:
+                    themeData.bgColorContainer.withValues(alpha: 0.5),
               ),
+
               /// ... 更多重载主题
             ),
 
             /// 深色模式
-            darkTheme: themeData.systemThemeDataDark?.copyWith(
+            darkTheme: TThemeBuilder.dark(themeData).copyWith(
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-                barBackgroundColor: themeData.dark?.grayColor13.withOpacity(0.5),
+                barBackgroundColor:
+                    themeData.dark?.grayColor13.withValues(alpha: 0.5),
               ),
 
               /// ... 更多重载主题
@@ -96,7 +99,7 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
     var themeModeProvider = Provider.of<ThemeModeProvider>(context);
 
     /// 获取系统主题
-    Brightness systemBrightness = MediaQuery.platformBrightnessOf(context);
+    var systemBrightness = MediaQuery.platformBrightnessOf(context);
 
     enabledModeCheckIcon(ThemeMode mode) {
       return themeModeProvider.themeMode == mode ||
@@ -118,13 +121,13 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
         child: Column(
           children: [
             TCellGroup(
-              theme: TCellGroupTheme.cardTheme,
+              variant: TCellGroupVariant.card,
               cells: [
                 TCell(
-                  title: '跟随系统',
-                  description: '开启后，将跟随系统打开或关闭深色模式。',
-                  rightIconWidget: TSwitch(
-                    isOn: themeModeProvider.themeMode == ThemeMode.system,
+                  title: const Text('跟随系统'),
+                  subtitle: const Text('开启后，将跟随系统打开或关闭深色模式。'),
+                  trailing: TSwitch(
+                    value: themeModeProvider.themeMode == ThemeMode.system,
                     onChanged: (isOn) {
                       if (isOn) {
                         themeModeProvider.themeMode = ThemeMode.system;
@@ -133,30 +136,28 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
                       } else {
                         themeModeProvider.themeMode = ThemeMode.light;
                       }
-                      return isOn;
                     },
                   ),
-                  disabled: true,
                 ),
               ],
             ),
             TCellGroup(
-              theme: TCellGroupTheme.cardTheme,
-              title: '手动选择',
+              variant: TCellGroupVariant.card,
+              title: const Text('手动选择'),
               cells: [
                 TCell(
-                  title: '浅色模式',
-                  leftIcon: TIcons.mode_light,
-                  rightIcon: enabledModeCheckIcon(ThemeMode.light),
-                  onClick: (cell) {
+                  title: const Text('浅色模式'),
+                  prefix: const Icon(TIcons.mode_light),
+                  trailing: Icon(enabledModeCheckIcon(ThemeMode.light)),
+                  onTap: () {
                     themeModeProvider.themeMode = ThemeMode.light;
                   },
                 ),
                 TCell(
-                  title: '深色模式',
-                  leftIcon: TIcons.mode_dark,
-                  rightIcon: enabledModeCheckIcon(ThemeMode.dark),
-                  onClick: (cell) {
+                  title: const Text('深色模式'),
+                  prefix: const Icon(TIcons.mode_dark),
+                  trailing: Icon(enabledModeCheckIcon(ThemeMode.dark)),
+                  onTap: () {
                     themeModeProvider.themeMode = ThemeMode.dark;
                   },
                 ),

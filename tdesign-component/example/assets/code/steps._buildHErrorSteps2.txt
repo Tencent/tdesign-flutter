@@ -1,5 +1,5 @@
-
-  Widget _buildHErrorSteps2(BuildContext context) {
+/// 水平错误状态图标步骤条
+    Widget _buildHErrorSteps2(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(
@@ -26,7 +26,7 @@
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
       // 错误状态
       status: TStepsStatus.error,
     );

@@ -1,0 +1,7 @@
+Widget _buildMultiple(BuildContext context) {
+    return TCalendar(
+      value: _multipleValue,
+      variant: TCalendarVariant.multiple,
+      onChanged: (value) => setState(() => _multipleValue = value),
+    );
+  }

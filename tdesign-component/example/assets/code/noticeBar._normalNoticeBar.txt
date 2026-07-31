@@ -1,8 +1,13 @@
-
 Widget _normalNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.info,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.info,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }

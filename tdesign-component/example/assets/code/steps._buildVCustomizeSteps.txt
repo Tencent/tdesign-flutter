@@ -1,5 +1,5 @@
-
-  Widget _buildVCustomizeSteps(BuildContext context) {
+/// Vertical Customize Steps 垂直自定义步骤条
+    Widget _buildVCustomizeSteps(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(title: 'Selected'),
@@ -11,8 +11,12 @@
       direction: TStepsDirection.vertical,
       // 简略模式
       simple: true,
-      activeIndex: 3,
+      value: _selectedStep,
       // 步骤条垂直自定义步骤条选择模式
       verticalSelect: true,
+      onChange: (index) {
+        setState(() => _selectedStep = index);
+        TToast.showText('选择了步骤 ${index + 1}', context: context);
+      },
     );
   }

@@ -1,13 +1,12 @@
-
-  Widget _buildItemWithStatus(BuildContext context) {
+Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
       const TTab(text: '选中'),
       const TTab(text: '默认'),
-      const TTab(text: '禁用', enable: false),
+      const TTab(text: '禁用', enabled: false),
     ];
-    return TTabBar(
+    return TTabsBar(
       tabs: tabs,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: true,
+      controller: _demoController('status', tabs.length),
+      indicator: _indicator(context),
     );
   }

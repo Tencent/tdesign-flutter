@@ -1,0 +1,12 @@
+Widget _buildCardGroup(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: TCellGroup(
+        variant: TCellGroupVariant.card,
+        cells: [
+          TCell(title: Text('单元格一')),
+          TCell(title: Text('单元格二'), arrow: true),
+        ],
+      ),
+    );
+  }

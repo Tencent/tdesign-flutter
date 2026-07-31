@@ -1,0 +1,20 @@
+Widget _capsuleTabBarOnLongPress(BuildContext context) {
+    return _ExampleTabBar(
+        variant: TTabBarVariant.capsule,
+        useVerticalDivider: true,
+        navigationTabs: List.generate(3, (index) {
+          final label = '标签${index + 1}';
+          return TTabBarItemConfig(
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            tabText: label,
+            onTap: () {
+              onTapTab(context, label);
+            },
+            onLongPress: () {
+              print('长按了${label}');
+              TToast.showText('长按了 $label', context: context);
+            },
+          );
+        }));
+  }

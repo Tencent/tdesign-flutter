@@ -1,5 +1,4 @@
-
-  Widget _buildSystemText(BuildContext context) {
+Widget _buildSystemText(BuildContext context) {
     return Text(
       exampleTxt,
     );

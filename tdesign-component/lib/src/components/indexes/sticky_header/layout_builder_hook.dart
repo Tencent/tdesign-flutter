@@ -165,7 +165,7 @@ class _LayoutBuilderElement<ConstraintType extends Constraints> extends RenderOb
 
   @override
   void removeRenderObjectChild(RenderObject child, Object? slot) {
-    final RenderConstrainedLayoutBuilder<ConstraintType, RenderObject> renderObject = this.renderObject;
+    final renderObject = this.renderObject;
     assert(renderObject.child == child);
     renderObject.child = null;
     assert(renderObject == this.renderObject);
@@ -303,7 +303,7 @@ class _RenderLayoutBuilder extends RenderBox with RenderObjectWithChildMixin<Ren
 
   @override
   void performLayout() {
-    final BoxConstraints constraints = this.constraints;
+    final constraints = this.constraints;
     rebuildIfNecessary();
     if (child != null) {
       child!.layout(constraints, parentUsesSize: true);
@@ -355,7 +355,7 @@ FlutterErrorDetails _reportException(
     StackTrace stack, {
       InformationCollector? informationCollector,
     }) {
-  final FlutterErrorDetails details = FlutterErrorDetails(
+  final details = FlutterErrorDetails(
     exception: exception,
     stack: stack,
     library: 'widgets library',

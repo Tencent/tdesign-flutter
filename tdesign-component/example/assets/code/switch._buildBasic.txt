@@ -1,0 +1,4 @@
+Widget _buildBasic(BuildContext context) => const TCell(
+        title: Text('基础开关'),
+        note: _StatefulSwitch(),
+      );

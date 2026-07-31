@@ -1,6 +1,17 @@
-
-  Widget _buildCloseOutlineTag(BuildContext context) {
-    return TTag('标签文字', needCloseIcon: true, isOutline: true, onCloseTap: () {
-      TToast.showText('点击关闭', context: context);
-    });
+Widget _buildCloseOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(isOutline: true)),
+      child: Wrap(
+        spacing: 8,
+        children: _closableOutlineTags
+            .map((text) => TTag(
+                  text,
+                  needCloseIcon: true,
+                  onCloseTap: () =>
+                      setState(() => _closableOutlineTags.remove(text)),
+                ))
+            .toList(),
+      ),
+    );
   }

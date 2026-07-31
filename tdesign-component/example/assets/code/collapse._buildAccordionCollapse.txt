@@ -1,12 +1,8 @@
-
-  Widget _buildAccordionCollapse(BuildContext context) {
-    return TCollapse.accordion(
-      style: TCollapseStyle.block,
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          _accordionData[index].isExpanded = !isExpanded;
-        });
-      },
+Widget _buildAccordionCollapse(BuildContext context) {
+    return TCollapse<String>(
+      mode: TCollapseMode.accordion,
+      value: _accordionValue,
+      onChanged: (value) => setState(() => _accordionValue = value),
       children: _accordionData.map((CollapseDataItem item) {
         return TCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {

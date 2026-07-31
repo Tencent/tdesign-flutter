@@ -1,0 +1,9 @@
+Widget _buildSelectable(BuildContext context) {
+    return _frame(TTable(
+      columns: _columns,
+      data: _rows,
+      selectionMode: TTableSelectionMode.multiple,
+      selectedRows: _selected,
+      onSelectionChanged: (value) => setState(() => _selected = value),
+    ));
+  }

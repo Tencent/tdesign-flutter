@@ -1,11 +1,9 @@
-
-  TButton _buildDisablePrimaryFillButton(BuildContext context) {
+TButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TButton(
-      text: '填充按钮',
+      child: Text('填充按钮'),
       size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.rectangle,
-      theme: TButtonTheme.primary,
-      disabled: true,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: null,
     );
   }

@@ -1,430 +1,318 @@
-///
-///  Created by arvinwli@tencent.com on 4/24/23.
-///
 import 'package:flutter/material.dart';
+
 import '../../theme/t_colors.dart';
-import '../../theme/t_spacers.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import 't_slider_theme.dart';
 
-enum Position {
-  start,
-  end,
+/// Formats the value shown above a slider thumb.
+typedef TSliderThumbFormatter = String Function(double value);
+
+SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
+  final inherited = SliderTheme.of(context);
+  final token = context.tTheme;
+  final brand = token.brandNormalColor;
+  final component = token.bgColorComponent;
+  final disabled = token.bgColorComponentDisabled;
+
+  return inherited.copyWith(
+    activeTrackColor: inherited.activeTrackColor ?? brand,
+    inactiveTrackColor: inherited.inactiveTrackColor ?? component,
+    secondaryActiveTrackColor:
+        inherited.secondaryActiveTrackColor ?? brand.withAlpha(0x8a),
+    disabledActiveTrackColor: inherited.disabledActiveTrackColor ?? disabled,
+    disabledInactiveTrackColor:
+        inherited.disabledInactiveTrackColor ?? disabled,
+    disabledSecondaryActiveTrackColor:
+        inherited.disabledSecondaryActiveTrackColor ?? disabled,
+    activeTickMarkColor: inherited.activeTickMarkColor ?? brand,
+    inactiveTickMarkColor: inherited.inactiveTickMarkColor ?? component,
+    disabledActiveTickMarkColor:
+        inherited.disabledActiveTickMarkColor ?? disabled,
+    disabledInactiveTickMarkColor:
+        inherited.disabledInactiveTickMarkColor ?? disabled,
+    thumbColor: inherited.thumbColor ?? brand,
+    disabledThumbColor: inherited.disabledThumbColor ?? disabled,
+    overlayColor: inherited.overlayColor ?? brand.withAlpha(0x1f),
+    valueIndicatorColor: inherited.valueIndicatorColor ?? brand,
+    valueIndicatorStrokeColor: inherited.valueIndicatorStrokeColor ?? brand,
+    valueIndicatorTextStyle:
+        inherited.valueIndicatorTextStyle ??
+        TextStyle(
+          color: token.textColorAnti,
+          fontSize: token.fontBodyLarge?.size,
+          height: token.fontBodyLarge?.height,
+          fontWeight: token.fontBodyLarge?.fontWeight,
+        ).merge(Theme.of(context).tExplicitTextTheme?.bodyLarge),
+  );
 }
 
-/// 单滑动选择器
-class TSlider extends StatefulWidget {
-  /// 默认值
+/// 基于 Material [Slider] 的严格受控单值滑块。
+class TSlider extends StatelessWidget {
+  const TSlider({
+    super.key,
+
+    /// 受控滑块值。
+    required this.value,
+
+    /// 值变更回调；为 null 时禁用。
+    this.onChanged,
+
+    /// 开始拖动时触发。
+    this.onChangeStart,
+
+    /// 结束拖动时触发。
+    this.onChangeEnd,
+
+    /// 最小值。
+    this.min = 0,
+
+    /// 最大值。
+    this.max = 1,
+
+    /// 离散刻度数；null 表示连续。
+    this.divisions,
+
+    /// 是否显示拇指上方数值。
+    this.showThumbValue = false,
+
+    /// 拇指上方数值格式化回调。
+    this.thumbFormatter,
+
+    /// 是否显示刻度值。
+    this.showScaleValue = false,
+
+    /// 刻度值格式化回调。
+    this.scaleFormatter,
+  }) : assert(max > min),
+       assert(value >= min && value <= max),
+       assert(divisions == null || divisions > 0),
+       assert(!showScaleValue || divisions != null);
+
+  /// 受控滑块值。
   final double value;
 
-  /// 自定义盒子样式
-  final Decoration? boxDecoration;
-
-  /// 左侧标签
-  final String? leftLabel;
-
-  /// 右侧标签
-  final String? rightLabel;
-
-  /// 滑动变化监听
+  /// 值变更回调；为 null 时禁用。
   final ValueChanged<double>? onChanged;
 
-  /// 滑动开始监听
+  /// 开始拖动时触发。
   final ValueChanged<double>? onChangeStart;
 
-  /// 滑动结束监听
+  /// 结束拖动时触发。
   final ValueChanged<double>? onChangeEnd;
 
-  /// 样式
-  final TSliderThemeData? sliderThemeData;
+  /// 最小值。
+  final double min;
 
-  ///  Thumb 点击事件 坐标、当前值
-  final Function(Offset offset, double value)? onTap;
+  /// 最大值。
+  final double max;
 
-  ///  Thumb 点击浮标文字 坐标、当前值
-  final Function(Offset offset, double value)? onThumbTextTap;
+  /// 离散刻度数；null 表示连续。
+  final int? divisions;
 
-  const TSlider({
-    Key? key,
-    required this.value,
-    this.boxDecoration,
-    this.onChanged,
-    this.sliderThemeData,
-    this.leftLabel,
-    this.rightLabel,
-    this.onChangeStart,
-    this.onChangeEnd,
-    this.onTap,
-    this.onThumbTextTap,
-  }) : super(key: key);
+  /// 是否显示拇指上方数值。
+  final bool showThumbValue;
 
-  @override
-  State<StatefulWidget> createState() {
-    return TSliderState();
-  }
-}
+  /// 拇指上方数值格式化回调。
+  final TSliderThumbFormatter? thumbFormatter;
 
-class TSliderState extends State<TSlider> {
-  final GlobalKey _sliderKey = GlobalKey();
-  double value = 0;
+  /// 是否显示刻度值；开启时必须提供 [divisions]。
+  final bool showScaleValue;
 
-  @override
-  void initState() {
-    super.initState();
-    value = widget.value;
-  }
-
-  @override
-  void didUpdateWidget(covariant TSlider oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    value = widget.value;
-  }
-
-  bool get _enabled => widget.onChanged != null;
-
-  TextStyle get labelTextStyle => TextStyle(
-      fontSize: 16,
-      color: _enabled
-          ? TTheme.of(context).textColorPrimary
-          : TTheme.of(context).textDisabledColor);
-
-  Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(widget.leftLabel!, style: labelTextStyle),
-        )
-      : Container();
-
-  Widget get rightLabel => widget.rightLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(widget.rightLabel!, style: labelTextStyle),
-        )
-      : Container();
+  /// 刻度值格式化回调。
+  final TSliderThumbFormatter? scaleFormatter;
 
   @override
   Widget build(BuildContext context) {
-    var tSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
-
-    final showValue =
-        tSliderThemeData.showScaleValue || tSliderThemeData.showThumbValue;
-
-    return Listener(
-        onPointerDown: (event) {
-          final sliderBox =
-              _sliderKey.currentContext?.findRenderObject() as RenderBox?;
-          if (sliderBox == null ||
-              widget.onThumbTextTap == null ||
-              !tSliderThemeData.showThumbValue) {
-            return;
-          }
-
-          final localOffset = sliderBox.globalToLocal(event.position);
-          final themeData = widget.sliderThemeData ?? TSliderThemeData();
-          final textRect = themeData.sliderMeasureData.thumbTextRect;
-
-          if (textRect != null && textRect.contains(localOffset)) {
-            widget.onThumbTextTap?.call(localOffset, value);
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.only(
-            top: (showValue ? 16 : 0) + 8,
-            bottom: 8,
-          ),
-          decoration: widget.boxDecoration ??
-              BoxDecoration(color: TTheme.of(context).bgColorContainer),
-          child: Row(
-            // spacing: TTheme.of(context).spacer8,
-            children: [
-              leftLabel,
-              const SizedBox(width: 8),
-              Expanded(
-                child: Listener(
-                  onPointerDown: (event) {
-                    if (!_enabled || widget.onTap == null) {
-                      return;
-                    }
-
-                    final sliderBox = _sliderKey.currentContext
-                        ?.findRenderObject() as RenderBox?;
-                    if (sliderBox == null) {
-                      return;
-                    }
-
-                    final tapOffset = sliderBox.globalToLocal(event.position);
-                    widget.onTap?.call(tapOffset, value);
-                  },
-                  child: SliderTheme(
-                    data: tSliderThemeData.sliderThemeData,
-                    child: Slider(
-                      key: _sliderKey,
-                      value: value,
-                      min: tSliderThemeData.min,
-                      max: tSliderThemeData.max,
-                      divisions: tSliderThemeData.divisions,
-                      onChangeStart: widget.onChangeStart,
-                      onChangeEnd: widget.onChangeEnd,
-                      onChanged: _enabled
-                          ? (slideValue) {
-                              setState(() {
-                                value = slideValue;
-                                widget.onChanged?.call(slideValue);
-                              });
-                            }
-                          : null,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              rightLabel
-            ],
-          ),
-        ));
+    final slider = Slider(
+      value: value,
+      onChanged: onChanged,
+      onChangeStart: onChangeStart,
+      onChangeEnd: onChangeEnd,
+      min: min,
+      max: max,
+      divisions: divisions,
+      label: showThumbValue
+          ? (thumbFormatter?.call(value) ?? value.toStringAsFixed(2))
+          : null,
+    );
+    final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
+      showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
+    );
+    final decoration = Theme.of(
+      context,
+    ).extension<TSliderThemeData>()?.decoration;
+    final themedSlider = SliderTheme(data: sliderTheme, child: slider);
+    final safeDivisions = divisions != null && divisions! > 0
+        ? divisions
+        : null;
+    final content = showScaleValue && safeDivisions != null
+        ? _SliderWithScaleLabels(
+            min: min,
+            max: max,
+            divisions: safeDivisions,
+            formatter: scaleFormatter,
+            slider: themedSlider,
+          )
+        : themedSlider;
+    return decoration == null
+        ? content
+        : DecoratedBox(decoration: decoration, child: content);
   }
 }
 
-/// 范围滑动选择器
-class TRangeSlider extends StatefulWidget {
-  /// 默认值
+/// 基于 Material [RangeSlider] 的严格受控范围滑块。
+class TRangeSlider extends StatelessWidget {
+  const TRangeSlider({
+    super.key,
+
+    /// 受控范围值。
+    required this.value,
+
+    /// 范围变更回调；为 null 时禁用。
+    this.onChanged,
+
+    /// 开始拖动时触发。
+    this.onChangeStart,
+
+    /// 结束拖动时触发。
+    this.onChangeEnd,
+
+    /// 最小值。
+    this.min = 0,
+
+    /// 最大值。
+    this.max = 1,
+
+    /// 离散刻度数；null 表示连续。
+    this.divisions,
+
+    /// 是否显示拇指上方数值。
+    this.showThumbValue = false,
+
+    /// 拇指上方数值格式化回调。
+    this.thumbFormatter,
+
+    /// 是否显示刻度值。
+    this.showScaleValue = false,
+
+    /// 刻度值格式化回调。
+    this.scaleFormatter,
+  }) : assert(max > min),
+       assert(divisions == null || divisions > 0),
+       assert(!showScaleValue || divisions != null);
+
+  /// 受控范围值。
   final RangeValues value;
 
-  /// 自定义盒子样式
-  final Decoration? boxDecoration;
-
-  /// 左侧标签
-  final String? leftLabel;
-
-  /// 右侧标签
-
-  final String? rightLabel;
-
-  /// 滑动变化监听
+  /// 范围变更回调；为 null 时禁用。
   final ValueChanged<RangeValues>? onChanged;
 
-  /// 滑动开始监听
-
+  /// 开始拖动时触发。
   final ValueChanged<RangeValues>? onChangeStart;
 
-  /// 滑动结束监听
+  /// 结束拖动时触发。
   final ValueChanged<RangeValues>? onChangeEnd;
 
-  /// 样式
-  final TSliderThemeData? sliderThemeData;
+  /// 最小值。
+  final double min;
 
-  /// Thumb 点击事件 位置、坐标、当前值
-  final Function(
-    Position position,
-    Offset offset,
-    double value,
-  )? onTap;
+  /// 最大值。
+  final double max;
 
-  /// Thumb 点击浮标文字 位置、坐标、当前值
-  final Function(
-    Position position,
-    Offset offset,
-    double value,
-  )? onThumbTextTap;
+  /// 离散刻度数；null 表示连续。
+  final int? divisions;
 
-  const TRangeSlider({
-    Key? key,
-    required this.value,
-    this.boxDecoration,
-    this.onChanged,
-    this.sliderThemeData,
-    this.leftLabel,
-    this.rightLabel,
-    this.onChangeStart,
-    this.onChangeEnd,
-    this.onTap,
-    this.onThumbTextTap,
-  }) : super(key: key);
+  /// 是否显示拇指上方数值。
+  final bool showThumbValue;
 
-  @override
-  State<StatefulWidget> createState() {
-    return _TRangeSliderState();
-  }
-}
+  /// 拇指上方数值格式化回调。
+  final TSliderThumbFormatter? thumbFormatter;
 
-class _TRangeSliderState extends State<TRangeSlider> {
-  RangeValues rangeValues = const RangeValues(0, 100);
-  final GlobalKey _sliderRangeKey = GlobalKey();
+  /// 是否显示刻度值；开启时必须提供 [divisions]。
+  final bool showScaleValue;
 
-  @override
-  void initState() {
-    super.initState();
-    rangeValues = widget.value;
-  }
-
-  @override
-  void didUpdateWidget(covariant TRangeSlider oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    rangeValues = widget.value;
-  }
-
-  bool get _enabled => widget.onChanged != null;
-
-  TextStyle get labelTextStyle => TextStyle(
-      fontSize: 16,
-      color: _enabled
-          ? TTheme.of(context).textColorPrimary
-          : TTheme.of(context).textDisabledColor);
-
-  Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(widget.leftLabel!, style: labelTextStyle),
-        )
-      : Container();
-
-  Widget get rightLabel => widget.rightLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(widget.rightLabel!, style: labelTextStyle),
-        )
-      : Container();
+  /// 刻度值格式化回调。
+  final TSliderThumbFormatter? scaleFormatter;
 
   @override
   Widget build(BuildContext context) {
-    var tSliderThemeData = widget.sliderThemeData ?? TSliderThemeData();
-    final showValue =
-        tSliderThemeData.showScaleValue || tSliderThemeData.showThumbValue;
+    final slider = RangeSlider(
+      values: value,
+      onChanged: onChanged,
+      onChangeStart: onChangeStart,
+      onChangeEnd: onChangeEnd,
+      min: min,
+      max: max,
+      divisions: divisions,
+      labels: showThumbValue
+          ? RangeLabels(
+              thumbFormatter?.call(value.start) ??
+                  value.start.toStringAsFixed(2),
+              thumbFormatter?.call(value.end) ?? value.end.toStringAsFixed(2),
+            )
+          : null,
+    );
+    final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
+      showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
+    );
+    final decoration = Theme.of(
+      context,
+    ).extension<TSliderThemeData>()?.decoration;
+    final themedSlider = SliderTheme(data: sliderTheme, child: slider);
+    final safeDivisions = divisions != null && divisions! > 0
+        ? divisions
+        : null;
+    final content = showScaleValue && safeDivisions != null
+        ? _SliderWithScaleLabels(
+            min: min,
+            max: max,
+            divisions: safeDivisions,
+            formatter: scaleFormatter,
+            slider: themedSlider,
+          )
+        : themedSlider;
+    return decoration == null
+        ? content
+        : DecoratedBox(decoration: decoration, child: content);
+  }
+}
 
-    return Listener(
-      onPointerDown: (event) {
-        final sliderBox =
-            _sliderRangeKey.currentContext?.findRenderObject() as RenderBox?;
-        final localOffset =
-            sliderBox?.globalToLocal(event.position) ?? Offset.zero;
+class _SliderWithScaleLabels extends StatelessWidget {
+  const _SliderWithScaleLabels({
+    required this.min,
+    required this.max,
+    required this.divisions,
+    required this.formatter,
+    required this.slider,
+  });
 
-        if (sliderBox == null ||
-            widget.onThumbTextTap == null ||
-            !tSliderThemeData.showThumbValue) {
-          return;
-        }
+  final double min;
+  final double max;
+  final int divisions;
+  final TSliderThumbFormatter? formatter;
+  final Widget slider;
 
-        final themeData = widget.sliderThemeData ?? TSliderThemeData();
-        final startTextRect =
-            themeData.sliderMeasureData.startRangeThumbTextRect;
-        final endTextRect = themeData.sliderMeasureData.endRangeThumbTextRect;
-
-        if (startTextRect?.contains(localOffset) ?? false) {
-          widget.onThumbTextTap
-              ?.call(Position.start, localOffset, rangeValues.start);
-        }
-        if (endTextRect?.contains(localOffset) ?? false) {
-          widget.onThumbTextTap
-              ?.call(Position.end, localOffset, rangeValues.end);
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.only(
-          top: (showValue ? 16 : 0) + 8,
-          bottom: 8,
+  @override
+  Widget build(BuildContext context) {
+    final labels = List<Widget>.generate(divisions + 1, (index) {
+      final value = min + (max - min) * index / divisions;
+      final text = formatter?.call(value) ?? value.toString();
+      return Expanded(
+        child: Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
         ),
-        decoration: widget.boxDecoration ??
-            BoxDecoration(
-              color: TTheme.of(context).bgColorContainer,
-            ),
-        child: Row(
-          // spacing: 8,
-          children: [
-            leftLabel,
-            const SizedBox(width: 8),
-            Expanded(
-              child: Listener(
-                onPointerDown: (PointerDownEvent event) {
-                  if (!_enabled || widget.onTap == null) {
-                    return;
-                  }
-
-                  final sliderBox = _sliderRangeKey.currentContext
-                      ?.findRenderObject() as RenderBox?;
-                  if (sliderBox == null) {
-                    return;
-                  }
-
-                  final tapOffset = sliderBox.globalToLocal(event.position);
-                  final sliderWidth = sliderBox.size.width;
-
-                  final sliderTheme = SliderTheme.of(context);
-                  final thumbShape = sliderTheme.rangeThumbShape;
-                  final thumbSize = thumbShape?.getPreferredSize(
-                        _enabled,
-                        widget.sliderThemeData?.divisions != null,
-                      ) ??
-                      const Size(20, 20);
-
-                  final thumbRadius = thumbSize.width / 2;
-
-                  // 计算当前值对应的坐标比例
-                  final min = widget.sliderThemeData?.min ?? 0;
-                  final max = widget.sliderThemeData?.max ?? 100;
-                  final startRatio = (rangeValues.start - min) / (max - min);
-                  final endRatio = (rangeValues.end - min) / (max - min);
-
-                  // 计算Thumb中心坐标
-                  final startCenterX = startRatio * sliderWidth;
-                  final endCenterX = endRatio * sliderWidth;
-                  final verticalCenter = sliderBox.size.height / 2;
-
-                  // 检测点击区域
-                  final isStartTap =
-                      (tapOffset.dx - startCenterX).abs() <= thumbRadius &&
-                          (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
-                  final isEndTap =
-                      (tapOffset.dx - endCenterX).abs() <= thumbRadius &&
-                          (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
-
-                  Position position;
-                  double tappedValue;
-
-                  if (isStartTap) {
-                    position = Position.start;
-                    tappedValue = rangeValues.start;
-                  } else if (isEndTap) {
-                    position = Position.end;
-                    tappedValue = rangeValues.end;
-                  } else {
-                    tappedValue =
-                        (tapOffset.dx / sliderWidth) * (max - min) + min;
-                    final startDistance =
-                        (tappedValue - rangeValues.start).abs();
-                    final endDistance = (tappedValue - rangeValues.end).abs();
-                    position = startDistance < endDistance
-                        ? Position.start
-                        : Position.end;
-                  }
-                  widget.onTap?.call(position, tapOffset, tappedValue);
-                },
-                child: SliderTheme(
-                  data: tSliderThemeData.sliderThemeData,
-                  child: RangeSlider(
-                    key: _sliderRangeKey,
-                    values: rangeValues,
-                    min: tSliderThemeData.min,
-                    max: tSliderThemeData.max,
-                    divisions: tSliderThemeData.divisions,
-                    onChanged: widget.onChanged == null
-                        ? null
-                        : (slideValue) {
-                            setState(() {
-                              rangeValues = slideValue;
-                              widget.onChanged?.call(slideValue);
-                            });
-                          },
-                    onChangeStart: widget.onChangeStart,
-                    onChangeEnd: widget.onChangeEnd,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            rightLabel,
-          ],
-        ),
-      ),
+      );
+    });
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        slider,
+        Row(children: labels),
+      ],
     );
   }
 }

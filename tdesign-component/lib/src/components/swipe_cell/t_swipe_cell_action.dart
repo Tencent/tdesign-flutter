@@ -25,18 +25,18 @@ class TSwipeCellAction extends StatelessWidget {
     this.direction = Axis.horizontal,
     this.confirmIndex,
     this.builder,
-  })  : assert((flex ?? 1) > 0, 'flex must be greater than 0'),
+  })  : assert(flex > 0, 'flex must be greater than 0'),
         assert(icon != null || label != null, 'icon or label must not be null'),
         super(key: key);
 
   /// 宽度占比，默认为 1，[TSwipeCellPanel.confirms]下无效（失踪占满整个[TSwipeCellPanel]宽度）
-  final int? flex;
+  final int flex;
 
   /// 背景颜色
   final Color? backgroundColor;
 
   /// 点击后自动关闭
-  final bool? autoClose;
+  final bool autoClose;
 
   /// 点击回调
   final void Function(BuildContext context)? onPressed;
@@ -48,10 +48,10 @@ class TSwipeCellAction extends StatelessWidget {
   final Color? iconColor;
 
   /// 图标大小
-  final double? iconSize;
+  final double iconSize;
 
   /// 图标和标题的间距
-  final double? spacing;
+  final double spacing;
 
   /// 标题
   final String? label;
@@ -60,7 +60,7 @@ class TSwipeCellAction extends StatelessWidget {
   final TextStyle? labelStyle;
 
   /// 图标和标题的排列方向
-  final Axis? direction;
+  final Axis direction;
 
   /// 指定[TSwipeCellPanel.children]的索引，来打开该[TSwipeCellAction]
   /// [TSwipeCellPanel.confirms]参数下才配置该参数
@@ -71,23 +71,22 @@ class TSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = TTheme.of(context).fontMarkMedium ??
+    final fontSize = context.tTheme.fontMarkMedium ??
         Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
     final children = <Widget>[
       if (icon != null)
         Icon(
           icon,
-          size: iconSize ?? 18,
-          color: labelStyle?.color ?? TTheme.of(context).textColorAnti,
+          size: iconSize,
+          color: iconColor ?? labelStyle?.color ?? context.tTheme.textColorAnti,
         ),
-      if (icon != null && label != null) SizedBox(width: spacing ?? 2),
+      if (icon != null && label != null) SizedBox(width: spacing),
       if (label != null)
         Flexible(
           child: TText(
             label,
-            forceVerticalCenter: true,
             font: fontSize,
-            textColor: TTheme.of(context).textColorAnti,
+            textColor: context.tTheme.textColorAnti,
             style: labelStyle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -105,7 +104,7 @@ class TSwipeCellAction extends StatelessWidget {
             color: backgroundColor,
             child: Flex(
               mainAxisAlignment: MainAxisAlignment.center,
-              direction: direction ?? Axis.horizontal,
+              direction: direction,
               children: children,
             ),
           ),
@@ -113,7 +112,7 @@ class TSwipeCellAction extends StatelessWidget {
     return confirmIndex?.isNotEmpty == true
         ? child
         : Expanded(
-            flex: flex ?? 1,
+            flex: flex,
             child: child,
           );
   }
@@ -125,7 +124,7 @@ class TSwipeCellAction extends StatelessWidget {
       return;
     }
     onPressed?.call(context);
-    if (autoClose ?? true) {
+    if (autoClose) {
       swipeInherited.controller.close(duration: swipeInherited.duration);
     }
   }

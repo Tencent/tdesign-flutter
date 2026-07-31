@@ -1,430 +1,519 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../util/auto_size.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
+import '../checkbox/t_check_box.dart' show TContentDirection;
+import '../checkbox/t_selection_card.dart';
+import '../divider/t_divider.dart';
+import 't_radio_theme_data.dart';
 
-enum TRadioStyle {
-  circle, // 圆形
-  square, // 方形
-  check, // 对号样式
-  hollowCircle, // 镂空圆点样式
+/// 自定义单选框指示器构建器。
+typedef TRadioIconBuilder =
+    Widget Function(BuildContext context, bool selected, bool disabled);
+
+/// 单选框指示器尺寸。
+enum TRadioSize {
+  /// 小尺寸。
+  small,
+
+  /// 中尺寸。
+  medium,
+
+  /// 大尺寸。
+  large,
 }
 
-/// 单选框按钮,继承自TCheckbox，字段含义与父类一致
-class TRadio extends TCheckbox {
-  /// 单选框按钮样式
-  final TRadioStyle radioStyle;
+@immutable
+/// 单选框组的数据项。
+class TRadioOption<T> {
+  const TRadioOption({
+    /// 选项值。
+    required this.value,
 
+    /// 主文案。
+    required this.label,
+
+    /// 副文案。
+    this.subTitle,
+
+    /// 是否禁用该项。
+    this.disabled = false,
+  });
+
+  /// 选项值。
+  final T value;
+
+  /// 主文案。
+  final String label;
+
+  /// 副文案。
+  final String? subTitle;
+
+  /// 是否禁用该项。
+  final bool disabled;
+}
+
+/// 自定义单选框组数据项构建器。
+typedef TRadioOptionBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      TRadioOption<T> option,
+      bool selected,
+      bool disabled,
+    );
+
+/// 遵循 Material value/groupValue 语义的严格受控单选框。
+class TRadio<T> extends StatelessWidget {
   const TRadio({
-    String? id,
-    Key? key,
-    String? title,
-    Font? titleFont,
-    String? subTitle,
-    Font? subTitleFont,
-    bool enable = true,
-    int subTitleMaxLine = 1,
-    int titleMaxLine = 1,
-    Color? selectColor,
-    Color? disableColor,
-    ContentBuilder? customContentBuilder,
-    double? spacing,
-    bool? cardMode,
-    bool? showDivider,
-    TCheckBoxSize size = TCheckBoxSize.small,
-    this.radioStyle = TRadioStyle.circle,
-    TContentDirection contentDirection = TContentDirection.right,
-    IconBuilder? customIconBuilder,
-    Color? titleColor,
-    Color? subTitleColor,
-    Color? backgroundColor,
-    double? checkBoxLeftSpace,
-    double? insetSpacing,
-    EdgeInsetsGeometry? customSpace,
-  }) : super(
-            id: id,
-            key: key,
-            title: title,
-            subTitle: subTitle,
-            titleFont: titleFont,
-            subTitleFont: subTitleFont,
-            subTitleMaxLine: subTitleMaxLine,
-            enable: enable,
-            size: size,
-            cardMode: cardMode ?? false,
-            showDivider: showDivider ?? true,
-            titleMaxLine: titleMaxLine,
-            customContentBuilder: customContentBuilder,
-            contentDirection: contentDirection,
-            spacing: spacing,
-            customIconBuilder: customIconBuilder,
-            selectColor: selectColor,
-            disableColor: disableColor,
-            titleColor: titleColor,
-            subTitleColor: subTitleColor,
-            backgroundColor: backgroundColor,
-            checkBoxLeftSpace: checkBoxLeftSpace,
-            insetSpacing: insetSpacing,
-            customSpace: customSpace);
+    super.key,
 
-  @override
-  Widget buildDefaultIcon(
-      BuildContext context, TCheckboxGroupState? groupState, bool isSelected) {
-    if (cardMode == true) {
-      return Container();
-    }
-    TRadioStyle? style;
-    if (groupState is TRadioGroupState) {
-      style = (groupState.widget as TRadioGroup).radioCheckStyle;
-    }
+    /// 当前选项值。
+    required this.value,
 
-    style = style ?? radioStyle;
+    /// 组内受控选中值。
+    required this.groupValue,
 
-    var size = 24.0;
-    final theme = TTheme.of(context);
+    /// 选中值变更回调；为 null 时禁用。
+    this.onChanged,
 
-    // 由于镂空圆没有现成icon，因而自己画一个
-    if (style == TRadioStyle.hollowCircle) {
-      return SizedBox(
-        width: size,
-        height: size,
-        child: CustomPaint(
-          painter: HollowCircle(!enable
-              ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
-              : isSelected
-                  ? selectColor ?? theme.brandNormalColor
-                  : theme.grayColor4),
-        ),
-      );
-    }
+    /// 主标题文案。
+    this.title,
 
-    IconData? iconData;
-    switch (style) {
-      case TRadioStyle.check:
-        iconData = isSelected ? TIcons.check : null;
-        break;
-      case TRadioStyle.square:
-        iconData =
-            isSelected ? TIcons.check_rectangle_filled : TIcons.rectangle;
-        break;
-      default:
-        iconData = isSelected ? TIcons.check_circle_filled : TIcons.circle;
-        break;
-    }
-    if (iconData != null) {
-      return Icon(iconData,
-          size: size,
-          color: !enable
-              ? (isSelected
-                  ? (disableColor ?? theme.brandDisabledColor)
-                  : theme.componentStrokeColor)
-              : isSelected
-                  ? selectColor ?? theme.brandNormalColor
-                  : theme.componentStrokeColor);
-    } else {
-      return SizedBox(
-        width: size,
-        height: size,
-      );
-    }
-  }
+    /// 副标题文案。
+    this.subTitle,
 
-  @override
-  State<StatefulWidget> createState() {
-    return TRadioState();
-  }
-}
+    /// 单选框尺寸。
+    this.size = TRadioSize.medium,
 
-class TRadioState extends TCheckboxState {
+    /// 是否使用卡片模式。
+    this.cardMode = false,
+
+    /// 是否显示底部分割线。
+    this.showDivider = false,
+
+    /// 控件与文案排列方向。
+    this.contentDirection = TContentDirection.right,
+
+    /// 主标题最大行数。
+    this.titleMaxLines = 1,
+
+    /// 副标题最大行数。
+    this.subTitleMaxLines = 1,
+
+    /// 自定义单选框指示器。
+    this.customIconBuilder,
+  });
+
+  /// 当前选项值。
+  final T value;
+
+  /// 组内受控选中值。
+  final T? groupValue;
+
+  /// 选中值变更回调；为 null 时禁用。
+  final ValueChanged<T>? onChanged;
+
+  /// 主标题文案。
+  final String? title;
+
+  /// 副标题文案。
+  final String? subTitle;
+
+  /// 单选框尺寸。
+  final TRadioSize size;
+
+  /// 是否使用卡片模式。
+  final bool cardMode;
+
+  /// 是否显示底部分割线。
+  final bool showDivider;
+
+  /// 控件与文案排列方向。
+  final TContentDirection contentDirection;
+
+  /// 主标题最大行数。
+  final int titleMaxLines;
+
+  /// 副标题最大行数。
+  final int subTitleMaxLines;
+
+  /// 自定义单选框指示器。
+  final TRadioIconBuilder? customIconBuilder;
+
+  bool get _selected => value == groupValue;
+  bool get _disabled => onChanged == null;
+
   @override
   Widget build(BuildContext context) {
-    // 检查是否包含在FuiCheckBoxGroup内，如果是的话，状态由Group管理
-    final groupState = TCheckboxGroupInherited.of(context)?.state;
-    if (groupState is TRadioGroupState) {
-      final strictMode = (groupState.widget as TRadioGroup).strictMode;
-      // 严格模式下不能取消选项，只能切换
-      if (strictMode == true) {
-        canNotCancel = true;
-      }
+    final theme = Theme.of(context).extension<TRadioThemeData>();
+    final indicator =
+        customIconBuilder?.call(context, _selected, _disabled) ??
+        (cardMode ? null : _buildIndicator(context, theme));
+    final content = _buildContent(context, theme);
+    final hasContent = content != null;
+    final constraints = hasContent
+        ? BoxConstraints(minHeight: _contentMinHeight)
+        : _resolveTapTargetConstraints(context);
+    final tileContent = LayoutBuilder(
+      builder: (context, layoutConstraints) {
+        final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
+        final children = <Widget>[
+          if (indicator != null) indicator,
+          if (indicator != null && content != null)
+            SizedBox(
+              width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
+            ),
+          if (content != null)
+            if (hasBoundedWidth) Expanded(child: content) else content,
+        ];
+        return Container(
+          constraints: cardMode ? null : constraints,
+          padding: hasContent
+              ? EdgeInsets.symmetric(
+                  horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
+                  vertical: context.tTheme.spacer8,
+                )
+              : EdgeInsets.zero,
+          decoration: cardMode
+              ? null
+              : BoxDecoration(
+                  color: hasContent
+                      ? context.tTheme.bgColorContainer
+                      : Colors.transparent,
+                ),
+          child: Row(
+            mainAxisSize: hasContent && hasBoundedWidth
+                ? MainAxisSize.max
+                : MainAxisSize.min,
+            mainAxisAlignment: hasContent
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: contentDirection == TContentDirection.right
+                ? children
+                : children.reversed.toList(),
+          ),
+        );
+      },
+    );
+    final tile = cardMode
+        ? TSelectionCard(
+            selected: _selected,
+            disabled: _disabled,
+            selectedColor:
+                theme?.selectColor ?? context.tTheme.brandNormalColor,
+            disabledColor:
+                theme?.disableColor ?? context.tTheme.brandDisabledColor,
+            backgroundColor:
+                theme?.backgroundColor ?? context.tTheme.bgColorContainer,
+            borderRadius: context.tTheme.radiusDefault,
+            minHeight: subTitle?.isNotEmpty == true ? 82 : 56,
+            child: tileContent,
+          )
+        : tileContent;
+    return Semantics(
+      enabled: !_disabled,
+      inMutuallyExclusiveGroup: true,
+      checked: _selected,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _disabled ? null : () => onChanged!(value),
+            child: tile,
+          ),
+          if (showDivider)
+            Padding(
+              padding: EdgeInsets.only(left: context.tTheme.spacer16),
+              child: const TDivider(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  double get _contentMinHeight => switch (size) {
+    TRadioSize.small => 40.0,
+    TRadioSize.medium => 48.0,
+    TRadioSize.large => 56.0,
+  };
+
+  BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
+    final materialTheme = RadioTheme.of(context);
+    final appTheme = Theme.of(context);
+    final visualDensity =
+        materialTheme.visualDensity ??
+        appTheme.tExplicitVisualDensity ??
+        VisualDensity.standard;
+    final tapTargetSize =
+        materialTheme.materialTapTargetSize ??
+        appTheme.tExplicitMaterialTapTargetSize ??
+        MaterialTapTargetSize.padded;
+    final indicatorSize = _indicatorSize;
+    final baseSize = tapTargetSize == MaterialTapTargetSize.padded
+        ? kMinInteractiveDimension
+        : indicatorSize;
+    final adjustment = visualDensity.baseSizeAdjustment;
+    return BoxConstraints(
+      minWidth: math.max(indicatorSize, baseSize + adjustment.dx),
+      minHeight: math.max(indicatorSize, baseSize + adjustment.dy),
+    );
+  }
+
+  double get _indicatorSize => switch (size) {
+    TRadioSize.small => 20.0,
+    TRadioSize.medium => 24.0,
+    TRadioSize.large => 28.0,
+  };
+
+  Widget _buildIndicator(BuildContext context, TRadioThemeData? theme) {
+    final materialTheme = RadioTheme.of(context);
+    final colorScheme = Theme.of(context).tExplicitColorScheme;
+    final states = <WidgetState>{
+      if (_selected) WidgetState.selected,
+      if (_disabled) WidgetState.disabled,
+    };
+    final color = _disabled
+        ? (theme?.disableColor ??
+              materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.onSurface.withValues(alpha: 0.38) ??
+              context.tTheme.brandDisabledColor)
+        : _selected
+        ? (theme?.selectColor ??
+              materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.primary ??
+              context.tTheme.brandNormalColor)
+        : (materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.outline ??
+              context.tTheme.componentBorderColor);
+    final iconSize = _indicatorSize;
+    return SizedBox(
+      width: iconSize,
+      height: iconSize,
+      child: CustomPaint(
+        painter: _TRadioIndicatorPainter(selected: _selected, color: color),
+      ),
+    );
+  }
+
+  Widget? _buildContent(BuildContext context, TRadioThemeData? theme) {
+    if (title == null && subTitle == null) {
+      return null;
     }
-    return super.build(context);
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
+    final titleFont = context.tTheme.fontBodyLarge;
+    final titleStyle = TextStyle(
+      fontSize: titleFont?.size ?? 16,
+      height: titleFont?.height,
+      fontWeight: titleFont?.fontWeight,
+    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+    final subtitleFont = context.tTheme.fontBodyMedium;
+    final subTitleStyle = TextStyle(
+      fontSize: subtitleFont?.size ?? 14,
+      height: subtitleFont?.height,
+      fontWeight: subtitleFont?.fontWeight,
+    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (title != null)
+          Text(
+            title!,
+            maxLines: titleMaxLines,
+            overflow: TextOverflow.ellipsis,
+            style: titleStyle.copyWith(
+              color: _disabled
+                  ? context.tTheme.textDisabledColor
+                  : (theme?.titleColor ??
+                        titleStyle.color ??
+                        context.tTheme.textColorPrimary),
+            ),
+          ),
+        if (title != null && subTitle != null)
+          SizedBox(height: context.tTheme.spacer4),
+        if (subTitle != null)
+          Text(
+            subTitle!,
+            maxLines: subTitleMaxLines,
+            overflow: TextOverflow.ellipsis,
+            style: subTitleStyle.copyWith(
+              color: _disabled
+                  ? context.tTheme.textDisabledColor
+                  : (theme?.subTitleColor ??
+                        subTitleStyle.color ??
+                        context.tTheme.textColorPlaceholder),
+            ),
+          ),
+      ],
+    );
   }
 }
 
-class HollowCircle extends CustomPainter {
-  HollowCircle(this.color);
+class _TRadioIndicatorPainter extends CustomPainter {
+  const _TRadioIndicatorPainter({required this.selected, required this.color});
 
-  // 绘制颜色
+  final bool selected;
   final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
+    final center = size.center(Offset.zero);
+    final strokeWidth = size.shortestSide / 16;
+    final outerRadius = size.shortestSide * 7 / 16;
+    final paint = Paint()
+      ..isAntiAlias = true
       ..color = color
-      ..strokeWidth = 1.5
+      ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
-    canvas.drawCircle(const Offset(10.5, 10.5), 10.5, paint);
-    paint.style = PaintingStyle.fill;
-    canvas.drawCircle(const Offset(10.5, 10.5), 6, paint);
+    canvas.drawCircle(center, outerRadius, paint);
+    if (selected) {
+      paint.style = PaintingStyle.fill;
+      canvas.drawCircle(center, outerRadius * 4 / 7, paint);
+    }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _TRadioIndicatorPainter oldDelegate) {
+    return selected != oldDelegate.selected || color != oldDelegate.color;
+  }
 }
 
-/// RadioGroup分组对象，继承自TCheckboxGroup，字段含义与父类一致
-/// RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
-///
-/// cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
-/// 组合为横向、纵向卡片，同时需要在每个TRadio上设置cardMode参数。
-class TRadioGroup extends TCheckboxGroup {
-  /// 严格模式下，用户不能取消勾选，只能切换选择项，
-  final bool strictMode;
+/// 数据驱动且严格受控的单选框组。
+class TRadioGroup<T> extends StatelessWidget {
+  const TRadioGroup({
+    super.key,
 
-  /// 勾选样式
-  final TRadioStyle? radioCheckStyle;
+    /// 受控选中值。
+    required this.value,
 
-  /// 是否显示下划线
+    /// 单选框数据项。
+    required this.options,
+
+    /// 选中值变更回调；为 null 时整组禁用。
+    this.onChanged,
+
+    /// 排列方向。
+    this.direction = Axis.vertical,
+
+    /// 每行列数，必须大于 0。
+    this.columns = 1,
+
+    /// 是否使用卡片模式。
+    this.cardMode = false,
+
+    /// 是否显示项间分割线。
+    this.showDivider = false,
+
+    /// 控件与文案排列方向。
+    this.contentDirection = TContentDirection.right,
+
+    /// 单选框尺寸。
+    this.size = TRadioSize.medium,
+
+    /// 自定义数据项视觉；交互仍由组接管。
+    this.itemBuilder,
+  }) : assert(columns > 0);
+
+  /// 受控选中值。
+  final T? value;
+
+  /// 单选框数据项。
+  final List<TRadioOption<T>> options;
+
+  /// 选中值变更回调；为 null 时整组禁用。
+  final ValueChanged<T>? onChanged;
+
+  /// 排列方向。
+  final Axis direction;
+
+  /// 每行列数。
+  final int columns;
+
+  /// 是否使用卡片模式。
+  final bool cardMode;
+
+  /// 是否显示项间分割线。
   final bool showDivider;
 
-  /// 自定义下划线
-  final Widget? divider;
+  /// 控件与文案排列方向。
+  final TContentDirection contentDirection;
 
-  ///每行几列
-  final int rowCount;
+  /// 单选框尺寸。
+  final TRadioSize size;
 
-  TRadioGroup(
-      {Key? key,
-      Widget? child, // 使用child 则请勿设置direction
-      Axis? direction, // direction 对 directionalTdRadios 起作用
-      List<TRadio>? directionalTdRadios,
-      String? selectId, // 默认选择项的id
-      bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
-      bool cardMode = false,
-      this.strictMode = true,
-      this.radioCheckStyle,
-      int? titleMaxLine, // item的行数
-      IconBuilder? customIconBuilder,
-      ContentBuilder? customContentBuilder,
-      double? spacing, // icon和文字距离
-      this.rowCount = 1,
-      TContentDirection? contentDirection,
-      OnRadioGroupChange? onRadioGroupChange, // 切换监听
-      this.showDivider = false,
-      this.divider,
+  /// 自定义数据项视觉；交互仍由组接管。
+  final TRadioOptionBuilder<T>? itemBuilder;
 
-      /// 可以通过控制器操作勾选状态
-      TCheckboxGroupController? controller})
-      : assert(() {
-          // 使用direction属性则必须配合directionalTdRadios，child字段无效
-          if (direction != null && directionalTdRadios == null) {
-            throw FlutterError(
-                '[TRadioGroup] direction and directionalTdRadios must set at the same time');
-          }
-          // 未使用direction则必须设置child
-          if (direction == null && child == null) {
-            throw FlutterError(
-                '[TRadioGroup] direction means use child as the exact one, but child is null');
-          }
-          // 横向单选框 每个选项有字数限制
-          if (direction == Axis.horizontal && directionalTdRadios != null) {
-            directionalTdRadios.forEach((element) {
-              if (element.subTitle != null) {
-                throw FlutterError(
-                    'horizontal radios style should not have subTilte, '
-                    'because there left no room for it');
-              }
-            });
-            var maxWordCount = 2;
-            var tips =
-                '[TRadioGroup] radio title please not exceed $maxWordCount words.\n'
-                '2tabs: 7words maximum\n'
-                '3tabs: 4words maximum\n'
-                '4tabs: 2words maximum';
-            if (directionalTdRadios.length == 2) {
-              maxWordCount = 7;
-            }
-            if (directionalTdRadios.length == 3) {
-              maxWordCount = 4;
-            }
-            if (directionalTdRadios.length == 4) {
-              maxWordCount = 2;
-            }
-            directionalTdRadios.forEach((radio) {
-              if ((radio.title?.length ?? 0) > maxWordCount) {
-                throw FlutterError(tips);
-              }
-            });
-          }
-          // 卡片模式要求每个TRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
-          if (cardMode == true) {
-            assert(direction != null && directionalTdRadios != null);
-            directionalTdRadios!.forEach((element) {
-              // if use cardMode at TRadioGroup, then every TRadio should
-              // set it's own carMode to true.
-              if (element.cardMode == false) {
-                throw FlutterError(
-                    'if use cardMode at TRadioGroup, then every '
-                    'TRadio should set it\'s own carMode to true.');
-              }
-              if (element.subTitle != null && direction == Axis.horizontal) {
-                throw FlutterError(
-                    'horizontal card style should not have subTilte, '
-                    'because there left no room for it');
-              }
-            });
-          }
-          return true;
-        }()),
-        super(
-          child: Container(
-            clipBehavior: (passThrough ?? false) && direction != Axis.horizontal
-                ? Clip.hardEdge
-                : Clip.none,
-            decoration: (passThrough ?? false) && direction != Axis.horizontal
-                ? BoxDecoration(borderRadius: BorderRadius.circular(10))
-                : null,
-            margin: (passThrough ?? false) && direction != Axis.horizontal
-                ? const EdgeInsets.symmetric(horizontal: 16)
-                : null,
-            child: direction == null
-                ? child!
-                : (direction == Axis.vertical
-                    ? ListView.separated(
-                        padding: const EdgeInsets.all(0),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            margin: cardMode
-                                ? const EdgeInsets.symmetric(horizontal: 16)
-                                : null,
-                            height: cardMode ? 82 : null,
-                            child: directionalTdRadios[index],
-                          );
-                        },
-                        itemCount: directionalTdRadios!.length,
-                        separatorBuilder: (BuildContext context, int index) {
-                          if (cardMode) {
-                            return const SizedBox(
-                              height: 12,
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
-                      )
-                    : Container(
-                        margin: cardMode
-                            ? const EdgeInsets.symmetric(horizontal: 16)
-                            : null,
-                        height: cardMode
-                            ? (directionalTdRadios!.length / rowCount).ceil() *
-                                (56 + 10)
-                            : null,
-                        alignment: cardMode ? Alignment.topLeft : null,
-                        child: cardMode
-                            ? GridView.builder(
-                                itemCount: directionalTdRadios!.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisSpacing: 10.0,
-                                  mainAxisSpacing: 10.0,
-                                  crossAxisCount: rowCount, //一行的 Widget 数量
-                                  mainAxisExtent: 56,
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return SizedBox(
-                                    width: 160.scale,
-                                    height: 56,
-                                    child: directionalTdRadios[index],
-                                  );
-                                })
-                            : rowCount > 1
-                                ? Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: List.generate(
-                                        (directionalTdRadios!.length / rowCount)
-                                            .ceil(), (index) {
-                                      var start = index * rowCount;
-                                      var end = (index + 1) * rowCount;
-                                      if (end > directionalTdRadios.length) {
-                                        end = directionalTdRadios.length;
-                                      }
-                                      var subList = directionalTdRadios
-                                          .sublist(start, end);
-                                      return Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ...subList
-                                              .map((e) => Expanded(child: e)),
-                                          if (subList.length < rowCount)
-                                            ...List.generate(
-                                                rowCount - subList.length,
-                                                (index) => const Expanded(
-                                                    child: SizedBox()))
-                                        ],
-                                      );
-                                    }))
-                                : Column(
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: directionalTdRadios!
-                                            .map((e) => Expanded(child: e))
-                                            .toList(),
-                                      ),
-                                      if (showDivider)
-                                        divider ??
-                                            const TDivider(
-                                              margin: EdgeInsets.only(left: 16),
-                                            )
-                                    ],
-                                  ),
-                      )),
-          ),
-          key: key,
-          onChangeGroup: (ids) {
-            onRadioGroupChange?.call(ids.isNotEmpty ? ids[0] : null);
-          },
-          controller: controller,
-          checkedIds: selectId != null ? [selectId] : null,
-          maxChecked: 1,
-          titleMaxLine: titleMaxLine,
-          contentDirection: contentDirection,
-          customIconBuilder: customIconBuilder,
-          customContentBuilder: customContentBuilder,
-          style: null,
-          spacing: spacing,
+  @override
+  Widget build(BuildContext context) {
+    if (cardMode) {
+      return TSelectionCardGroupLayout(
+        direction: direction,
+        columns: columns,
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
+        itemHasSubtitles: [
+          for (final option in options) option.subTitle?.isNotEmpty == true,
+        ],
+      );
+    }
+    if (direction == Axis.vertical && columns == 1) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
+      );
+    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth.isFinite
+            ? constraints.maxWidth / columns
+            : null;
+        return Wrap(
+          children: List.generate(options.length, (index) {
+            final child = _buildItem(context, options[index], index);
+            return width == null ? child : SizedBox(width: width, child: child);
+          }),
         );
-
-  @override
-  State<StatefulWidget> createState() {
-    return TRadioGroupState();
+      },
+    );
   }
-}
 
-class TRadioGroupState extends TCheckboxGroupState {
-  @override
-  bool toggle(String id, bool check, [bool notify = false]) {
-    checkBoxStates.forEach((key, value) {
-      checkBoxStates[key] = false;
-    });
-    return super.toggle(id, check, true);
+  Widget _buildItem(BuildContext context, TRadioOption<T> option, int index) {
+    final selected = value == option.value;
+    final disabled = onChanged == null || option.disabled;
+    if (itemBuilder != null) {
+      final child = itemBuilder!(context, option, selected, disabled);
+      return Semantics(
+        enabled: !disabled,
+        checked: selected,
+        inMutuallyExclusiveGroup: true,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: disabled ? null : () => onChanged!(option.value),
+          child: child,
+        ),
+      );
+    }
+    return TRadio<T>(
+      value: option.value,
+      groupValue: value,
+      onChanged: disabled ? null : onChanged,
+      title: option.label,
+      subTitle: option.subTitle,
+      cardMode: cardMode,
+      showDivider: showDivider && index < options.length - 1,
+      contentDirection: contentDirection,
+      size: size,
+    );
   }
-}
-
-typedef OnRadioGroupChange = void Function(String? selectedId);
-
-// 横向卡片单选框，根据设计师要求'间距保持一致，宽度适应'
-// 实现方法为在两个单选框中间增加一个宽度固定的SizedBox，同时每个单选框是Expanded的，这样就能
-// 平分整个Row。
-Iterable<Widget> horizontalChild(Widget child) sync* {
-  yield Expanded(child: child);
-  yield const SizedBox(
-    width: 12,
-  );
 }

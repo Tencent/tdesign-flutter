@@ -1,23 +1,31 @@
-
-  Widget _setBgColorNavbar(BuildContext context) {
+Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
-        height: 48,
-        title: titleText,
-        titleColor: Colors.white,
-        backgroundColor: TTheme.of(context).brandNormalColor,
-        titleFontWeight: FontWeight.w600,
-        useDefaultBack: false,
-        screenAdaptation: false,
-        leftBarItems: [
-          TNavBarItem(
-              icon: TIcons.chevron_left,
-              iconSize: 24,
-              iconColor: Colors.white),
-        ],
-        rightBarItems: [
-          TNavBarItem(
-              icon: TIcons.home, iconSize: 24, iconColor: Colors.white),
-          TNavBarItem(
-              icon: TIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
-        ]);
+      title: titleText,
+      titleColor: Colors.white,
+      backgroundColor: context.tTheme.brandNormalColor,
+      titleFontWeight: FontWeight.w600,
+      useDefaultBack: false,
+      leading: [
+        TNavBarItem(
+          icon: TIcons.chevron_left,
+          iconSize: 24,
+          iconColor: Colors.white,
+          onTap: () => _showAction(context, '返回'),
+        ),
+      ],
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          iconColor: Colors.white,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          iconColor: Colors.white,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../badge/t_badge.dart';
-import 't_action_sheet.dart';
+import 't_action_sheet_theme_data.dart';
 
 /// 动作面板项目
 class TActionSheetItem {
@@ -10,9 +10,8 @@ class TActionSheetItem {
     this.textStyle,
     this.icon,
     this.badge,
-    this.description,
+    this.subtitle,
     this.disabled = false,
-    this.iconSize,
     this.group,
   });
 
@@ -22,7 +21,9 @@ class TActionSheetItem {
   /// 标题样式
   final TextStyle? textStyle;
 
-  /// 图标
+  /// 图标槽位；调用方拥有其背景、形状和显式尺寸。
+  ///
+  /// 未显式设置尺寸或颜色的 [Icon] 会继承 [TActionSheetThemeData]。
   final Widget? icon;
 
   /// 角标
@@ -31,15 +32,10 @@ class TActionSheetItem {
   /// 是否禁用
   final bool disabled;
 
-  /// 图标大小
-  final double? iconSize;
-
   /// 分组，用于带描述多行滚动宫格
-  /// 当[TActionSheet.theme]等于[TActionSheetTheme.group]时有效
-  /// 有效时，如果该值未配置整个[TActionSheetItem]会被忽略，即不会展示
+  /// 仅分组动作面板使用；未配置时该项目不会进入任何分组
   final String? group;
 
   /// 描述信息
-  final String? description;
+  final String? subtitle;
 }
-

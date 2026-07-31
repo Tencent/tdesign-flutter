@@ -1,13 +1,19 @@
-
-  Widget _titleNormalNavbar(BuildContext context) {
+Widget _titleNormalNavbar(BuildContext context) {
     return TNavBar(
-        height: 48,
-        title: titleText,
-        titleFontWeight: FontWeight.w600,
-        screenAdaptation: false,
-        useDefaultBack: true,
-        rightBarItems: [
-          TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
-        ]);
+      title: titleText,
+      titleFontWeight: FontWeight.w600,
+      useDefaultBack: true,
+      actions: [
+        TNavBarItem(
+          icon: TIcons.home,
+          iconSize: 24,
+          onTap: () => _showAction(context, '首页'),
+        ),
+        TNavBarItem(
+          icon: TIcons.ellipsis,
+          iconSize: 24,
+          onTap: () => _showAction(context, '更多'),
+        ),
+      ],
+    );
   }

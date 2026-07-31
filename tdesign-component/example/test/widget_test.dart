@@ -1,106 +1,190 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/base/web_md_tool.dart';
-import 'package:tdesign_flutter_example/config.dart';
-
-import 'package:tdesign_flutter_example/home.dart';
+import 'package:tdesign_flutter_example/base/example_base.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/main.dart';
+import 'package:tdesign_flutter_example/page/t_calendar_page.dart';
+import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
-void main() async {
-
-  testWidgets('Counter increments smoke testeee', (WidgetTester tester) async {
-
-    WebMdTool.needGenerateWebMd = true;
-
+void main() {
+  testWidgets('example home smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
-    exampleMap.forEach((key, value) {
-      value.forEach((model) {
-        if (!model.isTodo) {
-          examplePageList.add(model);
-        }
-      });
-    });
-    for(var element in examplePageList){
-      // Build our app and trigger a frame.
-      if(element.text == '颜色'){
-        // 测试结束
-        break;
-      }
-      await _testComponent(tester, element.text);
-    }
-    // throw Exception('<===============执行完成!!!!=================>');
+    await tester.pumpAndSettle();
 
+    expect(find.text('TDesign Flutter 组件库'), findsOneWidget);
+    expect(find.text('Button 按钮'), findsOneWidget);
   });
 
-
-}
-
-var changeList = ['BackTop 返回顶部','Steps 步骤条','Calendar 日历','Input 输入框','Stepper 步进器','Upload 上传','Collapse 折叠面板','Progress 进度条','Tag 标签','Loading 加载', 'PullDownRefresh 下拉刷新'];
-Finder? lastFinder;
-
-int count = 0;
-Future<void> _testComponent(WidgetTester tester, String name) async {
-  print('\n\n当前组件==============>：$name, 滑动count:$count');
-
-  if(changeList.contains(name) && lastFinder != null){
-    count++;
-    await tester.fling(lastFinder!, const Offset(0, -300), 2);
-    try {
-      await tester.pumpAndSettle();
-    } catch (e) {
-      print('pumpAndSettle 1 error:$e');
-    }
-  }
-  if(name == 'Skeleton 骨架屏'){
-    // TODO: 骨架屏需要额外手动处理
-    return;
-  }
-  var button = find.text(name);
-
-  expect(button, findsOneWidget);
-  lastFinder = button;
-
-  await tester.tap(button);
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
-  var page = find.text('WebGenTag');
-  try {
-    expect(page, findsOneWidget);
-
+  testWidgets('示例页面和模块标题使用 headline 层级', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        theme: TThemeBuilder.light(token),
+        home: ExamplePage(
+          title: '页面标题',
+          desc: '页面说明',
+          exampleCodeGroup: 'test',
+          children: const [
+            ExampleModule(
+              title: '模块标题',
+              children: [
+                ExampleItem(
+                  ignoreCode: true,
+                  builder: _emptyExample,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ));
     await tester.pump();
 
-    await tester.fling(page, const Offset(0, -20000), 2);
-    try {
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-    } catch (e) {
-      print('pumpAndSettle 2 error:$e');
-    }
-  } catch (e) {
-    print("没有找到'WebGenTag',不用滑动,直接点击");
-  }
-  var genBtn = find.text('生成Web使用md');
-  expect(genBtn, findsOneWidget);
-  await tester.tap(genBtn);
+    final pageTitle = tester.widget<TText>(
+      find.byWidgetPredicate(
+        (widget) => widget is TText && widget.data == '页面标题',
+      ),
+    );
+    final moduleTitle = tester.widget<TText>(
+      find.byWidgetPredicate(
+        (widget) => widget is TText && widget.data == '01 模块标题',
+      ),
+    );
+    expect(pageTitle.style?.fontSize, token.fontHeadlineMedium?.size);
+    expect(moduleTitle.style?.fontSize, token.fontHeadlineSmall?.size);
+  });
 
-  var back = find.text('返回首页');
-  expect(back, findsOneWidget);
-  await tester.tap(back);
-  await tester.pumpAndSettle();
+  testWidgets('Calendar 页面提供底部 Popup 组合入口', (tester) async {
+    setTResourceBuilder(
+      (_) => null,
+      needAlwaysBuild: false,
+    );
+    addTearDown(
+      () => setTResourceBuilder((_) => null, needAlwaysBuild: false),
+    );
+    final model = ExamplePageModel(
+      text: 'Calendar 日历',
+      name: 'calendar',
+      pageBuilder: (_, __) => const TCalendarPage(),
+    );
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: ExamplePageInheritedTheme(
+          model: model,
+          child: const TCalendarPage(),
+        ),
+      ),
+    ));
+    await tester.pump();
+
+    final pageScrollable = find.byWidgetPredicate(
+      (widget) =>
+          widget is Scrollable && widget.physics is BouncingScrollPhysics,
+    );
+    expect(pageScrollable, findsOneWidget);
+    final pageScrollState = tester.state<ScrollableState>(pageScrollable);
+    for (var offset = 0.0;
+        offset <= pageScrollState.position.maxScrollExtent &&
+            find.text('单选日期').evaluate().isEmpty;
+        offset += 300) {
+      pageScrollState.position.jumpTo(offset);
+      await tester.pump();
+    }
+    expect(find.text('单选日期'), findsOneWidget);
+    await tester.tap(find.text('单选日期'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('选择日期'), findsOneWidget);
+    expect(find.byType(TCalendar), findsWidgets);
+
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('键盘收起后恢复输入框聚焦前的滚动位置', (tester) async {
+    final controller = ScrollController();
+    var inputBuildCount = 0;
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(controller.dispose);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetViewInsets);
+
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: ExamplePage(
+          title: 'Keyboard test',
+          exampleCodeGroup: 'test',
+          scrollController: controller,
+          children: [
+            ExampleModule(
+              title: 'Input',
+              children: [
+                ExampleItem(
+                  ignoreCode: true,
+                  center: false,
+                  builder: (_) {
+                    inputBuildCount++;
+                    return const TInput(hintText: 'Input');
+                  },
+                ),
+              ],
+            ),
+            ExampleModule(
+              title: 'Content',
+              children: List.generate(
+                12,
+                (index) => ExampleItem(
+                  ignoreCode: true,
+                  center: false,
+                  builder: (_) => const SizedBox(height: 120),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    final buildCountBeforeKeyboard = inputBuildCount;
+
+    controller.jumpTo(120);
+    await tester.pump();
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    await tester.pump();
+    expect(inputBuildCount, buildCountBeforeKeyboard);
+
+    controller.jumpTo(400);
+    await tester.pump();
+    tester.view.viewInsets = const FakeViewPadding(bottom: 150);
+    expect(controller.offset, closeTo(260, 0.5));
+    await tester.pump();
+    expect(controller.offset, closeTo(260, 0.5));
+
+    tester.view.resetViewInsets();
+    expect(controller.offset, closeTo(120, 0.5));
+    await tester.pump();
+
+    expect(controller.offset, closeTo(120, 0.5));
+
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    await tester.pump();
+    controller.jumpTo(400);
+    await tester.pump();
+    tester.view.resetViewInsets();
+    expect(controller.offset, closeTo(120, 0.5));
+    await tester.pump();
+
+    expect(controller.offset, closeTo(120, 0.5));
+  });
 }
 
+Widget _emptyExample(BuildContext context) => const SizedBox(height: 1);

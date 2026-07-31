@@ -1,8 +1,6 @@
-
-  Widget _buildCircleWarning(BuildContext context) {
+Widget _buildCircleWarning(BuildContext context) {
     return TProgress(
-      type: TProgressType.circular,
-      progressStatus: TProgressStatus.warning,
+      variant: TProgressVariant.circular,
       value: value,
     );
   }

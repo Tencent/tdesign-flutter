@@ -1,37 +1,32 @@
-
-  Widget _buildBadgeAvatar(BuildContext context) {
+/// 带徽标头像
+    Widget _buildBadgeAvatar(BuildContext context) {
     return const Row(
       // spacing: 32,
       children: [
         SizedBox(
-          height: 51,
-          width: 51,
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(
                 size: TAvatarSize.medium,
-                type: TAvatarType.normal,
-                defaultUrl: 'assets/img/t_avatar_1.png',
+                image: AssetImage('assets/img/t_avatar_1.png'),
               ),
-              Positioned(child: TBadge(TBadgeType.redPoint), right: 0, top: 0)
+              Positioned(
+                  child: TBadge(variant: TBadgeVariant.dot), right: 0, top: 0)
             ],
           ),
         ),
         SizedBox(width: 32),
         SizedBox(
-          height: 51,
-          width: 51,
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(
                 size: TAvatarSize.medium,
-                type: TAvatarType.customText,
-                text: 'A',
+                child: Text('A'),
               ),
               Positioned(
-                child: TBadge(TBadgeType.message, count: '8'),
+                child: TBadge(label: '8'),
                 right: 0,
                 top: 0,
               )
@@ -40,14 +35,12 @@
         ),
         SizedBox(width: 32),
         SizedBox(
-          width: 51,
-          height: 51,
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              TAvatar(size: TAvatarSize.medium, type: TAvatarType.icon),
+              TAvatar(size: TAvatarSize.medium),
               Positioned(
-                child: TBadge(TBadgeType.message, count: '12'),
+                child: TBadge(label: '12'),
                 right: 0,
                 top: 0,
               )

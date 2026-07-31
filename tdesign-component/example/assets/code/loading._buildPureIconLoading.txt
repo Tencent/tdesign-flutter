@@ -1,7 +1,6 @@
-
-  Widget _buildPureIconLoading(BuildContext context) {
+/// 纯图标
+    Widget _buildPureIconLoading(BuildContext context) {
     return Row(
-      // spacing: 36,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const TLoading(
@@ -14,10 +13,16 @@
           icon: TLoadingIcon.activity,
         ),
         const SizedBox(width: 36),
-        TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.point,
-          iconColor: TTheme.of(context).brandNormalColor,
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(
+              iconColor: context.tTheme.brandNormalColor,
+            ),
+          ),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            icon: TLoadingIcon.point,
+          ),
         ),
       ],
     );

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show Scaffold, AppBar, TabBar;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tdesign_flutter_adaptation/components/indexes/sticky_header/value_layout_builder.dart';
@@ -118,7 +119,7 @@ class SliverStickyHeaderState {
   final bool isPinned;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }

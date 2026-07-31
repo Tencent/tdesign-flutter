@@ -12,7 +12,10 @@ class TPopupBottomInset extends TPopupInset {
     this.right = 0,
   });
 
+  /// 左侧留白
   final double left;
+
+  /// 右侧留白
   final double right;
 }
 
@@ -23,7 +26,10 @@ class TPopupTopInset extends TPopupInset {
     this.right = 0,
   });
 
+  /// 左侧留白
   final double left;
+
+  /// 右侧留白
   final double right;
 }
 
@@ -34,7 +40,10 @@ class TPopupLeftInset extends TPopupInset {
     this.bottom = 0,
   });
 
+  /// 顶部留白
   final double top;
+
+  /// 底部留白
   final double bottom;
 }
 
@@ -45,6 +54,9 @@ class TPopupRightInset extends TPopupInset {
     this.bottom = 0,
   });
 
+  /// 顶部留白
   final double top;
+
+  /// 底部留白
   final double bottom;
 }

@@ -1,8 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
 
-enum TFooterType {
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import '../image/t_image.dart';
+import '../link/t_link.dart';
+import 't_footer_theme_data.dart';
+
+/// 页脚形态
+enum TFooterVariant {
   /// 文字样式
   text,
 
@@ -13,22 +19,22 @@ enum TFooterType {
   brand,
 }
 
-class TFooter extends StatefulWidget {
+/// 页面底部的版权、链接和品牌信息区域。
+class TFooter extends StatelessWidget {
   const TFooter(
-    this.type, {
+    this.variant, {
     Key? key,
     this.logo,
     this.text = '',
     this.links = const [],
     this.width,
-    this.height,
   }) : super(key: key);
 
   /// 品牌图片
   final String? logo;
 
-  /// 样式
-  final TFooterType type;
+  /// 页脚形态
+  final TFooterVariant variant;
 
   /// 文字
   final String text;
@@ -36,36 +42,30 @@ class TFooter extends StatefulWidget {
   /// 自定义图片宽
   final double? width;
 
-  /// 自定义图片高
-  final double? height;
-
   /// 链接
   final List<TLink> links;
 
   @override
-  State<TFooter> createState() => _TFooterState();
-}
-
-class _TFooterState extends State<TFooter> {
-  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TFooterThemeData>();
     var children = <Widget>[];
 
-    switch (widget.type) {
-      case TFooterType.text:
-        children = [_renderText()];
+    switch (variant) {
+      case TFooterVariant.text:
+        children = [_renderText(context)];
         break;
-      case TFooterType.link:
+      case TFooterVariant.link:
         children = [
-          if (widget.links.isNotEmpty) _renderLinks() else _renderText()
+          if (links.isNotEmpty) _renderLinks(context) else _renderText(context)
         ];
         break;
-      case TFooterType.brand:
-        children = [if (widget.logo != null) _renderLogo() else _renderText()];
+      case TFooterVariant.brand:
+        children = [if (logo != null) _renderLogo() else _renderText(context)];
         break;
     }
 
     return Container(
+      height: theme?.height,
       alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -79,16 +79,15 @@ class _TFooterState extends State<TFooter> {
       Padding(
         padding: const EdgeInsets.only(top: 4, bottom: 4),
         child: TImage(
-          assetUrl: widget.logo,
-          type: TImageType.fitWidth,
-          width: widget.width,
-          height: widget.height,
+          src: logo,
+          variant: TImageVariant.fitWidth,
+          width: width,
         ),
       )
     ]);
   }
 
-  Widget _renderLinks() {
+  Widget _renderLinks(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -96,15 +95,14 @@ class _TFooterState extends State<TFooter> {
           padding: const EdgeInsets.only(top: 4, bottom: 4),
           child: Wrap(
             alignment: WrapAlignment.center,
-            children: List.generate(widget.links.length, (index) {
-              var link = widget.links[index];
+            children: List.generate(links.length, (index) {
+              var link = links[index];
               return Container(
-                decoration: index < (widget.links.length - 1)
+                decoration: index < (links.length - 1)
                     ? BoxDecoration(
                         border: Border(
                             right: BorderSide(
-                                color:
-                                    TTheme.of(context).textColorPlaceholder)))
+                                color: context.tTheme.textColorPlaceholder)))
                     : null,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: link,
@@ -116,19 +114,23 @@ class _TFooterState extends State<TFooter> {
           padding: const EdgeInsets.only(bottom: 4),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Flexible(child: _renderText())]),
+              children: [Flexible(child: _renderText(context))]),
         ),
       ],
     );
   }
 
-  Widget _renderText() {
+  Widget _renderText(BuildContext context) {
     return Text(
-      widget.text,
+      text,
       textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      softWrap: false,
       style: TextStyle(
-        fontSize: 12,
-        color: TTheme.of(context).textColorPlaceholder,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+        height: context.tTheme.fontBodySmall?.height,
+        color: context.tTheme.textColorPlaceholder,
       ),
     );
   }

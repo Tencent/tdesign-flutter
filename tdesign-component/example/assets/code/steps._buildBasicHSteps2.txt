@@ -1,5 +1,5 @@
-
-  Widget _buildBasicHSteps2(BuildContext context) {
+/// 基本步骤2
+    Widget _buildBasicHSteps2(BuildContext context) {
     return TSteps(
       steps: [
         TStepsItemData(title: 'Steps1', content: 'Content1'),
@@ -8,6 +8,6 @@
       ],
       // 水平方向
       direction: TStepsDirection.horizontal,
-      activeIndex: 1,
+      value: 1,
     );
   }

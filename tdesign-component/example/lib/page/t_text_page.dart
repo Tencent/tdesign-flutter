@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 class TTextPage extends StatelessWidget {
@@ -27,169 +27,132 @@ class TTextPage extends StatelessWidget {
               builder: _buildStyleCoverColorAndFont),
           ExampleItem(desc: 'TText.rich测试:', builder: _buildRichText),
           ExampleItem(desc: '获取系统Text:', builder: _getSystemText),
-          ExampleItem(
-              desc: '中文居中:（带有英文可能不居中）', builder: _buildVerticalCenterText),
-          ExampleItem(desc: '自定义内部padding:', builder: _buildCustomPaddingText),
           ExampleItem(desc: '删除线:', builder: _buildTextThrough),
+          ExampleItem(desc: 'v1.0 Theme默认:', builder: _buildThemeDemo),
         ]),
       ],
-      test: [
-        ExampleItem(
-            desc: '中文居中-系统字体',
-            builder: (context) {
-              return Container(
-                color: TTheme.of(context).brandFocusColor,
-                child: Text(exampleTxt),
-              );
-            }),
-        ExampleItem(
-            desc: '中文居中-TD字体',
-            builder: (context) {
-              return Container(
-                color: TTheme.of(context).brandFocusColor,
-                child: TText(
-                  exampleTxt,
-                  forceVerticalCenter: true,
-                ),
-              );
-            }),
-      ],
+      test: const [],
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildNormalTText(BuildContext context) {
     return TText(
       exampleTxt,
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildSystemText(BuildContext context) {
     return Text(
       exampleTxt,
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildGeneralProp(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontHeadlineLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      backgroundColor: TTheme.of(context).brandFocusColor,
+      font: context.tTheme.fontHeadlineLarge,
+      textColor: context.tTheme.brandNormalColor,
+      backgroundColor: context.tTheme.brandFocusColor,
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildStyleCoverColor(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style: TextStyle(color: TTheme.of(context).errorNormalColor),
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(color: context.tTheme.errorNormalColor),
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildStyleCoverColorAndFont(BuildContext context) {
     return TText(
       exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(
+        color: context.tTheme.errorNormalColor,
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildRichText(BuildContext context) {
     return TText.rich(
       TextSpan(children: [
         TTextSpan(
             text: 'TTextSpan1',
-            font: TTheme.of(context).fontTitleExtraLarge,
-            textColor: TTheme.of(context).warningNormalColor,
+            font: context.tTheme.fontTitleExtraLarge,
+            textColor: context.tTheme.warningNormalColor,
             isTextThrough: true,
-            lineThroughColor: TTheme.of(context).brandNormalColor,
-            style: TextStyle(color: TTheme.of(context).errorNormalColor)),
+            lineThroughColor: context.tTheme.brandNormalColor,
+            style: TextStyle(color: context.tTheme.errorNormalColor)),
         TextSpan(
             text: 'TextSpan2',
             style: TextStyle(
-                fontSize: 14, color: TTheme.of(context).brandNormalColor)),
+                fontSize: 14, color: context.tTheme.brandNormalColor)),
         const WidgetSpan(
             child: Icon(
           TIcons.setting,
           size: 24,
         )),
       ]),
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style:
-          TextStyle(color: TTheme.of(context).errorNormalColor, fontSize: 32),
+      font: context.tTheme.fontBodyLarge,
+      textColor: context.tTheme.brandNormalColor,
+      style: TextStyle(color: context.tTheme.errorNormalColor, fontSize: 32),
     );
   }
 
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _getSystemText(BuildContext context) {
     return TText(
       exampleTxt,
-      backgroundColor: TTheme.of(context).brandFocusColor,
+      backgroundColor: context.tTheme.brandFocusColor,
     ).getRawText(context: context);
   }
 
-  @Demo(group: 'text')
-  Widget _buildVerticalCenterText(BuildContext context) {
-    return TText(
-      '中华人民共和国腾讯科技',
-      // font: Font(size: 100, lineHeight: 100),
-      forceVerticalCenter: true,
-      backgroundColor: TTheme.of(context).brandFocusColor,
-    );
-  }
-
-  @Demo(group: 'text')
-  Widget _buildCustomPaddingText(BuildContext context) {
-    return TTextConfiguration(
-      paddingConfig: CustomTextPaddingConfig(),
-      child: const CustomPaddingText(),
-    );
-  }
-
-  @Demo(group: 'text')
+  @ExampleCode(group: 'text')
   Widget _buildTextThrough(BuildContext context) {
     return TText(exampleTxt, isTextThrough: true);
   }
-}
 
-/// 自定义控件，内部的context可拿到外部TTextConfiguration的配置信息
-class CustomPaddingText extends StatelessWidget {
-  const CustomPaddingText({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TText(
-          '中华人民共和国腾讯科技fgjpqy',
-          forceVerticalCenter: true,
-          backgroundColor: TTheme.of(context).brandFocusColor,
-        ),
-        TText(
-          'English',
-          font: TTheme.of(context).fontHeadlineLarge,
-          forceVerticalCenter: true,
-          backgroundColor: TTheme.of(context).brandFocusColor,
-        ),
-      ],
+  @ExampleCode(group: 'text')
+  Widget _buildThemeDemo(BuildContext context) {
+    // v1.0 新增：通过 TTextThemeData 统一控制子树 TText 默认样式
+    return Theme(
+      data: Theme.of(context).copyWith(
+        extensions: [
+          ...Theme.of(context).extensions.values,
+          TTextThemeData(
+            defaultTextColor: context.tTheme.brandNormalColor,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: context.tTheme.brandFocusColor,
+            child: TText(exampleTxt),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '↑ 继承 TTextThemeData 默认颜色',
+            style: TextStyle(
+              fontSize: 12,
+              color: context.tTheme.textColorSecondary,
+            ),
+          ),
+        ],
+      ),
     );
-  }
-}
-
-/// 重写内部padding方法
-class CustomTextPaddingConfig extends TTextPaddingConfig {
-  @override
-  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
-    var supperPadding = super.getPadding(data, fontSize, height);
-    return EdgeInsets.only(left: 30, top: supperPadding.vertical.toDouble());
   }
 }

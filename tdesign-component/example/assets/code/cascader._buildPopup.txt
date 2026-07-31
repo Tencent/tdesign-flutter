@@ -1,0 +1,47 @@
+Widget _buildPopup(BuildContext context) {
+    List<String> selectedLabels(List<Object?> value) {
+      var options = _options;
+      final labels = <String>[];
+      for (final selectedValue in value) {
+        final matches =
+            options.where((option) => option.value == selectedValue).toList();
+        if (matches.isEmpty) {
+          break;
+        }
+        labels.add(matches.first.label);
+        options = matches.first.children;
+      }
+      return labels;
+    }
+
+    return TCell(
+      title: const TText('选择地区'),
+      note: TText(selectedLabels(_popupValue).join(' / ')),
+      arrow: true,
+      onTap: () {
+        var draft = List<Object?>.of(_popupValue);
+        TPopup.show(
+          context,
+          options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height * 0.6,
+            titleWidget: const TText('选择地区'),
+            child: StatefulBuilder(
+              builder: (context, setPopupState) => TCascader(
+                key: const Key('cascader-popup'),
+                options: _options,
+                value: draft,
+                onChanged: (value) {
+                  setPopupState(() => draft = value);
+                },
+              ),
+            ),
+            onVisibleChange: (visible, trigger) {
+              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
+                setState(() => _popupValue = List<Object?>.of(draft));
+              }
+            },
+          ),
+        );
+      },
+    );
+  }

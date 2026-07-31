@@ -9,15 +9,14 @@ void main() {
   tearDown(resetPopupTestResource);
 
   group('Popup 路由层行为（通过 TPopup.show 验证）', () {
-    testWidgets('无蒙层 + modal=true 时阻断底层点击与滚动',
-        (tester) async {
+    testWidgets('无蒙层 + modal=true 时阻断底层点击与滚动', (tester) async {
       final controller = ScrollController();
       var backgroundTapCount = 0;
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TTheme(
-            data: TThemeData.defaultData(),
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
             child: Scaffold(
               body: Builder(
                 builder: (context) {
@@ -79,15 +78,14 @@ void main() {
       expect(controller.offset, 0);
     });
 
-    testWidgets('无蒙层 + modal=false 时允许底层点击与滚动',
-        (tester) async {
+    testWidgets('无蒙层 + modal=false 时允许底层点击与滚动', (tester) async {
       final controller = ScrollController();
       var backgroundTapCount = 0;
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TTheme(
-            data: TThemeData.defaultData(),
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
             child: Scaffold(
               body: Builder(
                 builder: (context) {
@@ -219,7 +217,7 @@ void main() {
         expect(positioned.bottom, 0);
       });
 
-      testWidgets('bottom 无固定 height 时仍避让底部安全区', (tester) async {
+      testWidgets('bottom 默认高度仍避让底部安全区', (tester) async {
         const safeBottom = 34.0;
         await openPopup(
           tester,
@@ -239,7 +237,7 @@ void main() {
 
         final positioned = findPopupPanelPositioned(tester);
         expect(positioned.bottom, safeBottom);
-        expect(positioned.height, isNull);
+        expect(positioned.height, 240);
       });
 
       testWidgets('bottom inset 与安全区在路由层叠加', (tester) async {
@@ -457,10 +455,10 @@ void main() {
           onPressed: () {
             TPopup.show(
               tester.element(find.text('open')),
-              options: TPopupOptions(
+              options: const TPopupOptions(
                 placement: TPopupPlacement.top,
                 height: 90,
-                child: const SizedBox(height: 50),
+                child: SizedBox(height: 50),
               ),
             );
           },
@@ -471,7 +469,7 @@ void main() {
         expect(positioned.top, safeTop);
       });
 
-      testWidgets('center 忽略 useSafeArea', (tester) async {
+      testWidgets('center 默认避让全部安全区', (tester) async {
         await openPopup(
           tester,
           mediaPadding: const EdgeInsets.only(bottom: 34, top: 44),
@@ -492,9 +490,9 @@ void main() {
         expect(find.byType(Positioned), findsOneWidget);
         final positioned = tester.widget<Positioned>(find.byType(Positioned));
         expect(positioned.left, 0);
-        expect(positioned.top, 0);
+        expect(positioned.top, 44);
         expect(positioned.right, 0);
-        expect(positioned.bottom, 0);
+        expect(positioned.bottom, 34);
       });
 
       testWidgets('center 在 useSafeArea=false 时仍为全屏 fill', (tester) async {

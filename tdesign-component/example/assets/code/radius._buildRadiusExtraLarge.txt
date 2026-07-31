@@ -1,12 +1,8 @@
-
-  Widget _buildRadiusExtraLarge(BuildContext context) {
+Widget _buildRadiusExtraLarge(BuildContext context) {
     return Container(
-      width: 100,
-      height: 50,
       decoration: BoxDecoration(
-        color: TTheme.of(context).brandNormalColor,
-        borderRadius:
-            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
+        color: context.tTheme.brandNormalColor,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
       ),
     );
   }

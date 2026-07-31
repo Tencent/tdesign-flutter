@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' show FlutterView;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,13 +8,11 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../page/t_theme_page.dart';
 import '../provider/theme_mode_provider.dart';
-import 'syntax_highlighter.dart';
-import 'api_widget.dart';
 import 'example_base.dart';
 import 'example_route.dart';
 import 'notification_center.dart';
+import 'syntax_highlighter.dart';
 import 'web_md_tool.dart';
 
 var navBarkey = GlobalKey();
@@ -27,7 +26,7 @@ class ExamplePage extends StatefulWidget {
     this.desc = '',
     this.children = const [],
     this.padding,
-    @deprecated this.backgroundColor,
+    this.backgroundColor,
     required this.exampleCodeGroup,
     this.test = const [],
     this.showSingleChild = false,
@@ -78,15 +77,25 @@ class ExamplePage extends StatefulWidget {
   State<ExamplePage> createState() => _ExamplePageState();
 }
 
-class _ExamplePageState extends State<ExamplePage> {
+class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   late List<ExampleModule> list;
   bool apiVisible = false;
   ExamplePageModel? model;
   bool showAction = false;
+  late ScrollController _scrollController;
+  late bool _ownsScrollController;
+  FlutterView? _view;
+  double _keyboardInset = 0;
+  double? _scrollOffsetBeforeKeyboard;
+  bool _userScrolledWithKeyboard = false;
+  double? _keyboardDismissStartInset;
+  double? _scrollOffsetAtKeyboardDismissStart;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _setScrollController(widget.scrollController);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var modelTheme = context
           .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
@@ -100,90 +109,200 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final nextView = View.of(context);
+    if (!identical(_view, nextView)) {
+      _view = nextView;
+      _keyboardInset = _readKeyboardInset();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant ExamplePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.scrollController != widget.scrollController) {
+      if (_ownsScrollController) {
+        _scrollController.dispose();
+      }
+      _setScrollController(widget.scrollController);
+      _scrollOffsetBeforeKeyboard = null;
+      _userScrolledWithKeyboard = false;
+      _cancelKeyboardRestore();
+    }
+  }
+
+  @override
+  void didChangeMetrics() {
+    final nextInset = _readKeyboardInset();
+    final wasVisible = _keyboardInset > 0;
+    final isVisible = nextInset > 0;
+    if (!wasVisible && isVisible && _scrollController.hasClients) {
+      _cancelKeyboardRestore();
+      _scrollOffsetBeforeKeyboard = _scrollController.offset;
+      _userScrolledWithKeyboard = false;
+    } else if (wasVisible &&
+        isVisible &&
+        nextInset < _keyboardInset &&
+        !_userScrolledWithKeyboard) {
+      final restoreOffset = _scrollOffsetBeforeKeyboard;
+      if (restoreOffset != null && _scrollController.hasClients) {
+        _keyboardDismissStartInset ??= _keyboardInset;
+        _scrollOffsetAtKeyboardDismissStart ??= _scrollController.offset;
+        final startInset = _keyboardDismissStartInset!;
+        final startOffset = _scrollOffsetAtKeyboardDismissStart!;
+        final remaining = (nextInset / startInset).clamp(0.0, 1.0);
+        _restoreKeyboardOffset(
+          restoreOffset + (startOffset - restoreOffset) * remaining,
+        );
+      }
+    } else if (wasVisible && isVisible && nextInset > _keyboardInset) {
+      _cancelKeyboardRestore();
+    } else if (wasVisible && !isVisible) {
+      final restoreOffset = _scrollOffsetBeforeKeyboard;
+      _scrollOffsetBeforeKeyboard = null;
+      if (!_userScrolledWithKeyboard && restoreOffset != null) {
+        _restoreKeyboardOffset(restoreOffset);
+      }
+      _keyboardDismissStartInset = null;
+      _scrollOffsetAtKeyboardDismissStart = null;
+    }
+    _keyboardInset = nextInset;
+  }
+
+  void _restoreKeyboardOffset(double target) {
+    if (_userScrolledWithKeyboard || !_scrollController.hasClients) {
+      return;
+    }
+    final position = _scrollController.position;
+    final clampedTarget = target.clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+    if ((position.pixels - clampedTarget).abs() >= 0.5) {
+      _scrollController.jumpTo(clampedTarget);
+    }
+  }
+
+  void _cancelKeyboardRestore() {
+    _keyboardDismissStartInset = null;
+    _scrollOffsetAtKeyboardDismissStart = null;
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_ownsScrollController) {
+      _scrollController.dispose();
+    }
+    super.dispose();
+  }
+
+  void _setScrollController(ScrollController? controller) {
+    _ownsScrollController = controller == null;
+    _scrollController = controller ?? ScrollController();
+  }
+
+  double _readKeyboardInset() {
+    final view = _view;
+    if (view == null) {
+      return 0;
+    }
+    return view.viewInsets.bottom / view.devicePixelRatio;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: widget.floatingActionButton,
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
-              trackVisibility: MaterialStateProperty.all(true),
+              trackVisibility: WidgetStateProperty.all(true),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildNavBar(),
+                SafeArea(bottom: false, child: _buildNavBar()),
                 Expanded(
+                  child: SafeArea(
+                    top: false,
                     child: widget.showSingleChild && widget.singleChild != null
                         ? _singleChild()
-                        : MediaQuery(
-                            // 去掉底部安全区域,保证示例展示正常
-                            data: MediaQuery.of(context)
-                                .copyWith(padding: EdgeInsets.zero),
-                            child: ListView.builder(
-                              controller: widget.scrollController,
-                              shrinkWrap: true,
-                              physics: const BouncingScrollPhysics(),
-                              padding:
-                                  const EdgeInsets.only(top: 24, bottom: 24),
-                              itemCount: widget.children.length + 3,
-                              itemBuilder: (_, index) {
-                                if (index == 0) {
-                                  // 这里不能传ListView的context，否则暗色模式切换会延迟
-                                  return _buildHeader();
-                                }
-                                if (index == widget.children.length + 2) {
-                                  return WebMdTool.needGenerateWebMd
-                                      ? Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 24),
-                                          child: Column(
-                                            children: [
-                                              TButton(
-                                                text: '生成Web使用md',
-                                                type: TButtonType.fill,
-                                                onTap: () =>
-                                                    WebMdTool.generateWebMd(
-                                                        model: model,
-                                                        description:
-                                                            widget.desc,
-                                                        exampleCodeGroup: widget
-                                                            .exampleCodeGroup,
-                                                        exampleModuleList:
-                                                            widget.children,
-                                                        testList: widget.test,
-                                                        singleChild: widget
-                                                                .showSingleChild
-                                                            ? widget.singleChild
-                                                            : null),
-                                              ),
-                                              TButton(
-                                                text: '返回首页',
-                                                type: TButtonType.fill,
-                                                onTap: () =>
-                                                    Navigator.of(context)
-                                                        .maybePop(),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container();
-                                }
-                                ExampleModule data;
-                                if (index <= widget.children.length) {
-                                  data = widget.children[index - 1];
-                                } else {
-                                  data = ExampleModule(
-                                      title: '单元测试',
-                                      children: [
-                                        _buildTestExampleItem(),
-                                        ...widget.test
-                                      ]);
-                                }
-                                return _buildModule(index, data, context);
-                              },
-                            ),
-                          )),
+                        : _buildExampleList(),
+                  ),
+                ),
               ],
             )));
+  }
+
+  Widget _buildExampleList() {
+    final modules = [
+      ...widget.children,
+      ExampleModule(
+        title: '单元测试',
+        children: [_buildTestExampleItem(), ...widget.test],
+      ),
+    ];
+    return NotificationListener<ScrollStartNotification>(
+      onNotification: (notification) {
+        if (_keyboardInset > 0 && notification.dragDetails != null) {
+          _userScrolledWithKeyboard = true;
+          _cancelKeyboardRestore();
+        }
+        return false;
+      },
+      child: CustomScrollView(
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        slivers: [
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          SliverToBoxAdapter(child: _buildHeader()),
+          for (var moduleIndex = 0;
+              moduleIndex < modules.length;
+              moduleIndex++) ...[
+            SliverToBoxAdapter(
+              child: _buildModuleTitle(moduleIndex + 1, modules[moduleIndex]),
+            ),
+            SliverList.builder(
+              itemCount: modules[moduleIndex].children.length,
+              itemBuilder: (_, itemIndex) =>
+                  _buildExampleItem(modules[moduleIndex], itemIndex),
+            ),
+          ],
+          if (WebMdTool.needGenerateWebMd)
+            SliverToBoxAdapter(child: _buildWebMdActions()),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWebMdActions() {
+    return Container(
+      margin: const EdgeInsets.only(top: 24),
+      child: Column(
+        children: [
+          TButton(
+            variant: TButtonVariant.fill,
+            onPressed: () => WebMdTool.generateWebMd(
+              model: model,
+              description: widget.desc,
+              exampleCodeGroup: widget.exampleCodeGroup,
+              exampleModuleList: widget.children,
+              testList: widget.test,
+              singleChild: widget.showSingleChild ? widget.singleChild : null,
+            ),
+            child: const Text('生成Web使用md'),
+          ),
+          TButton(
+            variant: TButtonVariant.fill,
+            onPressed: () => Navigator.of(context).maybePop(),
+            child: const Text('返回首页'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _singleChild() {
@@ -201,9 +320,9 @@ class _ExamplePageState extends State<ExamplePage> {
               child: Column(
                 children: [
                   TButton(
-                    text: '生成Web使用md',
-                    type: TButtonType.fill,
-                    onTap: () => WebMdTool.generateWebMd(
+                    child: const Text('生成Web使用md'),
+                    variant: TButtonVariant.fill,
+                    onPressed: () => WebMdTool.generateWebMd(
                         model: model,
                         description: widget.desc,
                         exampleCodeGroup: widget.exampleCodeGroup,
@@ -213,9 +332,9 @@ class _ExamplePageState extends State<ExamplePage> {
                             widget.showSingleChild ? widget.singleChild : null),
                   ),
                   TButton(
-                    text: '返回首页',
-                    type: TButtonType.fill,
-                    onTap: () => Navigator.of(context).maybePop(),
+                    child: const Text('返回首页'),
+                    variant: TButtonVariant.fill,
+                    onPressed: () => Navigator.of(context).maybePop(),
                   ),
                 ],
               )),
@@ -242,13 +361,13 @@ class _ExamplePageState extends State<ExamplePage> {
       // Web 端和移动端都显示 API 按钮
       rightBarItems.add(TNavBarItem(
           icon: TIcons.info_circle,
-          action: () {
+          onTap: () {
             Navigator.pushNamed(context, TExampleRoute.getApiPath(model));
           }));
       if (!PlatformUtil.isWeb) {
         rightBarItems.add(TNavBarItem(
             icon: TIcons.code,
-            action: () {
+            onTap: () {
               setState(() {
                 apiVisible = !apiVisible;
                 if (model != null) {
@@ -270,7 +389,7 @@ class _ExamplePageState extends State<ExamplePage> {
           icon: themeModeProvider.themeMode == ThemeMode.light
               ? TIcons.mode_light
               : TIcons.mode_dark,
-          action: () {
+          onTap: () {
             themeModeProvider.themeMode =
                 themeModeProvider.themeMode == ThemeMode.light
                     ? ThemeMode.dark
@@ -283,8 +402,10 @@ class _ExamplePageState extends State<ExamplePage> {
     return TNavBar(
       key: widget.navBarKey,
       title: widget.title,
-      leftBarItems: leftBarItems,
-      rightBarItems: rightBarItems,
+      leading: leftBarItems,
+      actions: rightBarItems,
+      // ExamplePage 外层 SafeArea 已负责顶部避让。
+      useSafeArea: false,
     );
   }
 
@@ -304,8 +425,10 @@ class _ExamplePageState extends State<ExamplePage> {
           if (WebMdTool.needGenerateWebMd) const TText('WebGenTag'),
           TText(
             widget.title,
-            font: TTheme.of(context).fontHeadlineSmall,
-            textColor: TTheme.of(context).textColorPrimary,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: context.tTheme.textColorPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
           ),
           Container(
             margin: const EdgeInsets.only(
@@ -313,8 +436,8 @@ class _ExamplePageState extends State<ExamplePage> {
             ),
             child: TText(
               widget.desc,
-              font: TTheme.of(context).fontBodyMedium,
-              textColor: TTheme.of(context).textColorSecondary,
+              font: context.tTheme.fontBodyMedium,
+              textColor: context.tTheme.textColorSecondary,
             ),
           ),
           // Expanded(child: ),
@@ -323,24 +446,16 @@ class _ExamplePageState extends State<ExamplePage> {
     );
   }
 
-  Widget _buildModule(int index, ExampleModule data, BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
-          child: TText(
-            '${index < 10 ? "0$index" : index} ${data.title}',
-            font: TTheme.of(context).fontTitleLarge,
-            // todo BuildContext
-            // textColor: TTheme.of(context).textColorPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        for (var index = 0; index < data.children.length; index++)
-          _buildExampleItem(data, index)
-      ],
+  Widget _buildModuleTitle(int index, ExampleModule data) {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
+      child: TText(
+        '${index < 10 ? "0$index" : index} ${data.title}',
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: context.tTheme.textColorPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+      ),
     );
   }
 
@@ -432,7 +547,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
       child = widget.data.builder(context);
       if (widget.data.center) {
         child = Center(
-          child: widget.data.builder(context),
+          child: child,
         );
       }
     } else {
@@ -466,8 +581,8 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
                     bottom: 16),
                 child: TText(
                   widget.data.desc,
-                  font: TTheme.of(context).fontBodyMedium,
-                  textColor: TTheme.of(context).textColorSecondary,
+                  font: context.tTheme.fontBodyMedium,
+                  textColor: context.tTheme.textColorSecondary,
                 ),
               ),
         child
@@ -503,6 +618,8 @@ class CodeWrapper extends StatefulWidget {
 }
 
 class _CodeWrapperState extends State<CodeWrapper> {
+  static const _apiVisibilityEvent = 'onApiVisibleChange';
+
   bool apiVisible = false;
 
   String exampleCodeGroup = '';
@@ -510,12 +627,13 @@ class _CodeWrapperState extends State<CodeWrapper> {
   String? codeString;
 
   Brightness brightness = Brightness.light;
+  String? _observerId;
 
   @override
   void initState() {
     super.initState();
-    TNotification.addObserver('onApiVisibleChange', (arguments) {
-      if (arguments is Map) {
+    _observerId = TNotification.addObserver(_apiVisibilityEvent, (arguments) {
+      if (mounted && arguments is Map) {
         setState(() {
           apiVisible = arguments['apiVisible'] ?? false;
         });
@@ -537,6 +655,12 @@ class _CodeWrapperState extends State<CodeWrapper> {
     });
   }
 
+  @override
+  void dispose() {
+    TNotification.removeObserver(_apiVisibilityEvent, _observerId);
+    super.dispose();
+  }
+
   void loadManualCode() async {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExampleItemInherited>();
@@ -553,7 +677,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
     var child = widget.builder(context);
     if (widget.isCenter) {
       child = Center(
-        child: widget.builder(context),
+        child: child,
       );
     }
     if (apiVisible) {
@@ -568,11 +692,11 @@ class _CodeWrapperState extends State<CodeWrapper> {
               child: GestureDetector(
                 onTap: _showCodePanel,
                 child: Container(
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withValues(alpha: 0.4),
                   alignment: Alignment.center,
                   child: TText(
                     'code',
-                    textColor: TTheme.of(context).whiteColor1,
+                    textColor: context.tTheme.whiteColor1,
                   ),
                 ),
               ))
@@ -598,7 +722,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
       }
     }
     if (methodName.isNotEmpty && exampleCodeGroup.isNotEmpty) {
-      print('example code methodName: $methodName');
+      debugPrint('example code methodName: $methodName');
       return 'assets/code/${exampleCodeGroup}.$methodName.txt';
     }
     return '';
@@ -608,25 +732,23 @@ class _CodeWrapperState extends State<CodeWrapper> {
     codeString ??= await loadCodeString();
     await showModalBottomSheet(
         isScrollControlled: true,
-        barrierColor: Colors.black.withOpacity(0.5),
-        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withValues(alpha: 0.5),
         context: context,
         builder: (_) {
           if (codeString!.isEmpty) {
             return Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorSecondaryContainer,
+                  color: context.tTheme.bgColorSecondaryContainer,
                   borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(TTheme.of(context).radiusDefault))),
-              height: 500,
+                      top: Radius.circular(context.tTheme.radiusDefault))),
               child:
                   TText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
             );
           }
 
           var lines = codeString!.split('\n');
-          print('lines: ${lines.length}');
+          debugPrint('lines: ${lines.length}');
           double height = min(max(300, lines.length * 17 + 32),
               MediaQuery.of(context).size.height - 150);
           var mdText = '''
@@ -642,9 +764,9 @@ ${codeString}
           return Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: TTheme.of(context).bgColorSecondaryContainer,
+                color: context.tTheme.bgColorSecondaryContainer,
                 borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(TTheme.of(context).radiusDefault))),
+                    top: Radius.circular(context.tTheme.radiusDefault))),
             height: height,
             child: Markdown(
               physics: const BouncingScrollPhysics(),
@@ -669,7 +791,7 @@ ${codeString}
       try {
         codeString = await rootBundle.loadString(assetsPath);
       } catch (e) {
-        print(e);
+        debugPrint('$e');
       }
     }
     return codeString;
@@ -681,7 +803,7 @@ extension TStateExs on State {
   String tTitle() {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
-    return modelTheme?.model.text ?? '';
+    return modelTheme?.model.displayText ?? '';
   }
 }
 
@@ -690,6 +812,6 @@ extension TWidgetExs on StatelessWidget {
   String tTitle(BuildContext context) {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
-    return modelTheme?.model.text ?? '';
+    return modelTheme?.model.displayText ?? '';
   }
 }

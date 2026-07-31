@@ -8,7 +8,11 @@
 /// * [TPopupHeaderBuilder]、[TPopupSlotBuilder]、[TPopupVisibleChangeCallback] — 构建器类型
 library;
 
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -17,8 +21,8 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../../util/t_toolbar_pressable.dart';
-import '../icon/t_icons.dart';
 import '../text/t_text.dart';
+import 't_popup_theme_data.dart';
 
 part '_popup_center_close.dart';
 part '_popup_header.dart';
@@ -52,7 +56,8 @@ part 't_popup_types.dart';
 ///
 /// 配置项见 [TPopupOptions]；方向见 [TPopupPlacement]。
 final class TPopup {
-  const TPopup._();
+  // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
+  const TPopup._(); // coverage:ignore-line
 
   /// 打开浮层并压入独立 [PopupRoute]。
   ///
@@ -74,10 +79,34 @@ final class TPopup {
     bool useRootNavigator = false,
   }) {
     final navContext = navigatorContext ?? context;
+    final theme = Theme.of(context).extension<TPopupThemeData>();
+    final themedWidth = switch (options.placement) {
+      TPopupPlacement.left || TPopupPlacement.right => theme?.drawerWidth,
+      TPopupPlacement.center => theme?.centerSize?.width,
+      TPopupPlacement.top || TPopupPlacement.bottom => null,
+    };
+    final themedHeight = switch (options.placement) {
+      TPopupPlacement.top || TPopupPlacement.bottom => theme?.edgeHeight,
+      TPopupPlacement.center => theme?.centerSize?.height,
+      TPopupPlacement.left || TPopupPlacement.right => null,
+    };
+    final resolvedOptions = options.copyWith(
+      width: options.width ?? themedWidth,
+      height: options.height ?? themedHeight,
+      radius: options.radius ?? theme?.panelRadius,
+      backgroundColor: options.backgroundColor ?? theme?.panelBackgroundColor,
+      overlayColor: options.overlayColor ?? theme?.barrierColor,
+      overlayOpacity: options.overlayOpacity ?? theme?.barrierOpacity,
+      animationDuration:
+          options.animationDuration ??
+          theme?.transitionDuration ??
+          const Duration(milliseconds: 240),
+    );
     final handle = TPopupHandle._(
-      options: options,
+      options: resolvedOptions,
       navigatorContext: navigatorContext,
       useRootNavigator: useRootNavigator,
+      themeContext: context,
     );
     handle.open(navContext);
     return handle;

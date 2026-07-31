@@ -1,0 +1,22 @@
+Widget _multiple(BuildContext context) {
+    var selected = <String>{'phone'};
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return TDropdownMenu(
+          items: [
+            TDropdownMenuItem(
+              label: selected.isEmpty ? '全部分类' : '已选 ${selected.length} 项',
+              panelBuilder: (context, controller) =>
+                  TDropdownMultiSelectPanel<String>(
+                controller: controller,
+                options: categoryOptions,
+                values: selected,
+                columns: 3,
+                onConfirm: (values) => setState(() => selected = values),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }

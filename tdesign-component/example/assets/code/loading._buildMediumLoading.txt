@@ -1,9 +1,12 @@
-
-  Widget _buildMediumLoading(BuildContext context) {
-    return const TLoading(
-      size: TLoadingSize.medium,
-      icon: TLoadingIcon.circle,
-      text: '加载中…',
-      axis: Axis.horizontal,
+/// 中尺寸
+    Widget _buildMediumLoading(BuildContext context) {
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+      child: const TLoading(
+        size: TLoadingSize.medium,
+        icon: TLoadingIcon.circle,
+        text: '加载中…',
+      ),
     );
   }

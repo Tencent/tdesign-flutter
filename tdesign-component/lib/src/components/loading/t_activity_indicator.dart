@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
 
 const double _kDefaultIndicatorRadius = 10.0;
 
@@ -99,7 +101,7 @@ class _TCupertinoActivityIndicatorState
       child: CustomPaint(
         painter: _CupertinoActivityIndicatorPainter(
           position: _controller,
-          activeColor: widget.activeColor ?? TTheme.of(context).textColorPlaceholder,
+          activeColor: widget.activeColor ?? context.tTheme.textColorPlaceholder,
           radius: widget.radius,
           progress: widget.progress,
         ),

@@ -1,7 +1,6 @@
-
-  Widget _buildFooter(BuildContext context) {
+Widget _buildFooter(BuildContext context) {
     return const TFooter(
-      TFooterType.text,
+      TFooterVariant.text,
       text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }

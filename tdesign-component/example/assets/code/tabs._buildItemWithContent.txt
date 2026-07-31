@@ -1,22 +1,22 @@
-
-  Widget _buildItemWithContent(BuildContext context) {
-    var tabController = TabController(length: 3, vsync: this);
+Widget _buildItemWithContent(BuildContext context) {
+    final tabController = _demoController('content', 3);
     return SizedBox(
       height: 120 + 48,
       child: Column(
         children: [
-          TTabBar(
+          TTabsBar(
             tabs: subList(3),
             controller: tabController,
-            showIndicator: true,
             isScrollable: false,
+            indicator: _indicator(context),
           ),
-          Container(
-            height: 120,
-            color: TTheme.of(context).bgColorContainer,
-            child: TTabBarView(
-              children: _getTabViews(),
-              controller: tabController,
+          Expanded(
+            child: Container(
+              color: context.tTheme.bgColorContainer,
+              child: TTabsBarView(
+                children: _getTabViews(),
+                controller: tabController,
+              ),
             ),
           )
         ],

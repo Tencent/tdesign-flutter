@@ -1,11 +1,10 @@
-
-  Widget _buildFocusSearchBarWithAction(BuildContext context) {
+Widget _buildFocusSearchBarWithAction(BuildContext context) {
     return TSearchBar(
-      placeHolder: '搜索预设文案',
-      action: '搜索',
+      hintText: '搜索预设文案',
       needCancel: true,
+      cancelText: '关闭',
       controller: inputController,
-      onActionClick: (value) {
+      onCancelPressed: () {
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,

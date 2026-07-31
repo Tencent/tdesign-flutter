@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 
 /// 索引锚点
 class TIndexesAnchor extends StatelessWidget {
@@ -39,38 +44,35 @@ class TIndexesAnchor extends StatelessWidget {
         return customAnchor ??
             Container(
               padding: EdgeInsets.symmetric(
-                  vertical: TTheme.of(context).spacer4,
-                  horizontal: TTheme.of(context).spacer16),
+                  vertical: context.tTheme.spacer4,
+                  horizontal: context.tTheme.spacer16),
               margin: capsuleTheme
-                  ? EdgeInsets.symmetric(
-                      horizontal: TTheme.of(context).spacer8)
+                  ? EdgeInsets.symmetric(horizontal: context.tTheme.spacer8)
                   : null,
               decoration: BoxDecoration(
                 color: isPinned
-                    ? TTheme.of(context).bgColorContainer
-                    : TTheme.of(context).bgColorSecondaryContainer,
+                    ? context.tTheme.bgColorContainer
+                    : context.tTheme.bgColorSecondaryContainer,
                 borderRadius: capsuleTheme
-                    ? BorderRadius.circular(TTheme.of(context).radiusCircle)
+                    ? BorderRadius.circular(context.tTheme.radiusCircle)
                     : null,
                 border: isPinned
                     ? capsuleTheme
-                        ? Border.all(
-                            color: TTheme.of(context).componentStrokeColor)
+                        ? Border.all(color: context.tTheme.componentStrokeColor)
                         : Border(
                             bottom: BorderSide(
-                                color: TTheme.of(context).componentStrokeColor,
+                                color: context.tTheme.componentStrokeColor,
                                 width: 0.5))
                     : null,
               ),
               child: TText(
                 text,
-                forceVerticalCenter: true,
                 font: isPinned
-                    ? TTheme.of(context).fontMarkMedium
-                    : TTheme.of(context).fontTitleSmall,
+                    ? context.tTheme.fontMarkMedium
+                    : context.tTheme.fontTitleSmall,
                 textColor: isPinned
-                    ? TTheme.of(context).brandNormalColor
-                    : TTheme.of(context).textColorPrimary,
+                    ? context.tTheme.brandNormalColor
+                    : context.tTheme.textColorPrimary,
               ),
             );
       },

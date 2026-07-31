@@ -39,15 +39,13 @@ class TestPage extends StatelessWidget {
 
             Image.network(
               'assets/img/image.png',
-              width: 335,
               fit: BoxFit.fitWidth,
             ),
             const SizedBox(height: 20),
 
             const TImage(
-              imgUrl: 'assets/img/image.png',
-              type: TImageType.fitHeight,
-              height: 144,
+              src: 'assets/img/image.png',
+              variant: TImageVariant.fitHeight,
               fit: BoxFit.fitHeight,
             ),
           ],

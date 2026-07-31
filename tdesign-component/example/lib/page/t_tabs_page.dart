@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+import '../annotation/example_code.dart';
 
 class TTabsPage extends StatefulWidget {
   const TTabsPage({Key? key}) : super(key: key);
@@ -16,6 +16,7 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
   TabController? _tabController2;
   TabController? _tabController3;
   TabController? _tabController4;
+  final Map<String, TabController> _demoControllers = {};
   List<TTab> tabs = [];
   List<Widget> tabViews = [];
 
@@ -57,10 +58,32 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     _initTabController();
     _getTabs();
-    super.initState();
   }
+
+  @override
+  void dispose() {
+    _tabController1?.dispose();
+    _tabController2?.dispose();
+    _tabController3?.dispose();
+    _tabController4?.dispose();
+    for (final controller in _demoControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  TabController _demoController(String key, int length) {
+    return _demoControllers.putIfAbsent(
+      key,
+      () => TabController(length: length, vsync: this),
+    );
+  }
+
+  TTabsBarIndicator _indicator(BuildContext context) =>
+      TTabsBarIndicator(indicatorColor: context.tTheme.brandNormalColor);
 
   List<TTab> subList(int length) {
     var temp = <TTab>[];
@@ -114,69 +137,60 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
           ExampleItem(desc: '选项卡状态', builder: _buildItemWithStatus),
         ]),
         ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
-          ExampleItem(builder: _buildItemWithSizeBig),
           ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
           ExampleItem(builder: _buildItemWithOutlineCard),
         ]),
       ],
-      test: [
-        ExampleItem(desc: '自定义下标属性', builder: _customIndicatorStyle),
-        ExampleItem(desc: '自定义下划线样式', builder: _customDividerStyle),
-        ExampleItem(desc: '不展示下划线-高度为0', builder: _hideBottomDivider),
-        ExampleItem(desc: 'capsule类型可修改背景色', builder: _capsuleBackgroundColor),
-      ],
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit1(BuildContext context) {
-    return TTabBar(
+    return TTabsBar(
       tabs: subList(2),
       controller: _tabController1,
-      showIndicator: true,
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit2(BuildContext context) {
-    return TTabBar(
+    return TTabsBar(
       tabs: subList(3),
       controller: _tabController2,
-      showIndicator: true,
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit3(BuildContext context) {
-    return TTabBar(
+    return TTabsBar(
       tabs: subList(4),
       controller: _tabController3,
-      showIndicator: true,
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSplit4(BuildContext context) {
-    return TTabBar(
+    return TTabsBar(
       tabs: subList(5),
       controller: _tabController4,
-      showIndicator: true,
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithSpace(BuildContext context) {
-    return TTabBar(
+    return TTabsBar(
       tabs: subList(16),
-      controller: TabController(length: 16, vsync: this),
-      labelPadding: const EdgeInsets.all(10),
-      showIndicator: true,
+      controller: _demoController('space', 16),
+      indicator: _indicator(context),
       isScrollable: true,
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = List.generate(3, (index) {
       final text = '选项${index + 1}';
@@ -185,60 +199,59 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
         icon: const Icon(TIcons.app, size: 18),
       );
     });
-    return TTabBar(
+    return TTabsBar(
       tabs: tabs,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: true,
+      controller: _demoController('icon', tabs.length),
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
       const TTab(
-        text: '选项',
-        contentHeight: 48,
-        textMargin: EdgeInsets.only(right: 8),
-        badge: TBadge(TBadgeType.redPoint),
-      ),
-      const TTab(
-        text: '选项',
-        contentHeight: 42,
-        textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
-        badge: TBadge(TBadgeType.message, message: '8'),
-      ),
-      const TTab(
-        text: '选项',
-        height: 48,
+        text: '选项1',
         icon: Icon(TIcons.app, size: 18),
+        badge: TBadge(variant: TBadgeVariant.dot),
+      ),
+      const TTab(
+        text: '选项2',
+        icon: Icon(TIcons.app, size: 18),
+        badge: TBadge(label: '8'),
+      ),
+      const TTab(
+        text: '选项3',
+        icon: Icon(TIcons.app, size: 18),
+        badge: TBadge(variant: TBadgeVariant.dot),
       ),
     ];
-    return TTabBar(
+    return TTabsBar(
       tabs: tabs,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: true,
+      controller: _demoController('logo', tabs.length),
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithContent(BuildContext context) {
-    var tabController = TabController(length: 3, vsync: this);
+    final tabController = _demoController('content', 3);
     return SizedBox(
       height: 120 + 48,
       child: Column(
         children: [
-          TTabBar(
+          TTabsBar(
             tabs: subList(3),
             controller: tabController,
-            showIndicator: true,
             isScrollable: false,
+            indicator: _indicator(context),
           ),
-          Container(
-            height: 120,
-            color: TTheme.of(context).bgColorContainer,
-            child: TTabBarView(
-              children: _getTabViews(),
-              controller: tabController,
+          Expanded(
+            child: Container(
+              color: context.tTheme.bgColorContainer,
+              child: TTabsBarView(
+                children: _getTabViews(),
+                controller: tabController,
+              ),
             ),
           )
         ],
@@ -246,51 +259,21 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
       const TTab(text: '选中'),
       const TTab(text: '默认'),
-      const TTab(text: '禁用', enable: false),
+      const TTab(text: '禁用', enabled: false),
     ];
-    return TTabBar(
+    return TTabsBar(
       tabs: tabs,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: true,
+      controller: _demoController('status', tabs.length),
+      indicator: _indicator(context),
     );
   }
 
-  @Demo(group: 'tabs')
-  Widget _buildItemWithSizeSmall(BuildContext context) {
-    var tabs = [
-      const TTab(text: '小尺寸'),
-      const TTab(text: '选项2'),
-      const TTab(text: '选项3'),
-      const TTab(text: '选项4'),
-    ];
-    return TTabBar(
-      tabs: tabs,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: true,
-    );
-  }
-
-  @Demo(group: 'tabs')
-  Widget _buildItemWithSizeBig(BuildContext context) {
-    var tabs = [
-      const TTab(text: '大尺寸', size: TTabSize.large),
-      const TTab(text: '选项2', size: TTabSize.large),
-      const TTab(text: '选项3', size: TTabSize.large),
-      const TTab(text: '选项4', size: TTabSize.large),
-    ];
-    return TTabBar(
-      tabs: tabs,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: true,
-    );
-  }
-
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
       const TTab(text: '选项1'),
@@ -298,15 +281,14 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
       const TTab(text: '选项3'),
       const TTab(text: '选项4'),
     ];
-    return TTabBar(
+    return TTabsBar(
       tabs: tabs,
-      outlineType: TTabBarOutlineType.capsule,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: false,
+      variant: TTabsBarVariant.capsule,
+      controller: _demoController('outlineNormal', tabs.length),
     );
   }
 
-  @Demo(group: 'tabs')
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
       const TTab(text: '选项1'),
@@ -314,56 +296,10 @@ class _TTabsPageState extends State<TTabsPage> with TickerProviderStateMixin {
       const TTab(text: '选项3'),
       const TTab(text: '选项4'),
     ];
-    return TTabBar(
+    return TTabsBar(
       tabs: tabs,
-      outlineType: TTabBarOutlineType.card,
-      controller: TabController(length: tabs.length, vsync: this),
-      showIndicator: false,
-    );
-  }
-
-  @Demo(group: 'tabs')
-  Widget _customIndicatorStyle(BuildContext context) {
-    return TTabBar(
-      tabs: subList(2),
-      controller: _tabController1,
-      showIndicator: true,
-      indicatorColor: Colors.red,
-      indicatorHeight: 20,
-      indicatorWidth: 10,
-      indicatorPadding: const EdgeInsets.only(left: 20),
-    );
-  }
-
-  @Demo(group: 'tabs')
-  Widget _customDividerStyle(BuildContext context) {
-    return TTabBar(
-      tabs: subList(2),
-      controller: _tabController1,
-      showIndicator: true,
-      dividerColor: Colors.red,
-      dividerHeight: 5,
-    );
-  }
-
-  @Demo(group: 'tabs')
-  Widget _hideBottomDivider(BuildContext context) {
-    return TTabBar(
-      tabs: subList(2),
-      controller: _tabController1,
-      showIndicator: true,
-      dividerColor: Colors.red,
-      dividerHeight: 0,
-    );
-  }
-
-  @Demo(group: 'tabs')
-  Widget _capsuleBackgroundColor(BuildContext context) {
-    return TTabBar(
-      tabs: subList(2),
-      controller: _tabController1,
-      backgroundColor: Colors.red,
-      outlineType: TTabBarOutlineType.capsule,
+      variant: TTabsBarVariant.card,
+      controller: _demoController('outlineCard', tabs.length),
     );
   }
 }

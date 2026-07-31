@@ -1,0 +1,10 @@
+Widget _horizontalCardCheckbox(BuildContext context) {
+    return TCheckboxGroup<String>(
+      value: _horizontalCardValue,
+      options: _horizontalCardOptions,
+      direction: Axis.horizontal,
+      columns: 2,
+      cardMode: true,
+      onChanged: (value) => setState(() => _horizontalCardValue = value),
+    );
+  }

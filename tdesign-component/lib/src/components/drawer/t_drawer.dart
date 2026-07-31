@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/t_colors.dart';
-import '../../theme/t_spacers.dart';
-import '../../theme/t_theme.dart';
-import '../cell/t_cell.dart';
-import '../cell/t_cell_group.dart';
-import '../cell/t_cell_style.dart';
-import '../icon/t_icons.dart';
 import '../popup/t_popup.dart';
+import 't_drawer_theme_data.dart';
 import 't_drawer_widget.dart';
 
 /// 抽屉方向
-enum TDrawerPlacement { left, right }
+enum TDrawerPlacement {
+  /// 从左侧滑出
+  left,
+
+  /// 从右侧滑出
+  right,
+}
 
 /// 抽屉组件
 class TDrawer {
@@ -23,23 +23,13 @@ class TDrawer {
     this.placement = TDrawerPlacement.right,
     this.showOverlay = true,
     this.title,
-    this.titleWidget,
-    this.visible,
     this.onClose,
     this.onItemClick,
-    this.width = 280,
+    this.width,
     this.drawerTop,
-    this.style,
-    this.hover = true,
-    this.backgroundColor,
-    this.bordered = true,
-    this.isShowLastBordered = true,
-    this.contentWidget,
-  }) {
-    if (visible == true) {
-      show();
-    }
-  }
+    this.useSafeArea = true,
+    this.child,
+  });
 
   /// 上下文
   final BuildContext context;
@@ -54,7 +44,7 @@ class TDrawer {
   final List<TDrawerItem>? items;
 
   /// 自定义内容，优先级高于[items]/[footer]/[title]
-  final Widget? contentWidget;
+  final Widget? child;
 
   /// 抽屉方向
   final TDrawerPlacement? placement;
@@ -62,14 +52,8 @@ class TDrawer {
   /// 是否显示遮罩层
   final bool? showOverlay;
 
-  /// 抽屉的标题
-  final String? title;
-
   /// 抽屉的标题组件
-  final Widget? titleWidget;
-
-  /// 组件是否可见
-  final bool? visible;
+  final Widget? title;
 
   /// 关闭时触发
   final VoidCallback? onClose;
@@ -77,82 +61,83 @@ class TDrawer {
   /// 点击抽屉里的列表项触发
   final TDrawerItemClickCallback? onItemClick;
 
-  /// 宽度
+  /// 宽度（优先级高于 ThemeData）
   final double? width;
 
   /// 距离顶部的距离
   final double? drawerTop;
 
-  /// 列表自定义样式
-  final TCellStyle? style;
-
-  /// 是否开启点击反馈
-  final bool? hover;
-
-  /// 组件背景颜色
-  final Color? backgroundColor;
-
-  /// 是否显示边框
-  final bool? bordered;
-
-  /// 是否显示最后一行分割线
-  final bool? isShowLastBordered;
+  /// 是否避让系统安全区域
+  final bool useSafeArea;
 
   TPopupHandle? _drawerHandle;
 
-  void show() {
+  /// 从 ThemeData 解析有效值
+  TDrawerThemeData _resolveTheme() {
+    final theme = Theme.of(context).extension<TDrawerThemeData>() ??
+        const TDrawerThemeData();
+    return theme;
+  }
+
+  TDrawerHandle show() {
     if (_drawerHandle?.isShowing == true) {
-      return;
+      return TDrawerHandle._(_drawerHandle);
     }
 
+    final theme = _resolveTheme();
     final overlayEnabled = showOverlay ?? true;
     final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
     final popupPlacement = placement == TDrawerPlacement.right
         ? TPopupPlacement.right
         : TPopupPlacement.left;
     final popupInset = placement == TDrawerPlacement.right
-        ? TPopupRightInset(top: drawerTop ?? 0)
-        : TPopupLeftInset(top: drawerTop ?? 0);
+        ? TPopupRightInset(top: drawerTop ?? theme.drawerTop ?? 0)
+        : TPopupLeftInset(top: drawerTop ?? theme.drawerTop ?? 0);
 
     _drawerHandle = TPopup.show(
       context,
       options: TPopupOptions(
         placement: popupPlacement,
-        width: width,
+        width: width ?? theme.width ?? 280,
         inset: popupInset,
         showOverlay: overlayEnabled,
         closeOnOverlayClick: dismissible,
         overlayColor: overlayEnabled ? null : Colors.transparent,
+        useSafeArea: useSafeArea,
         onClosed: _deleteRouter,
-        child: TDrawerWidget(
-          footer: footer,
-          items: items,
-          contentWidget: contentWidget,
-          title: title,
-          titleWidget: titleWidget,
-          onItemClick: onItemClick,
-          width: width,
-          style: style,
-          hover: hover,
-          backgroundColor: backgroundColor,
-          bordered: bordered,
-          isShowLastBordered: isShowLastBordered,
+        child: Theme(
+          data: Theme.of(context),
+          child: TDrawerWidget(
+            footer: footer,
+            items: items,
+            child: child,
+            title: title,
+            onItemClick: onItemClick,
+            width: width,
+          ),
         ),
       ),
     );
-  }
-
-  void open() {
-    show();
-  }
-
-  @mustCallSuper
-  void close() {
-    _drawerHandle?.close();
+    return TDrawerHandle._(_drawerHandle);
   }
 
   void _deleteRouter() {
     _drawerHandle = null;
     onClose?.call();
+  }
+}
+
+/// [TDrawer.show] 返回的抽屉生命周期控制句柄。
+class TDrawerHandle {
+  const TDrawerHandle._(this._handle);
+
+  final TPopupHandle? _handle;
+
+  /// 当前抽屉是否仍显示在路由中。
+  bool get isShowing => _handle?.isShowing ?? false;
+
+  /// 关闭当前抽屉；重复调用安全。
+  void close() {
+    _handle?.close();
   }
 }

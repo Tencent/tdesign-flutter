@@ -4,49 +4,21 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| type | TBadgeType | - | 红点样式 |
-| border | TBadgeBorder | TBadgeBorder.large | 红点圆角大小 |
-| color | Color? | - | 红点颜色 |
-| count | String? | - | 红点数量 |
+| border | bool | false | 是否为徽标增加对比色描边。 |
+| child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxCount | String? | '99' | 最大红点数量 |
-| message | String? | - | 消息内容 |
-| padding | EdgeInsetsGeometry? | - | 角标自定义padding |
-| showZero | bool | true | 值为0是否显示 |
-| size | TBadgeSize | TBadgeSize.small | 红点尺寸 |
-| textColor | Color? | - | 文字颜色 |
-| widthLarge | double | 32 | 角标大三角形宽 |
-| widthSmall | double | 12 | 角标小三角形宽 |
+| label | String? | '0' | 徽标实际展示的短文本，例如 `8`、`99+` 或 `NEW`。 |
+| onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击语义。 |
+| showZero | bool | true | `label` 为 `0` 时是否显示徽标。 |
+| variant | TBadgeVariant | TBadgeVariant.normal | 徽标形态。 |
 
 
-### TBadgeType
+### TBadgeVariant
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| redPoint | 红点样式 |
-| message | 消息样式 |
-| bubble | 气泡样式 |
-| square | 方形样式 |
-| subscript | 角标样式 |
-
-
-### TBadgeBorder
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| large | 大圆角 8px |
-| small | 小圆角 2px |
-
-
-### TBadgeSize
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| large | 宽 20px |
-| small | 宽 16px |
+| normal | 标准文本徽标。 |
+| small | 紧凑文本徽标。 |
+| dot | 不显示文本的圆点徽标。 |
