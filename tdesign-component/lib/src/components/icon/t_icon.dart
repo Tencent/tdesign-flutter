@@ -82,18 +82,13 @@ class TIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final materialTheme = Theme.of(context);
     final theme = materialTheme.extension<TIconThemeData>();
-    final iconTheme = IconTheme.of(context);
-    final materialIconTheme = materialTheme.iconTheme;
-    final inheritedIconColor =
-        materialIconTheme.color == null ? null : iconTheme.color;
+    final iconTheme = context.tExplicitIconTheme;
 
     // 尺寸不硬造 token 映射，颜色必须兜到 TDesign token。
-    final effectiveSize =
-        size ?? theme?.size ?? iconTheme.size ?? materialIconTheme.size;
+    final effectiveSize = size ?? theme?.size ?? iconTheme?.size;
     final effectiveColor = color ??
         theme?.color ??
-        inheritedIconColor ??
-        materialIconTheme.color ??
+        iconTheme?.color ??
         context.tTheme.textColorPrimary;
 
     return Icon(

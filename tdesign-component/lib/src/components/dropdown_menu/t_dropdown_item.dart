@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
@@ -162,7 +163,21 @@ class _TDropdownMultiSelectPanelState<T>
                           child: Text(
                             entry.key!,
                             style: theme.optionTextStyle ??
-                                DefaultTextStyle.of(context).style,
+                                TextStyle(
+                                  color: context.tTheme.textColorPrimary,
+                                  fontSize:
+                                      context.tTheme.fontBodyMedium?.size,
+                                  height:
+                                      context.tTheme.fontBodyMedium?.height,
+                                  fontWeight: context
+                                      .tTheme
+                                      .fontBodyMedium
+                                      ?.fontWeight,
+                                ).merge(
+                                  Theme.of(context)
+                                      .tExplicitTextTheme
+                                      ?.bodyMedium,
+                                ),
                           ),
                         ),
                       ..._buildRows(context, entry.value, theme),
@@ -230,17 +245,20 @@ class _TDropdownMultiSelectPanelState<T>
     BuildContext context,
     TDropdownThemeData theme,
   ) {
+    final material = Theme.of(context);
+    final colorScheme = material.tExplicitColorScheme;
     return Container(
       padding:
           theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer16),
       decoration: BoxDecoration(
-        color:
-            theme.panelBackgroundColor ?? Theme.of(context).colorScheme.surface,
+        color: theme.panelBackgroundColor ??
+            colorScheme?.surface ??
+            context.tTheme.bgColorContainer,
         border: Border(
           top: BorderSide(
             color: theme.dividerColor ??
-                DividerTheme.of(context).color ??
-                Theme.of(context).dividerColor,
+                material.tExplicitDividerColor ??
+                context.tTheme.componentStrokeColor,
             width: 0.5,
           ),
         ),
@@ -315,15 +333,32 @@ class _DropdownOptionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final material = Theme.of(context);
+    final colorScheme = material.tExplicitColorScheme;
     final theme = Theme.of(context).extension<TDropdownThemeData>() ??
         const TDropdownThemeData();
-    final base = theme.optionTextStyle ?? DefaultTextStyle.of(context).style;
+    final tokenFont = context.tTheme.fontBodyMedium;
+    final base = theme.optionTextStyle ??
+        material.tExplicitTextTheme?.bodyMedium ??
+        TextStyle(
+          color: context.tTheme.textColorPrimary,
+          fontSize: tokenFont?.size,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight,
+        );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-            base.copyWith(color: Theme.of(context).disabledColor)
+            base.copyWith(
+              color:
+                  material.tExplicitDisabledColor ??
+                  context.tTheme.textDisabledColor,
+            )
         : selected
             ? theme.selectedOptionTextStyle ??
-                base.copyWith(color: Theme.of(context).colorScheme.primary)
+                base.copyWith(
+                  color:
+                      colorScheme?.primary ?? context.tTheme.brandNormalColor,
+                )
             : base;
     return Semantics(
       selected: selected,
@@ -348,7 +383,8 @@ class _DropdownOptionRow extends StatelessWidget {
                 if (selected)
                   Icon(
                     Icons.check,
-                    color: Theme.of(context).colorScheme.primary,
+                    color:
+                        colorScheme?.primary ?? context.tTheme.brandNormalColor,
                   ),
               ],
             ),
@@ -376,22 +412,41 @@ class _DropdownOptionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final material = Theme.of(context);
+    final colorScheme = material.tExplicitColorScheme;
     final backgroundColor = disabled
         ? theme.disabledOptionColor ??
-            Theme.of(context).disabledColor.withValues(alpha: 0.12)
+            (material.tExplicitDisabledColor ??
+                    context.tTheme.textDisabledColor)
+                .withValues(alpha: 0.12)
         : selected
             ? theme.selectedOptionColor ??
-                Theme.of(context).colorScheme.primaryContainer
+                colorScheme?.primaryContainer ??
+                context.tTheme.brandLightColor
             : theme.optionColor ??
-                Theme.of(context).colorScheme.surfaceContainerHighest;
-    final base = theme.optionTextStyle ?? DefaultTextStyle.of(context).style;
+                colorScheme?.surfaceContainerHighest ??
+                context.tTheme.bgColorSecondaryContainer;
+    final tokenFont = context.tTheme.fontBodyMedium;
+    final base = theme.optionTextStyle ??
+        material.tExplicitTextTheme?.bodyMedium ??
+        TextStyle(
+          color: context.tTheme.textColorPrimary,
+          fontSize: tokenFont?.size,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight,
+        );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-            base.copyWith(color: Theme.of(context).disabledColor)
+            base.copyWith(
+              color:
+                  material.tExplicitDisabledColor ??
+                  context.tTheme.textDisabledColor,
+            )
         : selected
             ? theme.selectedOptionTextStyle ??
                 base.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  color: colorScheme?.onPrimaryContainer ??
+                      context.tTheme.brandNormalColor,
                 )
             : base;
     return Semantics(

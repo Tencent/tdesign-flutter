@@ -33,12 +33,13 @@ class TLinkResolve {
     }
     // L3：颜色映射
     final tTheme = context.tTheme;
+    final materialScheme = Theme.of(context).tExplicitColorScheme;
     final scheme = colorScheme ?? TLinkColorScheme.primary;
 
     if (isDisabled) {
-      return _disabledColor(scheme, tTheme);
+      return _disabledColor(scheme, tTheme, materialScheme);
     }
-    return _normalColor(scheme, tTheme);
+    return _normalColor(scheme, tTheme, materialScheme);
   }
 
   /// 解析字号
@@ -95,31 +96,40 @@ class TLinkResolve {
   // ---- 内部颜色映射 ----
 
   /// 正常态颜色映射
-  static Color _normalColor(TLinkColorScheme scheme, TThemeData tTheme) {
+  static Color _normalColor(
+    TLinkColorScheme scheme,
+    TThemeData tTheme,
+    ColorScheme? material,
+  ) {
     return switch (scheme) {
-      TLinkColorScheme.primary => tTheme.brandNormalColor,
+      TLinkColorScheme.primary => material?.primary ?? tTheme.brandNormalColor,
       TLinkColorScheme.danger =>
-        tTheme.errorNormalColor, // coverage:ignore-line
+        material?.error ?? tTheme.errorNormalColor, // coverage:ignore-line
       TLinkColorScheme.warning =>
-        tTheme.warningNormalColor, // coverage:ignore-line
+        material?.tertiary ?? tTheme.warningNormalColor, // coverage:ignore-line
       TLinkColorScheme.success =>
         tTheme.successNormalColor, // coverage:ignore-line
       TLinkColorScheme.defaultTheme =>
-        tTheme.textColorPrimary, // coverage:ignore-line
+        material?.onSurface ?? tTheme.textColorPrimary, // coverage:ignore-line
     };
   }
 
   /// 禁用态颜色映射
-  static Color _disabledColor(TLinkColorScheme scheme, TThemeData tTheme) {
+  static Color _disabledColor(
+    TLinkColorScheme scheme,
+    TThemeData tTheme,
+    ColorScheme? material,
+  ) {
+    final materialDisabled = material?.onSurface.withValues(alpha: 0.38);
     return switch (scheme) {
-      TLinkColorScheme.primary => tTheme.brandDisabledColor,
-      TLinkColorScheme.danger => tTheme.errorDisabledColor,
+      TLinkColorScheme.primary => materialDisabled ?? tTheme.brandDisabledColor,
+      TLinkColorScheme.danger => materialDisabled ?? tTheme.errorDisabledColor,
       TLinkColorScheme.warning =>
-        tTheme.warningDisabledColor, // coverage:ignore-line
+        materialDisabled ?? tTheme.warningDisabledColor, // coverage:ignore-line
       TLinkColorScheme.success =>
         tTheme.successDisabledColor, // coverage:ignore-line
       TLinkColorScheme.defaultTheme =>
-        tTheme.textDisabledColor, // coverage:ignore-line
+        materialDisabled ?? tTheme.textDisabledColor, // coverage:ignore-line
     };
   }
 

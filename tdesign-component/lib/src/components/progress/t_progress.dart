@@ -43,8 +43,8 @@ class TProgress extends StatelessWidget {
     this.label,
     this.onTap,
     this.onLongPress,
-  })  : value = _validateProgress(value),
-        super(key: key);
+  }) : value = _validateProgress(value),
+       super(key: key);
 
   /// 进度条形态
   final TProgressVariant variant;
@@ -75,11 +75,23 @@ class TProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
+    final materialTheme = Theme.of(context);
+    final materialProgress = materialTheme.progressIndicatorTheme;
+    final colorScheme = materialTheme.tExplicitColorScheme;
     final defaultValues = _getDefaultValues(context, variant);
 
     final strokeWidth = theme?.strokeWidth ?? defaultValues.strokeWidth;
+    final materialTrackColor = switch (variant) {
+      TProgressVariant.circular ||
+      TProgressVariant.micro => materialProgress.circularTrackColor,
+      TProgressVariant.linear ||
+      TProgressVariant.button => materialProgress.linearTrackColor,
+    };
     final backgroundColor =
-        theme?.backgroundColor ?? defaultValues.backgroundColor;
+        theme?.backgroundColor ??
+        materialTrackColor ??
+        colorScheme?.surfaceContainerHighest ??
+        defaultValues.backgroundColor;
     final linearBorderRadius =
         theme?.linearBorderRadius ?? defaultValues.linearBorderRadius;
     final circleRadius = theme?.circleRadius ?? defaultValues.circleRadius;
@@ -88,7 +100,11 @@ class TProgress extends StatelessWidget {
     final labelWidgetAlignment = theme?.labelWidgetAlignment;
     final progressLabelPosition =
         theme?.progressLabelPosition ?? TProgressLabelPosition.inside;
-    final color = theme?.color ?? context.tTheme.brandNormalColor;
+    final color =
+        theme?.color ??
+        materialProgress.color ??
+        colorScheme?.primary ??
+        context.tTheme.brandNormalColor;
     final animationDuration =
         theme?.animationDuration ?? const Duration(milliseconds: 300);
 
@@ -112,7 +128,9 @@ class TProgress extends StatelessWidget {
   }
 
   _DefaultValues _getDefaultValues(
-      BuildContext context, TProgressVariant type) {
+    BuildContext context,
+    TProgressVariant type,
+  ) {
     switch (type) {
       case TProgressVariant.linear:
         return _DefaultValues(
@@ -210,8 +228,10 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: widget.animationDuration);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: widget.animationDuration,
+    );
     _updateAnimation();
     _updateEffectiveColor();
     _updateEffectiveLabel();
@@ -242,9 +262,9 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
 
   void _updateAnimation({double? oldWidgetValue}) {
     _animation = Tween<double>(
-            begin: oldWidgetValue ?? _animationController.value,
-            end: widget.value ?? 0)
-        .animate(_animationController);
+      begin: oldWidgetValue ?? _animationController.value,
+      end: widget.value ?? 0,
+    ).animate(_animationController);
     _animationController.forward(from: 0);
   }
 
@@ -253,8 +273,8 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
 
     Widget getAutoText() =>
         showAutoText && widget.type != TProgressVariant.micro
-            ? Text('${(widget.value! * 100).round()}%')
-            : const Text('');
+        ? Text('${(widget.value! * 100).round()}%')
+        : const Text('');
 
     return getAutoText();
   }
@@ -280,7 +300,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         else if (widget.type == TProgressVariant.micro)
           _buildMicroProgress()
         else if (widget.type == TProgressVariant.button)
-          _buildButtonProgress()
+          _buildButtonProgress(),
       ],
     );
   }
@@ -330,16 +350,17 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       builder: (context, child) {
         final progressWidth = _animation.value * maxWidth;
         return ClipRRect(
-            borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
-            child: Stack(
-              children: [
-                _buildBackgroundContainer(),
-                if (widget.value! > 0.1)
-                  _buildProgressContainerWithLabel(progressWidth)
-                else
-                  _buildProgressContainerWithLabelOutside(progressWidth),
-              ],
-            ));
+          borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
+          child: Stack(
+            children: [
+              _buildBackgroundContainer(),
+              if (widget.value! > 0.1)
+                _buildProgressContainerWithLabel(progressWidth)
+              else
+                _buildProgressContainerWithLabelOutside(progressWidth),
+            ],
+          ),
+        );
       },
     );
   }
@@ -353,40 +374,42 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           textDirection:
               widget.progressLabelPosition == TProgressLabelPosition.right
-                  ? TextDirection.rtl
-                  : TextDirection.ltr,
+              ? TextDirection.rtl
+              : TextDirection.ltr,
           children: [
             Container(
-              alignment: widget.labelWidgetAlignment ??
+              alignment:
+                  widget.labelWidgetAlignment ??
                   (widget.progressLabelPosition == TProgressLabelPosition.left
                       ? Alignment.centerRight
                       : Alignment.centerLeft),
-              constraints:
-                  BoxConstraints(minWidth: widget.labelWidgetWidth ?? 0),
+              constraints: BoxConstraints(
+                minWidth: widget.labelWidgetWidth ?? 0,
+              ),
               child: _buildLabelWidget(context.tTheme.textColorPrimary),
             ),
             SizedBox(width: context.tTheme.spacer8),
             Expanded(
               child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(context.tTheme.radiusRound),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Stack(
-                        children: [
-                          _buildBackgroundContainer(),
-                          Container(
-                            height: widget.strokeWidth,
-                            width: constraints.maxWidth * _animation.value,
-                            decoration: BoxDecoration(
-                              color: _effectiveColor,
-                              borderRadius: widget.linearBorderRadius,
-                            ),
+                borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Stack(
+                      children: [
+                        _buildBackgroundContainer(),
+                        Container(
+                          height: widget.strokeWidth,
+                          width: constraints.maxWidth * _animation.value,
+                          decoration: BoxDecoration(
+                            color: _effectiveColor,
+                            borderRadius: widget.linearBorderRadius,
                           ),
-                        ],
-                      );
-                    },
-                  )),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         );
@@ -434,19 +457,21 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
           decoration: BoxDecoration(
             color: _effectiveColor,
             borderRadius: BorderRadius.only(
-              topLeft:
-                  widget.linearBorderRadius.resolve(TextDirection.ltr).topLeft,
+              topLeft: widget.linearBorderRadius
+                  .resolve(TextDirection.ltr)
+                  .topLeft,
               bottomLeft: widget.linearBorderRadius
                   .resolve(TextDirection.ltr)
                   .bottomLeft,
-              topRight: Radius.circular(widget.linearBorderRadius
-                  .resolve(TextDirection.ltr)
-                  .topRight
-                  .x),
-              bottomRight: Radius.circular(widget.linearBorderRadius
-                  .resolve(TextDirection.ltr)
-                  .bottomRight
-                  .x),
+              topRight: Radius.circular(
+                widget.linearBorderRadius.resolve(TextDirection.ltr).topRight.x,
+              ),
+              bottomRight: Radius.circular(
+                widget.linearBorderRadius
+                    .resolve(TextDirection.ltr)
+                    .bottomRight
+                    .x,
+              ),
             ),
           ),
         ),
@@ -536,21 +561,22 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
 
   Widget _buildMicroProgress() {
     return AnimatedBuilder(
-        animation: _animation,
-        builder: (context, child) {
-          return GestureDetector(
-            onTap: widget.onTap,
-            onLongPress: widget.onLongPress,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                _buildMicroOutline(),
-                if (widget.showLabel)
-                  _buildLabelWidget(context.tTheme.textColorPrimary),
-              ],
-            ),
-          );
-        });
+      animation: _animation,
+      builder: (context, child) {
+        return GestureDetector(
+          onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              _buildMicroOutline(),
+              if (widget.showLabel)
+                _buildLabelWidget(context.tTheme.textColorPrimary),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildMicroOutline() {
@@ -575,24 +601,25 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
         return AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              final progressWidth = maxWidth * _animation.value;
-              return ClipRRect(
-                borderRadius: widget.linearBorderRadius,
-                child: GestureDetector(
-                  onTap: widget.onTap,
-                  onLongPress: widget.onLongPress,
-                  child: Stack(
-                    children: [
-                      _buildBackgroundContainer(),
-                      _buildButtonActiveContainer(progressWidth),
-                      if (widget.showLabel) _buildButtonLabel(maxWidth),
-                    ],
-                  ),
+          animation: _animation,
+          builder: (context, child) {
+            final progressWidth = maxWidth * _animation.value;
+            return ClipRRect(
+              borderRadius: widget.linearBorderRadius,
+              child: GestureDetector(
+                onTap: widget.onTap,
+                onLongPress: widget.onLongPress,
+                child: Stack(
+                  children: [
+                    _buildBackgroundContainer(),
+                    _buildButtonActiveContainer(progressWidth),
+                    if (widget.showLabel) _buildButtonLabel(maxWidth),
+                  ],
                 ),
-              );
-            });
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -605,7 +632,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         gradient: LinearGradient(
           colors: [
             _effectiveColor,
-            context.tTheme.brandDisabledColor.withValues(alpha: .5)
+            context.tTheme.brandDisabledColor.withValues(alpha: .5),
           ],
         ),
       ),

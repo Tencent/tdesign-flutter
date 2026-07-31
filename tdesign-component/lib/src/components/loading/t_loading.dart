@@ -78,15 +78,19 @@ class TLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [_contentWidget(context)],
-    );
+    return Wrap(children: [_contentWidget(context)]);
   }
 
   Widget _contentWidget(BuildContext context) {
     final theme = _effectiveTheme(context);
+    final materialTheme = Theme.of(context);
+    final colorScheme = materialTheme.tExplicitColorScheme;
     final effectiveAxis = theme.axis ?? Axis.vertical;
-    final effectiveIconColor = theme.iconColor;
+    final effectiveIconColor =
+        theme.iconColor ??
+        materialTheme.progressIndicatorTheme.color ??
+        colorScheme?.primary ??
+        context.tTheme.brandNormalColor;
     final effectiveCustomIcon = customIcon;
     final effectiveDuration = theme.duration ?? 2000;
     final effectiveRefreshWidget = refreshWidget;
@@ -180,7 +184,10 @@ class TLoading extends StatelessWidget {
   }
 
   Widget _textWidget(
-      BuildContext context, TLoadingThemeData theme, Widget? refreshWidget) {
+    BuildContext context,
+    TLoadingThemeData theme,
+    Widget? refreshWidget,
+  ) {
     final font = switch (size) {
       TLoadingSize.large =>
         context.tTheme.fontBodyLarge ?? Font(size: 16, lineHeight: 24),
@@ -192,7 +199,10 @@ class TLoading extends StatelessWidget {
 
     Widget result = TText(
       text,
-      textColor: theme.textColor ?? context.tTheme.textColorPrimary,
+      textColor:
+          theme.textColor ??
+          Theme.of(context).tExplicitColorScheme?.onSurface ??
+          context.tTheme.textColorPrimary,
       fontWeight: FontWeight.w400,
       font: font,
       textAlign: TextAlign.center,
@@ -200,11 +210,7 @@ class TLoading extends StatelessWidget {
     if (refreshWidget != null) {
       result = Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          result,
-          const SizedBox(width: 8),
-          refreshWidget,
-        ],
+        children: [result, const SizedBox(width: 8), refreshWidget],
       );
     }
     return result;

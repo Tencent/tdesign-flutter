@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
 import '../form/t_form.dart';
 import '../form/t_form_item.dart';
 import 't_input_resolve.dart';
@@ -80,9 +83,15 @@ class TInput extends StatefulWidget {
 
     /// Material 输入装饰逃逸口。
     this.decoration,
-  })  : _multiline = false,
-        assert(controller == null || initialValue == null),
-        assert(!obscureText || maxLines == 1);
+
+    /// 输入文本样式。
+    this.style,
+
+    /// 光标颜色。
+    this.cursorColor,
+  }) : _multiline = false,
+       assert(controller == null || initialValue == null),
+       assert(!obscureText || maxLines == 1);
 
   /// 创建多行输入框。
   const TInput.multiline({
@@ -150,9 +159,15 @@ class TInput extends StatefulWidget {
 
     /// Material 输入装饰逃逸口。
     this.decoration,
-  })  : _multiline = true,
-        obscureText = false,
-        assert(controller == null || initialValue == null);
+
+    /// 输入文本样式。
+    this.style,
+
+    /// 光标颜色。
+    this.cursorColor,
+  }) : _multiline = true,
+       obscureText = false,
+       assert(controller == null || initialValue == null);
 
   /// 文本控制器。
   final TextEditingController? controller;
@@ -220,6 +235,12 @@ class TInput extends StatefulWidget {
   /// Material 输入装饰逃逸口。
   final InputDecoration? decoration;
 
+  /// 输入文本样式。
+  final TextStyle? style;
+
+  /// 光标颜色。
+  final Color? cursorColor;
+
   final bool _multiline;
 
   @override
@@ -266,13 +287,44 @@ class _TInputState extends State<TInput> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TInputThemeData>();
+    final material = Theme.of(context);
+    final tokenFont = context.tTheme.fontBodyLarge;
+    final tokenStyle = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight,
+    );
+    final textStyle =
+        widget.style ??
+        theme?.textStyle ??
+        tokenStyle
+            .merge(material.tExplicitTextTheme?.bodyLarge)
+            .copyWith(
+              color:
+                  material.tExplicitTextTheme?.bodyLarge?.color ??
+                  material.tExplicitColorScheme?.onSurface ??
+                  context.tTheme.textColorPrimary,
+            );
+    final cursorColor =
+        widget.cursorColor ??
+        theme?.cursorColor ??
+        material.tExplicitColorScheme?.primary ??
+        context.tTheme.brandNormalColor;
     final showClearButton = theme?.showClearButton ?? true;
     final clearButton = widget.suffix == null && showClearButton && _hasText
         ? IconButton(
             tooltip: '清除',
             onPressed: widget.enabled && !widget.readOnly ? _clear : null,
             iconSize: theme?.clearIconSize ?? 20,
-            icon: const Icon(TIcons.close_circle_filled),
+            icon: Icon(
+              TIcons.close_circle_filled,
+              color:
+                  theme?.clearIconColor ??
+                  context.tExplicitIconTheme?.color ??
+                  material.tExplicitColorScheme?.onSurfaceVariant ??
+                  context.tTheme.textColorPlaceholder,
+            ),
           )
         : null;
     final decoration = TInputResolve.resolveDecoration(
@@ -284,12 +336,64 @@ class _TInputState extends State<TInput> {
     );
     final formErrorText = TFormFieldScope.maybeOf(context)?.errorText;
     final itemScope = TFormItemScope.maybeOf(context);
-    final effectiveDecoration = formErrorText != null &&
+    var effectiveDecoration =
+        formErrorText != null &&
             itemScope?.presentsError != true &&
             decoration.errorText == null &&
             decoration.error == null
         ? decoration.copyWith(errorText: formErrorText)
         : decoration;
+    final componentDecoration = theme?.decorationTheme;
+    final materialDecoration = material.inputDecorationTheme;
+    final tokenText = context.tTheme.fontBodyLarge;
+    final tokenHintStyle = TextStyle(
+      color: context.tTheme.textColorPlaceholder,
+      fontSize: tokenText?.size,
+      height: tokenText?.height,
+      fontWeight: tokenText?.fontWeight,
+    );
+    InputBorder underline(Color color) =>
+        UnderlineInputBorder(borderSide: BorderSide(color: color));
+    effectiveDecoration = effectiveDecoration.copyWith(
+      hintStyle:
+          effectiveDecoration.hintStyle ??
+          componentDecoration?.hintStyle ??
+          materialDecoration.hintStyle ??
+          tokenHintStyle,
+      border:
+          effectiveDecoration.border ??
+          componentDecoration?.border ??
+          materialDecoration.border ??
+          underline(context.tTheme.componentBorderColor),
+      enabledBorder:
+          effectiveDecoration.enabledBorder ??
+          componentDecoration?.enabledBorder ??
+          materialDecoration.enabledBorder ??
+          underline(context.tTheme.componentBorderColor),
+      focusedBorder:
+          effectiveDecoration.focusedBorder ??
+          componentDecoration?.focusedBorder ??
+          materialDecoration.focusedBorder ??
+          underline(
+            material.tExplicitColorScheme?.primary ??
+                context.tTheme.brandNormalColor,
+          ),
+      disabledBorder:
+          effectiveDecoration.disabledBorder ??
+          componentDecoration?.disabledBorder ??
+          materialDecoration.disabledBorder ??
+          underline(context.tTheme.componentStrokeColor),
+      errorBorder:
+          effectiveDecoration.errorBorder ??
+          componentDecoration?.errorBorder ??
+          materialDecoration.errorBorder ??
+          underline(context.tTheme.errorNormalColor),
+      focusedErrorBorder:
+          effectiveDecoration.focusedErrorBorder ??
+          componentDecoration?.focusedErrorBorder ??
+          materialDecoration.focusedErrorBorder ??
+          underline(context.tTheme.errorNormalColor),
+    );
 
     return TextField(
       controller: _controller,
@@ -300,7 +404,8 @@ class _TInputState extends State<TInput> {
       enabled: widget.enabled,
       readOnly: widget.readOnly,
       maxLines: widget.maxLines,
-      minLines: widget.minLines ??
+      minLines:
+          widget.minLines ??
           (widget._multiline ? theme?.multilineMinLines ?? 4 : null),
       maxLength: widget.maxLength,
       autofocus: widget.autofocus,
@@ -309,6 +414,8 @@ class _TInputState extends State<TInput> {
       textAlign: widget.textAlign,
       obscureText: widget.obscureText,
       inputFormatters: widget.inputFormatters,
+      style: textStyle,
+      cursorColor: cursorColor,
       decoration: effectiveDecoration,
     );
   }

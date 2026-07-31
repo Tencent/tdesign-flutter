@@ -475,13 +475,13 @@ class _StepperStyle {
           fontSize: 16.0,
         ),
     };
-    final defaultTextStyle = DefaultTextStyle.of(context).style;
+    final defaultTextStyle = context.tExplicitDefaultTextStyle;
     final materialTextStyle =
-        materialTheme.textTheme.bodySmall ?? const TextStyle();
+        materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
     final inheritedFontFamily =
-        defaultTextStyle.fontFamily ?? materialTextStyle.fontFamily;
+        defaultTextStyle?.fontFamily ?? materialTextStyle.fontFamily;
     final foregroundColor = componentTheme?.foregroundColor ??
-        defaultTextStyle.color ??
+        defaultTextStyle?.color ??
         materialTextStyle.color ??
         token.textColorPrimary;
     final disabledForegroundColor =
@@ -514,7 +514,7 @@ class _StepperStyle {
       foregroundColor: foregroundColor,
       disabledForegroundColor: disabledForegroundColor,
       iconColor: componentTheme?.foregroundColor ??
-          IconTheme.of(context).color ??
+          context.tExplicitIconTheme?.color ??
           foregroundColor,
       backgroundColor: componentTheme?.backgroundColor ??
           (inputFillColor == Colors.transparent ? null : inputFillColor) ??

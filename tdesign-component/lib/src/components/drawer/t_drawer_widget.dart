@@ -65,13 +65,15 @@ class TDrawerWidget extends StatelessWidget {
     final drawerTheme = Theme.of(context).extension<TDrawerThemeData>();
     final effectiveWidth = width ?? drawerTheme?.width ?? 280;
     final effectiveHover = hover ?? drawerTheme?.hover ?? true;
-    final effectiveBackgroundColor = backgroundColor ??
+    final effectiveBackgroundColor =
+        backgroundColor ??
         drawerTheme?.backgroundColor ??
         context.tTheme.bgColorContainer;
     final effectiveBordered = bordered ?? drawerTheme?.bordered ?? true;
     final effectiveShowLastBordered =
         isShowLastBordered ?? drawerTheme?.isShowLastBordered ?? true;
-    final content = child ??
+    final content =
+        child ??
         Column(
           children: [
             if (title != null)
@@ -87,7 +89,8 @@ class TDrawerWidget extends StatelessWidget {
                 decoration: effectiveBordered
                     ? BoxDecoration(
                         border: Border.all(
-                          color: drawerTheme?.dividerColor ??
+                          color:
+                              drawerTheme?.dividerColor ??
                               context.tTheme.componentStrokeColor,
                         ),
                       )
@@ -104,15 +107,20 @@ class TDrawerWidget extends StatelessWidget {
                           : () => onItemClick!(index, item),
                       enableFeedback: effectiveHover,
                       textStyle: _itemTextStyle(context, drawerTheme),
-                      backgroundColor: drawerTheme?.itemBackgroundColor ??
+                      backgroundColor:
+                          drawerTheme?.itemBackgroundColor ??
                           context.tTheme.bgColorContainer,
-                      pressedColor: drawerTheme?.itemPressedColor ??
+                      pressedColor:
+                          drawerTheme?.itemPressedColor ??
                           context.tTheme.bgColorContainerHover,
-                      padding: drawerTheme?.itemPadding ??
+                      padding:
+                          drawerTheme?.itemPadding ??
                           EdgeInsets.all(context.tTheme.spacer16),
-                      dividerColor: drawerTheme?.dividerColor ??
+                      dividerColor:
+                          drawerTheme?.dividerColor ??
                           context.tTheme.componentStrokeColor,
-                      showDivider: index < (items?.length ?? 0) - 1 ||
+                      showDivider:
+                          index < (items?.length ?? 0) - 1 ||
                           effectiveShowLastBordered,
                     );
                   },
@@ -139,7 +147,8 @@ class TDrawerWidget extends StatelessWidget {
     BuildContext context,
     TDrawerThemeData? drawerTheme,
   ) {
-    final materialStyle = Theme.of(context).textTheme.bodyMedium;
+    final materialStyle = Theme.of(context).tExplicitTextTheme?.bodyMedium;
+    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
     final tokenFont = context.tTheme.fontBodyMedium;
     return drawerTheme?.itemTextStyle ??
         materialStyle ??
@@ -148,6 +157,8 @@ class TDrawerWidget extends StatelessWidget {
           fontSize: tokenFont?.size ?? 14,
           height: tokenFont?.height,
           fontWeight: tokenFont?.fontWeight ?? FontWeight.w400,
+          fontFamily: inheritedStyle?.fontFamily,
+          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
         );
   }
 
@@ -155,7 +166,8 @@ class TDrawerWidget extends StatelessWidget {
     BuildContext context,
     TDrawerThemeData? drawerTheme,
   ) {
-    final materialStyle = Theme.of(context).textTheme.titleLarge;
+    final materialStyle = Theme.of(context).tExplicitTextTheme?.titleLarge;
+    final inheritedStyle = Theme.of(context).textTheme.titleLarge;
     final tokenFont = context.tTheme.fontTitleLarge;
     return drawerTheme?.titleStyle ??
         materialStyle ??
@@ -164,6 +176,8 @@ class TDrawerWidget extends StatelessWidget {
           fontSize: tokenFont?.size ?? 20,
           height: tokenFont?.height,
           fontWeight: tokenFont?.fontWeight ?? FontWeight.w600,
+          fontFamily: inheritedStyle?.fontFamily,
+          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
         );
   }
 }
@@ -210,7 +224,8 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
             SizedBox(width: context.tTheme.spacer12),
           ],
           Expanded(
-            child: widget.item.content ??
+            child:
+                widget.item.content ??
                 (widget.item.title == null
                     ? const SizedBox.shrink()
                     : TText(
@@ -230,8 +245,9 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
             onTap: widget.onTap,
             onTapDown: widget.enableFeedback ? (_) => _setPressed(true) : null,
             onTapUp: widget.enableFeedback ? (_) => _setPressed(false) : null,
-            onTapCancel:
-                widget.enableFeedback ? () => _setPressed(false) : null,
+            onTapCancel: widget.enableFeedback
+                ? () => _setPressed(false)
+                : null,
             child: content,
           );
     if (!widget.showDivider) {

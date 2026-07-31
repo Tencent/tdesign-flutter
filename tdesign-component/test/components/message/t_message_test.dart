@@ -12,8 +12,9 @@ void main() {
     return MaterialApp(
       theme: messageTheme == null
           ? TThemeBuilder.light(TThemeData.defaultData())
-          : TThemeBuilder.light(TThemeData.defaultData())
-              .mergeExtension(messageTheme),
+          : TThemeBuilder.light(
+              TThemeData.defaultData(),
+            ).mergeExtension(messageTheme),
       home: MediaQuery(
         data: MediaQueryData(size: mediaSize, padding: mediaPadding),
         child: Scaffold(body: Stack(children: [child])),
@@ -48,13 +49,7 @@ void main() {
 
     testWidgets('可隐藏或自定义图标', (tester) async {
       await tester.pumpWidget(
-        wrap(
-          const TMessage(
-            content: '无图标',
-            showIcon: false,
-            duration: null,
-          ),
-        ),
+        wrap(const TMessage(content: '无图标', showIcon: false, duration: null)),
       );
       expect(find.byType(Icon), findsNothing);
 
@@ -307,9 +302,7 @@ void main() {
           const TMessage(
             content: '单次跑马灯内容',
             duration: null,
-            marquee: TMessageMarquee(
-              duration: Duration(milliseconds: 200),
-            ),
+            marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
           ),
         ),
       );
@@ -400,6 +393,36 @@ void main() {
       expect(handle.isShowing, isFalse);
     });
 
+    testWidgets('保留触发子树的 ThemeExtension', (tester) async {
+      final key = GlobalKey();
+      final base = TThemeBuilder.light(TThemeData.defaultData());
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: base,
+          home: Theme(
+            data: base.mergeExtension(
+              const TMessageThemeData(backgroundColor: Colors.purple),
+            ),
+            child: Scaffold(body: SizedBox(key: key)),
+          ),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: '局部消息主题',
+        duration: null,
+      );
+      await tester.pump();
+      final material = tester.widget<Material>(
+        find
+            .ancestor(of: find.text('局部消息主题'), matching: find.byType(Material))
+            .first,
+      );
+      expect(material.color, Colors.purple);
+      handle.dismiss();
+      await tester.pump();
+    });
+
     testWidgets('自动关闭移除 Overlay 并透传回调', (tester) async {
       final key = GlobalKey();
       var ended = false;
@@ -461,8 +484,10 @@ void main() {
 
   test('ThemeData 纯函数', () {
     const base = TMessageThemeData(backgroundColor: Colors.white, elevation: 1);
-    const other =
-        TMessageThemeData(backgroundColor: Colors.black, elevation: 3);
+    const other = TMessageThemeData(
+      backgroundColor: Colors.black,
+      elevation: 3,
+    );
     expect(base.merge(null), same(base));
     expect(base.merge(other).elevation, 3);
     expect(base.copyWith(elevation: 2).elevation, 2);

@@ -32,12 +32,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
   /// 关闭时ThumbView的字体样式
   final TextStyle? thumbContentOffFont;
 
-  /// 开启文案
-  final String? openText;
-
-  /// 关闭文案
-  final String? closeText;
-
   const TSwitchThemeData({
     /// 默认尺寸。
     this.defaultSize,
@@ -62,12 +56,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
 
     /// 关闭态滑块内容文本样式。
     this.thumbContentOffFont,
-
-    /// text 形态的默认开启文案。
-    this.openText,
-
-    /// text 形态的默认关闭文案。
-    this.closeText,
   });
 
   @override
@@ -80,8 +68,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
     Color? thumbContentOffColor,
     TextStyle? thumbContentOnFont,
     TextStyle? thumbContentOffFont,
-    String? openText,
-    String? closeText,
   }) {
     return TSwitchThemeData(
       defaultSize: defaultSize ?? this.defaultSize,
@@ -92,8 +78,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
       thumbContentOffColor: thumbContentOffColor ?? this.thumbContentOffColor,
       thumbContentOnFont: thumbContentOnFont ?? this.thumbContentOnFont,
       thumbContentOffFont: thumbContentOffFont ?? this.thumbContentOffFont,
-      openText: openText ?? this.openText,
-      closeText: closeText ?? this.closeText,
     );
   }
 
@@ -113,16 +97,26 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
       defaultVariant: t <= 0.5 ? defaultVariant : other.defaultVariant,
       trackOnColor: Color.lerp(trackOnColor, other.trackOnColor, t),
       trackOffColor: Color.lerp(trackOffColor, other.trackOffColor, t),
-      thumbContentOnColor:
-          Color.lerp(thumbContentOnColor, other.thumbContentOnColor, t),
-      thumbContentOffColor:
-          Color.lerp(thumbContentOffColor, other.thumbContentOffColor, t),
-      thumbContentOnFont:
-          TextStyle.lerp(thumbContentOnFont, other.thumbContentOnFont, t),
-      thumbContentOffFont:
-          TextStyle.lerp(thumbContentOffFont, other.thumbContentOffFont, t),
-      openText: t <= 0.5 ? openText : other.openText,
-      closeText: t <= 0.5 ? closeText : other.closeText,
+      thumbContentOnColor: Color.lerp(
+        thumbContentOnColor,
+        other.thumbContentOnColor,
+        t,
+      ),
+      thumbContentOffColor: Color.lerp(
+        thumbContentOffColor,
+        other.thumbContentOffColor,
+        t,
+      ),
+      thumbContentOnFont: TextStyle.lerp(
+        thumbContentOnFont,
+        other.thumbContentOnFont,
+        t,
+      ),
+      thumbContentOffFont: TextStyle.lerp(
+        thumbContentOffFont,
+        other.thumbContentOffFont,
+        t,
+      ),
     );
   }
 }

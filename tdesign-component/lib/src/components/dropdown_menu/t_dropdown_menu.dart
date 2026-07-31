@@ -343,6 +343,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
   @override
   Widget build(BuildContext context) {
+    final material = Theme.of(context);
+    final colorScheme = material.tExplicitColorScheme;
     final theme = _theme;
     final bar = widget.scrollable
         ? SingleChildScrollView(
@@ -397,12 +399,13 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           height: theme.barHeight ?? 48,
           decoration: BoxDecoration(
             color: theme.barBackgroundColor ??
-                Theme.of(context).colorScheme.surface,
+                colorScheme?.surface ??
+                context.tTheme.bgColorContainer,
             border: Border(
               bottom: BorderSide(
                 color: theme.dividerColor ??
-                    DividerTheme.of(context).color ??
-                    Theme.of(context).dividerColor,
+                    material.tExplicitDividerColor ??
+                    context.tTheme.componentStrokeColor,
                 width: 0.5,
               ),
             ),
@@ -414,6 +417,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Widget _buildTrigger(int index) {
+    final material = Theme.of(context);
+    final colorScheme = material.tExplicitColorScheme;
     final item = widget.items[index];
     final isOpen = _controller.openIndex == index;
     final onTap = item.enabled ? () => unawaited(_toggle(index)) : null;
@@ -438,25 +443,42 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
 
     final theme = _theme;
-    final inheritedStyle = DefaultTextStyle.of(context).style;
-    final baseStyle = theme.textStyle ?? inheritedStyle;
+    final tokenFont = context.tTheme.fontBodyMedium;
+    final baseStyle = theme.textStyle ??
+        context.tExplicitDefaultTextStyle ??
+        material.tExplicitTextTheme?.bodyMedium ??
+        TextStyle(
+          color: context.tTheme.textColorPrimary,
+          fontSize: tokenFont?.size,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight,
+        );
     final style = !item.enabled
         ? theme.disabledTextStyle ??
-            baseStyle.copyWith(color: Theme.of(context).disabledColor)
+            baseStyle.copyWith(
+              color:
+                  material.tExplicitDisabledColor ??
+                  context.tTheme.textDisabledColor,
+            )
         : isOpen
             ? theme.activeTextStyle ??
                 baseStyle.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+                  color:
+                      colorScheme?.primary ?? context.tTheme.brandNormalColor,
                 )
             : baseStyle.copyWith(
                 color: baseStyle.color ?? context.tTheme.textColorPrimary,
               );
     final iconColor = !item.enabled
-        ? theme.disabledIconColor ?? Theme.of(context).disabledColor
+        ? theme.disabledIconColor ??
+            material.tExplicitDisabledColor ??
+            context.tTheme.textDisabledColor
         : isOpen
-            ? theme.activeIconColor ?? Theme.of(context).colorScheme.primary
+            ? theme.activeIconColor ??
+                colorScheme?.primary ??
+                context.tTheme.brandNormalColor
             : theme.iconColor ??
-                IconTheme.of(context).color ??
+                context.tExplicitIconTheme?.color ??
                 context.tTheme.textColorPrimary;
 
     return Semantics(
@@ -660,6 +682,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
             ? above
             : below;
     final theme = _theme;
+    final material = Theme.of(context);
+    final colorScheme = material.tExplicitColorScheme;
     final panelController = TDropdownMenuPanelController._(
       index: index,
       close: _close,
@@ -668,8 +692,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Material(
         key: _panelKey,
-        color:
-            theme.panelBackgroundColor ?? Theme.of(context).colorScheme.surface,
+        color: theme.panelBackgroundColor ??
+            colorScheme?.surface ??
+            context.tTheme.bgColorContainer,
         child: Focus(
           focusNode: _panelFocusNode,
           autofocus: true,

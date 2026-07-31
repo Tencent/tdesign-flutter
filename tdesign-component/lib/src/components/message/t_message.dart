@@ -15,11 +15,7 @@ import 't_message_theme_data.dart';
 /// 消息中的链接配置
 class TMessageLink {
   /// 创建消息链接
-  const TMessageLink({
-    required this.name,
-    this.uri,
-    this.color,
-  });
+  const TMessageLink({required this.name, this.uri, this.color});
 
   /// 链接文案
   final String name;
@@ -165,6 +161,8 @@ class TMessage extends StatefulWidget {
   }) {
     final handle = TMessageHandle._();
     late OverlayEntry entry;
+    final overlay = Overlay.of(context);
+    final captured = InheritedTheme.capture(from: context, to: overlay.context);
 
     void removeEntry() {
       if (handle._entry == null) {
@@ -175,26 +173,28 @@ class TMessage extends StatefulWidget {
     }
 
     entry = OverlayEntry(
-      builder: (context) => TMessage(
-        content: content,
-        duration: duration,
-        showIcon: showIcon,
-        icon: icon,
-        link: link,
-        showCloseButton: showCloseButton,
-        closeButton: closeButton,
-        marquee: marquee,
-        offset: offset,
-        variant: variant,
-        onCloseButtonPressed: onCloseButtonPressed,
-        onDurationEnd: onDurationEnd,
-        onLinkPressed: onLinkPressed,
-        onDismissed: removeEntry,
-        useSafeArea: useSafeArea,
+      builder: (context) => captured.wrap(
+        TMessage(
+          content: content,
+          duration: duration,
+          showIcon: showIcon,
+          icon: icon,
+          link: link,
+          showCloseButton: showCloseButton,
+          closeButton: closeButton,
+          marquee: marquee,
+          offset: offset,
+          variant: variant,
+          onCloseButtonPressed: onCloseButtonPressed,
+          onDurationEnd: onDurationEnd,
+          onLinkPressed: onLinkPressed,
+          onDismissed: removeEntry,
+          useSafeArea: useSafeArea,
+        ),
       ),
     );
     handle._entry = entry;
-    Overlay.of(context).insert(entry);
+    overlay.insert(entry);
     return handle;
   }
 
@@ -249,7 +249,8 @@ class _TMessageState extends State<TMessage>
 
   Offset get _effectiveOffset {
     final configured = widget.offset ?? _theme.defaultOffset;
-    final desired = configured ??
+    final desired =
+        configured ??
         Offset(
           _minimumLeft + (_maximumRight - _minimumLeft - _effectiveWidth) / 2,
           _defaultTop,
@@ -257,10 +258,7 @@ class _TMessageState extends State<TMessage>
     if (!widget.useSafeArea) {
       return desired;
     }
-    final maximumLeft = math.max(
-      _minimumLeft,
-      _maximumRight - _effectiveWidth,
-    );
+    final maximumLeft = math.max(_minimumLeft, _maximumRight - _effectiveWidth);
     return Offset(
       desired.dx.clamp(_minimumLeft, maximumLeft).toDouble(),
       _safeTop(desired.dy),
@@ -425,21 +423,21 @@ class _TMessageState extends State<TMessage>
     }
     final (icon, color) = switch (widget.variant) {
       TMessageVariant.info => (
-          TIcons.error_circle_filled,
-          context.tTheme.brandNormalColor
-        ),
+        TIcons.error_circle_filled,
+        context.tTheme.brandNormalColor,
+      ),
       TMessageVariant.success => (
-          TIcons.check_circle_filled,
-          context.tTheme.successNormalColor
-        ),
+        TIcons.check_circle_filled,
+        context.tTheme.successNormalColor,
+      ),
       TMessageVariant.warning => (
-          TIcons.error_circle_filled,
-          context.tTheme.warningNormalColor
-        ),
+        TIcons.error_circle_filled,
+        context.tTheme.warningNormalColor,
+      ),
       TMessageVariant.error => (
-          TIcons.error_circle_filled,
-          context.tTheme.errorNormalColor
-        ),
+        TIcons.error_circle_filled,
+        context.tTheme.errorNormalColor,
+      ),
     };
     return Icon(icon, color: color);
   }
@@ -447,11 +445,7 @@ class _TMessageState extends State<TMessage>
   Widget _buildLink(BuildContext context) {
     final link = widget.link!;
     final linkWidget = TLink(
-      child: Text(
-        link.name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+      child: Text(link.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       colorScheme: TLinkColorScheme.primary,
       variant: TLinkVariant.basic,
       size: TLinkSize.medium,
@@ -461,9 +455,7 @@ class _TMessageState extends State<TMessage>
       return linkWidget;
     }
     return Theme(
-      data: Theme.of(context).mergeExtension(
-        TLinkThemeData(color: link.color),
-      ),
+      data: Theme.of(context).mergeExtension(TLinkThemeData(color: link.color)),
       child: linkWidget,
     );
   }
@@ -474,11 +466,9 @@ class _TMessageState extends State<TMessage>
         widget.onCloseButtonPressed?.call();
         _close();
       },
-      child: widget.closeButton ??
-          Icon(
-            TIcons.close,
-            color: context.tTheme.textColorPlaceholder,
-          ),
+      child:
+          widget.closeButton ??
+          Icon(TIcons.close, color: context.tTheme.textColorPlaceholder),
     );
   }
 
@@ -497,10 +487,12 @@ class _TMessageState extends State<TMessage>
       child: _isVisible
           ? Material(
               color: theme.backgroundColor ?? context.tTheme.bgColorContainer,
-              shape: theme.shape ??
+              shape:
+                  theme.shape ??
                   RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(context.tTheme.radiusDefault),
+                    borderRadius: BorderRadius.circular(
+                      context.tTheme.radiusDefault,
+                    ),
                   ),
               elevation: theme.elevation ?? 6,
               child: SizedBox(
@@ -512,7 +504,10 @@ class _TMessageState extends State<TMessage>
                     children: [
                       if (widget.showIcon) ...[
                         SizedBox(
-                            width: 20, height: 22, child: _buildIcon(context)),
+                          width: 20,
+                          height: 22,
+                          child: _buildIcon(context),
+                        ),
                         const SizedBox(width: 10),
                       ],
                       Expanded(child: _buildText(context)),

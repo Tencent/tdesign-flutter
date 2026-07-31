@@ -3,6 +3,7 @@ import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_shadows.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_rate_theme_data.dart';
@@ -40,8 +41,8 @@ class TRate extends StatefulWidget {
 
     /// 各评分对应的文案。
     this.texts,
-  })  : assert(count > 0),
-        assert(value >= 0 && value <= count);
+  }) : assert(count > 0),
+       assert(value >= 0 && value <= count);
 
   /// 受控评分值。
   final double value;
@@ -111,15 +112,21 @@ class _TRateState extends State<TRate> {
             behavior: HitTestBehavior.opaque,
             onTapDown: _enabled
                 ? (details) {
-                    _lastInteractionValue =
-                        _valueAt(details.localPosition.dx, iconSize, iconGap);
+                    _lastInteractionValue = _valueAt(
+                      details.localPosition.dx,
+                      iconSize,
+                      iconGap,
+                    );
                     widget.onChangeStart?.call(widget.value);
                   }
                 : null,
             onTapUp: _enabled
                 ? (details) {
-                    final next =
-                        _valueAt(details.localPosition.dx, iconSize, iconGap);
+                    final next = _valueAt(
+                      details.localPosition.dx,
+                      iconSize,
+                      iconGap,
+                    );
                     _lastInteractionValue = next;
                     widget.onChanged?.call(next);
                     if (widget.allowHalf) {
@@ -143,16 +150,19 @@ class _TRateState extends State<TRate> {
                 : null,
             onHorizontalDragUpdate: _enabled
                 ? (details) {
-                    final next =
-                        _valueAt(details.localPosition.dx, iconSize, iconGap);
+                    final next = _valueAt(
+                      details.localPosition.dx,
+                      iconSize,
+                      iconGap,
+                    );
                     _lastInteractionValue = next;
                     widget.onChanged?.call(next);
                   }
                 : null,
             onHorizontalDragEnd: _enabled
                 ? (_) => widget.onChangeEnd?.call(
-                      _lastInteractionValue ?? widget.value,
-                    )
+                    _lastInteractionValue ?? widget.value,
+                  )
                 : null,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -172,7 +182,8 @@ class _TRateState extends State<TRate> {
                 _resolveText(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme?.textStyle ??
+                style:
+                    theme?.textStyle ??
                     TextStyle(
                       color: _enabled
                           ? context.tTheme.textColorPrimary
@@ -200,9 +211,11 @@ class _TRateState extends State<TRate> {
     final inactiveColor = _enabled
         ? (theme?.inactiveStarColor ?? context.tTheme.bgColorComponent)
         : context.tTheme.bgColorComponentDisabled;
-    final unselected = widget.icon?.call(false) ??
+    final unselected =
+        widget.icon?.call(false) ??
         Icon(TIcons.star_filled, size: iconSize, color: inactiveColor);
-    final selected = widget.icon?.call(true) ??
+    final selected =
+        widget.icon?.call(true) ??
         Icon(TIcons.star_filled, size: iconSize, color: selectedColor);
 
     return SizedBox.square(
@@ -241,6 +254,11 @@ class _TRateState extends State<TRate> {
     _dismissHalfChoice();
     final overlay = Overlay.of(context, rootOverlay: true);
     final mediaQuery = MediaQuery.of(context);
+    final material = Theme.of(context);
+    final theme = material.extension<TRateThemeData>();
+    final token = context.tTheme;
+    final selectedColor = theme?.starColor ?? token.warningColor5;
+    final inactiveColor = theme?.inactiveStarColor ?? token.bgColorComponent;
     final popupWidth = iconSize * 2 + 40;
     final popupHeight = iconSize + 36;
     final left = (globalPosition.dx - popupWidth / 2)
@@ -269,15 +287,12 @@ class _TRateState extends State<TRate> {
                 key: _halfChoiceKey,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Theme.of(overlayContext).colorScheme.surface,
+                  color:
+                      material.tExplicitColorScheme?.surface ??
+                      token.bgColorContainer,
                   borderRadius: BorderRadius.circular(4),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x1F000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
+                  boxShadow:
+                      theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -287,6 +302,8 @@ class _TRateState extends State<TRate> {
                       value: wholeValue - 0.5,
                       iconSize: iconSize,
                       isHalf: true,
+                      selectedColor: selectedColor,
+                      inactiveColor: inactiveColor,
                     ),
                     const SizedBox(width: 4),
                     _buildHalfChoiceButton(
@@ -294,6 +311,8 @@ class _TRateState extends State<TRate> {
                       value: wholeValue,
                       iconSize: iconSize,
                       isHalf: false,
+                      selectedColor: selectedColor,
+                      inactiveColor: inactiveColor,
                     ),
                   ],
                 ),
@@ -311,8 +330,9 @@ class _TRateState extends State<TRate> {
     required double value,
     required double iconSize,
     required bool isHalf,
+    required Color selectedColor,
+    required Color inactiveColor,
   }) {
-    final selectedColor = context.tTheme.warningColor5;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -334,7 +354,7 @@ class _TRateState extends State<TRate> {
                     child: Icon(
                       TIcons.star_filled,
                       size: iconSize,
-                      color: context.tTheme.bgColorComponent,
+                      color: inactiveColor,
                     ),
                   ),
                   if (isHalf)

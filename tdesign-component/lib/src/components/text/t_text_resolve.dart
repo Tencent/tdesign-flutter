@@ -47,9 +47,9 @@ class TTextResolve {
     final tTheme = context.tTheme;
     final materialTheme = Theme.of(context);
     final themeExtension = Theme.of(context).extension<TTextThemeData>();
-    final defaultTextStyle = DefaultTextStyle.of(context).style;
-    final materialTextStyle =
-        materialTheme.textTheme.bodyLarge ?? materialTheme.textTheme.bodyMedium;
+    final defaultTextStyle = context.tExplicitDefaultTextStyle;
+    final materialTextStyle = materialTheme.tExplicitTextTheme?.bodyLarge ??
+        materialTheme.tExplicitTextTheme?.bodyMedium;
     final configuration =
         context.dependOnInheritedWidgetOfExactType<TTextConfiguration>();
 
@@ -63,7 +63,7 @@ class TTextResolve {
     final fontSize = style?.fontSize ??
         font?.size ??
         themeExtension?.defaultFont?.size ??
-        defaultTextStyle.fontSize ??
+        defaultTextStyle?.fontSize ??
         materialTextStyle?.fontSize ??
         fallbackFont.size;
 
@@ -71,7 +71,7 @@ class TTextResolve {
     final resolvedHeight = style?.height ??
         font?.height ??
         themeExtension?.defaultFont?.height ??
-        defaultTextStyle.height ??
+        defaultTextStyle?.height ??
         materialTextStyle?.height ??
         fallbackFont.height;
 
@@ -79,7 +79,7 @@ class TTextResolve {
     final resolvedFontWeight = style?.fontWeight ??
         fontWeight ??
         themeExtension?.defaultFontWeight ??
-        defaultTextStyle.fontWeight ??
+        defaultTextStyle?.fontWeight ??
         materialTextStyle?.fontWeight ??
         textFont.fontWeight;
 
@@ -105,7 +105,7 @@ class TTextResolve {
     final color = style?.color ??
         textColor ??
         themeExtension?.defaultTextColor ??
-        defaultTextStyle.color ??
+        defaultTextStyle?.color ??
         materialTextStyle?.color ??
         tTheme.textColorPrimary;
 
@@ -127,34 +127,35 @@ class TTextResolve {
       fontSize: fontSize,
       fontWeight: resolvedFontWeight,
       fontStyle: style?.fontStyle ??
-          defaultTextStyle.fontStyle ??
+          defaultTextStyle?.fontStyle ??
           materialTextStyle?.fontStyle,
       letterSpacing: style?.letterSpacing ??
-          defaultTextStyle.letterSpacing ??
+          defaultTextStyle?.letterSpacing ??
           materialTextStyle?.letterSpacing,
       wordSpacing: style?.wordSpacing ??
-          defaultTextStyle.wordSpacing ??
+          defaultTextStyle?.wordSpacing ??
           materialTextStyle?.wordSpacing,
       textBaseline: style?.textBaseline ??
-          defaultTextStyle.textBaseline ??
+          defaultTextStyle?.textBaseline ??
           materialTextStyle?.textBaseline,
       height: resolvedHeight,
       leadingDistribution: style?.leadingDistribution ??
-          defaultTextStyle.leadingDistribution ??
+          defaultTextStyle?.leadingDistribution ??
           materialTextStyle?.leadingDistribution,
-      locale:
-          style?.locale ?? defaultTextStyle.locale ?? materialTextStyle?.locale,
+      locale: style?.locale ??
+          defaultTextStyle?.locale ??
+          materialTextStyle?.locale,
       foreground: style?.foreground ??
-          defaultTextStyle.foreground ??
+          defaultTextStyle?.foreground ??
           materialTextStyle?.foreground,
       background: style?.background ??
-          defaultTextStyle.background ??
+          defaultTextStyle?.background ??
           materialTextStyle?.background,
       shadows: style?.shadows ??
-          defaultTextStyle.shadows ??
+          defaultTextStyle?.shadows ??
           materialTextStyle?.shadows,
       fontFeatures: style?.fontFeatures ??
-          defaultTextStyle.fontFeatures ??
+          defaultTextStyle?.fontFeatures ??
           materialTextStyle?.fontFeatures,
       decoration: decoration,
       decorationColor: decorationColor,
@@ -163,7 +164,7 @@ class TTextResolve {
       debugLabel: style?.debugLabel,
       fontFamily: resolvedFontFamily,
       fontFamilyFallback: style?.fontFamilyFallback ??
-          defaultTextStyle.fontFamilyFallback ??
+          defaultTextStyle?.fontFamilyFallback ??
           materialTextStyle?.fontFamilyFallback,
       package: resolvedPackage,
     );

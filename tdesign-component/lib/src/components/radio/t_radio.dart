@@ -13,11 +13,8 @@ import '../divider/t_divider.dart';
 import 't_radio_theme_data.dart';
 
 /// 自定义单选框指示器构建器。
-typedef TRadioIconBuilder = Widget Function(
-  BuildContext context,
-  bool selected,
-  bool disabled,
-);
+typedef TRadioIconBuilder =
+    Widget Function(BuildContext context, bool selected, bool disabled);
 
 /// 单选框指示器尺寸。
 enum TRadioSize {
@@ -32,7 +29,6 @@ enum TRadioSize {
 }
 
 @immutable
-
 /// 单选框组的数据项。
 class TRadioOption<T> {
   const TRadioOption({
@@ -63,12 +59,13 @@ class TRadioOption<T> {
 }
 
 /// 自定义单选框组数据项构建器。
-typedef TRadioOptionBuilder<T> = Widget Function(
-  BuildContext context,
-  TRadioOption<T> option,
-  bool selected,
-  bool disabled,
-);
+typedef TRadioOptionBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      TRadioOption<T> option,
+      bool selected,
+      bool disabled,
+    );
 
 /// 遵循 Material value/groupValue 语义的严格受控单选框。
 class TRadio<T> extends StatelessWidget {
@@ -154,7 +151,8 @@ class TRadio<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TRadioThemeData>();
-    final indicator = customIconBuilder?.call(context, _selected, _disabled) ??
+    final indicator =
+        customIconBuilder?.call(context, _selected, _disabled) ??
         (cardMode ? null : _buildIndicator(context, theme));
     final content = _buildContent(context, theme);
     final hasContent = content != null;
@@ -167,9 +165,7 @@ class TRadio<T> extends StatelessWidget {
       if (content != null) Expanded(child: content),
     ];
     final constraints = hasContent
-        ? BoxConstraints(
-            minHeight: _contentMinHeight,
-          )
+        ? BoxConstraints(minHeight: _contentMinHeight)
         : _resolveTapTargetConstraints(context);
     final tileContent = Container(
       constraints: cardMode ? null : constraints,
@@ -188,8 +184,9 @@ class TRadio<T> extends StatelessWidget {
             ),
       child: Row(
         mainAxisSize: hasContent ? MainAxisSize.max : MainAxisSize.min,
-        mainAxisAlignment:
-            hasContent ? MainAxisAlignment.start : MainAxisAlignment.center,
+        mainAxisAlignment: hasContent
+            ? MainAxisAlignment.start
+            : MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: contentDirection == TContentDirection.right
             ? children
@@ -234,17 +231,21 @@ class TRadio<T> extends StatelessWidget {
   }
 
   double get _contentMinHeight => switch (size) {
-        TRadioSize.small => 40.0,
-        TRadioSize.medium => 48.0,
-        TRadioSize.large => 56.0,
-      };
+    TRadioSize.small => 40.0,
+    TRadioSize.medium => 48.0,
+    TRadioSize.large => 56.0,
+  };
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = RadioTheme.of(context);
     final appTheme = Theme.of(context);
-    final visualDensity = materialTheme.visualDensity ?? appTheme.visualDensity;
+    final visualDensity = materialTheme.visualDensity ??
+        appTheme.tExplicitVisualDensity ??
+        VisualDensity.standard;
     final tapTargetSize =
-        materialTheme.materialTapTargetSize ?? appTheme.materialTapTargetSize;
+        materialTheme.materialTapTargetSize ??
+        appTheme.tExplicitMaterialTapTargetSize ??
+        MaterialTapTargetSize.padded;
     final indicatorSize = _indicatorSize;
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
@@ -257,26 +258,37 @@ class TRadio<T> extends StatelessWidget {
   }
 
   double get _indicatorSize => switch (size) {
-        TRadioSize.small => 20.0,
-        TRadioSize.medium => 24.0,
-        TRadioSize.large => 28.0,
-      };
+    TRadioSize.small => 20.0,
+    TRadioSize.medium => 24.0,
+    TRadioSize.large => 28.0,
+  };
 
   Widget _buildIndicator(BuildContext context, TRadioThemeData? theme) {
+    final materialTheme = RadioTheme.of(context);
+    final colorScheme = Theme.of(context).tExplicitColorScheme;
+    final states = <WidgetState>{
+      if (_selected) WidgetState.selected,
+      if (_disabled) WidgetState.disabled,
+    };
     final color = _disabled
-        ? (theme?.disableColor ?? context.tTheme.brandDisabledColor)
+        ? (theme?.disableColor ??
+              materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.onSurface.withValues(alpha: 0.38) ??
+              context.tTheme.brandDisabledColor)
         : _selected
-            ? (theme?.selectColor ?? context.tTheme.brandNormalColor)
-            : context.tTheme.componentBorderColor;
+        ? (theme?.selectColor ??
+              materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.primary ??
+              context.tTheme.brandNormalColor)
+        : (materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.outline ??
+              context.tTheme.componentBorderColor);
     final iconSize = _indicatorSize;
     return SizedBox(
       width: iconSize,
       height: iconSize,
       child: CustomPaint(
-        painter: _TRadioIndicatorPainter(
-          selected: _selected,
-          color: color,
-        ),
+        painter: _TRadioIndicatorPainter(selected: _selected, color: color),
       ),
     );
   }
@@ -285,13 +297,19 @@ class TRadio<T> extends StatelessWidget {
     if (title == null && subTitle == null) {
       return null;
     }
-    final materialTextTheme = Theme.of(context).textTheme;
-    final titleStyle = materialTextTheme.bodyLarge ??
-        materialTextTheme.bodyMedium ??
-        TextStyle(fontSize: context.tTheme.fontBodyLarge?.size ?? 16);
-    final subTitleStyle = materialTextTheme.bodyMedium ??
-        materialTextTheme.bodySmall ??
-        TextStyle(fontSize: context.tTheme.fontBodyMedium?.size ?? 14);
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
+    final titleFont = context.tTheme.fontBodyLarge;
+    final titleStyle = TextStyle(
+      fontSize: titleFont?.size ?? 16,
+      height: titleFont?.height,
+      fontWeight: titleFont?.fontWeight,
+    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+    final subtitleFont = context.tTheme.fontBodyMedium;
+    final subTitleStyle = TextStyle(
+      fontSize: subtitleFont?.size ?? 14,
+      height: subtitleFont?.height,
+      fontWeight: subtitleFont?.fontWeight,
+    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -305,8 +323,8 @@ class TRadio<T> extends StatelessWidget {
               color: _disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.titleColor ??
-                      titleStyle.color ??
-                      context.tTheme.textColorPrimary),
+                        titleStyle.color ??
+                        context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -320,8 +338,8 @@ class TRadio<T> extends StatelessWidget {
               color: _disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.subTitleColor ??
-                      subTitleStyle.color ??
-                      context.tTheme.textColorPlaceholder),
+                        subTitleStyle.color ??
+                        context.tTheme.textColorPlaceholder),
             ),
           ),
       ],
@@ -330,10 +348,7 @@ class TRadio<T> extends StatelessWidget {
 }
 
 class _TRadioIndicatorPainter extends CustomPainter {
-  const _TRadioIndicatorPainter({
-    required this.selected,
-    required this.color,
-  });
+  const _TRadioIndicatorPainter({required this.selected, required this.color});
 
   final bool selected;
   final Color color;

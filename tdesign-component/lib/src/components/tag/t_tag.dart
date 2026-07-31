@@ -75,7 +75,12 @@ class TTag extends StatelessWidget {
 
     // 计算样式颜色
     final colors = _resolveColors(
-        context, resolvedColorScheme, isLight, isOutline, !enabled);
+      context,
+      resolvedColorScheme,
+      isLight,
+      isOutline,
+      !enabled,
+    );
     final borderRadius = _resolveBorderRadius(context, shape);
 
     var child = _buildLabel(
@@ -91,12 +96,14 @@ class TTag extends StatelessWidget {
     if (innerIcon != null || needCloseIcon) {
       var children = <Widget>[];
       if (innerIcon != null) {
-        children.add(Container(
-          margin: const EdgeInsets.only(right: 4),
-          width: 14,
-          height: 14,
-          child: innerIcon,
-        ));
+        children.add(
+          Container(
+            margin: const EdgeInsets.only(right: 4),
+            width: 14,
+            height: 14,
+            child: innerIcon,
+          ),
+        );
       }
       children.add(fixedWidth == null ? child : Flexible(child: child));
       if (needCloseIcon) {
@@ -108,14 +115,13 @@ class TTag extends StatelessWidget {
             size: 14,
           ),
         );
-        children.add(onCloseTap == null || !enabled
-            ? closeIcon
-            : GestureDetector(onTap: onCloseTap, child: closeIcon));
+        children.add(
+          onCloseTap == null || !enabled
+              ? closeIcon
+              : GestureDetector(onTap: onCloseTap, child: closeIcon),
+        );
       }
-      child = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      );
+      child = Row(mainAxisSize: MainAxisSize.min, children: children);
     }
 
     final effectivePadding = padding ?? _getPadding(isOutline ? 1.0 : 0.0);
@@ -124,12 +130,12 @@ class TTag extends StatelessWidget {
       height: maxLines == 1 ? _getTagHeight(context, effectivePadding) : null,
       padding: effectivePadding,
       decoration: BoxDecoration(
-          color: enabled
-              ? backgroundColor ?? colors.backgroundColor
-              : colors.backgroundColor,
-          border:
-              Border.all(width: isOutline ? 1 : 0, color: colors.borderColor),
-          borderRadius: borderRadius),
+        color: enabled
+            ? backgroundColor ?? colors.backgroundColor
+            : colors.backgroundColor,
+        border: Border.all(width: isOutline ? 1 : 0, color: colors.borderColor),
+        borderRadius: borderRadius,
+      ),
       child: Align(
         alignment: Alignment.center,
         widthFactor: fixedWidth == null ? 1 : null,
@@ -170,13 +176,18 @@ class TTag extends StatelessWidget {
     bool isOutline,
     bool disable,
   ) {
+    final token = context.tTheme;
+    final material = Theme.of(context).tExplicitColorScheme;
     if (disable) {
       return _TagColors(
-        textColor: context.tTheme.textDisabledColor,
+        textColor:
+            material?.onSurface.withValues(alpha: 0.38) ??
+            token.textDisabledColor,
         backgroundColor: isOutline && !isLight
             ? Colors.transparent
-            : context.tTheme.bgColorComponentDisabled,
-        borderColor: context.tTheme.componentBorderColor,
+            : material?.onSurface.withValues(alpha: 0.12) ??
+                  token.bgColorComponentDisabled,
+        borderColor: material?.outline ?? token.componentBorderColor,
       );
     }
 
@@ -187,80 +198,84 @@ class TTag extends StatelessWidget {
     switch (colorScheme) {
       case TTagColorScheme.primary:
         if (isOutline) {
-          borderColor = context.tTheme.brandNormalColor;
-          textColor = context.tTheme.brandNormalColor;
-          backgroundColor =
-              isLight ? context.tTheme.brandLightColor : Colors.transparent;
+          borderColor = material?.primary ?? token.brandNormalColor;
+          textColor = material?.primary ?? token.brandNormalColor;
+          backgroundColor = isLight
+              ? material?.primaryContainer ?? token.brandLightColor
+              : Colors.transparent;
         } else {
           textColor = isLight
-              ? context.tTheme.brandNormalColor
-              : context.tTheme.textColorAnti;
+              ? material?.primary ?? token.brandNormalColor
+              : material?.onPrimary ?? token.textColorAnti;
           backgroundColor = isLight
-              ? context.tTheme.brandLightColor
-              : context.tTheme.brandNormalColor;
+              ? material?.primaryContainer ?? token.brandLightColor
+              : material?.primary ?? token.brandNormalColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.warning:
         if (isOutline) {
-          borderColor = context.tTheme.warningNormalColor;
-          textColor = context.tTheme.warningNormalColor;
-          backgroundColor =
-              isLight ? context.tTheme.warningLightColor : Colors.transparent;
+          borderColor = material?.tertiary ?? token.warningNormalColor;
+          textColor = material?.tertiary ?? token.warningNormalColor;
+          backgroundColor = isLight
+              ? material?.tertiaryContainer ?? token.warningLightColor
+              : Colors.transparent;
         } else {
           textColor = isLight
-              ? context.tTheme.warningNormalColor
-              : context.tTheme.textColorAnti;
+              ? material?.tertiary ?? token.warningNormalColor
+              : material?.onTertiary ?? token.textColorAnti;
           backgroundColor = isLight
-              ? context.tTheme.warningLightColor
-              : context.tTheme.warningNormalColor;
+              ? material?.tertiaryContainer ?? token.warningLightColor
+              : material?.tertiary ?? token.warningNormalColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.danger:
         if (isOutline) {
-          borderColor = context.tTheme.errorNormalColor;
-          textColor = context.tTheme.errorNormalColor;
-          backgroundColor =
-              isLight ? context.tTheme.errorLightColor : Colors.transparent;
+          borderColor = material?.error ?? token.errorNormalColor;
+          textColor = material?.error ?? token.errorNormalColor;
+          backgroundColor = isLight
+              ? material?.errorContainer ?? token.errorLightColor
+              : Colors.transparent;
         } else {
           textColor = isLight
-              ? context.tTheme.errorNormalColor
-              : context.tTheme.textColorAnti;
+              ? material?.error ?? token.errorNormalColor
+              : material?.onError ?? token.textColorAnti;
           backgroundColor = isLight
-              ? context.tTheme.errorLightColor
-              : context.tTheme.errorNormalColor;
+              ? material?.errorContainer ?? token.errorLightColor
+              : material?.error ?? token.errorNormalColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.success:
         if (isOutline) {
-          borderColor = context.tTheme.successNormalColor;
-          textColor = context.tTheme.successNormalColor;
-          backgroundColor =
-              isLight ? context.tTheme.successLightColor : Colors.transparent;
-        } else {
-          textColor = isLight
-              ? context.tTheme.successNormalColor
-              : context.tTheme.textColorAnti;
+          borderColor = token.successNormalColor;
+          textColor = token.successNormalColor;
           backgroundColor = isLight
-              ? context.tTheme.successLightColor
-              : context.tTheme.successNormalColor;
+              ? token.successLightColor
+              : Colors.transparent;
+        } else {
+          textColor = isLight ? token.successNormalColor : token.textColorAnti;
+          backgroundColor = isLight
+              ? token.successLightColor
+              : token.successNormalColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.defaultTheme:
         if (isOutline) {
-          borderColor = context.tTheme.componentBorderColor;
-          textColor = context.tTheme.textColorPrimary;
+          borderColor = material?.outline ?? token.componentBorderColor;
+          textColor = material?.onSurface ?? token.textColorPrimary;
           backgroundColor = isLight
-              ? context.tTheme.bgColorSecondaryContainer
+              ? material?.surfaceContainerHighest ??
+                    token.bgColorSecondaryContainer
               : Colors.transparent;
         } else {
-          textColor = context.tTheme.textColorPrimary;
+          textColor = material?.onSurface ?? token.textColorPrimary;
           backgroundColor = isLight
-              ? context.tTheme.bgColorSecondaryContainer
-              : context.tTheme.bgColorComponent;
+              ? material?.surfaceContainerHighest ??
+                    token.bgColorSecondaryContainer
+              : material?.surfaceContainerHighest ?? token.bgColorComponent;
           borderColor = backgroundColor;
         }
     }
@@ -274,7 +289,9 @@ class TTag extends StatelessWidget {
   }
 
   BorderRadiusGeometry _resolveBorderRadius(
-      BuildContext context, TTagShape shape) {
+    BuildContext context,
+    TTagShape shape,
+  ) {
     switch (shape) {
       case TTagShape.square:
         return BorderRadius.circular(context.tTheme.radiusSmall);
@@ -291,11 +308,7 @@ class TTag extends StatelessWidget {
   Widget? _getIcon(Color textColor) {
     if (icon != null) {
       // 使用 Icon 组件渲染，保证可被 find.byIcon 命中且视觉一致
-      return Icon(
-        icon,
-        color: textColor,
-        size: _getIconSize(),
-      );
+      return Icon(icon, color: textColor, size: _getIconSize());
     }
     return null;
   }

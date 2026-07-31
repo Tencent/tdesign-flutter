@@ -29,31 +29,57 @@ class TSwitchResolvedStyle {
 /// Switch 的唯一样式解析入口。
 class TSwitchResolve {
   static double width(TSwitchSize size) => switch (size) {
-        TSwitchSize.large => 52,
-        TSwitchSize.medium => 45,
-        TSwitchSize.small => 39,
-      };
+    TSwitchSize.large => 52,
+    TSwitchSize.medium => 45,
+    TSwitchSize.small => 39,
+  };
 
   static double height(TSwitchSize size) => switch (size) {
-        TSwitchSize.large => 32,
-        TSwitchSize.medium => 28,
-        TSwitchSize.small => 24,
-      };
+    TSwitchSize.large => 32,
+    TSwitchSize.medium => 28,
+    TSwitchSize.small => 24,
+  };
 
   static TSwitchResolvedStyle resolve({
     required BuildContext context,
+    required bool enabled,
     TSwitchThemeData? theme,
   }) {
     final token = context.tTheme;
+    final material = Theme.of(context);
+    final switchTheme = material.switchTheme;
+    final colorScheme = material.tExplicitColorScheme;
+    final onStates = <WidgetState>{
+      WidgetState.selected,
+      if (!enabled) WidgetState.disabled,
+    };
+    final offStates = <WidgetState>{if (!enabled) WidgetState.disabled};
     return TSwitchResolvedStyle(
-      trackOnColor: theme?.trackOnColor ?? token.brandNormalColor,
-      trackOffColor: theme?.trackOffColor ?? token.textDisabledColor,
-      thumbContentOnColor: theme?.thumbContentOnColor ?? token.brandNormalColor,
+      trackOnColor:
+          theme?.trackOnColor ??
+          switchTheme.trackColor?.resolve(onStates) ??
+          colorScheme?.primary ??
+          token.brandNormalColor,
+      trackOffColor:
+          theme?.trackOffColor ??
+          switchTheme.trackColor?.resolve(offStates) ??
+          colorScheme?.surfaceContainerHighest ??
+          token.textDisabledColor,
+      thumbContentOnColor:
+          theme?.thumbContentOnColor ??
+          switchTheme.thumbColor?.resolve(onStates) ??
+          colorScheme?.onPrimary ??
+          token.brandNormalColor,
       thumbContentOffColor:
-          theme?.thumbContentOffColor ?? token.textDisabledColor,
-      thumbContentOnFont: theme?.thumbContentOnFont ??
+          theme?.thumbContentOffColor ??
+          switchTheme.thumbColor?.resolve(offStates) ??
+          colorScheme?.onSurfaceVariant ??
+          token.textDisabledColor,
+      thumbContentOnFont:
+          theme?.thumbContentOnFont ??
           TextStyle(fontSize: token.fontBodyMedium?.size ?? 14),
-      thumbContentOffFont: theme?.thumbContentOffFont ??
+      thumbContentOffFont:
+          theme?.thumbContentOffFont ??
           TextStyle(fontSize: token.fontBodyMedium?.size ?? 14),
     );
   }

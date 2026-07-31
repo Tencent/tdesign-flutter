@@ -34,11 +34,8 @@ enum TCheckboxSize {
 }
 
 /// 自定义复选框指示器构建器。
-typedef TCheckboxIconBuilder = Widget Function(
-  BuildContext context,
-  bool? value,
-  bool disabled,
-);
+typedef TCheckboxIconBuilder =
+    Widget Function(BuildContext context, bool? value, bool disabled);
 
 /// 严格受控的复选框；[onChanged] 为 null 时禁用。
 class TCheckbox extends StatelessWidget {
@@ -118,7 +115,8 @@ class TCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TCheckboxThemeData>();
     final selected = value == true;
-    final indicator = customIconBuilder?.call(context, value, _disabled) ??
+    final indicator =
+        customIconBuilder?.call(context, value, _disabled) ??
         (cardMode ? null : _buildIndicator(context, theme));
     final content = _buildContent(context, theme);
     final hasContent = content != null;
@@ -132,19 +130,17 @@ class TCheckbox extends StatelessWidget {
     ];
 
     final constraints = hasContent
-        ? BoxConstraints(
-            minHeight: _contentMinHeight,
-          )
+        ? BoxConstraints(minHeight: _contentMinHeight)
         : _resolveTapTargetConstraints(context);
 
     final tileContent = Container(
       constraints: cardMode ? null : constraints,
       padding: hasContent
           ? (theme?.customSpace ??
-              EdgeInsets.symmetric(
-                horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
-                vertical: context.tTheme.spacer8,
-              ))
+                EdgeInsets.symmetric(
+                  horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
+                  vertical: context.tTheme.spacer8,
+                ))
           : EdgeInsets.zero,
       decoration: cardMode
           ? null
@@ -155,8 +151,9 @@ class TCheckbox extends StatelessWidget {
             ),
       child: Row(
         mainAxisSize: hasContent ? MainAxisSize.max : MainAxisSize.min,
-        mainAxisAlignment:
-            hasContent ? MainAxisAlignment.start : MainAxisAlignment.center,
+        mainAxisAlignment: hasContent
+            ? MainAxisAlignment.start
+            : MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: contentDirection == TContentDirection.right
             ? children
@@ -203,23 +200,27 @@ class TCheckbox extends StatelessWidget {
   }
 
   double get _contentMinHeight => switch (size) {
-        TCheckboxSize.small => 40.0,
-        TCheckboxSize.medium => 48.0,
-        TCheckboxSize.large => 56.0,
-      };
+    TCheckboxSize.small => 40.0,
+    TCheckboxSize.medium => 48.0,
+    TCheckboxSize.large => 56.0,
+  };
 
   double get _indicatorSize => switch (size) {
-        TCheckboxSize.small => 20.0,
-        TCheckboxSize.medium => 24.0,
-        TCheckboxSize.large => 28.0,
-      };
+    TCheckboxSize.small => 20.0,
+    TCheckboxSize.medium => 24.0,
+    TCheckboxSize.large => 28.0,
+  };
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = CheckboxTheme.of(context);
     final appTheme = Theme.of(context);
-    final visualDensity = materialTheme.visualDensity ?? appTheme.visualDensity;
+    final visualDensity = materialTheme.visualDensity ??
+        appTheme.tExplicitVisualDensity ??
+        VisualDensity.standard;
     final tapTargetSize =
-        materialTheme.materialTapTargetSize ?? appTheme.materialTapTargetSize;
+        materialTheme.materialTapTargetSize ??
+        appTheme.tExplicitMaterialTapTargetSize ??
+        MaterialTapTargetSize.padded;
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
         : _indicatorSize;
@@ -231,34 +232,52 @@ class TCheckbox extends StatelessWidget {
   }
 
   Widget _buildIndicator(BuildContext context, TCheckboxThemeData? theme) {
+    final materialTheme = CheckboxTheme.of(context);
+    final colorScheme = Theme.of(context).tExplicitColorScheme;
     final variant = theme?.variant ?? TCheckboxVariant.square;
     final selected = value == true;
     final indeterminate = value == null;
+    final states = <WidgetState>{
+      if (selected || indeterminate) WidgetState.selected,
+      if (_disabled) WidgetState.disabled,
+    };
     final icon = switch (variant) {
-      TCheckboxVariant.circle => indeterminate
-          ? TIcons.minus_circle_filled
-          : selected
-              ? TIcons.check_circle_filled
-              : TIcons.circle,
-      TCheckboxVariant.square => indeterminate
-          ? TIcons.minus_rectangle_filled
-          : selected
-              ? TIcons.check_rectangle_filled
-              : TIcons.rectangle,
-      TCheckboxVariant.check => selected || indeterminate
-          ? (indeterminate ? TIcons.minus : TIcons.check)
-          : null,
+      TCheckboxVariant.circle =>
+        indeterminate
+            ? TIcons.minus_circle_filled
+            : selected
+            ? TIcons.check_circle_filled
+            : TIcons.circle,
+      TCheckboxVariant.square =>
+        indeterminate
+            ? TIcons.minus_rectangle_filled
+            : selected
+            ? TIcons.check_rectangle_filled
+            : TIcons.rectangle,
+      TCheckboxVariant.check =>
+        selected || indeterminate
+            ? (indeterminate ? TIcons.minus : TIcons.check)
+            : null,
     };
     final color = _disabled
-        ? (theme?.disableColor ?? context.tTheme.brandDisabledColor)
+        ? (theme?.disableColor ??
+              materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.onSurface.withValues(alpha: 0.38) ??
+              context.tTheme.brandDisabledColor)
         : selected || indeterminate
-            ? (theme?.selectColor ?? context.tTheme.brandNormalColor)
-            : context.tTheme.componentBorderColor;
+        ? (theme?.selectColor ??
+              materialTheme.fillColor?.resolve(states) ??
+              colorScheme?.primary ??
+              context.tTheme.brandNormalColor)
+        : (materialTheme.side?.color ??
+              colorScheme?.outline ??
+              context.tTheme.componentBorderColor);
     return SizedBox(
       width: _indicatorSize,
       height: _indicatorSize,
-      child:
-          icon == null ? null : Icon(icon, size: _indicatorSize, color: color),
+      child: icon == null
+          ? null
+          : Icon(icon, size: _indicatorSize, color: color),
     );
   }
 
@@ -266,23 +285,19 @@ class TCheckbox extends StatelessWidget {
     if (title == null && subTitle == null) {
       return null;
     }
-    final materialTextTheme = Theme.of(context).textTheme;
-    final titleStyle = materialTextTheme.bodyLarge ??
-        materialTextTheme.bodyMedium ??
-        TextStyle(
-          fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-          height: context.tTheme.fontBodyLarge?.height,
-          fontWeight:
-              context.tTheme.fontBodyLarge?.fontWeight ?? FontWeight.w400,
-        );
-    final subTitleStyle = materialTextTheme.bodyMedium ??
-        materialTextTheme.bodySmall ??
-        TextStyle(
-          fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-          height: context.tTheme.fontBodyMedium?.height,
-          fontWeight:
-              context.tTheme.fontBodyMedium?.fontWeight ?? FontWeight.w400,
-        );
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
+    final titleFont = context.tTheme.fontBodyLarge;
+    final titleStyle = TextStyle(
+      fontSize: titleFont?.size ?? 16,
+      height: titleFont?.height,
+      fontWeight: titleFont?.fontWeight ?? FontWeight.w400,
+    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+    final subtitleFont = context.tTheme.fontBodyMedium;
+    final subTitleStyle = TextStyle(
+      fontSize: subtitleFont?.size ?? 14,
+      height: subtitleFont?.height,
+      fontWeight: subtitleFont?.fontWeight ?? FontWeight.w400,
+    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -296,8 +311,8 @@ class TCheckbox extends StatelessWidget {
               color: _disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.titleColor ??
-                      titleStyle.color ??
-                      context.tTheme.textColorPrimary),
+                        titleStyle.color ??
+                        context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -311,8 +326,8 @@ class TCheckbox extends StatelessWidget {
               color: _disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.subTitleColor ??
-                      subTitleStyle.color ??
-                      context.tTheme.textColorPlaceholder),
+                        subTitleStyle.color ??
+                        context.tTheme.textColorPlaceholder),
             ),
           ),
       ],

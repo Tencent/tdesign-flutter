@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
@@ -44,7 +45,7 @@ enum TPopoverPlacement {
   left,
 
   /// 左上
-  leftTop
+  leftTop,
 }
 
 /// 点击事件回调
@@ -142,24 +143,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           ? null
           : BorderRadius.circular(_theme.borderRadius!));
 
-  static const List<BoxShadow> _defaultBoxShadow = [
-    BoxShadow(
-        color: Color(0x0d000000),
-        offset: Offset(0, 6),
-        blurRadius: 30,
-        spreadRadius: 5),
-    BoxShadow(
-        color: Color(0x0a000000),
-        offset: Offset(0, 16),
-        blurRadius: 24,
-        spreadRadius: 2),
-    BoxShadow(
-        color: Color(0x14000000),
-        offset: Offset(0, 8),
-        blurRadius: 10,
-        spreadRadius: -5),
-  ];
-
   late Color _color;
 
   late Color _backgroundColor;
@@ -171,11 +154,13 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     if (widget.contentWidget != null) {
       if (_effectiveWidth == null) {
         throw FlutterError(
-            'width must not be null when contentWidget is not null');
+          'width must not be null when contentWidget is not null',
+        );
       }
       if (_effectiveHeight == null) {
         throw FlutterError(
-            'height must not be null when contentWidget is not null');
+          'height must not be null when contentWidget is not null',
+        );
       }
     }
   }
@@ -183,78 +168,82 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   /// 绘制箭头
   Widget _drawArrow() {
     var border = Border(
+      right: BorderSide(
+        width: _effectiveArrowSize,
+        color: Colors.transparent,
+        style: BorderStyle.solid,
+      ),
+      bottom: BorderSide(
+        width: _effectiveArrowSize,
+        color: _backgroundColor,
+        style: BorderStyle.solid,
+      ),
+      left: BorderSide(
+        width: _effectiveArrowSize,
+        color: Colors.transparent,
+        style: BorderStyle.solid,
+      ),
+    );
+    if (widget.placement == TPopoverPlacement.bottom ||
+        widget.placement == TPopoverPlacement.bottomLeft ||
+        widget.placement == TPopoverPlacement.bottomRight) {
+      border = Border(
+        top: BorderSide(
+          width: _effectiveArrowSize,
+          color: _backgroundColor,
+          style: BorderStyle.solid,
+        ),
         right: BorderSide(
           width: _effectiveArrowSize,
           color: Colors.transparent,
-          style: BorderStyle.solid,
-        ),
-        bottom: BorderSide(
-          width: _effectiveArrowSize,
-          color: _backgroundColor,
           style: BorderStyle.solid,
         ),
         left: BorderSide(
           width: _effectiveArrowSize,
           color: Colors.transparent,
           style: BorderStyle.solid,
-        ));
-    if (widget.placement == TPopoverPlacement.bottom ||
-        widget.placement == TPopoverPlacement.bottomLeft ||
-        widget.placement == TPopoverPlacement.bottomRight) {
-      border = Border(
-          top: BorderSide(
-            width: _effectiveArrowSize,
-            color: _backgroundColor,
-            style: BorderStyle.solid,
-          ),
-          right: BorderSide(
-            width: _effectiveArrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ),
-          left: BorderSide(
-            width: _effectiveArrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ));
+        ),
+      );
     } else if (widget.placement == TPopoverPlacement.left ||
         widget.placement == TPopoverPlacement.leftTop ||
         widget.placement == TPopoverPlacement.leftBottom) {
       border = Border(
-          top: BorderSide(
-            width: _effectiveArrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ),
-          bottom: BorderSide(
-            width: _effectiveArrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ),
-          right: BorderSide(
-            width: _effectiveArrowSize,
-            color: _backgroundColor,
-            style: BorderStyle.solid,
-          ));
+        top: BorderSide(
+          width: _effectiveArrowSize,
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ),
+        bottom: BorderSide(
+          width: _effectiveArrowSize,
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ),
+        right: BorderSide(
+          width: _effectiveArrowSize,
+          color: _backgroundColor,
+          style: BorderStyle.solid,
+        ),
+      );
     } else if (widget.placement == TPopoverPlacement.right ||
         widget.placement == TPopoverPlacement.rightTop ||
         widget.placement == TPopoverPlacement.rightBottom) {
       border = Border(
-          top: BorderSide(
-            width: _effectiveArrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ),
-          bottom: BorderSide(
-            width: _effectiveArrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ),
-          left: BorderSide(
-            width: _effectiveArrowSize,
-            color: _backgroundColor,
-            style: BorderStyle.solid,
-          ));
+        top: BorderSide(
+          width: _effectiveArrowSize,
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ),
+        bottom: BorderSide(
+          width: _effectiveArrowSize,
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ),
+        left: BorderSide(
+          width: _effectiveArrowSize,
+          color: _backgroundColor,
+          style: BorderStyle.solid,
+        ),
+      );
     }
     return Container(
       width: 0,
@@ -311,7 +300,8 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var dy = widgetLocalToGlobal?.dy ?? 0;
     var arrowSize = _effectiveShowArrow ? _effectiveArrowSize : 0;
     var contentSize = _getContentSize();
-    var popoverHeight = _effectiveHeight ??
+    var popoverHeight =
+        _effectiveHeight ??
         (_effectivePadding != null ? _effectivePadding!.vertical : 24) +
             contentSize.height;
     switch (widget.placement) {
@@ -338,7 +328,8 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var widgetBounds = _getWidgetBounds(widget.context);
     var widgetWidth = widgetBounds?.width ?? 0;
     var contentSize = _getContentSize();
-    var popoverWidth = _effectiveWidth ??
+    var popoverWidth =
+        _effectiveWidth ??
         (_effectivePadding != null ? _effectivePadding!.horizontal : 24) +
             contentSize.width;
     var dx = widgetLocalToGlobal?.dx ?? 0;
@@ -369,52 +360,65 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     switch (widget.placement) {
       case TPopoverPlacement.topLeft:
         margin = EdgeInsets.only(
-            top: _effectiveArrowSize, left: _effectiveArrowSize + 12);
+          top: _effectiveArrowSize,
+          left: _effectiveArrowSize + 12,
+        );
         break;
       case TPopoverPlacement.topRight:
         margin = EdgeInsets.only(
-            top: _effectiveArrowSize, right: _effectiveArrowSize + 12);
+          top: _effectiveArrowSize,
+          right: _effectiveArrowSize + 12,
+        );
         break;
       case TPopoverPlacement.bottomLeft:
         margin = EdgeInsets.only(
-            bottom: _effectiveArrowSize, left: _effectiveArrowSize + 12);
+          bottom: _effectiveArrowSize,
+          left: _effectiveArrowSize + 12,
+        );
         break;
       case TPopoverPlacement.bottom:
         margin = EdgeInsets.only(bottom: _effectiveArrowSize);
         break;
       case TPopoverPlacement.bottomRight:
         margin = EdgeInsets.only(
-            bottom: _effectiveArrowSize, right: _effectiveArrowSize + 12);
+          bottom: _effectiveArrowSize,
+          right: _effectiveArrowSize + 12,
+        );
         break;
       case TPopoverPlacement.rightTop:
         margin = EdgeInsets.only(
-            top: _effectiveArrowSize + 6, right: _effectiveArrowSize);
+          top: _effectiveArrowSize + 6,
+          right: _effectiveArrowSize,
+        );
         break;
       case TPopoverPlacement.right:
         margin = EdgeInsets.only(right: _effectiveArrowSize);
         break;
       case TPopoverPlacement.rightBottom:
         margin = EdgeInsets.only(
-            bottom: _effectiveArrowSize + 6, right: _effectiveArrowSize);
+          bottom: _effectiveArrowSize + 6,
+          right: _effectiveArrowSize,
+        );
         break;
       case TPopoverPlacement.leftTop:
         margin = EdgeInsets.only(
-            top: _effectiveArrowSize + 6, left: _effectiveArrowSize);
+          top: _effectiveArrowSize + 6,
+          left: _effectiveArrowSize,
+        );
         break;
       case TPopoverPlacement.left:
         margin = EdgeInsets.only(left: _effectiveArrowSize);
         break;
       case TPopoverPlacement.leftBottom:
         margin = EdgeInsets.only(
-            bottom: _effectiveArrowSize + 6, left: _effectiveArrowSize);
+          bottom: _effectiveArrowSize + 6,
+          left: _effectiveArrowSize,
+        );
         break;
       default:
         margin = EdgeInsets.only(top: _effectiveArrowSize);
     }
-    return Container(
-      margin: margin,
-      child: _drawArrow(),
-    );
+    return Container(margin: margin, child: _drawArrow());
   }
 
   /// 获取弹出内容大小
@@ -428,21 +432,24 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   /// 获取文本内容大小
   Size _getTextSize() {
     final font = context.tTheme.fontBodyLarge;
-    var textPainter = TextPainter(
-      text: TextSpan(
-        text: widget.content,
-        style: TextStyle(
-          color: _color,
-          letterSpacing: 0,
-          fontSize: font?.size ?? 16,
-          height: font?.height ?? 1.5,
-        ),
-      ),
-      locale: Localizations.localeOf(context),
-      textDirection: TextDirection.ltr,
-    )..layout(
-        maxWidth: (_effectiveWidth ?? 300) -
-            (_effectivePadding != null ? _effectivePadding!.horizontal : 24));
+    var textPainter =
+        TextPainter(
+          text: TextSpan(
+            text: widget.content,
+            style: TextStyle(
+              color: _color,
+              letterSpacing: 0,
+              fontSize: font?.size ?? 16,
+              height: font?.height ?? 1.5,
+            ),
+          ),
+          locale: Localizations.localeOf(context),
+          textDirection: TextDirection.ltr,
+        )..layout(
+          maxWidth:
+              (_effectiveWidth ?? 300) -
+              (_effectivePadding != null ? _effectivePadding!.horizontal : 24),
+        );
     return textPainter.size;
   }
 
@@ -452,8 +459,9 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var effectiveWidth = _effectiveWidth;
     if (effectiveWidth == null && widget.contentWidget == null) {
       final textWidth = _getTextSize().width;
-      final paddingHorizontal =
-          _effectivePadding != null ? _effectivePadding!.horizontal : 24;
+      final paddingHorizontal = _effectivePadding != null
+          ? _effectivePadding!.horizontal
+          : 24;
       effectiveWidth = textWidth + paddingHorizontal;
     }
     return Container(
@@ -461,19 +469,23 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       height: _effectiveHeight,
       padding: _effectivePadding ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          borderRadius: _effectiveRadius ??
-              BorderRadius.circular(context.tTheme.radiusDefault),
-          color: _backgroundColor,
-          boxShadow: _theme.boxShadow ?? _defaultBoxShadow),
+        borderRadius:
+            _effectiveRadius ??
+            BorderRadius.circular(context.tTheme.radiusDefault),
+        color: _backgroundColor,
+        boxShadow: _theme.boxShadow ?? context.tTheme.shadowsTop ?? const [],
+      ),
       child: widget.contentWidget != null
           ? widget.contentWidget!
-          : TText(widget.content,
+          : TText(
+              widget.content,
               style: TextStyle(
                 color: _color,
                 letterSpacing: 0,
                 fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
                 height: context.tTheme.fontBodyLarge?.height ?? 1.5,
-              )),
+              ),
+            ),
     );
   }
 
@@ -481,10 +493,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   Widget _getChild() {
     var children = [
       _getContainerWidget(),
-      Visibility(
-        visible: _effectiveShowArrow,
-        child: _getArrowWidget(),
-      )
+      Visibility(visible: _effectiveShowArrow, child: _getArrowWidget()),
     ];
     var axis = CrossAxisAlignment.center;
     var direction = VerticalDirection.down;
@@ -502,10 +511,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
         /// 反转内容和箭头
         children = [
-          Visibility(
-            visible: _effectiveShowArrow,
-            child: _getArrowWidget(),
-          ),
+          Visibility(visible: _effectiveShowArrow, child: _getArrowWidget()),
           _getContainerWidget(),
         ];
         break;
@@ -543,10 +549,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.placement == TPopoverPlacement.left ||
         widget.placement == TPopoverPlacement.leftBottom ||
         widget.placement == TPopoverPlacement.leftTop) {
-      return Row(
-        crossAxisAlignment: axis,
-        children: children,
-      );
+      return Row(crossAxisAlignment: axis, children: children);
     }
 
     /// 纵向布局
@@ -564,13 +567,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     var top = _getOffsetTop(widgetLocalToGlobal);
     var left = _getOffsetLeft(widgetLocalToGlobal);
     return Stack(
-      children: [
-        Positioned(
-          top: top,
-          left: left,
-          child: _getChild(),
-        ),
-      ],
+      children: [Positioned(top: top, left: left, child: _getChild())],
     );
   }
 }

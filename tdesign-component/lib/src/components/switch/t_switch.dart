@@ -62,7 +62,11 @@ class TSwitch extends StatelessWidget {
         variant ?? theme?.defaultVariant ?? TSwitchVariant.filled;
     final enabled =
         onChanged != null && resolvedVariant != TSwitchVariant.loading;
-    final resolved = TSwitchResolve.resolve(context: context, theme: theme);
+    final resolved = TSwitchResolve.resolve(
+      context: context,
+      enabled: enabled,
+      theme: theme,
+    );
 
     Widget current = TCupertinoSwitch(
       value: value,
@@ -75,8 +79,8 @@ class TSwitch extends StatelessWidget {
       thumbView: _buildThumb(
         resolved: resolved,
         variant: resolvedVariant,
-        openText: openText ?? theme?.openText,
-        closeText: closeText ?? theme?.closeText,
+        openText: openText,
+        closeText: closeText,
       ),
     );
 
@@ -106,37 +110,38 @@ class TSwitch extends StatelessWidget {
   }) {
     return switch (variant) {
       TSwitchVariant.text => SizedBox(
-          width: 16,
-          child: Center(
-            child: Text(
-              value ? (openText ?? '开') : (closeText ?? '关'),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: (value
-                      ? resolved.thumbContentOnFont
-                      : resolved.thumbContentOffFont)
-                  .copyWith(
-                color: value
-                    ? resolved.thumbContentOnColor
-                    : resolved.thumbContentOffColor,
-                height: 1,
-                leadingDistribution: TextLeadingDistribution.even,
-              ),
-            ),
+        width: 16,
+        child: Center(
+          child: Text(
+            value ? (openText ?? '开') : (closeText ?? '关'),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style:
+                (value
+                        ? resolved.thumbContentOnFont
+                        : resolved.thumbContentOffFont)
+                    .copyWith(
+                      color: value
+                          ? resolved.thumbContentOnColor
+                          : resolved.thumbContentOffColor,
+                      height: 1,
+                      leadingDistribution: TextLeadingDistribution.even,
+                    ),
           ),
         ),
+      ),
       TSwitchVariant.loading => TCircleIndicator(
-          color: resolved.thumbContentOnColor,
-          size: 16,
-          lineWidth: 3,
-        ),
+        color: resolved.thumbContentOnColor,
+        size: 16,
+        lineWidth: 3,
+      ),
       TSwitchVariant.icon => Icon(
-          value ? TIcons.check : TIcons.close,
-          size: 16,
-          color: value
-              ? resolved.thumbContentOnColor
-              : resolved.thumbContentOffColor,
-        ),
+        value ? TIcons.check : TIcons.close,
+        size: 16,
+        color: value
+            ? resolved.thumbContentOnColor
+            : resolved.thumbContentOffColor,
+      ),
       TSwitchVariant.filled => null,
     };
   }

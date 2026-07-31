@@ -28,6 +28,9 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
 
     /// 文案样式。
     this.textStyle,
+
+    /// 半星选择浮层阴影。
+    this.overlayBoxShadow,
   });
 
   /// 选中星标颜色。
@@ -54,6 +57,9 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
   /// 文案样式。
   final TextStyle? textStyle;
 
+  /// 半星选择浮层阴影。
+  final List<BoxShadow>? overlayBoxShadow;
+
   @override
   TRateThemeData copyWith({
     Color? starColor,
@@ -64,6 +70,7 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
     double? textWidth,
     double? textGap,
     TextStyle? textStyle,
+    List<BoxShadow>? overlayBoxShadow,
   }) {
     return TRateThemeData(
       starColor: starColor ?? this.starColor,
@@ -74,6 +81,7 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
       textWidth: textWidth ?? this.textWidth,
       textGap: textGap ?? this.textGap,
       textStyle: textStyle ?? this.textStyle,
+      overlayBoxShadow: overlayBoxShadow ?? this.overlayBoxShadow,
     );
   }
 
@@ -84,14 +92,18 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
     }
     return TRateThemeData(
       starColor: Color.lerp(starColor, other.starColor, t),
-      inactiveStarColor:
-          Color.lerp(inactiveStarColor, other.inactiveStarColor, t),
+      inactiveStarColor: Color.lerp(
+        inactiveStarColor,
+        other.inactiveStarColor,
+        t,
+      ),
       iconSize: lerpDouble(iconSize, other.iconSize, t),
       iconGap: lerpDouble(iconGap, other.iconGap, t),
       showText: t < 0.5 ? showText : other.showText,
       textWidth: lerpDouble(textWidth, other.textWidth, t),
       textGap: lerpDouble(textGap, other.textGap, t),
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+      overlayBoxShadow: t < 0.5 ? overlayBoxShadow : other.overlayBoxShadow,
     );
   }
 }

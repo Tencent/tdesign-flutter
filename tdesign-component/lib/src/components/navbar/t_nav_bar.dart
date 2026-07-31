@@ -136,11 +136,16 @@ class _TNavBarState extends State<TNavBar> {
   Color _effectiveTitleColor(BuildContext context) =>
       widget.titleColor ??
       _themeData.titleColor ??
+      Theme.of(context).appBarTheme.foregroundColor ??
+      Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
   Color _effectiveBackIconColor(BuildContext context) =>
       widget.backIconColor ??
       _themeData.backIconColor ??
+      Theme.of(context).appBarTheme.iconTheme?.color ??
+      Theme.of(context).appBarTheme.foregroundColor ??
+      Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
   Font? get _effectiveTitleFont => widget.titleFont ?? _themeData.titleFont;
@@ -154,6 +159,8 @@ class _TNavBarState extends State<TNavBar> {
   Color get _effectiveBackgroundColor =>
       widget.backgroundColor ??
       _themeData.backgroundColor ??
+      Theme.of(context).appBarTheme.backgroundColor ??
+      Theme.of(context).tExplicitColorScheme?.surface ??
       context.tTheme.bgColorContainer;
 
   double get _effectiveHeight => widget.preferredSize.height;
@@ -188,27 +195,18 @@ class _TNavBarState extends State<TNavBar> {
       children.add(items[i]);
       if (_effectiveUseBorderStyle && i != items.length - 1) {
         children.add(
-          Container(
-            width: border.width,
-            height: 16.0,
-            color: borderColor,
-          ),
+          Container(width: border.width, height: 16.0, color: borderColor),
         );
       }
     }
-    var child = Row(
-      children: children,
-      mainAxisSize: MainAxisSize.min,
-    );
+    var child = Row(children: children, mainAxisSize: MainAxisSize.min);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(border.radius),
-        border: Border.all(
-          color: borderColor,
-          width: border.width,
-        ),
+        border: Border.all(color: borderColor, width: border.width),
       ),
-      padding: border.padding ??
+      padding:
+          border.padding ??
           EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
       child: child,
     );
@@ -230,9 +228,7 @@ class _TNavBarState extends State<TNavBar> {
   Widget _buildTitleBarItems(bool isLeading) {
     var barItems = (isLeading ? widget.leading : widget.actions) ?? [];
     var children = barItems
-        .map(
-          (e) => e.toWidget(context, isLeading: isLeading),
-        )
+        .map((e) => e.toWidget(context, isLeading: isLeading))
         .toList();
 
     return Row(
@@ -241,10 +237,7 @@ class _TNavBarState extends State<TNavBar> {
         if (children.isNotEmpty)
           _effectiveUseBorderStyle
               ? _addBorder(children)
-              : Row(
-                  children: children,
-                  mainAxisSize: MainAxisSize.min,
-                ),
+              : Row(children: children, mainAxisSize: MainAxisSize.min),
       ],
       mainAxisSize: MainAxisSize.min,
     );
@@ -253,19 +246,26 @@ class _TNavBarState extends State<TNavBar> {
   TextStyle _getTitleStyle(BuildContext context) {
     var titleColor = _effectiveTitleColor(context);
 
+    final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
     var titleFont = _effectiveTitleFont ?? context.tTheme.fontBodyLarge;
 
     return _effectiveTitleFontFamily == null
         ? TextStyle(
-            fontSize: titleFont?.size,
+            fontSize: materialStyle?.fontSize ?? titleFont?.size,
             color: titleColor,
-            fontWeight: _effectiveTitleFontWeight ?? FontWeight.w500,
+            fontWeight:
+                _effectiveTitleFontWeight ??
+                materialStyle?.fontWeight ??
+                FontWeight.w500,
             decoration: TextDecoration.none,
           )
         : TextStyle(
-            fontSize: titleFont?.size,
+            fontSize: materialStyle?.fontSize ?? titleFont?.size,
             color: titleColor,
-            fontWeight: _effectiveTitleFontWeight ?? FontWeight.w500,
+            fontWeight:
+                _effectiveTitleFontWeight ??
+                materialStyle?.fontWeight ??
+                FontWeight.w500,
             decoration: TextDecoration.none,
             fontFamily: _effectiveTitleFontFamily!.fontFamily,
             package: 'tdesign_flutter',
@@ -308,8 +308,9 @@ class _TNavBarState extends State<TNavBar> {
       _backgroundColor = _backgroundColor.withValues(alpha: _effectiveOpacity);
     }
 
-    final paddingTop =
-        widget.useSafeArea ? MediaQuery.paddingOf(context).top : 0.0;
+    final paddingTop = widget.useSafeArea
+        ? MediaQuery.paddingOf(context).top
+        : 0.0;
     var padding = _effectivePadding;
     Widget appBar = Container(
       height: _effectiveHeight + paddingTop,
@@ -323,10 +324,7 @@ class _TNavBarState extends State<TNavBar> {
     if (widget.flexibleSpace != null) {
       appBar = Stack(
         fit: StackFit.passthrough,
-        children: <Widget>[
-          widget.flexibleSpace!,
-          appBar,
-        ],
+        children: <Widget>[widget.flexibleSpace!, appBar],
       );
     }
 
@@ -369,11 +367,13 @@ class TNavBarItem {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Padding(
-        padding: padding ??
+        padding:
+            padding ??
             (isLeading
                 ? EdgeInsets.only(right: context.tTheme.spacer8)
                 : EdgeInsets.only(left: context.tTheme.spacer8)),
-        child: customWidget ??
+        child:
+            customWidget ??
             Icon(
               icon,
               size: iconSize,

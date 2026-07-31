@@ -51,29 +51,31 @@ class TResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
+    final material = Theme.of(context).tExplicitColorScheme;
     final titleStyle = theme?.titleStyle;
     var displayIcon = icon ?? _getDefaultIcon(context, variant);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          child: displayIcon,
-        ),
+        Container(child: displayIcon),
         if (title.isNotEmpty)
           Padding(
-              padding: const EdgeInsets.only(top: 17),
-              child: TText(
-                title,
-                textColor: context.tTheme.textColorPrimary,
-                font: context.tTheme.fontTitleExtraLarge,
-                style: titleStyle,
-              )),
+            padding: const EdgeInsets.only(top: 17),
+            child: TText(
+              title,
+              textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
+              font: context.tTheme.fontTitleExtraLarge,
+              style: titleStyle,
+            ),
+          ),
         if (subtitle != null && subtitle!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TText(
               subtitle!,
-              textColor: context.tTheme.textColorSecondary,
+              textColor:
+                  material?.onSurfaceVariant ??
+                  context.tTheme.textColorSecondary,
               font: context.tTheme.fontTitleSmall,
             ),
           ),
@@ -83,6 +85,7 @@ class TResult extends StatelessWidget {
 
   /// 根据形态返回对应的默认图标组件
   Widget _getDefaultIcon(BuildContext context, TResultVariant variant) {
+    final material = Theme.of(context).tExplicitColorScheme;
     switch (variant) {
       case TResultVariant.success:
         return Icon(
@@ -93,19 +96,19 @@ class TResult extends StatelessWidget {
       case TResultVariant.warning:
         return Icon(
           TIcons.error_circle,
-          color: context.tTheme.warningNormalColor,
+          color: material?.tertiary ?? context.tTheme.warningNormalColor,
           size: 70,
         );
       case TResultVariant.error:
         return Icon(
           TIcons.close_circle,
-          color: context.tTheme.errorNormalColor,
+          color: material?.error ?? context.tTheme.errorNormalColor,
           size: 70,
         );
       default:
         return Icon(
           TIcons.info_circle,
-          color: context.tTheme.brandNormalColor,
+          color: material?.primary ?? context.tTheme.brandNormalColor,
           size: 70,
         );
     }

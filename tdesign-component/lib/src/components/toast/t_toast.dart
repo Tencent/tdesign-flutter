@@ -22,7 +22,7 @@ enum IconTextDirection {
   horizontal,
 
   /// 竖向
-  vertical
+  vertical,
 }
 
 /// Toast实例管理类
@@ -33,10 +33,7 @@ class _ToastInstance {
   bool showing = true;
   bool removed = false;
 
-  _ToastInstance({
-    required this.overlayEntry,
-    this.timer,
-  });
+  _ToastInstance({required this.overlayEntry, this.timer});
 
   void cancel() {
     timer?.cancel();
@@ -76,6 +73,7 @@ class TToast {
   static String showText(
     /// 提示文案；为 null 时只展示自定义内容。
     String? text, {
+
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
@@ -127,6 +125,7 @@ class TToast {
   static String showIconText(
     /// 提示文案。
     String? text, {
+
     /// 左侧或上方图标。
     IconData? icon,
 
@@ -186,6 +185,7 @@ class TToast {
   static String showSuccess(
     /// 提示文案。
     String? text, {
+
     /// 图标与文案排列方向。
     IconTextDirection direction = IconTextDirection.horizontal,
 
@@ -236,6 +236,7 @@ class TToast {
   static String showWarning(
     /// 提示文案。
     String? text, {
+
     /// 图标与文案排列方向。
     IconTextDirection direction = IconTextDirection.horizontal,
 
@@ -286,6 +287,7 @@ class TToast {
   static String showFail(
     /// 提示文案。
     String? text, {
+
     /// 图标与文案排列方向。
     IconTextDirection direction = IconTextDirection.horizontal,
 
@@ -453,29 +455,30 @@ class TToast {
   }) {
     // 不自动关闭之前的Toast，支持多个Toast同时显示
     final overlayState = Overlay.of(context);
+    final captured = InheritedTheme.capture(
+      from: context,
+      to: overlayState.context,
+    );
 
     OverlayEntry overlayEntry;
     if (preventTap ?? false) {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => Positioned(
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          child: Container(
-            color: Colors.transparent,
-            child: Align(
-              alignment: Alignment.center,
-              child: widget,
+        builder: (BuildContext context) => captured.wrap(
+          Positioned(
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            child: Container(
+              color: Colors.transparent,
+              child: Align(alignment: Alignment.center, child: widget),
             ),
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => Center(
-          child: widget,
-        ),
+        builder: (BuildContext context) => captured.wrap(Center(child: widget)),
       );
     }
 
@@ -518,9 +521,10 @@ class _TIconTextToast extends StatelessWidget {
 
   Widget buildHorizontalWidgets(BuildContext context) {
     final theme = context.tTheme;
-    final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
-            const TToastThemeData())
-        .merge(config);
+    final toastTheme =
+        (Theme.of(context).extension<TToastThemeData>() ??
+                const TToastThemeData())
+            .merge(config);
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: toastTheme.maxWidth ?? 191,
@@ -548,8 +552,9 @@ class _TIconTextToast extends StatelessWidget {
             Flexible(
               child: TText(
                 text ?? '',
-                font:
-                    toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+                font: toastTheme.textStyle != null
+                    ? null
+                    : theme.fontBodyMedium,
                 style: toastTheme.textStyle,
                 maxLines: maxLines ?? 1,
                 overflow: TextOverflow.ellipsis,
@@ -564,13 +569,12 @@ class _TIconTextToast extends StatelessWidget {
 
   Widget buildVerticalWidgets(BuildContext context) {
     final theme = context.tTheme;
-    final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
-            const TToastThemeData())
-        .merge(config);
+    final toastTheme =
+        (Theme.of(context).extension<TToastThemeData>() ??
+                const TToastThemeData())
+            .merge(config);
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: toastTheme.maxWidth ?? 136,
-      ),
+      constraints: BoxConstraints(maxWidth: toastTheme.maxWidth ?? 136),
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
@@ -596,7 +600,7 @@ class _TIconTextToast extends StatelessWidget {
               maxLines: maxLines ?? 1,
               overflow: TextOverflow.ellipsis,
               textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-            )
+            ),
           ],
         ),
       ),
@@ -616,18 +620,15 @@ class _TToastLoading extends StatelessWidget {
   final Widget? customWidget;
   final TToastThemeData config;
 
-  const _TToastLoading({
-    this.text,
-    this.customWidget,
-    required this.config,
-  });
+  const _TToastLoading({this.text, this.customWidget, required this.config});
 
   @override
   Widget build(BuildContext context) {
     final theme = context.tTheme;
-    final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
-            const TToastThemeData())
-        .merge(config);
+    final toastTheme =
+        (Theme.of(context).extension<TToastThemeData>() ??
+                const TToastThemeData())
+            .merge(config);
     final maxWidth = math.max(110.0, toastTheme.maxWidth ?? 191.0);
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -636,37 +637,37 @@ class _TToastLoading extends StatelessWidget {
         maxWidth: maxWidth,
       ),
       child: Container(
-          padding: toastTheme.padding ?? const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: toastTheme.backgroundColor ?? theme.fontGyColor1,
-            borderRadius: BorderRadius.circular(
-              toastTheme.borderRadius ?? theme.radiusDefault,
-            ),
+        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          borderRadius: BorderRadius.circular(
+            toastTheme.borderRadius ?? theme.radiusDefault,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TCircleIndicator(
-                color: toastTheme.iconColor ?? theme.textColorAnti,
-                size: toastTheme.iconSize ?? 32,
-                lineWidth: 4,
-              ),
-              const SizedBox(height: 8),
-              customWidget ??
-                  TText(
-                    text ?? context.resource.loadingWithPoint,
-                    font: toastTheme.textStyle != null
-                        ? null
-                        : theme.fontBodyMedium,
-                    style: toastTheme.textStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textColor:
-                        toastTheme.textStyle?.color ?? theme.textColorAnti,
-                  )
-            ],
-          )),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TCircleIndicator(
+              color: toastTheme.iconColor ?? theme.textColorAnti,
+              size: toastTheme.iconSize ?? 32,
+              lineWidth: 4,
+            ),
+            const SizedBox(height: 8),
+            customWidget ??
+                TText(
+                  text ?? context.resource.loadingWithPoint,
+                  font: toastTheme.textStyle != null
+                      ? null
+                      : theme.fontBodyMedium,
+                  style: toastTheme.textStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+                ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -674,16 +675,15 @@ class _TToastLoading extends StatelessWidget {
 class _TToastLoadingWithoutText extends StatelessWidget {
   final TToastThemeData config;
 
-  const _TToastLoadingWithoutText({
-    required this.config,
-  });
+  const _TToastLoadingWithoutText({required this.config});
 
   @override
   Widget build(BuildContext context) {
     final theme = context.tTheme;
-    final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
-            const TToastThemeData())
-        .merge(config);
+    final toastTheme =
+        (Theme.of(context).extension<TToastThemeData>() ??
+                const TToastThemeData())
+            .merge(config);
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
       child: Container(
@@ -722,11 +722,13 @@ class _TTextToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.tTheme;
-    final toastTheme = (Theme.of(context).extension<TToastThemeData>() ??
-            const TToastThemeData())
-        .merge(config);
+    final toastTheme =
+        (Theme.of(context).extension<TToastThemeData>() ??
+                const TToastThemeData())
+            .merge(config);
     return ConstrainedBox(
-      constraints: constraints ??
+      constraints:
+          constraints ??
           BoxConstraints(maxWidth: toastTheme.maxWidth ?? 191.scale),
       child: Container(
         padding:
@@ -737,7 +739,8 @@ class _TTextToast extends StatelessWidget {
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
         ),
-        child: customWidget ??
+        child:
+            customWidget ??
             TText(
               text ?? '',
               font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,

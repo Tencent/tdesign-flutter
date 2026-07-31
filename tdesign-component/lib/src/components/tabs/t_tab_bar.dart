@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import 't_horizontal_tab_bar.dart';
 import 't_tab.dart';
@@ -55,7 +56,8 @@ class TTabsBar extends StatelessWidget {
         themeData.backgroundColor ?? context.tTheme.bgColorContainer;
     return Container(
       height: 48,
-      decoration: decoration ??
+      decoration:
+          decoration ??
           (variant == TTabsBarVariant.card
               ? BoxDecoration(color: backgroundColor)
               : BoxDecoration(
@@ -64,9 +66,13 @@ class TTabsBar extends StatelessWidget {
                       ? null
                       : Border(
                           bottom: BorderSide(
-                              color: themeData.dividerColor ??
-                                  context.tTheme.componentStrokeColor,
-                              width: dividerHeight)))),
+                            color:
+                                themeData.dividerColor ??
+                                context.tTheme.componentStrokeColor,
+                            width: dividerHeight,
+                          ),
+                        ),
+                )),
       child: THorizontalTabBar(
         isScrollable: isScrollable,
         indicator: indicator ?? themeData.indicator ?? _TNoneIndicator(),
@@ -79,7 +85,8 @@ class TTabsBar extends StatelessWidget {
         controller: controller,
         backgroundColor: themeData.backgroundColor,
         selectedBgColor: themeData.selectedBgColor,
-        unSelectedBgColor: themeData.unSelectedBgColor ??
+        unSelectedBgColor:
+            themeData.unSelectedBgColor ??
             context.tTheme.bgColorSecondaryContainer,
         tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
         onTap: (index) {
@@ -90,19 +97,37 @@ class TTabsBar extends StatelessWidget {
   }
 
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
-    return (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
+    final tokenFont = context.tTheme.fontBodyMedium;
+    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
+    return TextStyle(
+          fontSize: tokenFont?.size,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight,
+          fontFamily: inheritedStyle?.fontFamily,
+          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+        )
+        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
         .copyWith(
-      fontWeight: FontWeight.w400,
-      color: context.tTheme.textColorPrimary,
-    );
+          fontWeight: FontWeight.w400,
+          color: context.tTheme.textColorPrimary,
+        );
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
-    return (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
+    final tokenFont = context.tTheme.fontBodyMedium;
+    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
+    return TextStyle(
+          fontSize: tokenFont?.size,
+          height: tokenFont?.height,
+          fontWeight: tokenFont?.fontWeight,
+          fontFamily: inheritedStyle?.fontFamily,
+          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+        )
+        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
         .copyWith(
-      fontWeight: FontWeight.w600,
-      color: context.tTheme.textColorPrimary,
-    );
+          fontWeight: FontWeight.w600,
+          color: context.tTheme.textColorPrimary,
+        );
   }
 }
 
@@ -143,11 +168,16 @@ class _TTabsBarIndicatorPainter extends BoxPainter {
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     canvas.drawLine(
-        Offset(offset.dx + (configuration.size!.width - _indicatorWidth()) / 2,
-            configuration.size!.height - _indicatorHeight() / 2),
-        Offset(offset.dx + (configuration.size!.width + _indicatorWidth()) / 2,
-            configuration.size!.height - _indicatorHeight() / 2),
-        _paint..strokeWidth = _indicatorHeight());
+      Offset(
+        offset.dx + (configuration.size!.width - _indicatorWidth()) / 2,
+        configuration.size!.height - _indicatorHeight() / 2,
+      ),
+      Offset(
+        offset.dx + (configuration.size!.width + _indicatorWidth()) / 2,
+        configuration.size!.height - _indicatorHeight() / 2,
+      ),
+      _paint..strokeWidth = _indicatorHeight(),
+    );
   }
 
   double _indicatorHeight() =>

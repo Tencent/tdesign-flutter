@@ -354,7 +354,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
     final materialStyle = ListTileTheme.of(context).titleTextStyle ??
-        Theme.of(context).textTheme.titleMedium;
+        Theme.of(context).tExplicitTextTheme?.titleMedium;
     return tokenStyle.merge(materialStyle).merge(theme?.headerTextStyle);
   }
 
@@ -374,8 +374,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
     return tokenStyle
-        .merge(Theme.of(context).textTheme.bodyMedium)
-        .merge(DefaultTextStyle.of(context).style)
+        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
+        .merge(context.tExplicitDefaultTextStyle)
         .merge(theme?.contentTextStyle);
   }
 

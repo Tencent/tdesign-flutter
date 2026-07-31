@@ -53,11 +53,11 @@ void main() {
   }
 
   Finder toastBoxFinder(String text) => find.ancestor(
-        of: find.text(text),
-        matching: find.byWidgetPredicate(
-          (widget) => widget is Container && widget.decoration is BoxDecoration,
-        ),
-      );
+    of: find.text(text),
+    matching: find.byWidgetPredicate(
+      (widget) => widget is Container && widget.decoration is BoxDecoration,
+    ),
+  );
 
   /// 辅助：推进足够时间让 Toast 自动消失（duration + dispose 延迟）。
   Future<void> waitForDismiss(WidgetTester tester) async {
@@ -73,11 +73,39 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showText('提示消息',
-            context: context, duration: const Duration(milliseconds: 100));
+        TToast.showText(
+          '提示消息',
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('提示消息'), findsOneWidget);
 
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('保留触发子树的 ThemeExtension', (tester) async {
+      final base = fullTheme();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: base,
+          home: Theme(
+            data: base.mergeExtension(
+              const TToastThemeData(backgroundColor: Colors.purple),
+            ),
+            child: const Scaffold(body: SizedBox(key: Key('local_toast_host'))),
+          ),
+        ),
+      );
+      final context = tester.element(find.byKey(const Key('local_toast_host')));
+      TToast.showText(
+        '局部 Toast 主题',
+        context: context,
+        duration: const Duration(milliseconds: 100),
+      );
+      await tester.pump();
+      final box = tester.widget<Container>(toastBoxFinder('局部 Toast 主题').first);
+      expect((box.decoration! as BoxDecoration).color, Colors.purple);
       await waitForDismiss(tester);
     });
 
@@ -95,10 +123,12 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showIconText('成功',
-            icon: Icons.check_circle,
-            context: context,
-            duration: const Duration(milliseconds: 100));
+        TToast.showIconText(
+          '成功',
+          icon: Icons.check_circle,
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('成功'), findsOneWidget);
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
@@ -110,11 +140,13 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showIconText('竖向',
-            icon: Icons.info,
-            direction: IconTextDirection.vertical,
-            context: context,
-            duration: const Duration(milliseconds: 100));
+        TToast.showIconText(
+          '竖向',
+          icon: Icons.info,
+          direction: IconTextDirection.vertical,
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('竖向'), findsOneWidget);
 
@@ -125,11 +157,13 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showIconText('横向',
-            icon: Icons.warning,
-            direction: IconTextDirection.horizontal,
-            context: context,
-            duration: const Duration(milliseconds: 100));
+        TToast.showIconText(
+          '横向',
+          icon: Icons.warning,
+          direction: IconTextDirection.horizontal,
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('横向'), findsOneWidget);
 
@@ -219,10 +253,12 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showText('背景色',
-            context: context,
-            backgroundColor: Colors.red,
-            duration: const Duration(milliseconds: 100));
+        TToast.showText(
+          '背景色',
+          context: context,
+          backgroundColor: Colors.red,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('背景色'), findsOneWidget);
 
@@ -233,10 +269,12 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showText('样式',
-            context: context,
-            textStyle: const TextStyle(fontSize: 20, color: Colors.white),
-            duration: const Duration(milliseconds: 100));
+        TToast.showText(
+          '样式',
+          context: context,
+          textStyle: const TextStyle(fontSize: 20, color: Colors.white),
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('样式'), findsOneWidget);
 
@@ -247,12 +285,14 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       await showToastAndPump(tester, (context) {
-        TToast.showIconText('图标样式',
-            icon: Icons.star,
-            context: context,
-            iconSize: 32,
-            iconColor: Colors.yellow,
-            duration: const Duration(milliseconds: 100));
+        TToast.showIconText(
+          '图标样式',
+          icon: Icons.star,
+          context: context,
+          iconSize: 32,
+          iconColor: Colors.yellow,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       final icon = tester.widget<Icon>(find.byIcon(Icons.star));
       expect(icon.size, 32);
@@ -308,10 +348,12 @@ void main() {
       final box = tester.widget<Container>(toastBoxFinder('主题 toast'));
       final decoration = box.decoration! as BoxDecoration;
       final constraints = tester
-          .widget<ConstrainedBox>(find.ancestor(
-            of: find.text('主题 toast'),
-            matching: find.byType(ConstrainedBox),
-          ))
+          .widget<ConstrainedBox>(
+            find.ancestor(
+              of: find.text('主题 toast'),
+              matching: find.byType(ConstrainedBox),
+            ),
+          )
           .constraints;
 
       expect(decoration.borderRadius, BorderRadius.circular(12));
@@ -331,8 +373,11 @@ void main() {
 
       // 显示 Toast（短 duration）
       final context = tester.element(find.byKey(const Key('toast_host')));
-      TToast.showText('短暂提示',
-          context: context, duration: const Duration(milliseconds: 100));
+      TToast.showText(
+        '短暂提示',
+        context: context,
+        duration: const Duration(milliseconds: 100),
+      );
       await tester.pump(const Duration(milliseconds: 50));
       expect(find.text('短暂提示'), findsOneWidget);
 
@@ -345,8 +390,11 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
 
       final context = tester.element(find.byKey(const Key('toast_host')));
-      TToast.showText('长期提示',
-          context: context, duration: const Duration(seconds: 2));
+      TToast.showText(
+        '长期提示',
+        context: context,
+        duration: const Duration(seconds: 2),
+      );
       await tester.pump(const Duration(milliseconds: 50));
       expect(find.text('长期提示'), findsOneWidget);
 
@@ -367,8 +415,11 @@ void main() {
     testWidgets('showSuccess 显示成功图标与文案', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
-        TToast.showSuccess('成功',
-            context: context, duration: const Duration(milliseconds: 100));
+        TToast.showSuccess(
+          '成功',
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('成功'), findsOneWidget);
       expect(find.byIcon(TIcons.check_circle), findsOneWidget);
@@ -378,8 +429,11 @@ void main() {
     testWidgets('showWarning 显示警告图标与文案', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
-        TToast.showWarning('警告',
-            context: context, duration: const Duration(milliseconds: 100));
+        TToast.showWarning(
+          '警告',
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('警告'), findsOneWidget);
       expect(find.byIcon(TIcons.error_circle), findsOneWidget);
@@ -389,8 +443,11 @@ void main() {
     testWidgets('showFail 显示失败图标与文案', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
-        TToast.showFail('失败',
-            context: context, duration: const Duration(milliseconds: 100));
+        TToast.showFail(
+          '失败',
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('失败'), findsOneWidget);
       expect(find.byIcon(TIcons.close_circle), findsOneWidget);
@@ -430,10 +487,7 @@ void main() {
         wrapWithTheme(textScaler: const TextScaler.linear(2.5)),
       );
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showLoading(
-        context: context,
-        text: '正在加载较长的内容',
-      );
+      final id = TToast.showLoading(context: context, text: '正在加载较长的内容');
       await tester.pump();
 
       expect(tester.takeException(), isNull);
@@ -447,10 +501,7 @@ void main() {
     testWidgets('无文案 loading 在自定义大图标下自适应尺寸', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showLoadingWithoutText(
-        context: context,
-        iconSize: 64,
-      );
+      final id = TToast.showLoadingWithoutText(context: context, iconSize: 64);
       await tester.pump();
 
       expect(tester.takeException(), isNull);
@@ -462,7 +513,9 @@ void main() {
         ),
       );
       expect(
-          tester.getSize(decoratedBox.first).height, greaterThanOrEqualTo(112));
+        tester.getSize(decoratedBox.first).height,
+        greaterThanOrEqualTo(112),
+      );
 
       TToast.dismissToast(id);
       await tester.pump();
@@ -476,8 +529,11 @@ void main() {
     testWidgets('dismissToast 关闭指定 Toast', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showText('可关闭',
-          context: context, duration: const Duration(seconds: 10));
+      final id = TToast.showText(
+        '可关闭',
+        context: context,
+        duration: const Duration(seconds: 10),
+      );
       await tester.pump();
       expect(find.text('可关闭'), findsOneWidget);
       TToast.dismissToast(id);
@@ -488,10 +544,16 @@ void main() {
     testWidgets('dismissAll 关闭所有 Toast', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-      TToast.showText('A',
-          context: context, duration: const Duration(seconds: 10));
-      TToast.showText('B',
-          context: context, duration: const Duration(seconds: 10));
+      TToast.showText(
+        'A',
+        context: context,
+        duration: const Duration(seconds: 10),
+      );
+      TToast.showText(
+        'B',
+        context: context,
+        duration: const Duration(seconds: 10),
+      );
       await tester.pump();
       expect(find.text('A'), findsOneWidget);
       expect(find.text('B'), findsOneWidget);
@@ -528,10 +590,12 @@ void main() {
     testWidgets('preventTap 渲染全屏遮罩', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
-        TToast.showText('防触',
-            context: context,
-            preventTap: true,
-            duration: const Duration(milliseconds: 100));
+        TToast.showText(
+          '防触',
+          context: context,
+          preventTap: true,
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('防触'), findsOneWidget);
       // preventTap 时使用 Positioned 全屏透明遮罩
@@ -542,10 +606,12 @@ void main() {
     testWidgets('customWidget 渲染自定义内容', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
-        TToast.showText('忽略',
-            context: context,
-            customWidget: const Text('自定义内容'),
-            duration: const Duration(milliseconds: 100));
+        TToast.showText(
+          '忽略',
+          context: context,
+          customWidget: const Text('自定义内容'),
+          duration: const Duration(milliseconds: 100),
+        );
       });
       expect(find.text('自定义内容'), findsOneWidget);
       await waitForDismiss(tester);

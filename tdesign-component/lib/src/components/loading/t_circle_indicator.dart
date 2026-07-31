@@ -40,13 +40,19 @@ class _TCircleIndicatorState extends State<TCircleIndicator>
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: widget.duration))
-      ..addListener(() => setState(() {}))
-      ..repeat();
-    _animation1 = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    _controller =
+        AnimationController(
+            vsync: this,
+            duration: Duration(milliseconds: widget.duration),
+          )
+          ..addListener(() => setState(() {}))
+          ..repeat();
+    _animation1 = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 1.0, curve: Curves.linear)));
+        curve: const Interval(0.0, 1.0, curve: Curves.linear),
+      ),
+    );
   }
 
   @override
@@ -93,25 +99,37 @@ class _CirclePaint extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var minLength = min(size.width, size.height);
     _paint.strokeWidth = width;
-    _paint.shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2),
-        [const Color(0x01ffffff), color]);
+    _paint.shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2), [
+      color.withAlpha(1),
+      color,
+    ]);
     if (minLength == size.width) {
       // strokeWidth是居中位置的，需要减去width/2，使其向内绘制
       canvas.drawArc(
-          Rect.fromLTWH(width / 2, (size.height - size.width) / 2 + width / 2,
-              size.width - width, size.width - width),
-          0,
-          pi * 2,
-          false,
-          _paint);
+        Rect.fromLTWH(
+          width / 2,
+          (size.height - size.width) / 2 + width / 2,
+          size.width - width,
+          size.width - width,
+        ),
+        0,
+        pi * 2,
+        false,
+        _paint,
+      );
     } else {
       canvas.drawArc(
-          Rect.fromLTWH((size.width - size.height) / 2 + width / 2, width / 2,
-              size.height - width, size.height - width),
-          0,
-          pi * 2,
-          false,
-          _paint);
+        Rect.fromLTWH(
+          (size.width - size.height) / 2 + width / 2,
+          width / 2,
+          size.height - width,
+          size.height - width,
+        ),
+        0,
+        pi * 2,
+        false,
+        _paint,
+      );
     }
   }
 

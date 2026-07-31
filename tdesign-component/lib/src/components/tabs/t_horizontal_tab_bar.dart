@@ -567,7 +567,8 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
 
     var color = widget.indicatorColor ??
         tabBarTheme.indicatorColor ??
-        Theme.of(context).colorScheme.primary;
+        Theme.of(context).tExplicitColorScheme?.primary ??
+        context.tTheme.brandNormalColor;
     // Flutter TabBar defaults try to avoid having indicatorColor match the
     // primaryColor. However, it's possible that the tab bar is on a
     // Material that isn't the primaryColor. In that case, if the indicator
@@ -1604,7 +1605,9 @@ class TabPageSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final fixColor = color ?? Colors.transparent;
     final fixSelectedColor =
-        selectedColor ?? Theme.of(context).colorScheme.secondary;
+        selectedColor ??
+        Theme.of(context).tExplicitColorScheme?.secondary ??
+        context.tTheme.brandNormalColor;
     final selectedColorTween =
         ColorTween(begin: fixColor, end: fixSelectedColor);
     final previousColorTween =

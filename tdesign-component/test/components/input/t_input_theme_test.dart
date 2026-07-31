@@ -9,11 +9,19 @@ void main() {
       showClearButton: true,
       clearIconSize: 16,
       multilineMinLines: 3,
+      textStyle: TextStyle(color: Colors.red),
+      cursorColor: Colors.red,
+      decorationTheme: InputDecorationTheme(fillColor: Colors.red),
+      clearIconColor: Colors.red,
     );
     const other = TInputThemeData(
       showClearButton: false,
       clearIconSize: 24,
       multilineMinLines: 6,
+      textStyle: TextStyle(color: Colors.blue),
+      cursorColor: Colors.blue,
+      decorationTheme: InputDecorationTheme(fillColor: Colors.blue),
+      clearIconColor: Colors.blue,
     );
 
     expect(base.copyWith().showClearButton, isTrue);
@@ -23,6 +31,12 @@ void main() {
             showClearButton: false,
             clearIconSize: 20,
             multilineMinLines: 5,
+            textStyle: const TextStyle(color: Colors.green),
+            cursorColor: Colors.green,
+            decorationTheme: const InputDecorationTheme(
+              fillColor: Colors.green,
+            ),
+            clearIconColor: Colors.green,
           )
           .multilineMinLines,
       5,
@@ -31,6 +45,10 @@ void main() {
     expect(base.lerp(other, 0.25).showClearButton, isTrue);
     expect(base.lerp(other, 0.75).showClearButton, isFalse);
     expect(base.lerp(other, 0.5).clearIconSize, 20);
+    expect(base.lerp(other, 0.5).textStyle?.color, isNotNull);
+    expect(base.lerp(other, 0.5).cursorColor, isNotNull);
+    expect(base.lerp(other, 0.25).decorationTheme, base.decorationTheme);
+    expect(base.lerp(other, 0.5).clearIconColor, isNotNull);
   });
 
   test('TInputResolve preserves decoration and fills missing content', () {
@@ -74,10 +92,7 @@ void main() {
   test('TInputResolve preserves explicit decoration fill', () {
     const fillColor = Color(0xFFE5E5E5);
     final resolved = TInputResolve.resolveDecoration(
-      base: const InputDecoration(
-        filled: true,
-        fillColor: fillColor,
-      ),
+      base: const InputDecoration(filled: true, fillColor: fillColor),
     );
 
     expect(resolved.filled, isTrue);

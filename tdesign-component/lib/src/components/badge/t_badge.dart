@@ -67,7 +67,7 @@ class TBadge extends StatelessWidget {
         localBadgeTheme?.largeSize ?? globalBadgeTheme.largeSize ?? 16;
     final textStyle = localBadgeTheme?.textStyle ??
         globalBadgeTheme.textStyle ??
-        materialTheme.textTheme.labelSmall ??
+        materialTheme.tExplicitTextTheme?.labelSmall ??
         TextStyle(
           color: textColor,
           fontSize: token.fontMarkExtraSmall?.size,
@@ -101,8 +101,9 @@ class TBadge extends StatelessWidget {
         ? _buildBorderedLabel(
             label: badgeLabel,
             backgroundColor: backgroundColor,
-            borderColor:
-                tTheme?.borderColor ?? materialTheme.colorScheme.surface,
+            borderColor: tTheme?.borderColor ??
+                materialTheme.tExplicitColorScheme?.surface ??
+                token.bgColorContainer,
             borderWidth: tTheme?.borderWidth ?? 1,
             padding: effectivePadding,
             minHeight: isDot ? smallSize : effectiveLargeSize,

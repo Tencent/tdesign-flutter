@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import 't_slider_theme.dart';
 
@@ -36,9 +37,12 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
     valueIndicatorColor: inherited.valueIndicatorColor ?? brand,
     valueIndicatorStrokeColor: inherited.valueIndicatorStrokeColor ?? brand,
     valueIndicatorTextStyle: inherited.valueIndicatorTextStyle ??
-        Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: token.textColorAnti,
-            ),
+        TextStyle(
+          color: token.textColorAnti,
+          fontSize: token.fontBodyLarge?.size,
+          height: token.fontBodyLarge?.height,
+          fontWeight: token.fontBodyLarge?.fontWeight,
+        ).merge(Theme.of(context).tExplicitTextTheme?.bodyLarge),
   );
 }
 

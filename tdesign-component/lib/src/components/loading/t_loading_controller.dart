@@ -11,37 +11,44 @@ class TLoadingController {
   static bool _isShowing = false;
 
   // 展示
-  static void show(BuildContext context,
-    {Widget? child,
-      TLoadingSize size = TLoadingSize.medium,
-      TLoadingIcon? icon = TLoadingIcon.circle,
-      String? text,
-      TLoadingThemeData? theme}) {
+  static void show(
+    BuildContext context, {
+    Widget? child,
+    TLoadingSize size = TLoadingSize.medium,
+    TLoadingIcon? icon = TLoadingIcon.circle,
+    String? text,
+    TLoadingThemeData? theme,
+  }) {
     if (_isShowing) {
       debugPrint('warn: TLoading is showing!');
       return;
     }
 
-    _overlayEntry = OverlayEntry(builder: (context) {
-      final loadingWidget = child ??
-          TLoading(
-            size: size,
-            icon: icon,
-            text: text ?? context.resource.loading,
-          );
-      if (theme == null) {
-        return Center(child: loadingWidget);
-      }
-      return Center(
-        child: Theme(
-          data: Theme.of(context).mergeExtension(theme),
-          child: loadingWidget,
+    final overlay = Overlay.of(context);
+    final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final loadingText = text ?? context.resource.loading;
+    _overlayEntry = OverlayEntry(
+      builder: (overlayContext) => captured.wrap(
+        Builder(
+          builder: (capturedContext) {
+            final loadingWidget =
+                child ?? TLoading(size: size, icon: icon, text: loadingText);
+            if (theme == null) {
+              return Center(child: loadingWidget);
+            }
+            return Center(
+              child: Theme(
+                data: Theme.of(capturedContext).mergeExtension(theme),
+                child: loadingWidget,
+              ),
+            );
+          },
         ),
-      );
-    });
+      ),
+    );
 
     _isShowing = true;
-    Overlay.of(context).insert(_overlayEntry!);
+    overlay.insert(_overlayEntry!);
   }
 
   // 消失

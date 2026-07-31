@@ -27,23 +27,22 @@ void main() {
   }
 
   group('TSwitch v1 controlled behavior', () {
-    testWidgets('renders controlled values and reports the next value',
-        (tester) async {
+    testWidgets('renders controlled values and reports the next value', (
+      tester,
+    ) async {
       bool? changed;
-      await tester.pumpWidget(wrap(TSwitch(
-        value: false,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(TSwitch(value: false, onChanged: (value) => changed = value)),
+      );
 
       expect(find.byType(TCupertinoSwitch), findsOneWidget);
       await tester.tap(find.byType(TCupertinoSwitch));
       await tester.pump();
       expect(changed, isTrue);
 
-      await tester.pumpWidget(wrap(TSwitch(
-        value: true,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(TSwitch(value: true, onChanged: (value) => changed = value)),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.byType(TCupertinoSwitch));
       expect(changed, isFalse);
@@ -65,14 +64,19 @@ void main() {
       );
     });
 
-    testWidgets('loading variant is disabled even with callback',
-        (tester) async {
+    testWidgets('loading variant is disabled even with callback', (
+      tester,
+    ) async {
       var called = false;
-      await tester.pumpWidget(wrap(TSwitch(
-        value: true,
-        variant: TSwitchVariant.loading,
-        onChanged: (_) => called = true,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TSwitch(
+            value: true,
+            variant: TSwitchVariant.loading,
+            onChanged: (_) => called = true,
+          ),
+        ),
+      );
 
       await tester.tap(find.byType(TCupertinoSwitch), warnIfMissed: false);
       expect(called, isFalse);
@@ -82,34 +86,47 @@ void main() {
 
   group('TSwitch variants and sizes', () {
     testWidgets('text variant uses default and custom labels', (tester) async {
-      await tester.pumpWidget(wrap(const TSwitch(
-        value: true,
-        variant: TSwitchVariant.text,
-        onChanged: _noop,
-      )));
-      expect(find.text('开'), findsOneWidget);
-
-      await tester.pumpWidget(wrap(const TSwitch(
-        value: false,
-        variant: TSwitchVariant.text,
-        openText: 'YES',
-        closeText: 'NO',
-        onChanged: _noop,
-      )));
-      expect(find.text('NO'), findsOneWidget);
-    });
-
-    testWidgets('text stays centered in the active and inactive thumb',
-        (tester) async {
-      for (final value in [false, true]) {
-        await tester.pumpWidget(wrap(TCell(
-          title: const Text('文字开关'),
-          note: TSwitch(
-            value: value,
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(
+            value: true,
             variant: TSwitchVariant.text,
             onChanged: _noop,
           ),
-        )));
+        ),
+      );
+      expect(find.text('开'), findsOneWidget);
+
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(
+            value: false,
+            variant: TSwitchVariant.text,
+            openText: 'YES',
+            closeText: 'NO',
+            onChanged: _noop,
+          ),
+        ),
+      );
+      expect(find.text('NO'), findsOneWidget);
+    });
+
+    testWidgets('text stays centered in the active and inactive thumb', (
+      tester,
+    ) async {
+      for (final value in [false, true]) {
+        await tester.pumpWidget(
+          wrap(
+            TCell(
+              title: const Text('文字开关'),
+              note: TSwitch(
+                value: value,
+                variant: TSwitchVariant.text,
+                onChanged: _noop,
+              ),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
 
         final switchRect = tester.getRect(find.byType(TSwitch));
@@ -124,14 +141,19 @@ void main() {
       }
     });
 
-    testWidgets('text variant keeps long labels inside the thumb',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TSwitch(
-        value: true,
-        variant: TSwitchVariant.text,
-        openText: 'LONG',
-        onChanged: _noop,
-      )));
+    testWidgets('text variant keeps long labels inside the thumb', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(
+            value: true,
+            variant: TSwitchVariant.text,
+            openText: 'LONG',
+            onChanged: _noop,
+          ),
+        ),
+      );
 
       expect(tester.takeException(), isNull);
       final text = tester.widget<Text>(find.text('LONG'));
@@ -139,27 +161,40 @@ void main() {
       expect(text.overflow, TextOverflow.ellipsis);
     });
 
-    testWidgets('icon and filled variants render their expected thumb',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TSwitch(
-        value: true,
-        variant: TSwitchVariant.icon,
-        onChanged: _noop,
-      )));
+    testWidgets('icon and filled variants render their expected thumb', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(
+            value: true,
+            variant: TSwitchVariant.icon,
+            onChanged: _noop,
+          ),
+        ),
+      );
       expect(find.byIcon(TIcons.check), findsOneWidget);
 
-      await tester.pumpWidget(wrap(const TSwitch(
-        value: false,
-        variant: TSwitchVariant.icon,
-        onChanged: _noop,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(
+            value: false,
+            variant: TSwitchVariant.icon,
+            onChanged: _noop,
+          ),
+        ),
+      );
       expect(find.byIcon(TIcons.close), findsOneWidget);
 
-      await tester.pumpWidget(wrap(const TSwitch(
-        value: false,
-        variant: TSwitchVariant.filled,
-        onChanged: _noop,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(
+            value: false,
+            variant: TSwitchVariant.filled,
+            onChanged: _noop,
+          ),
+        ),
+      );
       expect(find.byIcon(TIcons.close), findsNothing);
     });
 
@@ -169,11 +204,9 @@ void main() {
         (TSwitchSize.medium, 45.0, 28.0),
         (TSwitchSize.small, 39.0, 24.0),
       ]) {
-        await tester.pumpWidget(wrap(TSwitch(
-          value: false,
-          size: entry.$1,
-          onChanged: _noop,
-        )));
+        await tester.pumpWidget(
+          wrap(TSwitch(value: false, size: entry.$1, onChanged: _noop)),
+        );
         expect(
           find.byWidgetPredicate(
             (widget) =>
@@ -188,53 +221,65 @@ void main() {
   });
 
   group('TSwitch theme and resolver', () {
-    testWidgets('theme supplies defaults and instance semantics override them',
-        (tester) async {
-      const theme = TSwitchThemeData(
-        defaultSize: TSwitchSize.small,
-        defaultVariant: TSwitchVariant.text,
-        trackOnColor: Colors.red,
-        trackOffColor: Colors.green,
-        thumbContentOnColor: Colors.blue,
-        thumbContentOffColor: Colors.orange,
-        thumbContentOnFont: TextStyle(fontSize: 16),
-        thumbContentOffFont: TextStyle(fontSize: 12),
-        openText: '主题开',
-        closeText: '主题关',
-      );
-      await tester.pumpWidget(wrap(
-        const TSwitch(value: true, onChanged: _noop),
-        switchTheme: theme,
-      ));
-      expect(find.text('主题开'), findsOneWidget);
+    testWidgets(
+      'theme supplies defaults and instance semantics override them',
+      (tester) async {
+        const theme = TSwitchThemeData(
+          defaultSize: TSwitchSize.small,
+          defaultVariant: TSwitchVariant.text,
+          trackOnColor: Colors.red,
+          trackOffColor: Colors.green,
+          thumbContentOnColor: Colors.blue,
+          thumbContentOffColor: Colors.orange,
+          thumbContentOnFont: TextStyle(fontSize: 16),
+          thumbContentOffFont: TextStyle(fontSize: 12),
+        );
+        await tester.pumpWidget(
+          wrap(
+            const TSwitch(value: true, onChanged: _noop),
+            switchTheme: theme,
+          ),
+        );
+        expect(find.text('开'), findsOneWidget);
 
-      await tester.pumpWidget(wrap(
-        const TSwitch(
-          value: true,
-          size: TSwitchSize.large,
-          variant: TSwitchVariant.icon,
-          onChanged: _noop,
-        ),
-        switchTheme: theme,
-      ));
-      expect(find.byIcon(TIcons.check), findsOneWidget);
-    });
+        await tester.pumpWidget(
+          wrap(
+            const TSwitch(
+              value: true,
+              size: TSwitchSize.large,
+              variant: TSwitchVariant.icon,
+              onChanged: _noop,
+            ),
+            switchTheme: theme,
+          ),
+        );
+        expect(find.byIcon(TIcons.check), findsOneWidget);
+      },
+    );
 
-    testWidgets('resolver falls back to token and uses theme overrides',
-        (tester) async {
+    testWidgets('resolver falls back to token and uses theme overrides', (
+      tester,
+    ) async {
       late BuildContext context;
-      await tester.pumpWidget(wrap(Builder(builder: (value) {
-        context = value;
-        return const SizedBox();
-      })));
+      await tester.pumpWidget(
+        wrap(
+          Builder(
+            builder: (value) {
+              context = value;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
 
-      final defaults = TSwitchResolve.resolve(context: context);
+      final defaults = TSwitchResolve.resolve(context: context, enabled: true);
       final token = TThemeData.defaultData();
       expect(defaults.trackOnColor, context.tTheme.brandNormalColor);
       expect(defaults.thumbContentOnFont.fontSize, token.fontBodyMedium?.size);
 
       final themed = TSwitchResolve.resolve(
         context: context,
+        enabled: true,
         theme: const TSwitchThemeData(
           trackOnColor: Colors.red,
           trackOffColor: Colors.green,
@@ -262,8 +307,6 @@ void main() {
         thumbContentOffColor: Colors.orange,
         thumbContentOnFont: TextStyle(fontSize: 12),
         thumbContentOffFont: TextStyle(fontSize: 10),
-        openText: 'on',
-        closeText: 'off',
       );
       const other = TSwitchThemeData(
         defaultSize: TSwitchSize.large,
@@ -274,8 +317,6 @@ void main() {
         thumbContentOffColor: Colors.yellow,
         thumbContentOnFont: TextStyle(fontSize: 20),
         thumbContentOffFont: TextStyle(fontSize: 18),
-        openText: 'yes',
-        closeText: 'no',
       );
 
       expect(base.copyWith().defaultSize, TSwitchSize.small);
@@ -290,11 +331,9 @@ void main() {
               thumbContentOffColor: Colors.yellow,
               thumbContentOnFont: const TextStyle(fontSize: 20),
               thumbContentOffFont: const TextStyle(fontSize: 18),
-              openText: 'yes',
-              closeText: 'no',
             )
-            .closeText,
-        'no',
+            .trackOnColor,
+        Colors.black,
       );
       expect(base.lerp(null, 0.5), same(base));
       expect(base.lerp(other, 0), same(base));
@@ -305,22 +344,25 @@ void main() {
   });
 
   group('TCupertinoSwitch interaction', () {
-    testWidgets('drag works in LTR and RTL and external updates animate',
-        (tester) async {
+    testWidgets('drag works in LTR and RTL and external updates animate', (
+      tester,
+    ) async {
       for (final direction in TextDirection.values) {
         bool? changed;
-        await tester.pumpWidget(wrap(
-          TCupertinoSwitch(
-            value: false,
-            onChanged: (value) => changed = value,
-            activeColor: Colors.red,
-            trackColor: Colors.green,
-            thumbColor: Colors.white,
-            thumbView: const Icon(Icons.check),
-            dragStartBehavior: DragStartBehavior.down,
+        await tester.pumpWidget(
+          wrap(
+            TCupertinoSwitch(
+              value: false,
+              onChanged: (value) => changed = value,
+              activeColor: Colors.red,
+              trackColor: Colors.green,
+              thumbColor: Colors.white,
+              thumbView: const Icon(Icons.check),
+              dragStartBehavior: DragStartBehavior.down,
+            ),
+            direction: direction,
           ),
-          direction: direction,
-        ));
+        );
         final delta = direction == TextDirection.ltr
             ? const Offset(80, 0)
             : const Offset(-80, 0);
@@ -328,16 +370,19 @@ void main() {
         await tester.pumpAndSettle();
         expect(changed, isTrue);
 
-        await tester.pumpWidget(wrap(
-          const TCupertinoSwitch(value: true, onChanged: _noop),
-          direction: direction,
-        ));
+        await tester.pumpWidget(
+          wrap(
+            const TCupertinoSwitch(value: true, onChanged: _noop),
+            direction: direction,
+          ),
+        );
         await tester.pumpAndSettle();
       }
     });
 
-    testWidgets('disabled switch ignores taps and exposes diagnostics',
-        (tester) async {
+    testWidgets('disabled switch ignores taps and exposes diagnostics', (
+      tester,
+    ) async {
       const widget = TCupertinoSwitch(value: false, onChanged: null);
       await tester.pumpWidget(wrap(widget));
       await tester.tap(find.byType(TCupertinoSwitch));

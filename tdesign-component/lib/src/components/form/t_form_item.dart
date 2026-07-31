@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import 't_form.dart';
 import 't_form_theme_data.dart';
@@ -85,8 +86,9 @@ class TFormItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFormThemeData>();
     final materialTheme = Theme.of(context);
-    final defaultTextStyle = DefaultTextStyle.of(context).style;
-    final textTheme = materialTheme.textTheme;
+    final defaultTextStyle = context.tExplicitDefaultTextStyle;
+    final textTheme = materialTheme.tExplicitTextTheme;
+    final token = context.tTheme;
     final fieldScope = TFormFieldScope.maybeOf(context);
     final inheritedErrorText = fieldScope?.errorText;
     final effectiveErrorText = errorText ?? inheritedErrorText;
@@ -94,17 +96,34 @@ class TFormItem extends StatelessWidget {
     final layout = theme?.layout ?? TFormLayout.horizontal;
     final effectiveLabelWidth = labelWidth ?? theme?.labelWidth ?? 96;
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
-    final labelStyle = (textTheme.bodyMedium ?? const TextStyle())
+    final labelFont = token.fontBodyMedium;
+    final labelStyle = TextStyle(
+      color: token.textColorPrimary,
+      fontSize: labelFont?.size,
+      height: labelFont?.height,
+      fontWeight: labelFont?.fontWeight,
+    )
+        .merge(textTheme?.bodyMedium)
         .merge(defaultTextStyle)
         .merge(theme?.labelStyle);
+    final helpFont = token.fontBodySmall;
     final helpStyle = theme?.helpStyle ??
-        (textTheme.bodySmall ?? const TextStyle())
-            .merge(defaultTextStyle)
-            .merge(TextStyle(color: context.tTheme.textColorSecondary));
+        TextStyle(
+          color: token.textColorSecondary,
+          fontSize: helpFont?.size,
+          height: helpFont?.height,
+          fontWeight: helpFont?.fontWeight,
+        ).merge(textTheme?.bodySmall).merge(defaultTextStyle);
     final errorStyle = theme?.errorStyle ??
-        defaultTextStyle
+        TextStyle(
+          color: token.errorNormalColor,
+          fontSize: helpFont?.size,
+          height: helpFont?.height,
+          fontWeight: helpFont?.fontWeight,
+        )
+            .merge(textTheme?.bodySmall)
             .merge(materialTheme.inputDecorationTheme.errorStyle)
-            .merge(TextStyle(color: context.tTheme.errorNormalColor));
+            .merge(defaultTextStyle);
     final labelWidget = label == null
         ? null
         : Text(
