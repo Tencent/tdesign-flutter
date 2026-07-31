@@ -3,11 +3,11 @@ Widget _normalNoticeBar(BuildContext context) {
     data: Theme.of(context).mergeExtension(
       const TNoticeBarThemeData(
         variant: TNoticeBarVariant.info,
-        prefixIcon: TIcons.error_circle_filled,
       ),
     ),
     child: const TNoticeBar(
       content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
     ),
   );
 }

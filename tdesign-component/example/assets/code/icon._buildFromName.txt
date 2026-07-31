@@ -1,6 +1,7 @@
 Widget _buildFromName(BuildContext context) {
     // 通过图标名查找（内部查找 TIcons.allIconsMap）
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TIcon.fromName('home_filled'),
         const SizedBox(width: 16),

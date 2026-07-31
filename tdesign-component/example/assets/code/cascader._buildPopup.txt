@@ -23,9 +23,11 @@ Widget _buildPopup(BuildContext context) {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height * 0.6,
             titleWidget: const TText('选择地区'),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TCascader(
+                key: const Key('cascader-popup'),
                 options: _options,
                 value: draft,
                 onChanged: (value) {
@@ -34,7 +36,7 @@ Widget _buildPopup(BuildContext context) {
               ),
             ),
             onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm) {
+              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
                 setState(() => _popupValue = List<Object?>.of(draft));
               }
             },

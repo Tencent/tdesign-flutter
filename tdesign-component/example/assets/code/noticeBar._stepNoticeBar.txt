@@ -1,19 +1,13 @@
 Widget _stepNoticeBar(BuildContext context) {
-  return Theme(
-    data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        prefixIcon: TIcons.sound,
-      ),
-    ),
-    child: const TNoticeBar(
-      items: [
-        '君不见黄河之水天上来',
-        '奔流到海不复回',
-        '君不见',
-        '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试'
-      ],
-      direction: Axis.vertical,
-      marquee: true,
-    ),
+  return const TNoticeBar(
+    prefixIcon: TIcons.sound,
+    items: [
+      '君不见黄河之水天上来',
+      '奔流到海不复回',
+      '君不见',
+      '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试'
+    ],
+    direction: Axis.vertical,
+    marquee: true,
   );
 }

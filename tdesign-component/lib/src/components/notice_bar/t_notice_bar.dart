@@ -28,6 +28,8 @@ class TNoticeBar extends StatefulWidget {
     this.items = const <String>[],
     this.left,
     this.right,
+    this.prefixIcon,
+    this.suffixIcon,
     this.direction = Axis.horizontal,
     this.maxLines = 1,
     this.marquee = false,
@@ -48,6 +50,12 @@ class TNoticeBar extends StatefulWidget {
 
   /// 右侧内容（自定义右侧内容，优先级高于suffixIcon）
   final Widget? right;
+
+  /// 左侧图标；[left] 非空时不渲染。
+  final IconData? prefixIcon;
+
+  /// 右侧图标；[right] 非空时不渲染。
+  final IconData? suffixIcon;
 
   /// 滚动方向
   final Axis direction;
@@ -401,8 +409,8 @@ class _TNoticeBarState extends State<TNoticeBar> {
   Widget build(BuildContext context) {
     _init();
     _size = MediaQuery.of(context).size;
-    final prefixIcon = _theme.prefixIcon;
-    final suffixIcon = _theme.suffixIcon;
+    final prefixIcon = widget.prefixIcon;
+    final suffixIcon = widget.suffixIcon;
     return Container(
       padding: _effectivePadding,
       color: _resolved.backgroundColor,

@@ -412,6 +412,96 @@ void main() {
         .first;
     expect(cellTextStyle.style.color, customScheme.onSurface);
   });
+
+  testWidgets('success/warning 无唯一 Material 语义时使用 TDesign Token',
+      (tester) async {
+    final token = TThemeData.defaultData();
+    late TNoticeBarThemeData noticeTheme;
+    late TNoticeBarThemeData warningNoticeTheme;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          colorScheme: customScheme,
+          extensions: [
+            token,
+            const TTagThemeData(isOutline: true),
+          ],
+        ),
+        home: Scaffold(
+          body: Column(
+            children: [
+              TLink(
+                colorScheme: TLinkColorScheme.success,
+                onPressed: () {},
+                child: const Text('success link'),
+              ),
+              const TTag(
+                'success tag',
+                colorScheme: TTagColorScheme.success,
+              ),
+              const TResult(
+                title: 'success result',
+                variant: TResultVariant.success,
+              ),
+              TLink(
+                colorScheme: TLinkColorScheme.warning,
+                onPressed: () {},
+                child: const Text('warning link'),
+              ),
+              const TTag(
+                'warning tag',
+                colorScheme: TTagColorScheme.warning,
+              ),
+              const TResult(
+                title: 'warning result',
+                variant: TResultVariant.warning,
+              ),
+              Builder(
+                builder: (context) {
+                  noticeTheme = const TNoticeBarThemeData(
+                    variant: TNoticeBarVariant.success,
+                  ).resolve(context);
+                  warningNoticeTheme = const TNoticeBarThemeData(
+                    variant: TNoticeBarVariant.warning,
+                  ).resolve(context);
+                  return const SizedBox();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      tester.widget<Text>(find.text('success link')).style?.color,
+      token.successNormalColor,
+    );
+    expect(
+      tester.widget<Text>(find.text('success tag')).style?.color,
+      token.successNormalColor,
+    );
+    expect(
+      tester.widget<Icon>(find.byIcon(TIcons.check_circle)).color,
+      token.successNormalColor,
+    );
+    expect(noticeTheme.leftIconColor, token.successNormalColor);
+    expect(noticeTheme.backgroundColor, token.successLightColor);
+    expect(
+      tester.widget<Text>(find.text('warning link')).style?.color,
+      token.warningNormalColor,
+    );
+    expect(
+      tester.widget<Text>(find.text('warning tag')).style?.color,
+      token.warningNormalColor,
+    );
+    expect(
+      tester.widget<Icon>(find.byIcon(TIcons.error_circle)).color,
+      token.warningNormalColor,
+    );
+    expect(warningNoticeTheme.leftIconColor, token.warningNormalColor);
+    expect(warningNoticeTheme.backgroundColor, token.warningLightColor);
+  });
 }
 
 void _noop(bool value) {}

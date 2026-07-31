@@ -20,6 +20,14 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
       children: [
         TTreeSelectOption(label: '苹果', value: 'apple'),
         TTreeSelectOption(label: '香蕉', value: 'banana'),
+        TTreeSelectOption(label: '橙子', value: 'orange'),
+        TTreeSelectOption(label: '草莓', value: 'strawberry'),
+        TTreeSelectOption(label: '芒果', value: 'mango'),
+        TTreeSelectOption(
+          label: '榴莲（暂不可选）',
+          value: 'durian',
+          disabled: true,
+        ),
       ],
     ),
     TTreeSelectOption(
@@ -32,8 +40,43 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
           children: [
             TTreeSelectOption(label: '深圳', value: 'shenzhen'),
             TTreeSelectOption(label: '广州', value: 'guangzhou'),
+            TTreeSelectOption(
+              label: '珠海（暂不可选）',
+              value: 'zhuhai',
+              disabled: true,
+            ),
+            TTreeSelectOption(label: '东莞', value: 'dongguan'),
           ],
         ),
+        TTreeSelectOption(
+          label: '浙江',
+          value: 'zhejiang',
+          children: [
+            TTreeSelectOption(label: '杭州', value: 'hangzhou'),
+            TTreeSelectOption(label: '宁波', value: 'ningbo'),
+            TTreeSelectOption(label: '温州', value: 'wenzhou'),
+          ],
+        ),
+      ],
+    ),
+    TTreeSelectOption(
+      label: '动物',
+      value: 'animal',
+      children: [
+        TTreeSelectOption(label: '猫', value: 'cat'),
+        TTreeSelectOption(label: '狗', value: 'dog'),
+        TTreeSelectOption(label: '兔子', value: 'rabbit'),
+        TTreeSelectOption(label: '鹦鹉', value: 'parrot'),
+      ],
+    ),
+    TTreeSelectOption(
+      label: '数码',
+      value: 'digital',
+      children: [
+        TTreeSelectOption(label: '手机', value: 'phone'),
+        TTreeSelectOption(label: '电脑', value: 'computer'),
+        TTreeSelectOption(label: '平板', value: 'tablet'),
+        TTreeSelectOption(label: '相机', value: 'camera'),
       ],
     ),
   ];
@@ -57,9 +100,9 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
           ExampleItem(desc: '底部弹出多选', builder: _buildPopup),
         ]),
         ExampleModule(title: '基础能力', children: [
-          ExampleItem(desc: '单选', builder: _buildSingle),
+          ExampleItem(desc: '单选（包含局部禁用项）', builder: _buildSingle),
           ExampleItem(desc: '多选', builder: _buildMultiple),
-          ExampleItem(desc: '禁用', builder: _buildDisabled),
+          ExampleItem(desc: '整体禁用', builder: _buildDisabled),
         ]),
       ],
     );
@@ -68,6 +111,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
   @ExampleCode(group: 'tree-select')
   Widget _buildSingle(BuildContext context) {
     return TTreeSelect(
+      key: const Key('tree-select-single'),
       options: _options,
       value: _singleValue,
       onChanged: (value) => setState(() => _singleValue = value),
@@ -105,9 +149,11 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height * 0.6,
             titleWidget: const TText('选择分类'),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TTreeSelect(
+                key: const Key('tree-select-popup'),
                 options: _options,
                 value: draft,
                 multiple: true,
@@ -117,7 +163,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
               ),
             ),
             onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm) {
+              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
                 setState(() {
                   _popupValue = [
                     for (final path in draft) List<Object?>.of(path),

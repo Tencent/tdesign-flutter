@@ -112,10 +112,20 @@ class _TProgressPageState extends State<TProgressPage> {
   @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
     return TProgress(
+      key: const Key('progress-button'),
       variant: TProgressVariant.button,
       value: progressValue,
       label: buttonLabel,
-      onTap: _toggleProgress,
+      onTap: () {
+        TToast.showText('onTap 已触发', context: context);
+        _toggleProgress();
+      },
+      onLongPress: () {
+        TToast.showText(
+          'onLongPress 已触发，onTap 未触发',
+          context: context,
+        );
+      },
     );
   }
 

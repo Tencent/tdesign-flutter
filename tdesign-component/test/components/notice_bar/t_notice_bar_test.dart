@@ -95,16 +95,14 @@ void main() {
   group('TNoticeBar 图标与自定义内容', () {
     testWidgets('prefixIcon 渲染左侧图标', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TNoticeBar(content: '带前缀图标'),
-        noticeBarTheme: const TNoticeBarThemeData(prefixIcon: Icons.info),
+        const TNoticeBar(content: '带前缀图标', prefixIcon: Icons.info),
       ));
       expect(find.byIcon(Icons.info), findsOneWidget);
     });
 
     testWidgets('suffixIcon 渲染右侧图标', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TNoticeBar(content: '带后缀图标'),
-        noticeBarTheme: const TNoticeBarThemeData(suffixIcon: Icons.close),
+        const TNoticeBar(content: '带后缀图标', suffixIcon: Icons.close),
       ));
       expect(find.byIcon(Icons.close), findsOneWidget);
     });
@@ -114,8 +112,8 @@ void main() {
         const TNoticeBar(
           content: '内容',
           left: Text('自定义左侧'),
+          prefixIcon: Icons.info,
         ),
-        noticeBarTheme: const TNoticeBarThemeData(prefixIcon: Icons.info),
       ));
       expect(find.text('自定义左侧'), findsOneWidget);
       // prefixIcon 不应渲染
@@ -127,8 +125,8 @@ void main() {
         const TNoticeBar(
           content: '内容',
           right: Text('自定义右侧'),
+          suffixIcon: Icons.close,
         ),
-        noticeBarTheme: const TNoticeBarThemeData(suffixIcon: Icons.close),
       ));
       expect(find.text('自定义右侧'), findsOneWidget);
       expect(find.byIcon(Icons.close), findsNothing);
@@ -201,8 +199,8 @@ void main() {
   group('TNoticeBar onPressed 回调', () {
     testWidgets('未提供 onPressed 时内置区域不创建点击手势', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TNoticeBar(content: '静态公告'),
-        noticeBarTheme: const TNoticeBarThemeData(
+        const TNoticeBar(
+          content: '静态公告',
           prefixIcon: Icons.info,
           suffixIcon: Icons.close,
         ),
@@ -228,9 +226,9 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(
         TNoticeBar(
           content: '内容',
+          prefixIcon: Icons.info,
           onPressed: (trigger) => triggered = trigger,
         ),
-        noticeBarTheme: const TNoticeBarThemeData(prefixIcon: Icons.info),
       ));
       await tester.tap(find.byIcon(Icons.info));
       expect(triggered, TNoticeBarTapTarget.prefix);
@@ -241,9 +239,9 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(
         TNoticeBar(
           content: '内容',
+          suffixIcon: Icons.close,
           onPressed: (trigger) => triggered = trigger,
         ),
-        noticeBarTheme: const TNoticeBarThemeData(suffixIcon: Icons.close),
       ));
       await tester.tap(find.byIcon(Icons.close));
       expect(triggered, TNoticeBarTapTarget.suffix);

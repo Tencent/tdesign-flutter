@@ -27,7 +27,7 @@
 | titleWidget | Widget? | - | 标题控件，优先级高于 `title` 文案 |
 | useBorderStyle | bool? | - | 是否使用边框模式 |
 | useDefaultBack | bool | true | 是否使用默认的返回按钮 |
-| useSafeArea | bool | true | 是否避让顶部系统安全区。 默认为 true。安全区高度只计入实际渲染高度，不计入 `preferredSize`； `height` 始终表示导航栏内容高度。 |
+| useSafeArea | bool | false | 是否避让顶部系统安全区。 默认为 false。仅当导航栏直接位于页面顶部且外层未处理安全区时开启。开启后，安全区高度只计入实际渲染高度，不计入 `preferredSize`； `height` 始终表示导航栏内容高度。 |
 
 
 ### TNavBarItem

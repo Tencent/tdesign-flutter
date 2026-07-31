@@ -1,16 +1,16 @@
 Widget _buildTime(BuildContext context) {
     return TCell(
+      key: const Key('date-time-picker-time-trigger'),
       title: const Text('选择时分'),
       note: Text(_formatResult(_timeSelected)),
       arrow: true,
       onTap: () {
         _showPickerPopup(
           context,
-          picker: TDateTimePicker(
-            mode: DateTimePickerMode(timeMode: TimeMode.minute),
-            value: _timeSelected,
-            onChanged: (result) => setState(() => _timeSelected = result),
-          ),
+          title: '选择时间',
+          mode: DateTimePickerMode(timeMode: TimeMode.minute),
+          value: _timeSelected,
+          onConfirm: (result) => setState(() => _timeSelected = result),
         );
       },
     );

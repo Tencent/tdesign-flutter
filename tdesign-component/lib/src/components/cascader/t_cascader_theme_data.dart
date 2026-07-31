@@ -32,6 +32,9 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
     /// 禁用文案样式。
     this.disabledTextStyle,
 
+    /// 末级选中图标颜色。
+    this.indicatorColor,
+
     /// 导航区域内边距。
     this.navigationPadding,
 
@@ -57,6 +60,9 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   /// 禁用文案样式。
   final TextStyle? disabledTextStyle;
 
+  /// 末级选中图标颜色。
+  final Color? indicatorColor;
+
   /// 导航区域内边距。
   final EdgeInsetsGeometry? navigationPadding;
 
@@ -71,6 +77,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
     TextStyle? textStyle,
     TextStyle? activeTextStyle,
     TextStyle? disabledTextStyle,
+    Color? indicatorColor,
     EdgeInsetsGeometry? navigationPadding,
     Color? dividerColor,
   }) {
@@ -81,6 +88,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
       textStyle: textStyle ?? this.textStyle,
       activeTextStyle: activeTextStyle ?? this.activeTextStyle,
       disabledTextStyle: disabledTextStyle ?? this.disabledTextStyle,
+      indicatorColor: indicatorColor ?? this.indicatorColor,
       navigationPadding: navigationPadding ?? this.navigationPadding,
       dividerColor: dividerColor ?? this.dividerColor,
     );
@@ -96,12 +104,22 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      activeTextStyle:
-          TextStyle.lerp(activeTextStyle, other.activeTextStyle, t),
-      disabledTextStyle:
-          TextStyle.lerp(disabledTextStyle, other.disabledTextStyle, t),
+      activeTextStyle: TextStyle.lerp(
+        activeTextStyle,
+        other.activeTextStyle,
+        t,
+      ),
+      disabledTextStyle: TextStyle.lerp(
+        disabledTextStyle,
+        other.disabledTextStyle,
+        t,
+      ),
+      indicatorColor: Color.lerp(indicatorColor, other.indicatorColor, t),
       navigationPadding: EdgeInsetsGeometry.lerp(
-          navigationPadding, other.navigationPadding, t),
+        navigationPadding,
+        other.navigationPadding,
+        t,
+      ),
       dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
     );
   }

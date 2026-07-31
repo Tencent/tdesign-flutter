@@ -84,6 +84,7 @@ class TTreeSelect extends StatefulWidget {
 
 class _TTreeSelectState extends State<TTreeSelect> {
   late List<Object?> _activePath;
+  List<List<Object?>>? _lastEmittedValue;
 
   bool get _enabled => widget.onChanged != null;
 
@@ -101,8 +102,19 @@ class _TTreeSelectState extends State<TTreeSelect> {
   @override
   void didUpdateWidget(covariant TTreeSelect oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.options != widget.options ||
-        !_pathsEqual(oldWidget.value, widget.value)) {
+    final valueChanged = !_pathsEqual(oldWidget.value, widget.value);
+    if (valueChanged) {
+      final reflectsLocalSelection = _lastEmittedValue != null &&
+          _pathsEqual(_lastEmittedValue!, widget.value);
+      _lastEmittedValue = null;
+      if (!reflectsLocalSelection) {
+        _activePath = _initialActivePath();
+        return;
+      }
+    } else {
+      _lastEmittedValue = null;
+    }
+    if (!_isActivePathValid()) {
       _activePath = _initialActivePath();
     }
   }
@@ -137,6 +149,22 @@ class _TTreeSelectState extends State<TTreeSelect> {
       }
     }
     return const [];
+  }
+
+  bool _isActivePathValid() {
+    var options = widget.options;
+    for (final value in _activePath) {
+      final index = options.indexWhere((option) => option.value == value);
+      if (index < 0) {
+        return false;
+      }
+      final option = options[index];
+      if (option.disabled || option.children.isEmpty) {
+        return false;
+      }
+      options = option.children;
+    }
+    return true;
   }
 
   List<List<TTreeSelectOption>> _visibleColumns() {
@@ -388,7 +416,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
 
   void _toggleLeaf(List<Object?> path) {
     if (!widget.multiple) {
-      widget.onChanged?.call(List.unmodifiable([path]));
+      _emitSelection(List.unmodifiable([path]));
       return;
     }
     final next = [
@@ -398,11 +426,16 @@ class _TTreeSelectState extends State<TTreeSelect> {
     if (next.length == widget.value.length) {
       next.add(path);
     }
-    widget.onChanged?.call(
+    _emitSelection(
       List.unmodifiable(
         next.map(List<Object?>.unmodifiable),
       ),
     );
+  }
+
+  void _emitSelection(List<List<Object?>> value) {
+    _lastEmittedValue = value;
+    widget.onChanged?.call(value);
   }
 
   static bool _pathsEqual(

@@ -5,8 +5,11 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 |
+| cacheHeight | int? | - | 解码缓存高度。 |
+| cacheWidth | int? | - | 解码缓存宽度。 |
 | errorBuilder | ImageErrorWidgetBuilder? | - | 图片错误构建器。 |
 | errorWidget | Widget? | - | 默认错误占位内容。 |
+| excludeFromSemantics | bool | false | 是否从语义树排除图片。 |
 | filterQuality | FilterQuality | FilterQuality.low | 图片滤镜质量。 |
 | fit | BoxFit? | - | 图片适配方式；优先于 `variant` 的默认适配方式。 |
 | frameBuilder | ImageFrameBuilder? | - | 图片帧构建器。 |

@@ -200,6 +200,16 @@ final class TActionSheet {
     final effectiveRows = rows ?? theme?.rows ?? 2;
     final effectiveItemHeight = itemHeight ?? theme?.itemHeight ?? 96;
     final effectiveItemMinWidth = itemMinWidth ?? theme?.itemMinWidth ?? 80;
+    final popupHeight = layout == _TActionSheetLayout.grid
+        ? TActionSheetGrid.preferredPopupHeight(
+            context,
+            subtitle: subtitle,
+            rows: effectiveRows,
+            itemHeight: effectiveItemHeight,
+            showPagination: showPagination,
+            showCancel: showCancel,
+          )
+        : null;
 
     final child = switch (layout) {
       _TActionSheetLayout.list => TActionSheetList(
@@ -247,6 +257,7 @@ final class TActionSheet {
     return TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height: popupHeight,
         headerBuilder: null,
         cancelBuilder: null,
         confirmBuilder: null,

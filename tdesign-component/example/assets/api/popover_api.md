@@ -10,7 +10,7 @@
 
 显示气泡弹层
 
-返回类型：`Future`
+返回类型：`Future<void>`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -20,6 +20,7 @@
 | offset | double? | - | 弹层与触发元素的间距。 |
 | colorScheme | TPopoverColorScheme? | - | 气泡语义色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
+| closeOnScroll | bool | true | 页面滚动时是否关闭弹层，避免触发元素移动后气泡停留在旧坐标。 |
 | placement | TPopoverPlacement? | - | 浮层出现位置 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
 | arrowSize | double? | - | 箭头尺寸。 |

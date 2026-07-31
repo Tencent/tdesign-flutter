@@ -215,18 +215,18 @@ class TTag extends StatelessWidget {
         break;
       case TTagColorScheme.warning:
         if (isOutline) {
-          borderColor = material?.tertiary ?? token.warningNormalColor;
-          textColor = material?.tertiary ?? token.warningNormalColor;
+          borderColor = token.warningNormalColor;
+          textColor = token.warningNormalColor;
           backgroundColor = isLight
-              ? material?.tertiaryContainer ?? token.warningLightColor
+              ? token.warningLightColor
               : Colors.transparent;
         } else {
           textColor = isLight
-              ? material?.tertiary ?? token.warningNormalColor
-              : material?.onTertiary ?? token.textColorAnti;
+              ? token.warningNormalColor
+              : token.textColorAnti;
           backgroundColor = isLight
-              ? material?.tertiaryContainer ?? token.warningLightColor
-              : material?.tertiary ?? token.warningNormalColor;
+              ? token.warningLightColor
+              : token.warningNormalColor;
           borderColor = backgroundColor;
         }
         break;

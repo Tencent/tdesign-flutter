@@ -65,7 +65,7 @@ class TSteps extends StatefulWidget {
     required this.steps,
     this.value = 0,
     this.direction = TStepsDirection.horizontal,
-    this.status,
+    this.status = TStepsStatus.success,
     this.simple,
     this.readOnly,
     this.verticalSelect,
@@ -81,8 +81,8 @@ class TSteps extends StatefulWidget {
   /// 步骤条当前激活的索引
   final int value;
 
-  /// 步骤条状态（优先级高于 ThemeData）
-  final TStepsStatus? status;
+  /// 步骤条状态。
+  final TStepsStatus status;
 
   /// 步骤条simple模式（优先级高于 ThemeData）
   final bool? simple;
@@ -117,8 +117,6 @@ class _TStepsState extends State<TSteps> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TStepsThemeData>();
     final effectiveIndex = widget.value;
-    final effectiveStatus =
-        widget.status ?? theme?.status ?? TStepsStatus.success;
     final effectiveSimple = widget.simple ?? theme?.simple ?? false;
     final effectiveReadOnly = widget.readOnly ?? theme?.readOnly ?? false;
     final effectiveVerticalSelect =
@@ -134,14 +132,14 @@ class _TStepsState extends State<TSteps> {
         ? TStepsHorizontal(
             steps: widget.steps,
             activeIndex: currentActiveIndex,
-            status: effectiveStatus,
+            status: widget.status,
             simple: effectiveSimple,
             readOnly: effectiveReadOnly,
             onChange: widget.onChange)
         : TStepsVertical(
             steps: widget.steps,
             activeIndex: currentActiveIndex,
-            status: effectiveStatus,
+            status: widget.status,
             simple: effectiveSimple,
             readOnly: effectiveReadOnly,
             verticalSelect: effectiveVerticalSelect,

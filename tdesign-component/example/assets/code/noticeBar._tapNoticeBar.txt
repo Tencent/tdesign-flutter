@@ -1,16 +1,10 @@
 Widget _tapNoticeBar(BuildContext context) {
-  return Theme(
-    data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        prefixIcon: TIcons.error_circle_filled,
-        suffixIcon: TIcons.chevron_right,
-      ),
-    ),
-    child: TNoticeBar(
-      content: '这是一条普通的通知信息',
-      onPressed: (trigger) {
-        TToast.showText('tap:$trigger', context: context);
-      },
-    ),
+  return TNoticeBar(
+    content: '这是一条普通的通知信息',
+    prefixIcon: TIcons.error_circle_filled,
+    suffixIcon: TIcons.chevron_right,
+    onPressed: (trigger) {
+      TToast.showText('tap:$trigger', context: context);
+    },
   );
 }

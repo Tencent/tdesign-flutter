@@ -2,6 +2,7 @@ Widget _titleBelowNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
+        key: const Key('navbar-demo-custom-height'),
         height: 80,
         title: '返回',
         titleColor: context.tTheme.textColorPrimary,

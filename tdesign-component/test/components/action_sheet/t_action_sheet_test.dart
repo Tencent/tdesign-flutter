@@ -227,6 +227,55 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('showGrid 按实际宫格内容计算弹窗高度', (tester) async {
+      final context = await pumpHost(tester);
+      final handle = TActionSheet.showGrid(
+        context,
+        subtitle: '选择分享方式',
+        items: List.generate(
+          6,
+          (index) => TActionSheetItem(label: '分享方式 $index'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final positioned = tester.widgetList<Positioned>(
+        find.ancestor(
+          of: find.byType(TActionSheetGrid),
+          matching: find.byType(Positioned),
+        ),
+      );
+      expect(positioned.last.height, 282);
+      expect(tester.takeException(), isNull);
+
+      handle.close();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('showGrid 在小视口内收缩并允许纵向滚动', (tester) async {
+      tester.view.physicalSize = const Size(375, 220);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final context = await pumpHost(tester);
+      final handle = TActionSheet.showGrid(
+        context,
+        subtitle: '选择分享方式',
+        items: List.generate(
+          6,
+          (index) => TActionSheetItem(label: '分享方式 $index'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final grid = tester.widget<GridView>(find.byType(GridView));
+      expect(grid.physics, isA<AlwaysScrollableScrollPhysics>());
+      expect(tester.takeException(), isNull);
+
+      handle.close();
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('showGroup 渲染分组内容', (tester) async {
       final context = await pumpHost(tester);
       final handle = TActionSheet.showGroup(

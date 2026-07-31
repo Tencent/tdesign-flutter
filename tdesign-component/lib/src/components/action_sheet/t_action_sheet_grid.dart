@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -17,6 +19,8 @@ import 't_action_sheet_types.dart';
 /// 以宫格布局展示可选项，支持分页和横向滚动。
 /// 通常不直接使用，由 `TActionSheet.showGrid` 创建。
 class TActionSheetGrid extends StatefulWidget {
+  static const paginationIndicatorExtent = 8.0;
+
   /// 动作面板的项目列表
   final List<TActionSheetItem> items;
 
@@ -77,6 +81,49 @@ class TActionSheetGrid extends StatefulWidget {
     this.useSafeArea = true,
   });
 
+  static double preferredPopupHeight(
+    BuildContext context, {
+    required String? subtitle,
+    required int rows,
+    required double itemHeight,
+    required bool showPagination,
+    required bool showCancel,
+  }) {
+    final token = context.tTheme;
+    var height = token.spacer8 + rows * itemHeight;
+    if (subtitle != null) {
+      final font = token.fontBodyMedium;
+      final painter = TextPainter(
+        text: TextSpan(
+          text: subtitle,
+          style: TextStyle(
+            fontSize: font?.size,
+            height: font?.height,
+            fontWeight: font?.fontWeight,
+          ),
+        ),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+      )..layout(
+          maxWidth: math.max(
+            0,
+            MediaQuery.sizeOf(context).width - token.spacer16 * 2,
+          ),
+        );
+      height += token.spacer4 + painter.height;
+      painter.dispose();
+    }
+    if (showPagination) {
+      height += paginationIndicatorExtent;
+    }
+    if (showCancel) {
+      height +=
+          (showPagination ? token.spacer16 : token.spacer8) +
+          actionSheetCancelButtonHeight;
+    }
+    return height;
+  }
+
   @override
   _TActionSheetGridState createState() => _TActionSheetGridState();
 }
@@ -104,14 +151,10 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
         children: [
           SizedBox(height: context.tTheme.spacer8),
           if (widget.subtitle != null) _buildDescription(context),
-          if (widget.showPagination) ...[
-            _buildPaginationGrid(context),
-            _buildPaginationDots(context),
-            // 横向滚动
-          ] else if (widget.scrollable)
-            _buildScrollGrid(context)
-          else
-            _buildGrid(context),
+          Flexible(
+            fit: FlexFit.loose,
+            child: _buildGridContent(context),
+          ),
           if (widget.showCancel)
             buildCancelButton(
               context,
@@ -121,6 +164,24 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
             ),
         ],
       ),
+    );
+  }
+
+  Widget _buildGridContent(BuildContext context) {
+    if (!widget.showPagination) {
+      return widget.scrollable
+          ? _buildScrollGrid(context)
+          : _buildGrid(context);
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          fit: FlexFit.loose,
+          child: _buildPaginationGrid(context),
+        ),
+        _buildPaginationDots(context),
+      ],
     );
   }
 
@@ -226,8 +287,11 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
               ? constraints.maxWidth
               : MediaQuery.sizeOf(context).width;
           final childAspectRatio = width / itemsPerRow / widget.itemHeight;
+          final needsVerticalScroll =
+              (items ?? widget.items).length > widget.count ||
+              constraints.maxHeight < widget.rows * widget.itemHeight;
           return GridView.builder(
-            physics: (items ?? widget.items).length > widget.count
+            physics: needsVerticalScroll
                 ? const AlwaysScrollableScrollPhysics()
                 : const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
@@ -258,8 +322,8 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
       ) {
         return Container(
           margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
-          width: 8.0,
-          height: 8.0,
+          width: TActionSheetGrid.paginationIndicatorExtent,
+          height: TActionSheetGrid.paginationIndicatorExtent,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: currentPage == index

@@ -3,13 +3,13 @@ Widget _customNoticeBar(BuildContext context) {
     data: Theme.of(context).mergeExtension(
       TNoticeBarThemeData(
         variant: TNoticeBarVariant.info,
-        prefixIcon: TIcons.notification,
-        suffixIcon: TIcons.chevron_right,
         backgroundColor: context.tTheme.bgColorComponent,
       ),
     ),
     child: const TNoticeBar(
       content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.notification,
+      suffixIcon: TIcons.chevron_right,
     ),
   );
 }

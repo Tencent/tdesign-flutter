@@ -46,6 +46,7 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
+      key: Key('navbar-demo-base'),
       titleFontWeight: FontWeight.w600,
       title: titleText,
       useDefaultBack: true,
@@ -240,6 +241,7 @@ class TNavBarPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
+        key: const Key('navbar-demo-custom-height'),
         height: 80,
         title: '返回',
         titleColor: context.tTheme.textColorPrimary,

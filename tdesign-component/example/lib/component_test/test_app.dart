@@ -94,6 +94,7 @@ Padding body(BuildContext context) {
 PreferredSizeWidget _buildAppBar(BuildContext context) {
   return TNavBar(
       useDefaultBack: false,
+      useSafeArea: true,
       // screenAdaptation: false,
       flexibleSpace: Container(
         decoration: const BoxDecoration(

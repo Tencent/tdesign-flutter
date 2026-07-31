@@ -15,8 +15,10 @@
 | marquee | bool | false | 是否启用滚动展示 |
 | maxLines | int | 1 | 文本行数（仅静态有效） |
 | onPressed | ValueChanged<TNoticeBarTapTarget>? | - | 点击事件 |
+| prefixIcon | IconData? | - | 左侧图标； `left` 非空时不渲染。 |
 | right | Widget? | - | 右侧内容（自定义右侧内容，优先级高于suffixIcon） |
 | speed | double | 50 | 每秒滚动的逻辑像素 |
+| suffixIcon | IconData? | - | 右侧图标； `right` 非空时不渲染。 |
 
 
 ### TNoticeBarTapTarget

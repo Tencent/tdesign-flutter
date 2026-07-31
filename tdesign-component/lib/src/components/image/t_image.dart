@@ -47,6 +47,9 @@ class TImage extends StatelessWidget {
     this.loadingBuilder,
     this.errorBuilder,
     this.semanticLabel,
+    this.excludeFromSemantics = false,
+    this.cacheWidth,
+    this.cacheHeight,
     this.filterQuality = FilterQuality.low,
     this.alignment = Alignment.center,
     this.repeat = ImageRepeat.noRepeat,
@@ -91,6 +94,15 @@ class TImage extends StatelessWidget {
 
   /// 无障碍标签。
   final String? semanticLabel;
+
+  /// 是否从语义树排除图片。
+  final bool excludeFromSemantics;
+
+  /// 解码缓存宽度。
+  final int? cacheWidth;
+
+  /// 解码缓存高度。
+  final int? cacheHeight;
 
   /// 图片滤镜质量。
   final FilterQuality filterQuality;
@@ -145,15 +157,12 @@ class TImage extends StatelessWidget {
           width: width,
           height: height,
         );
-    final excludeFromSemantics = theme?.excludeFromSemantics ?? false;
     final color = theme?.color;
     final colorBlendMode = theme?.colorBlendMode;
     final centerSlice = theme?.centerSlice;
     final matchTextDirection = theme?.matchTextDirection ?? false;
     final gaplessPlayback = theme?.gaplessPlayback ?? false;
     final isAntiAlias = theme?.isAntiAlias ?? false;
-    final cacheWidth = theme?.cacheWidth;
-    final cacheHeight = theme?.cacheHeight;
     if (imageFile != null) {
       return Image.file(
         imageFile!,

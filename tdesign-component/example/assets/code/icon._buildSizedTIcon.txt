@@ -1,6 +1,7 @@
 Widget _buildSizedTIcon(BuildContext context) {
     // 构造器参数 size/color 直接生效
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TIcon(TIcons.home_filled,
             size: 32, color: context.tTheme.brandNormalColor),

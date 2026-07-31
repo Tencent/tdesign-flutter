@@ -57,18 +57,15 @@ void main() {
   group('TStepsThemeData', () {
     test('默认构造', () {
       const data = TStepsThemeData();
-      expect(data.status, null);
       expect(data.simple, null);
     });
 
     test('带参数构造', () {
       const data = TStepsThemeData(
-        status: TStepsStatus.error,
         simple: true,
         readOnly: true,
         verticalSelect: true,
       );
-      expect(data.status, TStepsStatus.error);
       expect(data.simple, true);
     });
 

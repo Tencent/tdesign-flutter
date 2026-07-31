@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_icons/tdesign_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import 't_cascader_theme_data.dart';
@@ -151,6 +152,11 @@ class _TCascaderState extends State<TCascader> {
     final theme = Theme.of(context).extension<TCascaderThemeData>();
     final selected = _selectedOptions();
     final options = _optionsAt(_activeLevel);
+    final backgroundColor =
+        theme?.backgroundColor ?? context.tTheme.bgColorContainer;
+    final borderRadius = BorderRadius.circular(
+      theme?.borderRadius ?? context.tTheme.radiusDefault,
+    );
     return Semantics(
       enabled: _enabled,
       child: AnimatedOpacity(
@@ -158,27 +164,26 @@ class _TCascaderState extends State<TCascader> {
         duration: const Duration(milliseconds: 150),
         child: AbsorbPointer(
           absorbing: !_enabled,
-          child: Container(
+          child: SizedBox(
             height: theme?.height ?? 360,
-            decoration: BoxDecoration(
-              color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
-              borderRadius: BorderRadius.circular(
-                theme?.borderRadius ?? context.tTheme.radiusDefault,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildNavigation(context, selected, theme),
-                Divider(height: 1, color: theme?.dividerColor),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: options.length,
-                    itemBuilder: (context, index) =>
-                        _buildOption(context, options[index], theme),
+            child: Material(
+              color: backgroundColor,
+              borderRadius: borderRadius,
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildNavigation(context, selected, theme),
+                  Divider(height: 1, color: theme?.dividerColor),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: options.length,
+                      itemBuilder: (context, index) =>
+                          _buildOption(context, options[index], theme),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -191,15 +196,14 @@ class _TCascaderState extends State<TCascader> {
     List<TCascaderOption> selected,
     TCascaderThemeData? theme,
   ) {
+    final styles = _resolveTextStyles(context, theme);
     final entries = <Widget>[
       for (var index = 0; index < selected.length; index++)
         TextButton(
           onPressed: () => setState(() => _activeLevel = index),
           child: Text(
             selected[index].label,
-            style: index == _activeLevel
-                ? theme?.activeTextStyle
-                : theme?.textStyle,
+            style: index == _activeLevel ? styles.active : styles.normal,
           ),
         ),
       if (selected.isEmpty || selected.last.children.isNotEmpty)
@@ -208,8 +212,8 @@ class _TCascaderState extends State<TCascader> {
           child: Text(
             widget.placeholder,
             style: selected.length == _activeLevel
-                ? theme?.activeTextStyle
-                : theme?.textStyle,
+                ? styles.active
+                : styles.normal,
           ),
         ),
     ];
@@ -234,8 +238,17 @@ class _TCascaderState extends State<TCascader> {
     TCascaderOption option,
     TCascaderThemeData? theme,
   ) {
-    final selected = _activeLevel < widget.value.length &&
+    final styles = _resolveTextStyles(context, theme);
+    final selected =
+        _activeLevel < widget.value.length &&
         widget.value[_activeLevel] == option.value;
+    final isLeaf = option.children.isEmpty;
+    final material = Theme.of(context);
+    final indicatorColor =
+        theme?.indicatorColor ??
+        material.listTileTheme.selectedColor ??
+        material.tExplicitColorScheme?.primary ??
+        context.tTheme.brandNormalColor;
     return ListTile(
       key: ValueKey('cascader-${option.value}'),
       enabled: !option.disabled,
@@ -243,14 +256,16 @@ class _TCascaderState extends State<TCascader> {
       title: Text(
         option.label,
         style: option.disabled
-            ? theme?.disabledTextStyle ??
-                TextStyle(color: context.tTheme.textDisabledColor)
+            ? styles.disabled
             : selected
-                ? theme?.activeTextStyle
-                : theme?.textStyle,
+            ? styles.active
+            : styles.normal,
       ),
-      trailing:
-          option.children.isEmpty ? null : const Icon(TIcons.chevron_right),
+      trailing: isLeaf
+          ? selected
+                ? Icon(TIcons.check, size: 24, color: indicatorColor)
+                : null
+          : const Icon(TIcons.chevron_right),
       onTap: option.disabled
           ? null
           : () {
@@ -265,4 +280,50 @@ class _TCascaderState extends State<TCascader> {
             },
     );
   }
+
+  _CascaderTextStyles _resolveTextStyles(
+    BuildContext context,
+    TCascaderThemeData? theme,
+  ) {
+    final material = Theme.of(context);
+    final tokenFont = context.tTheme.fontBodyLarge;
+    final normal =
+        TextStyle(
+              color:
+                  material.listTileTheme.textColor ??
+                  context.tTheme.textColorPrimary,
+              fontSize: tokenFont?.size,
+              height: tokenFont?.height,
+              fontWeight: tokenFont?.fontWeight,
+            )
+            .merge(material.tExplicitTextTheme?.bodyLarge)
+            .merge(context.tExplicitDefaultTextStyle)
+            .merge(theme?.textStyle);
+    final active = normal
+        .copyWith(
+          color: material.listTileTheme.selectedColor ?? normal.color,
+          fontWeight: FontWeight.w600,
+        )
+        .merge(theme?.activeTextStyle);
+    final disabled = normal
+        .copyWith(color: context.tTheme.textDisabledColor)
+        .merge(theme?.disabledTextStyle);
+    return _CascaderTextStyles(
+      normal: normal,
+      active: active,
+      disabled: disabled,
+    );
+  }
+}
+
+class _CascaderTextStyles {
+  const _CascaderTextStyles({
+    required this.normal,
+    required this.active,
+    required this.disabled,
+  });
+
+  final TextStyle normal;
+  final TextStyle active;
+  final TextStyle disabled;
 }

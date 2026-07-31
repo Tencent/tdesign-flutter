@@ -10,6 +10,8 @@ import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
 
+const actionSheetCancelButtonHeight = 48.0;
+
 /// 动作面板单个项目组件
 ///
 /// 在宫格/分组模式下渲染单个可点击项目，含图标、标签和角标。
@@ -167,7 +169,7 @@ Widget buildCancelButton(
             ),
           ),
         ),
-        height: 48,
+        height: actionSheetCancelButtonHeight,
         child: Center(
           child: TText(
             cancelText ?? context.resource.cancel,

@@ -1,16 +1,16 @@
 Widget _buildYearMonth(BuildContext context) {
     return TCell(
+      key: const Key('date-time-picker-year-month-trigger'),
       title: const Text('选择年月'),
       note: Text(_formatResult(_yearMonthSelected)),
       arrow: true,
       onTap: () {
         _showPickerPopup(
           context,
-          picker: TDateTimePicker(
-            mode: DateTimePickerMode(dateMode: DateMode.month),
-            value: _yearMonthSelected,
-            onChanged: (result) => setState(() => _yearMonthSelected = result),
-          ),
+          title: '选择年月',
+          mode: DateTimePickerMode(dateMode: DateMode.month),
+          value: _yearMonthSelected,
+          onConfirm: (result) => setState(() => _yearMonthSelected = result),
         );
       },
     );

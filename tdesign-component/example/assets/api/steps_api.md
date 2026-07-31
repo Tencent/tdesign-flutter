@@ -9,7 +9,7 @@
 | onChange | ValueChanged<int>? | - | 用户选择步骤时触发；通过更新 `value` 实现受控模式。 |
 | readOnly | bool? | - | 步骤条readOnly模式（优先级高于 ThemeData） |
 | simple | bool? | - | 步骤条simple模式（优先级高于 ThemeData） |
-| status | TStepsStatus? | - | 步骤条状态（优先级高于 ThemeData） |
+| status | TStepsStatus | TStepsStatus.success | 步骤条状态。 |
 | steps | List<TStepsItemData> | - | 步骤条数据 |
 | value | int | 0 | 步骤条当前激活的索引 |
 | verticalSelect | bool? | - | 步骤条垂直自定义步骤条选择模式（优先级高于 ThemeData） |

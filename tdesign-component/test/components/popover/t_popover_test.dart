@@ -495,7 +495,9 @@ void main() {
     });
   });
 
-  testWidgets('showPopover uses theme barrierColor', (tester) async {
+  testWidgets('showPopover uses theme barrierColor without a modal barrier', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(
@@ -522,13 +524,21 @@ void main() {
       ),
     );
 
+    final initialModalBarrierCount = find
+        .byType(ModalBarrier)
+        .evaluate()
+        .length;
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    final barrier = tester
-        .widgetList<ModalBarrier>(find.byType(ModalBarrier))
-        .last;
-    expect(barrier.color, Colors.black54);
+    final overlayColor = tester.widget<ColoredBox>(
+      find.byKey(const Key('t-popover-overlay-color')),
+    );
+    expect(overlayColor.color, Colors.black54);
+    expect(
+      find.byType(ModalBarrier).evaluate().length,
+      initialModalBarrierCount,
+    );
   });
 
   // ============================================================
@@ -614,6 +624,117 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('可关闭'), findsNothing);
+    });
+
+    testWidgets('展示后页面仍可滚动且滚动时关闭气泡', (tester) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          ListView.builder(
+            controller: controller,
+            itemExtent: 80,
+            itemCount: 20,
+            itemBuilder: (context, index) {
+              if (index == 2) {
+                return Builder(
+                  builder: (anchorContext) => Center(
+                    child: TextButton(
+                      onPressed: () {
+                        unawaited(
+                          TPopover.showPopover(
+                            context: anchorContext,
+                            content: '滚动气泡',
+                            placement: TPopoverPlacement.bottom,
+                          ),
+                        );
+                      },
+                      child: const Text('滚动触发项'),
+                    ),
+                  ),
+                );
+              }
+              return Text('列表项 $index');
+            },
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('滚动触发项'));
+      await tester.pumpAndSettle();
+      expect(find.text('滚动气泡'), findsOneWidget);
+
+      await tester.dragFrom(const Offset(350, 500), const Offset(0, -120));
+      await tester.pumpAndSettle();
+
+      expect(controller.offset, greaterThan(0));
+      expect(find.text('滚动气泡'), findsNothing);
+    });
+
+    testWidgets('closeOnScroll: false 滚动时保持气泡展示', (tester) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          ListView(
+            controller: controller,
+            children: [
+              const SizedBox(height: 160),
+              Builder(
+                builder: (anchorContext) => TextButton(
+                  onPressed: () {
+                    unawaited(
+                      TPopover.showPopover(
+                        context: anchorContext,
+                        content: '保持展示',
+                        closeOnScroll: false,
+                      ),
+                    );
+                  },
+                  child: const Text('保持触发项'),
+                ),
+              ),
+              const SizedBox(height: 1000),
+            ],
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('保持触发项'));
+      await tester.pump();
+      await tester.dragFrom(const Offset(350, 500), const Offset(0, -120));
+      await tester.pumpAndSettle();
+
+      expect(controller.offset, greaterThan(0));
+      expect(find.text('保持展示'), findsOneWidget);
+    });
+
+    testWidgets('外部关闭完成 showPopover Future', (tester) async {
+      late BuildContext ctx;
+      var completed = false;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '等待关闭',
+        ).then((_) => completed = true),
+      );
+      await tester.pump();
+      expect(completed, isFalse);
+
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pump();
+      expect(completed, isTrue);
     });
   });
 

@@ -131,6 +131,7 @@ void main() {
                 appBar: TNavBar(
                   title: '标题',
                   useDefaultBack: true,
+                  useSafeArea: true,
                   onBack: null,
                 ),
               ),
@@ -262,25 +263,26 @@ void main() {
       );
     }
 
-    testWidgets('standalone 默认将顶部安全区加入实际高度', (tester) async {
+    testWidgets('standalone 默认不加入顶部安全区', (tester) async {
       const navBar = TNavBar(title: '安全区');
       await tester.pumpWidget(safeAreaHost(child: navBar));
 
       expect(navBar.preferredSize.height, 48);
-      expect(tester.getSize(find.byType(TNavBar)).height, 72);
-      expect(tester.getTopLeft(find.text('安全区')).dy, greaterThan(24));
+      expect(tester.getSize(find.byType(TNavBar)).height, 48);
+      expect(tester.getTopLeft(find.text('安全区')).dy, lessThan(24));
     });
 
-    testWidgets('useSafeArea=false 保持内容高度', (tester) async {
-      const navBar = TNavBar(title: '关闭安全区', useSafeArea: false);
+    testWidgets('useSafeArea=true 将顶部安全区加入实际高度', (tester) async {
+      const navBar = TNavBar(title: '开启安全区', useSafeArea: true);
       await tester.pumpWidget(safeAreaHost(child: navBar));
 
       expect(navBar.preferredSize.height, 48);
-      expect(tester.getSize(find.byType(TNavBar)).height, 48);
+      expect(tester.getSize(find.byType(TNavBar)).height, 72);
+      expect(tester.getTopLeft(find.text('开启安全区')).dy, greaterThan(24));
     });
 
     testWidgets('自定义 height 不包含顶部安全区', (tester) async {
-      const navBar = TNavBar(title: '自定义高度', height: 64);
+      const navBar = TNavBar(title: '自定义高度', height: 64, useSafeArea: true);
       await tester.pumpWidget(safeAreaHost(child: navBar));
 
       expect(navBar.preferredSize.height, 64);
@@ -288,7 +290,7 @@ void main() {
     });
 
     testWidgets('Scaffold.appBar 只计算一次顶部安全区', (tester) async {
-      const navBar = TNavBar(title: 'AppBar 安全区');
+      const navBar = TNavBar(title: 'AppBar 安全区', useSafeArea: true);
       final bodyKey = GlobalKey();
       await tester.pumpWidget(
         MediaQuery(

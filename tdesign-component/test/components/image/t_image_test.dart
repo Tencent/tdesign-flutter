@@ -167,6 +167,9 @@ void main() {
       TImage(
         imageFile: File('/tmp/not-found.png'),
         fit: BoxFit.fill,
+        excludeFromSemantics: true,
+        cacheWidth: 20,
+        cacheHeight: 20,
       ),
       imageTheme: const TImageThemeData(
         color: Colors.red,
@@ -174,13 +177,14 @@ void main() {
         centerSlice: Rect.fromLTWH(1, 1, 2, 2),
         matchTextDirection: true,
         gaplessPlayback: true,
-        excludeFromSemantics: true,
         isAntiAlias: true,
-        cacheWidth: 20,
-        cacheHeight: 20,
       ),
     ));
-    expect(tester.widget<Image>(find.byType(Image)).image, isA<FileImage>());
+    final fileProvider =
+        tester.widget<Image>(find.byType(Image)).image as ResizeImage;
+    expect(fileProvider.imageProvider, isA<FileImage>());
+    expect(fileProvider.width, 20);
+    expect(fileProvider.height, 20);
   });
 
   testWidgets('all variants resolve shape and default fit', (tester) async {
@@ -207,19 +211,22 @@ void main() {
     expect(find.byType(ClipRRect), findsOneWidget);
   });
 
-  testWidgets('fit override and theme values reach Image', (tester) async {
+  testWidgets('实例解码与语义参数、Theme 视觉参数传递到 Image', (tester) async {
     const theme = TImageThemeData(
       color: Colors.red,
       colorBlendMode: BlendMode.srcIn,
       matchTextDirection: true,
       gaplessPlayback: true,
-      excludeFromSemantics: true,
       isAntiAlias: true,
-      cacheWidth: 100,
-      cacheHeight: 80,
     );
     await tester.pumpWidget(app(
-      const TImage(src: 'assets/image.png', fit: BoxFit.contain),
+      const TImage(
+        src: 'assets/image.png',
+        fit: BoxFit.contain,
+        excludeFromSemantics: true,
+        cacheWidth: 100,
+        cacheHeight: 80,
+      ),
       imageTheme: theme,
     ));
 
@@ -267,10 +274,7 @@ void main() {
       centerSlice: Rect.fromLTWH(0, 0, 10, 10),
       matchTextDirection: false,
       gaplessPlayback: false,
-      excludeFromSemantics: false,
       isAntiAlias: false,
-      cacheWidth: 100,
-      cacheHeight: 80,
     );
     const b = TImageThemeData(
       color: Colors.blue,
@@ -278,17 +282,13 @@ void main() {
       centerSlice: Rect.fromLTWH(10, 10, 20, 20),
       matchTextDirection: true,
       gaplessPlayback: true,
-      excludeFromSemantics: true,
       isAntiAlias: true,
-      cacheWidth: 200,
-      cacheHeight: 120,
     );
 
-    expect(a.copyWith(cacheWidth: 120).cacheWidth, 120);
     expect(a.copyWith().color, Colors.red);
     expect(a.lerp(b, 0.25).colorBlendMode, BlendMode.srcIn);
     expect(a.lerp(b, 0.75).matchTextDirection, isTrue);
-    expect(a.lerp(b, 0.5).cacheWidth, 150);
+    expect(a.lerp(b, 0.75).isAntiAlias, isTrue);
     expect(a.lerp(null, 0.5), same(a));
   });
 }

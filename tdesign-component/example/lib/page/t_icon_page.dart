@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/example_code.dart';
@@ -12,11 +13,7 @@ class TIconPage extends StatefulWidget {
 }
 
 class _TIconPageState extends State<TIconPage> {
-  bool showBorder = false;
-
   List<MapEntry<String, IconData>> iconList = [];
-
-  var isLoading = false;
 
   @override
   void initState() {
@@ -60,6 +57,7 @@ class _TIconPageState extends State<TIconPage> {
   Widget _buildBasicTIcon(BuildContext context) {
     // v1.0 新增：TIcon Widget（Material Icon 薄包装）
     return const Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TIcon(TIcons.home_filled),
         SizedBox(width: 16),
@@ -74,6 +72,7 @@ class _TIconPageState extends State<TIconPage> {
   Widget _buildSizedTIcon(BuildContext context) {
     // 构造器参数 size/color 直接生效
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TIcon(TIcons.home_filled,
             size: 32, color: context.tTheme.brandNormalColor),
@@ -90,6 +89,7 @@ class _TIconPageState extends State<TIconPage> {
   Widget _buildFromName(BuildContext context) {
     // 通过图标名查找（内部查找 TIcons.allIconsMap）
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TIcon.fromName('home_filled'),
         const SizedBox(width: 16),
@@ -115,9 +115,10 @@ class _TIconPageState extends State<TIconPage> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               TIcon(TIcons.home_filled),
               SizedBox(width: 16),
@@ -155,9 +156,10 @@ class _TIconPageState extends State<TIconPage> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // 构造器 size 覆盖 Theme 的 36
               const TIcon(TIcons.home_filled, size: 20),
@@ -188,95 +190,114 @@ class _TIconPageState extends State<TIconPage> {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            alignment: Alignment.topLeft,
-            child: const Wrap(
-              children: [
-                TText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText('https://tdesign.tencent.com/icons')
-              ],
+          RepaintBoundary(
+            key: const Key('icon-official-link-section'),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.topLeft,
+              color: context.tTheme.bgColorContainer,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TText('筛选 Icon 请前往 TDesign 官网：'),
+                  const SizedBox(height: 4),
+                  Link(
+                    key: const Key('icon-official-link'),
+                    uri: Uri.parse('https://tdesign.tencent.com/icons'),
+                    target: LinkTarget.blank,
+                    builder: (context, followLink) => TLink(
+                      child: const Text('https://tdesign.tencent.com/icons'),
+                      variant: TLinkVariant.icon,
+                      colorScheme: TLinkColorScheme.primary,
+                      semanticLabel: '打开 TDesign 图标官网',
+                      onPressed: followLink,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           TSearchBar(
             hintText: '搜索',
-            onSubmitted: (text) {
+            onChanged: (text) {
+              final query = text.trim().toLowerCase();
               setState(() {
-                iconList = [];
-                isLoading = true;
-              });
-              Future.delayed(const Duration(milliseconds: 30), () {
-                var list = <MapEntry<String, IconData>>[];
-                TIcons.allIconsMap.forEach((key, value) {
-                  if (key.contains(text)) {
-                    list.add(MapEntry(key, value));
-                  }
-                });
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  iconList = list;
-                  isLoading = false;
-                });
+                iconList = query.isEmpty
+                    ? TIcons.allIconsMap.entries.toList()
+                    : TIcons.allIconsMap.entries
+                        .where((item) => item.key.toLowerCase().contains(query))
+                        .toList();
               });
             },
-            onClearPressed: () {
-              setState(() {
-                iconList = TIcons.allIconsMap.entries.toList();
-              });
-            },
-          ),
-          TCell(
-            title: const Text('显示边框'),
-            note: TSwitch(
-              value: showBorder,
-              onChanged: (value) {
-                setState(() {
-                  showBorder = value;
-                });
-              },
-            ),
           ),
           Builder(builder: (context) {
             if (iconList.isEmpty) {
-              return Container(
-                alignment: Alignment.center,
-                child: isLoading ? const TText('加载中...') : const TText('暂无内容'),
+              return const SizedBox(
+                height: 96,
+                child: Center(child: TText('暂无内容')),
               );
             }
 
-            var width = MediaQuery.of(context).size.width * 0.4;
-
-            return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: SingleChildScrollView(
-                  child: Wrap(
-                      spacing: 16,
-                      runSpacing: 18,
-                      children: iconList.map((item) {
-                        return SizedBox(
-                          width: width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: showBorder
-                                      ? context.tTheme.brandDisabledColor
-                                      : Colors.transparent,
-                                ),
-                                child: TIcon(item.value, size: 32),
-                              ),
-                              TText(item.key)
-                            ],
-                          ),
-                        );
-                      }).toList()),
-                ));
+            return IconCatalogGrid(
+              icons: iconList,
+            );
           })
         ],
+      ),
+    );
+  }
+}
+
+/// Icon Demo 使用的懒加载网格，避免一次性创建全部图标。
+@visibleForTesting
+class IconCatalogGrid extends StatelessWidget {
+  const IconCatalogGrid({
+    super.key,
+    required this.icons,
+  });
+
+  final List<MapEntry<String, IconData>> icons;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height * 0.7,
+      child: GridView.builder(
+        key: const Key('icon-catalog-grid'),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 176,
+          mainAxisExtent: 80,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+        ),
+        itemCount: icons.length,
+        itemBuilder: (context, index) {
+          final item = icons[index];
+          return Container(
+            key: ValueKey('icon-catalog-item-${item.key}'),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: context.tTheme.componentStrokeColor,
+              ),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TIcon(item.value, size: 32, semanticLabel: item.key),
+                const SizedBox(height: 6),
+                TText(
+                  item.key,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

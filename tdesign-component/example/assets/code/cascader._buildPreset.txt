@@ -1,0 +1,7 @@
+Widget _buildPreset(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _presetValue,
+      onChanged: (value) => setState(() => _presetValue = value),
+    );
+  }

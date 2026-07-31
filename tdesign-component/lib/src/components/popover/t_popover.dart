@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 't_popover_theme_data.dart';
@@ -8,7 +10,7 @@ import 't_popover_widget.dart';
 /// 通过 [showPopover] 静态方法弹出，支持 12 个方向定位和箭头。
 class TPopover {
   /// 显示气泡弹层
-  static Future showPopover({
+  static Future<void> showPopover({
     required BuildContext context,
     String? content,
     Widget? contentWidget,
@@ -21,6 +23,11 @@ class TPopover {
 
     /// 点击气泡外部区域时是否关闭弹层。
     bool closeOnClickOutside = true,
+
+    /// 页面滚动时是否关闭弹层。
+    ///
+    /// 默认为 true，避免触发元素移动后气泡停留在旧坐标。
+    bool closeOnScroll = true,
     TPopoverPlacement? placement,
 
     /// 是否显示气泡箭头。
@@ -52,35 +59,122 @@ class TPopover {
     final theme =
         Theme.of(context).extension<TPopoverThemeData>() ??
         const TPopoverThemeData();
-    final capturedTheme = Theme.of(context);
-    return showDialog(
-      barrierDismissible: closeOnClickOutside,
-      barrierColor: overlayColor ?? theme.barrierColor ?? Colors.transparent,
-      useSafeArea: false,
-      context: context,
-      builder: (ctx) => Theme(
-        data: capturedTheme,
-        child: TPopoverWidget(
-          context: context,
-          content: content,
-          contentWidget: contentWidget,
-          offset: offset ?? theme.offset,
-          colorScheme: colorScheme ?? theme.colorScheme,
-          placement: placement,
-          showArrow: showArrow ?? theme.showArrow,
-          arrowSize: arrowSize ?? theme.arrowSize,
-          padding: padding ?? theme.padding,
-          width: width ?? theme.minWidth,
-          height: height ?? theme.maxHeight,
-          onTap: onTap,
-          onLongTap: onLongTap,
-          radius:
-              radius ??
-              (theme.borderRadius == null
-                  ? null
-                  : BorderRadius.circular(theme.borderRadius!)),
-        ),
-      ),
+    final overlay = Overlay.maybeOf(context, rootOverlay: true);
+    if (overlay == null) {
+      return Future<void>.error(
+        FlutterError('TPopover requires an Overlay ancestor.'),
+      );
+    }
+
+    final completer = Completer<void>();
+    final capturedThemes = InheritedTheme.capture(
+      from: context,
+      to: overlay.context,
     );
+    final effectiveOverlayColor =
+        overlayColor ?? theme.barrierColor ?? Colors.transparent;
+    final scrollPosition = Scrollable.maybeOf(context)?.position;
+    final route = ModalRoute.of(context);
+    late OverlayEntry entry;
+    LocalHistoryEntry? historyEntry;
+    VoidCallback? scrollListener;
+    var dismissed = false;
+
+    void removeEntry() {
+      final currentScrollListener = scrollListener;
+      if (currentScrollListener != null) {
+        scrollPosition?.removeListener(currentScrollListener);
+      }
+      if (entry.mounted) {
+        entry.remove();
+      }
+      entry.dispose();
+      if (!completer.isCompleted) {
+        completer.complete();
+      }
+    }
+
+    void dismiss() {
+      if (dismissed) {
+        return;
+      }
+      dismissed = true;
+      final currentHistoryEntry = historyEntry;
+      historyEntry = null;
+      currentHistoryEntry?.remove();
+      removeEntry();
+    }
+
+    void dismissFromHistory() {
+      historyEntry = null;
+      if (dismissed) {
+        return;
+      }
+      dismissed = true;
+      removeEntry();
+    }
+
+    Widget buildOverlayContent() {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          IgnorePointer(
+            child: ColoredBox(
+              key: const Key('t-popover-overlay-color'),
+              color: effectiveOverlayColor,
+            ),
+          ),
+          if (closeOnClickOutside || closeOnScroll)
+            Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerMove: closeOnScroll ? (_) => dismiss() : null,
+              onPointerSignal: closeOnScroll ? (_) => dismiss() : null,
+              child: closeOnClickOutside
+                  ? GestureDetector(
+                      key: const Key('t-popover-outside-dismiss'),
+                      behavior: HitTestBehavior.translucent,
+                      onTap: dismiss,
+                      child: const SizedBox.expand(),
+                    )
+                  : const SizedBox.expand(),
+            ),
+          TPopoverWidget(
+            context: context,
+            content: content,
+            contentWidget: contentWidget,
+            offset: offset ?? theme.offset,
+            colorScheme: colorScheme ?? theme.colorScheme,
+            placement: placement,
+            showArrow: showArrow ?? theme.showArrow,
+            arrowSize: arrowSize ?? theme.arrowSize,
+            padding: padding ?? theme.padding,
+            width: width ?? theme.minWidth,
+            height: height ?? theme.maxHeight,
+            onTap: onTap,
+            onLongTap: onLongTap,
+            radius:
+                radius ??
+                (theme.borderRadius == null
+                    ? null
+                    : BorderRadius.circular(theme.borderRadius!)),
+          ),
+        ],
+      );
+    }
+
+    entry = OverlayEntry(
+      builder: (overlayContext) => capturedThemes.wrap(buildOverlayContent()),
+    );
+
+    if (closeOnScroll && scrollPosition != null) {
+      scrollListener = dismiss;
+      scrollPosition.addListener(dismiss);
+    }
+    overlay.insert(entry);
+    if (route != null) {
+      historyEntry = LocalHistoryEntry(onRemove: dismissFromHistory);
+      route.addLocalHistoryEntry(historyEntry!);
+    }
+    return completer.future;
   }
 }

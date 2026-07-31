@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdesign_flutter/src/components/steps/t_steps.dart' show TStepsStatus;
 import 'package:tdesign_flutter/src/components/steps/t_steps_theme_data.dart';
 
 /// TStepsThemeData 纯函数覆盖（copyWith / lerp），用于提升覆盖率。
@@ -20,12 +19,8 @@ void main() {
       expect(copied.verticalSelect, false);
     });
 
-    test('copyWith cover status and verticalSelect', () {
-      final copied = theme.copyWith(
-        status: TStepsStatus.error,
-        verticalSelect: true,
-      );
-      expect(copied.status, TStepsStatus.error);
+    test('copyWith cover verticalSelect', () {
+      final copied = theme.copyWith(verticalSelect: true);
       expect(copied.verticalSelect, true);
     });
 
@@ -47,13 +42,11 @@ void main() {
 
     test('lerp cover remaining fields', () {
       const other = TStepsThemeData(
-        status: TStepsStatus.error,
         simple: true,
         readOnly: true,
         verticalSelect: true,
       );
       final lerped = theme.lerp(other, 0.5);
-      expect(lerped.status, TStepsStatus.error);
       expect(lerped.simple, true);
       expect(lerped.readOnly, true);
       expect(lerped.verticalSelect, true);

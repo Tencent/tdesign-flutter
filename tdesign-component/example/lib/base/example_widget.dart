@@ -404,6 +404,8 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       title: widget.title,
       leading: leftBarItems,
       actions: rightBarItems,
+      // ExamplePage 外层 SafeArea 已负责顶部避让。
+      useSafeArea: false,
     );
   }
 

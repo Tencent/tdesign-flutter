@@ -1,18 +1,12 @@
 Widget _entranceNoticeBar2(BuildContext context) {
-  return Theme(
-    data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        prefixIcon: TIcons.error_circle_filled,
-        suffixIcon: TIcons.chevron_right,
-      ),
-    ),
-    child: TNoticeBar(
-      content: '这是一条普通的通知信息',
-      onPressed: (target) {
-        if (target == TNoticeBarTapTarget.suffix) {
-          TToast.showText('点击了入口图标', context: context);
-        }
-      },
-    ),
+  return TNoticeBar(
+    content: '这是一条普通的通知信息',
+    prefixIcon: TIcons.error_circle_filled,
+    suffixIcon: TIcons.chevron_right,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了入口图标', context: context);
+      }
+    },
   );
 }

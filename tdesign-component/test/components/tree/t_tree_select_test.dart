@@ -97,6 +97,66 @@ void main() {
     ]);
   });
 
+  testWidgets('multiple selection stays on the active branch after value sync',
+      (tester) async {
+    var value = <List<Object?>>[
+      ['fruit', 'apple'],
+    ];
+    await tester.pumpWidget(wrap(StatefulBuilder(
+      builder: (context, setState) => TTreeSelect(
+        options: List<TTreeSelectOption>.of(options),
+        value: value,
+        multiple: true,
+        onChanged: (next) => setState(() => value = next),
+      ),
+    )));
+
+    await tester.tap(find.text('Region'));
+    await tester.pump();
+    await tester.tap(find.text('China'));
+    await tester.pump();
+    await tester.tap(find.text('Guangdong'));
+    await tester.pump();
+    expect(find.text('Shenzhen'), findsOneWidget);
+
+    await tester.tap(find.text('Shenzhen'));
+    await tester.pump();
+
+    expect(value, [
+      ['fruit', 'apple'],
+      ['region', 'china', 'guangdong', 'shenzhen'],
+    ]);
+    expect(find.text('Shenzhen'), findsOneWidget);
+  });
+
+  testWidgets('options update resets a navigation path that no longer exists',
+      (tester) async {
+    var currentOptions = options;
+    late StateSetter rebuild;
+    await tester.pumpWidget(wrap(StatefulBuilder(
+      builder: (context, setState) {
+        rebuild = setState;
+        return TTreeSelect(
+          options: currentOptions,
+          value: const [
+            ['fruit', 'apple'],
+          ],
+          onChanged: _ignore,
+        );
+      },
+    )));
+
+    await tester.tap(find.text('Region'));
+    await tester.pump();
+    expect(find.text('China'), findsOneWidget);
+
+    rebuild(() => currentOptions = [options.first]);
+    await tester.pump();
+
+    expect(find.text('China'), findsNothing);
+    expect(find.text('Apple'), findsOneWidget);
+  });
+
   testWidgets('supports arbitrary tree depth', (tester) async {
     List<List<Object?>>? changed;
     await tester.pumpWidget(wrap(TTreeSelect(

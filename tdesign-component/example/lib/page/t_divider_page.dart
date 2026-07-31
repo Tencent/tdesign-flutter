@@ -27,30 +27,37 @@ class TDividerPage extends StatelessWidget {
 
   @ExampleCode(group: 'divider')
   Widget _horizontalDivider(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: const TDivider(),
+    return const SizedBox(
+      key: Key('divider-horizontal'),
+      width: double.infinity,
+      child: TDivider(),
     );
   }
 
   @ExampleCode(group: 'divider')
   Widget _horizontalTextDivider(BuildContext context) {
-    return const Wrap(
-      runSpacing: 20,
-      children: [
-        TDivider(
-          child: Text('文字信息'),
-          align: TDividerAlign.left,
-        ),
-        TDivider(
-          child: Text('文字信息'),
-          align: TDividerAlign.center,
-        ),
-        TDivider(
-          child: Text('文字信息'),
-          align: TDividerAlign.right,
-        ),
-      ],
+    return const SizedBox(
+      key: Key('divider-text-group'),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TDivider(
+            child: Text('文字信息'),
+            align: TDividerAlign.left,
+          ),
+          SizedBox(height: 20),
+          TDivider(
+            child: Text('文字信息'),
+            align: TDividerAlign.center,
+          ),
+          SizedBox(height: 20),
+          TDivider(
+            child: Text('文字信息'),
+            align: TDividerAlign.right,
+          ),
+        ],
+      ),
     );
   }
 
@@ -70,6 +77,7 @@ class TDividerPage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
+              height: 12,
               child: TDivider(layout: TDividerLayout.vertical),
             ),
           ),
@@ -77,6 +85,7 @@ class TDividerPage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
+              height: 12,
               child: TDivider(layout: TDividerLayout.vertical),
             ),
           ),
@@ -88,26 +97,33 @@ class TDividerPage extends StatelessWidget {
 
   @ExampleCode(group: 'divider')
   Widget _dashedDivider(BuildContext context) {
-    return const Wrap(
-      runSpacing: 20,
-      children: [
-        TDivider(dashed: true),
-        TDivider(
-          child: Text('文字信息'),
-          align: TDividerAlign.left,
-          dashed: true,
-        ),
-        TDivider(
-          child: Text('文字信息'),
-          align: TDividerAlign.center,
-          dashed: true,
-        ),
-        TDivider(
-          child: Text('文字信息'),
-          align: TDividerAlign.right,
-          dashed: true,
-        ),
-      ],
+    return const SizedBox(
+      key: Key('divider-dashed-group'),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TDivider(dashed: true),
+          SizedBox(height: 20),
+          TDivider(
+            child: Text('文字信息'),
+            align: TDividerAlign.left,
+            dashed: true,
+          ),
+          SizedBox(height: 20),
+          TDivider(
+            child: Text('文字信息'),
+            align: TDividerAlign.center,
+            dashed: true,
+          ),
+          SizedBox(height: 20),
+          TDivider(
+            child: Text('文字信息'),
+            align: TDividerAlign.right,
+            dashed: true,
+          ),
+        ],
+      ),
     );
   }
 }

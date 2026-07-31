@@ -13,9 +13,11 @@ Widget _buildPopup(BuildContext context) {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height * 0.6,
             titleWidget: const TText('选择分类'),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TTreeSelect(
+                key: const Key('tree-select-popup'),
                 options: _options,
                 value: draft,
                 multiple: true,
@@ -25,7 +27,7 @@ Widget _buildPopup(BuildContext context) {
               ),
             ),
             onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm) {
+              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
                 setState(() {
                   _popupValue = [
                     for (final path in draft) List<Object?>.of(path),

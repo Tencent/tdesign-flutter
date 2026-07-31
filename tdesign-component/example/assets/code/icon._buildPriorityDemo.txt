@@ -13,9 +13,10 @@ Widget _buildPriorityDemo(BuildContext context) {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // 构造器 size 覆盖 Theme 的 36
               const TIcon(TIcons.home_filled, size: 20),

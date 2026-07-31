@@ -96,7 +96,7 @@ class TResult extends StatelessWidget {
       case TResultVariant.warning:
         return Icon(
           TIcons.error_circle,
-          color: material?.tertiary ?? context.tTheme.warningNormalColor,
+          color: context.tTheme.warningNormalColor,
           size: 70,
         );
       case TResultVariant.error:

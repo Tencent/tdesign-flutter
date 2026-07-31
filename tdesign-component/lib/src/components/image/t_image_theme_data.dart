@@ -1,8 +1,6 @@
-import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/material.dart';
 
-/// 图片组件的视觉和解码默认值。
+/// 图片组件的视觉默认值。
 @immutable
 class TImageThemeData extends ThemeExtension<TImageThemeData> {
   const TImageThemeData({
@@ -11,10 +9,7 @@ class TImageThemeData extends ThemeExtension<TImageThemeData> {
     this.centerSlice,
     this.matchTextDirection,
     this.gaplessPlayback,
-    this.excludeFromSemantics,
     this.isAntiAlias,
-    this.cacheHeight,
-    this.cacheWidth,
   });
 
   /// 图片叠加色。
@@ -32,17 +27,8 @@ class TImageThemeData extends ThemeExtension<TImageThemeData> {
   /// 更新 provider 时是否保留上一帧。
   final bool? gaplessPlayback;
 
-  /// 是否从语义树排除图片。
-  final bool? excludeFromSemantics;
-
   /// 是否启用抗锯齿。
   final bool? isAntiAlias;
-
-  /// 解码缓存高度。
-  final int? cacheHeight;
-
-  /// 解码缓存宽度。
-  final int? cacheWidth;
 
   @override
   TImageThemeData copyWith({
@@ -51,10 +37,7 @@ class TImageThemeData extends ThemeExtension<TImageThemeData> {
     Rect? centerSlice,
     bool? matchTextDirection,
     bool? gaplessPlayback,
-    bool? excludeFromSemantics,
     bool? isAntiAlias,
-    int? cacheHeight,
-    int? cacheWidth,
   }) {
     return TImageThemeData(
       color: color ?? this.color,
@@ -62,10 +45,7 @@ class TImageThemeData extends ThemeExtension<TImageThemeData> {
       centerSlice: centerSlice ?? this.centerSlice,
       matchTextDirection: matchTextDirection ?? this.matchTextDirection,
       gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
-      excludeFromSemantics: excludeFromSemantics ?? this.excludeFromSemantics,
       isAntiAlias: isAntiAlias ?? this.isAntiAlias,
-      cacheHeight: cacheHeight ?? this.cacheHeight,
-      cacheWidth: cacheWidth ?? this.cacheWidth,
     );
   }
 
@@ -81,11 +61,7 @@ class TImageThemeData extends ThemeExtension<TImageThemeData> {
       matchTextDirection:
           t < 0.5 ? matchTextDirection : other.matchTextDirection,
       gaplessPlayback: t < 0.5 ? gaplessPlayback : other.gaplessPlayback,
-      excludeFromSemantics:
-          t < 0.5 ? excludeFromSemantics : other.excludeFromSemantics,
       isAntiAlias: t < 0.5 ? isAntiAlias : other.isAntiAlias,
-      cacheHeight: lerpDouble(cacheHeight, other.cacheHeight, t)?.round(),
-      cacheWidth: lerpDouble(cacheWidth, other.cacheWidth, t)?.round(),
     );
   }
 }

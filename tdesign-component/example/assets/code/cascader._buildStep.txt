@@ -1,8 +1,8 @@
 Widget _buildStep(BuildContext context) {
     return TCascader(
       options: _options,
-      value: _value,
+      value: _stepValue,
       variant: TCascaderVariant.step,
-      onChanged: (value) => setState(() => _value = value),
+      onChanged: (value) => setState(() => _stepValue = value),
     );
   }

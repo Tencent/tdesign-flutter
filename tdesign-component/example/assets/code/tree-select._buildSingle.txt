@@ -1,5 +1,6 @@
 Widget _buildSingle(BuildContext context) {
     return TTreeSelect(
+      key: const Key('tree-select-single'),
       options: _options,
       value: _singleValue,
       onChanged: (value) => setState(() => _singleValue = value),

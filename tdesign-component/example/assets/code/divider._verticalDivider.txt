@@ -13,6 +13,7 @@ Widget _verticalDivider(BuildContext context) {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
+              height: 12,
               child: TDivider(layout: TDividerLayout.vertical),
             ),
           ),
@@ -20,6 +21,7 @@ Widget _verticalDivider(BuildContext context) {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
+              height: 12,
               child: TDivider(layout: TDividerLayout.vertical),
             ),
           ),

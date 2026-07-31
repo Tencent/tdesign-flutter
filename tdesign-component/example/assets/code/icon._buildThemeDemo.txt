@@ -12,9 +12,10 @@ Widget _buildThemeDemo(BuildContext context) {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               TIcon(TIcons.home_filled),
               SizedBox(width: 16),

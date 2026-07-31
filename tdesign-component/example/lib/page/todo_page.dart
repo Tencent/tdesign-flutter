@@ -17,6 +17,7 @@ class TodoPage extends StatelessWidget {
               children: [
                 const TNavBar(
                   title: 'TODO',
+                  useSafeArea: true,
                 ),
                 Expanded(
                   child: Container(

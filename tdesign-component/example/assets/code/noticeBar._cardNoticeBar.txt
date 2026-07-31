@@ -37,16 +37,10 @@ Widget _cardNoticeBar(BuildContext context) {
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           clipBehavior: Clip.hardEdge,
-          child: Theme(
-            data: Theme.of(context).mergeExtension(
-              const TNoticeBarThemeData(
-                prefixIcon: TIcons.error_circle_filled,
-                suffixIcon: TIcons.chevron_right,
-              ),
-            ),
-            child: const TNoticeBar(
-              content: '这是一条普通的通知信息',
-            ),
+          child: const TNoticeBar(
+            content: '这是一条普通的通知信息',
+            prefixIcon: TIcons.error_circle_filled,
+            suffixIcon: TIcons.chevron_right,
           ),
         ),
         Container(

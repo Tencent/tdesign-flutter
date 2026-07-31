@@ -42,7 +42,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.useBorderStyle,
     this.border,
     this.boxShadow,
-    this.useSafeArea = true,
+    this.useSafeArea = false,
   }) : super(key: key);
 
   /// 标题文案
@@ -115,7 +115,8 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 是否避让顶部系统安全区。
   ///
-  /// 默认为 true。安全区高度只计入实际渲染高度，不计入 [preferredSize]；
+  /// 默认为 false。仅当导航栏直接位于页面顶部且外层未处理安全区时开启。
+  /// 开启后，安全区高度只计入实际渲染高度，不计入 [preferredSize]；
   /// [height] 始终表示导航栏内容高度。
   final bool useSafeArea;
 

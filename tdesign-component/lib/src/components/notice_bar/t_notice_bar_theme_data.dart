@@ -26,12 +26,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   /// 语义色变体
   final TNoticeBarVariant? variant;
 
-  /// 左侧图标
-  final IconData? prefixIcon;
-
-  /// 右侧图标
-  final IconData? suffixIcon;
-
   /// 文字高度
   final double? height;
 
@@ -52,8 +46,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
 
   const TNoticeBarThemeData({
     this.variant,
-    this.prefixIcon,
-    this.suffixIcon,
     this.height,
     this.backgroundColor,
     this.textStyle,
@@ -73,8 +65,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     }
     return TNoticeBarThemeData(
       variant: other.variant ?? variant,
-      prefixIcon: other.prefixIcon ?? prefixIcon,
-      suffixIcon: other.suffixIcon ?? suffixIcon,
       height: other.height ?? height,
       backgroundColor: other.backgroundColor ?? backgroundColor,
       textStyle: other.textStyle ?? textStyle,
@@ -130,8 +120,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   @override
   TNoticeBarThemeData copyWith({
     TNoticeBarVariant? variant,
-    IconData? prefixIcon,
-    IconData? suffixIcon,
     double? height,
     Color? backgroundColor,
     TextStyle? textStyle,
@@ -141,8 +129,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   }) {
     return TNoticeBarThemeData(
       variant: variant ?? this.variant,
-      prefixIcon: prefixIcon ?? this.prefixIcon,
-      suffixIcon: suffixIcon ?? this.suffixIcon,
       height: height ?? this.height,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       textStyle: textStyle ?? this.textStyle,
@@ -160,8 +146,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     }
     return TNoticeBarThemeData(
       variant: t < 0.5 ? variant : other.variant,
-      prefixIcon: t < 0.5 ? prefixIcon : other.prefixIcon,
-      suffixIcon: t < 0.5 ? suffixIcon : other.suffixIcon,
       height: lerpDouble(height, other.height, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),

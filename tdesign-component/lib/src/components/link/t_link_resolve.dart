@@ -7,7 +7,8 @@ import 't_link_types.dart';
 
 /// Link 样式解析器
 ///
-/// 优先级链：构造器参数 > TLinkThemeData > Token 默认值
+/// 优先级链：构造器参数 > TLinkThemeData > 显式 Material/ColorScheme
+/// > Token 默认值
 /// 这是唯一的样式 merge 入口，build 内禁止内联颜色/尺寸计算。
 class TLinkResolve {
   TLinkResolve._(); // coverage:ignore-line
@@ -106,7 +107,7 @@ class TLinkResolve {
       TLinkColorScheme.danger =>
         material?.error ?? tTheme.errorNormalColor, // coverage:ignore-line
       TLinkColorScheme.warning =>
-        material?.tertiary ?? tTheme.warningNormalColor, // coverage:ignore-line
+        tTheme.warningNormalColor, // coverage:ignore-line
       TLinkColorScheme.success =>
         tTheme.successNormalColor, // coverage:ignore-line
       TLinkColorScheme.defaultTheme =>
@@ -125,7 +126,7 @@ class TLinkResolve {
       TLinkColorScheme.primary => materialDisabled ?? tTheme.brandDisabledColor,
       TLinkColorScheme.danger => materialDisabled ?? tTheme.errorDisabledColor,
       TLinkColorScheme.warning =>
-        materialDisabled ?? tTheme.warningDisabledColor, // coverage:ignore-line
+        tTheme.warningDisabledColor, // coverage:ignore-line
       TLinkColorScheme.success =>
         tTheme.successDisabledColor, // coverage:ignore-line
       TLinkColorScheme.defaultTheme =>

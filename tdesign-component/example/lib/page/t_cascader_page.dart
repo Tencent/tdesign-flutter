@@ -26,19 +26,51 @@ class _TCascaderPageState extends State<TCascaderPage> {
             TCascaderOption(label: '福田区', value: 'ft'),
           ],
         ),
-        TCascaderOption(label: '广州市', value: 'gz'),
+        TCascaderOption(
+          label: '广州市',
+          value: 'gz',
+          children: [
+            TCascaderOption(label: '越秀区', value: 'yx'),
+            TCascaderOption(label: '天河区', value: 'th'),
+          ],
+        ),
       ],
     ),
     TCascaderOption(
       label: '浙江省',
       value: 'zj',
       children: [
-        TCascaderOption(label: '杭州市', value: 'hz'),
+        TCascaderOption(
+          label: '杭州市',
+          value: 'hz',
+          children: [
+            TCascaderOption(label: '西湖区', value: 'xh'),
+            TCascaderOption(label: '余杭区', value: 'yh'),
+          ],
+        ),
+        TCascaderOption(label: '宁波市', value: 'nb'),
       ],
     ),
+    TCascaderOption(label: '香港特别行政区', value: 'hk'),
   ];
 
-  List<Object?> _value = const [];
+  static const _optionsWithDisabled = [
+    TCascaderOption(
+      label: '广东省',
+      value: 'gd',
+      children: [
+        TCascaderOption(label: '深圳市', value: 'sz', disabled: true),
+        TCascaderOption(label: '广州市', value: 'gz'),
+      ],
+    ),
+    TCascaderOption(label: '暂不可选地区', value: 'disabled', disabled: true),
+  ];
+
+  List<Object?> _tabValue = const [];
+  List<Object?> _stepValue = const ['gd'];
+  List<Object?> _presetValue = const ['zj', 'hz', 'xh'];
+  List<Object?> _placeholderValue = const ['gd'];
+  List<Object?> _disabledOptionValue = const [];
   List<Object?> _popupValue = const ['gd', 'sz', 'ns'];
 
   @override
@@ -49,12 +81,19 @@ class _TCascaderPageState extends State<TCascaderPage> {
       exampleCodeGroup: 'cascader',
       children: [
         ExampleModule(title: '弹出层用法', children: [
-          ExampleItem(desc: '底部弹出选择', builder: _buildPopup),
+          ExampleItem(desc: '底部弹出选择（确认后提交）', builder: _buildPopup),
         ]),
-        ExampleModule(title: '基础能力', children: [
+        ExampleModule(title: '基础用法', children: [
           ExampleItem(desc: '标签导航', builder: _buildTab),
           ExampleItem(desc: '步骤导航', builder: _buildStep),
-          ExampleItem(desc: '禁用状态', builder: _buildDisabled),
+        ]),
+        ExampleModule(title: '选择状态', children: [
+          ExampleItem(desc: '默认选中路径', builder: _buildPreset),
+          ExampleItem(desc: '自定义占位文案', builder: _buildPlaceholder),
+        ]),
+        ExampleModule(title: '禁用状态', children: [
+          ExampleItem(desc: '禁用部分选项', builder: _buildDisabledOption),
+          ExampleItem(desc: '整体禁用', builder: _buildDisabled),
         ]),
       ],
     );
@@ -64,8 +103,27 @@ class _TCascaderPageState extends State<TCascaderPage> {
   Widget _buildTab(BuildContext context) {
     return TCascader(
       options: _options,
-      value: _value,
-      onChanged: (value) => setState(() => _value = value),
+      value: _tabValue,
+      onChanged: (value) => setState(() => _tabValue = value),
+    );
+  }
+
+  @ExampleCode(group: 'cascader')
+  Widget _buildPreset(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _presetValue,
+      onChanged: (value) => setState(() => _presetValue = value),
+    );
+  }
+
+  @ExampleCode(group: 'cascader')
+  Widget _buildPlaceholder(BuildContext context) {
+    return TCascader(
+      options: _options,
+      value: _placeholderValue,
+      placeholder: '请选择下一级',
+      onChanged: (value) => setState(() => _placeholderValue = value),
     );
   }
 
@@ -73,15 +131,27 @@ class _TCascaderPageState extends State<TCascaderPage> {
   Widget _buildStep(BuildContext context) {
     return TCascader(
       options: _options,
-      value: _value,
+      value: _stepValue,
       variant: TCascaderVariant.step,
-      onChanged: (value) => setState(() => _value = value),
+      onChanged: (value) => setState(() => _stepValue = value),
+    );
+  }
+
+  @ExampleCode(group: 'cascader')
+  Widget _buildDisabledOption(BuildContext context) {
+    return TCascader(
+      options: _optionsWithDisabled,
+      value: _disabledOptionValue,
+      onChanged: (value) => setState(() => _disabledOptionValue = value),
     );
   }
 
   @ExampleCode(group: 'cascader')
   Widget _buildDisabled(BuildContext context) {
-    return TCascader(options: _options, value: _value);
+    return const TCascader(
+      options: _options,
+      value: ['gd', 'sz', 'ns'],
+    );
   }
 
   @ExampleCode(group: 'cascader')
@@ -110,9 +180,11 @@ class _TCascaderPageState extends State<TCascaderPage> {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
+            height: MediaQuery.sizeOf(context).height * 0.6,
             titleWidget: const TText('选择地区'),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TCascader(
+                key: const Key('cascader-popup'),
                 options: _options,
                 value: draft,
                 onChanged: (value) {
@@ -121,7 +193,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
               ),
             ),
             onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm) {
+              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
                 setState(() => _popupValue = List<Object?>.of(draft));
               }
             },

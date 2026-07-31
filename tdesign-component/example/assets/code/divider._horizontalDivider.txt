@@ -1,6 +1,7 @@
 Widget _horizontalDivider(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: const TDivider(),
+    return const SizedBox(
+      key: Key('divider-horizontal'),
+      width: double.infinity,
+      child: TDivider(),
     );
   }

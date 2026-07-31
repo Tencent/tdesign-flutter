@@ -24,7 +24,7 @@ void main() {
   testWidgets('implicit Material defaults do not change TDesign visuals', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(760, 740);
+    tester.view.physicalSize = const Size(760, 780);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
 
@@ -118,6 +118,18 @@ class _ControlColumn extends StatelessWidget {
                   TTag('Tag'),
                   SizedBox(width: 12),
                   TBadge(label: '8'),
+                ],
+              ),
+              const SizedBox(height: 12),
+              const Row(
+                children: [
+                  TLink(
+                    colorScheme: TLinkColorScheme.success,
+                    onPressed: _tapNoop,
+                    child: Text('Success link'),
+                  ),
+                  SizedBox(width: 12),
+                  TTag('Success tag', colorScheme: TTagColorScheme.success),
                 ],
               ),
               const SizedBox(height: 16),
