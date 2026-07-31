@@ -12,7 +12,7 @@ void main() {
       shape: TButtonShape.round,
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(4),
-      iconSpacing: 6,
+      iconTextSpacing: 6,
       gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
     );
 
@@ -21,14 +21,14 @@ void main() {
         defaultVariant: TButtonVariant.outline,
         defaultSize: TButtonSize.large,
         shape: TButtonShape.circle,
-        iconSpacing: 10,
+        iconTextSpacing: 10,
       );
       expect(copied, isA<TButtonThemeData>());
       expect(copied.defaultVariant, TButtonVariant.outline);
       expect(copied.defaultSize, TButtonSize.large);
       expect(copied.shape, TButtonShape.circle);
       // 未覆盖字段保持原值
-      expect(copied.iconSpacing, 10);
+      expect(copied.iconTextSpacing, 10);
       expect(copied.padding, theme.padding);
     });
 
@@ -37,7 +37,7 @@ void main() {
         defaultVariant: TButtonVariant.text,
         defaultSize: TButtonSize.small,
         shape: TButtonShape.square,
-        iconSpacing: 20,
+        iconTextSpacing: 20,
       );
       final at0 = theme.lerp(other, 0);
       final atHalf = theme.lerp(other, 0.5);
@@ -60,6 +60,17 @@ void main() {
       const bare = TButtonThemeData();
       expect(bare.effectiveShape, TButtonShape.rectangle);
       expect(theme.effectiveShape, TButtonShape.round);
+    });
+
+    test('iconTextSpacing 拒绝负数和无穷值', () {
+      expect(
+        () => TButtonThemeData(iconTextSpacing: -1),
+        throwsAssertionError,
+      );
+      expect(
+        () => TButtonThemeData(iconTextSpacing: double.infinity),
+        throwsAssertionError,
+      );
     });
   });
 }

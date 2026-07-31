@@ -42,6 +42,7 @@ class TProgress extends StatelessWidget {
     double? value,
     this.label,
     this.onTap,
+    this.onLongPress,
   })  : value = _validateProgress(value),
         super(key: key);
 
@@ -58,6 +59,12 @@ class TProgress extends StatelessWidget {
   ///
   /// 这两个形态提供了可操作的视觉样式；线性和环形形态不会响应点击。
   final VoidCallback? onTap;
+
+  /// 长按 `button` 或 `micro` 进度条时触发。
+  ///
+  /// 可以独立于 [onTap] 使用；长按不会同时触发 [onTap]。线性和环形
+  /// 形态不会响应长按。
+  final VoidCallback? onLongPress;
 
   static double? _validateProgress(double? value) => value?.clamp(0.0, 1.0);
 
@@ -89,6 +96,7 @@ class TProgress extends StatelessWidget {
       value: value,
       label: label,
       onTap: onTap,
+      onLongPress: onLongPress,
       progressLabelPosition: progressLabelPosition,
       strokeWidth: strokeWidth,
       circleRadius: circleRadius,
@@ -156,6 +164,7 @@ class _ProgressIndicator extends StatefulWidget {
   final double? value;
   final Widget? label;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final TProgressLabelPosition progressLabelPosition;
   final double strokeWidth;
   final double circleRadius;
@@ -173,6 +182,7 @@ class _ProgressIndicator extends StatefulWidget {
     this.value,
     this.label,
     this.onTap,
+    this.onLongPress,
     this.progressLabelPosition = TProgressLabelPosition.inside,
     required this.strokeWidth,
     required this.linearBorderRadius,
@@ -530,6 +540,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         builder: (context, child) {
           return GestureDetector(
             onTap: widget.onTap,
+            onLongPress: widget.onLongPress,
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -571,6 +582,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
                 borderRadius: widget.linearBorderRadius,
                 child: GestureDetector(
                   onTap: widget.onTap,
+                  onLongPress: widget.onLongPress,
                   child: Stack(
                     children: [
                       _buildBackgroundContainer(),

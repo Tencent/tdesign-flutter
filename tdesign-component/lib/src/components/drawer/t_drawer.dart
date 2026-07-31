@@ -127,13 +127,16 @@ class TDrawer {
   }
 }
 
+/// [TDrawer.show] 返回的抽屉生命周期控制句柄。
 class TDrawerHandle {
   const TDrawerHandle._(this._handle);
 
   final TPopupHandle? _handle;
 
+  /// 当前抽屉是否仍显示在路由中。
   bool get isShowing => _handle?.isShowing ?? false;
 
+  /// 关闭当前抽屉；重复调用安全。
   void close() {
     _handle?.close();
   }

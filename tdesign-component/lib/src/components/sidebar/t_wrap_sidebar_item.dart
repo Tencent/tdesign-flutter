@@ -7,6 +7,9 @@ import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_sidebar_theme_data.dart';
 
+/// 侧边栏单项的内部渲染组件。
+///
+/// 通常由侧边导航栏创建；直接使用时需要调用方同步提供选中和相邻项状态。
 class TWrapSideBarItem extends StatelessWidget {
   const TWrapSideBarItem({
     Key? key,

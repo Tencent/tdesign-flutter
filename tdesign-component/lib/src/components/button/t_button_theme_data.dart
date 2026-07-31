@@ -36,8 +36,11 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 外边距
   final EdgeInsetsGeometry? margin;
 
-  /// 图标与文案之间的间距
-  final double? iconSpacing;
+  /// 图标与文案之间的间距，单位为逻辑像素。
+  ///
+  /// 仅在按钮同时提供 icon 和 child 时生效；该值控制两者
+  /// 之间的实际间隔，不会改变按钮整体内边距。
+  final double? iconTextSpacing;
 
   /// 渐变背景色（装饰层，非 ButtonStyle 字段）
   final Gradient? gradient;
@@ -52,9 +55,13 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
     this.shape,
     this.padding,
     this.margin,
-    this.iconSpacing,
+    this.iconTextSpacing,
     this.gradient,
-  });
+  }) : assert(
+          iconTextSpacing == null ||
+              (iconTextSpacing >= 0 && iconTextSpacing < double.infinity),
+          'iconTextSpacing must be finite and non-negative',
+        );
 
   @override
   TButtonThemeData copyWith({
@@ -67,7 +74,7 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
     TButtonShape? shape,
     EdgeInsetsGeometry? padding,
     EdgeInsetsGeometry? margin,
-    double? iconSpacing,
+    double? iconTextSpacing,
     Gradient? gradient,
   }) {
     return TButtonThemeData(
@@ -80,7 +87,7 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
       shape: shape ?? this.shape,
       padding: padding ?? this.padding,
       margin: margin ?? this.margin,
-      iconSpacing: iconSpacing ?? this.iconSpacing,
+      iconTextSpacing: iconTextSpacing ?? this.iconTextSpacing,
       gradient: gradient ?? this.gradient,
     );
   }
@@ -100,7 +107,7 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
       shape: t < 0.5 ? shape : other.shape,
       padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
       margin: EdgeInsetsGeometry.lerp(margin, other.margin, t),
-      iconSpacing: lerpDouble(iconSpacing, other.iconSpacing, t),
+      iconTextSpacing: lerpDouble(iconTextSpacing, other.iconTextSpacing, t),
       gradient: t < 0.5 ? gradient : other.gradient,
     );
   }

@@ -22,6 +22,7 @@ enum TResultVariant {
   error,
 }
 
+/// 用于展示成功、警告、失败或默认结果状态的内容块。
 class TResult extends StatelessWidget {
   const TResult({
     Key? key,

@@ -5,6 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 
+/// 复选框或单选框使用的卡片式选择容器。
 class TSelectionCard extends StatelessWidget {
   const TSelectionCard({
     super.key,
@@ -56,6 +57,7 @@ class TSelectionCard extends StatelessWidget {
   }
 }
 
+/// 用于排列多个 [TSelectionCard] 的布局容器。
 class TSelectionCardGroupLayout extends StatelessWidget {
   const TSelectionCardGroupLayout({
     super.key,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// 不带旋转动画的折叠面板展开状态图标。
 class TNonAnimatedExpandIcon extends StatelessWidget {
   const TNonAnimatedExpandIcon({
     required this.isExpanded,

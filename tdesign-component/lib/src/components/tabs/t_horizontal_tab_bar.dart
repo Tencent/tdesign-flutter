@@ -90,6 +90,9 @@ class _TabStyle extends AnimatedWidget {
   }
 }
 
+/// TDesign 风格的水平标签栏。
+///
+/// 使用外部 [controller]，或从 [DefaultTabController] 取得选中和动画状态。
 class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Creates a material design tab bar.
   ///

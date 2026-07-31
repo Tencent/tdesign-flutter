@@ -239,6 +239,7 @@ class TGIconHeaderWidget extends StatefulWidget {
   }
 }
 
+/// [TGIconHeaderWidget] 的状态实现。
 class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
     with TickerProviderStateMixin {
   IndicatorMode get _refreshState => widget.state.mode;

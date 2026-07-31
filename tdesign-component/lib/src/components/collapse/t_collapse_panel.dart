@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 't_collapse_types.dart';
 
+/// 根据折叠状态构建面板操作文字的回调。
 typedef TCollapseIconTextBuilder = String Function(
     BuildContext context, bool isExpanded);
 

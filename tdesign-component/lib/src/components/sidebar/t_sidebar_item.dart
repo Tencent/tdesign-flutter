@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../badge/t_badge.dart';
 
+/// 侧边导航栏的不可变配置项。
+///
+/// [value] 应在同一个侧边导航栏的 children 列表中保持唯一，以便组件稳定地
+/// 保留选中状态和滚动目标。
 class TSideBarItem {
   const TSideBarItem({
     Key? key,

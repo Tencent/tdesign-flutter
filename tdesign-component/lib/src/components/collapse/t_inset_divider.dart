@@ -7,6 +7,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 
+/// 带水平缩进的折叠面板分隔线。
 class TInsetDivider extends StatelessWidget {
   const TInsetDivider({
     this.color,

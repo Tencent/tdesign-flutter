@@ -90,6 +90,88 @@ void main() {
       expect(find.byType(TButton), findsOneWidget);
     });
 
+    testWidgets('onLongPress 与点击并存且长按只触发长按回调', (tester) async {
+      var taps = 0;
+      var longPresses = 0;
+      await tester.pumpWidget(wrap(TButton(
+        child: const Text('长按'),
+        onPressed: () => taps++,
+        onLongPress: () => longPresses++,
+      )));
+
+      await tester.longPress(find.byType(ElevatedButton));
+      expect(taps, 0);
+      expect(longPresses, 1);
+
+      await tester.tap(find.byType(ElevatedButton));
+      expect(taps, 1);
+      expect(longPresses, 1);
+    });
+
+    testWidgets('onPressed 为空时 onLongPress 也保持禁用', (tester) async {
+      var longPresses = 0;
+      await tester.pumpWidget(wrap(TButton(
+        child: const Text('禁用长按'),
+        onLongPress: () => longPresses++,
+      )));
+
+      await tester.longPress(find.byType(ElevatedButton));
+      expect(longPresses, 0);
+    });
+
+    testWidgets('渐变按钮也支持长按且不会触发点击', (tester) async {
+      var taps = 0;
+      var longPresses = 0;
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            const TButtonThemeData(
+              gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+            ),
+          ],
+        ),
+        home: Scaffold(
+          body: TButton(
+            child: const Text('渐变长按'),
+            onPressed: () => taps++,
+            onLongPress: () => longPresses++,
+          ),
+        ),
+      ));
+
+      await tester.longPress(find.byType(InkWell));
+      expect(taps, 0);
+      expect(longPresses, 1);
+    });
+
+    testWidgets('Theme 的 iconTextSpacing 控制图标与文本的实际间距',
+        (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            const TButtonThemeData(iconTextSpacing: 20),
+          ],
+        ),
+        home: const Scaffold(
+          body: TButton(
+            icon: Icon(Icons.add),
+            child: Text('间距'),
+            onPressed: _noop,
+          ),
+        ),
+      ));
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.width == 20 && widget.height == null,
+        ),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('style 覆盖可构建', (tester) async {
       await tester.pumpWidget(wrap(TButton(
         child: const Text('覆盖'),

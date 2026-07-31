@@ -156,8 +156,47 @@ void main() {
       expect(taps, 1);
     });
 
+    testWidgets('button variant 支持独立长按且不触发点击', (tester) async {
+      var taps = 0;
+      var longPresses = 0;
+      await tester.pumpWidget(wrapWithTheme(
+        SizedBox(
+          width: 200,
+          child: TProgress(
+            variant: TProgressVariant.button,
+            value: 0.5,
+            onTap: () => taps++,
+            onLongPress: () => longPresses++,
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.byType(TProgress));
+      await tester.pump();
+      expect(longPresses, 1);
+      expect(taps, 0);
+    });
+
+    testWidgets('micro variant 仅提供 onLongPress 时仍可长按', (tester) async {
+      var longPresses = 0;
+      await tester.pumpWidget(wrapWithTheme(
+        TProgress(
+          variant: TProgressVariant.micro,
+          value: 0.5,
+          onLongPress: () => longPresses++,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.byType(TProgress));
+      await tester.pump();
+      expect(longPresses, 1);
+    });
+
     testWidgets('linear variant 不响应交互回调', (tester) async {
       var taps = 0;
+      var longPresses = 0;
       await tester.pumpWidget(wrapWithTheme(
         SizedBox(
           width: 200,
@@ -165,6 +204,7 @@ void main() {
             variant: TProgressVariant.linear,
             value: 0.5,
             onTap: () => taps++,
+            onLongPress: () => longPresses++,
           ),
         ),
       ));
@@ -173,6 +213,9 @@ void main() {
       await tester.tap(find.byType(TProgress));
       await tester.pump();
       expect(taps, 0);
+      await tester.longPress(find.byType(TProgress));
+      await tester.pump();
+      expect(longPresses, 0);
     });
   });
 

@@ -18,6 +18,7 @@ enum TEmptyVariant {
   operation,
 }
 
+/// 用于空数据、网络异常和操作引导的空状态组件。
 class TEmpty extends StatelessWidget {
   const TEmpty({
     this.variant = TEmptyVariant.plain,

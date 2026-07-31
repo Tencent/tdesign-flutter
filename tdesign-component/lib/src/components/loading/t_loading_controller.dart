@@ -4,6 +4,7 @@ import '../../util/context_extension.dart';
 import 't_loading.dart';
 import 't_loading_theme_data.dart';
 
+/// 用于命令式显示和关闭加载状态的控制器。
 class TLoadingController {
   static OverlayEntry? _overlayEntry;
 

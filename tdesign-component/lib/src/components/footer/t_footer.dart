@@ -19,6 +19,7 @@ enum TFooterVariant {
   brand,
 }
 
+/// 页面底部的版权、链接和品牌信息区域。
 class TFooter extends StatelessWidget {
   const TFooter(
     this.variant, {

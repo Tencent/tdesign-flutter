@@ -18,9 +18,8 @@ class TButtonResolve {
   /// [variant] 按钮形态，决定 fill / outline / text / ghost 的基础样式链路。
   /// [colorScheme] 语义色方案；为 null 时使用默认色方案。
   /// [size] 尺寸规格，用于推导最小尺寸、内边距和默认字号。
-  /// [icon] 图标内容；与 [hasChild]、[iconPosition] 一起决定图标间距和尺寸。
+  /// [icon] 图标内容；与 [hasChild] 一起决定图标尺寸。
   /// [hasChild] 是否存在文本或自定义内容，用于区分纯图标按钮与图文按钮。
-  /// [iconPosition] 图标位置，用于计算图标和内容之间的间距。
   /// [theme] P1 组件主题，提供默认形态、色板、间距、渐变等配置。
   /// [instanceStyle] P0 实例样式，优先级最高，会覆盖所有 resolve 结果。
   /// [context] 当前构建上下文，用于读取 TDesign 全局 Token。
@@ -35,14 +34,11 @@ class TButtonResolve {
     /// 尺寸规格，用于推导最小尺寸、内边距和默认字号。
     required TButtonSize size,
 
-    /// 图标内容；与 [hasChild]、[iconPosition] 一起决定图标间距和尺寸。
+    /// 图标内容；与 [hasChild] 一起决定图标尺寸。
     required Widget? icon,
 
     /// 是否存在文本或自定义内容，用于区分纯图标按钮与图文按钮。
     required bool hasChild,
-
-    /// 图标位置，用于计算图标和内容之间的间距。
-    required TButtonIconPosition iconPosition,
 
     /// P1 组件主题，提供默认形态、色板、间距、渐变等配置。
     required TButtonThemeData? theme,
@@ -101,11 +97,7 @@ class TButtonResolve {
                 WidgetStatePropertyAll<EdgeInsetsGeometry>(theme!.padding!))
         : null;
 
-    // 6. iconSpacing
-    final spacing = theme?.iconSpacing ?? 8.0;
-    final iconSpacingStyle = _resolveIconSpacing(spacing, iconPosition);
-
-    // 合并：P2 色板 → colorScheme → shape → size → textStyle → Theme padding → iconSpacing → P0
+    // 合并：P2 色板 → colorScheme → shape → size → textStyle → Theme padding → P0
     var resolved = variantPalette ?? const ButtonStyle();
     resolved = _overrideWith(resolved, colorStyle);
     resolved = _overrideWith(resolved, shapeStyle);
@@ -114,7 +106,6 @@ class TButtonResolve {
     if (paddingStyle != null) {
       resolved = _overrideWith(resolved, paddingStyle);
     }
-    resolved = _overrideWith(resolved, iconSpacingStyle);
 
     // 渐变存在时强制背景 null（触发 MaterialType.transparency），阻止 M3 默认样式污染渐变效果（在 P0 之前，允许 P0 覆盖）
     if (hasGradient) {
@@ -448,14 +439,6 @@ class TButtonResolve {
       TButtonSize.small => 12,
       TButtonSize.extraSmall => 10,
     };
-  }
-
-  /// 图标与文案间距
-  static ButtonStyle _resolveIconSpacing(
-      double spacing, TButtonIconPosition iconPosition) {
-    // 使用 visualDensity 或通过 padding 间接控制间距
-    // 此处由 TButton.build 内部 Row 的间隙控制，不写入 ButtonStyle
-    return const ButtonStyle();
   }
 
   // --- 辅助颜色计算 ---

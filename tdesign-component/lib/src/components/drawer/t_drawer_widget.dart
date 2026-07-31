@@ -8,6 +8,9 @@ import '../text/t_text.dart';
 import 't_drawer.dart';
 import 't_drawer_theme_data.dart';
 
+/// 点击抽屉列表项时的回调。
+///
+/// [index] 是列表下标，[item] 是被点击的配置项。
 typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
 
 /// 抽屉内容组件

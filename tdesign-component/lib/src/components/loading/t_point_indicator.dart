@@ -7,6 +7,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
+/// 点状弹跳加载指示器。
 class TPointBounceIndicator extends StatefulWidget {
   const TPointBounceIndicator({
     Key? key,

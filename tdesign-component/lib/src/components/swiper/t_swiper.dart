@@ -194,12 +194,28 @@ class TSwiper extends StatefulWidget {
 
   /// 页面滚动方向。
   final Axis scrollDirection;
+
+  /// 页面视图使用的滚动物理效果。
+  ///
+  /// 未指定时使用 [PageView] 的默认物理效果。
   final ScrollPhysics? physics;
+
+  /// 页面停止滚动时是否自动对齐到整页。
   final bool pageSnapping;
+
+  /// 当 [viewportFraction] 小于 1 时，首尾页面是否保留端部留白。
   final bool padEnds;
+
+  /// 页面内容超出轮播边界时的裁剪方式。
   final Clip clipBehavior;
+
+  /// 是否反转页面的视觉顺序和滚动方向。
   final bool reverse;
+
+  /// 拖拽手势开始时的坐标解析方式。
   final DragStartBehavior dragStartBehavior;
+
+  /// 是否允许无障碍服务请求将未显示的页面滚动到可见区域。
   final bool allowImplicitScrolling;
 
   int get _resolvedItemCount {

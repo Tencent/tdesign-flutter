@@ -83,6 +83,9 @@ class DateSelectTypeNotifier extends ChangeNotifier {
   }
 }
 
+/// 单个日历日期格。
+///
+/// 默认渲染日期与副标题；可通过日历的 cell builder 覆盖整格内容。
 class TCalendarCell extends StatefulWidget {
   const TCalendarCell({
     Key? key,

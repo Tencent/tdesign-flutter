@@ -10,7 +10,8 @@ import 't_button_types.dart';
 
 /// TD 常规按钮（V1.0）
 ///
-/// Material 薄包装，`onPressed: null` 表示禁用。
+/// Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
+/// [onLongPress]。
 ///
 /// **L1 三维正交**：
 /// - [variant]：变体类型（fill / outline / text / ghost）
@@ -56,6 +57,7 @@ class TButton extends StatefulWidget {
     this.icon,
     this.iconPosition = TButtonIconPosition.left,
     this.onPressed,
+    this.onLongPress,
     this.style,
   }) : super(key: key);
 
@@ -79,6 +81,12 @@ class TButton extends StatefulWidget {
 
   /// 点击回调，`null` 表示禁用
   final VoidCallback? onPressed;
+
+  /// 长按回调。
+  ///
+  /// 仅在 [onPressed] 非空时生效；当 [onPressed] 为空时按钮保持禁用态，
+  /// 不会触发点击或长按回调。
+  final VoidCallback? onLongPress;
 
   /// P0 逃逸舱：[ButtonStyle] 覆盖所有 resolve 结果
   final ButtonStyle? style;
@@ -105,7 +113,6 @@ class _TButtonState extends State<TButton> {
       size: effectiveSize,
       icon: widget.icon,
       hasChild: widget.child != null,
-      iconPosition: widget.iconPosition,
       theme: theme,
       instanceStyle: widget.style,
       context: context,
@@ -115,7 +122,7 @@ class _TButtonState extends State<TButton> {
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconSpacing = theme?.iconSpacing ?? 8.0;
+    final iconTextSpacing = theme?.iconTextSpacing ?? 8.0;
     final gradient = theme?.gradient;
 
     Widget? content;
@@ -139,7 +146,7 @@ class _TButtonState extends State<TButton> {
 
       // 图标与文案间距
       if (children.length == 2) {
-        children.insert(1, SizedBox(width: iconSpacing));
+        children.insert(1, SizedBox(width: iconTextSpacing));
       }
 
       content = Row(
@@ -217,6 +224,7 @@ class _TButtonState extends State<TButton> {
             customBorder: effectiveShape,
             overlayColor: resolvedStyle.overlayColor,
             onTap: widget.onPressed,
+            onLongPress: widget.onPressed == null ? null : widget.onLongPress,
             child: Padding(
               padding: padding,
               child: styledContent,
@@ -252,6 +260,15 @@ class _TButtonState extends State<TButton> {
         style: resolvedStyle,
         child: content,
       );
+
+      // ElevatedButton 没有公开 onLongPress；由外层手势补充长按，保留
+      // ElevatedButton 自身的点击、Material 反馈和无障碍语义。
+      if (widget.onPressed != null && widget.onLongPress != null) {
+        button = GestureDetector(
+          onLongPress: widget.onLongPress,
+          child: button,
+        );
+      }
 
       // margin 外包（非渐变）
       if (theme?.margin != null) {
