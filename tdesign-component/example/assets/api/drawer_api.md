@@ -67,6 +67,9 @@
 
 
 ### TDrawerItemClickCallback
+#### 简介
+点击抽屉列表项时的回调。
+`index` 是列表下标，`item` 是被点击的配置项。
 #### 类型定义
 
 ```dart

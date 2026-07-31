@@ -6,29 +6,29 @@ Controller 驱动的轮播组件。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| allowImplicitScrolling | bool | false | - |
+| allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 |
 | autoplay | bool | false | 是否自动播放。 |
 | autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 |
 | children | List<Widget>? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 |
-| clipBehavior | Clip | Clip.hardEdge | - |
+| clipBehavior | Clip | Clip.hardEdge | 页面内容超出轮播边界时的裁剪方式。 |
 | controller | TSwiperController? | - | 外部控制器；未提供时组件会创建并自行释放内部控制器。 |
-| dragStartBehavior | DragStartBehavior | DragStartBehavior.start | - |
+| dragStartBehavior | DragStartBehavior | DragStartBehavior.start | 拖拽手势开始时的坐标解析方式。 |
 | itemBuilder | IndexedWidgetBuilder? | - | 按需构建页面；使用时必须同时提供正数 `itemCount`。 |
 | itemCount | int? | - | `itemBuilder` 模式下的页面数量。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | loop | bool | false | 是否循环滚动。 |
 | nextIcon | Widget? | - | next 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 |
 | onChanged | ValueChanged<int>? | - | 当前实际展示页发生变化时触发。 |
-| padEnds | bool | true | - |
+| padEnds | bool | true | 当 `viewportFraction` 小于 1 时，首尾页面是否保留端部留白。 |
 | pageEffect | TSwiperPageEffect? | - | 页面视觉效果；为空时从组件主题解析。 |
-| pageSnapping | bool | true | - |
+| pageSnapping | bool | true | 页面停止滚动时是否自动对齐到整页。 |
 | pagination | TSwiperPaginationVariant? | - | 指示器形态；为空时从组件主题解析，最终默认为 `TSwiperPaginationVariant.dots`。 |
 | paginationAlignment | AlignmentGeometry? | - | 指示器对齐；横向默认底部居中，竖向默认右侧居中。 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器 在下方或右侧外部区域内的对齐。 |
 | paginationItemBuilder | TSwiperPaginationItemBuilder? | - | 自定义 dots 和 dotsBar 的单个标记。 组件仍负责排列、间距、选中语义和业务下标更新。 |
 | paginationPlacement | TSwiperPaginationPlacement? | - | 指示器位置；为空时从组件主题解析，最终默认为覆盖在轮播内容上。 |
-| physics | ScrollPhysics? | - | - |
+| physics | ScrollPhysics? | - | 页面视图使用的滚动物理效果。 未指定时使用 `PageView` 的默认物理效果。 |
 | previousIcon | Widget? | - | previous 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 |
-| reverse | bool | false | - |
+| reverse | bool | false | 是否反转页面的视觉顺序和滚动方向。 |
 | scrollDirection | Axis | Axis.horizontal | 页面滚动方向。 |
 | viewportFraction | double | 1 | 每个页面占视口主轴的比例，必须大于零。 |
 

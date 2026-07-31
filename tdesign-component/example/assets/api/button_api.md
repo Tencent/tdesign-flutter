@@ -9,6 +9,7 @@
 | icon | Widget? | - | 图标（Widget 类型，IconData 需包裹为 `Icon(...)`） |
 | iconPosition | TButtonIconPosition | TButtonIconPosition.left | 图标位置 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| onLongPress | VoidCallback? | - | 长按回调。 仅在 `onPressed` 非空时生效；当 `onPressed` 为空时按钮保持禁用态， 不会触发点击或长按回调。 |
 | onPressed | VoidCallback? | - | 点击回调，`null` 表示禁用 |
 | size | TButtonSize? | - | 尺寸，未传时使用 Theme `TButtonThemeData.defaultSize` |
 | style | ButtonStyle? | - | P0 逃逸舱：`ButtonStyle` 覆盖所有 resolve 结果 |
