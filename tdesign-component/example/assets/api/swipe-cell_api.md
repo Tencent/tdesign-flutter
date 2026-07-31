@@ -32,6 +32,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | child | Widget | - | 要增强为可滑动单元格的内容。 |
+| closeOnScroll | bool | true | 祖先滚动容器开始滚动时是否关闭已展开的操作区。 |
 | closeWhenOpened | bool | false | 展开时是否关闭同组其他单元格 |
 | controller | SlidableController? | - | 自定义控制滑动窗口 |
 | direction | Axis | Axis.horizontal | 可拖动的方向 |

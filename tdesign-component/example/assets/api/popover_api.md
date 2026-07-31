@@ -16,7 +16,7 @@
 | --- | --- | --- | --- |
 | context | BuildContext | - | 上下文 |
 | content | String? | - | 显示内容 |
-| contentWidget | Widget? | - | 自定义内容 |
+| contentWidget | Widget? | - | 自定义内容。 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 `width`/`height` 或组件主题提供确定尺寸。 |
 | offset | double? | - | 弹层与触发元素的间距。 |
 | colorScheme | TPopoverColorScheme? | - | 气泡语义色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
@@ -24,8 +24,8 @@
 | showArrow | bool? | - | 是否显示气泡箭头。 |
 | arrowSize | double? | - | 箭头尺寸。 |
 | padding | EdgeInsetsGeometry? | - | 内容内边距。 |
-| width | double? | - | 内容宽度。 |
-| height | double? | - | 内容高度。 |
+| width | double? | - | 内容外框宽度（包含 padding）。 使用 `contentWidget` 时必须同时提供 `width` 和 `height`，也可以由 `TPopoverThemeData` 提供对应尺寸。 |
+| height | double? | - | 内容外框高度（包含 padding）。 |
 | overlayColor | Color? | - | 蒙层颜色。 |
 | onTap | TPopoverTapCallback? | - | 点击事件 |
 | onLongTap | TPopoverLongPressCallback? | - | 长按事件 |
@@ -42,9 +42,9 @@
 | arrowSize | double? | - | 箭头大小 |
 | colorScheme | TPopoverColorScheme? | - | 弹出气泡主题 |
 | content | String? | - | 显示内容 |
-| contentWidget | Widget? | - | 自定义内容 |
+| contentWidget | Widget? | - | 自定义内容。 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 `width`/`height` 或组件主题提供确定尺寸。 |
 | context | BuildContext | - | 上下文 |
-| height | double? | - | 内容高度（包含padding，实际高度：height - paddingTop - paddingBottom） |
+| height | double? | - | 内容外框高度（包含 padding）。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | offset | double? | - | 偏移 |
 | onLongTap | TPopoverLongPressCallback? | - | 长按事件 |
@@ -53,7 +53,7 @@
 | placement | TPopoverPlacement? | - | 浮层出现位置 |
 | radius | BorderRadius? | - | 圆角 |
 | showArrow | bool? | - | 是否显示浮层箭头 |
-| width | double? | - | 内容宽度（包含padding，实际高度：height - paddingLeft - paddingRight） |
+| width | double? | - | 内容外框宽度（包含 padding）。 |
 
 
 ### TPopoverPlacement

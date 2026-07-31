@@ -31,6 +31,8 @@
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | decoration | InputDecoration? | - | Material 输入装饰逃逸口。 |
+| style | TextStyle? | - | 输入文本样式。 |
+| cursorColor | Color? | - | 光标颜色。 |
 
 #### 默认构造方法
 
@@ -38,6 +40,7 @@
 | --- | --- | --- | --- |
 | autofocus | bool | false | 是否自动聚焦。 |
 | controller | TextEditingController? | - | 文本控制器。 |
+| cursorColor | Color? | - | 光标颜色。 |
 | decoration | InputDecoration? | - | Material 输入装饰逃逸口。 |
 | enabled | bool | true | 是否可交互。 |
 | focusNode | FocusNode? | - | 焦点节点。 |
@@ -57,5 +60,6 @@
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |
 | prefix | Widget? | - | 前缀组件。 |
 | readOnly | bool | false | 是否只读。 |
+| style | TextStyle? | - | 输入文本样式。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
