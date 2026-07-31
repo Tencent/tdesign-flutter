@@ -1,10 +1,20 @@
-## 🌈 1.0.0 `2026-07-31`
+## 🌈 1.0.0-alpha.1 `2026-07-31`
+
+> 这是 v1 的首个预发布版本，API 和视觉细节在正式版前仍可能调整。建议试用项目锁定
+> `tdesign_flutter: 1.0.0-alpha.1`，并重点回归浮层、选择器、日历和轮播等重构组件。
 
 ### 💥 Breaking Changes
 
-- 完成 v1 正式 API 迁移，组件统一使用 `T` 前缀并移除旧版兼容参数。
+- 完成 v1 API 预发布迁移，组件统一使用 `T` 前缀并移除旧版兼容参数。
 - 组件视觉默认值统一接入 Flutter `ThemeData` 与 TDesign ThemeExtension。
+- 样式支持应用级 Token、全局组件 ThemeData、局部子树 ThemeData 和单实例显式参数四级控制；局部覆盖统一使用 `mergeExtension`。
+- 受控组件需在回调中回写状态；业务创建的 Controller 由业务释放；Overlay 必须使用目标 Theme/Navigator 子树的 context。
 - `TSwiper` 改为 `TSwiperController` 驱动；`TBadge` 使用语义化 `label` 展示数字或自定义短文本。
+- Calendar 改为 `DateTime` 受控值；Picker、DateTimePicker 与 Cascader 只负责选择，标题、确认和弹层由业务组合。
+- Popup 改为 `TPopupOptions + TPopupHandle`，Dialog 改为统一内容槽位与 `TDialogAction`。
+
+完整的 `0.2.7 → 1.0.0-alpha.1` 组件迁移记录保存在仓库
+`tdesign-component/doc/MIGRATION-v1.md`；该文件不包含在 pub.dev 发布包中。
 
 ### 🚀 Features
 
