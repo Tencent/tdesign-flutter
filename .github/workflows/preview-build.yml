@@ -5,33 +5,38 @@ on:
     branches: [develop, main]
     types: [opened, synchronize, reopened]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tdesign-flutter-site:
     runs-on: ubuntu-latest
-    # Skip workflow if commit message contains [skip ci] or [ci skip]
-    if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     steps:
-      - name: Configure Git to not use symlinks
-        run: git config --global core.symlinks false
-
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-          lfs: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          persist-credentials: false
 
       - name: Prepare preview metadata
+        id: version
+        shell: bash
         run: |
-          VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
+          set -euo pipefail
+          VERSION=$(awk '$1 == "version:" { print $2; exit }' tdesign-component/pubspec.yaml)
           {
             echo "PR_NUMBER=${{ github.event.pull_request.number }}"
             echo "VERSION=$VERSION"
             echo "BUILD_NUMBER=${{ github.run_number }}"
           } > build-env.txt
+
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid package version: $VERSION"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Upload preview metadata
         if: always()
@@ -39,6 +44,7 @@ jobs:
         with:
           name: build-env
           path: build-env.txt
+          if-no-files-found: error
           retention-days: 5
 
       - name: Install pnpm
@@ -53,102 +59,39 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
 
-      - uses: actions/setup-java@v5
+      - name: Set up Java
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
-          java-version: "17.0.19+10"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          java-version: "17"
 
-      - name: Setup Android SDK
+      - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: "12"
-        env:
-          SKIP_JDK_VERSION_CHECK: true
 
       - name: Set up Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.32.0
           channel: stable
           cache: true
 
-      - name: Get component dependencies
+      - name: Initialize component build infrastructure
+        run: bash ./tdesign-component/init.sh
+
+      - name: Generate component API documentation
         working-directory: ./tdesign-component
-        run: flutter pub get
+        run: bash ./demo_tool/all_build.sh
 
       - name: Check example code snippets
         working-directory: ./tdesign-component
         run: dart run tool/generate_example_code.dart --check
 
-      - name: Extract version
-        id: version
-        run: |
-          VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
-          echo "major_version=$(echo $VERSION | cut -d. -f1)" >> $GITHUB_OUTPUT
-          echo "minor_version=$(echo $VERSION | cut -d. -f2)" >> $GITHUB_OUTPUT
-          echo "fix_version=$(echo $VERSION | cut -d. -f3)" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Update assets files
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
-          echo "$VERSION" > $GITHUB_WORKSPACE/tdesign-component/example/assets/version
-          date +%s%3N > $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
-
-      - name: Build Flutter apk
-        run: |
-          cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter clean > /dev/null 2>&1
-
-          cd ${{ github.workspace }}/tdesign-component/example/android/app
-          STORE_PASSWORD="tdesign123456"
-          KEY_PASSWORD="tdesign123456"
-          keytool -genkeypair 2>/dev/null \
-            -alias tdesign_flutter_debug_key \
-            -keypass "$KEY_PASSWORD" \
-            -keystore keystore.jks \
-            -storepass "$STORE_PASSWORD" \
-            -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 365
-          chmod 644 keystore.jks
-
-          cd ${{ github.workspace }}/tdesign-component/example/android
-          echo "storePassword=$STORE_PASSWORD" > key.properties
-          echo "keyPassword=$KEY_PASSWORD" >> key.properties
-          echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
-          echo "storeFile=keystore.jks" >> key.properties
-
-          flutter build apk --release > /tmp/apk_build.log 2>&1 \
-            --dart-define=isCI=true \
-            --dart-define=VersionCode=${{ github.run_number }} \
-            --dart-define=devopsUUID=${{ github.run_id }} \
-            --dart-define=MajorVersion=${{ steps.version.outputs.major_version }} \
-            --dart-define=MinorVersion=${{ steps.version.outputs.minor_version }} \
-            --dart-define=FixVersion=${{ steps.version.outputs.fix_version }} \
-            --dart-define=BuildNo=${{ github.run_number }} \
-            --dart-define=isPublish=false \
-            --dart-define=isBeta=false \
-            --dart-define=gitVersion=${{ github.sha }}
-      - name: Rename APK with version
-        run: |
-          VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
-          BUILD="${{ github.run_number }}"
-          cd ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/
-          mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tdesign-flutter-apk
-          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
-          compression-level: 0
-
-      - name: Generate web documentation from demo code
-        run: |
-          cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter test test/widget_test.dart --reporter compact > /dev/null 2>&1 || true
+          echo "$VERSION" > "$GITHUB_WORKSPACE/tdesign-component/example/assets/version"
+          date +%s%3N > "$GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time"
 
       - name: Build site
         working-directory: ./tdesign-site
@@ -156,29 +99,99 @@ jobs:
           pnpm install --frozen-lockfile --loglevel=error
           npm run site
 
-      - name: Build site Demo
+      - name: Build and merge Web Demo
         working-directory: ./tdesign-component/example
         run: |
-          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps > /tmp/web_build.log 2>&1
-          cd $GITHUB_WORKSPACE
+          set -euo pipefail
+          flutter build web --base-href /flutter/example/
+
+          cd "$GITHUB_WORKSPACE"
           mkdir -p tdesign-flutter-web/flutter/example/
-          cp -r tdesign-site/_site/* tdesign-flutter-web/
+          cp -a tdesign-site/_site/. tdesign-flutter-web/
           rm -rf tdesign-flutter-web/assets
-          for f in "$GITHUB_WORKSPACE/tdesign-flutter-web/index.html"; do
-            if [ -f "$f" ]; then
-              if ! grep -q '<base href="/">' "$f"; then
-                sed -i 's|<meta http-equiv="X-UA-Compatible" content="ie=edge">|<meta http-equiv="X-UA-Compatible" content="ie=edge">\n  <base href="/">|' "$f"
-              fi
-              sed -i "s|src=\"/flutter/|src=\"flutter/|g; s|href=\"/flutter/|href=\"flutter/|g; s|src='/flutter/|src='flutter/|g; s|href='/flutter/|href='flutter/|g" "$f"
-            fi
-          done
+
+          INDEX_FILE="$GITHUB_WORKSPACE/tdesign-flutter-web/index.html"
+          if ! grep -q '<base href="/">' "$INDEX_FILE"; then
+            sed -i 's|<meta http-equiv="X-UA-Compatible" content="ie=edge">|<meta http-equiv="X-UA-Compatible" content="ie=edge">\n  <base href="/">|' "$INDEX_FILE"
+          fi
+          sed -i "s|src=\"/flutter/|src=\"flutter/|g; s|href=\"/flutter/|href=\"flutter/|g; s|src='/flutter/|src='flutter/|g; s|href='/flutter/|href='flutter/|g" "$INDEX_FILE"
+
           cp tdesign-site/_site/index.html tdesign-flutter-web/404.html
           cp tdesign-site/_site/index.html tdesign-flutter-web/200.html
-          cp -r tdesign-site/_site/assets tdesign-flutter-web/flutter/assets
-          cp -r tdesign-component/example/build/web/* tdesign-flutter-web/flutter/example/
-          echo '/* /index.html 200' > "$GITHUB_WORKSPACE/CNAME"
-      - uses: actions/upload-artifact@v4
+          cp -a tdesign-site/_site/assets tdesign-flutter-web/flutter/assets
+          cp -a tdesign-component/example/build/web/. tdesign-flutter-web/flutter/example/
+
+          test -f tdesign-flutter-web/index.html
+          test -f tdesign-flutter-web/flutter/example/index.html
+
+      - name: Upload Web artifact
+        uses: actions/upload-artifact@v4
         with:
           name: tdesign-flutter-web
           path: ${{ github.workspace }}/tdesign-flutter-web
+          if-no-files-found: error
+          retention-days: 5
+
+      - name: Build and verify signed Flutter APK
+        working-directory: ./tdesign-component/example
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          KEY_ALIAS=tdesign_flutter_preview
+          KEYSTORE_PATH="$PWD/android/app/keystore.jks"
+          KEY_PROPERTIES_PATH="$PWD/android/key.properties"
+          STORE_PASSWORD=$(openssl rand -hex 24)
+          KEY_PASSWORD=$(openssl rand -hex 24)
+          trap 'rm -f "$KEYSTORE_PATH" "$KEY_PROPERTIES_PATH"' EXIT
+          echo "::add-mask::$STORE_PASSWORD"
+          echo "::add-mask::$KEY_PASSWORD"
+
+          keytool -genkeypair \
+            -storetype JKS \
+            -alias "$KEY_ALIAS" \
+            -keypass "$KEY_PASSWORD" \
+            -keystore "$KEYSTORE_PATH" \
+            -storepass "$STORE_PASSWORD" \
+            -dname "CN=TDesign Flutter Preview,O=TDesign,C=CN" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 365 \
+            -noprompt
+          chmod 600 "$KEYSTORE_PATH"
+
+          {
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyPassword=$KEY_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "storeFile=keystore.jks"
+          } > "$KEY_PROPERTIES_PATH"
+          chmod 600 "$KEY_PROPERTIES_PATH"
+
+          flutter build apk --release
+
+          APK_OUTPUT_DIR="$PWD/build/app/outputs/flutter-apk"
+          APK_PATH="$APK_OUTPUT_DIR/tdesign-flutter-${VERSION}-${GITHUB_RUN_NUMBER}.apk"
+          mv "$APK_OUTPUT_DIR/app-release.apk" "$APK_PATH"
+
+          ANDROID_SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}
+          if [ -z "$ANDROID_SDK" ]; then
+            echo "::error::ANDROID_HOME and ANDROID_SDK_ROOT are both unset"
+            exit 1
+          fi
+          APKSIGNER=$(find "$ANDROID_SDK/build-tools" -type f -name apksigner -print | sort -V | tail -n 1)
+          if [ -z "$APKSIGNER" ]; then
+            echo "::error::apksigner not found under $ANDROID_SDK/build-tools"
+            exit 1
+          fi
+          "$APKSIGNER" verify --verbose --print-certs "$APK_PATH" | tee "$RUNNER_TEMP/apk-signature.txt"
+          grep -Fq "CN=TDesign Flutter Preview" "$RUNNER_TEMP/apk-signature.txt"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdesign-flutter-apk
+          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
+          if-no-files-found: error
+          compression-level: 0
           retention-days: 5

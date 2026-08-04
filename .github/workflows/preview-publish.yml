@@ -1,106 +1,180 @@
-# 文件名建议统一为 preview-publish
-# 应用 preview.yml 的 demo
 name: PREVIEW_PUBLISH
 
 on:
   workflow_run:
     workflows: ["PREVIEW_BUILD"]
-    types:
-      - completed
+    types: [completed]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
 
 permissions:
   actions: read
   pull-requests: write
 
 jobs:
-  preview-success-web:
+  preview-success:
     runs-on: ubuntu-latest
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
-      - name: download build artifacts
-        uses: dawidd6/action-download-artifact@v6
+      - name: Resolve source PR
+        id: pr
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            const run = context.payload.workflow_run;
+            const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: run.head_sha,
+            });
+            const matches = pulls.filter((pull) =>
+              pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
+              ['develop', 'main'].includes(pull.base.ref) &&
+              pull.head.sha === run.head_sha &&
+              pull.head.repo?.full_name === run.head_repository.full_name
+            );
+            if (matches.length !== 1) {
+              core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
+              return;
+            }
+            return String(matches[0].number);
+
+      - name: Download preview metadata
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
           name: build-env
+          path: ${{ runner.temp }}/preview-metadata
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
 
-      - name: load build env variables
+      - name: Validate preview metadata
         id: build_env
+        shell: bash
+        env:
+          EXPECTED_PR_NUMBER: ${{ steps.pr.outputs.result }}
         run: |
-          # 从文件中读取环境变量并设置为输出
+          set -euo pipefail
+          METADATA_FILE="$RUNNER_TEMP/preview-metadata/build-env.txt"
+          PR_NUMBER=
+          VERSION=
+          BUILD_NUMBER=
+          SEEN_PR_NUMBER=0
+          SEEN_VERSION=0
+          SEEN_BUILD_NUMBER=0
+
           while IFS='=' read -r key value; do
-            echo "$key=$value" >> $GITHUB_OUTPUT
-            echo "Loaded: $key=$value"
-          done < build-env.txt
+            case "$key" in
+              PR_NUMBER)
+                (( SEEN_PR_NUMBER == 0 )) || { echo "::error::Duplicate metadata key: $key"; exit 1; }
+                PR_NUMBER=$value
+                SEEN_PR_NUMBER=1
+                ;;
+              VERSION)
+                (( SEEN_VERSION == 0 )) || { echo "::error::Duplicate metadata key: $key"; exit 1; }
+                VERSION=$value
+                SEEN_VERSION=1
+                ;;
+              BUILD_NUMBER)
+                (( SEEN_BUILD_NUMBER == 0 )) || { echo "::error::Duplicate metadata key: $key"; exit 1; }
+                BUILD_NUMBER=$value
+                SEEN_BUILD_NUMBER=1
+                ;;
+              *)
+                echo "::error::Unexpected metadata key: $key"
+                exit 1
+                ;;
+            esac
+          done < "$METADATA_FILE"
 
-      - name: download tdesign-flutter-apk artifact
-        uses: dawidd6/action-download-artifact@v6
-        with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{ github.event.workflow_run.id }}
-          name: tdesign-flutter-apk
-          path: tdesign-flutter-apk
+          [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
+          [[ "$BUILD_NUMBER" =~ ^[1-9][0-9]*$ ]]
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]
+          if [ "$PR_NUMBER" != "$EXPECTED_PR_NUMBER" ]; then
+            echo "::error::Metadata PR does not match the workflow source PR"
+            exit 1
+          fi
 
-      - name: download tdesign-flutter-web artifact
-        uses: dawidd6/action-download-artifact@v6
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Download Web artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{ github.event.workflow_run.id }}
           name: tdesign-flutter-web
-          path: tdesign-flutter-web
+          path: ${{ runner.temp }}/tdesign-flutter-web
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
 
-      - name: Move APK to web directory
-        run: |
-          # 将 APK 文件移动到 web 目录以便通过 surge 访问
-          mv tdesign-flutter-apk/*.apk tdesign-flutter-web/ || echo "No APK file found"
-          ls -la tdesign-flutter-web/*.apk || echo "*.apk not found"
+      - name: Resolve APK artifact URL
+        id: apk
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            const runId = context.payload.workflow_run.id;
+            const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+            });
+            const artifact = data.artifacts.find(
+              ({ name, expired }) => name === 'tdesign-flutter-apk' && !expired,
+            );
+            if (!artifact) {
+              core.setFailed(`tdesign-flutter-apk artifact not found in run ${runId}`);
+              return;
+            }
+            return `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/artifacts/${artifact.id}`;
 
-      - name: Upload surge service and generate preview URL
+      - name: Deploy preview to Surge
         id: deploy
+        env:
+          PR_NUMBER: ${{ steps.pr.outputs.result }}
+          SURGE_TOKEN: ${{ secrets.TDESIGN_SURGE_TOKEN }}
         run: |
-          repository=${{github.repository}}
-          project_name=${repository#*/}
-          export DEPLOY_DOMAIN=https://preview-pr-${{ steps.build_env.outputs.PR_NUMBER }}-$project_name.surge.sh
-          npx surge --project ./tdesign-flutter-web --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
-          echo the preview URL is $DEPLOY_DOMAIN
-          echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
+          set -euo pipefail
+          PROJECT_NAME=${GITHUB_REPOSITORY#*/}
+          DEPLOY_DOMAIN="https://preview-pr-${PR_NUMBER}-${PROJECT_NAME}.surge.sh"
+          npx --yes surge@0.30.0 \
+            --project "$RUNNER_TEMP/tdesign-flutter-web" \
+            --domain "$DEPLOY_DOMAIN" \
+            --token "$SURGE_TOKEN"
+          echo "url=$DEPLOY_DOMAIN" >> "$GITHUB_OUTPUT"
 
-      - name: generate APK download URL
-        id: apk_url
-        run: |
-          # 使用环境变量构建APK文件名和下载链接
-          APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.BUILD_NUMBER }}.apk"
-          APK_URL="${{ steps.deploy.outputs.url }}/$APK_FILENAME"
-          echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
-          echo "apk_url=$APK_URL" >> $GITHUB_OUTPUT
-          echo "APK download URL: $APK_URL"
-
-      - name: update status comment
-        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
+      - name: Update preview comment
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
+            <a href="${{ steps.deploy.outputs.url }}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
 
-            ## 📱 APK 下载
-             [${{ steps.apk_url.outputs.apk_filename }}](${{ steps.apk_url.outputs.apk_url }})
+            ## Web 预览
+            - [文档站点](${{ steps.deploy.outputs.url }})
+            - [Demo](${{ steps.deploy.outputs.url }}/flutter/example/)
 
+            ## APK 下载
+            - [tdesign-flutter-${{ steps.build_env.outputs.version }}-${{ steps.build_env.outputs.build_number }}.apk](${{ steps.apk.outputs.result }})
 
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.build_env.outputs.PR_NUMBER }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
-      - name: The job failed
-        if: ${{ failure() }}
-        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
+      - name: Report publish failure
+        if: failure() && steps.pr.outputs.result != ''
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.build_env.outputs.PR_NUMBER }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
   preview-failed:
@@ -109,28 +183,37 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     steps:
-      - name: download build artifacts
-        uses: dawidd6/action-download-artifact@v6
+      - name: Resolve source PR
+        id: pr
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{ github.event.workflow_run.id }}
-          name: build-env
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            const run = context.payload.workflow_run;
+            const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: run.head_sha,
+            });
+            const matches = pulls.filter((pull) =>
+              pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
+              ['develop', 'main'].includes(pull.base.ref) &&
+              pull.head.sha === run.head_sha &&
+              pull.head.repo?.full_name === run.head_repository.full_name
+            );
+            if (matches.length !== 1) {
+              core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
+              return;
+            }
+            return String(matches[0].number);
 
-      - name: load build env variables
-        id: build_env
-        run: |
-          # 从文件中读取环境变量并设置为输出
-          while IFS='=' read -r key value; do
-            echo "$key=$value" >> $GITHUB_OUTPUT
-            echo "Loaded: $key=$value"
-          done < build-env.txt
-
-      - name: The job failed
-        uses: TDesignOteam/workflows/actions/maintain-one-comment@main
+      - name: Report build failure
+        uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{ github.event.workflow_run.html_url }})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.build_env.outputs.PR_NUMBER }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
