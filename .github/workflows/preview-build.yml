@@ -77,8 +77,9 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Initialize component build infrastructure
-        run: bash ./tdesign-component/init.sh
+      - name: Get component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get
 
       - name: Generate component API documentation
         working-directory: ./tdesign-component
