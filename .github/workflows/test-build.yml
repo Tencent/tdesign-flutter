@@ -5,13 +5,11 @@ on:
     branches: [develop]
     paths-ignore:
       - "tdesign-site/**"
-      - "tdesign-adaptation/**"
       - "*.md"
   push:
     branches: [develop]
     paths-ignore:
       - "tdesign-site/**"
-      - "tdesign-adaptation/**"
       - "*.md"
 
 concurrency:
@@ -64,9 +62,6 @@ jobs:
           xcodebuild -version
           pod --version
           flutter --version
-
-      - name: tdesign-adaptation
-        run: sh ./tdesign-component/init.sh
 
       - name: generate api md
         working-directory: ./tdesign-component

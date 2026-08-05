@@ -19,8 +19,6 @@ tdesign-component/
 └── tests           // 组件测试
 
 tdesign-site/       // TDesign Flutter 站点
-
-tdesign-adaptation/ // TDesign Flutter 版本适配仓库
 ```
 
 ## 2. 如何运行
@@ -34,9 +32,7 @@ tdesign-adaptation/ // TDesign Flutter 版本适配仓库
 
 ### 2.2 开发环境要求
 
-Flutter SDK 版本： `>= 3.16.9`
-
-**注意：** TD 需要支持 `3.16.9` ~ 最新稳定版本，因此最好在 `3.16.9` 版本开发完成后，使用最新稳定版本确认能否正常运行。如果版本无法兼容，请将不兼容文件移至 `tdesign-adaptation`，做兼容处理。
+Flutter SDK 版本： `>= 3.32.0`
 
 ### 2.3 克隆项目
 
@@ -48,8 +44,6 @@ git clone <https://github.com/Tencent/tdesign-flutter.git>
 ### 2.4 运行 Flutter 项目
 
 下面是命令行运行方法，正常也可以不使用命令行，而在 IDE 直接运行，推荐使用 Android Studio 进行开发。运行时请选择 Android 设备和 iOS 模拟器，不要直接在浏览器运行。
-
-**注意：** 首次开发请先运行 `tdesign-flutter/tdesign-component/init.sh` 脚本，它会根据当前 Flutter 版本，选择适合的 `tdesign-adaptation` 依赖。
 
 ```bash
 # 运行 Flutter 组件项目
@@ -65,35 +59,7 @@ cd example/
 flutter run
 ```
 
-### 2.5 Flutter 多版本兼容
-
-在 Flutter `3.32` 版本，SDK 代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了 `tdesign-adaptation` 库，用于进行不同 Flutter 版本之间的代码适配。
-
-#### 2.5.1 版本切换
-
-首次运行，可以先将 Flutter SDK 切到 `3.16.9` 版本，执行 `tdesign-component/init.sh` 脚本，配置对应依赖。
-
-开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在 `tdesign-adaptation` 库进行适配。
-
-其中，高于 `3.32` 版本的代码，请在 `feature/3.32_adaptation` 分支开发，低于 `3.32` 版本的代码，请在 `feature/3.16_adaptation` 分支开发。
-
-本地开发 `tdesign-adaptation`，可以修改 `tdesign-component/pubspec_overrides.yaml` 和 `tdesign-component/example/pubspec_overrides.yaml` 文件，使用本地依赖，内容如下：
-
-```yaml
-dependency_overrides:
-  tdesign_adaptation:
-    path: ../tdesign-adaptation  # 本地相对路径
-```
-
-但是，提交 Git 时，**请不要将 `pubspec_overrides.yaml` 提交到仓库！！！**
-
-#### 2.5.2 国际化适配
-
-对于 `3.32` 以下版本，请在 `l10n.yaml` 中设置 `synthetic-package: false`。
-
-更多信息请参阅flutter官方文档说明：https://docs.flutter.dev/release/breaking-changes/flutter-generate-i10n-source
-
-### 2.6 运行前端官网项目
+### 2.5 运行前端官网项目
 
 ```bash
 # 进入官网前端项目
@@ -200,7 +166,7 @@ npm run site:dev
 
 点击 “体验 apk” 后面链接，即可跳转打包完成的 apk 下载地址，可以安装自测。
 
-**注意：** 该 demo 是基于 Flutter `3.16.9` 打包的。请留意最新 Flutter 版本的包是否打包成功；如果评论打包失败，请检测失败原因。
+**注意：** 该 demo 使用 CI 配置的 Flutter 版本打包；如果评论打包失败，请检查流水线日志确认原因。
 
 #### 自测内容
 

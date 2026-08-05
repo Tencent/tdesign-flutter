@@ -1,6 +1,6 @@
 Widget _buildNoArrowPopover(BuildContext context) {
     return LayoutBuilder(
-      builder: (_, constrains) {
+      builder: (popoverContext, constrains) {
         return TButton(
           size: TButtonSize.medium,
           child: const Text('不带箭头'),
@@ -8,7 +8,7 @@ Widget _buildNoArrowPopover(BuildContext context) {
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
             TPopover.showPopover(
-                context: _,
+                context: popoverContext,
                 content: '弹出气泡内容',
                 showArrow: false,
                 colorScheme: theme);
