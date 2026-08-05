@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' show Scaffold, AppBar, TabBar;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tdesign_flutter_adaptation/components/indexes/sticky_header/value_layout_builder.dart';
 
+import 'sticky_header_layout_builder.dart';
 import 'sticky_header_render.dart';
 
 /// Signature used by [SliverStickyHeader.builder] to build the header
@@ -177,7 +177,7 @@ class SliverStickyHeader extends RenderObjectWidget {
     StickyHeaderController? controller,
   }) : this(
           key: key,
-          header: ValueLayoutBuilder<SliverStickyHeaderState>(
+          header: StickyHeaderValueLayoutBuilder<SliverStickyHeaderState>(
             builder: (context, constraints) => builder(context, constraints.value),
           ),
           sliver: sliver,

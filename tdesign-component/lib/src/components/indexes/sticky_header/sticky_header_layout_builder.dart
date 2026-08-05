@@ -1,22 +1,17 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-/// The signature of the [ValueLayoutBuilder] builder function.
-typedef ValueLayoutWidgetBuilder<T> = Widget Function(
-  BuildContext context,
-  BoxValueConstraints<T> constraints,
-);
-
-class BoxValueConstraints<T> extends BoxConstraints {
-  BoxValueConstraints({
+/// The constraints used by [StickyHeaderValueLayoutBuilder].
+class StickyHeaderBoxValueConstraints<T> extends BoxConstraints {
+  StickyHeaderBoxValueConstraints({
     required this.value,
     required BoxConstraints constraints,
   }) : super(
-          minWidth: constraints.minWidth,
-          maxWidth: constraints.maxWidth,
-          minHeight: constraints.minHeight,
-          maxHeight: constraints.maxHeight,
-        );
+         minWidth: constraints.minWidth,
+         maxWidth: constraints.maxWidth,
+         minHeight: constraints.minHeight,
+         maxHeight: constraints.maxHeight,
+       );
 
   final T value;
 
@@ -26,16 +21,15 @@ class BoxValueConstraints<T> extends BoxConstraints {
     if (identical(this, other)) {
       return true;
     }
-    if (other is! BoxValueConstraints<T>) {
+    if (other is! StickyHeaderBoxValueConstraints<T>) {
       return false;
     }
-    final typedOther = other;
-    assert(typedOther.debugAssertIsValid());
-    return value == typedOther.value &&
-        minWidth == typedOther.minWidth &&
-        maxWidth == typedOther.maxWidth &&
-        minHeight == typedOther.minHeight &&
-        maxHeight == typedOther.maxHeight;
+    assert(other.debugAssertIsValid());
+    return value == other.value &&
+        minWidth == other.minWidth &&
+        maxWidth == other.maxWidth &&
+        minHeight == other.minHeight &&
+        maxHeight == other.maxHeight;
   }
 
   @override
@@ -45,31 +39,33 @@ class BoxValueConstraints<T> extends BoxConstraints {
   }
 }
 
-/// Builds a widget tree that can depend on the parent widget's size and a extra
-/// value.
-///
-/// Similar to the [LayoutBuilder] widget except that the constraints contains
-/// an extra value.
-///
-class ValueLayoutBuilder<T>
-    extends ConstrainedLayoutBuilder<BoxValueConstraints<T>> {
-  /// Creates a widget that defers its building until layout.
-  const ValueLayoutBuilder({
-    Key? key,
-    required ValueLayoutWidgetBuilder<T> builder,
-  }) : super(key: key, builder: builder);
+/// Builds a sticky header from layout constraints and its current state.
+class StickyHeaderValueLayoutBuilder<T>
+    extends ConstrainedLayoutBuilder<StickyHeaderBoxValueConstraints<T>> {
+  const StickyHeaderValueLayoutBuilder({
+    super.key,
+    required Widget Function(
+      BuildContext context,
+      StickyHeaderBoxValueConstraints<T> constraints,
+    )
+    builder,
+  }) : super(builder: builder);
 
   @override
   // ignore: library_private_types_in_public_api
-  _RenderValueLayoutBuilder<T> createRenderObject(BuildContext context) =>
-      _RenderValueLayoutBuilder<T>();
+  _RenderStickyHeaderValueLayoutBuilder<T> createRenderObject(
+    BuildContext context,
+  ) => _RenderStickyHeaderValueLayoutBuilder<T>();
 }
 
-class _RenderValueLayoutBuilder<T> extends RenderBox
+class _RenderStickyHeaderValueLayoutBuilder<T> extends RenderBox
     with
         RenderObjectWithChildMixin<RenderBox>,
         RenderObjectWithLayoutCallbackMixin,
-        RenderAbstractLayoutBuilderMixin<BoxValueConstraints<T>, RenderBox> {
+        RenderAbstractLayoutBuilderMixin<
+          StickyHeaderBoxValueConstraints<T>,
+          RenderBox
+        > {
   @override
   double computeMinIntrinsicWidth(double height) {
     assert(_debugThrowIfNotCheckingIntrinsics());
@@ -122,13 +118,13 @@ class _RenderValueLayoutBuilder<T> extends RenderBox
     assert(() {
       if (!RenderObject.debugCheckingIntrinsics) {
         throw FlutterError(
-            'ValueLayoutBuilder does not support returning intrinsic dimensions.\n'
-            'Calculating the intrinsic dimensions would require running the layout '
-            'callback speculatively, which might mutate the live render object tree.');
+          'StickyHeaderValueLayoutBuilder does not support returning intrinsic dimensions.\n'
+          'Calculating the intrinsic dimensions would require running the layout '
+          'callback speculatively, which might mutate the live render object tree.',
+        );
       }
       return true;
     }());
-
     return true;
   }
 }
