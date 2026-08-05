@@ -51,20 +51,6 @@ TDesign Flutter `0.1.5` 版本之后，可以通过重写 `TTextPaddingConfig` �
 
 如果发现组件内部写死了颜色或尺寸，导致无法适应业务场景，可以直接提 [issue](https://github.com/Tencent/tdesign-flutter/issues) 优化。
 
-## flutter 3.32以下SDK 无法运行
+## Flutter SDK 版本要求
 
-flutter `3.32`版本的sdk代码变更很大，无法跨版本兼容，因此引入了`tdesign_flutter_adaptation`库。
-
-**如果你是flutter 3.32以下的sdk版本，请在项目的`pubspec.yaml`中添加以下依赖覆盖：**
-```yaml
-dependency_overrides:
-  tdesign_flutter_adaptation: 3.16.0
-  image_picker: 1.0.8
-```
-
-如果你是 tdesign_flutter `0.2.3` 版本，且使用了 `3.32 `版本以上的Flutter SDK，请在项目的`pubspec.yaml`中添加以下依赖覆盖：
-```yaml
-dependency_overrides:
-  tdesign_flutter_adaptation: 3.32.0
-  image_picker: 1.1.2
-```
+TDesign Flutter v1 的最低支持版本为 Flutter `3.32.0`，不再支持 Flutter 3.32 以下版本，也不再需要配置 `tdesign_flutter_adaptation` 依赖覆盖。
