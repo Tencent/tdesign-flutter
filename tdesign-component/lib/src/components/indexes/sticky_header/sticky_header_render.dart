@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tdesign_flutter_adaptation/components/indexes/sticky_header/value_layout_builder.dart';
 
+import 'sticky_header_layout_builder.dart';
 import 'sticky_header_widget.dart';
 
 /// A sliver with a [RenderBox] as header and a [RenderSliver] as child.
@@ -193,7 +193,7 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
 
     if (header != null) {
       header!.layout(
-        BoxValueConstraints<SliverStickyHeaderState>(
+        StickyHeaderBoxValueConstraints<SliverStickyHeaderState>(
           value: _oldState ?? const SliverStickyHeaderState(0.0, false),
           constraints: constraints.asBoxConstraints(),
         ),
@@ -286,14 +286,14 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
       }
       // second layout if scroll percentage changed and header is a
       // RenderStickyHeaderLayoutBuilder.
-      if (header is RenderConstrainedLayoutBuilder<BoxValueConstraints<SliverStickyHeaderState>, RenderBox>) {
+      if (header is RenderConstrainedLayoutBuilder<StickyHeaderBoxValueConstraints<SliverStickyHeaderState>, RenderBox>) {
         final headerScrollRatioClamped = headerScrollRatio.clamp(0.0, 1.0);
 
         final state = SliverStickyHeaderState(headerScrollRatioClamped, _isPinned);
         if (_oldState != state) {
           _oldState = state;
           header!.layout(
-            BoxValueConstraints<SliverStickyHeaderState>(
+            StickyHeaderBoxValueConstraints<SliverStickyHeaderState>(
               value: _oldState!,
               constraints: constraints.asBoxConstraints(),
             ),

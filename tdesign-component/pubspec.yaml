@@ -22,9 +22,9 @@ dependencies:
   # 滑动单元格组件
   flutter_slidable: ^3.1.2
 
-  tdesign_flutter_adaptation: ^3.32.0
-
-  image_picker: ^1.1.2
+  # 相册选择组件
+  image_picker: 1.1.2
+  image_picker_android: 0.8.12+23
 
 dev_dependencies:
   analyzer: ^6.11.0
