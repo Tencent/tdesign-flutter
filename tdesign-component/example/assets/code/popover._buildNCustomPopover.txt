@@ -4,14 +4,14 @@ Widget _buildNCustomPopover(BuildContext context) {
             ? context.tTheme.fontGyColor1
             : context.tTheme.fontWhColor1);
     return LayoutBuilder(
-      builder: (_, constrains) {
+      builder: (popoverContext, constrains) {
         return TButton(
           child: const Text('自定义内容'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
             TPopover.showPopover(
-              context: _,
+              context: popoverContext,
               padding: const EdgeInsets.all(0),
               colorScheme: theme,
               // contentWidget 模式下必须指定 width 和 height（组件 initState 断言要求）
