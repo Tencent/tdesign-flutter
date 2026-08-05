@@ -4,7 +4,6 @@ on:
     branches: [develop]
     paths-ignore:
       - "tdesign-site/**"
-      - "tdesign-adaptation/**"
       - "*.md"
 
 concurrency:
@@ -25,9 +24,6 @@ jobs:
         with:
           flutter-version: 3.32.0
           cache: true
-
-      - name: tdesign-adaptation
-        run: sh ./tdesign-component/init.sh
 
       - name: generate api md
         working-directory: ./tdesign-component
