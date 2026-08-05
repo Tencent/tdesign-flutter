@@ -22,6 +22,7 @@ jobs:
     steps:
       - name: Resolve source PR
         id: pr
+        # 固定 github-script v9.0.0：根据 Build run 的提交校验真实来源 PR，避免信任 Artifact 中的 PR 编号。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -113,6 +114,7 @@ jobs:
 
       - name: Resolve APK artifact URL
         id: apk
+        # 固定 github-script v9.0.0：查询本次 Build run 的 APK Artifact ID，生成可点击的下载地址。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -185,6 +187,7 @@ jobs:
     steps:
       - name: Resolve source PR
         id: pr
+        # 固定 github-script v9.0.0：Build 失败时仍按提交定位来源 PR，以便写入失败评论。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

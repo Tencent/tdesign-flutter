@@ -63,13 +63,15 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: "temurin"
-          java-version: "17"
+          java-version: "17.0.19+10"
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "12"
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: 3.32.0
           channel: stable
