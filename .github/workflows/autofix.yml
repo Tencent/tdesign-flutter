@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: 3.32.0
           cache: true
@@ -40,14 +40,6 @@ jobs:
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build apk -t ./lib/main.dart --release
-
-      - name: generate web documentation from demo code
-        working-directory: ./tdesign-component/example
-        run: |
-          flutter test test/widget_test.dart --reporter expanded || {
-            echo "⚠ Widget test completed with warnings (this is expected)"
-            echo "Documentation should have been generated"
-          }
 
       - name: Sync README files
         run: node scripts/sync-readme.mjs

@@ -52,7 +52,7 @@ cd tdesign-flutter/tdesign-component/
 # 拉取依赖
 flutter pub get
 
-# 进入示例项目，需要把 AOPMarket|enable 改为 false，禁用 AOP 才行
+# 进入示例项目
 cd example/
 
 # 运行项目，最好在运行前先确认设备已连接
