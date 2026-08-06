@@ -28,12 +28,13 @@ void main() {
     String label, {
     String? panelLabel,
     bool enabled = true,
+    double panelHeight = 80,
   }) {
     return TDropdownMenuItem(
       label: label,
       enabled: enabled,
       panelBuilder: (context, controller) => SizedBox(
-        height: 80,
+        height: panelHeight,
         child: Center(child: Text(panelLabel ?? '$label panel')),
       ),
     );
@@ -324,7 +325,7 @@ void main() {
     });
 
     testWidgets(
-      'same-menu switch keeps overlay stable and slides full panels',
+      'same-menu switch keeps overlay stable with a subtle panel shift',
       (tester) async {
         final controller = TDropdownMenuController();
         final opened = <int>[];
@@ -359,10 +360,23 @@ void main() {
         expect(tester.widget<ColoredBox>(overlayFinder).color, beforeColor);
         expect(find.text('A panel'), findsOneWidget);
         expect(find.text('B panel'), findsOneWidget);
-        final slideOffsets = tester
-            .widgetList<SlideTransition>(find.byType(SlideTransition))
-            .map((transition) => transition.position.value.dy.abs());
-        expect(slideOffsets.any((offset) => offset > 0.25), isTrue);
+        final panelSurface = find.byKey(
+          const ValueKey<String>('t-dropdown-menu-panel-surface'),
+        );
+        expect(panelSurface, findsOneWidget);
+        expect(tester.widget<ColoredBox>(panelSurface).color, Colors.white);
+        final incomingOffset = tester
+            .widget<SlideTransition>(
+              find.byKey(
+                const ValueKey<String>('t-dropdown-menu-incoming-slide'),
+              ),
+            )
+            .position
+            .value
+            .dy
+            .abs();
+        expect(incomingOffset, greaterThan(0));
+        expect(incomingOffset, lessThanOrEqualTo(0.04));
         expect(closed, isEmpty);
 
         await tester.pumpAndSettle();
@@ -372,6 +386,122 @@ void main() {
         expect(closed, [(0, TDropdownMenuCloseReason.switchItem)]);
       },
     );
+
+    testWidgets('opening and closing reveal the panel from the menu edge', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            placement: TDropdownMenuPlacement.below,
+            animationDuration: const Duration(milliseconds: 200),
+            items: [item('位移展开')],
+          ),
+        ),
+      );
+
+      const revealKey = ValueKey<String>('t-dropdown-menu-open-close-reveal');
+      await tester.tap(find.text('位移展开'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      var reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
+      expect(reveal.axisAlignment, -1);
+      expect(reveal.sizeFactor.value, greaterThan(0));
+      expect(reveal.sizeFactor.value, lessThan(1));
+
+      await tester.pumpAndSettle();
+      reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
+      expect(reveal.sizeFactor.value, 1);
+
+      await tester.tap(find.text('位移展开'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
+      expect(reveal.sizeFactor.value, greaterThan(0));
+      expect(reveal.sizeFactor.value, lessThan(1));
+      await tester.pumpAndSettle();
+      expect(find.byKey(revealKey), findsNothing);
+    });
+
+    testWidgets('platform reduced motion disables menu animations', (
+      tester,
+    ) async {
+      final opened = <int>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: MediaQuery(
+            data: const MediaQueryData(disableAnimations: true),
+            child: Scaffold(
+              body: TDropdownMenu(
+                animationDuration: const Duration(milliseconds: 200),
+                onOpened: opened.add,
+                items: [item('减少动态')],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('减少动态'));
+      await tester.pump();
+      await tester.pump();
+      expect(opened, [0]);
+      expect(
+        tester
+            .widget<SizeTransition>(
+              find.byKey(
+                const ValueKey<String>('t-dropdown-menu-open-close-reveal'),
+              ),
+            )
+            .sizeFactor
+            .value,
+        1,
+      );
+    });
+
+    testWidgets('same-menu switch keeps one stable surface for panel heights', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            animationDuration: const Duration(milliseconds: 200),
+            placement: TDropdownMenuPlacement.below,
+            items: [
+              item('短面板', panelHeight: 80),
+              item('长面板', panelHeight: 160),
+            ],
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('短面板'));
+      await tester.pumpAndSettle();
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+      expect(tester.getSize(panelSurface).height, 80);
+
+      await tester.tap(find.text('长面板'));
+      await tester.pump();
+      expect(tester.getSize(panelSurface).height, 160);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getSize(panelSurface).height, 160);
+
+      await tester.pumpAndSettle();
+      expect(tester.getSize(panelSurface).height, 160);
+
+      await tester.tap(find.text('短面板'));
+      await tester.pump();
+      expect(tester.getSize(panelSurface).height, 160);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getSize(panelSurface).height, 160);
+
+      await tester.pumpAndSettle();
+      expect(tester.getSize(panelSurface).height, 80);
+    });
 
     testWidgets('rapid same-menu switches keep only the final panel active', (
       tester,
@@ -404,6 +534,97 @@ void main() {
         (0, TDropdownMenuCloseReason.switchItem),
         (1, TDropdownMenuCloseReason.switchItem),
       ]);
+    });
+
+    testWidgets('switching back does not close the active item index', (
+      tester,
+    ) async {
+      final opened = <int>[];
+      final closed = <(int, TDropdownMenuCloseReason)>[];
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            animationDuration: const Duration(milliseconds: 200),
+            onOpened: opened.add,
+            onClosed: (index, reason) => closed.add((index, reason)),
+            items: [item('A'), item('B')],
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('A'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('B'));
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.tap(find.text('A'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('A panel'), findsOneWidget);
+      expect(find.text('B panel'), findsNothing);
+      expect(opened, [0, 0]);
+      expect(closed, [(1, TDropdownMenuCloseReason.switchItem)]);
+    });
+
+    testWidgets('interrupted open and close futures both complete', (
+      tester,
+    ) async {
+      final controller = TDropdownMenuController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            controller: controller,
+            placement: TDropdownMenuPlacement.below,
+            animationDuration: const Duration(milliseconds: 200),
+            items: [item('动画中断')],
+          ),
+        ),
+      );
+
+      var openCompleted = false;
+      var closeCompleted = false;
+      unawaited(controller.open(0).whenComplete(() => openCompleted = true));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      unawaited(controller.close().whenComplete(() => closeCompleted = true));
+      await tester.pumpAndSettle();
+
+      expect(openCompleted, isTrue);
+      expect(closeCompleted, isTrue);
+      expect(controller.isOpen, isFalse);
+      expect(find.text('动画中断 panel'), findsNothing);
+    });
+
+    testWidgets('switching items during close restores the revealed panel', (
+      tester,
+    ) async {
+      final controller = TDropdownMenuController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            controller: controller,
+            placement: TDropdownMenuPlacement.below,
+            animationDuration: const Duration(milliseconds: 200),
+            items: [item('关闭中 A'), item('关闭中 B')],
+          ),
+        ),
+      );
+
+      unawaited(controller.open(0));
+      await tester.pumpAndSettle();
+      unawaited(controller.close());
+      await tester.pump(const Duration(milliseconds: 50));
+      unawaited(controller.open(1));
+      await tester.pumpAndSettle();
+
+      expect(controller.openIndex, 1);
+      expect(find.text('关闭中 A panel'), findsNothing);
+      expect(find.text('关闭中 B panel'), findsOneWidget);
+      final reveal = tester.widget<SizeTransition>(
+        find.byKey(const ValueKey<String>('t-dropdown-menu-open-close-reveal')),
+      );
+      expect(reveal.sizeFactor.value, 1);
     });
 
     testWidgets('overlay closes with overlay reason', (tester) async {
@@ -992,6 +1213,58 @@ void main() {
       },
     );
 
+    testWidgets('anchor seam guard straddles the bar by one physical pixel', (
+      tester,
+    ) async {
+      const devicePixelRatio = 3.25;
+      const logicalSize = Size(800, 600);
+      tester.view.devicePixelRatio = devicePixelRatio;
+      tester.view.physicalSize = logicalSize * devicePixelRatio;
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.resetPhysicalSize);
+
+      const seamKey = ValueKey<String>('t-dropdown-menu-anchor-seam');
+      const physicalPixel = 1 / devicePixelRatio;
+
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            placement: TDropdownMenuPlacement.below,
+            animationDuration: Duration.zero,
+            items: [item('向下保护区')],
+          ),
+          alignment: Alignment.center,
+        ),
+      );
+      await tester.tap(find.text('向下保护区'));
+      await tester.pumpAndSettle();
+
+      var barRect = tester.getRect(find.byType(TDropdownMenu));
+      var seamRect = tester.getRect(find.byKey(seamKey));
+      expect(seamRect.top, closeTo(barRect.bottom - physicalPixel, 0.001));
+      expect(seamRect.bottom, closeTo(barRect.bottom + physicalPixel, 0.001));
+
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+      await tester.pump();
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            placement: TDropdownMenuPlacement.above,
+            animationDuration: Duration.zero,
+            items: [item('向上保护区')],
+          ),
+          alignment: Alignment.center,
+        ),
+      );
+      await tester.tap(find.text('向上保护区'));
+      await tester.pumpAndSettle();
+
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      seamRect = tester.getRect(find.byKey(seamKey));
+      expect(seamRect.top, closeTo(barRect.top - physicalPixel, 0.001));
+      expect(seamRect.bottom, closeTo(barRect.top + physicalPixel, 0.001));
+    });
+
     testWidgets('panel and overlay touch only the configured side of the bar', (
       tester,
     ) async {
@@ -1252,6 +1525,324 @@ void main() {
           tester.getBottomLeft(find.byType(TDropdownMenu)).dy,
         ),
       );
+    });
+
+    testWidgets('arrow direction follows explicit and resolved placement', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            placement: TDropdownMenuPlacement.above,
+            animationDuration: Duration.zero,
+            items: [item('向上箭头')],
+          ),
+        ),
+      );
+      expect(
+        tester.widget<AnimatedRotation>(find.byType(AnimatedRotation)).turns,
+        0.5,
+      );
+      await tester.tap(find.text('向上箭头'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<AnimatedRotation>(find.byType(AnimatedRotation)).turns,
+        0,
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            animationDuration: Duration.zero,
+            items: [item('自动箭头')],
+          ),
+          alignment: Alignment.bottomCenter,
+        ),
+      );
+      await tester.tap(find.text('自动箭头'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<AnimatedRotation>(find.byType(AnimatedRotation)).turns,
+        0,
+      );
+    });
+
+    testWidgets('auto placement re-evaluates when the anchor scrolls', (
+      tester,
+    ) async {
+      final scrollController = ScrollController();
+      addTearDown(scrollController.dispose);
+      await tester.pumpWidget(
+        wrap(
+          SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                const SizedBox(height: 400),
+                TDropdownMenu(
+                  animationDuration: Duration.zero,
+                  items: [item('滚动翻转', panelHeight: 180)],
+                ),
+                const SizedBox(height: 600),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('滚动翻转'));
+      await tester.pumpAndSettle();
+      var barRect = tester.getRect(find.byType(TDropdownMenu));
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
+
+      scrollController.jumpTo(250);
+      await tester.pump();
+      await tester.pump();
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.5));
+    });
+
+    testWidgets('auto placement is stable around the flip boundary', (
+      tester,
+    ) async {
+      final scrollController = ScrollController();
+      addTearDown(scrollController.dispose);
+      await tester.pumpWidget(
+        wrap(
+          SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                const SizedBox(height: 400),
+                TDropdownMenu(
+                  animationDuration: Duration.zero,
+                  items: [item('临界翻转', panelHeight: 180)],
+                ),
+                const SizedBox(height: 600),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('临界翻转'));
+      await tester.pumpAndSettle();
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+
+      Future<void> setSpaceBelow(double target) async {
+        final barRect = tester.getRect(find.byType(TDropdownMenu));
+        final current = 600 - barRect.bottom;
+        scrollController.jumpTo(scrollController.offset + target - current);
+        await tester.pump();
+        await tester.pump();
+      }
+
+      await setSpaceBelow(190);
+      var barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+
+      await setSpaceBelow(179);
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
+
+      await setSpaceBelow(181);
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
+
+      await setSpaceBelow(189);
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+    });
+
+    testWidgets('auto placement is stable when available spaces are equal', (
+      tester,
+    ) async {
+      final scrollController = ScrollController();
+      addTearDown(scrollController.dispose);
+      await tester.pumpWidget(
+        wrap(
+          SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                const SizedBox(height: 400),
+                TDropdownMenu(
+                  animationDuration: Duration.zero,
+                  items: [item('空间临界', panelHeight: 500)],
+                ),
+                const SizedBox(height: 600),
+              ],
+            ),
+          ),
+        ),
+      );
+      scrollController.jumpTo(140);
+      await tester.pump();
+      await tester.tap(find.text('空间临界'));
+      await tester.pumpAndSettle();
+
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+
+      Future<void> setSpaceDifference(double target) async {
+        final barRect = tester.getRect(find.byType(TDropdownMenu));
+        final current = barRect.top - (600 - barRect.bottom);
+        scrollController.jumpTo(
+          scrollController.offset + (current - target) / 2,
+        );
+        await tester.pump();
+        await tester.pump();
+      }
+
+      await setSpaceDifference(2);
+      var barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+
+      await setSpaceDifference(10);
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
+
+      await setSpaceDifference(-2);
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
+
+      await setSpaceDifference(-10);
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+    });
+
+    testWidgets('auto placement can return during the same active drag', (
+      tester,
+    ) async {
+      final scrollController = ScrollController();
+      addTearDown(scrollController.dispose);
+      await tester.pumpWidget(
+        wrap(
+          SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                const SizedBox(height: 400),
+                TDropdownMenu(
+                  animationDuration: Duration.zero,
+                  items: [item('拖动临界', panelHeight: 180)],
+                ),
+                const SizedBox(height: 600),
+              ],
+            ),
+          ),
+        ),
+      );
+      scrollController.jumpTo(250);
+      await tester.pump();
+      await tester.tap(find.text('拖动临界'));
+      await tester.pumpAndSettle();
+
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+      var barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+
+      final gesture = await tester.startGesture(const Offset(20, 80));
+      for (var step = 0; step < 5; step++) {
+        await gesture.moveBy(const Offset(0, 52));
+        await tester.pump(const Duration(milliseconds: 16));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      expect(scrollController.offset, lessThan(250));
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.5));
+      final seam = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-anchor-seam'),
+      );
+      expect(tester.getRect(seam).bottom, greaterThan(barRect.top));
+
+      for (var step = 0; step < 4; step++) {
+        await gesture.moveBy(const Offset(0, -52));
+        await tester.pump(const Duration(milliseconds: 16));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.5));
+
+      await gesture.up();
+      scrollController.jumpTo(250);
+      await tester.pump();
+      await tester.pump();
+      barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.5));
+    });
+
+    testWidgets('auto placement re-evaluates the target panel height', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            animationDuration: const Duration(milliseconds: 200),
+            items: [
+              item('短筛选', panelHeight: 80),
+              item('长筛选', panelHeight: 260),
+            ],
+          ),
+          alignment: const Alignment(0, 0.55),
+        ),
+      );
+
+      await tester.tap(find.text('短筛选'));
+      await tester.pumpAndSettle();
+      final barRect = tester.getRect(find.byType(TDropdownMenu));
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+
+      await tester.tap(find.text('长筛选'));
+      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
+      expect(tester.getRect(panelSurface).top, greaterThanOrEqualTo(0));
+    });
+
+    testWidgets('auto placement remeasures rebuilt active panel content', (
+      tester,
+    ) async {
+      var panelHeight = 80.0;
+      late StateSetter rebuild;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = setState;
+              return TDropdownMenu(
+                animationDuration: Duration.zero,
+                items: [item('动态面板', panelHeight: panelHeight)],
+              );
+            },
+          ),
+          alignment: const Alignment(0, 0.55),
+        ),
+      );
+
+      await tester.tap(find.text('动态面板'));
+      await tester.pumpAndSettle();
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+      final barRect = tester.getRect(find.byType(TDropdownMenu));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+
+      rebuild(() => panelHeight = 260);
+      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.001));
     });
 
     testWidgets('keyboard and safe area constrain a long panel', (

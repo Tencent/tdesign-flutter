@@ -179,17 +179,21 @@ class TDropdownMenu extends StatefulWidget {
 }
 
 class _TDropdownMenuState extends State<TDropdownMenu>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   static final Map<NavigatorState, _TDropdownMenuState> _activeMenus = {};
+  static const double _autoPlacementHysteresis = 8;
+  static const double _panelSwitchOffset = 0.04;
 
   final LayerLink _layerLink = LayerLink();
   final GlobalKey _barKey = GlobalKey();
   final GlobalKey _panelKey = GlobalKey();
+  GlobalKey _activePanelKey = GlobalKey();
   final Object _tapRegionGroup = Object();
   final FocusNode _panelFocusNode = FocusNode(
     debugLabel: 'TDropdownMenu panel',
   );
   late AnimationController _animationController;
+  late AnimationController _panelSwitchController;
   late TDropdownMenuController _controller;
   late bool _ownsController;
   List<FocusNode> _triggerFocusNodes = <FocusNode>[];
@@ -202,19 +206,75 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   Offset? _outsidePointerDownPosition;
   int? _outsidePointer;
   int _operationEpoch = 0;
+  int _panelActivationEpoch = 0;
+  int? _outgoingIndex;
+  int? _outgoingPanelActivation;
+  final Set<int> _pendingSwitchClosures = <int>{};
   bool _disposing = false;
   bool _overlayRefreshScheduled = false;
+  bool _triggerRefreshScheduled = false;
   bool _placementCheckScheduled = false;
   bool _autoOpensAbove = false;
+  bool _autoPlacementResolved = false;
+  double? _autoPanelHeight;
+  int _autoPlacementEpoch = 0;
 
   TDropdownThemeData get _theme =>
       Theme.of(context).extension<TDropdownThemeData>() ??
       const TDropdownThemeData();
 
-  Duration get _duration =>
-      widget.animationDuration == const Duration(milliseconds: 200)
-      ? _theme.animationDuration ?? widget.animationDuration
-      : widget.animationDuration;
+  Duration get _duration {
+    if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
+      return Duration.zero;
+    }
+    return widget.animationDuration == const Duration(milliseconds: 200)
+        ? _theme.animationDuration ?? widget.animationDuration
+        : widget.animationDuration;
+  }
+
+  void _resetAutoPlacement({
+    required bool opensAbove,
+    bool replacePanelKey = false,
+  }) {
+    _autoPlacementEpoch++;
+    _placementCheckScheduled = false;
+    _autoOpensAbove = opensAbove;
+    _autoPlacementResolved = false;
+    _autoPanelHeight = null;
+    if (replacePanelKey) {
+      _activePanelKey = GlobalKey();
+    }
+  }
+
+  bool _resolveAutoOpensAbove({
+    required double panelHeight,
+    required double above,
+    required double below,
+  }) {
+    if (!_autoOpensAbove) {
+      return panelHeight > below && above > below + _autoPlacementHysteresis;
+    }
+    final belowClearlyFits = panelHeight + _autoPlacementHysteresis <= below;
+    final belowClearlyLarger = below > above + _autoPlacementHysteresis;
+    return !belowClearlyFits && !belowClearlyLarger;
+  }
+
+  void _updateAutoDirection(bool opensAbove) {
+    if (_autoOpensAbove == opensAbove) {
+      return;
+    }
+    _autoOpensAbove = opensAbove;
+    if (_triggerRefreshScheduled || _disposing) {
+      return;
+    }
+    _triggerRefreshScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _triggerRefreshScheduled = false;
+      if (mounted && !_disposing) {
+        setState(() {});
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -224,6 +284,11 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       vsync: this,
       duration: widget.animationDuration,
     );
+    _panelSwitchController = AnimationController(
+      vsync: this,
+      duration: widget.animationDuration,
+      value: 1,
+    );
     _bindController(widget.controller);
     _syncFocusNodes();
   }
@@ -232,6 +297,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _animationController.duration = _duration;
+    _panelSwitchController.duration = _duration;
+    if (_controller.isOpen && widget.placement == TDropdownMenuPlacement.auto) {
+      _resetAutoPlacement(opensAbove: _autoOpensAbove);
+    }
     _bindScrollObserver();
     _navigator = Navigator.maybeOf(context, rootNavigator: true);
     final overlay = _overlayState;
@@ -298,7 +367,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       if (controllerWasOpen) {
         _operationEpoch++;
         _animationController.stop();
+        _clearPanelSwitch(resetAnimation: false);
+        _pendingSwitchClosures.clear();
         _removeOverlay();
+        _resetAutoPlacement(opensAbove: false, replacePanelKey: true);
+        final navigator = _navigator;
+        if (navigator != null && identical(_activeMenus[navigator], this)) {
+          _activeMenus.remove(navigator);
+        }
       }
       _controller._detach();
       if (_ownsController) {
@@ -317,7 +393,19 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       _syncFocusNodes();
     }
     _animationController.duration = _duration;
+    _panelSwitchController.duration = _duration;
     final openIndex = _controller.openIndex;
+    final activeItemChanged =
+        openIndex != null &&
+        openIndex < widget.items.length &&
+        openIndex < oldWidget.items.length &&
+        !identical(widget.items[openIndex], oldWidget.items[openIndex]);
+    if (openIndex != null &&
+        widget.placement == TDropdownMenuPlacement.auto &&
+        (activeItemChanged ||
+            oldWidget.placement != TDropdownMenuPlacement.auto)) {
+      _resetAutoPlacement(opensAbove: _autoOpensAbove);
+    }
     if (openIndex != null &&
         (openIndex >= widget.items.length ||
             !widget.items[openIndex].enabled)) {
@@ -373,6 +461,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     _panelFocusNode.dispose();
     _animationController.dispose();
+    _panelSwitchController.dispose();
     super.dispose();
   }
 
@@ -541,6 +630,12 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         : theme.iconColor ??
               context.tExplicitIconTheme?.color ??
               context.tTheme.textColorPrimary;
+    final opensAbove = switch (widget.placement) {
+      TDropdownMenuPlacement.above => true,
+      TDropdownMenuPlacement.below => false,
+      TDropdownMenuPlacement.auto => isOpen && _autoOpensAbove,
+    };
+    final arrowTurns = opensAbove ? (isOpen ? 0.0 : 0.5) : (isOpen ? 0.5 : 0.0);
 
     return Semantics(
       button: true,
@@ -562,8 +657,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
               ),
             ),
             AnimatedRotation(
-              turns: isOpen ? 0.5 : 0,
+              turns: arrowTurns,
               duration: _duration,
+              curve: Curves.ease,
               child: Icon(
                 TIcons.caret_down_small,
                 size: theme.iconSize ?? 20,
@@ -608,6 +704,33 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
   }
 
+  Future<void> _waitForAutoPlacement() async {
+    if (widget.placement != TDropdownMenuPlacement.auto ||
+        _duration == Duration.zero) {
+      return;
+    }
+    await WidgetsBinding.instance.endOfFrame;
+  }
+
+  void _clearPanelSwitch({bool resetAnimation = true}) {
+    _panelSwitchController.stop();
+    if (resetAnimation) {
+      _panelSwitchController.value = 1;
+    }
+    _outgoingIndex = null;
+    _outgoingPanelActivation = null;
+  }
+
+  void _flushPendingSwitchClosures({int? except}) {
+    final closedIndices = _pendingSwitchClosures
+        .where((index) => index != except)
+        .toList(growable: false);
+    _pendingSwitchClosures.clear();
+    for (final index in closedIndices) {
+      widget.onClosed?.call(index, TDropdownMenuCloseReason.switchItem);
+    }
+  }
+
   Future<void> _open(int index) async {
     if (!mounted ||
         index < 0 ||
@@ -638,12 +761,25 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       _navigator = navigator;
       _activeMenus[navigator] = this;
     }
-    _autoOpensAbove = false;
+    _resetAutoPlacement(opensAbove: false, replacePanelKey: true);
+    _panelActivationEpoch++;
+    _clearPanelSwitch();
+    _pendingSwitchClosures.clear();
     _controller._setOpenIndex(index);
     setState(() {});
     _insertOverlay();
     _animationController.duration = _duration;
-    await _animationController.forward(from: 0);
+    await _waitForAutoPlacement();
+    if (!mounted ||
+        epoch != _operationEpoch ||
+        _controller.openIndex != index) {
+      return;
+    }
+    try {
+      await _animationController.forward(from: 0).orCancel;
+    } on TickerCanceled {
+      return;
+    }
     if (!mounted ||
         epoch != _operationEpoch ||
         _controller.openIndex != index) {
@@ -660,20 +796,41 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
 
     final epoch = ++_operationEpoch;
+    _panelSwitchController.stop();
+    _panelSwitchController.value = 0;
+    _outgoingIndex = previousIndex;
+    _outgoingPanelActivation = _panelActivationEpoch;
+    _panelActivationEpoch++;
+    _pendingSwitchClosures.add(previousIndex);
+    _resetAutoPlacement(opensAbove: _autoOpensAbove, replacePanelKey: true);
     _controller._setOpenIndex(index);
     setState(() {});
     _overlayEntry?.markNeedsBuild();
 
-    // Keep the overlay and its opacity unchanged while the independently keyed
-    // panels perform a full-distance transition along the expansion edge.
-    await Future<void>.delayed(_duration);
-    if (!mounted) {
+    await _waitForAutoPlacement();
+    if (!mounted ||
+        epoch != _operationEpoch ||
+        _controller.openIndex != index) {
       return;
     }
-    widget.onClosed?.call(previousIndex, TDropdownMenuCloseReason.switchItem);
+    _panelSwitchController.duration = _duration;
+    _animationController.duration = _duration;
+    final animations = <Future<void>>[
+      _panelSwitchController.forward(from: 0).orCancel,
+      _animationController.forward().orCancel,
+    ];
+    try {
+      await Future.wait(animations);
+    } on TickerCanceled {
+      return;
+    }
     if (epoch != _operationEpoch || _controller.openIndex != index) {
       return;
     }
+    _outgoingIndex = null;
+    _outgoingPanelActivation = null;
+    _overlayEntry?.markNeedsBuild();
+    _flushPendingSwitchClosures(except: index);
     _panelFocusNode.requestFocus();
     widget.onOpened?.call(index);
   }
@@ -684,13 +841,20 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       return;
     }
     final epoch = ++_operationEpoch;
-    await _animationController.reverse();
+    _clearPanelSwitch();
+    _overlayEntry?.markNeedsBuild();
+    try {
+      await _animationController.reverse().orCancel;
+    } on TickerCanceled {
+      return;
+    }
     if (epoch != _operationEpoch) {
       return;
     }
     _removeOverlay();
-    _autoOpensAbove = false;
+    _resetAutoPlacement(opensAbove: false);
     _controller._setOpenIndex(null);
+    _flushPendingSwitchClosures();
     final navigator = _navigator;
     if (navigator != null && identical(_activeMenus[navigator], this)) {
       _activeMenus.remove(navigator);
@@ -757,24 +921,34 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     required double below,
   }) {
     if (_placementCheckScheduled ||
-        widget.placement != TDropdownMenuPlacement.auto) {
+        widget.placement != TDropdownMenuPlacement.auto ||
+        _autoPlacementResolved) {
       return;
     }
     _placementCheckScheduled = true;
+    final placementEpoch = _autoPlacementEpoch;
+    final panelKey = _activePanelKey;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (placementEpoch != _autoPlacementEpoch) {
+        return;
+      }
       _placementCheckScheduled = false;
       if (_disposing || _overlayEntry?.mounted != true) {
         return;
       }
-      final renderObject = _panelKey.currentContext?.findRenderObject();
+      final renderObject = panelKey.currentContext?.findRenderObject();
       if (renderObject is! RenderBox || !renderObject.hasSize) {
         return;
       }
-      final shouldOpenAbove = renderObject.size.height > below && above > below;
-      if (_autoOpensAbove != shouldOpenAbove) {
-        _autoOpensAbove = shouldOpenAbove;
-        _overlayEntry?.markNeedsBuild();
-      }
+      final shouldOpenAbove = _resolveAutoOpensAbove(
+        panelHeight: renderObject.size.height,
+        above: above,
+        below: below,
+      );
+      _autoPanelHeight = renderObject.size.height;
+      _autoPlacementResolved = true;
+      _updateAutoDirection(shouldOpenAbove);
+      _overlayEntry?.markNeedsBuild();
     });
   }
 
@@ -790,6 +964,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     final media = MediaQuery.of(context);
     final view = View.of(context);
+    final anchorSeamExtent = 1 / view.devicePixelRatio;
     final keyboardInset = math.max(
       media.viewInsets.bottom,
       view.viewInsets.bottom / view.devicePixelRatio,
@@ -799,12 +974,25 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         overlayBox.size.height - media.padding.bottom - keyboardInset;
     final above = (rect.top - safeTop).clamp(0.0, double.infinity);
     final below = (safeBottom - rect.bottom).clamp(0.0, double.infinity);
+    final resolvedAutoOpensAbove = switch (_autoPanelHeight) {
+      final height? => _resolveAutoOpensAbove(
+        panelHeight: height,
+        above: above,
+        below: below,
+      ),
+      null => _autoOpensAbove,
+    };
+    if (_autoPanelHeight != null) {
+      _updateAutoDirection(resolvedAutoOpensAbove);
+    }
     final opensAbove = switch (widget.placement) {
       TDropdownMenuPlacement.above => true,
       TDropdownMenuPlacement.below => false,
       TDropdownMenuPlacement.auto => _autoOpensAbove,
     };
-    final maxHeight = widget.placement == TDropdownMenuPlacement.auto
+    final maxHeight =
+        widget.placement == TDropdownMenuPlacement.auto &&
+            !_autoPlacementResolved
         ? math.max(above, below)
         : opensAbove
         ? above
@@ -832,61 +1020,112 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     final theme = _theme;
     final material = Theme.of(context);
     final colorScheme = material.tExplicitColorScheme;
-    final panelController = TDropdownMenuPanelController._(
-      index: index,
-      close: (reason) {
-        if (_controller.openIndex != index) {
-          return Future<void>.value();
-        }
-        return _close(reason);
-      },
-    );
-    final panel = ConstrainedBox(
-      key: const ValueKey<String>('t-dropdown-menu-panel'),
-      constraints: BoxConstraints(maxHeight: maxHeight),
-      child: Material(
-        color:
-            theme.panelBackgroundColor ??
-            colorScheme?.surface ??
-            context.tTheme.bgColorContainer,
-        child: FocusScope(
-          child: widget.items[index].panelBuilder(context, panelController),
+    final panelBackgroundColor =
+        theme.panelBackgroundColor ??
+        colorScheme?.surface ??
+        context.tTheme.bgColorContainer;
+
+    Widget buildPanel({
+      required int panelIndex,
+      required int activation,
+      GlobalKey? measureKey,
+    }) {
+      final panelController = TDropdownMenuPanelController._(
+        index: panelIndex,
+        close: (reason) {
+          if (_controller.openIndex != panelIndex) {
+            return Future<void>.value();
+          }
+          return _close(reason);
+        },
+      );
+      return KeyedSubtree(
+        key: ValueKey<int>(activation),
+        child: KeyedSubtree(
+          key: const ValueKey<String>('t-dropdown-menu-panel'),
+          child: ConstrainedBox(
+            key: measureKey,
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: Material(
+              color: panelBackgroundColor,
+              child: FocusScope(
+                child: widget.items[panelIndex].panelBuilder(
+                  context,
+                  panelController,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
+      );
+    }
+
+    final switchOffset = opensAbove
+        ? const Offset(0, _panelSwitchOffset)
+        : const Offset(0, -_panelSwitchOffset);
+    final switchAnimation = CurvedAnimation(
+      parent: _panelSwitchController,
+      curve: Curves.easeInOutCubic,
+    );
+    final outgoingIndex = _outgoingIndex;
+    final outgoingActivation = _outgoingPanelActivation;
+    final canBuildOutgoing =
+        outgoingIndex != null &&
+        outgoingActivation != null &&
+        outgoingIndex < widget.items.length;
+    final panelSwitcher = AnimatedBuilder(
+      animation: _panelSwitchController,
+      builder: (context, child) {
+        return Stack(
+          clipBehavior: Clip.hardEdge,
+          alignment: opensAbove ? Alignment.bottomCenter : Alignment.topCenter,
+          children: [
+            if (canBuildOutgoing)
+              IgnorePointer(
+                child: ExcludeSemantics(
+                  child: SlideTransition(
+                    key: const ValueKey<String>(
+                      't-dropdown-menu-outgoing-slide',
+                    ),
+                    position: Tween<Offset>(
+                      begin: Offset.zero,
+                      end: switchOffset,
+                    ).animate(switchAnimation),
+                    child: SizedBox(
+                      width: rect.width,
+                      child: buildPanel(
+                        panelIndex: outgoingIndex,
+                        activation: outgoingActivation,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            SlideTransition(
+              key: const ValueKey<String>('t-dropdown-menu-incoming-slide'),
+              position: Tween<Offset>(
+                begin: switchOffset,
+                end: Offset.zero,
+              ).animate(switchAnimation),
+              child: SizedBox(
+                width: rect.width,
+                child: buildPanel(
+                  panelIndex: index,
+                  activation: _panelActivationEpoch,
+                  measureKey: _activePanelKey,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
     final switchingPanel = ClipRect(
       key: _panelKey,
-      child: AnimatedSwitcher(
-        duration: _duration,
-        reverseDuration: _duration,
-        switchInCurve: Curves.easeInOut,
-        switchOutCurve: Curves.easeInOut,
-        transitionBuilder: (child, animation) {
-          final offset = opensAbove ? const Offset(0, 1) : const Offset(0, -1);
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: offset,
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          );
-        },
-        layoutBuilder: (currentChild, previousChildren) {
-          return Stack(
-            alignment: opensAbove
-                ? Alignment.bottomCenter
-                : Alignment.topCenter,
-            children: [
-              for (final child in previousChildren)
-                IgnorePointer(child: ExcludeSemantics(child: child)),
-              if (currentChild != null) currentChild,
-            ],
-          );
-        },
-        child: KeyedSubtree(
-          key: ValueKey<int>(index),
-          child: SizedBox(width: rect.width, child: panel),
-        ),
+      child: ColoredBox(
+        key: const ValueKey<String>('t-dropdown-menu-panel-surface'),
+        color: panelBackgroundColor,
+        child: panelSwitcher,
       ),
     );
     final focusedPanel = Focus(
@@ -903,13 +1142,29 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       child: switchingPanel,
     );
     final animatedPanel = SizeTransition(
+      key: const ValueKey<String>('t-dropdown-menu-open-close-reveal'),
       sizeFactor: CurvedAnimation(
         parent: _animationController,
-        curve: Curves.decelerate,
-        reverseCurve: Curves.easeOut,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
       ),
       axisAlignment: opensAbove ? 1 : -1,
       child: focusedPanel,
+    );
+    final anchoredPanel = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        animatedPanel,
+        Positioned(
+          key: const ValueKey<String>('t-dropdown-menu-anchor-seam'),
+          top: opensAbove ? null : -anchorSeamExtent,
+          bottom: opensAbove ? -anchorSeamExtent : null,
+          left: 0,
+          right: 0,
+          height: anchorSeamExtent * 2,
+          child: IgnorePointer(child: ColoredBox(color: panelBackgroundColor)),
+        ),
+      ],
     );
     final captured = _capturedThemes;
     _scheduleAutoPlacementCheck(above: above, below: below);
@@ -960,6 +1215,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                     width: overlayBox.size.width,
                     height: followerExtent,
                     child: Stack(
+                      clipBehavior: Clip.none,
                       children: [
                         Positioned(
                           top: opensAbove ? null : 0,
@@ -976,7 +1232,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                           width: rect.width,
                           child: TapRegion(
                             groupId: _tapRegionGroup,
-                            child: animatedPanel,
+                            child: anchoredPanel,
                           ),
                         ),
                       ],
