@@ -14,9 +14,9 @@ spline: explain
 ```txt
 tdesign-component/
 ├── demo_tool       // API 和演示代码工具
-├── examples        // 组件使用示例
+├── example         // 组件使用示例
 ├── lib             // 组件库
-└── tests           // 组件测试
+└── test            // 组件测试
 
 tdesign-site/       // TDesign Flutter 站点
 ```
@@ -52,7 +52,7 @@ cd tdesign-flutter/tdesign-component/
 # 拉取依赖
 flutter pub get
 
-# 进入示例项目，需要把 AOPMarket|enable 改为 false，禁用 AOP 才行
+# 进入示例项目
 cd example/
 
 # 运行项目，最好在运行前先确认设备已连接
@@ -62,17 +62,14 @@ flutter run
 ### 2.5 运行前端官网项目
 
 ```bash
-# 进入官网前端项目
-cd tdesign-flutter/tdesign-site/site/
+# 进入官网项目
+cd tdesign-flutter/tdesign-site/
 
-# 安装依赖
-npm install
-
-# 回到 tdesign-site 目录
-cd ..
+# 安装依赖（仓库使用 pnpm）
+pnpm install --frozen-lockfile
 
 # 运行项目
-npm run site:dev
+pnpm site:dev
 ```
 
 **注意：** 本地运行项目，右侧 example 未展示对应组件示例，是正常现象，该示例正式部署才会展示。
@@ -102,7 +99,7 @@ npm run site:dev
 
 ## 4. 开发规范
 
-- 组件命名规范：以 `TD` 为前缀，组件名称、API 名称参考 TDesign 现有组件和 API 命名，可以根据 Flutter 原生 Widget 的特点进行修改。组件 API 以满足设计要求和使用为准，可根据 Flutter 特点做精简或定制。
+- 组件命名规范：以 `T` 为前缀，组件名称、API 名称参考 TDesign 现有组件和 API 命名，可以根据 Flutter 原生 Widget 的特点进行修改。组件 API 以满足设计要求和使用为准，可根据 Flutter 特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
 - 代码规范遵循腾讯 Dart 代码规范。
 - 对于系统原有组件，如 `Text`、`Image` 等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃 TDesign 控件。
@@ -115,8 +112,7 @@ npm run site:dev
 
 ### 5.1 PR 规则
 
-- PR 目标分支为 `develop` 分支，请勿直接往 `main` 分支合并。
-- 标题格式：`组件类名`: 修改描述（示例：`TUpload`: 新增 Upload 组件；`TBottomTabBar`: 修复 iconText 模式，底部溢出 2.5 像素）。
+- PR 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`。`scope` 可填写组件、文档或 CI 模块；常用 `type` 包括 `feat`、`fix`、`docs`、`refactor`、`test`、`ci` 和 `chore`。例如：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`、`docs(contributing): 更新 PR 提交流程`。
 - 勾选规则：
   > 1. 只要有新增参数，就勾选"新特性提交"。
   >

@@ -89,7 +89,3 @@ build/
 /tdesign-component/example/pubspec.lock
 
 /tdesign-site/package-lock.json
-
-# Cursor harness generated artifacts
-/.cursor/
-/AGENTS.md
