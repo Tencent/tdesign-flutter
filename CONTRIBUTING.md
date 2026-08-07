@@ -21,7 +21,7 @@ tdesign-site/       // tdesign flutter 站点
 - 示例页面尽量使用 ExamplePage + ExampleModule + ExampleItem 组合，按照示例稿的布局实现；页面写完后，在 main.dart 中修改 exampleMap 对应组件的 isTodo 属性即可。
 - 组件 API 和演示代码，请参考 [demo_tool/README.md](./tdesign-component/demo_tool/README.md) 文件。
 - 组件内部的固定文案，都应该抽离到 TResourceDelegate 中统一管理，方便业务进行国际化适配。
-- 如果使用的组件 TD 有封装，尽量使用 TD 已有组件，而非直接使用系统组件。
+- 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
 
 ## 示例代码片段
 
@@ -46,3 +46,16 @@ dart run tool/generate_example_code.dart --check
 ## 贡献指南
 
 请参考：[贡献指南](https://tdesign.tencent.com/flutter/develop)
+
+复杂需求、公共 API 变更、组件重构和跨目录改动请先阅读并创建对应的 [Spec](./specs/README.md)。
+
+## Spec 贡献流程
+
+1. 从 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录；编号按顺序递增，短名称使用小写 kebab-case。
+2. 在 `spec.md` 中说明背景、目标、范围、非目标、行为契约和验收标准。
+3. 在 `plan.md` 中记录技术方案、影响文件、API 变化、风险和验证策略。
+4. 在 `tasks.md` 中拆分实现、测试、示例和文档任务，并持续更新任务状态。
+5. 完成代码和测试后，在 `acceptance.md` 中记录实际命令、测试结果、人工验收项和未覆盖风险。
+6. 提交 PR 时，在正文中附上 Spec 目录链接；实现发生变化时，必须同步更新 Spec。
+
+简单文案、格式调整和单文件局部修改不要求创建完整 Spec。Spec 只描述设计和验收，不替代代码、测试或生成文档。

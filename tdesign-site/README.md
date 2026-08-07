@@ -18,7 +18,7 @@ https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component
 
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.1.0
+    tdesign_flutter: 1.0.0-alpha.1
 ```
 
 

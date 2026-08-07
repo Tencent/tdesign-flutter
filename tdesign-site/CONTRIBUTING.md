@@ -106,13 +106,14 @@ pnpm site:dev
 - 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现；页面写完后，在 `main.dart` 中修改 `exampleMap` 对应组件的 `isTodo` 属性即可。
 - 组件 API 和演示代码，请参考 `demo_tool/README.md` 文件。
 - 组件内部的固定文案，都应该抽离到 `TResourceDelegate` 中统一管理，方便业务进行国际化适配。
-- 如果使用的组件 TD 有封装，尽量使用 TD 已有组件，而非直接使用系统组件。
+- 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
 
 ## 5. 验收标准
 
 ### 5.1 PR 规则
 
 - PR 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`。`scope` 可填写组件、文档或 CI 模块；常用 `type` 包括 `feat`、`fix`、`docs`、`refactor`、`test`、`ci` 和 `chore`。例如：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`、`docs(contributing): 更新 PR 提交流程`。
+- 复杂需求、公共 API 变更、组件重构和跨目录改动应附带 [Spec](https://github.com/Tencent/tdesign-flutter/tree/develop/specs) 目录链接。
 - 勾选规则：
   > 1. 只要有新增参数，就勾选"新特性提交"。
   >
@@ -153,6 +154,17 @@ pnpm site:dev
 - `tdesign-site/site/docs/overview.md`：检查组件预览是否已添加、分组组件数量是否正确。
 
 ![概览示例](https://tdesign.tencent.com/flutter/assets/contributing_overview.png)
+
+#### 5.3.3 Spec 文档
+
+复杂需求、公共 API 变更、组件重构和跨目录改动需要创建 Spec。请从仓库根目录的 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录，并在 PR 中附上目录链接。
+
+- `spec.md`：记录背景、目标、范围、非目标、行为契约和验收标准。
+- `plan.md`：记录技术方案、影响范围、API 变化、风险和验证策略。
+- `tasks.md`：拆分实现、测试、示例和文档任务，并更新任务状态。
+- `acceptance.md`：记录实际验证命令、结果、人工验收项和未覆盖风险。
+
+实现或验收标准发生变化时，应先同步更新 Spec，再继续修改代码。简单文案、格式调整和单文件局部修改不要求创建完整 Spec。
 
 ### 5.4 Demo 自测
 
