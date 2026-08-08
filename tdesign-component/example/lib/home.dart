@@ -4,7 +4,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
-import 'base/web_md_tool.dart';
 import 'config.dart';
 import 'l10n/app_localizations.dart';
 
@@ -186,7 +185,6 @@ class _MyHomePageState extends State<MyHomePage> {
           // 如果有搜索文案,不再搜索中的组件不展示
           return;
         }
-        model.spline = WebMdTool.getSpline(key);
         if (model.isTodo) {
           if (_kShowTodoComponent) {
             cells.add(TCell(

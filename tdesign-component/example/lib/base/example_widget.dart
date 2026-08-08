@@ -13,7 +13,6 @@ import 'example_base.dart';
 import 'example_route.dart';
 import 'notification_center.dart';
 import 'syntax_highlighter.dart';
-import 'web_md_tool.dart';
 
 var navBarkey = GlobalKey();
 
@@ -270,79 +269,13 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
                   _buildExampleItem(modules[moduleIndex], itemIndex),
             ),
           ],
-          if (WebMdTool.needGenerateWebMd)
-            SliverToBoxAdapter(child: _buildWebMdActions()),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );
   }
 
-  Widget _buildWebMdActions() {
-    return Container(
-      margin: const EdgeInsets.only(top: 24),
-      child: Column(
-        children: [
-          TButton(
-            variant: TButtonVariant.fill,
-            onPressed: () => WebMdTool.generateWebMd(
-              model: model,
-              description: widget.desc,
-              exampleCodeGroup: widget.exampleCodeGroup,
-              exampleModuleList: widget.children,
-              testList: widget.test,
-              singleChild: widget.showSingleChild ? widget.singleChild : null,
-            ),
-            child: const Text('生成Web使用md'),
-          ),
-          TButton(
-            variant: TButtonVariant.fill,
-            onPressed: () => Navigator.of(context).maybePop(),
-            child: const Text('返回首页'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _singleChild() {
-    if (!WebMdTool.needGenerateWebMd) {
-      return widget.singleChild!;
-    }
-    return ExampleItemInherited(
-      child: Stack(
-        children: [
-          widget.singleChild!,
-          Positioned(
-              left: 16,
-              right: 16,
-              bottom: 0,
-              child: Column(
-                children: [
-                  TButton(
-                    child: const Text('生成Web使用md'),
-                    variant: TButtonVariant.fill,
-                    onPressed: () => WebMdTool.generateWebMd(
-                        model: model,
-                        description: widget.desc,
-                        exampleCodeGroup: widget.exampleCodeGroup,
-                        exampleModuleList: widget.children,
-                        testList: widget.test,
-                        singleChild:
-                            widget.showSingleChild ? widget.singleChild : null),
-                  ),
-                  TButton(
-                    child: const Text('返回首页'),
-                    variant: TButtonVariant.fill,
-                    onPressed: () => Navigator.of(context).maybePop(),
-                  ),
-                ],
-              )),
-        ],
-      ),
-      path: widget.exampleCodeGroup,
-    );
-  }
+  Widget _singleChild() => widget.singleChild!;
 
   ExampleItem _buildTestExampleItem() =>
       ExampleItem(desc: '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
@@ -422,7 +355,6 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (WebMdTool.needGenerateWebMd) const TText('WebGenTag'),
           TText(
             widget.title,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -465,8 +397,6 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       child: ExampleItemWidget(
         data: data.children[index],
         index: index,
-        exampleCodeGroup: widget.exampleCodeGroup,
-        moduleTitle: data.title,
       ),
     );
   }
@@ -507,33 +437,15 @@ class ExampleItem {
 }
 
 /// 组件示例
-class ExampleItemInherited extends InheritedWidget {
-  const ExampleItemInherited(
-      {required this.path, Key? key, required Widget child})
-      : super(key: key, child: child);
-
-  final String path;
-
-  @override
-  bool updateShouldNotify(covariant ExampleItemInherited oldWidget) {
-    return path != oldWidget.path;
-  }
-}
-
-/// 组件示例
 class ExampleItemWidget extends StatefulWidget {
   const ExampleItemWidget(
       {required this.data,
       Key? key,
-      required this.index,
-      this.exampleCodeGroup,
-      this.moduleTitle})
+      required this.index})
       : super(key: key);
 
   final ExampleItem data;
   final int index;
-  final String? exampleCodeGroup;
-  final String? moduleTitle;
 
   @override
   State<ExampleItemWidget> createState() => _ExampleItemWidgetState();
@@ -555,7 +467,6 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         builder: widget.data.builder,
         methodName: widget.data.methodName,
         isCenter: widget.data.center,
-        isFromItem: true,
       );
     }
     if (widget.data.padding != null) {
@@ -588,11 +499,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         child
       ],
     );
-    return ExampleItemInherited(
-      child: child,
-      path: WebMdTool.getItemKey(
-          widget.exampleCodeGroup, widget.moduleTitle, widget.data.desc),
-    );
+    return child;
   }
 }
 
@@ -601,15 +508,12 @@ class CodeWrapper extends StatefulWidget {
       {Key? key,
       required this.builder,
       this.methodName,
-      this.isCenter = false,
-      this.isFromItem = false})
+      this.isCenter = false})
       : super(key: key);
 
   final WidgetBuilder builder;
 
   final bool isCenter;
-
-  final bool isFromItem;
 
   final String? methodName;
 
@@ -649,9 +553,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
         brightness = Theme.of(context).brightness;
       });
 
-      if (WebMdTool.needGenerateWebMd && !widget.isFromItem) {
-        loadManualCode();
-      }
     });
   }
 
@@ -659,17 +560,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
   void dispose() {
     TNotification.removeObserver(_apiVisibilityEvent, _observerId);
     super.dispose();
-  }
-
-  void loadManualCode() async {
-    var modelTheme =
-        context.dependOnInheritedWidgetOfExactType<ExampleItemInherited>();
-    if (modelTheme?.path != null) {
-      codeString ??= await loadCodeString();
-      var list = WebMdTool.manualExampleCode[modelTheme!.path] ?? [];
-      list.add(codeString!);
-      WebMdTool.manualExampleCode[modelTheme.path] = list;
-    }
   }
 
   @override
