@@ -46,5 +46,5 @@
 
 - [ ] 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`；`scope` 可填写组件、文档或 CI 模块（示例：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`、`docs(contributing): 更新 PR 提交流程`）
 - [ ] ”相关issue“处带上修复的issue链接
-- [ ] 复杂需求或跨目录改动已附上对应的 Spec 链接
+- [ ] 已添加对应的 Spec 链接，或已由 Review 确认本次改动无需 Spec
 - [ ] 相关文档已补充或无须补充

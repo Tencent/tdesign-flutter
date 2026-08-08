@@ -113,7 +113,7 @@ pnpm site:dev
 ### 5.1 PR 规则
 
 - PR 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`。`scope` 可填写组件、文档或 CI 模块；常用 `type` 包括 `feat`、`fix`、`docs`、`refactor`、`test`、`ci` 和 `chore`。例如：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`、`docs(contributing): 更新 PR 提交流程`。
-- 复杂需求、公共 API 变更、组件重构和跨目录改动应附带 [Spec](https://github.com/Tencent/tdesign-flutter/tree/develop/specs) 目录链接。
+- 复杂需求、公共 API 变更、组件重构和跨目录改动应附带 [Spec](https://github.com/Tencent/tdesign-flutter/tree/develop/specs) 目录链接；是否可以不创建 Spec，由 Review 根据实际改动判断。
 - 勾选规则：
   > 1. 只要有新增参数，就勾选"新特性提交"。
   >
@@ -157,7 +157,7 @@ pnpm site:dev
 
 #### 5.3.3 Spec 文档
 
-复杂需求、公共 API 变更、组件重构和跨目录改动需要创建 Spec。请从仓库根目录的 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录，并在 PR 中附上目录链接。
+复杂需求、公共 API 变更、组件重构和跨目录改动通常需要创建 Spec。请从仓库根目录的 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录，并在 PR 中附上目录链接；是否可以例外，由 Review 根据实际改动判断。
 
 - `spec.md`：记录背景、目标、范围、非目标、行为契约和验收标准。
 - `plan.md`：记录技术方案、影响范围、API 变化、风险和验证策略。

@@ -47,7 +47,7 @@ dart run tool/generate_example_code.dart --check
 
 请参考：[贡献指南](https://tdesign.tencent.com/flutter/develop)
 
-复杂需求、公共 API 变更、组件重构和跨目录改动请先阅读并创建对应的 [Spec](./specs/README.md)。
+复杂需求、公共 API 变更、组件重构和跨目录改动请先阅读并创建对应的 [Spec](./specs/README.md)；是否可以不创建 Spec，由 Review 根据实际改动判断。
 
 ## Spec 贡献流程
 
