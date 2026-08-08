@@ -2,9 +2,14 @@
 
 ## 发布流程
 
-1. 从 `develop` 新建 `release/x.y.z` 分支，并修改 `tdesign-component/pubspec.yaml` 中的`version`版本号，推送分支至远程仓库，并提交一个合入`develop`的 Pull Request 到仓库；
-2. 仓库的 Github Action 会自动整理上个版本至今 commit 对应的 CHANGELOG，并将 CHANGELOG 的 draft 作为一个评论推送到该 Pull Request 上；
-3. 发布人检查 CHANGELOG，并优化内容逻辑结构，确认无误后删除对于评论首行提示，Github Action 会将优化后的内容写入 CHANGELOG.md 内；
-4. 确认无误后，合并分支入`develop`；
-5. 合入 `develop` 后，仓库会触发 Github Action 合入`main`分支，并将版本号作为 `tag` 打在仓库上，并触发 Github Action 执行版本发布流程；
-6. 合入 `main` 分支后，站点的部署流水线 web hook 会监听到 `main` 分支的新增 commit，并触发流水线，官网更新站点。
+1. 从 `develop` 新建 `release/x.y.z` 分支，修改 `tdesign-component/pubspec.yaml` 中的版本号，并创建目标为 `develop` 的 Pull Request。
+2. PR 打开或更新时，Auto Release workflow 会生成从上个版本到当前版本的 CHANGELOG 草稿，并评论到 release PR。
+3. 发布人检查并整理 CHANGELOG；按 workflow 约定编辑对应评论，自动化会将确认后的内容写入 `tdesign-site/CHANGELOG.md`。
+4. 确认无误后合并 release PR 到 `develop`。
+5. release PR 合并后，Auto Release workflow 在 `develop` 上创建版本 tag。
+6. tag 创建后，TAG_PUSH workflow 将 `develop` 合并到 `main` 并推送，随后触发站点和发布流程。
+
+相关实现：
+
+- `.github/workflows/auto-release.yml`
+- `.github/workflows/tag-push.yml`
