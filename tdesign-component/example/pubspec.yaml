@@ -30,10 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web: any
+  web: 1.1.1
 
   #轮播图组件
-  intl: any
+  intl: 0.20.2
   
   # 农历支持
   lunar: ^1.7.8
@@ -47,8 +47,8 @@ dependencies:
   tdesign_flutter:
     path: ../
 #  path_provider: 2.1.5
-  extended_nested_scroll_view: any
-  flutter_screenutil: any
+  extended_nested_scroll_view: 6.2.1
+  flutter_screenutil: 5.9.3
   provider: ^6.1.5+1
   shared_preferences: ^2.2.3
   url_launcher: 6.3.0
@@ -68,7 +68,6 @@ dev_dependencies:
 
 dependency_overrides:
   flutter_plugin_android_lifecycle: 2.0.32
-  web: ^1.1.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

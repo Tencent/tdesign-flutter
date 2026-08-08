@@ -13,6 +13,12 @@ class WebMdTool {
   /// 用于生成web端的md,正常使用不要开启
   static bool needGenerateWebMd = false;
 
+  @visibleForTesting
+  static String documentationOutputPath({
+    required String workspaceRoot,
+    required String componentName,
+  }) => '$workspaceRoot/tdesign-site/docs/components/$componentName/README.md';
+
   /// 生成web端的md
   static void generateWebMd({
     required ExamplePageModel? model,
@@ -27,7 +33,7 @@ class WebMdTool {
       var exampleCodeSb = StringBuffer();
       var count = 1;
       if (singleChild != null) {
-        await writeSingleCode(exampleCodeSb, exampleCodeGroup,pageName);
+        await writeSingleCode(exampleCodeSb, exampleCodeGroup, pageName);
       } else {
         for (var module in exampleModuleList) {
           exampleCodeSb.writeln('### $count ${module.title}');
@@ -47,15 +53,25 @@ class WebMdTool {
       } catch (e) {
         debugPrint('$e');
       }
-      var mdContent = _getTemplate(model.text, description,
-          model.spline ?? 'other', exampleCodeSb.toString(), api.toString(), pageName);
-      debugPrint('生成演示代码成功：\n${mdContent.substring(0,50)}...');
+      var mdContent = _getTemplate(
+        model.text,
+        description,
+        model.spline ?? 'other',
+        exampleCodeSb.toString(),
+        api.toString(),
+        pageName,
+      );
+      debugPrint('生成演示代码成功：\n${mdContent.substring(0, 50)}...');
 
       var path = '';
-      if(Platform.environment['FLUTTER_TEST'] == 'true'){
-
-        var baseDir = Platform.script.toFilePath().split('/tdesign-component')[0];
-        path = '$baseDir/tdesign-site/src/${model.name}/README.md';
+      if (Platform.environment['FLUTTER_TEST'] == 'true') {
+        var baseDir = Platform.script.toFilePath().split(
+          '/tdesign-component',
+        )[0];
+        path = documentationOutputPath(
+          workspaceRoot: baseDir,
+          componentName: model.name,
+        );
         // path = '$baseDir/test/src/${model.name}/README.md';
         // File
       } else {
@@ -70,7 +86,10 @@ class WebMdTool {
   }
 
   static Future<void> writeSingleCode(
-      StringBuffer exampleCodeSb, String? exampleCodeGroup, String? pageName) async {
+    StringBuffer exampleCodeSb,
+    String? exampleCodeGroup,
+    String? pageName,
+  ) async {
     var hasCodeSuccess = false;
 
     var list = manualExampleCode[exampleCodeGroup];
@@ -103,8 +122,12 @@ class WebMdTool {
     }
   }
 
-  static Future<void> writeCode(StringBuffer exampleCodeSb, ExampleItem item,
-      String? exampleCodeGroup, ExampleModule module) async {
+  static Future<void> writeCode(
+    StringBuffer exampleCodeSb,
+    ExampleItem item,
+    String? exampleCodeGroup,
+    ExampleModule module,
+  ) async {
     exampleCodeSb.writeln('');
     exampleCodeSb.writeln('${item.desc}');
 
@@ -130,8 +153,12 @@ class WebMdTool {
         }
       }
     } else {
-      var list = manualExampleCode[
-          getItemKey(exampleCodeGroup, module.title, item.desc)];
+      var list =
+          manualExampleCode[getItemKey(
+            exampleCodeGroup,
+            module.title,
+            item.desc,
+          )];
       if (list != null && list.isNotEmpty) {
         list.forEach((element) {
           exampleCodeSb.writeln('');
@@ -147,7 +174,8 @@ class WebMdTool {
         hasCodeSuccess = true;
       } else {
         debugPrint(
-            'error item:${exampleCodeGroup}_${module.title}_${item.desc},已忽略代码，请手动处理');
+          'error item:${exampleCodeGroup}_${module.title}_${item.desc},已忽略代码，请手动处理',
+        );
       }
     }
     if (!hasCodeSuccess) {
@@ -211,7 +239,7 @@ class WebMdTool {
     String spline,
     String exampleCode,
     String api,
-      String pageName,
+    String pageName,
   ) =>
       '''
 ---
@@ -243,21 +271,20 @@ ${api}
   static var manualExampleCode = <String, List<String>>{};
 
   static _getExtraImport(String title) {
-    if(title == 'Swiper 轮播图'){
+    if (title == 'Swiper 轮播图') {
       return '''
  
 ''';
-    } else if(title == 'PullDownRefresh 下拉刷新'){
+    } else if (title == 'PullDownRefresh 下拉刷新') {
       return '''
  
 import 'package:easy_refresh/easy_refresh.dart';''';
-
     }
     return '';
   }
 
   static _getPageCode(String pageName) {
-    if(pageName == 'td_side-bar_page'){
+    if (pageName == 'td_side-bar_page') {
       return '''
 [t_sidebar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/t_sidebar_page.dart)
 

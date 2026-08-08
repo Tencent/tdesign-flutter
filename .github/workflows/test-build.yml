@@ -71,6 +71,9 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/generate_example_code.dart --check
 
+      - name: Check Flutter component contracts
+        run: node scripts/check-flutter-component-contracts.mjs
+
       - name: flutter pub get
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
