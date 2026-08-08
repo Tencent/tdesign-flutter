@@ -13,9 +13,6 @@
 - Calendar 改为 `DateTime` 受控值；Picker、DateTimePicker 与 Cascader 只负责选择，标题、确认和弹层由业务组合。
 - Popup 改为 `TPopupOptions + TPopupHandle`，Dialog 改为统一内容槽位与 `TDialogAction`。
 
-完整的 `0.2.7 → 1.0.0-alpha.1` 组件迁移记录保存在仓库
-`tdesign-component/doc/MIGRATION-v1.md`；该文件不包含在 pub.dev 发布包中。
-
 ### 🚀 Features
 
 - `TSwiper` 支持 autoplay 生命周期管理、真实卡片视口、横竖布局、外置分页、自定义标记和自定义前后按钮。

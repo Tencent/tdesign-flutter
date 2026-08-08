@@ -18,7 +18,7 @@ https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component
 
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.1.0
+    tdesign_flutter: 1.0.0-alpha.1
 ```
 
 
@@ -30,12 +30,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 本地运行官网示例代码
 
-- 进入 `site` 文件夹，安装`npm install` 安装依赖包 
-- `cd ..` 回到 `tdesign-site` 目录，运行命令 `npm run site:dev` 
+- 在 `tdesign-site` 目录执行 `pnpm install --frozen-lockfile` 安装依赖
+- 运行 `pnpm site:dev` 启动本地文档站点
 
-## 基础库版本
+## 组件库版本
 
-最低基础库版本`^0.1.0`
+当前文档对应组件库版本 `1.0.0-alpha.1`，Flutter SDK 最低要求为 `3.32.0`。
 
 ## 开源协议
 

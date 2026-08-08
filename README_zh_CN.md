@@ -229,14 +229,6 @@ return MaterialApp(
 
 3. Flutter 国际化配置方法，请参阅官方文档：[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
 
-## ❓ 常见问题
-
-### 文本居中
-
-- **v0.1.4 版本**：Flutter 3.16 之后，修改了渲染引擎，导致启用 `forceVerticalCenter` 参数的组件字体偏移更多，不再居中。可以通过设置 `kTextForceVerticalCenterEnable=false` 来禁用字体居中功能，让组件显示与官方 Text 一致。
-
-- **v0.1.5 版本**：适配了 Android 和 iOS 双端基础系统字体的中文居中，其他语言的字体，可以通过重写 `TTextPaddingConfig` 的 `paddingRate` 和 `paddingExtraRate` 进行自定义适配，`TTextPaddingConfig` 使用方法可参考 `TTextPage`。
-
 ## 🔗 更多示例
 
 更多使用示例请参考 [example/lib/page/](https://github.com/Tencent/tdesign-flutter/tree/develop/tdesign-component/example/lib/page)

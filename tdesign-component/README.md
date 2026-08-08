@@ -229,14 +229,6 @@ return MaterialApp(
 
 3. For Flutter internationalization configuration, please refer to the official documentation: [Internationalizing Flutter apps](https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization)
 
-## ❓ FAQ
-
-### Text Centering
-
-- **v0.1.4**: After Flutter 3.16, rendering engine changes caused font offset issues with `forceVerticalCenter`. Disable this by setting `kTextForceVerticalCenterEnable=false`.
-
-- **v0.1.5**: Adapted Chinese text centering for both Android and iOS. For other languages, customize by overriding `TTextPaddingConfig`'s `paddingRate` and `paddingExtraRate`. See `TTextPage` for usage.
-
 ## 🔗 More Examples
 
 For more usage examples, refer to [example/lib/page/](https://github.com/Tencent/tdesign-flutter/tree/develop/tdesign-component/example/lib/page)
