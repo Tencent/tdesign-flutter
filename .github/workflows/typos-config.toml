@@ -5,4 +5,4 @@ default.check-filename = true
 "PA" = "PA"
 
 [files]
-extend-exclude = ["project.pbxproj","aop_flutter_sdk.patch"]
+extend-exclude = ["project.pbxproj"]
