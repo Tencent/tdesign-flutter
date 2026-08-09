@@ -158,7 +158,6 @@ jobs:
             <a href="${{ steps.deploy.outputs.url }}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
 
             ## Web 预览
-            - [文档站点](${{ steps.deploy.outputs.url }})
             - [Demo](${{ steps.deploy.outputs.url }}/flutter/example/)
 
             ## APK 下载
