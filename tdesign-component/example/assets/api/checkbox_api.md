@@ -59,17 +59,17 @@
 | large | 大尺寸。 |
 
 
-### TCheckboxOptionBuilder
-#### 类型定义
-
-```dart
-typedef TCheckboxOptionBuilder = Widget Function(BuildContext context, TCheckboxOption<T> option, bool selected, bool disabled);
-```
-
-
 ### TCheckboxIconBuilder
 #### 类型定义
 
 ```dart
 typedef TCheckboxIconBuilder = Widget Function(BuildContext context, bool? value, bool disabled);
+```
+
+
+### TCheckboxOptionBuilder
+#### 类型定义
+
+```dart
+typedef TCheckboxOptionBuilder = Widget Function(BuildContext context, TCheckboxOption<T> option, bool selected, bool disabled);
 ```
