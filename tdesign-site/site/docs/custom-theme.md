@@ -1,65 +1,37 @@
 ---
 title: 自定义主题
-description: 如何使用 CSS Variables 自定义主题
+description: 如何使用 TThemeData 自定义 Flutter 主题
 spline: explain
 ---
 
-组件库通用的 Design Token 均使用 CSS Variables 声明，你可以在自己的项目中声明同名变量来覆盖他们的值。
+TDesign Flutter 使用 `TThemeData` 和 Flutter `ThemeData` 描述主题。应用应通过 `TTheme` 注入主题数据，不使用 CSS Variables 或小程序 `page` 样式。
 
 ## 全局自定义
 
-小程序的 CSS Variables 全部定义考验在这里看到: [_variables.less](https://github.com/Tencent/tdesign-miniprogram/blob/develop/src/common/style/_variables.less)
+将全局主题放在应用根部，组件会按“实例参数 > 组件 ThemeData > Flutter 子树主题 > TDesign token”的优先级解析颜色、字号和状态样式。
 
-如果你想改变主题色，主要改变这几个变量即可：
-
-```css
-@brand-color: var(--td-brand-color, #0052d9); // 主题色
-@success-color: var(--td-success-color, #00a870); // 成功
-@warning-color: var(--td-warning-color, #ed7b2f); // 警告
-@error-color: var(--td-error-color, #e34d59); // 失败
+```dart
+TTheme(
+  data: TThemeData.defaultData(),
+  child: MaterialApp(home: const MyHomePage()),
+)
 ```
 
-> ⚠️ 注意：1.0.0 版本之前主题色的变量是 --td-primary-color
-
-在 `app.css` 文件添加下行代码即可：
-
-```css
-page {
-  --td-brand-color: navy; // 任何你想要的主题色
-}
-```
-
-> 当然，[_variables.less](https://github.com/Tencent/tdesign-miniprogram/blob/develop/src/common/style/_variables.less) 里面都是通用的全局变量，都可以修改
+可用的 token 和默认值见 [t_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)。
 
 ## 局部自定义
 
-在 TDesign 小程序里，你也可以只给某个组件修改主题，下面以 `Rate` 举例：
+可以通过局部 `TTheme` 或 Flutter 的 `Theme` 在子树中覆盖主题；需要覆盖单个组件时，优先使用对应的 `T*ThemeData`，而不是修改全局主题。
 
-```css
-page {
-  --td-rate-selected-color: #ed7b2f; /* 选中的颜色 */
-  --td-rate-unselected-color: #e3e6eb; /* 未选中的颜色 */
-}
+```dart
+TTheme(
+  data: TTheme.of(context).copyWith(
+    // 在此提供局部主题覆盖。
+  ),
+  child: const RatingSection(),
+)
 ```
 
-## 自定义 TabBar
+## Flutter 原生主题
 
-当然，有些组件可能不会被包裹在 `page` 里，比如自定义 `tab-bar`。
-
-此时，可以通过给组件增加 `class` 来实现：
-
-```html
-<t-tab-bar class="custom-tab-bar">
-  <t-tab-bar-item value="home" icon="home">home</t-tab-bar-item>
-</t-tab-bar>
-```
-
-对应的 `CSS` 可以这么定义：
-
-```css
-.custom-tab-bar {
-  --td-tab-bar-item-color: red;
-}
-```
-
-> 目前仅有部分组件支持自定义主题，支持的组件在其文档有陈列对应的 CSS Variables，可以访问 [tab-bar-item.less](https://github.com/Tencent/tdesign-miniprogram/blob/develop/src/tab-bar-item/tab-bar-item.less)
+未被组件 ThemeData 显式覆盖的文字、图标和 Material 控件会继承 Flutter 子树主题。需要保持 TDesign 默认视觉时，使用 `TTheme.of(context)` 获取局部主题；不要通过外层 `DefaultTextStyle` 或颜色包裹器修改组件内部状态层级。

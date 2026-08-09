@@ -89,6 +89,10 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/generate_example_code.dart --check
 
+      - name: Check Flutter component contracts
+        working-directory: .
+        run: node scripts/check-flutter-component-contracts.mjs
+
       - name: Update assets files
         env:
           VERSION: ${{ steps.version.outputs.version }}

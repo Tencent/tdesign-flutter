@@ -12,6 +12,7 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"],
+      "@component-docs/*": ["../docs/components/*"],
     },
   },
   "include": [
