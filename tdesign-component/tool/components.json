@@ -1,0 +1,838 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "slug": "button",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/button"
+      },
+      "api": {
+        "names": [
+          "TButton",
+          "TButtonStyle"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "divider",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/divider/t_divider.dart"
+      },
+      "api": {
+        "names": [
+          "TDivider"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "fab",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/fab/t_fab.dart"
+      },
+      "api": {
+        "names": [
+          "TFab"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "icon",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/icon"
+      },
+      "api": {
+        "names": [
+          "TIcon",
+          "TIconThemeData"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "link",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/link/t_link.dart"
+      },
+      "api": {
+        "names": [
+          "TLink"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "text",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/text/t_text.dart"
+      },
+      "api": {
+        "names": [
+          "TText",
+          "TTextSpan",
+          "TTextConfiguration"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "back-top",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/backtop/t_backtop.dart"
+      },
+      "api": {
+        "names": [
+          "TBackTop"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "drawer",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/drawer"
+      },
+      "api": {
+        "names": [
+          "TDrawer",
+          "TDrawerWidget",
+          "TDrawerItem"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "indexes",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/indexes"
+      },
+      "api": {
+        "names": [
+          "TIndexes",
+          "TIndexesAnchor",
+          "TIndexesList"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "navbar",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/navbar/t_nav_bar.dart"
+      },
+      "api": {
+        "names": [
+          "TNavBar",
+          "TNavBarItem"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "side-bar",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/sidebar"
+      },
+      "api": {
+        "names": [
+          "TSideBar",
+          "TSideBarItem"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "steps",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/steps"
+      },
+      "api": {
+        "names": [
+          "TSteps",
+          "TStepsItemData"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "tab-bar",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/tabbar"
+      },
+      "api": {
+        "names": [
+          "TTabBar",
+          "TTabBarBadgeConfig",
+          "TTabBarItemConfig",
+          "TTabBarPopUpBtnConfig",
+          "TTabBarPopUpShapeConfig",
+          "TTabBarMenuItem"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "tabs",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/tabs"
+      },
+      "api": {
+        "names": [
+          "TTabsBar",
+          "TTab",
+          "TTabsBarView",
+          "TTabsBarIndicator"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "calendar",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/calendar"
+      },
+      "api": {
+        "names": [
+          "TCalendar",
+          "TCalendarStyle",
+          "TCalendarCellModel",
+          "TCalendarSubtitleContext"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "cascader",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/cascader"
+      },
+      "api": {
+        "names": [
+          "TMultiCascader"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "checkbox",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/checkbox"
+      },
+      "api": {
+        "names": [
+          "TCheckbox",
+          "TCheckboxGroup"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "picker",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/picker"
+      },
+      "api": {
+        "names": [
+          "TPicker",
+          "TPickerOption",
+          "TPickerValue",
+          "TPickerColumns",
+          "TPickerLinked",
+          "TPickerKeys"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "date-time-picker",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/date_time_picker"
+      },
+      "api": {
+        "names": [
+          "TDateTimePicker",
+          "DateTimePickerMode",
+          "TDateTimePickerValue",
+          "DateTimePickerSteps",
+          "DateMode",
+          "TimeMode",
+          "DateTimeColumn",
+          "DateTimePickerRenderLabel"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "form",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/form"
+      },
+      "api": {
+        "names": [
+          "TForm",
+          "TFormItem",
+          "TFormItemType",
+          "TFormValidation"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "input",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/input/t_input.dart"
+      },
+      "api": {
+        "names": [
+          "TInput",
+          "TInputSpacer"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "radio",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/radio/t_radio.dart"
+      },
+      "api": {
+        "names": [
+          "TRadioStyle",
+          "TRadio",
+          "TRadioGroup"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "rate",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/rate/t_rate.dart"
+      },
+      "api": {
+        "names": [
+          "TRate"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "search",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/search/t_search_bar.dart"
+      },
+      "api": {
+        "names": [
+          "TSearchBar"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "slider",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/slider/t_slider.dart"
+      },
+      "api": {
+        "names": [
+          "TSlider",
+          "TRangeSlider",
+          "TSliderThemeData"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "stepper",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/stepper"
+      },
+      "api": {
+        "names": [
+          "TStepper",
+          "TStepperThemeData",
+          "TStepperSize",
+          "TStepperVariant"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "switch",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/switch/t_switch.dart"
+      },
+      "api": {
+        "names": [
+          "TSwitch"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "textarea",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/textarea/t_textarea.dart"
+      },
+      "api": {
+        "names": [
+          "TTextarea"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "tree-select",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/tree/t_tree_select.dart"
+      },
+      "api": {
+        "names": [
+          "TTreeSelect",
+          "TSelectOption"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "upload",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/upload/t_upload.dart"
+      },
+      "api": {
+        "names": [
+          "TUpload"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "avatar",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/avatar/t_avatar.dart"
+      },
+      "api": {
+        "names": [
+          "TAvatar"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "badge",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/badge/t_badge.dart"
+      },
+      "api": {
+        "names": [
+          "TBadge"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "cell",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/cell"
+      },
+      "api": {
+        "names": [
+          "TCell",
+          "TCellGroup",
+          "TCellStyle"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "time-counter",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/time_counter"
+      },
+      "api": {
+        "names": [
+          "TTimeCounter",
+          "TTimeCounterController",
+          "TTimeCounterStyle"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "collapse",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/collapse"
+      },
+      "api": {
+        "names": [
+          "TCollapse"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "empty",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/empty/t_empty.dart"
+      },
+      "api": {
+        "names": [
+          "TEmpty"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "footer",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/footer/t_footer.dart"
+      },
+      "api": {
+        "names": [
+          "TFooter",
+          "TFooterType"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "image",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/image/t_image.dart"
+      },
+      "api": {
+        "names": [
+          "TImage"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "image-viewer",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/image_viewer"
+      },
+      "api": {
+        "names": [
+          "TImageViewer",
+          "TImageViewerWidget"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "progress",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/progress/t_progress.dart"
+      },
+      "api": {
+        "names": [
+          "TProgress"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "result",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/result/t_result.dart"
+      },
+      "api": {
+        "names": [
+          "TResult"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "skeleton",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/skeleton"
+      },
+      "api": {
+        "names": [
+          "TSkeleton",
+          "TSkeletonLayout",
+          "TSkeletonBlockStyle",
+          "TSkeletonBlock"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "swiper",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/swiper"
+      },
+      "api": {
+        "names": [
+          "TSwiper",
+          "TSwiperController",
+          "TSwiperThemeData",
+          "TSwiperPaginationVariant",
+          "TSwiperPaginationPlacement",
+          "TSwiperPaginationItemDetails",
+          "TSwiperPageEffect"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "table",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/table"
+      },
+      "api": {
+        "names": [
+          "TTable",
+          "TTableCol",
+          "TTableEmpty"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "tag",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/tag"
+      },
+      "api": {
+        "names": [
+          "TTag",
+          "TSelectTag",
+          "TTagStyle"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "action-sheet",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/action_sheet"
+      },
+      "api": {
+        "names": [
+          "TActionSheetItem",
+          "TActionSheet",
+          "TActionSheetThemeData",
+          "TActionSheetAlign"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "dialog",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/dialog"
+      },
+      "api": {
+        "names": [
+          "TDialog",
+          "TDialogAction",
+          "TDialogActionRole",
+          "TConfirmDialog",
+          "TDialogThemeData"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "dropdown-menu",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/dropdown_menu"
+      },
+      "api": {
+        "names": [
+          "TDropdownMenu",
+          "TDropdownMenuDirection",
+          "TDropdownItem",
+          "TDropdownItemOption",
+          "TDropdownItemController"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "loading",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/loading/t_loading.dart"
+      },
+      "api": {
+        "names": [
+          "TLoading"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "message",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/message/t_message.dart"
+      },
+      "api": {
+        "names": [
+          "TMessage",
+          "MessageTheme",
+          "MessageMarquee",
+          "MessageLink"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "notice-bar",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/notice_bar"
+      },
+      "api": {
+        "names": [
+          "TNoticeBar",
+          "TNoticeBarStyle"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "popover",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/popover"
+      },
+      "api": {
+        "names": [
+          "TPopover",
+          "TPopoverWidget"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "popup",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/popup"
+      },
+      "api": {
+        "names": [
+          "TPopup",
+          "TPopupOptions",
+          "TPopupHandle",
+          "TPopupPlacement",
+          "TPopupTrigger"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "pull-down-refresh",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/refresh/t_refresh_header.dart"
+      },
+      "api": {
+        "names": [
+          "TRefreshHeader"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "swipe-cell",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/swipe_cell"
+      },
+      "api": {
+        "names": [
+          "TSwipeCell",
+          "TSwipeCellPanel",
+          "TSwipeCellAction",
+          "TSwipeCellSide",
+          "TSwipeCellChanged",
+          "SwipeMotion"
+        ],
+        "getComments": true
+      }
+    },
+    {
+      "slug": "toast",
+      "source": {
+        "type": "file",
+        "path": "lib/src/components/toast/t_toast.dart"
+      },
+      "api": {
+        "names": [
+          "TToast"
+        ],
+        "getComments": false
+      }
+    },
+    {
+      "slug": "theme",
+      "source": {
+        "type": "file",
+        "path": "lib/src/theme/t_theme.dart"
+      },
+      "api": {
+        "names": [
+          "TTheme",
+          "TThemeData"
+        ],
+        "getComments": false
+      }
+    }
+  ]
+}

@@ -1,4 +1,17 @@
-# api_tool：基于smart_cli实现的组件库生成工具
+# API 文档生成
+
+API 生成配置统一维护在 [`../tool/components.json`](../tool/components.json)。每项配置描述组件源码位置、API 类型和是否读取注释；它同时是站点组件契约检查的 API 来源。
+
+从 `tdesign-component` 目录执行：
+
+```bash
+bash demo_tool/all_build.sh
+node tool/generate_api.mjs --dry-run
+```
+
+`all_build.sh` 仅保留为兼容入口，实际调用 `tool/generate_api.mjs`。新增或迁移组件时先更新 `tool/components.json`，再生成并提交 `example/assets/api/<component>_api.md`。
+
+## 旧 api_tool 说明
 
 ## 组件注释规范
 
