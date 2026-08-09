@@ -1,0 +1,32 @@
+Widget _buildEventPopover(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        LayoutBuilder(
+          builder: (popoverContext, constraints) {
+            return TButton(
+              key: const Key('popover-event-trigger'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '点击或长按我',
+                  placement: TPopoverPlacement.bottom,
+                  onTap: (content) {
+                    setState(() => _eventStatus = 'onTap：$content');
+                  },
+                  onLongTap: (content) {
+                    setState(() => _eventStatus = 'onLongTap：$content');
+                  },
+                );
+              },
+              child: const Text('事件回调'),
+            );
+          },
+        ),
+        const SizedBox(height: 8),
+        TText(_eventStatus, key: const Key('popover-event-status')),
+      ],
+    );
+  }

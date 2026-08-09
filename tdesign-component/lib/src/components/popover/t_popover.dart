@@ -5,6 +5,64 @@ import 'package:flutter/material.dart';
 import 't_popover_theme_data.dart';
 import 't_popover_widget.dart';
 
+class _PopoverAnchorLifecycle extends StatefulWidget {
+  const _PopoverAnchorLifecycle({
+    required this.anchorContext,
+    required this.onAnchorUnmounted,
+    required this.child,
+  });
+
+  final BuildContext anchorContext;
+  final VoidCallback onAnchorUnmounted;
+  final Widget child;
+
+  @override
+  State<_PopoverAnchorLifecycle> createState() =>
+      _PopoverAnchorLifecycleState();
+}
+
+class _PopoverAnchorLifecycleState extends State<_PopoverAnchorLifecycle> {
+  var _checkScheduled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleAnchorCheck();
+  }
+
+  @override
+  void didUpdateWidget(_PopoverAnchorLifecycle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _scheduleAnchorCheck();
+  }
+
+  void _scheduleAnchorCheck() {
+    if (_checkScheduled) {
+      return;
+    }
+    _checkScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback(_checkAnchor);
+  }
+
+  void _checkAnchor(Duration _) {
+    _checkScheduled = false;
+    if (!mounted) {
+      return;
+    }
+    if (widget.anchorContext case final Element element when !element.mounted) {
+      widget.onAnchorUnmounted();
+      return;
+    }
+    _scheduleAnchorCheck();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _scheduleAnchorCheck();
+    return widget.child;
+  }
+}
+
 /// 气泡弹层
 ///
 /// 通过 [showPopover] 静态方法弹出，支持 12 个方向定位和箭头。
@@ -148,8 +206,8 @@ class TPopover {
             showArrow: showArrow ?? theme.showArrow,
             arrowSize: arrowSize ?? theme.arrowSize,
             padding: padding ?? theme.padding,
-            width: width ?? theme.minWidth,
-            height: height ?? theme.maxHeight,
+            width: width ?? (contentWidget == null ? null : theme.minWidth),
+            height: height ?? (contentWidget == null ? null : theme.maxHeight),
             onTap: onTap,
             onLongTap: onLongTap,
             radius:
@@ -163,7 +221,13 @@ class TPopover {
     }
 
     entry = OverlayEntry(
-      builder: (overlayContext) => capturedThemes.wrap(buildOverlayContent()),
+      builder: (overlayContext) => capturedThemes.wrap(
+        _PopoverAnchorLifecycle(
+          anchorContext: context,
+          onAnchorUnmounted: dismiss,
+          child: buildOverlayContent(),
+        ),
+      ),
     );
 
     if (closeOnScroll && scrollPosition != null) {

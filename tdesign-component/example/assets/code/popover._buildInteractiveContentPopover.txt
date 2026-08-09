@@ -1,0 +1,54 @@
+Widget _buildInteractiveContentPopover(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        LayoutBuilder(
+          builder: (popoverContext, constraints) {
+            return TButton(
+              key: const Key('popover-interactive-trigger'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  width: 180,
+                  height: 104,
+                  padding: EdgeInsets.zero,
+                  placement: TPopoverPlacement.bottom,
+                  contentWidget: Column(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          key: const Key('popover-menu-复制'),
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () =>
+                              setState(() => _customContentStatus = '已选择复制'),
+                          child: const Center(child: TText('复制')),
+                        ),
+                      ),
+                      const TDivider(),
+                      Expanded(
+                        child: GestureDetector(
+                          key: const Key('popover-menu-分享'),
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () =>
+                              setState(() => _customContentStatus = '已选择分享'),
+                          child: const Center(child: TText('分享')),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: const Text('打开操作菜单'),
+            );
+          },
+        ),
+        const SizedBox(height: 8),
+        TText(
+          _customContentStatus,
+          key: const Key('popover-interactive-status'),
+        ),
+      ],
+    );
+  }
