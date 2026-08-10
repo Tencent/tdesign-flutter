@@ -114,6 +114,39 @@ void main() {
       expect(decoration.color, token.grayColor14);
     });
 
+    testWidgets('主题 backgroundColor 覆盖语义色的背景 token', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: '自定义背景',
+                  colorScheme: TPopoverColorScheme.info,
+                ),
+              );
+            },
+          ),
+          popoverTheme: const TPopoverThemeData(backgroundColor: Colors.black),
+        ),
+      );
+      await tester.pump();
+
+      final container = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TPopoverWidget),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is BoxDecoration,
+              ),
+            )
+            .first,
+      );
+      expect((container.decoration! as BoxDecoration).color, Colors.black);
+    });
+
     testWidgets('长文本默认限制在测量宽度内并允许换行', (tester) async {
       const longContent = '这是一段非常非常非常非常非常非常非常长的气泡内容，用于验证默认宽度不会横向无限延伸';
       await tester.pumpWidget(
@@ -433,6 +466,33 @@ void main() {
       expect(tester.getSize(containerFinder).width, lessThanOrEqualTo(180));
     });
 
+    testWidgets('theme maxHeight 是文本气泡的最大高度而非固定高度', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              return Center(
+                child: TPopoverWidget(context: context, content: '短文本'),
+              );
+            },
+          ),
+          popoverTheme: const TPopoverThemeData(maxHeight: 200),
+        ),
+      );
+      await tester.pump();
+
+      final containerFinder = find
+          .descendant(
+            of: find.byType(TPopoverWidget),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container && widget.decoration is BoxDecoration,
+            ),
+          )
+          .first;
+      expect(tester.getSize(containerFinder).height, lessThan(200));
+    });
+
     testWidgets('自定义 radius 圆角', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -618,7 +678,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('可关闭'), findsOneWidget);
-
       // 点击外部关闭
       await tester.tapAt(const Offset(10, 10));
       await tester.pumpAndSettle();
@@ -734,6 +793,247 @@ void main() {
 
       await tester.tapAt(const Offset(10, 10));
       await tester.pump();
+      expect(completed, isTrue);
+    });
+
+    testWidgets('Popover 点击和长按回调会传递 content', (tester) async {
+      late BuildContext ctx;
+      String? tapped;
+      String? longPressed;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '回调内容',
+          placement: TPopoverPlacement.bottom,
+          onTap: (content) => tapped = content,
+          onLongTap: (content) => longPressed = content,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('回调内容'));
+      expect(tapped, '回调内容');
+      await tester.longPress(find.text('回调内容'));
+      expect(longPressed, '回调内容');
+    });
+
+    testWidgets('右下角锚点的 Popover 保持在安全区内', (tester) async {
+      late BuildContext anchorContext;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Builder(
+              builder: (context) {
+                anchorContext = context;
+                return const SizedBox(width: 40, height: 40);
+              },
+            ),
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: anchorContext,
+          content: '右下角的较长气泡内容',
+          placement: TPopoverPlacement.bottomRight,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final textRect = tester.getRect(find.text('右下角的较长气泡内容'));
+      final viewSize = tester.view.physicalSize / tester.view.devicePixelRatio;
+      expect(textRect.left, greaterThanOrEqualTo(0));
+      expect(textRect.top, greaterThanOrEqualTo(0));
+      expect(textRect.right, lessThanOrEqualTo(viewSize.width));
+      expect(textRect.bottom, lessThanOrEqualTo(viewSize.height));
+    });
+
+    testWidgets('top 上方空间不足时翻转到 bottom', (tester) async {
+      late BuildContext anchorContext;
+      const anchorKey = Key('top-flip-anchor');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Align(
+            alignment: Alignment.topCenter,
+            child: Builder(
+              builder: (context) {
+                anchorContext = context;
+                return const SizedBox(key: anchorKey, width: 40, height: 40);
+              },
+            ),
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: anchorContext,
+          content: '自动翻转到底部',
+          placement: TPopoverPlacement.top,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final anchorRect = tester.getRect(find.byKey(anchorKey));
+      final popoverRect = tester.getRect(find.text('自动翻转到底部'));
+      expect(popoverRect.top, greaterThanOrEqualTo(anchorRect.bottom));
+      final border =
+          tester.widget<Container>(arrowContainerFinder()).decoration
+              as BoxDecoration;
+      expect((border.border! as Border).top.color, isNot(Colors.transparent));
+    });
+
+    testWidgets('left 左侧空间不足时翻转到 right', (tester) async {
+      late BuildContext anchorContext;
+      const anchorKey = Key('left-flip-anchor');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Builder(
+              builder: (context) {
+                anchorContext = context;
+                return const SizedBox(key: anchorKey, width: 40, height: 40);
+              },
+            ),
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: anchorContext,
+          content: '自动翻转到右侧',
+          placement: TPopoverPlacement.left,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final anchorRect = tester.getRect(find.byKey(anchorKey));
+      final popoverRect = tester.getRect(find.text('自动翻转到右侧'));
+      expect(popoverRect.left, greaterThanOrEqualTo(anchorRect.right));
+      final border =
+          tester.widget<Container>(arrowContainerFinder()).decoration
+              as BoxDecoration;
+      expect((border.border! as Border).left.color, isNot(Colors.transparent));
+    });
+
+    testWidgets('两侧空间都不足时 clamp 并补偿箭头位置', (tester) async {
+      tester.view.physicalSize = const Size(240, 180);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      late BuildContext anchorContext;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Align(
+            alignment: Alignment.centerRight,
+            child: Builder(
+              builder: (context) {
+                anchorContext = context;
+                return const SizedBox(width: 40, height: 40);
+              },
+            ),
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: anchorContext,
+          contentWidget: const ColoredBox(
+            key: Key('clamped-popover-content'),
+            color: Colors.red,
+          ),
+          width: 180,
+          height: 150,
+          placement: TPopoverPlacement.top,
+          radius: BorderRadius.circular(20),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final contentRect = tester.getRect(
+        find.byKey(const Key('clamped-popover-content')),
+      );
+      expect(contentRect.left, greaterThanOrEqualTo(0));
+      expect(contentRect.top, greaterThanOrEqualTo(0));
+      expect(contentRect.right, lessThanOrEqualTo(240));
+      expect(contentRect.bottom, lessThanOrEqualTo(180));
+      final arrowTransform = tester.widget<Transform>(
+        find
+            .ancestor(
+              of: arrowContainerFinder(),
+              matching: find.byType(Transform),
+            )
+            .first,
+      );
+      final arrowTranslation = arrowTransform.transform.getTranslation().x;
+      final resolvedArrowCenter = 90 + arrowTranslation;
+      expect(arrowTranslation, greaterThan(0));
+      expect(resolvedArrowCenter, greaterThanOrEqualTo(28));
+      expect(resolvedArrowCenter, lessThanOrEqualTo(152));
+    });
+
+    testWidgets('锚点销毁后清理 Overlay 并完成 showPopover Future', (tester) async {
+      late BuildContext anchorContext;
+      late StateSetter setHostState;
+      var showAnchor = true;
+      var completed = false;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setState) {
+              setHostState = setState;
+              return Stack(
+                children: [
+                  if (showAnchor)
+                    Align(
+                      alignment: Alignment.center,
+                      child: Builder(
+                        builder: (context) {
+                          anchorContext = context;
+                          return const SizedBox(width: 40, height: 40);
+                        },
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: anchorContext,
+          content: '随锚点关闭',
+          placement: TPopoverPlacement.bottom,
+        ).then((_) => completed = true),
+      );
+      await tester.pump();
+      expect(find.text('随锚点关闭'), findsOneWidget);
+      expect(completed, isFalse);
+
+      setHostState(() => showAnchor = false);
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('随锚点关闭'), findsNothing);
+      expect(find.byKey(const Key('t-popover-outside-dismiss')), findsNothing);
       expect(completed, isTrue);
     });
   });

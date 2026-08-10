@@ -1,0 +1,58 @@
+Widget _buildLifecyclePopover(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          children: [
+            if (_showLifecycleAnchor)
+              Builder(
+                builder: (popoverContext) {
+                  return TButton(
+                    key: const Key('popover-lifecycle-anchor'),
+                    variant: TButtonVariant.outline,
+                    colorScheme: TButtonColorScheme.primary,
+                    onPressed: () {
+                      setState(() => _lifecycleStatus = 'Popover 展示中');
+                      unawaited(
+                        TPopover.showPopover(
+                          context: popoverContext,
+                          content: '移除锚点后自动关闭',
+                          placement: TPopoverPlacement.bottom,
+                          closeOnClickOutside: false,
+                          closeOnScroll: false,
+                        ).then((_) {
+                          if (mounted) {
+                            setState(
+                              () => _lifecycleStatus = 'Future 已完成，Overlay 已清理',
+                            );
+                          }
+                        }),
+                      );
+                    },
+                    child: const Text('打开生命周期气泡'),
+                  );
+                },
+              ),
+            TButton(
+              key: const Key('popover-lifecycle-toggle'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                setState(() {
+                  _showLifecycleAnchor = !_showLifecycleAnchor;
+                  if (_showLifecycleAnchor) {
+                    _lifecycleStatus = '锚点已恢复';
+                  }
+                });
+              },
+              child: Text(_showLifecycleAnchor ? '移除锚点' : '恢复锚点'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        TText(_lifecycleStatus, key: const Key('popover-lifecycle-status')),
+      ],
+    );
+  }
