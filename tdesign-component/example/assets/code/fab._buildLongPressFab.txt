@@ -1,0 +1,11 @@
+Widget _buildLongPressFab(BuildContext context) {
+    return _buildPageDemo(
+      fab: TFab(
+        text: '操作',
+        right: 16,
+        bottom: 16,
+        onPressed: _onFabPressed,
+        onLongPress: _onFabLongPressed,
+      ),
+    );
+  }
