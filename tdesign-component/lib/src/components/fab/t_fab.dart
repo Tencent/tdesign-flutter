@@ -44,6 +44,7 @@ class TFab extends StatelessWidget {
     this.icon,
     this.child,
     this.onPressed,
+    this.onLongPress,
     this.tooltip,
     this.semanticLabel,
     this.right,
@@ -68,6 +69,12 @@ class TFab extends StatelessWidget {
 
   /// 点击回调，null 时禁用
   final VoidCallback? onPressed;
+
+  /// 长按回调。
+  ///
+  /// 仅在 [onPressed] 非空时生效；当 [onPressed] 为空时按钮保持禁用态，
+  /// 不会触发点击或长按回调。
+  final VoidCallback? onLongPress;
 
   /// 纯图标 Fab 的 tooltip 提示
   final String? tooltip;
@@ -142,6 +149,7 @@ class TFab extends StatelessWidget {
         text: text,
         icon: icon,
         onPressed: onPressed,
+        onLongPress: onLongPress,
         context: context,
       );
     }

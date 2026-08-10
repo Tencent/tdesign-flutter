@@ -53,6 +53,7 @@ class TFabResolve {
     required String? text,
     required Widget? icon,
     required VoidCallback? onPressed,
+    VoidCallback? onLongPress,
     required BuildContext context,
   }) {
     final hasText = text != null && text.isNotEmpty;
@@ -65,6 +66,7 @@ class TFabResolve {
       child: hasText ? Text(text) : null,
       icon: effectiveIcon,
       onPressed: onPressed,
+      onLongPress: onLongPress,
     );
 
     // TButton 的 shape 由 TButtonThemeData.shape 控制

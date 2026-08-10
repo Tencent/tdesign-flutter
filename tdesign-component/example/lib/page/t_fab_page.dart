@@ -16,6 +16,10 @@ class _TFabPageState extends State<TFabPage> {
     TToast.showText('点击了悬浮按钮', context: context);
   }
 
+  void _onFabLongPressed() {
+    TToast.showText('长按了悬浮按钮', context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(title: tTitle(), exampleCodeGroup: 'fab', children: [
@@ -29,6 +33,7 @@ class _TFabPageState extends State<TFabPage> {
       ]),
       ExampleModule(title: '交互能力', children: [
         ExampleItem(desc: '可拖拽悬浮按钮（在卡片内拖动试试）', builder: _buildDraggableFab),
+        ExampleItem(desc: '点击与长按', builder: _buildLongPressFab),
       ]),
     ]);
   }
@@ -202,6 +207,19 @@ class _TFabPageState extends State<TFabPage> {
         draggable: TFabDragAxis.all,
         magnet: TFabMagnet.right,
         onPressed: _onFabPressed,
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'fab')
+  Widget _buildLongPressFab(BuildContext context) {
+    return _buildPageDemo(
+      fab: TFab(
+        text: '操作',
+        right: 16,
+        bottom: 16,
+        onPressed: _onFabPressed,
+        onLongPress: _onFabLongPressed,
       ),
     );
   }

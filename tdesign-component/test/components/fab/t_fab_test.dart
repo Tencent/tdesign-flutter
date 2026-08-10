@@ -106,6 +106,40 @@ void main() {
     });
   });
 
+  group('TFab 长按 onLongPress', () {
+    testWidgets('onLongPress 透传给内部 TButton', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TFab(onPressed: () {}, onLongPress: () {}),
+      ));
+      final button = tester.widget<TButton>(find.byType(TButton));
+      expect(button.onLongPress, isNotNull);
+      expect(button.onPressed, isNotNull);
+    });
+
+    testWidgets('长按手势触发 onLongPress 回调', (tester) async {
+      var longPressed = false;
+      await tester.pumpWidget(wrapWithTheme(
+        TFab(
+          text: '操作',
+          onPressed: () {},
+          onLongPress: () => longPressed = true,
+        ),
+      ));
+      await tester.longPress(find.text('操作'));
+      await tester.pumpAndSettle();
+      expect(longPressed, isTrue);
+    });
+
+    testWidgets('未传 onLongPress 时内部 TButton.onLongPress 为 null',
+        (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TFab(onPressed: () {}),
+      ));
+      final button = tester.widget<TButton>(find.byType(TButton));
+      expect(button.onLongPress, isNull);
+    });
+  });
+
   group('TFab 禁用态', () {
     testWidgets('onPressed: null 内嵌 TButton 禁用', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
