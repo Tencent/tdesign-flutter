@@ -208,4 +208,9 @@ export default defineComponent({
     box-sizing: border-box;
   }
 }
+
+td-code-block {
+  margin-bottom: 16px;
+  display: block;
+}
 </style>
