@@ -1,19 +1,7 @@
 {
   "name": "tdesign-flutter",
-  "purename": "tdesign",
-  "version": "0.1.2",
-  "description": "tdesign-flutter",
-  "title": "tdesign-flutter",
   "private": true,
-  "keywords": [
-    "tdesign",
-    "flutter"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Tencent/tdesign-flutter"
-  },
-  "homepage": "https://tdesign.tencent.com/flutter",
+  "packageManager": "pnpm@11.20.0",
   "scripts": {
     "copy:readme": "node script/copy-readme.js",
     "site": "cd site && vite build",
