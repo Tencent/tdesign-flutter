@@ -14,7 +14,7 @@ $:
 
   vscode:
     - docker:
-        image: tencent/tdesign/default-dev-env
+        image: tencent/tdesign/default-dev-env:latest
       services:
         - vscode
         - docker
