@@ -50,10 +50,17 @@ jobs:
           xcode-version: "16"
 
       - name: Setup Flutter
+        if: matrix.flutter-version != 'latest'
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
-          # An empty version selects the latest release from the stable channel.
-          flutter-version: ${{ matrix.flutter-version == 'latest' && '' || matrix.flutter-version }}
+          flutter-version: ${{ matrix.flutter-version }}
+          channel: stable
+          cache: true
+
+      - name: Setup latest Flutter
+        if: matrix.flutter-version == 'latest'
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
           channel: stable
           cache: true
 
