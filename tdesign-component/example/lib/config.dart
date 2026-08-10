@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
-// V1.0 Navigation 示例
 import 'page/sidebar/t_sidebar_page.dart';
 import 'page/sidebar/t_sidebar_page_anchor.dart';
 import 'page/sidebar/t_sidebar_page_custom.dart';
@@ -10,23 +9,10 @@ import 'page/sidebar/t_sidebar_page_loading.dart';
 import 'page/sidebar/t_sidebar_page_outline.dart';
 import 'page/sidebar/t_sidebar_page_pagination.dart';
 import 'page/sidebar/t_sidebar_page_unselected_color.dart';
-// V1.0 Feedback 组件
 import 'page/t_action_sheet_page.dart';
-// V1.0 Display 组件
 import 'page/t_avatar_page.dart';
 import 'page/t_backtop_page.dart';
 import 'page/t_badge_page.dart';
-/*
-import 'page/sidebar/t_sidebar_page.dart';
-import 'page/sidebar/t_sidebar_page_anchor.dart';
-import 'page/sidebar/t_sidebar_page_custom.dart';
-import 'page/sidebar/t_sidebar_page_icon.dart';
-import 'page/sidebar/t_sidebar_page_loading.dart';
-import 'page/sidebar/t_sidebar_page_outline.dart';
-import 'page/sidebar/t_sidebar_page_pagination.dart';
-import 'page/sidebar/t_sidebar_page_unselected_color.dart';
-*/
-// V1.0 Button 示例
 import 'page/t_button_page.dart';
 import 'page/t_calendar_page.dart';
 import 'page/t_cascader_page.dart';
@@ -35,23 +21,18 @@ import 'page/t_checkbox_page.dart';
 import 'page/t_collapse_page.dart';
 import 'page/t_date_time_picker_page.dart';
 import 'page/t_dialog_page.dart';
-// V1.0 Divider 示例
 import 'page/t_divider_page.dart';
 import 'page/t_drawer_page.dart';
 import 'page/t_dropdown_menu_page.dart';
 import 'page/t_empty_page.dart';
-// V1.0 FAB 示例
 import 'page/t_fab_page.dart';
 import 'page/t_footer_page.dart';
 import 'page/t_form_page.dart';
-// V1.0 Icon 示例
 import 'page/t_icon_page.dart';
 import 'page/t_image_page.dart';
 import 'page/t_image_viewer_page.dart';
 import 'page/t_indexes_page.dart';
-// V1.0 Input 组件
 import 'page/t_input_page.dart';
-// V1.0 Link 示例
 import 'page/t_link_page.dart';
 import 'page/t_loading_page.dart';
 import 'page/t_message_page.dart';
@@ -77,74 +58,12 @@ import 'page/t_tab_bar_page.dart';
 import 'page/t_table_page.dart';
 import 'page/t_tabs_page.dart';
 import 'page/t_tag_page.dart';
-// V1.0 Text 示例
 import 'page/t_text_page.dart';
 import 'page/t_textarea_page.dart';
 import 'page/t_time_counter_page.dart';
 import 'page/t_toast_page.dart';
 import 'page/t_tree_select_page.dart';
 import 'page/t_upload_page.dart';
-/*
-import 'page/t_action_sheet_page.dart';
-import 'page/t_avatar_page.dart';
-import 'page/t_backtop_page.dart';
-import 'page/t_badge_page.dart';
-import 'page/t_tab_bar_page.dart';
-import 'page/t_calendar_page.dart';
-import 'page/t_cascader_page.dart';
-import 'page/t_cell_page.dart';
-import 'page/t_checkbox_page.dart';
-import 'page/t_collapse_page.dart';
-import 'page/t_date_time_picker_page.dart';
-import 'page/t_dialog_page.dart';
-import 'page/t_divider_page.dart';
-import 'page/t_drawer_page.dart';
-import 'page/t_dropdown_menu_page.dart';
-import 'page/t_empty_page.dart';
-import 'page/t_fab_page.dart';
-import 'page/t_font_page.dart';
-import 'page/t_footer_page.dart';
-import 'page/t_form_page.dart';
-import 'page/t_icon_page.dart';
-import 'page/t_image_page.dart';
-import 'page/t_image_viewer_page.dart';
-import 'page/t_indexes_page.dart';
-import 'page/t_input_page.dart';
-import 'page/t_link_page.dart';
-import 'page/t_loading_page.dart';
-import 'page/t_message_page.dart';
-import 'page/t_navbar_page.dart';
-import 'page/t_notice_bar_page.dart';
-import 'page/t_picker_page.dart';
-import 'page/t_popover_page.dart';
-import 'page/t_popup_page.dart';
-import 'page/t_progress_page.dart';
-import 'page/t_radio_page.dart';
-import 'page/t_radius_page.dart';
-import 'page/t_rate_page.dart';
-import 'page/t_refresh_page.dart';
-import 'page/t_result_page.dart';
-import 'page/t_search_bar_page.dart';
-import 'page/t_shadows_page.dart';
-import 'page/t_skeleton_page.dart';
-import 'page/t_slider_page.dart';
-import 'page/t_stepper_page.dart';
-import 'page/t_steps_page.dart';
-import 'page/t_swipe_cell_page.dart';
-import 'page/t_swiper_page.dart';
-import 'page/t_switch_page.dart';
-import 'page/t_table_page.dart';
-import 'page/t_tabs_page.dart';
-import 'page/t_tag_page.dart';
-import 'page/t_text_page.dart';
-import 'page/t_textarea_page.dart';
-import 'page/t_theme_page.dart';
-import 'page/t_time_counter_page.dart';
-import 'page/t_toast_page.dart';
-import 'page/t_tree_select_page.dart';
-import 'page/t_upload_page.dart';
-import 'page/todo_page.dart';
-*/
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
   return (context, model) {
@@ -181,22 +100,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Icon 图标 (V1.0)',
         name: 'icon',
         pageBuilder: _wrapInheritedTheme((context) => const TIconPage())),
-    /*
-    ExamplePageModel(
-        text: 'Fab 悬浮按钮',
-        name: 'fab',
-        pageBuilder: _wrapInheritedTheme((context) => const TFabPage())),
-    ExamplePageModel(
-        text: 'Link 链接',
-        name: 'link',
-        pageBuilder: _wrapInheritedTheme((context) => const TLinkViewPage())),
-    ExamplePageModel(
-        text: 'Text 文本',
-        name: 'text',
-        pageBuilder: _wrapInheritedTheme((context) => const TTextPage())),
-    */
   ],
-  // TODO: 其他组件页面待升级至 V1.0 后取消注释
   '导航': [
     ExamplePageModel(
         text: 'BackTop 返回顶部 (V1.0)',
@@ -298,7 +202,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'treeSelect',
         pageBuilder: _wrapInheritedTheme((context) => const TTreeSelectPage())),
   ],
-  '展示': [
+  '数据展示': [
     ExamplePageModel(
         text: 'Image 图片 (V1.0)',
         name: 'image',
@@ -412,6 +316,13 @@ Map<String, List<ExamplePageModel>> exampleMap = {
             _wrapInheritedTheme((context) => const TDropdownMenuPage())),
   ],
 };
+
+// 保持 examples 顺序与 Web 组件导航一致。
+void sortExampleMap() {
+  for (final pages in exampleMap.values) {
+    pages.sort((a, b) => a.name.compareTo(b.name));
+  }
+}
 
 List<ExamplePageModel> sideBarExamplePage = [
   ExamplePageModel(
