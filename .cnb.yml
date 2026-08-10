@@ -1,0 +1,26 @@
+$:
+  push:
+    # 导入密钥仓库文件为环境变量
+    - imports:
+        - https://cnb.cool/tencent/tdesign/tdesign-private/-/blob/main/cnb-envs.yml
+      stages:
+        - name: sync to github with rebase
+          image: tencentcom/git-sync
+          settings:
+            target_url: https://github.com/Tencent/tdesign.git
+            auth_type: https
+            username: ${GIT_USERNAME}
+            password: ${GIT_ACCESS_TOKEN}
+
+  vscode:
+    - docker:
+        image: tencent/tdesign/defalut-dev-env:latest
+      services:
+        - vscode
+        - docker
+      stages:
+        - name: install pub dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install node dependencies
+          script: cd tdesign-site && pnpm install
