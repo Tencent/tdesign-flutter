@@ -7,7 +7,7 @@ $:
         - name: sync to github with rebase
           image: tencentcom/git-sync
           settings:
-            target_url: https://github.com/Tencent/tdesign.git
+            target_url: https://github.com/Tencent/tdesign-flutter.git
             auth_type: https
             username: ${GIT_USERNAME}
             password: ${GIT_ACCESS_TOKEN}
