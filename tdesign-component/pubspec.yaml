@@ -35,7 +35,7 @@ dev_dependencies:
   tdesign_flutter_tools:
     git:
       url: https://github.com/TDesignOteam/tdesign-flutter-tools.git
-      ref: rss1102/fix/analyzer-7-compat
+      ref: main
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
