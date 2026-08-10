@@ -49,6 +49,8 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
+        with:
+          package_json_file: tdesign-site/package.json
 
       - name: Set Node version
         uses: actions/setup-node@v6
