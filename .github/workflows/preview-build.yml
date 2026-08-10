@@ -48,14 +48,12 @@ jobs:
           retention-days: 5
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
+        uses: pnpm/action-setup@v6
 
       - name: Set Node version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "pnpm"
           cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
 
@@ -103,8 +101,8 @@ jobs:
       - name: Build site
         working-directory: ./tdesign-site
         run: |
-          pnpm install --frozen-lockfile --loglevel=error
-          npm run site
+          pnpm ci
+          pnpm run site
 
       - name: Build and merge Web Demo
         working-directory: ./tdesign-component/example
