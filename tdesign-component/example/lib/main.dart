@@ -21,7 +21,6 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
-  sortExampleMap();
   exampleMap.forEach((key, value) {
     value.forEach((model) {
       examplePageList.add(model);
