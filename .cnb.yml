@@ -19,8 +19,11 @@ $:
         - vscode
         - docker
       stages:
-        - name: install pub dependencies
+        - name: install component dependencies
           script: cd tdesign-component && flutter pub get
 
-        - name: install node dependencies
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
+
+        - name: install site dependencies
           script: cd tdesign-site && pnpm install
