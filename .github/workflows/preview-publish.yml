@@ -161,7 +161,7 @@ jobs:
             - [web-example](${{ steps.deploy.outputs.url }}/flutter/example/)
 
             ## APK 下载
-            - [tdesign-flutter-${{ steps.build_env.outputs.version }}-${{ steps.build_env.outputs.build_number }}.apk](${{ steps.apk.outputs.result }})
+            - [下载 APK（ZIP，解压后安装）](${{ steps.apk.outputs.result }})
 
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.result }}
