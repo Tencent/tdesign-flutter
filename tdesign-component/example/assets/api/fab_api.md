@@ -12,7 +12,7 @@
 | magnet | TFabMagnet? | - | 拖拽结束吸附方向；null 表示不吸附 |
 | onDragEnd | TFabDragCallback? | - | 拖拽结束回调 |
 | onDragStart | TFabDragCallback? | - | 拖拽开始回调 |
-| onLongPress | VoidCallback? | - | 长按回调。 仅在 `onPressed` 非空时生效；当 `onPressed` 为空时按钮保持禁用态， 不会触发点击或长按回调。 |
+| onLongPress | VoidCallback? | - | 长按回调。 仅在 `onPressed` 非空时生效；当 `onPressed` 为空时按钮保持禁用态， 不会触发点击或长按回调。 默认 TButton 模式与自定义 `child` 模式均支持。 |
 | onPressed | VoidCallback? | - | 点击回调，null 时禁用 |
 | right | double? | - | 距屏幕右侧偏移（默认 16） |
 | semanticLabel | String? | - | 读屏标签 |

@@ -109,7 +109,7 @@ void main() {
   group('TFab 长按 onLongPress', () {
     testWidgets('onLongPress 透传给内部 TButton', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TFab(onPressed: () {}, onLongPress: () {}),
+        TFab(onPressed: () {}, onLongPress: () {}),
       ));
       final button = tester.widget<TButton>(find.byType(TButton));
       expect(button.onLongPress, isNotNull);
@@ -133,10 +133,53 @@ void main() {
     testWidgets('未传 onLongPress 时内部 TButton.onLongPress 为 null',
         (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TFab(onPressed: () {}),
+        TFab(onPressed: () {}),
       ));
       final button = tester.widget<TButton>(find.byType(TButton));
       expect(button.onLongPress, isNull);
+    });
+
+    testWidgets('child 模式长按触发 onLongPress 回调', (tester) async {
+      var longPressed = false;
+      await tester.pumpWidget(wrapWithTheme(
+        TFab(
+          child: Container(width: 56, height: 56, color: Colors.red),
+          onPressed: () {},
+          onLongPress: () => longPressed = true,
+        ),
+      ));
+      await tester.longPress(find.byType(Container).last);
+      await tester.pumpAndSettle();
+      expect(longPressed, isTrue);
+    });
+
+    testWidgets('child 模式未传 onLongPress 时不包长按手势', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        TFab(
+          child: Container(width: 56, height: 56, color: Colors.red),
+          onPressed: () {},
+        ),
+      ));
+      // 定位层未为 child 模式提供 onLongPress 手势
+      final longPressDetectors = tester
+          .widgetList<GestureDetector>(find.byType(GestureDetector))
+          .where((g) => g.onLongPress != null);
+      expect(longPressDetectors, isEmpty);
+    });
+
+    testWidgets('child 模式拖拽 + onLongPress 回调', (tester) async {
+      var longPressed = false;
+      await tester.pumpWidget(wrapWithTheme(
+        TFab(
+          child: Container(width: 56, height: 56, color: Colors.red),
+          draggable: TFabDragAxis.all,
+          onPressed: () {},
+          onLongPress: () => longPressed = true,
+        ),
+      ));
+      await tester.longPress(fabDragTarget());
+      await tester.pumpAndSettle();
+      expect(longPressed, isTrue);
     });
   });
 

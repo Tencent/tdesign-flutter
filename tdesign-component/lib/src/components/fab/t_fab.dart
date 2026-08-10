@@ -179,6 +179,8 @@ class TFab extends StatelessWidget {
       child: actionChild,
       dragTapSlop: dragTapSlop,
       onPressed: isChildMode ? onPressed : null,
+      // child 模式下长按由定位层手势接管；TButton 模式已在内部处理
+      onLongPress: isChildMode ? onLongPress : null,
       onDragStart: onDragStart,
       onDragEnd: onDragEnd,
       magnetAnimationDuration: magnetDuration,

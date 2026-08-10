@@ -12,15 +12,17 @@ Widget buildFabPositioned({
   required Widget child,
   required double dragTapSlop,
   required VoidCallback? onPressed,
+  VoidCallback? onLongPress,
   TFabDragCallback? onDragStart,
   TFabDragCallback? onDragEnd,
   Duration? magnetAnimationDuration,
 }) {
   if (layout.draggable == null) {
     var positionedChild = child;
-    if (onPressed != null) {
+    if (onPressed != null || onLongPress != null) {
       positionedChild = GestureDetector(
         onTap: onPressed,
+        onLongPress: onLongPress,
         child: positionedChild,
       );
     }
@@ -35,6 +37,7 @@ Widget buildFabPositioned({
     child: child,
     dragTapSlop: dragTapSlop,
     onPressed: onPressed,
+    onLongPress: onLongPress,
     onDragStart: onDragStart,
     onDragEnd: onDragEnd,
     magnetAnimationDuration: magnetAnimationDuration,
@@ -48,6 +51,7 @@ class _FabDraggable extends StatefulWidget {
     required this.child,
     required this.dragTapSlop,
     this.onPressed,
+    this.onLongPress,
     this.onDragStart,
     this.onDragEnd,
     this.magnetAnimationDuration,
@@ -57,6 +61,7 @@ class _FabDraggable extends StatefulWidget {
   final Widget child;
   final double dragTapSlop;
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final TFabDragCallback? onDragStart;
   final TFabDragCallback? onDragEnd;
   final Duration? magnetAnimationDuration;
@@ -102,6 +107,7 @@ class _FabDraggableState extends State<_FabDraggable> {
         onPanStart: _onPanStart,
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
+        onLongPress: widget.onLongPress,
         child: KeyedSubtree(key: _childKey, child: widget.child),
       ),
     );
