@@ -1,0 +1,4 @@
+interface:
+  display_name: "TDesign Flutter PR Workflow"
+  short_description: "按仓库模板创建和更新 Flutter PR 描述流程"
+  default_prompt: "Use $tdesign-flutter-pr-workflow to create or update a TDesign Flutter PR."
