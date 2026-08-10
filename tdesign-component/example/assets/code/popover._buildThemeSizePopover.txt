@@ -1,0 +1,53 @@
+Widget _buildThemeSizePopover(BuildContext context) {
+    final popoverTheme = Theme.of(context).mergeExtension(
+      const TPopoverThemeData(
+        backgroundColor: Color(0xFF5E3BB7),
+        minWidth: 120,
+        maxWidth: 180,
+        maxHeight: 120,
+      ),
+    );
+    return Theme(
+      data: popoverTheme,
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 8,
+        children: [
+          Builder(
+            builder: (popoverContext) {
+              return TButton(
+                key: const Key('popover-theme-short-trigger'),
+                variant: TButtonVariant.outline,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: () {
+                  TPopover.showPopover(
+                    context: popoverContext,
+                    content: '短文本',
+                    placement: TPopoverPlacement.bottom,
+                  );
+                },
+                child: const Text('主题背景与最小宽度'),
+              );
+            },
+          ),
+          Builder(
+            builder: (popoverContext) {
+              return TButton(
+                key: const Key('popover-theme-long-trigger'),
+                variant: TButtonVariant.outline,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: () {
+                  TPopover.showPopover(
+                    context: popoverContext,
+                    content: '这是一段用于验证最大宽度和自然换行的较长气泡文本',
+                    placement: TPopoverPlacement.bottom,
+                  );
+                },
+                child: const Text('最大宽度与自然换行'),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }

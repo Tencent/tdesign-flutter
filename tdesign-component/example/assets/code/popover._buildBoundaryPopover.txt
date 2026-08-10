@@ -1,0 +1,62 @@
+Widget _buildBoundaryPopover(BuildContext context) {
+    Widget buildTrigger({
+      required Alignment alignment,
+      required String label,
+      required TPopoverPlacement placement,
+    }) {
+      return Align(
+        alignment: alignment,
+        child: Builder(
+          builder: (popoverContext) {
+            return TButton(
+              key: Key('popover-boundary-$label'),
+              size: TButtonSize.small,
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '$label边界内容',
+                  placement: placement,
+                );
+              },
+              child: Text(label),
+            );
+          },
+        ),
+      );
+    }
+
+    return Container(
+      key: const Key('popover-boundary-area'),
+      height: 180,
+      decoration: BoxDecoration(
+        border: Border.all(color: context.tTheme.grayColor4),
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+      ),
+      child: Stack(
+        children: [
+          buildTrigger(
+            alignment: Alignment.topLeft,
+            label: '左上',
+            placement: TPopoverPlacement.topLeft,
+          ),
+          buildTrigger(
+            alignment: Alignment.topRight,
+            label: '右上',
+            placement: TPopoverPlacement.topRight,
+          ),
+          buildTrigger(
+            alignment: Alignment.bottomLeft,
+            label: '左下',
+            placement: TPopoverPlacement.bottomLeft,
+          ),
+          buildTrigger(
+            alignment: Alignment.bottomRight,
+            label: '右下',
+            placement: TPopoverPlacement.bottomRight,
+          ),
+        ],
+      ),
+    );
+  }

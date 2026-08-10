@@ -10,7 +10,10 @@ Widget _buildPopover(BuildContext context) {
             colorScheme: TButtonColorScheme.primary,
             onPressed: () {
               TPopover.showPopover(
-                  context: popoverContext, content: '弹出气泡内容', colorScheme: theme);
+                context: popoverContext,
+                content: '弹出气泡内容',
+                colorScheme: theme,
+              );
             },
           );
         },

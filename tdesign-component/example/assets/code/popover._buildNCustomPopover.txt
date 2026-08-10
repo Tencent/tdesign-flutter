@@ -1,8 +1,9 @@
 Widget _buildNCustomPopover(BuildContext context) {
     var textStyle = TextStyle(
-        color: theme == TPopoverColorScheme.light
-            ? context.tTheme.fontGyColor1
-            : context.tTheme.fontWhColor1);
+      color: theme == TPopoverColorScheme.light
+          ? context.tTheme.fontGyColor1
+          : context.tTheme.fontWhColor1,
+    );
     return LayoutBuilder(
       builder: (popoverContext, constrains) {
         return TButton(
@@ -14,26 +15,32 @@ Widget _buildNCustomPopover(BuildContext context) {
               context: popoverContext,
               padding: const EdgeInsets.all(0),
               colorScheme: theme,
-              // contentWidget 模式下必须指定 width 和 height（组件 initState 断言要求）
+              // contentWidget 模式下必须指定确定的 width 和 height。
               width: 150,
               height: 146,
               contentWidget: Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 24),
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项1', style: textStyle),
                   ),
                   const TDivider(),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 24),
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项2', style: textStyle),
                   ),
                   const TDivider(),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 24),
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: TText('选项3', style: textStyle),
                   ),
                 ],

@@ -1,0 +1,35 @@
+Widget _buildKeyboardPopover(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const TextField(
+          key: Key('popover-keyboard-input'),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: '先点击输入框唤起键盘',
+          ),
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Builder(
+            builder: (popoverContext) {
+              return TButton(
+                key: const Key('popover-keyboard-trigger'),
+                variant: TButtonVariant.outline,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: () {
+                  TPopover.showPopover(
+                    context: popoverContext,
+                    content: '键盘弹出时保持在可用区域',
+                    placement: TPopoverPlacement.bottomRight,
+                  );
+                },
+                child: const Text('键盘上方显示'),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
