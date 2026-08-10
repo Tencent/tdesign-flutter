@@ -6,7 +6,7 @@
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="site/public/assets/qrcode/tdesign_apk_qrcode.png" />
+<img width="260" src="https://tdesign.tencent.com/flutter/assets/qrcode/t_apk_qrcode_0_2_7.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
