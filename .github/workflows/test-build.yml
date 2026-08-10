@@ -27,7 +27,7 @@ jobs:
           - web
         flutter-version:
           - 3.32.0
-          # - 3.x
+          - latest
         include:
           - platform: apk
             os: ubuntu-latest
@@ -52,7 +52,9 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
-          flutter-version: ${{ matrix.flutter-version }}
+          # An empty version selects the latest release from the stable channel.
+          flutter-version: ${{ matrix.flutter-version == 'latest' && '' || matrix.flutter-version }}
+          channel: stable
           cache: true
 
       - name: Diagnose iOS toolchain
