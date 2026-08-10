@@ -14,7 +14,7 @@ $:
 
   vscode:
     - docker:
-        image: docker.cnb.cool/tencent/tdesign/defalut-dev-env:latest
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
       services:
         - vscode
         - docker
