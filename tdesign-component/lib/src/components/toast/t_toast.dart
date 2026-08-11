@@ -542,7 +542,7 @@ class _TIconTextToast extends StatelessWidget {
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 14, 24, 14),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -586,7 +586,7 @@ class _TIconTextToast extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -647,7 +647,7 @@ class _TToastLoading extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -697,7 +697,7 @@ class _TToastLoadingWithoutText extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -742,7 +742,7 @@ class _TTextToast extends StatelessWidget {
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 16, 24, 16),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor1,
+          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
