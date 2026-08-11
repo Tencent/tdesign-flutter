@@ -33,10 +33,6 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/generate_example_code.dart
 
-      - name: flutter pub get
-        working-directory: ./tdesign-component/example
-        run: flutter pub get
-
       - name: Sync README files
         run: node scripts/sync-readme.mjs
 
