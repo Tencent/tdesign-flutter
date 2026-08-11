@@ -4,6 +4,11 @@ import 'package:tdesign_flutter_example/base/notification_center.dart';
 
 void main() {
   group('TNotification (example)', () {
+    setUp(() {
+      // TNotification 的静态状态在多个测试间共享，必须重置以避免观察者泄漏和顺序依赖。
+      TNotification.reset();
+    });
+
     test('observerId 唯一：相同事件下多个观察者互不覆盖', () {
       var called1 = <dynamic>[];
       var called2 = <dynamic>[];

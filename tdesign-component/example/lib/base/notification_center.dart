@@ -50,6 +50,16 @@ class TNotification {
   /// 他人的订阅。使用自增序号可彻底规避该风险。
   static int _observerSeq = 0;
 
+  /// 仅用于测试：清空所有静态状态，避免测试间相互泄漏观察者。
+  ///
+  /// `TNotification` 使用静态成员保存全局订阅，单元测试之间会共享这些状态，
+  /// 若不清理，某个测试注册的观察者会泄漏到后续测试，造成顺序依赖。
+  @visibleForTesting
+  static void reset() {
+    _eventMap.clear();
+    _observerSeq = 0;
+  }
+
   /// 注册观察者，返回可用于 [removeObserver] 的唯一 ID。
   ///
   /// 返回空字符串表示注册失败（eventName 为空）。
