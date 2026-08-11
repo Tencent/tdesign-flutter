@@ -6,6 +6,10 @@
 #   3. 关闭联动：GitHub 侧关闭 issue 时，同步关闭 CNB 侧对应的 issue。
 #
 # 触发事件只监听 opened / closed，不监听 edited，天然满足"后续更新不继续同步"。
+#
+# 实现方式：
+#   - 所有 CNB 侧操作均通过 CNB CLI（@cnbcool/cnb-cli，npm 安装）完成，不再直连 OpenAPI；
+#   - 工作流拆分为多个 step，按事件类型（opened / closed）条件执行。
 name: issue-sync-cnb
 
 on:
@@ -17,135 +21,118 @@ jobs:
     runs-on: ubuntu-latest
     # 只对非 PR 的 issue 生效（GitHub 的 PR 也会触发 issues 事件，需排除）
     if: github.event.issue.pull_request == null
+    env:
+      # CNB CLI 会自动读取 CNB_TOKEN / CNB_API_ENDPOINT 环境变量
+      CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
+      CNB_API_ENDPOINT: https://api.cnb.cool
+      # CNB 仓库路径，格式：组织/仓库
+      CNB_REPO: tencent/tdesign/tdesign-flutter
     steps:
-      - uses: actions/github-script@v7
-        env:
-          # 用于调用 CNB API 的访问令牌（需具备目标 CNB 仓库 issue 的读写权限）
-          CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
-          # CNB 仓库路径，格式：组织/仓库
-          CNB_REPO: tencent/tdesign/tdesign-flutter
-          # CNB 开放 API 服务地址
-          CNB_API: https://api.cnb.cool
+      # ---- 0. 准备：检出仓库并安装 CNB CLI（npm）----
+      - uses: actions/checkout@v4
+
+      - name: Install CNB CLI
+        run: npm install @cnbcool/cnb-cli -g
+
+      # ---- 1. 数据准备：仅读取 GitHub 事件上下文，不调用 CNB ----
+      - name: Prepare issue payload
+        id: prepare
+        uses: actions/github-script@v7
         with:
           script: |
-            const api = process.env.CNB_API;
-            const repo = process.env.CNB_REPO;
-            const token = process.env.CNB_TOKEN;
-
-            const ghIssue = context.payload.issue;
-            const ghNumber = ghIssue.number;
-            const ghAction = context.payload.action;
+            const fs = require('fs');
+            const { issue } = context.payload;
+            const ghNumber = issue.number;
 
             // 关联键：用标签 "gh-issue-<number>" 把 GitHub issue 映射到 CNB issue
             const mapLabel = `gh-issue-${ghNumber}`;
+            core.setOutput('map_label', mapLabel);
+            core.setOutput('gh_number', String(ghNumber));
 
-            // ---- 工具函数 ----
-            const call = async (method, path, body) => {
-              const url = `${api}${path}`;
-              const resp = await fetch(url, {
-                method,
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                },
-                body: body ? JSON.stringify(body) : undefined,
-              });
-              const text = await resp.text();
-              let data = null;
-              try { data = text ? JSON.parse(text) : null; } catch { data = text; }
-              return { ok: resp.ok, status: resp.status, data };
-            };
+            // 标题写入文件，避免 shell 特殊字符/引号问题
+            fs.writeFileSync('/tmp/issue-title.txt', issue.title || '');
 
-            // 按标签查找 CNB issue（列表查询，取首个匹配）
-            const findCnbIssue = async (state) => {
-              const { ok, data } = await call(
-                'GET',
-                `/${repo}/-/issues?labels=${encodeURIComponent(mapLabel)}&state=${state}&page=1&page_size=20`
-              );
-              if (ok && Array.isArray(data) && data.length > 0) {
-                return data[0];
-              }
-              // 兼容 data 为 {items: [...]} 之类的包装结构
-              if (ok && data && Array.isArray(data.items) && data.items.length > 0) {
-                return data.items[0];
-              }
-              return null;
-            };
+            // 组装正文：第一层正文 + 来源信息（GitHub 创建人 / 编号）
+            const ghAuthor = issue.user ? `@${issue.user.login}` : '未知用户';
+            const body =
+              (issue.body || '') +
+              '\n\n---\n' +
+              `> 本 Issue 由 GitHub 自动同步创建。\n` +
+              `> 来源：GitHub [${ghNumber}](https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${ghNumber})\n` +
+              `> 创建人：${ghAuthor}（CNB 侧创建人为同步机器人账号）\n`;
+            fs.writeFileSync('/tmp/issue-body.md', body);
 
-            // 确保 CNB 仓库存在某个标签（不存在则创建，返回是否可用）
-            const ensureLabel = async (name) => {
-              const r = await call('POST', `/${repo}/-/labels`, { name });
-              // 201 创建成功；409/422 表示已存在或其他原因，视为可用
-              return r.ok || r.status === 409 || r.status === 422;
-            };
+            // 标签：始终带上映射标签（关闭联动/防重复依据）；
+            // 同步的 GH 标签预留 1 个空位给映射标签，保证总数不超过 CLI 上限(10)。
+            const ghLabels = (issue.labels || []).map(l => l.name).slice(0, 9);
+            const allLabels = [mapLabel, ...ghLabels].slice(0, 10);
+            fs.writeFileSync('/tmp/labels.txt', allLabels.join('\n'));
 
-            // ---------- 处理 opened：创建 CNB issue ----------
-            if (ghAction === 'opened') {
-              // 幂等：若 CNB 侧已存在映射 issue，跳过创建，避免重复
-              const existing = await findCnbIssue('open');
-              if (existing) {
-                console.log(`CNB issue already exists (#${existing.number}), skip creating.`);
-                return;
-              }
+      # ---- 2. opened：确保所需标签在 CNB 仓库存在（幂等，重复创建视为成功）----
+      - name: Ensure labels exist on CNB
+        if: github.event.action == 'opened'
+        run: |
+          set +e
+          while IFS= read -r label; do
+            [ -z "$label" ] && continue
+            # 已存在时 post-label 返回 201 或失败，均视为可用
+            cnb repo-labels post-label \
+              --repo "$CNB_REPO" \
+              --name "$label" \
+              --color 5319e7 \
+              --description "auto-synced from GitHub issue"
+          done < /tmp/labels.txt
+          exit 0
 
-              // 同步标签：先确保 CNB 仓库存在这些标签，再挂到 issue 上
-              const ghLabels = (ghIssue.labels || []).map(l => l.name);
-              const labels = [];
-              for (const name of ghLabels.slice(0, 10)) {
-                if (await ensureLabel(name)) labels.push(name);
-              }
-              // 始终带上映射标签，作为"关闭联动"和防重复的依据
-              if (!labels.includes(mapLabel)) {
-                await ensureLabel(mapLabel);
-                labels.push(mapLabel);
-              }
+      # ---- 3. opened：幂等检查，按映射标签查找已存在的 open issue ----
+      - name: Find existing CNB issue
+        id: find
+        if: github.event.action == 'opened'
+        run: |
+          existing="$(cnb issues list-issues \
+            --repo "$CNB_REPO" \
+            --labels "${{ steps.prepare.outputs.map_label }}" \
+            --state open \
+            --page-size 20 -v \
+            | jq -r '.data[]?.number // empty' | head -1)"
+          echo "existing=$existing" >> "$GITHUB_OUTPUT"
 
-              // 组装正文：第一层正文 + 来源信息（GitHub 创建人 / 编号）
-              const ghAuthor = ghIssue.user ? `@${ghIssue.user.login}` : '未知用户';
-              const body =
-                (ghIssue.body || '') +
-                '\n\n---\n' +
-                `> 本 Issue 由 GitHub 自动同步创建。\n` +
-                `> 来源：GitHub [${ghNumber}](https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${ghNumber})\n` +
-                `> 创建人：${ghAuthor}（CNB 侧创建人为同步机器人账号）\n`;
+      # ---- 4. opened：创建 CNB issue（若已存在则跳过）----
+      - name: Create CNB issue
+        if: github.event.action == 'opened' && steps.find.outputs.existing == ''
+        run: |
+          args=()
+          while IFS= read -r label; do
+            [ -z "$label" ] && continue
+            args+=(--labels "$label")
+          done < /tmp/labels.txt
+          cnb issues create-issue \
+            --repo "$CNB_REPO" \
+            --title "$(cat /tmp/issue-title.txt)" \
+            --body-file /tmp/issue-body.md \
+            "${args[@]}"
+          echo "Created CNB issue for GitHub #${{ github.event.issue.number }}"
 
-              const { ok, status, data } = await call(
-                'POST',
-                `/${repo}/-/issues`,
-                { title: ghIssue.title, body, labels }
-              );
+      # ---- 5. closed：按映射标签查找待关闭的 open issue ----
+      - name: Find CNB issue to close
+        id: find_close
+        if: github.event.action == 'closed'
+        run: |
+          number="$(cnb issues list-issues \
+            --repo "$CNB_REPO" \
+            --labels "${{ steps.prepare.outputs.map_label }}" \
+            --state open \
+            --page-size 20 -v \
+            | jq -r '.data[]?.number // empty' | head -1)"
+          echo "number=$number" >> "$GITHUB_OUTPUT"
 
-              if (ok) {
-                const no = data && (data.number || data.iid) || 'N/A';
-                console.log(`Created CNB issue #${no} for GitHub #${ghNumber}`);
-              } else {
-                console.log(`Create CNB issue failed. status=${status}, resp=${JSON.stringify(data)}`);
-                core.setFailed(`Failed to create CNB issue (status ${status})`);
-              }
-              return;
-            }
-
-            // ---------- 处理 closed：关闭对应的 CNB issue ----------
-            if (ghAction === 'closed') {
-              const target = await findCnbIssue('open');
-              if (!target) {
-                console.log(`No open CNB issue with label ${mapLabel}, nothing to close.`);
-                return;
-              }
-              const no = target.number || target.iid;
-              const { ok, status, data } = await call(
-                'PATCH',
-                `/${repo}/-/issues/${no}`,
-                { state: 'closed', state_reason: 'completed' }
-              );
-              if (ok) {
-                console.log(`Closed CNB issue #${no} for GitHub #${ghNumber}`);
-              } else {
-                console.log(`Close CNB issue failed. status=${status}, resp=${JSON.stringify(data)}`);
-                core.setFailed(`Failed to close CNB issue #${no} (status ${status})`);
-              }
-              return;
-            }
-
-            console.log(`Unhandled action: ${ghAction}`);
+      # ---- 6. closed：关闭对应的 CNB issue ----
+      - name: Close CNB issue
+        if: github.event.action == 'closed' && steps.find_close.outputs.number != ''
+        run: |
+          cnb issues update-issue \
+            --repo "$CNB_REPO" \
+            --number "${{ steps.find_close.outputs.number }}" \
+            --state closed \
+            --state-reason completed
+          echo "Closed CNB issue #${{ steps.find_close.outputs.number }}"
