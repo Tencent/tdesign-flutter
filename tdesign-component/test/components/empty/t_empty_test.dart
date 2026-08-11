@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TEmpty V1.0 Widget 测试
+/// TEmpty Widget 测试
 /// 覆盖 variant、icon、emptyText、operationText、onPressed、customOperationWidget。
 void main() {
   Widget wrapWithTheme(Widget child, {TEmptyThemeData? emptyTheme}) {

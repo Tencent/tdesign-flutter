@@ -183,7 +183,7 @@ class TActionSheetList extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      /// todo 徽标应位于右上角，而不是右边紧挨着，请参考宫格徽标实现
+                      // TODO(#991): Position the badge at the item's top right.
                       if (item.badge != null) ...[
                         SizedBox(width: context.tTheme.spacer8),
                         item.badge!,

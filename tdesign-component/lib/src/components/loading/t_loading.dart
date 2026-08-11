@@ -69,7 +69,7 @@ class TLoading extends StatelessWidget {
 
   /// 获取生效的 Theme（Theme Extension > 默认值）
   ///
-  /// v1.0 按文档 §2.1 裁决：样式默认只从 `Theme.of(context)` 读取，
+  /// 按文档 §2.1 裁决：样式默认只从 `Theme.of(context)` 读取，
   /// 子树覆盖使用 `Theme.of(context).mergeExtension(...)`。
   TLoadingThemeData _effectiveTheme(BuildContext context) {
     return Theme.of(context).extension<TLoadingThemeData>() ??

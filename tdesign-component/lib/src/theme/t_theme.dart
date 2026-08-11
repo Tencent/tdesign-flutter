@@ -91,12 +91,12 @@ bool _tTextThemeTypographyEquivalent(TextTheme left, TextTheme right) {
 }
 
 // ============================================================
-// L2: 全局 theme.of 基础设施（v1.0 新增）
+// L2: 全局 theme.of 基础设施
 // ============================================================
 
 /// BuildContext 扩展：便捷获取全局 TThemeData Token
 ///
-/// v1.0 统一走 Material 的 `Theme.of(context)`。
+/// 统一走 Material 的 `Theme.of(context)`。
 /// 全库读取全局 Token（色板/间距/圆角/字体）统一用 `context.tTheme`。
 extension TThemeContextExtension on BuildContext {
   /// 获取全局 TThemeData（P4 Token），取不到则回退默认值
@@ -147,7 +147,7 @@ extension TThemeContextExtension on BuildContext {
 
 /// ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
 ///
-/// v1.0 子树覆盖统一用 `mergeExtension(...)`，
+/// 子树覆盖统一用 `mergeExtension(...)`，
 /// 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
 extension TThemeDataMergeExtension on ThemeData {
   /// 合并 Extension：保留现有所有 Extension，仅替换指定类型
@@ -413,7 +413,7 @@ class TStyleResolver {
 
 /// Token → 完整 ThemeData 的构建器
 ///
-/// v1.0 四层架构的 L2 层：接收 [TThemeData] token，产出完整 [ThemeData]。
+/// 四层架构的 L2 层：接收 [TThemeData] token，产出完整 [ThemeData]。
 /// 内部完成 Token → ColorScheme 映射、Token Font → TextTheme、
 /// Token 颜色 → M3 子主题，同时将 [TThemeData] 自身作为 Extension 注入。
 ///
@@ -769,7 +769,7 @@ class TMaterialThemeBuilder {
   }
 }
 
-/// v1.0 应用入口：Token → 完整 ThemeData
+/// 应用入口：Token → 完整 ThemeData
 ///
 /// 对齐 `MaterialApp.theme` / `darkTheme` / `themeMode` 三参数模式。
 ///

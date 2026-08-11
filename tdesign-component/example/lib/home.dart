@@ -7,8 +7,6 @@ import 'base/example_route.dart';
 import 'config.dart';
 import 'l10n/app_localizations.dart';
 
-var _kShowTodoComponent = false;
-
 /// 切换主题的回调
 typedef OnThemeChange = Function(TThemeData themeData);
 
@@ -185,26 +183,14 @@ class _MyHomePageState extends State<MyHomePage> {
           // 如果有搜索文案,不再搜索中的组件不展示
           return;
         }
-        if (model.isTodo) {
-          if (_kShowTodoComponent) {
-            cells.add(TCell(
-              title: Text(model.displayText),
-              arrow: true,
-              onTap: () {
-                Navigator.pushNamed(context, '${model.name}?showAction=1');
-              },
-            ));
-          }
-        } else {
-          cells.add(TCell(
-            title: Text(model.displayText),
-            arrow: true,
-            onTap: () {
-              focusNode.unfocus();
-              Navigator.pushNamed(context, '${model.name}?showAction=1');
-            },
-          ));
-        }
+        cells.add(TCell(
+          title: Text(model.text),
+          arrow: true,
+          onTap: () {
+            focusNode.unfocus();
+            Navigator.pushNamed(context, '${model.name}?showAction=1');
+          },
+        ));
       });
       if (cells.isNotEmpty) {
         children.add(

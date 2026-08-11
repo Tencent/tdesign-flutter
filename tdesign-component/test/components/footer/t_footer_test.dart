@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TFooter V1.0 Widget 测试
+/// TFooter Widget 测试
 ///
 /// 覆盖 variant 三档（text/link/brand）、links 列表、logo 渲染、
 /// Theme 各字段、copyWith/lerp、边界情况。

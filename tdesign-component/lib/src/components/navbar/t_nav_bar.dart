@@ -11,7 +11,7 @@ import 't_nav_bar_theme_data.dart';
 /// NavBar 操作项回调类型
 typedef TBarItemAction = void Function();
 
-/// NavBar 组件 v1.0
+/// NavBar 组件
 ///
 /// Material AppBar 薄包装（NavigationToolbar 实现）。
 /// - A 类禁用：操作项 `onTap: null`。

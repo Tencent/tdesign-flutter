@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TButton V1.0 Widget 测试
+/// TButton Widget 测试
 ///
 /// 覆盖所有公开 API 和关键行为路径，目标覆盖率 95%+。
 void main() {

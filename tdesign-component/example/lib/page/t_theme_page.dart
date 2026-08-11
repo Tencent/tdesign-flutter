@@ -277,7 +277,6 @@ class LayoutExtra extends TExtraThemeData {
 
   @override
   void parse(String name, Map<String, dynamic> curThemeMap) {
-    // TODO: implement parse
   }
 }
 

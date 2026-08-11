@@ -1,5 +1,5 @@
 Widget _buildThemeDemo(BuildContext context) {
-    // v1.0 新增：通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
+    // 通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
     return Theme(
       data: Theme.of(context).copyWith(
         extensions: [

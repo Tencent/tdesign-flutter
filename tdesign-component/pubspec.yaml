@@ -13,7 +13,7 @@ dependencies:
   collection: ^1.19.0
   meta: ^1.16.0
 
-  # TDesign 图标资源包（v1.0 剥离内嵌资源）
+  # TDesign 图标资源包
   tdesign_flutter_icons: ^0.0.5
 
   # 下拉刷新组件

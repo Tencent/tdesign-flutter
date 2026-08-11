@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/time_counter/t_time_counter_style.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TTimeCounter V1.0 Widget 测试
+/// TTimeCounter Widget 测试
 ///
 /// 覆盖：构造器、direction down/up、size 三档、theme 三种、
 /// autoStart、format、splitWithUnit、millisecond、content 自定义、

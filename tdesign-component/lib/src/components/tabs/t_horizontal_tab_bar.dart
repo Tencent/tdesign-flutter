@@ -591,8 +591,8 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
     // The material's color might be null (if it's a transparency). In that case
     // there's no good way for us to find out what the color is so we don't.
     //
-    // TODO(xu-baolin): Remove automatic adjustment to white color indicator
-    // with a better long-term solution.
+    // TODO(#992): Remove automatic adjustment to white color indicator with a
+    // better long-term solution.
     // https://github.com/flutter/flutter/pull/68171#pullrequestreview-517753917
     if (widget.automaticIndicatorColorAdjustment &&
         color.toARGB32() == Material.of(context).color?.toARGB32()) {

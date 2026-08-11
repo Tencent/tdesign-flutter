@@ -96,7 +96,7 @@ class TSteps extends StatefulWidget {
   /// 用户选择步骤时触发；通过更新 [value] 实现受控模式。
   final ValueChanged<int>? onChange;
 
-  /// 子树级主题数据（v1.0 新增）
+  /// 子树级主题数据
 
   @override
   _TStepsState createState() => _TStepsState();

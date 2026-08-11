@@ -103,7 +103,7 @@ pnpm site:dev
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
 - 代码规范遵循腾讯 Dart 代码规范。
 - 对于系统原有组件，如 `Text`、`Image` 等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃 TDesign 控件。
-- 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现；页面写完后，在 `main.dart` 中修改 `exampleMap` 对应组件的 `isTodo` 属性即可。
+- 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现。
 - 组件 API 和演示代码，请参考 `demo_tool/README.md` 文件。
 - 组件内部的固定文案，都应该抽离到 `TResourceDelegate` 中统一管理，方便业务进行国际化适配。
 - 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
