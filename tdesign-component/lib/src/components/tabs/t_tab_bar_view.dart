@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// TabBarView 组件 v1.0
+/// TabBarView 组件
 ///
 /// Material TabBarView 薄包装。
 /// `physics` 为空时默认不可滑动。

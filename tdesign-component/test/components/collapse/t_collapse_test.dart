@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TCollapse V1.0 Widget 测试
+/// TCollapse Widget 测试
 ///
 /// 覆盖 mode 两档（multiple/accordion）、展开/折叠交互、
 /// onExpansionChanged/onChanged 回调、TCollapsePanel 参数、

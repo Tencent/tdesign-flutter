@@ -4,7 +4,7 @@ import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/src/components/loading/t_point_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TLoading V1.0 Widget 测试
+/// TLoading Widget 测试
 ///
 /// Tier1 组件：覆盖 Theme 子树 mergeExtension(TLoadingThemeData)。
 /// 覆盖 size 三档、icon 三种、text、axis 方向。

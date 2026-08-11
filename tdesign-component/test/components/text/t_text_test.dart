@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TText V1.0 Widget 测试
+/// TText Widget 测试
 ///
 /// 覆盖样式优先级链、TTextThemeData、TTextResolve、padding 缓存、
 /// TTextSpan 一致性及全局变量删除后的行为。

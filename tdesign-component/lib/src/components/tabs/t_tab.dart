@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../badge/t_badge.dart';
 
-/// Tab 组件 v1.0
+/// Tab 组件
 ///
 /// Material Tab 薄包装。禁用：`enabled: false`。
 class TTab extends Tab {

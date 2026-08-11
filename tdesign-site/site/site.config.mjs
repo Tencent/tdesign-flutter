@@ -336,13 +336,6 @@ export default {
           component: () => import('@component-docs/collapse/README.md'),
         },
         {
-          title: 'TimeCounter 计时器',
-          name: 'timeCounter',
-          meta: { docType: 'data' },
-          path: '/flutter/components/time-counter',
-          component: () => import('@component-docs/time-counter/README.md'),
-        },
-        {
           title: 'Empty 空状态',
           name: 'empty',
           meta: { docType: 'data' },
@@ -425,6 +418,13 @@ export default {
           meta: { docType: 'data' },
           path: '/flutter/components/tag',
           component: () => import('@component-docs/tag/README.md'),
+        },
+        {
+          title: 'TimeCounter 计时器',
+          name: 'timeCounter',
+          meta: { docType: 'data' },
+          path: '/flutter/components/time-counter',
+          component: () => import('@component-docs/time-counter/README.md'),
         },
       ],
     },

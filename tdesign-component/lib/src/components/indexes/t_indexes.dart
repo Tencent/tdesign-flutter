@@ -71,7 +71,7 @@ class TIndexes extends StatefulWidget {
   final Widget Function(BuildContext context, String index, bool isActive)?
       builderIndex;
 
-  /// 子树级主题数据（v1.0 新增）
+  /// 子树级主题数据
 
   @override
   _TIndexesState createState() => _TIndexesState();

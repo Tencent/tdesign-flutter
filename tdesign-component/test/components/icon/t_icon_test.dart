@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TIcon v1.0 Widget 测试
+/// TIcon Widget 测试
 ///
 /// 覆盖基础渲染、构造器参数、TIconThemeData 子树注入、
 /// IconTheme 回退、TIcon.fromName 工厂构造。
