@@ -406,6 +406,24 @@ void main() {
       await tester.pump(const Duration(seconds: 3));
       expect(find.text('长期提示'), findsNothing);
     });
+
+    testWidgets('默认 duration 为 2000ms（与 TDesign Mobile 对齐）',
+        (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      TToast.showText('默认时长', context: context);
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(find.text('默认时长'), findsOneWidget);
+
+      // 1500ms 时仍应显示（未到默认 2000ms）
+      await tester.pump(const Duration(milliseconds: 1500));
+      expect(find.text('默认时长'), findsOneWidget);
+
+      // 超过 2000ms + dispose 延迟后消失
+      await tester.pump(const Duration(milliseconds: 1000));
+      expect(find.text('默认时长'), findsNothing);
+    });
   });
 
   // ============================================================

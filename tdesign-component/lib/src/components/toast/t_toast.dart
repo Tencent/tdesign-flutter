@@ -67,6 +67,11 @@ class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
   static int _instanceCounter = 0;
 
+  /// 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。
+  /// 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration
+  /// 时被误判为无限。
+  static const Duration infiniteDuration = Duration(seconds: 99999999);
+
   /// 生成唯一的Toast ID
   static String _generateToastId() {
     return 'toast_${_instanceCounter++}';
@@ -81,7 +86,7 @@ class TToast {
     required BuildContext context,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(milliseconds: 3000),
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 文案最大行数。
     int? maxLines,
@@ -139,7 +144,7 @@ class TToast {
     required BuildContext context,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(milliseconds: 3000),
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
@@ -196,7 +201,7 @@ class TToast {
     required BuildContext context,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(milliseconds: 3000),
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
@@ -247,7 +252,7 @@ class TToast {
     required BuildContext context,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(milliseconds: 3000),
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
@@ -298,7 +303,7 @@ class TToast {
     required BuildContext context,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(milliseconds: 3000),
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
@@ -346,7 +351,7 @@ class TToast {
     String? text,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(seconds: 99999999),
+    Duration duration = TToast.infiniteDuration,
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
@@ -395,7 +400,7 @@ class TToast {
     required BuildContext context,
 
     /// 自动关闭时长。
-    Duration duration = const Duration(seconds: 99999999),
+    Duration duration = TToast.infiniteDuration,
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
@@ -452,7 +457,7 @@ class TToast {
   static void _showOverlay(
     Widget? widget, {
     required BuildContext context,
-    Duration duration = const Duration(milliseconds: 3000),
+    Duration duration = const Duration(milliseconds: 2000),
     bool? preventTap,
     required String toastId,
   }) {
@@ -494,7 +499,7 @@ class TToast {
 
     Timer? timer;
 
-    if (duration != const Duration(seconds: 99999999)) {
+    if (duration != TToast.infiniteDuration) {
       timer = Timer(duration, () {
         final instance = _toastInstances[toastId];
         if (instance != null && instance.showing) {
