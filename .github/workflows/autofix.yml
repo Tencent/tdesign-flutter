@@ -37,10 +37,6 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter pub get
 
-      - name: flutter build
-        working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release
-
       - name: Sync README files
         run: node scripts/sync-readme.mjs
 
