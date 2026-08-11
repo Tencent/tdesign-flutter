@@ -28,7 +28,7 @@ class TTextPage extends StatelessWidget {
           ExampleItem(desc: 'TText.rich测试:', builder: _buildRichText),
           ExampleItem(desc: '获取系统Text:', builder: _getSystemText),
           ExampleItem(desc: '删除线:', builder: _buildTextThrough),
-          ExampleItem(desc: 'v1.0 Theme默认:', builder: _buildThemeDemo),
+          ExampleItem(desc: 'Theme 默认:', builder: _buildThemeDemo),
         ]),
       ],
       test: const [],
@@ -125,7 +125,7 @@ class TTextPage extends StatelessWidget {
 
   @ExampleCode(group: 'text')
   Widget _buildThemeDemo(BuildContext context) {
-    // v1.0 新增：通过 TTextThemeData 统一控制子树 TText 默认样式
+    // 通过 TTextThemeData 统一控制子树 TText 默认样式
     return Theme(
       data: Theme.of(context).copyWith(
         extensions: [

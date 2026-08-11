@@ -86,7 +86,7 @@ class TFontPage extends StatelessWidget {
             },
           ),
           ExampleItem(
-            desc: '字符测试 - 待修复',
+            desc: '字符测试（TODO #993）',
             ignoreCode: true,
             builder: (context) {
               return Column(

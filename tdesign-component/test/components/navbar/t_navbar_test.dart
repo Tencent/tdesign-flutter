@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TNavBar V1.0 Widget 测试
+/// TNavBar Widget 测试
 ///
 /// 覆盖标题渲染、titleWidget 优先级、leading/actions、useDefaultBack、
 /// onBack 回调、A 类禁用（onTap: null）、Theme 各字段覆盖、preferredSize。

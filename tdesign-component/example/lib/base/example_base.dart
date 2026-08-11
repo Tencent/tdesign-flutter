@@ -13,7 +13,6 @@ class ExamplePageModel {
     required this.name,
     this.apiVisible = false,
     this.showAction = false,
-    this.isTodo = false,
     required this.pageBuilder,
   });
 
@@ -22,11 +21,7 @@ class ExamplePageModel {
   String? codePath;
   bool apiVisible;
   bool showAction;
-  bool isTodo;
   final PageBuilder pageBuilder;
-
-  String get displayText =>
-      text.replaceFirst(RegExp(r'\s*\(V?1\.0\)\s*$', caseSensitive: false), '');
 }
 
 /// 存储主题数据的内部控件

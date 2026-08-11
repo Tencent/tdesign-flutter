@@ -2,7 +2,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TNoticeBar V1.0 Widget 测试
+/// TNoticeBar Widget 测试
 ///
 /// 覆盖 variant 四档、marquee 滚动、prefix/suffix 图标、
 /// left/right 自定义 widget、onPressed 回调、

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TProgress V1.0 Widget 测试
+/// TProgress Widget 测试
 ///
 /// 覆盖 variant 四档（linear/circular/micro/button）、value 边界、
 /// label 位置、Theme 各字段、copyWith/lerp、边界情况。

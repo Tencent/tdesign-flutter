@@ -191,7 +191,7 @@ class _TButtonPageState extends State<TButtonPage> {
             }),
         ExampleItem(
             ignoreCode: true,
-            desc: '通栏按钮测试（V1.0 外包布局）',
+            desc: '通栏按钮测试（外包布局）',
             builder: (context) {
               return Container(
                 color: context.tTheme.bgColorContainer,
@@ -280,7 +280,7 @@ class _TButtonPageState extends State<TButtonPage> {
     TToast.showText('点击了按钮', context: context);
   }
 
-  /// 为子树注入 [TButtonThemeData.shape]（v1.0 外形走 Theme）
+  /// 为子树注入 [TButtonThemeData.shape]（外形走 Theme）
   Widget _withButtonShape(
     BuildContext context,
     TButtonShape shape,

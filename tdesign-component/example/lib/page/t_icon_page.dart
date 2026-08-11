@@ -30,14 +30,14 @@ class _TIconPageState extends State<TIconPage> {
         exampleCodeGroup: 'icon',
         children: [
           ExampleModule(
-            title: 'v1.0 新特性',
+            title: '主题与图标',
             children: [
               ExampleItem(desc: 'TIcon 基础用法:', builder: _buildBasicTIcon),
               ExampleItem(desc: '指定 size 和 color:', builder: _buildSizedTIcon),
               ExampleItem(
                   desc: 'TIcon.fromName 通过名称:', builder: _buildFromName),
               ExampleItem(
-                  desc: 'v1.0 Theme 默认 size/color:', builder: _buildThemeDemo),
+                  desc: 'Theme 默认 size/color:', builder: _buildThemeDemo),
               ExampleItem(desc: '构造器优先级覆盖 Theme:', builder: _buildPriorityDemo),
             ],
           ),
@@ -55,7 +55,7 @@ class _TIconPageState extends State<TIconPage> {
 
   @ExampleCode(group: 'icon')
   Widget _buildBasicTIcon(BuildContext context) {
-    // v1.0 新增：TIcon Widget（Material Icon 薄包装）
+    // TIcon Widget（Material Icon 薄包装）
     return const Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -102,7 +102,7 @@ class _TIconPageState extends State<TIconPage> {
 
   @ExampleCode(group: 'icon')
   Widget _buildThemeDemo(BuildContext context) {
-    // v1.0 新增：通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
+    // 通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
     return Theme(
       data: Theme.of(context).copyWith(
         extensions: [

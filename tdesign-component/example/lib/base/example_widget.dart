@@ -693,7 +693,7 @@ extension TStateExs on State {
   String tTitle() {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
-    return modelTheme?.model.displayText ?? '';
+    return modelTheme?.model.text ?? '';
   }
 }
 
@@ -702,6 +702,6 @@ extension TWidgetExs on StatelessWidget {
   String tTitle(BuildContext context) {
     var modelTheme =
         context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
-    return modelTheme?.model.displayText ?? '';
+    return modelTheme?.model.text ?? '';
   }
 }

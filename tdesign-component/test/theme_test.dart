@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// v1.0 主题架构 P0–P4 层级覆盖验证测试
+/// 主题架构 P0–P4 层级覆盖验证测试
 ///
 /// 验证 CSS Token → 全局 Theme.of → 组件 Theme.of → 实例 style 的四层优先级链路。
 ///
 /// 优先级（覆盖方向，强 → 弱）：
 /// **P0 实例 > P1 组件 Theme > P2 Material > P3 ColorScheme > P4 Token**
 void main() {
-  group('v1.0 全局 theme.of 基础设施', () {
+  group('全局 theme.of 基础设施', () {
     test('TThemeData.defaultData() 返回非空默认 Token', () {
       final token = TThemeData.defaultData();
       expect(token, isNotNull);
@@ -295,7 +295,7 @@ void main() {
     });
   });
 
-  group('TLoading 无构造器 themeData（v1.0 §2.1 合规）', () {
+  group('TLoading 无构造器 themeData', () {
     testWidgets('TLoading 从 Theme Extension 读取样式', (tester) async {
       final token = TThemeData.defaultData();
 

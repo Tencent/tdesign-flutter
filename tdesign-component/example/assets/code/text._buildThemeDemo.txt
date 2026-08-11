@@ -1,5 +1,5 @@
 Widget _buildThemeDemo(BuildContext context) {
-    // v1.0 新增：通过 TTextThemeData 统一控制子树 TText 默认样式
+    // 通过 TTextThemeData 统一控制子树 TText 默认样式
     return Theme(
       data: Theme.of(context).copyWith(
         extensions: [
