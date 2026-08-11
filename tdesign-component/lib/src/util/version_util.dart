@@ -32,19 +32,25 @@ class VersionUtil {
 
   /// 判断 [current] 版本号是否大于等于 [target] 版本号（纯逻辑，与平台无关）。
   ///
-  /// 版本号按 `.` 分段逐段比较（如 `2.19.6`）。当分段数量不一致、版本号无法解析、
+  /// 版本号按 `.` 分段逐段比较（如 `2.19.6`）。当版本号为空、无法解析，
   /// 或 [current] 为空（未知版本）时，统一返回 `false`，即按"尚未达到目标版本"处理。
+  ///
+  /// 注意：当分段数量不一致（如 `2.20` vs `2.19.6`）时同样返回 `false`（保守语义）。
+  /// 即使其中一方分段数更少但数值上更大（例如 `2.20 > 2.19.6`），也会被判定为"未达到目标版本"。
+  /// 这是因为我们要求调用方提供语义一致、分段数相同的版本号，以避免跨位数比较带来的歧义。
   ///
   /// 该方法是纯函数，便于跨平台单测；[isAfterThen] 内部调用它。
   static bool isAfter(String current, String target) {
     try {
-      var targets = target.split('.');
-      var currents = current.split('.');
-      if (targets.isEmpty || currents.isEmpty) {
+      // 空字符串在 split('.') 后返回 [""] 而非空列表，因此这里需要在分割前先判空，
+      // 保证空版本号能被直观地识别为"未知版本"并返回 false。
+      if (current.isEmpty || target.isEmpty) {
         Log.w('VersionUtil',
             'target or current version is empty, current: $current, target: $target');
         return false;
       }
+      var targets = target.split('.');
+      var currents = current.split('.');
       if (targets.length != currents.length) {
         Log.w('VersionUtil', 'targets.length != currents.length');
         return false;
