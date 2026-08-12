@@ -19,6 +19,9 @@ $:
         cpus: 16
       docker:
         image: gmeligio/flutter-android:3.32.0
+        volumes:
+          - /root/.gradle:cow
+          - /root/.pub-cache:cow
       env:
         GIT_CONFIG_COUNT: "1"
         GIT_CONFIG_KEY_0: safe.directory
@@ -61,6 +64,9 @@ $:
         cpus: 16
       docker:
         image: gmeligio/flutter-android:3.44.9
+        volumes:
+          - /root/.gradle:cow
+          - /root/.pub-cache:cow
       env:
         GIT_CONFIG_COUNT: "1"
         GIT_CONFIG_KEY_0: safe.directory
