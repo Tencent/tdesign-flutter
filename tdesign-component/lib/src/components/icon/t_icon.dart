@@ -5,7 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
 import 't_icon_theme_data.dart';
 
-/// TIcon — v1.0 图标组件
+/// TIcon 图标组件
 ///
 /// Material [Icon] 的薄包装（T2 纯展示），提供组件级 Theme 注入能力。
 /// 图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。

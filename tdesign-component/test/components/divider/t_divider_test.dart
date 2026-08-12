@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/divider/t_divider_painter.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TDivider V1.0 Widget 测试
+/// TDivider Widget 测试
 ///
 /// 覆盖 layout×child 组合、align 三档、dashed 横向/竖线忽略、
 /// Theme 各字段、resolve 优先级、0.2 迁移验证。

@@ -218,7 +218,8 @@ abstract class TResourceDelegate {
 }
 
 /// 如果用户要重写，就应该全部重写，不开放只重新部分资源
-/// todo 这里默认为中文，推荐使用 Material 本地化作为备用，如 MaterialLocalizations.of(context).cancelButtonLabel
+/// TODO(#994): Add a MaterialLocalizations fallback for the default Chinese
+/// resources, such as MaterialLocalizations.of(context).cancelButtonLabel.
 class _DefaultResourceDelegate extends TResourceDelegate {
   @override // coverage:ignore-line
   String get open => '开';

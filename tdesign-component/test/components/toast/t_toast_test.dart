@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TToast V1.0 Widget 测试
+/// TToast Widget 测试
 ///
 /// E 类控制：`showText()` / `showIconText()` 调用即显；不调即不显。
 /// 覆盖文本 Toast、图标 Toast、自定义样式、duration。

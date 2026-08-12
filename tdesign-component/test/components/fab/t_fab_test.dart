@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/fab/t_fab_defaults.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TFab V1.0 Widget 测试
+/// TFab Widget 测试
 ///
 /// 覆盖：默认渲染、text 推导、onPressed 禁用、
 /// child 模式、拖拽阈值、resolveLayout + 安全区。

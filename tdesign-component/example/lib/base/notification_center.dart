@@ -6,8 +6,8 @@ typedef Observer = void Function(dynamic arguments);
 
 /// 广播工具
 ///
+/// TODO(#996): Prevent callbacks from reaching disposed State objects.
 ///
-/// todo bug
 /// flutter: TNotification postNotificationCallHandler onApiVisibleChange_165563855 error: setState() called after dispose(): _CodeWrapperState#1423d(lifecycle state: defunct, not mounted)
 /// This error happens if you call setState() on a State object for a widget that no longer appears in the widget tree (e.g., whose parent widget no longer includes the widget in its build). This error can occur when code calls setState() from a timer or an animation callback.
 /// The preferred solution is to cancel the timer or stop listening to the animation in the dispose() callback. Another solution is to check the "mounted" property of this object before calling setState() to ensure the object is still in the tree.

@@ -277,14 +277,6 @@ spline: explain
   </div> 
 
   <div class="image-wrapper">
-    <a class="item" href="/flutter/components/time-counter">
-      <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-countdown.png" />
-      <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-countdown-dark.png" />
-      <p class="name">TimeCounter 计时器</p>
-    </a>
-  </div>
-
-  <div class="image-wrapper">
     <a class="item" href="/flutter/components/empty">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-empty.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-empty-dark.png" />
@@ -376,6 +368,14 @@ spline: explain
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-tag.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-tag-dark.png" />
       <p class="name">Tag 标签</p>
+    </a>
+  </div>
+
+  <div class="image-wrapper">
+    <a class="item" href="/flutter/components/time-counter">
+      <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-countdown.png" />
+      <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-countdown-dark.png" />
+      <p class="name">TimeCounter 计时器</p>
     </a>
   </div>
 </section>

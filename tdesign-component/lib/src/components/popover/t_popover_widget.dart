@@ -373,7 +373,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   /// 获取箭头Widget
-  /// todo 通过 CustomPainter 绘制箭头进行优化
   Widget _getArrowWidget() {
     var margin = EdgeInsets.only(top: _effectiveArrowSize);
     switch (_resolvedPlacement) {

@@ -9,7 +9,7 @@ import '../../util/context_extension.dart';
 import '../text/t_text.dart';
 import 't_backtop_theme_data.dart';
 
-/// 返回顶部组件 v1.0
+/// 返回顶部组件
 ///
 /// T2 自绘组件：`GestureDetector` + `Container` 双形态（`circle` / `halfCircle`）。
 /// - 监听 [controller] 偏移控制显隐，点击默认 `controller.animateTo(0)` 后触发 [onPressed]。

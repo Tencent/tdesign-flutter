@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TTag V1.0 Widget 测试
+/// TTag Widget 测试
 ///
 /// 覆盖：
 /// - 基础渲染（text/icon/size）

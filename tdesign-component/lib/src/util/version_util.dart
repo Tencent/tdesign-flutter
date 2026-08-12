@@ -15,7 +15,7 @@ class VersionUtil {
   static bool isAfterThen(String target){
     try {
       if(PlatformUtil.isWeb){
-        // TODO: 需要适配flutter web的具体逻辑
+        // TODO(#990): Implement reliable version detection for Flutter Web.
         return kIsFlutterWebAfter320;
       }
       var targets = target.split('.');

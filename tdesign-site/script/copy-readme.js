@@ -1,5 +1,5 @@
 /**
- *  TODO 保证根目录下的 README_zh_CN.md 和 README.md 都能正确同步到其他位置
+ *  保证根目录下的 README_zh_CN.md 和 README.md 都能正确同步到其他位置
  * 
  *  集成在 release ci 上,在发版前（使用 tdesign-bot push 文档代码）
  * 

@@ -1,4 +1,3 @@
-// v1.0 Icon: TIcons 常量来自 tdesign_flutter_icons 资源包
 export 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 export 'src/components/action_sheet/t_action_sheet.dart';

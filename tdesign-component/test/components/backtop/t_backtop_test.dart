@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TBackTop V1.0 Widget 测试
+/// TBackTop Widget 测试
 ///
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。

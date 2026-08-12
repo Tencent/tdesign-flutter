@@ -8,7 +8,6 @@ import '../../util/context_extension.dart';
 
 const double _kDefaultIndicatorRadius = 10.0;
 
-/// todo 建议使用 CupertinoActivityIndicator
 ///
 /// An iOS-style activity indicator that spins clockwise.
 ///

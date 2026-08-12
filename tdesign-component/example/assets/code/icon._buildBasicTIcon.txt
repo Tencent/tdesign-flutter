@@ -1,5 +1,5 @@
 Widget _buildBasicTIcon(BuildContext context) {
-    // v1.0 新增：TIcon Widget（Material Icon 薄包装）
+    // TIcon Widget（Material Icon 薄包装）
     return const Row(
       mainAxisSize: MainAxisSize.min,
       children: [

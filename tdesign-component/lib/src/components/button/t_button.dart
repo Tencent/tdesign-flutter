@@ -8,7 +8,7 @@ import 't_button_types.dart';
 
 // ============ TButton Widget ============
 
-/// TD 常规按钮（V1.0）
+/// TD 常规按钮
 ///
 /// Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
 /// [onLongPress]。
