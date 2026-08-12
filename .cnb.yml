@@ -1,11 +1,14 @@
 # ===== 公共可复用片段（以 . 开头，不会被识别为分支名）=====
 
-# git safe.directory 全局配置（env 方式，覆盖所有目录）
+# git safe.directory 全局配置 + 腾讯云镜像源（env 方式）
 .git-safe-env: &git-safe-env
   env:
     GIT_CONFIG_COUNT: "1"
     GIT_CONFIG_KEY_0: safe.directory
     GIT_CONFIG_VALUE_0: "*"
+    PUB_HOSTED_URL: "https://mirrors.tencent.com/dart-pub"
+    FLUTTER_STORAGE_BASE_URL: "https://mirrors.tencent.com/flutter"
+    SDK_TEST_BASE_URL: "https://mirrors.tencent.com/AndroidSDK/"
 
 # 安装组件依赖
 .install-component: &install-component
