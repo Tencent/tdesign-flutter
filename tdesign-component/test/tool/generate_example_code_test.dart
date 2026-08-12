@@ -69,6 +69,25 @@ void demo() {}
     expect(createGenerator().run(check: true).isUpToDate, isTrue);
   });
 
+  test('verbose mode reports changes and writes files correctly', () {
+    writeSource('examples', '''
+@ExampleCode(group: 'button')
+void demo() {}
+''');
+
+    // First verbose run should detect and write the snippet.
+    final verboseResult = createGenerator().run(verbose: true);
+    expect(verboseResult.changed, <String>['button.demo.txt']);
+    expect(
+      File('${outputDirectory.path}/button.demo.txt').readAsStringSync(),
+      'void demo() {}\n',
+    );
+
+    // Second verbose run should report everything up to date.
+    final secondResult = createGenerator().run(verbose: true);
+    expect(secondResult.isUpToDate, isTrue);
+  });
+
   test('rejects duplicate, missing, and invalid groups', () {
     writeSource('invalid', '''
 @ExampleCode(group: 'bad/path')
