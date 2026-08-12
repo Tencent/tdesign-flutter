@@ -38,7 +38,7 @@
     }
     EOF
 
-    flutter build apk -t ./lib/main.dart --release --verbose
+    flutter build apk -t ./lib/main.dart --release
 
 # Web 构建
 .build-web: &build-web
