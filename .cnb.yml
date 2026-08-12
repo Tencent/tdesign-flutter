@@ -84,6 +84,30 @@ $:
             git config --global --add safe.directory /home/flutter/sdks/flutter
             cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
 
+    # 构建 Web（flutter latest），使用 gmeligio/flutter-web 镜像
+    - name: build web (flutter latest)
+      docker:
+        image: gmeligio/flutter-web:3.44.9
+      env:
+        GIT_CONFIG_COUNT: "1"
+        GIT_CONFIG_KEY_0: safe.directory
+        GIT_CONFIG_VALUE_0: "*"
+      stages:
+        - name: install component dependencies
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter pub get
+
+        - name: flutter build web
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+
   vscode:
     - docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
