@@ -30,15 +30,33 @@
     sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
       android/gradle/wrapper/gradle-wrapper.properties
 
-    # 2) 依赖仓库走腾讯云镜像（Gradle init script）
+    # 2) Gradle init script 全量镜像（含 pluginManagement）
     mkdir -p ~/.gradle
     cat > ~/.gradle/init.gradle <<'EOF'
     allprojects {
         repositories {
             maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/google/' }
+            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-central/' }
             maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
         }
     }
+    settingsEvaluated { settings ->
+        settings.pluginManagement {
+            repositories {
+                maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
+                maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+            }
+        }
+    }
+    EOF
+
+    # 3) Gradle 优化参数
+    cat > ~/.gradle/gradle.properties <<'EOF'
+    org.gradle.parallel=true
+    org.gradle.caching=true
+    org.gradle.configureondemand=true
+    org.gradle.daemon=false
     EOF
 
     flutter build apk -t ./lib/main.dart --release
