@@ -17,6 +17,10 @@ $:
     - name: build apk (flutter 3.32.0)
       docker:
         image: gmeligio/flutter-android:3.32.0
+      env:
+        GIT_CONFIG_COUNT: "1"
+        GIT_CONFIG_KEY_0: safe.directory
+        GIT_CONFIG_VALUE_0: "*"
       stages:
         - name: install component dependencies
           script: |
@@ -36,6 +40,10 @@ $:
     - name: build apk (flutter latest)
       docker:
         image: gmeligio/flutter-android:3.44.9
+      env:
+        GIT_CONFIG_COUNT: "1"
+        GIT_CONFIG_KEY_0: safe.directory
+        GIT_CONFIG_VALUE_0: "*"
       stages:
         - name: install component dependencies
           script: |
@@ -56,6 +64,10 @@ $:
     - name: build web (flutter 3.32.0)
       docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
+      env:
+        GIT_CONFIG_COUNT: "1"
+        GIT_CONFIG_KEY_0: safe.directory
+        GIT_CONFIG_VALUE_0: "*"
       stages:
         - name: install component dependencies
           script: |
