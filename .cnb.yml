@@ -12,7 +12,7 @@ $:
             username: ${GIT_USERNAME}
             password: ${GIT_ACCESS_TOKEN}
 
-  # 自定义 NPC「tdesign-flutter-npm」事件流水线
+  # 自定义 NPC「tdesign-flutter-npc」事件流水线
   # 参考文档：https://docs.cnb.cool/zh/build/npc.md
   issue.comment@npc:
     - docker:
