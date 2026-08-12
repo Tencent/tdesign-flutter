@@ -29,7 +29,7 @@ $:
 
     - name: build apk (flutter latest)
       docker:
-        image: ghcr.io/gmeligio/flutter-android:3.38.10
+        image: ghcr.io/gmeligio/flutter-android:3.44.9
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
@@ -56,7 +56,7 @@ $:
 
     - name: build web (flutter latest)
       docker:
-        image: ghcr.io/gmeligio/flutter-web:3.38.10
+        image: ghcr.io/gmeligio/flutter-web:3.44.9
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
