@@ -40,11 +40,10 @@ $:
         - name: flutter build apk
           script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
-    # 构建 Web，使用 gmeligio/flutter-web 镜像（Docker Hub）
-    # 说明：gmeligio/flutter-web 仅发布 3.44.x 及以上版本（无 3.32.0 / 3.38.10 标签），故统一使用当前稳定版 3.44.9
-    - name: build web (flutter 3.44.9)
+    # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
+    - name: build web (flutter 3.32.0)
       docker:
-        image: gmeligio/flutter-web:3.44.9
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
