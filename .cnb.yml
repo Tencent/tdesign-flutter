@@ -19,26 +19,38 @@ $:
         image: gmeligio/flutter-android:3.32.0
       stages:
         - name: install component dependencies
-          script: cd tdesign-component && flutter pub get
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component && flutter pub get
 
         - name: install example dependencies
-          script: cd tdesign-component/example && flutter pub get
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter pub get
 
         - name: flutter build apk
-          script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
     - name: build apk (flutter latest)
       docker:
         image: gmeligio/flutter-android:3.44.9
       stages:
         - name: install component dependencies
-          script: cd tdesign-component && flutter pub get
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component && flutter pub get
 
         - name: install example dependencies
-          script: cd tdesign-component/example && flutter pub get
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter pub get
 
         - name: flutter build apk
-          script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
     # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
     - name: build web (flutter 3.32.0)
@@ -46,13 +58,19 @@ $:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
       stages:
         - name: install component dependencies
-          script: cd tdesign-component && flutter pub get
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component && flutter pub get
 
         - name: install example dependencies
-          script: cd tdesign-component/example && flutter pub get
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter pub get
 
         - name: flutter build web
-          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+          script: |
+            git config --global --add safe.directory /home/flutter/sdks/flutter
+            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
 
   vscode:
     - docker:
