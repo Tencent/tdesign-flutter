@@ -40,10 +40,10 @@ $:
         - name: flutter build apk
           script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
-    # 构建 Web，使用 ghcr.io/gmeligio/flutter-web 镜像
+    # 构建 Web，使用 ghcr.io/gmeligio/flutter-android 镜像（flutter-web 无 3.32.0 镜像，flutter-android 可构建 web）
     - name: build web (flutter 3.32.0)
       docker:
-        image: ghcr.io/gmeligio/flutter-web:3.32.0
+        image: ghcr.io/gmeligio/flutter-android:3.32.0
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
