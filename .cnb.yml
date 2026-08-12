@@ -40,7 +40,7 @@ $:
             cd tdesign-component/example
 
             # 1) Gradle 发行版走腾讯云镜像加速下载
-            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle/distributions#' \
+            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
               android/gradle/wrapper/gradle-wrapper.properties
 
             # 2) 依赖仓库走腾讯云镜像（Gradle init script）
@@ -82,7 +82,7 @@ $:
             cd tdesign-component/example
 
             # 1) Gradle 发行版走腾讯云镜像加速下载
-            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle/distributions#' \
+            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
               android/gradle/wrapper/gradle-wrapper.properties
 
             # 2) 依赖仓库走腾讯云镜像（Gradle init script）
