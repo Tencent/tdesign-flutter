@@ -35,7 +35,7 @@ $:
         - name: flutter build apk
           script: |
             git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release --verbose
 
     - name: build apk (flutter latest)
       docker:
@@ -58,7 +58,7 @@ $:
         - name: flutter build apk
           script: |
             git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release --verbose
 
     # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
     - name: build web (flutter 3.32.0)
@@ -82,7 +82,7 @@ $:
         - name: flutter build web
           script: |
             git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --verbose
 
     # 构建 Web（flutter latest），使用 gmeligio/flutter-web 镜像
     - name: build web (flutter latest)
@@ -106,7 +106,7 @@ $:
         - name: flutter build web
           script: |
             git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --verbose
 
   vscode:
     - docker:
