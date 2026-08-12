@@ -13,10 +13,10 @@ $:
             password: ${GIT_ACCESS_TOKEN}
 
   pull_request:
-    # 构建 APK，使用 ghcr.io/gmeligio/flutter-android 镜像
+    # 构建 APK，使用 gmeligio/flutter-android 镜像（Docker Hub）
     - name: build apk (flutter 3.32.0)
       docker:
-        image: ghcr.io/gmeligio/flutter-android:3.32.0
+        image: gmeligio/flutter-android:3.32.0
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
@@ -29,7 +29,7 @@ $:
 
     - name: build apk (flutter latest)
       docker:
-        image: ghcr.io/gmeligio/flutter-android:3.44.9
+        image: gmeligio/flutter-android:3.44.9
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
@@ -40,23 +40,11 @@ $:
         - name: flutter build apk
           script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
-    # 构建 Web，使用 ghcr.io/gmeligio/flutter-android 镜像（flutter-web 无 3.32.0 镜像，flutter-android 可构建 web）
-    - name: build web (flutter 3.32.0)
+    # 构建 Web，使用 gmeligio/flutter-web 镜像（Docker Hub）
+    # 说明：gmeligio/flutter-web 仅发布 3.44.x 及以上版本（无 3.32.0 / 3.38.10 标签），故统一使用当前稳定版 3.44.9
+    - name: build web (flutter 3.44.9)
       docker:
-        image: ghcr.io/gmeligio/flutter-android:3.32.0
-      stages:
-        - name: install component dependencies
-          script: cd tdesign-component && flutter pub get
-
-        - name: install example dependencies
-          script: cd tdesign-component/example && flutter pub get
-
-        - name: flutter build web
-          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
-
-    - name: build web (flutter latest)
-      docker:
-        image: ghcr.io/gmeligio/flutter-web:3.44.9
+        image: gmeligio/flutter-web:3.44.9
       stages:
         - name: install component dependencies
           script: cd tdesign-component && flutter pub get
