@@ -1,3 +1,50 @@
+# ===== 公共可复用片段（以 . 开头，不会被识别为分支名）=====
+
+# git safe.directory 全局配置（env 方式，覆盖所有目录）
+.git-safe-env: &git-safe-env
+  env:
+    GIT_CONFIG_COUNT: "1"
+    GIT_CONFIG_KEY_0: safe.directory
+    GIT_CONFIG_VALUE_0: "*"
+
+# 安装组件依赖
+.install-component: &install-component
+  name: install component dependencies
+  script: cd tdesign-component && flutter pub get
+
+# 安装示例依赖
+.install-example: &install-example
+  name: install example dependencies
+  script: cd tdesign-component/example && flutter pub get
+
+# APK 构建（含腾讯云 Gradle/Maven 镜像加速）
+.build-apk: &build-apk
+  name: flutter build apk
+  script: |
+    cd tdesign-component/example
+
+    # 1) Gradle 发行版走腾讯云镜像加速下载
+    sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
+      android/gradle/wrapper/gradle-wrapper.properties
+
+    # 2) 依赖仓库走腾讯云镜像（Gradle init script）
+    mkdir -p ~/.gradle
+    cat > ~/.gradle/init.gradle <<'EOF'
+    allprojects {
+        repositories {
+            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+            maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
+        }
+    }
+    EOF
+
+    flutter build apk -t ./lib/main.dart --release --verbose
+
+# Web 构建
+.build-web: &build-web
+  name: flutter build web
+  script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --verbose
+
 $:
   push:
     # 导入密钥仓库文件为环境变量
@@ -22,42 +69,11 @@ $:
         volumes:
           - /root/.gradle:cow
           - /root/.pub-cache:cow
-      env:
-        GIT_CONFIG_COUNT: "1"
-        GIT_CONFIG_KEY_0: safe.directory
-        GIT_CONFIG_VALUE_0: "*"
+      <<: *git-safe-env
       stages:
-        - name: install component dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component && flutter pub get
-
-        - name: install example dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter pub get
-
-        - name: flutter build apk
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example
-
-            # 1) Gradle 发行版走腾讯云镜像加速下载
-            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
-              android/gradle/wrapper/gradle-wrapper.properties
-
-            # 2) 依赖仓库走腾讯云镜像（Gradle init script）
-            mkdir -p ~/.gradle
-            cat > ~/.gradle/init.gradle <<'EOF'
-            allprojects {
-                repositories {
-                    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
-                    maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
-                }
-            }
-            EOF
-
-            flutter build apk -t ./lib/main.dart --release --verbose
+        - *install-component
+        - *install-example
+        - *build-apk
 
     - name: build apk (flutter latest)
       runner:
@@ -67,90 +83,31 @@ $:
         volumes:
           - /root/.gradle:cow
           - /root/.pub-cache:cow
-      env:
-        GIT_CONFIG_COUNT: "1"
-        GIT_CONFIG_KEY_0: safe.directory
-        GIT_CONFIG_VALUE_0: "*"
+      <<: *git-safe-env
       stages:
-        - name: install component dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component && flutter pub get
-
-        - name: install example dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter pub get
-
-        - name: flutter build apk
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example
-
-            # 1) Gradle 发行版走腾讯云镜像加速下载
-            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
-              android/gradle/wrapper/gradle-wrapper.properties
-
-            # 2) 依赖仓库走腾讯云镜像（Gradle init script）
-            mkdir -p ~/.gradle
-            cat > ~/.gradle/init.gradle <<'EOF'
-            allprojects {
-                repositories {
-                    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
-                    maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
-                }
-            }
-            EOF
-
-            flutter build apk -t ./lib/main.dart --release --verbose
+        - *install-component
+        - *install-example
+        - *build-apk
 
     # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
     - name: build web (flutter 3.32.0)
       docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
-      env:
-        GIT_CONFIG_COUNT: "1"
-        GIT_CONFIG_KEY_0: safe.directory
-        GIT_CONFIG_VALUE_0: "*"
+      <<: *git-safe-env
       stages:
-        - name: install component dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component && flutter pub get
-
-        - name: install example dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter pub get
-
-        - name: flutter build web
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --verbose
+        - *install-component
+        - *install-example
+        - *build-web
 
     # 构建 Web（flutter latest），使用 gmeligio/flutter-web 镜像
     - name: build web (flutter latest)
       docker:
         image: gmeligio/flutter-web:3.44.9
-      env:
-        GIT_CONFIG_COUNT: "1"
-        GIT_CONFIG_KEY_0: safe.directory
-        GIT_CONFIG_VALUE_0: "*"
+      <<: *git-safe-env
       stages:
-        - name: install component dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component && flutter pub get
-
-        - name: install example dependencies
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter pub get
-
-        - name: flutter build web
-          script: |
-            git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --verbose
+        - *install-component
+        - *install-example
+        - *build-web
 
   vscode:
     - docker:
