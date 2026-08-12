@@ -15,6 +15,8 @@ $:
   pull_request:
     # 构建 APK，使用 gmeligio/flutter-android 镜像（Docker Hub）
     - name: build apk (flutter 3.32.0)
+      runner:
+        cpus: 16
       docker:
         image: gmeligio/flutter-android:3.32.0
       env:
@@ -38,6 +40,8 @@ $:
             cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release --verbose
 
     - name: build apk (flutter latest)
+      runner:
+        cpus: 16
       docker:
         image: gmeligio/flutter-android:3.44.9
       env:
