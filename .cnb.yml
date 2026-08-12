@@ -13,8 +13,8 @@ $:
             password: ${GIT_ACCESS_TOKEN}
 
   pull_request:
-    # 构建 APK 与 Web 集成 CI，使用 ghcr.io/gmeligio/flutter-android 镜像
-    - name: build apk & web (flutter 3.32.0)
+    # 构建 APK，使用 ghcr.io/gmeligio/flutter-android 镜像
+    - name: build apk (flutter 3.32.0)
       docker:
         image: ghcr.io/gmeligio/flutter-android:3.32.0
       stages:
@@ -27,10 +27,7 @@ $:
         - name: flutter build apk
           script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
-        - name: flutter build web
-          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
-
-    - name: build apk & web (flutter latest)
+    - name: build apk (flutter latest)
       docker:
         image: ghcr.io/gmeligio/flutter-android:3.38.10
       stages:
@@ -42,6 +39,30 @@ $:
 
         - name: flutter build apk
           script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+
+    # 构建 Web，使用 ghcr.io/gmeligio/flutter-web 镜像
+    - name: build web (flutter 3.32.0)
+      docker:
+        image: ghcr.io/gmeligio/flutter-web:3.32.0
+      stages:
+        - name: install component dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
+
+        - name: flutter build web
+          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+
+    - name: build web (flutter latest)
+      docker:
+        image: ghcr.io/gmeligio/flutter-web:3.38.10
+      stages:
+        - name: install component dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
 
         - name: flutter build web
           script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
