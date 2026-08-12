@@ -37,7 +37,24 @@ $:
         - name: flutter build apk
           script: |
             git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release --verbose
+            cd tdesign-component/example
+
+            # 1) Gradle 发行版走腾讯云镜像加速下载
+            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle/distributions#' \
+              android/gradle/wrapper/gradle-wrapper.properties
+
+            # 2) 依赖仓库走腾讯云镜像（Gradle init script）
+            mkdir -p ~/.gradle
+            cat > ~/.gradle/init.gradle <<'EOF'
+            allprojects {
+                repositories {
+                    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+                    maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
+                }
+            }
+            EOF
+
+            flutter build apk -t ./lib/main.dart --release --verbose
 
     - name: build apk (flutter latest)
       runner:
@@ -62,7 +79,24 @@ $:
         - name: flutter build apk
           script: |
             git config --global --add safe.directory /home/flutter/sdks/flutter
-            cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release --verbose
+            cd tdesign-component/example
+
+            # 1) Gradle 发行版走腾讯云镜像加速下载
+            sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle/distributions#' \
+              android/gradle/wrapper/gradle-wrapper.properties
+
+            # 2) 依赖仓库走腾讯云镜像（Gradle init script）
+            mkdir -p ~/.gradle
+            cat > ~/.gradle/init.gradle <<'EOF'
+            allprojects {
+                repositories {
+                    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+                    maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
+                }
+            }
+            EOF
+
+            flutter build apk -t ./lib/main.dart --release --verbose
 
     # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
     - name: build web (flutter 3.32.0)
