@@ -74,11 +74,10 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
         ),
       )),
       // 下拉刷新回调
-      onRefresh: () {
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            count++;
-          });
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 2));
+        setState(() {
+          count++;
         });
       },
     );

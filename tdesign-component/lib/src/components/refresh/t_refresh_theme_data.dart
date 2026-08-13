@@ -9,11 +9,19 @@ class TRefreshThemeData extends ThemeExtension<TRefreshThemeData> {
   /// loading 样式
   final TLoadingIcon? loadingIcon;
 
+  /// loading 图标颜色
+  final Color? loadingIconColor;
+
+  /// loading 文案颜色
+  final Color? loadingTextColor;
+
   /// 背景颜色
   final Color? backgroundColor;
 
   const TRefreshThemeData({
     this.loadingIcon,
+    this.loadingIconColor,
+    this.loadingTextColor,
     this.backgroundColor,
   });
 
@@ -24,6 +32,8 @@ class TRefreshThemeData extends ThemeExtension<TRefreshThemeData> {
     }
     return TRefreshThemeData(
       loadingIcon: other.loadingIcon ?? loadingIcon,
+      loadingIconColor: other.loadingIconColor ?? loadingIconColor,
+      loadingTextColor: other.loadingTextColor ?? loadingTextColor,
       backgroundColor: other.backgroundColor ?? backgroundColor,
     );
   }
@@ -31,10 +41,14 @@ class TRefreshThemeData extends ThemeExtension<TRefreshThemeData> {
   @override
   TRefreshThemeData copyWith({
     TLoadingIcon? loadingIcon,
+    Color? loadingIconColor,
+    Color? loadingTextColor,
     Color? backgroundColor,
   }) {
     return TRefreshThemeData(
       loadingIcon: loadingIcon ?? this.loadingIcon,
+      loadingIconColor: loadingIconColor ?? this.loadingIconColor,
+      loadingTextColor: loadingTextColor ?? this.loadingTextColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
     );
   }
@@ -46,14 +60,9 @@ class TRefreshThemeData extends ThemeExtension<TRefreshThemeData> {
     }
     return TRefreshThemeData(
       loadingIcon: t < 0.5 ? loadingIcon : other.loadingIcon,
+      loadingIconColor: Color.lerp(loadingIconColor, other.loadingIconColor, t),
+      loadingTextColor: Color.lerp(loadingTextColor, other.loadingTextColor, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
     );
-  }
-
-  static double? lerpDouble(double? a, double? b, double t) {
-    if (a == null && b == null) {
-      return null;
-    }
-    return (a ?? 0.0) * (1.0 - t) + (b ?? 0.0) * t;
   }
 }

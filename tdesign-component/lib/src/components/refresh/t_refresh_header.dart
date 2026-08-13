@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart' as physics;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -16,6 +13,11 @@ import 't_refresh_theme_data.dart';
 /// TDesign刷新头部
 /// 结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
 class TRefreshHeader extends Header {
+  /// 刷新头部构造器。
+  ///
+  /// TDesign 层只暴露视觉参数与最常用的行为参数；高级能力
+  /// （弹簧配置、二楼、无限刷新、triggerWhen* 等）请直接使用
+  /// `easy_refresh` 原生 [Header]。
   TRefreshHeader({
     this.key,
 
@@ -24,9 +26,6 @@ class TRefreshHeader extends Header {
 
     /// 触发刷新任务的偏移量。
     double? triggerDistance,
-
-    /// 是否启用越界钳制。
-    bool? clamping,
 
     /// 是否悬浮展示刷新头。
     bool? float,
@@ -41,13 +40,6 @@ class TRefreshHeader extends Header {
     bool? hapticFeedback,
     this.enableHapticFeedback = true,
 
-    /// 无限刷新触发偏移量。
-    double? infiniteOffset,
-    this.enableInfiniteRefresh = false,
-
-    /// 无限刷新是否允许越界命中。
-    bool? infiniteHitOver,
-
     /// 是否允许越界滚动。
     bool? overScroll,
 
@@ -57,65 +49,8 @@ class TRefreshHeader extends Header {
     /// Header 背景颜色。
     Color? backgroundColor,
 
-    /// 回弹弹簧配置。
-    physics.SpringDescription? spring,
-
-    /// 横向回弹弹簧配置。
-    physics.SpringDescription? horizontalSpring,
-
-    /// ready 状态的弹簧构建器。
-    SpringBuilder? readySpringBuilder,
-
-    /// 横向 ready 状态的弹簧构建器。
-    SpringBuilder? horizontalReadySpringBuilder,
-
-    /// 弹簧是否允许回弹。
-    bool springRebound = true,
-
-    /// 越界滚动摩擦系数。
-    FrictionFactor? frictionFactor,
-
-    /// 横向越界滚动摩擦系数。
-    FrictionFactor? horizontalFrictionFactor,
-
-    /// 是否计算安全区。
-    bool safeArea = false,
-
-    /// 滚动自身到达边界时是否判定越界。
-    bool? hitOver,
-
     /// 刷新头位置。
     IndicatorPosition position = IndicatorPosition.above,
-
-    /// 二楼触发偏移量。
-    double? secondaryTriggerOffset,
-
-    /// 二楼打开速度。
-    double secondaryVelocity = kDefaultSecondaryVelocity,
-
-    /// 二楼尺寸。
-    double? secondaryDimension,
-
-    /// 二楼关闭触发偏移量。
-    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
-
-    /// 不可见时是否仍发送通知。
-    bool notifyWhenInvisible = false,
-
-    /// 指示器状态监听器。
-    IndicatorStateListenable? listenable,
-
-    /// 到达触发距离时是否立即触发。
-    bool triggerWhenReach = false,
-
-    /// 释放时是否立即触发。
-    bool triggerWhenRelease = false,
-
-    /// 释放时是否立即触发且不等待任务完成。
-    bool triggerWhenReleaseNoWait = false,
-
-    /// 最大越界滚动距离。
-    double maxOverOffset = double.infinity,
   })  : finalExtent = extent ?? 48.0,
         finalTriggerDistance = triggerDistance ?? 48.0,
         finalFloat = float ?? false,
@@ -126,39 +61,19 @@ class TRefreshHeader extends Header {
         assert((triggerDistance ?? 48.0) > 0.0),
         assert((extent ?? 48.0) >= 0.0, 'extent must be non-negative'),
         assert(
-            (clamping ?? float ?? false) ||
+            (float ?? false) ||
                 (triggerDistance ?? 48.0) >= (extent ?? 48.0),
             'The refresh indicator cannot take more space in its final state '
             'than the amount initially created by overscrolling.'),
         super(
           triggerOffset: triggerDistance ?? 48.0,
-          clamping: clamping ?? float ?? false,
+          clamping: float ?? false,
           processedDuration: processedDuration ??
               completeDuration ??
               const Duration(seconds: 1),
           hapticFeedback: hapticFeedback ?? enableHapticFeedback,
-          infiniteOffset: enableInfiniteRefresh ? infiniteOffset : null,
-          infiniteHitOver: infiniteHitOver ?? overScroll ?? true,
-          spring: spring,
-          horizontalSpring: horizontalSpring,
-          readySpringBuilder: readySpringBuilder,
-          horizontalReadySpringBuilder: horizontalReadySpringBuilder,
-          springRebound: springRebound,
-          frictionFactor: frictionFactor,
-          horizontalFrictionFactor: horizontalFrictionFactor,
-          safeArea: safeArea,
-          hitOver: hitOver,
+          overScroll: overScroll ?? true,
           position: position,
-          secondaryTriggerOffset: secondaryTriggerOffset,
-          secondaryVelocity: secondaryVelocity,
-          secondaryDimension: secondaryDimension,
-          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
-          notifyWhenInvisible: notifyWhenInvisible,
-          listenable: listenable,
-          triggerWhenReach: triggerWhenReach,
-          triggerWhenRelease: triggerWhenRelease,
-          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
-          maxOverOffset: maxOverOffset,
         );
 
   /// Key
@@ -187,9 +102,6 @@ class TRefreshHeader extends Header {
 
   /// 是否启用震动反馈。
   final bool enableHapticFeedback;
-
-  /// 是否启用无限刷新。
-  final bool enableInfiniteRefresh;
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -252,20 +164,25 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
 
   double get _safeOffset => widget.state.safeOffset;
 
-  Widget _buildLoading() => Theme(
-        data: Theme.of(context).mergeExtension(
-          TLoadingThemeData(
-            iconColor: context.tTheme.brandNormalColor,
-            axis: Axis.horizontal,
-            textColor: context.tTheme.textColorPlaceholder,
-          ),
+  Widget _buildLoading() {
+    final theme = Theme.of(context).extension<TRefreshThemeData>();
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        TLoadingThemeData(
+          iconColor:
+              theme?.loadingIconColor ?? context.tTheme.brandNormalColor,
+          axis: Axis.horizontal,
+          textColor:
+              theme?.loadingTextColor ?? context.tTheme.textColorPlaceholder,
         ),
-        child: TLoading(
-          size: TLoadingSize.medium,
-          icon: widget.loadingIcon,
-          text: context.resource.refreshing,
-        ),
-      );
+      ),
+      child: TLoading(
+        size: TLoadingSize.medium,
+        icon: widget.loadingIcon,
+        text: context.resource.refreshing,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

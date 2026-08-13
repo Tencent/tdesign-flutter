@@ -66,11 +66,10 @@ import 'package:easy_refresh/easy_refresh.dart';
         ),
       )),
       // 下拉刷新回调
-      onRefresh: () {
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            count++;
-          });
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 2));
+        setState(() {
+          count++;
         });
       },
     );
@@ -89,42 +88,20 @@ TDesign刷新头部
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| clamping | bool? | - | - |
-| completeDuration | Duration? | - | 完成延时 |
-| enableHapticFeedback | bool | true | 开启震动反馈 |
-| enableInfiniteRefresh | bool | false | 是否开启无限刷新 |
-| extent | double? | 48.0 | Header容器高度 |
-| float | bool | false | 是否悬浮 |
-| frictionFactor | - | - | - |
-| hapticFeedback | bool? | - | - |
-| hitOver | - | - | - |
-| horizontalFrictionFactor | - | - | - |
-| horizontalReadySpringBuilder | - | - | - |
-| horizontalSpring | - | - | - |
-| infiniteHitOver | bool? | - | - |
-| infiniteOffset | double? | - | 无限刷新偏移量 |
+| backgroundColor | Color? | - | Header 背景颜色。 |
+| completeDuration | Duration? | - | 完成状态停留时长。 |
+| enableHapticFeedback | bool | true | 是否启用震动反馈。 |
+| extent | double? | 48.0 | Header 容器高度。 |
+| float | bool? | false | 是否悬浮展示刷新头。 |
+| hapticFeedback | bool? | - | 是否启用震动反馈；为空时使用 `enableHapticFeedback`。 |
 | key | Key? | - | Key |
-| listenable | - | - | - |
-| loadingIcon | TLoadingIcon | TLoadingIcon.circle | loading样式 |
-| maxOverOffset | - | - | - |
-| notifyWhenInvisible | - | - | - |
-| overScroll | bool | true | 越界滚动(`enableInfiniteRefresh`为true或`infiniteOffset`有值时生效) |
-| position | - | - | - |
-| processedDuration | Duration? | - | - |
-| readySpringBuilder | - | - | - |
-| safeArea | - | false | - |
-| secondaryCloseTriggerOffset | - | - | - |
-| secondaryDimension | - | - | - |
-| secondaryTriggerOffset | - | - | - |
-| secondaryVelocity | - | - | - |
-| spring | - | - | - |
-| springRebound | - | - | - |
-| triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同`triggerOffset` |
-| triggerOffset | double? | - | - |
-| triggerWhenReach | - | - | - |
-| triggerWhenRelease | - | - | - |
-| triggerWhenReleaseNoWait | - | - | - |
+| loadingIcon | TLoadingIcon? | TLoadingIcon.circle | loading 样式。 |
+| overScroll | bool? | true | 是否允许越界滚动。 |
+| position | IndicatorPosition | IndicatorPosition.above | 刷新头位置。 |
+| processedDuration | Duration? | - | 刷新完成后的处理动画时长。 |
+| triggerDistance | double? | 48.0 | 触发刷新任务的偏移量。 |
+
+> 说明：TDesign 层仅暴露视觉参数与最常用行为参数；高级能力（弹簧配置、二楼、无限刷新、triggerWhen* 等）请直接使用 `easy_refresh` 原生 `Header`。
 
 
   

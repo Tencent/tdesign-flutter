@@ -37,27 +37,38 @@ void main() {
     test('仅保存视觉字段', () {
       const base = TRefreshThemeData(
         loadingIcon: TLoadingIcon.circle,
+        loadingIconColor: Colors.blue,
+        loadingTextColor: Colors.black,
         backgroundColor: Colors.white,
       );
       const override = TRefreshThemeData(
         loadingIcon: TLoadingIcon.point,
+        loadingIconColor: Colors.red,
+        loadingTextColor: Colors.grey,
         backgroundColor: Colors.red,
       );
 
       final merged = base.merge(override);
       expect(merged.loadingIcon, TLoadingIcon.point);
+      expect(merged.loadingIconColor, Colors.red);
+      expect(merged.loadingTextColor, Colors.grey);
       expect(merged.backgroundColor, Colors.red);
       expect(base.merge(null), same(base));
 
       final copied = base.copyWith(backgroundColor: Colors.blue);
       expect(copied.loadingIcon, TLoadingIcon.circle);
+      expect(copied.loadingIconColor, Colors.blue);
+      expect(copied.loadingTextColor, Colors.black);
       expect(copied.backgroundColor, Colors.blue);
 
       final lerped = base.lerp(override, 0.75);
       expect(lerped.loadingIcon, TLoadingIcon.point);
+      expect(lerped.loadingIconColor,
+          Color.lerp(Colors.blue, Colors.red, 0.75));
+      expect(lerped.loadingTextColor,
+          Color.lerp(Colors.black, Colors.grey, 0.75));
       expect(lerped.backgroundColor, Color.lerp(Colors.white, Colors.red, 0.75));
       expect(base.lerp(null, 0.5), same(base));
-      expect(TRefreshThemeData.lerpDouble(null, null, 0.5), isNull);
     });
   });
 
@@ -72,20 +83,16 @@ void main() {
       expect(header.finalLoadingIcon, isNull);
       expect(header.finalBackgroundColor, isNull);
       expect(header.enableHapticFeedback, isTrue);
-      expect(header.enableInfiniteRefresh, isFalse);
     });
 
     test('行为参数由实例直接控制', () {
       final header = TRefreshHeader(
         extent: 60,
         triggerDistance: 80,
-        clamping: false,
         float: true,
         overScroll: false,
         completeDuration: const Duration(seconds: 2),
         enableHapticFeedback: false,
-        enableInfiniteRefresh: true,
-        infiniteOffset: 120,
         loadingIcon: TLoadingIcon.activity,
         backgroundColor: Colors.blue,
       );
@@ -97,7 +104,6 @@ void main() {
       expect(header.finalLoadingIcon, TLoadingIcon.activity);
       expect(header.finalBackgroundColor, Colors.blue);
       expect(header.enableHapticFeedback, isFalse);
-      expect(header.enableInfiniteRefresh, isTrue);
     });
 
     test('非法尺寸触发断言', () {
@@ -145,6 +151,8 @@ void main() {
           refreshTheme: const TRefreshThemeData(
             loadingIcon: TLoadingIcon.point,
             backgroundColor: Colors.yellow,
+            loadingIconColor: Colors.purple,
+            loadingTextColor: Colors.teal,
           ),
         ),
       );
@@ -152,6 +160,23 @@ void main() {
       await gesture.moveBy(const Offset(0, 120));
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byType(TGIconHeaderWidget), findsWidgets);
+      await gesture.up();
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('Theme loading 颜色可覆盖 loading 取色', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          refreshView(onRefresh: () async {}),
+          refreshTheme: const TRefreshThemeData(
+            loadingIconColor: Colors.purple,
+            loadingTextColor: Colors.teal,
+          ),
+        ),
+      );
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 120));
+      await tester.pump(const Duration(milliseconds: 300));
       await gesture.up();
       await tester.pump(const Duration(seconds: 2));
     });
