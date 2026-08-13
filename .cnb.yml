@@ -30,6 +30,10 @@
     sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
       android/gradle/wrapper/gradle-wrapper.properties
 
+    # 1.5) 增大 Gradle JVM 堆内存，避免 JetifyTransform 处理引擎 jar 时 Java heap space
+    sed -i 's/org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx4096M -XX:MaxMetaspaceSize=1024m/' \
+      android/gradle.properties
+
     # 2) Gradle init script 全量镜像（含 pluginManagement）
     mkdir -p ~/.gradle
     cat > ~/.gradle/init.gradle <<'EOF'
