@@ -33,7 +33,7 @@ dependencies:
   web: 1.1.1
 
   #轮播图组件
-  intl: ^0.20.3
+  intl: 0.20.2
   
   # 农历支持
   lunar: ^1.7.8
