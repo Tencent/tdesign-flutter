@@ -2,9 +2,8 @@
 
 ## TODO
 
-- [ ] 在 CI 上运行 `flutter analyze` 确认无告警
-- [ ] 在 CI 上运行 `flutter test test/components/swipe_cell/` 与 `test/acceptance/theme_acceptance_test.dart`
-- [ ] 确认 `flutter@3.32.0` 与 `flutter@latest` 双版本构建通过
+- [ ] 确认 `flutter analyze` 无告警（本地无环境，依赖后续人工/CI 确认）
+- [ ] 确认新增单元测试与主题验收测试通过（本地无环境，依赖后续验证）
 
 ## DOING
 
@@ -14,7 +13,8 @@
 - [x] 补充 `groupTag` / `closeOnScroll` / `confirms` 文档
 - [x] 补充单元测试与主题验收测试
 - [x] 创建 Spec `004-swipe-cell-theme-review-fixes`
+- [x] 创建 PR #38，CI（flutter 3.32.0 / latest 的 apk + web 构建）通过
 
 ## DONE
 
-- （提交 PR 后更新）
+- （待人工验证测试后更新）
