@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
@@ -161,7 +163,55 @@ class TGIconHeaderWidget extends StatefulWidget {
 /// [TGIconHeaderWidget] 的状态实现。
 class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
     with TickerProviderStateMixin {
+  /// 刷新完成后的复位兜底定时器。
+  ///
+  /// 当内容过短或滚动未真正复位时，`easy_refresh` 可能停留在 [IndicatorMode.done]
+  /// 且 offset 未归零，导致后续无法再次触发下拉刷新。此时主动驱动一次复位。
+  Timer? _resetFallbackTimer;
+
   IndicatorMode get _refreshState => widget.state.mode;
+
+  @override
+  void didUpdateWidget(TGIconHeaderWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final mode = widget.state.mode;
+    final oldMode = oldWidget.state.mode;
+    // 刷新任务完成进入 done 时，安排一次复位兜底检查。
+    if (mode == IndicatorMode.done && mode != oldMode) {
+      _scheduleResetFallback();
+    }
+  }
+
+  /// 在进入 [IndicatorMode.done] 后稍等一拍（给 easy_refresh 自身的回弹复位留足时间），
+  /// 若指示器仍卡在完成态且 offset 未归零，主动驱动滚动复位，保证后续可再次下拉刷新。
+  void _scheduleResetFallback() {
+    _resetFallbackTimer?.cancel();
+    _resetFallbackTimer =
+        Timer(const Duration(milliseconds: 400), _resetIfStuck);
+  }
+
+  void _resetIfStuck() {
+    if (!mounted) {
+      return;
+    }
+    final state = widget.state;
+    // 仅在用户已松手、指示器卡在 done 且 offset 未归零时兜底复位，
+    // 避免与 easy_refresh 自身的回弹复位冲突。
+    if (state.mode == IndicatorMode.done &&
+        state.offset > 0 &&
+        !state.userOffsetNotifier.value) {
+      unawaited(state.notifier.animateToOffset(
+        offset: 0,
+        mode: IndicatorMode.inactive,
+      ));
+    }
+  }
+
+  @override
+  void dispose() {
+    _resetFallbackTimer?.cancel();
+    super.dispose();
+  }
 
   double get _offset => widget.state.offset;
 
@@ -229,8 +279,11 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
                         ? context.resource.pullToRefresh // coverage:ignore-line
                         : _refreshState == IndicatorMode.processed ||
                                 _refreshState == IndicatorMode.done
-                            ? context.resource
-                                .completeRefresh // coverage:ignore-line
+                            // 若卡在完成态但用户已重新下拉，避免残留「刷新完成」文案。
+                            ? (widget.state.userOffsetNotifier.value
+                                ? context.resource.pullToRefresh // coverage:ignore-line
+                                : context.resource
+                                    .completeRefresh) // coverage:ignore-line
                             : context.resource.releaseRefresh,
                     font: context.tTheme.fontBodyMedium,
                     textColor: context.tTheme.textColorPlaceholder,

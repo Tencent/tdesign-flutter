@@ -75,11 +75,21 @@
 - `onRefresh` 改为 `Future<void> Function()` 写法，返回 `Future` 并在异步完成后 `setState`，
   保证刷新状态与计数更新同步。
 
+### 刷新完成复位兜底与文案收紧（组件错误修复）
+
+- **复位兜底**：刷新任务完成后，`easy_refresh` 可能因内容过短 / 滚动未真正复位而停留在
+  `processed/done` 且 offset 未归零，导致后续无法再次下拉刷新。`TGIconHeaderWidgetState` 在
+  进入 `done` 后稍等一拍，若用户已松手、状态仍卡在 `done` 且 offset 未归零，主动驱动滚动
+  复位到 `inactive`，保证可再次触发刷新。
+- **文案收紧**：若卡在完成态但用户已重新下拉（`userOffsetNotifier` 为 true），文案显示「下拉刷新」
+  而非残留的「刷新完成」，避免拖拽过程中出现误导文案。
+
 ## 验收标准
 
 - [x] `TRefreshHeader` 构造参数从 30+ 收敛到 12 个，保留参数默认值与行为与收敛前一致。
 - [x] 移除的高级参数不再出现在 `TRefreshHeader` 构造器与 API 文档中。
 - [x] `TRefreshThemeData` 支持 `loadingIconColor` / `loadingTextColor` 主题覆盖，且实例 / 全局回退链路正确。
 - [x] 示例 `onRefresh` 返回 `Future`，刷新完成动画与计数更新同步。
+- [x] 刷新完成后可再次下拉刷新（复位兜底），拖拽中不残留「刷新完成」文案。
 - [ ] 单元与 Widget 测试全部通过（CI 双版本构建已通过；组件单测建议本地 `flutter test` 闭环确认）。
 - [x] 明确标注该改动为 breaking change 并在 PR 更新日志中说明迁移方式。

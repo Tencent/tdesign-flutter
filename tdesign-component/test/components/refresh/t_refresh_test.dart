@@ -219,6 +219,37 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
     });
 
+    testWidgets('刷新完成后可再次下拉刷新（连续多次）', (tester) async {
+      var refreshCount = 0;
+      await tester.pumpWidget(
+        wrap(
+          refreshView(onRefresh: () async {
+            refreshCount++;
+          }),
+        ),
+      );
+
+      // 第一次下拉刷新。
+      var gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 160));
+      await tester.pump(const Duration(milliseconds: 300));
+      await gesture.up();
+      // 等待 processing 完成 + 复位回弹。
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
+      expect(refreshCount, 1);
+      expect(find.byType(TLoading), findsNothing);
+
+      // 第二次下拉刷新：若复位兜底失效，将无法再次进入 processing。
+      gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 160));
+      await tester.pump(const Duration(milliseconds: 300));
+      await gesture.up();
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
+      expect(refreshCount, 2);
+    });
+
     testWidgets('实例视觉参数优先于 Theme Extension', (tester) async {
       await tester.pumpWidget(
         wrap(
