@@ -18,7 +18,11 @@ class ExampleCodeGenerator {
   final Directory outputDirectory;
 
   /// Synchronizes generated snippets, or reports drift when [check] is true.
-  GenerationResult run({bool check = false}) {
+  ///
+  /// When [verbose] is true, prints detailed progress information to stdout,
+  /// including the scanned source files, collected snippets, and per-file
+  /// write/check results.
+  GenerationResult run({bool check = false, bool verbose = false}) {
     final collector = _ExampleCodeCollector();
     final sourceFiles = sourceDirectory
         .listSync(recursive: true)
@@ -27,10 +31,23 @@ class ExampleCodeGenerator {
         .toList()
       ..sort((a, b) => a.path.compareTo(b.path));
 
+    if (verbose) {
+      stdout.writeln('Scanning source directory: ${sourceDirectory.path}');
+      stdout.writeln('Found ${sourceFiles.length} Dart file(s):');
+      for (final file in sourceFiles) {
+        stdout.writeln('  - ${file.path}');
+      }
+    }
+
     for (final file in sourceFiles) {
       collector.collect(file);
     }
     collector.throwIfInvalid();
+
+    if (verbose) {
+      stdout.writeln(
+          'Collected ${collector.outputs.length} example code snippet(s).');
+    }
 
     final expected = collector.outputs;
     final existing = <String, File>{
@@ -43,25 +60,51 @@ class ExampleCodeGenerator {
 
     for (final entry in expected.entries) {
       final file = existing.remove(entry.key);
-      if (file == null || file.readAsStringSync() != entry.value) {
+      final isNew = file == null;
+      final isChanged =
+          file != null && file.readAsStringSync() != entry.value;
+      if (isNew || isChanged) {
         changed.add(entry.key);
       }
+      if (verbose) {
+        final status = isNew
+            ? 'new'
+            : (isChanged ? 'changed' : 'up-to-date');
+        stdout.writeln('  [$status] ${entry.key}');
+      }
     }
-    changed.addAll(existing.keys.map((name) => 'stale:$name'));
+    for (final name in existing.keys) {
+      changed.add('stale:$name');
+      if (verbose) {
+        stdout.writeln('  [stale] $name');
+      }
+    }
     changed.sort();
 
     if (!check && changed.isNotEmpty) {
+      if (verbose) {
+        stdout.writeln(
+            'Applying ${changed.length} change(s) to ${outputDirectory.path}...');
+      }
       outputDirectory.createSync(recursive: true);
       for (final entry in expected.entries) {
         final file = File(
             '${outputDirectory.path}${Platform.pathSeparator}${entry.key}');
         if (!file.existsSync() || file.readAsStringSync() != entry.value) {
           file.writeAsStringSync(entry.value);
+          if (verbose) {
+            stdout.writeln('  Wrote ${entry.key}');
+          }
         }
       }
       for (final file in existing.values) {
         file.deleteSync();
+        if (verbose) {
+          stdout.writeln('  Deleted ${_fileName(file.path)}');
+        }
       }
+    } else if (verbose && changed.isEmpty) {
+      stdout.writeln('All snippets are up to date.');
     }
 
     return GenerationResult(changed: changed);
@@ -156,11 +199,21 @@ class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
 String _fileName(String path) => path.split(Platform.pathSeparator).last;
 
 void main(List<String> args) {
+  const supported = <String>{'--check', '--verbose'};
   if (args.any((argument) => argument == '--help' || argument == '-h')) {
-    stdout.writeln('Usage: dart run tool/generate_example_code.dart [--check]');
+    stdout.writeln(
+        'Usage: dart run tool/generate_example_code.dart [--check] [--verbose]');
+    stdout.writeln();
+    stdout.writeln('Options:');
+    stdout.writeln(
+        '  --check     Check whether snippets are up to date without writing.');
+    stdout.writeln(
+        '  --verbose   Print detailed progress information during generation.');
+    stdout.writeln('  --help, -h  Show this help message.');
     return;
   }
-  final unsupported = args.where((argument) => argument != '--check').toList();
+  final unsupported =
+      args.where((argument) => !supported.contains(argument)).toList();
   if (unsupported.isNotEmpty) {
     stderr.writeln('Unsupported arguments: ${unsupported.join(', ')}');
     exitCode = 64;
@@ -173,7 +226,10 @@ void main(List<String> args) {
         '${componentRoot.path}${Platform.pathSeparator}example${Platform.pathSeparator}lib'),
     outputDirectory: Directory(
         '${componentRoot.path}${Platform.pathSeparator}example${Platform.pathSeparator}assets${Platform.pathSeparator}code'),
-  ).run(check: args.contains('--check'));
+  ).run(
+    check: args.contains('--check'),
+    verbose: args.contains('--verbose'),
+  );
 
   if (!result.isUpToDate) {
     final mode = args.contains('--check') ? 'out of date' : 'updated';
