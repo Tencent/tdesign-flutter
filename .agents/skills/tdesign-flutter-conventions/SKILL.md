@@ -11,9 +11,9 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR
 
 在创建 PR / 分支时，必须严格遵守以下分支命名约定：
 
-- **根据 Issue 创建的分支 / PR**（最常见）：格式 `<cnb.username/>/<issue.number>/<types>/<功能需求>`
+- **根据 Issue 创建的分支 / PR**（最常见）：格式 `<cnb.username/>/cnb-issue-<issue.number>/<types>/<功能需求>`
   - `<cnb.username/>`：当前操作者的 CNB 用户名（不要猜测，通过环境变量或平台信息获取）。
-  - `<issue.number>`：所关联 Issue 的编号，用于把分支 / PR 与具体需求绑定、便于回溯。
+  - `cnb-issue-<issue.number>`：固定前缀 `cnb-issue-` + 所关联 Issue 的编号，用于把分支 / PR 与具体需求绑定、便于回溯，并明确标识该需求来源于 CNB Issue。
   - `<types>`：改动类型，从以下取值中选择一个最贴切的：
     - `feat`：新特性 / 新组件
     - `fix`：缺陷修复
@@ -25,7 +25,7 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR
     - `style`：样式 / 交互改进
     - `release`：版本发布
   - `<功能需求>`：用简短、小写、以连字符分隔的英文短语描述本次改动要解决的功能需求。
-  - 示例：`rss1102/31/fix/branch-auto-close-issue`、`rss1102/22/feat/add-badge-component`
+  - 示例：`rss1102/cnb-issue-31/fix/branch-auto-close-issue`、`rss1102/cnb-issue-22/feat/add-badge-component`
 - **无关联 Issue 的独立改动**：格式 `<cnb.username/>/<types>/<功能需求>`
   - 仅当本次改动确实没有对应 Issue 时使用，例如 `rss1102/chore/update-ci-config`。
 - **PR 标题**遵循 Conventional Commits 格式：`type(scope): 修改描述`，scope 可填写组件、文档或 CI 模块，例如 `fix(TButton): 修复按钮溢出问题`。
