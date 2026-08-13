@@ -104,7 +104,7 @@ class TSwipeCellAction extends StatelessWidget {
     final effectiveTextStyle = labelStyle ?? theme.actionTextStyle;
     // 文字样式：优先 P0/P1 的 TextStyle，否则回退 P4 fontMarkMedium
     final fallbackFont = context.tTheme.fontMarkMedium ??
-        const Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
+        Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
 
     final children = <Widget>[
       if (icon != null)
