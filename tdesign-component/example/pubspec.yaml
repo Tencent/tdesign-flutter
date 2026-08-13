@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   web: 1.1.1
 
   #轮播图组件
@@ -55,8 +57,6 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-  flutter_localizations:
     sdk: flutter
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
