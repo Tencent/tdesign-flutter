@@ -21,7 +21,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 纯文字的公告栏
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -32,10 +32,9 @@ Widget _textNoticeBar(BuildContext context) {
 }</pre>
 
 </td-code-block>
-                                  
 
 可滚动的公告栏
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -48,27 +47,24 @@ Widget _scrollNoticeBar(BuildContext context) {
 }</pre>
 
 </td-code-block>
-                                  
 
 
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _scrollIconNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
-    speed: 50,
     prefixIcon: TIcons.sound,
     marquee: true,
+    speed: 50,
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 带图标的公告栏
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -80,158 +76,190 @@ Widget _iconNoticeBar(BuildContext context) {
 }</pre>
 
 </td-code-block>
-                                  
 
 带关闭的公告栏
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _closeNoticeBar(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.close,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了关闭按钮', context: context);
+      }
+    },
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 带入口的公告栏
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _entranceNoticeBar1(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     right: TButton(
-      text: '文字按钮',
-      type: TButtonType.text,
-      theme: TButtonTheme.primary,
+      child: const Text('文字按钮'),
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
       size: TButtonSize.extraSmall,
-      height: 22,
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+      onPressed: () => TToast.showText('点击了文字按钮', context: context),
     ),
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _entranceNoticeBar2(BuildContext context) {
-  return const TNoticeBar(
+  return TNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.chevron_right,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了入口图标', context: context);
+      }
+    },
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 自定义样式的公告栏
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _customNoticeBar(BuildContext context) {
-  return TNoticeBar(
-    content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.notification,
-    suffixIcon: TIcons.chevron_right,
-    style: TNoticeBarStyle.generateTheme(context, theme: TNoticeBarTheme.info)
-      ..backgroundColor = TTheme.of(context).bgColorComponent,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      TNoticeBarThemeData(
+        variant: TNoticeBarVariant.info,
+        backgroundColor: context.tTheme.bgColorComponent,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.notification,
+      suffixIcon: TIcons.chevron_right,
+    ),
   );
 }</pre>
 
 </td-code-block>
-                                  
 ### 1 组件状态
 
 普通通知
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _normalNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.info,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.info,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条普通的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 成功通知
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _successNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条成功的通知信息',
-    prefixIcon: TIcons.check_circle_filled,
-    theme: TNoticeBarTheme.success,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.success,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条成功的通知信息',
+      prefixIcon: TIcons.check_circle_filled,
+    ),
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 警示通知
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _warningNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条警示的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.warning,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.warning,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条警示的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }</pre>
 
 </td-code-block>
-                                  
 
 错误通知
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _errorNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条错误的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
-    theme: TNoticeBarTheme.error,
+  return Theme(
+    data: Theme.of(context).mergeExtension(
+      const TNoticeBarThemeData(
+        variant: TNoticeBarVariant.error,
+      ),
+    ),
+    child: const TNoticeBar(
+      content: '这是一条错误的通知信息',
+      prefixIcon: TIcons.error_circle_filled,
+    ),
   );
 }</pre>
 
 </td-code-block>
-                                  
 ### 1 组件样式
 
 卡片顶部
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
 Widget _cardNoticeBar(BuildContext context) {
   var size = MediaQuery.of(context).size;
+  final resolvedBg = const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
+      .resolve(context)
+      .backgroundColor;
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: TNoticeBarStyle.generateTheme(context).backgroundColor,
+      color: resolvedBg,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       boxShadow: const [
         BoxShadow(
@@ -269,9 +297,8 @@ Widget _cardNoticeBar(BuildContext context) {
           ),
         ),
         Container(
-          height: 150,
           decoration: BoxDecoration(
-            color: TTheme.of(context).bgColorContainer,
+            color: context.tTheme.bgColorContainer,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
         )
@@ -281,7 +308,6 @@ Widget _cardNoticeBar(BuildContext context) {
 }</pre>
 
 </td-code-block>
-                                  
 
 
 ## API
@@ -290,67 +316,53 @@ Widget _cardNoticeBar(BuildContext context) {
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| content | dynamic | - | 文本内容（字符串或字符串数组等） |
-| context | dynamic | - | 文本内容（请使用content属性） |
-| direction | Axis? | Axis.horizontal | 滚动方向 |
-| height | double | 22 | 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性） |
-| interval | int? | 3000 | 步进滚动间隔时间（毫秒） |
+| content | String | '' | 单条公告内容 |
+| direction | Axis | Axis.horizontal | 滚动方向 |
+| interval | Duration | const Duration(seconds: 3) | 垂直轮播的切换间隔 |
+| items | List<String> | const <String>[] | 多条公告内容，主要用于垂直轮播 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | left | Widget? | - | 左侧内容（自定义左侧内容，优先级高于prefixIcon） |
-| marquee | bool? | false | 跑马灯效果 |
-| maxLines | int? | 1 | 文本行数（仅静态有效） |
-| onTap | ValueChanged? | - | 点击事件 |
-| prefixIcon | IconData? | - | 左侧图标 |
+| marquee | bool | false | 是否启用滚动展示 |
+| maxLines | int | 1 | 文本行数（仅静态有效） |
+| onPressed | ValueChanged<TNoticeBarTapTarget>? | - | 点击事件 |
+| prefixIcon | IconData? | - | 左侧图标；`left` 非空时不渲染。 |
 | right | Widget? | - | 右侧内容（自定义右侧内容，优先级高于suffixIcon） |
-| speed | double? | 50 | 滚动速度 |
-| style | TNoticeBarStyle? | - | 公告栏样式 `TNoticeBarStyle` |
-| suffixIcon | IconData? | - | 右侧图标 |
-| theme | TNoticeBarTheme? | TNoticeBarTheme.info | 主题 |
+| speed | double | 50 | 每秒滚动的逻辑像素 |
+| suffixIcon | IconData? | - | 右侧图标；`right` 非空时不渲染。 |
 
 
-### TNoticeBarStyle
+### TNoticeBarTapTarget
 #### 简介
-公告栏样式
-
-#### 工厂构造方法
-
-##### TNoticeBarStyle.generateTheme
-
-根据主题生成样式
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | 上下文 |
-| theme | TNoticeBarTheme? | TNoticeBarTheme.info | - |
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 公告栏背景色 |
-| context | BuildContext? | - | 上下文 |
-| leftIconColor | Color? | - | 公告栏左侧图标颜色 |
-| padding | EdgeInsetsGeometry? | - | 公告栏内边距 |
-| rightIconColor | Color? | - | 公告栏右侧图标颜色 |
-| textStyle | TextStyle? | - | 公告栏内容样式 |
-
-
-### TNoticeBarType
-#### 简介
-公告栏类型
+公告栏点击区域
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| none | 静止（默认） |
-| scroll | 滚动 |
-| step | 步进 |
+| prefix | 左侧图标 |
+| content | 公告内容 |
+| suffix | 右侧图标 |
 
 
-### TNoticeBarTheme
+### TNoticeBarThemeData
 #### 简介
-公告栏主题
+公告栏组件级 ThemeExtension，通过 Theme 子树注入控制默认公告栏样式。
+#### 字段
+
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| variant | TNoticeBarVariant? | 语义色变体 |
+| height | double? | 文字高度 |
+| backgroundColor | Color? | 公告栏背景色 |
+| textStyle | TextStyle? | 公告栏内容样式 |
+| leftIconColor | Color? | 公告栏左侧图标颜色 |
+| rightIconColor | Color? | 公告栏右侧图标颜色 |
+| padding | EdgeInsetsGeometry? | 公告栏内边距 |
+
+
+### TNoticeBarVariant
+#### 简介
+公告栏语义色
 #### 枚举值
 
 
@@ -361,5 +373,3 @@ Widget _cardNoticeBar(BuildContext context) {
 | warning | 警告 |
 | error | 错误 |
 
-
-  

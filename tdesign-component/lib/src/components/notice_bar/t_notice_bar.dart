@@ -104,12 +104,8 @@ class _TNoticeBarState extends State<TNoticeBar> {
     return (ext ?? const TNoticeBarThemeData()).resolve(context);
   }
 
-  bool get _effectiveMarquee => widget.marquee;
-
   double get _effectiveSpeed =>
       widget.speed.isFinite && widget.speed > 0 ? widget.speed : 50;
-
-  Duration get _effectiveInterval => widget.interval;
 
   double get _effectiveHeight => _theme.height ?? 22;
 
@@ -143,7 +139,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
 
   void _scheduleMarqueeStart() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _effectiveMarquee) {
+      if (mounted && widget.marquee) {
         _startTimer();
       }
     });
@@ -171,8 +167,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
     if (!mounted || controller == null || !controller.hasClients) {
       return;
     }
-    var scrollDistance =
-        _getContextWidth() + (_size!.width - _effectivePadding.horizontal);
+    // 滚动距离 = 文本宽度 + 公告栏可视区宽度（而非屏幕宽度），
+    // 保证文本滚出可视区后紧跟一个等宽的空白段再回绕，窄屏/宽屏表现一致。
+    var scrollDistance = _getContextWidth() + _getEmptyWidth();
     var remainder = scrollDistance % _effectiveSpeed;
     controller.jumpTo(0);
     var offset = 0.0 + _effectiveSpeed;
@@ -235,7 +232,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
     if (content.isEmpty) {
       return;
     }
-    _timer = Timer.periodic(_effectiveInterval, (timer) {
+    _timer = Timer.periodic(widget.interval, (timer) {
       if (!mounted ||
           _scrollController == null ||
           !_scrollController!.hasClients) {
@@ -265,8 +262,8 @@ class _TNoticeBarState extends State<TNoticeBar> {
       text: TextSpan(text: text, style: _resolved.textStyle),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-      maxLines: _effectiveMarquee ? 1 : widget.maxLines,
-    )..layout(maxWidth: _size!.width);
+      maxLines: widget.marquee ? 1 : widget.maxLines,
+    )..layout(maxWidth: _getEmptyWidth());
     return textPainter.size;
   }
 
@@ -309,7 +306,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
           child: TText(
             displayText,
             style: _resolved.textStyle,
-            maxLines: _effectiveMarquee ? 1 : widget.maxLines,
+            maxLines: widget.marquee ? 1 : widget.maxLines,
           ),
         ),
       );
@@ -317,7 +314,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
       textWidget = const SizedBox.shrink();
     }
 
-    if (!_effectiveMarquee) {
+    if (!widget.marquee) {
       return textWidget;
     }
 
