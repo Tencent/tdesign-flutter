@@ -17,6 +17,7 @@
 4. **Spec 规范对齐**：组件 API 变更 / 重构 / 跨目录改动按 [`specs/README.md`](./specs/README.md) 创建 Spec，提交代码须与 Spec 行为契约一致并同步更新。
 5. **Flutter 双版本兼容**：同时兼容 `flutter@3.32.0` 与 `flutter@latest`。
 6. **breaking change 分析**：组件改动时判断是否改变公开 API 签名 / 默认行为 / 删除能力。
+7. **文档与注释**：组件公开 API 的 `///` dartdoc 注释就是用户文档，改动公开 API 时须随代码同步更新注释；复杂需求 / 重构按 Spec 记录设计；PR「更新日志」只写用户可感知的变更；`CHANGELOG.md` 由 CLI 生成勿手动编辑（详见 SKILL.md 第七节）。
 
 ## 回答风格
 
