@@ -75,6 +75,8 @@ $:
 
     # 构建 Web（flutter latest）
     - name: build web (flutter latest)
+      runner:
+        cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-latest
       stages:
