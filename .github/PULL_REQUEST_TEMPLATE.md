@@ -38,7 +38,9 @@
 格式要求：
 - 若一个 PR 包含多个功能 / 修复，必须按条目分开列写，不能合并成一条笼统描述。
 - 每条遵循：修复缺陷用 `fix(组件名称): 修复 xxx 的问题`，新增能力用 `feat(组件名称): 添加了 xxx 功能`，其他用 `docs(...)` / `refactor(...)` / `chore(...)` 等。
+- **Breaking change（改变公开 API 签名 / 默认行为 / 删除能力）必须在该条前加 ⚠️ 前置标记**，以提醒用户这是需要严重注意的问题，例如：`- ⚠️ refactor(toast): 调整 xxx 默认行为`。
 - 示例：
+  - ⚠️ refactor(toast): 调整 xxx 默认行为（Breaking change）
   - fix(TInput): 修复密文模式下无法粘贴的问题
   - feat(TButton): 新增渐变背景能力
   - docs: 更新主题生成器文档
