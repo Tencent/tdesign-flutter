@@ -227,7 +227,7 @@ void main() {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
 
-      final id = TToast.showLoading(context: context, text: '默认加载');
+      TToast.showLoading(context: context, text: '默认加载');
       await tester.pump();
 
       final indicator = tester.widget<TCircleIndicator>(
@@ -240,7 +240,7 @@ void main() {
       expect(text.maxLines, 1);
       expect(text.overflow, TextOverflow.ellipsis);
 
-      TToast.dismissToast(id);
+      TToast.dismiss();
       await tester.pump();
     });
   });
@@ -462,11 +462,11 @@ void main() {
     testWidgets('showLoading 显示加载文案', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showLoading(context: context, text: '加载中');
+      TToast.showLoading(context: context, text: '加载中');
       // 仅 pump 单帧：TCircleIndicator 有无限旋转动画，pumpAndSettle 会超时
       await tester.pump();
       expect(find.text('加载中'), findsOneWidget);
-      TToast.dismissToast(id);
+      TToast.dismiss();
       await tester.pump();
       expect(find.text('加载中'), findsNothing);
     });
@@ -474,11 +474,11 @@ void main() {
     testWidgets('showLoadingWithoutText 仅渲染指示器无文案', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showLoadingWithoutText(context: context);
+      TToast.showLoadingWithoutText(context: context);
       await tester.pump();
       // 不带文案，不应出现加载文案
       expect(find.text('加载中'), findsNothing);
-      TToast.dismissToast(id);
+      TToast.dismiss();
       await tester.pump();
     });
 
@@ -487,21 +487,21 @@ void main() {
         wrapWithTheme(textScaler: const TextScaler.linear(2.5)),
       );
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showLoading(context: context, text: '正在加载较长的内容');
+      TToast.showLoading(context: context, text: '正在加载较长的内容');
       await tester.pump();
 
       expect(tester.takeException(), isNull);
       final box = toastBoxFinder('正在加载较长的内容').first;
       expect(tester.getSize(box).height, greaterThanOrEqualTo(110));
 
-      TToast.dismissToast(id);
+      TToast.dismiss();
       await tester.pump();
     });
 
     testWidgets('无文案 loading 在自定义大图标下自适应尺寸', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showLoadingWithoutText(context: context, iconSize: 64);
+      TToast.showLoadingWithoutText(context: context, iconSize: 64);
       await tester.pump();
 
       expect(tester.takeException(), isNull);
@@ -517,7 +517,7 @@ void main() {
         greaterThanOrEqualTo(112),
       );
 
-      TToast.dismissToast(id);
+      TToast.dismiss();
       await tester.pump();
     });
   });
@@ -526,38 +526,17 @@ void main() {
   // dismiss 关闭
   // ============================================================
   group('TToast dismiss 关闭', () {
-    testWidgets('同一 toastId 重复展示会替换旧实例', (tester) async {
+    testWidgets('dismiss 关闭当前 Toast', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
-
       TToast.showText(
-        '旧 Toast',
-        context: context,
-        toastId: 'same',
-        preventTap: true,
-      );
-      await tester.pump();
-      TToast.showText('新 Toast', context: context, toastId: 'same');
-      await tester.pump();
-
-      expect(find.text('旧 Toast'), findsNothing);
-      expect(find.text('新 Toast'), findsOneWidget);
-      TToast.dismissToast('same');
-      await tester.pump();
-      expect(find.text('新 Toast'), findsNothing);
-    });
-
-    testWidgets('dismissToast 关闭指定 Toast', (tester) async {
-      await tester.pumpWidget(wrapWithTheme());
-      final context = tester.element(find.byKey(const Key('toast_host')));
-      final id = TToast.showText(
         '可关闭',
         context: context,
         duration: const Duration(seconds: 10),
       );
       await tester.pump();
       expect(find.text('可关闭'), findsOneWidget);
-      TToast.dismissToast(id);
+      TToast.dismiss();
       await tester.pump();
       expect(find.text('可关闭'), findsNothing);
     });
@@ -614,34 +593,6 @@ void main() {
       expect(find.text('C'), findsNothing);
     });
 
-    testWidgets('不同 toastId 也采用替换语义', (tester) async {
-      await tester.pumpWidget(wrapWithTheme());
-      final context = tester.element(find.byKey(const Key('toast_host')));
-
-      TToast.showText(
-        '旧实例',
-        context: context,
-        toastId: 'id1',
-        duration: const Duration(seconds: 10),
-      );
-      await tester.pump();
-      expect(find.text('旧实例'), findsOneWidget);
-
-      // 不同 toastId 也应替换旧的
-      TToast.showText(
-        '新实例',
-        context: context,
-        toastId: 'id2',
-        duration: const Duration(seconds: 10),
-      );
-      await tester.pump();
-      expect(find.text('旧实例'), findsNothing);
-      expect(find.text('新实例'), findsOneWidget);
-
-      TToast.dismissAll();
-      await tester.pump();
-    });
-
     testWidgets('showLoading 会替换普通 Toast', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
@@ -653,13 +604,13 @@ void main() {
       await tester.pump();
       expect(find.text('普通'), findsOneWidget);
 
-      final loadingId = TToast.showLoading(context: context, text: '加载中');
+      TToast.showLoading(context: context, text: '加载中');
       // 仅 pump 单帧，避免 TCircleIndicator 无限动画导致 pumpAndSettle 超时
       await tester.pump();
       expect(find.text('加载中'), findsOneWidget);
       // 普通 Toast 已被替换
       expect(find.text('普通'), findsNothing);
-      TToast.dismissToast(loadingId);
+      TToast.dismiss();
       await tester.pump();
       expect(find.text('加载中'), findsNothing);
       TToast.dismissAll();

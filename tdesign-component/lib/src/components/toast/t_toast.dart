@@ -25,15 +25,13 @@ enum IconTextDirection {
   vertical,
 }
 
-/// Toast实例管理类
+/// 单实例 Toast 实例管理类
 class _ToastInstance {
   final OverlayEntry overlayEntry;
-  final Timer? timer;
-  Timer? disposeTimer;
-  bool showing = true;
+  Timer? timer;
   bool removed = false;
 
-  _ToastInstance({required this.overlayEntry, this.timer});
+  _ToastInstance({required this.overlayEntry});
 
   void _removeEntry() {
     if (removed) {
@@ -46,17 +44,7 @@ class _ToastInstance {
 
   void cancel() {
     timer?.cancel();
-    disposeTimer?.cancel();
     _removeEntry();
-    showing = false;
-  }
-
-  void scheduleDispose(String toastId) {
-    disposeTimer?.cancel();
-    disposeTimer = Timer(const Duration(milliseconds: 200), () {
-      _removeEntry();
-      TToast._toastInstances.remove(toastId);
-    });
   }
 }
 
@@ -65,16 +53,11 @@ class _ToastInstance {
 /// 支持文本、图标、加载中等样式。采用单实例替换语义：
 /// 每次展示新 Toast 时，旧的 Toast 会被移除。
 class TToast {
-  static final Map<String, _ToastInstance> _toastInstances = {};
-  static int _instanceCounter = 0;
-
-  /// 生成唯一的Toast ID
-  static String _generateToastId() {
-    return 'toast_${_instanceCounter++}';
-  }
+  /// 当前展示中的 Toast 实例；单实例语义下同一时刻至多存在一个。
+  static _ToastInstance? _currentInstance;
 
   /// 普通文本Toast
-  static String showText(
+  static void showText(
     /// 提示文案；为 null 时只展示自定义内容。
     String? text, {
 
@@ -101,11 +84,7 @@ class TToast {
 
     /// Toast 文案样式。
     TextStyle? textStyle,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
     _showOverlay(
       _TTextToast(
         text: text,
@@ -120,13 +99,11 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
-      toastId: id,
     );
-    return id;
   }
 
   /// 带图标的Toast
-  static String showIconText(
+  static void showIconText(
     /// 提示文案。
     String? text, {
 
@@ -159,11 +136,7 @@ class TToast {
 
     /// 图标颜色。
     Color? iconColor,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
     _showOverlay(
       _TIconTextToast(
         text: text,
@@ -180,13 +153,11 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
-      toastId: id,
     );
-    return id;
   }
 
   /// 成功提示Toast
-  static String showSuccess(
+  static void showSuccess(
     /// 提示文案。
     String? text, {
 
@@ -216,11 +187,8 @@ class TToast {
 
     /// 图标颜色。
     Color? iconColor,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    return showIconText(
+    showIconText(
       text,
       icon: TIcons.check_circle,
       direction: direction,
@@ -232,12 +200,11 @@ class TToast {
       textStyle: textStyle,
       iconSize: iconSize,
       iconColor: iconColor,
-      toastId: toastId,
     );
   }
 
   /// 警告Toast
-  static String showWarning(
+  static void showWarning(
     /// 提示文案。
     String? text, {
 
@@ -267,11 +234,8 @@ class TToast {
 
     /// 图标颜色。
     Color? iconColor,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    return showIconText(
+    showIconText(
       text,
       icon: TIcons.error_circle,
       direction: direction,
@@ -283,12 +247,11 @@ class TToast {
       textStyle: textStyle,
       iconSize: iconSize,
       iconColor: iconColor,
-      toastId: toastId,
     );
   }
 
   /// 失败提示Toast
-  static String showFail(
+  static void showFail(
     /// 提示文案。
     String? text, {
 
@@ -318,11 +281,8 @@ class TToast {
 
     /// 图标颜色。
     Color? iconColor,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    return showIconText(
+    showIconText(
       text,
       icon: TIcons.close_circle,
       direction: direction,
@@ -334,12 +294,11 @@ class TToast {
       textStyle: textStyle,
       iconSize: iconSize,
       iconColor: iconColor,
-      toastId: toastId,
     );
   }
 
   /// 带文案的加载Toast
-  static String showLoading({
+  static void showLoading({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
@@ -366,11 +325,7 @@ class TToast {
 
     /// 加载图标颜色。
     Color? iconColor,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
     _showOverlay(
       _TToastLoading(
         text: text,
@@ -385,13 +340,11 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
-      toastId: id,
     );
-    return id;
   }
 
   /// 不带文案的加载Toast
-  static String showLoadingWithoutText({
+  static void showLoadingWithoutText({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
@@ -409,11 +362,7 @@ class TToast {
 
     /// 加载图标颜色。
     Color? iconColor,
-
-    /// 指定实例 ID；不传时自动生成。
-    String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
     _showOverlay(
       _TToastLoadingWithoutText(
         config: TToastThemeData(
@@ -425,29 +374,18 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
-      toastId: id,
     );
-    return id;
   }
 
-  /// 关闭指定的Toast
-  static void dismissToast(
-    /// 要关闭的 Toast 实例 ID。
-    String toastId,
-  ) {
-    final instance = _toastInstances[toastId];
-    if (instance != null) {
-      instance.cancel();
-      _toastInstances.remove(toastId);
-    }
+  /// 关闭当前展示中的 Toast。
+  static void dismiss() {
+    _currentInstance?.cancel();
+    _currentInstance = null;
   }
 
-  /// 关闭所有Toast
+  /// 关闭所有 Toast。单实例语义下与 [dismiss] 等价，保留以兼容旧用法。
   static void dismissAll() {
-    for (final instance in _toastInstances.values) {
-      instance.cancel();
-    }
-    _toastInstances.clear();
+    dismiss();
   }
 
   static void _showOverlay(
@@ -455,15 +393,14 @@ class TToast {
     required BuildContext context,
     Duration duration = const Duration(milliseconds: 3000),
     bool? preventTap,
-    required String toastId,
   }) {
     final overlayState = Overlay.maybeOf(context);
     if (overlayState == null) {
       debugPrint('warn: TToast requires an Overlay ancestor.');
       return;
     }
-    // 单实例替换语义：新 Toast 展示时移除所有旧实例。
-    dismissAll();
+    // 单实例替换语义：展示新 Toast 前移除旧的 Toast。
+    dismiss();
     final captured = InheritedTheme.capture(
       from: context,
       to: overlayState.context,
@@ -493,23 +430,13 @@ class TToast {
 
     overlayState.insert(overlayEntry);
 
-    Timer? timer;
+    final instance = _ToastInstance(overlayEntry: overlayEntry);
+    _currentInstance = instance;
 
+    // 非"无限"时长时，到期后自动关闭当前 Toast。
     if (duration != const Duration(seconds: 99999999)) {
-      timer = Timer(duration, () {
-        final instance = _toastInstances[toastId];
-        if (instance != null && instance.showing) {
-          instance.showing = false;
-          overlayEntry.markNeedsBuild();
-          instance.scheduleDispose(toastId);
-        }
-      });
+      instance.timer = Timer(duration, dismiss);
     }
-
-    _toastInstances[toastId] = _ToastInstance(
-      overlayEntry: overlayEntry,
-      timer: timer,
-    );
   }
 }
 

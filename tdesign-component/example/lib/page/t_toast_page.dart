@@ -79,13 +79,13 @@ class TToastPage extends StatelessWidget {
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          final id = TToast.showLoading(
+          TToast.showLoading(
             context: context,
             text: '加载中...',
           );
           // 2 秒后关闭
           Future.delayed(const Duration(seconds: 2), () {
-            TToast.dismissToast(id);
+            TToast.dismiss();
           });
         },
       ),

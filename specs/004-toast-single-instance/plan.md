@@ -2,53 +2,75 @@
 
 ## 技术方案
 
-### 核心改动
+### 核心改动：单实例 + 精简 API
 
-在 `_showOverlay` 方法中，展示新 Toast 前先调用 `dismissAll()` 移除所有已有 Toast 实例，再插入新的 OverlayEntry。
+将 TToast 从"多实例 Map + toastId"模型重构为**单一实例**模型：
 
-具体改动 `t_toast.dart` 的 `_showOverlay` 方法：
+1. 用单个 `_ToastInstance? _currentInstance` 取代 `Map<String, _ToastInstance> _toastInstances`。
+2. 删除 `_generateToastId()` 与 `_instanceCounter`。
+3. 所有 show 方法移除 `toastId` 参数并改为返回 `void`。
+4. 新增 `dismiss()` 关闭当前 Toast；`dismissAll()` 委托给 `dismiss()` 以兼容旧用法；删除 `dismissToast(toastId)`。
+5. 简化 `_ToastInstance`：删除冗余的 `showing`、`disposeTimer`、`scheduleDispose`，自动关闭定时器到期后直接调用 `dismiss()`。
+
+核心代码示意：
 
 ```dart
-static void _showOverlay(...) {
-    // 新 Toast 展示前先移除所有已有实例（单实例替换语义）
-    dismissAll();
-    ...
+static _ToastInstance? _currentInstance;
+
+// 展示新 Toast 前先移除旧的
+static void _showOverlay(Widget widget, {required BuildContext context, Duration duration}) {
+  final overlayState = Overlay.maybeOf(context);
+  if (overlayState == null) { return; }
+  dismiss(); // 单实例替换语义
+  ...
+  final instance = _ToastInstance(overlayEntry: overlayEntry);
+  _currentInstance = instance;
+  if (duration != const Duration(seconds: 99999999)) {
+    instance.timer = Timer(duration, dismiss);
+  }
 }
+
+static void dismiss() {
+  _currentInstance?.cancel();
+  _currentInstance = null;
+}
+
+static void dismissAll() => dismiss();
 ```
-
-同时更新 `_showOverlay` 中原本的注释，将"不同 ID 的 Toast 可以并存；同 ID 采用替换语义"改为"单实例替换语义：新 Toast 展示时移除所有旧 Toast"。
-
-注意：需要在调用 `dismissAll()` 之后、插入新 OverlayEntry 之前，保证新的 Toast 不会被旧的取消影响。
 
 ### 测试改动
 
-更新 `t_toast_test.dart` 中涉及多实例并存的测试用例：
+更新 `t_toast_test.dart`：
 
-- `dismissAll 关闭所有 Toast` 测试：改为验证"新 Toast 替换旧 Toast"。
-- 新增测试：连续 show 多个 Toast，验证始终只有一个可见。
+- 删除使用 `toastId` 的用例（"同一 toastId 重复展示"、"不同 toastId 替换"）。
+- 将 `dismissToast(id)` 改为 `dismiss()`。
+- 保留并强化单实例替换用例（连续 show 多个只保留最新）。
 
 ## 影响范围
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | tdesign-component/lib/src/components/toast/t_toast.dart | `_showOverlay` 加入 dismissAll，行为从多实例并存改为单实例替换 |
-| 测试 | tdesign-component/test/components/toast/t_toast_test.dart | 更新多实例相关测试 |
+| 组件 | tdesign-component/lib/src/components/toast/t_toast.dart | 移除 toastId / Map / 生成器；新增 dismiss()；删除 dismissToast() |
+| 测试 | tdesign-component/test/components/toast/t_toast_test.dart | 适配新 API |
+| 示例 | tdesign-component/example/lib/page/t_toast_page.dart | showLoading 示例改用 dismiss() |
 
-## API 变化
+## API 变化（breaking change）
 
-- 不新增、不删除、不重命名任何公共 API。
-- `showText` 等方法的行为从"多实例并存"变为"新实例替换旧实例"，属于**默认行为变更**，是 breaking change。
+- 删除所有 show 方法的 `toastId` 参数。
+- 删除 `dismissToast(String toastId)`。
+- 所有 show 方法返回类型由 `String` 改为 `void`。
+- 新增 `dismiss()`。
 
 ## 风险与取舍
 
-- **Breaking change**：用户若依赖多 Toast 并存的行为（如 loading + 提示同时显示），修改后不再支持。但考虑到 TDesign Mobile 的设计以及用户报告的问题，单实例语义是更合理的默认行为。
-- `showLoading` 和普通 Toast 同时显示的场景：修改后 loading 会被普通 Toast 替换，反之亦然。如果用户需要两者并存，需要自行设计（例如用自定义 Overlay 或其它方案）。
+- **Breaking change**：依赖 `toastId` / `dismissToast(id)` / show 方法返回值的调用方需要迁移到 `dismiss()` / 无返回值。考虑到 TDesign Mobile 的单实例设计以及本 issue 报告的叠加问题，这是更合理、更简洁的默认行为。
+- **Dart 侧兼容**：`showText` 等方法返回值改为 `void` 后，若调用方曾把返回值赋给变量会编译报错，需相应调整；删除 `dismissToast` 同理。仓库内部调用均已同步更新。
 - 不引入淡入淡出动画等体验类改动，避免扩大改动范围。
 
 ## 验证策略
 
-- Widget 测试：新增"连续多次 show 只有最新可见"用例。
-- Widget 测试：更新 `dismissAll` 相关用例以适配新行为。
+- Widget 测试：覆盖"连续多次 show 只有最新可见"、"dismiss 关闭当前 Toast"、"dismissAll 兼容"。
 - 运行 `flutter analyze lib/src/components/toast`。
 - 运行 toast 相关测试：`flutter test test/components/toast/t_toast_test.dart`。
 - 运行 `git diff --check`。
+- 全局 grep 确认无 `toastId` / `dismissToast` 残留。
