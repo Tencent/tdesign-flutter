@@ -19,55 +19,10 @@
   name: install example dependencies
   script: cd tdesign-component/example && flutter pub get
 
-# APK 构建（含腾讯云 Gradle/Maven 镜像加速）
+# APK 构建
 .build-apk: &build-apk
   name: flutter build apk
-  script: |
-    cd tdesign-component/example
-
-    # 1) Gradle 发行版走腾讯云镜像加速下载
-    sed -i 's#services.gradle.org/distributions#mirrors.cloud.tencent.com/gradle#' \
-      android/gradle/wrapper/gradle-wrapper.properties
-
-    # 1.5) 增大 Gradle JVM 堆内存，避免 JetifyTransform 处理引擎 jar 时 Java heap space
-    sed -i 's/org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx8192M -XX:MaxMetaspaceSize=1024m/' \
-      android/gradle.properties
-
-    # 2) Gradle init script 全量镜像
-    #    Flutter 新版 flutter-plugin-loader 会在 settingsEvaluated 中向
-    #    pluginManagement.repositories 追加本地 SDK 的 maven 仓库；当 repositoriesMode
-    #    为 PREFER_SETTINGS 时，Gradle 8.11+ 会报
-    #    "prefer settings repositories over project repositories" 校验错误。
-    #    因此这里把 repositoriesMode 显式改为 PREFER_PROJECT，并镜像 allprojects 依赖仓库。
-    mkdir -p ~/.gradle
-    cat > ~/.gradle/init.gradle <<'EOF'
-    // 显式改用 PREFER_PROJECT，避免 Gradle 8.11+ 因 Flutter plugin-loader
-    // 追加 maven 仓库触发 "prefer settings repositories" 校验失败
-    settingsEvaluated { settings ->
-        settings.dependencyResolutionManagement.repositoriesMode.set(
-            org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_PROJECT
-        )
-    }
-
-    allprojects {
-        repositories {
-            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
-            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/google/' }
-            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-central/' }
-            maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
-        }
-    }
-    EOF
-
-    # 3) Gradle 优化参数
-    cat > ~/.gradle/gradle.properties <<'EOF'
-    org.gradle.parallel=true
-    org.gradle.caching=true
-    org.gradle.configureondemand=true
-    org.gradle.daemon=false
-    EOF
-
-    flutter build apk -t ./lib/main.dart --release
+  script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
 
 # Web 构建
 .build-web: &build-web
