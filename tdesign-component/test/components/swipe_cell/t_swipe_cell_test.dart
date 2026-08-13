@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/src/components/swipe_cell/t_swipe_cell_inherited.dart';
 
 void main() {
   Widget app(Widget child) => MaterialApp(
@@ -158,6 +159,86 @@ void main() {
       )));
       await tester.pumpWidget(app(const SizedBox.shrink()));
       expect(() => TSwipeCell.close('group'), returnsNormally);
+    });
+
+    testWidgets('二次确认支持按 id 匹配重建的等价 action', (tester) async {
+      await tester.pumpWidget(app(TSwipeCell(
+        child: const TCell(title: Text('Row')),
+        end: TSwipeCellPanel(
+          children: [TSwipeCellAction(label: '删除', id: 'delete')],
+          confirms: [
+            TSwipeCellAction(
+              label: '确认删除',
+              id: 'delete-confirm',
+              confirmIndex: const [0],
+            ),
+          ],
+        ),
+        initialOpenSide: TSwipeCellSide.end,
+      )));
+      await tester.pumpAndSettle();
+
+      // 通过 Inherited 拿到 actionClick，用重建的等价 action（同 id）触发二次确认
+      final inherited =
+          TSwipeCellInherited.of(tester.element(find.text('删除')))!;
+      final recreated =
+          TSwipeCellAction(label: '删除', id: 'delete');
+      expect(inherited.actionClick(recreated), isTrue);
+      await tester.pumpAndSettle();
+      expect(find.text('确认删除'), findsOneWidget);
+    });
+
+    testWidgets('二次确认在无 id 时按实例引用匹配', (tester) async {
+      final action = TSwipeCellAction(label: '删除');
+      await tester.pumpWidget(app(TSwipeCell(
+        child: const TCell(title: Text('Row')),
+        end: TSwipeCellPanel(
+          children: [action],
+          confirms: [
+            TSwipeCellAction(
+              label: '确认删除',
+              confirmIndex: const [0],
+            ),
+          ],
+        ),
+        initialOpenSide: TSwipeCellSide.end,
+      )));
+      await tester.pumpAndSettle();
+
+      final inherited =
+          TSwipeCellInherited.of(tester.element(find.text('删除')))!;
+      expect(inherited.actionClick(action), isTrue);
+    });
+
+    testWidgets('操作项图标与文字均以 Flexible 包裹，布局对称', (tester) async {
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const TCell(title: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [
+              TSwipeCellAction(
+                icon: Icons.edit,
+                label: 'Action',
+                onPressed: (_) {},
+              ),
+            ],
+          ),
+          initialOpenSide: TSwipeCellSide.end,
+        ),
+      )));
+      await tester.pumpAndSettle();
+      final flex = tester.widget<Flex>(
+        find.ancestor(
+          of: find.text('Action'),
+          matching: find.byType(Flex),
+        ),
+      );
+      final flexibleCount = flex.children
+          .where((child) => child is Flexible)
+          .length;
+      expect(flexibleCount, greaterThanOrEqualTo(2));
     });
   });
 }

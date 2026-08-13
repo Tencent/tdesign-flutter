@@ -254,4 +254,77 @@ void main() {
       expect(button.style?.backgroundColor?.resolve({}), Colors.purple);
     });
   });
+
+  // ============================================================
+  // 档2-5：TSwipeCell 组件级 Theme 覆盖
+  // ============================================================
+  group('Theme 档2-5：TSwipeCell 组件级 Theme 覆盖', () {
+    Widget wrapSwipe(Widget child, {TSwipeCellThemeData? swipeTheme}) {
+      var theme = TThemeBuilder.light(TThemeData.defaultData());
+      if (swipeTheme != null) {
+        theme = theme.mergeExtension(swipeTheme);
+      }
+      return MaterialApp(
+        theme: theme,
+        home: Scaffold(body: Center(child: child)),
+      );
+    }
+
+    testWidgets('P1 actionBackgroundColor 覆盖 P0 未传背景色', (tester) async {
+      await tester.pumpWidget(wrapSwipe(
+        const TSwipeCell(
+          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [TSwipeCellAction(label: 'Action')],
+          ),
+        ),
+        swipeTheme: const TSwipeCellThemeData(
+          actionBackgroundColor: Colors.orange,
+        ),
+      ));
+      await tester.pump();
+      final container = tester.widget<Container>(
+        find.ancestor(of: find.text('Action'), matching: find.byType(Container)).first,
+      );
+      expect(container.color, Colors.orange);
+    });
+
+    testWidgets('P0 backgroundColor 覆盖 P1 主题背景色', (tester) async {
+      await tester.pumpWidget(wrapSwipe(
+        const TSwipeCell(
+          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [TSwipeCellAction(label: 'Action', backgroundColor: Colors.red)],
+          ),
+        ),
+        swipeTheme: const TSwipeCellThemeData(
+          actionBackgroundColor: Colors.orange,
+        ),
+      ));
+      await tester.pump();
+      final container = tester.widget<Container>(
+        find.ancestor(of: find.text('Action'), matching: find.byType(Container)).first,
+      );
+      expect(container.color, Colors.red);
+    });
+
+    testWidgets('P1 actionIconColor 覆盖 P4 Token 默认色', (tester) async {
+      await tester.pumpWidget(wrapSwipe(
+        const TSwipeCell(
+          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [TSwipeCellAction(icon: Icons.edit, label: 'Action')],
+          ),
+        ),
+        swipeTheme: const TSwipeCellThemeData(
+          actionIconColor: Colors.teal,
+        ),
+      ));
+      await tester.pump();
+      final icon = tester.widget<Icon>(
+        find.descendant(of: find.text('Action'), matching: find.byType(Icon)),
+      );
+      expect(icon.color, Colors.teal);
+    });
+  });
 }
