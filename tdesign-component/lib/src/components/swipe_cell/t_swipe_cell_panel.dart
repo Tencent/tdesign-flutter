@@ -20,7 +20,7 @@ enum SwipeMotion {
 
 /// 滑动单元格操作面板组件
 class TSwipeCellPanel {
-  TSwipeCellPanel({
+  const TSwipeCellPanel({
     this.extentRatio = 0.3,
     this.openThreshold,
     this.closeThreshold,

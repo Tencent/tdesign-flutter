@@ -282,7 +282,7 @@ void main() {
         actionIconSize: 40,
         actionSpacing: 8,
       );
-      final mid = base.lerp(target, 0.5)!;
+      final mid = base.lerp(target, 0.5);
       expect(mid.actionBackgroundColor, const Color(0xFF800000));
       expect(mid.actionIconSize, 30);
       expect(mid.actionSpacing, 6);

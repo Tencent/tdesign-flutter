@@ -24,7 +24,6 @@ class TTab extends Tab {
   /// 是否可用，默认 true；`false` 即禁用
   final bool enabled;
 
-  @override
   const TTab({
     Key? key,
     this.text,
