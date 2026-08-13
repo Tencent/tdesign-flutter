@@ -10,6 +10,12 @@
   name: install example dependencies
   script: cd tdesign-component/example && flutter pub get
 
+# 静态分析：lint 零告警（0 error / 0 warning）。
+# 不启用 --fatal-infos，避免存量 info 级告警把历史 PR 全红；后续逐步收紧。
+.analyze: &analyze
+  name: flutter analyze
+  script: cd tdesign-component && flutter analyze
+
 # APK 构建
 .build-apk: &build-apk
   name: flutter build apk
@@ -46,6 +52,7 @@ $:
           - /root/.pub-cache:cow
       stages:
         - *install-component
+        - *analyze
         - *install-example
         - *build-apk
 
@@ -59,6 +66,7 @@ $:
           - /root/.pub-cache:cow
       stages:
         - *install-component
+        - *analyze
         - *install-example
         - *build-apk
 
@@ -72,6 +80,7 @@ $:
           - /root/.pub-cache:cow
       stages:
         - *install-component
+        - *analyze
         - *install-example
         - *build-web
 
@@ -85,6 +94,7 @@ $:
           - /root/.pub-cache:cow
       stages:
         - *install-component
+        - *analyze
         - *install-example
         - *build-web
 
