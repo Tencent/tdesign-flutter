@@ -1,6 +1,6 @@
 ---
 name: tdesign-flutter-conventions
-description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基于 Issue 创建分支的 cnb-issue-<issue.number> 命名、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析、文档来源与注释规范）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动、维护组件注释与文档等任务时，都应先加载并遵守本约定。通用规范以 CONTRIBUTING.md / specs/README.md 为准，本文档只补充 CNB 平台特有的执行细则。
+description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基于 Issue 创建分支的 cnb-issue-<issue.number> 命名、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析、文档来源与注释规范、代码质量 / lint 零告警）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动、维护组件注释与文档、检查代码质量等任务时，都应先加载并遵守本约定。通用规范以 CONTRIBUTING.md / specs/README.md 为准，本文档只补充 CNB 平台特有的执行细则。
 ---
 
 # TDesign Flutter 仓库协作约定（CNB NPC 版）
@@ -104,6 +104,26 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基�
 - **注释必须与实现一致**：改行为就要改注释，避免注释与代码长期分叉（注释过期会误导使用者，危害不亚于缺注释）。
 - **内部实现注释**（非公开 API）：用于解释"为什么这么做"的边界条件、时序、避免踩坑点（如手势竞争、回调顺序、Completer 生命周期），帮助后续维护者与 AI 理解设计意图；无信息量的赘述应删除。
 - **Review / 修改组件时**：把"注释是否随代码同步更新"作为与"代码是否正确"同等重要的自查项。
+
+## 八、代码质量 / lint 零告警
+
+写代码与提交 PR 前，必须把 **lint 零告警**当作硬性门槛（skill 是自查约定，真正兜底在 CI 的 `flutter analyze`，见 `.cnb.yml`）。目标：**0 error / 0 warning / 0 info**（至少 0 error + 0 warning）。
+
+### 提交前自查（对照 `tdesign-component/analysis_options.yaml`）
+
+1. **能用 `const` 的地方必须 `const`**：`prefer_const_constructors` / `prefer_const_declarations` / `prefer_const_literals_to_create_immutables`（不可变对象、集合字面量、构造、声明均用 `const`），同时避免多余的 `unnecessary_const`。
+2. **优先 `final` 而非 `var`**：变量不会重新赋值时用 `final`，字段用 `final`（`prefer_final_fields`）。
+3. **避免 lambda 代替 tear-off**：能直接传方法引用就用 tear-off，不包一层 `() =>`（`unnecessary_lambdas`）。
+4. **导入顺序**：遵循 `directives_ordering`，按 dart / package / relative 分组排序。
+5. **统一用单引号**：字符串用 `'...'`（仓库 lint 默认 single quotes）。
+6. **集合字面量与判空**：优先 `[]`/`{}` 字面量（`prefer_collection_literals`），用 `.isEmpty`/`.isNotEmpty` 判空（`prefer_is_empty`）。
+7. **字符串插值**：统一 `${param}` 插值，避免拼接（`prefer_interpolation_to_compose_strings`）。
+8. **其余规则**：避免多余容器（`avoid_unnecessary_containers`）、`const` 构造函数与不可变对象（`prefer_const_constructors_in_immutables`）、类型命名规范（`camel_case_*` / `non_constant_identifier_names`）等，全部对齐 `analysis_options.yaml`。
+
+### 为什么必须过 CLI
+
+- skill / 约定属于**软约束**，NPC 可能漏查；只有 CI 里的 `flutter analyze`（`--fatal-infos`）才把它变成**机器硬门槛**，能拦截"漏写 const"这类问题。
+- 提交前在本地跑 `cd tdesign-component && flutter analyze`，确认无告警再提交；CI 的 `.cnb.yml` 已加入 analyze 步骤做最终兜底。
 
 ## 回答风格
 

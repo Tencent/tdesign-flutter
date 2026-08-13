@@ -18,6 +18,7 @@
 5. **Flutter 双版本兼容**：同时兼容 `flutter@3.32.0` 与 `flutter@latest`。
 6. **breaking change 分析**：组件改动时判断是否改变公开 API 签名 / 默认行为 / 删除能力。
 7. **文档与注释**：组件公开 API 的 `///` dartdoc 注释就是用户文档，改动公开 API 时须随代码同步更新注释；复杂需求 / 重构按 Spec 记录设计；PR「更新日志」只写用户可感知的变更；`CHANGELOG.md` 由 CLI 生成勿手动编辑（详见 SKILL.md 第七节）。
+8. **代码质量 / lint 零告警**：提交前须过 `flutter analyze`（0 error / 0 warning），能用 `const`/`final` 的地方必须用、避免 lambda 替代 tear-off、遵循 `directives_ordering` 等，全部对齐 `analysis_options.yaml`；CI 的 `.cnb.yml` 已加 analyze 兜底（详见 SKILL.md 第八节）。
 
 ## 回答风格
 
