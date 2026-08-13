@@ -31,7 +31,7 @@ jobs:
 
       - name: Generate example code snippets
         working-directory: ./tdesign-component
-        run: dart run tool/generate_example_code.dart
+        run: dart run tool/generate_example_code.dart --verbose
 
       - name: Sync README files
         run: node scripts/sync-readme.mjs
