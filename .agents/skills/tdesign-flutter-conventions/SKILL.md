@@ -1,6 +1,6 @@
 ---
 name: tdesign-flutter-conventions
-description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动等任务时，都应先加载并遵守本约定。
+description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动等任务时，都应先加载并遵守本约定。
 ---
 
 # TDesign Flutter 仓库协作约定
@@ -28,7 +28,20 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、Fl
 - PR 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`，scope 可填写组件、文档或 CI 模块，例如 `fix(TButton): 修复按钮溢出问题`。
 - 在创建分支、提交 PR 前，先复核分支名是否符合上述规范。
 
-## 二、Flutter 版本双兼容
+## 二、提交 PR 遵守项目模板
+
+提交 PR 时，必须遵守当前项目预设的 PR 模板 `.github/PULL_REQUEST_TEMPLATE.md`，并逐项补充完整内容：
+
+- **PR 正文**：以模板结构为准，依次填写「PR 性质」「相关 Issue」「需求背景和解决方案」「更新日志」「请求合并前的自查清单」等小节，不得省略。
+- **PR 性质勾选**：按模板勾选规则选择正确类型。
+- **自查清单**：逐项核对并勾选（标题格式、相关 Issue 链接、Spec 链接、文档补充）。
+- **Changelog**：从用户角度描述具体变化，标注可能的 breaking change；若无需纳入则勾选「本条 PR 不需要纳入 Changelog」。
+
+## 三、PR 关联相关 Issue
+
+提交 PR 时，如存在相关 Issue，必须在 PR 正文中携带关联，并以 `close #xx` 的形式提供（xx 为 Issue 编号，例如 `close #22`），确保合并后自动关闭对应 Issue。
+
+## 四、Flutter 版本双兼容
 
 `tdesign-flutter` 需要同时兼容 `flutter@3.32.0` 与 `flutter@latest`（stable 通道最新版）。当前项目通过 CI（`.github/workflows/test-build.yml`）分别对两个版本执行构建。
 
@@ -42,7 +55,7 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、Fl
 3. 若引入新依赖或新 API，需确认其最低要求不超过 3.32.0，且不破坏 latest 构建。
 4. 结论中请明确标注改动对 `flutter@3.32.0` 与 `flutter@latest` 各自的兼容性影响。
 
-## 三、组件变更的 breaking change 分析
+## 五、组件变更的 breaking change 分析
 
 当考虑组件（TDesign 组件，如 TButton、TInput 等）的修改时，必须分析是否会造成 breaking change：
 
