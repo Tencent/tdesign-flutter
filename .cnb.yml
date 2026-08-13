@@ -1,14 +1,5 @@
 # ===== 公共可复用片段（以 . 开头，不会被识别为分支名）=====
 
-# git safe.directory 全局配置 + 腾讯云镜像源（env 方式）
-.git-safe-env: &git-safe-env
-  env:
-    GIT_CONFIG_COUNT: "1"
-    GIT_CONFIG_KEY_0: safe.directory
-    GIT_CONFIG_VALUE_0: "*"
-    PUB_HOSTED_URL: "https://mirrors.tencent.com/dart-pub"
-    FLUTTER_STORAGE_BASE_URL: "https://mirrors.tencent.com/flutter"
-
 # 安装组件依赖
 .install-component: &install-component
   name: install component dependencies
@@ -44,16 +35,15 @@ $:
             password: ${GIT_ACCESS_TOKEN}
 
   pull_request:
-    # 构建 APK，使用 gmeligio/flutter-android 镜像（Docker Hub）
+    # 构建 APK
     - name: build apk (flutter 3.32.0)
       runner:
         cpus: 16
       docker:
-        image: gmeligio/flutter-android:3.32.0
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
         volumes:
           - /root/.gradle:cow
           - /root/.pub-cache:cow
-      <<: *git-safe-env
       stages:
         - *install-component
         - *install-example
@@ -67,19 +57,17 @@ $:
         volumes:
           - /root/.gradle:cow
           - /root/.pub-cache:cow
-      <<: *git-safe-env
       stages:
         - *install-component
         - *install-example
         - *build-apk
 
-    # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
+    # 构建 Web
     - name: build web (flutter 3.32.0)
       runner:
         cpus: 16
       docker:
-        image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
-      <<: *git-safe-env
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
       stages:
         - *install-component
         - *install-example
@@ -89,7 +77,6 @@ $:
     - name: build web (flutter latest)
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-      <<: *git-safe-env
       stages:
         - *install-component
         - *install-example
