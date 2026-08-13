@@ -41,7 +41,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Select Xcode version
         if: matrix.platform == 'ios'
@@ -50,19 +50,12 @@ jobs:
           xcode-version: "16"
 
       - name: Setup Flutter
-        if: matrix.flutter-version != 'latest'
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        uses: flutter-actions/setup-flutter@v4
         with:
-          flutter-version: ${{ matrix.flutter-version }}
+          version: ${{ matrix.flutter-version }}
           channel: stable
           cache: true
-
-      - name: Setup latest Flutter
-        if: matrix.flutter-version == 'latest'
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
-        with:
-          channel: stable
-          cache: true
+          cache-sdk: true
 
       - name: Diagnose iOS toolchain
         if: matrix.platform == 'ios'
@@ -83,7 +76,11 @@ jobs:
       - name: Check Flutter component contracts
         run: node scripts/check-flutter-component-contracts.mjs
 
-      - name: flutter pub get
+      - name: install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: install example dependencies
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 

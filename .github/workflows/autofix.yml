@@ -29,17 +29,9 @@ jobs:
         working-directory: ./tdesign-component
         run: sh ./demo_tool/all_build.sh
 
-      - name: Check example code snippets
+      - name: Generate example code snippets
         working-directory: ./tdesign-component
-        run: dart run tool/generate_example_code.dart --check
-
-      - name: flutter pub get
-        working-directory: ./tdesign-component/example
-        run: flutter pub get
-
-      - name: flutter build
-        working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release
+        run: dart run tool/generate_example_code.dart --verbose
 
       - name: Sync README files
         run: node scripts/sync-readme.mjs
