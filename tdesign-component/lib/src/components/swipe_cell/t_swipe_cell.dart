@@ -62,12 +62,19 @@ class TSwipeCell extends StatefulWidget {
   final TSwipeCellSide? initialOpenSide;
 
   /// 互斥滑动组标识
+  ///
+  /// 相同 [groupTag] 的 [TSwipeCell] 会互相影响（配合 [closeWhenOpened] 实现互斥关闭）。
+  /// **注意：需全局唯一**。不同类型 / 场景的互斥组请使用不同的标识，
+  /// 避免传入 `==` 相同的值（如相同的字符串）导致意外串组。
   final Object? groupTag;
 
   /// 展开时是否关闭同组其他单元格
   final bool closeWhenOpened;
 
   /// 祖先滚动容器开始滚动时是否关闭已展开的操作区。
+  ///
+  /// 注意：当配合 [initialOpenSide] 初始展开面板时，若本值为 true，
+  /// 面板会在首次滚动发生时即被关闭（语义偏"粘滞"），请按需调整。
   final bool closeOnScroll;
 
   /// 拖动开始行为
@@ -251,7 +258,10 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
       actionClick: (action) {
         final panel =
             openSide == TSwipeCellSide.start ? widget.start! : widget.end!;
-        final index = panel.children.indexOf(action);
+        // 优先按稳定 id 匹配；未配置 id 时回退到实例引用匹配（indexOf）。
+        final index = action.id != null
+            ? panel.children.indexWhere((e) => e.id == action.id)
+            : panel.children.indexOf(action);
         final confirm = panel.confirms
             ?.find((element) => element.confirmIndex?.contains(index) == true);
         confirmListenable.value = confirm;
