@@ -12,6 +12,32 @@ $:
             username: ${GIT_USERNAME}
             password: ${GIT_ACCESS_TOKEN}
 
+  branch.delete:
+    - stages:
+        - name: extract issue id from branch
+          script: |
+            # 从被删除分支名中解析关联 issue 编号
+            # 支持分支名中包含 issue-N / #N 格式
+            ISSUE_ID=$(echo "$CNB_BRANCH" | grep -oE 'issue[-_]?[0-9]+' | grep -oE '[0-9]+' | head -1)
+            if [ -z "$ISSUE_ID" ]; then
+              ISSUE_ID=$(echo "$CNB_BRANCH" | grep -oE '#[0-9]+' | grep -oE '[0-9]+' | head -1)
+            fi
+            if [ -n "$ISSUE_ID" ]; then
+              echo "##[set-output ISSUE_REF=#${ISSUE_ID}]"
+              echo "Found linked issue: #${ISSUE_ID} in branch $CNB_BRANCH"
+            else
+              echo "No linked issue found in branch: $CNB_BRANCH"
+            fi
+          exports:
+            ISSUE_REF: ISSUE_REF
+
+        - name: close linked issue
+          type: git:issue-update
+          options:
+            fromText: $ISSUE_REF
+            state: close
+          if: '[ -n "$ISSUE_REF" ]'
+
   vscode:
     - docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
