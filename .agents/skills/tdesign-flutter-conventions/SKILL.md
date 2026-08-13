@@ -1,11 +1,11 @@
 ---
 name: tdesign-flutter-conventions
-description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动等任务时，都应先加载并遵守本约定。
+description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基于 Issue 创建分支的 cnb-issue-<issue.number> 命名、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动等任务时，都应先加载并遵守本约定。通用规范以 CONTRIBUTING.md / specs/README.md 为准，本文档只补充 CNB 平台特有的执行细则。
 ---
 
-# TDesign Flutter 仓库协作约定
+# TDesign Flutter 仓库协作约定（CNB NPC 版）
 
-本 skill 定义 `tdesign-flutter` 仓库的协作规范，适用于所有在本仓库被 `@` 提及的 NPC（包括系统 NPC 与自定义 NPC）。执行涉及分支 / PR / 组件改动的任务时，请先遵循以下约定。
+本 skill 是 CNB 平台 NPC 在本仓库执行任务时遵循的执行约定。通用开发 / 协作 / Spec 规范以 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 与 [`specs/README.md`](../../../specs/README.md) 为准，本文档只补充 **CNB 平台 NPC 特有**的细则，避免重复维护。
 
 ## 一、分支与 PR 规范
 
@@ -40,21 +40,7 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR
 - **PR 正文**：以模板结构为准，依次填写「PR 性质」「相关 Issue」「需求背景和解决方案」「更新日志」「请求合并前的自查清单」等小节，不得省略。
 - **PR 性质勾选**：按模板勾选规则选择正确类型。
 - **自查清单**：逐项核对并勾选（标题格式、相关 Issue 链接、Spec 链接、文档补充）。
-- **更新日志（Changelog）**：
-  > 注意：`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。以下规范针对的是 **PR 描述「更新日志」小节**（描述本次 PR 面向用户的变更），与仓库自动生成的 CHANGELOG 文件不是一回事。
-  1. 从用户角度描述具体变化，标注可能的 breaking change；若无需纳入则勾选「本条 PR 不需要纳入 Changelog」。
-  2. **若一个 PR 包含多个功能 / 修复，必须按条目分开列写**，不能合并成一条笼统描述。
-  3. 每条遵循以下格式，说明改动类型与影响组件：
-     - 修复缺陷：`fix(组件名称): 修复 xxx 的问题`
-     - 新增能力：`feat(组件名称): 添加了 xxx 功能`
-     - 其他：`docs(...)`、`refactor(...)`、`chore(...)` 等，遵循 Conventional Commits。
-  4. 一个 PR 含多条变更时，使用无序列表逐条列出，例如：
-     ```
-     - fix(TInput): 修复密文模式下无法粘贴的问题
-     - feat(TButton): 新增渐变背景能力
-     - docs: 更新主题生成器文档
-     ```
-  5. 更新日志应与实际改动一一对应，不得遗漏也不得夸大。
+- **更新日志（Changelog）**：`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**；PR 描述「更新日志」小节须按条分开列写（一个 PR 含多个变更时逐条列出），完整格式规则见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」。
 
 ## 三、PR 关联相关 Issue
 
@@ -62,13 +48,12 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR
 
 ## 四、Spec 规范对齐
 
-涉及组件 API 变更、重构、跨目录改动时，须与 `specs/` 保持一致，具体遵循 `specs/README.md` 与 `CONTRIBUTING.md` 的 Spec 贡献流程：
+涉及组件 API 变更、重构、跨目录改动时，须与 `specs/` 保持一致，完整流程见 [`specs/README.md`](../../../specs/README.md) 与 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的 Spec 贡献流程。要点：
 
 1. **何时创建 Spec**：修改公共组件 API / 行为契约、组件重构、跨目录修复、同时改组件 + 测试 + 示例 + 文档时，先创建 `specs/<编号>-<短名称>/`；单行文案、格式调整、简单局部修复不要求。
-2. **Spec 目录结构**：遵循模板 `specs/_template/`，包含 `spec.md`（背景 / 目标 / 范围 / 非目标 / 行为契约 / 验收标准）、`plan.md`（技术方案 / 影响范围 / API 变化 / 风险）、`tasks.md`（任务拆分与状态）、`acceptance.md`（验证记录）。编号按创建顺序递增，短名称用小写 kebab-case。
-3. **提交的代码必须与 Spec 一致**：实现必须满足 `spec.md` 定义的行为契约与验收标准；Review 时同时检查实现是否满足 Spec，以及 Spec 是否准确反映最终实现。
-4. **方案变更同步更新 Spec**：实现过程中若方案变化，先更新 Spec 再改代码，不让文档与实现长期分叉。
-5. **提交 PR 时**：在正文附上 Spec 目录链接；自查清单中勾选「已添加对应的 Spec 链接」。
+2. **提交的代码必须与 Spec 一致**：实现须满足 `spec.md` 定义的行为契约与验收标准；Review 时同时核对实现与 Spec 是否相符。
+3. **方案变更同步更新 Spec**：先更新 Spec 再改代码，不让文档与实现长期分叉。
+4. **提交 PR 时**：在正文附上 Spec 目录链接；自查清单中勾选「已添加对应的 Spec 链接」。
 
 ## 五、Flutter 版本双兼容
 

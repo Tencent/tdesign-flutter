@@ -1,5 +1,9 @@
 # CONTRIBUTING
 
+> **本文档是 `tdesign-flutter` 仓库开发 / 协作 / PR / 更新日志规范的唯一事实来源**。
+> 其他文档（`AGENTS.md` 入口索引、`.agents/skills/.../SKILL.md`、`specs/README.md`）如需引用，统一指向本文档，避免重复维护。
+> - Spec 专项规范 → [`specs/README.md`](./specs/README.md)
+
 ## 目录结构
 
 ```text
@@ -22,7 +26,25 @@ tdesign-site/       // tdesign flutter 站点
 - 组件 API 和演示代码，请参考 [demo_tool/README.md](./tdesign-component/demo_tool/README.md) 文件。
 - 组件内部的固定文案，都应该抽离到 TResourceDelegate 中统一管理，方便业务进行国际化适配。
 - 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
-- `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**；PR 的变更说明请在 PR 描述「更新日志」小节按条列写即可。
+- `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**；PR 的变更说明请在 PR 描述「更新日志」小节按条列写即可（格式见下文「PR 更新日志规范」）。
+
+## PR 更新日志规范
+
+PR 描述「更新日志」小节是面向用户的本次变更说明（与仓库自动生成的 `CHANGELOG.md` 不是一回事）：
+
+1. 从用户角度描述具体变化，标注可能的 breaking change；若无需纳入则勾选「本条 PR 不需要纳入 Changelog」。
+2. **一个 PR 含多个功能 / 修复时，必须按条目分开列写**，不能合并成一条笼统描述。
+3. 每条遵循以下格式，说明改动类型与影响组件：
+   - 修复缺陷：`fix(组件名称): 修复 xxx 的问题`
+   - 新增能力：`feat(组件名称): 添加了 xxx 功能`
+   - 其他：`docs(...)`、`refactor(...)`、`chore(...)` 等，遵循 Conventional Commits。
+4. 一个 PR 含多条变更时使用无序列表逐条列出，例如：
+   ```
+   - fix(TInput): 修复密文模式下无法粘贴的问题
+   - feat(TButton): 新增渐变背景能力
+   - docs: 更新主题生成器文档
+   ```
+5. 更新日志应与实际改动一一对应，不得遗漏也不得夸大。
 
 ## 示例代码片段
 
@@ -52,13 +74,11 @@ dart run tool/generate_example_code.dart --check
 
 ## Spec 贡献流程
 
+复杂需求、公共 API 变更、组件重构和跨目录改动，请按 [`specs/README.md`](./specs/README.md) 的完整流程创建并维护 Spec：
+
 1. 从 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录；编号按顺序递增，短名称使用小写 kebab-case。
-2. 在 `spec.md` 中说明背景、目标、范围、非目标、行为契约和验收标准。
-3. 在 `plan.md` 中记录技术方案、影响文件、API 变化、风险和验证策略。
-4. 在 `tasks.md` 中拆分实现、测试、示例和文档任务，并持续更新任务状态。
-5. 完成代码和测试后，在 `acceptance.md` 中记录实际命令、测试结果、人工验收项和未覆盖风险。
-6. 提交 PR 时，在正文中附上 Spec 目录链接；实现发生变化时，必须同步更新 Spec。
-7. 提交的代码必须与 Spec 定义的行为契约 / 验收标准一致，Review 时同时核对实现与 Spec 是否相符。
-8. PR 描述「更新日志」小节须与 Spec 描述一致，按条列写实际变更（`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，无需人工维护）。
+2. 在 `spec.md`（背景 / 目标 / 范围 / 非目标 / 行为契约 / 验收标准）、`plan.md`（技术方案 / 影响范围 / API 变化 / 风险）、`tasks.md`（任务拆分与状态）、`acceptance.md`（验证记录）中按模板填写。
+3. 提交代码必须与 Spec 定义的行为契约 / 验收标准一致，Review 时同时核对实现与 Spec 是否相符；方案变更时先更新 Spec 再改代码。
+4. 提交 PR 时，在正文附上 Spec 目录链接；PR 描述「更新日志」须与 Spec 描述一致（格式见上文「PR 更新日志规范」）。
 
 简单文案、格式调整和单文件局部修改不要求创建完整 Spec。Spec 只描述设计和验收，不替代代码、测试或生成文档。
