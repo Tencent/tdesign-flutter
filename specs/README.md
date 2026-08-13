@@ -40,7 +40,7 @@ specs/ 用于记录复杂需求、重构、公共 API 变更和跨目录修复�
 6. 在 acceptance.md 中记录实际执行的命令、结果、未覆盖项和人工验收结论。
 7. Review 时同时检查实现是否满足 spec.md，以及 Spec 是否准确反映最终实现。
 8. 提交的代码必须与 spec.md 定义的行为契约、验收标准一致；若实现偏离 Spec，需先修订 Spec 再改代码，避免文档与实现长期分叉。
-9. PR 描述「更新日志」小节须与 Spec 描述一致，按条列写实际变更（格式细则见 [`CONTRIBUTING.md`](../CONTRIBUTING.md)；`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，无需人工维护）。
+9. PR 描述「更新日志」小节须与 Spec 描述一致，**只记录用户可感知的实际变更**（目标受众是用户，非开发者 / 维护者）；内部 / CI / 文档结构调整等用户无需感知的改动不写日志，勾选「本条 PR 不需要纳入 Changelog」（格式细则见 [`CONTRIBUTING.md`](../CONTRIBUTING.md)；`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，无需人工维护）。
 
 ## 文档边界
 
