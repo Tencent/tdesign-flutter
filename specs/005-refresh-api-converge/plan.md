@@ -20,7 +20,7 @@
 | 测试 | `t_refresh_test.dart` | 适配参数收敛与新增主题字段 |
 | 示例 | `t_refresh_page.dart`、`refresh._buildRefresh.txt` | 修复 `onRefresh` |
 | 文档 | `pull-down-refresh_api.md`、站点 README | 收敛 API 表、修复示例 |
-| Spec | `specs/004-refresh-api-converge/` | 新增 |
+| Spec | `specs/005-refresh-api-converge/` | 新增 |
 
 ## API 变化
 

@@ -36,7 +36,7 @@
 - `tdesign-component/example/assets/code/refresh._buildRefresh.txt`
 - `tdesign-component/example/assets/api/pull-down-refresh_api.md`
 - `tdesign-site/docs/components/pull-down-refresh/README.md`
-- `specs/004-refresh-api-converge/`
+- `specs/005-refresh-api-converge/`
 
 ### 不涉及
 
@@ -77,9 +77,9 @@
 
 ## 验收标准
 
-- [ ] `TRefreshHeader` 构造参数从 30+ 收敛到 12 个，保留参数默认值与行为与收敛前一致。
-- [ ] 移除的高级参数不再出现在 `TRefreshHeader` 构造器与 API 文档中。
-- [ ] `TRefreshThemeData` 支持 `loadingIconColor` / `loadingTextColor` 主题覆盖，且实例 / 全局回退链路正确。
-- [ ] 示例 `onRefresh` 返回 `Future`，刷新完成动画与计数更新同步。
-- [ ] 单元与 Widget 测试全部通过。
-- [ ] 明确标注该改动为 breaking change 并在 PR 更新日志中说明迁移方式。
+- [x] `TRefreshHeader` 构造参数从 30+ 收敛到 12 个，保留参数默认值与行为与收敛前一致。
+- [x] 移除的高级参数不再出现在 `TRefreshHeader` 构造器与 API 文档中。
+- [x] `TRefreshThemeData` 支持 `loadingIconColor` / `loadingTextColor` 主题覆盖，且实例 / 全局回退链路正确。
+- [x] 示例 `onRefresh` 返回 `Future`，刷新完成动画与计数更新同步。
+- [ ] 单元与 Widget 测试全部通过（待 CI / 本地执行确认）。
+- [x] 明确标注该改动为 breaking change 并在 PR 更新日志中说明迁移方式。

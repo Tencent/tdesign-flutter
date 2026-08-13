@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -165,19 +167,55 @@ void main() {
     });
 
     testWidgets('Theme loading 颜色可覆盖 loading 取色', (tester) async {
+      // 用未完成的 Future 保持刷新处于 processing 状态，确保 TLoading 渲染。
+      final completer = Completer<void>();
       await tester.pumpWidget(
         wrap(
-          refreshView(onRefresh: () async {}),
+          refreshView(onRefresh: () => completer.future),
           refreshTheme: const TRefreshThemeData(
             loadingIconColor: Colors.purple,
             loadingTextColor: Colors.teal,
           ),
         ),
       );
+      // 下拉并释放，触发 processing 状态，渲染 TLoading。
       final gesture = await tester.startGesture(const Offset(200, 150));
-      await gesture.moveBy(const Offset(0, 120));
+      await gesture.moveBy(const Offset(0, 160));
       await tester.pump(const Duration(milliseconds: 300));
       await gesture.up();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.byType(TLoading), findsWidgets);
+      // 校验经主题覆盖后的 loading 取色。
+      final loadingTheme =
+          Theme.of(tester.element(find.byType(TLoading).first))
+              .extension<TLoadingThemeData>();
+      expect(loadingTheme?.iconColor, Colors.purple);
+      expect(loadingTheme?.textColor, Colors.teal);
+      // 结束刷新，避免悬挂的 Future 影响后续断言。
+      completer.complete();
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('未设置 loading 颜色时回退到全局主题色', (tester) async {
+      final completer = Completer<void>();
+      await tester.pumpWidget(
+        wrap(refreshView(onRefresh: () => completer.future)),
+      );
+      // 下拉并释放，触发 processing 状态，渲染 TLoading。
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 160));
+      await tester.pump(const Duration(milliseconds: 300));
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.byType(TLoading), findsWidgets);
+      // 未设置 loadingIconColor / loadingTextColor 时，应回退到全局品牌色 / 占位文案色。
+      final buildContext = tester.element(find.byType(TLoading).first);
+      final loadingTheme =
+          Theme.of(buildContext).extension<TLoadingThemeData>();
+      expect(loadingTheme?.iconColor, buildContext.tTheme.brandNormalColor);
+      expect(loadingTheme?.textColor,
+          buildContext.tTheme.textColorPlaceholder);
+      completer.complete();
       await tester.pump(const Duration(seconds: 2));
     });
 

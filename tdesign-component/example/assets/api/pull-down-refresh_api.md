@@ -27,6 +27,7 @@ TDesign刷新头部
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| enableHapticFeedback | bool | true | 是否启用震动反馈；默认开启。构造时 `hapticFeedback` 为空会回退到本字段 |
 | finalBackgroundColor | Color? | - | 背景颜色 |
 | finalCompleteDuration | Duration? | - | 完成延时 |
 | finalExtent | double | - | Header 容器高度 |
@@ -34,3 +35,4 @@ TDesign刷新头部
 | finalLoadingIcon | TLoadingIcon? | - | loading 样式 |
 | finalOverScroll | bool | - | 越界滚动 |
 | finalTriggerDistance | double | - | 触发刷新任务的偏移量 |
+| key | Key? | - | 刷新头容器使用的 Key，可用于在子树中定位该组件 |

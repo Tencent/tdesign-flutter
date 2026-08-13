@@ -38,6 +38,11 @@ class TRefreshHeader extends Header {
 
     /// 是否启用震动反馈；为空时使用 [enableHapticFeedback]。
     bool? hapticFeedback,
+
+    /// 是否启用震动反馈；默认开启。
+    ///
+    /// 与 [hapticFeedback] 的区别：本参数是构造后的公开字段（可直接读取），
+    /// 而 [hapticFeedback] 仅作为构造入参，为空时回退到本字段。
     this.enableHapticFeedback = true,
 
     /// 是否允许越界滚动。
@@ -49,7 +54,8 @@ class TRefreshHeader extends Header {
     /// Header 背景颜色。
     Color? backgroundColor,
 
-    /// 刷新头位置。
+    /// 刷新头位置：位于内容上方（[IndicatorPosition.above]）或下方
+    /// （[IndicatorPosition.below]），默认在内容上方。
     IndicatorPosition position = IndicatorPosition.above,
   })  : finalExtent = extent ?? 48.0,
         finalTriggerDistance = triggerDistance ?? 48.0,
@@ -75,7 +81,7 @@ class TRefreshHeader extends Header {
           position: position,
         );
 
-  /// Key
+  /// 刷新头容器使用的 Key，可用于在子树中定位该组件。
   final Key? key;
 
   /// Header 容器高度
@@ -99,7 +105,9 @@ class TRefreshHeader extends Header {
   /// 背景颜色
   final Color? finalBackgroundColor;
 
-  /// 是否启用震动反馈。
+  /// 是否启用震动反馈；默认开启。
+  ///
+  /// 构造时 [hapticFeedback] 为空会回退到本字段，并作为公开属性可读取。
   final bool enableHapticFeedback;
 
   @override
