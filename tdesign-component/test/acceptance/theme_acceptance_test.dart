@@ -277,12 +277,13 @@ void main() {
           end: TSwipeCellPanel(
             children: [TSwipeCellAction(label: 'Action')],
           ),
+          initialOpenSide: TSwipeCellSide.end,
         ),
         swipeTheme: const TSwipeCellThemeData(
           actionBackgroundColor: Colors.orange,
         ),
       ));
-      await tester.pump();
+      await tester.pumpAndSettle();
       final container = tester.widget<Container>(
         find.ancestor(of: find.text('Action'), matching: find.byType(Container)).first,
       );
@@ -296,12 +297,13 @@ void main() {
           end: TSwipeCellPanel(
             children: [TSwipeCellAction(label: 'Action', backgroundColor: Colors.red)],
           ),
+          initialOpenSide: TSwipeCellSide.end,
         ),
         swipeTheme: const TSwipeCellThemeData(
           actionBackgroundColor: Colors.orange,
         ),
       ));
-      await tester.pump();
+      await tester.pumpAndSettle();
       final container = tester.widget<Container>(
         find.ancestor(of: find.text('Action'), matching: find.byType(Container)).first,
       );
@@ -315,15 +317,14 @@ void main() {
           end: TSwipeCellPanel(
             children: [TSwipeCellAction(icon: Icons.edit, label: 'Action')],
           ),
+          initialOpenSide: TSwipeCellSide.end,
         ),
         swipeTheme: const TSwipeCellThemeData(
           actionIconColor: Colors.teal,
         ),
       ));
-      await tester.pump();
-      final icon = tester.widget<Icon>(
-        find.descendant(of: find.text('Action'), matching: find.byType(Icon)),
-      );
+      await tester.pumpAndSettle();
+      final icon = tester.widget<Icon>(find.byType(Icon));
       expect(icon.color, Colors.teal);
     });
   });
