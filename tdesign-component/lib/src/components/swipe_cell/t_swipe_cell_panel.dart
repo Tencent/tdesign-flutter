@@ -62,6 +62,12 @@ class TSwipeCellPanel {
   final List<TSwipeCellAction> children;
 
   /// 二次确认操作组件列表
+  ///
+  /// 通过 [TSwipeCellAction.confirmIndex] 与 [children] 中的索引关联。
+  /// 点击 [children] 中某操作项后，若命中某个 confirm 的索引则展示二次确认。
+  /// **点击的 action 需与 [children] 中为同一实例**；
+  /// 若使用 `copyWith` 等重建等价实例，请为两者设置相同的
+  /// [TSwipeCellAction.id]，按标识而非引用匹配。
   final List<TSwipeCellAction>? confirms;
 
   /// 是否可通过拖动操作来移除 [TSwipeCell] 组件
