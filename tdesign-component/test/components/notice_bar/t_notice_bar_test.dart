@@ -349,8 +349,25 @@ void main() {
       capturedContext = tester.element(find.byType(TNoticeBar));
       const theme = TNoticeBarThemeData(variant: TNoticeBarVariant.warning);
       final resolved = theme.resolve(capturedContext);
-      expect(resolved.backgroundColor, isNotNull);
-      expect(resolved.leftIconColor, isNotNull);
+      // 校验具体色值：warning 变体应解析为警示色，而非仅断言非空
+      expect(resolved.backgroundColor, capturedContext.tTheme.warningLightColor);
+      expect(resolved.leftIconColor, capturedContext.tTheme.warningNormalColor);
+    });
+
+    testWidgets('TNoticeBarThemeData.resolve 各变体色值正确', (tester) async {
+      late BuildContext capturedContext;
+      await tester.pumpWidget(wrapWithTheme(
+        const TNoticeBar(content: '内容'),
+      ));
+      capturedContext = tester.element(find.byType(TNoticeBar));
+
+      Color? resolveBg(TNoticeBarVariant v) =>
+          const TNoticeBarThemeData().copyWith(variant: v).resolve(capturedContext).backgroundColor;
+
+      expect(resolveBg(TNoticeBarVariant.info), capturedContext.tTheme.brandLightColor);
+      expect(resolveBg(TNoticeBarVariant.success), capturedContext.tTheme.successLightColor);
+      expect(resolveBg(TNoticeBarVariant.warning), capturedContext.tTheme.warningLightColor);
+      expect(resolveBg(TNoticeBarVariant.error), capturedContext.tTheme.errorLightColor);
     });
   });
 
@@ -479,6 +496,65 @@ void main() {
       await tester.pump(const Duration(seconds: 10));
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: Container())));
       expect(find.byType(TNoticeBar), findsNothing);
+    });
+  });
+
+  // ============================================================
+  // 滚动距离回归：不再使用屏幕宽度
+  // ============================================================
+  group('TNoticeBar 水平滚动距离', () {
+    testWidgets('滚动距离基于公告栏可视区宽度而非屏幕宽度', (tester) async {
+      const containerWidth = 200.0;
+      // 保证 T > 容器宽
+      const text = '这是一段用于验证滚动距离的足够长的公告文本内容，宽度超过容器';
+
+      await tester.pumpWidget(wrapWithTheme(
+        const SizedBox(
+          width: containerWidth,
+          child: TNoticeBar(
+            content: text,
+            marquee: true,
+            speed: 50,
+          ),
+        ),
+      ));
+      // 完成布局并触发 _scroll 建立定时器
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final scrollable = find.descendant(
+        of: find.byType(TNoticeBar),
+        matching: find.byType(SingleChildScrollView),
+      );
+      final scrollView =
+          tester.widget<SingleChildScrollView>(scrollable.first);
+      final controller = scrollView.controller;
+      expect(controller, isNotNull);
+
+      // 文本渲染宽度
+      final textWidth = tester.getSize(find.text(text).first).width;
+      // 修复后动画总距离 = 文本宽度 + 可视区宽度(公告栏实际可视区)
+      final viewportWidth = controller!.position.viewportDimension;
+      final expectedDistance = textWidth + viewportWidth;
+
+      // 连续 pump，跟踪到达的最大滚动位置（到达总距离后回绕到 0）
+      var maxPixels = 0.0;
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 300));
+        final px = controller.position.pixels;
+        if (px > maxPixels) {
+          maxPixels = px;
+        }
+      }
+
+      // 修复后：最大滚动位置 ≈ textWidth + 可视区宽度；
+      // 若误用屏幕宽度(默认 800)，最大滚动位置会多出约 (800-可视区) 的空白段而显著偏大。
+      expect(maxPixels, closeTo(expectedDistance, 80));
+      expect(maxPixels, lessThan(expectedDistance + 100));
+      // 屏幕宽度 800 量级带来的空白段一定会让最大滚动位置远超可视区方案
+      expect(maxPixels, lessThan(expectedDistance + 600));
+      // 修复方案不会引入屏幕宽度的空白段
+      expect(maxPixels, lessThan(textWidth + 500));
     });
   });
 }
