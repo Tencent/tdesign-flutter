@@ -120,6 +120,17 @@
 | isSpacer | bool | - | 是否是透明间隔块。 |
 
 
+### TSkeletonBlockShape
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| rounded | 使用组件主题或 TDesign token 提供的圆角。 |
+| circle | 圆形或胶囊形。 |
+| rectangle | 无圆角矩形。 |
+
+
 ### TSkeletonAnimation
 #### 枚举值
 
@@ -140,14 +151,3 @@
 | image | 图片占位。 |
 | text | 双行文本占位。 |
 | paragraph | 四行段落占位。 |
-
-
-### TSkeletonBlockShape
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| rounded | 使用组件主题或 TDesign token 提供的圆角。 |
-| circle | 圆形或胶囊形。 |
-| rectangle | 无圆角矩形。 |
