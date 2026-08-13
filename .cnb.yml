@@ -68,6 +68,8 @@ $:
         cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.pub-cache:cow
       stages:
         - *install-component
         - *install-example
@@ -79,6 +81,8 @@ $:
         cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.pub-cache:cow
       stages:
         - *install-component
         - *install-example
