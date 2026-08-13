@@ -33,7 +33,12 @@
     sed -i 's/org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx8192M -XX:MaxMetaspaceSize=1024m/' \
       android/gradle.properties
 
-    # 2) Gradle init script 全量镜像（含 pluginManagement）
+    # 2) Gradle init script 全量镜像
+    #    注意：不要在 settingsEvaluated 中向 pluginManagement.repositories 追加 maven 仓库。
+    #    Flutter 的 settings.gradle 已显式声明 pluginManagement.repositories，Gradle 8.11+
+    #    会因 "prefer settings repositories over project repositories" 校验失败。
+    #    因此仅镜像 allprojects（依赖）仓库，构建插件走 settings.gradle 自带的
+    #    google/mavenCentral/gradlePluginPortal。
     mkdir -p ~/.gradle
     cat > ~/.gradle/init.gradle <<'EOF'
     allprojects {
@@ -42,14 +47,6 @@
             maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/google/' }
             maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-central/' }
             maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
-        }
-    }
-    settingsEvaluated { settings ->
-        settings.pluginManagement {
-            repositories {
-                maven { url 'https://mirrors.tencent.com/nexus/repository/gradle-plugins/' }
-                maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
-            }
         }
     }
     EOF
