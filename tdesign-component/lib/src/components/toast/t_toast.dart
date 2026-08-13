@@ -62,20 +62,25 @@ class _ToastInstance {
 
 /// 轻提示组件
 ///
-/// 支持文本、图标、加载中等样式，支持多实例同时显示。
+/// 支持文本、图标、加载中等样式。
+///
+/// 实例语义：
+/// - 未指定 [TToast.toastId] 时，所有匿名 Toast 共用同一个内部实例，
+///   后一次展示会替换前一次，避免重复点击叠加多个 Toast 导致半透明背景
+///   不断加深；
+/// - 指定不同 [TToast.toastId] 时，可多实例并存；
+/// - 指定相同 [TToast.toastId] 时，后一次替换前一次。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
-  static int _instanceCounter = 0;
+
+  /// 未指定 toastId 时的固定匿名实例 ID：后一次展示替换前一次，
+  /// 避免重复点击叠加多个 Toast（半透明背景叠加会不断变深）。
+  static const String _anonymousToastId = 'toast_anonymous';
 
   /// 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。
   /// 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration
   /// 时被误判为无限。
   static const Duration infiniteDuration = Duration(seconds: 99999999);
-
-  /// 生成唯一的Toast ID
-  static String _generateToastId() {
-    return 'toast_${_instanceCounter++}';
-  }
 
   /// 普通文本Toast
   static String showText(
@@ -109,7 +114,7 @@ class TToast {
     /// 指定实例 ID；不传时自动生成。
     String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
+    final id = toastId ?? _anonymousToastId;
     _showOverlay(
       _TTextToast(
         text: text,
@@ -167,7 +172,7 @@ class TToast {
     /// 指定实例 ID；不传时自动生成。
     String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
+    final id = toastId ?? _anonymousToastId;
     _showOverlay(
       _TIconTextToast(
         text: text,
@@ -374,7 +379,7 @@ class TToast {
     /// 指定实例 ID；不传时自动生成。
     String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
+    final id = toastId ?? _anonymousToastId;
     _showOverlay(
       _TToastLoading(
         text: text,
@@ -417,7 +422,7 @@ class TToast {
     /// 指定实例 ID；不传时自动生成。
     String? toastId,
   }) {
-    final id = toastId ?? _generateToastId();
+    final id = toastId ?? _anonymousToastId;
     _showOverlay(
       _TToastLoadingWithoutText(
         config: TToastThemeData(

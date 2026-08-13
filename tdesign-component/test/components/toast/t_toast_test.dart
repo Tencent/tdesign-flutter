@@ -580,17 +580,19 @@ void main() {
       expect(find.text('可关闭'), findsNothing);
     });
 
-    testWidgets('dismissAll 关闭所有 Toast', (tester) async {
+    testWidgets('不同 toastId 的多实例 Toast 并存', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       final context = tester.element(find.byKey(const Key('toast_host')));
       TToast.showText(
         'A',
         context: context,
+        toastId: 'a',
         duration: const Duration(seconds: 10),
       );
       TToast.showText(
         'B',
         context: context,
+        toastId: 'b',
         duration: const Duration(seconds: 10),
       );
       await tester.pump();
@@ -608,9 +610,14 @@ void main() {
       TToast.showText(
         '普通',
         context: context,
+        toastId: 'text',
         duration: const Duration(seconds: 10),
       );
-      final loadingId = TToast.showLoading(context: context, text: '加载中');
+      final loadingId = TToast.showLoading(
+        context: context,
+        text: '加载中',
+        toastId: 'loading',
+      );
       // 仅 pump 单帧，避免 TCircleIndicator 无限动画导致 pumpAndSettle 超时
       await tester.pump();
       expect(find.text('加载中'), findsOneWidget);
@@ -619,6 +626,31 @@ void main() {
       expect(find.text('加载中'), findsNothing);
       expect(find.text('普通'), findsOneWidget);
       TToast.dismissAll();
+    });
+
+    testWidgets('未指定 toastId 重复展示时后一次替换前一次，不叠加', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+
+      // 连续点击两次（不传 toastId），应只显示最新一次，旧的被替换
+      TToast.showText('第一次', context: context);
+      await tester.pump();
+      TToast.showText('第二次', context: context);
+      await tester.pump();
+
+      expect(find.text('第一次'), findsNothing);
+      expect(find.text('第二次'), findsOneWidget);
+      // 只存在一个 toast 容器（无叠加），背景不会因半透明叠加而加深
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Container && w.decoration is BoxDecoration,
+        ),
+        findsOneWidget,
+      );
+
+      TToast.dismissAll();
+      await tester.pump();
+      expect(find.text('第二次'), findsNothing);
     });
   });
 

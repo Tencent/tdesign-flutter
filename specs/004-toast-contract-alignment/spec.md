@@ -57,6 +57,12 @@ TDesign Flutter 的 TToast 组件在与 TDesign Mobile 对齐时存在两处默�
 - `showLoading` / `showLoadingWithoutText` 默认值与 `_showOverlay` 的"是否为无限"判定统一使用 `TToast.infiniteDuration`。
 - 用户显式传入 `TToast.infiniteDuration` 时，语义即为"永不自动消失"；此行为与原先的魔法数字等效，但语义更清晰、便于维护。
 
+### 实例语义（防重复叠加）
+
+- 未指定 `toastId` 的匿名 Toast 共用固定内部 ID `toast_anonymous`，后一次展示会替换前一次。
+- 目的是避免重复调用（如连续点击同一按钮）叠加多个半透明 Toast，导致"重复显示"且"背景不断变深"。
+- 指定不同 `toastId` 时仍可多实例并存；指定相同 `toastId` 时后一次替换前一次（行为与原先一致）。
+
 ## 验收标准
 
 - [x] 普通 toast 默认背景色为 `fontGyColor2`，测试断言同步更新。
@@ -64,5 +70,7 @@ TDesign Flutter 的 TToast 组件在与 TDesign Mobile 对齐时存在两处默�
 - [x] 普通 toast 默认 duration 为 2000ms，超过后自动消失。
 - [x] 加载类 toast 默认 duration 为 `TToast.infiniteDuration`，不自动消失。
 - [x] `TToast.infiniteDuration` 具名常量存在并被统一使用，魔法数字哨兵值不再散落。
+- [x] 未指定 `toastId` 的匿名 Toast 重复展示时后一次替换前一次，不叠加、背景不加深。
+- [x] 指定不同 `toastId` 时多实例仍可并存。
 - [x] toast 相关单元 / Widget 测试通过。
 - [x] flutter analyze 与 git diff --check 通过。
