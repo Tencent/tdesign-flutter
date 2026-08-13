@@ -103,7 +103,7 @@ $:
       runner:
         cpus: 16
       docker:
-        image: gmeligio/flutter-android:3.44.9
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
         volumes:
           - /root/.gradle:cow
           - /root/.pub-cache:cow
@@ -125,10 +125,10 @@ $:
         - *install-example
         - *build-web
 
-    # 构建 Web（flutter latest），使用 gmeligio/flutter-web 镜像
+    # 构建 Web（flutter latest）
     - name: build web (flutter latest)
       docker:
-        image: gmeligio/flutter-web:3.44.9
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
       <<: *git-safe-env
       stages:
         - *install-component
