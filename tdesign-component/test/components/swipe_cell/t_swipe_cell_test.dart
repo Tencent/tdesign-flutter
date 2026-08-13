@@ -241,6 +241,53 @@ void main() {
       expect(flexibleCount, greaterThanOrEqualTo(2));
     });
   });
+
+  group('TSwipeCellThemeData', () {
+    const base = TSwipeCellThemeData(
+      duration: Duration(milliseconds: 100),
+      actionBackgroundColor: Colors.red,
+      actionIconColor: Colors.green,
+      actionTextStyle: TextStyle(color: Colors.blue),
+      actionIconSize: 20,
+      actionSpacing: 4,
+    );
+
+    test('copyWith 仅覆盖非空字段', () {
+      final updated = base.copyWith(actionBackgroundColor: Colors.orange);
+      expect(updated.actionBackgroundColor, Colors.orange);
+      expect(updated.actionIconColor, base.actionIconColor);
+      expect(updated.actionTextStyle, base.actionTextStyle);
+      expect(updated.actionIconSize, base.actionIconSize);
+      expect(updated.actionSpacing, base.actionSpacing);
+      expect(updated.duration, base.duration);
+    });
+
+    test('merge 以 other 优先，null other 返回自身', () {
+      final merged = base.merge(const TSwipeCellThemeData(
+        actionIconColor: Colors.teal,
+        actionIconSize: 32,
+      ));
+      expect(merged.actionBackgroundColor, base.actionBackgroundColor);
+      expect(merged.actionIconColor, Colors.teal);
+      expect(merged.actionIconSize, 32);
+      expect(merged.actionSpacing, base.actionSpacing);
+      expect(merged.duration, base.duration);
+
+      expect(base.merge(null), same(base));
+    });
+
+    test('lerp 对颜色 / 尺寸 / 间距做线性插值', () {
+      const target = TSwipeCellThemeData(
+        actionBackgroundColor: Colors.black,
+        actionIconSize: 40,
+        actionSpacing: 8,
+      );
+      final mid = base.lerp(target, 0.5)!;
+      expect(mid.actionBackgroundColor, const Color(0xFF800000));
+      expect(mid.actionIconSize, 30);
+      expect(mid.actionSpacing, 6);
+    });
+  });
 }
 
 TSwipeCellAction panelAction(String label) =>
