@@ -1,6 +1,6 @@
 ---
 name: tdesign-flutter-conventions
-description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基于 Issue 创建分支的 cnb-issue-<issue.number> 命名、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析、文档来源与注释规范）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动、维护组件注释与文档等任务时，都应先加载并遵守本约定。通用规范以 CONTRIBUTING.md / specs/README.md 为准，本文档只补充 CNB 平台特有的执行细则。
+description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基于 Issue 创建分支的 cnb-issue-<issue.number> 命名、PR 模板填写、close #xx 关联 Issue、Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析）。任何 NPC 在本仓库执行创建分支、提交 PR、分析组件改动等任务时，都应先加载并遵守本约定。通用规范以 CONTRIBUTING.md / specs/README.md 为准，本文档只补充 CNB 平台特有的执行细则。
 ---
 
 # TDesign Flutter 仓库协作约定（CNB NPC 版）
@@ -85,25 +85,6 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的协作约定（基�
 4. 组件样式 / 布局默认值变化：可能影响既有页面视觉表现，应作为潜在 breaking change 提醒。
 5. 涉及公共 API 变更或组件重构时，按仓库规范应创建对应的 Spec（`specs/<编号>-<短名称>/`）。
 6. 输出时明确给出结论：是 / 否 breaking change，影响范围、受影响的 API，以及建议的迁移或兼容策略。
-
-## 七、文档来源与注释规范（注释即文档）
-
-本仓库的"文档"有明确来源与分工，改动组件时须先弄清楚每条文档该写在哪，避免重复维护与分叉：
-
-| 文档载体 | 来源 / 职责 | 何时维护 |
-|---------|------------|---------|
-| **dartdoc 注释**（`///`） | 组件公开 API 的**用户文档**，由代码注释承载，`dart doc` 生成站点文档 | 新增 / 修改公开 API（类、字段、参数、回调、枚举）时**必须同步**，与代码同一次提交 |
-| **Spec**（`specs/<编号>-<短名称>/`） | 复杂需求 / 重构 / 公共 API 变更的**设计文档**（spec / plan / tasks / acceptance） | 见第五节，先 Spec 后代码，方案变更时同步更新 |
-| **PR 更新日志** | 面向**使用方用户**的变更说明（目标受众是用户，非开发者 / 维护者），由 PR 描述承载 | 见第二节，只记录用户可感知的变更 |
-| **CHANGELOG.md** | 由 CLI 自动生成，**无需人工维护** | 不手动编辑 |
-| **CONTRIBUTING.md / specs/README.md** | 开发 / 协作 / PR / Spec 规范的**唯一事实来源** | 需引用时统一指向，避免重复维护 |
-
-### 注释的必要性
-
-- **公开 API 注释就是组件文档**：使用者（含站点文档生成）直接读到的是 `///` dartdoc，而非 Spec 或 CHANGELOG。因此每个公开字段 / 参数 / 回调 / 枚举 / 类，都要写清"是什么、默认值、生效条件、三态语义（省略 / 显式 null / 自定义）、与相关字段的关系"。
-- **注释必须与实现一致**：改行为就要改注释，避免注释与代码长期分叉（注释过期会误导使用者，危害不亚于缺注释）。
-- **内部实现注释**（非公开 API）：用于解释"为什么这么做"的边界条件、时序、避免踩坑点（如手势竞争、回调顺序、Completer 生命周期），帮助后续维护者与 AI 理解设计意图；无信息量的赘述应删除。
-- **Review / 修改组件时**：把"注释是否随代码同步更新"作为与"代码是否正确"同等重要的自查项。
 
 ## 回答风格
 
