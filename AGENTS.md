@@ -13,7 +13,7 @@
 
 1. **分支 / PR 规范**：分支名 `<cnb.username/>/<types>/<功能需求>`；PR 标题遵循 Conventional Commits。CNB 平台 NPC 若基于 Issue 创建，使用 `cnb-issue-<issue.number>` 前缀（见 SKILL.md）。详情见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)。
 2. **提交 PR 遵守模板**：按 `.github/PULL_REQUEST_TEMPLATE.md` **完整保留原模板结构**（所有选项含未勾选的 `[ ]`、所有 HTML 注释原样保留），只打勾 / 填写、不删减；PR 描述「更新日志」**只记录用户可感知的变更**（目标受众是用户，非开发者 / 维护者），内部 / CI / 文档结构调整等用户无需感知的改动**不写日志**，勾选「本条 PR 不需要纳入 Changelog」即可（`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，无需人工维护）。格式细则见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)。
-3. **关联相关 Issue**：有相关 Issue 时，在 PR 正文以 `close #xx`（如 `close #22`）形式携带关联。
+3. **关联相关 Issue**：Issue 主阵地是 GitHub。**CNB 平台生成的 PR 不自动关联 / 不写死 `close #xx` 指向 CNB Issue**（与 GitHub 冲突不一致），应在非 Issue 平台（CNB）保留 Issue 关联提示，真正的 `close #xx` 关联在 GitHub 侧 PR 中填写。
 4. **Spec 规范对齐**：组件 API 变更 / 重构 / 跨目录改动按 [`specs/README.md`](./specs/README.md) 创建 Spec，提交代码须与 Spec 行为契约一致并同步更新。
 5. **Flutter 双版本兼容**：同时兼容 `flutter@3.32.0` 与 `flutter@latest`。
 6. **breaking change 分析**：组件改动时判断是否改变公开 API 签名 / 默认行为 / 删除能力。

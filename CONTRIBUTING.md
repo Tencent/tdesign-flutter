@@ -39,6 +39,15 @@ tdesign-site/       // tdesign flutter 站点
 
 即 PR 正文形态为「完整模板 + 打勾 + 填写」，与模板逐行对应、无删减、无缺漏。
 
+## PR 关联 Issue
+
+Issue 的**主阵地是 GitHub**。CNB 是镜像平台，其 Issue 与 GitHub Issue 是两套体系、编号 / 状态不同步，因此：
+
+1. **CNB 平台生成的 PR 不自动关联 / 不写死 `close #xx` 指向 CNB Issue**，避免与 GitHub 侧的 Issue 关联冲突、造成两边状态不一致。
+2. **Issue 关联在 GitHub 侧保留**：`close #xx` 指向 GitHub Issue 的关联应在 GitHub 对应的 PR 中填写，合并后由 GitHub 自动关闭对应 Issue。
+3. **非 Issue 平台（CNB）保留关联提示**：CNB 生成的 PR 应在「相关 Issue」小节给出**提示**，说明该需求的 Issue 关联在 GitHub 保留，提醒维护者到 GitHub PR 中补充，避免遗漏。
+4. 自查清单「相关 Issue」处勾选时，明确该关联在 GitHub 保留。
+
 ## PR 更新日志规范
 
 PR 描述「更新日志」小节是**面向实际使用方的用户**的本次变更说明（与仓库自动生成的 `CHANGELOG.md` 不是一回事），其**目标受众是「用户」而非开发者 / 维护者**。因此：
