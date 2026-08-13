@@ -88,7 +88,7 @@ $:
     # 构建 APK，使用 gmeligio/flutter-android 镜像（Docker Hub）
     - name: build apk (flutter 3.32.0)
       runner:
-        cpus: 32
+        cpus: 8
       docker:
         image: gmeligio/flutter-android:3.32.0
         volumes:
@@ -102,7 +102,7 @@ $:
 
     - name: build apk (flutter latest)
       runner:
-        cpus: 32
+        cpus: 8
       docker:
         image: gmeligio/flutter-android:3.44.9
         volumes:
@@ -117,7 +117,7 @@ $:
     # 构建 Web，使用项目开发环境镜像（自带 Flutter 3.32.0，与 .fvmrc 一致）
     - name: build web (flutter 3.32.0)
       runner:
-        cpus: 16
+        cpus: 8
       docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
       <<: *git-safe-env
