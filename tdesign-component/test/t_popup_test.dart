@@ -193,6 +193,76 @@ void main() {
       await tester.pumpAndSettle();
       expect(closeCount, 1);
     });
+
+    testWidgets('关闭时 onClose 先于 onVisibleChange(false) 触发', (tester) async {
+      final order = <String>[];
+      late BuildContext hostContext;
+      TPopupHandle? handle;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          handle = TPopup.show(
+            hostContext,
+            options: TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 100,
+                onOpen: () => order.add('open'),
+                onClose: () => order.add('close'),
+                onVisibleChange: (v, _) => order.add('visible:$v'),
+                child: const SizedBox(height: 60)),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+      handle!.close();
+      await tester.pumpAndSettle();
+      // 打开：onOpen → onVisibleChange(true)；关闭：onClose → onVisibleChange(false)
+      expect(order, ['open', 'visible:true', 'close', 'visible:false']);
+    });
+
+    testWidgets('handle.result 每次打开对应独立 Future，关闭后按结果完成', (tester) async {
+      late BuildContext hostContext;
+      TPopupHandle? handle;
+
+      await openPopup(
+        tester,
+        onPressed: () {
+          hostContext = tester.element(find.text('open'));
+          handle = TPopup.show(
+            hostContext,
+            options: const TPopupOptions(
+                placement: TPopupPlacement.bottom,
+                height: 100,
+                cancelBuilder: null,
+                confirmBuilder: null,
+                child: SizedBox(height: 60, child: Text('panel'))),
+          );
+        },
+      );
+      await tester.pumpAndSettle();
+
+      // 首次打开：读取 result，close 携带结果后该 Future 被完成。
+      final first = handle!.result;
+      Object? completedFirst;
+      first.then((v) => completedFirst = v);
+      handle!.close('first');
+      await tester.pumpAndSettle();
+      expect(completedFirst, 'first');
+
+      // 再次打开：应返回新的、未完成的 Future，并在下次关闭时完成。
+      handle!.open(hostContext);
+      await tester.pumpAndSettle();
+      final second = handle!.result;
+      expect(identical(second, first), isFalse,
+          reason: '每次 open 都应生成独立的 result Future');
+      Object? completedSecond;
+      second.then((v) => completedSecond = v);
+      handle!.close('second');
+      await tester.pumpAndSettle();
+      expect(completedSecond, 'second');
+    });
   });
 
   group('TPopup Navigator 选择', () {

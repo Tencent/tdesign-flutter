@@ -40,7 +40,10 @@ class TPopupHandle {
 
   /// 当前这次打开结束后的路由结果。
   ///
-  /// 每次 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
+  /// 每次 [open] 都会在打开开始时重置为新的 Future；应在对应的 [open] 之后读取。
+  ///
+  /// 若在 [open] 之前访问，会提前创建一个待完成的 Future，并会被首次 [open] 复用
+  /// （而非丢弃），从而保证它最终能被 [open] 返回的路由结果完成，不会永久 pending。
   Future<Object?> get result =>
       (_resultCompleter ??= Completer<Object?>()).future;
 
@@ -83,7 +86,13 @@ class TPopupHandle {
     final normalized = options.normalized();
     final onClosed = normalized.onClosed;
     final openEpoch = ++_openEpoch;
-    final resultCompleter = Completer<Object?>();
+    // 复用尚未完成的 completer（例如 [result] 在 [open] 之前被访问过），
+    // 避免旧 completer 被丢弃后永久 pending；已完成则新建，保证每次 open 有独立 Future。
+    final previous = _resultCompleter;
+    final resultCompleter =
+        (previous != null && !previous.isCompleted)
+            ? previous
+            : Completer<Object?>();
     _resultCompleter = resultCompleter;
     final captureFrom = context?.mounted == true ? context! : themeContext;
     final capturedThemes = captureFrom.mounted

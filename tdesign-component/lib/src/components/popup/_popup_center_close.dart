@@ -9,9 +9,14 @@ Widget buildPopupCenterCloseControl({
 }) {
   if (_isPopupDefaultClose(options.closeBuilder)) {
     final theme = context.tTheme;
+    final popupTheme = Theme.of(context).extension<TPopupThemeData>();
     return IconButton(
       tooltip: context.resource.close,
-      icon: Icon(TIcons.close_circle, color: theme.fontWhColor1, size: 32),
+      icon: Icon(
+        TIcons.close_circle,
+        color: popupTheme?.closeIconColor ?? theme.fontWhColor1,
+        size: popupTheme?.closeIconSize ?? 32,
+      ),
       onPressed: () => onCloseWithTrigger(TPopupTrigger.close),
     );
   }

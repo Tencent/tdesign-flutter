@@ -369,7 +369,8 @@ class TPopupOptions {
 
   /// 点击可见蒙层是否关闭。
   ///
-  /// 省略时默认跟随 [showOverlay]：显示蒙层时为 true，否则为 false。
+  /// 省略时默认跟随 [showOverlay]：显示蒙层（true）时默认可点蒙层关闭，
+  /// 否则（false）不响应蒙层点击关闭。即“默认只在有蒙层时才开启蒙层点关”。
   bool get closeOnOverlayClick => _closeOnOverlayClick ?? showOverlay;
 
   /// 蒙层颜色，默认 black54。
@@ -381,9 +382,13 @@ class TPopupOptions {
   /// 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。
   ///
   /// 结合 [showOverlay] 可表达三种模式：
-  /// * `modal=true, showOverlay=true`：标准模态弹层
-  /// * `modal=true, showOverlay=false`：透明模态弹层
-  /// * `modal=false, showOverlay=false`：非模态浮层
+  /// * `modal=true, showOverlay=true`：标准模态弹层（有可见蒙层，默认可点蒙层关闭）
+  /// * `modal=true, showOverlay=false`：透明模态弹层（无可见蒙层，仍阻断背景）
+  /// * `modal=false, showOverlay=false`：非模态浮层（不阻断背景，无蒙层）
+  ///
+  /// 注意：`showOverlay=true` 必须搭配 `modal=true`（可见蒙层必然阻断背景交互），
+  /// 若需“可见半透明蒙层但不阻断背景”，属于不支持的组合，会在
+  /// [TPopupOptions.assertPlacementParams] / [TPopupHandle.open] 时抛出 [FlutterError]。
   final bool modal;
 
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
@@ -607,14 +612,15 @@ class TPopupOptions {
         titleWidget != null;
   }
 
+  /// 校验当前配置与 [placement] 是否匹配；不匹配时抛出 [FlutterError]。
+  ///
+  /// 与 [TPopupHandle.open] 的校验强度一致，debug / release 均生效，用于在
+  /// 组装配置阶段尽早暴露错误，而非等 open 时才暴露。
   void assertPlacementParams() {
-    assert(() {
-      final err = _validatePlacementParams();
-      if (err != null) {
-        _throwPopupOptionsValidationError(err);
-      }
-      return true;
-    }());
+    final error = _validatePlacementParams();
+    if (error != null) {
+      _throwPopupOptionsValidationError(error);
+    }
   }
 
   String? _validatePlacementParams() {

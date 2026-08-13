@@ -29,6 +29,21 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   /// center 未显式传入宽高时的默认面板尺寸
   final Size? centerSize;
 
+  /// center 内置关闭按钮的图标颜色
+  final Color? closeIconColor;
+
+  /// center 内置关闭按钮的图标尺寸
+  final double? closeIconSize;
+
+  /// bottom 内置头部标题的文本样式
+  final TextStyle? headerTitleStyle;
+
+  /// bottom 内置头部“取消”按钮的文本样式
+  final TextStyle? cancelButtonStyle;
+
+  /// bottom 内置头部“确定”按钮的文本样式
+  final TextStyle? confirmButtonStyle;
+
   const TPopupThemeData({
     this.barrierColor,
     this.barrierOpacity,
@@ -38,8 +53,14 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     this.edgeHeight,
     this.drawerWidth,
     this.centerSize,
+    this.closeIconColor,
+    this.closeIconSize,
+    this.headerTitleStyle,
+    this.cancelButtonStyle,
+    this.confirmButtonStyle,
   }) : assert(edgeHeight == null || edgeHeight > 0),
-       assert(drawerWidth == null || drawerWidth > 0);
+       assert(drawerWidth == null || drawerWidth > 0),
+       assert(closeIconSize == null || closeIconSize > 0);
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
   TPopupThemeData merge(TPopupThemeData? other) {
@@ -55,6 +76,11 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
       edgeHeight: other.edgeHeight ?? edgeHeight,
       drawerWidth: other.drawerWidth ?? drawerWidth,
       centerSize: other.centerSize ?? centerSize,
+      closeIconColor: other.closeIconColor ?? closeIconColor,
+      closeIconSize: other.closeIconSize ?? closeIconSize,
+      headerTitleStyle: other.headerTitleStyle ?? headerTitleStyle,
+      cancelButtonStyle: other.cancelButtonStyle ?? cancelButtonStyle,
+      confirmButtonStyle: other.confirmButtonStyle ?? confirmButtonStyle,
     );
   }
 
@@ -68,6 +94,11 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     double? edgeHeight,
     double? drawerWidth,
     Size? centerSize,
+    Color? closeIconColor,
+    double? closeIconSize,
+    TextStyle? headerTitleStyle,
+    TextStyle? cancelButtonStyle,
+    TextStyle? confirmButtonStyle,
   }) {
     return TPopupThemeData(
       barrierColor: barrierColor ?? this.barrierColor,
@@ -78,6 +109,11 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
       edgeHeight: edgeHeight ?? this.edgeHeight,
       drawerWidth: drawerWidth ?? this.drawerWidth,
       centerSize: centerSize ?? this.centerSize,
+      closeIconColor: closeIconColor ?? this.closeIconColor,
+      closeIconSize: closeIconSize ?? this.closeIconSize,
+      headerTitleStyle: headerTitleStyle ?? this.headerTitleStyle,
+      cancelButtonStyle: cancelButtonStyle ?? this.cancelButtonStyle,
+      confirmButtonStyle: confirmButtonStyle ?? this.confirmButtonStyle,
     );
   }
 
@@ -101,6 +137,23 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
       edgeHeight: lerpDouble(edgeHeight, other.edgeHeight, t),
       drawerWidth: lerpDouble(drawerWidth, other.drawerWidth, t),
       centerSize: Size.lerp(centerSize, other.centerSize, t),
+      closeIconColor: Color.lerp(closeIconColor, other.closeIconColor, t),
+      closeIconSize: lerpDouble(closeIconSize, other.closeIconSize, t),
+      headerTitleStyle: TextStyle.lerp(
+        headerTitleStyle,
+        other.headerTitleStyle,
+        t,
+      ),
+      cancelButtonStyle: TextStyle.lerp(
+        cancelButtonStyle,
+        other.cancelButtonStyle,
+        t,
+      ),
+      confirmButtonStyle: TextStyle.lerp(
+        confirmButtonStyle,
+        other.confirmButtonStyle,
+        t,
+      ),
     );
   }
 

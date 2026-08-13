@@ -123,12 +123,16 @@ class _DefaultHeader extends StatelessWidget {
 
   Widget _titleWrap(BuildContext context, TThemeData theme, Widget child) {
     // 标题内容由用户插槽决定样式，这里只做布局约束。
+    final popupTheme = Theme.of(context).extension<TPopupThemeData>();
+    final titleStyle =
+        popupTheme?.headerTitleStyle ??
+        TextStyle(
+          color: theme.textColorPrimary,
+          fontSize: theme.fontTitleLarge?.size,
+          fontWeight: FontWeight.w700,
+        );
     return DefaultTextStyle.merge(
-      style: TextStyle(
-        color: theme.textColorPrimary,
-        fontSize: theme.fontTitleLarge?.size,
-        fontWeight: FontWeight.w700,
-      ),
+      style: titleStyle,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       child: child,
@@ -137,12 +141,16 @@ class _DefaultHeader extends StatelessWidget {
 
   Widget _buildCancel(BuildContext context, TThemeData theme) {
     if (_isPopupDefaultCancel(options.cancelBuilder)) {
+      final popupTheme = Theme.of(context).extension<TPopupThemeData>();
+      // popupTheme.cancelButtonStyle 经 TText.style 覆盖（优先级最高），
+      // 未设置时回退到全局 theme 的默认色/字体。
       return TToolbarPressable(
         onTap: () => onCloseWithTrigger(TPopupTrigger.cancel),
         child: TText(
           context.resource.cancel,
           textColor: theme.textColorSecondary,
           font: theme.fontBodyLarge,
+          style: popupTheme?.cancelButtonStyle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -156,6 +164,9 @@ class _DefaultHeader extends StatelessWidget {
 
   Widget _buildConfirm(BuildContext context, TThemeData theme) {
     if (_isPopupDefaultConfirm(options.confirmBuilder)) {
+      final popupTheme = Theme.of(context).extension<TPopupThemeData>();
+      // popupTheme.confirmButtonStyle 经 TText.style 覆盖（优先级最高），
+      // 未设置时回退到全局 theme 的默认色/字体。
       return TToolbarPressable(
         onTap: () => onCloseWithTrigger(TPopupTrigger.confirm),
         child: TText(
@@ -163,6 +174,7 @@ class _DefaultHeader extends StatelessWidget {
           textColor: theme.brandNormalColor,
           font: theme.fontTitleMedium,
           fontWeight: FontWeight.w600,
+          style: popupTheme?.confirmButtonStyle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

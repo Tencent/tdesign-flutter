@@ -23,7 +23,6 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   bool _openedFired = false;
   bool _closedFired = false;
   bool _closeStartFired = false;
-  String? _barrierSemanticsLabel;
 
   _PopupBarrierMode get _barrierMode {
     if (!options.modal) {
@@ -57,8 +56,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   bool get barrierDismissible => false;
 
   @override
-  String? get barrierLabel =>
-      options.showOverlay ? _barrierSemanticsLabel : null;
+  String? get barrierLabel => null;
 
   @override
   Color? get barrierColor => null;
@@ -70,20 +68,15 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   @override
   bool get maintainState => !options.destroyOnClose;
 
+  /// 蒙层屏障：只负责阻断背景交互，不处理点击关闭。
+  ///
+  /// 点击关闭统一由 [buildTransitions] 中 [_buildBarrier] 的 GestureDetector 处理，
+  /// 避免与 ModalBarrier 的 onDismiss 在同一手势里双重触发 [onOverlayClick] / 关闭。
+  /// 这里仍保留 ModalBarrier 以在模态场景下正确阻断底层语义与焦点。
   @override
   Widget buildModalBarrier() {
     if (_barrierMode == _PopupBarrierMode.nonModal) {
       return const SizedBox.shrink();
-    }
-    if (_barrierMode == _PopupBarrierMode.modalOverlay &&
-        options.closeOnOverlayClick) {
-      return ModalBarrier(
-        color: Colors.transparent,
-        dismissible: true,
-        onDismiss: _handleOverlayTap,
-        semanticsLabel: _resolveBarrierSemanticsLabel(navigator!.context),
-        barrierSemanticsDismissible: true,
-      );
     }
     return const ModalBarrier(
       color: Colors.transparent,
@@ -93,13 +86,16 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   /// 关闭开始前统一入口：触发 [TPopupOptions.onClose]、[onVisibleChange](false, …)。
+  ///
+  /// 回调顺序与打开保持一致（打开：onOpen → onVisibleChange(true)；
+  /// 关闭：onClose → onVisibleChange(false)），避免使用者对时序产生歧义。
   void fireCloseStart(TPopupTrigger trigger) {
     if (_closeStartFired) {
       return;
     }
     _closeStartFired = true;
-    options.onVisibleChange?.call(false, trigger);
     options.onClose?.call();
+    options.onVisibleChange?.call(false, trigger);
   }
 
   @override
@@ -173,6 +169,13 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     return capturedThemes?.wrap(content) ?? content;
   }
 
+  /// 可见蒙层的着色层 + 唯一点击处理层。
+  ///
+  /// 仅在 [TPopupPlacement] 有蒙层（[modal] 且 [showOverlay]）时被 [buildTransitions]
+  /// 放入 [Stack]，作为整屏可见蒙层：负责绘制 [overlayColor]，并通过 [_handleOverlayTap]
+  /// 统一处理"点击蒙层"语义（是否关闭由 [TPopupOptions.closeOnOverlayClick] 决定）。
+  /// 它比 [buildModalBarrier] 的透明 ModalBarrier 更靠上，命中测试时优先于后者，
+  /// 因此点击关闭只会在这一层触发一次。
   Widget _buildBarrier(BuildContext context, double t) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -181,12 +184,6 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         color: _barrierColor.withValues(alpha: _barrierColor.a * t),
       ),
     );
-  }
-
-  String _resolveBarrierSemanticsLabel(BuildContext context) {
-    return _barrierSemanticsLabel ??= MaterialLocalizations.of(
-      context,
-    ).modalBarrierDismissLabel;
   }
 
   void _handleOverlayTap() {
