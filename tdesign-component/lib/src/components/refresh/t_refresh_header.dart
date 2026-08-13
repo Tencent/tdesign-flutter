@@ -72,7 +72,6 @@ class TRefreshHeader extends Header {
               completeDuration ??
               const Duration(seconds: 1),
           hapticFeedback: hapticFeedback ?? enableHapticFeedback,
-          overScroll: overScroll ?? true,
           position: position,
         );
 
