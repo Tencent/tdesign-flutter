@@ -76,7 +76,11 @@ jobs:
       - name: Check Flutter component contracts
         run: node scripts/check-flutter-component-contracts.mjs
 
-      - name: flutter pub get
+      - name: install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: install example dependencies
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
