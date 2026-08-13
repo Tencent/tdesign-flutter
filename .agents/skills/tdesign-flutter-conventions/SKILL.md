@@ -9,7 +9,9 @@ description: TDesign Flutter 仓库的协作约定（分支/PR 命名规范、PR
 
 ## 一、分支与 PR 规范
 
-在创建 PR / 分支时，必须严格遵守以下分支命名约定：
+在创建 PR / 分支时，必须严格遵守以下分支命名约定。
+
+> **与 AGENTS.md 的区别**：本 skill 是 CNB 平台专属约定，能获取到 CNB 平台的 Issue 编号，因此基于 Issue 创建时使用 `cnb-issue-<issue.number>` 格式；而 AGENTS.md 面向无法获取 CNB Issue 编号的通用 AI 工具（Codex / Cursor 等），故统一使用不携带 Issue 编号的通用格式 `<cnb.username/>/<types>/<功能需求>`。两者不冲突：**CNB 平台上的 NPC 以本 skill 为准**，通用工具以 AGENTS.md 为准。
 
 - **根据 Issue 创建的分支 / PR**（最常见）：格式 `<cnb.username/>/cnb-issue-<issue.number>/<types>/<功能需求>`
   - `<cnb.username/>`：当前操作者的 CNB 用户名（不要猜测，通过环境变量或平台信息获取）。
