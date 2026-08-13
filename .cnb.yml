@@ -1,3 +1,25 @@
+# ===== 公共可复用片段（以 . 开头，不会被识别为分支名）=====
+
+# 安装组件依赖
+.install-component: &install-component
+  name: install component dependencies
+  script: cd tdesign-component && flutter pub get
+
+# 安装示例依赖
+.install-example: &install-example
+  name: install example dependencies
+  script: cd tdesign-component/example && flutter pub get
+
+# APK 构建
+.build-apk: &build-apk
+  name: flutter build apk
+  script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+
+# Web 构建
+.build-web: &build-web
+  name: flutter build web
+  script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+
 $:
   push:
     # 导入密钥仓库文件为环境变量
@@ -11,6 +33,60 @@ $:
             auth_type: https
             username: ${GIT_USERNAME}
             password: ${GIT_ACCESS_TOKEN}
+
+  pull_request:
+    # 构建 APK
+    - name: build apk (flutter 3.32.0)
+      runner:
+        cpus: 16
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.gradle:cow
+          - /root/.pub-cache:cow
+      stages:
+        - *install-component
+        - *install-example
+        - *build-apk
+
+    - name: build apk (flutter latest)
+      runner:
+        cpus: 16
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.gradle:cow
+          - /root/.pub-cache:cow
+      stages:
+        - *install-component
+        - *install-example
+        - *build-apk
+
+    # 构建 Web
+    - name: build web (flutter 3.32.0)
+      runner:
+        cpus: 16
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - *install-component
+        - *install-example
+        - *build-web
+
+    # 构建 Web（flutter latest）
+    - name: build web (flutter latest)
+      runner:
+        cpus: 16
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - *install-component
+        - *install-example
+        - *build-web
 
   # 分支被删除时，自动关闭分支名中关联的 Issue（如 rss1102/cnb-issue-31/fix/xxx）
   # 注意：branch.delete 事件使用【默认分支】的最新代码和配置（被删分支已不存在）
