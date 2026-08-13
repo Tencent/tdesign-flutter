@@ -81,5 +81,5 @@
 - [x] 移除的高级参数不再出现在 `TRefreshHeader` 构造器与 API 文档中。
 - [x] `TRefreshThemeData` 支持 `loadingIconColor` / `loadingTextColor` 主题覆盖，且实例 / 全局回退链路正确。
 - [x] 示例 `onRefresh` 返回 `Future`，刷新完成动画与计数更新同步。
-- [ ] 单元与 Widget 测试全部通过（待 CI / 本地执行确认）。
+- [ ] 单元与 Widget 测试全部通过（CI 双版本构建已通过；组件单测建议本地 `flutter test` 闭环确认）。
 - [x] 明确标注该改动为 breaking change 并在 PR 更新日志中说明迁移方式。
