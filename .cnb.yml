@@ -34,13 +34,21 @@
       android/gradle.properties
 
     # 2) Gradle init script 全量镜像
-    #    注意：不要在 settingsEvaluated 中向 pluginManagement.repositories 追加 maven 仓库。
-    #    Flutter 的 settings.gradle 已显式声明 pluginManagement.repositories，Gradle 8.11+
-    #    会因 "prefer settings repositories over project repositories" 校验失败。
-    #    因此仅镜像 allprojects（依赖）仓库，构建插件走 settings.gradle 自带的
-    #    google/mavenCentral/gradlePluginPortal。
+    #    Flutter 新版 flutter-plugin-loader 会在 settingsEvaluated 中向
+    #    pluginManagement.repositories 追加本地 SDK 的 maven 仓库；当 repositoriesMode
+    #    为 PREFER_SETTINGS 时，Gradle 8.11+ 会报
+    #    "prefer settings repositories over project repositories" 校验错误。
+    #    因此这里把 repositoriesMode 显式改为 PREFER_PROJECT，并镜像 allprojects 依赖仓库。
     mkdir -p ~/.gradle
     cat > ~/.gradle/init.gradle <<'EOF'
+    // 显式改用 PREFER_PROJECT，避免 Gradle 8.11+ 因 Flutter plugin-loader
+    // 追加 maven 仓库触发 "prefer settings repositories" 校验失败
+    settingsEvaluated { settings ->
+        settings.dependencyResolutionManagement.repositoriesMode.set(
+            org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_PROJECT
+        )
+    }
+
     allprojects {
         repositories {
             maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
