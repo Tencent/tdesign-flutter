@@ -22,7 +22,7 @@ tdesign-site/       // tdesign flutter 站点
 - 组件 API 和演示代码，请参考 [demo_tool/README.md](./tdesign-component/demo_tool/README.md) 文件。
 - 组件内部的固定文案，都应该抽离到 TResourceDelegate 中统一管理，方便业务进行国际化适配。
 - 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
-- 组件改动须同步维护 `tdesign-component/CHANGELOG.md` 的更新日志，逐条列写实际变更，遵循 `fix(组件名称): 修复 xxx`、`feat(组件名称): 新增 xxx` 格式；一个 PR 含多个变更时按条分开。
+- `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**；PR 的变更说明请在 PR 描述「更新日志」小节按条列写即可。
 
 ## 示例代码片段
 
@@ -59,6 +59,6 @@ dart run tool/generate_example_code.dart --check
 5. 完成代码和测试后，在 `acceptance.md` 中记录实际命令、测试结果、人工验收项和未覆盖风险。
 6. 提交 PR 时，在正文中附上 Spec 目录链接；实现发生变化时，必须同步更新 Spec。
 7. 提交的代码必须与 Spec 定义的行为契约 / 验收标准一致，Review 时同时核对实现与 Spec 是否相符。
-8. 变更对应的更新日志（CHANGELOG）须与 Spec 描述一致，逐条列写，不得遗漏或夸大。
+8. PR 描述「更新日志」小节须与 Spec 描述一致，按条列写实际变更（`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，无需人工维护）。
 
 简单文案、格式调整和单文件局部修改不要求创建完整 Spec。Spec 只描述设计和验收，不替代代码、测试或生成文档。

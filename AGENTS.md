@@ -8,7 +8,7 @@
 执行涉及分支 / PR / 组件改动的任务时，请先遵循以下核心约定（详细规则以 skill 为准）：
 
 1. **分支 / PR 规范**：根据 Issue 创建的分支名 `<cnb.username/>/cnb-issue-<issue.number>/<types>/<功能需求>`（无关联 Issue 时用 `<cnb.username/>/<types>/<功能需求>`）；PR 标题遵循 Conventional Commits。
-2. **提交 PR 遵守模板**：按 `.github/PULL_REQUEST_TEMPLATE.md` 逐项填写；更新日志须按条分开，格式 `fix(组件): 修复 xxx`、`feat(组件): 新增 xxx`。
+2. **提交 PR 遵守模板**：按 `.github/PULL_REQUEST_TEMPLATE.md` 逐项填写；PR 描述「更新日志」须按条分开，格式 `fix(组件): 修复 xxx`、`feat(组件): 新增 xxx`（`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，无需人工维护）。
 3. **关联相关 Issue**：有相关 Issue 时，在 PR 正文以 `close #xx`（如 `close #22`）形式携带关联。
 4. **Spec 规范对齐**：组件 API 变更 / 重构 / 跨目录改动按 `specs/README.md` 创建 Spec，提交代码须与 Spec 行为契约一致并同步更新。
 5. **Flutter 双版本兼容**：同时兼容 `flutter@3.32.0` 与 `flutter@latest`。
