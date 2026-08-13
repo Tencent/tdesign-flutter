@@ -98,7 +98,7 @@ TDesign刷新头部
 | loadingIcon | TLoadingIcon? | TLoadingIcon.circle | loading 样式。 |
 | overScroll | bool? | true | 是否允许越界滚动。 |
 | position | IndicatorPosition | IndicatorPosition.above | 刷新头位置。 |
-| processedDuration | Duration? | - | 刷新完成后的处理动画时长。 |
+| processedDuration | Duration? | Duration.zero | 刷新完成后的处理动画时长。默认 `Duration.zero`，刷新任务一完成即可再次下拉刷新；如需完成动画停留，请显式传入时长。 |
 | triggerDistance | double? | 48.0 | 触发刷新任务的偏移量。 |
 
 > 说明：TDesign 层仅暴露视觉参数与最常用行为参数；高级能力（弹簧配置、二楼、无限刷新、triggerWhen* 等）请直接使用 `easy_refresh` 原生 `Header`。

@@ -58,6 +58,7 @@
   `secondaryCloseTriggerOffset`、`notifyWhenInvisible`、`listenable`、
   `triggerWhenReach`、`triggerWhenRelease`、`triggerWhenReleaseNoWait`、`maxOverOffset`。
 - 保留参数的默认值与透传行为与收敛前一致（`clamping` 默认沿用 `float ?? false`）。
+- `processedDuration` 默认值由 `Duration(seconds: 1)` 调整为 `Duration.zero`：刷新任务一旦完成（`onRefresh` 返回的 `Future` resolve，计数已更新），状态机立即结束完成态并复位，用户可**立即**再次下拉刷新，不再受 1s 完成动画锁定期影响（锁定窗口曾导致"刷新完成、计数已更新，但立刻下拉无法进入松开刷新"）。如需保留完成动画停留时长，可显式传入 `processedDuration`。
 - 构造器行为契约不变：`triggerDistance > 0`、`extent >= 0`、`clamping/float` 与
   `triggerDistance >= extent` 的断言逻辑保持一致。
 
@@ -91,5 +92,6 @@
 - [x] `TRefreshThemeData` 支持 `loadingIconColor` / `loadingTextColor` 主题覆盖，且实例 / 全局回退链路正确。
 - [x] 示例 `onRefresh` 返回 `Future`，刷新完成动画与计数更新同步。
 - [x] 刷新完成后可再次下拉刷新（复位兜底），拖拽中不残留「刷新完成」文案。
+- [x] 刷新完成后可**立即**再次下拉刷新：`processedDuration` 默认值缩短为 `Duration.zero`，消除刷新完成后至可再次下拉之间的 1s 完成动画锁定窗口。
 - [ ] 单元与 Widget 测试全部通过（CI 双版本构建已通过；组件单测建议本地 `flutter test` 闭环确认）。
 - [x] 明确标注该改动为 breaking change 并在 PR 更新日志中说明迁移方式。

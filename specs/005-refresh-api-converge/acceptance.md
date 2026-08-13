@@ -35,6 +35,19 @@
 - **文案收紧**：若卡在完成态但用户已重新下拉（`userOffsetNotifier` 为 true），文案显示「下拉刷新」而非残留的「刷新完成」。
 - **回归测试**：新增「刷新完成后可再次下拉刷新（连续多次）」Widget 测试，覆盖连续两次刷新场景。
 
+## 立即再次下拉修复（PR 讨论 comment-2088022189266112512 提出）
+
+针对「刷新完成后、计数已更新，但立刻下拉虽然显示『下拉刷新』却无法进入『松开刷新』，需等约 1s 后才正常」
+的问题，根因是 `processedDuration` 默认 `Duration(seconds: 1)`，刷新任务完成后状态机在 `processed` 态锁定
+整整 1s（`modeLocked`），期间 `_updateMode` 被跳过，无法进入 `drag → ready`。本次修复：
+
+- **`processedDuration` 默认值由 `Duration(seconds: 1)` 改为 `Duration.zero`**：刷新任务一完成（`onRefresh` 返回的
+  `Future` resolve、计数已更新），状态机立即结束完成态并复位，消除 1s 锁定窗口；需要完成动画停留时长可显式传参。
+- **用户重新下拉时主动复位**：监听 `userOffsetNotifier`，当用户刷新完成后重新开始下拉（`userOffset` 由 false → true）
+  而状态机仍停留在 `done` 且 offset 未归零时，主动 `animateToOffset(0, inactive)` 复位，让下拉重新进入 `drag → ready`。
+- **回归测试**：新增「刷新完成后可立即再次下拉并进入松开刷新（无 1s 锁定窗口）」Widget 测试。
+- 该改动改变了 `processedDuration` 的默认行为，属 breaking change，PR 更新日志已用 `⚠️` 标注。
+
 ## 未覆盖项与后续工作
 
 - 建议在合并前本地执行 `flutter test` + `dart analyze` 以闭环 refresh 组件单测（环境未安装 Flutter，未能本地执行）。

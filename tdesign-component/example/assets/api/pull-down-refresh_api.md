@@ -17,7 +17,7 @@ TDesign刷新头部
 | loadingIcon | TLoadingIcon? | - | 自定义 loading 图标样式。 |
 | overScroll | bool? | - | 是否允许越界滚动。 |
 | position | IndicatorPosition | IndicatorPosition.above | 刷新头位置：位于内容上方（`IndicatorPosition.above`）或下方 （`IndicatorPosition.below`），默认在内容上方。 |
-| processedDuration | Duration? | - | 刷新完成后的处理动画时长。 |
+| processedDuration | Duration? | Duration.zero | 刷新完成后的处理动画时长。默认 `Duration.zero`，刷新任务一完成即可再次下拉刷新；如需完成动画停留，请显式传入时长。 |
 | triggerDistance | double? | - | 触发刷新任务的偏移量。 |
 
 #### 公开属性

@@ -78,7 +78,7 @@ class TRefreshHeader extends Header {
           clamping: float ?? false,
           processedDuration: processedDuration ??
               completeDuration ??
-              const Duration(seconds: 1),
+              Duration.zero,
           hapticFeedback: hapticFeedback ?? enableHapticFeedback,
           position: position,
         );
@@ -169,17 +169,69 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
   /// 且 offset 未归零，导致后续无法再次触发下拉刷新。此时主动驱动一次复位。
   Timer? _resetFallbackTimer;
 
+  /// 当前绑定的 `userOffsetNotifier`，用于在状态重建时正确切换监听。
+  ValueNotifier<bool>? _boundUserOffsetNotifier;
+
+  /// 上一次的用户是否处于下拉手势中的状态，用于识别"开始新的下拉手势"边界。
+  bool _lastUserOffset = false;
+
   IndicatorMode get _refreshState => widget.state.mode;
+
+  @override
+  void initState() {
+    super.initState();
+    _bindUserOffsetNotifier();
+  }
 
   @override
   void didUpdateWidget(TGIconHeaderWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _bindUserOffsetNotifier();
     final mode = widget.state.mode;
     final oldMode = oldWidget.state.mode;
     // 刷新任务完成进入 done 时，安排一次复位兜底检查。
     if (mode == IndicatorMode.done && mode != oldMode) {
       _scheduleResetFallback();
     }
+  }
+
+  /// 绑定当前 `widget.state.userOffsetNotifier`，并在变化时自动切换监听。
+  ///
+  /// 用于在"刷新已完成但状态机仍停留在 [IndicatorMode.done]"时，用户重新开始下拉
+  /// 的瞬间主动复位，使状态机回到 [IndicatorMode.inactive]，从而能再次进入
+  /// `drag → ready`（松开刷新），避免"计数已更新但立刻下拉无法进入松开刷新"。
+  void _bindUserOffsetNotifier() {
+    final notifier = widget.state.userOffsetNotifier;
+    if (_boundUserOffsetNotifier == notifier) {
+      return;
+    }
+    _boundUserOffsetNotifier?.removeListener(_onUserOffsetChanged);
+    _boundUserOffsetNotifier = notifier;
+    _lastUserOffset = notifier.value;
+    notifier.addListener(_onUserOffsetChanged);
+  }
+
+  /// 用户开始新的下拉手势（`userOffset` 由 false → true）时，若状态机仍锁定在
+  /// [IndicatorMode.done] 且 offset 未归零，主动驱动一次复位，让用户的下拉能
+  /// 重新进入 `drag → ready`。
+  void _onUserOffsetChanged() {
+    if (!mounted) {
+      return;
+    }
+    final notifier = widget.state.userOffsetNotifier;
+    final now = notifier.value;
+    if (now && !_lastUserOffset) {
+      final state = widget.state;
+      // 刷新已完成、状态机仍停留在 done 且 offset 未归零时，用户重新下拉意味着想
+      // 再次刷新。此时主动复位，让状态机回到 inactive，随后下拉重新进入 drag→ready。
+      if (state.mode == IndicatorMode.done && state.offset > 0) {
+        unawaited(state.notifier.animateToOffset(
+          offset: 0,
+          mode: IndicatorMode.inactive,
+        ));
+      }
+    }
+    _lastUserOffset = now;
   }
 
   /// 在进入 [IndicatorMode.done] 后稍等一拍（给 easy_refresh 自身的回弹复位留足时间），
@@ -195,8 +247,8 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
       return;
     }
     final state = widget.state;
-    // 仅在用户已松手、指示器卡在 done 且 offset 未归零时兜底复位，
-    // 避免与 easy_refresh 自身的回弹复位冲突。
+    // 仅在用户已松手、指示器卡在 done 且 offset 未归零时兜底复位（处理内容过短 /
+    // 回弹未真正复位），避免与 easy_refresh 自身的回弹复位冲突、打断正常回弹。
     if (state.mode == IndicatorMode.done &&
         state.offset > 0 &&
         !state.userOffsetNotifier.value) {
@@ -209,6 +261,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
 
   @override
   void dispose() {
+    _boundUserOffsetNotifier?.removeListener(_onUserOffsetChanged);
     _resetFallbackTimer?.cancel();
     super.dispose();
   }
