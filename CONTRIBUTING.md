@@ -43,10 +43,10 @@ tdesign-site/       // tdesign flutter 站点
 
 Issue 的**主阵地是 GitHub**。CNB 是镜像平台，其 Issue 与 GitHub Issue 是两套体系、编号 / 状态不同步，因此：
 
-1. **CNB 平台生成的 PR 不自动关联 / 不写死 `close #xx` 指向 CNB Issue**，避免与 GitHub 侧的 Issue 关联冲突、造成两边状态不一致。
-2. **Issue 关联在 GitHub 侧保留**：`close #xx` 指向 GitHub Issue 的关联应在 GitHub 对应的 PR 中填写，合并后由 GitHub 自动关闭对应 Issue。
-3. **非 Issue 平台（CNB）保留关联提示**：CNB 生成的 PR 应在「相关 Issue」小节给出**提示**，说明该需求的 Issue 关联在 GitHub 保留，提醒维护者到 GitHub PR 中补充，避免遗漏。
-4. 自查清单「相关 Issue」处勾选时，明确该关联在 GitHub 保留。
+1. **CNB 平台生成的 PR 不关联 CNB Issue**：CNB 生成的 PR 正文**不携带任何 Issue 编号**（既不以 `close #xx` 形式关联 CNB Issue，也不在正文任何小节写明 CNB Issue 编号），避免与 GitHub 侧的 Issue 关联冲突、造成两边状态不一致。
+2. **不写差异 / 关联提示**：CNB 生成的 PR 正文**不额外追加**任何"该需求来源于某 Issue / 请在 GitHub 侧保留关联"之类的提示说明，内容**仅按 `.github/PULL_REQUEST_TEMPLATE.md` 原始模板填写**，模板有「相关 Issue」小节则按模板原样保留（含其 HTML 注释），无实际内容可填时留空即可，不凭空补充说明。
+3. **Issue 关联在 GitHub 侧保留**：真正的 `close #xx` 指向 GitHub Issue 的关联应在 GitHub 对应的 PR 中填写，合并后由 GitHub 自动关闭对应 Issue；该关联与 CNB 侧无关。
+4. 自查清单「相关 Issue」处按模板原样勾选，不额外填写 CNB Issue 编号。
 
 ## PR 更新日志规范
 
