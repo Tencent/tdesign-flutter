@@ -62,7 +62,8 @@ class _ToastInstance {
 
 /// 轻提示组件
 ///
-/// 支持文本、图标、加载中等样式，支持多实例同时显示。
+/// 支持文本、图标、加载中等样式。采用单实例替换语义：
+/// 每次展示新 Toast 时，旧的 Toast 会被移除。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
   static int _instanceCounter = 0;
@@ -456,13 +457,13 @@ class TToast {
     bool? preventTap,
     required String toastId,
   }) {
-    // 不同 ID 的 Toast 可以并存；同 ID 采用替换语义。
-    _toastInstances.remove(toastId)?.cancel();
     final overlayState = Overlay.maybeOf(context);
     if (overlayState == null) {
       debugPrint('warn: TToast requires an Overlay ancestor.');
       return;
     }
+    // 单实例替换语义：新 Toast 展示时移除所有旧实例。
+    dismissAll();
     final captured = InheritedTheme.capture(
       from: context,
       to: overlayState.context,
