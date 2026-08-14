@@ -17,6 +17,25 @@ $:
             password: ${GIT_ACCESS_TOKEN}
 
   pull_request:
+    # 静态分析：flutter 多版本独立跑（不挂钩在 build）
+    - name: analyze (flutter 3.32.0)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.analyze]
+
+    - name: analyze (flutter latest)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.analyze]
+
     # 构建 APK
     - name: build apk (flutter 3.32.0)
       docker:

@@ -1,7 +1,7 @@
 /// dateTimePicker: 包内实现（Snapshot / 边界 / Labels / Mode）。
 library;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show listEquals, mapEquals;
 import 'package:meta/meta.dart';
 
 import '../../theme/resource_delegate.dart';
