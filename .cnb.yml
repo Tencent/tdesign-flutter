@@ -1,6 +1,6 @@
-# 引入公共可复用片段（见 .cnb/.shared-stages.yml）
+# 引入公共可复用片段（见 .cnb/.reusable-stages.yml）
 include:
-  - .cnb/.shared-stages.yml
+  - .cnb/.reusable-stages.yml
 
 $:
   push:
