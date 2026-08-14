@@ -19,8 +19,6 @@ $:
   pull_request:
     # 构建 APK
     - name: build apk (flutter 3.32.0)
-      runner:
-        cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
         volumes:
@@ -32,8 +30,6 @@ $:
         - !reference [.build-apk]
 
     - name: build apk (flutter latest)
-      runner:
-        cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-latest
         volumes:
@@ -46,8 +42,6 @@ $:
 
     # 构建 Web
     - name: build web (flutter 3.32.0)
-      runner:
-        cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
         volumes:
@@ -59,8 +53,6 @@ $:
 
     # 构建 Web（flutter latest）
     - name: build web (flutter latest)
-      runner:
-        cpus: 16
       docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-latest
         volumes:
