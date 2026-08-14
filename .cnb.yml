@@ -11,10 +11,11 @@
   script: cd tdesign-component/example && flutter pub get
 
 # 静态分析：lint 零告警（0 error / 0 warning）。
-# 先不启用 --fatal-infos，避免存量 info 级告警（如 flutter@latest 的 deprecated_member_use）把历史 PR 全红，后续可逐步收紧。
+# 显式关闭 --fatal-infos（flutter analyze 默认把 info 也视为失败），
+# 避免存量 info 级告警（如 flutter@latest 的 deprecated_member_use）把历史 PR 全红，后续可逐步收紧。
 .analyze: &analyze
   name: flutter analyze
-  script: cd tdesign-component && flutter analyze
+  script: cd tdesign-component && flutter analyze --no-fatal-infos
 
 # APK 构建
 .build-apk: &build-apk
