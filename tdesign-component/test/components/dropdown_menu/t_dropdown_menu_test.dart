@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' show SemanticsFlag;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -404,24 +403,49 @@ void main() {
       await tester.tap(find.text('位移展开'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
-      var reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
-      // ignore: deprecated_member_use
-      expect(reveal.axisAlignment, -1);
-      expect(reveal.sizeFactor.value, greaterThan(0));
-      expect(reveal.sizeFactor.value, lessThan(1));
+      var align = tester.widget<Align>(
+        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+      );
+      expect(align.alignment, AlignmentDirectional.topStart);
+      expect(align.heightFactor, greaterThan(0));
+      expect(align.heightFactor, lessThan(1));
 
       await tester.pumpAndSettle();
-      reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
-      expect(reveal.sizeFactor.value, 1);
+      align = tester.widget<Align>(
+        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+      );
+      expect(align.heightFactor, 1);
 
       await tester.tap(find.text('位移展开'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
-      reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
-      expect(reveal.sizeFactor.value, greaterThan(0));
-      expect(reveal.sizeFactor.value, lessThan(1));
+      align = tester.widget<Align>(
+        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+      );
+      expect(align.heightFactor, greaterThan(0));
+      expect(align.heightFactor, lessThan(1));
       await tester.pumpAndSettle();
       expect(find.byKey(revealKey), findsNothing);
+
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(
+            placement: TDropdownMenuPlacement.above,
+            animationDuration: const Duration(milliseconds: 200),
+            items: [item('向上位移展开')],
+          ),
+          alignment: Alignment.center,
+        ),
+      );
+      await tester.tap(find.text('向上位移展开'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      align = tester.widget<Align>(
+        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+      );
+      expect(align.alignment, AlignmentDirectional.bottomStart);
+      expect(align.heightFactor, greaterThan(0));
+      expect(align.heightFactor, lessThan(1));
     });
 
     testWidgets('platform reduced motion disables menu animations', (
@@ -448,17 +472,13 @@ void main() {
       await tester.pump();
       await tester.pump();
       expect(opened, [0]);
-      expect(
-        tester
-            .widget<SizeTransition>(
-              find.byKey(
-                const ValueKey<String>('t-dropdown-menu-open-close-reveal'),
-              ),
-            )
-            .sizeFactor
-            .value,
-        1,
+      final revealKey = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-open-close-reveal'),
       );
+      final align = tester.widget<Align>(
+        find.descendant(of: revealKey, matching: find.byType(Align)),
+      );
+      expect(align.heightFactor, 1);
     });
 
     testWidgets('same-menu switch keeps one stable surface for panel heights', (
@@ -622,10 +642,13 @@ void main() {
       expect(controller.openIndex, 1);
       expect(find.text('关闭中 A panel'), findsNothing);
       expect(find.text('关闭中 B panel'), findsOneWidget);
-      final reveal = tester.widget<SizeTransition>(
-        find.byKey(const ValueKey<String>('t-dropdown-menu-open-close-reveal')),
+      final revealKey = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-open-close-reveal'),
       );
-      expect(reveal.sizeFactor.value, 1);
+      final align = tester.widget<Align>(
+        find.descendant(of: revealKey, matching: find.byType(Align)),
+      );
+      expect(align.heightFactor, 1);
     });
 
     testWidgets('overlay closes with overlay reason', (tester) async {
@@ -770,19 +793,14 @@ void main() {
           (widget) => widget is Semantics && widget.properties.expanded != null,
         ),
       );
-      var node = tester.getSemantics(triggerSemantics);
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.hasExpandedState), isTrue);
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.isExpanded), isFalse);
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.isButton), isTrue);
+      var semanticsWidget = tester.widget<Semantics>(triggerSemantics);
+      expect(semanticsWidget.properties.expanded, isFalse);
+      expect(semanticsWidget.properties.button, isTrue);
 
       await tester.tap(find.text('无障碍筛选'));
       await tester.pumpAndSettle();
-      node = tester.getSemantics(triggerSemantics);
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.isExpanded), isTrue);
+      semanticsWidget = tester.widget<Semantics>(triggerSemantics);
+      expect(semanticsWidget.properties.expanded, isTrue);
       expect(
         FocusManager.instance.primaryFocus?.debugLabel,
         'TDropdownMenu panel',

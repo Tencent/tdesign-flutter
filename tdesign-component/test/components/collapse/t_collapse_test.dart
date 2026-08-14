@@ -1,5 +1,3 @@
-import 'dart:ui' show SemanticsAction, SemanticsFlag;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -590,13 +588,10 @@ void main() {
           (widget) => widget is Semantics && widget.properties.expanded != null,
         ),
       );
-      final node = tester.getSemantics(headerSemantics);
-      expect(node.label, '标题');
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.hasExpandedState), isTrue);
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.isExpanded), isFalse);
-      expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
+      final semanticsWidget = tester.widget<Semantics>(headerSemantics);
+      expect(semanticsWidget.properties.label, '标题');
+      expect(semanticsWidget.properties.expanded, isFalse);
+      expect(semanticsWidget.properties.onTap, isNotNull);
       semantics.dispose();
     });
 
@@ -615,12 +610,16 @@ void main() {
       );
       await tester.tap(find.text('禁用标题'));
       expect(callbackCount, 0);
-      final node = tester.getSemantics(find.text('禁用标题'));
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.hasEnabledState), isTrue);
-      // ignore: deprecated_member_use
-      expect(node.hasFlag(SemanticsFlag.isEnabled), isFalse);
-      expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
+      final disabledSemantics = find.ancestor(
+        of: find.text('禁用标题'),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Semantics && widget.properties.enabled == false,
+        ),
+      );
+      final semanticsWidget = tester.widget<Semantics>(disabledSemantics);
+      expect(semanticsWidget.properties.enabled, isFalse);
+      expect(semanticsWidget.properties.onTap, isNull);
       expect(
         DefaultTextStyle.of(tester.element(find.text('禁用标题'))).style.color,
         TThemeData.defaultData().textDisabledColor,

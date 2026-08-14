@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/date_time_picker/t_date_time_picker_internal.dart';
 import 'package:tdesign_flutter/src/components/date_time_picker/t_date_time_picker_wheel.dart';
@@ -91,9 +90,13 @@ void main() {
       ),
     ));
     expect(find.byType(DateTimePickerWheel), findsOneWidget);
-    final semantics = tester.getSemantics(find.byType(TDateTimePicker));
-    // ignore: deprecated_member_use
-    expect(semantics.hasFlag(SemanticsFlag.isEnabled), isFalse);
+    final semantics = find.descendant(
+      of: find.byType(TDateTimePicker),
+      matching: find.byWidgetPredicate(
+        (widget) => widget is Semantics && widget.properties.enabled == false,
+      ),
+    );
+    expect(semantics, findsOneWidget);
   });
 
   testWidgets('更新分支覆盖 no-op、受控值分歧和范围重建', (tester) async {

@@ -41,6 +41,34 @@ typedef TDropdownMenuPanelBuilder =
 typedef TDropdownMenuTriggerBuilder =
     Widget Function(BuildContext context, TDropdownMenuTriggerState state);
 
+class _TDropdownMenuReveal extends StatelessWidget {
+  const _TDropdownMenuReveal({
+    super.key,
+    required this.sizeFactor,
+    required this.alignment,
+    required this.child,
+  });
+
+  final Animation<double> sizeFactor;
+  final AlignmentGeometry alignment;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: sizeFactor,
+      child: child,
+      builder: (context, child) => ClipRect(
+        child: Align(
+          alignment: alignment,
+          heightFactor: sizeFactor.value,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
 /// 自定义触发项可读取的不可变状态。
 class TDropdownMenuTriggerState {
   const TDropdownMenuTriggerState({
@@ -1141,15 +1169,16 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       },
       child: switchingPanel,
     );
-    final animatedPanel = SizeTransition(
+    final animatedPanel = _TDropdownMenuReveal(
       key: const ValueKey<String>('t-dropdown-menu-open-close-reveal'),
       sizeFactor: CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeOutCubic,
         reverseCurve: Curves.easeInCubic,
       ),
-      // ignore: deprecated_member_use
-      axisAlignment: opensAbove ? 1 : -1,
+      alignment: opensAbove
+          ? AlignmentDirectional.bottomStart
+          : AlignmentDirectional.topStart,
       child: focusedPanel,
     );
     final anchoredPanel = Stack(

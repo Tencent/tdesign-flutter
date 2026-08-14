@@ -106,8 +106,21 @@ void main() {
       expect(slider.label, '40%');
       expect(
         SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
-        // ignore: deprecated_member_use
-        ShowValueIndicator.always,
+        ShowValueIndicator.onlyForContinuous,
+      );
+    });
+
+    testWidgets('discrete slider uses the discrete value indicator',
+        (tester) async {
+      await tester.pumpWidget(wrap(const TSlider(
+        value: 0.4,
+        divisions: 5,
+        showThumbValue: true,
+      )));
+
+      expect(
+        SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
+        ShowValueIndicator.onlyForDiscrete,
       );
     });
 
@@ -209,8 +222,22 @@ void main() {
       expect(
         SliderTheme.of(tester.element(find.byType(RangeSlider)))
             .showValueIndicator,
-        // ignore: deprecated_member_use
-        ShowValueIndicator.always,
+        ShowValueIndicator.onlyForContinuous,
+      );
+    });
+
+    testWidgets('discrete range slider uses the discrete value indicator',
+        (tester) async {
+      await tester.pumpWidget(wrap(const TRangeSlider(
+        value: RangeValues(0.2, 0.6),
+        divisions: 5,
+        showThumbValue: true,
+      )));
+
+      expect(
+        SliderTheme.of(tester.element(find.byType(RangeSlider)))
+            .showValueIndicator,
+        ShowValueIndicator.onlyForDiscrete,
       );
     });
 

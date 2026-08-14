@@ -1,10 +1,6 @@
 analyzer:
   errors:
     unused_import: ignore
-    # 双版本兼容：flutter@latest 的 foundation.dart 已 re-export package:meta/meta.dart，
-    # 导致显式 import meta 被标记为 unnecessary_import；而 flutter 3.32.0 的 foundation.dart
-    # 未提供 @internal 等注解，仍需显式 import meta。故对 unnecessary_import 降级为忽略。
-    unnecessary_import: ignore
     camel_case_types: warning
     missing_required_param: error
     missing_return: warning
