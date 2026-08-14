@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../../theme/resource_delegate.dart';
 import '../picker/t_picker_types.dart';
