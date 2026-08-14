@@ -405,6 +405,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       var reveal = tester.widget<SizeTransition>(find.byKey(revealKey));
+      // ignore: deprecated_member_use
       expect(reveal.axisAlignment, -1);
       expect(reveal.sizeFactor.value, greaterThan(0));
       expect(reveal.sizeFactor.value, lessThan(1));
@@ -770,13 +771,17 @@ void main() {
         ),
       );
       var node = tester.getSemantics(triggerSemantics);
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.hasExpandedState), isTrue);
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.isExpanded), isFalse);
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.isButton), isTrue);
 
       await tester.tap(find.text('无障碍筛选'));
       await tester.pumpAndSettle();
       node = tester.getSemantics(triggerSemantics);
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.isExpanded), isTrue);
       expect(
         FocusManager.instance.primaryFocus?.debugLabel,

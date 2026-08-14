@@ -106,6 +106,7 @@ void main() {
       expect(slider.label, '40%');
       expect(
         SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
+        // ignore: deprecated_member_use
         ShowValueIndicator.always,
       );
     });
@@ -208,6 +209,7 @@ void main() {
       expect(
         SliderTheme.of(tester.element(find.byType(RangeSlider)))
             .showValueIndicator,
+        // ignore: deprecated_member_use
         ShowValueIndicator.always,
       );
     });

@@ -92,6 +92,7 @@ void main() {
     ));
     expect(find.byType(DateTimePickerWheel), findsOneWidget);
     final semantics = tester.getSemantics(find.byType(TDateTimePicker));
+    // ignore: deprecated_member_use
     expect(semantics.hasFlag(SemanticsFlag.isEnabled), isFalse);
   });
 

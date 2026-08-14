@@ -137,6 +137,7 @@ class TSlider extends StatelessWidget {
           : null,
     );
     final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
+      // ignore: deprecated_member_use
       showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
     );
     final decoration = Theme.of(
@@ -254,6 +255,7 @@ class TRangeSlider extends StatelessWidget {
           : null,
     );
     final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
+      // ignore: deprecated_member_use
       showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
     );
     final decoration = Theme.of(

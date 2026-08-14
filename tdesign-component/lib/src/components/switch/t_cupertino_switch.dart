@@ -614,6 +614,7 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     final offset = _childPaintOffset;
+    // ignore: deprecated_member_use
     transform.translate(offset.dx, offset.dy);
   }
 

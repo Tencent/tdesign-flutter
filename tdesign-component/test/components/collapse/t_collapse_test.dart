@@ -592,7 +592,9 @@ void main() {
       );
       final node = tester.getSemantics(headerSemantics);
       expect(node.label, '标题');
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.hasExpandedState), isTrue);
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.isExpanded), isFalse);
       expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
       semantics.dispose();
@@ -614,7 +616,9 @@ void main() {
       await tester.tap(find.text('禁用标题'));
       expect(callbackCount, 0);
       final node = tester.getSemantics(find.text('禁用标题'));
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.hasEnabledState), isTrue);
+      // ignore: deprecated_member_use
       expect(node.hasFlag(SemanticsFlag.isEnabled), isFalse);
       expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
       expect(

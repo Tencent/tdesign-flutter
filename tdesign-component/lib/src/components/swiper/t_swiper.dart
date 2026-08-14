@@ -307,6 +307,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // ignore: deprecated_member_use
     _tickerEnabled = TickerMode.of(context);
     _syncAutoplay();
   }

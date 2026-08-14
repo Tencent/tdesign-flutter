@@ -1,6 +1,9 @@
 analyzer:
   errors:
     unused_import: ignore
+    # 双版本兼容：旧 API 仅在 flutter@latest 上报 deprecated_member_use，
+    # 低版本（flutter 3.32.0）不报，导致跨版本场景下的 ignore 在低版本被标记为 unused_ignore，故忽略该提示。
+    unused_ignore: ignore
     camel_case_types: warning
     missing_required_param: error
     missing_return: warning

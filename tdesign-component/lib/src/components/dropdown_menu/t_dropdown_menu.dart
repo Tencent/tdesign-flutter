@@ -1148,6 +1148,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         curve: Curves.easeOutCubic,
         reverseCurve: Curves.easeInCubic,
       ),
+      // ignore: deprecated_member_use
       axisAlignment: opensAbove ? 1 : -1,
       child: focusedPanel,
     );
