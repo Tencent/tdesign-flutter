@@ -65,11 +65,11 @@ class _ToastInstance {
 /// 支持文本、图标、加载中等样式。
 ///
 /// 实例语义：
-/// - 未指定 [TToast.toastId] 时，所有匿名 Toast 共用同一个内部实例，
+/// - 未指定 `toastId` 时，所有匿名 Toast 共用同一个内部实例，
 ///   后一次展示会替换前一次，避免重复点击叠加多个 Toast 导致半透明背景
 ///   不断加深；
-/// - 指定不同 [TToast.toastId] 时，可多实例并存；
-/// - 指定相同 [TToast.toastId] 时，后一次替换前一次。
+/// - 指定不同 `toastId` 时，可多实例并存；
+/// - 指定相同 `toastId` 时，后一次替换前一次。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
 

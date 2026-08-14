@@ -50,7 +50,7 @@ void main() {
 
     testWidgets('TThemeBuilder 不用全局主题污染输入和普通图标默认样式', (tester) async {
       final token = TThemeData.defaultData();
-      InputDecorationTheme? capturedInputTheme;
+      dynamic capturedInputTheme;
       Color? capturedIconColor;
 
       await tester.pumpWidget(
