@@ -2,162 +2,125 @@
 include:
   - .cnb/.reusable-stages.yml
 
+# ================= 公共可复用片段（YAML 锚点，同文件内复用）=================
+# 说明：以 . 开头的 key 不会被识别为分支名；以下模板仅定义一次，
+#       develop.push 与 pull_request 通过 !reference 引用聚合列表复用，
+#       避免 6 个构建 job 在多个事件下重复书写。
+
+# 同步到 GitHub（develop / $ 兜底 push 共用）
+.sync-to-github: &sync-to-github
+  imports:
+    - https://cnb.cool/tencent/tdesign/tdesign-private/-/blob/main/cnb-envs.yml
+  stages:
+    - name: sync to github with rebase
+      image: tencentcom/git-sync
+      settings:
+        target_url: https://github.com/Tencent/tdesign-flutter.git
+        auth_type: https
+        username: ${GIT_USERNAME}
+        password: ${GIT_ACCESS_TOKEN}
+
+# 静态分析：flutter 多版本独立跑（不挂钩在 build）
+.analyze-332: &analyze-332
+  name: analyze (flutter 3.32.0)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.analyze]
+
+.analyze-latest: &analyze-latest
+  name: analyze (flutter latest)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.analyze]
+
+# 构建 APK
+.build-apk-332: &build-apk-332
+  name: build apk (flutter 3.32.0)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+    volumes:
+      - /root/.gradle:cow
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.install-example]
+    - !reference [.build-apk]
+
+.build-apk-latest: &build-apk-latest
+  name: build apk (flutter latest)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+    volumes:
+      - /root/.gradle:cow
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.install-example]
+    - !reference [.build-apk]
+
+# 构建 Web
+.build-web-332: &build-web-332
+  name: build web (flutter 3.32.0)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.install-example]
+    - !reference [.build-web]
+
+.build-web-latest: &build-web-latest
+  name: build web (flutter latest)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.install-example]
+    - !reference [.build-web]
+
+# 完整的 CI 流水线列表（pull_request 使用）
+.ci-pipelines:
+  - <<: *analyze-332
+  - <<: *analyze-latest
+  - <<: *build-apk-332
+  - <<: *build-apk-latest
+  - <<: *build-web-332
+  - <<: *build-web-latest
+
+# develop 分支 push：同步到 GitHub + 完整 CI
+.develop-push-pipelines:
+  - <<: *sync-to-github
+  - <<: *analyze-332
+  - <<: *analyze-latest
+  - <<: *build-apk-332
+  - <<: *build-apk-latest
+  - <<: *build-web-332
+  - <<: *build-web-latest
+
+# ================= 分支触发配置 =================
+# develop 分支 push：同步到 GitHub + 跑与 pull_request 一致的完整 CI
 develop:
-  push:
-    # 导入密钥仓库文件为环境变量
-    - imports:
-        - https://cnb.cool/tencent/tdesign/tdesign-private/-/blob/main/cnb-envs.yml
-      stages:
-        - name: sync to github with rebase
-          image: tencentcom/git-sync
-          settings:
-            target_url: https://github.com/Tencent/tdesign-flutter.git
-            auth_type: https
-            username: ${GIT_USERNAME}
-            password: ${GIT_ACCESS_TOKEN}
-
-    # 静态分析：flutter 多版本独立跑（不挂钩在 build）
-    - name: analyze (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.analyze]
-
-    - name: analyze (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.analyze]
-
-    # 构建 APK
-    - name: build apk (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.gradle:cow
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-apk]
-
-    - name: build apk (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.gradle:cow
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-apk]
-
-    # 构建 Web
-    - name: build web (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-web]
-
-    # 构建 Web（flutter latest）
-    - name: build web (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-web]
+  push: !reference [.develop-push-pipelines]
 
 $:
   push:
-    # 导入密钥仓库文件为环境变量
-    - imports:
-        - https://cnb.cool/tencent/tdesign/tdesign-private/-/blob/main/cnb-envs.yml
-      stages:
-        - name: sync to github with rebase
-          image: tencentcom/git-sync
-          settings:
-            target_url: https://github.com/Tencent/tdesign-flutter.git
-            auth_type: https
-            username: ${GIT_USERNAME}
-            password: ${GIT_ACCESS_TOKEN}
+    # 其他分支 push：仅同步到 GitHub
+    - <<: *sync-to-github
 
   pull_request:
-    # 静态分析：flutter 多版本独立跑（不挂钩在 build）
-    - name: analyze (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.analyze]
-
-    - name: analyze (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.analyze]
-
-    # 构建 APK
-    - name: build apk (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.gradle:cow
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-apk]
-
-    - name: build apk (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.gradle:cow
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-apk]
-
-    # 构建 Web
-    - name: build web (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-web]
-
-    # 构建 Web（flutter latest）
-    - name: build web (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-web]
+    # 静态分析 / 构建 APK / 构建 Web（flutter 3.32.0 与 latest 两个版本）
+    - !reference [.ci-pipelines]
 
   # 分支被删除时，自动关闭分支名中关联的 Issue（如 rss1102/cnb-issue-31/fix/xxx）
   # 注意：branch.delete 事件使用【默认分支】的最新代码和配置（被删分支已不存在）
