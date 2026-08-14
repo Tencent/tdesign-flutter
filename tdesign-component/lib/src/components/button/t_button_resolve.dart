@@ -37,7 +37,7 @@ class TButtonResolve {
     /// 尺寸规格，用于推导最小尺寸、内边距和默认字号。
     required TButtonSize size,
 
-    /// 图标内容；与 [hasChild] 一起决定图标尺寸。
+    /// 图标内容；与 `hasChild` 一起决定图标尺寸。
     required Widget? icon,
 
     /// 是否存在文本或自定义内容，用于区分纯图标按钮与图文按钮。
