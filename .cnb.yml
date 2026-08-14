@@ -48,6 +48,12 @@ $:
         - *install-component
         - *install-example
         - *build-apk
+        - name: upload apk to pr
+          image: cnbcool/attachments:latest
+          settings:
+            type: UPLOAD
+            attachments:
+              - "tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk"
 
     - name: build apk (flutter latest)
       runner:
