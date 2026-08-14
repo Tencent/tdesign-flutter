@@ -2,6 +2,84 @@
 include:
   - .cnb/.reusable-stages.yml
 
+develop:
+  push:
+    # 导入密钥仓库文件为环境变量
+    - imports:
+        - https://cnb.cool/tencent/tdesign/tdesign-private/-/blob/main/cnb-envs.yml
+      stages:
+        - name: sync to github with rebase
+          image: tencentcom/git-sync
+          settings:
+            target_url: https://github.com/Tencent/tdesign-flutter.git
+            auth_type: https
+            username: ${GIT_USERNAME}
+            password: ${GIT_ACCESS_TOKEN}
+
+    # 静态分析：flutter 多版本独立跑（不挂钩在 build）
+    - name: analyze (flutter 3.32.0)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.analyze]
+
+    - name: analyze (flutter latest)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.analyze]
+
+    # 构建 APK
+    - name: build apk (flutter 3.32.0)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.gradle:cow
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.install-example]
+        - !reference [.build-apk]
+
+    - name: build apk (flutter latest)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.gradle:cow
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.install-example]
+        - !reference [.build-apk]
+
+    # 构建 Web
+    - name: build web (flutter 3.32.0)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.install-example]
+        - !reference [.build-web]
+
+    # 构建 Web（flutter latest）
+    - name: build web (flutter latest)
+      docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+        volumes:
+          - /root/.pub-cache:cow
+      stages:
+        - !reference [.install-component]
+        - !reference [.install-example]
+        - !reference [.build-web]
+
 $:
   push:
     # 导入密钥仓库文件为环境变量
