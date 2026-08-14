@@ -1,0 +1,29 @@
+# ===== 公共可复用片段（以 . 开头，不会被识别为分支名）=====
+# 本文件由 .cnb.yml 通过 include + !reference 引入使用
+
+# 安装组件依赖
+.install-component:
+  name: install component dependencies
+  script: cd tdesign-component && flutter pub get
+
+# 安装示例依赖
+.install-example:
+  name: install example dependencies
+  script: cd tdesign-component/example && flutter pub get
+
+# 静态分析：lint 零告警（0 error / 0 warning / 0 info）。
+# 启用 --fatal-infos，任何 info 级告警都会阻断构建，作为 lint 零告警的机器硬门槛。
+# （存量 deprecated 告警已在本 PR 逐项清零，故可开启严格模式。）
+.analyze:
+  name: flutter analyze
+  script: cd tdesign-component && flutter analyze --fatal-infos
+
+# APK 构建
+.build-apk:
+  name: flutter build apk
+  script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+
+# Web 构建
+.build-web:
+  name: flutter build web
+  script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release

@@ -272,10 +272,10 @@ void main() {
 
     testWidgets('P1 actionBackgroundColor 覆盖 P0 未传背景色', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [TSwipeCellAction(label: 'Action')],
+            children: const [TSwipeCellAction(label: 'Action')],
           ),
           initialOpenSide: TSwipeCellSide.end,
         ),
@@ -292,10 +292,10 @@ void main() {
 
     testWidgets('P0 backgroundColor 覆盖 P1 主题背景色', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [TSwipeCellAction(label: 'Action', backgroundColor: Colors.red)],
+            children: const [TSwipeCellAction(label: 'Action', backgroundColor: Colors.red)],
           ),
           initialOpenSide: TSwipeCellSide.end,
         ),
@@ -312,10 +312,10 @@ void main() {
 
     testWidgets('P1 actionIconColor 覆盖 P4 Token 默认色', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [TSwipeCellAction(icon: Icons.edit, label: 'Action')],
+            children: const [TSwipeCellAction(icon: Icons.edit, label: 'Action')],
           ),
           initialOpenSide: TSwipeCellSide.end,
         ),
@@ -330,10 +330,10 @@ void main() {
 
     testWidgets('P1 actionTextStyle 覆盖 label 文字样式', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [TSwipeCellAction(label: 'Action')],
+            children: const [TSwipeCellAction(label: 'Action')],
           ),
           initialOpenSide: TSwipeCellSide.end,
         ),
@@ -353,10 +353,10 @@ void main() {
 
     testWidgets('P1 actionIconSize 覆盖内置默认图标尺寸 18', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [TSwipeCellAction(icon: Icons.edit)],
+            children: const [TSwipeCellAction(icon: Icons.edit)],
           ),
           initialOpenSide: TSwipeCellSide.end,
         ),
@@ -369,10 +369,10 @@ void main() {
 
     testWidgets('P1 actionSpacing 覆盖内置默认间距 2', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [
+            children: const [
               TSwipeCellAction(icon: Icons.edit, label: 'Action'),
             ],
           ),
@@ -394,10 +394,10 @@ void main() {
 
     testWidgets('未配置 iconColor 时 icon 颜色回退到 P4 Token', (tester) async {
       await tester.pumpWidget(wrapSwipe(
-        const TSwipeCell(
-          child: SizedBox(width: 300, height: 60, child: Text('Row')),
+        TSwipeCell(
+          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           end: TSwipeCellPanel(
-            children: [TSwipeCellAction(icon: Icons.edit)],
+            children: const [TSwipeCellAction(icon: Icons.edit)],
           ),
           initialOpenSide: TSwipeCellSide.end,
         ),

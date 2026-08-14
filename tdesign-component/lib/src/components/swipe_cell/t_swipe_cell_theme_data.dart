@@ -8,19 +8,19 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
   /// 打开关闭动画时长
   final Duration? duration;
 
-  /// 操作项默认背景色（P1，覆盖 [TSwipeCellAction.backgroundColor]）
+  /// 操作项默认背景色（P1，覆盖 `backgroundColor`）
   final Color? actionBackgroundColor;
 
-  /// 操作项图标默认色（P1，覆盖 [TSwipeCellAction.iconColor]）
+  /// 操作项图标默认色（P1，覆盖 `iconColor`）
   final Color? actionIconColor;
 
-  /// 操作项文字默认样式（P1，覆盖 [TSwipeCellAction.labelStyle]）
+  /// 操作项文字默认样式（P1，覆盖 `labelStyle`）
   final TextStyle? actionTextStyle;
 
-  /// 操作项图标默认尺寸（P1，覆盖 [TSwipeCellAction.iconSize] 默认值）
+  /// 操作项图标默认尺寸（P1，覆盖 `iconSize` 默认值）
   final double? actionIconSize;
 
-  /// 操作项图标与文字默认间距（P1，覆盖 [TSwipeCellAction.spacing] 默认值）
+  /// 操作项图标与文字默认间距（P1，覆盖 `spacing` 默认值）
   final double? actionSpacing;
 
   const TSwipeCellThemeData({
