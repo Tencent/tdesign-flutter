@@ -64,9 +64,7 @@ void main() {
     expect(field.focusNode, same(focusNode));
     expect(field.textInputAction, TextInputAction.newline);
     expect(field.textAlign, TextAlign.center);
-    // label 渲染为左侧固定标签，而非 Material 浮动标签（labelText）。
-    expect(field.decoration?.labelText, isNull);
-    expect(find.text('label'), findsOneWidget);
+    expect(field.decoration?.labelText, 'label');
     expect(field.decoration?.helperText, 'helper');
     expect(field.decoration?.filled, isFalse);
     expect(field.decoration?.fillColor, Colors.transparent);

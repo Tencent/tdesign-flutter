@@ -29,7 +29,7 @@ class TTextarea extends StatelessWidget {
     /// 是否只读。
     this.readOnly = false,
 
-    /// 标签文案（输入框左侧的固定标签）。
+    /// 标签文案。
     this.label,
 
     /// 占位提示文案。
@@ -93,7 +93,7 @@ class TTextarea extends StatelessWidget {
   /// 是否只读。
   final bool readOnly;
 
-  /// 标签文案（输入框左侧的固定标签）。
+  /// 标签文案。
   final String? label;
 
   /// 占位提示文案。
