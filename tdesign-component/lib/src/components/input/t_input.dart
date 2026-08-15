@@ -460,7 +460,7 @@ class _TInputState extends State<TInput> {
     }
 
     // 左侧固定标签（默认横向布局）；required 时在标签后追加红色 `*`。
-    final labelStyle = textStyle?.copyWith(
+    final labelStyle = textStyle.copyWith(
       color: context.tTheme.textColorPrimary,
     );
     final labelWidget = Text.rich(
@@ -473,9 +473,9 @@ class _TInputState extends State<TInput> {
               text: ' *',
               style: TextStyle(
                 color: context.tTheme.errorColor6,
-                fontSize: textStyle?.fontSize,
-                height: textStyle?.height,
-                fontWeight: textStyle?.fontWeight,
+                fontSize: textStyle.fontSize,
+                height: textStyle.height,
+                fontWeight: textStyle.fontWeight,
               ),
             ),
         ],
