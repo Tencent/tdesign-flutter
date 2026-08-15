@@ -19,6 +19,42 @@ enum TInputLayout {
   vertical,
 }
 
+/// 输入框状态，影响边框与提示文本颜色。
+enum TInputStatus {
+  /// 默认状态。
+  normal,
+
+  /// 成功状态。
+  success,
+
+  /// 警告状态。
+  warning,
+
+  /// 错误状态。
+  error,
+}
+
+/// 输入内容的位置。
+enum TInputAlign {
+  /// 居左。
+  left,
+
+  /// 居中。
+  center,
+
+  /// 居右。
+  right,
+}
+
+/// 内置清除按钮的触发方式。
+enum TInputClearTrigger {
+  /// 输入框有值时始终显示。
+  always,
+
+  /// 输入框聚焦且有值时显示。
+  focus,
+}
+
 /// 基于 Material [TextField] 的 v1 文本输入框。
 ///
 /// [controller] 是主控制路径；未传时由组件创建内部 controller，并使用
@@ -60,6 +96,30 @@ class TInput extends StatefulWidget {
 
     /// 标签与输入区的排布方式，默认横向（label 在左）。
     this.layout = TInputLayout.horizontal,
+
+    /// 输入框状态，影响边框与 [tips] 文本颜色。
+    this.status = TInputStatus.normal,
+
+    /// 输入区下方提示文本，颜色随 [status]。
+    this.tips,
+
+    /// 输入内容位置；未传时回退到 [textAlign]。
+    this.align,
+
+    /// 是否可清空；为 false 时不显示内置清除按钮。
+    this.clearable,
+
+    /// 内置清除按钮的触发方式。
+    this.clearTrigger = TInputClearTrigger.always,
+
+    /// 最大字符数，一个汉字计 2 个字符；与 [maxLength] 二选一使用。
+    this.maxcharacter,
+
+    /// 是否开启无边框模式。
+    this.borderless = false,
+
+    /// 超出 [maxLength] / [maxcharacter] 后是否允许继续输入。
+    this.allowInputOverMax = false,
 
     /// 占位提示文案。
     this.hintText,
@@ -146,6 +206,30 @@ class TInput extends StatefulWidget {
     /// 标签与输入区的排布方式，默认横向（label 在左）。
     this.layout = TInputLayout.horizontal,
 
+    /// 输入框状态，影响边框与 [tips] 文本颜色。
+    this.status = TInputStatus.normal,
+
+    /// 输入区下方提示文本，颜色随 [status]。
+    this.tips,
+
+    /// 输入内容位置；未传时回退到 [textAlign]。
+    this.align,
+
+    /// 是否可清空；为 false 时不显示内置清除按钮。
+    this.clearable,
+
+    /// 内置清除按钮的触发方式。
+    this.clearTrigger = TInputClearTrigger.always,
+
+    /// 最大字符数，一个汉字计 2 个字符；与 [maxLength] 二选一使用。
+    this.maxcharacter,
+
+    /// 是否开启无边框模式。
+    this.borderless = false,
+
+    /// 超出 [maxLength] / [maxcharacter] 后是否允许继续输入。
+    this.allowInputOverMax = false,
+
     /// 占位提示文案。
     this.hintText,
 
@@ -224,6 +308,30 @@ class TInput extends StatefulWidget {
   /// 标签与输入区的排布方式，默认横向（label 在左）。
   final TInputLayout layout;
 
+  /// 输入框状态，影响边框与 [tips] 文本颜色。
+  final TInputStatus status;
+
+  /// 输入区下方提示文本，颜色随 [status]。
+  final String? tips;
+
+  /// 输入内容位置；未传时回退到 [textAlign]。
+  final TInputAlign? align;
+
+  /// 是否可清空；为 false 时不显示内置清除按钮。
+  final bool? clearable;
+
+  /// 内置清除按钮的触发方式。
+  final TInputClearTrigger clearTrigger;
+
+  /// 最大字符数，一个汉字计 2 个字符；与 [maxLength] 二选一使用。
+  final int? maxcharacter;
+
+  /// 是否开启无边框模式。
+  final bool borderless;
+
+  /// 超出 [maxLength] / [maxcharacter] 后是否允许继续输入。
+  final bool allowInputOverMax;
+
   /// 占位提示文案。
   final String? hintText;
 
@@ -281,10 +389,15 @@ class TInput extends StatefulWidget {
 class _TInputState extends State<TInput> {
   late final TextEditingController _internalController;
   late TextEditingController _controller;
+  late final FocusNode _internalFocusNode;
+  FocusNode? _listenedFocusNode;
   bool _hasText = false;
+  bool _focused = false;
 
   TextEditingController get _effectiveController =>
       widget.controller ?? _internalController;
+
+  FocusNode get _effectiveFocusNode => widget.focusNode ?? _internalFocusNode;
 
   @override
   void initState() {
@@ -293,26 +406,54 @@ class _TInputState extends State<TInput> {
     _controller = _effectiveController;
     _hasText = _controller.text.isNotEmpty;
     _controller.addListener(_handleControllerChanged);
+    _internalFocusNode = FocusNode();
+    _attachFocusListener();
+    _focused = _effectiveFocusNode.hasFocus;
   }
 
   @override
   void didUpdateWidget(covariant TInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     final next = _effectiveController;
-    if (_controller == next) {
-      return;
+    if (_controller != next) {
+      _controller.removeListener(_handleControllerChanged);
+      _controller = next;
+      _controller.addListener(_handleControllerChanged);
+      _setHasText(_controller.text.isNotEmpty);
     }
-    _controller.removeListener(_handleControllerChanged);
-    _controller = next;
-    _controller.addListener(_handleControllerChanged);
-    _setHasText(_controller.text.isNotEmpty);
+    if (oldWidget.focusNode != widget.focusNode) {
+      _attachFocusListener();
+      _handleFocusChanged();
+    }
   }
 
   @override
   void dispose() {
     _controller.removeListener(_handleControllerChanged);
     _internalController.dispose();
+    _detachFocusListener();
+    _internalFocusNode.dispose();
     super.dispose();
+  }
+
+  void _attachFocusListener() {
+    _detachFocusListener();
+    final node = _effectiveFocusNode;
+    _listenedFocusNode = node;
+    node.addListener(_handleFocusChanged);
+  }
+
+  void _detachFocusListener() {
+    _listenedFocusNode?.removeListener(_handleFocusChanged);
+    _listenedFocusNode = null;
+  }
+
+  void _handleFocusChanged() {
+    final focused = _effectiveFocusNode.hasFocus;
+    if (_focused == focused) {
+      return;
+    }
+    setState(() => _focused = focused);
   }
 
   @override
@@ -342,8 +483,25 @@ class _TInputState extends State<TInput> {
         theme?.cursorColor ??
         material.tExplicitColorScheme?.primary ??
         context.tTheme.brandNormalColor;
-    final showClearButton = theme?.showClearButton ?? true;
-    final clearButton = widget.suffix == null && showClearButton && _hasText
+    // 输入框状态对应的边框/提示颜色；normal 为 null，保持默认（不覆盖）。
+    final statusColor = switch (widget.status) {
+      TInputStatus.success => context.tTheme.successNormalColor,
+      TInputStatus.warning => context.tTheme.warningNormalColor,
+      TInputStatus.error => context.tTheme.errorNormalColor,
+      TInputStatus.normal => null,
+    };
+    // 提示文本颜色：随 status（normal 用占位色）。
+    final tipsColor =
+        statusColor ?? context.tTheme.textColorPlaceholder;
+    final showClearButton =
+        widget.clearable ?? (theme?.showClearButton ?? true);
+    final clearTrigger = widget.clearTrigger;
+    final shouldShowClear =
+        widget.suffix == null &&
+        showClearButton &&
+        _hasText &&
+        (clearTrigger == TInputClearTrigger.always || _focused);
+    final clearButton = shouldShowClear
         ? IconButton(
             tooltip: '清除',
             onPressed: widget.enabled && !widget.readOnly ? _clear : null,
@@ -384,45 +542,70 @@ class _TInputState extends State<TInput> {
     );
     InputBorder underline(Color color) =>
         UnderlineInputBorder(borderSide: BorderSide(color: color));
+    // 无边框模式：所有状态边框一律置空。
+    InputBorder statusBorder(Color color) =>
+        widget.borderless ? InputBorder.none : underline(color);
     effectiveDecoration = effectiveDecoration.copyWith(
+      helperText: widget.tips ?? effectiveDecoration.helperText,
+      helperStyle:
+          widget.tips == null
+          ? effectiveDecoration.helperStyle
+          : effectiveDecoration.helperStyle?.copyWith(color: tipsColor) ??
+                TextStyle(color: tipsColor),
       hintStyle:
           effectiveDecoration.hintStyle ??
           componentDecoration?.hintStyle ??
           materialDecoration.hintStyle ??
           tokenHintStyle,
       border:
-          effectiveDecoration.border ??
-          componentDecoration?.border ??
-          materialDecoration.border ??
-          underline(context.tTheme.componentBorderColor),
+          widget.borderless
+          ? InputBorder.none
+          : effectiveDecoration.border ??
+                componentDecoration?.border ??
+                materialDecoration.border ??
+                underline(context.tTheme.componentBorderColor),
       enabledBorder:
-          effectiveDecoration.enabledBorder ??
-          componentDecoration?.enabledBorder ??
-          materialDecoration.enabledBorder ??
-          underline(context.tTheme.componentBorderColor),
+          widget.borderless
+          ? InputBorder.none
+          : statusColor != null
+          ? statusBorder(statusColor)
+          : effectiveDecoration.enabledBorder ??
+                componentDecoration?.enabledBorder ??
+                materialDecoration.enabledBorder ??
+                underline(context.tTheme.componentBorderColor),
       focusedBorder:
-          effectiveDecoration.focusedBorder ??
-          componentDecoration?.focusedBorder ??
-          materialDecoration.focusedBorder ??
-          underline(
-            material.tExplicitColorScheme?.primary ??
-                context.tTheme.brandNormalColor,
-          ),
+          widget.borderless
+          ? InputBorder.none
+          : statusColor != null
+          ? statusBorder(statusColor)
+          : effectiveDecoration.focusedBorder ??
+                componentDecoration?.focusedBorder ??
+                materialDecoration.focusedBorder ??
+                underline(
+                  material.tExplicitColorScheme?.primary ??
+                      context.tTheme.brandNormalColor,
+                ),
       disabledBorder:
-          effectiveDecoration.disabledBorder ??
-          componentDecoration?.disabledBorder ??
-          materialDecoration.disabledBorder ??
-          underline(context.tTheme.componentStrokeColor),
+          widget.borderless
+          ? InputBorder.none
+          : effectiveDecoration.disabledBorder ??
+                componentDecoration?.disabledBorder ??
+                materialDecoration.disabledBorder ??
+                underline(context.tTheme.componentStrokeColor),
       errorBorder:
-          effectiveDecoration.errorBorder ??
-          componentDecoration?.errorBorder ??
-          materialDecoration.errorBorder ??
-          underline(context.tTheme.errorNormalColor),
+          widget.borderless
+          ? InputBorder.none
+          : effectiveDecoration.errorBorder ??
+                componentDecoration?.errorBorder ??
+                materialDecoration.errorBorder ??
+                underline(context.tTheme.errorNormalColor),
       focusedErrorBorder:
-          effectiveDecoration.focusedErrorBorder ??
-          componentDecoration?.focusedErrorBorder ??
-          materialDecoration.focusedErrorBorder ??
-          underline(context.tTheme.errorNormalColor),
+          widget.borderless
+          ? InputBorder.none
+          : effectiveDecoration.focusedErrorBorder ??
+                componentDecoration?.focusedErrorBorder ??
+                materialDecoration.focusedErrorBorder ??
+                underline(context.tTheme.errorNormalColor),
     );
 
     final configuredMinLines =
@@ -432,9 +615,29 @@ class _TInputState extends State<TInput> {
         ? configuredMinLines
         : configuredMinLines.clamp(1, widget.maxLines!);
 
+    // 内容对齐：align 优先，其次 textAlign。
+    final effectiveTextAlign = switch (widget.align) {
+      TInputAlign.left => TextAlign.start,
+      TInputAlign.center => TextAlign.center,
+      TInputAlign.right => TextAlign.end,
+      null => widget.textAlign,
+    };
+    // 组合格式化器：maxcharacter（汉字算 2）追加到用户提供的格式化器之后。
+    final effectiveFormatters = [
+      ...?widget.inputFormatters,
+      if (widget.maxcharacter != null)
+        _TInputMaxCharacterTextInputFormatter(
+          widget.maxcharacter!,
+          allowOverMax: widget.allowInputOverMax,
+        ),
+    ];
+    // allowInputOverMax 时不让 TextField 硬性截断 maxLength。
+    final effectiveMaxLength =
+        widget.allowInputOverMax ? null : widget.maxLength;
+
     final inputField = TextField(
       controller: _controller,
-      focusNode: widget.focusNode,
+      focusNode: _effectiveFocusNode,
       onChanged: widget.onChanged,
       onSubmitted: widget.onSubmitted,
       onEditingComplete: widget.onEditingComplete,
@@ -442,13 +645,13 @@ class _TInputState extends State<TInput> {
       readOnly: widget.readOnly,
       maxLines: widget.maxLines,
       minLines: minLines,
-      maxLength: widget.maxLength,
+      maxLength: effectiveMaxLength,
       autofocus: widget.autofocus,
       keyboardType: widget.inputType,
       textInputAction: widget.inputAction,
-      textAlign: widget.textAlign,
+      textAlign: effectiveTextAlign,
       obscureText: widget.obscureText,
-      inputFormatters: widget.inputFormatters,
+      inputFormatters: effectiveFormatters,
       style: textStyle,
       cursorColor: cursorColor,
       decoration: effectiveDecoration,
@@ -523,4 +726,63 @@ class _TInputState extends State<TInput> {
     _controller.clear();
     widget.onChanged?.call('');
   }
+}
+
+/// 按“一个汉字计 2 个字符”计数并截断的输入格式化器，用于对齐 H5 `maxcharacter`。
+///
+/// [allowOverMax] 为 true 时不截断，仅保留计数语义（配合校验使用）。
+class _TInputMaxCharacterTextInputFormatter extends TextInputFormatter {
+  _TInputMaxCharacterTextInputFormatter(
+    this.maxLength, {
+    required this.allowOverMax,
+  });
+
+  /// 允许的最大“字符长度”，一个汉字计为 2。
+  final int maxLength;
+
+  /// 超出上限后是否允许继续输入（不截断）。
+  final bool allowOverMax;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (allowOverMax) {
+      return newValue;
+    }
+    final text = newValue.text;
+    if (_charLength(text) <= maxLength) {
+      return newValue;
+    }
+    final truncated = _truncate(text, maxLength);
+    return TextEditingValue(
+      text: truncated,
+      selection: TextSelection.collapsed(offset: truncated.length),
+    );
+  }
+
+  int _charLength(String value) {
+    var length = 0;
+    for (final rune in value.runes) {
+      length += _isChinese(rune) ? 2 : 1;
+    }
+    return length;
+  }
+
+  String _truncate(String value, int maxLength) {
+    final buffer = StringBuffer();
+    var length = 0;
+    for (final rune in value.runes) {
+      final add = _isChinese(rune) ? 2 : 1;
+      if (length + add > maxLength) {
+        break;
+      }
+      buffer.writeCharCode(rune);
+      length += add;
+    }
+    return buffer.toString();
+  }
+
+  bool _isChinese(int rune) => rune >= 0x4E00 && rune <= 0x9FFF;
 }

@@ -311,4 +311,95 @@ void main() {
       }
     });
   });
+
+  group('TInput H5-aligned capabilities', () {
+    testWidgets('tips renders as helper text with status color', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            status: TInputStatus.error,
+            tips: '辅助说明',
+            label: '标签文字',
+          ),
+        ),
+      );
+      final decoration = field(tester).decoration;
+      expect(decoration?.helperText, '辅助说明');
+      expect(
+        decoration?.helperStyle?.color,
+        isNotNull,
+      );
+    });
+
+    testWidgets('status maps to error border color', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            status: TInputStatus.error,
+            label: '标签文字',
+          ),
+        ),
+      );
+      final decoration = field(tester).decoration;
+      expect(decoration?.errorBorder, isNotNull);
+      expect(decoration?.focusedErrorBorder, isNotNull);
+    });
+
+    testWidgets('align overrides textAlign on TextField', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(align: TInputAlign.right, label: '价格')),
+      );
+      expect(field(tester).textAlign, TextAlign.end);
+    });
+
+    testWidgets('clearable false hides clear button', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(initialValue: 'content', clearable: false)),
+      );
+      expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
+    });
+
+    testWidgets('clearTrigger focus hides clear until focused', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(initialValue: 'content', clearTrigger: TInputClearTrigger.focus)),
+      );
+      // 未聚焦时不显示。
+      expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
+
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
+      expect(find.byIcon(TIcons.close_circle_filled), findsOneWidget);
+    });
+
+    testWidgets('maxcharacter truncates Chinese as 2 characters', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TInput(maxcharacter: 4)),
+      );
+      await tester.enterText(find.byType(TextField), '汉字abc');
+      // 汉字(2+2=4)已满，后续 'a' 无法输入。
+      expect(find.text('汉字'), findsOneWidget);
+    });
+
+    testWidgets('allowInputOverMax permits over-limit input', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(maxLength: 2, allowInputOverMax: true)),
+      );
+      await tester.enterText(find.byType(TextField), '12345');
+      expect(find.text('12345'), findsOneWidget);
+    });
+
+    testWidgets('borderless sets all borders to none', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(borderless: true, label: '标签文字')),
+      );
+      final decoration = field(tester).decoration;
+      expect(decoration?.border, InputBorder.none);
+      expect(decoration?.enabledBorder, InputBorder.none);
+      expect(decoration?.focusedBorder, InputBorder.none);
+    });
+  });
 }

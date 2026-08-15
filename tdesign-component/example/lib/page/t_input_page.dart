@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/example_code.dart';
@@ -71,29 +70,21 @@ class _TInputViewPageState extends State<TInputViewPage> {
   );
 
   @ExampleCode(group: 'input')
-  Widget _buildMaxLength(BuildContext context) => Column(
+  Widget _buildMaxLength(BuildContext context) => const Column(
     children: [
-      const TInput(
-        label: '标签文字',
-        hintText: '请输入文字',
-        maxLength: 10,
-        decoration: InputDecoration(counterText: ''),
-      ),
-      const SizedBox(height: 8),
-      const Align(
-        alignment: Alignment.centerLeft,
-        child: TText('最大输入10个字符'),
-      ),
-      const SizedBox(height: _kExampleGap),
       TInput(
         label: '标签文字',
         hintText: '请输入文字',
-        inputFormatters: [_MaxCharacterTextInputFormatter(10)],
+        maxLength: 10,
+        tips: '最大输入10个字符',
+        decoration: InputDecoration(counterText: ''),
       ),
-      const SizedBox(height: 8),
-      const Align(
-        alignment: Alignment.centerLeft,
-        child: TText('最大输入10个字符，汉字算两个'),
+      SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        maxcharacter: 10,
+        tips: '最大输入10个字符，汉字算两个',
       ),
     ],
   );
@@ -170,7 +161,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       const TInput(
         label: '价格',
         hintText: '0.00',
-        textAlign: TextAlign.right,
+        align: TInputAlign.right,
         suffix: Text('元'),
         inputType: TextInputType.number,
       ),
@@ -178,7 +169,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       const TInput(
         label: '数量',
         hintText: '填写个数',
-        textAlign: TextAlign.right,
+        align: TInputAlign.right,
         suffix: Text('个'),
         inputType: TextInputType.number,
       ),
@@ -191,7 +182,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
       TInput(
         initialValue: '已输入文字',
         label: '标签文字',
-        decoration: const InputDecoration(errorText: '辅助说明'),
+        status: TInputStatus.error,
+        tips: '辅助说明',
         suffix: Icon(TIcons.close, color: context.tTheme.errorColor6),
       ),
       const SizedBox(height: _kExampleGap),
@@ -217,13 +209,13 @@ class _TInputViewPageState extends State<TInputViewPage> {
       TInput(
         label: '标签居中',
         hintText: '请输入文字',
-        textAlign: TextAlign.center,
+        align: TInputAlign.center,
       ),
       SizedBox(height: _kExampleGap),
       TInput(
         label: '标签右对齐',
         hintText: '请输入文字',
-        textAlign: TextAlign.right,
+        align: TInputAlign.right,
       ),
     ],
   );
@@ -260,23 +252,12 @@ class _TInputViewPageState extends State<TInputViewPage> {
           borderRadius: const BorderRadius.all(Radius.circular(6)),
           border: Border.all(color: const Color(0xFFDCDCDC)),
         ),
-        child: Theme(
-          data: Theme.of(context).mergeExtension(
-            const TInputThemeData(
-              decorationTheme: InputDecorationTheme(
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-              ),
-            ),
-          ),
-          child: TInput(
-            hintText: '请输入文字',
-            suffix: Icon(
-              TIcons.error_circle_filled,
-              color: context.tTheme.errorColor6,
-            ),
+        child: TInput(
+          hintText: '请输入文字',
+          borderless: true,
+          suffix: Icon(
+            TIcons.error_circle_filled,
+            color: context.tTheme.errorColor6,
           ),
         ),
       ),
@@ -300,52 +281,4 @@ class _TInputViewPageState extends State<TInputViewPage> {
     ),
     child: const TInput(label: '标签文字', hintText: '请输入文字'),
   );
-}
-
-/// 按“汉字算两个字符”计数并截断的输入格式化器，用于对齐 H5 `maxcharacter`。
-class _MaxCharacterTextInputFormatter extends TextInputFormatter {
-  _MaxCharacterTextInputFormatter(this.maxLength);
-
-  /// 允许的最大“字符长度”，一个汉字计为 2。
-  final int maxLength;
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final text = newValue.text;
-    if (_charLength(text) <= maxLength) {
-      return newValue;
-    }
-    final truncated = _truncate(text, maxLength);
-    return TextEditingValue(
-      text: truncated,
-      selection: TextSelection.collapsed(offset: truncated.length),
-    );
-  }
-
-  int _charLength(String value) {
-    var length = 0;
-    for (final rune in value.runes) {
-      length += _isChinese(rune) ? 2 : 1;
-    }
-    return length;
-  }
-
-  String _truncate(String value, int maxLength) {
-    final buffer = StringBuffer();
-    var length = 0;
-    for (final rune in value.runes) {
-      final add = _isChinese(rune) ? 2 : 1;
-      if (length + add > maxLength) {
-        break;
-      }
-      buffer.writeCharCode(rune);
-      length += add;
-    }
-    return buffer.toString();
-  }
-
-  bool _isChinese(int rune) => rune >= 0x4E00 && rune <= 0x9FFF;
 }
