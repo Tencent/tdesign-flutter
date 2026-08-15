@@ -34,6 +34,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
           children: [
             ExampleItem(desc: '基础', builder: _buildBasic),
             ExampleItem(desc: '标签与内容槽', builder: _buildSlots),
+            ExampleItem(desc: '必填标签', builder: _buildRequired),
+            ExampleItem(desc: '纵向标签', builder: _buildVerticalLabel),
             ExampleItem(desc: '密码', builder: _buildPassword),
           ],
         ),
@@ -70,6 +72,20 @@ class _TInputViewPageState extends State<TInputViewPage> {
         prefix: Icon(TIcons.mobile),
         suffix: Text('+86'),
         inputType: TextInputType.phone,
+      );
+
+  @ExampleCode(group: 'input')
+  Widget _buildRequired(BuildContext context) => const TInput(
+        label: '标签文字',
+        required: true,
+        hintText: '请输入文字',
+      );
+
+  @ExampleCode(group: 'input')
+  Widget _buildVerticalLabel(BuildContext context) => const TInput(
+        label: '标签文字',
+        layout: TInputLayout.vertical,
+        hintText: '请输入文字',
       );
 
   @ExampleCode(group: 'input')

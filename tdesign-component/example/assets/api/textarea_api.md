@@ -17,7 +17,7 @@
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | inputType | TextInputType | TextInputType.multiline | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String? | - | 标签文案。 |
+| label | String? | - | 标签文案（输入框左侧的固定标签）。 |
 | maxLength | int? | - | 最大字符数。 |
 | maxLines | int? | - | 最大行数；null 表示不限制。 |
 | minLines | int? | - | 最小行数；未传时读取 Theme 默认值。 |

@@ -60,7 +60,6 @@ void main() {
     );
     final resolved = TInputResolve.resolveDecoration(
       base: base,
-      label: 'fallback label',
       hintText: 'fallback hint',
       prefix: const Icon(Icons.add),
       suffix: const Icon(Icons.close),
@@ -71,12 +70,11 @@ void main() {
     expect((resolved.suffixIcon as Icon).icon, Icons.info);
 
     final fallback = TInputResolve.resolveDecoration(
-      label: 'label',
       hintText: 'hint',
       prefix: const Icon(Icons.add),
       suffix: const Icon(Icons.close),
     );
-    expect(fallback.labelText, 'label');
+    expect(fallback.labelText, isNull);
     expect(fallback.hintText, 'hint');
     expect(fallback.filled, isFalse);
     expect(fallback.fillColor, Colors.transparent);

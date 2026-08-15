@@ -111,7 +111,9 @@ void main() {
       );
 
       final textField = field(tester);
-      expect(textField.decoration?.labelText, 'label');
+      // label 现在渲染为左侧固定标签，而非 Material 浮动标签（labelText）。
+      expect(textField.decoration?.labelText, isNull);
+      expect(find.text('label'), findsOneWidget);
       expect(textField.decoration?.hintText, 'decoration hint');
       expect(textField.decoration?.helperText, 'helper');
       expect(textField.decoration?.filled, isFalse);
@@ -189,6 +191,62 @@ void main() {
       );
       expect(field(tester).obscureText, isTrue);
       expect(field(tester).keyboardType, TextInputType.visiblePassword);
+    });
+  });
+
+  group('TInput label layout', () {
+    testWidgets('label renders as left-fixed label, not Material floating', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const TInput(label: '标签文字')));
+      expect(find.text('标签文字'), findsOneWidget);
+      // 未走 Material 浮动标签。
+      expect(field(tester).decoration?.labelText, isNull);
+      expect(field(tester).decoration?.hintText, isNull);
+    });
+
+    testWidgets('required renders red asterisk after label', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(label: '标签文字', required: true)),
+      );
+      expect(find.text('标签文字 *'), findsOneWidget);
+    });
+
+    testWidgets('required without label keeps plain input', (tester) async {
+      await tester.pumpWidget(wrap(const TInput(required: true)));
+      expect(find.text(' *'), findsNothing);
+      expect(field(tester), isNotNull);
+    });
+
+    testWidgets('vertical layout places label in a Column', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TInput(label: '标签文字', layout: TInputLayout.vertical)),
+      );
+      expect(find.text('标签文字'), findsOneWidget);
+      // 纵向布局中 label 与输入区不在同一 Row。
+      expect(
+        find.ancestor(
+          of: find.text('标签文字'),
+          matching: find.byType(Column),
+        ),
+        findsWidgets,
+      );
+    });
+
+    testWidgets('horizontal layout keeps label and input in same Row', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TInput(label: '标签文字', hintText: '请输入文字')),
+      );
+      final row = find.ancestor(
+        of: find.byType(TextField),
+        matching: find.byType(Row),
+      );
+      expect(
+        find.descendant(of: row, matching: find.text('标签文字')),
+        findsOneWidget,
+      );
     });
   });
 

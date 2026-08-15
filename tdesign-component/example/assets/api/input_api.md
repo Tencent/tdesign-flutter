@@ -17,7 +17,9 @@
 | onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
 | enabled | bool | true | 是否可交互。 |
 | readOnly | bool | false | 是否只读。 |
-| label | String? | - | 标签文案。 |
+| label | String? | - | 标签文案（输入框左侧的固定标签）。 |
+| required | bool | false | 是否必填；为 true 且存在 label 时在标签后展示红色 `*`。 |
+| layout | TInputLayout | horizontal | 标签与输入区的排布方式（horizontal/vertical）。 |
 | hintText | String? | - | 占位提示文案。 |
 | prefix | Widget? | - | 前缀组件。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
@@ -50,7 +52,9 @@
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | inputType | TextInputType | TextInputType.text | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String? | - | 标签文案。 |
+| label | String? | - | 标签文案（输入框左侧的固定标签）。 |
+| required | bool | false | 是否必填；为 true 且存在 label 时在标签后展示红色 `*`。 |
+| layout | TInputLayout | horizontal | 标签与输入区的排布方式（horizontal/vertical）。 |
 | maxLength | int? | - | 最大字符数。 |
 | maxLines | int? | 1 | 最大行数。 |
 | minLines | int? | - | 最小行数。 |

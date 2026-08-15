@@ -10,10 +10,23 @@ import '../form/t_form_item.dart';
 import 't_input_resolve.dart';
 import 't_input_theme_data.dart';
 
+/// label 与输入区的排布方式。
+enum TInputLayout {
+  /// 横向：label 在输入框左侧，同一行排列。
+  horizontal,
+
+  /// 纵向：label 在输入框上方，换行排列。
+  vertical,
+}
+
 /// 基于 Material [TextField] 的 v1 文本输入框。
 ///
 /// [controller] 是主控制路径；未传时由组件创建内部 controller，并使用
 /// [initialValue] 初始化一次。两者不能同时传入。
+///
+/// [label] 作为输入框左侧的固定标签展示（横向布局，[layout] 为
+/// [TInputLayout.vertical] 时展示在上方）；[required] 为 true 时在标签后
+/// 追加红色 `*`。
 class TInput extends StatefulWidget {
   const TInput({
     super.key,
@@ -39,8 +52,14 @@ class TInput extends StatefulWidget {
     /// 是否只读。
     this.readOnly = false,
 
-    /// 标签文案。
+    /// 标签文案（输入框左侧的固定标签）。
     this.label,
+
+    /// 是否必填；为 true 且存在 [label] 时在标签后展示红色 `*`。
+    this.required = false,
+
+    /// 标签与输入区的排布方式，默认横向（label 在左）。
+    this.layout = TInputLayout.horizontal,
 
     /// 占位提示文案。
     this.hintText,
@@ -118,8 +137,14 @@ class TInput extends StatefulWidget {
     /// 是否只读。
     this.readOnly = false,
 
-    /// 标签文案。
+    /// 标签文案（输入框左侧的固定标签）。
     this.label,
+
+    /// 是否必填；为 true 且存在 [label] 时在标签后展示红色 `*`。
+    this.required = false,
+
+    /// 标签与输入区的排布方式，默认横向（label 在左）。
+    this.layout = TInputLayout.horizontal,
 
     /// 占位提示文案。
     this.hintText,
@@ -190,8 +215,14 @@ class TInput extends StatefulWidget {
   /// 是否只读。
   final bool readOnly;
 
-  /// 标签文案。
+  /// 标签文案（输入框左侧的固定标签）。
   final String? label;
+
+  /// 是否必填；为 true 且存在 [label] 时在标签后展示红色 `*`。
+  final bool required;
+
+  /// 标签与输入区的排布方式，默认横向（label 在左）。
+  final TInputLayout layout;
 
   /// 占位提示文案。
   final String? hintText;
@@ -329,7 +360,6 @@ class _TInputState extends State<TInput> {
         : null;
     final decoration = TInputResolve.resolveDecoration(
       base: widget.decoration,
-      label: widget.label,
       hintText: widget.hintText,
       prefix: widget.prefix,
       suffix: widget.suffix ?? clearButton,
@@ -402,7 +432,7 @@ class _TInputState extends State<TInput> {
         ? configuredMinLines
         : configuredMinLines.clamp(1, widget.maxLines!);
 
-    return TextField(
+    final inputField = TextField(
       controller: _controller,
       focusNode: widget.focusNode,
       onChanged: widget.onChanged,
@@ -423,6 +453,59 @@ class _TInputState extends State<TInput> {
       cursorColor: cursorColor,
       decoration: effectiveDecoration,
     );
+
+    final label = widget.label;
+    if (label == null) {
+      return inputField;
+    }
+
+    // 左侧固定标签（默认横向布局）；required 时在标签后追加红色 `*`。
+    final labelStyle = textStyle?.copyWith(
+      color: context.tTheme.textColorPrimary,
+    );
+    final labelWidget = Text.rich(
+      TextSpan(
+        text: label,
+        style: labelStyle,
+        children: [
+          if (widget.required)
+            TextSpan(
+              text: ' *',
+              style: TextStyle(
+                color: context.tTheme.errorColor6,
+                fontSize: textStyle?.fontSize,
+                height: textStyle?.height,
+                fontWeight: textStyle?.fontWeight,
+              ),
+            ),
+        ],
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    return switch (widget.layout) {
+      TInputLayout.vertical => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: labelWidget,
+          ),
+          inputField,
+        ],
+      ),
+      TInputLayout.horizontal => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: labelWidget,
+          ),
+          Expanded(child: inputField),
+        ],
+      ),
+    };
   }
 
   void _handleControllerChanged() {
