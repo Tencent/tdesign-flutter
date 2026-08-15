@@ -92,14 +92,14 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
   }) {
     return [
       _buildLink(
-        colorScheme: TLinkColorScheme.primary,
-        variant: variant,
+        TLinkColorScheme.primary,
+        variant,
         prefixIconBuilder: prefixIconBuilder,
         suffixIconBuilder: suffixIconBuilder,
       ),
       _buildLink(
-        colorScheme: TLinkColorScheme.defaultTheme,
-        variant: variant,
+        TLinkColorScheme.defaultTheme,
+        variant,
         prefixIconBuilder: prefixIconBuilder,
         suffixIconBuilder: suffixIconBuilder,
       ),
