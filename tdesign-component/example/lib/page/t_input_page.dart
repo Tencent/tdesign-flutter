@@ -5,7 +5,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
+/// 每个示例之间的间距，与 H5（tdesign-mobile-vue）示例 `.t-input + .t-input` 保持一致。
+const double _kExampleGap = 16;
+
 /// TInput 示例页。
+///
+/// 分组与文案对齐 H5（tdesign-mobile-vue）`src/input/demos`：
+/// 01 组件类型 / 02 组件状态 / 03 组件样式。
 class TInputViewPage extends StatefulWidget {
   const TInputViewPage({super.key});
 
@@ -14,44 +20,38 @@ class TInputViewPage extends StatefulWidget {
 }
 
 class _TInputViewPageState extends State<TInputViewPage> {
-  final controller = TextEditingController();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
       exampleCodeGroup: 'input',
-      desc: '用于接收单行或多行文本。',
+      desc: '用于单行文本信息输入。',
       children: [
         ExampleModule(
-          title: '基础输入',
+          title: '组件类型',
           children: [
-            ExampleItem(desc: '基础', builder: _buildBasic),
-            ExampleItem(desc: '标签与内容槽', builder: _buildSlots),
-            ExampleItem(desc: '必填标签', builder: _buildRequired),
-            ExampleItem(desc: '纵向标签', builder: _buildVerticalLabel),
-            ExampleItem(desc: '密码', builder: _buildPassword),
+            ExampleItem(desc: '基础输入框', builder: _buildBasic),
+            ExampleItem(desc: '带字数限制输入框', builder: _buildMaxLength),
+            ExampleItem(desc: '带操作输入框', builder: _buildSuffix),
+            ExampleItem(desc: '带图标输入框', builder: _buildPrefix),
+            ExampleItem(desc: '特定类型输入框', builder: _buildSpecial),
           ],
         ),
         ExampleModule(
-          title: '状态',
+          title: '组件状态',
           children: [
-            ExampleItem(desc: '禁用', builder: _buildDisabled),
-            ExampleItem(desc: '只读', builder: _buildReadOnly),
-            ExampleItem(desc: '限制输入', builder: _buildFormatter),
+            ExampleItem(desc: '输入框状态', builder: _buildStatus),
+            ExampleItem(desc: '信息超长状态', builder: _buildLongLabel),
           ],
         ),
         ExampleModule(
-          title: '主题与多行',
+          title: '组件样式',
           children: [
-            ExampleItem(desc: '隐藏清除按钮', builder: _buildTheme),
-            ExampleItem(desc: '多行输入', builder: _buildMultiline),
+            ExampleItem(desc: '内容位置', builder: _buildAlign),
+            ExampleItem(desc: '竖排样式', builder: _buildLayout),
+            ExampleItem(desc: '非通栏样式', builder: _buildBanner),
+            ExampleItem(desc: '标签外置样式', builder: _buildBordered),
+            ExampleItem(desc: '自定义样式输入框', builder: _buildCustom),
           ],
         ),
       ],
@@ -60,72 +60,292 @@ class _TInputViewPageState extends State<TInputViewPage> {
   }
 
   @ExampleCode(group: 'input')
-  Widget _buildBasic(BuildContext context) => TInput(
-        controller: controller,
-        hintText: '请输入文字',
-      );
+  Widget _buildBasic(BuildContext context) => Column(
+    children: const [
+      TInput(label: '标签文字', hintText: '请输入文字'),
+      SizedBox(height: _kExampleGap),
+      TInput(label: '标签文字', required: true, hintText: '请输入文字'),
+      SizedBox(height: _kExampleGap),
+      TInput(hintText: '请输入文字'),
+    ],
+  );
 
   @ExampleCode(group: 'input')
-  Widget _buildSlots(BuildContext context) => const TInput(
-        label: '手机号',
-        hintText: '请输入手机号',
-        prefix: Icon(TIcons.mobile),
-        suffix: Text('+86'),
-        inputType: TextInputType.phone,
-      );
-
-  @ExampleCode(group: 'input')
-  Widget _buildRequired(BuildContext context) => const TInput(
+  Widget _buildMaxLength(BuildContext context) => Column(
+    children: [
+      const TInput(
         label: '标签文字',
-        required: true,
         hintText: '请输入文字',
-      );
-
-  @ExampleCode(group: 'input')
-  Widget _buildVerticalLabel(BuildContext context) => const TInput(
-        label: '标签文字',
-        layout: TInputLayout.vertical,
-        hintText: '请输入文字',
-      );
-
-  @ExampleCode(group: 'input')
-  Widget _buildPassword(BuildContext context) => const TInput(
-        label: '密码',
-        hintText: '请输入密码',
-        obscureText: true,
-        inputType: TextInputType.visiblePassword,
-      );
-
-  @ExampleCode(group: 'input')
-  Widget _buildDisabled(BuildContext context) => const TInput(
-        initialValue: '不可编辑',
-        enabled: false,
-      );
-
-  @ExampleCode(group: 'input')
-  Widget _buildReadOnly(BuildContext context) => const TInput(
-        initialValue: '可选择复制',
-        readOnly: true,
-      );
-
-  @ExampleCode(group: 'input')
-  Widget _buildFormatter(BuildContext context) => TInput(
-        hintText: '最多 10 个字符',
         maxLength: 10,
-        inputFormatters: [LengthLimitingTextInputFormatter(10)],
-      );
+        decoration: InputDecoration(counterText: ''),
+      ),
+      const SizedBox(height: 8),
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: TText('最大输入10个字符'),
+      ),
+      const SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        inputFormatters: [_MaxCharacterTextInputFormatter(10)],
+      ),
+      const SizedBox(height: 8),
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: TText('最大输入10个字符，汉字算两个'),
+      ),
+    ],
+  );
 
   @ExampleCode(group: 'input')
-  Widget _buildTheme(BuildContext context) => Theme(
-        data: Theme.of(context).mergeExtension(
-          const TInputThemeData(showClearButton: false),
+  Widget _buildSuffix(BuildContext context) => Column(
+    children: [
+      const TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        suffix: Icon(TIcons.info_circle),
+      ),
+      const SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签文字',
+        hintText: '请输入手机号码',
+        suffix: TButton(
+          child: const Text('操作按钮'),
+          size: TButtonSize.extraSmall,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {},
         ),
-        child: const TInput(initialValue: '无清除按钮'),
-      );
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        suffix: Icon(TIcons.user),
+      ),
+    ],
+  );
 
   @ExampleCode(group: 'input')
-  Widget _buildMultiline(BuildContext context) => const TInput.multiline(
-        hintText: '请输入多行内容',
-        maxLength: 200,
-      );
+  Widget _buildPrefix(BuildContext context) => Column(
+    children: const [
+      TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        prefix: Icon(TIcons.app),
+      ),
+      SizedBox(height: _kExampleGap),
+      TInput(hintText: '请输入文字', prefix: Icon(TIcons.app)),
+    ],
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildSpecial(BuildContext context) => Column(
+    children: [
+      const TInput(
+        initialValue: '520 TDesign',
+        label: '输入密码',
+        obscureText: true,
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '验证码',
+        hintText: '输入验证码',
+        suffix: Icon(TIcons.qrcode),
+      ),
+      const SizedBox(height: _kExampleGap),
+      TInput(
+        initialValue: '17600600600',
+        label: '手机号',
+        hintText: '输入手机号码',
+        inputType: TextInputType.phone,
+        suffix: TButton(
+          child: const Text('发送验证码'),
+          size: TButtonSize.extraSmall,
+          variant: TButtonVariant.text,
+          onPressed: () {},
+        ),
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '价格',
+        hintText: '0.00',
+        textAlign: TextAlign.right,
+        suffix: Text('元'),
+        inputType: TextInputType.number,
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '数量',
+        hintText: '填写个数',
+        textAlign: TextAlign.right,
+        suffix: Text('个'),
+        inputType: TextInputType.number,
+      ),
+    ],
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildStatus(BuildContext context) => Column(
+    children: [
+      TInput(
+        initialValue: '已输入文字',
+        label: '标签文字',
+        decoration: const InputDecoration(errorText: '辅助说明'),
+        suffix: Icon(TIcons.close, color: context.tTheme.errorColor6),
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        initialValue: '不可编辑文字',
+        label: '标签文字',
+        enabled: false,
+      ),
+    ],
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildLongLabel(BuildContext context) => const TInput(
+    label: '标签超长时最多十个字',
+    hintText: '请输入文字',
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildAlign(BuildContext context) => Column(
+    children: const [
+      TInput(label: '标签左对齐', hintText: '请输入文字'),
+      SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签居中',
+        hintText: '请输入文字',
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签右对齐',
+        hintText: '请输入文字',
+        textAlign: TextAlign.right,
+      ),
+    ],
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildLayout(BuildContext context) => const TInput(
+    label: '标签文字',
+    layout: TInputLayout.vertical,
+    hintText: '请输入文字',
+    suffix: Icon(TIcons.error_circle_filled),
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildBanner(BuildContext context) => Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    clipBehavior: Clip.antiAlias,
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: const TInput(label: '标签文字', hintText: '请输入文字'),
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildBordered(BuildContext context) => Column(
+    children: [
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: TText('标签文字'),
+      ),
+      const SizedBox(height: 8),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.circular(6),
+          border: Border.all(color: const Color(0xFFDCDCDC)),
+        ),
+        child: Theme(
+          data: Theme.of(context).mergeExtension(
+            const TInputThemeData(
+              decorationTheme: InputDecorationTheme(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
+            ),
+          ),
+          child: TInput(
+            hintText: '请输入文字',
+            suffix: Icon(
+              TIcons.error_circle_filled,
+              color: context.tTheme.errorColor6,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+
+  @ExampleCode(group: 'input')
+  Widget _buildCustom(BuildContext context) => Theme(
+    data: Theme.of(context).mergeExtension(
+      const TInputThemeData(
+        cursorColor: Colors.redAccent,
+        decorationTheme: InputDecorationTheme(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF4B4B4B)),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+        ),
+      ),
+    ),
+    child: const TInput(label: '标签文字', hintText: '请输入文字'),
+  );
+}
+
+/// 按“汉字算两个字符”计数并截断的输入格式化器，用于对齐 H5 `maxcharacter`。
+class _MaxCharacterTextInputFormatter extends TextInputFormatter {
+  _MaxCharacterTextInputFormatter(this.maxLength);
+
+  /// 允许的最大“字符长度”，一个汉字计为 2。
+  final int maxLength;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+    if (_charLength(text) <= maxLength) {
+      return newValue;
+    }
+    final truncated = _truncate(text, maxLength);
+    return TextEditingValue(
+      text: truncated,
+      selection: TextSelection.collapsed(offset: truncated.length),
+    );
+  }
+
+  int _charLength(String value) {
+    var length = 0;
+    for (final rune in value.runes) {
+      length += _isChinese(rune) ? 2 : 1;
+    }
+    return length;
+  }
+
+  String _truncate(String value, int maxLength) {
+    final buffer = StringBuffer();
+    var length = 0;
+    for (final rune in value.runes) {
+      final add = _isChinese(rune) ? 2 : 1;
+      if (length + add > maxLength) {
+        break;
+      }
+      buffer.writeCharCode(rune);
+      length += add;
+    }
+    return buffer.toString();
+  }
+
+  bool _isChinese(int rune) => rune >= 0x4E00 && rune <= 0x9FFF;
 }
