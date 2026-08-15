@@ -669,7 +669,64 @@ void main() {
         );
       });
       expect(find.text('防触'), findsOneWidget);
-      // preventTap 时使用 Positioned 全屏透明遮罩
+      // preventTap 时使用全屏拦截层
+      expect(find.byType(Positioned), findsWidgets);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showOverlay 渲染可见半透明蒙层', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '遮罩',
+          context: context,
+          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('遮罩'), findsOneWidget);
+      // showOverlay 时全屏蒙层颜色为半透明黑
+      final mask = find.byWidgetPredicate(
+        (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+      );
+      expect(mask, findsOneWidget);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('TOverlayConfig.color 覆盖默认蒙层色', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '遮罩色',
+          context: context,
+          overlay: const TOverlayConfig(
+            showOverlay: true,
+            color: Colors.red,
+          ),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('遮罩色'), findsOneWidget);
+      final mask = find.byWidgetPredicate(
+        (w) => w is Container && w.color == Colors.red,
+      );
+      expect(mask, findsOneWidget);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('overlay.preventTap 与旧 preventTap 取或合并拦截', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '拦截',
+          context: context,
+          preventTap: true,
+          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('拦截'), findsOneWidget);
+      // 存在全屏拦截/蒙层
       expect(find.byType(Positioned), findsWidgets);
       await waitForDismiss(tester);
     });
@@ -685,6 +742,65 @@ void main() {
         );
       });
       expect(find.text('自定义内容'), findsOneWidget);
+      await waitForDismiss(tester);
+    });
+  });
+
+  // ============================================================
+  // placement 展示位置
+  // ============================================================
+  group('TToast placement 展示位置', () {
+    testWidgets('默认 middle 居中', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '居中',
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('居中'), findsOneWidget);
+      // 无蒙层/拦截时不使用 Stack，直接 Align
+      final align = tester.widget<Align>(
+        find.ancestor(of: find.text('居中'), matching: find.byType(Align)).first,
+      );
+      expect(align.alignment, Alignment.center);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('placement top 顶部对齐', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '顶部',
+          context: context,
+          placement: TToastPlacement.top,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('顶部'), findsOneWidget);
+      final align = tester.widget<Align>(
+        find.ancestor(of: find.text('顶部'), matching: find.byType(Align)).first,
+      );
+      expect(align.alignment, Alignment.topCenter);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('placement bottom 底部对齐', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '底部',
+          context: context,
+          placement: TToastPlacement.bottom,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('底部'), findsOneWidget);
+      final align = tester.widget<Align>(
+        find.ancestor(of: find.text('底部'), matching: find.byType(Align)).first,
+      );
+      expect(align.alignment, Alignment.bottomCenter);
       await waitForDismiss(tester);
     });
   });

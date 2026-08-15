@@ -25,6 +25,48 @@ enum IconTextDirection {
   vertical,
 }
 
+/// Toast 展示位置
+enum TToastPlacement {
+  /// 顶部
+  top,
+
+  /// 居中
+  middle,
+
+  /// 底部
+  bottom,
+}
+
+/// 蒙层行为配置
+///
+/// 统一收敛 Toast 展示期间遮罩层的各项行为：
+/// - [showOverlay]：是否显示可见半透明蒙层（与 [preventTap] 解耦，
+///   `true` 时展示半透明黑色蒙层遮住背景）；
+/// - [color] / [opacity]：蒙层颜色与透明度，`color` 为 null 时由
+///   `Colors.black.withValues(alpha: opacity)` 派生黑色蒙层；
+/// - [preventTap]：是否拦截背景点击（与蒙层是否可见解耦，
+///   `true` 时展示期间背景不可点击）。
+class TOverlayConfig {
+  /// 是否显示可见半透明蒙层（默认 false）。
+  final bool showOverlay;
+
+  /// 蒙层颜色；为 null 时由 [opacity] 派生黑色蒙层。
+  final Color? color;
+
+  /// 蒙层透明度（0~1，默认 0.2）。
+  final double opacity;
+
+  /// 是否拦截背景点击（默认 false）。
+  final bool preventTap;
+
+  const TOverlayConfig({
+    this.showOverlay = false,
+    this.color,
+    this.opacity = 0.2,
+    this.preventTap = false,
+  });
+}
+
 /// Toast实例管理类
 class _ToastInstance {
   final OverlayEntry overlayEntry;
@@ -102,6 +144,12 @@ class TToast {
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
 
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
+
     /// 自定义内容；传入后优先展示。
     Widget? customWidget,
 
@@ -129,6 +177,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -153,6 +203,12 @@ class TToast {
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
+
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -189,6 +245,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -210,6 +268,12 @@ class TToast {
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
+
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -236,6 +300,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       backgroundColor: backgroundColor,
       maxLines: maxLines,
       textStyle: textStyle,
@@ -262,6 +328,12 @@ class TToast {
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
 
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
+
     /// Toast 背景色。
     Color? backgroundColor,
 
@@ -287,6 +359,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       backgroundColor: backgroundColor,
       maxLines: maxLines,
       textStyle: textStyle,
@@ -313,6 +387,12 @@ class TToast {
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
 
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
+
     /// Toast 背景色。
     Color? backgroundColor,
 
@@ -338,6 +418,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       backgroundColor: backgroundColor,
       maxLines: maxLines,
       textStyle: textStyle,
@@ -360,6 +442,12 @@ class TToast {
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
+
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// 自定义加载内容；传入后优先展示。
     Widget? customWidget,
@@ -394,6 +482,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -409,6 +499,12 @@ class TToast {
 
     /// 是否阻止 Toast 展示期间的背景点击。
     bool? preventTap,
+
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -434,6 +530,8 @@ class TToast {
       context: context,
       duration: duration,
       preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -460,10 +558,12 @@ class TToast {
   }
 
   static void _showOverlay(
-    Widget? widget, {
+    Widget widget, {
     required BuildContext context,
     Duration duration = const Duration(milliseconds: 2000),
     bool? preventTap,
+    TOverlayConfig? overlay,
+    TToastPlacement placement = TToastPlacement.middle,
     required String toastId,
   }) {
     // 不同 ID 的 Toast 可以并存；同 ID 采用替换语义。
@@ -478,25 +578,39 @@ class TToast {
       to: overlayState.context,
     );
 
+    final cfg = overlay ?? const TOverlayConfig();
+    // 拦截点击：overlay.preventTap 与旧 bool preventTap 取"或"，任一要求拦即拦。
+    final finalPreventTap = cfg.preventTap || (preventTap ?? false);
+    final showMask = cfg.showOverlay;
+    final maskColor = showMask
+        ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
+        : Colors.transparent;
+    final alignment = switch (placement) {
+      TToastPlacement.top => Alignment.topCenter,
+      TToastPlacement.bottom => Alignment.bottomCenter,
+      TToastPlacement.middle => Alignment.center,
+    };
+
     OverlayEntry overlayEntry;
-    if (preventTap ?? false) {
+    if (finalPreventTap || showMask) {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
-          Positioned(
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            child: Container(
-              color: Colors.transparent,
-              child: Align(alignment: Alignment.center, child: widget),
-            ),
+          Stack(
+            children: [
+              Positioned.fill(child: Container(color: maskColor)),
+              Align(
+                alignment: alignment,
+                child: SafeArea(child: widget),
+              ),
+            ],
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(Center(child: widget)),
+        builder: (BuildContext context) => captured.wrap(
+          Align(alignment: alignment, child: widget),
+        ),
       );
     }
 

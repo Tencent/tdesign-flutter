@@ -16,18 +16,31 @@ class TToastPage extends StatelessWidget {
       exampleCodeGroup: 'toast',
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
-        ExampleModule(title: '组件类型', children: [
+        ExampleModule(title: '基础提示', children: [
           ExampleItem(desc: '纯文字', builder: _buildTextToast),
-          ExampleItem(desc: '带图标', builder: _buildIconToast),
-          ExampleItem(desc: '加载中', builder: _buildLoadingToast),
+          ExampleItem(desc: '多行文字', builder: _buildMultipleTextToast),
+          ExampleItem(desc: '竖向图标', builder: _buildVerticalIconToast),
+          ExampleItem(
+            desc: '加载状态（无文字）',
+            builder: _buildLoadingWithoutTextToast,
+          ),
         ]),
         ExampleModule(title: '组件状态', children: [
           ExampleItem(desc: '成功', builder: _buildSuccessToast),
           ExampleItem(desc: '警告', builder: _buildWarningToast),
           ExampleItem(desc: '失败', builder: _buildFailToast),
         ]),
+        ExampleModule(title: '展示位置', children: [
+          ExampleItem(desc: '顶部', builder: _buildTopToast),
+          ExampleItem(desc: '居中', builder: _buildMiddleToast),
+          ExampleItem(desc: '底部', builder: _buildBottomToast),
+        ]),
+        ExampleModule(title: '显示遮罩', children: [
+          ExampleItem(desc: '半透明遮罩', builder: _buildShowOverlayToast),
+        ]),
         ExampleModule(title: '展示时长', children: [
           ExampleItem(desc: '自定义时长', builder: _buildCustomDurationToast),
+          ExampleItem(desc: '手动关闭', builder: _buildManualCloseToast),
         ]),
       ],
     );
@@ -50,18 +63,17 @@ class TToastPage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'toast')
-  Widget _buildIconToast(BuildContext context) {
+  Widget _buildMultipleTextToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('带图标'),
+        child: const Text('多行文字'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showIconText(
-            '这是一条带图标的提示',
-            icon: TIcons.info_circle,
+          TToast.showText(
+            '最多一行展示十个汉字宽度限制最多不超过三行文字',
             context: context,
           );
         },
@@ -70,19 +82,37 @@ class TToastPage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'toast')
-  Widget _buildLoadingToast(BuildContext context) {
+  Widget _buildVerticalIconToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('加载中'),
+        child: const Text('竖向图标'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          final id = TToast.showLoading(
+          TToast.showIconText(
+            '带竖向图标',
+            icon: TIcons.check_circle,
+            direction: IconTextDirection.vertical,
             context: context,
-            text: '加载中...',
           );
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
+  Widget _buildLoadingWithoutTextToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('加载状态（无文字）'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = TToast.showLoadingWithoutText(context: context);
           // 2 秒后关闭
           Future.delayed(const Duration(seconds: 2), () {
             TToast.dismissToast(id);
@@ -141,6 +171,86 @@ class TToastPage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'toast')
+  Widget _buildTopToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('顶部展示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '顶部提示',
+            context: context,
+            placement: TToastPlacement.top,
+          );
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
+  Widget _buildMiddleToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('居中展示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText('居中提示', context: context);
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
+  Widget _buildBottomToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('底部展示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '底部提示',
+            context: context,
+            placement: TToastPlacement.bottom,
+          );
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
+  Widget _buildShowOverlayToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('半透明遮罩'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '遮罩展示',
+            context: context,
+            overlay: const TOverlayConfig(
+              showOverlay: true,
+              opacity: 0.4,
+              preventTap: true,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
   Widget _buildCustomDurationToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -166,6 +276,29 @@ class TToastPage extends StatelessWidget {
               },
             ),
           );
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
+  Widget _buildManualCloseToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('手动关闭'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = TToast.showLoading(
+            context: context,
+            text: '加载中...',
+          );
+          // 0.5 秒后手动关闭
+          Future.delayed(const Duration(milliseconds: 500), () {
+            TToast.dismissToast(id);
+          });
         },
       ),
     );

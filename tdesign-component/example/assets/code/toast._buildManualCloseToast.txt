@@ -1,0 +1,21 @@
+Widget _buildManualCloseToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('手动关闭'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = TToast.showLoading(
+            context: context,
+            text: '加载中...',
+          );
+          // 0.5 秒后手动关闭
+          Future.delayed(const Duration(milliseconds: 500), () {
+            TToast.dismissToast(id);
+          });
+        },
+      ),
+    );
+  }
