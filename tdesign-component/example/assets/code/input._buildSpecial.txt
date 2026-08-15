@@ -1,0 +1,44 @@
+Widget _buildSpecial(BuildContext context) => Column(
+    children: [
+      const TInput(
+        initialValue: '520 TDesign',
+        label: '输入密码',
+        obscureText: true,
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '验证码',
+        hintText: '输入验证码',
+        suffix: Icon(TIcons.qrcode),
+      ),
+      const SizedBox(height: _kExampleGap),
+      TInput(
+        initialValue: '17600600600',
+        label: '手机号',
+        hintText: '输入手机号码',
+        inputType: TextInputType.phone,
+        suffix: TButton(
+          child: const Text('发送验证码'),
+          size: TButtonSize.extraSmall,
+          variant: TButtonVariant.text,
+          onPressed: () {},
+        ),
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '价格',
+        hintText: '0.00',
+        align: TInputAlign.right,
+        suffix: Text('元'),
+        inputType: TextInputType.number,
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '数量',
+        hintText: '填写个数',
+        align: TInputAlign.right,
+        suffix: Text('个'),
+        inputType: TextInputType.number,
+      ),
+    ],
+  );

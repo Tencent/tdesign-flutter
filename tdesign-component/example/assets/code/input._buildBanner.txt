@@ -1,0 +1,8 @@
+Widget _buildBanner(BuildContext context) => Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    clipBehavior: Clip.antiAlias,
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(6)),
+    ),
+    child: const TInput(label: '标签文字', hintText: '请输入文字'),
+  );

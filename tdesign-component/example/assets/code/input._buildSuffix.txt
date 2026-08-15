@@ -1,0 +1,26 @@
+Widget _buildSuffix(BuildContext context) => Column(
+    children: [
+      const TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        suffix: Icon(TIcons.info_circle),
+      ),
+      const SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签文字',
+        hintText: '请输入手机号码',
+        suffix: TButton(
+          child: const Text('操作按钮'),
+          size: TButtonSize.extraSmall,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {},
+        ),
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        suffix: Icon(TIcons.user),
+      ),
+    ],
+  );

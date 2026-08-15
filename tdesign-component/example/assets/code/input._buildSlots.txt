@@ -1,7 +1,0 @@
-Widget _buildSlots(BuildContext context) => const TInput(
-        label: '手机号',
-        hintText: '请输入手机号',
-        prefix: Icon(TIcons.mobile),
-        suffix: Text('+86'),
-        inputType: TextInputType.phone,
-      );

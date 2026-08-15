@@ -1,0 +1,18 @@
+Widget _buildMaxLength(BuildContext context) => const Column(
+    children: [
+      TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        maxLength: 10,
+        tips: '最大输入10个字符',
+        decoration: InputDecoration(counterText: ''),
+      ),
+      SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签文字',
+        hintText: '请输入文字',
+        maxcharacter: 10,
+        tips: '最大输入10个字符，汉字算两个',
+      ),
+    ],
+  );

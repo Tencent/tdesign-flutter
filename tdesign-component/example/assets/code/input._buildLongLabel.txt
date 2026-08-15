@@ -1,0 +1,4 @@
+Widget _buildLongLabel(BuildContext context) => const TInput(
+    label: '标签超长时最多十个字',
+    hintText: '请输入文字',
+  );

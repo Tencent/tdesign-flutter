@@ -1,0 +1,17 @@
+Widget _buildAlign(BuildContext context) => const Column(
+    children: [
+      TInput(label: '标签左对齐', hintText: '请输入文字'),
+      SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签居中',
+        hintText: '请输入文字',
+        align: TInputAlign.center,
+      ),
+      SizedBox(height: _kExampleGap),
+      TInput(
+        label: '标签右对齐',
+        hintText: '请输入文字',
+        align: TInputAlign.right,
+      ),
+    ],
+  );

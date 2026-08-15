@@ -1,0 +1,16 @@
+Widget _buildCustom(BuildContext context) => Theme(
+    data: Theme.of(context).mergeExtension(
+      const TInputThemeData(
+        cursorColor: Colors.redAccent,
+        decorationTheme: InputDecorationTheme(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF4B4B4B)),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+        ),
+      ),
+    ),
+    child: const TInput(label: '标签文字', hintText: '请输入文字'),
+  );

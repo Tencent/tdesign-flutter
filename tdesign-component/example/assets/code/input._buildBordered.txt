@@ -1,0 +1,24 @@
+Widget _buildBordered(BuildContext context) => Column(
+    children: [
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: TText('标签文字'),
+      ),
+      const SizedBox(height: 8),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+          border: Border.all(color: const Color(0xFFDCDCDC)),
+        ),
+        child: TInput(
+          hintText: '请输入文字',
+          borderless: true,
+          suffix: Icon(
+            TIcons.error_circle_filled,
+            color: context.tTheme.errorColor6,
+          ),
+        ),
+      ),
+    ],
+  );

@@ -1,0 +1,17 @@
+Widget _buildStatus(BuildContext context) => Column(
+    children: [
+      TInput(
+        initialValue: '已输入文字',
+        label: '标签文字',
+        status: TInputStatus.error,
+        tips: '辅助说明',
+        suffix: Icon(TIcons.close, color: context.tTheme.errorColor6),
+      ),
+      const SizedBox(height: _kExampleGap),
+      const TInput(
+        initialValue: '不可编辑文字',
+        label: '标签文字',
+        enabled: false,
+      ),
+    ],
+  );

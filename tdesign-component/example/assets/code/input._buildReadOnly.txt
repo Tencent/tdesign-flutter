@@ -1,4 +1,0 @@
-Widget _buildReadOnly(BuildContext context) => const TInput(
-        initialValue: '可选择复制',
-        readOnly: true,
-      );
