@@ -26,21 +26,32 @@ class _TButtonPageState extends State<TButtonPage> {
                 return Container(
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.only(left: 16),
-                  child: Wrap(
-                    spacing: 16, // 主轴方向间距
-                    runSpacing: 16, // 交叉轴方向间距
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CodeWrapper(
-                        builder: _buildPrimaryFillButton,
-                        methodName: '_buildPrimaryFillButton',
+                      Wrap(
+                        spacing: 16, // 主轴方向间距
+                        runSpacing: 16, // 交叉轴方向间距
+                        children: [
+                          CodeWrapper(
+                            builder: _buildPrimaryFillButton,
+                            methodName: '_buildPrimaryFillButton',
+                          ),
+                          CodeWrapper(
+                            builder: _buildLightFillButton,
+                            methodName: '_buildLightFillButton',
+                          ),
+                          CodeWrapper(builder: _buildDefaultFillButton),
+                        ],
                       ),
-                      CodeWrapper(
-                        builder: _buildLightFillButton,
-                        methodName: '_buildLightFillButton',
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 16,
+                        children: [
+                          CodeWrapper(builder: _buildPrimaryStrokeButton),
+                          CodeWrapper(builder: _buildPrimaryTextButton),
+                        ],
                       ),
-                      CodeWrapper(builder: _buildDefaultFillButton),
-                      CodeWrapper(builder: _buildPrimaryStrokeButton),
-                      CodeWrapper(builder: _buildPrimaryTextButton),
                     ],
                   ),
                 );
@@ -68,7 +79,7 @@ class _TButtonPageState extends State<TButtonPage> {
               desc: '幽灵按钮',
               builder: (context) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.all(16),
                   alignment: Alignment.center,
                   color: context.tTheme.grayColor14,
                   child: Wrap(
@@ -91,7 +102,7 @@ class _TButtonPageState extends State<TButtonPage> {
         ExampleModule(title: '组件状态', children: [
           ExampleItem(
               ignoreCode: true,
-              desc: '按钮禁用状态',
+              desc: '按钮禁用态',
               builder: (context) {
                 return Wrap(
                   alignment: WrapAlignment.center,
@@ -107,21 +118,24 @@ class _TButtonPageState extends State<TButtonPage> {
                 );
               }),
         ]),
-        ExampleModule(title: '组件主题', children: [
+        ExampleModule(title: '组件样式', children: [
           ExampleItem(
               ignoreCode: true,
               desc: '按钮尺寸',
               builder: (context) {
-                return Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 16, // 主轴方向间距
-                  runSpacing: 16, // 交叉轴方向间距
-                  children: [
-                    CodeWrapper(builder: _buildLargeButton),
-                    CodeWrapper(builder: _buildMediumButton),
-                    CodeWrapper(builder: _buildSmallButton),
-                    CodeWrapper(builder: _buildExtraSmallButton),
-                  ],
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    spacing: 16, // 主轴方向间距
+                    runSpacing: 16, // 交叉轴方向间距
+                    children: [
+                      CodeWrapper(builder: _buildLargeButton),
+                      CodeWrapper(builder: _buildMediumButton),
+                      CodeWrapper(builder: _buildSmallButton),
+                      CodeWrapper(builder: _buildExtraSmallButton),
+                    ],
+                  ),
                 );
               }),
           ExampleItem(
@@ -387,7 +401,7 @@ class _TButtonPageState extends State<TButtonPage> {
       context,
       TButtonShape.rectangle,
       TButton(
-        child: const Text('矩形'),
+        child: const Text('填充按钮'),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
@@ -404,7 +418,7 @@ class _TButtonPageState extends State<TButtonPage> {
         context,
         TButtonShape.filled,
         TButton(
-          child: const Text('直角通栏'),
+          child: const Text('填充按钮'),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
@@ -435,7 +449,7 @@ class _TButtonPageState extends State<TButtonPage> {
       context,
       TButtonShape.round,
       TButton(
-        child: const Text('圆角'),
+        child: const Text('填充按钮'),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
@@ -447,7 +461,7 @@ class _TButtonPageState extends State<TButtonPage> {
   @ExampleCode(group: 'button')
   TButton _buildExtraSmallButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮28'),
+      child: const Text('按钮 28'),
       size: TButtonSize.extraSmall,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
@@ -458,7 +472,7 @@ class _TButtonPageState extends State<TButtonPage> {
   @ExampleCode(group: 'button')
   TButton _buildSmallButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮32'),
+      child: const Text('按钮 32'),
       size: TButtonSize.small,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
@@ -469,7 +483,7 @@ class _TButtonPageState extends State<TButtonPage> {
   @ExampleCode(group: 'button')
   TButton _buildMediumButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮40'),
+      child: const Text('按钮 40'),
       size: TButtonSize.medium,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
@@ -480,7 +494,7 @@ class _TButtonPageState extends State<TButtonPage> {
   @ExampleCode(group: 'button')
   TButton _buildLargeButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮48'),
+      child: const Text('按钮 48'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
