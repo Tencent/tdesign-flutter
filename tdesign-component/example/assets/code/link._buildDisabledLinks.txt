@@ -6,12 +6,12 @@ Widget _buildDisabledLinks(BuildContext context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.primary,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.defaultTheme,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.danger,
-                  disabled: true),
+              _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
             ],
           ),
         ),
@@ -21,10 +21,10 @@ Widget _buildDisabledLinks(BuildContext context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.warning,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.success,
-                  disabled: true),
+              _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
             ],
           ),
         ),

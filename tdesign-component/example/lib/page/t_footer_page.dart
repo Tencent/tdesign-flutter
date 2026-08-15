@@ -44,6 +44,7 @@ class TFooterPage extends StatelessWidget {
           child: const Text('底部链接'),
           colorScheme: TLinkColorScheme.primary,
           variant: TLinkVariant.icon,
+          prefixIcon: const Icon(TIcons.link),
           suffixIcon: const Icon(TIcons.jump),
           onPressed: () {
             print('点击了链接');

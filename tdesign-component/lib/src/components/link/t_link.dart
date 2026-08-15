@@ -173,10 +173,10 @@ class TLink extends StatelessWidget {
 
     if (hasPrefix) {
       resolvedPrefix = prefixIcon;
+      resolvedSuffix = suffixIcon;
     } else if (hasSuffix) {
-      // 只有 suffix 时，prefix 使用默认链接图标
-      resolvedPrefix =
-          _defaultIcon(context, TIcons.link, effectiveIconSize, effectiveColor);
+      // 只传了 suffix 时，仅展示后缀图标，不额外补充默认前缀图标（对齐 h5 设计）
+      resolvedSuffix = suffixIcon;
     } else {
       // 两者都没传：默认显示链接图标 + 跳转图标
       resolvedPrefix =
@@ -184,8 +184,6 @@ class TLink extends StatelessWidget {
       resolvedSuffix =
           _defaultIcon(context, TIcons.jump, effectiveIconSize, effectiveColor);
     }
-
-    resolvedSuffix ??= suffixIcon;
 
     final rowChildren = <Widget>[];
     if (resolvedPrefix != null) {

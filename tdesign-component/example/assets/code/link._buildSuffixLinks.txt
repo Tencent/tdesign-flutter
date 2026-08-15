@@ -1,0 +1,11 @@
+Widget _buildSuffixLinks(BuildContext context) {
+    return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: _buildLinksWithVariant(
+            TLinkVariant.icon,
+            suffixIconBuilder: _jumpIcon,
+          ),
+        ));
+  }

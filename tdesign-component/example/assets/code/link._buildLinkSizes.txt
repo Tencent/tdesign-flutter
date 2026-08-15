@@ -4,9 +4,9 @@ Widget _buildLinkSizes(BuildContext context) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLinkWithSize(TLinkSize.small),
-            _buildLinkWithSize(TLinkSize.medium),
-            _buildLinkWithSize(TLinkSize.large),
+            _buildSizeLink(TLinkSize.small),
+            _buildSizeLink(TLinkSize.medium),
+            _buildSizeLink(TLinkSize.large),
           ],
         ));
   }

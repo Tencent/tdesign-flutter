@@ -26,10 +26,11 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '基础文字链接', builder: _buildBasicLinks),
             ExampleItem(desc: '下划线文字链接', builder: _buildUnderlineLinks),
-            ExampleItem(desc: '带图标链接', builder: _buildIconLinks),
+            ExampleItem(desc: '前置图标文字链接', builder: _buildPrefixLinks),
+            ExampleItem(desc: '后置图标文字链接', builder: _buildSuffixLinks),
           ]),
           ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '不同主题色', builder: _buildColorSchemeLinks),
+            ExampleItem(desc: '不同主题', builder: _buildColorSchemeLinks),
             ExampleItem(desc: '禁用状态', builder: _buildDisabledLinks)
           ]),
           ExampleModule(
@@ -59,32 +60,83 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
   }
 
   @ExampleCode(group: 'link')
-  Widget _buildIconLinks(BuildContext context) {
+  Widget _buildPrefixLinks(BuildContext context) {
     return Container(
         color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(TLinkVariant.icon),
+          children: _buildLinksWithVariant(
+            TLinkVariant.icon,
+            prefixIconBuilder: _linkIcon,
+          ),
         ));
   }
 
-  List<Widget> _buildLinksWithVariant(TLinkVariant variant) {
+  @ExampleCode(group: 'link')
+  Widget _buildSuffixLinks(BuildContext context) {
+    return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: _buildLinksWithVariant(
+            TLinkVariant.icon,
+            suffixIconBuilder: _jumpIcon,
+          ),
+        ));
+  }
+
+  List<Widget> _buildLinksWithVariant(
+    TLinkVariant variant, {
+    Widget Function(Color color)? prefixIconBuilder,
+    Widget Function(Color color)? suffixIconBuilder,
+  }) {
     return [
-      TLink(
-        child: const Text('跳转链接'),
+      _buildLink(
         colorScheme: TLinkColorScheme.primary,
         variant: variant,
-        size: TLinkSize.medium,
-        onPressed: _onLinkPressed,
+        prefixIconBuilder: prefixIconBuilder,
+        suffixIconBuilder: suffixIconBuilder,
       ),
-      TLink(
-        child: const Text('跳转链接'),
+      _buildLink(
         colorScheme: TLinkColorScheme.defaultTheme,
         variant: variant,
-        size: TLinkSize.medium,
-        onPressed: _onLinkPressed,
+        prefixIconBuilder: prefixIconBuilder,
+        suffixIconBuilder: suffixIconBuilder,
       ),
     ];
+  }
+
+  TLink _buildLink(
+    TLinkColorScheme colorScheme,
+    TLinkVariant variant, {
+    Widget Function(Color color)? prefixIconBuilder,
+    Widget Function(Color color)? suffixIconBuilder,
+    bool disabled = false,
+  }) {
+    final iconColor = _linkColor(context, colorScheme, disabled: disabled);
+    return TLink(
+      child: const Text('跳转链接'),
+      colorScheme: colorScheme,
+      variant: variant,
+      size: TLinkSize.medium,
+      prefixIcon: prefixIconBuilder?.call(iconColor),
+      suffixIcon: suffixIconBuilder?.call(iconColor),
+      onPressed: disabled ? null : _onLinkPressed,
+    );
+  }
+
+  Color _linkColor(BuildContext context, TLinkColorScheme colorScheme,
+      {bool disabled = false}) {
+    if (disabled) {
+      return context.tTheme.textDisabledColor;
+    }
+    return switch (colorScheme) {
+      TLinkColorScheme.primary => context.tTheme.brandNormalColor,
+      TLinkColorScheme.danger => context.tTheme.errorNormalColor,
+      TLinkColorScheme.warning => context.tTheme.warningNormalColor,
+      TLinkColorScheme.success => context.tTheme.successNormalColor,
+      TLinkColorScheme.defaultTheme => context.tTheme.textColorPrimary,
+    };
   }
 
   @ExampleCode(group: 'link')
@@ -96,9 +148,12 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.primary),
-              _buildLinkWithColorScheme(TLinkColorScheme.defaultTheme),
-              _buildLinkWithColorScheme(TLinkColorScheme.danger),
+              _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
             ],
           ),
         ),
@@ -108,14 +163,22 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.warning),
-              _buildLinkWithColorScheme(TLinkColorScheme.success),
+              _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
             ],
           ),
         ),
       ],
     );
   }
+
+  Widget _linkIcon(Color color) =>
+      Icon(TIcons.link, size: 16, color: color);
+
+  Widget _jumpIcon(Color color) =>
+      Icon(TIcons.jump, size: 16, color: color);
 
   @ExampleCode(group: 'link')
   Widget _buildDisabledLinks(BuildContext context) {
@@ -126,12 +189,12 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.primary,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.defaultTheme,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.danger,
-                  disabled: true),
+              _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
             ],
           ),
         ),
@@ -141,25 +204,14 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.warning,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.success,
-                  disabled: true),
+              _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
             ],
           ),
         ),
       ],
-    );
-  }
-
-  TLink _buildLinkWithColorScheme(TLinkColorScheme colorScheme,
-      {bool disabled = false}) {
-    return TLink(
-      child: const Text('跳转链接'),
-      colorScheme: colorScheme,
-      variant: TLinkVariant.basic,
-      size: TLinkSize.medium,
-      onPressed: disabled ? null : _onLinkPressed,
     );
   }
 
@@ -170,21 +222,23 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLinkWithSize(TLinkSize.small),
-            _buildLinkWithSize(TLinkSize.medium),
-            _buildLinkWithSize(TLinkSize.large),
+            _buildSizeLink(TLinkSize.small),
+            _buildSizeLink(TLinkSize.medium),
+            _buildSizeLink(TLinkSize.large),
           ],
         ));
   }
 
-  TLink _buildLinkWithSize(TLinkSize size) {
+  TLink _buildSizeLink(TLinkSize size) {
     final label =
         size == TLinkSize.small ? 'S' : (size == TLinkSize.medium ? 'M' : 'L');
     return TLink(
-      child: Text('${label}号链接'),
+      child: Text('${label}跳转链接'),
       colorScheme: TLinkColorScheme.primary,
       variant: TLinkVariant.icon,
       size: size,
+      suffixIcon: Icon(TIcons.jump,
+          size: 16, color: context.tTheme.brandNormalColor),
       onPressed: _onLinkPressed,
     );
   }

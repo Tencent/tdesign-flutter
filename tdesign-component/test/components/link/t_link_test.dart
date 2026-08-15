@@ -110,6 +110,8 @@ void main() {
 
     expect(find.text('后置图标'), findsOneWidget);
     expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
+    // 只传 suffix 时不自动补充默认前缀链接图标（对齐 h5 设计）
+    expect(find.byIcon(TIcons.link), findsNothing);
   });
 
   // ============================================================

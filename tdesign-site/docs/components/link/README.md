@@ -25,13 +25,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _basicTypeBasic(BuildContext context) {
+  Widget _buildBasicLinks(BuildContext context) {
     return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.basic),
+          children: _buildLinksWithVariant(TLinkVariant.basic),
         ));
   }</pre>
 
@@ -43,13 +42,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _withUnderline(BuildContext context) {
+  Widget _buildUnderlineLinks(BuildContext context) {
     return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.withUnderline),
+          children: _buildLinksWithVariant(TLinkVariant.underline),
         ));
   }</pre>
 
@@ -61,13 +59,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _withPrefixIcon(BuildContext context) {
+  Widget _buildPrefixLinks(BuildContext context) {
     return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.withPrefixIcon),
+          children: _buildLinksWithVariant(
+            TLinkVariant.icon,
+            prefixIconBuilder: _linkIcon,
+          ),
         ));
   }</pre>
 
@@ -79,27 +79,59 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _withSuffixIcon(BuildContext context) {
+  Widget _buildSuffixLinks(BuildContext context) {
     return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.withSuffixIcon),
+          children: _buildLinksWithVariant(
+            TLinkVariant.icon,
+            suffixIconBuilder: _jumpIcon,
+          ),
         ));
   }</pre>
 
 </td-code-block>
                                   
-### 1 组件状态
+### 2 组件状态
 
 不同主题
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TLinkState.normal);
+  Widget _buildColorSchemeLinks(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          color: context.tTheme.bgColorContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          color: context.tTheme.bgColorContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+            ],
+          ),
+        ),
+      ],
+    );
   }</pre>
 
 </td-code-block>
@@ -110,13 +142,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TLinkState.disabled);
+  Widget _buildDisabledLinks(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          color: context.tTheme.bgColorContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          color: context.tTheme.bgColorContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+              _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon, disabled: true),
+            ],
+          ),
+        ),
+      ],
+    );
   }</pre>
 
 </td-code-block>
                                   
-### 1 组件样式
+### 3 组件样式
 
 链接尺寸
             
@@ -125,14 +187,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
+        color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.small),
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.medium),
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.large),
+            _buildSizeLink(TLinkSize.small),
+            _buildSizeLink(TLinkSize.medium),
+            _buildSizeLink(TLinkSize.large),
           ],
         ));
   }</pre>
@@ -147,57 +208,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| color | Color? | - | link 文本的颜色，如果不设置则根据状态和风格进行计算 |
-| fontSize | double? | - | link 文本的字体大小，如果不设置则根据状态和风格进行计算 |
-| iconSize | double? | - | link icon 大小，如果不设置则根据状态和风格进行计算 |
+| child | Widget? | - | 链接内容，一般是 `Text` |
+| colorScheme | TLinkColorScheme? | - | 语义颜色方案 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String | - | link 展示的文本 |
-| leftGapWithIcon | double? | - | 前置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算 |
-| linkClick | LinkClick? | - | link 被点击之后所采取的动作，会将uri当做参数传入到该方法当中 |
-| prefixIcon | Icon? | - | 前置 icon |
-| rightGapWithIcon | double? | - | 后置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算 |
-| size | TLinkSize | TLinkSize.medium | link 大小 |
-| state | TLinkState | TLinkState.normal | link 状态 |
-| style | TLinkStyle | TLinkStyle.defaultStyle | link 风格 |
-| suffixIcon | Icon? | - | 后置 icon |
-| type | TLinkType | TLinkType.basic | link 类型 |
-| uri | Uri? | - | link 跳转的uri |
+| onPressed | VoidCallback? | - | 点击回调。为 null 时链接为禁用态 |
+| prefixIcon | Widget? | - | 前置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
+| semanticLabel | String? | - | 语义标签（无障碍） |
+| size | TLinkSize? | - | 尺寸；未传时读取 `TLinkThemeData.defaultSize`，再回退 medium。 |
+| suffixIcon | Widget? | - | 后置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
+| tooltip | String? | - | 悬浮提示 |
+| variant | TLinkVariant? | - | 链接形态；未传时读取 `TLinkThemeData.defaultVariant`，再回退 basic。 |
 
 
-### TLinkType
+### TLinkVariant
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| basic | - |
-| withUnderline | - |
-| withPrefixIcon | - |
-| withSuffixIcon | - |
+| basic | 纯文本链接 |
+| underline | 下划线链接 |
+| icon | 带图标链接（通过 prefixIcon / suffixIcon 区分前后） |
 
 
-### TLinkStyle
+### TLinkColorScheme
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| primary | - |
-| defaultStyle | - |
-| danger | - |
-| warning | - |
-| success | - |
-
-
-### TLinkState
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| normal | - |
-| active | - |
-| disabled | - |
+| primary | 品牌主色链接 |
+| defaultTheme | 默认文本色链接 |
+| danger | 危险操作链接 |
+| warning | 警告提示链接 |
+| success | 成功状态链接 |
 
 
 ### TLinkSize
@@ -206,17 +250,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 说明 |
 | --- | --- |
-| small | - |
-| medium | - |
-| large | - |
-
-
-### LinkClick
-#### 类型定义
-
-```dart
-typedef LinkClick =  Function(Uri? uri);
-```
-
-
-  
+| small | 小尺寸链接 |
+| medium | 中尺寸链接 |
+| large | 大尺寸链接 |

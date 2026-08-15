@@ -6,9 +6,12 @@ Widget _buildColorSchemeLinks(BuildContext context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.primary),
-              _buildLinkWithColorScheme(TLinkColorScheme.defaultTheme),
-              _buildLinkWithColorScheme(TLinkColorScheme.danger),
+              _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
             ],
           ),
         ),
@@ -18,8 +21,10 @@ Widget _buildColorSchemeLinks(BuildContext context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.warning),
-              _buildLinkWithColorScheme(TLinkColorScheme.success),
+              _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
+              _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
+                  suffixIconBuilder: _jumpIcon),
             ],
           ),
         ),
