@@ -60,8 +60,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
   }
 
   @ExampleCode(group: 'input')
-  Widget _buildBasic(BuildContext context) => Column(
-    children: const [
+  Widget _buildBasic(BuildContext context) => const Column(
+    children: [
       TInput(label: '标签文字', hintText: '请输入文字'),
       SizedBox(height: _kExampleGap),
       TInput(label: '标签文字', required: true, hintText: '请输入文字'),
@@ -127,8 +127,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
   );
 
   @ExampleCode(group: 'input')
-  Widget _buildPrefix(BuildContext context) => Column(
-    children: const [
+  Widget _buildPrefix(BuildContext context) => const Column(
+    children: [
       TInput(
         label: '标签文字',
         hintText: '请输入文字',
@@ -210,8 +210,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
   );
 
   @ExampleCode(group: 'input')
-  Widget _buildAlign(BuildContext context) => Column(
-    children: const [
+  Widget _buildAlign(BuildContext context) => const Column(
+    children: [
       TInput(label: '标签左对齐', hintText: '请输入文字'),
       SizedBox(height: _kExampleGap),
       TInput(
@@ -241,7 +241,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
     margin: const EdgeInsets.symmetric(horizontal: 16),
     clipBehavior: Clip.antiAlias,
     decoration: const BoxDecoration(
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.all(Radius.circular(6)),
     ),
     child: const TInput(label: '标签文字', hintText: '请输入文字'),
   );
@@ -257,7 +257,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.circular(6),
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
           border: Border.all(color: const Color(0xFFDCDCDC)),
         ),
         child: Theme(
