@@ -1,6 +1,6 @@
 TButton _buildMediumButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮40'),
+      child: const Text('按钮 40'),
       size: TButtonSize.medium,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,

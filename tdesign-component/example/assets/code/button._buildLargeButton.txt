@@ -1,6 +1,6 @@
 TButton _buildLargeButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮48'),
+      child: const Text('按钮 48'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,

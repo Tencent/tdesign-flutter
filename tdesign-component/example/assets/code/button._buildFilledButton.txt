@@ -5,7 +5,7 @@ Widget _buildFilledButton(BuildContext context) {
         context,
         TButtonShape.filled,
         TButton(
-          child: const Text('直角通栏'),
+          child: const Text('填充按钮'),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,

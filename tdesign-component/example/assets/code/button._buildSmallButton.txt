@@ -1,6 +1,6 @@
 TButton _buildSmallButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮32'),
+      child: const Text('按钮 32'),
       size: TButtonSize.small,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
