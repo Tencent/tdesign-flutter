@@ -20,331 +20,285 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### 1 基础提示
 
-纯文字
-            
+纯文本
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _textToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showText('轻提示文字内容', context: context);
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('纯文字'),
+  Widget _buildTextToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('纯文本'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText('轻提示文字内容', context: context);
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
 
 多行文字
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _multipleToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('多行文字'),
+  Widget _buildMultipleTextToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('多行文字'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '最多一行展示十个汉字宽度限制最多不超过三行文字',
+            context: context,
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
+
+带横向图标
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildHorizontalIconToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('带横向图标'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showIconText(
+            '带横向图标',
+            icon: TIcons.check_circle,
+            direction: IconTextDirection.horizontal,
+            context: context,
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
 
 带竖向图标
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _verticalIconToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showIconText(
-          '带竖向图标',
-          icon: TIcons.check_circle,
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('带竖向图标'),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-加载状态(无文字)
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _loadingWithoutTextToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        final id = TToast.showLoadingWithoutText(context: context);
-        Future.delayed(const Duration(seconds: 2), () {
-          TToast.dismissToast(id);
-        });
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('加载状态（无文字）'),
+  Widget _buildVerticalIconToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('带竖向图标'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showIconText(
+            '带竖向图标',
+            icon: TIcons.check_circle,
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
 
-
-加载状态自定义
+加载状态
 
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _loadingCustomToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        final id = TToast.showLoading(
-          context: context,
-          customWidget: Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: context.tTheme.brandColor1,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            alignment: Alignment.center,
-            child: const TText('加载'),
-          ),
-        );
-        Future.delayed(const Duration(seconds: 2), () {
-          TToast.dismissToast(id);
-        });
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('加载状态自定义'),
+  Widget _buildLoadingToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('加载状态'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = TToast.showLoading(
+            text: '加载中...',
+            context: context,
+          );
+          // 3 秒后关闭
+          Future.delayed(const Duration(seconds: 3), () {
+            TToast.dismissToast(id);
+          });
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
-### 1 组件状态
+
+### 2 组件状态
 
 成功提示
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _successToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showSuccess('成功文案', context: context);
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('成功提示'),
+  Widget _buildSuccessToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('成功提示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showSuccess('成功文案', context: context);
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
 
 警告提示
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _warningToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showWarning('警告文案', context: context);
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.danger,
-      isBlock: true,
-      child: Text('警告提示'),
+  Widget _buildWarningToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('警告提示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.danger,
+        onPressed: () {
+          TToast.showWarning('警告文案', context: context);
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
 
-失败提示
-            
+错误提示
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _failToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showFail('失败文案', context: context);
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.danger,
-      isBlock: true,
-      child: Text('失败提示'),
+  Widget _buildFailToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('错误提示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.danger,
+        onPressed: () {
+          TToast.showFail('错误文案', context: context);
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
 
-### 展示位置
+### 3 显示遮罩
 
-顶部展示
-            
+禁止滑动和点击
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _topToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showText(
-          '顶部提示',
-          context: context,
-          placement: TToastPlacement.top,
-        );
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('顶部展示'),
+  Widget _buildCoverToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('禁止滑动和点击'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '禁止滑动和点击',
+            context: context,
+            overlay: const TOverlayConfig(
+              showOverlay: true,
+              opacity: 0.4,
+              preventTap: true,
+            ),
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
 
-底部展示
-            
+### 4 手动关闭
+
+显示提示
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _bottomToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showText(
-          '底部提示',
-          context: context,
-          placement: TToastPlacement.bottom,
-        );
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('底部展示'),
+  Widget _buildShowToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('显示提示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.showText(
+            '轻提示文字内容',
+            context: context,
+            duration: const Duration(seconds: 99999999),
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
 
-### 显示遮罩
+关闭提示
 
-半透明遮罩
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _showOverlayToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        TToast.showText(
-          '遮罩展示',
-          context: context,
-          overlay: const TOverlayConfig(
-            showOverlay: true,
-            opacity: 0.4,
-            preventTap: true,
-          ),
-        );
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('半透明遮罩'),
+  Widget _buildHideToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('关闭提示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TToast.dismissAll();
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
-
-### 手动关闭
-
-手动关闭
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _manualCloseToast(BuildContext context) {
-    return TButton(
-      onPressed: () {
-        final id = TToast.showLoading(context: context, text: '加载中...');
-        Future.delayed(const Duration(milliseconds: 500), () {
-          TToast.dismissToast(id);
-        });
-      },
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      isBlock: true,
-      child: Text('手动关闭'),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-
-### 自定义时长与倒计时
-
-`duration` 控制 Toast 自动关闭时间；需要让用户感知剩余时间时，可以通过 `customWidget` 在同一个 Toast 内更新内容，无需重复创建 Overlay。
-
-```dart
-TToast.showText(
-  null,
-  context: context,
-  duration: const Duration(seconds: 5),
-  customWidget: TweenAnimationBuilder<double>(
-    tween: Tween(begin: 5, end: 0),
-    duration: const Duration(seconds: 5),
-    builder: (context, remaining, _) {
-      return TText(
-        '${remaining.ceil()} 秒后关闭',
-        font: context.tTheme.fontBodyMedium,
-        textColor: context.tTheme.textColorAnti,
-      );
-    },
-  ),
-);
-```
 
 ## API
 ### TToast

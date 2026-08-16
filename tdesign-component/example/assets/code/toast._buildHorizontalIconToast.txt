@@ -1,16 +1,17 @@
-Widget _buildTopToast(BuildContext context) {
+Widget _buildHorizontalIconToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('顶部展示'),
+        child: const Text('带横向图标'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText(
-            '顶部提示',
+          TToast.showIconText(
+            '带横向图标',
+            icon: TIcons.check_circle,
+            direction: IconTextDirection.horizontal,
             context: context,
-            placement: TToastPlacement.top,
           );
         },
       ),

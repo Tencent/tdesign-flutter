@@ -1,17 +1,13 @@
-Widget _buildBottomToast(BuildContext context) {
+Widget _buildHideToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('底部展示'),
+        child: const Text('关闭提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText(
-            '底部提示',
-            context: context,
-            placement: TToastPlacement.bottom,
-          );
+          TToast.dismissAll();
         },
       ),
     );

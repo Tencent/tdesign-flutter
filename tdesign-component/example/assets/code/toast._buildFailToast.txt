@@ -2,12 +2,12 @@ Widget _buildFailToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('失败'),
+        child: const Text('错误提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.danger,
         onPressed: () {
-          TToast.showFail('操作失败', context: context);
+          TToast.showFail('错误文案', context: context);
         },
       ),
     );

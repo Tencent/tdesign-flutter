@@ -1,15 +1,18 @@
-Widget _buildLoadingWithoutTextToast(BuildContext context) {
+Widget _buildLoadingToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('加载状态（无文字）'),
+        child: const Text('加载状态'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          final id = TToast.showLoadingWithoutText(context: context);
-          // 2 秒后关闭
-          Future.delayed(const Duration(seconds: 2), () {
+          final id = TToast.showLoading(
+            text: '加载中...',
+            context: context,
+          );
+          // 3 秒后关闭
+          Future.delayed(const Duration(seconds: 3), () {
             TToast.dismissToast(id);
           });
         },

@@ -1,20 +1,16 @@
-Widget _buildShowOverlayToast(BuildContext context) {
+Widget _buildShowToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('半透明遮罩'),
+        child: const Text('显示提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
           TToast.showText(
-            '遮罩展示',
+            '轻提示文字内容',
             context: context,
-            overlay: const TOverlayConfig(
-              showOverlay: true,
-              opacity: 0.4,
-              preventTap: true,
-            ),
+            duration: const Duration(seconds: 99999999),
           );
         },
       ),
