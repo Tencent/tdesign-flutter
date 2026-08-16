@@ -35,6 +35,41 @@ void main() {
     );
   }
 
+  Widget pullDownRefresh({
+    FutureOr<void> Function()? onRefresh,
+    FutureOr<void> Function()? onLoadMore,
+    bool enableLoadMore = false,
+    bool disabled = false,
+    TPullDownRefreshController? controller,
+    TPullDownRefreshTexts? texts,
+    Duration? refreshTimeout,
+    VoidCallback? onTimeout,
+    ValueChanged<TPullDownRefreshState>? onStateChanged,
+    TLoadingThemeData? loadingTheme,
+  }) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        onRefresh: onRefresh,
+        onLoadMore: onLoadMore,
+        enableLoadMore: enableLoadMore,
+        disabled: disabled,
+        controller: controller,
+        texts: texts,
+        refreshTimeout: refreshTimeout,
+        onTimeout: onTimeout,
+        onStateChanged: onStateChanged,
+        loadingTheme: loadingTheme,
+        child: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (context, index) => ListTile(
+            title: Text('项目$index'),
+          ),
+        ),
+      ),
+    );
+  }
+
   group('TRefreshThemeData', () {
     test('仅保存视觉字段', () {
       const base = TRefreshThemeData(
@@ -193,41 +228,6 @@ void main() {
   });
 
   group('TPullDownRefresh 最小化组件', () {
-    Widget pullDownRefresh({
-      FutureOr<void> Function()? onRefresh,
-      FutureOr<void> Function()? onLoadMore,
-      bool enableLoadMore = false,
-      bool disabled = false,
-      TPullDownRefreshController? controller,
-      TPullDownRefreshTexts? texts,
-      Duration? refreshTimeout,
-      VoidCallback? onTimeout,
-      ValueChanged<TPullDownRefreshState>? onStateChanged,
-      TLoadingThemeData? loadingTheme,
-    }) {
-      return SizedBox(
-        height: 300,
-        child: TPullDownRefresh(
-          onRefresh: onRefresh,
-          onLoadMore: onLoadMore,
-          enableLoadMore: enableLoadMore,
-          disabled: disabled,
-          controller: controller,
-          texts: texts,
-          refreshTimeout: refreshTimeout,
-          onTimeout: onTimeout,
-          onStateChanged: onStateChanged,
-          loadingTheme: loadingTheme,
-          child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) => ListTile(
-              title: Text('项目$index'),
-            ),
-          ),
-        ),
-      );
-    }
-
     testWidgets('默认渲染（loadingBarHeight=50）', (tester) async {
       await tester.pumpWidget(
         wrap(pullDownRefresh(onRefresh: () async {})),
