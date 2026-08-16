@@ -16,286 +16,271 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_popup_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_popup_page.dart)
+[t_popup_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_popup_page.dart)
 
-### 1 弹出位置
+### 1 组件类型
 
 
-            
+基础弹出层
+
+
+底部弹出
+
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromTop(BuildContext context) {
-    return TButton(
-      text: 'top',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.top(
-              height: 240,
-              child: Container(
-                color: TTheme.of(context).bgColorContainer,
-                height: 240,
-              )),
-        );
-      },
+  Widget _buildBottomPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('底部弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              titleWidget: const TText('底部弹出层'),
+              child: const Center(child: TText('弹出层内容区域')),
+            ),
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
+顶部弹出
 
 
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromLeft(BuildContext context) {
-    return TButton(
-      text: 'left',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.left(
-              width: 280,
+  Widget _buildTopPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('顶部弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.top(
               child: Container(
-                color: TTheme.of(context).bgColorContainer,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromCenter(BuildContext context) {
-    return TButton(
-      text: 'center',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.center(
-              width: 240,
-              height: 240,
-              child: Container(
-                color: TTheme.of(context).bgColorContainer,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromBottom(BuildContext context) {
-    return TButton(
-      text: 'bottom',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-              height: 240,
-              headerBuilder: null,
-              child: Container(
-                color: TTheme.of(context).bgColorContainer,
-                height: 240,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromRight(BuildContext context) {
-    return TButton(
-      text: 'right',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.right(
-              width: 280,
-              child: Container(
-                color: TTheme.of(context).bgColorContainer,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 头部与操作
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildBottomBuiltInHeaderDemos(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TButton(
-          text: '操作槽 默认',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () {
-            TPopup.show(
-              context,
-              options: TPopupOptions.bottom(
-                height: 280,
-                titleWidget: const TText('标题'),
-                child: Container(height: 200),
+                padding: const EdgeInsets.only(top: 40),
+                alignment: Alignment.center,
+                child: const TText('顶部弹出层内容'),
               ),
-            );
-          },
-        ),
-        const SizedBox(height: 12),
-        TButton(
-          text: '操作槽 自定义',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () {
-            TPopup.show(
-              context,
-              options: TPopupOptions.bottom(
-                height: 280,
-                titleWidget: const TText('标题'),
-                cancelBuilder: _bottomCancelSlot,
-                confirmBuilder: _bottomConfirmSlot,
-                child: Container(height: 200),
+            ),
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+左侧弹出
+
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildLeftPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('左侧弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.left(
+              child: Container(
+                alignment: Alignment.center,
+                child: const TText('左侧弹出层内容'),
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
+右侧弹出
 
 
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromBottomWithHeaderClose(BuildContext context) {
-    return TButton(
-      text: 'headerBuilder',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-            height: 280,
-            headerBuilder: _bottomTitleCloseHeader(title: '标题文字'),
-            child: Container(height: 200),
-          ),
-        );
-      },
+  Widget _buildRightPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('右侧弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.right(
+              child: Container(
+                alignment: Alignment.center,
+                child: const TText('右侧弹出层内容'),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
+中间弹出
 
 
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildPopFromCenterClose(BuildContext context) {
-    return TButton(
-      text: 'closeBuilder 自定义',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.center(
-            width: 240,
-            height: 200,
-            closeBuilder: _centerCustomCloseSlot,
-            child: Container(
+  Widget _buildCenterPopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('中间弹出'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.center(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(child: TText('中间弹出层内容')),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+### 2 组件示例
+
+
+应用示例
+
+
+带标题及操作
+
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildWithTitlePopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('带标题及操作'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 258,
+              titleWidget: const TText('标题文字'),
+              child: const Center(child: TText('内容区域')),
+            ),
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+自定义关闭按钮
+
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomClosePopup(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('自定义关闭按钮'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.center(
               width: 240,
               height: 200,
-              color: TTheme.of(context).bgColorContainer,
+              closeBuilder: (_, close) => IconButton(
+                tooltip: '关闭',
+                icon: Icon(
+                  TIcons.close_circle,
+                  color: theme.fontWhColor1,
+                  size: 32,
+                ),
+                onPressed: close,
+              ),
+              child: Container(
+                width: 240,
+                height: 200,
+                color: theme.bgColorContainer,
+                alignment: Alignment.center,
+                child: const TText('自定义关闭按钮'),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
+### 3 嵌套弹窗
 
 
-            
+多层 Popup 嵌套使用
+
+
+嵌套弹窗
+
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildNestedPopup(BuildContext context) {
-    return TButton(
-      text: '嵌套 show',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopupHandle? outerHandle;
-        outerHandle = TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('嵌套弹窗'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopupHandle? outerHandle;
+          outerHandle = TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
               height: 360,
               headerBuilder: null,
               child: Builder(
@@ -306,25 +291,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TText(
-                          '外层：headerBuilder: null，仅 child',
-                          textColor: TTheme.of(innerContext).textColorSecondary,
+                          '外层：仅 child，无内置头部',
+                          textColor: innerContext.tTheme.textColorSecondary,
                         ),
                         const SizedBox(height: 16),
                         TButton(
-                          text: '内层 bottom',
-                          isBlock: true,
-                          theme: TButtonTheme.primary,
+                          child: const TText('打开内层 Popup'),
                           size: TButtonSize.large,
-                          onTap: () {
+                          variant: TButtonVariant.outline,
+                          colorScheme: TButtonColorScheme.primary,
+                          onPressed: () {
                             TPopup.show(
                               innerContext,
                               options: TPopupOptions.bottom(
-                                height: 280,
+                                height: 240,
                                 titleWidget: const TText('内层标题'),
-                                child: Container(
-                                  height: 160,
-                                  color: TTheme.of(innerContext)
-                                      .bgColorSecondaryContainer,
+                                child: const Center(
+                                  child: TText('内层内容区域'),
                                 ),
                               ),
                             );
@@ -332,306 +315,25 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                         ),
                         const SizedBox(height: 12),
                         TButton(
-                          text: 'Handle.close',
-                          isBlock: true,
-                          type: TButtonType.outline,
+                          child: const TText('关闭外层'),
                           size: TButtonSize.large,
-                          onTap: () => _toastThen(
-                            innerContext,
-                            '点击：关闭外层',
-                            () => outerHandle?.close(),
-                          ),
+                          variant: TButtonVariant.outline,
+                          colorScheme: TButtonColorScheme.primary,
+                          onPressed: () => outerHandle?.close(),
                         ),
                       ],
                     ),
                   );
                 },
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 安全区域
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiUseSafeAreaCompare(BuildContext context) {
-    final theme = TTheme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TText(
-          'useSafeArea，真机看橙色底边标记',
-          textColor: theme.textColorSecondary,
-          font: theme.fontBodyMedium,
-        ),
-        const SizedBox(height: 16),
-        TButton(
-          text: 'useSafeArea 开',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          size: TButtonSize.large,
-          onTap: () => _showSafeAreaBottomPopup(context, useSafeArea: true),
-        ),
-        const SizedBox(height: 12),
-        TButton(
-          text: 'useSafeArea 关',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () => _showSafeAreaBottomPopup(context, useSafeArea: false),
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 圆角
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiRadiusCompare(BuildContext context) {
-    final theme = TTheme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TText(
-          'radius + bottom inset',
-          textColor: theme.textColorSecondary,
-          font: theme.fontBodyMedium,
-        ),
-        const SizedBox(height: 16),
-        TButton(
-          text: 'radius 默认',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          size: TButtonSize.large,
-          onTap: () => _showRadiusBottomPopup(context),
-        ),
-        const SizedBox(height: 12),
-        TButton(
-          text: 'radius 0',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () => _showRadiusBottomPopup(context, radius: 0),
-        ),
-        const SizedBox(height: 12),
-        TButton(
-          text: 'radius 28',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () => _showRadiusBottomPopup(context, radius: 28),
-        ),
-        const SizedBox(height: 12),
-        TButton(
-          text: 'center radius',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () => _showRadiusCenterPopup(context),
-        ),
-        const SizedBox(height: 12),
-        TButton(
-          text: 'center r32',
-          isBlock: true,
-          theme: TButtonTheme.primary,
-          type: TButtonType.outline,
-          size: TButtonSize.large,
-          onTap: () => _showRadiusCenterPopup(context, radius: 32),
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 更多 API
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiLifecycle(BuildContext context) {
-    final theme = TTheme.of(context);
-    return TButton(
-      text: '生命周期',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-            height: 300,
-            titleWidget: const TText('生命周期'),
-            onOpen: () => _lifecycleToast(context, 'onOpen'),
-            onOpened: () => _lifecycleToast(context, 'onOpened'),
-            onClose: () => _lifecycleToast(context, 'onClose'),
-            onClosed: () => _lifecycleToast(context, 'onClosed'),
-            child: ColoredBox(
-              color: theme.bgColorContainer,
-              child: Center(
-                child: TText(
-                  '打开：onOpen → onOpened\n关闭：onClose → onClosed',
-                  textColor: theme.textColorSecondary,
-                  font: theme.fontBodyMedium,
-                  textAlign: TextAlign.center,
-                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }</pre>
 
 </td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiCustomPosition(BuildContext context) {
-    return TButton(
-      text: 'right inset.top',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        final renderBox =
-            navBarkey.currentContext!.findRenderObject() as RenderBox;
-        TPopup.show(
-          context,
-          options: TPopupOptions.right(
-            width: 280,
-            inset: TPopupRightInset(top: renderBox.size.height),
-            child: Container(
-              color: TTheme.of(context).bgColorContainer,
-            ),
-          ),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiShowOverlayFalse(BuildContext context) {
-    return TButton(
-      text: 'showOverlay false',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-              height: 280,
-              showOverlay: false,
-              modal: true,
-              // 不显示可见蒙层，但仍阻断背景交互；须保留其它关闭入口。
-              titleWidget: const TText('透明模态'),
-              child: Container(
-                height: 200,
-                color: TTheme.of(context).bgColorContainer,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiOnOverlayClick(BuildContext context) {
-    return TButton(
-      text: 'onOverlayClick',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-              height: 260,
-              onOverlayClick: () =>
-                  TToast.showText('点击蒙层', context: context),
-              child: Container(
-                height: 200,
-                color: TTheme.of(context).bgColorContainer,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildApiDuration(BuildContext context) {
-    return TButton(
-      text: 'duration 600ms',
-      isBlock: true,
-      theme: TButtonTheme.primary,
-      type: TButtonType.outline,
-      size: TButtonSize.large,
-      onTap: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-              height: 240,
-              animationDuration: const Duration(milliseconds: 600),
-              child: Container(
-                height: 200,
-                color: TTheme.of(context).bgColorContainer,
-              )),
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
 
 ## API
 ### TPopup

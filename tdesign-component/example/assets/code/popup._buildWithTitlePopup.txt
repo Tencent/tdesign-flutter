@@ -1,0 +1,21 @@
+Widget _buildWithTitlePopup(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('带标题及操作'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 258,
+              titleWidget: const TText('标题文字'),
+              child: const Center(child: TText('内容区域')),
+            ),
+          );
+        },
+      ),
+    );
+  }
