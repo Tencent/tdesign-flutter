@@ -633,10 +633,10 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
-                overlay: const TPopupOverlayConfig(
+                overlay: TPopupOverlayConfig(
                   showOverlay: false,
                   preventTap: true,
                 ),
@@ -736,10 +736,10 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
-                overlay: const TPopupOverlayConfig(
+                overlay: TPopupOverlayConfig(
                   color: Colors.red,
                   opacity: 0.5,
                 ),

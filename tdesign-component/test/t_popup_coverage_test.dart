@@ -575,14 +575,14 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
-                overlay: const TPopupOverlayConfig(
+                overlay: TPopupOverlayConfig(
                   showOverlay: false,
                   preventTap: false,
                 ),
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
@@ -623,14 +623,14 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: TPopupOptions(
+            options: const TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 inset: TPopupBottomInset(left: 16, right: 16),
-                overlay: const TPopupOverlayConfig(showOverlay: false),
+                overlay: TPopupOverlayConfig(showOverlay: false),
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: const SizedBox(height: 60)),
+                child: SizedBox(height: 60)),
           );
         },
       );
