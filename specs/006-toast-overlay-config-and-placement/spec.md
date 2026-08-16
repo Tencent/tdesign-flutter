@@ -72,11 +72,12 @@ class TOverlayConfig {
 - 蒙层颜色：`overlay != null && overlay.showOverlay ? (overlay.color ?? Colors.black.withValues(alpha: overlay.opacity)) : Colors.transparent`。
 - 布局：
   - 有可见蒙层或需要拦点击（`showOverlay || preventTap`）时用 `Stack` + 全屏蒙层 `Container`，Toast 按 `placement` 对齐；
-  - 否则直接 `Align(alignment: placementAlignment, child: widget)`。
-- 位置：`placement` 决定 Toast 在屏幕上的对齐方式：
-  - `top` → `Alignment.topCenter`（带顶部安全距）
-  - `middle` → `Alignment.center`
-  - `bottom` → `Alignment.bottomCenter`（带底部安全距）
+  - 否则直接 `Align(alignment: placementOffset, child: widget)`。
+- 位置：`placement` 决定 Toast 的垂直位置（水平恒居中，垂直百分比偏移，对齐小程序 / mobile-vue）：
+  - `top` → `FractionalOffset(0.5, 0.25)`（距顶 25%）
+  - `middle` → `FractionalOffset(0.5, 0.5)`（正中）
+  - `bottom` → `FractionalOffset(0.5, 0.75)`（距底 25%）
+  - 百分比定位天然避让安全区，**不叠加 SafeArea**（移除原实现）。
 
 ### 兼容性
 

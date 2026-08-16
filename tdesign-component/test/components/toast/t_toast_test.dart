@@ -764,7 +764,7 @@ void main() {
       final align = tester.widget<Align>(
         find.ancestor(of: find.text('居中'), matching: find.byType(Align)).first,
       );
-      expect(align.alignment, Alignment.center);
+      expect(align.alignment, const FractionalOffset(0.5, 0.5));
       await waitForDismiss(tester);
     });
 
@@ -782,7 +782,7 @@ void main() {
       final align = tester.widget<Align>(
         find.ancestor(of: find.text('顶部'), matching: find.byType(Align)).first,
       );
-      expect(align.alignment, Alignment.topCenter);
+      expect(align.alignment, const FractionalOffset(0.5, 0.25));
       await waitForDismiss(tester);
     });
 
@@ -800,7 +800,7 @@ void main() {
       final align = tester.widget<Align>(
         find.ancestor(of: find.text('底部'), matching: find.byType(Align)).first,
       );
-      expect(align.alignment, Alignment.bottomCenter);
+      expect(align.alignment, const FractionalOffset(0.5, 0.75));
       await waitForDismiss(tester);
     });
   });

@@ -34,19 +34,19 @@ enum TToastPlacement {
 映射对齐常量：
 
 ```dart
-Alignment _placementAlignment(TToastPlacement p) {
+FractionalOffset _placementOffset(TToastPlacement p) {
   switch (p) {
     case TToastPlacement.top:
-      return Alignment.topCenter;
+      return const FractionalOffset(0.5, 0.25); // 距顶 25%
     case TToastPlacement.bottom:
-      return Alignment.bottomCenter;
+      return const FractionalOffset(0.5, 0.75); // 距底 25%
     case TToastPlacement.middle:
-      return Alignment.center;
+      return const FractionalOffset(0.5, 0.5); // 正中
   }
 }
 ```
 
-顶部 / 底部时叠加 `MediaQuery.paddingOf(context)` 的安全距，避免顶栏 / 底部手势区遮挡。
+与小程序 / mobile-vue 一致的**垂直百分比偏移 + 水平恒居中**定位：top 距顶 25%、middle 正中 50%、bottom 距底 25%。百分比定位天然避让安全区，**无需叠加 SafeArea**。
 
 ### 3. showXxx 签名扩展
 
@@ -83,7 +83,7 @@ static void _showOverlay(
         Stack(
           children: [
             Positioned.fill(child: Container(color: maskColor)),
-            Align(alignment: placementAlignment, child: SafeArea(child: widget)),
+            Align(alignment: placementOffset, child: widget),
           ],
         ),
       ),
@@ -91,7 +91,7 @@ static void _showOverlay(
   } else {
     overlayEntry = OverlayEntry(
       builder: (context) => captured.wrap(
-        Align(alignment: placementAlignment, child: widget),
+        Align(alignment: placementOffset, child: widget),
       ),
     );
   }
@@ -129,7 +129,7 @@ static void _showOverlay(
 ## 风险与取舍
 
 - `Colors.black.withValues(alpha:)` 需 Flutter 3.27+；项目基线 3.32.0 满足，latest 满足。
-- 顶部/底部安全距用 `MediaQuery.paddingOf(context)`，避免刘海屏 / 手势区遮挡。
+- placement 采用垂直百分比偏移（25% / 50% / 75%），与小程序 / mobile-vue 一致，天然避让安全区，**不再叠加 SafeArea**（移除原实现）。
 - 旧 `preventTap` 与 `overlay.preventTap` 采用"或"合并，语义清晰、避免两者都设时互相覆盖。
 
 ## 验证策略

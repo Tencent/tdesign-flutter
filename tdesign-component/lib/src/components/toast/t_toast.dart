@@ -27,13 +27,13 @@ enum IconTextDirection {
 
 /// Toast 展示位置
 enum TToastPlacement {
-  /// 顶部
+  /// 顶部（距屏幕顶部 25%，水平居中）
   top,
 
-  /// 居中
+  /// 居中（屏幕正中）
   middle,
 
-  /// 底部
+  /// 底部（距屏幕底部 25%，水平居中）
   bottom,
 }
 
@@ -585,14 +585,14 @@ class TToast {
     final maskColor = showMask
         ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
         : Colors.transparent;
+    // 采用与小程序 / mobile-vue 一致的垂直百分比偏移（水平恒居中）：
+    // top 距顶 25%、middle 正中 50%、bottom 距底 25%。
+    // 百分比定位天然避让安全区，无需再叠加 SafeArea。
     final alignment = switch (placement) {
-      TToastPlacement.top => Alignment.topCenter,
-      TToastPlacement.bottom => Alignment.bottomCenter,
-      TToastPlacement.middle => Alignment.center,
+      TToastPlacement.top => const FractionalOffset(0.5, 0.25),
+      TToastPlacement.middle => const FractionalOffset(0.5, 0.5),
+      TToastPlacement.bottom => const FractionalOffset(0.5, 0.75),
     };
-    // 顶部 / 底部需叠加安全距，避免顶栏 / 底部手势区遮挡；居中无需。
-    final useSafeArea = placement == TToastPlacement.top ||
-        placement == TToastPlacement.bottom;
 
     OverlayEntry overlayEntry;
     if (finalPreventTap || showMask) {
@@ -603,7 +603,7 @@ class TToast {
               Positioned.fill(child: Container(color: maskColor)),
               Align(
                 alignment: alignment,
-                child: useSafeArea ? SafeArea(child: widget) : widget,
+                child: widget,
               ),
             ],
           ),
@@ -614,7 +614,7 @@ class TToast {
         builder: (BuildContext context) => captured.wrap(
           Align(
             alignment: alignment,
-            child: useSafeArea ? SafeArea(child: widget) : widget,
+            child: widget,
           ),
         ),
       );
