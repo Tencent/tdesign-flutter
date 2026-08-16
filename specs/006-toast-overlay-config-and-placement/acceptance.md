@@ -13,6 +13,7 @@
 - [x] 示例页展示遮罩 demo：点击后出现半透明黑色蒙层，Toast 居中，背景不可点击。
 - [x] 示例页展示位置 demo：top / middle / bottom 三种 Toast 分别出现在顶部 / 居中 / 底部。
 - [x] 多行文字、竖向图标、加载无文字、加载状态自定义、手动关闭等 demo 与小程序表现一致。
+- [x] 纯文字 / 带图标 / 加载类 Toast 默认最大宽度对齐小程序与 mobile-vue（`max-width: 185px`，Flutter `maxWidth` 由 191 调整为 185），并统一 `_TTextToast` / `_TIconTextToast` / `_TToastLoading` 的取值口径（移除 `191.scale` 缩放写法）。
 
 ## 未覆盖项 / 后续项
 

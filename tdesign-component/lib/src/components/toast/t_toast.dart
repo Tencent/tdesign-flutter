@@ -8,7 +8,6 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
-import '../../util/auto_size.dart';
 import '../../util/context_extension.dart';
 import '../../util/t_toolbar_pressable.dart';
 import '../icon/t_icon.dart';
@@ -636,7 +635,7 @@ class _TIconTextToast extends StatelessWidget {
             .merge(config);
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: toastTheme.maxWidth ?? 191,
+        maxWidth: toastTheme.maxWidth ?? 185,
         maxHeight: 94,
       ),
       child: Container(
@@ -738,7 +737,7 @@ class _TToastLoading extends StatelessWidget {
         (Theme.of(context).extension<TToastThemeData>() ??
                 const TToastThemeData())
             .merge(config);
-    final maxWidth = math.max(110.0, toastTheme.maxWidth ?? 191.0);
+    final maxWidth = math.max(110.0, toastTheme.maxWidth ?? 185.0);
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: 110,
@@ -838,7 +837,7 @@ class _TTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints:
           constraints ??
-          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 191.scale),
+          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 16, 24, 16),

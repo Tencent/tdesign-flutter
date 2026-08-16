@@ -97,5 +97,6 @@ class TOverlayConfig {
 - [ ] `TOverlayConfig.preventTap: true` 生效（透明拦截层）。
 - [ ] 旧 `bool? preventTap` 参数已从所有 `showXxx` 移除，迁移为 `TOverlayConfig`。
 - [ ] 示例页对齐小程序 demo（含显示遮罩、多行文字、竖向图标、加载自定义等）。
+- [ ] 纯文字 / 带图标 / 加载类 Toast 的默认最大宽度对齐小程序与 mobile-vue（`max-width: 185px`，Flutter `maxWidth` 默认值由 191 调整为 185），并统一 `_TTextToast` 与 `_TIconTextToast` / `_TToastLoading` 的取值口径（不再使用 `191.scale` 缩放写法）。
 - [ ] toast 相关单元 / Widget 测试通过。
 - [ ] flutter analyze 与 git diff --check 通过。
