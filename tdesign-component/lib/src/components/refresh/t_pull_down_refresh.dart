@@ -152,7 +152,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
         }
         widget.onTimeout?.call();
         _handleStateChanged(TPullDownRefreshState.timeout);
-        _easyController?.finishRefresh(true);
+        _easyController?.finishRefresh(IndicatorResult.success, true);
       });
     }
     final result = widget.onRefresh?.call();

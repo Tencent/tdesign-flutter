@@ -38,12 +38,12 @@ class TPullDownRefreshController {
   /// 仅在外部接管刷新完成时才需要调用；若通过 `onRefresh` 回调返回
   /// Future 完成刷新，则无需手动调用。
   void finishRefresh() {
-    _controller?.finishRefresh(true);
+    _controller?.finishRefresh(IndicatorResult.success, true);
   }
 
   /// 结束当前触底加载任务。
   void finishLoadMore() {
-    _controller?.finishLoad(true);
+    _controller?.finishLoad(IndicatorResult.success, true);
   }
 
   /// 复位 Header / Footer 指示器状态。
