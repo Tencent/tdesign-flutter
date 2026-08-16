@@ -214,7 +214,7 @@ class TMessagePage extends StatelessWidget {
   }
 }
 
-/// 组件声明式调用示例：通过 [visible] 受控展示 / 隐藏消息。
+/// 组件声明式调用示例：通过 `visible` 受控展示 / 隐藏消息。
 class _DeclarativeMessageDemo extends StatefulWidget {
   const _DeclarativeMessageDemo();
 
