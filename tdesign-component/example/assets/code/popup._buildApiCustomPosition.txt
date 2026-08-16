@@ -1,0 +1,24 @@
+Widget _buildApiCustomPosition(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('right inset.top'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.right(
+              width: 280,
+              inset: const TPopupRightInset(top: 44),
+              child: ColoredBox(
+                color: context.tTheme.bgColorContainer,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

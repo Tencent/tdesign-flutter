@@ -1,0 +1,27 @@
+Widget _buildApiShowOverlayFalse(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('showOverlay false'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 280,
+              showOverlay: false,
+              // 不显示可见蒙层，但仍阻断背景交互；须保留其它关闭入口。
+              titleWidget: const TText('透明模态'),
+              child: ColoredBox(
+                color: theme.bgColorContainer,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

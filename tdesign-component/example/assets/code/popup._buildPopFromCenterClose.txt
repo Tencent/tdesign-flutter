@@ -1,0 +1,26 @@
+Widget _buildPopFromCenterClose(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('closeBuilder 自定义'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.center(
+              width: 240,
+              height: 200,
+              closeBuilder: _centerCustomCloseSlot,
+              child: ColoredBox(
+                color: theme.bgColorContainer,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

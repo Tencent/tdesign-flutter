@@ -1,0 +1,29 @@
+Widget _buildApiUseSafeAreaCompare(BuildContext context) {
+    final theme = context.tTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TText(
+          'useSafeArea，真机看橙色底边标记',
+          textColor: theme.textColorSecondary,
+          font: theme.fontBodyMedium,
+        ),
+        const SizedBox(height: 16),
+        TButton(
+          child: const TText('useSafeArea 开'),
+          size: TButtonSize.large,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _showSafeAreaBottomPopup(context, useSafeArea: true),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          child: const TText('useSafeArea 关'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () =>
+              _showSafeAreaBottomPopup(context, useSafeArea: false),
+        ),
+      ],
+    );
+  }

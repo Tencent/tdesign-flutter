@@ -1,0 +1,26 @@
+Widget _buildApiOnOverlayClick(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('onOverlayClick'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 260,
+              onOverlayClick: () =>
+                  TToast.showText('点击蒙层', context: context),
+              child: ColoredBox(
+                color: theme.bgColorContainer,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

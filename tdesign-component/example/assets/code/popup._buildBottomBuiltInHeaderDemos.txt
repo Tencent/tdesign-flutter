@@ -1,0 +1,49 @@
+Widget _buildBottomBuiltInHeaderDemos(BuildContext context) {
+    final theme = context.tTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TButton(
+          child: const TText('操作槽 默认'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
+            TPopup.show(
+              context,
+              options: TPopupOptions.bottom(
+                height: 280,
+                titleWidget: const TText('标题'),
+                child: ColoredBox(
+                  color: theme.bgColorContainer,
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          child: const TText('操作槽 自定义'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
+            TPopup.show(
+              context,
+              options: TPopupOptions.bottom(
+                height: 280,
+                titleWidget: const TText('标题'),
+                cancelBuilder: _bottomCancelSlot,
+                confirmBuilder: _bottomConfirmSlot,
+                child: ColoredBox(
+                  color: theme.bgColorContainer,
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }

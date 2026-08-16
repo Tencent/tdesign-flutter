@@ -1,0 +1,52 @@
+Widget _buildApiRadiusCompare(BuildContext context) {
+    final theme = context.tTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TText(
+          'radius + bottom inset',
+          textColor: theme.textColorSecondary,
+          font: theme.fontBodyMedium,
+        ),
+        const SizedBox(height: 16),
+        TButton(
+          child: const TText('radius 默认'),
+          size: TButtonSize.large,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _showRadiusBottomPopup(context),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          child: const TText('radius 0'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _showRadiusBottomPopup(context, radius: 0),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          child: const TText('radius 28'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _showRadiusBottomPopup(context, radius: 28),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          child: const TText('center radius'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _showRadiusCenterPopup(context),
+        ),
+        const SizedBox(height: 12),
+        TButton(
+          child: const TText('center r32'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _showRadiusCenterPopup(context, radius: 32),
+        ),
+      ],
+    );
+  }

@@ -1,0 +1,25 @@
+Widget _buildPopFromBottomWithHeaderClose(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('headerBuilder'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 280,
+              headerBuilder: _bottomTitleCloseHeader(title: '标题文字'),
+              child: ColoredBox(
+                color: theme.bgColorContainer,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

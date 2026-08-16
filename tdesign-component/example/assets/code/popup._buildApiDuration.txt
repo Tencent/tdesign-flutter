@@ -1,0 +1,25 @@
+Widget _buildApiDuration(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('duration 600ms'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 240,
+              animationDuration: const Duration(milliseconds: 600),
+              child: ColoredBox(
+                color: theme.bgColorContainer,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }

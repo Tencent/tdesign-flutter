@@ -1,0 +1,67 @@
+Widget _buildNestedPopup(BuildContext context) {
+    final theme = context.tTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const TText('嵌套 show'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          TPopupHandle? outerHandle;
+          outerHandle = TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 360,
+              child: Builder(
+                builder: (innerContext) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TText(
+                          '外层：仅 child',
+                          textColor: theme.textColorSecondary,
+                        ),
+                        const SizedBox(height: 16),
+                        TButton(
+                          child: const TText('内层 bottom'),
+                          size: TButtonSize.large,
+                          colorScheme: TButtonColorScheme.primary,
+                          onPressed: () {
+                            TPopup.show(
+                              innerContext,
+                              options: TPopupOptions.bottom(
+                                height: 280,
+                                titleWidget: const TText('内层标题'),
+                                child: ColoredBox(
+                                  color: theme.bgColorSecondaryContainer,
+                                  child: const SizedBox.expand(),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TButton(
+                          child: const TText('Handle.close'),
+                          size: TButtonSize.large,
+                          variant: TButtonVariant.outline,
+                          onPressed: () => _toastThen(
+                            innerContext,
+                            '点击：关闭外层',
+                            () => outerHandle?.close(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
