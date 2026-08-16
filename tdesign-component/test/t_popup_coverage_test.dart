@@ -575,12 +575,14 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: const TPopupOptions(
+            options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 120,
-                showOverlay: false,
-                modal: false,
-                child: SizedBox(height: 60)),
+                overlay: const TPopupOverlayConfig(
+                  showOverlay: false,
+                  preventTap: false,
+                ),
+                child: const SizedBox(height: 60)),
           );
         },
       );
@@ -621,14 +623,14 @@ void main() {
         onPressed: () {
           handle = TPopup.show(
             tester.element(find.text('open')),
-            options: const TPopupOptions(
+            options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
                 inset: TPopupBottomInset(left: 16, right: 16),
-                showOverlay: false,
+                overlay: const TPopupOverlayConfig(showOverlay: false),
                 cancelBuilder: null,
                 confirmBuilder: null,
-                child: SizedBox(height: 60)),
+                child: const SizedBox(height: 60)),
           );
         },
       );
@@ -780,15 +782,17 @@ void main() {
       final opts = TPopupOptions.bottom(
         child: const SizedBox(),
         animationDuration: const Duration(milliseconds: 500),
-        showOverlay: false,
-        overlayOpacity: 0.5,
+        overlay: const TPopupOverlayConfig(
+          showOverlay: false,
+          opacity: 0.5,
+        ),
         destroyOnClose: true,
         onVisibleChange: (_, __) => visibleChanges++,
       );
       expect(opts.animationDuration, const Duration(milliseconds: 500));
-      expect(opts.showOverlay, isFalse);
-      expect(opts.closeOnOverlayClick, isFalse);
-      expect(opts.overlayOpacity, 0.5);
+      expect(opts.overlayConfig.showOverlay, isFalse);
+      expect(opts.overlayConfig.effectiveCloseOnClick, isFalse);
+      expect(opts.overlayConfig.opacity, 0.5);
       expect(opts.destroyOnClose, isTrue);
       opts.onVisibleChange?.call(false, TPopupTrigger.api);
       expect(visibleChanges, 1);

@@ -64,6 +64,50 @@ bool _isPopupDefaultConfirm(TPopupSlotBuilder? builder) =>
 bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
     identical(builder, _kPopupDefaultClose);
 
+/// Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
+///
+/// 统一收敛 [TPopupOptions] 上散落的蒙层参数（`showOverlay` / `modal` /
+/// `closeOnOverlayClick` / `overlayColor` / `overlayOpacity` / `onOverlayClick`），
+/// 与 Toast 的 [TOverlayConfig] 命名风格一脉相承，作为蒙层行为的单一真源。
+///
+/// [showOverlay] 与 [preventTap] 解耦，可独立配置：
+/// * `showOverlay=true, preventTap=true`（默认）：标准模态弹层（显示蒙层 + 拦截背景）；
+/// * `showOverlay=true, preventTap=false`：显示蒙层但不拦截背景交互；
+/// * `showOverlay=false, preventTap=true`：透明模态弹层（拦截交互但不显示蒙层）；
+/// * `showOverlay=false, preventTap=false`：非模态浮层（不显示蒙层也不拦截交互）。
+class TPopupOverlayConfig {
+  /// 是否显示可见半透明蒙层（默认 true）。
+  final bool showOverlay;
+
+  /// 蒙层颜色；为 null 时默认 black54。
+  final Color? color;
+
+  /// 蒙层透明度系数（0–1），与 [color] 的 alpha 相乘后用于绘制；为 null 时不额外调整。
+  final double? opacity;
+
+  /// 是否拦截背景交互（默认 true）；对应原 `modal` 参数。
+  final bool preventTap;
+
+  /// 点击蒙层是否关闭；省略时跟随 [showOverlay]。
+  final bool? closeOnClick;
+
+  /// 蒙层点击回调；是否关闭取决于 [effectiveCloseOnClick]。
+  final VoidCallback? onClick;
+
+  /// 创建蒙层配置。
+  const TPopupOverlayConfig({
+    this.showOverlay = true,
+    this.color,
+    this.opacity,
+    this.preventTap = true,
+    this.closeOnClick,
+    this.onClick,
+  });
+
+  /// 解析后的点击蒙层是否关闭；省略时跟随 [showOverlay]。
+  bool get effectiveCloseOnClick => closeOnClick ?? showOverlay;
+}
+
 /// 浮层关闭或显隐变化时的触发来源。
 ///
 /// 作为 [TPopupVisibleChangeCallback] 的第二个参数，以及关闭流程中的语义标记。
@@ -74,7 +118,7 @@ bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
 /// [TPopupTrigger.systemBack]；headerBuilder 内调用 `close` 等为
 /// [TPopupTrigger.custom]。
 enum TPopupTrigger {
-  /// 点击蒙层，且 [TPopupOptions.closeOnOverlayClick] 为 true。
+  /// 点击蒙层，且 [TPopupOverlayConfig.effectiveCloseOnClick] 为 true。
   overlay,
 
   /// 点击 bottom 取消语义槽位（含默认与自定义 [TPopupOptions.cancelBuilder]）。

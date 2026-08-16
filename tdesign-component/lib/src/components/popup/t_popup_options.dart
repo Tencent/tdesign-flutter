@@ -37,7 +37,8 @@ Never _throwPopupOptionsValidationError(String error) {
 ///
 /// [titleWidget] 默认为 `null`，表示无标题内容。
 ///
-/// 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
+/// 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]；
+/// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
 class TPopupOptions {
   /// 通用构造；[placement] 在运行时才能确定时使用。
   ///
@@ -50,13 +51,7 @@ class TPopupOptions {
     this.inset,
     this.radius,
     this.backgroundColor,
-    this.showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    this.overlayColor,
-    this.overlayOpacity,
-    this.modal = true,
+    this.overlay,
     this.destroyOnClose = false,
     this.animationDuration,
     this.headerBuilder = _kPopupDefaultHeader,
@@ -69,9 +64,8 @@ class TPopupOptions {
     this.onClose,
     this.onClosed,
     this.onVisibleChange,
-    this.onOverlayClick,
     this.useSafeArea = true,
-  }) : _closeOnOverlayClick = closeOnOverlayClick;
+  });
 
   /// 创建 [TPopupPlacement.bottom] 配置。
   ///
@@ -87,13 +81,7 @@ class TPopupOptions {
     TPopupSlotBuilder? confirmBuilder = _kPopupDefaultConfirm,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
     VoidCallback? onOpen,
@@ -101,7 +89,6 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
     bool useSafeArea = true,
   }) =>
       TPopupOptions(
@@ -115,11 +102,7 @@ class TPopupOptions {
         confirmBuilder: confirmBuilder,
         radius: radius,
         backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
+        overlay: overlay,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -127,7 +110,6 @@ class TPopupOptions {
         onClose: onClose,
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
         useSafeArea: useSafeArea,
       );
 
@@ -141,13 +123,7 @@ class TPopupOptions {
     TPopupSlotBuilder? closeBuilder = _kPopupDefaultClose,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
     VoidCallback? onOpen,
@@ -155,7 +131,6 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
     bool useSafeArea = true,
   }) =>
       TPopupOptions(
@@ -166,11 +141,7 @@ class TPopupOptions {
         closeBuilder: closeBuilder,
         radius: radius,
         backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
+        overlay: overlay,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -178,7 +149,6 @@ class TPopupOptions {
         onClose: onClose,
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
         useSafeArea: useSafeArea,
       );
 
@@ -191,13 +161,7 @@ class TPopupOptions {
     TPopupTopInset? inset,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
     VoidCallback? onOpen,
@@ -205,7 +169,6 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
     bool useSafeArea = true,
   }) =>
       TPopupOptions(
@@ -215,11 +178,7 @@ class TPopupOptions {
         inset: inset,
         radius: radius,
         backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
+        overlay: overlay,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -227,7 +186,6 @@ class TPopupOptions {
         onClose: onClose,
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
         useSafeArea: useSafeArea,
       );
 
@@ -240,13 +198,7 @@ class TPopupOptions {
     TPopupLeftInset? inset,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
     VoidCallback? onOpen,
@@ -254,7 +206,6 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
     bool useSafeArea = true,
   }) =>
       TPopupOptions(
@@ -264,11 +215,7 @@ class TPopupOptions {
         inset: inset,
         radius: radius,
         backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
+        overlay: overlay,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -276,7 +223,6 @@ class TPopupOptions {
         onClose: onClose,
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
         useSafeArea: useSafeArea,
       );
 
@@ -289,13 +235,7 @@ class TPopupOptions {
     TPopupRightInset? inset,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
     VoidCallback? onOpen,
@@ -303,7 +243,6 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
     bool useSafeArea = true,
   }) =>
       TPopupOptions(
@@ -313,11 +252,7 @@ class TPopupOptions {
         inset: inset,
         radius: radius,
         backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
+        overlay: overlay,
         destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpen: onOpen,
@@ -325,7 +260,6 @@ class TPopupOptions {
         onClose: onClose,
         onClosed: onClosed,
         onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
         useSafeArea: useSafeArea,
       );
 
@@ -360,31 +294,12 @@ class TPopupOptions {
   /// 内容区背景色，默认主题容器色。
   final Color? backgroundColor;
 
-  /// 是否绘制半透明蒙层。
-  ///
-  /// 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。
-  final bool showOverlay;
+  /// 蒙层行为配置；为 null 时使用 [TPopupOverlayConfig] 默认值（标准模态弹层）。
+  final TPopupOverlayConfig? overlay;
 
-  final bool? _closeOnOverlayClick;
-
-  /// 点击可见蒙层是否关闭。
-  ///
-  /// 省略时默认跟随 [showOverlay]：显示蒙层时为 true，否则为 false。
-  bool get closeOnOverlayClick => _closeOnOverlayClick ?? showOverlay;
-
-  /// 蒙层颜色，默认 black54。
-  final Color? overlayColor;
-
-  /// 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。
-  final double? overlayOpacity;
-
-  /// 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。
-  ///
-  /// 结合 [showOverlay] 可表达三种模式：
-  /// * `modal=true, showOverlay=true`：标准模态弹层
-  /// * `modal=true, showOverlay=false`：透明模态弹层
-  /// * `modal=false, showOverlay=false`：非模态浮层
-  final bool modal;
+  /// 解析后的蒙层配置；未传时使用默认值。
+  TPopupOverlayConfig get overlayConfig =>
+      overlay ?? const TPopupOverlayConfig();
 
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
   final bool destroyOnClose;
@@ -432,9 +347,6 @@ class TPopupOptions {
   /// 显隐变化；第二个参数为 [TPopupTrigger]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
-  /// 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。
-  final VoidCallback? onOverlayClick;
-
   /// 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。
   ///
   /// 为 true 时通过 [Positioned] 偏移使面板不侵入刘海、Home Indicator 等区域；
@@ -452,11 +364,7 @@ class TPopupOptions {
     Object? inset = _unset,
     Object? radius = _unset,
     Object? backgroundColor = _unset,
-    bool? showOverlay,
-    Object? closeOnOverlayClick = _unset,
-    Object? overlayColor = _unset,
-    Object? overlayOpacity = _unset,
-    bool? modal,
+    Object? overlay = _unset,
     bool? destroyOnClose,
     Duration? animationDuration,
     Object? headerBuilder = _unset,
@@ -469,7 +377,6 @@ class TPopupOptions {
     Object? onClose = _unset,
     Object? onClosed = _unset,
     Object? onVisibleChange = _unset,
-    Object? onOverlayClick = _unset,
     bool? useSafeArea,
   }) {
     return TPopupOptions(
@@ -487,17 +394,9 @@ class TPopupOptions {
       backgroundColor: identical(backgroundColor, _unset)
           ? this.backgroundColor
           : backgroundColor as Color?,
-      showOverlay: showOverlay ?? this.showOverlay,
-      closeOnOverlayClick: identical(closeOnOverlayClick, _unset)
-          ? _closeOnOverlayClick
-          : closeOnOverlayClick as bool?,
-      overlayColor: identical(overlayColor, _unset)
-          ? this.overlayColor
-          : overlayColor as Color?,
-      overlayOpacity: identical(overlayOpacity, _unset)
-          ? this.overlayOpacity
-          : (overlayOpacity as num?)?.toDouble(),
-      modal: modal ?? this.modal,
+      overlay: identical(overlay, _unset)
+          ? this.overlay
+          : overlay as TPopupOverlayConfig?,
       destroyOnClose: destroyOnClose ?? this.destroyOnClose,
       animationDuration: animationDuration ?? this.animationDuration,
       headerBuilder: identical(headerBuilder, _unset)
@@ -527,9 +426,6 @@ class TPopupOptions {
       onVisibleChange: identical(onVisibleChange, _unset)
           ? this.onVisibleChange
           : onVisibleChange as TPopupVisibleChangeCallback?,
-      onOverlayClick: identical(onOverlayClick, _unset)
-          ? this.onOverlayClick
-          : onOverlayClick as VoidCallback?,
       useSafeArea: useSafeArea ?? this.useSafeArea,
     );
   }
@@ -546,11 +442,7 @@ class TPopupOptions {
       inset: inset,
       radius: radius,
       backgroundColor: backgroundColor,
-      showOverlay: showOverlay,
-      closeOnOverlayClick: _closeOnOverlayClick,
-      overlayColor: overlayColor,
-      overlayOpacity: overlayOpacity,
-      modal: modal,
+      overlay: overlay,
       destroyOnClose: destroyOnClose,
       animationDuration: animationDuration,
       headerBuilder: isBottom ? headerBuilder : null,
@@ -563,7 +455,6 @@ class TPopupOptions {
       onClose: onClose,
       onClosed: onClosed,
       onVisibleChange: onVisibleChange,
-      onOverlayClick: onOverlayClick,
       useSafeArea: useSafeArea,
     );
   }
@@ -669,12 +560,6 @@ class TPopupOptions {
         !_isPopupDefaultClose(closeBuilder)) {
       return 'closeBuilder only applies to placement=center '
           '(got placement=$placement).';
-    }
-    if (showOverlay && !modal) {
-      return 'showOverlay=true requires modal=true.';
-    }
-    if (!showOverlay && _closeOnOverlayClick == true) {
-      return 'closeOnOverlayClick=true requires showOverlay=true.';
     }
     return null;
   }

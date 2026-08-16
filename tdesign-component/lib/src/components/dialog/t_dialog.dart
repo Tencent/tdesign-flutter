@@ -153,9 +153,11 @@ class TDialog extends StatelessWidget {
         closeBuilder: null,
         radius: 0,
         backgroundColor: Colors.transparent,
-        showOverlay: true,
-        closeOnOverlayClick: barrierDismissible,
-        overlayColor: barrierColor ?? materialBarrierColor,
+        overlay: TPopupOverlayConfig(
+          showOverlay: true,
+          closeOnClick: barrierDismissible,
+          color: barrierColor ?? materialBarrierColor,
+        ),
         useSafeArea: useSafeArea,
       ),
     );

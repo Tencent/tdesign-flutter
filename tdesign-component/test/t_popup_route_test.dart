@@ -42,8 +42,10 @@ void main() {
                             context,
                             options: TPopupOptions.bottom(
                               height: 120,
-                              showOverlay: false,
-                              modal: true,
+                              overlay: const TPopupOverlayConfig(
+                                showOverlay: false,
+                                preventTap: true,
+                              ),
                               cancelBuilder: null,
                               confirmBuilder: null,
                               child: const SizedBox(height: 60),
@@ -111,8 +113,10 @@ void main() {
                             context,
                             options: TPopupOptions.bottom(
                               height: 120,
-                              showOverlay: false,
-                              modal: false,
+                              overlay: const TPopupOverlayConfig(
+                                showOverlay: false,
+                                preventTap: false,
+                              ),
                               cancelBuilder: null,
                               confirmBuilder: null,
                               child: const SizedBox(height: 60),
