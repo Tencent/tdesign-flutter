@@ -7,7 +7,6 @@
     "site": "cd site && vite build",
     "presite:dev": "npm run copy:readme",
     "dev": "cd site && vite",
-    "site:prerender": "node script/prerender.mjs",
     "changelog": "node script/generate-changelog.js"
   },
   "author": "tdesign",
