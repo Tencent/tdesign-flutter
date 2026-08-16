@@ -4,7 +4,7 @@
 
 - `flutter analyze lib/src/components/toast test/components/toast` → **0 error / 0 warning**
 - `flutter analyze example/lib/page/t_toast_page.dart` → **0 error / 0 warning**
-- `flutter test test/components/toast/t_toast_test.dart` → **37/37 通过**
+- `flutter test test/components/toast/t_toast_test.dart` → **47/47 通过**
 - `dart run tool/generate_example_code.dart --check` → 示例片段全部 up-to-date
 - `git diff --check` → 通过
 

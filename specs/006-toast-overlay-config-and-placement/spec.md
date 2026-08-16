@@ -90,9 +90,10 @@ class TOverlayConfig {
 
 - [ ] `TOverlayConfig` 公开类存在，字段与默认值符合契约。
 - [ ] 每个 `showXxx` 均可接收 `overlay` 与 `placement`，不传时行为与现状一致。
-- [ ] `showOverlay: true` 时渲染可见半透明蒙层，颜色/透明度可由 `TOverlayConfig.color` / `opacity` 控制。
-- [ ] `preventTap` 拦截点击与 `showOverlay` 可见蒙层解耦。
-- [ ] `placement: top / middle / bottom` 分别对齐顶部 / 居中 / 底部。
+- [ ] `showOverlay: true` 时渲染可见半透明蒙层，颜色/透明度可由 `TOverlayConfig.color` / `opacity` 控制；未传 `opacity` 时默认 0.2 派生黑色蒙层。
+- [ ] `preventTap` 拦截点击与 `showOverlay` 可见蒙层解耦；两者均关闭时不渲染蒙层/拦截层（直接 Align）。
+- [ ] `placement: top / middle / bottom` 分别对齐顶部 / 居中 / 底部；`placement` 与 `overlay` 组合时位置仍生效。
+- [ ] 所有 `showXxx`（showIconText / showSuccess / showWarning / showFail / showLoading / showLoadingWithoutText）均透传 `overlay` 与 `placement`。
 - [ ] `TOverlayConfig.preventTap: true` 生效（透明拦截层）。
 - [ ] 旧 `bool? preventTap` 参数已从所有 `showXxx` 移除，迁移为 `TOverlayConfig`。
 - [ ] 示例页对齐小程序 demo（含显示遮罩、多行文字、竖向图标、加载自定义等）。

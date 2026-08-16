@@ -133,7 +133,11 @@ static void _showOverlay(
 
 ## 验证策略
 
-- Widget 测试覆盖：showOverlay 可见蒙层、placement 对齐、TOverlayConfig.preventTap 拦截与 showOverlay 解耦。
+- Widget 测试覆盖：
+  - showOverlay 可见蒙层、placement 对齐、TOverlayConfig.preventTap 拦截与 showOverlay 解耦；
+  - 各 `showXxx`（showIconText / showSuccess / showWarning / showFail / showLoading / showLoadingWithoutText）透传 `overlay` / `placement`；
+  - `TOverlayConfig` 默认值契约（默认 opacity 0.2、两者均关闭时不渲染蒙层）；
+  - `placement` 与 `overlay` 组合时位置仍生效。
 - 运行 `flutter analyze lib/src/components/toast`。
-- 运行 toast 相关测试：`flutter test test/components/toast/t_toast_test.dart`。
+- 运行 toast 相关测试：`flutter test test/components/toast/t_toast_test.dart`（47 个用例）。
 - 运行 `git diff --check`。
