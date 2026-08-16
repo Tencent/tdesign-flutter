@@ -7,7 +7,7 @@ Widget _buildShowToast(BuildContext context) {
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText(
+          _manualToastId = TToast.showText(
             '轻提示文字内容',
             context: context,
             duration: const Duration(seconds: 99999999),

@@ -223,6 +223,9 @@ class TToastPage extends StatelessWidget {
     );
   }
 
+  /// 手动关闭 demo 中「显示提示」返回的实例 ID，供「关闭提示」定向关闭。
+  static String? _manualToastId;
+
   @ExampleCode(group: 'toast')
   Widget _buildShowToast(BuildContext context) {
     return SizedBox(
@@ -233,7 +236,7 @@ class TToastPage extends StatelessWidget {
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText(
+          _manualToastId = TToast.showText(
             '轻提示文字内容',
             context: context,
             duration: const Duration(seconds: 99999999),
@@ -245,14 +248,19 @@ class TToastPage extends StatelessWidget {
 
   @ExampleCode(group: 'toast')
   Widget _buildHideToast(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text('关闭提示'),
+        child: const Text('关闭提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: TToast.dismissAll,
+        onPressed: () {
+          final id = _manualToastId;
+          if (id != null) {
+            TToast.dismissToast(id);
+          }
+        },
       ),
     );
   }

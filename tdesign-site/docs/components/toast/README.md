@@ -278,7 +278,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText(
+          _manualToastId = TToast.showText(
             '轻提示文字内容',
             context: context,
             duration: const Duration(seconds: 99999999),
@@ -296,14 +296,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHideToast(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text('关闭提示'),
+        child: const Text('关闭提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: TToast.dismissAll,
+        onPressed: () {
+          final id = _manualToastId;
+          if (id != null) {
+            TToast.dismissToast(id);
+          }
+        },
       ),
     );
   }</pre>
