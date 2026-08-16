@@ -104,7 +104,7 @@ static void _showOverlay(
 
 在 `t_toast_page.dart` 中补齐小程序 toast demo 分组：
 
-- **基础提示**：纯文字、多行文字、竖向图标、加载状态（无文字）
+- **基础提示**：纯文字、多行文字、竖向图标、加载状态（无文字）、加载状态自定义
 - **组件状态**：成功、警告、失败
 - **显示遮罩**：`showOverlay` 半透明蒙层 + 拦点击
 - **手动关闭**：`duration` 短时长 + `dismissToast`

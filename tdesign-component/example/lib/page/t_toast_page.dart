@@ -24,6 +24,10 @@ class TToastPage extends StatelessWidget {
             desc: '加载状态（无文字）',
             builder: _buildLoadingWithoutTextToast,
           ),
+          ExampleItem(
+            desc: '加载状态自定义',
+            builder: _buildLoadingCustomToast,
+          ),
         ]),
         ExampleModule(title: '组件状态', children: [
           ExampleItem(desc: '成功', builder: _buildSuccessToast),
@@ -113,6 +117,38 @@ class TToastPage extends StatelessWidget {
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
           final id = TToast.showLoadingWithoutText(context: context);
+          // 2 秒后关闭
+          Future.delayed(const Duration(seconds: 2), () {
+            TToast.dismissToast(id);
+          });
+        },
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'toast')
+  Widget _buildLoadingCustomToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('加载状态自定义'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = TToast.showLoading(
+            context: context,
+            customWidget: Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: context.tTheme.brandColor1,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              alignment: Alignment.center,
+              child: const TText('加载'),
+            ),
+          );
           // 2 秒后关闭
           Future.delayed(const Duration(seconds: 2), () {
             TToast.dismissToast(id);

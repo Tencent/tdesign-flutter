@@ -105,7 +105,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       isBlock: true,
-      child: Text('加载状态（无文案）'),
+      child: Text('加载状态（无文字）'),
+    );
+  }</pre>
+
+</td-code-block>
+
+
+加载状态自定义
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustomToast(BuildContext context) {
+    return TButton(
+      onPressed: () {
+        final id = TToast.showLoading(
+          context: context,
+          customWidget: Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: context.tTheme.brandColor1,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            alignment: Alignment.center,
+            child: const TText('加载'),
+          ),
+        );
+        Future.delayed(const Duration(seconds: 2), () {
+          TToast.dismissToast(id);
+        });
+      },
+      size: TButtonSize.large,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      isBlock: true,
+      child: Text('加载状态自定义'),
     );
   }</pre>
 

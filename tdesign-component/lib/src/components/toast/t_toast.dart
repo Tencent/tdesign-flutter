@@ -590,6 +590,9 @@ class TToast {
       TToastPlacement.bottom => Alignment.bottomCenter,
       TToastPlacement.middle => Alignment.center,
     };
+    // 顶部 / 底部需叠加安全距，避免顶栏 / 底部手势区遮挡；居中无需。
+    final useSafeArea = placement == TToastPlacement.top ||
+        placement == TToastPlacement.bottom;
 
     OverlayEntry overlayEntry;
     if (finalPreventTap || showMask) {
@@ -600,7 +603,7 @@ class TToast {
               Positioned.fill(child: Container(color: maskColor)),
               Align(
                 alignment: alignment,
-                child: SafeArea(child: widget),
+                child: useSafeArea ? SafeArea(child: widget) : widget,
               ),
             ],
           ),
@@ -609,7 +612,10 @@ class TToast {
     } else {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
-          Align(alignment: alignment, child: widget),
+          Align(
+            alignment: alignment,
+            child: useSafeArea ? SafeArea(child: widget) : widget,
+          ),
         ),
       );
     }
