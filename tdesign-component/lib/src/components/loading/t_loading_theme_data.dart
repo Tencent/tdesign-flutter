@@ -13,7 +13,8 @@ class TLoadingThemeData extends ThemeExtension<TLoadingThemeData> {
   /// 文案和图标相对方向
   final Axis? axis;
 
-  /// 一次刷新的时间（毫秒），控制动画速度
+  /// 一次刷新的时间（毫秒），控制动画速度。
+  /// 未指定时默认 `800`ms（对齐 TDesign 小程序 / Mobile Vue 的 `duration` 默认值）。
   final int? duration;
 
   const TLoadingThemeData({

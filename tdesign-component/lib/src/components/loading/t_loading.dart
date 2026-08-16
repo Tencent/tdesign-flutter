@@ -85,14 +85,14 @@ class TLoading extends StatelessWidget {
     final theme = _effectiveTheme(context);
     final materialTheme = Theme.of(context);
     final colorScheme = materialTheme.tExplicitColorScheme;
-    final effectiveAxis = theme.axis ?? Axis.vertical;
+    final effectiveAxis = theme.axis ?? Axis.horizontal;
     final effectiveIconColor =
         theme.iconColor ??
         materialTheme.progressIndicatorTheme.color ??
         colorScheme?.primary ??
         context.tTheme.brandNormalColor;
     final effectiveCustomIcon = customIcon;
-    final effectiveDuration = theme.duration ?? 2000;
+    final effectiveDuration = theme.duration ?? 800;
     final effectiveRefreshWidget = refreshWidget;
     final innerDuration = effectiveDuration > 0 ? effectiveDuration : 1;
 
@@ -151,21 +151,21 @@ class TLoading extends StatelessWidget {
       case TLoadingSize.large:
         return TCircleIndicator(
           color: iconColor,
-          size: 24,
-          lineWidth: 3 * 4 / 3, // 根据small等等比缩放
+          size: 26,
+          lineWidth: 3 * 26 / 20, // 与 medium 等比缩放（基准 small lineWidth 3）
           duration: duration,
         );
       case TLoadingSize.medium:
         return TCircleIndicator(
           color: iconColor,
-          size: 21,
-          lineWidth: 3 * 7 / 6, // 根据small等等比缩放
+          size: 22,
+          lineWidth: 3 * 22 / 20,
           duration: duration,
         );
       case TLoadingSize.small:
         return TCircleIndicator(
           color: iconColor,
-          size: 18, // 设计稿框为24，图形宽为19.5，推导lineWidth为3时，size为18
+          size: 20, // 对齐官方尺寸 demo（20/22/26）与 activity 直径
           lineWidth: 3,
           duration: duration,
         );

@@ -27,6 +27,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
+          ExampleItem(desc: '自定义图标', builder: _buildCustomIconLoading),
           ExampleItem(
               desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
           ExampleItem(desc: '图标加文字竖向', builder: _buildTextIconVerticalLoading),
@@ -165,6 +166,30 @@ class _TLoadingPageState extends State<TLoadingPage> {
           ),
         ),
       ],
+    );
+  }
+
+  /// 自定义图标
+  @ExampleCode(group: 'loading')
+  Widget _buildCustomIconLoading(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        TLoadingThemeData(
+          iconColor: context.tTheme.brandNormalColor,
+        ),
+      ),
+      child: const TLoading(
+        size: TLoadingSize.small,
+        customIcon: SizedBox(
+          width: 20,
+          height: 20,
+          child: Icon(
+            Icons.sync_rounded,
+            size: 20,
+            color: Colors.blue,
+          ),
+        ),
+      ),
     );
   }
 

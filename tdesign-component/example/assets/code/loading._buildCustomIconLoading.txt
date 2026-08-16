@@ -1,0 +1,22 @@
+/// 自定义图标
+    Widget _buildCustomIconLoading(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        TLoadingThemeData(
+          iconColor: context.tTheme.brandNormalColor,
+        ),
+      ),
+      child: const TLoading(
+        size: TLoadingSize.small,
+        customIcon: SizedBox(
+          width: 20,
+          height: 20,
+          child: Icon(
+            Icons.sync_rounded,
+            size: 20,
+            color: Colors.blue,
+          ),
+        ),
+      ),
+    );
+  }

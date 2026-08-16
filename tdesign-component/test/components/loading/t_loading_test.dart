@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/loading/t_activity_indicator.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/src/components/loading/t_point_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -42,9 +43,9 @@ void main() {
       final indicator = tester.widget<TCircleIndicator>(
         find.byType(TCircleIndicator),
       );
-      expect(indicator.size, 21);
-      expect(indicator.lineWidth, 3 * 7 / 6);
-      expect(indicator.duration, 2000);
+      expect(indicator.size, 22);
+      expect(indicator.lineWidth, 3 * 22 / 20);
+      expect(indicator.duration, 800);
     });
 
     testWidgets('size=large 正常渲染', (tester) async {
@@ -414,8 +415,258 @@ void main() {
       await tester.pump();
       expect(find.byType(TCircleIndicator), findsOneWidget);
     });
+
+    testWidgets('didUpdateWidget duration 变化触发更新', (tester) async {
+      var duration = 1000;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return TCircleIndicator(duration: duration);
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      setState(() => duration = 1200);
+      await tester.pump();
+      expect(find.byType(TCircleIndicator), findsOneWidget);
+    });
+  });
+
+  // TActivityIndicator didUpdateWidget 覆盖率补充
+  group('TActivityIndicator 覆盖率补充', () {
+    testWidgets('didUpdateWidget animating 关闭/开启', (tester) async {
+      var animating = true;
+      var duration = 800;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return TCupertinoActivityIndicator(
+                animating: animating,
+                duration: duration,
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      // 关闭动画触发 stop
+      setState(() => animating = false);
+      await tester.pump();
+      // 重新开启并改变 duration 触发 repeat
+      setState(() {
+        animating = true;
+        duration = 1000;
+      });
+      await tester.pump();
+      expect(find.byType(TCupertinoActivityIndicator), findsOneWidget);
+    });
+  });
+
+  // ============================================================
+  // 新增契约：默认 duration / axis / 尺寸（对齐官方）
+  // ============================================================
+  group('TLoading 跨端对齐契约', () {
+    testWidgets('默认 duration 为 800', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(const TLoading(size: TLoadingSize.medium)),
+      );
+      final indicator = tester.widget<TCircleIndicator>(
+        find.byType(TCircleIndicator),
+      );
+      expect(indicator.duration, 800);
+    });
+
+    testWidgets('默认 axis 为 horizontal', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(const TLoading(size: TLoadingSize.medium, text: '加载')),
+      );
+      expect(tester.widget<Flex>(find.byType(Flex)).direction, Axis.horizontal);
+    });
+
+    testWidgets('显式 vertical 覆盖纵向 SizedBox 分支', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TLoading(size: TLoadingSize.medium, text: '加载'),
+          loadingTheme: const TLoadingThemeData(axis: Axis.vertical),
+        ),
+      );
+      expect(tester.widget<Flex>(find.byType(Flex)).direction, Axis.vertical);
+    });
+
+    testWidgets('circle 三档尺寸对齐官方 20/22/26', (tester) async {
+      Future<void> check(TLoadingSize size, double expectSize) async {
+        await tester.pumpWidget(
+          wrapWithTheme(TLoading(size: size, icon: TLoadingIcon.circle)),
+        );
+        final indicator = tester.widget<TCircleIndicator>(
+          find.byType(TCircleIndicator),
+        );
+        expect(indicator.size, expectSize);
+      }
+
+      await check(TLoadingSize.small, 20);
+      await check(TLoadingSize.medium, 22);
+      await check(TLoadingSize.large, 26);
+    });
+
+    testWidgets('activity 三档尺寸对齐官方 20/22/26', (tester) async {
+      Future<void> check(TLoadingSize size, double expectRadius) async {
+        await tester.pumpWidget(
+          wrapWithTheme(TLoading(size: size, icon: TLoadingIcon.activity)),
+        );
+        final indicator = tester.widget<TCupertinoActivityIndicator>(
+          find.byType(TCupertinoActivityIndicator),
+        );
+        expect(indicator.radius, expectRadius);
+      }
+
+      await check(TLoadingSize.small, 10);
+      await check(TLoadingSize.medium, 11);
+      await check(TLoadingSize.large, 13);
+    });
+  });
+
+  // ============================================================
+  // TLoadingController overlay 蒙层
+  // ============================================================
+  group('TLoadingController overlay 蒙层', () {
+    Future<BuildContext> pumpOverlay(
+      WidgetTester tester,
+      Widget child,
+    ) async {
+      late BuildContext ctx;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return child;
+            },
+          ),
+        ),
+      );
+      return ctx;
+    }
+
+    testWidgets('showOverlay 渲染可见全屏蒙层', (tester) async {
+      final ctx = await pumpOverlay(tester, const SizedBox());
+      TLoadingController.show(
+        ctx,
+        text: '加载中',
+        overlay: TOverlayConfig(
+          showOverlay: true,
+          color: Colors.white.withValues(alpha: 0.6),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('加载中'), findsOneWidget);
+      // showOverlay=true：蒙层 Container 使用指定颜色（TOverlayConfig 语义：
+      // color 为最终蒙层颜色，opacity 仅在 color==null 时派生默认蒙层）
+      final maskFinder = find.byWidgetPredicate(
+        (w) => w is Container && w.color == Colors.white.withValues(alpha: 0.6),
+      );
+      expect(maskFinder, findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+      expect(find.text('加载中'), findsNothing);
+    });
+
+    testWidgets('不传 overlay 时无蒙层（行为与现状一致）', (tester) async {
+      final ctx = await pumpOverlay(tester, const SizedBox());
+      TLoadingController.show(ctx, text: '加载中');
+      await tester.pump();
+      expect(find.text('加载中'), findsOneWidget);
+      // 无蒙层：showOverlay/preventTap 均关闭，不渲染 Positioned 蒙层分支
+      expect(find.byType(Positioned), findsNothing);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('preventTap 拦截背景点击', (tester) async {
+      final ctx = await pumpOverlay(tester, const SizedBox());
+      TLoadingController.show(
+        ctx,
+        text: '加载中',
+        overlay: const TOverlayConfig(preventTap: true),
+      );
+      await tester.pump();
+      expect(find.text('加载中'), findsOneWidget);
+      // preventTap=true：走 Stack 蒙层分支（存在 Positioned.fill 蒙层）
+      expect(find.byType(Positioned), findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+  });
+
+  // ============================================================
+  // TLoadingThemeData 单元：merge / copyWith / lerp
+  // ============================================================
+  group('TLoadingThemeData 单元', () {
+    testWidgets('merge 优先级与字段透传', (tester) async {
+      const base = TLoadingThemeData(
+        iconColor: Colors.red,
+        textColor: Colors.blue,
+        axis: Axis.vertical,
+        duration: 1000,
+      );
+      const other = TLoadingThemeData(duration: 1200);
+      final merged = base.merge(other);
+      expect(merged.iconColor, Colors.red);
+      expect(merged.textColor, Colors.blue);
+      expect(merged.axis, Axis.vertical);
+      expect(merged.duration, 1200);
+      // null 时返回自身
+      expect(base.merge(null), same(base));
+    });
+
+    testWidgets('copyWith 字段更新', (tester) async {
+      const base = TLoadingThemeData(iconColor: Colors.red, duration: 1000);
+      final copied = base.copyWith(
+        iconColor: Colors.green,
+        textColor: Colors.orange,
+        axis: Axis.horizontal,
+        duration: 800,
+      );
+      expect(copied.iconColor, Colors.green);
+      expect(copied.textColor, Colors.orange);
+      expect(copied.axis, Axis.horizontal);
+      expect(copied.duration, 800);
+      // 未传字段保持原值
+      final partial = base.copyWith();
+      expect(partial.iconColor, Colors.red);
+      expect(partial.duration, 1000);
+    });
+
+    testWidgets('lerp 字段插值', (tester) async {
+      const a = TLoadingThemeData(
+        iconColor: Colors.black,
+        textColor: Colors.black,
+        axis: Axis.vertical,
+        duration: 800,
+      );
+      const b = TLoadingThemeData(
+        iconColor: Colors.white,
+        textColor: Colors.white,
+        axis: Axis.horizontal,
+        duration: 1600,
+      );
+      final lerped = a.lerp(b, 0.5);
+      expect(lerped, isNotNull);
+      expect(lerped.axis, isNot(same(a.axis)));
+      // 非 TLoadingThemeData 返回自身
+      final other = a.lerp(null, 0.5);
+      expect(other, same(a));
+    });
   });
 }
+
 
 Finder _loadingTextFinder(String data) {
   return find.byWidgetPredicate(
