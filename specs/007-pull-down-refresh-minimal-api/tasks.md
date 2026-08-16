@@ -15,6 +15,8 @@
 - [x] 导出新增公开类到 `tdesign_flutter.dart`
 - [x] 更新测试 `t_refresh_test.dart`（默认值 / onRefresh / disabled / texts / timeout / loadMore / controller / stateChanged）
 - [x] 示例页改用 `TPullDownRefresh` 并同步示例代码资产
+- [x] 补齐官方「自定义提示语」「刷新超时」两组 demo（对应 mobile-vue loading-texts / timeout），同步 `example/assets/code/` 与站点 README
+- [x] 补强 refresh 目录单元测试（controller 全方法、状态回调、同步回调、loadingTheme、控制器切换绑定）
 - [x] 修正英文 l10n 缺空格
 - [x] 修正站点 README 死链与示例不一致
 

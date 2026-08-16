@@ -175,7 +175,7 @@ class TPullDownRefreshTexts {
 
 ## 验收标准
 
-- [ ] `TPullDownRefresh` / `TPullDownRefreshController` / `TPullDownRefreshTexts` / `TPullDownRefreshState` 公开导出。
+- [x] `TPullDownRefresh` / `TPullDownRefreshController` / `TPullDownRefreshTexts` / `TPullDownRefreshState` 公开导出。
 - [ ] 默认渲染：`loadingBarHeight=50`、`maxBarHeight=80`、触发阈值=50，Header 为 TDesign 样式。
 - [ ] `onRefresh` 生效：下拉松手触发，完成后展示完成态并复位；`onRefresh == null` 时禁用刷新。
 - [ ] `disabled == true` 时禁用下拉刷新（保留滚动）。
