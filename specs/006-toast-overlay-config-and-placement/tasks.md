@@ -14,7 +14,7 @@
 - [x] 重写 `_showOverlay` 统一解析蒙层 + 位置
 - [x] 补充 Widget 测试（showOverlay / placement / preventTap 解耦）
 - [x] 示例页对齐小程序 demo（含加载状态自定义）
-- [x] 修正站点 README 过时引用并同步新能力
+- [x] 站点 README 文档变更从 PR 中移出（留待独立 PR，避免与功能变更混入）
 
 ## DONE
 

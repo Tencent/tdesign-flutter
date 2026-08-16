@@ -116,7 +116,7 @@ static void _showOverlay(
 | 组件 | tdesign-component/lib/src/components/toast/t_toast.dart | 新增 TOverlayConfig / TToastPlacement，扩展 showXxx 签名，重写 _showOverlay |
 | 测试 | tdesign-component/test/components/toast/t_toast_test.dart | 新增 overlay / placement 用例 |
 | 示例 | tdesign-component/example/lib/page/t_toast_page.dart | 对齐小程序 demo |
-| 站点文档 | tdesign-site/docs/components/toast/README.md | 修正过时引用、同步新能力 |
+| 站点文档 | tdesign-site/docs/components/toast/README.md | **本次不含**：站点 README 文档变更已从 PR 中移出，留待独立 PR 处理（避免与功能变更混入） |
 
 ## API 变化
 
@@ -128,7 +128,7 @@ static void _showOverlay(
 ## 风险与取舍
 
 - `Colors.black.withValues(alpha:)` 需 Flutter 3.27+；项目基线 3.32.0 满足，latest 满足。
-- placement 采用垂直百分比偏移（25% / 50% / 75%），与小程序 / mobile-vue 一致，天然避让安全区，**不再叠加 SafeArea**（移除原实现）。
+- placement 采用垂直百分比偏移（25% / 50% / 75%），与小程序 / mobile-vue 一致。旧实现为固定 `Center` 居中（并未叠加 SafeArea），新实现改为百分比定位，同样天然避让安全区（刘海屏 / 挖孔屏 / 底部手势条），无需叠加 SafeArea。
 - **breaking change**：移除 `bool? preventTap` 参数，更新日志须加 `⚠️` 前置标记提醒用户迁移。
 
 ## 验证策略

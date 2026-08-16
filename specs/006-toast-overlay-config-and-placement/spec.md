@@ -32,7 +32,7 @@
 - tdesign-component/lib/src/components/toast/t_toast.dart
 - tdesign-component/test/components/toast/t_toast_test.dart
 - tdesign-component/example/lib/page/t_toast_page.dart
-- tdesign-site/docs/components/toast/README.md
+- tdesign-site/docs/components/toast/README.md（**本次移出 PR**：文档变更留待独立 PR，仅在设计范围提及）
 
 ### 不涉及
 
