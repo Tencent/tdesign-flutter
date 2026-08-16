@@ -80,8 +80,7 @@ void main() {
       ));
       expect(
         tester
-            .element(find.byType(TSwipeCell))
-            .widget<TSwipeCell>()
+            .widget<TSwipeCell>(find.byType(TSwipeCell))
             .getDuration(tester.element(find.byType(TSwipeCell))),
         const Duration(milliseconds: 600),
       );
@@ -95,8 +94,7 @@ void main() {
       )));
       expect(
         tester
-            .element(find.byType(TSwipeCell))
-            .widget<TSwipeCell>()
+            .widget<TSwipeCell>(find.byType(TSwipeCell))
             .getDuration(tester.element(find.byType(TSwipeCell))),
         const Duration(milliseconds: 100),
       );

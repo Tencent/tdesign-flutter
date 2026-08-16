@@ -246,18 +246,26 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
 
   bool get _shouldCloseOnTapOutside => widget.closeOnTapOutside != false;
 
+  /// 标记当前是否已向 [PointerRouter] 注册了点击外部关闭的全局路由，
+  /// 用于保证 add/remove 成对出现，避免重复移除触发断言或泄漏。
+  bool _tapOutsideRouteRegistered = false;
+
   void _registerTapOutsideListener() {
-    if (_shouldCloseOnTapOutside) {
-      WidgetsBinding.instance.pointerRouter.addRoute(_handlePointerDown);
+    if (_shouldCloseOnTapOutside && !_tapOutsideRouteRegistered) {
+      WidgetsBinding.instance.pointerRouter.addGlobalRoute(_handlePointerDown);
+      _tapOutsideRouteRegistered = true;
     }
   }
 
   void _unregisterTapOutsideListener() {
-    WidgetsBinding.instance.pointerRouter.removeRoute(_handlePointerDown);
+    if (_tapOutsideRouteRegistered) {
+      WidgetsBinding.instance.pointerRouter.removeGlobalRoute(_handlePointerDown);
+      _tapOutsideRouteRegistered = false;
+    }
   }
 
   /// 点击本格外部区域时关闭已展开面板
-  void _handlePointerDown(PointerDownEvent event) {
+  void _handlePointerDown(PointerEvent event) {
     if (!_shouldCloseOnTapOutside) {
       return;
     }
