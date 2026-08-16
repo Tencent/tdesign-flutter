@@ -233,10 +233,10 @@ class TToastPage extends StatelessWidget {
 
   @ExampleCode(group: 'toast')
   Widget _buildHideToast(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('关闭提示'),
+        child: Text('关闭提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
