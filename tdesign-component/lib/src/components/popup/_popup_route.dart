@@ -26,21 +26,23 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   String? _barrierSemanticsLabel;
 
   _PopupBarrierMode get _barrierMode {
-    if (!options.modal) {
+    final overlay = options.overlayConfig;
+    if (!overlay.preventTap) {
       return _PopupBarrierMode.nonModal;
     }
-    return options.showOverlay
+    return overlay.showOverlay
         ? _PopupBarrierMode.modalOverlay
         : _PopupBarrierMode.modalTransparent;
   }
 
   Color get _barrierColor {
-    if (!options.showOverlay) {
+    final overlay = options.overlayConfig;
+    if (!overlay.showOverlay) {
       return Colors.transparent;
     }
-    final base = options.overlayColor ?? Colors.black54;
-    if (options.overlayOpacity != null) {
-      final opacity = options.overlayOpacity!.clamp(0.0, 1.0);
+    final base = overlay.color ?? Colors.black54;
+    if (overlay.opacity != null) {
+      final opacity = overlay.opacity!.clamp(0.0, 1.0);
       return base.withValues(alpha: base.a * opacity);
     }
     return base;
@@ -58,7 +60,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   String? get barrierLabel =>
-      options.showOverlay ? _barrierSemanticsLabel : null;
+      options.overlayConfig.showOverlay ? _barrierSemanticsLabel : null;
 
   @override
   Color? get barrierColor => null;
@@ -72,11 +74,12 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildModalBarrier() {
+    final overlay = options.overlayConfig;
     if (_barrierMode == _PopupBarrierMode.nonModal) {
       return const SizedBox.shrink();
     }
     if (_barrierMode == _PopupBarrierMode.modalOverlay &&
-        options.closeOnOverlayClick) {
+        overlay.effectiveCloseOnClick) {
       return ModalBarrier(
         color: Colors.transparent,
         dismissible: true,
@@ -165,7 +168,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (_barrierMode == _PopupBarrierMode.modalOverlay) barrier,
+          if (options.overlayConfig.showOverlay) barrier,
           positioned,
         ],
       ),
@@ -174,12 +177,18 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   Widget _buildBarrier(BuildContext context, double t) {
+    final overlay = options.overlayConfig;
+    final barrier = Container(
+      color: _barrierColor.withValues(alpha: _barrierColor.a * t),
+    );
+    if (!overlay.preventTap) {
+      // 不拦截背景交互：蒙层仅视觉展示，点击穿透到背景。
+      return IgnorePointer(child: barrier);
+    }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _handleOverlayTap,
-      child: Container(
-        color: _barrierColor.withValues(alpha: _barrierColor.a * t),
-      ),
+      child: barrier,
     );
   }
 
@@ -190,8 +199,9 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   void _handleOverlayTap() {
-    options.onOverlayClick?.call();
-    if (options.closeOnOverlayClick) {
+    final overlay = options.overlayConfig;
+    overlay.onClick?.call();
+    if (overlay.effectiveCloseOnClick) {
       onCloseWithTrigger(TPopupTrigger.overlay);
     }
   }

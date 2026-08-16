@@ -20,7 +20,13 @@ void main() {
       expect(option.copyWith(width: 120, height: 80).width, 120);
       expect(option.copyWith(backgroundColor: Colors.red).backgroundColor,
           Colors.red);
-      expect(option.copyWith(showOverlay: false).closeOnOverlayClick, isFalse);
+      expect(
+        option
+            .copyWith(overlay: const TPopupOverlayConfig(showOverlay: false))
+            .overlayConfig
+            .showOverlay,
+        isFalse,
+      );
     }
 
     final bottom = TPopupOptions.bottom(

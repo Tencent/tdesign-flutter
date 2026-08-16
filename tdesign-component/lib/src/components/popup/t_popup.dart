@@ -95,8 +95,7 @@ final class TPopup {
       height: options.height ?? themedHeight,
       radius: options.radius ?? theme?.panelRadius,
       backgroundColor: options.backgroundColor ?? theme?.panelBackgroundColor,
-      overlayColor: options.overlayColor ?? theme?.barrierColor,
-      overlayOpacity: options.overlayOpacity ?? theme?.barrierOpacity,
+      overlay: _resolveOverlay(options.overlay, theme),
       animationDuration:
           options.animationDuration ??
           theme?.transitionDuration ??
@@ -110,5 +109,34 @@ final class TPopup {
     );
     handle.open(navContext);
     return handle;
+  }
+
+  /// 将 theme 的 barrier 值合并进 overlay 配置。
+  static TPopupOverlayConfig? _resolveOverlay(
+    TPopupOverlayConfig? overlay,
+    TPopupThemeData? theme,
+  ) {
+    final themeColor = theme?.barrierColor;
+    final themeOpacity = theme?.barrierOpacity;
+    if (overlay == null) {
+      if (themeColor == null && themeOpacity == null) {
+        return null;
+      }
+      return TPopupOverlayConfig(
+        color: themeColor,
+        opacity: themeOpacity,
+      );
+    }
+    if (overlay.color != null && overlay.opacity != null) {
+      return overlay;
+    }
+    return TPopupOverlayConfig(
+      showOverlay: overlay.showOverlay,
+      color: overlay.color ?? themeColor,
+      opacity: overlay.opacity ?? themeOpacity,
+      preventTap: overlay.preventTap,
+      closeOnClick: overlay.closeOnClick,
+      onClick: overlay.onClick,
+    );
   }
 }

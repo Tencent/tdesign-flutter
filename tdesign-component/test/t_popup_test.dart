@@ -610,8 +610,10 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
-                closeOnOverlayClick: false,
-                onOverlayClick: () {},
+                overlay: TPopupOverlayConfig(
+                  closeOnClick: false,
+                  onClick: () {},
+                ),
                 child: const SizedBox(height: 60)),
           );
         },
@@ -625,17 +627,19 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('showOverlay false 且 modal=true', (tester) async {
+    testWidgets('showOverlay false 且 preventTap=true（透明模态）', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: const TPopupOptions(
+            options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
-                showOverlay: false,
-                modal: true,
+                overlay: const TPopupOverlayConfig(
+                  showOverlay: false,
+                  preventTap: true,
+                ),
                 child: SizedBox(height: 60)),
           );
         },
@@ -683,8 +687,6 @@ void main() {
         '标准模态默认关闭',
         TPopupOptions.bottom(
           height: 100,
-          showOverlay: true,
-          modal: true,
           cancelBuilder: null,
           confirmBuilder: null,
           child: const SizedBox(height: 60, child: Text('标准模态默认关闭')),
@@ -694,9 +696,7 @@ void main() {
         '标准模态显式禁止蒙层关闭',
         TPopupOptions.bottom(
           height: 100,
-          showOverlay: true,
-          modal: true,
-          closeOnOverlayClick: false,
+          overlay: const TPopupOverlayConfig(closeOnClick: false),
           cancelBuilder: null,
           confirmBuilder: null,
           child: const SizedBox(height: 60, child: Text('标准模态显式禁止蒙层关闭')),
@@ -706,8 +706,10 @@ void main() {
         '透明模态默认关闭策略',
         TPopupOptions.bottom(
           height: 100,
-          showOverlay: false,
-          modal: true,
+          overlay: const TPopupOverlayConfig(
+            showOverlay: false,
+            preventTap: true,
+          ),
           cancelBuilder: null,
           confirmBuilder: null,
           child: const SizedBox(height: 60, child: Text('透明模态默认关闭策略')),
@@ -717,8 +719,10 @@ void main() {
         '非模态浮层默认关闭策略',
         TPopupOptions.bottom(
           height: 100,
-          showOverlay: false,
-          modal: false,
+          overlay: const TPopupOverlayConfig(
+            showOverlay: false,
+            preventTap: false,
+          ),
           cancelBuilder: null,
           confirmBuilder: null,
           child: const SizedBox(height: 60, child: Text('非模态浮层默认关闭策略')),
@@ -732,11 +736,13 @@ void main() {
         onPressed: () {
           TPopup.show(
             tester.element(find.text('open')),
-            options: const TPopupOptions(
+            options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 80,
-                overlayColor: Colors.red,
-                overlayOpacity: 0.5,
+                overlay: const TPopupOverlayConfig(
+                  color: Colors.red,
+                  opacity: 0.5,
+                ),
                 child: SizedBox(height: 40)),
           );
         },
@@ -1141,7 +1147,7 @@ void main() {
       expect(handle!.isShowing, isTrue);
     });
 
-    testWidgets('非法参数组合矩阵在 show 时直接抛 FlutterError', (tester) async {
+    testWidgets('蒙层组合矩阵都可正常 show / close', (tester) async {
       late BuildContext hostContext;
 
       await tester.pumpWidget(
@@ -1155,47 +1161,52 @@ void main() {
         ),
       );
 
-      void expectInvalidShow(String reason, TPopupOptions options) {
+      void expectShow(String reason, TPopupOptions options) {
         expect(
           () => TPopup.show(hostContext, options: options),
-          throwsA(isA<FlutterError>()),
+          returnsNormally,
           reason: reason,
         );
       }
 
-      expectInvalidShow(
-        '有蒙层但非模态（默认关闭策略）',
+      expectShow(
+        '显示蒙层且拦截交互（标准模态）',
         TPopupOptions.bottom(
           child: const SizedBox(height: 40),
-          showOverlay: true,
-          modal: false,
+          overlay: const TPopupOverlayConfig(
+            showOverlay: true,
+            preventTap: true,
+          ),
         ),
       );
-      expectInvalidShow(
-        '有蒙层但非模态（显式 false）',
+      expectShow(
+        '显示蒙层但不拦截交互',
         TPopupOptions.bottom(
           child: const SizedBox(height: 40),
-          showOverlay: true,
-          modal: false,
-          closeOnOverlayClick: false,
+          overlay: const TPopupOverlayConfig(
+            showOverlay: true,
+            preventTap: false,
+          ),
         ),
       );
-      expectInvalidShow(
-        '透明模态显式要求蒙层关闭',
+      expectShow(
+        '透明模态（拦截但不显示蒙层）',
         TPopupOptions.bottom(
           child: const SizedBox(height: 40),
-          showOverlay: false,
-          modal: true,
-          closeOnOverlayClick: true,
+          overlay: const TPopupOverlayConfig(
+            showOverlay: false,
+            preventTap: true,
+          ),
         ),
       );
-      expectInvalidShow(
-        '非模态浮层显式要求蒙层关闭',
+      expectShow(
+        '非模态浮层（不拦截不显示）',
         TPopupOptions.bottom(
           child: const SizedBox(height: 40),
-          showOverlay: false,
-          modal: false,
-          closeOnOverlayClick: true,
+          overlay: const TPopupOverlayConfig(
+            showOverlay: false,
+            preventTap: false,
+          ),
         ),
       );
     });
@@ -1311,7 +1322,9 @@ void main() {
             options: TPopupOptions(
                 placement: TPopupPlacement.bottom,
                 height: 100,
-                onOverlayClick: () => overlayClick++,
+                overlay: TPopupOverlayConfig(
+                  onClick: () => overlayClick++,
+                ),
                 child: const SizedBox(height: 60)),
           );
         },
