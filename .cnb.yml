@@ -11,6 +11,8 @@ develop:
     - !reference [.sync-to-github]
     - !reference [.analyze-332]
     - !reference [.analyze-latest]
+    - !reference [.test-coverage-332]
+    - !reference [.test-coverage-latest]
     - !reference [.build-apk-332]
     - !reference [.build-apk-latest]
     - !reference [.build-web-332]
@@ -22,9 +24,11 @@ $:
     - !reference [.sync-to-github]
 
   pull_request:
-    # 静态分析 / 构建 APK / 构建 Web（flutter 3.32.0 与 latest 两个版本）
+    # 静态分析 / 单元测试覆盖率 / 构建 APK / 构建 Web（flutter 3.32.0 与 latest 两个版本）
     - !reference [.analyze-332]
     - !reference [.analyze-latest]
+    - !reference [.test-coverage-332]
+    - !reference [.test-coverage-latest]
     - !reference [.build-apk-332]
     - !reference [.build-apk-latest]
     - !reference [.build-web-332]

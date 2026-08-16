@@ -18,6 +18,17 @@
   name: flutter analyze
   script: cd tdesign-component && flutter analyze --fatal-infos
 
+# 单元测试 + 覆盖率门槛检查：flutter test --coverage 生成 lcov.info，
+# 再用 tool/check_coverage.dart 校验总行覆盖率是否达到阈值（默认 95%）。
+# 覆盖率不达标时脚本以非 0 退出，阻断流水线。
+# coverage 目录由 flutter test 生成，加入 .gitignore 不入库。
+.test-coverage:
+  name: flutter test coverage
+  script: |
+    cd tdesign-component \
+      && flutter test --coverage \
+      && dart run tool/check_coverage.dart 95 coverage/lcov.info
+
 # APK 构建
 .build-apk:
   name: flutter build apk
@@ -55,6 +66,28 @@
   stages:
     - !reference [.install-component]
     - !reference [.analyze]
+
+# 单元测试 + 覆盖率：flutter 3.32.0（阈值 95%）
+.test-coverage-332:
+  name: test coverage (flutter 3.32.0)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.test-coverage]
+
+# 单元测试 + 覆盖率：flutter latest（阈值 95%）
+.test-coverage-latest:
+  name: test coverage (flutter latest)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.test-coverage]
 
 # 静态分析：flutter latest
 .analyze-latest:

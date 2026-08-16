@@ -35,6 +35,7 @@ tdesign-site/_site/
 .pub-cache/
 .pub/
 build/
+**/coverage/
 
 # Android related
 **/android/**/gradle-wrapper.jar
