@@ -70,10 +70,6 @@ class TSwipeCellPage extends StatelessWidget {
               child: TSwipeCell(
                 groupTag: 'cell-list',
                 closeWhenOpened: true,
-                onOpenChanged: (side, open) {
-                  print('打开方向：$side');
-                  print('打开转态$open');
-                },
                 end: TSwipeCellPanel(
                   extentRatio: 140 / screenWidth,
                   onDismissed: (context) {
@@ -90,8 +86,6 @@ class TSwipeCellPage extends StatelessWidget {
                       backgroundColor: context.tTheme.errorNormalColor,
                       label: '删除',
                       onPressed: (context) {
-                        print('点击action');
-                        print(TSwipeCell.of(context));
                         list.removeAt(index);
                         cellLength.value = list.length;
                       },

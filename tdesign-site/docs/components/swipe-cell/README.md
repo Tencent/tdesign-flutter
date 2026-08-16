@@ -51,6 +51,8 @@ TSwipeCell(
 | initialOpenSide | TSwipeCellSide? | - | 首次展示时打开的逻辑侧。 |
 | groupTag | Object? | - | 互斥分组标识。 |
 | closeWhenOpened | bool | false | 展开时关闭同组其他项。 |
+| closeOnScroll | bool | true | 祖先滚动容器滚动时关闭已展开面板。 |
+| closeOnTapOutside | bool? | true | 面板展开后点击本格或外部区域自动关闭。 |
 | dragStartBehavior | DragStartBehavior | DragStartBehavior.start | 拖动起始行为。 |
 
 ### TSwipeCellPanel

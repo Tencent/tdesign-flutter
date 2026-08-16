@@ -34,6 +34,7 @@ class TSwipeCell extends StatefulWidget {
     this.groupTag,
     this.closeWhenOpened = false,
     this.closeOnScroll = true,
+    this.closeOnTapOutside,
     this.dragStartBehavior = DragStartBehavior.start,
   }) : super(key: key);
 
@@ -77,6 +78,12 @@ class TSwipeCell extends StatefulWidget {
   /// 面板会在首次滚动发生时即被关闭（语义偏"粘滞"），请按需调整。
   final bool closeOnScroll;
 
+  /// 面板展开后，点击本格内容或单元格外部区域时是否自动关闭面板。
+  ///
+  /// 默认与官方行为对齐（`null` 视为 `true`）：面板展开后点击空白处自动收起。
+  /// 点击操作项按钮不受此参数影响（由操作项自身的 `onPressed` / `autoClose` 处理）。
+  final bool? closeOnTapOutside;
+
   /// 拖动开始行为
   final DragStartBehavior dragStartBehavior;
 
@@ -88,7 +95,7 @@ class TSwipeCell extends StatefulWidget {
 
   /// 获取滑动动画时长
   Duration getDuration(BuildContext context) =>
-      _effectiveTheme(context).duration ?? const Duration(milliseconds: 200);
+      _effectiveTheme(context).duration ?? const Duration(milliseconds: 600);
 
   static final Map<Object, List<SlidableController>> _controllers = {};
 
@@ -212,6 +219,7 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
   void dispose() {
     // 使用缓存的 groupTag，避免在 dispose 中访问 InheritedWidget 祖先
     TSwipeCell._pushController(controller, _groupTag, del: true);
+    _unregisterTapOutsideListener();
     _unbindController();
     confirmListenable.dispose();
     super.dispose();
@@ -236,6 +244,46 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
     confirmListenable.value = null;
   }
 
+  bool get _shouldCloseOnTapOutside => widget.closeOnTapOutside != false;
+
+  void _registerTapOutsideListener() {
+    if (_shouldCloseOnTapOutside) {
+      WidgetsBinding.instance.pointerRouter.addRoute(_handlePointerDown);
+    }
+  }
+
+  void _unregisterTapOutsideListener() {
+    WidgetsBinding.instance.pointerRouter.removeRoute(_handlePointerDown);
+  }
+
+  /// 点击本格外部区域时关闭已展开面板
+  void _handlePointerDown(PointerDownEvent event) {
+    if (!_shouldCloseOnTapOutside) {
+      return;
+    }
+    final box = context.findRenderObject();
+    if (box is! RenderBox || !box.hasSize) {
+      return;
+    }
+    final local = box.globalToLocal(event.position);
+    final size = box.size;
+    final inside = local.dx >= 0 &&
+        local.dy >= 0 &&
+        local.dx <= size.width &&
+        local.dy <= size.height;
+    if (!inside) {
+      controller.close(duration: widget.getDuration(context));
+    }
+  }
+
+  /// 点击本格内容（非操作项按钮）时关闭已展开面板
+  void _handleChildTapDown(PointerDownEvent event) {
+    if (!_shouldCloseOnTapOutside) {
+      return;
+    }
+    controller.close(duration: widget.getDuration(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     final endConfirmLength = widget.end?.confirms?.length ?? 0;
@@ -243,7 +291,13 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
 
     final slidable = Slidable(
       closeOnScroll: widget.closeOnScroll,
-      child: widget.child,
+      child: _shouldCloseOnTapOutside
+          ? Listener(
+              onPointerDown: _handleChildTapDown,
+              behavior: HitTestBehavior.translucent,
+              child: widget.child,
+            )
+          : widget.child,
       controller: controller,
       enabled: widget.enabled,
       groupTag: widget.groupTag,
@@ -320,6 +374,7 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
           widget.onOpenChanged?.call(side, false);
         }
         openSide = null;
+        _unregisterTapOutsideListener();
         break;
       case ActionPaneType.start:
         if (widget.closeWhenOpened) {
@@ -327,6 +382,7 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
         }
         openSide = TSwipeCellSide.start;
         widget.onOpenChanged?.call(openSide!, true);
+        _registerTapOutsideListener();
         break;
       case ActionPaneType.end:
         if (widget.closeWhenOpened) {
@@ -334,6 +390,7 @@ class _TSwipeCellState extends State<TSwipeCell> with TickerProviderStateMixin {
         }
         openSide = TSwipeCellSide.end;
         widget.onOpenChanged?.call(openSide!, true);
+        _registerTapOutsideListener();
         break;
     }
   }

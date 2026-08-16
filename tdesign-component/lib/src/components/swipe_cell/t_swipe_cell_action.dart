@@ -31,7 +31,7 @@ class TSwipeCellAction extends StatelessWidget {
         assert(icon != null || label != null, 'icon or label must not be null'),
         super(key: key);
 
-  /// 宽度占比，默认为 1，[TSwipeCellPanel.confirms]下无效（失踪占满整个[TSwipeCellPanel]宽度）
+  /// 宽度占比，默认为 1，[TSwipeCellPanel.confirms]下无效（始终占满整个[TSwipeCellPanel]宽度）
   final int flex;
 
   /// 背景颜色；为 null 时回退到组件级主题
@@ -51,11 +51,11 @@ class TSwipeCellAction extends StatelessWidget {
   /// [TSwipeCellThemeData.actionIconColor]、label 字体颜色、P4 Token。
   final Color? iconColor;
 
-  /// 图标大小，默认 18；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionIconSize]，
+  /// 图标大小，默认 20；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionIconSize]，
   /// 再回退到内置默认值。
   final double? iconSize;
 
-  /// 图标和标题的间距，默认 2；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionSpacing]，
+  /// 图标和标题的间距，默认 8；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionSpacing]，
   /// 再回退到内置默认值。
   final double? spacing;
 
@@ -95,8 +95,10 @@ class TSwipeCellAction extends StatelessWidget {
     // P0 实例参数 > P1 组件主题 > P4 Token 兜底
     final effectiveBackgroundColor =
         backgroundColor ?? theme.actionBackgroundColor;
-    final effectiveIconSize = iconSize ?? theme.actionIconSize ?? 18;
-    final effectiveSpacing = spacing ?? theme.actionSpacing ?? 2;
+    final effectiveIconSize = iconSize ?? theme.actionIconSize ?? 20;
+    final effectiveSpacing = spacing ?? theme.actionSpacing ?? 8;
+    final effectivePadding =
+        theme.actionPadding ?? const EdgeInsets.symmetric(horizontal: 16);
     final effectiveIconColor = iconColor ??
         theme.actionIconColor ??
         labelStyle?.color ??
@@ -139,6 +141,7 @@ class TSwipeCellAction extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             color: effectiveBackgroundColor,
+            padding: effectivePadding,
             child: Flex(
               mainAxisAlignment: MainAxisAlignment.center,
               direction: direction,

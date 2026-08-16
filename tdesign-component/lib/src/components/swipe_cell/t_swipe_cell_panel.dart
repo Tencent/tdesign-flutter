@@ -49,10 +49,10 @@ class TSwipeCellPanel {
   /// 宽度占比
   final double extentRatio;
 
-  /// 拖动多少占比触发打开动作，默认 [extentRatio] 的一半
+  /// 拖动多少占比触发打开动作，默认 [extentRatio] 的 30%（对齐官方）
   final double? openThreshold;
 
-  /// 拖动多少占比触发关闭动作，默认 [extentRatio] 的一半
+  /// 拖动多少占比触发关闭动作，默认 [extentRatio] 的 30%（对齐官方）
   final double? closeThreshold;
 
   /// 滑动动画展示方式
@@ -95,8 +95,8 @@ class TSwipeCellPanel {
     return ActionPane(
       extentRatio: extentRatio,
       motion: getMotionWidget(),
-      openThreshold: openThreshold ?? (extentRatio / 2),
-      closeThreshold: closeThreshold ?? (extentRatio / 2),
+      openThreshold: openThreshold ?? (extentRatio * 0.3),
+      closeThreshold: closeThreshold ?? (extentRatio * 0.3),
       children: children,
       dragDismissible: dragDismissible,
       dismissible: dragDismissible

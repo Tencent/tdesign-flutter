@@ -37,6 +37,71 @@ void main() {
       );
     });
 
+    testWidgets('默认打开/关闭阈值对齐官方 30% 面板宽度', (tester) async {
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const Text('Row'),
+          end: TSwipeCellPanel(
+            extentRatio: 0.5,
+            children: [panelAction('End')],
+          ),
+        ),
+      )));
+      final actionPane =
+          tester.widget<Slidable>(find.byType(Slidable)).endActionPane!;
+      expect(actionPane.openThreshold, closeTo(0.15, 1e-6));
+      expect(actionPane.closeThreshold, closeTo(0.15, 1e-6));
+
+      // 显式传入时以传入值为准
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const Text('Row'),
+          end: TSwipeCellPanel(
+            extentRatio: 0.5,
+            openThreshold: 0.4,
+            closeThreshold: 0.2,
+            children: [panelAction('End')],
+          ),
+        ),
+      )));
+      final explicit =
+          tester.widget<Slidable>(find.byType(Slidable)).endActionPane!;
+      expect(explicit.openThreshold, 0.4);
+      expect(explicit.closeThreshold, 0.2);
+    });
+
+    testWidgets('默认动画时长 600ms，且可通过 Theme 覆盖', (tester) async {
+      await tester.pumpWidget(app(
+        const TSwipeCell(child: Text('Row'), end: null, start: null),
+      ));
+      expect(
+        tester
+            .element(find.byType(TSwipeCell))
+            .widget<TSwipeCell>()
+            .getDuration(tester.element(find.byType(TSwipeCell))),
+        const Duration(milliseconds: 600),
+      );
+
+      await tester.pumpWidget(app(Theme(
+        data: Theme.of(tester.element(find.byType(TSwipeCell)))
+            .mergeExtension(
+          const TSwipeCellThemeData(duration: Duration(milliseconds: 100)),
+        ),
+        child: const TSwipeCell(child: Text('Row')),
+      )));
+      expect(
+        tester
+            .element(find.byType(TSwipeCell))
+            .widget<TSwipeCell>()
+            .getDuration(tester.element(find.byType(TSwipeCell))),
+        const Duration(milliseconds: 100),
+      );
+    });
+
     testWidgets('接受任意 child，而不依赖 TCell', (tester) async {
       await tester.pumpWidget(app(const TSwipeCell(child: Text('Custom row'))));
       expect(find.text('Custom row'), findsOneWidget);
@@ -112,6 +177,7 @@ void main() {
             start: panel('Start $id'),
             groupTag: 'inbox',
             closeWhenOpened: true,
+            closeOnTapOutside: false,
             onOpenChanged: (side, isOpen) {
               events.add('$id:${side.name}:$isOpen');
             },
@@ -237,6 +303,73 @@ void main() {
       final flexibleCount = flex.children.whereType<Flexible>().length;
       expect(flexibleCount, greaterThanOrEqualTo(2));
     });
+
+    testWidgets('面板展开后点击本格内容自动关闭（默认 true）', (tester) async {
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const TCell(title: Text('Row')),
+          end: panel('End'),
+          initialOpenSide: TSwipeCellSide.end,
+        ),
+      )));
+      await tester.pumpAndSettle();
+      expect(find.text('End'), findsOneWidget);
+
+      await tester.tap(find.text('Row'));
+      await tester.pumpAndSettle();
+      expect(find.text('End'), findsNothing);
+    });
+
+    testWidgets('closeOnTapOutside: false 时不因点击本格关闭', (tester) async {
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const TCell(title: Text('Row')),
+          end: panel('End'),
+          initialOpenSide: TSwipeCellSide.end,
+          closeOnTapOutside: false,
+        ),
+      )));
+      await tester.pumpAndSettle();
+      expect(find.text('End'), findsOneWidget);
+
+      await tester.tap(find.text('Row'));
+      await tester.pumpAndSettle();
+      expect(find.text('End'), findsOneWidget);
+    });
+
+    testWidgets('操作项图标大小默认 20、间距 8、左右内边距 16', (tester) async {
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const TCell(title: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [
+              TSwipeCellAction(
+                icon: Icons.edit,
+                label: 'Action',
+                onPressed: (_) {},
+              ),
+            ],
+          ),
+          initialOpenSide: TSwipeCellSide.end,
+        ),
+      )));
+      await tester.pumpAndSettle();
+
+      final icon = tester.widget<Icon>(find.byIcon(Icons.edit));
+      expect(icon.size, 20);
+
+      final container = tester.widget<Container>(find.ancestor(
+        of: find.text('Action'),
+        matching: find.byType(Container),
+      ).first);
+      expect(container.padding, const EdgeInsets.symmetric(horizontal: 16));
+    });
   });
 
   group('TSwipeCellThemeData', () {
@@ -247,6 +380,7 @@ void main() {
       actionTextStyle: TextStyle(color: Colors.blue),
       actionIconSize: 20,
       actionSpacing: 4,
+      actionPadding: EdgeInsets.all(8),
     );
 
     test('copyWith 仅覆盖非空字段', () {
@@ -256,6 +390,7 @@ void main() {
       expect(updated.actionTextStyle, base.actionTextStyle);
       expect(updated.actionIconSize, base.actionIconSize);
       expect(updated.actionSpacing, base.actionSpacing);
+      expect(updated.actionPadding, base.actionPadding);
       expect(updated.duration, base.duration);
     });
 
@@ -268,6 +403,7 @@ void main() {
       expect(merged.actionIconColor, Colors.teal);
       expect(merged.actionIconSize, 32);
       expect(merged.actionSpacing, base.actionSpacing);
+      expect(merged.actionPadding, base.actionPadding);
       expect(merged.duration, base.duration);
 
       expect(base.merge(null), same(base));

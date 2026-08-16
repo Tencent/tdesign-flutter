@@ -23,6 +23,9 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
   /// 操作项图标与文字默认间距（P1，覆盖 `spacing` 默认值）
   final double? actionSpacing;
 
+  /// 操作项面板左右内边距（P1，覆盖内置 `EdgeInsets.symmetric(horizontal: 16)`）
+  final EdgeInsetsGeometry? actionPadding;
+
   const TSwipeCellThemeData({
     this.duration,
     this.actionBackgroundColor,
@@ -30,6 +33,7 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
     this.actionTextStyle,
     this.actionIconSize,
     this.actionSpacing,
+    this.actionPadding,
   });
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
@@ -45,6 +49,7 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
       actionTextStyle: other.actionTextStyle ?? actionTextStyle,
       actionIconSize: other.actionIconSize ?? actionIconSize,
       actionSpacing: other.actionSpacing ?? actionSpacing,
+      actionPadding: other.actionPadding ?? actionPadding,
     );
   }
 
@@ -56,6 +61,7 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
     TextStyle? actionTextStyle,
     double? actionIconSize,
     double? actionSpacing,
+    EdgeInsetsGeometry? actionPadding,
   }) {
     return TSwipeCellThemeData(
       duration: duration ?? this.duration,
@@ -65,6 +71,7 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
       actionTextStyle: actionTextStyle ?? this.actionTextStyle,
       actionIconSize: actionIconSize ?? this.actionIconSize,
       actionSpacing: actionSpacing ?? this.actionSpacing,
+      actionPadding: actionPadding ?? this.actionPadding,
     );
   }
 
@@ -85,6 +92,7 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
       actionTextStyle: TextStyle.lerp(actionTextStyle, other.actionTextStyle, t),
       actionIconSize: _lerp(actionIconSize, other.actionIconSize, t),
       actionSpacing: _lerp(actionSpacing, other.actionSpacing, t),
+      actionPadding: EdgeInsetsGeometry.lerp(actionPadding, other.actionPadding, t),
     );
   }
 
