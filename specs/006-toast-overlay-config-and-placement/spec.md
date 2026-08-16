@@ -32,7 +32,7 @@
 - tdesign-component/lib/src/components/toast/t_toast.dart
 - tdesign-component/test/components/toast/t_toast_test.dart
 - tdesign-component/example/lib/page/t_toast_page.dart
-- tdesign-site/docs/components/toast/README.md（**本次移出 PR**：文档变更留待独立 PR，仅在设计范围提及）
+- tdesign-site/docs/components/toast/README.md（同步新 API 与 demo 结构、修正过时引用；文档变更随本 PR 提交，但**不写入 PR 更新日志**——文档调整属用户无需感知的变更）
 
 ### 不涉及
 
