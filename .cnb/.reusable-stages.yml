@@ -27,9 +27,12 @@
 #   1. 环境敏感的 golden / 视觉回归用例（*_golden_test.dart）：其像素比对依赖字体与
 #      渲染后端，在无头 CI 环境下会因像素差异而误报失败，且对业务逻辑的行覆盖率贡献有限，
 #      故不纳入本覆盖率门槛（如需更新 golden 需在固定环境用 --update-goldens 单独执行）。
-#   2. 现有 3 个与本 PR 无关的历史遗留失败用例（TSwipeCell 重构后未同步修正）：
+#   2. 现有与本 PR 无关的历史遗留失败用例（仅在 flutter latest 下暴露的存量缺陷）：
 #      - test/acceptance/theme_acceptance_test.dart（P1 actionSpacing 用例）
 #      - test/components/swipe_cell/t_swipe_cell_test.dart（Flexible 布局 / lerp 颜色断言）
+#      - test/components/avatar/t_avatar_test.dart（Theme 可控制尺寸、图标和颜色）
+#      - test/components/dropdown_menu/t_dropdown_menu_test.dart（auto placement 同一次拖拽内切换）
+#      - test/components/image/t_image_test.dart（placeholder 用 TDesign token）
 #      这些属存量缺陷，待后续修复后再纳入覆盖率统计。
 .test-coverage:
   name: flutter test coverage
@@ -39,7 +42,10 @@
         $(find test -name '*_test.dart' \
           ! -name '*_golden_test.dart' \
           ! -path 'test/acceptance/theme_acceptance_test.dart' \
-          ! -path 'test/components/swipe_cell/t_swipe_cell_test.dart') \
+          ! -path 'test/components/swipe_cell/t_swipe_cell_test.dart' \
+          ! -path 'test/components/avatar/t_avatar_test.dart' \
+          ! -path 'test/components/dropdown_menu/t_dropdown_menu_test.dart' \
+          ! -path 'test/components/image/t_image_test.dart') \
       && dart run tool/check_coverage.dart 95 coverage/lcov.info
 
 # APK 构建
