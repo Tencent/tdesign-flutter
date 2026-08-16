@@ -59,17 +59,6 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
 
-      - name: Set up Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: "temurin"
-          java-version: "17.0.19+10"
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: "12"
-
       - name: Set up Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
@@ -131,60 +120,19 @@ jobs:
           if-no-files-found: error
           retention-days: 5
 
-      - name: Build and verify signed Flutter APK
+      - name: Build Flutter APK
+        working-directory: ./tdesign-component/example
+        run: flutter build apk -t ./lib/main.dart --release
+
+      - name: rename apk
         working-directory: ./tdesign-component/example
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
-          KEY_ALIAS=tdesign_flutter_preview
-          KEYSTORE_PATH="$PWD/android/app/keystore.jks"
-          KEY_PROPERTIES_PATH="$PWD/android/key.properties"
-          STORE_PASSWORD=$(openssl rand -hex 24)
-          KEY_PASSWORD=$(openssl rand -hex 24)
-          trap 'rm -f "$KEYSTORE_PATH" "$KEY_PROPERTIES_PATH"' EXIT
-          echo "::add-mask::$STORE_PASSWORD"
-          echo "::add-mask::$KEY_PASSWORD"
-
-          keytool -genkeypair \
-            -storetype JKS \
-            -alias "$KEY_ALIAS" \
-            -keypass "$KEY_PASSWORD" \
-            -keystore "$KEYSTORE_PATH" \
-            -storepass "$STORE_PASSWORD" \
-            -dname "CN=TDesign Flutter Preview,O=TDesign,C=CN" \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 365 \
-            -noprompt
-          chmod 600 "$KEYSTORE_PATH"
-
-          {
-            echo "storePassword=$STORE_PASSWORD"
-            echo "keyPassword=$KEY_PASSWORD"
-            echo "keyAlias=$KEY_ALIAS"
-            echo "storeFile=keystore.jks"
-          } > "$KEY_PROPERTIES_PATH"
-          chmod 600 "$KEY_PROPERTIES_PATH"
-
-          flutter build apk --release
-
           APK_OUTPUT_DIR="$PWD/build/app/outputs/flutter-apk"
           APK_PATH="$APK_OUTPUT_DIR/tdesign-flutter-${VERSION}-${GITHUB_RUN_NUMBER}.apk"
           mv "$APK_OUTPUT_DIR/app-release.apk" "$APK_PATH"
-
-          ANDROID_SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}
-          if [ -z "$ANDROID_SDK" ]; then
-            echo "::error::ANDROID_HOME and ANDROID_SDK_ROOT are both unset"
-            exit 1
-          fi
-          APKSIGNER=$(find "$ANDROID_SDK/build-tools" -type f -name apksigner -print | sort -V | tail -n 1)
-          if [ -z "$APKSIGNER" ]; then
-            echo "::error::apksigner not found under $ANDROID_SDK/build-tools"
-            exit 1
-          fi
-          "$APKSIGNER" verify --verbose --print-certs "$APK_PATH" | tee "$RUNNER_TEMP/apk-signature.txt"
-          grep -Fq "CN=TDesign Flutter Preview" "$RUNNER_TEMP/apk-signature.txt"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
