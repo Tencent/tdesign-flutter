@@ -552,7 +552,7 @@ void main() {
         '旧 Toast',
         context: context,
         toastId: 'same',
-        preventTap: true,
+        overlay: const TOverlayConfig(preventTap: true),
       );
       await tester.pump();
       TToast.showText('新 Toast', context: context, toastId: 'same');
@@ -658,13 +658,13 @@ void main() {
   // preventTap / customWidget
   // ============================================================
   group('TToast 遮罩与自定义', () {
-    testWidgets('preventTap 渲染全屏遮罩', (tester) async {
+    testWidgets('TOverlayConfig.preventTap 渲染全屏遮罩', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
           '防触',
           context: context,
-          preventTap: true,
+          overlay: const TOverlayConfig(preventTap: true),
           duration: const Duration(milliseconds: 100),
         );
       });
@@ -714,14 +714,17 @@ void main() {
       await waitForDismiss(tester);
     });
 
-    testWidgets('overlay.preventTap 与旧 preventTap 取或合并拦截', (tester) async {
+    testWidgets('TOverlayConfig 同时控制拦截与遮罩', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
           '拦截',
           context: context,
-          preventTap: true,
-          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          overlay: const TOverlayConfig(
+            showOverlay: true,
+            opacity: 0.5,
+            preventTap: true,
+          ),
           duration: const Duration(milliseconds: 100),
         );
       });

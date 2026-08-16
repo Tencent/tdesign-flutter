@@ -11,10 +11,11 @@
 ## 目标
 
 - 新增公开类 `TOverlayConfig`，统一收敛"是否显示可见蒙层（showOverlay）、蒙层颜色、蒙层透明度、是否拦截背景点击（preventTap）"。
-- 每个 `showXxx` 方法只新增 **1 个可选参数** `TOverlayConfig? overlay`（默认 null，零负担、非 breaking）。
+- **收敛散参**：将原先散落在各 `showXxx` 上的 `bool? preventTap` **移除**，统一收敛到 `TOverlayConfig` 单一口子，形成**单一真源**（不兼容收敛版）。
+- 每个 `showXxx` 方法只保留 **1 个可选参数** `TOverlayConfig? overlay`（默认 null，未传时行为与现状一致）。
 - `_showOverlay` 统一解析 `TOverlayConfig`：可见蒙层颜色由 `showOverlay ? (color ?? black@opacity) : transparent` 决定；拦截点击由 `preventTap` 决定，与蒙层是否可见解耦。
 - 新增展示位置 `placement`（top / middle / bottom），对齐小程序 `placement` 语义。
-- 保留旧 `preventTap: bool?` 参数做向后兼容（有 `overlay` 时以 `overlay.preventTap` 为准，否则沿用旧布尔参数）。
+- **移除旧 `preventTap: bool?` 参数**（breaking change），既有调用需迁移为 `overlay: TOverlayConfig(preventTap: true)`。
 
 ## 非目标
 
@@ -60,14 +61,14 @@ class TOverlayConfig {
 
 ### showXxx 签名
 
-- `showText` / `showIconText` / `showLoading` / `showLoadingWithoutText` 直接新增 `TOverlayConfig? overlay` 并透传给 `_showOverlay`。
+- `showText` / `showIconText` / `showLoading` / `showLoadingWithoutText` 直接接收 `TOverlayConfig? overlay` 并透传给 `_showOverlay`。
 - `showSuccess` / `showWarning` / `showFail` 经由 `showIconText` 委托处透传 `overlay`。
-- 保留现有 `bool? preventTap` 参数，不删除（向后兼容旧调用）。
-- 各方法新增 `TToastPlacement placement = TToastPlacement.middle` 可选参数。
+- **移除 `bool? preventTap` 参数**（不兼容收敛版）：拦截点击只能通过 `overlay: TOverlayConfig(preventTap: true)` 开启。
+- 各方法保留 `TToastPlacement placement = TToastPlacement.middle` 可选参数。
 
 ### _showOverlay 统一解析
 
-- `preventTap` 合并：`overlay?.preventTap ?? false` 与旧 `preventTap ?? false` 取**或**（任一要求拦点击即拦，避免两者都设置时互相覆盖）。
+- 拦截点击统一由 `TOverlayConfig.preventTap` 决定（单一真源）：`finalPreventTap = (overlay ?? const TOverlayConfig()).preventTap`。
 - 蒙层是否可见：`overlay?.showOverlay ?? false`。
 - 蒙层颜色：`overlay != null && overlay.showOverlay ? (overlay.color ?? Colors.black.withValues(alpha: overlay.opacity)) : Colors.transparent`。
 - 布局：
@@ -79,11 +80,11 @@ class TOverlayConfig {
   - `bottom` → `FractionalOffset(0.5, 0.75)`（距底 25%）
   - 百分比定位天然避让安全区，**不叠加 SafeArea**（移除原实现）。
 
-### 兼容性
+### 兼容性（不兼容收敛版）
 
 - 不传 `overlay`、不传 `placement`（默认 middle）时，行为与现状完全一致（居中、无可见蒙层）。
-- `preventTap: true`（不传 overlay）仍铺透明拦截层，行为不变。
-- 新增类型与可选参数，**非 breaking**。
+- **breaking change**：移除 `showXxx` 上的 `bool? preventTap` 参数。既有调用 `preventTap: true` 需迁移为 `overlay: TOverlayConfig(preventTap: true)`。
+- 更新日志中该条须加 `⚠️` 前置标记提醒用户迁移。
 
 ## 验收标准
 
@@ -92,7 +93,8 @@ class TOverlayConfig {
 - [ ] `showOverlay: true` 时渲染可见半透明蒙层，颜色/透明度可由 `TOverlayConfig.color` / `opacity` 控制。
 - [ ] `preventTap` 拦截点击与 `showOverlay` 可见蒙层解耦。
 - [ ] `placement: top / middle / bottom` 分别对齐顶部 / 居中 / 底部。
-- [ ] 旧 `preventTap: true` 调用仍生效（透明拦截层）。
+- [ ] `TOverlayConfig.preventTap: true` 生效（透明拦截层）。
+- [ ] 旧 `bool? preventTap` 参数已从所有 `showXxx` 移除，迁移为 `TOverlayConfig`。
 - [ ] 示例页对齐小程序 demo（含显示遮罩、多行文字、竖向图标、加载自定义等）。
 - [ ] toast 相关单元 / Widget 测试通过。
 - [ ] flutter analyze 与 git diff --check 通过。

@@ -141,9 +141,6 @@ class TToast {
     /// Toast 内容约束。
     BoxConstraints? constraints,
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
-
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
 
@@ -176,7 +173,6 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       toastId: id,
@@ -200,9 +196,6 @@ class TToast {
 
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
-
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -244,7 +237,6 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       toastId: id,
@@ -265,9 +257,6 @@ class TToast {
 
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
-
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -299,7 +288,6 @@ class TToast {
       direction: direction,
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       backgroundColor: backgroundColor,
@@ -324,9 +312,6 @@ class TToast {
 
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
-
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -358,7 +343,6 @@ class TToast {
       direction: direction,
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       backgroundColor: backgroundColor,
@@ -383,9 +367,6 @@ class TToast {
 
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
-
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -417,7 +398,6 @@ class TToast {
       direction: direction,
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       backgroundColor: backgroundColor,
@@ -439,9 +419,6 @@ class TToast {
 
     /// 自动关闭时长。
     Duration duration = TToast.infiniteDuration,
-
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -481,7 +458,6 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       toastId: id,
@@ -496,9 +472,6 @@ class TToast {
 
     /// 自动关闭时长。
     Duration duration = TToast.infiniteDuration,
-
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -529,7 +502,6 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
       overlay: overlay,
       placement: placement,
       toastId: id,
@@ -561,7 +533,6 @@ class TToast {
     Widget widget, {
     required BuildContext context,
     Duration duration = const Duration(milliseconds: 2000),
-    bool? preventTap,
     TOverlayConfig? overlay,
     TToastPlacement placement = TToastPlacement.middle,
     required String toastId,
@@ -579,8 +550,8 @@ class TToast {
     );
 
     final cfg = overlay ?? const TOverlayConfig();
-    // 拦截点击：overlay.preventTap 与旧 bool preventTap 取"或"，任一要求拦即拦。
-    final finalPreventTap = cfg.preventTap || (preventTap ?? false);
+    // 拦截点击统一由 TOverlayConfig.preventTap 决定（不兼容收敛版）。
+    final finalPreventTap = cfg.preventTap;
     final showMask = cfg.showOverlay;
     final maskColor = showMask
         ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))

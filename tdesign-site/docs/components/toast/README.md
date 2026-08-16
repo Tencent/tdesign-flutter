@@ -380,7 +380,6 @@ TToast.showText(
 | direction | IconTextDirection | IconTextDirection.horizontal | - |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | backgroundColor | Color? | - | - |
@@ -404,7 +403,6 @@ TToast.showText(
 | direction | IconTextDirection | IconTextDirection.horizontal | - |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | backgroundColor | Color? | - | - |
@@ -426,7 +424,6 @@ TToast.showText(
 | context | BuildContext | - | - |
 | text | String? | - | - |
 | duration | Duration | const Duration(seconds: 99999999) | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | customWidget | Widget? | - | - |
@@ -447,7 +444,6 @@ TToast.showText(
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(seconds: 99999999) | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | backgroundColor | Color? | - | - |
@@ -468,7 +464,6 @@ TToast.showText(
 | direction | IconTextDirection | IconTextDirection.horizontal | - |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | backgroundColor | Color? | - | - |
@@ -492,7 +487,6 @@ TToast.showText(
 | duration | Duration | const Duration(milliseconds: 2000) | - |
 | maxLines | int? | - | - |
 | constraints | BoxConstraints? | - | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | customWidget | Widget? | - | - |
@@ -513,7 +507,6 @@ TToast.showText(
 | direction | IconTextDirection | IconTextDirection.horizontal | - |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | - |
-| preventTap | bool? | - | - |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等） |
 | placement | TToastPlacement | TToastPlacement.middle | 展示位置 |
 | backgroundColor | Color? | - | - |
