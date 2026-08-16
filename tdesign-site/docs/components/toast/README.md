@@ -291,9 +291,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          TToast.dismissAll();
-        },
+        onPressed: TToast.dismissAll,
       ),
     );
   }</pre>
