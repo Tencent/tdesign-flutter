@@ -5,9 +5,13 @@ Widget _buildFailToast(BuildContext context) {
         child: const Text('错误提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.danger,
+        colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showFail('错误文案', context: context);
+          TToast.showFail(
+            '错误文案',
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
         },
       ),
     );

@@ -166,7 +166,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showSuccess('成功文案', context: context);
+          TToast.showSuccess(
+            '成功文案',
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
         },
       ),
     );
@@ -186,9 +190,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         child: const Text('警告提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.danger,
+        colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showWarning('警告文案', context: context);
+          TToast.showWarning(
+            '警告文案',
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
         },
       ),
     );
@@ -208,9 +216,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         child: const Text('错误提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.danger,
+        colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showFail('错误文案', context: context);
+          TToast.showFail(
+            '错误文案',
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
         },
       ),
     );

@@ -7,7 +7,11 @@ Widget _buildSuccessToast(BuildContext context) {
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showSuccess('成功文案', context: context);
+          TToast.showSuccess(
+            '成功文案',
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
         },
       ),
     );
