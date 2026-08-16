@@ -1,7 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:meta/meta.dart';
 
-/// [TPullDownRefresh] 的受控控制器。
+/// `TPullDownRefresh` 的受控控制器。
 ///
 /// 对应官方（小程序 / mobile-vue）受控 `value` 语义，用 Flutter 惯用的
 /// 控制器模式表达：外部可通过 [refresh] / [loadMore] 触发，通过
@@ -11,7 +11,7 @@ class TPullDownRefreshController {
 
   TPullDownRefreshController();
 
-  /// 由 [TPullDownRefresh] 内部绑定。
+  /// 由 `TPullDownRefresh` 内部绑定。
   @internal
   void bind(EasyRefreshController controller) {
     _controller = controller;
@@ -38,12 +38,12 @@ class TPullDownRefreshController {
   /// 仅在外部接管刷新完成时才需要调用；若通过 `onRefresh` 回调返回
   /// Future 完成刷新，则无需手动调用。
   void finishRefresh() {
-    _controller?.finishRefresh(force: true);
+    _controller?.finishRefresh(true);
   }
 
   /// 结束当前触底加载任务。
   void finishLoadMore() {
-    _controller?.finishLoad(force: true);
+    _controller?.finishLoad(true);
   }
 
   /// 复位 Header / Footer 指示器状态。

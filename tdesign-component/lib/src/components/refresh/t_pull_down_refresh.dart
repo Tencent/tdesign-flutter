@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_loading.dart';
@@ -28,9 +30,6 @@ import 't_pull_down_refresh_texts.dart';
 /// )
 /// ```
 class TPullDownRefresh extends StatefulWidget {
-  /// Key
-  final Key? key;
-
   /// 必填：滚动内容（对应官方默认 slot）。
   final Widget child;
 
@@ -84,7 +83,7 @@ class TPullDownRefresh extends StatefulWidget {
 
   /// 构造 [TPullDownRefresh]。
   const TPullDownRefresh({
-    this.key,
+    super.key,
     required this.child,
     this.onRefresh,
     this.onLoadMore,
@@ -153,7 +152,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
         }
         widget.onTimeout?.call();
         _handleStateChanged(TPullDownRefreshState.timeout);
-        _easyController?.finishRefresh(force: true);
+        _easyController?.finishRefresh(true);
       });
     }
     final result = widget.onRefresh?.call();
@@ -251,8 +250,6 @@ class _TPullDownRefreshHeader extends Header {
     final showLoading = mode == IndicatorMode.processing;
     final showComplete = mode == IndicatorMode.processed ||
         mode == IndicatorMode.done;
-    final showText = !showLoading && !showComplete;
-
     String text;
     if (showLoading) {
       text = texts.refreshing;

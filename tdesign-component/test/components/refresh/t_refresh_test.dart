@@ -320,12 +320,11 @@ void main() {
     });
 
     testWidgets('enableLoadMore + onLoadMore 触底加载', (tester) async {
-      var loaded = false;
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
             onRefresh: () async {},
-            onLoadMore: () async => loaded = true,
+            onLoadMore: () async {},
             enableLoadMore: true,
           ),
         ),
