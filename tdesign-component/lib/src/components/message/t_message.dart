@@ -508,7 +508,7 @@ class _TMessageState extends State<TMessage>
                           height: 22,
                           child: _buildIcon(context),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 8),
                       ],
                       Expanded(child: _buildText(context)),
                       if (widget.link != null) ...[
@@ -539,7 +539,7 @@ class _TMessageState extends State<TMessage>
   double _calculateTextWidth() {
     var width = _effectiveWidth - 32;
     if (widget.showIcon) {
-      width -= 30;
+      width -= 28;
     }
     if (widget.link != null) {
       width -= 104;

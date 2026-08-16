@@ -1,0 +1,10 @@
+Widget _buildTextMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '纯文字的通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条纯文字的消息通知',
+        showIcon: false,
+      ),
+    );
+  }

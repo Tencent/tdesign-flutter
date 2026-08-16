@@ -495,4 +495,98 @@ void main() {
     expect(base.lerp(null, 0.5), same(base));
     expect(TMessageThemeData.lerpDouble(null, null, 0.5), isNull);
   });
+
+  group('对齐官方 @spacer 的图标文本间距', () {
+    testWidgets('带图标时图标与文本间距为 8px', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TMessage(content: '间距', duration: null)),
+      );
+      await tester.pump();
+      // 图标与文本之间的 SizedBox 宽度应对齐官方 @spacer = 8px。
+      final messageRow = find.ancestor(
+        of: find.text('间距'),
+        matching: find.byType(Row),
+      ).first;
+      final gap = tester.widget<SizedBox>(
+        find.descendant(
+          of: messageRow,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox && widget.width == 8 && widget.height == null,
+          ),
+        ),
+      );
+      expect(gap.width, 8);
+    });
+
+    testWidgets('纯文字（无图标）不渲染图标且仅保留文本', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TMessage(content: '纯文字', showIcon: false, duration: null)),
+      );
+      await tester.pump();
+      expect(find.text('纯文字'), findsOneWidget);
+      expect(find.byIcon(TIcons.error_circle_filled), findsNothing);
+    });
+  });
+
+  group('多消息叠加与句柄关闭', () {
+    testWidgets('多个句柄各自 dismiss 后可移除全部消息', (tester) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handles = <TMessageHandle>[
+        TMessage.show(
+          context: key.currentContext!,
+          content: '消息一',
+          duration: null,
+        ),
+        TMessage.show(
+          context: key.currentContext!,
+          content: '消息二',
+          duration: null,
+        ),
+      ];
+      await tester.pump();
+      expect(find.text('消息一'), findsOneWidget);
+      expect(find.text('消息二'), findsOneWidget);
+      for (final handle in handles) {
+        handle.dismiss();
+      }
+      await tester.pump();
+      expect(handles.every((handle) => !handle.isShowing), isTrue);
+      expect(find.text('消息一'), findsNothing);
+      expect(find.text('消息二'), findsNothing);
+    });
+  });
+
+  group('TMessage 声明式 visible 切换', () {
+    testWidgets('visible 从 false 切到 true 后内容出现', (tester) async {
+      var visible = false;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return TMessage(
+                content: '组件调用',
+                visible: visible,
+                duration: null,
+              );
+            },
+          ),
+        ),
+      );
+      expect(find.text('组件调用'), findsNothing);
+      setState(() => visible = true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('组件调用'), findsOneWidget);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+  });
 }

@@ -1,0 +1,10 @@
+Widget _buildWarningMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '警示通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条需要用户关注到的警示通知',
+        variant: TMessageVariant.warning,
+      ),
+    );
+  }

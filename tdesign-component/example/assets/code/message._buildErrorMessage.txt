@@ -1,0 +1,10 @@
+Widget _buildErrorMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '错误通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条错误提示通知',
+        variant: TMessageVariant.error,
+      ),
+    );
+  }

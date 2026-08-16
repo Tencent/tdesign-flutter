@@ -1,0 +1,10 @@
+Widget _buildSuccessMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '成功通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条成功的提示消息',
+        variant: TMessageVariant.success,
+      ),
+    );
+  }

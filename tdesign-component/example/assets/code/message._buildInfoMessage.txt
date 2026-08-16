@@ -1,0 +1,9 @@
+Widget _buildInfoMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '普通通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条普通通知信息',
+      ),
+    );
+  }

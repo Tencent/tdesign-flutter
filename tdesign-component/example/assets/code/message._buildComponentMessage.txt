@@ -1,0 +1,3 @@
+Widget _buildComponentMessage(BuildContext context) {
+    return const _DeclarativeMessageDemo();
+  }
