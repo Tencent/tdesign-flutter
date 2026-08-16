@@ -240,9 +240,7 @@ class TToastPage extends StatelessWidget {
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: () {
-          TToast.dismissAll();
-        },
+        onPressed: TToast.dismissAll,
       ),
     );
   }
