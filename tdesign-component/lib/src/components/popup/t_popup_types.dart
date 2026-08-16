@@ -68,7 +68,7 @@ bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
 ///
 /// 统一收敛 [TPopupOptions] 上散落的蒙层参数（`showOverlay` / `modal` /
 /// `closeOnOverlayClick` / `overlayColor` / `overlayOpacity` / `onOverlayClick`），
-/// 与 Toast 的 [TOverlayConfig] 命名风格一脉相承，作为蒙层行为的单一真源。
+/// 与 Toast 的 `TOverlayConfig` 命名风格一脉相承，作为蒙层行为的单一真源。
 ///
 /// [showOverlay] 与 [preventTap] 解耦，可独立配置：
 /// * `showOverlay=true, preventTap=true`（默认）：标准模态弹层（显示蒙层 + 拦截背景）；
