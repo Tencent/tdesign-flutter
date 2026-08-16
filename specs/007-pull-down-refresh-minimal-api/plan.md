@@ -1,0 +1,82 @@
+# 实施方案
+
+## 技术方案
+
+核心思路：新增**顶层组件 `TPullDownRefresh`**，在内部封装 `EasyRefresh`，对外只暴露最小、Flutter 惯用的 API；将原先裸透传 easy_refresh 参数的 `TRefreshHeader` 收敛为内部私有实现。状态由 easy_refresh 的 `Header`（`IndicatorState.mode`）驱动，通过 `TPullDownRefreshController` 与 `onStateChanged` 对外暴露。
+
+### 1. 目录与文件结构
+
+```
+tdesign-component/lib/src/components/refresh/
+├── t_pull_down_refresh.dart          # 新增：顶层组件 TPullDownRefresh + 状态枚举
+├── t_pull_down_refresh_controller.dart  # 新增：TPullDownRefreshController
+├── t_pull_down_refresh_texts.dart    # 新增：TPullDownRefreshTexts
+├── t_refresh_header.dart             # 重构：收敛为内部私有 Header，移除裸透传
+└── t_refresh_theme_data.dart         # 保留（视觉默认值）
+```
+
+### 2. TPullDownRefresh 内部封装 EasyRefresh
+
+```dart
+class _TPullDownRefreshState extends State<TPullDownRefresh> {
+  EasyRefreshController _easyController = EasyRefreshController();
+
+  Widget build(BuildContext context) {
+    final header = _TRefreshHeader(
+      extent: widget.loadingBarHeight,
+      triggerDistance: widget.loadingBarHeight,
+      maxOverOffset: widget.maxBarHeight,
+      texts: effectiveTexts,
+      loadingTheme: widget.loadingTheme,
+      backgroundColor: widget.backgroundColor,
+      onStateChanged: _handleStateChanged,
+    );
+    return EasyRefresh(
+      controller: _easyController,
+      header: widget.onRefresh == null || widget.disabled ? null : header,
+      onRefresh: widget.onRefresh == null || widget.disabled ? null : _handleRefresh,
+      onLoad: (widget.onLoadMore == null || !widget.enableLoadMore) ? null : _handleLoadMore,
+      child: widget.child,
+    );
+  }
+}
+```
+
+### 3. 状态映射与超时
+
+- 在 Header 的 `build(context, state)` 中，把 `IndicatorMode` 映射为 `TPullDownRefreshState`，通过 `onStateChanged` 上抛。
+- 超时：`onRefresh` 被触发时启动 `Timer(refreshTimeout)`，超时仍未完成则调用 `onTimeout` 并调用 `_easyController.finishRefresh()`；`onRefresh` 正常返回时 `cancel` 计时并结束。
+
+### 4. 收敛 TRefreshHeader
+
+- 将 `TRefreshHeader` 的约 40 个 easy_refresh 透传参数收敛为 `TPullDownRefresh` 内部私有字段，仅保留：`extent`、`triggerDistance`、`maxOverOffset`、`texts`、`loadingTheme`、`backgroundColor`、`onStateChanged`。
+- 为避免 breaking 过大，保留 `TRefreshHeader` 作为公共类存在但**推荐入口迁移到 `TPullDownRefresh`**；站点文档与示例统一改用 `TPullDownRefresh`。
+
+## 影响范围
+
+| 范围 | 文件或模块 | 影响 |
+| --- | --- | --- |
+| 组件 | t_pull_down_refresh.dart / controller / texts / t_refresh_header.dart | 新增组件 + 收敛 header |
+| 测试 | test/components/refresh/t_refresh_test.dart | 对齐新组件与默认值、状态、超时、触底、受控 |
+| 示例 | example/lib/page/t_refresh_page.dart | 改用 TPullDownRefresh + 补 demo |
+| l10n | example/lib/l10n/app_en.arb | 修正英文缺空格 |
+| 站点文档 | tdesign-site/docs/components/pull-down-refresh/README.md | 死链与示例不一致修正 |
+
+## API 变化
+
+- 新增公开类：`TPullDownRefresh`、`TPullDownRefreshController`、`TPullDownRefreshTexts`、`TPullDownRefreshState`（非 breaking）。
+- `TRefreshHeader` 由裸透传收敛为内部 Header（breaking，推荐迁移 `TPullDownRefresh`）。
+- 尺寸默认值 48 → 50（潜在视觉 breaking）。
+
+## 风险与取舍
+
+- 封装 easy_refresh 会隐藏部分高级能力（secondary 等），符合"最小 API"目标；确有需求可用 `childBuilder` 等再扩展。
+- 超时语义：默认不启用 `refreshTimeout`，避免改变现有行为；显式传入才启用。
+- `flutter@3.32.0` 与 `latest`：均为纯 Dart + easy_refresh 交互，不引入新依赖，双版本兼容。
+
+## 验证策略
+
+- Widget 测试：默认渲染 / onRefresh / disabled / texts / refreshTimeout / onLoadMore / controller / onStateChanged / loadingTheme。
+- 静态检查：`flutter analyze lib/src/components/refresh test/components/refresh` 0 error/warning。
+- 示例：`flutter analyze example/lib/page/t_refresh_page.dart`。
+- 完整性：`git diff --check`。

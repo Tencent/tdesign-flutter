@@ -4,7 +4,6 @@
  * 
  */
 
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -35,14 +34,19 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
 
   @ExampleCode(group: 'refresh')
   Widget _buildRefresh(BuildContext context) {
-    return EasyRefresh(
-      // 下拉样式
-      header: TRefreshHeader(),
+    return TPullDownRefresh(
+      // 下拉刷新回调
+      onRefresh: () {
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            count++;
+          });
+        });
+      },
       child: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          // spacing: 16,
           children: [
             Container(
               alignment: Alignment.center,
@@ -73,14 +77,6 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           ],
         ),
       )),
-      // 下拉刷新回调
-      onRefresh: () {
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            count++;
-          });
-        });
-      },
     );
   }
 }

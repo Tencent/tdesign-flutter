@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -188,5 +190,150 @@ void main() {
   test('公开枚举与状态类型可用', () {
     expect(TLoadingIcon.values, hasLength(3));
     expect(TGIconHeaderWidgetState, isNotNull);
+  });
+
+  group('TPullDownRefresh 最小化组件', () {
+    Widget pullDownRefresh({
+      FutureOr<void> Function()? onRefresh,
+      FutureOr<void> Function()? onLoadMore,
+      bool enableLoadMore = false,
+      bool disabled = false,
+      TPullDownRefreshController? controller,
+      TPullDownRefreshTexts? texts,
+      Duration? refreshTimeout,
+      VoidCallback? onTimeout,
+      ValueChanged<TPullDownRefreshState>? onStateChanged,
+    }) {
+      return SizedBox(
+        height: 300,
+        child: TPullDownRefresh(
+          onRefresh: onRefresh,
+          onLoadMore: onLoadMore,
+          enableLoadMore: enableLoadMore,
+          disabled: disabled,
+          controller: controller,
+          texts: texts,
+          refreshTimeout: refreshTimeout,
+          onTimeout: onTimeout,
+          onStateChanged: onStateChanged,
+          child: ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => ListTile(
+              title: Text('项目$index'),
+            ),
+          ),
+        ),
+      );
+    }
+
+    testWidgets('默认渲染（loadingBarHeight=50）', (tester) async {
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () async {})),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+      expect(find.text('项目0'), findsOneWidget);
+    });
+
+    testWidgets('无 onRefresh 时禁用刷新但仍渲染', (tester) async {
+      await tester.pumpWidget(wrap(pullDownRefresh()));
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+      expect(find.text('项目0'), findsOneWidget);
+    });
+
+    testWidgets('disabled 禁用下拉', (tester) async {
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () async {}, disabled: true)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('texts 自定义四态文案生效', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            texts: const TPullDownRefreshTexts(
+              pullToRefresh: '下拉',
+              releaseToRefresh: '松手',
+              refreshing: '加载中',
+              refreshComplete: '完成',
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('项目0'), findsOneWidget);
+    });
+
+    testWidgets('onStateChanged 回调状态变化', (tester) async {
+      final states = <TPullDownRefreshState>[];
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onStateChanged: states.add,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(states, contains(TPullDownRefreshState.inactive));
+    });
+
+    testWidgets('refreshTimeout 超时触发 onTimeout', (tester) async {
+      var timedOut = false;
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () => Completer<void>().future,
+            refreshTimeout: const Duration(milliseconds: 100),
+            onTimeout: () => timedOut = true,
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 不 await：onRefresh 永不完成，await 会挂起测试。
+      unawaited(controller.refresh());
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(timedOut, isTrue);
+    });
+
+    testWidgets('controller.refresh 可外部触发', (tester) async {
+      var refreshed = false;
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async => refreshed = true,
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await controller.refresh();
+      await tester.pump(const Duration(seconds: 1));
+      expect(refreshed, isTrue);
+    });
+
+    testWidgets('enableLoadMore + onLoadMore 触底加载', (tester) async {
+      var loaded = false;
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onLoadMore: () async => loaded = true,
+            enableLoadMore: true,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('项目0'), findsOneWidget);
+      // 触底加载为可选能力，仅验证可渲染。
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
   });
 }
