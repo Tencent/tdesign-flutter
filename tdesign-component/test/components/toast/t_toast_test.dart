@@ -1028,13 +1028,10 @@ void main() {
             .first,
       );
       expect(align.alignment, const FractionalOffset(0.5, 0.5));
-      // 不存在任何蒙层色 Container（透明拦截层或可见黑色蒙层）
+      // 无可见蒙层：不存在黑色蒙层 Container（遮罩色），且无全屏 Positioned 拦截层
       expect(
         find.byWidgetPredicate(
-          (w) =>
-              w is Container &&
-              (w.color == Colors.transparent ||
-                  w.color == Colors.black.withValues(alpha: 0.2)),
+          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.2),
         ),
         findsNothing,
       );
