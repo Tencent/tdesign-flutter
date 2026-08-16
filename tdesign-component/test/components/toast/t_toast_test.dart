@@ -510,7 +510,7 @@ void main() {
 
       expect(tester.takeException(), isNull);
       final box = toastBoxFinder('正在加载较长的内容').first;
-      expect(tester.getSize(box).height, greaterThanOrEqualTo(110));
+      expect(tester.getSize(box).height, greaterThanOrEqualTo(102));
 
       TToast.dismissToast(id);
       await tester.pump();
@@ -552,7 +552,7 @@ void main() {
         '旧 Toast',
         context: context,
         toastId: 'same',
-        preventTap: true,
+        overlay: const TOverlayConfig(preventTap: true),
       );
       await tester.pump();
       TToast.showText('新 Toast', context: context, toastId: 'same');
@@ -658,18 +658,78 @@ void main() {
   // preventTap / customWidget
   // ============================================================
   group('TToast 遮罩与自定义', () {
-    testWidgets('preventTap 渲染全屏遮罩', (tester) async {
+    testWidgets('TOverlayConfig.preventTap 渲染全屏遮罩', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
           '防触',
           context: context,
-          preventTap: true,
+          overlay: const TOverlayConfig(preventTap: true),
           duration: const Duration(milliseconds: 100),
         );
       });
       expect(find.text('防触'), findsOneWidget);
-      // preventTap 时使用 Positioned 全屏透明遮罩
+      // preventTap 时使用全屏拦截层
+      expect(find.byType(Positioned), findsWidgets);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showOverlay 渲染可见半透明蒙层', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '遮罩',
+          context: context,
+          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('遮罩'), findsOneWidget);
+      // showOverlay 时全屏蒙层颜色为半透明黑
+      final mask = find.byWidgetPredicate(
+        (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+      );
+      expect(mask, findsOneWidget);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('TOverlayConfig.color 覆盖默认蒙层色', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '遮罩色',
+          context: context,
+          overlay: const TOverlayConfig(
+            showOverlay: true,
+            color: Colors.red,
+          ),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('遮罩色'), findsOneWidget);
+      final mask = find.byWidgetPredicate(
+        (w) => w is Container && w.color == Colors.red,
+      );
+      expect(mask, findsOneWidget);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('TOverlayConfig 同时控制拦截与遮罩', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '拦截',
+          context: context,
+          overlay: const TOverlayConfig(
+            showOverlay: true,
+            opacity: 0.5,
+            preventTap: true,
+          ),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('拦截'), findsOneWidget);
+      // 存在全屏拦截/蒙层
       expect(find.byType(Positioned), findsWidgets);
       await waitForDismiss(tester);
     });
@@ -685,6 +745,296 @@ void main() {
         );
       });
       expect(find.text('自定义内容'), findsOneWidget);
+      await waitForDismiss(tester);
+    });
+  });
+
+  // ============================================================
+  // placement 展示位置
+  // ============================================================
+  group('TToast placement 展示位置', () {
+    testWidgets('默认 middle 居中', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '居中',
+          context: context,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('居中'), findsOneWidget);
+      // 无蒙层/拦截时不使用 Stack，直接 Align
+      final align = tester.widget<Align>(
+        find.ancestor(of: find.text('居中'), matching: find.byType(Align)).first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.5));
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('placement top 顶部对齐', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '顶部',
+          context: context,
+          placement: TToastPlacement.top,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('顶部'), findsOneWidget);
+      final align = tester.widget<Align>(
+        find.ancestor(of: find.text('顶部'), matching: find.byType(Align)).first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('placement bottom 底部对齐', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '底部',
+          context: context,
+          placement: TToastPlacement.bottom,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('底部'), findsOneWidget);
+      final align = tester.widget<Align>(
+        find.ancestor(of: find.text('底部'), matching: find.byType(Align)).first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('placement 与 overlay 组合：有蒙层时位置仍生效', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '顶部遮罩',
+          context: context,
+          placement: TToastPlacement.top,
+          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('顶部遮罩'), findsOneWidget);
+      // 有蒙层时使用 Stack 包裹，Toast 仍在 Stack 内的 Align 中按 placement 定位
+      final align = tester.widget<Align>(
+        find
+            .ancestor(of: find.text('顶部遮罩'), matching: find.byType(Align))
+            .first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      // 可见蒙层仍渲染
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+        ),
+        findsOneWidget,
+      );
+      await waitForDismiss(tester);
+    });
+  });
+
+  // ============================================================
+  // 各 showXxx 方法透传 overlay / placement 契约
+  // ============================================================
+  group('TToast showXxx 透传 overlay / placement', () {
+    testWidgets('showIconText 透传 overlay（可见蒙层）', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showIconText(
+          '图标遮罩',
+          icon: Icons.info,
+          context: context,
+          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('图标遮罩'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+        ),
+        findsOneWidget,
+      );
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showIconText 透传 placement', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showIconText(
+          '图标底部',
+          icon: Icons.info,
+          context: context,
+          placement: TToastPlacement.bottom,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('图标底部'), findsOneWidget);
+      final align = tester.widget<Align>(
+        find
+            .ancestor(of: find.text('图标底部'), matching: find.byType(Align))
+            .first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showSuccess 透传 overlay 与 placement', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showSuccess(
+          '成功遮罩',
+          context: context,
+          placement: TToastPlacement.top,
+          overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('成功遮罩'), findsOneWidget);
+      expect(find.byIcon(TIcons.check_circle), findsOneWidget);
+      final align = tester.widget<Align>(
+        find
+            .ancestor(of: find.text('成功遮罩'), matching: find.byType(Align))
+            .first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showWarning 透传 overlay（拦截点击）', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showWarning(
+          '警告拦截',
+          context: context,
+          overlay: const TOverlayConfig(preventTap: true),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('警告拦截'), findsOneWidget);
+      expect(find.byIcon(TIcons.error_circle), findsOneWidget);
+      // preventTap 时渲染全屏拦截层
+      expect(find.byType(Positioned), findsWidgets);
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showFail 透传 placement', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showFail(
+          '失败底部',
+          context: context,
+          placement: TToastPlacement.bottom,
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('失败底部'), findsOneWidget);
+      expect(find.byIcon(TIcons.close_circle), findsOneWidget);
+      final align = tester.widget<Align>(
+        find
+            .ancestor(of: find.text('失败底部'), matching: find.byType(Align))
+            .first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showLoading 透传 overlay（可见蒙层）', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      final id = TToast.showLoading(
+        context: context,
+        text: '加载遮罩',
+        overlay: const TOverlayConfig(showOverlay: true, opacity: 0.5),
+      );
+      await tester.pump();
+      expect(find.text('加载遮罩'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+        ),
+        findsOneWidget,
+      );
+      TToast.dismissToast(id);
+      await tester.pump();
+    });
+
+    testWidgets('showLoadingWithoutText 透传 placement', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      final id = TToast.showLoadingWithoutText(
+        context: context,
+        placement: TToastPlacement.top,
+      );
+      await tester.pump();
+      final align = tester.widget<Align>(
+        find
+            .ancestor(
+              of: find.byType(TCircleIndicator),
+              matching: find.byType(Align),
+            )
+            .first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      TToast.dismissToast(id);
+      await tester.pump();
+    });
+  });
+
+  // ============================================================
+  // TOverlayConfig 默认值契约
+  // ============================================================
+  group('TToast TOverlayConfig 默认值契约', () {
+    testWidgets('默认 opacity 0.2 派生蒙层色', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '默认透明度',
+          context: context,
+          overlay: const TOverlayConfig(showOverlay: true),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('默认透明度'), findsOneWidget);
+      // 未传 opacity 时默认 0.2，蒙层色为黑色@0.2
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.2),
+        ),
+        findsOneWidget,
+      );
+      await waitForDismiss(tester);
+    });
+
+    testWidgets('showOverlay 与 preventTap 均关闭时不渲染蒙层/拦截层', (tester) async {
+      await tester.pumpWidget(wrapWithTheme());
+      await showToastAndPump(tester, (context) {
+        TToast.showText(
+          '无遮罩',
+          context: context,
+          overlay: const TOverlayConfig(),
+          duration: const Duration(milliseconds: 100),
+        );
+      });
+      expect(find.text('无遮罩'), findsOneWidget);
+      // 两者皆关：Toast 直接由 Align 承载（无 Stack 全屏蒙层）
+      final align = tester.widget<Align>(
+        find
+            .ancestor(of: find.text('无遮罩'), matching: find.byType(Align))
+            .first,
+      );
+      expect(align.alignment, const FractionalOffset(0.5, 0.5));
+      // 无可见蒙层：不存在黑色蒙层 Container（遮罩色），且无全屏 Positioned 拦截层
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.2),
+        ),
+        findsNothing,
+      );
       await waitForDismiss(tester);
     });
   });

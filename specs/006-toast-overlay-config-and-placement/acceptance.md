@@ -1,0 +1,27 @@
+# Toast：可见遮罩 + 展示位置 - 验收记录
+
+## 命令（flutter 3.32.0）
+
+- `flutter analyze lib/src/components/toast test/components/toast` → **0 error / 0 warning**
+- `flutter analyze example/lib/page/t_toast_page.dart` → **0 error / 0 warning**
+- `flutter test test/components/toast/t_toast_test.dart` → **47/47 通过**
+- `dart run tool/generate_example_code.dart --check` → 示例片段全部 up-to-date
+- `git diff --check` → 通过
+
+## 人工验收
+
+- [x] 示例页展示遮罩 demo：点击后出现半透明黑色蒙层，Toast 居中，背景不可点击。
+- [x] 示例页展示位置 demo：top / middle / bottom 三种 Toast 分别出现在顶部 / 居中 / 底部。
+- [x] 多行文字、竖向图标、加载无文字、加载状态自定义、手动关闭等 demo 与小程序表现一致。
+- [x] 纯文字 / 带图标 / 加载类 Toast 默认最大宽度对齐小程序与 mobile-vue（`max-width: 185px`，Flutter `maxWidth` 由 191 调整为 185），并统一 `_TTextToast` / `_TIconTextToast` / `_TToastLoading` 的取值口径（移除 `191.scale` 缩放写法）。
+- [x] 纯文字 / 带图标横向 Toast 默认 padding 对齐小程序与 mobile-vue（纯文字水平 22 / 垂直 14；带图标横向水平 22 / 垂直 14）。
+- [x] 加载带文字 Toast 默认 min 尺寸对齐小程序与 mobile-vue（102×102），默认 padding 为水平 24 / 垂直 0。
+
+## 未覆盖项 / 后续项
+
+- `close` / `destroy` 回调事件（后续迭代）。
+- `TOverlayConfig` 的 zIndex / blur 高级扩展（后续迭代）。
+
+## 结论
+
+- [x] 已满足 spec.md 验收标准
