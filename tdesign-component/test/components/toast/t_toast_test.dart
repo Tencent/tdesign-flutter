@@ -510,7 +510,7 @@ void main() {
 
       expect(tester.takeException(), isNull);
       final box = toastBoxFinder('正在加载较长的内容').first;
-      expect(tester.getSize(box).height, greaterThanOrEqualTo(110));
+      expect(tester.getSize(box).height, greaterThanOrEqualTo(102));
 
       TToast.dismissToast(id);
       await tester.pump();

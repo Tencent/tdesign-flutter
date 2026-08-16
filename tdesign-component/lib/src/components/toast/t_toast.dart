@@ -640,7 +640,7 @@ class _TIconTextToast extends StatelessWidget {
       ),
       child: Container(
         padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 14, 24, 14),
+            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
@@ -737,15 +737,16 @@ class _TToastLoading extends StatelessWidget {
         (Theme.of(context).extension<TToastThemeData>() ??
                 const TToastThemeData())
             .merge(config);
-    final maxWidth = math.max(110.0, toastTheme.maxWidth ?? 185.0);
+    final maxWidth = math.max(102.0, toastTheme.maxWidth ?? 185.0);
     return ConstrainedBox(
       constraints: BoxConstraints(
-        minWidth: 110,
-        minHeight: 110,
+        minWidth: 102,
+        minHeight: 102,
         maxWidth: maxWidth,
       ),
       child: Container(
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        padding:
+            toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
@@ -840,7 +841,7 @@ class _TTextToast extends StatelessWidget {
           BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
         padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 16, 24, 16),
+            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(

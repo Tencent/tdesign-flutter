@@ -18,6 +18,8 @@
 - [x] 示例页对齐小程序 demo（含加载状态自定义）
 - [x] 站点 README 文档变更随本 PR 提交（同步新 API 与 demo 结构、修正过时引用），但**不写入 PR 更新日志**（文档调整属用户无需感知的变更）
 - [x] 样式对齐：纯文字 / 带图标 / 加载类 Toast 默认 `maxWidth` 由 191 调整为 185（对齐小程序 `max-width: 370rpx` 与 mobile-vue `185px`），并统一 `_TTextToast` / `_TIconTextToast` / `_TToastLoading` 取值口径（移除 `191.scale`）
+- [x] 样式对齐：纯文字 / 带图标横向 Toast 默认 padding 对齐小程序 / mobile-vue（纯文字 `LTRB(24,16,24,16)`→`LTRB(22,14,22,14)`；带图标横向 `LTRB(24,14,24,14)`→`LTRB(22,14,22,14)`，仅水平 24→22）
+- [x] 样式对齐：加载带文字 Toast（`_TToastLoading`）默认 min 尺寸 110×110 → 102×102（对齐小程序 / mobile-vue），默认 padding 由 `EdgeInsets.all(24)` 改为水平 24 / 垂直 0（`EdgeInsets.symmetric(horizontal: 24)`）
 
 ## DONE
 
