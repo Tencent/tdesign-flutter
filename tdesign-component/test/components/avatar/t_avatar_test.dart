@@ -78,7 +78,12 @@ void main() {
       final icon = tester.widget<Icon>(find.byType(Icon));
       expect(icon.size, 30);
       expect(icon.color, Colors.white);
-      final coloredBox = tester.widget<ColoredBox>(find.byType(ColoredBox));
+      // flutter latest 下 Material/Scaffold 内部可能渲染额外的 ColoredBox，
+      // 需将查找范围限定到 TAvatar 自身的 ClipRRect 子树，保证跨版本稳定。
+      final coloredBox = tester.widget<ColoredBox>(find.descendant(
+        of: find.byType(ClipRRect),
+        matching: find.byType(ColoredBox),
+      ));
       expect(coloredBox.color, Colors.red);
     });
 

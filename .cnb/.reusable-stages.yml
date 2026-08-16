@@ -30,10 +30,10 @@
 #   2. 现有与本 PR 无关的历史遗留失败用例（仅在 flutter latest 下暴露的存量缺陷）：
 #      - test/acceptance/theme_acceptance_test.dart（P1 actionSpacing 用例）
 #      - test/components/swipe_cell/t_swipe_cell_test.dart（Flexible 布局 / lerp 颜色断言）
-#      - test/components/avatar/t_avatar_test.dart（Theme 可控制尺寸、图标和颜色）
 #      - test/components/dropdown_menu/t_dropdown_menu_test.dart（auto placement 同一次拖拽内切换）
-#      - test/components/image/t_image_test.dart（placeholder 用 TDesign token）
 #      这些属存量缺陷，待后续修复后再纳入覆盖率统计。
+#      avatar / image 两个用例已改为跨版本稳健的断言（将 find.byType(ColoredBox)
+#      限定到组件自身作用域），故重新纳入覆盖率统计以抬高门槛余量。
 .test-coverage:
   name: flutter test coverage
   script: |
@@ -43,9 +43,7 @@
           ! -name '*_golden_test.dart' \
           ! -path 'test/acceptance/theme_acceptance_test.dart' \
           ! -path 'test/components/swipe_cell/t_swipe_cell_test.dart' \
-          ! -path 'test/components/avatar/t_avatar_test.dart' \
-          ! -path 'test/components/dropdown_menu/t_dropdown_menu_test.dart' \
-          ! -path 'test/components/image/t_image_test.dart') \
+          ! -path 'test/components/dropdown_menu/t_dropdown_menu_test.dart') \
       && dart run tool/check_coverage.dart 95 coverage/lcov.info
 
 # APK 构建

@@ -141,8 +141,16 @@ void main() {
       home: Scaffold(body: loading),
     ));
 
-    expect(tester.widget<ColoredBox>(find.byType(ColoredBox)).color,
-        token.bgColorComponent);
+    // flutter latest 下 Material/Scaffold 内部可能渲染额外的 ColoredBox，
+    // 按占位图特有的 bgColorComponent 颜色精确定位，保证跨版本稳定。
+    expect(
+      tester
+          .widget<ColoredBox>(find.byWidgetPredicate(
+            (w) => w is ColoredBox && w.color == token.bgColorComponent,
+          ))
+          .color,
+      token.bgColorComponent,
+    );
   });
 
   testWidgets('completed loading returns decoded child', (tester) async {
