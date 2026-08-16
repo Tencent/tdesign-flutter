@@ -1,0 +1,30 @@
+Widget _buildLoadingTexts(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        loadingBarHeight: 70,
+        maxBarHeight: 100,
+        texts: const TPullDownRefreshTexts(
+          pullToRefresh: '下拉即可刷新...',
+          releaseToRefresh: '释放即可刷新...',
+          refreshing: '加载中...',
+          refreshComplete: '刷新成功',
+        ),
+        onRefresh: () {
+          return Future<void>.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              loadingTextsCount++;
+            });
+          });
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '自定义提示语刷新次数：${loadingTextsCount}'),
+          ],
+        ),
+      ),
+    );
+  }

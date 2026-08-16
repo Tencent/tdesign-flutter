@@ -203,6 +203,7 @@ void main() {
       Duration? refreshTimeout,
       VoidCallback? onTimeout,
       ValueChanged<TPullDownRefreshState>? onStateChanged,
+      TLoadingThemeData? loadingTheme,
     }) {
       return SizedBox(
         height: 300,
@@ -216,6 +217,7 @@ void main() {
           refreshTimeout: refreshTimeout,
           onTimeout: onTimeout,
           onStateChanged: onStateChanged,
+          loadingTheme: loadingTheme,
           child: ListView.builder(
             itemCount: 5,
             itemBuilder: (context, index) => ListTile(
@@ -334,6 +336,101 @@ void main() {
       expect(find.text('项目0'), findsOneWidget);
       // 触底加载为可选能力，仅验证可渲染。
       expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('loadMore / finishLoadMore / reset 可调用', (tester) async {
+      var loaded = false;
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onLoadMore: () async => loaded = true,
+            enableLoadMore: true,
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      unawaited(controller.loadMore());
+      await tester.pump(const Duration(seconds: 1));
+      controller.finishLoadMore();
+      controller.reset();
+      controller.dispose();
+      expect(loaded, isTrue);
+    });
+
+    testWidgets('controller 切换时重新绑定', (tester) async {
+      final c1 = TPullDownRefreshController();
+      final c2 = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () async {}, controller: c1)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () async {}, controller: c2)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      c1.dispose();
+      c2.dispose();
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+  });
+
+  group('TPullDownRefresh 交互状态', () {
+    testWidgets('下拉手势触发 dragging 与 refreshing 状态', (tester) async {
+      final states = <TPullDownRefreshState>[];
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onStateChanged: states.add,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 80));
+      await tester.pump(const Duration(milliseconds: 200));
+      await gesture.up();
+      await tester.pump(const Duration(seconds: 1));
+      expect(states, contains(TPullDownRefreshState.dragging));
+      expect(states, contains(TPullDownRefreshState.refreshing));
+    });
+
+    testWidgets('loadingTheme 自定义渲染', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            loadingTheme: const TLoadingThemeData(
+              iconColor: Colors.red,
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('同步 onRefresh 返回值可处理', (tester) async {
+      var refreshed = false;
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () {
+              refreshed = true;
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 80));
+      await tester.pump(const Duration(milliseconds: 200));
+      await gesture.up();
+      await tester.pump(const Duration(seconds: 1));
+      expect(refreshed, isTrue);
     });
   });
 }

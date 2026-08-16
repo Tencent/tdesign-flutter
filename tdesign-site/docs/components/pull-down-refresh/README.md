@@ -19,63 +19,112 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 [t_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_refresh_page.dart)
 
+### 顶部下拉刷新
 
-      
+基础用法：下拉列表触发刷新，刷新完成后展示完成态并复位。
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildRefresh(BuildContext context) {
-    return TPullDownRefresh(
-      // 下拉刷新回调
-      onRefresh: () {
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            count++;
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        // 下拉刷新回调
+        onRefresh: () {
+          return Future<void>.delayed(const Duration(seconds: 2), () {
+            setState(() {
+              count++;
+            });
           });
-        });
-      },
-      child: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: context.tTheme.bgColorContainer,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(context.tTheme.radiusLarge))),
-              child: TText(
-                PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.textColorPlaceholder,
-              ),
-            ),
+            _demoHint(context, '拖拽该区域演示 顶部下拉刷新'),
             const SizedBox(height: 16),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: context.tTheme.bgColorContainer,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(context.tTheme.radiusLarge))),
-              child: TText(
-                '下拉刷新次数：${count}',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.textColorPlaceholder,
-              ),
-            ),
-            const SizedBox(height: 500),
+            _demoHint(context, '下拉刷新次数：${count}'),
           ],
         ),
-      )),
+      ),
     );
   }</pre>
 
 </td-code-block>
 
+### 自定义提示语
 
+通过 `texts` 覆盖四态提示语（对应官方 `loadingTexts`）。
 
-## API
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildLoadingTexts(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        loadingBarHeight: 70,
+        maxBarHeight: 100,
+        texts: const TPullDownRefreshTexts(
+          pullToRefresh: '下拉即可刷新...',
+          releaseToRefresh: '释放即可刷新...',
+          refreshing: '加载中...',
+          refreshComplete: '刷新成功',
+        ),
+        onRefresh: () {
+          return Future<void>.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              loadingTextsCount++;
+            });
+          });
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '自定义提示语刷新次数：${loadingTextsCount}'),
+          ],
+        ),
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+
+### 刷新超时
+
+通过 `refreshTimeout` 与 `onTimeout` 在刷新超时时给出提示并自动结束。
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildTimeout(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        refreshTimeout: const Duration(seconds: 1),
+        onTimeout: () {
+          TToast.showText('已超时', context: context);
+        },
+        onRefresh: () {
+          // 模拟长时间未完成的刷新，等待超时回调。
+          return Completer<void>().future;
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '超时刷新次数：${timeoutCount}'),
+          ],
+        ),
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+
 ### TPullDownRefresh
 #### 简介
 以最小、Flutter 惯用的 API 封装下拉刷新，对齐官方（小程序 / mobile-vue）PullDownRefresh 行为：下拉 → 松手 → 刷新 → 完成四态，支持触底加载、禁用、超时、四态文案自定义与受控刷新。
