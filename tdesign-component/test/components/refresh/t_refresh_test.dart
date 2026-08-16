@@ -314,7 +314,8 @@ void main() {
         ),
       );
       await tester.pump(const Duration(seconds: 1));
-      await controller.refresh();
+      // 不 await：await 触发动画可能在测试中挂起，改用 pump 推进。
+      unawaited(controller.refresh());
       await tester.pump(const Duration(seconds: 1));
       expect(refreshed, isTrue);
     });
