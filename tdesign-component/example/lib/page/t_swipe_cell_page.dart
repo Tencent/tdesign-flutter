@@ -42,14 +42,27 @@ class TSwipeCellPage extends StatelessWidget {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
     final list = [
-      {'id': '1', 'title': '项目进度', 'note': '待处理', 'description': '今天完成设计评审'},
+      {
+        'id': '1',
+        'title': '项目进度',
+        'note': '待处理',
+        'description': '今天完成设计评审',
+        'image': 'assets/img/t_avatar_1.png',
+      },
       {
         'id': '2',
         'title': '迭代任务',
         'note': '进行中',
-        'description': '实现 SwipeCell 的组件重构'
+        'description': '实现 SwipeCell 的组件重构',
+        'image': 'assets/img/t_avatar_2.png',
       },
-      {'id': '3', 'title': '周报草稿', 'note': '未提交', 'description': '整理本周工作内容'},
+      {
+        'id': '3',
+        'title': '周报草稿',
+        'note': '未提交',
+        'description': '整理本周工作内容',
+        'image': 'assets/img/t_avatar_1.png',
+      },
     ];
     final cellLength = ValueNotifier<int>(list.length);
     return ValueListenableBuilder(
@@ -58,6 +71,9 @@ class TSwipeCellPage extends StatelessWidget {
         return TCellGroup(
           cells: list
               .map((e) => TCell(
+                  image: CircleAvatar(
+                    backgroundImage: AssetImage(e['image'] ?? ''),
+                  ),
                   title: Text(e['title'] ?? ''),
                   note: Text(e['note'] ?? ''),
                   subtitle: Text(e['description'] ?? '')))
