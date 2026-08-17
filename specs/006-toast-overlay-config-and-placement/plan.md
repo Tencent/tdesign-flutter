@@ -129,7 +129,7 @@ static void _showOverlay(
 
 - `Colors.black.withValues(alpha:)` 需 Flutter 3.27+；项目基线 3.32.0 满足，latest 满足。
 - placement 采用垂直百分比偏移（25% / 50% / 75%），与小程序 / mobile-vue 一致。旧实现为固定 `Center` 居中（并未叠加 SafeArea），新实现改为百分比定位，同样天然避让安全区（刘海屏 / 挖孔屏 / 底部手势条），无需叠加 SafeArea。
-- **breaking change**：移除 `bool? preventTap` 参数，更新日志须加 `⚠️` 前置标记提醒用户迁移。
+- **breaking change**：移除 `bool? preventTap` 参数，更新日志使用 `breaking` commit type（`- breaking(toast): 移除 preventTap 参数，改用 overlay`）提醒用户迁移。
 
 ## 验证策略
 
