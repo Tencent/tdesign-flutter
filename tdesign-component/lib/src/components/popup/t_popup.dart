@@ -100,7 +100,7 @@ final class TPopup {
       animationDuration:
           options.animationDuration ??
           theme?.transitionDuration ??
-          const Duration(milliseconds: 240),
+          const Duration(milliseconds: 300),
     );
     final handle = TPopupHandle._(
       options: resolvedOptions,

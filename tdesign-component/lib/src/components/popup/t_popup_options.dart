@@ -354,7 +354,12 @@ class TPopupOptions {
   /// * [TPopupPlacement.center] 不支持
   final TPopupInset? inset;
 
-  /// 内容区圆角，默认主题大圆角。
+  /// 内容区圆角。
+  ///
+  /// [TPopupPlacement.top]、[TPopupPlacement.bottom]、[TPopupPlacement.center]
+  /// 默认取主题大圆角；[TPopupPlacement.left]、[TPopupPlacement.right]
+  /// 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过
+  /// [TPopupThemeData.panelRadius] 注入时应用圆角。
   final double? radius;
 
   /// 内容区背景色，默认主题容器色。
@@ -389,7 +394,7 @@ class TPopupOptions {
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
   final bool destroyOnClose;
 
-  /// 打开/关闭动画时长。
+  /// 打开/关闭动画时长，默认 300ms（与官方及仓库其他浮层组件对齐）。
   final Duration? animationDuration;
 
   /// bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。

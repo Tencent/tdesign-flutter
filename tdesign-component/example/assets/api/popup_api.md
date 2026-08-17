@@ -73,7 +73,7 @@
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 `overlayColor` 的 alpha 相乘后用于绘制。 |
-| radius | double? | - | 内容区圆角，默认主题大圆角。 |
+| radius | double? | - | 内容区圆角；top/bottom/center 默认主题大圆角，left/right 默认无圆角（对齐官方全高矩形），可经 `TPopupThemeData.panelRadius` 自定义。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
 
@@ -173,7 +173,7 @@
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 `overlayColor` 的 alpha 相乘后用于绘制。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 `TPopupPlacement.bottom`。 |
-| radius | double? | - | 内容区圆角，默认主题大圆角。 |
+| radius | double? | - | 内容区圆角；top/bottom/center 默认主题大圆角，left/right 默认无圆角（对齐官方全高矩形），可经 `TPopupThemeData.panelRadius` 自定义。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 `headerBuilder` 为内置默认时生效。`null` 表示无标题。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
