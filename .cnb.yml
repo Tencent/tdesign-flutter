@@ -62,6 +62,9 @@ $:
   # 点击后不再进入 WebIDE，而是构建 example 的 Flutter Web 产物并在 8686 端口
   # 以静态服务形式对外提供预览（see https://docs.cnb.cool/zh/workspaces/only-preview.md）。
   # 纯 CI 改动，不引入外部服务，不影响 flutter@3.32.0 / latest 双版本构建。
+  #
+  # 注意：镜像 flutter-3.32.0 内未内置 node，故静态服务用 Dart 实现（
+  # scripts/preview_server.dart，Flutter 镜像自带 dart，不依赖 node/python）。
   vscode:
     - docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
@@ -72,16 +75,14 @@ $:
           options:
             onlyPreview: true
             # 业务服务必须监听 8686 端口：若构建产物尚不存在则先构建再启动静态服务
-            launch: cd tdesign-component/example && { [ -d build/web ] || { flutter pub get && flutter build web -t ./lib/main.dart --release; }; } && node ../../scripts/preview-server.mjs build/web 8686
+            launch: cd tdesign-component/example && { [ -d build/web ] || { flutter pub get && flutter build web -t ./lib/main.dart --release; }; } && dart run ../../scripts/preview_server.dart build/web 8686
             keepAliveTimeout: 2h
+      # launch（Prepare 阶段）已负责构建产物并启动 8686 静态服务，此处仅作确认。
       stages:
-        - name: build example web
+        - name: preview ready
           script: |
-            cd tdesign-component
-            flutter pub get
-            cd example
-            flutter pub get
-            flutter build web -t ./lib/main.dart --release
+            echo "preview build/web:"
+            ls -la tdesign-component/example/build/web 2>/dev/null || echo "(build/web 将由 launch 在首次请求前构建)"
 
   # WebIDE 编辑入口（配合 .cnb/web_trigger.yml 的分支详情页自定义按钮）：
   # 上方 vscode 事件已启用仅预览模式（onlyPreview），仅预览模式不支持 WebIDE；
