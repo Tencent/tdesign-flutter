@@ -1,7 +1,4 @@
-# 分支详情页自定义按钮：启动预览入口。
-# 点击「启动预览」按钮，通过「仅预览模式」（onlyPreview）直接打开当前分支的
-# Flutter Web 预览页面（构建 example 的 build/web 并以静态服务监听 8686 端口）。
-# 「云原生开发」按钮（vscode 事件）则进入标准 WebIDE 云开发环境，用于编辑代码。
+# 分支详情页自定义按钮：启动预览（仅预览模式打开 Flutter Web 预览）
 branch:
   - buttons:
       - name: 启动预览
