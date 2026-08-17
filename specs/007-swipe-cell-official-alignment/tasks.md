@@ -2,9 +2,9 @@
 
 ## TODO
 
-- [ ] 本地/CI 验证 `flutter analyze --fatal-infos` 无告警（0 error / 0 warning / 0 info）
-- [ ] 本地/CI 验证新增测试通过
-- [ ] 提交 PR 并核对模板、Changelog（breaking 加 `⚠️`）
+- [x] 本地验证 `flutter analyze` 无告警（0 error / 0 warning / 0 info）
+- [x] 本地验证新增测试通过（28/28）+ 行覆盖率 95.13%
+- [x] 提交 PR 并核对模板、Changelog（breaking 加 `⚠️`）
 
 ## DOING
 

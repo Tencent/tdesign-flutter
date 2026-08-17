@@ -206,6 +206,16 @@ void main() {
       expect(find.text('End'), findsOneWidget);
     });
 
+    testWidgets('initialOpenSide: start 打开 start 面板', (tester) async {
+      await tester.pumpWidget(app(TSwipeCell(
+        child: const TCell(title: Text('Row')),
+        start: panel('Start'),
+        initialOpenSide: TSwipeCellSide.start,
+      )));
+      await tester.pumpAndSettle();
+      expect(find.text('Start'), findsOneWidget);
+    });
+
     testWidgets('重建不会因内部 UniqueKey 丢失 Slidable 状态', (tester) async {
       final child = TSwipeCell(child: const Text('Stable'), end: panel('End'));
       await tester.pumpWidget(app(child));
@@ -296,7 +306,7 @@ void main() {
         find.ancestor(
           of: find.text('Action'),
           matching: find.byType(Flex),
-        ),
+        ).first,
       );
       final flexibleCount = flex.children.whereType<Flexible>().length;
       expect(flexibleCount, greaterThanOrEqualTo(2));
@@ -315,7 +325,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('End'), findsOneWidget);
 
-      await tester.tap(find.text('Row'));
+      // end 面板展开后本格内容左移，直接 tap 文本会落到屏幕外；
+      // 这里 tap 本格仍在可视区域内的坐标（x=50 位于平移后 child 范围内）。
+      await tester.tapAt(const Offset(50, 30));
       await tester.pumpAndSettle();
       expect(find.text('End'), findsNothing);
     });
@@ -334,7 +346,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('End'), findsOneWidget);
 
-      await tester.tap(find.text('Row'));
+      // 同上，end 展开后本格内容左移，tap 可视区域内坐标。
+      await tester.tapAt(const Offset(50, 30));
       await tester.pumpAndSettle();
       expect(find.text('End'), findsOneWidget);
     });
@@ -367,6 +380,112 @@ void main() {
         matching: find.byType(Container),
       ).first);
       expect(container.padding, const EdgeInsets.symmetric(horizontal: 16));
+    });
+
+    testWidgets('dragDismissible 面板会构建 DismissiblePane', (tester) async {
+      await tester.pumpWidget(app(TSwipeCell(
+        child: const TCell(title: Text('Row')),
+        end: TSwipeCellPanel(
+          dragDismissible: true,
+          dismissThreshold: 0.6,
+          closeOnCancel: true,
+          onDismissed: (_) {},
+          children: [panelAction('End')],
+        ),
+        initialOpenSide: TSwipeCellSide.end,
+      )));
+      await tester.pumpAndSettle();
+      final slidable = tester.widget<Slidable>(find.byType(Slidable));
+      expect(slidable.endActionPane!.dragDismissible, isTrue);
+    });
+
+    testWidgets('操作项支持自定义 builder 内容', (tester) async {
+      await tester.pumpWidget(app(TSwipeCell(
+        child: const TCell(title: Text('Row')),
+        end: TSwipeCellPanel(
+          children: [
+            TSwipeCellAction(
+              label: 'Action',
+              builder: (context) => const Center(child: Text('CustomBtn')),
+            ),
+          ],
+        ),
+        initialOpenSide: TSwipeCellSide.end,
+      )));
+      await tester.pumpAndSettle();
+      expect(find.text('CustomBtn'), findsOneWidget);
+    });
+
+    testWidgets('带 confirmIndex 的二次确认操作项按内容直接包裹（不套 Expanded）',
+        (tester) async {
+      await tester.pumpWidget(app(TSwipeCell(
+        child: const TCell(title: Text('Row')),
+        end: TSwipeCellPanel(
+          children: const [TSwipeCellAction(label: '删除', id: 'del')],
+          confirms: const [
+            TSwipeCellAction(
+              label: '确认删除',
+              id: 'del-confirm',
+              confirmIndex: [0],
+            ),
+          ],
+        ),
+        initialOpenSide: TSwipeCellSide.end,
+      )));
+      await tester.pumpAndSettle();
+      // 点击“删除”命中 confirmIndex → 展示二次确认操作项
+      await tester.tap(find.text('删除'));
+      await tester.pumpAndSettle();
+      expect(find.text('确认删除'), findsOneWidget);
+    });
+
+    testWidgets('点击操作项触发 onPressed 并自动关闭', (tester) async {
+      var pressed = 0;
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const TCell(title: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [
+              TSwipeCellAction(label: 'End', onPressed: (_) => pressed++),
+            ],
+          ),
+          initialOpenSide: TSwipeCellSide.end,
+        ),
+      )));
+      await tester.pumpAndSettle();
+      expect(find.text('End'), findsOneWidget);
+
+      await tester.tap(find.text('End'));
+      await tester.pumpAndSettle();
+      expect(pressed, 1);
+      // autoClose 默认 true，点击后面板收起
+      expect(find.text('End'), findsNothing);
+    });
+
+    testWidgets('autoClose: false 时点击操作项不自动关闭', (tester) async {
+      await tester.pumpWidget(app(SizedBox(
+        width: 300,
+        height: 60,
+        child: TSwipeCell(
+          child: const TCell(title: Text('Row')),
+          end: TSwipeCellPanel(
+            children: [
+              TSwipeCellAction(
+                label: 'End',
+                autoClose: false,
+                onPressed: (_) {},
+              ),
+            ],
+          ),
+          initialOpenSide: TSwipeCellSide.end,
+        ),
+      )));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('End'));
+      await tester.pumpAndSettle();
+      expect(find.text('End'), findsOneWidget);
     });
   });
 
@@ -414,9 +533,16 @@ void main() {
         actionSpacing: 8,
       );
       final mid = base.lerp(target, 0.5);
-      expect(mid.actionBackgroundColor, const Color(0xFF800000));
+      expect(
+        mid.actionBackgroundColor,
+        Color.lerp(base.actionBackgroundColor, target.actionBackgroundColor, 0.5),
+      );
       expect(mid.actionIconSize, 30);
       expect(mid.actionSpacing, 6);
+    });
+
+    test('lerp 对 null 返回自身', () {
+      expect(base.lerp(null, 0.5), same(base));
     });
   });
 }
