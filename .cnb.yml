@@ -61,11 +61,6 @@ $:
   # 在分支详情页点击「启动预览」按钮，通过「仅预览模式」（onlyPreview）直接打开
   # 该分支代码的预览页面。点击后不再进入 WebIDE，而是构建 example 的 Flutter Web
   # 产物并在 8686 端口以静态服务形式对外提供预览（
-  # see https://docs.cnb.cool/zh/workspaces/only-preview.md）。
-  # 纯 CI 改动，不引入外部服务，不影响 flutter@3.32.0 / latest 双版本构建。
-  #
-  # 注意：镜像 flutter-3.32.0 内未内置 node，故静态服务用 Dart 实现（
-  # scripts/preview_server.dart，Flutter 镜像自带 dart，不依赖 node/python）。
   web_trigger_launch_preview:
     - docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env
