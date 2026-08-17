@@ -26,5 +26,5 @@ flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
 # 3. 嵌入产物并启动静态服务（监听 8686）
 mkdir -p "$SITE_OUT/flutter/example"
 cp -R build/web/* "$SITE_OUT/flutter/example"
-cd "$SITE_DIR"
+cd "$SITE_DIR/site"
 pnpm exec vite preview --mode=preview --port 8686 --host 0.0.0.0
