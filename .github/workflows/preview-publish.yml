@@ -143,12 +143,47 @@ jobs:
         run: |
           set -euo pipefail
           PROJECT_NAME=${GITHUB_REPOSITORY#*/}
-          DEPLOY_DOMAIN="https://preview-pr-${PR_NUMBER}-${PROJECT_NAME}.surge.sh"
+          # 每次运行使用独立域名，隔离 Surge CDN 中可能已损坏的 304/ETag 缓存，
+          # 同时让浏览器使用新的 Service Worker scope 和 Cache Storage。
+          DEPLOY_DOMAIN="https://preview-pr-${PR_NUMBER}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${PROJECT_NAME}.surge.sh"
           npx --yes surge@0.30.0 \
             --project "$RUNNER_TEMP/tdesign-flutter-web" \
             --domain "$DEPLOY_DOMAIN" \
             --token "$SURGE_TOKEN"
           echo "url=$DEPLOY_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Verify deployed Flutter Web assets
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+          LOCAL_MAIN="$RUNNER_TEMP/tdesign-flutter-web/flutter/example/main.dart.js"
+          REMOTE_MAIN=$(mktemp)
+          trap 'rm -f "$REMOTE_MAIN"' EXIT
+
+          EXPECTED_BYTES=$(wc -c < "$LOCAL_MAIN" | tr -d ' ')
+          for ATTEMPT in 1 2 3; do
+            if curl \
+              --fail \
+              --location \
+              --retry 2 \
+              --retry-all-errors \
+              --silent \
+              --show-error \
+              --output "$REMOTE_MAIN" \
+              "$DEPLOY_URL/flutter/example/main.dart.js?integrity=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${ATTEMPT}"; then
+              ACTUAL_BYTES=$(wc -c < "$REMOTE_MAIN" | tr -d ' ')
+              if [ "$ACTUAL_BYTES" = "$EXPECTED_BYTES" ] && cmp -s "$LOCAL_MAIN" "$REMOTE_MAIN"; then
+                echo "Flutter Web main.dart.js verified (${ACTUAL_BYTES} bytes)"
+                exit 0
+              fi
+              echo "Flutter Web asset mismatch: expected ${EXPECTED_BYTES} bytes, downloaded ${ACTUAL_BYTES} bytes" >&2
+            fi
+            sleep $((ATTEMPT * 5))
+          done
+
+          echo "Flutter Web deployment is incomplete; preview comment will not publish a broken URL" >&2
+          exit 1
 
       - name: Update preview comment
         uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
