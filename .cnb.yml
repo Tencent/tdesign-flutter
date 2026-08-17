@@ -68,7 +68,7 @@ $:
   # scripts/preview_server.dart，Flutter 镜像自带 dart，不依赖 node/python）。
   web_trigger_launch_preview:
     - docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env
         volumes:
           - /root/.pub-cache:cow
       services:
@@ -94,7 +94,7 @@ $:
   # （vscode + docker 服务，非仅预览模式）。
   vscode:
     - docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env
         volumes:
           - /root/.pub-cache:cow
       services:
