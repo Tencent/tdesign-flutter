@@ -32,9 +32,6 @@ const apiBySlug = new Map(apiManifest.components.map((component) => [component.s
 
 const errors = [];
 const seen = new Set();
-const exampleAliases = {
-  'pull-down-refresh': 'refresh',
-};
 for (const slug of routeSlugs) {
   if (!seen.add(slug)) {
     errors.push(`duplicate site route: ${slug}`);
@@ -50,8 +47,7 @@ for (const slug of routeSlugs) {
   } else if (!existsSync(join(root, 'tdesign-component/example/assets/api', `${slug}_api.md`))) {
     errors.push(`missing generated API document for site route: ${slug}`);
   }
-  const exampleName = exampleAliases[slug] || slug;
-  if (!exampleNames.has(normalize(exampleName))) {
+  if (!exampleNames.has(normalize(slug))) {
     errors.push(`missing Example page registration for site route: ${slug}`);
   }
 }
