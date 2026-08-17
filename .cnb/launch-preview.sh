@@ -19,19 +19,46 @@ LOG="$SITE_OUT/preview.log"
 mkdir -p "$SITE_OUT"
 : >"$LOG"
 
-# 1. 安装站点依赖（vite preview 依赖已安装的 vite）
-cd "$SITE_DIR"
-pnpm install
+# 1. 【关键】立即用 Node.js 内置 HTTP 服务占住 8686，通过平台启动检测。
+#    node 在镜像中一定可用；服务同时充当静态文件服务器，
+#    构建产物写入 $SITE_OUT 后即可被访问，并提供 SPA fallback。
+cd "$SITE_OUT"
+nohup node -e '
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const ROOT = process.cwd();
+const MIME = {
+  ".html":"text/html", ".js":"text/javascript", ".css":"text/css",
+  ".json":"application/json", ".png":"image/png", ".jpg":"image/jpeg",
+  ".svg":"image/svg+xml", ".ico":"image/x-icon", ".txt":"text/plain",
+  ".woff":"font/woff", ".woff2":"font/woff2", ".ttf":"font/ttf"
+};
+http.createServer((req, res) => {
+  let p = decodeURIComponent(req.url.split("?")[0] || "/");
+  if (p === "/") p = "/index.html";
+  let fp = path.join(ROOT, p);
+  if (!fp.startsWith(ROOT)) { res.writeHead(403); res.end("Forbidden"); return; }
+  let ok = true, stat = null;
+  try { stat = fs.statSync(fp); } catch { ok = false; }
+  if (ok && stat.isDirectory()) fp = path.join(fp, "index.html");
+  if (ok && fs.existsSync(fp)) {
+    res.writeHead(200, { "Content-Type": MIME[path.extname(fp)] || "application/octet-stream" });
+    res.end(fs.readFileSync(fp));
+  } else {
+    // SPA fallback：文件未就绪时返回占位页
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.end("<html><body><h1>TDesign Flutter Preview</h1><p>构建中，请稍候刷新…</p></body></html>");
+  }
+}).listen(8686, "0.0.0.0");
+' >>"$LOG" 2>&1 &
+echo "preview server started on 8686 (pid $!)" >>"$LOG"
 
-# 2. 立即后台启动 vite preview，先占住 8686 通过启动检测；vite 会按需提供 _site 内容
-cd "$SITE_DIR/site"
-nohup pnpm exec vite preview --mode=preview --port 8686 --host 0.0.0.0 >>"$LOG" 2>&1 &
-echo "vite preview started on 8686 (pid $!)" >>"$LOG"
-
-# 3. 后台构建站点与 flutter example 并嵌入 _site/flutter/example
+# 2. 后台安装站点依赖、构建站点与 flutter example 并嵌入 _site/flutter/example
 (
   cd "$SITE_DIR"
-  pnpm run site --mode=preview
+  pnpm install
+  pnpm run site -- --mode=preview
   cd "$FLUTTER_DIR"
   flutter pub get
   flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
@@ -40,5 +67,5 @@ echo "vite preview started on 8686 (pid $!)" >>"$LOG"
   echo "BUILD_DONE" >>"$LOG"
 ) >>"$LOG" 2>&1 &
 
-# 4. 保持脚本作为守护进程存活（daemon:true），vite preview 持续提供预览
+# 3. 保持脚本作为守护进程存活（daemon:true），静态服务持续提供预览
 wait
