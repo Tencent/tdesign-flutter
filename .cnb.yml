@@ -71,7 +71,7 @@ $:
             # launch 末尾的服务常驻前台，须 daemon 后台运行避免阻塞超时。
             launch: sh .cnb/launch-preview.sh
             daemon: true
-            keepAliveTimeout: 2h
+            keepAliveTimeout: 30m
       stages:
         - name: preview ready
           script: |
