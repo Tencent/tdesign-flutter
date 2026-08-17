@@ -40,8 +40,8 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 - **PR 正文**：**完整保留原模板结构**，只打勾 / 填写，不删减模板内容——所有勾选项（含未选中的 `[ ]`）与所有 HTML 注释（`<!-- ... -->`）一律原样保留在正文内，填写内容写在对应位置；各小节标题与勾选规则说明不得省略。详细规则见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 描述模板」小节。
 - **PR 性质勾选**：按模板勾选规则选择正确类型（所有选项保留，选中的 `[x]`、未选中的 `[ ]`）。
 - **自查清单**：逐项核对并勾选（标题格式、相关 Issue 链接、Spec 链接、文档补充）。
-- **更新日志（Changelog）**：`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。PR 描述「更新日志」小节**面向实际使用方的用户**（目标受众是用户，而非开发者 / 维护者），**只记录用户可感知的变更**；纯内部实现、CI/CD 配置、文档结构调整、重构（行为不变）等**用户无需感知**的改动，**不要凭空生成更新日志**，直接勾选「本条 PR 不需要纳入 Changelog」。一个 PR 含多个用户可感知变更时按条分开列写，完整格式规则见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」。
-- **Breaking change 使用 `breaking` commit type**：更新日志中凡是 breaking change（改变公开 API 签名 / 默认行为 / 删除能力）的条目，应使用 `breaking` type（如 `- breaking(toast): 调整 xxx 默认行为`），它会自动归入 CHANGELOG 的 **Breaking Changes** 分组。commit type 与最终分组对应关系见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
+- **更新日志（Changelog）**：`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。PR 描述「更新日志」小节**面向实际使用方的用户**（目标受众是用户，而非开发者 / 维护者），**只记录用户可感知的变更**；纯内部实现、CI/CD 配置、文档结构调整、重构（行为不变）等**用户无需感知**的改动，**不要凭空生成更新日志**，直接勾选「本条 PR 不需要纳入 Changelog」。一个 PR 含多个用户可感知变更时按条分开列写，完整格式规则（含 commit type 与最终分组对应表）见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」。
+- **Breaking change 一律用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 CHANGELOG 的 **Breaking Changes** 分组。其余 type 的对应关系见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)「PR 更新日志规范」或通用 skill 第二节。
 
 ## 三、PR 关联相关 Issue
 
@@ -63,12 +63,9 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 
 ### 「写不写 Spec」与「写不写更新日志」是两件独立的事
 
-**「是否需要 Spec」与「是否需要更新日志」由两套不同标准触发，不能互相推导**（详见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md) 第一节，此处不重复展开）：
+**「是否需要 Spec」与「是否需要更新日志」由两套不同标准触发，不能互相推导**：Spec 看「改动复杂度 / 碰公共契约」，更新日志看「用户感不感知」。四种情况的完整判断见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md) 第一节，此处不重复。
 
-- **写不写 Spec** → 看**改动复杂度 / 是否碰公共契约**（面向开发者 / 维护者）。
-- **写不写更新日志** → 看**用户感不感知得到**（面向用户）。
-
-**最容易出错**：把"勾选「本条 PR 不需要纳入 Changelog」"等同于"不需要 Spec"。行为不变的纯内部重构（用户无感、不写日志）仍可能需要 Spec（属于重构，Review 结合实际改动判定）。CNB 平台落地时按通用 skill 的**四种情况**判断即可，本文不再重复阐述。
+**最容易出错**：把"勾选「本条 PR 不需要纳入 Changelog」"等同于"不需要 Spec"。行为不变的纯内部重构（用户无感、不写日志）仍可能需要 Spec（属于重构，Review 结合实际改动判定）。
 
 ## 五、Flutter 版本双兼容
 

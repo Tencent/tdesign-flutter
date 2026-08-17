@@ -54,37 +54,28 @@ PR 描述「更新日志」小节是**面向实际使用方的用户**的本次�
 
 1. **只记录用户可感知的变更**：仅当本次改动会改变用户在使用组件 / 库时能观察到的行为（如 API、样式、交互、性能、体验等）时才写入更新日志；从用户角度描述具体变化，标注可能的 breaking change。
 2. **内部 / CI 改动不写日志**：纯内部实现、CI/CD 配置、文档结构调整、重构（行为不变）等**用户无需感知**的改动，**不应凭空生成更新日志**，而是勾选「本条 PR 不需要纳入 Changelog」，避免产生无用日志。判断标准是：**这个用户在使用产品时能否感知到这次变化？** 感知不到就不写。
-3. **「不写更新日志」≠「不需要 Spec」**：是否写更新日志与是否需要创建 Spec 是**两件独立的事**，不能互相推导（详见 [`specs/README.md`](./specs/README.md)）。区分四种情况：
-   - **组件本身的修改**（改 API / 行为契约 / 样式交互，无论内部重构还是功能调整）：**需要 Spec** 跟踪方案（先 Spec 后代码，提交时 PR 附 Spec 链接），且凡用户可感知的变更**都要写更新日志**。
-   - **简单外部改动**（不改动组件本身，如纯外部文档 / 依赖升级 / CI / 单行文案）：**不需要 Spec**，也**不需要更新日志**（用户无感，勾选「本条 PR 不需要纳入 Changelog」）。
-   - **用户可感知的行为变更**（API、样式、交互、性能、体验等）：**必须写更新日志**；若是 breaking change 还用 `breaking` commit type。
-   - **既改组件、又产生用户可感知行为**：**既要 Spec**，**也要写更新日志**；若是 breaking change 还用 `breaking` commit type。
+3. **「不写更新日志」≠「不需要 Spec」**：二者由两套独立标准触发，不能互相推导（详见 [`specs/README.md`](./specs/README.md)）。**判断口诀**：要不要 **Spec** 看「改动复杂度 / 碰不碰公共契约」（面向开发者）；要不要**更新日志**看「用户感不感知」（面向用户）。两轴交叉即四种情况：
+
+   | 用户是否可感知 ↓ | 可感知 | 无感 |
+   | --- | --- | --- |
+   | 碰组件 / 公共契约（要 Spec） | **两者都要** | **只要 Spec**、不写日志（纯内部重构） |
+   | 不碰组件（纯文档 / 依赖 / CI） | （罕见）只要日志 | **两者都不需要** |
 
    **最容易出错**：把"勾选「本条 PR 不需要纳入 Changelog」"等同于"不需要 Spec"。行为不变的纯内部重构（用户无感、不写日志）仍属于组件修改，**需要 Spec**（Review 结合实际改动判定）但**不写更新日志**。
 4. **一个 PR 含多个功能 / 修复时，必须按条目分开列写**，不能合并成一条笼统描述。
-5. 每条遵循 Conventional Commits 的 commit type 格式，说明改动类型与影响组件。**commit type 与最终分组（CHANGELOG 中的章节）存在固定对应关系**，写日志时按实际 type 归入对应分组：
-   | commit type | 最终分组 |
-   | --- | --- |
-   | `breaking` | Breaking Changes |
-   | `feat` | Features |
-   | `fix` | Bug Fixes |
-   | `perf`、`refactor` | Performance |
-   | `docs` | Documentation |
-   | 其他类型（`chore` 等） | Others |
+5. 每条遵循 Conventional Commits 的 commit type，**与最终分组（CHANGELOG 章节）固定对应**，写日志按实际 type 归入对应分组：
 
-   常用写法示例：
-   - 修复缺陷：`fix(组件名称): 修复 xxx 的问题`
-   - 新增能力：`feat(组件名称): 添加了 xxx 功能`
-   - 破坏性变更：`breaking(组件名称): 调整 xxx 默认行为`
-   - 其他：`docs(...)`、`refactor(...)`、`chore(...)` 等。
-6. 一个 PR 含多条变更时使用无序列表逐条列出，例如：
-   ```
-   - fix(TInput): 修复密文模式下无法粘贴的问题
-   - feat(TButton): 新增渐变背景能力
-   - docs: 更新主题生成器文档
-   ```
-7. **Breaking change 使用 `breaking` commit type**：凡是改变公开 API 签名、改变默认行为或删除既有能力的破坏性变更（breaking change），更新日志条目应使用 `breaking` type，即 `- breaking(组件名称): xxxx`，它会自动归入 CHANGELOG 的 **Breaking Changes** 分组。同时配合提交分支 / PR 性质勾选中的 `重构`、`组件样式/交互改进` 等选项说明风险。
-8. 更新日志应与实际改动一一对应，不得遗漏也不得夸大；**只写用户可感知的变更，内部 / CI 类改动明确勾选「本条 PR 不需要纳入 Changelog」**。
+   | commit type | 最终分组 | 示例 |
+   | --- | --- | --- |
+   | `breaking` | Breaking Changes | `breaking(toast): 调整 xxx 默认行为` |
+   | `feat` | Features | `feat(TButton): 新增渐变背景能力` |
+   | `fix` | Bug Fixes | `fix(TInput): 修复密文模式下无法粘贴的问题` |
+   | `perf`、`refactor` | Performance | `refactor(toast): 优化 xxx` |
+   | `docs` | Documentation | `docs: 更新主题生成器文档` |
+   | 其他（`chore` 等） | Others | `chore: 升级依赖` |
+
+   **Breaking change 一律用 `breaking` type**（改变公开 API 签名 / 默认行为 / 删除能力），自动归入 Breaking Changes 分组，同时配合 PR 性质勾选中的 `重构` / `组件样式/交互改进` 等选项说明风险。
+6. 更新日志应与实际改动一一对应，不得遗漏也不得夸大；**只写用户可感知的变更，内部 / CI 类改动明确勾选「本条 PR 不需要纳入 Changelog」**。
 
 ## 示例代码片段
 

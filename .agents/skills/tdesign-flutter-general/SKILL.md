@@ -14,22 +14,32 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 - **要不要 Spec** → 看**改动复杂度 / 是否碰公共契约**（面向开发者 / 维护者）。
 - **要不要写更新日志** → 看**用户感不感知得到**（面向用户，只写用户可感知的变更）。
 
-据此区分**四种情况**：
+两轴交叉即四种情况（完整细则见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)「PR 更新日志规范」）：
 
-1. **组件本身的修改**（改 API / 行为契约 / 样式交互，无论内部重构还是功能调整）→ **需要 Spec** 跟踪方案（先 Spec 后代码，提交时 PR 附 Spec 链接），且凡用户可感知的变更**都要写更新日志**。若属重构（行为不变）则写日志与否取决于用户是否可感知。
-2. **简单外部改动**（不改动组件本身，如纯外部文档 / 依赖升级 / CI / 单行文案）→ **不需要 Spec**，也**不需要更新日志**（用户无感，勾选「本条 PR 不需要纳入 Changelog」）。
-3. **用户可感知的行为变更**（API、样式、交互、性能、体验等）→ **必须写更新日志**；若是 breaking change（改公开 API 签名 / 默认行为 / 删除能力）还用 `breaking` commit type。
-4. **既改组件、又产生用户可感知行为** → 第 1 与第 3 叠加：**既要 Spec**，**也要写更新日志**。
+| 用户是否可感知 ↓ | 可感知 | 无感 |
+| --- | --- | --- |
+| 碰组件 / 公共契约（要 Spec） | **两者都要** | **只要 Spec**、不写日志（纯内部重构） |
+| 不碰组件（纯文档 / 依赖 / CI） | （罕见）只要日志 | **两者都不需要** |
 
-**最容易出错**：把"勾选不需要纳入 Changelog"等同于"不需要 Spec"——这是错误的。行为不变的纯内部重构（用户无感、不写日志）仍可能需要 Spec（Review 结合实际改动判定，属于重构）。
+**最容易出错**：把"勾选「本条 PR 不需要纳入 Changelog」"等同于"不需要 Spec"——这是错误的。行为不变的纯内部重构（用户无感、不写日志）仍属于组件修改，**需要 Spec**（Review 结合实际改动判定，属于重构）。
 
 一句话记忆：**Spec 看"改动复不复杂 / 碰不碰公共契约"，更新日志看"用户感不感知得到"**。
 
 ## 二、提交 PR 与更新日志格式
 
 - PR 正文**完整保留 `.github/PULL_REQUEST_TEMPLATE.md` 原模板结构**（所有勾选项含未选 `[ ]`、所有 HTML 注释原样保留），只打勾 / 填写，不删减。
-- 更新日志条目遵循 Conventional Commits 的 commit type，与最终分组固定对应：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
-- **Breaking change 用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 Breaking Changes 分组。
+- 更新日志条目遵循 Conventional Commits 的 commit type，与最终分组固定对应（完整见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)）：
+
+  | commit type | 最终分组 | 示例 |
+  | --- | --- | --- |
+  | `breaking` | Breaking Changes | `breaking(toast): 调整 xxx 默认行为` |
+  | `feat` | Features | `feat(TButton): 新增渐变背景能力` |
+  | `fix` | Bug Fixes | `fix(TInput): 修复密文模式下无法粘贴的问题` |
+  | `perf`、`refactor` | Performance | `refactor(toast): 优化 xxx` |
+  | `docs` | Documentation | `docs: 更新主题生成器文档` |
+  | 其他（`chore` 等） | Others | `chore: 升级依赖` |
+
+- **Breaking change 一律用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 Breaking Changes 分组。
 - `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。
 
 ## 三、Spec 流程
