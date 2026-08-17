@@ -1258,10 +1258,13 @@ void main() {
             .widgetList<Container>(find.byType(Container))
             .any((c) {
           final d = c.decoration;
-          if (d is! BoxDecoration || d.borderRadius == null) {
+          if (d is! BoxDecoration) {
             return false;
           }
           final b = d.borderRadius;
+          if (b == null) {
+            return false;
+          }
           final hasRightCorner = b.topRightRadius != Radius.zero ||
               b.bottomRightRadius != Radius.zero;
           final hasLeftCorner = b.topLeftRadius != Radius.zero ||
@@ -1270,7 +1273,7 @@ void main() {
         });
         expect(hasLeftRightRadius, isFalse,
             reason: 'placement=$placement 默认不应有圆角');
-        tester.widget<NavigatorState>(find.byType(NavigatorState)).pop();
+        Navigator.of(tester.element(find.text('open'))).pop();
         await tester.pumpAndSettle();
       }
     });
@@ -1297,8 +1300,8 @@ void main() {
         await tester.pumpAndSettle();
         // 显式 radius 时，内缘（left=右缘 / right=左缘）应用圆角。
         final expected = placement == TPopupPlacement.left
-            ? BorderRadius.horizontal(right: const Radius.circular(8))
-            : BorderRadius.horizontal(left: const Radius.circular(8));
+            ? const BorderRadius.horizontal(right: Radius.circular(8))
+            : const BorderRadius.horizontal(left: Radius.circular(8));
         final hasRadius = tester
             .widgetList<Container>(find.byType(Container))
             .any((c) {
@@ -1307,7 +1310,7 @@ void main() {
         });
         expect(hasRadius, isTrue,
             reason: 'placement=$placement 设置 radius 后应有内缘圆角');
-        tester.widget<NavigatorState>(find.byType(NavigatorState)).pop();
+        Navigator.of(tester.element(find.text('open'))).pop();
         await tester.pumpAndSettle();
       }
     });
@@ -1339,7 +1342,7 @@ void main() {
       await tester.pump();
       expect(observer.lastPushedRoute, isNotNull);
       expect(
-        observer.lastPushedRoute!.transitionDuration,
+        (observer.lastPushedRoute! as TransitionRoute).transitionDuration,
         const Duration(milliseconds: 300),
       );
       await tester.pumpAndSettle();
