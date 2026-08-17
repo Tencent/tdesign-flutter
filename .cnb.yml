@@ -76,7 +76,7 @@ $:
           options:
             onlyPreview: true
             # 业务服务必须监听 8686 端口：若构建产物尚不存在则先构建再启动静态服务
-            launch: cd tdesign-component/example && { [ -d build/web ] || { flutter pub get && flutter build web -t ./lib/main.dart --release; }; } && dart run ../../scripts/preview_server.dart build/web 8686
+            launch: sh .cnb/launch-preview.sh
             # preview_server.dart 是常驻前台 HTTP 服务、不会主动退出，须以守护进程方式启动，
             # 否则平台会因 launch 前台阻塞等待退出而在 5 分钟超时后被强制关闭（启动失败）。
             daemon: true
