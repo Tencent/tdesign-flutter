@@ -55,17 +55,28 @@ PR 描述「更新日志」小节是**面向实际使用方的用户**的本次�
 1. **只记录用户可感知的变更**：仅当本次改动会改变用户在使用组件 / 库时能观察到的行为（如 API、样式、交互、性能、体验等）时才写入更新日志；从用户角度描述具体变化，标注可能的 breaking change。
 2. **内部 / CI 改动不写日志**：纯内部实现、CI/CD 配置、文档结构调整、重构（行为不变）等**用户无需感知**的改动，**不应凭空生成更新日志**，而是勾选「本条 PR 不需要纳入 Changelog」，避免产生无用日志。判断标准是：**这个用户在使用产品时能否感知到这次变化？** 感知不到就不写。
 3. **一个 PR 含多个功能 / 修复时，必须按条目分开列写**，不能合并成一条笼统描述。
-4. 每条遵循以下格式，说明改动类型与影响组件：
+4. 每条遵循 Conventional Commits 的 commit type 格式，说明改动类型与影响组件。**commit type 与最终分组（CHANGELOG 中的章节）存在固定对应关系**，写日志时按实际 type 归入对应分组：
+   | commit type | 最终分组 |
+   | --- | --- |
+   | `breaking` | Breaking Changes |
+   | `feat` | Features |
+   | `fix` | Bug Fixes |
+   | `perf`、`refactor` | Performance |
+   | `docs` | Documentation |
+   | 其他类型（`chore` 等） | Others |
+
+   常用写法示例：
    - 修复缺陷：`fix(组件名称): 修复 xxx 的问题`
    - 新增能力：`feat(组件名称): 添加了 xxx 功能`
-   - 其他：`docs(...)`、`refactor(...)`、`chore(...)` 等，遵循 Conventional Commits。
+   - 破坏性变更：`breaking(组件名称): 调整 xxx 默认行为`
+   - 其他：`docs(...)`、`refactor(...)`、`chore(...)` 等。
 5. 一个 PR 含多条变更时使用无序列表逐条列出，例如：
    ```
    - fix(TInput): 修复密文模式下无法粘贴的问题
    - feat(TButton): 新增渐变背景能力
    - docs: 更新主题生成器文档
    ```
-6. **Breaking change 必须加 ⚠️ 前置标记**：凡是改变公开 API 签名、改变默认行为或删除既有能力的破坏性变更（breaking change），更新日志条目必须在该条之前加 `⚠️` 前缀，以醒目地提醒用户这是需要严重注意、可能影响现有代码的问题。格式：`- ⚠️ refactor(toast): xxxx`。同时配合提交分支 / PR 性质勾选中的 `重构`、`组件样式/交互改进` 等选项说明风险。
+6. **Breaking change 使用 `breaking` commit type**：凡是改变公开 API 签名、改变默认行为或删除既有能力的破坏性变更（breaking change），更新日志条目应使用 `breaking` type，即 `- breaking(组件名称): xxxx`，它会自动归入 CHANGELOG 的 **Breaking Changes** 分组，无需（也不再）使用 `⚠️` 前缀标记。同时配合提交分支 / PR 性质勾选中的 `重构`、`组件样式/交互改进` 等选项说明风险。
 7. 更新日志应与实际改动一一对应，不得遗漏也不得夸大；**只写用户可感知的变更，内部 / CI 类改动明确勾选「本条 PR 不需要纳入 Changelog」**。
 
 ## 示例代码片段
