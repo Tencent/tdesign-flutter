@@ -57,15 +57,16 @@ $:
             state: close
           if: '[ -n "$ISSUE_REF" ]'
 
-  # 分支预览（Issue #93）：在任意分支详情页点击「云原生开发」按钮，
-  # 通过云原生开发「仅预览模式」（onlyPreview）直接打开该分支代码的预览页面。
-  # 点击后不再进入 WebIDE，而是构建 example 的 Flutter Web 产物并在 8686 端口
-  # 以静态服务形式对外提供预览（see https://docs.cnb.cool/zh/workspaces/only-preview.md）。
+  # 启动预览入口（配合 .cnb/web_trigger.yml 的分支详情页自定义按钮）：
+  # 在分支详情页点击「启动预览」按钮，通过「仅预览模式」（onlyPreview）直接打开
+  # 该分支代码的预览页面。点击后不再进入 WebIDE，而是构建 example 的 Flutter Web
+  # 产物并在 8686 端口以静态服务形式对外提供预览（
+  # see https://docs.cnb.cool/zh/workspaces/only-preview.md）。
   # 纯 CI 改动，不引入外部服务，不影响 flutter@3.32.0 / latest 双版本构建。
   #
   # 注意：镜像 flutter-3.32.0 内未内置 node，故静态服务用 Dart 实现（
   # scripts/preview_server.dart，Flutter 镜像自带 dart，不依赖 node/python）。
-  vscode:
+  web_trigger_launch_preview:
     - docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
         volumes:
@@ -87,11 +88,11 @@ $:
             echo "preview build/web:"
             ls -la tdesign-component/example/build/web 2>/dev/null || echo "(build/web 将由 launch 在首次请求前构建)"
 
-  # WebIDE 编辑入口（配合 .cnb/web_trigger.yml 的分支详情页自定义按钮）：
-  # 上方 vscode 事件已启用仅预览模式（onlyPreview），仅预览模式不支持 WebIDE；
-  # 为保留代码编辑能力，通过分支详情页自定义按钮「WebIDE 编辑」触发本事件，
-  # 进入标准 WebIDE 云开发环境（vscode + docker 服务，非仅预览模式）。
-  web_trigger_launch_vscode:
+  # 云原生开发入口（分支详情页「云原生开发」按钮，vscode 事件）：
+  # 上方「启动预览」自定义按钮已启用仅预览模式（onlyPreview），仅预览模式不支持
+  # WebIDE；为保留代码编辑能力，「云原生开发」进入标准 WebIDE 云开发环境
+  # （vscode + docker 服务，非仅预览模式）。
+  vscode:
     - docker:
         image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
         volumes:

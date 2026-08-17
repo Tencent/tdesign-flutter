@@ -1,10 +1,10 @@
-# 分支详情页自定义按钮：WebIDE 编辑入口。
-# 「云原生开发」按钮（vscode 事件）已启用仅预览模式（onlyPreview），
-# 用于快速预览分支效果（Issue #93）。仅预览模式不支持 WebIDE 编辑，
-# 故在此新增一个自定义按钮进入标准 WebIDE 云开发环境，保留编辑能力。
+# 分支详情页自定义按钮：启动预览入口。
+# 点击「启动预览」按钮，通过「仅预览模式」（onlyPreview）直接打开当前分支的
+# Flutter Web 预览页面（构建 example 的 build/web 并以静态服务监听 8686 端口）。
+# 「云原生开发」按钮（vscode 事件）则进入标准 WebIDE 云开发环境，用于编辑代码。
 branch:
   - buttons:
-      - name: WebIDE 编辑
-        description: 进入标准 WebIDE 云开发环境编辑当前分支代码
-        event: web_trigger_launch_vscode
+      - name: 启动预览
+        description: 启动当前分支的 Flutter Web 预览页面
+        event: web_trigger_launch_preview
         openWorkspace: true
