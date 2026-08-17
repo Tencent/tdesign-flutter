@@ -70,10 +70,13 @@ $:
         - name: vscode
           options:
             onlyPreview: true
-            # 业务服务必须监听 8686 端口：若构建产物尚不存在则先构建再启动静态服务
+            # 业务服务必须监听 8686 端口：launch-preview.sh 负责安装依赖、构建
+            # tdesign-site + flutter example web 并嵌入产物，最后以 preview_server.dart
+            # 静态服务监听 8686（详见脚本内注释）。
             launch: sh .cnb/launch-preview.sh
-            # preview_server.dart 是常驻前台 HTTP 服务、不会主动退出，须以守护进程方式启动，
-            # 否则平台会因 launch 前台阻塞等待退出而在 5 分钟超时后被强制关闭（启动失败）。
+            # launch 末尾的 preview_server.dart 是常驻前台 HTTP 服务、不会主动退出，
+            # 须以守护进程方式启动，否则平台会因 launch 前台阻塞等待退出而在 5 分钟
+            # 超时后被强制关闭（启动失败）。
             daemon: true
             keepAliveTimeout: 2h
       # launch（Prepare 阶段）已负责构建产物并启动 8686 静态服务，此处仅作确认。
