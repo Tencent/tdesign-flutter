@@ -63,6 +63,7 @@ $:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env
         volumes:
           - /root/.pub-cache:cow
+          - .pnpm-store:cow
       services:
         - name: vscode
           options:
