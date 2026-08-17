@@ -1265,10 +1265,12 @@ void main() {
           if (b == null) {
             return false;
           }
-          final hasRightCorner = b.topRightRadius != Radius.zero ||
-              b.bottomRightRadius != Radius.zero;
-          final hasLeftCorner = b.topLeftRadius != Radius.zero ||
-              b.bottomLeftRadius != Radius.zero;
+          // 面板内缘圆角按从左到右布局解析为具体 BorderRadius 后判断。
+          final resolved = b.resolve(TextDirection.ltr);
+          final hasRightCorner = resolved.topRightRadius != Radius.zero ||
+              resolved.bottomRightRadius != Radius.zero;
+          final hasLeftCorner = resolved.topLeftRadius != Radius.zero ||
+              resolved.bottomLeftRadius != Radius.zero;
           return hasRightCorner || hasLeftCorner;
         });
         expect(hasLeftRightRadius, isFalse,
