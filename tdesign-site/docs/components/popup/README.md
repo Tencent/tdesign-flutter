@@ -396,7 +396,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
+| animationDuration | Duration | const Duration(milliseconds: 300) | 打开/关闭动画时长。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
 | closeOnOverlayClick | bool? | - | - |
@@ -410,7 +410,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 |
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 `overlayColor` 的 alpha 相乘后用于绘制。 |
-| radius | double? | - | 内容区圆角，默认主题大圆角。 |
+| radius | double? | - | 内容区圆角；top/bottom/center 默认主题大圆角，left/right 默认无圆角（对齐官方全高矩形），可经 `TPopupThemeData.panelRadius` 自定义。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； 与 `inset` 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。 |
 
@@ -489,7 +489,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animationDuration | Duration | const Duration(milliseconds: 240) | 打开/关闭动画时长。 |
+| animationDuration | Duration | const Duration(milliseconds: 300) | 打开/关闭动画时长。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | cancelBuilder | TPopupSlotBuilder? | _kPopupDefaultCancel | bottom 左侧操作槽；仅 `headerBuilder` 为内置默认时生效。 内置默认为「取消」，点击触发 `TPopupTrigger.cancel`。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
@@ -510,7 +510,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | overlayColor | Color? | - | 蒙层颜色，默认 black54。 |
 | overlayOpacity | double? | - | 蒙层透明度系数（0–1），与 `overlayColor` 的 alpha 相乘后用于绘制。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 `TPopupPlacement.bottom`。 |
-| radius | double? | - | 内容区圆角，默认主题大圆角。 |
+| radius | double? | - | 内容区圆角；top/bottom/center 默认主题大圆角，left/right 默认无圆角（对齐官方全高矩形），可经 `TPopupThemeData.panelRadius` 自定义。 |
 | showOverlay | bool | true | 是否绘制半透明蒙层。 当 `modal` 为 true 且此值为 false 时，为“透明模态弹层”。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 `headerBuilder` 为内置默认时生效。`null` 表示无标题。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认 true；仅 top/bottom/left/right 贴边弹出生效，center 忽略。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； 与 `inset` 在 top/bottom/left/right 上叠加。设为 false 可贴满屏幕边缘。 |

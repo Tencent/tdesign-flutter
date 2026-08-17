@@ -1237,5 +1237,127 @@ void main() {
       await tester.pumpAndSettle();
       expect(lastTrigger, TPopupTrigger.custom);
     });
+
+    testWidgets('left/right 默认无圆角（对齐官方全高矩形）', (tester) async {
+      for (final placement in [
+        TPopupPlacement.left,
+        TPopupPlacement.right,
+      ]) {
+        await openPopup(
+          tester,
+          onPressed: () {
+            TPopup.show(
+              tester.element(find.text('open')),
+              options: TPopupOptions(
+                placement: placement,
+                width: 200,
+                child: const SizedBox(height: 40),
+              ),
+            );
+          },
+        );
+        await tester.pumpAndSettle();
+        // 默认：面板 Container 不应携带任何内缘圆角。
+        final hasLeftRightRadius = tester
+            .widgetList<Container>(find.byType(Container))
+            .any((c) {
+          final d = c.decoration;
+          if (d is! BoxDecoration || d.borderRadius == null) {
+            return false;
+          }
+          final b = d.borderRadius;
+          final hasRightCorner = b.topRightRadius != Radius.zero ||
+              b.bottomRightRadius != Radius.zero;
+          final hasLeftCorner = b.topLeftRadius != Radius.zero ||
+              b.bottomLeftRadius != Radius.zero;
+          return hasRightCorner || hasLeftCorner;
+        });
+        expect(hasLeftRightRadius, isFalse,
+            reason: 'placement=$placement 默认不应有圆角');
+        tester.widget<NavigatorState>(find.byType(NavigatorState)).pop();
+        await tester.pumpAndSettle();
+      }
+    });
+
+    testWidgets('left/right 设置 radius 后应用内缘圆角', (tester) async {
+      for (final placement in [
+        TPopupPlacement.left,
+        TPopupPlacement.right,
+      ]) {
+        await openPopup(
+          tester,
+          onPressed: () {
+            TPopup.show(
+              tester.element(find.text('open')),
+              options: TPopupOptions(
+                placement: placement,
+                width: 200,
+                radius: 8,
+                child: const SizedBox(height: 40),
+              ),
+            );
+          },
+        );
+        await tester.pumpAndSettle();
+        // 显式 radius 时，内缘（left=右缘 / right=左缘）应用圆角。
+        final expected = placement == TPopupPlacement.left
+            ? BorderRadius.horizontal(right: const Radius.circular(8))
+            : BorderRadius.horizontal(left: const Radius.circular(8));
+        final hasRadius = tester
+            .widgetList<Container>(find.byType(Container))
+            .any((c) {
+          final d = c.decoration;
+          return d is BoxDecoration && d.borderRadius == expected;
+        });
+        expect(hasRadius, isTrue,
+            reason: 'placement=$placement 设置 radius 后应有内缘圆角');
+        tester.widget<NavigatorState>(find.byType(NavigatorState)).pop();
+        await tester.pumpAndSettle();
+      }
+    });
+
+    testWidgets('默认动画时长为 300ms（对齐官方与其他组件）', (tester) async {
+      bindPopupTestResource(PopupTestResourceDelegate.zh());
+      final observer = _CapturingNavigatorObserver();
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorObservers: [observer],
+          theme: ThemeData(extensions: [TThemeData.defaultData()]),
+          home: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () {
+                TPopup.show(
+                  context,
+                  options: const TPopupOptions(
+                      placement: TPopupPlacement.bottom,
+                      height: 160,
+                      child: SizedBox(height: 60)),
+                );
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pump();
+      expect(observer.lastPushedRoute, isNotNull);
+      expect(
+        observer.lastPushedRoute!.transitionDuration,
+        const Duration(milliseconds: 300),
+      );
+      await tester.pumpAndSettle();
+    });
   });
+}
+
+/// 测试辅助：捕获最近一次 push 的路由，用于断言默认动画时长。
+class _CapturingNavigatorObserver extends NavigatorObserver {
+  Route<dynamic>? lastPushedRoute;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    lastPushedRoute = route;
+    super.didPush(route, previousRoute);
+  }
 }

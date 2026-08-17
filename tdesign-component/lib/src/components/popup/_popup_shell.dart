@@ -15,12 +15,20 @@ class PopupShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.tTheme;
-    final radius = options.radius ?? theme.radiusExtraLarge;
+    // top/bottom/center 默认使用全局大圆角；
+    // left/right 对齐官方为无圆角全高矩形，仅当显式设置
+    // `options.radius`（或经 `TPopupThemeData.panelRadius` 注入）时应用圆角。
+    final isEdgeDrawer =
+        options.placement == TPopupPlacement.left ||
+        options.placement == TPopupPlacement.right;
+    final radius = isEdgeDrawer
+        ? options.radius
+        : (options.radius ?? theme.radiusExtraLarge);
     final backgroundColor = options.backgroundColor ?? theme.bgColorContainer;
     final borderRadius = _borderRadius(options.placement, radius);
 
     if (options.placement == TPopupPlacement.center) {
-      return _buildCenter(context, radius, backgroundColor);
+      return _buildCenter(context, radius ?? 0, backgroundColor);
     }
 
     return _buildEdge(context, borderRadius, backgroundColor);
@@ -85,18 +93,26 @@ class PopupShell extends StatelessWidget {
     );
   }
 
-  BorderRadius? _borderRadius(TPopupPlacement placement, double radius) {
+  BorderRadius? _borderRadius(TPopupPlacement placement, double? radius) {
     switch (placement) {
       case TPopupPlacement.top:
-        return BorderRadius.vertical(bottom: Radius.circular(radius));
+        return BorderRadius.vertical(bottom: Radius.circular(radius ?? 0));
       case TPopupPlacement.bottom:
-        return BorderRadius.vertical(top: Radius.circular(radius));
+        return BorderRadius.vertical(top: Radius.circular(radius ?? 0));
       case TPopupPlacement.left:
+        // 未显式设置圆角时为无圆角（对齐官方全高矩形）。
+        if (radius == null) {
+          return null;
+        }
         return BorderRadius.horizontal(right: Radius.circular(radius));
       case TPopupPlacement.right:
+        // 未显式设置圆角时为无圆角（对齐官方全高矩形）。
+        if (radius == null) {
+          return null;
+        }
         return BorderRadius.horizontal(left: Radius.circular(radius));
       case TPopupPlacement.center:
-        return BorderRadius.circular(radius);
+        return BorderRadius.circular(radius ?? 0);
     }
   }
 }

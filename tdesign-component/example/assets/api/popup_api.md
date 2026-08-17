@@ -49,7 +49,8 @@
 | 显式 `null` | 隐藏该区域 |
 | 自定义 `TPopupHeaderBuilder` / `TPopupSlotBuilder` | 完全替换；需自行提供交互与语义，可调用 `close` 关闭浮层 |
 `titleWidget` 默认为 `null`，表示无标题内容。
-生命周期回调见 `onOpen`、`onOpened`、`onClose`、`onClosed`、`onVisibleChange`；蒙层行为见 `overlay`（`TPopupOverlayConfig`）。
+生命周期回调见 `onOpen`、`onOpened`、`onClose`、`onClosed`、`onVisibleChange`；
+蒙层行为见 `overlay`（`TPopupOverlayConfig`）。
 
 #### 工厂构造方法
 
@@ -59,7 +60,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animationDuration | Duration? | - | 打开/关闭动画时长。 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 300ms（与官方及仓库其他浮层组件对齐）。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
 | destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
@@ -68,8 +69,8 @@
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 |
-| overlay | TPopupOverlayConfig? | - | 蒙层行为配置（可见遮罩、背景拦截、点击关闭、回调等）；为 null 时使用默认配置（标准模态弹层）。 |
-| radius | double? | - | 内容区圆角，默认主题大圆角。 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
 
 
@@ -147,7 +148,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animationDuration | Duration? | - | 打开/关闭动画时长。 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 300ms（与官方及仓库其他浮层组件对齐）。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | cancelBuilder | TPopupSlotBuilder? | _kPopupDefaultCancel | bottom 左侧操作槽；仅 `headerBuilder` 为内置默认时生效。 内置默认为「取消」，点击触发 `TPopupTrigger.cancel`。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
@@ -162,9 +163,9 @@
 | onOpen | VoidCallback? | - | 路由 push 时（打开动画开始前）。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 |
-| overlay | TPopupOverlayConfig? | - | 蒙层行为配置（可见遮罩、背景拦截、点击关闭、回调等）；为 null 时使用默认配置（标准模态弹层）。 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 `TPopupPlacement.bottom`。 |
-| radius | double? | - | 内容区圆角，默认主题大圆角。 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 |
 | titleWidget | Widget? | - | bottom 标题插槽；仅 `headerBuilder` 为内置默认时生效。`null` 表示无标题。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 |

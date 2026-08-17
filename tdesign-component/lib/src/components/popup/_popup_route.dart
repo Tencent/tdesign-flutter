@@ -50,7 +50,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   Duration get transitionDuration =>
-      options.animationDuration ?? const Duration(milliseconds: 240);
+      options.animationDuration ?? const Duration(milliseconds: 300);
 
   @override
   Duration get reverseTransitionDuration => transitionDuration;
