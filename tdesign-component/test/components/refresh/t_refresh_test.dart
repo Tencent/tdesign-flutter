@@ -284,6 +284,49 @@ void main() {
       expect(states, contains(TPullDownRefreshState.inactive));
     });
 
+    testWidgets('默认 refreshTimeout 为 3 秒', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text('项目$index'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      final widget = tester.widget<TPullDownRefresh>(
+        find.byType(TPullDownRefresh),
+      );
+      expect(widget.refreshTimeout, const Duration(milliseconds: 3000));
+    });
+
+    testWidgets('refreshTimeout 为 null 时关闭超时', (tester) async {
+      var timedOut = false;
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () => Completer<void>().future,
+            refreshTimeout: null,
+            onTimeout: () => timedOut = true,
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      unawaited(controller.refresh());
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(timedOut, isFalse);
+    });
+
     testWidgets('refreshTimeout 超时触发 onTimeout', (tester) async {
       var timedOut = false;
       final controller = TPullDownRefreshController();
@@ -300,8 +343,13 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       // 不 await：onRefresh 永不完成，await 会挂起测试。
       unawaited(controller.refresh());
-      await tester.pump(const Duration(milliseconds: 200));
+      // 分步推进，让 EasyRefresh 完成下拉动画并触发超时计时器。
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
       expect(timedOut, isTrue);
+      // 清空 EasyRefresh 内部残留计时器。
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('controller.refresh 可外部触发', (tester) async {
@@ -318,8 +366,12 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       // 不 await：await 触发动画可能在测试中挂起，改用 pump 推进。
       unawaited(controller.refresh());
-      await tester.pump(const Duration(seconds: 1));
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
       expect(refreshed, isTrue);
+      // 清空 EasyRefresh 内部残留计时器。
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('enableLoadMore + onLoadMore 触底加载', (tester) async {
@@ -353,11 +405,15 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       unawaited(controller.loadMore());
-      await tester.pump(const Duration(seconds: 1));
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(loaded, isTrue);
       controller.finishLoadMore();
       controller.reset();
       controller.dispose();
-      expect(loaded, isTrue);
+      // 清空 EasyRefresh 内部残留计时器。
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('controller 切换时重新绑定', (tester) async {
@@ -380,22 +436,38 @@ void main() {
   group('TPullDownRefresh 交互状态', () {
     testWidgets('下拉手势触发 dragging 与 refreshing 状态', (tester) async {
       final states = <TPullDownRefreshState>[];
+      final completer = Completer<void>();
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
-            onRefresh: () async {},
+            // onRefresh 不立即完成，便于捕获 refreshing 状态。
+            onRefresh: () => completer.future,
             onStateChanged: states.add,
           ),
         ),
       );
       await tester.pump(const Duration(seconds: 1));
       final gesture = await tester.startGesture(const Offset(200, 150));
-      await gesture.moveBy(const Offset(0, 80));
-      await tester.pump(const Duration(milliseconds: 200));
+      // 分步下拉：先低于触发阈值，捕获 dragging。
+      for (var i = 0; i < 5; i++) {
+        await gesture.moveBy(const Offset(0, 5));
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+      // 继续下拉超过触发阈值，进入 ready。
+      for (var i = 0; i < 10; i++) {
+        await gesture.moveBy(const Offset(0, 10));
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+      // 松手触发刷新，捕获 refreshing。
       await gesture.up();
-      await tester.pump(const Duration(seconds: 1));
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
       expect(states, contains(TPullDownRefreshState.dragging));
       expect(states, contains(TPullDownRefreshState.refreshing));
+      // 完成刷新并清空残留计时器。
+      completer.complete();
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('loadingTheme 自定义渲染', (tester) async {
@@ -426,11 +498,18 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       final gesture = await tester.startGesture(const Offset(200, 150));
-      await gesture.moveBy(const Offset(0, 80));
-      await tester.pump(const Duration(milliseconds: 200));
+      // 分步下拉超过触发阈值并松手，触发同步 onRefresh。
+      for (var i = 0; i < 15; i++) {
+        await gesture.moveBy(const Offset(0, 10));
+        await tester.pump(const Duration(milliseconds: 20));
+      }
       await gesture.up();
-      await tester.pump(const Duration(seconds: 1));
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
       expect(refreshed, isTrue);
+      // 清空 EasyRefresh 内部残留计时器。
+      await tester.pump(const Duration(seconds: 1));
     });
   });
 }

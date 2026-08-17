@@ -58,9 +58,10 @@ class TPullDownRefresh extends StatefulWidget {
   /// 四态提示语；为空时回退 l10n（默认中文与官方 `loadingTexts` 一致）。
   final TPullDownRefreshTexts? texts;
 
-  /// 刷新超时时长；超过时长仍未完成 [onRefresh] 时触发 [onTimeout] 并结束刷新。
+  /// 刷新超时时长（默认 3 秒）；超过时长仍未完成 [onRefresh] 时自动结束刷新，
+  /// 并触发 [onTimeout]（可为空）。
   ///
-  /// 为空时不启用超时（默认行为与现状一致）。
+  /// 默认启用 3 秒超时；传入 null 可关闭超时。
   final Duration? refreshTimeout;
 
   /// 刷新超时回调。
@@ -91,7 +92,7 @@ class TPullDownRefresh extends StatefulWidget {
     this.disabled = false,
     this.controller,
     this.texts,
-    this.refreshTimeout,
+    this.refreshTimeout = const Duration(milliseconds: 3000),
     this.onTimeout,
     this.loadingBarHeight = 50,
     this.maxBarHeight = 80,
