@@ -1271,10 +1271,10 @@ void main() {
           }
           // 面板内缘圆角按从左到右布局解析为具体 BorderRadius 后判断。
           final resolved = b.resolve(TextDirection.ltr);
-          final hasRightCorner = resolved.topRightRadius != Radius.zero ||
-              resolved.bottomRightRadius != Radius.zero;
-          final hasLeftCorner = resolved.topLeftRadius != Radius.zero ||
-              resolved.bottomLeftRadius != Radius.zero;
+          final hasRightCorner = resolved.topRight != Radius.zero ||
+              resolved.bottomRight != Radius.zero;
+          final hasLeftCorner = resolved.topLeft != Radius.zero ||
+              resolved.bottomLeft != Radius.zero;
           return hasRightCorner || hasLeftCorner;
         });
         expect(hasLeftRightRadius, isFalse,
