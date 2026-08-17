@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 # 仅预览模式（onlyPreview）下的预览构建与启动脚本。
 # 业务服务必须监听 8686 端口（CNB 仅预览模式硬约束）。
