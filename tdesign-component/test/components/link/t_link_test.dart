@@ -147,6 +147,59 @@ void main() {
   });
 
   // ============================================================
+  // T07b – hover: true（默认）使用 InkWell 提供点击反馈
+  // ============================================================
+  testWidgets('T07b - hover 默认开启 InkWell 反馈', (tester) async {
+    await tester.pumpWidget(_wrap(
+      const TLink(
+        child: Text('hover 反馈'),
+        onPressed: _noop,
+      ),
+    ));
+
+    // 默认 hover 开启时使用 InkWell 提供点击反馈
+    expect(find.byType(InkWell), findsWidgets);
+  });
+
+  // ============================================================
+  // T07c – hover: false 不使用 InkWell，但仍可点击
+  // ============================================================
+  testWidgets('T07c - hover 关闭时无 InkWell 反馈且仍可点击', (tester) async {
+    var tapped = false;
+    await tester.pumpWidget(_wrap(
+      TLink(
+        child: const Text('无反馈链接'),
+        hover: false,
+        onPressed: () => tapped = true,
+      ),
+    ));
+
+    // 关闭 hover 后不再使用 InkWell，改用 GestureDetector（无水波纹）
+    expect(find.byType(InkWell), findsNothing);
+    expect(find.byType(GestureDetector), findsWidgets);
+
+    await tester.tap(find.text('无反馈链接'));
+    expect(tapped, true);
+  });
+
+  // ============================================================
+  // T07d – hover: false 对 icon 形态同样生效
+  // ============================================================
+  testWidgets('T07d - icon 形态 hover 关闭时无 InkWell', (tester) async {
+    await tester.pumpWidget(_wrap(
+      const TLink(
+        child: Text('图标无反馈'),
+        variant: TLinkVariant.icon,
+        hover: false,
+        onPressed: _noop,
+      ),
+    ));
+
+    expect(find.byType(InkWell), findsNothing);
+    expect(find.byType(GestureDetector), findsWidgets);
+  });
+
+  // ============================================================
   // T08 – colorScheme × variant 颜色映射（通过 resolve）
   // ============================================================
   testWidgets('T08 - colorScheme 颜色映射', (tester) async {

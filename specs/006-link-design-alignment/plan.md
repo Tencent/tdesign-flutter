@@ -10,6 +10,7 @@
    显式补充 `prefixIcon: Icon(TIcons.link)` 以保持展示不变。
 4. **测试**：为「仅传 suffix 不自动补默认前缀」补充断言 `find.byIcon(TIcons.link) == findsNothing`。
 5. **示例代码快照与站点文档**：按新的示例方法更新 `link.*.txt` 与 `README.md`。
+6. **hover 点击反馈开关**：为 `TLink` 新增可选参数 `hover`（默认 `true`），为 `false` 时改用 `GestureDetector` 承接 `onTap`，关闭 InkWell 水波纹反馈，对齐 h5 `hover` 能力。
 
 ## 影响范围
 
@@ -23,8 +24,9 @@
 
 ## API 变化
 
-- 无公开 API 签名变化。仅 `TLinkVariant.icon` 在「只传 suffixIcon」时的图标渲染行为变化
-  （不再自动补默认前置链接图标），属于行为对齐 h5，非 breaking（不改变既有参数签名 / 默认值）。
+- 新增 `TLink.hover`（`bool`，默认 `true`）：为 `false` 时关闭 InkWell 点击反馈（用 `GestureDetector` 承接点击）。
+  纯新增可选参数，不改变既有行为，**非 breaking**。
+- `TLinkVariant.icon` 在「只传 suffixIcon」时的图标渲染行为变化（不再自动补默认前置链接图标），属于行为对齐 h5，非 breaking。
 
 ## 风险与取舍
 
@@ -33,7 +35,7 @@
 
 ## 验证策略
 
-- 单元 / Widget 测试：T05 断言「仅传 suffix 时 `TIcons.link` 不出现」。
+- 单元 / Widget 测试：T05 断言「仅传 suffix 时 `TIcons.link` 不出现」；T07b/T07c/T07d 断言 hover 开关对 InkWell 的控制。
 - 静态检查：`flutter analyze` 0 error / 0 warning。
 - 示例快照一致性：`dart run tool/generate_example_code.dart --verbose`（CI 兜底）。
 - 人工验收：对照 h5 <https://tdesign.tencent.com/mobile-vue/mobile.html#/link> 逐项比对示例与文案。

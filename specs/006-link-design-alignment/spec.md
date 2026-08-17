@@ -22,7 +22,15 @@
 
 - 不改变 `TLinkVariant.basic` / `TLinkVariant.underline` 的既有行为。
 - 不改变「未传任何图标时默认展示 链接图标 + 跳转图标」的既有行为（该行为被现有测试覆盖）。
-- 不改动组件公开 API 签名（`TLinkVariant`、`TLinkColorScheme`、`TLinkSize` 等保持不变）。
+- 不改动 `TLinkVariant`、`TLinkColorScheme`、`TLinkSize` 等既有枚举/参数的签名。
+
+## 新增 hover 参数（对齐 h5 点击反馈能力）
+
+h5（tdesign-mobile-vue）`TdLinkProps` 提供 `hover`（是否开启点击反馈）。Flutter `TLink` 新增同名可选参数：
+
+- `hover`：`bool`，默认 `true`。为 `false` 时关闭 InkWell 点击反馈（无水波纹 / 悬浮高亮），但链接仍可正常点击响应（用 `GestureDetector` 承接 `onTap`）。
+- 该参数为**纯新增可选参数**，不改变既有行为（默认值 `true` 等价于现状），**非 breaking**。
+- 覆盖 `TLinkVariant.basic` / `underline` / `icon` 三种形态。
 
 ## 范围
 
@@ -42,6 +50,7 @@
 
 ## 行为契约
 
+- `TLink` 新增 `hover` 参数（默认 `true`）：为 `true` 时用 `InkWell` 提供点击反馈；为 `false` 时改用 `GestureDetector`（仅响应点击、无水波纹），对 `basic` / `underline` / `icon` 三种形态一致生效。
 - `TLinkVariant.icon` 下，图标展示遵循以下规则：
   - 仅传 `prefixIcon`：只展示前置图标。
   - 仅传 `suffixIcon`：只展示后置图标（不再自动补默认前置链接图标）。
@@ -56,5 +65,6 @@
 - [ ] 「不同主题」「禁用状态」示例展示带后缀跳转图标的链接。
 - [ ] 「链接尺寸」示例展示带后缀跳转图标的 S/M/L 跳转链接。
 - [ ] 仅传 `suffixIcon` 时，`find.byIcon(TIcons.link)` 为 `findsNothing`。
+- [ ] `hover: true`（默认）时存在 `InkWell`；`hover: false` 时不存在 `InkWell` 但仍可点击（`T07b`/`T07c`/`T07d` 用例覆盖）。
 - [ ] `flutter analyze` 0 error / 0 warning。
 - [ ] 相关测试通过，示例代码快照与 `generate_example_code.dart` 一致。

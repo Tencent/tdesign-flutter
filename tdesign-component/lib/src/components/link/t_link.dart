@@ -18,6 +18,7 @@ class TLink extends StatelessWidget {
     this.colorScheme,
     this.size,
     this.onPressed,
+    this.hover = true,
     this.semanticLabel,
     this.tooltip,
   }) : super(key: key);
@@ -42,6 +43,10 @@ class TLink extends StatelessWidget {
 
   /// 点击回调。为 null 时链接为禁用态
   final VoidCallback? onPressed;
+
+  /// 是否开启点击反馈。为 false 时点击链接不会出现 InkWell 水波纹 / 高亮反馈，
+  /// 但仍可正常响应点击（对应 h5 的 `hover` 能力）。默认 true。
+  final bool hover;
 
   /// 语义标签（无障碍）
   final String? semanticLabel;
@@ -83,10 +88,7 @@ class TLink extends StatelessWidget {
     }
 
     // 纯文本 / 下划线：直接返回 InkWell 包裹的文本
-    final Widget link = InkWell(
-      onTap: onPressed,
-      child: text,
-    );
+    final Widget link = hover ? _buildInkWell(text) : _buildGestureDetector(text);
 
     if (isDisabled) {
       return IgnorePointer(child: link);
@@ -208,9 +210,23 @@ class TLink extends StatelessWidget {
       return IgnorePointer(child: wrapped);
     }
 
+    return hover ? _buildInkWell(wrapped) : _buildGestureDetector(wrapped);
+  }
+
+  /// 使用 [InkWell] 包裹子组件，提供水波纹 / 悬浮点击反馈
+  Widget _buildInkWell(Widget child) {
     return InkWell(
       onTap: onPressed,
-      child: wrapped,
+      child: child,
+    );
+  }
+
+  /// 关闭点击反馈时使用 [GestureDetector] 包裹，仅响应点击、无水波纹
+  Widget _buildGestureDetector(Widget child) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onPressed,
+      child: child,
     );
   }
 
