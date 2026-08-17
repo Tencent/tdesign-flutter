@@ -10,7 +10,7 @@ const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
 const publicPathMap: Record<string, string> = {
   preview: '/',
-  production: 'https://static.tdesign.tencent.com/flutter/',
+  production: '/flutter/',
 };
 
 // https://vitejs.dev/config/
