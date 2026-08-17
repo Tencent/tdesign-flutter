@@ -88,7 +88,7 @@ class TLink extends StatelessWidget {
     }
 
     // 纯文本 / 下划线：直接返回 InkWell 包裹的文本
-    final Widget link = hover ? _buildInkWell(text) : _buildGestureDetector(text);
+    final link = hover ? _buildInkWell(text) : _buildGestureDetector(text);
 
     if (isDisabled) {
       return IgnorePointer(child: link);
