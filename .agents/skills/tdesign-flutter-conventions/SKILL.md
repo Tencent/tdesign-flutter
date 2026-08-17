@@ -41,7 +41,7 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 - **PR 性质勾选**：按模板勾选规则选择正确类型（所有选项保留，选中的 `[x]`、未选中的 `[ ]`）。
 - **自查清单**：逐项核对并勾选（标题格式、相关 Issue 链接、Spec 链接、文档补充）。
 - **更新日志（Changelog）**：`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。PR 描述「更新日志」小节**面向实际使用方的用户**（目标受众是用户，而非开发者 / 维护者），**只记录用户可感知的变更**；纯内部实现、CI/CD 配置、文档结构调整、重构（行为不变）等**用户无需感知**的改动，**不要凭空生成更新日志**，直接勾选「本条 PR 不需要纳入 Changelog」。一个 PR 含多个用户可感知变更时按条分开列写，完整格式规则见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」。
-- **Breaking change 使用 `breaking` commit type**：更新日志中凡是 breaking change（改变公开 API 签名 / 默认行为 / 删除能力）的条目，应使用 `breaking` type（如 `- breaking(toast): 调整 xxx 默认行为`），它会自动归入 CHANGELOG 的 **Breaking Changes** 分组（不再使用 `⚠️` 前缀）。commit type 与最终分组对应关系见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
+- **Breaking change 使用 `breaking` commit type**：更新日志中凡是 breaking change（改变公开 API 签名 / 默认行为 / 删除能力）的条目，应使用 `breaking` type（如 `- breaking(toast): 调整 xxx 默认行为`），它会自动归入 CHANGELOG 的 **Breaking Changes** 分组。commit type 与最终分组对应关系见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
 
 ## 三、PR 关联相关 Issue
 

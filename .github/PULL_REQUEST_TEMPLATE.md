@@ -38,7 +38,7 @@
 格式要求：
 - 一个 PR 含多个功能 / 修复时，按条目分开列写，不合并。
 - 每条遵循 Conventional Commits 的 commit type，与最终分组对应：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
-- Breaking change 使用 `breaking(组件): xxx` 写法，自动归入 Breaking Changes 分组（不再用 ⚠️ 前缀）。
+- Breaking change 使用 `breaking(组件): xxx` 写法，自动归入 Breaking Changes 分组。
 - 示例：`breaking(toast): 调整 xxx 默认行为`、`fix(TInput): 修复密文模式下无法粘贴的问题`、`feat(TButton): 新增渐变背景能力`、`docs: 更新主题生成器文档`
 -->
 

@@ -83,7 +83,7 @@ PR 描述「更新日志」小节是**面向实际使用方的用户**的本次�
    - feat(TButton): 新增渐变背景能力
    - docs: 更新主题生成器文档
    ```
-7. **Breaking change 使用 `breaking` commit type**：凡是改变公开 API 签名、改变默认行为或删除既有能力的破坏性变更（breaking change），更新日志条目应使用 `breaking` type，即 `- breaking(组件名称): xxxx`，它会自动归入 CHANGELOG 的 **Breaking Changes** 分组，无需（也不再）使用 `⚠️` 前缀标记。同时配合提交分支 / PR 性质勾选中的 `重构`、`组件样式/交互改进` 等选项说明风险。
+7. **Breaking change 使用 `breaking` commit type**：凡是改变公开 API 签名、改变默认行为或删除既有能力的破坏性变更（breaking change），更新日志条目应使用 `breaking` type，即 `- breaking(组件名称): xxxx`，它会自动归入 CHANGELOG 的 **Breaking Changes** 分组。同时配合提交分支 / PR 性质勾选中的 `重构`、`组件样式/交互改进` 等选项说明风险。
 8. 更新日志应与实际改动一一对应，不得遗漏也不得夸大；**只写用户可感知的变更，内部 / CI 类改动明确勾选「本条 PR 不需要纳入 Changelog」**。
 
 ## 示例代码片段

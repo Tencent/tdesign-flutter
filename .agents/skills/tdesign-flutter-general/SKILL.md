@@ -29,7 +29,7 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 - PR 正文**完整保留 `.github/PULL_REQUEST_TEMPLATE.md` 原模板结构**（所有勾选项含未选 `[ ]`、所有 HTML 注释原样保留），只打勾 / 填写，不删减。
 - 更新日志条目遵循 Conventional Commits 的 commit type，与最终分组固定对应：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
-- **Breaking change 用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 Breaking Changes 分组，不再使用 `⚠️` 前缀。
+- **Breaking change 用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 Breaking Changes 分组。
 - `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。
 
 ## 三、Spec 流程
