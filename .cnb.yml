@@ -82,3 +82,25 @@ $:
             cd example
             flutter pub get
             flutter build web -t ./lib/main.dart --release
+
+  # WebIDE 编辑入口（配合 .cnb/web_trigger.yml 的分支详情页自定义按钮）：
+  # 上方 vscode 事件已启用仅预览模式（onlyPreview），仅预览模式不支持 WebIDE；
+  # 为保留代码编辑能力，通过分支详情页自定义按钮「WebIDE 编辑」触发本事件，
+  # 进入标准 WebIDE 云开发环境（vscode + docker 服务，非仅预览模式）。
+  web_trigger_launch_vscode:
+    - docker:
+        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+        volumes:
+          - /root/.pub-cache:cow
+      services:
+        - vscode
+        - docker
+      stages:
+        - name: install component dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
+
+        - name: install site dependencies
+          script: cd tdesign-site && pnpm install
