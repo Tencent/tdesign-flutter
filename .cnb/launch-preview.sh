@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
+# pipefail 为 bash 扩展，POSIX sh（如 dash）不支持；bash 下启用，保证上游命令失败可被捕获
+if [ -n "${BASH_VERSION:-}" ]; then
+  set -o pipefail
+fi
 
 # 仅预览模式（onlyPreview）下的预览构建与启动脚本。
 # 业务服务必须监听 8686 端口（CNB 仅预览模式硬约束）。
