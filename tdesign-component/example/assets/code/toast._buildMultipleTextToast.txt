@@ -1,15 +1,14 @@
-Widget _buildWarningToast(BuildContext context) {
+Widget _buildMultipleTextToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('警告提示'),
+        child: const Text('多行文字'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showWarning(
-            '警告文案',
-            direction: IconTextDirection.vertical,
+          TToast.showText(
+            '最多一行展示十个汉字宽度限制最多不超过三行文字',
             context: context,
           );
         },

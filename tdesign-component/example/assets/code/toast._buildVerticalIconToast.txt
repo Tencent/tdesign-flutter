@@ -1,14 +1,15 @@
-Widget _buildWarningToast(BuildContext context) {
+Widget _buildVerticalIconToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('警告提示'),
+        child: const Text('带竖向图标'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showWarning(
-            '警告文案',
+          TToast.showIconText(
+            '带竖向图标',
+            icon: TIcons.check_circle,
             direction: IconTextDirection.vertical,
             context: context,
           );

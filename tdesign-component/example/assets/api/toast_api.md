@@ -32,7 +32,8 @@
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | maxLines | int? | - | 文案最大行数。 |
 | textStyle | TextStyle? | - | Toast 文案样式。 |
@@ -54,7 +55,8 @@
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | maxLines | int? | - | 文案最大行数。 |
 | textStyle | TextStyle? | - | Toast 文案样式。 |
@@ -74,7 +76,8 @@
 | context | BuildContext | - | - |
 | text | String? | - | 加载提示文案。 |
 | duration | Duration | TToast.infiniteDuration | 自动关闭时长。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | customWidget | Widget? | - | 自定义加载内容；传入后优先展示。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | textStyle | TextStyle? | - | Toast 文案样式。 |
@@ -93,7 +96,8 @@
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 | duration | Duration | TToast.infiniteDuration | 自动关闭时长。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | iconSize | double? | - | 加载图标尺寸。 |
 | iconColor | Color? | - | 加载图标颜色。 |
@@ -112,7 +116,8 @@
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | maxLines | int? | - | 文案最大行数。 |
 | textStyle | TextStyle? | - | Toast 文案样式。 |
@@ -134,7 +139,8 @@
 | duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
 | maxLines | int? | - | 文案最大行数。 |
 | constraints | BoxConstraints? | - | Toast 内容约束。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | customWidget | Widget? | - | 自定义内容；传入后优先展示。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | textStyle | TextStyle? | - | Toast 文案样式。 |
@@ -153,7 +159,8 @@
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
 | context | BuildContext | - | - |
 | duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
-| preventTap | bool? | - | 是否阻止 Toast 展示期间的背景点击。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
 | backgroundColor | Color? | - | Toast 背景色。 |
 | maxLines | int? | - | 文案最大行数。 |
 | textStyle | TextStyle? | - | Toast 文案样式。 |
@@ -176,3 +183,14 @@
 | --- | --- |
 | horizontal | 横向 |
 | vertical | 竖向 |
+
+
+### TToastPlacement
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| top | 顶部（距屏幕顶部 25%，水平居中） |
+| middle | 居中（屏幕正中） |
+| bottom | 底部（距屏幕底部 25%，水平居中） |
