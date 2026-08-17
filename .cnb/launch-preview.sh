@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -e
 
 # 仅预览模式（onlyPreview）下的预览构建与启动脚本。
 # 业务服务必须监听 8686 端口（CNB 仅预览模式硬约束）。
@@ -28,5 +28,5 @@ mkdir -p "$SITE_OUT/flutter/example"
 cp -R build/web/* "$SITE_OUT/flutter/example"
 
 echo "[preview] step 5/5: start static server on 8686 (root=$SITE_OUT)..."
-cd "$ROOT"
-exec dart run scripts/preview_server.dart "$SITE_OUT" 8686
+cd "$SITE_DIR"
+pnpm exec vite preview --mode=preview --port 8686 --host 0.0.0.0
