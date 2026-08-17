@@ -33,6 +33,7 @@
 | --- | --- | --- | --- |
 | child | Widget | - | 要增强为可滑动单元格的内容。 |
 | closeOnScroll | bool | true | 祖先滚动容器开始滚动时是否关闭已展开的操作区。 注意：当配合 `initialOpenSide` 初始展开面板时，若本值为 true， 面板会在首次滚动发生时即被关闭（语义偏"粘滞"），请按需调整。 |
+| closeOnTapOutside | bool? | - | 面板展开后，点击本格内容或单元格外部区域时是否自动关闭面板。 默认与官方行为对齐（`null` 视为 `true`）：面板展开后点击空白处自动收起。 点击操作项按钮不受此参数影响（由操作项自身的 `onPressed` / `autoClose` 处理）。 |
 | closeWhenOpened | bool | false | 展开时是否关闭同组其他单元格 |
 | controller | SlidableController? | - | 自定义控制滑动窗口 |
 | direction | Axis | Axis.horizontal | 可拖动的方向 |
@@ -55,7 +56,7 @@
 | --- | --- | --- | --- |
 | children | List<TSwipeCellAction> | - | 操作组件列表 |
 | closeOnCancel | bool | false | 移除取消后，是否关闭滑动单元格。dragDismissible为true才有效 |
-| closeThreshold | double? | - | 拖动多少占比触发关闭动作，默认 `extentRatio` 的一半 |
+| closeThreshold | double? | - | 拖动多少占比触发关闭动作，默认 `extentRatio` 的 30%（对齐官方） |
 | confirmDismiss | Future<bool> Function(BuildContext context)? | - | 移除前回调，可阻止移除。dragDismissible为true才有效 |
 | confirms | List<TSwipeCellAction>? | - | 二次确认操作组件列表 通过 `TSwipeCellAction.confirmIndex` 与 `children` 中的索引关联。 点击 `children` 中某操作项后，若命中某个 confirm 的索引则展示二次确认。 **点击的 action 需与 `children` 中为同一实例**； 若使用 `copyWith` 等重建等价实例，请为两者设置相同的 `TSwipeCellAction.id`，按标识而非引用匹配。 |
 | dismissalDuration | Duration | const Duration(milliseconds: 300) | 触发移除的滑动动画时长。dragDismissible为true才有效 |
@@ -64,7 +65,7 @@
 | extentRatio | double | 0.3 | 宽度占比 |
 | motionType | SwipeMotion? | - | 滑动动画展示方式 |
 | onDismissed | void Function(BuildContext context)? | - | 移除后回调。dragDismissible为true才有效 |
-| openThreshold | double? | - | 拖动多少占比触发打开动作，默认 `extentRatio` 的一半 |
+| openThreshold | double? | - | 拖动多少占比触发打开动作，默认 `extentRatio` 的 30%（对齐官方） |
 | resizeDuration | Duration | const Duration(milliseconds: 300) | 移除动画（高度变为0）时长。dragDismissible为true才有效 |
 
 
@@ -80,16 +81,16 @@
 | builder | WidgetBuilder? | - | 自定义构建 |
 | confirmIndex | List<int>? | - | 指定`TSwipeCellPanel.children`的索引，来打开该`TSwipeCellAction` `TSwipeCellPanel.confirms`参数下才配置该参数 |
 | direction | Axis | Axis.horizontal | 图标和标题的排列方向 |
-| flex | int | 1 | 宽度占比，默认为 1，`TSwipeCellPanel.confirms`下无效（失踪占满整个`TSwipeCellPanel`宽度） |
+| flex | int | 1 | 宽度占比，默认为 1，`TSwipeCellPanel.confirms`下无效（始终占满整个`TSwipeCellPanel`宽度） |
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色；为 null 时依次回退到组件级主题 `TSwipeCellThemeData.actionIconColor`、label 字体颜色、P4 Token。 |
-| iconSize | double? | - | 图标大小，默认 18；为 null 时回退到组件级主题 `TSwipeCellThemeData.actionIconSize`， 再回退到内置默认值。 |
+| iconSize | double? | - | 图标大小，默认 20；为 null 时回退到组件级主题 `TSwipeCellThemeData.actionIconSize`， 再回退到内置默认值。 |
 | id | String? | - | 稳定标识，用于二次确认匹配。 二次确认通过 `TSwipeCellPanel.confirms` 的 `confirmIndex` 与 `TSwipeCellPanel.children` 的索引关联。默认依赖点击的 action 与 children 为同一实例（`==` 匹配）； 若通过 `copyWith` 等重建了等价实例，请为两者设置相同的 `id`， 以按标识而非实例引用匹配。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 标题 |
 | labelStyle | TextStyle? | - | 标题样式；为 null 时回退到组件级主题 `TSwipeCellThemeData.actionTextStyle`。 |
 | onPressed | void Function(BuildContext context)? | - | 点击回调 |
-| spacing | double? | - | 图标和标题的间距，默认 2；为 null 时回退到组件级主题 `TSwipeCellThemeData.actionSpacing`， 再回退到内置默认值。 |
+| spacing | double? | - | 图标和标题的间距，默认 8；为 null 时回退到组件级主题 `TSwipeCellThemeData.actionSpacing`， 再回退到内置默认值。 |
 
 
 ### TSwipeCellSide
