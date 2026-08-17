@@ -75,8 +75,9 @@ $:
       stages:
         - name: preview ready
           script: |
-            echo "preview build/web:"
-            ls -la tdesign-component/example/build/web 2>/dev/null || echo "(build/web 将由 launch 在首次请求前构建)"
+            # launch 以 daemon 后台构建并落盘日志，此处展示构建进度供定位
+            echo "===== preview.log (launch 构建日志) ==="
+            tail -n 100 tdesign-site/_site/preview.log 2>/dev/null || echo "(日志尚未生成，构建可能仍在启动)"
 
   # 云原生开发：仅预览模式不支持 WebIDE，此事件进入标准 WebIDE 用于编辑代码
   vscode:
