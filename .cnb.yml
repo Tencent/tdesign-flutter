@@ -57,7 +57,9 @@ $:
             state: close
           if: '[ -n "$ISSUE_REF" ]'
 
-  # 启动预览：仅预览模式打开分支 Flutter Web 预览（构建 example 并监听 8686）
+  # 启动预览：仅预览模式打开分支 Flutter Web 预览。
+  # default-dev-env 镜像预装 nginx 监听 8686（root=/usr/share/nginx/html），
+  # launch-preview.sh 负责构建站点与 example 产物并复制到该目录，nginx 即时生效。
   web_trigger_launch_preview:
     - docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env
@@ -68,8 +70,8 @@ $:
         - name: vscode
           options:
             onlyPreview: true
-            # 业务服务须监听 8686，由 launch-preview.sh 构建产物并启动；
-            # launch 末尾的服务常驻前台，须 daemon 后台运行避免阻塞超时。
+            # 业务服务须监听 8686（镜像 nginx 已常驻），launch-preview.sh 仅负责构建并复制到
+            # /usr/share/nginx/html；launch 末尾以 daemon 后台保活，避免前台阻塞超时。
             launch: sh .cnb/launch-preview.sh
             daemon: true
             keepAliveTimeout: 30m
@@ -78,7 +80,7 @@ $:
           script: |
             # launch 以 daemon 后台构建并落盘日志，此处展示构建进度供定位
             echo "===== preview.log (launch 构建日志) ==="
-            tail -n 100 tdesign-site/_site/preview.log 2>/dev/null || echo "(日志尚未生成，构建可能仍在启动)"
+            tail -n 100 /usr/share/nginx/html/preview.log 2>/dev/null || echo "(日志尚未生成，构建可能仍在启动)"
 
   # 云原生开发：仅预览模式不支持 WebIDE，此事件进入标准 WebIDE 用于编辑代码
   vscode:

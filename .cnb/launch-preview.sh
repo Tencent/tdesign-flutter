@@ -5,33 +5,41 @@ if [ -n "${BASH_VERSION:-}" ]; then
   set -o pipefail
 fi
 
-# 仅预览模式下构建并启动预览（须监听 8686）。
-# 策略：用一个 Node 进程（.cnb/preview-server.js）从启动【一直常驻】8686，
-#       期间在后台构建站点与 Flutter Web 到 $SITE_OUT。
-#       服务进程从不 kill / 重启，平台对 8686 的转发始终稳定，杜绝
-#       "先 node 占位、再换 vite preview"方案中因进程切换导致的转发失效问题。
-#       preview-server.js 在构建前返回占位页（自动刷新），构建后实时提供
-#       _site 静态文件（含 SPA fallback 与正确 MIME），无需重启即可生效。
-# launch 以 daemon:true 运行，日志不直接进流水线，故统一落盘到 $SITE_OUT/preview.log，
+# 仅预览模式下构建并启动预览（default-dev-env 镜像预装 nginx 监听 8686）。
+# 策略：镜像启动时 nginx 即常驻 8686（root=/usr/share/nginx/html），端口检测天然通过，
+#       本脚本仅负责构建站点与 Flutter Web 产物并复制到 /usr/share/nginx/html，
+#       nginx 静态服务即时生效、无需重启，彻底规避此前"占位->换进程"导致的转发漂移。
+#       构建期间先写入占位页，避免预览页空白/404。
+# launch 以 daemon:true 运行，日志不直接进流水线，故统一落盘到 /usr/share/nginx/html/preview.log，
 # 由 stages 的「preview ready」阶段 tail 展示，便于定位构建问题。
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SITE_DIR="$ROOT/tdesign-site"
 SITE_OUT="$SITE_DIR/_site"
 FLUTTER_DIR="$ROOT/tdesign-component/example"
-LOG="$SITE_OUT/preview.log"
+WEB_ROOT="/usr/share/nginx/html"
+LOG="$WEB_ROOT/preview.log"
 
-mkdir -p "$SITE_OUT"
+mkdir -p "$SITE_OUT" "$WEB_ROOT"
 : >"$LOG"
 
-# 1. 【关键】立即启动常驻的 Node 预览服务器占住 8686，通过平台启动检测。
-#    该进程全程不退出，构建完成后自动开始提供真实产物。
-cd "$SITE_OUT"
-nohup node "$ROOT/.cnb/preview-server.js" "$SITE_OUT" 8686 "$LOG" >>"$LOG" 2>&1 &
-SERVER_PID=$!
-echo "preview server (pid $SERVER_PID) started on 8686" >>"$LOG"
+# 1. 确认 nginx 已监听 8686（镜像预装并随容器启动）；极端未启动时拉起，保证端口检测通过
+if ! bash -c 'exec 3<>/dev/tcp/127.0.0.1/8686' 2>/dev/null; then
+  echo "[$(date +%T)] nginx not listening on 8686 yet, starting nginx..." >>"$LOG"
+  nginx >>"$LOG" 2>&1 || echo "[$(date +%T)] nginx start failed, check image config" >>"$LOG"
+fi
 
-# 2. 后台安装站点依赖、构建站点与 flutter example 并嵌入 _site/flutter/example
+# 2. 写入构建占位页，供 nginx 在构建期间稳定返回（自动刷新）
+cat > "$WEB_ROOT/index.html" <<'HTML'
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<meta http-equiv="refresh" content="5"><title>TDesign Flutter Preview</title></head>
+<body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;
+height:100vh;margin:0;background:#f4f4f5;color:#333">
+<div style="text-align:center"><h1>TDesign Flutter Preview</h1>
+<p>构建中，请稍候自动刷新…</p></div></body></html>
+HTML
+
+# 3. 后台安装依赖、构建站点与 flutter example，并嵌入 _site/flutter/example
 (
   cd "$SITE_DIR"
   pnpm install
@@ -41,16 +49,15 @@ echo "preview server (pid $SERVER_PID) started on 8686" >>"$LOG"
   flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
   mkdir -p "$SITE_OUT/flutter/example"
   cp -R build/web/* "$SITE_OUT/flutter/example"
+
+  # 4. 将最终产物整体复制到 nginx 根目录（覆盖占位页），nginx 即时生效
+  cp -R "$SITE_OUT"/. "$WEB_ROOT"/
   echo "BUILD_DONE" >>"$LOG"
 ) >>"$LOG" 2>&1 &
 BUILD_PID=$!
 
-# 3. 保持脚本作为守护进程存活（daemon:true）。
-#    preview server 常驻 8686 提供预览，后台构建完成后即自动切换到真实产物。
-#    此处仅等待构建完成，便于在日志中确认 BUILD_DONE；随后进入 wait 持续保活，
-#    直到整个仅预览环境被关闭（keepAliveTimeout 兜底）。
+# 5. 守护保活：等待构建完成，便于在日志确认 BUILD_DONE；
+#    随后常驻保活，避免 daemon 进程提前退出导致平台判定服务结束（keepAliveTimeout 兜底回收）。
 wait "$BUILD_PID"
-echo "build finished; preview server (pid $SERVER_PID) keeps serving on 8686" >>"$LOG"
-# 显式等待 preview server，保证脚本（daemon:true）在服务存活期间不退出，
-# 直到整个仅预览环境被关闭（keepAliveTimeout 兜底）。
-wait "$SERVER_PID"
+echo "[$(date +%T)] build finished; nginx serves $WEB_ROOT on 8686" >>"$LOG"
+sleep infinity
