@@ -33,7 +33,7 @@ fi
 (
   cd "$SITE_DIR"
   pnpm install
-  pnpm run site -- --mode=preview
+  pnpm run site --mode=preview
   cd "$FLUTTER_DIR"
   flutter pub get
   flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
