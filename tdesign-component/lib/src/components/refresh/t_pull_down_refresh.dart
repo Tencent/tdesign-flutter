@@ -42,16 +42,17 @@ class TPullDownRefresh extends StatefulWidget {
   /// 也可通过 [controller] 接管完成时机。
   ///
   /// 若回调同步抛错或返回的 Future 失败，刷新任务会**正常结束（不悬挂）**，
-  /// 但错误**不会被本组件吞掉**——会继续上抛给调用方。若需在失败时做业务
-  /// 处理，请在回调内部自行 try/catch。
+  /// 错误通过 `FlutterError.reportError` 上报（不吞掉），但不会作为未捕获异常
+  /// 中断 easy_refresh 的动画流程。若需在失败时做业务处理，请在回调内部自行
+  /// try/catch。
   final FutureOr<void> Function()? onRefresh;
 
   /// 触底加载回调（对应官方 `scrolltolower` 事件）。
   ///
   /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。启用后会展示
   /// 一个与组件职责相符的可见 footer（加载指示器），滚动到底时触发。
-  /// 同 [onRefresh]，回调抛错 / Future 失败时不悬挂加载、错误上抛给调用方。
-  final FutureOr<void> Function()? onLoadMore;
+  /// 同 [onRefresh]，回调抛错 / Future 失败时不悬挂加载、错误经
+  /// `FlutterError.reportError` 上报。
 
   /// 是否启用触底加载（默认 false）。
   ///
@@ -202,17 +203,36 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
       final result = widget.onRefresh?.call();
       final future = result is Future ? result : null;
       if (future != null) {
-        // Future 成功 / 失败都会结束刷新（whenComplete），错误继续上抛给调用方。
-        return future.whenComplete(_finishRefreshAndReport);
+        // Future 成功 / 失败都会结束刷新（whenComplete）；失败时通过
+        // FlutterError.reportError 上报（不吞掉、不悬挂），避免作为未捕获异常
+        // 中断 easy_refresh 的动画流程。
+        return future.then<void>(
+          (_) => _finishRefreshAndReport(),
+          onError: (Object e, StackTrace st) {
+            _finishRefreshAndReport();
+            _reportRefreshError(e, st);
+            return null;
+          },
+        );
       }
       // 同步返回：视为立即完成。
       _finishRefreshAndReport();
       return result;
     } catch (e, st) {
-      // 同步抛错：先结束刷新避免悬挂，再把错误上抛给调用方（不吞掉）。
+      // 同步抛错：结束刷新避免悬挂，并通过 FlutterError.reportError 上报。
       _finishRefreshAndReport();
-      Error.throwWithStackTrace(e, st);
+      _reportRefreshError(e, st);
+      return null;
     }
+  }
+
+  void _reportRefreshError(Object e, StackTrace st) {
+    FlutterError.reportError(FlutterErrorDetails(
+      exception: e,
+      stack: st,
+      library: 'TPullDownRefresh',
+      context: ErrorDescription('下拉刷新回调 onRefresh 执行失败'),
+    ));
   }
 
   FutureOr<void> _handleLoadMore() {

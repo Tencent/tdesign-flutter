@@ -702,7 +702,12 @@ void main() {
   });
 
   group('异常传播（P2-2）', () {
-    testWidgets('onRefresh 同步抛错不会悬挂刷新', (tester) async {
+    testWidgets('onRefresh 同步抛错不会悬挂刷新且错误经 FlutterError 上报', (tester) async {
+      final reported = <Object?>[];
+      final originalOnError = FlutterError.onError;
+      FlutterError.onError = (details) => reported.add(details.exception);
+      addTearDown(() => FlutterError.onError = originalOnError);
+
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
@@ -714,39 +719,28 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       final gesture = await tester.startGesture(const Offset(200, 150));
-      // 同步抛错会经 easy_refresh 动画 tick 上抛（组件刻意不吞错误、交给调用方），
-      // 属预期行为：逐帧消费异常，核心断言是「刷新不悬挂」——组件仍可正常复位。
       for (var i = 0; i < 15; i++) {
         await gesture.moveBy(const Offset(0, 10));
-        // 同步抛错经动画 tick 上抛，属预期，忽略（刷新不悬挂即可）。
-        try {
-          await tester.pump(const Duration(milliseconds: 20));
-        } catch (_) {
-          // ignore: empty_catches
-        }
+        await tester.pump(const Duration(milliseconds: 20));
       }
-      // 同步抛错可能经 easy_refresh 上抛，属预期，忽略。
-      try {
-        await gesture.up();
-      } catch (_) {
-        // ignore: empty_catches
-      }
+      await gesture.up();
       for (var i = 0; i < 10; i++) {
-        // 同步抛错可能经后续帧继续上抛，属预期，忽略。
-        try {
-          await tester.pump(const Duration(milliseconds: 100));
-        } catch (_) {
-          // ignore: empty_catches
-        }
+        await tester.pump(const Duration(milliseconds: 100));
       }
-      // 取走可能残留的未捕获异常（错误上抛属预期），核心断言是刷新不悬挂。
-      tester.takeException();
+      // 错误已通过 FlutterError.reportError 上报（不吞掉），且刷新不悬挂。
+      expect(reported, isNotEmpty);
+      expect(reported.first, isA<StateError>());
       // 清空残留计时器后组件可正常复位。
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
     });
 
-    testWidgets('onRefresh Future 失败不会悬挂刷新', (tester) async {
+    testWidgets('onRefresh Future 失败不会悬挂刷新且错误经 FlutterError 上报', (tester) async {
+      final reported = <Object?>[];
+      final originalOnError = FlutterError.onError;
+      FlutterError.onError = (details) => reported.add(details.exception);
+      addTearDown(() => FlutterError.onError = originalOnError);
+
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
@@ -761,18 +755,12 @@ void main() {
         await tester.pump(const Duration(milliseconds: 20));
       }
       await gesture.up();
-      // onRefresh 返回的 Future 失败会被组件透传给调用方，属预期行为；
-      // 逐帧消费异常，核心断言是「刷新不悬挂」——组件仍可正常复位。
       for (var i = 0; i < 10; i++) {
-        // Future 失败经帧上抛，属预期，忽略。
-        try {
-          await tester.pump(const Duration(milliseconds: 100));
-        } catch (_) {
-          // ignore: empty_catches
-        }
+        await tester.pump(const Duration(milliseconds: 100));
       }
-      // 取走可能残留的未捕获异常（错误上抛属预期），核心断言是刷新不悬挂。
-      tester.takeException();
+      // 错误已通过 FlutterError.reportError 上报（不吞掉），且刷新不悬挂。
+      expect(reported, isNotEmpty);
+      expect(reported.first, isA<StateError>());
       // 清空残留计时器后组件可正常复位。
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
