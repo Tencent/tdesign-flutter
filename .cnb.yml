@@ -58,8 +58,8 @@ $:
           if: '[ -n "$ISSUE_REF" ]'
 
   # 启动预览：仅预览模式打开分支 Flutter Web 预览。
-  # default-dev-env 镜像预装 nginx 监听 8686（root=/usr/share/nginx/html），
-  # launch-preview.sh 负责构建站点与 example 产物并复制到该目录，nginx 即时生效。
+  # launch-preview.sh 先用 .cnb/preview-server.js（Node 进程）常驻监听 8686 通过启动检测，
+  # 再后台构建站点与 example 产物到 tdesign-site/_site，服务构建期间返回占位页、完成后实时提供真实产物。
   web_trigger_launch_preview:
     - docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env
@@ -70,8 +70,8 @@ $:
         - name: vscode
           options:
             onlyPreview: true
-            # 业务服务须监听 8686（镜像 nginx 已常驻），launch-preview.sh 仅负责构建并复制到
-            # /usr/share/nginx/html；launch 末尾以 daemon 后台保活，避免前台阻塞超时。
+            # 业务服务须监听 8686：launch-preview.sh 用 Node 进程常驻 8686 并通过平台启动检测，
+            # 后台构建产物；launch 以 daemon 后台保活，避免前台阻塞超时。
             launch: sh .cnb/launch-preview.sh
             daemon: true
             keepAliveTimeout: 30m
