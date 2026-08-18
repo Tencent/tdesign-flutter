@@ -2,8 +2,8 @@
 
 ## 验证环境
 
-- 分支：`rss1102/cnb-issue-70/feat/loading-contract-alignment`（待创建）
-- 提交：（待填写）
+- 分支：`rss1102/cnb-issue-70/feat/loading-contract-alignment`
+- 提交：`a22b0289`
 - Flutter/Dart：3.32.0 (Dart 3.8.0) / 3.47.0 (Dart 3.13.0)
 
 ## 自动化验证
@@ -31,7 +31,7 @@
 ## 人工验收
 
 - [x] 默认 `duration` 800、默认 `axis` horizontal，与官方一致（示例页可见默认转圈速度与横向布局）。
-- [x] `TLoadingController.show` 传 `overlay` 时渲染全屏蒙层 / 拦截点击；不传时无蒙层。
+- [x] `TLoadingController.show` 传 `overlay` 时渲染全屏蒙层；仅 `preventTap: true` 拦截背景点击，不传时无蒙层。
 - [x] circle 三档尺寸 20/22/26 对齐官方与 activity。
 - [x] 示例页纯图标分组新增"自定义图标"（custom 指示器）Demo。
 - [x] 站点 README 文件链接、API 表、示例代码已修正，`loading_api.md` 保持生成原样。

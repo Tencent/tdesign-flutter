@@ -589,8 +589,26 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('preventTap 拦截背景点击', (tester) async {
-      final ctx = await pumpOverlay(tester, const SizedBox());
+    testWidgets('preventTap 控制蒙层是否拦截背景点击', (tester) async {
+      var tapCount = 0;
+      final ctx = await pumpOverlay(
+        tester,
+        SizedBox.expand(
+          child: GestureDetector(onTap: () => tapCount++),
+        ),
+      );
+
+      TLoadingController.show(
+        ctx,
+        text: '加载中',
+        overlay: const TOverlayConfig(showOverlay: true),
+      );
+      await tester.pump();
+      await tester.tapAt(const Offset(10, 10));
+      expect(tapCount, 1);
+      TLoadingController.dismiss();
+      await tester.pump();
+
       TLoadingController.show(
         ctx,
         text: '加载中',
@@ -598,8 +616,8 @@ void main() {
       );
       await tester.pump();
       expect(find.text('加载中'), findsOneWidget);
-      // preventTap=true：走 Stack 蒙层分支（存在 Positioned.fill 蒙层）
-      expect(find.byType(Positioned), findsOneWidget);
+      await tester.tapAt(const Offset(10, 10));
+      expect(tapCount, 1);
       TLoadingController.dismiss();
       await tester.pump();
     });

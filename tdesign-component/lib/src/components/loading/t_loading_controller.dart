@@ -62,7 +62,12 @@ class TLoadingController {
     if (cfg.preventTap || showMask) {
       content = Stack(
         children: [
-          Positioned.fill(child: Container(color: maskColor)),
+          Positioned.fill(
+            child: IgnorePointer(
+              ignoring: !cfg.preventTap,
+              child: Container(color: maskColor),
+            ),
+          ),
           content,
         ],
       );
