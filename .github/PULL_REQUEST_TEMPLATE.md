@@ -36,14 +36,10 @@
 从用户角度描述具体变化，以及可能的 breaking change 和其他风险。
 
 格式要求：
-- 若一个 PR 包含多个功能 / 修复，必须按条目分开列写，不能合并成一条笼统描述。
-- 每条遵循：修复缺陷用 `fix(组件名称): 修复 xxx 的问题`，新增能力用 `feat(组件名称): 添加了 xxx 功能`，其他用 `docs(...)` / `refactor(...)` / `chore(...)` 等。
-- **Breaking change（改变公开 API 签名 / 默认行为 / 删除能力）必须在该条前加 ⚠️ 前置标记**，以提醒用户这是需要严重注意的问题，例如：`- ⚠️ refactor(toast): 调整 xxx 默认行为`。
-- 示例：
-  - ⚠️ refactor(toast): 调整 xxx 默认行为（Breaking change）
-  - fix(TInput): 修复密文模式下无法粘贴的问题
-  - feat(TButton): 新增渐变背景能力
-  - docs: 更新主题生成器文档
+- 一个 PR 含多个功能 / 修复时，按条目分开列写，不合并。
+- 每条遵循 Conventional Commits 的 commit type，与最终分组对应：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
+- Breaking change 使用 `breaking(组件): xxx` 写法，自动归入 Breaking Changes 分组。
+- 示例：`breaking(toast): 调整 xxx 默认行为`、`fix(TInput): 修复密文模式下无法粘贴的问题`、`feat(TButton): 新增渐变背景能力`、`docs: 更新主题生成器文档`
 -->
 
 - 待补充
@@ -54,7 +50,7 @@
 
 ⚠️ 请自检并全部**勾选全部选项**。⚠️
 
-- [ ] 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`；`scope` 可填写组件、文档或 CI 模块。
+- [ ] 标题遵循 Conventional Commits 格式：`type(<scope>?): 修改描述`。
       示例：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`
 - [ ] “相关 Issue”处带上修复的 Issue 链接或无关联 Issue
 - [ ] 已添加对应的 Spec 链接，或已由 Review 确认本次改动无需 Spec

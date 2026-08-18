@@ -57,9 +57,59 @@ $:
             state: close
           if: '[ -n "$ISSUE_REF" ]'
 
+  # 启动预览：仅预览模式打开分支 Flutter Web 预览。
+  # launch 仅启动镜像预装 nginx 常驻监听 8686（root=/usr/share/nginx/html）通过平台启动检测；
+  # 业务构建由下方 stages 完成，产物复制到 /usr/share/nginx/html 后 nginx 实时提供。
+  web_trigger_launch_preview:
+    - docker:
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env
+        volumes:
+          - /root/.pub-cache:cow
+          - .pnpm-store:cow
+      services:
+        - name: vscode
+          options:
+            onlyPreview: true
+            # 业务服务须监听 8686：launch 仅启动镜像预装 nginx 占住 8686 通过平台启动检测，
+            # 构建在下方 stages 中执行；daemon: true 让 nginx 前台常驻不阻塞。
+            launch: nginx
+            daemon: true
+            keepAliveTimeout: 30m
+      stages:
+        # 安装依赖（与 vscode 事件复用同一套 install 阶段）
+        - name: install component dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
+
+        - name: install site dependencies
+          script: cd tdesign-site && pnpm install
+
+        # 构建站点与 Flutter example Web 产物
+        - name: build site
+          script: cd tdesign-site && pnpm run site --mode=preview
+
+        - name: build flutter web
+          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
+
+        # 将产物嵌入 _site/flutter/example 后整体复制到 nginx 根目录，nginx 即时生效
+        - name: deploy to nginx root
+          script: |
+            set -eu
+            SITE_OUT=tdesign-site/_site
+            FLUTTER_DIR=tdesign-component/example
+            WEB_ROOT=/usr/share/nginx/html
+            mkdir -p "$SITE_OUT/flutter/example"
+            cp -R "$FLUTTER_DIR"/build/web/* "$SITE_OUT"/flutter/example/
+            cp -R "$SITE_OUT"/. "$WEB_ROOT"/
+
+  # 云原生开发：仅预览模式不支持 WebIDE，此事件进入标准 WebIDE 用于编辑代码
   vscode:
     - docker:
-        image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env
+        volumes:
+          - /root/.pub-cache:cow
       services:
         - vscode
         - docker
