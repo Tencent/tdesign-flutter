@@ -739,7 +739,7 @@ void main() {
           // ignore: empty_catches
         }
       }
-      // 取走框架可能记录的未捕获异常，避免测试失败。
+      // 取走可能残留的未捕获异常（错误上抛属预期），核心断言是刷新不悬挂。
       tester.takeException();
       // 清空残留计时器后组件可正常复位。
       await tester.pump(const Duration(seconds: 1));
@@ -771,7 +771,7 @@ void main() {
           // ignore: empty_catches
         }
       }
-      // 取走框架可能记录的未捕获异常，避免测试失败。
+      // 取走可能残留的未捕获异常（错误上抛属预期），核心断言是刷新不悬挂。
       tester.takeException();
       // 清空残留计时器后组件可正常复位。
       await tester.pump(const Duration(seconds: 1));
