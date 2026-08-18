@@ -1,5 +1,5 @@
 # 引入公共可复用片段（见 .cnb/.reusable-stages.yml）
-# 完整的 CI pipeline 模板（sync + analyze / build apk / build web × flutter 3.32.0 & latest）
+# 完整的 CI pipeline 模板（sync + analyze / test / build apk / build web × flutter 3.32.0 & latest）
 # 都在该文件中定义，此处事件侧仅用 !reference 逐条引用，避免重复书写。
 include:
   - .cnb/.reusable-stages.yml
@@ -11,6 +11,8 @@ develop:
     - !reference [.sync-to-github]
     - !reference [.analyze-332]
     - !reference [.analyze-latest]
+    - !reference [.test-332]
+    - !reference [.test-latest]
     - !reference [.build-apk-332]
     - !reference [.build-apk-latest]
     - !reference [.build-web-332]
@@ -22,9 +24,11 @@ $:
     - !reference [.sync-to-github]
 
   pull_request:
-    # 静态分析 / 构建 APK / 构建 Web（flutter 3.32.0 与 latest 两个版本）
+    # 静态分析 / 测试+覆盖率 / 构建 APK / 构建 Web（flutter 3.32.0 与 latest 两个版本）
     - !reference [.analyze-332]
     - !reference [.analyze-latest]
+    - !reference [.test-332]
+    - !reference [.test-latest]
     - !reference [.build-apk-332]
     - !reference [.build-apk-latest]
     - !reference [.build-web-332]

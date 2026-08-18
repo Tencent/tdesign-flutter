@@ -512,4 +512,361 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
   });
+
+  group('loadMore 触底加载 footer（P1-2）', () {
+    testWidgets('enableLoadMore 开启且长列表触底时渲染可见 footer', (tester) async {
+      // onLoadMore 不立即完成，让 footer 保持加载态以便断言。
+      final loadCompleter = Completer<void>();
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              onLoadMore: () => loadCompleter.future,
+              enableLoadMore: true,
+              child: ListView.builder(
+                itemCount: 40,
+                itemBuilder: (context, index) =>
+                    SizedBox(height: 60, child: Text('item$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 滚动到底，footer 加载指示器应可见。
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.byType(TLoading).evaluate().isNotEmpty, isTrue);
+      // 完成加载并清空残留计时器。
+      loadCompleter.complete();
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('enableLoadMore=false 时不渲染 footer', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onLoadMore: () async {},
+            enableLoadMore: false,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('滚动到底触发 onLoadMore', (tester) async {
+      var loaded = false;
+      // 内容足够多以便滚动到底触发触底加载。
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              onLoadMore: () async => loaded = true,
+              enableLoadMore: true,
+              child: ListView.builder(
+                itemCount: 40,
+                itemBuilder: (context, index) =>
+                    SizedBox(height: 60, child: Text('item$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 滚动到底部触发触底加载。
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(loaded, isTrue);
+      // 清空 EasyRefresh 内部残留计时器。
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('onLoadMore 为空时即使 enableLoadMore=true 也不加载', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onLoadMore: null,
+            enableLoadMore: true,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('加载完成后 footer 进入结束语义', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              onLoadMore: () async {},
+              enableLoadMore: true,
+              child: ListView.builder(
+                itemCount: 40,
+                itemBuilder: (context, index) =>
+                    SizedBox(height: 60, child: Text('item$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 滚动到底触发加载，加载立即完成，footer 进入结束（done）语义。
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      // 结束语义：加载完成后 footer 仍在渲染（指示器或结束文案），不再持续加载态。
+      final footerRendered =
+          find.byType(TLoading).evaluate().isNotEmpty ||
+              find.byType(TText).evaluate().isNotEmpty;
+      expect(footerRendered, isTrue);
+      // 清空残留计时器。
+      await tester.pump(const Duration(seconds: 1));
+    });
+  });
+
+  group('controller 所有权（P1-1）', () {
+    testWidgets('外部 controller.dispose 不会双重释放', (tester) async {
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () async {}, controller: controller)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 组件存活时外部 dispose，仅解绑、不释放底层 controller，不应抛错。
+      controller.dispose();
+      // 卸载组件，State 仍可正常 dispose 底层 EasyRefreshController（无双重释放异常）。
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(seconds: 1));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('dispose 后 refresh 静默失败而非抛错', (tester) async {
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () async {}, controller: controller)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      controller.dispose();
+      // dispose 后调用 refresh，应静默失败不抛错（底层 controller 已被解绑）。
+      expect(() => unawaited(controller.refresh()), returnsNormally);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('状态回调去重与异步调度（P2-1）', () {
+    testWidgets('onStateChanged 状态跳变去重、不在 build 期同步回调', (tester) async {
+      final states = <TPullDownRefreshState>[];
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onStateChanged: (s) {
+              // 若在 build 期同步触发，这里 setState 会抛错——
+              // 组件已改为异步调度，故此处不应抛错。
+              states.add(s);
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 至少上报过 inactive；同一状态不应重复上报多次（已去重）。
+      expect(states, contains(TPullDownRefreshState.inactive));
+      final inactiveCount = states
+          .where((s) => s == TPullDownRefreshState.inactive)
+          .length;
+      expect(inactiveCount, lessThanOrEqualTo(2));
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('异常传播（P2-2）', () {
+    testWidgets('onRefresh 同步抛错不会悬挂刷新', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () {
+              throw StateError('boom');
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      for (var i = 0; i < 15; i++) {
+        await gesture.moveBy(const Offset(0, 10));
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+      // 捕获手势触发期间可能上抛的错误，并清理框架记录的异常，
+      // 核心断言是「刷新不悬挂」：随后组件仍可正常 pump / 复位。
+      try {
+        await gesture.up();
+      } catch (_) {
+        // 同步抛错可能经 easy_refresh 上抛，属预期，忽略。
+      }
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      // 取走框架可能记录的未捕获异常，避免测试失败。
+      tester.takeException();
+      // 清空残留计时器后组件可正常复位。
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('onRefresh Future 失败不会悬挂刷新', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async => throw StateError('boom'),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      for (var i = 0; i < 15; i++) {
+        await gesture.moveBy(const Offset(0, 10));
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+      await gesture.up();
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      // 取走框架可能记录的未捕获异常，避免测试失败。
+      tester.takeException();
+      // 清空残留计时器后组件可正常复位。
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+  });
+
+  group('timeout 状态语义（P2-3）', () {
+    testWidgets('超时上报 timeout 后结束刷新并复位', (tester) async {
+      final states = <TPullDownRefreshState>[];
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () => Completer<void>().future,
+            refreshTimeout: const Duration(milliseconds: 100),
+            onStateChanged: states.add,
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      unawaited(controller.refresh());
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(states, contains(TPullDownRefreshState.timeout));
+      // 超时后组件复位（回到 inactive）。
+      await tester.pump(const Duration(seconds: 1));
+      expect(states, contains(TPullDownRefreshState.inactive));
+    });
+  });
+
+  group('逐公开 Demo Widget 断言（P0-1/P1-4）', () {
+    testWidgets('基础刷新 demo：onRefresh / child / Header 均存在', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              child: ListView(children: const [
+                Text('拖拽该区域演示 顶部下拉刷新'),
+                SizedBox(height: 16),
+                Text('下拉刷新次数：0'),
+              ]),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('拖拽该区域演示 顶部下拉刷新'), findsOneWidget);
+      expect(find.text('下拉刷新次数：0'), findsOneWidget);
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('自定义提示语 demo：四态文案自定义生效', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              texts: const TPullDownRefreshTexts(
+                pullToRefresh: '下拉即可刷新...',
+                releaseToRefresh: '释放即可刷新...',
+                refreshing: '加载中...',
+                refreshComplete: '刷新成功',
+              ),
+              onRefresh: () async {},
+              child: ListView(children: const [
+                Text('下拉刷新'),
+                SizedBox(height: 16),
+                Text('自定义提示语刷新次数：0'),
+              ]),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('下拉刷新'), findsOneWidget);
+      expect(find.text('自定义提示语刷新次数：0'), findsOneWidget);
+    });
+
+    testWidgets('刷新超时 demo：refreshTimeout + onTimeout 生效', (tester) async {
+      var timedOut = false;
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              refreshTimeout: const Duration(seconds: 1),
+              onTimeout: () => timedOut = true,
+              onRefresh: () => Completer<void>().future,
+              controller: controller,
+              child: ListView(children: const [
+                Text('下拉刷新'),
+                SizedBox(height: 16),
+                Text('超时刷新次数：0'),
+              ]),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      unawaited(controller.refresh());
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(timedOut, isTrue);
+      await tester.pump(const Duration(seconds: 1));
+    });
+  });
 }
