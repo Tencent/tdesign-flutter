@@ -28,7 +28,7 @@
 - **loadMore**：补真实滚动到底触发、加载状态、禁用/结束语义测试；提供可见 footer（`_TPullDownRefreshFooter`）。
 - **controller 所有权**：底层 `EasyRefreshController` 仅由 State 管理/dispose；外部 `TPullDownRefreshController.dispose()` 仅解绑、不释放底层（含 dispose 后行为测试）。
 - **状态回调去重**：`onStateChanged` 在状态跳变处去重上报，异步调度避免 build 期同步回调。
-- **异常传播**：`onRefresh` 同步抛错 / Future 失败均结束刷新（不悬挂），错误继续上抛。
+- **异常传播**：`onRefresh` 同步抛错 / Future 失败均结束刷新（不悬挂）；错误经 `FlutterError.reportError` 上报（不吞掉），避免 easy_refresh 对任务失败无条件 rethrow 产生调用方无法接管的 unhandled async error。
 - **timeout 语义**：超时瞬时上报 `timeout` 后立即结束刷新并复位（无专属渲染文案，已在 dartdoc 说明）。
 - **英文文案**：`releaseRefresh` 改为 `Release to refresh`。
 - **站点 churn 清理**：修复 README 全角逗号回归，移除过时 `easy_refresh` import，补充 child 滚动约束 dartdoc。
