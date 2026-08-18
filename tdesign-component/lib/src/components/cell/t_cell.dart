@@ -202,10 +202,10 @@ class _TCellState extends State<TCell> {
                       color:
                           colorScheme?.onSurfaceVariant ??
                           context.tTheme.textColorPlaceholder,
-                      fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                      height: context.tTheme.fontBodyMedium?.height,
+                      fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+                      height: context.tTheme.fontBodyLarge?.height,
                       fontWeight:
-                          context.tTheme.fontBodyMedium?.fontWeight ??
+                          context.tTheme.fontBodyLarge?.fontWeight ??
                           FontWeight.w400,
                     ),
                 child: widget.note!,

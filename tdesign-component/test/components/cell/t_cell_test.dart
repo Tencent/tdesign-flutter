@@ -208,8 +208,8 @@ void main() {
       expect(noteStyle.maxLines, 1);
       expect(noteStyle.overflow, TextOverflow.ellipsis);
       expect(noteStyle.softWrap, isFalse);
-      expect(noteStyle.style.fontSize, token.fontBodyMedium?.size);
-      expect(noteStyle.style.height, token.fontBodyMedium?.height);
+      expect(noteStyle.style.fontSize, token.fontBodyLarge?.size);
+      expect(noteStyle.style.height, token.fontBodyLarge?.height);
 
       final subtitleStyle =
           DefaultTextStyle.of(tester.element(find.text(subtitle)));
