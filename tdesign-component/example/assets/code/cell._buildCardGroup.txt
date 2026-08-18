@@ -1,12 +1,37 @@
 Widget _buildCardGroup(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: TCellGroup(
-        variant: TCellGroupVariant.card,
-        cells: [
-          TCell(title: Text('单元格一')),
-          TCell(title: Text('单元格二'), arrow: true),
-        ],
-      ),
+    return TCellGroup(
+      variant: TCellGroupVariant.card,
+      cells: [
+        TCell(
+          prefix: Icon(
+            TIcons.service,
+            size: 24,
+            color: context.tTheme.brandNormalColor,
+          ),
+          title: const Text('单行标题'),
+          arrow: true,
+          onTap: () {},
+        ),
+        TCell(
+          prefix: Icon(
+            TIcons.internet,
+            size: 24,
+            color: context.tTheme.brandNormalColor,
+          ),
+          title: const Text('单行标题'),
+          arrow: true,
+          onTap: () {},
+        ),
+        TCell(
+          prefix: Icon(
+            TIcons.lock_on,
+            size: 24,
+            color: context.tTheme.brandNormalColor,
+          ),
+          title: const Text('单行标题'),
+          arrow: true,
+          onTap: () {},
+        ),
+      ],
     );
   }

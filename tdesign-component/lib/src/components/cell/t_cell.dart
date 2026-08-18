@@ -92,6 +92,12 @@ class _TCellState extends State<TCell> {
       TCellAlign.center => CrossAxisAlignment.center,
       TCellAlign.bottom => CrossAxisAlignment.end,
     };
+    final noteAlignment = switch (align) {
+      TCellAlign.top => AlignmentDirectional.topEnd,
+      TCellAlign.center => AlignmentDirectional.centerEnd,
+      TCellAlign.bottom => AlignmentDirectional.bottomEnd,
+    };
+    final hasMainContent = widget.title != null || widget.subtitle != null;
     final content = Container(
       height: theme?.height,
       padding: theme?.padding ?? EdgeInsets.all(context.tTheme.spacer16),
@@ -123,92 +129,100 @@ class _TCellState extends State<TCell> {
             widget.prefix!,
             SizedBox(width: context.tTheme.spacer12),
           ],
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (widget.title != null)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: DefaultTextStyle.merge(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                          style:
-                              theme?.titleStyle ??
-                              listTileTheme.titleTextStyle ??
-                              TextStyle(
-                                color:
-                                    colorScheme?.onSurface ??
-                                    context.tTheme.textColorPrimary,
-                                fontSize:
-                                    context.tTheme.fontBodyLarge?.size ?? 16,
-                                height: context.tTheme.fontBodyLarge?.height,
-                                fontWeight:
-                                    context.tTheme.fontBodyLarge?.fontWeight ??
-                                    FontWeight.w400,
-                              ),
-                          child: widget.title!,
+          if (hasMainContent || widget.note == null)
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.title != null)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: DefaultTextStyle.merge(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style:
+                                theme?.titleStyle ??
+                                listTileTheme.titleTextStyle ??
+                                TextStyle(
+                                  color:
+                                      colorScheme?.onSurface ??
+                                      context.tTheme.textColorPrimary,
+                                  fontSize:
+                                      context.tTheme.fontBodyLarge?.size ?? 16,
+                                  height: context.tTheme.fontBodyLarge?.height,
+                                  fontWeight:
+                                      context
+                                          .tTheme
+                                          .fontBodyLarge
+                                          ?.fontWeight ??
+                                      FontWeight.w400,
+                                ),
+                            child: widget.title!,
+                          ),
                         ),
-                      ),
-                      if (widget.required)
-                        Text(
-                          ' *',
-                          style:
-                              theme?.requiredStyle ??
-                              TextStyle(
-                                color:
-                                    colorScheme?.error ??
-                                    context.tTheme.errorNormalColor,
-                              ),
-                        ),
-                    ],
-                  ),
-                if (widget.title != null && widget.subtitle != null)
-                  SizedBox(height: context.tTheme.spacer4),
-                if (widget.subtitle != null)
-                  DefaultTextStyle.merge(
-                    style:
-                        theme?.subtitleStyle ??
-                        listTileTheme.subtitleTextStyle ??
-                        TextStyle(
-                          color:
-                              colorScheme?.onSurfaceVariant ??
-                              context.tTheme.textColorSecondary,
-                          fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                          height: context.tTheme.fontBodyMedium?.height,
-                          fontWeight:
-                              context.tTheme.fontBodyMedium?.fontWeight ??
-                              FontWeight.w400,
-                        ),
-                    child: widget.subtitle!,
-                  ),
-              ],
-            ),
-          ),
-          if (widget.note != null) ...[
-            SizedBox(width: context.tTheme.spacer4),
-            Flexible(
-              child: DefaultTextStyle.merge(
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style:
-                    theme?.noteStyle ??
-                    TextStyle(
-                      color:
-                          colorScheme?.onSurfaceVariant ??
-                          context.tTheme.textColorPlaceholder,
-                      fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                      height: context.tTheme.fontBodyLarge?.height,
-                      fontWeight:
-                          context.tTheme.fontBodyLarge?.fontWeight ??
-                          FontWeight.w400,
+                        if (widget.required)
+                          Text(
+                            ' *',
+                            style:
+                                theme?.requiredStyle ??
+                                TextStyle(
+                                  color:
+                                      colorScheme?.error ??
+                                      context.tTheme.errorNormalColor,
+                                ),
+                          ),
+                      ],
                     ),
-                child: widget.note!,
+                  if (widget.title != null && widget.subtitle != null)
+                    SizedBox(height: context.tTheme.spacer4),
+                  if (widget.subtitle != null)
+                    DefaultTextStyle.merge(
+                      style:
+                          theme?.subtitleStyle ??
+                          listTileTheme.subtitleTextStyle ??
+                          TextStyle(
+                            color:
+                                colorScheme?.onSurfaceVariant ??
+                                context.tTheme.textColorSecondary,
+                            fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                            height: context.tTheme.fontBodyMedium?.height,
+                            fontWeight:
+                                context.tTheme.fontBodyMedium?.fontWeight ??
+                                FontWeight.w400,
+                          ),
+                      child: widget.subtitle!,
+                    ),
+                ],
+              ),
+            ),
+          if (widget.note != null) ...[
+            if (hasMainContent) SizedBox(width: context.tTheme.spacer4),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Align(
+                alignment: noteAlignment,
+                child: DefaultTextStyle.merge(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style:
+                      theme?.noteStyle ??
+                      TextStyle(
+                        color:
+                            colorScheme?.onSurfaceVariant ??
+                            context.tTheme.textColorPlaceholder,
+                        fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+                        height: context.tTheme.fontBodyLarge?.height,
+                        fontWeight:
+                            context.tTheme.fontBodyLarge?.fontWeight ??
+                            FontWeight.w400,
+                      ),
+                  child: widget.note!,
+                ),
               ),
             ),
           ],
