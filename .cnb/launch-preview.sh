@@ -32,19 +32,30 @@ fi
 
 # 2. 后台安装依赖、构建站点与 flutter example，并嵌入 _site/flutter/example
 #    构建成功写 BUILD_DONE、失败写 BUILD_FAILED，供「preview ready」阶段判定完成状态并回显日志。
+#    run() 为每步打印明确的步骤标题、命令回显、退出码与耗时，任一步失败即中止后续步骤，
+#    从而在 preview.log 中精确定位失败环节，避免只看到 pnpm 安装等少量输出却不知后续进展。
 (
   set +e
-  cd "$SITE_DIR"
-  pnpm install
-  pnpm run site --mode=preview
-  cd "$FLUTTER_DIR"
-  flutter pub get
-  flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
-  mkdir -p "$SITE_OUT/flutter/example"
-  cp -R build/web/* "$SITE_OUT/flutter/example"
+  run() {
+    local name="$1"; shift
+    local cmd="$*"
+    local start; start=$(date +%s)
+    echo ""
+    echo "===== [$name] @ $(date +%T) ====="
+    echo "> $cmd"
+    bash -c "$cmd"
+    local rc=$?
+    local dur=$(( $(date +%s) - start ))
+    echo "--- [$name] exit=$rc, ${dur}s ---"
+    return "$rc"
+  }
 
-  # 3. 将最终产物整体复制到 nginx 根目录（覆盖镜像默认占位页），nginx 即时生效
-  cp -R "$SITE_OUT"/. "$WEB_ROOT"/
+  cd "$SITE_DIR"
+  run "1/5 install site deps" "pnpm install" \
+   && run "2/5 build site (--mode=preview)" "pnpm run site --mode=preview" \
+   && ( cd "$FLUTTER_DIR" && run "3/5 flutter pub get" "flutter pub get" ) \
+   && ( cd "$FLUTTER_DIR" && run "4/5 flutter build web" "flutter build web -t ./lib/main.dart --release --base-href /flutter/example/" ) \
+   && run "5/5 deploy to nginx root" "mkdir -p '${SITE_OUT}/flutter/example' && cp -R '${FLUTTER_DIR}/build/web/'* '${SITE_OUT}/flutter/example' && cp -R '${SITE_OUT}/.' '${WEB_ROOT}/.'"
   BUILD_RC=$?
   if [ "$BUILD_RC" -eq 0 ]; then
     echo "BUILD_DONE" >>"$LOG"
