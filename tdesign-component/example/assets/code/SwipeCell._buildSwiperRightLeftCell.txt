@@ -6,7 +6,7 @@ Widget _buildSwiperRightLeftCell(BuildContext context) {
       ),
       child: TSwipeCell(
         start: TSwipeCellPanel(
-          extentRatio: 60 / screenWidth,
+          extentRatio: 70 / screenWidth,
           children: [
             TSwipeCellAction(
               backgroundColor: context.tTheme.brandNormalColor,
@@ -15,12 +15,8 @@ Widget _buildSwiperRightLeftCell(BuildContext context) {
           ],
         ),
         end: TSwipeCellPanel(
-          extentRatio: 120 / screenWidth,
+          extentRatio: 70 / screenWidth,
           children: [
-            TSwipeCellAction(
-              backgroundColor: context.tTheme.warningNormalColor,
-              label: '编辑',
-            ),
             TSwipeCellAction(
               backgroundColor: context.tTheme.errorNormalColor,
               label: '删除',
