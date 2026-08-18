@@ -648,6 +648,88 @@ void main() {
     });
   });
 
+  group('footer no-more 结束文案（P2-1）', () {
+    testWidgets('加载完成后默认展示 no-more 文案（默认 `/`）', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              onLoadMore: () async {},
+              enableLoadMore: true,
+              child: ListView.builder(
+                itemCount: 40,
+                itemBuilder: (context, index) =>
+                    SizedBox(height: 60, child: Text('item$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 滚动到底触发加载，加载立即完成，footer 进入 done 态，展示默认 `/`。
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(find.text('/'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('自定义 noMore 文案生效', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () async {},
+              onLoadMore: () async {},
+              enableLoadMore: true,
+              texts: const TPullDownRefreshTexts(
+                pullToRefresh: '下拉',
+                releaseToRefresh: '松手',
+                refreshing: '加载中',
+                refreshComplete: '完成',
+                noMore: '已经到底了',
+              ),
+              child: ListView.builder(
+                itemCount: 40,
+                itemBuilder: (context, index) =>
+                    SizedBox(height: 60, child: Text('item$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(find.text('已经到底了'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    test('TPullDownRefreshTexts.noMore 默认值为 `/`', () {
+      const texts = TPullDownRefreshTexts(
+        pullToRefresh: '下拉',
+        releaseToRefresh: '松手',
+        refreshing: '加载中',
+        refreshComplete: '完成',
+      );
+      expect(texts.noMore, '/');
+    });
+  });
+
   group('controller 所有权（P1-1）', () {
     testWidgets('外部 controller.dispose 不会双重释放', (tester) async {
       final controller = TPullDownRefreshController();
@@ -762,6 +844,68 @@ void main() {
       expect(reported, isNotEmpty);
       expect(reported.first, isA<StateError>());
       // 清空残留计时器后组件可正常复位。
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('onLoadMore 同步抛错不悬挂加载且错误经 FlutterError 上报', (tester) async {
+      final reported = <Object?>[];
+      final originalOnError = FlutterError.onError;
+      FlutterError.onError = (details) => reported.add(details.exception);
+      addTearDown(() => FlutterError.onError = originalOnError);
+
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onLoadMore: () {
+              throw StateError('load boom');
+            },
+            enableLoadMore: true,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      // 滚动到底触发触底加载（同步抛错）。
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+      // 错误经 FlutterError.reportError 上报（不吞掉），加载不悬挂。
+      expect(reported, isNotEmpty);
+      expect(reported.first, isA<StateError>());
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(EasyRefresh), findsOneWidget);
+    });
+
+    testWidgets('onLoadMore Future 失败不悬挂加载且错误经 FlutterError 上报', (tester) async {
+      final reported = <Object?>[];
+      final originalOnError = FlutterError.onError;
+      FlutterError.onError = (details) => reported.add(details.exception);
+      addTearDown(() => FlutterError.onError = originalOnError);
+
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async {},
+            onLoadMore: () async => throw StateError('load boom'),
+            enableLoadMore: true,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await tester.drag(
+        find.byType(ListView),
+        const Offset(0, -3000),
+        warnIfMissed: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(reported, isNotEmpty);
+      expect(reported.first, isA<StateError>());
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
     });

@@ -8,11 +8,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// 下拉刷新「逐公开 Demo」Golden / 固定视口证据。
 ///
-/// 注意：本文件需要先在支持 Flutter 的环境执行一次
+/// baseline（goldens/*.png）已随仓库提交，CI 会作为视觉回归断言自动运行
+/// （与 `t_refresh_test.dart` 一同执行）。若视觉基线需要更新，在支持
+/// Flutter 的环境执行一次
 /// `flutter test test/components/refresh/t_refresh_golden_test.dart --update-goldens`
-/// 生成 baseline（goldens/*.png），随后方可作为视觉回归断言运行。
-/// 当前自动化 CI 仅执行 `t_refresh_test.dart`；本 Golden 的 baseline 生成与
-/// 逐像素人工复核为**待完成人工项**，不作为已通过宣称（见 acceptance.md）。
+/// 后提交新的 baseline 即可。
 void main() {
   setUpAll(() async {
     final flutterBin =

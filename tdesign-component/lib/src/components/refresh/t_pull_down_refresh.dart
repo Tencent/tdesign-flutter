@@ -33,7 +33,8 @@ class TPullDownRefresh extends StatefulWidget {
   /// 必填：滚动内容（对应官方默认 slot）。
   ///
   /// 必须为**有界、可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
-  /// 若内容自身不可滚动，请用 `SizedBox` 等为其指定固定高度。
+  /// 若内容自身不可滚动，请用 `SizedBox` 等为其指定固定高度，否则下拉 / 触底
+  /// 手势无法生效。
   final Widget child;
 
   /// 下拉触发刷新回调（对应官方 `refresh` 事件）。
@@ -51,8 +52,12 @@ class TPullDownRefresh extends StatefulWidget {
   ///
   /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。启用后会展示
   /// 一个与组件职责相符的可见 footer（加载指示器），滚动到底时触发。
-  /// 同 [onRefresh]，回调抛错 / Future 失败时不悬挂加载、错误经
-  /// `FlutterError.reportError` 上报。
+  ///
+  /// 返回的 `Future` 完成后自动结束加载态；也可通过
+  /// [TPullDownRefreshController.finishLoadMore] 手动结束。与 [onRefresh] 一致，
+  /// 本回调若同步抛错或返回的 `Future` 失败，
+  /// 加载任务会**正常结束（不悬挂）**，错误经 `FlutterError.reportError` 上报
+  /// （不吞掉）。若需在失败时做业务处理，请在回调内部自行 try/catch。
   final FutureOr<void> Function()? onLoadMore;
 
   /// 是否启用触底加载（默认 false）。
@@ -236,13 +241,40 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     ));
   }
 
+  void _reportLoadMoreError(Object e, StackTrace st) {
+    FlutterError.reportError(FlutterErrorDetails(
+      exception: e,
+      stack: st,
+      library: 'TPullDownRefresh',
+      context: ErrorDescription('触底加载回调 onLoadMore 执行失败'),
+    ));
+  }
+
+  /// 处理触底加载回调，与 [_handleRefresh] 一致地保证：
+  /// 回调抛错 / Future 失败时**不悬挂**加载任务，且错误经
+  /// `FlutterError.reportError` 上报（不吞掉，也不作为未捕获异常
+  /// 中断 easy_refresh 的动画流程）。
   FutureOr<void> _handleLoadMore() {
-    final result = widget.onLoadMore?.call();
-    final future = result is Future ? result : null;
-    if (future != null) {
-      return future;
+    try {
+      final result = widget.onLoadMore?.call();
+      final future = result is Future ? result : null;
+      if (future != null) {
+        // Future 失败时经 FlutterError.reportError 上报，不悬挂加载。
+        return future.then<void>(
+          (_) {},
+          onError: (Object e, StackTrace st) {
+            _reportLoadMoreError(e, st);
+            return null;
+          },
+        );
+      }
+      // 同步返回：视为立即完成。
+      return result;
+    } catch (e, st) {
+      // 同步抛错：上报错误，不悬挂加载。
+      _reportLoadMoreError(e, st);
+      return null;
     }
-    return result;
   }
 
   TPullDownRefreshTexts _effectiveTexts(BuildContext context) {
@@ -430,8 +462,9 @@ class _TPullDownRefreshFooter extends Footer {
         ),
       );
     } else if (noMore) {
+      // no-more 结束态：展示 texts.noMore（默认 `/`）。
       child = TText(
-        texts.refreshComplete,
+        texts.noMore,
         font: context.tTheme.fontBodyMedium,
         textColor: context.tTheme.textColorPlaceholder,
       );

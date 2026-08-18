@@ -75,6 +75,10 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter test test/components/refresh/t_refresh_test.dart --coverage
 
+      - name: Run refresh golden tests
+        working-directory: ./tdesign-component
+        run: flutter test test/components/refresh/t_refresh_golden_test.dart
+
   build:
     strategy:
       fail-fast: false
