@@ -192,6 +192,8 @@ class TMessagePage extends StatelessWidget {
               context: context,
               content: '第${i + 1}条通知',
               variant: themes[i],
+              duration: null,
+              offset: Offset(16, 80 + 56.0 * i),
             );
             _handles.add(handle);
           });

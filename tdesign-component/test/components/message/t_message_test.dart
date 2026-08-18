@@ -530,7 +530,7 @@ void main() {
   });
 
   group('多消息叠加与句柄关闭', () {
-    testWidgets('多个句柄各自 dismiss 后可移除全部消息', (tester) async {
+    testWidgets('多个消息使用不同偏移展示且句柄可关闭全部消息', (tester) async {
       final key = GlobalKey();
       await tester.pumpWidget(
         MaterialApp(
@@ -543,16 +543,24 @@ void main() {
           context: key.currentContext!,
           content: '消息一',
           duration: null,
+          offset: const Offset(16, 80),
         ),
         TMessage.show(
           context: key.currentContext!,
           content: '消息二',
           duration: null,
+          offset: const Offset(16, 136),
         ),
       ];
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('消息一'), findsOneWidget);
       expect(find.text('消息二'), findsOneWidget);
+      final positions = tester
+          .widgetList<AnimatedPositioned>(find.byType(AnimatedPositioned))
+          .map((positioned) => positioned.top)
+          .toSet();
+      expect(positions, containsAll(<double>{80, 136}));
       for (final handle in handles) {
         handle.dismiss();
       }
