@@ -31,20 +31,32 @@ import 't_pull_down_refresh_texts.dart';
 /// ```
 class TPullDownRefresh extends StatefulWidget {
   /// 必填：滚动内容（对应官方默认 slot）。
+  ///
+  /// 必须为**有界、可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
+  /// 若内容自身不可滚动，请用 `SizedBox` 等为其指定固定高度。
   final Widget child;
 
   /// 下拉触发刷新回调（对应官方 `refresh` 事件）。
   ///
   /// 为空时禁用下拉刷新。返回的 Future 完成后自动展示完成态并复位；
   /// 也可通过 [controller] 接管完成时机。
+  ///
+  /// 若回调同步抛错或返回的 Future 失败，刷新任务会正常结束（不悬挂），
+  /// 但错误**不会被本组件吞掉**——请在回调内部自行 try/catch 处理，
+  /// 避免未捕获异常冒泡。
   final FutureOr<void> Function()? onRefresh;
 
   /// 触底加载回调（对应官方 `scrolltolower` 事件）。
   ///
-  /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。
+  /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。启用后会展示
+  /// 一个与组件职责相符的可见 footer（加载指示器），滚动到底时触发。
+  /// 同 [onRefresh]，回调抛错 / Future 失败时请自行 try/catch 处理。
   final FutureOr<void> Function()? onLoadMore;
 
   /// 是否启用触底加载（默认 false）。
+  ///
+  /// 置为 true 且 [onLoadMore] 非空时，滚动容器触底会触发加载，并展示
+  /// 加载中的 footer 指示器。加载结束可通过 [controller] 或返回 Future。
   final bool enableLoadMore;
 
   /// 是否禁用下拉刷新（默认 false；禁用后仍保留滚动）。
@@ -53,15 +65,19 @@ class TPullDownRefresh extends StatefulWidget {
   /// 受控刷新 / 加载控制器。
   ///
   /// 通过 [TPullDownRefreshController.refresh] 等外部触发 / 结束刷新。
+  /// 其生命周期由本组件独占管理：底层 [EasyRefreshController] 由 State
+  /// 创建并释放，外部控制器仅持有引用，不应重复 dispose（详见
+  /// [TPullDownRefreshController] 文档）。
   final TPullDownRefreshController? controller;
 
   /// 四态提示语；为空时回退 l10n（默认中文与官方 `loadingTexts` 一致）。
   final TPullDownRefreshTexts? texts;
 
-  /// 刷新超时时长（默认 3 秒）；超过时长仍未完成 [onRefresh] 时自动结束刷新，
+  /// 刷新超时时长（**默认 3 秒**）；超过时长仍未完成 [onRefresh] 时自动结束刷新，
   /// 并触发 [onTimeout]（可为空）。
   ///
-  /// 默认启用 3 秒超时；传入 null 可关闭超时。
+  /// 默认启用 3 秒超时；传入 `null` 可关闭超时。
+  /// `timeout` 状态仅在超时瞬间上报一次，随后立即结束刷新并复位，无专属渲染文案。
   final Duration? refreshTimeout;
 
   /// 刷新超时回调。
@@ -80,6 +96,10 @@ class TPullDownRefresh extends StatefulWidget {
   final Color? backgroundColor;
 
   /// 刷新状态变化回调（对应官方 `change`/`onChange` 事件）。
+  ///
+  /// 值域为 [TPullDownRefreshState]。仅在状态**跳变**时回调（已去重），
+  /// 且通过异步调度触发，**不会**在 build 期间同步调用，可在回调中安全
+  /// `setState`。
   final ValueChanged<TPullDownRefreshState>? onStateChanged;
 
   /// 构造 [TPullDownRefresh]。
@@ -108,6 +128,7 @@ class TPullDownRefresh extends StatefulWidget {
 class _TPullDownRefreshState extends State<TPullDownRefresh> {
   EasyRefreshController? _easyController;
   Timer? _timeoutTimer;
+  TPullDownRefreshState? _lastReportedState;
 
   bool get _refreshEnabled =>
       widget.onRefresh != null && !widget.disabled;
@@ -139,8 +160,29 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     super.dispose();
   }
 
+  /// 上报状态变化：去重 + 异步调度，避免 build 期同步回调与重复上报。
   void _handleStateChanged(TPullDownRefreshState state) {
-    widget.onStateChanged?.call(state);
+    if (_lastReportedState == state) {
+      return;
+    }
+    _lastReportedState = state;
+    final cb = widget.onStateChanged;
+    if (cb == null) {
+      return;
+    }
+    // 异步调度，避免在 build / 布局期间同步触发回调（防止 setState 报错）。
+    scheduleMicrotask(() {
+      if (mounted) {
+        cb(state);
+      }
+    });
+  }
+
+  void _finishRefreshAndReport() {
+    _timeoutTimer?.cancel();
+    if (mounted) {
+      _handleStateChanged(TPullDownRefreshState.done);
+    }
   }
 
   FutureOr<void> _handleRefresh() {
@@ -156,18 +198,21 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
         _easyController?.finishRefresh(IndicatorResult.success, true);
       });
     }
-    final result = widget.onRefresh?.call();
-    final future = result is Future ? result : null;
-    if (future != null) {
-      return future.whenComplete(() {
-        _timeoutTimer?.cancel();
-        _handleStateChanged(TPullDownRefreshState.done);
-      });
+    try {
+      final result = widget.onRefresh?.call();
+      final future = result is Future ? result : null;
+      if (future != null) {
+        // Future 成功 / 失败都会结束刷新（whenComplete），错误继续向上传播。
+        return future.whenComplete(_finishRefreshAndReport);
+      }
+      // 同步返回：视为立即完成。
+      _finishRefreshAndReport();
+      return result;
+    } catch (e, st) {
+      // 同步抛错：先结束刷新避免悬挂，再把错误交给调用方处理（不吞掉）。
+      _finishRefreshAndReport();
+      Error.throwWithStackTrace(e, st);
     }
-    // 同步返回：视为立即完成。
-    _timeoutTimer?.cancel();
-    _handleStateChanged(TPullDownRefreshState.done);
-    return result;
   }
 
   FutureOr<void> _handleLoadMore() {
@@ -195,6 +240,13 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 
   @override
   Widget build(BuildContext context) {
+    final footer = _loadMoreEnabled
+        ? _TPullDownRefreshFooter(
+            texts: _effectiveTexts(context),
+            loadingTheme: widget.loadingTheme,
+            backgroundColor: widget.backgroundColor,
+          )
+        : null;
     return EasyRefresh(
       controller: _easyController,
       header: _refreshEnabled
@@ -208,6 +260,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
               onStateChanged: _handleStateChanged,
             )
           : null,
+      footer: footer,
       onRefresh: _refreshEnabled ? _handleRefresh : null,
       onLoad: _loadMoreEnabled ? _handleLoadMore : null,
       child: widget.child,
@@ -244,19 +297,20 @@ class _TPullDownRefreshHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    final mode = state.mode;
-    final stateType = _toState(mode);
+    final stateType = _toState(state.mode);
+    // 状态上报在 State 中统一去重 + 异步调度。
     onStateChanged?.call(stateType);
 
-    final showLoading = mode == IndicatorMode.processing;
-    final showComplete = mode == IndicatorMode.processed ||
-        mode == IndicatorMode.done;
+    final showLoading = state.mode == IndicatorMode.processing;
+    final showComplete = state.mode == IndicatorMode.processed ||
+        state.mode == IndicatorMode.done;
     String text;
     if (showLoading) {
       text = texts.refreshing;
     } else if (showComplete) {
       text = texts.refreshComplete;
-    } else if (mode == IndicatorMode.ready || mode == IndicatorMode.armed) {
+    } else if (state.mode == IndicatorMode.ready ||
+        state.mode == IndicatorMode.armed) {
       text = texts.releaseToRefresh;
     } else {
       text = texts.pullToRefresh;
@@ -310,5 +364,63 @@ class _TPullDownRefreshHeader extends Header {
       default:
         return TPullDownRefreshState.inactive;
     }
+  }
+}
+
+/// TDesign 下拉刷新 Footer（内部实现）：触底加载指示器。
+class _TPullDownRefreshFooter extends Footer {
+  final TPullDownRefreshTexts texts;
+  final TLoadingThemeData? loadingTheme;
+  final Color? backgroundColor;
+
+  _TPullDownRefreshFooter({
+    required this.texts,
+    this.loadingTheme,
+    this.backgroundColor,
+  }) : super();
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    final loading = state.mode == IndicatorMode.processing ||
+        state.mode == IndicatorMode.armed ||
+        state.mode == IndicatorMode.ready;
+    final noMore = state.mode == IndicatorMode.done;
+
+    Widget child;
+    if (loading) {
+      child = Theme(
+        data: Theme.of(context).mergeExtension(
+          loadingTheme ??
+              TLoadingThemeData(
+                iconColor: context.tTheme.brandNormalColor,
+                axis: Axis.horizontal,
+                textColor: context.tTheme.textColorPlaceholder,
+              ),
+        ),
+        child: TLoading(
+          size: TLoadingSize.medium,
+          text: texts.refreshing,
+        ),
+      );
+    } else if (noMore) {
+      child = TText(
+        texts.refreshComplete,
+        font: context.tTheme.fontBodyMedium,
+        textColor: context.tTheme.textColorPlaceholder,
+      );
+    } else {
+      child = TText(
+        texts.pullToRefresh,
+        font: context.tTheme.fontBodyMedium,
+        textColor: context.tTheme.textColorPlaceholder,
+      );
+    }
+
+    return Container(
+      alignment: Alignment.center,
+      height: 50,
+      color: backgroundColor,
+      child: child,
+    );
   }
 }

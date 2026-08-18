@@ -6,6 +6,14 @@ import 'package:meta/meta.dart';
 /// 对应官方（小程序 / mobile-vue）受控 `value` 语义，用 Flutter 惯用的
 /// 控制器模式表达：外部可通过 [refresh] / [loadMore] 触发，通过
 /// [finishRefresh] / [finishLoadMore] 结束。
+///
+/// ## 生命周期（所有权）
+///
+/// 底层 [EasyRefreshController] 的所有权归 `TPullDownRefresh` 的 State 独占管理：
+/// State 在 `initState` 中创建、在 `dispose` 中释放。本控制器仅持有对其的**弱引用**，
+/// 因此 **不要** 在本控制器上调用 [dispose] 去释放底层 controller——那会导致与 State 的
+/// 双重释放。外部使用完成后无需调用 [dispose]，只需置空引用交由 GC 回收；
+/// 若确需手动释放，本控制器的 [dispose] 仅解绑、不释放底层对象。
 class TPullDownRefreshController {
   EasyRefreshController? _controller;
 
@@ -52,9 +60,12 @@ class TPullDownRefreshController {
     _controller?.resetFooter();
   }
 
-  /// 释放控制器。
+  /// 解绑底层引用。
+  ///
+  /// 仅将内部持有的底层 [EasyRefreshController] 引用置空，**不会** dispose 底层对象
+  /// （底层对象的生命周期由 `TPullDownRefresh` 的 State 独占管理），因此调用本方法
+  /// 不会导致双重释放。若组件仍在挂载，调用后可继续创建/复用本控制器。
   void dispose() {
-    _controller?.dispose();
     _controller = null;
   }
 }
