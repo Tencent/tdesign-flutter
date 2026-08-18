@@ -72,7 +72,7 @@ $:
             onlyPreview: true
             # 业务服务须监听 8686：launch 仅启动镜像预装 nginx 占住 8686 通过平台启动检测，
             # 构建在下方 stages 中执行；daemon: true 让 nginx 前台常驻不阻塞。
-            launch: nginx -g "daemon off;"
+            launch: nginx
             daemon: true
             keepAliveTimeout: 30m
       stages:
