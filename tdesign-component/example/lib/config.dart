@@ -304,7 +304,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TPopupPage())),
     ExamplePageModel(
         text: 'Refresh 下拉刷新',
-        name: 'refresh',
+        name: 'pullDownRefresh',
         pageBuilder:
             _wrapInheritedTheme((context) => const TPullDownRefreshPage())),
     ExamplePageModel(
