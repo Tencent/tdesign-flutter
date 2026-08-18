@@ -377,7 +377,13 @@ class _TPullDownRefreshFooter extends Footer {
     required this.texts,
     this.loadingTheme,
     this.backgroundColor,
-  }) : super(triggerOffset: 50, clamping: true);
+  }) : super(
+        // Footer 默认 infiniteOffset=0（非 null），而 Indicator 断言
+        // `infiniteOffset == null || !clamping`，故触底加载 Footer 不能开启
+        // clamping，必须置 false，否则运行期抛「Cannot scroll indefinitely when clamping」。
+        triggerOffset: 50,
+        clamping: false,
+      );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
