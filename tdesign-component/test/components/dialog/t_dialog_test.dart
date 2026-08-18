@@ -193,6 +193,88 @@ void main() {
   });
 
   group('TDialog 主题', () {
+    test('ThemeData merge/copyWith/lerp 保留所有公开字段', () {
+      const base = TDialogThemeData(
+        backgroundColor: Colors.red,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        elevation: 2,
+        titleTextStyle: TextStyle(fontSize: 16),
+        contentTextStyle: TextStyle(fontSize: 14),
+        contentPadding: EdgeInsets.all(16),
+        maxHeight: 240,
+        actionButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStatePropertyAll(Colors.red),
+        ),
+        width: 280,
+      );
+      const override = TDialogThemeData(
+        backgroundColor: Colors.blue,
+        elevation: 6,
+        titleTextStyle: TextStyle(fontSize: 20),
+        contentPadding: EdgeInsets.all(24),
+        width: 320,
+      );
+
+      expect(identical(base.merge(null), base), isTrue);
+      final merged = base.merge(override);
+      expect(merged.backgroundColor, Colors.blue);
+      expect(merged.shape, base.shape);
+      expect(merged.elevation, 6);
+      expect(merged.titleTextStyle, override.titleTextStyle);
+      expect(merged.contentTextStyle, base.contentTextStyle);
+      expect(merged.contentPadding, override.contentPadding);
+      expect(merged.maxHeight, base.maxHeight);
+      expect(merged.actionButtonStyle, base.actionButtonStyle);
+      expect(merged.width, 320);
+
+      final copied = base.copyWith(
+        backgroundColor: Colors.green,
+        shape: const StadiumBorder(),
+        elevation: 4,
+        titleTextStyle: const TextStyle(fontSize: 18),
+        contentTextStyle: const TextStyle(fontSize: 15),
+        contentPadding: const EdgeInsets.all(20),
+        maxHeight: 300,
+        actionButtonStyle: const ButtonStyle(
+          foregroundColor: WidgetStatePropertyAll(Colors.green),
+        ),
+        width: 300,
+      );
+      expect(copied.backgroundColor, Colors.green);
+      expect(copied.shape, const StadiumBorder());
+      expect(copied.elevation, 4);
+      expect(copied.titleTextStyle?.fontSize, 18);
+      expect(copied.contentTextStyle?.fontSize, 15);
+      expect(copied.contentPadding, const EdgeInsets.all(20));
+      expect(copied.maxHeight, 300);
+      expect(copied.actionButtonStyle, isNotNull);
+      expect(copied.width, 300);
+
+      final unchanged = base.copyWith();
+      expect(unchanged.backgroundColor, base.backgroundColor);
+      expect(unchanged.shape, base.shape);
+      expect(unchanged.elevation, base.elevation);
+      expect(unchanged.titleTextStyle, base.titleTextStyle);
+      expect(unchanged.contentTextStyle, base.contentTextStyle);
+      expect(unchanged.contentPadding, base.contentPadding);
+      expect(unchanged.maxHeight, base.maxHeight);
+      expect(unchanged.actionButtonStyle, base.actionButtonStyle);
+      expect(unchanged.width, base.width);
+
+      final interpolated = base.lerp(copied, 0.5);
+      expect(interpolated.backgroundColor, Color.lerp(Colors.red, Colors.green, 0.5));
+      expect(interpolated.elevation, 3);
+      expect(interpolated.titleTextStyle?.fontSize, 17);
+      expect(interpolated.contentTextStyle?.fontSize, 14.5);
+      expect(interpolated.contentPadding, const EdgeInsets.all(18));
+      expect(interpolated.maxHeight, 270);
+      expect(interpolated.actionButtonStyle, isNotNull);
+      expect(interpolated.width, 290);
+      expect(TDialogThemeData.lerpDouble(null, null, 0.5), isNull);
+    });
+
     testWidgets('实例值优先于 Dialog ThemeExtension', (tester) async {
       const extension = TDialogThemeData(
         backgroundColor: Colors.red,
@@ -264,6 +346,30 @@ void main() {
       );
       expect(material.color, Colors.purple);
       expect(material.elevation, 6);
+    });
+
+    testWidgets('默认内容顶边距与关闭按钮位置对齐官方基线', (tester) async {
+      await tester.pumpWidget(app(const TDialog(
+        title: Text('像素对齐'),
+        showCloseButton: true,
+      )));
+
+      final scrollView = tester.widget<SingleChildScrollView>(
+        find.descendant(
+          of: find.byType(TDialog),
+          matching: find.byType(SingleChildScrollView),
+        ),
+      );
+      expect(scrollView.padding, const EdgeInsets.fromLTRB(24, 24, 24, 0));
+
+      final positioned = tester.widget<Positioned>(
+        find.ancestor(
+          of: find.byType(IconButton),
+          matching: find.byType(Positioned),
+        ),
+      );
+      expect(positioned.top, 8);
+      expect(positioned.right, 8);
     });
   });
 

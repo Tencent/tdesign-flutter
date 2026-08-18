@@ -190,7 +190,7 @@ class TDialog extends StatelessWidget {
     );
     final effectiveContentPadding = contentPadding ??
         extension?.contentPadding ??
-        const EdgeInsets.fromLTRB(24, 32, 24, 0);
+        const EdgeInsets.fromLTRB(24, 24, 24, 0);
     final titleStyle = extension?.titleTextStyle ??
         material.titleTextStyle ??
         TextStyle(
@@ -269,8 +269,8 @@ class TDialog extends StatelessWidget {
               ),
               if (showCloseButton)
                 PositionedDirectional(
-                  top: 0,
-                  end: 0,
+                  top: 8,
+                  end: 8,
                   child: IconButton(
                     tooltip: context.resource.close,
                     icon: Icon(

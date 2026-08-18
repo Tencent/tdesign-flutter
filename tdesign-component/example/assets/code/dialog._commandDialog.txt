@@ -1,0 +1,14 @@
+Widget _commandDialog(BuildContext context) {
+    return _trigger('命令行操作', () async {
+      final confirmed = await TDialog.show<bool>(
+        context,
+        barrierDismissible: true,
+        dialog: TDialog(
+          title: const Text('弹窗标题'),
+          content: const Text('告知当前状态、信息和解决方法等内容。'),
+          actions: _actions(),
+        ),
+      );
+      debugPrint(confirmed == true ? '点击了确定' : '点击了取消');
+    });
+  }

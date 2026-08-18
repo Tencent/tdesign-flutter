@@ -1,0 +1,40 @@
+Widget _inputDialogs(BuildContext context) {
+    return _scenarios([
+      _trigger('输入类-无描述', () {
+        TDialog.show<bool>(
+          context,
+          dialog: TDialog(
+            title: const Text('带输入框对话框'),
+            content: const TextField(
+              decoration: InputDecoration(
+                hintText: '输入12文案',
+                border: InputBorder.none,
+              ),
+            ),
+            actions: _actions(),
+          ),
+        );
+      }),
+      _trigger('输入类-带描述', () {
+        TDialog.show<bool>(
+          context,
+          dialog: TDialog(
+            title: const Text('带输入框对话框'),
+            content: const Column(
+              children: [
+                Text(_description),
+                SizedBox(height: 16),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: '输入12文案',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ],
+            ),
+            actions: _actions(),
+          ),
+        );
+      }),
+    ]);
+  }

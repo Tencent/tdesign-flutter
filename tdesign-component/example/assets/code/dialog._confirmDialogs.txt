@@ -1,0 +1,29 @@
+Widget _confirmDialogs(BuildContext context) {
+    return _scenarios([
+      _trigger('确认类-带标题', () {
+        TDialog.show<bool>(
+          context,
+          dialog: TDialog(
+            title: const Text('对话框标题'),
+            content: const Text(_description),
+            actions: _actions(),
+          ),
+        );
+      }),
+      _trigger('确认类-无标题', () {
+        TDialog.show<bool>(
+          context,
+          dialog: TDialog(
+            content: const Text(_description),
+            actions: _actions(destructive: true),
+          ),
+        );
+      }),
+      _trigger('确认类-纯标题', () {
+        TDialog.show<bool>(
+          context,
+          dialog: TDialog(title: const Text('对话框标题'), actions: _actions()),
+        );
+      }),
+    ]);
+  }
