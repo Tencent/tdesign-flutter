@@ -53,6 +53,7 @@ class TPullDownRefresh extends StatefulWidget {
   /// 一个与组件职责相符的可见 footer（加载指示器），滚动到底时触发。
   /// 同 [onRefresh]，回调抛错 / Future 失败时不悬挂加载、错误经
   /// `FlutterError.reportError` 上报。
+  final FutureOr<void> Function()? onLoadMore;
 
   /// 是否启用触底加载（默认 false）。
   ///
