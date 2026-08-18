@@ -18,7 +18,7 @@ void main() {
       expect(d.loadingWithPoint, '加载中...');
       expect(d.knew, '知道了');
       expect(d.refreshing, '正在刷新');
-      expect(d.releaseRefresh, '松开刷新');
+      expect(d.releaseRefresh, '松手刷新');
       expect(d.pullToRefresh, '下拉刷新');
       expect(d.completeRefresh, '刷新完成');
       expect(d.days, '天');

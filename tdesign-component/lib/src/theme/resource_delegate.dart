@@ -90,7 +90,7 @@ abstract class TResourceDelegate {
   /// [TRefreshHeader] 正在刷新
   String get refreshing;
 
-  /// [TRefreshHeader] 松开刷新
+  /// [TRefreshHeader] 松手刷新
   String get releaseRefresh;
 
   /// [TRefreshHeader] 下拉刷新
@@ -255,7 +255,7 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   String get refreshing => '正在刷新';
 
   @override
-  String get releaseRefresh => '松开刷新';
+  String get releaseRefresh => '松手刷新';
 
   @override // coverage:ignore-line
   String get pullToRefresh => '下拉刷新';

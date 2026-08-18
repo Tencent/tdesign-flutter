@@ -32,7 +32,7 @@ import 'package:easy_refresh/easy_refresh.dart';
       child: TPullDownRefresh(
         // 下拉刷新回调
         onRefresh: () {
-          return Future<void>.delayed(const Duration(seconds: 2), () {
+          return Future<void>.delayed(const Duration(milliseconds: 1500), () {
             setState(() {
               count++;
             });
