@@ -19,11 +19,20 @@
 - [x] 补强 refresh 目录单元测试（controller 全方法、状态回调、同步回调、loadingTheme、控制器切换绑定）
 - [x] 修正英文 l10n 缺空格
 - [x] 修正站点 README 死链与示例不一致
+- [x] 修订 Spec/plan/acceptance：`refreshTimeout` 默认 3000ms、传 null 关闭；controller 所有权；footer；Demo 矩阵标注；验收记录与真实结果一致
+- [x] 补真实 `flutter test` 与 LCOV 覆盖率门禁（CI 最小改动，仅增加测试+覆盖率步骤）
+- [x] 每个公开 Demo 补逐项 Widget 断言与 Golden/固定视口证据
+- [x] controller 所有权修复：底层 EasyRefreshController 仅由 State 管理/dispose，外部 controller 不双重释放
+- [x] loadMore 补可见 footer 与真实滚动到底/加载状态/禁用结束语义测试
+- [x] P2 最小修复：状态回调去重与避免 build 期同步回调、异常传播、timeout 语义、英文 `Release to refresh`、站点 churn 清理、child 滚动约束 dartdoc
 
 ## DONE
 
 - [x] `flutter analyze` 组件 + 示例 0 error / 0 warning（flutter 3.32.0 与 latest 均通过）
+- [x] `flutter test`（3.32.0 与 latest）通过
+- [x] refresh 生产源码 LCOV LH/LF ≥95%
 - [x] `flutter build apk`（3.32.0 与 latest）通过
 - [x] `flutter build web`（3.32.0 与 latest）通过
 - [x] 示例代码资产与 `generate_example_code` 输出一致
 - [x] `git diff --check` 通过
+- [ ] 真机 / 同尺寸像素对照（人工项，未完成）

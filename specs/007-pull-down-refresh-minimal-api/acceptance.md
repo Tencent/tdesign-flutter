@@ -16,18 +16,34 @@
 | flutter build apk（flutter latest） | ✅ success | CI pipeline-4 |
 | flutter build web（flutter 3.32.0） | ✅ success | CI pipeline-5 |
 | flutter build web（flutter latest） | ✅ success | CI pipeline-6 |
+| flutter test（flutter 3.32.0） | ⏳ 待 CI | 本 PR 新增 `.test-332` 步骤，需 CI 执行确认 |
+| flutter test（flutter latest） | ⏳ 待 CI | 本 PR 新增 `.test-latest` 步骤，需 CI 执行确认 |
+| LCOV 覆盖率（refresh 生产源码 LH/LF ≥95%） | ⏳ 待 CI | `tool/check_refresh_coverage.py` 作为门禁，需 CI 执行确认达标 |
+| 逐公开 Demo Golden（固定视口） | ⏳ 待 CI 生成 | `t_refresh_golden_test.dart` 需 `--update-goldens` 生成 baseline 后人工复核 |
 | generate_example_code --check | ✅ 手动核对一致 | 示例代码资产与生成器输出逐字一致 |
+
+## 代码补强（已落地，验证依赖 CI / 人工）
+
+- **每个公开 Demo** 均有逐项 Widget 断言（基础 / 自定义提示语 / 超时）+ 固定视口 Golden 测试文件。
+- **loadMore**：补真实滚动到底触发、加载状态、禁用/结束语义测试；提供可见 footer（`_TPullDownRefreshFooter`）。
+- **controller 所有权**：底层 `EasyRefreshController` 仅由 State 管理/dispose；外部 `TPullDownRefreshController.dispose()` 仅解绑、不释放底层（含 dispose 后行为测试）。
+- **状态回调去重**：`onStateChanged` 在状态跳变处去重上报，异步调度避免 build 期同步回调。
+- **异常传播**：`onRefresh` 同步抛错 / Future 失败均结束刷新（不悬挂），错误继续上抛。
+- **timeout 语义**：超时瞬时上报 `timeout` 后立即结束刷新并复位（无专属渲染文案，已在 dartdoc 说明）。
+- **英文文案**：`releaseRefresh` 改为 `Release to refresh`。
+- **站点 churn 清理**：修复 README 全角逗号回归，移除过时 `easy_refresh` import，补充 child 滚动约束 dartdoc。
 
 ## 人工验收
 
 - [x] `TPullDownRefresh` 默认渲染对齐官方（loadingBarHeight=50 / maxBarHeight=80 / 触发阈值=50）
 - [x] 下拉 → 松手 → 刷新 → 完成四态文案正确（中文默认与官方一致）
 - [x] 受控 `controller.refresh()` / `finishRefresh()`、`onStateChanged` 生效
-- [x] `refreshTimeout` + `onTimeout` 生效
-- [x] `onLoadMore` / `enableLoadMore` 触底加载生效
+- [x] `refreshTimeout` 默认 3000ms，超时触发 `onTimeout`；传入 null 关闭超时
+- [x] `onLoadMore` / `enableLoadMore` 触底加载生效（含可见 footer）
 - [x] `disabled` 禁用生效
 
-## 未覆盖项与后续工作
+## 未覆盖项与后续工作（如实保留，不臆测通过）
 
-- Widget 测试（t_refresh_test.dart）已补充，但 CNB CI 不执行 `flutter test`；GitHub 侧 test-build CI 会运行，若失败需在 PR 中迭代。
+- **真机 / 同尺寸像素对照**：无法自动化，需真机人工核验（未完成）。
+- **Golden 与小程序视口逐像素对照**：本 PR 提供固定视口 Golden，但与小程序实际渲染的逐像素对照需真机人工确认（未完成）。
 - `TRefreshHeader` 保留为低层 Header（向后兼容），后续可进一步收敛其公开参数。

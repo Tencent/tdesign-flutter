@@ -71,7 +71,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 ## 风险与取舍
 
 - 封装 easy_refresh 会隐藏部分高级能力（secondary 等），符合"最小 API"目标；确有需求可用 `childBuilder` 等再扩展。
-- 超时语义：默认不启用 `refreshTimeout`，避免改变现有行为；显式传入才启用。
+- 超时语义：`refreshTimeout` 默认 `3000ms`（对齐官方），超时自动结束刷新并触发可空的 `onTimeout`；传入 `null` 关闭超时。
 - `flutter@3.32.0` 与 `latest`：均为纯 Dart + easy_refresh 交互，不引入新依赖，双版本兼容。
 
 ## 验证策略
