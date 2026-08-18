@@ -58,8 +58,8 @@ $:
           if: '[ -n "$ISSUE_REF" ]'
 
   # 启动预览：仅预览模式打开分支 Flutter Web 预览。
-  # launch-preview.sh 启动镜像预装 nginx 常驻监听 8686 通过启动检测（root=/usr/share/nginx/html），
-  # 再后台构建站点与 example 产物复制到该目录，服务构建期间用镜像默认占位页、完成后 nginx 实时提供真实产物。
+  # launch 仅启动镜像预装 nginx 常驻监听 8686（root=/usr/share/nginx/html）通过平台启动检测；
+  # 业务构建由下方 stages 完成，产物复制到 /usr/share/nginx/html 后 nginx 实时提供。
   web_trigger_launch_preview:
     - docker:
         image: docker.cnb.cool/tencent/tdesign/default-dev-env
@@ -70,28 +70,39 @@ $:
         - name: vscode
           options:
             onlyPreview: true
-            # 业务服务须监听 8686：launch-preview.sh 启动镜像预装 nginx 常驻 8686 并通过平台启动检测，
-            # 后台构建产物；launch 以 daemon 后台保活，避免前台阻塞超时。
-            launch: sh .cnb/launch-preview.sh
+            # 业务服务须监听 8686：launch 仅启动镜像预装 nginx 占住 8686 通过平台启动检测，
+            # 构建在下方 stages 中执行；daemon: true 让 nginx 前台常驻不阻塞。
+            launch: nginx -g "daemon off;"
             daemon: true
             keepAliveTimeout: 30m
       stages:
-        # launch 以 daemon 后台构建，日志落盘到 /var/log/preview.log。本阶段用 tail -f 实时
-        # 跟随该日志并回显到流水线，读到构建标记（BUILD_DONE 成功 / BUILD_FAILED 失败）即结束；
-        # 超时由 stage 的 timeout: 30m 兜底，避免 launch 未启动时无限等待。
-        - name: preview ready
+        # 安装依赖（与 vscode 事件复用同一套 install 阶段）
+        - name: install component dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
+
+        - name: install site dependencies
+          script: cd tdesign-site && pnpm install
+
+        # 构建站点与 Flutter example Web 产物
+        - name: build site
+          script: cd tdesign-site && pnpm run site --mode=preview
+
+        - name: build flutter web
+          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
+
+        # 将产物嵌入 _site/flutter/example 后整体复制到 nginx 根目录，nginx 即时生效
+        - name: deploy to nginx root
           script: |
             set -eu
-            LOG=/var/log/preview.log
-            [ -f "$LOG" ] || { echo "preview.log 不存在，launch 可能未启动" >&2; exit 1; }
-            tail -n +1 -f "$LOG" | while IFS= read -r line; do
-              echo "$line"
-              case "$line" in
-                BUILD_DONE)   exit 0;;
-                BUILD_FAILED) exit 1;;
-              esac
-            done
-          timeout: 30m
+            SITE_OUT=tdesign-site/_site
+            FLUTTER_DIR=tdesign-component/example
+            WEB_ROOT=/usr/share/nginx/html
+            mkdir -p "$SITE_OUT/flutter/example"
+            cp -R "$FLUTTER_DIR"/build/web/* "$SITE_OUT"/flutter/example/
+            cp -R "$SITE_OUT"/. "$WEB_ROOT"/
 
   # 云原生开发：仅预览模式不支持 WebIDE，此事件进入标准 WebIDE 用于编辑代码
   vscode:
