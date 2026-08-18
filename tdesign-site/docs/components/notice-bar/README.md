@@ -16,9 +16,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_notice-bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_notice-bar_page.dart)
+[t_notice_bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_notice_bar_page.dart)
 
-### 1 组件类型
+### 01 组件类型
 
 纯文字的公告栏
 
@@ -58,6 +58,27 @@ Widget _scrollIconNoticeBar(BuildContext context) {
     prefixIcon: TIcons.sound,
     marquee: true,
     speed: 50,
+  );
+}</pre>
+
+</td-code-block>
+
+垂直滚动的公告栏
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+Widget _stepNoticeBar(BuildContext context) {
+  return const TNoticeBar(
+    prefixIcon: TIcons.sound,
+    items: [
+      '君不见黄河之水天上来',
+      '奔流到海不复回',
+      '君不见',
+      '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试',
+    ],
+    direction: Axis.vertical,
+    marquee: true,
   );
 }</pre>
 
@@ -137,6 +158,32 @@ Widget _entranceNoticeBar2(BuildContext context) {
 
 </td-code-block>
 
+自定义内容的公告栏
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+Widget _leftNoticeBar(BuildContext context) {
+  return TNoticeBar(
+    content: '这是一条普通的通知信息',
+    suffixIcon: TIcons.chevron_right,
+    left: TButton(
+      child: const Text('文本'),
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      size: TButtonSize.extraSmall,
+      onPressed: () => TToast.showText('点击了文字按钮', context: context),
+    ),
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了入口图标', context: context);
+      }
+    },
+  );
+}</pre>
+
+</td-code-block>
+
 自定义样式的公告栏
 
 <td-code-block panel="Dart">
@@ -159,7 +206,7 @@ Widget _customNoticeBar(BuildContext context) {
 }</pre>
 
 </td-code-block>
-### 1 组件状态
+### 02 组件状态
 
 普通通知
 
@@ -244,72 +291,6 @@ Widget _errorNoticeBar(BuildContext context) {
 }</pre>
 
 </td-code-block>
-### 1 组件样式
-
-卡片顶部
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _cardNoticeBar(BuildContext context) {
-  var size = MediaQuery.of(context).size;
-  final resolvedBg = const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
-      .resolve(context)
-      .backgroundColor;
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 16),
-    decoration: BoxDecoration(
-      color: resolvedBg,
-      borderRadius: const BorderRadius.all(Radius.circular(12)),
-      boxShadow: const [
-        BoxShadow(
-          color: Color(0x0d000000),
-          blurRadius: 8,
-          spreadRadius: 2,
-          offset: Offset(0, 2),
-        ),
-        BoxShadow(
-          color: Color(0x0f000000),
-          blurRadius: 10,
-          spreadRadius: 1,
-          offset: Offset(0, 8),
-        ),
-        BoxShadow(
-          color: Color(0x1a000000),
-          blurRadius: 5,
-          spreadRadius: -3,
-          offset: Offset(0, 5),
-        ),
-      ],
-    ),
-    child: Column(
-      children: [
-        Container(
-          width: size.width - 32,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: const TNoticeBar(
-            content: '这是一条普通的通知信息',
-            prefixIcon: TIcons.error_circle_filled,
-            suffixIcon: TIcons.chevron_right,
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: context.tTheme.bgColorContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-          ),
-        )
-      ],
-    ),
-  );
-}</pre>
-
-</td-code-block>
-
-
 ## API
 ### TNoticeBar
 #### 默认构造方法
@@ -372,4 +353,3 @@ Widget _cardNoticeBar(BuildContext context) {
 | success | 成功 |
 | warning | 警告 |
 | error | 错误 |
-

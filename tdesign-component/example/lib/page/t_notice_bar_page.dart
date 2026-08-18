@@ -14,42 +14,45 @@ class TNoticeBarPage extends StatelessWidget {
       exampleCodeGroup: 'noticeBar',
       desc: '在导航栏下方，用于给用户显示提示消息。',
       children: const [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
-          ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
-          ExampleItem(
-              padding: EdgeInsets.only(top: 16), builder: _scrollIconNoticeBar),
-          ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
-          ExampleItem(desc: '带可点击后缀图标的公告栏', builder: _closeNoticeBar),
-          ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
-          ExampleItem(
-              padding: EdgeInsets.only(top: 16), builder: _entranceNoticeBar2),
-          ExampleItem(desc: '自定义样式的公告栏', builder: _customNoticeBar),
-        ]),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '普通通知', builder: _normalNoticeBar),
-          ExampleItem(desc: '成功通知', builder: _successNoticeBar),
-          ExampleItem(desc: '警示通知', builder: _warningNoticeBar),
-          ExampleItem(desc: '错误通知', builder: _errorNoticeBar),
-        ]),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '卡片顶部', builder: _cardNoticeBar),
-        ])
+        ExampleModule(
+          title: '01 组件类型',
+          children: [
+            ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
+            ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
+            ExampleItem(
+              padding: EdgeInsets.only(top: 16),
+              builder: _scrollIconNoticeBar,
+            ),
+            ExampleItem(desc: '垂直滚动的公告栏', builder: _stepNoticeBar),
+            ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
+            ExampleItem(desc: '带可点击后缀图标的公告栏', builder: _closeNoticeBar),
+            ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
+            ExampleItem(
+              padding: EdgeInsets.only(top: 16),
+              builder: _entranceNoticeBar2,
+            ),
+            ExampleItem(desc: '自定义内容的公告栏', builder: _leftNoticeBar),
+            ExampleItem(desc: '自定义样式的公告栏', builder: _customNoticeBar),
+          ],
+        ),
+        ExampleModule(
+          title: '02 组件状态',
+          children: [
+            ExampleItem(desc: '普通通知', builder: _normalNoticeBar),
+            ExampleItem(desc: '成功通知', builder: _successNoticeBar),
+            ExampleItem(desc: '警示通知', builder: _warningNoticeBar),
+            ExampleItem(desc: '错误通知', builder: _errorNoticeBar),
+          ],
+        ),
       ],
-      test: const [
-        ExampleItem(desc: '带点击事件的公告栏', builder: _tapNoticeBar),
-        ExampleItem(desc: '自定义左侧内容的公告栏', builder: _leftNoticeBar),
-        ExampleItem(desc: '垂直滚动的公告栏', builder: _stepNoticeBar),
-      ],
+      test: const [ExampleItem(desc: '带点击事件的公告栏', builder: _tapNoticeBar)],
     );
   }
 }
 
 @ExampleCode(group: 'noticeBar')
 Widget _textNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '这是一条普通的通知信息',
-  );
+  return const TNoticeBar(content: '这是一条普通的通知信息');
 }
 
 @ExampleCode(group: 'noticeBar')
@@ -143,9 +146,7 @@ Widget _customNoticeBar(BuildContext context) {
 Widget _normalNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        variant: TNoticeBarVariant.info,
-      ),
+      const TNoticeBarThemeData(variant: TNoticeBarVariant.info),
     ),
     child: const TNoticeBar(
       content: '这是一条普通的通知信息',
@@ -158,9 +159,7 @@ Widget _normalNoticeBar(BuildContext context) {
 Widget _successNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        variant: TNoticeBarVariant.success,
-      ),
+      const TNoticeBarThemeData(variant: TNoticeBarVariant.success),
     ),
     child: const TNoticeBar(
       content: '这是一条成功的通知信息',
@@ -173,9 +172,7 @@ Widget _successNoticeBar(BuildContext context) {
 Widget _warningNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        variant: TNoticeBarVariant.warning,
-      ),
+      const TNoticeBarThemeData(variant: TNoticeBarVariant.warning),
     ),
     child: const TNoticeBar(
       content: '这是一条警示的通知信息',
@@ -188,70 +185,11 @@ Widget _warningNoticeBar(BuildContext context) {
 Widget _errorNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        variant: TNoticeBarVariant.error,
-      ),
+      const TNoticeBarThemeData(variant: TNoticeBarVariant.error),
     ),
     child: const TNoticeBar(
       content: '这是一条错误的通知信息',
       prefixIcon: TIcons.error_circle_filled,
-    ),
-  );
-}
-
-@ExampleCode(group: 'noticeBar')
-Widget _cardNoticeBar(BuildContext context) {
-  var size = MediaQuery.of(context).size;
-  final resolvedBg = const TNoticeBarThemeData(variant: TNoticeBarVariant.info)
-      .resolve(context)
-      .backgroundColor;
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 16),
-    decoration: BoxDecoration(
-      color: resolvedBg,
-      borderRadius: const BorderRadius.all(Radius.circular(12)),
-      boxShadow: const [
-        BoxShadow(
-          color: Color(0x0d000000),
-          blurRadius: 8,
-          spreadRadius: 2,
-          offset: Offset(0, 2),
-        ),
-        BoxShadow(
-          color: Color(0x0f000000),
-          blurRadius: 10,
-          spreadRadius: 1,
-          offset: Offset(0, 8),
-        ),
-        BoxShadow(
-          color: Color(0x1a000000),
-          blurRadius: 5,
-          spreadRadius: -3,
-          offset: Offset(0, 5),
-        ),
-      ],
-    ),
-    child: Column(
-      children: [
-        Container(
-          width: size.width - 32,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: const TNoticeBar(
-            content: '这是一条普通的通知信息',
-            prefixIcon: TIcons.error_circle_filled,
-            suffixIcon: TIcons.chevron_right,
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: context.tTheme.bgColorContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-          ),
-        )
-      ],
     ),
   );
 }
@@ -296,7 +234,7 @@ Widget _stepNoticeBar(BuildContext context) {
       '君不见黄河之水天上来',
       '奔流到海不复回',
       '君不见',
-      '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试'
+      '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试',
     ],
     direction: Axis.vertical,
     marquee: true,

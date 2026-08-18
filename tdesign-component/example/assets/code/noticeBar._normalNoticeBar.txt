@@ -1,9 +1,7 @@
 Widget _normalNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
-      const TNoticeBarThemeData(
-        variant: TNoticeBarVariant.info,
-      ),
+      const TNoticeBarThemeData(variant: TNoticeBarVariant.info),
     ),
     child: const TNoticeBar(
       content: '这是一条普通的通知信息',

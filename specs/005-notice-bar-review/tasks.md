@@ -19,9 +19,15 @@
 
 - [x] 创建 Spec `specs/005-notice-bar-review/`。
 - [x] 同步站点 README `tdesign-site/docs/components/notice-bar/README.md` 为当前 API。
+- [x] 公开垂直滚动和自定义内容 Demo，删除无平台依据的卡片 Demo。
+- [x] 同步生成代码并新增 Example 矩阵测试。
 
 ## 验证
 
 - [x] `flutter analyze` 改动文件无 error/warning。
-- [ ] CI（flutter 3.32.0 与 latest）构建通过。
-- [ ] 单元测试全绿（沙箱 pub-cache 不完整，需 CI 执行）。
+- [x] Flutter 3.32.0 与 latest 的 NoticeBar 组件测试各 42 项通过。
+- [x] Flutter 3.32.0 与 latest 的 Example 测试各 2 项通过。
+- [x] Flutter 3.32.0 与 latest 严格 analyze 均为 0 issues。
+- [x] NoticeBar 生产源码覆盖率 96.23%（`LH=230` / `LF=239`）。
+- [ ] 获取 interval、operation、默认图标、垂直交互和内边距等契约的维护者决策。
+- [ ] 完成真实运行时像素与触摸交互验收。
