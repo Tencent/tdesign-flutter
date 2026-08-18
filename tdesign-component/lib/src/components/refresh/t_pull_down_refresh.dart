@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/foundation.dart' show ErrorDescription, FlutterErrorDetails;
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
