@@ -2,12 +2,16 @@ Widget _buildSuccessToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('成功'),
+        child: const Text('成功提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showSuccess('操作成功', context: context);
+          TToast.showSuccess(
+            '成功文案',
+            direction: IconTextDirection.vertical,
+            context: context,
+          );
         },
       ),
     );

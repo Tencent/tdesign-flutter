@@ -8,6 +8,10 @@ import 't_slider_theme.dart';
 /// Formats the value shown above a slider thumb.
 typedef TSliderThumbFormatter = String Function(double value);
 
+ShowValueIndicator _showValueIndicatorFor(int? divisions) => divisions == null
+    ? ShowValueIndicator.onlyForContinuous
+    : ShowValueIndicator.onlyForDiscrete;
+
 SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
   final inherited = SliderTheme.of(context);
   final token = context.tTheme;
@@ -137,7 +141,8 @@ class TSlider extends StatelessWidget {
           : null,
     );
     final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
-      showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
+      showValueIndicator:
+          showThumbValue ? _showValueIndicatorFor(divisions) : null,
     );
     final decoration = Theme.of(
       context,
@@ -254,7 +259,8 @@ class TRangeSlider extends StatelessWidget {
           : null,
     );
     final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
-      showValueIndicator: showThumbValue ? ShowValueIndicator.always : null,
+      showValueIndicator:
+          showThumbValue ? _showValueIndicatorFor(divisions) : null,
     );
     final decoration = Theme.of(
       context,
