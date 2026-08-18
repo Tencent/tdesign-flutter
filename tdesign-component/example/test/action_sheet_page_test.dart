@@ -41,29 +41,62 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  Future<void> openShareGrid(WidgetTester tester) async {
+  Future<void> openBasicGrid(WidgetTester tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
-    await tester.tap(find.widgetWithText(TButton, '分享照片'));
+    final trigger = find.widgetWithText(TButton, '常规宫格型');
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(trigger);
     await tester.pumpAndSettle();
   }
 
-  testWidgets('分享方式宫格在手机视口完整展示且不溢出', (tester) async {
+  testWidgets('官方 Demo 矩阵公开展示全部场景', (tester) async {
+    configurePhone(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    const labels = [
+      '常规列表型',
+      '带描述列表型',
+      '带图标列表型',
+      '常规宫格型',
+      '带描述宫格型',
+      '带翻页宫格型',
+      '列表型选项状态',
+      '居中列表型',
+      '左对齐列表型',
+    ];
+    for (final label in labels) {
+      final trigger = find.widgetWithText(TButton, label);
+      await tester.scrollUntilVisible(
+        trigger,
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(trigger, findsOneWidget);
+    }
+  });
+
+  testWidgets('常规宫格型在手机视口完整展示且不溢出', (tester) async {
     configurePhone(tester);
 
-    await openShareGrid(tester);
+    await openBasicGrid(tester);
 
     expect(find.byType(TActionSheetGrid), findsOneWidget);
-    expect(find.text('消息'), findsOneWidget);
-    expect(find.text('更多'), findsOneWidget);
+    expect(find.text('微信'), findsOneWidget);
+    expect(find.text('复制'), findsOneWidget);
     expect(find.text('取消'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('分享方式宫格弹窗视觉快照', (tester) async {
+  testWidgets('常规宫格型弹窗视觉快照', (tester) async {
     configurePhone(tester);
 
-    await openShareGrid(tester);
+    await openBasicGrid(tester);
 
     await expectLater(
       find.byType(Overlay),

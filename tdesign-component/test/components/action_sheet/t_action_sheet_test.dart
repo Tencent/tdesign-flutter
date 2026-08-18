@@ -158,8 +158,8 @@ void main() {
       expect(
         itemContainers.any(
           (container) =>
-              container.constraints?.minHeight == 78 &&
-              container.constraints?.maxHeight == 78 &&
+              container.constraints?.minHeight == 84 &&
+              container.constraints?.maxHeight == 84 &&
               container.decoration is BoxDecoration &&
               (container.decoration! as BoxDecoration).border != null,
         ),

@@ -107,7 +107,7 @@ class TActionSheetList extends StatelessWidget {
                 TActionSheetAlign.right => TextAlign.right,
                 TActionSheetAlign.center => TextAlign.center,
               },
-              textColor: context.tTheme.textColorSecondary,
+              textColor: context.tTheme.textColorPlaceholder,
             ),
           ),
         ],
@@ -137,7 +137,7 @@ class TActionSheetList extends StatelessWidget {
                     Navigator.maybePop(context); // 关闭当前页面
                   },
             child: Container(
-              height: item.subtitle == null || item.subtitle!.isEmpty ? 56 : 78,
+              height: item.subtitle == null || item.subtitle!.isEmpty ? 56 : 84,
               padding:
                   EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
               decoration: BoxDecoration(
@@ -200,7 +200,8 @@ class TActionSheetList extends StatelessWidget {
                                   font: context.tTheme.fontBodyMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  textColor: context.tTheme.textDisabledColor))
+                                  textColor:
+                                      context.tTheme.textColorPlaceholder))
                         ])
                   ]
                 ],

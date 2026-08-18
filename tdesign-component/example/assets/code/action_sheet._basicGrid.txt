@@ -1,0 +1,8 @@
+Widget _basicGrid(BuildContext context) => _trigger(
+        label: '常规宫格型',
+        onPressed: () => TActionSheet.showGrid(
+          context,
+          items: _gridItems(context),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );

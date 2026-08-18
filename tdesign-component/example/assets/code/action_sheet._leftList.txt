@@ -1,0 +1,2 @@
+Widget _leftList(BuildContext context) =>
+      _alignedList(context, '左对齐列表型', TActionSheetAlign.left);

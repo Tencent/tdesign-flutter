@@ -11,13 +11,23 @@ class TActionSheetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '在文件、图片和分享场景中选择下一步操作。',
+      desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
       exampleCodeGroup: 'action_sheet',
       children: [
-        ExampleModule(title: '真实使用场景', children: [
-          ExampleItem(desc: '文件操作列表', builder: _list),
-          ExampleItem(desc: '分享方式宫格', builder: _grid),
-          ExampleItem(desc: '图片编辑分组', builder: _group),
+        ExampleModule(title: '01 组件类型', children: [
+          ExampleItem(desc: '常规列表型', builder: _basicList),
+          ExampleItem(desc: '带描述列表型', builder: _descriptionList),
+          ExampleItem(desc: '带图标列表型', builder: _iconList),
+          ExampleItem(desc: '常规宫格型', builder: _basicGrid),
+          ExampleItem(desc: '带描述宫格型', builder: _descriptionGrid),
+          ExampleItem(desc: '带翻页宫格型', builder: _paginationGrid),
+        ]),
+        ExampleModule(title: '02 组件状态', children: [
+          ExampleItem(desc: '列表型选项状态', builder: _statusList),
+        ]),
+        ExampleModule(title: '03 组件样式', children: [
+          ExampleItem(desc: '居中列表型', builder: _centerList),
+          ExampleItem(desc: '左对齐列表型', builder: _leftList),
         ]),
       ],
     );
@@ -27,190 +37,193 @@ class TActionSheetPage extends StatelessWidget {
     return TButton(child: Text(label), onPressed: onPressed);
   }
 
+  List<TActionSheetItem> _textItems() => [
+        TActionSheetItem(label: 'Move'),
+        TActionSheetItem(label: 'Mark as important'),
+        TActionSheetItem(label: 'Unsubscribe'),
+        TActionSheetItem(label: 'Add to Tasks'),
+      ];
+
+  List<TActionSheetItem> _iconItems() => [
+        TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
+        TActionSheetItem(
+          label: 'Mark as important',
+          icon: const Icon(TIcons.notification),
+        ),
+        TActionSheetItem(label: 'Unsubscribe', icon: const Icon(TIcons.delete)),
+        TActionSheetItem(
+          label: 'Add to Tasks',
+          icon: const Icon(TIcons.cloud_upload),
+        ),
+      ];
+
+  Widget _gridIcon(IconData icon, Color color) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Icon(icon, size: 24, color: color),
+    );
+  }
+
+  List<TActionSheetItem> _gridItems(BuildContext context) => [
+        TActionSheetItem(
+          label: '微信',
+          icon: _gridIcon(TIcons.chat, context.tTheme.successNormalColor),
+        ),
+        TActionSheetItem(
+          label: '朋友圈',
+          icon: _gridIcon(TIcons.share, context.tTheme.successNormalColor),
+        ),
+        TActionSheetItem(
+          label: 'QQ',
+          icon: _gridIcon(TIcons.user, context.tTheme.brandNormalColor),
+        ),
+        TActionSheetItem(
+          label: '企业微信',
+          icon: _gridIcon(TIcons.app, context.tTheme.brandNormalColor),
+        ),
+        TActionSheetItem(label: '收藏', icon: const Icon(TIcons.star)),
+        TActionSheetItem(label: '刷新', icon: const Icon(TIcons.refresh)),
+        TActionSheetItem(label: '下载', icon: const Icon(TIcons.download)),
+        TActionSheetItem(label: '复制', icon: const Icon(TIcons.file_copy)),
+      ];
+
+  void _showSelection(BuildContext context, TActionSheetItem item) {
+    TToast.showText('已选择：${item.label}', context: context);
+  }
+
   @ExampleCode(group: 'action_sheet')
-  Widget _list(BuildContext context) {
+  Widget _basicList(BuildContext context) => _trigger(
+        label: '常规列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          items: _textItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _descriptionList(BuildContext context) => _trigger(
+        label: '带描述列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          subtitle: 'Email Settings',
+          items: _textItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _iconList(BuildContext context) => _trigger(
+        label: '带图标列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          items: _iconItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _basicGrid(BuildContext context) => _trigger(
+        label: '常规宫格型',
+        onPressed: () => TActionSheet.showGrid(
+          context,
+          items: _gridItems(context),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _descriptionGrid(BuildContext context) => _trigger(
+        label: '带描述宫格型',
+        onPressed: () => TActionSheet.showGrid(
+          context,
+          subtitle: '动作面板描述文字',
+          items: _gridItems(context),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _paginationGrid(BuildContext context) => _trigger(
+        label: '带翻页宫格型',
+        onPressed: () => TActionSheet.showGrid(
+          context,
+          items: [
+            ..._gridItems(context),
+            ...List.generate(
+              8,
+              (_) => TActionSheetItem(
+                label: '标题文字',
+                icon: const Icon(TIcons.image),
+              ),
+            ),
+          ],
+          showPagination: true,
+          count: 8,
+          rows: 2,
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _statusList(BuildContext context) => _trigger(
+        label: '列表型选项状态',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          items: [
+            TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
+            TActionSheetItem(
+              label: 'Mark as important',
+              icon: const Icon(TIcons.notification),
+              textStyle: TextStyle(color: context.tTheme.brandNormalColor),
+            ),
+            TActionSheetItem(
+              label: 'Unsubscribe',
+              icon: const Icon(TIcons.delete),
+              textStyle: TextStyle(color: context.tTheme.errorNormalColor),
+            ),
+            TActionSheetItem(
+              label: 'Add to Tasks',
+              icon: const Icon(TIcons.cloud_upload),
+              disabled: true,
+            ),
+          ],
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _centerList(BuildContext context) =>
+      _alignedList(context, '居中列表型', TActionSheetAlign.center);
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _leftList(BuildContext context) =>
+      _alignedList(context, '左对齐列表型', TActionSheetAlign.left);
+
+  Widget _alignedList(
+    BuildContext context,
+    String label,
+    TActionSheetAlign align,
+  ) {
     return _trigger(
-      label: '管理项目',
+      label: label,
       onPressed: () => TActionSheet.showList(
         context,
-        subtitle: '报告-2026-Q3.pdf',
-        items: [
-          TActionSheetItem(label: '编辑内容', icon: const Icon(TIcons.edit)),
-          TActionSheetItem(label: '复制链接', icon: const Icon(TIcons.link)),
-          TActionSheetItem(label: '移动到文件夹', icon: const Icon(TIcons.folder)),
-          TActionSheetItem(
-            label: '删除文件',
-            icon: const Icon(TIcons.delete),
-            disabled: true,
-          ),
-        ],
-        onChanged: (item, _) =>
-            TToast.showText('已选择：${item.label}', context: context),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _grid(BuildContext context) {
-    Widget shareIcon(
-      IconData icon, {
-      required Color backgroundColor,
-      required Color foregroundColor,
-    }) {
-      return Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          shape: BoxShape.circle,
-        ),
-        alignment: Alignment.center,
-        child: Icon(icon, size: 24, color: foregroundColor),
-      );
-    }
-
-    return _trigger(
-      label: '分享照片',
-      onPressed: () => TActionSheet.showGrid(
-        context,
-        subtitle: '选择分享方式',
-        items: [
-          TActionSheetItem(
-            label: '消息',
-            icon: shareIcon(
-              TIcons.chat,
-              backgroundColor: context.tTheme.successLightColor,
-              foregroundColor: context.tTheme.successNormalColor,
-            ),
-          ),
-          TActionSheetItem(
-            label: '邮件',
-            icon: shareIcon(
-              TIcons.mail,
-              backgroundColor: context.tTheme.brandLightColor,
-              foregroundColor: context.tTheme.brandNormalColor,
-            ),
-          ),
-          TActionSheetItem(
-            label: '复制链接',
-            icon: shareIcon(
-              TIcons.link,
-              backgroundColor: context.tTheme.bgColorComponent,
-              foregroundColor: context.tTheme.textColorPrimary,
-            ),
-          ),
-          TActionSheetItem(
-            label: '保存到本地',
-            icon: shareIcon(
-              TIcons.download,
-              backgroundColor: context.tTheme.warningLightColor,
-              foregroundColor: context.tTheme.warningNormalColor,
-            ),
-          ),
-          TActionSheetItem(
-            label: '生成二维码',
-            icon: shareIcon(
-              TIcons.qrcode,
-              backgroundColor: context.tTheme.brandLightColor,
-              foregroundColor: context.tTheme.brandNormalColor,
-            ),
-          ),
-          TActionSheetItem(
-            label: '更多',
-            icon: shareIcon(
-              TIcons.more,
-              backgroundColor: context.tTheme.bgColorComponent,
-              foregroundColor: context.tTheme.textColorSecondary,
-            ),
-          ),
-        ],
-        onChanged: (item, _) =>
-            TToast.showText('已分享到：${item.label}', context: context),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _group(BuildContext context) {
-    Widget actionIcon(
-      IconData icon, {
-      required Color backgroundColor,
-      required Color foregroundColor,
-    }) {
-      return Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Icon(icon, size: 24, color: foregroundColor),
-      );
-    }
-
-    return _trigger(
-      label: '编辑图片',
-      onPressed: () => TActionSheet.showGroup(
-        context,
-        items: [
-          TActionSheetItem(
-            label: '旋转',
-            group: '图片处理',
-            icon: actionIcon(
-              TIcons.rotate,
-              backgroundColor: context.tTheme.bgColorComponent,
-              foregroundColor: context.tTheme.textColorPrimary,
-            ),
-          ),
-          TActionSheetItem(
-            label: '裁剪',
-            group: '图片处理',
-            icon: actionIcon(
-              TIcons.cut,
-              backgroundColor: context.tTheme.bgColorComponent,
-              foregroundColor: context.tTheme.textColorPrimary,
-            ),
-          ),
-          TActionSheetItem(
-            label: '滤镜',
-            group: '图片处理',
-            icon: actionIcon(
-              TIcons.filter,
-              backgroundColor: context.tTheme.bgColorComponent,
-              foregroundColor: context.tTheme.textColorPrimary,
-            ),
-          ),
-          TActionSheetItem(
-            label: '分享',
-            group: '分享与导出',
-            icon: actionIcon(
-              TIcons.share,
-              backgroundColor: context.tTheme.brandLightColor,
-              foregroundColor: context.tTheme.brandNormalColor,
-            ),
-          ),
-          TActionSheetItem(
-            label: '保存副本',
-            group: '分享与导出',
-            icon: actionIcon(
-              TIcons.download,
-              backgroundColor: context.tTheme.warningLightColor,
-              foregroundColor: context.tTheme.warningNormalColor,
-            ),
-          ),
-          TActionSheetItem(
-            label: '删除图片',
-            group: '危险操作',
-            icon: actionIcon(
-              TIcons.delete,
-              backgroundColor: context.tTheme.errorLightColor,
-              foregroundColor: context.tTheme.errorNormalColor,
-            ),
-          ),
-        ],
-        onChanged: (item, _) =>
-            TToast.showText('已选择：${item.label}', context: context),
+        cancelText: 'cancel',
+        subtitle: 'Email Settings',
+        align: align,
+        items: _iconItems(),
+        onChanged: (item, _) => _showSelection(context, item),
       ),
     );
   }

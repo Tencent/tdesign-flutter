@@ -1,0 +1,20 @@
+Widget _paginationGrid(BuildContext context) => _trigger(
+        label: '带翻页宫格型',
+        onPressed: () => TActionSheet.showGrid(
+          context,
+          items: [
+            ..._gridItems(context),
+            ...List.generate(
+              8,
+              (_) => TActionSheetItem(
+                label: '标题文字',
+                icon: const Icon(TIcons.image),
+              ),
+            ),
+          ],
+          showPagination: true,
+          count: 8,
+          rows: 2,
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );

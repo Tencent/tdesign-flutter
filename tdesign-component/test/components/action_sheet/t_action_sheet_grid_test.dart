@@ -81,6 +81,16 @@ void main() {
       ),
     );
     expect(find.byType(TActionSheetGrid), findsOneWidget);
+    final token = TThemeData.defaultData();
+    final dotColors = tester
+        .widgetList<Container>(find.byType(Container))
+        .map((container) => container.decoration)
+        .whereType<BoxDecoration>()
+        .where((decoration) => decoration.shape == BoxShape.circle)
+        .map((decoration) => decoration.color)
+        .toList();
+    expect(dotColors, contains(token.brandNormalColor));
+    expect(dotColors, contains(token.textDisabledColor));
     // 翻页（左滑）触发 onPageChanged
     await tester.drag(find.byType(PageView), const Offset(-400, 0));
     await tester.pumpAndSettle();

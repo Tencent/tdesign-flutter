@@ -328,7 +328,7 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
             shape: BoxShape.circle,
             color: currentPage == index
                 ? context.tTheme.brandNormalColor
-                : context.tTheme.bgColorSecondaryContainerActive,
+                : context.tTheme.textDisabledColor,
           ),
         );
       }),
