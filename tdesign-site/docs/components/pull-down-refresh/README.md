@@ -1,6 +1,6 @@
 ---
 title: PullDownRefresh 下拉刷新
-description: 用于快速刷新页面信息,刷新可以是整页刷新也可以是页面的局部刷新。
+description: 用于快速刷新页面信息，刷新可以是整页刷新也可以是页面的局部刷新。
 spline: base
 isComponent: true
 ---
@@ -12,7 +12,6 @@ isComponent: true
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:easy_refresh/easy_refresh.dart';
 ```
 
 ## 代码演示
@@ -56,6 +55,8 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 通过 `texts` 覆盖四态提示语（对应官方 `loadingTexts`）。
 
+> **说明**：本 Demo 为小程序已有公开 props（`loadingTexts`）的新增 API 演示，Demo 形态仅参考 Mobile Vue，不表示小程序现有公开 Demo。
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -95,6 +96,8 @@ import 'package:easy_refresh/easy_refresh.dart';
 ### 刷新超时
 
 通过 `refreshTimeout` 与 `onTimeout` 在刷新超时时给出提示并自动结束。
+
+> **说明**：本 Demo 为小程序已有公开 props（`refreshTimeout` + `timeout`）的新增 API 演示，Demo 形态仅参考 Mobile Vue，不表示小程序现有公开 Demo。
 
 <td-code-block panel="Dart">
 
@@ -139,7 +142,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 | disabled | bool | false | 是否禁用下拉刷新 |
 | controller | TPullDownRefreshController? | - | 受控刷新 / 加载控制器 |
 | texts | TPullDownRefreshTexts? | - | 四态提示语，为空时回退 l10n |
-| refreshTimeout | Duration? | - | 刷新超时时长，为空时不启用超时 |
+| refreshTimeout | Duration? | 3000ms | 刷新超时时长，超过时长自动结束并触发 onTimeout；传 null 关闭 |
 | onTimeout | VoidCallback? | - | 刷新超时回调 |
 | loadingBarHeight | double | 50 | Header 容器高度 = 触发阈值 |
 | maxBarHeight | double | 80 | 最大下拉高度 |

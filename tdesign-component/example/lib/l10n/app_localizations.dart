@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @releaseRefresh.
   ///
   /// In en, this message translates to:
-  /// **'Loose to refresh'**
+  /// **'Release to refresh'**
   String get releaseRefresh;
 
   /// No description provided for @pullToRefresh.

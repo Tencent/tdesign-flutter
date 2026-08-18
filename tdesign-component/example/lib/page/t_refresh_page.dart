@@ -36,10 +36,16 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           ExampleItem(desc: '基础用法', builder: _buildRefresh),
         ]),
         ExampleModule(title: '自定义提示语', children: [
-          ExampleItem(desc: 'loadingTexts', builder: _buildLoadingTexts),
+          ExampleItem(
+            desc: 'loadingTexts（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）',
+            builder: _buildLoadingTexts,
+          ),
         ]),
         ExampleModule(title: '刷新超时', children: [
-          ExampleItem(desc: 'refreshTimeout', builder: _buildTimeout),
+          ExampleItem(
+            desc: 'refreshTimeout（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）',
+            builder: _buildTimeout,
+          ),
         ]),
       ],
     );

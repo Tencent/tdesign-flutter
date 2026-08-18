@@ -63,7 +63,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get refreshing => 'Refreshing';
 
   @override
-  String get releaseRefresh => 'Loose to refresh';
+  String get releaseRefresh => 'Release to refresh';
 
   @override
   String get pullToRefresh => 'Pull to refresh';
