@@ -671,7 +671,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       controller.dispose();
       // dispose 后调用 refresh，应静默失败不抛错（底层 controller 已被解绑）。
-      expect(() => unawaited(controller.refresh()), returnsNormally);
+      expect(controller.refresh, returnsNormally);
       await tester.pump(const Duration(milliseconds: 100));
       expect(tester.takeException(), isNull);
     });
@@ -684,11 +684,9 @@ void main() {
         wrap(
           pullDownRefresh(
             onRefresh: () async {},
-            onStateChanged: (s) {
-              // 若在 build 期同步触发，这里 setState 会抛错——
-              // 组件已改为异步调度，故此处不应抛错。
-              states.add(s);
-            },
+            // 若在 build 期同步触发，这里 setState 会抛错——
+            // 组件已改为异步调度，故此处不应抛错。
+            onStateChanged: states.add,
           ),
         ),
       );

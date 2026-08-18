@@ -377,7 +377,7 @@ class _TPullDownRefreshFooter extends Footer {
     required this.texts,
     this.loadingTheme,
     this.backgroundColor,
-  }) : super();
+  }) : super(triggerOffset: 50, clamping: true);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
