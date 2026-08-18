@@ -265,6 +265,7 @@ Create [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues) or sca
 TDesign Flutter depends on the following component libraries. We appreciate the authors for their open-source contributions:
 
 - [easy_refresh](https://pub.dev/packages/easy_refresh)
+- [flutter_slidable](https://pub.dev/packages/flutter_slidable)
 - [image_picker](https://pub.dev/packages/image_picker)
 
 ## 📄 License
