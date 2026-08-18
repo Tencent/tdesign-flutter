@@ -76,45 +76,20 @@ $:
             daemon: true
             keepAliveTimeout: 30m
       stages:
-        # launch 以 daemon 后台构建，输出统一落盘到 /usr/share/nginx/html/preview.log。
-        # 本阶段持续跟随该日志直至构建结束（BUILD_DONE/BUILD_FAILED），把完整构建输出
-        # （pnpm install / site build / flutter pub get / flutter build web）实时回显到流水线日志；
-        # 构建失败则本阶段失败，便于直接在日志中定位。
+        # launch 以 daemon 后台构建，日志落盘到 /var/log/preview.log。本阶段用 tail -f 实时
+        # 跟随该日志并回显到流水线，读到构建标记（BUILD_DONE 成功 / BUILD_FAILED 失败）即结束；
+        # 超时由 stage 的 timeout: 30m 兜底，避免 launch 未启动时无限等待。
         - name: preview ready
           script: |
             set -eu
-            LOG=/usr/share/nginx/html/preview.log
-            # 等待日志文件生成（launch 启动有一小段延迟）
-            for _ in $(seq 1 120); do
-              [ -f "$LOG" ] && break
-              sleep 1
-            done
-            if [ ! -f "$LOG" ]; then
-              echo "preview.log 未生成，launch 可能未启动" >&2
-              exit 1
-            fi
-            echo "===== preview build log ==="
-            last_size=0
-            DEADLINE=$(( $(date +%s) + 1800 ))   # 30 分钟上限，构建一般数分钟完成
-            while :; do
-              size=$(wc -c <"$LOG" 2>/dev/null || echo 0)
-              if [ "$size" -gt "$last_size" ]; then
-                tail -c +$((last_size + 1)) "$LOG" 2>/dev/null || true
-                last_size=$size
-              fi
-              if grep -q "BUILD_DONE" "$LOG" 2>/dev/null; then
-                echo "===== preview build done ===="
-                exit 0
-              fi
-              if grep -q "BUILD_FAILED" "$LOG" 2>/dev/null; then
-                echo "===== preview build failed ===" >&2
-                exit 1
-              fi
-              if [ "$(date +%s)" -ge "$DEADLINE" ]; then
-                echo "等待构建超时，请查看 /usr/share/nginx/html/preview.log 或重试" >&2
-                exit 1
-              fi
-              sleep 2
+            LOG=/var/log/preview.log
+            [ -f "$LOG" ] || { echo "preview.log 不存在，launch 可能未启动" >&2; exit 1; }
+            tail -n +1 -f "$LOG" | while IFS= read -r line; do
+              echo "$line"
+              case "$line" in
+                BUILD_DONE)   exit 0;;
+                BUILD_FAILED) exit 1;;
+              esac
             done
           timeout: 30m
 
