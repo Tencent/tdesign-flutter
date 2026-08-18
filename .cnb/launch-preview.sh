@@ -39,7 +39,7 @@ height:100vh;margin:0;background:#f4f4f5;color:#333">
 <p>构建中，请稍候自动刷新…</p></div></body></html>
 HTML
 
-# 1.1 安装 nginx（default-dev-env 镜像未预装；幂等，已安装则跳过）
+# 安装 nginx（default-dev-env 镜像未预装；幂等，已安装则跳过）
 if ! command -v nginx >/dev/null 2>&1; then
   echo "[$(date +%T)] installing nginx..." >>"$LOG"
   (export DEBIAN_FRONTEND=noninteractive
@@ -50,7 +50,7 @@ else
   echo "[$(date +%T)] nginx already installed" >>"$LOG"
 fi
 
-# 1.2 写 nginx 配置：root 指向 $SITE_OUT，SPA fallback + Flutter example 精确命中
+# 写 nginx 配置：root 指向 $SITE_OUT，SPA fallback + Flutter example 精确命中
 cat >"$NGINX_CONF" <<NGINX
 server {
     listen 8686;
@@ -70,7 +70,7 @@ server {
 }
 NGINX
 
-# 1.3 启动 nginx（前台 daemon off 并常驻；已运行则先 reload 以应用新配置）
+# 启动 nginx（前台 daemon off 并常驻；已运行则先 reload 以应用新配置）
 if ! bash -c 'exec 3<>/dev/tcp/127.0.0.1/8686' 2>/dev/null; then
   nginx -g 'daemon off;' >>"$LOG" 2>&1 &
   NGINX_PID=$!
