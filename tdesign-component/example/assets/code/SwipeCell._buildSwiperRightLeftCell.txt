@@ -1,29 +1,11 @@
 Widget _buildSwiperRightLeftCell(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        const TSwipeCellThemeData(),
+    return TSwipeCell(
+      start: TSwipeCellPanel(
+        children: [_action(context, '选择', context.tTheme.brandNormalColor)],
       ),
-      child: TSwipeCell(
-        start: TSwipeCellPanel(
-          extentRatio: 70 / screenWidth,
-          children: [
-            TSwipeCellAction(
-              backgroundColor: context.tTheme.brandNormalColor,
-              label: '选择',
-            ),
-          ],
-        ),
-        end: TSwipeCellPanel(
-          extentRatio: 70 / screenWidth,
-          children: [
-            TSwipeCellAction(
-              backgroundColor: context.tTheme.errorNormalColor,
-              label: '删除',
-            ),
-          ],
-        ),
-        child: const TCell(title: Text('左右滑操作'), note: Text('辅助信息')),
+      end: TSwipeCellPanel(
+        children: [_action(context, '删除', context.tTheme.errorNormalColor)],
       ),
+      child: const TCell(title: Text('左右滑操作'), note: Text('辅助信息')),
     );
   }

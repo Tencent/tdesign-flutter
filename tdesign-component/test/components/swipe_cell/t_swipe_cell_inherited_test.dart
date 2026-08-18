@@ -1,54 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdesign_flutter/src/components/swipe_cell/t_swipe_cell_action.dart';
 import 'package:tdesign_flutter/src/components/swipe_cell/t_swipe_cell_inherited.dart';
 
-// TSwipeCellInherited 覆盖率补充测试
-//
-// 覆盖：updateShouldNotify 重写方法体（t_swipe_cell_inherited.dart 未覆盖行），
-// 以及 of(context) 从子树解析最近实例。
 void main() {
-  TSwipeCellInherited makeInherited(SlidableController controller) {
-    return TSwipeCellInherited(
-      child: const SizedBox(),
-      actionClick: (_) => false,
-      duration: const Duration(milliseconds: 200),
-      controller: controller,
-    );
-  }
-
   group('TSwipeCellInherited', () {
-    testWidgets('updateShouldNotify 重写方法体始终返回 true', (tester) async {
-      final controller = SlidableController(tester);
-      final a = makeInherited(controller);
-      final b = makeInherited(controller);
-      // 直接调用覆盖 @override updateShouldNotify 方法体
-      expect(a.updateShouldNotify(b), isTrue);
+    Future<void> close() async {}
+
+    test('仅关闭回调变化时通知子树', () {
+      final first = TSwipeCellInherited(close: close, child: const SizedBox());
+      final same = TSwipeCellInherited(close: close, child: const SizedBox());
+      final different = TSwipeCellInherited(
+        close: () async {},
+        child: const SizedBox(),
+      );
+      expect(first.updateShouldNotify(same), isFalse);
+      expect(first.updateShouldNotify(different), isTrue);
     });
 
-    testWidgets('of 从子树 context 解析最近实例', (tester) async {
-      final controller = SlidableController(tester);
+    testWidgets('of 从子树解析最近实例', (tester) async {
       TSwipeCellInherited? resolved;
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: TSwipeCellInherited(
-              child: Builder(
-                builder: (context) {
-                  resolved = TSwipeCellInherited.of(context);
-                  return const SizedBox();
-                },
-              ),
-              actionClick: (_) => false,
-              duration: const Duration(milliseconds: 200),
-              controller: controller,
+          home: TSwipeCellInherited(
+            close: close,
+            child: Builder(
+              builder: (context) {
+                resolved = TSwipeCellInherited.of(context);
+                return const SizedBox();
+              },
             ),
           ),
         ),
       );
       expect(resolved, isNotNull);
-      expect(resolved, isA<TSwipeCellInherited>());
     });
   });
 }

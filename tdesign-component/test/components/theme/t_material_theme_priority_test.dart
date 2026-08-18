@@ -111,12 +111,14 @@ void main() {
 
   testWidgets('TThemeBuilder 的 Material 投影仍属于 Token 层', (tester) async {
     late ThemeData material;
+    late IconThemeData? inheritedIconTheme;
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()),
         home: Builder(
           builder: (context) {
             material = Theme.of(context);
+            inheritedIconTheme = context.tExplicitIconTheme;
             return const SizedBox();
           },
         ),
@@ -126,6 +128,7 @@ void main() {
     expect(material.tExplicitColorScheme, isNull);
     expect(material.tExplicitTextTheme, isNull);
     expect(material.tExplicitIconTheme, isNull);
+    expect(inheritedIconTheme, isNull);
     expect(material.tExplicitDividerColor, isNull);
   });
 
@@ -413,8 +416,9 @@ void main() {
     expect(cellTextStyle.style.color, customScheme.onSurface);
   });
 
-  testWidgets('success/warning 无唯一 Material 语义时使用 TDesign Token',
-      (tester) async {
+  testWidgets('success/warning 无唯一 Material 语义时使用 TDesign Token', (
+    tester,
+  ) async {
     final token = TThemeData.defaultData();
     late TNoticeBarThemeData noticeTheme;
     late TNoticeBarThemeData warningNoticeTheme;
@@ -422,10 +426,7 @@ void main() {
       MaterialApp(
         theme: ThemeData(
           colorScheme: customScheme,
-          extensions: [
-            token,
-            const TTagThemeData(isOutline: true),
-          ],
+          extensions: [token, const TTagThemeData(isOutline: true)],
         ),
         home: Scaffold(
           body: Column(
@@ -435,10 +436,7 @@ void main() {
                 onPressed: () {},
                 child: const Text('success link'),
               ),
-              const TTag(
-                'success tag',
-                colorScheme: TTagColorScheme.success,
-              ),
+              const TTag('success tag', colorScheme: TTagColorScheme.success),
               const TResult(
                 title: 'success result',
                 variant: TResultVariant.success,
@@ -448,10 +446,7 @@ void main() {
                 onPressed: () {},
                 child: const Text('warning link'),
               ),
-              const TTag(
-                'warning tag',
-                colorScheme: TTagColorScheme.warning,
-              ),
+              const TTag('warning tag', colorScheme: TTagColorScheme.warning),
               const TResult(
                 title: 'warning result',
                 variant: TResultVariant.warning,

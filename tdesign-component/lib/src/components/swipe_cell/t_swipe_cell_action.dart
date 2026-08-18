@@ -6,16 +6,13 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_swipe_cell_inherited.dart';
-import 't_swipe_cell_panel.dart';
 import 't_swipe_cell_theme_data.dart';
 
-/// 滑动单元格操作按钮
+/// 滑动单元格操作项。
 class TSwipeCellAction extends StatelessWidget {
   const TSwipeCellAction({
     Key? key,
-    this.flex = 1,
     this.backgroundColor,
-    this.autoClose = true,
     this.onPressed,
     this.icon,
     this.iconColor,
@@ -23,67 +20,40 @@ class TSwipeCellAction extends StatelessWidget {
     this.spacing,
     this.label,
     this.labelStyle,
-    this.direction = Axis.horizontal,
-    this.confirmIndex,
     this.builder,
-    this.id,
-  })  : assert(flex > 0, 'flex must be greater than 0'),
-        assert(icon != null || label != null, 'icon or label must not be null'),
-        super(key: key);
+  }) : assert(
+         builder != null || icon != null || label != null,
+         'builder, icon or label must not be null',
+       ),
+       super(key: key);
 
-  /// 宽度占比，默认为 1，[TSwipeCellPanel.confirms]下无效（始终占满整个[TSwipeCellPanel]宽度）
-  final int flex;
-
-  /// 背景颜色；为 null 时回退到组件级主题
-  /// [TSwipeCellThemeData.actionBackgroundColor]。
+  /// 背景颜色；为空时回退到 [TSwipeCellThemeData.actionBackgroundColor]。
   final Color? backgroundColor;
 
-  /// 点击后自动关闭
-  final bool autoClose;
-
-  /// 点击回调
+  /// 点击回调。回调后组件会自动关闭操作面板。
   final void Function(BuildContext context)? onPressed;
 
-  /// 图标
+  /// 图标。
   final IconData? icon;
 
-  /// 图标颜色；为 null 时依次回退到组件级主题
-  /// [TSwipeCellThemeData.actionIconColor]、label 字体颜色、P4 Token。
+  /// 图标颜色。
   final Color? iconColor;
 
-  /// 图标大小，默认 20；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionIconSize]，
-  /// 再回退到内置默认值。
+  /// 图标大小，默认 20。
   final double? iconSize;
 
-  /// 图标和标题的间距，默认 8；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionSpacing]，
-  /// 再回退到内置默认值。
+  /// 图标和文字的水平间距，默认 8。
   final double? spacing;
 
-  /// 标题
+  /// 操作文字。
   final String? label;
 
-  /// 标题样式；为 null 时回退到组件级主题 [TSwipeCellThemeData.actionTextStyle]。
+  /// 操作文字样式。
   final TextStyle? labelStyle;
 
-  /// 图标和标题的排列方向
-  final Axis direction;
-
-  /// 指定[TSwipeCellPanel.children]的索引，来打开该[TSwipeCellAction]
-  /// [TSwipeCellPanel.confirms]参数下才配置该参数
-  final List<int>? confirmIndex;
-
-  /// 自定义构建
+  /// 自定义操作项。其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
   final WidgetBuilder? builder;
 
-  /// 稳定标识，用于二次确认匹配。
-  ///
-  /// 二次确认通过 [TSwipeCellPanel.confirms] 的 [confirmIndex] 与 [TSwipeCellPanel.children]
-  /// 的索引关联。默认依赖点击的 action 与 children 为同一实例（`==` 匹配）；
-  /// 若通过 `copyWith` 等重建了等价实例，请为两者设置相同的 [id]，
-  /// 以按标识而非实例引用匹配。
-  final String? id;
-
-  /// 获取生效的组件级主题
   TSwipeCellThemeData _effectiveTheme(BuildContext context) {
     return Theme.of(context).extension<TSwipeCellThemeData>() ??
         const TSwipeCellThemeData();
@@ -92,80 +62,61 @@ class TSwipeCellAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _effectiveTheme(context);
-    // P0 实例参数 > P1 组件主题 > P4 Token 兜底
     final effectiveBackgroundColor =
         backgroundColor ?? theme.actionBackgroundColor;
-    final effectiveIconSize = iconSize ?? theme.actionIconSize ?? 20;
+    final materialTheme = Theme.of(context);
+    final explicitIconTheme = context.tExplicitIconTheme;
+    final effectiveIconSize =
+        iconSize ?? theme.actionIconSize ?? explicitIconTheme?.size ?? 20;
     final effectiveSpacing = spacing ?? theme.actionSpacing ?? 8;
     final effectivePadding =
         theme.actionPadding ?? const EdgeInsets.symmetric(horizontal: 16);
-    final effectiveIconColor = iconColor ??
+    final effectiveIconColor =
+        iconColor ??
         theme.actionIconColor ??
-        labelStyle?.color ??
+        explicitIconTheme?.color ??
         context.tTheme.textColorAnti;
-    final effectiveTextStyle = labelStyle ?? theme.actionTextStyle;
-    // 文字样式：优先 P0/P1 的 TextStyle，否则回退 P4 fontMarkMedium
-    final fallbackFont = context.tTheme.fontMarkMedium ??
+    final fallbackFont =
+        context.tTheme.fontMarkMedium ??
         Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
-
-    final children = <Widget>[
-      if (icon != null)
-        Flexible(
-          fit: FlexFit.loose,
-          child: Icon(
-            icon,
-            size: effectiveIconSize,
-            color: effectiveIconColor,
-          ),
-        ),
-      if (icon != null && label != null) SizedBox(width: effectiveSpacing),
-      if (label != null)
-        Flexible(
-          fit: FlexFit.loose,
-          child: TText(
-            label,
-            font: fallbackFont,
-            textColor: context.tTheme.textColorAnti,
-            style: effectiveTextStyle,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-    ];
-    final child = GestureDetector(
-      onTap: () {
-        _handleTap(context);
-      },
-      child: builder?.call(context) ??
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: effectiveBackgroundColor,
-            padding: effectivePadding,
-            child: Flex(
-              mainAxisAlignment: MainAxisAlignment.center,
-              direction: direction,
-              children: children,
-            ),
-          ),
+    final tokenTextStyle = TextStyle(
+      color: context.tTheme.textColorAnti,
+      fontSize: fallbackFont.size,
+      height: fallbackFont.height,
+      fontWeight: fallbackFont.fontWeight,
     );
-    return confirmIndex?.isNotEmpty == true
-        ? child
-        : Expanded(
-            flex: flex,
-            child: child,
-          );
-  }
+    final effectiveTextStyle = tokenTextStyle
+        .merge(materialTheme.tExplicitTextTheme?.labelMedium)
+        .merge(context.tExplicitDefaultTextStyle)
+        .merge(theme.actionTextStyle)
+        .merge(labelStyle);
 
-  void _handleTap(BuildContext context) {
-    final swipeInherited = TSwipeCellInherited.of(context)!;
-    var openConfirm = swipeInherited.actionClick(this);
-    if (openConfirm == true) {
-      return;
-    }
-    onPressed?.call(context);
-    if (autoClose) {
-      swipeInherited.controller.close(duration: swipeInherited.duration);
-    }
+    final content =
+        builder?.call(context) ??
+        Container(
+          height: double.infinity,
+          color: effectiveBackgroundColor,
+          padding: effectivePadding,
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null)
+                Icon(icon, size: effectiveIconSize, color: effectiveIconColor),
+              if (icon != null && label != null)
+                SizedBox(width: effectiveSpacing),
+              if (label != null)
+                TText(label!, style: effectiveTextStyle, maxLines: 1),
+            ],
+          ),
+        );
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        onPressed?.call(context);
+        TSwipeCellInherited.of(context)?.close();
+      },
+      child: content,
+    );
   }
 }
