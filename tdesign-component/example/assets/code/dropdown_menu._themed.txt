@@ -24,11 +24,11 @@ Widget _themed(BuildContext context) {
             label: '主题筛选',
             panelBuilder: (context, controller) =>
                 TDropdownSingleSelectPanel<String>(
-              controller: controller,
-              options: statusOptions,
-              value: 'all',
-              onChanged: (_) {},
-            ),
+                  controller: controller,
+                  options: statusOptions,
+                  value: 'all',
+                  onChanged: (_) {},
+                ),
           ),
         ],
       ),

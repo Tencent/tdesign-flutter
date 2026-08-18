@@ -1,0 +1,32 @@
+Widget _direction(BuildContext context) {
+    return TDropdownMenu(
+      placement: TDropdownMenuPlacement.above,
+      items: [
+        TDropdownMenuItem.custom(
+          triggerBuilder: (context, state) => InkWell(
+            onTap: state.enabled ? state.toggle : null,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('向上展开'),
+                Icon(
+                  state.isOpen
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                options: statusOptions,
+                value: 'all',
+                maxHeight: 280,
+                onChanged: (_) {},
+              ),
+        ),
+      ],
+    );
+  }

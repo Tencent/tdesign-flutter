@@ -13,25 +13,25 @@ Widget _sorting(BuildContext context) {
               },
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                value: sort,
-                options: const [
-                  TDropdownMenuOption(value: 'default', label: '默认排序'),
-                  TDropdownMenuOption(value: 'price_asc', label: '价格从低到高'),
-                  TDropdownMenuOption(value: 'sales', label: '销量优先'),
-                ],
-                onChanged: (value) => setState(() => sort = value),
-              ),
+                    controller: controller,
+                    value: sort,
+                    options: const [
+                      TDropdownMenuOption(value: 'default', label: '默认排序'),
+                      TDropdownMenuOption(value: 'price_asc', label: '价格从低到高'),
+                      TDropdownMenuOption(value: 'sales', label: '销量优先'),
+                    ],
+                    onChanged: (value) => setState(() => sort = value),
+                  ),
             ),
             TDropdownMenuItem(
               label: status == 'all' ? '商品状态' : '已筛选状态',
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                value: status,
-                options: statusOptions,
-                onChanged: (value) => setState(() => status = value),
-              ),
+                    controller: controller,
+                    value: status,
+                    options: statusOptions,
+                    onChanged: (value) => setState(() => status = value),
+                  ),
             ),
           ],
         );

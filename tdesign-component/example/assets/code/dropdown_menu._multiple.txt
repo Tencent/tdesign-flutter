@@ -1,19 +1,55 @@
 Widget _multiple(BuildContext context) {
-    var selected = <String>{'phone'};
+    var singleColumn = <String>{'phone'};
+    var doubleColumn = <String>{'phone'};
+    var tripleColumn = <String>{'phone'};
     return StatefulBuilder(
       builder: (context, setState) {
-        return TDropdownMenu(
-          items: [
-            TDropdownMenuItem(
-              label: selected.isEmpty ? '全部分类' : '已选 ${selected.length} 项',
-              panelBuilder: (context, controller) =>
-                  TDropdownMultiSelectPanel<String>(
-                controller: controller,
-                options: categoryOptions,
-                values: selected,
-                columns: 3,
-                onConfirm: (values) => setState(() => selected = values),
-              ),
+        Widget menu(
+          String label,
+          int columns,
+          Set<String> selected,
+          ValueChanged<Set<String>> onConfirm,
+        ) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: TDropdownMenu(
+              items: [
+                TDropdownMenuItem(
+                  label: '$label（已选 ${selected.length} 项）',
+                  panelBuilder: (context, controller) =>
+                      TDropdownMultiSelectPanel<String>(
+                        controller: controller,
+                        options: categoryOptions,
+                        values: selected,
+                        columns: columns,
+                        maxHeight: 280,
+                        onConfirm: onConfirm,
+                      ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Column(
+          children: [
+            menu(
+              '单列',
+              1,
+              singleColumn,
+              (values) => setState(() => singleColumn = values),
+            ),
+            menu(
+              '双列',
+              2,
+              doubleColumn,
+              (values) => setState(() => doubleColumn = values),
+            ),
+            menu(
+              '三列',
+              3,
+              tripleColumn,
+              (values) => setState(() => tripleColumn = values),
             ),
           ],
         );

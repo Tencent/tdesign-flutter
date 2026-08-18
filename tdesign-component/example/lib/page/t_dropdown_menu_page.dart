@@ -34,15 +34,28 @@ class TDropdownMenuPage extends StatelessWidget {
       desc: '用于商品列表等页面的排序和多维筛选；表单选择请使用 Picker。',
       exampleCodeGroup: 'dropdown_menu',
       children: [
-        ExampleModule(title: '真实筛选场景', children: [
-          ExampleItem(desc: '商品排序与状态', builder: _sorting),
-          ExampleItem(desc: '分类多选（确认后生效）', builder: _multiple),
-          ExampleItem(desc: '自定义价格区间', builder: _customPanel),
-        ]),
-        ExampleModule(title: '布局与主题', children: [
-          ExampleItem(desc: '横向滚动与禁用项', builder: _scrollable),
-          ExampleItem(desc: '局部主题与自动方向', builder: _themed),
-        ]),
+        ExampleModule(
+          title: '01 组件类型',
+          children: [
+            ExampleItem(desc: '单选下拉菜单', builder: _sorting),
+            ExampleItem(desc: '1 / 2 / 3 列多选', builder: _multiple),
+            ExampleItem(desc: '自定义价格区间', builder: _customPanel),
+          ],
+        ),
+        ExampleModule(
+          title: '02 组件状态',
+          children: [
+            ExampleItem(desc: '禁用菜单', builder: _disabled),
+            ExampleItem(desc: '向上展开与自定义图标', builder: _direction),
+          ],
+        ),
+        ExampleModule(
+          title: '03 Flutter 额外能力',
+          children: [
+            ExampleItem(desc: '横向滚动与禁用项', builder: _scrollable),
+            ExampleItem(desc: '局部主题与自动方向', builder: _themed),
+          ],
+        ),
       ],
     );
   }
@@ -63,25 +76,25 @@ class TDropdownMenuPage extends StatelessWidget {
               },
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                value: sort,
-                options: const [
-                  TDropdownMenuOption(value: 'default', label: '默认排序'),
-                  TDropdownMenuOption(value: 'price_asc', label: '价格从低到高'),
-                  TDropdownMenuOption(value: 'sales', label: '销量优先'),
-                ],
-                onChanged: (value) => setState(() => sort = value),
-              ),
+                    controller: controller,
+                    value: sort,
+                    options: const [
+                      TDropdownMenuOption(value: 'default', label: '默认排序'),
+                      TDropdownMenuOption(value: 'price_asc', label: '价格从低到高'),
+                      TDropdownMenuOption(value: 'sales', label: '销量优先'),
+                    ],
+                    onChanged: (value) => setState(() => sort = value),
+                  ),
             ),
             TDropdownMenuItem(
               label: status == 'all' ? '商品状态' : '已筛选状态',
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                value: status,
-                options: statusOptions,
-                onChanged: (value) => setState(() => status = value),
-              ),
+                    controller: controller,
+                    value: status,
+                    options: statusOptions,
+                    onChanged: (value) => setState(() => status = value),
+                  ),
             ),
           ],
         );
@@ -91,25 +104,119 @@ class TDropdownMenuPage extends StatelessWidget {
 
   @ExampleCode(group: 'dropdown_menu')
   Widget _multiple(BuildContext context) {
-    var selected = <String>{'phone'};
+    var singleColumn = <String>{'phone'};
+    var doubleColumn = <String>{'phone'};
+    var tripleColumn = <String>{'phone'};
     return StatefulBuilder(
       builder: (context, setState) {
-        return TDropdownMenu(
-          items: [
-            TDropdownMenuItem(
-              label: selected.isEmpty ? '全部分类' : '已选 ${selected.length} 项',
-              panelBuilder: (context, controller) =>
-                  TDropdownMultiSelectPanel<String>(
-                controller: controller,
-                options: categoryOptions,
-                values: selected,
-                columns: 3,
-                onConfirm: (values) => setState(() => selected = values),
-              ),
+        Widget menu(
+          String label,
+          int columns,
+          Set<String> selected,
+          ValueChanged<Set<String>> onConfirm,
+        ) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: TDropdownMenu(
+              items: [
+                TDropdownMenuItem(
+                  label: '$label（已选 ${selected.length} 项）',
+                  panelBuilder: (context, controller) =>
+                      TDropdownMultiSelectPanel<String>(
+                        controller: controller,
+                        options: categoryOptions,
+                        values: selected,
+                        columns: columns,
+                        maxHeight: 280,
+                        onConfirm: onConfirm,
+                      ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Column(
+          children: [
+            menu(
+              '单列',
+              1,
+              singleColumn,
+              (values) => setState(() => singleColumn = values),
+            ),
+            menu(
+              '双列',
+              2,
+              doubleColumn,
+              (values) => setState(() => doubleColumn = values),
+            ),
+            menu(
+              '三列',
+              3,
+              tripleColumn,
+              (values) => setState(() => tripleColumn = values),
             ),
           ],
         );
       },
+    );
+  }
+
+  @ExampleCode(group: 'dropdown_menu')
+  Widget _disabled(BuildContext context) {
+    return TDropdownMenu(
+      items: [
+        TDropdownMenuItem(
+          label: '不可选菜单',
+          enabled: false,
+          panelBuilder: (context, controller) => const SizedBox.shrink(),
+        ),
+        TDropdownMenuItem(
+          label: '可选菜单',
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                options: statusOptions,
+                value: 'all',
+                maxHeight: 280,
+                onChanged: (_) {},
+              ),
+        ),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'dropdown_menu')
+  Widget _direction(BuildContext context) {
+    return TDropdownMenu(
+      placement: TDropdownMenuPlacement.above,
+      items: [
+        TDropdownMenuItem.custom(
+          triggerBuilder: (context, state) => InkWell(
+            onTap: state.enabled ? state.toggle : null,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('向上展开'),
+                Icon(
+                  state.isOpen
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                options: statusOptions,
+                value: 'all',
+                maxHeight: 280,
+                onChanged: (_) {},
+              ),
+        ),
+      ],
     );
   }
 
@@ -235,11 +342,11 @@ class TDropdownMenuPage extends StatelessWidget {
             label: '主题筛选',
             panelBuilder: (context, controller) =>
                 TDropdownSingleSelectPanel<String>(
-              controller: controller,
-              options: statusOptions,
-              value: 'all',
-              onChanged: (_) {},
-            ),
+                  controller: controller,
+                  options: statusOptions,
+                  value: 'all',
+                  onChanged: (_) {},
+                ),
           ),
         ],
       ),
