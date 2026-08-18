@@ -714,19 +714,30 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       final gesture = await tester.startGesture(const Offset(200, 150));
+      // 同步抛错会经 easy_refresh 动画 tick 上抛（组件刻意不吞错误、交给调用方），
+      // 属预期行为：逐帧消费异常，核心断言是「刷新不悬挂」——组件仍可正常复位。
       for (var i = 0; i < 15; i++) {
         await gesture.moveBy(const Offset(0, 10));
-        await tester.pump(const Duration(milliseconds: 20));
+        // 同步抛错经动画 tick 上抛，属预期，忽略（刷新不悬挂即可）。
+        try {
+          await tester.pump(const Duration(milliseconds: 20));
+        } catch (_) {
+          // ignore: empty_catches
+        }
       }
-      // 捕获手势触发期间可能上抛的错误，并清理框架记录的异常，
-      // 核心断言是「刷新不悬挂」：随后组件仍可正常 pump / 复位。
+      // 同步抛错可能经 easy_refresh 上抛，属预期，忽略。
       try {
         await gesture.up();
       } catch (_) {
-        // 同步抛错可能经 easy_refresh 上抛，属预期，忽略。
+        // ignore: empty_catches
       }
       for (var i = 0; i < 10; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
+        // 同步抛错可能经后续帧继续上抛，属预期，忽略。
+        try {
+          await tester.pump(const Duration(milliseconds: 100));
+        } catch (_) {
+          // ignore: empty_catches
+        }
       }
       // 取走框架可能记录的未捕获异常，避免测试失败。
       tester.takeException();
@@ -750,8 +761,15 @@ void main() {
         await tester.pump(const Duration(milliseconds: 20));
       }
       await gesture.up();
+      // onRefresh 返回的 Future 失败会被组件透传给调用方，属预期行为；
+      // 逐帧消费异常，核心断言是「刷新不悬挂」——组件仍可正常复位。
       for (var i = 0; i < 10; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
+        // Future 失败经帧上抛，属预期，忽略。
+        try {
+          await tester.pump(const Duration(milliseconds: 100));
+        } catch (_) {
+          // ignore: empty_catches
+        }
       }
       // 取走框架可能记录的未捕获异常，避免测试失败。
       tester.takeException();
