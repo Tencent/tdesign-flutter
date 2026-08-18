@@ -90,9 +90,18 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 | **CHANGELOG.md** | 由 CLI 自动生成 | 不手动编辑 |
 | **CONTRIBUTING.md / specs/README.md** | 规范唯一事实来源 | 需引用时统一指向，避免重复维护 |
 
-## 八、代码质量 / lint 零告警
+## 八、API 文档 / 示例代码改动的脚本同步
 
-通用自查清单（`const`/`final`、tear-off、`directives_ordering`、单引号、集合字面量、字符串插值等，对齐 `tdesign-component/analysis_options.yaml`）见通用 skill 第七节。CNB 平台落地要点：**lint 零告警是硬性门槛**，skill / 约定属软约束，只有 CI 的 `flutter analyze`（`.cnb.yml`，`--fatal-infos`）才是机器硬门槛；提交前在本地跑 `cd tdesign-component && flutter analyze` 确认无告警再提交。
+本仓库存在**由脚本生成并需随源码一并提交**的产物，改动设计 API 或示例代码时，**必须运行对应生成脚本**，把生成的产物与源码同一次提交（通用规则与命令见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md) 第七节）。CNB 平台落地要点：
+
+1. **修改设计 / 组件 API 时** → 在 `tdesign-component` 目录运行 `sh ./demo_tool/all_build.sh`，重新生成并提交 `example/assets/api/<component>_api.md`；新增或迁移组件时先更新 `tool/components.json` 再生成。
+2. **修改示例代码（带 `@ExampleCode` 注解的示例方法）时** → 在 `tdesign-component` 目录运行 `dart run tool/generate_example_code.dart --verbose`，重新生成并提交 `example/assets/code/*.txt`；CI 会用 `dart run tool/generate_example_code.dart --check` 校验同步。
+
+**容易漏**：只改了源码没运行脚本 / 运行了却没把生成文件提交，都会导致源码与产物分叉、CI 校验失败。提交 PR 前先在本地重跑脚本并确认生成文件已一并提交。
+
+## 九、代码质量 / lint 零告警
+
+通用自查清单（`const`/`final`、tear-off、`directives_ordering`、单引号、集合字面量、字符串插值等，对齐 `tdesign-component/analysis_options.yaml`）见通用 skill 第八节。CNB 平台落地要点：**lint 零告警是硬性门槛**，skill / 约定属软约束，只有 CI 的 `flutter analyze`（`.cnb.yml`，`--fatal-infos`）才是机器硬门槛；提交前在本地跑 `cd tdesign-component && flutter analyze` 确认无告警再提交。
 
 ## 回答风格
 
