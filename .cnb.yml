@@ -76,11 +76,47 @@ $:
             daemon: true
             keepAliveTimeout: 30m
       stages:
+        # launch 以 daemon 后台构建，输出统一落盘到 /usr/share/nginx/html/preview.log。
+        # 本阶段持续跟随该日志直至构建结束（BUILD_DONE/BUILD_FAILED），把完整构建输出
+        # （pnpm install / site build / flutter pub get / flutter build web）实时回显到流水线日志；
+        # 构建失败则本阶段失败，便于直接在日志中定位。
         - name: preview ready
           script: |
-            # launch 以 daemon 后台构建并落盘日志，此处展示构建进度供定位
-            echo "===== preview.log (launch 构建日志) ==="
-            tail -n 100 /usr/share/nginx/html/preview.log 2>/dev/null || echo "(日志尚未生成，构建可能仍在启动)"
+            set -eu
+            LOG=/usr/share/nginx/html/preview.log
+            # 等待日志文件生成（launch 启动有一小段延迟）
+            for _ in $(seq 1 120); do
+              [ -f "$LOG" ] && break
+              sleep 1
+            done
+            if [ ! -f "$LOG" ]; then
+              echo "preview.log 未生成，launch 可能未启动" >&2
+              exit 1
+            fi
+            echo "===== preview build log ==="
+            last_size=0
+            DEADLINE=$(( $(date +%s) + 1800 ))   # 30 分钟上限，构建一般数分钟完成
+            while :; do
+              size=$(wc -c <"$LOG" 2>/dev/null || echo 0)
+              if [ "$size" -gt "$last_size" ]; then
+                tail -c +$((last_size + 1)) "$LOG" 2>/dev/null || true
+                last_size=$size
+              fi
+              if grep -q "BUILD_DONE" "$LOG" 2>/dev/null; then
+                echo "===== preview build done ===="
+                exit 0
+              fi
+              if grep -q "BUILD_FAILED" "$LOG" 2>/dev/null; then
+                echo "===== preview build failed ===" >&2
+                exit 1
+              fi
+              if [ "$(date +%s)" -ge "$DEADLINE" ]; then
+                echo "等待构建超时，请查看 /usr/share/nginx/html/preview.log 或重试" >&2
+                exit 1
+              fi
+              sleep 2
+            done
+          timeout: 30m
 
   # 云原生开发：仅预览模式不支持 WebIDE，此事件进入标准 WebIDE 用于编辑代码
   vscode:

@@ -10,8 +10,9 @@ fi
 #       本脚本仅负责构建站点与 Flutter Web 产物并复制到 /usr/share/nginx/html，
 #       nginx 静态服务即时生效、无需重启，彻底规避此前"占位->换进程"导致的转发漂移。
 #       构建期间直接复用镜像预装的默认 index.html 占位页（自动刷新、避免空白/404），无需额外写入。
-# launch 以 daemon:true 运行，日志不直接进流水线，故统一落盘到 /usr/share/nginx/html/preview.log，
-# 由 stages 的「preview ready」阶段 tail 展示，便于定位构建问题。
+# launch 以 daemon:true 运行，日志不直接进流水线，故统一落盘到 /usr/share/nginx/html/preview.log。
+# stages 的「preview ready」阶段会持续跟随该日志直至出现 BUILD_DONE / BUILD_FAILED 标记，
+# 把完整构建输出回显到流水线日志，便于定位构建问题。
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SITE_DIR="$ROOT/tdesign-site"
@@ -30,7 +31,9 @@ if ! bash -c 'exec 3<>/dev/tcp/127.0.0.1/8686' 2>/dev/null; then
 fi
 
 # 2. 后台安装依赖、构建站点与 flutter example，并嵌入 _site/flutter/example
+#    构建成功写 BUILD_DONE、失败写 BUILD_FAILED，供「preview ready」阶段判定完成状态并回显日志。
 (
+  set +e
   cd "$SITE_DIR"
   pnpm install
   pnpm run site --mode=preview
@@ -42,12 +45,18 @@ fi
 
   # 3. 将最终产物整体复制到 nginx 根目录（覆盖镜像默认占位页），nginx 即时生效
   cp -R "$SITE_OUT"/. "$WEB_ROOT"/
-  echo "BUILD_DONE" >>"$LOG"
+  BUILD_RC=$?
+  if [ "$BUILD_RC" -eq 0 ]; then
+    echo "BUILD_DONE" >>"$LOG"
+  else
+    echo "BUILD_FAILED" >>"$LOG"
+  fi
+  exit "$BUILD_RC"
 ) >>"$LOG" 2>&1 &
 BUILD_PID=$!
 
-# 4. 守护保活：等待构建完成，便于在日志确认 BUILD_DONE；
+# 4. 守护保活：等待构建完成（失败不退出，便于保留容器查看日志定位）；
 #    随后常驻保活，避免 daemon 进程提前退出导致平台判定服务结束（keepAliveTimeout 兜底回收）。
-wait "$BUILD_PID"
+wait "$BUILD_PID" || true
 echo "[$(date +%T)] build finished; nginx serves $WEB_ROOT on 8686" >>"$LOG"
 sleep infinity
