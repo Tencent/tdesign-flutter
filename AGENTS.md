@@ -7,7 +7,7 @@
 > - Spec 专项规范 → [`specs/README.md`](./specs/README.md)
 >
 > **面向所有 AI 助手的通用协作约定** → 仓库级 skill：`.agents/skills/tdesign-flutter-general/SKILL.md`
-> （含「何时创建 Spec / 何时写更新日志」四种情况、Flutter 双版本兼容、breaking change 分析、文档与注释规范、API 文档 / 示例代码脚本同步、lint 零告警等平台无关约定）
+> （含「何时创建 Spec / 何时写更新日志」四种情况、Flutter 双版本兼容、breaking change 分析、文档与注释规范、API 文档 / 示例代码 / README 脚本同步、lint 零告警等平台无关约定）
 >
 > **面向 CNB 平台 NPC 的执行约定** → 仓库级 skill：`.agents/skills/tdesign-flutter-conventions/SKILL.md`
 > （含 `cnb-issue-<issue.number>` 等仅 CNB 平台可用的细化规则，通用工具以其可读取到的实际上下文为准；通用规则见 `.agents/skills/tdesign-flutter-general/SKILL.md`，不重复阐述）
@@ -20,7 +20,7 @@
 4. **Spec 规范对齐**：组件 API 变更 / 重构 / 跨目录改动按 [`specs/README.md`](./specs/README.md) 创建 Spec，提交代码须与 Spec 行为契约一致并同步更新。注意**「是否需要 Spec」与「是否需要更新日志」是两件独立的事**：Spec 看改动复杂度 / 是否碰公共契约，更新日志看用户是否感知。**最容易出错**：行为不变的纯内部重构**要 Spec**（属于重构）但**不写更新日志**。四种情况详见 `.agents/skills/tdesign-flutter-general/SKILL.md` 第一节。
 5. **Flutter 双版本兼容**：同时兼容 `flutter@3.32.0` 与 `flutter@latest`。
 6. **breaking change 分析**：组件改动时判断是否改变公开 API 签名 / 默认行为 / 删除能力。
-7. **API 文档 / 示例代码脚本同步**：改动设计 / 组件 API 或示例代码后，**必须运行对应生成脚本并提交产物**——修改 API 时在 `tdesign-component` 目录跑 `sh ./demo_tool/all_build.sh` 重新生成 `example/assets/api/*.md`；修改示例代码时跑 `dart run tool/generate_example_code.dart --verbose` 重新生成 `example/assets/code/*.txt`，两者与源码同一次提交（详见 `.agents/skills/tdesign-flutter-general/SKILL.md` 第七节）。
+7. **API 文档 / 示例代码 / README 脚本同步**：改动设计 / 组件 API、示例代码或根目录 README 后，**必须运行对应生成 / 同步脚本并提交产物**——修改 API 时在 `tdesign-component` 目录跑 `sh ./demo_tool/all_build.sh` 重新生成 `example/assets/api/*.md`；修改示例代码时跑 `dart run tool/generate_example_code.dart --verbose` 重新生成 `example/assets/code/*.txt`；修改根目录 `README.md` 或 `README_zh_CN.md` 时在仓库根目录跑 `node scripts/sync-readme.mjs` 同步到 `tdesign-component/README*.md` 与 `tdesign-site/site/docs/getting-started.md`，产物与源码同一次提交（详见 `.agents/skills/tdesign-flutter-general/SKILL.md` 第七节）。
 8. **文档与注释**：组件公开 API 的 `///` dartdoc 注释就是用户文档，改动公开 API 时须随代码同步更新注释；复杂需求 / 重构按 Spec 记录设计；PR「更新日志」只写用户可感知的变更；`CHANGELOG.md` 由 CLI 生成勿手动编辑（详见 `.agents/skills/tdesign-flutter-general/SKILL.md` 第六节）。
 9. **代码质量 / lint 零告警**：提交前须过 `flutter analyze`（0 error / 0 warning），能用 `const`/`final` 的地方必须用、避免 lambda 替代 tear-off、遵循 `directives_ordering` 等，全部对齐 `analysis_options.yaml`；CI 的 `.cnb.yml` 已加 analyze 兜底（详见 `.agents/skills/tdesign-flutter-general/SKILL.md` 第八节）。
 
