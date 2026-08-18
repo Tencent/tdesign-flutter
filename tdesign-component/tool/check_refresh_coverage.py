@@ -18,8 +18,9 @@ THRESHOLD = 95.0
 
 def main() -> int:
     lcov_path = 'coverage/lcov.info'
-    current = None
+    current = False
     lf = lh = 0
+    matched_files = []
     try:
         with open(lcov_path, encoding='utf-8') as f:
             for raw in f:
@@ -27,18 +28,26 @@ def main() -> int:
                 if line.startswith('SF:'):
                     path = line[3:]
                     current = any(path.endswith(t) for t in TARGETS)
+                    if current:
+                        matched_files.append(path)
                     continue
-                if current is None:
+                if not current:
+                    if line.startswith('end_of_record'):
+                        current = False
                     continue
                 if line.startswith('LF:'):
                     lf += int(line[3:])
                 elif line.startswith('LH:'):
                     lh += int(line[3:])
                 elif line.startswith('end_of_record'):
-                    current = None
+                    current = False
     except OSError as e:
         print(f'ERROR: cannot read {lcov_path}: {e}')
         return 1
+
+    print('refresh matched files:')
+    for p in matched_files:
+        print(f'  - {p}')
 
     if lf == 0:
         print('NO refresh coverage data found in lcov.info')
