@@ -115,6 +115,95 @@ void main() {
   });
 
   // ============================================================
+  // T05b – suffixIconData 图标颜色跟随 colorScheme
+  // ============================================================
+  testWidgets('T05b - suffixIconData 图标颜色跟随主题色', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(MaterialApp(
+      theme: TThemeBuilder.light(token),
+      home: const Scaffold(
+        body: Center(
+          child: TLink(
+            child: Text('主题色'),
+            variant: TLinkVariant.icon,
+            colorScheme: TLinkColorScheme.primary,
+            suffixIconData: TIcons.jump,
+            onPressed: _noop,
+          ),
+        ),
+      ),
+    ));
+
+    final icon = tester.widget<Icon>(find.byIcon(TIcons.jump));
+    expect(icon.color, token.brandNormalColor);
+  });
+
+  // ============================================================
+  // T05c – suffixIconData 图标颜色跟随禁用态
+  // ============================================================
+  testWidgets('T05c - suffixIconData 图标禁用态颜色跟随', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(MaterialApp(
+      theme: TThemeBuilder.light(token),
+      home: const Scaffold(
+        body: Center(
+          child: TLink(
+            child: Text('禁用'),
+            variant: TLinkVariant.icon,
+            colorScheme: TLinkColorScheme.primary,
+            suffixIconData: TIcons.jump,
+            onPressed: null,
+          ),
+        ),
+      ),
+    ));
+
+    final icon = tester.widget<Icon>(find.byIcon(TIcons.jump));
+    expect(icon.color, token.brandDisabledColor);
+  });
+
+  // ============================================================
+  // T05d – suffixIconData 图标尺寸跟随 TLinkSize
+  // ============================================================
+  testWidgets('T05d - suffixIconData 图标尺寸跟随 size', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(MaterialApp(
+      theme: TThemeBuilder.light(token),
+      home: const Scaffold(
+        body: Center(
+          child: TLink(
+            child: Text('大号'),
+            variant: TLinkVariant.icon,
+            colorScheme: TLinkColorScheme.primary,
+            size: TLinkSize.large,
+            suffixIconData: TIcons.jump,
+            onPressed: _noop,
+          ),
+        ),
+      ),
+    ));
+
+    final icon = tester.widget<Icon>(find.byIcon(TIcons.jump));
+    expect(icon.size, 18);
+  });
+
+  // ============================================================
+  // T05e – prefixIconData 图标正常工作
+  // ============================================================
+  testWidgets('T05e - prefixIconData 图标渲染', (tester) async {
+    await tester.pumpWidget(_wrap(
+      const TLink(
+        child: Text('前置图标数据'),
+        variant: TLinkVariant.icon,
+        prefixIconData: TIcons.link,
+      ),
+    ));
+
+    expect(find.text('前置图标数据'), findsOneWidget);
+    expect(find.byIcon(TIcons.link), findsOneWidget);
+  });
+
+  // ============================================================
   // T06 – 禁用态（onPressed: null）
   // ============================================================
   testWidgets('T06 - 禁用态（onPressed: null）', (tester) async {

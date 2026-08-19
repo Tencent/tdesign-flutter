@@ -64,10 +64,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(
-            TLinkVariant.icon,
-            prefixIconBuilder: _linkIcon,
-          ),
+          children:
+              _buildLinksWithVariant(TLinkVariant.icon, prefixIconData: TIcons.link),
         ));
   }</pre>
 
@@ -84,10 +82,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(
-            TLinkVariant.icon,
-            suffixIconBuilder: _jumpIcon,
-          ),
+          children:
+              _buildLinksWithVariant(TLinkVariant.icon, suffixIconData: TIcons.jump),
         ));
   }</pre>
 
@@ -109,11 +105,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
               _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
               _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
             ],
           ),
         ),
@@ -124,9 +120,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
               _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
             ],
           ),
         ),
@@ -151,11 +147,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
               _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
               _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
             ],
           ),
         ),
@@ -166,9 +162,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
               _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
             ],
           ),
         ),
@@ -213,10 +209,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | hover | bool | true | 是否开启点击反馈。为 false 时关闭 InkWell 水波纹 / 高亮反馈，但链接仍可正常点击 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onPressed | VoidCallback? | - | 点击回调。为 null 时链接为禁用态 |
-| prefixIcon | Widget? | - | 前置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
+| prefixIcon | Widget? | - | 前置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效）。传入 `Widget` 时原样透传，不做染色 / 定尺寸；若希望图标颜色与尺寸跟随 `colorScheme` / 禁用态 / `size`，请改用 `prefixIconData`。 |
+| prefixIconData | IconData? | - | 前置图标数据（仅在 `variant` 为 `TLinkVariant.icon` 时生效）。由组件统一按 `colorScheme`（含禁用态）染色、并按 `size` 定尺寸。与 `prefixIcon` 同时传入时以 `prefixIcon` 为准。 |
 | semanticLabel | String? | - | 语义标签（无障碍） |
 | size | TLinkSize? | - | 尺寸；未传时读取 `TLinkThemeData.defaultSize`，再回退 medium。 |
-| suffixIcon | Widget? | - | 后置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效） |
+| suffixIcon | Widget? | - | 后置图标（仅在 `variant` 为 `TLinkVariant.icon` 时生效）。传入 `Widget` 时原样透传，不做染色 / 定尺寸；若希望图标颜色与尺寸跟随 `colorScheme` / 禁用态 / `size`，请改用 `suffixIconData`。 |
+| suffixIconData | IconData? | - | 后置图标数据（仅在 `variant` 为 `TLinkVariant.icon` 时生效）。由组件统一按 `colorScheme`（含禁用态）染色、并按 `size` 定尺寸。与 `suffixIcon` 同时传入时以 `suffixIcon` 为准。 |
 | tooltip | String? | - | 悬浮提示 |
 | variant | TLinkVariant? | - | 链接形态；未传时读取 `TLinkThemeData.defaultVariant`，再回退 basic。 |
 

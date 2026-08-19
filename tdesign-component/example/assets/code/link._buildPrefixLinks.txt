@@ -3,9 +3,7 @@ Widget _buildPrefixLinks(BuildContext context) {
         color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(
-            TLinkVariant.icon,
-            prefixIconBuilder: _linkIcon,
-          ),
+          children:
+              _buildLinksWithVariant(TLinkVariant.icon, prefixIconData: TIcons.link),
         ));
   }

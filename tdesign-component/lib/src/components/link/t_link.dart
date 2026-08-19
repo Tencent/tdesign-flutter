@@ -14,6 +14,8 @@ class TLink extends StatelessWidget {
     this.child,
     this.prefixIcon,
     this.suffixIcon,
+    this.prefixIconData,
+    this.suffixIconData,
     this.variant,
     this.colorScheme,
     this.size,
@@ -36,10 +38,28 @@ class TLink extends StatelessWidget {
   final TLinkSize? size;
 
   /// 前置图标（仅在 [variant] 为 [TLinkVariant.icon] 时生效）
+  ///
+  /// 传入 [Widget] 时原样透传，不做染色 / 定尺寸。
+  /// 若希望图标颜色与尺寸跟随 [colorScheme] / 禁用态 / [size]，请改用 [prefixIconData]。
   final Widget? prefixIcon;
 
   /// 后置图标（仅在 [variant] 为 [TLinkVariant.icon] 时生效）
+  ///
+  /// 传入 [Widget] 时原样透传，不做染色 / 定尺寸。
+  /// 若希望图标颜色与尺寸跟随 [colorScheme] / 禁用态 / [size]，请改用 [suffixIconData]。
   final Widget? suffixIcon;
+
+  /// 前置图标数据（仅在 [variant] 为 [TLinkVariant.icon] 时生效）
+  ///
+  /// 传入 [IconData] 时由组件统一按 [colorScheme]（含禁用态）染色、并按 [size]
+  /// 定尺寸，与默认图标走同一解析链路。与 [prefixIcon] 同时传入时以 [prefixIcon] 为准。
+  final IconData? prefixIconData;
+
+  /// 后置图标数据（仅在 [variant] 为 [TLinkVariant.icon] 时生效）
+  ///
+  /// 传入 [IconData] 时由组件统一按 [colorScheme]（含禁用态）染色、并按 [size]
+  /// 定尺寸，与默认图标走同一解析链路。与 [suffixIcon] 同时传入时以 [suffixIcon] 为准。
+  final IconData? suffixIconData;
 
   /// 点击回调。为 null 时链接为禁用态
   final VoidCallback? onPressed;
@@ -166,21 +186,30 @@ class TLink extends StatelessWidget {
       theme: theme,
     );
 
-    // 构建图标（优先用户传入，否则使用默认图标）
+    // 构建图标：显式传入的 Widget 优先于 IconData，最后回退默认图标
+    final hasPrefixIcon = prefixIcon != null || prefixIconData != null;
+    final hasSuffixIcon = suffixIcon != null || suffixIconData != null;
+
     Widget? resolvedPrefix;
     Widget? resolvedSuffix;
 
-    final hasPrefix = prefixIcon != null;
-    final hasSuffix = suffixIcon != null;
-
-    if (hasPrefix) {
+    if (prefixIcon != null) {
       resolvedPrefix = prefixIcon;
+    } else if (prefixIconData != null) {
+      resolvedPrefix = _defaultIcon(
+          context, prefixIconData!, effectiveIconSize, effectiveColor);
+    }
+
+    if (suffixIcon != null) {
       resolvedSuffix = suffixIcon;
-    } else if (hasSuffix) {
-      // 只传了 suffix 时，仅展示后缀图标，不额外补充默认前缀图标（对齐 h5 设计）
-      resolvedSuffix = suffixIcon;
-    } else {
-      // 两者都没传：默认显示链接图标 + 跳转图标
+    } else if (suffixIconData != null) {
+      resolvedSuffix = _defaultIcon(
+          context, suffixIconData!, effectiveIconSize, effectiveColor);
+    }
+
+    // 两者都没显式传入：默认显示链接图标 + 跳转图标；
+    // 仅传后缀（或后缀图标数据）时不补默认前缀链接图标（对齐 h5 设计）
+    if (!hasPrefixIcon && !hasSuffixIcon) {
       resolvedPrefix =
           _defaultIcon(context, TIcons.link, effectiveIconSize, effectiveColor);
       resolvedSuffix =

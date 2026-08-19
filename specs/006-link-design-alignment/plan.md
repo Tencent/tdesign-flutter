@@ -11,21 +11,23 @@
 4. **测试**：为「仅传 suffix 不自动补默认前缀」补充断言 `find.byIcon(TIcons.link) == findsNothing`。
 5. **示例代码快照与站点文档**：按新的示例方法更新 `link.*.txt` 与 `README.md`。
 6. **hover 点击反馈开关**：为 `TLink` 新增可选参数 `hover`（默认 `true`），为 `false` 时改用 `GestureDetector` 承接 `onTap`，关闭 InkWell 水波纹反馈，对齐 h5 `hover` 能力。
+7. **组件层图标着色与定尺寸（下沉修复）**：为 `TLink` 新增可选参数 `prefixIconData` / `suffixIconData`（`IconData?`），由组件统一按 `colorScheme`（含禁用态）染色、按 `size` 定尺寸，与默认图标走同一 `TLinkResolve` 解析链路。示例页改用 `suffixIconData: TIcons.jump`，删除消费端手工复刻的 `_linkColor` / `_sizeLinkIconSize` / `_jumpIcon` / `_linkIcon`，从根上消除颜色 / 尺寸映射在组件与示例两处维护的漂移。
 
 ## 影响范围
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | `lib/src/components/link/t_link.dart` | 仅传 suffix 不再自动补默认前缀图标 |
-| 测试 | `test/components/link/t_link_test.dart` | T05 补充断言 |
-| 示例 | `example/lib/page/t_link_page.dart`、`t_footer_page.dart` | 示例结构 / 文案 / 图标对齐 |
-| 示例快照 | `example/assets/code/link.*.txt` | 新增 prefix/suffix 快照，移除 icon 快照 |
+| 组件 | `lib/src/components/link/t_link.dart` | 仅传 suffix 不再自动补默认前缀图标；新增 `prefixIconData` / `suffixIconData` 组件层着色与定尺寸 |
+| 测试 | `test/components/link/t_link_test.dart` | T05 补充断言；新增 T05b~T05e 覆盖图标数据参数 |
+| 示例 | `example/lib/page/t_link_page.dart`、`t_footer_page.dart` | 示例结构 / 文案 / 图标对齐；改用图标数据参数并删除手工复刻逻辑 |
+| 示例快照 | `example/assets/code/link.*.txt` | 同步 prefix/suffix/主题/禁用快照 |
 | 文档 | `tdesign-site/docs/components/link/README.md` | 示例与 API 对齐当前组件 |
 
 ## API 变化
 
 - 新增 `TLink.hover`（`bool`，默认 `true`）：为 `false` 时关闭 InkWell 点击反馈（用 `GestureDetector` 承接点击）。
   纯新增可选参数，不改变既有行为，**非 breaking**。
+- 新增 `TLink.prefixIconData` / `TLink.suffixIconData`（`IconData?`）：由组件统一按 `colorScheme`（含禁用态）染色、按 `size` 定尺寸，与默认图标走同一 `TLinkResolve` 解析链路。与 `prefixIcon` / `suffixIcon` 同时传入时以 `Widget` 为准。纯新增可选参数，不改变既有行为，**非 breaking**。
 - `TLinkVariant.icon` 在「只传 suffixIcon」时的图标渲染行为变化（不再自动补默认前置链接图标），属于行为对齐 h5，非 breaking。
 
 ## 风险与取舍

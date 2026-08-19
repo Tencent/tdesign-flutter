@@ -65,10 +65,8 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
         color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(
-            TLinkVariant.icon,
-            prefixIconBuilder: _linkIcon,
-          ),
+          children:
+              _buildLinksWithVariant(TLinkVariant.icon, prefixIconData: TIcons.link),
         ));
   }
 
@@ -78,30 +76,28 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
         color: context.tTheme.bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(
-            TLinkVariant.icon,
-            suffixIconBuilder: _jumpIcon,
-          ),
+          children:
+              _buildLinksWithVariant(TLinkVariant.icon, suffixIconData: TIcons.jump),
         ));
   }
 
   List<Widget> _buildLinksWithVariant(
     TLinkVariant variant, {
-    Widget Function(Color color)? prefixIconBuilder,
-    Widget Function(Color color)? suffixIconBuilder,
+    IconData? prefixIconData,
+    IconData? suffixIconData,
   }) {
     return [
       _buildLink(
         TLinkColorScheme.primary,
         variant,
-        prefixIconBuilder: prefixIconBuilder,
-        suffixIconBuilder: suffixIconBuilder,
+        prefixIconData: prefixIconData,
+        suffixIconData: suffixIconData,
       ),
       _buildLink(
         TLinkColorScheme.defaultTheme,
         variant,
-        prefixIconBuilder: prefixIconBuilder,
-        suffixIconBuilder: suffixIconBuilder,
+        prefixIconData: prefixIconData,
+        suffixIconData: suffixIconData,
       ),
     ];
   }
@@ -109,41 +105,19 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
   TLink _buildLink(
     TLinkColorScheme colorScheme,
     TLinkVariant variant, {
-    Widget Function(Color color)? prefixIconBuilder,
-    Widget Function(Color color)? suffixIconBuilder,
+    IconData? prefixIconData,
+    IconData? suffixIconData,
     bool disabled = false,
   }) {
-    final iconColor = _linkColor(context, colorScheme, disabled: disabled);
     return TLink(
       child: const Text('跳转链接'),
       colorScheme: colorScheme,
       variant: variant,
       size: TLinkSize.medium,
-      prefixIcon: prefixIconBuilder?.call(iconColor),
-      suffixIcon: suffixIconBuilder?.call(iconColor),
+      prefixIconData: prefixIconData,
+      suffixIconData: suffixIconData,
       onPressed: disabled ? null : _onLinkPressed,
     );
-  }
-
-  Color _linkColor(BuildContext context, TLinkColorScheme colorScheme,
-      {bool disabled = false}) {
-    if (disabled) {
-      // 图标颜色跟随各主题对应的禁用色（与 TLink 组件内部文字禁用色一致）
-      return switch (colorScheme) {
-        TLinkColorScheme.primary => context.tTheme.brandDisabledColor,
-        TLinkColorScheme.danger => context.tTheme.errorDisabledColor,
-        TLinkColorScheme.warning => context.tTheme.warningDisabledColor,
-        TLinkColorScheme.success => context.tTheme.successDisabledColor,
-        TLinkColorScheme.defaultTheme => context.tTheme.textDisabledColor,
-      };
-    }
-    return switch (colorScheme) {
-      TLinkColorScheme.primary => context.tTheme.brandNormalColor,
-      TLinkColorScheme.danger => context.tTheme.errorNormalColor,
-      TLinkColorScheme.warning => context.tTheme.warningNormalColor,
-      TLinkColorScheme.success => context.tTheme.successNormalColor,
-      TLinkColorScheme.defaultTheme => context.tTheme.textColorPrimary,
-    };
   }
 
   @ExampleCode(group: 'link')
@@ -156,11 +130,11 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
               _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
               _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
             ],
           ),
         ),
@@ -171,21 +145,15 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
               _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon),
+                  suffixIconData: TIcons.jump),
             ],
           ),
         ),
       ],
     );
   }
-
-  Widget _linkIcon(Color color) =>
-      Icon(TIcons.link, size: 16, color: color);
-
-  Widget _jumpIcon(Color color) =>
-      Icon(TIcons.jump, size: 16, color: color);
 
   @ExampleCode(group: 'link')
   Widget _buildDisabledLinks(BuildContext context) {
@@ -197,11 +165,11 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.primary, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
               _buildLink(TLinkColorScheme.defaultTheme, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
               _buildLink(TLinkColorScheme.danger, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
             ],
           ),
         ),
@@ -212,9 +180,9 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLink(TLinkColorScheme.warning, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
               _buildLink(TLinkColorScheme.success, TLinkVariant.icon,
-                  suffixIconBuilder: _jumpIcon, disabled: true),
+                  suffixIconData: TIcons.jump, disabled: true),
             ],
           ),
         ),
@@ -244,19 +212,8 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
       colorScheme: TLinkColorScheme.primary,
       variant: TLinkVariant.icon,
       size: size,
-      suffixIcon: Icon(TIcons.jump,
-          size: _sizeLinkIconSize(size),
-          color: context.tTheme.brandNormalColor),
+      suffixIconData: TIcons.jump,
       onPressed: _onLinkPressed,
     );
-  }
-
-  /// 链接尺寸对应的图标大小，与组件默认图标尺寸对齐（S=14 / M=16 / L=18）
-  double _sizeLinkIconSize(TLinkSize size) {
-    return switch (size) {
-      TLinkSize.small => 14,
-      TLinkSize.medium => 16,
-      TLinkSize.large => 18,
-    };
   }
 }

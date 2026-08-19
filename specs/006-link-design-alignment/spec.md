@@ -57,8 +57,22 @@ h5（tdesign-mobile-vue）`TdLinkProps` 提供 `hover`（是否开启点击反�
   - 同时传 `prefixIcon` 与 `suffixIcon`：前后图标都展示。
   - 两者都不传：保持默认展示 链接图标 + 跳转图标（既有行为不变）。
 - 文案对齐 h5：链接尺寸示例展示「S/M/L 跳转链接」。
-- 链接尺寸示例中，后缀跳转图标大小跟随 `TLinkSize` 变化（S=14 / M=16 / L=18），与组件默认图标尺寸对齐。
-- 图标颜色跟随链接语义色；禁用态下图标使用禁用色。
+
+## 新增 prefixIconData / suffixIconData（组件层图标着色与定尺寸）
+
+此前示例页为让图标颜色 / 尺寸跟随主题，在消费端手工复刻了 `TLinkResolve` 的颜色与尺寸解析逻辑
+（`_linkColor` / `_sizeLinkIconSize`），属于典型的 API 缺口：同样的映射在组件与示例两处维护、易漂移。
+本次下沉到组件层解决：
+
+- `TLink` 新增可选参数 `prefixIconData` / `suffixIconData`（类型 `IconData?`）：传入时由组件统一按
+  `colorScheme`（含禁用态）染色、并按 `size` 定尺寸，与默认图标走同一 `TLinkResolve` 解析链路。
+- 与 `prefixIcon` / `suffixIcon`（`Widget`）同时传入时，以 `Widget` 为准（`Widget` 原样透传、不自动染色/定尺寸）。
+- 该参数为**纯新增可选参数**，不改变既有行为，**非 breaking**。
+
+由此，示例页可改为：
+- 「不同主题」「禁用状态」示例传 `suffixIconData: TIcons.jump`，图标颜色自动跟随各主题语义色 / 禁用色。
+- 「链接尺寸」示例传 `suffixIconData: TIcons.jump`，图标大小自动跟随 `TLinkSize`（S=14 / M=16 / L=18）。
+- 删除示例页手工复刻的 `_linkColor` / `_sizeLinkIconSize` / `_jumpIcon` / `_linkIcon`。
 
 ## 验收标准
 
@@ -67,5 +81,7 @@ h5（tdesign-mobile-vue）`TdLinkProps` 提供 `hover`（是否开启点击反�
 - [ ] 「链接尺寸」示例展示带后缀跳转图标的 S/M/L 跳转链接，且图标大小跟随尺寸（S=14 / M=16 / L=18）。
 - [ ] 仅传 `suffixIcon` 时，`find.byIcon(TIcons.link)` 为 `findsNothing`。
 - [ ] `hover: true`（默认）时存在 `InkWell`；`hover: false` 时不存在 `InkWell` 但仍可点击（`T07b`/`T07c`/`T07d` 用例覆盖）。
+- [ ] `suffixIconData` 图标颜色跟随 `colorScheme`（primary → `brandNormalColor`，禁用态 → `brandDisabledColor`），尺寸跟随 `TLinkSize`（large → 18），由 `T05b`/`T05c`/`T05d` 用例覆盖；`prefixIconData` 正常渲染（`T05e`）。
+- [ ] 示例页不再包含 `_linkColor` / `_sizeLinkIconSize` / `_jumpIcon` / `_linkIcon` 等手工复刻逻辑。
 - [ ] `flutter analyze` 0 error / 0 warning。
 - [ ] 相关测试通过，示例代码快照与 `generate_example_code.dart` 一致。

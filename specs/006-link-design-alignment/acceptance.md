@@ -11,7 +11,7 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter analyze` | 待 CI | 目标 0 error / 0 warning |
-| `flutter test test/components/link/t_link_test.dart` | 待 CI | T05 断言 TIcons.link findsNothing |
+| `flutter test test/components/link/t_link_test.dart` | 待 CI | T05 断言 TIcons.link findsNothing；T05b~T05e 覆盖 prefix/suffixIconData 的着色与定尺寸；T07b~T07d 覆盖 hover |
 | `dart run tool/generate_example_code.dart --check` | 待 CI | 示例快照一致性 |
 
 ## 人工验收
