@@ -1,9 +1,0 @@
-Widget _buildGroup(BuildContext context) {
-    return const TCellGroup(
-      title: Text('分组标题'),
-      cells: [
-        TCell(title: Text('单元格一'), arrow: true),
-        TCell(title: Text('单元格二'), subtitle: Text('描述信息')),
-      ],
-    );
-  }

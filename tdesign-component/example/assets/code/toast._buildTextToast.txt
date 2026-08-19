@@ -2,12 +2,12 @@ Widget _buildTextToast(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('纯文字'),
+        child: const Text('纯文本'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText('这是一条纯文字提示', context: context);
+          TToast.showText('轻提示文字内容', context: context);
         },
       ),
     );

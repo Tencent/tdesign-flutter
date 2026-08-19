@@ -1,0 +1,17 @@
+Widget _buildHideToast(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('关闭提示'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {
+          final id = _manualToastId;
+          if (id != null) {
+            TToast.dismissToast(id);
+          }
+        },
+      ),
+    );
+  }
