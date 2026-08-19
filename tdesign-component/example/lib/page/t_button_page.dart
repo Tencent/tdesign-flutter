@@ -82,12 +82,13 @@ class _TButtonPageState extends State<TButtonPage> {
                   padding: const EdgeInsets.all(16),
                   alignment: Alignment.center,
                   color: context.tTheme.grayColor14,
-                  child: Wrap(
-                    spacing: 16, // 主轴方向间距
-                    runSpacing: 16, // 交叉轴方向间距
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CodeWrapper(builder: _buildPrimaryGhostButton),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildDangerGhostButton),
+                      const SizedBox(width: 16),
                       CodeWrapper(builder: _buildDefaultGhostButton),
                     ],
                   ),
