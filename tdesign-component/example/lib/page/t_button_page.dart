@@ -147,15 +147,27 @@ class _TButtonPageState extends State<TButtonPage> {
                 return Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CodeWrapper(builder: _buildRectangleShapeButton),
-                      CodeWrapper(builder: _buildSquareIconButton),
-                      CodeWrapper(builder: _buildRoundButton),
-                      CodeWrapper(builder: _buildCircleButton),
-                      CodeWrapper(builder: _buildFilledButton),
+                      Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: [
+                          CodeWrapper(builder: _buildRectangleShapeButton),
+                          CodeWrapper(builder: _buildSquareIconButton),
+                          CodeWrapper(builder: _buildRoundButton),
+                          CodeWrapper(builder: _buildCircleButton),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CodeWrapper(builder: _buildFilledButton),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 );
