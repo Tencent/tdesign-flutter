@@ -140,8 +140,6 @@ Widget _buildRefreshDemo() {
               const _SkeletonRow(),
               if (index < 2) const SizedBox(height: 16),
             ],
-            const SizedBox(height: 24),
-            const Center(child: Text('刷新次数：0')),
           ],
         ),
       ),

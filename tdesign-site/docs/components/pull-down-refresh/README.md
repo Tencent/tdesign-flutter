@@ -31,13 +31,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: TPullDownRefresh(
         controller: _controller,
         // 下拉刷新回调
-        onRefresh: () {
-          return Future<void>.delayed(const Duration(milliseconds: 1500), () {
-            setState(() {
-              count++;
-            });
-          });
-        },
+        onRefresh: () =>
+            Future<void>.delayed(const Duration(milliseconds: 1500)),
         child: _buildOfficialDemoContent(context),
       ),
     );
@@ -198,4 +193,3 @@ TDesign刷新头部
 | triggerWhenReach | - | - | - |
 | triggerWhenRelease | - | - | - |
 | triggerWhenReleaseNoWait | - | - | - |
-

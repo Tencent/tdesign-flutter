@@ -32,6 +32,7 @@ void main() {
     // 首屏可见：大骨架 + 前两组双列骨架；第三组位于内部滚动区域下方。
     expect(find.byType(TSkeleton), findsAtLeastNWidgets(5));
     expect(find.text('拖拽该区域演示 顶部下拉刷新'), findsOneWidget);
+    expect(find.textContaining('刷新次数'), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));
@@ -43,18 +44,13 @@ void main() {
     await tester.pump();
 
     await tester.tap(find.text('拖拽该区域演示 顶部下拉刷新'));
-    for (var index = 0; index < 24; index++) {
+    for (var index = 0; index < 8; index++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
-    final refreshList = find.descendant(
-      of: find.byType(TPullDownRefresh),
-      matching: find.byType(ListView),
-    );
-    await tester.drag(refreshList, const Offset(0, -600));
-    await tester.pump();
 
-    expect(find.text('刷新次数：1'), findsOneWidget);
+    expect(find.text('正在刷新'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    await tester.pump(const Duration(seconds: 2));
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));
   });

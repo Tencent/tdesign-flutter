@@ -22,7 +22,6 @@ class TPullDownRefreshPage extends StatefulWidget {
 
 class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
   final _controller = TPullDownRefreshController();
-  var count = 0;
   var loadingTextsCount = 0;
   var timeoutCount = 0;
 
@@ -98,13 +97,8 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
       child: TPullDownRefresh(
         controller: _controller,
         // 下拉刷新回调
-        onRefresh: () {
-          return Future<void>.delayed(const Duration(milliseconds: 1500), () {
-            setState(() {
-              count++;
-            });
-          });
-        },
+        onRefresh: () =>
+            Future<void>.delayed(const Duration(milliseconds: 1500)),
         child: _buildOfficialDemoContent(context),
       ),
     );
@@ -155,13 +149,6 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           const _PullDownRefreshSkeletonRow(),
           if (index < 2) const SizedBox(height: 16),
         ],
-        const SizedBox(height: 24),
-        TText(
-          '刷新次数：${count}',
-          textAlign: TextAlign.center,
-          font: context.tTheme.fontBodyMedium,
-          textColor: context.tTheme.textColorPlaceholder,
-        ),
       ],
     );
   }
