@@ -43,6 +43,6 @@ enum TPullDownRefreshState {
   /// 刷新完成、展示完成态。
   done,
 
-  /// 刷新超时。
+  /// 刷新超时的一次性通知，随后回到 [TPullDownRefreshState.inactive]。
   timeout,
 }

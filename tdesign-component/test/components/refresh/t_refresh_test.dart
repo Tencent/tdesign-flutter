@@ -53,6 +53,21 @@ void main() {
       expect(widget.refreshTimeout, const Duration(milliseconds: 3000));
     });
 
+    test('公开尺寸与时长参数拒绝无效边界', () {
+      expect(
+        () => TPullDownRefresh(loadingBarHeight: 0, child: const SizedBox()),
+        throwsAssertionError,
+      );
+      expect(
+        () => TPullDownRefresh(
+          loadingBarHeight: 60,
+          maxBarHeight: 50,
+          child: const SizedBox(),
+        ),
+        throwsAssertionError,
+      );
+    });
+
     testWidgets('默认渲染（loadingBarHeight=50）', (tester) async {
       await tester.pumpWidget(wrap(pullDownRefresh(onRefresh: () async {})));
       await tester.pump(const Duration(seconds: 1));
@@ -155,7 +170,7 @@ void main() {
         ),
       );
       await tester.pump(const Duration(seconds: 1));
-      // 不 await：onRefresh 永不完成，await 会挂起测试。
+      // 不 await：先推进动画和超时，再验证 controller Future 已完成。
       unawaited(controller.refresh());
       // 分步推进，让 EasyRefresh 完成下拉动画并触发超时计时器。
       for (var i = 0; i < 20; i++) {
@@ -178,13 +193,66 @@ void main() {
         ),
       );
       await tester.pump(const Duration(seconds: 1));
-      // 不 await：await 触发动画可能在测试中挂起，改用 pump 推进。
-      unawaited(controller.refresh());
+      final refreshFuture = controller.refresh();
       for (var i = 0; i < 20; i++) {
         await tester.pump(const Duration(milliseconds: 100));
       }
       expect(refreshed, isTrue);
+      await refreshFuture;
       // 清空 EasyRefresh 内部残留计时器。
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('controller.refresh 等待 onRefresh 进入终态', (tester) async {
+      final refreshCompleter = Completer<void>();
+      var settled = false;
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () => refreshCompleter.future,
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+
+      final refreshFuture = controller.refresh().then((_) => settled = true);
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(settled, isFalse);
+
+      refreshCompleter.complete();
+      await tester.pump(const Duration(seconds: 1));
+      await refreshFuture;
+      expect(settled, isTrue);
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('controller.refresh 在回调失败后也完成', (tester) async {
+      final reported = <Object?>[];
+      final originalOnError = FlutterError.onError;
+      FlutterError.onError = (details) => reported.add(details.exception);
+      addTearDown(() => FlutterError.onError = originalOnError);
+
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () async => throw StateError('refresh failed'),
+            controller: controller,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+
+      final refreshFuture = controller.refresh();
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await refreshFuture;
+      expect(reported, contains(isA<StateError>()));
       await tester.pump(const Duration(seconds: 1));
     });
 
@@ -582,10 +650,11 @@ void main() {
     testWidgets('超时上报 timeout 后结束刷新并复位', (tester) async {
       final states = <TPullDownRefreshState>[];
       final controller = TPullDownRefreshController();
+      final refreshCompleter = Completer<void>();
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
-            onRefresh: () => Completer<void>().future,
+            onRefresh: () => refreshCompleter.future,
             refreshTimeout: const Duration(milliseconds: 100),
             onStateChanged: states.add,
             controller: controller,
@@ -600,7 +669,12 @@ void main() {
       expect(states, contains(TPullDownRefreshState.timeout));
       // 超时后组件复位（回到 inactive）。
       await tester.pump(const Duration(seconds: 1));
-      expect(states, contains(TPullDownRefreshState.inactive));
+      expect(states.last, TPullDownRefreshState.inactive);
+      expect(states, isNot(contains(TPullDownRefreshState.done)));
+      // 迟到的业务 Future 不应再次触发 done。
+      refreshCompleter.complete();
+      await tester.pump(const Duration(seconds: 1));
+      expect(states, isNot(contains(TPullDownRefreshState.done)));
     });
   });
 

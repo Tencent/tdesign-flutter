@@ -40,7 +40,7 @@
 - [x] `TPullDownRefresh` 默认渲染对齐官方（loadingBarHeight=50 / maxBarHeight=80 / 触发阈值=50）
 - [x] 下拉 → 松手 → 刷新 → 完成四态文案正确（中文默认与官方一致）
 - [x] 下拉过程中刷新头与页面内容同步下移，释放后回弹
-- [x] 外部 `controller.refresh()`、`onStateChanged` 生效；刷新完成由 `onRefresh` Future 统一决定
+- [x] 外部 `controller.refresh()`、`onStateChanged` 生效；`await controller.refresh()` 在成功、失败或超时后完成，不代表业务一定成功
 - [x] `refreshTimeout` 默认 3000ms，超时通过 `onStateChanged(timeout)` 上报；传入 null 关闭超时
 - [x] `onLoadMore` 非空时按 `lowerThreshold` 自动启用触底加载，且不渲染额外 Footer UI
 - [x] `onRefresh == null` 时禁用下拉刷新并保留滚动

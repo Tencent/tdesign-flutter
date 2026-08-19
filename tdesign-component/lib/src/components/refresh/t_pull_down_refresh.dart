@@ -64,7 +64,8 @@ class TPullDownRefresh extends StatefulWidget {
   /// 外部主动刷新控制器。
   ///
   /// 通过 [TPullDownRefreshController.refresh] 从页面外部触发刷新。刷新完成时机
-  /// 始终由 [onRefresh] 返回的 Future 决定。
+  /// 由 [onRefresh] 返回的 Future、异常或 [refreshTimeout] 共同决定；超时后
+  /// 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。
   /// 底层 [EasyRefreshController] 由 State 创建并释放；外部控制器仅持有引用，
   /// 无需也不能重复 dispose（详见 [TPullDownRefreshController] 文档）。
   final TPullDownRefreshController? controller;
@@ -76,7 +77,10 @@ class TPullDownRefresh extends StatefulWidget {
   /// 并通过 [onStateChanged] 上报 [TPullDownRefreshState.timeout]。
   ///
   /// 默认启用 3 秒超时；传入 `null` 可关闭超时。
-  /// `timeout` 状态仅在超时瞬间上报一次，随后立即结束刷新并复位，无专属渲染文案。
+  /// `timeout` 是一次性状态通知，随后立即结束刷新并回到
+  /// [TPullDownRefreshState.inactive]，无专属渲染文案。超时后即使原始
+  /// [onRefresh] Future 迟到完成，也不会再次上报 [TPullDownRefreshState.done]。
+  /// 必须为非负时长。
   final Duration? refreshTimeout;
 
   /// Header 容器高度 = 触发阈值（默认 50，对齐官方 `loadingBarHeight`）。
@@ -86,13 +90,15 @@ class TPullDownRefresh extends StatefulWidget {
   final double maxBarHeight;
 
   /// 刷新完成提示的展示时长（默认 500ms，对齐官方 `successDuration`）。
+  /// 必须为非负时长。
   final Duration successDuration;
 
   /// 刷新状态变化回调（对应官方 `change`/`onChange` 事件）。
   ///
   /// 值域为 [TPullDownRefreshState]。仅在状态**跳变**时回调（已去重），
   /// 且通过异步调度触发，**不会**在 build 期间同步调用，可在回调中安全
-  /// `setState`。
+  /// `setState`。其中 [TPullDownRefreshState.timeout] 是一次性超时通知，
+  /// 随后会收到 [TPullDownRefreshState.inactive]。
   final ValueChanged<TPullDownRefreshState>? onStateChanged;
 
   /// 构造 [TPullDownRefresh]。
@@ -109,7 +115,9 @@ class TPullDownRefresh extends StatefulWidget {
     this.maxBarHeight = 80,
     this.successDuration = const Duration(milliseconds: 500),
     this.onStateChanged,
-  }) : assert(lowerThreshold > 0);
+  }) : assert(lowerThreshold > 0),
+       assert(loadingBarHeight > 0),
+       assert(maxBarHeight >= loadingBarHeight);
 
   @override
   State<TPullDownRefresh> createState() => _TPullDownRefreshState();
@@ -119,6 +127,11 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   EasyRefreshController? _easyController;
   Timer? _timeoutTimer;
   TPullDownRefreshState? _lastReportedState;
+  int _refreshGeneration = 0;
+  bool _refreshTerminal = false;
+  bool _timeoutTerminal = false;
+  Completer<void>? _activeRefresh;
+  Completer<void>? _pendingExternalRefresh;
 
   bool get _refreshEnabled => widget.onRefresh != null;
 
@@ -126,9 +139,11 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 
   @override
   void initState() {
+    assert(!widget.successDuration.isNegative);
+    assert(widget.refreshTimeout == null || !widget.refreshTimeout!.isNegative);
     super.initState();
-    _easyController = EasyRefreshController();
-    widget.controller?.bind(_easyController!);
+    _easyController = EasyRefreshController(controlFinishRefresh: true);
+    widget.controller?.bind(_requestRefresh);
   }
 
   @override
@@ -136,13 +151,14 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller?.unbind();
-      widget.controller?.bind(_easyController!);
+      widget.controller?.bind(_requestRefresh);
     }
   }
 
   @override
   void dispose() {
     _timeoutTimer?.cancel();
+    _completeRefreshWaiters();
     widget.controller?.unbind();
     _easyController?.dispose();
     super.dispose();
@@ -150,6 +166,11 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 
   /// 上报状态变化：去重 + 异步调度，避免 build 期同步回调与重复上报。
   void _handleStateChanged(TPullDownRefreshState state) {
+    // 小程序超时是一次性事件，随后直接收起；不能在迟到的 Future 完成时
+    // 再次把 timeout 刷新报告成 done。
+    if (state == TPullDownRefreshState.done && _timeoutTerminal) {
+      return;
+    }
     if (_lastReportedState == state) {
       return;
     }
@@ -166,23 +187,107 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     });
   }
 
-  void _finishRefreshAndReport() {
-    _timeoutTimer?.cancel();
-    if (mounted) {
-      _handleStateChanged(TPullDownRefreshState.done);
+  Future<void> _requestRefresh() async {
+    if (!mounted || !_refreshEnabled) {
+      return;
+    }
+    final active = _activeRefresh;
+    if (active != null) {
+      await active.future;
+      return;
+    }
+    final pending = _pendingExternalRefresh;
+    if (pending != null) {
+      await pending.future;
+      return;
+    }
+
+    final request = Completer<void>();
+    _pendingExternalRefresh = request;
+    final generation = _refreshGeneration;
+    await _easyController?.callRefresh();
+    // EasyRefresh 在动画 Future 完成后的下一个微任务中才开始执行刷新回调，
+    // 先让该任务有机会进入 [_handleRefresh]，避免把真实刷新误判为 no-op。
+    await Future<void>.microtask(() {});
+    if (!mounted) {
+      if (!request.isCompleted) {
+        request.complete();
+      }
+      return;
+    }
+    // 没有可滚动位置、刷新已在进行中或刷新被禁用时，EasyRefresh 会静默 no-op。
+    final headerMode = _easyController?.headerState?.mode;
+    if (_refreshGeneration == generation &&
+        identical(_pendingExternalRefresh, request) &&
+        (headerMode == null || headerMode == IndicatorMode.inactive)) {
+      _pendingExternalRefresh = null;
+      request.complete();
+    }
+    await request.future;
+  }
+
+  void _beginRefresh() {
+    _refreshGeneration++;
+    _refreshTerminal = false;
+    _timeoutTerminal = false;
+    _activeRefresh = _pendingExternalRefresh ?? Completer<void>();
+    _pendingExternalRefresh = null;
+  }
+
+  void _completeRefreshWaiters() {
+    final active = _activeRefresh;
+    _activeRefresh = null;
+    if (active != null && !active.isCompleted) {
+      active.complete();
+    }
+    final pending = _pendingExternalRefresh;
+    _pendingExternalRefresh = null;
+    if (pending != null && !pending.isCompleted) {
+      pending.complete();
     }
   }
 
+  void _finishRefreshAndReport(int generation) {
+    _completeRefresh(
+      generation: generation,
+      result: IndicatorResult.success,
+      state: TPullDownRefreshState.done,
+    );
+  }
+
+  void _completeRefresh({
+    required int generation,
+    required IndicatorResult result,
+    required TPullDownRefreshState state,
+  }) {
+    if (!mounted || generation != _refreshGeneration || _refreshTerminal) {
+      return;
+    }
+    _refreshTerminal = true;
+    _timeoutTimer?.cancel();
+    if (state == TPullDownRefreshState.timeout) {
+      _timeoutTerminal = true;
+      _handleStateChanged(state);
+    }
+    _easyController?.finishRefresh(result, true);
+    if (state == TPullDownRefreshState.done) {
+      _handleStateChanged(state);
+    }
+    _completeRefreshWaiters();
+  }
+
   FutureOr<void> _handleRefresh() {
+    _beginRefresh();
+    final generation = _refreshGeneration;
     final timeout = widget.refreshTimeout;
     if (timeout != null) {
       _timeoutTimer?.cancel();
       _timeoutTimer = Timer(timeout, () {
-        if (!mounted) {
-          return;
-        }
-        _handleStateChanged(TPullDownRefreshState.timeout);
-        _easyController?.finishRefresh(IndicatorResult.success, true);
+        _completeRefresh(
+          generation: generation,
+          result: IndicatorResult.success,
+          state: TPullDownRefreshState.timeout,
+        );
       });
     }
     try {
@@ -193,20 +298,28 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
         // FlutterError.reportError 上报（不吞掉、不悬挂），避免作为未捕获异常
         // 中断 easy_refresh 的动画流程。
         return future.then<void>(
-          (_) => _finishRefreshAndReport(),
+          (_) => _finishRefreshAndReport(generation),
           onError: (Object e, StackTrace st) {
-            _finishRefreshAndReport();
+            _completeRefresh(
+              generation: generation,
+              result: IndicatorResult.fail,
+              state: TPullDownRefreshState.done,
+            );
             _reportRefreshError(e, st);
             return null;
           },
         );
       }
       // 同步返回：视为立即完成。
-      _finishRefreshAndReport();
+      _finishRefreshAndReport(generation);
       return result;
     } catch (e, st) {
       // 同步抛错：结束刷新避免悬挂，并通过 FlutterError.reportError 上报。
-      _finishRefreshAndReport();
+      _completeRefresh(
+        generation: generation,
+        result: IndicatorResult.fail,
+        state: TPullDownRefreshState.done,
+      );
       _reportRefreshError(e, st);
       return null;
     }

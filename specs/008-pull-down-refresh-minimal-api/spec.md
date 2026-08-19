@@ -91,9 +91,9 @@ class TPullDownRefresh extends StatefulWidget {
 - `onRefresh`：`FutureOr<void> Function()?`，下拉触发刷新（对应 `refresh` 事件）。为空时禁用刷新。
 - `onLoadMore`：`FutureOr<void> Function()?`，触底加载（对应 `scrolltolower`）。非空时自动启用，避免与额外布尔开关形成两个状态源；小程序未定义可见 Footer，因此 Flutter 仅触发事件，不展示 loading/no-more 文案。
 - `lowerThreshold`：默认 `50`，触底加载阈值（对应官方 `lowerThreshold`）。
-- `controller`：`TPullDownRefreshController?`，仅用于外部主动触发刷新；刷新完成由 `onRefresh` 返回的 Future 统一决定。
+- `controller`：`TPullDownRefreshController?`，仅用于外部主动触发刷新；`await refresh()` 表示本次刷新流程已经结束，不代表业务一定成功。成功、回调失败和超时都会完成 Future。
 - `texts`：`TPullDownRefreshTexts?`，四态提示语；为空时回退 l10n。
-- `refreshTimeout`：`Duration?`，刷新超时（**默认 `Duration(milliseconds: 3000)`，即默认启用 3 秒超时**，对齐官方 `refreshTimeout=3000`）；超过时长仍未完成 `onRefresh` 时自动结束刷新并通过 `onStateChanged(timeout)` 上报。**传入 `null` 可关闭超时**。
+- `refreshTimeout`：`Duration?`，刷新超时（**默认 `Duration(milliseconds: 3000)`，即默认启用 3 秒超时**，对齐官方 `refreshTimeout=3000`）；超过时长仍未完成 `onRefresh` 时通过 `onStateChanged(timeout)` 一次性上报，并自动结束刷新、回到 `inactive`。超时后迟到的 `onRefresh` Future 不再改变状态。**传入 `null` 可关闭超时**。
 - `loadingBarHeight`：默认 `50`（对齐官方），Header 容器高度 = 触发阈值。
 - `maxBarHeight`：默认 `80`（对齐官方），最大下拉高度（阻尼上限）。
 - `successDuration`：默认 `500ms`，刷新完成提示展示时长（对应官方 `successDuration`）。
@@ -115,7 +115,7 @@ enum TPullDownRefreshState {
 ```
 
 - 映射自 easy_refresh `IndicatorMode`：`inactive/done` → `inactive`、`drag` → `dragging`、`armed/ready` → `ready`、`processing` → `refreshing`、`processed` → `done`。
-- 刷新完成（`onRefresh` 返回）后展示完成态，再回到 `inactive`。
+- 刷新成功或失败后展示完成态，再回到 `inactive`；超时只上报一次 `timeout`，随后回到 `inactive`，迟到的业务 Future 不再上报 `done`。
 
 ### TPullDownRefreshController
 
@@ -125,7 +125,7 @@ class TPullDownRefreshController {
 }
 ```
 
-- `refresh()` 用于页面外部主动触发一次刷新；刷新过程状态由 `onStateChanged` 通知，完成时机由 `onRefresh` Future 决定。
+- `refresh()` 用于页面外部主动触发一次刷新；`await refresh()` 表示本次刷新流程已经结束，不代表业务一定成功。刷新过程状态由 `onStateChanged` 通知。
 - 不公开 `loadMore` / `finishRefresh` / `finishLoadMore` / `reset` / `dispose`，避免泄漏底层 Header/Footer 任务模型和产生双完成源。
 
 ### TPullDownRefreshTexts
@@ -178,7 +178,7 @@ class TPullDownRefreshTexts {
 - [ ] 默认渲染：`loadingBarHeight=50`、`maxBarHeight=80`、触发阈值=50，Header 为 TDesign 样式。
 - [ ] `onRefresh` 生效：下拉松手触发，完成后展示完成态并复位；`onRefresh == null` 时禁用刷新。
 - [ ] `texts` 覆盖四态文案，缺省回退 l10n；中文默认与官方 `loadingTexts` 一致。
-- [ ] `refreshTimeout` 默认 `3000ms`，超过时长未完成时上报 `timeout` 并结束刷新；传入 `null` 关闭超时。
+- [ ] `refreshTimeout` 默认 `3000ms`，超过时长未完成时上报一次 `timeout`、回到 `inactive` 并结束刷新；传入 `null` 关闭超时。
 - [ ] `onLoadMore` + `lowerThreshold` 生效（触底加载），`onLoadMore == null` 时禁用，且不渲染额外 Footer UI。
 - [ ] `controller.refresh()` 生效，Controller 不暴露结束、复位、加载更多或 dispose API。
 - [ ] `onStateChanged` 按状态变化回调（inactive/dragging/ready/refreshing/done/timeout）。

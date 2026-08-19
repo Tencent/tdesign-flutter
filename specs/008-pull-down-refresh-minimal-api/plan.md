@@ -41,7 +41,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 ### 3. 状态映射与超时
 
 - 在 Header 的 `build(context, state)` 中，把 `IndicatorMode` 映射为 `TPullDownRefreshState`，通过 `onStateChanged` 上抛。
-- 超时：`onRefresh` 被触发时启动 `Timer(refreshTimeout)`，超时仍未完成则上报 `timeout` 状态并调用 `_easyController.finishRefresh()`；`onRefresh` 正常返回时 `cancel` 计时并结束。
+- 超时：`onRefresh` 被触发时启动 `Timer(refreshTimeout)`，超时仍未完成则上报一次 `timeout`、调用内部受控完成机制收起 Header 并回到 `inactive`；`onRefresh` 正常返回或失败时只完成当前刷新一次，迟到 Future 不再改变状态。
 
 ### 4. 删除 TRefreshHeader 双入口
 
@@ -67,7 +67,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 ## 风险与取舍
 
 - 封装 easy_refresh 会隐藏部分高级能力（secondary 等），符合"最小 API"目标；确有需求可用 `childBuilder` 等再扩展。
-- 超时语义：`refreshTimeout` 默认 `3000ms`（对齐官方），超时自动结束刷新并通过 `onStateChanged(timeout)` 上报；传入 `null` 关闭超时。
+- 超时语义：`refreshTimeout` 默认 `3000ms`（对齐官方），超时自动结束刷新、通过 `onStateChanged(timeout)` 一次性上报并回到 `inactive`；传入 `null` 关闭超时。
 - `flutter@3.32.0` 与 `latest`：均为纯 Dart + easy_refresh 交互，不引入新依赖，双版本兼容。
 
 ## 验证策略

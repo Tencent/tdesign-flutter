@@ -84,7 +84,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### 刷新超时
 
-通过 `refreshTimeout` 与 `onStateChanged` 的 `timeout` 状态在刷新超时时给出提示并自动结束。
+通过 `refreshTimeout` 与 `onStateChanged` 的 `timeout` 状态在刷新超时时给出提示并自动结束；超时后状态回到 `inactive`。
 
 > **说明**：本 Demo 为小程序已有公开 props（`refreshTimeout` + `timeout`）的新增 API 演示，Demo 形态仅参考 Mobile Vue，不表示小程序现有公开 Demo。
 
@@ -132,15 +132,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | lowerThreshold | double | 50 | 距离底部多少逻辑像素时触发加载 |
 | controller | TPullDownRefreshController? | - | 从页面外部主动触发刷新的控制器 |
 | texts | TPullDownRefreshTexts? | - | 四态提示语，为空时回退 l10n |
-| refreshTimeout | Duration? | 3000ms | 刷新超时时长，超过时长自动结束并上报 timeout 状态；传 null 关闭 |
-| loadingBarHeight | double | 50 | Header 容器高度 = 触发阈值 |
-| maxBarHeight | double | 80 | 最大下拉高度 |
-| successDuration | Duration | 500ms | 刷新完成提示展示时长 |
+| refreshTimeout | Duration? | 3000ms | 刷新超时时长，超过时长上报一次 timeout 并回到 inactive；传 null 关闭 |
+| loadingBarHeight | double | 50 | Header 容器高度 = 触发阈值，必须大于 0 |
+| maxBarHeight | double | 80 | 最大下拉高度，必须不小于 loadingBarHeight |
+| successDuration | Duration | 500ms | 刷新完成提示展示时长，必须为非负时长 |
 | onStateChanged | ValueChanged<TPullDownRefreshState>? | - | 刷新状态变化回调 |
 
 ### TPullDownRefreshController
 
-外部刷新控制器，仅提供 `refresh()`。刷新完成由 `onRefresh` 返回的 Future 统一决定，无需调用方释放。
+外部刷新控制器，仅提供 `refresh()`，无需调用方释放。`await controller.refresh()` 表示本次刷新流程已经结束，不代表业务一定成功；成功、回调失败和超时都会完成 Future，回调异常由组件通过 `FlutterError.reportError` 上报。
 
 Loading 指示器样式自动继承 Flutter Theme 子树中的 `TLoadingThemeData`，组件仅固定横向排列。
 
