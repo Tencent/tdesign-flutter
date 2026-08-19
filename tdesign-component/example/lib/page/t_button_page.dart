@@ -68,7 +68,7 @@ class _TButtonPageState extends State<TButtonPage> {
                     runSpacing: 16, // 交叉轴方向间距
                     children: [
                       CodeWrapper(builder: _buildRectangleIconButton),
-                      CodeWrapper(builder: _buildRoundIconButton),
+                      CodeWrapper(builder: _buildSquareIconButton),
                       CodeWrapper(builder: _buildLoadingIconButton)
                     ],
                   ),
@@ -132,10 +132,8 @@ class _TButtonPageState extends State<TButtonPage> {
               builder: (context) {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 16, // 主轴方向间距
-                    runSpacing: 16, // 交叉轴方向间距
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CodeWrapper(builder: _buildLargeButton),
                       CodeWrapper(builder: _buildMediumButton),
@@ -628,21 +626,6 @@ class _TButtonPageState extends State<TButtonPage> {
     return _withButtonShape(
       context,
       TButtonShape.square,
-      TButton(
-        icon: const Icon(TIcons.app),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildRoundIconButton(BuildContext context) {
-    return _withButtonShape(
-      context,
-      TButtonShape.round,
       TButton(
         icon: const Icon(TIcons.app),
         size: TButtonSize.large,
