@@ -777,6 +777,22 @@
       }
     },
     {
+      "slug": "pull-down-refresh",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/refresh"
+      },
+      "api": {
+        "names": [
+          "TPullDownRefresh",
+          "TPullDownRefreshController",
+          "TPullDownRefreshTexts",
+          "TPullDownRefreshState"
+        ],
+        "getComments": true
+      }
+    },
+    {
       "slug": "swipe-cell",
       "source": {
         "type": "folder",
