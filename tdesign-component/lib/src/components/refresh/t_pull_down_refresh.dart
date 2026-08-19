@@ -50,8 +50,8 @@ class TPullDownRefresh extends StatefulWidget {
 
   /// 触底加载回调（对应官方 `scrolltolower` 事件）。
   ///
-  /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。启用后会展示
-  /// 一个与组件职责相符的可见 footer（加载指示器），滚动到底时触发。
+  /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。触底达到
+  /// [lowerThreshold] 时触发；Footer 本身不增加 TDesign 未定义的可见样式。
   ///
   /// 返回的 `Future` 完成后自动结束加载态；也可通过
   /// [TPullDownRefreshController.finishLoadMore] 手动结束。与 [onRefresh] 一致，
@@ -62,9 +62,12 @@ class TPullDownRefresh extends StatefulWidget {
 
   /// 是否启用触底加载（默认 false）。
   ///
-  /// 置为 true 且 [onLoadMore] 非空时，滚动容器触底会触发加载，并展示
-  /// 加载中的 footer 指示器。加载结束可通过 [controller] 或返回 Future。
+  /// 置为 true 且 [onLoadMore] 非空时，滚动容器触底会触发加载。
+  /// 加载结束可通过 [controller] 或返回 Future。
   final bool enableLoadMore;
+
+  /// 距离底部多少逻辑像素时触发加载（默认 50，对齐官方 `lowerThreshold`）。
+  final double lowerThreshold;
 
   /// 是否禁用下拉刷新（默认 false；禁用后仍保留滚动）。
   final bool disabled;
@@ -96,6 +99,9 @@ class TPullDownRefresh extends StatefulWidget {
   /// 最大下拉高度（默认 80，对齐官方 `maxBarHeight`）。
   final double maxBarHeight;
 
+  /// 刷新完成提示的展示时长（默认 500ms，对齐官方 `successDuration`）。
+  final Duration successDuration;
+
   /// loading 指示器样式（对应官方 `loadingProps`）。
   final TLoadingThemeData? loadingTheme;
 
@@ -116,6 +122,7 @@ class TPullDownRefresh extends StatefulWidget {
     this.onRefresh,
     this.onLoadMore,
     this.enableLoadMore = false,
+    this.lowerThreshold = 50,
     this.disabled = false,
     this.controller,
     this.texts,
@@ -123,10 +130,11 @@ class TPullDownRefresh extends StatefulWidget {
     this.onTimeout,
     this.loadingBarHeight = 50,
     this.maxBarHeight = 80,
+    this.successDuration = const Duration(milliseconds: 500),
     this.loadingTheme,
     this.backgroundColor,
     this.onStateChanged,
-  });
+  }) : assert(lowerThreshold > 0);
 
   @override
   State<TPullDownRefresh> createState() => _TPullDownRefreshState();
@@ -137,8 +145,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   Timer? _timeoutTimer;
   TPullDownRefreshState? _lastReportedState;
 
-  bool get _refreshEnabled =>
-      widget.onRefresh != null && !widget.disabled;
+  bool get _refreshEnabled => widget.onRefresh != null && !widget.disabled;
 
   bool get _loadMoreEnabled =>
       widget.onLoadMore != null && widget.enableLoadMore;
@@ -233,21 +240,25 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   }
 
   void _reportRefreshError(Object e, StackTrace st) {
-    FlutterError.reportError(FlutterErrorDetails(
-      exception: e,
-      stack: st,
-      library: 'TPullDownRefresh',
-      context: ErrorDescription('下拉刷新回调 onRefresh 执行失败'),
-    ));
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: e,
+        stack: st,
+        library: 'TPullDownRefresh',
+        context: ErrorDescription('下拉刷新回调 onRefresh 执行失败'),
+      ),
+    );
   }
 
   void _reportLoadMoreError(Object e, StackTrace st) {
-    FlutterError.reportError(FlutterErrorDetails(
-      exception: e,
-      stack: st,
-      library: 'TPullDownRefresh',
-      context: ErrorDescription('触底加载回调 onLoadMore 执行失败'),
-    ));
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: e,
+        stack: st,
+        library: 'TPullDownRefresh',
+        context: ErrorDescription('触底加载回调 onLoadMore 执行失败'),
+      ),
+    );
   }
 
   /// 处理触底加载回调，与 [_handleRefresh] 一致地保证：
@@ -294,11 +305,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   @override
   Widget build(BuildContext context) {
     final footer = _loadMoreEnabled
-        ? _TPullDownRefreshFooter(
-            texts: _effectiveTexts(context),
-            loadingTheme: widget.loadingTheme,
-            backgroundColor: widget.backgroundColor,
-          )
+        ? _TPullDownRefreshFooter(triggerOffset: widget.lowerThreshold)
         : null;
     return EasyRefresh(
       controller: _easyController,
@@ -307,6 +314,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
               extent: widget.loadingBarHeight,
               triggerDistance: widget.loadingBarHeight,
               maxOverOffset: widget.maxBarHeight,
+              successDuration: widget.successDuration,
               texts: _effectiveTexts(context),
               loadingTheme: widget.loadingTheme,
               backgroundColor: widget.backgroundColor,
@@ -333,20 +341,21 @@ class _TPullDownRefreshHeader extends Header {
     required double extent,
     required double triggerDistance,
     required double maxOverOffset,
+    required Duration successDuration,
     required this.texts,
     this.loadingTheme,
     this.backgroundColor,
     this.onStateChanged,
-  })  : _extent = extent,
-        assert(triggerDistance > 0),
-        assert(extent >= 0),
-        assert(maxOverOffset >= triggerDistance),
-        super(
-          triggerOffset: triggerDistance,
-          clamping: true,
-          processedDuration: const Duration(milliseconds: 500),
-          maxOverOffset: maxOverOffset,
-        );
+  }) : _extent = extent,
+       assert(triggerDistance > 0),
+       assert(extent >= 0),
+       assert(maxOverOffset >= triggerDistance),
+       super(
+         triggerOffset: triggerDistance,
+         clamping: true,
+         processedDuration: successDuration,
+         maxOverOffset: maxOverOffset,
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -355,7 +364,8 @@ class _TPullDownRefreshHeader extends Header {
     onStateChanged?.call(stateType);
 
     final showLoading = state.mode == IndicatorMode.processing;
-    final showComplete = state.mode == IndicatorMode.processed ||
+    final showComplete =
+        state.mode == IndicatorMode.processed ||
         state.mode == IndicatorMode.done;
     String text;
     if (showLoading) {
@@ -386,10 +396,7 @@ class _TPullDownRefreshHeader extends Header {
                         textColor: context.tTheme.textColorPlaceholder,
                       ),
                 ),
-                child: TLoading(
-                  size: TLoadingSize.medium,
-                  text: text,
-                ),
+                child: TLoading(size: TLoadingSize.medium, text: text),
               )
             : TText(
                 text,
@@ -420,67 +427,22 @@ class _TPullDownRefreshHeader extends Header {
   }
 }
 
-/// TDesign 下拉刷新 Footer（内部实现）：触底加载指示器。
+/// 触底加载检测 Footer（内部实现）。
+///
+/// 小程序 `scrolltolower` 只提供事件，不定义可见 Footer，因此这里不绘制
+/// loading/no-more 文案，避免引入跨端不存在的视觉表现。
 class _TPullDownRefreshFooter extends Footer {
-  final TPullDownRefreshTexts texts;
-  final TLoadingThemeData? loadingTheme;
-  final Color? backgroundColor;
-
-  _TPullDownRefreshFooter({
-    required this.texts,
-    this.loadingTheme,
-    this.backgroundColor,
-  }) : super(
+  _TPullDownRefreshFooter({required double triggerOffset})
+    : super(
         // Footer 默认 infiniteOffset=0（非 null），而 Indicator 断言
         // `infiniteOffset == null || !clamping`，故触底加载 Footer 不能开启
         // clamping，必须置 false，否则运行期抛「Cannot scroll indefinitely when clamping」。
-        triggerOffset: 50,
+        triggerOffset: triggerOffset,
         clamping: false,
       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    final loading = state.mode == IndicatorMode.processing ||
-        state.mode == IndicatorMode.armed ||
-        state.mode == IndicatorMode.ready;
-    final noMore = state.mode == IndicatorMode.done;
-
-    Widget child;
-    if (loading) {
-      child = Theme(
-        data: Theme.of(context).mergeExtension(
-          loadingTheme ??
-              TLoadingThemeData(
-                iconColor: context.tTheme.brandNormalColor,
-                axis: Axis.horizontal,
-                textColor: context.tTheme.textColorPlaceholder,
-              ),
-        ),
-        child: TLoading(
-          size: TLoadingSize.medium,
-          text: texts.refreshing,
-        ),
-      );
-    } else if (noMore) {
-      // no-more 结束态：展示 texts.noMore（默认 `/`）。
-      child = TText(
-        texts.noMore,
-        font: context.tTheme.fontBodyMedium,
-        textColor: context.tTheme.textColorPlaceholder,
-      );
-    } else {
-      child = TText(
-        texts.pullToRefresh,
-        font: context.tTheme.fontBodyMedium,
-        textColor: context.tTheme.textColorPlaceholder,
-      );
-    }
-
-    return Container(
-      alignment: Alignment.center,
-      height: 50,
-      color: backgroundColor,
-      child: child,
-    );
+    return SizedBox(height: state.offset);
   }
 }

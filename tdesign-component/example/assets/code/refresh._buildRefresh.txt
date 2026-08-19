@@ -1,7 +1,8 @@
 Widget _buildRefresh(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 620,
       child: TPullDownRefresh(
+        controller: _controller,
         // 下拉刷新回调
         onRefresh: () {
           return Future<void>.delayed(const Duration(milliseconds: 1500), () {
@@ -10,14 +11,7 @@ Widget _buildRefresh(BuildContext context) {
             });
           });
         },
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _demoHint(context, '拖拽该区域演示 顶部下拉刷新'),
-            const SizedBox(height: 16),
-            _demoHint(context, '下拉刷新次数：${count}'),
-          ],
-        ),
+        child: _buildOfficialDemoContent(context),
       ),
     );
   }

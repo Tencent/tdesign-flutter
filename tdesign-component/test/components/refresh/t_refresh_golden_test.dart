@@ -15,8 +15,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 后提交新的 baseline 即可。
 void main() {
   setUpAll(() async {
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
@@ -26,14 +27,15 @@ void main() {
   });
 
   testWidgets('基础刷新 demo（固定视口）', (tester) async {
-    tester.view.physicalSize = const Size(375, 360);
+    tester.view.physicalSize = const Size(375, 680);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
       MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData())
-            .copyWith(textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto')),
+        theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+        ),
         home: Scaffold(body: _buildRefreshDemo()),
       ),
     );
@@ -52,8 +54,9 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData())
-            .copyWith(textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto')),
+        theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+        ),
         home: Scaffold(body: _buildLoadingTextsDemo()),
       ),
     );
@@ -72,8 +75,9 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData())
-            .copyWith(textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto')),
+        theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+        ),
         home: Scaffold(body: _buildTimeoutDemo()),
       ),
     );
@@ -91,20 +95,86 @@ Widget _buildRefreshDemo() {
   return RepaintBoundary(
     key: const Key('refresh-demo-base'),
     child: SizedBox(
-      height: 300,
+      height: 620,
       child: TPullDownRefresh(
-        onRefresh: () => Future<void>.delayed(const Duration(milliseconds: 1500)),
+        onRefresh: () =>
+            Future<void>.delayed(const Duration(milliseconds: 1500)),
         child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: const [
-            Center(child: Text('拖拽该区域演示 顶部下拉刷新')),
-            SizedBox(height: 16),
-            Center(child: Text('下拉刷新次数：0')),
+          padding: const EdgeInsets.fromLTRB(16, 32, 16, 28),
+          children: [
+            const Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                TSkeleton.custom(
+                  layout: TSkeletonLayout(
+                    rows: [
+                      [
+                        TSkeletonBlock(
+                          height: 171,
+                          style: TSkeletonBlockStyle(borderRadius: 12),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 88,
+                  left: 0,
+                  right: 0,
+                  child: Text('拖拽该区域演示 顶部下拉刷新', textAlign: TextAlign.center),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            for (var index = 0; index < 3; index++) ...[
+              const _SkeletonRow(),
+              if (index < 2) const SizedBox(height: 16),
+            ],
+            const SizedBox(height: 24),
+            const Center(child: Text('刷新次数：0')),
           ],
         ),
       ),
     ),
   );
+}
+
+class _SkeletonRow extends StatelessWidget {
+  const _SkeletonRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [
+        Expanded(child: _SkeletonCard()),
+        SizedBox(width: 16),
+        Expanded(child: _SkeletonCard()),
+      ],
+    );
+  }
+}
+
+class _SkeletonCard extends StatelessWidget {
+  const _SkeletonCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return const TSkeleton.custom(
+      layout: TSkeletonLayout(
+        rowSpacing: 8,
+        rows: [
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line(flex: 5), TSkeletonBlock.spacer(flex: 3)],
+          [
+            TSkeletonBlock(
+              height: 164,
+              style: TSkeletonBlockStyle(borderRadius: 12),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 /// 与 example 的 _buildLoadingTexts 保持同构的自定义提示语 demo。

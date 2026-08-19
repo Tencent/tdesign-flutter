@@ -10,8 +10,9 @@ void main() {
     return MaterialApp(
       theme: refreshTheme == null
           ? TThemeBuilder.light(TThemeData.defaultData())
-          : TThemeBuilder.light(TThemeData.defaultData())
-              .mergeExtension(refreshTheme),
+          : TThemeBuilder.light(
+              TThemeData.defaultData(),
+            ).mergeExtension(refreshTheme),
       home: Scaffold(body: child),
     );
   }
@@ -27,9 +28,7 @@ void main() {
         onRefresh: onRefresh,
         child: ListView.builder(
           itemCount: 5,
-          itemBuilder: (context, index) => ListTile(
-            title: Text('项目$index'),
-          ),
+          itemBuilder: (context, index) => ListTile(title: Text('项目$index')),
         ),
       ),
     );
@@ -62,9 +61,7 @@ void main() {
         loadingTheme: loadingTheme,
         child: ListView.builder(
           itemCount: 5,
-          itemBuilder: (context, index) => ListTile(
-            title: Text('项目$index'),
-          ),
+          itemBuilder: (context, index) => ListTile(title: Text('项目$index')),
         ),
       ),
     );
@@ -92,7 +89,10 @@ void main() {
 
       final lerped = base.lerp(override, 0.75);
       expect(lerped.loadingIcon, TLoadingIcon.point);
-      expect(lerped.backgroundColor, Color.lerp(Colors.white, Colors.red, 0.75));
+      expect(
+        lerped.backgroundColor,
+        Color.lerp(Colors.white, Colors.red, 0.75),
+      );
       expect(base.lerp(null, 0.5), same(base));
       expect(TRefreshThemeData.lerpDouble(null, null, 0.5), isNull);
     });
@@ -138,24 +138,14 @@ void main() {
     });
 
     test('非法尺寸触发断言', () {
-      expect(
-        () => TRefreshHeader(triggerDistance: 0),
-        throwsAssertionError,
-      );
-      expect(
-        () => TRefreshHeader(extent: -1),
-        throwsAssertionError,
-      );
+      expect(() => TRefreshHeader(triggerDistance: 0), throwsAssertionError);
+      expect(() => TRefreshHeader(extent: -1), throwsAssertionError);
       expect(
         () => TRefreshHeader(extent: 80, triggerDistance: 40),
         throwsAssertionError,
       );
       expect(
-        () => TRefreshHeader(
-          extent: 80,
-          triggerDistance: 40,
-          float: true,
-        ),
+        () => TRefreshHeader(extent: 80, triggerDistance: 40, float: true),
         returnsNormally,
       );
     });
@@ -228,10 +218,17 @@ void main() {
   });
 
   group('TPullDownRefresh 最小化组件', () {
+    test('跨端可见行为默认值与小程序一致', () {
+      const widget = TPullDownRefresh(child: SizedBox());
+      expect(widget.loadingBarHeight, 50);
+      expect(widget.maxBarHeight, 80);
+      expect(widget.lowerThreshold, 50);
+      expect(widget.successDuration, const Duration(milliseconds: 500));
+      expect(widget.refreshTimeout, const Duration(milliseconds: 3000));
+    });
+
     testWidgets('默认渲染（loadingBarHeight=50）', (tester) async {
-      await tester.pumpWidget(
-        wrap(pullDownRefresh(onRefresh: () async {})),
-      );
+      await tester.pumpWidget(wrap(pullDownRefresh(onRefresh: () async {})));
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
       expect(find.text('项目0'), findsOneWidget);
@@ -274,10 +271,7 @@ void main() {
       final states = <TPullDownRefreshState>[];
       await tester.pumpWidget(
         wrap(
-          pullDownRefresh(
-            onRefresh: () async {},
-            onStateChanged: states.add,
-          ),
+          pullDownRefresh(onRefresh: () async {}, onStateChanged: states.add),
         ),
       );
       await tester.pump(const Duration(seconds: 1));
@@ -293,9 +287,8 @@ void main() {
               onRefresh: () async {},
               child: ListView.builder(
                 itemCount: 5,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text('项目$index'),
-                ),
+                itemBuilder: (context, index) =>
+                    ListTile(title: Text('项目$index')),
               ),
             ),
           ),
@@ -475,9 +468,7 @@ void main() {
         wrap(
           pullDownRefresh(
             onRefresh: () async {},
-            loadingTheme: const TLoadingThemeData(
-              iconColor: Colors.red,
-            ),
+            loadingTheme: const TLoadingThemeData(iconColor: Colors.red),
           ),
         ),
       );
@@ -513,9 +504,8 @@ void main() {
     });
   });
 
-  group('loadMore 触底加载 footer（P1-2）', () {
-    testWidgets('enableLoadMore 开启且长列表触底时渲染可见 footer', (tester) async {
-      // onLoadMore 不立即完成，让 footer 保持加载态以便断言。
+  group('loadMore 触底事件', () {
+    testWidgets('触底加载不渲染小程序未定义的可见 footer', (tester) async {
       final loadCompleter = Completer<void>();
       await tester.pumpWidget(
         wrap(
@@ -535,14 +525,15 @@ void main() {
         ),
       );
       await tester.pump(const Duration(seconds: 1));
-      // 滚动到底，footer 加载指示器应可见。
+      // 滚动到底会触发事件，但不应额外绘制 loading/no-more UI。
       await tester.drag(
         find.byType(ListView),
         const Offset(0, -3000),
         warnIfMissed: false,
       );
       await tester.pump(const Duration(milliseconds: 300));
-      expect(find.byType(TLoading).evaluate().isNotEmpty, isTrue);
+      expect(find.byType(TLoading), findsNothing);
+      expect(find.text('/'), findsNothing);
       // 完成加载并清空残留计时器。
       loadCompleter.complete();
       await tester.pump(const Duration(seconds: 1));
@@ -608,125 +599,6 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
-    });
-
-    testWidgets('加载完成后 footer 进入结束语义', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          SizedBox(
-            height: 300,
-            child: TPullDownRefresh(
-              onRefresh: () async {},
-              onLoadMore: () async {},
-              enableLoadMore: true,
-              child: ListView.builder(
-                itemCount: 40,
-                itemBuilder: (context, index) =>
-                    SizedBox(height: 60, child: Text('item$index')),
-              ),
-            ),
-          ),
-        ),
-      );
-      await tester.pump(const Duration(seconds: 1));
-      // 滚动到底触发加载，加载立即完成，footer 进入结束（done）语义。
-      await tester.drag(
-        find.byType(ListView),
-        const Offset(0, -3000),
-        warnIfMissed: false,
-      );
-      for (var i = 0; i < 10; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-      }
-      // 结束语义：加载完成后 footer 仍在渲染（指示器或结束文案），不再持续加载态。
-      final footerRendered =
-          find.byType(TLoading).evaluate().isNotEmpty ||
-              find.byType(TText).evaluate().isNotEmpty;
-      expect(footerRendered, isTrue);
-      // 清空残留计时器。
-      await tester.pump(const Duration(seconds: 1));
-    });
-  });
-
-  group('footer no-more 结束文案（P2-1）', () {
-    testWidgets('加载完成后默认展示 no-more 文案（默认 `/`）', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          SizedBox(
-            height: 300,
-            child: TPullDownRefresh(
-              onRefresh: () async {},
-              onLoadMore: () async {},
-              enableLoadMore: true,
-              child: ListView.builder(
-                itemCount: 40,
-                itemBuilder: (context, index) =>
-                    SizedBox(height: 60, child: Text('item$index')),
-              ),
-            ),
-          ),
-        ),
-      );
-      await tester.pump(const Duration(seconds: 1));
-      // 滚动到底触发加载，加载立即完成，footer 进入 done 态，展示默认 `/`。
-      await tester.drag(
-        find.byType(ListView),
-        const Offset(0, -3000),
-        warnIfMissed: false,
-      );
-      for (var i = 0; i < 10; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-      }
-      expect(find.text('/'), findsOneWidget);
-      await tester.pump(const Duration(seconds: 1));
-    });
-
-    testWidgets('自定义 noMore 文案生效', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          SizedBox(
-            height: 300,
-            child: TPullDownRefresh(
-              onRefresh: () async {},
-              onLoadMore: () async {},
-              enableLoadMore: true,
-              texts: const TPullDownRefreshTexts(
-                pullToRefresh: '下拉',
-                releaseToRefresh: '松手',
-                refreshing: '加载中',
-                refreshComplete: '完成',
-                noMore: '已经到底了',
-              ),
-              child: ListView.builder(
-                itemCount: 40,
-                itemBuilder: (context, index) =>
-                    SizedBox(height: 60, child: Text('item$index')),
-              ),
-            ),
-          ),
-        ),
-      );
-      await tester.pump(const Duration(seconds: 1));
-      await tester.drag(
-        find.byType(ListView),
-        const Offset(0, -3000),
-        warnIfMissed: false,
-      );
-      for (var i = 0; i < 10; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-      }
-      expect(find.text('已经到底了'), findsOneWidget);
-      await tester.pump(const Duration(seconds: 1));
-    });
-
-    test('TPullDownRefreshTexts.noMore 默认值为 `/`', () {
-      const texts = TPullDownRefreshTexts(
-        pullToRefresh: '下拉',
-        releaseToRefresh: '松手',
-        refreshing: '加载中',
-        refreshComplete: '完成',
-      );
-      expect(texts.noMore, '/');
     });
   });
 
@@ -817,18 +689,16 @@ void main() {
       expect(find.byType(EasyRefresh), findsOneWidget);
     });
 
-    testWidgets('onRefresh Future 失败不会悬挂刷新且错误经 FlutterError 上报', (tester) async {
+    testWidgets('onRefresh Future 失败不会悬挂刷新且错误经 FlutterError 上报', (
+      tester,
+    ) async {
       final reported = <Object?>[];
       final originalOnError = FlutterError.onError;
       FlutterError.onError = (details) => reported.add(details.exception);
       addTearDown(() => FlutterError.onError = originalOnError);
 
       await tester.pumpWidget(
-        wrap(
-          pullDownRefresh(
-            onRefresh: () async => throw StateError('boom'),
-          ),
-        ),
+        wrap(pullDownRefresh(onRefresh: () async => throw StateError('boom'))),
       );
       await tester.pump(const Duration(seconds: 1));
       final gesture = await tester.startGesture(const Offset(200, 150));
@@ -881,7 +751,9 @@ void main() {
       expect(find.byType(EasyRefresh), findsOneWidget);
     });
 
-    testWidgets('onLoadMore Future 失败不悬挂加载且错误经 FlutterError 上报', (tester) async {
+    testWidgets('onLoadMore Future 失败不悬挂加载且错误经 FlutterError 上报', (
+      tester,
+    ) async {
       final reported = <Object?>[];
       final originalOnError = FlutterError.onError;
       FlutterError.onError = (details) => reported.add(details.exception);
@@ -945,11 +817,13 @@ void main() {
             height: 300,
             child: TPullDownRefresh(
               onRefresh: () async {},
-              child: ListView(children: const [
-                Text('拖拽该区域演示 顶部下拉刷新'),
-                SizedBox(height: 16),
-                Text('下拉刷新次数：0'),
-              ]),
+              child: ListView(
+                children: const [
+                  Text('拖拽该区域演示 顶部下拉刷新'),
+                  SizedBox(height: 16),
+                  Text('下拉刷新次数：0'),
+                ],
+              ),
             ),
           ),
         ),
@@ -973,11 +847,13 @@ void main() {
                 refreshComplete: '刷新成功',
               ),
               onRefresh: () async {},
-              child: ListView(children: const [
-                Text('下拉刷新'),
-                SizedBox(height: 16),
-                Text('自定义提示语刷新次数：0'),
-              ]),
+              child: ListView(
+                children: const [
+                  Text('下拉刷新'),
+                  SizedBox(height: 16),
+                  Text('自定义提示语刷新次数：0'),
+                ],
+              ),
             ),
           ),
         ),
@@ -999,11 +875,13 @@ void main() {
               onTimeout: () => timedOut = true,
               onRefresh: () => Completer<void>().future,
               controller: controller,
-              child: ListView(children: const [
-                Text('下拉刷新'),
-                SizedBox(height: 16),
-                Text('超时刷新次数：0'),
-              ]),
+              child: ListView(
+                children: const [
+                  Text('下拉刷新'),
+                  SizedBox(height: 16),
+                  Text('超时刷新次数：0'),
+                ],
+              ),
             ),
           ),
         ),

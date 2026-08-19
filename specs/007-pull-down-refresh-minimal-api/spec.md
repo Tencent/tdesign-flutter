@@ -22,11 +22,12 @@ Issue #81 的跨端对照 Review 结论：Flutter 当前 `TRefreshHeader` 是一
 - 新增顶层组件 **`TPullDownRefresh`**，在内部封装 `EasyRefresh`，对外只暴露**最小、经设计的 Flutter 惯用 API**，替代直接透传 easy_refresh 参数的裸 `TRefreshHeader` 用法。
 - 对齐官方能力：
   - `onRefresh`（对应 `refresh` 事件）
-  - `onLoadMore` / `enableLoadMore`（对应 `scrolltolower`）
+  - `onLoadMore` / `enableLoadMore` / `lowerThreshold`（对应 `scrolltolower` / `lowerThreshold`，不新增可见 Footer）
   - `disabled`（对应 `disabled`）
   - `texts`（对应 `loadingTexts`，四态文案）
   - `refreshTimeout` + `onTimeout`（对应 `refreshTimeout` + `timeout`）
   - `loadingBarHeight`（默认 50）+ `maxBarHeight`（默认 80），对齐官方尺寸
+  - `successDuration`（默认 500ms），对齐官方刷新完成提示时长
   - `loadingTheme`（复用 `TLoadingThemeData`，对应 `loadingProps`）
   - `onStateChanged`（对应 `change`/`onChange`）
   - `controller`（`TPullDownRefreshController`，对应官方受控 `value`，用 Flutter 控制器惯用法表达）
@@ -73,6 +74,7 @@ class TPullDownRefresh extends StatefulWidget {
     this.onRefresh,
     this.onLoadMore,
     this.enableLoadMore = false,
+    this.lowerThreshold = 50,
     this.disabled = false,
     this.controller,
     this.texts,
@@ -80,6 +82,7 @@ class TPullDownRefresh extends StatefulWidget {
     this.onTimeout,
     this.loadingBarHeight = 50,
     this.maxBarHeight = 80,
+    this.successDuration = const Duration(milliseconds: 500),
     this.loadingTheme,
     this.backgroundColor,
     this.onStateChanged,
@@ -91,8 +94,9 @@ class TPullDownRefresh extends StatefulWidget {
 
 - `child`：必填，滚动内容（对应官方默认 slot）。
 - `onRefresh`：`FutureOr<void> Function()?`，下拉触发刷新（对应 `refresh` 事件）。为空时禁用刷新。
-- `onLoadMore`：`FutureOr<void> Function()?`，触底加载（对应 `scrolltolower`）。仅在 `enableLoadMore == true` 且非空时启用。
+- `onLoadMore`：`FutureOr<void> Function()?`，触底加载（对应 `scrolltolower`）。仅在 `enableLoadMore == true` 且非空时启用；小程序未定义可见 Footer，因此 Flutter 仅触发事件，不展示 loading/no-more 文案。
 - `enableLoadMore`：默认 `false`，是否启用触底加载。
+- `lowerThreshold`：默认 `50`，触底加载阈值（对应官方 `lowerThreshold`）。
 - `disabled`：默认 `false`，禁用下拉刷新（仍保留滚动）。
 - `controller`：`TPullDownRefreshController?`，受控刷新 / 加载控制器。
 - `texts`：`TPullDownRefreshTexts?`，四态提示语；为空时回退 l10n。
@@ -100,6 +104,7 @@ class TPullDownRefresh extends StatefulWidget {
 - `onTimeout`：`VoidCallback?`，刷新超时回调。
 - `loadingBarHeight`：默认 `50`（对齐官方），Header 容器高度 = 触发阈值。
 - `maxBarHeight`：默认 `80`（对齐官方），最大下拉高度（阻尼上限）。
+- `successDuration`：默认 `500ms`，刷新完成提示展示时长（对应官方 `successDuration`）。
 - `loadingTheme`：`TLoadingThemeData?`，loading 指示器样式（对齐官方 `loadingProps`）。
 - `backgroundColor`：`Color?`，Header 背景色（对齐官方 CSS 变量 `--td-pull-down-refresh-color`）。
 - `onStateChanged`：`void Function(TPullDownRefreshState)?`，状态变化回调（对应 `change`/`onChange`），值域为 `TPullDownRefreshState`（inactive / dragging / ready / refreshing / done / timeout）。
@@ -157,7 +162,7 @@ class TPullDownRefreshTexts {
 | 加载条高度 | `loadingBarHeight=50` | `50` | `loadingBarHeight=50` |
 | 触发阈值 | =50 | =50 | =`loadingBarHeight`(50) |
 | 最大下拉 | `maxBarHeight=80` | `80` | `maxBarHeight=80` |
-| 完成停留 | `successDuration=500`ms | 300ms | 内部取 easy_refresh 完成动画（默认 500ms，对齐 mp） |
+| 完成停留 | `successDuration=500`ms | 300ms | `successDuration=500ms` |
 | loading 尺寸 | 50rpx≈25px | 24px | `TLoadingSize.medium`（默认，可用 `loadingTheme` 覆盖） |
 
 > 说明：将默认 `extent/triggerDistance` 从 48 调整为官方 50，属**潜在视觉 breaking**（默认渲染高度变化），在 Spec 中明确标注。
@@ -177,7 +182,8 @@ class TPullDownRefreshTexts {
 
 - [x] `TPullDownRefresh` / `TPullDownRefreshController` / `TPullDownRefreshTexts` / `TPullDownRefreshState` 公开导出。
 - [x] **controller 所有权**：底层 `EasyRefreshController` 仅由 `_TPullDownRefreshState` 创建与 `dispose`；外部 `TPullDownRefreshController.dispose()` 仅解绑、不释放底层 controller，避免双重释放。dartdoc 写清生命周期。
-- [x] **loadMore footer**：`enableLoadMore` 开启时提供与组件职责相符的可见 footer（加载指示器 / 文案），并具备加载中、禁用、结束语义。
+- [x] **loadMore 事件**：`enableLoadMore` 开启时按 `lowerThreshold` 触发；不绘制小程序未定义的 loading/no-more Footer。
+- [x] **基础 Demo 同构**：按小程序公开 base Demo 展示大骨架、三组双列骨架与中央刷新提示；Web 通过点击同一区域真实触发刷新。
 - [x] **Demo 矩阵标注**：「自定义提示语」「刷新超时」为小程序已有公开 props 的新增 API 演示（Demo 形态仅参考 Mobile Vue），不作为小程序现有公开 Demo 宣称。
 - [x] **测试 / 覆盖率 / Golden**：补真实 `flutter test`，生产源码 LCOV LH/LF ≥95%；每个公开 Demo 补逐项 Widget 断言与 Golden/固定视口证据；真机/同尺寸像素对照保留为未完成人工项。
 - [x] **P2 最小修复**：状态回调去重且避免 build 期同步回调；明确/处理异常传播；timeout 状态语义明确；英文文案 `Release to refresh`；清理站点无关标点 churn 与过时 easy_refresh import；补 child 滚动约束 dartdoc。
@@ -186,17 +192,17 @@ class TPullDownRefreshTexts {
 - [ ] `disabled == true` 时禁用下拉刷新（保留滚动）。
 - [ ] `texts` 覆盖四态文案，缺省回退 l10n；中文默认与官方 `loadingTexts` 一致。
 - [ ] `refreshTimeout` 默认 `3000ms`，超过时长未完成时触发 `onTimeout` 并结束刷新；传入 `null` 关闭超时。
-- [ ] `onLoadMore` + `enableLoadMore` 生效（触底加载），`enableLoadMore == false` 时禁用。
+- [ ] `onLoadMore` + `enableLoadMore` + `lowerThreshold` 生效（触底加载），`enableLoadMore == false` 时禁用，且不渲染额外 Footer UI。
 - [ ] `controller.refresh()` / `finishRefresh()` / `loadMore()` / `finishLoadMore()` 生效。
 - [ ] `onStateChanged` 按状态变化回调（inactive/dragging/ready/refreshing/done/timeout）。
 - [ ] `loadingTheme` / `backgroundColor` 生效。
-- [ ] 示例页 `t_refresh_page.dart` 改用 `TPullDownRefresh` 并补齐 demo 分组（基础刷新 / 自定义提示语 / 超时）；其中「自定义提示语」「刷新超时」标注为小程序已有公开 props 的新增 API 演示（Demo 形态仅参考 Mobile Vue），不宣称是小程序现有公开 Demo。
+- [ ] 示例页 `t_refresh_page.dart` 改用 `TPullDownRefresh` 并补齐 demo 分组（基础刷新 / 自定义提示语 / 超时）；基础刷新与小程序公开 Demo 的骨架页面结构同构，并可在 Web 预览点击触发；其中「自定义提示语」「刷新超时」标注为扩展 API 演示，不宣称是小程序现有公开 Demo。
 
 ## Demo 矩阵
 
 | Demo 分组 | 小程序公开项 | 形态来源 | 归属标注 |
 | --- | --- | --- | --- |
-| 顶部下拉刷新（基础用法） | ✅ 是（base） | 小程序 | 官方公开 Demo |
+| 顶部下拉刷新（基础用法） | ✅ 是（base） | 小程序 | 大骨架 + 三组双列骨架 + 中央刷新提示；Web 同位置点击触发 |
 | 自定义提示语（loadingTexts） | props 已有（`loadingTexts`），无独立 Demo | Mobile Vue | **新增 API 演示**（Demo 形态仅参考 Mobile Vue） |
 | 刷新超时（refreshTimeout） | props 已有（`refreshTimeout` + `timeout`），无独立 Demo | Mobile Vue | **新增 API 演示**（Demo 形态仅参考 Mobile Vue） |
 - [ ] 英文 l10n 修正（`Release Refresh` / `Pull To Refresh` / `Refresh Completed` 加空格）。

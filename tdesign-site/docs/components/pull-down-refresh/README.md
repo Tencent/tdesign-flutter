@@ -20,15 +20,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### 顶部下拉刷新
 
-基础用法：下拉列表触发刷新，刷新完成后展示完成态并复位。
+基础用法与小程序公开 Demo 对应：大骨架、三组双列骨架和中央刷新提示。移动端下拉触发；Web 预览点击中央提示区域触发。
 
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildRefresh(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 620,
       child: TPullDownRefresh(
+        controller: _controller,
         // 下拉刷新回调
         onRefresh: () {
           return Future<void>.delayed(const Duration(milliseconds: 1500), () {
@@ -37,14 +38,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             });
           });
         },
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _demoHint(context, '拖拽该区域演示 顶部下拉刷新'),
-            const SizedBox(height: 16),
-            _demoHint(context, '下拉刷新次数：${count}'),
-          ],
-        ),
+        child: _buildOfficialDemoContent(context),
       ),
     );
   }</pre>
@@ -137,8 +131,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | child | Widget | - | 滚动内容（必填） |
 | onRefresh | FutureOr<void> Function()? | - | 下拉触发刷新回调，为空时禁用刷新 |
-| onLoadMore | FutureOr<void> Function()? | - | 触底加载回调，仅在 `enableLoadMore` 且非空时启用 |
+| onLoadMore | FutureOr<void> Function()? | - | 触底加载回调，仅在 `enableLoadMore` 且非空时启用；不绘制额外 Footer UI |
 | enableLoadMore | bool | false | 是否启用触底加载 |
+| lowerThreshold | double | 50 | 距离底部多少逻辑像素时触发加载 |
 | disabled | bool | false | 是否禁用下拉刷新 |
 | controller | TPullDownRefreshController? | - | 受控刷新 / 加载控制器 |
 | texts | TPullDownRefreshTexts? | - | 四态提示语，为空时回退 l10n |
@@ -146,6 +141,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onTimeout | VoidCallback? | - | 刷新超时回调 |
 | loadingBarHeight | double | 50 | Header 容器高度 = 触发阈值 |
 | maxBarHeight | double | 80 | 最大下拉高度 |
+| successDuration | Duration | 500ms | 刷新完成提示展示时长 |
 | loadingTheme | TLoadingThemeData? | - | loading 指示器样式 |
 | backgroundColor | Color? | - | Header 背景色 |
 | onStateChanged | ValueChanged<TPullDownRefreshState>? | - | 刷新状态变化回调 |
@@ -202,5 +198,4 @@ TDesign刷新头部
 | triggerWhenReach | - | - | - |
 | triggerWhenRelease | - | - | - |
 | triggerWhenReleaseNoWait | - | - | - |
-
 

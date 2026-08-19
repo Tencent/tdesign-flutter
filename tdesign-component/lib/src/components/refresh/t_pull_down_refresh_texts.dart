@@ -1,10 +1,9 @@
 import 'package:flutter/widgets.dart';
 
-/// 下拉刷新提示语。
+/// 下拉刷新四态提示语。
 ///
 /// 对应官方（小程序 / mobile-vue）`loadingTexts: string[]` 数组，
-/// 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段，
-/// 外加触底加载的「没有更多了（no-more）」结束文案。
+/// 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段的文案。
 class TPullDownRefreshTexts {
   /// 下拉未达阈值时的提示语（官方默认「下拉刷新」）。
   final String pullToRefresh;
@@ -18,19 +17,12 @@ class TPullDownRefreshTexts {
   /// 刷新完成时的提示语（官方默认「刷新完成」）。
   final String refreshComplete;
 
-  /// 触底加载、无更多数据时 footer 的结束提示语（默认 `/`）。
-  ///
-  /// 仅在启用触底加载（`TPullDownRefresh.enableLoadMore`）且加载进入
-  /// 结束态时展示。
-  final String noMore;
-
-  /// 构造文案。
+  /// 构造四态文案。
   const TPullDownRefreshTexts({
     required this.pullToRefresh,
     required this.releaseToRefresh,
     required this.refreshing,
     required this.refreshComplete,
-    this.noMore = '/',
   });
 }
 
