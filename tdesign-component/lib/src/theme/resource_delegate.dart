@@ -3,9 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../tdesign_flutter.dart';
 
-typedef TResourceBuilder = TResourceDelegate? Function(
-  BuildContext context,
-);
+typedef TResourceBuilder = TResourceDelegate? Function(BuildContext context);
 
 /// 资源管理器
 class TResourceManager {
@@ -87,16 +85,16 @@ abstract class TResourceDelegate {
   /// [TConfirmDialog] 知道了
   String get knew;
 
-  /// [TRefreshHeader] 正在刷新
+  /// [TPullDownRefresh] 正在刷新
   String get refreshing;
 
-  /// [TRefreshHeader] 松开刷新
+  /// [TPullDownRefresh] 松手刷新
   String get releaseRefresh;
 
-  /// [TRefreshHeader] 下拉刷新
+  /// [TPullDownRefresh] 下拉刷新
   String get pullToRefresh;
 
-  /// [TRefreshHeader] 刷新完成
+  /// [TPullDownRefresh] 刷新完成
   String get completeRefresh;
 
   /// [TTimeCounter] 天
@@ -255,7 +253,7 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   String get refreshing => '正在刷新';
 
   @override
-  String get releaseRefresh => '松开刷新';
+  String get releaseRefresh => '松手刷新';
 
   @override // coverage:ignore-line
   String get pullToRefresh => '下拉刷新';

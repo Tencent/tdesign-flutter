@@ -63,7 +63,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get refreshing => '正在刷新';
 
   @override
-  String get releaseRefresh => '松开刷新';
+  String get releaseRefresh => '松手刷新';
 
   @override
   String get pullToRefresh => '下拉刷新';

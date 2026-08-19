@@ -779,12 +779,15 @@
     {
       "slug": "pull-down-refresh",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/refresh/t_refresh_header.dart"
+        "type": "folder",
+        "path": "lib/src/components/refresh"
       },
       "api": {
         "names": [
-          "TRefreshHeader"
+          "TPullDownRefresh",
+          "TPullDownRefreshController",
+          "TPullDownRefreshTexts",
+          "TPullDownRefreshState"
         ],
         "getComments": true
       }

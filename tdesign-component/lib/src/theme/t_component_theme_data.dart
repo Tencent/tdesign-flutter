@@ -42,7 +42,6 @@ export '../components/progress/t_progress_theme_data.dart'
     show TProgressThemeData;
 export '../components/radio/t_radio_theme_data.dart' show TRadioThemeData;
 export '../components/rate/t_rate_theme_data.dart' show TRateThemeData;
-export '../components/refresh/t_refresh_theme_data.dart' show TRefreshThemeData;
 export '../components/result/t_result_theme_data.dart' show TResultThemeData;
 export '../components/search/t_search_bar_theme_data.dart'
     show TSearchBarThemeData;
