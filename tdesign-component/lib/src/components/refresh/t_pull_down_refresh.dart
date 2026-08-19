@@ -17,7 +17,7 @@ import 't_pull_down_refresh_texts.dart';
 ///
 /// 以**最小、Flutter 惯用**的 API 封装 [EasyRefresh]，对齐官方
 /// （小程序 / mobile-vue）PullDownRefresh 的行为表现：
-/// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、禁用、超时、
+/// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 /// 四态文案自定义与受控刷新。
 ///
 /// 典型用法：
@@ -39,8 +39,7 @@ class TPullDownRefresh extends StatefulWidget {
 
   /// 下拉触发刷新回调（对应官方 `refresh` 事件）。
   ///
-  /// 为空时禁用下拉刷新。返回的 Future 完成后自动展示完成态并复位；
-  /// 也可通过 [controller] 接管完成时机。
+  /// 为空时禁用下拉刷新。返回的 Future 完成后自动展示完成态并复位。
   ///
   /// 若回调同步抛错或返回的 Future 失败，刷新任务会**正常结束（不悬挂）**，
   /// 错误通过 `FlutterError.reportError` 上报（不吞掉），但不会作为未捕获异常
@@ -50,48 +49,35 @@ class TPullDownRefresh extends StatefulWidget {
 
   /// 触底加载回调（对应官方 `scrolltolower` 事件）。
   ///
-  /// 仅在 [enableLoadMore] 为 true 且本参数非空时启用。触底达到
-  /// [lowerThreshold] 时触发；Footer 本身不增加 TDesign 未定义的可见样式。
+  /// 非空时自动启用，触底达到 [lowerThreshold] 时触发；Footer 本身不增加
+  /// TDesign 未定义的可见样式。
   ///
-  /// 返回的 `Future` 完成后自动结束加载态；也可通过
-  /// [TPullDownRefreshController.finishLoadMore] 手动结束。与 [onRefresh] 一致，
-  /// 本回调若同步抛错或返回的 `Future` 失败，
+  /// 返回的 `Future` 完成后自动结束加载态。与 [onRefresh] 一致，本回调若同步
+  /// 抛错或返回的 `Future` 失败，
   /// 加载任务会**正常结束（不悬挂）**，错误经 `FlutterError.reportError` 上报
   /// （不吞掉）。若需在失败时做业务处理，请在回调内部自行 try/catch。
   final FutureOr<void> Function()? onLoadMore;
 
-  /// 是否启用触底加载（默认 false）。
-  ///
-  /// 置为 true 且 [onLoadMore] 非空时，滚动容器触底会触发加载。
-  /// 加载结束可通过 [controller] 或返回 Future。
-  final bool enableLoadMore;
-
   /// 距离底部多少逻辑像素时触发加载（默认 50，对齐官方 `lowerThreshold`）。
   final double lowerThreshold;
 
-  /// 是否禁用下拉刷新（默认 false；禁用后仍保留滚动）。
-  final bool disabled;
-
-  /// 受控刷新 / 加载控制器。
+  /// 外部主动刷新控制器。
   ///
-  /// 通过 [TPullDownRefreshController.refresh] 等外部触发 / 结束刷新。
-  /// 其生命周期由本组件独占管理：底层 [EasyRefreshController] 由 State
-  /// 创建并释放，外部控制器仅持有引用，不应重复 dispose（详见
-  /// [TPullDownRefreshController] 文档）。
+  /// 通过 [TPullDownRefreshController.refresh] 从页面外部触发刷新。刷新完成时机
+  /// 始终由 [onRefresh] 返回的 Future 决定。
+  /// 底层 [EasyRefreshController] 由 State 创建并释放；外部控制器仅持有引用，
+  /// 无需也不能重复 dispose（详见 [TPullDownRefreshController] 文档）。
   final TPullDownRefreshController? controller;
 
   /// 四态提示语；为空时回退 l10n（默认中文与官方 `loadingTexts` 一致）。
   final TPullDownRefreshTexts? texts;
 
   /// 刷新超时时长（**默认 3 秒**）；超过时长仍未完成 [onRefresh] 时自动结束刷新，
-  /// 并触发 [onTimeout]（可为空）。
+  /// 并通过 [onStateChanged] 上报 [TPullDownRefreshState.timeout]。
   ///
   /// 默认启用 3 秒超时；传入 `null` 可关闭超时。
   /// `timeout` 状态仅在超时瞬间上报一次，随后立即结束刷新并复位，无专属渲染文案。
   final Duration? refreshTimeout;
-
-  /// 刷新超时回调。
-  final VoidCallback? onTimeout;
 
   /// Header 容器高度 = 触发阈值（默认 50，对齐官方 `loadingBarHeight`）。
   final double loadingBarHeight;
@@ -101,12 +87,6 @@ class TPullDownRefresh extends StatefulWidget {
 
   /// 刷新完成提示的展示时长（默认 500ms，对齐官方 `successDuration`）。
   final Duration successDuration;
-
-  /// loading 指示器样式（对应官方 `loadingProps`）。
-  final TLoadingThemeData? loadingTheme;
-
-  /// Header 背景色。
-  final Color? backgroundColor;
 
   /// 刷新状态变化回调（对应官方 `change`/`onChange` 事件）。
   ///
@@ -121,18 +101,13 @@ class TPullDownRefresh extends StatefulWidget {
     required this.child,
     this.onRefresh,
     this.onLoadMore,
-    this.enableLoadMore = false,
     this.lowerThreshold = 50,
-    this.disabled = false,
     this.controller,
     this.texts,
     this.refreshTimeout = const Duration(milliseconds: 3000),
-    this.onTimeout,
     this.loadingBarHeight = 50,
     this.maxBarHeight = 80,
     this.successDuration = const Duration(milliseconds: 500),
-    this.loadingTheme,
-    this.backgroundColor,
     this.onStateChanged,
   }) : assert(lowerThreshold > 0);
 
@@ -145,10 +120,9 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   Timer? _timeoutTimer;
   TPullDownRefreshState? _lastReportedState;
 
-  bool get _refreshEnabled => widget.onRefresh != null && !widget.disabled;
+  bool get _refreshEnabled => widget.onRefresh != null;
 
-  bool get _loadMoreEnabled =>
-      widget.onLoadMore != null && widget.enableLoadMore;
+  bool get _loadMoreEnabled => widget.onLoadMore != null;
 
   @override
   void initState() {
@@ -207,7 +181,6 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
         if (!mounted) {
           return;
         }
-        widget.onTimeout?.call();
         _handleStateChanged(TPullDownRefreshState.timeout);
         _easyController?.finishRefresh(IndicatorResult.success, true);
       });
@@ -316,8 +289,6 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
               maxOverOffset: widget.maxBarHeight,
               successDuration: widget.successDuration,
               texts: _effectiveTexts(context),
-              loadingTheme: widget.loadingTheme,
-              backgroundColor: widget.backgroundColor,
               onStateChanged: _handleStateChanged,
             )
           : null,
@@ -333,8 +304,6 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 class _TPullDownRefreshHeader extends Header {
   final double _extent;
   final TPullDownRefreshTexts texts;
-  final TLoadingThemeData? loadingTheme;
-  final Color? backgroundColor;
   final ValueChanged<TPullDownRefreshState>? onStateChanged;
 
   _TPullDownRefreshHeader({
@@ -343,8 +312,6 @@ class _TPullDownRefreshHeader extends Header {
     required double maxOverOffset,
     required Duration successDuration,
     required this.texts,
-    this.loadingTheme,
-    this.backgroundColor,
     this.onStateChanged,
   }) : _extent = extent,
        assert(triggerDistance > 0),
@@ -370,6 +337,9 @@ class _TPullDownRefreshHeader extends Header {
     final showComplete =
         state.mode == IndicatorMode.processed ||
         state.mode == IndicatorMode.done;
+    final inheritedLoadingTheme = Theme.of(
+      context,
+    ).extension<TLoadingThemeData>();
     String text;
     if (showLoading) {
       text = texts.refreshing;
@@ -388,16 +358,13 @@ class _TPullDownRefreshHeader extends Header {
       child: Container(
         alignment: Alignment.center,
         height: _extent,
-        color: backgroundColor,
+        color: context.tTheme.bgColorContainer,
         child: showLoading
             ? Theme(
                 data: Theme.of(context).mergeExtension(
-                  loadingTheme ??
-                      TLoadingThemeData(
-                        iconColor: context.tTheme.brandNormalColor,
-                        axis: Axis.horizontal,
-                        textColor: context.tTheme.textColorPlaceholder,
-                      ),
+                  (inheritedLoadingTheme ?? const TLoadingThemeData()).copyWith(
+                    axis: Axis.horizontal,
+                  ),
                 ),
                 child: TLoading(size: TLoadingSize.medium, text: text),
               )

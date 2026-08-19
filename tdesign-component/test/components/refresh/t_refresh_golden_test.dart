@@ -222,7 +222,6 @@ Widget _buildTimeoutDemo() {
       height: 300,
       child: TPullDownRefresh(
         refreshTimeout: const Duration(seconds: 1),
-        onTimeout: () {},
         onRefresh: () => Completer<void>().future,
         child: ListView(
           padding: const EdgeInsets.all(16),

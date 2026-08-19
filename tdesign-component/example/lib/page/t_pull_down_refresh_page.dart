@@ -26,12 +26,6 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
   var timeoutCount = 0;
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
@@ -191,8 +185,10 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
       height: 300,
       child: TPullDownRefresh(
         refreshTimeout: const Duration(seconds: 1),
-        onTimeout: () {
-          TToast.showText('已超时', context: context);
+        onStateChanged: (state) {
+          if (state == TPullDownRefreshState.timeout) {
+            TToast.showText('已超时', context: context);
+          }
         },
         onRefresh: () {
           // 模拟长时间未完成的刷新，等待超时回调。

@@ -125,9 +125,6 @@ export 'src/components/rate/t_rate_theme_data.dart' show TRateThemeData;
 export 'src/components/refresh/t_pull_down_refresh.dart';
 export 'src/components/refresh/t_pull_down_refresh_controller.dart';
 export 'src/components/refresh/t_pull_down_refresh_texts.dart';
-export 'src/components/refresh/t_refresh_header.dart';
-export 'src/components/refresh/t_refresh_theme_data.dart'
-    show TRefreshThemeData;
 export 'src/components/result/t_result.dart';
 export 'src/components/result/t_result_theme_data.dart' show TResultThemeData;
 export 'src/components/search/t_search_bar.dart';

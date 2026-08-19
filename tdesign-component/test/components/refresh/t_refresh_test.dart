@@ -3,62 +3,38 @@ import 'dart:async';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child, {TRefreshThemeData? refreshTheme}) {
+  Widget wrap(Widget child, {TLoadingThemeData? loadingTheme}) {
+    var theme = TThemeBuilder.light(TThemeData.defaultData());
+    if (loadingTheme != null) {
+      theme = theme.mergeExtension(loadingTheme);
+    }
     return MaterialApp(
-      theme: refreshTheme == null
-          ? TThemeBuilder.light(TThemeData.defaultData())
-          : TThemeBuilder.light(
-              TThemeData.defaultData(),
-            ).mergeExtension(refreshTheme),
+      theme: theme,
       home: Scaffold(body: child),
-    );
-  }
-
-  Widget refreshView({
-    TRefreshHeader? header,
-    Future<void> Function()? onRefresh,
-  }) {
-    return SizedBox(
-      height: 300,
-      child: EasyRefresh(
-        header: header ?? TRefreshHeader(),
-        onRefresh: onRefresh,
-        child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) => ListTile(title: Text('项目$index')),
-        ),
-      ),
     );
   }
 
   Widget pullDownRefresh({
     FutureOr<void> Function()? onRefresh,
     FutureOr<void> Function()? onLoadMore,
-    bool enableLoadMore = false,
-    bool disabled = false,
     TPullDownRefreshController? controller,
     TPullDownRefreshTexts? texts,
     Duration? refreshTimeout,
-    VoidCallback? onTimeout,
     ValueChanged<TPullDownRefreshState>? onStateChanged,
-    TLoadingThemeData? loadingTheme,
   }) {
     return SizedBox(
       height: 300,
       child: TPullDownRefresh(
         onRefresh: onRefresh,
         onLoadMore: onLoadMore,
-        enableLoadMore: enableLoadMore,
-        disabled: disabled,
         controller: controller,
         texts: texts,
         refreshTimeout: refreshTimeout,
-        onTimeout: onTimeout,
         onStateChanged: onStateChanged,
-        loadingTheme: loadingTheme,
         child: ListView.builder(
           itemCount: 5,
           itemBuilder: (context, index) => ListTile(title: Text('项目$index')),
@@ -66,156 +42,6 @@ void main() {
       ),
     );
   }
-
-  group('TRefreshThemeData', () {
-    test('仅保存视觉字段', () {
-      const base = TRefreshThemeData(
-        loadingIcon: TLoadingIcon.circle,
-        backgroundColor: Colors.white,
-      );
-      const override = TRefreshThemeData(
-        loadingIcon: TLoadingIcon.point,
-        backgroundColor: Colors.red,
-      );
-
-      final merged = base.merge(override);
-      expect(merged.loadingIcon, TLoadingIcon.point);
-      expect(merged.backgroundColor, Colors.red);
-      expect(base.merge(null), same(base));
-
-      final copied = base.copyWith(backgroundColor: Colors.blue);
-      expect(copied.loadingIcon, TLoadingIcon.circle);
-      expect(copied.backgroundColor, Colors.blue);
-
-      final lerped = base.lerp(override, 0.75);
-      expect(lerped.loadingIcon, TLoadingIcon.point);
-      expect(
-        lerped.backgroundColor,
-        Color.lerp(Colors.white, Colors.red, 0.75),
-      );
-      expect(base.lerp(null, 0.5), same(base));
-      expect(TRefreshThemeData.lerpDouble(null, null, 0.5), isNull);
-    });
-  });
-
-  group('TRefreshHeader 构造', () {
-    test('默认参数', () {
-      final header = TRefreshHeader();
-      expect(header, isA<Header>());
-      expect(header.finalExtent, 48);
-      expect(header.finalTriggerDistance, 48);
-      expect(header.finalFloat, isFalse);
-      expect(header.finalOverScroll, isTrue);
-      expect(header.finalLoadingIcon, isNull);
-      expect(header.finalBackgroundColor, isNull);
-      expect(header.enableHapticFeedback, isTrue);
-      expect(header.enableInfiniteRefresh, isFalse);
-    });
-
-    test('行为参数由实例直接控制', () {
-      final header = TRefreshHeader(
-        extent: 60,
-        triggerDistance: 80,
-        clamping: false,
-        float: true,
-        overScroll: false,
-        completeDuration: const Duration(seconds: 2),
-        enableHapticFeedback: false,
-        enableInfiniteRefresh: true,
-        infiniteOffset: 120,
-        loadingIcon: TLoadingIcon.activity,
-        backgroundColor: Colors.blue,
-      );
-      expect(header.finalExtent, 60);
-      expect(header.finalTriggerDistance, 80);
-      expect(header.finalFloat, isTrue);
-      expect(header.finalOverScroll, isFalse);
-      expect(header.finalCompleteDuration, const Duration(seconds: 2));
-      expect(header.finalLoadingIcon, TLoadingIcon.activity);
-      expect(header.finalBackgroundColor, Colors.blue);
-      expect(header.enableHapticFeedback, isFalse);
-      expect(header.enableInfiniteRefresh, isTrue);
-    });
-
-    test('非法尺寸触发断言', () {
-      expect(() => TRefreshHeader(triggerDistance: 0), throwsAssertionError);
-      expect(() => TRefreshHeader(extent: -1), throwsAssertionError);
-      expect(
-        () => TRefreshHeader(extent: 80, triggerDistance: 40),
-        throwsAssertionError,
-      );
-      expect(
-        () => TRefreshHeader(extent: 80, triggerDistance: 40, float: true),
-        returnsNormally,
-      );
-    });
-  });
-
-  group('EasyRefresh 集成', () {
-    testWidgets('基础渲染', (tester) async {
-      await tester.pumpWidget(wrap(refreshView(onRefresh: () async {})));
-      await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(EasyRefresh), findsOneWidget);
-      expect(find.text('项目0'), findsOneWidget);
-    });
-
-    testWidgets('无 onRefresh 也可渲染', (tester) async {
-      await tester.pumpWidget(wrap(refreshView()));
-      await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(EasyRefresh), findsOneWidget);
-    });
-
-    testWidgets('Theme Extension 提供视觉默认值', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          refreshView(onRefresh: () async {}),
-          refreshTheme: const TRefreshThemeData(
-            loadingIcon: TLoadingIcon.point,
-            backgroundColor: Colors.yellow,
-          ),
-        ),
-      );
-      final gesture = await tester.startGesture(const Offset(200, 150));
-      await gesture.moveBy(const Offset(0, 120));
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(find.byType(TGIconHeaderWidget), findsWidgets);
-      await gesture.up();
-      await tester.pump(const Duration(seconds: 2));
-    });
-
-    testWidgets('实例视觉参数优先于 Theme Extension', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          refreshView(
-            header: TRefreshHeader(
-              loadingIcon: TLoadingIcon.activity,
-              backgroundColor: Colors.green,
-            ),
-            onRefresh: () async {},
-          ),
-          refreshTheme: const TRefreshThemeData(
-            loadingIcon: TLoadingIcon.point,
-            backgroundColor: Colors.red,
-          ),
-        ),
-      );
-      final gesture = await tester.startGesture(const Offset(200, 150));
-      await gesture.moveBy(const Offset(0, 120));
-      await tester.pump(const Duration(milliseconds: 300));
-      final headerWidget = tester.widget<TGIconHeaderWidget>(
-        find.byType(TGIconHeaderWidget).first,
-      );
-      expect(headerWidget.loadingIcon, TLoadingIcon.activity);
-      expect(headerWidget.backgroundColor, Colors.green);
-      await gesture.up();
-      await tester.pump(const Duration(seconds: 2));
-    });
-  });
-
-  test('公开枚举与状态类型可用', () {
-    expect(TLoadingIcon.values, hasLength(3));
-    expect(TGIconHeaderWidgetState, isNotNull);
-  });
 
   group('TPullDownRefresh 最小化组件', () {
     test('跨端可见行为默认值与小程序一致', () {
@@ -239,14 +65,6 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
       expect(find.text('项目0'), findsOneWidget);
-    });
-
-    testWidgets('disabled 禁用下拉', (tester) async {
-      await tester.pumpWidget(
-        wrap(pullDownRefresh(onRefresh: () async {}, disabled: true)),
-      );
-      await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(EasyRefresh), findsOneWidget);
     });
 
     testWidgets('texts 自定义四态文案生效', (tester) async {
@@ -302,7 +120,7 @@ void main() {
     });
 
     testWidgets('refreshTimeout 为 null 时关闭超时', (tester) async {
-      var timedOut = false;
+      final states = <TPullDownRefreshState>[];
       final refreshCompleter = Completer<void>();
       final controller = TPullDownRefreshController();
       await tester.pumpWidget(
@@ -310,7 +128,7 @@ void main() {
           pullDownRefresh(
             onRefresh: () => refreshCompleter.future,
             refreshTimeout: null,
-            onTimeout: () => timedOut = true,
+            onStateChanged: states.add,
             controller: controller,
           ),
         ),
@@ -318,20 +136,20 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       unawaited(controller.refresh());
       await tester.pump(const Duration(milliseconds: 200));
-      expect(timedOut, isFalse);
+      expect(states, isNot(contains(TPullDownRefreshState.timeout)));
       refreshCompleter.complete();
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('refreshTimeout 超时触发 onTimeout', (tester) async {
-      var timedOut = false;
+    testWidgets('refreshTimeout 超时上报 timeout 状态', (tester) async {
+      final states = <TPullDownRefreshState>[];
       final controller = TPullDownRefreshController();
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
             onRefresh: () => Completer<void>().future,
             refreshTimeout: const Duration(milliseconds: 100),
-            onTimeout: () => timedOut = true,
+            onStateChanged: states.add,
             controller: controller,
           ),
         ),
@@ -343,7 +161,7 @@ void main() {
       for (var i = 0; i < 20; i++) {
         await tester.pump(const Duration(milliseconds: 100));
       }
-      expect(timedOut, isTrue);
+      expect(states, contains(TPullDownRefreshState.timeout));
       // 清空 EasyRefresh 内部残留计时器。
       await tester.pump(const Duration(seconds: 1));
     });
@@ -370,46 +188,14 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('enableLoadMore + onLoadMore 触底加载', (tester) async {
+    testWidgets('onLoadMore 非空时自动启用触底加载', (tester) async {
       await tester.pumpWidget(
-        wrap(
-          pullDownRefresh(
-            onRefresh: () async {},
-            onLoadMore: () async {},
-            enableLoadMore: true,
-          ),
-        ),
+        wrap(pullDownRefresh(onRefresh: () async {}, onLoadMore: () async {})),
       );
       await tester.pump(const Duration(seconds: 1));
       expect(find.text('项目0'), findsOneWidget);
       // 触底加载为可选能力，仅验证可渲染。
       expect(find.byType(EasyRefresh), findsOneWidget);
-    });
-
-    testWidgets('loadMore / finishLoadMore / reset 可调用', (tester) async {
-      var loaded = false;
-      final controller = TPullDownRefreshController();
-      await tester.pumpWidget(
-        wrap(
-          pullDownRefresh(
-            onRefresh: () async {},
-            onLoadMore: () async => loaded = true,
-            enableLoadMore: true,
-            controller: controller,
-          ),
-        ),
-      );
-      await tester.pump(const Duration(seconds: 1));
-      unawaited(controller.loadMore());
-      for (var i = 0; i < 20; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-      }
-      expect(loaded, isTrue);
-      controller.finishLoadMore();
-      controller.reset();
-      controller.dispose();
-      // 清空 EasyRefresh 内部残留计时器。
-      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('controller 切换时重新绑定', (tester) async {
@@ -423,8 +209,6 @@ void main() {
         wrap(pullDownRefresh(onRefresh: () async {}, controller: c2)),
       );
       await tester.pump(const Duration(seconds: 1));
-      c1.dispose();
-      c2.dispose();
       expect(find.byType(EasyRefresh), findsOneWidget);
     });
   });
@@ -484,17 +268,36 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('loadingTheme 自定义渲染', (tester) async {
+    testWidgets('loading 样式继承 Theme 子树', (tester) async {
+      final completer = Completer<void>();
+      final controller = TPullDownRefreshController();
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
-            onRefresh: () async {},
-            loadingTheme: const TLoadingThemeData(iconColor: Colors.red),
+            onRefresh: () => completer.future,
+            controller: controller,
+          ),
+          loadingTheme: const TLoadingThemeData(
+            iconColor: Colors.red,
+            duration: 1234,
           ),
         ),
       );
       await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(EasyRefresh), findsOneWidget);
+      unawaited(controller.refresh());
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        if (find.byType(TCircleIndicator).evaluate().isNotEmpty) {
+          break;
+        }
+      }
+      final indicator = tester.widget<TCircleIndicator>(
+        find.byType(TCircleIndicator),
+      );
+      expect(indicator.color, Colors.red);
+      expect(indicator.duration, 1234);
+      completer.complete();
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('同步 onRefresh 返回值可处理', (tester) async {
@@ -535,7 +338,6 @@ void main() {
             child: TPullDownRefresh(
               onRefresh: () async {},
               onLoadMore: () => loadCompleter.future,
-              enableLoadMore: true,
               child: ListView.builder(
                 itemCount: 40,
                 itemBuilder: (context, index) =>
@@ -560,15 +362,9 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('enableLoadMore=false 时不渲染 footer', (tester) async {
+    testWidgets('onLoadMore 为空时不渲染 footer', (tester) async {
       await tester.pumpWidget(
-        wrap(
-          pullDownRefresh(
-            onRefresh: () async {},
-            onLoadMore: () async {},
-            enableLoadMore: false,
-          ),
-        ),
+        wrap(pullDownRefresh(onRefresh: () async {}, onLoadMore: null)),
       );
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
@@ -584,7 +380,6 @@ void main() {
             child: TPullDownRefresh(
               onRefresh: () async {},
               onLoadMore: () async => loaded = true,
-              enableLoadMore: true,
               child: ListView.builder(
                 itemCount: 40,
                 itemBuilder: (context, index) =>
@@ -608,15 +403,9 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('onLoadMore 为空时即使 enableLoadMore=true 也不加载', (tester) async {
+    testWidgets('onLoadMore 为空时不加载', (tester) async {
       await tester.pumpWidget(
-        wrap(
-          pullDownRefresh(
-            onRefresh: () async {},
-            onLoadMore: null,
-            enableLoadMore: true,
-          ),
-        ),
+        wrap(pullDownRefresh(onRefresh: () async {}, onLoadMore: null)),
       );
       await tester.pump(const Duration(seconds: 1));
       expect(find.byType(EasyRefresh), findsOneWidget);
@@ -624,28 +413,15 @@ void main() {
   });
 
   group('controller 所有权（P1-1）', () {
-    testWidgets('外部 controller.dispose 不会双重释放', (tester) async {
+    testWidgets('组件卸载后 refresh 静默失败而非抛错', (tester) async {
       final controller = TPullDownRefreshController();
       await tester.pumpWidget(
         wrap(pullDownRefresh(onRefresh: () async {}, controller: controller)),
       );
       await tester.pump(const Duration(seconds: 1));
-      // 组件存活时外部 dispose，仅解绑、不释放底层 controller，不应抛错。
-      controller.dispose();
-      // 卸载组件，State 仍可正常 dispose 底层 EasyRefreshController（无双重释放异常）。
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(seconds: 1));
-      expect(tester.takeException(), isNull);
-    });
-
-    testWidgets('dispose 后 refresh 静默失败而非抛错', (tester) async {
-      final controller = TPullDownRefreshController();
-      await tester.pumpWidget(
-        wrap(pullDownRefresh(onRefresh: () async {}, controller: controller)),
-      );
-      await tester.pump(const Duration(seconds: 1));
-      controller.dispose();
-      // dispose 后调用 refresh，应静默失败不抛错（底层 controller 已被解绑）。
+      // 组件卸载后调用 refresh，应静默失败不抛错（底层 controller 已被解绑）。
       expect(controller.refresh, returnsNormally);
       await tester.pump(const Duration(milliseconds: 100));
       expect(tester.takeException(), isNull);
@@ -752,7 +528,6 @@ void main() {
             onLoadMore: () {
               throw StateError('load boom');
             },
-            enableLoadMore: true,
           ),
         ),
       );
@@ -785,7 +560,6 @@ void main() {
           pullDownRefresh(
             onRefresh: () async {},
             onLoadMore: () async => throw StateError('load boom'),
-            enableLoadMore: true,
           ),
         ),
       );
@@ -884,8 +658,8 @@ void main() {
       expect(find.text('自定义提示语刷新次数：0'), findsOneWidget);
     });
 
-    testWidgets('刷新超时 demo：refreshTimeout + onTimeout 生效', (tester) async {
-      var timedOut = false;
+    testWidgets('刷新超时 demo：refreshTimeout + timeout 状态生效', (tester) async {
+      final states = <TPullDownRefreshState>[];
       final controller = TPullDownRefreshController();
       await tester.pumpWidget(
         wrap(
@@ -893,7 +667,7 @@ void main() {
             height: 300,
             child: TPullDownRefresh(
               refreshTimeout: const Duration(seconds: 1),
-              onTimeout: () => timedOut = true,
+              onStateChanged: states.add,
               onRefresh: () => Completer<void>().future,
               controller: controller,
               child: ListView(
@@ -912,7 +686,7 @@ void main() {
       for (var i = 0; i < 20; i++) {
         await tester.pump(const Duration(milliseconds: 100));
       }
-      expect(timedOut, isTrue);
+      expect(states, contains(TPullDownRefreshState.timeout));
       await tester.pump(const Duration(seconds: 1));
     });
   });

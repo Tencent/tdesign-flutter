@@ -777,19 +777,6 @@
       }
     },
     {
-      "slug": "pull-down-refresh",
-      "source": {
-        "type": "file",
-        "path": "lib/src/components/refresh/t_refresh_header.dart"
-      },
-      "api": {
-        "names": [
-          "TRefreshHeader"
-        ],
-        "getComments": true
-      }
-    },
-    {
       "slug": "swipe-cell",
       "source": {
         "type": "folder",

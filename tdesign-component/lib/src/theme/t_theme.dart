@@ -562,7 +562,6 @@ class TMaterialThemeBuilder {
       const TProgressThemeData(),
       const TRadioThemeData(),
       const TRateThemeData(),
-      const TRefreshThemeData(),
       const TResultThemeData(),
       const TSearchBarThemeData(),
       const TSideBarThemeData(),

@@ -25,7 +25,7 @@
 
 - **每个公开 Demo** 均有逐项 Widget 断言（基础 / 自定义提示语 / 超时）+ 固定视口 Golden 测试文件。
 - **loadMore**：补真实滚动到底触发、禁用与异常传播测试；按小程序 `scrolltolower` 语义不绘制额外 loading/no-more Footer。
-- **controller 所有权**：底层 `EasyRefreshController` 仅由 State 管理/dispose；外部 `TPullDownRefreshController.dispose()` 仅解绑、不释放底层（含 dispose 后行为测试）。
+- **controller 所有权**：底层 `EasyRefreshController` 仅由 State 管理/dispose；外部 `TPullDownRefreshController` 只提供 `refresh()`，不暴露需要调用方释放的资源。
 - **状态回调去重**：`onStateChanged` 在状态跳变处去重上报，异步调度避免 build 期同步回调。
 - **异常传播**：`onRefresh` / `onLoadMore` 同步抛错 / Future 失败均正常结束（不悬挂）；错误经 `FlutterError.reportError` 上报（不吞掉），避免 easy_refresh 对任务失败无条件 rethrow 产生调用方无法接管的 unhandled async error。`onLoadMore` 已补同步抛错与 Future 失败两组测试。
 - **默认值补齐**：`lowerThreshold=50`、`successDuration=500ms` 与小程序一致，并有公开默认值断言。
@@ -40,13 +40,13 @@
 - [x] `TPullDownRefresh` 默认渲染对齐官方（loadingBarHeight=50 / maxBarHeight=80 / 触发阈值=50）
 - [x] 下拉 → 松手 → 刷新 → 完成四态文案正确（中文默认与官方一致）
 - [x] 下拉过程中刷新头与页面内容同步下移，释放后回弹
-- [x] 受控 `controller.refresh()` / `finishRefresh()`、`onStateChanged` 生效
-- [x] `refreshTimeout` 默认 3000ms，超时触发 `onTimeout`；传入 null 关闭超时
-- [x] `onLoadMore` / `enableLoadMore` / `lowerThreshold` 触底加载生效，且不渲染额外 Footer UI
-- [x] `disabled` 禁用生效
+- [x] 外部 `controller.refresh()`、`onStateChanged` 生效；刷新完成由 `onRefresh` Future 统一决定
+- [x] `refreshTimeout` 默认 3000ms，超时通过 `onStateChanged(timeout)` 上报；传入 null 关闭超时
+- [x] `onLoadMore` 非空时按 `lowerThreshold` 自动启用触底加载，且不渲染额外 Footer UI
+- [x] `onRefresh == null` 时禁用下拉刷新并保留滚动
 
 ## 未覆盖项与后续工作（如实保留，不臆测通过）
 
 - **真机 / 同尺寸像素对照**：无法自动化，需真机人工核验（未完成）。
 - **Golden 与小程序视口逐像素对照**：本 PR 提供固定视口 Golden，但与小程序实际渲染的逐像素对照需真机人工确认（未完成）。
-- `TRefreshHeader` 保留为低层 Header（向后兼容），后续可进一步收敛其公开参数。
+- 删除旧 `TRefreshHeader` 与其专属 `TRefreshThemeData`，公开入口仅保留 `TPullDownRefresh`。

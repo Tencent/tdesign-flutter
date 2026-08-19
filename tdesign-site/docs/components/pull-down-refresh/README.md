@@ -84,7 +84,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ### 刷新超时
 
-通过 `refreshTimeout` 与 `onTimeout` 在刷新超时时给出提示并自动结束。
+通过 `refreshTimeout` 与 `onStateChanged` 的 `timeout` 状态在刷新超时时给出提示并自动结束。
 
 > **说明**：本 Demo 为小程序已有公开 props（`refreshTimeout` + `timeout`）的新增 API 演示，Demo 形态仅参考 Mobile Vue，不表示小程序现有公开 Demo。
 
@@ -96,8 +96,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       height: 300,
       child: TPullDownRefresh(
         refreshTimeout: const Duration(seconds: 1),
-        onTimeout: () {
-          TToast.showText('已超时', context: context);
+        onStateChanged: (state) {
+          if (state == TPullDownRefreshState.timeout) {
+            TToast.showText('已超时', context: context);
+          }
         },
         onRefresh: () {
           // 模拟长时间未完成的刷新，等待超时回调。
@@ -126,70 +128,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | child | Widget | - | 滚动内容（必填） |
 | onRefresh | FutureOr<void> Function()? | - | 下拉触发刷新回调，为空时禁用刷新 |
-| onLoadMore | FutureOr<void> Function()? | - | 触底加载回调，仅在 `enableLoadMore` 且非空时启用；不绘制额外 Footer UI |
-| enableLoadMore | bool | false | 是否启用触底加载 |
+| onLoadMore | FutureOr<void> Function()? | - | 触底加载回调，非空时自动启用；不绘制额外 Footer UI |
 | lowerThreshold | double | 50 | 距离底部多少逻辑像素时触发加载 |
-| disabled | bool | false | 是否禁用下拉刷新 |
-| controller | TPullDownRefreshController? | - | 受控刷新 / 加载控制器 |
+| controller | TPullDownRefreshController? | - | 从页面外部主动触发刷新的控制器 |
 | texts | TPullDownRefreshTexts? | - | 四态提示语，为空时回退 l10n |
-| refreshTimeout | Duration? | 3000ms | 刷新超时时长，超过时长自动结束并触发 onTimeout；传 null 关闭 |
-| onTimeout | VoidCallback? | - | 刷新超时回调 |
+| refreshTimeout | Duration? | 3000ms | 刷新超时时长，超过时长自动结束并上报 timeout 状态；传 null 关闭 |
 | loadingBarHeight | double | 50 | Header 容器高度 = 触发阈值 |
 | maxBarHeight | double | 80 | 最大下拉高度 |
 | successDuration | Duration | 500ms | 刷新完成提示展示时长 |
-| loadingTheme | TLoadingThemeData? | - | loading 指示器样式 |
-| backgroundColor | Color? | - | Header 背景色 |
 | onStateChanged | ValueChanged<TPullDownRefreshState>? | - | 刷新状态变化回调 |
 
 ### TPullDownRefreshController
 
-受控控制器，对应官方受控 `value` 语义。方法：`refresh()` / `loadMore()` / `finishRefresh()` / `finishLoadMore()` / `reset()`。
+外部刷新控制器，仅提供 `refresh()`。刷新完成由 `onRefresh` 返回的 Future 统一决定，无需调用方释放。
+
+Loading 指示器样式自动继承 Flutter Theme 子树中的 `TLoadingThemeData`，组件仅固定横向排列。
 
 ### TPullDownRefreshTexts
 
 四态提示语：`pullToRefresh` / `releaseToRefresh` / `refreshing` / `refreshComplete`，缺省回退 l10n。
-
-### TRefreshHeader（低层，向后兼容）
-#### 简介
-TDesign刷新头部
-结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| clamping | bool? | - | - |
-| completeDuration | Duration? | - | 完成延时 |
-| enableHapticFeedback | bool | true | 开启震动反馈 |
-| enableInfiniteRefresh | bool | false | 是否开启无限刷新 |
-| extent | double? | 48.0 | Header容器高度 |
-| float | bool | false | 是否悬浮 |
-| frictionFactor | - | - | - |
-| hapticFeedback | bool? | - | - |
-| hitOver | - | - | - |
-| horizontalFrictionFactor | - | - | - |
-| horizontalReadySpringBuilder | - | - | - |
-| horizontalSpring | - | - | - |
-| infiniteHitOver | bool? | - | - |
-| infiniteOffset | double? | - | 无限刷新偏移量 |
-| key | Key? | - | Key |
-| listenable | - | - | - |
-| loadingIcon | TLoadingIcon | TLoadingIcon.circle | loading样式 |
-| maxOverOffset | - | - | - |
-| notifyWhenInvisible | - | - | - |
-| overScroll | bool | true | 越界滚动(`enableInfiniteRefresh`为true或`infiniteOffset`有值时生效) |
-| position | - | - | - |
-| processedDuration | Duration? | - | - |
-| readySpringBuilder | - | - | - |
-| safeArea | - | false | - |
-| secondaryCloseTriggerOffset | - | - | - |
-| secondaryDimension | - | - | - |
-| secondaryTriggerOffset | - | - | - |
-| secondaryVelocity | - | - | - |
-| spring | - | - | - |
-| springRebound | - | - | - |
-| triggerDistance | double | 48.0 | 触发刷新任务的偏移量,同`triggerOffset` |
-| triggerOffset | double? | - | - |
-| triggerWhenReach | - | - | - |
-| triggerWhenRelease | - | - | - |
-| triggerWhenReleaseNoWait | - | - | - |
