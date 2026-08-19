@@ -128,11 +128,12 @@ class _TButtonPageState extends State<TButtonPage> {
           ExampleItem(
               ignoreCode: true,
               desc: '按钮尺寸',
+              center: false,
               builder: (context) {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Wrap(
-                    alignment: WrapAlignment.spaceBetween,
+                    alignment: WrapAlignment.start,
                     spacing: 16, // 主轴方向间距
                     runSpacing: 16, // 交叉轴方向间距
                     children: [
