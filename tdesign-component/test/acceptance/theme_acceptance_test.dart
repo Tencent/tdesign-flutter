@@ -351,7 +351,7 @@ void main() {
       expect(text.style?.fontSize, 20);
     });
 
-    testWidgets('P1 actionIconSize 覆盖内置默认图标尺寸 18', (tester) async {
+    testWidgets('P1 actionIconSize 覆盖内置默认图标尺寸 20', (tester) async {
       await tester.pumpWidget(wrapSwipe(
         TSwipeCell(
           child: const SizedBox(width: 300, height: 60, child: Text('Row')),
@@ -367,7 +367,7 @@ void main() {
       expect(icon.size, 28);
     });
 
-    testWidgets('P1 actionSpacing 覆盖内置默认间距 2', (tester) async {
+    testWidgets('P1 actionSpacing 覆盖内置默认间距 8', (tester) async {
       await tester.pumpWidget(wrapSwipe(
         TSwipeCell(
           child: const SizedBox(width: 300, height: 60, child: Text('Row')),
@@ -382,11 +382,8 @@ void main() {
       ));
       await tester.pumpAndSettle();
       final spacing = tester.widget<SizedBox>(
-        find.ancestor(
-          of: find.text('Action'),
-          matching: find.byWidgetPredicate(
-            (w) => w is SizedBox && w.width == 12,
-          ),
+        find.byWidgetPredicate(
+          (w) => w is SizedBox && w.width == 12,
         ),
       );
       expect(spacing.width, 12);

@@ -33,7 +33,7 @@ TSwipeCell(
 )
 ```
 
-`start` 和 `end` 是逻辑方向：横向滑动时分别对应左侧和右侧，纵向滑动时分别对应上方和下方。需要多个单元格互斥展开时，为它们设置相同的 `groupTag` 并开启 `closeWhenOpened`。
+`start` 和 `end` 是逻辑方向，会随 `TextDirection` 自动适配。操作项宽度由图标、文字、间距和内边距的实际布局结果决定；自定义 `builder` 也无需另传宽度。任意一个单元格展开时，其他已展开单元格会自动关闭。
 
 ## API
 
@@ -46,20 +46,17 @@ TSwipeCell(
 | start | TSwipeCellPanel? | - | 起始侧操作面板。 |
 | end | TSwipeCellPanel? | - | 结束侧操作面板。 |
 | onOpenChanged | TSwipeCellChanged? | - | 面板展开或关闭时回调。 |
-| controller | SlidableController? | - | 外部滑动控制器。 |
-| direction | Axis | Axis.horizontal | 滑动轴。 |
+| controller | TSwipeCellController? | - | 通过 `open(side)` / `close()` 命令式控制。 |
 | initialOpenSide | TSwipeCellSide? | - | 首次展示时打开的逻辑侧。 |
-| groupTag | Object? | - | 互斥分组标识。 |
-| closeWhenOpened | bool | false | 展开时关闭同组其他项。 |
-| dragStartBehavior | DragStartBehavior | DragStartBehavior.start | 拖动起始行为。 |
+| closeOnScroll | bool | true | 祖先滚动容器滚动时关闭已展开面板。 |
 
 ### TSwipeCellPanel
 
-操作面板。通过 `children` 提供 `TSwipeCellAction`，并可通过 `extentRatio` 指定面板占比、通过 `confirms` 为指定 action 提供二次确认内容。
+操作面板，只需通过 `children` 提供 `TSwipeCellAction`。面板宽度是所有操作项真实布局宽度之和。
 
 ### TSwipeCellAction
 
-单个操作项。使用 `label`、`icon`、`backgroundColor` 定义外观，`onPressed` 处理点击；复杂内容可使用 `builder`。
+单个操作项。使用 `label`、`icon`、`backgroundColor` 定义外观，`onPressed` 处理点击；复杂内容可使用 `builder`。点击操作项后面板会自动关闭。
 
 ### TSwipeCellSide 与 TSwipeCellChanged
 
@@ -69,8 +66,6 @@ TSwipeCell(
 typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
 ```
 
-### 静态方法
+### TSwipeCellController
 
-`TSwipeCell.close(groupTag, current: controller)` 可关闭一个分组中除 `current` 外的所有单元格；`TSwipeCell.of(context)` 返回最近的 `SlidableController`。
-
-v1 不提供旧命名的兼容别名；请只使用本页列出的 API。
+控制器只提供 `open(TSwipeCellSide side)` 和 `close()`。一个控制器同一时间只能绑定一个 `TSwipeCell`；普通拖动场景无需创建控制器。

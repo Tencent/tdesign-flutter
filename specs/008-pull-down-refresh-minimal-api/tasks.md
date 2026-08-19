@@ -6,7 +6,7 @@
 
 ## DOING
 
-- [x] 创建 Spec `007-pull-down-refresh-minimal-api`
+- [x] 创建 Spec `008-pull-down-refresh-minimal-api`
 - [x] 新增 `TPullDownRefreshTexts`（四态文案）
 - [x] 新增 `TPullDownRefreshState` 枚举
 - [x] 新增 `TPullDownRefreshController`

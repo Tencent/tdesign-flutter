@@ -785,11 +785,12 @@
       "api": {
         "names": [
           "TSwipeCell",
+          "TSwipeCellController",
           "TSwipeCellPanel",
           "TSwipeCellAction",
           "TSwipeCellSide",
           "TSwipeCellChanged",
-          "SwipeMotion"
+          "TSwipeCellThemeData"
         ],
         "getComments": true
       }

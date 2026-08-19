@@ -308,7 +308,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder:
             _wrapInheritedTheme((context) => const TPullDownRefreshPage())),
     ExamplePageModel(
-        text: 'SwipeCell 滑动单元格',
+        text: 'SwipeCell 滑动操作',
         name: 'swipeCell',
         pageBuilder: _wrapInheritedTheme((context) => const TSwipeCellPage())),
     ExamplePageModel(

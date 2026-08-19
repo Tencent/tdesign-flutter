@@ -139,6 +139,8 @@ extension TThemeContextExtension on BuildContext {
       return inherited;
     }
     return inherited == material.iconTheme ||
+            inherited ==
+                const IconThemeData.fallback().merge(material.iconTheme) ||
             inherited == const IconThemeData.fallback()
         ? null
         : inherited;
