@@ -1,85 +1,34 @@
 # 引入公共可复用片段（见 .cnb/.reusable-stages.yml）
+# 完整的 CI pipeline 模板（sync + analyze / build apk / build web × flutter 3.32.0 & latest）
+# 都在该文件中定义，此处事件侧仅用 !reference 逐条引用，避免重复书写。
 include:
   - .cnb/.reusable-stages.yml
 
+# ================= 分支触发配置 =================
+# develop 分支 push：同步到 GitHub + 跑与 pull_request 一致的完整 CI
+develop:
+  push:
+    - !reference [.sync-to-github]
+    - !reference [.analyze-332]
+    - !reference [.analyze-latest]
+    - !reference [.build-apk-332]
+    - !reference [.build-apk-latest]
+    - !reference [.build-web-332]
+    - !reference [.build-web-latest]
+
 $:
   push:
-    # 导入密钥仓库文件为环境变量
-    - imports:
-        - https://cnb.cool/tencent/tdesign/tdesign-private/-/blob/main/cnb-envs.yml
-      stages:
-        - name: sync to github with rebase
-          image: tencentcom/git-sync
-          settings:
-            target_url: https://github.com/Tencent/tdesign-flutter.git
-            auth_type: https
-            username: ${GIT_USERNAME}
-            password: ${GIT_ACCESS_TOKEN}
+    # 其他分支 push：仅同步到 GitHub
+    - !reference [.sync-to-github]
 
   pull_request:
-    # 静态分析：flutter 多版本独立跑（不挂钩在 build）
-    - name: analyze (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.analyze]
-
-    - name: analyze (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.analyze]
-
-    # 构建 APK
-    - name: build apk (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.gradle:cow
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-apk]
-
-    - name: build apk (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.gradle:cow
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-apk]
-
-    # 构建 Web
-    - name: build web (flutter 3.32.0)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-web]
-
-    # 构建 Web（flutter latest）
-    - name: build web (flutter latest)
-      docker:
-        image: docker.cnb.cool/liweijie0812/docker/flutter-latest
-        volumes:
-          - /root/.pub-cache:cow
-      stages:
-        - !reference [.install-component]
-        - !reference [.install-example]
-        - !reference [.build-web]
+    # 静态分析 / 构建 APK / 构建 Web（flutter 3.32.0 与 latest 两个版本）
+    - !reference [.analyze-332]
+    - !reference [.analyze-latest]
+    - !reference [.build-apk-332]
+    - !reference [.build-apk-latest]
+    - !reference [.build-web-332]
+    - !reference [.build-web-latest]
 
   # 分支被删除时，自动关闭分支名中关联的 Issue（如 rss1102/cnb-issue-31/fix/xxx）
   # 注意：branch.delete 事件使用【默认分支】的最新代码和配置（被删分支已不存在）
@@ -108,9 +57,59 @@ $:
             state: close
           if: '[ -n "$ISSUE_REF" ]'
 
+  # 启动预览：仅预览模式打开分支 Flutter Web 预览。
+  # launch 仅启动镜像预装 nginx 常驻监听 8686（root=/usr/share/nginx/html）通过平台启动检测；
+  # 业务构建由下方 stages 完成，产物复制到 /usr/share/nginx/html 后 nginx 实时提供。
+  web_trigger_launch_preview:
+    - docker:
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env
+        volumes:
+          - /root/.pub-cache:cow
+          - .pnpm-store:cow
+      services:
+        - name: vscode
+          options:
+            onlyPreview: true
+            # 业务服务须监听 8686：launch 仅启动镜像预装 nginx 占住 8686 通过平台启动检测，
+            # 构建在下方 stages 中执行；daemon: true 让 nginx 前台常驻不阻塞。
+            launch: nginx
+            daemon: true
+            keepAliveTimeout: 30m
+      stages:
+        # 安装依赖（与 vscode 事件复用同一套 install 阶段）
+        - name: install component dependencies
+          script: cd tdesign-component && flutter pub get
+
+        - name: install example dependencies
+          script: cd tdesign-component/example && flutter pub get
+
+        - name: install site dependencies
+          script: cd tdesign-site && pnpm install
+
+        # 构建站点与 Flutter example Web 产物
+        - name: build site
+          script: cd tdesign-site && pnpm run site --mode=preview
+
+        - name: build flutter web
+          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
+
+        # 将产物嵌入 _site/flutter/example 后整体复制到 nginx 根目录，nginx 即时生效
+        - name: deploy to nginx root
+          script: |
+            set -eu
+            SITE_OUT=tdesign-site/_site
+            FLUTTER_DIR=tdesign-component/example
+            WEB_ROOT=/usr/share/nginx/html
+            mkdir -p "$SITE_OUT/flutter/example"
+            cp -R "$FLUTTER_DIR"/build/web/* "$SITE_OUT"/flutter/example/
+            cp -R "$SITE_OUT"/. "$WEB_ROOT"/
+
+  # 云原生开发：仅预览模式不支持 WebIDE，此事件进入标准 WebIDE 用于编辑代码
   vscode:
     - docker:
-        image: docker.cnb.cool/tencent/tdesign/default-dev-env:latest
+        image: docker.cnb.cool/tencent/tdesign/default-dev-env
+        volumes:
+          - /root/.pub-cache:cow
       services:
         - vscode
         - docker

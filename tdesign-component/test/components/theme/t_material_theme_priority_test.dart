@@ -109,14 +109,58 @@ void main() {
     );
   });
 
+  testWidgets('BuildContext 保留显式 ThemeData IconTheme', (tester) async {
+    late IconThemeData? inheritedIconTheme;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          iconTheme: const IconThemeData(size: 28, color: Colors.teal),
+          extensions: [TThemeData.defaultData()],
+        ),
+        home: Builder(
+          builder: (context) {
+            inheritedIconTheme = context.tExplicitIconTheme;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+
+    expect(inheritedIconTheme?.size, 28);
+    expect(inheritedIconTheme?.color, Colors.teal);
+  });
+
+  testWidgets('BuildContext 保留局部显式 IconTheme', (tester) async {
+    late IconThemeData? inheritedIconTheme;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: IconTheme(
+          data: const IconThemeData(size: 30, color: Colors.green),
+          child: Builder(
+            builder: (context) {
+              inheritedIconTheme = context.tExplicitIconTheme;
+              return const SizedBox();
+            },
+          ),
+        ),
+      ),
+    );
+
+    expect(inheritedIconTheme?.size, 30);
+    expect(inheritedIconTheme?.color, Colors.green);
+  });
+
   testWidgets('TThemeBuilder 的 Material 投影仍属于 Token 层', (tester) async {
     late ThemeData material;
+    late IconThemeData? inheritedIconTheme;
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()),
         home: Builder(
           builder: (context) {
             material = Theme.of(context);
+            inheritedIconTheme = context.tExplicitIconTheme;
             return const SizedBox();
           },
         ),
@@ -126,7 +170,23 @@ void main() {
     expect(material.tExplicitColorScheme, isNull);
     expect(material.tExplicitTextTheme, isNull);
     expect(material.tExplicitIconTheme, isNull);
+    expect(inheritedIconTheme, isNull);
     expect(material.tExplicitDividerColor, isNull);
+  });
+
+  testWidgets('Input 清除图标忽略隐式 IconTheme 并回退到 Token', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(token),
+        home: const Scaffold(body: TInput(initialValue: 'value')),
+      ),
+    );
+
+    final clearIcon = tester.widget<Icon>(
+      find.byIcon(TIcons.close_circle_filled),
+    );
+    expect(clearIcon.color, token.textColorPlaceholder);
   });
 
   testWidgets('Switch 保持几何且遵循 Component > Material > ColorScheme > Token', (
@@ -413,8 +473,9 @@ void main() {
     expect(cellTextStyle.style.color, customScheme.onSurface);
   });
 
-  testWidgets('success/warning 无唯一 Material 语义时使用 TDesign Token',
-      (tester) async {
+  testWidgets('success/warning 无唯一 Material 语义时使用 TDesign Token', (
+    tester,
+  ) async {
     final token = TThemeData.defaultData();
     late TNoticeBarThemeData noticeTheme;
     late TNoticeBarThemeData warningNoticeTheme;
@@ -422,10 +483,7 @@ void main() {
       MaterialApp(
         theme: ThemeData(
           colorScheme: customScheme,
-          extensions: [
-            token,
-            const TTagThemeData(isOutline: true),
-          ],
+          extensions: [token, const TTagThemeData(isOutline: true)],
         ),
         home: Scaffold(
           body: Column(
@@ -435,10 +493,7 @@ void main() {
                 onPressed: () {},
                 child: const Text('success link'),
               ),
-              const TTag(
-                'success tag',
-                colorScheme: TTagColorScheme.success,
-              ),
+              const TTag('success tag', colorScheme: TTagColorScheme.success),
               const TResult(
                 title: 'success result',
                 variant: TResultVariant.success,
@@ -448,10 +503,7 @@ void main() {
                 onPressed: () {},
                 child: const Text('warning link'),
               ),
-              const TTag(
-                'warning tag',
-                colorScheme: TTagColorScheme.warning,
-              ),
+              const TTag('warning tag', colorScheme: TTagColorScheme.warning),
               const TResult(
                 title: 'warning result',
                 variant: TResultVariant.warning,

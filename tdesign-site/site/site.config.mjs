@@ -16,14 +16,14 @@ export default {
           name: 'develop',
           meta: { docType: 'explain' },
           path: '/flutter/develop',
-          component: () => import('@/../CONTRIBUTING.md'),
+          component: () => import('../CONTRIBUTING.md'),
         },
         {
           title: '常见问题',
           name: 'faq',
           meta: { docType: 'explain' },
           path: '/flutter/faq',
-          component: () => import('@/../FAQ.md'),
+          component: () => import('../FAQ.md'),
         },
         // {
         //   title: '谁在用',
@@ -37,7 +37,7 @@ export default {
           name: 'changelog',
           meta: { docType: 'explain' },
           path: '/flutter/changelog',
-          component: () => import('@/../CHANGELOG.md'),
+          component: () => import('../CHANGELOG.md'),
         },
         // {
         //   title: '自定义主题',

@@ -1,68 +1,47 @@
 Widget _buildSwiperCell(BuildContext context) {
-    // 屏幕宽度
-    var screenWidth = MediaQuery.of(context).size.width;
-    final list = [
-      {'id': '1', 'title': '项目进度', 'note': '待处理', 'description': '今天完成设计评审'},
-      {
-        'id': '2',
-        'title': '迭代任务',
-        'note': '进行中',
-        'description': '实现 SwipeCell 的组件重构'
-      },
-      {'id': '3', 'title': '周报草稿', 'note': '未提交', 'description': '整理本周工作内容'},
-    ];
-    final cellLength = ValueNotifier<int>(list.length);
-    return ValueListenableBuilder(
-      valueListenable: cellLength,
-      builder: (BuildContext context, value, Widget? child) {
-        return TCellGroup(
-          cells: list
-              .map((e) => TCell(
-                  title: Text(e['title'] ?? ''),
-                  note: Text(e['note'] ?? ''),
-                  subtitle: Text(e['description'] ?? '')))
-              .toList(),
-          builder: (context, cell, index) {
-            return Theme(
-              data: Theme.of(context).mergeExtension(
-                const TSwipeCellThemeData(),
-              ),
-              child: TSwipeCell(
-                groupTag: 'cell-list',
-                closeWhenOpened: true,
-                onOpenChanged: (side, open) {
-                  print('打开方向：$side');
-                  print('打开转态$open');
-                },
-                end: TSwipeCellPanel(
-                  extentRatio: 140 / screenWidth,
-                  onDismissed: (context) {
-                    list.removeAt(index);
-                    cellLength.value = list.length;
-                  },
-                  children: [
-                    TSwipeCellAction(
-                      backgroundColor: context.tTheme.warningNormalColor,
-                      label: '编辑',
-                      onPressed: (_) {},
-                    ),
-                    TSwipeCellAction(
-                      backgroundColor: context.tTheme.errorNormalColor,
-                      label: '删除',
-                      onPressed: (context) {
-                        print('点击action');
-                        print(TSwipeCell.of(context));
-                        list.removeAt(index);
-                        cellLength.value = list.length;
-                      },
-                    ),
-                  ],
-                ),
-                child: cell,
-              ),
-            );
-          },
-        );
-      },
+    return Column(
+      children: [
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [_action(context, '删除', context.tTheme.errorNormalColor)],
+          ),
+          child: const TCell(title: Text('左滑单操作'), note: Text('辅助信息')),
+        ),
+        const SizedBox(height: 16),
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [_action(context, '删除', context.tTheme.errorNormalColor)],
+          ),
+          child: const TCell(
+            title: Text('左滑大列表'),
+            note: Text('辅助信息'),
+            subtitle: Text('一段很长很长的内容文字'),
+            image: CircleAvatar(
+              backgroundImage: AssetImage('assets/img/t_avatar_1.png'),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [
+              _action(context, '编辑', context.tTheme.warningNormalColor),
+              _action(context, '删除', context.tTheme.errorNormalColor),
+            ],
+          ),
+          child: const TCell(title: Text('左滑双操作'), note: Text('辅助信息')),
+        ),
+        const SizedBox(height: 16),
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [
+              _action(context, '收藏', context.tTheme.brandNormalColor),
+              _action(context, '编辑', context.tTheme.warningNormalColor),
+              _action(context, '删除', context.tTheme.errorNormalColor),
+            ],
+          ),
+          child: const TCell(title: Text('左滑多操作'), note: Text('辅助信息')),
+        ),
+      ],
     );
   }

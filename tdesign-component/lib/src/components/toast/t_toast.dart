@@ -8,7 +8,6 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
-import '../../util/auto_size.dart';
 import '../../util/context_extension.dart';
 import '../../util/t_toolbar_pressable.dart';
 import '../icon/t_icon.dart';
@@ -23,6 +22,48 @@ enum IconTextDirection {
 
   /// 竖向
   vertical,
+}
+
+/// Toast 展示位置
+enum TToastPlacement {
+  /// 顶部（距屏幕顶部 25%，水平居中）
+  top,
+
+  /// 居中（屏幕正中）
+  middle,
+
+  /// 底部（距屏幕底部 25%，水平居中）
+  bottom,
+}
+
+/// 蒙层行为配置
+///
+/// 统一收敛 Toast 展示期间遮罩层的各项行为：
+/// - [showOverlay]：是否显示可见半透明蒙层（与 [preventTap] 解耦，
+///   `true` 时展示半透明黑色蒙层遮住背景）；
+/// - [color] / [opacity]：蒙层颜色与透明度，`color` 为 null 时由
+///   `Colors.black.withValues(alpha: opacity)` 派生黑色蒙层；
+/// - [preventTap]：是否拦截背景点击（与蒙层是否可见解耦，
+///   `true` 时展示期间背景不可点击）。
+class TOverlayConfig {
+  /// 是否显示可见半透明蒙层（默认 false）。
+  final bool showOverlay;
+
+  /// 蒙层颜色；为 null 时由 [opacity] 派生黑色蒙层。
+  final Color? color;
+
+  /// 蒙层透明度（0~1，默认 0.2）。
+  final double opacity;
+
+  /// 是否拦截背景点击（默认 false）。
+  final bool preventTap;
+
+  const TOverlayConfig({
+    this.showOverlay = false,
+    this.color,
+    this.opacity = 0.2,
+    this.preventTap = false,
+  });
 }
 
 /// Toast实例管理类
@@ -99,8 +140,11 @@ class TToast {
     /// Toast 内容约束。
     BoxConstraints? constraints,
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// 自定义内容；传入后优先展示。
     Widget? customWidget,
@@ -128,7 +172,8 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -151,8 +196,11 @@ class TToast {
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -188,7 +236,8 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -208,8 +257,11 @@ class TToast {
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -235,7 +287,8 @@ class TToast {
       direction: direction,
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       backgroundColor: backgroundColor,
       maxLines: maxLines,
       textStyle: textStyle,
@@ -259,8 +312,11 @@ class TToast {
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -286,7 +342,8 @@ class TToast {
       direction: direction,
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       backgroundColor: backgroundColor,
       maxLines: maxLines,
       textStyle: textStyle,
@@ -310,8 +367,11 @@ class TToast {
     /// 自动关闭时长。
     Duration duration = const Duration(milliseconds: 2000),
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -337,7 +397,8 @@ class TToast {
       direction: direction,
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       backgroundColor: backgroundColor,
       maxLines: maxLines,
       textStyle: textStyle,
@@ -358,8 +419,11 @@ class TToast {
     /// 自动关闭时长。
     Duration duration = TToast.infiniteDuration,
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// 自定义加载内容；传入后优先展示。
     Widget? customWidget,
@@ -393,7 +457,8 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -407,8 +472,11 @@ class TToast {
     /// 自动关闭时长。
     Duration duration = TToast.infiniteDuration,
 
-    /// 是否阻止 Toast 展示期间的背景点击。
-    bool? preventTap,
+    /// 蒙层行为配置（可见遮罩、拦截点击等）。
+    TOverlayConfig? overlay,
+
+    /// Toast 展示位置。
+    TToastPlacement placement = TToastPlacement.middle,
 
     /// Toast 背景色。
     Color? backgroundColor,
@@ -433,7 +501,8 @@ class TToast {
       ),
       context: context,
       duration: duration,
-      preventTap: preventTap,
+      overlay: overlay,
+      placement: placement,
       toastId: id,
     );
     return id;
@@ -460,10 +529,11 @@ class TToast {
   }
 
   static void _showOverlay(
-    Widget? widget, {
+    Widget widget, {
     required BuildContext context,
     Duration duration = const Duration(milliseconds: 2000),
-    bool? preventTap,
+    TOverlayConfig? overlay,
+    TToastPlacement placement = TToastPlacement.middle,
     required String toastId,
   }) {
     // 不同 ID 的 Toast 可以并存；同 ID 采用替换语义。
@@ -478,25 +548,45 @@ class TToast {
       to: overlayState.context,
     );
 
+    final cfg = overlay ?? const TOverlayConfig();
+    // 拦截点击统一由 TOverlayConfig.preventTap 决定（不兼容收敛版）。
+    final finalPreventTap = cfg.preventTap;
+    final showMask = cfg.showOverlay;
+    final maskColor = showMask
+        ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
+        : Colors.transparent;
+    // 采用与小程序 / mobile-vue 一致的垂直百分比偏移（水平恒居中）：
+    // top 距顶 25%、middle 正中 50%、bottom 距底 25%。
+    // 百分比定位天然避让安全区，无需再叠加 SafeArea。
+    final alignment = switch (placement) {
+      TToastPlacement.top => const FractionalOffset(0.5, 0.25),
+      TToastPlacement.middle => const FractionalOffset(0.5, 0.5),
+      TToastPlacement.bottom => const FractionalOffset(0.5, 0.75),
+    };
+
     OverlayEntry overlayEntry;
-    if (preventTap ?? false) {
+    if (finalPreventTap || showMask) {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
-          Positioned(
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            child: Container(
-              color: Colors.transparent,
-              child: Align(alignment: Alignment.center, child: widget),
-            ),
+          Stack(
+            children: [
+              Positioned.fill(child: Container(color: maskColor)),
+              Align(
+                alignment: alignment,
+                child: widget,
+              ),
+            ],
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(Center(child: widget)),
+        builder: (BuildContext context) => captured.wrap(
+          Align(
+            alignment: alignment,
+            child: widget,
+          ),
+        ),
       );
     }
 
@@ -545,12 +635,12 @@ class _TIconTextToast extends StatelessWidget {
             .merge(config);
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: toastTheme.maxWidth ?? 191,
+        maxWidth: toastTheme.maxWidth ?? 185,
         maxHeight: 94,
       ),
       child: Container(
         padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 14, 24, 14),
+            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
@@ -647,15 +737,16 @@ class _TToastLoading extends StatelessWidget {
         (Theme.of(context).extension<TToastThemeData>() ??
                 const TToastThemeData())
             .merge(config);
-    final maxWidth = math.max(110.0, toastTheme.maxWidth ?? 191.0);
+    final maxWidth = math.max(102.0, toastTheme.maxWidth ?? 185.0);
     return ConstrainedBox(
       constraints: BoxConstraints(
-        minWidth: 110,
-        minHeight: 110,
+        minWidth: 102,
+        minHeight: 102,
         maxWidth: maxWidth,
       ),
       child: Container(
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        padding:
+            toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
@@ -747,10 +838,10 @@ class _TTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints:
           constraints ??
-          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 191.scale),
+          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
         padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(24, 16, 24, 16),
+            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGyColor2,
           borderRadius: BorderRadius.circular(
