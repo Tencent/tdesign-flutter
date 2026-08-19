@@ -245,8 +245,18 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
       variant: TLinkVariant.icon,
       size: size,
       suffixIcon: Icon(TIcons.jump,
-          size: 16, color: context.tTheme.brandNormalColor),
+          size: _sizeLinkIconSize(size),
+          color: context.tTheme.brandNormalColor),
       onPressed: _onLinkPressed,
     );
+  }
+
+  /// 链接尺寸对应的图标大小，与组件默认图标尺寸对齐（S=14 / M=16 / L=18）
+  double _sizeLinkIconSize(TLinkSize size) {
+    return switch (size) {
+      TLinkSize.small => 14,
+      TLinkSize.medium => 16,
+      TLinkSize.large => 18,
+    };
   }
 }

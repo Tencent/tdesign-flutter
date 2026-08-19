@@ -57,13 +57,14 @@ h5（tdesign-mobile-vue）`TdLinkProps` 提供 `hover`（是否开启点击反�
   - 同时传 `prefixIcon` 与 `suffixIcon`：前后图标都展示。
   - 两者都不传：保持默认展示 链接图标 + 跳转图标（既有行为不变）。
 - 文案对齐 h5：链接尺寸示例展示「S/M/L 跳转链接」。
+- 链接尺寸示例中，后缀跳转图标大小跟随 `TLinkSize` 变化（S=14 / M=16 / L=18），与组件默认图标尺寸对齐。
 - 图标颜色跟随链接语义色；禁用态下图标使用禁用色。
 
 ## 验收标准
 
 - [ ] 示例页「组件类型」含：基础、下划线、前置图标、后置图标四个示例。
 - [ ] 「不同主题」「禁用状态」示例展示带后缀跳转图标的链接。
-- [ ] 「链接尺寸」示例展示带后缀跳转图标的 S/M/L 跳转链接。
+- [ ] 「链接尺寸」示例展示带后缀跳转图标的 S/M/L 跳转链接，且图标大小跟随尺寸（S=14 / M=16 / L=18）。
 - [ ] 仅传 `suffixIcon` 时，`find.byIcon(TIcons.link)` 为 `findsNothing`。
 - [ ] `hover: true`（默认）时存在 `InkWell`；`hover: false` 时不存在 `InkWell` 但仍可点击（`T07b`/`T07c`/`T07d` 用例覆盖）。
 - [ ] `flutter analyze` 0 error / 0 warning。
