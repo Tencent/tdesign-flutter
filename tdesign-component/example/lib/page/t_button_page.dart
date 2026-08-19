@@ -68,7 +68,7 @@ class _TButtonPageState extends State<TButtonPage> {
                     runSpacing: 16, // 交叉轴方向间距
                     children: [
                       CodeWrapper(builder: _buildRectangleIconButton),
-                      CodeWrapper(builder: _buildSquareIconButton),
+                      CodeWrapper(builder: _buildRoundIconButton),
                       CodeWrapper(builder: _buildLoadingIconButton)
                     ],
                   ),
@@ -627,6 +627,21 @@ class _TButtonPageState extends State<TButtonPage> {
     return _withButtonShape(
       context,
       TButtonShape.square,
+      TButton(
+        icon: const Icon(TIcons.app),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'button')
+  Widget _buildRoundIconButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.round,
       TButton(
         icon: const Icon(TIcons.app),
         size: TButtonSize.large,
