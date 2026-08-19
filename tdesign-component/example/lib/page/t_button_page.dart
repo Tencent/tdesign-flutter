@@ -98,7 +98,12 @@ class _TButtonPageState extends State<TButtonPage> {
               ignoreCode: true,
               desc: '组合按钮',
               builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
-          ExampleItem(desc: '通栏按钮', builder: _buildBlockFillButton),
+          ExampleItem(
+              desc: '通栏按钮',
+              builder: (context) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildBlockFillButton(context),
+              )),
         ]),
         ExampleModule(title: '组件状态', children: [
           ExampleItem(
@@ -150,9 +155,8 @@ class _TButtonPageState extends State<TButtonPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Wrap(
-                        spacing: 16,
-                        runSpacing: 16,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CodeWrapper(builder: _buildRectangleShapeButton),
                           CodeWrapper(builder: _buildSquareIconButton),
