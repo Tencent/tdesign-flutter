@@ -1,0 +1,4 @@
+Widget _buildMaxLength(BuildContext context) => const TFormItem(
+    label: '标签文字',
+    child: TTextarea(hintText: '设置最大字符个数', maxLength: 200, indicator: true),
+  );

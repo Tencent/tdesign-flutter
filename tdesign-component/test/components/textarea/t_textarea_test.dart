@@ -15,13 +15,18 @@ void main() {
     );
   }
 
-  testWidgets('TInput.multiline uses multiline defaults and callbacks',
-      (tester) async {
+  testWidgets('TInput.multiline uses multiline defaults and callbacks', (
+    tester,
+  ) async {
     String? changed;
-    await tester.pumpWidget(wrap(TInput.multiline(
-      initialValue: 'line',
-      onChanged: (value) => changed = value,
-    )));
+    await tester.pumpWidget(
+      wrap(
+        TInput.multiline(
+          initialValue: 'line',
+          onChanged: (value) => changed = value,
+        ),
+      ),
+    );
     final field = tester.widget<TextField>(find.byType(TextField));
     expect(field.maxLines, isNull);
     expect(field.minLines, 4);
@@ -30,36 +35,47 @@ void main() {
     expect(changed, 'updated');
   });
 
-  testWidgets('TTextarea delegates every public option to TInput.multiline',
-      (tester) async {
+  testWidgets('TTextarea delegates every public option to TInput.multiline', (
+    tester,
+  ) async {
     final controller = TextEditingController(text: 'initial');
     final focusNode = FocusNode();
-    await tester.pumpWidget(wrap(TTextarea(
-      controller: controller,
-      enabled: true,
-      readOnly: true,
-      label: 'label',
-      hintText: 'hint',
-      prefix: const Icon(Icons.search),
-      suffix: const Icon(Icons.info),
-      maxLines: 8,
-      minLines: 2,
-      maxLength: 50,
-      autofocus: true,
-      focusNode: focusNode,
-      inputType: TextInputType.multiline,
-      inputAction: TextInputAction.newline,
-      textAlign: TextAlign.center,
-      inputFormatters: [LengthLimitingTextInputFormatter(20)],
-      decoration: const InputDecoration(helperText: 'helper'),
-    )));
+    await tester.pumpWidget(
+      wrap(
+        TTextarea(
+          controller: controller,
+          enabled: true,
+          readOnly: true,
+          hintText: 'hint',
+          prefix: const Icon(Icons.search),
+          suffix: const Icon(Icons.info),
+          maxLines: 8,
+          minLines: 2,
+          maxLength: 50,
+          autofocus: true,
+          focusNode: focusNode,
+          inputType: TextInputType.multiline,
+          inputAction: TextInputAction.newline,
+          textAlign: TextAlign.center,
+          inputFormatters: [LengthLimitingTextInputFormatter(20)],
+          decoration: const InputDecoration(
+            labelText: 'label',
+            helperText: 'helper',
+          ),
+        ),
+      ),
+    );
 
     final field = tester.widget<TextField>(find.byType(TextField));
     expect(field.controller, same(controller));
     expect(field.readOnly, isTrue);
     expect(field.maxLines, 8);
     expect(field.minLines, 2);
-    expect(field.maxLength, 50);
+    expect(field.maxLength, isNull);
+    expect(
+      field.inputFormatters,
+      contains(isA<LengthLimitingTextInputFormatter>()),
+    );
     expect(field.autofocus, isTrue);
     expect(field.focusNode, same(focusNode));
     expect(field.textInputAction, TextInputAction.newline);
@@ -74,29 +90,36 @@ void main() {
 
   testWidgets('TTextarea preserves explicit decoration fill', (tester) async {
     const fillColor = Color(0xFFE5E5E5);
-    await tester.pumpWidget(wrap(const TTextarea(
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: fillColor,
+    await tester.pumpWidget(
+      wrap(
+        const TTextarea(
+          decoration: InputDecoration(filled: true, fillColor: fillColor),
+        ),
       ),
-    )));
+    );
 
-    final decoration =
-        tester.widget<TextField>(find.byType(TextField)).decoration;
+    final decoration = tester
+        .widget<TextField>(find.byType(TextField))
+        .decoration;
     expect(decoration?.filled, isTrue);
     expect(decoration?.fillColor, fillColor);
   });
 
-  testWidgets('TTextarea forwards submission and editing completion',
-      (tester) async {
+  testWidgets('TTextarea forwards submission and editing completion', (
+    tester,
+  ) async {
     String? submitted;
     var completed = false;
-    await tester.pumpWidget(wrap(TTextarea(
-      initialValue: 'text',
-      inputAction: TextInputAction.done,
-      onSubmitted: (value) => submitted = value,
-      onEditingComplete: () => completed = true,
-    )));
+    await tester.pumpWidget(
+      wrap(
+        TTextarea(
+          initialValue: 'text',
+          inputAction: TextInputAction.done,
+          onSubmitted: (value) => submitted = value,
+          onEditingComplete: () => completed = true,
+        ),
+      ),
+    );
     await tester.tap(find.byType(TextField));
     await tester.pump();
     await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -105,11 +128,38 @@ void main() {
   });
 
   testWidgets('multiline minimum rows can come from theme', (tester) async {
-    await tester.pumpWidget(wrap(
-      const TTextarea(),
-      inputTheme: const TInputThemeData(multilineMinLines: 6),
-    ));
+    await tester.pumpWidget(
+      wrap(
+        const TTextarea(),
+        inputTheme: const TInputThemeData(multilineMinLines: 6),
+      ),
+    );
     expect(tester.widget<TextField>(find.byType(TextField)).minLines, 6);
+  });
+
+  testWidgets('bordered, indicator and maxCharacter map to TInput shell', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTextarea(
+          initialValue: 'a中',
+          bordered: true,
+          maxCharacter: 8,
+          indicator: true,
+        ),
+      ),
+    );
+
+    expect(find.text('3/8'), findsOneWidget);
+    final shell = tester
+        .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+        .first;
+    expect((shell.decoration as BoxDecoration).border, isNotNull);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).inputFormatters,
+      contains(isNot(isA<LengthLimitingTextInputFormatter>())),
+    );
   });
 
   test('TTextarea rejects controller with initialValue', () {

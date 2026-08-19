@@ -3,32 +3,10 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
+import 't_field_scope.dart';
 import 't_form.dart';
+import 't_form_item_scope.dart';
 import 't_form_theme_data.dart';
-
-/// 表单项子树中的错误展示状态。
-///
-/// 基础输入组件使用它避免与 [TFormItem] 重复渲染同一条错误文案。
-class TFormItemScope extends InheritedWidget {
-  const TFormItemScope({
-    super.key,
-    required this.presentsError,
-    required super.child,
-  });
-
-  /// 当前表单项是否负责展示错误文案。
-  final bool presentsError;
-
-  /// 读取最近的表单项状态。
-  static TFormItemScope? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TFormItemScope>();
-  }
-
-  @override
-  bool updateShouldNotify(TFormItemScope oldWidget) {
-    return presentsError != oldWidget.presentsError;
-  }
-}
 
 /// 表单项的标签和字段布局容器。
 class TFormItem extends StatelessWidget {
@@ -57,8 +35,14 @@ class TFormItem extends StatelessWidget {
     /// 标签区域宽度；为空时读取 [TFormThemeData.labelWidth]。
     this.labelWidth,
 
+    /// 标签文本对齐方式；为空时读取 [TFormThemeData.labelAlign]。
+    this.labelAlign,
+
     /// 标签末尾的额外内容。
     this.extra,
+
+    /// 是否展示继承的校验错误。
+    this.showErrorMessage = true,
   });
 
   /// 字段内容。
@@ -79,8 +63,14 @@ class TFormItem extends StatelessWidget {
   /// 标签区域宽度。
   final double? labelWidth;
 
+  /// 标签文本对齐方式。
+  final TextAlign? labelAlign;
+
   /// 标签末尾的额外内容。
   final Widget? extra;
+
+  /// 是否展示从 [TFormField] 继承的校验错误。
+  final bool showErrorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -89,97 +79,125 @@ class TFormItem extends StatelessWidget {
     final defaultTextStyle = context.tExplicitDefaultTextStyle;
     final textTheme = materialTheme.tExplicitTextTheme;
     final token = context.tTheme;
-    final fieldScope = TFormFieldScope.maybeOf(context);
-    final inheritedErrorText = fieldScope?.errorText;
+    final fieldScope = TFieldScope.maybeOf(context);
+    final inheritedErrorText = showErrorMessage ? fieldScope?.errorText : null;
     final effectiveErrorText = errorText ?? inheritedErrorText;
     final effectiveRequired = required ?? fieldScope?.required ?? false;
     final layout = theme?.layout ?? TFormLayout.horizontal;
     final effectiveLabelWidth = labelWidth ?? theme?.labelWidth ?? 96;
+    final effectiveLabelAlign =
+        labelAlign ?? theme?.labelAlign ?? TextAlign.start;
+    final labelAlignment = switch (effectiveLabelAlign) {
+      TextAlign.start || TextAlign.left => AlignmentDirectional.centerStart,
+      TextAlign.center => AlignmentDirectional.center,
+      _ => AlignmentDirectional.centerEnd,
+    };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
-    final labelFont = token.fontBodyMedium;
-    final labelStyle = TextStyle(
-      color: token.textColorPrimary,
-      fontSize: labelFont?.size,
-      height: labelFont?.height,
-      fontWeight: labelFont?.fontWeight,
-    )
-        .merge(textTheme?.bodyMedium)
-        .merge(defaultTextStyle)
-        .merge(theme?.labelStyle);
-    final helpFont = token.fontBodySmall;
-    final helpStyle = theme?.helpStyle ??
+    final labelFont = token.fontBodyLarge;
+    final labelStyle =
         TextStyle(
-          color: token.textColorSecondary,
+              color: token.textColorPrimary,
+              fontSize: labelFont?.size,
+              height: labelFont?.height,
+              fontWeight: labelFont?.fontWeight,
+            )
+            .merge(textTheme?.bodyMedium)
+            .merge(defaultTextStyle)
+            .merge(theme?.labelStyle);
+    final helpFont = token.fontBodySmall;
+    final helpStyle =
+        theme?.helpStyle ??
+        TextStyle(
+          color: token.textColorPlaceholder,
           fontSize: helpFont?.size,
           height: helpFont?.height,
           fontWeight: helpFont?.fontWeight,
         ).merge(textTheme?.bodySmall).merge(defaultTextStyle);
-    final errorStyle = theme?.errorStyle ??
+    final errorStyle =
+        theme?.errorStyle ??
         TextStyle(
-          color: token.errorNormalColor,
-          fontSize: helpFont?.size,
-          height: helpFont?.height,
-          fontWeight: helpFont?.fontWeight,
-        )
+              color: token.errorNormalColor,
+              fontSize: helpFont?.size,
+              height: helpFont?.height,
+              fontWeight: helpFont?.fontWeight,
+            )
             .merge(textTheme?.bodySmall)
             .merge(materialTheme.inputDecorationTheme.errorStyle)
             .merge(defaultTextStyle);
     final labelWidget = label == null
         ? null
-        : Text(
-            labelText,
-            textAlign: theme?.labelAlign,
-            style: labelStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          );
+        : Text(labelText, textAlign: effectiveLabelAlign, style: labelStyle);
+    final requiredMark = effectiveRequired
+        ? Text(
+            '*',
+            style:
+                theme?.requiredMarkStyle ??
+                TextStyle(color: context.tTheme.errorNormalColor),
+          )
+        : null;
     final markedLabel = labelWidget == null
         ? null
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if ((theme?.requiredMarkPosition ??
+                      TFormRequiredMarkPosition.left) ==
+                  TFormRequiredMarkPosition.left) ...[
+                if (requiredMark != null) requiredMark,
+                if (requiredMark != null) const SizedBox(width: 2),
+              ],
               Flexible(child: labelWidget),
-              if (effectiveRequired)
-                Text(
-                  '*',
-                  style: theme?.requiredMarkStyle ??
-                      TextStyle(color: context.tTheme.errorNormalColor),
-                ),
+              if ((theme?.requiredMarkPosition ??
+                      TFormRequiredMarkPosition.left) ==
+                  TFormRequiredMarkPosition.right) ...[
+                if (requiredMark != null) const SizedBox(width: 2),
+                if (requiredMark != null) requiredMark,
+              ],
             ],
           );
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TFormItemScope(
-          presentsError: effectiveErrorText != null,
-          child: child,
+          child: TFieldScope(
+            required: effectiveRequired,
+            errorText: effectiveErrorText,
+            showErrorInInput: false,
+            child: child,
+          ),
         ),
         if (effectiveErrorText != null) ...[
           SizedBox(height: theme?.messageGap ?? 4),
-          Text(
-            effectiveErrorText,
-            style: errorStyle,
-          ),
+          Text(effectiveErrorText, style: errorStyle),
         ] else if (help != null) ...[
           SizedBox(height: theme?.messageGap ?? 4),
-          Text(
-            help!,
-            style: helpStyle,
-          ),
+          Text(help!, style: helpStyle),
         ],
       ],
     );
 
     return Container(
-      color: theme?.backgroundColor,
-      padding: theme?.itemPadding ?? const EdgeInsets.symmetric(vertical: 8),
+      color: theme?.backgroundColor ?? token.bgColorContainer,
+      foregroundDecoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: theme?.borderColor ?? token.componentStrokeColor,
+          ),
+        ),
+      ),
+      padding:
+          theme?.itemPadding ??
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       margin: EdgeInsets.only(bottom: theme?.itemSpacing ?? 0),
       child: layout == TFormLayout.horizontal
           ? Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (markedLabel != null)
-                  SizedBox(width: effectiveLabelWidth, child: markedLabel),
+                  SizedBox(
+                    width: effectiveLabelWidth,
+                    child: Align(alignment: labelAlignment, child: markedLabel),
+                  ),
                 Expanded(child: content),
                 if (extra != null) extra!,
               ],

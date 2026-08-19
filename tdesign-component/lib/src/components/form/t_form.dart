@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 't_field_scope.dart';
+
 /// TDesign 表单容器。
 ///
 /// 校验和字段生命周期委托给 Flutter [Form] 与 [FormState]。
@@ -57,16 +59,34 @@ class TFormState extends State<TForm> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, Object?> _values = {};
   final Map<String, Object> _fieldOwners = {};
+  final Map<String, bool Function()> _validateCallbacks = {};
+  final Map<String, VoidCallback> _clearValidateCallbacks = {};
+  final Map<String, String> _externalErrors = {};
   bool _hasSubmitted = false;
+  int _validationVersion = 0;
 
   /// 当前字段值的只读快照。
   Map<String, Object?> get values => Map.unmodifiable(_values);
 
-  /// 运行所有字段校验。
-  bool validate() {
-    final valid = _formKey.currentState?.validate() ?? false;
+  /// 运行表单字段校验。
+  ///
+  /// [fields] 为空时校验所有已注册字段；传入字段名后只校验指定字段。
+  bool validate({Iterable<String>? fields}) {
+    final valid = fields == null
+        ? _formKey.currentState?.validate() ?? false
+        : _validateFields(fields);
     if (!_hasSubmitted) {
       setState(() => _hasSubmitted = true);
+    }
+    return valid;
+  }
+
+  bool _validateFields(Iterable<String> fields) {
+    var valid = true;
+    for (final name in fields) {
+      if (!(_validateCallbacks[name]?.call() ?? true)) {
+        valid = false;
+      }
     }
     return valid;
   }
@@ -81,14 +101,61 @@ class TFormState extends State<TForm> {
     return valid;
   }
 
-  /// 重置 Flutter 字段的交互和校验状态。
+  /// 重置 Flutter 字段的交互和校验状态，并清除外部错误。
   ///
   /// 字段值由业务受控状态所有；调用方应自行恢复 [TFormField.value]。
   void reset() {
-    _formKey.currentState?.reset();
+    for (final clearValidate in _clearValidateCallbacks.values) {
+      clearValidate();
+    }
+    _externalErrors.clear();
+    _validationVersion++;
     if (_hasSubmitted) {
       setState(() => _hasSubmitted = false);
+    } else {
+      setState(() {});
     }
+  }
+
+  /// 清除全部或指定字段的校验状态。
+  ///
+  /// 同时清除通过 [setValidateMessage] 注入的外部错误。
+  void clearValidate({Iterable<String>? fields}) {
+    final names = fields?.toSet();
+    final callbacks = names == null
+        ? _clearValidateCallbacks.entries
+        : _clearValidateCallbacks.entries.where(
+            (entry) => names.contains(entry.key),
+          );
+    for (final entry in callbacks) {
+      entry.value();
+    }
+    if (names == null) {
+      _externalErrors.clear();
+    } else {
+      for (final name in names) {
+        _externalErrors.remove(name);
+      }
+    }
+    _validationVersion++;
+    setState(() {});
+  }
+
+  /// 设置字段的外部校验错误。
+  ///
+  /// 常用于服务端校验。传入 `null` 的字段会清除对应外部错误；外部错误
+  /// 会覆盖字段本地校验错误，直到调用 [clearValidate] 或再次设置。
+  void setValidateMessage(Map<String, String?> messages) {
+    for (final entry in messages.entries) {
+      final message = entry.value;
+      if (message == null || message.isEmpty) {
+        _externalErrors.remove(entry.key);
+      } else {
+        _externalErrors[entry.key] = message;
+      }
+    }
+    _validationVersion++;
+    setState(() {});
   }
 
   AutovalidateMode get _effectiveAutovalidateMode {
@@ -112,6 +179,18 @@ class TFormState extends State<TForm> {
     _values[name] = value;
   }
 
+  void _registerFieldActions(
+    String name,
+    Object owner, {
+    required bool Function() validate,
+    required VoidCallback clearValidate,
+  }) {
+    if (identical(_fieldOwners[name], owner)) {
+      _validateCallbacks[name] = validate;
+      _clearValidateCallbacks[name] = clearValidate;
+    }
+  }
+
   void _setValue(String name, Object owner, Object? value) {
     if (identical(_fieldOwners[name], owner)) {
       _values[name] = value;
@@ -122,8 +201,12 @@ class TFormState extends State<TForm> {
     if (identical(_fieldOwners[name], owner)) {
       _fieldOwners.remove(name);
       _values.remove(name);
+      _validateCallbacks.remove(name);
+      _clearValidateCallbacks.remove(name);
     }
   }
+
+  String? _externalError(String name) => _externalErrors[name];
 
   @override
   void initState() {
@@ -152,6 +235,7 @@ class TFormState extends State<TForm> {
       state: this,
       showErrorMessage: widget.showErrorMessage,
       autovalidateMode: _effectiveAutovalidateMode,
+      validationVersion: _validationVersion,
       child: Form(
         key: _formKey,
         autovalidateMode: _effectiveAutovalidateMode,
@@ -169,14 +253,23 @@ class TFormController {
   /// 当前字段值的只读快照。
   Map<String, Object?> get values => _state?.values ?? const {};
 
-  /// 运行所有字段校验。
-  bool validate() => _state?.validate() ?? false;
+  /// 运行表单字段校验。
+  bool validate({Iterable<String>? fields}) =>
+      _state?.validate(fields: fields) ?? false;
 
   /// 校验并提交表单。
   bool submit() => _state?.submit() ?? false;
 
   /// 重置表单。
   void reset() => _state?.reset();
+
+  /// 清除全部或指定字段的校验状态。
+  void clearValidate({Iterable<String>? fields}) =>
+      _state?.clearValidate(fields: fields);
+
+  /// 设置字段的外部校验错误。
+  void setValidateMessage(Map<String, String?> messages) =>
+      _state?.setValidateMessage(messages);
 
   void _attach(TFormState state) => _state = state;
 
@@ -192,12 +285,14 @@ class _TFormScope extends InheritedWidget {
     required this.state,
     required this.showErrorMessage,
     required this.autovalidateMode,
+    required this.validationVersion,
     required super.child,
   });
 
   final TFormState state;
   final bool showErrorMessage;
   final AutovalidateMode autovalidateMode;
+  final int validationVersion;
 
   static _TFormScope? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_TFormScope>();
@@ -206,36 +301,8 @@ class _TFormScope extends InheritedWidget {
   @override
   bool updateShouldNotify(_TFormScope oldWidget) {
     return showErrorMessage != oldWidget.showErrorMessage ||
-        autovalidateMode != oldWidget.autovalidateMode;
-  }
-}
-
-/// 字段 builder 子树中的当前表单状态。
-///
-/// 这是 Form 与基础输入组件之间的内部桥接；应用代码通常只需使用
-/// [TFormField] builder 的 `errorText` 参数，或让表单项自动展示错误。
-class TFormFieldScope extends InheritedWidget {
-  const TFormFieldScope({
-    super.key,
-    required this.required,
-    required this.errorText,
-    required super.child,
-  });
-
-  /// 当前字段是否为必填。
-  final bool required;
-
-  /// 当前字段的校验错误；全局关闭错误展示时为 null。
-  final String? errorText;
-
-  /// 读取最近的字段状态。
-  static TFormFieldScope? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TFormFieldScope>();
-  }
-
-  @override
-  bool updateShouldNotify(TFormFieldScope oldWidget) {
-    return required != oldWidget.required || errorText != oldWidget.errorText;
+        autovalidateMode != oldWidget.autovalidateMode ||
+        validationVersion != oldWidget.validationVersion;
   }
 }
 
@@ -245,12 +312,13 @@ class TFormFieldScope extends InheritedWidget {
 typedef TFormRule<T> = FormFieldValidator<T>;
 
 /// TDesign 字段 builder。
-typedef TFormFieldBuilder<T> = Widget Function(
-  BuildContext context,
-  T value,
-  ValueChanged<T>? onChanged,
-  String? errorText,
-);
+typedef TFormFieldBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      T value,
+      ValueChanged<T>? onChanged,
+      String? errorText,
+    );
 
 /// 将严格受控组件接入 Flutter [FormField] 的字段桥接组件。
 class TFormField<T> extends StatefulWidget {
@@ -384,6 +452,10 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
   }
 
   String? _validate(T? value) {
+    final externalError = _scope?.state._externalError(widget.name);
+    if (externalError != null) {
+      return externalError;
+    }
     if (widget.required && _isRequiredEmpty(value)) {
       return widget.requiredMessage;
     }
@@ -422,9 +494,16 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
       onSaved: widget.onSaved,
       autovalidateMode: widget.autovalidateMode ?? _scope?.autovalidateMode,
       builder: (field) {
-        final errorText =
-            _scope?.showErrorMessage ?? true ? field.errorText : null;
-        return TFormFieldScope(
+        final errorText = _scope?.showErrorMessage ?? true
+            ? _scope?.state._externalError(widget.name) ?? field.errorText
+            : null;
+        _scope?.state._registerFieldActions(
+          widget.name,
+          this,
+          validate: () => field.validate(),
+          clearValidate: field.reset,
+        );
+        return TFieldScope(
           required: widget.required,
           errorText: errorText,
           child: widget.builder(

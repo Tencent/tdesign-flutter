@@ -1,0 +1,17 @@
+Widget _buildCard(BuildContext context) => Padding(
+    padding: const EdgeInsets.all(16),
+    child: Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TInputThemeData(borderRadius: 12)),
+      child: const TFormItem(
+        label: '标签文字',
+        child: TTextarea(
+          hintText: '请输入文字',
+          bordered: true,
+          maxLength: 500,
+          indicator: true,
+        ),
+      ),
+    ),
+  );

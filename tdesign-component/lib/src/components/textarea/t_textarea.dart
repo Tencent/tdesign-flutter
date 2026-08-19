@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../input/t_input.dart';
+import '../input/t_input_types.dart';
 
 /// [TInput.multiline] 的语义别名。
 class TTextarea extends StatelessWidget {
@@ -29,9 +30,6 @@ class TTextarea extends StatelessWidget {
     /// 是否只读。
     this.readOnly = false,
 
-    /// 标签文案。
-    this.label,
-
     /// 占位提示文案。
     this.hintText,
 
@@ -41,6 +39,15 @@ class TTextarea extends StatelessWidget {
     /// 后缀组件。
     this.suffix,
 
+    /// 清除按钮显示模式；未传时读取 `TInputThemeData.clearButtonMode`。
+    this.clearButtonMode,
+
+    /// 输入框语义状态。
+    this.status = TInputStatus.normal,
+
+    /// 是否显示外边框。
+    this.bordered = false,
+
     /// 最大行数；null 表示不限制。
     this.maxLines,
 
@@ -49,6 +56,12 @@ class TTextarea extends StatelessWidget {
 
     /// 最大字符数。
     this.maxLength,
+
+    /// 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。
+    this.maxCharacter,
+
+    /// 是否显示当前字符计数。
+    this.indicator = false,
 
     /// 是否自动聚焦。
     this.autofocus = false,
@@ -70,7 +83,10 @@ class TTextarea extends StatelessWidget {
 
     /// Material 输入装饰逃逸口。
     this.decoration,
-  }) : assert(controller == null || initialValue == null);
+  }) : assert(controller == null || initialValue == null),
+       assert(maxLength == null || maxCharacter == null),
+       assert(maxLength == null || maxLength >= 0),
+       assert(maxCharacter == null || maxCharacter >= 0);
 
   /// 文本控制器。
   final TextEditingController? controller;
@@ -93,9 +109,6 @@ class TTextarea extends StatelessWidget {
   /// 是否只读。
   final bool readOnly;
 
-  /// 标签文案。
-  final String? label;
-
   /// 占位提示文案。
   final String? hintText;
 
@@ -105,6 +118,15 @@ class TTextarea extends StatelessWidget {
   /// 后缀组件。
   final Widget? suffix;
 
+  /// 清除按钮显示模式。
+  final TInputClearButtonMode? clearButtonMode;
+
+  /// 输入框语义状态。
+  final TInputStatus status;
+
+  /// 是否显示外边框。
+  final bool bordered;
+
   /// 最大行数；null 表示不限制。
   final int? maxLines;
 
@@ -113,6 +135,12 @@ class TTextarea extends StatelessWidget {
 
   /// 最大字符数。
   final int? maxLength;
+
+  /// 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。
+  final int? maxCharacter;
+
+  /// 是否显示当前字符计数。
+  final bool indicator;
 
   /// 是否自动聚焦。
   final bool autofocus;
@@ -145,13 +173,17 @@ class TTextarea extends StatelessWidget {
       onEditingComplete: onEditingComplete,
       enabled: enabled,
       readOnly: readOnly,
-      label: label,
       hintText: hintText,
       prefix: prefix,
       suffix: suffix,
+      clearButtonMode: clearButtonMode,
+      status: status,
+      borderless: !bordered,
       maxLines: maxLines,
       minLines: minLines,
       maxLength: maxLength,
+      maxCharacter: maxCharacter,
+      indicator: indicator,
       autofocus: autofocus,
       focusNode: focusNode,
       inputType: inputType,

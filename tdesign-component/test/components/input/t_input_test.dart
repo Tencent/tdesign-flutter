@@ -96,7 +96,6 @@ void main() {
       await tester.pumpWidget(
         wrap(
           TInput(
-            label: 'label',
             hintText: 'property hint',
             prefix: const Icon(Icons.search),
             suffix: const Icon(Icons.info),
@@ -105,7 +104,7 @@ void main() {
             inputType: TextInputType.emailAddress,
             textAlign: TextAlign.center,
             inputFormatters: [LengthLimitingTextInputFormatter(5)],
-            decoration: base,
+            decoration: base.copyWith(labelText: 'label'),
           ),
         ),
       );
@@ -116,7 +115,11 @@ void main() {
       expect(textField.decoration?.helperText, 'helper');
       expect(textField.decoration?.filled, isFalse);
       expect(textField.decoration?.fillColor, Colors.transparent);
-      expect(textField.maxLength, 20);
+      expect(textField.maxLength, isNull);
+      expect(
+        textField.inputFormatters,
+        contains(isA<LengthLimitingTextInputFormatter>()),
+      );
       expect(textField.autofocus, isTrue);
       expect(textField.keyboardType, TextInputType.emailAddress);
       expect(textField.textAlign, TextAlign.center);
@@ -166,6 +169,50 @@ void main() {
       expect(decoration?.hintMaxLines, 1);
     });
 
+    testWidgets('文本和提示词遵循 TDesign 状态颜色', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(wrap(const TInput(hintText: 'hint')));
+
+      expect(field(tester).style?.color, token.textColorPrimary);
+      expect(
+        field(tester).decoration?.hintStyle?.color,
+        token.textColorPlaceholder,
+      );
+
+      await tester.pumpWidget(
+        wrap(const TInput(hintText: 'hint', enabled: false)),
+      );
+      expect(field(tester).style?.color, token.textDisabledColor);
+      expect(
+        tester.widget<EditableText>(find.byType(EditableText)).style.color,
+        token.textDisabledColor,
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          const TInput(initialValue: 'disabled', enabled: false),
+          inputTheme: const TInputThemeData(
+            textStyle: TextStyle(color: Colors.black),
+          ),
+        ),
+      );
+      expect(field(tester).style?.color, token.textDisabledColor);
+      expect(
+        field(tester).decoration?.hintStyle?.color,
+        token.textDisabledColor,
+      );
+
+      await tester.pumpWidget(
+        wrap(const TInput(initialValue: 'error', status: TInputStatus.error)),
+      );
+      expect(field(tester).style?.color, token.errorNormalColor);
+
+      await tester.pumpWidget(
+        wrap(const TInput(initialValue: 'readonly', readOnly: true)),
+      );
+      expect(field(tester).style?.color, token.textColorPrimary);
+    });
+
     testWidgets('enabled and readOnly follow TextField semantics', (
       tester,
     ) async {
@@ -175,6 +222,51 @@ void main() {
       expect(field(tester).enabled, isFalse);
       expect(field(tester).readOnly, isTrue);
     });
+
+    testWidgets('focus and text changes do not recreate the TextField', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            initialValue: 'content',
+            clearButtonMode: TInputClearButtonMode.focused,
+          ),
+        ),
+      );
+      final editor = field(tester);
+
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
+      expect(identical(editor, field(tester)), isTrue);
+
+      await tester.enterText(find.byType(TextField), 'changed');
+      await tester.pump();
+      expect(identical(editor, field(tester)), isTrue);
+    });
+
+    testWidgets(
+      'disabled color is not overridden by Material body text color',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        final baseTheme = TThemeBuilder.light(token);
+        final theme = baseTheme.copyWith(
+          textTheme: baseTheme.textTheme.copyWith(
+            bodyLarge: const TextStyle(color: Colors.black),
+          ),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: const Scaffold(
+              body: TInput(initialValue: '不可编辑', enabled: false),
+            ),
+          ),
+        );
+
+        expect(field(tester).style?.color, token.textDisabledColor);
+      },
+    );
 
     testWidgets('obscureText remains independent from keyboard type', (
       tester,
@@ -200,7 +292,11 @@ void main() {
       String? changed;
       await tester.pumpWidget(
         wrap(
-          TInput(controller: controller, onChanged: (value) => changed = value),
+          TInput(
+            controller: controller,
+            clearButtonMode: TInputClearButtonMode.always,
+            onChanged: (value) => changed = value,
+          ),
         ),
       );
 
@@ -213,7 +309,13 @@ void main() {
 
     testWidgets('suffix suppresses clear button', (tester) async {
       await tester.pumpWidget(
-        wrap(const TInput(initialValue: 'content', suffix: Icon(Icons.info))),
+        wrap(
+          const TInput(
+            initialValue: 'content',
+            clearButtonMode: TInputClearButtonMode.always,
+            suffix: Icon(Icons.info),
+          ),
+        ),
       );
       expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
       expect(find.byIcon(Icons.info), findsOneWidget);
@@ -223,14 +325,19 @@ void main() {
       await tester.pumpWidget(
         wrap(
           const TInput(initialValue: 'content'),
-          inputTheme: const TInputThemeData(showClearButton: false),
+          inputTheme: const TInputThemeData(
+            clearButtonMode: TInputClearButtonMode.never,
+          ),
         ),
       );
       expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
 
       await tester.pumpWidget(
         wrap(
-          const TInput(initialValue: 'content'),
+          const TInput(
+            initialValue: 'content',
+            clearButtonMode: TInputClearButtonMode.always,
+          ),
           inputTheme: const TInputThemeData(clearIconSize: 28),
         ),
       );
@@ -238,12 +345,38 @@ void main() {
       expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
     });
 
+    testWidgets('focused mode only shows clear button while focused', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            initialValue: 'content',
+            clearButtonMode: TInputClearButtonMode.focused,
+          ),
+        ),
+      );
+      expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
+
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
+      expect(find.byIcon(TIcons.close_circle_filled), findsOneWidget);
+    });
+
     testWidgets('disabled and readOnly clear buttons cannot mutate text', (
       tester,
     ) async {
       for (final input in const [
-        TInput(initialValue: 'disabled', enabled: false),
-        TInput(initialValue: 'readonly', readOnly: true),
+        TInput(
+          initialValue: 'disabled',
+          enabled: false,
+          clearButtonMode: TInputClearButtonMode.always,
+        ),
+        TInput(
+          initialValue: 'readonly',
+          readOnly: true,
+          clearButtonMode: TInputClearButtonMode.always,
+        ),
       ]) {
         await tester.pumpWidget(wrap(input));
         expect(
@@ -251,6 +384,84 @@ void main() {
           isNull,
         );
       }
+    });
+  });
+
+  group('TInput TDesign shell', () {
+    testWidgets('status and borderless are rendered outside TextField', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            status: TInputStatus.error,
+            borderless: true,
+            initialValue: 'error',
+          ),
+        ),
+      );
+
+      final shells = tester.widgetList<DecoratedBox>(find.byType(DecoratedBox));
+      expect(
+        shells.any(
+          (shell) =>
+              shell.decoration is BoxDecoration &&
+              (shell.decoration as BoxDecoration).border == null,
+        ),
+        isTrue,
+      );
+      expect(field(tester).decoration?.border, InputBorder.none);
+    });
+
+    testWidgets('rounded single-line input uses a complete outer border', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(),
+          inputTheme: const TInputThemeData(borderRadius: 6),
+        ),
+      );
+
+      final shell = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .whereType<DecoratedBox>()
+          .firstWhere((box) => box.decoration is BoxDecoration);
+      final decoration = shell.decoration as BoxDecoration;
+      expect(decoration.border, isA<Border>());
+      final border = decoration.border! as Border;
+      expect(border.top.style, BorderStyle.solid);
+      expect(border.right.style, BorderStyle.solid);
+      expect(border.bottom.style, BorderStyle.solid);
+      expect(border.left.style, BorderStyle.solid);
+    });
+
+    testWidgets('maxCharacter uses weighted ASCII and non-ASCII length', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TInput(maxCharacter: 4, initialValue: 'a中')),
+      );
+
+      final formatter = field(tester).inputFormatters!.last;
+      expect(
+        formatter
+            .formatEditUpdate(
+              const TextEditingValue(),
+              const TextEditingValue(text: 'ab中'),
+            )
+            .text,
+        'ab中',
+      );
+      expect(
+        formatter
+            .formatEditUpdate(
+              const TextEditingValue(),
+              const TextEditingValue(text: 'ab中x'),
+            )
+            .text,
+        isEmpty,
+      );
     });
   });
 }

@@ -1,0 +1,34 @@
+Widget _buildBordered(BuildContext context) {
+    final token = context.tTheme;
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(
+            const TFormThemeData(
+              layout: TFormLayout.vertical,
+              borderColor: Colors.transparent,
+              itemPadding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+              labelGap: 8,
+            ),
+          )
+          .mergeExtension(
+            const TInputThemeData(
+              borderRadius: 6,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+            ),
+          ),
+      child: TFormItem(
+        label: '标签文字',
+        child: TInput(
+          hintText: '请输入文字',
+          suffix: Icon(
+            TIcons.info_circle_filled,
+            size: 24,
+            color: token.textColorPlaceholder,
+          ),
+        ),
+      ),
+    );
+  }

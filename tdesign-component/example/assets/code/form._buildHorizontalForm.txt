@@ -14,6 +14,7 @@ Widget _buildHorizontalForm(BuildContext context) {
             label: '姓名',
             child: TInput(
               controller: _nameController,
+              borderless: true,
               hintText: '请输入姓名',
               onChanged: onChanged,
             ),
@@ -30,6 +31,7 @@ Widget _buildHorizontalForm(BuildContext context) {
             help: '使用密码输入类型',
             child: TInput(
               controller: _passwordController,
+              borderless: true,
               obscureText: true,
               hintText: '请输入密码',
               onChanged: onChanged,
@@ -97,8 +99,12 @@ Widget _buildHorizontalForm(BuildContext context) {
           ],
           builder: (context, value, onChanged, errorText) => TFormItem(
             label: '数量',
-            child:
-                TStepper(value: value, min: 1, max: 10, onChanged: onChanged),
+            child: TStepper(
+              value: value,
+              min: 1,
+              max: 10,
+              onChanged: onChanged,
+            ),
           ),
         ),
       ],

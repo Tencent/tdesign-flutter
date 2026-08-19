@@ -1,0 +1,4 @@
+Widget _buildDisabled(BuildContext context) => const TFormItem(
+    label: '标签文字',
+    child: TTextarea(hintText: '请输入文字', initialValue: '不可编辑文字', enabled: false),
+  );

@@ -1,0 +1,16 @@
+Widget _buildCustom(BuildContext context) => const Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('标签文字'),
+        SizedBox(height: 8),
+        TTextarea(
+          hintText: '请输入文字',
+          bordered: true,
+          maxLength: 100,
+          indicator: true,
+        ),
+      ],
+    ),
+  );

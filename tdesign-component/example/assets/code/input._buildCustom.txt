@@ -1,0 +1,29 @@
+Widget _buildCustom(BuildContext context) => Theme(
+    data: Theme.of(context)
+        .mergeExtension(
+          const TInputThemeData(
+            backgroundColor: Color(0xff2c2c2c),
+            borderColor: Color(0xff4b4b4b),
+            textStyle: TextStyle(color: Colors.white),
+            decorationTheme: InputDecorationTheme(
+              hintStyle: TextStyle(color: Color(0x59ffffff)),
+            ),
+          ),
+        )
+        .mergeExtension(
+          const TFormThemeData(
+            backgroundColor: Color(0xff2c2c2c),
+            borderColor: Color(0xff4b4b4b),
+            labelStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              height: 24 / 16,
+            ),
+            itemPadding: EdgeInsets.fromLTRB(16, 16, 16, 24),
+          ),
+        ),
+    child: const TFormItem(
+      label: '标签文字',
+      child: TInput(hintText: '请输入文字'),
+    ),
+  );

@@ -1,0 +1,4 @@
+Widget _buildAutosize(BuildContext context) => const TFormItem(
+    label: '标签文字',
+    child: TTextarea(hintText: '请输入文字', minLines: 1),
+  );

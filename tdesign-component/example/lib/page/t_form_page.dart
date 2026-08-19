@@ -50,13 +50,12 @@ class _TFormPageState extends State<TFormPage> {
   num _quantity = 2;
   double _progress = 60;
   double _rating = 3;
-  final _region = ValueNotifier<List<Object?>>([
-    'guangdong',
-    'shenzhen',
-  ]);
+  final _region = ValueNotifier<List<Object?>>(['guangdong', 'shenzhen']);
   final _selectedAppointment = ValueNotifier<TDateTimePickerValue>(
     _appointment,
   );
+  TFormLayout _selectedLayout = TFormLayout.horizontal;
+  bool _formDisabled = false;
   String _submittedLayout = '';
   Map<String, Object?> _submittedValues = const {};
 
@@ -74,15 +73,87 @@ class _TFormPageState extends State<TFormPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '组合常用输入组件，支持横向和纵向布局、校验、提交与重置。',
+      desc: '用以收集、校验和提交数据，一般由输入框、单选框、复选框、选择器等控件组成。',
       exampleCodeGroup: 'form',
+      compactDemo: true,
+      showTestModule: false,
       children: [
         ExampleModule(
-          title: '表单布局',
+          title: '组件类型',
           children: [
-            ExampleItem(desc: '横向布局：基础输入与选择', builder: _buildHorizontalForm),
-            ExampleItem(desc: '纵向布局：数值、滚轮与日期输入', builder: _buildVerticalForm),
+            ExampleItem(
+              desc: '基础表单',
+              builder: _buildFormDemo,
+              center: false,
+              ignoreCode: true,
+            ),
           ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFormDemo(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Theme(
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TButtonThemeData(shape: TButtonShape.round)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TButton(
+                    variant: TButtonVariant.fill,
+                    colorScheme: _selectedLayout == TFormLayout.horizontal
+                        ? TButtonColorScheme.light
+                        : TButtonColorScheme.defaultTheme,
+                    onPressed: () => setState(
+                      () => _selectedLayout = TFormLayout.horizontal,
+                    ),
+                    child: const TText('水平排布'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TButton(
+                    variant: TButtonVariant.fill,
+                    colorScheme: _selectedLayout == TFormLayout.vertical
+                        ? TButtonColorScheme.light
+                        : TButtonColorScheme.defaultTheme,
+                    onPressed: () =>
+                        setState(() => _selectedLayout = TFormLayout.vertical),
+                    child: const TText('竖直排布'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const TText('禁用态'),
+              TSwitch(
+                value: _formDisabled,
+                onChanged: (value) => setState(() => _formDisabled = value),
+              ),
+            ],
+          ),
+        ),
+        IgnorePointer(
+          ignoring: _formDisabled,
+          child: Opacity(
+            opacity: _formDisabled ? 0.5 : 1,
+            child: _selectedLayout == TFormLayout.horizontal
+                ? _buildHorizontalForm(context)
+                : _buildVerticalForm(context),
+          ),
         ),
       ],
     );
@@ -105,6 +176,7 @@ class _TFormPageState extends State<TFormPage> {
             label: '姓名',
             child: TInput(
               controller: _nameController,
+              borderless: true,
               hintText: '请输入姓名',
               onChanged: onChanged,
             ),
@@ -121,6 +193,7 @@ class _TFormPageState extends State<TFormPage> {
             help: '使用密码输入类型',
             child: TInput(
               controller: _passwordController,
+              borderless: true,
               obscureText: true,
               hintText: '请输入密码',
               onChanged: onChanged,
@@ -188,8 +261,12 @@ class _TFormPageState extends State<TFormPage> {
           ],
           builder: (context, value, onChanged, errorText) => TFormItem(
             label: '数量',
-            child:
-                TStepper(value: value, min: 1, max: 10, onChanged: onChanged),
+            child: TStepper(
+              value: value,
+              min: 1,
+              max: 10,
+              onChanged: onChanged,
+            ),
           ),
         ),
       ],
@@ -213,6 +290,7 @@ class _TFormPageState extends State<TFormPage> {
             label: '备注',
             child: TInput.multiline(
               controller: _noteController,
+              borderless: true,
               maxLength: 100,
               hintText: '请输入备注',
               onChanged: onChanged,
@@ -274,24 +352,24 @@ class _TFormPageState extends State<TFormPage> {
           valueListenable: _selectedAppointment,
           builder: (context, appointment, child) =>
               TFormField<TDateTimePickerValue>(
-            name: 'appointment',
-            value: appointment,
-            onChanged: (value) => _selectedAppointment.value = value,
-            required: true,
-            requiredMessage: '请选择预约时间',
-            rules: [(value) => value?.year == null ? '请选择预约时间' : null],
-            builder: (context, value, onChanged, errorText) => TFormItem(
-              label: '预约时间',
-              child: TDateTimePicker(
-                mode: DateTimePickerMode(
-                  dateMode: DateMode.date,
-                  timeMode: TimeMode.minute,
+                name: 'appointment',
+                value: appointment,
+                onChanged: (value) => _selectedAppointment.value = value,
+                required: true,
+                requiredMessage: '请选择预约时间',
+                rules: [(value) => value?.year == null ? '请选择预约时间' : null],
+                builder: (context, value, onChanged, errorText) => TFormItem(
+                  label: '预约时间',
+                  child: TDateTimePicker(
+                    mode: DateTimePickerMode(
+                      dateMode: DateMode.date,
+                      timeMode: TimeMode.minute,
+                    ),
+                    value: value,
+                    onChanged: onChanged,
+                  ),
                 ),
-                value: value,
-                onChanged: onChanged,
               ),
-            ),
-          ),
         ),
       ],
     );
@@ -309,24 +387,26 @@ class _TFormPageState extends State<TFormPage> {
         TFormThemeData(
           layout: layout,
           showColon: layout == TFormLayout.horizontal,
-          itemSpacing: layout == TFormLayout.vertical ? 8 : 0,
+          labelAlign: TextAlign.left,
+          requiredMarkPosition: TFormRequiredMarkPosition.left,
+          itemSpacing: 0,
         ),
       ),
       child: Column(
         children: [
           if (_submittedLayout == layoutLabel && _submittedValues.isNotEmpty)
             _buildSubmittedResult(context),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TForm(
-              controller: controller,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onSubmit: (values) => _showSubmittedValues(layoutLabel, values),
-              child: Column(
-                children: [
-                  ...children,
-                  const SizedBox(height: 12),
-                  Row(
+          TForm(
+            controller: controller,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            onSubmit: (values) => _showSubmittedValues(layoutLabel, values),
+            child: Column(
+              children: [
+                ...children,
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
                     children: [
                       Expanded(
                         child: TButton(
@@ -343,8 +423,8 @@ class _TFormPageState extends State<TFormPage> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -363,10 +443,7 @@ class _TFormPageState extends State<TFormPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TText(
-            '提交结果 · $_submittedLayout',
-            fontWeight: FontWeight.w600,
-          ),
+          TText('提交结果 · $_submittedLayout', fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           for (final entry in _submittedValues.entries)
             Padding(

@@ -1,0 +1,8 @@
+Widget _buildMaxCharacter(BuildContext context) => const TFormItem(
+    label: '标签文字',
+    child: TTextarea(
+      hintText: '设置最大字符个数，一个汉字表示两个字符',
+      maxCharacter: 200,
+      indicator: true,
+    ),
+  );

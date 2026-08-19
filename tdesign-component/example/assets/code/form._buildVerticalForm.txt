@@ -14,6 +14,7 @@ Widget _buildVerticalForm(BuildContext context) {
             label: '备注',
             child: TInput.multiline(
               controller: _noteController,
+              borderless: true,
               maxLength: 100,
               hintText: '请输入备注',
               onChanged: onChanged,
@@ -75,24 +76,24 @@ Widget _buildVerticalForm(BuildContext context) {
           valueListenable: _selectedAppointment,
           builder: (context, appointment, child) =>
               TFormField<TDateTimePickerValue>(
-            name: 'appointment',
-            value: appointment,
-            onChanged: (value) => _selectedAppointment.value = value,
-            required: true,
-            requiredMessage: '请选择预约时间',
-            rules: [(value) => value?.year == null ? '请选择预约时间' : null],
-            builder: (context, value, onChanged, errorText) => TFormItem(
-              label: '预约时间',
-              child: TDateTimePicker(
-                mode: DateTimePickerMode(
-                  dateMode: DateMode.date,
-                  timeMode: TimeMode.minute,
+                name: 'appointment',
+                value: appointment,
+                onChanged: (value) => _selectedAppointment.value = value,
+                required: true,
+                requiredMessage: '请选择预约时间',
+                rules: [(value) => value?.year == null ? '请选择预约时间' : null],
+                builder: (context, value, onChanged, errorText) => TFormItem(
+                  label: '预约时间',
+                  child: TDateTimePicker(
+                    mode: DateTimePickerMode(
+                      dateMode: DateMode.date,
+                      timeMode: TimeMode.minute,
+                    ),
+                    value: value,
+                    onChanged: onChanged,
+                  ),
                 ),
-                value: value,
-                onChanged: onChanged,
               ),
-            ),
-          ),
         ),
       ],
     );

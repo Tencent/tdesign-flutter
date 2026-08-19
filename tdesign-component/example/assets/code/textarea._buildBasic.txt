@@ -1,3 +1,2 @@
-Widget _buildBasic(BuildContext context) => const TTextarea(
-        hintText: '请输入内容',
-      );
+Widget _buildBasic(BuildContext context) =>
+      const TTextarea(hintText: '请输入文字');

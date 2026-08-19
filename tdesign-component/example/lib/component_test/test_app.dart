@@ -73,18 +73,20 @@ Padding body(BuildContext context) {
         //     fontFamily: FontFamily(fontFamily: 'test1'),
         //   ),
         // ),
-        const TInput(
+        const TFormItem(
           label: '标签文字',
-          hintText: '请输入文字',
+          child: TInput(hintText: '请输入文字'),
         ),
         const SizedBox(height: 16),
-        const TTextarea(
+        const TFormItem(
           label: '标签文字',
-          hintText: '请输入文字',
-          maxLines: 4,
-          minLines: 4,
-          maxLength: 500,
-          decoration: InputDecoration(border: OutlineInputBorder()),
+          child: TTextarea(
+            hintText: '请输入文字',
+            maxLines: 4,
+            minLines: 4,
+            maxLength: 500,
+            decoration: InputDecoration(border: OutlineInputBorder()),
+          ),
         )
       ],
     ),
