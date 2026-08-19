@@ -30,6 +30,7 @@
 - **异常传播**：`onRefresh` / `onLoadMore` 同步抛错 / Future 失败均正常结束（不悬挂）；错误经 `FlutterError.reportError` 上报（不吞掉），避免 easy_refresh 对任务失败无条件 rethrow 产生调用方无法接管的 unhandled async error。`onLoadMore` 已补同步抛错与 Future 失败两组测试。
 - **默认值补齐**：`lowerThreshold=50`、`successDuration=500ms` 与小程序一致，并有公开默认值断言。
 - **基础 Demo 同构**：大骨架、三组双列骨架、中央刷新提示与小程序公开 base Demo 对应；Web 可点击同一区域触发刷新。
+- **整体下拉交互**：Header 使用非 clamping overscroll；拖拽时刷新头与滚动内容同步下移，并有首项纵向位移回归测试。
 - **timeout 语义**：超时瞬时上报 `timeout` 后立即结束刷新并复位（无专属渲染文案，已在 dartdoc 说明）。
 - **英文文案**：`releaseRefresh` 改为 `Release to refresh`。
 - **站点 churn 清理**：修复 README 全角逗号回归，移除过时 `easy_refresh` import，补充 child 滚动约束 dartdoc。
@@ -38,6 +39,7 @@
 
 - [x] `TPullDownRefresh` 默认渲染对齐官方（loadingBarHeight=50 / maxBarHeight=80 / 触发阈值=50）
 - [x] 下拉 → 松手 → 刷新 → 完成四态文案正确（中文默认与官方一致）
+- [x] 下拉过程中刷新头与页面内容同步下移，释放后回弹
 - [x] 受控 `controller.refresh()` / `finishRefresh()`、`onStateChanged` 生效
 - [x] `refreshTimeout` 默认 3000ms，超时触发 `onTimeout`；传入 null 关闭超时
 - [x] `onLoadMore` / `enableLoadMore` / `lowerThreshold` 触底加载生效，且不渲染额外 Footer UI

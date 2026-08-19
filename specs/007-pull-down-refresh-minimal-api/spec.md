@@ -21,6 +21,7 @@ Issue #81 的跨端对照 Review 结论：Flutter 当前 `TRefreshHeader` 是一
 
 - 新增顶层组件 **`TPullDownRefresh`**，在内部封装 `EasyRefresh`，对外只暴露**最小、经设计的 Flutter 惯用 API**，替代直接透传 easy_refresh 参数的裸 `TRefreshHeader` 用法。
 - 对齐官方能力：
+  - 下拉时刷新头与滚动内容同步下移，释放后回弹，保持与小程序基础 Demo 一致
   - `onRefresh`（对应 `refresh` 事件）
   - `onLoadMore` / `enableLoadMore` / `lowerThreshold`（对应 `scrolltolower` / `lowerThreshold`，不新增可见 Footer）
   - `disabled`（对应 `disabled`）

@@ -352,7 +352,10 @@ class _TPullDownRefreshHeader extends Header {
        assert(maxOverOffset >= triggerDistance),
        super(
          triggerOffset: triggerDistance,
-         clamping: true,
+         // 与小程序 Demo 一致：下拉时让 ScrollView 产生真实 overscroll，
+         // 刷新头和页面内容一起向下移动。clamping=true 会把内容固定在原位，
+         // 只在其上方绘制刷新头，不符合 PullDownRefresh 的交互表现。
+         clamping: false,
          processedDuration: successDuration,
          maxOverOffset: maxOverOffset,
        );

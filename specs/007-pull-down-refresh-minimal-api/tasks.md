@@ -28,6 +28,7 @@
 - [x] P1：`onLoadMore` 异常传播（同步抛错 / Future 失败均不悬挂、经 `FlutterError.reportError` 上报）+ `onLoadMore` dartdoc 说明 + 测试
 - [x] 跨端复核：移除小程序未定义的 footer no-more 文案，补 `lowerThreshold` / `successDuration` 默认值
 - [x] 基础 Demo 按小程序公开 base 页面重做骨架结构，并为 Web 增加同位置点击刷新入口
+- [x] 修复整体下拉交互：刷新头与滚动内容同步位移，并补回归测试
 - [x] P2-3：生成并提交 Golden baseline（`goldens/*.png`），接入 CI `.test` 阶段自动逐像素比对
 
 ## DONE

@@ -303,11 +303,12 @@ void main() {
 
     testWidgets('refreshTimeout 为 null 时关闭超时', (tester) async {
       var timedOut = false;
+      final refreshCompleter = Completer<void>();
       final controller = TPullDownRefreshController();
       await tester.pumpWidget(
         wrap(
           pullDownRefresh(
-            onRefresh: () => Completer<void>().future,
+            onRefresh: () => refreshCompleter.future,
             refreshTimeout: null,
             onTimeout: () => timedOut = true,
             controller: controller,
@@ -318,6 +319,8 @@ void main() {
       unawaited(controller.refresh());
       await tester.pump(const Duration(milliseconds: 200));
       expect(timedOut, isFalse);
+      refreshCompleter.complete();
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('refreshTimeout 超时触发 onTimeout', (tester) async {
@@ -427,6 +430,24 @@ void main() {
   });
 
   group('TPullDownRefresh 交互状态', () {
+    testWidgets('下拉时刷新头与滚动内容同步下移', (tester) async {
+      await tester.pumpWidget(
+        wrap(pullDownRefresh(onRefresh: () => Completer<void>().future)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+
+      final firstItem = find.text('项目0');
+      final initialTop = tester.getTopLeft(firstItem).dy;
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 40));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(tester.getTopLeft(firstItem).dy, greaterThan(initialTop));
+
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('下拉手势触发 dragging 与 refreshing 状态', (tester) async {
       final states = <TPullDownRefreshState>[];
       final completer = Completer<void>();
