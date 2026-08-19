@@ -280,20 +280,26 @@ class TButtonResolve {
     final colorScheme = Theme.of(context).tExplicitColorScheme;
     late final Color borderColor;
     Color fg;
+    // 禁用态文字色与边框色一致，对齐 tdesign 官方规范（_var.less）
+    late final Color disabledColor;
 
     switch (scheme) {
       case TButtonColorScheme.primary:
         borderColor = colorScheme?.primary ?? tTheme.brandNormalColor;
         fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        disabledColor = tTheme.brandDisabledColor;
       case TButtonColorScheme.danger:
         borderColor = colorScheme?.error ?? tTheme.errorNormalColor;
         fg = colorScheme?.error ?? tTheme.errorNormalColor;
+        disabledColor = tTheme.errorDisabledColor;
       case TButtonColorScheme.light:
         borderColor = colorScheme?.primary ?? tTheme.brandNormalColor;
         fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        disabledColor = tTheme.brandDisabledColor;
       case TButtonColorScheme.defaultTheme:
         borderColor = colorScheme?.outline ?? tTheme.componentBorderColor;
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
+        disabledColor = tTheme.componentBorderColor;
     }
 
     return ButtonStyle(
@@ -307,16 +313,15 @@ class TButtonResolve {
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              tTheme.textDisabledColor;
+              disabledColor;
         }
         return fg;
       }),
       side: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return BorderSide(
-            color:
-                colorScheme?.onSurface.withValues(alpha: 0.12) ??
-                tTheme.componentBorderColor.withValues(alpha: 0.4),
+            color: colorScheme?.onSurface.withValues(alpha: 0.38) ??
+                disabledColor,
             width: 1,
           );
         }
