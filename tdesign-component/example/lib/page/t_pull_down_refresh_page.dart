@@ -1,6 +1,6 @@
 /*
  * Created by haozhicao@tencent.com on 6/28/22.
- * t_refresh_page.dart
+ * t_pull_down_refresh_page.dart
  * 
  */
 
@@ -35,7 +35,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      exampleCodeGroup: 'refresh',
+      exampleCodeGroup: 'PullDownRefresh',
       desc: '用于快速刷新页面信息，刷新可以是整页刷新也可以是页面的局部刷新。',
       children: [
         ExampleModule(
@@ -90,7 +90,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
     );
   }
 
-  @ExampleCode(group: 'refresh')
+  @ExampleCode(group: 'PullDownRefresh')
   Widget _buildRefresh(BuildContext context) {
     return SizedBox(
       height: 620,
@@ -153,7 +153,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
     );
   }
 
-  @ExampleCode(group: 'refresh')
+  @ExampleCode(group: 'PullDownRefresh')
   Widget _buildLoadingTexts(BuildContext context) {
     return SizedBox(
       height: 300,
@@ -185,7 +185,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
     );
   }
 
-  @ExampleCode(group: 'refresh')
+  @ExampleCode(group: 'PullDownRefresh')
   Widget _buildTimeout(BuildContext context) {
     return SizedBox(
       height: 300,

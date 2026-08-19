@@ -53,7 +53,7 @@ Issue #81 的跨端对照 Review 结论：Flutter 当前 `TRefreshHeader` 是一
 - tdesign-component/lib/src/components/refresh/t_refresh_header.dart（保留：向后兼容的低层 Header，站点文档与示例迁移到 `TPullDownRefresh`）
 - tdesign-component/lib/tdesign_flutter.dart（导出新增公开类）
 - tdesign-component/test/components/refresh/t_refresh_test.dart（对齐新增组件测试）
-- tdesign-component/example/lib/page/t_refresh_page.dart（改用 `TPullDownRefresh` 并补官方 demo 分组）
+- tdesign-component/example/lib/page/t_pull_down_refresh_page.dart（改用 `TPullDownRefresh` 并补官方 demo 分组）
 - tdesign-component/example/lib/l10n/app_en.arb（修正英文缺空格）
 - tdesign-site/docs/components/pull-down-refresh/README.md（修正死链与示例代码不一致）
 
@@ -197,7 +197,7 @@ class TPullDownRefreshTexts {
 - [ ] `controller.refresh()` / `finishRefresh()` / `loadMore()` / `finishLoadMore()` 生效。
 - [ ] `onStateChanged` 按状态变化回调（inactive/dragging/ready/refreshing/done/timeout）。
 - [ ] `loadingTheme` / `backgroundColor` 生效。
-- [ ] 示例页 `t_refresh_page.dart` 改用 `TPullDownRefresh` 并补齐 demo 分组（基础刷新 / 自定义提示语 / 超时）；基础刷新与小程序公开 Demo 的骨架页面结构同构，并可在 Web 预览点击触发；其中「自定义提示语」「刷新超时」标注为扩展 API 演示，不宣称是小程序现有公开 Demo。
+- [ ] 示例页 `t_pull_down_refresh_page.dart` 改用 `TPullDownRefresh` 并补齐 demo 分组（基础刷新 / 自定义提示语 / 超时）；基础刷新与小程序公开 Demo 的骨架页面结构同构，并可在 Web 预览点击触发；其中「自定义提示语」「刷新超时」标注为扩展 API 演示，不宣称是小程序现有公开 Demo。
 
 ## Demo 矩阵
 

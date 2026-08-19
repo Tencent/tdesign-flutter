@@ -58,7 +58,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 | --- | --- | --- |
 | 组件 | t_pull_down_refresh.dart / controller / texts / t_refresh_header.dart | 新增组件 + 收敛 header |
 | 测试 | test/components/refresh/t_refresh_test.dart | 对齐新组件与默认值、状态、超时、触底、受控 |
-| 示例 | example/lib/page/t_refresh_page.dart | 改用 TPullDownRefresh + 补 demo |
+| 示例 | example/lib/page/t_pull_down_refresh_page.dart | 改用 TPullDownRefresh + 补 demo |
 | l10n | example/lib/l10n/app_en.arb | 修正英文缺空格 |
 | 站点文档 | tdesign-site/docs/components/pull-down-refresh/README.md | 死链与示例不一致修正 |
 
@@ -78,5 +78,5 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 
 - Widget 测试：默认渲染 / onRefresh / disabled / texts / refreshTimeout / onLoadMore / controller / onStateChanged / loadingTheme。
 - 静态检查：`flutter analyze lib/src/components/refresh test/components/refresh` 0 error/warning。
-- 示例：`flutter analyze example/lib/page/t_refresh_page.dart`。
+- 示例：`flutter analyze example/lib/page/t_pull_down_refresh_page.dart`。
 - 完整性：`git diff --check`。

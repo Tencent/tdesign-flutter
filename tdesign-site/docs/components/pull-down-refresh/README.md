@@ -16,7 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_refresh_page.dart)
+[t_pull_down_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_pull_down_refresh_page.dart)
 
 ### 顶部下拉刷新
 
