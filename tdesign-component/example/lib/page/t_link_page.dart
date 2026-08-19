@@ -128,7 +128,14 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
   Color _linkColor(BuildContext context, TLinkColorScheme colorScheme,
       {bool disabled = false}) {
     if (disabled) {
-      return context.tTheme.textDisabledColor;
+      // 图标颜色跟随各主题对应的禁用色（与 TLink 组件内部文字禁用色一致）
+      return switch (colorScheme) {
+        TLinkColorScheme.primary => context.tTheme.brandDisabledColor,
+        TLinkColorScheme.danger => context.tTheme.errorDisabledColor,
+        TLinkColorScheme.warning => context.tTheme.warningDisabledColor,
+        TLinkColorScheme.success => context.tTheme.successDisabledColor,
+        TLinkColorScheme.defaultTheme => context.tTheme.textDisabledColor,
+      };
     }
     return switch (colorScheme) {
       TLinkColorScheme.primary => context.tTheme.brandNormalColor,
