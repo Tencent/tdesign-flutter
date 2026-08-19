@@ -6,15 +6,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../../example/test/golden_test_utils.dart';
+
 /// 下拉刷新「逐公开 Demo」Golden / 固定视口证据。
 ///
-/// baseline（goldens/*.png）已随仓库提交，CI 会作为视觉回归断言自动运行
-/// （与 `t_refresh_test.dart` 一同执行）。若视觉基线需要更新，在支持
+/// baseline（goldens/*.png）已随仓库提交，CI 会以仓库统一的 1.5% 像素差异
+/// 面积容差执行视觉回归断言，消除 macOS/Linux 字体栅格化差异，同时保留布局、
+/// 尺寸和大面积颜色变化的保护。若视觉基线需要更新，在支持
 /// Flutter 的环境执行一次
 /// `flutter test test/components/refresh/t_refresh_golden_test.dart --update-goldens`
 /// 后提交新的 baseline 即可。
 void main() {
+  late GoldenFileComparator originalGoldenComparator;
+
   setUpAll(() async {
+    originalGoldenComparator = useGoldenDiffTolerance();
     final flutterBin = File(
       Platform.resolvedExecutable,
     ).parent.parent.parent.parent.parent;
@@ -24,6 +30,10 @@ void main() {
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
     await robotoFont.load();
+  });
+
+  tearDownAll(() {
+    goldenFileComparator = originalGoldenComparator;
   });
 
   testWidgets('基础刷新 demo（固定视口）', (tester) async {

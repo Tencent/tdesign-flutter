@@ -18,7 +18,7 @@
 | flutter test（flutter 3.32.0） | ✅ success | refresh 行为 40 项 + Golden 3 项 + Example 页面 2 项 |
 | flutter test（flutter 3.47.0） | ✅ success | refresh 行为 + Golden + Example 页面测试通过 |
 | LCOV 覆盖率（refresh 生产源码 LH/LF ≥95%） | ✅ 98.7% | `153/155`，高于 95% 门槛 |
-| 逐公开 Demo Golden（固定视口） | ✅ success | 三张 baseline 已更新并逐像素比对通过 |
+| 逐公开 Demo Golden（固定视口） | ✅ success | 三张 baseline 已更新；复用仓库统一的 1.5% 差异面积容差，规避 macOS/Linux 字体栅格差异 |
 | generate_example_code --check | ✅ 手动核对一致 | 示例代码资产与生成器输出逐字一致 |
 
 ## 代码补强（已落地，验证依赖 CI / 人工）
