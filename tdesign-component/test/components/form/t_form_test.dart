@@ -362,44 +362,57 @@ void main() {
       expect(validatorCalls, 0);
     });
 
-    testWidgets(
-      'upload removal immediately validates an empty required field',
-      (tester) async {
-        var files = const [
-          TUploadFile(
-            id: 'photo',
-            name: 'photo.png',
-            status: TUploadFileStatus.success,
-          ),
-        ];
-        await tester.pumpWidget(
-          wrap(
-            StatefulBuilder(
-              builder: (context, setState) => TForm(
-                child: TFormField<List<TUploadFile>>(
-                  name: 'photo',
-                  value: files,
-                  required: true,
-                  requiredMessage: '请上传照片',
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onChanged: (value) => setState(() => files = value),
-                  builder: (context, value, onChanged, errorText) => TFormItem(
+    testWidgets('upload follows form-level validation timing', (tester) async {
+      const photo = TUploadFile(
+        id: 'photo',
+        name: 'photo.png',
+        status: TUploadFileStatus.success,
+      );
+      final controller = TFormController();
+      var files = const [photo];
+      ValueChanged<List<TUploadFile>>? changeFiles;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TForm(
+              controller: controller,
+              child: TFormField<List<TUploadFile>>(
+                name: 'photo',
+                value: files,
+                required: true,
+                requiredMessage: '请上传照片',
+                onChanged: (value) => setState(() => files = value),
+                builder: (context, value, onChanged, errorText) {
+                  changeFiles = onChanged;
+                  return TFormItem(
                     label: '上传照片',
                     child: TUpload(files: value, onChanged: onChanged),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ),
-        );
+        ),
+      );
 
-        await tester.tap(find.byKey(const ValueKey('upload-remove-photo')));
-        await tester.pump();
+      await tester.tap(find.byKey(const ValueKey('upload-remove-photo')));
+      await tester.pump();
 
-        expect(files, isEmpty);
-        expect(find.text('请上传照片'), findsOneWidget);
-      },
-    );
+      expect(files, isEmpty);
+      expect(find.text('请上传照片'), findsNothing);
+
+      expect(controller.submit(), isFalse);
+      await tester.pump();
+      expect(find.text('请上传照片'), findsOneWidget);
+
+      changeFiles!(const [photo]);
+      await tester.pump();
+      expect(find.text('请上传照片'), findsNothing);
+
+      await tester.tap(find.byKey(const ValueKey('upload-remove-photo')));
+      await tester.pump();
+      expect(find.text('请上传照片'), findsOneWidget);
+    });
 
     testWidgets('original validator runs after passing rules', (tester) async {
       final controller = TFormController();

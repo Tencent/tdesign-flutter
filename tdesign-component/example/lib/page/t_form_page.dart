@@ -347,7 +347,6 @@ class _TFormPageState extends State<TFormPage> {
               value: _photos,
               required: true,
               requiredMessage: '请上传照片',
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               onChanged: (value) => setState(() => _photos = value),
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '上传照片',

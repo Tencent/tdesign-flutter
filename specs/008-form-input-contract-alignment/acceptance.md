@@ -13,8 +13,8 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter test test/components/form test/components/input test/components/textarea` | 通过 | 76 tests，覆盖消息 token、状态颜色、局部样式合并、Textarea 容器与横向字段对齐 |
-| `flutter test test/components/input/t_input_test.dart` | 通过 | 26 tests，覆盖 24dp 普通前后缀图标、40dp 密码显隐触控区域、局部样式 token 继承和状态颜色优先级 |
-| `flutter test test/components/form/t_form_test.dart test/components/input/t_input_test.dart test/components/textarea/t_textarea_test.dart test/components/upload/t_upload_test.dart` | 通过 | 94 tests，新增 Upload 清空即时必填校验和竖排 FormItem 右侧操作区几何回归 |
+| `flutter test test/components/input/t_input_test.dart` | 通过 | 27 tests，覆盖 24dp 普通前后缀图标、40dp 密码显隐触控区域、局部样式 token 继承，以及状态壳层与正常正文色的分离 |
+| `flutter test test/components/form/t_form_test.dart test/components/input/t_input_test.dart test/components/textarea/t_textarea_test.dart test/components/upload/t_upload_test.dart` | 通过 | 94 tests，新增 Upload 提交前不显示错误、提交后按交互更新的表单级校验回归，以及竖排 FormItem 右侧操作区几何回归 |
 | `flutter analyze`（`tdesign-component`） | 通过 | No issues found |
 | `flutter analyze`（`tdesign-component/example`） | 通过 | No issues found |
 | `Flutter 3.47.0 flutter analyze`（组件包与 Example） | 通过 | No issues found |

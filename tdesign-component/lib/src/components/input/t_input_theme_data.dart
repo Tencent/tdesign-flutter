@@ -22,7 +22,8 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
 
     /// 输入文本样式。
     ///
-    /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色默认仅覆盖正常态。
+    /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色覆盖所有可用状态的
+    /// 输入文字，不影响壳层和提示的语义状态色。
     this.textStyle,
 
     /// 光标颜色。
@@ -66,7 +67,8 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
 
   /// 输入文本样式。
   ///
-  /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色默认仅覆盖正常态。
+  /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色覆盖所有可用状态的
+  /// 输入文字，不影响壳层和提示的语义状态色。
   final TextStyle? textStyle;
 
   /// 光标颜色。

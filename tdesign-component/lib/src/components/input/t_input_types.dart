@@ -11,6 +11,8 @@ enum TInputClearButtonMode {
 }
 
 /// 输入框的语义状态。
+///
+/// 状态不改变已输入文字的正文色。
 enum TInputStatus {
   /// 默认状态。
   normal,

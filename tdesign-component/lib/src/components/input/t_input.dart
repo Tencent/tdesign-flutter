@@ -133,6 +133,9 @@ class TInput extends StatefulWidget {
   final TInputClearButtonMode? clearButtonMode;
 
   /// 输入框语义状态。
+  ///
+  /// 状态色用于输入壳层、计数器和错误提示；
+  /// 已输入文字仍使用正常正文色，除非通过 [style] 或 [TInputThemeData.textStyle] 显式覆盖。
   final TInputStatus status;
 
   /// 是否隐藏输入框边框。
@@ -194,7 +197,7 @@ class TInput extends StatefulWidget {
 
   /// 输入文本样式。
   ///
-  /// 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖状态默认色。
+  /// 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖默认正文色。
   final TextStyle? style;
 
   /// 光标颜色。
@@ -260,7 +263,7 @@ class _TInputState extends State<TInput> {
     final effectiveStatus = inputErrorText != null
         ? TInputStatus.error
         : widget.status;
-    final inputTextColor = _inputTextColor(token, effectiveStatus);
+    final inputTextColor = _inputTextColor(token);
     final tokenFont = token.fontBodyLarge;
     final tokenStyle = TextStyle(
       color: inputTextColor,
@@ -275,11 +278,9 @@ class _TInputState extends State<TInput> {
     final configuredTextStyle = inheritedTextStyle
         .merge(themeTextStyle)
         .merge(widget.style);
-    final configuredTextColor = switch ((widget.enabled, effectiveStatus)) {
-      (false, _) => inputTextColor,
-      (true, TInputStatus.normal) => themeTextStyle?.color ?? inputTextColor,
-      _ => inputTextColor,
-    };
+    final configuredTextColor = widget.enabled
+        ? themeTextStyle?.color ?? inputTextColor
+        : inputTextColor;
     final textStyle = configuredTextStyle.copyWith(
       color: widget.style?.color ?? configuredTextColor,
     );
@@ -472,17 +473,8 @@ class _TInputState extends State<TInput> {
     setState(() => _obscureText = !_obscureText);
   }
 
-  Color _inputTextColor(TThemeData token, TInputStatus status) {
-    if (!widget.enabled) {
-      return token.textDisabledColor;
-    }
-    return switch (status) {
-      TInputStatus.normal => token.textColorPrimary,
-      TInputStatus.success => token.successNormalColor,
-      TInputStatus.warning => token.warningNormalColor,
-      TInputStatus.error => token.errorNormalColor,
-    };
-  }
+  Color _inputTextColor(TThemeData token) =>
+      widget.enabled ? token.textColorPrimary : token.textDisabledColor;
 
   Color _statusColor(TThemeData token, TInputStatus status) => switch (status) {
     TInputStatus.normal => token.brandNormalColor,

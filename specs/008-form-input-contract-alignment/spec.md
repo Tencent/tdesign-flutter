@@ -89,7 +89,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - `showPasswordToggle` 是 TInput 的可选密码能力；初始显隐状态读取 `obscureText`，显隐切换由组件内部维护，眼睛按钮使用 TDesign 图标和固定触控区域。
 - `prefix` / `suffix` 作为内容插槽时，普通图标使用 24dp 图标尺寸和 token 默认图标样式；密码显隐按钮单独保留 40dp 触控区域。Demo 不再在输入框外重复拼接普通图标。
 - `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按小程序规则以 ASCII 字符 1、非 ASCII 字符 2 计数。
-- `TInputStatus` 提供 `normal`、`success`、`warning`、`error` 四种状态；状态只影响输入壳层和计数/帮助色，不替代 `TFormItem` 的字段错误展示。
+- `TInputStatus` 提供 `normal`、`success`、`warning`、`error` 四种状态；状态只影响输入壳层和计数/帮助色，已输入文字始终使用正常正文色，且状态不替代 `TFormItem` 的字段错误展示。
 - `borderless` 控制输入壳层是否绘制边框；`TTextarea.bordered` 为小程序语义的正向别名，二者不在同一组件上重复暴露。
 - 非 `borderless` 的单行 `TInput` 默认绘制底部分隔线，匹配小程序 Input；通过 `TInputThemeData.borderRadius` 设置圆角时使用完整边框，用于标签外置等标准输入框场景。
 - `TTextarea.indicator` 在配置 `maxLength` 或 `maxCharacter` 时展示当前计数；`autosize` 通过 `minLines`/`maxLines` 组合实现，避免引入平台专属布局 API。
@@ -97,7 +97,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - 独立 Textarea 默认由组件提供 16dp 容器内边距和容器背景；放入 `TFormItem` 时自动去除这层内边距和背景，避免 Demo 或业务手工抵消双重留白。
 - `decoration` 保留为 Material 迁移逃逸口，仅补充输入内核属性，不再决定默认 TDesign 外层布局。
 - `TInputThemeData.borderColor` 可覆盖输入壳层边框颜色；`backgroundColor`、`contentPadding` 和 `borderRadius` 继续负责对应的外层视觉 token。
-- 单行 Input 的输入文字和提示词默认使用完整 `fontBodyLarge`；Textarea 按上述多行 token 解析。Theme 或实例只配置颜色时必须保留 token 字号与行高。组件主题文字颜色仅覆盖 normal 状态，success/warning/error 默认继续使用语义色，实例 `style.color` 可显式覆盖。
+- 单行 Input 的输入文字和提示词默认使用完整 `fontBodyLarge`；Textarea 按上述多行 token 解析。Theme 或实例只配置颜色时必须保留 token 字号与行高。组件主题文字颜色覆盖所有可用状态的输入文字，状态语义色仅由输入壳层、计数器和错误提示消费；实例 `style.color` 仍具有最高优先级。
 
 ### 视觉 Demo 契约
 
@@ -106,7 +106,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - 带图标且带标签的示例使用 `TFormItem.leading + label` 表达字段行结构；`TInput.prefix` 只演示输入内容区前缀，不承载标签文案。
 - 自定义样式输入框只在 Demo 覆盖颜色和外层留白，不重复声明组件默认字号、行高或字段行内边距。
 - Form Demo 的水平/竖直布局使用同一组用户名、密码、性别、生日、籍贯、年限、自我评价、个人简介、上传照片字段；禁用状态逐组件传递，不使用整棵子树透明度模拟。
-- Form Demo 的上传照片字段配置空列表必填校验，并在用户删除最后一张图片时立即展示错误；该校验规则属于 Demo 场景，Upload 组件只负责回传受控文件列表。
+- Form Demo 的上传照片字段使用与其他字段相同的表单级校验时机：首次提交前只更新受控文件列表，提交时统一执行空列表必填校验，首次提交后再随用户交互更新错误；Upload 组件只负责回传受控文件列表。
 - Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；内部标题、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。
 - Demo 视觉对齐优先验证容器层级、字段行高度、标签与内容的相对位置、分隔线和状态颜色，再验证代码面板等 Example 基础设施。
 

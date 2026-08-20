@@ -169,7 +169,7 @@ void main() {
       expect(decoration?.hintMaxLines, 1);
     });
 
-    testWidgets('文本和提示词遵循 TDesign 状态颜色', (tester) async {
+    testWidgets('文本和提示词遵循 TDesign 颜色契约', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrap(const TInput(hintText: 'hint')));
 
@@ -202,10 +202,16 @@ void main() {
         token.textDisabledColor,
       );
 
-      await tester.pumpWidget(
-        wrap(const TInput(initialValue: 'error', status: TInputStatus.error)),
-      );
-      expect(field(tester).style?.color, token.errorNormalColor);
+      for (final status in const [
+        TInputStatus.success,
+        TInputStatus.warning,
+        TInputStatus.error,
+      ]) {
+        await tester.pumpWidget(
+          wrap(TInput(initialValue: 'status', status: status)),
+        );
+        expect(field(tester).style?.color, token.textColorPrimary);
+      }
 
       await tester.pumpWidget(
         wrap(const TInput(initialValue: 'readonly', readOnly: true)),
@@ -262,10 +268,9 @@ void main() {
       expect(hintStyle?.height, token.fontBodyLarge?.height);
     });
 
-    testWidgets('semantic status color precedes component theme color', (
+    testWidgets('component text color applies across semantic statuses', (
       tester,
     ) async {
-      final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrap(
           const TInput(initialValue: 'error', status: TInputStatus.error),
@@ -274,7 +279,7 @@ void main() {
           ),
         ),
       );
-      expect(field(tester).style?.color, token.errorNormalColor);
+      expect(field(tester).style?.color, Colors.white);
 
       await tester.pumpWidget(
         wrap(
@@ -537,9 +542,25 @@ void main() {
   });
 
   group('TInput TDesign shell', () {
-    testWidgets('status and borderless are rendered outside TextField', (
+    testWidgets('status colors shell without recoloring input text', (
       tester,
     ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(const TInput(status: TInputStatus.error, initialValue: 'error')),
+      );
+
+      expect(field(tester).style?.color, token.textColorPrimary);
+      final borderedShell = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .firstWhere(
+            (shell) =>
+                shell.decoration is BoxDecoration &&
+                (shell.decoration as BoxDecoration).border != null,
+          );
+      final border = (borderedShell.decoration as BoxDecoration).border!;
+      expect((border as Border).bottom.color, token.errorNormalColor);
+
       await tester.pumpWidget(
         wrap(
           const TInput(
