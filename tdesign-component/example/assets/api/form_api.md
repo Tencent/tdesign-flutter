@@ -25,7 +25,8 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 标签文案。 |
 | labelAlign | TextAlign? | - | 标签文本对齐方式；为空时读取 `TFormThemeData.labelAlign`。 |
-| labelWidth | double? | - | 标签区域宽度；为空时读取 `TFormThemeData.labelWidth`。 |
+| labelWidth | double? | - | 标签区域宽度；为空时读取 `TFormThemeData.labelWidth`，默认 80dp。 |
+| leading | Widget? | - | 标签区域前的内容，通常用于字段行图标。 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。 |
 | required | bool? | - | 是否显示必填标记。 未传时继承最近 `TFormField` 的 required 状态。 |
 | showErrorMessage | bool | true | 是否展示继承的校验错误。 |
 

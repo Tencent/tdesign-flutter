@@ -362,6 +362,45 @@ void main() {
       expect(validatorCalls, 0);
     });
 
+    testWidgets(
+      'upload removal immediately validates an empty required field',
+      (tester) async {
+        var files = const [
+          TUploadFile(
+            id: 'photo',
+            name: 'photo.png',
+            status: TUploadFileStatus.success,
+          ),
+        ];
+        await tester.pumpWidget(
+          wrap(
+            StatefulBuilder(
+              builder: (context, setState) => TForm(
+                child: TFormField<List<TUploadFile>>(
+                  name: 'photo',
+                  value: files,
+                  required: true,
+                  requiredMessage: '请上传照片',
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: (value) => setState(() => files = value),
+                  builder: (context, value, onChanged, errorText) => TFormItem(
+                    label: '上传照片',
+                    child: TUpload(files: value, onChanged: onChanged),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byKey(const ValueKey('upload-remove-photo')));
+        await tester.pump();
+
+        expect(files, isEmpty);
+        expect(find.text('请上传照片'), findsOneWidget);
+      },
+    );
+
     testWidgets('original validator runs after passing rules', (tester) async {
       final controller = TFormController();
       await tester.pumpWidget(
@@ -1148,10 +1187,188 @@ void main() {
       );
       expect(find.text('Error'), findsOneWidget);
       expect(find.text('Help'), findsNothing);
-      expect(tester.widget<Text>(find.text('Error')).style, errorStyle);
+      final resolvedErrorStyle = tester.widget<Text>(find.text('Error')).style;
+      final token = TThemeData.defaultData();
+      expect(resolvedErrorStyle?.color, errorStyle.color);
+      expect(resolvedErrorStyle?.fontSize, token.fontBodySmall?.size);
+      expect(resolvedErrorStyle?.height, token.fontBodySmall?.height);
       final container = tester.widget<Container>(find.byType(Container).first);
       expect(container.color, Colors.yellow);
       expect(find.byType(Column), findsWidgets);
+    });
+
+    testWidgets('message styles use complete tokens in light and dark themes', (
+      tester,
+    ) async {
+      for (final brightness in Brightness.values) {
+        final baseToken = TThemeData.defaultData();
+        final materialTheme = brightness == Brightness.light
+            ? TThemeBuilder.light(baseToken)
+            : TThemeBuilder.dark(baseToken);
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: materialTheme.mergeExtension(
+              const TFormThemeData(
+                labelStyle: TextStyle(decoration: TextDecoration.underline),
+                helpStyle: TextStyle(fontStyle: FontStyle.italic),
+                errorStyle: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            home: const Scaffold(
+              body: Column(
+                children: [
+                  TFormItem(label: 'Label', help: 'Help', child: Text('Field')),
+                  TFormItem(errorText: 'Error', child: Text('Invalid')),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        final token = tester.element(find.text('Help')).tTheme;
+        final labelStyle = tester.widget<Text>(find.text('Label')).style;
+        final helpStyle = tester.widget<Text>(find.text('Help')).style;
+        final errorStyle = tester.widget<Text>(find.text('Error')).style;
+        expect(labelStyle?.color, token.textColorPrimary);
+        expect(labelStyle?.fontSize, token.fontBodyLarge?.size);
+        expect(labelStyle?.height, token.fontBodyLarge?.height);
+        expect(labelStyle?.decoration, TextDecoration.underline);
+        expect(helpStyle?.color, token.textColorPlaceholder);
+        expect(helpStyle?.fontSize, token.fontBodySmall?.size);
+        expect(helpStyle?.height, token.fontBodySmall?.height);
+        expect(helpStyle?.fontStyle, FontStyle.italic);
+        expect(errorStyle?.color, token.errorNormalColor);
+        expect(errorStyle?.fontSize, token.fontBodySmall?.size);
+        expect(errorStyle?.height, token.fontBodySmall?.height);
+        expect(errorStyle?.fontWeight, FontWeight.bold);
+      }
+    });
+
+    testWidgets('long label centers while message rows align to the top', (
+      tester,
+    ) async {
+      const fieldKey = Key('centered-field');
+      const messageFieldKey = Key('message-field');
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            children: [
+              TFormItem(
+                label: '标签超长时最多十个字',
+                child: SizedBox(key: fieldKey, height: 24),
+              ),
+              TFormItem(
+                label: '标签文字',
+                help: '最大输入10个字符',
+                child: SizedBox(key: messageFieldKey, height: 24),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final longLabelRect = tester.getRect(find.text('标签超长时最多十个字'));
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      final messageLabelRect = tester.getRect(find.text('标签文字'));
+      final messageFieldRect = tester.getRect(find.byKey(messageFieldKey));
+      expect(longLabelRect.center.dy, closeTo(fieldRect.center.dy, 0.01));
+      expect(messageLabelRect.top, closeTo(messageFieldRect.top, 0.01));
+    });
+
+    testWidgets('theme can top align a tall horizontal field', (tester) async {
+      const fieldKey = Key('top-aligned-field');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: '个人简介',
+            child: SizedBox(key: fieldKey, height: 100),
+          ),
+          formTheme: const TFormThemeData(
+            horizontalCrossAxisAlignment: CrossAxisAlignment.start,
+          ),
+        ),
+      );
+
+      final labelRect = tester.getRect(find.text('个人简介'));
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      expect(labelRect.top, closeTo(fieldRect.top, 0.01));
+    });
+
+    testWidgets('leading is part of the form item structure', (tester) async {
+      const leadingKey = Key('leading');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            leading: Icon(Icons.search, key: leadingKey),
+            label: 'Name',
+            child: Text('Field'),
+          ),
+          formTheme: const TFormThemeData(leadingGap: 20),
+        ),
+      );
+
+      final leadingFinder = find.byKey(leadingKey);
+      final leadingRect = tester.getRect(leadingFinder);
+      final labelRect = tester.getRect(find.text('Name'));
+      final fieldRect = tester.getRect(find.text('Field'));
+      final iconTheme = IconTheme.of(tester.element(leadingFinder));
+
+      expect(labelRect.left - leadingRect.right, 20);
+      expect(leadingRect.left, lessThan(labelRect.left));
+      expect(labelRect.left, lessThan(fieldRect.left));
+      expect(iconTheme.size, 24);
+      expect(iconTheme.color, TThemeData.defaultData().textColorPrimary);
+    });
+
+    testWidgets('vertical leading shares the label header', (tester) async {
+      const leadingKey = Key('vertical-leading');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            leading: Icon(Icons.search, key: leadingKey),
+            label: 'Name',
+            child: Text('Field'),
+          ),
+          formTheme: const TFormThemeData(layout: TFormLayout.vertical),
+        ),
+      );
+
+      final leadingRect = tester.getRect(find.byKey(leadingKey));
+      final labelRect = tester.getRect(find.text('Name'));
+      final fieldRect = tester.getRect(find.text('Field'));
+      expect(leadingRect.left, lessThan(labelRect.left));
+      expect(labelRect.top, lessThan(fieldRect.top));
+    });
+
+    testWidgets('vertical extra stays at the trailing edge beside controls', (
+      tester,
+    ) async {
+      const fieldKey = Key('vertical-field');
+      const extraKey = Key('vertical-extra');
+      await tester.pumpWidget(
+        wrap(
+          const Align(
+            alignment: Alignment.topCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TFormItem(
+                  label: '生日',
+                  extra: SizedBox(key: extraKey, width: 24, height: 24),
+                  child: SizedBox(key: fieldKey, height: 24),
+                ),
+              ],
+            ),
+          ),
+          formTheme: const TFormThemeData(layout: TFormLayout.vertical),
+        ),
+      );
+
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      final extraRect = tester.getRect(find.byKey(extraKey));
+      expect(extraRect.left, fieldRect.right);
+      expect(extraRect.center.dy, closeTo(fieldRect.center.dy - 16, 0.01));
+      expect(extraRect.right, 384);
     });
 
     testWidgets('label and messages are optional', (tester) async {
@@ -1176,7 +1393,9 @@ void main() {
       itemPadding: EdgeInsets.all(4),
       itemSpacing: 4,
       labelGap: 6,
+      leadingGap: 8,
       messageGap: 2,
+      horizontalCrossAxisAlignment: CrossAxisAlignment.center,
     );
     const other = TFormThemeData(
       showColon: false,
@@ -1192,7 +1411,9 @@ void main() {
       itemPadding: EdgeInsets.all(8),
       itemSpacing: 8,
       labelGap: 10,
+      leadingGap: 12,
       messageGap: 6,
+      horizontalCrossAxisAlignment: CrossAxisAlignment.start,
     );
 
     expect(base.copyWith().labelWidth, 80);
@@ -1212,7 +1433,9 @@ void main() {
             itemPadding: const EdgeInsets.all(6),
             itemSpacing: 6,
             labelGap: 8,
+            leadingGap: 10,
             messageGap: 4,
+            horizontalCrossAxisAlignment: CrossAxisAlignment.end,
           )
           .layout,
       TFormLayout.vertical,
@@ -1230,5 +1453,10 @@ void main() {
     );
     expect(base.lerp(other, 0.5).labelWidth, 100);
     expect(base.lerp(other, 0.5).itemSpacing, 6);
+    expect(base.lerp(other, 0.5).leadingGap, 10);
+    expect(
+      base.lerp(other, 0.75).horizontalCrossAxisAlignment,
+      CrossAxisAlignment.start,
+    );
   });
 }

@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
+import '../form/t_field_scope.dart';
+import '../form/t_form_item_scope.dart';
 import '../input/t_input.dart';
+import '../input/t_input_theme_data.dart';
 import '../input/t_input_types.dart';
 
-/// [TInput.multiline] 的语义别名。
-class TTextarea extends StatelessWidget {
+/// TDesign 多行文本输入框。
+///
+/// 编辑能力复用 [TInput.multiline]；容器、内部标题、提示词和计数器遵循
+/// Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，[label] 仅用于
+/// 独立 Textarea 自身的内部标题。
+class TTextarea extends StatefulWidget {
   const TTextarea({
     super.key,
 
@@ -32,6 +44,11 @@ class TTextarea extends StatelessWidget {
 
     /// 占位提示文案。
     this.hintText,
+
+    /// 输入框内部标题。
+    ///
+    /// 表单中的字段标签请使用 `TFormItem.label`，避免与表单必填、校验语义重复。
+    this.label,
 
     /// 前缀组件。
     this.prefix,
@@ -112,6 +129,9 @@ class TTextarea extends StatelessWidget {
   /// 占位提示文案。
   final String? hintText;
 
+  /// 输入框内部标题；表单字段标签应由 `TFormItem` 提供。
+  final String? label;
+
   /// 前缀组件。
   final Widget? prefix;
 
@@ -164,33 +184,135 @@ class TTextarea extends StatelessWidget {
   final InputDecoration? decoration;
 
   @override
+  State<TTextarea> createState() => _TTextareaState();
+}
+
+class _TTextareaState extends State<TTextarea> {
+  late final FocusNode _internalFocusNode;
+
+  FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _internalFocusNode = FocusNode();
+    _focusNode.addListener(_handleFocusChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant TTextarea oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.focusNode != widget.focusNode) {
+      (oldWidget.focusNode ?? _internalFocusNode).removeListener(
+        _handleFocusChanged,
+      );
+      _focusNode.addListener(_handleFocusChanged);
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_handleFocusChanged);
+    _internalFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return TInput.multiline(
-      controller: controller,
-      initialValue: initialValue,
-      onChanged: onChanged,
-      onSubmitted: onSubmitted,
-      onEditingComplete: onEditingComplete,
-      enabled: enabled,
-      readOnly: readOnly,
-      hintText: hintText,
-      prefix: prefix,
-      suffix: suffix,
-      clearButtonMode: clearButtonMode,
-      status: status,
-      borderless: !bordered,
-      maxLines: maxLines,
-      minLines: minLines,
-      maxLength: maxLength,
-      maxCharacter: maxCharacter,
-      indicator: indicator,
-      autofocus: autofocus,
-      focusNode: focusNode,
-      inputType: inputType,
-      inputAction: inputAction,
-      textAlign: textAlign,
-      inputFormatters: inputFormatters,
-      decoration: decoration,
+    final token = context.tTheme;
+    final theme = Theme.of(context).extension<TInputThemeData>();
+    final fieldScope = TFieldScope.maybeOf(context);
+    final effectiveStatus =
+        fieldScope?.errorText != null && fieldScope?.showErrorInInput != false
+        ? TInputStatus.error
+        : widget.status;
+    final inFormItem = TFormItemScope.maybeOf(context);
+    final contentPadding =
+        theme?.contentPadding ??
+        (inFormItem ? EdgeInsets.zero : const EdgeInsets.all(16));
+    final borderColor = !widget.enabled
+        ? theme?.borderColor ?? token.componentStrokeColor
+        : theme?.borderColor ??
+              switch (effectiveStatus) {
+                TInputStatus.normal =>
+                  _focusNode.hasFocus
+                      ? token.brandNormalColor
+                      : token.componentBorderColor,
+                TInputStatus.success => token.successNormalColor,
+                TInputStatus.warning => token.warningNormalColor,
+                TInputStatus.error => token.errorNormalColor,
+              };
+    final inputTheme = (theme ?? const TInputThemeData()).copyWith(
+      contentPadding: EdgeInsets.zero,
+      backgroundColor: Colors.transparent,
+    );
+    final labelFont = token.fontBodyMedium;
+    final labelStyle = TextStyle(
+      color: widget.enabled ? token.textColorPrimary : token.textDisabledColor,
+      fontSize: labelFont?.size,
+      height: labelFont?.height,
+      fontWeight: labelFont?.fontWeight,
+    );
+    final editor = Theme(
+      data: Theme.of(context).mergeExtension(inputTheme),
+      child: TInput.multiline(
+        controller: widget.controller,
+        initialValue: widget.initialValue,
+        onChanged: widget.onChanged,
+        onSubmitted: widget.onSubmitted,
+        onEditingComplete: widget.onEditingComplete,
+        enabled: widget.enabled,
+        readOnly: widget.readOnly,
+        hintText: widget.hintText,
+        prefix: widget.prefix,
+        suffix: widget.suffix,
+        clearButtonMode: widget.clearButtonMode,
+        status: widget.status,
+        borderless: true,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        maxLength: widget.maxLength,
+        maxCharacter: widget.maxCharacter,
+        indicator: widget.indicator,
+        autofocus: widget.autofocus,
+        focusNode: _focusNode,
+        inputType: widget.inputType,
+        inputAction: widget.inputAction,
+        textAlign: widget.textAlign,
+        inputFormatters: widget.inputFormatters,
+        decoration: widget.decoration,
+      ),
+    );
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (widget.label != null) ...[
+          Text(widget.label!, style: labelStyle),
+          SizedBox(height: token.spacer8),
+        ],
+        editor,
+      ],
+    );
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: inFormItem
+            ? Colors.transparent
+            : theme?.backgroundColor ?? token.bgColorContainer,
+        border: widget.bordered
+            ? Border.all(color: borderColor, width: theme?.borderWidth ?? 1)
+            : null,
+        borderRadius: BorderRadius.circular(
+          theme?.borderRadius ?? token.radiusDefault,
+        ),
+      ),
+      child: Padding(padding: contentPadding, child: content),
     );
   }
 }

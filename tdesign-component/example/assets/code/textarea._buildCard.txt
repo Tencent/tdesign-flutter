@@ -3,12 +3,13 @@ Widget _buildCard(BuildContext context) => Padding(
     child: Theme(
       data: Theme.of(
         context,
-      ).mergeExtension(const TInputThemeData(borderRadius: 12)),
-      child: const TFormItem(
-        label: '标签文字',
+      ).mergeExtension(const TInputThemeData(borderRadius: 9)),
+      child: const SizedBox(
+        height: 156,
         child: TTextarea(
+          label: '标签文字',
           hintText: '请输入文字',
-          bordered: true,
+          minLines: 2,
           maxLength: 500,
           indicator: true,
         ),

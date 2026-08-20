@@ -44,6 +44,7 @@ void main() {
       wrap(
         TTextarea(
           controller: controller,
+          label: '标题',
           enabled: true,
           readOnly: true,
           hintText: 'hint',
@@ -80,6 +81,7 @@ void main() {
     expect(field.focusNode, same(focusNode));
     expect(field.textInputAction, TextInputAction.newline);
     expect(field.textAlign, TextAlign.center);
+    expect(find.text('标题'), findsOneWidget);
     expect(field.decoration?.labelText, 'label');
     expect(field.decoration?.helperText, 'helper');
     expect(field.decoration?.filled, isFalse);
@@ -159,6 +161,73 @@ void main() {
     expect(
       tester.widget<TextField>(find.byType(TextField)).inputFormatters,
       contains(isNot(isA<LengthLimitingTextInputFormatter>())),
+    );
+  });
+
+  testWidgets('label, placeholder and indicator use textarea tokens', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      wrap(
+        const TTextarea(
+          label: '标签文字',
+          hintText: '请输入文字',
+          maxLength: 200,
+          indicator: true,
+        ),
+      ),
+    );
+
+    final label = tester.widget<Text>(find.text('标签文字'));
+    expect(label.style?.fontSize, token.fontBodyMedium?.size);
+    expect(label.style?.height, token.fontBodyMedium?.height);
+    expect(label.style?.color, token.textColorPrimary);
+
+    final field = tester.widget<TextField>(find.byType(TextField));
+    expect(field.decoration?.hintStyle?.fontSize, token.fontBodyMedium?.size);
+    expect(field.decoration?.hintStyle?.height, token.fontBodyMedium?.height);
+    expect(field.decoration?.hintStyle?.color, token.textColorPlaceholder);
+
+    final indicator = tester.widget<Text>(find.text('0/200'));
+    expect(indicator.style?.fontSize, token.fontBodySmall?.size);
+    expect(indicator.style?.height, token.fontBodySmall?.height);
+    expect(indicator.style?.color, token.textColorPlaceholder);
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.height == token.spacer8,
+      ),
+      findsAtLeastNWidgets(2),
+    );
+  });
+
+  testWidgets('textarea owns default padding and form item removes it', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const TTextarea(hintText: 'standalone')));
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Padding && widget.padding == const EdgeInsets.all(16),
+      ),
+      findsOneWidget,
+    );
+
+    await tester.pumpWidget(
+      wrap(
+        const TFormItem(
+          label: '字段',
+          child: TTextarea(hintText: 'in form'),
+        ),
+      ),
+    );
+    expect(find.text('字段'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Padding && widget.padding == const EdgeInsets.all(16),
+      ),
+      findsOneWidget,
     );
   });
 

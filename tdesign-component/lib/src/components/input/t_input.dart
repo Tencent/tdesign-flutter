@@ -5,6 +5,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../form/t_field_scope.dart';
 import '../form/t_form_item_scope.dart';
@@ -192,6 +193,8 @@ class TInput extends StatefulWidget {
   final InputDecoration? decoration;
 
   /// 输入文本样式。
+  ///
+  /// 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖状态默认色。
   final TextStyle? style;
 
   /// 光标颜色。
@@ -265,17 +268,21 @@ class _TInputState extends State<TInput> {
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
     );
-    final inheritedTextStyle = tokenStyle.merge(
-      material.tExplicitTextTheme?.bodyLarge,
-    );
+    final inheritedTextStyle = const TextStyle()
+        .merge(material.tExplicitTextTheme?.bodyLarge)
+        .merge(tokenStyle);
     final themeTextStyle = theme?.textStyle;
-    final textStyle =
-        widget.style ??
-        (themeTextStyle == null
-            ? inheritedTextStyle.copyWith(color: inputTextColor)
-            : widget.enabled
-            ? themeTextStyle
-            : themeTextStyle.copyWith(color: inputTextColor));
+    final configuredTextStyle = inheritedTextStyle
+        .merge(themeTextStyle)
+        .merge(widget.style);
+    final configuredTextColor = switch ((widget.enabled, effectiveStatus)) {
+      (false, _) => inputTextColor,
+      (true, TInputStatus.normal) => themeTextStyle?.color ?? inputTextColor,
+      _ => inputTextColor,
+    };
+    final textStyle = configuredTextStyle.copyWith(
+      color: widget.style?.color ?? configuredTextColor,
+    );
     final cursorColor =
         widget.cursorColor ??
         theme?.cursorColor ??
@@ -286,23 +293,35 @@ class _TInputState extends State<TInput> {
         theme?.clearButtonMode ??
         TInputClearButtonMode.never;
     final statusColor = _statusColor(token, effectiveStatus);
-    final hintFont = token.fontBodyLarge;
-    final hintStyle =
-        theme?.decorationTheme?.hintStyle ??
-        TextStyle(
-          color: widget.enabled
-              ? token.textColorPlaceholder
-              : token.textDisabledColor,
-          fontSize: hintFont?.size,
-          height: hintFont?.height,
-          fontWeight: hintFont?.fontWeight,
-        );
+    final hintFont = widget._multiline
+        ? token.fontBodyMedium
+        : token.fontBodyLarge;
     final sourceDecoration = TInputResolve.resolveDecoration(
       base: widget.decoration,
       hintText: widget.hintText,
     );
+    final themeHintStyle = theme?.decorationTheme?.hintStyle;
+    final instanceHintStyle = sourceDecoration.hintStyle;
+    final hintStyle =
+        TextStyle(
+              color: widget.enabled
+                  ? token.textColorPlaceholder
+                  : token.textDisabledColor,
+              fontSize: hintFont?.size,
+              height: hintFont?.height,
+              fontWeight: hintFont?.fontWeight,
+            )
+            .merge(themeHintStyle)
+            .merge(instanceHintStyle)
+            .copyWith(
+              color:
+                  instanceHintStyle?.color ??
+                  (widget.enabled
+                      ? themeHintStyle?.color ?? token.textColorPlaceholder
+                      : token.textDisabledColor),
+            );
     final innerDecoration = sourceDecoration.copyWith(
-      hintStyle: sourceDecoration.hintStyle ?? hintStyle,
+      hintStyle: hintStyle,
       isCollapsed: sourceDecoration.isCollapsed ?? true,
       contentPadding: sourceDecoration.contentPadding ?? EdgeInsets.zero,
       border: InputBorder.none,
@@ -385,6 +404,8 @@ class _TInputState extends State<TInput> {
       maxCharacter: widget.maxCharacter,
       counterColor: effectiveStatus == TInputStatus.error
           ? token.errorNormalColor
+          : widget._multiline
+          ? token.textColorPlaceholder
           : token.textColorSecondary,
       counterStyle: TextStyle(
         fontSize: token.fontBodySmall?.size,
@@ -400,6 +421,7 @@ class _TInputState extends State<TInput> {
       focusedBorderSide: borderSide.copyWith(color: statusColor),
       borderRadius: borderRadius,
       contentPadding: contentPadding,
+      counterGap: widget._multiline ? token.spacer8 : 2,
     );
     final error = inputErrorText == null
         ? null
@@ -507,6 +529,7 @@ class _TInputShell extends StatefulWidget {
     required this.focusedBorderSide,
     required this.borderRadius,
     required this.contentPadding,
+    required this.counterGap,
     this.prefix,
     this.suffix,
   });
@@ -537,6 +560,7 @@ class _TInputShell extends StatefulWidget {
   final BorderSide focusedBorderSide;
   final BorderRadius borderRadius;
   final EdgeInsetsGeometry contentPadding;
+  final double counterGap;
 
   @override
   State<_TInputShell> createState() => _TInputShellState();
@@ -607,15 +631,15 @@ class _TInputShellState extends State<_TInputShell> {
         : null;
     final passwordButton = widget.showPasswordToggle
         ? SizedBox(
-            width: _inputIconSlotSize,
-            height: _inputIconSlotSize,
+            width: _inputPasswordButtonSize,
+            height: _inputPasswordButtonSize,
             child: IconButton(
               tooltip: widget.obscureText ? '显示密码' : '隐藏密码',
               onPressed: widget.enabled ? widget.onTogglePassword : null,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints.tightFor(
-                width: _inputIconSlotSize,
-                height: _inputIconSlotSize,
+                width: _inputPasswordButtonSize,
+                height: _inputPasswordButtonSize,
               ),
               iconSize: 24,
               icon: Icon(
@@ -663,8 +687,13 @@ class _TInputShellState extends State<_TInputShell> {
                   : CrossAxisAlignment.center,
               children: [
                 if (widget.prefix != null) ...[
-                  _TInputSlot(child: widget.prefix!),
-                  const SizedBox(width: 8),
+                  _TInputSlot(
+                    color: widget.enabled
+                        ? context.tTheme.textColorPrimary
+                        : context.tTheme.textDisabledColor,
+                    child: widget.prefix!,
+                  ),
+                  const SizedBox(width: _inputIconGap),
                 ],
                 Expanded(child: widget.editor),
                 if (clearButton != null) ...[
@@ -676,12 +705,20 @@ class _TInputShellState extends State<_TInputShell> {
                   passwordButton,
                 ],
                 if (widget.suffix != null) ...[
-                  const SizedBox(width: 8),
-                  _TInputSlot(child: widget.suffix!),
+                  const SizedBox(width: _inputIconGap),
+                  _TInputSlot(
+                    color: widget.enabled
+                        ? context.tTheme.textColorPlaceholder
+                        : context.tTheme.textDisabledColor,
+                    child: widget.suffix!,
+                  ),
                 ],
               ],
             ),
-            if (counter != null) ...[const SizedBox(height: 2), counter],
+            if (counter != null) ...[
+              SizedBox(height: widget.counterGap),
+              counter,
+            ],
           ],
         ),
       ),
@@ -689,27 +726,21 @@ class _TInputShellState extends State<_TInputShell> {
   }
 }
 
-const double _inputIconSlotSize = 40;
+const double _inputIconSize = 24;
+const double _inputIconGap = 8;
+const double _inputPasswordButtonSize = 40;
 
 class _TInputSlot extends StatelessWidget {
-  const _TInputSlot({required this.child});
+  const _TInputSlot({required this.child, required this.color});
 
   final Widget child;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        minWidth: _inputIconSlotSize,
-        minHeight: _inputIconSlotSize,
-      ),
-      child: IconTheme(
-        data: IconThemeData(
-          color: context.tTheme.textColorPlaceholder,
-          size: 24,
-        ),
-        child: Center(child: child),
-      ),
+    return IconTheme(
+      data: IconThemeData(color: color, size: _inputIconSize),
+      child: Center(child: child),
     );
   }
 }

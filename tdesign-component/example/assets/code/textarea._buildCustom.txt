@@ -1,16 +1,41 @@
-Widget _buildCustom(BuildContext context) => const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('标签文字'),
-        SizedBox(height: 8),
-        TTextarea(
-          hintText: '请输入文字',
-          bordered: true,
-          maxLength: 100,
-          indicator: true,
-        ),
-      ],
+Widget _buildCustom(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorSecondaryContainer,
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '标签文字',
+            style: TextStyle(
+              color: context.tTheme.textColorPrimary,
+              fontSize: context.tTheme.fontBodySmall?.size,
+              height: context.tTheme.fontBodySmall?.height,
+              fontWeight: context.tTheme.fontBodySmall?.fontWeight,
+            ),
+          ),
+          SizedBox(height: context.tTheme.spacer8),
+          Theme(
+            data: Theme.of(context).mergeExtension(
+              const TInputThemeData(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              ),
+            ),
+            child: const SizedBox(
+              height: 124,
+              child: TTextarea(
+                hintText: '请输入文字',
+                bordered: true,
+                minLines: 2,
+                maxLength: 100,
+                indicator: true,
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );

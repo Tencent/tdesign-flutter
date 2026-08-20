@@ -140,51 +140,31 @@ class _TInputViewPageState extends State<TInputViewPage> {
   @ExampleCode(group: 'input')
   Widget _buildSlots(BuildContext context) {
     final token = context.tTheme;
-    const formTheme = TFormThemeData(itemPadding: EdgeInsets.zero);
-    const inputTheme = TInputThemeData(
-      contentPadding: EdgeInsets.symmetric(vertical: 16),
-    );
-    final icon = Icon(TIcons.app, size: 24, color: token.textColorPrimary);
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              icon,
-              const SizedBox(width: 8),
-              Expanded(
-                child: Theme(
-                  data: Theme.of(
-                    context,
-                  ).mergeExtension(formTheme).mergeExtension(inputTheme),
-                  child: const TFormItem(
-                    label: '标签文字',
-                    child: TInput(borderless: true, hintText: '请输入文字'),
-                  ),
-                ),
-              ),
-            ],
+
+    return ColoredBox(
+      color: token.bgColorPage,
+      child: const Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: TFormItem(
+              leading: Icon(TIcons.app),
+              label: '标签文字',
+              child: TInput(borderless: true, hintText: '请输入文字'),
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              icon,
-              const SizedBox(width: 8),
-              Expanded(
-                child: Theme(
-                  data: Theme.of(context).mergeExtension(inputTheme),
-                  child: const TInput(borderless: true, hintText: '请输入文字'),
-                ),
-              ),
-            ],
+          SizedBox(height: 16),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: TInput(
+              borderless: true,
+              hintText: '请输入文字',
+              prefix: Icon(TIcons.app),
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-      ],
+          SizedBox(height: 16),
+        ],
+      ),
     );
   }
 
@@ -350,7 +330,6 @@ class _TInputViewPageState extends State<TInputViewPage> {
 
   @ExampleCode(group: 'input')
   Widget _buildLabel(BuildContext context) => const TFormItem(
-    labelWidth: 80,
     label: '标签超长时最多十个字',
     child: TInput(borderless: true, hintText: '请输入文字'),
   );
@@ -478,33 +457,34 @@ class _TInputViewPageState extends State<TInputViewPage> {
   }
 
   @ExampleCode(group: 'input')
-  Widget _buildCustom(BuildContext context) => Theme(
-    data: Theme.of(context)
-        .mergeExtension(
-          const TInputThemeData(
-            backgroundColor: Color(0xff2c2c2c),
-            borderColor: Color(0xff4b4b4b),
-            textStyle: TextStyle(color: Colors.white),
-            decorationTheme: InputDecorationTheme(
-              hintStyle: TextStyle(color: Color(0x59ffffff)),
+  Widget _buildCustom(BuildContext context) => ColoredBox(
+    color: const Color(0xff2c2c2c),
+    child: Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Theme(
+        data: Theme.of(context)
+            .mergeExtension(
+              const TInputThemeData(
+                backgroundColor: Color(0xff2c2c2c),
+                borderColor: Color(0xff4b4b4b),
+                textStyle: TextStyle(color: Colors.white),
+                decorationTheme: InputDecorationTheme(
+                  hintStyle: TextStyle(color: Color(0x59ffffff)),
+                ),
+              ),
+            )
+            .mergeExtension(
+              const TFormThemeData(
+                backgroundColor: Color(0xff2c2c2c),
+                borderColor: Color(0xff4b4b4b),
+                labelStyle: TextStyle(color: Colors.white),
+              ),
             ),
-          ),
-        )
-        .mergeExtension(
-          const TFormThemeData(
-            backgroundColor: Color(0xff2c2c2c),
-            borderColor: Color(0xff4b4b4b),
-            labelStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              height: 24 / 16,
-            ),
-            itemPadding: EdgeInsets.fromLTRB(16, 16, 16, 24),
-          ),
+        child: const TFormItem(
+          label: '标签文字',
+          child: TInput(borderless: true, hintText: '请输入文字'),
         ),
-    child: const TFormItem(
-      label: '标签文字',
-      child: TInput(hintText: '请输入文字'),
+      ),
     ),
   );
 

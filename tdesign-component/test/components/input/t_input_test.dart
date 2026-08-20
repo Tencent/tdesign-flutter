@@ -213,6 +213,84 @@ void main() {
       expect(field(tester).style?.color, token.textColorPrimary);
     });
 
+    testWidgets('partial component styles preserve token typography', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          const TInput(hintText: 'hint', initialValue: 'value'),
+          inputTheme: const TInputThemeData(
+            textStyle: TextStyle(color: Colors.white),
+            decorationTheme: InputDecorationTheme(
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ),
+      );
+
+      final inputStyle = field(tester).style;
+      final hintStyle = field(tester).decoration?.hintStyle;
+      expect(inputStyle?.color, Colors.white);
+      expect(inputStyle?.fontSize, token.fontBodyLarge?.size);
+      expect(inputStyle?.height, token.fontBodyLarge?.height);
+      expect(inputStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
+      expect(hintStyle?.color, Colors.grey);
+      expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
+      expect(hintStyle?.height, token.fontBodyLarge?.height);
+      expect(hintStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
+    });
+
+    testWidgets('instance hint style merges with token typography', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            hintText: 'hint',
+            decoration: InputDecoration(
+              hintStyle: TextStyle(color: Colors.purple),
+            ),
+          ),
+        ),
+      );
+
+      final hintStyle = field(tester).decoration?.hintStyle;
+      expect(hintStyle?.color, Colors.purple);
+      expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
+      expect(hintStyle?.height, token.fontBodyLarge?.height);
+    });
+
+    testWidgets('semantic status color precedes component theme color', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          const TInput(initialValue: 'error', status: TInputStatus.error),
+          inputTheme: const TInputThemeData(
+            textStyle: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+      expect(field(tester).style?.color, token.errorNormalColor);
+
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            initialValue: 'explicit error',
+            status: TInputStatus.error,
+            style: TextStyle(color: Colors.purple),
+          ),
+          inputTheme: const TInputThemeData(
+            textStyle: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+      expect(field(tester).style?.color, Colors.purple);
+    });
+
     testWidgets('enabled and readOnly follow TextField semantics', (
       tester,
     ) async {
@@ -313,7 +391,7 @@ void main() {
       },
     );
 
-    testWidgets('prefix and suffix widgets use a 40dp input slot', (
+    testWidgets('prefix and suffix icons use the 24dp input icon size', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -322,20 +400,36 @@ void main() {
         ),
       );
 
-      final prefixSlot = find
-          .ancestor(
-            of: find.byIcon(Icons.search),
-            matching: find.byType(ConstrainedBox),
-          )
-          .first;
-      final suffixSlot = find
-          .ancestor(
-            of: find.byIcon(Icons.info),
-            matching: find.byType(ConstrainedBox),
-          )
-          .first;
-      expect(tester.getSize(prefixSlot), const Size(40, 40));
-      expect(tester.getSize(suffixSlot), const Size(40, 40));
+      expect(tester.getSize(find.byIcon(Icons.search)), const Size(24, 24));
+      expect(tester.getSize(find.byIcon(Icons.info)), const Size(24, 24));
+      expect(
+        tester
+            .widget<IconTheme>(
+              find
+                  .ancestor(
+                    of: find.byIcon(Icons.search),
+                    matching: find.byType(IconTheme),
+                  )
+                  .first,
+            )
+            .data
+            .color,
+        TThemeData.defaultData().textColorPrimary,
+      );
+      expect(
+        tester
+            .widget<IconTheme>(
+              find
+                  .ancestor(
+                    of: find.byIcon(Icons.info),
+                    matching: find.byType(IconTheme),
+                  )
+                  .first,
+            )
+            .data
+            .color,
+        TThemeData.defaultData().textColorPlaceholder,
+      );
     });
   });
 

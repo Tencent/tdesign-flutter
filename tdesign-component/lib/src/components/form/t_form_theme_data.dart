@@ -65,14 +65,22 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     /// 标签与字段的垂直间距。
     this.labelGap,
 
+    /// 前置内容与标签区域的间距。
+    this.leadingGap,
+
     /// 字段与辅助或错误文案的间距。
     this.messageGap,
+
+    /// 横向表单项各区域的垂直对齐方式。
+    ///
+    /// 未设置时，无消息的字段居中，有 help/error 的字段顶部对齐。
+    this.horizontalCrossAxisAlignment,
   });
 
   /// 是否在标签末尾显示冒号。
   final bool? showColon;
 
-  /// 默认标签宽度。
+  /// 默认标签宽度；为空时表单项使用 80dp。
   final double? labelWidth;
 
   /// 表单项布局方向。
@@ -111,8 +119,14 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   /// 标签与字段的垂直间距。
   final double? labelGap;
 
+  /// 前置内容与标签区域的间距。
+  final double? leadingGap;
+
   /// 字段与辅助或错误文案的间距。
   final double? messageGap;
+
+  /// 横向表单项各区域的垂直对齐方式。
+  final CrossAxisAlignment? horizontalCrossAxisAlignment;
 
   @override
   TFormThemeData copyWith({
@@ -130,7 +144,9 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     EdgeInsetsGeometry? itemPadding,
     double? itemSpacing,
     double? labelGap,
+    double? leadingGap,
     double? messageGap,
+    CrossAxisAlignment? horizontalCrossAxisAlignment,
   }) {
     return TFormThemeData(
       showColon: showColon ?? this.showColon,
@@ -147,7 +163,10 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       itemPadding: itemPadding ?? this.itemPadding,
       itemSpacing: itemSpacing ?? this.itemSpacing,
       labelGap: labelGap ?? this.labelGap,
+      leadingGap: leadingGap ?? this.leadingGap,
       messageGap: messageGap ?? this.messageGap,
+      horizontalCrossAxisAlignment:
+          horizontalCrossAxisAlignment ?? this.horizontalCrossAxisAlignment,
     );
   }
 
@@ -177,7 +196,11 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       itemPadding: EdgeInsetsGeometry.lerp(itemPadding, other.itemPadding, t),
       itemSpacing: lerpDouble(itemSpacing, other.itemSpacing, t),
       labelGap: lerpDouble(labelGap, other.labelGap, t),
+      leadingGap: lerpDouble(leadingGap, other.leadingGap, t),
       messageGap: lerpDouble(messageGap, other.messageGap, t),
+      horizontalCrossAxisAlignment: t < 0.5
+          ? horizontalCrossAxisAlignment
+          : other.horizontalCrossAxisAlignment,
     );
   }
 }

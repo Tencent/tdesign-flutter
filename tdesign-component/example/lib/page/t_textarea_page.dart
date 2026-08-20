@@ -60,40 +60,52 @@ class TTextareaPage extends StatelessWidget {
 
   @ExampleCode(group: 'textarea')
   Widget _buildBasic(BuildContext context) =>
-      const TTextarea(hintText: '请输入文字');
+      const SizedBox(height: 128, child: TTextarea(hintText: '请输入文字'));
 
   @ExampleCode(group: 'textarea')
-  Widget _buildLabel(BuildContext context) => const TFormItem(
-    label: '标签文字',
-    child: TTextarea(hintText: '请输入文字'),
+  Widget _buildLabel(BuildContext context) => const SizedBox(
+    height: 128,
+    child: TTextarea(label: '标签文字', hintText: '请输入文字', minLines: 2),
   );
 
   @ExampleCode(group: 'textarea')
-  Widget _buildAutosize(BuildContext context) => const TFormItem(
-    label: '标签文字',
-    child: TTextarea(hintText: '请输入文字', minLines: 1),
-  );
+  Widget _buildAutosize(BuildContext context) =>
+      const TTextarea(label: '标签文字', hintText: '请输入文字', minLines: 1);
 
   @ExampleCode(group: 'textarea')
-  Widget _buildMaxLength(BuildContext context) => const TFormItem(
-    label: '标签文字',
-    child: TTextarea(hintText: '设置最大字符个数', maxLength: 200, indicator: true),
-  );
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildMaxCharacter(BuildContext context) => const TFormItem(
-    label: '标签文字',
+  Widget _buildMaxLength(BuildContext context) => const SizedBox(
+    height: 162,
     child: TTextarea(
+      label: '标签文字',
+      hintText: '设置最大字符个数',
+      minLines: 3,
+      maxLength: 200,
+      indicator: true,
+    ),
+  );
+
+  @ExampleCode(group: 'textarea')
+  Widget _buildMaxCharacter(BuildContext context) => const SizedBox(
+    height: 162,
+    child: TTextarea(
+      label: '标签文字',
       hintText: '设置最大字符个数，一个汉字表示两个字符',
+      minLines: 3,
       maxCharacter: 200,
       indicator: true,
     ),
   );
 
   @ExampleCode(group: 'textarea')
-  Widget _buildDisabled(BuildContext context) => const TFormItem(
-    label: '标签文字',
-    child: TTextarea(hintText: '请输入文字', initialValue: '不可编辑文字', enabled: false),
+  Widget _buildDisabled(BuildContext context) => const SizedBox(
+    height: 128,
+    child: TTextarea(
+      label: '标签文字',
+      hintText: '请输入文字',
+      initialValue: '不可编辑文字',
+      enabled: false,
+      minLines: 2,
+    ),
   );
 
   @ExampleCode(group: 'textarea')
@@ -102,12 +114,13 @@ class TTextareaPage extends StatelessWidget {
     child: Theme(
       data: Theme.of(
         context,
-      ).mergeExtension(const TInputThemeData(borderRadius: 12)),
-      child: const TFormItem(
-        label: '标签文字',
+      ).mergeExtension(const TInputThemeData(borderRadius: 9)),
+      child: const SizedBox(
+        height: 156,
         child: TTextarea(
+          label: '标签文字',
           hintText: '请输入文字',
-          bordered: true,
+          minLines: 2,
           maxLength: 500,
           indicator: true,
         ),
@@ -116,20 +129,45 @@ class TTextareaPage extends StatelessWidget {
   );
 
   @ExampleCode(group: 'textarea')
-  Widget _buildCustom(BuildContext context) => const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('标签文字'),
-        SizedBox(height: 8),
-        TTextarea(
-          hintText: '请输入文字',
-          bordered: true,
-          maxLength: 100,
-          indicator: true,
-        ),
-      ],
+  Widget _buildCustom(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorSecondaryContainer,
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '标签文字',
+            style: TextStyle(
+              color: context.tTheme.textColorPrimary,
+              fontSize: context.tTheme.fontBodySmall?.size,
+              height: context.tTheme.fontBodySmall?.height,
+              fontWeight: context.tTheme.fontBodySmall?.fontWeight,
+            ),
+          ),
+          SizedBox(height: context.tTheme.spacer8),
+          Theme(
+            data: Theme.of(context).mergeExtension(
+              const TInputThemeData(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              ),
+            ),
+            child: const SizedBox(
+              height: 124,
+              child: TTextarea(
+                hintText: '请输入文字',
+                bordered: true,
+                minLines: 2,
+                maxLength: 100,
+                indicator: true,
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

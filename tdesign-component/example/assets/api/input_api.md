@@ -35,7 +35,7 @@
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | decoration | InputDecoration? | - | Material 输入装饰迁移逃逸口。 该属性可以补充 Flutter 输入内核支持的 hint、label、语义和文本 配置；默认 TDesign 外层边框、内边距和清除按钮仍由本组件负责。 |
-| style | TextStyle? | - | 输入文本样式。 |
+| style | TextStyle? | - | 输入文本样式。 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖状态默认色。 |
 | cursorColor | Color? | - | 光标颜色。 |
 
 #### 默认构造方法
@@ -69,6 +69,6 @@
 | readOnly | bool | false | 是否只读。 设为 `true` 时禁止修改内容，但保留只读文本的选择和复制能力；文字仍使用正常态颜色。 |
 | showPasswordToggle | bool | false | 是否在后置插槽显示内置密码显隐按钮。 初始显隐状态由 `obscureText` 决定，按钮点击后的显隐状态由输入框 自身维护。启用后会使用 TDesign 的浏览图标和 40dp 触控区域；如果 同时传入 `suffix`，自定义后置内容会紧跟在该按钮之后。 |
 | status | TInputStatus | TInputStatus.normal | 输入框语义状态。 |
-| style | TextStyle? | - | 输入文本样式。 |
+| style | TextStyle? | - | 输入文本样式。 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖状态默认色。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |

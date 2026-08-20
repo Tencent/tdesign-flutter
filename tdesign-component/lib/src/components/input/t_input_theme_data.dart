@@ -21,12 +21,16 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
     this.multilineMinLines,
 
     /// 输入文本样式。
+    ///
+    /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色默认仅覆盖正常态。
     this.textStyle,
 
     /// 光标颜色。
     this.cursorColor,
 
     /// 输入装饰的组件级默认值。
+    ///
+    /// [InputDecorationTheme.hintStyle] 会与默认提示词 token 样式合并。
     this.decorationTheme,
 
     /// 清除图标颜色。
@@ -61,12 +65,16 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
   final int? multilineMinLines;
 
   /// 输入文本样式。
+  ///
+  /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色默认仅覆盖正常态。
   final TextStyle? textStyle;
 
   /// 光标颜色。
   final Color? cursorColor;
 
   /// 输入装饰的组件级默认值。
+  ///
+  /// [InputDecorationTheme.hintStyle] 会与默认提示词 token 样式合并。
   final InputDecorationTheme? decorationTheme;
 
   /// 清除图标颜色。

@@ -1,7 +1,7 @@
 ## API
 ### TTextarea
 #### 简介
-`TInput.multiline` 的语义别名。
+复用 `TInput.multiline` 编辑内核的 TDesign 多行文本输入框。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -20,6 +20,7 @@
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | inputType | TextInputType | TextInputType.multiline | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| label | String? | - | 输入框内部标题；表单字段标签应由 `TFormItem` 提供。 |
 | maxCharacter | int? | - | 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。 |
 | maxLength | int? | - | 最大字符数。 |
 | maxLines | int? | - | 最大行数；null 表示不限制。 |
