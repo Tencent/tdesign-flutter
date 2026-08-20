@@ -1,5 +1,4 @@
 Widget _buildBordered(BuildContext context) {
-    final token = context.tTheme;
     return Theme(
       data: Theme.of(context)
           .mergeExtension(
@@ -19,15 +18,11 @@ Widget _buildBordered(BuildContext context) {
               ),
             ),
           ),
-      child: TFormItem(
+      child: const TFormItem(
         label: '标签文字',
         child: TInput(
           hintText: '请输入文字',
-          suffix: Icon(
-            TIcons.info_circle_filled,
-            size: 24,
-            color: token.textColorPlaceholder,
-          ),
+          suffix: Icon(TIcons.info_circle_filled),
         ),
       ),
     );

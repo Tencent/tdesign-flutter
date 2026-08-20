@@ -80,6 +80,8 @@ TForm                 表单生命周期、字段注册和统一操作
 - `clearButtonMode` 为单一清除按钮配置：`never`、`always`、`focused`。
 - `clearButtonMode` 默认 `never`，与小程序 `clearable=false` 对齐；需要清除能力时显式使用 `always` 或 `focused`。
 - `suffix` 存在时不自动插入清除按钮。
+- `showPasswordToggle` 是 TInput 的可选密码能力；初始显隐状态读取 `obscureText`，显隐切换由组件内部维护，眼睛按钮使用 TDesign 图标和固定触控区域。
+- `prefix` / `suffix` 作为内容插槽时统一使用 40dp 的图标/操作槽和 token 默认图标样式，Demo 不再为普通图标重复设置尺寸与颜色。
 - `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按小程序规则以 ASCII 字符 1、非 ASCII 字符 2 计数。
 - `TInputStatus` 提供 `normal`、`success`、`warning`、`error` 四种状态；状态只影响输入壳层和计数/帮助色，不替代 `TFormItem` 的字段错误展示。
 - `borderless` 控制输入壳层是否绘制边框；`TTextarea.bordered` 为小程序语义的正向别名，二者不在同一组件上重复暴露。
@@ -101,7 +103,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - [x] Form 外部错误能展示在对应 `TFormItem`，且清除校验后消失。
 - [x] `TInput` / `TTextarea` 不再提供 label 参数，清除按钮只由 `clearButtonMode` 决定。
 - [x] 默认输入壳层不依赖 Material `InputDecoration` 的 border/fill/padding 绘制，ThemeData 的 Material 输入主题不会污染 TDesign 视觉。
-- [x] Input 覆盖基础、前后缀、密码、禁用、只读、清除、边框、状态、`maxLength`、`maxCharacter` 场景。
+- [x] Input 覆盖基础、前后缀、密码显隐、禁用、只读、清除、边框、状态、`maxLength`、`maxCharacter` 场景。
 - [x] 非多行 TInput 通过 `TInputThemeData.borderRadius` 支持完整圆角边框，Demo 不再手绘输入框外框。
 - [x] Textarea 覆盖基础、边框、只读、`maxLength`/`maxCharacter` 计数和 min/max 行数场景。
 - [x] Form Demo 展示横向/纵向布局、help/error、required、外部校验错误和 reset/submit。

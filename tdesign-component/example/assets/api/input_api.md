@@ -62,6 +62,7 @@
 | maxLines | int? | 1 | 最大行数。 |
 | minLines | int? | - | 最小行数。 |
 | obscureText | bool | false | 是否隐藏输入文本。 |
+| showPasswordToggle | bool | false | 是否显示由组件自主管理的密码显隐按钮；初始状态由 obscureText 决定。 |
 | onChanged | ValueChanged<String>? | - | 文本变化通知。 |
 | onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |
@@ -71,3 +72,4 @@
 | style | TextStyle? | - | 输入文本样式。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
+`TInput` 不提供 `label`；标签、help 和 error 应使用 `TFormItem` 或页面外层结构承载。

@@ -282,6 +282,61 @@ void main() {
       expect(field(tester).obscureText, isTrue);
       expect(field(tester).keyboardType, TextInputType.visiblePassword);
     });
+
+    testWidgets(
+      'password toggle owns visibility state and uses TDesign icons',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'secret',
+              obscureText: true,
+              showPasswordToggle: true,
+            ),
+          ),
+        );
+
+        expect(field(tester).obscureText, isTrue);
+        expect(find.byIcon(TIcons.browse_off), findsOneWidget);
+        expect(find.byTooltip('显示密码'), findsOneWidget);
+
+        await tester.tap(find.byTooltip('显示密码'));
+        await tester.pump();
+
+        expect(field(tester).obscureText, isFalse);
+        expect(find.byIcon(TIcons.browse), findsOneWidget);
+        expect(find.byTooltip('隐藏密码'), findsOneWidget);
+
+        await tester.tap(find.byTooltip('隐藏密码'));
+        await tester.pump();
+        expect(field(tester).obscureText, isTrue);
+      },
+    );
+
+    testWidgets('prefix and suffix widgets use a 40dp input slot', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(prefix: Icon(Icons.search), suffix: Icon(Icons.info)),
+        ),
+      );
+
+      final prefixSlot = find
+          .ancestor(
+            of: find.byIcon(Icons.search),
+            matching: find.byType(ConstrainedBox),
+          )
+          .first;
+      final suffixSlot = find
+          .ancestor(
+            of: find.byIcon(Icons.info),
+            matching: find.byType(ConstrainedBox),
+          )
+          .first;
+      expect(tester.getSize(prefixSlot), const Size(40, 40));
+      expect(tester.getSize(suffixSlot), const Size(40, 40));
+    });
   });
 
   group('TInput clear button', () {

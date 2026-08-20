@@ -190,20 +190,11 @@ class _TInputViewPageState extends State<TInputViewPage> {
 
   @ExampleCode(group: 'input')
   Widget _buildAction(BuildContext context) {
-    final token = context.tTheme;
-    final suffixIcon = Icon(
-      TIcons.info_circle_filled,
-      size: 24,
-      color: token.textColorPlaceholder,
-    );
-    final avatarIcon = Icon(
-      TIcons.user_avatar,
-      size: 24,
-      color: token.textColorPlaceholder,
-    );
+    const suffixIcon = Icon(TIcons.info_circle_filled);
+    const avatarIcon = Icon(TIcons.user_avatar);
     return Column(
       children: [
-        TFormItem(
+        const TFormItem(
           label: '标签文字',
           child: TInput(
             borderless: true,
@@ -228,7 +219,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           ),
         ),
         const SizedBox(height: 16),
-        TFormItem(
+        const TFormItem(
           label: '标签文字',
           child: TInput(
             borderless: true,
@@ -246,19 +237,15 @@ class _TInputViewPageState extends State<TInputViewPage> {
     final token = context.tTheme;
     return Column(
       children: [
-        TFormItem(
+        const TFormItem(
           label: '输入密码',
           child: TInput(
             borderless: true,
             hintText: '请输入密码',
             initialValue: '123456',
             obscureText: true,
+            showPasswordToggle: true,
             inputType: TextInputType.visiblePassword,
-            suffix: Icon(
-              TIcons.browse_off,
-              size: 24,
-              color: token.textColorPlaceholder,
-            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -426,21 +413,16 @@ class _TInputViewPageState extends State<TInputViewPage> {
 
   @ExampleCode(group: 'input')
   Widget _buildLayout(BuildContext context) {
-    final token = context.tTheme;
     return Theme(
       data: Theme.of(context).mergeExtension(
         const TFormThemeData(layout: TFormLayout.vertical, labelGap: 4),
       ),
-      child: TFormItem(
+      child: const TFormItem(
         label: '标签文字',
         child: TInput(
           borderless: true,
           hintText: '请输入文字',
-          suffix: Icon(
-            TIcons.info_circle_filled,
-            size: 24,
-            color: token.textColorPlaceholder,
-          ),
+          suffix: Icon(TIcons.info_circle_filled),
         ),
       ),
     );
@@ -466,7 +448,6 @@ class _TInputViewPageState extends State<TInputViewPage> {
 
   @ExampleCode(group: 'input')
   Widget _buildBordered(BuildContext context) {
-    final token = context.tTheme;
     return Theme(
       data: Theme.of(context)
           .mergeExtension(
@@ -486,15 +467,11 @@ class _TInputViewPageState extends State<TInputViewPage> {
               ),
             ),
           ),
-      child: TFormItem(
+      child: const TFormItem(
         label: '标签文字',
         child: TInput(
           hintText: '请输入文字',
-          suffix: Icon(
-            TIcons.info_circle_filled,
-            size: 24,
-            color: token.textColorPlaceholder,
-          ),
+          suffix: Icon(TIcons.info_circle_filled),
         ),
       ),
     );

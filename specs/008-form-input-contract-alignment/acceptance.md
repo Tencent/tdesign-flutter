@@ -12,7 +12,8 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/form test/components/input test/components/textarea` | 通过 | 64 tests |
+| `flutter test test/components/form test/components/input test/components/textarea` | 通过 | 66 tests |
+| `flutter test test/components/input/t_input_test.dart` | 通过 | 23 tests，覆盖密码显隐按钮和 40dp 图标插槽 |
 | `flutter analyze`（`tdesign-component`） | 通过 | No issues found |
 | `flutter analyze`（`tdesign-component/example`） | 通过 | No issues found |
 | `Flutter 3.47.0 flutter analyze`（组件包与 Example） | 通过 | No issues found |
@@ -24,6 +25,7 @@
 
 - [x] Form Demo 与小程序 Form/FormItem 语义矩阵核对
 - [x] Input/Textarea Demo 核对 label、clear button、边框、状态、计数和 FormItem 组合
+- [x] Input 图标插槽和密码显隐按钮核对组件默认尺寸、token 颜色及交互状态
 - [x] 通过 Golden 对 Material 主题隔离和新 Input 外层结构做回归
 
 ## 验收边界

@@ -1,18 +1,9 @@
 Widget _buildAction(BuildContext context) {
-    final token = context.tTheme;
-    final suffixIcon = Icon(
-      TIcons.info_circle_filled,
-      size: 24,
-      color: token.textColorPlaceholder,
-    );
-    final avatarIcon = Icon(
-      TIcons.user_avatar,
-      size: 24,
-      color: token.textColorPlaceholder,
-    );
+    const suffixIcon = Icon(TIcons.info_circle_filled);
+    const avatarIcon = Icon(TIcons.user_avatar);
     return Column(
       children: [
-        TFormItem(
+        const TFormItem(
           label: '标签文字',
           child: TInput(
             borderless: true,
@@ -37,7 +28,7 @@ Widget _buildAction(BuildContext context) {
           ),
         ),
         const SizedBox(height: 16),
-        TFormItem(
+        const TFormItem(
           label: '标签文字',
           child: TInput(
             borderless: true,

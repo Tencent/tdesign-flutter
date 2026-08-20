@@ -44,6 +44,7 @@ class TInput extends StatefulWidget {
     this.inputAction,
     this.textAlign = TextAlign.start,
     this.obscureText = false,
+    this.showPasswordToggle = false,
     this.inputFormatters,
     this.decoration,
     this.style,
@@ -87,6 +88,7 @@ class TInput extends StatefulWidget {
     this.cursorColor,
   }) : _multiline = true,
        obscureText = false,
+       showPasswordToggle = false,
        assert(controller == null || initialValue == null),
        assert(maxLength == null || maxCharacter == null),
        assert(maxLength == null || maxLength >= 0),
@@ -173,6 +175,13 @@ class TInput extends StatefulWidget {
   /// 是否隐藏输入文本。
   final bool obscureText;
 
+  /// 是否在后置插槽显示内置密码显隐按钮。
+  ///
+  /// 初始显隐状态由 [obscureText] 决定，按钮点击后的显隐状态由输入框
+  /// 自身维护。启用后会使用 TDesign 的浏览图标和 40dp 触控区域；如果
+  /// 同时传入 [suffix]，自定义后置内容会紧跟在该按钮之后。
+  final bool showPasswordToggle;
+
   /// 输入格式化器。
   final List<TextInputFormatter>? inputFormatters;
 
@@ -199,6 +208,7 @@ class _TInputState extends State<TInput> {
   late final FocusNode _internalFocusNode;
   late TextEditingController _controller;
   late FocusNode _focusNode;
+  late bool _obscureText;
 
   TextEditingController get _effectiveController =>
       widget.controller ?? _internalController;
@@ -210,6 +220,7 @@ class _TInputState extends State<TInput> {
     _internalFocusNode = FocusNode();
     _controller = _effectiveController;
     _focusNode = widget.focusNode ?? _internalFocusNode;
+    _obscureText = widget.obscureText;
   }
 
   @override
@@ -220,6 +231,10 @@ class _TInputState extends State<TInput> {
       _controller = next;
     }
     _focusNode = widget.focusNode ?? _internalFocusNode;
+    if (oldWidget.obscureText != widget.obscureText ||
+        oldWidget.showPasswordToggle != widget.showPasswordToggle) {
+      _obscureText = widget.obscureText;
+    }
   }
 
   @override
@@ -321,7 +336,9 @@ class _TInputState extends State<TInput> {
       keyboardType: widget.inputType,
       textInputAction: widget.inputAction,
       textAlign: widget.textAlign,
-      obscureText: widget.obscureText,
+      obscureText: widget.showPasswordToggle
+          ? _obscureText
+          : widget.obscureText,
       inputFormatters: _effectiveFormatters(),
       style: textStyle,
       cursorColor: cursorColor,
@@ -348,6 +365,11 @@ class _TInputState extends State<TInput> {
       editor: editor,
       prefix: widget.prefix,
       suffix: widget.suffix,
+      showPasswordToggle: widget.showPasswordToggle,
+      obscureText: widget.showPasswordToggle
+          ? _obscureText
+          : widget.obscureText,
+      onTogglePassword: _togglePassword,
       clearButtonMode: clearMode,
       clearIconSize: theme?.clearIconSize ?? 20,
       clearIconColor:
@@ -421,6 +443,13 @@ class _TInputState extends State<TInput> {
     widget.onChanged?.call('');
   }
 
+  void _togglePassword() {
+    if (!widget.enabled) {
+      return;
+    }
+    setState(() => _obscureText = !_obscureText);
+  }
+
   Color _inputTextColor(TThemeData token, TInputStatus status) {
     if (!widget.enabled) {
       return token.textDisabledColor;
@@ -457,6 +486,9 @@ class _TInputShell extends StatefulWidget {
     required this.controller,
     required this.focusNode,
     required this.editor,
+    required this.showPasswordToggle,
+    required this.obscureText,
+    required this.onTogglePassword,
     required this.clearButtonMode,
     required this.clearIconSize,
     required this.clearIconColor,
@@ -484,6 +516,9 @@ class _TInputShell extends StatefulWidget {
   final Widget editor;
   final Widget? prefix;
   final Widget? suffix;
+  final bool showPasswordToggle;
+  final bool obscureText;
+  final VoidCallback onTogglePassword;
   final TInputClearButtonMode clearButtonMode;
   final double clearIconSize;
   final Color clearIconColor;
@@ -547,6 +582,7 @@ class _TInputShellState extends State<_TInputShell> {
     final hasFocus = widget.focusNode.hasFocus;
     final showClearButton =
         widget.suffix == null &&
+        !widget.showPasswordToggle &&
         widget.clearButtonMode != TInputClearButtonMode.never &&
         hasText &&
         (widget.clearButtonMode == TInputClearButtonMode.always || hasFocus);
@@ -565,6 +601,28 @@ class _TInputShellState extends State<_TInputShell> {
               icon: Icon(
                 TIcons.close_circle_filled,
                 color: widget.clearIconColor,
+              ),
+            ),
+          )
+        : null;
+    final passwordButton = widget.showPasswordToggle
+        ? SizedBox(
+            width: _inputIconSlotSize,
+            height: _inputIconSlotSize,
+            child: IconButton(
+              tooltip: widget.obscureText ? '显示密码' : '隐藏密码',
+              onPressed: widget.enabled ? widget.onTogglePassword : null,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints.tightFor(
+                width: _inputIconSlotSize,
+                height: _inputIconSlotSize,
+              ),
+              iconSize: 24,
+              icon: Icon(
+                widget.obscureText ? TIcons.browse_off : TIcons.browse,
+                color: widget.enabled
+                    ? context.tTheme.textColorPlaceholder
+                    : context.tTheme.textDisabledColor,
               ),
             ),
           )
@@ -605,7 +663,7 @@ class _TInputShellState extends State<_TInputShell> {
                   : CrossAxisAlignment.center,
               children: [
                 if (widget.prefix != null) ...[
-                  widget.prefix!,
+                  _TInputSlot(child: widget.prefix!),
                   const SizedBox(width: 8),
                 ],
                 Expanded(child: widget.editor),
@@ -613,15 +671,44 @@ class _TInputShellState extends State<_TInputShell> {
                   const SizedBox(width: 4),
                   clearButton,
                 ],
+                if (passwordButton != null) ...[
+                  const SizedBox(width: 4),
+                  passwordButton,
+                ],
                 if (widget.suffix != null) ...[
                   const SizedBox(width: 8),
-                  widget.suffix!,
+                  _TInputSlot(child: widget.suffix!),
                 ],
               ],
             ),
             if (counter != null) ...[const SizedBox(height: 2), counter],
           ],
         ),
+      ),
+    );
+  }
+}
+
+const double _inputIconSlotSize = 40;
+
+class _TInputSlot extends StatelessWidget {
+  const _TInputSlot({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minWidth: _inputIconSlotSize,
+        minHeight: _inputIconSlotSize,
+      ),
+      child: IconTheme(
+        data: IconThemeData(
+          color: context.tTheme.textColorPlaceholder,
+          size: 24,
+        ),
+        child: Center(child: child),
       ),
     );
   }
