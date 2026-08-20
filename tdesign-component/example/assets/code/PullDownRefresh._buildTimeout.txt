@@ -1,0 +1,25 @@
+Widget _buildTimeout(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        refreshTimeout: const Duration(seconds: 1),
+        onStateChanged: (state) {
+          if (state == TPullDownRefreshState.timeout) {
+            TToast.showText('已超时', context: context);
+          }
+        },
+        onRefresh: () {
+          // 模拟长时间未完成的刷新，等待超时回调。
+          return Completer<void>().future;
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '超时刷新次数：${timeoutCount}'),
+          ],
+        ),
+      ),
+    );
+  }

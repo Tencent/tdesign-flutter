@@ -46,6 +46,39 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter analyze --no-pub --fatal-infos
 
+  test:
+    name: test (flutter ${{ matrix.flutter-version }})
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.32.0
+          - latest
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: ${{ matrix.flutter-version }}
+          channel: stable
+          cache: true
+          cache-sdk: true
+
+      - name: Install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Run refresh tests with coverage
+        working-directory: ./tdesign-component
+        run: flutter test test/components/refresh/t_refresh_test.dart --coverage
+
+      - name: Run refresh golden tests
+        working-directory: ./tdesign-component
+        run: flutter test test/components/refresh/t_refresh_golden_test.dart
+
   build:
     strategy:
       fail-fast: false

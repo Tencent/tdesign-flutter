@@ -18,6 +18,19 @@
   name: flutter analyze
   script: cd tdesign-component && flutter analyze --fatal-infos
 
+# 单元 / Widget 测试：运行 refresh 相关测试（生产源码覆盖率门禁在此产出）。
+# 仅跑 refresh 目录的测试，避免无关测试影响速度；`--coverage` 产出 lcov.info。
+.test:
+  name: flutter test (refresh)
+  script: |
+    set -eu
+    cd tdesign-component
+    flutter test test/components/refresh/t_refresh_test.dart --coverage
+    # 用 Python 解析 lcov.info，过滤出 refresh 生产源码并校验 LH/LF >= 95%
+    python3 tool/check_refresh_coverage.py
+    # Golden 视觉回归：与已提交的 baseline（goldens/*.png）逐像素比对
+    flutter test test/components/refresh/t_refresh_golden_test.dart
+
 # APK 构建
 .build-apk:
   name: flutter build apk
@@ -66,6 +79,28 @@
   stages:
     - !reference [.install-component]
     - !reference [.analyze]
+
+# 测试 + 覆盖率：flutter 3.32.0
+.test-332:
+  name: test (flutter 3.32.0)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.test]
+
+# 测试 + 覆盖率：flutter latest
+.test-latest:
+  name: test (flutter latest)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.test]
 
 # 构建 APK：flutter 3.32.0
 .build-apk-332:
