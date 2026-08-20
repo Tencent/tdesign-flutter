@@ -21,7 +21,7 @@
 | prefix | Widget? | - | 前缀组件。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | clearButtonMode | TInputClearButtonMode? | - | 清除按钮显示模式。 |
-| status | TInputStatus | TInputStatus.normal | 输入框语义状态。状态色用于输入壳层、计数器和错误提示；已输入文字仍使用正常正文色，除非通过 `style` 或 `TInputThemeData.textStyle` 显式覆盖。 |
+| status | TInputStatus | TInputStatus.normal | 输入框语义状态。 状态色用于输入壳层、计数器和错误提示； 已输入文字仍使用正常正文色，除非通过 `style` 或 `TInputThemeData.textStyle` 显式覆盖。 |
 | borderless | bool | false | 是否隐藏输入框边框。 |
 | maxLines | int? | - | 最大行数。 |
 | minLines | int? | - | 最小行数。 |
@@ -68,7 +68,7 @@
 | prefix | Widget? | - | 前缀组件。 |
 | readOnly | bool | false | 是否只读。 设为 `true` 时禁止修改内容，但保留只读文本的选择和复制能力；文字仍使用正常态颜色。 |
 | showPasswordToggle | bool | false | 是否在后置插槽显示内置密码显隐按钮。 初始显隐状态由 `obscureText` 决定，按钮点击后的显隐状态由输入框 自身维护。启用后会使用 TDesign 的浏览图标和 40dp 触控区域；如果 同时传入 `suffix`，自定义后置内容会紧跟在该按钮之后。 |
-| status | TInputStatus | TInputStatus.normal | 输入框语义状态。状态色用于输入壳层、计数器和错误提示；已输入文字仍使用正常正文色，除非通过 `style` 或 `TInputThemeData.textStyle` 显式覆盖。 |
+| status | TInputStatus | TInputStatus.normal | 输入框语义状态。 状态色用于输入壳层、计数器和错误提示； 已输入文字仍使用正常正文色，除非通过 `style` 或 `TInputThemeData.textStyle` 显式覆盖。 |
 | style | TextStyle? | - | 输入文本样式。 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖默认正文色。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
