@@ -62,14 +62,13 @@
 | maxLines | int? | 1 | 最大行数。 |
 | minLines | int? | - | 最小行数。 |
 | obscureText | bool | false | 是否隐藏输入文本。 |
-| showPasswordToggle | bool | false | 是否显示由组件自主管理的密码显隐按钮；初始状态由 obscureText 决定。 |
 | onChanged | ValueChanged<String>? | - | 文本变化通知。 |
 | onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |
 | prefix | Widget? | - | 前缀组件。 |
 | readOnly | bool | false | 是否只读。 设为 `true` 时禁止修改内容，但保留只读文本的选择和复制能力；文字仍使用正常态颜色。 |
+| showPasswordToggle | bool | false | 是否在后置插槽显示内置密码显隐按钮。 初始显隐状态由 `obscureText` 决定，按钮点击后的显隐状态由输入框 自身维护。启用后会使用 TDesign 的浏览图标和 40dp 触控区域；如果 同时传入 `suffix`，自定义后置内容会紧跟在该按钮之后。 |
 | status | TInputStatus | TInputStatus.normal | 输入框语义状态。 |
 | style | TextStyle? | - | 输入文本样式。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
-`TInput` 不提供 `label`；标签、help 和 error 应使用 `TFormItem` 或页面外层结构承载。
