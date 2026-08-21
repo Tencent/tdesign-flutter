@@ -34,6 +34,15 @@ export 'src/components/checkbox/t_check_box.dart';
 export 'src/components/checkbox/t_check_box_group.dart';
 export 'src/components/checkbox/t_checkbox_theme_data.dart'
     show TCheckboxThemeData, TCheckboxVariant;
+export 'src/components/color_picker/t_color_picker.dart';
+export 'src/components/color_picker/t_color_picker_palette.dart';
+export 'src/components/color_picker/t_color_picker_theme_data.dart'
+    show TColorPickerThemeData;
+export 'src/components/color_picker/t_color_picker_types.dart'
+    show
+        TColorPickerChangeContext,
+        TColorPickerChangeTrigger,
+        TColorPickerType;
 export 'src/components/collapse/t_collapse.dart';
 export 'src/components/collapse/t_collapse_panel.dart';
 export 'src/components/collapse/t_collapse_theme_data.dart'
@@ -202,4 +211,5 @@ export 'src/theme/t_shadows.dart';
 export 'src/theme/t_spacers.dart';
 export 'src/theme/t_theme.dart';
 export 'src/util/platform_util.dart';
+export 'src/util/t_color_object.dart';
 export 'src/util/t_toolbar_pressable.dart';
