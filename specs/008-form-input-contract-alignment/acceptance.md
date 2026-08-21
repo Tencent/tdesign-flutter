@@ -12,9 +12,7 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/form test/components/input test/components/textarea` | 通过 | 76 tests，覆盖消息 token、状态颜色、局部样式合并、Textarea 容器与横向字段对齐 |
-| `flutter test test/components/input/t_input_test.dart` | 通过 | 27 tests，覆盖 24dp 普通前后缀图标、40dp 密码显隐触控区域、局部样式 token 继承，以及状态壳层与正常正文色的分离 |
-| `flutter test test/components/form/t_form_test.dart test/components/input/t_input_test.dart test/components/textarea/t_textarea_test.dart test/components/upload/t_upload_test.dart` | 通过 | 94 tests，新增 Upload 提交前不显示错误、提交后按交互更新的表单级校验回归，以及竖排 FormItem 右侧操作区几何回归 |
+| `flutter test test/components/input test/components/textarea test/components/form test/components/upload` | 通过 | 覆盖 Input/Textarea 专属主题、Form validator、字段布局、语义化纵向对齐和 Upload 表单校验链路 |
 | `flutter analyze`（`tdesign-component`） | 通过 | No issues found |
 | `flutter analyze`（`tdesign-component/example`） | 通过 | No issues found |
 | `Flutter 3.47.0 flutter analyze`（组件包与 Example） | 通过 | No issues found |
@@ -27,11 +25,12 @@
 
 - [x] Form Demo 与小程序 Form/FormItem 语义矩阵核对
 - [x] Input/Textarea Demo 核对 label、clear button、边框、状态、计数和 FormItem 组合
-- [x] Input 图标插槽和密码显隐按钮核对组件默认尺寸、token 颜色及交互状态
+- [x] Input 图标插槽和密码显隐按钮核对24dp图标槽、标准56dp行高、token颜色及交互状态
 - [x] 浅色 Input 全页截图核对 tips/error、超长标签和自定义样式的字体、颜色、行高与对齐
 - [x] 深色 Form Web 截图核对分组、布局选择、禁用开关、九个字段和操作按钮的场景顺序
 - [x] 深色 Textarea Web 截图核对固定高度、内置标题、自动增高、字符限制和容器间距
 - [x] 通过 Widget 几何测试核对普通横向字段垂直居中、带消息字段顶部对齐，以及 Form Demo 个人简介标签顶部对齐
+- [x] 核对 `extra` 保持无附加定位样式的原始插槽，并通过 FormItem 实例与主题的 `start/center` 语义配置控制整行纵向对齐
 - [x] 使用无旧 Service Worker 缓存的新 Web 构建复查竖排生日/籍贯字段，label 与 controls 纵向排列且箭头保持在表单项最右侧
 - [x] 使用同一新 Web 构建复查 Input 自定义样式，字段行只保留 FormItem 的单层背景与底部分隔线，不再叠加 Input 外壳边框
 - [x] 通过 Golden 对 Material 主题隔离和新 Input 外层结构做回归

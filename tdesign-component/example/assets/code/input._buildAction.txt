@@ -5,6 +5,7 @@ Widget _buildAction(BuildContext context) {
       children: [
         const TFormItem(
           label: '标签文字',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '请输入文字',
@@ -15,6 +16,7 @@ Widget _buildAction(BuildContext context) {
         TFormItem(
           label: '标签文字',
           help: '最多十个字',
+          verticalAlignment: TFormItemVerticalAlignment.start,
           child: const TInput(
             borderless: true,
             hintText: '请输入文字',
@@ -30,6 +32,7 @@ Widget _buildAction(BuildContext context) {
         const SizedBox(height: 16),
         const TFormItem(
           label: '标签文字',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '请输入文字',

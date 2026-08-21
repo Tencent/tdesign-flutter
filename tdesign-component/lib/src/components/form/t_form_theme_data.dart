@@ -20,6 +20,15 @@ enum TFormRequiredMarkPosition {
   right,
 }
 
+/// 水平表单项各区域的纵向对齐方式。
+enum TFormItemVerticalAlignment {
+  /// 标签、字段内容和额外内容从顶部对齐。
+  start,
+
+  /// 标签、字段内容和额外内容垂直居中。
+  center,
+}
+
 /// TForm 组件级 ThemeExtension。
 class TFormThemeData extends ThemeExtension<TFormThemeData> {
   const TFormThemeData({
@@ -71,10 +80,8 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     /// 字段与辅助或错误文案的间距。
     this.messageGap,
 
-    /// 横向表单项各区域的垂直对齐方式。
-    ///
-    /// 未设置时，无消息的字段居中，有 help/error 的字段顶部对齐。
-    this.horizontalCrossAxisAlignment,
+    /// 水平表单项各区域的纵向对齐方式。
+    this.verticalAlignment,
   });
 
   /// 是否在标签末尾显示冒号。
@@ -125,8 +132,8 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   /// 字段与辅助或错误文案的间距。
   final double? messageGap;
 
-  /// 横向表单项各区域的垂直对齐方式。
-  final CrossAxisAlignment? horizontalCrossAxisAlignment;
+  /// 水平表单项各区域的纵向对齐方式。
+  final TFormItemVerticalAlignment? verticalAlignment;
 
   @override
   TFormThemeData copyWith({
@@ -146,7 +153,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     double? labelGap,
     double? leadingGap,
     double? messageGap,
-    CrossAxisAlignment? horizontalCrossAxisAlignment,
+    TFormItemVerticalAlignment? verticalAlignment,
   }) {
     return TFormThemeData(
       showColon: showColon ?? this.showColon,
@@ -165,8 +172,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       labelGap: labelGap ?? this.labelGap,
       leadingGap: leadingGap ?? this.leadingGap,
       messageGap: messageGap ?? this.messageGap,
-      horizontalCrossAxisAlignment:
-          horizontalCrossAxisAlignment ?? this.horizontalCrossAxisAlignment,
+      verticalAlignment: verticalAlignment ?? this.verticalAlignment,
     );
   }
 
@@ -198,9 +204,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       labelGap: lerpDouble(labelGap, other.labelGap, t),
       leadingGap: lerpDouble(leadingGap, other.leadingGap, t),
       messageGap: lerpDouble(messageGap, other.messageGap, t),
-      horizontalCrossAxisAlignment: t < 0.5
-          ? horizontalCrossAxisAlignment
-          : other.horizontalCrossAxisAlignment,
+      verticalAlignment: t < 0.5 ? verticalAlignment : other.verticalAlignment,
     );
   }
 }

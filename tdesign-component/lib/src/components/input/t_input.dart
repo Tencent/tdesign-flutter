@@ -9,7 +9,6 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../form/t_field_scope.dart';
 import '../form/t_form_item_scope.dart';
-import 't_input_resolve.dart';
 import 't_input_theme_data.dart';
 import 't_input_types.dart';
 
@@ -47,7 +46,6 @@ class TInput extends StatefulWidget {
     this.obscureText = false,
     this.showPasswordToggle = false,
     this.inputFormatters,
-    this.decoration,
     this.style,
     this.cursorColor,
   }) : _multiline = false,
@@ -84,7 +82,6 @@ class TInput extends StatefulWidget {
     this.inputAction,
     this.textAlign = TextAlign.start,
     this.inputFormatters,
-    this.decoration,
     this.style,
     this.cursorColor,
   }) : _multiline = true,
@@ -182,18 +179,12 @@ class TInput extends StatefulWidget {
   /// 是否在后置插槽显示内置密码显隐按钮。
   ///
   /// 初始显隐状态由 [obscureText] 决定，按钮点击后的显隐状态由输入框
-  /// 自身维护。启用后会使用 TDesign 的浏览图标和 40dp 触控区域；如果
-  /// 同时传入 [suffix]，自定义后置内容会紧跟在该按钮之后。
+  /// 自身维护。启用后会使用 TDesign 的浏览图标和 24dp 图标槽，且不会
+  /// 额外撑高输入框；如果同时传入 [suffix]，自定义后置内容会紧跟在该按钮之后。
   final bool showPasswordToggle;
 
   /// 输入格式化器。
   final List<TextInputFormatter>? inputFormatters;
-
-  /// Material 输入装饰迁移逃逸口。
-  ///
-  /// 该属性可以补充 Flutter 输入内核支持的 hint、label、语义和文本
-  /// 配置；默认 TDesign 外层边框、内边距和清除按钮仍由本组件负责。
-  final InputDecoration? decoration;
 
   /// 输入文本样式。
   ///
@@ -297,12 +288,7 @@ class _TInputState extends State<TInput> {
     final hintFont = widget._multiline
         ? token.fontBodyMedium
         : token.fontBodyLarge;
-    final sourceDecoration = TInputResolve.resolveDecoration(
-      base: widget.decoration,
-      hintText: widget.hintText,
-    );
-    final themeHintStyle = theme?.decorationTheme?.hintStyle;
-    final instanceHintStyle = sourceDecoration.hintStyle;
+    final themeHintStyle = theme?.hintStyle;
     final hintStyle =
         TextStyle(
               color: widget.enabled
@@ -313,26 +299,25 @@ class _TInputState extends State<TInput> {
               fontWeight: hintFont?.fontWeight,
             )
             .merge(themeHintStyle)
-            .merge(instanceHintStyle)
             .copyWith(
-              color:
-                  instanceHintStyle?.color ??
-                  (widget.enabled
-                      ? themeHintStyle?.color ?? token.textColorPlaceholder
-                      : token.textDisabledColor),
+              color: widget.enabled
+                  ? themeHintStyle?.color ?? token.textColorPlaceholder
+                  : token.textDisabledColor,
             );
-    final innerDecoration = sourceDecoration.copyWith(
+    final innerDecoration = InputDecoration(
+      hintText: widget.hintText,
       hintStyle: hintStyle,
-      isCollapsed: sourceDecoration.isCollapsed ?? true,
-      contentPadding: sourceDecoration.contentPadding ?? EdgeInsets.zero,
+      hintMaxLines: 1,
+      filled: false,
+      fillColor: Colors.transparent,
+      isCollapsed: true,
+      contentPadding: EdgeInsets.zero,
       border: InputBorder.none,
       enabledBorder: InputBorder.none,
       focusedBorder: InputBorder.none,
       disabledBorder: InputBorder.none,
       errorBorder: InputBorder.none,
       focusedErrorBorder: InputBorder.none,
-      errorText: null,
-      error: null,
     );
 
     final configuredMinLines =
@@ -623,17 +608,17 @@ class _TInputShellState extends State<_TInputShell> {
         : null;
     final passwordButton = widget.showPasswordToggle
         ? SizedBox(
-            width: _inputPasswordButtonSize,
-            height: _inputPasswordButtonSize,
+            width: _inputIconSize,
+            height: _inputIconSize,
             child: IconButton(
               tooltip: widget.obscureText ? '显示密码' : '隐藏密码',
               onPressed: widget.enabled ? widget.onTogglePassword : null,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints.tightFor(
-                width: _inputPasswordButtonSize,
-                height: _inputPasswordButtonSize,
+                width: _inputIconSize,
+                height: _inputIconSize,
               ),
-              iconSize: 24,
+              iconSize: _inputIconSize,
               icon: Icon(
                 widget.obscureText ? TIcons.browse_off : TIcons.browse,
                 color: widget.enabled
@@ -720,7 +705,6 @@ class _TInputShellState extends State<_TInputShell> {
 
 const double _inputIconSize = 24;
 const double _inputIconGap = 8;
-const double _inputPasswordButtonSize = 40;
 
 class _TInputSlot extends StatelessWidget {
   const _TInputSlot({required this.child, required this.color});

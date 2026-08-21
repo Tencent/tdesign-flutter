@@ -306,11 +306,6 @@ class _TFormScope extends InheritedWidget {
   }
 }
 
-/// 字段级校验规则。
-///
-/// 返回 null 表示校验通过；返回错误文案时停止后续校验。
-typedef TFormRule<T> = FormFieldValidator<T>;
-
 /// TDesign 字段 builder。
 typedef TFormFieldBuilder<T> =
     Widget Function(
@@ -343,9 +338,6 @@ class TFormField<T> extends StatefulWidget {
     /// 内置必填校验失败时的错误文案。
     this.requiredMessage = '此项不能为空',
 
-    /// 按顺序执行的字段校验规则。
-    this.rules = const [],
-
     /// 字段校验器。
     this.validator,
 
@@ -368,17 +360,11 @@ class TFormField<T> extends StatefulWidget {
   /// 是否执行内置必填校验。
   ///
   /// 内置规则仅将 null、空白字符串、空 [Iterable] 和空 [Map] 视为未填写；
-  /// false 与 0 均是有效值。对象内部的未选择状态应通过 [rules] 描述。
+  /// false 与 0 均是有效值。对象内部的未选择状态应通过 [validator] 描述。
   final bool required;
 
   /// 内置必填校验失败时的错误文案。
   final String requiredMessage;
-
-  /// 按顺序执行的字段校验规则。
-  ///
-  /// 在内置 [required] 校验通过后执行；返回第一条错误后停止。新代码优先
-  /// 使用 [rules] 表达多个约束，单个 [validator] 用于最后的自定义校验。
-  final List<TFormRule<T>> rules;
 
   /// 字段内容 builder。
   final TFormFieldBuilder<T> builder;
@@ -458,12 +444,6 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
     }
     if (widget.required && _isRequiredEmpty(value)) {
       return widget.requiredMessage;
-    }
-    for (final rule in widget.rules) {
-      final errorText = rule(value);
-      if (errorText != null) {
-        return errorText;
-      }
     }
     return widget.validator?.call(value);
   }

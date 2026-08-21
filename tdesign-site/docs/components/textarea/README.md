@@ -263,12 +263,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | bordered | bool? | - | 是否显示外边框 |
 | controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
 | cursorColor | Color? | - | 游标颜色 |
-| decoration | Decoration? | - | 输入框样式(包括标签) |
 | focusNode | FocusNode? | - | 获取或者取消焦点使用 |
 | hintText | String? | - | 提示文案 |
 | hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
 | indicator | bool? | false | 否显示文本计数器，如 0/140（必须设置maxLength） |
-| inputDecoration | InputDecoration? | - | 自定义输入框TextField组件样式 |
 | inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
 | inputType | TextInputType? | - | 键盘类型，数字、字母 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
@@ -306,6 +304,3 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- |
 | vertical | - |
 | horizontal | - |
-
-
-  

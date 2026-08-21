@@ -88,11 +88,7 @@ void main() {
   });
 
   group('TInput Material semantics', () {
-    testWidgets('content and decoration map to TextField', (tester) async {
-      const base = InputDecoration(
-        hintText: 'decoration hint',
-        helperText: 'helper',
-      );
+    testWidgets('content and behavior map to TextField', (tester) async {
       await tester.pumpWidget(
         wrap(
           TInput(
@@ -104,15 +100,12 @@ void main() {
             inputType: TextInputType.emailAddress,
             textAlign: TextAlign.center,
             inputFormatters: [LengthLimitingTextInputFormatter(5)],
-            decoration: base.copyWith(labelText: 'label'),
           ),
         ),
       );
 
       final textField = field(tester);
-      expect(textField.decoration?.labelText, 'label');
-      expect(textField.decoration?.hintText, 'decoration hint');
-      expect(textField.decoration?.helperText, 'helper');
+      expect(textField.decoration?.hintText, 'property hint');
       expect(textField.decoration?.filled, isFalse);
       expect(textField.decoration?.fillColor, Colors.transparent);
       expect(textField.maxLength, isNull);
@@ -125,21 +118,6 @@ void main() {
       expect(textField.textAlign, TextAlign.center);
       expect(find.byIcon(Icons.search), findsOneWidget);
       expect(find.byIcon(Icons.info), findsOneWidget);
-    });
-
-    testWidgets('explicit decoration fill is preserved', (tester) async {
-      const fillColor = Color(0xFFE5E5E5);
-      await tester.pumpWidget(
-        wrap(
-          const TInput(
-            decoration: InputDecoration(filled: true, fillColor: fillColor),
-          ),
-        ),
-      );
-
-      final decoration = field(tester).decoration;
-      expect(decoration?.filled, isTrue);
-      expect(decoration?.fillColor, fillColor);
     });
 
     testWidgets('global inputDecorationTheme does not leak into TInput', (
@@ -228,9 +206,7 @@ void main() {
           const TInput(hintText: 'hint', initialValue: 'value'),
           inputTheme: const TInputThemeData(
             textStyle: TextStyle(color: Colors.white),
-            decorationTheme: InputDecorationTheme(
-              hintStyle: TextStyle(color: Colors.grey),
-            ),
+            hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
       );
@@ -245,27 +221,6 @@ void main() {
       expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
       expect(hintStyle?.height, token.fontBodyLarge?.height);
       expect(hintStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
-    });
-
-    testWidgets('instance hint style merges with token typography', (
-      tester,
-    ) async {
-      final token = TThemeData.defaultData();
-      await tester.pumpWidget(
-        wrap(
-          const TInput(
-            hintText: 'hint',
-            decoration: InputDecoration(
-              hintStyle: TextStyle(color: Colors.purple),
-            ),
-          ),
-        ),
-      );
-
-      final hintStyle = field(tester).decoration?.hintStyle;
-      expect(hintStyle?.color, Colors.purple);
-      expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
-      expect(hintStyle?.height, token.fontBodyLarge?.height);
     });
 
     testWidgets('component text color applies across semantic statuses', (
@@ -382,6 +337,18 @@ void main() {
         expect(field(tester).obscureText, isTrue);
         expect(find.byIcon(TIcons.browse_off), findsOneWidget);
         expect(find.byTooltip('显示密码'), findsOneWidget);
+        final passwordButton = find.ancestor(
+          of: find.byIcon(TIcons.browse_off),
+          matching: find.byType(IconButton),
+        );
+        final inputShell = find
+            .descendant(
+              of: find.byType(TInput),
+              matching: find.byType(DecoratedBox),
+            )
+            .first;
+        expect(tester.getSize(passwordButton), const Size.square(24));
+        expect(tester.getSize(inputShell).height, 56);
 
         await tester.tap(find.byTooltip('显示密码'));
         await tester.pump();
@@ -407,6 +374,13 @@ void main() {
 
       expect(tester.getSize(find.byIcon(Icons.search)), const Size(24, 24));
       expect(tester.getSize(find.byIcon(Icons.info)), const Size(24, 24));
+      final inputShell = find
+          .descendant(
+            of: find.byType(TInput),
+            matching: find.byType(DecoratedBox),
+          )
+          .first;
+      expect(tester.getSize(inputShell).height, 56);
       expect(
         tester
             .widget<IconTheme>(

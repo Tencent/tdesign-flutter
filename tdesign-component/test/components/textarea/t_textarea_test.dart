@@ -59,10 +59,6 @@ void main() {
           inputAction: TextInputAction.newline,
           textAlign: TextAlign.center,
           inputFormatters: [LengthLimitingTextInputFormatter(20)],
-          decoration: const InputDecoration(
-            labelText: 'label',
-            helperText: 'helper',
-          ),
         ),
       ),
     );
@@ -82,29 +78,10 @@ void main() {
     expect(field.textInputAction, TextInputAction.newline);
     expect(field.textAlign, TextAlign.center);
     expect(find.text('标题'), findsOneWidget);
-    expect(field.decoration?.labelText, 'label');
-    expect(field.decoration?.helperText, 'helper');
     expect(field.decoration?.filled, isFalse);
     expect(field.decoration?.fillColor, Colors.transparent);
     controller.dispose();
     focusNode.dispose();
-  });
-
-  testWidgets('TTextarea preserves explicit decoration fill', (tester) async {
-    const fillColor = Color(0xFFE5E5E5);
-    await tester.pumpWidget(
-      wrap(
-        const TTextarea(
-          decoration: InputDecoration(filled: true, fillColor: fillColor),
-        ),
-      ),
-    );
-
-    final decoration = tester
-        .widget<TextField>(find.byType(TextField))
-        .decoration;
-    expect(decoration?.filled, isTrue);
-    expect(decoration?.fillColor, fillColor);
   });
 
   testWidgets('TTextarea forwards submission and editing completion', (

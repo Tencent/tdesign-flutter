@@ -145,23 +145,14 @@ class _TInputViewPageState extends State<TInputViewPage> {
       color: token.bgColorPage,
       child: const Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: TFormItem(
-              leading: Icon(TIcons.app),
-              label: '标签文字',
-              child: TInput(borderless: true, hintText: '请输入文字'),
-            ),
+          TFormItem(
+            leading: Icon(TIcons.app),
+            label: '标签文字',
+            verticalAlignment: TFormItemVerticalAlignment.center,
+            child: TInput(borderless: true, hintText: '请输入文字'),
           ),
           SizedBox(height: 16),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: TInput(
-              borderless: true,
-              hintText: '请输入文字',
-              prefix: Icon(TIcons.app),
-            ),
-          ),
+          TInput(borderless: true, hintText: '请输入文字', prefix: Icon(TIcons.app)),
           SizedBox(height: 16),
         ],
       ),
@@ -176,6 +167,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       children: [
         const TFormItem(
           label: '标签文字',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '请输入文字',
@@ -186,6 +178,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TFormItem(
           label: '标签文字',
           help: '最多十个字',
+          verticalAlignment: TFormItemVerticalAlignment.start,
           child: const TInput(
             borderless: true,
             hintText: '请输入文字',
@@ -201,6 +194,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         const SizedBox(height: 16),
         const TFormItem(
           label: '标签文字',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '请输入文字',
@@ -219,6 +213,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
       children: [
         const TFormItem(
           label: '输入密码',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '请输入密码',
@@ -231,18 +226,23 @@ class _TInputViewPageState extends State<TInputViewPage> {
         const SizedBox(height: 16),
         TFormItem(
           label: '验证码',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '输入验证码',
-            suffix: Container(
+            suffix: SizedBox(
               width: 72,
-              height: 36,
-              alignment: Alignment.center,
-              child: Image.network(
-                'https://wwcdn.weixin.qq.com/node/wework/images/202010241547.ac6876be9c.png',
-                width: 72,
-                height: 36,
-                fit: BoxFit.contain,
+              height: 24,
+              child: OverflowBox(
+                minHeight: 36,
+                maxHeight: 36,
+                alignment: Alignment.center,
+                child: Image.network(
+                  'https://wwcdn.weixin.qq.com/node/wework/images/202010241547.ac6876be9c.png',
+                  width: 72,
+                  height: 36,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
@@ -251,6 +251,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TFormItem(
           label: '手机号',
           errorText: phoneError ? '手机号输入不正确' : null,
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '输入手机号码',
@@ -282,6 +283,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TFormItem(
           label: '价格',
           errorText: priceError ? '请输入正确的价格' : null,
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             controller: priceController,
             borderless: true,
@@ -302,6 +304,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         const SizedBox(height: 16),
         TFormItem(
           label: '数量',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             borderless: true,
             hintText: '填写个数',
@@ -341,25 +344,33 @@ class _TInputViewPageState extends State<TInputViewPage> {
   );
 
   @ExampleCode(group: 'input')
-  Widget _buildStatus(BuildContext context) => Column(
-    children: [
-      const TFormItem(
-        label: '标签文字',
-        errorText: '错误提示',
-        child: TInput(
-          borderless: true,
-          initialValue: '已输入内容',
-          status: TInputStatus.error,
-          clearButtonMode: TInputClearButtonMode.always,
+  Widget _buildStatus(BuildContext context) {
+    final token = context.tTheme;
+    return Column(
+      children: [
+        TFormItem(
+          label: '标签文字',
+          errorText: '错误提示',
+          child: Theme(
+            data: Theme.of(context).mergeExtension(
+              TInputThemeData(clearIconColor: token.errorNormalColor),
+            ),
+            child: const TInput(
+              borderless: true,
+              initialValue: '已输入内容',
+              status: TInputStatus.error,
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
         ),
-      ),
-      const SizedBox(height: 16),
-      _buildDisabled(context),
-      const SizedBox(height: 16),
-      _buildReadOnly(context),
-      const SizedBox(height: 16),
-    ],
-  );
+        const SizedBox(height: 16),
+        _buildDisabled(context),
+        const SizedBox(height: 16),
+        _buildReadOnly(context),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
 
   @ExampleCode(group: 'input')
   Widget _buildAlign(BuildContext context) => const Column(
@@ -468,9 +479,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
                 backgroundColor: Color(0xff2c2c2c),
                 borderColor: Color(0xff4b4b4b),
                 textStyle: TextStyle(color: Colors.white),
-                decorationTheme: InputDecorationTheme(
-                  hintStyle: TextStyle(color: Color(0x59ffffff)),
-                ),
+                hintStyle: TextStyle(color: Color(0x59ffffff)),
               ),
             )
             .mergeExtension(

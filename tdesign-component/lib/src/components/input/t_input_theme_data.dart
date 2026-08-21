@@ -8,7 +8,7 @@ import 't_input_types.dart';
 ///
 /// 输入组件的外层边框、颜色、内边距和文本样式在这里提供组件级默认值；
 /// 默认状态不继承全局填充色，避免输入区被 [ThemeData.inputDecorationTheme]
-/// 污染。Material [InputDecoration] 仅作为迁移逃逸口保留。
+/// 污染。
 class TInputThemeData extends ThemeExtension<TInputThemeData> {
   const TInputThemeData({
     /// 清除按钮默认显示模式。
@@ -29,10 +29,10 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
     /// 光标颜色。
     this.cursorColor,
 
-    /// 输入装饰的组件级默认值。
+    /// 占位提示文本样式。
     ///
-    /// [InputDecorationTheme.hintStyle] 会与默认提示词 token 样式合并。
-    this.decorationTheme,
+    /// 未指定的字段继承 TDesign 输入框提示词 token。
+    this.hintStyle,
 
     /// 清除图标颜色。
     this.clearIconColor,
@@ -74,10 +74,10 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
   /// 光标颜色。
   final Color? cursorColor;
 
-  /// 输入装饰的组件级默认值。
+  /// 占位提示文本样式。
   ///
-  /// [InputDecorationTheme.hintStyle] 会与默认提示词 token 样式合并。
-  final InputDecorationTheme? decorationTheme;
+  /// 未指定的字段继承 TDesign 输入框提示词 token。
+  final TextStyle? hintStyle;
 
   /// 清除图标颜色。
   final Color? clearIconColor;
@@ -104,7 +104,7 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
     int? multilineMinLines,
     TextStyle? textStyle,
     Color? cursorColor,
-    InputDecorationTheme? decorationTheme,
+    TextStyle? hintStyle,
     Color? clearIconColor,
     EdgeInsetsGeometry? contentPadding,
     double? borderRadius,
@@ -118,7 +118,7 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
       multilineMinLines: multilineMinLines ?? this.multilineMinLines,
       textStyle: textStyle ?? this.textStyle,
       cursorColor: cursorColor ?? this.cursorColor,
-      decorationTheme: decorationTheme ?? this.decorationTheme,
+      hintStyle: hintStyle ?? this.hintStyle,
       clearIconColor: clearIconColor ?? this.clearIconColor,
       contentPadding: contentPadding ?? this.contentPadding,
       borderRadius: borderRadius ?? this.borderRadius,
@@ -139,7 +139,7 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
       multilineMinLines: t < 0.5 ? multilineMinLines : other.multilineMinLines,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
       cursorColor: Color.lerp(cursorColor, other.cursorColor, t),
-      decorationTheme: t < 0.5 ? decorationTheme : other.decorationTheme,
+      hintStyle: TextStyle.lerp(hintStyle, other.hintStyle, t),
       clearIconColor: Color.lerp(clearIconColor, other.clearIconColor, t),
       contentPadding: EdgeInsetsGeometry.lerp(
         contentPadding,

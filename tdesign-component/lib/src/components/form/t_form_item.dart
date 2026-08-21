@@ -44,8 +44,15 @@ class TFormItem extends StatelessWidget {
     /// 标签文本对齐方式；为空时读取 [TFormThemeData.labelAlign]。
     this.labelAlign,
 
-    /// 标签末尾的额外内容。
+    /// 表单项尾部的额外内容。
+    ///
+    /// 该插槽不会被附加内边距、位移或固定尺寸。
     this.extra,
+
+    /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
+    ///
+    /// 未传时读取 [TFormThemeData.verticalAlignment]，默认顶部对齐。
+    this.verticalAlignment,
 
     /// 是否展示继承的校验错误。
     this.showErrorMessage = true,
@@ -75,8 +82,13 @@ class TFormItem extends StatelessWidget {
   /// 标签文本对齐方式。
   final TextAlign? labelAlign;
 
-  /// 标签末尾的额外内容。
+  /// 表单项尾部的额外内容。
+  ///
+  /// 该插槽不会被附加内边距、位移或固定尺寸。
   final Widget? extra;
+
+  /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
+  final TFormItemVerticalAlignment? verticalAlignment;
 
   /// 是否展示从 [TFormField] 继承的校验错误。
   final bool showErrorMessage;
@@ -97,22 +109,18 @@ class TFormItem extends StatelessWidget {
     final effectiveLabelAlign =
         labelAlign ?? theme?.labelAlign ?? TextAlign.start;
     final effectiveLeadingGap = theme?.leadingGap ?? token.spacer8;
-    final labelAlignment = switch ((
-      effectiveLabelAlign,
-      theme?.horizontalCrossAxisAlignment,
-    )) {
-      (TextAlign.start || TextAlign.left, CrossAxisAlignment.start) =>
-        AlignmentDirectional.topStart,
-      (TextAlign.center, CrossAxisAlignment.start) => Alignment.topCenter,
-      (_, CrossAxisAlignment.start) => AlignmentDirectional.topEnd,
-      (TextAlign.start || TextAlign.left, CrossAxisAlignment.end) =>
-        AlignmentDirectional.bottomStart,
-      (TextAlign.center, CrossAxisAlignment.end) => Alignment.bottomCenter,
-      (_, CrossAxisAlignment.end) => AlignmentDirectional.bottomEnd,
-      (TextAlign.start || TextAlign.left, _) =>
-        AlignmentDirectional.centerStart,
-      (TextAlign.center, _) => Alignment.center,
-      _ => AlignmentDirectional.centerEnd,
+    final effectiveVerticalAlignment =
+        verticalAlignment ??
+        theme?.verticalAlignment ??
+        TFormItemVerticalAlignment.start;
+    final horizontalCrossAxisAlignment = switch (effectiveVerticalAlignment) {
+      TFormItemVerticalAlignment.start => CrossAxisAlignment.start,
+      TFormItemVerticalAlignment.center => CrossAxisAlignment.center,
+    };
+    final labelAlignment = switch (effectiveLabelAlign) {
+      (TextAlign.start || TextAlign.left) => AlignmentDirectional.topStart,
+      (TextAlign.center) => Alignment.topCenter,
+      _ => AlignmentDirectional.topEnd,
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
     final labelFont = token.fontBodyLarge;
@@ -192,6 +200,7 @@ class TFormItem extends StatelessWidget {
             child: leading!,
           );
     final content = Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TFormItemScope(
@@ -227,11 +236,7 @@ class TFormItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: theme?.itemSpacing ?? 0),
       child: layout == TFormLayout.horizontal
           ? Row(
-              crossAxisAlignment:
-                  theme?.horizontalCrossAxisAlignment ??
-                  (effectiveErrorText != null || help != null
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.center),
+              crossAxisAlignment: horizontalCrossAxisAlignment,
               children: [
                 if (leadingWidget != null) ...[
                   leadingWidget,

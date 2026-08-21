@@ -171,11 +171,10 @@ class _TFormPageState extends State<TFormPage> {
               name: 'name',
               value: _nameController.text,
               onChanged: (_) => setState(() {}),
-              rules: [
-                (value) => RegExp(r'^[a-zA-Z]{8}$').hasMatch(value ?? '')
-                    ? null
-                    : '只能输入8个字符英文',
-              ],
+              validator: (value) =>
+                  RegExp(r'^[a-zA-Z]{8}$').hasMatch(value ?? '')
+                  ? null
+                  : '只能输入8个字符英文',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '用户名',
                 help: '输入用户名',
@@ -192,7 +191,8 @@ class _TFormPageState extends State<TFormPage> {
               name: 'password',
               value: _passwordController.text,
               onChanged: (_) => setState(() {}),
-              rules: [(value) => (value?.length ?? 0) > 6 ? null : '长度大于6个字符'],
+              validator: (value) =>
+                  (value?.length ?? 0) > 6 ? null : '长度大于6个字符',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '密码',
                 child: TInput(
@@ -209,7 +209,7 @@ class _TFormPageState extends State<TFormPage> {
               name: 'gender',
               value: _gender,
               onChanged: (value) => setState(() => _gender = value),
-              rules: [(value) => value?.isNotEmpty == true ? null : '不能为空'],
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '性别',
                 child: TRadioGroup<String>(
@@ -229,7 +229,7 @@ class _TFormPageState extends State<TFormPage> {
               name: 'birth',
               value: _birth,
               onChanged: (value) => setState(() => _birth = value),
-              rules: [(value) => value?.isNotEmpty == true ? null : '不能为空'],
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '生日',
                 extra: _buildArrow(context),
@@ -256,7 +256,7 @@ class _TFormPageState extends State<TFormPage> {
               name: 'place',
               value: _place,
               onChanged: (value) => setState(() => _place = value),
-              rules: [(value) => value?.isNotEmpty == true ? null : '不能为空'],
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '籍贯',
                 extra: _buildArrow(context),
@@ -301,7 +301,7 @@ class _TFormPageState extends State<TFormPage> {
               name: 'description',
               value: _description,
               onChanged: (value) => setState(() => _description = value),
-              rules: [(value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价'],
+              validator: (value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '自我评价',
                 child: Align(
@@ -320,27 +320,22 @@ class _TFormPageState extends State<TFormPage> {
               name: 'resume',
               value: _resumeController.text,
               onChanged: (_) => setState(() {}),
-              rules: [(value) => value?.isNotEmpty == true ? null : '不能为空'],
-              builder: (context, value, onChanged, errorText) =>
-                  _alignTextareaLabel(
-                    context,
-                    horizontal: horizontal,
-                    child: TFormItem(
-                      label: '个人简介',
-                      child: SizedBox(
-                        height: 100,
-                        child: TTextarea(
-                          controller: _resumeController,
-                          enabled: !_disabled,
-                          hintText: '请输入个人简介',
-                          minLines: 2,
-                          maxLength: 50,
-                          indicator: true,
-                          onChanged: onChanged,
-                        ),
-                      ),
-                    ),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '个人简介',
+                child: SizedBox(
+                  height: 100,
+                  child: TTextarea(
+                    controller: _resumeController,
+                    enabled: !_disabled,
+                    hintText: '请输入个人简介',
+                    minLines: 2,
+                    maxLength: 50,
+                    indicator: true,
+                    onChanged: onChanged,
                   ),
+                ),
+              ),
             ),
             TFormField<List<TUploadFile>>(
               name: 'photo',
@@ -384,25 +379,6 @@ class _TFormPageState extends State<TFormPage> {
         : context.tTheme.textColorPlaceholder,
     semanticLabel: '选择',
   );
-
-  Widget _alignTextareaLabel(
-    BuildContext context, {
-    required bool horizontal,
-    required Widget child,
-  }) {
-    if (!horizontal) {
-      return child;
-    }
-    final formTheme = Theme.of(context).extension<TFormThemeData>();
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        (formTheme ?? const TFormThemeData()).copyWith(
-          horizontalCrossAxisAlignment: CrossAxisAlignment.start,
-        ),
-      ),
-      child: child,
-    );
-  }
 
   Widget _buildButtons(bool horizontal) {
     return Container(

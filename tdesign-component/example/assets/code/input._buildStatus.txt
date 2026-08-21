@@ -1,19 +1,27 @@
-Widget _buildStatus(BuildContext context) => Column(
-    children: [
-      const TFormItem(
-        label: '标签文字',
-        errorText: '错误提示',
-        child: TInput(
-          borderless: true,
-          initialValue: '已输入内容',
-          status: TInputStatus.error,
-          clearButtonMode: TInputClearButtonMode.always,
+Widget _buildStatus(BuildContext context) {
+    final token = context.tTheme;
+    return Column(
+      children: [
+        TFormItem(
+          label: '标签文字',
+          errorText: '错误提示',
+          child: Theme(
+            data: Theme.of(context).mergeExtension(
+              TInputThemeData(clearIconColor: token.errorNormalColor),
+            ),
+            child: const TInput(
+              borderless: true,
+              initialValue: '已输入内容',
+              status: TInputStatus.error,
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
         ),
-      ),
-      const SizedBox(height: 16),
-      _buildDisabled(context),
-      const SizedBox(height: 16),
-      _buildReadOnly(context),
-      const SizedBox(height: 16),
-    ],
-  );
+        const SizedBox(height: 16),
+        _buildDisabled(context),
+        const SizedBox(height: 16),
+        _buildReadOnly(context),
+        const SizedBox(height: 16),
+      ],
+    );
+  }

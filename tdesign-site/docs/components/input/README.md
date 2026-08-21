@@ -1033,13 +1033,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | contextMenuBuilder | EditableTextContextMenuBuilder? | - | 自定义上下文菜单构建器 |
 | controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
 | cursorColor | Color? | - | 游标颜色 |
-| decoration | Decoration? | - | 输入框样式 |
 | enableInteractiveSelection | bool? | - | 是否启用交互式选择 |
 | focusNode | FocusNode? | - | 获取或者取消焦点使用 |
 | hintText | String? | - | 提示文案 |
 | hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
 | inputAction | TextInputAction? | - | 键盘动作类型 |
-| inputDecoration | InputDecoration? | - | 自定义输入框样式，默认圆角 |
 | inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
 | inputType | TextInputType? | - | 键盘类型，数字、字母 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
@@ -1108,6 +1106,3 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | topText | - |
 | topTextWithBlueBorder | - |
 | errorStyle | - |
-
-
-  

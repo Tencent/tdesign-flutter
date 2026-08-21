@@ -13,7 +13,6 @@ Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，`lab
 | bordered | bool | false | 是否显示外边框。 |
 | clearButtonMode | TInputClearButtonMode? | - | 清除按钮显示模式；未传时读取 `TInputThemeData.clearButtonMode`。 |
 | controller | TextEditingController? | - | 文本控制器。 |
-| decoration | InputDecoration? | - | Material 输入装饰逃逸口。 |
 | enabled | bool | true | 是否可交互。 |
 | focusNode | FocusNode? | - | 焦点节点。 |
 | hintText | String? | - | 占位提示文案。 |

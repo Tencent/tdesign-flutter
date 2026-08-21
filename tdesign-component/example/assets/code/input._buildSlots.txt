@@ -5,23 +5,14 @@ Widget _buildSlots(BuildContext context) {
       color: token.bgColorPage,
       child: const Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: TFormItem(
-              leading: Icon(TIcons.app),
-              label: '标签文字',
-              child: TInput(borderless: true, hintText: '请输入文字'),
-            ),
+          TFormItem(
+            leading: Icon(TIcons.app),
+            label: '标签文字',
+            verticalAlignment: TFormItemVerticalAlignment.center,
+            child: TInput(borderless: true, hintText: '请输入文字'),
           ),
           SizedBox(height: 16),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: TInput(
-              borderless: true,
-              hintText: '请输入文字',
-              prefix: Icon(TIcons.app),
-            ),
-          ),
+          TInput(borderless: true, hintText: '请输入文字', prefix: Icon(TIcons.app)),
           SizedBox(height: 16),
         ],
       ),

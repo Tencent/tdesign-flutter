@@ -85,7 +85,7 @@ Padding body(BuildContext context) {
             maxLines: 4,
             minLines: 4,
             maxLength: 500,
-            decoration: InputDecoration(border: OutlineInputBorder()),
+            bordered: true,
           ),
         )
       ],

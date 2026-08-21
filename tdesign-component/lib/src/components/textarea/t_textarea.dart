@@ -97,9 +97,6 @@ class TTextarea extends StatefulWidget {
 
     /// 输入格式化器。
     this.inputFormatters,
-
-    /// Material 输入装饰逃逸口。
-    this.decoration,
   }) : assert(controller == null || initialValue == null),
        assert(maxLength == null || maxCharacter == null),
        assert(maxLength == null || maxLength >= 0),
@@ -179,9 +176,6 @@ class TTextarea extends StatefulWidget {
 
   /// 输入格式化器。
   final List<TextInputFormatter>? inputFormatters;
-
-  /// Material 输入装饰逃逸口。
-  final InputDecoration? decoration;
 
   @override
   State<TTextarea> createState() => _TTextareaState();
@@ -286,7 +280,6 @@ class _TTextareaState extends State<TTextarea> {
         inputAction: widget.inputAction,
         textAlign: widget.textAlign,
         inputFormatters: widget.inputFormatters,
-        decoration: widget.decoration,
       ),
     );
     final content = Column(

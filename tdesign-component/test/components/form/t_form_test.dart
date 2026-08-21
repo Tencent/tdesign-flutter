@@ -283,7 +283,7 @@ void main() {
       expect(controller.submit(), isTrue);
     });
 
-    testWidgets('rules run before the original validator', (tester) async {
+    testWidgets('validator runs after required validation', (tester) async {
       final controller = TFormController();
       await tester.pumpWidget(
         wrap(
@@ -293,7 +293,6 @@ void main() {
               name: 'name',
               value: 'value',
               onChanged: (_) {},
-              rules: [(value) => 'rule error'],
               validator: (value) => 'validator error',
               builder: (context, value, onChanged, errorText) =>
                   Text(errorText ?? 'valid'),
@@ -304,63 +303,55 @@ void main() {
 
       expect(controller.submit(), isFalse);
       await tester.pump();
-      expect(find.text('rule error'), findsOneWidget);
-      expect(find.text('validator error'), findsNothing);
+      expect(find.text('validator error'), findsOneWidget);
     });
 
-    testWidgets('required handles empty collections and short-circuits rules', (
-      tester,
-    ) async {
-      final controller = TFormController();
-      var ruleCalls = 0;
-      var validatorCalls = 0;
-      await tester.pumpWidget(
-        wrap(
-          TForm(
-            controller: controller,
-            child: Column(
-              children: [
-                TFormField<List<String>>(
-                  name: 'list',
-                  value: const [],
-                  required: true,
-                  requiredMessage: 'list required',
-                  onChanged: (_) {},
-                  rules: [
-                    (value) {
-                      ruleCalls += 1;
-                      return 'rule error';
+    testWidgets(
+      'required handles empty collections and short-circuits validator',
+      (tester) async {
+        final controller = TFormController();
+        var validatorCalls = 0;
+        await tester.pumpWidget(
+          wrap(
+            TForm(
+              controller: controller,
+              child: Column(
+                children: [
+                  TFormField<List<String>>(
+                    name: 'list',
+                    value: const [],
+                    required: true,
+                    requiredMessage: 'list required',
+                    onChanged: (_) {},
+                    validator: (value) {
+                      validatorCalls += 1;
+                      return 'validator error';
                     },
-                  ],
-                  validator: (value) {
-                    validatorCalls += 1;
-                    return 'validator error';
-                  },
-                  builder: (context, value, onChanged, errorText) =>
-                      Text(errorText ?? 'valid'),
-                ),
-                TFormField<Map<String, String>>(
-                  name: 'map',
-                  value: const {},
-                  required: true,
-                  requiredMessage: 'map required',
-                  onChanged: (_) {},
-                  builder: (context, value, onChanged, errorText) =>
-                      Text(errorText ?? 'valid'),
-                ),
-              ],
+                    builder: (context, value, onChanged, errorText) =>
+                        Text(errorText ?? 'valid'),
+                  ),
+                  TFormField<Map<String, String>>(
+                    name: 'map',
+                    value: const {},
+                    required: true,
+                    requiredMessage: 'map required',
+                    onChanged: (_) {},
+                    builder: (context, value, onChanged, errorText) =>
+                        Text(errorText ?? 'valid'),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(controller.submit(), isFalse);
-      await tester.pump();
-      expect(find.text('list required'), findsOneWidget);
-      expect(find.text('map required'), findsOneWidget);
-      expect(ruleCalls, 0);
-      expect(validatorCalls, 0);
-    });
+        expect(controller.submit(), isFalse);
+        await tester.pump();
+        expect(find.text('list required'), findsOneWidget);
+        expect(find.text('map required'), findsOneWidget);
+        expect(validatorCalls, 0);
+      },
+    );
 
     testWidgets('upload follows form-level validation timing', (tester) async {
       const photo = TUploadFile(
@@ -414,7 +405,9 @@ void main() {
       expect(find.text('请上传照片'), findsOneWidget);
     });
 
-    testWidgets('original validator runs after passing rules', (tester) async {
+    testWidgets('validator runs after passing required validation', (
+      tester,
+    ) async {
       final controller = TFormController();
       await tester.pumpWidget(
         wrap(
@@ -424,7 +417,6 @@ void main() {
               name: 'name',
               value: 'value',
               onChanged: (_) {},
-              rules: [(value) => null],
               validator: (value) => 'validator error',
               builder: (context, value, onChanged, errorText) =>
                   Text(errorText ?? 'valid'),
@@ -438,243 +430,276 @@ void main() {
       expect(find.text('validator error'), findsOneWidget);
     });
 
-    testWidgets('every form demo input supports required rules and validator', (
-      tester,
-    ) async {
-      const names = [
-        'input',
-        'textarea',
-        'radio',
-        'checkbox',
-        'switch',
-        'stepper',
-        'slider',
-        'rate',
-        'picker',
-        'dateTimePicker',
-      ];
-      const pickerItems = TPickerColumns([
-        [TPickerOption(label: 'Option', value: 'option')],
-      ]);
-      final controller = TFormController();
-      var phase = 0;
-      late StateSetter update;
+    testWidgets(
+      'every form demo input supports required validation and validator',
+      (tester) async {
+        const names = [
+          'input',
+          'textarea',
+          'radio',
+          'checkbox',
+          'switch',
+          'stepper',
+          'slider',
+          'rate',
+          'picker',
+          'dateTimePicker',
+        ];
+        const pickerItems = TPickerColumns([
+          [TPickerOption(label: 'Option', value: 'option')],
+        ]);
+        final controller = TFormController();
+        var phase = 0;
+        late StateSetter update;
 
-      Widget item(String label, Widget child) {
-        return TFormItem(
-          label: label,
-          child: Offstage(child: child),
-        );
-      }
+        Widget item(String label, Widget child) {
+          return TFormItem(
+            label: label,
+            child: Offstage(child: child),
+          );
+        }
 
-      await tester.pumpWidget(
-        wrap(
-          StatefulBuilder(
-            builder: (context, setState) {
-              update = setState;
-              final stringValue = phase == 0 ? null : 'value';
-              final listValue = phase == 0 ? null : <String>['value'];
-              final objectListValue = phase == 0 ? null : <Object?>['option'];
-              final boolValue = phase == 0 ? null : true;
-              final numValue = phase == 0 ? null : 1;
-              final doubleValue = phase == 0 ? null : 1.0;
-              final dateValue = phase == 0
-                  ? null
-                  : const TDateTimePickerValue(year: 2026, month: 1, day: 1);
+        await tester.pumpWidget(
+          wrap(
+            StatefulBuilder(
+              builder: (context, setState) {
+                update = setState;
+                final stringValue = phase == 0 ? null : 'value';
+                final listValue = phase == 0 ? null : <String>['value'];
+                final objectListValue = phase == 0 ? null : <Object?>['option'];
+                final boolValue = phase == 0 ? null : true;
+                final numValue = phase == 0 ? null : 1;
+                final doubleValue = phase == 0 ? null : 1.0;
+                final dateValue = phase == 0
+                    ? null
+                    : const TDateTimePickerValue(year: 2026, month: 1, day: 1);
 
-              return TForm(
-                controller: controller,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TFormField<String?>(
-                        name: 'input',
-                        value: stringValue,
-                        required: true,
-                        requiredMessage: 'input required',
-                        rules: [(value) => phase == 1 ? 'input rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'input validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) =>
-                            item('Input', TInput(initialValue: value ?? '')),
-                      ),
-                      TFormField<String?>(
-                        name: 'textarea',
-                        value: stringValue,
-                        required: true,
-                        requiredMessage: 'textarea required',
-                        rules: [(value) => phase == 1 ? 'textarea rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'textarea validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) => item(
-                          'Textarea',
-                          TTextarea(initialValue: value ?? ''),
+                return TForm(
+                  controller: controller,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TFormField<String?>(
+                          name: 'input',
+                          value: stringValue,
+                          required: true,
+                          requiredMessage: 'input required',
+                          validator: (value) => phase == 1
+                              ? 'input validator'
+                              : phase == 2
+                              ? 'input validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item('Input', TInput(initialValue: value ?? '')),
                         ),
-                      ),
-                      TFormField<String?>(
-                        name: 'radio',
-                        value: stringValue,
-                        required: true,
-                        requiredMessage: 'radio required',
-                        rules: [(value) => phase == 1 ? 'radio rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'radio validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) => item(
-                          'Radio',
-                          TRadioGroup<String>(
-                            value: value,
-                            options: const [
-                              TRadioOption(value: 'value', label: 'Value'),
-                            ],
-                          ),
+                        TFormField<String?>(
+                          name: 'textarea',
+                          value: stringValue,
+                          required: true,
+                          requiredMessage: 'textarea required',
+                          validator: (value) => phase == 1
+                              ? 'textarea validator'
+                              : phase == 2
+                              ? 'textarea validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item(
+                                'Textarea',
+                                TTextarea(initialValue: value ?? ''),
+                              ),
                         ),
-                      ),
-                      TFormField<List<String>?>(
-                        name: 'checkbox',
-                        value: listValue,
-                        required: true,
-                        requiredMessage: 'checkbox required',
-                        rules: [(value) => phase == 1 ? 'checkbox rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'checkbox validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) => item(
-                          'Checkbox',
-                          TCheckboxGroup<String>(
-                            value: value ?? const [],
-                            options: const [
-                              TCheckboxOption(value: 'value', label: 'Value'),
-                            ],
-                          ),
+                        TFormField<String?>(
+                          name: 'radio',
+                          value: stringValue,
+                          required: true,
+                          requiredMessage: 'radio required',
+                          validator: (value) => phase == 1
+                              ? 'radio validator'
+                              : phase == 2
+                              ? 'radio validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item(
+                                'Radio',
+                                TRadioGroup<String>(
+                                  value: value,
+                                  options: const [
+                                    TRadioOption(
+                                      value: 'value',
+                                      label: 'Value',
+                                    ),
+                                  ],
+                                ),
+                              ),
                         ),
-                      ),
-                      TFormField<bool?>(
-                        name: 'switch',
-                        value: boolValue,
-                        required: true,
-                        requiredMessage: 'switch required',
-                        rules: [(value) => phase == 1 ? 'switch rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'switch validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) =>
-                            item('Switch', TSwitch(value: value ?? false)),
-                      ),
-                      TFormField<num?>(
-                        name: 'stepper',
-                        value: numValue,
-                        required: true,
-                        requiredMessage: 'stepper required',
-                        rules: [(value) => phase == 1 ? 'stepper rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'stepper validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) =>
-                            item('Stepper', TStepper(value: value ?? 0)),
-                      ),
-                      TFormField<double?>(
-                        name: 'slider',
-                        value: doubleValue,
-                        required: true,
-                        requiredMessage: 'slider required',
-                        rules: [(value) => phase == 1 ? 'slider rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'slider validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) =>
-                            item('Slider', TSlider(value: value ?? 0)),
-                      ),
-                      TFormField<double?>(
-                        name: 'rate',
-                        value: doubleValue,
-                        required: true,
-                        requiredMessage: 'rate required',
-                        rules: [(value) => phase == 1 ? 'rate rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'rate validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) =>
-                            item('Rate', TRate(value: value ?? 0)),
-                      ),
-                      TFormField<List<Object?>?>(
-                        name: 'picker',
-                        value: objectListValue,
-                        required: true,
-                        requiredMessage: 'picker required',
-                        rules: [(value) => phase == 1 ? 'picker rule' : null],
-                        validator: (value) =>
-                            phase == 2 ? 'picker validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) => item(
-                          'Picker',
-                          TPicker(items: pickerItems, value: value ?? const []),
+                        TFormField<List<String>?>(
+                          name: 'checkbox',
+                          value: listValue,
+                          required: true,
+                          requiredMessage: 'checkbox required',
+                          validator: (value) => phase == 1
+                              ? 'checkbox validator'
+                              : phase == 2
+                              ? 'checkbox validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item(
+                                'Checkbox',
+                                TCheckboxGroup<String>(
+                                  value: value ?? const [],
+                                  options: const [
+                                    TCheckboxOption(
+                                      value: 'value',
+                                      label: 'Value',
+                                    ),
+                                  ],
+                                ),
+                              ),
                         ),
-                      ),
-                      TFormField<TDateTimePickerValue?>(
-                        name: 'dateTimePicker',
-                        value: dateValue,
-                        required: true,
-                        requiredMessage: 'dateTimePicker required',
-                        rules: [
-                          (value) => phase == 1 ? 'dateTimePicker rule' : null,
-                        ],
-                        validator: (value) =>
-                            phase == 2 ? 'dateTimePicker validator' : null,
-                        onChanged: (_) {},
-                        builder: (context, value, onChanged, errorText) => item(
-                          'DateTimePicker',
-                          TDateTimePicker(
-                            value: value ?? const TDateTimePickerValue(),
-                          ),
+                        TFormField<bool?>(
+                          name: 'switch',
+                          value: boolValue,
+                          required: true,
+                          requiredMessage: 'switch required',
+                          validator: (value) => phase == 1
+                              ? 'switch validator'
+                              : phase == 2
+                              ? 'switch validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item('Switch', TSwitch(value: value ?? false)),
                         ),
-                      ),
-                    ],
+                        TFormField<num?>(
+                          name: 'stepper',
+                          value: numValue,
+                          required: true,
+                          requiredMessage: 'stepper required',
+                          validator: (value) => phase == 1
+                              ? 'stepper validator'
+                              : phase == 2
+                              ? 'stepper validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item('Stepper', TStepper(value: value ?? 0)),
+                        ),
+                        TFormField<double?>(
+                          name: 'slider',
+                          value: doubleValue,
+                          required: true,
+                          requiredMessage: 'slider required',
+                          validator: (value) => phase == 1
+                              ? 'slider validator'
+                              : phase == 2
+                              ? 'slider validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item('Slider', TSlider(value: value ?? 0)),
+                        ),
+                        TFormField<double?>(
+                          name: 'rate',
+                          value: doubleValue,
+                          required: true,
+                          requiredMessage: 'rate required',
+                          validator: (value) => phase == 1
+                              ? 'rate validator'
+                              : phase == 2
+                              ? 'rate validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item('Rate', TRate(value: value ?? 0)),
+                        ),
+                        TFormField<List<Object?>?>(
+                          name: 'picker',
+                          value: objectListValue,
+                          required: true,
+                          requiredMessage: 'picker required',
+                          validator: (value) => phase == 1
+                              ? 'picker validator'
+                              : phase == 2
+                              ? 'picker validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item(
+                                'Picker',
+                                TPicker(
+                                  items: pickerItems,
+                                  value: value ?? const [],
+                                ),
+                              ),
+                        ),
+                        TFormField<TDateTimePickerValue?>(
+                          name: 'dateTimePicker',
+                          value: dateValue,
+                          required: true,
+                          requiredMessage: 'dateTimePicker required',
+                          validator: (value) => phase == 1
+                              ? 'dateTimePicker validator'
+                              : phase == 2
+                              ? 'dateTimePicker validator'
+                              : null,
+                          onChanged: (_) {},
+                          builder: (context, value, onChanged, errorText) =>
+                              item(
+                                'DateTimePicker',
+                                TDateTimePicker(
+                                  value: value ?? const TDateTimePickerValue(),
+                                ),
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
 
-      for (final name in names) {
-        expect(find.text('$name required'), findsNothing);
-      }
-      expect(controller.validate(), isFalse);
-      await tester.pump();
-      for (final name in names) {
-        expect(find.text('$name required'), findsOneWidget);
-      }
+        for (final name in names) {
+          expect(find.text('$name required'), findsNothing);
+        }
+        expect(controller.validate(), isFalse);
+        await tester.pump();
+        for (final name in names) {
+          expect(find.text('$name required'), findsOneWidget);
+        }
 
-      phase = 1;
-      update(() {});
-      await tester.pump();
-      await tester.pump();
-      expect(controller.validate(), isFalse);
-      await tester.pump();
-      for (final name in names) {
-        expect(find.text('$name rule'), findsOneWidget);
-      }
+        phase = 1;
+        update(() {});
+        await tester.pump();
+        await tester.pump();
+        expect(controller.validate(), isFalse);
+        await tester.pump();
+        for (final name in names) {
+          expect(find.text('$name validator'), findsOneWidget);
+        }
 
-      phase = 2;
-      update(() {});
-      await tester.pump();
-      await tester.pump();
-      expect(controller.validate(), isFalse);
-      await tester.pump();
-      for (final name in names) {
-        expect(find.text('$name validator'), findsOneWidget);
-      }
+        phase = 2;
+        update(() {});
+        await tester.pump();
+        await tester.pump();
+        expect(controller.validate(), isFalse);
+        await tester.pump();
+        for (final name in names) {
+          expect(find.text('$name validator'), findsOneWidget);
+        }
 
-      phase = 3;
-      update(() {});
-      await tester.pump();
-      await tester.pump();
-      expect(controller.validate(), isTrue);
-    });
+        phase = 3;
+        update(() {});
+        await tester.pump();
+        await tester.pump();
+        expect(controller.validate(), isTrue);
+      },
+    );
 
     testWidgets('form item can explicitly override inherited required marker', (
       tester,
@@ -1257,7 +1282,7 @@ void main() {
       }
     });
 
-    testWidgets('long label centers while message rows align to the top', (
+    testWidgets('long labels and message rows align to the top', (
       tester,
     ) async {
       const fieldKey = Key('centered-field');
@@ -1284,11 +1309,13 @@ void main() {
       final fieldRect = tester.getRect(find.byKey(fieldKey));
       final messageLabelRect = tester.getRect(find.text('标签文字'));
       final messageFieldRect = tester.getRect(find.byKey(messageFieldKey));
-      expect(longLabelRect.center.dy, closeTo(fieldRect.center.dy, 0.01));
+      expect(longLabelRect.top, closeTo(fieldRect.top, 0.01));
       expect(messageLabelRect.top, closeTo(messageFieldRect.top, 0.01));
     });
 
-    testWidgets('theme can top align a tall horizontal field', (tester) async {
+    testWidgets('tall horizontal fields align labels to the top', (
+      tester,
+    ) async {
       const fieldKey = Key('top-aligned-field');
       await tester.pumpWidget(
         wrap(
@@ -1296,11 +1323,9 @@ void main() {
             label: '个人简介',
             child: SizedBox(key: fieldKey, height: 100),
           ),
-          formTheme: const TFormThemeData(
-            horizontalCrossAxisAlignment: CrossAxisAlignment.start,
-          ),
         ),
       );
+      await tester.pump();
 
       final labelRect = tester.getRect(find.text('个人简介'));
       final fieldRect = tester.getRect(find.byKey(fieldKey));
@@ -1384,6 +1409,49 @@ void main() {
       expect(extraRect.right, 384);
     });
 
+    testWidgets('horizontal vertical alignment supports theme and override', (
+      tester,
+    ) async {
+      const fieldKey = Key('aligned-field');
+      const extraKey = Key('aligned-extra');
+
+      Future<void> pump({TFormItemVerticalAlignment? alignment}) =>
+          tester.pumpWidget(
+            wrap(
+              TFormItem(
+                label: 'Label',
+                help: 'Help',
+                verticalAlignment: alignment,
+                child: const SizedBox(key: fieldKey, height: 40),
+                extra: TButton(
+                  key: extraKey,
+                  size: TButtonSize.extraSmall,
+                  onPressed: () {},
+                  child: const Text('Action'),
+                ),
+              ),
+              formTheme: const TFormThemeData(
+                verticalAlignment: TFormItemVerticalAlignment.center,
+              ),
+            ),
+          );
+
+      await pump();
+      var fieldRect = tester.getRect(find.byKey(fieldKey));
+      var extraRect = tester.getRect(find.byKey(extraKey));
+      var helpRect = tester.getRect(find.text('Help'));
+      expect(extraRect.height, 28);
+      expect(
+        extraRect.center.dy,
+        closeTo((fieldRect.top + helpRect.bottom) / 2, 0.01),
+      );
+
+      await pump(alignment: TFormItemVerticalAlignment.start);
+      fieldRect = tester.getRect(find.byKey(fieldKey));
+      extraRect = tester.getRect(find.byKey(extraKey));
+      expect(extraRect.top, closeTo(fieldRect.top, 0.01));
+    });
+
     testWidgets('label and messages are optional', (tester) async {
       await tester.pumpWidget(wrap(const TFormItem(child: Text('Field'))));
       expect(find.text('Field'), findsOneWidget);
@@ -1408,7 +1476,7 @@ void main() {
       labelGap: 6,
       leadingGap: 8,
       messageGap: 2,
-      horizontalCrossAxisAlignment: CrossAxisAlignment.center,
+      verticalAlignment: TFormItemVerticalAlignment.start,
     );
     const other = TFormThemeData(
       showColon: false,
@@ -1426,7 +1494,7 @@ void main() {
       labelGap: 10,
       leadingGap: 12,
       messageGap: 6,
-      horizontalCrossAxisAlignment: CrossAxisAlignment.start,
+      verticalAlignment: TFormItemVerticalAlignment.center,
     );
 
     expect(base.copyWith().labelWidth, 80);
@@ -1448,7 +1516,7 @@ void main() {
             labelGap: 8,
             leadingGap: 10,
             messageGap: 4,
-            horizontalCrossAxisAlignment: CrossAxisAlignment.end,
+            verticalAlignment: TFormItemVerticalAlignment.center,
           )
           .layout,
       TFormLayout.vertical,
@@ -1468,8 +1536,8 @@ void main() {
     expect(base.lerp(other, 0.5).itemSpacing, 6);
     expect(base.lerp(other, 0.5).leadingGap, 10);
     expect(
-      base.lerp(other, 0.75).horizontalCrossAxisAlignment,
-      CrossAxisAlignment.start,
+      base.lerp(other, 0.75).verticalAlignment,
+      TFormItemVerticalAlignment.center,
     );
   });
 }

@@ -14,6 +14,9 @@
 - [x] DONE 修复竖排 FormItem 的右侧操作区结构和全宽 controls 布局
 - [x] DONE 修复 Input 自定义主题示例的双重输入壳层
 - [x] DONE 为 Form Upload 示例补充空列表必填校验，并与其他字段共用表单级校验时机
+- [x] DONE 收敛 FormItem 对齐 API，并统一 TFormField 使用 Flutter validator
+- [x] DONE 移除 Input/Textarea 的 Material decoration 透传入口，以专属 hintStyle 收敛提示词主题配置
+- [x] DONE 为 TFormItem 增加 start/center 语义化纵向对齐并保持 extra 为纯插槽
 - [x] DONE 补充或更新 Widget/Golden 测试
 - [x] DONE 更新 Example 和 API dartdoc
 - [x] DONE 执行 Flutter 3.32.0/latest 验证并记录结果

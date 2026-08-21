@@ -9,9 +9,7 @@ Widget _buildCustom(BuildContext context) => ColoredBox(
                 backgroundColor: Color(0xff2c2c2c),
                 borderColor: Color(0xff4b4b4b),
                 textStyle: TextStyle(color: Colors.white),
-                decorationTheme: InputDecorationTheme(
-                  hintStyle: TextStyle(color: Color(0x59ffffff)),
-                ),
+                hintStyle: TextStyle(color: Color(0x59ffffff)),
               ),
             )
             .mergeExtension(

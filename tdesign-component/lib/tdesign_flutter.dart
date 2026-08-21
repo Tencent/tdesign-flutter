@@ -62,7 +62,11 @@ export 'src/components/footer/t_footer_theme_data.dart' show TFooterThemeData;
 export 'src/components/form/t_form.dart';
 export 'src/components/form/t_form_item.dart';
 export 'src/components/form/t_form_theme_data.dart'
-    show TFormLayout, TFormRequiredMarkPosition, TFormThemeData;
+    show
+        TFormItemVerticalAlignment,
+        TFormLayout,
+        TFormRequiredMarkPosition,
+        TFormThemeData;
 export 'src/components/icon/t_icon.dart';
 export 'src/components/icon/t_icon_theme_data.dart' show TIconThemeData;
 export 'src/components/image/t_image.dart';

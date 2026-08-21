@@ -62,7 +62,7 @@ TForm                 表单生命周期、字段注册和统一操作
 
 ### TFormField
 
-- 负责 `name`、受控 `value`、`onChanged`、`required`、`rules`、`validator`。
+- 负责 `name`、受控 `value`、`onChanged`、`required` 和 Flutter 原生语义的 `validator`。
 - `required` 是校验规则，并向子树提供必填状态供 `TFormItem` 展示标记。
 - builder 继续接收 value、onChanged 和 errorText，不增加 label、layout 或输入专属参数。
 
@@ -75,9 +75,9 @@ TForm                 表单生命周期、字段注册和统一操作
 - `TFormThemeData.borderColor` 可覆盖 FormItem 底部分隔线颜色，用于小程序自定义主题或无边界 Demo。
 - `TFormThemeData.leadingGap` 可覆盖前置内容与标签区域的间距，默认读取 8dp 间距 token。
 - label 默认使用 `fontBodyLarge + textColorPrimary`；help 使用 `fontBodySmall + textColorPlaceholder`；error 使用 `fontBodySmall + errorNormalColor`。组件主题中的局部 TextStyle 只覆盖显式字段，不得清空其余 token 字体属性。
-- 横向布局无 help/error 时垂直居中；存在 help/error 时顶部对齐，使超长标签和带提示字段分别匹配小程序的默认与 `align-items: start` 示例。
+- `TFormItemVerticalAlignment` 只提供 `start`、`center` 两种水平布局下的语义化纵向对齐；实例配置优先于 `TFormThemeData.verticalAlignment`，默认 `start` 保持多行字段与消息场景的现有行为，不暴露 Flutter `CrossAxisAlignment`。
+- `extra` 保持纯 Widget 插槽，不附加固定 Padding、Transform 或尺寸；它与 label、字段内容共同遵循上述纵向对齐。Input Demo 的普通图标行使用 `center`，带 tips 的操作按钮保持 `start`，对应小程序默认与 `.extra` 局部覆盖。
 - 竖向布局只将 label 与 controls 的内部结构改为纵向排列；`extra` 仍是表单项外层右侧操作区，并与内部内容垂直居中，不得落到 controls 下方。
-- `TFormThemeData.horizontalCrossAxisAlignment` 只用于局部视觉覆盖；Form Demo 用它映射小程序个人简介字段的 `t-class-label` 顶部对齐，不改变其他字段默认布局。
 
 ### TInput / TTextarea
 
@@ -86,8 +86,8 @@ TForm                 表单生命周期、字段注册和统一操作
 - `clearButtonMode` 为单一清除按钮配置：`never`、`always`、`focused`。
 - `clearButtonMode` 默认 `never`，与小程序 `clearable=false` 对齐；需要清除能力时显式使用 `always` 或 `focused`。
 - `suffix` 存在时不自动插入清除按钮。
-- `showPasswordToggle` 是 TInput 的可选密码能力；初始显隐状态读取 `obscureText`，显隐切换由组件内部维护，眼睛按钮使用 TDesign 图标和固定触控区域。
-- `prefix` / `suffix` 作为内容插槽时，普通图标使用 24dp 图标尺寸和 token 默认图标样式；密码显隐按钮单独保留 40dp 触控区域。Demo 不再在输入框外重复拼接普通图标。
+- `showPasswordToggle` 是 TInput 的可选密码能力；初始显隐状态读取 `obscureText`，显隐切换由组件内部维护，眼睛按钮使用 TDesign 图标和固定图标槽。
+- `prefix` / `suffix` 作为内容插槽时，普通图标使用 24dp 图标尺寸和 token 默认图标样式；密码显隐按钮同样使用 24dp 图标槽，不得额外撑高标准 56dp 输入框。Demo 不再在输入框外重复拼接普通图标。
 - `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按小程序规则以 ASCII 字符 1、非 ASCII 字符 2 计数。
 - `TInputStatus` 提供 `normal`、`success`、`warning`、`error` 四种状态；状态只影响输入壳层和计数/帮助色，已输入文字始终使用正常正文色，且状态不替代 `TFormItem` 的字段错误展示。
 - `borderless` 控制输入壳层是否绘制边框；`TTextarea.bordered` 为小程序语义的正向别名，二者不在同一组件上重复暴露。
@@ -95,8 +95,8 @@ TForm                 表单生命周期、字段注册和统一操作
 - `TTextarea.indicator` 在配置 `maxLength` 或 `maxCharacter` 时展示当前计数；`autosize` 通过 `minLines`/`maxLines` 组合实现，避免引入平台专属布局 API。
 - Textarea 输入文字使用 `fontBodyLarge`，placeholder 使用 `fontBodyMedium + textColorPlaceholder`，indicator 使用 `fontBodySmall + textColorPlaceholder`；标题与编辑区、编辑区与 indicator 的间距均读取 `spacer8`。
 - 独立 Textarea 默认由组件提供 16dp 容器内边距和容器背景；放入 `TFormItem` 时自动去除这层内边距和背景，避免 Demo 或业务手工抵消双重留白。
-- `decoration` 保留为 Material 迁移逃逸口，仅补充输入内核属性，不再决定默认 TDesign 外层布局。
-- `TInputThemeData.borderColor` 可覆盖输入壳层边框颜色；`backgroundColor`、`contentPadding` 和 `borderRadius` 继续负责对应的外层视觉 token。
+- 不公开 Material `InputDecoration` 透传入口；hint、前后置内容、背景、边框、内边距、label 和 help/error 分别由 TInput、TInputThemeData 和 TFormItem 的专属 API 负责，避免两套视觉配置冲突。
+- `TInputThemeData.borderColor` 可覆盖输入壳层边框颜色；`backgroundColor`、`contentPadding`、`borderRadius` 和 `hintStyle` 继续负责对应的视觉 token。
 - 单行 Input 的输入文字和提示词默认使用完整 `fontBodyLarge`；Textarea 按上述多行 token 解析。Theme 或实例只配置颜色时必须保留 token 字号与行高。组件主题文字颜色覆盖所有可用状态的输入文字，状态语义色仅由输入壳层、计数器和错误提示消费；实例 `style.color` 仍具有最高优先级。
 
 ### 视觉 Demo 契约
@@ -116,6 +116,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - [x] `TFormController` 支持全量及按字段 validate、clearValidate、setValidateMessage。
 - [x] Form 外部错误能展示在对应 `TFormItem`，且清除校验后消失。
 - [x] `TInput` 不再提供 label；`TTextarea.label` 仅承担独立内部标题，清除按钮只由 `clearButtonMode` 决定。
+- [x] `TInput`、`TTextarea` 不再公开 `decoration`，`TInputThemeData` 使用专属 `hintStyle` 代替 `decorationTheme`。
 - [x] 默认输入壳层不依赖 Material `InputDecoration` 的 border/fill/padding 绘制，ThemeData 的 Material 输入主题不会污染 TDesign 视觉。
 - [x] Input 覆盖基础、前后缀、密码显隐、禁用、只读、清除、边框、状态、`maxLength`、`maxCharacter` 场景。
 - [x] 非多行 TInput 通过 `TInputThemeData.borderRadius` 支持完整圆角边框，Demo 不再手绘输入框外框。
