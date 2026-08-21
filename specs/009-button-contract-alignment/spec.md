@@ -56,6 +56,8 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
   对应字号为 16/16/14/14dp，并保留 token 行高和字重。
 - 默认图标尺寸分别为 24/20/18/18dp；显式传入的 `Icon.size` 和 `Icon.color`
   不被覆盖。
+- 图标与文案默认间距读取全局 `spacer8` token；组件 Theme 的
+  `iconTextSpacing` 与实例内容组合保持既有优先级。
 - 图标按钮复用 `TButton` 的内容、状态、事件和主题解析：`icon + child` 表示图文按钮，
   仅 `icon` 表示纯图标按钮，不建立第二套按钮 API。
 - `TButtonShape.square` 用于纯图标按钮时约束宽高相等，并使用 `radiusDefault`；

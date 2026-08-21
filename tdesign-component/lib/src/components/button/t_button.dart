@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_button_resolve.dart';
 import 't_button_theme_data.dart';
@@ -181,7 +182,7 @@ class _TButtonState extends State<TButton> {
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconTextSpacing = theme?.iconTextSpacing ?? 8.0;
+    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer8;
     final gradient = theme?.gradient;
 
     Widget? content;

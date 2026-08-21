@@ -3,6 +3,7 @@
 - [x] DONE 明确需求和验收边界
 - [x] DONE 完成 develop 基线的 Button 全局审查
 - [x] DONE 统一尺寸、字体、图标与 tap target 解析
+- [x] DONE 图文间距读取 `spacer8` token，并覆盖自定义字体/间距 token 回归
 - [x] DONE 对齐 square 图标按钮的等宽高与默认圆角契约
 - [x] DONE 移除职责混杂且已失去通栏行为的 `TButtonShape.filled`
 - [x] DONE 移除属于父布局职责的 `TButtonThemeData.margin`

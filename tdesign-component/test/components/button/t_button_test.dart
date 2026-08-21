@@ -12,6 +12,7 @@ void main() {
     Widget child, {
     TButtonThemeData? buttonTheme,
     ButtonStyle? materialStyle,
+    TThemeData? tTheme,
   }) {
     final themeExtensions = <ThemeExtension>[
       if (buttonTheme != null) buttonTheme,
@@ -20,7 +21,7 @@ void main() {
     // 用外层 Theme 包 MaterialApp 会被 MaterialApp 默认 ThemeData.light() 覆盖，导致 extension 丢失。
     return MaterialApp(
       theme: ThemeData(
-        extensions: [TThemeData.defaultData(), ...themeExtensions],
+        extensions: [tTheme ?? TThemeData.defaultData(), ...themeExtensions],
         elevatedButtonTheme: ElevatedButtonThemeData(style: materialStyle),
         outlinedButtonTheme: OutlinedButtonThemeData(style: materialStyle),
         textButtonTheme: TextButtonThemeData(style: materialStyle),
@@ -464,6 +465,64 @@ void main() {
         );
       });
     }
+
+    testWidgets('字体与图文间距读取 TDesign token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'button-token-test',
+        fontMap: {
+          'fontMarkLarge': Font(
+            size: 17,
+            lineHeight: 25,
+            fontWeight: FontWeight.w500,
+          ),
+          'fontMarkMedium': Font(
+            size: 13,
+            lineHeight: 19,
+            fontWeight: FontWeight.w700,
+          ),
+        },
+        marginMap: const {'spacer8': 13},
+      );
+
+      for (final sizeCase in const [
+        (
+          size: TButtonSize.large,
+          fontSize: 17.0,
+          lineHeight: 25 / 17,
+          weight: FontWeight.w500,
+        ),
+        (
+          size: TButtonSize.small,
+          fontSize: 13.0,
+          lineHeight: 19 / 13,
+          weight: FontWeight.w700,
+        ),
+      ]) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              size: sizeCase.size,
+              icon: const Icon(Icons.add, key: Key('token-icon')),
+              onPressed: () {},
+              child: const Text('token 文案'),
+            ),
+            tTheme: token,
+          ),
+        );
+
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        final style = button.style!.textStyle!.resolve({})!;
+        expect(style.fontSize, sizeCase.fontSize);
+        expect(style.height, closeTo(sizeCase.lineHeight, 0.001));
+        expect(style.fontWeight, sizeCase.weight);
+
+        final iconRect = tester.getRect(find.byKey(const Key('token-icon')));
+        final textRect = tester.getRect(find.text('token 文案'));
+        expect(textRect.left - iconRect.right, 13);
+      }
+    });
 
     testWidgets('Material ButtonTheme 可恢复 padded tap target', (tester) async {
       const key = Key('material-padded-button');
