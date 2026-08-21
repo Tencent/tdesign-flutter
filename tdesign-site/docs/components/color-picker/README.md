@@ -72,7 +72,7 @@ TPopup.show(
 
 ### 2 组件状态
 
-格式切换（HEX / RGB / HSL / HSV / CMYK / CSS）
+组件模式选择（格式切换）：CSS / HEX / RGB / HSL / HSV / CMYK，默认 `CSS`，两行布局对齐 mobile-vue
 
 ```dart
 TColorPicker(

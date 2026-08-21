@@ -25,16 +25,21 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
   /// 格式切换当前值。
   String formatValue = '#0052D9';
 
-  /// 当前选择格式。
-  TColorPickerFormat curFormat = TColorPickerFormat.rgb;
+  /// 当前选择格式（默认 CSS，对齐 mobile-vue format 示例）。
+  TColorPickerFormat curFormat = TColorPickerFormat.css;
 
-  static const List<TColorPickerFormat> _formatList = [
-    TColorPickerFormat.css,
-    TColorPickerFormat.hex,
-    TColorPickerFormat.rgb,
-    TColorPickerFormat.hsl,
-    TColorPickerFormat.hsv,
-    TColorPickerFormat.cmyk,
+  /// 格式选项，两行布局，对齐 mobile-vue `format.vue` 的 `lineList`。
+  static const List<List<TColorPickerFormat>> _formatLines = [
+    [
+      TColorPickerFormat.css,
+      TColorPickerFormat.hex,
+      TColorPickerFormat.rgb,
+    ],
+    [
+      TColorPickerFormat.hsl,
+      TColorPickerFormat.hsv,
+      TColorPickerFormat.cmyk,
+    ],
   ];
 
   @override
@@ -55,7 +60,7 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
         ExampleModule(
           title: '组件状态',
           children: [
-            ExampleItem(desc: '格式切换', builder: _buildFormat),
+            ExampleItem(desc: '组件模式选择', builder: _buildFormat),
           ],
         ),
       ],
@@ -124,20 +129,8 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
   Widget _buildFormat(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              for (final item in _formatList)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: _FormatChip(
-                    label: item.name.toUpperCase(),
-                    selected: curFormat == item,
-                    onTap: () => setState(() => curFormat = item),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
+          for (final line in _formatLines) _buildFormatLine(line),
+          const SizedBox(height: 8),
           TColorPicker(
             value: formatValue,
             type: TColorPickerType.multiple,
@@ -150,15 +143,38 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
           ),
         ],
       );
+
+  /// 构建一行格式选项，项间等分、块间留 12px 间距，对齐 mobile-vue `format-line`。
+  Widget _buildFormatLine(List<TColorPickerFormat> items) => Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Row(
+          children: [
+            for (var i = 0; i < items.length; i++) ...[
+              if (i > 0) const SizedBox(width: 12),
+              Expanded(
+                child: _FormatChip(
+                  label: items[i].name.toUpperCase(),
+                  selected: curFormat == items[i],
+                  onTap: () => setState(() => curFormat = items[i]),
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
 }
 
-/// 格式选择小块。
+/// 格式选择小块，对齐 mobile-vue `format-item`：圆角矩形块，选中态显示
+/// 蓝色边框、左上角三角标记与白色勾选图标。
 class _FormatChip extends StatelessWidget {
   const _FormatChip({
     required this.label,
     required this.selected,
     required this.onTap,
   });
+
+  /// 选中态边框 / 三角颜色，对齐 mobile-vue `#0052d9`。
+  static const Color _activeColor = Color(0xFF0052D9);
 
   final String label;
   final bool selected;
@@ -167,26 +183,81 @@ class _FormatChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final primary = colorScheme.primary;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        height: 56,
         decoration: BoxDecoration(
-          color: selected ? primary : colorScheme.surface,
-          borderRadius: BorderRadius.circular(4),
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? primary : Theme.of(context).dividerColor,
+            color: selected ? _activeColor : colorScheme.dividerColor,
+            width: selected ? 1.2 : 1,
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: selected ? Colors.white : null,
-          ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Center(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: selected ? _activeColor : colorScheme.onSurface,
+                ),
+              ),
+            ),
+            if (selected) ...[
+              // 左上角三角标记，对齐 mobile-vue `.active::after`。
+              Positioned(
+                left: -0.2,
+                top: -0.2,
+                child: _CornerTriangle(),
+              ),
+              // 三角内的白色勾选图标。
+              const Positioned(
+                left: 3,
+                top: 3,
+                child: Icon(
+                  Icons.check,
+                  size: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );
   }
+}
+
+/// 左上角直角三角，对齐 mobile-vue `format-item.active::after`（28px 三角）。
+class _CornerTriangle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: const Size(28, 28),
+      painter: _CornerTrianglePainter(),
+    );
+  }
+}
+
+class _CornerTrianglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(
+      path,
+      Paint()..color = _FormatChip._activeColor,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _CornerTrianglePainter oldDelegate) => false;
 }
