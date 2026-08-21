@@ -1248,6 +1248,40 @@ void main() {
       );
     });
 
+    testWidgets('渐变 square/circle 纯图标在 minimumSize 解析为 null 时仍等宽高', (
+      tester,
+    ) async {
+      for (final shape in [TButtonShape.square, TButtonShape.circle]) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              icon: const SizedBox(width: 1, height: 1),
+              size: TButtonSize.medium,
+              style: const ButtonStyle(
+                minimumSize: WidgetStatePropertyAll<Size?>(null),
+              ),
+              onPressed: () {},
+            ),
+            buttonTheme: TButtonThemeData(
+              shape: shape,
+              gradient: const LinearGradient(colors: [Colors.red, Colors.blue]),
+            ),
+          ),
+        );
+
+        final visualButton = find
+            .descendant(
+              of: find.byType(TButton),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is ShapeDecoration,
+              ),
+            )
+            .first;
+        expect(tester.getSize(visualButton), const Size.square(40));
+      }
+    });
+
     testWidgets('无渐变时不额外包裹 Container', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

@@ -215,7 +215,10 @@ class _TButtonState extends State<TButton> {
                 ));
       final minimumSize =
           resolvedStyle.minimumSize?.resolve(states) ??
-          Size(0, sizeMetrics.height);
+          Size(
+            isIconOnly && isFixedIconShape ? sizeMetrics.height : 0,
+            sizeMetrics.height,
+          );
       final maximumSize = resolvedStyle.maximumSize?.resolve(states);
       final fixedSize = resolvedStyle.fixedSize?.resolve(states);
       final visualDensity =
