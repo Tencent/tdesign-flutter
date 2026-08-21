@@ -22,15 +22,16 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - 统一普通与渐变按钮的尺寸来源、点击区和无障碍按钮语义。
 - 使 `TFab` 显式遵循组合组件的 large / fill / primary 基线，不再依赖 Material 默认点击区间接获得尺寸。
 - Demo 展示组件自身默认结果，不通过外层位移修正按钮位置。
-- Button Demo 按验收小程序的图标、通栏和四种 shape 场景编排；`filled` 不混入 shape Demo，
-  通栏继续由 Flutter 父布局表达。
+- Button Demo 按验收小程序的图标、通栏和四种 shape 场景编排；通栏继续由 Flutter
+  父布局表达。
 
 ## 非目标
 
 - 不复制小程序 `openType`、`block`、`loadingProps` 等平台专属 API。
 - 不新增 `loading` 或通栏布局参数；Flutter 调用方继续使用内容组合和父布局。
 - 不新增独立的图标按钮组件；纯图标按钮继续由 `TButton(icon: ..., child: null)` 表达。
-- 不删除或重命名现有公开枚举值。
+- 除移除职责混杂且已失去通栏行为的 `TButtonShape.filled`、以及属于父布局职责的
+  `TButtonThemeData.margin` 外，不删除或重命名其他公开 API。
 - 不在本 PR 重做 Button 全部颜色和变体设计。
 
 ## 范围
@@ -67,6 +68,16 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
   分支行为一致。
 - 渐变按钮保留 button/enabled 语义，并消费解析后的 visual density、tap target、
   mouse cursor、feedback 和 splash 配置。
+- 渐变按钮与 Flutter `ButtonStyleButton` 共用同一状态解析契约：pressed、hovered、
+  focused、disabled 变化时，颜色、文字、图标、边框、形状、padding、尺寸、阴影和
+  cursor 等 stateful `ButtonStyle` 字段必须按实时状态重新解析，不能只在 build 时按
+  enabled/disabled 静态取值。
+- 渐变分支支持 `ButtonStyle.alignment`、`backgroundBuilder`、
+  `foregroundBuilder`，并与普通分支一样允许实例 `iconColor`、`iconSize` 覆盖组件
+  尺寸默认值；显式 `Icon.size` / `Icon.color` 仍保持 Flutter 原生最高优先级。
+- `tapTargetSize` 由统一 resolve 入口保证非空，渐变布局不再维护与 resolver 分叉的
+  Material Theme fallback；visual density 对约束和 padding 的处理与
+  `ButtonStyleButton` 一致。
 - 渐变按钮沿用 Flutter `ButtonStyleButton` 的外层 `Semantics` + 内层 `InkWell`
   结构，button/enabled 与 tap 动作必须合并为一个语义节点，不能产生重复按钮节点。
 - 渐变分支的本地 tap-target 只承接 Flutter 私有 `_InputPadding` 的公开可见行为：
@@ -81,7 +92,10 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - 默认状态层基于 P0 合并后的最终前景色和背景状态生成；实例 `ButtonStyle` 提供的
   stateful 背景不会被重复叠加 pressed overlay。
 - 禁用按钮的默认状态层保持透明，不响应点击或长按。
-- `TButtonShape.filled` 只表示直角外形，不承诺自动通栏；按钮宽度继续由 Flutter 父布局控制。
+- 移除 `TButtonShape.filled`：填充视觉继续由 `TButtonVariant.fill` 表达，通栏由 Flutter
+  父布局控制，零圆角通过实例 `ButtonStyle.shape` 定制；不新增替代 shape 枚举。
+- 移除 `TButtonThemeData.margin`：按钮外部间距由 `Padding`、`SizedBox`、`Wrap.spacing`
+  等 Flutter 父布局表达，组件 Theme 只保留按钮自身视觉与内部布局。
 - `TFab` 内嵌 Button 显式使用 large / fill / primary，与 MiniProgram 的组合基线一致。
 
 ## 验收标准
@@ -96,3 +110,5 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - [x] `TFab` 默认尺寸与拖拽边界回归通过。
 - [x] Flutter 3.32.0 与 latest 静态检查通过。
 - [x] 不新增公开 API，Demo 不使用位移修复组件视觉。
+- [x] 渐变分支的实时 pressed/hovered/focused/disabled 样式与动态 cursor 有回归测试。
+- [x] 普通与渐变分支的 P0 icon 样式及渐变 layer builder/alignment 有回归测试。

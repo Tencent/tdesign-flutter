@@ -65,7 +65,4 @@ enum TButtonShape {
 
   /// 圆形按钮
   circle,
-
-  /// 直角按钮；宽度仍由父布局约束。
-  filled,
 }

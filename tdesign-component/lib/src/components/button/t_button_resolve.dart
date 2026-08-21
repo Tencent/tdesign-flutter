@@ -92,26 +92,10 @@ class TButtonResolve {
       tapTargetSize: tapTargetSize,
     );
 
-    // 5.5 textStyle → 保留 Material 字体字段，仅覆盖组件规格字号。
+    // 5.5 textStyle 在各主题层合并完成后解析，保留其 stateful 字体字段，
+    // 再以组件 size 规格锁定字号、行高与字重。
     final metrics = sizeMetrics(size, tTheme);
     final materialLabelStyle = Theme.of(context).textTheme.labelLarge;
-    final textStyleStyle = ButtonStyle(
-      textStyle: WidgetStatePropertyAll<TextStyle>(
-        TextStyle(
-              fontSize: metrics.fontSize,
-              height: metrics.fontHeight,
-              fontWeight: metrics.fontWeight,
-              fontFamily: materialLabelStyle?.fontFamily,
-              fontFamilyFallback: materialLabelStyle?.fontFamilyFallback,
-            )
-            .merge(Theme.of(context).tExplicitTextTheme?.labelLarge)
-            .copyWith(
-              fontSize: metrics.fontSize,
-              height: metrics.fontHeight,
-              fontWeight: metrics.fontWeight,
-            ),
-      ),
-    );
 
     // 6. P1 Theme padding 覆盖规格默认。
     final paddingStyle = theme?.padding != null
@@ -134,6 +118,25 @@ class TButtonResolve {
       resolved = _overrideWith(resolved, componentShapeStyle);
     }
     resolved = _overrideWith(resolved, sizeStyle);
+    final themedTextStyle = resolved.textStyle;
+    final tokenTextStyle = TextStyle(
+      fontSize: metrics.fontSize,
+      height: metrics.fontHeight,
+      fontWeight: metrics.fontWeight,
+      fontFamily: materialLabelStyle?.fontFamily,
+      fontFamilyFallback: materialLabelStyle?.fontFamilyFallback,
+    ).merge(Theme.of(context).tExplicitTextTheme?.labelLarge);
+    final textStyleStyle = ButtonStyle(
+      textStyle: WidgetStateProperty.resolveWith((states) {
+        return tokenTextStyle
+            .merge(themedTextStyle?.resolve(states))
+            .copyWith(
+              fontSize: metrics.fontSize,
+              height: metrics.fontHeight,
+              fontWeight: metrics.fontWeight,
+            );
+      }),
+    );
     resolved = _overrideWith(resolved, textStyleStyle);
     if (paddingStyle != null) {
       resolved = _overrideWith(resolved, paddingStyle);
@@ -165,9 +168,7 @@ class TButtonResolve {
     // 最终样式未显式配置交互层时，使用最终前景色生成 Flutter 原生 WidgetState 反馈。
     // 放在 P0 之后只补空缺，不覆盖 Material、组件 Theme 或实例 style 的显式 overlayColor。
     if (resolved.overlayColor == null) {
-      final interactionColor =
-          resolved.foregroundColor?.resolve(const <WidgetState>{}) ??
-          tTheme.textColorPrimary;
+      final foreground = resolved.foregroundColor;
       final background = resolved.backgroundColor;
       final hasPressedBackground =
           background?.resolve(const <WidgetState>{WidgetState.pressed}) !=
@@ -176,7 +177,8 @@ class TButtonResolve {
         resolved,
         ButtonStyle(
           overlayColor: _interactionOverlay(
-            interactionColor,
+            foreground,
+            fallbackColor: tTheme.textColorPrimary,
             includePressed: !hasPressedBackground,
           ),
         ),
@@ -450,9 +452,6 @@ class TButtonResolve {
         borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusRound)),
       ),
       TButtonShape.circle => const CircleBorder(),
-      TButtonShape.filled => const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
     };
     return ButtonStyle(shape: WidgetStatePropertyAll<OutlinedBorder>(shape));
   }
@@ -490,6 +489,7 @@ class TButtonResolve {
       padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
         EdgeInsets.symmetric(horizontal: paddingValue, vertical: padV),
       ),
+      iconSize: WidgetStatePropertyAll<double>(metrics.iconSize),
     );
   }
 
@@ -571,13 +571,15 @@ class TButtonResolve {
   ///
   /// 按压/聚焦使用 12% 前景色，悬浮使用 8%；禁用和静止状态不绘制。
   static WidgetStateProperty<Color> _interactionOverlay(
-    Color color, {
+    WidgetStateProperty<Color?>? foreground, {
+    required Color fallbackColor,
     required bool includePressed,
   }) {
     return WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.disabled)) {
         return Colors.transparent;
       }
+      final color = foreground?.resolve(states) ?? fallbackColor;
       if (states.contains(WidgetState.pressed)) {
         return includePressed
             ? color.withValues(alpha: 0.12)
