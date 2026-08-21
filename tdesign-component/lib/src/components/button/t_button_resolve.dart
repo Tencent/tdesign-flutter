@@ -473,25 +473,19 @@ class TButtonResolve {
         ? metrics.iconOnlyPadding
         : metrics.horizontalPadding;
 
-    double? minWidth;
     final minHeight = metrics.height;
-
-    if (isSquareOrCircle) {
-      // square/circle：固定宽高
-      minWidth = metrics.height;
-    }
+    final fixedIconShape = isSquareOrCircle && onlyIcon;
 
     // padding：纵向按 size，横向按内容
-    final padH = paddingValue;
-    final padV = (isSquareOrCircle && onlyIcon)
-        ? paddingValue
-        : metrics.verticalPadding;
+    final padV = fixedIconShape ? paddingValue : metrics.verticalPadding;
 
     return ButtonStyle(
-      minimumSize: WidgetStatePropertyAll<Size>(Size(minWidth ?? 0, minHeight)),
+      minimumSize: WidgetStatePropertyAll<Size>(
+        Size(fixedIconShape ? metrics.height : 0, minHeight),
+      ),
       tapTargetSize: tapTargetSize,
       padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
-        EdgeInsets.symmetric(horizontal: padH, vertical: padV),
+        EdgeInsets.symmetric(horizontal: paddingValue, vertical: padV),
       ),
     );
   }

@@ -305,6 +305,25 @@ void main() {
       );
     });
 
+    testWidgets('square 图文按钮按内容展开且不强制等宽', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            icon: Icon(Icons.home),
+            child: Text('图文按钮'),
+            onPressed: null,
+          ),
+          buttonTheme: const TButtonThemeData(shape: TButtonShape.square),
+        ),
+      );
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      final minSize = button.style?.minimumSize?.resolve({});
+      expect(minSize, const Size(0, 40));
+      final actualSize = tester.getSize(find.byType(ElevatedButton));
+      expect(actualSize.width, greaterThan(actualSize.height));
+    });
+
     testWidgets('icon 位置 left / right 皆正常', (tester) async {
       // left
       await tester.pumpWidget(
@@ -1045,6 +1064,44 @@ void main() {
       expect(
         (decoration.shape as RoundedRectangleBorder).borderRadius,
         const BorderRadius.all(Radius.circular(6)),
+      );
+    });
+
+    testWidgets('渐变 square 图文按钮按内容展开且不强制等宽', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            icon: const Icon(Icons.home),
+            child: const Text('渐变图文按钮'),
+            onPressed: () {},
+          ),
+          buttonTheme: const TButtonThemeData(
+            shape: TButtonShape.square,
+            gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          ),
+        ),
+      );
+
+      final visualButton = find
+          .descendant(
+            of: find.byType(TButton),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container && widget.decoration is ShapeDecoration,
+            ),
+          )
+          .first;
+      final visualSize = tester.getSize(visualButton);
+      expect(visualSize.width, greaterThan(visualSize.height));
+      expect(
+        tester
+            .widgetList<ConstrainedBox>(find.byType(ConstrainedBox))
+            .any(
+              (box) =>
+                  box.constraints.minWidth == 0 &&
+                  box.constraints.minHeight == 40,
+            ),
+        isTrue,
       );
     });
 
