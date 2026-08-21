@@ -7,7 +7,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TButton P0 Golden 测试
 ///
-/// 覆盖 primary 默认态、danger、disabled、纯 icon + circle 等关键态。
+/// 覆盖 primary 默认态、danger、disabled、纯 icon + circle/square 等关键态。
 /// 首次运行用 `flutter test --update-goldens` 生成基线。
 void main() {
   setUpAll(() async {
@@ -16,9 +16,13 @@ void main() {
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
-    await (FontLoader('Roboto')
-          ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView)))
-        .load();
+    final robotoFont = FontLoader('Roboto')
+      ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
+    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
+      ..addFont(
+        rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'),
+      );
+    await Future.wait([robotoFont.load(), iconFont.load()]);
   });
 
   Widget wrapWithTheme(Widget child, {TButtonThemeData? buttonTheme}) {
@@ -104,7 +108,7 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          icon: Icon(Icons.add),
+          icon: Icon(TIcons.app),
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
           onPressed: _noop,
@@ -124,7 +128,7 @@ void main() {
 
       await tester.pumpWidget(wrapWithTheme(
         const TButton(
-          icon: Icon(Icons.add),
+          icon: Icon(TIcons.app),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorScheme: TButtonColorScheme.primary,
