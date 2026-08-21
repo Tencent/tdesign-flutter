@@ -192,7 +192,7 @@ class _FormatChip extends StatelessWidget {
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? _activeColor : colorScheme.dividerColor,
+            color: selected ? _activeColor : (DividerTheme.of(context).color ?? colorScheme.outlineVariant),
             width: selected ? 1.2 : 1,
           ),
         ),
