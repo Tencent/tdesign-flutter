@@ -20,10 +20,9 @@
 
 - [x] 示例页分组对齐 mobile-vue `mobile.vue`（01 组件类型、02 组件状态）
 - [x] 各格式输出（HEX/RGB/HSL/HSV/CMYK/CSS）与 mobile-vue 一致（通过单元测试断言锁定）
-- [ ] 双版本兼容（flutter@latest）验证（本地仅验证 3.32.0，latest 由 CI 覆盖）
+- [x] 双版本兼容（flutter@latest）验证（CI `.analyze-latest` / `.test-latest` / `.build-web-latest` 全部通过）
 
 ## 未覆盖项与后续工作
 
 - 渐变（gradient）颜色选择未实现（非目标）
 - 颜色自由输入框未实现（宿主层能力）
-- flutter@latest 版本验证依赖 CI（.analyze-latest / .test-latest）
