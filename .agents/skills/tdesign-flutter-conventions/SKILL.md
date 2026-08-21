@@ -41,7 +41,7 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 - **PR 性质勾选**：按模板勾选规则选择正确类型（所有选项保留，选中的 `[x]`、未选中的 `[ ]`）。
 - **自查清单**：逐项核对并勾选（标题格式、相关 Issue 链接、Spec 链接、文档补充）。
 - **更新日志（Changelog）**：`tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。PR 描述「更新日志」小节**面向实际使用方的用户**（目标受众是用户，而非开发者 / 维护者），**只记录用户可感知的变更**；纯内部实现、CI/CD 配置、文档结构调整、重构（行为不变）等**用户无需感知**的改动，**不要凭空生成更新日志**，直接勾选「本条 PR 不需要纳入 Changelog」。一个 PR 含多个用户可感知变更时按条分开列写，完整格式规则（含 commit type 与最终分组对应表）见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 的「PR 更新日志规范」。
-- **Breaking change 一律用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 CHANGELOG 的 **Breaking Changes** 分组。其余 type 的对应关系见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)「PR 更新日志规范」或通用 skill 第二节。
+- **Breaking change 一律用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 CHANGELOG 的 **Breaking Changes** 分组。其余 type 的对应关系见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)「PR 更新日志规范」或通用 skill「提交 PR 与更新日志格式」一节。
 - **更新日志条目一律用普通列表项，不要用行内代码块（反引号 `` ` ``）包裹**：上文及模板注释里的反引号（如 `` `breaking(toast): ...` ``）**只是用于展示格式的示例写法**，填写 PR 描述「更新日志」小节时要把这些反引号去掉，写成纯文本条目（如 `- breaking(TFab): 调整 xxx 默认行为`），避免污染自动生成的 CHANGELOG。
 
 ## 三、PR 关联相关 Issue
@@ -64,24 +64,24 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 
 ### 「写不写 Spec」与「写不写更新日志」是两件独立的事
 
-**「是否需要 Spec」与「是否需要更新日志」由两套不同标准触发，不能互相推导**：Spec 看「改动复杂度 / 碰公共契约」，更新日志看「用户感不感知」。四种情况的完整判断见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md) 第一节，此处不重复。
+**「是否需要 Spec」与「是否需要更新日志」由两套不同标准触发，不能互相推导**：Spec 看「改动复杂度 / 碰公共契约」，更新日志看「用户感不感知」。四种情况的完整判断见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md)「何时创建 Spec / 何时写更新日志」一节，此处不重复。
 
 **最容易出错**：把"勾选「本条 PR 不需要纳入 Changelog」"等同于"不需要 Spec"。行为不变的纯内部重构（用户无感、不写日志）仍可能需要 Spec（属于重构，Review 结合实际改动判定）。
 
 ## 五、Flutter 版本双兼容
 
-`tdesign-flutter` 需同时兼容 `flutter@3.32.0` 与 `flutter@latest`（stable 通道最新版），通用判断规则见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md) 第四节。CNB 平台落地要点：
+`tdesign-flutter` 需同时兼容 `flutter@3.32.0` 与 `flutter@latest`（stable 通道最新版），通用判断规则见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md)「Flutter 双版本兼容」一节。CNB 平台落地要点：
 
 - `flutter@3.32.0`：项目基线版本，`pubspec.yaml` 声明 `flutter: ">=3.32.0"`，`.fvmrc` 固定为 3.32.0。
 - `flutter@latest`：stable 通道最新版本，用于前瞻性兼容。
 
 ## 六、组件变更的 breaking change 分析
 
-通用判断规则（是否改公开 API 签名 / 默认行为 / 删除能力、迁移策略等）见通用 skill 第五节。CNB 平台落地时：涉及公共 API 变更或组件重构须创建对应 Spec，并在 PR 自查清单勾选「已添加对应的 Spec 链接」；若为 breaking change，更新日志用 `breaking` commit type（见第二节）。
+通用判断规则（是否改公开 API 签名 / 默认行为 / 删除能力、迁移策略等）见通用 skill「组件变更的 breaking change 分析」一节。CNB 平台落地时：涉及公共 API 变更或组件重构须创建对应 Spec，并在 PR 自查清单勾选「已添加对应的 Spec 链接」；若为 breaking change，更新日志用 `breaking` commit type（见第二节）。
 
 ## 七、文档来源与注释规范（注释即文档）
 
-本仓库的"文档"有明确来源与分工，改动组件时须先弄清楚每条文档该写在哪，避免重复维护与分叉（通用规则见通用 skill 第六节，此处列 CNB 平台落地时的速查）：
+本仓库的"文档"有明确来源与分工，改动组件时须先弄清楚每条文档该写在哪，避免重复维护与分叉（通用规则见通用 skill「文档来源与注释规范」一节，此处列 CNB 平台落地时的速查）：
 
 | 文档载体 | 职责 | CNB 平台何时维护 |
 |---------|------|-----------------|
@@ -93,17 +93,13 @@ description: TDesign Flutter 仓库面向 CNB 平台 NPC 的执行约定（基�
 
 ## 八、API 文档 / 示例代码 / README 的脚本同步
 
-本仓库存在**由脚本生成并需随源码一并提交**的产物，改动设计 API、示例代码或根目录 README 时，**必须运行对应生成 / 同步脚本**，把生成的产物与源码同一次提交（通用规则与命令见通用 skill [`../tdesign-flutter-general/SKILL.md`](../tdesign-flutter-general/SKILL.md) 第七节）。CNB 平台落地要点：
+本仓库存在**由脚本生成并需随源码一并提交**的产物，改动设计 API、示例代码或根目录 README 时，**必须运行对应生成 / 同步脚本**，把生成的产物与源码同一次提交。三类产物的具体命令见通用 skill「API 文档 / 示例代码 / README 的脚本同步」一节，此处不重复。
 
-1. **修改设计 / 组件 API 时** → 在 `tdesign-component` 目录运行 `sh ./demo_tool/all_build.sh`，重新生成并提交 `example/assets/api/<component>_api.md`；新增或迁移组件时先更新 `tool/components.json` 再生成。
-2. **修改示例代码（带 `@ExampleCode` 注解的示例方法）时** → 在 `tdesign-component` 目录运行 `dart run tool/generate_example_code.dart --verbose`，重新生成并提交 `example/assets/code/*.txt`；CI 会用 `dart run tool/generate_example_code.dart --check` 校验同步。
-3. **修改根目录 `README.md` 或 `README_zh_CN.md` 时** → 在仓库根目录运行 `node scripts/sync-readme.mjs`，将内容同步到 `tdesign-component/README.md`、`tdesign-component/README_zh_CN.md` 与 `tdesign-site/site/docs/getting-started.md`，同步产物与源码同一次提交。
-
-**容易漏**：只改了源码没运行脚本 / 运行了却没把生成文件提交，都会导致源码与产物分叉、CI 校验失败。提交 PR 前先在本地重跑脚本并确认生成文件已一并提交。
+CNB 平台落地要点（**容易漏**）：只改了源码没运行脚本 / 运行了却没把生成文件提交，都会导致源码与产物分叉、CI 校验失败。提交 PR 前先在本地重跑脚本并确认生成文件已一并提交。
 
 ## 九、代码质量 / lint 零告警
 
-通用自查清单（`const`/`final`、tear-off、`directives_ordering`、单引号、集合字面量、字符串插值等，对齐 `tdesign-component/analysis_options.yaml`）见通用 skill 第八节。CNB 平台落地要点：**lint 零告警是硬性门槛**，skill / 约定属软约束，只有 CI 的 `flutter analyze`（`.cnb.yml`，`--fatal-infos`）才是机器硬门槛；提交前在本地跑 `cd tdesign-component && flutter analyze` 确认无告警再提交。
+通用自查清单（`const`/`final`、tear-off、`directives_ordering`、单引号、集合字面量、字符串插值等，对齐 `tdesign-component/analysis_options.yaml`）见通用 skill「代码质量 / lint 零告警」一节。CNB 平台落地要点：**lint 零告警是硬性门槛**，skill / 约定属软约束，只有 CI 的 `flutter analyze`（`.cnb.yml`，`--fatal-infos`）才是机器硬门槛；提交前在本地跑 `cd tdesign-component && flutter analyze` 确认无告警再提交。
 
 ## 回答风格
 
