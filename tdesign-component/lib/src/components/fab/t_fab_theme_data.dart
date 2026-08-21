@@ -7,7 +7,8 @@ import 't_fab_layout.dart';
 /// Fab 定位层 ThemeExtension
 ///
 /// 仅管理 Fab 定位层的默认值（偏移、边界、拖拽阈值等）。
-/// 按钮外观走 TButtonThemeData。
+/// 默认动作层固定使用 large / fill / primary；需要完整自定义动作层时使用
+/// `TFab.child`。
 class TFabThemeData extends ThemeExtension<TFabThemeData> {
   /// 默认距屏幕右侧偏移（逻辑像素）
   final double? defaultRight;
@@ -66,8 +67,9 @@ class TFabThemeData extends ThemeExtension<TFabThemeData> {
       defaultBottom: lerpDouble(defaultBottom, other.defaultBottom, t),
       defaultXBounds: t < 0.5 ? defaultXBounds : other.defaultXBounds,
       defaultYBounds: t < 0.5 ? defaultYBounds : other.defaultYBounds,
-      magnetAnimationDuration:
-          t < 0.5 ? magnetAnimationDuration : other.magnetAnimationDuration,
+      magnetAnimationDuration: t < 0.5
+          ? magnetAnimationDuration
+          : other.magnetAnimationDuration,
       dragTapSlop: lerpDouble(dragTapSlop, other.dragTapSlop, t),
     );
   }

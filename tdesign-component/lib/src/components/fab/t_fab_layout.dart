@@ -23,18 +23,20 @@ enum TFabMagnet {
 
 /// 拖拽边界限制
 class TFabBounds {
-  /// 起点留白（水平：left，垂直：top）
+  /// 起点留白（水平：left，垂直：top）。
   final double start;
 
-  /// 终点留白（水平：right，垂直：bottom）
+  /// 终点留白（水平：right，垂直：bottom）。
   final double end;
 
-  const TFabBounds({required this.start, required this.end});
+  const TFabBounds({required this.start, required this.end})
+    : assert(start >= 0 && start < double.infinity),
+      assert(end >= 0 && end < double.infinity);
 }
 
 /// 拖拽回调详情
 class TFabDragDetails {
-  /// 当前位置（相对父 Stack 内容区）
+  /// 当前定位偏移，`dx` 为 right，`dy` 为 bottom。
   final Offset position;
 
   /// 拖拽开始详情
@@ -43,11 +45,7 @@ class TFabDragDetails {
   /// 拖拽结束详情
   final DragEndDetails? end;
 
-  const TFabDragDetails({
-    required this.position,
-    this.start,
-    this.end,
-  });
+  const TFabDragDetails({required this.position, this.start, this.end});
 }
 
 /// 拖拽回调

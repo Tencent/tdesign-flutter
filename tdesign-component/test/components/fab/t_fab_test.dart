@@ -43,13 +43,11 @@ void main() {
     if (fabTheme != null) {
       theme = theme.mergeExtension(fabTheme);
     }
+    theme = theme.copyWith(splashFactory: NoSplash.splashFactory);
     return MaterialApp(
       theme: theme,
       home: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: [child],
-        ),
+        body: Stack(fit: StackFit.expand, children: [child]),
       ),
     );
   }
@@ -62,32 +60,111 @@ void main() {
     });
 
     testWidgets('图标 + 文字', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(text: '发布'),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(text: '发布')));
       expect(find.byType(TFab), findsOneWidget);
       expect(find.text('发布'), findsOneWidget);
     });
 
-    testWidgets('内嵌 TButton 的尺寸和变体由 Theme 控制', (tester) async {
+    testWidgets('内嵌 TButton 固定使用 Fab 默认动作规格', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TFab()));
 
       final button = tester.widget<TButton>(find.byType(TButton));
-      expect(button.size, isNull);
-      expect(button.variant, isNull);
-      expect(button.colorScheme, isNull);
+      expect(button.size, TButtonSize.large);
+      expect(button.variant, TButtonVariant.fill);
+      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(find.byIcon(TIcons.add), findsOneWidget);
+      expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
+    });
+
+    testWidgets('Fab 默认动作规格不受 TButtonTheme 默认值影响', (tester) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData())
+          .mergeExtension(
+            const TButtonThemeData(
+              defaultSize: TButtonSize.extraSmall,
+              defaultVariant: TButtonVariant.outline,
+              padding: EdgeInsets.zero,
+              gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+            ),
+          );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(body: Stack(children: [TFab()])),
+        ),
+      );
+
+      final button = tester.widget<TButton>(find.byType(TButton));
+      expect(button.size, TButtonSize.large);
+      expect(button.variant, TButtonVariant.fill);
+      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
+
+      final fabButtonThemes = tester
+          .widgetList<Theme>(find.byType(Theme))
+          .map((widget) => widget.data.extension<TButtonThemeData>())
+          .where(
+            (theme) =>
+                theme?.shape == TButtonShape.circle &&
+                theme?.iconTextSpacing == 4 &&
+                theme?.padding == null &&
+                theme?.gradient == null,
+          );
+      expect(fabButtonThemes, isNotEmpty);
+    });
+
+    testWidgets('图文默认间距使用 spacer4', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TFab(text: '发布')));
+
+      final spacing = tester
+          .widgetList<SizedBox>(find.byType(SizedBox))
+          .where((widget) => widget.width == 4);
+      expect(spacing, isNotEmpty);
+      expect(
+        tester.getSize(find.byType(TButton)).height,
+        greaterThanOrEqualTo(48),
+      );
+    });
+
+    testWidgets('默认动作层带中层阴影，child 模式不注入阴影', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TFab()));
+      final decorations = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<ShapeDecoration>()
+          .where((decoration) => decoration.shadows?.isNotEmpty ?? false);
+      expect(decorations, hasLength(1));
+      expect(decorations.single.shape, isA<CircleBorder>());
+      expect(
+        decorations.single.shadows,
+        TThemeData.defaultData().shadowsMiddle,
+      );
+
+      await tester.pumpWidget(wrapWithTheme(const TFab(text: '发布')));
+      final textDecoration = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<ShapeDecoration>()
+          .where((decoration) => decoration.shadows?.isNotEmpty ?? false)
+          .single;
+      expect(textDecoration.shape, isA<StadiumBorder>());
+
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(child: SizedBox(width: 48, height: 48))),
+      );
+      final childDecorations = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<ShapeDecoration>()
+          .where((decoration) => decoration.shadows?.isNotEmpty ?? false);
+      expect(childDecorations, isEmpty);
     });
 
     testWidgets('child 模式 — 不内嵌 TButton', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          child: Container(
-            width: 56,
-            height: 56,
-            color: Colors.blue,
-          ),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(child: Container(width: 56, height: 56, color: Colors.blue)),
         ),
-      ));
+      );
       expect(find.byType(TFab), findsOneWidget);
       // child 模式下不应内嵌 TButton
       expect(find.byType(TButton), findsNothing);
@@ -95,12 +172,14 @@ void main() {
 
     testWidgets('child 模式 + 点击', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          child: Container(width: 56, height: 56, color: Colors.red),
-          onPressed: () => tapped = true,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            child: Container(width: 56, height: 56, color: Colors.red),
+            onPressed: () => tapped = true,
+          ),
         ),
-      ));
+      );
       await tester.tap(fabTapOnlyTarget());
       expect(tapped, true);
     });
@@ -108,23 +187,23 @@ void main() {
 
   group('TFab 禁用态', () {
     testWidgets('onPressed: null 内嵌 TButton 禁用', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(onPressed: null),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(onPressed: null)));
       expect(find.byType(TFab), findsOneWidget);
     });
 
     testWidgets('child 模式 onPressed: null 用 IgnorePointer', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          child: GestureDetector(
-            onTap: () => tapped = true,
-            child: Container(width: 56, height: 56, color: Colors.grey),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            child: GestureDetector(
+              onTap: () => tapped = true,
+              child: Container(width: 56, height: 56, color: Colors.grey),
+            ),
+            onPressed: null,
           ),
-          onPressed: null,
         ),
-      ));
+      );
       await tester.tap(fabTapTarget(), warnIfMissed: false);
       expect(tapped, false);
     });
@@ -139,9 +218,7 @@ void main() {
     });
 
     testWidgets('自定义 right/bottom', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(right: 24, bottom: 48),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(right: 24, bottom: 48)));
       final positioned = fabPositioned(tester);
       expect(positioned.right, 24);
       expect(positioned.bottom, 48);
@@ -168,6 +245,14 @@ void main() {
       expect(bounds.end, 8);
     });
 
+    test('TFabBounds 拒绝负数和无限边界', () {
+      expect(() => TFabBounds(start: -1, end: 0), throwsAssertionError);
+      expect(
+        () => TFabBounds(start: 0, end: double.infinity),
+        throwsAssertionError,
+      );
+    });
+
     test('TFabDragAxis 枚举值', () {
       expect(TFabDragAxis.all.index, 0);
       expect(TFabDragAxis.vertical.index, 1);
@@ -182,8 +267,8 @@ void main() {
 
   group('TFabDefaults', () {
     test('shapeForText 根据文本存在性推导默认 shape', () {
-      expect(TFabDefaults.shapeForText(false), 'circle');
-      expect(TFabDefaults.shapeForText(true), 'round');
+      expect(TFabDefaults.shapeForText(false), TButtonShape.circle);
+      expect(TFabDefaults.shapeForText(true), TButtonShape.round);
     });
   });
 
@@ -211,10 +296,12 @@ void main() {
     });
 
     testWidgets('Theme 注入生效', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(),
-        fabTheme: const TFabThemeData(defaultRight: 50, defaultBottom: 100),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(),
+          fabTheme: const TFabThemeData(defaultRight: 50, defaultBottom: 100),
+        ),
+      );
       final positioned = fabPositioned(tester);
       expect(positioned.right, 50);
       expect(positioned.bottom, 100);
@@ -223,9 +310,7 @@ void main() {
 
   group('TFabDragDetails', () {
     test('构造', () {
-      const details = TFabDragDetails(
-        position: Offset(16, 32),
-      );
+      const details = TFabDragDetails(position: Offset(16, 32));
       expect(details.position.dx, 16);
       expect(details.position.dy, 32);
       expect(details.start, null);
@@ -237,17 +322,18 @@ void main() {
   // 补充：TFabResolve.resolveLayout 全分支（通过 Widget 验证内部行为）
   // ============================================================
   group('TFabResolve.resolveLayout', () {
-    testWidgets('themeDefaultXBounds/YBounds 生效（拖拽边界从 Theme 读取）',
-        (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          draggable: TFabDragAxis.all,
+    testWidgets('themeDefaultXBounds/YBounds 生效（拖拽边界从 Theme 读取）', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all),
+          fabTheme: const TFabThemeData(
+            defaultXBounds: TFabBounds(start: 8, end: 8),
+            defaultYBounds: TFabBounds(start: 4, end: 4),
+          ),
         ),
-        fabTheme: const TFabThemeData(
-          defaultXBounds: TFabBounds(start: 8, end: 8),
-          defaultYBounds: TFabBounds(start: 4, end: 4),
-        ),
-      ));
+      );
       // 不抛异常即说明 resolveLayout 正常处理 themeDefaultXBounds
       expect(find.byType(TFab), findsOneWidget);
     });
@@ -262,10 +348,7 @@ void main() {
               padding: EdgeInsets.only(right: 20, bottom: 34),
             ),
             child: Scaffold(
-              body: Stack(
-                fit: StackFit.expand,
-                children: [TFab()],
-              ),
+              body: Stack(fit: StackFit.expand, children: [TFab()]),
             ),
           ),
         ),
@@ -286,13 +369,7 @@ void main() {
             child: Scaffold(
               body: Stack(
                 fit: StackFit.expand,
-                children: [
-                  TFab(
-                    right: 24,
-                    bottom: 48,
-                    useSafeArea: false,
-                  ),
-                ],
+                children: [TFab(right: 24, bottom: 48, useSafeArea: false)],
               ),
             ),
           ),
@@ -319,9 +396,9 @@ void main() {
     });
 
     testWidgets('自定义 icon 覆盖默认 Icons.add', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(icon: Icon(Icons.edit)),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(icon: Icon(Icons.edit))),
+      );
       expect(find.byIcon(Icons.edit), findsOneWidget);
     });
   });
@@ -331,16 +408,12 @@ void main() {
   // ============================================================
   group('TFab tooltip / semanticLabel', () {
     testWidgets('tooltip 非空时包 Tooltip', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(tooltip: '悬浮提示'),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(tooltip: '悬浮提示')));
       expect(find.byType(Tooltip), findsOneWidget);
     });
 
     testWidgets('tooltip 空字符串不包 Tooltip', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(tooltip: ''),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(tooltip: '')));
       expect(find.byType(Tooltip), findsNothing);
     });
 
@@ -350,37 +423,37 @@ void main() {
     });
 
     testWidgets('semanticLabel 非空时包 Semantics', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(semanticLabel: '添加按钮'),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(semanticLabel: '添加按钮')));
       expect(find.byType(Semantics), findsWidgets);
     });
 
     testWidgets('semanticLabel 空字符串不包 Semantics', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(semanticLabel: ''),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TFab(semanticLabel: '')));
       // 仅有子组件自身的 Semantics，不应有额外包裹
       expect(find.byType(TFab), findsOneWidget);
     });
 
     testWidgets('child 模式 + tooltip', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          tooltip: '子组件提示',
-          child: Container(width: 56, height: 56, color: Colors.blue),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            tooltip: '子组件提示',
+            child: Container(width: 56, height: 56, color: Colors.blue),
+          ),
         ),
-      ));
+      );
       expect(find.byType(Tooltip), findsOneWidget);
     });
 
     testWidgets('child 模式 + semanticLabel', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          semanticLabel: '子组件标签',
-          child: Container(width: 56, height: 56, color: Colors.blue),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            semanticLabel: '子组件标签',
+            child: Container(width: 56, height: 56, color: Colors.blue),
+          ),
         ),
-      ));
+      );
       expect(find.byType(TFab), findsOneWidget);
     });
   });
@@ -390,42 +463,44 @@ void main() {
   // ============================================================
   group('TFab 拖拽模式', () {
     testWidgets('draggable=true 进入拖拽模式（不创建 Positioned 直接子）', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.all)),
+      );
       // 拖拽模式下内部使用 Positioned 但带 GestureDetector(onPanStart)
       expect(find.byType(TFab), findsOneWidget);
     });
 
     testWidgets('draggable=TFabDragAxis.all', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.all)),
+      );
       expect(find.byType(TFab), findsOneWidget);
     });
 
     testWidgets('draggable=TFabDragAxis.vertical', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.vertical),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.vertical)),
+      );
       expect(find.byType(TFab), findsOneWidget);
     });
 
     testWidgets('draggable=TFabDragAxis.horizontal', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.horizontal),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.horizontal)),
+      );
       expect(find.byType(TFab), findsOneWidget);
     });
 
     testWidgets('拖拽位移触发 onDragEnd 回调', (tester) async {
       TFabDragDetails? endDetails;
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          draggable: TFabDragAxis.all,
-          onDragEnd: (details) => endDetails = details,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            draggable: TFabDragAxis.all,
+            onDragEnd: (details) => endDetails = details,
+          ),
         ),
-      ));
+      );
       // 大幅度拖拽以超过 dragTapSlop（默认 18）
       await tester.timedDrag(
         fabDragTarget(),
@@ -439,12 +514,11 @@ void main() {
 
     testWidgets('拖拽小幅位移（小于阈值）触发 onPressed（点击）', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          draggable: TFabDragAxis.all,
-          onPressed: () => tapped = true,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(draggable: TFabDragAxis.all, onPressed: () => tapped = true),
         ),
-      ));
+      );
       // 极小位移（1px < dragTapSlop 18）应识别为点击
       await tester.timedDrag(
         fabDragTarget(),
@@ -456,25 +530,32 @@ void main() {
     });
 
     testWidgets('拖拽 + magnet=true 吸附', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
+        ),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-100, 0),
         const Duration(milliseconds: 200),
       );
-      // 磁吸使用 Future.delayed，需推进时间冲刷定时器
-      await tester.pump(const Duration(milliseconds: 250));
+      final start = fabPositioned(tester).right!;
+      await tester.pump(const Duration(milliseconds: 100));
+      final middle = fabPositioned(tester).right!;
+      expect(middle, lessThan(start));
+      expect(middle, greaterThan(16));
       await tester.pumpAndSettle();
       final positioned = fabPositioned(tester);
       expect(positioned.right, 16);
     });
 
     testWidgets('拖拽 + magnet=TFabMagnet.left 吸附', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.left),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.left),
+        ),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-100, 0),
@@ -487,9 +568,11 @@ void main() {
     });
 
     testWidgets('拖拽 + magnet=TFabMagnet.right 吸附', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
+        ),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(50, 0),
@@ -518,10 +601,7 @@ void main() {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      TFab(
-                        draggable: TFabDragAxis.all,
-                        magnet: magnet,
-                      ),
+                      TFab(draggable: TFabDragAxis.all, magnet: magnet),
                     ],
                   ),
                 ),
@@ -594,8 +674,8 @@ void main() {
       );
       await tester.pumpAndSettle();
       var positioned = fabPositioned(tester);
-      expect(positioned.right, 32);
-      expect(positioned.bottom, 38);
+      expect(positioned.right, 36);
+      expect(positioned.bottom, 40);
 
       await tester.timedDrag(
         fabDragTarget(),
@@ -604,18 +684,20 @@ void main() {
       );
       await tester.pumpAndSettle();
       positioned = fabPositioned(tester);
-      expect(positioned.right, 320);
-      expect(positioned.bottom, 416);
+      expect(positioned.right, 324);
+      expect(positioned.bottom, 418);
     });
 
     testWidgets('拖拽 + xBounds/yBounds 边界限制', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          draggable: TFabDragAxis.all,
-          xBounds: TFabBounds(start: 8, end: 8),
-          yBounds: TFabBounds(start: 4, end: 4),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(
+            draggable: TFabDragAxis.all,
+            xBounds: TFabBounds(start: 8, end: 8),
+            yBounds: TFabBounds(start: 4, end: 4),
+          ),
         ),
-      ));
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-200, -200),
@@ -628,17 +710,19 @@ void main() {
     });
 
     testWidgets('自定义 child 尺寸参与拖拽边界计算', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          draggable: TFabDragAxis.all,
-          onPressed: () {},
-          child: const SizedBox(
-            width: 96,
-            height: 96,
-            child: ColoredBox(color: Colors.red),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            draggable: TFabDragAxis.all,
+            onPressed: () {},
+            child: const SizedBox(
+              width: 96,
+              height: 96,
+              child: ColoredBox(color: Colors.red),
+            ),
           ),
         ),
-      ));
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-1000, 0),
@@ -651,9 +735,9 @@ void main() {
     });
 
     testWidgets('布局 right/bottom 更新后同步拖拽位置', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.all)),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-100, -100),
@@ -664,23 +748,21 @@ void main() {
       expect(positioned.right, 116);
       expect(positioned.bottom, 132);
 
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          draggable: TFabDragAxis.all,
-          right: 40,
-          bottom: 60,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all, right: 40, bottom: 60),
         ),
-      ));
+      );
       await tester.pump();
       positioned = fabPositioned(tester);
       expect(positioned.right, 40);
       expect(positioned.bottom, 60);
     });
 
-    testWidgets('边界更新后钳制已有拖拽位置', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all),
-      ));
+    testWidgets('边界更新后按 start/end 语义钳制已有拖拽位置', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.all)),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-300, 0),
@@ -690,22 +772,24 @@ void main() {
       var positioned = fabPositioned(tester);
       expect(positioned.right, 316);
 
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(
-          draggable: TFabDragAxis.all,
-          xBounds: TFabBounds(start: 8, end: 600),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(
+            draggable: TFabDragAxis.all,
+            xBounds: TFabBounds(start: 500, end: 8),
+          ),
         ),
-      ));
+      );
       await tester.pump();
       positioned = fabPositioned(tester);
-      expect(positioned.right, 152);
+      expect(positioned.right, 252);
       expect(positioned.bottom, 32);
     });
 
     testWidgets('拖拽 vertical 轴仅垂直移动', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.vertical),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.vertical)),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-50, -50),
@@ -718,9 +802,9 @@ void main() {
     });
 
     testWidgets('拖拽 horizontal 轴仅水平移动', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.horizontal),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TFab(draggable: TFabDragAxis.horizontal)),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-50, -50),
@@ -734,12 +818,14 @@ void main() {
 
     testWidgets('拖拽 + onDragStart 回调', (tester) async {
       TFabDragDetails? startDetails;
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          draggable: TFabDragAxis.all,
-          onDragStart: (details) => startDetails = details,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            draggable: TFabDragAxis.all,
+            onDragStart: (details) => startDetails = details,
+          ),
         ),
-      ));
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-50, -50),
@@ -753,13 +839,15 @@ void main() {
 
     testWidgets('child 模式 + 拖拽 + onPressed 点击', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          child: Container(width: 56, height: 56, color: Colors.red),
-          draggable: TFabDragAxis.all,
-          onPressed: () => tapped = true,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            child: Container(width: 56, height: 56, color: Colors.red),
+            draggable: TFabDragAxis.all,
+            onPressed: () => tapped = true,
+          ),
         ),
-      ));
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(1, 1),
@@ -769,15 +857,64 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('child 模式 + 拖拽 + magnet', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TFab(
-          child: Container(width: 56, height: 56, color: Colors.red),
-          draggable: TFabDragAxis.all,
-          magnet: TFabMagnet.right,
-          onPressed: () {},
+    testWidgets('默认动作层进入拖拽手势后的小位移仍触发点击', (tester) async {
+      var tapCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(draggable: TFabDragAxis.all, onPressed: () => tapCount += 1),
+          fabTheme: const TFabThemeData(dragTapSlop: 100),
         ),
-      ));
+      );
+
+      await tester.timedDrag(
+        fabDragTarget(),
+        const Offset(20, 0),
+        const Duration(milliseconds: 100),
+      );
+      await tester.pumpAndSettle();
+      expect(tapCount, 1);
+    });
+
+    testWidgets('移除 magnet 会停止尚未完成的吸附动画', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
+          fabTheme: const TFabThemeData(
+            magnetAnimationDuration: Duration(seconds: 1),
+          ),
+        ),
+      );
+      await tester.timedDrag(
+        fabDragTarget(),
+        const Offset(-100, 0),
+        const Duration(milliseconds: 100),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all),
+          fabTheme: const TFabThemeData(
+            magnetAnimationDuration: Duration(seconds: 1),
+          ),
+        ),
+      );
+      final stoppedAt = fabPositioned(tester).right;
+      await tester.pump(const Duration(seconds: 1));
+      expect(fabPositioned(tester).right, stoppedAt);
+    });
+
+    testWidgets('child 模式 + 拖拽 + magnet', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            child: Container(width: 56, height: 56, color: Colors.red),
+            draggable: TFabDragAxis.all,
+            magnet: TFabMagnet.right,
+            onPressed: () {},
+          ),
+        ),
+      );
       await tester.timedDrag(
         fabDragTarget(),
         const Offset(-100, 0),
@@ -852,15 +989,18 @@ void main() {
       expect(result, same(a));
     });
 
-    testWidgets('dragTapSlop + magnetAnimationDuration 从 Theme 注入',
-        (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
-        fabTheme: const TFabThemeData(
-          dragTapSlop: 5,
-          magnetAnimationDuration: Duration(milliseconds: 10),
+    testWidgets('dragTapSlop + magnetAnimationDuration 从 Theme 注入', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TFab(draggable: TFabDragAxis.all, magnet: TFabMagnet.right),
+          fabTheme: const TFabThemeData(
+            dragTapSlop: 5,
+            magnetAnimationDuration: Duration(milliseconds: 10),
+          ),
         ),
-      ));
+      );
       // 小位移（3px < 5）应识别为点击
       await tester.timedDrag(
         find.byType(TFab),
@@ -921,12 +1061,12 @@ void main() {
   // ============================================================
   group('TFabDefaults 边界', () {
     test('默认常量与 shapeForText', () {
-      expect(TFabDefaults.defaultSizeIndex, 0);
-      expect(TFabDefaults.defaultVariantIndex, 0);
-      expect(TFabDefaults.defaultColorSchemeIndex, 1);
-      expect(TFabDefaults.defaultIconData, Icons.add);
-      expect(TFabDefaults.shapeForText(false), 'circle');
-      expect(TFabDefaults.shapeForText(true), 'round');
+      expect(TFabDefaults.defaultSize, TButtonSize.large);
+      expect(TFabDefaults.defaultVariant, TButtonVariant.fill);
+      expect(TFabDefaults.defaultColorScheme, TButtonColorScheme.primary);
+      expect(TFabDefaults.defaultIconData, TIcons.add);
+      expect(TFabDefaults.shapeForText(false), TButtonShape.circle);
+      expect(TFabDefaults.shapeForText(true), TButtonShape.round);
     });
   });
 

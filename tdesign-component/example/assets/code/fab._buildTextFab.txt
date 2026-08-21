@@ -1,9 +1,8 @@
 Widget _buildTextFab(BuildContext context) {
     return _buildPageDemo(
       fab: TFab(
-        text: 'Floating',
-        right: 16,
-        bottom: 16,
+        icon: const Icon(TIcons.share),
+        text: '分享给朋友',
         onPressed: _onFabPressed,
       ),
     );

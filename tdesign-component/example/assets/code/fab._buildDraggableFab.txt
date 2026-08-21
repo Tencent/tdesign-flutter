@@ -1,10 +1,10 @@
 Widget _buildDraggableFab(BuildContext context) {
     return _buildPageDemo(
       fab: TFab(
-        right: 16,
-        bottom: 16,
+        icon: const Icon(TIcons.gesture_press),
+        text: '拖我',
         draggable: TFabDragAxis.all,
-        magnet: TFabMagnet.right,
+        yBounds: const TFabBounds(start: 0, end: 32),
         onPressed: _onFabPressed,
       ),
     );
