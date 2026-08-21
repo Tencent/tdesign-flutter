@@ -64,6 +64,9 @@ class TFabResolve {
     final tButton = TButton(
       child: hasText ? Text(text) : null,
       icon: effectiveIcon,
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
       onPressed: onPressed,
     );
 

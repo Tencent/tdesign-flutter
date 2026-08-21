@@ -69,13 +69,13 @@ void main() {
       expect(find.text('发布'), findsOneWidget);
     });
 
-    testWidgets('内嵌 TButton 的尺寸和变体由 Theme 控制', (tester) async {
+    testWidgets('内嵌 TButton 显式使用 Fab 的 large/fill/primary 基线', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TFab()));
 
       final button = tester.widget<TButton>(find.byType(TButton));
-      expect(button.size, isNull);
-      expect(button.variant, isNull);
-      expect(button.colorScheme, isNull);
+      expect(button.size, TButtonSize.large);
+      expect(button.variant, TButtonVariant.fill);
+      expect(button.colorScheme, TButtonColorScheme.primary);
     });
 
     testWidgets('child 模式 — 不内嵌 TButton', (tester) async {

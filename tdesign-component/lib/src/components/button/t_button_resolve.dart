@@ -85,27 +85,36 @@ class TButtonResolve {
 
     // 5. 实例 size > 组件 defaultSize，并据此生成组件规格尺寸。
     final effectiveShape = theme?.shape ?? TButtonShape.rectangle;
+    final tapTargetSize =
+        componentPalette?.tapTargetSize ??
+        materialPalette?.tapTargetSize ??
+        MaterialTapTargetSize.shrinkWrap;
     final sizeStyle = _resolveSize(
       size: size,
       hasIcon: icon != null,
       hasChild: hasChild,
       effectiveShape: effectiveShape,
+      tapTargetSize: tapTargetSize,
     );
 
     // 5.5 textStyle → 保留 Material 字体字段，仅覆盖组件规格字号。
-    final tokenFont = tTheme.fontLinkMedium;
+    final metrics = sizeMetrics(size, tTheme);
     final materialLabelStyle = Theme.of(context).textTheme.labelLarge;
     final textStyleStyle = ButtonStyle(
       textStyle: WidgetStatePropertyAll<TextStyle>(
         TextStyle(
-              fontSize: tokenFont?.size,
-              height: tokenFont?.height,
-              fontWeight: tokenFont?.fontWeight,
+              fontSize: metrics.fontSize,
+              height: metrics.fontHeight,
+              fontWeight: metrics.fontWeight,
               fontFamily: materialLabelStyle?.fontFamily,
               fontFamilyFallback: materialLabelStyle?.fontFamilyFallback,
             )
             .merge(Theme.of(context).tExplicitTextTheme?.labelLarge)
-            .copyWith(fontSize: _fontSizeForSize(size)),
+            .copyWith(
+              fontSize: metrics.fontSize,
+              height: metrics.fontHeight,
+              fontWeight: metrics.fontWeight,
+            ),
       ),
     );
 
@@ -444,6 +453,7 @@ class TButtonResolve {
     required bool hasIcon,
     required bool hasChild,
     required TButtonShape effectiveShape,
+    required MaterialTapTargetSize tapTargetSize,
   }) {
     final isSquareOrCircle =
         effectiveShape == TButtonShape.square ||
@@ -451,67 +461,81 @@ class TButtonResolve {
     // square/circle 纯 icon 按钮：等宽高 + 等边 padding
     final onlyIcon = hasIcon && !hasChild;
 
-    double sideLength;
-    double paddingValue;
-
-    switch (size) {
-      case TButtonSize.large:
-        sideLength = 48;
-        paddingValue = onlyIcon ? 12 : 20;
-      case TButtonSize.medium:
-        sideLength = 40;
-        paddingValue = onlyIcon ? 10 : 16;
-      case TButtonSize.small:
-        sideLength = 32;
-        paddingValue = onlyIcon ? 7 : 12;
-      case TButtonSize.extraSmall:
-        sideLength = 28;
-        paddingValue = onlyIcon ? 5 : 8;
-    }
+    final metrics = sizeMetrics(size, null);
+    final paddingValue = onlyIcon
+        ? metrics.iconOnlyPadding
+        : metrics.horizontalPadding;
 
     double? minWidth;
-    var minHeight = sideLength;
+    final minHeight = metrics.height;
 
     if (isSquareOrCircle) {
       // square/circle：固定宽高
-      minWidth = sideLength;
+      minWidth = metrics.height;
     }
 
     // padding：纵向按 size，横向按内容
-    final padH = (isSquareOrCircle && onlyIcon) ? paddingValue : paddingValue;
+    final padH = paddingValue;
     final padV = (isSquareOrCircle && onlyIcon)
         ? paddingValue
-        : _verticalPadding(size);
+        : metrics.verticalPadding;
 
     return ButtonStyle(
       minimumSize: WidgetStatePropertyAll<Size>(Size(minWidth ?? 0, minHeight)),
+      tapTargetSize: tapTargetSize,
       padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
         EdgeInsets.symmetric(horizontal: padH, vertical: padV),
       ),
     );
   }
 
-  /// 根据 size 获取纵向 padding
-  static double _verticalPadding(TButtonSize size) {
-    switch (size) {
-      case TButtonSize.large:
-        return 12;
-      case TButtonSize.medium:
-        return 8;
-      case TButtonSize.small:
-        return 5;
-      case TButtonSize.extraSmall:
-        return 3;
-    }
-  }
-
-  /// 根据 size 获取字号（与 t_button.dart _fontSizeForButton 对齐）
-  static double _fontSizeForSize(TButtonSize size) {
+  /// 返回普通与渐变按钮共用的 TDesign 尺寸规格。
+  static TButtonSizeMetrics sizeMetrics(TButtonSize size, TThemeData? theme) {
+    final font = switch (size) {
+      TButtonSize.large || TButtonSize.medium => theme?.fontMarkLarge,
+      TButtonSize.small || TButtonSize.extraSmall => theme?.fontMarkMedium,
+    };
     return switch (size) {
-      TButtonSize.large => 16,
-      TButtonSize.medium => 14,
-      TButtonSize.small => 12,
-      TButtonSize.extraSmall => 10,
+      TButtonSize.large => TButtonSizeMetrics(
+        height: 48,
+        horizontalPadding: 20,
+        verticalPadding: 12,
+        iconOnlyPadding: 12,
+        iconSize: 24,
+        fontSize: font?.size ?? 16,
+        fontHeight: font?.height ?? 1.5,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
+      TButtonSize.medium => TButtonSizeMetrics(
+        height: 40,
+        horizontalPadding: 16,
+        verticalPadding: 8,
+        iconOnlyPadding: 10,
+        iconSize: 20,
+        fontSize: font?.size ?? 16,
+        fontHeight: font?.height ?? 1.5,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
+      TButtonSize.small => TButtonSizeMetrics(
+        height: 32,
+        horizontalPadding: 12,
+        verticalPadding: 5,
+        iconOnlyPadding: 7,
+        iconSize: 18,
+        fontSize: font?.size ?? 14,
+        fontHeight: font?.height ?? 22 / 14,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
+      TButtonSize.extraSmall => TButtonSizeMetrics(
+        height: 28,
+        horizontalPadding: 8,
+        verticalPadding: 3,
+        iconOnlyPadding: 5,
+        iconSize: 18,
+        fontSize: font?.size ?? 14,
+        fontHeight: font?.height ?? 22 / 14,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
     };
   }
 
@@ -538,4 +562,27 @@ class TButtonResolve {
       TButtonColorScheme.defaultTheme => tTheme.bgColorComponentHover,
     };
   }
+}
+
+/// Button 内部尺寸规格，不从包入口导出。
+class TButtonSizeMetrics {
+  const TButtonSizeMetrics({
+    required this.height,
+    required this.horizontalPadding,
+    required this.verticalPadding,
+    required this.iconOnlyPadding,
+    required this.iconSize,
+    required this.fontSize,
+    required this.fontHeight,
+    required this.fontWeight,
+  });
+
+  final double height;
+  final double horizontalPadding;
+  final double verticalPadding;
+  final double iconOnlyPadding;
+  final double iconSize;
+  final double fontSize;
+  final double fontHeight;
+  final FontWeight fontWeight;
 }

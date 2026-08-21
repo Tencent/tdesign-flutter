@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -7,7 +8,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖所有公开 API 和关键行为路径，目标覆盖率 95%+。
 void main() {
   // 用 TTheme 包裹以提供基础 Token
-  Widget wrapWithTheme(Widget child, {TButtonThemeData? buttonTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TButtonThemeData? buttonTheme,
+    ButtonStyle? materialStyle,
+  }) {
     final themeExtensions = <ThemeExtension>[
       if (buttonTheme != null) buttonTheme,
     ];
@@ -16,6 +21,9 @@ void main() {
     return MaterialApp(
       theme: ThemeData(
         extensions: [TThemeData.defaultData(), ...themeExtensions],
+        elevatedButtonTheme: ElevatedButtonThemeData(style: materialStyle),
+        outlinedButtonTheme: OutlinedButtonThemeData(style: materialStyle),
+        textButtonTheme: TextButtonThemeData(style: materialStyle),
       ),
       home: Scaffold(body: child),
     );
@@ -320,6 +328,141 @@ void main() {
   // size 四档 + Theme defaultSize
   // ============================================================
   group('TButton size', () {
+    const sizeCases =
+        <
+          ({
+            TButtonSize size,
+            double height,
+            double fontSize,
+            double lineHeight,
+            double horizontalPadding,
+            double verticalPadding,
+            double iconSize,
+          })
+        >[
+          (
+            size: TButtonSize.large,
+            height: 48,
+            fontSize: 16,
+            lineHeight: 1.5,
+            horizontalPadding: 20,
+            verticalPadding: 12,
+            iconSize: 24,
+          ),
+          (
+            size: TButtonSize.medium,
+            height: 40,
+            fontSize: 16,
+            lineHeight: 1.5,
+            horizontalPadding: 16,
+            verticalPadding: 8,
+            iconSize: 20,
+          ),
+          (
+            size: TButtonSize.small,
+            height: 32,
+            fontSize: 14,
+            lineHeight: 22 / 14,
+            horizontalPadding: 12,
+            verticalPadding: 5,
+            iconSize: 18,
+          ),
+          (
+            size: TButtonSize.extraSmall,
+            height: 28,
+            fontSize: 14,
+            lineHeight: 22 / 14,
+            horizontalPadding: 8,
+            verticalPadding: 3,
+            iconSize: 18,
+          ),
+        ];
+
+    for (final sizeCase in sizeCases) {
+      testWidgets('${sizeCase.size.name} 使用完整 TDesign 尺寸规格', (tester) async {
+        final key = ValueKey(sizeCase.size);
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              key: key,
+              size: sizeCase.size,
+              icon: const Icon(Icons.add),
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {},
+              child: const Text('按钮'),
+            ),
+          ),
+        );
+
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        final textStyle = button.style?.textStyle?.resolve({});
+        final padding = button.style?.padding?.resolve({});
+        final icon = tester.widget<Icon>(find.byIcon(Icons.add));
+        expect(tester.getSize(find.byKey(key)).height, sizeCase.height);
+        expect(button.style?.minimumSize?.resolve({})?.height, sizeCase.height);
+        expect(button.style?.tapTargetSize, MaterialTapTargetSize.shrinkWrap);
+        expect(textStyle?.fontSize, sizeCase.fontSize);
+        expect(textStyle?.height, closeTo(sizeCase.lineHeight, 0.001));
+        expect(textStyle?.fontWeight, FontWeight.w600);
+        expect(
+          padding,
+          EdgeInsets.symmetric(
+            horizontal: sizeCase.horizontalPadding,
+            vertical: sizeCase.verticalPadding,
+          ),
+        );
+        expect(icon.size, sizeCase.iconSize);
+      });
+    }
+
+    testWidgets('Material ButtonTheme 可恢复 padded tap target', (tester) async {
+      const key = Key('material-padded-button');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            key: key,
+            size: TButtonSize.extraSmall,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {},
+            child: const Text('按钮'),
+          ),
+          materialStyle: const ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.padded,
+          ),
+        ),
+      );
+
+      final material = find.byWidgetPredicate(
+        (widget) => widget is Material && widget.type == MaterialType.button,
+      );
+      expect(tester.getSize(find.byKey(key)).height, 48);
+      expect(tester.getSize(material).height, 28);
+    });
+
+    testWidgets('实例 tap target 覆盖 Material ButtonTheme', (tester) async {
+      const key = Key('instance-shrink-wrap-button');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            key: key,
+            size: TButtonSize.extraSmall,
+            style: const ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () {},
+            child: const Text('按钮'),
+          ),
+          materialStyle: const ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.padded,
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byKey(key)).height, 28);
+    });
+
     testWidgets('large 渲染成功', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -465,6 +608,134 @@ void main() {
   // 渐变（gradient）
   // ============================================================
   group('TButton gradient 渐变', () {
+    testWidgets('渐变 extraSmall 默认保持 28dp 视觉和布局尺寸', (tester) async {
+      const key = Key('gradient-extra-small');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            key: key,
+            size: TButtonSize.extraSmall,
+            onPressed: () {},
+            child: const Text('渐变'),
+          ),
+          buttonTheme: const TButtonThemeData(
+            gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          ),
+        ),
+      );
+
+      final decorated = find.descendant(
+        of: find.byKey(key),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is ShapeDecoration &&
+              (widget.decoration! as ShapeDecoration).gradient != null,
+        ),
+      );
+      expect(tester.getSize(find.byKey(key)).height, 28);
+      expect(tester.getSize(decorated).height, 28);
+      final semantics = tester.getSemantics(find.byKey(key));
+      // ignore: deprecated_member_use
+      expect(semantics.hasFlag(SemanticsFlag.isButton), isTrue);
+      // ignore: deprecated_member_use
+      expect(semantics.hasFlag(SemanticsFlag.hasEnabledState), isTrue);
+      // ignore: deprecated_member_use
+      expect(semantics.hasFlag(SemanticsFlag.isEnabled), isTrue);
+    });
+
+    testWidgets('渐变 padded tap target 扩展点击区但不放大背景', (tester) async {
+      const key = Key('gradient-padded');
+      var taps = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            key: key,
+            size: TButtonSize.extraSmall,
+            style: const ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.padded,
+              mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.click),
+              enableFeedback: false,
+              splashFactory: NoSplash.splashFactory,
+            ),
+            onPressed: () => taps++,
+            child: const Text('渐变'),
+          ),
+          buttonTheme: const TButtonThemeData(
+            gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          ),
+        ),
+      );
+
+      final outerRect = tester.getRect(find.byKey(key));
+      final decorated = find.descendant(
+        of: find.byKey(key),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is ShapeDecoration &&
+              (widget.decoration! as ShapeDecoration).gradient != null,
+        ),
+      );
+      final inkWell = tester.widget<InkWell>(find.byType(InkWell));
+      expect(outerRect.height, 48);
+      expect(tester.getSize(decorated).height, 28);
+      expect(inkWell.mouseCursor, SystemMouseCursors.click);
+      expect(inkWell.enableFeedback, isFalse);
+      expect(inkWell.splashFactory, NoSplash.splashFactory);
+
+      await tester.tapAt(Offset(outerRect.center.dx, outerRect.top + 2));
+      expect(taps, 1);
+    });
+
+    testWidgets('渐变 tap target 提供稳定的固有尺寸并响应样式更新', (tester) async {
+      Widget buildButton(MaterialTapTargetSize tapTargetSize) {
+        return wrapWithTheme(
+          TButton(
+            size: TButtonSize.extraSmall,
+            style: ButtonStyle(tapTargetSize: tapTargetSize),
+            onPressed: () {},
+            child: const Text('渐变'),
+          ),
+          buttonTheme: const TButtonThemeData(
+            gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(buildButton(MaterialTapTargetSize.padded));
+      final tapTarget = tester.allRenderObjects
+          .whereType<RenderBox>()
+          .singleWhere(
+            (renderObject) =>
+                renderObject.runtimeType.toString() ==
+                '_RenderTButtonTapTarget',
+          );
+      expect(tapTarget.getMinIntrinsicWidth(48), greaterThanOrEqualTo(48));
+      expect(tapTarget.getMaxIntrinsicWidth(48), greaterThanOrEqualTo(48));
+      expect(tapTarget.getMinIntrinsicHeight(100), 48);
+      expect(tapTarget.getMaxIntrinsicHeight(100), 48);
+      expect(
+        tapTarget.getDryLayout(const BoxConstraints(maxWidth: 200)).height,
+        48,
+      );
+      tapTarget.getDryBaseline(
+        const BoxConstraints(maxWidth: 200),
+        TextBaseline.alphabetic,
+      );
+
+      await tester.pumpWidget(buildButton(MaterialTapTargetSize.shrinkWrap));
+      final updatedTapTarget = tester.allRenderObjects
+          .whereType<RenderBox>()
+          .singleWhere(
+            (renderObject) =>
+                renderObject.runtimeType.toString() ==
+                '_RenderTButtonTapTarget',
+          );
+      expect(identical(updatedTapTarget, tapTarget), isTrue);
+      expect(updatedTapTarget.size.height, 28);
+    });
+
     testWidgets('渐变存在时外层包裹 Container', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -579,17 +850,13 @@ void main() {
       expect(find.byType(ElevatedButton), findsNothing);
       expect(
         tester
-            .widgetList<SizedBox>(find.byType(SizedBox))
-            .any((box) => box.width == 140 && box.height == 52),
-        isTrue,
-      );
-      expect(
-        tester
             .widgetList<ConstrainedBox>(find.byType(ConstrainedBox))
             .any(
               (box) =>
-                  box.constraints.maxWidth == 160 &&
-                  box.constraints.maxHeight == 60,
+                  box.constraints.minWidth == 140 &&
+                  box.constraints.maxWidth == 140 &&
+                  box.constraints.minHeight == 52 &&
+                  box.constraints.maxHeight == 52,
             ),
         isTrue,
       );
@@ -717,9 +984,10 @@ void main() {
       expect(find.byType(InkWell), findsOneWidget);
     });
 
-    testWidgets('渐变 round/filled/circle shape 分支可构建', (tester) async {
+    testWidgets('渐变全部 shape 分支可构建', (tester) async {
       for (final shape in [
         TButtonShape.round,
+        TButtonShape.square,
         TButtonShape.filled,
         TButtonShape.circle,
       ]) {

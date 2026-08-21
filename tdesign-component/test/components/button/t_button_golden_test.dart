@@ -154,6 +154,57 @@ void main() {
         matchesGoldenFile('goldens/t_button_text.png'),
       );
     });
+
+    testWidgets('四档尺寸矩阵', (tester) async {
+      tester.view.physicalSize = const Size(520, 160);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      const matrixKey = Key('button-size-matrix');
+      await tester.pumpWidget(wrapWithTheme(
+        const RepaintBoundary(
+          key: matrixKey,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TButton(
+                size: TButtonSize.large,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: _noop,
+                child: Text('L 48'),
+              ),
+              SizedBox(width: 12),
+              TButton(
+                size: TButtonSize.medium,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: _noop,
+                child: Text('M 40'),
+              ),
+              SizedBox(width: 12),
+              TButton(
+                size: TButtonSize.small,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: _noop,
+                child: Text('S 32'),
+              ),
+              SizedBox(width: 12),
+              TButton(
+                size: TButtonSize.extraSmall,
+                colorScheme: TButtonColorScheme.primary,
+                onPressed: _noop,
+                child: Text('XS 28'),
+              ),
+            ],
+          ),
+        ),
+      ));
+
+      await expectLater(
+        find.byKey(matrixKey),
+        matchesGoldenFile('goldens/t_button_size_matrix.png'),
+      );
+    });
   });
 }
 

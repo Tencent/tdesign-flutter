@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
@@ -64,7 +67,9 @@ class TButton extends StatefulWidget {
   /// 内容（纯文案用 `Text('...')`）
   final Widget? child;
 
-  /// 尺寸，未传时使用 Theme [TButtonThemeData.defaultSize]
+  /// 尺寸，未传时使用 Theme [TButtonThemeData.defaultSize]。
+  ///
+  /// 默认按 48、40、32、28dp 的 TDesign 视觉高度参与布局。
   final TButtonSize? size;
 
   /// 变体（fill / outline / text / ghost），未传时使用 Theme [TButtonThemeData.defaultVariant]
@@ -88,7 +93,11 @@ class TButton extends StatefulWidget {
   /// 不会触发点击或长按回调。
   final VoidCallback? onLongPress;
 
-  /// P0 逃逸舱：[ButtonStyle] 覆盖所有 resolve 结果
+  /// P0 逃逸舱：[ButtonStyle] 覆盖所有 resolve 结果。
+  ///
+  /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
+  /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
+  /// [MaterialTapTargetSize.padded]。
   final ButtonStyle? style;
 
   @override
@@ -104,6 +113,10 @@ class _TButtonState extends State<TButton> {
         widget.variant ?? theme?.defaultVariant ?? TButtonVariant.fill;
     final effectiveSize =
         widget.size ?? theme?.defaultSize ?? TButtonSize.medium;
+    final sizeMetrics = TButtonResolve.sizeMetrics(
+      effectiveSize,
+      context.tTheme,
+    );
     final hasGradient = theme?.gradient != null;
 
     // 解析 ButtonStyle
@@ -131,7 +144,7 @@ class _TButtonState extends State<TButton> {
 
       // 左侧图标
       if (hasIcon && widget.iconPosition == TButtonIconPosition.left) {
-        children.add(_wrapIcon(widget.icon!, effectiveSize));
+        children.add(_wrapIcon(widget.icon!, sizeMetrics));
       }
 
       // 内容
@@ -141,7 +154,7 @@ class _TButtonState extends State<TButton> {
 
       // 右侧图标
       if (hasIcon && widget.iconPosition == TButtonIconPosition.right) {
-        children.add(_wrapIcon(widget.icon!, effectiveSize));
+        children.add(_wrapIcon(widget.icon!, sizeMetrics));
       }
 
       // 图标与文案间距
@@ -164,6 +177,7 @@ class _TButtonState extends State<TButton> {
 
     if (gradient != null) {
       // 渐变按钮保留自绘装饰层，同时复用 resolvedStyle 中的 P0/ButtonStyle 结果。
+      final appTheme = Theme.of(context);
       final isDisabled = widget.onPressed == null;
       final states = <WidgetState>{if (isDisabled) WidgetState.disabled};
       final shape =
@@ -182,23 +196,38 @@ class _TButtonState extends State<TButton> {
 
       final textStyle =
           resolvedStyle.textStyle?.resolve(states) ??
-          TextStyle(fontSize: _fontSizeForButton(effectiveSize));
+          TextStyle(
+            fontSize: sizeMetrics.fontSize,
+            height: sizeMetrics.fontHeight,
+            fontWeight: sizeMetrics.fontWeight,
+          );
+      final isIconOnly = widget.icon != null && widget.child == null;
+      final isFixedIconShape =
+          theme?.effectiveShape == TButtonShape.square ||
+          theme?.effectiveShape == TButtonShape.circle;
       final padding =
           resolvedStyle.padding?.resolve(states) ??
-          _gradientPadding(
-            effectiveSize,
-            widget.icon != null,
-            widget.child != null,
-            theme?.effectiveShape ?? TButtonShape.rectangle,
-          );
+          (isIconOnly && isFixedIconShape
+              ? EdgeInsets.all(sizeMetrics.iconOnlyPadding)
+              : EdgeInsets.symmetric(
+                  horizontal: sizeMetrics.horizontalPadding,
+                  vertical: sizeMetrics.verticalPadding,
+                ));
       final minimumSize =
           resolvedStyle.minimumSize?.resolve(states) ??
-          Size(0, _sideLengthForSize(effectiveSize));
+          Size(0, sizeMetrics.height);
       final maximumSize = resolvedStyle.maximumSize?.resolve(states);
       final fixedSize = resolvedStyle.fixedSize?.resolve(states);
+      final visualDensity =
+          resolvedStyle.visualDensity ?? appTheme.visualDensity;
+      final densityAdjustment = visualDensity.baseSizeAdjustment;
+      final tapTargetSize =
+          resolvedStyle.tapTargetSize ?? appTheme.materialTapTargetSize;
       final elevation = resolvedStyle.elevation?.resolve(states) ?? 0;
       final shadowColor = resolvedStyle.shadowColor?.resolve(states);
       final surfaceTintColor = resolvedStyle.surfaceTintColor?.resolve(states);
+      final animationDuration =
+          resolvedStyle.animationDuration ?? kThemeChangeDuration;
 
       var styledContent = content;
       if (styledContent != null) {
@@ -225,9 +254,13 @@ class _TButtonState extends State<TButton> {
           elevation: elevation,
           shadowColor: shadowColor,
           surfaceTintColor: surfaceTintColor,
+          animationDuration: animationDuration,
           child: InkWell(
             customBorder: effectiveShape,
             overlayColor: resolvedStyle.overlayColor,
+            mouseCursor: resolvedStyle.mouseCursor?.resolve(states),
+            enableFeedback: resolvedStyle.enableFeedback ?? true,
+            splashFactory: resolvedStyle.splashFactory,
             onTap: widget.onPressed,
             onLongPress: widget.onPressed == null ? null : widget.onLongPress,
             child: Padding(padding: padding, child: styledContent),
@@ -235,23 +268,45 @@ class _TButtonState extends State<TButton> {
         ),
       );
 
-      Widget constrainedButton = ConstrainedBox(
-        constraints: BoxConstraints(
+      var effectiveConstraints = visualDensity.effectiveConstraints(
+        BoxConstraints(
           minWidth: minimumSize.width,
           minHeight: minimumSize.height,
           maxWidth: maximumSize?.width ?? double.infinity,
           maxHeight: maximumSize?.height ?? double.infinity,
         ),
-        child: buttonChild,
       );
       if (fixedSize != null) {
-        constrainedButton = SizedBox.fromSize(
-          size: fixedSize,
-          child: constrainedButton,
+        final effectiveFixedSize = effectiveConstraints.constrain(fixedSize);
+        effectiveConstraints = effectiveConstraints.copyWith(
+          minWidth: effectiveFixedSize.width,
+          maxWidth: effectiveFixedSize.width,
+          minHeight: effectiveFixedSize.height,
+          maxHeight: effectiveFixedSize.height,
         );
       }
 
-      button = IntrinsicWidth(child: constrainedButton);
+      Widget constrainedButton = ConstrainedBox(
+        constraints: effectiveConstraints,
+        child: buttonChild,
+      );
+
+      final minimumTapSize = switch (tapTargetSize) {
+        MaterialTapTargetSize.padded => Size(
+          math.max(0, kMinInteractiveDimension + densityAdjustment.dx),
+          math.max(0, kMinInteractiveDimension + densityAdjustment.dy),
+        ),
+        MaterialTapTargetSize.shrinkWrap => Size.zero,
+      };
+      button = Semantics(
+        container: true,
+        button: true,
+        enabled: !isDisabled,
+        child: _TButtonTapTarget(
+          minSize: minimumTapSize,
+          child: IntrinsicWidth(child: constrainedButton),
+        ),
+      );
 
       if (theme?.margin != null) {
         button = Container(margin: theme!.margin, child: button);
@@ -282,36 +337,23 @@ class _TButtonState extends State<TButton> {
   }
 
   /// 包裹图标，按 TButtonSize 设置默认尺寸
-  Widget _wrapIcon(Widget iconWidget, TButtonSize effectiveSize) {
+  Widget _wrapIcon(Widget iconWidget, TButtonSizeMetrics metrics) {
     if (iconWidget is Icon) {
       final icon = iconWidget;
       final useDefaultSize = icon.size == null;
       final useDefaultColor = icon.color == null;
 
       if (useDefaultSize || useDefaultColor) {
-        final iconSize = _iconSizeForButton(effectiveSize);
         return Icon(
           icon.icon,
-          size: useDefaultSize ? iconSize : icon.size, // coverage:ignore-line
+          size: useDefaultSize
+              ? metrics.iconSize
+              : icon.size, // coverage:ignore-line
           color: useDefaultColor ? null : icon.color, // coverage:ignore-line
         );
       }
     }
     return iconWidget;
-  }
-
-  /// 根据 size 获取默认图标尺寸
-  static double _iconSizeForButton(TButtonSize size) {
-    switch (size) {
-      case TButtonSize.large:
-        return 24;
-      case TButtonSize.medium:
-        return 20;
-      case TButtonSize.small:
-        return 18;
-      case TButtonSize.extraSmall: // coverage:ignore-line
-        return 14;
-    }
   }
 
   /// 根据 shape 获取渐变裁剪圆角值
@@ -325,59 +367,133 @@ class _TButtonState extends State<TButton> {
       TButtonShape.circle => 0, // coverage:ignore-line
     };
   }
+}
 
-  /// 渐变模式下根据 size 计算 padding（与 _resolveSize 对齐）
-  EdgeInsets _gradientPadding(
-    TButtonSize size,
-    bool hasIcon,
-    bool hasChild,
-    TButtonShape shape,
+/// 扩展按钮点击区域但保持可见 Material 的规格尺寸。
+class _TButtonTapTarget extends SingleChildRenderObjectWidget {
+  const _TButtonTapTarget({required this.minSize, required super.child});
+
+  final Size minSize;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderTButtonTapTarget(minSize);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    covariant _RenderTButtonTapTarget renderObject,
   ) {
-    final isSquareOrCircle =
-        shape == TButtonShape.square || shape == TButtonShape.circle;
-    final onlyIcon = hasIcon && !hasChild;
+    renderObject.minSize = minSize;
+  }
+}
 
-    double padH;
-    double padV;
+class _RenderTButtonTapTarget extends RenderShiftedBox {
+  _RenderTButtonTapTarget(this._minSize) : super(null);
 
-    switch (size) {
-      case TButtonSize.large:
-        padH = onlyIcon ? 12 : 20;
-        padV = onlyIcon ? 12 : 12;
-      case TButtonSize.medium:
-        padH = onlyIcon ? 10 : 16;
-        padV = onlyIcon ? 10 : 8;
-      case TButtonSize.small: // coverage:ignore-line
-        padH = onlyIcon ? 7 : 12;
-        padV = onlyIcon ? 7 : 5;
-      case TButtonSize.extraSmall: // coverage:ignore-line
-        padH = onlyIcon ? 5 : 8;
-        padV = onlyIcon ? 5 : 3;
+  Size _minSize;
+
+  Size get minSize => _minSize;
+
+  set minSize(Size value) {
+    if (_minSize == value) {
+      return;
     }
-
-    if (isSquareOrCircle && onlyIcon) {
-      return EdgeInsets.all(padH); // coverage:ignore-line
-    }
-    return EdgeInsets.symmetric(horizontal: padH, vertical: padV);
+    _minSize = value;
+    markNeedsLayout();
   }
 
-  /// 根据 size 获取默认字体大小
-  double _fontSizeForButton(TButtonSize size) {
-    return switch (size) {
-      TButtonSize.large => 16,
-      TButtonSize.medium => 14,
-      TButtonSize.small => 12, // coverage:ignore-line
-      TButtonSize.extraSmall => 10, // coverage:ignore-line
-    };
+  @override
+  double computeMinIntrinsicWidth(double height) => child == null
+      ? 0
+      : math.max(child!.getMinIntrinsicWidth(height), minSize.width);
+
+  @override
+  double computeMinIntrinsicHeight(double width) => child == null
+      ? 0
+      : math.max(child!.getMinIntrinsicHeight(width), minSize.height);
+
+  @override
+  double computeMaxIntrinsicWidth(double height) => child == null
+      ? 0
+      : math.max(child!.getMaxIntrinsicWidth(height), minSize.width);
+
+  @override
+  double computeMaxIntrinsicHeight(double width) => child == null
+      ? 0
+      : math.max(child!.getMaxIntrinsicHeight(width), minSize.height);
+
+  Size _computeSize({
+    required BoxConstraints constraints,
+    required ChildLayouter layoutChild,
+  }) {
+    if (child == null) {
+      return Size.zero;
+    }
+    final childSize = layoutChild(child!, constraints);
+    return constraints.constrain(
+      Size(
+        math.max(childSize.width, minSize.width),
+        math.max(childSize.height, minSize.height),
+      ),
+    );
   }
 
-  /// 根据 size 获取按钮边长（对齐 _resolveSize 中的 sideLength）
-  double _sideLengthForSize(TButtonSize size) {
-    return switch (size) {
-      TButtonSize.large => 48,
-      TButtonSize.medium => 40,
-      TButtonSize.small => 32, // coverage:ignore-line
-      TButtonSize.extraSmall => 28, // coverage:ignore-line
-    };
+  @override
+  Size computeDryLayout(BoxConstraints constraints) => _computeSize(
+    constraints: constraints,
+    layoutChild: ChildLayoutHelper.dryLayoutChild,
+  );
+
+  @override
+  double? computeDryBaseline(
+    covariant BoxConstraints constraints,
+    TextBaseline baseline,
+  ) {
+    final child = this.child;
+    if (child == null) {
+      return null;
+    }
+    final childBaseline = child.getDryBaseline(constraints, baseline);
+    if (childBaseline == null) {
+      return null;
+    }
+    final childSize = child.getDryLayout(constraints);
+    return childBaseline +
+        Alignment.center
+            .alongOffset(computeDryLayout(constraints) - childSize as Offset)
+            .dy;
+  }
+
+  @override
+  void performLayout() {
+    size = _computeSize(
+      constraints: constraints,
+      layoutChild: ChildLayoutHelper.layoutChild,
+    );
+    final child = this.child;
+    if (child != null) {
+      final childParentData = child.parentData! as BoxParentData;
+      childParentData.offset = Alignment.center.alongOffset(
+        size - child.size as Offset,
+      );
+    }
+  }
+
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    if (super.hitTest(result, position: position)) {
+      return true;
+    }
+    final child = this.child;
+    if (child == null) {
+      return false;
+    }
+    final center = child.size.center(Offset.zero);
+    return result.addWithRawTransform(
+      transform: MatrixUtils.forceToPoint(center),
+      position: center,
+      hitTest: (result, position) => child.hitTest(result, position: center),
+    );
   }
 }
