@@ -204,6 +204,13 @@ export default {
           component: () => import('@component-docs/cascader/README.md'),
         },
         {
+          title: 'ColorPicker 颜色选择器',
+          name: 'color-picker',
+          meta: { docType: 'form' },
+          path: '/flutter/components/color-picker',
+          component: () => import('@component-docs/color-picker/README.md'),
+        },
+        {
           title: 'CheckBox 多选框',
           name: 'checkbox',
           meta: { docType: 'form' },
