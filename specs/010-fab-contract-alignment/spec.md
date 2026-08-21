@@ -70,7 +70,8 @@ Flutter `TFab` 已采用“定位层 + 内嵌 `TButton` 动作层”的组合模
 - `TFabDragDetails.position` 明确表示 `Offset(right, bottom)`，不伪装成左上角坐标。
 - `magnetAnimationDuration` 控制当前位置到目标边界的真实动画；新一轮拖拽或布局更新
   会终止旧动画，避免延迟任务回写过期位置。
-- 拖拽手势被识别但总位移未超过 `dragTapSlop` 时仍触发一次 `onPressed`；默认
+- 单次拖拽手势期间距起点的最大位移未超过 `dragTapSlop` 时，仍触发一次
+  `onPressed`；只要曾超过阈值，即使松手前回到起点附近也仍按拖拽处理。默认
   TButton 与自定义 `child` 的点击次数一致，不重复触发。
 - Demo 与默认组件的边界：前三个场景只使用 TFab 默认能力；自动收缩场景使用
   `child` 组合页面滚动状态，不向 TFab 增加 API。滚动开始时收缩，滚动结束 100ms

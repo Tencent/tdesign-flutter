@@ -529,6 +529,33 @@ void main() {
       expect(tapped, isTrue);
     });
 
+    testWidgets('拖出阈值后回到起点仍按拖拽处理', (tester) async {
+      var tapCount = 0;
+      var dragEndCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TFab(
+            draggable: TFabDragAxis.all,
+            onPressed: () => tapCount += 1,
+            onDragEnd: (_) => dragEndCount += 1,
+          ),
+        ),
+      );
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(fabDragTarget()),
+      );
+      await gesture.moveBy(const Offset(-50, 0));
+      await tester.pump();
+      await gesture.moveBy(const Offset(50, 0));
+      await tester.pump();
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(tapCount, 0);
+      expect(dragEndCount, 1);
+    });
+
     testWidgets('拖拽 + magnet=true 吸附', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

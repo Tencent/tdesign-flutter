@@ -72,7 +72,7 @@ class _FabDraggableState extends State<_FabDraggable>
   final GlobalKey _childKey = GlobalKey();
   late double _right;
   late double _bottom;
-  double _totalDisplacement = 0;
+  double _maxDisplacement = 0;
   Offset? _dragOrigin;
   late final AnimationController _snapController;
   Animation<double>? _snapAnimation;
@@ -141,7 +141,7 @@ class _FabDraggableState extends State<_FabDraggable>
 
   void _onPanStart(DragStartDetails details) {
     _stopSnap();
-    _totalDisplacement = 0;
+    _maxDisplacement = 0;
     _dragOrigin = details.globalPosition;
     widget.onDragStart?.call(
       TFabDragDetails(position: Offset(_right, _bottom), start: details),
@@ -150,9 +150,12 @@ class _FabDraggableState extends State<_FabDraggable>
 
   void _onPanUpdate(DragUpdateDetails details) {
     final delta = details.delta;
-    _totalDisplacement =
+    final displacement =
         (details.globalPosition - (_dragOrigin ?? details.globalPosition))
             .distance;
+    if (displacement > _maxDisplacement) {
+      _maxDisplacement = displacement;
+    }
 
     final axis = widget.layout.draggable;
 
@@ -167,7 +170,7 @@ class _FabDraggableState extends State<_FabDraggable>
   }
 
   void _onPanEnd(DragEndDetails details) {
-    final isDrag = _totalDisplacement > widget.dragTapSlop;
+    final isDrag = _maxDisplacement > widget.dragTapSlop;
     _dragOrigin = null;
 
     if (isDrag) {
