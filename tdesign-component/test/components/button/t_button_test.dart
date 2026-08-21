@@ -111,7 +111,7 @@ void main() {
       expect(find.byType(ElevatedButton), findsOneWidget);
     });
 
-    testWidgets('shape: square 正常渲染（直角 + 等宽高）', (tester) async {
+    testWidgets('shape: square 正常渲染（默认圆角）', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(child: Text('square'), onPressed: null),
@@ -122,9 +122,12 @@ void main() {
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(find.byType(TButton), findsOneWidget);
 
-      // 验证 square 的 shape 为直角（RoundedRectangleBorder + BorderRadius.zero）
       final shape = button.style?.shape?.resolve({});
-      expect(shape, isNotNull);
+      expect(shape, isA<RoundedRectangleBorder>());
+      expect(
+        (shape! as RoundedRectangleBorder).borderRadius,
+        const BorderRadius.all(Radius.circular(6)),
+      );
     });
 
     testWidgets('shape: circle 正常渲染（圆形）', (tester) async {
@@ -155,7 +158,7 @@ void main() {
       expect(find.byType(ElevatedButton), findsOneWidget);
     });
 
-    testWidgets('square 渲染为直角（BorderRadius.zero）', (tester) async {
+    testWidgets('square 使用 radiusDefault 而非零圆角', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(child: Text('square'), onPressed: null),
@@ -166,7 +169,10 @@ void main() {
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       final shape = button.style?.shape?.resolve({});
       expect(shape, isA<RoundedRectangleBorder>());
-      expect((shape as RoundedRectangleBorder).borderRadius, BorderRadius.zero);
+      expect(
+        (shape as RoundedRectangleBorder).borderRadius,
+        const BorderRadius.all(Radius.circular(6)),
+      );
     });
 
     testWidgets('rectangle 渲染有圆角', (tester) async {
@@ -278,7 +284,7 @@ void main() {
       expect(shape is CircleBorder, isTrue);
     });
 
-    testWidgets('纯 icon + square shape 等宽高', (tester) async {
+    testWidgets('纯 icon + square shape 等宽高且保留默认圆角', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(icon: Icon(Icons.home), onPressed: null),
@@ -291,6 +297,12 @@ void main() {
       // square 纯 icon 应等宽高
       expect(minSize?.width, isNotNull);
       expect(minSize?.width, equals(minSize?.height));
+      final shape = button.style?.shape?.resolve({});
+      expect(shape, isA<RoundedRectangleBorder>());
+      expect(
+        (shape! as RoundedRectangleBorder).borderRadius,
+        const BorderRadius.all(Radius.circular(6)),
+      );
     });
 
     testWidgets('icon 位置 left / right 皆正常', (tester) async {
@@ -1006,6 +1018,36 @@ void main() {
       }
     });
 
+    testWidgets('渐变 square 保留 radiusDefault', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(icon: const Icon(Icons.crop_square), onPressed: () {}),
+          buttonTheme: const TButtonThemeData(
+            shape: TButtonShape.square,
+            gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          ),
+        ),
+      );
+
+      final decoratedContainer = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TButton),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is ShapeDecoration,
+              ),
+            )
+            .first,
+      );
+      final decoration = decoratedContainer.decoration! as ShapeDecoration;
+      expect(decoration.shape, isA<RoundedRectangleBorder>());
+      expect(
+        (decoration.shape as RoundedRectangleBorder).borderRadius,
+        const BorderRadius.all(Radius.circular(6)),
+      );
+    });
+
     testWidgets('渐变 fallback shape/textStyle/padding/minimumSize 可执行', (
       tester,
     ) async {
@@ -1362,6 +1404,126 @@ void main() {
       );
       await pressAndRelease(tester);
       expect(find.byType(TButton), findsOneWidget);
+    });
+  });
+
+  // ============================================================
+  // Flutter 原生交互状态层
+  // ============================================================
+  group('TButton 点击反馈', () {
+    testWidgets('普通与 ghost 按钮默认提供可见状态层', (tester) async {
+      for (final variant in [TButtonVariant.fill, TButtonVariant.ghost]) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              child: Text(variant.name),
+              variant: variant,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {},
+            ),
+          ),
+        );
+
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        final overlay = button.style?.overlayColor;
+        expect(overlay, isNotNull);
+        expect(overlay!.resolve({}), Colors.transparent);
+        expect(
+          overlay.resolve({WidgetState.pressed}),
+          isNot(Colors.transparent),
+        );
+        expect(
+          overlay.resolve({WidgetState.hovered}),
+          isNot(Colors.transparent),
+        );
+        expect(
+          overlay.resolve({WidgetState.focused}),
+          isNot(Colors.transparent),
+        );
+        expect(overlay.resolve({WidgetState.disabled}), Colors.transparent);
+      }
+    });
+
+    testWidgets('渐变按钮把同一状态层交给 InkWell', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            child: const Text('渐变反馈'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {},
+          ),
+          buttonTheme: const TButtonThemeData(
+            gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          ),
+        ),
+      );
+
+      final inkWell = tester.widget<InkWell>(find.byType(InkWell));
+      expect(inkWell.overlayColor, isNotNull);
+      expect(inkWell.overlayColor!.resolve({}), Colors.transparent);
+      expect(
+        inkWell.overlayColor!.resolve({WidgetState.pressed}),
+        isNot(Colors.transparent),
+      );
+    });
+
+    testWidgets('Material、组件 Theme 与实例 overlayColor 保持优先级', (tester) async {
+      const materialOverlay = Color(0x110000FF);
+      const componentOverlay = Color(0x2200FF00);
+      const instanceOverlay = Color(0x33FF0000);
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            child: const Text('组件主题'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {},
+          ),
+          materialStyle: const ButtonStyle(
+            overlayColor: WidgetStatePropertyAll(materialOverlay),
+          ),
+          buttonTheme: const TButtonThemeData(
+            filledStyle: ButtonStyle(
+              overlayColor: WidgetStatePropertyAll(componentOverlay),
+            ),
+          ),
+        ),
+      );
+
+      var button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(
+        button.style?.overlayColor?.resolve({WidgetState.pressed}),
+        componentOverlay,
+      );
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            child: const Text('实例样式'),
+            colorScheme: TButtonColorScheme.primary,
+            style: const ButtonStyle(
+              overlayColor: WidgetStatePropertyAll(instanceOverlay),
+            ),
+            onPressed: () {},
+          ),
+          materialStyle: const ButtonStyle(
+            overlayColor: WidgetStatePropertyAll(materialOverlay),
+          ),
+          buttonTheme: const TButtonThemeData(
+            filledStyle: ButtonStyle(
+              overlayColor: WidgetStatePropertyAll(componentOverlay),
+            ),
+          ),
+        ),
+      );
+
+      button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(
+        button.style?.overlayColor?.resolve({WidgetState.pressed}),
+        instanceOverlay,
+      );
     });
   });
 

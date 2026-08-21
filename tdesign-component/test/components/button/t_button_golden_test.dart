@@ -117,6 +117,27 @@ void main() {
       );
     });
 
+    testWidgets('纯 icon + square 保留默认圆角', (tester) async {
+      tester.view.physicalSize = const Size(400, 200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      await tester.pumpWidget(wrapWithTheme(
+        const TButton(
+          icon: Icon(Icons.add),
+          size: TButtonSize.large,
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: _noop,
+        ),
+        buttonTheme: const TButtonThemeData(shape: TButtonShape.square),
+      ));
+      await expectLater(
+        find.byType(TButton),
+        matchesGoldenFile('goldens/t_button_icon_square.png'),
+      );
+    });
+
     testWidgets('outline 变体', (tester) async {
       tester.view.physicalSize = const Size(400, 200);
       tester.view.devicePixelRatio = 1.0;

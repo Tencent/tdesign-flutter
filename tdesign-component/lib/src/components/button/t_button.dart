@@ -362,9 +362,8 @@ class _TButtonState extends State<TButton> {
     return switch (shape) {
       TButtonShape.rectangle => tTheme.radiusDefault,
       TButtonShape.round => tTheme.radiusRound, // coverage:ignore-line
-      TButtonShape.square ||
-      TButtonShape.filled ||
-      TButtonShape.circle => 0, // coverage:ignore-line
+      TButtonShape.square => tTheme.radiusDefault,
+      TButtonShape.filled || TButtonShape.circle => 0, // coverage:ignore-line
     };
   }
 }

@@ -27,7 +27,10 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// P2 色板：ghost 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
   final ButtonStyle? ghostStyle;
 
-  /// 外形，会展开进 resolves [ButtonStyle.shape]
+  /// 外形，会展开进 resolves [ButtonStyle.shape]。
+  ///
+  /// [TButtonShape.square] 在纯图标场景表示宽高相等并保留默认圆角，
+  /// 不表示直角，也不会裁剪图文内容宽度。
   final TButtonShape? shape;
 
   /// 覆盖默认 padding（null 时由 resolve 按 size/shape 推导）

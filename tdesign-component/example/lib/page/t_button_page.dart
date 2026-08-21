@@ -140,7 +140,6 @@ class _TButtonPageState extends State<TButtonPage> {
                       CodeWrapper(builder: _buildSquareIconButton),
                       CodeWrapper(builder: _buildRoundButton),
                       CodeWrapper(builder: _buildCircleButton),
-                      CodeWrapper(builder: _buildFilledButton),
                     ],
                   ),
                 );
@@ -397,24 +396,6 @@ class _TButtonPageState extends State<TButtonPage> {
   }
 
   @ExampleCode(group: 'button')
-  Widget _buildFilledButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: _withButtonShape(
-        context,
-        TButtonShape.filled,
-        TButton(
-          child: const Text('直角通栏'),
-          size: TButtonSize.large,
-          variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
-          onPressed: _onTap,
-        ),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
   Widget _buildCircleButton(BuildContext context) {
     return _withButtonShape(
       context,
@@ -435,7 +416,7 @@ class _TButtonPageState extends State<TButtonPage> {
       context,
       TButtonShape.round,
       TButton(
-        child: const Text('圆角'),
+        child: const Text('填充按钮'),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
@@ -549,7 +530,6 @@ class _TButtonPageState extends State<TButtonPage> {
       width: double.infinity,
       child: TButton(
         child: const Text('填充按钮'),
-        icon: const Icon(TIcons.app),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,

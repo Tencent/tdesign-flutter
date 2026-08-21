@@ -149,6 +149,18 @@ class TButtonResolve {
       resolved = _overrideWith(resolved, colorStyle);
     }
 
+    // 未显式配置交互层时，使用前景色生成 Flutter 原生 WidgetState 反馈。
+    // Material / 组件 Theme 的显式 overlayColor 保持优先，实例 style 在下方最终覆盖。
+    if (resolved.overlayColor == null) {
+      final interactionColor =
+          resolved.foregroundColor?.resolve(const <WidgetState>{}) ??
+          tTheme.textColorPrimary;
+      resolved = _overrideWith(
+        resolved,
+        ButtonStyle(overlayColor: _interactionOverlay(interactionColor)),
+      );
+    }
+
     // 渐变存在时强制背景 null（触发 MaterialType.transparency），阻止 M3 默认样式污染渐变效果（在 P0 之前，允许 P0 覆盖）
     if (hasGradient) {
       resolved = _overrideWith(
@@ -156,7 +168,6 @@ class TButtonResolve {
         const ButtonStyle(
           // 设为 null 而非 Colors.transparent，确保 ButtonStyleButton 使用 MaterialType.transparency
           backgroundColor: WidgetStatePropertyAll<Color?>(null),
-          overlayColor: WidgetStatePropertyAll<Color>(Colors.transparent),
           surfaceTintColor: WidgetStatePropertyAll<Color>(Colors.transparent),
           shadowColor: WidgetStatePropertyAll<Color>(Colors.transparent),
         ),
@@ -273,7 +284,6 @@ class TButtonResolve {
         }
         return fg;
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -331,7 +341,6 @@ class TButtonResolve {
         }
         return BorderSide(color: borderColor, width: 1);
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -373,7 +382,6 @@ class TButtonResolve {
         }
         return fg;
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -416,7 +424,6 @@ class TButtonResolve {
             : fg;
         return BorderSide(color: color, width: 1);
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -433,8 +440,8 @@ class TButtonResolve {
       TButtonShape.rectangle => RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusDefault)),
       ),
-      TButtonShape.square => const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
+      TButtonShape.square => RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusDefault)),
       ),
       TButtonShape.round => RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusRound)),
@@ -561,6 +568,25 @@ class TButtonResolve {
       TButtonColorScheme.light => tTheme.brandFocusColor,
       TButtonColorScheme.defaultTheme => tTheme.bgColorComponentHover,
     };
+  }
+
+  /// 默认 Flutter 交互状态层。
+  ///
+  /// 按压/聚焦使用 12% 前景色，悬浮使用 8%；禁用和静止状态不绘制。
+  static WidgetStateProperty<Color> _interactionOverlay(Color color) {
+    return WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.disabled)) {
+        return Colors.transparent;
+      }
+      if (states.contains(WidgetState.pressed) ||
+          states.contains(WidgetState.focused)) {
+        return color.withValues(alpha: 0.12);
+      }
+      if (states.contains(WidgetState.hovered)) {
+        return color.withValues(alpha: 0.08);
+      }
+      return Colors.transparent;
+    });
   }
 }
 
