@@ -28,7 +28,10 @@
 - [x] square 纯图标按钮为等宽高并保留 `radiusDefault`，普通与渐变分支一致
 - [x] 图标、通栏与四种 shape Demo 的顺序、内容和文案与验收小程序一致
 - [x] 普通与渐变按钮在 shrink-wrap/padded 下的视觉尺寸和点击区均已复查
-- [x] 普通、ghost、渐变按钮均接入 Flutter WidgetState/Ink 点击反馈，禁用态及主题优先级测试通过
+- [x] fill、outline、text、ghost 与渐变按钮均接入 Flutter WidgetState/Ink 点击反馈，禁用态及主题优先级测试通过
+- [x] fill、outline、text 的 pressed 背景 token 不叠加 pressed overlay，ghost 与渐变在无 pressed 背景变化时使用 overlay
+- [x] 默认状态层基于 P0 最终样式生成，实例前景色和 stateful 背景的优先级测试通过
+- [x] Icon 默认尺寸由 IconTheme 注入，调用方传入的 key、语义标签和原生视觉属性保持不变
 - [x] `TFab` 小程序组合源码明确为 large / circle(or round) / primary，Flutter 组合层已显式对齐
 
 ## 未覆盖项与后续工作

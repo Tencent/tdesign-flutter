@@ -339,19 +339,10 @@ class _TButtonState extends State<TButton> {
   /// 包裹图标，按 TButtonSize 设置默认尺寸
   Widget _wrapIcon(Widget iconWidget, TButtonSizeMetrics metrics) {
     if (iconWidget is Icon) {
-      final icon = iconWidget;
-      final useDefaultSize = icon.size == null;
-      final useDefaultColor = icon.color == null;
-
-      if (useDefaultSize || useDefaultColor) {
-        return Icon(
-          icon.icon,
-          size: useDefaultSize
-              ? metrics.iconSize
-              : icon.size, // coverage:ignore-line
-          color: useDefaultColor ? null : icon.color, // coverage:ignore-line
-        );
-      }
+      return IconTheme.merge(
+        data: IconThemeData(size: metrics.iconSize),
+        child: iconWidget,
+      );
     }
     return iconWidget;
   }

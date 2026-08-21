@@ -68,8 +68,13 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - 渐变按钮保留 button/enabled 语义，并消费解析后的 visual density、tap target、
   mouse cursor、feedback 和 splash 配置。
 - 启用态按钮使用 Flutter `WidgetState`/Ink 状态层提供 pressed、hovered、focused 反馈；
-  现有语义按压背景 token 继续生效，渐变和 ghost 分支也必须有可见反馈。显式
+  现有语义按压背景 token 继续生效，fill、outline、text、ghost 与渐变分支均必须有可见反馈。显式
   Material ButtonTheme、`TButtonThemeData` 或实例 `ButtonStyle.overlayColor` 可覆盖默认状态层。
+- fill、outline、text 已通过语义背景 token 表达 pressed 时，不再叠加第二层 pressed overlay；
+  ghost、渐变或静态自定义背景没有 pressed 背景变化时，使用前景色 overlay 补足反馈。
+  hover、focused 继续由 overlay 覆盖全部变体。
+- 默认状态层基于 P0 合并后的最终前景色和背景状态生成；实例 `ButtonStyle` 提供的
+  stateful 背景不会被重复叠加 pressed overlay。
 - 禁用按钮的默认状态层保持透明，不响应点击或长按。
 - `TButtonShape.filled` 只表示直角外形，不承诺自动通栏；按钮宽度继续由 Flutter 父布局控制。
 - `TFab` 内嵌 Button 显式使用 large / fill / primary，与 MiniProgram 的组合基线一致。
@@ -80,7 +85,7 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - [x] 默认、Flutter Theme 和实例三种 tap target 优先级有回归测试。
 - [x] padded tap target 下可见 Material 保持规格尺寸，点击区域扩展到 48dp。
 - [x] 渐变与普通按钮的 enabled/disabled、点击、长按和语义行为一致。
-- [x] 普通、ghost、渐变按钮均有可解析的按压反馈，禁用态无反馈，主题和实例
+- [x] fill、outline、text、ghost 与渐变按钮均有可解析的按压反馈，禁用态无反馈，主题和实例
   `overlayColor` 优先级有回归测试。
 - [x] Button Golden 与小程序尺寸 Demo 完成截图比对。
 - [x] `TFab` 默认尺寸与拖拽边界回归通过。

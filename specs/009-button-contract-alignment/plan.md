@@ -14,7 +14,10 @@
   可见装饰尺寸，并补齐 Semantics 与 InkWell 原生配置。
 - 在最终样式没有显式 `overlayColor` 时补入 Flutter `WidgetState` 状态层；组件主题、
   Material ButtonTheme 与实例 `ButtonStyle` 的显式状态层保持原优先级，渐变分支直接
-  复用同一解析结果，不在 Demo 模拟点击反馈。
+  复用同一解析结果，不在 Demo 模拟点击反馈。已有 pressed 背景 token 的变体不重复
+  叠加 pressed overlay；没有 pressed 背景变化时由 overlay 补足反馈。
+- Icon 默认尺寸通过 `IconTheme` 注入，不重建调用方传入的 `Icon`，以保留 key、语义标签、
+  阴影及其他 Flutter 原生属性。
 - `TFab` 在组合层显式传入 large / fill / primary，保留其 48dp 动作层和拖拽边界契约。
 - Demo 只编排小程序对应的图标、通栏、尺寸和 shape 场景，不在示例层修正组件样式；
   通栏继续由 `SizedBox(width: double.infinity)` 表达。

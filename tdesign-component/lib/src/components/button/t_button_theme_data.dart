@@ -15,16 +15,16 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 未传按钮 size 时的默认尺寸
   final TButtonSize defaultSize;
 
-  /// P2 色板：fill 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件色板：fill 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
   final ButtonStyle? filledStyle;
 
-  /// P2 色板：outline 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件色板：outline 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
   final ButtonStyle? outlinedStyle;
 
-  /// P2 色板：text 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件色板：text 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
   final ButtonStyle? textButtonStyle;
 
-  /// P2 色板：ghost 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件色板：ghost 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
   final ButtonStyle? ghostStyle;
 
   /// 外形，会展开进 resolves [ButtonStyle.shape]。
@@ -61,10 +61,10 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
     this.iconTextSpacing,
     this.gradient,
   }) : assert(
-          iconTextSpacing == null ||
-              (iconTextSpacing >= 0 && iconTextSpacing < double.infinity),
-          'iconTextSpacing must be finite and non-negative',
-        );
+         iconTextSpacing == null ||
+             (iconTextSpacing >= 0 && iconTextSpacing < double.infinity),
+         'iconTextSpacing must be finite and non-negative',
+       );
 
   @override
   TButtonThemeData copyWith({

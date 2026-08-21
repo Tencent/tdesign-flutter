@@ -269,6 +269,33 @@ void main() {
       expect(icon.color, Colors.orange);
     });
 
+    testWidgets('默认图标尺寸通过 IconTheme 注入且保留 Icon 属性', (tester) async {
+      const iconKey = Key('semantic-icon');
+      const shadow = Shadow(color: Colors.black, blurRadius: 2);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            icon: Icon(
+              Icons.favorite,
+              key: iconKey,
+              semanticLabel: '收藏',
+              textDirection: TextDirection.rtl,
+              shadows: [shadow],
+            ),
+            child: Text('保留属性'),
+            onPressed: null,
+          ),
+        ),
+      );
+
+      final icon = tester.widget<Icon>(find.byKey(iconKey));
+      expect(icon.size, isNull);
+      expect(icon.semanticLabel, '收藏');
+      expect(icon.textDirection, TextDirection.rtl);
+      expect(icon.shadows, const [shadow]);
+      expect(IconTheme.of(tester.element(find.byKey(iconKey))).size, 20);
+    });
+
     testWidgets('纯 icon + circle shape 渲染正确', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -430,7 +457,6 @@ void main() {
         );
         final textStyle = button.style?.textStyle?.resolve({});
         final padding = button.style?.padding?.resolve({});
-        final icon = tester.widget<Icon>(find.byIcon(Icons.add));
         expect(tester.getSize(find.byKey(key)).height, sizeCase.height);
         expect(button.style?.minimumSize?.resolve({})?.height, sizeCase.height);
         expect(button.style?.tapTargetSize, MaterialTapTargetSize.shrinkWrap);
@@ -444,7 +470,10 @@ void main() {
             vertical: sizeCase.verticalPadding,
           ),
         );
-        expect(icon.size, sizeCase.iconSize);
+        expect(
+          IconTheme.of(tester.element(find.byIcon(Icons.add))).size,
+          sizeCase.iconSize,
+        );
       });
     }
 
@@ -1468,8 +1497,8 @@ void main() {
   // Flutter 原生交互状态层
   // ============================================================
   group('TButton 点击反馈', () {
-    testWidgets('普通与 ghost 按钮默认提供可见状态层', (tester) async {
-      for (final variant in [TButtonVariant.fill, TButtonVariant.ghost]) {
+    testWidgets('全部基础变体默认提供可见状态层', (tester) async {
+      for (final variant in TButtonVariant.values) {
         await tester.pumpWidget(
           wrapWithTheme(
             TButton(
@@ -1488,10 +1517,6 @@ void main() {
         expect(overlay, isNotNull);
         expect(overlay!.resolve({}), Colors.transparent);
         expect(
-          overlay.resolve({WidgetState.pressed}),
-          isNot(Colors.transparent),
-        );
-        expect(
           overlay.resolve({WidgetState.hovered}),
           isNot(Colors.transparent),
         );
@@ -1500,6 +1525,22 @@ void main() {
           isNot(Colors.transparent),
         );
         expect(overlay.resolve({WidgetState.disabled}), Colors.transparent);
+
+        final background = button.style?.backgroundColor;
+        final hasPressedBackground =
+            background?.resolve({WidgetState.pressed}) !=
+            background?.resolve({});
+        final pressedOverlay = overlay.resolve({WidgetState.pressed});
+        expect(
+          hasPressedBackground || pressedOverlay != Colors.transparent,
+          isTrue,
+        );
+        if (variant == TButtonVariant.ghost) {
+          expect(pressedOverlay, isNot(Colors.transparent));
+        } else {
+          expect(hasPressedBackground, isTrue);
+          expect(pressedOverlay, Colors.transparent);
+        }
       }
     });
 
@@ -1580,6 +1621,43 @@ void main() {
       expect(
         button.style?.overlayColor?.resolve({WidgetState.pressed}),
         instanceOverlay,
+      );
+    });
+
+    testWidgets('默认状态层基于 P0 最终前景色且不重复覆盖 P0 pressed 背景', (tester) async {
+      const instanceForeground = Color(0xFF123456);
+      const normalBackground = Color(0xFFFFFFFF);
+      const pressedBackground = Color(0xFFEEEEEE);
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            child: const Text('实例状态'),
+            variant: TButtonVariant.ghost,
+            style: ButtonStyle(
+              foregroundColor: const WidgetStatePropertyAll(instanceForeground),
+              backgroundColor: WidgetStateProperty.resolveWith(
+                (states) => states.contains(WidgetState.pressed)
+                    ? pressedBackground
+                    : normalBackground,
+              ),
+            ),
+            onPressed: () {},
+          ),
+        ),
+      );
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      final overlay = button.style?.overlayColor;
+      expect(overlay, isNotNull);
+      expect(overlay!.resolve({WidgetState.pressed}), Colors.transparent);
+      expect(
+        overlay.resolve({WidgetState.hovered}),
+        instanceForeground.withValues(alpha: 0.08),
+      );
+      expect(
+        button.style?.backgroundColor?.resolve({WidgetState.pressed}),
+        pressedBackground,
       );
     });
   });

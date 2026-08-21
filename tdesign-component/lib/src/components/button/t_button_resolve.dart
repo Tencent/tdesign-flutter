@@ -71,17 +71,12 @@ class TButtonResolve {
 
     // 4. Token 默认 shape；Material 可覆盖，显式组件 shape 再覆盖 Material。
     final tokenShapeStyle = _resolveShape(
-      context: context,
       effectiveShape: TButtonShape.rectangle,
       tTheme: tTheme,
     );
     final componentShapeStyle = theme?.shape == null
         ? null
-        : _resolveShape(
-            context: context,
-            effectiveShape: theme!.shape!,
-            tTheme: tTheme,
-          );
+        : _resolveShape(effectiveShape: theme!.shape!, tTheme: tTheme);
 
     // 5. 实例 size > 组件 defaultSize，并据此生成组件规格尺寸。
     final effectiveShape = theme?.shape ?? TButtonShape.rectangle;
@@ -149,18 +144,6 @@ class TButtonResolve {
       resolved = _overrideWith(resolved, colorStyle);
     }
 
-    // 未显式配置交互层时，使用前景色生成 Flutter 原生 WidgetState 反馈。
-    // Material / 组件 Theme 的显式 overlayColor 保持优先，实例 style 在下方最终覆盖。
-    if (resolved.overlayColor == null) {
-      final interactionColor =
-          resolved.foregroundColor?.resolve(const <WidgetState>{}) ??
-          tTheme.textColorPrimary;
-      resolved = _overrideWith(
-        resolved,
-        ButtonStyle(overlayColor: _interactionOverlay(interactionColor)),
-      );
-    }
-
     // 渐变存在时强制背景 null（触发 MaterialType.transparency），阻止 M3 默认样式污染渐变效果（在 P0 之前，允许 P0 覆盖）
     if (hasGradient) {
       resolved = _overrideWith(
@@ -177,6 +160,27 @@ class TButtonResolve {
     // P0：实例 style 覆盖所有
     if (instanceStyle != null) {
       resolved = _overrideWith(resolved, instanceStyle);
+    }
+
+    // 最终样式未显式配置交互层时，使用最终前景色生成 Flutter 原生 WidgetState 反馈。
+    // 放在 P0 之后只补空缺，不覆盖 Material、组件 Theme 或实例 style 的显式 overlayColor。
+    if (resolved.overlayColor == null) {
+      final interactionColor =
+          resolved.foregroundColor?.resolve(const <WidgetState>{}) ??
+          tTheme.textColorPrimary;
+      final background = resolved.backgroundColor;
+      final hasPressedBackground =
+          background?.resolve(const <WidgetState>{WidgetState.pressed}) !=
+          background?.resolve(const <WidgetState>{});
+      resolved = _overrideWith(
+        resolved,
+        ButtonStyle(
+          overlayColor: _interactionOverlay(
+            interactionColor,
+            includePressed: !hasPressedBackground,
+          ),
+        ),
+      );
     }
 
     return resolved;
@@ -432,7 +436,6 @@ class TButtonResolve {
 
   /// 将内部 shape 枚举展开为 [ButtonStyle.shape]
   static ButtonStyle _resolveShape({
-    required BuildContext context,
     required TButtonShape effectiveShape,
     required TThemeData tTheme,
   }) {
@@ -567,13 +570,20 @@ class TButtonResolve {
   /// 默认 Flutter 交互状态层。
   ///
   /// 按压/聚焦使用 12% 前景色，悬浮使用 8%；禁用和静止状态不绘制。
-  static WidgetStateProperty<Color> _interactionOverlay(Color color) {
+  static WidgetStateProperty<Color> _interactionOverlay(
+    Color color, {
+    required bool includePressed,
+  }) {
     return WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.disabled)) {
         return Colors.transparent;
       }
-      if (states.contains(WidgetState.pressed) ||
-          states.contains(WidgetState.focused)) {
+      if (states.contains(WidgetState.pressed)) {
+        return includePressed
+            ? color.withValues(alpha: 0.12)
+            : Colors.transparent;
+      }
+      if (states.contains(WidgetState.focused)) {
         return color.withValues(alpha: 0.12);
       }
       if (states.contains(WidgetState.hovered)) {
