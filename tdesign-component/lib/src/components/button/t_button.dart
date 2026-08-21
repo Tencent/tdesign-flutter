@@ -298,6 +298,8 @@ class _TButtonState extends State<TButton> {
         ),
         MaterialTapTargetSize.shrinkWrap => Size.zero,
       };
+      // 与 Flutter ButtonStyleButton 保持相同结构：外层 Semantics 声明
+      // button/enabled，内层 InkWell 提供 tap 动作，二者合并为一个语义节点。
       button = Semantics(
         container: true,
         button: true,
@@ -360,6 +362,14 @@ class _TButtonState extends State<TButton> {
 }
 
 /// 扩展按钮点击区域但保持可见 Material 的规格尺寸。
+///
+/// Flutter 的 [ButtonStyleButton] 使用私有 `_InputPadding` 实现同一语义，
+/// 但该实现不能被组件复用。这里保留最小的等价实现：以
+/// [kMinInteractiveDimension] 和 visual density 计算点击区、将可见按钮居中，
+/// 并把点击区空白位置的命中重定向到可见按钮中心。
+///
+/// intrinsic、dry layout、baseline、样式更新和空白区命中均有回归测试；
+/// Flutter 若提供公开扩展点，应优先替换本实现。
 class _TButtonTapTarget extends SingleChildRenderObjectWidget {
   const _TButtonTapTarget({required this.minSize, required super.child});
 
@@ -420,6 +430,8 @@ class _RenderTButtonTapTarget extends RenderShiftedBox {
     if (child == null) {
       return Size.zero;
     }
+    // 宽高分别扩展到 minSize；不要交换两个轴。Flutter 3.47 的
+    // ButtonStyleButton._RenderInputPadding 采用相同计算。
     final childSize = layoutChild(child!, constraints);
     return constraints.constrain(
       Size(
@@ -479,6 +491,8 @@ class _RenderTButtonTapTarget extends RenderShiftedBox {
     if (child == null) {
       return false;
     }
+    // 对齐 ButtonStyleButton 的 padded tap-target：可见 Material 外的命中
+    // 重定向到子节点中心，使 InkWell 收到同一次点击。
     final center = child.size.center(Offset.zero);
     return result.addWithRawTransform(
       transform: MatrixUtils.forceToPoint(center),

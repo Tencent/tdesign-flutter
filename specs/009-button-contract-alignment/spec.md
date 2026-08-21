@@ -67,6 +67,11 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
   分支行为一致。
 - 渐变按钮保留 button/enabled 语义，并消费解析后的 visual density、tap target、
   mouse cursor、feedback 和 splash 配置。
+- 渐变按钮沿用 Flutter `ButtonStyleButton` 的外层 `Semantics` + 内层 `InkWell`
+  结构，button/enabled 与 tap 动作必须合并为一个语义节点，不能产生重复按钮节点。
+- 渐变分支的本地 tap-target 只承接 Flutter 私有 `_InputPadding` 的公开可见行为：
+  48dp padded 点击区、可见按钮居中和空白区命中重定向；intrinsic、dry layout、
+  baseline 与 hit test 必须由回归测试锁定。
 - 启用态按钮使用 Flutter `WidgetState`/Ink 状态层提供 pressed、hovered、focused 反馈；
   现有语义按压背景 token 继续生效，fill、outline、text、ghost 与渐变分支均必须有可见反馈。显式
   Material ButtonTheme、`TButtonThemeData` 或实例 `ButtonStyle.overlayColor` 可覆盖默认状态层。

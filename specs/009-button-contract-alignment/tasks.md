@@ -5,6 +5,7 @@
 - [x] DONE 统一尺寸、字体、图标与 tap target 解析
 - [x] DONE 对齐 square 图标按钮的等宽高与默认圆角契约
 - [x] DONE 对齐渐变分支的布局、交互和语义
+- [x] DONE 锁定渐变分支单一按钮语义与本地 tap-target 维护契约
 - [x] DONE 补齐 fill、outline、text、ghost 与渐变按钮的 Flutter 原生点击反馈与优先级测试
 - [x] DONE 避免 pressed 背景 token 与 pressed overlay 重复绘制
 - [x] DONE 默认状态层基于 P0 最终样式补全，不覆盖实例 stateful 背景

@@ -704,6 +704,49 @@ void main() {
       expect(semantics.hasFlag(SemanticsFlag.isEnabled), isTrue);
     });
 
+    testWidgets('渐变按钮在启用与禁用状态均只生成一个 button 语义节点', (tester) async {
+      final semantics = tester.ensureSemantics();
+      try {
+        Widget buildButton(VoidCallback? onPressed) {
+          return wrapWithTheme(
+            TButton(onPressed: onPressed, child: const Text('渐变语义')),
+            buttonTheme: const TButtonThemeData(
+              gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+            ),
+          );
+        }
+
+        List<SemanticsNode> buttonNodes() {
+          return find.semantics
+              .byFlag(SemanticsFlag.isButton)
+              .evaluate()
+              .toList();
+        }
+
+        await tester.pumpWidget(buildButton(() {}));
+        final enabledNodes = buttonNodes();
+        expect(enabledNodes, hasLength(1));
+        expect(enabledNodes.single.label, '渐变语义');
+        expect(
+          enabledNodes.single.getSemanticsData().hasAction(SemanticsAction.tap),
+          isTrue,
+        );
+
+        await tester.pumpWidget(buildButton(null));
+        final disabledNodes = buttonNodes();
+        expect(disabledNodes, hasLength(1));
+        expect(disabledNodes.single.label, '渐变语义');
+        expect(
+          disabledNodes.single.getSemanticsData().hasAction(
+            SemanticsAction.tap,
+          ),
+          isFalse,
+        );
+      } finally {
+        semantics.dispose();
+      }
+    });
+
     testWidgets('渐变 padded tap target 扩展点击区但不放大背景', (tester) async {
       const key = Key('gradient-padded');
       var taps = 0;
@@ -779,10 +822,11 @@ void main() {
         tapTarget.getDryLayout(const BoxConstraints(maxWidth: 200)).height,
         48,
       );
-      tapTarget.getDryBaseline(
+      final paddedBaseline = tapTarget.getDryBaseline(
         const BoxConstraints(maxWidth: 200),
         TextBaseline.alphabetic,
       );
+      expect(paddedBaseline, isNotNull);
 
       await tester.pumpWidget(buildButton(MaterialTapTargetSize.shrinkWrap));
       final updatedTapTarget = tester.allRenderObjects
@@ -794,6 +838,12 @@ void main() {
           );
       expect(identical(updatedTapTarget, tapTarget), isTrue);
       expect(updatedTapTarget.size.height, 28);
+      final shrinkWrapBaseline = updatedTapTarget.getDryBaseline(
+        const BoxConstraints(maxWidth: 200),
+        TextBaseline.alphabetic,
+      );
+      expect(shrinkWrapBaseline, isNotNull);
+      expect(paddedBaseline, shrinkWrapBaseline! + 10);
     });
 
     testWidgets('渐变存在时外层包裹 Container', (tester) async {
