@@ -13,6 +13,7 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter test test/components/fab/t_fab_test.dart test/components/base_components_golden_test.dart` | 通过 | Flutter 3.32.0，73 个用例 |
+| `flutter test --coverage --coverage-path=<temp>/fab-lcov.info test/components/fab/t_fab_test.dart` | 通过 | Flutter 3.32.0，Fab 生产源码 `LH/LF=212/214`，行覆盖率 `99.07%`，高于 95% 门槛 |
 | `flutter analyze` | 通过 | Flutter 3.32.0，组件包零问题 |
 | `flutter analyze example` | 通过 | Flutter 3.32.0，Example 零问题 |
 | `flutter test test/fab_page_test.dart` | 通过 | 通栏按钮切换、单 Fab、自动收缩时序与无溢出 |
