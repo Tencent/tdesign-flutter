@@ -34,6 +34,11 @@ export 'src/components/checkbox/t_check_box.dart';
 export 'src/components/checkbox/t_check_box_group.dart';
 export 'src/components/checkbox/t_checkbox_theme_data.dart'
     show TCheckboxThemeData, TCheckboxVariant;
+export 'src/components/collapse/t_collapse.dart';
+export 'src/components/collapse/t_collapse_panel.dart';
+export 'src/components/collapse/t_collapse_theme_data.dart'
+    show TCollapseThemeData;
+export 'src/components/collapse/t_collapse_types.dart';
 export 'src/components/color_picker/t_color_picker.dart';
 export 'src/components/color_picker/t_color_picker_palette.dart';
 export 'src/components/color_picker/t_color_picker_theme_data.dart'
@@ -43,11 +48,6 @@ export 'src/components/color_picker/t_color_picker_types.dart'
         TColorPickerChangeContext,
         TColorPickerChangeTrigger,
         TColorPickerType;
-export 'src/components/collapse/t_collapse.dart';
-export 'src/components/collapse/t_collapse_panel.dart';
-export 'src/components/collapse/t_collapse_theme_data.dart'
-    show TCollapseThemeData;
-export 'src/components/collapse/t_collapse_types.dart';
 export 'src/components/date_time_picker/t_date_time_picker.dart';
 export 'src/components/dialog/t_dialog.dart';
 export 'src/components/dialog/t_dialog_theme_data.dart' show TDialogThemeData;

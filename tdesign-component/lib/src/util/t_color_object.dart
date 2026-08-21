@@ -151,10 +151,10 @@ class TColorObject {
     if (rgbMatch != null) {
       final parts = _splitComma(rgbMatch.group(1)!);
       if (parts.length >= 3) {
-        final r = _parseComponent(parts[0], 255);
-        final g = _parseComponent(parts[1], 255);
-        final b = _parseComponent(parts[2], 255);
-        final a = parts.length > 3 ? _parseAlpha(parts[3]) : 1;
+        final r = _parseComponent(parts[0], 255).round();
+        final g = _parseComponent(parts[1], 255).round();
+        final b = _parseComponent(parts[2], 255).round();
+        final a = parts.length > 3 ? _parseAlpha(parts[3]) : 1.0;
         _fromRgb(r, g, b, a);
         return;
       }
@@ -171,7 +171,7 @@ class TColorObject {
         final h = _parseComponent(parts[0], 360);
         final s = _parseComponent(parts[1], 1);
         final l = _parseComponent(parts[2], 1);
-        final a = parts.length > 3 ? _parseAlpha(parts[3]) : 1;
+        final a = parts.length > 3 ? _parseAlpha(parts[3]) : 1.0;
         _fromHsl(h, s, l, a);
         return;
       }
@@ -188,7 +188,7 @@ class TColorObject {
         final h = _parseComponent(parts[0], 360);
         final s = _parseComponent(parts[1], 1);
         final v = _parseComponent(parts[2], 1);
-        final a = parts.length > 3 ? _parseAlpha(parts[3]) : 1;
+        final a = parts.length > 3 ? _parseAlpha(parts[3]) : 1.0;
         _hue = _clamp(h, 0, 360);
         _saturation = _clamp(s, 0, 1);
         _value = _clamp(v, 0, 1);
@@ -267,9 +267,11 @@ class TColorObject {
         h = 60 * ((rd - gd) / delta + 4);
       }
     }
-    if (h < 0) h += 360;
+    if (h < 0) {
+      h += 360;
+    }
 
-    final s = max == 0 ? 0 : delta / max;
+    final s = max == 0 ? 0.0 : delta / max;
     _hue = h;
     _saturation = s;
     _value = max;
@@ -376,7 +378,7 @@ class TColorObject {
     final l = (max + min) / 2;
     final delta = max - min;
 
-    double h = _hue;
+    var h = _hue;
     double s = 0;
     if (delta != 0) {
       s = delta / (1 - (2 * l - 1).abs());
@@ -387,7 +389,9 @@ class TColorObject {
       } else {
         h = 60 * ((rd - gd) / delta + 4);
       }
-      if (h < 0) h += 360;
+      if (h < 0) {
+      h += 360;
+    }
     }
     return (h: h, s: s, l: l);
   }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 /// TColorPicker 组件级 ThemeExtension。
 ///
-/// 通过 Theme 子树注入，控制 [TColorPicker] 的默认外观。
+/// 通过 Theme 子树注入，控制 `TColorPicker` 的默认外观。
 /// 默认值对齐 tdesign-mobile-vue ColorPicker 的 CSS Variables。
 class TColorPickerThemeData extends ThemeExtension<TColorPickerThemeData> {
   const TColorPickerThemeData({

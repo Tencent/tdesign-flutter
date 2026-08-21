@@ -67,7 +67,7 @@ class TColorPicker extends StatefulWidget {
   /// 是否可清空。为 true 时展示"清除"按钮。
   final bool clearable;
 
-  /// 调色板（饱和度/明度色板）拖拽过程回调，[color] 为当前颜色对象。
+  /// 调色板（饱和度/明度色板）拖拽过程回调，`color` 为当前颜色对象。
   final ValueChanged<TColorObject>? onPaletteBarChange;
 
   /// 实例级主题覆盖。

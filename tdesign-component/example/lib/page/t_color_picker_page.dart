@@ -40,7 +40,7 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tTitle(context),
+      title: tTitle(),
       exampleCodeGroup: 'colorPicker',
       desc: '用于颜色选择，支持多种格式。',
       children: [

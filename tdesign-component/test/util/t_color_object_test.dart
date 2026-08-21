@@ -33,8 +33,11 @@ void main() {
     });
 
     test('parses hsv string', () {
-      final color = TColorObject('hsv(217, 100%, 85%)');
-      expect(color.hex, '#0052D9');
+      final color = TColorObject('hsv(0, 100%, 100%)');
+      expect(color.hex, '#FF0000');
+      // #0052D9 的 HSV 表示（含舍入）。
+      final fromHex = TColorObject('#0052D9');
+      expect(fromHex.hsv, 'hsv(217, 100%, 85%)');
     });
 
     test('parses cmyk string', () {
