@@ -13,7 +13,8 @@
 - 使用 `AnimationController` 驱动磁吸 right 值，取代 `Future.delayed`；生命周期中处理
   stop、duration 更新和 dispose。
 - 以单次手势期间距起点的最大位移判断点击/拖拽，避免拖出阈值后回到
-  起点附近时误触点击；拖拽层始终获得 onPressed，但固定模式
+  起点附近时误触点击；位移阈值按屏幕空间统计，轴向只约束 Fab 的位置更新，
+  避免大幅滑动后误触点击；拖拽层始终获得 onPressed，但固定模式
   仅在 child 模式包 GestureDetector，避免默认 TButton 重复点击。
 - Demo 删除与小程序当前页面无关的配色、尺寸矩阵，通过四个通栏按钮切换官方场景；
   自动收缩只在 Demo 内监听滚动开始/结束并组合自定义 child。

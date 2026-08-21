@@ -25,7 +25,10 @@ class TFabThemeData extends ThemeExtension<TFabThemeData> {
   /// 吸附动画时长
   final Duration? magnetAnimationDuration;
 
-  /// 点击 vs 拖拽判定阈值（位移逻辑像素）
+  /// 点击与拖拽的判定阈值（位移逻辑像素）。
+  ///
+  /// 按手势起点到当前位置的屏幕全方向最大位移判定，与 [TFabDragAxis] 限制的
+  /// 位置更新轴向无关。
   final double? dragTapSlop;
 
   const TFabThemeData({

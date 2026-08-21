@@ -22,6 +22,8 @@ enum TFabMagnet {
 }
 
 /// 拖拽边界限制
+///
+/// [start] 和 [end] 必须是非负有限值。
 class TFabBounds {
   /// 起点留白（水平：left，垂直：top）。
   final double start;

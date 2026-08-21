@@ -245,8 +245,9 @@ void main() {
       expect(bounds.end, 8);
     });
 
-    test('TFabBounds 拒绝负数和无限边界', () {
+    test('TFabBounds 拒绝负数、NaN 和无限边界', () {
       expect(() => TFabBounds(start: -1, end: 0), throwsAssertionError);
+      expect(() => TFabBounds(start: 0, end: double.nan), throwsAssertionError);
       expect(
         () => TFabBounds(start: 0, end: double.infinity),
         throwsAssertionError,
@@ -555,6 +556,42 @@ void main() {
       expect(tapCount, 0);
       expect(dragEndCount, 1);
     });
+
+    for (final axis in <TFabDragAxis>[
+      TFabDragAxis.vertical,
+      TFabDragAxis.horizontal,
+    ]) {
+      testWidgets('单轴模式 $axis 的锁定轴大位移取消点击', (tester) async {
+        var tapCount = 0;
+        var dragEndCount = 0;
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TFab(
+              draggable: axis,
+              onPressed: () => tapCount += 1,
+              onDragEnd: (_) => dragEndCount += 1,
+            ),
+          ),
+        );
+
+        final before = fabPositioned(tester);
+        final offset = axis == TFabDragAxis.vertical
+            ? const Offset(-50, 0)
+            : const Offset(0, -50);
+        await tester.timedDrag(
+          fabDragTarget(),
+          offset,
+          const Duration(milliseconds: 200),
+        );
+        await tester.pumpAndSettle();
+
+        final after = fabPositioned(tester);
+        expect(after.right, before.right);
+        expect(after.bottom, before.bottom);
+        expect(tapCount, 0);
+        expect(dragEndCount, 1);
+      });
+    }
 
     testWidgets('拖拽 + magnet=true 吸附', (tester) async {
       await tester.pumpWidget(

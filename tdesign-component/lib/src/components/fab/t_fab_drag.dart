@@ -87,7 +87,10 @@ class _FabDraggableState extends State<_FabDraggable>
       duration:
           widget.magnetAnimationDuration ??
           TFabDefaults.defaultMagnetAnimationDuration,
-    )..addListener(_handleSnapTick);
+    );
+    _snapController
+      ..addListener(_handleSnapTick)
+      ..addStatusListener(_handleSnapStatus);
   }
 
   @override
@@ -121,6 +124,7 @@ class _FabDraggableState extends State<_FabDraggable>
 
   @override
   void dispose() {
+    _snapController.removeStatusListener(_handleSnapStatus);
     _snapController.dispose();
     super.dispose();
   }
@@ -262,6 +266,12 @@ class _FabDraggableState extends State<_FabDraggable>
       return;
     }
     setState(() => _right = animation.value);
+  }
+
+  void _handleSnapStatus(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      _snapAnimation = null;
+    }
   }
 
   void _stopSnap() {

@@ -12,14 +12,14 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/fab/t_fab_test.dart test/components/base_components_golden_test.dart` | 通过 | Flutter 3.32.0，71 个用例 |
+| `flutter test test/components/fab/t_fab_test.dart test/components/base_components_golden_test.dart` | 通过 | Flutter 3.32.0，73 个用例 |
 | `flutter analyze` | 通过 | Flutter 3.32.0，组件包零问题 |
 | `flutter analyze example` | 通过 | Flutter 3.32.0，Example 零问题 |
 | `flutter test test/fab_page_test.dart` | 通过 | 通栏按钮切换、单 Fab、自动收缩时序与无溢出 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码资产无漂移 |
 | `flutter build web` | 通过 | Flutter 3.32.0 release Web 构建 |
 | `node scripts/check-flutter-component-contracts.mjs` | 通过 | 56 个组件路由契约完整 |
-| `flutter test --no-pub test/components/fab/t_fab_test.dart` | 通过 | Flutter 3.47.0，69 个 Fab 用例 |
+| `flutter test --no-pub test/components/fab/t_fab_test.dart` | 通过 | Flutter 3.47.0，71 个 Fab 用例 |
 | `flutter analyze --no-pub` | 通过 | Flutter 3.47.0，组件包零问题 |
 | `flutter analyze --no-pub example` | 通过 | Flutter 3.47.0，Example 零问题 |
 
