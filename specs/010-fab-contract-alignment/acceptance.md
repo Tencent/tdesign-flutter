@@ -15,6 +15,7 @@
 | `flutter test test/components/fab/t_fab_test.dart test/components/base_components_golden_test.dart` | 通过 | Flutter 3.32.0，70 个用例 |
 | `flutter analyze` | 通过 | Flutter 3.32.0，组件包零问题 |
 | `flutter analyze example` | 通过 | Flutter 3.32.0，Example 零问题 |
+| `flutter test test/fab_page_test.dart` | 通过 | 通栏按钮切换、单 Fab、自动收缩时序与无溢出 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码资产无漂移 |
 | `flutter build web` | 通过 | Flutter 3.32.0 release Web 构建 |
 | `node scripts/check-flutter-component-contracts.mjs` | 通过 | 56 个组件路由契约完整 |
@@ -30,6 +31,7 @@
 - [x] 投影使用 TDesign `shadowsMiddle`，对应小程序 `shadow-2`
 - [x] 默认位置、拖拽、非对称边界和磁吸动画符合契约
 - [x] Demo 分组、文案和四个场景与小程序源码一致
+- [x] 四个通栏按钮切换单个 Fab，自动收缩在滚动结束 100ms 后展开且无布局溢出
 - [x] 浅色 Golden 与手机尺寸 Web 截图未发现布局、裁剪或滚动遮挡问题
 
 ## 未覆盖项与后续工作

@@ -1,9 +1,7 @@
 Widget _buildTextFab(BuildContext context) {
-    return _buildPageDemo(
-      fab: TFab(
-        icon: const Icon(TIcons.share),
-        text: '分享给朋友',
-        onPressed: _onFabPressed,
-      ),
+    return TFab(
+      icon: const Icon(TIcons.share),
+      text: '分享给朋友',
+      onPressed: _onFabPressed,
     );
   }

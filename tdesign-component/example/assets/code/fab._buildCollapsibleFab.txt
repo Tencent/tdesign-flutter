@@ -1,13 +1,10 @@
 Widget _buildCollapsibleFab(BuildContext context) {
-    return _buildPageDemo(
-      height: 220,
-      fab: TFab(
-        right: _scrolling ? 0 : 16,
-        bottom: _scrolling ? 64 : 24,
-        onPressed: _onFabPressed,
-        child: _scrolling
-            ? const _CollapsedFabContent()
-            : const _ExpandedFabContent(),
-      ),
+    return TFab(
+      right: _scrolling ? 0 : 16,
+      bottom: _scrolling ? 64 : 24,
+      onPressed: _onFabPressed,
+      child: _scrolling
+          ? const _CollapsedFabContent()
+          : const _ExpandedFabContent(),
     );
   }

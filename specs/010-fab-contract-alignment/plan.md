@@ -14,8 +14,8 @@
   stop、duration 更新和 dispose。
 - 以拖拽起点到当前位置的净位移判断点击/拖拽；拖拽层始终获得 onPressed，但固定模式
   仅在 child 模式包 GestureDetector，避免默认 TButton 重复点击。
-- Demo 删除与小程序当前页面无关的配色、尺寸矩阵，改成四个官方场景；自动收缩只在
-  Demo 内监听滚动并组合自定义 child。
+- Demo 删除与小程序当前页面无关的配色、尺寸矩阵，通过四个通栏按钮切换官方场景；
+  自动收缩只在 Demo 内监听滚动开始/结束并组合自定义 child。
 - 更新站点文档，移除迁移前已经不存在的 Theme/Shape/Size API 示例。
 
 ## 影响范围
@@ -48,6 +48,7 @@
 - 单元/Widget：默认动作层配置、图标、投影、child 边界、Theme 隔离。
 - 手势：非对称边界、轴向限制、轻微拖拽点击、磁吸动画和生命周期。
 - Golden：纯图标与图文默认样式，浅色主题固定尺寸。
-- 示例：生成代码同步检查、Example analyze、Web release build。
+- 示例：通栏按钮切换与自动收缩时序 Widget 测试、生成代码同步检查、Example
+  analyze、Web release build。
 - 双版本：Flutter 3.32.0 与 latest 分别执行 analyze 和 Fab 测试。
 - 人工：Web/手机尺寸截图与小程序 Fab 源码规格逐项复查。
