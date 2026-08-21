@@ -32,16 +32,15 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
   | commit type | 最终分组 | 示例 |
   | --- | --- | --- |
-  | `breaking` | Breaking Changes | `breaking(toast): 调整 xxx 默认行为` |
-  | `feat` | Features | `feat(TButton): 新增渐变背景能力` |
-  | `fix` | Bug Fixes | `fix(TInput): 修复密文模式下无法粘贴的问题` |
-  | `perf`、`refactor` | Performance | `refactor(toast): 优化 xxx` |
-  | `docs` | Documentation | `docs: 更新主题生成器文档` |
-  | 其他（`chore` 等） | Others | `chore: 升级依赖` |
+  | `breaking` | Breaking Changes | breaking(toast): 调整 xxx 默认行为 |
+  | `feat` | Features | feat(TButton): 新增渐变背景能力 |
+  | `fix` | Bug Fixes | fix(TInput): 修复密文模式下无法粘贴的问题 |
+  | `perf`、`refactor` | Performance | refactor(toast): 优化 xxx |
+  | `docs` | Documentation | docs: 更新主题生成器文档 |
+  | 其他（`chore` 等） | Others | chore: 升级依赖 |
 
-- **Breaking change 一律用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 Breaking Changes 分组。
+- **Breaking change 一律用 `breaking` commit type**（如 - breaking(toast): 调整 xxx 默认行为），自动归入 Breaking Changes 分组。
 - `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。
-- **更新日志条目一律用普通列表项，不要用行内代码块（反引号 `` ` ``）包裹**：上文表格里的反引号（如 `` `breaking(toast): ...` ``）**只是用于展示格式的示例写法**，填写 PR 描述「更新日志」小节时要把这些反引号去掉，写成纯文本条目（`- breaking(TFab): 调整 xxx 默认行为`）。否则会污染自动生成的 CHANGELOG 与仓库既有口径。
 
 ## 三、Spec 流程
 
