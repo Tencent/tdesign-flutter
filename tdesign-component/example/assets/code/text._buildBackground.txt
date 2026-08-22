@@ -1,0 +1,19 @@
+Widget _buildBackground(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TText(
+          '字形背景',
+          style: TextStyle(backgroundColor: context.tTheme.brandFocusColor),
+        ),
+        const SizedBox(height: 12),
+        ColoredBox(
+          color: context.tTheme.brandFocusColor,
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: TText('行盒背景'),
+          ),
+        ),
+      ],
+    );
+  }

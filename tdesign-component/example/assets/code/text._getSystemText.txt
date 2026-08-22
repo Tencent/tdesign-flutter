@@ -1,6 +1,0 @@
-Widget _getSystemText(BuildContext context) {
-    return TText(
-      exampleTxt,
-      style: TextStyle(backgroundColor: context.tTheme.brandFocusColor),
-    ).getRawText(context: context);
-  }
