@@ -1,0 +1,11 @@
+Widget _buildDashedDividers(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TDivider(dashed: true),
+        TDivider(dashed: true, child: Text('文字信息'), align: TDividerAlign.left),
+        TDivider(dashed: true, child: Text('文字信息')),
+        TDivider(dashed: true, child: Text('文字信息'), align: TDividerAlign.right),
+      ],
+    );
+  }
