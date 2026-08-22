@@ -18,7 +18,9 @@ class TForm extends StatefulWidget {
     /// 自动校验时机。
     this.autovalidateMode,
 
-    /// 任意字段变化时触发。
+    /// 任意字段值变化时触发。
+    ///
+    /// 仅清除校验状态或外部错误时不会触发。
     this.onChanged,
 
     /// 校验通过后触发，参数为各 [TFormField] 注册的字段值。
@@ -41,7 +43,9 @@ class TForm extends StatefulWidget {
   /// [Form] 的校验语义。
   final AutovalidateMode? autovalidateMode;
 
-  /// 任意字段变化时触发。
+  /// 任意字段值变化时触发。
+  ///
+  /// 仅清除校验状态或外部错误时不会触发。
   final VoidCallback? onChanged;
 
   /// 校验通过后触发。
@@ -63,6 +67,7 @@ class TFormState extends State<TForm> {
   final Map<String, VoidCallback> _clearValidateCallbacks = {};
   final Map<String, String> _externalErrors = {};
   bool _hasSubmitted = false;
+  bool _suppressOnChanged = false;
   int _validationVersion = 0;
 
   /// 当前字段值的只读快照。
@@ -105,9 +110,11 @@ class TFormState extends State<TForm> {
   ///
   /// 字段值由业务受控状态所有；调用方应自行恢复 [TFormField.value]。
   void reset() {
-    for (final clearValidate in _clearValidateCallbacks.values) {
-      clearValidate();
-    }
+    _withoutChangeNotification(() {
+      for (final clearValidate in _clearValidateCallbacks.values) {
+        clearValidate();
+      }
+    });
     _externalErrors.clear();
     _validationVersion++;
     if (_hasSubmitted) {
@@ -127,9 +134,11 @@ class TFormState extends State<TForm> {
         : _clearValidateCallbacks.entries.where(
             (entry) => names.contains(entry.key),
           );
-    for (final entry in callbacks) {
-      entry.value();
-    }
+    _withoutChangeNotification(() {
+      for (final entry in callbacks) {
+        entry.value();
+      }
+    });
     if (names == null) {
       _externalErrors.clear();
     } else {
@@ -208,6 +217,22 @@ class TFormState extends State<TForm> {
 
   String? _externalError(String name) => _externalErrors[name];
 
+  void _withoutChangeNotification(VoidCallback callback) {
+    final wasSuppressed = _suppressOnChanged;
+    _suppressOnChanged = true;
+    try {
+      callback();
+    } finally {
+      _suppressOnChanged = wasSuppressed;
+    }
+  }
+
+  void _handleChanged() {
+    if (!_suppressOnChanged) {
+      widget.onChanged?.call();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -239,7 +264,7 @@ class TFormState extends State<TForm> {
       child: Form(
         key: _formKey,
         autovalidateMode: _effectiveAutovalidateMode,
-        onChanged: widget.onChanged,
+        onChanged: _handleChanged,
         child: widget.child,
       ),
     );

@@ -1162,6 +1162,37 @@ void main() {
       await tester.pump();
       expect(find.text('server error'), findsNothing);
     });
+
+    testWidgets('clearing validation does not report a field value change', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var changeCount = 0;
+      await tester.pumpWidget(
+        wrap(
+          TForm(
+            controller: controller,
+            onChanged: () => changeCount += 1,
+            child: TFormField<String>(
+              name: 'name',
+              value: '',
+              onChanged: (_) {},
+              validator: (_) => 'required',
+              builder: (context, value, onChanged, errorText) =>
+                  Text(errorText ?? 'valid'),
+            ),
+          ),
+        ),
+      );
+
+      expect(controller.validate(), isFalse);
+      await tester.pump();
+      controller.clearValidate();
+      await tester.pump();
+
+      expect(changeCount, 0);
+      expect(find.text('required'), findsNothing);
+    });
   });
 
   group('TFormItem layout', () {

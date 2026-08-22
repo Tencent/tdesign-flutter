@@ -51,6 +51,7 @@ class TInput extends StatefulWidget {
   }) : _multiline = false,
        assert(controller == null || initialValue == null),
        assert(!obscureText || maxLines == 1),
+       assert(!showPasswordToggle || maxLines == 1),
        assert(maxLength == null || maxCharacter == null),
        assert(maxLength == null || maxLength >= 0),
        assert(maxCharacter == null || maxCharacter >= 0);
@@ -180,7 +181,8 @@ class TInput extends StatefulWidget {
   ///
   /// 初始显隐状态由 [obscureText] 决定，按钮点击后的显隐状态由输入框
   /// 自身维护。启用后会使用 TDesign 的浏览图标和 24dp 图标槽，且不会
-  /// 额外撑高输入框；如果同时传入 [suffix]，自定义后置内容会紧跟在该按钮之后。
+  /// 额外撑高输入框；仅支持单行输入。如果同时传入 [suffix]，自定义后置内容
+  /// 会紧跟在该按钮之后。
   final bool showPasswordToggle;
 
   /// 输入格式化器。
@@ -254,7 +256,7 @@ class _TInputState extends State<TInput> {
     final effectiveStatus = inputErrorText != null
         ? TInputStatus.error
         : widget.status;
-    final inputTextColor = _inputTextColor(token);
+    final inputTextColor = _inputTextColor(token, material);
     final tokenFont = token.fontBodyLarge;
     final tokenStyle = TextStyle(
       color: inputTextColor,
@@ -262,15 +264,18 @@ class _TInputState extends State<TInput> {
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
     );
-    final inheritedTextStyle = const TextStyle()
-        .merge(material.tExplicitTextTheme?.bodyLarge)
-        .merge(tokenStyle);
+    final inheritedTextStyle = tokenStyle.merge(
+      material.tExplicitTextTheme?.bodyLarge,
+    );
     final themeTextStyle = theme?.textStyle;
     final configuredTextStyle = inheritedTextStyle
         .merge(themeTextStyle)
         .merge(widget.style);
     final configuredTextColor = widget.enabled
-        ? themeTextStyle?.color ?? inputTextColor
+        ? themeTextStyle?.color ??
+              material.tExplicitTextTheme?.bodyLarge?.color ??
+              material.tExplicitColorScheme?.onSurface ??
+              inputTextColor
         : inputTextColor;
     final textStyle = configuredTextStyle.copyWith(
       color: widget.style?.color ?? configuredTextColor,
@@ -292,16 +297,21 @@ class _TInputState extends State<TInput> {
     final hintStyle =
         TextStyle(
               color: widget.enabled
-                  ? token.textColorPlaceholder
+                  ? material.tExplicitColorScheme?.onSurfaceVariant ??
+                        token.textColorPlaceholder
                   : token.textDisabledColor,
               fontSize: hintFont?.size,
               height: hintFont?.height,
               fontWeight: hintFont?.fontWeight,
             )
+            .merge(material.tExplicitTextTheme?.bodyLarge)
             .merge(themeHintStyle)
             .copyWith(
               color: widget.enabled
-                  ? themeHintStyle?.color ?? token.textColorPlaceholder
+                  ? themeHintStyle?.color ??
+                        material.tExplicitTextTheme?.bodyLarge?.color ??
+                        material.tExplicitColorScheme?.onSurfaceVariant ??
+                        token.textColorPlaceholder
                   : token.textDisabledColor,
             );
     final innerDecoration = InputDecoration(
@@ -458,8 +468,9 @@ class _TInputState extends State<TInput> {
     setState(() => _obscureText = !_obscureText);
   }
 
-  Color _inputTextColor(TThemeData token) =>
-      widget.enabled ? token.textColorPrimary : token.textDisabledColor;
+  Color _inputTextColor(TThemeData token, ThemeData material) => widget.enabled
+      ? material.tExplicitColorScheme?.onSurface ?? token.textColorPrimary
+      : token.textDisabledColor;
 
   Color _statusColor(TThemeData token, TInputStatus status) => switch (status) {
     TInputStatus.normal => token.brandNormalColor,
@@ -722,7 +733,7 @@ class _TInputSlot extends StatelessWidget {
 }
 
 int _inputLength(String value, int? maxCharacter) =>
-    maxCharacter == null ? value.runes.length : _characterLength(value);
+    maxCharacter == null ? value.characters.length : _characterLength(value);
 
 int _characterLength(String value) =>
     value.runes.fold<int>(0, (length, rune) => length + (rune <= 0x7f ? 1 : 2));

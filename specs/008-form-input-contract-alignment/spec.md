@@ -63,6 +63,7 @@ TForm                 表单生命周期、字段注册和统一操作
 ### TFormField
 
 - 负责 `name`、受控 `value`、`onChanged`、`required` 和 Flutter 原生语义的 `validator`。
+- 删除与 `validator` 职责重复的 `TFormRule` / `rules`；多个约束在单个 `validator` 中按顺序组合，避免两套校验入口和优先级。
 - `required` 是校验规则，并向子树提供必填状态供 `TFormItem` 展示标记。
 - builder 继续接收 value、onChanged 和 errorText，不增加 label、layout 或输入专属参数。
 

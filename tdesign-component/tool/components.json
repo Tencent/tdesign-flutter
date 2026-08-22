@@ -292,11 +292,17 @@
       "api": {
         "names": [
           "TForm",
+          "TFormState",
+          "TFormController",
+          "TFormField",
+          "TFormFieldBuilder",
           "TFormItem",
-          "TFormItemType",
-          "TFormValidation"
+          "TFormLayout",
+          "TFormRequiredMarkPosition",
+          "TFormItemVerticalAlignment",
+          "TFormThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {

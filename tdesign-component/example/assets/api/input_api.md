@@ -65,7 +65,7 @@
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |
 | prefix | Widget? | - | 前缀组件。 |
 | readOnly | bool | false | 是否只读。 设为 `true` 时禁止修改内容，但保留只读文本的选择和复制能力；文字仍使用正常态颜色。 |
-| showPasswordToggle | bool | false | 是否在后置插槽显示内置密码显隐按钮。 初始显隐状态由 `obscureText` 决定，按钮点击后的显隐状态由输入框 自身维护。启用后会使用 TDesign 的浏览图标和 24dp 图标槽，且不会 额外撑高输入框；如果同时传入 `suffix`，自定义后置内容会紧跟在该按钮之后。 |
+| showPasswordToggle | bool | false | 是否在后置插槽显示内置密码显隐按钮。 初始显隐状态由 `obscureText` 决定，按钮点击后的显隐状态由输入框 自身维护。启用后会使用 TDesign 的浏览图标和 24dp 图标槽，且不会 额外撑高输入框；仅支持单行输入。如果同时传入 `suffix`，自定义后置内容 会紧跟在该按钮之后。 |
 | status | TInputStatus | TInputStatus.normal | 输入框语义状态。 状态色用于输入壳层、计数器和错误提示； 已输入文字仍使用正常正文色，除非通过 `style` 或 `TInputThemeData.textStyle` 显式覆盖。 |
 | style | TextStyle? | - | 输入文本样式。 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖默认正文色。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |

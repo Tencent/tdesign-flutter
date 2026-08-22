@@ -85,6 +85,13 @@ void main() {
       );
       controller.dispose();
     });
+
+    test('password toggle only supports single-line input', () {
+      expect(
+        () => TInput(maxLines: 2, showPasswordToggle: true),
+        throwsAssertionError,
+      );
+    });
   });
 
   group('TInput Material semantics', () {
@@ -195,6 +202,27 @@ void main() {
         wrap(const TInput(initialValue: 'readonly', readOnly: true)),
       );
       expect(field(tester).style?.color, token.textColorPrimary);
+    });
+
+    testWidgets('explicit Flutter typography precedes token defaults', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(fontSize: 19, height: 1.5),
+            ),
+            extensions: [TThemeData.defaultData()],
+          ),
+          home: const Scaffold(body: TInput(hintText: 'hint')),
+        ),
+      );
+
+      expect(field(tester).style?.fontSize, 19);
+      expect(field(tester).style?.height, 1.5);
+      expect(field(tester).decoration?.hintStyle?.fontSize, 19);
+      expect(field(tester).decoration?.hintStyle?.height, 1.5);
     });
 
     testWidgets('partial component styles preserve token typography', (
@@ -363,6 +391,23 @@ void main() {
       },
     );
 
+    testWidgets('maxLength indicator counts user-perceived characters', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(
+            initialValue: '👨‍👩‍👧‍👦',
+            maxLength: 10,
+            indicator: true,
+          ),
+        ),
+      );
+
+      expect(find.text('1/10'), findsOneWidget);
+      expect(find.text('7/10'), findsNothing);
+    });
+
     testWidgets('prefix and suffix icons use the 24dp input icon size', (
       tester,
     ) async {
@@ -472,6 +517,44 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
     });
+
+    testWidgets(
+      'status keeps the default clear color and theme can override it',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        for (final status in TInputStatus.values) {
+          await tester.pumpWidget(
+            wrap(
+              TInput(
+                initialValue: 'content',
+                status: status,
+                clearButtonMode: TInputClearButtonMode.always,
+              ),
+            ),
+          );
+          expect(
+            tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
+            token.textColorPlaceholder,
+          );
+        }
+
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'invalid',
+              status: TInputStatus.error,
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+            inputTheme: TInputThemeData(clearIconColor: token.errorNormalColor),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
+          token.errorNormalColor,
+        );
+      },
+    );
 
     testWidgets('focused mode only shows clear button while focused', (
       tester,

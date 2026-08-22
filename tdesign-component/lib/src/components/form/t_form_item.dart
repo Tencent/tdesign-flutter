@@ -97,7 +97,6 @@ class TFormItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFormThemeData>();
     final materialTheme = Theme.of(context);
-    final defaultTextStyle = context.tExplicitDefaultTextStyle;
     final textTheme = materialTheme.tExplicitTextTheme;
     final token = context.tTheme;
     final fieldScope = TFieldScope.maybeOf(context);
@@ -124,44 +123,29 @@ class TFormItem extends StatelessWidget {
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
     final labelFont = token.fontBodyLarge;
-    final labelStyle = const TextStyle()
-        .merge(textTheme?.bodyMedium)
-        .merge(defaultTextStyle)
-        .merge(
-          TextStyle(
-            color: token.textColorPrimary,
-            fontSize: labelFont?.size,
-            height: labelFont?.height,
-            fontWeight: labelFont?.fontWeight,
-          ),
-        )
-        .merge(theme?.labelStyle);
+    final labelStyle = TextStyle(
+      color: token.textColorPrimary,
+      fontSize: labelFont?.size,
+      height: labelFont?.height,
+      fontWeight: labelFont?.fontWeight,
+    ).merge(textTheme?.bodyMedium).merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
-    final helpStyle = const TextStyle()
-        .merge(textTheme?.bodySmall)
-        .merge(defaultTextStyle)
-        .merge(
-          TextStyle(
-            color: token.textColorPlaceholder,
-            fontSize: helpFont?.size,
-            height: helpFont?.height,
-            fontWeight: helpFont?.fontWeight,
-          ),
-        )
-        .merge(theme?.helpStyle);
-    final errorStyle = const TextStyle()
-        .merge(textTheme?.bodySmall)
-        .merge(materialTheme.inputDecorationTheme.errorStyle)
-        .merge(defaultTextStyle)
-        .merge(
-          TextStyle(
-            color: token.errorNormalColor,
-            fontSize: helpFont?.size,
-            height: helpFont?.height,
-            fontWeight: helpFont?.fontWeight,
-          ),
-        )
-        .merge(theme?.errorStyle);
+    final helpStyle = TextStyle(
+      color: token.textColorPlaceholder,
+      fontSize: helpFont?.size,
+      height: helpFont?.height,
+      fontWeight: helpFont?.fontWeight,
+    ).merge(textTheme?.bodySmall).merge(theme?.helpStyle);
+    final errorStyle =
+        TextStyle(
+              color: token.errorNormalColor,
+              fontSize: helpFont?.size,
+              height: helpFont?.height,
+              fontWeight: helpFont?.fontWeight,
+            )
+            .merge(textTheme?.bodySmall)
+            .merge(materialTheme.inputDecorationTheme.errorStyle)
+            .merge(theme?.errorStyle);
     final labelWidget = label == null
         ? null
         : Text(labelText, textAlign: effectiveLabelAlign, style: labelStyle);
