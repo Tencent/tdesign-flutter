@@ -71,43 +71,31 @@ class TButtonResolve {
 
     // 4. Token 默认 shape；Material 可覆盖，显式组件 shape 再覆盖 Material。
     final tokenShapeStyle = _resolveShape(
-      context: context,
       effectiveShape: TButtonShape.rectangle,
       tTheme: tTheme,
     );
     final componentShapeStyle = theme?.shape == null
         ? null
-        : _resolveShape(
-            context: context,
-            effectiveShape: theme!.shape!,
-            tTheme: tTheme,
-          );
+        : _resolveShape(effectiveShape: theme!.shape!, tTheme: tTheme);
 
     // 5. 实例 size > 组件 defaultSize，并据此生成组件规格尺寸。
     final effectiveShape = theme?.shape ?? TButtonShape.rectangle;
+    final tapTargetSize =
+        componentPalette?.tapTargetSize ??
+        materialPalette?.tapTargetSize ??
+        MaterialTapTargetSize.shrinkWrap;
     final sizeStyle = _resolveSize(
       size: size,
       hasIcon: icon != null,
       hasChild: hasChild,
       effectiveShape: effectiveShape,
+      tapTargetSize: tapTargetSize,
     );
 
-    // 5.5 textStyle → 保留 Material 字体字段，仅覆盖组件规格字号。
-    final tokenFont = tTheme.fontLinkMedium;
+    // 5.5 textStyle 在各主题层合并完成后解析，保留其 stateful 字体字段，
+    // 再以组件 size 规格锁定字号、行高与字重。
+    final metrics = sizeMetrics(size, tTheme);
     final materialLabelStyle = Theme.of(context).textTheme.labelLarge;
-    final textStyleStyle = ButtonStyle(
-      textStyle: WidgetStatePropertyAll<TextStyle>(
-        TextStyle(
-              fontSize: tokenFont?.size,
-              height: tokenFont?.height,
-              fontWeight: tokenFont?.fontWeight,
-              fontFamily: materialLabelStyle?.fontFamily,
-              fontFamilyFallback: materialLabelStyle?.fontFamilyFallback,
-            )
-            .merge(Theme.of(context).tExplicitTextTheme?.labelLarge)
-            .copyWith(fontSize: _fontSizeForSize(size)),
-      ),
-    );
 
     // 6. P1 Theme padding 覆盖规格默认。
     final paddingStyle = theme?.padding != null
@@ -130,6 +118,25 @@ class TButtonResolve {
       resolved = _overrideWith(resolved, componentShapeStyle);
     }
     resolved = _overrideWith(resolved, sizeStyle);
+    final themedTextStyle = resolved.textStyle;
+    final tokenTextStyle = TextStyle(
+      fontSize: metrics.fontSize,
+      height: metrics.fontHeight,
+      fontWeight: metrics.fontWeight,
+      fontFamily: materialLabelStyle?.fontFamily,
+      fontFamilyFallback: materialLabelStyle?.fontFamilyFallback,
+    ).merge(Theme.of(context).tExplicitTextTheme?.labelLarge);
+    final textStyleStyle = ButtonStyle(
+      textStyle: WidgetStateProperty.resolveWith((states) {
+        return tokenTextStyle
+            .merge(themedTextStyle?.resolve(states))
+            .copyWith(
+              fontSize: metrics.fontSize,
+              height: metrics.fontHeight,
+              fontWeight: metrics.fontWeight,
+            );
+      }),
+    );
     resolved = _overrideWith(resolved, textStyleStyle);
     if (paddingStyle != null) {
       resolved = _overrideWith(resolved, paddingStyle);
@@ -147,7 +154,6 @@ class TButtonResolve {
         const ButtonStyle(
           // 设为 null 而非 Colors.transparent，确保 ButtonStyleButton 使用 MaterialType.transparency
           backgroundColor: WidgetStatePropertyAll<Color?>(null),
-          overlayColor: WidgetStatePropertyAll<Color>(Colors.transparent),
           surfaceTintColor: WidgetStatePropertyAll<Color>(Colors.transparent),
           shadowColor: WidgetStatePropertyAll<Color>(Colors.transparent),
         ),
@@ -157,6 +163,26 @@ class TButtonResolve {
     // P0：实例 style 覆盖所有
     if (instanceStyle != null) {
       resolved = _overrideWith(resolved, instanceStyle);
+    }
+
+    // 最终样式未显式配置交互层时，使用最终前景色生成 Flutter 原生 WidgetState 反馈。
+    // 放在 P0 之后只补空缺，不覆盖 Material、组件 Theme 或实例 style 的显式 overlayColor。
+    if (resolved.overlayColor == null) {
+      final foreground = resolved.foregroundColor;
+      final background = resolved.backgroundColor;
+      final hasPressedBackground =
+          background?.resolve(const <WidgetState>{WidgetState.pressed}) !=
+          background?.resolve(const <WidgetState>{});
+      resolved = _overrideWith(
+        resolved,
+        ButtonStyle(
+          overlayColor: _interactionOverlay(
+            foreground,
+            fallbackColor: tTheme.textColorPrimary,
+            includePressed: !hasPressedBackground,
+          ),
+        ),
+      );
     }
 
     return resolved;
@@ -264,7 +290,6 @@ class TButtonResolve {
         }
         return fg;
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -322,7 +347,6 @@ class TButtonResolve {
         }
         return BorderSide(color: borderColor, width: 1);
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -364,7 +388,6 @@ class TButtonResolve {
         }
         return fg;
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -407,7 +430,6 @@ class TButtonResolve {
             : fg;
         return BorderSide(color: color, width: 1);
       }),
-      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
@@ -416,7 +438,6 @@ class TButtonResolve {
 
   /// 将内部 shape 枚举展开为 [ButtonStyle.shape]
   static ButtonStyle _resolveShape({
-    required BuildContext context,
     required TButtonShape effectiveShape,
     required TThemeData tTheme,
   }) {
@@ -424,16 +445,13 @@ class TButtonResolve {
       TButtonShape.rectangle => RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusDefault)),
       ),
-      TButtonShape.square => const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
+      TButtonShape.square => RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusDefault)),
       ),
       TButtonShape.round => RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(tTheme.radiusRound)),
       ),
       TButtonShape.circle => const CircleBorder(),
-      TButtonShape.filled => const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
     };
     return ButtonStyle(shape: WidgetStatePropertyAll<OutlinedBorder>(shape));
   }
@@ -444,6 +462,7 @@ class TButtonResolve {
     required bool hasIcon,
     required bool hasChild,
     required TButtonShape effectiveShape,
+    required MaterialTapTargetSize tapTargetSize,
   }) {
     final isSquareOrCircle =
         effectiveShape == TButtonShape.square ||
@@ -451,67 +470,76 @@ class TButtonResolve {
     // square/circle 纯 icon 按钮：等宽高 + 等边 padding
     final onlyIcon = hasIcon && !hasChild;
 
-    double sideLength;
-    double paddingValue;
+    final metrics = sizeMetrics(size, null);
+    final paddingValue = onlyIcon
+        ? metrics.iconOnlyPadding
+        : metrics.horizontalPadding;
 
-    switch (size) {
-      case TButtonSize.large:
-        sideLength = 48;
-        paddingValue = onlyIcon ? 12 : 20;
-      case TButtonSize.medium:
-        sideLength = 40;
-        paddingValue = onlyIcon ? 10 : 16;
-      case TButtonSize.small:
-        sideLength = 32;
-        paddingValue = onlyIcon ? 7 : 12;
-      case TButtonSize.extraSmall:
-        sideLength = 28;
-        paddingValue = onlyIcon ? 5 : 8;
-    }
-
-    double? minWidth;
-    var minHeight = sideLength;
-
-    if (isSquareOrCircle) {
-      // square/circle：固定宽高
-      minWidth = sideLength;
-    }
+    final minHeight = metrics.height;
+    final fixedIconShape = isSquareOrCircle && onlyIcon;
 
     // padding：纵向按 size，横向按内容
-    final padH = (isSquareOrCircle && onlyIcon) ? paddingValue : paddingValue;
-    final padV = (isSquareOrCircle && onlyIcon)
-        ? paddingValue
-        : _verticalPadding(size);
+    final padV = fixedIconShape ? paddingValue : metrics.verticalPadding;
 
     return ButtonStyle(
-      minimumSize: WidgetStatePropertyAll<Size>(Size(minWidth ?? 0, minHeight)),
-      padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
-        EdgeInsets.symmetric(horizontal: padH, vertical: padV),
+      minimumSize: WidgetStatePropertyAll<Size>(
+        Size(fixedIconShape ? metrics.height : 0, minHeight),
       ),
+      tapTargetSize: tapTargetSize,
+      padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
+        EdgeInsets.symmetric(horizontal: paddingValue, vertical: padV),
+      ),
+      iconSize: WidgetStatePropertyAll<double>(metrics.iconSize),
     );
   }
 
-  /// 根据 size 获取纵向 padding
-  static double _verticalPadding(TButtonSize size) {
-    switch (size) {
-      case TButtonSize.large:
-        return 12;
-      case TButtonSize.medium:
-        return 8;
-      case TButtonSize.small:
-        return 5;
-      case TButtonSize.extraSmall:
-        return 3;
-    }
-  }
-
-  /// 根据 size 获取字号（与 t_button.dart _fontSizeForButton 对齐）
-  static double _fontSizeForSize(TButtonSize size) {
+  /// 返回普通与渐变按钮共用的 TDesign 尺寸规格。
+  static TButtonSizeMetrics sizeMetrics(TButtonSize size, TThemeData? theme) {
+    final font = switch (size) {
+      TButtonSize.large || TButtonSize.medium => theme?.fontMarkLarge,
+      TButtonSize.small || TButtonSize.extraSmall => theme?.fontMarkMedium,
+    };
     return switch (size) {
-      TButtonSize.large => 16,
-      TButtonSize.medium => 14,
-      TButtonSize.small => 12,
-      TButtonSize.extraSmall => 10,
+      TButtonSize.large => TButtonSizeMetrics(
+        height: 48,
+        horizontalPadding: 20,
+        verticalPadding: 12,
+        iconOnlyPadding: 12,
+        iconSize: 24,
+        fontSize: font?.size ?? 16,
+        fontHeight: font?.height ?? 1.5,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
+      TButtonSize.medium => TButtonSizeMetrics(
+        height: 40,
+        horizontalPadding: 16,
+        verticalPadding: 8,
+        iconOnlyPadding: 10,
+        iconSize: 20,
+        fontSize: font?.size ?? 16,
+        fontHeight: font?.height ?? 1.5,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
+      TButtonSize.small => TButtonSizeMetrics(
+        height: 32,
+        horizontalPadding: 12,
+        verticalPadding: 5,
+        iconOnlyPadding: 7,
+        iconSize: 18,
+        fontSize: font?.size ?? 14,
+        fontHeight: font?.height ?? 22 / 14,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
+      TButtonSize.extraSmall => TButtonSizeMetrics(
+        height: 28,
+        horizontalPadding: 8,
+        verticalPadding: 3,
+        iconOnlyPadding: 5,
+        iconSize: 18,
+        fontSize: font?.size ?? 14,
+        fontHeight: font?.height ?? 22 / 14,
+        fontWeight: font?.fontWeight ?? FontWeight.w600,
+      ),
     };
   }
 
@@ -538,4 +566,55 @@ class TButtonResolve {
       TButtonColorScheme.defaultTheme => tTheme.bgColorComponentHover,
     };
   }
+
+  /// 默认 Flutter 交互状态层。
+  ///
+  /// 按压/聚焦使用 12% 前景色，悬浮使用 8%；禁用和静止状态不绘制。
+  static WidgetStateProperty<Color> _interactionOverlay(
+    WidgetStateProperty<Color?>? foreground, {
+    required Color fallbackColor,
+    required bool includePressed,
+  }) {
+    return WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.disabled)) {
+        return Colors.transparent;
+      }
+      final color = foreground?.resolve(states) ?? fallbackColor;
+      if (states.contains(WidgetState.pressed)) {
+        return includePressed
+            ? color.withValues(alpha: 0.12)
+            : Colors.transparent;
+      }
+      if (states.contains(WidgetState.focused)) {
+        return color.withValues(alpha: 0.12);
+      }
+      if (states.contains(WidgetState.hovered)) {
+        return color.withValues(alpha: 0.08);
+      }
+      return Colors.transparent;
+    });
+  }
+}
+
+/// Button 内部尺寸规格，不从包入口导出。
+class TButtonSizeMetrics {
+  const TButtonSizeMetrics({
+    required this.height,
+    required this.horizontalPadding,
+    required this.verticalPadding,
+    required this.iconOnlyPadding,
+    required this.iconSize,
+    required this.fontSize,
+    required this.fontHeight,
+    required this.fontWeight,
+  });
+
+  final double height;
+  final double horizontalPadding;
+  final double verticalPadding;
+  final double iconOnlyPadding;
+  final double iconSize;
+  final double fontSize;
+  final double fontHeight;
+  final FontWeight fontWeight;
 }
