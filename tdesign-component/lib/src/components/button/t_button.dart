@@ -404,19 +404,11 @@ class _TButtonState extends State<TButton> {
     } else {
       button = ElevatedButton(
         onPressed: widget.onPressed,
+        onLongPress: widget.onPressed == null ? null : widget.onLongPress,
         statesController: _statesController,
         style: resolvedStyle,
         child: content,
       );
-
-      // ElevatedButton 没有公开 onLongPress；由外层手势补充长按，保留
-      // ElevatedButton 自身的点击、Material 反馈和无障碍语义。
-      if (widget.onPressed != null && widget.onLongPress != null) {
-        button = GestureDetector(
-          onLongPress: widget.onLongPress,
-          child: button,
-        );
-      }
     }
 
     return button;
