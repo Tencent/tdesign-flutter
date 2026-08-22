@@ -33,13 +33,17 @@
 ### 📝 更新日志
 
 <!--
-从用户角度描述具体变化，以及可能的 breaking change 和其他风险。
+更新日志面向实际使用方用户，请从用户角度描述用户在使用组件或库时能够感知到的具体变化，以及可能的 breaking change 和其他风险。
+仅记录用户可感知的变更，不要填写用户无法感知的内部实现、CI/CD 或文档结构调整；如果本次改动用户无法感知，请勾选“本条 PR 不需要纳入 Changelog”。
 
 格式要求：
 - 一个 PR 含多个功能 / 修复时，按条目分开列写，不合并。
-- 每条遵循 Conventional Commits 的 commit type，与最终分组对应：`breaking`→Breaking Changes、`feat`→Features、`fix`→Bug Fixes、`perf`/`refactor`→Performance、`docs`→Documentation、其他→Others。
-- Breaking change 使用 `breaking(组件): xxx` 写法，自动归入 Breaking Changes 分组。
-- 示例：`breaking(toast): 调整 xxx 默认行为`、`fix(TInput): 修复密文模式下无法粘贴的问题`、`feat(TButton): 新增渐变背景能力`、`docs: 更新主题生成器文档`
+- 每条遵循 Conventional Commits 的 commit type，与最终分组对应：
+  - `breaking` → Breaking Changes
+  - `feat` → Features
+  - `fix` → Bug Fixes
+  - `perf` / `refactor` → Performance
+- 示例：`fix(TInput): 修复密文模式下无法粘贴的问题`
 -->
 
 - 待补充
