@@ -69,15 +69,15 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 公开字段 / 参数 / 回调 / 枚举 / 类的 `///` 注释要写清"是什么、默认值、生效条件、三态语义、与相关字段关系"，注释必须与实现一致。
 
-## 七、API 文档 / 示例代码 / README 的脚本同步
+## 七、脚本生成的产物（供 AI 理解，贡献者无需关注）
 
-本仓库存在**由脚本生成并需随源码一并提交**的产物，改动设计 API、示例代码或根目录 README 时，**必须运行对应生成 / 同步脚本**，确保生成产物与源码同步后再提交，否则会出现源码与文档/示例不一致、CI 校验失败的问题：
+本仓库的 **API 文档、示例代码片段、README 副本** 均由脚本从源码生成，`.github/workflows/autofix.yml` 会在 PR 时**自动运行**这些脚本并提交修正，因此**贡献者（人类）无需手动关注 / 运行它们**。但 **AI 助手需要理解每个脚本具体做什么**，以便在改动相关源文件时知道哪些产物是自动生成的、是否需要手动运行或校验：
 
-1. **修改设计 / 组件 API 时** → 在 `tdesign-component` 目录运行 `sh ./demo_tool/all_build.sh`（即 `node tool/generate_api.mjs`），重新生成并提交 `example/assets/api/<component>_api.md`。新增或迁移组件时先更新 `tool/components.json` 再生成。
-2. **修改示例代码（带 `@ExampleCode` 注解的示例方法）时** → 在 `tdesign-component` 目录运行 `dart run tool/generate_example_code.dart --verbose`，重新生成并提交 `example/assets/code/*.txt`。CI 会用 `dart run tool/generate_example_code.dart --check` 校验这些片段是否与源码同步。
-3. **修改根目录 `README.md` 或 `README_zh_CN.md` 时** → 在仓库根目录运行 `node scripts/sync-readme.mjs`，将内容同步到 `tdesign-component/README.md`、`tdesign-component/README_zh_CN.md` 与 `tdesign-site/site/docs/getting-started.md`，同步产物与源码同一次提交。
+1. **API 文档**：`sh ./demo_tool/all_build.sh`（等价 `node tool/generate_api.mjs`，manifest 驱动），从组件 API 生成 `example/assets/api/<component>_api.md`；新增 / 迁移组件时先更新 `tool/components.json`。改动设计 / 组件 API 时该产物会随之变化。
+2. **示例代码片段**：`dart run tool/generate_example_code.dart`，从带 `@ExampleCode` 注解的示例方法生成 `example/assets/code/*.txt`；CI 用 `--check` 校验片段与源码同步。改动示例方法时该产物会随之变化。
+3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md` 与 `tdesign-site/site/docs/getting-started.md`。改动根目录 README 时副本会随之同步。
 
-提交前务必让本地生成的产物与源码同一次提交，不要漏提生成文件。
+> 这些脚本由 CI 自动兜底，**不要把它们当作面向贡献者的提交要求**；若 AI 在改动相关源文件后需要产物立即可用或校验同步，可手动运行对应脚本，产物与源码一并提交即可。
 
 ## 八、代码质量 / lint 零告警
 
