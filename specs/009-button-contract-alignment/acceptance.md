@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/fix/button-contract-alignment`
-- 基线：`origin/develop@67d334a7`
+- 基线：`origin/develop@24f6fea1`
 - 提交：由 PR HEAD 标识
 - Flutter 3.32.0 / Dart 3.8.0
 - Flutter 3.47.0 / Dart 3.13.0
@@ -16,7 +16,7 @@
 | `flutter test test/components/button --coverage` | 通过 | 127 个 Button 测试；Button 生产代码 459/473 = 97.04% |
 | `flutter test test/components/fab` | 通过 | 63 个 Fab 测试，拖拽边界回归通过 |
 | Dialog/Dropdown/Empty/Drawer/NoticeBar/Fab 直接消费者测试 | 通过 | Flutter 3.32.0 共 353 个测试，确认 Button 改动未泄漏到组合组件 |
-| `flutter analyze` + Button/Fab tests | 通过 | Flutter 3.47.0；185 个 Button 非 Golden + Fab 测试，Golden 以 3.32.0 为基线 |
+| `flutter analyze` + Button/Fab tests | 通过 | Flutter 3.47.0；191 个 Button 非 Golden + Fab 测试，Golden 以 3.32.0 为基线 |
 | Example `flutter analyze` | 通过 | Flutter 3.32.0 与 3.47.0 均为 0 issues |
 | Example `flutter build web` | 通过 | Flutter 3.32.0 release Web 产物编译成功 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | Demo 代码资产无漂移 |
@@ -36,7 +36,7 @@
 - [x] fill、outline、text 的 pressed 背景 token 不叠加 pressed overlay，ghost 与渐变在无 pressed 背景变化时使用 overlay
 - [x] 默认状态层基于 P0 最终样式生成，实例前景色和 stateful 背景的优先级测试通过
 - [x] Icon 默认尺寸由 IconTheme 注入，调用方传入的 key、语义标签和原生视觉属性保持不变
-- [x] `TFab` 小程序组合源码明确为 large / circle(or round) / primary，Flutter 组合层已显式对齐
+- [x] `TFab` 等直接消费者回归通过，Button PR 不再携带 Fab 实现改动
 - [x] 渐变分支使用内部状态控制器按实时 pressed/hovered/focused/disabled 重新解析 `ButtonStyle`
 - [x] 渐变动态 cursor、P0 icon 样式、alignment 与 layer builder 已增加聚焦回归
 

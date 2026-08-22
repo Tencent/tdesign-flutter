@@ -20,7 +20,6 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - 对齐小程序 Button 的字号、行高、字重、水平内边距和图标尺寸。
 - 保留 Flutter 原生主题和实例 `ButtonStyle` 对 tap target 的显式控制。
 - 统一普通与渐变按钮的尺寸来源、点击区和无障碍按钮语义。
-- 使 `TFab` 显式遵循组合组件的 large / fill / primary 基线，不再依赖 Material 默认点击区间接获得尺寸。
 - Demo 展示组件自身默认结果，不通过外层位移修正按钮位置。
 - Button Demo 按验收小程序的图标、通栏和四种 shape 场景编排；通栏继续由 Flutter
   父布局表达。
@@ -41,7 +40,7 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - `TButton` 普通与渐变渲染分支。
 - `TButtonResolve` 的尺寸、字体、图标与 Flutter Theme 解析。
 - Button Demo、dartdoc、Widget/Theme/Golden 测试。
-- `TFab` 内嵌 Button 的基线配置与拖拽边界回归。
+- `TFab` 等直接消费者的回归验证；不在本 Spec 修改其组件契约。
 
 ### 不涉及
 
@@ -98,7 +97,6 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
   父布局控制，零圆角通过实例 `ButtonStyle.shape` 定制；不新增替代 shape 枚举。
 - 移除 `TButtonThemeData.margin`：按钮外部间距由 `Padding`、`SizedBox`、`Wrap.spacing`
   等 Flutter 父布局表达，组件 Theme 只保留按钮自身视觉与内部布局。
-- `TFab` 内嵌 Button 显式使用 large / fill / primary，与 MiniProgram 的组合基线一致。
 
 ## 验收标准
 
@@ -109,7 +107,7 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
 - [x] fill、outline、text、ghost 与渐变按钮均有可解析的按压反馈，禁用态无反馈，主题和实例
   `overlayColor` 优先级有回归测试。
 - [x] Button Golden 与小程序尺寸 Demo 完成截图比对。
-- [x] `TFab` 默认尺寸与拖拽边界回归通过。
+- [x] `TFab` 等直接消费者的回归测试通过，Button 改动未泄漏到组合组件。
 - [x] Flutter 3.32.0 与 latest 静态检查通过。
 - [x] 不新增公开 API，Demo 不使用位移修复组件视觉。
 - [x] 渐变分支的实时 pressed/hovered/focused/disabled 样式与动态 cursor 有回归测试。

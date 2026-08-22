@@ -15,16 +15,19 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 未传按钮 size 时的默认尺寸
   final TButtonSize defaultSize;
 
-  /// P1 组件色板：fill 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：fill 变体的 [ButtonStyle]。
+  ///
+  /// 尺寸、形状和 padding 的组件级默认值优先使用 [defaultSize]、[shape]
+  /// 和 [padding]；其余标准 [ButtonStyle] 字段按组件主题优先级参与合并。
   final ButtonStyle? filledStyle;
 
-  /// P1 组件色板：outline 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：outline 变体的 [ButtonStyle]。
   final ButtonStyle? outlinedStyle;
 
-  /// P1 组件色板：text 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：text 变体的 [ButtonStyle]。
   final ButtonStyle? textButtonStyle;
 
-  /// P1 组件色板：ghost 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：ghost 变体的 [ButtonStyle]。
   final ButtonStyle? ghostStyle;
 
   /// 外形，会展开进 resolves [ButtonStyle.shape]。

@@ -18,7 +18,7 @@
   叠加 pressed overlay；没有 pressed 背景变化时由 overlay 补足反馈。
 - Icon 默认尺寸通过 `IconTheme` 注入，不重建调用方传入的 `Icon`，以保留 key、语义标签、
   阴影及其他 Flutter 原生属性。
-- `TFab` 在组合层显式传入 large / fill / primary，保留其 48dp 动作层和拖拽边界契约。
+- 对 `TFab` 等直接消费者执行回归验证，不在 Button PR 修改其组件契约。
 - Demo 只编排小程序对应的图标、通栏、尺寸和 shape 场景，不在示例层修正组件样式；
   通栏继续由 `SizedBox(width: double.infinity)` 表达。
 
@@ -27,7 +27,7 @@
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
 | 组件 | `button/t_button*.dart` | 统一尺寸、主题和渐变交互契约 |
-| 组合组件 | `fab/t_fab_resolve.dart` | 显式固定 Fab 的 Button 基线，避免隐式依赖 |
+| 组合组件 | 消费者回归测试 | 验证 Button 改动不改变组合组件既有契约 |
 | 测试 | `test/components/button/` | 增加尺寸矩阵、主题优先级、渐变语义和 Golden 回归 |
 | 示例 | `example/lib/page/t_button_page.dart` | 编排图标、通栏、尺寸和 shape 场景 |
 | 文档 | dartdoc、Spec、生成示例资产 | 明确 square、filled、状态层和 tap target 边界 |
