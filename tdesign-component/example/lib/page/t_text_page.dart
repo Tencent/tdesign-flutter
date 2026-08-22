@@ -51,11 +51,13 @@ class TTextPage extends StatelessWidget {
 
   @ExampleCode(group: 'text')
   Widget _buildGeneralProp(BuildContext context) {
-    return TText(
-      exampleTxt,
-      font: context.tTheme.fontHeadlineLarge,
-      textColor: context.tTheme.brandNormalColor,
-      backgroundColor: context.tTheme.brandFocusColor,
+    return ColoredBox(
+      color: context.tTheme.brandFocusColor,
+      child: TText(
+        exampleTxt,
+        font: context.tTheme.fontHeadlineLarge,
+        textColor: context.tTheme.brandNormalColor,
+      ),
     );
   }
 
@@ -114,7 +116,7 @@ class TTextPage extends StatelessWidget {
   Widget _getSystemText(BuildContext context) {
     return TText(
       exampleTxt,
-      backgroundColor: context.tTheme.brandFocusColor,
+      style: TextStyle(backgroundColor: context.tTheme.brandFocusColor),
     ).getRawText(context: context);
   }
 
@@ -131,7 +133,7 @@ class TTextPage extends StatelessWidget {
         extensions: [
           ...Theme.of(context).extensions.values,
           TTextThemeData(
-            defaultTextColor: context.tTheme.brandNormalColor,
+            textStyle: TextStyle(color: context.tTheme.brandNormalColor),
           ),
         ],
       ),

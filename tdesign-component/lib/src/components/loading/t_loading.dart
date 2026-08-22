@@ -198,7 +198,7 @@ class TLoading extends StatelessWidget {
     };
 
     Widget result = TText(
-      text,
+      text ?? '',
       textColor:
           theme.textColor ??
           Theme.of(context).tExplicitColorScheme?.onSurface ??
