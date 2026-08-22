@@ -20,7 +20,7 @@ Widget _showAllIcons(BuildContext context) {
                     target: LinkTarget.blank,
                     builder: (context, followLink) => TLink(
                       child: const Text('https://tdesign.tencent.com/icons'),
-                      variant: TLinkVariant.icon,
+                      prefixIcon: const Icon(TIcons.link),
                       colorScheme: TLinkColorScheme.primary,
                       semanticLabel: '打开 TDesign 图标官网',
                       onPressed: followLink,

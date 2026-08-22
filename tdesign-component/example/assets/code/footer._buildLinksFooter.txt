@@ -5,7 +5,6 @@ Widget _buildLinksFooter(BuildContext context) {
         TLink(
           child: const Text('底部链接1'),
           colorScheme: TLinkColorScheme.primary,
-          variant: TLinkVariant.basic,
           onPressed: () {
             print('点击了链接1');
           },
@@ -13,7 +12,6 @@ Widget _buildLinksFooter(BuildContext context) {
         TLink(
           child: const Text('底部链接2'),
           colorScheme: TLinkColorScheme.primary,
-          variant: TLinkVariant.basic,
           onPressed: () {
             print('点击了链接2');
           },
