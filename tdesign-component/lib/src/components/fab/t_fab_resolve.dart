@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../components/button/t_button.dart';
 import '../../components/button/t_button_theme_data.dart';
 import '../../components/button/t_button_types.dart';
+import '../../theme/t_shadows.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_fab_defaults.dart';
 import 't_fab_layout.dart';
@@ -28,8 +30,10 @@ class TFabResolve {
     required TFabBounds? themeDefaultYBounds,
     required EdgeInsets safePadding,
   }) {
-    final effectiveRight = right ?? themeDefaultRight ?? 16;
-    final effectiveBottom = bottom ?? themeDefaultBottom ?? 32;
+    final effectiveRight =
+        right ?? themeDefaultRight ?? TFabDefaults.defaultRight;
+    final effectiveBottom =
+        bottom ?? themeDefaultBottom ?? TFabDefaults.defaultBottom;
     final adjustedRight = effectiveRight + safePadding.right;
     final adjustedBottom = effectiveBottom + safePadding.bottom;
 
@@ -59,26 +63,39 @@ class TFabResolve {
     final effectiveIcon = icon ?? const Icon(TFabDefaults.defaultIconData);
 
     // shape 推导：纯图标=圆形，有文字=胶囊形。
-    final effectiveShape = hasText ? TButtonShape.round : TButtonShape.circle;
+    final effectiveShape = TFabDefaults.shapeForText(hasText);
 
     final tButton = TButton(
       child: hasText ? Text(text) : null,
       icon: effectiveIcon,
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      size: TFabDefaults.defaultSize,
+      variant: TFabDefaults.defaultVariant,
+      colorScheme: TFabDefaults.defaultColorScheme,
       onPressed: onPressed,
     );
 
-    // TButton 的 shape 由 TButtonThemeData.shape 控制
-    // 合并父级 TButtonThemeData（保留其他字段）+ 推导出的 shape
-    final parentBtnTheme = Theme.of(context).extension<TButtonThemeData>();
-    final fabBtnTheme = (parentBtnTheme ?? const TButtonThemeData())
-        .copyWith(shape: effectiveShape);
+    // TFab 默认动作层拥有完整规格；完整自定义通过 TFab.child 组合，避免父级
+    // TButtonThemeData 的 padding/gradient 等字段意外改变 Fab 基线。
+    final fabBtnTheme = TButtonThemeData(
+      shape: effectiveShape,
+      iconTextSpacing: context.tTheme.spacer4,
+    );
 
-    return Theme(
-      data: Theme.of(context).mergeExtension(fabBtnTheme),
-      child: tButton,
+    final shadowShape = switch (effectiveShape) {
+      TButtonShape.circle => const CircleBorder(),
+      TButtonShape.round => const StadiumBorder(),
+      _ => const RoundedRectangleBorder(),
+    };
+
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        shape: shadowShape,
+        shadows: context.tTheme.shadowsMiddle ?? const [],
+      ),
+      child: Theme(
+        data: Theme.of(context).mergeExtension(fabBtnTheme),
+        child: tButton,
+      ),
     );
   }
 }
