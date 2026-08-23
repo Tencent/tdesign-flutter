@@ -120,4 +120,18 @@ void main() {
     expect(resolved?.fontSize, isNull);
     expect(resolved?.decoration, TextDecoration.lineThrough);
   });
+
+  test('FontFamily 同时透传字体族和 package', () {
+    final resolved = TTextResolve.resolveSpan(
+      fontFamily: FontFamily(
+        fontFamily: 'TDesignTestFont',
+        package: 'tdesign_test_package',
+      ),
+    );
+
+    expect(
+      resolved?.fontFamily,
+      'packages/tdesign_test_package/TDesignTestFont',
+    );
+  });
 }

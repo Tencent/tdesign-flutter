@@ -178,6 +178,126 @@ void main() {
     expect(textCenter.dy, closeTo(boxCenter.dy, 0.01));
   });
 
+  testWidgets('不同线性缩放下行盒保持几何居中且不裁切', (tester) async {
+    final heights = <double>[];
+
+    for (final scale in const [1.0, 1.5, 2.0]) {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            key: const Key('scaled-box'),
+            width: 240,
+            height: 96,
+            child: Center(
+              child: TText(
+                '中文 English 😀',
+                key: const Key('scaled-text'),
+                textScaler: TextScaler.linear(scale),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final boxRect = tester.getRect(find.byKey(const Key('scaled-box')));
+      final textRect = tester.getRect(find.byKey(const Key('scaled-text')));
+      heights.add(textRect.height);
+
+      expect(textRect.center.dy, closeTo(boxRect.center.dy, 0.01));
+      expect(textRect.top, greaterThanOrEqualTo(boxRect.top));
+      expect(textRect.bottom, lessThanOrEqualTo(boxRect.bottom));
+      expect(tester.takeException(), isNull);
+    }
+
+    expect(heights[1], greaterThan(heights[0]));
+    expect(heights[2], greaterThan(heights[1]));
+  });
+
+  testWidgets('中文英文 emoji 多行混排在缩放后不裁切', (tester) async {
+    const content = '中文 English 😀\n第二行 Mixed text 🚀';
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          key: Key('multiline-box'),
+          width: 240,
+          height: 144,
+          child: Center(
+            child: TText(
+              content,
+              key: Key('multiline-text'),
+              textScaler: TextScaler.linear(2),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final boxRect = tester.getRect(find.byKey(const Key('multiline-box')));
+    final textRect = tester.getRect(find.byKey(const Key('multiline-text')));
+    final paragraph = tester.renderObject<RenderParagraph>(
+      find.byKey(const Key('multiline-text')),
+    );
+
+    expect(textRect.center.dy, closeTo(boxRect.center.dy, 0.01));
+    expect(textRect.top, greaterThanOrEqualTo(boxRect.top));
+    expect(textRect.bottom, lessThanOrEqualTo(boxRect.bottom));
+    expect(paragraph.didExceedMaxLines, isFalse);
+    expect(textRect.height, greaterThan(48));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('父 Row.center 负责图标与文字的中心对齐', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          height: 64,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.info, key: Key('center-icon'), size: 24),
+              SizedBox(width: 8),
+              TText('中文 English 😀', key: Key('center-text')),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final iconCenter = tester.getCenter(find.byKey(const Key('center-icon')));
+    final textCenter = tester.getCenter(find.byKey(const Key('center-text')));
+    expect(textCenter.dy, closeTo(iconCenter.dy, 0.01));
+  });
+
+  testWidgets('TText.rich 使用与普通文本一致的父级居中契约', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          key: Key('rich-box'),
+          width: 200,
+          height: 80,
+          child: Center(
+            child: TText.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '中文 '),
+                  TextSpan(text: 'English', style: TextStyle(fontSize: 20)),
+                  TextSpan(text: ' 😀'),
+                ],
+              ),
+              key: Key('rich-text'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final boxRect = tester.getRect(find.byKey(const Key('rich-box')));
+    final textRect = tester.getRect(find.byKey(const Key('rich-text')));
+    expect(textRect.center.dy, closeTo(boxRect.center.dy, 0.01));
+    expect(textRect.top, greaterThanOrEqualTo(boxRect.top));
+    expect(textRect.bottom, lessThanOrEqualTo(boxRect.bottom));
+  });
+
   testWidgets('父级 baseline 布局同时支持 TText 与原生 Text', (tester) async {
     await tester.pumpWidget(
       wrap(
@@ -213,24 +333,47 @@ void main() {
   });
 
   test('TTextThemeData copyWith 与 lerp 使用统一字段', () {
+    const textHeightBehavior = TextHeightBehavior(
+      applyHeightToFirstAscent: false,
+    );
     final original = TTextThemeData(
       font: Font(size: 16, lineHeight: 24),
       textStyle: const TextStyle(color: Colors.red),
+      strutStyle: const StrutStyle(fontSize: 16),
+      textWidthBasis: TextWidthBasis.longestLine,
+      textHeightBehavior: textHeightBehavior,
     );
     final copied = original.copyWith(
       textStyle: const TextStyle(color: Colors.blue),
     );
     expect(copied.font, original.font);
     expect(copied.textStyle?.color, Colors.blue);
+    expect(copied.strutStyle, original.strutStyle);
+    expect(copied.textWidthBasis, original.textWidthBasis);
+    expect(copied.textHeightBehavior, original.textHeightBehavior);
+    expect(original.lerp(null, 0), same(original));
+    final other = TTextThemeData(
+      font: Font(size: 20, lineHeight: 28),
+      textStyle: const TextStyle(color: Colors.blue),
+      strutStyle: const StrutStyle(fontSize: 20),
+      textWidthBasis: TextWidthBasis.parent,
+      textHeightBehavior: const TextHeightBehavior(
+        applyHeightToLastDescent: false,
+      ),
+    );
+    final beforeMidpoint = original.lerp(other, 0.25);
+    expect(beforeMidpoint.font, same(original.font));
+    expect(beforeMidpoint.strutStyle, original.strutStyle);
+    expect(beforeMidpoint.textWidthBasis, original.textWidthBasis);
+    expect(beforeMidpoint.textHeightBehavior, original.textHeightBehavior);
     expect(
-      original
-          .lerp(
-            const TTextThemeData(textStyle: TextStyle(color: Colors.blue)),
-            1,
-          )
-          .textStyle
-          ?.color,
+      original.lerp(other, 1).textStyle?.color,
       isSameColorAs(Colors.blue),
     );
+    final afterMidpoint = original.lerp(other, 0.75);
+    expect(afterMidpoint.font, same(other.font));
+    expect(afterMidpoint.strutStyle, other.strutStyle);
+    expect(afterMidpoint.textWidthBasis, other.textWidthBasis);
+    expect(afterMidpoint.textHeightBehavior, other.textHeightBehavior);
   });
 }
