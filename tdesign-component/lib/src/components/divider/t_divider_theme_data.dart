@@ -16,7 +16,7 @@ class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
   /// 外边距。未设置时，水平分割线使用上下 10dp，垂直分割线使用左右 8dp。
   final EdgeInsetsGeometry? margin;
 
-  /// 线与中间内容之间的间距（默认 horizontal: 8）
+  /// 线与中间内容之间的间距，默认左右各使用 `spacer12`（12dp）。
   final EdgeInsetsGeometry? gapPadding;
 
   /// child 为文本时的默认样式，覆盖 `fontBodySmall` / `textColorPlaceholder` Token。
