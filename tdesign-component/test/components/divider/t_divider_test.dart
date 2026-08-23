@@ -169,7 +169,41 @@ void main() {
 
     testWidgets('Theme.gapPadding 默认值', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TDivider(child: Text('内容'))));
-      expect(find.text('内容'), findsOneWidget);
+      final gapPadding = tester.widget<Padding>(
+        find.descendant(
+          of: find.byType(TDivider),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Padding &&
+                widget.padding == const EdgeInsets.symmetric(horizontal: 12),
+          ),
+        ),
+      );
+      expect(gapPadding.padding, const EdgeInsets.symmetric(horizontal: 12));
+    });
+
+    testWidgets('显式 Material DividerTheme 参与颜色与间距解析', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            dividerTheme: const DividerThemeData(
+              color: Colors.orange,
+              space: 24,
+            ),
+            extensions: [TThemeData.defaultData()],
+          ),
+          home: const Scaffold(body: TDivider()),
+        ),
+      );
+
+      final coloredBox = tester.widget<ColoredBox>(
+        find.descendant(
+          of: find.byType(TDivider),
+          matching: find.byType(ColoredBox),
+        ),
+      );
+      expect(coloredBox.color, Colors.orange);
+      expect(tester.getSize(find.byType(TDivider)).height, 24);
     });
 
     testWidgets('默认内容使用 bodySmall / placeholder Token', (tester) async {

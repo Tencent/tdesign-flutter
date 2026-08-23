@@ -20,7 +20,7 @@ void main() {
     return tester.getSize(find.byWidget(element.widget)).width;
   }
 
-  testWidgets('带文字与虚线示例中的分割线共享父级宽度', (tester) async {
+  testWidgets('水平与虚线示例中的分割线共享页面内容宽度', (tester) async {
     tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -29,21 +29,17 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    for (final key in const [
-      Key('divider-text-group'),
-      Key('divider-dashed-group'),
-    ]) {
-      final group = find.byKey(key);
-      final groupWidth = tester.getSize(group).width;
-      final dividers = find.descendant(
-        of: group,
-        matching: find.byType(TDivider),
-      );
+    final horizontalDividers = find.byWidgetPredicate(
+      (widget) =>
+          widget is TDivider && widget.layout != TDividerLayout.vertical,
+    );
+    expect(horizontalDividers, findsNWidgets(8));
 
-      expect(dividers, findsWidgets);
-      for (final divider in dividers.evaluate()) {
-        expect(widthOf(tester, divider), groupWidth);
-      }
-    }
+    final widths = horizontalDividers
+        .evaluate()
+        .map((divider) => widthOf(tester, divider))
+        .toSet();
+    expect(widths, hasLength(1));
+    expect(widths.single, greaterThan(0));
   });
 }
