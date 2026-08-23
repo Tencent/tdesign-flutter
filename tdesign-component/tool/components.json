@@ -52,7 +52,7 @@
           "TIcon",
           "TIconThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -71,14 +71,15 @@
     {
       "slug": "text",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/text/t_text.dart"
+        "type": "folder",
+        "path": "lib/src/components/text"
       },
       "api": {
         "names": [
           "TText",
           "TTextSpan",
-          "TTextConfiguration"
+          "TTextThemeData",
+          "TFontLoader"
         ],
         "getComments": false
       }

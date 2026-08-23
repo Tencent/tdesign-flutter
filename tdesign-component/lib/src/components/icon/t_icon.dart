@@ -7,14 +7,13 @@ import 't_icon_theme_data.dart';
 
 /// TIcon 图标组件
 ///
-/// Material [Icon] 的薄包装（T2 纯展示），提供组件级 Theme 注入能力。
+/// Material [Icon] 的薄包装，提供 TDesign 默认颜色和组件级 Theme 注入能力。
 /// 图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。
 ///
 /// 优先级链：
 /// 构造器参数 > [TIconThemeData] > [IconTheme] > ThemeData.iconTheme >
 /// TDesign token 颜色兜底。
 ///
-/// 示例：
 /// ```dart
 /// // 基础使用
 /// TIcon(TIcons.home_filled)
@@ -34,16 +33,24 @@ import 't_icon_theme_data.dart';
 /// )
 /// ```
 class TIcon extends StatelessWidget {
-  /// 图标数据（位置参数）
+  /// 要绘制的图标数据，通常使用 `tdesign_flutter_icons` 提供的 `TIcons.xxx`。
   final IconData icon;
 
-  /// 图标尺寸（优先于 [TIconThemeData.size] 和 [IconTheme.of]）
+  /// 图标尺寸，单位为逻辑像素。
+  ///
+  /// 未设置时依次读取 [TIconThemeData.size]、显式 [IconTheme]，最后由 Flutter
+  /// 原生 [Icon] 使用其默认尺寸。
   final double? size;
 
-  /// 图标颜色（优先于 [TIconThemeData.color]、[IconTheme.of] 和 token 兜底）
+  /// 图标颜色。
+  ///
+  /// 未设置时依次读取 [TIconThemeData.color]、显式 [IconTheme]，最后回退到
+  /// TDesign 的 `textColorPrimary` Token。
   final Color? color;
 
-  /// 无障碍语义标签
+  /// 无障碍语义标签。
+  ///
+  /// 非空时由原生 [Icon] 暴露给辅助技术；为空时图标不单独提供语义节点。
   final String? semanticLabel;
 
   const TIcon(
@@ -54,7 +61,7 @@ class TIcon extends StatelessWidget {
     this.semanticLabel,
   });
 
-  /// 通过图标名称构造（查找 [TIcons.allIconsMap]）
+  /// 通过图标名称构造，并在 [TIcons.allIconsMap] 中查找对应图标。
   ///
   /// 如果名称不存在，抛出 [ArgumentError]。
   factory TIcon.fromName(
@@ -86,7 +93,8 @@ class TIcon extends StatelessWidget {
 
     // 尺寸不硬造 token 映射，颜色必须兜到 TDesign token。
     final effectiveSize = size ?? theme?.size ?? iconTheme?.size;
-    final effectiveColor = color ??
+    final effectiveColor =
+        color ??
         theme?.color ??
         iconTheme?.color ??
         context.tTheme.textColorPrimary;

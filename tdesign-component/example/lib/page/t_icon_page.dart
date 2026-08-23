@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import 'package:url_launcher/link.dart';
 
 import '../../base/example_widget.dart';
@@ -196,24 +198,17 @@ class _TIconPageState extends State<TIconPage> {
               padding: const EdgeInsets.all(16),
               alignment: Alignment.topLeft,
               color: context.tTheme.bgColorContainer,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const TText('筛选 Icon 请前往 TDesign 官网：'),
-                  const SizedBox(height: 4),
-                  Link(
-                    key: const Key('icon-official-link'),
-                    uri: Uri.parse('https://tdesign.tencent.com/icons'),
-                    target: LinkTarget.blank,
-                    builder: (context, followLink) => TLink(
-                      child: const Text('https://tdesign.tencent.com/icons'),
-                      variant: TLinkVariant.icon,
-                      colorScheme: TLinkColorScheme.primary,
-                      semanticLabel: '打开 TDesign 图标官网',
-                      onPressed: followLink,
-                    ),
-                  ),
-                ],
+              child: Link(
+                key: const Key('icon-official-link'),
+                uri: Uri.parse('https://tdesign.tencent.com/icons'),
+                target: LinkTarget.blank,
+                builder: (context, followLink) => TLink(
+                  child: const Text('https://tdesign.tencent.com/icons'),
+                  variant: TLinkVariant.icon,
+                  colorScheme: TLinkColorScheme.primary,
+                  semanticLabel: '打开 TDesign 图标官网',
+                  onPressed: followLink,
+                ),
               ),
             ),
           ),
@@ -258,43 +253,63 @@ class IconCatalogGrid extends StatelessWidget {
 
   final List<MapEntry<String, IconData>> icons;
 
+  Future<void> _copyIcon(BuildContext context, String name) async {
+    final code = 'TIcon(TIcons.$name)';
+    await Clipboard.setData(ClipboardData(text: code));
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('已复制 $code'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.7,
       child: GridView.builder(
         key: const Key('icon-catalog-grid'),
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 176,
-          mainAxisExtent: 80,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
+          maxCrossAxisExtent: 96,
+          mainAxisExtent: 64,
+          mainAxisSpacing: 15,
         ),
         itemCount: icons.length,
         itemBuilder: (context, index) {
           final item = icons[index];
-          return Container(
-            key: ValueKey('icon-catalog-item-${item.key}'),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: context.tTheme.componentStrokeColor,
-              ),
+          return Semantics(
+            button: true,
+            label: '${item.key} 图标',
+            hint: '点击复制代码',
+            child: InkWell(
               borderRadius: BorderRadius.circular(6),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TIcon(item.value, size: 32, semanticLabel: item.key),
-                const SizedBox(height: 6),
-                TText(
-                  item.key,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
+              onTap: () => _copyIcon(context, item.key),
+              child: Container(
+                key: ValueKey('icon-catalog-item-${item.key}'),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TIcon(item.value, size: 24),
+                    const SizedBox(height: 4),
+                    TText(
+                      item.key,
+                      font: context.tTheme.fontBodySmall,
+                      textColor: context.tTheme.textColorPlaceholder,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
         },
