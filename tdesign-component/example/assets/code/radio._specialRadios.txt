@@ -1,0 +1,23 @@
+Widget _specialRadios(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TRadioGroup<String>(
+          value: _verticalCardValue,
+          options: _cardOptions,
+          cardMode: true,
+          onChanged: (value) => setState(() => _verticalCardValue = value),
+        ),
+        const SizedBox(height: 24),
+        const TText('横向卡片单选框'),
+        TRadioGroup<String>(
+          value: _horizontalCardValue,
+          options: _cardOptions,
+          cardMode: true,
+          direction: Axis.horizontal,
+          columns: 2,
+          onChanged: (value) => setState(() => _horizontalCardValue = value),
+        ),
+      ],
+    );
+  }
