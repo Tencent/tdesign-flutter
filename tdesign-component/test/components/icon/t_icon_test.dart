@@ -8,8 +8,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// IconTheme 回退、TIcon.fromName 工厂构造。
 void main() {
   /// 完整包装，注入 TDesign 全局主题。
-  Widget wrapWithTheme(Widget child, {TIconThemeData? iconTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget wrapWithTheme(
+    Widget child, {
+    TIconThemeData? iconTheme,
+    ThemeData? materialTheme,
+  }) {
+    var theme = materialTheme ?? TThemeBuilder.light(TThemeData.defaultData());
     if (iconTheme != null) {
       theme = theme.mergeExtension(iconTheme);
     }
@@ -23,32 +27,43 @@ void main() {
   // T01 – 基础渲染
   // ============================================================
   testWidgets('T01 - 基础渲染：渲染 TDesign 图标', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.home_filled),
-    ));
+    await tester.pumpWidget(wrapWithTheme(const TIcon(TIcons.home_filled)));
     expect(find.byType(TIcon), findsOneWidget);
     expect(find.byType(Icon), findsOneWidget);
   });
 
   testWidgets('T01b - 完整主题下默认图标使用文本主色而非品牌色', (tester) async {
     final token = TThemeData.defaultData();
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.home_filled),
-    ));
+    await tester.pumpWidget(wrapWithTheme(const TIcon(TIcons.home_filled)));
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.color, token.textColorPrimary);
     expect(icon.color, isNot(token.brandNormalColor));
   });
 
+  for (final brightness in Brightness.values) {
+    testWidgets('T01c - ${brightness.name} 主题使用对应文本主色 Token', (tester) async {
+      final token = TThemeData.defaultData();
+      final theme = brightness == Brightness.light
+          ? TThemeBuilder.light(token)
+          : TThemeBuilder.dark(token);
+      await tester.pumpWidget(
+        wrapWithTheme(const TIcon(TIcons.home_filled), materialTheme: theme),
+      );
+
+      final icon = tester.widget<Icon>(find.byType(Icon));
+      expect(icon.color, theme.extension<TThemeData>()?.textColorPrimary);
+    });
+  }
+
   // ============================================================
   // T02 – 构造器参数覆盖
   // ============================================================
   testWidgets('T02 - 构造器 size 生效', (tester) async {
     const customSize = 48.0;
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.setting, size: customSize),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(const TIcon(TIcons.setting, size: customSize)),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, customSize);
@@ -56,9 +71,9 @@ void main() {
 
   testWidgets('T02b - 构造器 color 生效', (tester) async {
     const customColor = Colors.red;
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.check_circle, color: customColor),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(const TIcon(TIcons.check_circle, color: customColor)),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.color, customColor);
@@ -69,10 +84,12 @@ void main() {
   // ============================================================
   testWidgets('T03 - Theme size 默认生效', (tester) async {
     const themeSize = 32.0;
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.home_filled),
-      iconTheme: const TIconThemeData(size: themeSize),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TIcon(TIcons.home_filled),
+        iconTheme: const TIconThemeData(size: themeSize),
+      ),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, themeSize);
@@ -80,10 +97,12 @@ void main() {
 
   testWidgets('T03b - Theme color 默认生效', (tester) async {
     const themeColor = Colors.blue;
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.star_filled),
-      iconTheme: const TIconThemeData(color: themeColor),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TIcon(TIcons.star_filled),
+        iconTheme: const TIconThemeData(color: themeColor),
+      ),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.color, themeColor);
@@ -92,10 +111,12 @@ void main() {
   testWidgets('T03c - 构造器参数优先于 Theme', (tester) async {
     const themeSize = 20.0;
     const constructorSize = 40.0;
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.home_filled, size: constructorSize),
-      iconTheme: const TIconThemeData(size: themeSize),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TIcon(TIcons.home_filled, size: constructorSize),
+        iconTheme: const TIconThemeData(size: themeSize),
+      ),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, constructorSize);
@@ -111,9 +132,7 @@ void main() {
           extensions: [TThemeData.defaultData()],
           iconTheme: const IconThemeData(size: 28.0, color: Colors.green),
         ),
-        home: const Scaffold(
-          body: Center(child: TIcon(TIcons.check)),
-        ),
+        home: const Scaffold(body: Center(child: TIcon(TIcons.check))),
       ),
     );
 
@@ -124,27 +143,26 @@ void main() {
 
   testWidgets('T04a - 裸 TThemeData 注入时颜色兜底到 token', (tester) async {
     final token = TThemeData.defaultData();
-    await tester.pumpWidget(MaterialApp(
-      theme: ThemeData(
-        extensions: [token],
-        iconTheme: const IconThemeData(),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(extensions: [token], iconTheme: const IconThemeData()),
+        home: const Scaffold(body: Center(child: TIcon(TIcons.check))),
       ),
-      home: const Scaffold(
-        body: Center(child: TIcon(TIcons.check)),
-      ),
-    ));
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.color, token.textColorPrimary);
   });
 
   testWidgets('T04b - 完整主题下仍尊重局部 IconTheme', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const IconTheme(
-        data: IconThemeData(size: 30.0, color: Colors.green),
-        child: TIcon(TIcons.check),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const IconTheme(
+          data: IconThemeData(size: 30.0, color: Colors.green),
+          child: TIcon(TIcons.check),
+        ),
       ),
-    ));
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, 30.0);
@@ -152,13 +170,15 @@ void main() {
   });
 
   testWidgets('T04c - TIconThemeData 覆盖局部 IconTheme', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const IconTheme(
-        data: IconThemeData(size: 30.0, color: Colors.green),
-        child: TIcon(TIcons.check),
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const IconTheme(
+          data: IconThemeData(size: 30.0, color: Colors.green),
+          child: TIcon(TIcons.check),
+        ),
+        iconTheme: const TIconThemeData(size: 22, color: Colors.orange),
       ),
-      iconTheme: const TIconThemeData(size: 22, color: Colors.orange),
-    ));
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, 22);
@@ -166,10 +186,12 @@ void main() {
   });
 
   testWidgets('T04d - 构造器覆盖 TIconThemeData', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      const TIcon(TIcons.check, size: 26, color: Colors.red),
-      iconTheme: const TIconThemeData(size: 22, color: Colors.orange),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(
+        const TIcon(TIcons.check, size: 26, color: Colors.red),
+        iconTheme: const TIconThemeData(size: 22, color: Colors.orange),
+      ),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, 26);
@@ -180,21 +202,36 @@ void main() {
   // T05 – TIcon.fromName 工厂构造
   // ============================================================
   testWidgets('T05 - fromName 合法名渲染图标', (tester) async {
-    await tester.pumpWidget(wrapWithTheme(
-      TIcon.fromName('home_filled'),
-    ));
+    await tester.pumpWidget(wrapWithTheme(TIcon.fromName('home_filled')));
     expect(find.byType(TIcon), findsOneWidget);
     expect(find.byType(Icon), findsOneWidget);
   });
 
   testWidgets('T05b - fromName 带参数', (tester) async {
     const customSize = 36.0;
-    await tester.pumpWidget(wrapWithTheme(
-      TIcon.fromName('setting', size: customSize),
-    ));
+    await tester.pumpWidget(
+      wrapWithTheme(TIcon.fromName('setting', size: customSize)),
+    );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
     expect(icon.size, customSize);
+  });
+
+  test('T05b2 - fromName 完整透传图标和构造器参数', () {
+    const key = ValueKey('named-icon');
+    final icon = TIcon.fromName(
+      'setting',
+      key: key,
+      size: 36,
+      color: Colors.purple,
+      semanticLabel: '设置',
+    );
+
+    expect(icon.key, key);
+    expect(icon.icon, TIcons.setting);
+    expect(icon.size, 36);
+    expect(icon.color, Colors.purple);
+    expect(icon.semanticLabel, '设置');
   });
 
   test('T05c - fromName 非法名抛出异常', () {
@@ -202,6 +239,27 @@ void main() {
       () => TIcon.fromName('__non_existent_icon__'),
       throwsA(isA<ArgumentError>()),
     );
+  });
+
+  testWidgets('T05d - semanticLabel 透传原生语义且空值不产生标签', (tester) async {
+    final semantics = tester.ensureSemantics();
+    try {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Row(
+            children: [
+              TIcon(TIcons.setting, semanticLabel: '设置'),
+              TIcon(TIcons.home),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.bySemanticsLabel('设置'), findsOneWidget);
+      expect(find.bySemanticsLabel('home'), findsNothing);
+    } finally {
+      semantics.dispose();
+    }
   });
 
   // ============================================================
@@ -256,29 +314,39 @@ void main() {
 
   // 补充用例至 ≥15
   testWidgets('T07 - mergeExtension 覆盖 defaultSize', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      theme: ThemeData(extensions: [
-        TThemeData.defaultData(),
-        const TIconThemeData(size: 32.0, color: Colors.green),
-      ]),
-      home: const Scaffold(body: Center(child: TIcon(TIcons.home))),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            const TIconThemeData(size: 32.0, color: Colors.green),
+          ],
+        ),
+        home: const Scaffold(body: Center(child: TIcon(TIcons.home))),
+      ),
+    );
     final icon = tester.widget<Icon>(find.byIcon(TIcons.home));
     expect(icon.size, 32.0);
     expect(icon.color, Colors.green);
   });
 
   testWidgets('T08 - 多个 TIcon 同时渲染', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      theme: ThemeData(extensions: [TThemeData.defaultData()]),
-      home: const Scaffold(
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(extensions: [TThemeData.defaultData()]),
+        home: const Scaffold(
           body: Center(
-              child: Row(children: [
-        TIcon(TIcons.home),
-        TIcon(TIcons.search),
-        TIcon(TIcons.user),
-      ]))),
-    ));
+            child: Row(
+              children: [
+                TIcon(TIcons.home),
+                TIcon(TIcons.search),
+                TIcon(TIcons.user),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
     expect(find.byIcon(TIcons.home), findsOneWidget);
     expect(find.byIcon(TIcons.search), findsOneWidget);
     expect(find.byIcon(TIcons.user), findsOneWidget);
