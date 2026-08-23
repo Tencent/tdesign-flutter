@@ -1,0 +1,29 @@
+Widget _buildSizes(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      const TCell(
+        title: Text('大尺寸 32'),
+        note: _StatefulSwitch(initialValue: true, size: TSwitchSize.large),
+      ),
+      Divider(
+        height: 0.5,
+        thickness: 0.5,
+        indent: context.tTheme.spacer16,
+        color: context.tTheme.componentStrokeColor,
+      ),
+      const TCell(
+        title: Text('中尺寸 28'),
+        note: _StatefulSwitch(initialValue: true),
+      ),
+      Divider(
+        height: 0.5,
+        thickness: 0.5,
+        indent: context.tTheme.spacer16,
+        color: context.tTheme.componentStrokeColor,
+      ),
+      const TCell(
+        title: Text('小尺寸 24'),
+        note: _StatefulSwitch(initialValue: true, size: TSwitchSize.small),
+      ),
+    ],
+  );

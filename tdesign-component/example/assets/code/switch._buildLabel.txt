@@ -1,0 +1,24 @@
+Widget _buildLabel(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      const TCell(
+        title: Text('带文字开关'),
+        note: _StatefulSwitch(
+          initialValue: true,
+          variant: TSwitchVariant.text,
+          openText: '开',
+          closeText: '关',
+        ),
+      ),
+      Divider(
+        height: 0.5,
+        thickness: 0.5,
+        indent: context.tTheme.spacer16,
+        color: context.tTheme.componentStrokeColor,
+      ),
+      const TCell(
+        title: Text('带图标开关'),
+        note: _StatefulSwitch(initialValue: true, variant: TSwitchVariant.icon),
+      ),
+    ],
+  );
