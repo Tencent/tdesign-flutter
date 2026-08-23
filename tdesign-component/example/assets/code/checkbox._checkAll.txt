@@ -7,8 +7,8 @@ Widget _checkAll(BuildContext context) {
           value: allSelected
               ? true
               : _checkAllValue.isEmpty
-                  ? false
-                  : null,
+              ? false
+              : null,
           title: '全选',
           onChanged: (checked) {
             setState(() {

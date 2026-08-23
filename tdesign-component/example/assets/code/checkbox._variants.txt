@@ -1,4 +1,5 @@
-Widget _variants(BuildContext context) {
+@ExampleCode(group: 'checkbox')
+  Widget _variants(BuildContext context) {
     return Column(
       children: [
         for (final entry in const [
@@ -7,9 +8,9 @@ Widget _variants(BuildContext context) {
           (TCheckboxVariant.check, '仅勾选'),
         ])
           Theme(
-            data: Theme.of(context).mergeExtension(
-              TCheckboxThemeData(variant: entry.$1),
-            ),
+            data: Theme.of(
+              context,
+            ).mergeExtension(TCheckboxThemeData(variant: entry.$1)),
             child: TCheckbox(
               value: _variantValues[entry.$1],
               title: entry.$2,

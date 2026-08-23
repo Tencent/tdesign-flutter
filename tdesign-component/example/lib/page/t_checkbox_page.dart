@@ -13,15 +13,10 @@ class TCheckboxPage extends StatefulWidget {
 
 class _TCheckboxPageState extends State<TCheckboxPage> {
   static const _options = [
-    TCheckboxOption(value: 'a', label: '多选 A'),
-    TCheckboxOption(value: 'b', label: '多选 B', subTitle: '描述信息'),
-    TCheckboxOption(value: 'c', label: '多选 C'),
-    TCheckboxOption(value: 'd', label: '多选 D'),
-  ];
-  static const _horizontalCardOptions = [
     TCheckboxOption(value: 'a', label: '多选'),
     TCheckboxOption(value: 'b', label: '多选'),
-    TCheckboxOption(value: 'c', label: '多选'),
+    TCheckboxOption(value: 'c', label: '多选标题多行多选标题多行多选标题多行多选标题多行'),
+    TCheckboxOption(value: 'd', label: '多选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
   ];
   static const _verticalCardOptions = [
     TCheckboxOption(value: 'a', label: '多选', subTitle: '描述信息'),
@@ -34,9 +29,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   List<String> _horizontalValue = ['a', 'c'];
   List<String> _checkAllValue = ['b'];
   List<String> _verticalCardValue = ['b'];
-  List<String> _horizontalCardValue = ['a'];
-  bool? _singleValue = false;
-  bool? _densityValue = false;
   final Map<TCheckboxVariant, bool> _variantValues = {
     TCheckboxVariant.square: true,
     TCheckboxVariant.circle: true,
@@ -52,23 +44,30 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
       desc: '用于在一组选项中执行多项选择。',
       exampleCodeGroup: 'checkbox',
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '纵向多选框', builder: _verticalCheckbox),
-          ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
-          ExampleItem(desc: '全选', builder: _checkAll),
-        ]),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '单颗受控', builder: _singleCheckbox),
-          ExampleItem(desc: '禁用状态', builder: _disabledCheckbox),
-          ExampleItem(desc: '单项禁用', builder: _itemDisabledCheckbox),
-        ]),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '勾选样式', builder: _variants),
-          ExampleItem(desc: '勾选显示位置', builder: _positions),
-          ExampleItem(desc: '点击热区密度', builder: _density),
-          ExampleItem(desc: '纵向卡片多选框', builder: _verticalCardCheckbox),
-          ExampleItem(desc: '横向两列卡片多选框', builder: _horizontalCardCheckbox),
-        ]),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '纵向多选框', builder: _verticalCheckbox),
+            ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
+            ExampleItem(desc: '带全选多选框', builder: _checkAll),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [ExampleItem(desc: '多选框状态', builder: _disabledCheckbox)],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '勾选样式', builder: _variants),
+            ExampleItem(desc: '勾选显示位置', builder: _positions),
+            ExampleItem(desc: '非通栏多选样式', builder: _verticalCardCheckbox),
+          ],
+        ),
+        ExampleModule(
+          title: '组件规格',
+          children: [ExampleItem(desc: '多选框尺寸规格', builder: _sizes)],
+        ),
       ],
     );
   }
@@ -104,8 +103,8 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
           value: allSelected
               ? true
               : _checkAllValue.isEmpty
-                  ? false
-                  : null,
+              ? false
+              : null,
           title: '全选',
           onChanged: (checked) {
             setState(() {
@@ -124,15 +123,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   }
 
   @ExampleCode(group: 'checkbox')
-  Widget _singleCheckbox(BuildContext context) {
-    return TCheckbox(
-      value: _singleValue,
-      title: '受控多选',
-      subTitle: 'value 由页面 State 持有',
-      onChanged: (value) => setState(() => _singleValue = value),
-    );
-  }
-
   @ExampleCode(group: 'checkbox')
   Widget _disabledCheckbox(BuildContext context) {
     return const Column(
@@ -145,18 +135,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   }
 
   @ExampleCode(group: 'checkbox')
-  Widget _itemDisabledCheckbox(BuildContext context) {
-    return TCheckboxGroup<String>(
-      value: const ['b'],
-      options: const [
-        TCheckboxOption(value: 'a', label: '正常选项'),
-        TCheckboxOption(value: 'b', label: '禁用-已选', disabled: true),
-        TCheckboxOption(value: 'c', label: '禁用-未选', disabled: true),
-      ],
-      onChanged: (value) {},
-    );
-  }
-
   @ExampleCode(group: 'checkbox')
   Widget _variants(BuildContext context) {
     return Column(
@@ -167,9 +145,9 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
           (TCheckboxVariant.check, '仅勾选'),
         ])
           Theme(
-            data: Theme.of(context).mergeExtension(
-              TCheckboxThemeData(variant: entry.$1),
-            ),
+            data: Theme.of(
+              context,
+            ).mergeExtension(TCheckboxThemeData(variant: entry.$1)),
             child: TCheckbox(
               value: _variantValues[entry.$1],
               title: entry.$2,
@@ -206,48 +184,20 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   }
 
   @ExampleCode(group: 'checkbox')
-  Widget _density(BuildContext context) {
-    final compactTheme = CheckboxTheme.of(context).copyWith(
-      visualDensity: VisualDensity.compact,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    );
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  Widget _sizes(BuildContext context) {
+    return Column(
       children: [
-        Column(
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(color: context.tTheme.componentBorderColor),
-              ),
-              child: TCheckbox(
-                value: _densityValue,
-                onChanged: (value) => setState(() => _densityValue = value),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text('默认 48×48'),
-          ],
-        ),
-        Column(
-          children: [
-            Theme(
-              data: Theme.of(context).copyWith(checkboxTheme: compactTheme),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  border:
-                      Border.all(color: context.tTheme.componentBorderColor),
-                ),
-                child: TCheckbox(
-                  value: _densityValue,
-                  onChanged: (value) => setState(() => _densityValue = value),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text('紧凑 24×24'),
-          ],
-        ),
+        for (final size in TCheckboxSize.values)
+          TCheckbox(
+            value: true,
+            size: size,
+            title: switch (size) {
+              TCheckboxSize.small => '小尺寸',
+              TCheckboxSize.medium => '中尺寸',
+              TCheckboxSize.large => '大尺寸',
+            },
+            onChanged: (_) {},
+          ),
       ],
     );
   }
@@ -259,18 +209,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
       options: _verticalCardOptions,
       cardMode: true,
       onChanged: (value) => setState(() => _verticalCardValue = value),
-    );
-  }
-
-  @ExampleCode(group: 'checkbox')
-  Widget _horizontalCardCheckbox(BuildContext context) {
-    return TCheckboxGroup<String>(
-      value: _horizontalCardValue,
-      options: _horizontalCardOptions,
-      direction: Axis.horizontal,
-      columns: 2,
-      cardMode: true,
-      onChanged: (value) => setState(() => _horizontalCardValue = value),
     );
   }
 }
