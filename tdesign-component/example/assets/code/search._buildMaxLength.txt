@@ -1,0 +1,14 @@
+Widget _buildMaxLength(BuildContext context) {
+    return const _SearchDemoSurface(
+      child: Column(
+        children: [
+          TSearchBar(hintText: '最大输入10个字符', maxLength: 10),
+          SizedBox(height: 16),
+          TSearchBar(
+            hintText: '最大输入10个字符，汉字算两个',
+            inputFormatters: [_WeightedLengthFormatter(10)],
+          ),
+        ],
+      ),
+    );
+  }
