@@ -52,7 +52,7 @@
           "TIcon",
           "TIconThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
