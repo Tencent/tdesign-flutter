@@ -21,6 +21,7 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
     return ExamplePage(
       title: tTitle(),
       desc: '文字超链接用于跳转一个新页面，如当前项目跳转，友情链接等。',
+      backgroundColor: context.tTheme.bgColorPage,
       exampleCodeGroup: 'link',
       children: [
         ExampleModule(
