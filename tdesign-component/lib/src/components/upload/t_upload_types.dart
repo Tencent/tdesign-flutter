@@ -9,6 +9,15 @@ enum TUploadMediaType {
   video,
 }
 
+/// 上传文件的布局方式。
+enum TUploadLayout {
+  /// 宫格布局。
+  grid,
+
+  /// 列表布局。
+  list,
+}
+
 /// 上传文件展示状态。
 enum TUploadFileStatus {
   /// 已选择，等待业务上传。
@@ -22,6 +31,9 @@ enum TUploadFileStatus {
 
   /// 上传失败。
   error,
+
+  /// 上传失败，可由用户重新上传。
+  retry,
 }
 
 /// 上传文件校验错误。

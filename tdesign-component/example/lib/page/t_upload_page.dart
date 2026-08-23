@@ -5,51 +5,73 @@ import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 /// TUpload 演示。
-class TUploadPage extends StatefulWidget {
+class TUploadPage extends StatelessWidget {
   const TUploadPage({super.key});
 
-  @override
-  State<TUploadPage> createState() => _TUploadPageState();
-}
-
-class _TUploadPageState extends State<TUploadPage> {
-  List<TUploadFile> _files = [];
-  List<TUploadFile> _emptyFiles = [];
-  List<TUploadFile> _previewFiles = const [
+  static const _imageFiles = [
     TUploadFile(
-      id: 'preview-1',
-      name: 'preview-1.png',
+      id: 'image-1',
+      name: 'image-1.png',
       url: 'https://tdesign.gtimg.com/demo/images/example1.png',
+      size: 1024 * 128,
       status: TUploadFileStatus.success,
     ),
     TUploadFile(
-      id: 'preview-2',
-      name: 'preview-2.png',
+      id: 'image-2',
+      name: 'image-2.png',
       url: 'https://tdesign.gtimg.com/demo/images/example2.png',
+      size: 1024 * 256,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'image-3',
+      name: 'image-3.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example3.png',
+      size: 1024 * 512,
       status: TUploadFileStatus.success,
     ),
   ];
-  List<TUploadFile> _statusFiles = const [
+
+  static const _statusFiles = [
     TUploadFile(
-      id: 'uploading',
-      name: 'uploading.png',
+      id: 'loading',
+      name: 'loading.png',
       url: 'https://tdesign.gtimg.com/demo/images/example1.png',
+      status: TUploadFileStatus.uploading,
+    ),
+    TUploadFile(
+      id: 'progress',
+      name: 'progress.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example2.png',
       status: TUploadFileStatus.uploading,
       progress: 0.68,
     ),
     TUploadFile(
-      id: 'error',
-      name: 'error.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example2.png',
+      id: 'retry',
+      name: 'retry.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example3.png',
+      status: TUploadFileStatus.retry,
+    ),
+    TUploadFile(
+      id: 'failed',
+      name: 'failed.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
       status: TUploadFileStatus.error,
-      errorText: '重新上传',
     ),
   ];
-  static const _disabledFiles = [
+
+  static const _listFiles = [
     TUploadFile(
-      id: 'disabled-success',
-      name: 'disabled-success.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example3.png',
+      id: 'document',
+      name: '设计说明.pdf',
+      size: 1024 * 768,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'photo',
+      name: '产品截图.png',
+      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
+      size: 1024 * 256,
       status: TUploadFileStatus.success,
     ),
   ];
@@ -57,148 +79,95 @@ class _TUploadPageState extends State<TUploadPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tTitle(),
+      title: tTitle(context),
       exampleCodeGroup: 'upload',
-      desc: '用于选择文件并展示业务上传状态。',
+      desc:
+          '用于相册读取或拉起拍照的图片上传功能。（为避免涉及用户隐私，Upload 组件示例均为禁用态，使用时请自行取消禁用态，以便正常使用上传功能。）',
       children: [
-        ExampleModule(title: '基础能力', children: [
-          ExampleItem(desc: '图片选择', builder: _buildBasic),
-          ExampleItem(desc: '图片预览', builder: _buildPreview),
-          ExampleItem(desc: '空态可用与禁用', builder: _buildEmptyStates),
-          ExampleItem(desc: '上传状态', builder: _buildStatus),
-          ExampleItem(desc: '圆形主题', builder: _buildCircle),
-          ExampleItem(desc: '禁用状态', builder: _buildDisabled),
-        ]),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '单选上传', builder: _single),
+            ExampleItem(desc: '多选上传', builder: _multiple),
+            ExampleItem(desc: '长按图片拖拽排片', builder: _drag),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(desc: '加载状态', builder: _status),
+            ExampleItem(desc: '从聊天记录上选', builder: _messageFile),
+          ],
+        ),
+        ExampleModule(
+          title: '组件风格',
+          children: [ExampleItem(desc: '宫格/列表布局', builder: _layouts)],
+        ),
       ],
     );
   }
 
   @ExampleCode(group: 'upload')
-  Widget _buildBasic(BuildContext context) {
-    return _section(
-      TUpload(
-        files: _files,
-        maxFiles: 4,
-        maxFileSize: 5 * 1024 * 1024,
-        onValidationError: (error) => _show('$error'),
-        onError: (error) => _show('$error'),
-        onChanged: (files) => setState(() => _files = files),
-      ),
+  Widget _single(BuildContext context) {
+    return _demo(TUpload(files: const [], maxFiles: 1), title: '上传图片');
+  }
+
+  @ExampleCode(group: 'upload')
+  Widget _multiple(BuildContext context) {
+    return _demo(TUpload(files: _imageFiles, maxFiles: 4), title: '上传图片');
+  }
+
+  @ExampleCode(group: 'upload')
+  Widget _drag(BuildContext context) {
+    return _demo(TUpload(files: _imageFiles, maxFiles: 4), title: '上传图片');
+  }
+
+  @ExampleCode(group: 'upload')
+  Widget _status(BuildContext context) {
+    return _demo(TUpload(files: _statusFiles, maxFiles: 4), title: '上传图片');
+  }
+
+  @ExampleCode(group: 'upload')
+  Widget _messageFile(BuildContext context) {
+    return _demo(
+      TUpload(files: [_imageFiles.first], maxFiles: 4),
+      title: '上传图片',
     );
   }
 
   @ExampleCode(group: 'upload')
-  Widget _buildEmptyStates(BuildContext context) {
-    return _section(
-      Row(
+  Widget _layouts(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                const TText('可用'),
-                const SizedBox(height: 8),
-                TUpload(
-                  files: _emptyFiles,
-                  maxFiles: 1,
-                  onChanged: (files) => setState(() => _emptyFiles = files),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              children: [
-                const TText('禁用'),
-                const SizedBox(height: 8),
-                TUpload(files: const [], maxFiles: 1),
-              ],
-            ),
-          ),
+          const TText('宫格布局上传'),
+          const SizedBox(height: 8),
+          TUpload(files: _imageFiles, maxFiles: 4),
+          const SizedBox(height: 24),
+          const TText('列表布局上传'),
+          const SizedBox(height: 8),
+          TUpload(files: _listFiles, maxFiles: 3, layout: TUploadLayout.list),
         ],
       ),
     );
   }
 
-  @ExampleCode(group: 'upload')
-  Widget _buildPreview(BuildContext context) {
-    return _section(
-      TUpload(
-        files: _previewFiles,
-        maxFiles: 4,
-        onChanged: (files) => setState(() => _previewFiles = files),
-        onPreview: (file) => _showPreview(context, file),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'upload')
-  Widget _buildStatus(BuildContext context) {
-    return _section(
-      TUpload(
-        files: _statusFiles,
-        maxFiles: 4,
-        onRetry: (file) => _show('重试 ${file.name}'),
-        onChanged: (files) => setState(() => _statusFiles = files),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'upload')
-  Widget _buildCircle(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        const TUploadThemeData(
-          variant: TUploadVariant.circle,
-          itemSize: 72,
-          spacing: 12,
+  Widget _demo(TUpload upload, {required String title}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TText(title),
         ),
-      ),
-      child: _section(
-        TUpload(
-          files: _files,
-          maxFiles: 4,
-          onChanged: (files) => setState(() => _files = files),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: upload,
         ),
-      ),
+      ],
     );
-  }
-
-  @ExampleCode(group: 'upload')
-  Widget _buildDisabled(BuildContext context) {
-    return _section(TUpload(files: _disabledFiles, maxFiles: 4));
-  }
-
-  Widget _section(Widget child) {
-    return Padding(padding: const EdgeInsets.all(16), child: child);
-  }
-
-  void _showPreview(BuildContext context, TUploadFile file) {
-    final previewFiles = _previewFiles
-        .where((item) => item.bytes != null || item.url != null)
-        .toList();
-    final index = previewFiles.indexWhere((item) => item.id == file.id);
-    if (index < 0) {
-      return;
-    }
-    TImageViewer.show(
-      context: context,
-      images: previewFiles.map(_toImageProvider).toList(),
-      initialIndex: index,
-      showIndex: true,
-    );
-  }
-
-  ImageProvider<Object> _toImageProvider(TUploadFile file) {
-    if (file.bytes != null) {
-      return MemoryImage(file.bytes!);
-    }
-    return NetworkImage(file.url!);
-  }
-
-  void _show(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

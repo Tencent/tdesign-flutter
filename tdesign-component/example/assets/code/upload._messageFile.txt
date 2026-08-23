@@ -1,0 +1,6 @@
+Widget _messageFile(BuildContext context) {
+    return _demo(
+      TUpload(files: [_imageFiles.first], maxFiles: 4),
+      title: '上传图片',
+    );
+  }

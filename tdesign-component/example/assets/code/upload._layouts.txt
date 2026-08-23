@@ -1,0 +1,17 @@
+Widget _layouts(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const TText('宫格布局上传'),
+          const SizedBox(height: 8),
+          TUpload(files: _imageFiles, maxFiles: 4),
+          const SizedBox(height: 24),
+          const TText('列表布局上传'),
+          const SizedBox(height: 8),
+          TUpload(files: _listFiles, maxFiles: 3, layout: TUploadLayout.list),
+        ],
+      ),
+    );
+  }
