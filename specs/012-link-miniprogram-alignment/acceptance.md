@@ -2,7 +2,7 @@
 
 ## 验证基线
 
-- Flutter：`origin/develop`
+- Flutter：`origin/develop@358fbfe4`
 - 小程序：`origin/develop@d973e4aab`
 - 对照目录：`packages/components/link`
 
@@ -12,7 +12,9 @@
 | --- | --- |
 | Flutter 3.32.0 analyze | 通过 |
 | Flutter latest analyze | 通过 |
-| Link 聚焦测试与 Golden | 通过 |
+| `flutter test test/components/link test/components/message/t_message_test.dart` | 通过，共 43 项 |
+| `flutter test --coverage test/components/link` | 通过，共 22 项；生产源码 `LH=123 / LF=126 = 97.62%` |
+| Link 与基础组件 Golden | 通过 |
 | 示例代码生成检查 | 通过 |
 
 ## 人工验收

@@ -166,6 +166,28 @@ void main() {
     inkWell.onHover?.call(false);
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+
+    tester.widget<InkWell>(find.byType(InkWell)).onFocusChange?.call(true);
+    await tester.pump();
+    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+
+    tester.widget<InkWell>(find.byType(InkWell)).onFocusChange?.call(false);
+    await tester.pump();
+    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+
+    tester
+        .widget<InkWell>(find.byType(InkWell))
+        .onHighlightChanged
+        ?.call(true);
+    await tester.pump();
+    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+
+    tester
+        .widget<InkWell>(find.byType(InkWell))
+        .onHighlightChanged
+        ?.call(false);
+    await tester.pump();
+    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
   });
 
   testWidgets('实例参数覆盖组件 Theme 默认值', (tester) async {
