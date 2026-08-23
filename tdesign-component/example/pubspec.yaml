@@ -48,7 +48,7 @@ dependencies:
   http: ^0.13.5
   tdesign_flutter:
     path: ../
-  tdesign_flutter_icons: ^0.0.5
+  tdesign_flutter_icons: ^0.0.6
 #  path_provider: 2.1.5
   extended_nested_scroll_view: 6.2.1
   flutter_screenutil: 5.9.3
