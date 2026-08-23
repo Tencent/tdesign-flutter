@@ -1,0 +1,28 @@
+Widget _buildBaseDividers(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const TDivider(),
+          _sectionTitle(context, '带文字水平分割线'),
+          const TDivider(child: Text('文字信息'), align: TDividerAlign.left),
+          const TDivider(child: Text('文字信息')),
+          const TDivider(child: Text('文字信息'), align: TDividerAlign.right),
+          _sectionTitle(context, '垂直分割线'),
+          const Padding(
+            padding: EdgeInsetsDirectional.only(start: 16),
+            child: Row(
+              children: [
+                Text('文字信息'),
+                TDivider(layout: TDividerLayout.vertical),
+                Text('文字信息'),
+                TDivider(layout: TDividerLayout.vertical),
+                Text('文字信息'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
