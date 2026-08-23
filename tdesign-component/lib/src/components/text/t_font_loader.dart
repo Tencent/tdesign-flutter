@@ -1,176 +1,63 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 't_text.dart';
-
-/// 线上字体加载工具
+/// Flutter 动态字体注册工具。
+///
+/// 字体应在构建 Text 前加载完成；组件不会在绘制过程中隐式下载字体。
 class TFontLoader {
-  /// 缓存字体 FontLoader，防止重复加载
-  static final _record = <String, bool>{}; // coverage:ignore-line
+  TFontLoader._();
 
-  /// 加载字体资源
+  static final Map<String, _FontLoadRecord> _records = {};
+
+  /// 下载并注册字体。
+  ///
+  /// 同一 [name] 和 [fontFamilyUrl] 的并发调用共享同一个 Future。加载失败会
+  /// 清除缓存并允许重试；已经注册或正在注册的字体不能切换 URL。
   static Future<bool> load({
-    // coverage:ignore-line
+    /// 注册到 Flutter 字体系统中的字体族名称。
+    required String name,
+
+    /// 可直接下载的字体资源 URL。
+    required String fontFamilyUrl,
+  }) {
+    final existing = _records[name];
+    if (existing != null) {
+      return existing.url == fontFamilyUrl
+          ? existing.future
+          : Future<bool>.value(false);
+    }
+
+    final future = _load(name: name, fontFamilyUrl: fontFamilyUrl);
+    _records[name] = _FontLoadRecord(url: fontFamilyUrl, future: future);
+    future.then((success) {
+      if (!success && identical(_records[name]?.future, future)) {
+        _records.remove(name);
+      }
+    });
+    return future;
+  }
+
+  static Future<bool> _load({
     required String name,
     required String fontFamilyUrl,
   }) async {
+    if (name.isEmpty || fontFamilyUrl.isEmpty) {
+      return false;
+    }
     try {
-      if (!(_record[name] ?? false)) {
-        // coverage:ignore-line
-        var fontLoader = FontLoader(name); // coverage:ignore-line
-
-        fontLoader.addFont(
-          Future(() async {
-            // coverage:ignore-line
-            var uri = Uri.parse(fontFamilyUrl); // coverage:ignore-line
-            var bundle = NetworkAssetBundle(uri); // coverage:ignore-line
-            return await bundle.load(''); // coverage:ignore-line
-          }),
-        );
-
-        await fontLoader.load(); // coverage:ignore-line
-        _record[name] = true; // coverage:ignore-line
-      }
+      final uri = Uri.parse(fontFamilyUrl);
+      final bundle = NetworkAssetBundle(uri);
+      final loader = FontLoader(name)..addFont(bundle.load(''));
+      await loader.load();
       return true;
     } catch (_) {
-      // 字体加载失败时返回 false，由调用方决定是否降级展示。
+      return false;
     }
-    return false;
   }
 }
 
-/// 懒加载 FontWidget
-class TFontLoaderWidget extends StatefulWidget {
-  const TFontLoaderWidget({
-    // coverage:ignore-line
-    Key? key,
-    required this.textWidget,
-    required this.fontFamilyUrl,
-  }) : super(key: key); // coverage:ignore-line
+class _FontLoadRecord {
+  const _FontLoadRecord({required this.url, required this.future});
 
-  /// 需要加载字体的文本组件
-  final TText textWidget;
-
-  /// FontFamily 的下载地址
-  final String fontFamilyUrl;
-
-  @override // coverage:ignore-line
-  State<TFontLoaderWidget> createState() => _TFontLoaderWidgetState(); // coverage:ignore-line
-}
-
-class _TFontLoaderWidgetState extends State<TFontLoaderWidget> {
-  var _fontFamilyLoaded = false;
-
-  @override // coverage:ignore-line
-  void initState() {
-    super.initState(); // coverage:ignore-line
-    loadFont(); // coverage:ignore-line
-  }
-
-  void loadFont() async {
-    // coverage:ignore-line
-    if ((widget.textWidget.fontFamily?.fontFamily.isNotEmpty ??
-            false) && // coverage:ignore-line
-        widget.fontFamilyUrl.isNotEmpty) {
-      // coverage:ignore-line
-      try {
-        if (await TFontLoader.load(
-          // coverage:ignore-line
-          name:
-              widget.textWidget.fontFamily!.fontFamily, // coverage:ignore-line
-          fontFamilyUrl: widget.fontFamilyUrl,
-        )) {
-          // coverage:ignore-start
-          _fontFamilyLoaded = true;
-          if (!mounted) {
-            return;
-          }
-          setState(() {});
-          // coverage:ignore-end
-        }
-      } catch (_) {
-        // 字体加载失败时保持原文本渲染。
-      }
-    }
-  }
-
-  @override // coverage:ignore-line
-  Widget build(BuildContext context) {
-    final textWidget = widget.textWidget; // coverage:ignore-line
-
-    final common = (
-      font: textWidget.font, // coverage:ignore-line
-      fontWeight: textWidget.fontWeight, // coverage:ignore-line
-      fontFamily: textWidget.fontFamily, // coverage:ignore-line
-      textColor: textWidget.textColor, // coverage:ignore-line
-      backgroundColor: textWidget.backgroundColor, // coverage:ignore-line
-      isTextThrough: textWidget.isTextThrough, // coverage:ignore-line
-      lineThroughColor: textWidget.lineThroughColor, // coverage:ignore-line
-      package: textWidget.package, // coverage:ignore-line
-      style: textWidget.style, // coverage:ignore-line
-      strutStyle: textWidget.strutStyle, // coverage:ignore-line
-      textAlign: textWidget.textAlign, // coverage:ignore-line
-      textDirection: textWidget.textDirection, // coverage:ignore-line
-      locale: textWidget.locale, // coverage:ignore-line
-      softWrap: textWidget.softWrap, // coverage:ignore-line
-      overflow: textWidget.overflow, // coverage:ignore-line
-      textScaleFactor: textWidget.textScaleFactor, // coverage:ignore-line
-      maxLines: textWidget.maxLines, // coverage:ignore-line
-      semanticsLabel: textWidget.semanticsLabel, // coverage:ignore-line
-      textWidthBasis: textWidget.textWidthBasis, // coverage:ignore-line
-      textHeightBehavior: textWidget.textHeightBehavior, // coverage:ignore-line
-      isInFontLoader: !_fontFamilyLoaded,
-    );
-    final span = textWidget.textSpan;
-    if (span != null) {
-      return TText.rich(
-        span,
-        font: common.font,
-        fontWeight: common.fontWeight,
-        fontFamily: common.fontFamily,
-        textColor: common.textColor,
-        backgroundColor: common.backgroundColor,
-        isTextThrough: common.isTextThrough,
-        lineThroughColor: common.lineThroughColor,
-        package: common.package,
-        style: common.style,
-        strutStyle: common.strutStyle,
-        textAlign: common.textAlign,
-        textDirection: common.textDirection,
-        locale: common.locale,
-        softWrap: common.softWrap,
-        overflow: common.overflow,
-        textScaleFactor: common.textScaleFactor,
-        maxLines: common.maxLines,
-        semanticsLabel: common.semanticsLabel,
-        textWidthBasis: common.textWidthBasis,
-        textHeightBehavior: common.textHeightBehavior,
-        isInFontLoader: common.isInFontLoader,
-      );
-    }
-    return TText(
-      textWidget.data,
-      font: common.font,
-      fontWeight: common.fontWeight,
-      fontFamily: common.fontFamily,
-      textColor: common.textColor,
-      backgroundColor: common.backgroundColor,
-      isTextThrough: common.isTextThrough,
-      lineThroughColor: common.lineThroughColor,
-      package: common.package,
-      style: common.style,
-      strutStyle: common.strutStyle,
-      textAlign: common.textAlign,
-      textDirection: common.textDirection,
-      locale: common.locale,
-      softWrap: common.softWrap,
-      overflow: common.overflow,
-      textScaleFactor: common.textScaleFactor,
-      maxLines: common.maxLines,
-      semanticsLabel: common.semanticsLabel,
-      textWidthBasis: common.textWidthBasis,
-      textHeightBehavior: common.textHeightBehavior,
-      isInFontLoader: common.isInFontLoader,
-    );
-  }
+  final String url;
+  final Future<bool> future;
 }
