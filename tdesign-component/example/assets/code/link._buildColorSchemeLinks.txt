@@ -1,28 +1,28 @@
 Widget _buildColorSchemeLinks(BuildContext context) {
     return Column(
       children: [
-        Container(
-          color: context.tTheme.bgColorContainer,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.primary),
-              _buildLinkWithColorScheme(TLinkColorScheme.defaultTheme),
-              _buildLinkWithColorScheme(TLinkColorScheme.danger),
-            ],
+        _exampleRow(context, [
+          _link(
+            colorScheme: TLinkColorScheme.primary,
+            suffixIcon: const Icon(TIcons.jump),
           ),
-        ),
+          _link(suffixIcon: const Icon(TIcons.jump)),
+          _link(
+            colorScheme: TLinkColorScheme.danger,
+            suffixIcon: const Icon(TIcons.jump),
+          ),
+        ]),
         const SizedBox(height: 16),
-        Container(
-          color: context.tTheme.bgColorContainer,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.warning),
-              _buildLinkWithColorScheme(TLinkColorScheme.success),
-            ],
+        _exampleRow(context, [
+          _link(
+            colorScheme: TLinkColorScheme.warning,
+            suffixIcon: const Icon(TIcons.jump),
           ),
-        ),
+          _link(
+            colorScheme: TLinkColorScheme.success,
+            suffixIcon: const Icon(TIcons.jump),
+          ),
+        ]),
       ],
     );
   }

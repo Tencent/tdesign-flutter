@@ -204,7 +204,8 @@ class _TIconPageState extends State<TIconPage> {
                 target: LinkTarget.blank,
                 builder: (context, followLink) => TLink(
                   child: const Text('https://tdesign.tencent.com/icons'),
-                  variant: TLinkVariant.icon,
+                  prefixIcon: const Icon(TIcons.link),
+                  suffixIcon: const Icon(TIcons.jump),
                   colorScheme: TLinkColorScheme.primary,
                   semanticLabel: '打开 TDesign 图标官网',
                   onPressed: followLink,

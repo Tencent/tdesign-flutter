@@ -1,33 +1,32 @@
 Widget _buildDisabledLinks(BuildContext context) {
     return Column(
       children: [
-        Container(
-          color: context.tTheme.bgColorContainer,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.primary,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.defaultTheme,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.danger,
-                  disabled: true),
-            ],
+        _exampleRow(context, [
+          _link(
+            colorScheme: TLinkColorScheme.primary,
+            suffixIcon: const Icon(TIcons.jump),
+            disabled: true,
           ),
-        ),
+          _link(suffixIcon: const Icon(TIcons.jump), disabled: true),
+          _link(
+            colorScheme: TLinkColorScheme.danger,
+            suffixIcon: const Icon(TIcons.jump),
+            disabled: true,
+          ),
+        ]),
         const SizedBox(height: 16),
-        Container(
-          color: context.tTheme.bgColorContainer,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildLinkWithColorScheme(TLinkColorScheme.warning,
-                  disabled: true),
-              _buildLinkWithColorScheme(TLinkColorScheme.success,
-                  disabled: true),
-            ],
+        _exampleRow(context, [
+          _link(
+            colorScheme: TLinkColorScheme.warning,
+            suffixIcon: const Icon(TIcons.jump),
+            disabled: true,
           ),
-        ),
+          _link(
+            colorScheme: TLinkColorScheme.success,
+            suffixIcon: const Icon(TIcons.jump),
+            disabled: true,
+          ),
+        ]),
       ],
     );
   }
