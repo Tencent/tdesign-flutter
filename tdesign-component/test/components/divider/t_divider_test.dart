@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/divider/t_divider_painter.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -100,6 +101,33 @@ void main() {
         ),
       );
       expect(find.text('右对齐'), findsOneWidget);
+    });
+
+    testWidgets('宽屏下三档对齐的线与内容占满可用宽度', (tester) async {
+      for (final align in TDividerAlign.values) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            SizedBox(
+              width: 600,
+              child: TDivider(child: const Text('文字信息'), align: align),
+            ),
+          ),
+        );
+
+        final row = tester.renderObject<RenderFlex>(
+          find.descendant(
+            of: find.byType(TDivider),
+            matching: find.byType(Row),
+          ),
+        );
+        var occupiedWidth = 0.0;
+        var child = row.firstChild;
+        while (child != null) {
+          occupiedWidth += child.size.width;
+          child = (child.parentData! as FlexParentData).nextSibling;
+        }
+        expect(occupiedWidth, closeTo(row.size.width, 0.01));
+      }
     });
   });
 

@@ -195,54 +195,60 @@ class TDivider extends StatelessWidget {
     bool isDashed,
     TDividerAlign align,
   ) {
-    // 给中间内容一个弹性宽度，避免长文案把 Row 撑出屏幕。
-    // 不限制行数，让调用方仍可使用多行内容。
-    final middleContent = Flexible(
-      child: DefaultTextStyle.merge(
-        style: effectiveTextStyle ?? const TextStyle(),
-        child: Padding(padding: gapPadding, child: child!),
-      ),
-    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 文字按实际宽度参与 Row 布局，剩余空间全部交给线段。
+        // 仅限制最大宽度以避免长内容溢出，并保留调用方的多行能力。
+        final reservedLineWidth = align == TDividerAlign.center ? 0.0 : 30.0;
+        final maxContentWidth = constraints.hasBoundedWidth
+            ? (constraints.maxWidth - reservedLineWidth)
+                  .clamp(0.0, double.infinity)
+                  .toDouble()
+            : double.infinity;
+        final middleContent = ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxContentWidth),
+          child: DefaultTextStyle.merge(
+            style: effectiveTextStyle ?? const TextStyle(),
+            child: Padding(padding: gapPadding, child: child!),
+          ),
+        );
 
-    // 小程序端固定为 60rpx，在 375dp 设计基准下对应 30dp。
-    final shortLine = SizedBox(
-      width: 30,
-      height: thickness,
-      child: isDashed
-          ? CustomPaint(
-              painter: DashedPainter(color: color, strokeWidth: thickness),
-            )
-          : Container(color: color),
-    );
+        // 小程序端固定为 60rpx，在 375dp 设计基准下对应 30dp。
+        final shortLine = SizedBox(
+          width: 30,
+          height: thickness,
+          child: isDashed
+              ? CustomPaint(
+                  painter: DashedPainter(color: color, strokeWidth: thickness),
+                )
+              : Container(color: color),
+        );
 
-    // 弹性线
-    final flexLine = Expanded(
-      child: SizedBox(
-        height: thickness,
-        child: isDashed
-            ? CustomPaint(
-                painter: DashedPainter(color: color, strokeWidth: thickness),
-              )
-            : Container(color: color),
-      ),
-    );
+        Widget flexLine() => Expanded(
+          child: SizedBox(
+            height: thickness,
+            child: isDashed
+                ? CustomPaint(
+                    painter: DashedPainter(
+                      color: color,
+                      strokeWidth: thickness,
+                    ),
+                  )
+                : Container(color: color),
+          ),
+        );
 
-    List<Widget> children;
-    switch (align) {
-      case TDividerAlign.left:
-        children = [shortLine, middleContent, flexLine];
-        break;
-      case TDividerAlign.center:
-        children = [flexLine, middleContent, flexLine];
-        break;
-      case TDividerAlign.right:
-        children = [flexLine, middleContent, shortLine];
-        break;
-    }
+        final children = switch (align) {
+          TDividerAlign.left => [shortLine, middleContent, flexLine()],
+          TDividerAlign.center => [flexLine(), middleContent, flexLine()],
+          TDividerAlign.right => [flexLine(), middleContent, shortLine],
+        };
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: children,
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
+        );
+      },
     );
   }
 

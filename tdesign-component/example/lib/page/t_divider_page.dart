@@ -18,6 +18,7 @@ class TDividerPage extends StatelessWidget {
           title: '组件类型',
           children: [
             ExampleItem(
+              key: const Key('divider-base-example'),
               desc: '水平分割线',
               center: false,
               builder: _buildBaseDividers,
@@ -28,6 +29,7 @@ class TDividerPage extends StatelessWidget {
           title: '组件状态',
           children: [
             ExampleItem(
+              key: const Key('divider-dashed-example'),
               desc: '虚线样式',
               center: false,
               builder: _buildDashedDividers,
@@ -40,41 +42,55 @@ class TDividerPage extends StatelessWidget {
 
   @ExampleCode(group: 'divider')
   Widget _buildBaseDividers(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const TDivider(),
-        _sectionTitle(context, '带文字水平分割线'),
-        const TDivider(child: Text('文字信息'), align: TDividerAlign.left),
-        const TDivider(child: Text('文字信息')),
-        const TDivider(child: Text('文字信息'), align: TDividerAlign.right),
-        _sectionTitle(context, '垂直分割线'),
-        const Padding(
-          padding: EdgeInsetsDirectional.only(start: 16),
-          child: Row(
-            children: [
-              Text('文字信息'),
-              TDivider(layout: TDividerLayout.vertical),
-              Text('文字信息'),
-              TDivider(layout: TDividerLayout.vertical),
-              Text('文字信息'),
-            ],
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const TDivider(),
+          _sectionTitle(context, '带文字水平分割线'),
+          const TDivider(child: Text('文字信息'), align: TDividerAlign.left),
+          const TDivider(child: Text('文字信息')),
+          const TDivider(child: Text('文字信息'), align: TDividerAlign.right),
+          _sectionTitle(context, '垂直分割线'),
+          const Padding(
+            padding: EdgeInsetsDirectional.only(start: 16),
+            child: Row(
+              children: [
+                Text('文字信息'),
+                TDivider(layout: TDividerLayout.vertical),
+                Text('文字信息'),
+                TDivider(layout: TDividerLayout.vertical),
+                Text('文字信息'),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   @ExampleCode(group: 'divider')
   Widget _buildDashedDividers(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TDivider(dashed: true),
-        TDivider(dashed: true, child: Text('文字信息'), align: TDividerAlign.left),
-        TDivider(dashed: true, child: Text('文字信息')),
-        TDivider(dashed: true, child: Text('文字信息'), align: TDividerAlign.right),
-      ],
+    return const SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TDivider(dashed: true),
+          TDivider(
+            dashed: true,
+            child: Text('文字信息'),
+            align: TDividerAlign.left,
+          ),
+          TDivider(dashed: true, child: Text('文字信息')),
+          TDivider(
+            dashed: true,
+            child: Text('文字信息'),
+            align: TDividerAlign.right,
+          ),
+        ],
+      ),
     );
   }
 
