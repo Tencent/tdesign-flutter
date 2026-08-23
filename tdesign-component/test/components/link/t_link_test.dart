@@ -1,5 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -158,36 +159,34 @@ void main() {
       ),
     );
 
-    final inkWell = tester.widget<InkWell>(find.byType(InkWell));
-    inkWell.onHover?.call(true);
+    final link = find.byType(InkWell);
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer(location: Offset.zero);
+    await mouse.moveTo(tester.getCenter(link));
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
 
-    inkWell.onHover?.call(false);
+    await mouse.moveTo(Offset.zero);
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
 
-    tester.widget<InkWell>(find.byType(InkWell)).onFocusChange?.call(true);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
 
-    tester.widget<InkWell>(find.byType(InkWell)).onFocusChange?.call(false);
+    FocusManager.instance.primaryFocus?.unfocus();
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
 
-    tester
-        .widget<InkWell>(find.byType(InkWell))
-        .onHighlightChanged
-        ?.call(true);
+    final touch = await tester.startGesture(tester.getCenter(link));
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
 
-    tester
-        .widget<InkWell>(find.byType(InkWell))
-        .onHighlightChanged
-        ?.call(false);
+    await touch.up();
     await tester.pump();
     expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+
+    await mouse.removePointer();
   });
 
   testWidgets('实例参数覆盖组件 Theme 默认值', (tester) async {
