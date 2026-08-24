@@ -8,17 +8,25 @@ class TSearchBarPage extends StatefulWidget {
   const TSearchBarPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TSearchBarPageState();
+  State<TSearchBarPage> createState() => _TSearchBarPageState();
 }
 
 class _TSearchBarPageState extends State<TSearchBarPage> {
-  String? inputText;
-  String? searchText;
-  final TextEditingController inputController = TextEditingController();
+  static const _allResults = <String>[
+    'tdesign-vue',
+    'tdesign-react',
+    'tdesign-miniprogram',
+  ];
+
+  final _resultController = TextEditingController();
+  final _actionController = TextEditingController();
+  var _results = const <String>[];
+  var _showAction = false;
 
   @override
   void dispose() {
-    inputController.dispose();
+    _resultController.dispose();
+    _actionController.dispose();
     super.dispose();
   }
 
@@ -26,73 +34,67 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '用于一组预设数据中的选择。',
+      desc: '用于用户输入搜索信息，并进行页面内容搜索。',
+      backgroundColor: context.tTheme.bgColorPage,
       exampleCodeGroup: 'search',
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
-            ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
+            ExampleItem(desc: '基础搜索框', center: false, builder: _buildBase),
+            ExampleItem(desc: '字数限制', center: false, builder: _buildMaxLength),
+            ExampleItem(
+              desc: '获取焦点后显示取消按钮',
+              center: false,
+              builder: _buildAction,
+            ),
           ],
         ),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
-          ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),
-        ]),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '搜索框形状', center: false, builder: _buildShape),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(
+              desc: '默认状态其他对齐方式',
+              center: false,
+              builder: _buildCenter,
+            ),
+          ],
+        ),
       ],
-      test: [
-        ExampleItem(desc: '外部按钮触发搜索', builder: _buildSearchBarWithAction),
-        ExampleItem(desc: '自定义取消按钮文案', builder: _buildFocusSearchBarWithAction),
-      ],
+      test: const [],
     );
   }
 
   @ExampleCode(group: 'search')
-  Widget _buildDefaultSearchBar(BuildContext context) {
-    return TSearchBar(
-      hintText: '搜索预设文案',
-      onChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
-    );
-  }
-
-  @ExampleCode(group: 'search')
-  Widget _buildFocusSearchBar(BuildContext context) {
-    return const TSearchBar(
-      hintText: '搜索预设文案',
-      needCancel: true,
-      autoFocus: true,
-    );
-  }
-
-  @ExampleCode(group: 'search')
-  Widget _buildSearchBarWithShape(BuildContext context) {
+  Widget _buildBase(BuildContext context) {
     return Column(
       children: [
-        TSearchBar(
-          hintText: '搜索预设文案',
-          onChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
-        ),
+        const _SearchDemoSurface(child: TSearchBar(hintText: '搜索预设文案')),
         const SizedBox(height: 16),
-        Theme(
-          data: Theme.of(context).mergeExtension(
-            const TSearchBarThemeData(variant: TSearchBarVariant.round),
-          ),
-          child: TSearchBar(
-            hintText: '搜索预设文案',
-            onChanged: (String text) {
-              setState(() {
-                inputText = text;
-              });
-            },
+        _SearchDemoSurface(
+          child: Column(
+            children: [
+              TSearchBar(
+                controller: _resultController,
+                hintText: '输入tdesign，有预览结果',
+                onChanged: _filterResults,
+              ),
+              ..._results.map(
+                (result) => TCell(
+                  title: Text(result),
+                  onTap: () {
+                    _resultController.text = result;
+                    _filterResults(result);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -100,80 +102,86 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
   }
 
   @ExampleCode(group: 'search')
-  Widget _buildCenterSearchBar(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        const TSearchBarThemeData(textAlignment: TSearchBarAlignment.center),
-      ),
+  Widget _buildMaxLength(BuildContext context) {
+    return const Column(
+      children: [
+        _SearchDemoSurface(
+          child: TSearchBar(hintText: '最大输入10个字符', maxLength: 10),
+        ),
+        SizedBox(height: 16),
+        _SearchDemoSurface(
+          child: TSearchBar(hintText: '最大输入10个字符，汉字算两个', maxCharacter: 10),
+        ),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'search')
+  Widget _buildAction(BuildContext context) {
+    return _SearchDemoSurface(
       child: TSearchBar(
+        controller: _actionController,
         hintText: '搜索预设文案',
-        onChanged: (String text) {
-          setState(() {
-            inputText = text;
-          });
+        textAlignment: TSearchBarAlignment.center,
+        actionText: _showAction ? '取消' : null,
+        onFocusChanged: (focused) => setState(() => _showAction = focused),
+        onActionPressed: () {
+          _actionController.clear();
+          FocusManager.instance.primaryFocus?.unfocus();
+          setState(() => _showAction = false);
         },
       ),
     );
   }
 
   @ExampleCode(group: 'search')
-  Widget _buildSearchBarWithAction(BuildContext context) {
-    return Column(
+  Widget _buildShape(BuildContext context) {
+    return const Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: TSearchBar(
-                hintText: '搜索预设文案',
-                controller: inputController,
-                onChanged: (String text) {
-                  setState(() {
-                    inputText = text;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 8),
-            TButton(
-              child: const Text('搜索'),
-              onPressed: () {
-                setState(() {
-                  searchText = inputController.text;
-                });
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.only(left: 15),
-          alignment: Alignment.centerLeft,
-          child: TText('搜索框输入的内容：${searchText ?? ''}'),
+        _SearchDemoSurface(child: TSearchBar(hintText: '搜索预设文案')),
+        SizedBox(height: 16),
+        _SearchDemoSurface(
+          child: TSearchBar(
+            hintText: '搜索预设文案',
+            variant: TSearchBarVariant.round,
+          ),
         ),
       ],
     );
   }
 
   @ExampleCode(group: 'search')
-  Widget _buildFocusSearchBarWithAction(BuildContext context) {
-    return TSearchBar(
-      hintText: '搜索预设文案',
-      needCancel: true,
-      cancelText: '关闭',
-      controller: inputController,
-      onCancelPressed: () {
-        showGeneralDialog(
-          context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return TConfirmDialog(
-              content: inputController.text.isNotEmpty
-                  ? '搜索关键词：${inputController.text}'
-                  : '搜索关键词为空',
-            );
-          },
-        );
-      },
+  Widget _buildCenter(BuildContext context) {
+    return const _SearchDemoSurface(
+      child: TSearchBar(
+        hintText: '搜索预设文案',
+        textAlignment: TSearchBarAlignment.center,
+      ),
+    );
+  }
+
+  void _filterResults(String value) {
+    setState(() {
+      _results = value.isEmpty
+          ? const []
+          : _allResults.where((item) => item.contains(value)).toList();
+    });
+  }
+}
+
+class _SearchDemoSurface extends StatelessWidget {
+  const _SearchDemoSurface({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: child,
+      ),
     );
   }
 }

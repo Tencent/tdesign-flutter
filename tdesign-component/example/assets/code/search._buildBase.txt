@@ -1,0 +1,28 @@
+Widget _buildBase(BuildContext context) {
+    return Column(
+      children: [
+        const _SearchDemoSurface(child: TSearchBar(hintText: '搜索预设文案')),
+        const SizedBox(height: 16),
+        _SearchDemoSurface(
+          child: Column(
+            children: [
+              TSearchBar(
+                controller: _resultController,
+                hintText: '输入tdesign，有预览结果',
+                onChanged: _filterResults,
+              ),
+              ..._results.map(
+                (result) => TCell(
+                  title: Text(result),
+                  onTap: () {
+                    _resultController.text = result;
+                    _filterResults(result);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
