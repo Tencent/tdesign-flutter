@@ -69,7 +69,7 @@
 | uploading | 上传中。 |
 | success | 上传成功。 |
 | error | 上传失败。 |
-| retry | 上传失败，可由用户重新上传。 |
+| retryableError | 上传失败且允许重试。 当组件提供重试回调且未禁用时，用户点击该文件会触发重试。 |
 
 
 ### TUploadLayout
