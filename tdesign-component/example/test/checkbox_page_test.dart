@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -7,7 +10,49 @@ import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/t_checkbox_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
+import 'golden_test_utils.dart';
+
 void main() {
+  final originalGoldenComparator = useGoldenDiffTolerance();
+  setUpAll(() async {
+    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
+      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
+    final robotoFile = File(
+      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+    );
+    final robotoFont = FontLoader('Roboto')
+      ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
+    await Future.wait([iconFont.load(), robotoFont.load()]);
+  });
+  tearDownAll(() {
+    goldenFileComparator = originalGoldenComparator;
+  });
+
+  Widget buildPage(ThemeMode mode) {
+    return RepaintBoundary(
+      key: const Key('checkbox-page-golden'),
+      child: ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          darkTheme: TThemeBuilder.dark(TThemeData.defaultData()),
+          themeMode: mode,
+          home: ExamplePageInheritedTheme(
+            model: ExamplePageModel(
+              text: 'Checkbox 多选框',
+              name: 'checkbox',
+              pageBuilder: (_, __) => const TCheckboxPage(),
+            ),
+            child: const TCheckboxPage(),
+          ),
+        ),
+      ),
+    );
+  }
+
   testWidgets('Checkbox Demo follows the official groups', (tester) async {
     await tester.pumpWidget(
       ChangeNotifierProvider(
@@ -54,4 +99,22 @@ void main() {
     expect(foundSpec, isTrue);
     expect(foundAll, isTrue);
   });
+
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('Checkbox Demo ${mode.name} 手机视口视觉快照', (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(buildPage(mode));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      await expectLater(
+        find.byKey(const Key('checkbox-page-golden')),
+        matchesGoldenFile('goldens/checkbox_page_${mode.name}.png'),
+      );
+    });
+  }
 }

@@ -1,5 +1,4 @@
-@ExampleCode(group: 'checkbox')
-  Widget _variants(BuildContext context) {
+Widget _variants(BuildContext context) {
     return Column(
       children: [
         for (final entry in const [

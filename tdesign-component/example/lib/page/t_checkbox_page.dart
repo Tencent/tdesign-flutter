@@ -123,7 +123,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
   }
 
   @ExampleCode(group: 'checkbox')
-  @ExampleCode(group: 'checkbox')
   Widget _disabledCheckbox(BuildContext context) {
     return const Column(
       children: [
@@ -134,7 +133,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
     );
   }
 
-  @ExampleCode(group: 'checkbox')
   @ExampleCode(group: 'checkbox')
   Widget _variants(BuildContext context) {
     return Column(
