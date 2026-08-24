@@ -27,6 +27,7 @@ class _TRadioPageState extends State<TRadioPage> {
   String? _verticalValue = 'a';
   String? _horizontalValue = 'b';
   String? _verticalCardValue = 'a';
+  String? _verticalSpecialCardValue = 'a';
   String? _horizontalCardValue = 'b';
   String? _positionValue = 'left';
 
@@ -132,10 +133,11 @@ class _TRadioPageState extends State<TRadioPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TRadioGroup<String>(
-          value: _verticalCardValue,
+          value: _verticalSpecialCardValue,
           options: _cardOptions,
           cardMode: true,
-          onChanged: (value) => setState(() => _verticalCardValue = value),
+          onChanged: (value) =>
+              setState(() => _verticalSpecialCardValue = value),
         ),
         const SizedBox(height: 24),
         const TText('横向卡片单选框'),
