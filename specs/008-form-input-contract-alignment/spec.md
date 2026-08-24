@@ -89,7 +89,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - `suffix` 存在时不自动插入清除按钮。
 - `showPasswordToggle` 是 TInput 的可选密码能力；初始显隐状态读取 `obscureText`，显隐切换由组件内部维护，眼睛按钮使用 TDesign 图标和固定图标槽。
 - `prefix` / `suffix` 作为内容插槽时，普通图标使用 24dp 图标尺寸和 token 默认图标样式；密码显隐按钮同样使用 24dp 图标槽，不得额外撑高标准 56dp 输入框。Demo 不再在输入框外重复拼接普通图标。
-- `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按小程序规则以 ASCII 字符 1、非 ASCII 字符 2 计数。
+- `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按小程序规则以 Unicode code point 加权计算，ASCII code point 计 1、非 ASCII code point 计 2。
 - `TInputStatus` 提供 `normal`、`success`、`warning`、`error` 四种状态；状态只影响输入壳层和计数/帮助色，已输入文字始终使用正常正文色，且状态不替代 `TFormItem` 的字段错误展示。
 - `borderless` 控制输入壳层是否绘制边框；`TTextarea.bordered` 为小程序语义的正向别名，二者不在同一组件上重复暴露。
 - 非 `borderless` 的单行 `TInput` 默认绘制底部分隔线，匹配小程序 Input；通过 `TInputThemeData.borderRadius` 设置圆角时使用完整边框，用于标签外置等标准输入框场景。

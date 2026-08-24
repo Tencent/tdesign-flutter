@@ -74,7 +74,8 @@ class TTextarea extends StatefulWidget {
     /// 最大字符数。
     this.maxLength,
 
-    /// 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。
+    /// 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1，
+    /// 非 ASCII code point 计 2。
     this.maxCharacter,
 
     /// 是否显示当前字符计数。
@@ -153,7 +154,8 @@ class TTextarea extends StatefulWidget {
   /// 最大字符数。
   final int? maxLength;
 
-  /// 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。
+  /// 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1，
+  /// 非 ASCII code point 计 2。
   final int? maxCharacter;
 
   /// 是否显示当前字符计数。
