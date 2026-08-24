@@ -50,7 +50,7 @@ class TUploadPage extends StatelessWidget {
       id: 'retry',
       name: 'retry.png',
       url: 'https://tdesign.gtimg.com/demo/images/example3.png',
-      status: TUploadFileStatus.retry,
+      status: TUploadFileStatus.retryableError,
     ),
     TUploadFile(
       id: 'failed',
@@ -81,15 +81,14 @@ class TUploadPage extends StatelessWidget {
     return ExamplePage(
       title: tTitle(context),
       exampleCodeGroup: 'upload',
-      desc:
-          '用于相册读取或拉起拍照的图片上传功能。（为避免涉及用户隐私，Upload 组件示例均为禁用态，使用时请自行取消禁用态，以便正常使用上传功能。）',
+      desc: '用于相册读取或拉起拍照的图片上传功能。（为避免涉及用户隐私，示例不会实际拉起系统文件选择器。）',
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
             ExampleItem(desc: '单选上传', builder: _single),
             ExampleItem(desc: '多选上传', builder: _multiple),
-            ExampleItem(desc: '长按图片拖拽排片', builder: _drag),
+            ExampleItem(desc: '图片平铺展示', builder: _tile),
           ],
         ),
         ExampleModule(
@@ -118,13 +117,21 @@ class TUploadPage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'upload')
-  Widget _drag(BuildContext context) {
+  Widget _tile(BuildContext context) {
     return _demo(TUpload(files: _imageFiles, maxFiles: 4), title: '上传图片');
   }
 
   @ExampleCode(group: 'upload')
   Widget _status(BuildContext context) {
-    return _demo(TUpload(files: _statusFiles, maxFiles: 4), title: '上传图片');
+    return _demo(
+      TUpload(
+        files: _statusFiles,
+        maxFiles: 4,
+        onChanged: _ignoreFiles,
+        onRetry: _ignoreFile,
+      ),
+      title: '上传图片',
+    );
   }
 
   @ExampleCode(group: 'upload')
@@ -170,4 +177,8 @@ class TUploadPage extends StatelessWidget {
       ],
     );
   }
+
+  static void _ignoreFiles(List<TUploadFile> files) {}
+
+  static void _ignoreFile(TUploadFile file) {}
 }

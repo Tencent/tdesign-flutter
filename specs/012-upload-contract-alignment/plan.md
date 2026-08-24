@@ -8,7 +8,7 @@
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | `lib/src/components/upload` | 新增列表布局、retry 状态、禁用遮罩 |
+| 组件 | `lib/src/components/upload` | 新增列表布局、retryableError 状态、禁用遮罩 |
 | 测试 | `test/components/upload` | 增加视觉契约回归 |
 | 示例 | `example/lib/page/t_upload_page.dart` | 对齐官方分组和禁用示例 |
 | 文档 | `tool/components.json`、生成资产 | 暴露新增类型并同步代码片段 |
@@ -17,7 +17,7 @@
 
 - 新增可选 `TUpload.layout`，默认 `TUploadLayout.grid`。
 - 新增 `TUploadLayout.list`。
-- 新增 `TUploadFileStatus.retry`。
+- 新增 `TUploadFileStatus.retryableError`。
 - 新增主题可选字段 `disabledMaskColor`。
 
 ## 风险与取舍

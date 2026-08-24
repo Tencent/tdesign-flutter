@@ -47,7 +47,7 @@ void main() {
       foundStatus |= find.text('02 组件状态').evaluate().isNotEmpty;
       foundStyle |= find.text('03 组件风格').evaluate().isNotEmpty;
       foundNotice |= find
-          .textContaining('Upload 组件示例均为禁用态')
+          .textContaining('示例不会实际拉起系统文件选择器')
           .evaluate()
           .isNotEmpty;
       foundList |= find

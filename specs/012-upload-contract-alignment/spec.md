@@ -20,7 +20,7 @@
 ### 涉及
 
 - `TUpload.layout` 使用 `TUploadLayout.grid/list` 选择布局。
-- `TUploadFileStatus.retry` 表达可重试失败；`error` 保持失败状态。
+- `TUploadFileStatus.retryableError` 表达可重试失败；`error` 保持失败状态。
 - 禁用时为已有图片显示主题遮罩；列表布局展示文件名和大小 / 状态辅助信息。
 - Upload Demo 和组件测试。
 
@@ -32,7 +32,7 @@
 
 - `onChanged == null` 表示组件禁用；新增按钮、删除、预览和重试均不可触发。
 - `grid` 保持 80dp 文件项和 token 间距；`list` 使用 Flutter Column/Row 组成文件信息行。
-- `uploading` 显示进度环，`retry` 显示刷新图标和“重新上传”，`error` 显示错误图标和“上传失败”。
+- `uploading` 显示进度环；`retryableError` 在 `onRetry` 可用时显示刷新图标和“重新上传”，否则降级为普通失败视觉；`error` 显示错误图标和“上传失败”。
 - 禁用态图片使用浅色 / 深色对应的禁用遮罩；主题可通过 `disabledMaskColor` 覆盖。
 - 文件列表仍由调用方控制，组件只生成不可变的变化列表并触发回调。
 

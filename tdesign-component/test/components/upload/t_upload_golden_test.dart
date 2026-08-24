@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,8 +10,9 @@ void main() {
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
@@ -20,9 +22,10 @@ void main() {
   });
 
   for (final brightness in Brightness.values) {
-    testWidgets('Upload enabled and disabled ${brightness.name}',
-        (tester) async {
-      tester.view.physicalSize = const Size(320, 180);
+    testWidgets('Upload enabled and disabled ${brightness.name}', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(720, 760);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
 
@@ -30,9 +33,7 @@ void main() {
 
       await expectLater(
         find.byKey(const Key('upload-state-scene')),
-        matchesGoldenFile(
-          'goldens/t_upload_states_${brightness.name}.png',
-        ),
+        matchesGoldenFile('goldens/t_upload_states_${brightness.name}.png'),
       );
     });
   }
@@ -64,12 +65,21 @@ class _UploadStateScene extends StatelessWidget {
               color: theme.colorScheme.surface,
               child: const Padding(
                 padding: EdgeInsets.all(20),
-                child: Row(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _UploadState(label: 'Enabled', enabled: true),
-                    SizedBox(width: 40),
-                    _UploadState(label: 'Disabled', enabled: false),
+                    _UploadState(
+                      label: 'Grid states',
+                      layout: TUploadLayout.grid,
+                    ),
+                    SizedBox(height: 24),
+                    _UploadState(
+                      label: 'List states',
+                      layout: TUploadLayout.list,
+                    ),
+                    SizedBox(height: 24),
+                    _DisabledUploadState(),
                   ],
                 ),
               ),
@@ -82,13 +92,10 @@ class _UploadStateScene extends StatelessWidget {
 }
 
 class _UploadState extends StatelessWidget {
-  const _UploadState({
-    required this.label,
-    required this.enabled,
-  });
+  const _UploadState({required this.label, required this.layout});
 
   final String label;
-  final bool enabled;
+  final TUploadLayout layout;
 
   @override
   Widget build(BuildContext context) {
@@ -98,10 +105,72 @@ class _UploadState extends StatelessWidget {
         TText(label, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 10),
         SizedBox(
+          width: 640,
+          child: TUpload(
+            layout: layout,
+            files: const [
+              TUploadFile(
+                id: 'uploading',
+                name: 'uploading.png',
+                status: TUploadFileStatus.uploading,
+                progress: 0.5,
+              ),
+              TUploadFile(
+                id: 'error',
+                name: 'error.png',
+                status: TUploadFileStatus.error,
+                errorText: 'Upload failed',
+              ),
+              TUploadFile(
+                id: 'retry',
+                name: 'retry.png',
+                status: TUploadFileStatus.retryableError,
+                errorText: 'Retry',
+              ),
+              TUploadFile(
+                id: 'success',
+                name: 'success.png',
+                status: TUploadFileStatus.success,
+                size: 2048,
+              ),
+            ],
+            maxFiles: 4,
+            onChanged: _ignore,
+            onRetry: _ignoreFile,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DisabledUploadState extends StatelessWidget {
+  const _DisabledUploadState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TText(
+          'Disabled existing image',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
           width: 80,
           child: TUpload(
-            files: const [],
-            onChanged: enabled ? _ignore : null,
+            files: [
+              TUploadFile(
+                id: 'disabled',
+                name: 'disabled.png',
+                status: TUploadFileStatus.success,
+                bytes: base64Decode(
+                  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+                ),
+              ),
+            ],
+            onChanged: null,
           ),
         ),
       ],
@@ -110,3 +179,5 @@ class _UploadState extends StatelessWidget {
 }
 
 void _ignore(List<TUploadFile> value) {}
+
+void _ignoreFile(TUploadFile value) {}

@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/basic.dart';
+import '../../theme/resource_delegate.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
@@ -132,6 +133,7 @@ class TUpload extends StatelessWidget {
   }
 
   Widget _buildAdd(BuildContext context, double size, TUploadThemeData? theme) {
+    final resource = TResourceManager.instance.delegate(context);
     final backgroundColor = _enabled
         ? (theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer)
         : (theme?.disabledBackgroundColor ??
@@ -142,7 +144,7 @@ class TUpload extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: _enabled,
-      label: '选择文件',
+      label: resource.uploadSelect,
       child: GestureDetector(
         key: const ValueKey('upload-add'),
         onTap: _enabled ? () => _pickFiles(context) : null,
@@ -273,18 +275,19 @@ class TUpload extends StatelessWidget {
     TUploadThemeData? theme,
   ) {
     final isUploading = file.status == TUploadFileStatus.uploading;
-    final isRetry = file.status == TUploadFileStatus.retry;
+    final isRetryableError = file.status == TUploadFileStatus.retryableError;
+    final canRetry = _enabled && isRetryableError && onRetry != null;
+    final resource = TResourceManager.instance.delegate(context);
     final label = isUploading
         ? file.progress == null
-              ? '上传中'
+              ? resource.uploading
               : '${(file.progress! * 100).round()}%'
-        : file.errorText ?? (isRetry ? '重新上传' : '上传失败');
+        : file.errorText ??
+              (canRetry ? resource.uploadRetry : resource.uploadFailed);
     final foregroundColor = context.tTheme.textColorAnti;
     return GestureDetector(
       key: ValueKey('upload-status-${file.id}'),
-      onTap: _enabled && !isUploading && onRetry != null
-          ? () => onRetry!(file)
-          : null,
+      onTap: canRetry ? () => onRetry!(file) : null,
       child: ColoredBox(
         color: theme?.overlayColor ?? context.tTheme.fontGyColor3,
         child: Column(
@@ -301,7 +304,7 @@ class TUpload extends StatelessWidget {
               )
             else
               Icon(
-                isRetry ? TIcons.refresh : TIcons.close_circle,
+                canRetry ? TIcons.refresh : TIcons.close_circle,
                 size: theme?.statusIconSize ?? 24,
                 color: foregroundColor,
               ),
@@ -325,6 +328,7 @@ class TUpload extends StatelessWidget {
   }
 
   Widget _buildListAdd(BuildContext context, TUploadThemeData? theme) {
+    final resource = TResourceManager.instance.delegate(context);
     final foregroundColor = _enabled
         ? (theme?.foregroundColor ?? context.tTheme.textColorBrand)
         : (theme?.disabledForegroundColor ?? context.tTheme.textDisabledColor);
@@ -335,8 +339,8 @@ class TUpload extends StatelessWidget {
         size: theme?.addIconSize ?? 28,
         color: foregroundColor,
       ),
-      title: '上传文件',
-      subtitle: '支持图片、视频等文件',
+      title: resource.uploadFile,
+      subtitle: resource.uploadFileHint,
       onTap: _enabled ? () => _pickFiles(context) : null,
       key: const ValueKey('upload-add'),
     );
@@ -347,14 +351,12 @@ class TUpload extends StatelessWidget {
     TUploadFile file,
     TUploadThemeData? theme,
   ) {
-    final retryable =
-        file.status == TUploadFileStatus.error ||
-        file.status == TUploadFileStatus.retry;
+    final retryable = file.status == TUploadFileStatus.retryableError;
     return _listRow(
       context,
       leading: _listLeading(context, file, theme),
       title: file.name,
-      subtitle: _listSubtitle(file),
+      subtitle: _listSubtitle(context, file),
       onTap: _enabled && retryable && onRetry != null
           ? () => onRetry!(file)
           : _enabled && onPreview != null
@@ -399,7 +401,14 @@ class TUpload extends StatelessWidget {
         color: context.tTheme.errorNormalColor,
       );
     }
-    if (file.status == TUploadFileStatus.retry) {
+    if (file.status == TUploadFileStatus.retryableError) {
+      if (!_enabled || onRetry == null) {
+        return Icon(
+          TIcons.close_circle,
+          size: 32,
+          color: context.tTheme.errorNormalColor,
+        );
+      }
       return Icon(
         TIcons.refresh,
         size: 32,
@@ -426,19 +435,26 @@ class TUpload extends StatelessWidget {
     );
   }
 
-  String _listSubtitle(TUploadFile file) {
+  String _listSubtitle(BuildContext context, TUploadFile file) {
     if (file.status == TUploadFileStatus.uploading) {
       return file.progress == null
-          ? '上传中'
+          ? TResourceManager.instance.delegate(context).uploading
           : '${(file.progress! * 100).round()}%';
     }
     if (file.status == TUploadFileStatus.error) {
-      return file.errorText ?? '上传失败';
+      return file.errorText ??
+          TResourceManager.instance.delegate(context).uploadFailed;
     }
-    if (file.status == TUploadFileStatus.retry) {
-      return file.errorText ?? '重新上传';
+    if (file.status == TUploadFileStatus.retryableError) {
+      final resource = TResourceManager.instance.delegate(context);
+      return file.errorText ??
+          (_enabled && onRetry != null
+              ? resource.uploadRetry
+              : resource.uploadFailed);
     }
-    return file.size == null ? '待上传' : _formatSize(file.size!);
+    return file.size == null
+        ? TResourceManager.instance.delegate(context).uploadPending
+        : _formatSize(file.size!);
   }
 
   String _formatSize(int size) {

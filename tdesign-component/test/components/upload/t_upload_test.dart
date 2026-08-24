@@ -287,7 +287,7 @@ void main() {
       expect(changed, [second]);
     });
 
-    testWidgets('preview and retry callbacks receive the selected file', (
+    testWidgets('preview and retry callbacks follow file status semantics', (
       tester,
     ) async {
       TUploadFile? previewed;
@@ -298,11 +298,12 @@ void main() {
         status: TUploadFileStatus.error,
         errorText: 'Try again',
       );
+      final retry = file('retry', status: TUploadFileStatus.retryableError);
       await tester.pumpWidget(
         wrap(
           TUpload(
-            files: [ready, failed],
-            maxFiles: 3,
+            files: [ready, failed, retry],
+            maxFiles: 4,
             onPreview: (value) => previewed = value,
             onRetry: (value) => retried = value,
             onChanged: (_) {},
@@ -311,8 +312,10 @@ void main() {
       );
       await tester.tap(find.byKey(const ValueKey('upload-file-ready')));
       await tester.tap(find.byKey(const ValueKey('upload-status-failed')));
+      expect(retried, isNull);
+      await tester.tap(find.byKey(const ValueKey('upload-status-retry')));
       expect(previewed, same(ready));
-      expect(retried, same(failed));
+      expect(retried, same(retry));
     });
 
     testWidgets('max count hides add and canRemove controls remove action', (
@@ -426,7 +429,7 @@ void main() {
             layout: TUploadLayout.list,
             files: [
               file('image'),
-              file('retry', status: TUploadFileStatus.retry),
+              file('retry', status: TUploadFileStatus.retryableError),
             ],
             maxFiles: 3,
             onChanged: (_) {},
@@ -447,6 +450,78 @@ void main() {
       expect(find.text('重新上传'), findsOneWidget);
       expect(find.byIcon(TIcons.refresh), findsOneWidget);
       expect(find.byIcon(TIcons.delete), findsNWidgets(2));
+    });
+
+    testWidgets('list error previews while retry invokes onRetry', (
+      tester,
+    ) async {
+      TUploadFile? previewed;
+      TUploadFile? retried;
+      final error = file('error', status: TUploadFileStatus.error);
+      final retry = file('retry', status: TUploadFileStatus.retryableError);
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            layout: TUploadLayout.list,
+            files: [error, retry],
+            maxFiles: 3,
+            onChanged: (_) {},
+            onPreview: (value) => previewed = value,
+            onRetry: (value) => retried = value,
+          ),
+        ),
+      );
+
+      tester
+          .widget<GestureDetector>(
+            find.byKey(const ValueKey('upload-list-file-error')),
+          )
+          .onTap!();
+      expect(previewed, same(error));
+      expect(retried, isNull);
+
+      tester
+          .widget<GestureDetector>(
+            find.byKey(const ValueKey('upload-list-file-retry')),
+          )
+          .onTap!();
+      expect(retried, same(retry));
+    });
+
+    testWidgets('retryable error without callback falls back to error UI', (
+      tester,
+    ) async {
+      final retryableError = file(
+        'retryable',
+        status: TUploadFileStatus.retryableError,
+        errorText: null,
+      );
+      await tester.pumpWidget(
+        wrap(TUpload(files: [retryableError], onChanged: (_) {})),
+      );
+
+      expect(find.text('上传失败'), findsOneWidget);
+      expect(find.byIcon(TIcons.close_circle), findsOneWidget);
+      expect(
+        tester
+            .widget<GestureDetector>(
+              find.byKey(const ValueKey('upload-status-retryable')),
+            )
+            .onTap,
+        isNull,
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            layout: TUploadLayout.list,
+            files: [retryableError],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+      expect(find.text('上传失败'), findsOneWidget);
+      expect(find.byIcon(TIcons.close_circle), findsOneWidget);
     });
 
     testWidgets('disabled image files use the disabled mask token', (
