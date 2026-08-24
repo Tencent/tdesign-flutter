@@ -332,17 +332,26 @@ class TUpload extends StatelessWidget {
     final foregroundColor = _enabled
         ? (theme?.foregroundColor ?? context.tTheme.textColorBrand)
         : (theme?.disabledForegroundColor ?? context.tTheme.textDisabledColor);
-    return _listRow(
-      context,
-      leading: Icon(
-        TIcons.add,
-        size: theme?.addIconSize ?? 28,
-        color: foregroundColor,
-      ),
-      title: resource.uploadFile,
-      subtitle: resource.uploadFileHint,
+    return Semantics(
+      button: true,
+      enabled: _enabled,
+      excludeSemantics: true,
+      label: resource.uploadSelect,
       onTap: _enabled ? () => _pickFiles(context) : null,
-      key: const ValueKey('upload-add'),
+      child: _listRow(
+        context,
+        leading: Icon(
+          TIcons.add,
+          size: theme?.addIconSize ?? 28,
+          color: foregroundColor,
+        ),
+        title: resource.uploadFile,
+        subtitle: mediaType == TUploadMediaType.video
+            ? resource.uploadVideoHint
+            : resource.uploadImageHint,
+        onTap: _enabled ? () => _pickFiles(context) : null,
+        key: const ValueKey('upload-add'),
+      ),
     );
   }
 
@@ -351,17 +360,12 @@ class TUpload extends StatelessWidget {
     TUploadFile file,
     TUploadThemeData? theme,
   ) {
-    final retryable = file.status == TUploadFileStatus.retryableError;
     return _listRow(
       context,
       leading: _listLeading(context, file, theme),
       title: file.name,
       subtitle: _listSubtitle(context, file),
-      onTap: _enabled && retryable && onRetry != null
-          ? () => onRetry!(file)
-          : _enabled && onPreview != null
-          ? () => onPreview!(file)
-          : null,
+      onTap: _listFileTap(file),
       key: ValueKey('upload-list-file-${file.id}'),
       trailing: _enabled && file.canRemove
           ? GestureDetector(
@@ -377,6 +381,21 @@ class TUpload extends StatelessWidget {
             )
           : null,
     );
+  }
+
+  VoidCallback? _listFileTap(TUploadFile file) {
+    if (!_enabled) {
+      return null;
+    }
+    if (file.status == TUploadFileStatus.retryableError) {
+      return onRetry == null ? null : () => onRetry!(file);
+    }
+    if ((file.status == TUploadFileStatus.ready ||
+            file.status == TUploadFileStatus.success) &&
+        onPreview != null) {
+      return () => onPreview!(file);
+    }
+    return null;
   }
 
   Widget _listLeading(
@@ -452,9 +471,13 @@ class TUpload extends StatelessWidget {
               ? resource.uploadRetry
               : resource.uploadFailed);
     }
-    return file.size == null
-        ? TResourceManager.instance.delegate(context).uploadPending
-        : _formatSize(file.size!);
+    if (file.size != null) {
+      return _formatSize(file.size!);
+    }
+    final resource = TResourceManager.instance.delegate(context);
+    return file.status == TUploadFileStatus.success
+        ? resource.uploadSuccess
+        : resource.uploadPending;
   }
 
   String _formatSize(int size) {

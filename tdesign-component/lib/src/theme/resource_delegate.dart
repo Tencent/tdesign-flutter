@@ -76,6 +76,15 @@ abstract class TResourceDelegate {
   /// [TUpload] 选择文件入口说明。
   String get uploadFileHint => '支持图片、视频等文件';
 
+  /// [TUpload] 选择图片入口说明。
+  String get uploadImageHint => '支持图片文件';
+
+  /// [TUpload] 选择视频入口说明。
+  String get uploadVideoHint => '支持视频文件';
+
+  /// [TUpload] 上传成功。
+  String get uploadSuccess => '上传成功';
+
   /// [TSwitch]的打开状态文案
   String get open;
 

@@ -33,6 +33,8 @@
 - `onChanged == null` 表示组件禁用；新增按钮、删除、预览和重试均不可触发。
 - `grid` 保持 80dp 文件项和 token 间距；`list` 使用 Flutter Column/Row 组成文件信息行。
 - `uploading` 显示进度环；`retryableError` 在 `onRetry` 可用时显示刷新图标和“重新上传”，否则降级为普通失败视觉；`error` 显示错误图标和“上传失败”。
+- 列表布局仅允许 `ready` / `success` 文件触发预览；`retryableError` 仅在 `onRetry` 可用时触发重试，`uploading` / `error` 及无重试回调的 `retryableError` 不回退触发预览。
+- 列表新增入口提供 button 无障碍语义，并按 `mediaType` 展示图片或视频提示；`success` 文件缺少大小时显示“上传成功”，不显示“待上传”。
 - 禁用态图片使用浅色 / 深色对应的禁用遮罩；主题可通过 `disabledMaskColor` 覆盖。
 - 文件列表仍由调用方控制，组件只生成不可变的变化列表并触发回调。
 

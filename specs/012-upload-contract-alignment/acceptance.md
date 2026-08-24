@@ -17,6 +17,8 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例资产 |
 | `node scripts/check-flutter-component-contracts.mjs` | 通过 | 56 个站点路由 |
 
+覆盖列表入口 button semantics、图片/视频提示、失败态不回退预览，以及成功态无大小文案。
+
 ## 人工验收
 
 - [ ] 对照小程序 Upload 三组 Demo 截图检查布局、间距和状态
