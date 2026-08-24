@@ -82,8 +82,7 @@ export 'src/components/input/t_input_theme_data.dart' show TInputThemeData;
 export 'src/components/input/t_input_types.dart';
 export 'src/components/link/t_link.dart';
 export 'src/components/link/t_link_theme_data.dart' show TLinkThemeData;
-export 'src/components/link/t_link_types.dart'
-    show TLinkColorScheme, TLinkSize, TLinkVariant;
+export 'src/components/link/t_link_types.dart' show TLinkColorScheme, TLinkSize;
 export 'src/components/loading/t_loading.dart';
 export 'src/components/loading/t_loading_controller.dart';
 export 'src/components/loading/t_loading_theme_data.dart'

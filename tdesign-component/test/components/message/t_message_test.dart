@@ -81,6 +81,10 @@ void main() {
           ),
         ),
       );
+      expect(
+        DefaultTextStyle.of(tester.element(find.text('详情'))).style.color,
+        Colors.red,
+      );
       await tester.tap(find.text('详情'));
       expect(pressed, isTrue);
     });

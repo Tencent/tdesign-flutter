@@ -1,21 +1,18 @@
-Widget _horizontalTextDivider(BuildContext context) {
+Widget _buildDashedDividers(BuildContext context) {
     return const SizedBox(
-      key: Key('divider-text-group'),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          TDivider(dashed: true),
           TDivider(
+            dashed: true,
             child: Text('文字信息'),
             align: TDividerAlign.left,
           ),
-          SizedBox(height: 20),
+          TDivider(dashed: true, child: Text('文字信息')),
           TDivider(
-            child: Text('文字信息'),
-            align: TDividerAlign.center,
-          ),
-          SizedBox(height: 20),
-          TDivider(
+            dashed: true,
             child: Text('文字信息'),
             align: TDividerAlign.right,
           ),

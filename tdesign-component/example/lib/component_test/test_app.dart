@@ -13,17 +13,20 @@ void main() async {
   var themeData =
       TThemeData.fromJson('greenLight', jsonString) ?? TThemeData.defaultData();
   await TFontLoader.load(
-      name: 'test1',
-      fontFamilyUrl:
-          'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf');
+    name: 'test1',
+    fontFamilyUrl:
+        'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
+  );
 
-  runApp(MaterialApp(
-    home: TTextConfiguration(
-      globalFontFamily: FontFamily(
-        fontFamily: 'test1',
-      ),
-      child: Theme(
-        data: ThemeData(extensions: [themeData]),
+  runApp(
+    MaterialApp(
+      home: Theme(
+        data: ThemeData(
+          extensions: [
+            themeData,
+            const TTextThemeData(textStyle: TextStyle(fontFamily: 'test1')),
+          ],
+        ),
         child: Builder(
           builder: (context) {
             ScreenUtil.init(context);
@@ -38,7 +41,7 @@ void main() async {
         ),
       ),
     ),
-  ));
+  );
 }
 
 Padding body(BuildContext context) {
@@ -54,25 +57,11 @@ Padding body(BuildContext context) {
             TLoadingController.dismiss();
           },
         ),
-        // 先显示再加载
         TText(
           '测试文案',
           textColor: context.tTheme.brandNormalColor,
-          fontFamilyUrl:
-              'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
-          fontFamily: FontFamily(fontFamily: 'test'),
+          fontFamily: FontFamily(fontFamily: 'test1'),
         ),
-        //  // 先加载再显示
-        // child: FutureBuilder(
-        //     future:TFontLoader.load(name: 'test1', fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf'),
-        //   initialData: false,
-        //   builder: (_,data)=>TText(
-        //     (data.data ?? false) ? '测试文案' : '',
-        //     textColor: context.tTheme.brandNormalColor,
-        //     fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
-        //     fontFamily: FontFamily(fontFamily: 'test1'),
-        //   ),
-        // ),
         const TFormItem(
           label: '标签文字',
           child: TInput(hintText: '请输入文字'),
@@ -108,14 +97,9 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
       titleMargin: 0,
       titleWidget: Theme(
         data: Theme.of(context).mergeExtension(
-          const TSearchBarThemeData(
-            variant: TSearchBarVariant.round,
-            padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
-            autoHeight: true,
-          ),
+          const TSearchBarThemeData(variant: TSearchBarVariant.round),
         ),
         child: TSearchBar(
-          needCancel: false,
           hintText: '搜索预设文案',
           onChanged: (String text) {
             print('input：$text');

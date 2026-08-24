@@ -487,13 +487,13 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         children: [
           TText(
             widget.title,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: context.tTheme.textColorPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(top: 4),
+            margin: const EdgeInsets.only(top: 8),
             child: TText(
               widget.desc,
               font: context.tTheme.fontBodyMedium,
@@ -511,9 +511,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
       child: TText(
         '${index < 10 ? "0$index" : index} ${data.title}',
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
           color: context.tTheme.textColorPrimary,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
