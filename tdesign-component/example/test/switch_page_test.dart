@@ -1,17 +1,63 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/page/t_switch_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
+import 'golden_test_utils.dart';
+
 void main() {
+  final originalGoldenComparator = useGoldenDiffTolerance();
+  setUpAll(() async {
+    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
+      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
+    final robotoFile = File(
+      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+    );
+    final robotoFont = FontLoader('Roboto')
+      ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
+    await Future.wait([iconFont.load(), robotoFont.load()]);
+  });
+  tearDownAll(() {
+    goldenFileComparator = originalGoldenComparator;
+  });
+
   Widget buildPage() {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
       child: MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()),
         home: const TSwitchPage(),
+      ),
+    );
+  }
+
+  Widget buildGoldenPage(ThemeMode mode) {
+    return RepaintBoundary(
+      key: const Key('switch-page-golden'),
+      child: ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          darkTheme: TThemeBuilder.dark(TThemeData.defaultData()),
+          themeMode: mode,
+          home: ExamplePageInheritedTheme(
+            model: ExamplePageModel(
+              text: 'Switch 开关',
+              name: 'switch',
+              pageBuilder: (_, __) => const TSwitchPage(),
+            ),
+            child: const TSwitchPage(),
+          ),
+        ),
       ),
     );
   }
@@ -97,4 +143,22 @@ void main() {
     expect(loadingValues, containsAll(const [false, true]));
     expect(disabledValues, containsAll(const [false, true]));
   });
+
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('Switch Demo ${mode.name} 手机视口视觉快照', (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(buildGoldenPage(mode));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      await expectLater(
+        find.byKey(const Key('switch-page-golden')),
+        matchesGoldenFile('goldens/switch_page_${mode.name}.png'),
+      );
+    });
+  }
 }
