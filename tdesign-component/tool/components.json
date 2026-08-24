@@ -345,12 +345,15 @@
     {
       "slug": "search",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/search/t_search_bar.dart"
+        "type": "folder",
+        "path": "lib/src/components/search"
       },
       "api": {
         "names": [
-          "TSearchBar"
+          "TSearchBar",
+          "TSearchBarThemeData",
+          "TSearchBarVariant",
+          "TSearchBarAlignment"
         ],
         "getComments": false
       }
