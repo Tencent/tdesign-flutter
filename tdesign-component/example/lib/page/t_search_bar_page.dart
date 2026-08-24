@@ -16,11 +16,16 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     'tdesign-vue',
     'tdesign-react',
     'tdesign-miniprogram',
+    'tdesign-angular',
+    'tdesign-mobile-vue',
+    'tdesign-mobile-react',
   ];
 
   final _resultController = TextEditingController();
   final _actionController = TextEditingController();
   var _results = const <String>[];
+  var _resultFocused = false;
+  var _resultSelected = false;
   var _showAction = false;
 
   @override
@@ -84,14 +89,12 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
                 controller: _resultController,
                 hintText: '输入tdesign，有预览结果',
                 onChanged: _filterResults,
+                onFocusChanged: _handleResultFocusChanged,
               ),
               ..._results.map(
                 (result) => TCell(
-                  title: Text(result),
-                  onTap: () {
-                    _resultController.text = result;
-                    _filterResults(result);
-                  },
+                  title: _highlightResult(result),
+                  onTap: () => _selectResult(result),
                 ),
               ),
             ],
@@ -162,10 +165,51 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
 
   void _filterResults(String value) {
     setState(() {
-      _results = value.isEmpty
-          ? const []
-          : _allResults.where((item) => item.contains(value)).toList();
+      _resultSelected = false;
+      _results = _resultFocused
+          ? _allResults.where((item) => item.contains(value)).toList()
+          : const [];
     });
+  }
+
+  void _handleResultFocusChanged(bool focused) {
+    setState(() {
+      _resultFocused = focused;
+      _results = focused && !_resultSelected
+          ? _allResults
+                .where((item) => item.contains(_resultController.text))
+                .toList()
+          : const [];
+    });
+  }
+
+  void _selectResult(String result) {
+    setState(() {
+      _resultController.text = result;
+      _resultSelected = true;
+      _results = const [];
+    });
+  }
+
+  Widget _highlightResult(String result) {
+    final query = _resultController.text;
+    final start = result.indexOf(query);
+    if (query.isEmpty || start < 0) {
+      return Text(result);
+    }
+    final end = start + query.length;
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: result.substring(0, start)),
+          TextSpan(
+            text: result.substring(start, end),
+            style: TextStyle(color: context.tTheme.brandNormalColor),
+          ),
+          TextSpan(text: result.substring(end)),
+        ],
+      ),
+    );
   }
 }
 

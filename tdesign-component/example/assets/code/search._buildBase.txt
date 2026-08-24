@@ -10,14 +10,12 @@ Widget _buildBase(BuildContext context) {
                 controller: _resultController,
                 hintText: '输入tdesign，有预览结果',
                 onChanged: _filterResults,
+                onFocusChanged: _handleResultFocusChanged,
               ),
               ..._results.map(
                 (result) => TCell(
-                  title: Text(result),
-                  onTap: () {
-                    _resultController.text = result;
-                    _filterResults(result);
-                  },
+                  title: _highlightResult(result),
+                  onTap: () => _selectResult(result),
                 ),
               ),
             ],

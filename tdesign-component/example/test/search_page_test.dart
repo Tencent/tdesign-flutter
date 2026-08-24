@@ -79,11 +79,41 @@ void main() {
           widget is TextField &&
           widget.decoration?.hintText == '输入tdesign，有预览结果',
     );
-    await tester.enterText(resultField, 'miniprogram');
+    await tester.tap(resultField);
     await tester.pump();
 
-    expect(find.text('tdesign-miniprogram'), findsOneWidget);
+    for (final result in [
+      'tdesign-vue',
+      'tdesign-react',
+      'tdesign-miniprogram',
+      'tdesign-angular',
+      'tdesign-mobile-vue',
+      'tdesign-mobile-react',
+    ]) {
+      expect(find.text(result), findsOneWidget);
+    }
+
+    await tester.enterText(resultField, 'mobile');
+    await tester.pump();
+
+    expect(find.text('tdesign-mobile-vue'), findsOneWidget);
+    expect(find.text('tdesign-mobile-react'), findsOneWidget);
     expect(find.text('tdesign-vue'), findsNothing);
+    final highlighted = tester
+        .widgetList<Text>(find.byType(Text))
+        .where((text) => text.textSpan?.toPlainText() == 'tdesign-mobile-vue')
+        .single;
+    final spans = (highlighted.textSpan! as TextSpan).children!;
+    expect((spans[1] as TextSpan).text, 'mobile');
+    expect(
+      (spans[1] as TextSpan).style?.color,
+      TThemeData.defaultData().brandNormalColor,
+    );
+
+    await tester.tap(find.text('tdesign-mobile-vue'));
+    await tester.pump();
+    expect(fieldText(resultField, tester), 'tdesign-mobile-vue');
+    expect(find.text('tdesign-mobile-react'), findsNothing);
   });
 
   testWidgets('手机尺寸浅色 Search Demo 快照', (tester) async {
@@ -116,3 +146,6 @@ void main() {
     );
   });
 }
+
+String fieldText(Finder finder, WidgetTester tester) =>
+    tester.widget<TextField>(finder).controller!.text;
