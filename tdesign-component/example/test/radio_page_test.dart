@@ -107,6 +107,16 @@ void main() {
         .map((element) => element.widget as TRadioGroup<String>)
         .toList();
     expect(verticalCardGroups, hasLength(2));
+    expect(verticalCardGroups.first.itemBuilder, isNull);
+    expect(verticalCardGroups.last.itemBuilder, isNotNull);
+    expect(
+      verticalCardGroups.first.options.every((item) => item.subTitle == null),
+      isTrue,
+    );
+    expect(
+      verticalCardGroups.last.options.every((item) => item.subTitle == '描述信息'),
+      isTrue,
+    );
 
     verticalCardGroups.first.onChanged?.call('b');
     await tester.pump();

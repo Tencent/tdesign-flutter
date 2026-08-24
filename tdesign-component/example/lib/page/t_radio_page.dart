@@ -23,6 +23,11 @@ class _TRadioPageState extends State<TRadioPage> {
     TRadioOption(value: 'b', label: '单选'),
     TRadioOption(value: 'c', label: '单选标题多行单选标题多行单选标题多行'),
   ];
+  static const _specialCardOptions = [
+    TRadioOption(value: 'a', label: '单选', subTitle: '描述信息'),
+    TRadioOption(value: 'b', label: '单选', subTitle: '描述信息'),
+    TRadioOption(value: 'c', label: '单选', subTitle: '描述信息'),
+  ];
 
   String? _verticalValue = 'a';
   String? _horizontalValue = 'b';
@@ -134,8 +139,9 @@ class _TRadioPageState extends State<TRadioPage> {
       children: [
         TRadioGroup<String>(
           value: _verticalSpecialCardValue,
-          options: _cardOptions,
+          options: _specialCardOptions,
           cardMode: true,
+          itemBuilder: _buildSpecialCardItem,
           onChanged: (value) =>
               setState(() => _verticalSpecialCardValue = value),
         ),
@@ -143,13 +149,59 @@ class _TRadioPageState extends State<TRadioPage> {
         const TText('横向卡片单选框'),
         TRadioGroup<String>(
           value: _horizontalCardValue,
-          options: _cardOptions,
+          options: _specialCardOptions,
           cardMode: true,
           direction: Axis.horizontal,
           columns: 2,
+          itemBuilder: _buildSpecialCardItem,
           onChanged: (value) => setState(() => _horizontalCardValue = value),
         ),
       ],
+    );
+  }
+
+  Widget _buildSpecialCardItem(
+    BuildContext context,
+    TRadioOption<String> option,
+    bool selected,
+    bool disabled,
+  ) {
+    final theme = context.tTheme;
+    return Container(
+      constraints: const BoxConstraints(minHeight: 82),
+      padding: EdgeInsets.symmetric(
+        horizontal: theme.spacer16,
+        vertical: theme.spacer12,
+      ),
+      decoration: BoxDecoration(
+        color: selected ? theme.brandColor1 : theme.grayColor1,
+        border: Border.all(
+          color: selected ? theme.brandNormalColor : theme.componentBorderColor,
+        ),
+        borderRadius: BorderRadius.circular(theme.radiusDefault),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TText(option.label),
+                if (option.subTitle != null) ...[
+                  SizedBox(height: theme.spacer4),
+                  TText(
+                    option.subTitle!,
+                    style: TextStyle(color: theme.textColorSecondary),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (selected)
+            Icon(Icons.check_circle, color: theme.brandNormalColor, size: 24),
+        ],
+      ),
     );
   }
 }

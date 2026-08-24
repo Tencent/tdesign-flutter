@@ -4,8 +4,9 @@ Widget _specialRadios(BuildContext context) {
       children: [
         TRadioGroup<String>(
           value: _verticalSpecialCardValue,
-          options: _cardOptions,
+          options: _specialCardOptions,
           cardMode: true,
+          itemBuilder: _buildSpecialCardItem,
           onChanged: (value) =>
               setState(() => _verticalSpecialCardValue = value),
         ),
@@ -13,10 +14,11 @@ Widget _specialRadios(BuildContext context) {
         const TText('横向卡片单选框'),
         TRadioGroup<String>(
           value: _horizontalCardValue,
-          options: _cardOptions,
+          options: _specialCardOptions,
           cardMode: true,
           direction: Axis.horizontal,
           columns: 2,
+          itemBuilder: _buildSpecialCardItem,
           onChanged: (value) => setState(() => _horizontalCardValue = value),
         ),
       ],
