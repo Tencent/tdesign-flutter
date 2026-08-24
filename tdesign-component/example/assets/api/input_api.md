@@ -26,7 +26,7 @@
 | maxLines | int? | - | 最大行数。 |
 | minLines | int? | - | 最小行数。 |
 | maxLength | int? | - | 最大字符数，使用 Flutter grapheme 计数语义。 |
-| maxCharacter | int? | - | 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。 与 `maxLength` 二选一；用于对齐小程序 `maxcharacter`。 |
+| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 与 `maxLength` 二选一；用于对齐小程序 `maxcharacter`。 |
 | indicator | bool | false | 是否显示当前字符计数。 主要用于 `TInput.multiline` 对齐小程序 Textarea 的 `indicator`。未配置长度限制时不会显示。 |
 | autofocus | bool | false | 是否自动聚焦。 |
 | focusNode | FocusNode? | - | 焦点节点。 |
@@ -55,7 +55,7 @@
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | inputType | TextInputType | TextInputType.text | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxCharacter | int? | - | 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。 与 `maxLength` 二选一；用于对齐小程序 `maxcharacter`。 |
+| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 与 `maxLength` 二选一；用于对齐小程序 `maxcharacter`。 |
 | maxLength | int? | - | 最大字符数，使用 Flutter grapheme 计数语义。 |
 | maxLines | int? | 1 | 最大行数。 |
 | minLines | int? | - | 最小行数。 |

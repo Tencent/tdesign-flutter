@@ -23,7 +23,7 @@ Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，`lab
 | inputType | TextInputType | TextInputType.multiline | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 输入框内部标题。 表单中的字段标签请使用 `TFormItem.label`，避免与表单必填、校验语义重复。 |
-| maxCharacter | int? | - | 最大字符数，按 ASCII 字符 1、非 ASCII 字符 2 计数。 |
+| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 |
 | maxLength | int? | - | 最大字符数。 |
 | maxLines | int? | - | 最大行数；null 表示不限制。 |
 | minLines | int? | - | 最小行数；未传时读取 Theme 默认值。 |
