@@ -3,130 +3,141 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/link/t_link_resolve.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// 覆盖 [TLinkResolve] 的全部静态解析方法与颜色映射分支。
 void main() {
   Widget wrap(Widget child) => MaterialApp(
-        theme: ThemeData(extensions: [TThemeData.defaultData()]),
-        home: Scaffold(body: child),
-      );
+    theme: TThemeBuilder.light(TThemeData.defaultData()),
+    home: Scaffold(body: child),
+  );
 
-  // ============================================================
-  // 无需 context 的纯解析方法
-  // ============================================================
-  group('TLinkResolve 字号/图标/间距解析', () {
-    test('resolveFontSize 各 size 默认值', () {
-      expect(
-          TLinkResolve.resolveFontSize(size: TLinkSize.small, theme: null), 12);
-      expect(TLinkResolve.resolveFontSize(size: TLinkSize.medium, theme: null),
-          14);
-      expect(
-          TLinkResolve.resolveFontSize(size: TLinkSize.large, theme: null), 16);
-    });
+  testWidgets('size 解析使用完整字体 Token', (tester) async {
+    await tester.pumpWidget(wrap(const SizedBox()));
+    final context = tester.element(find.byType(SizedBox));
 
-    test('resolveFontSize 优先级：instance > theme > 默认', () {
-      expect(
-          TLinkResolve.resolveFontSize(
-              size: TLinkSize.medium, theme: null, instanceFontSize: 20),
-          20);
-      expect(
-          TLinkResolve.resolveFontSize(
-              size: TLinkSize.medium,
-              theme: const TLinkThemeData(fontSize: 18)),
-          18);
-    });
+    final small = TLinkResolve.resolveTextStyle(
+      context: context,
+      size: TLinkSize.small,
+      theme: null,
+      color: Colors.black,
+    );
+    final medium = TLinkResolve.resolveTextStyle(
+      context: context,
+      size: TLinkSize.medium,
+      theme: null,
+      color: Colors.black,
+    );
+    final large = TLinkResolve.resolveTextStyle(
+      context: context,
+      size: TLinkSize.large,
+      theme: null,
+      color: Colors.black,
+    );
 
-    test('resolveIconSize 各 size 默认值与 theme 优先级', () {
-      expect(
-          TLinkResolve.resolveIconSize(size: TLinkSize.small, theme: null), 14);
-      expect(TLinkResolve.resolveIconSize(size: TLinkSize.medium, theme: null),
-          16);
-      expect(
-          TLinkResolve.resolveIconSize(size: TLinkSize.large, theme: null), 18);
-      expect(
-          TLinkResolve.resolveIconSize(
-              size: TLinkSize.medium,
-              theme: const TLinkThemeData(iconSize: 22)),
-          22);
-    });
-
-    test('resolveGap 各 size 默认值与 theme 优先级', () {
-      final small = TLinkResolve.resolveGap(size: TLinkSize.small, theme: null);
-      expect(small.$1, 6.05);
-      expect(small.$2, 6.63);
-      final medium =
-          TLinkResolve.resolveGap(size: TLinkSize.medium, theme: null);
-      expect(medium.$1, 6.34);
-      expect(medium.$2, 7);
-      final large = TLinkResolve.resolveGap(size: TLinkSize.large, theme: null);
-      expect(large.$1, 8);
-      expect(large.$2, 8);
-      final themed = TLinkResolve.resolveGap(
-        size: TLinkSize.medium,
-        theme: const TLinkThemeData(leftGapWithIcon: 3, rightGapWithIcon: 4),
-      );
-      expect(themed.$1, 3);
-      expect(themed.$2, 4);
-    });
+    expect((small.fontSize, small.height), (12, 20 / 12));
+    expect((medium.fontSize, medium.height), (14, 22 / 14));
+    expect((large.fontSize, large.height), (16, 24 / 16));
   });
 
-  // ============================================================
-  // 需要 context 的颜色解析（覆盖正常/禁用 × 各 colorScheme）
-  // ============================================================
-  group('TLinkResolve 颜色解析', () {
-    Future<BuildContext> _context(WidgetTester tester) async {
-      await tester.pumpWidget(wrap(const SizedBox()));
-      return tester.element(find.byType(SizedBox));
+  testWidgets('Theme 只覆盖显式 TextStyle 字段', (tester) async {
+    await tester.pumpWidget(wrap(const SizedBox()));
+    final context = tester.element(find.byType(SizedBox));
+    final style = TLinkResolve.resolveTextStyle(
+      context: context,
+      size: TLinkSize.medium,
+      theme: const TLinkThemeData(
+        textStyle: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      color: Colors.red,
+    );
+
+    expect(style.fontSize, 14);
+    expect(style.height, 22 / 14);
+    expect(style.fontWeight, FontWeight.w700);
+    expect(style.color, Colors.red);
+  });
+
+  testWidgets('图标尺寸与间距对齐小程序', (tester) async {
+    await tester.pumpWidget(wrap(const SizedBox()));
+    final context = tester.element(find.byType(SizedBox));
+
+    expect(
+      TLinkResolve.resolveIconSize(size: TLinkSize.small, theme: null),
+      14,
+    );
+    expect(
+      TLinkResolve.resolveIconSize(size: TLinkSize.medium, theme: null),
+      16,
+    );
+    expect(
+      TLinkResolve.resolveIconSize(size: TLinkSize.large, theme: null),
+      18,
+    );
+    expect(TLinkResolve.resolveIconGap(context: context, theme: null), 4);
+    expect(
+      TLinkResolve.resolveIconGap(
+        context: context,
+        theme: const TLinkThemeData(iconGap: 10),
+      ),
+      10,
+    );
+  });
+
+  testWidgets('normal / active / disabled 使用对应语义 Token', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(wrap(const SizedBox()));
+    final context = tester.element(find.byType(SizedBox));
+
+    expect(
+      TLinkResolve.resolveColor(
+        context: context,
+        colorScheme: TLinkColorScheme.defaultTheme,
+        theme: null,
+        isDisabled: false,
+        isActive: false,
+      ),
+      token.textColorPrimary,
+    );
+    expect(
+      TLinkResolve.resolveColor(
+        context: context,
+        colorScheme: TLinkColorScheme.defaultTheme,
+        theme: null,
+        isDisabled: false,
+        isActive: true,
+      ),
+      token.brandClickColor,
+    );
+    expect(
+      TLinkResolve.resolveColor(
+        context: context,
+        colorScheme: TLinkColorScheme.primary,
+        theme: null,
+        isDisabled: true,
+        isActive: false,
+      ),
+      token.brandDisabledColor,
+    );
+  });
+
+  testWidgets('所有语义颜色方案均覆盖三种状态', (tester) async {
+    await tester.pumpWidget(wrap(const SizedBox()));
+    final context = tester.element(find.byType(SizedBox));
+    for (final scheme in TLinkColorScheme.values) {
+      for (final state in const [
+        (false, false),
+        (false, true),
+        (true, false),
+      ]) {
+        expect(
+          TLinkResolve.resolveColor(
+            context: context,
+            colorScheme: scheme,
+            theme: null,
+            isDisabled: state.$1,
+            isActive: state.$2,
+          ),
+          isA<Color>(),
+        );
+      }
     }
-
-    testWidgets('resolveColor 正常态覆盖全部 colorScheme', (tester) async {
-      final context = await _context(tester);
-      for (final scheme in TLinkColorScheme.values) {
-        final color = TLinkResolve.resolveColor(
-          context: context,
-          colorScheme: scheme,
-          theme: null,
-          isDisabled: false,
-        );
-        expect(color, isA<Color>());
-      }
-    });
-
-    testWidgets('resolveColor 禁用态覆盖全部 colorScheme', (tester) async {
-      final context = await _context(tester);
-      for (final scheme in TLinkColorScheme.values) {
-        final color = TLinkResolve.resolveColor(
-          context: context,
-          colorScheme: scheme,
-          theme: null,
-          isDisabled: true,
-        );
-        expect(color, isA<Color>());
-      }
-    });
-
-    testWidgets('resolveColor 优先级：instance > theme > scheme', (tester) async {
-      final context = await _context(tester);
-      // instance 优先
-      expect(
-        TLinkResolve.resolveColor(
-          context: context,
-          colorScheme: TLinkColorScheme.primary,
-          theme: const TLinkThemeData(color: Colors.green),
-          isDisabled: false,
-          instanceColor: Colors.purple,
-        ),
-        Colors.purple,
-      );
-      // theme 次之
-      expect(
-        TLinkResolve.resolveColor(
-          context: context,
-          colorScheme: TLinkColorScheme.danger,
-          theme: const TLinkThemeData(color: Colors.green),
-          isDisabled: false,
-        ),
-        Colors.green,
-      );
-    });
   });
 }

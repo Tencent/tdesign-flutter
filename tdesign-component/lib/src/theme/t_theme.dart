@@ -674,13 +674,8 @@ class TMaterialThemeBuilder {
     return const TIconThemeData();
   }
 
-  TDividerThemeData _dividerTheme(TThemeData token) {
-    return TDividerThemeData(
-      color: token.componentStrokeColor,
-      textStyle: _textStyle(
-        token.fontBodyMedium,
-      )?.copyWith(color: token.textColorSecondary),
-    );
+  TDividerThemeData _dividerTheme(TThemeData _) {
+    return const TDividerThemeData();
   }
 
   TLinkThemeData _linkTheme(TThemeData _) {

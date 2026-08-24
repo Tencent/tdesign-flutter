@@ -54,12 +54,10 @@ void main() {
                           align: TDividerAlign.left,
                           child: Text('Left'),
                         ),
-                        SizedBox(height: 20),
                         TDivider(
                           align: TDividerAlign.center,
                           child: Text('Center'),
                         ),
-                        SizedBox(height: 20),
                         TDivider(
                           align: TDividerAlign.right,
                           child: Text('Right'),

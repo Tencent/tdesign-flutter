@@ -1,170 +1,106 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_link_theme_data.dart';
 import 't_link_types.dart';
 
-/// Link 样式解析器
-///
-/// 优先级链：构造器参数 > TLinkThemeData > 显式 Material/ColorScheme
-/// > Token 默认值
-/// 这是唯一的样式 merge 入口，build 内禁止内联颜色/尺寸计算。
+/// Link 样式的唯一解析入口。
 class TLinkResolve {
   TLinkResolve._(); // coverage:ignore-line
 
-  /// 解析链接文本颜色
-  ///
-  /// 优先级：构造器 color > Theme.color > colorScheme × disabled 映射
+  /// 解析 normal / active / disabled 链接颜色。
   static Color resolveColor({
     required BuildContext context,
-    required TLinkColorScheme? colorScheme,
+    required TLinkColorScheme colorScheme,
     required TLinkThemeData? theme,
     required bool isDisabled,
-    Color? instanceColor,
+    required bool isActive,
   }) {
-    // L1：构造器参数
-    if (instanceColor != null) {
-      return instanceColor;
-    }
-    // L2：Theme
-    final themeColor = theme?.color;
-    if (themeColor != null) {
-      return themeColor;
-    }
-    // L3：颜色映射
-    final tTheme = context.tTheme;
-    final materialScheme = Theme.of(context).tExplicitColorScheme;
-    final scheme = colorScheme ?? TLinkColorScheme.primary;
+    final token = context.tTheme;
+    final material = Theme.of(context).tExplicitColorScheme;
 
     if (isDisabled) {
-      return _disabledColor(scheme, tTheme, materialScheme);
+      return switch (colorScheme) {
+        TLinkColorScheme.primary => token.brandDisabledColor,
+        TLinkColorScheme.defaultTheme => token.textDisabledColor,
+        TLinkColorScheme.danger => token.errorDisabledColor,
+        TLinkColorScheme.warning => token.warningDisabledColor,
+        TLinkColorScheme.success => token.successDisabledColor,
+      };
     }
-    return _normalColor(scheme, tTheme, materialScheme);
+
+    if (isActive) {
+      return switch (colorScheme) {
+        TLinkColorScheme.primary ||
+        TLinkColorScheme.defaultTheme => token.brandClickColor,
+        TLinkColorScheme.danger => token.errorClickColor,
+        TLinkColorScheme.warning => token.warningClickColor,
+        TLinkColorScheme.success => token.successClickColor,
+      };
+    }
+
+    final themedColor = theme?.textStyle?.color;
+    if (themedColor != null) {
+      return themedColor;
+    }
+    return switch (colorScheme) {
+      TLinkColorScheme.primary => material?.primary ?? token.brandNormalColor,
+      TLinkColorScheme.defaultTheme =>
+        material?.onSurface ?? token.textColorPrimary,
+      TLinkColorScheme.danger => material?.error ?? token.errorNormalColor,
+      TLinkColorScheme.warning => token.warningNormalColor,
+      TLinkColorScheme.success => token.successNormalColor,
+    };
   }
 
-  /// 解析字号
-  ///
-  /// 优先级：构造器 fontSize > Theme.fontSize > size 默认
-  static double resolveFontSize({
+  /// 解析包含字号、行高、字重与颜色的完整文字样式。
+  static TextStyle resolveTextStyle({
+    required BuildContext context,
     required TLinkSize size,
     required TLinkThemeData? theme,
-    double? instanceFontSize,
+    required Color color,
   }) {
-    if (instanceFontSize != null) {
-      return instanceFontSize;
-    }
-    if (theme?.fontSize != null) {
-      return theme!.fontSize!;
-    }
-    return _defaultFontSize(size);
+    final font = _fontForSize(context, size);
+    final base = TextStyle(
+      fontSize: font.size,
+      height: font.height,
+      fontWeight: font.fontWeight,
+    );
+    return base.merge(theme?.textStyle).copyWith(color: color);
   }
 
-  /// 解析图标尺寸
-  ///
-  /// 优先级：构造器 iconSize > Theme.iconSize > size 默认
+  /// 解析图标尺寸。
   static double resolveIconSize({
     required TLinkSize size,
     required TLinkThemeData? theme,
-    double? instanceIconSize,
   }) {
-    if (instanceIconSize != null) {
-      return instanceIconSize;
-    }
-    if (theme?.iconSize != null) {
-      // coverage:ignore-line
-      return theme!.iconSize!; // coverage:ignore-line
-    }
-    return _defaultIconSize(size);
+    return theme?.iconSize ??
+        switch (size) {
+          TLinkSize.small => 14,
+          TLinkSize.medium => 16,
+          TLinkSize.large => 18,
+        };
   }
 
-  /// 解析图标与文本间距
-  ///
-  /// 返回 (leftGap, rightGap)
-  /// 优先级：构造器参数 > Theme > size 默认
-  static (double leftGap, double rightGap) resolveGap({
-    required TLinkSize size,
+  /// 解析图标与文字间距。
+  static double resolveIconGap({
+    required BuildContext context,
     required TLinkThemeData? theme,
-    double? instanceLeftGap,
-    double? instanceRightGap,
   }) {
-    return (
-      instanceLeftGap ?? theme?.leftGapWithIcon ?? _defaultLeftGap(size),
-      instanceRightGap ?? theme?.rightGapWithIcon ?? _defaultRightGap(size),
-    );
+    return theme?.iconGap ?? context.tTheme.spacer4;
   }
 
-  // ---- 内部颜色映射 ----
-
-  /// 正常态颜色映射
-  static Color _normalColor(
-    TLinkColorScheme scheme,
-    TThemeData tTheme,
-    ColorScheme? material,
-  ) {
-    return switch (scheme) {
-      TLinkColorScheme.primary => material?.primary ?? tTheme.brandNormalColor,
-      TLinkColorScheme.danger =>
-        material?.error ?? tTheme.errorNormalColor, // coverage:ignore-line
-      TLinkColorScheme.warning =>
-        tTheme.warningNormalColor, // coverage:ignore-line
-      TLinkColorScheme.success =>
-        tTheme.successNormalColor, // coverage:ignore-line
-      TLinkColorScheme.defaultTheme =>
-        material?.onSurface ?? tTheme.textColorPrimary, // coverage:ignore-line
-    };
-  }
-
-  /// 禁用态颜色映射
-  static Color _disabledColor(
-    TLinkColorScheme scheme,
-    TThemeData tTheme,
-    ColorScheme? material,
-  ) {
-    final materialDisabled = material?.onSurface.withValues(alpha: 0.38);
-    return switch (scheme) {
-      TLinkColorScheme.primary => materialDisabled ?? tTheme.brandDisabledColor,
-      TLinkColorScheme.danger => materialDisabled ?? tTheme.errorDisabledColor,
-      TLinkColorScheme.warning =>
-        tTheme.warningDisabledColor, // coverage:ignore-line
-      TLinkColorScheme.success =>
-        tTheme.successDisabledColor, // coverage:ignore-line
-      TLinkColorScheme.defaultTheme =>
-        materialDisabled ?? tTheme.textDisabledColor, // coverage:ignore-line
-    };
-  }
-
-  // ---- 默认值 ----
-
-  static double _defaultFontSize(TLinkSize size) {
+  static Font _fontForSize(BuildContext context, TLinkSize size) {
+    final token = context.tTheme;
     return switch (size) {
-      TLinkSize.large => 16,
-      TLinkSize.medium => 14,
-      TLinkSize.small => 12,
-    };
-  }
-
-  static double _defaultIconSize(TLinkSize size) {
-    return switch (size) {
-      TLinkSize.large => 18,
-      TLinkSize.medium => 16,
-      TLinkSize.small => 14, // coverage:ignore-line
-    };
-  }
-
-  static double _defaultLeftGap(TLinkSize size) {
-    return switch (size) {
-      TLinkSize.large => 8,
-      TLinkSize.medium => 6.34,
-      TLinkSize.small => 6.05, // coverage:ignore-line
-    };
-  }
-
-  static double _defaultRightGap(TLinkSize size) {
-    return switch (size) {
-      TLinkSize.large => 8,
-      TLinkSize.medium => 7,
-      TLinkSize.small => 6.63, // coverage:ignore-line
+      TLinkSize.small => token.fontBodySmall ?? Font(size: 12, lineHeight: 20),
+      TLinkSize.medium =>
+        token.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
+      TLinkSize.large => token.fontBodyLarge ?? Font(size: 16, lineHeight: 24),
     };
   }
 }

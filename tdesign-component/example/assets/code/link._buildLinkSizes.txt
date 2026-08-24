@@ -1,12 +1,22 @@
 Widget _buildLinkSizes(BuildContext context) {
-    return Container(
-        color: context.tTheme.bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildLinkWithSize(TLinkSize.small),
-            _buildLinkWithSize(TLinkSize.medium),
-            _buildLinkWithSize(TLinkSize.large),
-          ],
-        ));
+    return _exampleRow(context, [
+      _link(
+        label: 'S号链接',
+        colorScheme: TLinkColorScheme.primary,
+        size: TLinkSize.small,
+        suffixIcon: const Icon(TIcons.jump),
+      ),
+      _link(
+        label: 'M号链接',
+        colorScheme: TLinkColorScheme.primary,
+        size: TLinkSize.medium,
+        suffixIcon: const Icon(TIcons.jump),
+      ),
+      _link(
+        label: 'L号链接',
+        colorScheme: TLinkColorScheme.primary,
+        size: TLinkSize.large,
+        suffixIcon: const Icon(TIcons.jump),
+      ),
+    ]);
   }

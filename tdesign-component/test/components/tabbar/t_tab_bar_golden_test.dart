@@ -64,8 +64,8 @@ void main() {
     return MaterialApp(
       theme: ThemeData(extensions: [
         TThemeData.defaultData(),
-        TTextThemeData(
-          defaultFontFamily: FontFamily(fontFamily: 'TCloudNumber'),
+        const TTextThemeData(
+          textStyle: TextStyle(fontFamily: 'TCloudNumber'),
         ),
       ]),
       home: Scaffold(backgroundColor: Colors.white, body: Center(child: child)),
