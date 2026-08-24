@@ -137,6 +137,10 @@ void main() {
 
       await tester.enterText(find.byType(TextField), 'ab中文');
       expect(find.text('ab中'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'ab😀x');
+      expect(find.text('ab😀'), findsOneWidget);
+      expect(field(tester).controller?.text.runes, [0x61, 0x62, 0x1f600]);
       expect(
         () => TSearchBar(maxLength: 4, maxCharacter: 4),
         throwsAssertionError,
@@ -169,6 +173,31 @@ void main() {
       expect(pressed, isTrue);
       expect(controller.text, 'query');
       expect(focusNode.hasFocus, isTrue);
+    });
+
+    testWidgets('disabled action uses disabled color and ignores taps', (
+      tester,
+    ) async {
+      var pressed = false;
+      await tester.pumpWidget(
+        wrap(
+          TSearchBar(
+            enabled: false,
+            actionText: '取消',
+            onActionPressed: () => pressed = true,
+          ),
+          searchTheme: const TSearchBarThemeData(
+            actionTextStyle: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+
+      expect(
+        tester.widget<Text>(find.text('取消')).style?.color,
+        TThemeData.defaultData().textDisabledColor,
+      );
+      await tester.tap(find.text('取消'));
+      expect(pressed, isFalse);
     });
   });
 

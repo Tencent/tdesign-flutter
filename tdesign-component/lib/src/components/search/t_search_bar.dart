@@ -202,7 +202,12 @@ class _TSearchBarState extends State<TSearchBar> {
         );
     final actionStyle = defaultTextStyle
         .copyWith(color: token.brandNormalColor)
-        .merge(theme?.actionTextStyle);
+        .merge(theme?.actionTextStyle)
+        .copyWith(
+          color: widget.enabled
+              ? theme?.actionTextStyle?.color ?? token.brandNormalColor
+              : token.textDisabledColor,
+        );
     var searchIconTheme = IconThemeData(
       size: _kIconSize,
       color: token.textColorPlaceholder,
