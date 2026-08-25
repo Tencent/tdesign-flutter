@@ -18,7 +18,7 @@
 | inputFormatters | List<TextInputFormatter>? | - | 输入格式化器。 |
 | inputType | TextInputType | TextInputType.text | 键盘类型。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 与 `maxLength` 二选一；用于对齐小程序 `maxcharacter`。 |
+| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 与 `maxLength` 二选一。提交中的文本超过限制时，保留不超过限制的 最长前缀；输入法正在 composing 时暂不截断，在 composing 结束后执行。 |
 | maxLength | int? | - | 最大字符数，使用 Flutter grapheme 计数语义。 |
 | maxLines | int? | 1 | 最大行数。 |
 | minLines | int? | - | 最小行数。 |
