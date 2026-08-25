@@ -20,7 +20,7 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | Example 代码资产与源码一致 |
 | `flutter build web`（`tdesign-component/example`） | 通过 | Web Demo 可构建 |
 | `flutter build web --no-web-resources-cdn`（`tdesign-component/example`） | 通过 | 使用仓库构建产物内的 CanvasKit 完成本地截图验收 |
-| `flutter test test/form_input_textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Input、Textarea、Form 三页全部滚动内容，浅色与深色共 6 张 Golden；CI 固定 Flutter 3.32.0，避免引擎字体栅格差异误报 |
+| `flutter test test/form_input_textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Input、Textarea、Form 三页全部滚动内容，浅色与深色共 6 个标准基线；CI 仅在 Flutter 3.32.0 执行，复用仓库跨平台比较器允许 3% 字体栅格差异，并严格校验页面宽高、主滚动区、完整内容高度、关键组件数量/矩形与边框 |
 
 ## 人工验收
 

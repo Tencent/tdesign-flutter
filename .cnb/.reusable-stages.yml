@@ -31,6 +31,12 @@
     # Golden 视觉回归：与已提交的 baseline（goldens/*.png）逐像素比对
     flutter test test/components/refresh/t_refresh_golden_test.dart
 
+# Form / Input / Textarea 完整 Demo 页面 Golden 固定在 Flutter 3.32.0 执行。
+# 复用单套标准基线和受控跨平台比较器，并由测试严格校验页面结构与几何。
+.form-input-page-golden:
+  name: flutter test (form input textarea page golden)
+  script: cd tdesign-component/example && flutter test test/form_input_textarea_page_golden_test.dart
+
 # APK 构建
 .build-apk:
   name: flutter build apk
@@ -89,7 +95,9 @@
       - /root/.pub-cache:cow
   stages:
     - !reference [.install-component]
+    - !reference [.install-example]
     - !reference [.test]
+    - !reference [.form-input-page-golden]
 
 # 测试 + 覆盖率：flutter latest
 .test-latest:
