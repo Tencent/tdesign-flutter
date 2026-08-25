@@ -15,13 +15,23 @@ class TInputViewPage extends StatefulWidget {
 class _TInputViewPageState extends State<TInputViewPage> {
   final controller = TextEditingController();
   final priceController = TextEditingController();
+  final priceFocusNode = FocusNode();
   bool phoneError = false;
   bool priceError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    priceFocusNode.addListener(_formatPriceOnBlur);
+  }
 
   @override
   void dispose() {
     controller.dispose();
     priceController.dispose();
+    priceFocusNode
+      ..removeListener(_formatPriceOnBlur)
+      ..dispose();
     super.dispose();
   }
 
@@ -34,17 +44,25 @@ class _TInputViewPageState extends State<TInputViewPage> {
 
   void _onPriceChanged(String value) {
     final valid = RegExp(r'^\d+(\.\d+)?$').hasMatch(value);
-    if (valid) {
-      final formatted = double.parse(value).toStringAsFixed(2);
-      if (formatted != value) {
-        priceController.value = TextEditingValue(
-          text: formatted,
-          selection: TextSelection.collapsed(offset: formatted.length),
-        );
-      }
-    }
     if (priceError == valid) {
       setState(() => priceError = !valid);
+    }
+  }
+
+  void _formatPriceOnBlur() {
+    if (priceFocusNode.hasFocus) {
+      return;
+    }
+    final value = priceController.text;
+    if (!RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
+      return;
+    }
+    final formatted = double.parse(value).toStringAsFixed(2);
+    if (formatted != value) {
+      priceController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
     }
   }
 
@@ -288,6 +306,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
           verticalAlignment: TFormItemVerticalAlignment.center,
           child: TInput(
             controller: priceController,
+            focusNode: priceFocusNode,
             borderless: true,
             hintText: '0.00',
             onChanged: _onPriceChanged,

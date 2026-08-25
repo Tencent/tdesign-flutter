@@ -169,6 +169,32 @@ void main() {
       expect(decoration?.hintMaxLines, 1);
     });
 
+    testWidgets('native hint color applies without leaking decoration layout', (
+      tester,
+    ) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        inputDecorationTheme: const InputDecorationTheme(
+          hintStyle: TextStyle(color: Colors.purple),
+          filled: true,
+          fillColor: Colors.red,
+          contentPadding: EdgeInsets.all(20),
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(body: TInput(hintText: 'search')),
+        ),
+      );
+
+      final decoration = field(tester).decoration;
+      expect(decoration?.hintStyle?.color, Colors.purple);
+      expect(decoration?.filled, isFalse);
+      expect(decoration?.fillColor, Colors.transparent);
+      expect(decoration?.contentPadding, EdgeInsets.zero);
+    });
+
     testWidgets('文本和提示词遵循 TDesign 颜色契约', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrap(const TInput(hintText: 'hint')));
@@ -226,7 +252,11 @@ void main() {
         MaterialApp(
           theme: ThemeData(
             textTheme: const TextTheme(
-              bodyLarge: TextStyle(fontSize: 19, height: 1.5),
+              bodyLarge: TextStyle(
+                color: Colors.black,
+                fontSize: 19,
+                height: 1.5,
+              ),
             ),
             extensions: [TThemeData.defaultData()],
           ),
@@ -238,6 +268,10 @@ void main() {
       expect(field(tester).style?.height, 1.5);
       expect(field(tester).decoration?.hintStyle?.fontSize, 19);
       expect(field(tester).decoration?.hintStyle?.height, 1.5);
+      expect(
+        field(tester).decoration?.hintStyle?.color,
+        TThemeData.defaultData().textColorPlaceholder,
+      );
     });
 
     testWidgets('partial component styles preserve token typography', (

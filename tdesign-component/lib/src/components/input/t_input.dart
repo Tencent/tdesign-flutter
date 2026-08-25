@@ -264,8 +264,7 @@ class _TInputState extends State<TInput> {
     final hintStyle =
         TextStyle(
               color: widget.enabled
-                  ? material.tExplicitColorScheme?.onSurfaceVariant ??
-                        token.textColorPlaceholder
+                  ? token.textColorPlaceholder
                   : token.textDisabledColor,
               fontSize: hintFont?.size,
               height: hintFont?.height,
@@ -276,8 +275,7 @@ class _TInputState extends State<TInput> {
             .copyWith(
               color: widget.enabled
                   ? themeHintStyle?.color ??
-                        material.tExplicitTextTheme?.bodyLarge?.color ??
-                        material.tExplicitColorScheme?.onSurfaceVariant ??
+                        material.inputDecorationTheme.hintStyle?.color ??
                         token.textColorPlaceholder
                   : token.textDisabledColor,
             );
