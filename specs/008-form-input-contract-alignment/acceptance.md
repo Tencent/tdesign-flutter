@@ -20,7 +20,7 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | Example 代码资产与源码一致 |
 | `flutter build web`（`tdesign-component/example`） | 通过 | Web Demo 可构建 |
 | `flutter build web --no-web-resources-cdn`（`tdesign-component/example`） | 通过 | 使用仓库构建产物内的 CanvasKit 完成本地截图验收 |
-| `flutter test test/form_input_textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Input、Textarea、Form 三页全部滚动内容，浅色与深色共 6 个标准基线；Linux CI 固定 Flutter 3.32.0 并以 0% 严格比较作为唯一权威结果，其他宿主仅以 3% 容差本地预检；测试同时严格校验页面宽高、主滚动区、完整内容高度、关键组件数量/矩形与边框 |
+| `flutter test test/form_input_textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Input、Textarea、Form 三页全部滚动内容，浅色与深色共 6 个标准基线；测试固定加载 Roboto 和 49 KB 的 Noto Sans SC Regular 中文子集，不依赖宿主字体；Linux CI 固定 Flutter 3.32.0 并以 0% 严格比较作为唯一权威结果，其他宿主按实测 3.48%～4.32% 栅格差异以 5% 容差本地预检；测试同时严格校验页面宽高、主滚动区、完整内容高度、关键组件数量/矩形与边框 |
 
 ## 人工验收
 
@@ -53,3 +53,19 @@
 
 - 小程序专属键盘高度、同层渲染、安全键盘和 `scrollToFirstError` 未复制到 Flutter API。
 - 本地已按小程序源码完成 Form/Textarea 的结构和状态矩阵，并完成 Web 暗色运行截图；浅色主题的 token 映射已有 Widget 测试，最终跨设备字体栅格和逐像素结果仍需在 PR Demo 中复查。
+- 页面 Golden 的固定中文字体仅用于建立可重复的 Linux 基线，不替代 Android、iOS 和 Web 各自的系统字体截图验收，也不声明三个平台的文字栅格逐像素一致。
+
+## 页面 Golden 基线更新
+
+页面像素基线只能在仓库根目录通过以下固定环境更新；不得用 macOS 系统字体或
+`--update-goldens` 直接覆盖权威文件：
+
+```bash
+docker run --rm --platform linux/amd64 \
+  -v "$PWD:/workspace" \
+  -w /workspace/tdesign-component/example \
+  docker.cnb.cool/liweijie0812/docker/flutter-3.32.0 \
+  flutter test test/form_input_textarea_page_golden_test.dart --update-goldens
+```
+
+更新后必须在同一容器去掉 `--update-goldens` 再运行一次，确认 Linux 0% 比较通过。

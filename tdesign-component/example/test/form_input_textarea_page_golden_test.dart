@@ -15,10 +15,11 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 import 'golden_test_utils.dart';
 
 const _pageWidth = 375.0;
+const _goldenCjkFontFamily = 'TDesign Golden CJK';
 // Linux + Flutter 3.32 是唯一权威 Golden 环境，保持 0% 严格比较。
-// 其他宿主仅用于本地预检；3% 来自同一页面在 macOS/Linux 间已观测的
-// 1.90%～2.58% 字体栅格差异，不是全仓默认容差。
-const _nonLinuxPreviewDiffRate = 0.03;
+// 其他宿主仅用于本地预检；5% 来自固定 CJK 字体后同一页面在 macOS/Linux 间
+// 已观测的 3.48%～4.32% 字体与图标栅格差异，不是全仓默认容差。
+const _nonLinuxPreviewDiffRate = 0.05;
 const _geometryEpsilon = 0.000001;
 
 void main() {
@@ -39,7 +40,13 @@ void main() {
           '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
         ).readAsBytes().then(ByteData.sublistView),
       );
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    final cjkFont = FontLoader(_goldenCjkFontFamily)
+      ..addFont(
+        File(
+          'test/fonts/TDesignGoldenCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
   });
   tearDownAll(() => goldenFileComparator = originalGoldenComparator);
 
@@ -47,20 +54,20 @@ void main() {
     _DemoPage(
       name: 'input',
       title: 'Input 输入框',
-      height: 2994,
-      contentHeight: 2946,
+      height: 3020,
+      contentHeight: 2972,
       components: [
         _ComponentGeometry(
           type: TInput,
           count: 26,
-          first: Rect.fromLTRB(96, 248, 359, 272),
-          last: Rect.fromLTRB(96, 2930, 359, 2954),
+          first: Rect.fromLTRB(96, 252, 359, 276),
+          last: Rect.fromLTRB(96, 2956, 359, 2980),
         ),
         _ComponentGeometry(
           type: TFormItem,
           count: 25,
-          first: Rect.fromLTRB(0, 232, 375, 288),
-          last: Rect.fromLTRB(0, 2914, 375, 2970),
+          first: Rect.fromLTRB(0, 236, 375, 292),
+          last: Rect.fromLTRB(0, 2940, 375, 2996),
         ),
       ],
       child: TInputViewPage(),
@@ -68,20 +75,20 @@ void main() {
     _DemoPage(
       name: 'textarea',
       title: 'Textarea 多行文本框',
-      height: 1966,
-      contentHeight: 1918,
+      height: 1976,
+      contentHeight: 1928,
       components: [
         _ComponentGeometry(
           type: TTextarea,
           count: 8,
-          first: Rect.fromLTRB(0, 232, 375, 360),
-          last: Rect.fromLTRB(16, 1818, 359, 1942),
+          first: Rect.fromLTRB(0, 236, 375, 364),
+          last: Rect.fromLTRB(16, 1828, 359, 1952),
         ),
         _ComponentGeometry(
           type: TFormItem,
           count: 1,
-          first: Rect.fromLTRB(0, 1774, 375, 1966),
-          last: Rect.fromLTRB(0, 1774, 375, 1966),
+          first: Rect.fromLTRB(0, 1784, 375, 1976),
+          last: Rect.fromLTRB(0, 1784, 375, 1976),
         ),
       ],
       child: TTextareaPage(),
@@ -89,26 +96,26 @@ void main() {
     _DemoPage(
       name: 'form',
       title: 'Form 表单',
-      height: 1135,
-      contentHeight: 1064.3333333333335,
+      height: 1139,
+      contentHeight: 1090.3333333333335,
       components: [
         _ComponentGeometry(
           type: TTextarea,
           count: 1,
-          first: Rect.fromLTRB(96, 801, 359, 901),
-          last: Rect.fromLTRB(96, 801, 359, 901),
+          first: Rect.fromLTRB(96, 827, 359, 927),
+          last: Rect.fromLTRB(96, 827, 359, 927),
         ),
         _ComponentGeometry(
           type: TFormItem,
           count: 9,
-          first: Rect.fromLTRB(0, 345, 375, 425),
-          last: Rect.fromLTRB(0, 917, 375, 1031.3333333333335),
+          first: Rect.fromLTRB(0, 371, 375, 451),
+          last: Rect.fromLTRB(0, 943, 375, 1057.3333333333335),
         ),
         _ComponentGeometry(
           type: TUpload,
           count: 1,
-          first: Rect.fromLTRB(96, 933, 359, 1015.3333333333334),
-          last: Rect.fromLTRB(96, 933, 359, 1015.3333333333334),
+          first: Rect.fromLTRB(96, 959, 359, 1041.3333333333335),
+          last: Rect.fromLTRB(96, 959, 359, 1041.3333333333335),
         ),
       ],
       child: TFormPage(),
@@ -204,11 +211,11 @@ void _expectDirectFormInputs(WidgetTester tester) {
   expect(inputs, hasLength(2));
   _expectRect(
     tester.getRect(find.byWidget(inputs.first)),
-    const Rect.fromLTRB(96, 361, 359, 385),
+    const Rect.fromLTRB(96, 387, 359, 411),
   );
   _expectRect(
     tester.getRect(find.byWidget(inputs.last)),
-    const Rect.fromLTRB(96, 441, 359, 465),
+    const Rect.fromLTRB(96, 467, 359, 491),
   );
 }
 
@@ -276,10 +283,24 @@ Widget _buildPage(_DemoPage page, ThemeMode themeMode) {
   return ChangeNotifierProvider(
     create: (_) => ThemeModeProvider(),
     child: MaterialApp(
-      theme: TThemeBuilder.light(TThemeData.defaultData()),
-      darkTheme: TThemeBuilder.dark(TThemeData.defaultData()),
+      theme: _withGoldenFontFallback(
+        TThemeBuilder.light(TThemeData.defaultData()),
+      ),
+      darkTheme: _withGoldenFontFallback(
+        TThemeBuilder.dark(TThemeData.defaultData()),
+      ),
       themeMode: themeMode,
       home: ExamplePageInheritedTheme(model: model, child: page.child),
+    ),
+  );
+}
+
+ThemeData _withGoldenFontFallback(ThemeData theme) {
+  const fallback = [_goldenCjkFontFamily];
+  return theme.copyWith(
+    textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
+    primaryTextTheme: theme.primaryTextTheme.apply(
+      fontFamilyFallback: fallback,
     ),
   );
 }

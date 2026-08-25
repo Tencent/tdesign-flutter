@@ -50,7 +50,7 @@
 
 - 单元测试：Form controller 的字段校验、清除校验和外部错误。
 - Widget 测试：覆盖独立 TFormItem、前置内容布局、语义化纵向对齐、clearButtonMode、输入 label 迁移、局部颜色样式保留 token 字体、help/error 语义色以及超长标签与消息行对齐。
-- 页面 Golden：以 375dp 手机宽度完整渲染 Input、Textarea、Form 三个真实 Example 页面，浅色与深色分别保留一套标准基线；测试必须覆盖全部滚动内容，不允许只截首屏。Linux CI 固定 Flutter 3.32.0，以 0% 严格比较作为唯一权威结果；其他宿主仅使用受控容差本地预检。测试同时严格断言页面宽高、主滚动区、完整内容高度、关键组件数量/矩形与边框，避免容差掩盖结构回归；Flutter latest 不执行像素测试。
+- 页面 Golden：以 375dp 手机宽度完整渲染 Input、Textarea、Form 三个真实 Example 页面，浅色与深色分别保留一套标准基线；测试必须覆盖全部滚动内容，不允许只截首屏。测试显式加载 Flutter 固定 Roboto 与仓库内 49 KB 的 Noto Sans SC Regular 测试子集，避免 Linux 缺少 CJK fallback 时把中文渲染成缺字符号；该字体仅用于测试，不改变组件或 Example 的运行时字体。Linux CI 固定 Flutter 3.32.0，以 0% 严格比较作为唯一权威结果；其他宿主仅使用受控容差本地预检。测试同时严格断言页面宽高、主滚动区、完整内容高度、关键组件数量/矩形与边框，避免容差掩盖结构回归；Flutter latest 不执行像素测试。
 - 静态检查：`flutter analyze`。
 - 人工验收：Example Form、Input 与 Textarea 页面检查无重复 label、错误和清除按钮行为。
 - 视觉验收：Example 页面逐项对照 MiniProgram API/Demo 矩阵，至少检查边框、焦点、禁用、状态、计数和自适应高度。
