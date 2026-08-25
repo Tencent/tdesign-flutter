@@ -1,0 +1,4 @@
+Widget _buildLabel(BuildContext context) => const TFormItem(
+    label: '标签超长时最多十个字',
+    child: TInput(borderless: true, hintText: '请输入文字'),
+  );

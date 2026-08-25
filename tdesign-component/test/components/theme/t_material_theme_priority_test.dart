@@ -183,7 +183,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(token),
-        home: const Scaffold(body: TInput(initialValue: 'value')),
+        home: const Scaffold(
+          body: TInput(
+            initialValue: 'value',
+            clearButtonMode: TInputClearButtonMode.always,
+          ),
+        ),
       ),
     );
 
