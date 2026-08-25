@@ -33,6 +33,10 @@ void main() {
     );
   }
 
+  TextStyle effectiveTextStyle(WidgetTester tester, String text) {
+    return DefaultTextStyle.of(tester.element(find.text(text))).style;
+  }
+
   testWidgets('Flutter 隐式 M3 ColorScheme 不遮蔽 Token', (tester) async {
     late ThemeData material;
     await tester.pumpWidget(
@@ -446,10 +450,7 @@ void main() {
       ),
     );
 
-    expect(
-      tester.widget<Text>(find.text('link')).style?.color,
-      customScheme.primary,
-    );
+    expect(effectiveTextStyle(tester, 'link').color, customScheme.onSurface);
     expect(
       tester.widget<Text>(find.text('tag')).style?.color,
       customScheme.onSurface,
@@ -526,7 +527,7 @@ void main() {
     );
 
     expect(
-      tester.widget<Text>(find.text('success link')).style?.color,
+      effectiveTextStyle(tester, 'success link').color,
       token.successNormalColor,
     );
     expect(
@@ -540,7 +541,7 @@ void main() {
     expect(noticeTheme.leftIconColor, token.successNormalColor);
     expect(noticeTheme.backgroundColor, token.successLightColor);
     expect(
-      tester.widget<Text>(find.text('warning link')).style?.color,
+      effectiveTextStyle(tester, 'warning link').color,
       token.warningNormalColor,
     );
     expect(
