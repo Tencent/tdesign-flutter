@@ -51,6 +51,7 @@ TDesign 表单容器。
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | child | Widget | - | 字段内容。 |
+| contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式。 未传时读取 `TFormThemeData.contentAlignment`，默认起始侧对齐；影响 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。 |
 | errorText | String? | - | 错误文案。 未传时自动使用最近 `TFormField` 的校验错误。 |
 | extra | Widget? | - | 表单项尾部的额外内容。 该插槽不会被附加内边距、位移或固定尺寸。 |
 | help | String? | - | 辅助说明文案。 |
@@ -73,6 +74,7 @@ TForm 组件级 ThemeExtension。
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 表单项背景色。 |
 | borderColor | Color? | - | 表单项底部分隔线颜色。 |
+| contentAlignment | TFormItemContentAlignment? | - | 表单项内容区域的水平方向对齐方式。 |
 | errorStyle | TextStyle? | - | 错误文案样式。 |
 | helpStyle | TextStyle? | - | 辅助说明样式。 |
 | itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 |
@@ -124,6 +126,18 @@ TForm 组件级 ThemeExtension。
 | --- | --- |
 | start | 标签、字段内容和额外内容从顶部对齐。 |
 | center | 标签、字段内容和额外内容垂直居中。 |
+
+
+### TFormItemContentAlignment
+#### 简介
+表单项内容区域的水平方向对齐方式。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| start | 内容靠起始侧对齐。 |
+| end | 内容靠结束侧对齐。 |
 
 
 ### TFormFieldBuilder
