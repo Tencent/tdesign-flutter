@@ -20,6 +20,7 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | Example 代码资产与源码一致 |
 | `flutter build web`（`tdesign-component/example`） | 通过 | Web Demo 可构建 |
 | `flutter build web --no-web-resources-cdn`（`tdesign-component/example`） | 通过 | 使用仓库构建产物内的 CanvasKit 完成本地截图验收 |
+| `flutter test test/form_input_textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Input、Textarea、Form 三页全部滚动内容，浅色与深色共 6 张 Golden；CI 固定 Flutter 3.32.0，避免引擎字体栅格差异误报 |
 
 ## 人工验收
 
@@ -45,6 +46,8 @@
 - [x] 使用无旧 Service Worker 缓存的新 Web 构建复查竖排生日/籍贯字段，label 与 controls 纵向排列且箭头保持在表单项最右侧
 - [x] 使用同一新 Web 构建复查 Input 自定义样式，字段行只保留 FormItem 的单层背景与底部分隔线，不再叠加 Input 外壳边框
 - [x] 通过 Golden 对 Material 主题隔离和新 Input 外层结构做回归
+- [x] 对照小程序最新 `develop` 源码确认 Input/FormItem 的 16px 内边距与 56px 标准行高，Textarea 的 128/162/156px 场景高度分别对应 256/324/312rpx；字体保持各平台原生效果，不以跨平台逐像素一致作为验收条件
+- [x] 通过页面级 Golden 固定三页完整浅色/深色页面，覆盖分组、实例顺序、高度、边框、背景、间距与对齐，防止后续组件或 Theme 改动造成视觉回归
 
 ## 验收边界
 

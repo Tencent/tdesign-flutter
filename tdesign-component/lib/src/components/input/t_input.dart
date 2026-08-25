@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -115,7 +117,8 @@ class TInput extends StatefulWidget {
   /// 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1，
   /// 非 ASCII code point 计 2。
   ///
-  /// 与 [maxLength] 二选一；用于对齐小程序 `maxcharacter`。
+  /// 与 [maxLength] 二选一。提交中的文本超过限制时，保留不超过限制的
+  /// 最长前缀；输入法正在 composing 时暂不截断，在 composing 结束后执行。
   final int? maxCharacter;
 
   /// 是否显示当前字符计数。
@@ -160,8 +163,7 @@ class TInput extends StatefulWidget {
   /// 光标颜色。
   final Color? cursorColor;
 
-  bool get _multiline =>
-      inputType == TextInputType.multiline || maxLines != 1 || minLines != null;
+  bool get _multiline => maxLines != 1 || minLines != null;
 
   @override
   State<TInput> createState() => _TInputState();
@@ -417,11 +419,7 @@ class _TInputState extends State<TInput> {
     }
     if (widget.maxCharacter != null) {
       formatters.add(
-        TextInputFormatter.withFunction((oldValue, newValue) {
-          return _characterLength(newValue.text) <= widget.maxCharacter!
-              ? newValue
-              : oldValue;
-        }),
+        _WeightedLengthLimitingTextInputFormatter(widget.maxCharacter!),
       );
     }
     return formatters.isEmpty ? null : formatters;
@@ -708,3 +706,40 @@ int _inputLength(String value, int? maxCharacter) =>
 
 int _characterLength(String value) =>
     value.runes.fold<int>(0, (length, rune) => length + (rune <= 0x7f ? 1 : 2));
+
+class _WeightedLengthLimitingTextInputFormatter extends TextInputFormatter {
+  const _WeightedLengthLimitingTextInputFormatter(this.maxCharacter);
+
+  final int maxCharacter;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (_characterLength(newValue.text) <= maxCharacter ||
+        newValue.composing.isValid) {
+      return newValue;
+    }
+
+    final buffer = StringBuffer();
+    var length = 0;
+    for (final rune in newValue.text.runes) {
+      final runeLength = rune <= 0x7f ? 1 : 2;
+      if (length + runeLength > maxCharacter) {
+        break;
+      }
+      buffer.writeCharCode(rune);
+      length += runeLength;
+    }
+
+    final text = buffer.toString();
+    return TextEditingValue(
+      text: text,
+      selection: newValue.selection.copyWith(
+        baseOffset: math.min(newValue.selection.start, text.length),
+        extentOffset: math.min(newValue.selection.end, text.length),
+      ),
+    );
+  }
+}

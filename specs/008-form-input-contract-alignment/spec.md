@@ -88,14 +88,14 @@ TForm                 表单生命周期、字段注册和统一操作
 ### TInput / TTextarea
 
 - `TInput` 不提供 label，表单字段 label 由 `TFormItem` 提供。
-- 删除与 `TTextarea` 重复的 `TInput.multiline` 命名构造器；`TInput` 保留 Flutter 原生 `maxLines` / `minLines` / `inputType` 组合能力，正式多行输入场景统一使用 `TTextarea`。
+- 删除与 `TTextarea` 重复的 `TInput.multiline` 命名构造器；`maxLines` / `minLines` 唯一决定多行布局，`inputType` 只选择 Flutter 键盘类型，不参与视觉布局判断。正式多行输入场景统一使用 `TTextarea`。
 - `TTextarea.label` 仅表达独立多行输入框内部的标题，使用 `fontBodyMedium + textColorPrimary`；位于 `TFormItem` 中时仍使用 `TFormItem.label`，不得同时传入两份标签。
 - `clearButtonMode` 为单一清除按钮配置：`never`、`always`、`focused`。
 - `clearButtonMode` 默认 `never`，与小程序 `clearable=false` 对齐；需要清除能力时显式使用 `always` 或 `focused`。
 - `suffix` 存在时不自动插入清除按钮。
 - `showPasswordToggle` 是 TInput 的可选密码能力；初始显隐状态读取 `obscureText`，显隐切换由组件内部维护，眼睛按钮使用 TDesign 图标和固定图标槽。
 - `prefix` / `suffix` 作为内容插槽时，普通图标使用 24dp 图标尺寸和 token 默认图标样式；密码显隐按钮同样使用 24dp 图标槽，不得额外撑高标准 56dp 输入框。Demo 不再在输入框外重复拼接普通图标。
-- `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按小程序规则以 Unicode code point 加权计算，ASCII code point 计 1、非 ASCII code point 计 2。
+- `maxLength` 保留 Flutter 原生 grapheme 计数语义；新增 Dart 风格的 `maxCharacter`，按 Unicode code point 加权计算，ASCII code point 计 1、非 ASCII code point 计 2。提交文本超限时保留不超过上限的最长前缀；IME composing 期间暂不截断，提交后执行，避免破坏组合输入。
 - `TInputStatus` 提供 `normal`、`success`、`warning`、`error` 四种状态；状态只影响输入壳层和计数/帮助色，已输入文字始终使用正常正文色，且状态不替代 `TFormItem` 的字段错误展示。
 - `borderless` 控制输入壳层是否绘制边框；`TTextarea.bordered` 为小程序语义的正向别名，二者不在同一组件上重复暴露。
 - 非 `borderless` 的单行 `TInput` 默认绘制底部分隔线，匹配小程序 Input；通过 `TInputThemeData.borderRadius` 设置圆角时使用完整边框，用于标签外置等标准输入框场景。
@@ -115,7 +115,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - Form Demo 的水平/竖直布局使用同一组用户名、密码、性别、生日、籍贯、年限、自我评价、个人简介、上传照片字段；禁用状态逐组件传递，不使用整棵子树透明度模拟。
 - Form Demo 的生日和籍贯是选择触发器，不使用只读 `TInput` 模拟编辑行为；`TFormItem` 负责字段行和内容对齐，业务组合使用文本展示当前值并通过手势打开 Picker，同时提供按钮语义。
 - Form Demo 的上传照片字段使用与其他字段相同的表单级校验时机：首次提交前只更新受控文件列表，提交时统一执行空列表必填校验，首次提交后再随用户交互更新错误；Upload 组件只负责回传受控文件列表。
-- Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；内部标题、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。
+- Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；默认 Textarea 保持方形容器，只有 `bordered` 或显式主题圆角才绘制圆角。内部标题、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。
 - Input 与 Textarea 的外置标签 Demo 统一由可独立使用的 `TFormItem` 表达，不在 Demo 手写标签字号、颜色和间距。
 - Demo 视觉对齐优先验证容器层级、字段行高度、标签与内容的相对位置、分隔线和状态颜色，再验证代码面板等 Example 基础设施。
 
@@ -132,4 +132,5 @@ TForm                 表单生命周期、字段注册和统一操作
 - [x] Textarea 覆盖基础、内部标题、边框、禁用、`maxLength`/`maxCharacter` 计数和 min/max 行数场景。
 - [x] Form Demo 展示与小程序一致的横向/纵向字段矩阵、禁用、校验和 reset/submit。
 - [x] Form/Input 相关测试通过，`flutter analyze` 零告警。
+- [x] Input、Textarea、Form 三个真实 Example 页面具备完整滚动内容的浅色与深色 Golden 回归。
 - [x] Flutter 3.32.0 与 3.47.0 均不使用不兼容 API。

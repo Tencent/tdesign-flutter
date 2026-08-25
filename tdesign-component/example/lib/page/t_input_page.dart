@@ -242,6 +242,8 @@ class _TInputViewPageState extends State<TInputViewPage> {
                   width: 72,
                   height: 36,
                   fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) =>
+                      const SizedBox(width: 72, height: 36),
                 ),
               ),
             ),

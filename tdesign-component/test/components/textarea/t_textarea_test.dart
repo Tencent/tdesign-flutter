@@ -116,9 +116,24 @@ void main() {
         .first;
     expect((shell.decoration as BoxDecoration).border, isNotNull);
     expect(
+      (shell.decoration as BoxDecoration).borderRadius,
+      BorderRadius.circular(TThemeData.defaultData().radiusDefault),
+    );
+    expect(
       tester.widget<TextField>(find.byType(TextField)).inputFormatters,
       contains(isNot(isA<LengthLimitingTextInputFormatter>())),
     );
+  });
+
+  testWidgets('default textarea stays square unless border radius is themed', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const TTextarea()));
+
+    final shell = tester
+        .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+        .first;
+    expect((shell.decoration as BoxDecoration).borderRadius, BorderRadius.zero);
   });
 
   testWidgets('label, placeholder and indicator use textarea tokens', (

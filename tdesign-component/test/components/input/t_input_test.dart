@@ -29,6 +29,19 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets(
+      'keyboard type does not independently enable multiline layout',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(const TInput(inputType: TextInputType.multiline)),
+        );
+
+        expect(field(tester).keyboardType, TextInputType.multiline);
+        expect(field(tester).maxLines, 1);
+        expect(field(tester).minLines, isNull);
+      },
+    );
+
     testWidgets('controller text and callbacks are forwarded', (tester) async {
       final controller = TextEditingController(text: 'initial');
       String? changed;
@@ -757,8 +770,50 @@ void main() {
               const TextEditingValue(text: 'ab中x'),
             )
             .text,
-        isEmpty,
+        'ab中',
       );
+    });
+
+    testWidgets('maxCharacter truncates paste and preserves selection', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const TInput(maxCharacter: 4)));
+
+      final formatter = field(tester).inputFormatters!.last;
+      final formatted = formatter.formatEditUpdate(
+        const TextEditingValue(),
+        const TextEditingValue(
+          text: 'a中bc',
+          selection: TextSelection.collapsed(offset: 4),
+        ),
+      );
+
+      expect(formatted.text, 'a中b');
+      expect(formatted.selection, const TextSelection.collapsed(offset: 3));
+    });
+
+    testWidgets('maxCharacter waits for composing to end before truncating', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const TInput(maxCharacter: 2)));
+
+      final formatter = field(tester).inputFormatters!.last;
+      const composing = TextEditingValue(
+        text: '中文',
+        selection: TextSelection.collapsed(offset: 2),
+        composing: TextRange(start: 0, end: 2),
+      );
+      expect(
+        formatter.formatEditUpdate(TextEditingValue.empty, composing),
+        composing,
+      );
+
+      final committed = formatter.formatEditUpdate(
+        composing,
+        composing.copyWith(composing: TextRange.empty),
+      );
+      expect(committed.text, '中');
+      expect(committed.selection, const TextSelection.collapsed(offset: 1));
     });
   });
 }

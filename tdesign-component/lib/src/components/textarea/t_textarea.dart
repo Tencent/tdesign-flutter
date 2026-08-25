@@ -313,7 +313,7 @@ class _TTextareaState extends State<TTextarea> {
             ? Border.all(color: borderColor, width: theme?.borderWidth ?? 1)
             : null,
         borderRadius: BorderRadius.circular(
-          theme?.borderRadius ?? token.radiusDefault,
+          theme?.borderRadius ?? (widget.bordered ? token.radiusDefault : 0),
         ),
       ),
       child: Padding(padding: contentPadding, child: content),
