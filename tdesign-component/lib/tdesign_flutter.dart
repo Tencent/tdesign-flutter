@@ -64,6 +64,7 @@ export 'src/components/form/t_form_item.dart';
 export 'src/components/form/t_form_theme_data.dart'
     show
         TFormItemVerticalAlignment,
+        TFormItemContentAlignment,
         TFormLayout,
         TFormRequiredMarkPosition,
         TFormThemeData;

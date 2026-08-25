@@ -29,6 +29,15 @@ enum TFormItemVerticalAlignment {
   center,
 }
 
+/// 表单项内容区域的水平方向对齐方式。
+enum TFormItemContentAlignment {
+  /// 内容靠起始侧对齐。
+  start,
+
+  /// 内容靠结束侧对齐。
+  end,
+}
+
 /// TForm 组件级 ThemeExtension。
 class TFormThemeData extends ThemeExtension<TFormThemeData> {
   const TFormThemeData({
@@ -82,6 +91,9 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
 
     /// 水平表单项各区域的纵向对齐方式。
     this.verticalAlignment,
+
+    /// 表单项内容区域的水平方向对齐方式。
+    this.contentAlignment,
   });
 
   /// 是否在标签末尾显示冒号。
@@ -135,6 +147,9 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   /// 水平表单项各区域的纵向对齐方式。
   final TFormItemVerticalAlignment? verticalAlignment;
 
+  /// 表单项内容区域的水平方向对齐方式。
+  final TFormItemContentAlignment? contentAlignment;
+
   @override
   TFormThemeData copyWith({
     bool? showColon,
@@ -154,6 +169,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     double? leadingGap,
     double? messageGap,
     TFormItemVerticalAlignment? verticalAlignment,
+    TFormItemContentAlignment? contentAlignment,
   }) {
     return TFormThemeData(
       showColon: showColon ?? this.showColon,
@@ -173,6 +189,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       leadingGap: leadingGap ?? this.leadingGap,
       messageGap: messageGap ?? this.messageGap,
       verticalAlignment: verticalAlignment ?? this.verticalAlignment,
+      contentAlignment: contentAlignment ?? this.contentAlignment,
     );
   }
 
@@ -205,6 +222,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       leadingGap: lerpDouble(leadingGap, other.leadingGap, t),
       messageGap: lerpDouble(messageGap, other.messageGap, t),
       verticalAlignment: t < 0.5 ? verticalAlignment : other.verticalAlignment,
+      contentAlignment: t < 0.5 ? contentAlignment : other.contentAlignment,
     );
   }
 }

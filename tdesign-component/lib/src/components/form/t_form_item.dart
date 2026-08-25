@@ -54,6 +54,12 @@ class TFormItem extends StatelessWidget {
     /// 未传时读取 [TFormThemeData.verticalAlignment]，默认顶部对齐。
     this.verticalAlignment,
 
+    /// 内容区域的水平方向对齐方式。
+    ///
+    /// 未传时读取 [TFormThemeData.contentAlignment]，默认起始侧对齐；影响
+    /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
+    this.contentAlignment,
+
     /// 是否展示继承的校验错误。
     this.showErrorMessage = true,
   });
@@ -90,6 +96,9 @@ class TFormItem extends StatelessWidget {
   /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
   final TFormItemVerticalAlignment? verticalAlignment;
 
+  /// 内容区域的水平方向对齐方式。
+  final TFormItemContentAlignment? contentAlignment;
+
   /// 是否展示从 [TFormField] 继承的校验错误。
   final bool showErrorMessage;
 
@@ -112,6 +121,10 @@ class TFormItem extends StatelessWidget {
         verticalAlignment ??
         theme?.verticalAlignment ??
         TFormItemVerticalAlignment.start;
+    final effectiveContentAlignment =
+        contentAlignment ??
+        theme?.contentAlignment ??
+        TFormItemContentAlignment.start;
     final horizontalCrossAxisAlignment = switch (effectiveVerticalAlignment) {
       TFormItemVerticalAlignment.start => CrossAxisAlignment.start,
       TFormItemVerticalAlignment.center => CrossAxisAlignment.center,
@@ -120,6 +133,14 @@ class TFormItem extends StatelessWidget {
       (TextAlign.start || TextAlign.left) => AlignmentDirectional.topStart,
       (TextAlign.center) => Alignment.topCenter,
       _ => AlignmentDirectional.topEnd,
+    };
+    final contentAreaAlignment = switch (effectiveContentAlignment) {
+      TFormItemContentAlignment.start => AlignmentDirectional.centerStart,
+      TFormItemContentAlignment.end => AlignmentDirectional.centerEnd,
+    };
+    final contentTextAlign = switch (effectiveContentAlignment) {
+      TFormItemContentAlignment.start => TextAlign.start,
+      TFormItemContentAlignment.end => TextAlign.end,
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
     final labelFont = token.fontBodyLarge;
@@ -130,22 +151,18 @@ class TFormItem extends StatelessWidget {
       fontWeight: labelFont?.fontWeight,
     ).merge(textTheme?.bodyMedium).merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
-    final helpStyle = TextStyle(
-      color: token.textColorPlaceholder,
+    final messageTextStyle = TextStyle(
       fontSize: helpFont?.size,
       height: helpFont?.height,
       fontWeight: helpFont?.fontWeight,
-    ).merge(textTheme?.bodySmall).merge(theme?.helpStyle);
-    final errorStyle =
-        TextStyle(
-              color: token.errorNormalColor,
-              fontSize: helpFont?.size,
-              height: helpFont?.height,
-              fontWeight: helpFont?.fontWeight,
-            )
-            .merge(textTheme?.bodySmall)
-            .merge(materialTheme.inputDecorationTheme.errorStyle)
-            .merge(theme?.errorStyle);
+    ).merge(textTheme?.bodySmall);
+    final helpStyle = messageTextStyle
+        .copyWith(color: token.textColorPlaceholder)
+        .merge(theme?.helpStyle);
+    final errorStyle = messageTextStyle
+        .copyWith(color: token.errorNormalColor)
+        .merge(materialTheme.inputDecorationTheme.errorStyle)
+        .merge(theme?.errorStyle);
     final labelWidget = label == null
         ? null
         : Text(labelText, textAlign: effectiveLabelAlign, style: labelStyle);
@@ -192,15 +209,35 @@ class TFormItem extends StatelessWidget {
             required: effectiveRequired,
             errorText: effectiveErrorText,
             showErrorInInput: false,
-            child: child,
+            child: effectiveContentAlignment == TFormItemContentAlignment.end
+                ? Align(alignment: contentAreaAlignment, child: child)
+                : child,
           ),
         ),
         if (effectiveErrorText != null) ...[
           SizedBox(height: theme?.messageGap ?? token.spacer4),
-          Text(effectiveErrorText, style: errorStyle),
+          effectiveContentAlignment == TFormItemContentAlignment.end
+              ? Align(
+                  alignment: contentAreaAlignment,
+                  child: Text(
+                    effectiveErrorText,
+                    textAlign: contentTextAlign,
+                    style: errorStyle,
+                  ),
+                )
+              : Text(effectiveErrorText, style: errorStyle),
         ] else if (help != null) ...[
           SizedBox(height: theme?.messageGap ?? token.spacer4),
-          Text(help!, style: helpStyle),
+          effectiveContentAlignment == TFormItemContentAlignment.end
+              ? Align(
+                  alignment: contentAreaAlignment,
+                  child: Text(
+                    help!,
+                    textAlign: contentTextAlign,
+                    style: helpStyle,
+                  ),
+                )
+              : Text(help!, style: helpStyle),
         ],
       ],
     );

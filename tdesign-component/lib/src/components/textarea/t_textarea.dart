@@ -222,7 +222,8 @@ class _TTextareaState extends State<TTextarea> {
   @override
   Widget build(BuildContext context) {
     final token = context.tTheme;
-    final theme = Theme.of(context).extension<TInputThemeData>();
+    final material = Theme.of(context);
+    final theme = material.extension<TInputThemeData>();
     final fieldScope = TFieldScope.maybeOf(context);
     final effectiveStatus =
         fieldScope?.errorText != null && fieldScope?.showErrorInInput != false
@@ -249,12 +250,20 @@ class _TTextareaState extends State<TTextarea> {
       backgroundColor: Colors.transparent,
     );
     final labelFont = token.fontBodyMedium;
-    final labelStyle = TextStyle(
-      color: widget.enabled ? token.textColorPrimary : token.textDisabledColor,
-      fontSize: labelFont?.size,
-      height: labelFont?.height,
-      fontWeight: labelFont?.fontWeight,
-    );
+    final labelStyle =
+        TextStyle(
+              fontSize: labelFont?.size,
+              height: labelFont?.height,
+              fontWeight: labelFont?.fontWeight,
+            )
+            .merge(material.tExplicitTextTheme?.bodyMedium)
+            .copyWith(
+              color: widget.enabled
+                  ? material.tExplicitTextTheme?.bodyMedium?.color ??
+                        material.tExplicitColorScheme?.onSurface ??
+                        token.textColorPrimary
+                  : token.textDisabledColor,
+            );
     final editor = Theme(
       data: Theme.of(context).mergeExtension(inputTheme),
       child: TInput.multiline(

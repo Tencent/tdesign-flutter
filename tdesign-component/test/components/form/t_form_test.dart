@@ -799,6 +799,77 @@ void main() {
       update(() {});
     });
 
+    testWidgets('validate does not enable automatic validation', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var value = '';
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TForm(
+              controller: controller,
+              child: TFormField<String>(
+                name: 'name',
+                value: value,
+                onChanged: (next) => setState(() => value = next),
+                validator: (next) => next!.isEmpty ? 'required' : null,
+                builder: (context, current, onChanged, errorText) => TFormItem(
+                  child: TextButton(
+                    onPressed: () => onChanged!('valid'),
+                    child: const Text('change'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(controller.validate(), isFalse);
+      await tester.pump();
+      expect(find.text('required'), findsOneWidget);
+
+      await tester.tap(find.text('change'));
+      await tester.pump();
+      expect(value, 'valid');
+      expect(find.text('required'), findsOneWidget);
+    });
+
+    testWidgets('successful submit does not enable automatic validation', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var value = 'valid';
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TForm(
+              controller: controller,
+              child: TFormField<String>(
+                name: 'name',
+                value: value,
+                onChanged: (next) => setState(() => value = next),
+                validator: (next) => next!.isEmpty ? 'required' : null,
+                builder: (context, current, onChanged, errorText) => TFormItem(
+                  child: TextButton(
+                    onPressed: () => onChanged!(''),
+                    child: const Text('clear'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(controller.submit(), isTrue);
+      await tester.tap(find.text('clear'));
+      await tester.pump();
+      expect(value, isEmpty);
+      expect(find.text('required'), findsNothing);
+    });
+
     testWidgets('rejected controlled values restore the registered value', (
       tester,
     ) async {
@@ -924,6 +995,54 @@ void main() {
 
       await tester.pump();
       expect(find.text('required'), findsOneWidget);
+    });
+
+    testWidgets('explicit onUnfocus validates when focus leaves the field', (
+      tester,
+    ) async {
+      final focusNode = FocusNode();
+      final textController = TextEditingController(text: 'valid');
+      var value = 'valid';
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => Column(
+              children: [
+                TForm(
+                  autovalidateMode: AutovalidateMode.onUnfocus,
+                  child: TFormField<String>(
+                    name: 'name',
+                    value: value,
+                    onChanged: (next) => setState(() => value = next),
+                    validator: (next) => next!.isEmpty ? 'required' : null,
+                    builder: (context, current, onChanged, errorText) =>
+                        TFormItem(
+                          child: TextField(
+                            controller: textController,
+                            focusNode: focusNode,
+                            onChanged: onChanged,
+                          ),
+                        ),
+                  ),
+                ),
+                const TextButton(onPressed: null, child: Text('outside')),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(TextField));
+      await tester.enterText(find.byType(TextField), '');
+      await tester.pump();
+      expect(find.text('required'), findsNothing);
+
+      focusNode.unfocus();
+      await tester.pump();
+      expect(find.text('required'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+      focusNode.dispose();
+      textController.dispose();
     });
 
     testWidgets('reset restores the default validation interaction mode', (
@@ -1313,6 +1432,38 @@ void main() {
       }
     });
 
+    testWidgets('message semantic colors override the generic text color', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token).copyWith(
+            textTheme: const TextTheme(
+              bodySmall: TextStyle(color: Colors.black),
+            ),
+          ),
+          home: const Scaffold(
+            body: Column(
+              children: [
+                TFormItem(help: 'Help', child: Text('Field')),
+                TFormItem(errorText: 'Error', child: Text('Invalid')),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.widget<Text>(find.text('Help')).style?.color,
+        token.textColorPlaceholder,
+      );
+      expect(
+        tester.widget<Text>(find.text('Error')).style?.color,
+        token.errorNormalColor,
+      );
+    });
+
     testWidgets('long labels and message rows align to the top', (
       tester,
     ) async {
@@ -1483,6 +1634,45 @@ void main() {
       expect(extraRect.top, closeTo(fieldRect.top, 0.01));
     });
 
+    testWidgets('content alignment applies to fields and messages', (
+      tester,
+    ) async {
+      const fieldKey = Key('aligned-content-field');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: 'Label',
+            help: 'Help',
+            contentAlignment: TFormItemContentAlignment.end,
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
+          ),
+          formTheme: const TFormThemeData(
+            contentAlignment: TFormItemContentAlignment.start,
+          ),
+        ),
+      );
+
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      final helpRect = tester.getRect(find.text('Help'));
+      expect(fieldRect.right, 384);
+      expect(helpRect.right, 384);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: 'Label',
+            help: 'Help',
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
+          ),
+          formTheme: const TFormThemeData(
+            contentAlignment: TFormItemContentAlignment.end,
+          ),
+        ),
+      );
+      expect(tester.getRect(find.byKey(fieldKey)).right, 384);
+    });
+
     testWidgets('label and messages are optional', (tester) async {
       await tester.pumpWidget(wrap(const TFormItem(child: Text('Field'))));
       expect(find.text('Field'), findsOneWidget);
@@ -1508,6 +1698,7 @@ void main() {
       leadingGap: 8,
       messageGap: 2,
       verticalAlignment: TFormItemVerticalAlignment.start,
+      contentAlignment: TFormItemContentAlignment.start,
     );
     const other = TFormThemeData(
       showColon: false,
@@ -1526,6 +1717,7 @@ void main() {
       leadingGap: 12,
       messageGap: 6,
       verticalAlignment: TFormItemVerticalAlignment.center,
+      contentAlignment: TFormItemContentAlignment.end,
     );
 
     expect(base.copyWith().labelWidth, 80);
@@ -1548,6 +1740,7 @@ void main() {
             leadingGap: 10,
             messageGap: 4,
             verticalAlignment: TFormItemVerticalAlignment.center,
+            contentAlignment: TFormItemContentAlignment.end,
           )
           .layout,
       TFormLayout.vertical,
@@ -1569,6 +1762,10 @@ void main() {
     expect(
       base.lerp(other, 0.75).verticalAlignment,
       TFormItemVerticalAlignment.center,
+    );
+    expect(
+      base.lerp(other, 0.75).contentAlignment,
+      TFormItemContentAlignment.end,
     );
   });
 }

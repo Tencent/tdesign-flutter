@@ -66,7 +66,7 @@ class TFormState extends State<TForm> {
   final Map<String, bool Function()> _validateCallbacks = {};
   final Map<String, VoidCallback> _clearValidateCallbacks = {};
   final Map<String, String> _externalErrors = {};
-  bool _hasSubmitted = false;
+  bool _submitFailed = false;
   bool _suppressOnChanged = false;
   int _validationVersion = 0;
 
@@ -77,13 +77,9 @@ class TFormState extends State<TForm> {
   ///
   /// [fields] 为空时校验所有已注册字段；传入字段名后只校验指定字段。
   bool validate({Iterable<String>? fields}) {
-    final valid = fields == null
+    return fields == null
         ? _formKey.currentState?.validate() ?? false
         : _validateFields(fields);
-    if (!_hasSubmitted) {
-      setState(() => _hasSubmitted = true);
-    }
-    return valid;
   }
 
   bool _validateFields(Iterable<String> fields) {
@@ -102,6 +98,8 @@ class TFormState extends State<TForm> {
     if (valid) {
       _formKey.currentState?.save();
       widget.onSubmit?.call(values);
+    } else if (widget.autovalidateMode == null && !_submitFailed) {
+      setState(() => _submitFailed = true);
     }
     return valid;
   }
@@ -117,8 +115,8 @@ class TFormState extends State<TForm> {
     });
     _externalErrors.clear();
     _validationVersion++;
-    if (_hasSubmitted) {
-      setState(() => _hasSubmitted = false);
+    if (_submitFailed) {
+      setState(() => _submitFailed = false);
     } else {
       setState(() {});
     }
@@ -169,7 +167,7 @@ class TFormState extends State<TForm> {
 
   AutovalidateMode get _effectiveAutovalidateMode {
     return widget.autovalidateMode ??
-        (_hasSubmitted
+        (_submitFailed
             ? AutovalidateMode.onUserInteraction
             : AutovalidateMode.disabled);
   }

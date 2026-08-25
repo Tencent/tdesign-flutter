@@ -58,6 +58,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - 继续负责 `validate`、`submit`、`reset`、`onChanged`、`onSubmit`。
 - 增加 `validate(fields: ...)`、`clearValidate(fields: ...)` 和 `setValidateMessage(...)`。
 - 外部错误文案优先于字段本地校验错误；清除校验时同时清除外部错误。
+- 未显式配置 `autovalidateMode` 时，初始使用 `disabled`；仅完整 `submit()` 校验失败后切换为 `onUserInteraction`。`validate()`（含指定字段校验）和校验成功的 `submit()` 不改变后续自动校验时机；显式配置时完整遵循 Flutter 的 `disabled`、`always`、`onUserInteraction` 和 `onUnfocus` 语义。
 - 视觉默认值继续由 `TFormThemeData` 提供，不在 `TForm` 和 `TFormItem` 之间复制同一套默认参数。
 
 ### TFormField
@@ -75,6 +76,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - 默认视觉使用小程序 FormItem 的容器结构：容器背景、16px 水平/垂直内边距和底部分隔线；放置输入组件时，输入组件的默认外层内边距由 FormItem 内部作用域压缩，避免出现双重留白。
 - `TFormThemeData.borderColor` 可覆盖 FormItem 底部分隔线颜色，用于小程序自定义主题或无边界 Demo。
 - `TFormThemeData.leadingGap` 可覆盖前置内容与标签区域的间距，默认读取 8dp 间距 token。
+- `TFormThemeData.contentAlignment` 提供字段内容区域的全局默认水平对齐，`TFormItem.contentAlignment` 可逐项覆盖；仅提供 RTL 安全的 `start`、`end`，并同时对齐 child、help 和 error，不改变输入文本自身的 `textAlign`。
 - label 默认使用 `fontBodyLarge + textColorPrimary`；help 使用 `fontBodySmall + textColorPlaceholder`；error 使用 `fontBodySmall + errorNormalColor`。组件主题中的局部 TextStyle 只覆盖显式字段，不得清空其余 token 字体属性。
 - `TFormItemVerticalAlignment` 只提供 `start`、`center` 两种水平布局下的语义化纵向对齐；实例配置优先于 `TFormThemeData.verticalAlignment`，默认 `start` 保持多行字段与消息场景的现有行为，不暴露 Flutter `CrossAxisAlignment`。
 - `extra` 保持纯 Widget 插槽，不附加固定 Padding、Transform 或尺寸；它与 label、字段内容共同遵循上述纵向对齐。Input Demo 的普通图标行使用 `center`，带 tips 的操作按钮保持 `start`，对应小程序默认与 `.extra` 局部覆盖。
@@ -97,7 +99,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - Textarea 输入文字使用 `fontBodyLarge`，placeholder 使用 `fontBodyMedium + textColorPlaceholder`，indicator 使用 `fontBodySmall + textColorPlaceholder`；标题与编辑区、编辑区与 indicator 的间距均读取 `spacer8`。
 - 独立 Textarea 默认由组件提供 16dp 容器内边距和容器背景；放入 `TFormItem` 时自动去除这层内边距和背景，避免 Demo 或业务手工抵消双重留白。
 - 不公开 Material `InputDecoration` 透传入口；hint、前后置内容、背景、边框、内边距、label 和 help/error 分别由 TInput、TInputThemeData 和 TFormItem 的专属 API 负责，避免两套视觉配置冲突。
-- `TInputThemeData.borderColor` 可覆盖输入壳层边框颜色；`backgroundColor`、`contentPadding`、`borderRadius` 和 `hintStyle` 继续负责对应的视觉 token。
+- `TInputThemeData.borderColor` 可覆盖输入壳层在聚焦与非聚焦状态下的边框颜色；`backgroundColor`、`contentPadding`、`borderRadius` 和 `hintStyle` 继续负责对应的视觉 token。独立输入组件的表单错误样式复用 Material `InputDecorationTheme.errorStyle`，`TFormItem` 内的错误仍由 `TFormThemeData.errorStyle` 控制；Textarea 内部标题复用 Flutter `TextTheme.bodyMedium`。
 - 单行 Input 的输入文字和提示词默认使用完整 `fontBodyLarge`；Textarea 按上述多行 token 解析。Theme 或实例只配置颜色时必须保留 token 字号与行高。组件主题文字颜色覆盖所有可用状态的输入文字，状态语义色仅由输入壳层、计数器和错误提示消费；实例 `style.color` 仍具有最高优先级。
 
 ### 视觉 Demo 契约
@@ -107,6 +109,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - 带图标且带标签的示例使用 `TFormItem.leading + label` 表达字段行结构；`TInput.prefix` 只演示输入内容区前缀，不承载标签文案。
 - 自定义样式输入框只在 Demo 覆盖颜色和外层留白，不重复声明组件默认字号、行高或字段行内边距。
 - Form Demo 的水平/竖直布局使用同一组用户名、密码、性别、生日、籍贯、年限、自我评价、个人简介、上传照片字段；禁用状态逐组件传递，不使用整棵子树透明度模拟。
+- Form Demo 的生日和籍贯是选择触发器，不使用只读 `TInput` 模拟编辑行为；`TFormItem` 负责字段行和内容对齐，业务组合使用文本展示当前值并通过手势打开 Picker，同时提供按钮语义。
 - Form Demo 的上传照片字段使用与其他字段相同的表单级校验时机：首次提交前只更新受控文件列表，提交时统一执行空列表必填校验，首次提交后再随用户交互更新错误；Upload 组件只负责回传受控文件列表。
 - Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；内部标题、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。
 - Demo 视觉对齐优先验证容器层级、字段行高度、标签与内容的相对位置、分隔线和状态颜色，再验证代码面板等 Example 基础设施。

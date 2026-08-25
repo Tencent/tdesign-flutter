@@ -153,6 +153,9 @@ class _TFormPageState extends State<TFormPage> {
   @ExampleCode(group: 'form')
   Widget _buildForm(BuildContext context) {
     final horizontal = _layout == TFormLayout.horizontal;
+    final trailingContentAlignment = horizontal
+        ? TFormItemContentAlignment.end
+        : null;
     return Theme(
       data: Theme.of(context).mergeExtension(
         TFormThemeData(
@@ -230,24 +233,21 @@ class _TFormPageState extends State<TFormPage> {
               value: _birth,
               onChanged: (value) => setState(() => _birth = value),
               validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
-              builder: (context, value, onChanged, errorText) => TFormItem(
+              builder: (context, value, onChanged, errorText) => Semantics(
+                button: true,
+                enabled: !_disabled,
                 label: '生日',
-                extra: _buildArrow(context),
+                value: value.isNotEmpty ? value : '未选择',
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: _disabled
                       ? null
                       : () => _showDatePicker(context, onChanged),
-                  child: IgnorePointer(
-                    child: TInput(
-                      key: ValueKey('form-birth-$value'),
-                      initialValue: value,
-                      enabled: !_disabled,
-                      readOnly: true,
-                      borderless: true,
-                      textAlign: horizontal ? TextAlign.end : TextAlign.start,
-                      hintText: '请输入生日',
-                    ),
+                  child: TFormItem(
+                    label: '生日',
+                    contentAlignment: trailingContentAlignment,
+                    extra: _buildArrow(context),
+                    child: _buildSelectionValue(context, value, '请输入生日'),
                   ),
                 ),
               ),
@@ -257,24 +257,21 @@ class _TFormPageState extends State<TFormPage> {
               value: _place,
               onChanged: (value) => setState(() => _place = value),
               validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
-              builder: (context, value, onChanged, errorText) => TFormItem(
+              builder: (context, value, onChanged, errorText) => Semantics(
+                button: true,
+                enabled: !_disabled,
                 label: '籍贯',
-                extra: _buildArrow(context),
+                value: value.isNotEmpty ? value : '未选择',
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: _disabled
                       ? null
                       : () => _showRegionPicker(context, onChanged),
-                  child: IgnorePointer(
-                    child: TInput(
-                      key: ValueKey('form-place-$value'),
-                      initialValue: value,
-                      enabled: !_disabled,
-                      readOnly: true,
-                      borderless: true,
-                      textAlign: horizontal ? TextAlign.end : TextAlign.start,
-                      hintText: '请选择籍贯',
-                    ),
+                  child: TFormItem(
+                    label: '籍贯',
+                    contentAlignment: trailingContentAlignment,
+                    extra: _buildArrow(context),
+                    child: _buildSelectionValue(context, value, '请选择籍贯'),
                   ),
                 ),
               ),
@@ -285,15 +282,11 @@ class _TFormPageState extends State<TFormPage> {
               onChanged: (value) => setState(() => _age = value),
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '年限',
-                child: Align(
-                  alignment: horizontal
-                      ? AlignmentDirectional.centerEnd
-                      : AlignmentDirectional.centerStart,
-                  child: TStepper(
-                    value: value,
-                    variant: TStepperVariant.filled,
-                    onChanged: _disabled ? null : onChanged,
-                  ),
+                contentAlignment: trailingContentAlignment,
+                child: TStepper(
+                  value: value,
+                  variant: TStepperVariant.filled,
+                  onChanged: _disabled ? null : onChanged,
                 ),
               ),
             ),
@@ -304,15 +297,11 @@ class _TFormPageState extends State<TFormPage> {
               validator: (value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '自我评价',
-                child: Align(
-                  alignment: horizontal
-                      ? AlignmentDirectional.centerEnd
-                      : AlignmentDirectional.centerStart,
-                  child: TRate(
-                    value: value,
-                    allowHalf: true,
-                    onChanged: _disabled ? null : onChanged,
-                  ),
+                contentAlignment: trailingContentAlignment,
+                child: TRate(
+                  value: value,
+                  allowHalf: true,
+                  onChanged: _disabled ? null : onChanged,
                 ),
               ),
             ),
@@ -340,9 +329,8 @@ class _TFormPageState extends State<TFormPage> {
             TFormField<List<TUploadFile>>(
               name: 'photo',
               value: _photos,
-              required: true,
-              requiredMessage: '请上传照片',
               onChanged: (value) => setState(() => _photos = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '请上传照片',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '上传照片',
                 child: LayoutBuilder(
@@ -379,6 +367,23 @@ class _TFormPageState extends State<TFormPage> {
         : context.tTheme.textColorPlaceholder,
     semanticLabel: '选择',
   );
+
+  Widget _buildSelectionValue(
+    BuildContext context,
+    String? value,
+    String placeholder,
+  ) {
+    final hasValue = value?.isNotEmpty == true;
+    return TText(
+      hasValue ? value! : placeholder,
+      font: context.tTheme.fontBodyLarge,
+      textColor: _disabled
+          ? context.tTheme.textDisabledColor
+          : hasValue
+          ? context.tTheme.textColorPrimary
+          : context.tTheme.textColorPlaceholder,
+    );
+  }
 
   Widget _buildButtons(bool horizontal) {
     return Container(

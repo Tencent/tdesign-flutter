@@ -415,7 +415,9 @@ class _TInputState extends State<TInput> {
               : token.bgColorContainer),
       borderless: widget.borderless,
       borderSide: borderSide,
-      focusedBorderSide: borderSide.copyWith(color: statusColor),
+      focusedBorderSide: borderSide.copyWith(
+        color: theme?.borderColor ?? statusColor,
+      ),
       borderRadius: borderRadius,
       contentPadding: contentPadding,
       counterGap: widget._multiline ? token.spacer8 : 2,
@@ -426,11 +428,15 @@ class _TInputState extends State<TInput> {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               inputErrorText,
-              style: TextStyle(
-                color: token.errorNormalColor,
-                fontSize: token.fontBodySmall?.size,
-                height: token.fontBodySmall?.height,
-              ),
+              style:
+                  TextStyle(
+                        fontSize: token.fontBodySmall?.size,
+                        height: token.fontBodySmall?.height,
+                        fontWeight: token.fontBodySmall?.fontWeight,
+                      )
+                      .merge(material.tExplicitTextTheme?.bodySmall)
+                      .copyWith(color: token.errorNormalColor)
+                      .merge(material.inputDecorationTheme.errorStyle),
             ),
           );
 

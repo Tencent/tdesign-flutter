@@ -178,6 +178,46 @@ void main() {
     );
   });
 
+  testWidgets('textarea label uses text theme and disabled semantics', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(token).copyWith(
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(
+              color: Colors.purple,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        home: const Scaffold(body: TTextarea(label: 'enabled')),
+      ),
+    );
+
+    final enabled = tester.widget<Text>(find.text('enabled')).style;
+    expect(enabled?.color, Colors.purple);
+    expect(enabled?.fontWeight, FontWeight.bold);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(token).copyWith(
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(color: Colors.purple),
+          ),
+        ),
+        home: const Scaffold(
+          body: TTextarea(label: 'disabled', enabled: false),
+        ),
+      ),
+    );
+    expect(
+      tester.widget<Text>(find.text('disabled')).style?.color,
+      token.textDisabledColor,
+    );
+  });
+
   testWidgets('textarea owns default padding and form item removes it', (
     tester,
   ) async {

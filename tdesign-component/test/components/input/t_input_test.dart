@@ -599,6 +599,74 @@ void main() {
   });
 
   group('TInput TDesign shell', () {
+    testWidgets('theme border color remains effective while focused', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TInput(status: TInputStatus.error),
+          inputTheme: const TInputThemeData(borderColor: Colors.purple),
+        ),
+      );
+
+      Border currentBorder() {
+        final shell = tester
+            .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+            .firstWhere(
+              (box) =>
+                  box.decoration is BoxDecoration &&
+                  (box.decoration as BoxDecoration).border != null,
+            );
+        return (shell.decoration as BoxDecoration).border! as Border;
+      }
+
+      expect(currentBorder().bottom.color, Colors.purple);
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
+      expect(currentBorder().bottom.color, Colors.purple);
+    });
+
+    testWidgets('standalone field error uses Material error style', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+            inputDecorationTheme: const InputDecorationTheme(
+              errorStyle: TextStyle(
+                color: Colors.purple,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          home: Scaffold(
+            body: TForm(
+              controller: controller,
+              child: TFormField<String>(
+                name: 'name',
+                value: '',
+                onChanged: (_) {},
+                validator: (_) => 'required',
+                builder: (context, value, onChanged, errorText) =>
+                    TInput(initialValue: value, onChanged: onChanged),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(controller.validate(), isFalse);
+      await tester.pump();
+      final error = tester.widget<Text>(find.text('required'));
+      expect(error.style?.color, Colors.purple);
+      expect(error.style?.fontWeight, FontWeight.bold);
+      expect(
+        error.style?.fontSize,
+        TThemeData.defaultData().fontBodySmall?.size,
+      );
+    });
+
     testWidgets('status colors shell without recoloring input text', (
       tester,
     ) async {
