@@ -15,6 +15,10 @@
 - [x] DONE 修复 Input 自定义主题示例的双重输入壳层
 - [x] DONE 为 Form Upload 示例补充空列表必填校验，并与其他字段共用表单级校验时机
 - [x] DONE 收敛 FormItem 对齐 API，并统一 TFormField 使用 Flutter validator
+- [x] DONE 修正 clearValidate 的受控值语义，并明确未知字段校验失败
+- [x] DONE 修复 reset 对原生 FormField 失效的回归，同时保留受控字段最新值
+- [x] DONE 删除与 Textarea 重复的 TInput.multiline 公开入口
+- [x] DONE 统一 Input/Textarea 外置标签 Demo 的 TFormItem 组合方式
 - [x] DONE 移除 Input/Textarea 的 Material decoration 透传入口，以专属 hintStyle 收敛提示词主题配置
 - [x] DONE 为 TFormItem 增加 start/center 语义化纵向对齐并保持 extra 为纯插槽
 - [x] DONE 补充或更新 Widget/Golden 测试

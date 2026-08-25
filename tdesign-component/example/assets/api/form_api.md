@@ -60,7 +60,7 @@ TDesign 表单容器。
 | labelAlign | TextAlign? | - | 标签文本对齐方式；为空时读取 `TFormThemeData.labelAlign`。 |
 | labelWidth | double? | - | 标签区域宽度；为空时读取 `TFormThemeData.labelWidth`，默认 80dp。 |
 | leading | Widget? | - | 标签区域前的内容，通常用于字段行图标。 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。 |
-| required | bool? | - | 是否显示必填标记。 未传时继承最近 `TFormField` 的 required 状态。 |
+| required | bool? | - | 是否显示必填标记；仅覆盖展示效果，不会启用或关闭 `TFormField.required` 的校验行为。 未传时继承最近 `TFormField` 的 required 状态。 |
 | showErrorMessage | bool | true | 是否展示继承的校验错误。 |
 | verticalAlignment | TFormItemVerticalAlignment? | - | 水平布局下标签、字段内容和额外内容的纵向对齐方式。 未传时读取 `TFormThemeData.verticalAlignment`，默认顶部对齐。 |
 

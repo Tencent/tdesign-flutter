@@ -1086,6 +1086,55 @@ void main() {
       expect(find.text('required'), findsNothing);
     });
 
+    testWidgets(
+      'reset delegates to native FormField and preserves controlled fields',
+      (tester) async {
+        final controller = TFormController();
+        var controlledValue = 'initial';
+        late ValueChanged<String> changeControlledValue;
+        await tester.pumpWidget(
+          wrap(
+            StatefulBuilder(
+              builder: (context, setState) {
+                return TForm(
+                  controller: controller,
+                  child: Column(
+                    children: [
+                      TextFormField(initialValue: 'native'),
+                      TFormField<String>(
+                        name: 'controlled',
+                        value: controlledValue,
+                        onChanged: (next) {
+                          setState(() => controlledValue = next);
+                        },
+                        builder: (context, value, onChanged, errorText) {
+                          changeControlledValue = onChanged!;
+                          return Text(value);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+
+        await tester.enterText(find.byType(TextFormField), 'changed');
+        changeControlledValue('latest');
+        await tester.pump();
+
+        controller.reset();
+        await tester.pump();
+
+        expect(
+          tester.widget<TextField>(find.byType(TextField)).controller!.text,
+          'native',
+        );
+        expect(find.text('latest'), findsOneWidget);
+      },
+    );
+
     testWidgets('standalone input displays ambient field error once', (
       tester,
     ) async {
@@ -1280,6 +1329,74 @@ void main() {
       controller.clearValidate(fields: ['first']);
       await tester.pump();
       expect(find.text('server error'), findsNothing);
+    });
+
+    testWidgets('scoped validation fails for unregistered fields', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      await tester.pumpWidget(
+        wrap(
+          TForm(
+            controller: controller,
+            child: TFormField<String>(
+              name: 'registered',
+              value: 'value',
+              onChanged: (_) {},
+              builder: (context, value, onChanged, errorText) => Text(value),
+            ),
+          ),
+        ),
+      );
+
+      expect(controller.validate(fields: ['missing']), isFalse);
+      expect(controller.validate(fields: ['registered', 'missing']), isFalse);
+    });
+
+    testWidgets('clearing validation preserves the latest controlled value', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var value = 'initial';
+      late ValueChanged<String> changeValue;
+      late StateSetter update;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return TForm(
+                controller: controller,
+                child: TFormField<String>(
+                  name: 'name',
+                  value: value,
+                  onChanged: (next) {
+                    value = next;
+                    update(() {});
+                  },
+                  validator: (current) =>
+                      current == 'latest' ? null : 'stale value',
+                  builder: (context, fieldValue, onChanged, errorText) {
+                    changeValue = onChanged!;
+                    return Text(errorText ?? fieldValue);
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
+      changeValue('latest');
+      await tester.pump();
+      controller.setValidateMessage({'name': 'server error'});
+      await tester.pump();
+
+      controller.clearValidate(fields: ['name']);
+      await tester.pump();
+
+      expect(find.text('latest'), findsOneWidget);
+      expect(controller.validate(fields: ['name']), isTrue);
     });
 
     testWidgets('clearing validation does not report a field value change', (

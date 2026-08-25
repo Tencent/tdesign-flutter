@@ -48,47 +48,9 @@ class TInput extends StatefulWidget {
     this.inputFormatters,
     this.style,
     this.cursorColor,
-  }) : _multiline = false,
-       assert(controller == null || initialValue == null),
-       assert(!obscureText || maxLines == 1),
-       assert(!showPasswordToggle || maxLines == 1),
-       assert(maxLength == null || maxCharacter == null),
-       assert(maxLength == null || maxLength >= 0),
-       assert(maxCharacter == null || maxCharacter >= 0);
-
-  /// 创建多行输入框。
-  const TInput.multiline({
-    super.key,
-    this.controller,
-    this.initialValue,
-    this.onChanged,
-    this.onSubmitted,
-    this.onEditingComplete,
-    this.enabled = true,
-    this.readOnly = false,
-    this.hintText,
-    this.prefix,
-    this.suffix,
-    this.clearButtonMode,
-    this.status = TInputStatus.normal,
-    this.borderless = false,
-    this.maxLines,
-    this.minLines,
-    this.maxLength,
-    this.maxCharacter,
-    this.indicator = false,
-    this.autofocus = false,
-    this.focusNode,
-    this.inputType = TextInputType.multiline,
-    this.inputAction,
-    this.textAlign = TextAlign.start,
-    this.inputFormatters,
-    this.style,
-    this.cursorColor,
-  }) : _multiline = true,
-       obscureText = false,
-       showPasswordToggle = false,
-       assert(controller == null || initialValue == null),
+  }) : assert(controller == null || initialValue == null),
+       assert(!obscureText || (maxLines == 1 && minLines == null)),
+       assert(!showPasswordToggle || (maxLines == 1 && minLines == null)),
        assert(maxLength == null || maxCharacter == null),
        assert(maxLength == null || maxLength >= 0),
        assert(maxCharacter == null || maxCharacter >= 0);
@@ -134,6 +96,8 @@ class TInput extends StatefulWidget {
   ///
   /// 状态色用于输入壳层、计数器和错误提示；
   /// 已输入文字仍使用正常正文色，除非通过 [style] 或 [TInputThemeData.textStyle] 显式覆盖。
+  /// 当输入框位于 `TFormField` 中且表单错误需要在输入框内展示时，
+  /// 表单错误状态优先于这里显式设置的状态。
   final TInputStatus status;
 
   /// 是否隐藏输入框边框。
@@ -156,8 +120,7 @@ class TInput extends StatefulWidget {
 
   /// 是否显示当前字符计数。
   ///
-  /// 主要用于 [TInput.multiline] 对齐小程序 Textarea
-  /// 的 `indicator`。未配置长度限制时不会显示。
+  /// 多行场景优先使用 `TTextarea`；未配置长度限制时不会显示。
   final bool indicator;
 
   /// 是否自动聚焦。
@@ -197,7 +160,8 @@ class TInput extends StatefulWidget {
   /// 光标颜色。
   final Color? cursorColor;
 
-  final bool _multiline;
+  bool get _multiline =>
+      inputType == TextInputType.multiline || maxLines != 1 || minLines != null;
 
   @override
   State<TInput> createState() => _TInputState();

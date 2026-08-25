@@ -76,6 +76,7 @@ class TFormState extends State<TForm> {
   /// 运行表单字段校验。
   ///
   /// [fields] 为空时校验所有已注册字段；传入字段名后只校验指定字段。
+  /// 未注册或尚未构建完成的字段视为校验失败。
   bool validate({Iterable<String>? fields}) {
     return fields == null
         ? _formKey.currentState?.validate() ?? false
@@ -85,7 +86,7 @@ class TFormState extends State<TForm> {
   bool _validateFields(Iterable<String> fields) {
     var valid = true;
     for (final name in fields) {
-      if (!(_validateCallbacks[name]?.call() ?? true)) {
+      if (!(_validateCallbacks[name]?.call() ?? false)) {
         valid = false;
       }
     }
@@ -109,6 +110,7 @@ class TFormState extends State<TForm> {
   /// 字段值由业务受控状态所有；调用方应自行恢复 [TFormField.value]。
   void reset() {
     _withoutChangeNotification(() {
+      _formKey.currentState?.reset();
       for (final clearValidate in _clearValidateCallbacks.values) {
         clearValidate();
       }
@@ -407,7 +409,7 @@ class TFormField<T> extends StatefulWidget {
 
 class _TFormFieldState<T> extends State<TFormField<T>> {
   _TFormScope? _scope;
-  final _fieldKey = GlobalKey<FormFieldState<T>>();
+  GlobalKey<FormFieldState<T>> _fieldKey = GlobalKey<FormFieldState<T>>();
   bool _syncScheduled = false;
 
   @override
@@ -471,6 +473,15 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
     return widget.validator?.call(value);
   }
 
+  void _clearValidate() {
+    setState(() {
+      // Recreate only Flutter's validation state. Using FormFieldState.reset
+      // here would also restore initialValue and diverge from widget.value,
+      // which remains the single source of truth for this controlled field.
+      _fieldKey = GlobalKey<FormFieldState<T>>();
+    });
+  }
+
   bool _isRequiredEmpty(Object? value) {
     if (value == null) {
       return true;
@@ -504,7 +515,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
           widget.name,
           this,
           validate: () => field.validate(),
-          clearValidate: field.reset,
+          clearValidate: _clearValidate,
         );
         return TFieldScope(
           required: widget.required,

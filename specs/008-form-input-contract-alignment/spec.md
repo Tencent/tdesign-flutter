@@ -57,7 +57,10 @@ TForm                 表单生命周期、字段注册和统一操作
 
 - 继续负责 `validate`、`submit`、`reset`、`onChanged`、`onSubmit`。
 - 增加 `validate(fields: ...)`、`clearValidate(fields: ...)` 和 `setValidateMessage(...)`。
+- `validate(fields: ...)` 遇到未注册或尚未完成构建的字段时返回失败，不静默视为通过。
 - 外部错误文案优先于字段本地校验错误；清除校验时同时清除外部错误。
+- `clearValidate(fields: ...)` 只清除字段校验展示与外部错误，不重置或改写受控字段值；清除后再次校验必须使用最新 `value`。
+- `reset()` 继续委托 Flutter `FormState.reset()` 重置原生字段，同时只重建受控 `TFormField` 的交互与校验状态，不得把其值恢复为过期的 `initialValue`。
 - 未显式配置 `autovalidateMode` 时，初始使用 `disabled`；仅完整 `submit()` 校验失败后切换为 `onUserInteraction`。`validate()`（含指定字段校验）和校验成功的 `submit()` 不改变后续自动校验时机；显式配置时完整遵循 Flutter 的 `disabled`、`always`、`onUserInteraction` 和 `onUnfocus` 语义。
 - 视觉默认值继续由 `TFormThemeData` 提供，不在 `TForm` 和 `TFormItem` 之间复制同一套默认参数。
 
@@ -85,6 +88,7 @@ TForm                 表单生命周期、字段注册和统一操作
 ### TInput / TTextarea
 
 - `TInput` 不提供 label，表单字段 label 由 `TFormItem` 提供。
+- 删除与 `TTextarea` 重复的 `TInput.multiline` 命名构造器；`TInput` 保留 Flutter 原生 `maxLines` / `minLines` / `inputType` 组合能力，正式多行输入场景统一使用 `TTextarea`。
 - `TTextarea.label` 仅表达独立多行输入框内部的标题，使用 `fontBodyMedium + textColorPrimary`；位于 `TFormItem` 中时仍使用 `TFormItem.label`，不得同时传入两份标签。
 - `clearButtonMode` 为单一清除按钮配置：`never`、`always`、`focused`。
 - `clearButtonMode` 默认 `never`，与小程序 `clearable=false` 对齐；需要清除能力时显式使用 `always` 或 `focused`。
@@ -112,6 +116,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - Form Demo 的生日和籍贯是选择触发器，不使用只读 `TInput` 模拟编辑行为；`TFormItem` 负责字段行和内容对齐，业务组合使用文本展示当前值并通过手势打开 Picker，同时提供按钮语义。
 - Form Demo 的上传照片字段使用与其他字段相同的表单级校验时机：首次提交前只更新受控文件列表，提交时统一执行空列表必填校验，首次提交后再随用户交互更新错误；Upload 组件只负责回传受控文件列表。
 - Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；内部标题、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。
+- Input 与 Textarea 的外置标签 Demo 统一由可独立使用的 `TFormItem` 表达，不在 Demo 手写标签字号、颜色和间距。
 - Demo 视觉对齐优先验证容器层级、字段行高度、标签与内容的相对位置、分隔线和状态颜色，再验证代码面板等 Example 基础设施。
 
 ## 验收标准

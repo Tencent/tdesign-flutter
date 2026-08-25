@@ -15,27 +15,7 @@ void main() {
     );
   }
 
-  testWidgets('TInput.multiline uses multiline defaults and callbacks', (
-    tester,
-  ) async {
-    String? changed;
-    await tester.pumpWidget(
-      wrap(
-        TInput.multiline(
-          initialValue: 'line',
-          onChanged: (value) => changed = value,
-        ),
-      ),
-    );
-    final field = tester.widget<TextField>(find.byType(TextField));
-    expect(field.maxLines, isNull);
-    expect(field.minLines, 4);
-    expect(field.keyboardType, TextInputType.multiline);
-    await tester.enterText(find.byType(TextField), 'updated');
-    expect(changed, 'updated');
-  });
-
-  testWidgets('TTextarea delegates every public option to TInput.multiline', (
+  testWidgets('TTextarea delegates every public editing option to TInput', (
     tester,
   ) async {
     final controller = TextEditingController(text: 'initial');

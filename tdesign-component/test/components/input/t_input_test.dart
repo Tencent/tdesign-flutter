@@ -20,7 +20,9 @@ void main() {
 
   group('TInput v1 control', () {
     testWidgets('multiline 较小 maxLines 会收敛默认 minLines', (tester) async {
-      await tester.pumpWidget(wrap(const TInput.multiline(maxLines: 2)));
+      await tester.pumpWidget(
+        wrap(const TInput(inputType: TextInputType.multiline, maxLines: 2)),
+      );
 
       expect(field(tester).minLines, 2);
       expect(field(tester).maxLines, 2);
