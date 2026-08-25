@@ -132,5 +132,5 @@ TForm                 表单生命周期、字段注册和统一操作
 - [x] Textarea 覆盖基础、内部标题、边框、禁用、`maxLength`/`maxCharacter` 计数和 min/max 行数场景。
 - [x] Form Demo 展示与小程序一致的横向/纵向字段矩阵、禁用、校验和 reset/submit。
 - [x] Form/Input 相关测试通过，`flutter analyze` 零告警。
-- [x] Input、Textarea、Form 三个真实 Example 页面具备完整滚动内容的浅色与深色单套 Golden 回归；固定 Flutter 3.32.0，受控吸收跨平台字体栅格差异，并严格校验页面结构、内容高度和关键组件几何。
+- [x] Input、Textarea、Form 三个真实 Example 页面具备完整滚动内容的浅色与深色单套 Golden 回归；Linux CI 固定 Flutter 3.32.0 并以 0% 严格比较作为唯一权威结果，其他宿主仅作容差预检，同时严格校验页面结构、内容高度和关键组件几何。
 - [x] Flutter 3.32.0 与 3.47.0 均不使用不兼容 API。

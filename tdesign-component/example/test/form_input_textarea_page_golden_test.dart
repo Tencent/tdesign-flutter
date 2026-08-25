@@ -15,15 +15,19 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 import 'golden_test_utils.dart';
 
 const _pageWidth = 375.0;
-const _crossPlatformDiffRate = 0.03;
+// Linux + Flutter 3.32 是唯一权威 Golden 环境，保持 0% 严格比较。
+// 其他宿主仅用于本地预检；3% 来自同一页面在 macOS/Linux 间已观测的
+// 1.90%～2.58% 字体栅格差异，不是全仓默认容差。
+const _nonLinuxPreviewDiffRate = 0.03;
+const _geometryEpsilon = 0.000001;
 
 void main() {
   late GoldenFileComparator originalGoldenComparator;
 
   setUpAll(() async {
-    originalGoldenComparator = useGoldenDiffTolerance(
-      maxDiffRate: _crossPlatformDiffRate,
-    );
+    originalGoldenComparator = Platform.isLinux
+        ? goldenFileComparator
+        : useGoldenDiffTolerance(maxDiffRate: _nonLinuxPreviewDiffRate);
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
     final flutterBin = File(
@@ -89,12 +93,6 @@ void main() {
       contentHeight: 1064.3333333333335,
       components: [
         _ComponentGeometry(
-          type: TInput,
-          count: 3,
-          first: Rect.fromLTRB(96, 361, 359, 385),
-          last: Rect.fromLTRB(96, 801, 359, 877),
-        ),
-        _ComponentGeometry(
           type: TTextarea,
           count: 1,
           first: Rect.fromLTRB(96, 801, 359, 901),
@@ -151,6 +149,9 @@ void main() {
         );
         _expectContentHeight(tester, pageScrollView, page.contentHeight);
         _expectComponentGeometry(tester, page.components);
+        if (page.name == 'form') {
+          _expectDirectFormInputs(tester);
+        }
         _expectKeyBorders(tester, page.name);
 
         await expectLater(
@@ -179,7 +180,7 @@ void _expectContentHeight(
     contentHeight += sliver.geometry!.scrollExtent;
     sliver = viewport.childAfter(sliver);
   }
-  expect(contentHeight, expectedHeight);
+  expect(contentHeight, closeTo(expectedHeight, _geometryEpsilon));
 }
 
 void _expectComponentGeometry(
@@ -194,12 +195,28 @@ void _expectComponentGeometry(
   }
 }
 
+void _expectDirectFormInputs(WidgetTester tester) {
+  final inputs = tester
+      .widgetList<TFormItem>(find.byType(TFormItem))
+      .map((item) => item.child)
+      .whereType<TInput>()
+      .toList(growable: false);
+  expect(inputs, hasLength(2));
+  _expectRect(
+    tester.getRect(find.byWidget(inputs.first)),
+    const Rect.fromLTRB(96, 361, 359, 385),
+  );
+  _expectRect(
+    tester.getRect(find.byWidget(inputs.last)),
+    const Rect.fromLTRB(96, 441, 359, 465),
+  );
+}
+
 void _expectRect(Rect actual, Rect expected) {
-  const epsilon = 0.000001;
-  expect(actual.left, closeTo(expected.left, epsilon));
-  expect(actual.top, closeTo(expected.top, epsilon));
-  expect(actual.right, closeTo(expected.right, epsilon));
-  expect(actual.bottom, closeTo(expected.bottom, epsilon));
+  expect(actual.left, closeTo(expected.left, _geometryEpsilon));
+  expect(actual.top, closeTo(expected.top, _geometryEpsilon));
+  expect(actual.right, closeTo(expected.right, _geometryEpsilon));
+  expect(actual.bottom, closeTo(expected.bottom, _geometryEpsilon));
 }
 
 void _expectKeyBorders(WidgetTester tester, String pageName) {
