@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -671,13 +670,18 @@ void main() {
 
       expect(find.text('Upload'), findsOneWidget);
       expect(find.byIcon(TIcons.upload), findsOneWidget);
-      final enabledData = tester
-          .getSemantics(find.byKey(const ValueKey('upload-add')))
-          .getSemanticsData();
-      expect(enabledData.label, 'Upload');
-      expect(enabledData.hasFlag(SemanticsFlag.isButton), isTrue);
-      expect(enabledData.hasFlag(SemanticsFlag.isEnabled), isTrue);
-      expect(enabledData.hasAction(SemanticsAction.tap), isTrue);
+      expect(
+        tester.getSemantics(find.byKey(const ValueKey('upload-add'))),
+        matchesSemantics(
+          label: 'Upload',
+          isButton: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
+      );
 
       await tester.pumpWidget(
         wrap(
@@ -685,13 +689,16 @@ void main() {
         ),
       );
       expect(find.text('Upload'), findsOneWidget);
-      final disabledData = tester
-          .getSemantics(find.byKey(const ValueKey('upload-add')))
-          .getSemanticsData();
-      expect(disabledData.label, 'Upload');
-      expect(disabledData.hasFlag(SemanticsFlag.isButton), isTrue);
-      expect(disabledData.hasFlag(SemanticsFlag.isEnabled), isFalse);
-      expect(disabledData.hasAction(SemanticsAction.tap), isFalse);
+      expect(
+        tester.getSemantics(find.byKey(const ValueKey('upload-add'))),
+        matchesSemantics(
+          label: 'Upload',
+          isButton: true,
+          hasEnabledState: true,
+          isFocusable: true,
+          hasFocusAction: true,
+        ),
+      );
       semantics.dispose();
     });
 
