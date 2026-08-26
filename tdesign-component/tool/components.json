@@ -438,12 +438,17 @@
     {
       "slug": "upload",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/upload/t_upload.dart"
+        "type": "folder",
+        "path": "lib/src/components/upload"
       },
       "api": {
         "names": [
-          "TUpload"
+          "TUpload",
+          "TUploadFile",
+          "TUploadFileStatus",
+          "TUploadLayout",
+          "TUploadThemeData",
+          "TUploadVariant"
         ],
         "getComments": false
       }
