@@ -26,8 +26,8 @@
     set -eu
     cd tdesign-component
     flutter test test/components/refresh/t_refresh_test.dart --coverage
-    # 用 Python 解析 lcov.info，过滤出 refresh 生产源码并校验 LH/LF >= 95%
-    python3 tool/check_refresh_coverage.py
+    # 过滤 refresh 生产源码并校验 LH/LF >= 95%
+    python3 tool/check_component_coverage.py refresh
     # Golden 视觉回归：与已提交的 baseline（goldens/*.png）逐像素比对
     flutter test test/components/refresh/t_refresh_golden_test.dart
 
@@ -44,6 +44,24 @@
 .form-input-page-golden:
   name: flutter test (form input textarea page golden)
   script: cd tdesign-component/example && flutter test test/form_input_textarea_page_golden_test.dart
+
+# Switch 组件行为与生产源码覆盖率门禁，在两个 Flutter 版本执行。
+.switch-component-tests:
+  name: flutter test (switch component)
+  script: |
+    cd tdesign-component
+    flutter test test/components/switch/t_switch_test.dart --coverage
+    python3 tool/check_component_coverage.py switch
+
+# Switch 完整 Demo 页面及亮暗 Golden，以 Flutter 3.32.0 Linux 为权威环境。
+.switch-page-golden:
+  name: flutter test (switch page golden)
+  script: cd tdesign-component/example && flutter test test/switch_page_test.dart
+
+# latest 只验证 Demo 结构与交互，避免跨 Flutter 引擎复用 Golden 基线。
+.switch-page-tests:
+  name: flutter test (switch page)
+  script: cd tdesign-component/example && flutter test test/switch_page_test.dart --exclude-tags golden
 
 # APK 构建
 .build-apk:
@@ -105,8 +123,10 @@
     - !reference [.install-component]
     - !reference [.install-example]
     - !reference [.test]
+    - !reference [.switch-component-tests]
     - !reference [.upload-tests]
     - !reference [.form-input-page-golden]
+    - !reference [.switch-page-golden]
 
 # 测试 + 覆盖率：flutter latest
 .test-latest:
@@ -117,7 +137,10 @@
       - /root/.pub-cache:cow
   stages:
     - !reference [.install-component]
+    - !reference [.install-example]
     - !reference [.test]
+    - !reference [.switch-component-tests]
+    - !reference [.switch-page-tests]
 
 # 构建 APK：flutter 3.32.0
 .build-apk-332:

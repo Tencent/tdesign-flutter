@@ -73,7 +73,15 @@ jobs:
 
       - name: Run refresh tests with coverage
         working-directory: ./tdesign-component
-        run: flutter test test/components/refresh/t_refresh_test.dart --coverage
+        run: |
+          flutter test test/components/refresh/t_refresh_test.dart --coverage
+          python3 tool/check_component_coverage.py refresh
+
+      - name: Run Switch tests with coverage
+        working-directory: ./tdesign-component
+        run: |
+          flutter test test/components/switch/t_switch_test.dart --coverage
+          python3 tool/check_component_coverage.py switch
 
       - name: Run refresh golden tests
         working-directory: ./tdesign-component
@@ -84,8 +92,7 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter test test/components/upload/t_upload_test.dart test/components/upload/t_upload_golden_test.dart
 
-      - name: Install example dependencies for page golden tests
-        if: matrix.flutter-version == '3.32.0'
+      - name: Install example dependencies for page tests
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
@@ -93,6 +100,16 @@ jobs:
         if: matrix.flutter-version == '3.32.0'
         working-directory: ./tdesign-component/example
         run: flutter test test/form_input_textarea_page_golden_test.dart
+
+      - name: Run Switch page tests and golden tests
+        if: matrix.flutter-version == '3.32.0'
+        working-directory: ./tdesign-component/example
+        run: flutter test test/switch_page_test.dart
+
+      - name: Run Switch page tests without golden tests
+        if: matrix.flutter-version != '3.32.0'
+        working-directory: ./tdesign-component/example
+        run: flutter test test/switch_page_test.dart --exclude-tags golden
 
   build:
     strategy:

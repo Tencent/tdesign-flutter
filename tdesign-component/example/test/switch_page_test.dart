@@ -185,7 +185,7 @@ void main() {
         image,
         matchesGoldenFile('goldens/switch_page_${mode.name}.png'),
       );
-    });
+    }, tags: 'golden');
   }
 }
 
