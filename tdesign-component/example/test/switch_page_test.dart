@@ -134,7 +134,7 @@ void main() {
     final switches = tester.widgetList<TSwitch>(find.byType(TSwitch)).toList();
     final variants = switches.map((widget) => widget.variant).toSet();
     final loadingValues = switches
-        .where((widget) => widget.variant == TSwitchVariant.loading)
+        .where((widget) => widget.loading)
         .map((widget) => widget.value)
         .toSet();
     final disabledValues = switches

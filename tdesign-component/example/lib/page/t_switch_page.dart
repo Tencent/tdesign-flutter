@@ -112,12 +112,9 @@ class TSwitchPage extends StatelessWidget {
         cells: [
           TCell(
             title: Text('加载状态'),
-            note: TSwitch(value: false, variant: TSwitchVariant.loading),
+            note: TSwitch(value: false, loading: true),
           ),
-          TCell(
-            title: Text('加载状态'),
-            note: TSwitch(value: true, variant: TSwitchVariant.loading),
-          ),
+          TCell(title: Text('加载状态'), note: TSwitch(value: true, loading: true)),
         ],
       ),
       _SwitchGroupLabel('禁用状态', top: 24),
