@@ -1,7 +1,0 @@
-Widget _buildIcon(BuildContext context) => const TCell(
-        title: Text('图标开关'),
-        note: _StatefulSwitch(
-          initialValue: true,
-          variant: TSwitchVariant.icon,
-        ),
-      );

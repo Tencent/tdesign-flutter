@@ -1,4 +1,0 @@
-Widget _buildMedium(BuildContext context) => const TCell(
-        title: Text('中尺寸'),
-        note: _StatefulSwitch(size: TSwitchSize.medium),
-      );

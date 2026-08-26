@@ -1,0 +1,17 @@
+Widget _buildLabel(BuildContext context) => const TCellGroup(
+    cells: [
+      TCell(
+        title: Text('带文字开关'),
+        note: _StatefulSwitch(
+          initialValue: true,
+          variant: TSwitchVariant.text,
+          openText: '开',
+          closeText: '关',
+        ),
+      ),
+      TCell(
+        title: Text('带图标开关'),
+        note: _StatefulSwitch(initialValue: true, variant: TSwitchVariant.icon),
+      ),
+    ],
+  );

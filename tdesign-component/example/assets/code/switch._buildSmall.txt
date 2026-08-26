@@ -1,4 +1,0 @@
-Widget _buildSmall(BuildContext context) => const TCell(
-        title: Text('小尺寸'),
-        note: _StatefulSwitch(size: TSwitchSize.small),
-      );

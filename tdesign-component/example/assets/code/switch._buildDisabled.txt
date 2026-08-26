@@ -1,4 +1,0 @@
-Widget _buildDisabled(BuildContext context) => const TCell(
-        title: Text('禁用状态'),
-        note: TSwitch(value: false),
-      );
