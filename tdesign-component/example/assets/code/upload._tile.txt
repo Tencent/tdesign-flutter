@@ -1,3 +1,14 @@
 Widget _tile(BuildContext context) {
-    return _demo(TUpload(files: _imageFiles, maxFiles: 4), title: '上传图片');
+    var files = _imageFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 4,
+          draggable: true,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
   }

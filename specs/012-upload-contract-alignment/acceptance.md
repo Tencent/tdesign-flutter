@@ -17,7 +17,7 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例资产 |
 | `node scripts/check-flutter-component-contracts.mjs` | 通过 | 56 个站点路由 |
 
-覆盖列表入口 button semantics、图片/视频提示、失败态不回退预览，以及成功态无大小文案。
+覆盖列表入口 button semantics、按钮顺序、文件行容器 token / 内边距、24dp 状态图标、18dp 删除图标、失败文字颜色、所有状态的统一文件点击、宫格 / 列表长按排序、禁用态拖拽拦截，以及成功态无大小文案。
 
 ## 人工验收
 
@@ -25,4 +25,5 @@
 
 ## 未覆盖项与后续工作
 
-- 拖拽排序和平台请求适配不在本次 Flutter 组件契约内。
+- 平台请求适配不在本次 Flutter 组件契约内。
+- 小程序的拖拽振动和过渡配置属于平台细节，本次不复制。

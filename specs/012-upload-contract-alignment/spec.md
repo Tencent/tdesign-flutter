@@ -8,11 +8,11 @@
 
 - 保留 Flutter 受控文件列表和原生文件选择能力。
 - 补齐小程序 Demo 可见的宫格 / 列表布局、加载 / 重试 / 失败状态和禁用文件遮罩。
-- Demo 使用与小程序一致的“组件类型 / 组件状态 / 组件风格”分组，隐私场景默认禁用。
+- Demo 使用与小程序一致的“组件类型 / 组件状态 / 组件风格”分组，隐私文件选择默认禁用，拖拽示例可操作。
 
 ## 非目标
 
-- 不引入小程序的 requestMethod、slot、source、draggable 或平台文件选择 API。
+- 不引入小程序的 requestMethod、slot、source 或平台文件选择 API。
 - 不把上传请求生命周期放入组件；业务仍通过受控 files 和回调管理状态。
 
 ## 范围
@@ -21,26 +21,33 @@
 
 - `TUpload.layout` 使用 `TUploadLayout.grid/list` 选择布局。
 - `TUploadFileStatus.retryableError` 表达可重试失败；`error` 保持失败状态。
+- `TUpload.onFileTap` 统一通知已有文件点击，调用方根据文件状态决定预览、重试或忽略。
+- `TUpload.draggable` 控制是否允许长按文件排序，排序结果通过现有 `onChanged` 回传。
 - 禁用时为已有图片显示主题遮罩；列表布局展示文件名和大小 / 状态辅助信息。
 - Upload Demo 和组件测试。
 
 ### 不涉及
 
-- 现有 `files`、`onChanged`、`picker`、预览、重试和校验回调的生命周期。
+- 现有 `files`、`onChanged`、`picker` 和校验回调的生命周期。
 
 ## 行为契约
 
-- `onChanged == null` 表示组件禁用；新增按钮、删除、预览和重试均不可触发。
-- `grid` 保持 80dp 文件项和 token 间距；`list` 使用 Flutter Column/Row 组成文件信息行。
-- `uploading` 显示进度环；`retryableError` 在 `onRetry` 可用时显示刷新图标和“重新上传”，否则降级为普通失败视觉；`error` 显示错误图标和“上传失败”。
-- 列表布局仅允许 `ready` / `success` 文件触发预览；`retryableError` 仅在 `onRetry` 可用时触发重试，`uploading` / `error` 及无重试回调的 `retryableError` 不回退触发预览。
-- 列表新增入口提供 button 无障碍语义，并按 `mediaType` 展示图片或视频提示；`success` 文件缺少大小时显示“上传成功”，不显示“待上传”。
+- `onChanged == null` 表示组件禁用；新增、删除、文件点击和拖拽排序均不可触发。
+- `draggable` 默认为 `false`；为 `true` 且组件启用时，宫格和列表文件均可长按拖拽，添加入口不参与排序。
+- 拖拽落下后组件生成不可变的新文件列表并触发一次 `onChanged`；组件自身不持有排序状态。
+- `grid` 保持 80dp 文件项和 8dp 间距；非图片文件按扩展名显示语义图标与文件名。
+- `list` 的 Upload 按钮位于文件列表之前；文件行间距为 12dp，内边距为竖向 8dp / 水平 12dp，使用次级容器背景和默认圆角。
+- `list` 缩略图和状态图标为 24dp，删除图标为 18dp；启用态失败文件名使用 error token，禁用态统一使用 disabled token。
+- `uploading` 显示进度环；`retryableError` 显示刷新图标和“重新上传”；`error` 显示错误图标和“上传失败”。
+- 所有状态的已有文件点击均只触发 `onFileTap`；组件不自动预览、重试或改变文件状态，调用方根据 `file.status` 决定后续行为。
+- 列表新增入口复用中型主题 `TButton`，显示上传图标和 `Upload`；`success` 文件缺少大小时显示“上传成功”，不显示“待上传”。
+- Demo 提供与小程序相同的分组、文案和文件数据；普通隐私文件选择保持禁用，拖拽示例启用以演示排序。按钮顺序、行背景 / 圆角 / 间距、图标尺寸与失败颜色属于组件默认样式。
 - 禁用态图片使用浅色 / 深色对应的禁用遮罩；主题可通过 `disabledMaskColor` 覆盖。
 - 文件列表仍由调用方控制，组件只生成不可变的变化列表并触发回调。
 
 ## 验收标准
 
-- [ ] 组件测试覆盖两种布局、状态区分、禁用遮罩和既有受控行为。
-- [ ] Demo 具有三组官方分组和隐私禁用说明。
+- [ ] 组件测试覆盖两种布局、状态区分、禁用遮罩、拖拽排序和既有受控行为。
+- [ ] Demo 具有三组官方分组、隐私禁用说明和官方文件状态数据。
 - [ ] API 文档和示例代码资产与源码同步。
 - [ ] Flutter 3.32.0 分析、测试和 Web 构建通过。

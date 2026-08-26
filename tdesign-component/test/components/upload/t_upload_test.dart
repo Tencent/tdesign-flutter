@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
@@ -118,7 +120,8 @@ void main() {
           TUpload(
             files: [file('a')],
             maxFiles: 2,
-            onPreview: (_) => fail('disabled preview'),
+            draggable: true,
+            onFileTap: (_) => fail('disabled file tap'),
           ),
         ),
       );
@@ -128,7 +131,96 @@ void main() {
             .onTap,
         isNull,
       );
+      expect(
+        tester
+            .widget<GestureDetector>(
+              find.byKey(const ValueKey('upload-file-a')),
+            )
+            .onTap,
+        isNull,
+      );
       expect(find.byKey(const ValueKey('upload-remove-a')), findsNothing);
+      expect(find.byType(LongPressDraggable<int>), findsNothing);
+    });
+
+    testWidgets('grid long press reorder emits an immutable next list', (
+      tester,
+    ) async {
+      List<TUploadFile>? changed;
+      final first = file('a');
+      final second = file('b');
+      final third = file('c');
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            files: [first, second, third],
+            maxFiles: 3,
+            draggable: true,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey('upload-file-a'))),
+      );
+      await tester.pump(kLongPressTimeout + const Duration(milliseconds: 50));
+      await gesture.moveTo(
+        tester.getCenter(find.byKey(const ValueKey('upload-file-c'))),
+      );
+      await tester.pump();
+      await gesture.up();
+      await tester.pump();
+
+      expect(changed, [second, third, first]);
+      expect(() => changed!.add(file('d')), throwsUnsupportedError);
+    });
+
+    testWidgets('list long press reorder uses onChanged', (tester) async {
+      List<TUploadFile>? changed;
+      final first = file('a');
+      final second = file('b');
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            layout: TUploadLayout.list,
+            files: [first, second],
+            maxFiles: 2,
+            draggable: true,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey('upload-list-file-b'))),
+      );
+      await tester.pump(kLongPressTimeout + const Duration(milliseconds: 50));
+      await gesture.moveTo(
+        tester.getCenter(find.byKey(const ValueKey('upload-list-file-a'))),
+      );
+      await tester.pump();
+      await gesture.up();
+      await tester.pump();
+
+      expect(changed, [second, first]);
+    });
+
+    testWidgets('draggable false does not install reorder gestures', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            files: [file('a'), file('b')],
+            maxFiles: 2,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(find.byType(LongPressDraggable<int>), findsNothing);
+      expect(find.byType(DragTarget<int>), findsNothing);
     });
 
     testWidgets('custom picker emits a complete immutable next list', (
@@ -287,12 +379,12 @@ void main() {
       expect(changed, [second]);
     });
 
-    testWidgets('preview and retry callbacks follow file status semantics', (
+    testWidgets('file tap reports every status through one callback', (
       tester,
     ) async {
-      TUploadFile? previewed;
-      TUploadFile? retried;
+      final tapped = <TUploadFile>[];
       final ready = file('ready');
+      final uploading = file('uploading', status: TUploadFileStatus.uploading);
       final failed = file(
         'failed',
         status: TUploadFileStatus.error,
@@ -302,20 +394,18 @@ void main() {
       await tester.pumpWidget(
         wrap(
           TUpload(
-            files: [ready, failed, retry],
+            files: [ready, uploading, failed, retry],
             maxFiles: 4,
-            onPreview: (value) => previewed = value,
-            onRetry: (value) => retried = value,
+            onFileTap: tapped.add,
             onChanged: (_) {},
           ),
         ),
       );
       await tester.tap(find.byKey(const ValueKey('upload-file-ready')));
+      await tester.tap(find.byKey(const ValueKey('upload-status-uploading')));
       await tester.tap(find.byKey(const ValueKey('upload-status-failed')));
-      expect(retried, isNull);
       await tester.tap(find.byKey(const ValueKey('upload-status-retry')));
-      expect(previewed, same(ready));
-      expect(retried, same(retry));
+      expect(tapped, [ready, uploading, failed, retry]);
     });
 
     testWidgets('max count hides add and canRemove controls remove action', (
@@ -433,7 +523,6 @@ void main() {
             ],
             maxFiles: 3,
             onChanged: (_) {},
-            onRetry: (_) {},
           ),
         ),
       );
@@ -447,72 +536,81 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('image.png'), findsOneWidget);
-      expect(find.text('重新上传'), findsOneWidget);
-      expect(find.byIcon(TIcons.refresh), findsOneWidget);
+      expect(find.text('上传失败'), findsOneWidget);
+      expect(find.byIcon(TIcons.error_circle_filled), findsOneWidget);
       expect(find.byIcon(TIcons.delete), findsNWidgets(2));
+
+      final token = TThemeData.defaultData();
+      expect(
+        tester.getTopLeft(find.byKey(const ValueKey('upload-add'))).dy,
+        lessThan(
+          tester
+              .getTopLeft(find.byKey(const ValueKey('upload-list-file-image')))
+              .dy,
+        ),
+      );
+      final retryRow = tester.widget<GestureDetector>(
+        find.byKey(const ValueKey('upload-list-file-retry')),
+      );
+      final container = retryRow.child! as Container;
+      final decoration = container.decoration! as BoxDecoration;
+      expect(
+        container.padding,
+        EdgeInsets.symmetric(
+          vertical: token.spacer8,
+          horizontal: token.spacer12,
+        ),
+      );
+      expect(decoration.color, token.bgColorSecondaryContainer);
+      expect(
+        decoration.borderRadius,
+        BorderRadius.circular(token.radiusDefault),
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.error_circle_filled)).size,
+        24,
+      );
+      expect(
+        tester.widgetList<Icon>(find.byIcon(TIcons.delete)).first.size,
+        18,
+      );
+      expect(
+        tester.widget<Text>(find.text('retry.png')).style?.color,
+        token.errorNormalColor,
+      );
     });
 
-    testWidgets(
-      'list previews completed files and retry only invokes onRetry',
-      (tester) async {
-        TUploadFile? previewed;
-        TUploadFile? retried;
-        final ready = file('ready');
-        final error = file('error', status: TUploadFileStatus.error);
-        final uploading = file(
-          'uploading',
-          status: TUploadFileStatus.uploading,
-        );
-        final retry = file('retry', status: TUploadFileStatus.retryableError);
-        await tester.pumpWidget(
-          wrap(
-            TUpload(
-              layout: TUploadLayout.list,
-              files: [ready, error, uploading, retry],
-              maxFiles: 5,
-              onChanged: (_) {},
-              onPreview: (value) => previewed = value,
-              onRetry: (value) => retried = value,
-            ),
+    testWidgets('list reports every file status through one callback', (
+      tester,
+    ) async {
+      final tapped = <TUploadFile>[];
+      final ready = file('ready');
+      final error = file('error', status: TUploadFileStatus.error);
+      final uploading = file('uploading', status: TUploadFileStatus.uploading);
+      final retry = file('retry', status: TUploadFileStatus.retryableError);
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            layout: TUploadLayout.list,
+            files: [ready, error, uploading, retry],
+            maxFiles: 5,
+            onChanged: (_) {},
+            onFileTap: tapped.add,
           ),
-        );
+        ),
+      );
 
+      for (final id in ['ready', 'error', 'uploading', 'retry']) {
         tester
             .widget<GestureDetector>(
-              find.byKey(const ValueKey('upload-list-file-ready')),
+              find.byKey(ValueKey('upload-list-file-$id')),
             )
             .onTap!();
-        expect(previewed, same(ready));
+      }
+      expect(tapped, [ready, error, uploading, retry]);
+    });
 
-        previewed = null;
-        expect(
-          tester
-              .widget<GestureDetector>(
-                find.byKey(const ValueKey('upload-list-file-error')),
-              )
-              .onTap,
-          isNull,
-        );
-        expect(
-          tester
-              .widget<GestureDetector>(
-                find.byKey(const ValueKey('upload-list-file-uploading')),
-              )
-              .onTap,
-          isNull,
-        );
-        expect(previewed, isNull);
-
-        tester
-            .widget<GestureDetector>(
-              find.byKey(const ValueKey('upload-list-file-retry')),
-            )
-            .onTap!();
-        expect(retried, same(retry));
-      },
-    );
-
-    testWidgets('retryable error without callback falls back to error UI', (
+    testWidgets('retryable error visual does not depend on callback', (
       tester,
     ) async {
       final retryableError = file(
@@ -524,8 +622,8 @@ void main() {
         wrap(TUpload(files: [retryableError], onChanged: (_) {})),
       );
 
-      expect(find.text('上传失败'), findsOneWidget);
-      expect(find.byIcon(TIcons.close_circle), findsOneWidget);
+      expect(find.text('重新上传'), findsOneWidget);
+      expect(find.byIcon(TIcons.refresh), findsOneWidget);
       expect(
         tester
             .widget<GestureDetector>(
@@ -541,12 +639,11 @@ void main() {
             layout: TUploadLayout.list,
             files: [retryableError],
             onChanged: (_) {},
-            onPreview: (_) => fail('失败状态不应回退触发预览'),
           ),
         ),
       );
       expect(find.text('上传失败'), findsOneWidget);
-      expect(find.byIcon(TIcons.close_circle), findsOneWidget);
+      expect(find.byIcon(TIcons.error_circle_filled), findsOneWidget);
       expect(
         tester
             .widget<GestureDetector>(
@@ -557,7 +654,7 @@ void main() {
       );
     });
 
-    testWidgets('list add semantics and media-specific hints are explicit', (
+    testWidgets('list add uses the miniprogram button content and semantics', (
       tester,
     ) async {
       final semantics = tester.ensureSemantics();
@@ -572,28 +669,29 @@ void main() {
         ),
       );
 
-      expect(find.text('支持视频文件'), findsOneWidget);
-      expect(
-        tester.getSemantics(find.byKey(const ValueKey('upload-add'))),
-        matchesSemantics(
-          label: '选择文件',
-          isButton: true,
-          hasEnabledState: true,
-          isEnabled: true,
-          hasTapAction: true,
-        ),
-      );
+      expect(find.text('Upload'), findsOneWidget);
+      expect(find.byIcon(TIcons.upload), findsOneWidget);
+      final enabledData = tester
+          .getSemantics(find.byKey(const ValueKey('upload-add')))
+          .getSemanticsData();
+      expect(enabledData.label, 'Upload');
+      expect(enabledData.hasFlag(SemanticsFlag.isButton), isTrue);
+      expect(enabledData.hasFlag(SemanticsFlag.isEnabled), isTrue);
+      expect(enabledData.hasAction(SemanticsAction.tap), isTrue);
 
       await tester.pumpWidget(
         wrap(
           TUpload(layout: TUploadLayout.list, files: const [], onChanged: null),
         ),
       );
-      expect(find.text('支持图片文件'), findsOneWidget);
-      expect(
-        tester.getSemantics(find.byKey(const ValueKey('upload-add'))),
-        matchesSemantics(label: '选择文件', isButton: true, hasEnabledState: true),
-      );
+      expect(find.text('Upload'), findsOneWidget);
+      final disabledData = tester
+          .getSemantics(find.byKey(const ValueKey('upload-add')))
+          .getSemanticsData();
+      expect(disabledData.label, 'Upload');
+      expect(disabledData.hasFlag(SemanticsFlag.isButton), isTrue);
+      expect(disabledData.hasFlag(SemanticsFlag.isEnabled), isFalse);
+      expect(disabledData.hasAction(SemanticsAction.tap), isFalse);
       semantics.dispose();
     });
 
@@ -682,7 +780,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.file));
       expect(placeholderBox.color, token.bgColorSecondaryContainer);
-      expect(icon.color, token.textColorPlaceholder);
+      expect(icon.color, token.textDisabledColor);
     });
 
     testWidgets('theme controls dimensions, shape and status styling', (

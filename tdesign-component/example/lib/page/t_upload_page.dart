@@ -11,23 +11,20 @@ class TUploadPage extends StatelessWidget {
   static const _imageFiles = [
     TUploadFile(
       id: 'image-1',
-      name: 'image-1.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
-      size: 1024 * 128,
+      name: 'uploaded1.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example4.png',
       status: TUploadFileStatus.success,
     ),
     TUploadFile(
       id: 'image-2',
-      name: 'image-2.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example2.png',
-      size: 1024 * 256,
+      name: 'uploaded2.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example6.png',
       status: TUploadFileStatus.success,
     ),
     TUploadFile(
       id: 'image-3',
-      name: 'image-3.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example3.png',
-      size: 1024 * 512,
+      name: 'uploaded3.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example5.png',
       status: TUploadFileStatus.success,
     ),
   ];
@@ -35,43 +32,159 @@ class TUploadPage extends StatelessWidget {
   static const _statusFiles = [
     TUploadFile(
       id: 'loading',
-      name: 'loading.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
+      name: 'uploaded1.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example4.png',
       status: TUploadFileStatus.uploading,
     ),
     TUploadFile(
       id: 'progress',
-      name: 'progress.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example2.png',
+      name: 'uploaded2.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example5.png',
       status: TUploadFileStatus.uploading,
       progress: 0.68,
     ),
     TUploadFile(
       id: 'retry',
-      name: 'retry.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example3.png',
+      name: 'uploaded3.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example6.png',
       status: TUploadFileStatus.retryableError,
     ),
     TUploadFile(
       id: 'failed',
-      name: 'failed.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
+      name: 'uploaded4.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example5.png',
       status: TUploadFileStatus.error,
+    ),
+  ];
+
+  static const _gridLayoutFiles = [
+    TUploadFile(
+      id: 'grid-loading',
+      name: 'loading-file.txt',
+      status: TUploadFileStatus.uploading,
+    ),
+    TUploadFile(
+      id: 'grid-progress',
+      name: 'loading-file2.txt',
+      status: TUploadFileStatus.uploading,
+      progress: 0.68,
+    ),
+    TUploadFile(
+      id: 'grid-retry',
+      name: 'failed-file.txt',
+      status: TUploadFileStatus.retryableError,
+    ),
+    TUploadFile(
+      id: 'grid-failed',
+      name: 'error-file.txt',
+      status: TUploadFileStatus.error,
+    ),
+    TUploadFile(
+      id: 'grid-excel',
+      name: 'report.xlsx',
+      size: 153600,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'grid-pdf',
+      name: 'document.pdf',
+      size: 327680,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'grid-powerpoint',
+      name: 'presentation.pptx',
+      size: 524288,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'grid-word',
+      name: 'article.docx',
+      size: 262144,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'grid-image-loading',
+      name: 'image-loading.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+      status: TUploadFileStatus.uploading,
+    ),
+    TUploadFile(
+      id: 'grid-image-progress',
+      name: 'image-percent.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+      status: TUploadFileStatus.uploading,
+      progress: 0.68,
+    ),
+    TUploadFile(
+      id: 'grid-image-retry',
+      name: 'image-reload.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+      status: TUploadFileStatus.retryableError,
+    ),
+    TUploadFile(
+      id: 'grid-image-failed',
+      name: 'image-failed.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+      status: TUploadFileStatus.error,
+    ),
+    TUploadFile(
+      id: 'grid-image-done',
+      name: 'image-done.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+      status: TUploadFileStatus.success,
     ),
   ];
 
   static const _listFiles = [
     TUploadFile(
-      id: 'document',
-      name: '设计说明.pdf',
-      size: 1024 * 768,
+      id: 'list-loading',
+      name: 'Technical Design Document.pdf',
+      size: 222208,
+      status: TUploadFileStatus.uploading,
+      progress: 0.3,
+    ),
+    TUploadFile(
+      id: 'list-failed',
+      name: 'Technical Design Document.pdf',
+      size: 222208,
+      status: TUploadFileStatus.error,
+    ),
+    TUploadFile(
+      id: 'list-image',
+      name: 'Design Mockup.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+      size: 1048576,
       status: TUploadFileStatus.success,
     ),
     TUploadFile(
-      id: 'photo',
-      name: '产品截图.png',
-      url: 'https://tdesign.gtimg.com/demo/images/example1.png',
-      size: 1024 * 256,
+      id: 'list-video',
+      name: 'Product Demo.mp4',
+      size: 5242880,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'list-word',
+      name: 'Project Proposal.docx',
+      size: 131072,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'list-excel',
+      name: 'Financial Report.xlsx',
+      size: 262144,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'list-pdf',
+      name: 'User Manual.pdf',
+      size: 524288,
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'list-powerpoint',
+      name: 'Quarterly Review.pptx',
+      size: 786432,
       status: TUploadFileStatus.success,
     ),
   ];
@@ -81,14 +194,16 @@ class TUploadPage extends StatelessWidget {
     return ExamplePage(
       title: tTitle(context),
       exampleCodeGroup: 'upload',
-      desc: '用于相册读取或拉起拍照的图片上传功能。（为避免涉及用户隐私，示例不会实际拉起系统文件选择器。）',
+      desc:
+          '用于相册读取或拉起拍照的图片上传功能。'
+          '（为避免涉及用户隐私，文件选择示例为禁用态；拖拽示例启用以演示排序。）',
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
             ExampleItem(desc: '单选上传', builder: _single),
             ExampleItem(desc: '多选上传', builder: _multiple),
-            ExampleItem(desc: '图片平铺展示', builder: _tile),
+            ExampleItem(desc: '长按图片拖拽排片', builder: _tile),
           ],
         ),
         ExampleModule(
@@ -118,20 +233,23 @@ class TUploadPage extends StatelessWidget {
 
   @ExampleCode(group: 'upload')
   Widget _tile(BuildContext context) {
-    return _demo(TUpload(files: _imageFiles, maxFiles: 4), title: '上传图片');
+    var files = _imageFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 4,
+          draggable: true,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
   }
 
   @ExampleCode(group: 'upload')
   Widget _status(BuildContext context) {
-    return _demo(
-      TUpload(
-        files: _statusFiles,
-        maxFiles: 4,
-        onChanged: _ignoreFiles,
-        onRetry: _ignoreFile,
-      ),
-      title: '上传图片',
-    );
+    return _demo(TUpload(files: _statusFiles, maxFiles: 4), title: '上传图片');
   }
 
   @ExampleCode(group: 'upload')
@@ -144,18 +262,22 @@ class TUploadPage extends StatelessWidget {
 
   @ExampleCode(group: 'upload')
   Widget _layouts(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const TText('宫格布局上传'),
-          const SizedBox(height: 8),
-          TUpload(files: _imageFiles, maxFiles: 4),
-          const SizedBox(height: 24),
-          const TText('列表布局上传'),
-          const SizedBox(height: 8),
-          TUpload(files: _listFiles, maxFiles: 3, layout: TUploadLayout.list),
+          TText('宫格布局上传'),
+          SizedBox(height: 16),
+          TUpload(files: _gridLayoutFiles, maxFiles: null),
+          SizedBox(height: 16),
+          TText('列表布局上传'),
+          SizedBox(height: 16),
+          TUpload(
+            files: _listFiles,
+            maxFiles: null,
+            layout: TUploadLayout.list,
+          ),
         ],
       ),
     );
@@ -169,7 +291,7 @@ class TUploadPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TText(title),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: upload,
@@ -177,8 +299,4 @@ class TUploadPage extends StatelessWidget {
       ],
     );
   }
-
-  static void _ignoreFiles(List<TUploadFile> files) {}
-
-  static void _ignoreFile(TUploadFile file) {}
 }

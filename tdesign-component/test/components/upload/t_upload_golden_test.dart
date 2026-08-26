@@ -136,7 +136,7 @@ class _UploadState extends StatelessWidget {
             ],
             maxFiles: 4,
             onChanged: _ignore,
-            onRetry: _ignoreFile,
+            onFileTap: _ignoreFile,
           ),
         ),
       ],

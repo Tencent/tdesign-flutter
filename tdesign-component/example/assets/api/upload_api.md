@@ -4,6 +4,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| draggable | bool | false | 是否支持长按拖拽排序；禁用时不生效。 |
 | files | List<TUploadFile> | - | 受控文件列表。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | layout | TUploadLayout | TUploadLayout.grid | 文件布局方式。 |
@@ -12,8 +13,7 @@
 | mediaType | TUploadMediaType | TUploadMediaType.image | 允许选择的媒体类型。 |
 | onChanged | ValueChanged<List<TUploadFile>>? | - | 文件列表变化回调；为 null 时禁用。 |
 | onError | ValueChanged<Object>? | - | 文件选择失败时触发。 |
-| onPreview | ValueChanged<TUploadFile>? | - | 点击已有文件时触发。 |
-| onRetry | ValueChanged<TUploadFile>? | - | 点击错误文件的重试操作时触发。 |
+| onFileTap | ValueChanged<TUploadFile>? | - | 点击任意状态的已有文件时触发；组件不会自动预览或重新上传。 |
 | onValidationError | ValueChanged<TUploadValidationError>? | - | 文件校验失败时触发。 |
 | picker | TUploadPicker? | - | 自定义文件选择器；为空时使用 image_picker。 |
 
@@ -69,7 +69,7 @@
 | uploading | 上传中。 |
 | success | 上传成功。 |
 | error | 上传失败。 |
-| retryableError | 上传失败且允许重试。 当组件提供重试回调且未禁用时，用户点击该文件会触发重试。 |
+| retryableError | 上传失败且允许重试。 该状态只控制刷新图标和“重新上传”文案；组件不会自动重试。 |
 
 
 ### TUploadLayout
