@@ -194,9 +194,7 @@ class TUploadPage extends StatelessWidget {
     return ExamplePage(
       title: tTitle(context),
       exampleCodeGroup: 'upload',
-      desc:
-          '用于相册读取或拉起拍照的图片上传功能。'
-          '（为避免涉及用户隐私，文件选择示例为禁用态；拖拽示例启用以演示排序。）',
+      desc: '用于相册读取或拉起拍照的图片上传功能。',
       children: [
         ExampleModule(
           title: '组件类型',
@@ -223,12 +221,32 @@ class TUploadPage extends StatelessWidget {
 
   @ExampleCode(group: 'upload')
   Widget _single(BuildContext context) {
-    return _demo(TUpload(files: const [], maxFiles: 1), title: '上传图片');
+    var files = const <TUploadFile>[];
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 1,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
   }
 
   @ExampleCode(group: 'upload')
   Widget _multiple(BuildContext context) {
-    return _demo(TUpload(files: _imageFiles, maxFiles: 4), title: '上传图片');
+    var files = _imageFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 4,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
   }
 
   @ExampleCode(group: 'upload')
@@ -249,36 +267,62 @@ class TUploadPage extends StatelessWidget {
 
   @ExampleCode(group: 'upload')
   Widget _status(BuildContext context) {
-    return _demo(TUpload(files: _statusFiles, maxFiles: 4), title: '上传图片');
+    var files = _statusFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 4,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
   }
 
   @ExampleCode(group: 'upload')
   Widget _messageFile(BuildContext context) {
-    return _demo(
-      TUpload(files: [_imageFiles.first], maxFiles: 4),
-      title: '上传图片',
+    var files = [_imageFiles.first];
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 4,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
     );
   }
 
   @ExampleCode(group: 'upload')
   Widget _layouts(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TText('宫格布局上传'),
-          SizedBox(height: 16),
-          TUpload(files: _gridLayoutFiles, maxFiles: null),
-          SizedBox(height: 16),
-          TText('列表布局上传'),
-          SizedBox(height: 16),
-          TUpload(
-            files: _listFiles,
-            maxFiles: null,
-            layout: TUploadLayout.list,
-          ),
-        ],
+    var gridFiles = _gridLayoutFiles;
+    var listFiles = _listFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TText('宫格布局上传'),
+            const SizedBox(height: 16),
+            TUpload(
+              files: gridFiles,
+              maxFiles: null,
+              onChanged: (value) => setState(() => gridFiles = value),
+            ),
+            const SizedBox(height: 16),
+            const TText('列表布局上传'),
+            const SizedBox(height: 16),
+            TUpload(
+              files: listFiles,
+              maxFiles: null,
+              layout: TUploadLayout.list,
+              onChanged: (value) => setState(() => listFiles = value),
+            ),
+          ],
+        ),
       ),
     );
   }

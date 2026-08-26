@@ -36,11 +36,10 @@ void main() {
     var foundStatus = false;
     var foundStyle = false;
     var foundList = false;
-    var foundNotice = false;
     var foundDragLabel = false;
     var foundGridMatrix = false;
     var foundListMatrix = false;
-    var privatePickersDisabled = true;
+    var allExamplesEnabled = true;
     var foundEnabledDragDemo = false;
     for (
       var offset = 0.0;
@@ -51,7 +50,6 @@ void main() {
       await tester.pump();
       foundStatus |= find.text('02 组件状态').evaluate().isNotEmpty;
       foundStyle |= find.text('03 组件风格').evaluate().isNotEmpty;
-      foundNotice |= find.textContaining('文件选择示例为禁用态').evaluate().isNotEmpty;
       foundDragLabel |= find.text('长按图片拖拽排片').evaluate().isNotEmpty;
       foundList |= find
           .byWidgetPredicate(
@@ -61,10 +59,9 @@ void main() {
           .evaluate()
           .isNotEmpty;
       for (final upload in tester.widgetList<TUpload>(find.byType(TUpload))) {
+        allExamplesEnabled &= upload.onChanged != null;
         if (upload.draggable) {
           foundEnabledDragDemo |= upload.onChanged != null;
-        } else {
-          privatePickersDisabled &= upload.onChanged == null;
         }
         foundGridMatrix |=
             upload.layout == TUploadLayout.grid &&
@@ -81,11 +78,10 @@ void main() {
     expect(foundStatus, isTrue);
     expect(foundStyle, isTrue);
     expect(foundList, isTrue);
-    expect(foundNotice, isTrue);
     expect(foundDragLabel, isTrue);
     expect(foundGridMatrix, isTrue);
     expect(foundListMatrix, isTrue);
-    expect(privatePickersDisabled, isTrue);
+    expect(allExamplesEnabled, isTrue);
     expect(foundEnabledDragDemo, isTrue);
   });
 }

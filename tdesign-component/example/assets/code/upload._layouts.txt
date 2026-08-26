@@ -1,21 +1,30 @@
 Widget _layouts(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TText('宫格布局上传'),
-          SizedBox(height: 16),
-          TUpload(files: _gridLayoutFiles, maxFiles: null),
-          SizedBox(height: 16),
-          TText('列表布局上传'),
-          SizedBox(height: 16),
-          TUpload(
-            files: _listFiles,
-            maxFiles: null,
-            layout: TUploadLayout.list,
-          ),
-        ],
+    var gridFiles = _gridLayoutFiles;
+    var listFiles = _listFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TText('宫格布局上传'),
+            const SizedBox(height: 16),
+            TUpload(
+              files: gridFiles,
+              maxFiles: null,
+              onChanged: (value) => setState(() => gridFiles = value),
+            ),
+            const SizedBox(height: 16),
+            const TText('列表布局上传'),
+            const SizedBox(height: 16),
+            TUpload(
+              files: listFiles,
+              maxFiles: null,
+              layout: TUploadLayout.list,
+              onChanged: (value) => setState(() => listFiles = value),
+            ),
+          ],
+        ),
       ),
     );
   }
