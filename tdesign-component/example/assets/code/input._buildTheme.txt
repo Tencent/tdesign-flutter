@@ -1,6 +1,0 @@
-Widget _buildTheme(BuildContext context) => Theme(
-        data: Theme.of(context).mergeExtension(
-          const TInputThemeData(showClearButton: false),
-        ),
-        child: const TInput(initialValue: '无清除按钮'),
-      );

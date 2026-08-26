@@ -59,10 +59,15 @@ export 'src/components/fab/t_fab.dart';
 export 'src/components/fab/t_fab_theme_data.dart' show TFabThemeData;
 export 'src/components/footer/t_footer.dart';
 export 'src/components/footer/t_footer_theme_data.dart' show TFooterThemeData;
-export 'src/components/form/t_form.dart' hide TFormFieldScope;
-export 'src/components/form/t_form_item.dart' hide TFormItemScope;
+export 'src/components/form/t_form.dart';
+export 'src/components/form/t_form_item.dart';
 export 'src/components/form/t_form_theme_data.dart'
-    show TFormLayout, TFormThemeData;
+    show
+        TFormItemVerticalAlignment,
+        TFormItemContentAlignment,
+        TFormLayout,
+        TFormRequiredMarkPosition,
+        TFormThemeData;
 export 'src/components/icon/t_icon.dart';
 export 'src/components/icon/t_icon_theme_data.dart' show TIconThemeData;
 export 'src/components/image/t_image.dart';
@@ -75,6 +80,7 @@ export 'src/components/indexes/t_indexes_theme_data.dart'
     show TIndexesThemeData;
 export 'src/components/input/t_input.dart';
 export 'src/components/input/t_input_theme_data.dart' show TInputThemeData;
+export 'src/components/input/t_input_types.dart';
 export 'src/components/link/t_link.dart';
 export 'src/components/link/t_link_theme_data.dart' show TLinkThemeData;
 export 'src/components/link/t_link_types.dart' show TLinkColorScheme, TLinkSize;

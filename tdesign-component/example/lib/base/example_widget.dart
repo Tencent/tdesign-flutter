@@ -26,6 +26,7 @@ class ExamplePage extends StatefulWidget {
     this.children = const [],
     this.padding,
     this.backgroundColor,
+    this.compactDemo = false,
     required this.exampleCodeGroup,
     this.test = const [],
     this.showSingleChild = false,
@@ -56,6 +57,9 @@ class ExamplePage extends StatefulWidget {
 
   /// 填充
   final EdgeInsetsGeometry? padding;
+
+  /// 使用小程序 Demo 的紧凑分组结构：说明条、白色示例块、连续字段行。
+  final bool compactDemo;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -219,7 +223,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.backgroundColor,
+      backgroundColor:
+          widget.backgroundColor ??
+          (widget.compactDemo ? context.tTheme.bgColorPage : null),
       floatingActionButton: widget.floatingActionButton,
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
@@ -252,6 +258,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           children: [_buildTestExampleItem(), ...widget.test],
         ),
     ];
+    final slivers = widget.compactDemo
+        ? _buildCompactSlivers(modules)
+        : _buildDefaultSlivers(modules);
     return NotificationListener<ScrollStartNotification>(
       onNotification: (notification) {
         if (_keyboardInset > 0 && notification.dragDetails != null) {
@@ -264,24 +273,127 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          SliverToBoxAdapter(child: _buildHeader()),
-          for (
-            var moduleIndex = 0;
-            moduleIndex < modules.length;
-            moduleIndex++
-          ) ...[
-            SliverToBoxAdapter(
-              child: _buildModuleTitle(moduleIndex + 1, modules[moduleIndex]),
+        slivers: slivers,
+      ),
+    );
+  }
+
+  List<Widget> _buildDefaultSlivers(List<ExampleModule> modules) {
+    return [
+      const SliverToBoxAdapter(child: SizedBox(height: 24)),
+      SliverToBoxAdapter(child: _buildHeader()),
+      for (
+        var moduleIndex = 0;
+        moduleIndex < modules.length;
+        moduleIndex++
+      ) ...[
+        SliverToBoxAdapter(
+          child: _buildModuleTitle(moduleIndex + 1, modules[moduleIndex]),
+        ),
+        SliverList.builder(
+          itemCount: modules[moduleIndex].children.length,
+          itemBuilder: (_, itemIndex) =>
+              _buildExampleItem(modules[moduleIndex], itemIndex),
+        ),
+      ],
+      const SliverToBoxAdapter(child: SizedBox(height: 24)),
+    ];
+  }
+
+  List<Widget> _buildCompactSlivers(List<ExampleModule> modules) {
+    final entries = <_CompactExampleEntry>[];
+    for (var moduleIndex = 0; moduleIndex < modules.length; moduleIndex++) {
+      final module = modules[moduleIndex];
+      for (var itemIndex = 0; itemIndex < module.children.length; itemIndex++) {
+        entries.add(
+          _CompactExampleEntry(
+            module: module,
+            moduleIndex: moduleIndex,
+            itemIndex: itemIndex,
+          ),
+        );
+      }
+    }
+    return [
+      SliverToBoxAdapter(child: _buildCompactHeader()),
+      SliverList.builder(
+        itemCount: entries.length,
+        itemBuilder: (_, index) => _buildCompactItem(entries[index]),
+      ),
+    ];
+  }
+
+  Widget _buildCompactItem(_CompactExampleEntry entry) {
+    final module = entry.module;
+    final moduleIndex = entry.moduleIndex;
+    final itemIndex = entry.itemIndex;
+    final item = module.children[itemIndex];
+    final hasTitle = itemIndex == 0 && module.title.isNotEmpty;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (hasTitle) const SizedBox(height: 32),
+        if (hasTitle || item.desc.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, hasTitle ? 0 : 24, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (hasTitle)
+                  TText(
+                    '${moduleIndex + 1 < 10 ? '0' : ''}${moduleIndex + 1} '
+                    '${module.title}',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: context.tTheme.textColorPrimary,
+                      fontSize: 18,
+                      height: 52 / 36,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                if (item.desc.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.only(top: hasTitle ? 8 : 0),
+                    child: TText(
+                      item.desc,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: context.tTheme.textColorSecondary,
+                        fontSize: 14,
+                        height: 22 / 14,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            SliverList.builder(
-              itemCount: modules[moduleIndex].children.length,
-              itemBuilder: (_, itemIndex) =>
-                  _buildExampleItem(modules[moduleIndex], itemIndex),
+          ),
+        const SizedBox(height: 16),
+        _buildExampleContent(item),
+      ],
+    );
+  }
+
+  Widget _buildCompactHeader() {
+    return Container(
+      width: double.infinity,
+      color: context.tTheme.bgColorPage,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TText(
+            widget.title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: context.tTheme.textColorPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (widget.desc.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            TText(
+              widget.desc,
+              font: context.tTheme.fontBodyMedium,
+              textColor: context.tTheme.textColorSecondary,
             ),
           ],
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );
@@ -413,6 +525,41 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       child: ExampleItemWidget(data: data.children[index], index: index),
     );
   }
+
+  Widget _buildExampleContent(ExampleItem data) {
+    Widget child;
+    if (data.ignoreCode) {
+      child = data.builder(context);
+      if (data.center) {
+        child = Center(child: child);
+      }
+    } else {
+      child = CodeWrapper(
+        builder: data.builder,
+        methodName: data.methodName,
+        isCenter: data.center,
+      );
+    }
+    if (data.padding != null) {
+      child = Padding(padding: data.padding!, child: child);
+    }
+    if (data.key != null) {
+      child = RepaintBoundary(key: data.key, child: child);
+    }
+    return child;
+  }
+}
+
+class _CompactExampleEntry {
+  const _CompactExampleEntry({
+    required this.module,
+    required this.moduleIndex,
+    required this.itemIndex,
+  });
+
+  final ExampleModule module;
+  final int moduleIndex;
+  final int itemIndex;
 }
 
 /// 示例模块
