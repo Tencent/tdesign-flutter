@@ -1,30 +1,26 @@
-Widget _buildStatus(BuildContext context) => Column(
+Widget _buildStatus(BuildContext context) => const Column(
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const _SwitchGroupLabel('加载状态'),
-      const TCell(
-        title: Text('加载状态'),
-        note: TSwitch(value: false, variant: TSwitchVariant.loading),
+      _SwitchGroupLabel('加载状态'),
+      TCellGroup(
+        cells: [
+          TCell(
+            title: Text('加载状态'),
+            note: TSwitch(value: false, variant: TSwitchVariant.loading),
+          ),
+          TCell(
+            title: Text('加载状态'),
+            note: TSwitch(value: true, variant: TSwitchVariant.loading),
+          ),
+        ],
       ),
-      Divider(
-        height: 0.5,
-        thickness: 0.5,
-        indent: context.tTheme.spacer16,
-        color: context.tTheme.componentStrokeColor,
+      _SwitchGroupLabel('禁用状态', top: 24),
+      TCellGroup(
+        cells: [
+          TCell(title: Text('禁用状态'), note: TSwitch(value: false)),
+          TCell(title: Text('禁用状态'), note: TSwitch(value: true)),
+        ],
       ),
-      const TCell(
-        title: Text('加载状态'),
-        note: TSwitch(value: true, variant: TSwitchVariant.loading),
-      ),
-      const _SwitchGroupLabel('禁用状态'),
-      const TCell(title: Text('禁用状态'), note: TSwitch(value: false)),
-      Divider(
-        height: 0.5,
-        thickness: 0.5,
-        indent: context.tTheme.spacer16,
-        color: context.tTheme.componentStrokeColor,
-      ),
-      const TCell(title: Text('禁用状态'), note: TSwitch(value: true)),
     ],
   );

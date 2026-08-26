@@ -344,6 +344,49 @@ void main() {
   });
 
   group('TCupertinoSwitch interaction', () {
+    testWidgets('updates render state when controlled properties change', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TCupertinoSwitch(
+            value: false,
+            onChanged: _noop,
+            activeColor: Colors.red,
+            trackColor: Colors.green,
+            thumbColor: Colors.white,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          const TCupertinoSwitch(
+            value: true,
+            onChanged: null,
+            activeColor: Colors.blue,
+            trackColor: Colors.orange,
+            thumbColor: Colors.black,
+          ),
+          direction: TextDirection.rtl,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final updated = tester.widget<TCupertinoSwitch>(
+        find.byType(TCupertinoSwitch),
+      );
+      expect(updated.value, isTrue);
+      expect(updated.onChanged, isNull);
+      expect(updated.activeColor, Colors.blue);
+      expect(updated.trackColor, Colors.orange);
+      expect(updated.thumbColor, Colors.black);
+      expect(
+        Directionality.of(tester.element(find.byType(TCupertinoSwitch))),
+        TextDirection.rtl,
+      );
+    });
+
     testWidgets('drag works in LTR and RTL and external updates animate', (
       tester,
     ) async {
@@ -388,6 +431,8 @@ void main() {
       await tester.tap(find.byType(TCupertinoSwitch));
       await tester.pumpAndSettle();
       expect(widget.toStringShort(), contains('TCupertinoSwitch'));
+      expect(widget.toStringDeep(), contains('value: off'));
+      expect(widget.toStringDeep(), contains('disabled'));
     });
   });
 }
