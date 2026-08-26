@@ -535,8 +535,8 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('image.png'), findsOneWidget);
-      expect(find.text('上传失败'), findsOneWidget);
-      expect(find.byIcon(TIcons.error_circle_filled), findsOneWidget);
+      expect(find.text('重新上传'), findsOneWidget);
+      expect(find.byIcon(TIcons.refresh), findsOneWidget);
       expect(find.byIcon(TIcons.delete), findsNWidgets(2));
 
       final token = TThemeData.defaultData();
@@ -565,10 +565,7 @@ void main() {
         decoration.borderRadius,
         BorderRadius.circular(token.radiusDefault),
       );
-      expect(
-        tester.widget<Icon>(find.byIcon(TIcons.error_circle_filled)).size,
-        24,
-      );
+      expect(tester.widget<Icon>(find.byIcon(TIcons.refresh)).size, 24);
       expect(
         tester.widgetList<Icon>(find.byIcon(TIcons.delete)).first.size,
         18,
@@ -641,8 +638,8 @@ void main() {
           ),
         ),
       );
-      expect(find.text('上传失败'), findsOneWidget);
-      expect(find.byIcon(TIcons.error_circle_filled), findsOneWidget);
+      expect(find.text('重新上传'), findsOneWidget);
+      expect(find.byIcon(TIcons.refresh), findsOneWidget);
       expect(
         tester
             .widget<GestureDetector>(

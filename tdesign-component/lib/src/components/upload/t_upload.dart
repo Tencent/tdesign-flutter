@@ -492,10 +492,18 @@ class TUpload extends StatelessWidget {
         ),
       );
     }
-    if (file.status == TUploadFileStatus.error ||
-        file.status == TUploadFileStatus.retryableError) {
+    if (file.status == TUploadFileStatus.error) {
       return Icon(
         TIcons.error_circle_filled,
+        size: 24,
+        color: _enabled
+            ? context.tTheme.errorNormalColor
+            : context.tTheme.errorDisabledColor,
+      );
+    }
+    if (file.status == TUploadFileStatus.retryableError) {
+      return Icon(
+        TIcons.refresh,
         size: 24,
         color: _enabled
             ? context.tTheme.errorNormalColor
@@ -537,7 +545,7 @@ class TUpload extends StatelessWidget {
     }
     if (file.status == TUploadFileStatus.retryableError) {
       return file.errorText ??
-          TResourceManager.instance.delegate(context).uploadFailed;
+          TResourceManager.instance.delegate(context).uploadRetry;
     }
     if (file.size != null) {
       return _formatSize(file.size!);
