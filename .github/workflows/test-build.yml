@@ -79,6 +79,21 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter test test/components/refresh/t_refresh_golden_test.dart
 
+      - name: Run Upload tests and golden tests
+        if: matrix.flutter-version == '3.32.0'
+        working-directory: ./tdesign-component
+        run: flutter test test/components/upload/t_upload_test.dart test/components/upload/t_upload_golden_test.dart
+
+      - name: Install example dependencies for page golden tests
+        if: matrix.flutter-version == '3.32.0'
+        working-directory: ./tdesign-component/example
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Run Form Input Textarea page golden tests
+        if: matrix.flutter-version == '3.32.0'
+        working-directory: ./tdesign-component/example
+        run: flutter test test/form_input_textarea_page_golden_test.dart
+
   build:
     strategy:
       fail-fast: false

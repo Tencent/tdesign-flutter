@@ -1,0 +1,207 @@
+Widget _buildForm(BuildContext context) {
+    final horizontal = _layout == TFormLayout.horizontal;
+    final trailingContentAlignment = horizontal
+        ? TFormItemContentAlignment.end
+        : null;
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        TFormThemeData(
+          layout: _layout,
+          labelAlign: TextAlign.left,
+          requiredMarkPosition: TFormRequiredMarkPosition.left,
+          itemSpacing: 0,
+        ),
+      ),
+      child: TForm(
+        controller: _formController,
+        showErrorMessage: true,
+        child: Column(
+          children: [
+            TFormField<String>(
+              name: 'name',
+              value: _nameController.text,
+              onChanged: (_) => setState(() {}),
+              validator: (value) =>
+                  RegExp(r'^[a-zA-Z]{8}$').hasMatch(value ?? '')
+                  ? null
+                  : '只能输入8个字符英文',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '用户名',
+                help: '输入用户名',
+                child: TInput(
+                  controller: _nameController,
+                  enabled: !_disabled,
+                  borderless: true,
+                  hintText: '请输入用户名',
+                  onChanged: onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'password',
+              value: _passwordController.text,
+              onChanged: (_) => setState(() {}),
+              validator: (value) =>
+                  (value?.length ?? 0) > 6 ? null : '长度大于6个字符',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '密码',
+                child: TInput(
+                  controller: _passwordController,
+                  enabled: !_disabled,
+                  borderless: true,
+                  obscureText: true,
+                  hintText: '请输入密码',
+                  onChanged: onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'gender',
+              value: _gender,
+              onChanged: (value) => setState(() => _gender = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '性别',
+                child: TRadioGroup<String>(
+                  value: value,
+                  options: const [
+                    TRadioOption(value: 'man', label: '男'),
+                    TRadioOption(value: 'women', label: '女'),
+                    TRadioOption(value: 'secret', label: '保密'),
+                  ],
+                  direction: Axis.horizontal,
+                  columns: 3,
+                  onChanged: _disabled ? null : onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'birth',
+              value: _birth,
+              onChanged: (value) => setState(() => _birth = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => Semantics(
+                button: true,
+                enabled: !_disabled,
+                label: '生日',
+                value: value.isNotEmpty ? value : '未选择',
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _disabled
+                      ? null
+                      : () => _showDatePicker(context, onChanged),
+                  child: TFormItem(
+                    label: '生日',
+                    contentAlignment: trailingContentAlignment,
+                    extra: _buildArrow(context),
+                    child: _buildSelectionValue(context, value, '请输入生日'),
+                  ),
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'place',
+              value: _place,
+              onChanged: (value) => setState(() => _place = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => Semantics(
+                button: true,
+                enabled: !_disabled,
+                label: '籍贯',
+                value: value.isNotEmpty ? value : '未选择',
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _disabled
+                      ? null
+                      : () => _showRegionPicker(context, onChanged),
+                  child: TFormItem(
+                    label: '籍贯',
+                    contentAlignment: trailingContentAlignment,
+                    extra: _buildArrow(context),
+                    child: _buildSelectionValue(context, value, '请选择籍贯'),
+                  ),
+                ),
+              ),
+            ),
+            TFormField<num>(
+              name: 'age',
+              value: _age,
+              onChanged: (value) => setState(() => _age = value),
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '年限',
+                contentAlignment: trailingContentAlignment,
+                child: TStepper(
+                  value: value,
+                  variant: TStepperVariant.filled,
+                  onChanged: _disabled ? null : onChanged,
+                ),
+              ),
+            ),
+            TFormField<double>(
+              name: 'description',
+              value: _description,
+              onChanged: (value) => setState(() => _description = value),
+              validator: (value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '自我评价',
+                contentAlignment: trailingContentAlignment,
+                child: TRate(
+                  value: value,
+                  allowHalf: true,
+                  onChanged: _disabled ? null : onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'resume',
+              value: _resumeController.text,
+              onChanged: (_) => setState(() {}),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '个人简介',
+                child: SizedBox(
+                  height: 100,
+                  child: TTextarea(
+                    controller: _resumeController,
+                    enabled: !_disabled,
+                    hintText: '请输入个人简介',
+                    minLines: 2,
+                    maxLength: 50,
+                    indicator: true,
+                    onChanged: onChanged,
+                  ),
+                ),
+              ),
+            ),
+            TFormField<List<TUploadFile>>(
+              name: 'photo',
+              value: _photos,
+              onChanged: (value) => setState(() => _photos = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '请上传照片',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '上传照片',
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final columns = horizontal ? 3 : 4;
+                    final size =
+                        (constraints.maxWidth - (columns - 1) * 8) / columns;
+                    return Theme(
+                      data: Theme.of(context).mergeExtension(
+                        TUploadThemeData(itemSize: size.clamp(64, 96)),
+                      ),
+                      child: TUpload(
+                        files: value,
+                        maxFiles: horizontal ? 6 : 8,
+                        onChanged: _disabled ? null : onChanged,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            _buildButtons(horizontal),
+          ],
+        ),
+      ),
+    );
+  }

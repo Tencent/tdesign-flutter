@@ -55,6 +55,24 @@ class TResourceManager {
 
 /// 资源管理器，允许外部重写，设计成抽象类，防止有新增字段时，用户没有感知
 abstract class TResourceDelegate {
+  /// [TUpload] 上传中。
+  String get uploading => '上传中';
+
+  /// [TUpload] 选择文件的无障碍标签。
+  String get uploadSelect => '选择文件';
+
+  /// [TUpload] 待上传状态。
+  String get uploadPending => '待上传';
+
+  /// [TUpload] 上传失败。
+  String get uploadFailed => '上传失败';
+
+  /// [TUpload] 重新上传。
+  String get uploadRetry => '重新上传';
+
+  /// [TUpload] 上传成功。
+  String get uploadSuccess => '上传成功';
+
   /// [TSwitch]的打开状态文案
   String get open;
 

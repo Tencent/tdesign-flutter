@@ -102,23 +102,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _searchNavbar(BuildContext context) {
     return TNavBar(
         useDefaultBack: false,
-        screenAdaptation: false,
         centerTitle: false,
         titleMargin: 0,
-        titleWidget: TSearchBar(
-          needCancel: false,
-          autoHeight: true,
-          padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-          placeHolder: '搜索预设文案',
-          mediumStyle: true,
-          style: TSearchStyle.round,
-          onTextChanged: (String text) {
-            print('input：$text');
-          },
+        titleWidget: Theme(
+          data: Theme.of(context).mergeExtension(
+            const TSearchBarThemeData(variant: TSearchBarVariant.round),
+          ),
+          child: TSearchBar(
+            hintText: '搜索预设文案',
+            onChanged: (String text) {
+              print('input：$text');
+            },
+          ),
         ),
-        rightBarItems: [
+        actions: [
           TNavBarItem(icon: TIcons.home, iconSize: 24),
-          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24)
+          TNavBarItem(icon: TIcons.ellipsis, iconSize: 24),
         ]);
   }</pre>
 
@@ -342,5 +341,3 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 typedef TBarItemAction = void Function();
 ```
 
-
-  
