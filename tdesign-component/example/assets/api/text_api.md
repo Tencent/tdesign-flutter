@@ -5,69 +5,65 @@
 
 ##### TText.rich
 
-富文本构造方法
+创建 TDesign 富文本。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| textSpan | InlineSpan? | - | 透传至系统 `Text.rich` 的富文本片段 |
-| font | Font? | - | 字体尺寸，包含 大小size 和 行高height |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| fontFamily | FontFamily? | - | 字体ttf |
-| textColor | Color? | - | 文本颜色 |
-| backgroundColor | Color? | - | 背景颜色 |
-| isTextThrough | bool? | false | 是否是横线穿过样式（删除线） |
-| lineThroughColor | Color? | - | 删除线颜色，对应 TestStyle 的 decorationColor |
-| package | String? | - | 字体包名 |
+| textSpan | InlineSpan | - | 富文本内容。 |
+| font | Font? | - | TDesign 字体 Token，包含字号、行高和字重。 |
+| fontWeight | FontWeight? | - | 字体粗细。 |
+| fontFamily | FontFamily? | - | 字体族及可选资源 package。 |
+| textColor | Color? | - | 文字颜色。 |
+| isTextThrough | bool? | - | 是否显示删除线。为 null 时继承 Theme 或父级样式。 |
+| lineThroughColor | Color? | - | 删除线颜色。 |
+| style | TextStyle? | - | Flutter 原生文字样式，具有最高优先级。 |
+| strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 |
+| textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 |
+| textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 |
+| locale | Locale? | - | 透传至 `Text.locale`。 |
+| softWrap | bool? | - | 透传至 `Text.softWrap`。 |
+| overflow | TextOverflow? | - | 透传至 `Text.overflow`。 |
+| textScaler | TextScaler? | - | Flutter 原生文字缩放器；为 null 时继承 MediaQuery。 |
+| maxLines | int? | - | 透传至 `Text.maxLines`。 |
+| semanticsLabel | String? | - | 透传至 `Text.semanticsLabel`。 |
+| semanticsIdentifier | String? | - | 透传至 `Text.semanticsIdentifier`。 |
+| textWidthBasis | TextWidthBasis? | - | 透传至 `Text.textWidthBasis`。 |
+| textHeightBehavior | ui.TextHeightBehavior? | - | 透传至 `Text.textHeightBehavior`。 |
+| selectionColor | Color? | - | 透传至 `Text.selectionColor`。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| style | TextStyle? | - | 自定义的 TextStyle，其中指定的属性，将覆盖扩展的外层属性 |
-| strutStyle | StrutStyle? | - | 透传至系统 `Text.strutStyle` 的段落支柱样式 |
-| textAlign | TextAlign? | - | 透传至系统 `Text.textAlign` 的文本对齐方式 |
-| textDirection | TextDirection? | - | 透传至系统 `Text.textDirection` 的文本方向 |
-| locale | Locale? | - | 透传至系统 `Text.locale` 的区域设置 |
-| softWrap | bool? | - | 透传至系统 `Text.softWrap`，控制是否自动换行 |
-| overflow | TextOverflow? | - | 透传至系统 `Text.overflow` 的溢出处理方式 |
-| textScaleFactor | double? | - | 文本缩放倍率，内部转换为系统 `Text.textScaler` |
-| maxLines | int? | - | 透传至系统 `Text.maxLines` 的最大行数 |
-| semanticsLabel | String? | - | 透传至系统 `Text.semanticsLabel` 的无障碍标签 |
-| textWidthBasis | TextWidthBasis? | - | 透传至系统 `Text.textWidthBasis` 的宽度计算基准 |
-| textHeightBehavior | ui.TextHeightBehavior? | - | 透传至系统 `Text.textHeightBehavior` 的高度行为 |
-| isInFontLoader | bool | false | 是否在 FontLoader 中使用 |
-| fontFamilyUrl | String? | - | 是否禁用懒加载 FontFamily 的能力 |
 
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| data | String? | - | 透传至系统 `Text.data` 的文本内容 |
-| backgroundColor | Color? | - | 背景颜色 |
-| font | Font? | - | 字体尺寸，包含 大小size 和 行高height |
-| fontFamily | FontFamily? | - | 字体ttf |
-| fontFamilyUrl | String? | - | 是否禁用懒加载 FontFamily 的能力 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| isInFontLoader | bool | false | 是否在 FontLoader 中使用 |
-| isTextThrough | bool? | false | 是否是横线穿过样式（删除线） |
+| data | String | - | 文本内容。 |
+| font | Font? | - | TDesign 字体 Token，包含字号、行高和字重。 |
+| fontFamily | FontFamily? | - | 字体族及可选资源 package。 |
+| fontWeight | FontWeight? | - | 字体粗细。 |
+| isTextThrough | bool? | - | 是否显示删除线。为 null 时继承 Theme 或父级样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| lineThroughColor | Color? | - | 删除线颜色，对应 TestStyle 的 decorationColor |
-| locale | Locale? | - | 透传至系统 `Text.locale` 的区域设置 |
-| maxLines | int? | - | 透传至系统 `Text.maxLines` 的最大行数 |
-| overflow | TextOverflow? | - | 透传至系统 `Text.overflow` 的溢出处理方式 |
-| package | String? | - | 字体包名 |
-| semanticsLabel | String? | - | 透传至系统 `Text.semanticsLabel` 的无障碍标签 |
-| softWrap | bool? | - | 透传至系统 `Text.softWrap`，控制是否自动换行 |
-| strutStyle | StrutStyle? | - | 透传至系统 `Text.strutStyle` 的段落支柱样式 |
-| style | TextStyle? | - | 自定义的 TextStyle，其中指定的属性，将覆盖扩展的外层属性 |
-| textAlign | TextAlign? | - | 透传至系统 `Text.textAlign` 的文本对齐方式 |
-| textColor | Color? | - | 文本颜色 |
-| textDirection | TextDirection? | - | 透传至系统 `Text.textDirection` 的文本方向 |
-| textHeightBehavior | ui.TextHeightBehavior? | - | 透传至系统 `Text.textHeightBehavior` 的高度行为 |
-| textScaleFactor | double? | - | 文本缩放倍率，内部转换为系统 `Text.textScaler` |
-| textWidthBasis | TextWidthBasis? | - | 透传至系统 `Text.textWidthBasis` 的宽度计算基准 |
+| lineThroughColor | Color? | - | 删除线颜色。 |
+| locale | Locale? | - | 透传至 `Text.locale`。 |
+| maxLines | int? | - | 透传至 `Text.maxLines`。 |
+| overflow | TextOverflow? | - | 透传至 `Text.overflow`。 |
+| selectionColor | Color? | - | 透传至 `Text.selectionColor`。 |
+| semanticsIdentifier | String? | - | 透传至 `Text.semanticsIdentifier`。 |
+| semanticsLabel | String? | - | 透传至 `Text.semanticsLabel`。 |
+| softWrap | bool? | - | 透传至 `Text.softWrap`。 |
+| strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 |
+| style | TextStyle? | - | Flutter 原生文字样式，具有最高优先级。 |
+| textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 |
+| textColor | Color? | - | 文字颜色。 |
+| textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 |
+| textHeightBehavior | ui.TextHeightBehavior? | - | 透传至 `Text.textHeightBehavior`。 |
+| textScaler | TextScaler? | - | Flutter 原生文字缩放器；为 null 时继承 MediaQuery。 |
+| textWidthBasis | TextWidthBasis? | - | 透传至 `Text.textWidthBasis`。 |
 
 #### 公开属性
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| textSpan | InlineSpan? | - | 透传至系统 `Text.rich` 的富文本片段 |
+| textSpan | InlineSpan? | - | 富文本内容。 |
 
 
 ### TTextSpan
@@ -75,29 +71,50 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| children | List<InlineSpan>? | - | 子富文本片段，透传至系统 `TextSpan.children`。 |
-| context | BuildContext? | - | 当前构建上下文；提供 Theme 和 Token 以解析默认字体样式。 |
-| font | Font? | - | 字体尺寸，包含 size 和 lineHeight。 |
-| fontFamily | FontFamily? | - | 字体族。 |
+| children | List<InlineSpan>? | - | 透传至 `TextSpan.children`。 |
+| font | Font? | - | TDesign 字体 Token，包含字号、行高和字重。 |
+| fontFamily | FontFamily? | - | 字体族及可选资源 package。 |
 | fontWeight | FontWeight? | - | 字体粗细。 |
-| isTextThrough | bool? | false | 是否应用删除线样式。 |
-| lineThroughColor | Color? | - | 删除线颜色，对应 `TextStyle.decorationColor`。 |
-| mouseCursor | MouseCursor? | - | 鼠标指针样式，透传至系统 `TextSpan.mouseCursor`。 |
-| onEnter | PointerEnterEventListener? | - | 鼠标进入回调，透传至系统 `TextSpan.onEnter`。 |
-| onExit | PointerExitEventListener? | - | 鼠标离开回调，透传至系统 `TextSpan.onExit`。 |
-| package | String? | - | 字体资源包名。 |
-| recognizer | GestureRecognizer? | - | 手势识别器，透传至系统 `TextSpan.recognizer`。 |
-| semanticsLabel | String? | - | 无障碍标签，透传至系统 `TextSpan.semanticsLabel`。 |
-| style | TextStyle? | - | 自定义文本样式；其中指定的属性优先于扁平化参数。 |
-| text | String? | - | 文本内容，透传至系统 `TextSpan.text`。 |
-| textColor | Color? | - | 文本颜色。 |
+| isTextThrough | bool? | - | 是否显示删除线。为 null 时继承父 Span。 |
+| lineThroughColor | Color? | - | 删除线颜色。 |
+| locale | Locale? | - | 透传至 `TextSpan.locale`。 |
+| mouseCursor | MouseCursor? | - | 透传至 `TextSpan.mouseCursor`。 |
+| onEnter | PointerEnterEventListener? | - | 透传至 `TextSpan.onEnter`。 |
+| onExit | PointerExitEventListener? | - | 透传至 `TextSpan.onExit`。 |
+| recognizer | GestureRecognizer? | - | 透传至 `TextSpan.recognizer`。 |
+| semanticsIdentifier | String? | - | 透传至 `TextSpan.semanticsIdentifier`。 |
+| semanticsLabel | String? | - | 透传至 `TextSpan.semanticsLabel`。 |
+| spellOut | bool? | - | 透传至 `TextSpan.spellOut`。 |
+| style | TextStyle? | - | Flutter 原生文字样式，具有最高优先级。 |
+| text | String? | - | 透传至 `TextSpan.text`。 |
+| textColor | Color? | - | 文字颜色。 |
 
 
-### TTextConfiguration
+### TTextThemeData
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| child | Widget | - | 子树内容，配置会作用于该子树内的 TText。 |
-| globalFontFamily | FontFamily? | - | 全局字体族，设置后子树中所有 TText 将默认使用此字体。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| font | Font? | - | 默认 TDesign 字体 Token。 |
+| strutStyle | StrutStyle? | - | 默认段落支柱样式。 |
+| textHeightBehavior | ui.TextHeightBehavior? | - | 默认文本高度行为。 |
+| textStyle | TextStyle? | - | 默认 Flutter 文字样式。 |
+| textWidthBasis | TextWidthBasis? | - | 默认文本宽度计算方式。 |
+
+
+### TFontLoader
+
+#### 静态方法
+
+##### TFontLoader.load
+
+下载并注册字体。
+同一 `name` 和 `fontFamilyUrl` 的并发调用共享同一个 Future。加载失败会
+清除缓存并允许重试；已经注册或正在注册的字体不能切换 URL。
+
+返回类型：`Future<bool>`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| name | String | - | - |
+| fontFamilyUrl | String | - | - |

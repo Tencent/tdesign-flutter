@@ -5,59 +5,58 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void main() {
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
-  group('TLink widget 级用例', () {
-    testWidgets('basic 变体可构建', (tester) async {
-      await tester.pumpWidget(wrap(const TLink(
-        child: Text('普通链接'),
-        onPressed: null,
-      )));
-      expect(find.byType(TLink), findsOneWidget);
-      expect(find.text('普通链接'), findsOneWidget);
-    });
+  testWidgets('basic / underline / prefix / suffix 官方类型可构建', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const Column(
+          children: [
+            TLink(child: Text('基础'), onPressed: _noop),
+            TLink(child: Text('下划线'), underline: true, onPressed: _noop),
+            TLink(
+              child: Text('前置'),
+              prefixIcon: Icon(Icons.arrow_back),
+              onPressed: _noop,
+            ),
+            TLink(
+              child: Text('后置'),
+              suffixIcon: Icon(Icons.arrow_forward),
+              onPressed: _noop,
+            ),
+          ],
+        ),
+      ),
+    );
 
-    testWidgets('underline 变体可构建', (tester) async {
-      await tester.pumpWidget(wrap(const TLink(
-        variant: TLinkVariant.underline,
-        child: Text('下划线'),
-        onPressed: _noop,
-      )));
-      expect(find.byType(TLink), findsOneWidget);
-    });
+    expect(find.byType(TLink), findsNWidgets(4));
+    expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
+  });
 
-    testWidgets('icon 变体（前后图标）可构建', (tester) async {
-      await tester.pumpWidget(wrap(const TLink(
-        variant: TLinkVariant.icon,
-        prefixIcon: Icon(Icons.arrow_back),
-        suffixIcon: Icon(Icons.arrow_forward),
-        child: Text('图标链接'),
-        onPressed: _noop,
-      )));
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
-    });
+  testWidgets('五种主题、三种尺寸与禁用态可构建', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        Column(
+          children: [
+            for (final scheme in TLinkColorScheme.values)
+              TLink(
+                child: Text(scheme.name),
+                colorScheme: scheme,
+                onPressed: _noop,
+              ),
+            for (final size in TLinkSize.values)
+              TLink(child: Text(size.name), size: size, onPressed: _noop),
+            const TLink(child: Text('禁用')),
+          ],
+        ),
+      ),
+    );
 
-    testWidgets('colorScheme / size / disabled / tooltip 可构建', (tester) async {
-      await tester.pumpWidget(wrap(const Column(
-        children: [
-          TLink(
-            child: Text('主色'),
-            colorScheme: TLinkColorScheme.primary,
-            size: TLinkSize.large,
-            onPressed: _noop,
-          ),
-          TLink(
-            child: Text('禁用'),
-            onPressed: null,
-          ),
-          TLink(
-            child: Text('提示'),
-            tooltip: '提示文案',
-            onPressed: _noop,
-          ),
-        ],
-      )));
-      expect(find.byType(TLink, skipOffstage: false), findsNWidgets(3));
-    });
+    expect(
+      find.byType(TLink),
+      findsNWidgets(
+        TLinkColorScheme.values.length + TLinkSize.values.length + 1,
+      ),
+    );
   });
 }
 

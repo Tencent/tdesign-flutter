@@ -1,0 +1,13 @@
+Widget _status(BuildContext context) {
+    var files = _statusFiles;
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 4,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
+  }

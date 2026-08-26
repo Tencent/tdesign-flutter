@@ -4,66 +4,53 @@ import 'package:flutter/material.dart';
 
 import 't_link_types.dart';
 
-/// TLink 组件级 ThemeExtension
+/// TLink 组件级主题。
 ///
-/// 通过 Theme 子树注入，控制子树的默认形态。
-/// 构造器参数优先于 Theme。
+/// 通过 Theme 子树注入链接默认视觉，构造器参数优先于主题。
 class TLinkThemeData extends ThemeExtension<TLinkThemeData> {
-  /// 未传链接 variant 时的默认链接形态
-  final TLinkVariant? defaultVariant;
-
-  /// 未传链接 size 时的默认尺寸
-  final TLinkSize? defaultSize;
-
-  /// 未传链接 colorScheme 时的默认语义色
-  final TLinkColorScheme? defaultColorScheme;
-
-  /// 链接文本颜色（覆盖 colorScheme 计算色）
-  final Color? color;
-
-  /// 图标尺寸
-  final double? iconSize;
-
-  /// 文本字号
-  final double? fontSize;
-
-  /// 前置图标与文本间距
-  final double? leftGapWithIcon;
-
-  /// 后置图标与文本间距
-  final double? rightGapWithIcon;
-
   const TLinkThemeData({
-    this.defaultVariant,
     this.defaultSize,
     this.defaultColorScheme,
-    this.color,
+    this.underline,
+    this.textStyle,
     this.iconSize,
-    this.fontSize,
-    this.leftGapWithIcon,
-    this.rightGapWithIcon,
+    this.iconGap,
   });
+
+  /// 默认尺寸。
+  final TLinkSize? defaultSize;
+
+  /// 默认语义颜色；未设置时使用 [TLinkColorScheme.defaultTheme]。
+  final TLinkColorScheme? defaultColorScheme;
+
+  /// 是否默认显示下划线。
+  final bool? underline;
+
+  /// 链接文字样式；字号、行高与字重默认由 [defaultSize] 对应 Token 提供。
+  final TextStyle? textStyle;
+
+  /// 图标尺寸。
+  final double? iconSize;
+
+  /// 前/后图标与内容之间的间距。
+  final double? iconGap;
 
   @override
   TLinkThemeData copyWith({
-    TLinkVariant? defaultVariant,
     TLinkSize? defaultSize,
     TLinkColorScheme? defaultColorScheme,
-    Color? color,
+    bool? underline,
+    TextStyle? textStyle,
     double? iconSize,
-    double? fontSize,
-    double? leftGapWithIcon,
-    double? rightGapWithIcon,
+    double? iconGap,
   }) {
     return TLinkThemeData(
-      defaultVariant: defaultVariant ?? this.defaultVariant,
       defaultSize: defaultSize ?? this.defaultSize,
       defaultColorScheme: defaultColorScheme ?? this.defaultColorScheme,
-      color: color ?? this.color,
+      underline: underline ?? this.underline,
+      textStyle: textStyle ?? this.textStyle,
       iconSize: iconSize ?? this.iconSize,
-      fontSize: fontSize ?? this.fontSize,
-      leftGapWithIcon: leftGapWithIcon ?? this.leftGapWithIcon,
-      rightGapWithIcon: rightGapWithIcon ?? this.rightGapWithIcon,
+      iconGap: iconGap ?? this.iconGap,
     );
   }
 
@@ -73,15 +60,14 @@ class TLinkThemeData extends ThemeExtension<TLinkThemeData> {
       return this;
     }
     return TLinkThemeData(
-      defaultVariant: t < 0.5 ? defaultVariant : other.defaultVariant,
       defaultSize: t < 0.5 ? defaultSize : other.defaultSize,
-      defaultColorScheme:
-          t < 0.5 ? defaultColorScheme : other.defaultColorScheme,
-      color: Color.lerp(color, other.color, t),
+      defaultColorScheme: t < 0.5
+          ? defaultColorScheme
+          : other.defaultColorScheme,
+      underline: t < 0.5 ? underline : other.underline,
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
       iconSize: lerpDouble(iconSize, other.iconSize, t),
-      fontSize: lerpDouble(fontSize, other.fontSize, t),
-      leftGapWithIcon: lerpDouble(leftGapWithIcon, other.leftGapWithIcon, t),
-      rightGapWithIcon: lerpDouble(rightGapWithIcon, other.rightGapWithIcon, t),
+      iconGap: lerpDouble(iconGap, other.iconGap, t),
     );
   }
 }

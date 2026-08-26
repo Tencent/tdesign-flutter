@@ -502,7 +502,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       child: widget.contentWidget != null
           ? widget.contentWidget!
           : TText(
-              widget.content,
+              widget.content ?? '',
               style: TextStyle(
                 color: _color,
                 letterSpacing: 0,

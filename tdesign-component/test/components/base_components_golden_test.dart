@@ -116,7 +116,7 @@ class _BaseComponentsScene extends StatelessWidget {
                           ),
                           SizedBox(width: 24),
                           TLink(
-                            variant: TLinkVariant.underline,
+                            underline: true,
                             child: Text('Underline'),
                             onPressed: _noop,
                           ),

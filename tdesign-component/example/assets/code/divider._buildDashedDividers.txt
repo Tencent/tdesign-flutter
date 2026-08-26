@@ -1,0 +1,22 @@
+Widget _buildDashedDividers(BuildContext context) {
+    return const SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TDivider(dashed: true),
+          TDivider(
+            dashed: true,
+            child: Text('文字信息'),
+            align: TDividerAlign.left,
+          ),
+          TDivider(dashed: true, child: Text('文字信息')),
+          TDivider(
+            dashed: true,
+            child: Text('文字信息'),
+            align: TDividerAlign.right,
+          ),
+        ],
+      ),
+    );
+  }
