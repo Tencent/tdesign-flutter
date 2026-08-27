@@ -98,14 +98,13 @@ class _TRadioPageState extends State<TRadioPage> {
         setState(() => _verticalValue = _verticalValue == value ? null : value);
       },
       showDivider: true,
-      titleMaxLines: 3,
-      subTitleMaxLines: 5,
     );
   }
 
   @ExampleCode(group: 'radio')
   Widget _horizontalRadios(BuildContext context) {
-    return Padding(
+    return Container(
+      color: context.tTheme.bgColorContainer,
       padding: EdgeInsets.all(context.tTheme.spacer16),
       child: Theme(
         data: Theme.of(

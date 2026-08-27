@@ -35,17 +35,18 @@ Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显
 ## 行为契约
 
 - `TRadioIconType.dot` 提供圆环加圆点样式。
-- `TRadioIconType.check` 在选中时显示品牌色勾选标记，未选中时不显示标记。
-- `TRadioIconType.fill` 未选中时显示边框圆环，选中时显示品牌色实心圆及反色勾选标记。
-- 禁用、选中和未选颜色继续遵循 `TRadioThemeData`、Material `RadioTheme` / `ColorScheme`、TDesign token 的既有优先级；反色勾选标记使用 `ColorScheme.onPrimary` 或 `textColorAnti` token。
-- 图标几何尺寸由 `TRadioSize` 的既有指示器尺寸按比例计算，不新增固定像素样式常量。
+- `TRadioIconType.check` 在选中时使用与指示器同尺寸的 TDesign `check` 图标显示品牌色勾选标记，未选中时不显示标记。
+- `TRadioIconType.fill` 未选中时显示边框圆环，选中时使用与指示器同尺寸的 TDesign `check-circle-filled` 图标，这也是与小程序一致的默认样式。
+- 禁用、选中和未选颜色继续遵循 `TRadioThemeData`、Material `RadioTheme` / `ColorScheme`、TDesign token 的既有优先级。
+- 图标几何尺寸使用 `TRadioSize` 的既有指示器尺寸；勾选样式复用 TDesign 图标，其余样式按该尺寸成比例绘制，不新增固定像素样式常量。
+- 横向 Demo 使用通栏容器背景，并将 `spacer16` 作为容器内边距，不形成额外的卡片外框。
 - 块级 Radio 使用 `spacer16` 上下内边距；分割线不带外边距，并从正文起点开始，均对齐小程序默认块级布局。
 - 带副标题时，内置指示器与主标题行盒垂直居中，不相对整个多行文本块居中。
 - 副标题默认使用 `textColorSecondary`，与小程序 `text-color-secondary` token 保持一致。
 - Material `TextTheme` 只提供字体排版继承，不覆盖 Radio 标题和副标题的语义颜色；颜色由 `TRadioThemeData` 和对应 TDesign token 解析。
 - `customIconBuilder` 优先于 `iconType`，保持完整自定义能力。
 - `TRadio` 和 `TRadioGroup` 的 `iconType` 默认值为 `fill`，直接对齐小程序默认实心勾选视觉，不保留旧默认视觉的兼容分支。
-- `TRadioGroup` 将 `iconType`、`titleMaxLines` 和 `subTitleMaxLines` 透传给默认子项；文本行数默认值仍为 `1`、`1`。
+- `TRadio` 和 `TRadioGroup` 的主标题、副标题最大行数默认值分别为 `3`、`5`，与小程序默认省略规则一致；`TRadioGroup` 将这两个配置透传给默认子项。
 - release 构建不创建或展示 Demo 内部测试模块；debug 行为保持可控。
 
 ## 验收标准

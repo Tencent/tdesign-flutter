@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -115,11 +116,11 @@ class TRadio<T> extends StatelessWidget {
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
 
-    /// 主标题最大行数。
-    this.titleMaxLines = 1,
+    /// 主标题最大行数，默认 3 行。
+    this.titleMaxLines = 3,
 
-    /// 副标题最大行数。
-    this.subTitleMaxLines = 1,
+    /// 副标题最大行数，默认 5 行。
+    this.subTitleMaxLines = 5,
 
     /// 自定义单选框指示器。
     this.customIconBuilder,
@@ -155,10 +156,10 @@ class TRadio<T> extends StatelessWidget {
   /// 控件与文案排列方向。
   final TContentDirection contentDirection;
 
-  /// 主标题最大行数。
+  /// 主标题最大行数，默认 3 行。
   final int titleMaxLines;
 
-  /// 副标题最大行数。
+  /// 副标题最大行数，默认 5 行。
   final int subTitleMaxLines;
 
   /// 自定义单选框指示器。
@@ -345,18 +346,27 @@ class TRadio<T> extends StatelessWidget {
               colorScheme?.outline ??
               context.tTheme.componentBorderColor);
     final iconSize = _indicatorSize;
-    final markColor = colorScheme?.onPrimary ?? context.tTheme.textColorAnti;
+    final selectedIcon = _selected
+        ? switch (iconType) {
+            TRadioIconType.check => TIcons.check,
+            TRadioIconType.fill => TIcons.check_circle_filled,
+            TRadioIconType.dot => null,
+          }
+        : null;
     return SizedBox(
       width: iconSize,
       height: iconSize,
-      child: CustomPaint(
-        painter: _TRadioIndicatorPainter(
-          selected: _selected,
-          color: color,
-          markColor: markColor,
-          iconType: iconType,
-        ),
-      ),
+      child: selectedIcon != null
+          ? Icon(selectedIcon, size: iconSize, color: color)
+          : iconType == TRadioIconType.check
+          ? null
+          : CustomPaint(
+              painter: _TRadioIndicatorPainter(
+                selected: _selected,
+                color: color,
+                iconType: iconType,
+              ),
+            ),
     );
   }
 
@@ -422,13 +432,11 @@ class _TRadioIndicatorPainter extends CustomPainter {
   const _TRadioIndicatorPainter({
     required this.selected,
     required this.color,
-    required this.markColor,
     required this.iconType,
   });
 
   final bool selected;
   final Color color;
-  final Color markColor;
   final TRadioIconType iconType;
 
   @override
@@ -451,37 +459,16 @@ class _TRadioIndicatorPainter extends CustomPainter {
           canvas.drawCircle(center, outerRadius * 4 / 7, paint);
         }
       case TRadioIconType.check:
-        if (selected) {
-          _drawCheck(canvas, size, paint);
-        }
+        break;
       case TRadioIconType.fill:
-        if (selected) {
-          paint.style = PaintingStyle.fill;
-          canvas.drawCircle(center, outerRadius, paint);
-          paint
-            ..color = markColor
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = size.shortestSide / 12;
-          _drawCheck(canvas, size, paint);
-        } else {
-          canvas.drawCircle(center, outerRadius, paint);
-        }
+        canvas.drawCircle(center, outerRadius, paint);
     }
-  }
-
-  void _drawCheck(Canvas canvas, Size size, Paint paint) {
-    final path = Path()
-      ..moveTo(size.width * 5 / 16, size.height * 8 / 16)
-      ..lineTo(size.width * 7 / 16, size.height * 10 / 16)
-      ..lineTo(size.width * 11 / 16, size.height * 6 / 16);
-    canvas.drawPath(path, paint);
   }
 
   @override
   bool shouldRepaint(covariant _TRadioIndicatorPainter oldDelegate) {
     return selected != oldDelegate.selected ||
         color != oldDelegate.color ||
-        markColor != oldDelegate.markColor ||
         iconType != oldDelegate.iconType;
   }
 }
@@ -521,11 +508,11 @@ class TRadioGroup<T> extends StatelessWidget {
     /// 内置指示器样式。
     this.iconType = TRadioIconType.fill,
 
-    /// 主标题最大行数。
-    this.titleMaxLines = 1,
+    /// 主标题最大行数，默认 3 行。
+    this.titleMaxLines = 3,
 
-    /// 副标题最大行数。
-    this.subTitleMaxLines = 1,
+    /// 副标题最大行数，默认 5 行。
+    this.subTitleMaxLines = 5,
 
     /// 自定义数据项视觉；交互仍由组接管。
     this.itemBuilder,
@@ -561,10 +548,10 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 内置指示器样式。
   final TRadioIconType iconType;
 
-  /// 主标题最大行数。
+  /// 主标题最大行数，默认 3 行。
   final int titleMaxLines;
 
-  /// 副标题最大行数。
+  /// 副标题最大行数，默认 5 行。
   final int subTitleMaxLines;
 
   /// 自定义数据项视觉；交互仍由组接管。

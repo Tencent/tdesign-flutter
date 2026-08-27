@@ -16,9 +16,9 @@
 | showDivider | bool | false | 是否显示底部分割线。 |
 | size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
 | subTitle | String? | - | 副标题文案。 |
-| subTitleMaxLines | int | 1 | 副标题最大行数。 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
 | title | String? | - | 主标题文案。 |
-| titleMaxLines | int | 1 | 主标题最大行数。 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
 | value | T | - | 当前选项值。 |
 
 
@@ -40,8 +40,8 @@
 | options | List<TRadioOption<T>> | - | 单选框数据项。 |
 | showDivider | bool | false | 是否显示项间分割线。 |
 | size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
-| subTitleMaxLines | int | 1 | 副标题最大行数。 |
-| titleMaxLines | int | 1 | 主标题最大行数。 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
 | value | T? | - | 受控选中值。 |
 
 

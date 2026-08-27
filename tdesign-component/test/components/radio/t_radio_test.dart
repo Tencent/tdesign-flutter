@@ -34,6 +34,29 @@ void main() {
   }
 
   group('TRadio v1 单项行为', () {
+    testWidgets('默认主标题和副标题行数与小程序一致', (tester) async {
+      const radio = TRadio<String>(
+        value: 'a',
+        groupValue: 'a',
+        title: '主标题',
+        subTitle: '副标题',
+      );
+      const group = TRadioGroup<String>(value: 'a', options: options);
+
+      expect(radio.titleMaxLines, 3);
+      expect(radio.subTitleMaxLines, 5);
+      expect(group.titleMaxLines, 3);
+      expect(group.subTitleMaxLines, 5);
+
+      await tester.pumpWidget(wrap(radio));
+      final title = tester.widget<Text>(find.text('主标题'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.maxLines, 3);
+      expect(title.overflow, TextOverflow.ellipsis);
+      expect(subTitle.maxLines, 5);
+      expect(subTitle.overflow, TextOverflow.ellipsis);
+    });
+
     testWidgets('按 groupValue 渲染选中态并触发 onChanged', (tester) async {
       String? changed;
       await tester.pumpWidget(
@@ -164,15 +187,20 @@ void main() {
           of: find.text('主标题-${size.name}'),
           matching: find.byType(TRadio<TRadioSize>),
         );
-        final indicator = find.descendant(
-          of: radio,
-          matching: find.byWidgetPredicate(
-            (widget) =>
-                widget is CustomPaint &&
-                widget.painter.runtimeType.toString() ==
-                    '_TRadioIndicatorPainter',
-          ),
-        );
+        final indicator = size == TRadioSize.medium
+            ? find.descendant(
+                of: radio,
+                matching: find.byIcon(TIcons.check_circle_filled),
+              )
+            : find.descendant(
+                of: radio,
+                matching: find.byWidgetPredicate(
+                  (widget) =>
+                      widget is CustomPaint &&
+                      widget.painter.runtimeType.toString() ==
+                          '_TRadioIndicatorPainter',
+                ),
+              );
         expect(
           tester.getCenter(indicator).dy,
           closeTo(tester.getCenter(find.text('主标题-${size.name}')).dy, 0.01),
@@ -321,16 +349,17 @@ void main() {
       final indicator = tester
           .widgetList<SizedBox>(find.byType(SizedBox))
           .firstWhere((box) => box.width == 24.0 && box.height == 24.0);
-      final painter = radioIndicatorPainters(tester).single;
+      final selectedIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
 
       expect(indicator.width, 24.0);
       expect(indicator.height, 24.0);
-      expect(painter.selected, isTrue);
-      expect(painter.color, token.brandNormalColor);
-      expect(painter.iconType, TRadioIconType.fill);
+      expect(selectedIcon.size, 24.0);
+      expect(selectedIcon.color, token.brandNormalColor);
     });
 
-    testWidgets('内置指示器支持 check 和 fill 样式并使用反色 token', (tester) async {
+    testWidgets('check 和默认 fill 使用同尺寸 TDesign 图标', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrap(
@@ -354,19 +383,31 @@ void main() {
                 iconType: TRadioIconType.fill,
                 onChanged: (_) {},
               ),
+              TRadio<String>(
+                value: 'd',
+                groupValue: 'd',
+                iconType: TRadioIconType.dot,
+                onChanged: (_) {},
+              ),
             ],
           ),
         ),
       );
 
       final painters = radioIndicatorPainters(tester);
+      final checkIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
+      final fillIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
+      expect(checkIcon.size, 24);
+      expect(checkIcon.color, token.brandNormalColor);
+      expect(fillIcon.size, 24);
+      expect(fillIcon.color, token.brandNormalColor);
       expect(painters.map((painter) => painter.iconType), [
-        TRadioIconType.check,
         TRadioIconType.fill,
-        TRadioIconType.fill,
+        TRadioIconType.dot,
       ]);
-      expect(painters[1].markColor, token.textColorAnti);
-      expect(painters.map((painter) => painter.selected), [true, true, false]);
+      expect(painters.map((painter) => painter.selected), [false, true]);
     });
 
     testWidgets('完整主题下未选、禁用和文字颜色使用对应 token', (tester) async {
@@ -389,13 +430,15 @@ void main() {
       );
 
       final painters = radioIndicatorPainters(tester);
+      final disabledIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
       final subTitle = tester.widget<Text>(find.text('描述信息'));
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
-      expect(painters[0].selected, isFalse);
-      expect(painters[0].color, token.componentBorderColor);
-      expect(painters[1].selected, isTrue);
-      expect(painters[1].color, token.brandDisabledColor);
+      expect(painters.single.selected, isFalse);
+      expect(painters.single.color, token.componentBorderColor);
+      expect(disabledIcon.color, token.brandDisabledColor);
       expect(subTitle.style?.color, token.textColorSecondary);
       expect(disabledTitle.style?.color, token.textDisabledColor);
     });
@@ -417,7 +460,9 @@ void main() {
         ),
       );
 
-      final painter = radioIndicatorPainters(tester).single;
+      final selectedIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
       final title = tester.widget<Text>(find.text('主题单选'));
       final spacing = tester.widget<SizedBox>(
         find.byWidgetPredicate(
@@ -425,7 +470,7 @@ void main() {
         ),
       );
 
-      expect(painter.color, Colors.red);
+      expect(selectedIcon.color, Colors.red);
       expect(title.style?.color, Colors.green);
       expect(spacing.width, 12);
     });

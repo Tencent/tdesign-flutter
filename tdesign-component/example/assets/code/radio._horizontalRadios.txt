@@ -1,5 +1,6 @@
 Widget _horizontalRadios(BuildContext context) {
-    return Padding(
+    return Container(
+      color: context.tTheme.bgColorContainer,
       padding: EdgeInsets.all(context.tTheme.spacer16),
       child: Theme(
         data: Theme.of(
