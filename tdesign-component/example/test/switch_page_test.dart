@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -10,64 +6,23 @@ import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/page/t_switch_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
-import 'golden_test_utils.dart';
-
 const _pageWidth = 375.0;
 const _pageHeight = 1320.0;
-const _goldenCjkFontFamily = 'TDesign Golden CJK';
-const _nonLinuxPreviewDiffRate = 0.05;
 
 void main() {
-  late GoldenFileComparator originalGoldenComparator;
-
-  setUpAll(() async {
-    originalGoldenComparator = Platform.isLinux
-        ? goldenFileComparator
-        : useGoldenDiffTolerance(maxDiffRate: _nonLinuxPreviewDiffRate);
-    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
-      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin = File(
-      Platform.resolvedExecutable,
-    ).parent.parent.parent.parent.parent;
-    final robotoFile = File(
-      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
-    );
-    final robotoFont = FontLoader('Roboto')
-      ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    final cjkFont = FontLoader(_goldenCjkFontFamily)
-      ..addFont(
-        File(
-          'test/fonts/TDesignGoldenCJK-Regular.otf',
-        ).readAsBytes().then(ByteData.sublistView),
-      );
-    await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
-  });
-  tearDownAll(() {
-    goldenFileComparator = originalGoldenComparator;
-  });
-
-  Widget buildPage([ThemeMode mode = ThemeMode.light]) {
+  Widget buildPage() {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: _withGoldenFontFallback(
-          TThemeBuilder.light(TThemeData.defaultData()),
-        ),
-        darkTheme: _withGoldenFontFallback(
-          TThemeBuilder.dark(TThemeData.defaultData()),
-        ),
-        themeMode: mode,
-        home: RepaintBoundary(
-          key: const Key('switch-page-golden'),
-          child: ExamplePageInheritedTheme(
-            model: ExamplePageModel(
-              text: 'Switch 开关',
-              name: 'switch',
-              pageBuilder: (_, __) => const TSwitchPage(),
-            ),
-            child: const TSwitchPage(),
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: ExamplePageInheritedTheme(
+          model: ExamplePageModel(
+            text: 'Switch 开关',
+            name: 'switch',
+            pageBuilder: (_, __) => const TSwitchPage(),
           ),
+          child: const TSwitchPage(),
         ),
       ),
     );
@@ -80,12 +35,9 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  Future<void> pumpPage(
-    WidgetTester tester, [
-    ThemeMode mode = ThemeMode.light,
-  ]) async {
+  Future<void> pumpPage(WidgetTester tester) async {
     configurePage(tester);
-    await tester.pumpWidget(buildPage(mode));
+    await tester.pumpWidget(buildPage());
     await tester.pump();
   }
 
@@ -170,31 +122,4 @@ void main() {
       TSwitchSize.small,
     ]);
   });
-
-  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    testWidgets('完整 Switch ${mode.name} Demo 快照', (tester) async {
-      await pumpPage(tester, mode);
-
-      final page = find.byKey(const Key('switch-page-golden'));
-      expect(page, findsOneWidget);
-      final boundary = tester.renderObject<RenderRepaintBoundary>(page);
-      final image = await boundary.toImage();
-      addTearDown(image.dispose);
-
-      await expectLater(
-        image,
-        matchesGoldenFile('goldens/switch_page_${mode.name}.png'),
-      );
-    }, tags: 'golden');
-  }
-}
-
-ThemeData _withGoldenFontFallback(ThemeData theme) {
-  const fallback = [_goldenCjkFontFamily];
-  return theme.copyWith(
-    textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
-    primaryTextTheme: theme.primaryTextTheme.apply(
-      fontFamilyFallback: fallback,
-    ),
-  );
 }

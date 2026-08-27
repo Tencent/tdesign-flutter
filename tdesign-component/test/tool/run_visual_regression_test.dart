@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../tool/run_component_regression.dart';
 import '../../tool/run_visual_regression.dart';
 
 void main() {
@@ -17,5 +18,17 @@ void main() {
   test('visual regression suite names are unique', () {
     final names = visualTestSuites.map((suite) => suite.name).toList();
     expect(names.toSet(), hasLength(names.length));
+  });
+
+  test('every regression component owns one visual regression suite', () {
+    final componentSuites = componentTestSuites
+        .map((suite) => suite.component)
+        .toSet();
+    final visualSuites = visualTestSuites
+        .map((suite) => suite.component)
+        .toSet();
+
+    expect(visualSuites, componentSuites);
+    expect(visualTestSuites, hasLength(componentSuites.length));
   });
 }

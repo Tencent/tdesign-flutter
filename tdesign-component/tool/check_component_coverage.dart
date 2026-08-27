@@ -1,15 +1,24 @@
 import 'dart:io';
 
 const componentTargets = <String, List<String>>{
+  'button': ['lib/src/components/button/'],
+  'divider': ['lib/src/components/divider/'],
+  'fab': ['lib/src/components/fab/'],
   'form': ['lib/src/components/form/'],
+  'icon': ['lib/src/components/icon/'],
   'input': ['lib/src/components/input/'],
+  'link': ['lib/src/components/link/'],
   'refresh': [
     'lib/src/components/refresh/t_pull_down_refresh.dart',
     'lib/src/components/refresh/t_pull_down_refresh_controller.dart',
     'lib/src/components/refresh/t_pull_down_refresh_texts.dart',
   ],
+  'search': ['lib/src/components/search/'],
+  'swipe_cell': ['lib/src/components/swipe_cell/'],
   'switch': ['lib/src/components/switch/'],
+  'text': ['lib/src/components/text/'],
   'textarea': ['lib/src/components/textarea/'],
+  'toast': ['lib/src/components/toast/'],
   'upload': ['lib/src/components/upload/'],
 };
 

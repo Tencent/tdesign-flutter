@@ -2,12 +2,14 @@ import 'dart:io';
 
 class VisualTestSuite {
   const VisualTestSuite(
+    this.component,
     this.name, {
     required this.workingDirectory,
     required this.testFiles,
     this.arguments = const [],
   });
 
+  final String component;
   final String name;
   final String workingDirectory;
   final List<String> testFiles;
@@ -16,30 +18,94 @@ class VisualTestSuite {
 
 const visualTestSuites = <VisualTestSuite>[
   VisualTestSuite(
-    'Refresh Demo structure',
-    workingDirectory: '.',
-    testFiles: ['test/components/refresh/t_refresh_test.dart'],
-    arguments: ['--tags', 'demo'],
-  ),
-  VisualTestSuite(
-    'Refresh golden',
-    workingDirectory: '.',
-    testFiles: ['test/components/refresh/t_refresh_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'Upload golden',
-    workingDirectory: '.',
-    testFiles: ['test/components/upload/t_upload_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'Form Input Textarea page golden',
+    'button',
+    'Button Demo',
     workingDirectory: 'example',
-    testFiles: ['test/form_input_textarea_page_golden_test.dart'],
+    testFiles: ['test/button_demo_test.dart'],
   ),
   VisualTestSuite(
-    'Switch page and golden',
+    'divider',
+    'Divider Demo',
     workingDirectory: 'example',
-    testFiles: ['test/switch_page_test.dart'],
+    testFiles: ['test/divider_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'fab',
+    'Fab Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/fab_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'icon',
+    'Icon Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/icon_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'link',
+    'Link Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/link_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'text',
+    'Text Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/text_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'form',
+    'Form Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/form_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'input',
+    'Input Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/input_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'search',
+    'Search Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/search_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'switch',
+    'Switch Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/switch_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'textarea',
+    'Textarea Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/textarea_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'upload',
+    'Upload Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/upload_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'refresh',
+    'PullDownRefresh Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/pull_down_refresh_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'toast',
+    'Toast Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/toast_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'swipe_cell',
+    'SwipeCell Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/swipe_cell_demo_test.dart'],
   ),
 ];
 

@@ -10,9 +10,35 @@ class ComponentTestSuite {
 }
 
 const componentTestSuites = <ComponentTestSuite>[
+  ComponentTestSuite('button', [
+    'test/components/button/t_button_test.dart',
+    'test/components/button/t_button_theme_priority_test.dart',
+    'test/components/button/t_button_theme_test.dart',
+    'test/components/button/t_button_widget_test.dart',
+  ]),
+  ComponentTestSuite('divider', [
+    'test/components/divider/t_divider_test.dart',
+  ]),
+  ComponentTestSuite('fab', [
+    'test/components/fab/t_fab_layout_test.dart',
+    'test/components/fab/t_fab_test.dart',
+  ]),
   ComponentTestSuite('refresh', [
     'test/components/refresh/t_refresh_test.dart',
   ]),
+  ComponentTestSuite('icon', ['test/components/icon/t_icon_test.dart']),
+  ComponentTestSuite('link', [
+    'test/components/link/t_link_resolve_test.dart',
+    'test/components/link/t_link_test.dart',
+    'test/components/link/t_link_theme_test.dart',
+    'test/components/link/t_link_widget_test.dart',
+  ]),
+  ComponentTestSuite('text', [
+    'test/components/text/t_font_loader_test.dart',
+    'test/components/text/t_text_resolve_test.dart',
+    'test/components/text/t_text_test.dart',
+  ]),
+  ComponentTestSuite('search', ['test/components/search/t_search_test.dart']),
   ComponentTestSuite('switch', [
     'test/components/switch/t_switch_test.dart',
     'test/components/switch/t_cupertino_switch_test.dart',
@@ -25,6 +51,12 @@ const componentTestSuites = <ComponentTestSuite>[
   ]),
   ComponentTestSuite('textarea', [
     'test/components/textarea/t_textarea_test.dart',
+  ]),
+  ComponentTestSuite('toast', ['test/components/toast/t_toast_test.dart']),
+  ComponentTestSuite('swipe_cell', [
+    'test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart',
+    'test/components/swipe_cell/t_swipe_cell_inherited_test.dart',
+    'test/components/swipe_cell/t_swipe_cell_test.dart',
   ]),
 ];
 
