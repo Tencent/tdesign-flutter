@@ -4,9 +4,9 @@ import 'package:tdesign_flutter/src/components/checkbox/t_selection_card.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child) {
+  Widget wrap(Widget child, {TThemeData? token}) {
     return MaterialApp(
-      theme: TThemeBuilder.light(TThemeData.defaultData()),
+      theme: TThemeBuilder.light(token ?? TThemeData.defaultData()),
       home: Scaffold(body: child),
     );
   }
@@ -368,6 +368,104 @@ void main() {
         find.byWidgetPredicate(
           (widget) =>
               widget is CustomPaint && widget.size == const Size.square(24),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('卡片高度与角标尺寸读取 TDesign token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'selection-card-token-test',
+        fontMap: {
+          'fontBodyLarge': Font(size: 17, lineHeight: 26),
+          'fontBodyMedium': Font(size: 15, lineHeight: 23),
+        },
+        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 27},
+      );
+      Widget selectedCard() => const TSelectionCard(
+        selected: true,
+        disabled: false,
+        selectedColor: Colors.blue,
+        disabledColor: Colors.grey,
+        backgroundColor: Colors.white,
+        borderRadius: 6,
+        minHeight: 1,
+        child: Text('selected'),
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          TSelectionCardGroupLayout(
+            direction: Axis.vertical,
+            columns: 1,
+            itemHasSubtitles: const [true],
+            children: [selectedCard()],
+          ),
+          token: token,
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.height == 90,
+        ),
+        findsOneWidget,
+      );
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 16);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint && widget.size == const Size.square(32),
+        ),
+        findsOneWidget,
+      );
+      final cardContainer = tester
+          .widgetList<Container>(find.byType(Container))
+          .firstWhere(
+            (container) =>
+                container.decoration is BoxDecoration &&
+                (container.decoration! as BoxDecoration).border != null,
+          );
+      final border = (cardContainer.decoration! as BoxDecoration).border!;
+      final markPainter =
+          tester
+                  .widgetList<CustomPaint>(find.byType(CustomPaint))
+                  .map((paint) => paint.painter)
+                  .firstWhere(
+                    (painter) =>
+                        painter.runtimeType.toString() ==
+                        '_SelectionCardMarkPainter',
+                  )
+              as dynamic;
+      expect((border as Border).top.width, 1.875);
+      expect(markPainter.cornerRadius, 5);
+
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 240,
+            child: TSelectionCardGroupLayout(
+              direction: Axis.horizontal,
+              columns: 1,
+              itemHasSubtitles: const [false],
+              children: [selectedCard()],
+            ),
+          ),
+          token: token,
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.height == 62,
+        ),
+        findsOneWidget,
+      );
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 13.5);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint && widget.size == const Size.square(27),
         ),
         findsOneWidget,
       );

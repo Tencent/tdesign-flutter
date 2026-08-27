@@ -123,7 +123,7 @@ class TCheckbox extends StatelessWidget {
     final hasContent = content != null;
 
     final constraints = hasContent
-        ? BoxConstraints(minHeight: _contentMinHeight)
+        ? BoxConstraints(minHeight: _contentMinHeight(context))
         : _resolveTapTargetConstraints(context);
 
     final tileContent = LayoutBuilder(
@@ -181,7 +181,7 @@ class TCheckbox extends StatelessWidget {
             backgroundColor:
                 theme?.backgroundColor ?? context.tTheme.bgColorContainer,
             borderRadius: context.tTheme.radiusDefault,
-            minHeight: subTitle?.isNotEmpty == true ? 82 : 56,
+            minHeight: _cardMinHeight(context),
             child: tileContent,
           )
         : tileContent;
@@ -214,17 +214,30 @@ class TCheckbox extends StatelessWidget {
     );
   }
 
-  double get _contentMinHeight => switch (size) {
-    TCheckboxSize.small => 48.0,
-    TCheckboxSize.medium => 56.0,
-    TCheckboxSize.large => 64.0,
+  double _contentMinHeight(BuildContext context) => switch (size) {
+    TCheckboxSize.small => context.tTheme.spacer48,
+    TCheckboxSize.medium => context.tTheme.spacer48 + context.tTheme.spacer8,
+    TCheckboxSize.large => context.tTheme.spacer64,
   };
 
-  double get _indicatorSize => switch (size) {
-    TCheckboxSize.small => 20.0,
-    TCheckboxSize.medium => 24.0,
-    TCheckboxSize.large => 28.0,
+  double _indicatorSize(BuildContext context) => switch (size) {
+    TCheckboxSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
+    TCheckboxSize.medium => context.tTheme.spacer24,
+    TCheckboxSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
   };
+
+  double _cardMinHeight(BuildContext context) {
+    final titleHeight = _textLineHeight(_resolveTitleStyle(context));
+    final contentHeight = subTitle?.isNotEmpty == true
+        ? titleHeight +
+              context.tTheme.spacer4 +
+              _textLineHeight(_resolveSubTitleStyle(context))
+        : titleHeight;
+    return contentHeight + context.tTheme.spacer16 * 2;
+  }
+
+  double _textLineHeight(TextStyle style) =>
+      style.fontSize! * (style.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = CheckboxTheme.of(context);
@@ -237,13 +250,14 @@ class TCheckbox extends StatelessWidget {
         materialTheme.materialTapTargetSize ??
         appTheme.tExplicitMaterialTapTargetSize ??
         MaterialTapTargetSize.padded;
+    final indicatorSize = _indicatorSize(context);
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
-        : _indicatorSize;
+        : indicatorSize;
     final adjustment = visualDensity.baseSizeAdjustment;
     return BoxConstraints(
-      minWidth: math.max(_indicatorSize, baseSize + adjustment.dx),
-      minHeight: math.max(_indicatorSize, baseSize + adjustment.dy),
+      minWidth: math.max(indicatorSize, baseSize + adjustment.dx),
+      minHeight: math.max(indicatorSize, baseSize + adjustment.dy),
     );
   }
 
@@ -288,32 +302,44 @@ class TCheckbox extends StatelessWidget {
         : (materialTheme.side?.color ??
               colorScheme?.outline ??
               context.tTheme.componentBorderColor);
+    final indicatorSize = _indicatorSize(context);
     return SizedBox(
-      width: _indicatorSize,
-      height: _indicatorSize,
+      width: indicatorSize,
+      height: indicatorSize,
       child: icon == null
           ? null
-          : Icon(icon, size: _indicatorSize, color: color),
+          : Icon(icon, size: indicatorSize, color: color),
     );
+  }
+
+  TextStyle _resolveTitleStyle(BuildContext context) {
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
+    final materialFallback = Theme.of(context).textTheme.bodyLarge;
+    final titleFont = context.tTheme.fontBodyLarge;
+    return TextStyle(
+      fontSize: titleFont?.size ?? materialFallback?.fontSize,
+      height: titleFont?.height ?? materialFallback?.height,
+      fontWeight: titleFont?.fontWeight ?? materialFallback?.fontWeight,
+    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+  }
+
+  TextStyle _resolveSubTitleStyle(BuildContext context) {
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
+    final materialFallback = Theme.of(context).textTheme.bodyMedium;
+    final subtitleFont = context.tTheme.fontBodyMedium;
+    return TextStyle(
+      fontSize: subtitleFont?.size ?? materialFallback?.fontSize,
+      height: subtitleFont?.height ?? materialFallback?.height,
+      fontWeight: subtitleFont?.fontWeight ?? materialFallback?.fontWeight,
+    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
   }
 
   Widget? _buildContent(BuildContext context, TCheckboxThemeData? theme) {
     if (title == null && subTitle == null) {
       return null;
     }
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
-    final titleFont = context.tTheme.fontBodyLarge;
-    final titleStyle = TextStyle(
-      fontSize: titleFont?.size ?? 16,
-      height: titleFont?.height,
-      fontWeight: titleFont?.fontWeight ?? FontWeight.w400,
-    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
-    final subtitleFont = context.tTheme.fontBodyMedium;
-    final subTitleStyle = TextStyle(
-      fontSize: subtitleFont?.size ?? 14,
-      height: subtitleFont?.height,
-      fontWeight: subtitleFont?.fontWeight ?? FontWeight.w400,
-    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+    final titleStyle = _resolveTitleStyle(context);
+    final subTitleStyle = _resolveSubTitleStyle(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
