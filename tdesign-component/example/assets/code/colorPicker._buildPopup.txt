@@ -1,0 +1,10 @@
+Widget _buildPopup(BuildContext context) => SizedBox(
+        width: double.infinity,
+        child: TButton(
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          child: const TText('展示'),
+          onPressed: () => _showPopupPicker(context),
+        ),
+      );
