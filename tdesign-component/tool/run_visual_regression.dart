@@ -72,6 +72,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/input_demo_test.dart'],
   ),
   VisualTestSuite(
+    'radio',
+    'Radio Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/radio_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'search',
     'Search Demo',
     workingDirectory: 'example',

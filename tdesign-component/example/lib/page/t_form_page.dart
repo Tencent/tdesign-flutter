@@ -215,16 +215,22 @@ class _TFormPageState extends State<TFormPage> {
               validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '性别',
-                child: TRadioGroup<String>(
-                  value: value,
-                  options: const [
-                    TRadioOption(value: 'man', label: '男'),
-                    TRadioOption(value: 'women', label: '女'),
-                    TRadioOption(value: 'secret', label: '保密'),
-                  ],
-                  direction: Axis.horizontal,
-                  columns: 3,
-                  onChanged: _disabled ? null : onChanged,
+                child: Theme(
+                  data: Theme.of(context).mergeExtension(
+                    TRadioThemeData(insetSpacing: context.tTheme.spacer4),
+                  ),
+                  child: TRadioGroup<String>(
+                    value: value,
+                    options: const [
+                      TRadioOption(value: 'man', label: '男'),
+                      TRadioOption(value: 'women', label: '女'),
+                      TRadioOption(value: 'secret', label: '保密'),
+                    ],
+                    direction: Axis.horizontal,
+                    columns: 3,
+                    showDivider: false,
+                    onChanged: _disabled ? null : onChanged,
+                  ),
                 ),
               ),
             ),

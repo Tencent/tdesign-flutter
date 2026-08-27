@@ -1,9 +1,19 @@
 Widget _horizontalRadios(BuildContext context) {
-    return TRadioGroup<String>(
-      value: _horizontalValue,
-      options: _options,
-      direction: Axis.horizontal,
-      columns: 2,
-      onChanged: (value) => setState(() => _horizontalValue = value),
+    return Container(
+      color: context.tTheme.bgColorContainer,
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: Theme(
+        data: Theme.of(
+          context,
+        ).mergeExtension(TRadioThemeData(insetSpacing: context.tTheme.spacer4)),
+        child: TRadioGroup<int>(
+          value: _horizontalValue,
+          options: _horizontalOptions,
+          direction: Axis.horizontal,
+          columns: 3,
+          showDivider: false,
+          onChanged: (value) => setState(() => _horizontalValue = value),
+        ),
+      ),
     );
   }

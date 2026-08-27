@@ -37,6 +37,10 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/link/t_link_theme_test.dart',
     'test/components/link/t_link_widget_test.dart',
   ]),
+  ComponentTestSuite('radio', [
+    'test/components/radio/t_radio_test.dart',
+    'test/components/radio/t_radio_theme_contract_test.dart',
+  ]),
   ComponentTestSuite('text', [
     'test/components/text/t_font_loader_test.dart',
     'test/components/text/t_text_resolve_test.dart',

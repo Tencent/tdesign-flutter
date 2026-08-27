@@ -1,8 +1,10 @@
 Widget _verticalRadios(BuildContext context) {
-    return TRadioGroup<String>(
+    return TRadioGroup<int>(
       value: _verticalValue,
       options: _options,
-      onChanged: (value) => setState(() => _verticalValue = value),
+      onChanged: (value) {
+        setState(() => _verticalValue = _verticalValue == value ? null : value);
+      },
       showDivider: true,
     );
   }
