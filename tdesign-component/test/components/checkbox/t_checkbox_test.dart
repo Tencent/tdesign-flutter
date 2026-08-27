@@ -347,6 +347,64 @@ void main() {
       }
     });
 
+    testWidgets('块高、指示器和卡片高度均读取 TDesign token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'checkbox-size-token-test',
+        fontMap: {
+          'fontBodyLarge': Font(size: 17, lineHeight: 26),
+          'fontBodyMedium': Font(size: 15, lineHeight: 23),
+        },
+        marginMap: const {
+          'spacer4': 5,
+          'spacer8': 9,
+          'spacer16': 18,
+          'spacer24': 27,
+          'spacer48': 51,
+        },
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: Scaffold(
+            body: Column(
+              children: [
+                TCheckbox(
+                  key: const ValueKey('token-block'),
+                  value: true,
+                  title: '块级',
+                  showDivider: false,
+                  onChanged: (_) {},
+                ),
+                TCheckbox(
+                  key: const ValueKey('token-card'),
+                  value: true,
+                  title: '卡片',
+                  subTitle: '说明',
+                  cardMode: true,
+                  onChanged: (_) {},
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      Finder gesture(String key) => find.descendant(
+        of: find.byKey(ValueKey(key)),
+        matching: find.byType(GestureDetector),
+      );
+      final selectedIcon = tester.widget<Icon>(
+        find.descendant(
+          of: find.byKey(const ValueKey('token-block')),
+          matching: find.byIcon(TIcons.check_circle_filled),
+        ),
+      );
+
+      expect(tester.getSize(gesture('token-block')).height, 60);
+      expect(tester.getSize(gesture('token-card')).height, 90);
+      expect(selectedIcon.size, 27);
+    });
+
     testWidgets('customIconBuilder 接收 value/disabled 状态', (tester) async {
       await tester.pumpWidget(
         wrap(
