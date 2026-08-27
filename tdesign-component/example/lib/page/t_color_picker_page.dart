@@ -106,17 +106,19 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
       );
 
   void _showPopupPicker(BuildContext context) {
-    // multiple + enableAlpha 的完整形态约需 460 高度（含头部），
+    // multiple + enableAlpha 的完整形态约需 460 高度（不含头部），
     // 未传高度时 TPopup bottom 默认 240 会裁剪内容，故按屏高比例显式指定。
     //
-    // 拖拽过程只更新弹窗内草稿值，「取消」关闭后回显旧值；「确定」才提交，
-    // 对齐 calendar 等示例的取色确认链路。
+    // 无标题栏与「确定/取消」按钮，点击遮罩层即关闭弹窗并提交草稿值。
     var draft = popupValue;
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
         height: MediaQuery.sizeOf(context).height * 0.72,
-        titleWidget: const TText('选择颜色'),
+        titleWidget: null,
+        cancelBuilder: null,
+        confirmBuilder: null,
+        closeOnOverlayClick: true,
         child: StatefulBuilder(
           builder: (context, setPopupState) => TColorPicker(
             value: draft,
@@ -129,7 +131,8 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
           ),
         ),
         onVisibleChange: (visible, trigger) {
-          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
+          // 无「确定」按钮，弹窗关闭（点击遮罩）即提交草稿值。
+          if (!visible && mounted) {
             setState(() => popupValue = draft);
           }
         },
