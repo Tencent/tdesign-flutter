@@ -1,0 +1,18 @@
+Widget _nonFullWidthCheckbox(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
+          child: TCheckboxGroup<String>(
+            value: _nonFullWidthValue,
+            options: _nonFullWidthOptions,
+            onChanged: (value) => setState(() => _nonFullWidthValue = value),
+          ),
+        ),
+      ),
+    );
+  }

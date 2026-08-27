@@ -1,27 +1,34 @@
 Widget _checkAll(BuildContext context) {
-    final enabledValues = _options.map((option) => option.value).toList();
+    final enabledValues = _checkAllOptions
+        .map((option) => option.value)
+        .toList();
     final allSelected = _checkAllValue.length == enabledValues.length;
-    return Column(
-      children: [
-        TCheckbox(
-          value: allSelected
-              ? true
-              : _checkAllValue.isEmpty
-              ? false
-              : null,
-          title: '全选',
-          onChanged: (checked) {
-            setState(() {
-              _checkAllValue = checked == true ? enabledValues : [];
-            });
-          },
-          showDivider: true,
-        ),
-        TCheckboxGroup<String>(
-          value: _checkAllValue,
-          options: _options,
-          onChanged: (value) => setState(() => _checkAllValue = value),
-        ),
-      ],
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Column(
+        children: [
+          TCheckbox(
+            value: allSelected
+                ? true
+                : _checkAllValue.isEmpty
+                ? false
+                : null,
+            title: '全选',
+            onChanged: (checked) {
+              setState(() {
+                _checkAllValue = checked == true ? enabledValues : [];
+              });
+            },
+            showDivider: true,
+          ),
+          TCheckboxGroup<String>(
+            value: _checkAllValue,
+            options: _checkAllOptions,
+            onChanged: (value) => setState(() => _checkAllValue = value),
+          ),
+        ],
+      ),
     );
   }

@@ -185,8 +185,9 @@ void main() {
       expect(spacing.width, 12);
     });
 
-    testWidgets('文案继承 Flutter TextTheme 且组件颜色优先', (tester) async {
-      final theme = TThemeBuilder.light(TThemeData.defaultData())
+    testWidgets('TextTheme 只继承字体属性且组件语义颜色优先', (tester) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token)
           .copyWith(
             textTheme: const TextTheme(
               bodyLarge: TextStyle(
@@ -203,7 +204,12 @@ void main() {
               ),
             ),
           )
-          .mergeExtension(const TCheckboxThemeData(titleColor: Colors.green));
+          .mergeExtension(
+            const TCheckboxThemeData(
+              titleColor: Colors.green,
+              subTitleColor: Colors.yellow,
+            ),
+          );
       await tester.pumpWidget(
         MaterialApp(
           theme: theme,
@@ -224,10 +230,39 @@ void main() {
       expect(title.fontSize, 18);
       expect(title.height, 1.4);
       expect(title.fontWeight, FontWeight.w600);
-      expect(subTitle.color, Colors.purple);
+      expect(subTitle.color, Colors.yellow);
       expect(subTitle.fontSize, 15);
       expect(subTitle.height, 1.3);
       expect(subTitle.fontWeight, FontWeight.w500);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token).copyWith(
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(color: Colors.orange),
+              bodyMedium: TextStyle(color: Colors.purple),
+            ),
+          ),
+          home: Scaffold(
+            body: TCheckbox(
+              value: false,
+              title: '默认标题',
+              subTitle: '默认副标题',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget<Text>(find.text('默认标题')).style?.color,
+        token.textColorPrimary,
+      );
+      expect(
+        tester.widget<Text>(find.text('默认副标题')).style?.color,
+        token.textColorSecondary,
+      );
     });
 
     testWidgets('标题、副标题、分割线可渲染', (tester) async {
@@ -246,6 +281,7 @@ void main() {
       expect(find.text('标题'), findsOneWidget);
       expect(find.text('副标题'), findsOneWidget);
       expect(find.byType(TDivider), findsOneWidget);
+      expect(tester.getSize(find.byType(TDivider)).height, 0.5);
     });
 
     testWidgets('三种尺寸和左右内容方向可构建', (tester) async {

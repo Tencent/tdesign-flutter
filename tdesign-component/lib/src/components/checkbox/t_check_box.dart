@@ -9,6 +9,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../divider/t_divider.dart';
+import '../divider/t_divider_theme_data.dart';
 import 't_checkbox_theme_data.dart';
 import 't_selection_card.dart';
 
@@ -201,7 +202,12 @@ class TCheckbox extends StatelessWidget {
           if (showDivider)
             Padding(
               padding: EdgeInsets.only(left: context.tTheme.spacer16),
-              child: const TDivider(),
+              child: Theme(
+                data: Theme.of(context).mergeExtension(
+                  const TDividerThemeData(margin: EdgeInsets.zero),
+                ),
+                child: const TDivider(),
+              ),
             ),
         ],
       ),
@@ -320,9 +326,7 @@ class TCheckbox extends StatelessWidget {
             style: titleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.titleColor ??
-                        titleStyle.color ??
-                        context.tTheme.textColorPrimary),
+                  : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -335,9 +339,7 @@ class TCheckbox extends StatelessWidget {
             style: subTitleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.subTitleColor ??
-                        subTitleStyle.color ??
-                        context.tTheme.textColorPlaceholder),
+                  : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),
       ],
