@@ -174,7 +174,8 @@ class _TColorPickerState extends State<TColorPicker> {
               theme: effectiveTheme,
               onChanged: _handleSaturationDrag,
             ),
-            const SizedBox(height: 12),
+            // 区块间距对齐 mobile-vue：色板-滑块 16、滑块间 20、滑块-格式区 20。
+            const SizedBox(height: 16),
             TColorPickerSlider(
               color: _color,
               isAlpha: false,
@@ -182,7 +183,7 @@ class _TColorPickerState extends State<TColorPicker> {
               onChanged: _handleHueChange,
             ),
             if (widget.enableAlpha) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
               TColorPickerSlider(
                 color: _color,
                 isAlpha: true,
@@ -190,39 +191,51 @@ class _TColorPickerState extends State<TColorPicker> {
                 onChanged: _handleAlphaChange,
               ),
             ],
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             _FormatDisplay(
               format: _effectiveFormat,
-              value: _formattedValue,
+              color: _color,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 28),
           ],
           if (swatchColors.isNotEmpty) ...[
-            if (widget.type == TColorPickerType.multiple)
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '系统预设色彩',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-              ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                for (final swatch in swatchColors)
-                  _SwatchItem(
-                    color: swatch,
-                    selected: _isSelected(swatch),
-                    theme: effectiveTheme,
-                    onTap: () => _handleSwatchTap(swatch),
+                if (widget.type == TColorPickerType.multiple)
+                  const _SwatchesTitle(text: '系统预设色彩'),
+                if (widget.clearable)
+                  GestureDetector(
+                    onTap: _handleClear,
+                    child: Text(
+                      '清除',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: context.tTheme.brandNormalColor,
+                      ),
+                    ),
                   ),
               ],
             ),
-          ],
-          if (widget.clearable) ...[
+            // 对齐 mobile-vue：标题与色块行距 12，色块横向单行滚动、块间距 12。
             const SizedBox(height: 12),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 12,
+                children: [
+                  for (final swatch in swatchColors)
+                    _SwatchItem(
+                      color: swatch,
+                      selected: _isSelected(swatch),
+                      theme: effectiveTheme,
+                      onTap: () => _handleSwatchTap(swatch),
+                    ),
+                ],
+              ),
+            ),
+          ],
+          if (widget.clearable && swatchColors.isEmpty)
             Align(
               alignment: Alignment.centerLeft,
               child: GestureDetector(
@@ -236,7 +249,6 @@ class _TColorPickerState extends State<TColorPicker> {
                 ),
               ),
             ),
-          ],
         ],
       ),
     );
@@ -258,38 +270,146 @@ class _TColorPickerState extends State<TColorPicker> {
   }
 }
 
-/// 当前格式与格式化值展示（对齐 mobile-vue `__format` 区域）。
+/// 格式区（对齐 mobile-vue `__format`）。
+///
+/// 左侧为格式名框（68px），右侧为各通道值连体分段框；与设计稿
+/// `RGB | 0 | 26 | 87 | 100%` 一致。数值只读，输入属宿主层。
 class _FormatDisplay extends StatelessWidget {
-  const _FormatDisplay({required this.format, required this.value});
+  const _FormatDisplay({required this.format, required this.color});
 
   final TColorPickerFormat format;
-  final String value;
+  final TColorObject color;
+
+  static const double _firstWidth = 68;
+  static const double _itemHeight = 36;
+  static const Color _borderColor = Color(0xFFDCDCDC);
+  static const TextStyle _textStyle = TextStyle(
+    fontSize: 14,
+    height: 1,
+    color: Color(0xFF333333),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: context.tTheme.grayColor1,
-            borderRadius: BorderRadius.circular(4),
+    final segments = _buildSegments();
+    return SizedBox(
+      height: _itemHeight,
+      child: Row(
+        children: [
+          // 格式名框。
+          Container(
+            width: _firstWidth,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(color: _borderColor),
+              borderRadius: const BorderRadius.horizontal(
+                left: Radius.circular(6),
+              ),
+            ),
+            child: Text(format.name.toUpperCase(), style: _textStyle),
           ),
-          child: Text(
-            format.name.toUpperCase(),
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          // 通道值框：相邻边共线合并，对齐 mobile-vue `__format-input`。
+          Expanded(
+            child: Row(
+              children: [
+                for (var i = 0; i < segments.length; i++)
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: _borderColor),
+                          bottom: BorderSide(color: _borderColor),
+                          right: BorderSide(color: _borderColor),
+                          left: i == 0 ? BorderSide(color: _borderColor) : BorderSide.none,
+                        ),
+                        borderRadius: BorderRadius.horizontal(
+                          right: i == segments.length - 1
+                              ? const Radius.circular(6)
+                              : Radius.zero,
+                        ),
+                      ),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Text(segments[i], style: _textStyle, maxLines: 1),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(fontSize: 13),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+
+  /// 构建通道段：最后一段固定为百分比 alpha（CSS 只有一整段），
+  /// 对齐 mobile-vue `getFormatList`。
+  List<String> _buildSegments() {
+    switch (format) {
+      case TColorPickerFormat.hex:
+        return [color.hex];
+      case TColorPickerFormat.hex8:
+        return [color.hex8];
+      case TColorPickerFormat.css:
+        return [color.css];
+      case TColorPickerFormat.rgb:
+        final v = color.getRgb();
+        return ['${v.r}', '${v.g}', '${v.b}', _alphaText()];
+      case TColorPickerFormat.rgba:
+        final v = color.getRgb();
+        return ['${v.r}', '${v.g}', '${v.b}', _alphaText()];
+      case TColorPickerFormat.hsl:
+      case TColorPickerFormat.hsla:
+        final v = color.getHsl();
+        return [
+          '${v.h.round()}',
+          '${(v.s * 100).round()}%',
+          '${(v.l * 100).round()}%',
+          _alphaText(),
+        ];
+      case TColorPickerFormat.hsv:
+      case TColorPickerFormat.hsva:
+        return [
+          '${color.hue.round()}',
+          '${(color.saturation * 100).round()}%',
+          '${(color.value * 100).round()}%',
+          _alphaText(),
+        ];
+      case TColorPickerFormat.cmyk:
+        final v = color.getCmyk();
+        return [
+          '${v.c.round()}',
+          '${v.m.round()}',
+          '${v.y.round()}',
+          '${v.k.round()}',
+          _alphaText(),
+        ];
+    }
+  }
+
+  String _alphaText() => '${(color.alpha * 100).round()}%';
+}
+
+/// 系统预设色彩标题，字号加粗以贴近设计稿（mobile-vue font-title-medium）。
+class _SwatchesTitle extends StatelessWidget {
+  const _SwatchesTitle({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final token = context.tTheme;
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: token.fontTitleSmall?.size ?? 14,
+        fontWeight: FontWeight.w600,
+        color: token.textColorPrimary,
+      ),
     );
   }
 }

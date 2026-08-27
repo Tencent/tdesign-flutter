@@ -46,26 +46,32 @@ class _TColorPickerSaturationPanelState
         final width = constraints.maxWidth;
         final heightPx = height;
 
-        Widget panel = Container(
-          height: heightPx,
-          width: width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            gradient: LinearGradient(
-              colors: [Colors.white, baseColor],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius),
-              gradient: const LinearGradient(
-                colors: [Colors.transparent, Colors.black],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+        Widget panel = ClipRRect(
+          borderRadius: BorderRadius.circular(radius),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ColoredBox(color: baseColor),
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.white, Colors.transparent],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
               ),
-            ),
+              // 黑色渐变自下而上淡出，对齐 mobile-vue ::after（0deg）。
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.transparent, Colors.black],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
 
@@ -120,8 +126,8 @@ class _TColorPickerSaturationPanelState
     double width,
     double heightPx,
   ) {
-    var saturation = (position.dx / width).clamp(0.0, 1.0);
-    var value = (1 - position.dy / heightPx).clamp(0.0, 1.0);
+    final saturation = (position.dx / width).clamp(0.0, 1.0).toDouble();
+    final value = (1 - position.dy / heightPx).clamp(0.0, 1.0).toDouble();
     widget.onChanged((saturation: saturation, value: value));
   }
 }
@@ -164,7 +170,21 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
 
     final baseColor = HSLColor.fromAHSL(1, widget.color.hue, 1, 0.5).toColor();
 
-    final track = Container(
+    // 色相渐变 stop 对齐 mobile-vue（red→17% 黄→33% 绿→50% 青→67% 蓝→83% 品红→red）。
+    const hueGradient = LinearGradient(
+      stops: [0, 0.17, 0.33, 0.5, 0.67, 0.83, 1],
+      colors: [
+        Color(0xFFFF0000),
+        Color(0xFFFFFF00),
+        Color(0xFF00FF00),
+        Color(0xFF00FFFF),
+        Color(0xFF0000FF),
+        Color(0xFFFF00FF),
+        Color(0xFFFF0000),
+      ],
+    );
+
+    Widget rail = Container(
       height: sliderHeight,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(sliderHeight / 2),
@@ -177,46 +197,36 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               )
-            : const LinearGradient(
-                colors: [
-                  Color(0xFFFF0000),
-                  Color(0xFFFFFF00),
-                  Color(0xFF00FF00),
-                  Color(0xFF00FFFF),
-                  Color(0xFF0000FF),
-                  Color(0xFFFF00FF),
-                  Color(0xFFFF0000),
-                ],
-              ),
+            : hueGradient,
       ),
     );
 
-    // 透明条加棋盘格背景表示透明。
-    Widget bar = track;
-    if (widget.isAlpha) {
-      bar = Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: sliderHeight,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(sliderHeight / 2),
-              color: const Color(0xFFE5E5E5),
-            ),
-          ),
-          track,
-        ],
-      );
-    }
+    // 对齐 mobile-vue：轨道包裹 thumb 区域，透明条底为斜向棋盘格表示透明。
+    Widget bar = ClipRRect(
+      borderRadius: BorderRadius.circular(sliderHeight / 2),
+      child: SizedBox(
+        height: sliderHeight,
+        child: Stack(
+          children: [
+            Positioned.fill(child: rail),
+            if (widget.isAlpha)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: CustomPaint(painter: _AlphaCheckerPainter()),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final ratio = widget.isAlpha ? widget.color.alpha : widget.color.hue / 360;
-        final thumbLeft = (ratio * width - thumbSize / 2).clamp(
-              -thumbSize / 2,
-              width - thumbSize / 2,
-            );
+        final thumbLeft = (ratio * width - thumbSize / 2)
+            .clamp(-thumbSize / 2, width - thumbSize / 2)
+            .toDouble();
 
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -225,6 +235,7 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
           onPanEnd: (_) {},
           child: SizedBox(
             height: thumbSize,
+            width: width,
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.centerLeft,
@@ -235,6 +246,7 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
                   top: (thumbSize - sliderHeight) / 2,
                   child: bar,
                 ),
+                // thumb 以白圆为底、内嵌当前色圆点，对齐 mobile-vue `__thumb`。
                 Positioned(
                   left: thumbLeft,
                   top: 0,
@@ -257,7 +269,6 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: widget.color.toFlutterColor(),
-                        border: Border.all(color: Colors.white),
                       ),
                     ),
                   ),
@@ -271,11 +282,33 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
   }
 
   void _update(double dx, double width) {
-    final ratio = (dx / width).clamp(0.0, 1.0);
+    final ratio = (dx / width).clamp(0.0, 1.0).toDouble();
     if (widget.isAlpha) {
       widget.onChanged(ratio);
     } else {
       widget.onChanged(ratio * 360);
     }
   }
+}
+
+/// 透明条斜向棋盘格，对齐 mobile-vue `__slider-wrapper--alpha-type` 的
+/// 双层 45° 渐变（6px 网格，#c5c5c5 与透明交错）。
+class _AlphaCheckerPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cell = 3.0;
+    final paint = Paint()..color = const Color(0xFFC5C5C5);
+    for (var y = 0.0; y < size.height; y += cell * 2) {
+      for (var x = -cell * 2; x < size.width; x += cell * 2) {
+        canvas.drawRect(Rect.fromLTWH(x + cell, y, cell, cell), paint);
+        canvas.drawRect(
+          Rect.fromLTWH(x, y + cell, cell, cell),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _AlphaCheckerPainter oldDelegate) => false;
 }

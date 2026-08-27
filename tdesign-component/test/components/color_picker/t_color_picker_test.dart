@@ -82,6 +82,38 @@ void main() {
       expect(find.text('清除'), findsOneWidget);
     });
 
+    testWidgets('multiple type shows segmented format display', (tester) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#001A57',
+          type: TColorPickerType.multiple,
+          enableAlpha: true,
+          format: TColorPickerFormat.rgb,
+          onChanged: (_) {},
+        )),
+      );
+      // 格式区各通道分段展示（RGB → 0 | 26 | 87 | 100%）。
+      expect(find.text('RGB'), findsOneWidget);
+      expect(find.text('0'), findsOneWidget);
+      expect(find.text('26'), findsOneWidget);
+      expect(find.text('87'), findsOneWidget);
+      expect(find.text('100%'), findsOneWidget);
+    });
+
+    testWidgets('multiple type swatches title with single-line scroll',
+        (tester) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          onChanged: (_) {},
+        )),
+      );
+      expect(find.text('系统预设色彩'), findsOneWidget);
+      // 默认 10 个 swatch 全部在单行横向滚动视口内。
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+    });
+
     testWidgets('clear button triggers onChanged with clear trigger',
         (tester) async {
       (String, TColorPickerChangeContext)? result;
