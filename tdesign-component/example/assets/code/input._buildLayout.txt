@@ -1,0 +1,15 @@
+Widget _buildLayout(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TFormThemeData(layout: TFormLayout.vertical, labelGap: 4),
+      ),
+      child: const TFormItem(
+        label: '标签文字',
+        child: TInput(
+          borderless: true,
+          hintText: '请输入文字',
+          suffix: Icon(TIcons.info_circle_filled),
+        ),
+      ),
+    );
+  }

@@ -1,0 +1,13 @@
+Widget _buildSizes(BuildContext context) => const TCellGroup(
+    cells: [
+      TCell(
+        title: Text('大尺寸 32'),
+        note: _StatefulSwitch(initialValue: true, size: TSwitchSize.large),
+      ),
+      TCell(title: Text('中尺寸 28'), note: _StatefulSwitch(initialValue: true)),
+      TCell(
+        title: Text('小尺寸 24'),
+        note: _StatefulSwitch(initialValue: true, size: TSwitchSize.small),
+      ),
+    ],
+  );

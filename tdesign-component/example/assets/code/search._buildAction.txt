@@ -1,0 +1,16 @@
+Widget _buildAction(BuildContext context) {
+    return _SearchDemoSurface(
+      child: TSearchBar(
+        controller: _actionController,
+        hintText: '搜索预设文案',
+        textAlignment: TSearchBarAlignment.center,
+        actionText: _showAction ? '取消' : null,
+        onFocusChanged: (focused) => setState(() => _showAction = focused),
+        onActionPressed: () {
+          _actionController.clear();
+          FocusManager.instance.primaryFocus?.unfocus();
+          setState(() => _showAction = false);
+        },
+      ),
+    );
+  }

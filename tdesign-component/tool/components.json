@@ -52,7 +52,7 @@
           "TIcon",
           "TIconThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -71,14 +71,15 @@
     {
       "slug": "text",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/text/t_text.dart"
+        "type": "folder",
+        "path": "lib/src/components/text"
       },
       "api": {
         "names": [
           "TText",
           "TTextSpan",
-          "TTextConfiguration"
+          "TTextThemeData",
+          "TFontLoader"
         ],
         "getComments": false
       }
@@ -292,11 +293,17 @@
       "api": {
         "names": [
           "TForm",
+          "TFormState",
+          "TFormController",
+          "TFormField",
+          "TFormFieldBuilder",
           "TFormItem",
-          "TFormItemType",
-          "TFormValidation"
+          "TFormLayout",
+          "TFormRequiredMarkPosition",
+          "TFormItemVerticalAlignment",
+          "TFormThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -344,12 +351,15 @@
     {
       "slug": "search",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/search/t_search_bar.dart"
+        "type": "folder",
+        "path": "lib/src/components/search"
       },
       "api": {
         "names": [
-          "TSearchBar"
+          "TSearchBar",
+          "TSearchBarThemeData",
+          "TSearchBarVariant",
+          "TSearchBarAlignment"
         ],
         "getComments": false
       }
@@ -428,12 +438,17 @@
     {
       "slug": "upload",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/upload/t_upload.dart"
+        "type": "folder",
+        "path": "lib/src/components/upload"
       },
       "api": {
         "names": [
-          "TUpload"
+          "TUpload",
+          "TUploadFile",
+          "TUploadFileStatus",
+          "TUploadLayout",
+          "TUploadThemeData",
+          "TUploadVariant"
         ],
         "getComments": false
       }

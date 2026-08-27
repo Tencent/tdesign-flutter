@@ -64,7 +64,7 @@ void main() {
       );
     });
 
-    testWidgets('loading variant is disabled even with callback', (
+    testWidgets('loading state is disabled and overrides thumb variant', (
       tester,
     ) async {
       var called = false;
@@ -72,7 +72,8 @@ void main() {
         wrap(
           TSwitch(
             value: true,
-            variant: TSwitchVariant.loading,
+            loading: true,
+            variant: TSwitchVariant.icon,
             onChanged: (_) => called = true,
           ),
         ),
@@ -81,10 +82,34 @@ void main() {
       await tester.tap(find.byType(TCupertinoSwitch), warnIfMissed: false);
       expect(called, isFalse);
       expect(find.byType(TCircleIndicator), findsOneWidget);
+      expect(find.byIcon(TIcons.check), findsNothing);
+
+      await tester.pumpWidget(
+        wrap(
+          TSwitch(
+            value: true,
+            variant: TSwitchVariant.icon,
+            onChanged: (_) => called = true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(TCircleIndicator), findsNothing);
+      expect(find.byIcon(TIcons.check), findsOneWidget);
+      await tester.tap(find.byType(TCupertinoSwitch));
+      expect(called, isTrue);
     });
   });
 
   group('TSwitch variants and sizes', () {
+    test('variant enum contains content shapes only', () {
+      expect(TSwitchVariant.values, const [
+        TSwitchVariant.filled,
+        TSwitchVariant.text,
+        TSwitchVariant.icon,
+      ]);
+    });
+
     testWidgets('text variant uses default and custom labels', (tester) async {
       await tester.pumpWidget(
         wrap(
@@ -344,6 +369,49 @@ void main() {
   });
 
   group('TCupertinoSwitch interaction', () {
+    testWidgets('updates render state when controlled properties change', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TCupertinoSwitch(
+            value: false,
+            onChanged: _noop,
+            activeColor: Colors.red,
+            trackColor: Colors.green,
+            thumbColor: Colors.white,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          const TCupertinoSwitch(
+            value: true,
+            onChanged: null,
+            activeColor: Colors.blue,
+            trackColor: Colors.orange,
+            thumbColor: Colors.black,
+          ),
+          direction: TextDirection.rtl,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final updated = tester.widget<TCupertinoSwitch>(
+        find.byType(TCupertinoSwitch),
+      );
+      expect(updated.value, isTrue);
+      expect(updated.onChanged, isNull);
+      expect(updated.activeColor, Colors.blue);
+      expect(updated.trackColor, Colors.orange);
+      expect(updated.thumbColor, Colors.black);
+      expect(
+        Directionality.of(tester.element(find.byType(TCupertinoSwitch))),
+        TextDirection.rtl,
+      );
+    });
+
     testWidgets('drag works in LTR and RTL and external updates animate', (
       tester,
     ) async {
@@ -388,6 +456,8 @@ void main() {
       await tester.tap(find.byType(TCupertinoSwitch));
       await tester.pumpAndSettle();
       expect(widget.toStringShort(), contains('TCupertinoSwitch'));
+      expect(widget.toStringDeep(), contains('value: off'));
+      expect(widget.toStringDeep(), contains('disabled'));
     });
   });
 }

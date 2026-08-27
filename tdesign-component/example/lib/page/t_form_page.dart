@@ -15,58 +15,54 @@ class TFormPage extends StatefulWidget {
 class _TFormPageState extends State<TFormPage> {
   static const _regionItems = TPickerColumns([
     [
-      TPickerOption(label: '广东', value: 'guangdong'),
-      TPickerOption(label: '浙江', value: 'zhejiang'),
-      TPickerOption(label: '江苏', value: 'jiangsu'),
-      TPickerOption(label: '四川', value: 'sichuan'),
-      TPickerOption(label: '北京', value: 'beijing'),
+      TPickerOption(label: '北京市', value: 'beijing'),
+      TPickerOption(label: '天津市', value: 'tianjin'),
     ],
     [
-      TPickerOption(label: '深圳', value: 'shenzhen'),
-      TPickerOption(label: '杭州', value: 'hangzhou'),
-      TPickerOption(label: '南京', value: 'nanjing'),
-      TPickerOption(label: '成都', value: 'chengdu'),
-      TPickerOption(label: '北京', value: 'beijing-city'),
+      TPickerOption(label: '海淀区', value: 'haidian'),
+      TPickerOption(label: '朝阳区', value: 'chaoyang'),
+      TPickerOption(label: '蓟州区', value: 'jizhou'),
     ],
   ]);
-
-  static const _appointment = TDateTimePickerValue(
+  static const _initialDate = TDateTimePickerValue(
     year: 2026,
-    month: 7,
-    day: 28,
-    hour: 10,
-    minute: 30,
+    month: 8,
+    day: 20,
   );
+  static const _initialPhotos = [
+    TUploadFile(
+      id: 'uploaded-1',
+      name: 'uploaded1.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example4.png',
+      status: TUploadFileStatus.success,
+    ),
+    TUploadFile(
+      id: 'uploaded-2',
+      name: 'uploaded2.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example6.png',
+      status: TUploadFileStatus.success,
+    ),
+  ];
 
-  final _horizontalController = TFormController();
-  final _verticalController = TFormController();
+  final _formController = TFormController();
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _noteController = TextEditingController();
+  final _resumeController = TextEditingController();
 
-  String _gender = 'female';
-  List<String> _interests = ['design'];
-  bool _notifications = true;
-  num _quantity = 2;
-  double _progress = 60;
-  double _rating = 3;
-  final _region = ValueNotifier<List<Object?>>([
-    'guangdong',
-    'shenzhen',
-  ]);
-  final _selectedAppointment = ValueNotifier<TDateTimePickerValue>(
-    _appointment,
-  );
-  String _submittedLayout = '';
-  Map<String, Object?> _submittedValues = const {};
+  TFormLayout _layout = TFormLayout.horizontal;
+  bool _disabled = false;
+  String _gender = '';
+  String _birth = '';
+  String _place = '';
+  num _age = 3;
+  double _description = 2;
+  List<TUploadFile> _photos = List.of(_initialPhotos);
 
   @override
   void dispose() {
     _nameController.dispose();
     _passwordController.dispose();
-    _noteController.dispose();
-    _region.dispose();
-    _selectedAppointment.dispose();
+    _resumeController.dispose();
     super.dispose();
   }
 
@@ -74,451 +70,428 @@ class _TFormPageState extends State<TFormPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '组合常用输入组件，支持横向和纵向布局、校验、提交与重置。',
+      desc: '用以收集、校验和提交数据，一般由输入框、单选框、复选框、选择器等控件组成。',
       exampleCodeGroup: 'form',
+      compactDemo: true,
+      showTestModule: false,
       children: [
         ExampleModule(
-          title: '表单布局',
+          title: '组件类型',
           children: [
-            ExampleItem(desc: '横向布局：基础输入与选择', builder: _buildHorizontalForm),
-            ExampleItem(desc: '纵向布局：数值、滚轮与日期输入', builder: _buildVerticalForm),
+            ExampleItem(
+              desc: '基础表单',
+              builder: _buildFormDemo,
+              center: false,
+              ignoreCode: true,
+            ),
           ],
         ),
       ],
     );
   }
 
-  @ExampleCode(group: 'form')
-  Widget _buildHorizontalForm(BuildContext context) {
-    return _buildForm(
-      context,
-      controller: _horizontalController,
-      layout: TFormLayout.horizontal,
+  Widget _buildFormDemo(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TFormField<String>(
-          name: 'name',
-          value: _nameController.text,
-          onChanged: (_) => setState(() {}),
-          required: true,
-          requiredMessage: '请输入姓名',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '姓名',
-            child: TInput(
-              controller: _nameController,
-              hintText: '请输入姓名',
-              onChanged: onChanged,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          decoration: BoxDecoration(
+            color: context.tTheme.bgColorContainer,
+            border: Border(
+              bottom: BorderSide(color: context.tTheme.componentStrokeColor),
             ),
           ),
-        ),
-        TFormField<String>(
-          name: 'password',
-          value: _passwordController.text,
-          onChanged: (_) => setState(() {}),
-          required: true,
-          requiredMessage: '请输入密码',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '密码',
-            help: '使用密码输入类型',
-            child: TInput(
-              controller: _passwordController,
-              obscureText: true,
-              hintText: '请输入密码',
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-        TFormField<String>(
-          name: 'gender',
-          value: _gender,
-          onChanged: (value) => setState(() => _gender = value),
-          required: true,
-          requiredMessage: '请选择性别',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '性别',
-            child: TRadioGroup<String>(
-              value: value,
-              options: const [
-                TRadioOption(value: 'female', label: '女'),
-                TRadioOption(value: 'male', label: '男'),
-              ],
-              direction: Axis.horizontal,
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-        TFormField<List<String>>(
-          name: 'interests',
-          value: _interests,
-          onChanged: (value) => setState(() => _interests = value),
-          required: true,
-          requiredMessage: '至少选择一项兴趣',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '兴趣',
-            child: TCheckboxGroup<String>(
-              value: value,
-              options: const [
-                TCheckboxOption(value: 'design', label: '设计'),
-                TCheckboxOption(value: 'code', label: '开发'),
-                TCheckboxOption(value: 'product', label: '产品'),
-              ],
-              direction: Axis.horizontal,
-              columns: 3,
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-        TFormField<bool>(
-          name: 'notifications',
-          value: _notifications,
-          onChanged: (value) => setState(() => _notifications = value),
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '消息通知',
-            help: '接收服务状态通知',
-            child: TSwitch(value: value, onChanged: onChanged),
-          ),
-        ),
-        TFormField<num>(
-          name: 'quantity',
-          value: _quantity,
-          onChanged: (value) => setState(() => _quantity = value),
-          rules: [
-            (value) => value != null && value >= 1 && value <= 10
-                ? null
-                : '范围为 1 到 10',
-          ],
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '数量',
-            child:
-                TStepper(value: value, min: 1, max: 10, onChanged: onChanged),
-          ),
-        ),
-      ],
-    );
-  }
-
-  @ExampleCode(group: 'form')
-  Widget _buildVerticalForm(BuildContext context) {
-    return _buildForm(
-      context,
-      controller: _verticalController,
-      layout: TFormLayout.vertical,
-      children: [
-        TFormField<String>(
-          name: 'note',
-          value: _noteController.text,
-          onChanged: (_) => setState(() {}),
-          required: true,
-          requiredMessage: '请输入备注',
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '备注',
-            child: TInput.multiline(
-              controller: _noteController,
-              maxLength: 100,
-              hintText: '请输入备注',
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-        TFormField<double>(
-          name: 'progress',
-          value: _progress,
-          onChanged: (value) => setState(() => _progress = value),
-          rules: [
-            (value) => value != null && value >= 0 && value <= 100
-                ? null
-                : '范围为 0 到 100',
-          ],
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '进度',
-            child: TSlider(
-              value: value,
-              min: 0,
-              max: 100,
-              divisions: 10,
-              showThumbValue: true,
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-        TFormField<double>(
-          name: 'rating',
-          value: _rating,
-          onChanged: (value) => setState(() => _rating = value),
-          required: true,
-          requiredMessage: '请选择评分',
-          rules: [(value) => value == 0 ? '请选择评分' : null],
-          builder: (context, value, onChanged, errorText) => TFormItem(
-            label: '评分',
-            child: TRate(value: value, allowHalf: true, onChanged: onChanged),
-          ),
-        ),
-        ValueListenableBuilder<List<Object?>>(
-          valueListenable: _region,
-          builder: (context, region, child) => TFormField<List<Object?>>(
-            name: 'region',
-            value: region,
-            onChanged: (value) => _region.value = value,
-            required: true,
-            requiredMessage: '请选择地区',
-            builder: (context, value, onChanged, errorText) => TFormItem(
-              label: '地区',
-              child: TPicker(
-                items: _regionItems,
-                value: value,
-                onChanged: (pickerValue) => onChanged?.call(pickerValue.values),
-              ),
-            ),
-          ),
-        ),
-        ValueListenableBuilder<TDateTimePickerValue>(
-          valueListenable: _selectedAppointment,
-          builder: (context, appointment, child) =>
-              TFormField<TDateTimePickerValue>(
-            name: 'appointment',
-            value: appointment,
-            onChanged: (value) => _selectedAppointment.value = value,
-            required: true,
-            requiredMessage: '请选择预约时间',
-            rules: [(value) => value?.year == null ? '请选择预约时间' : null],
-            builder: (context, value, onChanged, errorText) => TFormItem(
-              label: '预约时间',
-              child: TDateTimePicker(
-                mode: DateTimePickerMode(
-                  dateMode: DateMode.date,
-                  timeMode: TimeMode.minute,
+          child: Theme(
+            data: Theme.of(
+              context,
+            ).mergeExtension(const TButtonThemeData(shape: TButtonShape.round)),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TButton(
+                    size: TButtonSize.small,
+                    variant: TButtonVariant.fill,
+                    colorScheme: _layout == TFormLayout.horizontal
+                        ? TButtonColorScheme.light
+                        : TButtonColorScheme.defaultTheme,
+                    onPressed: () =>
+                        setState(() => _layout = TFormLayout.horizontal),
+                    child: const TText('水平排布'),
+                  ),
                 ),
-                value: value,
-                onChanged: onChanged,
-              ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TButton(
+                    size: TButtonSize.small,
+                    variant: TButtonVariant.fill,
+                    colorScheme: _layout == TFormLayout.vertical
+                        ? TButtonColorScheme.light
+                        : TButtonColorScheme.defaultTheme,
+                    onPressed: () =>
+                        setState(() => _layout = TFormLayout.vertical),
+                    child: const TText('竖直排布'),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
+        TCell(
+          title: const TText('禁用态'),
+          note: TSwitch(
+            value: _disabled,
+            onChanged: (value) => setState(() => _disabled = value),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _buildForm(context),
       ],
     );
   }
 
-  Widget _buildForm(
-    BuildContext context, {
-    required TFormController controller,
-    required TFormLayout layout,
-    required List<Widget> children,
-  }) {
-    final layoutLabel = layout == TFormLayout.horizontal ? '横向布局' : '纵向布局';
+  @ExampleCode(group: 'form')
+  Widget _buildForm(BuildContext context) {
+    final horizontal = _layout == TFormLayout.horizontal;
+    final trailingContentAlignment = horizontal
+        ? TFormItemContentAlignment.end
+        : null;
     return Theme(
       data: Theme.of(context).mergeExtension(
         TFormThemeData(
-          layout: layout,
-          showColon: layout == TFormLayout.horizontal,
-          itemSpacing: layout == TFormLayout.vertical ? 8 : 0,
+          layout: _layout,
+          labelAlign: TextAlign.left,
+          requiredMarkPosition: TFormRequiredMarkPosition.left,
+          itemSpacing: 0,
         ),
       ),
-      child: Column(
-        children: [
-          if (_submittedLayout == layoutLabel && _submittedValues.isNotEmpty)
-            _buildSubmittedResult(context),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TForm(
-              controller: controller,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onSubmit: (values) => _showSubmittedValues(layoutLabel, values),
-              child: Column(
-                children: [
-                  ...children,
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TButton(
-                          variant: TButtonVariant.fill,
-                          onPressed: () => _submit(layoutLabel, controller),
-                          child: const TText('提交并查看数据'),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      TButton(
-                        variant: TButtonVariant.outline,
-                        onPressed: () => _reset(controller),
-                        child: const TText('重置'),
-                      ),
-                    ],
-                  ),
-                ],
+      child: TForm(
+        controller: _formController,
+        showErrorMessage: true,
+        child: Column(
+          children: [
+            TFormField<String>(
+              name: 'name',
+              value: _nameController.text,
+              onChanged: (_) => setState(() {}),
+              validator: (value) =>
+                  RegExp(r'^[a-zA-Z]{8}$').hasMatch(value ?? '')
+                  ? null
+                  : '只能输入8个字符英文',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '用户名',
+                help: '输入用户名',
+                child: TInput(
+                  controller: _nameController,
+                  enabled: !_disabled,
+                  borderless: true,
+                  hintText: '请输入用户名',
+                  onChanged: onChanged,
+                ),
               ),
             ),
-          ),
-        ],
+            TFormField<String>(
+              name: 'password',
+              value: _passwordController.text,
+              onChanged: (_) => setState(() {}),
+              validator: (value) =>
+                  (value?.length ?? 0) > 6 ? null : '长度大于6个字符',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '密码',
+                child: TInput(
+                  controller: _passwordController,
+                  enabled: !_disabled,
+                  borderless: true,
+                  obscureText: true,
+                  hintText: '请输入密码',
+                  onChanged: onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'gender',
+              value: _gender,
+              onChanged: (value) => setState(() => _gender = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '性别',
+                child: TRadioGroup<String>(
+                  value: value,
+                  options: const [
+                    TRadioOption(value: 'man', label: '男'),
+                    TRadioOption(value: 'women', label: '女'),
+                    TRadioOption(value: 'secret', label: '保密'),
+                  ],
+                  direction: Axis.horizontal,
+                  columns: 3,
+                  onChanged: _disabled ? null : onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'birth',
+              value: _birth,
+              onChanged: (value) => setState(() => _birth = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => Semantics(
+                button: true,
+                enabled: !_disabled,
+                label: '生日',
+                value: value.isNotEmpty ? value : '未选择',
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _disabled
+                      ? null
+                      : () => _showDatePicker(context, onChanged),
+                  child: TFormItem(
+                    label: '生日',
+                    contentAlignment: trailingContentAlignment,
+                    extra: _buildArrow(context),
+                    child: _buildSelectionValue(context, value, '请输入生日'),
+                  ),
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'place',
+              value: _place,
+              onChanged: (value) => setState(() => _place = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => Semantics(
+                button: true,
+                enabled: !_disabled,
+                label: '籍贯',
+                value: value.isNotEmpty ? value : '未选择',
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _disabled
+                      ? null
+                      : () => _showRegionPicker(context, onChanged),
+                  child: TFormItem(
+                    label: '籍贯',
+                    contentAlignment: trailingContentAlignment,
+                    extra: _buildArrow(context),
+                    child: _buildSelectionValue(context, value, '请选择籍贯'),
+                  ),
+                ),
+              ),
+            ),
+            TFormField<num>(
+              name: 'age',
+              value: _age,
+              onChanged: (value) => setState(() => _age = value),
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '年限',
+                contentAlignment: trailingContentAlignment,
+                child: TStepper(
+                  value: value,
+                  variant: TStepperVariant.filled,
+                  onChanged: _disabled ? null : onChanged,
+                ),
+              ),
+            ),
+            TFormField<double>(
+              name: 'description',
+              value: _description,
+              onChanged: (value) => setState(() => _description = value),
+              validator: (value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '自我评价',
+                contentAlignment: trailingContentAlignment,
+                child: TRate(
+                  value: value,
+                  allowHalf: true,
+                  onChanged: _disabled ? null : onChanged,
+                ),
+              ),
+            ),
+            TFormField<String>(
+              name: 'resume',
+              value: _resumeController.text,
+              onChanged: (_) => setState(() {}),
+              validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '个人简介',
+                child: SizedBox(
+                  height: 100,
+                  child: TTextarea(
+                    controller: _resumeController,
+                    enabled: !_disabled,
+                    hintText: '请输入个人简介',
+                    minLines: 2,
+                    maxLength: 50,
+                    indicator: true,
+                    onChanged: onChanged,
+                  ),
+                ),
+              ),
+            ),
+            TFormField<List<TUploadFile>>(
+              name: 'photo',
+              value: _photos,
+              onChanged: (value) => setState(() => _photos = value),
+              validator: (value) => value?.isNotEmpty == true ? null : '请上传照片',
+              builder: (context, value, onChanged, errorText) => TFormItem(
+                label: '上传照片',
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final columns = horizontal ? 3 : 4;
+                    final size =
+                        (constraints.maxWidth - (columns - 1) * 8) / columns;
+                    return Theme(
+                      data: Theme.of(context).mergeExtension(
+                        TUploadThemeData(itemSize: size.clamp(64, 96)),
+                      ),
+                      child: TUpload(
+                        files: value,
+                        maxFiles: horizontal ? 6 : 8,
+                        onChanged: _disabled ? null : onChanged,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            _buildButtons(horizontal),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSubmittedResult(BuildContext context) {
+  Widget _buildArrow(BuildContext context) => TIcon(
+    TIcons.chevron_right,
+    size: 24,
+    color: _disabled
+        ? context.tTheme.textDisabledColor
+        : context.tTheme.textColorPlaceholder,
+    semanticLabel: '选择',
+  );
+
+  Widget _buildSelectionValue(
+    BuildContext context,
+    String? value,
+    String placeholder,
+  ) {
+    final hasValue = value?.isNotEmpty == true;
+    return TText(
+      hasValue ? value! : placeholder,
+      font: context.tTheme.fontBodyLarge,
+      textColor: _disabled
+          ? context.tTheme.textDisabledColor
+          : hasValue
+          ? context.tTheme.textColorPrimary
+          : context.tTheme.textColorPlaceholder,
+    );
+  }
+
+  Widget _buildButtons(bool horizontal) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: context.tTheme.bgColorContainer,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+        border: Border(
+          bottom: BorderSide(color: context.tTheme.componentStrokeColor),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          TText(
-            '提交结果 · $_submittedLayout',
-            fontWeight: FontWeight.w600,
-          ),
-          const SizedBox(height: 8),
-          for (final entry in _submittedValues.entries)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Builder(
-                    builder: (context) {
-                      final error = _validationError(entry.key, entry.value);
-                      return TIcon(
-                        error == null
-                            ? TIcons.check_circle_filled
-                            : TIcons.error_circle_filled,
-                        size: 18,
-                        color: error == null
-                            ? context.tTheme.successNormalColor
-                            : context.tTheme.errorNormalColor,
-                        semanticLabel: error == null ? '校验通过' : '校验失败',
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: 96,
-                    child: TText(
-                      entry.key,
-                      textColor: context.tTheme.textColorSecondary,
-                    ),
-                  ),
-                  Expanded(
-                    child: Builder(
-                      builder: (context) {
-                        final error = _validationError(entry.key, entry.value);
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TText(_displayValue(entry.key, entry.value)),
-                            if (error != null)
-                              TText(
-                                error,
-                                textColor: context.tTheme.errorNormalColor,
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+          Expanded(
+            child: TButton(
+              size: TButtonSize.large,
+              variant: TButtonVariant.fill,
+              colorScheme: horizontal
+                  ? TButtonColorScheme.primary
+                  : TButtonColorScheme.light,
+              onPressed: _disabled ? null : _formController.submit,
+              child: const TText('提交'),
             ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: TButton(
+              size: TButtonSize.large,
+              variant: TButtonVariant.fill,
+              colorScheme: TButtonColorScheme.defaultTheme,
+              onPressed: _disabled ? null : _reset,
+              child: const TText('重置'),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void _showSubmittedValues(String layout, Map<String, Object?> values) {
-    setState(() {
-      _submittedLayout = layout;
-      _submittedValues = Map<String, Object?>.from(values);
-    });
+  void _showDatePicker(BuildContext context, ValueChanged<String>? onChanged) {
+    var draft = _initialDate;
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        titleWidget: const TText('选择日期'),
+        child: StatefulBuilder(
+          builder: (context, setPopupState) => TDateTimePicker(
+            mode: DateTimePickerMode(dateMode: DateMode.date),
+            value: draft,
+            onChanged: (value) => setPopupState(() => draft = value),
+          ),
+        ),
+        onVisibleChange: (visible, trigger) {
+          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
+            onChanged?.call(
+              '${draft.year}-${draft.month.toString().padLeft(2, '0')}-${draft.day.toString().padLeft(2, '0')}',
+            );
+          }
+        },
+      ),
+    );
   }
 
-  void _submit(String layout, TFormController controller) {
-    if (!controller.submit()) {
-      setState(() {
-        _submittedLayout = layout;
-        _submittedValues = Map<String, Object?>.from(controller.values);
-      });
-    }
+  void _showRegionPicker(
+    BuildContext context,
+    ValueChanged<String>? onChanged,
+  ) {
+    var draft = <Object?>['beijing', 'haidian'];
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        titleWidget: const TText('选择地址'),
+        child: StatefulBuilder(
+          builder: (context, setPopupState) => TPicker(
+            items: _regionItems,
+            value: draft,
+            onChanged: (value) => setPopupState(() => draft = value.values),
+          ),
+        ),
+        onVisibleChange: (visible, trigger) {
+          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
+            const labels = {
+              'beijing': '北京市',
+              'tianjin': '天津市',
+              'haidian': '海淀区',
+              'chaoyang': '朝阳区',
+              'jizhou': '蓟州区',
+            };
+            onChanged?.call(
+              draft.map((value) => labels[value] ?? '$value').join('/'),
+            );
+          }
+        },
+      ),
+    );
   }
 
-  String? _validationError(String key, Object? value) {
-    switch (key) {
-      case 'name':
-        return value is String && value.trim().isNotEmpty ? null : '必填';
-      case 'password':
-        return value is String && value.isNotEmpty ? null : '必填';
-      case 'note':
-        return value is String && value.trim().isNotEmpty ? null : '必填';
-      case 'rating':
-        return value is num && value > 0 ? null : '必选';
-      case 'region':
-        return value is Iterable && value.isNotEmpty ? null : '必选';
-      case 'interests':
-        return value is Iterable && value.isNotEmpty ? null : '至少选择一项兴趣';
-      case 'quantity':
-        return value is num && value >= 1 && value <= 10 ? null : '范围为 1 到 10';
-      case 'progress':
-        return value is num && value >= 0 && value <= 100
-            ? null
-            : '范围为 0 到 100';
-      case 'appointment':
-        return value is TDateTimePickerValue && value.year != null
-            ? null
-            : '必选';
-      default:
-        return key == 'notifications' && value == null ? '请选择通知设置' : null;
-    }
-  }
-
-  void _reset(TFormController controller) {
-    controller.reset();
+  void _reset() {
+    _formController.reset();
     setState(() {
       _nameController.clear();
       _passwordController.clear();
-      _noteController.clear();
-      _gender = 'female';
-      _interests = ['design'];
-      _notifications = true;
-      _quantity = 2;
-      _progress = 60;
-      _rating = 3;
-      _region.value = ['guangdong', 'shenzhen'];
-      _selectedAppointment.value = _appointment;
-      _submittedLayout = '';
-      _submittedValues = const {};
+      _resumeController.clear();
+      _gender = '';
+      _birth = '';
+      _place = '';
+      _age = 3;
+      _description = 2;
+      _photos = List.of(_initialPhotos);
     });
-  }
-
-  String _displayValue(String key, Object? value) {
-    if (key == 'password') {
-      return value is String && value.isNotEmpty ? '已填写（已隐藏）' : '未填写';
-    }
-    if (key == 'gender') {
-      return value == 'female' ? '女' : '男';
-    }
-    if (key == 'interests' && value is Iterable<Object?>) {
-      const labels = {'design': '设计', 'code': '开发', 'product': '产品'};
-      return value.map((item) => labels[item] ?? '$item').join('、');
-    }
-    if (key == 'region' && value is Iterable<Object?>) {
-      const labels = {
-        'guangdong': '广东',
-        'zhejiang': '浙江',
-        'jiangsu': '江苏',
-        'sichuan': '四川',
-        'beijing': '北京',
-        'shenzhen': '深圳',
-        'hangzhou': '杭州',
-        'nanjing': '南京',
-        'chengdu': '成都',
-        'beijing-city': '北京',
-      };
-      return value.map((item) => labels[item] ?? '$item').join('、');
-    }
-    if (value is TDateTimePickerValue) {
-      return '${value.year}-${value.month}-${value.day} ${value.hour}:${value.minute}';
-    }
-    if (value is Iterable<Object?>) {
-      return value.map((item) => _displayValue(key, item)).join('、');
-    }
-    return '$value';
   }
 }

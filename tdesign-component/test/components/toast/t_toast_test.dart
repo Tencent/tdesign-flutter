@@ -407,8 +407,7 @@ void main() {
       expect(find.text('长期提示'), findsNothing);
     });
 
-    testWidgets('默认 duration 为 2000ms（与 TDesign Mobile 对齐）',
-        (tester) async {
+    testWidgets('默认 duration 为 2000ms（与 TDesign Mobile 对齐）', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
 
       final context = tester.element(find.byKey(const Key('toast_host')));
@@ -699,10 +698,7 @@ void main() {
         TToast.showText(
           '遮罩色',
           context: context,
-          overlay: const TOverlayConfig(
-            showOverlay: true,
-            color: Colors.red,
-          ),
+          overlay: const TOverlayConfig(showOverlay: true, color: Colors.red),
           duration: const Duration(milliseconds: 100),
         );
       });
@@ -829,7 +825,8 @@ void main() {
       // 可见蒙层仍渲染
       expect(
         find.byWidgetPredicate(
-          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+          (w) =>
+              w is Container && w.color == Colors.black.withValues(alpha: 0.5),
         ),
         findsOneWidget,
       );
@@ -855,7 +852,8 @@ void main() {
       expect(find.text('图标遮罩'), findsOneWidget);
       expect(
         find.byWidgetPredicate(
-          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+          (w) =>
+              w is Container && w.color == Colors.black.withValues(alpha: 0.5),
         ),
         findsOneWidget,
       );
@@ -955,7 +953,8 @@ void main() {
       expect(find.text('加载遮罩'), findsOneWidget);
       expect(
         find.byWidgetPredicate(
-          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.5),
+          (w) =>
+              w is Container && w.color == Colors.black.withValues(alpha: 0.5),
         ),
         findsOneWidget,
       );
@@ -1003,7 +1002,8 @@ void main() {
       // 未传 opacity 时默认 0.2，蒙层色为黑色@0.2
       expect(
         find.byWidgetPredicate(
-          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.2),
+          (w) =>
+              w is Container && w.color == Colors.black.withValues(alpha: 0.2),
         ),
         findsOneWidget,
       );
@@ -1023,19 +1023,80 @@ void main() {
       expect(find.text('无遮罩'), findsOneWidget);
       // 两者皆关：Toast 直接由 Align 承载（无 Stack 全屏蒙层）
       final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('无遮罩'), matching: find.byType(Align))
-            .first,
+        find.ancestor(of: find.text('无遮罩'), matching: find.byType(Align)).first,
       );
       expect(align.alignment, const FractionalOffset(0.5, 0.5));
       // 无可见蒙层：不存在黑色蒙层 Container（遮罩色），且无全屏 Positioned 拦截层
       expect(
         find.byWidgetPredicate(
-          (w) => w is Container && w.color == Colors.black.withValues(alpha: 0.2),
+          (w) =>
+              w is Container && w.color == Colors.black.withValues(alpha: 0.2),
         ),
         findsNothing,
       );
       await waitForDismiss(tester);
     });
+  });
+
+  test('TToastThemeData merge copyWith and lerp preserve every field', () {
+    const base = TToastThemeData(
+      backgroundColor: Colors.black,
+      textStyle: TextStyle(fontSize: 12),
+      iconSize: 16,
+      iconColor: Colors.white,
+      borderRadius: 4,
+      padding: EdgeInsets.all(8),
+      maxWidth: 120,
+    );
+    const override = TToastThemeData(
+      backgroundColor: Colors.red,
+      textStyle: TextStyle(fontSize: 16),
+      iconSize: 24,
+      iconColor: Colors.blue,
+      borderRadius: 8,
+      padding: EdgeInsets.all(12),
+      maxWidth: 240,
+    );
+
+    expect(identical(base.merge(null), base), isTrue);
+    final merged = base.merge(override);
+    expect(merged.backgroundColor, Colors.red);
+    expect(merged.textStyle, const TextStyle(fontSize: 16));
+    expect(merged.iconSize, 24);
+    expect(merged.iconColor, Colors.blue);
+    expect(merged.borderRadius, 8);
+    expect(merged.padding, const EdgeInsets.all(12));
+    expect(merged.maxWidth, 240);
+
+    final copied = base.copyWith(
+      backgroundColor: Colors.green,
+      textStyle: const TextStyle(fontSize: 14),
+      iconSize: 20,
+      iconColor: Colors.orange,
+      borderRadius: 6,
+      padding: const EdgeInsets.all(10),
+      maxWidth: 180,
+    );
+    expect(copied.backgroundColor, Colors.green);
+    expect(copied.textStyle, const TextStyle(fontSize: 14));
+    expect(copied.iconSize, 20);
+    expect(copied.iconColor, Colors.orange);
+    expect(copied.borderRadius, 6);
+    expect(copied.padding, const EdgeInsets.all(10));
+    expect(copied.maxWidth, 180);
+
+    final lerped = base.lerp(override, 0.5);
+    expect(lerped.backgroundColor, Color.lerp(Colors.black, Colors.red, 0.5));
+    expect(
+      lerped.textStyle,
+      TextStyle.lerp(base.textStyle, override.textStyle, 0.5),
+    );
+    expect(lerped.iconSize, 20);
+    expect(lerped.iconColor, Color.lerp(Colors.white, Colors.blue, 0.5));
+    expect(lerped.borderRadius, 6);
+    expect(lerped.padding, const EdgeInsets.all(10));
+    expect(lerped.maxWidth, 180);
+    expect(identical(base.lerp(null, 0.5), base), isTrue);
+    expect(TToastThemeData.lerpDouble(null, null, 0.5), isNull);
   });
 }

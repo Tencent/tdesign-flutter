@@ -18,18 +18,19 @@
   name: flutter analyze
   script: cd tdesign-component && flutter analyze --fatal-infos
 
-# 单元 / Widget 测试：运行 refresh 相关测试（生产源码覆盖率门禁在此产出）。
-# 仅跑 refresh 目录的测试，避免无关测试影响速度；`--coverage` 产出 lcov.info。
-.test:
-  name: flutter test (refresh)
-  script: |
-    set -eu
-    cd tdesign-component
-    flutter test test/components/refresh/t_refresh_test.dart --coverage
-    # 用 Python 解析 lcov.info，过滤出 refresh 生产源码并校验 LH/LF >= 95%
-    python3 tool/check_refresh_coverage.py
-    # Golden 视觉回归：与已提交的 baseline（goldens/*.png）逐像素比对
-    flutter test test/components/refresh/t_refresh_golden_test.dart
+# 六个组件的交互测试与生产源码 95% 覆盖率门禁，双 Flutter 版本共用。
+.component-regression-tests:
+  name: flutter test (component regression)
+  script: cd tdesign-component && dart run tool/run_component_regression.dart
+
+.regression-tool-tests:
+  name: flutter test (regression tooling)
+  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+
+# Demo 结构与 Golden 固定在 Flutter 3.32.0 Linux 执行，测试清单由 Dart 统一维护。
+.visual-regression-tests:
+  name: flutter test (visual regression)
+  script: cd tdesign-component && dart run tool/run_visual_regression.dart
 
 # APK 构建
 .build-apk:
@@ -89,7 +90,10 @@
       - /root/.pub-cache:cow
   stages:
     - !reference [.install-component]
-    - !reference [.test]
+    - !reference [.install-example]
+    - !reference [.component-regression-tests]
+    - !reference [.regression-tool-tests]
+    - !reference [.visual-regression-tests]
 
 # 测试 + 覆盖率：flutter latest
 .test-latest:
@@ -100,7 +104,8 @@
       - /root/.pub-cache:cow
   stages:
     - !reference [.install-component]
-    - !reference [.test]
+    - !reference [.component-regression-tests]
+    - !reference [.regression-tool-tests]
 
 # 构建 APK：flutter 3.32.0
 .build-apk-332:
