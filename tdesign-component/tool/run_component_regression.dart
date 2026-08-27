@@ -16,6 +16,10 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('checkbox', [
+    'test/components/checkbox/t_check_box_group_test.dart',
+    'test/components/checkbox/t_checkbox_test.dart',
+  ]),
   ComponentTestSuite('divider', [
     'test/components/divider/t_divider_test.dart',
   ]),

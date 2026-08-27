@@ -97,6 +97,24 @@ dart run tool/generate_example_code.dart --check
 
 第二条命令不会写文件，用于本地和 CI 校验片段是否与源码同步。
 
+## 组件测试与 CI 回归门禁
+
+新增组件或为既有组件新增测试时，测试文件不会因为放入 `test/` 目录就自动进入集中式 CI 回归。贡献者须同步维护以下三个清单：
+
+1. **组件测试**：在 `tdesign-component/tool/run_component_regression.dart` 的 `componentTestSuites` 中登记组件名及测试文件。CI 会按组件运行这些测试并生成覆盖率。
+2. **生产源码覆盖率**：在 `tdesign-component/tool/check_component_coverage.dart` 的 `componentTargets` 中登记该组件的生产源码目录或文件。手写生产 Dart 行覆盖率须达到 `LH/LF >= 95%`。
+3. **Demo 与 Golden**：新增或修改 Demo 结构测试、明暗 Golden 时，在 `tdesign-component/tool/run_visual_regression.dart` 的 `visualTestSuites` 中登记对应测试文件。
+
+登记后在 `tdesign-component` 目录执行：
+
+```bash
+flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+dart run tool/run_component_regression.dart
+dart run tool/run_visual_regression.dart
+```
+
+调度器自测会检查组件测试清单、覆盖率目标和视觉回归清单是否同步，以及登记的测试文件是否存在。CI job 成功仅代表清单中已登记的测试通过；测试文件存在、Golden 已提交或本地单独运行通过，均不能替代 CI 回归登记。
+
 ## 贡献指南
 
 请参考：[贡献指南](https://tdesign.tencent.com/flutter/develop)

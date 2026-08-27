@@ -9,6 +9,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../divider/t_divider.dart';
+import '../divider/t_divider_theme_data.dart';
 import 't_checkbox_theme_data.dart';
 import 't_selection_card.dart';
 
@@ -60,17 +61,17 @@ class TCheckbox extends StatelessWidget {
     /// 是否使用卡片模式。
     this.cardMode = false,
 
-    /// 是否显示底部分割线。
-    this.showDivider = false,
+    /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
+    this.showDivider = true,
 
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
 
-    /// 主标题最大行数。
-    this.titleMaxLines = 1,
+    /// 主标题最大行数，默认 3 行。
+    this.titleMaxLines = 3,
 
-    /// 副标题最大行数。
-    this.subTitleMaxLines = 1,
+    /// 副标题最大行数，默认 5 行。
+    this.subTitleMaxLines = 5,
 
     /// 自定义复选框指示器。
     this.customIconBuilder,
@@ -94,16 +95,16 @@ class TCheckbox extends StatelessWidget {
   /// 是否使用卡片模式。
   final bool cardMode;
 
-  /// 是否显示底部分割线。
+  /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
   final bool showDivider;
 
   /// 控件与文案排列方向。
   final TContentDirection contentDirection;
 
-  /// 主标题最大行数。
+  /// 主标题最大行数，默认 3 行。
   final int titleMaxLines;
 
-  /// 副标题最大行数。
+  /// 副标题最大行数，默认 5 行。
   final int subTitleMaxLines;
 
   /// 自定义复选框指示器。
@@ -198,10 +199,15 @@ class TCheckbox extends StatelessWidget {
                 : () => onChanged!(value == true ? false : true),
             child: tile,
           ),
-          if (showDivider)
+          if (showDivider && !cardMode)
             Padding(
               padding: EdgeInsets.only(left: context.tTheme.spacer16),
-              child: const TDivider(),
+              child: Theme(
+                data: Theme.of(context).mergeExtension(
+                  const TDividerThemeData(margin: EdgeInsets.zero),
+                ),
+                child: const TDivider(),
+              ),
             ),
         ],
       ),
@@ -209,9 +215,9 @@ class TCheckbox extends StatelessWidget {
   }
 
   double get _contentMinHeight => switch (size) {
-    TCheckboxSize.small => 40.0,
-    TCheckboxSize.medium => 48.0,
-    TCheckboxSize.large => 56.0,
+    TCheckboxSize.small => 48.0,
+    TCheckboxSize.medium => 56.0,
+    TCheckboxSize.large => 64.0,
   };
 
   double get _indicatorSize => switch (size) {
@@ -244,7 +250,7 @@ class TCheckbox extends StatelessWidget {
   Widget _buildIndicator(BuildContext context, TCheckboxThemeData? theme) {
     final materialTheme = CheckboxTheme.of(context);
     final colorScheme = Theme.of(context).tExplicitColorScheme;
-    final variant = theme?.variant ?? TCheckboxVariant.square;
+    final variant = theme?.variant ?? TCheckboxVariant.circle;
     final selected = value == true;
     final indeterminate = value == null;
     final states = <WidgetState>{
@@ -320,9 +326,7 @@ class TCheckbox extends StatelessWidget {
             style: titleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.titleColor ??
-                        titleStyle.color ??
-                        context.tTheme.textColorPrimary),
+                  : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -335,9 +339,7 @@ class TCheckbox extends StatelessWidget {
             style: subTitleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.subTitleColor ??
-                        subTitleStyle.color ??
-                        context.tTheme.textColorPlaceholder),
+                  : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),
       ],
