@@ -71,10 +71,7 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
   @ExampleCode(group: 'colorPicker')
   Widget _buildBase(BuildContext context) => TColorPicker(
         value: baseValue,
-        onChanged: (result) {
-          final (value, _) = result;
-          setState(() => baseValue = value);
-        },
+        onChanged: (value, change) => setState(() => baseValue = value),
       );
 
   @ExampleCode(group: 'colorPicker')
@@ -82,10 +79,7 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
         value: multipleValue,
         type: TColorPickerType.multiple,
         enableAlpha: true,
-        onChanged: (result) {
-          final (value, _) = result;
-          setState(() => multipleValue = value);
-        },
+        onChanged: (value, change) => setState(() => multipleValue = value),
         onPaletteBarChange: (color) {
           debugPrint('palette bar change: ${color.hex}');
         },
@@ -124,10 +118,7 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
             value: draft,
             type: TColorPickerType.multiple,
             enableAlpha: true,
-            onChanged: (result) {
-              final (value, _) = result;
-              setPopupState(() => draft = value);
-            },
+            onChanged: (value, change) => setPopupState(() => draft = value),
           ),
         ),
         onVisibleChange: (visible, trigger) {
@@ -151,10 +142,7 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
             type: TColorPickerType.multiple,
             enableAlpha: true,
             format: curFormat,
-            onChanged: (result) {
-              final (value, _) = result;
-              setState(() => formatValue = value);
-            },
+            onChanged: (value, change) => setState(() => formatValue = value),
           ),
         ],
       );

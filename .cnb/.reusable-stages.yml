@@ -21,7 +21,7 @@
 # 单元 / Widget 测试：运行 refresh 相关测试（生产源码覆盖率门禁在此产出）。
 # 仅跑 refresh 目录的测试，避免无关测试影响速度；`--coverage` 产出 lcov.info。
 .test:
-  name: flutter test (refresh)
+  name: flutter test (refresh & color picker)
   script: |
     set -eu
     cd tdesign-component
@@ -30,6 +30,8 @@
     python3 tool/check_refresh_coverage.py
     # Golden 视觉回归：与已提交的 baseline（goldens/*.png）逐像素比对
     flutter test test/components/refresh/t_refresh_golden_test.dart
+    # ColorPicker 行为 + light/dark Golden 视觉回归
+    flutter test test/components/color_picker
 
 # Upload 行为与 Golden 固定在 Flutter 3.32.0 的 Linux 环境执行，确保拖拽、
 # 禁用边界、状态文案和视觉基线持续受 CI 保护。

@@ -9,5 +9,5 @@
 - [x] 补充单元测试（`TColorObject`）与 Widget 测试（`TColorPicker`）
 - [x] 更新示例页 `t_color_picker_page.dart` 与 `config.dart` 路由
 - [x] 新增站点文档 `tdesign-site/docs/components/color-picker/README.md`
-- [ ] 执行验证并记录结果（`flutter analyze`、测试）
+- [x] 执行验证并记录结果（`flutter analyze`、测试）
 - [ ] 完成 Review

@@ -80,8 +80,8 @@ class TColorPicker extends StatefulWidget {
 布局契约（对齐 tdesign-mobile-vue 真实 DOM 结构与 CSS，用户反馈设计稿差异后修正）：
 
 - `multiple` 类型区块自上而下：饱和度面板 → 16px → 色相条 → 20px（+透明条）→ 20px → 格式区 → 28px → swatch 区。
-- 格式区对齐 mobile-vue `__format`：左侧格式名框（68px、1px 边框、左圆角 6），右侧各通道值连体分段框（相邻边共线合并、末格右圆角 6），每段居中展示数值；最后一段固定为百分比 alpha（如 RGB 显示 `0 | 26 | 87 | 100%`），CSS 为单整段。数值只读，输入属宿主层。
-- 格式区文字与边框颜色跟随全局 Token（`textColorPrimary` / `componentBorderColor`），不用硬编码色值，保证深浅色模式下均可读；边框圆角、布局尺寸与 mobile-vue 一致。
+- 格式区对齐 mobile-vue `__format`：左侧格式名框（68px、1px 边框、左圆角 6），右侧各通道值连体分段框（相邻边共线合并、末格右圆角 6），每段居中展示数值；最后一段固定为百分比 alpha（如 RGB 显示 `0 | 26 | 87 | 100%`），HEX/HEX8/CSS 同样附带该定宽 alpha 段（对齐 mobile-vue `getFormatList` 的 `__format-input--fixed`）。数值只读，输入属宿主层。
+- 格式区文字用弱化提示色 Token（`textColorPlaceholder`，上游 `__format` 为 `@text-color-placeholder`）、边框用 `componentBorderColor`，不用硬编码色值，保证深浅色模式下均可读；边框圆角、布局尺寸与 mobile-vue 一致。
 - 色相条渐变 stop 对齐 mobile-vue（red→黄 17%→绿 33%→青 50%→蓝 67%→品红 83%→red）；滑块 thumb 与轨道同层绝对定位，白圆底 + 内嵌当前色圆点。
 - 透明条以斜向棋盘格为底（6px 网格、#c5c5c5，对齐 mobile-vue alpha wrapper 背景棋盘），上层覆盖当前色透明渐变。
 - swatch 区：标题加粗与"清除"同行（space-between），下方 12px 单行横向滚动排列，块间距 12（对齐 mobile-vue `__swatches-items` 横滚与 12px margin）。
@@ -111,11 +111,11 @@ class TColorPicker extends StatefulWidget {
 
 ## 验收标准
 
-- [ ] `TColorPicker` 组件 `base`/`multiple` 两种类型渲染正确，交互（色板拖拽、色相条、透明条、预设点击、清除）与 mobile-vue 行为一致。
-- [ ] `onChanged` 输出格式随 `format` 变化，`enableAlpha` 时自动升级为带 alpha 格式（HEX8/RGBA/HSLA/HSVA）。
-- [ ] `swatchColors` 为 `null` 用内置色板，为空列表隐藏色板。
-- [ ] `TColorObject` 各格式互转结果与预期一致（CMYK 舍入损耗锁定期望值），单元测试覆盖。
-- [ ] `TColorPickerThemeData` 默认值对齐 mobile-vue CSS Variables，可被主题子树覆盖。
-- [ ] 示例页分组对齐 mobile-vue `mobile.vue`（01 组件类型、02 组件状态）。
-- [ ] 站点文档 README.md 提供与示例一致的使用代码。
-- [ ] `flutter analyze` 0 error / 0 warning，`flutter@3.32.0` 与 `flutter@latest` 双版本兼容。
+- [x] `TColorPicker` 组件 `base`/`multiple` 两种类型渲染正确，交互（色板拖拽、色相条、透明条、预设点击、清除）与 mobile-vue 行为一致。
+- [x] `onChanged` 输出格式随 `format` 变化，`enableAlpha` 时自动升级为带 alpha 格式（HEX8/RGBA/HSLA/HSVA）。
+- [x] `swatchColors` 为 `null` 用内置色板，为空列表隐藏色板。
+- [x] `TColorObject` 各格式互转结果与预期一致（CMYK 舍入损耗锁定期望值），单元测试覆盖。
+- [x] `TColorPickerThemeData` 默认值对齐 mobile-vue CSS Variables，可被主题子树覆盖。
+- [x] 示例页分组对齐 mobile-vue `mobile.vue`（01 组件类型、02 组件状态）。
+- [x] 站点文档 README.md 提供与示例一致的使用代码。
+- [x] `flutter analyze` 0 error / 0 warning，`flutter@3.32.0` 与 `flutter@latest` 双版本兼容。

@@ -23,7 +23,7 @@ void main() {
   group('TColorPicker v1 behavior', () {
     testWidgets('base type renders swatch grid', (tester) async {
       await tester.pumpWidget(
-        wrap(TColorPicker(value: '#0052D9', onChanged: (_) {})),
+        wrap(TColorPicker(value: '#0052D9', onChanged: (value, change) {})),
       );
       // 默认色板 10 个 swatch。
       expect(find.byType(TColorPicker), findsOneWidget);
@@ -36,7 +36,7 @@ void main() {
           value: '#0052D9',
           type: TColorPickerType.multiple,
           enableAlpha: true,
-          onChanged: (_) {},
+          onChanged: (value, change) {},
         )),
       );
       expect(find.byType(TColorPickerSaturationPanel), findsOneWidget);
@@ -46,11 +46,15 @@ void main() {
 
     testWidgets('swatch tap triggers onChanged with preset trigger',
         (tester) async {
-      (String, TColorPickerChangeContext)? result;
+      String? value;
+      TColorPickerChangeContext? change;
       await tester.pumpWidget(
         wrap(TColorPicker(
           value: '#0052D9',
-          onChanged: (r) => result = r,
+          onChanged: (v, c) {
+            value = v;
+            change = c;
+          },
         )),
       );
       // 默认色板第一个 swatch 为 #ECF2FE。
@@ -63,8 +67,8 @@ void main() {
       expect(firstSwatch, findsOneWidget);
       await tester.tap(firstSwatch);
       await tester.pump();
-      expect(result, isNotNull);
-      expect(result!.$2.trigger, TColorPickerChangeTrigger.preset);
+      expect(value, isNotNull);
+      expect(change!.trigger, TColorPickerChangeTrigger.preset);
     });
 
     testWidgets('empty swatchColors hides swatch grid', (tester) async {
@@ -72,7 +76,7 @@ void main() {
         wrap(TColorPicker(
           value: '#0052D9',
           swatchColors: const [],
-          onChanged: (_) {},
+          onChanged: (value, change) {},
         )),
       );
       // 空列表不渲染 swatch。
@@ -84,7 +88,7 @@ void main() {
         wrap(TColorPicker(
           value: '#0052D9',
           clearable: true,
-          onChanged: (_) {},
+          onChanged: (value, change) {},
         )),
       );
       expect(find.text('清除'), findsOneWidget);
@@ -97,11 +101,12 @@ void main() {
           type: TColorPickerType.multiple,
           enableAlpha: true,
           format: TColorPickerFormat.rgb,
-          onChanged: (_) {},
+          onChanged: (value, change) {},
         )),
       );
-      // 格式区各通道分段展示（RGB → 0 | 26 | 87 | 100%）。
-      expect(find.text('RGB'), findsOneWidget);
+      // 格式区各通道分段展示；enableAlpha 下格式升级为 RGBA。
+      // （值段 → 0 | 26 | 87 | 100%，末段为固定 alpha 段）
+      expect(find.text('RGBA'), findsOneWidget);
       expect(find.text('0'), findsOneWidget);
       expect(find.text('26'), findsOneWidget);
       expect(find.text('87'), findsOneWidget);
@@ -114,7 +119,7 @@ void main() {
         wrap(TColorPicker(
           value: '#0052D9',
           type: TColorPickerType.multiple,
-          onChanged: (_) {},
+          onChanged: (value, change) {},
         )),
       );
       expect(find.text('系统预设色彩'), findsOneWidget);
@@ -124,18 +129,22 @@ void main() {
 
     testWidgets('clear button triggers onChanged with clear trigger',
         (tester) async {
-      (String, TColorPickerChangeContext)? result;
+      String? value;
+      TColorPickerChangeContext? change;
       await tester.pumpWidget(
         wrap(TColorPicker(
           value: '#0052D9',
           clearable: true,
-          onChanged: (r) => result = r,
+          onChanged: (v, c) {
+            value = v;
+            change = c;
+          },
         )),
       );
       await tester.tap(find.text('清除'));
       await tester.pump();
-      expect(result, isNotNull);
-      expect(result!.$2.trigger, TColorPickerChangeTrigger.clear);
+      expect(value, isNotNull);
+      expect(change!.trigger, TColorPickerChangeTrigger.clear);
     });
 
     testWidgets('multiple type in dark theme renders readable format display',
@@ -147,7 +156,7 @@ void main() {
           type: TColorPickerType.multiple,
           enableAlpha: true,
           format: TColorPickerFormat.rgb,
-          onChanged: (_) {},
+          onChanged: (value, change) {},
         )),
       );
       final context = tester.element(find.byType(TColorPicker));
@@ -158,9 +167,156 @@ void main() {
       expect(token.textColorPrimary, const Color(0xE5FFFFFF));
       expect(token.componentBorderColor, const Color(0xFF5E5E5E));
 
-      // 格式区各通道段正常渲染。
-      expect(find.text('RGB'), findsOneWidget);
+      // 格式区各通道段正常渲染（enableAlpha 下格式名显示 RGBA）。
+      expect(find.text('RGBA'), findsOneWidget);
       expect(find.text('100%'), findsOneWidget);
+    });
+
+    testWidgets('hue slider drag updates color and emits paletteHueBar', (
+      tester,
+    ) async {
+      TColorPickerChangeContext? change;
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          onChanged: (value, c) => change = c,
+        )),
+      );
+      // 色相条位于色板下方：沿轨道横向拖动改变色相。
+      final hueSlider = find.byType(TColorPickerSlider).first;
+      await tester.drag(hueSlider, const Offset(80, 0));
+      await tester.pump();
+      expect(change, isNotNull);
+      expect(change!.trigger, TColorPickerChangeTrigger.paletteHueBar);
+      // 拖拽不产生合法十六进制以外的颜色即为解析成功；色相应已偏离初始 217 度。
+      expect(change!.color.hue, isNot(217.0));
+    });
+
+    testWidgets('alpha slider drag emits paletteAlphaBar with alpha output', (
+      tester,
+    ) async {
+      String? value;
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          enableAlpha: true,
+          onChanged: (v, c) => value = v,
+        )),
+      );
+      // 透明条为第二个滑块：拖到最左端 alpha 归零，输出带透明度的 RGBA。
+      final alphaSlider = find.byType(TColorPickerSlider).at(1);
+      await tester.drag(alphaSlider, const Offset(-320, 0));
+      await tester.pump();
+      expect(value, isNotNull);
+      expect(value!.endsWith(', 0)'), isTrue);
+    });
+
+    testWidgets('saturation panel drag calls onPaletteBarChange only', (
+      tester,
+    ) async {
+      var paletteCalls = 0;
+      TColorPickerChangeContext? changed;
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          onChanged: (value, c) => changed = c,
+          onPaletteBarChange: (color) => paletteCalls++,
+        )),
+      );
+      // 饱和度-明度色板拖拽只走 onPaletteBarChange，不触发 onChanged（对齐上游）。
+      await tester.drag(find.byType(TColorPickerSaturationPanel), const Offset(-60, -40));
+      await tester.pump();
+      expect(paletteCalls, greaterThan(0));
+      expect(changed, isNull);
+    });
+
+    testWidgets('format display appends fixed alpha segment for css/hex/hex8', (
+      tester,
+    ) async {
+      // 回归 B3：对齐 mobile-vue getFormatList——HEX/HEX8/CSS 第二段也是
+      // 固定的百分比 alpha 段。
+      Future<void> check(
+        TColorPickerFormat format,
+        bool enableAlpha,
+        String name,
+      ) async {
+        await tester.pumpWidget(
+          wrap(TColorPicker(
+            key: ValueKey('$format-$enableAlpha'),
+            value: '#0052D9',
+            type: TColorPickerType.multiple,
+            enableAlpha: enableAlpha,
+            format: format,
+            onChanged: (value, change) {},
+          )),
+        );
+        expect(find.text(name), findsOneWidget);
+        // 末段固定为百分比 alpha 段（当前不透明显示 100%）。
+        expect(find.text('100%'), findsOneWidget);
+      }
+
+      await check(TColorPickerFormat.css, true, 'CSS');
+      await check(TColorPickerFormat.hex, false, 'HEX');
+      await check(TColorPickerFormat.hex8, true, 'HEX8');
+    });
+
+    testWidgets('theme extension from TThemeBuilder subtree overrides defaults', (
+      tester,
+    ) async {
+      // 回归 B1：TColorPickerThemeData 必须注册进全局主题管道，
+      // 经 TThemeBuilder 注入的子树主题能直接改变组件外观。
+      const overriddenPanel = Color(0xFF123456);
+      final baseTheme = TThemeBuilder.light(TThemeData.defaultData());
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: baseTheme.copyWith(
+            extensions: [
+              ...baseTheme.extensions.values,
+              const TColorPickerThemeData(panelBackgroundColor: overriddenPanel),
+            ],
+          ),
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 320,
+                child: TColorPicker(value: '#0052D9', onChanged: (value, change) {}),
+              ),
+            ),
+          ),
+        ),
+      );
+      // 组件可正常渲染且读取到注入的主题扩展（默认面板背景不再是 bgColorContainer）。
+      final context = tester.element(find.byType(TColorPicker));
+      final injected = Theme.of(context).extension<TColorPickerThemeData>();
+      expect(injected, isNotNull);
+      expect(injected!.panelBackgroundColor, overriddenPanel);
+    });
+
+    testWidgets('multiple type registered in default theme pipeline', (
+      tester,
+    ) async {
+      // 回归 B1：默认 TTheme 管道即携带组件级扩展，业务侧无需手动塞 extensions。
+      late ThemeData materialTheme;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) {
+                materialTheme = Theme.of(context);
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      );
+      expect(
+        materialTheme.extension<TColorPickerThemeData>(),
+        isNotNull,
+      );
     });
   });
 }

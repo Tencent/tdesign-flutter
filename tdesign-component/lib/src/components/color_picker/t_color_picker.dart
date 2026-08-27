@@ -47,10 +47,11 @@ class TColorPicker extends StatefulWidget {
   /// 任一格式。为空时使用默认色 `#001F97`。
   final String value;
 
-  /// 选中色值变化时触发。`value` 为按 [format] 格式化后的新色值，
-  /// [TColorPickerChangeContext.color] 为当前颜色对象，
-  /// [TColorPickerChangeContext.trigger] 为触发来源。
-  final ValueChanged<(String, TColorPickerChangeContext)> onChanged;
+  /// 选中色值变化时触发。
+  ///
+  /// [value] 为按 [format] 格式化后的新色值；第二个参数含当前颜色对象与触发来源
+  /// （`TColorPickerChangeContext.color` / `TColorPickerChangeContext.trigger`）。
+  final void Function(String value, TColorPickerChangeContext change) onChanged;
 
   /// 颜色选择器类型。默认 [TColorPickerType.base]。
   final TColorPickerType type;
@@ -120,7 +121,7 @@ class _TColorPickerState extends State<TColorPicker> {
 
   void _emitChange(TColorPickerChangeTrigger trigger) {
     final formatted = _formattedValue;
-    widget.onChanged((formatted, TColorPickerChangeContext(_color, trigger)));
+    widget.onChanged(formatted, TColorPickerChangeContext(_color, trigger));
   }
 
   void _handleSaturationDrag(({double saturation, double value}) next) {
@@ -158,8 +159,9 @@ class _TColorPickerState extends State<TColorPicker> {
     final panelRadius = effectiveTheme?.panelRadius ?? 12;
     final panelPadding = effectiveTheme?.panelPadding ?? const EdgeInsets.all(16);
     final swatchColors = _swatchColors;
-    // 格式区文字 / 边框颜色使用全局 Token，保证深浅色模式下均可读。
-    final formatTextColor = context.tTheme.textColorPrimary;
+    // 格式区文字为弱化提示色（上游 __format 为 @text-color-placeholder），
+    // 边框用组件描边 Token，深浅色模式下均可读。
+    final formatTextColor = context.tTheme.textColorPlaceholder;
     final formatBorderColor = context.tTheme.componentBorderColor;
 
     return Container(
@@ -365,16 +367,18 @@ class _FormatDisplay extends StatelessWidget {
     );
   }
 
-  /// 构建通道段：最后一段固定为百分比 alpha（CSS 只有一整段），
-  /// 对齐 mobile-vue `getFormatList`。
+  /// 构建通道段。
+  ///
+  /// 对齐 mobile-vue `getFormatList`：所有格式的最后一段固定为百分比 alpha
+  /// （HEX/HEX8/CSS 亦然，对应上游定宽的 `__format-input--fixed`）。
   List<String> _buildSegments() {
     switch (format) {
       case TColorPickerFormat.hex:
-        return [color.hex];
+        return [color.hex, _alphaText()];
       case TColorPickerFormat.hex8:
-        return [color.hex8];
+        return [color.hex8, _alphaText()];
       case TColorPickerFormat.css:
-        return [color.css];
+        return [color.css, _alphaText()];
       case TColorPickerFormat.rgb:
         final v = color.getRgb();
         return ['${v.r}', '${v.g}', '${v.b}', _alphaText()];
@@ -427,7 +431,7 @@ class _SwatchesTitle extends StatelessWidget {
       style: TextStyle(
         fontSize: token.fontTitleSmall?.size ?? 14,
         fontWeight: FontWeight.w600,
-        color: token.textColorPrimary,
+        color: token.textColorPlaceholder,
       ),
     );
   }

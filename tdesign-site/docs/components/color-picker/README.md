@@ -25,9 +25,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 Widget _buildBase(BuildContext context) {
   return TColorPicker(
     value: '#0052D9',
-    onChanged: (result) {
-      final (value, _) = result;
-      // value 为按 format 格式化后的新色值
+    onChanged: (value, change) {
+      // value 为按 format 格式化后的新色值，
+      // change.trigger 为触发来源、change.color 为当前颜色对象。
     },
   );
 }
@@ -41,9 +41,7 @@ Widget _buildMultiple(BuildContext context) {
     value: '#0052D9',
     type: TColorPickerType.multiple,
     enableAlpha: true,
-    onChanged: (result) {
-      final (value, _) = result;
-    },
+    onChanged: (value, change) {},
     onPaletteBarChange: (color) {
       // 色板拖拽过程回调
     },
@@ -66,27 +64,24 @@ SizedBox(
   ),
 )
 
-// 弹窗内使用草稿值，点击「确定」后才提交，取消 / 蒙层关闭则回显旧值。
+// 无标题栏与「确定/取消」按钮，点击遮罩层即关闭弹窗并提交草稿值。
 var draft = popupValue;
 TPopup.show(
   context,
   options: TPopupOptions.bottom(
     // multiple 类型内容较高，未传高度时 TPopup bottom 默认 240 会裁剪内容。
     height: MediaQuery.sizeOf(context).height * 0.72,
-    titleWidget: const Text('选择颜色'),
     child: StatefulBuilder(
       builder: (context, setPopupState) => TColorPicker(
         value: draft,
         type: TColorPickerType.multiple,
         enableAlpha: true,
-        onChanged: (result) {
-          final (value, _) = result;
-          setPopupState(() => draft = value);
-        },
+        onChanged: (value, change) => setPopupState(() => draft = value),
       ),
     ),
     onVisibleChange: (visible, trigger) {
-      if (!visible && trigger == TPopupTrigger.confirm) {
+      // 弹窗关闭（点击遮罩）即提交草稿值到页面状态。
+      if (!visible && mounted) {
         setState(() => popupValue = draft);
       }
     },
@@ -122,7 +117,7 @@ TColorPicker(
 | format | TColorPickerFormat | rgb | 格式化色值。enableAlpha 为真时，hex8 / rgba / hsla / hsva 有效 |
 | enableAlpha | bool | false | 是否开启透明通道，为真时展示透明条并输出带 alpha 的格式 |
 | swatchColors | List\<String\>? | null | 系统预设颜色，null 用内置色板，空列表隐藏色板 |
-| clearable | bool | false | 是否可清空 |
+| clearable | bool | false | 是否可清空。注：上游 mobile-vue 当前仅为 prop 占位，Flutter 侧已实现「清除」按钮并新增 `clear` 触发来源，属有意扩展 |
 | onPaletteBarChange | ValueChanged\<TColorObject\>? | - | 色板拖拽过程回调 |
 | themeData | TColorPickerThemeData? | - | 实例级主题覆盖 |
 

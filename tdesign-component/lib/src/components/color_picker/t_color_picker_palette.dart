@@ -208,13 +208,15 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
         height: sliderHeight,
         child: Stack(
           children: [
-            Positioned.fill(child: rail),
+            // 对齐上游层级：棋盘在最底层，彩色渐变 rail 叠加其上——棋盘只在
+            // rail 的透明区透出，rail 不透明处不被污染。
             if (widget.isAlpha)
               Positioned.fill(
                 child: IgnorePointer(
                   child: CustomPaint(painter: _AlphaCheckerPainter()),
                 ),
               ),
+            Positioned.fill(child: rail),
           ],
         ),
       ),
