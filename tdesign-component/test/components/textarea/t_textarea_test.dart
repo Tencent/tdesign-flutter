@@ -243,6 +243,57 @@ void main() {
     );
   });
 
+  testWidgets('rebinds its focus listener when focusNode changes', (
+    tester,
+  ) async {
+    final firstFocusNode = FocusNode();
+    final secondFocusNode = FocusNode();
+
+    await tester.pumpWidget(wrap(TTextarea(focusNode: firstFocusNode)));
+    await tester.pumpWidget(wrap(TTextarea(focusNode: secondFocusNode)));
+    secondFocusNode.requestFocus();
+    await tester.pump();
+
+    expect(secondFocusNode.hasFocus, isTrue);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    firstFocusNode.dispose();
+    secondFocusNode.dispose();
+  });
+
+  testWidgets('semantic statuses use their matching border tokens', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    const cases = {
+      TInputStatus.success: 'success',
+      TInputStatus.warning: 'warning',
+      TInputStatus.error: 'error',
+    };
+    final colors = {
+      TInputStatus.success: token.successNormalColor,
+      TInputStatus.warning: token.warningNormalColor,
+      TInputStatus.error: token.errorNormalColor,
+    };
+
+    for (final entry in cases.entries) {
+      await tester.pumpWidget(
+        wrap(
+          TTextarea(
+            key: ValueKey(entry.value),
+            bordered: true,
+            status: entry.key,
+          ),
+        ),
+      );
+      final shell = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .first;
+      final border = (shell.decoration as BoxDecoration).border! as Border;
+      expect(border.top.color, colors[entry.key]);
+    }
+  });
+
   test('TTextarea rejects controller with initialValue', () {
     final controller = TextEditingController();
     expect(
