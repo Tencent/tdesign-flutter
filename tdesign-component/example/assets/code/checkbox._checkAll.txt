@@ -26,6 +26,7 @@ Widget _checkAll(BuildContext context) {
           TCheckboxGroup<String>(
             value: _checkAllValue,
             options: _checkAllOptions,
+            showDivider: true,
             onChanged: (value) => setState(() => _checkAllValue = value),
           ),
         ],

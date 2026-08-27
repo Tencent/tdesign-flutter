@@ -199,6 +199,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
           TCheckboxGroup<String>(
             value: _checkAllValue,
             options: _checkAllOptions,
+            showDivider: true,
             onChanged: (value) => setState(() => _checkAllValue = value),
           ),
         ],
@@ -289,6 +290,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
           child: TCheckboxGroup<String>(
             value: _nonFullWidthValue,
             options: _nonFullWidthOptions,
+            showDivider: true,
             onChanged: (value) => setState(() => _nonFullWidthValue = value),
           ),
         ),

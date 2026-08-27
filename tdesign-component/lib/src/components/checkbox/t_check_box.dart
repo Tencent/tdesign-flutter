@@ -67,11 +67,11 @@ class TCheckbox extends StatelessWidget {
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
 
-    /// 主标题最大行数。
-    this.titleMaxLines = 1,
+    /// 主标题最大行数，默认 3 行。
+    this.titleMaxLines = 3,
 
-    /// 副标题最大行数。
-    this.subTitleMaxLines = 1,
+    /// 副标题最大行数，默认 5 行。
+    this.subTitleMaxLines = 5,
 
     /// 自定义复选框指示器。
     this.customIconBuilder,
@@ -101,10 +101,10 @@ class TCheckbox extends StatelessWidget {
   /// 控件与文案排列方向。
   final TContentDirection contentDirection;
 
-  /// 主标题最大行数。
+  /// 主标题最大行数，默认 3 行。
   final int titleMaxLines;
 
-  /// 副标题最大行数。
+  /// 副标题最大行数，默认 5 行。
   final int subTitleMaxLines;
 
   /// 自定义复选框指示器。

@@ -10,6 +10,7 @@ Widget _nonFullWidthCheckbox(BuildContext context) {
           child: TCheckboxGroup<String>(
             value: _nonFullWidthValue,
             options: _nonFullWidthOptions,
+            showDivider: true,
             onChanged: (value) => setState(() => _nonFullWidthValue = value),
           ),
         ),

@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/pr-1048-demo-alignment`
-- 提交：未提交（基线 `0966800d`）
+- 提交：当前 PR 分支最新提交
 - Flutter/Dart：Flutter 3.32.0 与 3.47.0
 
 ## 自动化验证
@@ -12,7 +12,7 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/checkbox/t_check_box_group_test.dart test/components/checkbox/t_checkbox_test.dart` | 通过 | Flutter 3.32.0，36 项，含分割线无额外外边距和卡片角标回归 |
+| `flutter test test/components/checkbox/t_check_box_group_test.dart test/components/checkbox/t_checkbox_test.dart` | 通过 | Flutter 3.32.0，37 项，含默认 3/5 行、分割线无额外外边距和卡片角标回归 |
 | `flutter test test/checkbox_page_test.dart` | 通过 | Flutter 3.32.0，结构 + 明/暗全页 Golden |
 | Checkbox 生产源码覆盖率 | 通过 | LH/LF = 288/297 = 96.97% |
 | `flutter analyze` | 通过 | Flutter 3.32.0，组件与 Demo 均 0 问题 |
@@ -21,6 +21,7 @@
 | Flutter 3.47.0 Demo Golden | 未严格通过 | 尺寸相同，明色 21px、暗色 18px 像素差异，属跨 Flutter 版本字形/渲染差异 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 生成片段无漂移 |
 | Checkbox 语义颜色回归 | 通过 | Theme 覆盖、默认主/次 token 与 Material 字体属性继承均已覆盖 |
+| Checkbox 默认文案行数回归 | 通过 | 主标题 3 行、副标题 5 行，超出使用省略号 |
 
 ## 人工验收
 

@@ -81,6 +81,26 @@ void main() {
   });
 
   group('TCheckbox v1 视觉参数', () {
+    testWidgets('默认主标题 3 行、副标题 5 行并在超出时省略', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckbox(
+            value: false,
+            title: '主标题',
+            subTitle: '副标题',
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final title = tester.widget<Text>(find.text('主标题'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.maxLines, 3);
+      expect(title.overflow, TextOverflow.ellipsis);
+      expect(subTitle.maxLines, 5);
+      expect(subTitle.overflow, TextOverflow.ellipsis);
+    });
+
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(wrap(TCheckbox(value: false, onChanged: (_) {})));
 
