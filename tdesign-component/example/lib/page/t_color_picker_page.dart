@@ -91,25 +91,18 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
         },
       );
 
+  // 「展示」按钮对齐 mobile-vue 的 block 用法（块级通栏），
+  // 参考 t_button_page 通栏写法：SizedBox 包裹展开为可用宽度。
   @ExampleCode(group: 'colorPicker')
-  Widget _buildPopup(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 弹窗内的「展示」按钮对齐 mobile-vue 的 block 用法（块级通栏），
-          // 参考 t_button_page 通栏写法：SizedBox 包裹展开为可用宽度。
-          SizedBox(
-            width: double.infinity,
-            child: TButton(
-              size: TButtonSize.large,
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              child: const TText('展示'),
-              onPressed: () => _showPopupPicker(context),
-            ),
-          ),
-          const SizedBox(height: 12),
-          TText('当前颜色：$popupValue'),
-        ],
+  Widget _buildPopup(BuildContext context) => SizedBox(
+        width: double.infinity,
+        child: TButton(
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          child: const TText('展示'),
+          onPressed: () => _showPopupPicker(context),
+        ),
       );
 
   void _showPopupPicker(BuildContext context) {
