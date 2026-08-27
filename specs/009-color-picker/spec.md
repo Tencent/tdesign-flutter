@@ -80,7 +80,8 @@ class TColorPicker extends StatefulWidget {
 布局契约（对齐 tdesign-mobile-vue 真实 DOM 结构与 CSS，用户反馈设计稿差异后修正）：
 
 - `multiple` 类型区块自上而下：饱和度面板 → 16px → 色相条 → 20px（+透明条）→ 20px → 格式区 → 28px → swatch 区。
-- 格式区对齐 mobile-vue `__format`：左侧格式名框（68px、1px `#dcdcdc` 边框、左圆角 6），右侧各通道值连体分段框（相邻边共线合并、末格右圆角 6），每段居中展示数值；最后一段固定为百分比 alpha（如 RGB 显示 `0 | 26 | 87 | 100%`），CSS 为单整段。数值只读，输入属宿主层。
+- 格式区对齐 mobile-vue `__format`：左侧格式名框（68px、1px 边框、左圆角 6），右侧各通道值连体分段框（相邻边共线合并、末格右圆角 6），每段居中展示数值；最后一段固定为百分比 alpha（如 RGB 显示 `0 | 26 | 87 | 100%`），CSS 为单整段。数值只读，输入属宿主层。
+- 格式区文字与边框颜色跟随全局 Token（`textColorPrimary` / `componentBorderColor`），不用硬编码色值，保证深浅色模式下均可读；边框圆角、布局尺寸与 mobile-vue 一致。
 - 色相条渐变 stop 对齐 mobile-vue（red→黄 17%→绿 33%→青 50%→蓝 67%→品红 83%→red）；滑块 thumb 与轨道同层绝对定位，白圆底 + 内嵌当前色圆点。
 - 透明条以斜向棋盘格为底（6px 网格、#c5c5c5，对齐 mobile-vue alpha wrapper 背景棋盘），上层覆盖当前色透明渐变。
 - swatch 区：标题加粗与"清除"同行（space-between），下方 12px 单行横向滚动排列，块间距 12（对齐 mobile-vue `__swatches-items` 横滚与 12px margin）。

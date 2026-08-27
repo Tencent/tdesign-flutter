@@ -158,6 +158,9 @@ class _TColorPickerState extends State<TColorPicker> {
     final panelRadius = effectiveTheme?.panelRadius ?? 12;
     final panelPadding = effectiveTheme?.panelPadding ?? const EdgeInsets.all(16);
     final swatchColors = _swatchColors;
+    // 格式区文字 / 边框颜色使用全局 Token，保证深浅色模式下均可读。
+    final formatTextColor = context.tTheme.textColorPrimary;
+    final formatBorderColor = context.tTheme.componentBorderColor;
 
     return Container(
       decoration: BoxDecoration(
@@ -196,6 +199,8 @@ class _TColorPickerState extends State<TColorPicker> {
             _FormatDisplay(
               format: _effectiveFormat,
               color: _color,
+              textColor: formatTextColor,
+              borderColor: formatBorderColor,
             ),
             const SizedBox(height: 28),
           ],
@@ -276,19 +281,30 @@ class _TColorPickerState extends State<TColorPicker> {
 /// 左侧为格式名框（68px），右侧为各通道值连体分段框；与设计稿
 /// `RGB | 0 | 26 | 87 | 100%` 一致。数值只读，输入属宿主层。
 class _FormatDisplay extends StatelessWidget {
-  const _FormatDisplay({required this.format, required this.color});
+  const _FormatDisplay({
+    required this.format,
+    required this.color,
+    required this.textColor,
+    required this.borderColor,
+  });
 
   final TColorPickerFormat format;
   final TColorObject color;
 
+  /// 数值文字颜色，跟随全局 Token（深色模式为浅色）。
+  final Color textColor;
+
+  /// 分段框边框颜色，跟随全局 Token。
+  final Color borderColor;
+
   static const double _firstWidth = 68;
   static const double _itemHeight = 36;
-  static const Color _borderColor = Color(0xFFDCDCDC);
-  static const TextStyle _textStyle = TextStyle(
-    fontSize: 14,
-    height: 1,
-    color: Color(0xFF333333),
-  );
+
+  TextStyle get _textStyle => TextStyle(
+        fontSize: 14,
+        height: 1,
+        color: textColor,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +318,7 @@ class _FormatDisplay extends StatelessWidget {
             width: _firstWidth,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              border: Border.all(color: _borderColor),
+              border: Border.all(color: borderColor),
               borderRadius: const BorderRadius.horizontal(
                 left: Radius.circular(6),
               ),
@@ -319,11 +335,11 @@ class _FormatDisplay extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border(
-                          top: const BorderSide(color: _borderColor),
-                          bottom: const BorderSide(color: _borderColor),
-                          right: const BorderSide(color: _borderColor),
+                          top: BorderSide(color: borderColor),
+                          bottom: BorderSide(color: borderColor),
+                          right: BorderSide(color: borderColor),
                           left: i == 0
-                              ? const BorderSide(color: _borderColor)
+                              ? BorderSide(color: borderColor)
                               : BorderSide.none,
                         ),
                         borderRadius: BorderRadius.horizontal(
