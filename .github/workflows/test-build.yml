@@ -55,9 +55,7 @@ jobs:
           - 3.32.0
           - latest
 
-    # Golden tests require a stable Linux userspace in addition to the pinned
-    # Flutter SDK. Do not use ubuntu-latest for pixel-exact baselines.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 
@@ -73,81 +71,58 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Run refresh tests with coverage
-        if: matrix.flutter-version == '3.32.0'
+      - name: Run component regression tests with coverage
         working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/refresh/t_refresh_test.dart --coverage
-          dart run tool/check_component_coverage.dart refresh
+        run: dart run tool/run_component_regression.dart
 
-      - name: Run refresh tests with coverage without Demo assertions
-        if: matrix.flutter-version != '3.32.0'
+      - name: Test regression tooling
         working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/refresh/t_refresh_test.dart --exclude-tags demo --coverage
-          dart run tool/check_component_coverage.dart refresh
+        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart
 
-      - name: Run Switch tests with coverage
-        working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/switch/t_switch_test.dart test/components/switch/t_cupertino_switch_test.dart --coverage
-          dart run tool/check_component_coverage.dart switch
+  visual-regression:
+    name: visual regression (flutter 3.32.0 linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
 
-      - name: Run Upload tests with coverage
-        working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/upload/t_upload_test.dart --coverage
-          dart run tool/check_component_coverage.dart upload
+      - name: Setup Flutter
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: 3.32.0
+          channel: stable
+          cache: true
+          cache-sdk: true
 
-      - name: Run Form tests with coverage
+      - name: Install component dependencies
         working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/form/t_form_test.dart --coverage
-          dart run tool/check_component_coverage.dart form
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Run Input tests with coverage
+      - name: Run Refresh Demo structure tests
         working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/input/t_input_test.dart test/components/input/t_input_theme_test.dart --coverage
-          dart run tool/check_component_coverage.dart input
+        run: flutter test --no-pub test/components/refresh/t_refresh_test.dart --tags demo
 
-      - name: Run Textarea tests with coverage
+      - name: Run Refresh golden tests
         working-directory: ./tdesign-component
-        run: |
-          flutter test test/components/textarea/t_textarea_test.dart --coverage
-          dart run tool/check_component_coverage.dart textarea
-
-      - name: Test component coverage checker
-        working-directory: ./tdesign-component
-        run: flutter test test/tool/check_component_coverage_test.dart
-
-      - name: Run refresh golden tests
-        if: matrix.flutter-version == '3.32.0'
-        working-directory: ./tdesign-component
-        run: flutter test test/components/refresh/t_refresh_golden_test.dart
+        run: flutter test --no-pub test/components/refresh/t_refresh_golden_test.dart
 
       - name: Run Upload golden tests
-        if: matrix.flutter-version == '3.32.0'
         working-directory: ./tdesign-component
-        run: flutter test test/components/upload/t_upload_golden_test.dart
+        run: flutter test --no-pub test/components/upload/t_upload_golden_test.dart
 
       - name: Install example dependencies for page tests
-        if: matrix.flutter-version == '3.32.0'
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: Run Form Input Textarea page golden tests
-        if: matrix.flutter-version == '3.32.0'
         working-directory: ./tdesign-component/example
-        run: flutter test test/form_input_textarea_page_golden_test.dart
+        run: flutter test --no-pub test/form_input_textarea_page_golden_test.dart
 
       - name: Run Switch page tests and golden tests
-        if: matrix.flutter-version == '3.32.0'
         working-directory: ./tdesign-component/example
-        run: flutter test test/switch_page_test.dart
+        run: flutter test --no-pub test/switch_page_test.dart
 
       - name: Upload golden failure images
-        if: failure() && matrix.flutter-version == '3.32.0'
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: golden-failures-flutter-3.32.0
