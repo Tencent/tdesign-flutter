@@ -75,7 +75,7 @@ const visualTestSuites = <VisualTestSuite>[
     'radio',
     'Radio Demo',
     workingDirectory: 'example',
-    testFiles: ['test/radio_page_test.dart'],
+    testFiles: ['test/radio_page_golden_test.dart'],
   ),
   VisualTestSuite(
     'search',

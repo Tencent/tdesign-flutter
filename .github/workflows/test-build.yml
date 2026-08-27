@@ -71,6 +71,10 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
+      - name: Install example dependencies
+        working-directory: ./tdesign-component/example
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
       - name: Run component regression tests with coverage
         working-directory: ./tdesign-component
         run: dart run tool/run_component_regression.dart
@@ -78,6 +82,10 @@ jobs:
       - name: Test regression tooling
         working-directory: ./tdesign-component
         run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+
+      - name: Run example shared functional tests
+        working-directory: ./tdesign-component/example
+        run: flutter test --no-pub test/widget_test.dart test/radio_page_test.dart
 
   visual-regression:
     name: visual regression (flutter 3.32.0 linux)

@@ -182,7 +182,7 @@ class _TRadioPageState extends State<TRadioPage> {
     return Padding(
       padding: EdgeInsets.all(context.tTheme.spacer16),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+        borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
         child: TRadioGroup<int>(
           value: _verticalCardValue,
           options: _cardOptions,

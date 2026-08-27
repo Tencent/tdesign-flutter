@@ -1,76 +1,28 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
-import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
 import 'package:tdesign_flutter_example/page/t_radio_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
-import 'golden_test_utils.dart';
-
-const _goldenCjkFontFamily = 'Radio Golden CJK';
-
 void main() {
-  final originalGoldenComparator = useGoldenDiffTolerance();
-  setUpAll(() async {
-    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
-      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin = File(
-      Platform.resolvedExecutable,
-    ).parent.parent.parent.parent.parent;
-    final robotoFile = File(
-      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
-    );
-    final robotoFont = FontLoader('Roboto')
-      ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    final cjkFont = FontLoader(_goldenCjkFontFamily)
-      ..addFont(
-        File(
-          'test/fonts/RadioGoldenCJK-Regular.otf',
-        ).readAsBytes().then(ByteData.sublistView),
-      );
-    await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
-  });
-  tearDownAll(() {
-    goldenFileComparator = originalGoldenComparator;
-  });
-
   Widget buildPage(ThemeMode mode) {
-    return RepaintBoundary(
-      key: const Key('radio-page-golden'),
-      child: ChangeNotifierProvider(
-        create: (_) => ThemeModeProvider(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          locale: const Locale('zh', 'CN'),
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.noScaling),
-            child: child!,
+    return ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        darkTheme: TThemeBuilder.dark(TThemeData.defaultData()),
+        themeMode: mode,
+        home: ExamplePageInheritedTheme(
+          model: ExamplePageModel(
+            text: 'Radio 单选框',
+            name: 'radio',
+            pageBuilder: (_, __) => const TRadioPage(),
           ),
-          theme: _withGoldenFontFallback(
-            TThemeBuilder.light(TThemeData.defaultData()),
-          ),
-          darkTheme: _withGoldenFontFallback(
-            TThemeBuilder.dark(TThemeData.defaultData()),
-          ),
-          themeMode: mode,
-          home: ExamplePageInheritedTheme(
-            model: ExamplePageModel(
-              text: 'Radio 单选框',
-              name: 'radio',
-              pageBuilder: (_, __) => const TRadioPage(),
-            ),
-            child: const TRadioPage(),
-          ),
+          child: const TRadioPage(),
         ),
       ),
     );
@@ -82,9 +34,7 @@ void main() {
         create: (_) => ThemeModeProvider(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: _withGoldenFontFallback(
-            TThemeBuilder.light(TThemeData.defaultData()),
-          ),
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
           home: ExamplePageInheritedTheme(
             model: ExamplePageModel(
               text: 'Radio 单选框',
@@ -199,8 +149,28 @@ void main() {
     expect(updatedGroups.map((group) => group.value), [2, 0]);
   });
 
+  testWidgets('非通栏单选样式使用 radiusExtraLarge 圆角 token', (tester) async {
+    tester.view.physicalSize = const Size(375, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage(ThemeMode.light));
+    await tester.pump();
+
+    final nonFullWidthClip = find.ancestor(
+      of: find.text('单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行'),
+      matching: find.byType(ClipRRect),
+    );
+    expect(nonFullWidthClip, findsOneWidget);
+    expect(
+      tester.widget<ClipRRect>(nonFullWidthClip).borderRadius,
+      BorderRadius.circular(TThemeData.defaultData().radiusExtraLarge),
+    );
+  });
+
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    testWidgets('Radio Demo ${mode.name} 整页视觉快照', (tester) async {
+    testWidgets('Radio Demo ${mode.name} 使用副标题语义色', (tester) async {
       tester.view.physicalSize = const Size(375, 2600);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
@@ -208,7 +178,6 @@ void main() {
 
       await tester.pumpWidget(buildPage(mode));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
 
       final description = tester.widget<Text>(
         find.text('描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息'),
@@ -217,21 +186,6 @@ void main() {
           ? TThemeData.defaultData()
           : TThemeData.defaultData().dark!;
       expect(description.style?.color, token.textColorSecondary);
-
-      await expectLater(
-        find.byKey(const Key('radio-page-golden')),
-        matchesGoldenFile('goldens/radio_page_${mode.name}.png'),
-      );
     });
   }
-}
-
-ThemeData _withGoldenFontFallback(ThemeData theme) {
-  const fallback = [_goldenCjkFontFamily];
-  return theme.copyWith(
-    textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
-    primaryTextTheme: theme.primaryTextTheme.apply(
-      fontFamilyFallback: fallback,
-    ),
-  );
 }
