@@ -13,7 +13,7 @@
 | `flutter test test/components/switch/t_switch_test.dart --coverage` | 通过 | 15 项；Switch 生产目录 341/358，95.25% |
 | `flutter test test/switch_page_test.dart --coverage` | 通过 | 4 项；Demo 49/49，100%；light/dark Golden 非更新模式通过 |
 | CNB / GitHub Flutter 3.32.0 | 待 CI 验证 | Switch 组件测试、覆盖率门禁、Demo 交互与 light/dark Golden |
-| CNB / GitHub Flutter latest | 待 CI 验证 | Switch 组件测试、覆盖率门禁与 Demo 非 Golden 测试 |
+| CNB / GitHub Flutter latest | 待 CI 验证 | Switch 组件交互测试与生产源码覆盖率门禁；不执行 Demo 结构或 Golden 测试 |
 | `flutter analyze`（tdesign-component） | 通过 | 0 issues |
 | `flutter analyze`（example） | 通过 | 0 issues |
 | `dart run tool/generate_example_code.dart --check --verbose` | 通过 | 所有片段已同步 |
