@@ -296,7 +296,7 @@ class _TColorPickerSliderState extends State<TColorPickerSlider> {
 class _AlphaCheckerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final cell = 3.0;
+    const cell = 3.0;
     final paint = Paint()..color = const Color(0xFFC5C5C5);
     for (var y = 0.0; y < size.height; y += cell * 2) {
       for (var x = -cell * 2; x < size.width; x += cell * 2) {

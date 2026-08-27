@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../../util/t_color_object.dart';
 import 't_color_picker_palette.dart';
@@ -318,10 +319,12 @@ class _FormatDisplay extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border(
-                          top: BorderSide(color: _borderColor),
-                          bottom: BorderSide(color: _borderColor),
-                          right: BorderSide(color: _borderColor),
-                          left: i == 0 ? BorderSide(color: _borderColor) : BorderSide.none,
+                          top: const BorderSide(color: _borderColor),
+                          bottom: const BorderSide(color: _borderColor),
+                          right: const BorderSide(color: _borderColor),
+                          left: i == 0
+                              ? const BorderSide(color: _borderColor)
+                              : BorderSide.none,
                         ),
                         borderRadius: BorderRadius.horizontal(
                           right: i == segments.length - 1
