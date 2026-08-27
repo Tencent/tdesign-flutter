@@ -39,6 +39,7 @@ Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显
 - `TRadioIconType.fill` 未选中时显示边框圆环，选中时显示品牌色实心圆及反色勾选标记。
 - 禁用、选中和未选颜色继续遵循 `TRadioThemeData`、Material `RadioTheme` / `ColorScheme`、TDesign token 的既有优先级；反色勾选标记使用 `ColorScheme.onPrimary` 或 `textColorAnti` token。
 - 图标几何尺寸由 `TRadioSize` 的既有指示器尺寸按比例计算，不新增固定像素样式常量。
+- 块级 Radio 使用 `spacer16` 上下内边距；分割线不带外边距，并从正文起点开始，均对齐小程序默认块级布局。
 - `customIconBuilder` 优先于 `iconType`，保持完整自定义能力。
 - `TRadio` 和 `TRadioGroup` 的 `iconType` 默认值为 `fill`，直接对齐小程序默认实心勾选视觉，不保留旧默认视觉的兼容分支。
 - `TRadioGroup` 将 `iconType`、`titleMaxLines` 和 `subTitleMaxLines` 透传给默认子项；文本行数默认值仍为 `1`、`1`。

@@ -98,8 +98,8 @@ void main() {
     );
     expect(verticalGroup.value, 1);
     expect(verticalGroup.iconType, TRadioIconType.fill);
-    expect(verticalGroup.titleMaxLines, 2);
-    expect(verticalGroup.subTitleMaxLines, 3);
+    expect(verticalGroup.titleMaxLines, 3);
+    expect(verticalGroup.subTitleMaxLines, 5);
     expect(verticalGroup.options[2].label, '单选单选单选单选单选单选单选单选单选单选单选单选单选单选');
     verticalGroup.onChanged?.call(1);
     await tester.pump();

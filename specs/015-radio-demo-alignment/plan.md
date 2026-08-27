@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-在现有 `_TRadioIndicatorPainter` 中增加样式分支，复用既有状态色解析和 `TRadioSize` 尺寸，不引入 Demo 私有绘制。Group 仅透传单项已存在的文本能力与新增图标样式。Demo 使用 `cardMode`、Theme extension 和现有布局能力组合公开示例。
+在现有 `_TRadioIndicatorPainter` 中增加样式分支，复用既有状态色解析和 `TRadioSize` 尺寸，不引入 Demo 私有绘制。块级 Radio 的上下内边距和分割线位置直接使用现有 token 对齐小程序。Group 仅透传单项已存在的文本能力与新增图标样式。Demo 使用 `cardMode`、Theme extension 和现有布局能力组合公开示例。
 
 ## 影响范围
 

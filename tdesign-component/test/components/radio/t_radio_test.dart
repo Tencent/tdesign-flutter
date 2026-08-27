@@ -106,6 +106,39 @@ void main() {
   });
 
   group('TRadio v1 视觉参数', () {
+    testWidgets('块级单行内容使用 56 高度且分割线从正文起点开始', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 320,
+            child: TRadio<String>(
+              value: 'a',
+              groupValue: 'b',
+              title: '单选',
+              showDivider: true,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final radio = find.byType(TRadio<String>);
+      final gesture = find.descendant(
+        of: radio,
+        matching: find.byType(GestureDetector),
+      );
+      final dividerLine = find.descendant(
+        of: find.byType(TDivider),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Container && widget.color != null,
+        ),
+      );
+
+      expect(tester.getSize(gesture).height, 56);
+      expect(tester.getTopLeft(dividerLine).dx, 48);
+      expect(tester.getSize(dividerLine).height, 0.5);
+    });
+
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(
         wrap(TRadio<String>(value: 'a', groupValue: 'b', onChanged: (_) {})),

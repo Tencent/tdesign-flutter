@@ -98,8 +98,8 @@ class _TRadioPageState extends State<TRadioPage> {
         setState(() => _verticalValue = _verticalValue == value ? null : value);
       },
       showDivider: true,
-      titleMaxLines: 2,
-      subTitleMaxLines: 3,
+      titleMaxLines: 3,
+      subTitleMaxLines: 5,
     );
   }
 

@@ -10,6 +10,7 @@ import '../../theme/t_theme.dart';
 import '../checkbox/t_check_box.dart' show TContentDirection;
 import '../checkbox/t_selection_card.dart';
 import '../divider/t_divider.dart';
+import '../divider/t_divider_theme_data.dart';
 import 't_radio_theme_data.dart';
 
 /// 自定义单选框指示器构建器。
@@ -194,7 +195,9 @@ class TRadio<T> extends StatelessWidget {
           padding: hasContent
               ? EdgeInsets.symmetric(
                   horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
-                  vertical: context.tTheme.spacer8,
+                  vertical: cardMode
+                      ? context.tTheme.spacer8
+                      : context.tTheme.spacer16,
                 )
               : EdgeInsets.zero,
           decoration: cardMode
@@ -246,12 +249,29 @@ class TRadio<T> extends StatelessWidget {
             onTap: _disabled ? null : () => onChanged!(value),
             child: tile,
           ),
-          if (showDivider)
-            Padding(
-              padding: EdgeInsets.only(left: context.tTheme.spacer16),
-              child: const TDivider(),
-            ),
+          if (showDivider) _buildDivider(context, theme),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(BuildContext context, TRadioThemeData? radioTheme) {
+    final theme = Theme.of(context);
+    final dividerTheme =
+        theme.extension<TDividerThemeData>()?.copyWith(
+          margin: EdgeInsets.zero,
+        ) ??
+        const TDividerThemeData(margin: EdgeInsets.zero);
+    final insetSpacing = radioTheme?.insetSpacing ?? context.tTheme.spacer16;
+    final contentSpacing = radioTheme?.spacing ?? context.tTheme.spacer8;
+    final start = contentDirection == TContentDirection.right
+        ? insetSpacing + _indicatorSize + contentSpacing
+        : insetSpacing;
+    return Theme(
+      data: theme.mergeExtension(dividerTheme),
+      child: Padding(
+        padding: EdgeInsetsDirectional.only(start: start),
+        child: const TDivider(),
       ),
     );
   }
