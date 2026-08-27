@@ -1,0 +1,12 @@
+Widget _buildAction(BuildContext context) => const Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _RateGroupLabel('只可选全星时'),
+      TCell(title: Text('点击或滑动'), note: _StatefulRate(initialValue: 3.5)),
+      _RateGroupLabel('只可选半星时', top: 24),
+      TCell(
+        title: Text('点击或滑动'),
+        note: _StatefulRate(initialValue: 3, allowHalf: true),
+      ),
+    ],
+  );

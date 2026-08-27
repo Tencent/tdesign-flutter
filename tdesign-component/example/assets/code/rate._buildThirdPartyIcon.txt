@@ -1,0 +1,12 @@
+Widget _buildThirdPartyIcon(BuildContext context) => TCell(
+    title: const Text('第三方图标'),
+    note: _StatefulRate(
+      initialValue: 3,
+      icon: (filled) => Icon(
+        filled ? Icons.favorite : Icons.favorite_border,
+        color: filled
+            ? context.tTheme.warningColor5
+            : context.tTheme.bgColorComponent,
+      ),
+    ),
+  );
