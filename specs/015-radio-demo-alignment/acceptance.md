@@ -35,7 +35,6 @@
 - 微信开发者工具 RC 2.02.2607161，基础库 3.17.1，iPhone 15 Pro Max 模拟器：横向示例为通栏容器，`spacer16` 位于白色容器内部；勾选样式使用 24px TDesign `check` 图标，默认选中态使用 24px TDesign `check-circle-filled` 图标；主标题和副标题默认最多显示 3 行、5 行。
 - Android 16 真机（1220×2656）：横向示例已移除外部留白形成的卡片轮廓，并保持 token 驱动的内部间距。
 - Flutter 3.32 Widget 实测：small / medium / large 块级单行高度为 48 / 56 / 64dp；默认 medium 的 24dp 指示器与 56dp 块高对应小程序默认规格。
-- `flutter test test/components/radio/t_radio_test.dart`：通过，29 tests。
-- `t_radio.dart` 聚焦覆盖率：221/228，96.93%。
-- `flutter test test/radio_page_test.dart`：通过，3 tests，light/dark Golden 已更新。
+- Linux Flutter 3.32：Radio 组件与 Theme 契约测试通过，30 tests；Radio 生产目录覆盖率 242/249，97.19%。
+- Linux Flutter 3.32：Form 与 Radio 页面共 6 个结构 / light / dark Golden 测试通过；Form 横向 Radio 保持单行，页面高度仅反映默认 medium 的 56dp 块高。
 - `flutter analyze`：通过，0 issues。
