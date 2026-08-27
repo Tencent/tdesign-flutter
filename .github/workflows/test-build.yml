@@ -77,7 +77,7 @@ jobs:
 
       - name: Test regression tooling
         working-directory: ./tdesign-component
-        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart
+        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
 
   visual-regression:
     name: visual regression (flutter 3.32.0 linux)
@@ -97,29 +97,13 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Run Refresh Demo structure tests
-        working-directory: ./tdesign-component
-        run: flutter test --no-pub test/components/refresh/t_refresh_test.dart --tags demo
-
-      - name: Run Refresh golden tests
-        working-directory: ./tdesign-component
-        run: flutter test --no-pub test/components/refresh/t_refresh_golden_test.dart
-
-      - name: Run Upload golden tests
-        working-directory: ./tdesign-component
-        run: flutter test --no-pub test/components/upload/t_upload_golden_test.dart
-
-      - name: Install example dependencies for page tests
+      - name: Install example dependencies
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Run Form Input Textarea page golden tests
-        working-directory: ./tdesign-component/example
-        run: flutter test --no-pub test/form_input_textarea_page_golden_test.dart
-
-      - name: Run Switch page tests and golden tests
-        working-directory: ./tdesign-component/example
-        run: flutter test --no-pub test/switch_page_test.dart
+      - name: Run visual regression tests
+        working-directory: ./tdesign-component
+        run: dart run tool/run_visual_regression.dart
 
       - name: Upload golden failure images
         if: failure()

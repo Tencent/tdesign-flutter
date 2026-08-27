@@ -25,33 +25,12 @@
 
 .regression-tool-tests:
   name: flutter test (regression tooling)
-  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart
+  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
 
-# Refresh Demo 结构断言仅在 Flutter 3.32.0 Linux 视觉回归环境执行。
-.refresh-demo-tests:
-  name: flutter test (refresh demo structure)
-  script: cd tdesign-component && flutter test --no-pub test/components/refresh/t_refresh_test.dart --tags demo
-
-# Refresh Golden 固定在 Flutter 3.32.0 Linux，以 0% 像素差异严格比较。
-.refresh-golden:
-  name: flutter test (refresh golden)
-  script: cd tdesign-component && flutter test --no-pub test/components/refresh/t_refresh_golden_test.dart
-
-# Upload Golden 固定在 Flutter 3.32.0 Linux 环境执行。
-.upload-tests:
-  name: flutter test (upload golden)
-  script: cd tdesign-component && flutter test --no-pub test/components/upload/t_upload_golden_test.dart
-
-# Form / Input / Textarea 完整 Demo 页面 Golden 固定在 Flutter 3.32.0 执行。
-# 复用单套标准基线和受控跨平台比较器，并由测试严格校验页面结构与几何。
-.form-input-page-golden:
-  name: flutter test (form input textarea page golden)
-  script: cd tdesign-component/example && flutter test --no-pub test/form_input_textarea_page_golden_test.dart
-
-# Switch 完整 Demo 页面及亮暗 Golden，以 Flutter 3.32.0 Linux 为权威环境。
-.switch-page-golden:
-  name: flutter test (switch page golden)
-  script: cd tdesign-component/example && flutter test --no-pub test/switch_page_test.dart
+# Demo 结构与 Golden 固定在 Flutter 3.32.0 Linux 执行，测试清单由 Dart 统一维护。
+.visual-regression-tests:
+  name: flutter test (visual regression)
+  script: cd tdesign-component && dart run tool/run_visual_regression.dart
 
 # APK 构建
 .build-apk:
@@ -114,11 +93,7 @@
     - !reference [.install-example]
     - !reference [.component-regression-tests]
     - !reference [.regression-tool-tests]
-    - !reference [.refresh-demo-tests]
-    - !reference [.refresh-golden]
-    - !reference [.upload-tests]
-    - !reference [.form-input-page-golden]
-    - !reference [.switch-page-golden]
+    - !reference [.visual-regression-tests]
 
 # 测试 + 覆盖率：flutter latest
 .test-latest:
