@@ -2,6 +2,7 @@ import 'dart:io';
 
 const componentTargets = <String, List<String>>{
   'button': ['lib/src/components/button/'],
+  'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],
   'fab': ['lib/src/components/fab/'],
   'form': ['lib/src/components/form/'],
