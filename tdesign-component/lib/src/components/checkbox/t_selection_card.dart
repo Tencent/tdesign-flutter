@@ -1,9 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
+import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+
+double _fontLineHeight(
+  Font? font,
+  TextStyle? explicitStyle,
+  TextStyle? materialFallback,
+) {
+  final style = TextStyle(
+    fontSize: font?.size ?? materialFallback?.fontSize,
+    height: font?.height ?? materialFallback?.height,
+  ).merge(explicitStyle);
+  return style.fontSize! * (style.height ?? 1);
+}
+
+double _selectionCardHeight(BuildContext context, bool hasSubtitle) {
+  final materialTheme = Theme.of(context);
+  final explicitTextTheme = materialTheme.tExplicitTextTheme;
+  final titleHeight = _fontLineHeight(
+    context.tTheme.fontBodyLarge,
+    explicitTextTheme?.bodyLarge ?? explicitTextTheme?.bodyMedium,
+    materialTheme.textTheme.bodyLarge,
+  );
+  final contentHeight = hasSubtitle
+      ? titleHeight +
+            context.tTheme.spacer4 +
+            _fontLineHeight(
+              context.tTheme.fontBodyMedium,
+              explicitTextTheme?.bodyMedium ?? explicitTextTheme?.bodySmall,
+              materialTheme.textTheme.bodyMedium,
+            )
+      : titleHeight;
+  return contentHeight + context.tTheme.spacer16 * 2;
+}
 
 /// 复选框或单选框使用的卡片式选择容器。
 class TSelectionCard extends StatelessWidget {
@@ -32,13 +66,15 @@ class TSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final stateColor = disabled ? disabledColor : selectedColor;
     final markStyle = _SelectionCardMarkStyle.maybeOf(context);
+    final defaultMarkSize = context.tTheme.spacer24 + context.tTheme.spacer4;
+    final markSize = markStyle?.size ?? defaultMarkSize;
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: backgroundColor,
         border: Border.all(
-          width: 1.5,
+          width: context.tTheme.spacer4 * 3 / 8,
           color: selected ? stateColor : Colors.transparent,
         ),
         borderRadius: BorderRadius.circular(borderRadius),
@@ -52,9 +88,11 @@ class TSelectionCard extends StatelessWidget {
               left: 0,
               child: _SelectionCardMark(
                 color: stateColor,
-                size: markStyle?.size ?? 28,
-                iconSize: markStyle?.iconSize ?? 14,
-                iconOffset: markStyle?.iconOffset ?? const Offset(2, 3),
+                size: markSize,
+                iconSize: markStyle?.iconSize ?? markSize / 2,
+                iconOffset:
+                    markStyle?.iconOffset ??
+                    Offset(markSize / 14, markSize * 3 / 28),
               ),
             ),
         ],
@@ -90,7 +128,7 @@ class TSelectionCardGroupLayout extends StatelessWidget {
           children: [
             for (var index = 0; index < children.length; index++) ...[
               SizedBox(
-                height: itemHasSubtitles[index] ? 82 : 56,
+                height: _selectionCardHeight(context, itemHasSubtitles[index]),
                 child: children[index],
               ),
               if (index < children.length - 1)
@@ -111,9 +149,11 @@ class TSelectionCardGroupLayout extends StatelessWidget {
         final itemWidth = availableWidth == null
             ? null
             : (availableWidth - spacing * (columns - 1)) / columns;
-        final itemHeight = itemHasSubtitles.any((hasSubtitle) => hasSubtitle)
-            ? 82.0
-            : 56.0;
+        final itemHeight = _selectionCardHeight(
+          context,
+          itemHasSubtitles.any((hasSubtitle) => hasSubtitle),
+        );
+        final markSize = context.tTheme.spacer24;
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Wrap(
@@ -125,9 +165,9 @@ class TSelectionCardGroupLayout extends StatelessWidget {
                   width: itemWidth,
                   height: itemHeight,
                   child: _SelectionCardMarkStyle(
-                    size: 24,
-                    iconSize: 12,
-                    iconOffset: const Offset(1.5, 1.5),
+                    size: markSize,
+                    iconSize: markSize / 2,
+                    iconOffset: Offset(markSize / 16, markSize / 16),
                     child: child,
                   ),
                 ),
@@ -162,7 +202,10 @@ class _SelectionCardMark extends StatelessWidget {
         children: [
           CustomPaint(
             size: Size.square(size),
-            painter: _SelectionCardMarkPainter(color),
+            painter: _SelectionCardMarkPainter(
+              color,
+              cornerRadius: context.tTheme.spacer4,
+            ),
           ),
           Positioned(
             top: iconOffset.dy,
@@ -205,9 +248,10 @@ class _SelectionCardMarkStyle extends InheritedWidget {
 }
 
 class _SelectionCardMarkPainter extends CustomPainter {
-  const _SelectionCardMarkPainter(this.color);
+  const _SelectionCardMarkPainter(this.color, {required this.cornerRadius});
 
   final Color color;
+  final double cornerRadius;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -216,8 +260,8 @@ class _SelectionCardMarkPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.fill;
     final path = Path()
-      ..moveTo(0, 4)
-      ..quadraticBezierTo(0, 0, 4, 0)
+      ..moveTo(0, cornerRadius)
+      ..quadraticBezierTo(0, 0, cornerRadius, 0)
       ..lineTo(size.width, 0)
       ..lineTo(0, size.height)
       ..close();
@@ -226,6 +270,7 @@ class _SelectionCardMarkPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _SelectionCardMarkPainter oldDelegate) {
-    return color != oldDelegate.color;
+    return color != oldDelegate.color ||
+        cornerRadius != oldDelegate.cornerRadius;
   }
 }
