@@ -319,20 +319,31 @@ void main() {
       expect(find.byType(TDivider), findsNothing);
     });
 
-    testWidgets('三种尺寸和左右内容方向可构建', (tester) async {
-      for (final size in TCheckboxSize.values) {
+    testWidgets('三种尺寸的文案行高且左右内容方向可构建', (tester) async {
+      const expectedHeights = {
+        TCheckboxSize.small: 48.0,
+        TCheckboxSize.medium: 56.0,
+        TCheckboxSize.large: 64.0,
+      };
+      for (final entry in expectedHeights.entries) {
         await tester.pumpWidget(
           wrap(
             TCheckbox(
               value: false,
-              title: 'size-$size',
-              size: size,
+              title: 'size-${entry.key}',
+              size: entry.key,
               contentDirection: TContentDirection.left,
+              showDivider: false,
               onChanged: (_) {},
             ),
           ),
         );
-        expect(find.text('size-$size'), findsOneWidget);
+        final gesture = find.descendant(
+          of: find.byType(TCheckbox),
+          matching: find.byType(GestureDetector),
+        );
+        expect(find.text('size-${entry.key}'), findsOneWidget);
+        expect(tester.getSize(gesture).height, entry.value);
       }
     });
 

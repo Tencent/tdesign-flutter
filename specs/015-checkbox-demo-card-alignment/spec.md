@@ -14,6 +14,7 @@ Checkbox Flutter Demo 需要以官方站内的小程序实际运行画面为基�
 - Checkbox 只从 Material `TextTheme` 继承字体属性；主标题颜色按 `titleColor -> textColorPrimary`，副标题颜色按 `subTitleColor -> textColorSecondary` 解析。
 - Checkbox 主标题默认最多 3 行、副标题默认最多 5 行，超出后省略，与小程序默认值一致。
 - Checkbox 默认使用圆形指示器，普通 Checkbox 与 CheckboxGroup 默认显示分割线。
+- 普通 Checkbox 的 small / medium / large 带文案项最小高度分别为 48dp / 56dp / 64dp，默认 medium 与小程序 56px 单行高度一致。
 - 两组样式示例按公开 Demo 保留 16dp 项间距。
 - 横向卡片将小程序的 `48rpx` 按 375dp 基准换算为 24dp，纵向卡片继续使用 28dp。
 
@@ -55,6 +56,7 @@ Checkbox Flutter Demo 需要以官方站内的小程序实际运行画面为基�
 - [ ] Material `TextTheme.color` 不覆盖 Checkbox 主/副标题语义颜色，字体属性仍正常继承。
 - [ ] Checkbox 默认主标题 3 行、副标题 5 行，超出后省略。
 - [ ] Checkbox 默认圆形指示器，普通 Checkbox 与 CheckboxGroup 默认显示分割线。
+- [ ] 普通 Checkbox 三档带文案项高度为 48dp / 56dp / 64dp，默认单行项为 56dp。
 - [ ] 两组示例的相邻选项间距为 16dp。
 - [ ] 横向与纵向卡片角标尺寸分别为 24dp 和 28dp。
 - [ ] Flutter 3.32.0 与 latest analyze 零告警，相关测试通过。

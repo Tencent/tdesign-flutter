@@ -215,9 +215,9 @@ class TCheckbox extends StatelessWidget {
   }
 
   double get _contentMinHeight => switch (size) {
-    TCheckboxSize.small => 40.0,
-    TCheckboxSize.medium => 48.0,
-    TCheckboxSize.large => 56.0,
+    TCheckboxSize.small => 48.0,
+    TCheckboxSize.medium => 56.0,
+    TCheckboxSize.large => 64.0,
   };
 
   double get _indicatorSize => switch (size) {
