@@ -12,9 +12,9 @@
 | showDivider | bool | false | 是否显示底部分割线。 |
 | size | TCheckboxSize | TCheckboxSize.medium | 复选框尺寸。 |
 | subTitle | String? | - | 副标题文案。 |
-| subTitleMaxLines | int | 1 | 副标题最大行数。 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
 | title | String? | - | 主标题文案。 |
-| titleMaxLines | int | 1 | 主标题最大行数。 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
 | value | bool? | - | 受控选中态；null 表示半选。 |
 
 
