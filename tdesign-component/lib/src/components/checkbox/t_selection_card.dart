@@ -31,6 +31,7 @@ class TSelectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stateColor = disabled ? disabledColor : selectedColor;
+    final markStyle = _SelectionCardMarkStyle.maybeOf(context);
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       clipBehavior: Clip.hardEdge,
@@ -49,7 +50,12 @@ class TSelectionCard extends StatelessWidget {
             Positioned(
               top: 0,
               left: 0,
-              child: _SelectionCardMark(color: stateColor),
+              child: _SelectionCardMark(
+                color: stateColor,
+                size: markStyle?.size ?? 28,
+                iconSize: markStyle?.iconSize ?? 14,
+                iconOffset: markStyle?.iconOffset ?? const Offset(2, 3),
+              ),
             ),
         ],
       ),
@@ -65,8 +71,8 @@ class TSelectionCardGroupLayout extends StatelessWidget {
     required this.columns,
     required this.children,
     required this.itemHasSubtitles,
-  })  : assert(children.length == itemHasSubtitles.length),
-        assert(columns > 0);
+  }) : assert(children.length == itemHasSubtitles.length),
+       assert(columns > 0);
 
   final Axis direction;
   final int columns;
@@ -105,8 +111,9 @@ class TSelectionCardGroupLayout extends StatelessWidget {
         final itemWidth = availableWidth == null
             ? null
             : (availableWidth - spacing * (columns - 1)) / columns;
-        final itemHeight =
-            itemHasSubtitles.any((hasSubtitle) => hasSubtitle) ? 82.0 : 56.0;
+        final itemHeight = itemHasSubtitles.any((hasSubtitle) => hasSubtitle)
+            ? 82.0
+            : 56.0;
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Wrap(
@@ -114,7 +121,16 @@ class TSelectionCardGroupLayout extends StatelessWidget {
             runSpacing: spacing,
             children: [
               for (final child in children)
-                SizedBox(width: itemWidth, height: itemHeight, child: child),
+                SizedBox(
+                  width: itemWidth,
+                  height: itemHeight,
+                  child: _SelectionCardMarkStyle(
+                    size: 24,
+                    iconSize: 12,
+                    iconOffset: const Offset(1.5, 1.5),
+                    child: child,
+                  ),
+                ),
             ],
           ),
         );
@@ -124,34 +140,67 @@ class TSelectionCardGroupLayout extends StatelessWidget {
 }
 
 class _SelectionCardMark extends StatelessWidget {
-  const _SelectionCardMark({required this.color});
+  const _SelectionCardMark({
+    required this.color,
+    required this.size,
+    required this.iconSize,
+    required this.iconOffset,
+  });
 
   final Color color;
+  final double size;
+  final double iconSize;
+  final Offset iconOffset;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 28,
-      height: 28,
+      width: size,
+      height: size,
       child: Stack(
         alignment: Alignment.topLeft,
         children: [
           CustomPaint(
-            size: const Size.square(28),
+            size: Size.square(size),
             painter: _SelectionCardMarkPainter(color),
           ),
           Positioned(
-            top: 3,
-            left: 2,
+            top: iconOffset.dy,
+            left: iconOffset.dx,
             child: Icon(
               TIcons.check,
-              size: 14,
+              size: iconSize,
               color: context.tTheme.textColorAnti,
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class _SelectionCardMarkStyle extends InheritedWidget {
+  const _SelectionCardMarkStyle({
+    required this.size,
+    required this.iconSize,
+    required this.iconOffset,
+    required super.child,
+  });
+
+  final double size;
+  final double iconSize;
+  final Offset iconOffset;
+
+  static _SelectionCardMarkStyle? maybeOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_SelectionCardMarkStyle>();
+  }
+
+  @override
+  bool updateShouldNotify(_SelectionCardMarkStyle oldWidget) {
+    return size != oldWidget.size ||
+        iconSize != oldWidget.iconSize ||
+        iconOffset != oldWidget.iconOffset;
   }
 }
 

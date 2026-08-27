@@ -81,6 +81,26 @@ void main() {
   });
 
   group('TCheckbox v1 视觉参数', () {
+    testWidgets('默认主标题 3 行、副标题 5 行并在超出时省略', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckbox(
+            value: false,
+            title: '主标题',
+            subTitle: '副标题',
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final title = tester.widget<Text>(find.text('主标题'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.maxLines, 3);
+      expect(title.overflow, TextOverflow.ellipsis);
+      expect(subTitle.maxLines, 5);
+      expect(subTitle.overflow, TextOverflow.ellipsis);
+    });
+
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(wrap(TCheckbox(value: false, onChanged: (_) {})));
 
@@ -89,7 +109,7 @@ void main() {
         of: checkbox,
         matching: find.byType(GestureDetector),
       );
-      final indicator = find.byIcon(TIcons.rectangle);
+      final indicator = find.byIcon(TIcons.circle);
 
       expect(tester.getSize(gesture), const Size.square(48));
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
@@ -115,7 +135,7 @@ void main() {
         of: checkbox,
         matching: find.byType(GestureDetector),
       );
-      final indicator = find.byIcon(TIcons.rectangle);
+      final indicator = find.byIcon(TIcons.circle);
 
       expect(tester.getSize(gesture), const Size.square(24));
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
@@ -127,9 +147,7 @@ void main() {
         wrap(TCheckbox(value: true, title: '复选项', onChanged: (_) {})),
       );
 
-      final icon = tester.widget<Icon>(
-        find.byIcon(TIcons.check_rectangle_filled),
-      );
+      final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle_filled));
       expect(icon.size, 24.0);
       expect(icon.color, token.brandNormalColor);
     });
@@ -147,9 +165,9 @@ void main() {
         ),
       );
 
-      final uncheckedIcon = tester.widget<Icon>(find.byIcon(TIcons.rectangle));
+      final uncheckedIcon = tester.widget<Icon>(find.byIcon(TIcons.circle));
       final disabledCheckedIcon = tester.widget<Icon>(
-        find.byIcon(TIcons.check_rectangle_filled),
+        find.byIcon(TIcons.check_circle_filled),
       );
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
@@ -170,9 +188,7 @@ void main() {
         ),
       );
 
-      final icon = tester.widget<Icon>(
-        find.byIcon(TIcons.check_rectangle_filled),
-      );
+      final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle_filled));
       final title = tester.widget<Text>(find.text('主题复选'));
       final spacing = tester.widget<SizedBox>(
         find.byWidgetPredicate(
@@ -185,8 +201,9 @@ void main() {
       expect(spacing.width, 12);
     });
 
-    testWidgets('文案继承 Flutter TextTheme 且组件颜色优先', (tester) async {
-      final theme = TThemeBuilder.light(TThemeData.defaultData())
+    testWidgets('TextTheme 只继承字体属性且组件语义颜色优先', (tester) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token)
           .copyWith(
             textTheme: const TextTheme(
               bodyLarge: TextStyle(
@@ -203,7 +220,12 @@ void main() {
               ),
             ),
           )
-          .mergeExtension(const TCheckboxThemeData(titleColor: Colors.green));
+          .mergeExtension(
+            const TCheckboxThemeData(
+              titleColor: Colors.green,
+              subTitleColor: Colors.yellow,
+            ),
+          );
       await tester.pumpWidget(
         MaterialApp(
           theme: theme,
@@ -224,20 +246,48 @@ void main() {
       expect(title.fontSize, 18);
       expect(title.height, 1.4);
       expect(title.fontWeight, FontWeight.w600);
-      expect(subTitle.color, Colors.purple);
+      expect(subTitle.color, Colors.yellow);
       expect(subTitle.fontSize, 15);
       expect(subTitle.height, 1.3);
       expect(subTitle.fontWeight, FontWeight.w500);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token).copyWith(
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(color: Colors.orange),
+              bodyMedium: TextStyle(color: Colors.purple),
+            ),
+          ),
+          home: Scaffold(
+            body: TCheckbox(
+              value: false,
+              title: '默认标题',
+              subTitle: '默认副标题',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget<Text>(find.text('默认标题')).style?.color,
+        token.textColorPrimary,
+      );
+      expect(
+        tester.widget<Text>(find.text('默认副标题')).style?.color,
+        token.textColorSecondary,
+      );
     });
 
-    testWidgets('标题、副标题、分割线可渲染', (tester) async {
+    testWidgets('默认使用圆形指示器并显示分割线', (tester) async {
       await tester.pumpWidget(
         wrap(
           TCheckbox(
             value: true,
             title: '标题',
             subTitle: '副标题',
-            showDivider: true,
             onChanged: (_) {},
           ),
         ),
@@ -245,23 +295,55 @@ void main() {
 
       expect(find.text('标题'), findsOneWidget);
       expect(find.text('副标题'), findsOneWidget);
+      expect(find.byIcon(TIcons.check_circle_filled), findsOneWidget);
       expect(find.byType(TDivider), findsOneWidget);
+      expect(tester.getSize(find.byType(TDivider)).height, 0.5);
     });
 
-    testWidgets('三种尺寸和左右内容方向可构建', (tester) async {
-      for (final size in TCheckboxSize.values) {
+    testWidgets('可显式恢复方形指示器并关闭分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckbox(
+            value: true,
+            title: '方形',
+            showDivider: false,
+            onChanged: (_) {},
+          ),
+          checkboxTheme: const TCheckboxThemeData(
+            variant: TCheckboxVariant.square,
+          ),
+        ),
+      );
+
+      expect(find.byIcon(TIcons.check_rectangle_filled), findsOneWidget);
+      expect(find.byType(TDivider), findsNothing);
+    });
+
+    testWidgets('三种尺寸的文案行高且左右内容方向可构建', (tester) async {
+      const expectedHeights = {
+        TCheckboxSize.small: 48.0,
+        TCheckboxSize.medium: 56.0,
+        TCheckboxSize.large: 64.0,
+      };
+      for (final entry in expectedHeights.entries) {
         await tester.pumpWidget(
           wrap(
             TCheckbox(
               value: false,
-              title: 'size-$size',
-              size: size,
+              title: 'size-${entry.key}',
+              size: entry.key,
               contentDirection: TContentDirection.left,
+              showDivider: false,
               onChanged: (_) {},
             ),
           ),
         );
-        expect(find.text('size-$size'), findsOneWidget);
+        final gesture = find.descendant(
+          of: find.byType(TCheckbox),
+          matching: find.byType(GestureDetector),
+        );
+        expect(find.text('size-${entry.key}'), findsOneWidget);
+        expect(tester.getSize(gesture).height, entry.value);
       }
     });
 
@@ -294,6 +376,7 @@ void main() {
       );
 
       expect(find.text('卡片'), findsOneWidget);
+      expect(find.byType(TDivider), findsNothing);
     });
 
     testWidgets('无界宽度下按内容自然收缩且不触发 flex 异常', (tester) async {

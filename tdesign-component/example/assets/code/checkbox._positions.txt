@@ -1,21 +1,27 @@
 Widget _positions(BuildContext context) {
-    return Column(
-      children: [
-        TCheckbox(
-          value: _leftPositionValue,
-          title: '图标在左',
-          onChanged: (value) {
-            setState(() => _leftPositionValue = value == true);
-          },
-        ),
-        TCheckbox(
-          value: _rightPositionValue,
-          title: '图标在右',
-          contentDirection: TContentDirection.left,
-          onChanged: (value) {
-            setState(() => _rightPositionValue = value == true);
-          },
-        ),
-      ],
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Column(
+        children: [
+          TCheckbox(
+            value: _leftPositionValue,
+            title: '多选',
+            onChanged: (value) {
+              setState(() => _leftPositionValue = value == true);
+            },
+          ),
+          const SizedBox(height: 16),
+          TCheckbox(
+            value: _rightPositionValue,
+            title: '多选',
+            contentDirection: TContentDirection.left,
+            onChanged: (value) {
+              setState(() => _rightPositionValue = value == true);
+            },
+          ),
+        ],
+      ),
     );
   }
