@@ -173,7 +173,8 @@ class TRadio<T> extends StatelessWidget {
     final indicator =
         customIconBuilder?.call(context, _selected, _disabled) ??
         (cardMode ? null : _buildIndicator(context, theme));
-    final content = _buildContent(context, theme);
+    final titleStyle = _resolveTitleStyle(context);
+    final content = _buildContent(context, theme, titleStyle);
     final hasContent = content != null;
     final constraints = hasContent
         ? BoxConstraints(minHeight: _contentMinHeight)
@@ -181,8 +182,19 @@ class TRadio<T> extends StatelessWidget {
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
+        final indicatorOffset =
+            ((titleStyle.fontSize ?? 16) * (titleStyle.height ?? 1) -
+                _indicatorSize) /
+            2;
         final children = <Widget>[
-          if (indicator != null) indicator,
+          if (indicator != null)
+            if (hasContent && customIconBuilder == null)
+              Transform.translate(
+                offset: Offset(0, indicatorOffset),
+                child: indicator,
+              )
+            else
+              indicator,
           if (indicator != null && content != null)
             SizedBox(
               width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
@@ -214,7 +226,9 @@ class TRadio<T> extends StatelessWidget {
             mainAxisAlignment: hasContent
                 ? MainAxisAlignment.start
                 : MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: hasContent
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: contentDirection == TContentDirection.right
                 ? children
                 : children.reversed.toList(),
@@ -346,17 +360,25 @@ class TRadio<T> extends StatelessWidget {
     );
   }
 
-  Widget? _buildContent(BuildContext context, TRadioThemeData? theme) {
-    if (title == null && subTitle == null) {
-      return null;
-    }
+  TextStyle _resolveTitleStyle(BuildContext context) {
     final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final titleFont = context.tTheme.fontBodyLarge;
-    final titleStyle = TextStyle(
+    return TextStyle(
       fontSize: titleFont?.size ?? 16,
       height: titleFont?.height,
       fontWeight: titleFont?.fontWeight,
     ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+  }
+
+  Widget? _buildContent(
+    BuildContext context,
+    TRadioThemeData? theme,
+    TextStyle titleStyle,
+  ) {
+    if (title == null && subTitle == null) {
+      return null;
+    }
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final subtitleFont = context.tTheme.fontBodyMedium;
     final subTitleStyle = TextStyle(
       fontSize: subtitleFont?.size ?? 14,
@@ -375,9 +397,7 @@ class TRadio<T> extends StatelessWidget {
             style: titleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.titleColor ??
-                        titleStyle.color ??
-                        context.tTheme.textColorPrimary),
+                  : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -390,9 +410,7 @@ class TRadio<T> extends StatelessWidget {
             style: subTitleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.subTitleColor ??
-                        subTitleStyle.color ??
-                        context.tTheme.textColorPlaceholder),
+                  : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),
       ],

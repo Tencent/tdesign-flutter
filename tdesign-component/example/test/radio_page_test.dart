@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
 import 'package:tdesign_flutter_example/page/t_radio_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
@@ -46,6 +47,15 @@ void main() {
         create: (_) => ThemeModeProvider(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          locale: const Locale('zh', 'CN'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.noScaling),
+            child: child!,
+          ),
           theme: _withGoldenFontFallback(
             TThemeBuilder.light(TThemeData.defaultData()),
           ),
@@ -199,6 +209,14 @@ void main() {
       await tester.pumpWidget(buildPage(mode));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
+
+      final description = tester.widget<Text>(
+        find.text('描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息'),
+      );
+      final token = mode == ThemeMode.light
+          ? TThemeData.defaultData()
+          : TThemeData.defaultData().dark!;
+      expect(description.style?.color, token.textColorSecondary);
 
       await expectLater(
         find.byKey(const Key('radio-page-golden')),

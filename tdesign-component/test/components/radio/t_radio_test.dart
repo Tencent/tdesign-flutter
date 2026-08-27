@@ -139,6 +139,47 @@ void main() {
       expect(tester.getSize(dividerLine).height, 0.5);
     });
 
+    testWidgets('带副标题时指示器始终与主标题行居中对齐', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: TRadioSize.values
+                .map(
+                  (size) => TRadio<TRadioSize>(
+                    value: size,
+                    groupValue: TRadioSize.medium,
+                    title: '主标题-${size.name}',
+                    subTitle: '副标题',
+                    size: size,
+                    onChanged: (_) {},
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+
+      for (final size in TRadioSize.values) {
+        final radio = find.ancestor(
+          of: find.text('主标题-${size.name}'),
+          matching: find.byType(TRadio<TRadioSize>),
+        );
+        final indicator = find.descendant(
+          of: radio,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is CustomPaint &&
+                widget.painter.runtimeType.toString() ==
+                    '_TRadioIndicatorPainter',
+          ),
+        );
+        expect(
+          tester.getCenter(indicator).dy,
+          closeTo(tester.getCenter(find.text('主标题-${size.name}')).dy, 0.01),
+        );
+      }
+    });
+
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(
         wrap(TRadio<String>(value: 'a', groupValue: 'b', onChanged: (_) {})),
@@ -235,6 +276,35 @@ void main() {
       expect(subTitle.style?.fontSize, 14);
     });
 
+    testWidgets('Material TextTheme 颜色不覆盖标题和副标题语义色', (tester) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token).copyWith(
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.purple),
+          bodyMedium: TextStyle(color: Colors.orange),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: TRadio<String>(
+              value: 'a',
+              groupValue: 'a',
+              title: '主标题',
+              subTitle: '副标题',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final title = tester.widget<Text>(find.text('主标题'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.style?.color, token.textColorPrimary);
+      expect(subTitle.style?.color, token.textColorSecondary);
+    });
+
     testWidgets('完整主题下选中指示器使用品牌色并保持 24 尺寸', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
@@ -309,6 +379,7 @@ void main() {
                 value: 'a',
                 groupValue: 'b',
                 title: '未选',
+                subTitle: '描述信息',
                 onChanged: (_) {},
               ),
               const TRadio<String>(value: 'b', groupValue: 'b', title: '禁用选中'),
@@ -318,12 +389,14 @@ void main() {
       );
 
       final painters = radioIndicatorPainters(tester);
+      final subTitle = tester.widget<Text>(find.text('描述信息'));
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
       expect(painters[0].selected, isFalse);
       expect(painters[0].color, token.componentBorderColor);
       expect(painters[1].selected, isTrue);
       expect(painters[1].color, token.brandDisabledColor);
+      expect(subTitle.style?.color, token.textColorSecondary);
       expect(disabledTitle.style?.color, token.textDisabledColor);
     });
 
