@@ -54,6 +54,18 @@ Widget _buildMultiple(BuildContext context) {
 弹窗形式的颜色选择器（配合 `TPopup` 使用）
 
 ```dart
+// 展示按钮：对齐 mobile-vue 的 block 用法，块级通栏展开至可用宽度。
+SizedBox(
+  width: double.infinity,
+  child: TButton(
+    size: TButtonSize.large,
+    variant: TButtonVariant.outline,
+    colorScheme: TButtonColorScheme.primary,
+    child: const TText('展示'),
+    onPressed: () => _showPopupPicker(context),
+  ),
+)
+
 // 弹窗内使用草稿值，点击「确定」后才提交，取消 / 蒙层关闭则回显旧值。
 var draft = popupValue;
 TPopup.show(
