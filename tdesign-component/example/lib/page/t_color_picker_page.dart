@@ -95,35 +95,51 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
   Widget _buildPopup(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TButton(
-            size: TButtonSize.large,
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            child: const Text('展示'),
-            onPressed: () => _showPopupPicker(context),
+          // SizedBox 包裹展开为通栏宽度（新按钮契约下 TButton 收缩内容宽），
+          // 参考 t_button_page 通栏写法。
+          SizedBox(
+            width: double.infinity,
+            child: TButton(
+              size: TButtonSize.large,
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              child: const TText('展示'),
+              onPressed: () => _showPopupPicker(context),
+            ),
           ),
           const SizedBox(height: 12),
-          Text('当前颜色：$popupValue'),
+          TText('当前颜色：$popupValue'),
         ],
       );
 
   void _showPopupPicker(BuildContext context) {
     // multiple + enableAlpha 的完整形态约需 460 高度（含头部），
     // 未传高度时 TPopup bottom 默认 240 会裁剪内容，故按屏高比例显式指定。
+    //
+    // 拖拽过程只更新弹窗内草稿值，「取消」关闭后回显旧值；「确定」才提交，
+    // 对齐 calendar 等示例的取色确认链路。
+    var draft = popupValue;
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
         height: MediaQuery.sizeOf(context).height * 0.72,
-        titleWidget: const Text('选择颜色'),
-        child: TColorPicker(
-          value: popupValue,
-          type: TColorPickerType.multiple,
-          enableAlpha: true,
-          onChanged: (result) {
-            final (value, _) = result;
-            setState(() => popupValue = value);
-          },
+        titleWidget: const TText('选择颜色'),
+        child: StatefulBuilder(
+          builder: (context, setPopupState) => TColorPicker(
+            value: draft,
+            type: TColorPickerType.multiple,
+            enableAlpha: true,
+            onChanged: (result) {
+              final (value, _) = result;
+              setPopupState(() => draft = value);
+            },
+          ),
         ),
+        onVisibleChange: (visible, trigger) {
+          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
+            setState(() => popupValue = draft);
+          }
+        },
       ),
     );
   }
@@ -203,9 +219,9 @@ class _FormatChip extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Center(
-              child: Text(
+              child: TText(
                 label,
-                style: TextStyle(
+                font: TextStyle(
                   fontSize: 14,
                   color: selected ? _activeColor : colorScheme.onSurface,
                 ),

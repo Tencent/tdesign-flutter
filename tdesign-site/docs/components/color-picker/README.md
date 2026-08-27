@@ -54,20 +54,30 @@ Widget _buildMultiple(BuildContext context) {
 弹窗形式的颜色选择器（配合 `TPopup` 使用）
 
 ```dart
+// 弹窗内使用草稿值，点击「确定」后才提交，取消 / 蒙层关闭则回显旧值。
+var draft = popupValue;
 TPopup.show(
   context,
   options: TPopupOptions.bottom(
     // multiple 类型内容较高，未传高度时 TPopup bottom 默认 240 会裁剪内容。
     height: MediaQuery.sizeOf(context).height * 0.72,
     titleWidget: const Text('选择颜色'),
-    child: TColorPicker(
-      value: popupValue,
-      type: TColorPickerType.multiple,
-      enableAlpha: true,
-      onChanged: (result) {
-        final (value, _) = result;
-      },
+    child: StatefulBuilder(
+      builder: (context, setPopupState) => TColorPicker(
+        value: draft,
+        type: TColorPickerType.multiple,
+        enableAlpha: true,
+        onChanged: (result) {
+          final (value, _) = result;
+          setPopupState(() => draft = value);
+        },
+      ),
     ),
+    onVisibleChange: (visible, trigger) {
+      if (!visible && trigger == TPopupTrigger.confirm) {
+        setState(() => popupValue = draft);
+      }
+    },
   ),
 );
 ```
