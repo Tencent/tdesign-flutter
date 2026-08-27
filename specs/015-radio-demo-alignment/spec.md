@@ -39,8 +39,9 @@ Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显
 - `TRadioIconType.fill` 未选中时显示边框圆环，选中时使用与指示器同尺寸的 TDesign `check-circle-filled` 图标，这也是与小程序一致的默认样式。
 - 禁用、选中和未选颜色继续遵循 `TRadioThemeData`、Material `RadioTheme` / `ColorScheme`、TDesign token 的既有优先级。
 - 图标几何尺寸使用 `TRadioSize` 的既有指示器尺寸；勾选样式复用 TDesign 图标，其余样式按该尺寸成比例绘制，不新增固定像素样式常量。
+- 块级 Radio 的 small / medium / large 高度分别使用 48 / 56 / 64 的现有尺寸 token；默认 medium 的 24dp 指示器和 56dp 块高与小程序一致，上下留白由目标高度、标题行高和指示器尺寸动态计算。
 - 横向 Demo 使用通栏容器背景，并将 `spacer16` 作为容器内边距，不形成额外的卡片外框。
-- 块级 Radio 使用 `spacer16` 上下内边距；分割线不带外边距，并从正文起点开始，均对齐小程序默认块级布局。
+- 块级 Radio 根据三档目标高度动态计算上下内边距；分割线不带外边距，并从正文起点开始，均对齐小程序默认块级布局。
 - 带副标题时，内置指示器与主标题行盒垂直居中，不相对整个多行文本块居中。
 - 副标题默认使用 `textColorSecondary`，与小程序 `text-color-secondary` token 保持一致。
 - Material `TextTheme` 只提供字体排版继承，不覆盖 Radio 标题和副标题的语义颜色；颜色由 `TRadioThemeData` 和对应 TDesign token 解析。

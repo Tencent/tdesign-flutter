@@ -208,6 +208,40 @@ void main() {
       }
     });
 
+    testWidgets('三档块级高度保持 48 56 64 且默认规格对应小程序', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: TRadioSize.values
+                .map(
+                  (size) => TRadio<TRadioSize>(
+                    key: ValueKey(size),
+                    value: size,
+                    groupValue: TRadioSize.medium,
+                    title: size.name,
+                    size: size,
+                    onChanged: (_) {},
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getSize(find.byKey(const ValueKey(TRadioSize.small))).height,
+        48,
+      );
+      expect(
+        tester.getSize(find.byKey(const ValueKey(TRadioSize.medium))).height,
+        56,
+      );
+      expect(
+        tester.getSize(find.byKey(const ValueKey(TRadioSize.large))).height,
+        64,
+      );
+    });
+
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(
         wrap(TRadio<String>(value: 'a', groupValue: 'b', onChanged: (_) {})),

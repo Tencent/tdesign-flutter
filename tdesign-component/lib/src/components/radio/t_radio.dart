@@ -178,15 +178,13 @@ class TRadio<T> extends StatelessWidget {
     final content = _buildContent(context, theme, titleStyle);
     final hasContent = content != null;
     final constraints = hasContent
-        ? BoxConstraints(minHeight: _contentMinHeight)
+        ? BoxConstraints(minHeight: _contentMinHeight(context))
         : _resolveTapTargetConstraints(context);
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
         final indicatorOffset =
-            ((titleStyle.fontSize ?? 16) * (titleStyle.height ?? 1) -
-                _indicatorSize) /
-            2;
+            (_titleLineHeight(titleStyle) - _indicatorSize) / 2;
         final children = <Widget>[
           if (indicator != null)
             if (hasContent && customIconBuilder == null)
@@ -210,7 +208,7 @@ class TRadio<T> extends StatelessWidget {
                   horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
                   vertical: cardMode
                       ? context.tTheme.spacer8
-                      : context.tTheme.spacer16,
+                      : _contentVerticalPadding(context, titleStyle),
                 )
               : EdgeInsets.zero,
           decoration: cardMode
@@ -291,11 +289,20 @@ class TRadio<T> extends StatelessWidget {
     );
   }
 
-  double get _contentMinHeight => switch (size) {
-    TRadioSize.small => 40.0,
-    TRadioSize.medium => 48.0,
-    TRadioSize.large => 56.0,
+  double _contentMinHeight(BuildContext context) => switch (size) {
+    TRadioSize.small => context.tTheme.spacer48,
+    TRadioSize.medium => context.tTheme.spacer48 + context.tTheme.spacer8,
+    TRadioSize.large => context.tTheme.spacer64,
   };
+
+  double _contentVerticalPadding(BuildContext context, TextStyle titleStyle) {
+    final titleLineHeight = _titleLineHeight(titleStyle);
+    final leadingHeight = math.max(titleLineHeight, _indicatorSize);
+    return math.max(0, (_contentMinHeight(context) - leadingHeight) / 2);
+  }
+
+  double _titleLineHeight(TextStyle titleStyle) =>
+      titleStyle.fontSize! * (titleStyle.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = RadioTheme.of(context);

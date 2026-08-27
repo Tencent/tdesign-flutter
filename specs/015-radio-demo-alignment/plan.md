@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-复用既有状态色解析和 `TRadioSize` 尺寸：勾选样式使用 TDesign `check` 图标，默认实心样式的选中态使用 TDesign `check-circle-filled` 图标，圆点及未选圆环继续由 `_TRadioIndicatorPainter` 绘制，不引入 Demo 私有绘制。块级 Radio 的上下内边距和分割线位置直接使用现有 token 对齐小程序。Group 仅透传单项已存在的文本能力与新增图标样式。Demo 使用 `cardMode`、Theme extension 和现有布局能力组合公开示例；横向示例的通栏背景与内部间距均使用现有 token。
+复用既有状态色解析和 `TRadioSize` 尺寸：勾选样式使用 TDesign `check` 图标，默认实心样式的选中态使用 TDesign `check-circle-filled` 图标，圆点及未选圆环继续由 `_TRadioIndicatorPainter` 绘制，不引入 Demo 私有绘制。块级 Radio 使用现有尺寸 token 定义 48 / 56 / 64 三档高度，并由目标高度、标题行高和指示器尺寸动态计算上下留白，默认 medium 对齐小程序的 56dp 块高；分割线位置继续使用现有 token。Group 仅透传单项已存在的文本能力与新增图标样式。Demo 使用 `cardMode`、Theme extension 和现有布局能力组合公开示例；横向示例的通栏背景与内部间距均使用现有 token。
 
 ## 影响范围
 
