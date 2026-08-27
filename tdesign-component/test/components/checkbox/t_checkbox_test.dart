@@ -109,7 +109,7 @@ void main() {
         of: checkbox,
         matching: find.byType(GestureDetector),
       );
-      final indicator = find.byIcon(TIcons.rectangle);
+      final indicator = find.byIcon(TIcons.circle);
 
       expect(tester.getSize(gesture), const Size.square(48));
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
@@ -135,7 +135,7 @@ void main() {
         of: checkbox,
         matching: find.byType(GestureDetector),
       );
-      final indicator = find.byIcon(TIcons.rectangle);
+      final indicator = find.byIcon(TIcons.circle);
 
       expect(tester.getSize(gesture), const Size.square(24));
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
@@ -147,9 +147,7 @@ void main() {
         wrap(TCheckbox(value: true, title: '复选项', onChanged: (_) {})),
       );
 
-      final icon = tester.widget<Icon>(
-        find.byIcon(TIcons.check_rectangle_filled),
-      );
+      final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle_filled));
       expect(icon.size, 24.0);
       expect(icon.color, token.brandNormalColor);
     });
@@ -167,9 +165,9 @@ void main() {
         ),
       );
 
-      final uncheckedIcon = tester.widget<Icon>(find.byIcon(TIcons.rectangle));
+      final uncheckedIcon = tester.widget<Icon>(find.byIcon(TIcons.circle));
       final disabledCheckedIcon = tester.widget<Icon>(
-        find.byIcon(TIcons.check_rectangle_filled),
+        find.byIcon(TIcons.check_circle_filled),
       );
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
@@ -190,9 +188,7 @@ void main() {
         ),
       );
 
-      final icon = tester.widget<Icon>(
-        find.byIcon(TIcons.check_rectangle_filled),
-      );
+      final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle_filled));
       final title = tester.widget<Text>(find.text('主题复选'));
       final spacing = tester.widget<SizedBox>(
         find.byWidgetPredicate(
@@ -285,14 +281,13 @@ void main() {
       );
     });
 
-    testWidgets('标题、副标题、分割线可渲染', (tester) async {
+    testWidgets('默认使用圆形指示器并显示分割线', (tester) async {
       await tester.pumpWidget(
         wrap(
           TCheckbox(
             value: true,
             title: '标题',
             subTitle: '副标题',
-            showDivider: true,
             onChanged: (_) {},
           ),
         ),
@@ -300,8 +295,28 @@ void main() {
 
       expect(find.text('标题'), findsOneWidget);
       expect(find.text('副标题'), findsOneWidget);
+      expect(find.byIcon(TIcons.check_circle_filled), findsOneWidget);
       expect(find.byType(TDivider), findsOneWidget);
       expect(tester.getSize(find.byType(TDivider)).height, 0.5);
+    });
+
+    testWidgets('可显式恢复方形指示器并关闭分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckbox(
+            value: true,
+            title: '方形',
+            showDivider: false,
+            onChanged: (_) {},
+          ),
+          checkboxTheme: const TCheckboxThemeData(
+            variant: TCheckboxVariant.square,
+          ),
+        ),
+      );
+
+      expect(find.byIcon(TIcons.check_rectangle_filled), findsOneWidget);
+      expect(find.byType(TDivider), findsNothing);
     });
 
     testWidgets('三种尺寸和左右内容方向可构建', (tester) async {
@@ -350,6 +365,7 @@ void main() {
       );
 
       expect(find.text('卡片'), findsOneWidget);
+      expect(find.byType(TDivider), findsNothing);
     });
 
     testWidgets('无界宽度下按内容自然收缩且不触发 flex 异常', (tester) async {

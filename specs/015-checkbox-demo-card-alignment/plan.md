@@ -7,6 +7,7 @@
 - `TSelectionCardGroupLayout` 在横向布局中使用私有 `InheritedWidget` 向子卡片传递角标尺寸，不扩大公开 API。
 - Checkbox 标题保留 Material `TextTheme` 字体属性，但不从 `bodyLarge/bodyMedium.color` 继承语义颜色；颜色由 Checkbox Theme 与 TDesign 主/次文字 token 解析。
 - Checkbox 主标题与副标题默认最大行数分别由 1 调整为 3 和 5，与小程序默认契约一致；超出后继续省略。
+- Checkbox 默认指示器由方形调整为圆形，Checkbox 与 CheckboxGroup 在普通模式默认显示分割线；卡片模式不绘制分割线，无边框横向示例显式关闭。
 
 ## 影响范围
 
@@ -19,8 +20,8 @@
 
 ## API 变化
 
-- 不新增或删除公开参数；`TCheckbox.titleMaxLines` 默认值由 1 改为 3，`subTitleMaxLines` 默认值由 1 改为 5。
-- 这是用户可感知的默认布局行为变化：依赖原单行高度的使用方应显式传入 `titleMaxLines: 1` / `subTitleMaxLines: 1`。
+- 不新增或删除公开参数；`TCheckbox.titleMaxLines` 默认值由 1 改为 3，`subTitleMaxLines` 默认值由 1 改为 5，默认指示器由方形改为圆形，`TCheckbox.showDivider` 与 `TCheckboxGroup.showDivider` 默认值由 `false` 改为 `true`。
+- 这些均为用户可感知的默认行为变化：依赖原行为的使用方应显式传入 `titleMaxLines: 1` / `subTitleMaxLines: 1`、通过 `TCheckboxThemeData(variant: TCheckboxVariant.square)` 保留方形指示器，或传入 `showDivider: false` 关闭分割线。
 
 ## 风险与取舍
 

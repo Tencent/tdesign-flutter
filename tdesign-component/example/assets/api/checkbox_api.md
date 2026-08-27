@@ -9,7 +9,7 @@
 | customIconBuilder | TCheckboxIconBuilder? | - | 自定义复选框指示器。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | ValueChanged<bool?>? | - | 选中态变更回调；为 null 时禁用。 |
-| showDivider | bool | false | 是否显示底部分割线。 |
+| showDivider | bool | true | 普通模式是否显示底部分割线，默认显示；卡片模式不显示。 |
 | size | TCheckboxSize | TCheckboxSize.medium | 复选框尺寸。 |
 | subTitle | String? | - | 副标题文案。 |
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
@@ -33,7 +33,7 @@
 | onChanged | ValueChanged<List<T>>? | - | 选中项列表变更回调；为 null 时整组禁用。 |
 | onMaxSelected | VoidCallback? | - | 超过最多可选数量时触发。 |
 | options | List<TCheckboxOption<T>> | - | 复选框数据项。 |
-| showDivider | bool | false | 是否显示项间分割线。 |
+| showDivider | bool | true | 普通模式是否显示项间分割线，默认显示；卡片模式不显示。 |
 | size | TCheckboxSize | TCheckboxSize.medium | 复选框尺寸。 |
 | value | List<T> | - | 受控选中项列表。 |
 

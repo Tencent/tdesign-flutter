@@ -153,6 +153,7 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
                 TCheckbox(
                   value: _horizontalValue.contains(option.value),
                   title: option.label,
+                  showDivider: false,
                   onChanged: (_) => _toggleHorizontal(option.value),
                 ),
             ],

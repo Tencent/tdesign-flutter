@@ -65,8 +65,8 @@ class TCheckboxGroup<T> extends StatelessWidget {
     /// 是否使用卡片模式。
     this.cardMode = false,
 
-    /// 是否显示项间分割线。
-    this.showDivider = false,
+    /// 普通模式是否显示项间分割线，默认显示；卡片模式不显示。
+    this.showDivider = true,
 
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
@@ -102,7 +102,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
   /// 是否使用卡片模式。
   final bool cardMode;
 
-  /// 是否显示项间分割线。
+  /// 普通模式是否显示项间分割线，默认显示；卡片模式不显示。
   final bool showDivider;
 
   /// 控件与文案排列方向。

@@ -61,8 +61,8 @@ class TCheckbox extends StatelessWidget {
     /// 是否使用卡片模式。
     this.cardMode = false,
 
-    /// 是否显示底部分割线。
-    this.showDivider = false,
+    /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
+    this.showDivider = true,
 
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
@@ -95,7 +95,7 @@ class TCheckbox extends StatelessWidget {
   /// 是否使用卡片模式。
   final bool cardMode;
 
-  /// 是否显示底部分割线。
+  /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
   final bool showDivider;
 
   /// 控件与文案排列方向。
@@ -199,7 +199,7 @@ class TCheckbox extends StatelessWidget {
                 : () => onChanged!(value == true ? false : true),
             child: tile,
           ),
-          if (showDivider)
+          if (showDivider && !cardMode)
             Padding(
               padding: EdgeInsets.only(left: context.tTheme.spacer16),
               child: Theme(
@@ -250,7 +250,7 @@ class TCheckbox extends StatelessWidget {
   Widget _buildIndicator(BuildContext context, TCheckboxThemeData? theme) {
     final materialTheme = CheckboxTheme.of(context);
     final colorScheme = Theme.of(context).tExplicitColorScheme;
-    final variant = theme?.variant ?? TCheckboxVariant.square;
+    final variant = theme?.variant ?? TCheckboxVariant.circle;
     final selected = value == true;
     final indeterminate = value == null;
     final states = <WidgetState>{

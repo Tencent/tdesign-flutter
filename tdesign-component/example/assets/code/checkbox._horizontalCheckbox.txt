@@ -17,6 +17,7 @@ Widget _horizontalCheckbox(BuildContext context) {
                 TCheckbox(
                   value: _horizontalValue.contains(option.value),
                   title: option.label,
+                  showDivider: false,
                   onChanged: (_) => _toggleHorizontal(option.value),
                 ),
             ],

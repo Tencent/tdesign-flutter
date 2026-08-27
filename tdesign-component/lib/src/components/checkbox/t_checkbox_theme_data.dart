@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// 通过 Theme 子树注入，控制子树默认样式。
 /// 被 TCheckbox 和 TCheckboxGroup 共用。
 class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
-  /// 复选框指示器的默认视觉变体。
+  /// 复选框指示器的默认视觉变体；未设置时使用圆形。
   final TCheckboxVariant? variant;
 
   /// 选择颜色
@@ -35,7 +35,7 @@ class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
   final EdgeInsetsGeometry? customSpace;
 
   const TCheckboxThemeData({
-    /// 复选框指示器的默认视觉变体。
+    /// 复选框指示器的默认视觉变体；未设置时使用圆形。
     this.variant,
 
     /// 选中态颜色。

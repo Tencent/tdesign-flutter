@@ -107,6 +107,35 @@ void main() {
   });
 
   group('TCheckboxGroup v1 布局与自定义项', () {
+    testWidgets('默认显示项间分割线且末项无分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['a'],
+            options: options,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(find.byType(TDivider), findsNWidgets(options.length - 1));
+    });
+
+    testWidgets('可显式关闭项间分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['a'],
+            options: options,
+            showDivider: false,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(find.byType(TDivider), findsNothing);
+    });
+
     testWidgets('横向多列布局可构建', (tester) async {
       await tester.pumpWidget(
         wrap(
