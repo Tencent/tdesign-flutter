@@ -75,6 +75,7 @@ Widget _buildForm(BuildContext context) {
                     ],
                     direction: Axis.horizontal,
                     columns: 3,
+                    showDivider: false,
                     onChanged: _disabled ? null : onChanged,
                   ),
                 ),

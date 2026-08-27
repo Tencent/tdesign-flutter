@@ -228,6 +228,7 @@ class _TFormPageState extends State<TFormPage> {
                     ],
                     direction: Axis.horizontal,
                     columns: 3,
+                    showDivider: false,
                     onChanged: _disabled ? null : onChanged,
                   ),
                 ),
