@@ -40,8 +40,10 @@ Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显
 - 禁用、选中和未选颜色继续遵循 `TRadioThemeData`、Material `RadioTheme` / `ColorScheme`、TDesign token 的既有优先级。
 - 图标几何尺寸使用 `TRadioSize` 的既有指示器尺寸；勾选样式复用 TDesign 图标，其余样式按该尺寸成比例绘制，不新增固定像素样式常量。
 - 块级 Radio 的 small / medium / large 高度分别使用 48 / 56 / 64 的现有尺寸 token；默认 medium 的 24dp 指示器和 56dp 块高与小程序一致，上下留白由目标高度、标题行高和指示器尺寸动态计算。
+- 指示器三档尺寸及卡片最小高度由 TDesign 间距、字体与行高 token 计算；绘制器中的比例常量仅描述图形几何关系，不作为样式尺寸。
 - 横向 Demo 使用通栏容器背景，并将 `spacer16` 作为容器内边距，不形成额外的卡片外框。
 - 块级 Radio 根据三档目标高度动态计算上下内边距；分割线不带外边距，并从正文起点开始，均对齐小程序默认块级布局。
+- `TRadio` 和 `TRadioGroup` 默认显示分割线，与小程序默认非无边框模式及 Checkbox 保持一致；显式设置 `showDivider: false` 时关闭，卡片模式始终不显示分割线。
 - 带副标题时，内置指示器与主标题行盒垂直居中，不相对整个多行文本块居中。
 - 副标题默认使用 `textColorSecondary`，与小程序 `text-color-secondary` token 保持一致。
 - Material `TextTheme` 只提供字体排版继承，不覆盖 Radio 标题和副标题的语义颜色；颜色由 `TRadioThemeData` 和对应 TDesign token 解析。
@@ -54,6 +56,7 @@ Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显
 
 - [ ] 未传新增参数时，Radio 使用小程序默认实心勾选视觉，受控交互行为保持不变。
 - [ ] 三种图标样式覆盖选中、未选和禁用状态测试。
+- [ ] 默认显示分割线，显式关闭和卡片模式不显示分割线。
 - [ ] Group 参数正确透传，长标题和副标题按 Demo 要求换行。
 - [ ] Demo 不包含基础 Radio 图标的自定义绘制或平台兼容分支。
 - [ ] Demo 样式值使用 Theme / Material / TDesign token 或组件公开能力。

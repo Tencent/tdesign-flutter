@@ -47,6 +47,8 @@ void main() {
       expect(radio.subTitleMaxLines, 5);
       expect(group.titleMaxLines, 3);
       expect(group.subTitleMaxLines, 5);
+      expect(radio.showDivider, isTrue);
+      expect(group.showDivider, isTrue);
 
       await tester.pumpWidget(wrap(radio));
       final title = tester.widget<Text>(find.text('主标题'));
@@ -55,6 +57,40 @@ void main() {
       expect(title.overflow, TextOverflow.ellipsis);
       expect(subTitle.maxLines, 5);
       expect(subTitle.overflow, TextOverflow.ellipsis);
+    });
+
+    testWidgets('默认显示分割线且卡片模式与显式关闭时不显示', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            children: [
+              TRadio<String>(value: 'a', groupValue: 'b', title: '默认分割线'),
+              TRadio<String>(
+                value: 'a',
+                groupValue: 'b',
+                title: '关闭分割线',
+                showDivider: false,
+              ),
+              TRadio<String>(
+                value: 'a',
+                groupValue: 'a',
+                title: '卡片模式',
+                cardMode: true,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.byType(TDivider), findsOneWidget);
+    });
+
+    testWidgets('Group 默认仅在选项之间显示分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TRadioGroup<String>(value: 'a', options: options)),
+      );
+
+      expect(find.byType(TDivider), findsNWidgets(options.length - 1));
     });
 
     testWidgets('按 groupValue 渲染选中态并触发 onChanged', (tester) async {
@@ -228,18 +264,73 @@ void main() {
         ),
       );
 
-      expect(
-        tester.getSize(find.byKey(const ValueKey(TRadioSize.small))).height,
-        48,
+      for (final (size, expectedHeight) in const [
+        (TRadioSize.small, 48.0),
+        (TRadioSize.medium, 56.0),
+        (TRadioSize.large, 64.0),
+      ]) {
+        final gesture = find.descendant(
+          of: find.byKey(ValueKey(size)),
+          matching: find.byType(GestureDetector),
+        );
+        expect(tester.getSize(gesture).height, expectedHeight);
+      }
+    });
+
+    testWidgets('块高、指示器和卡片高度均读取 TDesign token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'radio-size-token-test',
+        marginMap: const {
+          'spacer4': 5,
+          'spacer8': 9,
+          'spacer16': 18,
+          'spacer24': 27,
+          'spacer48': 51,
+        },
       );
-      expect(
-        tester.getSize(find.byKey(const ValueKey(TRadioSize.medium))).height,
-        56,
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: Scaffold(
+            body: Column(
+              children: [
+                TRadio<String>(
+                  key: const ValueKey('token-block'),
+                  value: 'a',
+                  groupValue: 'a',
+                  title: '块级',
+                  showDivider: false,
+                  onChanged: (_) {},
+                ),
+                TRadio<String>(
+                  key: const ValueKey('token-card'),
+                  value: 'b',
+                  groupValue: 'b',
+                  title: '卡片',
+                  subTitle: '说明',
+                  cardMode: true,
+                  onChanged: (_) {},
+                ),
+              ],
+            ),
+          ),
+        ),
       );
-      expect(
-        tester.getSize(find.byKey(const ValueKey(TRadioSize.large))).height,
-        64,
+
+      Finder gesture(String key) => find.descendant(
+        of: find.byKey(ValueKey(key)),
+        matching: find.byType(GestureDetector),
       );
+      final selectedIcon = tester.widget<Icon>(
+        find.descendant(
+          of: find.byKey(const ValueKey('token-block')),
+          matching: find.byIcon(TIcons.check_circle_filled),
+        ),
+      );
+
+      expect(tester.getSize(gesture('token-block')).height, 60);
+      expect(tester.getSize(gesture('token-card')).height, 87);
+      expect(selectedIcon.size, 27);
     });
 
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {

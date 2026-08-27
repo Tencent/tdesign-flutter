@@ -115,6 +115,7 @@ class _TRadioPageState extends State<TRadioPage> {
           options: _horizontalOptions,
           direction: Axis.horizontal,
           columns: 3,
+          showDivider: false,
           onChanged: (value) => setState(() => _horizontalValue = value),
         ),
       ),

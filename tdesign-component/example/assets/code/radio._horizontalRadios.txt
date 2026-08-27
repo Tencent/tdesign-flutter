@@ -11,6 +11,7 @@ Widget _horizontalRadios(BuildContext context) {
           options: _horizontalOptions,
           direction: Axis.horizontal,
           columns: 3,
+          showDivider: false,
           onChanged: (value) => setState(() => _horizontalValue = value),
         ),
       ),
