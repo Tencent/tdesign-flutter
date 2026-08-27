@@ -114,7 +114,6 @@ TColorPicker(
 | onPaletteBarChange | ValueChanged\<TColorObject\>? | - | 色板拖拽过程回调 |
 | themeData | TColorPickerThemeData? | - | 实例级主题覆盖 |
 
-> `fixed`（`position: fixed` 语义）在 Flutter 布局体系下不适用，故不提供该属性。
 
 ### TColorObject
 
