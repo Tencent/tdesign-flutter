@@ -1,8 +1,6 @@
 Widget _buildBasicLinks(BuildContext context) {
-    return Container(
-        color: context.tTheme.bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithVariant(TLinkVariant.basic),
-        ));
+    return _exampleRow(context, [
+      _link(colorScheme: TLinkColorScheme.primary),
+      _link(),
+    ]);
   }

@@ -64,6 +64,9 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
 
     /// 移除图标尺寸。
     this.removeIconSize,
+
+    /// 禁用文件遮罩颜色。
+    this.disabledMaskColor,
   });
 
   /// 上传项形状。
@@ -117,6 +120,9 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
   /// 移除图标尺寸。
   final double? removeIconSize;
 
+  /// 禁用文件遮罩颜色。
+  final Color? disabledMaskColor;
+
   @override
   TUploadThemeData copyWith({
     TUploadVariant? variant,
@@ -136,6 +142,7 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
     double? removeButtonSize,
     Color? removeButtonColor,
     double? removeIconSize,
+    Color? disabledMaskColor,
   }) {
     return TUploadThemeData(
       variant: variant ?? this.variant,
@@ -157,6 +164,7 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
       removeButtonSize: removeButtonSize ?? this.removeButtonSize,
       removeButtonColor: removeButtonColor ?? this.removeButtonColor,
       removeIconSize: removeIconSize ?? this.removeIconSize,
+      disabledMaskColor: disabledMaskColor ?? this.disabledMaskColor,
     );
   }
 
@@ -173,20 +181,37 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
       alignment: t < 0.5 ? alignment : other.alignment,
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       foregroundColor: Color.lerp(foregroundColor, other.foregroundColor, t),
-      disabledBackgroundColor:
-          Color.lerp(disabledBackgroundColor, other.disabledBackgroundColor, t),
-      disabledForegroundColor:
-          Color.lerp(disabledForegroundColor, other.disabledForegroundColor, t),
+      disabledBackgroundColor: Color.lerp(
+        disabledBackgroundColor,
+        other.disabledBackgroundColor,
+        t,
+      ),
+      disabledForegroundColor: Color.lerp(
+        disabledForegroundColor,
+        other.disabledForegroundColor,
+        t,
+      ),
       overlayColor: Color.lerp(overlayColor, other.overlayColor, t),
-      statusTextStyle:
-          TextStyle.lerp(statusTextStyle, other.statusTextStyle, t),
+      statusTextStyle: TextStyle.lerp(
+        statusTextStyle,
+        other.statusTextStyle,
+        t,
+      ),
       borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
       addIconSize: lerpDouble(addIconSize, other.addIconSize, t),
       statusIconSize: lerpDouble(statusIconSize, other.statusIconSize, t),
       removeButtonSize: lerpDouble(removeButtonSize, other.removeButtonSize, t),
-      removeButtonColor:
-          Color.lerp(removeButtonColor, other.removeButtonColor, t),
+      removeButtonColor: Color.lerp(
+        removeButtonColor,
+        other.removeButtonColor,
+        t,
+      ),
       removeIconSize: lerpDouble(removeIconSize, other.removeIconSize, t),
+      disabledMaskColor: Color.lerp(
+        disabledMaskColor,
+        other.disabledMaskColor,
+        t,
+      ),
     );
   }
 }

@@ -1,0 +1,27 @@
+Widget _buildAlign(BuildContext context) => const Column(
+    children: [
+      TFormItem(
+        label: '左对齐',
+        child: TInput(borderless: true, hintText: '请输入文字'),
+      ),
+      SizedBox(height: 16),
+      TFormItem(
+        label: '居中',
+        child: TInput(
+          borderless: true,
+          hintText: '请输入文字',
+          textAlign: TextAlign.center,
+        ),
+      ),
+      SizedBox(height: 16),
+      TFormItem(
+        label: '右对齐',
+        child: TInput(
+          borderless: true,
+          hintText: '请输入文字',
+          textAlign: TextAlign.end,
+        ),
+      ),
+      SizedBox(height: 16),
+    ],
+  );

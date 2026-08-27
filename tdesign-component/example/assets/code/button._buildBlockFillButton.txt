@@ -3,7 +3,6 @@ Widget _buildBlockFillButton(BuildContext context) {
       width: double.infinity,
       child: TButton(
         child: const Text('填充按钮'),
-        icon: const Icon(TIcons.app),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,

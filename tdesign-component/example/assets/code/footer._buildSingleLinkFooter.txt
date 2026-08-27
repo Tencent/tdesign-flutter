@@ -5,7 +5,6 @@ Widget _buildSingleLinkFooter(BuildContext context) {
         TLink(
           child: const Text('底部链接'),
           colorScheme: TLinkColorScheme.primary,
-          variant: TLinkVariant.icon,
           suffixIcon: const Icon(TIcons.jump),
           onPressed: () {
             print('点击了链接');

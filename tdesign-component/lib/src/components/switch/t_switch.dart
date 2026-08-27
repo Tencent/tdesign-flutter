@@ -11,8 +11,9 @@ export 't_switch_types.dart';
 
 /// 严格受控的开关组件。
 ///
-/// [value] 由父级持有；[onChanged] 为 null 时禁用。文字、图标和加载形态
-/// 无法由 Material Switch 完整表达，因此底层保留 TDesign 自定义开关实现。
+/// [value] 由父级持有；[onChanged] 为 null 时禁用；[loading] 为 true 时
+/// 显示加载指示器并禁用交互。文字、图标和加载内容无法由 Material Switch
+/// 完整表达，因此底层保留 TDesign 自定义开关实现。
 class TSwitch extends StatelessWidget {
   const TSwitch({
     super.key,
@@ -28,6 +29,9 @@ class TSwitch extends StatelessWidget {
 
     /// 开关内容形态；未传时读取 [TSwitchThemeData.defaultVariant]。
     this.variant,
+
+    /// 是否处于加载状态；加载时显示指示器并禁用交互。
+    this.loading = false,
 
     /// text 形态的开启文案。
     this.openText,
@@ -48,6 +52,9 @@ class TSwitch extends StatelessWidget {
   /// 开关内容形态。
   final TSwitchVariant? variant;
 
+  /// 是否处于加载状态；加载时显示指示器并禁用交互。
+  final bool loading;
+
   /// text 形态的开启文案。
   final String? openText;
 
@@ -60,8 +67,7 @@ class TSwitch extends StatelessWidget {
     final resolvedSize = size ?? theme?.defaultSize ?? TSwitchSize.medium;
     final resolvedVariant =
         variant ?? theme?.defaultVariant ?? TSwitchVariant.filled;
-    final enabled =
-        onChanged != null && resolvedVariant != TSwitchVariant.loading;
+    final enabled = onChanged != null && !loading;
     final resolved = TSwitchResolve.resolve(
       context: context,
       enabled: enabled,
@@ -79,6 +85,7 @@ class TSwitch extends StatelessWidget {
       thumbView: _buildThumb(
         resolved: resolved,
         variant: resolvedVariant,
+        loading: loading,
         openText: openText,
         closeText: closeText,
       ),
@@ -105,9 +112,17 @@ class TSwitch extends StatelessWidget {
   Widget? _buildThumb({
     required TSwitchResolvedStyle resolved,
     required TSwitchVariant variant,
+    required bool loading,
     required String? openText,
     required String? closeText,
   }) {
+    if (loading) {
+      return TCircleIndicator(
+        color: resolved.thumbContentOnColor,
+        size: 16,
+        lineWidth: 3,
+      );
+    }
     return switch (variant) {
       TSwitchVariant.text => SizedBox(
         width: 16,
@@ -129,11 +144,6 @@ class TSwitch extends StatelessWidget {
                     ),
           ),
         ),
-      ),
-      TSwitchVariant.loading => TCircleIndicator(
-        color: resolved.thumbContentOnColor,
-        size: 16,
-        lineWidth: 3,
       ),
       TSwitchVariant.icon => Icon(
         value ? TIcons.check : TIcons.close,
