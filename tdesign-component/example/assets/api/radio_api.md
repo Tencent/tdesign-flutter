@@ -13,7 +13,7 @@
 | iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式；`customIconBuilder` 非空时以自定义指示器为准。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时禁用。 |
-| showDivider | bool | false | 是否显示底部分割线。 |
+| showDivider | bool | true | 是否显示底部分割线，默认显示；卡片模式不显示。 |
 | size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
 | subTitle | String? | - | 副标题文案。 |
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
@@ -38,7 +38,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
 | options | List<TRadioOption<T>> | - | 单选框数据项。 |
-| showDivider | bool | false | 是否显示项间分割线。 |
+| showDivider | bool | true | 是否显示项间分割线，默认显示；卡片模式不显示。 |
 | size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
 | titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
