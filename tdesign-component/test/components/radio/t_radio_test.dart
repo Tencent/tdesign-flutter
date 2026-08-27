@@ -78,6 +78,7 @@ void main() {
       );
 
       expect(find.text('true false'), findsOneWidget);
+      expect(radioIndicatorPainters(tester), isEmpty);
     });
 
     testWidgets('large + contentDirection.left + divider + subTitle 可构建', (
@@ -223,6 +224,46 @@ void main() {
       expect(indicator.height, 24.0);
       expect(painter.selected, isTrue);
       expect(painter.color, token.brandNormalColor);
+      expect(painter.iconType, TRadioIconType.fill);
+    });
+
+    testWidgets('内置指示器支持 check 和 fill 样式并使用反色 token', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: [
+              TRadio<String>(
+                value: 'a',
+                groupValue: 'a',
+                iconType: TRadioIconType.check,
+                onChanged: (_) {},
+              ),
+              TRadio<String>(
+                value: 'b',
+                groupValue: 'b',
+                iconType: TRadioIconType.fill,
+                onChanged: (_) {},
+              ),
+              TRadio<String>(
+                value: 'c',
+                groupValue: 'none',
+                iconType: TRadioIconType.fill,
+                onChanged: (_) {},
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final painters = radioIndicatorPainters(tester);
+      expect(painters.map((painter) => painter.iconType), [
+        TRadioIconType.check,
+        TRadioIconType.fill,
+        TRadioIconType.fill,
+      ]);
+      expect(painters[1].markColor, token.textColorAnti);
+      expect(painters.map((painter) => painter.selected), [true, true, false]);
     });
 
     testWidgets('完整主题下未选、禁用和文字颜色使用对应 token', (tester) async {
@@ -374,6 +415,30 @@ void main() {
   });
 
   group('TRadioGroup v1 布局与自定义项', () {
+    testWidgets('透传指示器样式和标题行数', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRadioGroup<String>(
+            value: 'a',
+            options: options,
+            iconType: TRadioIconType.fill,
+            titleMaxLines: 2,
+            subTitleMaxLines: 3,
+          ),
+        ),
+      );
+
+      final painters = radioIndicatorPainters(tester);
+      final title = tester.widget<Text>(find.text('选项 A'));
+      final subTitle = tester.widget<Text>(find.text('说明 B'));
+      expect(
+        painters.every((painter) => painter.iconType == TRadioIconType.fill),
+        isTrue,
+      );
+      expect(title.maxLines, 2);
+      expect(subTitle.maxLines, 3);
+    });
+
     testWidgets('横向多列布局可构建', (tester) async {
       await tester.pumpWidget(
         wrap(

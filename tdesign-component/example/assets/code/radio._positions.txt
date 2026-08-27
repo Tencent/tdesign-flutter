@@ -1,18 +1,19 @@
 Widget _positions(BuildContext context) {
     return Column(
       children: [
-        TRadio<String>(
-          value: 'left',
-          groupValue: _positionValue,
-          title: '图标在左',
-          onChanged: (value) => setState(() => _positionValue = value),
+        TRadio<bool>(
+          value: true,
+          groupValue: _leftSelected,
+          title: '单选',
+          onChanged: (_) => setState(() => _leftSelected = !_leftSelected),
         ),
-        TRadio<String>(
-          value: 'right',
-          groupValue: _positionValue,
-          title: '图标在右',
+        SizedBox(height: context.tTheme.spacer16),
+        TRadio<bool>(
+          value: true,
+          groupValue: _rightSelected,
+          title: '单选',
           contentDirection: TContentDirection.left,
-          onChanged: (value) => setState(() => _positionValue = value),
+          onChanged: (_) => setState(() => _rightSelected = !_rightSelected),
         ),
       ],
     );

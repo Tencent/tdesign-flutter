@@ -1,8 +1,14 @@
 Widget _verticalCardRadios(BuildContext context) {
-    return TRadioGroup<String>(
-      value: _verticalCardValue,
-      options: _cardOptions,
-      cardMode: true,
-      onChanged: (value) => setState(() => _verticalCardValue = value),
+    return Padding(
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+        child: TRadioGroup<int>(
+          value: _verticalCardValue,
+          options: _cardOptions,
+          titleMaxLines: 2,
+          onChanged: (value) => setState(() => _verticalCardValue = value),
+        ),
+      ),
     );
   }

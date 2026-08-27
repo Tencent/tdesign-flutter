@@ -4,6 +4,10 @@
 Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它不会打包进 Example
 或组件产物。
 
+`RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
+`radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为
+`cdd6b80b52382a5345597848ba58ef53ddf630aa29bfa1a4165b63264c000c2d`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`

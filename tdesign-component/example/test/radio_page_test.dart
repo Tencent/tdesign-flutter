@@ -12,6 +12,8 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 import 'golden_test_utils.dart';
 
+const _goldenCjkFontFamily = 'Radio Golden CJK';
+
 void main() {
   final originalGoldenComparator = useGoldenDiffTolerance();
   setUpAll(() async {
@@ -25,7 +27,13 @@ void main() {
     );
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    final cjkFont = FontLoader(_goldenCjkFontFamily)
+      ..addFont(
+        File(
+          'test/fonts/RadioGoldenCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
   });
   tearDownAll(() {
     goldenFileComparator = originalGoldenComparator;
@@ -37,8 +45,13 @@ void main() {
       child: ChangeNotifierProvider(
         create: (_) => ThemeModeProvider(),
         child: MaterialApp(
-          theme: TThemeBuilder.light(TThemeData.defaultData()),
-          darkTheme: TThemeBuilder.dark(TThemeData.defaultData()),
+          debugShowCheckedModeBanner: false,
+          theme: _withGoldenFontFallback(
+            TThemeBuilder.light(TThemeData.defaultData()),
+          ),
+          darkTheme: _withGoldenFontFallback(
+            TThemeBuilder.dark(TThemeData.defaultData()),
+          ),
           themeMode: mode,
           home: ExamplePageInheritedTheme(
             model: ExamplePageModel(
@@ -58,7 +71,10 @@ void main() {
       ChangeNotifierProvider(
         create: (_) => ThemeModeProvider(),
         child: MaterialApp(
-          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          debugShowCheckedModeBanner: false,
+          theme: _withGoldenFontFallback(
+            TThemeBuilder.light(TThemeData.defaultData()),
+          ),
           home: ExamplePageInheritedTheme(
             model: ExamplePageModel(
               text: 'Radio 单选框',
@@ -73,14 +89,53 @@ void main() {
     await tester.pump();
 
     expect(find.text('01 组件类型'), findsOneWidget);
-    expect(find.text('纵向单选框'), findsOneWidget);
+    expect(find.text('用于在预设的一组选项中执行单项选择，并呈现选择结果。'), findsOneWidget);
+
+    final verticalGroup = tester.widget<TRadioGroup<int>>(
+      find.byWidgetPredicate(
+        (widget) => widget is TRadioGroup<int> && widget.options.length == 4,
+      ),
+    );
+    expect(verticalGroup.value, 1);
+    expect(verticalGroup.iconType, TRadioIconType.fill);
+    expect(verticalGroup.titleMaxLines, 2);
+    expect(verticalGroup.subTitleMaxLines, 3);
+    expect(verticalGroup.options[2].label, '单选单选单选单选单选单选单选单选单选单选单选单选单选单选');
+    verticalGroup.onChanged?.call(1);
+    await tester.pump();
+    expect(
+      tester
+          .widget<TRadioGroup<int>>(
+            find.byWidgetPredicate(
+              (widget) =>
+                  widget is TRadioGroup<int> && widget.options.length == 4,
+            ),
+          )
+          .value,
+      isNull,
+    );
 
     final scrollState = tester.state<ScrollableState>(
-      find.byType(Scrollable).first,
+      find.descendant(
+        of: find.byType(CustomScrollView),
+        matching: find.byType(Scrollable),
+      ),
     );
-    var foundStatus = false;
-    var foundStyle = false;
-    var foundSpecial = false;
+    final expectedText = <String>{
+      '01 组件类型',
+      '纵向单选框',
+      '横向单选框',
+      '02 组件状态',
+      '单选框状态',
+      '03 组件样式',
+      '勾选样式',
+      '勾选显示位置',
+      '非通栏单选样式',
+      '04 特殊样式',
+      '纵向卡片单选框',
+      '横向卡片单选框',
+    };
+    final foundText = <String>{};
     for (
       var offset = 0.0;
       offset <= scrollState.position.maxScrollExtent;
@@ -88,68 +143,55 @@ void main() {
     ) {
       scrollState.position.jumpTo(offset);
       await tester.pump();
-      foundStatus |= find.text('02 组件状态').evaluate().isNotEmpty;
-      foundStyle |= find.text('03 组件样式').evaluate().isNotEmpty;
-      foundSpecial |= find.text('04 特殊样式').evaluate().isNotEmpty;
+      await tester.pump();
+      for (final text in expectedText) {
+        if (find.text(text).evaluate().isNotEmpty) {
+          foundText.add(text);
+        }
+      }
     }
-    expect(foundStatus, isTrue);
-    expect(foundStyle, isTrue);
-    expect(foundSpecial, isTrue);
+    expect(foundText, expectedText);
 
-    final verticalCardGroups = find
+    scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
+    await tester.pump();
+    await tester.pump();
+    final specialGroups = find
         .byWidgetPredicate(
-          (widget) =>
-              widget is TRadioGroup<String> &&
-              widget.cardMode &&
-              widget.direction == Axis.vertical,
+          (widget) => widget is TRadioGroup<int> && widget.cardMode,
         )
         .evaluate()
-        .map((element) => element.widget as TRadioGroup<String>)
+        .map((element) => element.widget as TRadioGroup<int>)
         .toList();
-    expect(verticalCardGroups, hasLength(2));
-    expect(verticalCardGroups.first.itemBuilder, isNull);
-    expect(verticalCardGroups.last.itemBuilder, isNotNull);
+    expect(specialGroups, hasLength(2));
+    expect(specialGroups.first.direction, Axis.vertical);
+    expect(specialGroups.last.direction, Axis.horizontal);
+    expect(specialGroups.last.columns, 3);
     expect(
-      verticalCardGroups.first.options.every((item) => item.subTitle == null),
+      specialGroups.first.options.every(
+        (item) => item.subTitle == '描述信息描述信息描述信息描述信息描述信息',
+      ),
       isTrue,
     );
     expect(
-      verticalCardGroups.last.options.every((item) => item.subTitle == '描述信息'),
+      specialGroups.last.options.every((item) => item.subTitle == null),
       isTrue,
     );
 
-    verticalCardGroups.first.onChanged?.call('b');
+    specialGroups.first.onChanged?.call(2);
     await tester.pump();
-    var updatedGroups = find
+    final updatedGroups = find
         .byWidgetPredicate(
-          (widget) =>
-              widget is TRadioGroup<String> &&
-              widget.cardMode &&
-              widget.direction == Axis.vertical,
+          (widget) => widget is TRadioGroup<int> && widget.cardMode,
         )
         .evaluate()
-        .map((element) => element.widget as TRadioGroup<String>)
+        .map((element) => element.widget as TRadioGroup<int>)
         .toList();
-    expect(updatedGroups.map((group) => group.value), ['b', 'a']);
-
-    updatedGroups.last.onChanged?.call('c');
-    await tester.pump();
-    updatedGroups = find
-        .byWidgetPredicate(
-          (widget) =>
-              widget is TRadioGroup<String> &&
-              widget.cardMode &&
-              widget.direction == Axis.vertical,
-        )
-        .evaluate()
-        .map((element) => element.widget as TRadioGroup<String>)
-        .toList();
-    expect(updatedGroups.map((group) => group.value), ['b', 'c']);
+    expect(updatedGroups.map((group) => group.value), [2, 0]);
   });
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    testWidgets('Radio Demo ${mode.name} 手机视口视觉快照', (tester) async {
-      tester.view.physicalSize = const Size(375, 812);
+    testWidgets('Radio Demo ${mode.name} 整页视觉快照', (tester) async {
+      tester.view.physicalSize = const Size(375, 2600);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
@@ -164,4 +206,14 @@ void main() {
       );
     });
   }
+}
+
+ThemeData _withGoldenFontFallback(ThemeData theme) {
+  const fallback = [_goldenCjkFontFamily];
+  return theme.copyWith(
+    textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
+    primaryTextTheme: theme.primaryTextTheme.apply(
+      fontFamilyFallback: fallback,
+    ),
+  );
 }
