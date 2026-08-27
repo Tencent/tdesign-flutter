@@ -13,89 +13,144 @@ class TRadioPage extends StatefulWidget {
 
 class _TRadioPageState extends State<TRadioPage> {
   static const _options = [
-    TRadioOption(value: 'a', label: '单选 A'),
-    TRadioOption(value: 'b', label: '单选 B', subTitle: '描述信息'),
-    TRadioOption(value: 'c', label: '单选 C'),
-    TRadioOption(value: 'd', label: '单选 D'),
+    TRadioOption(value: 0, label: '单选'),
+    TRadioOption(value: 1, label: '单选'),
+    TRadioOption(value: 2, label: '单选单选单选单选单选单选单选单选单选单选单选单选单选单选'),
+    TRadioOption(
+      value: 3,
+      label: '单选',
+      subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+    ),
+  ];
+  static const _horizontalOptions = [
+    TRadioOption(value: 0, label: '单选标题'),
+    TRadioOption(value: 1, label: '单选标题'),
+    TRadioOption(value: 2, label: '上限四字'),
   ];
   static const _cardOptions = [
-    TRadioOption(value: 'a', label: '单选', subTitle: '描述信息'),
-    TRadioOption(value: 'b', label: '单选', subTitle: '描述信息'),
-    TRadioOption(value: 'c', label: '单选', subTitle: '描述信息'),
+    TRadioOption(value: 0, label: '单选'),
+    TRadioOption(value: 1, label: '单选'),
+    TRadioOption(value: 2, label: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行'),
+  ];
+  static const _specialVerticalOptions = [
+    TRadioOption(value: 0, label: '单选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
+    TRadioOption(value: 1, label: '单选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
+    TRadioOption(value: 2, label: '单选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
+  ];
+  static const _specialHorizontalOptions = [
+    TRadioOption(value: 0, label: '单选'),
+    TRadioOption(value: 1, label: '单选'),
+    TRadioOption(value: 2, label: '单选'),
   ];
 
-  String? _verticalValue = 'a';
-  String? _horizontalValue = 'b';
-  String? _verticalCardValue = 'a';
-  String? _horizontalCardValue = 'b';
-  String? _positionValue = 'left';
-  String? _itemDisabledValue = 'c';
+  int? _verticalValue = 1;
+  int? _horizontalValue = 0;
+  int? _verticalCardValue = 0;
+  int? _verticalSpecialCardValue = 0;
+  int? _horizontalCardValue = 0;
+  bool _lineSelected = true;
+  bool _dotSelected = true;
+  bool _leftSelected = true;
+  bool _rightSelected = true;
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '用于在一组选项中执行单项选择。',
+      desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
       exampleCodeGroup: 'radio',
+      compactDemo: true,
+      showTestModule: false,
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
-          ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
-        ]),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '禁用状态', builder: _disabledRadios),
-        ]),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '勾选显示位置', builder: _positions),
-          ExampleItem(desc: '纵向一列卡片单选框', builder: _verticalCardRadios),
-          ExampleItem(desc: '横向两列卡片单选框', builder: _horizontalCardRadios),
-        ]),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
+            ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [ExampleItem(desc: '单选框状态', builder: _disabledRadios)],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '勾选样式', builder: _themes),
+            ExampleItem(desc: '勾选显示位置', builder: _positions),
+            ExampleItem(desc: '非通栏单选样式', builder: _verticalCardRadios),
+          ],
+        ),
+        ExampleModule(
+          title: '特殊样式',
+          children: [ExampleItem(desc: '纵向卡片单选框', builder: _specialRadios)],
+        ),
       ],
     );
   }
 
   @ExampleCode(group: 'radio')
   Widget _verticalRadios(BuildContext context) {
-    return TRadioGroup<String>(
+    return TRadioGroup<int>(
       value: _verticalValue,
       options: _options,
-      onChanged: (value) => setState(() => _verticalValue = value),
+      onChanged: (value) {
+        setState(() => _verticalValue = _verticalValue == value ? null : value);
+      },
       showDivider: true,
     );
   }
 
   @ExampleCode(group: 'radio')
   Widget _horizontalRadios(BuildContext context) {
-    return TRadioGroup<String>(
-      value: _horizontalValue,
-      options: _options,
-      direction: Axis.horizontal,
-      columns: 2,
-      onChanged: (value) => setState(() => _horizontalValue = value),
+    return Container(
+      color: context.tTheme.bgColorContainer,
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: Theme(
+        data: Theme.of(
+          context,
+        ).mergeExtension(TRadioThemeData(insetSpacing: context.tTheme.spacer4)),
+        child: TRadioGroup<int>(
+          value: _horizontalValue,
+          options: _horizontalOptions,
+          direction: Axis.horizontal,
+          columns: 3,
+          showDivider: false,
+          onChanged: (value) => setState(() => _horizontalValue = value),
+        ),
+      ),
     );
   }
 
   @ExampleCode(group: 'radio')
   Widget _disabledRadios(BuildContext context) {
+    return const TRadioGroup<int>(
+      value: 0,
+      options: [
+        TRadioOption(value: 0, label: '单选'),
+        TRadioOption(value: 1, label: '单选'),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'radio')
+  Widget _themes(BuildContext context) {
     return Column(
       children: [
-        const TRadioGroup<String>(
-          value: 'a',
-          options: [
-            TRadioOption(value: 'a', label: '整组禁用'),
-            TRadioOption(value: 'b', label: '不可选择'),
-          ],
+        TRadio<bool>(
+          value: true,
+          groupValue: _lineSelected,
+          title: '单选',
+          iconType: TRadioIconType.check,
+          onChanged: (_) => setState(() => _lineSelected = !_lineSelected),
         ),
-        const SizedBox(height: 16),
-        TRadioGroup<String>(
-          value: _itemDisabledValue,
-          options: const [
-            TRadioOption(value: 'a', label: '正常选项 A'),
-            TRadioOption(value: 'b', label: '正常选项 B'),
-            TRadioOption(value: 'c', label: '禁用-已选', disabled: true),
-            TRadioOption(value: 'd', label: '禁用-未选', disabled: true),
-          ],
-          onChanged: (value) => setState(() => _itemDisabledValue = value),
+        SizedBox(height: context.tTheme.spacer16),
+        TRadio<bool>(
+          value: true,
+          groupValue: _dotSelected,
+          title: '单选',
+          iconType: TRadioIconType.dot,
+          onChanged: (_) => setState(() => _dotSelected = !_dotSelected),
         ),
       ],
     );
@@ -105,31 +160,19 @@ class _TRadioPageState extends State<TRadioPage> {
   Widget _positions(BuildContext context) {
     return Column(
       children: [
-        TRadio<String>(
-          value: 'left',
-          groupValue: _positionValue,
-          title: '图标在左',
-          onChanged: (value) => setState(() => _positionValue = value),
+        TRadio<bool>(
+          value: true,
+          groupValue: _leftSelected,
+          title: '单选',
+          onChanged: (_) => setState(() => _leftSelected = !_leftSelected),
         ),
-        TRadio<String>(
-          value: 'right',
-          groupValue: _positionValue,
-          title: '图标在右',
+        SizedBox(height: context.tTheme.spacer16),
+        TRadio<bool>(
+          value: true,
+          groupValue: _rightSelected,
+          title: '单选',
           contentDirection: TContentDirection.left,
-          onChanged: (value) => setState(() => _positionValue = value),
-        ),
-        TRadio<String>(
-          value: 'custom',
-          groupValue: _positionValue,
-          title: '自定义指示器',
-          customIconBuilder: (context, selected, disabled) => Icon(
-            selected ? Icons.check_circle : Icons.radio_button_unchecked,
-            color: disabled
-                ? context.tTheme.brandDisabledColor
-                : context.tTheme.brandNormalColor,
-            size: 24,
-          ),
-          onChanged: (value) => setState(() => _positionValue = value),
+          onChanged: (_) => setState(() => _rightSelected = !_rightSelected),
         ),
       ],
     );
@@ -137,23 +180,52 @@ class _TRadioPageState extends State<TRadioPage> {
 
   @ExampleCode(group: 'radio')
   Widget _verticalCardRadios(BuildContext context) {
-    return TRadioGroup<String>(
-      value: _verticalCardValue,
-      options: _cardOptions,
-      cardMode: true,
-      onChanged: (value) => setState(() => _verticalCardValue = value),
+    return Padding(
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
+        child: TRadioGroup<int>(
+          value: _verticalCardValue,
+          options: _cardOptions,
+          titleMaxLines: 2,
+          onChanged: (value) => setState(() => _verticalCardValue = value),
+        ),
+      ),
     );
   }
 
   @ExampleCode(group: 'radio')
-  Widget _horizontalCardRadios(BuildContext context) {
-    return TRadioGroup<String>(
-      value: _horizontalCardValue,
-      options: _cardOptions,
-      cardMode: true,
-      direction: Axis.horizontal,
-      columns: 2,
-      onChanged: (value) => setState(() => _horizontalCardValue = value),
+  Widget _specialRadios(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TRadioGroup<int>(
+          value: _verticalSpecialCardValue,
+          options: _specialVerticalOptions,
+          cardMode: true,
+          subTitleMaxLines: 1,
+          onChanged: (value) =>
+              setState(() => _verticalSpecialCardValue = value),
+        ),
+        SizedBox(height: context.tTheme.spacer24),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            context.tTheme.spacer16,
+            0,
+            context.tTheme.spacer16,
+            context.tTheme.spacer16,
+          ),
+          child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
+        ),
+        TRadioGroup<int>(
+          value: _horizontalCardValue,
+          options: _specialHorizontalOptions,
+          direction: Axis.horizontal,
+          columns: 3,
+          cardMode: true,
+          onChanged: (value) => setState(() => _horizontalCardValue = value),
+        ),
+      ],
     );
   }
 }

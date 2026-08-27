@@ -16,6 +16,10 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('checkbox', [
+    'test/components/checkbox/t_check_box_group_test.dart',
+    'test/components/checkbox/t_checkbox_test.dart',
+  ]),
   ComponentTestSuite('divider', [
     'test/components/divider/t_divider_test.dart',
   ]),
@@ -32,6 +36,10 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/link/t_link_test.dart',
     'test/components/link/t_link_theme_test.dart',
     'test/components/link/t_link_widget_test.dart',
+  ]),
+  ComponentTestSuite('radio', [
+    'test/components/radio/t_radio_test.dart',
+    'test/components/radio/t_radio_theme_contract_test.dart',
   ]),
   ComponentTestSuite('text', [
     'test/components/text/t_font_loader_test.dart',

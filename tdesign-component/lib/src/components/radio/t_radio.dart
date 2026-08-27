@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -10,6 +11,7 @@ import '../../theme/t_theme.dart';
 import '../checkbox/t_check_box.dart' show TContentDirection;
 import '../checkbox/t_selection_card.dart';
 import '../divider/t_divider.dart';
+import '../divider/t_divider_theme_data.dart';
 import 't_radio_theme_data.dart';
 
 /// 自定义单选框指示器构建器。
@@ -26,6 +28,18 @@ enum TRadioSize {
 
   /// 大尺寸。
   large,
+}
+
+/// 单选框内置指示器样式。
+enum TRadioIconType {
+  /// 圆环内显示实心圆点。
+  dot,
+
+  /// 选中时显示勾选标记。
+  check,
+
+  /// 选中时显示带反色勾选标记的实心圆。
+  fill,
 }
 
 @immutable
@@ -90,20 +104,23 @@ class TRadio<T> extends StatelessWidget {
     /// 单选框尺寸。
     this.size = TRadioSize.medium,
 
+    /// 内置指示器样式；[customIconBuilder] 非空时以自定义指示器为准。
+    this.iconType = TRadioIconType.fill,
+
     /// 是否使用卡片模式。
     this.cardMode = false,
 
-    /// 是否显示底部分割线。
-    this.showDivider = false,
+    /// 是否显示底部分割线，默认显示；卡片模式不显示。
+    this.showDivider = true,
 
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
 
-    /// 主标题最大行数。
-    this.titleMaxLines = 1,
+    /// 主标题最大行数，默认 3 行。
+    this.titleMaxLines = 3,
 
-    /// 副标题最大行数。
-    this.subTitleMaxLines = 1,
+    /// 副标题最大行数，默认 5 行。
+    this.subTitleMaxLines = 5,
 
     /// 自定义单选框指示器。
     this.customIconBuilder,
@@ -127,19 +144,22 @@ class TRadio<T> extends StatelessWidget {
   /// 单选框尺寸。
   final TRadioSize size;
 
+  /// 内置指示器样式。
+  final TRadioIconType iconType;
+
   /// 是否使用卡片模式。
   final bool cardMode;
 
-  /// 是否显示底部分割线。
+  /// 是否显示底部分割线，默认显示；卡片模式不显示。
   final bool showDivider;
 
   /// 控件与文案排列方向。
   final TContentDirection contentDirection;
 
-  /// 主标题最大行数。
+  /// 主标题最大行数，默认 3 行。
   final int titleMaxLines;
 
-  /// 副标题最大行数。
+  /// 副标题最大行数，默认 5 行。
   final int subTitleMaxLines;
 
   /// 自定义单选框指示器。
@@ -154,16 +174,27 @@ class TRadio<T> extends StatelessWidget {
     final indicator =
         customIconBuilder?.call(context, _selected, _disabled) ??
         (cardMode ? null : _buildIndicator(context, theme));
-    final content = _buildContent(context, theme);
+    final titleStyle = _resolveTitleStyle(context);
+    final content = _buildContent(context, theme, titleStyle);
     final hasContent = content != null;
+    final indicatorSize = _indicatorSize(context);
     final constraints = hasContent
-        ? BoxConstraints(minHeight: _contentMinHeight)
+        ? BoxConstraints(minHeight: _contentMinHeight(context))
         : _resolveTapTargetConstraints(context);
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
+        final indicatorOffset =
+            (_titleLineHeight(titleStyle) - indicatorSize) / 2;
         final children = <Widget>[
-          if (indicator != null) indicator,
+          if (indicator != null)
+            if (hasContent && customIconBuilder == null)
+              Transform.translate(
+                offset: Offset(0, indicatorOffset),
+                child: indicator,
+              )
+            else
+              indicator,
           if (indicator != null && content != null)
             SizedBox(
               width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
@@ -176,7 +207,9 @@ class TRadio<T> extends StatelessWidget {
           padding: hasContent
               ? EdgeInsets.symmetric(
                   horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
-                  vertical: context.tTheme.spacer8,
+                  vertical: cardMode
+                      ? context.tTheme.spacer8
+                      : _contentVerticalPadding(context, titleStyle),
                 )
               : EdgeInsets.zero,
           decoration: cardMode
@@ -193,7 +226,9 @@ class TRadio<T> extends StatelessWidget {
             mainAxisAlignment: hasContent
                 ? MainAxisAlignment.start
                 : MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: hasContent
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: contentDirection == TContentDirection.right
                 ? children
                 : children.reversed.toList(),
@@ -212,7 +247,7 @@ class TRadio<T> extends StatelessWidget {
             backgroundColor:
                 theme?.backgroundColor ?? context.tTheme.bgColorContainer,
             borderRadius: context.tTheme.radiusDefault,
-            minHeight: subTitle?.isNotEmpty == true ? 82 : 56,
+            minHeight: _cardMinHeight(context, titleStyle),
             child: tileContent,
           )
         : tileContent;
@@ -228,21 +263,57 @@ class TRadio<T> extends StatelessWidget {
             onTap: _disabled ? null : () => onChanged!(value),
             child: tile,
           ),
-          if (showDivider)
-            Padding(
-              padding: EdgeInsets.only(left: context.tTheme.spacer16),
-              child: const TDivider(),
-            ),
+          if (showDivider && !cardMode) _buildDivider(context, theme),
         ],
       ),
     );
   }
 
-  double get _contentMinHeight => switch (size) {
-    TRadioSize.small => 40.0,
-    TRadioSize.medium => 48.0,
-    TRadioSize.large => 56.0,
+  Widget _buildDivider(BuildContext context, TRadioThemeData? radioTheme) {
+    final theme = Theme.of(context);
+    final dividerTheme =
+        theme.extension<TDividerThemeData>()?.copyWith(
+          margin: EdgeInsets.zero,
+        ) ??
+        const TDividerThemeData(margin: EdgeInsets.zero);
+    final insetSpacing = radioTheme?.insetSpacing ?? context.tTheme.spacer16;
+    final contentSpacing = radioTheme?.spacing ?? context.tTheme.spacer8;
+    final start = contentDirection == TContentDirection.right
+        ? insetSpacing + _indicatorSize(context) + contentSpacing
+        : insetSpacing;
+    return Theme(
+      data: theme.mergeExtension(dividerTheme),
+      child: Padding(
+        padding: EdgeInsetsDirectional.only(start: start),
+        child: const TDivider(),
+      ),
+    );
+  }
+
+  double _contentMinHeight(BuildContext context) => switch (size) {
+    TRadioSize.small => context.tTheme.spacer48,
+    TRadioSize.medium => context.tTheme.spacer48 + context.tTheme.spacer8,
+    TRadioSize.large => context.tTheme.spacer64,
   };
+
+  double _contentVerticalPadding(BuildContext context, TextStyle titleStyle) {
+    final titleLineHeight = _titleLineHeight(titleStyle);
+    final leadingHeight = math.max(titleLineHeight, _indicatorSize(context));
+    return math.max(0, (_contentMinHeight(context) - leadingHeight) / 2);
+  }
+
+  double _cardMinHeight(BuildContext context, TextStyle titleStyle) {
+    final titleHeight = _titleLineHeight(titleStyle);
+    final contentHeight = subTitle?.isNotEmpty == true
+        ? titleHeight +
+              context.tTheme.spacer4 +
+              _titleLineHeight(_resolveSubTitleStyle(context))
+        : titleHeight;
+    return contentHeight + context.tTheme.spacer16 * 2;
+  }
+
+  double _titleLineHeight(TextStyle titleStyle) =>
+      titleStyle.fontSize! * (titleStyle.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
     final materialTheme = RadioTheme.of(context);
@@ -255,7 +326,7 @@ class TRadio<T> extends StatelessWidget {
         materialTheme.materialTapTargetSize ??
         appTheme.tExplicitMaterialTapTargetSize ??
         MaterialTapTargetSize.padded;
-    final indicatorSize = _indicatorSize;
+    final indicatorSize = _indicatorSize(context);
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
         : indicatorSize;
@@ -266,10 +337,10 @@ class TRadio<T> extends StatelessWidget {
     );
   }
 
-  double get _indicatorSize => switch (size) {
-    TRadioSize.small => 20.0,
-    TRadioSize.medium => 24.0,
-    TRadioSize.large => 28.0,
+  double _indicatorSize(BuildContext context) => switch (size) {
+    TRadioSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
+    TRadioSize.medium => context.tTheme.spacer24,
+    TRadioSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
   };
 
   Widget _buildIndicator(BuildContext context, TRadioThemeData? theme) {
@@ -292,33 +363,60 @@ class TRadio<T> extends StatelessWidget {
         : (materialTheme.fillColor?.resolve(states) ??
               colorScheme?.outline ??
               context.tTheme.componentBorderColor);
-    final iconSize = _indicatorSize;
+    final iconSize = _indicatorSize(context);
+    final selectedIcon = _selected
+        ? switch (iconType) {
+            TRadioIconType.check => TIcons.check,
+            TRadioIconType.fill => TIcons.check_circle_filled,
+            TRadioIconType.dot => null,
+          }
+        : null;
     return SizedBox(
       width: iconSize,
       height: iconSize,
-      child: CustomPaint(
-        painter: _TRadioIndicatorPainter(selected: _selected, color: color),
-      ),
+      child: selectedIcon != null
+          ? Icon(selectedIcon, size: iconSize, color: color)
+          : iconType == TRadioIconType.check
+          ? null
+          : CustomPaint(
+              painter: _TRadioIndicatorPainter(
+                selected: _selected,
+                color: color,
+                iconType: iconType,
+              ),
+            ),
     );
   }
 
-  Widget? _buildContent(BuildContext context, TRadioThemeData? theme) {
-    if (title == null && subTitle == null) {
-      return null;
-    }
+  TextStyle _resolveTitleStyle(BuildContext context) {
     final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final titleFont = context.tTheme.fontBodyLarge;
-    final titleStyle = TextStyle(
+    return TextStyle(
       fontSize: titleFont?.size ?? 16,
       height: titleFont?.height,
       fontWeight: titleFont?.fontWeight,
     ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+  }
+
+  TextStyle _resolveSubTitleStyle(BuildContext context) {
+    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final subtitleFont = context.tTheme.fontBodyMedium;
-    final subTitleStyle = TextStyle(
+    return TextStyle(
       fontSize: subtitleFont?.size ?? 14,
       height: subtitleFont?.height,
       fontWeight: subtitleFont?.fontWeight,
     ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+  }
+
+  Widget? _buildContent(
+    BuildContext context,
+    TRadioThemeData? theme,
+    TextStyle titleStyle,
+  ) {
+    if (title == null && subTitle == null) {
+      return null;
+    }
+    final subTitleStyle = _resolveSubTitleStyle(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -331,9 +429,7 @@ class TRadio<T> extends StatelessWidget {
             style: titleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.titleColor ??
-                        titleStyle.color ??
-                        context.tTheme.textColorPrimary),
+                  : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
         if (title != null && subTitle != null)
@@ -346,9 +442,7 @@ class TRadio<T> extends StatelessWidget {
             style: subTitleStyle.copyWith(
               color: _disabled
                   ? context.tTheme.textDisabledColor
-                  : (theme?.subTitleColor ??
-                        subTitleStyle.color ??
-                        context.tTheme.textColorPlaceholder),
+                  : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),
       ],
@@ -357,10 +451,15 @@ class TRadio<T> extends StatelessWidget {
 }
 
 class _TRadioIndicatorPainter extends CustomPainter {
-  const _TRadioIndicatorPainter({required this.selected, required this.color});
+  const _TRadioIndicatorPainter({
+    required this.selected,
+    required this.color,
+    required this.iconType,
+  });
 
   final bool selected;
   final Color color;
+  final TRadioIconType iconType;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -371,17 +470,28 @@ class _TRadioIndicatorPainter extends CustomPainter {
       ..isAntiAlias = true
       ..color = color
       ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
-    canvas.drawCircle(center, outerRadius, paint);
-    if (selected) {
-      paint.style = PaintingStyle.fill;
-      canvas.drawCircle(center, outerRadius * 4 / 7, paint);
+    switch (iconType) {
+      case TRadioIconType.dot:
+        canvas.drawCircle(center, outerRadius, paint);
+        if (selected) {
+          paint.style = PaintingStyle.fill;
+          canvas.drawCircle(center, outerRadius * 4 / 7, paint);
+        }
+      case TRadioIconType.check:
+        break;
+      case TRadioIconType.fill:
+        canvas.drawCircle(center, outerRadius, paint);
     }
   }
 
   @override
   bool shouldRepaint(covariant _TRadioIndicatorPainter oldDelegate) {
-    return selected != oldDelegate.selected || color != oldDelegate.color;
+    return selected != oldDelegate.selected ||
+        color != oldDelegate.color ||
+        iconType != oldDelegate.iconType;
   }
 }
 
@@ -408,14 +518,23 @@ class TRadioGroup<T> extends StatelessWidget {
     /// 是否使用卡片模式。
     this.cardMode = false,
 
-    /// 是否显示项间分割线。
-    this.showDivider = false,
+    /// 是否显示项间分割线，默认显示；卡片模式不显示。
+    this.showDivider = true,
 
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
 
     /// 单选框尺寸。
     this.size = TRadioSize.medium,
+
+    /// 内置指示器样式。
+    this.iconType = TRadioIconType.fill,
+
+    /// 主标题最大行数，默认 3 行。
+    this.titleMaxLines = 3,
+
+    /// 副标题最大行数，默认 5 行。
+    this.subTitleMaxLines = 5,
 
     /// 自定义数据项视觉；交互仍由组接管。
     this.itemBuilder,
@@ -439,7 +558,7 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 是否使用卡片模式。
   final bool cardMode;
 
-  /// 是否显示项间分割线。
+  /// 是否显示项间分割线，默认显示；卡片模式不显示。
   final bool showDivider;
 
   /// 控件与文案排列方向。
@@ -447,6 +566,15 @@ class TRadioGroup<T> extends StatelessWidget {
 
   /// 单选框尺寸。
   final TRadioSize size;
+
+  /// 内置指示器样式。
+  final TRadioIconType iconType;
+
+  /// 主标题最大行数，默认 3 行。
+  final int titleMaxLines;
+
+  /// 副标题最大行数，默认 5 行。
+  final int subTitleMaxLines;
 
   /// 自定义数据项视觉；交互仍由组接管。
   final TRadioOptionBuilder<T>? itemBuilder;
@@ -514,6 +642,9 @@ class TRadioGroup<T> extends StatelessWidget {
       showDivider: showDivider && index < options.length - 1,
       contentDirection: contentDirection,
       size: size,
+      iconType: iconType,
+      titleMaxLines: titleMaxLines,
+      subTitleMaxLines: subTitleMaxLines,
     );
   }
 }

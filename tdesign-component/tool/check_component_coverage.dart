@@ -2,12 +2,14 @@ import 'dart:io';
 
 const componentTargets = <String, List<String>>{
   'button': ['lib/src/components/button/'],
+  'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],
   'fab': ['lib/src/components/fab/'],
   'form': ['lib/src/components/form/'],
   'icon': ['lib/src/components/icon/'],
   'input': ['lib/src/components/input/'],
   'link': ['lib/src/components/link/'],
+  'radio': ['lib/src/components/radio/'],
   'refresh': [
     'lib/src/components/refresh/t_pull_down_refresh.dart',
     'lib/src/components/refresh/t_pull_down_refresh_controller.dart',

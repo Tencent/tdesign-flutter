@@ -79,7 +79,18 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 > 这些脚本由 CI 自动兜底，**不要把它们当作面向贡献者的提交要求**；若 AI 在改动相关源文件后需要产物立即可用或校验同步，可手动运行对应脚本，产物与源码一并提交即可。
 
-## 八、代码质量 / lint 零告警
+## 八、组件测试与 CI 回归门禁
+
+仓库使用集中式回归调度器，新增组件或为既有组件新增测试时，须按 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)「组件测试与 CI 回归门禁」登记：
+
+- 组件测试文件加入 `tool/run_component_regression.dart` 的 `componentTestSuites`；
+- 生产源码范围加入 `tool/check_component_coverage.dart` 的 `componentTargets`，手写生产 Dart 行覆盖率 `LH/LF >= 95%`；
+- Demo 结构与 Golden 测试加入 `tool/run_visual_regression.dart` 的 `visualTestSuites`；
+- 运行调度器自测，确认三个清单同步且登记文件存在。
+
+测试文件存在、Golden 已提交或本地单独运行通过，不代表 CI 已执行；必须读取 CI 实际入口并确认测试已被调度。
+
+## 九、代码质量 / lint 零告警
 
 提交前过 `flutter analyze`，目标 **0 error / 0 warning**。能用 `const` 必须 `const`、优先 `final`、避免 lambda 代替 tear-off、遵循 `directives_ordering`、统一单引号、优先集合字面量、用 `.isEmpty`/`.isNotEmpty` 判空、统一 `${param}` 插值，全部对齐 `tdesign-component/analysis_options.yaml`；CI 的 `.cnb.yml` 已加 analyze 兜底。
 

@@ -61,6 +61,38 @@ void main() {
     expect(moduleTitle.style?.fontWeight, FontWeight.w700);
   });
 
+  testWidgets('单元测试模块仅在 debug 模式按开关展示', (tester) async {
+    Widget buildPage({required bool showTestModule}) {
+      return ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: ExamplePage(
+            title: 'Test module',
+            exampleCodeGroup: 'test',
+            showTestModule: showTestModule,
+            children: const [
+              ExampleModule(
+                title: 'Demo',
+                children: [
+                  ExampleItem(ignoreCode: true, builder: _emptyExample),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    await tester.pumpWidget(buildPage(showTestModule: true));
+    await tester.pump();
+    expect(find.text('02 单元测试'), findsOneWidget);
+
+    await tester.pumpWidget(buildPage(showTestModule: false));
+    await tester.pump();
+    expect(find.text('02 单元测试'), findsNothing);
+  });
+
   testWidgets('Link Demo 使用页面背景与白色示例行分层', (tester) async {
     final token = TThemeData.defaultData();
     await tester.pumpWidget(ChangeNotifierProvider(

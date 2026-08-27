@@ -24,6 +24,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/button_demo_test.dart'],
   ),
   VisualTestSuite(
+    'checkbox',
+    'Checkbox Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/checkbox_page_test.dart'],
+  ),
+  VisualTestSuite(
     'divider',
     'Divider Demo',
     workingDirectory: 'example',
@@ -64,6 +70,12 @@ const visualTestSuites = <VisualTestSuite>[
     'Input Demo',
     workingDirectory: 'example',
     testFiles: ['test/input_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'radio',
+    'Radio Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/radio_page_golden_test.dart'],
   ),
   VisualTestSuite(
     'search',

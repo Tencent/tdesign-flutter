@@ -1,8 +1,21 @@
 Widget _verticalCheckbox(BuildContext context) {
-    return TCheckboxGroup<String>(
-      value: _verticalValue,
-      options: _options,
-      onChanged: (value) => setState(() => _verticalValue = value),
-      showDivider: true,
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Column(
+        children: [
+          for (var index = 0; index < _verticalOptions.length; index++)
+            TCheckbox(
+              value: _verticalValue.contains(_verticalOptions[index].value),
+              title: _verticalOptions[index].label,
+              subTitle: _verticalOptions[index].subTitle,
+              titleMaxLines: index == 2 ? 2 : 1,
+              subTitleMaxLines: index == 3 ? 2 : 1,
+              showDivider: index < _verticalOptions.length - 1,
+              onChanged: (_) => _toggleVertical(_verticalOptions[index].value),
+            ),
+        ],
+      ),
     );
   }
