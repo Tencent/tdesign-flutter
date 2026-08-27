@@ -221,10 +221,8 @@ class _FormatChip extends StatelessWidget {
             Center(
               child: TText(
                 label,
-                font: TextStyle(
-                  fontSize: 14,
-                  color: selected ? _activeColor : colorScheme.onSurface,
-                ),
+                font: Font(size: 14, lineHeight: 22),
+                textColor: selected ? _activeColor : colorScheme.onSurface,
               ),
             ),
             if (selected) ...[
