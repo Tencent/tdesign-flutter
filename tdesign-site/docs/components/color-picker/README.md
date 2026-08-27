@@ -57,6 +57,8 @@ Widget _buildMultiple(BuildContext context) {
 TPopup.show(
   context,
   options: TPopupOptions.bottom(
+    // multiple 类型内容较高，未传高度时 TPopup bottom 默认 240 会裁剪内容。
+    height: MediaQuery.sizeOf(context).height * 0.72,
     titleWidget: const Text('选择颜色'),
     child: TColorPicker(
       value: popupValue,

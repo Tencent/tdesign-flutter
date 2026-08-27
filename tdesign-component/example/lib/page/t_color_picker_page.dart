@@ -108,9 +108,12 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
       );
 
   void _showPopupPicker(BuildContext context) {
+    // multiple + enableAlpha 的完整形态约需 460 高度（含头部），
+    // 未传高度时 TPopup bottom 默认 240 会裁剪内容，故按屏高比例显式指定。
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height: MediaQuery.sizeOf(context).height * 0.72,
         titleWidget: const Text('选择颜色'),
         child: TColorPicker(
           value: popupValue,
