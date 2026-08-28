@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../toast/t_toast.dart';
 import 't_loading.dart';
 import 't_loading_theme_data.dart';
 
@@ -19,7 +18,6 @@ class TLoadingController {
     TLoadingIcon? icon = TLoadingIcon.circle,
     String? text,
     TLoadingThemeData? theme,
-    TOverlayConfig? overlay,
   }) {
     if (_isShowing) {
       debugPrint('warn: TLoading is showing!');
@@ -36,45 +34,24 @@ class TLoadingController {
       to: overlayState.context,
     );
     final loadingText = text ?? context.resource.loading;
-
-    final cfg = overlay ?? const TOverlayConfig();
-    final showMask = cfg.showOverlay;
-    final maskColor = showMask
-        ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
-        : Colors.transparent;
-
-    Widget content = Center(
-      child: Builder(
-        builder: (capturedContext) {
-          final loadingWidget =
-              child ?? TLoading(size: size, icon: icon, text: loadingText);
-          if (theme == null) {
-            return loadingWidget;
-          }
-          return Theme(
-            data: Theme.of(capturedContext).mergeExtension(theme),
-            child: loadingWidget,
-          );
-        },
-      ),
-    );
-    // 全屏蒙层：showOverlay 显示可见蒙层，preventTap 拦截背景点击。
-    if (cfg.preventTap || showMask) {
-      content = Stack(
-        children: [
-          Positioned.fill(
-            child: IgnorePointer(
-              ignoring: !cfg.preventTap,
-              child: Container(color: maskColor),
-            ),
-          ),
-          content,
-        ],
-      );
-    }
-
     _overlayEntry = OverlayEntry(
-      builder: (overlayContext) => captured.wrap(content),
+      builder: (overlayContext) => captured.wrap(
+        Builder(
+          builder: (capturedContext) {
+            final loadingWidget =
+                child ?? TLoading(size: size, icon: icon, text: loadingText);
+            if (theme == null) {
+              return Center(child: loadingWidget);
+            }
+            return Center(
+              child: Theme(
+                data: Theme.of(capturedContext).mergeExtension(theme),
+                child: loadingWidget,
+              ),
+            );
+          },
+        ),
+      ),
     );
 
     final entry = _overlayEntry!;

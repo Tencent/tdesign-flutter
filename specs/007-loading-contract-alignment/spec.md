@@ -1,4 +1,4 @@
-# Loading：跨端对齐（duration / axis 默认值、全屏蒙层、尺寸、Demo 与文档）
+# Loading：默认值、尺寸、Demo 与文档调整
 
 ## 背景
 
@@ -6,14 +6,12 @@
 
 1. **`duration` 默认值不一致**：官方默认 `800`ms，Flutter 默认 `2000`ms，转圈明显偏慢。
 2. **`layout` 默认方向不一致**：官方默认 `horizontal`（图标在左、文字在右），Flutter 默认 `Axis.vertical`（图标在上、文字在下）。
-3. **全屏加载无可见蒙层**：官方 `fullscreen` 有半透明白蒙层 `rgba(255,255,255,.6)` + `z-index:3500` + 防滚动穿透；Flutter `TLoadingController.show` Overlay 全屏居中，无可见蒙层、无 z-index 收敛、无滚动锁。
-4. **三种图标尺寸内部不一致**：同一 `TLoadingSize` 下 circle / activity / point 直径彼此不一致（如 large：circle 24 / activity 26 / point 20），且 circle 与官方尺寸 demo（20/22/26px）相比偏小。
-5. **站点文档多处过时/不一致**：示例文件链接笔误、`axis/iconColor/textColor/duration` 误列为 `TLoading` 构造参数（实际在 `TLoadingThemeData`）、示例代码与源码不符、`loading_api.md` 与 README 分叉。
+3. **三种图标尺寸内部不一致**：同一 `TLoadingSize` 下 circle / activity / point 直径彼此不一致（如 large：circle 24 / activity 26 / point 20），且 circle 与尺寸 demo（20/22/26px）相比偏小。
+4. **站点文档多处过时/不一致**：示例文件链接笔误、`axis/iconColor/textColor/duration` 误列为 `TLoading` 构造参数（实际在 `TLoadingThemeData`）、示例代码与源码不符、`loading_api.md` 与 README 分叉。
 
 ## 目标
 
 - 对齐 `duration` 默认值 800ms、`axis` 默认方向 horizontal（对齐官方 `layout` 默认）。
-- 为 `TLoadingController.show` 增加全屏蒙层能力，**复用** toast 已落地的 `TOverlayConfig`（`showOverlay/color/opacity/preventTap`），避免重复造轮子。
 - 统一 circle / activity 图标在各 `TLoadingSize` 下的容器直径，对齐官方尺寸 demo（20/22/26px）。
 - 补齐官方纯图标分组中的 custom 指示器 Demo（复用已有 `customIcon` 能力，不加新 API）。
 - 修正站点 README 与 `loading_api.md` 的过时/分叉内容。
@@ -24,6 +22,7 @@
 - **不实现** `attach`（仅 Vue 独有且发布版注释"视觉稿待定"）。
 - 不改变 `TLoadingSize` / `TLoadingIcon` 枚举的定义与命名。
 - 不改变 `TLoadingController` 的命令式 `show/dismiss` 形态（属框架设计差异，可接受）。
+- 不为公开 Demo 未使用的全屏蒙层新增参数；保持 Loading 与 Toast 的公共契约独立。
 - 不改动其他 Overlay 组件（Toast / Dialog / ActionSheet）。
 - `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，不人工编辑。
 
@@ -58,23 +57,16 @@
 - 显式传入 `axis` 或注入 `TLoadingThemeData(axis:)` 时行为不变。
 - 间距语义保持不变（horizontal 用横向间距、vertical 用纵向间距）。
 
-### 3. `TLoadingController.show` 新增 `overlay` 参数
-
-- 新增可选参数 `TOverlayConfig? overlay`（默认 null），复用 toast 的 `TOverlayConfig`。
-- 传入 `overlay` 且 `showOverlay == true` 时，渲染全屏半透明蒙层（颜色 `color ?? Colors.black.withValues(alpha: opacity)`）；`preventTap == true` 时拦截背景点击。
-- **不传 `overlay` 时行为与现状完全一致**（全屏居中、无蒙层），向后兼容。
-- 复用 toast 的蒙层颜色口径：官方 fullscreen 为**白蒙层**，调用方可传 `TOverlayConfig(showOverlay: true, color: Colors.white, opacity: 0.6, preventTap: true)` 对齐官方；本组件仅提供能力，不硬编码默认蒙层颜色（避免影响既有命令式调用）。
-
-### 4. 尺寸统一
+### 3. 尺寸统一
 
 - circle 图标三档容器直径从 `18/21/24` 调整为 `20/22/26`，与 activity（已对齐官方 20/22/26）一致。
 - `_getPaddingSize()` 与 point 指示器保持不变（point 的 `size` 语义与官方 dots 不同，官方 dots 无三档尺寸 Demo 依据，不做无依据调整）。
 
-### 5. Demo 补充
+### 4. Demo 补充
 
 - `t_loading_page.dart` 纯图标分组补一个 custom 指示器示例（用 `customIcon` 传自定义 Widget），对齐小程序 base demo 的 `theme="custom"` + indicator 插槽。
 
-### 6. 文档修正
+### 5. 文档修正
 
 - 站点 README 示例链接 `td_loading_page.dart` → `t_loading_page.dart`。
 - 站点 README API 表将 `axis/iconColor/textColor/duration` 从 `TLoading` 构造参数移入 `TLoadingThemeData` 说明。
@@ -91,14 +83,13 @@
 
 ### 非 breaking
 
-- `TLoadingController.show` 新增可选 `overlay` 参数，向后兼容。
 - circle 尺寸调整不改变 API 签名，仅内部视觉常量。
+- 不新增公开 API；`TLoadingController.show` 保持原有签名。
 
 ## 验收标准
 
 - [ ] `duration` 生效默认值从 2000 改为 800（未注入 Theme 时 circle indicator duration == 800）。
 - [ ] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
-- [ ] `TLoadingController.show` 支持 `overlay: TOverlayConfig(showOverlay: true, ...)` 渲染可见全屏蒙层；`preventTap` 拦截背景点击；不传 `overlay` 时无蒙层（行为与现状一致）。
 - [ ] circle 三档容器直径统一为 20/22/26。
 - [ ] 示例页纯图标分组新增 custom 指示器 Demo，且示例代码生成（`example/assets/code/`）保持 up-to-date。
 - [ ] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。
