@@ -42,9 +42,9 @@ import 'page/t_picker_page.dart';
 import 'page/t_popover_page.dart';
 import 'page/t_popup_page.dart';
 import 'page/t_progress_page.dart';
+import 'page/t_pull_down_refresh_page.dart';
 import 'page/t_radio_page.dart';
 import 'page/t_rate_page.dart';
-import 'page/t_refresh_page.dart';
 import 'page/t_result_page.dart';
 import 'page/t_search_bar_page.dart';
 import 'page/t_skeleton_page.dart';
@@ -303,12 +303,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'popup',
         pageBuilder: _wrapInheritedTheme((context) => const TPopupPage())),
     ExamplePageModel(
-        text: 'Refresh 下拉刷新',
+        text: 'PullDownRefresh 下拉刷新',
         name: 'pullDownRefresh',
         pageBuilder:
             _wrapInheritedTheme((context) => const TPullDownRefreshPage())),
     ExamplePageModel(
-        text: 'SwipeCell 滑动单元格',
+        text: 'SwipeCell 滑动操作',
         name: 'swipeCell',
         pageBuilder: _wrapInheritedTheme((context) => const TSwipeCellPage())),
     ExamplePageModel(

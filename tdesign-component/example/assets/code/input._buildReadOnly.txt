@@ -1,4 +1,4 @@
-Widget _buildReadOnly(BuildContext context) => const TInput(
-        initialValue: '可选择复制',
-        readOnly: true,
-      );
+Widget _buildReadOnly(BuildContext context) => const TFormItem(
+    label: '标签文字',
+    child: TInput(borderless: true, initialValue: '只读模式', readOnly: true),
+  );

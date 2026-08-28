@@ -1,0 +1,13 @@
+Widget _single(BuildContext context) {
+    var files = const <TUploadFile>[];
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 1,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
+  }

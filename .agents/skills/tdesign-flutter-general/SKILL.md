@@ -32,14 +32,14 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
   | commit type | 最终分组 | 示例 |
   | --- | --- | --- |
-  | `breaking` | Breaking Changes | `breaking(toast): 调整 xxx 默认行为` |
-  | `feat` | Features | `feat(TButton): 新增渐变背景能力` |
-  | `fix` | Bug Fixes | `fix(TInput): 修复密文模式下无法粘贴的问题` |
-  | `perf`、`refactor` | Performance | `refactor(toast): 优化 xxx` |
-  | `docs` | Documentation | `docs: 更新主题生成器文档` |
-  | 其他（`chore` 等） | Others | `chore: 升级依赖` |
+  | `breaking` | Breaking Changes | breaking(toast): 调整 xxx 默认行为 |
+  | `feat` | Features | feat(TButton): 新增渐变背景能力 |
+  | `fix` | Bug Fixes | fix(TInput): 修复密文模式下无法粘贴的问题 |
+  | `perf`、`refactor` | Performance | refactor(toast): 优化 xxx |
+  | `docs` | Documentation | docs: 更新主题生成器文档 |
+  | 其他（`chore` 等） | Others | chore: 升级依赖 |
 
-- **Breaking change 一律用 `breaking` commit type**（如 `- breaking(toast): 调整 xxx 默认行为`），自动归入 Breaking Changes 分组。
+- **Breaking change 一律用 `breaking` commit type**（如 - breaking(toast): 调整 xxx 默认行为），自动归入 Breaking Changes 分组。
 - `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**。
 
 ## 三、Spec 流程
@@ -62,14 +62,35 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 | 文档载体 | 职责 | 何时维护 |
 |---------|------|---------|
 | **dartdoc 注释**（`///`） | 组件公开 API 的**用户文档** | 新增 / 修改公开 API 时**必须同步** |
-| **Spec** | 复杂需求 / 重构的设计文档 | 见第一节，先 Spec 后代码 |
-| **PR 更新日志** | 面向使用方用户的变更说明 | 见第一节，只写用户可感知的变更 |
+| **Spec** | 复杂需求 / 重构的设计文档 | 见「何时创建 Spec / 何时写更新日志」一节，先 Spec 后代码 |
+| **PR 更新日志** | 面向使用方用户的变更说明 | 见「何时创建 Spec / 何时写更新日志」一节，只写用户可感知的变更 |
 | **CHANGELOG.md** | 由 CLI 自动生成 | 不手动编辑 |
 | **CONTRIBUTING.md / specs/README.md** | 规范唯一事实来源 | 需引用时统一指向 |
 
 公开字段 / 参数 / 回调 / 枚举 / 类的 `///` 注释要写清"是什么、默认值、生效条件、三态语义、与相关字段关系"，注释必须与实现一致。
 
-## 七、代码质量 / lint 零告警
+## 七、脚本生成的产物（供 AI 理解，贡献者无需关注）
+
+本仓库的 **API 文档、示例代码片段、README 副本** 均由脚本从源码生成，`.github/workflows/autofix.yml` 会在 PR 时**自动运行**这些脚本并提交修正，因此**贡献者（人类）无需手动关注 / 运行它们**。但 **AI 助手需要理解每个脚本具体做什么**，以便在改动相关源文件时知道哪些产物是自动生成的、是否需要手动运行或校验：
+
+1. **API 文档**：`sh ./demo_tool/all_build.sh`（等价 `node tool/generate_api.mjs`，manifest 驱动），从组件 API 生成 `example/assets/api/<component>_api.md`；新增 / 迁移组件时先更新 `tool/components.json`。改动设计 / 组件 API 时该产物会随之变化。
+2. **示例代码片段**：`dart run tool/generate_example_code.dart`，从带 `@ExampleCode` 注解的示例方法生成 `example/assets/code/*.txt`；CI 用 `--check` 校验片段与源码同步。改动示例方法时该产物会随之变化。
+3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md` 与 `tdesign-site/site/docs/getting-started.md`。改动根目录 README 时副本会随之同步。
+
+> 这些脚本由 CI 自动兜底，**不要把它们当作面向贡献者的提交要求**；若 AI 在改动相关源文件后需要产物立即可用或校验同步，可手动运行对应脚本，产物与源码一并提交即可。
+
+## 八、组件测试与 CI 回归门禁
+
+仓库使用集中式回归调度器，新增组件或为既有组件新增测试时，须按 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)「组件测试与 CI 回归门禁」登记：
+
+- 组件测试文件加入 `tool/run_component_regression.dart` 的 `componentTestSuites`；
+- 生产源码范围加入 `tool/check_component_coverage.dart` 的 `componentTargets`，手写生产 Dart 行覆盖率 `LH/LF >= 95%`；
+- Demo 结构与 Golden 测试加入 `tool/run_visual_regression.dart` 的 `visualTestSuites`；
+- 运行调度器自测，确认三个清单同步且登记文件存在。
+
+测试文件存在、Golden 已提交或本地单独运行通过，不代表 CI 已执行；必须读取 CI 实际入口并确认测试已被调度。
+
+## 九、代码质量 / lint 零告警
 
 提交前过 `flutter analyze`，目标 **0 error / 0 warning**。能用 `const` 必须 `const`、优先 `final`、避免 lambda 代替 tear-off、遵循 `directives_ordering`、统一单引号、优先集合字面量、用 `.isEmpty`/`.isNotEmpty` 判空、统一 `${param}` 插值，全部对齐 `tdesign-component/analysis_options.yaml`；CI 的 `.cnb.yml` 已加 analyze 兜底。
 

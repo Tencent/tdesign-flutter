@@ -1,0 +1,9 @@
+Widget _buildSuffixLinks(BuildContext context) {
+    return _exampleRow(context, [
+      _link(
+        colorScheme: TLinkColorScheme.primary,
+        suffixIcon: const Icon(TIcons.jump),
+      ),
+      _link(suffixIcon: const Icon(TIcons.jump)),
+    ]);
+  }

@@ -60,12 +60,9 @@ enum TButtonShape {
   /// 圆角按钮
   round,
 
-  /// 方形按钮
+  /// 纯图标场景保持等宽高和默认圆角；图文内容不会被裁剪。
   square,
 
   /// 圆形按钮
   circle,
-
-  /// 填满容器的按钮
-  filled,
 }

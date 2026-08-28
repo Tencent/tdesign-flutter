@@ -11,120 +11,139 @@ isComponent: true
 在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart'; 
-import 'package:easy_refresh/easy_refresh.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
 ## 代码演示
 
-[td_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_refresh_page.dart)
+[t_pull_down_refresh_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_pull_down_refresh_page.dart)
 
+### 顶部下拉刷新
 
-      
+基础用法与小程序公开 Demo 对应：大骨架、三组双列骨架和中央刷新提示。移动端下拉触发；Web 预览点击中央提示区域触发。
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildRefresh(BuildContext context) {
-    return EasyRefresh(
-      // 下拉样式
-      header: TRefreshHeader(),
-      child: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          // spacing: 16,
-          children: [
-            Container(
-              height: 171,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(TTheme.of(context).radiusLarge))),
-              child: TText(
-                PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
-                font: TTheme.of(context).fontBodyLarge,
-                textColor: TTheme.of(context).textColorPlaceholder,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              height: 70,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: TTheme.of(context).bgColorContainer,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(TTheme.of(context).radiusLarge))),
-              child: TText(
-                '下拉刷新次数：${count}',
-                font: TTheme.of(context).fontBodyLarge,
-                textColor: TTheme.of(context).textColorPlaceholder,
-              ),
-            ),
-            const SizedBox(height: 500),
-          ],
-        ),
-      )),
-      // 下拉刷新回调
-      onRefresh: () {
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            count++;
-          });
-        });
-      },
+    return SizedBox(
+      height: 620,
+      child: TPullDownRefresh(
+        controller: _controller,
+        // 下拉刷新回调
+        onRefresh: () =>
+            Future<void>.delayed(const Duration(milliseconds: 1500)),
+        child: _buildOfficialDemoContent(context),
+      ),
     );
   }</pre>
 
 </td-code-block>
-                
 
+### 自定义提示语
 
-## API
-### TRefreshHeader
+通过 `texts` 覆盖四态提示语（对应官方 `loadingTexts`）。
+
+> **说明**：本 Demo 为小程序已有公开 props（`loadingTexts`）的新增 API 演示，Demo 形态仅参考 Mobile Vue，不表示小程序现有公开 Demo。
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildLoadingTexts(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        loadingBarHeight: 70,
+        maxBarHeight: 100,
+        texts: const TPullDownRefreshTexts(
+          pullToRefresh: '下拉即可刷新...',
+          releaseToRefresh: '释放即可刷新...',
+          refreshing: '加载中...',
+          refreshComplete: '刷新成功',
+        ),
+        onRefresh: () {
+          return Future<void>.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              loadingTextsCount++;
+            });
+          });
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '自定义提示语刷新次数：${loadingTextsCount}'),
+          ],
+        ),
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+
+### 刷新超时
+
+通过 `refreshTimeout` 与 `onStateChanged` 的 `timeout` 状态在刷新超时时给出提示并自动结束；超时后状态回到 `inactive`。
+
+> **说明**：本 Demo 为小程序已有公开 props（`refreshTimeout` + `timeout`）的新增 API 演示，Demo 形态仅参考 Mobile Vue，不表示小程序现有公开 Demo。
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildTimeout(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        refreshTimeout: const Duration(seconds: 1),
+        onStateChanged: (state) {
+          if (state == TPullDownRefreshState.timeout) {
+            TToast.showText('已超时', context: context);
+          }
+        },
+        onRefresh: () {
+          // 模拟长时间未完成的刷新，等待超时回调。
+          return Completer<void>().future;
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '超时刷新次数：${timeoutCount}'),
+          ],
+        ),
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+
+### TPullDownRefresh
 #### 简介
-TDesign刷新头部
-结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
+以最小、Flutter 惯用的 API 封装下拉刷新，对齐官方（小程序 / mobile-vue）PullDownRefresh 行为：下拉 → 松手 → 刷新 → 完成四态，支持触底加载、禁用、超时、四态文案自定义与受控刷新。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| clamping | bool? | - | - |
-| completeDuration | Duration? | - | 完成延时 |
-| enableHapticFeedback | bool | true | 开启震动反馈 |
-| enableInfiniteRefresh | bool | false | 是否开启无限刷新 |
-| extent | double? | 48.0 | Header容器高度 |
-| float | bool | false | 是否悬浮 |
-| frictionFactor | - | - | - |
-| hapticFeedback | bool? | - | - |
-| hitOver | - | - | - |
-| horizontalFrictionFactor | - | - | - |
-| horizontalReadySpringBuilder | - | - | - |
-| horizontalSpring | - | - | - |
-| infiniteHitOver | bool? | - | - |
-| infiniteOffset | double? | - | 无限刷新偏移量 |
-| key | Key? | - | Key |
-| listenable | - | - | - |
-| loadingIcon | TLoadingIcon | TLoadingIcon.circle | loading样式 |
-| maxOverOffset | - | - | - |
-| notifyWhenInvisible | - | - | - |
-| overScroll | bool | true | 越界滚动(`enableInfiniteRefresh`为true或`infiniteOffset`有值时生效) |
-| position | - | - | - |
-| processedDuration | Duration? | - | - |
-| readySpringBuilder | - | - | - |
-| safeArea | - | false | - |
-| secondaryCloseTriggerOffset | - | - | - |
-| secondaryDimension | - | - | - |
-| secondaryTriggerOffset | - | - | - |
-| secondaryVelocity | - | - | - |
-| spring | - | - | - |
-| springRebound | - | - | - |
-| triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同`triggerOffset` |
-| triggerOffset | double? | - | - |
-| triggerWhenReach | - | - | - |
-| triggerWhenRelease | - | - | - |
-| triggerWhenReleaseNoWait | - | - | - |
+| child | Widget | - | 滚动内容（必填） |
+| onRefresh | FutureOr<void> Function()? | - | 下拉触发刷新回调，为空时禁用刷新 |
+| onLoadMore | FutureOr<void> Function()? | - | 触底加载回调，非空时自动启用；不绘制额外 Footer UI |
+| lowerThreshold | double | 50 | 距离底部多少逻辑像素时触发加载 |
+| controller | TPullDownRefreshController? | - | 从页面外部主动触发刷新的控制器 |
+| texts | TPullDownRefreshTexts? | - | 四态提示语，为空时回退 l10n |
+| refreshTimeout | Duration? | 3000ms | 刷新超时时长，超过时长上报一次 timeout 并回到 inactive；传 null 关闭 |
+| loadingBarHeight | double | 50 | Header 容器高度 = 触发阈值，必须大于 0 |
+| maxBarHeight | double | 80 | 最大下拉高度，必须不小于 loadingBarHeight |
+| successDuration | Duration | 500ms | 刷新完成提示展示时长，必须为非负时长 |
+| onStateChanged | ValueChanged<TPullDownRefreshState>? | - | 刷新状态变化回调 |
 
+### TPullDownRefreshController
 
-  
+外部刷新控制器，仅提供 `refresh()`，无需调用方释放。`await controller.refresh()` 表示本次刷新流程已经结束，不代表业务一定成功；成功、回调失败和超时都会完成 Future，回调异常由组件通过 `FlutterError.reportError` 上报。
+
+Loading 指示器样式自动继承 Flutter Theme 子树中的 `TLoadingThemeData`，组件仅固定横向排列。
+
+### TPullDownRefreshTexts
+
+四态提示语：`pullToRefresh` / `releaseToRefresh` / `refreshing` / `refreshComplete`，缺省回退 l10n。

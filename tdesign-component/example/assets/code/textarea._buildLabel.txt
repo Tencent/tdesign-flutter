@@ -1,7 +1,4 @@
-Widget _buildLabel(BuildContext context) => const TTextarea(
-        label: '备注',
-        hintText: '请输入备注',
-        maxLength: 200,
-        minLines: 3,
-        maxLines: 6,
-      );
+Widget _buildLabel(BuildContext context) => const SizedBox(
+    height: 128,
+    child: TTextarea(label: '标签文字', hintText: '请输入文字', minLines: 2),
+  );

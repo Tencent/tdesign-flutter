@@ -139,6 +139,8 @@ extension TThemeContextExtension on BuildContext {
       return inherited;
     }
     return inherited == material.iconTheme ||
+            inherited ==
+                const IconThemeData.fallback().merge(material.iconTheme) ||
             inherited == const IconThemeData.fallback()
         ? null
         : inherited;
@@ -562,7 +564,6 @@ class TMaterialThemeBuilder {
       const TProgressThemeData(),
       const TRadioThemeData(),
       const TRateThemeData(),
-      const TRefreshThemeData(),
       const TResultThemeData(),
       const TSearchBarThemeData(),
       const TSideBarThemeData(),
@@ -673,13 +674,8 @@ class TMaterialThemeBuilder {
     return const TIconThemeData();
   }
 
-  TDividerThemeData _dividerTheme(TThemeData token) {
-    return TDividerThemeData(
-      color: token.componentStrokeColor,
-      textStyle: _textStyle(
-        token.fontBodyMedium,
-      )?.copyWith(color: token.textColorSecondary),
-    );
+  TDividerThemeData _dividerTheme(TThemeData _) {
+    return const TDividerThemeData();
   }
 
   TLinkThemeData _linkTheme(TThemeData _) {

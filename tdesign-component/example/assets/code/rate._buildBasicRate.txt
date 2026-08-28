@@ -1,9 +1,0 @@
-Widget _buildBasicRate(BuildContext context) {
-    return _rateCell(
-      title: '基础评分',
-      rate: TRate(
-        value: _basicValue,
-        onChanged: (value) => setState(() => _basicValue = value),
-      ),
-    );
-  }

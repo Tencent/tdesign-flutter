@@ -1,0 +1,23 @@
+# 实施任务
+
+- [x] DONE 明确需求和验收边界
+- [x] DONE 完成 develop 基线的 Button 全局审查
+- [x] DONE 统一尺寸、字体、图标与 tap target 解析
+- [x] DONE 图文间距读取 `spacer8` token，并覆盖自定义字体/间距 token 回归
+- [x] DONE 对齐 square 图标按钮的等宽高与默认圆角契约
+- [x] DONE 移除职责混杂且已失去通栏行为的 `TButtonShape.filled`
+- [x] DONE 移除属于父布局职责的 `TButtonThemeData.margin`
+- [x] DONE 对齐渐变分支的布局、交互和语义
+- [x] DONE 锁定渐变分支单一按钮语义与本地 tap-target 维护契约
+- [x] DONE 补齐 fill、outline、text、ghost 与渐变按钮的 Flutter 原生点击反馈与优先级测试
+- [x] DONE 避免 pressed 背景 token 与 pressed overlay 重复绘制
+- [x] DONE 默认状态层基于 P0 最终样式补全，不覆盖实例 stateful 背景
+- [x] DONE 使用 IconTheme 注入默认图标尺寸并保留调用方 Icon 属性
+- [x] DONE 以内部 WidgetStatesController 统一渐变分支的实时状态解析
+- [x] DONE 补齐动态 cursor、P0 icon 样式、alignment 与 layer builder 契约
+- [x] DONE 验证 `TFab` 等直接消费者不受 Button 契约调整影响
+- [x] DONE 修正文档与 Demo 边界
+- [x] DONE 补充或更新 Widget/Theme/Golden 测试
+- [x] DONE 执行 Flutter 3.32.0/latest 验证并记录结果
+- [x] DONE 完成尺寸 Golden 与 MiniProgram 源码规格验收
+- [x] DONE 完成最终 Review 与 PR 更新准备

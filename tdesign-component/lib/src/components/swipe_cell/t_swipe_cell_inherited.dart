@@ -1,33 +1,22 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter/widgets.dart';
 
-import 't_swipe_cell_action.dart';
-
-/// 滑动单元格的 InheritedWidget，用于向子树传递滑动状态
+/// 向操作项传递当前滑动单元格关闭能力。
 class TSwipeCellInherited extends InheritedWidget {
   const TSwipeCellInherited({
     Key? key,
     required Widget child,
-    required this.actionClick,
-    required this.duration,
-    required this.controller,
+    required this.close,
   }) : super(child: child, key: key);
 
-  /// 滑动动画时长
-  final Duration duration;
-
-  /// 操作按钮点击回调，返回 true 表示触发二次确认
-  final bool Function(TSwipeCellAction action) actionClick;
-
-  /// 滑动控制器
-  final SlidableController controller;
+  /// 关闭当前滑动单元格。
+  final Future<void> Function() close;
 
   @override
   bool updateShouldNotify(covariant TSwipeCellInherited oldWidget) {
-    return true;
+    return close != oldWidget.close;
   }
 
-  /// 获取最近的 [TSwipeCellInherited] 实例
+  /// 获取最近的 [TSwipeCellInherited]。
   static TSwipeCellInherited? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<TSwipeCellInherited>();
   }
