@@ -432,7 +432,7 @@ void main() {
       expect(find.text('100%'), findsOneWidget);
     });
 
-    testWidgets('unparseable swatch color falls back to transparent', (
+    testWidgets('unparsable swatch color falls back to transparent', (
       tester,
     ) async {
       await tester.pumpWidget(
