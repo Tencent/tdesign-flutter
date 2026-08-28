@@ -71,28 +71,58 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Run refresh tests with coverage
-        working-directory: ./tdesign-component
-        run: flutter test test/components/refresh/t_refresh_test.dart --coverage
-
-      - name: Run refresh golden tests
-        working-directory: ./tdesign-component
-        run: flutter test test/components/refresh/t_refresh_golden_test.dart
-
-      - name: Run Upload tests and golden tests
-        if: matrix.flutter-version == '3.32.0'
-        working-directory: ./tdesign-component
-        run: flutter test test/components/upload/t_upload_test.dart test/components/upload/t_upload_golden_test.dart
-
-      - name: Install example dependencies for page golden tests
-        if: matrix.flutter-version == '3.32.0'
+      - name: Install example dependencies
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Run Form Input Textarea page golden tests
-        if: matrix.flutter-version == '3.32.0'
+      - name: Run component regression tests with coverage
+        working-directory: ./tdesign-component
+        run: dart run tool/run_component_regression.dart
+
+      - name: Test regression tooling
+        working-directory: ./tdesign-component
+        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+
+      - name: Run example shared functional tests
         working-directory: ./tdesign-component/example
-        run: flutter test test/form_input_textarea_page_golden_test.dart
+        run: flutter test --no-pub test/widget_test.dart test/radio_page_test.dart
+
+  visual-regression:
+    name: visual regression (flutter 3.32.0 linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: 3.32.0
+          channel: stable
+          cache: true
+          cache-sdk: true
+
+      - name: Install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Install example dependencies
+        working-directory: ./tdesign-component/example
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Run visual regression tests
+        working-directory: ./tdesign-component
+        run: dart run tool/run_visual_regression.dart
+
+      - name: Upload golden failure images
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures-flutter-3.32.0
+          path: |
+            tdesign-component/test/**/failures/
+            tdesign-component/example/test/failures/
+          if-no-files-found: ignore
+          retention-days: 7
 
   build:
     strategy:

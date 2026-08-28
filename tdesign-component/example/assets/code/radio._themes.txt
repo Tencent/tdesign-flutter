@@ -1,0 +1,21 @@
+Widget _themes(BuildContext context) {
+    return Column(
+      children: [
+        TRadio<bool>(
+          value: true,
+          groupValue: _lineSelected,
+          title: '单选',
+          iconType: TRadioIconType.check,
+          onChanged: (_) => setState(() => _lineSelected = !_lineSelected),
+        ),
+        SizedBox(height: context.tTheme.spacer16),
+        TRadio<bool>(
+          value: true,
+          groupValue: _dotSelected,
+          title: '单选',
+          iconType: TRadioIconType.dot,
+          onChanged: (_) => setState(() => _dotSelected = !_dotSelected),
+        ),
+      ],
+    );
+  }

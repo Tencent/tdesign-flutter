@@ -14,8 +14,9 @@ void main() {
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
@@ -27,11 +28,7 @@ void main() {
   Widget buildGrid(List<MapEntry<String, IconData>> icons) {
     return MaterialApp(
       theme: TThemeBuilder.light(TThemeData.defaultData()),
-      home: Scaffold(
-        body: IconCatalogGrid(
-          icons: icons,
-        ),
-      ),
+      home: Scaffold(body: IconCatalogGrid(icons: icons)),
     );
   }
 
@@ -93,9 +90,7 @@ void main() {
     final fourthItem = find.byKey(
       ValueKey('icon-catalog-item-${icons[3].key}'),
     );
-    final fifthItem = find.byKey(
-      ValueKey('icon-catalog-item-${icons[4].key}'),
-    );
+    final fifthItem = find.byKey(ValueKey('icon-catalog-item-${icons[4].key}'));
     expect(tester.getTopLeft(fourthItem).dy, tester.getTopLeft(firstItem).dy);
     expect(
       tester.getTopLeft(fifthItem).dy,
@@ -120,7 +115,8 @@ void main() {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
     messenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
       if (call.method == 'Clipboard.setData') {
-        copiedText = (call.arguments as Map<Object?, Object?>)['text'] as String?;
+        copiedText =
+            (call.arguments as Map<Object?, Object?>)['text'] as String?;
       }
       return null;
     });
@@ -132,28 +128,11 @@ void main() {
     await tester.pumpWidget(buildGrid([first]));
 
     final item = find.byKey(ValueKey('icon-catalog-item-${first.key}'));
-    await tester.tap(
-      find.ancestor(of: item, matching: find.byType(InkWell)),
-    );
+    await tester.tap(find.ancestor(of: item, matching: find.byType(InkWell)));
     await tester.pump();
 
     expect(copiedText, 'TIcon(TIcons.${first.key})');
     expect(find.text('已复制 TIcon(TIcons.${first.key})'), findsOneWidget);
-  });
-
-  testWidgets('图标目录网格视觉快照', (tester) async {
-    tester.view.physicalSize = const Size(360, 420);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    final icons = TIcons.allIconsMap.entries.take(12).toList();
-    await tester.pumpWidget(buildGrid(icons));
-
-    await expectLater(
-      find.byKey(const Key('icon-catalog-grid')),
-      matchesGoldenFile('goldens/icon_catalog_grid.png'),
-    );
   });
 
   testWidgets('图标官网使用真实 Link 跳转且不再显示边框开关', (tester) async {
@@ -166,8 +145,9 @@ void main() {
     await tester.pump();
 
     final officialLink = find.byKey(const Key('icon-official-link'));
-    final scrollable =
-        tester.state<ScrollableState>(find.byType(Scrollable).first);
+    final scrollable = tester.state<ScrollableState>(
+      find.byType(Scrollable).first,
+    );
     for (var index = 0; index < 8 && officialLink.evaluate().isEmpty; index++) {
       scrollable.position.jumpTo(scrollable.position.maxScrollExtent);
       await tester.pumpAndSettle();
@@ -190,9 +170,5 @@ void main() {
       alignment: 0.5,
     );
     await tester.pumpAndSettle();
-    await expectLater(
-      find.byKey(const Key('icon-official-link-section')),
-      matchesGoldenFile('goldens/icon_official_link.png'),
-    );
   });
 }

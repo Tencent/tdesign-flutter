@@ -34,6 +34,65 @@ void main() {
   }
 
   group('TRadio v1 单项行为', () {
+    testWidgets('默认主标题和副标题行数与小程序一致', (tester) async {
+      const radio = TRadio<String>(
+        value: 'a',
+        groupValue: 'a',
+        title: '主标题',
+        subTitle: '副标题',
+      );
+      const group = TRadioGroup<String>(value: 'a', options: options);
+
+      expect(radio.titleMaxLines, 3);
+      expect(radio.subTitleMaxLines, 5);
+      expect(group.titleMaxLines, 3);
+      expect(group.subTitleMaxLines, 5);
+      expect(radio.showDivider, isTrue);
+      expect(group.showDivider, isTrue);
+
+      await tester.pumpWidget(wrap(radio));
+      final title = tester.widget<Text>(find.text('主标题'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.maxLines, 3);
+      expect(title.overflow, TextOverflow.ellipsis);
+      expect(subTitle.maxLines, 5);
+      expect(subTitle.overflow, TextOverflow.ellipsis);
+    });
+
+    testWidgets('默认显示分割线且卡片模式与显式关闭时不显示', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            children: [
+              TRadio<String>(value: 'a', groupValue: 'b', title: '默认分割线'),
+              TRadio<String>(
+                value: 'a',
+                groupValue: 'b',
+                title: '关闭分割线',
+                showDivider: false,
+              ),
+              TRadio<String>(
+                value: 'a',
+                groupValue: 'a',
+                title: '卡片模式',
+                cardMode: true,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.byType(TDivider), findsOneWidget);
+    });
+
+    testWidgets('Group 默认仅在选项之间显示分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TRadioGroup<String>(value: 'a', options: options)),
+      );
+
+      expect(find.byType(TDivider), findsNWidgets(options.length - 1));
+    });
+
     testWidgets('按 groupValue 渲染选中态并触发 onChanged', (tester) async {
       String? changed;
       await tester.pumpWidget(
@@ -78,6 +137,7 @@ void main() {
       );
 
       expect(find.text('true false'), findsOneWidget);
+      expect(radioIndicatorPainters(tester), isEmpty);
     });
 
     testWidgets('large + contentDirection.left + divider + subTitle 可构建', (
@@ -105,6 +165,174 @@ void main() {
   });
 
   group('TRadio v1 视觉参数', () {
+    testWidgets('块级单行内容使用 56 高度且分割线从正文起点开始', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 320,
+            child: TRadio<String>(
+              value: 'a',
+              groupValue: 'b',
+              title: '单选',
+              showDivider: true,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final radio = find.byType(TRadio<String>);
+      final gesture = find.descendant(
+        of: radio,
+        matching: find.byType(GestureDetector),
+      );
+      final dividerLine = find.descendant(
+        of: find.byType(TDivider),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Container && widget.color != null,
+        ),
+      );
+
+      expect(tester.getSize(gesture).height, 56);
+      expect(tester.getTopLeft(dividerLine).dx, 48);
+      expect(tester.getSize(dividerLine).height, 0.5);
+    });
+
+    testWidgets('带副标题时指示器始终与主标题行居中对齐', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: TRadioSize.values
+                .map(
+                  (size) => TRadio<TRadioSize>(
+                    value: size,
+                    groupValue: TRadioSize.medium,
+                    title: '主标题-${size.name}',
+                    subTitle: '副标题',
+                    size: size,
+                    onChanged: (_) {},
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+
+      for (final size in TRadioSize.values) {
+        final radio = find.ancestor(
+          of: find.text('主标题-${size.name}'),
+          matching: find.byType(TRadio<TRadioSize>),
+        );
+        final indicator = size == TRadioSize.medium
+            ? find.descendant(
+                of: radio,
+                matching: find.byIcon(TIcons.check_circle_filled),
+              )
+            : find.descendant(
+                of: radio,
+                matching: find.byWidgetPredicate(
+                  (widget) =>
+                      widget is CustomPaint &&
+                      widget.painter.runtimeType.toString() ==
+                          '_TRadioIndicatorPainter',
+                ),
+              );
+        expect(
+          tester.getCenter(indicator).dy,
+          closeTo(tester.getCenter(find.text('主标题-${size.name}')).dy, 0.01),
+        );
+      }
+    });
+
+    testWidgets('三档块级高度保持 48 56 64 且默认规格对应小程序', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: TRadioSize.values
+                .map(
+                  (size) => TRadio<TRadioSize>(
+                    key: ValueKey(size),
+                    value: size,
+                    groupValue: TRadioSize.medium,
+                    title: size.name,
+                    size: size,
+                    onChanged: (_) {},
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+
+      for (final (size, expectedHeight) in const [
+        (TRadioSize.small, 48.0),
+        (TRadioSize.medium, 56.0),
+        (TRadioSize.large, 64.0),
+      ]) {
+        final gesture = find.descendant(
+          of: find.byKey(ValueKey(size)),
+          matching: find.byType(GestureDetector),
+        );
+        expect(tester.getSize(gesture).height, expectedHeight);
+      }
+    });
+
+    testWidgets('块高、指示器和卡片高度均读取 TDesign token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'radio-size-token-test',
+        marginMap: const {
+          'spacer4': 5,
+          'spacer8': 9,
+          'spacer16': 18,
+          'spacer24': 27,
+          'spacer48': 51,
+        },
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: Scaffold(
+            body: Column(
+              children: [
+                TRadio<String>(
+                  key: const ValueKey('token-block'),
+                  value: 'a',
+                  groupValue: 'a',
+                  title: '块级',
+                  showDivider: false,
+                  onChanged: (_) {},
+                ),
+                TRadio<String>(
+                  key: const ValueKey('token-card'),
+                  value: 'b',
+                  groupValue: 'b',
+                  title: '卡片',
+                  subTitle: '说明',
+                  cardMode: true,
+                  onChanged: (_) {},
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      Finder gesture(String key) => find.descendant(
+        of: find.byKey(ValueKey(key)),
+        matching: find.byType(GestureDetector),
+      );
+      final selectedIcon = tester.widget<Icon>(
+        find.descendant(
+          of: find.byKey(const ValueKey('token-block')),
+          matching: find.byIcon(TIcons.check_circle_filled),
+        ),
+      );
+
+      expect(tester.getSize(gesture('token-block')).height, 60);
+      expect(tester.getSize(gesture('token-card')).height, 87);
+      expect(selectedIcon.size, 27);
+    });
+
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(
         wrap(TRadio<String>(value: 'a', groupValue: 'b', onChanged: (_) {})),
@@ -201,6 +429,35 @@ void main() {
       expect(subTitle.style?.fontSize, 14);
     });
 
+    testWidgets('Material TextTheme 颜色不覆盖标题和副标题语义色', (tester) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token).copyWith(
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.purple),
+          bodyMedium: TextStyle(color: Colors.orange),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: TRadio<String>(
+              value: 'a',
+              groupValue: 'a',
+              title: '主标题',
+              subTitle: '副标题',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final title = tester.widget<Text>(find.text('主标题'));
+      final subTitle = tester.widget<Text>(find.text('副标题'));
+      expect(title.style?.color, token.textColorPrimary);
+      expect(subTitle.style?.color, token.textColorSecondary);
+    });
+
     testWidgets('完整主题下选中指示器使用品牌色并保持 24 尺寸', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
@@ -217,12 +474,65 @@ void main() {
       final indicator = tester
           .widgetList<SizedBox>(find.byType(SizedBox))
           .firstWhere((box) => box.width == 24.0 && box.height == 24.0);
-      final painter = radioIndicatorPainters(tester).single;
+      final selectedIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
 
       expect(indicator.width, 24.0);
       expect(indicator.height, 24.0);
-      expect(painter.selected, isTrue);
-      expect(painter.color, token.brandNormalColor);
+      expect(selectedIcon.size, 24.0);
+      expect(selectedIcon.color, token.brandNormalColor);
+    });
+
+    testWidgets('check 和默认 fill 使用同尺寸 TDesign 图标', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: [
+              TRadio<String>(
+                value: 'a',
+                groupValue: 'a',
+                iconType: TRadioIconType.check,
+                onChanged: (_) {},
+              ),
+              TRadio<String>(
+                value: 'b',
+                groupValue: 'b',
+                iconType: TRadioIconType.fill,
+                onChanged: (_) {},
+              ),
+              TRadio<String>(
+                value: 'c',
+                groupValue: 'none',
+                iconType: TRadioIconType.fill,
+                onChanged: (_) {},
+              ),
+              TRadio<String>(
+                value: 'd',
+                groupValue: 'd',
+                iconType: TRadioIconType.dot,
+                onChanged: (_) {},
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final painters = radioIndicatorPainters(tester);
+      final checkIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
+      final fillIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
+      expect(checkIcon.size, 24);
+      expect(checkIcon.color, token.brandNormalColor);
+      expect(fillIcon.size, 24);
+      expect(fillIcon.color, token.brandNormalColor);
+      expect(painters.map((painter) => painter.iconType), [
+        TRadioIconType.fill,
+        TRadioIconType.dot,
+      ]);
+      expect(painters.map((painter) => painter.selected), [false, true]);
     });
 
     testWidgets('完整主题下未选、禁用和文字颜色使用对应 token', (tester) async {
@@ -235,6 +545,7 @@ void main() {
                 value: 'a',
                 groupValue: 'b',
                 title: '未选',
+                subTitle: '描述信息',
                 onChanged: (_) {},
               ),
               const TRadio<String>(value: 'b', groupValue: 'b', title: '禁用选中'),
@@ -244,12 +555,16 @@ void main() {
       );
 
       final painters = radioIndicatorPainters(tester);
+      final disabledIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
+      final subTitle = tester.widget<Text>(find.text('描述信息'));
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
-      expect(painters[0].selected, isFalse);
-      expect(painters[0].color, token.componentBorderColor);
-      expect(painters[1].selected, isTrue);
-      expect(painters[1].color, token.brandDisabledColor);
+      expect(painters.single.selected, isFalse);
+      expect(painters.single.color, token.componentBorderColor);
+      expect(disabledIcon.color, token.brandDisabledColor);
+      expect(subTitle.style?.color, token.textColorSecondary);
       expect(disabledTitle.style?.color, token.textDisabledColor);
     });
 
@@ -270,7 +585,9 @@ void main() {
         ),
       );
 
-      final painter = radioIndicatorPainters(tester).single;
+      final selectedIcon = tester.widget<Icon>(
+        find.byIcon(TIcons.check_circle_filled),
+      );
       final title = tester.widget<Text>(find.text('主题单选'));
       final spacing = tester.widget<SizedBox>(
         find.byWidgetPredicate(
@@ -278,7 +595,7 @@ void main() {
         ),
       );
 
-      expect(painter.color, Colors.red);
+      expect(selectedIcon.color, Colors.red);
       expect(title.style?.color, Colors.green);
       expect(spacing.width, 12);
     });
@@ -374,6 +691,30 @@ void main() {
   });
 
   group('TRadioGroup v1 布局与自定义项', () {
+    testWidgets('透传指示器样式和标题行数', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRadioGroup<String>(
+            value: 'a',
+            options: options,
+            iconType: TRadioIconType.fill,
+            titleMaxLines: 2,
+            subTitleMaxLines: 3,
+          ),
+        ),
+      );
+
+      final painters = radioIndicatorPainters(tester);
+      final title = tester.widget<Text>(find.text('选项 A'));
+      final subTitle = tester.widget<Text>(find.text('说明 B'));
+      expect(
+        painters.every((painter) => painter.iconType == TRadioIconType.fill),
+        isTrue,
+      );
+      expect(title.maxLines, 2);
+      expect(subTitle.maxLines, 3);
+    });
+
     testWidgets('横向多列布局可构建', (tester) async {
       await tester.pumpWidget(
         wrap(

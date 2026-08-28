@@ -701,7 +701,7 @@ void main() {
       expect(find.text('拖拽该区域演示 顶部下拉刷新'), findsOneWidget);
       expect(find.text('下拉刷新次数：0'), findsOneWidget);
       expect(find.byType(EasyRefresh), findsOneWidget);
-    });
+    }, tags: 'demo');
 
     testWidgets('自定义提示语 demo：四态文案自定义生效', (tester) async {
       await tester.pumpWidget(
@@ -730,7 +730,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       expect(find.text('下拉刷新'), findsOneWidget);
       expect(find.text('自定义提示语刷新次数：0'), findsOneWidget);
-    });
+    }, tags: 'demo');
 
     testWidgets('刷新超时 demo：refreshTimeout + timeout 状态生效', (tester) async {
       final states = <TPullDownRefreshState>[];
@@ -762,6 +762,6 @@ void main() {
       }
       expect(states, contains(TPullDownRefreshState.timeout));
       await tester.pump(const Duration(seconds: 1));
-    });
+    }, tags: 'demo');
   });
 }

@@ -1,0 +1,33 @@
+Widget _specialRadios(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TRadioGroup<int>(
+          value: _verticalSpecialCardValue,
+          options: _specialVerticalOptions,
+          cardMode: true,
+          subTitleMaxLines: 1,
+          onChanged: (value) =>
+              setState(() => _verticalSpecialCardValue = value),
+        ),
+        SizedBox(height: context.tTheme.spacer24),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            context.tTheme.spacer16,
+            0,
+            context.tTheme.spacer16,
+            context.tTheme.spacer16,
+          ),
+          child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
+        ),
+        TRadioGroup<int>(
+          value: _horizontalCardValue,
+          options: _specialHorizontalOptions,
+          direction: Axis.horizontal,
+          columns: 3,
+          cardMode: true,
+          onChanged: (value) => setState(() => _horizontalCardValue = value),
+        ),
+      ],
+    );
+  }

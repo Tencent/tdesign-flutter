@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui' show FlutterView;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -76,7 +77,9 @@ class ExamplePage extends StatefulWidget {
   /// 悬浮按钮
   final Widget? floatingActionButton;
 
-  /// 是否展示仅用于内部验证的单元测试模块。
+  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
+  ///
+  /// profile 和 release 构建中始终不展示。
   final bool showTestModule;
 
   /// 悬浮按钮
@@ -252,7 +255,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildExampleList() {
     final modules = [
       ...widget.children,
-      if (widget.showTestModule)
+      if (kDebugMode && widget.showTestModule)
         ExampleModule(
           title: '单元测试',
           children: [_buildTestExampleItem(), ...widget.test],
@@ -704,6 +707,9 @@ class _CodeWrapperState extends State<CodeWrapper> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (!mounted) {
+        return;
+      }
       setState(() {
         var modelTheme = context
             .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();

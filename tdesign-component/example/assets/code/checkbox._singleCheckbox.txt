@@ -1,8 +1,0 @@
-Widget _singleCheckbox(BuildContext context) {
-    return TCheckbox(
-      value: _singleValue,
-      title: '受控多选',
-      subTitle: 'value 由页面 State 持有',
-      onChanged: (value) => setState(() => _singleValue = value),
-    );
-  }
