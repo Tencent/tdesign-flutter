@@ -6,7 +6,7 @@
 
 ## DOING
 
-- [x] 创建 Spec `007-popup-overlay-config`
+- [x] 创建 Spec `018-popup-overlay-config`
 - [x] 新增公开类 `TPopupOverlayConfig`
 - [x] `TPopupOptions` 收敛散参为 `overlay`
 - [x] `_popup_route.dart` 改用 `overlayConfig`

@@ -8,7 +8,17 @@ Widget _buildPopup(BuildContext context) {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
-            titleWidget: const TText('选择地区'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: () => close(TPopupTrigger.cancel),
+                child: const TText('取消'),
+              ),
+              title: const TText('选择地区'),
+              confirmButton: TextButton(
+                onPressed: () => close(TPopupTrigger.confirm),
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TPicker(
                 items: _linked,

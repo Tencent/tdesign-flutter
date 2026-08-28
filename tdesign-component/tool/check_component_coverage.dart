@@ -9,6 +9,7 @@ const componentTargets = <String, List<String>>{
   'icon': ['lib/src/components/icon/'],
   'input': ['lib/src/components/input/'],
   'link': ['lib/src/components/link/'],
+  'popup': ['lib/src/components/popup/'],
   'radio': ['lib/src/components/radio/'],
   'rate': ['lib/src/components/rate/'],
   'refresh': [

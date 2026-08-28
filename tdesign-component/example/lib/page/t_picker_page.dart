@@ -195,15 +195,19 @@ class _TPickerPageState extends State<TPickerPage> {
       desc: '用于从独立列或联动数据中选择值。',
       exampleCodeGroup: 'picker',
       children: [
-        ExampleModule(title: '弹出层用法', children: [
-          ExampleItem(desc: '底部弹出选择', builder: _buildPopup),
-        ]),
-        ExampleModule(title: '基础能力', children: [
-          ExampleItem(desc: '多列选择', builder: _buildColumns),
-          ExampleItem(desc: '多级联动', builder: _buildLinked),
-          ExampleItem(desc: '禁用状态', builder: _buildDisabled),
-          ExampleItem(desc: '主题尺寸', builder: _buildThemed),
-        ]),
+        ExampleModule(
+          title: '弹出层用法',
+          children: [ExampleItem(desc: '底部弹出选择', builder: _buildPopup)],
+        ),
+        ExampleModule(
+          title: '基础能力',
+          children: [
+            ExampleItem(desc: '多列选择', builder: _buildColumns),
+            ExampleItem(desc: '多级联动', builder: _buildLinked),
+            ExampleItem(desc: '禁用状态', builder: _buildDisabled),
+            ExampleItem(desc: '主题尺寸', builder: _buildThemed),
+          ],
+        ),
       ],
     );
   }
@@ -234,9 +238,9 @@ class _TPickerPageState extends State<TPickerPage> {
   @ExampleCode(group: 'picker')
   Widget _buildThemed(BuildContext context) {
     return Theme(
-      data: Theme.of(context).mergeExtension(
-        const TPickerThemeData(height: 160, itemCount: 3),
-      ),
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TPickerThemeData(height: 160, itemCount: 3)),
       child: TPicker(
         items: _columns,
         value: _columnValue,
@@ -256,7 +260,17 @@ class _TPickerPageState extends State<TPickerPage> {
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
-            titleWidget: const TText('选择地区'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: () => close(TPopupTrigger.cancel),
+                child: const TText('取消'),
+              ),
+              title: const TText('选择地区'),
+              confirmButton: TextButton(
+                onPressed: () => close(TPopupTrigger.confirm),
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TPicker(
                 items: _linked,

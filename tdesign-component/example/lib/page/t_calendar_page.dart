@@ -114,7 +114,17 @@ class _TCalendarPageState extends State<TCalendarPage> {
         context,
         options: TPopupOptions.bottom(
           height: MediaQuery.sizeOf(context).height * 0.72,
-          titleWidget: TText(title),
+          headerBuilder: (_, close) => TPopupHeader(
+            cancelButton: TextButton(
+              onPressed: () => close(TPopupTrigger.cancel),
+              child: const TText('取消'),
+            ),
+            title: TText(title),
+            confirmButton: TextButton(
+              onPressed: () => close(TPopupTrigger.confirm),
+              child: const TText('确定'),
+            ),
+          ),
           child: StatefulBuilder(
             builder: (context, setPopupState) => TCalendar(
               value: draft,
@@ -138,9 +148,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
       children: [
         TCell(
           title: const TText('单选日期'),
-          note: TText(
-            displayValue(TCalendarVariant.single, _popupSingleValue),
-          ),
+          note: TText(displayValue(TCalendarVariant.single, _popupSingleValue)),
           arrow: true,
           onTap: () => showCalendar(
             title: '选择日期',
@@ -164,9 +172,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
         ),
         TCell(
           title: const TText('日期区间'),
-          note: TText(
-            displayValue(TCalendarVariant.range, _popupRangeValue),
-          ),
+          note: TText(displayValue(TCalendarVariant.range, _popupRangeValue)),
           arrow: true,
           onTap: () => showCalendar(
             title: '选择日期区间',
@@ -189,10 +195,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
               tooltip: '上个月',
               icon: const Icon(Icons.chevron_left),
               onPressed: () => setState(() {
-                _anchorDate = DateTime(
-                  _anchorDate.year,
-                  _anchorDate.month - 1,
-                );
+                _anchorDate = DateTime(_anchorDate.year, _anchorDate.month - 1);
               }),
             ),
             Expanded(
@@ -205,10 +208,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
               tooltip: '下个月',
               icon: const Icon(Icons.chevron_right),
               onPressed: () => setState(() {
-                _anchorDate = DateTime(
-                  _anchorDate.year,
-                  _anchorDate.month + 1,
-                );
+                _anchorDate = DateTime(_anchorDate.year, _anchorDate.month + 1);
               }),
             ),
           ],

@@ -1,6 +1,6 @@
 part of 't_popup.dart';
 
-/// 浮层内容外壳：圆角、[PopupHeader]（仅 bottom）与主体内容；
+/// 浮层内容外壳：圆角、可选头部（仅 bottom）与主体内容；
 /// center 由 [PopupCenterUnderClose] 接管面板外下方关闭区。
 class PopupShell extends StatelessWidget {
   const PopupShell({
@@ -63,17 +63,20 @@ class PopupShell extends StatelessWidget {
     BorderRadius? borderRadius,
     Color background,
   ) {
+    void closeHeader([TPopupTrigger trigger = TPopupTrigger.custom]) {
+      onCloseWithTrigger(trigger);
+    }
+
     // 四个边缘方向现在都有固定的默认尺寸，主体始终填满剩余空间；
     // 显式尺寸与默认尺寸的内容布局保持一致。
-    final body = options.placement == TPopupPlacement.bottom
+    final body =
+        options.placement == TPopupPlacement.bottom &&
+            options.headerBuilder != null
         ? Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              PopupHeader(
-                options: options,
-                onCloseWithTrigger: onCloseWithTrigger,
-              ),
+              options.headerBuilder!(context, closeHeader),
               Expanded(child: options.child),
             ],
           )
@@ -84,10 +87,7 @@ class PopupShell extends StatelessWidget {
           );
 
     return Container(
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: borderRadius,
-      ),
+      decoration: BoxDecoration(color: background, borderRadius: borderRadius),
       clipBehavior: Clip.antiAlias,
       child: body,
     );

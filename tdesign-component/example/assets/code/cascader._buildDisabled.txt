@@ -1,6 +1,3 @@
 Widget _buildDisabled(BuildContext context) {
-    return const TCascader(
-      options: _options,
-      value: ['gd', 'sz', 'ns'],
-    );
+    return const TCascader(options: _options, value: ['gd', 'sz', 'ns']);
   }

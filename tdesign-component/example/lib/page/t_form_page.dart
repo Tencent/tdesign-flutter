@@ -433,7 +433,17 @@ class _TFormPageState extends State<TFormPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-        titleWidget: const TText('选择日期'),
+        headerBuilder: (_, close) => TPopupHeader(
+          cancelButton: TextButton(
+            onPressed: () => close(TPopupTrigger.cancel),
+            child: const TText('取消'),
+          ),
+          title: const TText('选择日期'),
+          confirmButton: TextButton(
+            onPressed: () => close(TPopupTrigger.confirm),
+            child: const TText('确定'),
+          ),
+        ),
         child: StatefulBuilder(
           builder: (context, setPopupState) => TDateTimePicker(
             mode: DateTimePickerMode(dateMode: DateMode.date),
@@ -460,7 +470,17 @@ class _TFormPageState extends State<TFormPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-        titleWidget: const TText('选择地址'),
+        headerBuilder: (_, close) => TPopupHeader(
+          cancelButton: TextButton(
+            onPressed: () => close(TPopupTrigger.cancel),
+            child: const TText('取消'),
+          ),
+          title: const TText('选择地址'),
+          confirmButton: TextButton(
+            onPressed: () => close(TPopupTrigger.confirm),
+            child: const TText('确定'),
+          ),
+        ),
         child: StatefulBuilder(
           builder: (context, setPopupState) => TPicker(
             items: _regionItems,

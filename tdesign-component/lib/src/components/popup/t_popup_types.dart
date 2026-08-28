@@ -14,7 +14,7 @@ enum TPopupPlacement {
   /// 自右侧滑入；默认宽 280，使用 [TPopupOptions.width]、[TPopupOptions.inset]（[TPopupRightInset]）覆盖。
   right,
 
-  /// 自底部滑入；默认高 240 且带内置头部；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）覆盖。
+  /// 自底部滑入；默认高 240；使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupBottomInset]）覆盖。
   bottom,
 
   /// 屏幕居中；默认 240 × 240，使用 [TPopupOptions.width]、[TPopupOptions.height] 覆盖；
@@ -25,44 +25,22 @@ enum TPopupPlacement {
 /// bottom 整行头部自定义构建器。
 ///
 /// * [context] 构建上下文
-/// * [close] 关闭浮层，触发源为 [TPopupTrigger.custom]
-typedef TPopupHeaderBuilder = Widget Function(
-  BuildContext context,
-  VoidCallback close,
-);
+/// * [close] 关闭浮层；省略参数时触发源为 [TPopupTrigger.custom]，也可显式传入
+///   [TPopupTrigger.cancel] 或 [TPopupTrigger.confirm] 标记操作语义
+typedef TPopupHeaderBuilder =
+    Widget Function(BuildContext context, TPopupCloseCallback close);
 
-/// bottom 左右操作槽或 center 关闭区构建器。
+/// Popup 关闭函数；省略 [trigger] 时按 [TPopupTrigger.custom] 上报。
+typedef TPopupCloseCallback = void Function([TPopupTrigger trigger]);
+
+/// center 面板外关闭区构建器。
 ///
 /// * [context] 构建上下文
-/// * [close] 关闭浮层；触发源与槽位语义保持一致
+/// * [close] 关闭浮层，触发源为 [TPopupTrigger.close]
 ///
 /// 自定义 builder 需自行提供交互与无障碍语义；框架仅为内置默认控件补充默认语义。
-typedef TPopupSlotBuilder = Widget Function(
-  BuildContext context,
-  VoidCallback close,
-);
-
-// 库内 sentinel：识别 builder「未传 = 内置默认」。业务三态见 [TPopupOptions]。
-
-Widget _kPopupDefaultHeader(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
-
-Widget _kPopupDefaultCancel(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
-
-Widget _kPopupDefaultConfirm(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
-
-Widget _kPopupDefaultClose(BuildContext context, VoidCallback close) => const SizedBox.shrink(); // coverage:ignore-line
-
-bool _isPopupDefaultHeader(TPopupHeaderBuilder? builder) =>
-    identical(builder, _kPopupDefaultHeader);
-
-bool _isPopupDefaultCancel(TPopupSlotBuilder? builder) =>
-    identical(builder, _kPopupDefaultCancel);
-
-bool _isPopupDefaultConfirm(TPopupSlotBuilder? builder) =>
-    identical(builder, _kPopupDefaultConfirm);
-
-bool _isPopupDefaultClose(TPopupSlotBuilder? builder) =>
-    identical(builder, _kPopupDefaultClose);
+typedef TPopupSlotBuilder =
+    Widget Function(BuildContext context, VoidCallback close);
 
 /// Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 ///
@@ -88,10 +66,15 @@ class TPopupOverlayConfig {
   /// 是否拦截背景交互（默认 true）；对应原 `modal` 参数。
   final bool preventTap;
 
-  /// 点击蒙层是否关闭；省略时跟随 [showOverlay]。
+  /// 点击可见蒙层是否关闭；省略时在可点击的可见蒙层上默认为 true。
+  ///
+  /// 仅当 [showOverlay] 与 [preventTap] 都为 true 时生效；视觉蒙层允许点击穿透时，
+  /// 不会接收点击事件，也不会关闭 Popup。
   final bool? closeOnClick;
 
-  /// 蒙层点击回调；是否关闭取决于 [effectiveCloseOnClick]。
+  /// 可见蒙层点击回调；是否关闭取决于 [effectiveCloseOnClick]。
+  ///
+  /// 仅当 [showOverlay] 与 [preventTap] 都为 true 时触发。
   final VoidCallback? onClick;
 
   /// 创建蒙层配置。
@@ -104,16 +87,21 @@ class TPopupOverlayConfig {
     this.onClick,
   });
 
-  /// 解析后的点击蒙层是否关闭；省略时跟随 [showOverlay]。
-  bool get effectiveCloseOnClick => closeOnClick ?? showOverlay;
+  /// 解析后的点击可见蒙层是否关闭。
+  ///
+  /// 没有可见蒙层或允许点击穿透时始终为 false；其余情况省略 [closeOnClick] 时
+  /// 默认为 true。
+  bool get effectiveCloseOnClick =>
+      showOverlay && preventTap && (closeOnClick ?? true);
 }
 
 /// 浮层关闭或显隐变化时的触发来源。
 ///
 /// 作为 [TPopupVisibleChangeCallback] 的第二个参数，以及关闭流程中的语义标记。
 ///
-/// 内置控件会映射为 [TPopupTrigger.overlay]、[TPopupTrigger.cancel]、
-/// [TPopupTrigger.confirm]、[TPopupTrigger.close]；
+/// 内置行为会映射为 [TPopupTrigger.overlay]，headerBuilder 可显式上报
+/// [TPopupTrigger.cancel] 或 [TPopupTrigger.confirm]，center 关闭 builder 调用
+/// `close` 映射为 [TPopupTrigger.close]；
 /// [TPopupHandle.close] 为 [TPopupTrigger.api]；系统返回为
 /// [TPopupTrigger.systemBack]；headerBuilder 内调用 `close` 等为
 /// [TPopupTrigger.custom]。
@@ -121,13 +109,13 @@ enum TPopupTrigger {
   /// 点击蒙层，且 [TPopupOverlayConfig.effectiveCloseOnClick] 为 true。
   overlay,
 
-  /// 点击 bottom 取消语义槽位（含默认与自定义 [TPopupOptions.cancelBuilder]）。
+  /// 调用头部关闭函数并显式指定取消语义。
   cancel,
 
-  /// 点击 bottom 确认语义槽位（含默认与自定义 [TPopupOptions.confirmBuilder]）。
+  /// 调用头部关闭函数并显式指定确认语义。
   confirm,
 
-  /// 点击 center 关闭语义槽位（含默认与自定义 [TPopupOptions.closeBuilder]）。
+  /// 点击 center 关闭槽位。
   close,
 
   /// 外部 API 主动触发的显隐变化，如 [TPopupHandle.close] 或打开事件。
@@ -144,7 +132,5 @@ enum TPopupTrigger {
 ///
 /// * [visible] 为 true 表示打开，false 表示开始关闭
 /// * [trigger] 关闭来源，见 [TPopupTrigger]；打开时为 [TPopupTrigger.api]
-typedef TPopupVisibleChangeCallback = void Function(
-  bool visible,
-  TPopupTrigger trigger,
-);
+typedef TPopupVisibleChangeCallback =
+    void Function(bool visible, TPopupTrigger trigger);

@@ -67,10 +67,10 @@ class TPopupOverlayConfig {
   /// 是否拦截背景交互（默认 true，替代原 modal）。
   final bool preventTap;
 
-  /// 点击蒙层是否关闭；省略时跟随 [showOverlay]。
+  /// 点击可见蒙层是否关闭；仅在 [showOverlay] 与 [preventTap] 均为 true 时生效。
   final bool? closeOnClick;
 
-  /// 蒙层点击回调。
+  /// 可见蒙层点击回调；仅在 [showOverlay] 与 [preventTap] 均为 true 时触发。
   final VoidCallback? onClick;
 
   const TPopupOverlayConfig({
@@ -82,8 +82,9 @@ class TPopupOverlayConfig {
     this.onClick,
   });
 
-  /// 解析后的点击蒙层是否关闭（省略时跟随 showOverlay）。
-  bool get effectiveCloseOnClick => closeOnClick ?? showOverlay;
+  /// 解析后的点击可见蒙层是否关闭。
+  bool get effectiveCloseOnClick =>
+      showOverlay && preventTap && (closeOnClick ?? true);
 }
 ```
 
@@ -106,6 +107,7 @@ class TPopupOverlayConfig {
   - `overlay.opacity != null` 时与基础色 alpha 相乘
 - `buildModalBarrier` 中 `options.closeOnOverlayClick` → `overlay.effectiveCloseOnClick`
 - `_handleOverlayTap` 中 `options.onOverlayClick` → `overlay.onClick`，`options.closeOnOverlayClick` → `overlay.effectiveCloseOnClick`
+- `showOverlay=false` 或 `preventTap=false` 时没有可点击的可见蒙层，`closeOnClick` 与 `onClick` 不生效；视觉蒙层允许穿透时，点击由背景接收。
 
 ### t_popup.dart 改动
 
@@ -132,8 +134,8 @@ class TPopupOverlayConfig {
 - [ ] `showOverlay`、`closeOnOverlayClick`、`overlayColor`、`overlayOpacity`、`modal`、`onOverlayClick` 六个散参已从 `TPopupOptions` 移除。
 - [ ] `overlay.showOverlay: true` 时渲染可见半透明蒙层，颜色/透明度可由 `color` / `opacity` 控制。
 - [ ] `overlay.preventTap` 拦截背景交互与 `showOverlay` 显示蒙层解耦；`preventTap=false, showOverlay=false` 时不渲染蒙层/拦截层。
-- [ ] `overlay.effectiveCloseOnClick` 正确解析（省略时跟随 showOverlay）。
-- [ ] `overlay.onClick` 回调正确触发。
+- [ ] `overlay.effectiveCloseOnClick` 仅在显示且拦截蒙层点击时可为 true。
+- [ ] `overlay.onClick` 仅在可点击的可见蒙层上正确触发；穿透模式不触发。
 - [ ] theme 的 `barrierColor` / `barrierOpacity` 作为 `TPopupOverlayConfig.color` / `opacity` 的默认值生效。
 - [ ] ActionSheet / Dialog / Drawer 迁移到新 API 后行为不变。
 - [ ] Popup 相关单元 / Widget 测试通过。

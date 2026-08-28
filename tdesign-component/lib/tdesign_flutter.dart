@@ -108,6 +108,7 @@ export 'src/components/popup/t_popup.dart'
     show
         TPopup,
         TPopupHandle,
+        TPopupHeader,
         TPopupOptions,
         TPopupOverlayConfig,
         TPopupPlacement,
@@ -118,6 +119,7 @@ export 'src/components/popup/t_popup.dart'
         TPopupLeftInset,
         TPopupRightInset,
         TPopupHeaderBuilder,
+        TPopupCloseCallback,
         TPopupSlotBuilder,
         TPopupVisibleChangeCallback;
 export 'src/components/popup/t_popup_theme_data.dart' show TPopupThemeData;

@@ -30,10 +30,8 @@ void main() {
                         child: ListView.builder(
                           controller: controller,
                           itemCount: 30,
-                          itemBuilder: (_, index) => SizedBox(
-                            height: 48,
-                            child: Text('item-$index'),
-                          ),
+                          itemBuilder: (_, index) =>
+                              SizedBox(height: 48, child: Text('item-$index')),
                         ),
                       ),
                       ElevatedButton(
@@ -46,8 +44,6 @@ void main() {
                                 showOverlay: false,
                                 preventTap: true,
                               ),
-                              cancelBuilder: null,
-                              confirmBuilder: null,
                               child: const SizedBox(height: 60),
                             ),
                           );
@@ -64,8 +60,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final backgroundButtonCenter =
-          tester.getCenter(find.text('background button'));
+      final backgroundButtonCenter = tester.getCenter(
+        find.text('background button'),
+      );
       final listDragStart = tester.getCenter(find.text('item-3'));
 
       await tester.tap(find.text('open popup'));
@@ -101,10 +98,8 @@ void main() {
                         child: ListView.builder(
                           controller: controller,
                           itemCount: 30,
-                          itemBuilder: (_, index) => SizedBox(
-                            height: 48,
-                            child: Text('item-$index'),
-                          ),
+                          itemBuilder: (_, index) =>
+                              SizedBox(height: 48, child: Text('item-$index')),
                         ),
                       ),
                       ElevatedButton(
@@ -117,8 +112,6 @@ void main() {
                                 showOverlay: false,
                                 preventTap: false,
                               ),
-                              cancelBuilder: null,
-                              confirmBuilder: null,
                               child: const SizedBox(height: 60),
                             ),
                           );
@@ -135,8 +128,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final backgroundButtonCenter =
-          tester.getCenter(find.text('background button'));
+      final backgroundButtonCenter = tester.getCenter(
+        find.text('background button'),
+      );
       final listDragStart = tester.getCenter(find.text('item-3'));
 
       await tester.tap(find.text('open popup'));
@@ -151,6 +145,67 @@ void main() {
       expect(controller.offset, greaterThan(0));
     });
 
+    testWidgets('可见蒙层 + preventTap=false 时点击穿透且不触发蒙层回调', (tester) async {
+      var backgroundTapCount = 0;
+      var overlayTapCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Theme(
+            data: ThemeData(extensions: [TThemeData.defaultData()]),
+            child: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  return Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => backgroundTapCount++,
+                        child: const Text('background button'),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          TPopup.show(
+                            context,
+                            options: TPopupOptions.bottom(
+                              height: 120,
+                              overlay: TPopupOverlayConfig(
+                                showOverlay: true,
+                                preventTap: false,
+                                closeOnClick: true,
+                                onClick: () => overlayTapCount++,
+                              ),
+                              headerBuilder: null,
+                              child: const SizedBox(height: 60),
+                            ),
+                          );
+                        },
+                        child: const Text('open popup'),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final backgroundButtonCenter = tester.getCenter(
+        find.text('background button'),
+      );
+      await tester.tap(find.text('open popup'));
+      await tester.pumpAndSettle();
+
+      await tester.tapAt(backgroundButtonCenter);
+      await tester.pump();
+
+      expect(backgroundTapCount, 1);
+      expect(overlayTapCount, 0);
+      expect(find.text('open popup'), findsOneWidget);
+    });
+
     group('useSafeArea 安全区', () {
       testWidgets('MediaQuery.padding 全零时 bottom 贴屏幕底', (tester) async {
         await openPopup(
@@ -161,8 +216,6 @@ void main() {
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
                 height: 100,
-                cancelBuilder: null,
-                confirmBuilder: null,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -184,8 +237,6 @@ void main() {
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
                 height: 120,
-                cancelBuilder: null,
-                confirmBuilder: null,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -208,8 +259,6 @@ void main() {
               options: TPopupOptions.bottom(
                 height: 120,
                 useSafeArea: false,
-                cancelBuilder: null,
-                confirmBuilder: null,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -230,8 +279,6 @@ void main() {
             TPopup.show(
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
-                cancelBuilder: null,
-                confirmBuilder: null,
                 child: const SizedBox(height: 80, width: 200),
               ),
             );
@@ -255,8 +302,6 @@ void main() {
               options: TPopupOptions.bottom(
                 height: 160,
                 inset: const TPopupBottomInset(left: 12, right: 20),
-                cancelBuilder: null,
-                confirmBuilder: null,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -344,8 +389,6 @@ void main() {
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
                 height: 100,
-                cancelBuilder: null,
-                confirmBuilder: null,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -539,10 +582,11 @@ void main() {
           handle = TPopup.show(
             hostContext,
             options: TPopupOptions(
-                placement: TPopupPlacement.bottom,
-                height: 100,
-                onClose: () => closeCount++,
-                child: const SizedBox(height: 60)),
+              placement: TPopupPlacement.bottom,
+              height: 100,
+              onClose: () => closeCount++,
+              child: const SizedBox(height: 60),
+            ),
           );
         },
       );

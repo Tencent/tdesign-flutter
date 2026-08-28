@@ -23,11 +23,7 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
         TTreeSelectOption(label: '橙子', value: 'orange'),
         TTreeSelectOption(label: '草莓', value: 'strawberry'),
         TTreeSelectOption(label: '芒果', value: 'mango'),
-        TTreeSelectOption(
-          label: '榴莲（暂不可选）',
-          value: 'durian',
-          disabled: true,
-        ),
+        TTreeSelectOption(label: '榴莲（暂不可选）', value: 'durian', disabled: true),
       ],
     ),
     TTreeSelectOption(
@@ -96,14 +92,18 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
       desc: '用于从层级数据中选择一个或多个叶子节点。',
       exampleCodeGroup: 'tree-select',
       children: [
-        ExampleModule(title: '弹出层用法', children: [
-          ExampleItem(desc: '底部弹出多选', builder: _buildPopup),
-        ]),
-        ExampleModule(title: '基础能力', children: [
-          ExampleItem(desc: '单选（包含局部禁用项）', builder: _buildSingle),
-          ExampleItem(desc: '多选', builder: _buildMultiple),
-          ExampleItem(desc: '整体禁用', builder: _buildDisabled),
-        ]),
+        ExampleModule(
+          title: '弹出层用法',
+          children: [ExampleItem(desc: '底部弹出多选', builder: _buildPopup)],
+        ),
+        ExampleModule(
+          title: '基础能力',
+          children: [
+            ExampleItem(desc: '单选（包含局部禁用项）', builder: _buildSingle),
+            ExampleItem(desc: '多选', builder: _buildMultiple),
+            ExampleItem(desc: '整体禁用', builder: _buildDisabled),
+          ],
+        ),
       ],
     );
   }
@@ -143,14 +143,22 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
       ),
       arrow: true,
       onTap: () {
-        var draft = [
-          for (final path in _popupValue) List<Object?>.of(path),
-        ];
+        var draft = [for (final path in _popupValue) List<Object?>.of(path)];
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
             height: MediaQuery.sizeOf(context).height * 0.6,
-            titleWidget: const TText('选择分类'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: () => close(TPopupTrigger.cancel),
+                child: const TText('取消'),
+              ),
+              title: const TText('选择分类'),
+              confirmButton: TextButton(
+                onPressed: () => close(TPopupTrigger.confirm),
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TTreeSelect(
                 key: const Key('tree-select-popup'),

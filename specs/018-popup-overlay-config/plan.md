@@ -12,10 +12,11 @@ class TPopupOverlayConfig {
   final Color? color;       // 蒙层颜色（null → black54）
   final double? opacity;    // 蒙层透明度系数（null → 不调整）
   final bool preventTap;    // 是否拦截背景交互（默认 true，替代原 modal）
-  final bool? closeOnClick; // 点击蒙层是否关闭（省略时跟随 showOverlay）
-  final VoidCallback? onClick; // 蒙层点击回调
+  final bool? closeOnClick; // 点击可见蒙层是否关闭
+  final VoidCallback? onClick; // 可见蒙层点击回调
   const TPopupOverlayConfig({...});
-  bool get effectiveCloseOnClick => closeOnClick ?? showOverlay;
+  bool get effectiveCloseOnClick =>
+      showOverlay && preventTap && (closeOnClick ?? true);
 }
 ```
 
@@ -30,6 +31,7 @@ class TPopupOverlayConfig {
 ### 3. `_popup_route.dart` 改动
 
 - `_barrierMode` / `_barrierColor` / `buildModalBarrier` / `_handleOverlayTap` 全部改用 `options.overlayConfig`。
+- `showOverlay=false` 或 `preventTap=false` 时不响应蒙层点击配置；`preventTap=false` 的视觉蒙层只负责绘制并允许事件穿透。
 
 ### 4. `t_popup.dart` theme 合并
 
