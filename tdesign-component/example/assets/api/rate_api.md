@@ -11,6 +11,7 @@
 | onChanged | ValueChanged<double>? | - | 评分变更回调；为 null 时禁用。 |
 | onChangeEnd | ValueChanged<double>? | - | 结束交互时触发；指针取消时以当前受控值结束。 |
 | onChangeStart | ValueChanged<double>? | - | 开始交互时触发；同一次指针或语义交互只触发一次。 |
+| showValueIndicator | bool | true | 是否在整星点击、长按以及拖动评分时显示当前值提示。 默认为 true。半星点击的精确选择浮层不受此参数控制。 |
 | texts | List<String>? | - | 各评分对应的辅助文案。 为 null 时不显示辅助文案；非 null 时显示。当当前评分 没有对应文案时，显示本地化的“未评分”。 |
 | value | double | - | 受控评分值。 |
 

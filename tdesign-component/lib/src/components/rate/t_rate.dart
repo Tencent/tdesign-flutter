@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -38,6 +40,11 @@ class TRate extends StatefulWidget {
     /// 是否允许半星。
     this.allowHalf = false,
 
+    /// 是否在整星点击、长按以及拖动评分时显示当前值提示。
+    ///
+    /// 默认为 true。半星点击的精确选择浮层不受此参数控制。
+    this.showValueIndicator = true,
+
     /// 自定义评分图标。
     this.icon,
 
@@ -67,6 +74,11 @@ class TRate extends StatefulWidget {
   /// 是否允许半星。
   final bool allowHalf;
 
+  /// 是否在整星点击、长按以及拖动评分时显示当前值提示。
+  ///
+  /// 默认为 true。半星点击的精确选择浮层不受此参数控制。
+  final bool showValueIndicator;
+
   /// 自定义评分图标。
   final TRateIconBuilder? icon;
 
@@ -82,10 +94,17 @@ class TRate extends StatefulWidget {
 
 class _TRateState extends State<TRate> {
   static const _halfChoiceKey = ValueKey<String>('t-rate-half-choice');
+  static const _valueIndicatorKey = ValueKey<String>('t-rate-value-indicator');
+  static const _valueIndicatorDuration = Duration(milliseconds: 300);
 
   double? _lastInteractionValue;
-  OverlayEntry? _halfChoiceEntry;
+  OverlayEntry? _valueIndicatorEntry;
+  Timer? _valueIndicatorTimer;
   double? _pendingHalfChoiceValue;
+  Offset _valueIndicatorPosition = Offset.zero;
+  double _valueIndicatorValue = 0;
+  double _valueIndicatorIconSize = 0;
+  bool _valueIndicatorShowsHalfChoices = false;
   bool _interactionStarted = false;
 
   bool get _enabled => widget.onChanged != null;
@@ -102,14 +121,18 @@ class _TRateState extends State<TRate> {
   void didUpdateWidget(TRate oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.allowHalf != oldWidget.allowHalf || !_enabled) {
-      _dismissHalfChoice();
+      _dismissValueIndicator();
       _resetInteraction();
+    } else if (!widget.showValueIndicator &&
+        oldWidget.showValueIndicator &&
+        !_valueIndicatorShowsHalfChoices) {
+      _dismissValueIndicator();
     }
   }
 
   @override
   void dispose() {
-    _dismissHalfChoice();
+    _dismissValueIndicator();
     super.dispose();
   }
 
@@ -118,7 +141,7 @@ class _TRateState extends State<TRate> {
     final material = Theme.of(context);
     final theme = material.extension<TRateThemeData>();
     final explicitColorScheme = material.tExplicitColorScheme;
-    final iconSize = theme?.iconSize ?? 24;
+    final iconSize = theme?.iconSize ?? context.tTheme.spacer24;
     final iconGap = theme?.iconGap ?? context.tTheme.spacer8;
     final texts = widget.texts;
     final step = widget.allowHalf ? 0.5 : 1.0;
@@ -149,7 +172,7 @@ class _TRateState extends State<TRate> {
         builder: (context, constraints) => Listener(
           onPointerCancel: (_) {
             _finishInteraction(_effectiveValue);
-            _dismissHalfChoice();
+            _dismissValueIndicator();
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -178,16 +201,62 @@ class _TRateState extends State<TRate> {
                         _startInteraction();
                         widget.onChanged?.call(next);
                         if (widget.allowHalf) {
-                          _showHalfChoice(
+                          _showValueIndicator(
                             context,
-                            details.globalPosition,
-                            next.ceilToDouble(),
-                            iconSize,
+                            globalPosition: details.globalPosition,
+                            localPosition: details.localPosition,
+                            value: next,
+                            iconSize: iconSize,
+                            iconGap: iconGap,
+                            showHalfChoices: true,
                           );
                           _pendingHalfChoiceValue = next;
                         } else {
+                          if (widget.showValueIndicator) {
+                            _showValueIndicator(
+                              context,
+                              globalPosition: details.globalPosition,
+                              localPosition: details.localPosition,
+                              value: next,
+                              iconSize: iconSize,
+                              iconGap: iconGap,
+                              showHalfChoices: false,
+                            );
+                            _scheduleValueIndicatorDismissal();
+                          }
                           _finishInteraction(next);
                         }
+                      }
+                    : null,
+                onLongPressStart: _enabled
+                    ? (details) {
+                        _startInteraction();
+                        _updateContinuousInteraction(
+                          context,
+                          globalPosition: details.globalPosition,
+                          localPosition: details.localPosition,
+                          iconSize: iconSize,
+                          iconGap: iconGap,
+                        );
+                      }
+                    : null,
+                onLongPressMoveUpdate: _enabled
+                    ? (details) {
+                        _updateContinuousInteraction(
+                          context,
+                          globalPosition: details.globalPosition,
+                          localPosition: details.localPosition,
+                          iconSize: iconSize,
+                          iconGap: iconGap,
+                        );
+                      }
+                    : null,
+                onLongPressEnd: _enabled
+                    ? (_) {
+                        _dismissValueIndicator();
+                        _finishInteraction(
+                          _lastInteractionValue ?? _effectiveValue,
+                        );
                       }
                     : null,
                 onHorizontalDragStart: _enabled
@@ -198,20 +267,22 @@ class _TRateState extends State<TRate> {
                     : null,
                 onHorizontalDragUpdate: _enabled
                     ? (details) {
-                        final next = _valueAt(
-                          details.localPosition.dx,
-                          iconSize,
-                          iconGap,
-                          Directionality.of(context),
+                        _updateContinuousInteraction(
+                          context,
+                          globalPosition: details.globalPosition,
+                          localPosition: details.localPosition,
+                          iconSize: iconSize,
+                          iconGap: iconGap,
                         );
-                        _lastInteractionValue = next;
-                        widget.onChanged?.call(next);
                       }
                     : null,
                 onHorizontalDragEnd: _enabled
-                    ? (_) => _finishInteraction(
-                        _lastInteractionValue ?? _effectiveValue,
-                      )
+                    ? (_) {
+                        _dismissValueIndicator();
+                        _finishInteraction(
+                          _lastInteractionValue ?? _effectiveValue,
+                        );
+                      }
                     : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -336,6 +407,9 @@ class _TRateState extends State<TRate> {
     final itemExtent = iconSize + iconGap;
     final width = itemExtent * _effectiveCount - iconGap;
     final directionalDx = textDirection == TextDirection.rtl ? width - dx : dx;
+    if (directionalDx <= -(itemExtent + iconGap)) {
+      return 0;
+    }
     final clamped = directionalDx.clamp(0, width);
     final index = (clamped / itemExtent).floor().clamp(0, _effectiveCount - 1);
     final local = clamped - index * itemExtent;
@@ -343,21 +417,97 @@ class _TRateState extends State<TRate> {
     return index + fraction;
   }
 
-  void _showHalfChoice(
-    BuildContext context,
-    Offset globalPosition,
-    double wholeValue,
-    double iconSize,
-  ) {
-    _dismissHalfChoice();
-    final overlay = Overlay.of(context, rootOverlay: true);
+  void _updateContinuousInteraction(
+    BuildContext context, {
+    required Offset globalPosition,
+    required Offset localPosition,
+    required double iconSize,
+    required double iconGap,
+  }) {
+    final next = _valueAt(
+      localPosition.dx,
+      iconSize,
+      iconGap,
+      Directionality.of(context),
+    );
+    _lastInteractionValue = next;
+    widget.onChanged?.call(next);
+    if (widget.showValueIndicator) {
+      _showValueIndicator(
+        context,
+        globalPosition: globalPosition,
+        localPosition: localPosition,
+        value: next,
+        iconSize: iconSize,
+        iconGap: iconGap,
+        showHalfChoices: false,
+      );
+    }
+  }
+
+  void _showValueIndicator(
+    BuildContext context, {
+    required Offset globalPosition,
+    required Offset localPosition,
+    required double value,
+    required double iconSize,
+    required double iconGap,
+    required bool showHalfChoices,
+  }) {
+    _valueIndicatorTimer?.cancel();
+    _valueIndicatorPosition = _valueIndicatorAnchor(
+      globalPosition: globalPosition,
+      localPosition: localPosition,
+      value: value,
+      iconSize: iconSize,
+      iconGap: iconGap,
+      textDirection: Directionality.of(context),
+    );
+    _valueIndicatorValue = value;
+    _valueIndicatorIconSize = iconSize;
+    _valueIndicatorShowsHalfChoices = showHalfChoices;
+
+    if (_valueIndicatorEntry != null) {
+      _valueIndicatorEntry!.markNeedsBuild();
+      return;
+    }
+
+    _valueIndicatorEntry = OverlayEntry(builder: _buildValueIndicatorOverlay);
+    Overlay.of(context, rootOverlay: true).insert(_valueIndicatorEntry!);
+  }
+
+  Offset _valueIndicatorAnchor({
+    required Offset globalPosition,
+    required Offset localPosition,
+    required double value,
+    required double iconSize,
+    required double iconGap,
+    required TextDirection textDirection,
+  }) {
+    final itemExtent = iconSize + iconGap;
+    final width = itemExtent * _effectiveCount - iconGap;
+    final index = value <= 0
+        ? 0
+        : (value.ceil() - 1).clamp(0, _effectiveCount - 1).toInt();
+    final centerX = textDirection == TextDirection.rtl
+        ? width - index * itemExtent - iconSize / 2
+        : index * itemExtent + iconSize / 2;
+    final wrapperOrigin = globalPosition - localPosition;
+    return wrapperOrigin + Offset(centerX, iconSize / 2);
+  }
+
+  Widget _buildValueIndicatorOverlay(BuildContext overlayContext) {
+    final context = this.context;
     final mediaQuery = MediaQuery.of(context);
     final material = Theme.of(context);
     final theme = material.extension<TRateThemeData>();
     final token = context.tTheme;
+    final iconSize = _valueIndicatorIconSize;
     final selectedColor = theme?.starColor ?? token.warningColor5;
     final inactiveColor = theme?.inactiveStarColor ?? token.bgColorComponent;
-    final naturalPopupWidth = iconSize * 2 + token.spacer40;
+    final naturalPopupWidth = _valueIndicatorShowsHalfChoices
+        ? iconSize * 2 + token.spacer40
+        : iconSize + token.spacer24;
     final popupHeight = iconSize + token.spacer32 + token.spacer4;
     final horizontalInset = token.spacer8;
     final popupWidth = naturalPopupWidth.clamp(
@@ -366,13 +516,14 @@ class _TRateState extends State<TRate> {
     );
     final maxLeft = (mediaQuery.size.width - popupWidth - horizontalInset)
         .clamp(horizontalInset, double.infinity);
-    final left = (globalPosition.dx - popupWidth / 2)
+    final left = (_valueIndicatorPosition.dx - popupWidth / 2)
         .clamp(horizontalInset, maxLeft)
         .toDouble();
-    final preferredTop = globalPosition.dy - popupHeight - token.spacer12;
+    final preferredTop =
+        _valueIndicatorPosition.dy - popupHeight - token.spacer12;
     final rawTop = preferredTop >= mediaQuery.padding.top
         ? preferredTop
-        : globalPosition.dy + token.spacer12;
+        : _valueIndicatorPosition.dy + token.spacer12;
     final verticalInset = mediaQuery.padding.top + token.spacer8;
     final maxTop =
         (mediaQuery.size.height -
@@ -382,29 +533,45 @@ class _TRateState extends State<TRate> {
             .clamp(verticalInset, double.infinity);
     final top = rawTop.clamp(verticalInset, maxTop).toDouble();
 
-    Widget buildChoices(BuildContext overlayContext) {
-      final choices = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildHalfChoiceButton(
-            overlayContext,
-            value: wholeValue - 0.5,
-            iconSize: iconSize,
-            isHalf: true,
-            selectedColor: selectedColor,
-            inactiveColor: inactiveColor,
-          ),
-          SizedBox(width: token.spacer4),
-          _buildHalfChoiceButton(
-            overlayContext,
-            value: wholeValue,
-            iconSize: iconSize,
-            isHalf: false,
-            selectedColor: selectedColor,
-            inactiveColor: inactiveColor,
-          ),
-        ],
-      );
+    Widget buildContent() {
+      final Widget choices;
+      if (_valueIndicatorShowsHalfChoices) {
+        final wholeValue = _valueIndicatorValue.ceilToDouble();
+        choices = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildValueIndicatorItem(
+              overlayContext,
+              value: wholeValue - 0.5,
+              iconSize: iconSize,
+              isHalf: true,
+              selectedColor: selectedColor,
+              inactiveColor: inactiveColor,
+              onTap: () => _selectHalfChoice(wholeValue - 0.5),
+            ),
+            SizedBox(width: token.spacer4),
+            _buildValueIndicatorItem(
+              overlayContext,
+              value: wholeValue,
+              iconSize: iconSize,
+              isHalf: false,
+              selectedColor: selectedColor,
+              inactiveColor: inactiveColor,
+              onTap: () => _selectHalfChoice(wholeValue),
+            ),
+          ],
+        );
+      } else {
+        final value = _valueIndicatorValue;
+        choices = _buildValueIndicatorItem(
+          overlayContext,
+          value: value,
+          iconSize: iconSize,
+          isHalf: value != value.truncateToDouble(),
+          selectedColor: selectedColor,
+          inactiveColor: inactiveColor,
+        );
+      }
       if (popupWidth == naturalPopupWidth) {
         return choices;
       }
@@ -417,48 +584,49 @@ class _TRateState extends State<TRate> {
       );
     }
 
-    _halfChoiceEntry = OverlayEntry(
-      builder: (overlayContext) => Stack(
-        children: [
+    return Stack(
+      children: [
+        if (_valueIndicatorShowsHalfChoices)
           Positioned.fill(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: _completeHalfChoice,
             ),
           ),
-          Positioned(
-            left: left,
-            top: top,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                key: _halfChoiceKey,
-                padding: EdgeInsets.all(token.spacer4),
-                decoration: BoxDecoration(
-                  color:
-                      material.tExplicitColorScheme?.surface ??
-                      token.bgColorContainer,
-                  borderRadius: BorderRadius.circular(token.radiusDefault),
-                  boxShadow:
-                      theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
-                ),
-                child: buildChoices(overlayContext),
+        Positioned(
+          left: left,
+          top: top,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              key: _valueIndicatorShowsHalfChoices
+                  ? _halfChoiceKey
+                  : _valueIndicatorKey,
+              padding: EdgeInsets.all(token.spacer4),
+              decoration: BoxDecoration(
+                color:
+                    material.tExplicitColorScheme?.surface ??
+                    token.bgColorContainer,
+                borderRadius: BorderRadius.circular(token.radiusDefault),
+                boxShadow:
+                    theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
               ),
+              child: buildContent(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
-    overlay.insert(_halfChoiceEntry!);
   }
 
-  Widget _buildHalfChoiceButton(
+  Widget _buildValueIndicatorItem(
     BuildContext context, {
     required double value,
     required double iconSize,
     required bool isHalf,
     required Color selectedColor,
     required Color inactiveColor,
+    VoidCallback? onTap,
   }) {
     final token = context.tTheme;
     final fillAlignment = Directionality.of(context) == TextDirection.rtl
@@ -466,12 +634,7 @@ class _TRateState extends State<TRate> {
         : Alignment.centerLeft;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        if (_pendingHalfChoiceValue != value) {
-          widget.onChanged?.call(value);
-        }
-        _completeHalfChoice(value);
-      },
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: token.spacer4,
@@ -506,7 +669,7 @@ class _TRateState extends State<TRate> {
               ),
             ),
             Text(
-              value.toStringAsFixed(1),
+              _formatValue(value),
               style: TextStyle(fontSize: token.fontBodyMedium?.size),
             ),
           ],
@@ -515,15 +678,33 @@ class _TRateState extends State<TRate> {
     );
   }
 
-  void _dismissHalfChoice() {
-    _halfChoiceEntry?.remove();
-    _halfChoiceEntry = null;
+  void _selectHalfChoice(double value) {
+    if (_pendingHalfChoiceValue != value) {
+      widget.onChanged?.call(value);
+    }
+    _completeHalfChoice(value);
+  }
+
+  void _scheduleValueIndicatorDismissal() {
+    _valueIndicatorTimer?.cancel();
+    _valueIndicatorTimer = Timer(
+      _valueIndicatorDuration,
+      _dismissValueIndicator,
+    );
+  }
+
+  void _dismissValueIndicator() {
+    _valueIndicatorTimer?.cancel();
+    _valueIndicatorTimer = null;
+    _valueIndicatorEntry?.remove();
+    _valueIndicatorEntry = null;
     _pendingHalfChoiceValue = null;
+    _valueIndicatorShowsHalfChoices = false;
   }
 
   void _completeHalfChoice([double? value]) {
     final completedValue = value ?? _pendingHalfChoiceValue;
-    _dismissHalfChoice();
+    _dismissValueIndicator();
     if (completedValue != null) {
       _finishInteraction(completedValue);
     }

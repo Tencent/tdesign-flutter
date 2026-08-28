@@ -26,7 +26,7 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
     /// 文案样式。
     this.textStyle,
 
-    /// 半星选择浮层阴影。
+    /// 当前值提示与半星选择浮层阴影。
     this.overlayBoxShadow,
   });
 
@@ -51,7 +51,7 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
   /// 文案样式。
   final TextStyle? textStyle;
 
-  /// 半星选择浮层阴影。
+  /// 当前值提示与半星选择浮层阴影。
   final List<BoxShadow>? overlayBoxShadow;
 
   @override

@@ -62,6 +62,7 @@ void main() {
         find.byType(GestureDetector),
       );
       expect(detector.onTapDown, isNull);
+      expect(detector.onLongPressStart, isNull);
       expect(detector.onHorizontalDragUpdate, isNull);
       await tester.tap(find.byType(TRate));
       await tester.drag(find.byType(TRate), const Offset(40, 0));
@@ -72,6 +73,7 @@ void main() {
       );
       detector = tester.widget<GestureDetector>(find.byType(GestureDetector));
       expect(detector.onTapDown, isNotNull);
+      expect(detector.onLongPressStart, isNotNull);
       expect(detector.onHorizontalDragUpdate, isNotNull);
     });
 
@@ -92,43 +94,183 @@ void main() {
 
       final rect = tester.getRect(find.byType(GestureDetector));
       await tester.tapAt(Offset(rect.left + 70, rect.center.dy));
+      await tester.pump();
 
       expect(starts, [1]);
       expect(changes, [3]);
       expect(ends, [3]);
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsOneWidget,
+      );
+      expect(find.text('3'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 299));
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsOneWidget,
+      );
+      await tester.pump(const Duration(milliseconds: 1));
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsNothing,
+      );
     });
 
-    testWidgets('half selection exposes half and whole choices after tap', (
+    testWidgets('showValueIndicator false hides ordinary rating feedback', (
       tester,
     ) async {
+      final changes = <double>[];
+      await tester.pumpWidget(
+        wrap(
+          TRate(value: 1, showValueIndicator: false, onChanged: changes.add),
+        ),
+      );
+
+      final rect = tester.getRect(find.byType(GestureDetector));
+      await tester.tapAt(Offset(rect.left + 70, rect.center.dy));
+
+      expect(changes, [3]);
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsNothing,
+      );
+
+      await tester.drag(find.byType(TRate), const Offset(40, 0));
+      await tester.pump();
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('value indicator stays anchored to the selected item', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRate(value: 0, onChanged: _noop),
+          rateTheme: const TRateThemeData(iconSize: 40, iconGap: 8),
+        ),
+      );
+
+      final rateRect = tester.getRect(find.byType(GestureDetector));
+      final indicator = find.byKey(const ValueKey('t-rate-value-indicator'));
+
+      await tester.tapAt(Offset(rateRect.left + 4, rateRect.center.dy));
+      await tester.pump();
+      final firstLeft = tester
+          .widget<Positioned>(
+            find.ancestor(of: indicator, matching: find.byType(Positioned)),
+          )
+          .left;
+
+      await tester.tapAt(Offset(rateRect.left + 34, rateRect.center.dy));
+      await tester.pump();
+      final sameItemLeft = tester
+          .widget<Positioned>(
+            find.ancestor(of: indicator, matching: find.byType(Positioned)),
+          )
+          .left;
+
+      await tester.tapAt(Offset(rateRect.left + 52, rateRect.center.dy));
+      await tester.pump();
+      final nextItemLeft = tester
+          .widget<Positioned>(
+            find.ancestor(of: indicator, matching: find.byType(Positioned)),
+          )
+          .left;
+
+      expect(sameItemLeft, firstLeft);
+      expect(nextItemLeft! - firstLeft!, 48);
+    });
+
+    testWidgets('long press shows the anchored value indicator until release', (
+      tester,
+    ) async {
+      final starts = <double>[];
       final changes = <double>[];
       final ends = <double>[];
       await tester.pumpWidget(
         wrap(
           TRate(
-            value: 0,
-            allowHalf: true,
+            value: 1,
+            onChangeStart: starts.add,
             onChanged: changes.add,
             onChangeEnd: ends.add,
           ),
+          rateTheme: const TRateThemeData(iconSize: 40, iconGap: 8),
         ),
       );
 
-      final rect = tester.getRect(find.byType(GestureDetector));
-      await tester.tapAt(Offset(rect.left + 3, rect.center.dy));
+      final rateRect = tester.getRect(find.byType(GestureDetector));
+      final indicator = find.byKey(const ValueKey('t-rate-value-indicator'));
+      final gesture = await tester.startGesture(
+        Offset(rateRect.left + 52, rateRect.center.dy),
+      );
+      await tester.pump(kLongPressTimeout + const Duration(milliseconds: 1));
+
+      expect(starts, [1]);
+      expect(changes, [2]);
+      expect(indicator, findsOneWidget);
+      final initialLeft = tester
+          .widget<Positioned>(
+            find.ancestor(of: indicator, matching: find.byType(Positioned)),
+          )
+          .left;
+
+      await gesture.moveBy(const Offset(20, 0));
+      await tester.pump();
+      final movedLeft = tester
+          .widget<Positioned>(
+            find.ancestor(of: indicator, matching: find.byType(Positioned)),
+          )
+          .left;
+
+      expect(movedLeft, initialLeft);
+      await gesture.up();
       await tester.pump();
 
-      expect(find.byKey(const ValueKey('t-rate-half-choice')), findsOneWidget);
-      expect(find.text('0.5'), findsOneWidget);
-      expect(find.text('1.0'), findsOneWidget);
-
-      await tester.tap(find.text('1.0'));
-      await tester.pump();
-
-      expect(changes, [0.5, 1]);
-      expect(ends, [1]);
-      expect(find.byKey(const ValueKey('t-rate-half-choice')), findsNothing);
+      expect(ends, [2]);
+      expect(indicator, findsNothing);
     });
+
+    testWidgets(
+      'half selection always exposes choices when value indicator is hidden',
+      (tester) async {
+        final changes = <double>[];
+        final ends = <double>[];
+        await tester.pumpWidget(
+          wrap(
+            TRate(
+              value: 0,
+              allowHalf: true,
+              showValueIndicator: false,
+              onChanged: changes.add,
+              onChangeEnd: ends.add,
+            ),
+          ),
+        );
+
+        final rect = tester.getRect(find.byType(GestureDetector));
+        await tester.tapAt(Offset(rect.left + 3, rect.center.dy));
+        await tester.pump();
+
+        expect(
+          find.byKey(const ValueKey('t-rate-half-choice')),
+          findsOneWidget,
+        );
+        expect(find.text('0.5'), findsOneWidget);
+        expect(find.text('1'), findsOneWidget);
+
+        await tester.tap(find.text('1'));
+        await tester.pump();
+
+        expect(changes, [0.5, 1]);
+        expect(ends, [1]);
+        expect(find.byKey(const ValueKey('t-rate-half-choice')), findsNothing);
+      },
+    );
 
     testWidgets('half choice remains visible after a controlled value update', (
       tester,
@@ -214,12 +356,51 @@ void main() {
       await tester.pump();
       await gesture.moveTo(rect.centerRight + const Offset(100, 0));
       await tester.pump();
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsOneWidget,
+      );
       await gesture.up();
+      await tester.pump();
 
       expect(starts, [2]);
       expect(changes, isNotEmpty);
       expect(changes.last, 5);
       expect(ends, [5]);
+      expect(
+        find.byKey(const ValueKey('t-rate-value-indicator')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('dragging beyond the leading edge clears the rating', (
+      tester,
+    ) async {
+      for (final allowHalf in [false, true]) {
+        final changes = <double>[];
+        final ends = <double>[];
+        await tester.pumpWidget(
+          wrap(
+            TRate(
+              value: 2,
+              allowHalf: allowHalf,
+              onChanged: changes.add,
+              onChangeEnd: ends.add,
+            ),
+          ),
+        );
+
+        final rect = tester.getRect(find.byType(GestureDetector).first);
+        final gesture = await tester.startGesture(rect.center);
+        await gesture.moveBy(const Offset(-20, 0));
+        await tester.pump();
+        await gesture.moveTo(Offset(rect.left - 48, rect.center.dy));
+        await tester.pump();
+        await gesture.up();
+
+        expect(changes.last, 0);
+        expect(ends, [0]);
+      }
     });
 
     testWidgets('slow horizontal drag starts and ends one lifecycle', (
@@ -291,17 +472,21 @@ void main() {
           ),
         ),
       );
-      expect(find.byIcon(TIcons.star_filled), findsNWidgets(6));
+      final rateIcons = find.descendant(
+        of: find.byType(TRate),
+        matching: find.byIcon(TIcons.star_filled),
+      );
+      expect(rateIcons, findsNWidgets(6));
 
       final rect = tester.getRect(find.byType(GestureDetector));
       await tester.tapAt(Offset(rect.left + 100, rect.center.dy));
       await tester.pump();
-      expect(find.byIcon(TIcons.star_filled), findsNWidgets(6));
+      expect(rateIcons, findsNWidgets(6));
 
       update(() {});
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
       expect(value, 4);
-      expect(find.byIcon(TIcons.star_filled), findsNWidgets(9));
+      expect(rateIcons, findsNWidgets(9));
     });
   });
 
@@ -443,6 +628,7 @@ void main() {
                     'bgColorComponent': Colors.blue,
                     'textColorPrimary': Colors.green,
                   },
+                  marginMap: {'spacer24': 30},
                 )
                 as TThemeData;
         final colorScheme = ColorScheme.fromSeed(
@@ -468,6 +654,7 @@ void main() {
         expect(icons.any((icon) => icon.color == Colors.red), isTrue);
         expect(icons.any((icon) => icon.color == Colors.blue), isTrue);
         expect(icons.any((icon) => icon.color == colorScheme.primary), isFalse);
+        expect(icons.every((icon) => icon.size == 30), isTrue);
       },
     );
 

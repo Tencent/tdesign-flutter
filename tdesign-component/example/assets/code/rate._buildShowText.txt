@@ -1,22 +1,27 @@
-Widget _buildShowText(BuildContext context) => const Column(
+Widget _buildShowText(BuildContext context) => Column(
     children: [
-      _RateRow(
+      const _RateRow(
         title: '带描述评分',
         rate: _StatefulRate(
           initialValue: 3,
           texts: ['1分', '2分', '3分', '4分', '5分'],
         ),
       ),
-      _RateRow(
+      SizedBox(height: context.tTheme.spacer16),
+      const _RateRow(
         title: '带描述评分',
         rate: _StatefulRate(
           initialValue: 3,
           texts: ['极差', '失望', '一般', '满意', '惊喜'],
         ),
       ),
-      _RateRow(
+      SizedBox(height: context.tTheme.spacer16),
+      const _RateRow(
         title: '带描述评分',
-        rate: _StatefulRate(initialValue: 0, texts: []),
+        rate: _StatefulRate(
+          initialValue: 0,
+          texts: ['极差', '失望', '一般', '满意', '惊喜'],
+        ),
       ),
     ],
   );

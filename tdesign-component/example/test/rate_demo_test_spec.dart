@@ -11,6 +11,8 @@ const rateDemoPageTestSpec = DemoPageTestSpec(
     '01 组件类型',
     '实心评分',
     '自定义评分',
+    '第三方图标评分',
+    '第三方图标',
     '自定义评分数量',
     '带描述评分',
     '3分',
@@ -32,5 +34,5 @@ const rateDemoPageTestSpec = DemoPageTestSpec(
     '可以前往',
   ],
   componentType: TRate,
-  expectedComponentCount: 13,
+  expectedComponentCount: 14,
 );

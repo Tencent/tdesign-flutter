@@ -85,6 +85,10 @@ Future<void> disposeDemoPage(WidgetTester tester) async {
 Future<void> _loadGoldenFonts() async {
   final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
     ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
+  final cupertinoIconFont =
+      FontLoader('packages/cupertino_icons/CupertinoIcons')..addFont(
+        rootBundle.load('packages/cupertino_icons/assets/CupertinoIcons.ttf'),
+      );
   final flutterBin = File(
     Platform.resolvedExecutable,
   ).parent.parent.parent.parent.parent;
@@ -100,7 +104,12 @@ Future<void> _loadGoldenFonts() async {
         'test/fonts/TDesignGoldenCJK-Regular.otf',
       ).readAsBytes().then(ByteData.sublistView),
     );
-  await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
+  await Future.wait([
+    iconFont.load(),
+    cupertinoIconFont.load(),
+    robotoFont.load(),
+    cjkFont.load(),
+  ]);
 }
 
 Future<void> pumpFullDemoPage(

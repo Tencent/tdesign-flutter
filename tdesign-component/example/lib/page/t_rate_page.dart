@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -21,6 +22,11 @@ class TRatePage extends StatelessWidget {
         children: [
           ExampleItem(desc: '实心评分', builder: _buildBasic, center: false),
           ExampleItem(desc: '自定义评分', builder: _buildCustom, center: false),
+          ExampleItem(
+            desc: '第三方图标评分',
+            builder: _buildThirdPartyIcon,
+            center: false,
+          ),
           ExampleItem(desc: '自定义评分数量', builder: _buildCount, center: false),
           ExampleItem(desc: '带描述评分', builder: _buildShowText, center: false),
         ],
@@ -64,31 +70,46 @@ class TRatePage extends StatelessWidget {
   );
 
   @ExampleCode(group: 'rate')
+  Widget _buildThirdPartyIcon(BuildContext context) => TCell(
+    title: const Text('第三方图标'),
+    note: _StatefulRate(
+      initialValue: 3,
+      icon: (filled) =>
+          Icon(filled ? CupertinoIcons.heart_fill : CupertinoIcons.heart),
+    ),
+  );
+
+  @ExampleCode(group: 'rate')
   Widget _buildCount(BuildContext context) => const TCell(
     title: Text('自定义评分数量'),
     note: _StatefulRate(initialValue: 2, count: 3),
   );
 
   @ExampleCode(group: 'rate')
-  Widget _buildShowText(BuildContext context) => const Column(
+  Widget _buildShowText(BuildContext context) => Column(
     children: [
-      _RateRow(
+      const _RateRow(
         title: '带描述评分',
         rate: _StatefulRate(
           initialValue: 3,
           texts: ['1分', '2分', '3分', '4分', '5分'],
         ),
       ),
-      _RateRow(
+      SizedBox(height: context.tTheme.spacer16),
+      const _RateRow(
         title: '带描述评分',
         rate: _StatefulRate(
           initialValue: 3,
           texts: ['极差', '失望', '一般', '满意', '惊喜'],
         ),
       ),
-      _RateRow(
+      SizedBox(height: context.tTheme.spacer16),
+      const _RateRow(
         title: '带描述评分',
-        rate: _StatefulRate(initialValue: 0, texts: []),
+        rate: _StatefulRate(
+          initialValue: 0,
+          texts: ['极差', '失望', '一般', '满意', '惊喜'],
+        ),
       ),
     ],
   );
