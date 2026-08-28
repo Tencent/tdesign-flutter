@@ -30,6 +30,7 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('refresh', [
     'test/components/refresh/t_refresh_test.dart',
   ]),
+  ComponentTestSuite('rate', ['test/components/rate/t_rate_test.dart']),
   ComponentTestSuite('icon', ['test/components/icon/t_icon_test.dart']),
   ComponentTestSuite('link', [
     'test/components/link/t_link_resolve_test.dart',

@@ -1,0 +1,33 @@
+Widget _buildColor(BuildContext context) => Column(
+    children: [
+      TCell(
+        title: const Text('填充评分'),
+        note: Theme(
+          data: Theme.of(context).mergeExtension(
+            const TRateThemeData(
+              starColor: Color(0xFFF96102),
+              inactiveStarColor: Color(0xFFBBBBBB),
+            ),
+          ),
+          child: const _StatefulRate(initialValue: 3, allowHalf: true),
+        ),
+      ),
+      TCell(
+        title: const Text('线描评分'),
+        note: Theme(
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TRateThemeData(starColor: Color(0xFF00A870))),
+          child: _StatefulRate(
+            initialValue: 3,
+            icon: (filled) => Icon(
+              filled ? TIcons.star_filled : TIcons.star,
+              color: filled
+                  ? const Color(0xFF00A870)
+                  : context.tTheme.bgColorComponent,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );

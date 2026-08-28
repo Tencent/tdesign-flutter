@@ -1,0 +1,2 @@
+Widget _buildBasic(BuildContext context) =>
+      const TCell(title: Text('实心评分'), note: _StatefulRate(initialValue: 3));

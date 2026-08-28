@@ -32,10 +32,15 @@ class DemoPageTestSpec {
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
+  registerDemoStructureTests(spec);
+  registerDemoGoldenTests(spec);
+}
+
+void registerDemoStructureTests(DemoPageTestSpec spec) {
   setUpAll(_loadGoldenFonts);
 
   testWidgets('${spec.name} Demo structure', (tester) async {
-    await _pumpFullPage(tester, spec, ThemeMode.light);
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
 
     for (final text in spec.expectedTexts) {
       expect(
@@ -52,23 +57,27 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
       );
     }
     expect(tester.takeException(), isNull);
-    await _disposePage(tester);
+    await disposeDemoPage(tester);
   }, tags: 'demo');
+}
+
+void registerDemoGoldenTests(DemoPageTestSpec spec) {
+  setUpAll(_loadGoldenFonts);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
-      await _pumpFullPage(tester, spec, mode);
+      await pumpFullDemoPage(tester, spec, mode);
 
       await expectLater(
         find.byKey(ValueKey('${spec.name}-demo-page')),
         matchesGoldenFile('goldens/${spec.name}_page_${mode.name}.png'),
       );
-      await _disposePage(tester);
+      await disposeDemoPage(tester);
     }, tags: 'golden');
   }
 }
 
-Future<void> _disposePage(WidgetTester tester) async {
+Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pumpWidget(const SizedBox());
   await tester.pump(const Duration(seconds: 1));
 }
@@ -76,6 +85,10 @@ Future<void> _disposePage(WidgetTester tester) async {
 Future<void> _loadGoldenFonts() async {
   final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
     ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
+  final cupertinoIconFont =
+      FontLoader('packages/cupertino_icons/CupertinoIcons')..addFont(
+        rootBundle.load('packages/cupertino_icons/assets/CupertinoIcons.ttf'),
+      );
   final flutterBin = File(
     Platform.resolvedExecutable,
   ).parent.parent.parent.parent.parent;
@@ -91,10 +104,15 @@ Future<void> _loadGoldenFonts() async {
         'test/fonts/TDesignGoldenCJK-Regular.otf',
       ).readAsBytes().then(ByteData.sublistView),
     );
-  await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
+  await Future.wait([
+    iconFont.load(),
+    cupertinoIconFont.load(),
+    robotoFont.load(),
+    cjkFont.load(),
+  ]);
 }
 
-Future<void> _pumpFullPage(
+Future<void> pumpFullDemoPage(
   WidgetTester tester,
   DemoPageTestSpec spec,
   ThemeMode mode,
