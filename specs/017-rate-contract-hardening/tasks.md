@@ -9,4 +9,8 @@
 - [x] 更新并复跑 Linux Golden
 - [x] 补齐显式 Material 文本色、默认 token 与完整 Semantics 断言
 - [x] 拆分 Demo 功能测试和 Golden，并登记双版本功能回归
+- [x] 修复慢速拖拽重复开始与指针取消生命周期
+- [x] 保留半星 Semantics 数值并修复长文案受限宽度溢出
+- [x] 更正已发布 `showText` 的 breaking 判断并补迁移说明
+- [x] 同步官网 Rate 示例与当前公开 API
 - [x] 记录验收结果

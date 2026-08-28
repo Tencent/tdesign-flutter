@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -221,6 +222,60 @@ void main() {
       expect(ends, [5]);
     });
 
+    testWidgets('slow horizontal drag starts and ends one lifecycle', (
+      tester,
+    ) async {
+      final starts = <double>[];
+      final ends = <double>[];
+      await tester.pumpWidget(
+        wrap(
+          TRate(
+            value: 2,
+            onChanged: _noop,
+            onChangeStart: starts.add,
+            onChangeEnd: ends.add,
+          ),
+        ),
+      );
+
+      final rect = tester.getRect(find.byType(TRate));
+      final gesture = await tester.startGesture(rect.center);
+      await tester.pump(kPressTimeout + const Duration(milliseconds: 1));
+      await gesture.moveBy(const Offset(20, 0));
+      await tester.pump();
+      await gesture.up();
+
+      expect(starts, [2]);
+      expect(ends, hasLength(1));
+    });
+
+    testWidgets('pointer cancellation completes one interaction lifecycle', (
+      tester,
+    ) async {
+      final starts = <double>[];
+      final ends = <double>[];
+      await tester.pumpWidget(
+        wrap(
+          TRate(
+            value: 2,
+            onChanged: _noop,
+            onChangeStart: starts.add,
+            onChangeEnd: ends.add,
+          ),
+        ),
+      );
+
+      final rect = tester.getRect(find.byType(TRate));
+      final gesture = await tester.startGesture(rect.center);
+      await gesture.moveBy(const Offset(20, 0));
+      await tester.pump();
+      await gesture.cancel();
+      await tester.pump();
+
+      expect(starts, [2]);
+      expect(ends, [2]);
+    });
+
     testWidgets('external value remains the rendering source of truth', (
       tester,
     ) async {
@@ -276,6 +331,48 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.text('一般'), findsOneWidget);
+    });
+
+    testWidgets('long text shrinks in a bounded parent without textWidth', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const SizedBox(
+            width: 200,
+            child: TRate(
+              value: 3,
+              texts: [
+                'very long description',
+                'very long description',
+                'very long description',
+              ],
+              onChanged: _noop,
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('very long description'), findsOneWidget);
+    });
+
+    testWidgets('text keeps intrinsic width in an unbounded row', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TRate(value: 3, texts: ['bad', 'ok', 'good'], onChanged: _noop),
+            ],
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('good'), findsOneWidget);
     });
 
     testWidgets('custom builder receives selected and unselected states', (
@@ -551,6 +648,28 @@ void main() {
     expect(starts, [2, 2]);
     expect(changes, [2.5, 1.5]);
     expect(ends, [2.5, 1.5]);
+    semantics.dispose();
+  });
+
+  testWidgets('half-step semantics keeps numeric values with descriptions', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.pumpWidget(
+      wrap(
+        const TRate(
+          value: 2,
+          allowHalf: true,
+          texts: ['one', 'two', 'three', 'four', 'five'],
+          onChanged: _noop,
+        ),
+      ),
+    );
+
+    final data = tester.getSemantics(find.byType(TRate)).getSemanticsData();
+    expect(data.value, '2 two');
+    expect(data.increasedValue, '2.5 two');
+    expect(data.decreasedValue, '1.5 one');
     semantics.dispose();
   });
 

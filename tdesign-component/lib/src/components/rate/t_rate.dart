@@ -26,10 +26,10 @@ class TRate extends StatefulWidget {
     /// 评分变更回调；为 null 时禁用。
     this.onChanged,
 
-    /// 开始交互时触发。
+    /// 开始交互时触发；同一次指针或语义交互只触发一次。
     this.onChangeStart,
 
-    /// 结束交互时触发。
+    /// 结束交互时触发；指针取消时以当前受控值结束。
     this.onChangeEnd,
 
     /// 评分项数量。
@@ -55,10 +55,10 @@ class TRate extends StatefulWidget {
   /// 评分变更回调；为 null 时禁用。
   final ValueChanged<double>? onChanged;
 
-  /// 开始交互时触发。
+  /// 开始交互时触发；同一次指针或语义交互只触发一次。
   final ValueChanged<double>? onChangeStart;
 
-  /// 结束交互时触发。
+  /// 结束交互时触发；指针取消时以当前受控值结束。
   final ValueChanged<double>? onChangeEnd;
 
   /// 评分项数量。
@@ -86,6 +86,7 @@ class _TRateState extends State<TRate> {
   double? _lastInteractionValue;
   OverlayEntry? _halfChoiceEntry;
   double? _pendingHalfChoiceValue;
+  bool _interactionStarted = false;
 
   bool get _enabled => widget.onChanged != null;
   int get _effectiveCount => widget.count < 1 ? 1 : widget.count;
@@ -102,6 +103,7 @@ class _TRateState extends State<TRate> {
     super.didUpdateWidget(oldWidget);
     if (widget.allowHalf != oldWidget.allowHalf || !_enabled) {
       _dismissHalfChoice();
+      _resetInteraction();
     }
   }
 
@@ -143,104 +145,138 @@ class _TRateState extends State<TRate> {
       onDecrease: _enabled && decreasedValue != _effectiveValue
           ? () => _changeFromSemantics(decreasedValue)
           : null,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTapDown: _enabled
-                ? (details) {
-                    _lastInteractionValue = _valueAt(
-                      details.localPosition.dx,
-                      iconSize,
-                      iconGap,
-                      Directionality.of(context),
-                    );
-                    widget.onChangeStart?.call(_effectiveValue);
-                  }
-                : null,
-            onTapUp: _enabled
-                ? (details) {
-                    final next = _valueAt(
-                      details.localPosition.dx,
-                      iconSize,
-                      iconGap,
-                      Directionality.of(context),
-                    );
-                    _lastInteractionValue = next;
-                    widget.onChanged?.call(next);
-                    if (widget.allowHalf) {
-                      _showHalfChoice(
-                        context,
-                        details.globalPosition,
-                        next.ceilToDouble(),
-                        iconSize,
-                      );
-                      _pendingHalfChoiceValue = next;
-                    } else {
-                      widget.onChangeEnd?.call(next);
-                    }
-                  }
-                : null,
-            onHorizontalDragStart: _enabled
-                ? (_) {
-                    _lastInteractionValue = _effectiveValue;
-                    widget.onChangeStart?.call(_effectiveValue);
-                  }
-                : null,
-            onHorizontalDragUpdate: _enabled
-                ? (details) {
-                    final next = _valueAt(
-                      details.localPosition.dx,
-                      iconSize,
-                      iconGap,
-                      Directionality.of(context),
-                    );
-                    _lastInteractionValue = next;
-                    widget.onChanged?.call(next);
-                  }
-                : null,
-            onHorizontalDragEnd: _enabled
-                ? (_) => widget.onChangeEnd?.call(
-                    _lastInteractionValue ?? _effectiveValue,
-                  )
-                : null,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var index = 0; index < _effectiveCount; index++) ...[
-                  _buildItem(context, index, iconSize, theme),
-                  if (index < _effectiveCount - 1) SizedBox(width: iconGap),
-                ],
-              ],
-            ),
-          ),
-          if (texts != null) ...[
-            SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
-            SizedBox(
-              width: theme?.textWidth,
-              child: Text(
-                _resolveText(context, texts: texts),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    theme?.textStyle ??
-                    TextStyle(
-                      color: _enabled
-                          ? explicitColorScheme?.onSurface ??
-                                context.tTheme.textColorPrimary
-                          : explicitColorScheme?.onSurface.withValues(
-                                  alpha: 0.38,
-                                ) ??
-                                context.tTheme.textDisabledColor,
-                      fontSize: context.tTheme.fontBodyLarge?.size,
-                    ),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Listener(
+          onPointerCancel: (_) {
+            _finishInteraction(_effectiveValue);
+            _dismissHalfChoice();
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: _enabled
+                    ? (details) {
+                        _lastInteractionValue = _valueAt(
+                          details.localPosition.dx,
+                          iconSize,
+                          iconGap,
+                          Directionality.of(context),
+                        );
+                      }
+                    : null,
+                onTapUp: _enabled
+                    ? (details) {
+                        final next = _valueAt(
+                          details.localPosition.dx,
+                          iconSize,
+                          iconGap,
+                          Directionality.of(context),
+                        );
+                        _lastInteractionValue = next;
+                        _startInteraction();
+                        widget.onChanged?.call(next);
+                        if (widget.allowHalf) {
+                          _showHalfChoice(
+                            context,
+                            details.globalPosition,
+                            next.ceilToDouble(),
+                            iconSize,
+                          );
+                          _pendingHalfChoiceValue = next;
+                        } else {
+                          _finishInteraction(next);
+                        }
+                      }
+                    : null,
+                onHorizontalDragStart: _enabled
+                    ? (_) {
+                        _lastInteractionValue = _effectiveValue;
+                        _startInteraction();
+                      }
+                    : null,
+                onHorizontalDragUpdate: _enabled
+                    ? (details) {
+                        final next = _valueAt(
+                          details.localPosition.dx,
+                          iconSize,
+                          iconGap,
+                          Directionality.of(context),
+                        );
+                        _lastInteractionValue = next;
+                        widget.onChanged?.call(next);
+                      }
+                    : null,
+                onHorizontalDragEnd: _enabled
+                    ? (_) => _finishInteraction(
+                        _lastInteractionValue ?? _effectiveValue,
+                      )
+                    : null,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var index = 0; index < _effectiveCount; index++) ...[
+                      _buildItem(context, index, iconSize, theme),
+                      if (index < _effectiveCount - 1) SizedBox(width: iconGap),
+                    ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ],
+              if (texts != null) ...[
+                SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
+                if (constraints.hasBoundedWidth)
+                  Flexible(
+                    child: SizedBox(
+                      width: theme?.textWidth,
+                      child: Text(
+                        _resolveText(context, texts: texts),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: _resolveTextStyle(
+                          context,
+                          theme,
+                          explicitColorScheme,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  SizedBox(
+                    width: theme?.textWidth,
+                    child: Text(
+                      _resolveText(context, texts: texts),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: _resolveTextStyle(
+                        context,
+                        theme,
+                        explicitColorScheme,
+                      ),
+                    ),
+                  ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  TextStyle _resolveTextStyle(
+    BuildContext context,
+    TRateThemeData? theme,
+    ColorScheme? explicitColorScheme,
+  ) {
+    return theme?.textStyle ??
+        TextStyle(
+          color: _enabled
+              ? explicitColorScheme?.onSurface ??
+                    context.tTheme.textColorPrimary
+              : explicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
+                    context.tTheme.textDisabledColor,
+          fontSize: context.tTheme.fontBodyLarge?.size,
+        );
   }
 
   Widget _buildItem(
@@ -489,8 +525,29 @@ class _TRateState extends State<TRate> {
     final completedValue = value ?? _pendingHalfChoiceValue;
     _dismissHalfChoice();
     if (completedValue != null) {
-      widget.onChangeEnd?.call(completedValue);
+      _finishInteraction(completedValue);
     }
+  }
+
+  void _startInteraction() {
+    if (_interactionStarted) {
+      return;
+    }
+    _interactionStarted = true;
+    widget.onChangeStart?.call(_effectiveValue);
+  }
+
+  void _finishInteraction(double value) {
+    if (!_interactionStarted) {
+      return;
+    }
+    _resetInteraction();
+    widget.onChangeEnd?.call(value);
+  }
+
+  void _resetInteraction() {
+    _interactionStarted = false;
+    _lastInteractionValue = null;
   }
 
   void _changeFromSemantics(double next) {
@@ -500,14 +557,12 @@ class _TRateState extends State<TRate> {
   }
 
   String _semanticText(BuildContext context, double value) {
-    if (value == 0) {
-      return context.resource.notRated;
-    }
     final texts = widget.texts;
     if (texts == null) {
       return _formatValue(value);
     }
-    return _resolveText(context, texts: texts, value: value);
+    final description = _resolveText(context, texts: texts, value: value);
+    return '${_formatValue(value)} $description';
   }
 
   String _resolveText(
