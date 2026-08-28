@@ -319,4 +319,188 @@ void main() {
       );
     });
   });
+  group('TColorPicker v2 coverage & edge branches', () {
+    testWidgets('external value change re-parses color in didUpdateWidget', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          format: TColorPickerFormat.rgb,
+          onChanged: (value, change) {},
+        )),
+      );
+      expect(find.text('RGB'), findsOneWidget);
+      // 外部受控 value 变化后，格式区应刷新为新颜色（红色 255）。
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#FF0000',
+          type: TColorPickerType.multiple,
+          format: TColorPickerFormat.rgb,
+          onChanged: (value, change) {},
+        )),
+      );
+      expect(find.text('255'), findsOneWidget);
+      // 空 value 不触发重新解析，保持内部颜色不变。
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '',
+          type: TColorPickerType.multiple,
+          format: TColorPickerFormat.rgb,
+          onChanged: (value, change) {},
+        )),
+      );
+      expect(find.text('255'), findsOneWidget);
+    });
+
+    testWidgets('clearable with empty swatchColors shows bottom clear button', (
+      tester,
+    ) async {
+      String? value;
+      TColorPickerChangeContext? change;
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          clearable: true,
+          swatchColors: const [],
+          onChanged: (v, c) {
+            value = v;
+            change = c;
+          },
+        )),
+      );
+      // 空 swatch + clearable 走底部独立"清除"分支。
+      expect(find.text('清除'), findsOneWidget);
+      await tester.tap(find.text('清除'));
+      await tester.pump();
+      expect(value, isNotNull);
+      expect(change!.trigger, TColorPickerChangeTrigger.clear);
+    });
+
+    testWidgets('hsl format display renders hue/saturation/lightness segments', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          format: TColorPickerFormat.hsl,
+          onChanged: (value, change) {},
+        )),
+      );
+      expect(find.text('HSL'), findsOneWidget);
+      expect(find.text('217'), findsOneWidget);
+      expect(find.text('43%'), findsOneWidget);
+      // 饱和度与 alpha 两段均为 100%。
+      expect(find.text('100%'), findsNWidgets(2));
+    });
+
+    testWidgets('hsv format display renders hue/saturation/value segments', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          format: TColorPickerFormat.hsv,
+          onChanged: (value, change) {},
+        )),
+      );
+      expect(find.text('HSV'), findsOneWidget);
+      expect(find.text('217'), findsOneWidget);
+      expect(find.text('85%'), findsOneWidget);
+      // 饱和度与 alpha 两段均为 100%。
+      expect(find.text('100%'), findsNWidgets(2));
+    });
+
+    testWidgets('cmyk format display renders cyan/magenta/yellow/key segments', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          format: TColorPickerFormat.cmyk,
+          onChanged: (value, change) {},
+        )),
+      );
+      expect(find.text('CMYK'), findsOneWidget);
+      expect(find.text('100'), findsOneWidget);
+      expect(find.text('62'), findsOneWidget);
+      expect(find.text('15'), findsOneWidget);
+      expect(find.text('100%'), findsOneWidget);
+    });
+
+    testWidgets('unparseable swatch color falls back to transparent', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          swatchColors: const ['rgb(1, 2, x)'],
+          onChanged: (value, change) {},
+        )),
+      );
+      // _parseColor 与 _isSelected 的异常分支：非法分量导致 double.parse 抛错，
+      // 组件应降级为透明 swatch 且不抛错。
+      final transparentSwatch = find.byWidgetPredicate((w) {
+        return w is Container &&
+            w.decoration is BoxDecoration &&
+            (w.decoration! as BoxDecoration).color == Colors.transparent;
+      });
+      expect(transparentSwatch, findsOneWidget);
+    });
+
+    testWidgets('saturation drag without onPaletteBarChange is safe', (
+      tester,
+    ) async {
+      TColorPickerChangeContext? changed;
+      await tester.pumpWidget(
+        wrap(TColorPicker(
+          value: '#0052D9',
+          type: TColorPickerType.multiple,
+          onChanged: (value, c) => changed = c,
+          // onPaletteBarChange 缺省，覆盖 ?.call 空分支。
+        )),
+      );
+      await tester.drag(
+        find.byType(TColorPickerSaturationPanel),
+        const Offset(-60, -40),
+      );
+      await tester.pump();
+      expect(changed, isNull);
+    });
+
+    test('TColorPickerThemeData copyWith and lerp contract', () {
+      const theme = TColorPickerThemeData(
+        panelBackgroundColor: Color(0xFF123456),
+        panelRadius: 12,
+        saturationHeight: 144,
+        sliderHeight: 8,
+      );
+      // copyWith：覆盖指定字段，其余保留源值。
+      final copied = theme.copyWith(
+        panelBackgroundColor: const Color(0xFF654321),
+        swatchWidth: 32,
+      );
+      expect(copied.panelBackgroundColor, const Color(0xFF654321));
+      expect(copied.panelRadius, 12);
+      expect(copied.saturationHeight, 144);
+      expect(copied.sliderHeight, 8);
+      expect(copied.swatchWidth, 32);
+      // copyWith 全空 = 克隆。
+      final clone = theme.copyWith();
+      expect(clone.panelRadius, 12);
+      expect(clone.sliderHeight, 8);
+      // lerp 取中间值。
+      const other = TColorPickerThemeData(panelRadius: 24, sliderHeight: 16);
+      final lerped = theme.lerp(other, 0.5);
+      expect(lerped.panelRadius, 18);
+      expect(lerped.sliderHeight, 12);
+      // lerp 非同类 / null 时返回自身。
+      final same = theme.lerp(null, 0.5);
+      expect(identical(same, theme), isTrue);
+    });
+  });
 }
