@@ -1,7 +1,4 @@
 Widget _buildBase(BuildContext context) => TColorPicker(
         value: baseValue,
-        onChanged: (result) {
-          final (value, _) = result;
-          setState(() => baseValue = value);
-        },
+        onChanged: (value, change) => setState(() => baseValue = value),
       );

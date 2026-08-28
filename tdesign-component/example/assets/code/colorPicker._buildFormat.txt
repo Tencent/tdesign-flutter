@@ -8,10 +8,7 @@ Widget _buildFormat(BuildContext context) => Column(
             type: TColorPickerType.multiple,
             enableAlpha: true,
             format: curFormat,
-            onChanged: (result) {
-              final (value, _) = result;
-              setState(() => formatValue = value);
-            },
+            onChanged: (value, change) => setState(() => formatValue = value),
           ),
         ],
       );

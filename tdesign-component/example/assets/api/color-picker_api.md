@@ -8,7 +8,7 @@
 | enableAlpha | bool | false | 是否开启透明通道。为 true 时展示透明条，并输出带 alpha 的格式。 |
 | format | TColorPickerFormat | TColorPickerFormat.rgb | 输出格式。默认 `TColorPickerFormat.rgb`。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChanged | ValueChanged<(String, TColorPickerChangeContext)> | - | 选中色值变化时触发。`value` 为按 `format` 格式化后的新色值， `TColorPickerChangeContext.color` 为当前颜色对象， `TColorPickerChangeContext.trigger` 为触发来源。 |
+| onChanged | void Function(String value, TColorPickerChangeContext change) | - | 选中色值变化时触发。 `value` 为按 `format` 格式化后的新色值；第二个参数含当前颜色对象与触发来源 （`TColorPickerChangeContext.color` / `TColorPickerChangeContext.trigger`）。 |
 | onPaletteBarChange | ValueChanged<TColorObject>? | - | 调色板（饱和度/明度色板）拖拽过程回调，`color` 为当前颜色对象。 |
 | swatchColors | List<String>? | - | 系统预设的颜色样例。`null` 使用内置默认色板； 空列表 `[]` 隐藏系统色板。 |
 | themeData | TColorPickerThemeData? | - | 实例级主题覆盖。 |
