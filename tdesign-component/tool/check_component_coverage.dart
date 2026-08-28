@@ -10,6 +10,7 @@ const componentTargets = <String, List<String>>{
   'input': ['lib/src/components/input/'],
   'link': ['lib/src/components/link/'],
   'radio': ['lib/src/components/radio/'],
+  'rate': ['lib/src/components/rate/'],
   'refresh': [
     'lib/src/components/refresh/t_pull_down_refresh.dart',
     'lib/src/components/refresh/t_pull_down_refresh_controller.dart',

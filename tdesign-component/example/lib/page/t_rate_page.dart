@@ -60,7 +60,7 @@ class TRatePage extends StatelessWidget {
     note: _StatefulRate(
       initialValue: 3,
       icon: (filled) => Icon(
-        filled ? Icons.thumb_up : Icons.thumb_up_outlined,
+        TIcons.thumb_up,
         color: filled
             ? context.tTheme.warningColor5
             : context.tTheme.bgColorComponent,
@@ -73,8 +73,7 @@ class TRatePage extends StatelessWidget {
     title: const Text('第三方图标'),
     note: _StatefulRate(
       initialValue: 3,
-      icon: (filled) => Icon(
-        filled ? Icons.favorite : Icons.favorite_border,
+      icon: (filled) => _ThirdPartyRateIcon(
         color: filled
             ? context.tTheme.warningColor5
             : context.tTheme.bgColorComponent,
@@ -176,7 +175,7 @@ class TRatePage extends StatelessWidget {
           child: _StatefulRate(
             initialValue: 3,
             icon: (filled) => Icon(
-              filled ? Icons.star : Icons.star_border,
+              filled ? TIcons.star_filled : TIcons.star,
               color: filled
                   ? const Color(0xFF00A870)
                   : context.tTheme.bgColorComponent,
@@ -191,6 +190,32 @@ class TRatePage extends StatelessWidget {
   Widget _buildVertical(BuildContext context) => const Padding(
     padding: EdgeInsets.all(16),
     child: Center(child: _VerticalRate()),
+  );
+}
+
+/// 对应小程序示例中第三方 iconfont 的 `a-1h` 字形。
+class _ThirdPartyRateIcon extends StatelessWidget {
+  const _ThirdPartyRateIcon({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+    dimension: 16,
+    child: Stack(
+      children: [
+        Positioned(
+          left: 1,
+          bottom: 0,
+          child: Text('1', style: TextStyle(color: color, fontSize: 13)),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          child: Text('h', style: TextStyle(color: color, fontSize: 8)),
+        ),
+      ],
+    ),
   );
 }
 

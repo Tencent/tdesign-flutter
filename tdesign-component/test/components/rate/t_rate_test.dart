@@ -28,6 +28,14 @@ void main() {
           .widgetList<Align>(find.byType(Align))
           .firstWhere((widget) => widget.widthFactor == 0.5);
       expect(align.widthFactor, 0.5);
+
+      await tester.pumpWidget(wrap(const TRate(value: 2.5)));
+      expect(
+        tester
+            .widgetList<Align>(find.byType(Align))
+            .where((widget) => widget.widthFactor == 0.5),
+        isEmpty,
+      );
     });
 
     testWidgets('count controls the number of items', (tester) async {

@@ -108,6 +108,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/pull_down_refresh_demo_test.dart'],
   ),
   VisualTestSuite(
+    'rate',
+    'Rate Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/rate_demo_test.dart'],
+  ),
+  VisualTestSuite(
     'toast',
     'Toast Demo',
     workingDirectory: 'example',

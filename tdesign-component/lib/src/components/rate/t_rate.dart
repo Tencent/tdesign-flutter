@@ -211,7 +211,8 @@ class _TRateState extends State<TRate> {
     double iconSize,
     TRateThemeData? theme,
   ) {
-    final fill = (_effectiveValue - index).clamp(0, 1).toDouble();
+    final rawFill = (_effectiveValue - index).clamp(0, 1).toDouble();
+    final fill = widget.allowHalf ? rawFill : rawFill.floorToDouble();
     final selectedColor = _enabled
         ? (theme?.starColor ?? context.tTheme.warningColor5)
         : context.tTheme.textDisabledColor;

@@ -21,7 +21,7 @@ Widget _buildColor(BuildContext context) => Column(
           child: _StatefulRate(
             initialValue: 3,
             icon: (filled) => Icon(
-              filled ? Icons.star : Icons.star_border,
+              filled ? TIcons.star_filled : TIcons.star,
               color: filled
                   ? const Color(0xFF00A870)
                   : context.tTheme.bgColorComponent,
