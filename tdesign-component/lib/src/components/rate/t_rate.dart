@@ -3,9 +3,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
 import 't_rate_theme_data.dart';
 
 /// 自定义评分图标构建器。
@@ -39,7 +41,10 @@ class TRate extends StatefulWidget {
     /// 自定义评分图标。
     this.icon,
 
-    /// 各评分对应的文案。
+    /// 各评分对应的辅助文案。
+    ///
+    /// 为 null 时不显示辅助文案；非 null 时显示。当当前评分
+    /// 没有对应文案时，显示本地化的“未评分”。
     this.texts,
   }) : assert(count > 0),
        assert(value >= 0 && value <= count);
@@ -65,7 +70,10 @@ class TRate extends StatefulWidget {
   /// 自定义评分图标。
   final TRateIconBuilder? icon;
 
-  /// 各评分对应的文案。
+  /// 各评分对应的辅助文案。
+  ///
+  /// 为 null 时不显示辅助文案；非 null 时显示。当当前评分
+  /// 没有对应文案时，显示本地化的“未评分”。
   final List<String>? texts;
 
   @override
@@ -85,7 +93,8 @@ class _TRateState extends State<TRate> {
     if (!widget.value.isFinite) {
       return 0;
     }
-    return widget.value.clamp(0, _effectiveCount).toDouble();
+    final value = widget.value.clamp(0, _effectiveCount).toDouble();
+    return widget.allowHalf ? value : value.floorToDouble();
   }
 
   @override
@@ -107,11 +116,31 @@ class _TRateState extends State<TRate> {
     final theme = Theme.of(context).extension<TRateThemeData>();
     final iconSize = theme?.iconSize ?? 24;
     final iconGap = theme?.iconGap ?? context.tTheme.spacer8;
-    final showText = theme?.showText ?? false;
+    final showText = widget.texts != null;
+    final step = widget.allowHalf ? 0.5 : 1.0;
+    final increasedValue = (_effectiveValue + step)
+        .clamp(0, _effectiveCount)
+        .toDouble();
+    final decreasedValue = (_effectiveValue - step)
+        .clamp(0, _effectiveCount)
+        .toDouble();
 
     return Semantics(
+      slider: true,
       enabled: _enabled,
-      value: _effectiveValue.toString(),
+      value: _semanticText(context, _effectiveValue),
+      increasedValue: _enabled && increasedValue != _effectiveValue
+          ? _semanticText(context, increasedValue)
+          : null,
+      decreasedValue: _enabled && decreasedValue != _effectiveValue
+          ? _semanticText(context, decreasedValue)
+          : null,
+      onIncrease: _enabled && increasedValue != _effectiveValue
+          ? () => _changeFromSemantics(increasedValue)
+          : null,
+      onDecrease: _enabled && decreasedValue != _effectiveValue
+          ? () => _changeFromSemantics(decreasedValue)
+          : null,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -123,6 +152,7 @@ class _TRateState extends State<TRate> {
                       details.localPosition.dx,
                       iconSize,
                       iconGap,
+                      Directionality.of(context),
                     );
                     widget.onChangeStart?.call(_effectiveValue);
                   }
@@ -133,6 +163,7 @@ class _TRateState extends State<TRate> {
                       details.localPosition.dx,
                       iconSize,
                       iconGap,
+                      Directionality.of(context),
                     );
                     _lastInteractionValue = next;
                     widget.onChanged?.call(next);
@@ -161,6 +192,7 @@ class _TRateState extends State<TRate> {
                       details.localPosition.dx,
                       iconSize,
                       iconGap,
+                      Directionality.of(context),
                     );
                     _lastInteractionValue = next;
                     widget.onChanged?.call(next);
@@ -186,7 +218,7 @@ class _TRateState extends State<TRate> {
             SizedBox(
               width: theme?.textWidth,
               child: Text(
-                _resolveText(),
+                _resolveText(context),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style:
@@ -219,12 +251,11 @@ class _TRateState extends State<TRate> {
     final inactiveColor = _enabled
         ? (theme?.inactiveStarColor ?? context.tTheme.bgColorComponent)
         : context.tTheme.bgColorComponentDisabled;
-    final unselected =
-        widget.icon?.call(false) ??
-        Icon(TIcons.star_filled, size: iconSize, color: inactiveColor);
-    final selected =
-        widget.icon?.call(true) ??
-        Icon(TIcons.star_filled, size: iconSize, color: selectedColor);
+    final unselected = _buildIcon(false, iconSize, inactiveColor);
+    final selected = _buildIcon(true, iconSize, selectedColor);
+    final fillAlignment = Directionality.of(context) == TextDirection.rtl
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
 
     return SizedBox.square(
       dimension: iconSize,
@@ -234,7 +265,7 @@ class _TRateState extends State<TRate> {
           if (fill > 0)
             ClipRect(
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: fillAlignment,
                 widthFactor: fill,
                 child: SizedBox.square(dimension: iconSize, child: selected),
               ),
@@ -244,9 +275,27 @@ class _TRateState extends State<TRate> {
     );
   }
 
-  double _valueAt(double dx, double iconSize, double iconGap) {
+  Widget _buildIcon(bool filled, double iconSize, Color color) {
+    final icon = widget.icon?.call(filled);
+    if (icon == null) {
+      return Icon(TIcons.star_filled, size: iconSize, color: color);
+    }
+    return IconTheme.merge(
+      data: IconThemeData(size: iconSize, color: color),
+      child: icon,
+    );
+  }
+
+  double _valueAt(
+    double dx,
+    double iconSize,
+    double iconGap,
+    TextDirection textDirection,
+  ) {
     final itemExtent = iconSize + iconGap;
-    final clamped = dx.clamp(0, itemExtent * _effectiveCount - iconGap);
+    final width = itemExtent * _effectiveCount - iconGap;
+    final directionalDx = textDirection == TextDirection.rtl ? width - dx : dx;
+    final clamped = directionalDx.clamp(0, width);
     final index = (clamped / itemExtent).floor().clamp(0, _effectiveCount - 1);
     final local = clamped - index * itemExtent;
     final fraction = widget.allowHalf && local <= iconSize / 2 ? 0.5 : 1.0;
@@ -267,15 +316,65 @@ class _TRateState extends State<TRate> {
     final token = context.tTheme;
     final selectedColor = theme?.starColor ?? token.warningColor5;
     final inactiveColor = theme?.inactiveStarColor ?? token.bgColorComponent;
-    final popupWidth = iconSize * 2 + 40;
-    final popupHeight = iconSize + 36;
+    final naturalPopupWidth = iconSize * 2 + token.spacer40;
+    final popupHeight = iconSize + token.spacer32 + token.spacer4;
+    final horizontalInset = token.spacer8;
+    final popupWidth = naturalPopupWidth.clamp(
+      0.0,
+      (mediaQuery.size.width - horizontalInset * 2).clamp(0.0, double.infinity),
+    );
+    final maxLeft = (mediaQuery.size.width - popupWidth - horizontalInset)
+        .clamp(horizontalInset, double.infinity);
     final left = (globalPosition.dx - popupWidth / 2)
-        .clamp(8.0, mediaQuery.size.width - popupWidth - 8.0)
+        .clamp(horizontalInset, maxLeft)
         .toDouble();
-    final preferredTop = globalPosition.dy - popupHeight - 12;
-    final top = preferredTop >= mediaQuery.padding.top
+    final preferredTop = globalPosition.dy - popupHeight - token.spacer12;
+    final rawTop = preferredTop >= mediaQuery.padding.top
         ? preferredTop
-        : globalPosition.dy + 12;
+        : globalPosition.dy + token.spacer12;
+    final verticalInset = mediaQuery.padding.top + token.spacer8;
+    final maxTop =
+        (mediaQuery.size.height -
+                mediaQuery.padding.bottom -
+                popupHeight -
+                token.spacer8)
+            .clamp(verticalInset, double.infinity);
+    final top = rawTop.clamp(verticalInset, maxTop).toDouble();
+
+    Widget buildChoices(BuildContext overlayContext) {
+      final choices = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildHalfChoiceButton(
+            overlayContext,
+            value: wholeValue - 0.5,
+            iconSize: iconSize,
+            isHalf: true,
+            selectedColor: selectedColor,
+            inactiveColor: inactiveColor,
+          ),
+          SizedBox(width: token.spacer4),
+          _buildHalfChoiceButton(
+            overlayContext,
+            value: wholeValue,
+            iconSize: iconSize,
+            isHalf: false,
+            selectedColor: selectedColor,
+            inactiveColor: inactiveColor,
+          ),
+        ],
+      );
+      if (popupWidth == naturalPopupWidth) {
+        return choices;
+      }
+      return SizedBox(
+        width: (popupWidth - token.spacer8).clamp(0, double.infinity),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: choices,
+        ),
+      );
+    }
 
     _halfChoiceEntry = OverlayEntry(
       builder: (overlayContext) => Stack(
@@ -293,37 +392,16 @@ class _TRateState extends State<TRate> {
               color: Colors.transparent,
               child: Container(
                 key: _halfChoiceKey,
-                padding: const EdgeInsets.all(4),
+                padding: EdgeInsets.all(token.spacer4),
                 decoration: BoxDecoration(
                   color:
                       material.tExplicitColorScheme?.surface ??
                       token.bgColorContainer,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(token.radiusDefault),
                   boxShadow:
                       theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildHalfChoiceButton(
-                      overlayContext,
-                      value: wholeValue - 0.5,
-                      iconSize: iconSize,
-                      isHalf: true,
-                      selectedColor: selectedColor,
-                      inactiveColor: inactiveColor,
-                    ),
-                    const SizedBox(width: 4),
-                    _buildHalfChoiceButton(
-                      overlayContext,
-                      value: wholeValue,
-                      iconSize: iconSize,
-                      isHalf: false,
-                      selectedColor: selectedColor,
-                      inactiveColor: inactiveColor,
-                    ),
-                  ],
-                ),
+                child: buildChoices(overlayContext),
               ),
             ),
           ),
@@ -341,6 +419,10 @@ class _TRateState extends State<TRate> {
     required Color selectedColor,
     required Color inactiveColor,
   }) {
+    final token = context.tTheme;
+    final fillAlignment = Directionality.of(context) == TextDirection.rtl
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -350,7 +432,10 @@ class _TRateState extends State<TRate> {
         _completeHalfChoice(value);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        padding: EdgeInsets.symmetric(
+          horizontal: token.spacer4,
+          vertical: token.spacer4 / 2,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -359,36 +444,30 @@ class _TRateState extends State<TRate> {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: Icon(
-                      TIcons.star_filled,
-                      size: iconSize,
-                      color: inactiveColor,
-                    ),
+                    child: _buildIcon(false, iconSize, inactiveColor),
                   ),
                   if (isHalf)
                     ClipRect(
                       child: Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: fillAlignment,
                         widthFactor: 0.5,
-                        child: Icon(
-                          TIcons.star_filled,
-                          size: iconSize,
-                          color: selectedColor,
+                        child: SizedBox.square(
+                          dimension: iconSize,
+                          child: _buildIcon(true, iconSize, selectedColor),
                         ),
                       ),
                     )
                   else
                     Positioned.fill(
-                      child: Icon(
-                        TIcons.star_filled,
-                        size: iconSize,
-                        color: selectedColor,
-                      ),
+                      child: _buildIcon(true, iconSize, selectedColor),
                     ),
                 ],
               ),
             ),
-            Text(value.toStringAsFixed(1)),
+            Text(
+              value.toStringAsFixed(1),
+              style: TextStyle(fontSize: token.fontBodyMedium?.size),
+            ),
           ],
         ),
       ),
@@ -409,15 +488,39 @@ class _TRateState extends State<TRate> {
     }
   }
 
-  String _resolveText() {
-    final texts = widget.texts;
-    final value = _effectiveValue;
-    if (value <= 0 || texts == null || texts.isEmpty) {
-      return value.toString();
-    }
-    final halfIndex = (value * 2).ceil() - 1;
-    final wholeIndex = value.ceil() - 1;
-    final index = texts.length >= _effectiveCount * 2 ? halfIndex : wholeIndex;
-    return index >= 0 && index < texts.length ? texts[index] : value.toString();
+  void _changeFromSemantics(double next) {
+    widget.onChangeStart?.call(_effectiveValue);
+    widget.onChanged?.call(next);
+    widget.onChangeEnd?.call(next);
   }
+
+  String _semanticText(BuildContext context, double value) {
+    if (value == 0) {
+      return context.resource.notRated;
+    }
+    final texts = widget.texts;
+    if (texts == null) {
+      return _formatValue(value);
+    }
+    return _resolveText(context, value: value);
+  }
+
+  String _resolveText(BuildContext context, {double? value}) {
+    final texts = widget.texts;
+    final effectiveValue = value ?? _effectiveValue;
+    if (effectiveValue <= 0) {
+      return context.resource.notRated;
+    }
+    if (texts == null) {
+      return _formatValue(effectiveValue);
+    }
+    final index = (effectiveValue - 1).floor();
+    return index >= 0 && index < texts.length
+        ? texts[index]
+        : context.resource.notRated;
+  }
+
+  String _formatValue(double value) => value == value.truncateToDouble()
+      ? value.toInt().toString()
+      : value.toString();
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -36,6 +37,8 @@ void main() {
             .where((widget) => widget.widthFactor == 0.5),
         isEmpty,
       );
+      final semantics = tester.getSemantics(find.byType(TRate));
+      expect(semantics.value, '2');
     });
 
     testWidgets('count controls the number of items', (tester) async {
@@ -261,7 +264,7 @@ void main() {
               ),
             ),
           ),
-          rateTheme: const TRateThemeData(showText: true, textWidth: 64),
+          rateTheme: const TRateThemeData(textWidth: 64),
         ),
       );
 
@@ -306,7 +309,6 @@ void main() {
             inactiveStarColor: Colors.blue,
             iconSize: 30,
             iconGap: 4,
-            showText: true,
             textWidth: 80,
             textGap: 12,
             textStyle: style,
@@ -347,8 +349,7 @@ void main() {
       tester,
     ) async {
       const whole = ['one', 'two', 'three', 'four', 'five'];
-      const half = ['0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5'];
-      const theme = TRateThemeData(showText: true);
+      const theme = TRateThemeData();
 
       await tester.pumpWidget(
         wrap(
@@ -361,23 +362,174 @@ void main() {
 
       await tester.pumpWidget(
         wrap(
-          const TRate(value: 2.5, allowHalf: true, texts: half),
+          const TRate(value: 2.5, allowHalf: true, texts: whole),
           rateTheme: theme,
         ),
       );
-      expect(find.text('2.5'), findsOneWidget);
+      expect(find.text('two'), findsOneWidget);
 
       await tester.pumpWidget(
         wrap(const TRate(value: 0, texts: whole), rateTheme: theme),
       );
-      expect(find.text('0.0'), findsOneWidget);
+      expect(find.text('未评分'), findsOneWidget);
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(value: 0.5, allowHalf: true, texts: whole),
+          rateTheme: theme,
+        ),
+      );
+      expect(find.text('未评分'), findsOneWidget);
 
       await tester.pumpWidget(
         wrap(const TRate(value: 5, texts: ['short']), rateTheme: theme),
       );
-      expect(find.text('5.0'), findsOneWidget);
+      expect(find.text('未评分'), findsOneWidget);
+
+      await tester.pumpWidget(wrap(const TRate(value: 2)));
+      expect(find.text('2'), findsNothing);
+    });
+
+    testWidgets('custom icon is reused by the half choice overlay', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TRate(
+            value: 1,
+            allowHalf: true,
+            onChanged: _noop,
+            icon: (filled) =>
+                Icon(filled ? Icons.favorite : Icons.favorite_border),
+          ),
+        ),
+      );
+
+      final selectedBefore = find.byIcon(Icons.favorite).evaluate().length;
+      final unselectedBefore = find
+          .byIcon(Icons.favorite_border)
+          .evaluate()
+          .length;
+      await tester.tap(find.byType(TRate));
+      await tester.pump();
+
+      expect(find.byKey(const ValueKey('t-rate-half-choice')), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(selectedBefore + 2));
+      expect(
+        find.byIcon(Icons.favorite_border),
+        findsNWidgets(unselectedBefore + 2),
+      );
+    });
+
+    testWidgets('custom icon inherits component size and color', (
+      tester,
+    ) async {
+      final themes = <IconThemeData>[];
+      await tester.pumpWidget(
+        wrap(
+          TRate(
+            value: 1,
+            onChanged: _noop,
+            icon: (_) => Builder(
+              builder: (context) {
+                themes.add(IconTheme.of(context));
+                return const Icon(Icons.favorite);
+              },
+            ),
+          ),
+          rateTheme: const TRateThemeData(
+            iconSize: 30,
+            starColor: Colors.red,
+            inactiveStarColor: Colors.blue,
+          ),
+        ),
+      );
+
+      expect(themes, isNotEmpty);
+      expect(themes.every((theme) => theme.size == 30), isTrue);
+      expect(themes.any((theme) => theme.color == Colors.red), isTrue);
+      expect(themes.any((theme) => theme.color == Colors.blue), isTrue);
+    });
+
+    testWidgets('half choice stays in bounds on a narrow viewport', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const MediaQuery(
+            data: MediaQueryData(size: Size(60, 120)),
+            child: TRate(value: 1, allowHalf: true, onChanged: _noop),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(TRate));
+      await tester.pump();
+      expect(find.byKey(const ValueKey('t-rate-half-choice')), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
+
+  testWidgets('semantics exposes bounded increase and decrease actions', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    final starts = <double>[];
+    final changes = <double>[];
+    final ends = <double>[];
+    await tester.pumpWidget(
+      wrap(
+        TRate(
+          value: 2,
+          allowHalf: true,
+          onChangeStart: starts.add,
+          onChanged: changes.add,
+          onChangeEnd: ends.add,
+        ),
+      ),
+    );
+
+    final node = tester.getSemantics(find.byType(TRate));
+    final data = node.getSemanticsData();
+    expect(data.label, isEmpty);
+    // Flutter 3.32 尚无 flagsCollection，双版本兼容期保留 hasFlag。
+    // ignore: deprecated_member_use
+    expect(data.hasFlag(SemanticsFlag.isSlider), isTrue);
+    expect(data.hasAction(SemanticsAction.increase), isTrue);
+    expect(data.hasAction(SemanticsAction.decrease), isTrue);
+    node.owner!.performAction(node.id, SemanticsAction.increase);
+    await tester.pump();
+    node.owner!.performAction(node.id, SemanticsAction.decrease);
+
+    expect(starts, [2, 2]);
+    expect(changes, [2.5, 1.5]);
+    expect(ends, [2.5, 1.5]);
+    semantics.dispose();
+  });
+
+  testWidgets(
+    'RTL starts rating from the right and fills half from the right',
+    (tester) async {
+      final changes = <double>[];
+      await tester.pumpWidget(
+        wrap(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TRate(value: 0.5, allowHalf: true, onChanged: changes.add),
+          ),
+        ),
+      );
+
+      final half = tester
+          .widgetList<Align>(find.byType(Align))
+          .firstWhere((widget) => widget.widthFactor == 0.5);
+      expect(half.alignment, Alignment.centerRight);
+
+      final rect = tester.getRect(find.byType(GestureDetector).first);
+      await tester.tapAt(Offset(rect.right - 2, rect.center.dy));
+      expect(changes, [0.5]);
+    },
+  );
 
   test('constructor rejects invalid values', () {
     expect(() => TRate(value: -1), throwsAssertionError);
@@ -391,7 +543,6 @@ void main() {
       inactiveStarColor: Colors.grey,
       iconSize: 20,
       iconGap: 4,
-      showText: false,
       textWidth: 40,
       textGap: 8,
       textStyle: TextStyle(fontSize: 12),
@@ -402,7 +553,6 @@ void main() {
       inactiveStarColor: Colors.black,
       iconSize: 30,
       iconGap: 8,
-      showText: true,
       textWidth: 60,
       textGap: 12,
       textStyle: TextStyle(fontSize: 16),
@@ -417,18 +567,15 @@ void main() {
             inactiveStarColor: Colors.white,
             iconSize: 24,
             iconGap: 6,
-            showText: true,
             textWidth: 50,
             textGap: 10,
             textStyle: const TextStyle(fontSize: 14),
             overlayBoxShadow: const [BoxShadow(color: Colors.green)],
           )
-          .showText,
-      isTrue,
+          .textWidth,
+      50,
     );
     expect(base.lerp(null, 0.5), same(base));
-    expect(base.lerp(other, 0.25).showText, isFalse);
-    expect(base.lerp(other, 0.75).showText, isTrue);
     expect(base.lerp(other, 0.5).iconSize, 25);
     expect(base.lerp(other, 0.25).overlayBoxShadow, base.overlayBoxShadow);
   });

@@ -1,24 +1,22 @@
-Widget _buildShowText(BuildContext context) => Theme(
-    data: Theme.of(
-      context,
-    ).mergeExtension(const TRateThemeData(showText: true, textWidth: 40)),
-    child: const Column(
-      children: [
-        _RateRow(
-          title: '带描述评分',
-          rate: _StatefulRate(
-            initialValue: 3,
-            texts: ['1分', '2分', '3分', '4分', '5分'],
-          ),
+Widget _buildShowText(BuildContext context) => const Column(
+    children: [
+      _RateRow(
+        title: '带描述评分',
+        rate: _StatefulRate(
+          initialValue: 3,
+          texts: ['1分', '2分', '3分', '4分', '5分'],
         ),
-        _RateRow(
-          title: '带描述评分',
-          rate: _StatefulRate(
-            initialValue: 3,
-            texts: ['极差', '失望', '一般', '满意', '惊喜'],
-          ),
+      ),
+      _RateRow(
+        title: '带描述评分',
+        rate: _StatefulRate(
+          initialValue: 3,
+          texts: ['极差', '失望', '一般', '满意', '惊喜'],
         ),
-        _RateRow(title: '带描述评分', rate: _StatefulRate(initialValue: 0)),
-      ],
-    ),
+      ),
+      _RateRow(
+        title: '带描述评分',
+        rate: _StatefulRate(initialValue: 0, texts: []),
+      ),
+    ],
   );

@@ -13,7 +13,6 @@ void main() {
         '01 组件类型',
         '实心评分',
         '自定义评分',
-        '第三方图标评分',
         '自定义评分数量',
         '带描述评分',
         '02 组件状态',
@@ -26,7 +25,7 @@ void main() {
         '竖向带描述评分',
       ],
       componentType: TRate,
-      expectedComponentCount: 14,
+      expectedComponentCount: 13,
     ),
   );
 }

@@ -21,11 +21,6 @@ class TRatePage extends StatelessWidget {
         children: [
           ExampleItem(desc: '实心评分', builder: _buildBasic, center: false),
           ExampleItem(desc: '自定义评分', builder: _buildCustom, center: false),
-          ExampleItem(
-            desc: '第三方图标评分',
-            builder: _buildThirdPartyIcon,
-            center: false,
-          ),
           ExampleItem(desc: '自定义评分数量', builder: _buildCount, center: false),
           ExampleItem(desc: '带描述评分', builder: _buildShowText, center: false),
         ],
@@ -69,48 +64,33 @@ class TRatePage extends StatelessWidget {
   );
 
   @ExampleCode(group: 'rate')
-  Widget _buildThirdPartyIcon(BuildContext context) => TCell(
-    title: const Text('第三方图标'),
-    note: _StatefulRate(
-      initialValue: 3,
-      icon: (filled) => _ThirdPartyRateIcon(
-        color: filled
-            ? context.tTheme.warningColor5
-            : context.tTheme.bgColorComponent,
-      ),
-    ),
-  );
-
-  @ExampleCode(group: 'rate')
   Widget _buildCount(BuildContext context) => const TCell(
     title: Text('自定义评分数量'),
     note: _StatefulRate(initialValue: 2, count: 3),
   );
 
   @ExampleCode(group: 'rate')
-  Widget _buildShowText(BuildContext context) => Theme(
-    data: Theme.of(
-      context,
-    ).mergeExtension(const TRateThemeData(showText: true, textWidth: 40)),
-    child: const Column(
-      children: [
-        _RateRow(
-          title: '带描述评分',
-          rate: _StatefulRate(
-            initialValue: 3,
-            texts: ['1分', '2分', '3分', '4分', '5分'],
-          ),
+  Widget _buildShowText(BuildContext context) => const Column(
+    children: [
+      _RateRow(
+        title: '带描述评分',
+        rate: _StatefulRate(
+          initialValue: 3,
+          texts: ['1分', '2分', '3分', '4分', '5分'],
         ),
-        _RateRow(
-          title: '带描述评分',
-          rate: _StatefulRate(
-            initialValue: 3,
-            texts: ['极差', '失望', '一般', '满意', '惊喜'],
-          ),
+      ),
+      _RateRow(
+        title: '带描述评分',
+        rate: _StatefulRate(
+          initialValue: 3,
+          texts: ['极差', '失望', '一般', '满意', '惊喜'],
         ),
-        _RateRow(title: '带描述评分', rate: _StatefulRate(initialValue: 0)),
-      ],
-    ),
+      ),
+      _RateRow(
+        title: '带描述评分',
+        rate: _StatefulRate(initialValue: 0, texts: []),
+      ),
+    ],
   );
 
   @ExampleCode(group: 'rate')
@@ -118,7 +98,7 @@ class TRatePage extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _RateGroupLabel('只可选全星时'),
-      TCell(title: Text('点击或滑动'), note: _StatefulRate(initialValue: 3.5)),
+      TCell(title: Text('点击或滑动'), note: _StatefulRate(initialValue: 3)),
       _RateGroupLabel('只可选半星时', top: 24),
       TCell(
         title: Text('点击或滑动'),
@@ -190,32 +170,6 @@ class TRatePage extends StatelessWidget {
   Widget _buildVertical(BuildContext context) => const Padding(
     padding: EdgeInsets.all(16),
     child: Center(child: _VerticalRate()),
-  );
-}
-
-/// 对应小程序示例中第三方 iconfont 的 `a-1h` 字形。
-class _ThirdPartyRateIcon extends StatelessWidget {
-  const _ThirdPartyRateIcon({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) => SizedBox.square(
-    dimension: 16,
-    child: Stack(
-      children: [
-        Positioned(
-          left: 1,
-          bottom: 0,
-          child: Text('1', style: TextStyle(color: color, fontSize: 13)),
-        ),
-        Positioned(
-          right: 0,
-          top: 0,
-          child: Text('h', style: TextStyle(color: color, fontSize: 8)),
-        ),
-      ],
-    ),
   );
 }
 
