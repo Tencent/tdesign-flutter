@@ -113,10 +113,12 @@ class _TRateState extends State<TRate> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<TRateThemeData>();
+    final material = Theme.of(context);
+    final theme = material.extension<TRateThemeData>();
+    final explicitColorScheme = material.tExplicitColorScheme;
     final iconSize = theme?.iconSize ?? 24;
     final iconGap = theme?.iconGap ?? context.tTheme.spacer8;
-    final showText = widget.texts != null;
+    final texts = widget.texts;
     final step = widget.allowHalf ? 0.5 : 1.0;
     final increasedValue = (_effectiveValue + step)
         .clamp(0, _effectiveCount)
@@ -213,20 +215,24 @@ class _TRateState extends State<TRate> {
               ],
             ),
           ),
-          if (showText) ...[
+          if (texts != null) ...[
             SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
             SizedBox(
               width: theme?.textWidth,
               child: Text(
-                _resolveText(context),
+                _resolveText(context, texts: texts),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style:
                     theme?.textStyle ??
                     TextStyle(
                       color: _enabled
-                          ? context.tTheme.textColorPrimary
-                          : context.tTheme.textDisabledColor,
+                          ? explicitColorScheme?.onSurface ??
+                                context.tTheme.textColorPrimary
+                          : explicitColorScheme?.onSurface.withValues(
+                                  alpha: 0.38,
+                                ) ??
+                                context.tTheme.textDisabledColor,
                       fontSize: context.tTheme.fontBodyLarge?.size,
                     ),
               ),
@@ -243,8 +249,7 @@ class _TRateState extends State<TRate> {
     double iconSize,
     TRateThemeData? theme,
   ) {
-    final rawFill = (_effectiveValue - index).clamp(0, 1).toDouble();
-    final fill = widget.allowHalf ? rawFill : rawFill.floorToDouble();
+    final fill = (_effectiveValue - index).clamp(0, 1).toDouble();
     final selectedColor = _enabled
         ? (theme?.starColor ?? context.tTheme.warningColor5)
         : context.tTheme.textDisabledColor;
@@ -502,17 +507,17 @@ class _TRateState extends State<TRate> {
     if (texts == null) {
       return _formatValue(value);
     }
-    return _resolveText(context, value: value);
+    return _resolveText(context, texts: texts, value: value);
   }
 
-  String _resolveText(BuildContext context, {double? value}) {
-    final texts = widget.texts;
+  String _resolveText(
+    BuildContext context, {
+    required List<String> texts,
+    double? value,
+  }) {
     final effectiveValue = value ?? _effectiveValue;
     if (effectiveValue <= 0) {
       return context.resource.notRated;
-    }
-    if (texts == null) {
-      return _formatValue(effectiveValue);
     }
     final index = (effectiveValue - 1).floor();
     return index >= 0 && index < texts.length

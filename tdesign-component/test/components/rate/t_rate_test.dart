@@ -4,11 +4,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child, {TRateThemeData? rateTheme}) {
+  Widget wrap(
+    Widget child, {
+    TRateThemeData? rateTheme,
+    TThemeData? token,
+    ColorScheme? colorScheme,
+  }) {
     return MaterialApp(
       theme: ThemeData(
+        colorScheme: colorScheme,
         extensions: [
-          TThemeData.defaultData(),
+          token ?? TThemeData.defaultData(),
           if (rateTheme != null) rateTheme,
         ],
       ),
@@ -330,6 +336,44 @@ void main() {
       );
     });
 
+    testWidgets(
+      'default colors follow explicit Material text and TDesign rate tokens',
+      (tester) async {
+        final token =
+            TThemeData.defaultData().copyWith(
+                  colorMap: {
+                    'warningColor5': Colors.red,
+                    'bgColorComponent': Colors.blue,
+                    'textColorPrimary': Colors.green,
+                  },
+                )
+                as TThemeData;
+        final colorScheme = ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+        ).copyWith(onSurface: Colors.purple);
+        await tester.pumpWidget(
+          wrap(
+            const TRate(
+              value: 2,
+              texts: ['bad', 'ok', 'good', 'great', 'best'],
+              onChanged: _noop,
+            ),
+            token: token,
+            colorScheme: colorScheme,
+          ),
+        );
+
+        expect(
+          tester.widget<Text>(find.text('ok')).style?.color,
+          Colors.purple,
+        );
+        final icons = tester.widgetList<Icon>(find.byIcon(TIcons.star_filled));
+        expect(icons.any((icon) => icon.color == Colors.red), isTrue);
+        expect(icons.any((icon) => icon.color == Colors.blue), isTrue);
+        expect(icons.any((icon) => icon.color == colorScheme.primary), isFalse);
+      },
+    );
+
     testWidgets('disabled colors come from global tokens', (tester) async {
       await tester.pumpWidget(
         wrap(
@@ -497,6 +541,9 @@ void main() {
     expect(data.hasFlag(SemanticsFlag.isSlider), isTrue);
     expect(data.hasAction(SemanticsAction.increase), isTrue);
     expect(data.hasAction(SemanticsAction.decrease), isTrue);
+    expect(data.value, '2');
+    expect(data.increasedValue, '2.5');
+    expect(data.decreasedValue, '1.5');
     node.owner!.performAction(node.id, SemanticsAction.increase);
     await tester.pump();
     node.owner!.performAction(node.id, SemanticsAction.decrease);

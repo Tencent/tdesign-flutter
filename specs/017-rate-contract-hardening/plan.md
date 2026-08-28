@@ -13,6 +13,8 @@
 - Semantics 暴露 slider、增减后的值及增减回调。
 - 命中计算和裁剪根据 `Directionality` 选择方向。
 - 浮层可见样式从 `TThemeData` 的 spacer、radius、font、shadow 和 color 派生。
+- 辅助文本优先使用 `TRateThemeData.textStyle`，未配置时读取显式 `ColorScheme.onSurface`，最后回退 TDesign 文本 token；星色继续使用 Rate Theme 与 warning/component token。
+- 移除整星填充和文案解析中的不可达或重复防御分支。
 
 ## 风险
 
@@ -23,4 +25,5 @@
 
 - 运行 Rate 组件测试与覆盖率门禁。
 - 运行 Demo 结构测试和 Linux Golden。
+- 将 Demo 功能契约与 Golden 拆分，功能测试进入双版本共享回归，Golden 仅进入 Flutter 3.32.0 Linux 视觉回归。
 - 运行生成器 check、回归调度器自测与全量 analyze。

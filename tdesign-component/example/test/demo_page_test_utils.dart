@@ -32,10 +32,15 @@ class DemoPageTestSpec {
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
+  registerDemoStructureTests(spec);
+  registerDemoGoldenTests(spec);
+}
+
+void registerDemoStructureTests(DemoPageTestSpec spec) {
   setUpAll(_loadGoldenFonts);
 
   testWidgets('${spec.name} Demo structure', (tester) async {
-    await _pumpFullPage(tester, spec, ThemeMode.light);
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
 
     for (final text in spec.expectedTexts) {
       expect(
@@ -52,23 +57,27 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
       );
     }
     expect(tester.takeException(), isNull);
-    await _disposePage(tester);
+    await disposeDemoPage(tester);
   }, tags: 'demo');
+}
+
+void registerDemoGoldenTests(DemoPageTestSpec spec) {
+  setUpAll(_loadGoldenFonts);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
-      await _pumpFullPage(tester, spec, mode);
+      await pumpFullDemoPage(tester, spec, mode);
 
       await expectLater(
         find.byKey(ValueKey('${spec.name}-demo-page')),
         matchesGoldenFile('goldens/${spec.name}_page_${mode.name}.png'),
       );
-      await _disposePage(tester);
+      await disposeDemoPage(tester);
     }, tags: 'golden');
   }
 }
 
-Future<void> _disposePage(WidgetTester tester) async {
+Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pumpWidget(const SizedBox());
   await tester.pump(const Duration(seconds: 1));
 }
@@ -94,7 +103,7 @@ Future<void> _loadGoldenFonts() async {
   await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
 }
 
-Future<void> _pumpFullPage(
+Future<void> pumpFullDemoPage(
   WidgetTester tester,
   DemoPageTestSpec spec,
   ThemeMode mode,

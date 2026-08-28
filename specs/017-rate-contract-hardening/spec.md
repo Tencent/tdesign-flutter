@@ -15,6 +15,7 @@ Rate 初版对齐公开 Demo 后，仍存在文案状态由组件与 Theme 双�
 - 浮层在窄屏和屏幕上下边界内保持可访问，必要时允许水平滚动。
 - 整星模式将受控小数值向下归一化，确保绘制、文案与语义值一致。
 - Demo 带文案行对齐小程序 `96rpx` 高度、`32rpx` 水平内边距和 `200rpx` 标题宽度；评分文案保持内容自适应，不设固定宽度。
+- 辅助文本遵循组件 Theme、显式 Material `ColorScheme.onSurface`、TDesign token 的解析顺序；评分星色保持 warning 语义，不机械映射 Material `primary`。
 
 ## 非目标
 
@@ -35,5 +36,6 @@ Rate 初版对齐公开 Demo 后，仍存在文案状态由组件与 Theme 双�
 
 - 组件测试覆盖文案、浮层自定义图标、读屏增减和 RTL。
 - Demo 结构测试和 Flutter 3.32.0 Linux light/dark Golden 通过。
+- Demo 非视觉契约测试在 Flutter 3.32.0 与 latest 均执行，Golden 独立固定在 Flutter 3.32.0 Linux。
 - 生产 Rate 源码行覆盖率不低于 95%。
 - Flutter analyze 零告警，示例生成片段同步。

@@ -1,31 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_rate_page.dart';
 
 import 'demo_page_test_utils.dart';
+import 'rate_demo_test_spec.dart';
 
 void main() {
-  registerDemoPageTests(
-    const DemoPageTestSpec(
-      name: 'rate',
-      title: 'Rate 评分',
-      page: TRatePage(),
-      expectedTexts: [
-        '01 组件类型',
-        '实心评分',
-        '自定义评分',
-        '自定义评分数量',
-        '带描述评分',
-        '02 组件状态',
-        '只可选全星时',
-        '只可选半星时',
-        '03 组件样式',
-        '评分大小',
-        '设置评分颜色',
-        '04 特殊样式',
-        '竖向带描述评分',
-      ],
-      componentType: TRate,
-      expectedComponentCount: 13,
-    ),
-  );
+  registerDemoStructureTests(rateDemoPageTestSpec);
+
+  testWidgets('Rate Demo exposes the complete instance contract', (
+    tester,
+  ) async {
+    await pumpFullDemoPage(tester, rateDemoPageTestSpec, ThemeMode.light);
+
+    var rates = tester.widgetList<TRate>(find.byType(TRate)).toList();
+    expect(rates, hasLength(13));
+    expect(rates.map((rate) => rate.value), [
+      3,
+      3,
+      2,
+      3,
+      3,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      4,
+    ]);
+    expect(rates.map((rate) => rate.count), [
+      5,
+      5,
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+    ]);
+    expect(rates.map((rate) => rate.allowHalf), [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+    ]);
+    expect(rates[1].icon, isNotNull);
+    expect(rates[11].icon, isNotNull);
+    expect(rates[3].texts, ['1分', '2分', '3分', '4分', '5分']);
+    expect(rates[4].texts, ['极差', '失望', '一般', '满意', '惊喜']);
+    expect(rates[5].texts, isEmpty);
+
+    final firstRate = find.byType(TRate).first;
+    final rect = tester.getRect(firstRate);
+    await tester.tapAt(Offset(rect.right - 2, rect.center.dy));
+    await tester.pump();
+    rates = tester.widgetList<TRate>(find.byType(TRate)).toList();
+    expect(rates.first.value, 5);
+
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
 }
