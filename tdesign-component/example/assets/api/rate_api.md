@@ -11,7 +11,7 @@
 | onChanged | ValueChanged<double>? | - | 评分变更回调；为 null 时禁用。 |
 | onChangeEnd | ValueChanged<double>? | - | 结束交互时触发。 |
 | onChangeStart | ValueChanged<double>? | - | 开始交互时触发。 |
-| texts | List<String>? | - | 各评分对应的文案。 |
+| texts | List<String>? | - | 各评分对应的辅助文案。 为 null 时不显示辅助文案；非 null 时显示。当当前评分 没有对应文案时，显示本地化的“未评分”。 |
 | value | double | - | 受控评分值。 |
 
 
