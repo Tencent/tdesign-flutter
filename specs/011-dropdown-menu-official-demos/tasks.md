@@ -7,4 +7,5 @@
 - [x] DONE 实测生产源码 LCOV
 - [x] DONE 完成双 Flutter 版本 Example 测试和严格 analyze，记录 latest 既有组件几何断言差异
 - [ ] TODO 获取待确认契约的维护者决策
-- [ ] TODO 完成真实运行时像素验收与最终 Review
+- [x] DONE 完成真实运行时页面截图验收
+- [ ] TODO 完成向上展开面板截图验收与最终 Review

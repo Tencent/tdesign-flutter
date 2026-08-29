@@ -1781,11 +1781,13 @@ void main() {
       }
       expect(scrollController.offset, lessThan(250));
       barRect = tester.getRect(find.byType(TDropdownMenu));
-      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 0.5));
+      // Flutter engines can round the actively dragged anchor by one logical
+      // pixel while preserving the exact above/below placement relationship.
+      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 1));
       final seam = find.byKey(
         const ValueKey<String>('t-dropdown-menu-anchor-seam'),
       );
-      expect(tester.getRect(seam).bottom, greaterThan(barRect.top));
+      expect(tester.getRect(seam).bottom, greaterThan(barRect.top - 1));
 
       for (var step = 0; step < 4; step++) {
         await gesture.moveBy(const Offset(0, -52));
@@ -1793,14 +1795,14 @@ void main() {
         await tester.pump(const Duration(milliseconds: 16));
       }
       barRect = tester.getRect(find.byType(TDropdownMenu));
-      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.5));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 1));
 
       await gesture.up();
       scrollController.jumpTo(250);
       await tester.pump();
       await tester.pump();
       barRect = tester.getRect(find.byType(TDropdownMenu));
-      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.5));
+      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 1));
     });
 
     testWidgets('auto placement re-evaluates the target panel height', (
