@@ -7,6 +7,7 @@ const messageDemoPageTestSpec = DemoPageTestSpec(
   name: 'message',
   title: 'Message 消息通知',
   page: TMessagePage(),
+  useAlignmentCjkFont: true,
   expectedTexts: [
     '01 组件类型',
     '消息通知内容为文本、带操作按钮',
