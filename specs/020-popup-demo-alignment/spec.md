@@ -28,9 +28,10 @@ Popup Flutter Demo 虽覆盖了小程序公开页面的 7 个场景，但分组�
 
 ## 验收标准
 
-- [ ] 分组、说明、实例数量、顺序和按钮文案由 Demo Widget 测试精确断言。
-- [ ] 基础底部与两个应用实例的关键结构、尺寸和关闭交互通过测试。
-- [ ] 明暗主题完整页面 Golden 在 Flutter 3.32.0 Linux 可复现。
-- [ ] Popup 组件测试、覆盖率目标、Demo 功能测试与 Golden 均进入 CI 实际调度入口。
-- [ ] Popup 生产源码行覆盖率不低于 95%。
-- [ ] Flutter 3.32.0 与 latest 严格 analyze、组件测试和 Demo 功能测试通过。
+- [x] 分组、说明、实例数量、顺序和按钮文案由 Demo Widget 测试精确断言。
+- [x] 基础底部与两个应用实例的关键结构、尺寸和关闭交互通过测试。
+- [x] 明暗主题完整页面 Golden 在 Flutter 3.32.0 Linux 可复现。
+- [x] 已用微信开发者工具实际页截图与 Flutter Golden 比对，公开矩阵一致。
+- [x] Popup 组件测试、覆盖率目标、Demo 功能测试与 Golden 均进入 CI 实际调度入口。
+- [x] Popup 生产源码行覆盖率不低于 95%。
+- [x] Flutter 3.32.0 与 latest 严格 analyze、组件测试和 Demo 功能测试通过。
