@@ -1,6 +1,7 @@
 import 'dart:io';
 
 const componentTargets = <String, List<String>>{
+  'action_sheet': ['lib/src/components/action_sheet/'],
   'button': ['lib/src/components/button/'],
   'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],

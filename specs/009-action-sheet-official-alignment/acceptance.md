@@ -18,12 +18,15 @@
 | `flutter test --no-pub ... --plain-name <matrix/interaction>` | PASS，2 tests | Flutter 3.47.0；golden 固定由最低支持版本 3.32.0 生成，latest 的图标抗锯齿存在 1.22% 差异 |
 | `flutter test --no-pub test/components/action_sheet` | PASS，41 tests | Flutter 3.47.0 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.47.0，0 issues |
+| `flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart` | PASS，10 tests | 回归清单、覆盖率目标和视觉测试登记同步 |
+| `flutter test --no-pub test/action_sheet_page_golden_test.dart test/action_sheet_page_test.dart` | PASS，4 tests | Flutter 3.32.0；功能测试与 light/dark Golden 分流后复验 |
+| 集中式 CI 登记 | PASS | 组件测试、98.20% 覆盖率、双版本 Demo 功能测试与 3.32.0 Golden 均已登记 |
 
 ## 人工验收
 
 - [ ] 9 个入口在 Example 应用中可打开、选择、取消和翻页。
-- [ ] 与官方小程序基线完成同尺寸截图叠加对照。
+- [x] 使用 375dp 视口完成小程序与 Flutter 页面、列表弹层截图对照，证据见 [visual-comparison.md](visual-comparison.md)。
 
 ## 未覆盖项与后续工作
 
-- 真实运行时像素证据待补充。
+- 翻页、禁用项和全部入口的真机连续交互仍需人工复核；静态截图不能替代交互验收。

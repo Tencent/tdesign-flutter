@@ -98,6 +98,12 @@ Future<void> _loadGoldenFonts() async {
         '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
       ).readAsBytes().then(ByteData.sublistView),
     );
+  final materialIconsFont = FontLoader('MaterialIcons')
+    ..addFont(
+      File(
+        '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+      ).readAsBytes().then(ByteData.sublistView),
+    );
   final cjkFont = FontLoader(_goldenCjkFontFamily)
     ..addFont(
       File(
@@ -108,6 +114,7 @@ Future<void> _loadGoldenFonts() async {
     iconFont.load(),
     cupertinoIconFont.load(),
     robotoFont.load(),
+    materialIconsFont.load(),
     cjkFont.load(),
   ]);
 }

@@ -18,6 +18,12 @@ class VisualTestSuite {
 
 const visualTestSuites = <VisualTestSuite>[
   VisualTestSuite(
+    'action_sheet',
+    'ActionSheet Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/action_sheet_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'button',
     'Button Demo',
     workingDirectory: 'example',
