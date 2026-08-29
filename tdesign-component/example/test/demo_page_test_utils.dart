@@ -158,6 +158,20 @@ Future<void> pumpFullDemoPage(
   addTearDown(tester.view.resetDevicePixelRatio);
 }
 
+Future<void> pumpDemoPageAtPhoneViewport(
+  WidgetTester tester,
+  DemoPageTestSpec spec,
+  ThemeMode mode,
+) async {
+  tester.view.physicalSize = const Size(_pageWidth, _initialPageHeight);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(_buildPage(spec, mode));
+  await tester.pump();
+}
+
 Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   final model = ExamplePageModel(
     text: spec.title,

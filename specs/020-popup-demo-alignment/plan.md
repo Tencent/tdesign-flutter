@@ -24,6 +24,6 @@
 ## 验证策略
 
 - 双版本执行 Popup 组件测试、Demo 功能测试与严格 analyze。
-- Flutter 3.32.0 Linux 生成并复跑明暗主题 Golden。
+- Flutter 3.32.0 Linux 生成并复跑明暗主题完整页面 Golden，以及顶部、左侧、居中、底部、右侧五个基础方向的展开态 Golden。
 - 按 `lib/src/components/popup/` 过滤 LCOV，要求 LH/LF 不低于 95%。
 - 运行生成器 check、调度器自测和 `git diff --check`。
