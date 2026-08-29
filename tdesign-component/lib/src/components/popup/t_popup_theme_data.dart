@@ -11,7 +11,7 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   /// 蒙层透明度系数
   final double? barrierOpacity;
 
-  /// 打开/关闭动画时长，默认 300ms（与官方及仓库其他浮层组件对齐）。
+  /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
   final Duration? transitionDuration;
 
   /// 内容区圆角。

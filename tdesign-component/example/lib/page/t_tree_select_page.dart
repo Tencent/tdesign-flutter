@@ -150,12 +150,21 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
             height: MediaQuery.sizeOf(context).height * 0.6,
             headerBuilder: (_, close) => TPopupHeader(
               cancelButton: TextButton(
-                onPressed: () => close(TPopupTrigger.cancel),
+                onPressed: close,
                 child: const TText('取消'),
               ),
               title: const TText('选择分类'),
               confirmButton: TextButton(
-                onPressed: () => close(TPopupTrigger.confirm),
+                onPressed: () {
+                  if (mounted) {
+                    setState(() {
+                      _popupValue = [
+                        for (final path in draft) List<Object?>.of(path),
+                      ];
+                    });
+                  }
+                  close();
+                },
                 child: const TText('确定'),
               ),
             ),
@@ -170,15 +179,6 @@ class _TTreeSelectPageState extends State<TTreeSelectPage> {
                 },
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-                setState(() {
-                  _popupValue = [
-                    for (final path in draft) List<Object?>.of(path),
-                  ];
-                });
-              }
-            },
           ),
         );
       },

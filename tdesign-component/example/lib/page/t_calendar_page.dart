@@ -116,12 +116,17 @@ class _TCalendarPageState extends State<TCalendarPage> {
           height: MediaQuery.sizeOf(context).height * 0.72,
           headerBuilder: (_, close) => TPopupHeader(
             cancelButton: TextButton(
-              onPressed: () => close(TPopupTrigger.cancel),
+              onPressed: close,
               child: const TText('取消'),
             ),
             title: TText(title),
             confirmButton: TextButton(
-              onPressed: () => close(TPopupTrigger.confirm),
+              onPressed: () {
+                if (mounted) {
+                  onConfirm(List<DateTime>.of(draft));
+                }
+                close();
+              },
               child: const TText('确定'),
             ),
           ),
@@ -135,11 +140,6 @@ class _TCalendarPageState extends State<TCalendarPage> {
               },
             ),
           ),
-          onVisibleChange: (visible, trigger) {
-            if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-              onConfirm(List<DateTime>.of(draft));
-            }
-          },
         ),
       );
     }

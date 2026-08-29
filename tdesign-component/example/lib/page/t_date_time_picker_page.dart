@@ -152,13 +152,15 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
       context,
       options: TPopupOptions.bottom(
         headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TextButton(
-            onPressed: () => close(TPopupTrigger.cancel),
-            child: const TText('取消'),
-          ),
+          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
           title: TText(title),
           confirmButton: TextButton(
-            onPressed: () => close(TPopupTrigger.confirm),
+            onPressed: () {
+              if (mounted) {
+                onConfirm(draft);
+              }
+              close();
+            },
             child: const TText('确定'),
           ),
         ),
@@ -183,11 +185,6 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
             ),
           ),
         ),
-        onVisibleChange: (visible, trigger) {
-          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-            onConfirm(draft);
-          }
-        },
       ),
     );
   }
@@ -322,12 +319,26 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
             height: MediaQuery.sizeOf(context).height,
             headerBuilder: (_, close) => TPopupHeader(
               cancelButton: TextButton(
-                onPressed: () => close(TPopupTrigger.cancel),
+                onPressed: close,
                 child: const TText('取消'),
               ),
               title: const TText('选择日期和时间'),
               confirmButton: TextButton(
-                onPressed: () => close(TPopupTrigger.confirm),
+                onPressed: () {
+                  if (mounted && draftDate.isNotEmpty) {
+                    final date = draftDate.first;
+                    setState(() {
+                      _calendarTimeSelected = DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                        draftTime.hour ?? _calendarTimeSelected.hour,
+                        draftTime.minute ?? _calendarTimeSelected.minute,
+                      );
+                    });
+                  }
+                  close();
+                },
                 child: const TText('确定'),
               ),
             ),
@@ -359,24 +370,6 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
                 ],
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (visible ||
-                  trigger != TPopupTrigger.confirm ||
-                  !mounted ||
-                  draftDate.isEmpty) {
-                return;
-              }
-              final date = draftDate.first;
-              setState(() {
-                _calendarTimeSelected = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  draftTime.hour ?? _calendarTimeSelected.hour,
-                  draftTime.minute ?? _calendarTimeSelected.minute,
-                );
-              });
-            },
           ),
         );
       },

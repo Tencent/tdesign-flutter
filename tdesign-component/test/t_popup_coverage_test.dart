@@ -218,7 +218,7 @@ void main() {
       expect(handle!.isShowing, isFalse);
     });
 
-    testWidgets('handle.open 关闭后再次打开触发 onOpen / onOpened', (tester) async {
+    testWidgets('handle.open 关闭后再次打开触发显隐变化与 onOpened', (tester) async {
       var openCount = 0;
       var openedCount = 0;
       late BuildContext hostContext;
@@ -233,7 +233,11 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 80,
-              onOpen: () => openCount++,
+              onVisibleChange: (visible, _) {
+                if (visible) {
+                  openCount++;
+                }
+              },
               onOpened: () => openedCount++,
               child: const SizedBox(height: 40),
             ),
@@ -434,7 +438,7 @@ void main() {
               height: 160,
               headerBuilder: (_, close) => TPopupHeader(
                 cancelButton: TextButton(
-                  onPressed: () => close(TPopupTrigger.cancel),
+                  onPressed: close,
                   child: const TText('取消'),
                 ),
                 title: const TText('标题'),
@@ -453,7 +457,7 @@ void main() {
 
       await tester.tap(find.text('取消'));
       await tester.pumpAndSettle();
-      expect(hideTriggers.last, TPopupTrigger.cancel);
+      expect(hideTriggers.last, TPopupTrigger.custom);
 
       await openPopup(
         tester,
@@ -1072,7 +1076,7 @@ void main() {
       }
     });
 
-    testWidgets('默认动画时长为 300ms（对齐官方与其他组件）', (tester) async {
+    testWidgets('默认动画时长为 240ms（对齐小程序公开属性）', (tester) async {
       bindPopupTestResource(PopupTestResourceDelegate.zh());
       final observer = _CapturingNavigatorObserver();
       await tester.pumpWidget(
@@ -1101,7 +1105,7 @@ void main() {
       expect(observer.lastPushedRoute, isNotNull);
       expect(
         (observer.lastPushedRoute! as TransitionRoute).transitionDuration,
-        const Duration(milliseconds: 300),
+        const Duration(milliseconds: 240),
       );
       await tester.pumpAndSettle();
     });

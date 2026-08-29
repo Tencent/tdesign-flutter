@@ -191,12 +191,17 @@ class _TCascaderPageState extends State<TCascaderPage> {
             height: MediaQuery.sizeOf(context).height * 0.6,
             headerBuilder: (_, close) => TPopupHeader(
               cancelButton: TextButton(
-                onPressed: () => close(TPopupTrigger.cancel),
+                onPressed: close,
                 child: const TText('取消'),
               ),
               title: const TText('选择地区'),
               confirmButton: TextButton(
-                onPressed: () => close(TPopupTrigger.confirm),
+                onPressed: () {
+                  if (mounted) {
+                    setState(() => _popupValue = List<Object?>.of(draft));
+                  }
+                  close();
+                },
                 child: const TText('确定'),
               ),
             ),
@@ -210,11 +215,6 @@ class _TCascaderPageState extends State<TCascaderPage> {
                 },
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-                setState(() => _popupValue = List<Object?>.of(draft));
-              }
-            },
           ),
         );
       },

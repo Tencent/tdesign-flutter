@@ -434,13 +434,17 @@ class _TFormPageState extends State<TFormPage> {
       context,
       options: TPopupOptions.bottom(
         headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TextButton(
-            onPressed: () => close(TPopupTrigger.cancel),
-            child: const TText('取消'),
-          ),
+          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
           title: const TText('选择日期'),
           confirmButton: TextButton(
-            onPressed: () => close(TPopupTrigger.confirm),
+            onPressed: () {
+              if (mounted) {
+                onChanged?.call(
+                  '${draft.year}-${draft.month.toString().padLeft(2, '0')}-${draft.day.toString().padLeft(2, '0')}',
+                );
+              }
+              close();
+            },
             child: const TText('确定'),
           ),
         ),
@@ -451,13 +455,6 @@ class _TFormPageState extends State<TFormPage> {
             onChanged: (value) => setPopupState(() => draft = value),
           ),
         ),
-        onVisibleChange: (visible, trigger) {
-          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-            onChanged?.call(
-              '${draft.year}-${draft.month.toString().padLeft(2, '0')}-${draft.day.toString().padLeft(2, '0')}',
-            );
-          }
-        },
       ),
     );
   }
@@ -471,13 +468,24 @@ class _TFormPageState extends State<TFormPage> {
       context,
       options: TPopupOptions.bottom(
         headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TextButton(
-            onPressed: () => close(TPopupTrigger.cancel),
-            child: const TText('取消'),
-          ),
+          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
           title: const TText('选择地址'),
           confirmButton: TextButton(
-            onPressed: () => close(TPopupTrigger.confirm),
+            onPressed: () {
+              if (mounted) {
+                const labels = {
+                  'beijing': '北京市',
+                  'tianjin': '天津市',
+                  'haidian': '海淀区',
+                  'chaoyang': '朝阳区',
+                  'jizhou': '蓟州区',
+                };
+                onChanged?.call(
+                  draft.map((value) => labels[value] ?? '$value').join('/'),
+                );
+              }
+              close();
+            },
             child: const TText('确定'),
           ),
         ),
@@ -488,20 +496,6 @@ class _TFormPageState extends State<TFormPage> {
             onChanged: (value) => setPopupState(() => draft = value.values),
           ),
         ),
-        onVisibleChange: (visible, trigger) {
-          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-            const labels = {
-              'beijing': '北京市',
-              'tianjin': '天津市',
-              'haidian': '海淀区',
-              'chaoyang': '朝阳区',
-              'jizhou': '蓟州区',
-            };
-            onChanged?.call(
-              draft.map((value) => labels[value] ?? '$value').join('/'),
-            );
-          }
-        },
       ),
     );
   }

@@ -25,13 +25,9 @@ enum TPopupPlacement {
 /// bottom 整行头部自定义构建器。
 ///
 /// * [context] 构建上下文
-/// * [close] 关闭浮层；省略参数时触发源为 [TPopupTrigger.custom]，也可显式传入
-///   [TPopupTrigger.cancel] 或 [TPopupTrigger.confirm] 标记操作语义
+/// * [close] 关闭浮层，触发源为 [TPopupTrigger.custom]
 typedef TPopupHeaderBuilder =
-    Widget Function(BuildContext context, TPopupCloseCallback close);
-
-/// Popup 关闭函数；省略 [trigger] 时按 [TPopupTrigger.custom] 上报。
-typedef TPopupCloseCallback = void Function([TPopupTrigger trigger]);
+    Widget Function(BuildContext context, VoidCallback close);
 
 /// center 面板外关闭区构建器。
 ///
@@ -99,21 +95,14 @@ class TPopupOverlayConfig {
 ///
 /// 作为 [TPopupVisibleChangeCallback] 的第二个参数，以及关闭流程中的语义标记。
 ///
-/// 内置行为会映射为 [TPopupTrigger.overlay]，headerBuilder 可显式上报
-/// [TPopupTrigger.cancel] 或 [TPopupTrigger.confirm]，center 关闭 builder 调用
-/// `close` 映射为 [TPopupTrigger.close]；
+/// 内置行为会映射为 [TPopupTrigger.overlay]，center 关闭 builder 调用 `close`
+/// 映射为 [TPopupTrigger.close]；
 /// [TPopupHandle.close] 为 [TPopupTrigger.api]；系统返回为
 /// [TPopupTrigger.systemBack]；headerBuilder 内调用 `close` 等为
 /// [TPopupTrigger.custom]。
 enum TPopupTrigger {
   /// 点击蒙层，且 [TPopupOverlayConfig.effectiveCloseOnClick] 为 true。
   overlay,
-
-  /// 调用头部关闭函数并显式指定取消语义。
-  cancel,
-
-  /// 调用头部关闭函数并显式指定确认语义。
-  confirm,
 
   /// 点击 center 关闭槽位。
   close,

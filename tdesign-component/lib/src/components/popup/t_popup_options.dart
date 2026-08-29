@@ -31,7 +31,7 @@ Never _throwPopupOptionsValidationError(String error) {
 /// [child]。显式提供 builder 时才会渲染相应区域，builder 可调用 `close`
 /// 关闭浮层。
 ///
-/// 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]；
+/// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
 /// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
 class TPopupOptions {
   /// 通用构造；[placement] 在运行时才能确定时使用。
@@ -50,9 +50,7 @@ class TPopupOptions {
     this.animationDuration,
     this.headerBuilder,
     this.closeBuilder,
-    this.onOpen,
     this.onOpened,
-    this.onClose,
     this.onClosed,
     this.onVisibleChange,
     this.useSafeArea = false,
@@ -72,9 +70,7 @@ class TPopupOptions {
     TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
@@ -89,9 +85,7 @@ class TPopupOptions {
     overlay: overlay,
     destroyOnClose: destroyOnClose,
     animationDuration: animationDuration,
-    onOpen: onOpen,
     onOpened: onOpened,
-    onClose: onClose,
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
@@ -110,9 +104,7 @@ class TPopupOptions {
     TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
@@ -127,9 +119,7 @@ class TPopupOptions {
     overlay: overlay,
     destroyOnClose: destroyOnClose,
     animationDuration: animationDuration,
-    onOpen: onOpen,
     onOpened: onOpened,
-    onClose: onClose,
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
@@ -147,9 +137,7 @@ class TPopupOptions {
     TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
@@ -163,9 +151,7 @@ class TPopupOptions {
     overlay: overlay,
     destroyOnClose: destroyOnClose,
     animationDuration: animationDuration,
-    onOpen: onOpen,
     onOpened: onOpened,
-    onClose: onClose,
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
@@ -183,9 +169,7 @@ class TPopupOptions {
     TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
@@ -199,9 +183,7 @@ class TPopupOptions {
     overlay: overlay,
     destroyOnClose: destroyOnClose,
     animationDuration: animationDuration,
-    onOpen: onOpen,
     onOpened: onOpened,
-    onClose: onClose,
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
@@ -219,9 +201,7 @@ class TPopupOptions {
     TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
@@ -235,9 +215,7 @@ class TPopupOptions {
     overlay: overlay,
     destroyOnClose: destroyOnClose,
     animationDuration: animationDuration,
-    onOpen: onOpen,
     onOpened: onOpened,
-    onClose: onClose,
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
@@ -289,7 +267,7 @@ class TPopupOptions {
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
   final bool destroyOnClose;
 
-  /// 打开/关闭动画时长，默认 300ms（与官方及仓库其他浮层组件对齐）。
+  /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
   final Duration? animationDuration;
 
   /// bottom 头部；仅 [TPopupPlacement.bottom] 生效，默认不显示。
@@ -302,14 +280,8 @@ class TPopupOptions {
   /// builder 的 `close` 参数只负责关闭 Popup，不会自动生成关闭按钮。
   final TPopupSlotBuilder? closeBuilder;
 
-  /// 路由 push 时（打开动画开始前）。
-  final VoidCallback? onOpen;
-
   /// 打开动画结束。
   final VoidCallback? onOpened;
-
-  /// 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。
-  final VoidCallback? onClose;
 
   /// 当前展示周期真正结束。
   ///
@@ -342,9 +314,7 @@ class TPopupOptions {
     Duration? animationDuration,
     Object? headerBuilder = _unset,
     Object? closeBuilder = _unset,
-    Object? onOpen = _unset,
     Object? onOpened = _unset,
-    Object? onClose = _unset,
     Object? onClosed = _unset,
     Object? onVisibleChange = _unset,
     bool? useSafeArea,
@@ -376,13 +346,9 @@ class TPopupOptions {
       closeBuilder: identical(closeBuilder, _unset)
           ? this.closeBuilder
           : closeBuilder as TPopupSlotBuilder?,
-      onOpen: identical(onOpen, _unset) ? this.onOpen : onOpen as VoidCallback?,
       onOpened: identical(onOpened, _unset)
           ? this.onOpened
           : onOpened as VoidCallback?,
-      onClose: identical(onClose, _unset)
-          ? this.onClose
-          : onClose as VoidCallback?,
       onClosed: identical(onClosed, _unset)
           ? this.onClosed
           : onClosed as VoidCallback?,
@@ -410,9 +376,7 @@ class TPopupOptions {
       animationDuration: animationDuration,
       headerBuilder: isBottom ? headerBuilder : null,
       closeBuilder: isCenter ? closeBuilder : null,
-      onOpen: onOpen,
       onOpened: onOpened,
-      onClose: onClose,
       onClosed: onClosed,
       onVisibleChange: onVisibleChange,
       useSafeArea: useSafeArea,

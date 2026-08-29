@@ -499,7 +499,11 @@ void main() {
             options: TPopupOptions.bottom(
               height: 100,
               animationDuration: const Duration(milliseconds: 300),
-              onOpen: () => openCount++,
+              onVisibleChange: (visible, _) {
+                if (visible) {
+                  openCount++;
+                }
+              },
               onClosed: () => closedCount++,
               child: const SizedBox(height: 60, child: Text('race panel')),
             ),

@@ -136,7 +136,7 @@ class TPopupPage extends StatelessWidget {
               height: 240,
               headerBuilder: (_, close) => TPopupHeader(
                 cancelButton: TToolbarPressable(
-                  onTap: () => close(TPopupTrigger.cancel),
+                  onTap: close,
                   child: TText(
                     '取消',
                     textColor: theme.textColorSecondary,
@@ -145,7 +145,7 @@ class TPopupPage extends StatelessWidget {
                 ),
                 title: const TText('标题文字'),
                 confirmButton: TToolbarPressable(
-                  onTap: () => close(TPopupTrigger.confirm),
+                  onTap: close,
                   child: TText(
                     '确定',
                     textColor: theme.brandNormalColor,

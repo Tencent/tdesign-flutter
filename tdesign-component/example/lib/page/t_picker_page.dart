@@ -262,12 +262,17 @@ class _TPickerPageState extends State<TPickerPage> {
           options: TPopupOptions.bottom(
             headerBuilder: (_, close) => TPopupHeader(
               cancelButton: TextButton(
-                onPressed: () => close(TPopupTrigger.cancel),
+                onPressed: close,
                 child: const TText('取消'),
               ),
               title: const TText('选择地区'),
               confirmButton: TextButton(
-                onPressed: () => close(TPopupTrigger.confirm),
+                onPressed: () {
+                  if (mounted) {
+                    setState(() => _popupValue = List<dynamic>.of(draft));
+                  }
+                  close();
+                },
                 child: const TText('确定'),
               ),
             ),
@@ -280,11 +285,6 @@ class _TPickerPageState extends State<TPickerPage> {
                 },
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm) {
-                setState(() => _popupValue = List<dynamic>.of(draft));
-              }
-            },
           ),
         );
       },

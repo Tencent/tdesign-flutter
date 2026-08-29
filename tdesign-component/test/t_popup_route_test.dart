@@ -577,7 +577,7 @@ void main() {
       });
     });
 
-    testWidgets('fireCloseStart 仅触发一次 onClose', (tester) async {
+    testWidgets('fireCloseStart 仅上报一次关闭显隐变化', (tester) async {
       var closeCount = 0;
       late BuildContext hostContext;
       TPopupHandle? handle;
@@ -591,7 +591,11 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 100,
-              onClose: () => closeCount++,
+              onVisibleChange: (visible, _) {
+                if (!visible) {
+                  closeCount++;
+                }
+              },
               child: const SizedBox(height: 60),
             ),
           );

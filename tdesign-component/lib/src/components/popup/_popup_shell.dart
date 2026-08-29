@@ -63,9 +63,7 @@ class PopupShell extends StatelessWidget {
     BorderRadius? borderRadius,
     Color background,
   ) {
-    void closeHeader([TPopupTrigger trigger = TPopupTrigger.custom]) {
-      onCloseWithTrigger(trigger);
-    }
+    void closeHeader() => onCloseWithTrigger(TPopupTrigger.custom);
 
     // 四个边缘方向现在都有固定的默认尺寸，主体始终填满剩余空间；
     // 显式尺寸与默认尺寸的内容布局保持一致。

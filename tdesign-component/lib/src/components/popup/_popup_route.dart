@@ -50,7 +50,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   Duration get transitionDuration =>
-      options.animationDuration ?? const Duration(milliseconds: 300);
+      options.animationDuration ?? const Duration(milliseconds: 240);
 
   @override
   Duration get reverseTransitionDuration => transitionDuration;
@@ -95,14 +95,13 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     );
   }
 
-  /// 关闭开始前统一入口：触发 [TPopupOptions.onClose]、[onVisibleChange](false, …)。
+  /// 关闭开始前统一入口：触发 [onVisibleChange](false, …)。
   void fireCloseStart(TPopupTrigger trigger) {
     if (_closeStartFired) {
       return;
     }
     _closeStartFired = true;
     options.onVisibleChange?.call(false, trigger);
-    options.onClose?.call();
   }
 
   @override
@@ -167,10 +166,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       ignoring: animation.status == AnimationStatus.reverse,
       child: Stack(
         fit: StackFit.expand,
-        children: [
-          if (options.overlayConfig.showOverlay) barrier,
-          positioned,
-        ],
+        children: [if (options.overlayConfig.showOverlay) barrier, positioned],
       ),
     );
     return capturedThemes?.wrap(content) ?? content;
@@ -234,7 +230,6 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   TickerFuture didPush() {
-    options.onOpen?.call();
     options.onVisibleChange?.call(true, TPopupTrigger.api);
     final future = super.didPush();
     future.whenComplete(_attachAnimationListener);
