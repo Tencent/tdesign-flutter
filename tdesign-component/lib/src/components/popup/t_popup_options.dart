@@ -55,7 +55,7 @@ class TPopupOptions {
     this.onClose,
     this.onClosed,
     this.onVisibleChange,
-    this.useSafeArea = true,
+    this.useSafeArea = false,
   });
 
   /// 创建 [TPopupPlacement.bottom] 配置。
@@ -77,7 +77,7 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    bool useSafeArea = true,
+    bool useSafeArea = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.bottom,
@@ -115,7 +115,7 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    bool useSafeArea = true,
+    bool useSafeArea = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.center,
@@ -152,7 +152,7 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    bool useSafeArea = true,
+    bool useSafeArea = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.top,
@@ -188,7 +188,7 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    bool useSafeArea = true,
+    bool useSafeArea = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.left,
@@ -224,7 +224,7 @@ class TPopupOptions {
     VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    bool useSafeArea = true,
+    bool useSafeArea = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.right,
@@ -319,10 +319,11 @@ class TPopupOptions {
   /// 显隐变化；第二个参数为 [TPopupTrigger]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
-  /// 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。
+  /// 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。
   ///
   /// 为 true 时通过 [Positioned] 偏移使面板不侵入刘海、Home Indicator 等区域；
-  /// top/bottom/left/right 还会与对应 [inset] 叠加。设为 false 可贴满屏幕边缘。
+  /// top/bottom/left/right 还会与对应 [inset] 叠加。需要避让时显式设为 true；
+  /// 也可以在 [child] 内使用 Flutter 原生 [SafeArea]，只约束内容而保留面板背景贴边。
   final bool useSafeArea;
 
   /// 返回配置副本。

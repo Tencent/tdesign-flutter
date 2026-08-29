@@ -18,3 +18,11 @@
 ## 未决项
 
 - 小程序源码中 Popup duration 属性默认 240ms，而样式/蒙层回退使用 300ms；本次不调整，待维护者确认权威默认值。
+
+## 安全区默认行为调整
+
+- Popup 作为基础浮层容器默认不主动避让系统安全区，`TPopupOptions` 及五个命名工厂的 `useSafeArea` 默认值调整为 `false`。
+- 需要沿用旧行为的调用方迁移为显式传入 `useSafeArea: true`；只需要保护内容时可在 `child` 内组合 Flutter 原生 `SafeArea`。
+- 该项改变公开默认行为，按 breaking change 记录。
+- Flutter 3.32.0 完整 Popup 回归 169 项通过，生产源码覆盖率 `519/532 = 97.56%`；Flutter 3.47.0 默认/显式安全区聚焦回归 44 项通过，两个版本严格 analyze 均为 0 error / 0 warning。
+- 已重新安装到 Android 16 真机 `25113PN0EC`，应用进程保持运行，默认 Popup 可直接检查贴边效果。

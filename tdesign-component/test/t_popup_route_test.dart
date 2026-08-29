@@ -227,7 +227,7 @@ void main() {
         expect(positioned.bottom, 0);
       });
 
-      testWidgets('bottom 默认避让 MediaQuery.padding.bottom', (tester) async {
+      testWidgets('bottom 显式开启时避让 MediaQuery.padding.bottom', (tester) async {
         const safeBottom = 34.0;
         await openPopup(
           tester,
@@ -237,6 +237,7 @@ void main() {
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
                 height: 120,
+                useSafeArea: true,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -249,7 +250,7 @@ void main() {
         expect(positioned.height, 120);
       });
 
-      testWidgets('bottom useSafeArea=false 时贴屏幕底边', (tester) async {
+      testWidgets('bottom 默认贴屏幕底边', (tester) async {
         await openPopup(
           tester,
           mediaPadding: const EdgeInsets.only(bottom: 34),
@@ -258,7 +259,6 @@ void main() {
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
                 height: 120,
-                useSafeArea: false,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -270,7 +270,7 @@ void main() {
         expect(positioned.bottom, 0);
       });
 
-      testWidgets('bottom 默认高度仍避让底部安全区', (tester) async {
+      testWidgets('bottom 默认高度显式开启时仍避让底部安全区', (tester) async {
         const safeBottom = 34.0;
         await openPopup(
           tester,
@@ -279,6 +279,7 @@ void main() {
             TPopup.show(
               tester.element(find.text('open')),
               options: TPopupOptions.bottom(
+                useSafeArea: true,
                 child: const SizedBox(height: 80, width: 200),
               ),
             );
@@ -302,6 +303,7 @@ void main() {
               options: TPopupOptions.bottom(
                 height: 160,
                 inset: const TPopupBottomInset(left: 12, right: 20),
+                useSafeArea: true,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -326,6 +328,7 @@ void main() {
               tester.element(find.text('open')),
               options: TPopupOptions.top(
                 height: 100,
+                useSafeArea: true,
                 child: const SizedBox(height: 60),
               ),
             );
@@ -410,6 +413,7 @@ void main() {
               options: TPopupOptions.left(
                 width: 280,
                 inset: const TPopupLeftInset(top: 8, bottom: 12),
+                useSafeArea: true,
                 child: const SizedBox(height: 120),
               ),
             );
@@ -457,6 +461,7 @@ void main() {
               options: TPopupOptions.right(
                 width: 260,
                 inset: const TPopupRightInset(top: 5, bottom: 7),
+                useSafeArea: true,
                 child: const SizedBox(height: 120),
               ),
             );
@@ -505,6 +510,7 @@ void main() {
               options: const TPopupOptions(
                 placement: TPopupPlacement.top,
                 height: 90,
+                useSafeArea: true,
                 child: SizedBox(height: 50),
               ),
             );
@@ -516,7 +522,7 @@ void main() {
         expect(positioned.top, safeTop);
       });
 
-      testWidgets('center 默认避让全部安全区', (tester) async {
+      testWidgets('center 显式开启时避让全部安全区', (tester) async {
         await openPopup(
           tester,
           mediaPadding: const EdgeInsets.only(bottom: 34, top: 44),
@@ -527,6 +533,7 @@ void main() {
                 width: 120,
                 height: 120,
                 closeBuilder: null,
+                useSafeArea: true,
                 child: const SizedBox(height: 80, width: 80),
               ),
             );

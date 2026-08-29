@@ -9,7 +9,7 @@ void main() {
       expect(options.placement, TPopupPlacement.bottom);
       expect(options.overlayConfig.showOverlay, isTrue);
       expect(options.overlayConfig.preventTap, isTrue);
-      expect(options.useSafeArea, isTrue);
+      expect(options.useSafeArea, isFalse);
       expect(options.overlayConfig.effectiveCloseOnClick, isTrue);
       expect(options.headerBuilder, isNull);
       expect(options.closeBuilder, isNull);
@@ -277,8 +277,8 @@ void main() {
     test('copyWith 可更新 useSafeArea', () {
       final options = const TPopupOptions(
         child: SizedBox(),
-      ).copyWith(useSafeArea: false);
-      expect(options.useSafeArea, isFalse);
+      ).copyWith(useSafeArea: true);
+      expect(options.useSafeArea, isTrue);
     });
 
     test('normalized 保留 useSafeArea', () {
@@ -289,41 +289,41 @@ void main() {
       expect(options.useSafeArea, isFalse);
     });
 
-    test('bottom 工厂可关闭 useSafeArea', () {
+    test('bottom 工厂可显式开启 useSafeArea', () {
       final options = TPopupOptions.bottom(
         child: const SizedBox(),
-        useSafeArea: false,
+        useSafeArea: true,
       );
-      expect(options.useSafeArea, isFalse);
+      expect(options.useSafeArea, isTrue);
     });
 
     group('useSafeArea 边界', () {
-      test('各命名工厂默认 useSafeArea 为 true', () {
+      test('各命名工厂默认 useSafeArea 为 false', () {
         const child = SizedBox();
-        expect(TPopupOptions.bottom(child: child).useSafeArea, isTrue);
-        expect(TPopupOptions.top(child: child).useSafeArea, isTrue);
-        expect(TPopupOptions.left(child: child).useSafeArea, isTrue);
-        expect(TPopupOptions.right(child: child).useSafeArea, isTrue);
-        expect(TPopupOptions.center(child: child).useSafeArea, isTrue);
+        expect(TPopupOptions.bottom(child: child).useSafeArea, isFalse);
+        expect(TPopupOptions.top(child: child).useSafeArea, isFalse);
+        expect(TPopupOptions.left(child: child).useSafeArea, isFalse);
+        expect(TPopupOptions.right(child: child).useSafeArea, isFalse);
+        expect(TPopupOptions.center(child: child).useSafeArea, isFalse);
       });
 
-      test('各命名工厂可显式关闭 useSafeArea', () {
+      test('各命名工厂可显式开启 useSafeArea', () {
         const child = SizedBox();
         expect(
-          TPopupOptions.top(child: child, useSafeArea: false).useSafeArea,
-          isFalse,
+          TPopupOptions.top(child: child, useSafeArea: true).useSafeArea,
+          isTrue,
         );
         expect(
-          TPopupOptions.left(child: child, useSafeArea: false).useSafeArea,
-          isFalse,
+          TPopupOptions.left(child: child, useSafeArea: true).useSafeArea,
+          isTrue,
         );
         expect(
-          TPopupOptions.right(child: child, useSafeArea: false).useSafeArea,
-          isFalse,
+          TPopupOptions.right(child: child, useSafeArea: true).useSafeArea,
+          isTrue,
         );
         expect(
-          TPopupOptions.center(child: child, useSafeArea: false).useSafeArea,
-          isFalse,
+          TPopupOptions.center(child: child, useSafeArea: true).useSafeArea,
+          isTrue,
         );
       });
 
