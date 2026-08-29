@@ -19,18 +19,18 @@ class TDialogPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(
-          title: '01 组件类型',
+          title: '组件类型',
           children: [
             ExampleItem(desc: '反馈类对话框', builder: _feedbackDialogs),
             ExampleItem(desc: '确认类对话框', builder: _confirmDialogs),
           ],
         ),
         ExampleModule(
-          title: '02 组件状态',
+          title: '组件状态',
           children: [ExampleItem(desc: '按钮布局与关闭按钮', builder: _buttonDialogs)],
         ),
         ExampleModule(
-          title: '03 特殊类型',
+          title: '特殊类型',
           children: [
             ExampleItem(desc: '带图片对话框', builder: _imageDialogs),
             ExampleItem(desc: '带输入框对话框', builder: _inputDialogs),
