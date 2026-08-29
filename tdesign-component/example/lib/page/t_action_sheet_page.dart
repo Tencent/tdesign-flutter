@@ -14,7 +14,7 @@ class TActionSheetPage extends StatelessWidget {
       desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
       exampleCodeGroup: 'action_sheet',
       children: [
-        ExampleModule(title: '01 组件类型', children: [
+        ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '常规列表型', builder: _basicList),
           ExampleItem(desc: '带描述列表型', builder: _descriptionList),
           ExampleItem(desc: '带图标列表型', builder: _iconList),
@@ -22,10 +22,10 @@ class TActionSheetPage extends StatelessWidget {
           ExampleItem(desc: '带描述宫格型', builder: _descriptionGrid),
           ExampleItem(desc: '带翻页宫格型', builder: _paginationGrid),
         ]),
-        ExampleModule(title: '02 组件状态', children: [
+        ExampleModule(title: '组件状态', children: [
           ExampleItem(desc: '列表型选项状态', builder: _statusList),
         ]),
-        ExampleModule(title: '03 组件样式', children: [
+        ExampleModule(title: '组件样式', children: [
           ExampleItem(desc: '居中列表型', builder: _centerList),
           ExampleItem(desc: '左对齐列表型', builder: _leftList),
         ]),
