@@ -4,6 +4,7 @@ import 'package:tdesign_flutter_example/page/t_dialog_page.dart';
 import 'demo_page_test_utils.dart';
 
 const dialogDemoPageTestSpec = DemoPageTestSpec(
+  useFeedbackGoldenFont: true,
   name: 'dialog',
   title: 'Dialog 对话框',
   page: TDialogPage(),

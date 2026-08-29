@@ -12,6 +12,7 @@ const _pageWidth = 375.0;
 const _initialPageHeight = 812.0;
 const _maxPageHeight = 12000.0;
 const _goldenCjkFontFamily = 'TDesign Golden CJK';
+const _feedbackGoldenCjkFontFamily = 'TDesign Feedback Golden CJK';
 
 class DemoPageTestSpec {
   const DemoPageTestSpec({
@@ -21,6 +22,7 @@ class DemoPageTestSpec {
     required this.expectedTexts,
     this.componentType,
     this.expectedComponentCount,
+    this.useFeedbackGoldenFont = false,
   });
 
   final String name;
@@ -29,6 +31,7 @@ class DemoPageTestSpec {
   final List<String> expectedTexts;
   final Type? componentType;
   final int? expectedComponentCount;
+  final bool useFeedbackGoldenFont;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -37,7 +40,7 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoStructureTests(DemoPageTestSpec spec) {
-  setUpAll(_loadGoldenFonts);
+  setUpAll(() => _loadGoldenFonts(spec));
 
   testWidgets('${spec.name} Demo structure', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -62,7 +65,7 @@ void registerDemoStructureTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoGoldenTests(DemoPageTestSpec spec) {
-  setUpAll(_loadGoldenFonts);
+  setUpAll(() => _loadGoldenFonts(spec));
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
@@ -82,7 +85,7 @@ Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 1));
 }
 
-Future<void> _loadGoldenFonts() async {
+Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
   final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
     ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
   final cupertinoIconFont =
@@ -98,25 +101,34 @@ Future<void> _loadGoldenFonts() async {
         '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
       ).readAsBytes().then(ByteData.sublistView),
     );
-  final materialIconsFont = FontLoader('MaterialIcons')
-    ..addFont(
-      File(
-        '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
-      ).readAsBytes().then(ByteData.sublistView),
-    );
   final cjkFont = FontLoader(_goldenCjkFontFamily)
     ..addFont(
       File(
         'test/fonts/TDesignGoldenCJK-Regular.otf',
       ).readAsBytes().then(ByteData.sublistView),
     );
-  await Future.wait([
+  final loaders = <Future<void>>[
     iconFont.load(),
     cupertinoIconFont.load(),
     robotoFont.load(),
-    materialIconsFont.load(),
     cjkFont.load(),
-  ]);
+  ];
+  if (spec.useFeedbackGoldenFont) {
+    final materialIconsFont = FontLoader('MaterialIcons')
+      ..addFont(
+        File(
+          '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    final feedbackCjkFont = FontLoader(_feedbackGoldenCjkFontFamily)
+      ..addFont(
+        File(
+          'test/fonts/TDesignFeedbackGoldenCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    loaders.addAll([materialIconsFont.load(), feedbackCjkFont.load()]);
+  }
+  await Future.wait(loaders);
 }
 
 Future<void> pumpFullDemoPage(
@@ -162,8 +174,14 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
     create: (_) => ThemeModeProvider(),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: _withGoldenFonts(TThemeBuilder.light(TThemeData.defaultData())),
-      darkTheme: _withGoldenFonts(TThemeBuilder.dark(TThemeData.defaultData())),
+      theme: _withGoldenFonts(
+        TThemeBuilder.light(TThemeData.defaultData()),
+        spec.useFeedbackGoldenFont,
+      ),
+      darkTheme: _withGoldenFonts(
+        TThemeBuilder.dark(TThemeData.defaultData()),
+        spec.useFeedbackGoldenFont,
+      ),
       themeMode: mode,
       home: RepaintBoundary(
         key: ValueKey('${spec.name}-demo-page'),
@@ -173,8 +191,11 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   );
 }
 
-ThemeData _withGoldenFonts(ThemeData theme) {
-  const fallback = [_goldenCjkFontFamily];
+ThemeData _withGoldenFonts(ThemeData theme, bool useFeedbackGoldenFont) {
+  final fallback = [
+    if (useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
+    _goldenCjkFontFamily,
+  ];
   return theme.copyWith(
     textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
     primaryTextTheme: theme.primaryTextTheme.apply(

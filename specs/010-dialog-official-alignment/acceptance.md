@@ -18,6 +18,7 @@
 | `flutter test --no-pub test/dialog_page_test.dart` | PASS，3 tests | Flutter 3.47.0；清理跨 SDK shader 缓存后 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.47.0，0 issues |
 | Flutter 3.32.0 `flutter test --no-pub test/dialog_page_golden_test.dart test/dialog_page_test.dart` | PASS，5 tests | 功能测试与 light/dark Golden 分流 |
+| CNB 同款 `docker/flutter-3.32.0` Linux 镜像更新并复跑 `dialog_page_golden_test.dart` | PASS，2 + 2 tests | light/dark 基线由 Linux 生成 |
 | 回归调度器工具测试 | PASS，10 tests | Dialog 组件、覆盖率、Demo 功能和视觉回归登记同步 |
 | Flutter 3.47.0 组件与 Demo 非视觉测试 | PASS，14 + 3 tests | Golden 未在 latest 执行 |
 
