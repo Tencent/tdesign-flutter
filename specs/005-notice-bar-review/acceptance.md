@@ -14,6 +14,7 @@
 | Flutter 3.47.0 `dart analyze --fatal-infos` | PASS，0 issues |
 | `dart run tool/generate_example_code.dart` | PASS，卡片片段已删除，公开场景片段已同步 |
 | Flutter 3.32.0 `flutter test --no-pub test/notice_bar_page_golden_test.dart test/notice_bar_page_test.dart` | PASS，4 tests；light/dark Golden 与功能测试分流 |
+| CNB 同款 `docker/flutter-3.32.0` Linux 镜像更新并复跑 `notice_bar_page_golden_test.dart` | PASS，2 + 2 tests；light/dark 基线由 Linux 生成 |
 | 回归调度器工具测试 | PASS，10 tests；NoticeBar 组件、覆盖率、Demo 功能和视觉回归登记同步 |
 | Flutter 3.47.0 组件与 Demo 非视觉测试 | PASS，42 + 2 tests；Golden 未在 latest 执行 |
 
