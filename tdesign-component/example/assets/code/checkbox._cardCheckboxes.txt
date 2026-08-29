@@ -1,0 +1,29 @@
+Widget _cardCheckboxes(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TCheckboxGroup<String>(
+          value: _verticalCardValue,
+          options: _verticalCardOptions,
+          cardMode: true,
+          onChanged: (value) => setState(() => _verticalCardValue = value),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+          child: TText(
+            '横向卡片多选框',
+            font: context.tTheme.fontBodyMedium,
+            textColor: context.tTheme.textColorSecondary,
+          ),
+        ),
+        TCheckboxGroup<String>(
+          value: _horizontalCardValue,
+          options: _horizontalCardOptions,
+          direction: Axis.horizontal,
+          columns: 3,
+          cardMode: true,
+          onChanged: (value) => setState(() => _horizontalCardValue = value),
+        ),
+      ],
+    );
+  }

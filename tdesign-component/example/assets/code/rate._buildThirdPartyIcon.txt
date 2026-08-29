@@ -1,0 +1,8 @@
+Widget _buildThirdPartyIcon(BuildContext context) => TCell(
+    title: const Text('第三方图标'),
+    note: _StatefulRate(
+      initialValue: 3,
+      icon: (filled) =>
+          Icon(filled ? CupertinoIcons.heart_fill : CupertinoIcons.heart),
+    ),
+  );

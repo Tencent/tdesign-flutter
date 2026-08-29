@@ -3,9 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../tdesign_flutter.dart';
 
-typedef TResourceBuilder = TResourceDelegate? Function(
-  BuildContext context,
-);
+typedef TResourceBuilder = TResourceDelegate? Function(BuildContext context);
 
 /// 资源管理器
 class TResourceManager {
@@ -57,6 +55,24 @@ class TResourceManager {
 
 /// 资源管理器，允许外部重写，设计成抽象类，防止有新增字段时，用户没有感知
 abstract class TResourceDelegate {
+  /// [TUpload] 上传中。
+  String get uploading => '上传中';
+
+  /// [TUpload] 选择文件的无障碍标签。
+  String get uploadSelect => '选择文件';
+
+  /// [TUpload] 待上传状态。
+  String get uploadPending => '待上传';
+
+  /// [TUpload] 上传失败。
+  String get uploadFailed => '上传失败';
+
+  /// [TUpload] 重新上传。
+  String get uploadRetry => '重新上传';
+
+  /// [TUpload] 上传成功。
+  String get uploadSuccess => '上传成功';
+
   /// [TSwitch]的打开状态文案
   String get open;
 
@@ -87,16 +103,16 @@ abstract class TResourceDelegate {
   /// [TConfirmDialog] 知道了
   String get knew;
 
-  /// [TRefreshHeader] 正在刷新
+  /// [TPullDownRefresh] 正在刷新
   String get refreshing;
 
-  /// [TRefreshHeader] 松开刷新
+  /// [TPullDownRefresh] 松手刷新
   String get releaseRefresh;
 
-  /// [TRefreshHeader] 下拉刷新
+  /// [TPullDownRefresh] 下拉刷新
   String get pullToRefresh;
 
-  /// [TRefreshHeader] 刷新完成
+  /// [TPullDownRefresh] 刷新完成
   String get completeRefresh;
 
   /// [TTimeCounter] 天
@@ -255,7 +271,7 @@ class _DefaultResourceDelegate extends TResourceDelegate {
   String get refreshing => '正在刷新';
 
   @override
-  String get releaseRefresh => '松开刷新';
+  String get releaseRefresh => '松手刷新';
 
   @override // coverage:ignore-line
   String get pullToRefresh => '下拉刷新';

@@ -4,9 +4,9 @@ import 'package:tdesign_flutter/src/components/checkbox/t_selection_card.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child) {
+  Widget wrap(Widget child, {TThemeData? token}) {
     return MaterialApp(
-      theme: TThemeBuilder.light(TThemeData.defaultData()),
+      theme: TThemeBuilder.light(token ?? TThemeData.defaultData()),
       home: Scaffold(body: child),
     );
   }
@@ -20,11 +20,15 @@ void main() {
   group('TCheckboxGroup v1 受控行为', () {
     testWidgets('按 value 渲染选中项并按 options 顺序回调', (tester) async {
       List<String>? changed;
-      await tester.pumpWidget(wrap(TCheckboxGroup<String>(
-        value: const ['b'],
-        options: options,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['b'],
+            options: options,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
 
       await tester.tap(find.text('选项 A'));
       await tester.pump();
@@ -35,11 +39,15 @@ void main() {
 
     testWidgets('点击已选项会移除该项', (tester) async {
       List<String>? changed;
-      await tester.pumpWidget(wrap(TCheckboxGroup<String>(
-        value: const ['a', 'b'],
-        options: options,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['a', 'b'],
+            options: options,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
 
       await tester.tap(find.text('选项 A'));
       await tester.pump();
@@ -48,10 +56,9 @@ void main() {
     });
 
     testWidgets('onChanged 为 null 时整组禁用', (tester) async {
-      await tester.pumpWidget(wrap(const TCheckboxGroup<String>(
-        value: ['a'],
-        options: options,
-      )));
+      await tester.pumpWidget(
+        wrap(const TCheckboxGroup<String>(value: ['a'], options: options)),
+      );
 
       await tester.tap(find.text('选项 A'));
       await tester.pump();
@@ -60,11 +67,15 @@ void main() {
 
     testWidgets('禁用 option 不触发回调', (tester) async {
       List<String>? changed;
-      await tester.pumpWidget(wrap(TCheckboxGroup<String>(
-        value: const [],
-        options: options,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const [],
+            options: options,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
 
       await tester.tap(find.text('选项 C'));
       await tester.pump();
@@ -75,13 +86,17 @@ void main() {
     testWidgets('maxSelected 超限时触发 onMaxSelected 并保持原值', (tester) async {
       var overloaded = false;
       List<String>? changed;
-      await tester.pumpWidget(wrap(TCheckboxGroup<String>(
-        value: const ['a'],
-        options: options,
-        maxSelected: 1,
-        onMaxSelected: () => overloaded = true,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['a'],
+            options: options,
+            maxSelected: 1,
+            onMaxSelected: () => overloaded = true,
+            onChanged: (value) => changed = value,
+          ),
+        ),
+      );
 
       await tester.tap(find.text('选项 B'));
       await tester.pump();
@@ -92,27 +107,64 @@ void main() {
   });
 
   group('TCheckboxGroup v1 布局与自定义项', () {
-    testWidgets('横向多列布局可构建', (tester) async {
-      await tester.pumpWidget(wrap(const SizedBox(
-        width: 240,
-        child: TCheckboxGroup<String>(
-          value: ['a'],
-          options: options,
-          direction: Axis.horizontal,
-          columns: 2,
+    testWidgets('默认显示项间分割线且末项无分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['a'],
+            options: options,
+            onChanged: (_) {},
+          ),
         ),
-      )));
+      );
+
+      expect(find.byType(TDivider), findsNWidgets(options.length - 1));
+    });
+
+    testWidgets('可显式关闭项间分割线', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const ['a'],
+            options: options,
+            showDivider: false,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(find.byType(TDivider), findsNothing);
+    });
+
+    testWidgets('横向多列布局可构建', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const SizedBox(
+            width: 240,
+            child: TCheckboxGroup<String>(
+              value: ['a'],
+              options: options,
+              direction: Axis.horizontal,
+              columns: 2,
+            ),
+          ),
+        ),
+      );
 
       expect(find.byType(TCheckboxGroup<String>), findsOneWidget);
       expect(find.byType(Wrap), findsOneWidget);
     });
 
     testWidgets('cardMode 使用卡片组布局', (tester) async {
-      await tester.pumpWidget(wrap(const TCheckboxGroup<String>(
-        value: ['a'],
-        options: options,
-        cardMode: true,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          const TCheckboxGroup<String>(
+            value: ['a'],
+            options: options,
+            cardMode: true,
+          ),
+        ),
+      );
 
       expect(find.text('选项 A'), findsOneWidget);
       expect(find.text('选项 B'), findsOneWidget);
@@ -120,14 +172,18 @@ void main() {
 
     testWidgets('itemBuilder 由 Group 接管点击和语义', (tester) async {
       List<String>? changed;
-      await tester.pumpWidget(wrap(TCheckboxGroup<String>(
-        value: const [],
-        options: options,
-        onChanged: (value) => changed = value,
-        itemBuilder: (context, option, selected, disabled) {
-          return Text('${option.label} $selected $disabled');
-        },
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TCheckboxGroup<String>(
+            value: const [],
+            options: options,
+            onChanged: (value) => changed = value,
+            itemBuilder: (context, option, selected, disabled) {
+              return Text('${option.label} $selected $disabled');
+            },
+          ),
+        ),
+      );
 
       await tester.tap(find.text('选项 A false false'));
       await tester.pump();
@@ -149,40 +205,44 @@ void main() {
 
   group('TSelectionCard 内部布局', () {
     testWidgets('选中/禁用/未选卡片路径可构建', (tester) async {
-      await tester.pumpWidget(wrap(const Column(
-        children: [
-          TSelectionCard(
-            selected: true,
-            disabled: false,
-            selectedColor: Colors.blue,
-            disabledColor: Colors.grey,
-            backgroundColor: Colors.white,
-            borderRadius: 6,
-            minHeight: 56,
-            child: Text('selected'),
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            children: [
+              TSelectionCard(
+                selected: true,
+                disabled: false,
+                selectedColor: Colors.blue,
+                disabledColor: Colors.grey,
+                backgroundColor: Colors.white,
+                borderRadius: 6,
+                minHeight: 56,
+                child: Text('selected'),
+              ),
+              TSelectionCard(
+                selected: true,
+                disabled: true,
+                selectedColor: Colors.blue,
+                disabledColor: Colors.grey,
+                backgroundColor: Colors.white,
+                borderRadius: 6,
+                minHeight: 56,
+                child: Text('disabled'),
+              ),
+              TSelectionCard(
+                selected: false,
+                disabled: false,
+                selectedColor: Colors.blue,
+                disabledColor: Colors.grey,
+                backgroundColor: Colors.white,
+                borderRadius: 6,
+                minHeight: 56,
+                child: Text('plain'),
+              ),
+            ],
           ),
-          TSelectionCard(
-            selected: true,
-            disabled: true,
-            selectedColor: Colors.blue,
-            disabledColor: Colors.grey,
-            backgroundColor: Colors.white,
-            borderRadius: 6,
-            minHeight: 56,
-            child: Text('disabled'),
-          ),
-          TSelectionCard(
-            selected: false,
-            disabled: false,
-            selectedColor: Colors.blue,
-            disabledColor: Colors.grey,
-            backgroundColor: Colors.white,
-            borderRadius: 6,
-            minHeight: 56,
-            child: Text('plain'),
-          ),
-        ],
-      )));
+        ),
+      );
 
       expect(find.text('selected'), findsOneWidget);
       expect(find.text('disabled'), findsOneWidget);
@@ -192,60 +252,223 @@ void main() {
 
     testWidgets('选择卡片角标使用反色文本 token', (tester) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(wrap(const TSelectionCard(
-        selected: true,
-        disabled: false,
-        selectedColor: Colors.blue,
-        disabledColor: Colors.grey,
-        backgroundColor: Colors.white,
-        borderRadius: 4,
-        minHeight: 56,
-        child: Text('selected'),
-      )));
+      await tester.pumpWidget(
+        wrap(
+          const TSelectionCard(
+            selected: true,
+            disabled: false,
+            selectedColor: Colors.blue,
+            disabledColor: Colors.grey,
+            backgroundColor: Colors.white,
+            borderRadius: 4,
+            minHeight: 56,
+            child: Text('selected'),
+          ),
+        ),
+      );
 
       final icon = tester.widget<Icon>(find.byIcon(TIcons.check));
       expect(icon.color, token.textColorAnti);
     });
 
     testWidgets('垂直布局按副标题高度和间距构建', (tester) async {
-      await tester.pumpWidget(wrap(TSelectionCardGroupLayout(
-        direction: Axis.vertical,
-        columns: 1,
-        itemHasSubtitles: const [false, true],
-        children: const [
-          Text('a'),
-          Text('b'),
-        ],
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TSelectionCardGroupLayout(
+            direction: Axis.vertical,
+            columns: 1,
+            itemHasSubtitles: const [false, true],
+            children: const [Text('a'), Text('b')],
+          ),
+        ),
+      );
 
       expect(find.text('a'), findsOneWidget);
       expect(find.text('b'), findsOneWidget);
     });
 
     testWidgets('水平布局覆盖有/无副标题与有限宽约束', (tester) async {
-      await tester.pumpWidget(wrap(SizedBox(
-        width: 240,
-        child: Column(
-          children: [
-            TSelectionCardGroupLayout(
-              direction: Axis.horizontal,
-              columns: 2,
-              itemHasSubtitles: const [false, false],
-              children: const [Text('a'), Text('b')],
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 240,
+            child: Column(
+              children: [
+                TSelectionCardGroupLayout(
+                  direction: Axis.horizontal,
+                  columns: 2,
+                  itemHasSubtitles: const [false, false],
+                  children: const [Text('a'), Text('b')],
+                ),
+                TSelectionCardGroupLayout(
+                  direction: Axis.horizontal,
+                  columns: 2,
+                  itemHasSubtitles: const [false, true],
+                  children: const [Text('c'), Text('d')],
+                ),
+              ],
             ),
-            TSelectionCardGroupLayout(
-              direction: Axis.horizontal,
-              columns: 2,
-              itemHasSubtitles: const [false, true],
-              children: const [Text('c'), Text('d')],
-            ),
-          ],
+          ),
         ),
-      )));
+      );
 
       expect(find.text('a'), findsOneWidget);
       expect(find.text('d'), findsOneWidget);
       expect(find.byType(Wrap), findsNWidgets(2));
+    });
+
+    testWidgets('水平布局按 rpx 换算角标且不影响垂直布局', (tester) async {
+      Widget selectedCard() => const TSelectionCard(
+        selected: true,
+        disabled: false,
+        selectedColor: Colors.blue,
+        disabledColor: Colors.grey,
+        backgroundColor: Colors.white,
+        borderRadius: 6,
+        minHeight: 56,
+        child: Text('selected'),
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          TSelectionCardGroupLayout(
+            direction: Axis.vertical,
+            columns: 1,
+            itemHasSubtitles: const [false],
+            children: [selectedCard()],
+          ),
+        ),
+      );
+
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 14);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint && widget.size == const Size.square(28),
+        ),
+        findsOneWidget,
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 240,
+            child: TSelectionCardGroupLayout(
+              direction: Axis.horizontal,
+              columns: 1,
+              itemHasSubtitles: const [false],
+              children: [selectedCard()],
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 12);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint && widget.size == const Size.square(24),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('卡片高度与角标尺寸读取 TDesign token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'selection-card-token-test',
+        fontMap: {
+          'fontBodyLarge': Font(size: 17, lineHeight: 26),
+          'fontBodyMedium': Font(size: 15, lineHeight: 23),
+        },
+        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 27},
+      );
+      Widget selectedCard() => const TSelectionCard(
+        selected: true,
+        disabled: false,
+        selectedColor: Colors.blue,
+        disabledColor: Colors.grey,
+        backgroundColor: Colors.white,
+        borderRadius: 6,
+        minHeight: 1,
+        child: Text('selected'),
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          TSelectionCardGroupLayout(
+            direction: Axis.vertical,
+            columns: 1,
+            itemHasSubtitles: const [true],
+            children: [selectedCard()],
+          ),
+          token: token,
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.height == 90,
+        ),
+        findsOneWidget,
+      );
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 16);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint && widget.size == const Size.square(32),
+        ),
+        findsOneWidget,
+      );
+      final cardContainer = tester
+          .widgetList<Container>(find.byType(Container))
+          .firstWhere(
+            (container) =>
+                container.decoration is BoxDecoration &&
+                (container.decoration! as BoxDecoration).border != null,
+          );
+      final border = (cardContainer.decoration! as BoxDecoration).border!;
+      final markPainter =
+          tester
+                  .widgetList<CustomPaint>(find.byType(CustomPaint))
+                  .map((paint) => paint.painter)
+                  .firstWhere(
+                    (painter) =>
+                        painter.runtimeType.toString() ==
+                        '_SelectionCardMarkPainter',
+                  )
+              as dynamic;
+      expect((border as Border).top.width, 1.875);
+      expect(markPainter.cornerRadius, 5);
+
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 240,
+            child: TSelectionCardGroupLayout(
+              direction: Axis.horizontal,
+              columns: 1,
+              itemHasSubtitles: const [false],
+              children: [selectedCard()],
+            ),
+          ),
+          token: token,
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.height == 62,
+        ),
+        findsOneWidget,
+      );
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 13.5);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint && widget.size == const Size.square(27),
+        ),
+        findsOneWidget,
+      );
     });
 
     test('children 与 itemHasSubtitles 长度必须一致', () {

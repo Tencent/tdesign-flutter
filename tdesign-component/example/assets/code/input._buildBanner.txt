@@ -1,0 +1,16 @@
+Widget _buildBanner(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: ClipRRect(
+      // MiniProgram demo: border-radius: 18rpx.
+      borderRadius: BorderRadius.circular(9),
+      child: Theme(
+        data: Theme.of(
+          context,
+        ).mergeExtension(const TFormThemeData(borderColor: Colors.transparent)),
+        child: const TFormItem(
+          label: '标签文字',
+          child: TInput(borderless: true, hintText: '请输入文字'),
+        ),
+      ),
+    ),
+  );

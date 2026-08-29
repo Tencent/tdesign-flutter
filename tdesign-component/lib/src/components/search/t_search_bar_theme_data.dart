@@ -2,62 +2,81 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-/// TSearchBar 组件级 ThemeExtension。
+/// `TSearchBar` 的默认视觉配置。
 class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
   const TSearchBarThemeData({
-    /// 搜索框形态。
     this.variant,
-
-    /// 文本对齐方式。
-    this.textAlignment,
-
-    /// 背景颜色。
-    this.backgroundColor,
-
-    /// 外层内边距。
-    this.padding,
-
-    /// 光标高度。
+    this.height,
+    this.inputBackgroundColor,
+    this.contentPadding,
+    this.textStyle,
+    this.hintStyle,
+    this.searchIconTheme,
+    this.clearIconTheme,
+    this.actionTextStyle,
+    this.actionGap,
     this.cursorHeight,
-
-    /// 是否自动高度。
-    this.autoHeight,
   });
 
   /// 搜索框形态。
   final TSearchBarVariant? variant;
 
-  /// 文本对齐方式。
-  final TSearchBarAlignment? textAlignment;
+  /// 搜索框高度，默认 40dp。
+  final double? height;
 
-  /// 背景颜色。
-  final Color? backgroundColor;
+  /// 输入区域背景色，默认 `bgColorSecondaryContainer` Token。
+  final Color? inputBackgroundColor;
 
-  /// 外层内边距。
-  final EdgeInsetsGeometry? padding;
+  /// 输入区域内部留白，默认水平方向 12dp。
+  final EdgeInsetsGeometry? contentPadding;
+
+  /// 输入文字样式，未设置字段继承 `fontBodyLarge` Token。
+  final TextStyle? textStyle;
+
+  /// 占位文字样式，未设置字段继承 `fontBodyLarge` 和占位色 Token。
+  final TextStyle? hintStyle;
+
+  /// 搜索图标主题。
+  final IconThemeData? searchIconTheme;
+
+  /// 清除图标主题。
+  final IconThemeData? clearIconTheme;
+
+  /// 右侧操作文字样式。
+  final TextStyle? actionTextStyle;
+
+  /// 搜索框与右侧操作文字的间距，默认 15dp。
+  final double? actionGap;
 
   /// 光标高度。
   final double? cursorHeight;
 
-  /// 是否自动高度。
-  final bool? autoHeight;
-
   @override
   TSearchBarThemeData copyWith({
     TSearchBarVariant? variant,
-    TSearchBarAlignment? textAlignment,
-    Color? backgroundColor,
-    EdgeInsetsGeometry? padding,
+    double? height,
+    Color? inputBackgroundColor,
+    EdgeInsetsGeometry? contentPadding,
+    TextStyle? textStyle,
+    TextStyle? hintStyle,
+    IconThemeData? searchIconTheme,
+    IconThemeData? clearIconTheme,
+    TextStyle? actionTextStyle,
+    double? actionGap,
     double? cursorHeight,
-    bool? autoHeight,
   }) {
     return TSearchBarThemeData(
       variant: variant ?? this.variant,
-      textAlignment: textAlignment ?? this.textAlignment,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      padding: padding ?? this.padding,
+      height: height ?? this.height,
+      inputBackgroundColor: inputBackgroundColor ?? this.inputBackgroundColor,
+      contentPadding: contentPadding ?? this.contentPadding,
+      textStyle: textStyle ?? this.textStyle,
+      hintStyle: hintStyle ?? this.hintStyle,
+      searchIconTheme: searchIconTheme ?? this.searchIconTheme,
+      clearIconTheme: clearIconTheme ?? this.clearIconTheme,
+      actionTextStyle: actionTextStyle ?? this.actionTextStyle,
+      actionGap: actionGap ?? this.actionGap,
       cursorHeight: cursorHeight ?? this.cursorHeight,
-      autoHeight: autoHeight ?? this.autoHeight,
     );
   }
 
@@ -71,11 +90,36 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
     }
     return TSearchBarThemeData(
       variant: t < 0.5 ? variant : other.variant,
-      textAlignment: t < 0.5 ? textAlignment : other.textAlignment,
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+      height: lerpDouble(height, other.height, t),
+      inputBackgroundColor: Color.lerp(
+        inputBackgroundColor,
+        other.inputBackgroundColor,
+        t,
+      ),
+      contentPadding: EdgeInsetsGeometry.lerp(
+        contentPadding,
+        other.contentPadding,
+        t,
+      ),
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+      hintStyle: TextStyle.lerp(hintStyle, other.hintStyle, t),
+      searchIconTheme: IconThemeData.lerp(
+        searchIconTheme,
+        other.searchIconTheme,
+        t,
+      ),
+      clearIconTheme: IconThemeData.lerp(
+        clearIconTheme,
+        other.clearIconTheme,
+        t,
+      ),
+      actionTextStyle: TextStyle.lerp(
+        actionTextStyle,
+        other.actionTextStyle,
+        t,
+      ),
+      actionGap: lerpDouble(actionGap, other.actionGap, t),
       cursorHeight: lerpDouble(cursorHeight, other.cursorHeight, t),
-      autoHeight: t < 0.5 ? autoHeight : other.autoHeight,
     );
   }
 }

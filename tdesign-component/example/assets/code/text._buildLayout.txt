@@ -1,0 +1,10 @@
+Widget _buildLayout(BuildContext context) {
+    return const SizedBox(
+      width: 240,
+      child: TText(
+        '居中文本 Text',
+        textAlign: TextAlign.center,
+        textScaler: TextScaler.linear(1.25),
+      ),
+    );
+  }

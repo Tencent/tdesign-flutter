@@ -1,42 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdesign_flutter/src/components/link/t_link_theme_data.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TLinkThemeData 纯函数覆盖（copyWith / lerp），用于提升覆盖率。
 void main() {
-  group('TLinkThemeData 纯函数', () {
+  group('TLinkThemeData', () {
     const theme = TLinkThemeData(
-      color: Colors.red,
+      defaultSize: TLinkSize.small,
+      defaultColorScheme: TLinkColorScheme.primary,
+      underline: true,
+      textStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
       iconSize: 16,
-      fontSize: 14,
-      leftGapWithIcon: 4,
-      rightGapWithIcon: 4,
+      iconGap: 4,
     );
 
-    test('copyWith 覆盖字段', () {
-      final copied = theme.copyWith(color: Colors.blue, iconSize: 20, fontSize: 16);
-      expect(copied, isA<TLinkThemeData>());
-      expect(copied.color, Colors.blue);
-      expect(copied.iconSize, 20);
-      expect(copied.fontSize, 16);
-      expect(copied.leftGapWithIcon, 4);
+    test('copyWith 仅覆盖显式字段', () {
+      final copied = theme.copyWith(
+        defaultSize: TLinkSize.large,
+        textStyle: const TextStyle(color: Colors.blue),
+        iconGap: 8,
+      );
+
+      expect(copied.defaultSize, TLinkSize.large);
+      expect(copied.defaultColorScheme, TLinkColorScheme.primary);
+      expect(copied.underline, isTrue);
+      expect(copied.textStyle?.color, Colors.blue);
+      expect(copied.iconSize, 16);
+      expect(copied.iconGap, 8);
     });
 
-    test('lerp 在 t=0 / 0.5 / 1 返回 TLinkThemeData', () {
-      const other = TLinkThemeData(color: Colors.green, iconSize: 24, fontSize: 18);
-      final at0 = theme.lerp(other, 0);
-      final atHalf = theme.lerp(other, 0.5);
-      final at1 = theme.lerp(other, 1);
-      expect(at0, isA<TLinkThemeData>());
-      expect(atHalf, isA<TLinkThemeData>());
-      expect(at1, isA<TLinkThemeData>());
-      expect(at0.color, isA<Color>()); // t=0 取 this（感知色彩插值，不校验精确值）
-      expect(at1.color, isA<Color>()); // t=1 取 other
-      expect(atHalf.color, isA<Color>()); // 连续插值结果
+    test('lerp 插值视觉字段并切换离散字段', () {
+      const other = TLinkThemeData(
+        defaultSize: TLinkSize.large,
+        defaultColorScheme: TLinkColorScheme.danger,
+        underline: false,
+        textStyle: TextStyle(color: Colors.blue),
+        iconSize: 24,
+        iconGap: 12,
+      );
+
+      final atStart = theme.lerp(other, 0);
+      final atEnd = theme.lerp(other, 1);
+      expect(atStart.defaultSize, TLinkSize.small);
+      expect(atStart.underline, isTrue);
+      expect(atStart.iconSize, 16);
+      expect(atEnd.defaultSize, TLinkSize.large);
+      expect(atEnd.defaultColorScheme, TLinkColorScheme.danger);
+      expect(atEnd.underline, isFalse);
+      expect(atEnd.iconSize, 24);
+      expect(atEnd.iconGap, 12);
     });
 
-    test('lerp other 非同类型时返回 this', () {
-      expect(theme.lerp(null, 0.5), theme);
+    test('lerp 非同类型时返回当前主题', () {
+      expect(theme.lerp(null, 0.5), same(theme));
     });
   });
 }

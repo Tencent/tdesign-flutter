@@ -1013,7 +1013,7 @@ class TTabBarItemWithBadge extends StatelessWidget {
     Font font,
   ) {
     return TText(
-      config.tabText,
+      config.tabText ?? '',
       font: font,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       style: isSelected

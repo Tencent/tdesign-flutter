@@ -18,9 +18,6 @@ enum TSwitchVariant {
   /// 滑块内显示开关文案。
   text,
 
-  /// 滑块内显示加载指示器，并禁用交互。
-  loading,
-
   /// 滑块内显示开关图标。
   icon,
 }

@@ -1,5 +1,3 @@
 Widget _buildPureIconFab(BuildContext context) {
-    return _buildPageDemo(
-      fab: TFab(right: 16, bottom: 16, onPressed: _onFabPressed),
-    );
+    return TFab(onPressed: _onFabPressed, semanticLabel: '增加');
   }

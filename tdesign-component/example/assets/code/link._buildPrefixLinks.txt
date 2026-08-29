@@ -1,0 +1,9 @@
+Widget _buildPrefixLinks(BuildContext context) {
+    return _exampleRow(context, [
+      _link(
+        colorScheme: TLinkColorScheme.primary,
+        prefixIcon: const Icon(TIcons.link),
+      ),
+      _link(prefixIcon: const Icon(TIcons.link)),
+    ]);
+  }

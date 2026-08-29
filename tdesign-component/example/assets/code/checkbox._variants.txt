@@ -1,15 +1,14 @@
 Widget _variants(BuildContext context) {
     return Column(
       children: [
-        for (final entry in const [
-          (TCheckboxVariant.square, '方形'),
-          (TCheckboxVariant.circle, '圆形'),
-          (TCheckboxVariant.check, '仅勾选'),
-        ])
+        for (final (index, entry) in const [
+          (TCheckboxVariant.check, '多选'),
+          (TCheckboxVariant.square, '多选'),
+        ].indexed) ...[
           Theme(
-            data: Theme.of(context).mergeExtension(
-              TCheckboxThemeData(variant: entry.$1),
-            ),
+            data: Theme.of(
+              context,
+            ).mergeExtension(TCheckboxThemeData(variant: entry.$1)),
             child: TCheckbox(
               value: _variantValues[entry.$1],
               title: entry.$2,
@@ -18,6 +17,8 @@ Widget _variants(BuildContext context) {
               },
             ),
           ),
+          if (index == 0) const SizedBox(height: 16),
+        ],
       ],
     );
   }
