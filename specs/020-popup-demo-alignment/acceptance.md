@@ -5,7 +5,7 @@
 - Flutter 3.32.0 / latest 3.47.0 严格 analyze：均为 0 error / 0 warning。
 - Popup 完整组件回归在本轮 Flutter 3.32.0 复跑 169 项通过；当前覆盖率调度器口径下生产源码 `519/532 = 97.56%`。
 - Popup Demo 功能测试：两个版本各 4 项通过。
-- Flutter 3.32.0 Linux 明暗主题 Golden：更新后立即无更新参数复跑，2 项完整页面与 10 项五方向展开态共 12 项通过；固定 375dp、DPR 1、受控 Roboto/CJK/TIcons 字体，展开态截取包含蒙层与 Popup Route 的 `Overlay`，未保留缺字符号。
+- Flutter 3.32.0 Linux 明暗主题 Golden：更新后立即无更新参数复跑，2 项完整页面与 14 项全部七个公开实例展开态共 16 项通过；固定 375dp、DPR 1、受控 Roboto/CJK/TIcons 字体，展开态截取包含蒙层与 Popup Route 的 `Overlay`，未保留缺字符号。
 - 示例代码生成 check、回归调度器自测与 `git diff --check` 通过。
 
 ## 人工证据
