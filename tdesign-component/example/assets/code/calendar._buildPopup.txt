@@ -33,7 +33,22 @@ Widget _buildPopup(BuildContext context) {
         context,
         options: TPopupOptions.bottom(
           height: MediaQuery.sizeOf(context).height * 0.72,
-          titleWidget: TText(title),
+          headerBuilder: (_, close) => TPopupHeader(
+            cancelButton: TextButton(
+              onPressed: close,
+              child: const TText('取消'),
+            ),
+            title: TText(title),
+            confirmButton: TextButton(
+              onPressed: () {
+                if (mounted) {
+                  onConfirm(List<DateTime>.of(draft));
+                }
+                close();
+              },
+              child: const TText('确定'),
+            ),
+          ),
           child: StatefulBuilder(
             builder: (context, setPopupState) => TCalendar(
               value: draft,
@@ -44,11 +59,6 @@ Widget _buildPopup(BuildContext context) {
               },
             ),
           ),
-          onVisibleChange: (visible, trigger) {
-            if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-              onConfirm(List<DateTime>.of(draft));
-            }
-          },
         ),
       );
     }
@@ -57,9 +67,7 @@ Widget _buildPopup(BuildContext context) {
       children: [
         TCell(
           title: const TText('单选日期'),
-          note: TText(
-            displayValue(TCalendarVariant.single, _popupSingleValue),
-          ),
+          note: TText(displayValue(TCalendarVariant.single, _popupSingleValue)),
           arrow: true,
           onTap: () => showCalendar(
             title: '选择日期',
@@ -83,9 +91,7 @@ Widget _buildPopup(BuildContext context) {
         ),
         TCell(
           title: const TText('日期区间'),
-          note: TText(
-            displayValue(TCalendarVariant.range, _popupRangeValue),
-          ),
+          note: TText(displayValue(TCalendarVariant.range, _popupRangeValue)),
           arrow: true,
           onTap: () => showCalendar(
             title: '选择日期区间',

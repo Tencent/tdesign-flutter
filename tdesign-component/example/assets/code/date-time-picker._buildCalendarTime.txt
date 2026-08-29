@@ -20,7 +20,31 @@ Widget _buildCalendarTime(BuildContext context) {
           context,
           options: TPopupOptions.bottom(
             height: MediaQuery.sizeOf(context).height,
-            titleWidget: const TText('选择日期和时间'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: close,
+                child: const TText('取消'),
+              ),
+              title: const TText('选择日期和时间'),
+              confirmButton: TextButton(
+                onPressed: () {
+                  if (mounted && draftDate.isNotEmpty) {
+                    final date = draftDate.first;
+                    setState(() {
+                      _calendarTimeSelected = DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                        draftTime.hour ?? _calendarTimeSelected.hour,
+                        draftTime.minute ?? _calendarTimeSelected.minute,
+                      );
+                    });
+                  }
+                  close();
+                },
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => Column(
                 key: const Key('calendar-time-popup'),
@@ -49,24 +73,6 @@ Widget _buildCalendarTime(BuildContext context) {
                 ],
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (visible ||
-                  trigger != TPopupTrigger.confirm ||
-                  !mounted ||
-                  draftDate.isEmpty) {
-                return;
-              }
-              final date = draftDate.first;
-              setState(() {
-                _calendarTimeSelected = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  draftTime.hour ?? _calendarTimeSelected.hour,
-                  draftTime.minute ?? _calendarTimeSelected.minute,
-                );
-              });
-            },
           ),
         );
       },

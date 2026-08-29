@@ -783,8 +783,10 @@
       "api": {
         "names": [
           "TPopup",
+          "TPopupHeader",
           "TPopupOptions",
           "TPopupHandle",
+          "TPopupOverlayConfig",
           "TPopupPlacement",
           "TPopupTrigger"
         ],

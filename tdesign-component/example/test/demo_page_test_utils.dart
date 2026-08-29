@@ -12,6 +12,7 @@ const _pageWidth = 375.0;
 const _initialPageHeight = 812.0;
 const _maxPageHeight = 12000.0;
 const _goldenCjkFontFamily = 'TDesign Golden CJK';
+const _alignmentCjkFontFamily = 'TDesign Alignment CJK';
 
 class DemoPageTestSpec {
   const DemoPageTestSpec({
@@ -21,6 +22,7 @@ class DemoPageTestSpec {
     required this.expectedTexts,
     this.componentType,
     this.expectedComponentCount,
+    this.useAlignmentCjkFont = false,
   });
 
   final String name;
@@ -29,6 +31,7 @@ class DemoPageTestSpec {
   final List<String> expectedTexts;
   final Type? componentType;
   final int? expectedComponentCount;
+  final bool useAlignmentCjkFont;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -37,7 +40,7 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoStructureTests(DemoPageTestSpec spec) {
-  setUpAll(_loadGoldenFonts);
+  setUpAll(() => _loadGoldenFonts(spec.useAlignmentCjkFont));
 
   testWidgets('${spec.name} Demo structure', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -62,7 +65,7 @@ void registerDemoStructureTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoGoldenTests(DemoPageTestSpec spec) {
-  setUpAll(_loadGoldenFonts);
+  setUpAll(() => _loadGoldenFonts(spec.useAlignmentCjkFont));
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
@@ -82,7 +85,7 @@ Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 1));
 }
 
-Future<void> _loadGoldenFonts() async {
+Future<void> _loadGoldenFonts(bool useAlignmentCjkFont) async {
   final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
     ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
   final cupertinoIconFont =
@@ -104,12 +107,22 @@ Future<void> _loadGoldenFonts() async {
         'test/fonts/TDesignGoldenCJK-Regular.otf',
       ).readAsBytes().then(ByteData.sublistView),
     );
-  await Future.wait([
+  final fonts = [
     iconFont.load(),
     cupertinoIconFont.load(),
     robotoFont.load(),
     cjkFont.load(),
-  ]);
+  ];
+  if (useAlignmentCjkFont) {
+    final alignmentCjkFont = FontLoader(_alignmentCjkFontFamily)
+      ..addFont(
+        File(
+          'test/fonts/TDesignAlignmentCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    fonts.add(alignmentCjkFont.load());
+  }
+  await Future.wait(fonts);
 }
 
 Future<void> pumpFullDemoPage(
@@ -145,6 +158,20 @@ Future<void> pumpFullDemoPage(
   addTearDown(tester.view.resetDevicePixelRatio);
 }
 
+Future<void> pumpDemoPageAtPhoneViewport(
+  WidgetTester tester,
+  DemoPageTestSpec spec,
+  ThemeMode mode,
+) async {
+  tester.view.physicalSize = const Size(_pageWidth, _initialPageHeight);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(_buildPage(spec, mode));
+  await tester.pump();
+}
+
 Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   final model = ExamplePageModel(
     text: spec.title,
@@ -155,8 +182,14 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
     create: (_) => ThemeModeProvider(),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: _withGoldenFonts(TThemeBuilder.light(TThemeData.defaultData())),
-      darkTheme: _withGoldenFonts(TThemeBuilder.dark(TThemeData.defaultData())),
+      theme: _withGoldenFonts(
+        TThemeBuilder.light(TThemeData.defaultData()),
+        spec.useAlignmentCjkFont,
+      ),
+      darkTheme: _withGoldenFonts(
+        TThemeBuilder.dark(TThemeData.defaultData()),
+        spec.useAlignmentCjkFont,
+      ),
       themeMode: mode,
       home: RepaintBoundary(
         key: ValueKey('${spec.name}-demo-page'),
@@ -166,8 +199,11 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   );
 }
 
-ThemeData _withGoldenFonts(ThemeData theme) {
-  const fallback = [_goldenCjkFontFamily];
+ThemeData _withGoldenFonts(ThemeData theme, bool useAlignmentCjkFont) {
+  final fallback = [
+    _goldenCjkFontFamily,
+    if (useAlignmentCjkFont) _alignmentCjkFontFamily,
+  ];
   return theme.copyWith(
     textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
     primaryTextTheme: theme.primaryTextTheme.apply(
