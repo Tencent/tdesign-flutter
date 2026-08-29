@@ -7,6 +7,7 @@ const popoverDemoPageTestSpec = DemoPageTestSpec(
   name: 'popover',
   title: 'Popover 弹出气泡',
   page: TPopoverPage(),
+  useAlignmentCjkFont: true,
   expectedTexts: [
     '01 组件类型',
     '带箭头的弹出气泡',
