@@ -11,7 +11,6 @@ void main() {
       defaultSize: TButtonSize.medium,
       shape: TButtonShape.round,
       padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(4),
       iconTextSpacing: 6,
       gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
     );
@@ -63,10 +62,7 @@ void main() {
     });
 
     test('iconTextSpacing 拒绝负数和无穷值', () {
-      expect(
-        () => TButtonThemeData(iconTextSpacing: -1),
-        throwsAssertionError,
-      );
+      expect(() => TButtonThemeData(iconTextSpacing: -1), throwsAssertionError);
       expect(
         () => TButtonThemeData(iconTextSpacing: double.infinity),
         throwsAssertionError,

@@ -1,0 +1,8 @@
+Widget _buildCenter(BuildContext context) {
+    return const _SearchDemoSurface(
+      child: TSearchBar(
+        hintText: '搜索预设文案',
+        textAlignment: TSearchBarAlignment.center,
+      ),
+    );
+  }

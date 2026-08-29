@@ -447,7 +447,6 @@ class _TMessageState extends State<TMessage>
     final linkWidget = TLink(
       child: Text(link.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       colorScheme: TLinkColorScheme.primary,
-      variant: TLinkVariant.basic,
       size: TLinkSize.medium,
       onPressed: widget.onLinkPressed,
     );
@@ -455,7 +454,9 @@ class _TMessageState extends State<TMessage>
       return linkWidget;
     }
     return Theme(
-      data: Theme.of(context).mergeExtension(TLinkThemeData(color: link.color)),
+      data: Theme.of(
+        context,
+      ).mergeExtension(TLinkThemeData(textStyle: TextStyle(color: link.color))),
       child: linkWidget,
     );
   }

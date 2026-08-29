@@ -99,6 +99,11 @@ void main() {
         onLongPress: () => longPresses++,
       )));
 
+      final elevatedButton = tester.widget<ElevatedButton>(
+        find.byType(ElevatedButton),
+      );
+      expect(elevatedButton.onLongPress, isNotNull);
+
       await tester.longPress(find.byType(ElevatedButton));
       expect(taps, 0);
       expect(longPresses, 1);
@@ -114,6 +119,12 @@ void main() {
         child: const Text('禁用长按'),
         onLongPress: () => longPresses++,
       )));
+
+      final elevatedButton = tester.widget<ElevatedButton>(
+        find.byType(ElevatedButton),
+      );
+      expect(elevatedButton.onPressed, isNull);
+      expect(elevatedButton.onLongPress, isNull);
 
       await tester.longPress(find.byType(ElevatedButton));
       expect(longPresses, 0);

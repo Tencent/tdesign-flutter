@@ -1,14 +1,11 @@
 ---
 title: Search 搜索框
-description: 用于一组预设数据中的选择。
+description: 用于用户输入搜索信息，并进行页面内容搜索。
 spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,178 +13,74 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_search_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_search_page.dart)
+[t_search_bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_search_bar_page.dart)
 
-### 1 组件类型
+### 基础搜索框
 
-基础搜索框
-            
-<td-code-block panel="Dart">
+搜索结果是业务内容，通过 `TCell` 在搜索框下方组合，不属于 `TSearchBar` 公共 API。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildDefaultSearchBar(BuildContext context) {
-    return TSearchBar(
-      placeHolder: '搜索预设文案',
-      onTextChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
-    );
-  }</pre>
+```dart
+TSearchBar(
+  controller: controller,
+  hintText: '输入tdesign，有预览结果',
+  onChanged: filterResults,
+  onFocusChanged: handleFocusChanged,
+)
+```
 
-</td-code-block>
-                                  
+### 字数限制
 
-获取焦点后显示取消按钮
-            
-<td-code-block panel="Dart">
+```dart
+TSearchBar(hintText: '最大输入10个字符', maxLength: 10)
+TSearchBar(hintText: '最大输入10个字符，汉字算两个', maxCharacter: 10)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFocusSearchBar(BuildContext context) {
-    return const TSearchBar(
-      placeHolder: '搜索预设文案',
-      needCancel: true,
-      autoFocus: true,
-    );
-  }</pre>
+### 获取焦点后显示取消按钮
 
-</td-code-block>
-                                  
-### 1 组件样式
+```dart
+TSearchBar(
+  controller: controller,
+  hintText: '搜索预设文案',
+  textAlignment: TSearchBarAlignment.center,
+  actionText: focused ? '取消' : null,
+  onFocusChanged: (value) => setState(() => focused = value),
+  onActionPressed: () {
+    controller.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
+  },
+)
+```
 
-搜索框形状
-            
-<td-code-block panel="Dart">
+### 搜索框形状与对齐
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSearchBarWithShape(BuildContext context) {
-    return Column(
-      // spacing: 16,
-      children: [
-        TSearchBar(
-          placeHolder: '搜索预设文案',
-          // 方形
-          style: TSearchStyle.square,
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
-        ),
-        const SizedBox(height: 16),
-        TSearchBar(
-          placeHolder: '搜索预设文案',
-          // 圆形
-          style: TSearchStyle.round,
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-默认状态其他对齐方式
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCenterSearchBar(BuildContext context) {
-    return TSearchBar(
-      placeHolder: '搜索预设文案',
-      alignment: TSearchAlignment.center,
-      onTextChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+```dart
+const TSearchBar(variant: TSearchBarVariant.round)
+const TSearchBar(textAlignment: TSearchBarAlignment.center)
+```
 
 ## API
+
 ### TSearchBar
-#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action | String | '' | 自定义操作文字 |
-| alignment | TSearchAlignment? | TSearchAlignment.left | 对齐方式，居中或这头部对齐 |
-| autoFocus | bool | false | 是否自动获取焦点 |
-| autoHeight | bool | false | 是否自动计算高度 |
-| backgroundColor | Color? | - | 背景颜色 |
-| controller | TextEditingController? | - | 控制器 |
-| cursorHeight | double? | - | 光标的高 |
-| enabled | bool? | - | 是否禁用 |
-| focusNode | FocusNode? | - | 自定义焦点 |
-| inputAction | TextInputAction? | - | 键盘动作类型 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| mediumStyle | bool | false | 是否在导航栏中的样式 |
-| needCancel | bool | false | 是否需要取消按钮 |
-| onActionClick | TSearchBarEvent? | - | 自定义操作回调 |
-| onClearClick | TSearchBarClearEvent? | - | 自定义操作回调 |
-| onEditComplete | TSearchBarCallBack? | - | 编辑完成回调 |
-| onInputClick | GestureTapCallback? | - | 输入框点击事件 |
-| onSubmitted | TSearchBarEvent? | - | 提交回调 |
-| onTapOutside | TapRegionCallback? | - | 点击输入框外部回调 |
-| onTextChanged | TSearchBarEvent? | - | 文字改变回调 |
-| padding | EdgeInsets | const EdgeInsets.symmetric(horizontal: 16, vertical: 8) | 内部填充 |
-| placeHolder | String? | - | 预设文案 |
-| readOnly | bool? | - | 是否只读 |
-| style | TSearchStyle? | TSearchStyle.square | 样式 |
+| controller | TextEditingController? | - | 文本控制器 |
+| initialValue | String? | - | 初始文本，不能与 controller 同时设置 |
+| hintText | String? | - | 占位提示 |
+| actionText | String? | - | 右侧操作文案；为空时不占空间 |
+| onActionPressed | VoidCallback? | - | 操作点击回调，不隐式清空或失焦 |
+| onChanged / onSubmitted | ValueChanged&lt;String&gt;? | - | 文本变化与提交通知 |
+| onFocusChanged | ValueChanged&lt;bool&gt;? | - | 焦点变化通知 |
+| onClearPressed | VoidCallback? | - | 清除按钮点击回调 |
+| enabled / readOnly | bool | true / false | 可交互与只读状态 |
+| clearable / autofocus | bool | true / false | 清除按钮与自动聚焦 |
+| inputType | TextInputType | TextInputType.text | 键盘类型 |
+| inputAction | TextInputAction | TextInputAction.search | 键盘动作 |
+| inputFormatters | List&lt;TextInputFormatter&gt;? | - | 输入格式化器 |
+| maxLength | int? | - | 最大字符数 |
+| maxCharacter | int? | - | 加权字符数，ASCII=1、非 ASCII=2；与 maxLength 互斥 |
+| variant | TSearchBarVariant? | square | `square` 或 `round` |
+| textAlignment | TSearchBarAlignment? | left | `left` 或 `center` |
+| focusNode | FocusNode? | - | 自定义焦点节点 |
 
-
-### TSearchStyle
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| square | 方形 |
-| round | 圆形 |
-
-
-### TSearchAlignment
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 默认头部对齐 |
-| center | 居中 |
-
-
-### TSearchBarEvent
-#### 类型定义
-
-```dart
-typedef TSearchBarEvent = void Function(String value);
-```
-
-
-### TSearchBarClearEvent
-#### 类型定义
-
-```dart
-typedef TSearchBarClearEvent = bool? Function(String value);
-```
-
-
-### TSearchBarCallBack
-#### 类型定义
-
-```dart
-typedef TSearchBarCallBack = void Function();
-```
-
-
-  
+视觉默认值通过 `TSearchBarThemeData` 配置，包括高度、背景、内部留白、文字与图标样式、操作间距及光标高度。

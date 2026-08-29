@@ -6,6 +6,7 @@ import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/main.dart';
 import 'package:tdesign_flutter_example/page/t_calendar_page.dart';
+import 'package:tdesign_flutter_example/page/t_link_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
@@ -17,7 +18,7 @@ void main() {
     expect(find.text('Button 按钮'), findsOneWidget);
   });
 
-  testWidgets('示例页面和模块标题使用 headline 层级', (tester) async {
+  testWidgets('示例页面标题层级与小程序 Demo 壳一致', (tester) async {
     final token = TThemeData.defaultData();
     await tester.pumpWidget(ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
@@ -53,8 +54,67 @@ void main() {
         (widget) => widget is TText && widget.data == '01 模块标题',
       ),
     );
-    expect(pageTitle.style?.fontSize, token.fontHeadlineMedium?.size);
-    expect(moduleTitle.style?.fontSize, token.fontHeadlineSmall?.size);
+    expect(pageTitle.style?.fontSize, token.fontHeadlineSmall?.size);
+    expect(pageTitle.style?.height, token.fontHeadlineSmall?.height);
+    expect(moduleTitle.style?.fontSize, token.fontTitleLarge?.size);
+    expect(moduleTitle.style?.height, token.fontTitleLarge?.height);
+    expect(moduleTitle.style?.fontWeight, FontWeight.w700);
+  });
+
+  testWidgets('单元测试模块仅在 debug 模式按开关展示', (tester) async {
+    Widget buildPage({required bool showTestModule}) {
+      return ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: ExamplePage(
+            title: 'Test module',
+            exampleCodeGroup: 'test',
+            showTestModule: showTestModule,
+            children: const [
+              ExampleModule(
+                title: 'Demo',
+                children: [
+                  ExampleItem(ignoreCode: true, builder: _emptyExample),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    await tester.pumpWidget(buildPage(showTestModule: true));
+    await tester.pump();
+    expect(find.text('02 单元测试'), findsOneWidget);
+
+    await tester.pumpWidget(buildPage(showTestModule: false));
+    await tester.pump();
+    expect(find.text('02 单元测试'), findsNothing);
+  });
+
+  testWidgets('Link Demo 使用页面背景与白色示例行分层', (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        theme: TThemeBuilder.light(token),
+        home: const TLinkViewPage(),
+      ),
+    ));
+    await tester.pump();
+
+    expect(tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
+        token.bgColorPage);
+    final exampleRows = tester.widgetList<Container>(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.constraints?.maxHeight == 48 &&
+            widget.color == token.bgColorContainer,
+      ),
+    );
+    expect(exampleRows, isNotEmpty);
   });
 
   testWidgets('Calendar 页面提供底部 Popup 组合入口', (tester) async {

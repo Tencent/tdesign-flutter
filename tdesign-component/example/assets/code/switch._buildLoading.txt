@@ -1,7 +1,0 @@
-Widget _buildLoading(BuildContext context) => const TCell(
-        title: Text('加载状态'),
-        note: TSwitch(
-          value: true,
-          variant: TSwitchVariant.loading,
-        ),
-      );

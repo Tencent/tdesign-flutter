@@ -1,0 +1,65 @@
+# Radio Demo 小程序视觉对齐
+
+## 背景
+
+Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显示默认选中标记、长文案换行和横向布局仍存在差异。现有 `TRadio` 已具备主题色、尺寸和文本行数能力，但缺少内置勾选样式，`TRadioGroup` 也无法把行数配置传给子项。
+
+## 目标
+
+- 以小程序公开 Demo 为可见效果基线，完成 Radio Demo 的最小视觉对齐。
+- 由组件提供可复用的内置选中标记样式，Demo 不自绘基础 Radio 图标。
+- 所有颜色、尺寸、圆角和间距来自现有 Theme、Material 或 TDesign token。
+- 移除与小程序冲突的默认圆点视觉，以实心勾选作为统一默认样式。
+
+## 非目标
+
+- 不复制小程序运行时、平台提示或兼容分支。
+- 不机械映射小程序 props/events。
+- 不改变 Radio 的受控状态模型。
+
+## 范围
+
+### 涉及
+
+- `TRadio` 内置选中标记样式。
+- `TRadioGroup` 对图标样式和文本最大行数的透传。
+- Radio Demo、Widget 测试、Golden 和真机截图。
+- Demo 调试模块的 release 隔离及已发现的异步回调生命周期问题。
+
+### 不涉及
+
+- Checkbox 或其他选择组件的公开 API。
+- 小程序专属的 Skyline/WebView 提示。
+- 与 Radio Demo 无关的页面结构和样式。
+
+## 行为契约
+
+- `TRadioIconType.dot` 提供圆环加圆点样式。
+- `TRadioIconType.check` 在选中时使用与指示器同尺寸的 TDesign `check` 图标显示品牌色勾选标记，未选中时不显示标记。
+- `TRadioIconType.fill` 未选中时显示边框圆环，选中时使用与指示器同尺寸的 TDesign `check-circle-filled` 图标，这也是与小程序一致的默认样式。
+- 禁用、选中和未选颜色继续遵循 `TRadioThemeData`、Material `RadioTheme` / `ColorScheme`、TDesign token 的既有优先级。
+- 图标几何尺寸使用 `TRadioSize` 的既有指示器尺寸；勾选样式复用 TDesign 图标，其余样式按该尺寸成比例绘制，不新增固定像素样式常量。
+- 块级 Radio 的 small / medium / large 高度分别使用 48 / 56 / 64 的现有尺寸 token；默认 medium 的 24dp 指示器和 56dp 块高与小程序一致，上下留白由目标高度、标题行高和指示器尺寸动态计算。
+- 指示器三档尺寸及卡片最小高度由 TDesign 间距、字体与行高 token 计算；绘制器中的比例常量仅描述图形几何关系，不作为样式尺寸。
+- 横向 Demo 使用通栏容器背景，并将 `spacer16` 作为容器内边距，不形成额外的卡片外框。
+- 块级 Radio 根据三档目标高度动态计算上下内边距；分割线不带外边距，并从正文起点开始，均对齐小程序默认块级布局。
+- `TRadio` 和 `TRadioGroup` 默认显示分割线，与小程序默认非无边框模式及 Checkbox 保持一致；显式设置 `showDivider: false` 时关闭，卡片模式始终不显示分割线。
+- 带副标题时，内置指示器与主标题行盒垂直居中，不相对整个多行文本块居中。
+- 副标题默认使用 `textColorSecondary`，与小程序 `text-color-secondary` token 保持一致。
+- Material `TextTheme` 只提供字体排版继承，不覆盖 Radio 标题和副标题的语义颜色；颜色由 `TRadioThemeData` 和对应 TDesign token 解析。
+- `customIconBuilder` 优先于 `iconType`，保持完整自定义能力。
+- `TRadio` 和 `TRadioGroup` 的 `iconType` 默认值为 `fill`，直接对齐小程序默认实心勾选视觉，不保留旧默认视觉的兼容分支。
+- `TRadio` 和 `TRadioGroup` 的主标题、副标题最大行数默认值分别为 `3`、`5`，与小程序默认省略规则一致；`TRadioGroup` 将这两个配置透传给默认子项。
+- release 构建不创建或展示 Demo 内部测试模块；debug 行为保持可控。
+
+## 验收标准
+
+- [ ] 未传新增参数时，Radio 使用小程序默认实心勾选视觉，受控交互行为保持不变。
+- [ ] 三种图标样式覆盖选中、未选和禁用状态测试。
+- [ ] 默认显示分割线，显式关闭和卡片模式不显示分割线。
+- [ ] Group 参数正确透传，长标题和副标题按 Demo 要求换行。
+- [ ] Demo 不包含基础 Radio 图标的自定义绘制或平台兼容分支。
+- [ ] Demo 样式值使用 Theme / Material / TDesign token 或组件公开能力。
+- [ ] light/dark Golden 更新并通过。
+- [ ] Android 真机截图与小程序公开 Demo 分段对照完成。
+- [ ] Flutter 3.32.0 与 latest 的 analyze 和相关测试通过。

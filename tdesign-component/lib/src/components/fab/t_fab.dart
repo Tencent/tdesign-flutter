@@ -17,6 +17,9 @@ export 't_fab_layout.dart'
 /// 悬浮操作按钮组件
 ///
 /// T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ 动作层（默认内嵌 TButton）
+/// 默认动作层使用 large / fill / primary 规格；纯图标为圆形，图文为胶囊形。
+/// 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 [child]。
+/// [TFab] 返回 [Positioned]，应作为 [Stack] 的直接子组件使用。
 ///
 /// 示例：
 /// ```dart
@@ -60,10 +63,13 @@ class TFab extends StatelessWidget {
   /// 图标 + 文字形态；非空时内嵌 TButton 为 round 形状
   final String text;
 
-  /// 图标；未传时默认 [Icons.add]
+  /// 图标；未传时使用 TDesign add 图标。
   final Widget? icon;
 
-  /// 自定义内容；有则替代默认内嵌 TButton
+  /// 自定义内容；有则替代默认内嵌 TButton。
+  ///
+  /// 自定义内容自行负责尺寸、形状、颜色和投影；[TFab] 继续负责定位、拖拽、
+  /// 点击和禁用语义。
   final Widget? child;
 
   /// 点击回调，null 时禁用
@@ -75,10 +81,10 @@ class TFab extends StatelessWidget {
   /// 读屏标签
   final String? semanticLabel;
 
-  /// 距屏幕右侧偏移（默认 16）
+  /// 距父级 Stack 内容区右侧偏移（默认 16）
   final double? right;
 
-  /// 距屏幕底部偏移（默认 32）
+  /// 距父级 Stack 内容区底部偏移（默认 32）
   final double? bottom;
 
   /// 拖拽轴向；null 表示不启用拖拽，[TFabDragAxis.all] 表示全向拖拽
@@ -109,8 +115,9 @@ class TFab extends StatelessWidget {
   Widget build(BuildContext context) {
     // ---- resolve Theme ----
     final theme = Theme.of(context).extension<TFabThemeData>();
-    final safePadding =
-        useSafeArea ? MediaQuery.paddingOf(context) : EdgeInsets.zero;
+    final safePadding = useSafeArea
+        ? MediaQuery.paddingOf(context)
+        : EdgeInsets.zero;
 
     // ---- resolveLayout ----
     final layout = TFabResolve.resolveLayout(
@@ -127,9 +134,10 @@ class TFab extends StatelessWidget {
       safePadding: safePadding,
     );
 
-    final dragTapSlop = theme?.dragTapSlop ?? 18;
+    final dragTapSlop = theme?.dragTapSlop ?? TFabDefaults.defaultDragTapSlop;
     final magnetDuration =
-        theme?.magnetAnimationDuration ?? const Duration(milliseconds: 200);
+        theme?.magnetAnimationDuration ??
+        TFabDefaults.defaultMagnetAnimationDuration;
 
     // ---- 构建动作层 ----
     final isChildMode = child != null;
@@ -150,10 +158,7 @@ class TFab extends StatelessWidget {
     if (isChildMode && onPressed == null) {
       actionChild = Semantics(
         enabled: false,
-        child: Opacity(
-          opacity: 0.4,
-          child: IgnorePointer(child: actionChild),
-        ),
+        child: Opacity(opacity: 0.4, child: IgnorePointer(child: actionChild)),
       );
     }
 
@@ -170,7 +175,8 @@ class TFab extends StatelessWidget {
       layout: layout,
       child: actionChild,
       dragTapSlop: dragTapSlop,
-      onPressed: isChildMode ? onPressed : null,
+      onPressed: onPressed,
+      wrapFixedTap: isChildMode,
       onDragStart: onDragStart,
       onDragEnd: onDragEnd,
       magnetAnimationDuration: magnetDuration,

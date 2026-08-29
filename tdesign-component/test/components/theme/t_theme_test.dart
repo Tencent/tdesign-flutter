@@ -65,33 +65,34 @@ void main() {
 
   group('TStyleResolver', () {
     testWidgets(
-        'of/token/colorScheme/textTheme/materialTheme/componentExtension',
-        (tester) async {
-      final token = TThemeData.defaultData();
-      final resolverHolder = <TStyleResolver>[];
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            extensions: [token],
-            textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 13)),
+      'of/token/colorScheme/textTheme/materialTheme/componentExtension',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        final resolverHolder = <TStyleResolver>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              extensions: [token],
+              textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 13)),
+            ),
+            home: Builder(
+              builder: (context) {
+                final r = TStyleResolver.of(context);
+                resolverHolder.add(r);
+                // 触发各 getter
+                expect(r.token, isA<TThemeData>());
+                expect(r.colorScheme, isA<ColorScheme>());
+                expect(r.textTheme, isA<TextTheme>());
+                expect(r.materialTheme, isA<ThemeData>());
+                expect(r.componentExtension<TThemeData>(), isNotNull);
+                return const SizedBox();
+              },
+            ),
           ),
-          home: Builder(
-            builder: (context) {
-              final r = TStyleResolver.of(context);
-              resolverHolder.add(r);
-              // 触发各 getter
-              expect(r.token, isA<TThemeData>());
-              expect(r.colorScheme, isA<ColorScheme>());
-              expect(r.textTheme, isA<TextTheme>());
-              expect(r.materialTheme, isA<ThemeData>());
-              expect(r.componentExtension<TThemeData>(), isNotNull);
-              return const SizedBox();
-            },
-          ),
-        ),
-      );
-      expect(resolverHolder, isNotEmpty);
-    });
+        );
+        expect(resolverHolder, isNotEmpty);
+      },
+    );
 
     testWidgets('token 无 Extension 时回退 defaultData', (tester) async {
       await tester.pumpWidget(
@@ -160,7 +161,6 @@ void main() {
       expect(theme.extension<TProgressThemeData>(), isNotNull);
       expect(theme.extension<TRadioThemeData>(), isNotNull);
       expect(theme.extension<TRateThemeData>(), isNotNull);
-      expect(theme.extension<TRefreshThemeData>(), isNotNull);
       expect(theme.extension<TResultThemeData>(), isNotNull);
       expect(theme.extension<TSearchBarThemeData>(), isNotNull);
       expect(theme.extension<TSideBarThemeData>(), isNotNull);
@@ -283,8 +283,11 @@ void main() {
     });
 
     test('fromJson 带 extraThemeData 走 parse 分支', () {
-      final theme =
-          TThemeData.fromJson('testTheme', json, extraThemeData: _TestExtra())!;
+      final theme = TThemeData.fromJson(
+        'testTheme',
+        json,
+        extraThemeData: _TestExtra(),
+      )!;
       expect(theme.extraThemeData, isA<_TestExtra>());
       expect(theme.ofExtra<_TestExtra>(), isA<_TestExtra>());
       // 类型不匹配时返回 null
@@ -295,10 +298,12 @@ void main() {
   group('TThemeData 拷贝与 Map', () {
     test('copyWith 覆盖并保留未覆盖字段', () {
       final base = TThemeData.defaultData();
-      final copied = base.copyWith(
-        name: 'copied',
-        colorMap: {'brandNormalColor': Colors.red},
-      ) as TThemeData;
+      final copied =
+          base.copyWith(
+                name: 'copied',
+                colorMap: {'brandNormalColor': Colors.red},
+              )
+              as TThemeData;
       expect(copied.name, 'copied');
       expect(copied.ofColor('brandNormalColor'), Colors.red);
       // 未覆盖的其它颜色经 factory 仍可取
@@ -309,8 +314,10 @@ void main() {
 
     test('copyWithTThemeData 同义封装', () {
       final base = TThemeData.defaultData();
-      final copied = base.copyWithTThemeData('copy2',
-          colorMap: {'brandNormalColor': Colors.blue});
+      final copied = base.copyWithTThemeData(
+        'copy2',
+        colorMap: {'brandNormalColor': Colors.blue},
+      );
       expect(copied.name, 'copy2');
       expect(copied.ofColor('brandNormalColor'), Colors.blue);
       expect(copied, isA<TThemeData>());

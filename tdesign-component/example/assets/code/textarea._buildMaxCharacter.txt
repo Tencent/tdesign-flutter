@@ -1,0 +1,10 @@
+Widget _buildMaxCharacter(BuildContext context) => const SizedBox(
+    height: 162,
+    child: TTextarea(
+      label: '标签文字',
+      hintText: '设置最大字符个数，一个汉字表示两个字符',
+      minLines: 3,
+      maxCharacter: 200,
+      indicator: true,
+    ),
+  );

@@ -1,4 +1,4 @@
-Widget _buildDisabled(BuildContext context) => const TInput(
-        initialValue: '不可编辑',
-        enabled: false,
-      );
+Widget _buildDisabled(BuildContext context) => const TFormItem(
+    label: '标签文字',
+    child: TInput(borderless: true, initialValue: '不可编辑文字', enabled: false),
+  );

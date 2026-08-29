@@ -1,792 +1,90 @@
 ---
 title: Form 表单
-description: 用以收集、校验和提交数据，一般由输入框、单选框、复选框、选择器等控件组成。
+description: 用以收集、校验和提交数据，一般由输入框、选择器等控件组成。
 spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
-## 代码演示
+## 组件关系
 
-[td_form_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_form_page.dart)
+```text
+TForm                 表单生命周期、字段注册和统一操作
+  └─ TFormField<T>    受控字段值、必填与 validator
+       └─ TFormItem   label、必填标记、help/error 和布局
+            └─ 输入或选择组件
+```
 
-### 1 基础类型
+`TFormField` 和 `TFormItem` 均可独立使用。Flutter 业务状态仍由调用方持有，组件不会复制一份表单 data。
 
-基础表单
-      
-<td-code-block panel="Dart">
+## 基础用法
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+```dart
+final formController = TFormController();
+var name = '';
 
-</td-code-block>
-                
+TForm(
+  controller: formController,
+  onSubmit: (values) {},
+  child: TFormField<String>(
+    name: 'name',
+    value: name,
+    required: true,
+    requiredMessage: '请输入用户名',
+    onChanged: (value) => setState(() => name = value),
+    validator: (value) => value.length == 8 ? null : '只能输入8个字符',
+    builder: (context, value, onChanged, errorText) => TFormItem(
+      label: '用户名',
+      help: '输入用户名',
+      child: TInput(
+        borderless: true,
+        hintText: '请输入用户名',
+        onChanged: onChanged,
+      ),
+    ),
+  ),
+)
+```
 
+## 校验与提交
 
+```dart
+formController.validate();
+formController.validate(fields: ['name']);
+formController.submit();
+formController.clearValidate();
+formController.clearValidate(fields: ['name']);
+formController.setValidateMessage({'name': '用户名已存在'});
+formController.reset();
+```
 
-          
-<td-code-block panel="Dart">
+- 默认首次提交前不自动展示校验错误；首次提交失败后按用户交互更新。
+- `clearValidate` 只清除校验展示，不表示字段值变化，也不会触发 `TForm.onChanged`。
+- `reset` 重置 Flutter 字段交互与校验状态；受控业务值仍由调用方恢复。
+- `setValidateMessage` 用于服务端错误，外部错误优先于本地 validator。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildForm(BuildContext context) {
-    final theme = TTheme.of(context);
-    return TForm(
-        formController: _formController,
-        disabled: _formDisableState,
-        data: _formData,
-        isHorizontal: _isFormHorizontal,
-        rules: _validationRules,
-        formContentAlign: TextAlign.left,
-        requiredMark: true,
+## 横向与纵向布局
 
-        /// 确定整个表单是否展示提示信息
-        formShowErrorMessage: true,
-        onSubmit: onSubmit,
-        items: [
-          TFormItem(
-            label: '用户名',
-            name: 'name',
-            type: TFormItemType.input,
-            help: '请输入用户名',
-            labelWidth: 82.0,
-            formItemNotifier: _formItemNotifier['name'],
+```dart
+Theme(
+  data: Theme.of(context).mergeExtension(
+    const TFormThemeData(layout: TFormLayout.vertical),
+  ),
+  child: form,
+)
+```
 
-            /// 控制单个 item 是否展示错误提醒
-            showErrorMessage: true,
-            requiredMark: true,
-            child: TInput(
-                leftContentSpace: 0,
-                inputDecoration: InputDecoration(
-                  hintText: '请输入用户名',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: TTheme.of(context).textColorPlaceholder,
-                  ),
-                ),
-                controller: _controller[0],
-                additionInfoColor: TTheme.of(context).errorColor6,
-                showBottomDivider: false,
-                readOnly: _formDisableState,
-                onChanged: (val) {
-                  _formItemNotifier['name']?.upDataForm(val);
-                },
-                onClearTap: () {
-                  _controller[0].clear();
-                  _formItemNotifier['name']?.upDataForm('');
-                }),
-          ),
-          TFormItem(
-            label: '密码',
-            name: 'password',
-            type: TFormItemType.input,
-            labelWidth: 82.0,
-            formItemNotifier: _formItemNotifier['password'],
-            showErrorMessage: true,
-            child: TInput(
-                leftContentSpace: 0,
-                inputDecoration: InputDecoration(
-                  hintText: '请输入密码',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: TTheme.of(context).textColorPlaceholder,
-                  ),
-                ),
-                type: TInputType.normal,
-                controller: _controller[1],
-                obscureText: !browseOn,
-                needClear: false,
-                readOnly: _formDisableState,
-                showBottomDivider: false,
-                onChanged: (val) {
-                  _formItemNotifier['password']?.upDataForm(val);
-                },
-                onClearTap: () {
-                  _controller[1].clear();
-                  _formItemNotifier['password']?.upDataForm('');
-                }),
-          ),
-          TFormItem(
-            label: '性别',
-            name: 'gender',
-            type: TFormItemType.radios,
-            labelWidth: 82.0,
-            showErrorMessage: true,
-            formItemNotifier: _formItemNotifier['gender'],
-            child: TRadioGroup(
-              spacing: 0,
-              direction: Axis.horizontal,
-              controller: _genderCheckboxGroupController,
-              directionalTdRadios: _radios.entries.map((entry) {
-                return TRadio(
-                  id: entry.key,
-                  title: entry.value,
-                  radioStyle: TRadioStyle.circle,
-                  showDivider: false,
-                  spacing: 4,
-                  checkBoxLeftSpace: 0,
-                  customSpace: EdgeInsets.all(0),
-                  enable: !_formDisableState,
-                );
-              }).toList(),
-              onRadioGroupChange: (ids) {
-                if (ids == null) {
-                  return;
-                }
-                _formItemNotifier['gender']?.upDataForm(ids);
-              },
-            ),
-          ),
-          TFormItem(
-            label: '生日',
-            name: 'birth',
-            labelWidth: 82.0,
-            type: TFormItemType.dateTimePicker,
-            contentAlign: TextAlign.left,
-            tipAlign: TextAlign.left,
-            formItemNotifier: _formItemNotifier['birth'],
-            hintText: '请输入内容',
-            select: _selected_1,
-            selectFn: (BuildContext context) {
-              if (_formDisableState) {
-                return;
-              }
-              _showDatePicker(
-                context,
-                initialDate: [2012, 1, 1],
-                onConfirm: (selected) {
-                  setState(() {
-                    _selected_1 =
-                        '${selected[0].toString().padLeft(4, '0')}-${selected[1].toString().padLeft(2, '0')}-${selected[2].toString().padLeft(2, '0')}';
-                    _formItemNotifier['birth']?.upDataForm(_selected_1);
-                  });
-                },
-              );
-            },
-          ),
-          TFormItem(
-            label: '籍贯',
-            name: 'place',
-            type: TFormItemType.cascader,
-            contentAlign: TextAlign.left,
-            tipAlign: TextAlign.left,
-            labelWidth: 82.0,
-            hintText: '请输入内容',
-            select: _selected_2,
-            formItemNotifier: _formItemNotifier['place'],
-            selectFn: (BuildContext context) {
-              if (_formDisableState) {
-                return;
-              }
-              TCascader.showMultiCascader(context,
-                  title: '选择地址',
-                  data: _data,
-                  initialData: _initLocalData,
-                  theme: 'step',
-                  onChange: (List<MultiCascaderListModel> selectData) {
-                setState(() {
-                  var result = [];
-                  var len = selectData.length;
-                  _initLocalData = selectData[len - 1].value!;
-                  selectData.forEach((element) {
-                    result.add(element.label);
-                  });
-                  _selected_2 = result.join('/');
-                  _formItemNotifier['place']?.upDataForm(_selected_2);
-                });
-              }, onClose: () {
-                Navigator.of(context).pop();
-              });
-            },
-          ),
-          TFormItem(
-              label: '年限',
-              name: 'age',
-              labelWidth: 82.0,
-              type: TFormItemType.stepper,
-              formItemNotifier: _formItemNotifier['age'],
-              child: Padding(
-                padding: const EdgeInsets.only(right: 18),
-                child: TStepper(
-                  theme: TStepperTheme.filled,
-                  disabled: _formDisableState,
-                  eventController: _stepController!,
-                  value: int.parse(_formData['age']),
-                  onChange: (value) {
-                    _formItemNotifier['age']?.upDataForm('${value}');
-                  },
-                ),
-              )),
-          TFormItem(
-            label: '自我评价',
-            name: 'description',
-            tipAlign: TextAlign.left,
-            type: TFormItemType.rate,
-            labelWidth: 82.0,
-            formItemNotifier: _formItemNotifier['description'],
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                  padding: const EdgeInsets.only(right: 18),
-                  child: TRate(
-                    count: 5,
-                    value: double.parse(_formData['description']),
-                    allowHalf: false,
-                    disabled: _formDisableState,
-                    onChange: (value) {
-                      setState(() {
-                        _formData['description'] = '${value}';
-                      });
-                      _formItemNotifier['description']?.upDataForm('${value}');
-                    },
-                  )),
-            ),
-          ),
-          TFormItem(
-              label: '个人简介',
-              labelWidth: 82.0,
-              name: 'resume',
-              type: TFormItemType.textarea,
-              formItemNotifier: _formItemNotifier['resume'],
-              child: Padding(
-                padding:
-                    EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
-                child: TTextarea(
-                  backgroundColor: Colors.red,
-                  hintText: '请输入个人简介',
-                  maxLength: 500,
-                  indicator: true,
-                  readOnly: _formDisableState,
-                  layout: TTextareaLayout.vertical,
-                  controller: _controller[2],
-                  showBottomDivider: false,
-                  onChanged: (value) {
-                    _formItemNotifier['resume']?.upDataForm(value);
-                  },
-                ),
-              )),
-          TFormItem(
-              label: '上传图片',
-              name: 'photo',
-              labelWidth: 82.0,
-              type: TFormItemType.upLoadImg,
-              formItemNotifier: _formItemNotifier['photo'],
-              child: Padding(
-                padding: EdgeInsets.only(top: 4, bottom: 4),
-                child: TUpload(
-                  files: files,
-                  multiple: true,
-                  max: 6,
-                  onError: print,
-                  onValidate: print,
-                  disabled: _formDisableState,
-                  onChange: ((imgList, type) {
-                    if (_formDisableState) {
-                      return;
-                    }
-                    files = _onValueChanged(files ?? [], imgList, type);
-                    List imgs =
-                        files.map((e) => e.remotePath ?? e.assetPath).toList();
-                    setState(() {
-                      _formItemNotifier['photo'].upDataForm(imgs.join(','));
-                    });
-                  }),
-                ),
-              ))
-        ],
-        btnGroup: [
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: TButton(
-                    text: '重置',
-                    size: TButtonSize.large,
-                    type: TButtonType.fill,
-                    theme: TButtonTheme.light,
-                    shape: TButtonShape.rectangle,
-                    disabled: _formDisableState,
-                    onTap: () {
-                      //用户名称
-                      _controller[0].clear();
-                      //密码
-                      _controller[1].clear();
-                      // 性别
-                      _genderCheckboxGroupController.toggle('', false);
-                      //个人简介
-                      _controller[2].clear();
-                      //生日
-                      _selected_1 = '';
-                      //籍贯
-                      _selected_2 = '';
-                      //年限
-                      _stepController.add(TStepperEventType.cleanValue);
-                      //上传图片
-                      files.clear();
-                      _formData = {
-                        'name': '',
-                        'password': '',
-                        'gender': '',
-                        'birth': '',
-                        'place': '',
-                        'age': '0',
-                        'description': '2',
-                        'resume': '',
-                        'photo': ''
-                      };
-                      _formData.forEach((key, value) {
-                        _formItemNotifier[key].upDataForm(value);
-                      });
-                      _formController.reset(_formData);
-                      setState(() {});
-                    },
-                  )),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                      child: TButton(
-                          text: '提交',
-                          size: TButtonSize.large,
-                          type: TButtonType.fill,
-                          theme: TButtonTheme.primary,
-                          shape: TButtonShape.rectangle,
-                          onTap: _onSubmit,
-                          disabled: _formDisableState)),
-                ],
-              ))
-        ]);
-  }</pre>
+`TFormItem` 的布局与视觉默认值由 `TFormThemeData` 控制。`leading` 属于标签区域前置结构，`extra` 是无定位样式的尾部 Widget 插槽；需要垂直居中时使用 `verticalAlignment: TFormItemVerticalAlignment.center`。
 
-</td-code-block>
-                
+## 迁移说明
 
+- 删除旧的模板式 `data`、`items`、`TFormItemType` 和 `TFormValidation` API，字段改由 `TFormField<T>` 组合。
+- 删除 `TFormRule` / `TFormField.rules`，必填使用 `required`，其他约束统一写入 Flutter 原生 `validator`。
+- 表单项视觉继续由 `TFormItem` 负责，不把 label、help、error 等参数复制到输入组件。
 
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildForm(BuildContext context) {
-    final theme = TTheme.of(context);
-    return TForm(
-        formController: _formController,
-        disabled: _formDisableState,
-        data: _formData,
-        isHorizontal: _isFormHorizontal,
-        rules: _validationRules,
-        formContentAlign: TextAlign.left,
-        requiredMark: true,
-
-        /// 确定整个表单是否展示提示信息
-        formShowErrorMessage: true,
-        onSubmit: onSubmit,
-        items: [
-          TFormItem(
-            label: '用户名',
-            name: 'name',
-            type: TFormItemType.input,
-            help: '请输入用户名',
-            labelWidth: 82.0,
-            formItemNotifier: _formItemNotifier['name'],
-
-            /// 控制单个 item 是否展示错误提醒
-            showErrorMessage: true,
-            requiredMark: true,
-            child: TInput(
-                leftContentSpace: 0,
-                inputDecoration: InputDecoration(
-                  hintText: '请输入用户名',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: TTheme.of(context).textColorPlaceholder,
-                  ),
-                ),
-                controller: _controller[0],
-                additionInfoColor: TTheme.of(context).errorColor6,
-                showBottomDivider: false,
-                readOnly: _formDisableState,
-                onChanged: (val) {
-                  _formItemNotifier['name']?.upDataForm(val);
-                },
-                onClearTap: () {
-                  _controller[0].clear();
-                  _formItemNotifier['name']?.upDataForm('');
-                }),
-          ),
-          TFormItem(
-            label: '密码',
-            name: 'password',
-            type: TFormItemType.input,
-            labelWidth: 82.0,
-            formItemNotifier: _formItemNotifier['password'],
-            showErrorMessage: true,
-            child: TInput(
-                leftContentSpace: 0,
-                inputDecoration: InputDecoration(
-                  hintText: '请输入密码',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: TTheme.of(context).textColorPlaceholder,
-                  ),
-                ),
-                type: TInputType.normal,
-                controller: _controller[1],
-                obscureText: !browseOn,
-                needClear: false,
-                readOnly: _formDisableState,
-                showBottomDivider: false,
-                onChanged: (val) {
-                  _formItemNotifier['password']?.upDataForm(val);
-                },
-                onClearTap: () {
-                  _controller[1].clear();
-                  _formItemNotifier['password']?.upDataForm('');
-                }),
-          ),
-          TFormItem(
-            label: '性别',
-            name: 'gender',
-            type: TFormItemType.radios,
-            labelWidth: 82.0,
-            showErrorMessage: true,
-            formItemNotifier: _formItemNotifier['gender'],
-            child: TRadioGroup(
-              spacing: 0,
-              direction: Axis.horizontal,
-              controller: _genderCheckboxGroupController,
-              directionalTdRadios: _radios.entries.map((entry) {
-                return TRadio(
-                  id: entry.key,
-                  title: entry.value,
-                  radioStyle: TRadioStyle.circle,
-                  showDivider: false,
-                  spacing: 4,
-                  checkBoxLeftSpace: 0,
-                  customSpace: EdgeInsets.all(0),
-                  enable: !_formDisableState,
-                );
-              }).toList(),
-              onRadioGroupChange: (ids) {
-                if (ids == null) {
-                  return;
-                }
-                _formItemNotifier['gender']?.upDataForm(ids);
-              },
-            ),
-          ),
-          TFormItem(
-            label: '生日',
-            name: 'birth',
-            labelWidth: 82.0,
-            type: TFormItemType.dateTimePicker,
-            contentAlign: TextAlign.left,
-            tipAlign: TextAlign.left,
-            formItemNotifier: _formItemNotifier['birth'],
-            hintText: '请输入内容',
-            select: _selected_1,
-            selectFn: (BuildContext context) {
-              if (_formDisableState) {
-                return;
-              }
-              _showDatePicker(
-                context,
-                initialDate: [2012, 1, 1],
-                onConfirm: (selected) {
-                  setState(() {
-                    _selected_1 =
-                        '${selected[0].toString().padLeft(4, '0')}-${selected[1].toString().padLeft(2, '0')}-${selected[2].toString().padLeft(2, '0')}';
-                    _formItemNotifier['birth']?.upDataForm(_selected_1);
-                  });
-                },
-              );
-            },
-          ),
-          TFormItem(
-            label: '籍贯',
-            name: 'place',
-            type: TFormItemType.cascader,
-            contentAlign: TextAlign.left,
-            tipAlign: TextAlign.left,
-            labelWidth: 82.0,
-            hintText: '请输入内容',
-            select: _selected_2,
-            formItemNotifier: _formItemNotifier['place'],
-            selectFn: (BuildContext context) {
-              if (_formDisableState) {
-                return;
-              }
-              TCascader.showMultiCascader(context,
-                  title: '选择地址',
-                  data: _data,
-                  initialData: _initLocalData,
-                  theme: 'step',
-                  onChange: (List<MultiCascaderListModel> selectData) {
-                setState(() {
-                  var result = [];
-                  var len = selectData.length;
-                  _initLocalData = selectData[len - 1].value!;
-                  selectData.forEach((element) {
-                    result.add(element.label);
-                  });
-                  _selected_2 = result.join('/');
-                  _formItemNotifier['place']?.upDataForm(_selected_2);
-                });
-              }, onClose: () {
-                Navigator.of(context).pop();
-              });
-            },
-          ),
-          TFormItem(
-              label: '年限',
-              name: 'age',
-              labelWidth: 82.0,
-              type: TFormItemType.stepper,
-              formItemNotifier: _formItemNotifier['age'],
-              child: Padding(
-                padding: const EdgeInsets.only(right: 18),
-                child: TStepper(
-                  theme: TStepperTheme.filled,
-                  disabled: _formDisableState,
-                  eventController: _stepController!,
-                  value: int.parse(_formData['age']),
-                  onChange: (value) {
-                    _formItemNotifier['age']?.upDataForm('${value}');
-                  },
-                ),
-              )),
-          TFormItem(
-            label: '自我评价',
-            name: 'description',
-            tipAlign: TextAlign.left,
-            type: TFormItemType.rate,
-            labelWidth: 82.0,
-            formItemNotifier: _formItemNotifier['description'],
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                  padding: const EdgeInsets.only(right: 18),
-                  child: TRate(
-                    count: 5,
-                    value: double.parse(_formData['description']),
-                    allowHalf: false,
-                    disabled: _formDisableState,
-                    onChange: (value) {
-                      setState(() {
-                        _formData['description'] = '${value}';
-                      });
-                      _formItemNotifier['description']?.upDataForm('${value}');
-                    },
-                  )),
-            ),
-          ),
-          TFormItem(
-              label: '个人简介',
-              labelWidth: 82.0,
-              name: 'resume',
-              type: TFormItemType.textarea,
-              formItemNotifier: _formItemNotifier['resume'],
-              child: Padding(
-                padding:
-                    EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
-                child: TTextarea(
-                  backgroundColor: Colors.red,
-                  hintText: '请输入个人简介',
-                  maxLength: 500,
-                  indicator: true,
-                  readOnly: _formDisableState,
-                  layout: TTextareaLayout.vertical,
-                  controller: _controller[2],
-                  showBottomDivider: false,
-                  onChanged: (value) {
-                    _formItemNotifier['resume']?.upDataForm(value);
-                  },
-                ),
-              )),
-          TFormItem(
-              label: '上传图片',
-              name: 'photo',
-              labelWidth: 82.0,
-              type: TFormItemType.upLoadImg,
-              formItemNotifier: _formItemNotifier['photo'],
-              child: Padding(
-                padding: EdgeInsets.only(top: 4, bottom: 4),
-                child: TUpload(
-                  files: files,
-                  multiple: true,
-                  max: 6,
-                  onError: print,
-                  onValidate: print,
-                  disabled: _formDisableState,
-                  onChange: ((imgList, type) {
-                    if (_formDisableState) {
-                      return;
-                    }
-                    files = _onValueChanged(files ?? [], imgList, type);
-                    List imgs =
-                        files.map((e) => e.remotePath ?? e.assetPath).toList();
-                    setState(() {
-                      _formItemNotifier['photo'].upDataForm(imgs.join(','));
-                    });
-                  }),
-                ),
-              ))
-        ],
-        btnGroup: [
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: TButton(
-                    text: '重置',
-                    size: TButtonSize.large,
-                    type: TButtonType.fill,
-                    theme: TButtonTheme.light,
-                    shape: TButtonShape.rectangle,
-                    disabled: _formDisableState,
-                    onTap: () {
-                      //用户名称
-                      _controller[0].clear();
-                      //密码
-                      _controller[1].clear();
-                      // 性别
-                      _genderCheckboxGroupController.toggle('', false);
-                      //个人简介
-                      _controller[2].clear();
-                      //生日
-                      _selected_1 = '';
-                      //籍贯
-                      _selected_2 = '';
-                      //年限
-                      _stepController.add(TStepperEventType.cleanValue);
-                      //上传图片
-                      files.clear();
-                      _formData = {
-                        'name': '',
-                        'password': '',
-                        'gender': '',
-                        'birth': '',
-                        'place': '',
-                        'age': '0',
-                        'description': '2',
-                        'resume': '',
-                        'photo': ''
-                      };
-                      _formData.forEach((key, value) {
-                        _formItemNotifier[key].upDataForm(value);
-                      });
-                      _formController.reset(_formData);
-                      setState(() {});
-                    },
-                  )),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                      child: TButton(
-                          text: '提交',
-                          size: TButtonSize.large,
-                          type: TButtonType.fill,
-                          theme: TButtonTheme.primary,
-                          shape: TButtonShape.rectangle,
-                          onTap: _onSubmit,
-                          disabled: _formDisableState)),
-                ],
-              ))
-        ]);
-  }</pre>
-
-</td-code-block>
-                
-
-
-## API
-### TForm
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| btnGroup | List<Widget>? | - | 表单按钮组 |
-| colon | bool? | false | 是否在表单标签字段右侧显示冒号 |
-| data | Map<String, dynamic> | - | 表单数据 |
-| disabled | bool | false | 是否禁用整个表单 |
-| errorMessage | Object? | - | 表单信息错误信息配置 |
-| formContentAlign | TextAlign | TextAlign.left | 表单内容对齐方式: 左对齐、右对齐、居中对齐 可选项: left/right/center 默认为左对齐 优先级低于 TFormItem 的对齐 API；TStepper、TRate 尚未实现通用对齐能力（TODO #995） |
-| formController | FormController? | - | 表单控制器 |
-| formLabelAlign | TextAlign? | TextAlign.left | 表单字段标签的对齐方式： 左对齐、右对齐、顶部对齐 可选项: left/right/top |
-| formShowErrorMessage | bool? | true | 校验不通过时，是否显示错误提示信息，统一控制全部表单项 如果希望控制单个表单项，请给 FormItem 设置该属性 |
-| isHorizontal | bool | true | 表单排列方式是否为 水平方向 |
-| items | List<TFormItem> | - | 表单内容 items |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| labelWidth | double? | 20.0 | 可以整体设置 label 标签宽度 |
-| onReset | Function? | - | 表单重置时触发 |
-| onSubmit | Function | - | 表单提交时触发 |
-| preventSubmitDefault | bool? | true | 是否阻止表单提交默认事件（表单提交默认事件会刷新页面） 设置为 true 可以避免刷新 |
-| requiredMark | bool? | true | 是否显示必填符号（*），默认显示 |
-| rules | Map<String, TFormValidation> | - | 整个表单字段校验规则 |
-| scrollToFirstError | String? | - | 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。 值为空则表示不滚动。可选项：''/smooth/auto |
-| submitWithWarningMessage | bool? | false | 【讨论中】当校验结果只有告警信息时，是否触发 submit 提交事件 |
-
-
-### TFormItem
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| additionInfo | String? | - | TInput的辅助信息 |
-| backgroundColor | Color? | - | 背景色 |
-| child | Widget? | - | 表单子组件 |
-| contentAlign | TextAlign? | - | 表单显示内容对齐方式： left、right、top；TStepper、TRate 尚未实现通用对齐能力（TODO #995） |
-| formItemNotifier | FormItemNotifier? | - | - |
-| formRules | List<TFormValidation>? | - | 整个表单的校验规则 |
-| help | String? | - | TInput 默认显示文字 |
-| hintText | - | '' | 提示内容 |
-| indicator | bool? | - | TTextarea 的属性，指示器 |
-| itemRule | List? | - | 表单项验证规则 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String? | - | 表单项标签左侧展示的内容 |
-| labelAlign | TextAlign? | - | item 标签对齐方式，可选: left、right、top |
-| labelWidget | Widget? | - | 自定义标签 |
-| labelWidth | double? | - | 标签宽度，如果提供则覆盖Form的labelWidth |
-| name | String? | - | 表单字段名称 |
-| radios | Map<String, String>? | - | - |
-| requiredMark | bool? | true | 是否显示必填标记（*） |
-| select | String | '' | 选择器 适用于日期选择器等 |
-| selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
-| showErrorMessage | bool | true | 是否显示错误信息 |
-| tipAlign | TextAlign? | - | 组件提示内容对齐方式 |
-| type | TFormItemType | - | 表格单元需要使用的组件类型 |
-
-
-### TFormValidation
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| errorMessage | String | - | 错误提示信息 |
-| type | TFormItemType | - | 校验对象的类型 |
-| validate | String? Function(dynamic) | - | 校验方法 |
-
-
-### TFormItemType
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| input | - |
-| radios | - |
-| dateTimePicker | - |
-| cascader | - |
-| stepper | - |
-| rate | - |
-| textarea | - |
-| upLoadImg | - |
+完整示例见 [t_form_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_form_page.dart)，完整 API 以组件 dartdoc 和 Example API 面板为准。

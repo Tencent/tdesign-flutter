@@ -1,0 +1,12 @@
+Widget _buildCustom(BuildContext context) => TCell(
+    title: const Text('自定义评分'),
+    note: _StatefulRate(
+      initialValue: 3,
+      icon: (filled) => Icon(
+        TIcons.thumb_up,
+        color: filled
+            ? context.tTheme.warningColor5
+            : context.tTheme.bgColorComponent,
+      ),
+    ),
+  );

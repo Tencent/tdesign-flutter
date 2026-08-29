@@ -1,0 +1,23 @@
+Widget _buildStatus(BuildContext context) => const Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _SwitchGroupLabel('加载状态'),
+      TCellGroup(
+        cells: [
+          TCell(
+            title: Text('加载状态'),
+            note: TSwitch(value: false, loading: true),
+          ),
+          TCell(title: Text('加载状态'), note: TSwitch(value: true, loading: true)),
+        ],
+      ),
+      _SwitchGroupLabel('禁用状态', top: 24),
+      TCellGroup(
+        cells: [
+          TCell(title: Text('禁用状态'), note: TSwitch(value: false)),
+          TCell(title: Text('禁用状态'), note: TSwitch(value: true)),
+        ],
+      ),
+    ],
+  );

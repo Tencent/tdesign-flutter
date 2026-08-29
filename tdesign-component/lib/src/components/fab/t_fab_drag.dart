@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderStack;
 
+import 't_fab_defaults.dart';
 import 't_fab_layout.dart';
 
 /// 构建 Fab 定位包装器
@@ -12,13 +13,14 @@ Widget buildFabPositioned({
   required Widget child,
   required double dragTapSlop,
   required VoidCallback? onPressed,
+  required bool wrapFixedTap,
   TFabDragCallback? onDragStart,
   TFabDragCallback? onDragEnd,
   Duration? magnetAnimationDuration,
 }) {
   if (layout.draggable == null) {
     var positionedChild = child;
-    if (onPressed != null) {
+    if (wrapFixedTap && onPressed != null) {
       positionedChild = GestureDetector(
         onTap: onPressed,
         child: positionedChild,
@@ -65,25 +67,52 @@ class _FabDraggable extends StatefulWidget {
   State<_FabDraggable> createState() => _FabDraggableState();
 }
 
-class _FabDraggableState extends State<_FabDraggable> {
+class _FabDraggableState extends State<_FabDraggable>
+    with SingleTickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey();
   late double _right;
   late double _bottom;
-  double _totalDisplacement = 0;
+  double _maxDisplacement = 0;
+  Offset? _dragOrigin;
+  late final AnimationController _snapController;
+  Animation<double>? _snapAnimation;
 
   @override
   void initState() {
     super.initState();
     _right = widget.layout.right;
     _bottom = widget.layout.bottom;
+    _snapController = AnimationController(
+      vsync: this,
+      duration:
+          widget.magnetAnimationDuration ??
+          TFabDefaults.defaultMagnetAnimationDuration,
+    );
+    _snapController
+      ..addListener(_handleSnapTick)
+      ..addStatusListener(_handleSnapStatus);
   }
 
   @override
   void didUpdateWidget(covariant _FabDraggable oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _snapController.duration =
+        widget.magnetAnimationDuration ??
+        TFabDefaults.defaultMagnetAnimationDuration;
     final positionChanged =
         oldWidget.layout.right != widget.layout.right ||
         oldWidget.layout.bottom != widget.layout.bottom;
+    final boundsChanged =
+        !_sameBounds(oldWidget.layout.xBounds, widget.layout.xBounds) ||
+        !_sameBounds(oldWidget.layout.yBounds, widget.layout.yBounds) ||
+        oldWidget.layout.safePadding != widget.layout.safePadding;
+    final interactionChanged =
+        oldWidget.layout.draggable != widget.layout.draggable ||
+        oldWidget.layout.magnet != widget.layout.magnet ||
+        oldWidget.magnetAnimationDuration != widget.magnetAnimationDuration;
+    if (positionChanged || boundsChanged || interactionChanged) {
+      _stopSnap();
+    }
     if (positionChanged) {
       _right = _clampSafe(widget.layout.right, _minX(), _maxX());
       _bottom = _clampSafe(widget.layout.bottom, _minY(), _maxY());
@@ -91,6 +120,13 @@ class _FabDraggableState extends State<_FabDraggable> {
     }
     _right = _clampSafe(_right, _minX(), _maxX());
     _bottom = _clampSafe(_bottom, _minY(), _maxY());
+  }
+
+  @override
+  void dispose() {
+    _snapController.removeStatusListener(_handleSnapStatus);
+    _snapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,7 +144,9 @@ class _FabDraggableState extends State<_FabDraggable> {
   }
 
   void _onPanStart(DragStartDetails details) {
-    _totalDisplacement = 0;
+    _stopSnap();
+    _maxDisplacement = 0;
+    _dragOrigin = details.globalPosition;
     widget.onDragStart?.call(
       TFabDragDetails(position: Offset(_right, _bottom), start: details),
     );
@@ -116,7 +154,12 @@ class _FabDraggableState extends State<_FabDraggable> {
 
   void _onPanUpdate(DragUpdateDetails details) {
     final delta = details.delta;
-    _totalDisplacement += delta.distance;
+    final displacement =
+        (details.globalPosition - (_dragOrigin ?? details.globalPosition))
+            .distance;
+    if (displacement > _maxDisplacement) {
+      _maxDisplacement = displacement;
+    }
 
     final axis = widget.layout.draggable;
 
@@ -131,7 +174,8 @@ class _FabDraggableState extends State<_FabDraggable> {
   }
 
   void _onPanEnd(DragEndDetails details) {
-    final isDrag = _totalDisplacement > widget.dragTapSlop;
+    final isDrag = _maxDisplacement > widget.dragTapSlop;
+    _dragOrigin = null;
 
     if (isDrag) {
       // 拖拽结束 — 可能触发吸附
@@ -166,21 +210,24 @@ class _FabDraggableState extends State<_FabDraggable> {
     };
 
     final duration =
-        widget.magnetAnimationDuration ?? const Duration(milliseconds: 200);
-
-    // 简易吸附：直接用 setState（未来可升级为 AnimationController）
-    Future.delayed(duration, () {
-      if (mounted) {
-        setState(() {
-          _right = targetRight;
-        });
-      }
-    });
+        widget.magnetAnimationDuration ??
+        TFabDefaults.defaultMagnetAnimationDuration;
+    _stopSnap();
+    if (duration == Duration.zero || _right == targetRight) {
+      setState(() => _right = targetRight);
+      return;
+    }
+    _snapController.duration = duration;
+    _snapAnimation = Tween<double>(begin: _right, end: targetRight).animate(
+      CurvedAnimation(parent: _snapController, curve: Curves.easeOutCubic),
+    );
+    _snapController.forward(from: 0);
   }
 
   double _minX() {
     final bounds = widget.layout.xBounds;
-    return (bounds?.start ?? 16) + widget.layout.safePadding.right;
+    return (bounds?.end ?? TFabDefaults.defaultHorizontalBoundary) +
+        widget.layout.safePadding.right;
   }
 
   static double _clampSafe(double value, double min, double max) {
@@ -192,14 +239,15 @@ class _FabDraggableState extends State<_FabDraggable> {
     final bounds = widget.layout.xBounds;
     final fabWidth = _fabSize().width;
     return width -
-        (bounds?.end ?? 16) -
+        (bounds?.start ?? TFabDefaults.defaultHorizontalBoundary) -
         fabWidth -
         widget.layout.safePadding.left;
   }
 
   double _minY() {
     final bounds = widget.layout.yBounds;
-    return (bounds?.start ?? 0) + widget.layout.safePadding.bottom;
+    return (bounds?.end ?? TFabDefaults.defaultVerticalBoundary) +
+        widget.layout.safePadding.bottom;
   }
 
   double _maxY() {
@@ -207,9 +255,32 @@ class _FabDraggableState extends State<_FabDraggable> {
     final bounds = widget.layout.yBounds;
     final fabHeight = _fabSize().height;
     return height -
-        (bounds?.end ?? 0) -
+        (bounds?.start ?? TFabDefaults.defaultVerticalBoundary) -
         fabHeight -
         widget.layout.safePadding.top;
+  }
+
+  void _handleSnapTick() {
+    final animation = _snapAnimation;
+    if (animation == null || !mounted) {
+      return;
+    }
+    setState(() => _right = animation.value);
+  }
+
+  void _handleSnapStatus(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      _snapAnimation = null;
+    }
+  }
+
+  void _stopSnap() {
+    _snapController.stop();
+    _snapAnimation = null;
+  }
+
+  static bool _sameBounds(TFabBounds? a, TFabBounds? b) {
+    return a?.start == b?.start && a?.end == b?.end;
   }
 
   Size _fabSize() {
@@ -217,6 +288,6 @@ class _FabDraggableState extends State<_FabDraggable> {
     if (renderObject is RenderBox && renderObject.hasSize) {
       return renderObject.size;
     }
-    return const Size(48, 48);
+    return const Size.square(TFabDefaults.defaultActionExtent);
   }
 }

@@ -196,7 +196,7 @@ class TActionSheetList extends StatelessWidget {
                         mainAxisAlignment: getMainAxisAlignment(align),
                         children: [
                           Flexible(
-                              child: TText(item.subtitle,
+                              child: TText(item.subtitle!,
                                   font: context.tTheme.fontBodyMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
