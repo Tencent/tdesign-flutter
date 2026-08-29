@@ -25,4 +25,4 @@
 - 需要沿用旧行为的调用方迁移为显式传入 `useSafeArea: true`；只需要保护内容时可在 `child` 内组合 Flutter 原生 `SafeArea`。
 - 该项改变公开默认行为，按 breaking change 记录。
 - Flutter 3.32.0 完整 Popup 回归 169 项通过，生产源码覆盖率 `519/532 = 97.56%`；Flutter 3.47.0 默认/显式安全区聚焦回归 44 项通过，两个版本严格 analyze 均为 0 error / 0 warning。
-- 已重新安装到 Android 16 真机 `25113PN0EC`，应用进程保持运行，默认 Popup 可直接检查贴边效果。
+- 已重新安装到 Android 16 真机，应用进程保持运行，默认 Popup 可直接检查贴边效果。
