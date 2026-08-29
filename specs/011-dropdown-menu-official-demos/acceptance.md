@@ -17,6 +17,7 @@
 | `dart analyze --fatal-infos` | PASS | Flutter 3.47.0 SDK，0 issues |
 | `dart run tool/generate_example_code.dart` | PASS | 新增 direction/disabled 片段并同步更新现有片段 |
 | Flutter 3.32.0 `flutter test --no-pub test/dropdown_menu_page_golden_test.dart test/dropdown_menu_page_test.dart` | PASS，6 tests | 功能测试与 light/dark Golden 分流 |
+| CNB 同款 `docker/flutter-3.32.0` Linux 镜像更新并复跑 `dropdown_menu_page_golden_test.dart` | PASS，2 + 2 tests | light/dark 基线由 Linux 生成 |
 | 回归调度器工具测试 | PASS，10 tests | DropdownMenu 组件、覆盖率、Demo 功能和视觉回归登记同步 |
 | Flutter 3.47.0 组件与 Demo 非视觉测试 | PASS，59 + 4 tests | 主动拖动时的跨引擎坐标舍入以 1px 容差验证，展开关系仍严格检查 |
 
@@ -28,5 +29,5 @@
 ## 未覆盖项与后续工作
 
 - 勾选默认位置、空选按钮行为和全局 280px 上限等公开契约尚未获得维护者确认。
-- Flutter 3.47.0 的既有组件用例 `auto placement can return during the same active drag` 稳定出现 0.93px 几何差异（原容差 0.5px）；本次未修改组件源码或该用例，Example 聚焦测试已通过。
+- Flutter 3.47.0 的既有组件用例 `auto placement can return during the same active drag` 存在 0.93px 几何舍入差异；本次仅将该断言容差收敛为 1 个逻辑像素，未修改组件源码，展开关系仍严格检查。
 - 页面级运行截图已补充；向上展开面板的跨端打开态截图仍待补充。
