@@ -23,4 +23,5 @@ const actionSheetDemoPageTestSpec = DemoPageTestSpec(
   ],
   componentType: TButton,
   expectedComponentCount: 9,
+  useFeedbackGoldenFont: true,
 );
