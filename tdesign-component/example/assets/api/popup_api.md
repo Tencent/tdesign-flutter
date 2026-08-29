@@ -89,7 +89,7 @@ Popup 标准头部布局。
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 |
 | overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 |
 | radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 |
-| useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 |
 
 
 ##### TPopupOptions.bottom
@@ -179,7 +179,7 @@ Popup 标准头部布局。
 | overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 |
 | placement | TPopupPlacement | TPopupPlacement.bottom | 出现位置，默认 `TPopupPlacement.bottom`。 |
 | radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 |
-| useSafeArea | bool | true | 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。设为 false 可贴满屏幕边缘。 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 |
 
 
