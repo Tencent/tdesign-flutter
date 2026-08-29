@@ -7,6 +7,7 @@ const loadingDemoPageTestSpec = DemoPageTestSpec(
   name: 'loading',
   title: 'Loading 加载',
   page: TLoadingPage(),
+  useAlignmentCjkFont: true,
   expectedTexts: [
     '01 组件类型',
     '纯图标',
