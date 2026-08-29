@@ -24,6 +24,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - 触发节点销毁后隐藏并最终回收 Overlay，完成 showPopover 返回的 Future。
 - 用聚焦 Widget/Golden 测试覆盖上述公共行为。
 - 用可操作 Demo 覆盖事件、主题尺寸、窄屏边界、键盘和锚点销毁场景。
+- 公开 Demo 默认仅展示小程序公开页的“组件类型 / 组件样式”矩阵；交互与边界场景仅在内部测试模式展示。
 
 ## 非目标
 
@@ -31,6 +32,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - 不改变十二种 TPopoverPlacement 的枚举和方向含义。
 - 不改变 contentWidget 必须具有确定外框尺寸的契约。
 - 不重构 Popup、DropdownMenu 或其他 Overlay 组件。
+- 不为了复用内部诊断 Demo 而扩大 TPopover 组件公开 API；`showInternalExamples` 仅是 Example 页的测试开关。
 
 ## 范围
 
@@ -45,6 +47,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - tdesign-component/example/test/popover_page_test.dart
 - tdesign-component/example/assets/code/popover.*.txt
 - Popover 与 Popup 主题、Overlay 的直接关联测试。
+- 小程序实际页截图与 Flutter 3.32.0 Linux 明暗整页 Golden。
 
 ### 不涉及
 
@@ -114,4 +117,6 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - [x] Popover、Golden、关联 Popup/主题测试通过。
 - [x] Demo 可直接观察事件回调、自定义内容、主题尺寸、四角边界、键盘和锚点销毁行为。
 - [x] Demo Widget 测试覆盖交互、几何边界与生命周期 Future 完成。
+- [x] 公开 Demo 默认不展示“交互与边界”诊断模块，小程序公开矩阵的 21 个触发按钮顺序保持一致。
+- [x] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，并与小程序实际页截图完成人工比对。
 - [x] flutter analyze、组件文档契约检查和 git diff --check 通过。

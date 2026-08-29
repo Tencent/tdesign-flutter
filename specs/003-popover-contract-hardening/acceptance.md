@@ -20,6 +20,9 @@
 | `flutter build web`（example） | 通过 | 实际 Example Web 发布入口编译成功 |
 | `node scripts/check-flutter-component-contracts.mjs` | 通过 | 56 site routes have source, Example, and docs entries |
 | `git diff --check` | 通过 | 无空白错误 |
+| `flutter test test/popover_demo_test.dart` | 通过 | 公开 Demo 结构与 21 个触发按钮精确校验 |
+| `flutter test test/popover_demo_golden_test.dart` (Flutter 3.32.0 Linux) | 通过 | 明暗整页 Golden |
+| LCOV 覆盖率（`lib/src/components/popover/`） | 通过 | LH=501, LF=519，96.53% |
 
 ## 已验证行为
 
@@ -36,6 +39,8 @@
 - [x] Demo 中事件和自定义内容可交互，结果状态可观察
 - [x] Demo 中主题尺寸、窄屏边界和键盘可用区域可验证
 - [x] Demo 中移除锚点后 Overlay 消失且 Future 完成状态可观察
+- [x] 公开页默认仅展示小程序的“组件类型 / 组件样式”矩阵，内部诊断场景由 Widget 测试显式开启。
+- [x] 已使用微信开发者工具截取小程序实际页，并与 Flutter 3.32.0 Linux 明暗整页 Golden 比对。
 
 ## 人工验收
 

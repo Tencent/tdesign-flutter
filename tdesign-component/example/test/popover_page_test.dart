@@ -12,7 +12,7 @@ void main() {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: TThemeBuilder.light(TThemeData.defaultData()),
-        home: const TPopoverPage(),
+        home: const TPopoverPage(showInternalExamples: true),
       ),
     );
   }

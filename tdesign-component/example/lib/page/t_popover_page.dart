@@ -7,7 +7,10 @@ import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
 class TPopoverPage extends StatefulWidget {
-  const TPopoverPage({super.key});
+  const TPopoverPage({super.key, this.showInternalExamples = false});
+
+  /// 是否展示仅用于组件回归验证的交互与边界场景。
+  final bool showInternalExamples;
 
   @override
   State<StatefulWidget> createState() => _TPopoverPage();
@@ -41,6 +44,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       title: tTitle(),
       desc: '用于文字提示的气泡框。',
       exampleCodeGroup: 'popover',
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -192,20 +196,24 @@ class _TPopoverPage extends State<TPopoverPage> {
             ),
           ],
         ),
-        ExampleModule(
-          title: '交互与边界',
-          children: [
-            ExampleItem(desc: '点击与长按回调', builder: _buildEventPopover),
-            ExampleItem(
-              desc: '可交互自定义内容',
-              builder: _buildInteractiveContentPopover,
-            ),
-            ExampleItem(desc: '主题与尺寸约束', builder: _buildThemeSizePopover),
-            ExampleItem(desc: '窄屏四角边界与自动翻转', builder: _buildBoundaryPopover),
-            ExampleItem(desc: '键盘遮挡场景', builder: _buildKeyboardPopover),
-            ExampleItem(desc: '锚点销毁与 Future', builder: _buildLifecyclePopover),
-          ],
-        ),
+        if (widget.showInternalExamples)
+          ExampleModule(
+            title: '交互与边界',
+            children: [
+              ExampleItem(desc: '点击与长按回调', builder: _buildEventPopover),
+              ExampleItem(
+                desc: '可交互自定义内容',
+                builder: _buildInteractiveContentPopover,
+              ),
+              ExampleItem(desc: '主题与尺寸约束', builder: _buildThemeSizePopover),
+              ExampleItem(desc: '窄屏四角边界与自动翻转', builder: _buildBoundaryPopover),
+              ExampleItem(desc: '键盘遮挡场景', builder: _buildKeyboardPopover),
+              ExampleItem(
+                desc: '锚点销毁与 Future',
+                builder: _buildLifecyclePopover,
+              ),
+            ],
+          ),
       ],
       test: [
         ExampleItem(desc: '显示多行内容', builder: _buildMultiLinePopover),
