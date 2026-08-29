@@ -7,6 +7,7 @@ const popupDemoPageTestSpec = DemoPageTestSpec(
   name: 'popup',
   title: 'Popup 弹出层',
   page: TPopupPage(),
+  useAlignmentCjkFont: true,
   expectedTexts: [
     '01 组件类型',
     '基础弹出层',
