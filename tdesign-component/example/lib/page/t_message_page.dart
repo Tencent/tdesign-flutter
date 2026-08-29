@@ -15,25 +15,18 @@ class TMessagePage extends StatelessWidget {
       desc: '用于轻量级反馈或提示，不会打断用户操作。',
       exampleCodeGroup: 'message',
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      showTestModule: false,
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '纯文字的通知', builder: _buildTextMessage),
-          ExampleItem(desc: '带图标的通知', builder: _buildIconMessage),
-          ExampleItem(desc: '带关闭的通知', builder: _buildCloseMessage),
-          ExampleItem(desc: '可滚动的通知', builder: _buildScrollMessage),
-          ExampleItem(desc: '带按钮的通知', builder: _buildLinkMessage),
-          ExampleItem(desc: '组件调用', builder: _buildComponentMessage),
-        ]),
-        ExampleModule(title: '组件风格', children: [
-          ExampleItem(desc: '普通通知', builder: _buildInfoMessage),
-          ExampleItem(desc: '成功通知', builder: _buildSuccessMessage),
-          ExampleItem(desc: '警示通知', builder: _buildWarningMessage),
-          ExampleItem(desc: '错误通知', builder: _buildErrorMessage),
-        ]),
-        ExampleModule(title: '关闭所有通知', children: [
-          ExampleItem(desc: '打开多个通知', builder: _buildOpenAllMessage),
-          ExampleItem(desc: '关闭所有通知', builder: _buildCloseAllMessage),
-        ]),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '消息通知内容为文本、带操作按钮', builder: _buildMessageTypes),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [ExampleItem(desc: '消息组件风格', builder: _buildMessageStyles)],
+        ),
       ],
     );
   }
@@ -54,6 +47,39 @@ class TMessagePage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'message')
+  Widget _buildMessageTypes(BuildContext context) {
+    return Column(
+      children: [
+        _buildTextMessage(context),
+        const SizedBox(height: 16),
+        _buildIconMessage(context),
+        const SizedBox(height: 16),
+        _buildCloseMessage(context),
+        const SizedBox(height: 16),
+        _buildScrollMessage(context),
+        const SizedBox(height: 16),
+        _buildLinkMessage(context),
+        const SizedBox(height: 16),
+        _buildComponentMessage(context),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'message')
+  Widget _buildMessageStyles(BuildContext context) {
+    return Column(
+      children: [
+        _buildInfoMessage(context),
+        const SizedBox(height: 16),
+        _buildSuccessMessage(context),
+        const SizedBox(height: 16),
+        _buildWarningMessage(context),
+        const SizedBox(height: 16),
+        _buildErrorMessage(context),
+      ],
+    );
+  }
+
   Widget _buildTextMessage(BuildContext context) {
     return _fullWidthButton(
       text: '纯文字的通知',
@@ -65,18 +91,13 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildIconMessage(BuildContext context) {
     return _fullWidthButton(
       text: '带图标的通知',
-      onPressed: () => TMessage.show(
-        context: context,
-        content: '这是一条带图标的消息通知',
-      ),
+      onPressed: () => TMessage.show(context: context, content: '这是一条带图标的消息通知'),
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildCloseMessage(BuildContext context) {
     return _fullWidthButton(
       text: '带关闭的通知',
@@ -90,7 +111,6 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildScrollMessage(BuildContext context) {
     return _fullWidthButton(
       text: '可滚动的通知',
@@ -104,7 +124,6 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildLinkMessage(BuildContext context) {
     return _fullWidthButton(
       text: '带按钮的通知',
@@ -117,26 +136,17 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  /// 记录「打开多个通知」返回的句柄，供「关闭所有通知」定向关闭。
-  static final List<TMessageHandle> _handles = <TMessageHandle>[];
-
-  @ExampleCode(group: 'message')
   Widget _buildComponentMessage(BuildContext context) {
     return const _DeclarativeMessageDemo();
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildInfoMessage(BuildContext context) {
     return _fullWidthButton(
       text: '普通通知',
-      onPressed: () => TMessage.show(
-        context: context,
-        content: '这是一条普通通知信息',
-      ),
+      onPressed: () => TMessage.show(context: context, content: '这是一条普通通知信息'),
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildSuccessMessage(BuildContext context) {
     return _fullWidthButton(
       text: '成功通知',
@@ -148,7 +158,6 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildWarningMessage(BuildContext context) {
     return _fullWidthButton(
       text: '警示通知',
@@ -160,7 +169,6 @@ class TMessagePage extends StatelessWidget {
     );
   }
 
-  @ExampleCode(group: 'message')
   Widget _buildErrorMessage(BuildContext context) {
     return _fullWidthButton(
       text: '错误通知',
@@ -171,49 +179,6 @@ class TMessagePage extends StatelessWidget {
       ),
     );
   }
-
-  @ExampleCode(group: 'message')
-  Widget _buildOpenAllMessage(BuildContext context) {
-    return _fullWidthButton(
-      text: '打开多个通知',
-      onPressed: () {
-        final themes = <TMessageVariant>[
-          TMessageVariant.info,
-          TMessageVariant.success,
-          TMessageVariant.warning,
-          TMessageVariant.error,
-        ];
-        for (var i = 0; i < themes.length; i++) {
-          Future<void>.delayed(Duration(milliseconds: 300 * i), () {
-            if (!context.mounted) {
-              return;
-            }
-            final handle = TMessage.show(
-              context: context,
-              content: '第${i + 1}条通知',
-              variant: themes[i],
-              duration: null,
-              offset: Offset(16, 80 + 56.0 * i),
-            );
-            _handles.add(handle);
-          });
-        }
-      },
-    );
-  }
-
-  @ExampleCode(group: 'message')
-  Widget _buildCloseAllMessage(BuildContext context) {
-    return _fullWidthButton(
-      text: '关闭所有通知',
-      onPressed: () {
-        for (final handle in _handles) {
-          handle.dismiss();
-        }
-        _handles.clear();
-      },
-    );
-  }
 }
 
 /// 组件声明式调用示例：通过 `visible` 受控展示 / 隐藏消息。
@@ -221,7 +186,8 @@ class _DeclarativeMessageDemo extends StatefulWidget {
   const _DeclarativeMessageDemo();
 
   @override
-  State<_DeclarativeMessageDemo> createState() => _DeclarativeMessageDemoState();
+  State<_DeclarativeMessageDemo> createState() =>
+      _DeclarativeMessageDemoState();
 }
 
 class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {

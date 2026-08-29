@@ -1,9 +1,0 @@
-Widget _buildIconMessage(BuildContext context) {
-    return _fullWidthButton(
-      text: '带图标的通知',
-      onPressed: () => TMessage.show(
-        context: context,
-        content: '这是一条带图标的消息通知',
-      ),
-    );
-  }

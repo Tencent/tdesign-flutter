@@ -7,14 +7,14 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 1. **公开 Demo 覆盖不全**：Flutter 示例页 `t_message_page.dart` 仅覆盖"组件状态（4 主题）+ 跑马灯"，而官方存在以下公开 Demo 缺失：
    - 纯文字通知（无图标）、带关闭通知、带按钮（链接）通知 —— 对应小程序 `message/_example/base`、mobile-vue `message/demos/base.vue`；
    - 组件声明式调用（`visible` 受控）—— 对应小程序 `base/index.wxml` 的 `<t-message visible=...>`；
-   - 多消息叠加 + 关闭所有通知 —— 对应 mobile-vue `message/demos/closeAll.vue`、小程序 `single`/`gap` 多消息能力。
+   - Mobile Vue 另有“关闭所有通知”扩展示例，但小程序公开 Demo 页不展示该分组，不应作为 Flutter 对齐基线。
 2. **示例生成代码不同步**：`example/assets/code/` 仅含 `message._marquee.txt`，未与完整 Demo 同步。
 3. **站点文档严重过期**：`tdesign-site/docs/components/message/README.md` 仍使用已废弃 API（`TMessage.showMessage`、`MessageTheme`、`MessageLink`、`MessageMarquee`、`closeBtn`、`icon`、`theme`、`onCloseBtnClick`、`onLinkClick` 等），无法编译，与现网 `TMessage.show` / `TMessageVariant` / `TMessageLink` / `TMessageMarquee` / `showIcon` / `showCloseButton` / `onCloseButtonPressed` / `onLinkPressed` 不一致。
 4. **像素级视觉差异**：图标与文本间距 Flutter 为 10px，官方为 `@spacer`（8px）。
 
 ## 目标
 
-- 依据官方公开 Demo，补齐 Flutter Message 的 Demo 矩阵，使小程序 / Mobile Vue / Flutter 三端 Demo 一一对应。
+- 以小程序公开 Demo 为可见基线，收敛 Flutter Message 的两个公开分组与十个触发实例。
 - 同步 `example/assets/code/` 生成示例代码。
 - 修复 `tdesign-site/docs/components/message/README.md`，对齐现网公开 API。
 - 对齐图标与文本间距为官方 `@spacer`（8px），并同步 marquee 文本宽度计算。
@@ -24,6 +24,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 - 不新增 / 不删除 / 不重命名 `TMessage` 的任何公共参数或类型（现有公开 API 已足以表达全部官方 Demo）。
 - 不引入 `align`、`gap`、`single`、自定义 content Widget、`marquee` 的 `speed`/`loop` 语义等新 API（如未来需要，另行按仓库规范讨论）。
+- 不在小程序公开基线中展示 Mobile Vue / Flutter 扩展的“关闭所有通知”模块；底层 dismiss 能力不删除。
 - 不改变 `TMessage` 默认定位（当前距顶 80px 居中卡片 vs 官方贴顶全宽条带）——该调整属于视觉 breaking change，需维护者单独拍板后另行处理。
 - 不调整阴影（elevation）与图标尺寸的像素值——当前实现方式（Material elevation / 主题 Icon）属于框架差异，像素级表现需真机截图确认，不在此次断言对齐。
 - 不处理 Overlay 安全区默认值等涉及默认行为的变更。
@@ -47,7 +48,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 ## 行为契约
 
-### Demo 矩阵（三端一一对应）
+### Demo 矩阵（小程序公开页基线）
 
 | 官方分组 | 官方 Demo | Flutter 示例 | 使用 API |
 | --- | --- | --- | --- |
@@ -58,10 +59,10 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 | 组件类型 | 带按钮的通知 | 带链接通知 | `TMessage.show(link: TMessageLink(...))` |
 | 组件类型 | 组件调用 | 组件声明式调用 | `TMessage(visible: ...)` |
 | 组件风格 | 普通 / 成功 / 警示 / 错误 | 同 4 主题 | `TMessage.show(variant: ...)` |
-| 关闭所有通知 | 打开多个 / 关闭所有 | 多消息叠加 + 关闭所有 | 多个 `TMessage.show` 句柄 + `handle.dismiss()` |
 
 - 官方存在、Flutter 缺失的 Demo 必须补齐（上表各条目）。
-- Flutter 示例中不携带官方平台依据的 Demo 必须删除（当前无此情况，4 主题 + 跑马灯均对应官方 Demo）。
+- Flutter 公开页不携带小程序公开基线的扩展 Demo，如“关闭所有通知”，不继续对外展示。
+- 调试模块默认不出现在公开页。
 
 ### 图标-文本间距
 
@@ -80,7 +81,9 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 ## 验收标准
 
-- [ ] 官方 Demo 矩阵全部在 Flutter 示例页落地，且三端一一对应。
+- [ ] 小程序公开 Demo 的两个分组、十个实例、顺序与文案在 Flutter 示例页落地。
+- [ ] 公开页不展示“关闭所有通知”扩展模块，且不因 Demo 对齐新增公开 API。
+- [ ] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页截图完成人工比对。
 - [ ] `example/assets/code/message.*.txt` 与 `t_message_page.dart` 同步（codegen `--check` 通过）。
 - [ ] `tdesign-site/docs/components/message/README.md` 不再包含已废弃 API，示例可编译。
 - [ ] 图标-文本间距为 8px，marquee 宽度计算同步更新。

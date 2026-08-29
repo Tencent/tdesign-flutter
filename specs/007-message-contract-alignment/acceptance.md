@@ -14,17 +14,18 @@
 | `flutter analyze --fatal-infos`（3.47.0） | ✅ 0 error / 0 warning | lib + test + example |
 | `flutter test test/components/message/t_message_test.dart`（3.32.0） | ✅ 25/25 通过 | |
 | `flutter test test/components/message/t_message_test.dart`（3.47.0） | ✅ 25/25 通过 | |
-| LCOV 覆盖率（`lib/src/components/message/`） | ✅ 98.21% | LH=220, LF=224 |
+| LCOV 覆盖率（`lib/src/components/message/`） | ✅ 98.22% | LH=221, LF=225 |
 | `dart run tool/generate_example_code.dart --check` | ✅ 通过 | 生成片段与示例页一致 |
 
 ## 人工验收
 
-- [x] 官方 Demo 矩阵（小程序 / Mobile Vue / Flutter）已一一对应补齐。
-- [x] `example/assets/code/message.*.txt` 已与示例页同步（删除 `message._marquee.txt`，新增 12 个 Demo 片段）。
+- [x] 小程序公开 Demo 的两个分组与十个触发实例已按顺序收敛。
+- [x] `example/assets/code/message.*.txt` 已与两个公开示例容器同步，旧的单实例与关闭所有片段已删除。
 - [x] 站点 `README.md` 已对齐现网 API（`TMessage.show` / `TMessageVariant` / `TMessageLink` / `TMessageMarquee` / `showIcon` / `showCloseButton` / `onCloseButtonPressed` / `onLinkPressed`）。
 - [x] 图标-文本间距对齐官方 `@spacer` = 8px，同步 marquee 宽度计算。
-- [x] 多消息使用不同垂直偏移展示且保持可见，关闭全部通知可定向移除所有句柄。
+- [x] Mobile Vue / Flutter 扩展的“关闭所有通知”不再作为小程序公开 Demo 基线；底层 dismiss 能力保留。
 - [x] 未新增 / 未删除 / 未重命名任何公共 API。
+- [x] 已使用微信开发者工具截取小程序实际页，并与 Flutter 3.32.0 Linux 明暗整页 Golden 比对。
 
 ## 未覆盖项与后续工作
 

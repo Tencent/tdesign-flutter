@@ -8,9 +8,9 @@
 
 - **组件类型**：纯文字（`showIcon: false`）/ 带图标（默认图标）/ 带关闭（`showCloseButton: true` + `link`）/ 可滚动（`marquee`）/ 带按钮（`link: TMessageLink`）/ 组件声明式（`TMessage(visible: ...)`）。
 - **组件风格**：info / success / warning / error 四个 `variant`。
-- **关闭所有通知**：用静态 `List<TMessageHandle>` 记录多个 `TMessage.show()` 返回句柄，提供"打开多个通知"与"关闭所有通知"两个操作（复用现有 `handle.dismiss()`，不新增公开 API）。
+- 公开页仅保留上述两个小程序分组；Mobile Vue / Flutter 扩展的“关闭所有通知”不继续对外展示，底层 `handle.dismiss()` 能力不删除。
 
-每个 Demo 方法加 `@ExampleCode(group: 'message')`，由 codegen（`tool/generate_example_code.dart`）生成 `example/assets/code/message.*.txt`。
+两个公开示例容器加 `@ExampleCode(group: 'message')`，由 codegen（`tool/generate_example_code.dart`）生成 `example/assets/code/message.*.txt`。
 
 ### 图标-文本间距
 
@@ -51,4 +51,4 @@
 - 静态检查：`flutter analyze --fatal-infos`
 - 示例代码一致性：codegen `--check`
 - 站点/组件契约：`node scripts/check-flutter-component-contracts.mjs`
-- 人工验收：真机查看 Demo 视觉效果
+- 人工验收：微信开发者工具小程序实际页截图与 Flutter 3.32.0 Linux 明暗整页 Golden 比对；真机 DPR 仍单独说明未验证。
