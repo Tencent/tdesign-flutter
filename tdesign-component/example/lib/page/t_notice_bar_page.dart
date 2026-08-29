@@ -15,7 +15,7 @@ class TNoticeBarPage extends StatelessWidget {
       desc: '在导航栏下方，用于给用户显示提示消息。',
       children: const [
         ExampleModule(
-          title: '01 组件类型',
+          title: '组件类型',
           children: [
             ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
             ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
@@ -36,7 +36,7 @@ class TNoticeBarPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '02 组件状态',
+          title: '组件状态',
           children: [
             ExampleItem(desc: '普通通知', builder: _normalNoticeBar),
             ExampleItem(desc: '成功通知', builder: _successNoticeBar),
