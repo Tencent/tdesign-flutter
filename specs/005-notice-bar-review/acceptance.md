@@ -13,6 +13,9 @@
 | Flutter 3.47.0 `flutter test --no-pub test/notice_bar_page_test.dart` | PASS，2 tests |
 | Flutter 3.47.0 `dart analyze --fatal-infos` | PASS，0 issues |
 | `dart run tool/generate_example_code.dart` | PASS，卡片片段已删除，公开场景片段已同步 |
+| Flutter 3.32.0 `flutter test --no-pub test/notice_bar_page_golden_test.dart test/notice_bar_page_test.dart` | PASS，4 tests；light/dark Golden 与功能测试分流 |
+| 回归调度器工具测试 | PASS，10 tests；NoticeBar 组件、覆盖率、Demo 功能和视觉回归登记同步 |
+| Flutter 3.47.0 组件与 Demo 非视觉测试 | PASS，42 + 2 tests；Golden 未在 latest 执行 |
 
 ## 验收项核对
 
@@ -24,10 +27,11 @@
 - [x] 双版本严格 analyze 通过。
 - [x] 生产源码覆盖率高于 95%。
 - [x] 官方垂直滚动与自定义内容场景已公开，卡片 Demo 已删除。
+- [x] 375dp 小程序与 Flutter light/dark 页面截图已人工对照，证据见 [visual-comparison.md](visual-comparison.md)。
 
 ## 未覆盖项
 
 - 水平滚动的真实帧级平滑度（依赖运行态视觉验证）。
 - 真实设备上的垂直触摸、循环与 change 回调仍属于待确认/待实现契约。
 - interval 默认值、operation 点击目标、默认前缀图标和 right padding 等公开行为仍需维护者决策。
-- MiniProgram 与 Flutter 的统一视口截图叠图尚未完成。
+- 静态截图已完成；逐帧叠图与真实设备触摸循环仍未验证。
