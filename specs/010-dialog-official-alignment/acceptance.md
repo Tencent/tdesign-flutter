@@ -17,12 +17,15 @@
 | `flutter test --no-pub test/components/dialog/t_dialog_test.dart` | PASS，14 tests | Flutter 3.47.0 |
 | `flutter test --no-pub test/dialog_page_test.dart` | PASS，3 tests | Flutter 3.47.0；清理跨 SDK shader 缓存后 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.47.0，0 issues |
+| Flutter 3.32.0 `flutter test --no-pub test/dialog_page_golden_test.dart test/dialog_page_test.dart` | PASS，5 tests | 功能测试与 light/dark Golden 分流 |
+| 回归调度器工具测试 | PASS，10 tests | Dialog 组件、覆盖率、Demo 功能和视觉回归登记同步 |
+| Flutter 3.47.0 组件与 Demo 非视觉测试 | PASS，14 + 3 tests | Golden 未在 latest 执行 |
 
 ## 人工验收
 
 - [ ] 21 个入口在 Example 运行时可打开、关闭、输入和返回结果。
-- [ ] 与官方小程序完成同尺寸像素对照。
+- [x] 使用 375dp 视口完成小程序与 Flutter 页面、关键打开态截图对照，证据见 [visual-comparison.md](visual-comparison.md)。
 
 ## 未覆盖项与后续工作
 
-- 真实运行时像素证据待补充。
+- 图片、输入等全部场景的连续交互仍需真机逐项复核；静态截图不证明输入与返回值行为。

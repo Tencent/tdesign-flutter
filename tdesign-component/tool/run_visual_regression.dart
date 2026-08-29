@@ -36,6 +36,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/divider_demo_test.dart'],
   ),
   VisualTestSuite(
+    'dialog',
+    'Dialog Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/dialog_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'fab',
     'Fab Demo',
     workingDirectory: 'example',

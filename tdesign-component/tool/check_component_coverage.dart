@@ -4,6 +4,7 @@ const componentTargets = <String, List<String>>{
   'button': ['lib/src/components/button/'],
   'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],
+  'dialog': ['lib/src/components/dialog/'],
   'fab': ['lib/src/components/fab/'],
   'form': ['lib/src/components/form/'],
   'icon': ['lib/src/components/icon/'],
