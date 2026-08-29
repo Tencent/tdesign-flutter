@@ -1,252 +1,149 @@
 ---
 title: Rate 评分
-description: 用于对某行为/事物进行打分。
+description: 用于对某行为或事物进行打分。
 spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
-## 代码演示
+完整示例见 [t_rate_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_rate_page.dart)。
 
-[td_rate_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_rate_page.dart)
+## 基础用法
 
-### 1 组件类型
+`TRate` 是严格受控组件。`value` 是唯一评分状态源，`onChanged` 为 null 时组件禁用。
 
-实心评分
-            
-<td-code-block panel="Dart">
+```dart
+class RateExample extends StatefulWidget {
+  const RateExample({super.key});
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFilledRate(BuildContext context) {
-    return const TCell(title: '实心评分', noteWidget: TRate(value: 3));
-  }</pre>
+  @override
+  State<RateExample> createState() => _RateExampleState();
+}
 
-</td-code-block>
-                                  
+class _RateExampleState extends State<RateExample> {
+  double value = 3;
 
-自定义评分
-            
-<td-code-block panel="Dart">
+  @override
+  Widget build(BuildContext context) => TRate(
+    value: value,
+    onChanged: (next) => setState(() => value = next),
+  );
+}
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCusRate(BuildContext context) {
-    return const TCell(
-        title: '自定义评分', noteWidget: TRate(value: 3, icon: [TIcons.thumb_up]));
-  }</pre>
+## 半星
 
-</td-code-block>
-                                  
+```dart
+TRate(
+  value: value,
+  allowHalf: true,
+  onChanged: (next) => setState(() => value = next),
+)
+```
 
-自定义评分数量
-            
-<td-code-block panel="Dart">
+点击半星评分后会显示半星与整星选择浮层。拖动和读屏增减的步长同样为 `0.5`。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildNumRate(BuildContext context) {
-    return const TCell(
-        title: '自定义评分数量',
-        noteWidget: TRate(
-          value: 2,
-          count: 3,
-        ));
-  }</pre>
+## 辅助文案
 
-</td-code-block>
-                                  
+`texts` 是辅助文案是否显示及显示内容的唯一入口：null 时不显示，非 null 时显示。0 分或没有对应档位时显示本地化的“未评分”。
 
-带描述评分
-            
-<td-code-block panel="Dart">
+```dart
+TRate(
+  value: value,
+  texts: const ['极差', '失望', '一般', '满意', '惊喜'],
+  onChanged: (next) => setState(() => value = next),
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildMsgRate(BuildContext context) {
-    return const TCellGroup(cells: [
-      TCell(
-          title: '带描述评分',
-          noteWidget: TRate(
-              value: 3, showText: true, texts: ['1分', '2分', '3分', '4分', '5分'])),
-      TCell(title: '带描述评分', noteWidget: TRate(value: 3, showText: true))
-    ]);
-  }</pre>
+半星仍按五档文案解析，例如 `2` 与 `2.5` 都对应第二档；读屏语义会同时保留精确数值，能够区分两个评分。
 
-</td-code-block>
-                                  
+## 自定义图标
 
-评分弹框位置
-            
-<td-code-block panel="Dart">
+图标 builder 会同时用于主评分和半星选择浮层。通过 `filled` 区分选中与未选中图标，并可继承组件提供的 `IconTheme` 尺寸和颜色。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildDRate(BuildContext context) {
-    return const TCellGroup(cells: [
-      TCell(title: '顶部显示', noteWidget: TRate(placement: PlacementEnum.top)),
-      TCell(title: '不显示', noteWidget: TRate(placement: PlacementEnum.none)),
-      TCell(
-          title: '底部显示', noteWidget: TRate(placement: PlacementEnum.bottom)),
-    ]);
-  }</pre>
+```dart
+TRate(
+  value: value,
+  icon: (filled) => const Icon(TIcons.thumb_up),
+  onChanged: (next) => setState(() => value = next),
+)
+```
 
-</td-code-block>
-                                  
-### 1 组件状态
+## 数量与样式
 
-只可选全星时
-            
-<td-code-block panel="Dart">
+```dart
+Theme(
+  data: Theme.of(context).mergeExtension(
+    const TRateThemeData(
+      iconSize: 20,
+      iconGap: 4,
+      starColor: Color(0xFF00A870),
+    ),
+  ),
+  child: TRate(
+    value: value,
+    count: 3,
+    onChanged: (next) => setState(() => value = next),
+  ),
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildFullRate(BuildContext context) {
-    return const TCell(title: '点击活滑动', noteWidget: TRate(value: 3));
-  }</pre>
+## 从 1.0.0-alpha.1 迁移
 
-</td-code-block>
-                                  
+`TRateThemeData.showText` 已移除。内容是否显示不再由 Theme 控制：
 
-可选半星时
-            
-<td-code-block panel="Dart">
+```dart
+// 旧写法
+Theme(
+  data: Theme.of(context).mergeExtension(
+    const TRateThemeData(showText: true),
+  ),
+  child: TRate(value: value, texts: texts),
+)
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHalfRate(BuildContext context) {
-    return const TCell(
-        title: '点击活滑动',
-        noteWidget: TRate(
-          value: 3,
-          allowHalf: true,
-          onChange: print,
-        ));
-  }</pre>
+// 新写法
+TRate(value: value, texts: texts)
+```
 
-</td-code-block>
-                                  
-### 1 组件样式
-
-评分大小
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSizeRate(BuildContext context) {
-    return const TCellGroup(cells: [
-      TCell(title: '默认尺寸24', noteWidget: TRate(value: 3)),
-      TCell(title: '小尺寸20', noteWidget: TRate(value: 3, size: 20)),
-    ]);
-  }</pre>
-
-</td-code-block>
-                                  
-
-设置评分颜色
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildColorRate(BuildContext context) {
-    return const TCellGroup(cells: [
-      TCell(
-          title: '填充评分',
-          noteWidget: TRate(
-            value: 2.5,
-            allowHalf: true,
-            color: [Color(0xFFFFC51C), Color(0xFFE8E8E8)],
-          )),
-      TCell(
-          title: '线描评分',
-          noteWidget:
-              TRate(value: 2.5, allowHalf: true, color: [Color(0xFF00A870)])),
-    ]);
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 特殊样式
-
-竖向带描述评分
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildOtherRate(BuildContext context) {
-    var texts = ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'];
-    return Container(
-      width: double.infinity,
-      child: Center(
-        child: TRate(
-          value: 2,
-          size: 30,
-          showText: true,
-          // texts: ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'],
-          direction: Axis.vertical,
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // textWidth: 64,
-          builderText: (context, value) {
-            return value == 0
-                ? const SizedBox.shrink()
-                : Padding(
-                    padding: EdgeInsets.only(top: TTheme.of(context).spacer8),
-                    child: TText(
-                      texts[(value - 1).toInt()],
-                      font: TTheme.of(context).fontTitleMedium,
-                      textColor: TTheme.of(context).warningColor5,
-                    ),
-                  );
-          },
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      color: TTheme.of(context).bgColorContainer,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+- 需要显示文案：向 `TRate.texts` 传入非 null 列表；
+- 不显示文案：保持 `TRate.texts` 为 null；
+- 文案的 `textStyle`、`textGap`、`textWidth` 仍由 `TRateThemeData` 控制。
 
 ## API
+
 ### TRate
-#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| allowHalf | bool? | false | 是否允许半选 |
-| builderText | Widget Function(BuildContext context, double value)? | - | 评分等级对应的辅助文字自定义构建，优先级高于`texts` 配置后，会忽略`texts`,`textWidth`,`iconTextGap` |
-| color | List<Color>? | - | 评分图标的颜色，示例：`选中颜色` / `选中颜色，未选中颜色`，默认：`TTheme.of(context).warningColor5, TTheme.of(context).grayColor4` |
-| count | int? | 5 | 评分的数量 |
-| crossAxisAlignment | CrossAxisAlignment? | CrossAxisAlignment.center | 评分图标与辅助文字的交叉轴对齐方式 |
-| direction | Axis? | Axis.horizontal | 评分图标与辅助文字的布局方向 |
-| disabled | bool? | false | 是否禁用评分 |
-| gap | double? | - | 评分图标的间距，默认：TTheme.of(context).spacer8 |
-| icon | List<IconData>? | - | 自定义评分图标，`选中和未选中图标` / `选中图标，未选中图标`，默认：`TIcons.star_filled` |
-| iconTextGap | double? | - | 评分图标与辅助文字的间距，默认：`TTheme.of(context).spacer16` |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| mainAxisAlignment | MainAxisAlignment? | MainAxisAlignment.start | 评分图标与辅助文字的主轴对齐方式 |
-| mainAxisSize | MainAxisSize? | MainAxisSize.min | 评分图标与辅助文字主轴方向上如何占用空间 |
-| onChange | void Function(double value)? | - | 评分数改变时触发 |
-| placement | PlacementEnum? | PlacementEnum.top | 选择评分弹框的位置，值为`PlacementEnum.none`表示不显示评分弹框。 |
-| showText | bool? | false | 是否显示对应的辅助文字 |
-| size | double? | 24.0 | 评分图标的大小 |
-| texts | List<String>? | const ['极差', '失望', '一般', '满意', '惊喜'] | 评分等级对应的辅助文字， 当`allowHalf`为false时长度应与`count`一致， 当`allowHalf`为true时长度应为`count`的两倍， 自定义值示例：`'1分', '2分', '3分', '4分', '5分'`。 |
-| textWidth | double? | 48.0 | 评分等级对应的辅助文字宽度 |
-| value | double? | 0 | 选择评分的值 |
+| value | double | 必填 | 唯一的受控评分值，范围为 0 到 count；整星模式下小数向下归一化 |
+| onChanged | ValueChanged<double>? | - | 评分变化回调；为 null 时禁用 |
+| onChangeStart | ValueChanged<double>? | - | 一次指针或语义交互开始时触发一次 |
+| onChangeEnd | ValueChanged<double>? | - | 一次交互结束时触发一次；指针取消时返回当前受控值 |
+| count | int | 5 | 评分项数量，必须大于 0 |
+| allowHalf | bool | false | 是否允许半星 |
+| icon | TRateIconBuilder? | - | 自定义选中与未选中图标 |
+| texts | List<String>? | - | 各评分档位的辅助文案；null 时不显示 |
 
+### TRateIconBuilder
 
-### PlacementEnum
-#### 枚举值
+```dart
+typedef TRateIconBuilder = Widget Function(bool filled);
+```
 
+### TRateThemeData
 
-| 名称 | 说明 |
-| --- | --- |
-| none | - |
-| top | - |
-| bottom | - |
-
-
-  
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| starColor | Color? | 选中星标颜色 |
+| inactiveStarColor | Color? | 未选中星标颜色 |
+| iconSize | double? | 图标尺寸 |
+| iconGap | double? | 图标间距 |
+| textWidth | double? | 文案最大布局宽度；未设置时在有界父布局内使用剩余宽度 |
+| textGap | double? | 图标与文案间距 |
+| textStyle | TextStyle? | 文案样式 |
+| overlayBoxShadow | List<BoxShadow>? | 半星选择浮层阴影 |

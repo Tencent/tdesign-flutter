@@ -18,6 +18,24 @@
   name: flutter analyze
   script: cd tdesign-component && flutter analyze --fatal-infos
 
+.component-regression-tests:
+  name: flutter test (component regression)
+  script: cd tdesign-component && dart run tool/run_component_regression.dart
+
+.regression-tool-tests:
+  name: flutter test (regression tooling)
+  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+
+# Example 页面共享功能回归，双 Flutter 版本共用；不包含 Golden。
+.example-regression-tests:
+  name: flutter test (example shared regression)
+  script: cd tdesign-component/example && flutter test --no-pub test/widget_test.dart test/radio_page_test.dart test/rate_demo_test.dart
+
+# Demo 结构与 Golden 固定在 Flutter 3.32.0 Linux 执行，测试清单由 Dart 统一维护。
+.visual-regression-tests:
+  name: flutter test (visual regression)
+  script: cd tdesign-component && dart run tool/run_visual_regression.dart
+
 # APK 构建
 .build-apk:
   name: flutter build apk
@@ -66,6 +84,35 @@
   stages:
     - !reference [.install-component]
     - !reference [.analyze]
+
+# 测试 + 覆盖率：flutter 3.32.0
+.test-332:
+  name: test (flutter 3.32.0)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-3.32.0
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.install-example]
+    - !reference [.component-regression-tests]
+    - !reference [.regression-tool-tests]
+    - !reference [.example-regression-tests]
+    - !reference [.visual-regression-tests]
+
+# 测试 + 覆盖率：flutter latest
+.test-latest:
+  name: test (flutter latest)
+  docker:
+    image: docker.cnb.cool/liweijie0812/docker/flutter-latest
+    volumes:
+      - /root/.pub-cache:cow
+  stages:
+    - !reference [.install-component]
+    - !reference [.install-example]
+    - !reference [.component-regression-tests]
+    - !reference [.regression-tool-tests]
+    - !reference [.example-regression-tests]
 
 # 构建 APK：flutter 3.32.0
 .build-apk-332:

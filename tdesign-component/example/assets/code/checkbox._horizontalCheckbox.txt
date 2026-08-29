@@ -1,9 +1,28 @@
 Widget _horizontalCheckbox(BuildContext context) {
-    return TCheckboxGroup<String>(
-      value: _horizontalValue,
-      options: _options,
-      direction: Axis.horizontal,
-      columns: 2,
-      onChanged: (value) => setState(() => _horizontalValue = value),
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(
+          variant: TCheckboxVariant.circle,
+          customSpace: EdgeInsets.symmetric(vertical: 8),
+        ),
+      ),
+      child: ColoredBox(
+        color: context.tTheme.bgColorContainer,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (final option in _horizontalOptions)
+                TCheckbox(
+                  value: _horizontalValue.contains(option.value),
+                  title: option.label,
+                  showDivider: false,
+                  onChanged: (_) => _toggleHorizontal(option.value),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }

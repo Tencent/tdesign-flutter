@@ -1,0 +1,7 @@
+# 分支详情页自定义按钮：启动预览（仅预览模式打开 Flutter Web 预览）
+branch:
+  - buttons:
+      - name: 启动预览
+        description: 启动当前分支的 Flutter Web 预览页面
+        event: web_trigger_launch_preview
+        openWorkspace: true

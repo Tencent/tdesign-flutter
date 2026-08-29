@@ -1,7 +1,0 @@
-Widget _buildFocusSearchBar(BuildContext context) {
-    return const TSearchBar(
-      hintText: '搜索预设文案',
-      needCancel: true,
-      autoFocus: true,
-    );
-  }

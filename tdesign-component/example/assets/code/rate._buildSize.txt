@@ -1,0 +1,22 @@
+Widget _buildSize(BuildContext context) => Column(
+    children: [
+      TCell(
+        title: const Text('大尺寸 24'),
+        note: Theme(
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TRateThemeData(iconSize: 24)),
+          child: const _StatefulRate(initialValue: 3),
+        ),
+      ),
+      TCell(
+        title: const Text('小尺寸 20'),
+        note: Theme(
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TRateThemeData(iconSize: 20)),
+          child: const _StatefulRate(initialValue: 3),
+        ),
+      ),
+    ],
+  );

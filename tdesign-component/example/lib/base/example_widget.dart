@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui' show FlutterView;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -26,15 +27,19 @@ class ExamplePage extends StatefulWidget {
     this.children = const [],
     this.padding,
     this.backgroundColor,
+    this.compactDemo = false,
     required this.exampleCodeGroup,
     this.test = const [],
     this.showSingleChild = false,
     this.singleChild,
     this.scrollController,
     this.floatingActionButton,
-  })  : assert(children.length > 0 || (showSingleChild && singleChild != null),
-            'children or singleChild must have at least one'),
-        super(key: key);
+    this.showTestModule = true,
+  }) : assert(
+         children.length > 0 || (showSingleChild && singleChild != null),
+         'children or singleChild must have at least one',
+       ),
+       super(key: key);
 
   /// 标题
   final String title;
@@ -54,6 +59,9 @@ class ExamplePage extends StatefulWidget {
   /// 填充
   final EdgeInsetsGeometry? padding;
 
+  /// 使用小程序 Demo 的紧凑分组结构：说明条、白色示例块、连续字段行。
+  final bool compactDemo;
+
   /// 背景颜色
   final Color? backgroundColor;
 
@@ -68,6 +76,11 @@ class ExamplePage extends StatefulWidget {
 
   /// 悬浮按钮
   final Widget? floatingActionButton;
+
+  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
+  ///
+  /// profile 和 release 构建中始终不展示。
+  final bool showTestModule;
 
   /// 悬浮按钮
   final GlobalKey? navBarKey;
@@ -213,35 +226,44 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: widget.floatingActionButton,
-        body: ScrollbarTheme(
-            data: ScrollbarThemeData(
-              trackVisibility: WidgetStateProperty.all(true),
+      backgroundColor:
+          widget.backgroundColor ??
+          (widget.compactDemo ? context.tTheme.bgColorPage : null),
+      floatingActionButton: widget.floatingActionButton,
+      body: ScrollbarTheme(
+        data: ScrollbarThemeData(
+          trackVisibility: WidgetStateProperty.all(true),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SafeArea(bottom: false, child: _buildNavBar()),
+            Expanded(
+              child: SafeArea(
+                top: false,
+                child: widget.showSingleChild && widget.singleChild != null
+                    ? _singleChild()
+                    : _buildExampleList(),
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SafeArea(bottom: false, child: _buildNavBar()),
-                Expanded(
-                  child: SafeArea(
-                    top: false,
-                    child: widget.showSingleChild && widget.singleChild != null
-                        ? _singleChild()
-                        : _buildExampleList(),
-                  ),
-                ),
-              ],
-            )));
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildExampleList() {
     final modules = [
       ...widget.children,
-      ExampleModule(
-        title: '单元测试',
-        children: [_buildTestExampleItem(), ...widget.test],
-      ),
+      if (kDebugMode && widget.showTestModule)
+        ExampleModule(
+          title: '单元测试',
+          children: [_buildTestExampleItem(), ...widget.test],
+        ),
     ];
+    final slivers = widget.compactDemo
+        ? _buildCompactSlivers(modules)
+        : _buildDefaultSlivers(modules);
     return NotificationListener<ScrollStartNotification>(
       onNotification: (notification) {
         if (_keyboardInset > 0 && notification.dragDetails != null) {
@@ -254,22 +276,127 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          SliverToBoxAdapter(child: _buildHeader()),
-          for (var moduleIndex = 0;
-              moduleIndex < modules.length;
-              moduleIndex++) ...[
-            SliverToBoxAdapter(
-              child: _buildModuleTitle(moduleIndex + 1, modules[moduleIndex]),
+        slivers: slivers,
+      ),
+    );
+  }
+
+  List<Widget> _buildDefaultSlivers(List<ExampleModule> modules) {
+    return [
+      const SliverToBoxAdapter(child: SizedBox(height: 24)),
+      SliverToBoxAdapter(child: _buildHeader()),
+      for (
+        var moduleIndex = 0;
+        moduleIndex < modules.length;
+        moduleIndex++
+      ) ...[
+        SliverToBoxAdapter(
+          child: _buildModuleTitle(moduleIndex + 1, modules[moduleIndex]),
+        ),
+        SliverList.builder(
+          itemCount: modules[moduleIndex].children.length,
+          itemBuilder: (_, itemIndex) =>
+              _buildExampleItem(modules[moduleIndex], itemIndex),
+        ),
+      ],
+      const SliverToBoxAdapter(child: SizedBox(height: 24)),
+    ];
+  }
+
+  List<Widget> _buildCompactSlivers(List<ExampleModule> modules) {
+    final entries = <_CompactExampleEntry>[];
+    for (var moduleIndex = 0; moduleIndex < modules.length; moduleIndex++) {
+      final module = modules[moduleIndex];
+      for (var itemIndex = 0; itemIndex < module.children.length; itemIndex++) {
+        entries.add(
+          _CompactExampleEntry(
+            module: module,
+            moduleIndex: moduleIndex,
+            itemIndex: itemIndex,
+          ),
+        );
+      }
+    }
+    return [
+      SliverToBoxAdapter(child: _buildCompactHeader()),
+      SliverList.builder(
+        itemCount: entries.length,
+        itemBuilder: (_, index) => _buildCompactItem(entries[index]),
+      ),
+    ];
+  }
+
+  Widget _buildCompactItem(_CompactExampleEntry entry) {
+    final module = entry.module;
+    final moduleIndex = entry.moduleIndex;
+    final itemIndex = entry.itemIndex;
+    final item = module.children[itemIndex];
+    final hasTitle = itemIndex == 0 && module.title.isNotEmpty;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (hasTitle) const SizedBox(height: 32),
+        if (hasTitle || item.desc.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, hasTitle ? 0 : 24, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (hasTitle)
+                  TText(
+                    '${moduleIndex + 1 < 10 ? '0' : ''}${moduleIndex + 1} '
+                    '${module.title}',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: context.tTheme.textColorPrimary,
+                      fontSize: 18,
+                      height: 52 / 36,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                if (item.desc.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.only(top: hasTitle ? 8 : 0),
+                    child: TText(
+                      item.desc,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: context.tTheme.textColorSecondary,
+                        fontSize: 14,
+                        height: 22 / 14,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            SliverList.builder(
-              itemCount: modules[moduleIndex].children.length,
-              itemBuilder: (_, itemIndex) =>
-                  _buildExampleItem(modules[moduleIndex], itemIndex),
+          ),
+        const SizedBox(height: 16),
+        _buildExampleContent(item),
+      ],
+    );
+  }
+
+  Widget _buildCompactHeader() {
+    return Container(
+      width: double.infinity,
+      color: context.tTheme.bgColorPage,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TText(
+            widget.title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: context.tTheme.textColorPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (widget.desc.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            TText(
+              widget.desc,
+              font: context.tTheme.fontBodyMedium,
+              textColor: context.tTheme.textColorSecondary,
             ),
           ],
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );
@@ -277,10 +404,12 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
 
   Widget _singleChild() => widget.singleChild!;
 
-  ExampleItem _buildTestExampleItem() =>
-      ExampleItem(desc: '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
+  ExampleItem _buildTestExampleItem() => ExampleItem(
+    desc: '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
   1.参数为数字。需测试数字为负数、0、较大数值的场景。
-  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''', builder: (_) => const TDivider());
+  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''',
+    builder: (_) => const TDivider(),
+  );
 
   Widget _buildNavBar() {
     var leftBarItems = <TNavBarItem>[];
@@ -292,13 +421,17 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     }
     if (showAction) {
       // Web 端和移动端都显示 API 按钮
-      rightBarItems.add(TNavBarItem(
+      rightBarItems.add(
+        TNavBarItem(
           icon: TIcons.info_circle,
           onTap: () {
             Navigator.pushNamed(context, TExampleRoute.getApiPath(model));
-          }));
+          },
+        ),
+      );
       if (!PlatformUtil.isWeb) {
-        rightBarItems.add(TNavBarItem(
+        rightBarItems.add(
+          TNavBarItem(
             icon: TIcons.code,
             onTap: () {
               setState(() {
@@ -307,9 +440,12 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
                   model!.apiVisible = apiVisible;
                 }
               });
-              TNotification.postNotification(
-                  'onApiVisibleChange', {'apiVisible': apiVisible});
-            }));
+              TNotification.postNotification('onApiVisibleChange', {
+                'apiVisible': apiVisible,
+              });
+            },
+          ),
+        );
       }
     }
     if (!PlatformUtil.isWeb) {
@@ -325,8 +461,8 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           onTap: () {
             themeModeProvider.themeMode =
                 themeModeProvider.themeMode == ThemeMode.light
-                    ? ThemeMode.dark
-                    : ThemeMode.light;
+                ? ThemeMode.dark
+                : ThemeMode.light;
           },
         ),
       );
@@ -347,25 +483,20 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       return Container();
     }
     return Container(
-      margin: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-      ),
+      margin: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TText(
             widget.title,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: context.tTheme.textColorPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: context.tTheme.textColorPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           Container(
-            margin: const EdgeInsets.only(
-              top: 4,
-            ),
+            margin: const EdgeInsets.only(top: 8),
             child: TText(
               widget.desc,
               font: context.tTheme.fontBodyMedium,
@@ -383,10 +514,10 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
       child: TText(
         '${index < 10 ? "0$index" : index} ${data.title}',
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: context.tTheme.textColorPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: context.tTheme.textColorPrimary,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
@@ -394,12 +525,44 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildExampleItem(ExampleModule data, int index) {
     return Container(
       margin: widget.padding,
-      child: ExampleItemWidget(
-        data: data.children[index],
-        index: index,
-      ),
+      child: ExampleItemWidget(data: data.children[index], index: index),
     );
   }
+
+  Widget _buildExampleContent(ExampleItem data) {
+    Widget child;
+    if (data.ignoreCode) {
+      child = data.builder(context);
+      if (data.center) {
+        child = Center(child: child);
+      }
+    } else {
+      child = CodeWrapper(
+        builder: data.builder,
+        methodName: data.methodName,
+        isCenter: data.center,
+      );
+    }
+    if (data.padding != null) {
+      child = Padding(padding: data.padding!, child: child);
+    }
+    if (data.key != null) {
+      child = RepaintBoundary(key: data.key, child: child);
+    }
+    return child;
+  }
+}
+
+class _CompactExampleEntry {
+  const _CompactExampleEntry({
+    required this.module,
+    required this.moduleIndex,
+    required this.itemIndex,
+  });
+
+  final ExampleModule module;
+  final int moduleIndex;
+  final int itemIndex;
 }
 
 /// 示例模块
@@ -414,7 +577,7 @@ class ExampleModule {
 /// 示例样例数据
 class ExampleItem {
   const ExampleItem({
-    Key? key,
+    this.key,
     this.desc = '',
     required this.builder,
     this.methodName,
@@ -422,6 +585,9 @@ class ExampleItem {
     this.ignoreCode = false,
     this.padding,
   });
+
+  /// Demo 内容的稳定定位与视觉快照边界。
+  final Key? key;
 
   final String desc;
 
@@ -438,11 +604,8 @@ class ExampleItem {
 
 /// 组件示例
 class ExampleItemWidget extends StatefulWidget {
-  const ExampleItemWidget(
-      {required this.data,
-      Key? key,
-      required this.index})
-      : super(key: key);
+  const ExampleItemWidget({required this.data, Key? key, required this.index})
+    : super(key: key);
 
   final ExampleItem data;
   final int index;
@@ -458,9 +621,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
     if (widget.data.ignoreCode) {
       child = widget.data.builder(context);
       if (widget.data.center) {
-        child = Center(
-          child: child,
-        );
+        child = Center(child: child);
       }
     } else {
       child = CodeWrapper(
@@ -470,10 +631,10 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
       );
     }
     if (widget.data.padding != null) {
-      child = Padding(
-        padding: widget.data.padding!,
-        child: child,
-      );
+      child = Padding(padding: widget.data.padding!, child: child);
+    }
+    if (widget.data.key != null) {
+      child = RepaintBoundary(key: widget.data.key, child: child);
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
@@ -486,17 +647,18 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
             : Container(
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: widget.index == 0 ? 8 : 24,
-                    bottom: 16),
+                  left: 16,
+                  right: 16,
+                  top: widget.index == 0 ? 8 : 24,
+                  bottom: 16,
+                ),
                 child: TText(
                   widget.data.desc,
                   font: context.tTheme.fontBodyMedium,
                   textColor: context.tTheme.textColorSecondary,
                 ),
               ),
-        child
+        child,
       ],
     );
     return child;
@@ -504,12 +666,12 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
 }
 
 class CodeWrapper extends StatefulWidget {
-  const CodeWrapper(
-      {Key? key,
-      required this.builder,
-      this.methodName,
-      this.isCenter = false})
-      : super(key: key);
+  const CodeWrapper({
+    Key? key,
+    required this.builder,
+    this.methodName,
+    this.isCenter = false,
+  }) : super(key: key);
 
   final WidgetBuilder builder;
 
@@ -545,6 +707,9 @@ class _CodeWrapperState extends State<CodeWrapper> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (!mounted) {
+        return;
+      }
       setState(() {
         var modelTheme = context
             .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
@@ -552,7 +717,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
         apiVisible = modelTheme?.model.apiVisible ?? false;
         brightness = Theme.of(context).brightness;
       });
-
     });
   }
 
@@ -566,30 +730,26 @@ class _CodeWrapperState extends State<CodeWrapper> {
   Widget build(BuildContext context) {
     var child = widget.builder(context);
     if (widget.isCenter) {
-      child = Center(
-        child: child,
-      );
+      child = Center(child: child);
     }
     if (apiVisible) {
       child = Stack(
         children: [
           child,
           Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: _showCodePanel,
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.4),
-                  alignment: Alignment.center,
-                  child: TText(
-                    'code',
-                    textColor: context.tTheme.whiteColor1,
-                  ),
-                ),
-              ))
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: _showCodePanel,
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.4),
+                alignment: Alignment.center,
+                child: TText('code', textColor: context.tTheme.whiteColor1),
+              ),
+            ),
+          ),
         ],
       );
     }
@@ -621,57 +781,64 @@ class _CodeWrapperState extends State<CodeWrapper> {
   void _showCodePanel() async {
     codeString ??= await loadCodeString();
     await showModalBottomSheet(
-        isScrollControlled: true,
-        barrierColor: Colors.black.withValues(alpha: 0.5),
-        context: context,
-        builder: (_) {
-          if (codeString!.isEmpty) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: context.tTheme.bgColorSecondaryContainer,
-                  borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(context.tTheme.radiusDefault))),
-              child:
-                  TText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
-            );
-          }
+      isScrollControlled: true,
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      context: context,
+      builder: (_) {
+        if (codeString!.isEmpty) {
+          return Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: context.tTheme.bgColorSecondaryContainer,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(context.tTheme.radiusDefault),
+              ),
+            ),
+            child: TText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
+          );
+        }
 
-          var lines = codeString!.split('\n');
-          debugPrint('lines: ${lines.length}');
-          double height = min(max(300, lines.length * 17 + 32),
-              MediaQuery.of(context).size.height - 150);
-          var mdText = '''
+        var lines = codeString!.split('\n');
+        debugPrint('lines: ${lines.length}');
+        double height = min(
+          max(300, lines.length * 17 + 32),
+          MediaQuery.of(context).size.height - 150,
+        );
+        var mdText =
+            '''
 ```dart
 ${codeString}
 ```
                   ''';
 
-          var syntaxHighlighterStyle = brightness == Brightness.light
-              ? SyntaxHighlighterStyle.lightThemeStyle()
-              : SyntaxHighlighterStyle.darkThemeStyle();
+        var syntaxHighlighterStyle = brightness == Brightness.light
+            ? SyntaxHighlighterStyle.lightThemeStyle()
+            : SyntaxHighlighterStyle.darkThemeStyle();
 
-          return Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: context.tTheme.bgColorSecondaryContainer,
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(context.tTheme.radiusDefault))),
-            height: height,
-            child: Markdown(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.zero,
-              selectable: false,
-              shrinkWrap: true,
-              syntaxHighlighter: DartSyntaxHighlighter(syntaxHighlighterStyle),
-              data: mdText,
-              extensionSet: md.ExtensionSet(
-                md.ExtensionSet.gitHubWeb.blockSyntaxes,
-                [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
-              ),
+        return Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: context.tTheme.bgColorSecondaryContainer,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(context.tTheme.radiusDefault),
             ),
-          );
-        });
+          ),
+          height: height,
+          child: Markdown(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            selectable: false,
+            shrinkWrap: true,
+            syntaxHighlighter: DartSyntaxHighlighter(syntaxHighlighterStyle),
+            data: mdText,
+            extensionSet: md.ExtensionSet(
+              md.ExtensionSet.gitHubWeb.blockSyntaxes,
+              [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<String> loadCodeString() async {
@@ -691,8 +858,8 @@ ${codeString}
 /// State获取标题的扩展
 extension TStateExs on State {
   String tTitle() {
-    var modelTheme =
-        context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+    var modelTheme = context
+        .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
   }
 }
@@ -700,8 +867,8 @@ extension TStateExs on State {
 /// StatelessWidget获取标题的扩展
 extension TWidgetExs on StatelessWidget {
   String tTitle(BuildContext context) {
-    var modelTheme =
-        context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+    var modelTheme = context
+        .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
   }
 }

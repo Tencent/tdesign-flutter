@@ -5,10 +5,7 @@ spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,296 +13,56 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_textarea_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_textarea_page.dart)
+完整场景见 [t_textarea_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_textarea_page.dart)。
 
-### 1 组件类型
+### 基础与内部标题
 
-基础多文本输入框
-            
-<td-code-block panel="Dart">
+```dart
+const SizedBox(
+  height: 128,
+  child: TTextarea(
+    label: '标签文字',
+    hintText: '请输入文字',
+    minLines: 2,
+  ),
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _basicType(BuildContext context) {
-    return TTextarea(
-      controller: controller[0],
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      onChanged: (value) {
-        setState(() {});
-      },
-    );
-  }</pre>
+`label` 是独立 Textarea 的内部标题。作为表单字段使用时，应改用 `TFormItem.label`，避免重复标签和校验语义。
 
-</td-code-block>
-                                  
+### 自动增高与字符计数
 
-带标题多文本输入框
-            
-<td-code-block panel="Dart">
+```dart
+const TTextarea(
+  label: '标签文字',
+  hintText: '设置最大字符个数',
+  minLines: 1,
+  maxLines: 6,
+  maxLength: 200,
+  indicator: true,
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _basicTypeByTitle(BuildContext context) {
-    return TTextarea(
-      controller: controller[1],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      onChanged: (value) {},
-    );
-  }</pre>
+- `minLines` 与 `maxLines` 组合表达自动增高范围。
+- `indicator` 仅在配置 `maxLength` 或 `maxCharacter` 时显示。
+- `maxLength` 使用 Flutter grapheme 语义；`maxCharacter` 使用 ASCII 1、非 ASCII 2 的计数规则。
 
-</td-code-block>
-                                  
+### 状态与外框
 
-自动增高多文本输入框
-            
-<td-code-block panel="Dart">
+```dart
+const TTextarea(
+  hintText: '请输入文字',
+  bordered: true,
+  status: TInputStatus.error,
+  maxLength: 100,
+  indicator: true,
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _autoHeightType(BuildContext context) {
-    return TTextarea(
-      controller: controller[2],
-      hintText: '请输入文字',
-      minLines: 1,
-      onChanged: (value) {},
-    );
-  }</pre>
+`bordered` 控制外边框；背景、圆角、内边距和文字视觉通过 `TInputThemeData` 定制。禁用使用 `enabled: false`，只读使用 `readOnly: true`。
 
-</td-code-block>
-                                  
+## 迁移说明
 
-设置字符数限制
-            
-<td-code-block panel="Dart">
+Textarea 不再透传 Material `InputDecoration`。外置表单标签迁移到 `TFormItem`；独立输入框内部标题继续使用 `TTextarea.label`。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _maxLengthType(BuildContext context) {
-    return TTextarea(
-      controller: controller[3],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件状态
-
-禁用状态
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _disabledState(BuildContext context) {
-    return TTextarea(
-      controller: controller[4],
-      label: '标签文字',
-      hintText: '不可编辑文字',
-      maxLines: 4,
-      minLines: 4,
-      readOnly: true,
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件样式
-
-竖排样式
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _verticalStyle(BuildContext context) {
-    return TTextarea(
-      controller: controller[5],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-卡片样式
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _cardStyle(BuildContext context) {
-    return TTextarea(
-      controller: controller[6],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      decoration: BoxDecoration(
-        color: TTheme.of(context).bgColorContainer,
-        borderRadius:
-            BorderRadius.circular(TTheme.of(context).radiusExtraLarge),
-      ),
-      margin: EdgeInsets.only(
-          right: TTheme.of(context).spacer16,
-          left: TTheme.of(context).spacer16),
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 特殊样式
-
-标签外置输入框
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _extensionStyle(BuildContext context) {
-    return TTextarea(
-      controller: controller[7],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      bordered: true,
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-自定义标题
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _setLabel(BuildContext context) {
-    return TTextarea(
-      controller: controller[9],
-      label: '地址信息',
-      // labelWidth: 100,
-      labelIcon: Icon(
-        TIcons.location,
-        size: 20,
-        color: TTheme.of(context).textColorPrimary,
-      ),
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-必填和辅助说明
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _setStatus(BuildContext context) {
-    return TTextarea(
-      controller: controller[10],
-      label: '标签文字',
-      hintText: '请输入文字',
-      maxLines: 4,
-      minLines: 4,
-      maxLength: 500,
-      indicator: true,
-      layout: TTextareaLayout.vertical,
-      required: true,
-      additionInfo: '辅助说明',
-      onChanged: (value) {},
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-## API
-### TTextarea
-#### 简介
-用于多行文本信息输入
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| additionInfo | String? | '' | 错误提示信息 |
-| additionInfoColor | Color? | - | 错误提示颜色 |
-| allowInputOverMax | bool? | false | 超出`maxLength`之后是否还允许输入 |
-| autofocus | bool? | false | 是否自动获取焦点 |
-| autosize | bool? | - | 是否自动增高，值为 true 时，`maxLines`不生效 |
-| backgroundColor | Color? | - | 输入框背景色 |
-| bordered | bool? | - | 是否显示外边框 |
-| controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
-| cursorColor | Color? | - | 游标颜色 |
-| decoration | Decoration? | - | 输入框样式(包括标签) |
-| focusNode | FocusNode? | - | 获取或者取消焦点使用 |
-| hintText | String? | - | 提示文案 |
-| hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
-| indicator | bool? | false | 否显示文本计数器，如 0/140（必须设置maxLength） |
-| inputDecoration | InputDecoration? | - | 自定义输入框TextField组件样式 |
-| inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
-| inputType | TextInputType? | - | 键盘类型，数字、字母 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| label | String? | - | 输入框标题 |
-| labelIcon | Widget? | - | 输入框标题图标 |
-| labelStyle | TextStyle? | - | 左侧标签文本样式 |
-| labelWidget | Widget? | - | label组件，支持自定义 |
-| labelWidth | double? | - | 输入框标题宽度 |
-| layout | TTextareaLayout? | TTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
-| margin | EdgeInsetsGeometry? | - | 外边距 |
-| maxLength | int? | - | 最大字数限制 |
-| maxLengthEnforcement | MaxLengthEnforcement? | - | 如何执行输入长度限制 |
-| maxLines | int? | - | 最大输入行数 |
-| minLines | int? | 4 | 最小输入行数 |
-| onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
-| onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
-| onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
-| padding | EdgeInsetsGeometry? | - | 内边距 |
-| readOnly | bool? | false | 是否只读 |
-| required | bool? | - | 是否必填标志（红色*） |
-| showBottomDivider | bool? | true | 边框外部下划线 |
-| size | TInputSize? | TInputSize.large | 输入框规格 |
-| textAlign | TextAlign? | - | 文字对齐方向 |
-| textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
-| textInputBackgroundColor | Color? | - | 文本框背景色 |
-| textStyle | TextStyle? | - | 文本颜色 |
-| width | double? | - | 输入框宽度 |
-
-
-### TTextareaLayout
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| vertical | - |
-| horizontal | - |
-
-
-  
+完整 API 以 `TTextarea` dartdoc 和 Example API 面板为准。

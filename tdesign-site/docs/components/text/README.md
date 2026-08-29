@@ -1,304 +1,166 @@
 ---
 title: Text 文本
-description: 
+description: 使用 TDesign Token 渲染 Flutter 原生文本。
 spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
-## 代码演示
+`TText` 是 Flutter `Text` 的 TDesign Token 薄封装。文字排版、字体 fallback、
+无障碍缩放、语义和选区行为均由 Flutter 原生实现；容器居中和图文 baseline 由父布局负责。
 
-[td_text_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_text_page.dart)
+## 基础用法
 
-### 1 使用示例
+```dart
+TText(
+  '文本 Text',
+  font: context.tTheme.fontHeadlineLarge,
+  textColor: context.tTheme.brandNormalColor,
+)
+```
 
-系统Text:
-            
-<td-code-block panel="Dart">
+`style` 具有最高优先级，适合使用 Flutter `TextStyle` 的完整能力：
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSystemText(BuildContext context) {
-    return Text(
-      exampleTxt,
-    );
-  }</pre>
+```dart
+TText(
+  '文本 Text',
+  font: context.tTheme.fontBodyLarge,
+  textColor: context.tTheme.brandNormalColor,
+  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+)
+```
 
-</td-code-block>
-                                  
+## 富文本
 
-普通TText:
-            
-<td-code-block panel="Dart">
+`TTextSpan` 只生成显式设置的样式，未设置字段从根 Span 继承。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildNormalTText(BuildContext context) {
-    return TText(
-      exampleTxt,
-    );
-  }</pre>
+```dart
+TText.rich(
+  TextSpan(
+    children: [
+      TTextSpan(text: '警告', textColor: context.tTheme.warningNormalColor),
+      const TextSpan(text: '普通内容'),
+    ],
+  ),
+  font: context.tTheme.fontBodyLarge,
+)
+```
 
-</td-code-block>
-                                  
+## Theme 默认值
 
-指定常用属性:
-            
-<td-code-block panel="Dart">
+```dart
+Theme(
+  data: Theme.of(context).copyWith(
+    extensions: [
+      ...Theme.of(context).extensions.values,
+      const TTextThemeData(
+        textStyle: TextStyle(color: Colors.blue),
+      ),
+    ],
+  ),
+  child: const TText('继承组件 Theme'),
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildGeneralProp(BuildContext context) {
-    return TText(
-      exampleTxt,
-      font: TTheme.of(context).fontHeadlineLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      backgroundColor: TTheme.of(context).brandFocusColor,
-    );
-  }</pre>
+最终样式优先级为：实例 `style` > 实例便利参数 > `TTextThemeData` >
+`DefaultTextStyle` > Material `TextTheme` > TDesign Token。
 
-</td-code-block>
-                                  
+## 字体加载
 
-style覆盖textColor,不覆盖font:
-            
-<td-code-block panel="Dart">
+`TText` 不在构建或绘制期间下载字体。先异步加载，再通过 `fontFamily` 使用：
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildStyleCoverColor(BuildContext context) {
-    return TText(
-      exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style: TextStyle(color: TTheme.of(context).errorNormalColor),
-    );
-  }</pre>
+```dart
+final loaded = await TFontLoader.load(
+  name: 'BrandFont',
+  fontFamilyUrl: fontUrl,
+);
 
-</td-code-block>
-                                  
+if (loaded) {
+  const TText(
+    '品牌字体',
+    fontFamily: FontFamily(fontFamily: 'BrandFont'),
+  );
+}
+```
 
-style覆盖textColor和font:
-            
-<td-code-block panel="Dart">
+同名字体的并发加载共享一个 Future；加载失败后可以重试，同名字体不能切换 URL。
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildStyleCoverColorAndFont(BuildContext context) {
-    return TText(
-      exampleTxt,
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-    );
-  }</pre>
+## Flutter 原生组合
 
-</td-code-block>
-                                  
+- 线性缩放：`textScaler: TextScaler.linear(1.2)`。
+- 系统缩放：不设置 `textScaler`，自动继承 `MediaQuery.textScalerOf(context)`。
+- 字形背景：`style: TextStyle(backgroundColor: color)`。
+- 行盒背景：用 `ColoredBox` 或 `Container` 包裹。
+- 垂直居中：用 `Center` 或 `Align` 包裹。
+- package 字体：`FontFamily(fontFamily: 'Name', package: 'package_name')`。
 
-TText.rich测试:
-            
-<td-code-block panel="Dart">
+## Breaking 迁移
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildRichText(BuildContext context) {
-    return TText.rich(
-      TextSpan(children: [
-        TTextSpan(
-            text: 'TTextSpan1',
-            font: TTheme.of(context).fontTitleExtraLarge,
-            textColor: TTheme.of(context).warningNormalColor,
-            isTextThrough: true,
-            lineThroughColor: TTheme.of(context).brandNormalColor,
-            style: TextStyle(color: TTheme.of(context).errorNormalColor)),
-        TextSpan(
-            text: 'TextSpan2',
-            style: TextStyle(
-                fontSize: 14, color: TTheme.of(context).brandNormalColor)),
-        const WidgetSpan(
-            child: Icon(
-          TIcons.setting,
-          size: 24,
-        )),
-      ]),
-      font: TTheme.of(context).fontBodyLarge,
-      textColor: TTheme.of(context).brandNormalColor,
-      style:
-          TextStyle(color: TTheme.of(context).errorNormalColor, fontSize: 32),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-获取系统Text:
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _getSystemText(BuildContext context) {
-    return TText(
-      exampleTxt,
-      backgroundColor: TTheme.of(context).brandFocusColor,
-    ).getRawText(context: context);
-  }</pre>
-
-</td-code-block>
-                                  
-
-中文居中:（带有英文可能不居中）
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVerticalCenterText(BuildContext context) {
-    return TText(
-      '中华人民共和国腾讯科技',
-      // font: Font(size: 100, lineHeight: 100),
-      forceVerticalCenter: true,
-      backgroundColor: TTheme.of(context).brandFocusColor,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-自定义内部padding:
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCustomPaddingText(BuildContext context) {
-    return TTextConfiguration(
-      paddingConfig: CustomTextPaddingConfig(),
-      child: const CustomPaddingText(),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-删除线:
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildTextThrough(BuildContext context) {
-    return TText(exampleTxt, isTextThrough: true);
-  }</pre>
-
-</td-code-block>
-                                  
-
+- `textScaleFactor` 改为 `textScaler: TextScaler.linear(value)`。
+- `fontFamilyUrl`、`isInFontLoader` 和 `TFontLoaderWidget` 改为先调用
+  `TFontLoader.load`，加载成功后设置 `fontFamily`。
+- `TTextConfiguration` 改为 Material `Theme`、`DefaultTextStyle` 或
+  `TTextThemeData`。
+- 独立 `package` 合并到 `FontFamily.package`。
+- `backgroundColor` 根据语义改为 `TextStyle.backgroundColor` 或父级
+  `ColoredBox`。
+- `forceVerticalCenter` 和 padding 配置改为父级 `Center`、`Align` 或 baseline 布局。
+- `TText` 的 `data` 与 `TText.rich` 的 `textSpan` 现在必须非空。
 
 ## API
-### TText
 
-#### 工厂构造方法
+### TText / TText.rich
 
-##### TText.rich
-
-富文本构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| textSpan | InlineSpan? | - | - |
-| font | Font? | - | 字体尺寸，包含 大小size 和 行高height |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| fontFamily | FontFamily? | - | 字体ttf |
-| textColor | Color? | - | 文本颜色 |
-| backgroundColor | Color? | - | 背景颜色 |
-| isTextThrough | bool? | false | 是否是横线穿过样式（删除线） |
-| lineThroughColor | Color? | - | 删除线颜色，对应 TestStyle 的 decorationColor |
-| package | String? | - | 字体包名 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| style | TextStyle? | - | 自定义的 TextStyle，其中指定的属性，将覆盖扩展的外层属性 |
-| strutStyle | StrutStyle? | - | - |
-| textAlign | TextAlign? | - | - |
-| textDirection | TextDirection? | - | - |
-| locale | Locale? | - | - |
-| softWrap | bool? | - | - |
-| overflow | TextOverflow? | - | - |
-| textScaleFactor | double? | - | - |
-| maxLines | int? | - | - |
-| semanticsLabel | String? | - | - |
-| textWidthBasis | TextWidthBasis? | - | - |
-| textHeightBehavior | ui.TextHeightBehavior? | - | - |
-| forceVerticalCenter | bool | false | 是否强制居中 |
-| isInFontLoader | bool | false | 是否在 FontLoader 中使用 |
-| fontFamilyUrl | String? | - | 是否禁用懒加载 FontFamily 的能力 |
-
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| data | - | - | 以下系统 text 属性，释义请参考系统 `Text` 中注释 |
-| backgroundColor | Color? | - | 背景颜色 |
-| font | Font? | - | 字体尺寸，包含 大小size 和 行高height |
-| fontFamily | FontFamily? | - | 字体ttf |
-| fontFamilyUrl | String? | - | 是否禁用懒加载 FontFamily 的能力 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| forceVerticalCenter | bool | false | 是否强制居中 |
-| isInFontLoader | bool | false | 是否在 FontLoader 中使用 |
-| isTextThrough | bool? | false | 是否是横线穿过样式（删除线） |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| lineThroughColor | Color? | - | 删除线颜色，对应 TestStyle 的 decorationColor |
-| locale | Locale? | - | - |
-| maxLines | int? | - | - |
-| overflow | TextOverflow? | - | - |
-| package | String? | - | 字体包名 |
-| semanticsLabel | String? | - | - |
-| softWrap | bool? | - | - |
-| strutStyle | StrutStyle? | - | - |
-| style | TextStyle? | - | 自定义的 TextStyle，其中指定的属性，将覆盖扩展的外层属性 |
-| textAlign | TextAlign? | - | - |
-| textColor | Color? | - | 文本颜色 |
-| textDirection | TextDirection? | - | - |
-| textHeightBehavior | ui.TextHeightBehavior? | - | - |
-| textScaleFactor | double? | - | - |
-| textWidthBasis | TextWidthBasis? | - | - |
-
-#### 公开属性
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| textSpan | InlineSpan? | - | - |
-
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| data / textSpan | String / InlineSpan | 普通文本或富文本内容，必填且非空类型 |
+| font | Font? | TDesign 字体 Token |
+| fontWeight | FontWeight? | 字重 |
+| fontFamily | FontFamily? | 字体族及可选 package |
+| textColor | Color? | 文字颜色 |
+| isTextThrough | bool? | 是否使用删除线，null 表示继承 |
+| lineThroughColor | Color? | 删除线颜色 |
+| style | TextStyle? | 最高优先级的 Flutter 原生样式 |
+| strutStyle | StrutStyle? | 原生段落 Strut |
+| textAlign | TextAlign? | 原生对齐方式 |
+| textDirection | TextDirection? | 原生文字方向 |
+| locale | Locale? | 原生 Locale |
+| softWrap | bool? | 是否软换行 |
+| overflow | TextOverflow? | 溢出行为 |
+| textScaler | TextScaler? | 文字缩放；null 时继承 MediaQuery |
+| maxLines | int? | 最大行数 |
+| semanticsLabel | String? | 语义标签 |
+| semanticsIdentifier | String? | 语义标识 |
+| textWidthBasis | TextWidthBasis? | 宽度计算方式 |
+| textHeightBehavior | TextHeightBehavior? | 高度行为 |
+| selectionColor | Color? | 选区颜色 |
 
 ### TTextSpan
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<InlineSpan>? | - | - |
-| context | BuildContext? | - | - |
-| font | Font? | - | - |
-| fontFamily | FontFamily? | - | - |
-| fontWeight | FontWeight? | - | - |
-| isTextThrough | bool? | false | - |
-| lineThroughColor | Color? | - | - |
-| mouseCursor | MouseCursor? | - | - |
-| onEnter | PointerEnterEventListener? | - | - |
-| onExit | PointerExitEventListener? | - | - |
-| package | String? | - | - |
-| recognizer | GestureRecognizer? | - | - |
-| semanticsLabel | String? | - | - |
-| style | TextStyle? | - | - |
-| text | String? | - | - |
-| textColor | Color? | - | - |
+除 Flutter `TextSpan` 的文本、子节点、手势和语义参数外，支持 `font`、
+`fontWeight`、`fontFamily`、`textColor`、`isTextThrough`、
+`lineThroughColor` 和 `style`。
 
+### TTextThemeData
 
-### TTextConfiguration
-#### 默认构造方法
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| font | Font? | 默认 TDesign 字体 Token |
+| textStyle | TextStyle? | 默认 Flutter 文字样式，覆盖 font 同名字段 |
+| strutStyle | StrutStyle? | 默认 Strut |
+| textWidthBasis | TextWidthBasis? | 默认宽度计算方式 |
+| textHeightBehavior | TextHeightBehavior? | 默认高度行为 |
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget | - | - |
-| globalFontFamily | FontFamily? | - | 全局字体，kTextNeedGlobalFontFamily=true 时生效 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| paddingConfig | TTextPaddingConfig? | - | forceVerticalCenter=true 时，内置 padding 配置 |
+### TFontLoader.load
 
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| name | String | 注册后的字体族名称 |
+| fontFamilyUrl | String | 字体资源 URL |
 
-  
+返回 `Future<bool>` 表示字体是否加载并注册成功。

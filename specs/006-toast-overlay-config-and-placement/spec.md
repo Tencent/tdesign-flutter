@@ -84,7 +84,7 @@ class TOverlayConfig {
 
 - 不传 `overlay`、不传 `placement`（默认 middle）时，行为与现状完全一致（居中、无可见蒙层）。
 - **breaking change**：移除 `showXxx` 上的 `bool? preventTap` 参数。既有调用 `preventTap: true` 需迁移为 `overlay: TOverlayConfig(preventTap: true)`。
-- 更新日志中该条须加 `⚠️` 前置标记提醒用户迁移。
+- 更新日志中该条使用 `breaking` commit type（`- breaking(toast): 移除 preventTap 参数，改用 overlay`）提醒用户迁移。
 
 ## 验收标准
 

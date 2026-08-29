@@ -15,26 +15,29 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 未传按钮 size 时的默认尺寸
   final TButtonSize defaultSize;
 
-  /// P2 色板：fill 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：fill 变体的 [ButtonStyle]。
+  ///
+  /// 尺寸、形状和 padding 的组件级默认值优先使用 [defaultSize]、[shape]
+  /// 和 [padding]；其余标准 [ButtonStyle] 字段按组件主题优先级参与合并。
   final ButtonStyle? filledStyle;
 
-  /// P2 色板：outline 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：outline 变体的 [ButtonStyle]。
   final ButtonStyle? outlinedStyle;
 
-  /// P2 色板：text 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：text 变体的 [ButtonStyle]。
   final ButtonStyle? textButtonStyle;
 
-  /// P2 色板：ghost 变体的 [ButtonStyle]（仅颜色相关字段，不含 shape）
+  /// P1 组件样式：ghost 变体的 [ButtonStyle]。
   final ButtonStyle? ghostStyle;
 
-  /// 外形，会展开进 resolves [ButtonStyle.shape]
+  /// 外形，会展开进 resolves [ButtonStyle.shape]。
+  ///
+  /// [TButtonShape.square] 在纯图标场景表示宽高相等并保留默认圆角，
+  /// 不表示直角，也不会裁剪图文内容宽度。
   final TButtonShape? shape;
 
   /// 覆盖默认 padding（null 时由 resolve 按 size/shape 推导）
   final EdgeInsetsGeometry? padding;
-
-  /// 外边距
-  final EdgeInsetsGeometry? margin;
 
   /// 图标与文案之间的间距，单位为逻辑像素。
   ///
@@ -54,14 +57,13 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
     this.ghostStyle,
     this.shape,
     this.padding,
-    this.margin,
     this.iconTextSpacing,
     this.gradient,
   }) : assert(
-          iconTextSpacing == null ||
-              (iconTextSpacing >= 0 && iconTextSpacing < double.infinity),
-          'iconTextSpacing must be finite and non-negative',
-        );
+         iconTextSpacing == null ||
+             (iconTextSpacing >= 0 && iconTextSpacing < double.infinity),
+         'iconTextSpacing must be finite and non-negative',
+       );
 
   @override
   TButtonThemeData copyWith({
@@ -73,7 +75,6 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
     ButtonStyle? ghostStyle,
     TButtonShape? shape,
     EdgeInsetsGeometry? padding,
-    EdgeInsetsGeometry? margin,
     double? iconTextSpacing,
     Gradient? gradient,
   }) {
@@ -86,7 +87,6 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
       ghostStyle: ghostStyle ?? this.ghostStyle,
       shape: shape ?? this.shape,
       padding: padding ?? this.padding,
-      margin: margin ?? this.margin,
       iconTextSpacing: iconTextSpacing ?? this.iconTextSpacing,
       gradient: gradient ?? this.gradient,
     );
@@ -106,7 +106,6 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
       ghostStyle: t < 0.5 ? ghostStyle : other.ghostStyle,
       shape: t < 0.5 ? shape : other.shape,
       padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
-      margin: EdgeInsetsGeometry.lerp(margin, other.margin, t),
       iconTextSpacing: lerpDouble(iconTextSpacing, other.iconTextSpacing, t),
       gradient: t < 0.5 ? gradient : other.gradient,
     );

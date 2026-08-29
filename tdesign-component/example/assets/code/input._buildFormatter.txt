@@ -1,5 +1,16 @@
-Widget _buildFormatter(BuildContext context) => TInput(
-        hintText: '最多 10 个字符',
-        maxLength: 10,
-        inputFormatters: [LengthLimitingTextInputFormatter(10)],
-      );
+Widget _buildFormatter(BuildContext context) => const Column(
+    children: [
+      TFormItem(
+        label: '标签文字',
+        help: '最大输入10个字符',
+        child: TInput(borderless: true, hintText: '请输入文字', maxLength: 10),
+      ),
+      SizedBox(height: 16),
+      TFormItem(
+        label: '标签文字',
+        help: '最大输入10个字符，汉字算两个',
+        child: TInput(borderless: true, hintText: '请输入文字', maxCharacter: 10),
+      ),
+      SizedBox(height: 16),
+    ],
+  );

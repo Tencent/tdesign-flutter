@@ -512,23 +512,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                 
 
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TButton _buildFilledButton(BuildContext context) {
-    return const TButton(
-      text: '填充按钮',
-      size: TButtonSize.large,
-      type: TButtonType.fill,
-      shape: TButtonShape.filled,
-      theme: TButtonTheme.primary,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
 按钮主题
 
           
@@ -907,4 +890,3 @@ typedef TButtonEvent = void Function();
 ```
 
 
-  
