@@ -35,7 +35,7 @@ class TDropdownMenuPage extends StatelessWidget {
       exampleCodeGroup: 'dropdown_menu',
       children: [
         ExampleModule(
-          title: '01 组件类型',
+          title: '组件类型',
           children: [
             ExampleItem(desc: '单选下拉菜单', builder: _sorting),
             ExampleItem(desc: '1 / 2 / 3 列多选', builder: _multiple),
@@ -43,14 +43,14 @@ class TDropdownMenuPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '02 组件状态',
+          title: '组件状态',
           children: [
             ExampleItem(desc: '禁用菜单', builder: _disabled),
             ExampleItem(desc: '向上展开与自定义图标', builder: _direction),
           ],
         ),
         ExampleModule(
-          title: '03 Flutter 额外能力',
+          title: 'Flutter 额外能力',
           children: [
             ExampleItem(desc: '横向滚动与禁用项', builder: _scrollable),
             ExampleItem(desc: '局部主题与自动方向', builder: _themed),
