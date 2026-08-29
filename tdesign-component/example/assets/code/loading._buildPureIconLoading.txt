@@ -3,25 +3,31 @@
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.circle,
-        ),
+        const TLoading(size: TLoadingSize.small, icon: TLoadingIcon.circle),
         const SizedBox(width: 36),
-        const TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.activity,
-        ),
+        const TLoading(size: TLoadingSize.small, icon: TLoadingIcon.activity),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(
-              iconColor: context.tTheme.brandNormalColor,
-            ),
+            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
           child: const TLoading(
             size: TLoadingSize.small,
             icon: TLoadingIcon.point,
+          ),
+        ),
+        const SizedBox(width: 36),
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
+          ),
+          child: const TLoading(
+            size: TLoadingSize.small,
+            customIcon: SizedBox(
+              width: 20,
+              height: 20,
+              child: Icon(Icons.sync_rounded, size: 20, color: Colors.blue),
+            ),
           ),
         ),
       ],

@@ -40,22 +40,11 @@ case TLoadingSize.small: size: 20, lineWidth: ...
 
 保持 lineWidth 等比缩放逻辑。与 activity 直径（20/22/26）对齐。
 
-### 4. Demo 补充 custom 指示器
+### 4. Demo 公开矩阵收敛
 
-`t_loading_page.dart` 纯图标分组新增：
-
-```dart
-@ExampleCode(group: 'loading')
-Widget _buildCustomIconLoading(BuildContext context) {
-  return Theme(
-    data: Theme.of(context).mergeExtension(...),
-    child: const TLoading(
-      size: TLoadingSize.small,
-      customIcon: SizedBox(...自定义图标...),
-    ),
-  );
-}
-```
+- 纯图标用一个示例容器展示 circle / spinner / dots / custom，custom 复用现有 `customIcon`。
+- 大、中、小三档尺寸合并在一个示例容器中。
+- 公开页默认不显示调试模块。
 
 ### 5. 文档修正
 
@@ -68,7 +57,7 @@ Widget _buildCustomIconLoading(BuildContext context) {
 | 组件 | `t_loading.dart` | duration 默认、axis 默认、circle 尺寸 |
 | 组件 | `t_loading_theme_data.dart` | `duration` dartdoc 默认说明 |
 | 测试 | `t_loading_test.dart` | 补充 duration/axis/尺寸分支，提升覆盖率 |
-| 示例 | `t_loading_page.dart` | 补 custom 指示器 Demo |
+| 示例 | `t_loading_page.dart` | 收敛小程序公开 Demo 分组，custom 不单独扩展 |
 | 生成示例 | `example/assets/code/` | 随示例源码自动生成 |
 | 文档 | `example/assets/api/loading_api.md` | 收敛与 README 一致 |
 | 文档 | `tdesign-site/docs/components/loading/README.md` | 修正链接/API 表/示例代码 |

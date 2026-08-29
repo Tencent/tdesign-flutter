@@ -1,0 +1,24 @@
+/// 组件尺寸
+    Widget _buildLoadingSizes(BuildContext context) {
+    Widget loading(TLoadingSize size) => Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+      child: TLoading(size: size, icon: TLoadingIcon.circle, text: '加载中…'),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        loading(TLoadingSize.large),
+        const SizedBox(height: 24),
+        const Text('中尺寸'),
+        const SizedBox(height: 16),
+        loading(TLoadingSize.medium),
+        const SizedBox(height: 24),
+        const Text('小尺寸'),
+        const SizedBox(height: 16),
+        loading(TLoadingSize.small),
+      ],
+    );
+  }

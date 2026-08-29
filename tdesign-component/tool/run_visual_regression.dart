@@ -54,6 +54,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/link_demo_test.dart'],
   ),
   VisualTestSuite(
+    'loading',
+    'Loading Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/loading_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'text',
     'Text Demo',
     workingDirectory: 'example',

@@ -4,8 +4,9 @@
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Theme(
-          data: Theme.of(context)
-              .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
           child: const TLoading(
             size: TLoadingSize.small,
             icon: TLoadingIcon.circle,
@@ -14,8 +15,9 @@
         ),
         const SizedBox(width: 36),
         Theme(
-          data: Theme.of(context)
-              .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
           child: const TLoading(
             size: TLoadingSize.small,
             icon: TLoadingIcon.activity,

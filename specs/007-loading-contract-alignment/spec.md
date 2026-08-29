@@ -13,7 +13,7 @@
 
 - 对齐 `duration` 默认值 800ms、`axis` 默认方向 horizontal（对齐官方 `layout` 默认）。
 - 统一 circle / activity 图标在各 `TLoadingSize` 下的容器直径，对齐官方尺寸 demo（20/22/26px）。
-- 补齐官方纯图标分组中的 custom 指示器 Demo（复用已有 `customIcon` 能力，不加新 API）。
+- 按小程序公开页收敛 Demo 分组与实例顺序：纯图标中合并 custom 指示器，尺寸合并为一个完整示例（复用已有能力，不加新 API）。
 - 修正站点 README 与 `loading_api.md` 的过时/分叉内容。
 
 ## 非目标
@@ -34,7 +34,7 @@
 - `tdesign-component/lib/src/components/loading/t_loading_controller.dart`
 - `tdesign-component/lib/src/components/loading/t_loading_theme_data.dart`
 - `tdesign-component/test/components/loading/t_loading_test.dart`
-- `tdesign-component/example/lib/page/t_loading_page.dart`（补 custom 指示器 Demo）
+- `tdesign-component/example/lib/page/t_loading_page.dart`（收敛小程序公开 Demo 矩阵）
 - `tdesign-component/example/assets/api/loading_api.md`（收敛与 README 一致）
 - `tdesign-site/docs/components/loading/README.md`（修正链接、API 表、示例代码；不写入 PR 更新日志）
 
@@ -62,9 +62,12 @@
 - circle 图标三档容器直径从 `18/21/24` 调整为 `20/22/26`，与 activity（已对齐官方 20/22/26）一致。
 - `_getPaddingSize()` 与 point 指示器保持不变（point 的 `size` 语义与官方 dots 不同，官方 dots 无三档尺寸 Demo 依据，不做无依据调整）。
 
-### 4. Demo 补充
+### 4. Demo 收敛
 
-- `t_loading_page.dart` 纯图标分组补一个 custom 指示器示例（用 `customIcon` 传自定义 Widget），对齐小程序 base demo 的 `theme="custom"` + indicator 插槽。
+- `t_loading_page.dart` 的公开页仅保留小程序公开矩阵：`01 组件类型`、`02 组件尺寸`、`03 加载速度`。
+- custom 指示器与 circle / spinner / dots 同属“纯图标”实例，不单独扩充一个 Flutter 专属 Demo。
+- 大、中、小三档尺寸收敛在“大尺寸”示例内，与小程序页面层级一致。
+- 调试模块默认不出现在公开页。
 
 ### 5. 文档修正
 
@@ -91,7 +94,8 @@
 - [ ] `duration` 生效默认值从 2000 改为 800（未注入 Theme 时 circle indicator duration == 800）。
 - [ ] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
 - [ ] circle 三档容器直径统一为 20/22/26。
-- [ ] 示例页纯图标分组新增 custom 指示器 Demo，且示例代码生成（`example/assets/code/`）保持 up-to-date。
+- [ ] 公开 Demo 的三个分组、实例顺序和文案与小程序一致，custom 指示器不单独扩展分组。
+- [ ] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页面截图完成人工比对。
 - [ ] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。
 - [ ] Loading 全部手写生产源码行覆盖率 ≥95% 且不低于修改前基线（86.15%）。
 - [ ] `flutter analyze --fatal-infos` 0 error / 0 warning。
