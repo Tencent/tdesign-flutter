@@ -110,7 +110,9 @@ export 'src/components/popup/t_popup.dart'
     show
         TPopup,
         TPopupHandle,
+        TPopupHeader,
         TPopupOptions,
+        TPopupOverlayConfig,
         TPopupPlacement,
         TPopupTrigger,
         TPopupInset,

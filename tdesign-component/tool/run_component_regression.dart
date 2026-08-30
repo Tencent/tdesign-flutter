@@ -41,6 +41,17 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('notice_bar', [
     'test/components/notice_bar/t_notice_bar_test.dart',
   ]),
+  ComponentTestSuite('popup', [
+    'test/components/popup/t_feedback_theme_data_test.dart',
+    'test/components/popup/t_popup_options_contract_test.dart',
+    'test/components/popup/t_popup_theme_test.dart',
+    'test/components/popup/t_popup_widget_test.dart',
+    'test/t_popup_coverage_test.dart',
+    'test/t_popup_layout_test.dart',
+    'test/t_popup_options_test.dart',
+    'test/t_popup_route_test.dart',
+    'test/t_popup_test.dart',
+  ]),
   ComponentTestSuite('radio', [
     'test/components/radio/t_radio_test.dart',
     'test/components/radio/t_radio_theme_contract_test.dart',

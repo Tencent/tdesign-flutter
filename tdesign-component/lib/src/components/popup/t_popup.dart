@@ -12,7 +12,6 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -20,8 +19,6 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../../util/t_toolbar_pressable.dart';
-import '../text/t_text.dart';
 import 't_popup_theme_data.dart';
 
 part '_popup_center_close.dart';
@@ -35,7 +32,8 @@ part 't_popup_inset.dart';
 part 't_popup_options.dart';
 part 't_popup_types.dart';
 
-/// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、bottom 操作区、center 面板外下方关闭区。
+/// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、可选 bottom 头部和
+/// 可选 center 面板外下方关闭区。
 ///
 /// 通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
 /// 多次调用 [show] 会继续压入新的浮层路由，可用于叠加展示。
@@ -46,7 +44,9 @@ part 't_popup_types.dart';
 /// final handle = TPopup.show(
 ///   context,
 ///   options: TPopupOptions.bottom(
-///     titleWidget: const Text('标题'),
+///     headerBuilder: (context, close) => TPopupHeader(
+///       title: const Text('标题'),
+///     ),
 ///     child: MyPanel(),
 ///   ),
 /// );
@@ -95,8 +95,7 @@ final class TPopup {
       height: options.height ?? themedHeight,
       radius: options.radius ?? theme?.panelRadius,
       backgroundColor: options.backgroundColor ?? theme?.panelBackgroundColor,
-      overlayColor: options.overlayColor ?? theme?.barrierColor,
-      overlayOpacity: options.overlayOpacity ?? theme?.barrierOpacity,
+      overlay: _resolveOverlay(options.overlay, theme),
       animationDuration:
           options.animationDuration ??
           theme?.transitionDuration ??
@@ -110,5 +109,31 @@ final class TPopup {
     );
     handle.open(navContext);
     return handle;
+  }
+
+  /// 将 theme 的 barrier 值合并进 overlay 配置。
+  static TPopupOverlayConfig? _resolveOverlay(
+    TPopupOverlayConfig? overlay,
+    TPopupThemeData? theme,
+  ) {
+    final themeColor = theme?.barrierColor;
+    final themeOpacity = theme?.barrierOpacity;
+    if (overlay == null) {
+      if (themeColor == null && themeOpacity == null) {
+        return null;
+      }
+      return TPopupOverlayConfig(color: themeColor, opacity: themeOpacity);
+    }
+    if (overlay.color != null && overlay.opacity != null) {
+      return overlay;
+    }
+    return TPopupOverlayConfig(
+      showOverlay: overlay.showOverlay,
+      color: overlay.color ?? themeColor,
+      opacity: overlay.opacity ?? themeOpacity,
+      preventTap: overlay.preventTap,
+      closeOnClick: overlay.closeOnClick,
+      onClick: overlay.onClick,
+    );
   }
 }
