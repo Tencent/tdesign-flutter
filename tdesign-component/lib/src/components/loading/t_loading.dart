@@ -151,21 +151,21 @@ class TLoading extends StatelessWidget {
       case TLoadingSize.large:
         return TCircleIndicator(
           color: iconColor,
-          size: 26,
-          lineWidth: 3 * 26 / 20, // 与 medium 等比缩放（基准 small lineWidth 3）
+          size: 32,
+          lineWidth: 4,
           duration: duration,
         );
       case TLoadingSize.medium:
         return TCircleIndicator(
           color: iconColor,
-          size: 22,
-          lineWidth: 3 * 22 / 20,
+          size: 28,
+          lineWidth: 3.5,
           duration: duration,
         );
       case TLoadingSize.small:
         return TCircleIndicator(
           color: iconColor,
-          size: 20, // 对齐官方尺寸 demo（20/22/26）与 activity 直径
+          size: 24,
           lineWidth: 3,
           duration: duration,
         );

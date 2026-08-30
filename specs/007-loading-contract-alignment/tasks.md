@@ -9,7 +9,7 @@
 - [x] 创建 Spec `007-loading-contract-alignment`
 - [x] `t_loading.dart`：duration 默认 2000→800
 - [x] `t_loading.dart`：axis 默认 vertical→horizontal
-- [x] `t_loading.dart`：circle 三档尺寸统一为 20/22/26
+- [x] `t_loading.dart`：circle 三档尺寸对齐官方 24/28/32
 - [x] `t_loading_theme_data.dart`：`duration` dartdoc 默认说明
 - [x] 示例页收敛小程序公开矩阵（custom 合并到纯图标、三档尺寸合并，含生成代码）
 - [x] 补充 Demo 结构测试、明暗整页 Golden 与小程序实际页截图证据

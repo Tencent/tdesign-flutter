@@ -31,7 +31,7 @@
 ## 人工验收
 
 - [x] 默认 `duration` 800、默认 `axis` horizontal，与官方一致（示例页可见默认转圈速度与横向布局）。
-- [x] circle 三档尺寸 20/22/26 对齐官方与 activity。
+- [x] circle 三档尺寸 24/28/32 对齐官方小程序 `48/56/64rpx`；activity 保留自身视觉尺寸语义。
 - [x] 公开页收敛为小程序的三个分组；custom 指示器合并到“纯图标”，三档尺寸合并为一个示例。
 - [x] 已使用微信开发者工具截取小程序实际页，并与 Flutter 3.32.0 Linux 明暗整页 Golden 比对。
 - [x] 站点 README 文件链接、API 表、示例代码已修正，`loading_api.md` 保持生成原样。

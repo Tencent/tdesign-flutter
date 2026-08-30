@@ -43,8 +43,8 @@ void main() {
       final indicator = tester.widget<TCircleIndicator>(
         find.byType(TCircleIndicator),
       );
-      expect(indicator.size, 22);
-      expect(indicator.lineWidth, 3 * 22 / 20);
+      expect(indicator.size, 28);
+      expect(indicator.lineWidth, 3.5);
       expect(indicator.duration, 800);
     });
 
@@ -500,7 +500,7 @@ void main() {
       expect(tester.widget<Flex>(find.byType(Flex)).direction, Axis.vertical);
     });
 
-    testWidgets('circle 三档尺寸对齐官方 20/22/26', (tester) async {
+    testWidgets('circle 三档尺寸对齐官方 24/28/32', (tester) async {
       Future<void> check(TLoadingSize size, double expectSize) async {
         await tester.pumpWidget(
           wrapWithTheme(TLoading(size: size, icon: TLoadingIcon.circle)),
@@ -511,12 +511,12 @@ void main() {
         expect(indicator.size, expectSize);
       }
 
-      await check(TLoadingSize.small, 20);
-      await check(TLoadingSize.medium, 22);
-      await check(TLoadingSize.large, 26);
+      await check(TLoadingSize.small, 24);
+      await check(TLoadingSize.medium, 28);
+      await check(TLoadingSize.large, 32);
     });
 
-    testWidgets('activity 三档尺寸对齐官方 20/22/26', (tester) async {
+    testWidgets('activity 三档保留既有 20/22/26 视觉尺寸', (tester) async {
       Future<void> check(TLoadingSize size, double expectRadius) async {
         await tester.pumpWidget(
           wrapWithTheme(TLoading(size: size, icon: TLoadingIcon.activity)),

@@ -6,13 +6,13 @@
 
 1. **`duration` 默认值不一致**：官方默认 `800`ms，Flutter 默认 `2000`ms，转圈明显偏慢。
 2. **`layout` 默认方向不一致**：官方默认 `horizontal`（图标在左、文字在右），Flutter 默认 `Axis.vertical`（图标在上、文字在下）。
-3. **三种图标尺寸内部不一致**：同一 `TLoadingSize` 下 circle / activity / point 直径彼此不一致（如 large：circle 24 / activity 26 / point 20），且 circle 与尺寸 demo（20/22/26px）相比偏小。
+3. **circle 尺寸未对齐公开 Demo**：官方小程序尺寸示例显式使用 `48/56/64rpx`，即 `24/28/32px`；Flutter 原有 circle 为 `18/21/24px`。
 4. **站点文档多处过时/不一致**：示例文件链接笔误、`axis/iconColor/textColor/duration` 误列为 `TLoading` 构造参数（实际在 `TLoadingThemeData`）、示例代码与源码不符、`loading_api.md` 与 README 分叉。
 
 ## 目标
 
 - 对齐 `duration` 默认值 800ms、`axis` 默认方向 horizontal（对齐官方 `layout` 默认）。
-- 统一 circle / activity 图标在各 `TLoadingSize` 下的容器直径，对齐官方尺寸 demo（20/22/26px）。
+- 将 circle 三档容器直径对齐官方尺寸 Demo 的 `24/28/32px`；不同图标形态保留各自视觉尺寸语义。
 - 按小程序公开页收敛 Demo 分组与实例顺序：纯图标中合并 custom 指示器，尺寸合并为一个完整示例（复用已有能力，不加新 API）。
 - 修正站点 README 与 `loading_api.md` 的过时/分叉内容。
 
@@ -59,7 +59,7 @@
 
 ### 3. 尺寸统一
 
-- circle 图标三档容器直径从 `18/21/24` 调整为 `20/22/26`，与 activity（已对齐官方 20/22/26）一致。
+- circle 图标三档容器直径从 `18/21/24` 调整为 `24/28/32`，对应官方 `48/56/64rpx`。
 - `_getPaddingSize()` 与 point 指示器保持不变（point 的 `size` 语义与官方 dots 不同，官方 dots 无三档尺寸 Demo 依据，不做无依据调整）。
 
 ### 4. Demo 收敛
@@ -93,7 +93,7 @@
 
 - [ ] `duration` 生效默认值从 2000 改为 800（未注入 Theme 时 circle indicator duration == 800）。
 - [ ] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
-- [ ] circle 三档容器直径统一为 20/22/26。
+- [ ] circle 三档容器直径为 24/28/32。
 - [ ] 公开 Demo 的三个分组、实例顺序和文案与小程序一致，custom 指示器不单独扩展分组。
 - [ ] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页面截图完成人工比对。
 - [ ] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。

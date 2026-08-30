@@ -28,7 +28,7 @@ final effectiveAxis = theme.axis ?? Axis.vertical;
 final effectiveAxis = theme.axis ?? Axis.horizontal;
 ```
 
-### 3. 尺寸统一（circle → 20/22/26）
+### 3. 尺寸对齐（circle → 24/28/32）
 
 `t_loading.dart` `_getCircleIndicator`：
 
@@ -38,7 +38,7 @@ case TLoadingSize.medium: size: 22, lineWidth: ...
 case TLoadingSize.small: size: 20, lineWidth: ...
 ```
 
-保持 lineWidth 等比缩放逻辑。与 activity 直径（20/22/26）对齐。
+保持 8:1 的直径/线宽比例，对齐小程序尺寸 Demo 的 `48/56/64rpx`。
 
 ### 4. Demo 公开矩阵收敛
 
@@ -76,7 +76,7 @@ case TLoadingSize.small: size: 20, lineWidth: ...
 
 ## 验证策略
 
-- Widget 测试覆盖：默认 duration==800、默认 axis==horizontal、circle 三档尺寸 20/22/26，以及 `TLoadingController.show/dismiss` 既有行为。
+- Widget 测试覆盖：默认 duration==800、默认 axis==horizontal、circle 三档尺寸 24/28/32，以及 `TLoadingController.show/dismiss` 既有行为。
 - 覆盖率：`flutter test --coverage` 统计 `lib/src/components/loading/` 行覆盖率 ≥95%。
 - 静态检查：`flutter analyze --fatal-infos` 0 error / 0 warning。
 - 示例生成：`dart run tool/generate_example_code.dart --check` 保持 up-to-date。
