@@ -7,7 +7,7 @@ void main() {
     testWidgets('TPopupOptions 各方向工厂可构造', (tester) async {
       final bottom = TPopupOptions.bottom(
         child: const Text('body'),
-        titleWidget: const Text('标题'),
+        headerBuilder: (_, __) => const TPopupHeader(title: Text('标题')),
       );
       final top = TPopupOptions.top(child: const Text('top'));
       final left = TPopupOptions.left(child: const Text('left'));
@@ -21,38 +21,42 @@ void main() {
     });
 
     testWidgets('TPopup.show 打开浮层并渲染内容', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => TPopup.show(
-                context,
-                options: TPopupOptions.bottom(child: const Text('浮层内容')),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => TPopup.show(
+                  context,
+                  options: TPopupOptions.bottom(child: const Text('浮层内容')),
+                ),
+                child: const Text('打开'),
               ),
-              child: const Text('打开'),
             ),
           ),
         ),
-      ));
+      );
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       expect(find.text('浮层内容'), findsWidgets);
     });
 
     testWidgets('center 浮层可打开', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => TPopup.show(
-                context,
-                options: TPopupOptions.center(child: const Text('居中浮层')),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => TPopup.show(
+                  context,
+                  options: TPopupOptions.center(child: const Text('居中浮层')),
+                ),
+                child: const Text('打开居中'),
               ),
-              child: const Text('打开居中'),
             ),
           ),
         ),
-      ));
+      );
       await tester.tap(find.text('打开居中'));
       await tester.pumpAndSettle();
       expect(find.text('居中浮层'), findsWidgets);
@@ -64,23 +68,25 @@ void main() {
       final theme = TThemeBuilder.light(
         TThemeData.defaultData(),
       ).mergeExtension(const TPopupThemeData(edgeHeight: 180));
-      await tester.pumpWidget(MaterialApp(
-        theme: theme,
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => TPopup.show(
-                context,
-                options: TPopupOptions.top(
-                  height: explicitHeight ? 120 : null,
-                  child: const SizedBox.expand(key: contentKey),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => TPopup.show(
+                  context,
+                  options: TPopupOptions.top(
+                    height: explicitHeight ? 120 : null,
+                    child: const SizedBox.expand(key: contentKey),
+                  ),
                 ),
+                child: const Text('打开主题 edge'),
               ),
-              child: const Text('打开主题 edge'),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('打开主题 edge'));
       await tester.pumpAndSettle();
@@ -97,42 +103,41 @@ void main() {
     testWidgets('Theme 控制 drawer 宽度和 center 尺寸', (tester) async {
       const drawerKey = ValueKey('themed-drawer-content');
       const centerKey = ValueKey('themed-center-content');
-      final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        const TPopupThemeData(
-          drawerWidth: 160,
-          centerSize: Size(200, 140),
-        ),
-      );
-      await tester.pumpWidget(MaterialApp(
-        theme: theme,
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => TPopup.show(
-                    context,
-                    options: TPopupOptions.left(
-                      child: const SizedBox.expand(key: drawerKey),
+      final theme = TThemeBuilder.light(TThemeData.defaultData())
+          .mergeExtension(
+            const TPopupThemeData(drawerWidth: 160, centerSize: Size(200, 140)),
+          );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => TPopup.show(
+                      context,
+                      options: TPopupOptions.left(
+                        child: const SizedBox.expand(key: drawerKey),
+                      ),
                     ),
+                    child: const Text('打开主题 drawer'),
                   ),
-                  child: const Text('打开主题 drawer'),
-                ),
-                ElevatedButton(
-                  onPressed: () => TPopup.show(
-                    context,
-                    options: TPopupOptions.center(
-                      closeBuilder: null,
-                      child: const SizedBox.expand(key: centerKey),
+                  ElevatedButton(
+                    onPressed: () => TPopup.show(
+                      context,
+                      options: TPopupOptions.center(
+                        child: const SizedBox.expand(key: centerKey),
+                      ),
                     ),
+                    child: const Text('打开主题 center'),
                   ),
-                  child: const Text('打开主题 center'),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('打开主题 drawer'));
       await tester.pumpAndSettle();
@@ -153,38 +158,41 @@ void main() {
 
       const edgeKey = ValueKey('viewport-edge-content');
       const drawerKey = ValueKey('viewport-drawer-content');
-      final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        const TPopupThemeData(edgeHeight: 300, drawerWidth: 300),
-      );
-      await tester.pumpWidget(MaterialApp(
-        theme: theme,
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => TPopup.show(
-                    context,
-                    options: TPopupOptions.top(
-                      child: const SizedBox.expand(key: edgeKey),
+      final theme = TThemeBuilder.light(TThemeData.defaultData())
+          .mergeExtension(
+            const TPopupThemeData(edgeHeight: 300, drawerWidth: 300),
+          );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => TPopup.show(
+                      context,
+                      options: TPopupOptions.top(
+                        child: const SizedBox.expand(key: edgeKey),
+                      ),
                     ),
+                    child: const Text('打开小视口 edge'),
                   ),
-                  child: const Text('打开小视口 edge'),
-                ),
-                ElevatedButton(
-                  onPressed: () => TPopup.show(
-                    context,
-                    options: TPopupOptions.left(
-                      child: const SizedBox.expand(key: drawerKey),
+                  ElevatedButton(
+                    onPressed: () => TPopup.show(
+                      context,
+                      options: TPopupOptions.left(
+                        child: const SizedBox.expand(key: drawerKey),
+                      ),
                     ),
+                    child: const Text('打开小视口 drawer'),
                   ),
-                  child: const Text('打开小视口 drawer'),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('打开小视口 edge'));
       await tester.pumpAndSettle();
@@ -204,25 +212,27 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       const centerKey = ValueKey('viewport-center-content');
-      final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        const TPopupThemeData(centerSize: Size(300, 300)),
-      );
-      await tester.pumpWidget(MaterialApp(
-        theme: theme,
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => TPopup.show(
-                context,
-                options: TPopupOptions.center(
-                  child: const SizedBox.expand(key: centerKey),
+      final theme = TThemeBuilder.light(
+        TThemeData.defaultData(),
+      ).mergeExtension(const TPopupThemeData(centerSize: Size(300, 300)));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => TPopup.show(
+                  context,
+                  options: TPopupOptions.center(
+                    child: const SizedBox.expand(key: centerKey),
+                  ),
                 ),
+                child: const Text('打开小视口 center'),
               ),
-              child: const Text('打开小视口 center'),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('打开小视口 center'));
       await tester.pumpAndSettle();

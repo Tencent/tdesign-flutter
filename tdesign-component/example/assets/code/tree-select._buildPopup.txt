@@ -7,14 +7,31 @@ Widget _buildPopup(BuildContext context) {
       ),
       arrow: true,
       onTap: () {
-        var draft = [
-          for (final path in _popupValue) List<Object?>.of(path),
-        ];
+        var draft = [for (final path in _popupValue) List<Object?>.of(path)];
         TPopup.show(
           context,
           options: TPopupOptions.bottom(
             height: MediaQuery.sizeOf(context).height * 0.6,
-            titleWidget: const TText('选择分类'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: close,
+                child: const TText('取消'),
+              ),
+              title: const TText('选择分类'),
+              confirmButton: TextButton(
+                onPressed: () {
+                  if (mounted) {
+                    setState(() {
+                      _popupValue = [
+                        for (final path in draft) List<Object?>.of(path),
+                      ];
+                    });
+                  }
+                  close();
+                },
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TTreeSelect(
                 key: const Key('tree-select-popup'),
@@ -26,15 +43,6 @@ Widget _buildPopup(BuildContext context) {
                 },
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-                setState(() {
-                  _popupValue = [
-                    for (final path in draft) List<Object?>.of(path),
-                  ];
-                });
-              }
-            },
           ),
         );
       },

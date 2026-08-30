@@ -42,3 +42,10 @@
 - **真机像素表现仍未实测**：已有微信开发者工具 iPhone 12/13 模拟器截图与 Linux Golden，但不将其外推为真机 DPR 结论。
 - `reverse` / `pause` / `delay`（后续迭代，官方发布版未公开对应 Demo）。
 - `attach`（仅 Vue 独有且发布版注释）。
+
+## 2026-08-31 develop 同步复验
+
+- 已合并 `origin/develop@fb26b8d5`，保留 Loading 回归登记并采用 develop 的共享测试基建。
+- CI 同款 Flutter 3.32.0 Linux：页面 light/dark Golden 更新后不带 `--update-goldens` 复跑通过，Demo 功能测试同时通过。
+- Flutter 3.32.0 与 3.47.0：组件聚焦测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
+- API 收敛复核：没有新增一次性 props；仅调整既有默认布局、动画时长与三档图标尺寸，属于 PR 标题已声明的 breaking 默认行为变更。

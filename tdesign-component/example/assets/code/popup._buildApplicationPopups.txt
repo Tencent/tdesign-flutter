@@ -1,0 +1,74 @@
+Widget _buildApplicationPopups(BuildContext context) {
+    Widget popupButton(String label, String key, VoidCallback onPressed) {
+      return SizedBox(
+        width: double.infinity,
+        child: TButton(
+          key: ValueKey(key),
+          onPressed: onPressed,
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          child: TText(label),
+        ),
+      );
+    }
+
+    final theme = context.tTheme;
+    return Column(
+      children: [
+        popupButton('底部弹出层-带标题及操作', 'popup-with-title-trigger', () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 240,
+              headerBuilder: (_, close) => TPopupHeader(
+                cancelButton: TToolbarPressable(
+                  onTap: close,
+                  child: TText(
+                    '取消',
+                    textColor: theme.textColorSecondary,
+                    font: theme.fontBodyLarge,
+                  ),
+                ),
+                title: const TText('标题文字'),
+                confirmButton: TToolbarPressable(
+                  onTap: close,
+                  child: TText(
+                    '确定',
+                    textColor: theme.brandNormalColor,
+                    font: theme.fontTitleMedium,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              child: const SizedBox(key: ValueKey('popup-with-title-content')),
+            ),
+          );
+        }),
+        const SizedBox(height: 16),
+        popupButton('居中弹出层-带自定义关闭按钮', 'popup-custom-close-trigger', () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.center(
+              width: 240,
+              height: 240,
+              closeBuilder: (_, close) => IconButton(
+                tooltip: '关闭',
+                icon: Icon(
+                  TIcons.close_circle,
+                  color: theme.fontWhColor1,
+                  size: 32,
+                ),
+                onPressed: close,
+              ),
+              child: const SizedBox(
+                key: ValueKey('popup-custom-close-content'),
+                width: 240,
+                height: 240,
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }

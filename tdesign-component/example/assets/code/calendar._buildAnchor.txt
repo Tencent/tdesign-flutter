@@ -7,10 +7,7 @@ Widget _buildAnchor(BuildContext context) {
               tooltip: '上个月',
               icon: const Icon(Icons.chevron_left),
               onPressed: () => setState(() {
-                _anchorDate = DateTime(
-                  _anchorDate.year,
-                  _anchorDate.month - 1,
-                );
+                _anchorDate = DateTime(_anchorDate.year, _anchorDate.month - 1);
               }),
             ),
             Expanded(
@@ -23,10 +20,7 @@ Widget _buildAnchor(BuildContext context) {
               tooltip: '下个月',
               icon: const Icon(Icons.chevron_right),
               onPressed: () => setState(() {
-                _anchorDate = DateTime(
-                  _anchorDate.year,
-                  _anchorDate.month + 1,
-                );
+                _anchorDate = DateTime(_anchorDate.year, _anchorDate.month + 1);
               }),
             ),
           ],

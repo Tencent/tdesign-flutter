@@ -755,7 +755,9 @@
       "api": {
         "names": [
           "TNoticeBar",
-          "TNoticeBarStyle"
+          "TNoticeBarTapTarget",
+          "TNoticeBarStatus",
+          "TNoticeBarThemeData"
         ],
         "getComments": true
       }
@@ -783,8 +785,10 @@
       "api": {
         "names": [
           "TPopup",
+          "TPopupHeader",
           "TPopupOptions",
           "TPopupHandle",
+          "TPopupOverlayConfig",
           "TPopupPlacement",
           "TPopupTrigger"
         ],
