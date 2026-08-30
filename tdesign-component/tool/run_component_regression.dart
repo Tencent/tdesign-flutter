@@ -16,6 +16,13 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('tag', [
+    'test/components/tag/t_select_tag_test.dart',
+    'test/components/tag/t_tag_test.dart',
+  ]),
+  ComponentTestSuite('popover', [
+    'test/components/popover/t_popover_test.dart',
+  ]),
   ComponentTestSuite('checkbox', [
     'test/components/checkbox/t_check_box_group_test.dart',
     'test/components/checkbox/t_checkbox_test.dart',

@@ -10,8 +10,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// - TTagShape 形状（square/round/mark）
 /// - TTagSize 尺寸
 /// - 禁用状态（disable）
-/// - 描边样式（isOutline）
-/// - 浅色样式（isLight）
+/// - TTagVariant 全部绘制形态
 /// - 关闭图标 + onCloseTap 回调
 /// - 主题覆盖（ThemeExtension）
 /// - 边界场景
@@ -178,10 +177,9 @@ void main() {
   // 描边 / 浅色 / 禁用
   // ============================================================
   group('TTag 样式变体', () {
-    testWidgets('isOutline 描边样式渲染', (tester) async {
+    testWidgets('outline 描边样式渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('描边'),
-        tagTheme: const TTagThemeData(isOutline: true),
+        const TTag('描边', variant: TTagVariant.outline),
       ));
       expect(find.text('描边'), findsOneWidget);
       // 描边时 Container 应有 border
@@ -195,18 +193,20 @@ void main() {
       expect(decoration.border, isNotNull);
     });
 
-    testWidgets('isLight 浅色样式渲染', (tester) async {
+    testWidgets('light 浅色样式渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('浅色', colorScheme: TTagColorScheme.primary),
-        tagTheme: const TTagThemeData(isLight: true),
+        const TTag('浅色',
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.light),
       ));
       expect(find.text('浅色'), findsOneWidget);
     });
 
-    testWidgets('isOutline + isLight 组合渲染', (tester) async {
+    testWidgets('lightOutline 浅色描边渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('描边浅色', colorScheme: TTagColorScheme.danger),
-        tagTheme: const TTagThemeData(isOutline: true, isLight: true),
+        const TTag('描边浅色',
+            colorScheme: TTagColorScheme.danger,
+            variant: TTagVariant.lightOutline),
       ));
       expect(find.text('描边浅色'), findsOneWidget);
     });
@@ -233,10 +233,10 @@ void main() {
       expect(tapped, isFalse);
     });
 
-    testWidgets('disable + isOutline 禁用描边渲染', (tester) async {
+    testWidgets('disable + outline 禁用描边渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('禁用描边', enabled: false),
-        tagTheme: const TTagThemeData(isOutline: true),
+        const TTag('禁用描边',
+            enabled: false, variant: TTagVariant.outline),
       ));
       expect(find.text('禁用描边'), findsOneWidget);
     });
@@ -431,10 +431,9 @@ void main() {
     });
 
     test('TTagThemeData copyWith 正确合并', () {
-      const base = TTagThemeData(isOutline: true);
-      final merged = base.copyWith(isLight: true);
-      expect(merged.isOutline, isTrue);
-      expect(merged.isLight, isTrue);
+      const base = TTagThemeData(shape: TTagShape.square);
+      final merged = base.copyWith(shape: TTagShape.round);
+      expect(merged.shape, TTagShape.round);
     });
 
     test('TTagThemeData lerp 正确插值', () {
@@ -502,10 +501,9 @@ void main() {
       expect(find.text('可关闭'), findsOneWidget);
     });
 
-    testWidgets('isOutline + isLight', (tester) async {
+    testWidgets('lightOutline', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('描边'),
-        tagTheme: const TTagThemeData(isOutline: true, isLight: true),
+        const TTag('描边', variant: TTagVariant.lightOutline),
       ));
       expect(find.text('描边'), findsOneWidget);
     });
@@ -531,18 +529,20 @@ void main() {
       expect(find.byIcon(Icons.favorite), findsOneWidget);
     });
 
-    testWidgets('primary + isOutline', (tester) async {
+    testWidgets('primary + outline', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('primary', colorScheme: TTagColorScheme.primary),
-        tagTheme: const TTagThemeData(isOutline: true),
+        const TTag('primary',
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.outline),
       ));
       expect(find.text('primary'), findsOneWidget);
     });
 
-    testWidgets('warning + isOutline', (tester) async {
+    testWidgets('warning + outline', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('warning', colorScheme: TTagColorScheme.warning),
-        tagTheme: const TTagThemeData(isOutline: true),
+        const TTag('warning',
+            colorScheme: TTagColorScheme.warning,
+            variant: TTagVariant.outline),
       ));
       expect(find.text('warning'), findsOneWidget);
     });
@@ -558,20 +558,32 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(
         Wrap(
           children: TTagColorScheme.values
-              .map((scheme) => TTag('$scheme', colorScheme: scheme))
+              .map((scheme) => TTag('$scheme',
+                  colorScheme: scheme, variant: TTagVariant.light))
               .toList(),
         ),
-        tagTheme: const TTagThemeData(isLight: true),
       ));
       expect(find.byType(TTag), findsNWidgets(TTagColorScheme.values.length));
     });
 
     testWidgets('success outline resolves semantic border', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
-        const TTag('success', colorScheme: TTagColorScheme.success),
-        tagTheme: const TTagThemeData(isOutline: true),
+        const TTag('success',
+            colorScheme: TTagColorScheme.success,
+            variant: TTagVariant.outline),
       ));
       expect(find.text('success'), findsOneWidget);
+    });
+
+    testWidgets('all tag variants render', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        Wrap(
+          children: TTagVariant.values
+              .map((variant) => TTag('$variant', variant: variant))
+              .toList(),
+        ),
+      ));
+      expect(find.byType(TTag), findsNWidgets(TTagVariant.values.length));
     });
   });
 }

@@ -65,7 +65,7 @@ void main() {
         TPopover.showPopover(
           context: anchorContext,
           content: 'Popover content',
-          colorScheme: TPopoverColorScheme.info,
+          colorScheme: TPopoverColorScheme.primary,
           placement: TPopoverPlacement.top,
         ),
       );

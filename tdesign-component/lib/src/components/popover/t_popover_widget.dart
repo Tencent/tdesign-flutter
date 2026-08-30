@@ -68,7 +68,7 @@ class TPopoverWidget extends StatefulWidget {
     this.content,
     this.contentWidget,
     this.offset,
-    this.colorScheme,
+    this.colorScheme = TPopoverColorScheme.defaultTheme,
     this.placement,
     this.showArrow,
     this.arrowSize,
@@ -95,8 +95,8 @@ class TPopoverWidget extends StatefulWidget {
   /// 偏移
   final double? offset;
 
-  /// 弹出气泡主题
-  final TPopoverColorScheme? colorScheme;
+  /// 弹出气泡预设配色。
+  final TPopoverColorScheme colorScheme;
 
   /// 浮层出现位置
   final TPopoverPlacement? placement;
@@ -266,7 +266,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   /// 初始化主题
   void _initTheme() {
     switch (widget.colorScheme) {
-      case TPopoverColorScheme.info:
+      case TPopoverColorScheme.primary:
         _color = widget.context.tTheme.brandNormalColor;
         _backgroundColor = widget.context.tTheme.brandLightColor;
         break;
@@ -278,7 +278,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         _color = widget.context.tTheme.warningNormalColor;
         _backgroundColor = widget.context.tTheme.warningLightColor;
         break;
-      case TPopoverColorScheme.error:
+      case TPopoverColorScheme.danger:
         _color = widget.context.tTheme.errorNormalColor;
         _backgroundColor = widget.context.tTheme.errorLightColor;
         break;
@@ -286,7 +286,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         _color = widget.context.tTheme.grayColor14;
         _backgroundColor = widget.context.tTheme.whiteColor1;
         break;
-      default:
+      case TPopoverColorScheme.defaultTheme:
         _color = widget.context.tTheme.textColorAnti;
         _backgroundColor = widget.context.tTheme.grayColor14;
         break;

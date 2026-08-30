@@ -77,8 +77,8 @@ class TPopover {
     /// 弹层与触发元素的间距。
     double? offset,
 
-    /// 气泡语义色。
-    TPopoverColorScheme? colorScheme,
+    /// 气泡预设配色。
+    TPopoverColorScheme colorScheme = TPopoverColorScheme.defaultTheme,
 
     /// 点击气泡外部区域时是否关闭弹层。
     bool closeOnClickOutside = true,

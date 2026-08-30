@@ -180,7 +180,7 @@ export 'src/components/tag/t_select_tag.dart';
 export 'src/components/tag/t_tag.dart';
 export 'src/components/tag/t_tag_theme_data.dart' show TTagThemeData;
 export 'src/components/tag/t_tag_types.dart'
-    show TTagColorScheme, TTagShape, TTagSize;
+    show TTagColorScheme, TTagShape, TTagSize, TTagVariant;
 export 'src/components/text/t_font_loader.dart';
 export 'src/components/text/t_text.dart';
 export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;

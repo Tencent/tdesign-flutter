@@ -25,14 +25,8 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   /// 自定义间距
   final EdgeInsets? padding;
 
-  /// 是否为描边类型
-  final bool? isOutline;
-
   /// 标签形状
   final TTagShape? shape;
-
-  /// 是否为浅色
-  final bool? isLight;
 
   /// 文字溢出处理
   final TextOverflow? overflow;
@@ -51,9 +45,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.font,
     this.fontWeight,
     this.padding,
-    this.isOutline,
     this.shape,
-    this.isLight,
     this.overflow,
     this.maxLines,
     this.fixedWidth,
@@ -66,9 +58,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     Font? font,
     FontWeight? fontWeight,
     EdgeInsets? padding,
-    bool? isOutline,
     TTagShape? shape,
-    bool? isLight,
     TextOverflow? overflow,
     int? maxLines,
     double? fixedWidth,
@@ -79,9 +69,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       font: font ?? this.font,
       fontWeight: fontWeight ?? this.fontWeight,
       padding: padding ?? this.padding,
-      isOutline: isOutline ?? this.isOutline,
       shape: shape ?? this.shape,
-      isLight: isLight ?? this.isLight,
       overflow: overflow ?? this.overflow,
       maxLines: maxLines ?? this.maxLines,
       fixedWidth: fixedWidth ?? this.fixedWidth,
@@ -100,9 +88,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       fontWeight: t < 0.5 ? fontWeight : other.fontWeight,
       padding:
           EdgeInsetsGeometry.lerp(padding, other.padding, t) as EdgeInsets?,
-      isOutline: t < 0.5 ? isOutline : other.isOutline,
       shape: t < 0.5 ? shape : other.shape,
-      isLight: t < 0.5 ? isLight : other.isLight,
       overflow: t < 0.5 ? overflow : other.overflow,
       maxLines: t < 0.5 ? maxLines : other.maxLines,
       fixedWidth: lerpDouble(fixedWidth, other.fixedWidth, t),

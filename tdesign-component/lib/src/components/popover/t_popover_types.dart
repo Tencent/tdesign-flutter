@@ -1,13 +1,13 @@
 /// 弹出气泡预设配色。
 enum TPopoverColorScheme {
-  /// 深色。
-  dark,
+  /// 默认深色配色。
+  defaultTheme,
 
   /// 浅色。
   light,
 
-  /// 信息。
-  info,
+  /// 品牌主色。
+  primary,
 
   /// 成功。
   success,
@@ -15,6 +15,6 @@ enum TPopoverColorScheme {
   /// 警告。
   warning,
 
-  /// 错误。
-  error,
+  /// 危险色。
+  danger,
 }
