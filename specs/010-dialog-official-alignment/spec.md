@@ -7,7 +7,7 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 ## 目标
 
 - 对齐小程序官方 Dialog 的默认顶边距和关闭按钮位置。
-- 公开展示官方 base、confirm、status、with-image、with-input 和 command 全部 21 个场景。
+- 公开展示官方 base、confirm、status、with-image、with-input、command 和自定义按钮全部 22 个场景。
 - Dialog 生产源码 LCOV 达到 95% 以上。
 
 ## 非目标
@@ -32,13 +32,14 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 
 - 默认 content padding 为 `EdgeInsets.fromLTRB(24, 24, 24, 0)`。
 - 关闭按钮距面板 top/end 均为 8px。
+- 默认标题和正文样式保留应用 `TextTheme` 的主字体与 fallback，避免弹层丢失应用级字体覆盖。
 - 带图片场景在 Example 层通过任意 `content` Widget 组合；垂直两按钮通过 `actionsWidget` 组合；不扩大基础 API。
-- 21 个官方场景均有独立可见触发入口。
+- 22 个官方场景均有独立可见触发入口；小程序 `openType` 通过 Flutter 既有 `TDialogAction` 自定义子项表达，不新增跨端专用 API。
 
 ## 验收标准
 
 - [x] 顶边距和关闭按钮偏移有 Widget 测试保护。
-- [x] Example 测试证明 21 个入口公开可见，并覆盖图片和垂直按钮交互。
+- [x] Example 测试证明 22 个入口公开可见，并覆盖图片、垂直按钮和自定义操作项交互。
 - [x] Dialog 生产源码 LCOV `LH/LF >= 95%`。
 - [x] Flutter 3.32.0 与 latest 的组件测试、Example 测试和严格 analyze 全部通过。
 - [ ] 真实运行时与小程序完成像素对照。

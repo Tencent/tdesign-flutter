@@ -168,8 +168,9 @@ class TDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(title != null || content != null);
-    final extension = Theme.of(context).extension<TDialogThemeData>();
-    final material = Theme.of(context).dialogTheme;
+    final theme = Theme.of(context);
+    final extension = theme.extension<TDialogThemeData>();
+    final material = theme.dialogTheme;
     final token = context.tTheme;
     final effectiveBackground =
         backgroundColor ??
@@ -197,7 +198,7 @@ class TDialog extends StatelessWidget {
         contentPadding ??
         extension?.contentPadding ??
         const EdgeInsets.fromLTRB(24, 24, 24, 0);
-    final titleStyle =
+    final resolvedTitleStyle =
         extension?.titleTextStyle ??
         material.titleTextStyle ??
         TextStyle(
@@ -206,7 +207,7 @@ class TDialog extends StatelessWidget {
           height: token.fontTitleLarge?.height ?? 26 / 18,
           fontWeight: token.fontTitleLarge?.fontWeight ?? FontWeight.w600,
         );
-    final contentStyle =
+    final resolvedContentStyle =
         extension?.contentTextStyle ??
         material.contentTextStyle ??
         TextStyle(
@@ -215,6 +216,21 @@ class TDialog extends StatelessWidget {
           height: token.fontBodyLarge?.height ?? 24 / 16,
           fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
         );
+    final inheritedTextStyle = theme.textTheme.bodyMedium;
+    final titleStyle = resolvedTitleStyle.copyWith(
+      fontFamily:
+          resolvedTitleStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+      fontFamilyFallback:
+          resolvedTitleStyle.fontFamilyFallback ??
+          inheritedTextStyle?.fontFamilyFallback,
+    );
+    final contentStyle = resolvedContentStyle.copyWith(
+      fontFamily:
+          resolvedContentStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+      fontFamilyFallback:
+          resolvedContentStyle.fontFamilyFallback ??
+          inheritedTextStyle?.fontFamilyFallback,
+    );
 
     return Semantics(
       namesRoute: true,

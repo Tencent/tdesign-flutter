@@ -15,11 +15,29 @@ void main() {
       await pumpDemoPageAtPhoneViewport(tester, dialogDemoPageTestSpec, mode);
 
       final trigger = find.widgetWithText(TButton, '带关闭按钮的对话框');
-      await tester.drag(
-        find.byType(CustomScrollView).first,
-        const Offset(0, -500),
-      );
-      await tester.pumpAndSettle();
+      for (
+        var attempt = 0;
+        attempt < 10 && trigger.evaluate().isEmpty;
+        attempt++
+      ) {
+        await tester.drag(
+          find.byType(CustomScrollView).first,
+          const Offset(0, -400),
+        );
+        await tester.pumpAndSettle();
+      }
+      expect(trigger, findsOneWidget);
+      for (
+        var attempt = 0;
+        attempt < 5 && tester.getRect(trigger).bottom > 760;
+        attempt++
+      ) {
+        await tester.drag(
+          find.byType(CustomScrollView).first,
+          const Offset(0, -200),
+        );
+        await tester.pumpAndSettle();
+      }
       await tester.tap(trigger);
       await tester.pumpAndSettle();
 

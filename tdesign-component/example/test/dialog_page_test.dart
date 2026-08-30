@@ -32,13 +32,11 @@ void main() {
     );
     for (var attempt = 0; attempt < 5; attempt++) {
       final rect = tester.getRect(finder);
-      if (rect.top >= 0 && rect.bottom <= tester.view.physicalSize.height - 80) {
+      if (rect.top >= 0 &&
+          rect.bottom <= tester.view.physicalSize.height - 80) {
         break;
       }
-      await tester.drag(
-        find.byType(Scrollable).first,
-        const Offset(0, -300),
-      );
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
       await tester.pumpAndSettle();
     }
     await tester.tap(finder);
@@ -58,20 +56,21 @@ void main() {
       '确认类-带标题',
       '确认类-无标题',
       '确认类-纯标题',
-      '文字按钮',
-      '水平基础按钮',
-      '垂直基础按钮',
-      '多按钮',
-      '带关闭按钮的对话框',
+      '输入类-无描述',
+      '输入类-带描述',
       '图片置顶-带标题描述',
       '图片置顶-无标题',
       '图片置顶-纯标题',
       '图片置顶-纯图片',
       '图片居中-带标题描述',
       '图片居中-纯标题',
-      '输入类-无描述',
-      '输入类-带描述',
+      '文字按钮',
+      '水平基础按钮',
+      '垂直基础按钮',
+      '多按钮',
+      '带关闭按钮的对话框',
       '命令行操作',
+      '开放能力按钮',
     ];
     for (final label in labels) {
       await tester.scrollUntilVisible(
@@ -81,6 +80,17 @@ void main() {
       );
       expect(find.widgetWithText(TButton, label), findsOneWidget);
     }
+  });
+
+  testWidgets('开放能力按钮通过现有 TDialogAction 组合', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    await openScenario(tester, '开放能力按钮');
+
+    expect(find.text('分享给朋友'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('图片置顶场景使用现有 content Widget 表达', (tester) async {
@@ -93,10 +103,7 @@ void main() {
     final dialog = tester.widget<TDialog>(find.byType(TDialog));
     expect(dialog.contentPadding, EdgeInsets.zero);
     expect(
-      find.descendant(
-        of: find.byType(TDialog),
-        matching: find.byType(Image),
-      ),
+      find.descendant(of: find.byType(TDialog), matching: find.byType(Image)),
       findsOneWidget,
     );
     expect(find.text('对话框标题'), findsOneWidget);

@@ -193,6 +193,32 @@ void main() {
   });
 
   group('TDialog 主题', () {
+    testWidgets('默认标题与正文样式继承应用字体', (tester) async {
+      final base = theme();
+      const family = 'Test Primary Font';
+      const fallback = 'Test CJK Fallback';
+      await tester.pumpWidget(MaterialApp(
+        theme: base.copyWith(
+          textTheme: base.textTheme.apply(
+            fontFamily: family,
+            fontFamilyFallback: const [fallback],
+          ),
+        ),
+        home: const Scaffold(
+          body: TDialog(title: Text('标题'), content: Text('正文')),
+        ),
+      ));
+
+      final titleStyle =
+          DefaultTextStyle.of(tester.element(find.text('标题'))).style;
+      final contentStyle =
+          DefaultTextStyle.of(tester.element(find.text('正文'))).style;
+      expect(titleStyle.fontFamily, family);
+      expect(contentStyle.fontFamily, family);
+      expect(titleStyle.fontFamilyFallback, contains(fallback));
+      expect(contentStyle.fontFamilyFallback, contains(fallback));
+    });
+
     test('ThemeData merge/copyWith/lerp 保留所有公开字段', () {
       const base = TDialogThemeData(
         backgroundColor: Colors.red,

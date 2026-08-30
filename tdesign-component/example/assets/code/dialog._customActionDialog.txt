@@ -1,0 +1,20 @@
+Widget _customActionDialog(BuildContext context) {
+    return _trigger('开放能力按钮', () async {
+      final result = await TDialog.show<String>(
+        context,
+        dialog: const TDialog(
+          title: Text('弹窗标题'),
+          content: Text('通过现有操作项组合业务能力，无需增加跨端专用参数。'),
+          actions: [
+            TDialogAction(child: Text('取消'), result: 'cancel'),
+            TDialogAction(
+              result: 'share',
+              role: TDialogActionRole.primary,
+              child: Text('分享给朋友'),
+            ),
+          ],
+        ),
+      );
+      debugPrint(result == 'share' ? '执行分享能力' : '取消操作');
+    });
+  }

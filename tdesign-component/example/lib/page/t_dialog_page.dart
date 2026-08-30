@@ -23,6 +23,8 @@ class TDialogPage extends StatelessWidget {
           children: [
             ExampleItem(desc: '反馈类对话框', builder: _feedbackDialogs),
             ExampleItem(desc: '确认类对话框', builder: _confirmDialogs),
+            ExampleItem(desc: '输入类对话框', builder: _inputDialogs),
+            ExampleItem(desc: '带图片的对话框', builder: _imageDialogs),
           ],
         ),
         ExampleModule(
@@ -30,11 +32,10 @@ class TDialogPage extends StatelessWidget {
           children: [ExampleItem(desc: '按钮布局与关闭按钮', builder: _buttonDialogs)],
         ),
         ExampleModule(
-          title: '特殊类型',
+          title: '组件用法',
           children: [
-            ExampleItem(desc: '带图片对话框', builder: _imageDialogs),
-            ExampleItem(desc: '带输入框对话框', builder: _inputDialogs),
             ExampleItem(desc: '命令调用', builder: _commandDialog),
+            ExampleItem(desc: '自定义按钮', builder: _customActionDialog),
           ],
         ),
       ],
@@ -398,6 +399,28 @@ class TDialogPage extends StatelessWidget {
         ),
       );
       debugPrint(confirmed == true ? '点击了确定' : '点击了取消');
+    });
+  }
+
+  @ExampleCode(group: 'dialog')
+  Widget _customActionDialog(BuildContext context) {
+    return _trigger('开放能力按钮', () async {
+      final result = await TDialog.show<String>(
+        context,
+        dialog: const TDialog(
+          title: Text('弹窗标题'),
+          content: Text('通过现有操作项组合业务能力，无需增加跨端专用参数。'),
+          actions: [
+            TDialogAction(child: Text('取消'), result: 'cancel'),
+            TDialogAction(
+              result: 'share',
+              role: TDialogActionRole.primary,
+              child: Text('分享给朋友'),
+            ),
+          ],
+        ),
+      );
+      debugPrint(result == 'share' ? '执行分享能力' : '取消操作');
     });
   }
 }

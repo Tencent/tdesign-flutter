@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | 组件 | `t_dialog.dart` | 默认可见间距 |
 | 测试 | `test/components/dialog/` | 样式和 ThemeData 契约 |
-| 示例 | `example/lib/page/t_dialog_page.dart` | 21 场景公开矩阵 |
+| 示例 | `example/lib/page/t_dialog_page.dart` | 22 场景公开矩阵 |
 | 示例测试 | `example/test/dialog_page_test.dart` | 入口和关键组合交互 |
 | 生成文档 | `example/assets/code/dialog.*.txt` | 代码查看器片段 |
 
@@ -26,6 +26,6 @@
 ## 验证策略
 
 - 单元/Widget 测试：Dialog 组件全部聚焦测试。
-- Example 测试：入口矩阵、图片组合和垂直按钮。
+- Example 测试：入口矩阵、图片组合、垂直按钮和自定义操作项。
 - 静态检查：Flutter 3.32.0 和 latest 严格 analyze。
 - 人工验收：375px 视口像素截图与交互对照。
