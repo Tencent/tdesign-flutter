@@ -7,10 +7,11 @@ import '../base/example_widget.dart';
 class TDropdownMenuPage extends StatelessWidget {
   const TDropdownMenuPage({super.key});
 
-  static const statusOptions = <TDropdownMenuOption<String>>[
-    TDropdownMenuOption(value: 'all', label: '全部商品'),
-    TDropdownMenuOption(value: 'selling', label: '在售'),
-    TDropdownMenuOption(value: 'sold_out', label: '已售罄'),
+  static const productOptions = <TDropdownMenuOption<String>>[
+    TDropdownMenuOption(value: 'all', label: '全部产品'),
+    TDropdownMenuOption(value: 'new', label: '最新产品'),
+    TDropdownMenuOption(value: 'hot', label: '最火产品'),
+    TDropdownMenuOption(value: 'disabled', label: '禁用选项', disabled: true),
   ];
 
   static const categoryOptions = <TDropdownMenuOption<String>>[
@@ -38,20 +39,18 @@ class TDropdownMenuPage extends StatelessWidget {
           title: '组件类型',
           children: [
             ExampleItem(desc: '单选下拉菜单', builder: _sorting),
-            ExampleItem(desc: '1 / 2 / 3 列多选', builder: _multiple),
-            ExampleItem(desc: '自定义价格区间', builder: _customPanel),
+            ExampleItem(desc: '分栏下拉菜单', builder: _multiple),
           ],
         ),
         ExampleModule(
           title: '组件状态',
-          children: [
-            ExampleItem(desc: '禁用菜单', builder: _disabled),
-            ExampleItem(desc: '向上展开与自定义图标', builder: _direction),
-          ],
+          children: [ExampleItem(desc: '禁用状态', builder: _disabled)],
         ),
         ExampleModule(
           title: 'Flutter 额外能力',
           children: [
+            ExampleItem(desc: '自定义价格区间', builder: _customPanel),
+            ExampleItem(desc: '向上展开与自定义图标', builder: _direction),
             ExampleItem(desc: '横向滚动与禁用项', builder: _scrollable),
             ExampleItem(desc: '局部主题与自动方向', builder: _themed),
           ],
@@ -62,38 +61,37 @@ class TDropdownMenuPage extends StatelessWidget {
 
   @ExampleCode(group: 'dropdown_menu')
   Widget _sorting(BuildContext context) {
-    var sort = 'default';
-    var status = 'all';
+    var product = 'all';
+    var sorter = 'default';
     return StatefulBuilder(
       builder: (context, setState) {
         return TDropdownMenu(
           items: [
             TDropdownMenuItem(
-              label: switch (sort) {
-                'price_asc' => '价格升序',
-                'sales' => '销量优先',
-                _ => '默认排序',
+              label: switch (product) {
+                'new' => '最新产品',
+                'hot' => '最火产品',
+                _ => '全部产品',
               },
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
                     controller: controller,
-                    value: sort,
-                    options: const [
-                      TDropdownMenuOption(value: 'default', label: '默认排序'),
-                      TDropdownMenuOption(value: 'price_asc', label: '价格从低到高'),
-                      TDropdownMenuOption(value: 'sales', label: '销量优先'),
-                    ],
-                    onChanged: (value) => setState(() => sort = value),
+                    value: product,
+                    options: productOptions,
+                    onChanged: (value) => setState(() => product = value),
                   ),
             ),
             TDropdownMenuItem(
-              label: status == 'all' ? '商品状态' : '已筛选状态',
+              label: sorter == 'default' ? '默认排序' : '价格从高到低',
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
                     controller: controller,
-                    value: status,
-                    options: statusOptions,
-                    onChanged: (value) => setState(() => status = value),
+                    value: sorter,
+                    options: const [
+                      TDropdownMenuOption(value: 'default', label: '默认排序'),
+                      TDropdownMenuOption(value: 'price', label: '价格从高到低'),
+                    ],
+                    onChanged: (value) => setState(() => sorter = value),
                   ),
             ),
           ],
@@ -109,53 +107,37 @@ class TDropdownMenuPage extends StatelessWidget {
     var tripleColumn = <String>{'phone'};
     return StatefulBuilder(
       builder: (context, setState) {
-        Widget menu(
+        TDropdownMenuItem menuItem(
           String label,
           int columns,
           Set<String> selected,
           ValueChanged<Set<String>> onConfirm,
         ) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: TDropdownMenu(
-              items: [
-                TDropdownMenuItem(
-                  label: '$label（已选 ${selected.length} 项）',
-                  panelBuilder: (context, controller) =>
-                      TDropdownMultiSelectPanel<String>(
-                        controller: controller,
-                        options: categoryOptions,
-                        values: selected,
-                        columns: columns,
-                        maxHeight: 280,
-                        onConfirm: onConfirm,
-                      ),
+          return TDropdownMenuItem(
+            label: label,
+            panelBuilder: (context, controller) =>
+                TDropdownMultiSelectPanel<String>(
+                  controller: controller,
+                  options: categoryOptions,
+                  values: selected,
+                  columns: columns,
+                  maxHeight: 280,
+                  onConfirm: onConfirm,
                 ),
-              ],
-            ),
           );
         }
 
-        return Column(
-          children: [
-            menu(
-              '单列',
-              1,
-              singleColumn,
-              (values) => setState(() => singleColumn = values),
-            ),
-            menu(
-              '双列',
-              2,
-              doubleColumn,
-              (values) => setState(() => doubleColumn = values),
-            ),
-            menu(
-              '三列',
-              3,
-              tripleColumn,
-              (values) => setState(() => tripleColumn = values),
-            ),
+        return TDropdownMenu(
+          items: [
+            menuItem('单列多选', 1, singleColumn, (values) {
+              setState(() => singleColumn = values);
+            }),
+            menuItem('双列多选', 2, doubleColumn, (values) {
+              setState(() => doubleColumn = values);
+            }),
+            menuItem('三列多选', 3, tripleColumn, (values) {
+              setState(() => tripleColumn = values);
+            }),
           ],
         );
       },
@@ -167,20 +149,14 @@ class TDropdownMenuPage extends StatelessWidget {
     return TDropdownMenu(
       items: [
         TDropdownMenuItem(
-          label: '不可选菜单',
+          label: '禁用菜单',
           enabled: false,
           panelBuilder: (context, controller) => const SizedBox.shrink(),
         ),
         TDropdownMenuItem(
-          label: '可选菜单',
-          panelBuilder: (context, controller) =>
-              TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                options: statusOptions,
-                value: 'all',
-                maxHeight: 280,
-                onChanged: (_) {},
-              ),
+          label: '禁用菜单',
+          enabled: false,
+          panelBuilder: (context, controller) => const SizedBox.shrink(),
         ),
       ],
     );
@@ -210,7 +186,7 @@ class TDropdownMenuPage extends StatelessWidget {
           panelBuilder: (context, controller) =>
               TDropdownSingleSelectPanel<String>(
                 controller: controller,
-                options: statusOptions,
+                options: productOptions,
                 value: 'all',
                 maxHeight: 280,
                 onChanged: (_) {},
@@ -343,7 +319,7 @@ class TDropdownMenuPage extends StatelessWidget {
             panelBuilder: (context, controller) =>
                 TDropdownSingleSelectPanel<String>(
                   controller: controller,
-                  options: statusOptions,
+                  options: productOptions,
                   value: 'all',
                   onChanged: (_) {},
                 ),

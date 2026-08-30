@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-仅改动 Example 层：多选用现有 `columns`，禁用用现有 `enabled`，direction 用现有 `placement` 和 `TDropdownMenuItem.custom`。组件层保持不变。
+仅改动 Example 层：单选和多选复用现有 panel，多选用现有 `columns`，禁用用现有 `enabled`，direction 用现有 `placement` 和 `TDropdownMenuItem.custom`。组件层保持不变。
 
 ## 影响范围
 

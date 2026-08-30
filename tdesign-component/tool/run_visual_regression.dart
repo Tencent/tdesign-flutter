@@ -24,6 +24,19 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/button_demo_test.dart'],
   ),
   VisualTestSuite(
+    'tag',
+    'Tag Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/tag_page_test.dart'],
+    arguments: ['--exclude-tags', 'demo'],
+  ),
+  VisualTestSuite(
+    'popover',
+    'Popover component',
+    workingDirectory: '.',
+    testFiles: ['test/components/popover/t_popover_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'checkbox',
     'Checkbox Demo',
     workingDirectory: 'example',
@@ -58,6 +71,18 @@ const visualTestSuites = <VisualTestSuite>[
     'Link Demo',
     workingDirectory: 'example',
     testFiles: ['test/link_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'notice_bar',
+    'NoticeBar Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/notice_bar_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'popup',
+    'Popup Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/popup_demo_golden_test.dart'],
   ),
   VisualTestSuite(
     'text',

@@ -6,9 +6,9 @@ DropdownMenu 的锚点、滚动跟随和自动方向能力已完整，但 Exampl
 
 ## 目标
 
-- 补齐官方单选、1/2/3 列多选、自定义、禁用和向上展开 Demo。
+- 补齐官方单选、1/2/3 列多选和禁用 Demo。
 - 复用现有 custom trigger 表达开合图标，不新增一次性 API。
-- 保留 scrollable 和 ThemeData 作为明确标记的 Flutter 额外能力。
+- 保留自定义面板、向上展开、scrollable 和 ThemeData 作为明确标记的 Flutter 额外能力。
 
 ## 非目标
 
@@ -29,13 +29,14 @@ DropdownMenu 的锚点、滚动跟随和自动方向能力已完整，但 Exampl
 
 ## 行为契约
 
-- 多选 Demo 分别传入 `columns: 1/2/3`，并在 Demo 层使用官方 280px 最大高度。
-- 禁用 trigger 点击后不展开，同组可用 trigger 正常展开。
+- 单选 Demo 按官方顺序展示“全部产品”和“默认排序”，产品选项包含一个禁用项。
+- 多选 Demo 在同一个菜单栏中分别传入 `columns: 1/2/3`，并在 Demo 层使用 280px 最大高度。
+- 状态组的两个禁用 trigger 点击后都不展开。
 - direction Demo 显式使用 `placement: above`，并通过 custom trigger 根据 `isOpen` 切换图标。
 
 ## 验收标准
 
-- [x] 新 Demo 入口可见，禁用和向上展开交互有 Example 测试。
+- [x] 新 Demo 入口可见，单选展开、两个禁用入口和向上展开交互有 Example 测试。
 - [x] DropdownMenu 生产源码 LCOV `LH/LF >= 95%`。
 - [ ] Flutter 3.32.0 与 latest 的聚焦测试和严格 analyze 全部通过（latest 存在一个非本次改动的 0.93px 既有几何断言差异）。
 - [ ] 待确认的公开契约已获得维护者决策或明确留作后续。

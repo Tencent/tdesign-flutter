@@ -1,17 +1,23 @@
 Widget _buildLightShowTags(BuildContext context) {
     // 浅色填充各主题
-    return Theme(
-      data:
-          Theme.of(context).mergeExtension(const TTagThemeData(isLight: true)),
-      child: const Wrap(
-        spacing: 8,
-        children: [
-          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
-          TTag('主要', colorScheme: TTagColorScheme.primary),
-          TTag('警告', colorScheme: TTagColorScheme.warning),
-          TTag('危险', colorScheme: TTagColorScheme.danger),
-          TTag('成功', colorScheme: TTagColorScheme.success),
-        ],
-      ),
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('默认',
+            colorScheme: TTagColorScheme.defaultTheme,
+            variant: TTagVariant.light),
+        TTag('主要',
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.light),
+        TTag('警告',
+            colorScheme: TTagColorScheme.warning,
+            variant: TTagVariant.light),
+        TTag('危险',
+            colorScheme: TTagColorScheme.danger,
+            variant: TTagVariant.light),
+        TTag('成功',
+            colorScheme: TTagColorScheme.success,
+            variant: TTagVariant.light),
+      ],
     );
   }

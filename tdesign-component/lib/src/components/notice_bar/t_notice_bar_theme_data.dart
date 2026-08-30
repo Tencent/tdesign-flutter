@@ -3,29 +3,12 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
-
-/// 公告栏语义色
-enum TNoticeBarVariant {
-  /// 信息（默认）
-  info,
-
-  /// 成功
-  success,
-
-  /// 警告
-  warning,
-
-  /// 错误
-  error,
-}
+import 't_notice_bar_types.dart';
 
 /// TNoticeBar 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认公告栏样式。
 class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
-  /// 语义色变体
-  final TNoticeBarVariant? variant;
-
   /// 文字高度
   final double? height;
 
@@ -45,7 +28,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   final EdgeInsetsGeometry? padding;
 
   const TNoticeBarThemeData({
-    this.variant,
     this.height,
     this.backgroundColor,
     this.textStyle,
@@ -55,8 +37,12 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   });
 
   /// 默认内边距
-  static const EdgeInsets defaultPadding =
-      EdgeInsets.only(top: 13, bottom: 13, left: 16, right: 12);
+  static const EdgeInsets defaultPadding = EdgeInsets.only(
+    top: 13,
+    bottom: 13,
+    left: 16,
+    right: 12,
+  );
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
   TNoticeBarThemeData merge(TNoticeBarThemeData? other) {
@@ -64,7 +50,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
       return this;
     }
     return TNoticeBarThemeData(
-      variant: other.variant ?? variant,
       height: other.height ?? height,
       backgroundColor: other.backgroundColor ?? backgroundColor,
       textStyle: other.textStyle ?? textStyle,
@@ -74,29 +59,31 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     );
   }
 
-  /// 根据变体和上下文解析出完整的样式（颜色等）
-  TNoticeBarThemeData resolve(BuildContext context) {
-    final effectiveVariant = variant ?? TNoticeBarVariant.info;
+  /// 根据状态和上下文解析出完整的样式（颜色等）
+  TNoticeBarThemeData resolve(
+    BuildContext context, {
+    TNoticeBarStatus status = TNoticeBarStatus.info,
+  }) {
     final t = context.tTheme;
 
     var resolvedBg = backgroundColor;
     var resolvedLeftIcon = leftIconColor;
 
-    // 仅在未显式注入时才使用变体默认色，保证 TNoticeBarThemeData 注入生效
-    switch (effectiveVariant) {
-      case TNoticeBarVariant.warning:
+    // 仅在未显式注入时才使用状态默认色，保证 TNoticeBarThemeData 注入生效
+    switch (status) {
+      case TNoticeBarStatus.warning:
         resolvedLeftIcon ??= t.warningNormalColor;
         resolvedBg ??= t.warningLightColor;
         break;
-      case TNoticeBarVariant.error:
+      case TNoticeBarStatus.error:
         resolvedLeftIcon ??= t.errorNormalColor;
         resolvedBg ??= t.errorLightColor;
         break;
-      case TNoticeBarVariant.success:
+      case TNoticeBarStatus.success:
         resolvedLeftIcon ??= t.successNormalColor;
         resolvedBg ??= t.successLightColor;
         break;
-      case TNoticeBarVariant.info:
+      case TNoticeBarStatus.info:
         resolvedLeftIcon ??= t.brandNormalColor;
         resolvedBg ??= t.brandLightColor;
         break;
@@ -106,7 +93,8 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
       backgroundColor: resolvedBg,
       leftIconColor: resolvedLeftIcon,
       rightIconColor: rightIconColor ?? t.textColorSecondary,
-      textStyle: textStyle ??
+      textStyle:
+          textStyle ??
           TextStyle(
             color: t.textColorPrimary,
             fontSize: t.fontBodyMedium?.size,
@@ -119,7 +107,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
 
   @override
   TNoticeBarThemeData copyWith({
-    TNoticeBarVariant? variant,
     double? height,
     Color? backgroundColor,
     TextStyle? textStyle,
@@ -128,7 +115,6 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     EdgeInsetsGeometry? padding,
   }) {
     return TNoticeBarThemeData(
-      variant: variant ?? this.variant,
       height: height ?? this.height,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       textStyle: textStyle ?? this.textStyle,
@@ -140,12 +126,13 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
 
   @override
   TNoticeBarThemeData lerp(
-      ThemeExtension<TNoticeBarThemeData>? other, double t) {
+    ThemeExtension<TNoticeBarThemeData>? other,
+    double t,
+  ) {
     if (other is! TNoticeBarThemeData) {
       return this;
     }
     return TNoticeBarThemeData(
-      variant: t < 0.5 ? variant : other.variant,
       height: lerpDouble(height, other.height, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),

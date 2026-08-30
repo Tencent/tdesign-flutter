@@ -2,20 +2,14 @@ Widget _disabled(BuildContext context) {
     return TDropdownMenu(
       items: [
         TDropdownMenuItem(
-          label: '不可选菜单',
+          label: '禁用菜单',
           enabled: false,
           panelBuilder: (context, controller) => const SizedBox.shrink(),
         ),
         TDropdownMenuItem(
-          label: '可选菜单',
-          panelBuilder: (context, controller) =>
-              TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                options: statusOptions,
-                value: 'all',
-                maxHeight: 280,
-                onChanged: (_) {},
-              ),
+          label: '禁用菜单',
+          enabled: false,
+          panelBuilder: (context, controller) => const SizedBox.shrink(),
         ),
       ],
     );

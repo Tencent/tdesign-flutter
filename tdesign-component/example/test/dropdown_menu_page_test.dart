@@ -69,43 +69,37 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pumpAndSettle();
 
-    const labels = [
-      '单列（已选 1 项）',
-      '双列（已选 1 项）',
-      '三列（已选 1 项）',
-      '不可选菜单',
-      '可选菜单',
-      '向上展开',
-    ];
+    const labels = ['全部产品', '默认排序', '单列多选', '双列多选', '三列多选', '禁用菜单', '向上展开'];
     for (final label in labels) {
       final finder = find.text(label);
       await tester.scrollUntilVisible(
-        finder,
+        finder.first,
         300,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(finder, findsOneWidget);
+      expect(finder, label == '禁用菜单' ? findsNWidgets(2) : findsOneWidget);
     }
   });
 
-  testWidgets('禁用菜单不展开，可选菜单正常展开', (tester) async {
+  testWidgets('两个禁用菜单均不展开', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
     await tester.pumpAndSettle();
 
-    final disabled = find.text('不可选菜单');
+    final disabled = find.text('禁用菜单');
     await tester.scrollUntilVisible(
-      disabled,
+      disabled.first,
       300,
       scrollable: find.byType(Scrollable).first,
     );
-    await tester.tap(disabled);
+    expect(disabled, findsNWidgets(2));
+    await tester.tap(disabled.first);
     await tester.pumpAndSettle();
-    expect(find.text('全部商品'), findsNothing);
+    expect(find.text('最新产品'), findsNothing);
 
-    await tester.tap(find.text('可选菜单'));
+    await tester.tap(disabled.last);
     await tester.pumpAndSettle();
-    expect(find.text('全部商品'), findsOneWidget);
+    expect(find.text('最新产品'), findsNothing);
   });
 
   testWidgets('自定义图标的菜单明确向上展开', (tester) async {
@@ -126,7 +120,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byIcon(Icons.keyboard_arrow_down), findsOneWidget);
-    expect(tester.getTopLeft(find.text('全部商品')).dy, lessThan(triggerTop));
+    expect(tester.getTopLeft(find.text('最新产品')).dy, lessThan(triggerTop));
     expect(tester.takeException(), isNull);
   });
 }

@@ -32,12 +32,15 @@ void main() {
   group('枚举', () {
     test('TPopoverColorScheme 有六个值', () {
       expect(TPopoverColorScheme.values.length, 6);
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.dark));
+      expect(
+        TPopoverColorScheme.values,
+        contains(TPopoverColorScheme.defaultTheme),
+      );
       expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.light));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.info));
+      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.primary));
       expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.success));
       expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.warning));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.error));
+      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.danger));
     });
 
     test('TPopoverPlacement 有十二个值', () {
@@ -123,7 +126,7 @@ void main() {
                 child: TPopoverWidget(
                   context: context,
                   content: '自定义背景',
-                  colorScheme: TPopoverColorScheme.info,
+                  colorScheme: TPopoverColorScheme.primary,
                 ),
               );
             },
@@ -1053,7 +1056,6 @@ void main() {
             },
           ),
           popoverTheme: const TPopoverThemeData(
-            colorScheme: TPopoverColorScheme.dark,
             backgroundColor: Colors.black,
             borderRadius: 8,
             arrowSize: 10,
@@ -1064,7 +1066,13 @@ void main() {
         ),
       );
 
-      unawaited(TPopover.showPopover(context: ctx, content: '主题气泡'));
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '主题气泡',
+          colorScheme: TPopoverColorScheme.defaultTheme,
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('主题气泡'), findsOneWidget);

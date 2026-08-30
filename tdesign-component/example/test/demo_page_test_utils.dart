@@ -13,6 +13,7 @@ const _initialPageHeight = 812.0;
 const _maxPageHeight = 12000.0;
 const _goldenCjkFontFamily = 'TDesign Golden CJK';
 const _feedbackGoldenCjkFontFamily = 'TDesign Feedback Golden CJK';
+const _alignmentCjkFontFamily = 'TDesign Alignment CJK';
 
 class DemoPageTestSpec {
   const DemoPageTestSpec({
@@ -23,6 +24,7 @@ class DemoPageTestSpec {
     this.componentType,
     this.expectedComponentCount,
     this.useFeedbackGoldenFont = false,
+    this.useAlignmentCjkFont = false,
   });
 
   final String name;
@@ -32,6 +34,7 @@ class DemoPageTestSpec {
   final Type? componentType;
   final int? expectedComponentCount;
   final bool useFeedbackGoldenFont;
+  final bool useAlignmentCjkFont;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -128,6 +131,15 @@ Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
       );
     loaders.addAll([materialIconsFont.load(), feedbackCjkFont.load()]);
   }
+  if (spec.useAlignmentCjkFont) {
+    final alignmentCjkFont = FontLoader(_alignmentCjkFontFamily)
+      ..addFont(
+        File(
+          'test/fonts/TDesignAlignmentCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    loaders.add(alignmentCjkFont.load());
+  }
   await Future.wait(loaders);
 }
 
@@ -164,6 +176,20 @@ Future<void> pumpFullDemoPage(
   addTearDown(tester.view.resetDevicePixelRatio);
 }
 
+Future<void> pumpDemoPageAtPhoneViewport(
+  WidgetTester tester,
+  DemoPageTestSpec spec,
+  ThemeMode mode,
+) async {
+  tester.view.physicalSize = const Size(_pageWidth, _initialPageHeight);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(_buildPage(spec, mode));
+  await tester.pump();
+}
+
 Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   final model = ExamplePageModel(
     text: spec.title,
@@ -176,11 +202,11 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
       debugShowCheckedModeBanner: false,
       theme: _withGoldenFonts(
         TThemeBuilder.light(TThemeData.defaultData()),
-        spec.useFeedbackGoldenFont,
+        spec,
       ),
       darkTheme: _withGoldenFonts(
         TThemeBuilder.dark(TThemeData.defaultData()),
-        spec.useFeedbackGoldenFont,
+        spec,
       ),
       themeMode: mode,
       home: RepaintBoundary(
@@ -191,10 +217,11 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   );
 }
 
-ThemeData _withGoldenFonts(ThemeData theme, bool useFeedbackGoldenFont) {
+ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
   final fallback = [
-    if (useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
+    if (spec.useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
     _goldenCjkFontFamily,
+    if (spec.useAlignmentCjkFont) _alignmentCjkFontFamily,
   ];
   return theme.copyWith(
     textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),

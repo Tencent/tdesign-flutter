@@ -21,7 +21,7 @@ Widget _direction(BuildContext context) {
           panelBuilder: (context, controller) =>
               TDropdownSingleSelectPanel<String>(
                 controller: controller,
-                options: statusOptions,
+                options: productOptions,
                 value: 'all',
                 maxHeight: 280,
                 onChanged: (_) {},
