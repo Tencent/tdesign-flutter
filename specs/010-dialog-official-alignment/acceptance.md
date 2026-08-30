@@ -30,3 +30,10 @@
 ## 未覆盖项与后续工作
 
 - 图片、输入等全部场景的连续交互仍需真机逐项复核；静态截图不证明输入与返回值行为。
+
+## 2026-08-31 develop 同步复验
+
+- 已合并 `origin/develop@fb26b8d5`，冲突按 develop 共享测试基建与本 PR Dialog 默认值改动并集解决。
+- CI 同款 Flutter 3.32.0 Linux：页面 light/dark 与点击“带关闭按钮的对话框”后的 Overlay light/dark Golden 共 4 项，更新后不带 `--update-goldens` 复跑通过。
+- Flutter 3.32.0 与 3.47.0：14 个组件测试、3 个 Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
+- API 收敛复核：未新增公共 API；保留既有 `contentPadding` 定制入口，仅把默认上内边距 32 调为 24、关闭按钮默认偏移从 0 调为 8，属于 PR 标题已声明的 breaking 默认行为变更。

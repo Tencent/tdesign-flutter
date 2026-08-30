@@ -487,10 +487,7 @@ void main() {
     late TNoticeBarThemeData warningNoticeTheme;
     await tester.pumpWidget(
       MaterialApp(
-        theme: ThemeData(
-          colorScheme: customScheme,
-          extensions: [token, const TTagThemeData(isOutline: true)],
-        ),
+        theme: ThemeData(colorScheme: customScheme, extensions: [token]),
         home: Scaffold(
           body: Column(
             children: [
@@ -499,7 +496,11 @@ void main() {
                 onPressed: () {},
                 child: const Text('success link'),
               ),
-              const TTag('success tag', colorScheme: TTagColorScheme.success),
+              const TTag(
+                'success tag',
+                colorScheme: TTagColorScheme.success,
+                variant: TTagVariant.outline,
+              ),
               const TResult(
                 title: 'success result',
                 variant: TResultVariant.success,
@@ -509,19 +510,25 @@ void main() {
                 onPressed: () {},
                 child: const Text('warning link'),
               ),
-              const TTag('warning tag', colorScheme: TTagColorScheme.warning),
+              const TTag(
+                'warning tag',
+                colorScheme: TTagColorScheme.warning,
+                variant: TTagVariant.outline,
+              ),
               const TResult(
                 title: 'warning result',
                 variant: TResultVariant.warning,
               ),
               Builder(
                 builder: (context) {
-                  noticeTheme = const TNoticeBarThemeData(
-                    variant: TNoticeBarVariant.success,
-                  ).resolve(context);
-                  warningNoticeTheme = const TNoticeBarThemeData(
-                    variant: TNoticeBarVariant.warning,
-                  ).resolve(context);
+                  noticeTheme = const TNoticeBarThemeData().resolve(
+                    context,
+                    status: TNoticeBarStatus.success,
+                  );
+                  warningNoticeTheme = const TNoticeBarThemeData().resolve(
+                    context,
+                    status: TNoticeBarStatus.warning,
+                  );
                   return const SizedBox();
                 },
               ),

@@ -1,33 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// TPopover 语义色
-enum TPopoverColorScheme {
-  /// 深色
-  dark,
-
-  /// 浅色
-  light,
-
-  /// 信息
-  info,
-
-  /// 成功
-  success,
-
-  /// 警告
-  warning,
-
-  /// 错误
-  error,
-}
-
 /// TPopover 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认气泡样式。
 class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
-  /// 语义色
-  final TPopoverColorScheme? colorScheme;
-
   /// 气泡背景色
   final Color? backgroundColor;
 
@@ -62,7 +38,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
   final List<BoxShadow>? boxShadow;
 
   const TPopoverThemeData({
-    this.colorScheme,
     this.backgroundColor,
     this.padding,
     this.minWidth,
@@ -81,7 +56,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       return this;
     }
     return TPopoverThemeData(
-      colorScheme: other.colorScheme ?? colorScheme,
       backgroundColor: other.backgroundColor ?? backgroundColor,
       padding: other.padding ?? padding,
       minWidth: other.minWidth ?? minWidth,
@@ -98,7 +72,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
 
   @override
   TPopoverThemeData copyWith({
-    TPopoverColorScheme? colorScheme,
     Color? backgroundColor,
     EdgeInsetsGeometry? padding,
     double? minWidth,
@@ -112,7 +85,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     List<BoxShadow>? boxShadow,
   }) {
     return TPopoverThemeData(
-      colorScheme: colorScheme ?? this.colorScheme,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       padding: padding ?? this.padding,
       minWidth: minWidth ?? this.minWidth,
@@ -133,7 +105,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       return this;
     }
     return TPopoverThemeData(
-      colorScheme: t < 0.5 ? colorScheme : other.colorScheme,
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
       minWidth: lerpDouble(minWidth, other.minWidth, t),

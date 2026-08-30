@@ -90,8 +90,10 @@ class TDialog extends StatelessWidget {
     this.contentPadding,
     this.actionsPadding = const EdgeInsets.fromLTRB(24, 24, 24, 24),
     this.actionSpacing = 12,
-  }) : assert(actionsWidget == null || actions.length == 0,
-            'actions and actionsWidget cannot be used together.');
+  }) : assert(
+         actionsWidget == null || actions.length == 0,
+         'actions and actionsWidget cannot be used together.',
+       );
 
   /// 标题槽位。
   final Widget? title;
@@ -150,12 +152,13 @@ class TDialog extends StatelessWidget {
       useRootNavigator: useRootNavigator,
       options: TPopupOptions.center(
         child: dialog,
-        closeBuilder: null,
         radius: 0,
         backgroundColor: Colors.transparent,
-        showOverlay: true,
-        closeOnOverlayClick: barrierDismissible,
-        overlayColor: barrierColor ?? materialBarrierColor,
+        overlay: TPopupOverlayConfig(
+          showOverlay: true,
+          closeOnClick: barrierDismissible,
+          color: barrierColor ?? materialBarrierColor,
+        ),
         useSafeArea: useSafeArea,
       ),
     );
@@ -168,11 +171,13 @@ class TDialog extends StatelessWidget {
     final extension = Theme.of(context).extension<TDialogThemeData>();
     final material = Theme.of(context).dialogTheme;
     final token = context.tTheme;
-    final effectiveBackground = backgroundColor ??
+    final effectiveBackground =
+        backgroundColor ??
         extension?.backgroundColor ??
         material.backgroundColor ??
         token.bgColorContainer;
-    final effectiveShape = shape ??
+    final effectiveShape =
+        shape ??
         extension?.shape ??
         material.shape ??
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(12));
@@ -188,10 +193,12 @@ class TDialog extends StatelessWidget {
       effectiveWidth,
       MediaQuery.sizeOf(context).width - 32,
     );
-    final effectiveContentPadding = contentPadding ??
+    final effectiveContentPadding =
+        contentPadding ??
         extension?.contentPadding ??
         const EdgeInsets.fromLTRB(24, 24, 24, 0);
-    final titleStyle = extension?.titleTextStyle ??
+    final titleStyle =
+        extension?.titleTextStyle ??
         material.titleTextStyle ??
         TextStyle(
           color: token.textColorPrimary,
@@ -199,7 +206,8 @@ class TDialog extends StatelessWidget {
           height: token.fontTitleLarge?.height ?? 26 / 18,
           fontWeight: token.fontTitleLarge?.fontWeight ?? FontWeight.w600,
         );
-    final contentStyle = extension?.contentTextStyle ??
+    final contentStyle =
+        extension?.contentTextStyle ??
         material.contentTextStyle ??
         TextStyle(
           color: token.textColorSecondary,
@@ -273,10 +281,7 @@ class TDialog extends StatelessWidget {
                   end: 8,
                   child: IconButton(
                     tooltip: context.resource.close,
-                    icon: Icon(
-                      TIcons.close,
-                      color: token.textColorPlaceholder,
-                    ),
+                    icon: Icon(TIcons.close, color: token.textColorPlaceholder),
                     onPressed: () => Navigator.maybePop(context),
                   ),
                 ),
@@ -301,26 +306,28 @@ class _DialogActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttons = actions.map((action) {
-      final (variant, colorScheme) = _resolveStyle(action);
-      return TButton(
-        variant: action.variant ?? variant,
-        colorScheme: action.colorScheme ?? colorScheme,
-        style: action.style ?? defaultStyle,
-        onPressed: action.disabled
-            ? null
-            : () {
-                action.onPressed?.call();
-                final route = ModalRoute.of(context);
-                if (action.closeOnPressed &&
-                    context.mounted &&
-                    route?.isCurrent == true) {
-                  Navigator.pop(context, action.result);
-                }
-              },
-        child: action.child,
-      );
-    }).toList(growable: false);
+    final buttons = actions
+        .map((action) {
+          final (variant, colorScheme) = _resolveStyle(action);
+          return TButton(
+            variant: action.variant ?? variant,
+            colorScheme: action.colorScheme ?? colorScheme,
+            style: action.style ?? defaultStyle,
+            onPressed: action.disabled
+                ? null
+                : () {
+                    action.onPressed?.call();
+                    final route = ModalRoute.of(context);
+                    if (action.closeOnPressed &&
+                        context.mounted &&
+                        route?.isCurrent == true) {
+                      Navigator.pop(context, action.result);
+                    }
+                  },
+            child: action.child,
+          );
+        })
+        .toList(growable: false);
 
     if (buttons.length <= 2) {
       return Row(
@@ -346,17 +353,17 @@ class _DialogActions extends StatelessWidget {
   (TButtonVariant, TButtonColorScheme) _resolveStyle(TDialogAction action) {
     return switch (action.role) {
       TDialogActionRole.normal => (
-          TButtonVariant.outline,
-          TButtonColorScheme.defaultTheme,
-        ),
+        TButtonVariant.outline,
+        TButtonColorScheme.defaultTheme,
+      ),
       TDialogActionRole.primary => (
-          TButtonVariant.fill,
-          TButtonColorScheme.primary,
-        ),
+        TButtonVariant.fill,
+        TButtonColorScheme.primary,
+      ),
       TDialogActionRole.destructive => (
-          TButtonVariant.fill,
-          TButtonColorScheme.danger,
-        ),
+        TButtonVariant.fill,
+        TButtonColorScheme.danger,
+      ),
     };
   }
 }
