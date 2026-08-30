@@ -755,7 +755,9 @@
       "api": {
         "names": [
           "TNoticeBar",
-          "TNoticeBarStyle"
+          "TNoticeBarTapTarget",
+          "TNoticeBarStatus",
+          "TNoticeBarThemeData"
         ],
         "getComments": true
       }
