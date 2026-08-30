@@ -1,7 +1,4 @@
 Widget _buildIconOutlineTag(BuildContext context) {
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: const TTag('标签文字', icon: TIcons.discount),
-    );
+    return const TTag('标签文字',
+        icon: TIcons.discount, variant: TTagVariant.outline);
   }

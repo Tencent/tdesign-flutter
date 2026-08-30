@@ -18,7 +18,7 @@
 | content | String? | - | 显示内容 |
 | contentWidget | Widget? | - | 自定义内容。 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 `width`/`height` 或组件主题提供确定尺寸。 |
 | offset | double? | - | 弹层与触发元素的间距。 |
-| colorScheme | TPopoverColorScheme? | - | 气泡语义色。 |
+| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
 | placement | TPopoverPlacement? | - | 浮层出现位置 |
@@ -41,7 +41,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | arrowSize | double? | - | 箭头大小 |
-| colorScheme | TPopoverColorScheme? | - | 弹出气泡主题 |
+| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 弹出气泡预设配色。 |
 | content | String? | - | 显示内容 |
 | contentWidget | Widget? | - | 自定义内容。 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 `width`/`height` 或组件主题提供确定尺寸。 |
 | context | BuildContext | - | 上下文 |

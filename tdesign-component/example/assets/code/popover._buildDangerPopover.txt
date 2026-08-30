@@ -1,4 +1,4 @@
-Widget _buildInfoPopover(BuildContext context) {
+Widget _buildDangerPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -6,14 +6,14 @@ Widget _buildInfoPopover(BuildContext context) {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            child: const Text('品牌色'),
+            child: const Text('错误色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: '弹出气泡内容',
-                colorScheme: TPopoverColorScheme.info,
+                colorScheme: TPopoverColorScheme.danger,
               );
             },
           );

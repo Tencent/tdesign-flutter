@@ -24,6 +24,19 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/button_demo_test.dart'],
   ),
   VisualTestSuite(
+    'tag',
+    'Tag Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/tag_page_test.dart'],
+    arguments: ['--exclude-tags', 'demo'],
+  ),
+  VisualTestSuite(
+    'popover',
+    'Popover component',
+    workingDirectory: '.',
+    testFiles: ['test/components/popover/t_popover_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'checkbox',
     'Checkbox Demo',
     workingDirectory: 'example',

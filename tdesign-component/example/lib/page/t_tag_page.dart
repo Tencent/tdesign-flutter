@@ -180,12 +180,7 @@ class _TTagPageState extends State<TTagPage> {
 
   @ExampleCode(group: 'tag')
   Widget _buildSimpleOutlineTag(BuildContext context) {
-    // 描边标签：通过 TTagThemeData(isOutline: true) 子树注入
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: const TTag('标签文字'),
-    );
+    return const TTag('标签文字', variant: TTagVariant.outline);
   }
 
   @ExampleCode(group: 'tag')
@@ -202,8 +197,8 @@ class _TTagPageState extends State<TTagPage> {
   Widget _buildCircleOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
-          const TTagThemeData(shape: TTagShape.round, isOutline: true)),
-      child: const TTag('标签文字'),
+          const TTagThemeData(shape: TTagShape.round)),
+      child: const TTag('标签文字', variant: TTagVariant.outline),
     );
   }
 
@@ -221,8 +216,8 @@ class _TTagPageState extends State<TTagPage> {
   Widget _buildMarkOutlineTag(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
-          const TTagThemeData(shape: TTagShape.mark, isOutline: true)),
-      child: const TTag('标签文字'),
+          const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字', variant: TTagVariant.outline),
     );
   }
 
@@ -234,11 +229,8 @@ class _TTagPageState extends State<TTagPage> {
 
   @ExampleCode(group: 'tag')
   Widget _buildIconOutlineTag(BuildContext context) {
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: const TTag('标签文字', icon: TIcons.discount),
-    );
+    return const TTag('标签文字',
+        icon: TIcons.discount, variant: TTagVariant.outline);
   }
 
   @ExampleCode(group: 'tag')
@@ -257,20 +249,17 @@ class _TTagPageState extends State<TTagPage> {
 
   @ExampleCode(group: 'tag')
   Widget _buildCloseOutlineTag(BuildContext context) {
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: Wrap(
-        spacing: 8,
-        children: _closableOutlineTags
-            .map((text) => TTag(
-                  text,
-                  needCloseIcon: true,
-                  onCloseTap: () =>
-                      setState(() => _closableOutlineTags.remove(text)),
-                ))
-            .toList(),
-      ),
+    return Wrap(
+      spacing: 8,
+      children: _closableOutlineTags
+          .map((text) => TTag(
+                text,
+                variant: TTagVariant.outline,
+                needCloseIcon: true,
+                onCloseTap: () =>
+                    setState(() => _closableOutlineTags.remove(text)),
+              ))
+          .toList(),
     );
   }
 
@@ -294,57 +283,75 @@ class _TTagPageState extends State<TTagPage> {
   @ExampleCode(group: 'tag')
   Widget _buildLightShowTags(BuildContext context) {
     // 浅色填充各主题
-    return Theme(
-      data:
-          Theme.of(context).mergeExtension(const TTagThemeData(isLight: true)),
-      child: const Wrap(
-        spacing: 8,
-        children: [
-          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
-          TTag('主要', colorScheme: TTagColorScheme.primary),
-          TTag('警告', colorScheme: TTagColorScheme.warning),
-          TTag('危险', colorScheme: TTagColorScheme.danger),
-          TTag('成功', colorScheme: TTagColorScheme.success),
-        ],
-      ),
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('默认',
+            colorScheme: TTagColorScheme.defaultTheme,
+            variant: TTagVariant.light),
+        TTag('主要',
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.light),
+        TTag('警告',
+            colorScheme: TTagColorScheme.warning,
+            variant: TTagVariant.light),
+        TTag('危险',
+            colorScheme: TTagColorScheme.danger,
+            variant: TTagVariant.light),
+        TTag('成功',
+            colorScheme: TTagColorScheme.success,
+            variant: TTagVariant.light),
+      ],
     );
   }
 
   @ExampleCode(group: 'tag')
   Widget _buildOutlineShowTags(BuildContext context) {
     // 非浅色描边各主题
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(isOutline: true)),
-      child: const Wrap(
-        spacing: 8,
-        children: [
-          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
-          TTag('主要', colorScheme: TTagColorScheme.primary),
-          TTag('警告', colorScheme: TTagColorScheme.warning),
-          TTag('危险', colorScheme: TTagColorScheme.danger),
-          TTag('成功', colorScheme: TTagColorScheme.success),
-        ],
-      ),
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('默认',
+            colorScheme: TTagColorScheme.defaultTheme,
+            variant: TTagVariant.outline),
+        TTag('主要',
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.outline),
+        TTag('警告',
+            colorScheme: TTagColorScheme.warning,
+            variant: TTagVariant.outline),
+        TTag('危险',
+            colorScheme: TTagColorScheme.danger,
+            variant: TTagVariant.outline),
+        TTag('成功',
+            colorScheme: TTagColorScheme.success,
+            variant: TTagVariant.outline),
+      ],
     );
   }
 
   @ExampleCode(group: 'tag')
   Widget _buildLightOutlineShowTags(BuildContext context) {
     // 浅色描边各主题
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(isOutline: true, isLight: true)),
-      child: const Wrap(
-        spacing: 8,
-        children: [
-          TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
-          TTag('主要', colorScheme: TTagColorScheme.primary),
-          TTag('警告', colorScheme: TTagColorScheme.warning),
-          TTag('危险', colorScheme: TTagColorScheme.danger),
-          TTag('成功', colorScheme: TTagColorScheme.success),
-        ],
-      ),
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('默认',
+            colorScheme: TTagColorScheme.defaultTheme,
+            variant: TTagVariant.lightOutline),
+        TTag('主要',
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.lightOutline),
+        TTag('警告',
+            colorScheme: TTagColorScheme.warning,
+            variant: TTagVariant.lightOutline),
+        TTag('危险',
+            colorScheme: TTagColorScheme.danger,
+            variant: TTagVariant.lightOutline),
+        TTag('成功',
+            colorScheme: TTagColorScheme.success,
+            variant: TTagVariant.lightOutline),
+      ],
     );
   }
 
