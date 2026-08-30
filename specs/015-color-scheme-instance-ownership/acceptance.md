@@ -23,6 +23,8 @@
 | `/Users/rs/fvm/versions/3.47.0/bin/flutter clean` | 通过 | 清理由跨 SDK 缓存引起的 `ink_sparkle.frag` 校验失败 |
 | `/Users/rs/fvm/versions/3.47.0/bin/flutter test test/components/tag/t_tag_test.dart test/components/tag/t_select_tag_test.dart test/components/popover/t_popover_test.dart test/components/theme/t_material_theme_priority_test.dart` | 通过，124 tests | Flutter 3.47.0，清理缓存后重跑 |
 | `/Users/rs/fvm/versions/3.47.0/bin/flutter analyze` | 通过，No issues found | Flutter 3.47.0 |
+| `quick_validate.py .agents/skills/tdesign-component-align-review` | 通过 | 仓库 skill 结构有效 |
+| `diff -q` 仓库 skill 与 `/Users/rs/.codex/skills/tdesign-component-align-review/SKILL.md` | 通过，无差异 | 仓库文件是唯一维护源，加载副本已同步 |
 | `git diff --check` | 通过 | 无空白错误 |
 
 ## 人工验收
@@ -32,6 +34,9 @@
 - [x] 确认 ThemeData 仍可覆盖具体样式
 - [x] 确认 Popover 类型从包入口导出不变
 - [x] 确认 Tag Demo 覆盖 5 种配色和 4 种形态，Popover 六种配色均有组件测试
+- [x] 确认 `variant / colorScheme / status / style` 按调用语义和运行效果分层，不按枚举值名称机械归类
+- [x] 确认 `defaultVariant` 仅在 nullable 实例字段和真实子树默认需求下成立，`colorScheme / status` 不从 Theme 回退
+- [x] 确认历史 `TLinkThemeData.defaultColorScheme` 被记录为独立 breaking 债务，不阻塞无关 PR 且不得继续扩散
 
 ## 未覆盖项与后续工作
 
