@@ -45,3 +45,18 @@ enum TTagColorScheme {
   /// 成功色。
   success,
 }
+
+/// 标签绘制形态。
+enum TTagVariant {
+  /// 深色填充。
+  dark,
+
+  /// 浅色填充。
+  light,
+
+  /// 描边。
+  outline,
+
+  /// 浅色描边。
+  lightOutline,
+}

@@ -80,21 +80,31 @@ class _TCascaderPageState extends State<TCascaderPage> {
       desc: '用于从层级数据中选择一条路径。',
       exampleCodeGroup: 'cascader',
       children: [
-        ExampleModule(title: '弹出层用法', children: [
-          ExampleItem(desc: '底部弹出选择（确认后提交）', builder: _buildPopup),
-        ]),
-        ExampleModule(title: '基础用法', children: [
-          ExampleItem(desc: '标签导航', builder: _buildTab),
-          ExampleItem(desc: '步骤导航', builder: _buildStep),
-        ]),
-        ExampleModule(title: '选择状态', children: [
-          ExampleItem(desc: '默认选中路径', builder: _buildPreset),
-          ExampleItem(desc: '自定义占位文案', builder: _buildPlaceholder),
-        ]),
-        ExampleModule(title: '禁用状态', children: [
-          ExampleItem(desc: '禁用部分选项', builder: _buildDisabledOption),
-          ExampleItem(desc: '整体禁用', builder: _buildDisabled),
-        ]),
+        ExampleModule(
+          title: '弹出层用法',
+          children: [ExampleItem(desc: '底部弹出选择（确认后提交）', builder: _buildPopup)],
+        ),
+        ExampleModule(
+          title: '基础用法',
+          children: [
+            ExampleItem(desc: '标签导航', builder: _buildTab),
+            ExampleItem(desc: '步骤导航', builder: _buildStep),
+          ],
+        ),
+        ExampleModule(
+          title: '选择状态',
+          children: [
+            ExampleItem(desc: '默认选中路径', builder: _buildPreset),
+            ExampleItem(desc: '自定义占位文案', builder: _buildPlaceholder),
+          ],
+        ),
+        ExampleModule(
+          title: '禁用状态',
+          children: [
+            ExampleItem(desc: '禁用部分选项', builder: _buildDisabledOption),
+            ExampleItem(desc: '整体禁用', builder: _buildDisabled),
+          ],
+        ),
       ],
     );
   }
@@ -148,10 +158,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
 
   @ExampleCode(group: 'cascader')
   Widget _buildDisabled(BuildContext context) {
-    return const TCascader(
-      options: _options,
-      value: ['gd', 'sz', 'ns'],
-    );
+    return const TCascader(options: _options, value: ['gd', 'sz', 'ns']);
   }
 
   @ExampleCode(group: 'cascader')
@@ -160,8 +167,9 @@ class _TCascaderPageState extends State<TCascaderPage> {
       var options = _options;
       final labels = <String>[];
       for (final selectedValue in value) {
-        final matches =
-            options.where((option) => option.value == selectedValue).toList();
+        final matches = options
+            .where((option) => option.value == selectedValue)
+            .toList();
         if (matches.isEmpty) {
           break;
         }
@@ -181,7 +189,22 @@ class _TCascaderPageState extends State<TCascaderPage> {
           context,
           options: TPopupOptions.bottom(
             height: MediaQuery.sizeOf(context).height * 0.6,
-            titleWidget: const TText('选择地区'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: close,
+                child: const TText('取消'),
+              ),
+              title: const TText('选择地区'),
+              confirmButton: TextButton(
+                onPressed: () {
+                  if (mounted) {
+                    setState(() => _popupValue = List<Object?>.of(draft));
+                  }
+                  close();
+                },
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TCascader(
                 key: const Key('cascader-popup'),
@@ -192,11 +215,6 @@ class _TCascaderPageState extends State<TCascaderPage> {
                 },
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-                setState(() => _popupValue = List<Object?>.of(draft));
-              }
-            },
           ),
         );
       },

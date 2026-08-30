@@ -31,3 +31,10 @@
 ## 未覆盖项与后续工作
 
 - 翻页、禁用项和全部入口的真机连续交互仍需人工复核；静态截图不能替代交互验收。
+
+## 2026-08-31 develop 同步复验
+
+- 已合并 `origin/develop@fb26b8d5`，冲突按 develop 共享测试基建与本 PR ActionSheet 改动并集解决。
+- CI 同款 Flutter 3.32.0 Linux：页面 light/dark 与点击“常规列表型”后的 Overlay light/dark Golden 共 4 项，更新后不带 `--update-goldens` 复跑通过。
+- Flutter 3.32.0 与 3.47.0：组件聚焦测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
+- API 收敛复核：未新增、删除或重命名公共 API；改动仅涉及描述色、高度和分页点颜色。

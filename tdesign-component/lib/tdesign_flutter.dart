@@ -96,19 +96,24 @@ export 'src/components/navbar/t_nav_bar_theme_data.dart'
     show TNavBarThemeData, TNavBarBorder;
 export 'src/components/notice_bar/t_notice_bar.dart';
 export 'src/components/notice_bar/t_notice_bar_theme_data.dart'
-    show TNoticeBarThemeData, TNoticeBarVariant;
+    show TNoticeBarThemeData;
+export 'src/components/notice_bar/t_notice_bar_types.dart'
+    show TNoticeBarStatus;
 export 'src/components/picker/t_picker.dart';
 export 'src/components/picker/t_picker_theme_data.dart' show TPickerThemeData;
 export 'src/components/picker/t_picker_types.dart';
 export 'src/components/popover/t_popover.dart';
 export 'src/components/popover/t_popover_theme_data.dart'
-    show TPopoverThemeData, TPopoverColorScheme;
+    show TPopoverThemeData;
+export 'src/components/popover/t_popover_types.dart' show TPopoverColorScheme;
 export 'src/components/popover/t_popover_widget.dart';
 export 'src/components/popup/t_popup.dart'
     show
         TPopup,
         TPopupHandle,
+        TPopupHeader,
         TPopupOptions,
+        TPopupOverlayConfig,
         TPopupPlacement,
         TPopupTrigger,
         TPopupInset,
@@ -177,7 +182,7 @@ export 'src/components/tag/t_select_tag.dart';
 export 'src/components/tag/t_tag.dart';
 export 'src/components/tag/t_tag_theme_data.dart' show TTagThemeData;
 export 'src/components/tag/t_tag_types.dart'
-    show TTagColorScheme, TTagShape, TTagSize;
+    show TTagColorScheme, TTagShape, TTagSize, TTagVariant;
 export 'src/components/text/t_font_loader.dart';
 export 'src/components/text/t_text.dart';
 export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;

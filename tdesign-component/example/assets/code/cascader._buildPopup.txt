@@ -3,8 +3,9 @@ Widget _buildPopup(BuildContext context) {
       var options = _options;
       final labels = <String>[];
       for (final selectedValue in value) {
-        final matches =
-            options.where((option) => option.value == selectedValue).toList();
+        final matches = options
+            .where((option) => option.value == selectedValue)
+            .toList();
         if (matches.isEmpty) {
           break;
         }
@@ -24,7 +25,22 @@ Widget _buildPopup(BuildContext context) {
           context,
           options: TPopupOptions.bottom(
             height: MediaQuery.sizeOf(context).height * 0.6,
-            titleWidget: const TText('选择地区'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: close,
+                child: const TText('取消'),
+              ),
+              title: const TText('选择地区'),
+              confirmButton: TextButton(
+                onPressed: () {
+                  if (mounted) {
+                    setState(() => _popupValue = List<Object?>.of(draft));
+                  }
+                  close();
+                },
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => TCascader(
                 key: const Key('cascader-popup'),
@@ -35,11 +51,6 @@ Widget _buildPopup(BuildContext context) {
                 },
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-                setState(() => _popupValue = List<Object?>.of(draft));
-              }
-            },
           ),
         );
       },

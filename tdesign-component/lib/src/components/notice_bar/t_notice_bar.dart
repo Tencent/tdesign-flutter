@@ -3,20 +3,25 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
 import 't_notice_bar_theme_data.dart';
+import 't_notice_bar_types.dart';
 
 /// 公告栏点击区域
 enum TNoticeBarTapTarget {
-  /// 左侧图标
+  /// 前缀区域
   prefix,
 
   /// 公告内容
   content,
 
-  /// 右侧图标
+  /// 右侧操作区
+  operation,
+
+  /// 尾部图标
   suffix,
 }
 
@@ -26,35 +31,45 @@ class TNoticeBar extends StatefulWidget {
     super.key,
     this.content = '',
     this.items = const <String>[],
-    this.left,
-    this.right,
-    this.prefixIcon,
+    this.status = TNoticeBarStatus.info,
+    this.prefix,
+    this.operation,
     this.suffixIcon,
     this.direction = Axis.horizontal,
     this.maxLines = 1,
     this.marquee = false,
     this.speed = 50,
-    this.interval = const Duration(seconds: 3),
+    this.interval = const Duration(seconds: 2),
     this.onPressed,
   }) : assert(speed > 0, 'speed must be greater than zero'),
        assert(maxLines > 0, 'maxLines must be greater than zero');
 
-  /// 单条公告内容
+  /// 单条公告内容。
+  ///
+  /// 当 [items] 非空时不显示此内容。
   final String content;
 
-  /// 多条公告内容，主要用于垂直轮播
+  /// 多条公告内容，主要用于垂直轮播。
+  ///
+  /// 非空时作为内容数据源，并优先于 [content]。
   final List<String> items;
 
-  /// 左侧内容（自定义左侧内容，优先级高于prefixIcon）
-  final Widget? left;
+  /// 公告栏业务状态，决定默认配色和默认前缀图标。
+  final TNoticeBarStatus status;
 
-  /// 右侧内容（自定义右侧内容，优先级高于suffixIcon）
-  final Widget? right;
+  /// 自定义前缀区域。
+  ///
+  /// 为 null 时根据 [status] 显示默认图标；传入 [SizedBox.shrink] 可隐藏
+  /// 前缀区域。自定义内容负责该区域的间距；其中未显式指定颜色或尺寸的
+  /// [Icon] 会继承公告栏的状态图标颜色和标准图标尺寸。
+  final Widget? prefix;
 
-  /// 左侧图标；[left] 非空时不渲染。
-  final IconData? prefixIcon;
+  /// 内容右侧、[suffixIcon] 左侧的自定义操作区。
+  ///
+  /// 可以和 [suffixIcon] 同时显示。
+  final Widget? operation;
 
-  /// 右侧图标；[right] 非空时不渲染。
+  /// 尾部图标，可以和 [operation] 同时显示。
   final IconData? suffixIcon;
 
   /// 滚动方向
@@ -63,13 +78,14 @@ class TNoticeBar extends StatefulWidget {
   /// 文本行数（仅静态有效）
   final int maxLines;
 
-  /// 是否启用滚动展示
+  /// 是否启用横向跑马灯展示。
   final bool marquee;
 
-  /// 每秒滚动的逻辑像素
+  /// 横向跑马灯每秒滚动的逻辑像素，仅在 [direction] 为 [Axis.horizontal]
+  /// 且 [marquee] 为 true 时生效。
   final double speed;
 
-  /// 垂直轮播的切换间隔
+  /// 垂直轮播的切换间隔，仅在 [direction] 为 [Axis.vertical] 时生效。
   final Duration interval;
 
   /// 点击事件
@@ -83,7 +99,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
   ScrollController? _scrollController;
   Timer? _timer;
 
-  Size? _size;
+  double _contentViewportWidth = 0;
   late TNoticeBarThemeData _resolved;
 
   final GlobalKey _key = GlobalKey();
@@ -101,15 +117,14 @@ class _TNoticeBarState extends State<TNoticeBar> {
 
   TNoticeBarThemeData get _theme {
     final ext = Theme.of(context).extension<TNoticeBarThemeData>();
-    return (ext ?? const TNoticeBarThemeData()).resolve(context);
+    return (ext ?? const TNoticeBarThemeData()).resolve(
+      context,
+      status: widget.status,
+    );
   }
-
-  bool get _effectiveMarquee => widget.marquee;
 
   double get _effectiveSpeed =>
       widget.speed.isFinite && widget.speed > 0 ? widget.speed : 50;
-
-  Duration get _effectiveInterval => widget.interval;
 
   double get _effectiveHeight => _theme.height ?? 22;
 
@@ -141,9 +156,13 @@ class _TNoticeBarState extends State<TNoticeBar> {
     }
   }
 
+  bool get _shouldAnimate => widget.direction == Axis.horizontal
+      ? widget.marquee
+      : widget.items.length > 1;
+
   void _scheduleMarqueeStart() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _effectiveMarquee) {
+      if (mounted && _shouldAnimate) {
         _startTimer();
       }
     });
@@ -171,8 +190,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
     if (!mounted || controller == null || !controller.hasClients) {
       return;
     }
-    var scrollDistance =
-        _getContextWidth() + (_size!.width - _effectivePadding.horizontal);
+    // 滚动距离 = 文本宽度 + 公告栏可视区宽度（而非屏幕宽度），
+    // 保证文本滚出可视区后紧跟一个等宽的空白段再回绕，窄屏/宽屏表现一致。
+    var scrollDistance = _getContextWidth() + _getEmptyWidth();
     var remainder = scrollDistance % _effectiveSpeed;
     controller.jumpTo(0);
     var offset = 0.0 + _effectiveSpeed;
@@ -235,14 +255,13 @@ class _TNoticeBarState extends State<TNoticeBar> {
     if (content.isEmpty) {
       return;
     }
-    _timer = Timer.periodic(_effectiveInterval, (timer) {
+    _timer = Timer.periodic(widget.interval, (timer) {
       if (!mounted ||
           _scrollController == null ||
           !_scrollController!.hasClients) {
         timer.cancel();
         return;
       }
-      var time = (_effectiveHeight / _effectiveSpeed * 1000).round();
       if (step >= content.length) {
         step = 0;
         offset = 0;
@@ -252,7 +271,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
       offset += _effectiveHeight;
       _scrollController!.animateTo(
         offset,
-        duration: Duration(milliseconds: time),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.linear,
       );
     });
@@ -265,29 +284,35 @@ class _TNoticeBarState extends State<TNoticeBar> {
       text: TextSpan(text: text, style: _resolved.textStyle),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-      maxLines: _effectiveMarquee ? 1 : widget.maxLines,
-    )..layout(maxWidth: _size!.width);
+      maxLines: widget.marquee ? 1 : widget.maxLines,
+    )..layout(maxWidth: _getEmptyWidth());
     return textPainter.size;
   }
 
   /// 获取文本内容宽度
   double _getContextWidth() {
-    var contextWidth =
-        _key.currentContext?.findRenderObject()?.paintBounds.size.width ?? 0;
+    var contextWidth = _renderWidth(_key) ?? 0;
     if (contextWidth == 0) {
       contextWidth = _getFontSize().width;
     }
     return contextWidth;
   }
 
+  double? _renderWidth(GlobalKey key) {
+    final renderObject = key.currentContext?.findRenderObject();
+    if (renderObject is RenderBox && renderObject.hasSize) {
+      return renderObject.size.width;
+    }
+    return null;
+  }
+
   /// 获取滚动区域宽度
   double _getEmptyWidth() {
-    return _contentKey.currentContext
-            ?.findRenderObject() // coverage:ignore-line
-            ?.paintBounds // coverage:ignore-line
-            .size // coverage:ignore-line
-            .width ?? // coverage:ignore-line
-        (_size!.width - _effectivePadding.horizontal);
+    final measuredWidth = _renderWidth(_contentKey);
+    if (measuredWidth != null && measuredWidth > 0) {
+      return measuredWidth;
+    }
+    return _contentViewportWidth;
   }
 
   /// 获取文字高度
@@ -309,7 +334,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
           child: TText(
             displayText,
             style: _resolved.textStyle,
-            maxLines: _effectiveMarquee ? 1 : widget.maxLines,
+            maxLines: widget.marquee ? 1 : widget.maxLines,
           ),
         ),
       );
@@ -317,7 +342,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
       textWidget = const SizedBox.shrink();
     }
 
-    if (!_effectiveMarquee) {
+    if (widget.direction == Axis.horizontal && !widget.marquee) {
       return textWidget;
     }
 
@@ -405,11 +430,61 @@ class _TNoticeBarState extends State<TNoticeBar> {
     );
   }
 
+  Widget _buildCustomTapTarget(TNoticeBarTapTarget target, Widget child) {
+    if (widget.onPressed == null) {
+      return child;
+    }
+    // 自定义 Widget 内部可能拥有自己的手势识别器。使用原始指针
+    // 监听可在子组件处理业务点击的同时，稳定报告 NoticeBar 的自定义区域目标。
+    return Listener(
+      behavior: HitTestBehavior.opaque,
+      onPointerUp: (_) => widget.onPressed!(target),
+      child: child,
+    );
+  }
+
+  IconData get _defaultPrefixIcon {
+    switch (widget.status) {
+      case TNoticeBarStatus.info:
+        return TIcons.info_circle_filled;
+      case TNoticeBarStatus.success:
+        return TIcons.check_circle_filled;
+      case TNoticeBarStatus.warning:
+      case TNoticeBarStatus.error:
+        return TIcons.error_circle_filled;
+    }
+  }
+
+  Widget _buildPrefix() {
+    final prefix = widget.prefix;
+    if (prefix != null) {
+      return _buildCustomTapTarget(
+        TNoticeBarTapTarget.prefix,
+        IconTheme.merge(
+          data: IconThemeData(
+            color: _resolved.leftIconColor,
+            size: _effectiveHeight,
+          ),
+          child: prefix,
+        ),
+      );
+    }
+    return _buildBuiltInTapTarget(
+      TNoticeBarTapTarget.prefix,
+      Container(
+        margin: const EdgeInsets.only(right: 8),
+        child: Icon(
+          _defaultPrefixIcon,
+          color: _resolved.leftIconColor,
+          size: _effectiveHeight,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _init();
-    _size = MediaQuery.of(context).size;
-    final prefixIcon = widget.prefixIcon;
     final suffixIcon = widget.suffixIcon;
     return Container(
       padding: _effectivePadding,
@@ -418,35 +493,34 @@ class _TNoticeBarState extends State<TNoticeBar> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          /// 左侧widget
-          if (widget.left != null)
-            widget.left!
-          else if (prefixIcon != null)
-            _buildBuiltInTapTarget(
-              TNoticeBarTapTarget.prefix,
-              Container(
-                margin: const EdgeInsets.only(right: 8),
-                child: Icon(
-                  prefixIcon,
-                  color: _resolved.leftIconColor,
-                  size: _effectiveHeight,
-                ),
-              ),
-            ),
+          /// 前缀区域
+          _buildPrefix(),
 
           /// 中间内容
           Expanded(
             key: _contentKey,
-            child: _buildBuiltInTapTarget(
-              TNoticeBarTapTarget.content,
-              _contentWidget(),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                _contentViewportWidth = constraints.hasBoundedWidth
+                    ? constraints.maxWidth
+                    : 0;
+                return _buildBuiltInTapTarget(
+                  TNoticeBarTapTarget.content,
+                  _contentWidget(),
+                );
+              },
             ),
           ),
 
-          /// 右侧widget
-          if (widget.right != null)
-            widget.right!
-          else if (suffixIcon != null)
+          /// 右侧操作区
+          if (widget.operation != null)
+            _buildCustomTapTarget(
+              TNoticeBarTapTarget.operation,
+              widget.operation!,
+            ),
+
+          /// 尾部图标
+          if (suffixIcon != null)
             _buildBuiltInTapTarget(
               TNoticeBarTapTarget.suffix,
               Container(
