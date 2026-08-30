@@ -22,22 +22,17 @@ Never _throwPopupOptionsValidationError(String error) {
 ///
 /// | [TPopupPlacement] | 头部 / 关闭区 | 尺寸 |
 /// |-------------------|-------------|------|
-/// | [TPopupPlacement.bottom] | [headerBuilder]、[titleWidget]、[cancelBuilder]、[confirmBuilder] | [height]、[inset] |
+/// | [TPopupPlacement.bottom] | [headerBuilder] | [height]、[inset] |
 /// | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
 /// | [TPopupPlacement.top] | — | [height]、[inset] |
 /// | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[inset] |
 ///
-/// ## Builder 三态（[headerBuilder]、[cancelBuilder]、[confirmBuilder]、[closeBuilder]）
+/// [headerBuilder] 与 [closeBuilder] 默认均为 `null`，基础 Popup 只渲染
+/// [child]。显式提供 builder 时才会渲染相应区域，builder 可调用 `close`
+/// 关闭浮层。
 ///
-/// | 传参方式 | 效果 |
-/// |----------|------|
-/// | 省略（使用默认值） | 渲染内置 UI |
-/// | 显式 `null` | 隐藏该区域 |
-/// | 自定义 [TPopupHeaderBuilder] / [TPopupSlotBuilder] | 完全替换；需自行提供交互与语义，可调用 `close` 关闭浮层 |
-///
-/// [titleWidget] 默认为 `null`，表示无标题内容。
-///
-/// 生命周期回调见 [onOpen]、[onOpened]、[onClose]、[onClosed]、[onVisibleChange]、[onOverlayClick]。
+/// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
+/// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
 class TPopupOptions {
   /// 通用构造；[placement] 在运行时才能确定时使用。
   ///
@@ -50,137 +45,85 @@ class TPopupOptions {
     this.inset,
     this.radius,
     this.backgroundColor,
-    this.showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    this.overlayColor,
-    this.overlayOpacity,
-    this.modal = true,
+    this.overlay,
     this.destroyOnClose = false,
     this.animationDuration,
-    this.headerBuilder = _kPopupDefaultHeader,
-    this.titleWidget,
-    this.cancelBuilder = _kPopupDefaultCancel,
-    this.confirmBuilder = _kPopupDefaultConfirm,
-    this.closeBuilder = _kPopupDefaultClose,
-    this.onOpen,
+    this.headerBuilder,
+    this.closeBuilder,
     this.onOpened,
-    this.onClose,
     this.onClosed,
     this.onVisibleChange,
-    this.onOverlayClick,
-    this.useSafeArea = true,
-  }) : _closeOnOverlayClick = closeOnOverlayClick;
+    this.useSafeArea = false,
+  });
 
   /// 创建 [TPopupPlacement.bottom] 配置。
   ///
-  /// 固定 [placement] 为 [TPopupPlacement.bottom]；默认带内置头部。
+  /// 固定 [placement] 为 [TPopupPlacement.bottom]；默认不显示头部。
   /// 蒙层、动画、生命周期等字段语义见同名成员文档。
   factory TPopupOptions.bottom({
     required Widget child,
     double? height,
     TPopupBottomInset? inset,
-    TPopupHeaderBuilder? headerBuilder = _kPopupDefaultHeader,
-    Widget? titleWidget,
-    TPopupSlotBuilder? cancelBuilder = _kPopupDefaultCancel,
-    TPopupSlotBuilder? confirmBuilder = _kPopupDefaultConfirm,
+    TPopupHeaderBuilder? headerBuilder,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
-    bool useSafeArea = true,
-  }) =>
-      TPopupOptions(
-        child: child,
-        placement: TPopupPlacement.bottom,
-        height: height,
-        inset: inset,
-        headerBuilder: headerBuilder,
-        titleWidget: titleWidget,
-        cancelBuilder: cancelBuilder,
-        confirmBuilder: confirmBuilder,
-        radius: radius,
-        backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
-        destroyOnClose: destroyOnClose,
-        animationDuration: animationDuration,
-        onOpen: onOpen,
-        onOpened: onOpened,
-        onClose: onClose,
-        onClosed: onClosed,
-        onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
-        useSafeArea: useSafeArea,
-      );
+    bool useSafeArea = false,
+  }) => TPopupOptions(
+    child: child,
+    placement: TPopupPlacement.bottom,
+    height: height,
+    inset: inset,
+    headerBuilder: headerBuilder,
+    radius: radius,
+    backgroundColor: backgroundColor,
+    overlay: overlay,
+    destroyOnClose: destroyOnClose,
+    animationDuration: animationDuration,
+    onOpened: onOpened,
+    onClosed: onClosed,
+    onVisibleChange: onVisibleChange,
+    useSafeArea: useSafeArea,
+  );
 
   /// 创建 [TPopupPlacement.center] 配置。
   ///
-  /// 固定 [placement] 为 [TPopupPlacement.center]；默认展示面板外下方圆形关闭按钮。
+  /// 固定 [placement] 为 [TPopupPlacement.center]；默认不显示关闭按钮。
   factory TPopupOptions.center({
     required Widget child,
     double? width,
     double? height,
-    TPopupSlotBuilder? closeBuilder = _kPopupDefaultClose,
+    TPopupSlotBuilder? closeBuilder,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
-    bool useSafeArea = true,
-  }) =>
-      TPopupOptions(
-        child: child,
-        placement: TPopupPlacement.center,
-        width: width,
-        height: height,
-        closeBuilder: closeBuilder,
-        radius: radius,
-        backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
-        destroyOnClose: destroyOnClose,
-        animationDuration: animationDuration,
-        onOpen: onOpen,
-        onOpened: onOpened,
-        onClose: onClose,
-        onClosed: onClosed,
-        onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
-        useSafeArea: useSafeArea,
-      );
+    bool useSafeArea = false,
+  }) => TPopupOptions(
+    child: child,
+    placement: TPopupPlacement.center,
+    width: width,
+    height: height,
+    closeBuilder: closeBuilder,
+    radius: radius,
+    backgroundColor: backgroundColor,
+    overlay: overlay,
+    destroyOnClose: destroyOnClose,
+    animationDuration: animationDuration,
+    onOpened: onOpened,
+    onClosed: onClosed,
+    onVisibleChange: onVisibleChange,
+    useSafeArea: useSafeArea,
+  );
 
   /// 创建 [TPopupPlacement.top] 配置。
   ///
@@ -191,45 +134,28 @@ class TPopupOptions {
     TPopupTopInset? inset,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
-    bool useSafeArea = true,
-  }) =>
-      TPopupOptions(
-        child: child,
-        placement: TPopupPlacement.top,
-        height: height,
-        inset: inset,
-        radius: radius,
-        backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
-        destroyOnClose: destroyOnClose,
-        animationDuration: animationDuration,
-        onOpen: onOpen,
-        onOpened: onOpened,
-        onClose: onClose,
-        onClosed: onClosed,
-        onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
-        useSafeArea: useSafeArea,
-      );
+    bool useSafeArea = false,
+  }) => TPopupOptions(
+    child: child,
+    placement: TPopupPlacement.top,
+    height: height,
+    inset: inset,
+    radius: radius,
+    backgroundColor: backgroundColor,
+    overlay: overlay,
+    destroyOnClose: destroyOnClose,
+    animationDuration: animationDuration,
+    onOpened: onOpened,
+    onClosed: onClosed,
+    onVisibleChange: onVisibleChange,
+    useSafeArea: useSafeArea,
+  );
 
   /// 创建 [TPopupPlacement.left] 配置。
   ///
@@ -240,45 +166,28 @@ class TPopupOptions {
     TPopupLeftInset? inset,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
-    bool useSafeArea = true,
-  }) =>
-      TPopupOptions(
-        child: child,
-        placement: TPopupPlacement.left,
-        width: width,
-        inset: inset,
-        radius: radius,
-        backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
-        destroyOnClose: destroyOnClose,
-        animationDuration: animationDuration,
-        onOpen: onOpen,
-        onOpened: onOpened,
-        onClose: onClose,
-        onClosed: onClosed,
-        onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
-        useSafeArea: useSafeArea,
-      );
+    bool useSafeArea = false,
+  }) => TPopupOptions(
+    child: child,
+    placement: TPopupPlacement.left,
+    width: width,
+    inset: inset,
+    radius: radius,
+    backgroundColor: backgroundColor,
+    overlay: overlay,
+    destroyOnClose: destroyOnClose,
+    animationDuration: animationDuration,
+    onOpened: onOpened,
+    onClosed: onClosed,
+    onVisibleChange: onVisibleChange,
+    useSafeArea: useSafeArea,
+  );
 
   /// 创建 [TPopupPlacement.right] 配置。
   ///
@@ -289,45 +198,28 @@ class TPopupOptions {
     TPopupRightInset? inset,
     double? radius,
     Color? backgroundColor,
-    bool showOverlay = true,
-
-    /// 点击蒙层时是否关闭浮层；未传时跟随 [showOverlay]。
-    bool? closeOnOverlayClick,
-    Color? overlayColor,
-    double? overlayOpacity,
-    bool modal = true,
+    TPopupOverlayConfig? overlay,
     bool destroyOnClose = false,
     Duration? animationDuration,
-    VoidCallback? onOpen,
     VoidCallback? onOpened,
-    VoidCallback? onClose,
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
-    VoidCallback? onOverlayClick,
-    bool useSafeArea = true,
-  }) =>
-      TPopupOptions(
-        child: child,
-        placement: TPopupPlacement.right,
-        width: width,
-        inset: inset,
-        radius: radius,
-        backgroundColor: backgroundColor,
-        showOverlay: showOverlay,
-        closeOnOverlayClick: closeOnOverlayClick,
-        overlayColor: overlayColor,
-        overlayOpacity: overlayOpacity,
-        modal: modal,
-        destroyOnClose: destroyOnClose,
-        animationDuration: animationDuration,
-        onOpen: onOpen,
-        onOpened: onOpened,
-        onClose: onClose,
-        onClosed: onClosed,
-        onVisibleChange: onVisibleChange,
-        onOverlayClick: onOverlayClick,
-        useSafeArea: useSafeArea,
-      );
+    bool useSafeArea = false,
+  }) => TPopupOptions(
+    child: child,
+    placement: TPopupPlacement.right,
+    width: width,
+    inset: inset,
+    radius: radius,
+    backgroundColor: backgroundColor,
+    overlay: overlay,
+    destroyOnClose: destroyOnClose,
+    animationDuration: animationDuration,
+    onOpened: onOpened,
+    onClosed: onClosed,
+    onVisibleChange: onVisibleChange,
+    useSafeArea: useSafeArea,
+  );
 
   /// 浮层主体内容（必填）。
   final Widget child;
@@ -354,75 +246,42 @@ class TPopupOptions {
   /// * [TPopupPlacement.center] 不支持
   final TPopupInset? inset;
 
-  /// 内容区圆角，默认主题大圆角。
+  /// 内容区圆角。
+  ///
+  /// [TPopupPlacement.top]、[TPopupPlacement.bottom]、[TPopupPlacement.center]
+  /// 默认取主题大圆角；[TPopupPlacement.left]、[TPopupPlacement.right]
+  /// 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过
+  /// [TPopupThemeData.panelRadius] 注入时应用圆角。
   final double? radius;
 
   /// 内容区背景色，默认主题容器色。
   final Color? backgroundColor;
 
-  /// 是否绘制半透明蒙层。
-  ///
-  /// 当 [modal] 为 true 且此值为 false 时，为“透明模态弹层”。
-  final bool showOverlay;
+  /// 蒙层行为配置；为 null 时使用 [TPopupOverlayConfig] 默认值（标准模态弹层）。
+  final TPopupOverlayConfig? overlay;
 
-  final bool? _closeOnOverlayClick;
-
-  /// 点击可见蒙层是否关闭。
-  ///
-  /// 省略时默认跟随 [showOverlay]：显示蒙层时为 true，否则为 false。
-  bool get closeOnOverlayClick => _closeOnOverlayClick ?? showOverlay;
-
-  /// 蒙层颜色，默认 black54。
-  final Color? overlayColor;
-
-  /// 蒙层透明度系数（0–1），与 [overlayColor] 的 alpha 相乘后用于绘制。
-  final double? overlayOpacity;
-
-  /// 是否以模态方式展示；为 true 时阻断背景交互与底层语义/焦点。
-  ///
-  /// 结合 [showOverlay] 可表达三种模式：
-  /// * `modal=true, showOverlay=true`：标准模态弹层
-  /// * `modal=true, showOverlay=false`：透明模态弹层
-  /// * `modal=false, showOverlay=false`：非模态浮层
-  final bool modal;
+  /// 解析后的蒙层配置；未传时使用默认值。
+  TPopupOverlayConfig get overlayConfig =>
+      overlay ?? const TPopupOverlayConfig();
 
   /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
   final bool destroyOnClose;
 
-  /// 打开/关闭动画时长。
+  /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
   final Duration? animationDuration;
 
-  /// bottom 头部；仅 [TPopupPlacement.bottom] 生效。三态见类文档「Builder 三态」。
+  /// bottom 头部；仅 [TPopupPlacement.bottom] 生效，默认不显示。
   ///
-  /// 自定义时忽略 [titleWidget]、[cancelBuilder]、[confirmBuilder]。
+  /// 可返回 [TPopupHeader] 组合取消按钮、标题和确认按钮；builder 的 `close`
+  /// 参数只负责关闭 Popup，不会自动生成任何按钮。
   final TPopupHeaderBuilder? headerBuilder;
 
-  /// bottom 标题插槽；仅 [headerBuilder] 为内置默认时生效。`null` 表示无标题。
-  final Widget? titleWidget;
-
-  /// bottom 左侧操作槽；仅 [headerBuilder] 为内置默认时生效。
-  ///
-  /// 内置默认为「取消」，点击触发 [TPopupTrigger.cancel]。
-  final TPopupSlotBuilder? cancelBuilder;
-
-  /// bottom 右侧操作槽；仅 [headerBuilder] 为内置默认时生效。
-  ///
-  /// 内置默认为「确定」，点击触发 [TPopupTrigger.confirm]。
-  final TPopupSlotBuilder? confirmBuilder;
-
-  /// center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效。三态见类文档「Builder 三态」。
-  ///
-  /// 内置默认点击触发 [TPopupTrigger.close]。
+  /// center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效，默认不显示。
+  /// builder 的 `close` 参数只负责关闭 Popup，不会自动生成关闭按钮。
   final TPopupSlotBuilder? closeBuilder;
-
-  /// 路由 push 时（打开动画开始前）。
-  final VoidCallback? onOpen;
 
   /// 打开动画结束。
   final VoidCallback? onOpened;
-
-  /// 开始关闭（与 [onVisibleChange] 的 `visible: false` 同期）。
-  final VoidCallback? onClose;
 
   /// 当前展示周期真正结束。
   ///
@@ -432,18 +291,16 @@ class TPopupOptions {
   /// 显隐变化；第二个参数为 [TPopupTrigger]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
-  /// 蒙层点击；是否关闭取决于 [closeOnOverlayClick]。
-  final VoidCallback? onOverlayClick;
-
-  /// 是否避让系统安全区，默认 true；center 使用完整安全区，其他方向避让贴边侧及相邻边。
+  /// 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。
   ///
   /// 为 true 时通过 [Positioned] 偏移使面板不侵入刘海、Home Indicator 等区域；
-  /// top/bottom/left/right 还会与对应 [inset] 叠加。设为 false 可贴满屏幕边缘。
+  /// top/bottom/left/right 还会与对应 [inset] 叠加。需要避让时显式设为 true；
+  /// 也可以在 [child] 内使用 Flutter 原生 [SafeArea]，只约束内容而保留面板背景贴边。
   final bool useSafeArea;
 
   /// 返回配置副本。
   ///
-  /// 未传入的字段保持原值；对头部/关闭相关插槽显式传入 `null` 表示隐藏该区域。
+  /// 未传入的字段保持原值；对头部/关闭 builder 显式传入 `null` 表示隐藏该区域。
   TPopupOptions copyWith({
     Widget? child,
     TPopupPlacement? placement,
@@ -452,31 +309,22 @@ class TPopupOptions {
     Object? inset = _unset,
     Object? radius = _unset,
     Object? backgroundColor = _unset,
-    bool? showOverlay,
-    Object? closeOnOverlayClick = _unset,
-    Object? overlayColor = _unset,
-    Object? overlayOpacity = _unset,
-    bool? modal,
+    Object? overlay = _unset,
     bool? destroyOnClose,
     Duration? animationDuration,
     Object? headerBuilder = _unset,
-    Object? titleWidget = _unset,
-    Object? cancelBuilder = _unset,
-    Object? confirmBuilder = _unset,
     Object? closeBuilder = _unset,
-    Object? onOpen = _unset,
     Object? onOpened = _unset,
-    Object? onClose = _unset,
     Object? onClosed = _unset,
     Object? onVisibleChange = _unset,
-    Object? onOverlayClick = _unset,
     bool? useSafeArea,
   }) {
     return TPopupOptions(
       child: child ?? this.child,
       placement: placement ?? this.placement,
-      width:
-          identical(width, _unset) ? this.width : (width as num?)?.toDouble(),
+      width: identical(width, _unset)
+          ? this.width
+          : (width as num?)?.toDouble(),
       height: identical(height, _unset)
           ? this.height
           : (height as num?)?.toDouble(),
@@ -487,49 +335,26 @@ class TPopupOptions {
       backgroundColor: identical(backgroundColor, _unset)
           ? this.backgroundColor
           : backgroundColor as Color?,
-      showOverlay: showOverlay ?? this.showOverlay,
-      closeOnOverlayClick: identical(closeOnOverlayClick, _unset)
-          ? _closeOnOverlayClick
-          : closeOnOverlayClick as bool?,
-      overlayColor: identical(overlayColor, _unset)
-          ? this.overlayColor
-          : overlayColor as Color?,
-      overlayOpacity: identical(overlayOpacity, _unset)
-          ? this.overlayOpacity
-          : (overlayOpacity as num?)?.toDouble(),
-      modal: modal ?? this.modal,
+      overlay: identical(overlay, _unset)
+          ? this.overlay
+          : overlay as TPopupOverlayConfig?,
       destroyOnClose: destroyOnClose ?? this.destroyOnClose,
       animationDuration: animationDuration ?? this.animationDuration,
       headerBuilder: identical(headerBuilder, _unset)
           ? this.headerBuilder
           : headerBuilder as TPopupHeaderBuilder?,
-      titleWidget: identical(titleWidget, _unset)
-          ? this.titleWidget
-          : titleWidget as Widget?,
-      cancelBuilder: identical(cancelBuilder, _unset)
-          ? this.cancelBuilder
-          : cancelBuilder as TPopupSlotBuilder?,
-      confirmBuilder: identical(confirmBuilder, _unset)
-          ? this.confirmBuilder
-          : confirmBuilder as TPopupSlotBuilder?,
       closeBuilder: identical(closeBuilder, _unset)
           ? this.closeBuilder
           : closeBuilder as TPopupSlotBuilder?,
-      onOpen: identical(onOpen, _unset) ? this.onOpen : onOpen as VoidCallback?,
       onOpened: identical(onOpened, _unset)
           ? this.onOpened
           : onOpened as VoidCallback?,
-      onClose:
-          identical(onClose, _unset) ? this.onClose : onClose as VoidCallback?,
       onClosed: identical(onClosed, _unset)
           ? this.onClosed
           : onClosed as VoidCallback?,
       onVisibleChange: identical(onVisibleChange, _unset)
           ? this.onVisibleChange
           : onVisibleChange as TPopupVisibleChangeCallback?,
-      onOverlayClick: identical(onOverlayClick, _unset)
-          ? this.onOverlayClick
-          : onOverlayClick as VoidCallback?,
       useSafeArea: useSafeArea ?? this.useSafeArea,
     );
   }
@@ -546,65 +371,16 @@ class TPopupOptions {
       inset: inset,
       radius: radius,
       backgroundColor: backgroundColor,
-      showOverlay: showOverlay,
-      closeOnOverlayClick: _closeOnOverlayClick,
-      overlayColor: overlayColor,
-      overlayOpacity: overlayOpacity,
-      modal: modal,
+      overlay: overlay,
       destroyOnClose: destroyOnClose,
       animationDuration: animationDuration,
       headerBuilder: isBottom ? headerBuilder : null,
-      titleWidget: isBottom ? titleWidget : null,
-      cancelBuilder: isBottom ? cancelBuilder : null,
-      confirmBuilder: isBottom ? confirmBuilder : null,
       closeBuilder: isCenter ? closeBuilder : null,
-      onOpen: onOpen,
       onOpened: onOpened,
-      onClose: onClose,
       onClosed: onClosed,
       onVisibleChange: onVisibleChange,
-      onOverlayClick: onOverlayClick,
       useSafeArea: useSafeArea,
     );
-  }
-
-  bool get usesDefaultHeader => _isPopupDefaultHeader(headerBuilder);
-
-  bool get usesDefaultCancel => _isPopupDefaultCancel(cancelBuilder);
-
-  bool get usesDefaultConfirm => _isPopupDefaultConfirm(confirmBuilder);
-
-  bool get usesDefaultClose => _isPopupDefaultClose(closeBuilder);
-
-  bool get useCustomHeader =>
-      placement == TPopupPlacement.bottom &&
-      headerBuilder != null &&
-      !_isPopupDefaultHeader(headerBuilder);
-
-  bool get useDefaultHeader =>
-      placement == TPopupPlacement.bottom &&
-      _isPopupDefaultHeader(headerBuilder);
-
-  bool get showCancelSlot =>
-      placement == TPopupPlacement.bottom &&
-      useDefaultHeader &&
-      cancelBuilder != null;
-
-  bool get showConfirmSlot =>
-      placement == TPopupPlacement.bottom &&
-      useDefaultHeader &&
-      confirmBuilder != null;
-
-  bool get hasBuiltInHeader {
-    if (placement != TPopupPlacement.bottom || headerBuilder == null) {
-      return false;
-    }
-    if (useCustomHeader) {
-      return true;
-    }
-    return cancelBuilder != null ||
-        confirmBuilder != null ||
-        titleWidget != null;
   }
 
   void assertPlacementParams() {
@@ -657,24 +433,13 @@ class TPopupOptions {
         }
         break;
     }
-    final hasBottomHeaderCustom = !_isPopupDefaultHeader(headerBuilder) ||
-        titleWidget != null ||
-        !_isPopupDefaultCancel(cancelBuilder) ||
-        !_isPopupDefaultConfirm(confirmBuilder);
-    if (placement != TPopupPlacement.bottom && hasBottomHeaderCustom) {
-      return 'header/titleWidget/cancel/confirmBuilder only apply to '
+    if (placement != TPopupPlacement.bottom && headerBuilder != null) {
+      return 'headerBuilder only applies to '
           'placement=bottom (got placement=$placement).';
     }
-    if (placement != TPopupPlacement.center &&
-        !_isPopupDefaultClose(closeBuilder)) {
+    if (placement != TPopupPlacement.center && closeBuilder != null) {
       return 'closeBuilder only applies to placement=center '
           '(got placement=$placement).';
-    }
-    if (showOverlay && !modal) {
-      return 'showOverlay=true requires modal=true.';
-    }
-    if (!showOverlay && _closeOnOverlayClick == true) {
-      return 'closeOnOverlayClick=true requires showOverlay=true.';
     }
     return null;
   }

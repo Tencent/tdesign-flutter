@@ -16,6 +16,13 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('tag', [
+    'test/components/tag/t_select_tag_test.dart',
+    'test/components/tag/t_tag_test.dart',
+  ]),
+  ComponentTestSuite('popover', [
+    'test/components/popover/t_popover_test.dart',
+  ]),
   ComponentTestSuite('checkbox', [
     'test/components/checkbox/t_check_box_group_test.dart',
     'test/components/checkbox/t_checkbox_test.dart',
@@ -38,8 +45,19 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/link/t_link_theme_test.dart',
     'test/components/link/t_link_widget_test.dart',
   ]),
-  ComponentTestSuite('popover', [
-    'test/components/popover/t_popover_test.dart',
+  ComponentTestSuite('notice_bar', [
+    'test/components/notice_bar/t_notice_bar_test.dart',
+  ]),
+  ComponentTestSuite('popup', [
+    'test/components/popup/t_feedback_theme_data_test.dart',
+    'test/components/popup/t_popup_options_contract_test.dart',
+    'test/components/popup/t_popup_theme_test.dart',
+    'test/components/popup/t_popup_widget_test.dart',
+    'test/t_popup_coverage_test.dart',
+    'test/t_popup_layout_test.dart',
+    'test/t_popup_options_test.dart',
+    'test/t_popup_route_test.dart',
+    'test/t_popup_test.dart',
   ]),
   ComponentTestSuite('radio', [
     'test/components/radio/t_radio_test.dart',

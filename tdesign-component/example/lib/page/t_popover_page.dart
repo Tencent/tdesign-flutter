@@ -33,7 +33,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
             ? TPopoverColorScheme.light
-            : TPopoverColorScheme.dark;
+            : TPopoverColorScheme.defaultTheme;
       });
     });
   }
@@ -75,7 +75,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                             child: CodeWrapper(builder: _buildLightPopover),
                           ),
                           Expanded(
-                            child: CodeWrapper(builder: _buildInfoPopover),
+                            child: CodeWrapper(builder: _buildPrimaryPopover),
                           ),
                         ],
                       ),
@@ -89,7 +89,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                             child: CodeWrapper(builder: _buildWarningPopover),
                           ),
                           Expanded(
-                            child: CodeWrapper(builder: _buildErrorPopover),
+                            child: CodeWrapper(builder: _buildDangerPopover),
                           ),
                         ],
                       ),
@@ -676,7 +676,7 @@ class _TPopoverPage extends State<TPopoverPage> {
   }
 
   @ExampleCode(group: 'popover')
-  Widget _buildInfoPopover(BuildContext context) {
+  Widget _buildPrimaryPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -691,7 +691,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               TPopover.showPopover(
                 context: popoverContext,
                 content: '弹出气泡内容',
-                colorScheme: TPopoverColorScheme.info,
+                colorScheme: TPopoverColorScheme.primary,
               );
             },
           );
@@ -751,7 +751,7 @@ class _TPopoverPage extends State<TPopoverPage> {
   }
 
   @ExampleCode(group: 'popover')
-  Widget _buildErrorPopover(BuildContext context) {
+  Widget _buildDangerPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -766,7 +766,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               TPopover.showPopover(
                 context: popoverContext,
                 content: '弹出气泡内容',
-                colorScheme: TPopoverColorScheme.error,
+                colorScheme: TPopoverColorScheme.danger,
               );
             },
           );

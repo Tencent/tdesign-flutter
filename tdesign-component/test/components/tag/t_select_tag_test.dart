@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// 覆盖 [TSelectTag] 的选中/未选中、colorScheme、icon、size 与 onChanged 分支。
+/// 覆盖 [TSelectTag] 的选中/未选中、colorScheme、variant、icon、size 与 onChanged 分支。
 void main() {
   Widget wrap(Widget child, {TTagThemeData? tagTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
@@ -64,11 +64,12 @@ void main() {
     testWidgets('未选中带 onChanged，点击触发取反回调', (tester) async {
       var changed = false;
       await tester.pumpWidget(wrap(
-        TSelectTag(
-          '点击',
-          value: false,
-          colorScheme: TTagColorScheme.primary,
-          icon: Icons.star,
+          TSelectTag(
+            '点击',
+            value: false,
+            colorScheme: TTagColorScheme.primary,
+            variant: TTagVariant.light,
+            icon: Icons.star,
           size: TTagSize.small,
           onChanged: (v) => changed = v,
         ),
@@ -78,6 +79,7 @@ void main() {
       await tester.tap(find.byType(TSelectTag));
       await tester.pump();
       expect(changed, isTrue);
+      expect(tester.widget<TTag>(find.byType(TTag)).variant, TTagVariant.light);
     });
 
     testWidgets('无 onChanged 时使用禁用态，即使 value 为 true', (tester) async {

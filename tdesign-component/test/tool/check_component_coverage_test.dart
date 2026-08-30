@@ -69,7 +69,15 @@ end_of_record
   test('defines every component covered by the regression matrix', () {
     expect(
       componentTargets.keys,
-      containsAll(['form', 'input', 'refresh', 'switch', 'textarea', 'upload']),
+      containsAll([
+        'form',
+        'input',
+        'popup',
+        'refresh',
+        'switch',
+        'textarea',
+        'upload',
+      ]),
     );
   });
 

@@ -2,6 +2,8 @@ import 'dart:io';
 
 const componentTargets = <String, List<String>>{
   'button': ['lib/src/components/button/'],
+  'tag': ['lib/src/components/tag/'],
+  'popover': ['lib/src/components/popover/'],
   'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],
   'fab': ['lib/src/components/fab/'],
@@ -9,7 +11,8 @@ const componentTargets = <String, List<String>>{
   'icon': ['lib/src/components/icon/'],
   'input': ['lib/src/components/input/'],
   'link': ['lib/src/components/link/'],
-  'popover': ['lib/src/components/popover/'],
+  'notice_bar': ['lib/src/components/notice_bar/'],
+  'popup': ['lib/src/components/popup/'],
   'radio': ['lib/src/components/radio/'],
   'rate': ['lib/src/components/rate/'],
   'refresh': [

@@ -2,13 +2,16 @@ Widget _customNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
       TNoticeBarThemeData(
-        variant: TNoticeBarVariant.info,
         backgroundColor: context.tTheme.bgColorComponent,
+        leftIconColor: context.tTheme.textColorPrimary,
       ),
     ),
     child: const TNoticeBar(
-      content: '这是一条普通的通知信息',
-      prefixIcon: TIcons.notification,
+      content: '提示文字描述提示文字描述提示文字描述',
+      prefix: Padding(
+        padding: EdgeInsets.only(right: 8),
+        child: Icon(TIcons.sound),
+      ),
       suffixIcon: TIcons.chevron_right,
     ),
   );
