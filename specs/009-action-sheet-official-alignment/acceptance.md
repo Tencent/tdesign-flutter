@@ -38,3 +38,4 @@
 - CI 同款 Flutter 3.32.0 Linux：页面 light/dark 与点击“常规列表型”后的 Overlay light/dark Golden 共 4 项，更新后不带 `--update-goldens` 复跑通过。
 - Flutter 3.32.0 与 3.47.0：组件聚焦测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
 - API 收敛复核：未新增、删除或重命名公共 API；改动仅涉及描述色、高度和分页点颜色。
+- 站点 README 已移除旧的文件/分享/图片处理业务示例，改为与当前公开 Demo 一致的描述列表、分页宫格和状态示例；`showGroup` 仍保留在 API 摘要中。

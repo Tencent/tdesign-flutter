@@ -13,21 +13,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 使用场景
 
-ActionSheet 通过 `TActionSheet.showList`、`showGrid` 和 `showGroup` 命令式打开，适合文件操作、分享方式和图片编辑等短流程操作。选择项目后会自动关闭面板，并通过 `onChanged` 返回被选中的项目。
+ActionSheet 通过 `TActionSheet.showList`、`showGrid` 和 `showGroup` 命令式打开。选择项目后会自动关闭面板，并通过 `onChanged` 返回被选中的项目。
 
 ```dart
 TActionSheet.showList(
   context,
-  subtitle: '报告-2026-Q3.pdf',
+  cancelText: 'cancel',
+  subtitle: 'Email Settings',
   items: [
-    TActionSheetItem(label: '编辑内容', icon: const Icon(TIcons.edit)),
-    TActionSheetItem(label: '复制链接', icon: const Icon(TIcons.link)),
-    TActionSheetItem(label: '移动到文件夹', icon: const Icon(TIcons.folder)),
-    TActionSheetItem(
-      label: '删除文件',
-      icon: const Icon(TIcons.delete),
-      disabled: true,
-    ),
+    TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
+    TActionSheetItem(label: 'Add to Tasks', icon: const Icon(TIcons.cloud_upload)),
   ],
   onChanged: (item, index) {
     // 执行业务操作
@@ -35,62 +30,40 @@ TActionSheet.showList(
 );
 ```
 
-## 宫格与分组
+## 宫格与状态
 
 `icon` 是完整的 Widget 插槽。普通 `Icon` 会继承 ActionSheet 的默认字号和颜色；渠道图标、品牌图标或带背景的工具图标由调用方直接构造完整 Widget，组件不会强制缩放。
 
 ```dart
 TActionSheet.showGrid(
   context,
-  subtitle: '选择分享方式',
-  items: [
-    TActionSheetItem(
-      label: '消息',
-      icon: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: context.tTheme.successLightColor,
-          shape: BoxShape.circle,
-        ),
-        alignment: Alignment.center,
-        child: Icon(
-          TIcons.chat,
-          size: 24,
-          color: context.tTheme.successNormalColor,
-        ),
-      ),
+  items: List.generate(
+    16,
+    (index) => TActionSheetItem(
+      label: '标题文字',
+      icon: const Icon(TIcons.image),
     ),
-    TActionSheetItem(label: '邮件', icon: const Icon(TIcons.mail)),
-    TActionSheetItem(label: '复制链接', icon: const Icon(TIcons.link)),
-    TActionSheetItem(label: '生成二维码', icon: const Icon(TIcons.qrcode)),
-  ],
+  ),
+  showPagination: true,
+  count: 8,
+  rows: 2,
   onChanged: (item, index) {},
 );
 
-TActionSheet.showGroup(
+TActionSheet.showList(
   context,
+  cancelText: 'cancel',
   items: [
     TActionSheetItem(
-      label: '旋转',
-      group: '图片处理',
-      icon: const Icon(TIcons.rotate),
+      label: 'Mark as important',
+      textStyle: TextStyle(color: context.tTheme.brandNormalColor),
     ),
     TActionSheetItem(
-      label: '裁剪',
-      group: '图片处理',
-      icon: const Icon(TIcons.cut),
-    ),
-    TActionSheetItem(
-      label: '滤镜',
-      group: '图片处理',
-      icon: const Icon(TIcons.filter),
-    ),
-    TActionSheetItem(
-      label: '删除图片',
-      group: '危险操作',
+      label: 'Unsubscribe',
       icon: const Icon(TIcons.delete),
+      textStyle: TextStyle(color: context.tTheme.errorNormalColor),
     ),
+    TActionSheetItem(label: 'Add to Tasks', disabled: true),
   ],
   onChanged: (item, index) {},
 );
