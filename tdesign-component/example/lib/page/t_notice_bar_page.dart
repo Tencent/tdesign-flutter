@@ -51,14 +51,14 @@ class TNoticeBarPage extends StatelessWidget {
 
 @ExampleCode(group: 'noticeBar')
 Widget _textNoticeBar(BuildContext context) {
-  return const TNoticeBar(content: '这是一条普通的通知信息');
+  return const TNoticeBar(content: '这是一条普通的通知信息', prefix: SizedBox.shrink());
 }
 
 @ExampleCode(group: 'noticeBar')
 Widget _iconNoticeBar(BuildContext context) {
   return const TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述',
-    prefixIcon: TIcons.error_circle_filled,
+    prefix: Icon(TIcons.error_circle_filled),
   );
 }
 
@@ -66,7 +66,6 @@ Widget _iconNoticeBar(BuildContext context) {
 Widget _closeNoticeBar(BuildContext context) {
   return TNoticeBar(
     content: '这是一条普通的通知信息',
-    prefixIcon: TIcons.error_circle_filled,
     suffixIcon: TIcons.close,
     onPressed: (target) {
       if (target == TNoticeBarTapTarget.suffix) {
@@ -78,36 +77,20 @@ Widget _closeNoticeBar(BuildContext context) {
 
 @ExampleCode(group: 'noticeBar')
 Widget _entranceNoticeBar(BuildContext context) {
-  final noticeTheme =
-      (Theme.of(context).extension<TNoticeBarThemeData>() ??
-              const TNoticeBarThemeData())
-          .resolve(context);
   return Column(
     children: [
       TNoticeBar(
         content: '这是一条普通的通知信息',
-        prefixIcon: TIcons.error_circle_filled,
-        right: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TLink(
-              child: const Text('详情'),
-              colorScheme: TLinkColorScheme.primary,
-              onPressed: () => TToast.showText('点击了详情', context: context),
-            ),
-            const SizedBox(width: 12),
-            Icon(
-              TIcons.chevron_right,
-              color: noticeTheme.rightIconColor,
-              size: noticeTheme.height,
-            ),
-          ],
+        operation: TLink(
+          child: const Text('详情'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () => TToast.showText('点击了详情', context: context),
         ),
+        suffixIcon: TIcons.chevron_right,
       ),
       const SizedBox(height: 16),
       TNoticeBar(
         content: '这是一条普通的通知信息',
-        prefixIcon: TIcons.error_circle_filled,
         suffixIcon: TIcons.chevron_right,
         onPressed: (target) {
           if (target == TNoticeBarTapTarget.suffix) {
@@ -124,14 +107,16 @@ Widget _customNoticeBar(BuildContext context) {
   return Theme(
     data: Theme.of(context).mergeExtension(
       TNoticeBarThemeData(
-        variant: TNoticeBarVariant.info,
         backgroundColor: context.tTheme.bgColorComponent,
         leftIconColor: context.tTheme.textColorPrimary,
       ),
     ),
     child: const TNoticeBar(
       content: '提示文字描述提示文字描述提示文字描述',
-      prefixIcon: TIcons.sound,
+      prefix: Padding(
+        padding: EdgeInsets.only(right: 8),
+        child: Icon(TIcons.sound),
+      ),
       suffixIcon: TIcons.chevron_right,
     ),
   );
@@ -139,71 +124,29 @@ Widget _customNoticeBar(BuildContext context) {
 
 @ExampleCode(group: 'noticeBar')
 Widget _themeNoticeBars(BuildContext context) {
-  return Column(
+  return const Column(
     children: [
-      const TNoticeBar(
-        content: '默认状态公告栏默认状态公告栏',
-        prefixIcon: TIcons.error_circle_filled,
-      ),
-      const SizedBox(height: 16),
-      Theme(
-        data: Theme.of(context).mergeExtension(
-          const TNoticeBarThemeData(variant: TNoticeBarVariant.success),
-        ),
-        child: const TNoticeBar(
-          content: '成功状态公告栏成功状态公告栏',
-          prefixIcon: TIcons.check_circle_filled,
-        ),
-      ),
-      const SizedBox(height: 16),
-      Theme(
-        data: Theme.of(context).mergeExtension(
-          const TNoticeBarThemeData(variant: TNoticeBarVariant.warning),
-        ),
-        child: const TNoticeBar(
-          content: '警示状态公告栏警示状态公告栏',
-          prefixIcon: TIcons.error_circle_filled,
-        ),
-      ),
-      const SizedBox(height: 16),
-      Theme(
-        data: Theme.of(context).mergeExtension(
-          const TNoticeBarThemeData(variant: TNoticeBarVariant.error),
-        ),
-        child: const TNoticeBar(
-          content: '错误状态公告栏错误状态公告栏',
-          prefixIcon: TIcons.error_circle_filled,
-        ),
-      ),
+      TNoticeBar(content: '默认状态公告栏默认状态公告栏'),
+      SizedBox(height: 16),
+      TNoticeBar(status: TNoticeBarStatus.success, content: '成功状态公告栏成功状态公告栏'),
+      SizedBox(height: 16),
+      TNoticeBar(status: TNoticeBarStatus.warning, content: '警示状态公告栏警示状态公告栏'),
+      SizedBox(height: 16),
+      TNoticeBar(status: TNoticeBarStatus.error, content: '错误状态公告栏错误状态公告栏'),
     ],
   );
 }
 
 @ExampleCode(group: 'noticeBar')
 Widget _customContentNoticeBar(BuildContext context) {
-  final noticeTheme =
-      (Theme.of(context).extension<TNoticeBarThemeData>() ??
-              const TNoticeBarThemeData())
-          .resolve(context);
   return TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述',
-    prefixIcon: TIcons.error_circle_filled,
-    right: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TLink(
-          child: const Text('详情'),
-          colorScheme: TLinkColorScheme.primary,
-          onPressed: () => TToast.showText('点击了详情', context: context),
-        ),
-        const SizedBox(width: 12),
-        Icon(
-          TIcons.close,
-          color: noticeTheme.rightIconColor,
-          size: noticeTheme.height,
-        ),
-      ],
+    operation: TLink(
+      child: const Text('详情'),
+      colorScheme: TLinkColorScheme.primary,
+      onPressed: () => TToast.showText('点击了详情', context: context),
     ),
+    suffixIcon: TIcons.close,
   );
 }
 
@@ -213,22 +156,22 @@ Widget _scrollingNoticeBars(BuildContext context) {
     children: [
       TNoticeBar(
         content: '提示文字描述提示文字描述提示文字描述提示文字描述文',
+        prefix: SizedBox.shrink(),
         marquee: true,
         speed: 80,
       ),
       SizedBox(height: 16),
       TNoticeBar(
         content: '提示文字描述提示文字描述提示文字描述提示文字描述文',
-        prefixIcon: TIcons.error_circle_filled,
         marquee: true,
         speed: 60,
       ),
       SizedBox(height: 16),
       TNoticeBar(
-        prefixIcon: TIcons.error_circle_filled,
+        prefix: Icon(TIcons.sound),
         items: ['君不见', '高堂明镜悲白发', '朝如青丝暮成雪', '人生得意须尽欢', '莫使金樽空对月'],
         direction: Axis.vertical,
-        marquee: true,
+        interval: Duration(seconds: 3),
       ),
     ],
   );

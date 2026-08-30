@@ -47,20 +47,20 @@ void main() {
     expect(notices, hasLength(14));
 
     expect(notices[0].content, '这是一条普通的通知信息');
-    expect(notices[0].prefixIcon, isNull);
+    expect(notices[0].prefix, isA<SizedBox>());
     expect(notices[1].content, '提示文字描述提示文字描述提示文字描述');
-    expect(notices[1].prefixIcon, TIcons.error_circle_filled);
-    expect(notices[2].prefixIcon, TIcons.error_circle_filled);
+    expect((notices[1].prefix! as Icon).icon, TIcons.error_circle_filled);
+    expect(notices[2].prefix, isNull);
     expect(notices[2].suffixIcon, TIcons.close);
 
-    expect(notices[3].prefixIcon, TIcons.error_circle_filled);
-    expect(notices[3].right, isA<Row>());
-    expect(notices[4].prefixIcon, TIcons.error_circle_filled);
+    expect(notices[3].operation, isA<TLink>());
+    expect(notices[3].suffixIcon, TIcons.chevron_right);
+    expect(notices[4].prefix, isNull);
     expect(notices[4].suffixIcon, TIcons.chevron_right);
-    expect(notices[5].prefixIcon, TIcons.sound);
+    expect(notices[5].prefix, isA<Padding>());
     expect(notices[5].suffixIcon, TIcons.chevron_right);
-    expect(notices[6].prefixIcon, TIcons.error_circle_filled);
-    expect(notices[6].right, isA<Row>());
+    expect(notices[6].operation, isA<TLink>());
+    expect(notices[6].suffixIcon, TIcons.close);
 
     expect(notices.sublist(7, 11).map((notice) => notice.content), [
       '默认状态公告栏默认状态公告栏',
@@ -68,19 +68,23 @@ void main() {
       '警示状态公告栏警示状态公告栏',
       '错误状态公告栏错误状态公告栏',
     ]);
-    expect(notices[7].prefixIcon, TIcons.error_circle_filled);
-    expect(notices[8].prefixIcon, TIcons.check_circle_filled);
-    expect(notices[9].prefixIcon, TIcons.error_circle_filled);
-    expect(notices[10].prefixIcon, TIcons.error_circle_filled);
+    expect(notices.sublist(7, 11).map((notice) => notice.status), [
+      TNoticeBarStatus.info,
+      TNoticeBarStatus.success,
+      TNoticeBarStatus.warning,
+      TNoticeBarStatus.error,
+    ]);
 
     expect(notices[11].marquee, isTrue);
     expect(notices[11].speed, 80);
-    expect(notices[11].prefixIcon, isNull);
+    expect(notices[11].prefix, isA<SizedBox>());
     expect(notices[12].marquee, isTrue);
     expect(notices[12].speed, 60);
-    expect(notices[12].prefixIcon, TIcons.error_circle_filled);
+    expect(notices[12].prefix, isNull);
     expect(notices[13].direction, Axis.vertical);
-    expect(notices[13].prefixIcon, TIcons.error_circle_filled);
+    expect((notices[13].prefix! as Icon).icon, TIcons.sound);
+    expect(notices[13].marquee, isFalse);
+    expect(notices[13].interval, const Duration(seconds: 3));
     expect(notices[13].items, [
       '君不见',
       '高堂明镜悲白发',

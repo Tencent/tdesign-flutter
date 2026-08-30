@@ -1,3 +1,3 @@
 Widget _textNoticeBar(BuildContext context) {
-  return const TNoticeBar(content: '这是一条普通的通知信息');
+  return const TNoticeBar(content: '这是一条普通的通知信息', prefix: SizedBox.shrink());
 }

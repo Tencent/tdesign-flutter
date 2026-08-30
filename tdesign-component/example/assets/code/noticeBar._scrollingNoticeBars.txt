@@ -3,22 +3,22 @@ Widget _scrollingNoticeBars(BuildContext context) {
     children: [
       TNoticeBar(
         content: '提示文字描述提示文字描述提示文字描述提示文字描述文',
+        prefix: SizedBox.shrink(),
         marquee: true,
         speed: 80,
       ),
       SizedBox(height: 16),
       TNoticeBar(
         content: '提示文字描述提示文字描述提示文字描述提示文字描述文',
-        prefixIcon: TIcons.error_circle_filled,
         marquee: true,
         speed: 60,
       ),
       SizedBox(height: 16),
       TNoticeBar(
-        prefixIcon: TIcons.error_circle_filled,
+        prefix: Icon(TIcons.sound),
         items: ['君不见', '高堂明镜悲白发', '朝如青丝暮成雪', '人生得意须尽欢', '莫使金樽空对月'],
         direction: Axis.vertical,
-        marquee: true,
+        interval: Duration(seconds: 3),
       ),
     ],
   );

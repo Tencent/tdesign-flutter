@@ -516,12 +516,14 @@ void main() {
               ),
               Builder(
                 builder: (context) {
-                  noticeTheme = const TNoticeBarThemeData(
-                    variant: TNoticeBarVariant.success,
-                  ).resolve(context);
-                  warningNoticeTheme = const TNoticeBarThemeData(
-                    variant: TNoticeBarVariant.warning,
-                  ).resolve(context);
+                  noticeTheme = const TNoticeBarThemeData().resolve(
+                    context,
+                    status: TNoticeBarStatus.success,
+                  );
+                  warningNoticeTheme = const TNoticeBarThemeData().resolve(
+                    context,
+                    status: TNoticeBarStatus.warning,
+                  );
                   return const SizedBox();
                 },
               ),

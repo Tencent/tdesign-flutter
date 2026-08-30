@@ -1,26 +1,11 @@
 Widget _customContentNoticeBar(BuildContext context) {
-  final noticeTheme =
-      (Theme.of(context).extension<TNoticeBarThemeData>() ??
-              const TNoticeBarThemeData())
-          .resolve(context);
   return TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述',
-    prefixIcon: TIcons.error_circle_filled,
-    right: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TLink(
-          child: const Text('详情'),
-          colorScheme: TLinkColorScheme.primary,
-          onPressed: () => TToast.showText('点击了详情', context: context),
-        ),
-        const SizedBox(width: 12),
-        Icon(
-          TIcons.close,
-          color: noticeTheme.rightIconColor,
-          size: noticeTheme.height,
-        ),
-      ],
+    operation: TLink(
+      child: const Text('详情'),
+      colorScheme: TLinkColorScheme.primary,
+      onPressed: () => TToast.showText('点击了详情', context: context),
     ),
+    suffixIcon: TIcons.close,
   );
 }

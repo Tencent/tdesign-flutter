@@ -96,7 +96,9 @@ export 'src/components/navbar/t_nav_bar_theme_data.dart'
     show TNavBarThemeData, TNavBarBorder;
 export 'src/components/notice_bar/t_notice_bar.dart';
 export 'src/components/notice_bar/t_notice_bar_theme_data.dart'
-    show TNoticeBarThemeData, TNoticeBarVariant;
+    show TNoticeBarThemeData;
+export 'src/components/notice_bar/t_notice_bar_types.dart'
+    show TNoticeBarStatus;
 export 'src/components/picker/t_picker.dart';
 export 'src/components/picker/t_picker_theme_data.dart' show TPickerThemeData;
 export 'src/components/picker/t_picker_types.dart';

@@ -24,9 +24,9 @@
 
 ## 非目标
 
-- 不改变 `TNoticeBar` 的公开 API 签名与默认行为（仅内部实现修复与文档/测试补全）。
-- 不新增组件能力。
-- 未经维护者确认，不改变 `interval`、默认图标、内边距、垂直交互或点击目标等公开契约。
+- 不机械复制小程序的 `boolean | object` 联合类型或字符串插槽。
+- 不新增当前公开 Demo 未验证的 `loop`、`delay` 能力。
+- 不改变 NoticeBar 之外组件的公开契约。
 
 ## 范围
 
@@ -40,20 +40,24 @@
 
 ### 不涉及
 
-- `TNoticeBarThemeData` 公共 API（`TNoticeBarVariant`、`TNoticeBarThemeData`）保持不变。
+- NoticeBar 之外的组件 ThemeExtension。
 - 站点设计文档 `tdesign-site/docs/design/flutter/notice-bar.md`（非组件 API 文档）。
 
 ## 行为契约
 
 - 水平跑马灯滚动总距离 = **文本宽度 + 公告栏可视区宽度**，与屏幕宽度无关。
-- `speed` 表示每秒滚动的逻辑像素数，单位为 px/s；水平滚动每个 tick 前进 `speed` 像素。
-- 垂直 step 每步位移 = 公告栏高度，时长 = `位移 / speed`。
+- `speed` 表示横向跑马灯每秒滚动的逻辑像素数，单位为 px/s；不再控制纵向切换动画。
+- `interval` 默认值为 2 秒且仅控制纵向轮播；纵向列表由 `direction == Axis.vertical` 与多条 `items` 启用，不依赖 `marquee`。
+- `status` 是 info / success / warning / error 的唯一实例状态入口；ThemeData 不再保存枚举型状态选择器。
+- `prefix` 是 Flutter Widget 插槽：null 使用 status 默认图标，自定义 Widget 覆盖默认图标，`SizedBox.shrink()` 隐藏前缀。
+- `operation` 是内容右侧、尾部图标左侧的 Widget 插槽，可与 `suffixIcon` 共存；点击报告 `TNoticeBarTapTarget.operation`。
+- 删除职责重复或含义模糊的 `left`、`right`、`prefixIcon` 与 ThemeData `variant`。
 - 移除 `_effectiveMarquee`、`_effectiveInterval`，改用 `widget.marquee`、`widget.interval`。
-- 站点 README 只描述当前存在的 API：`content`、`items`、`left`、`right`、`prefixIcon`、`suffixIcon`、`direction`、`maxLines`、`marquee`、`speed`、`interval`、`onPressed`、`TNoticeBarTapTarget`、`TNoticeBarThemeData`、`TNoticeBarVariant`；不再出现 `TNoticeBarStyle`、`TNoticeBarTheme`、`TNoticeBarType`、`onTap`。
+- 站点 README 只描述最终 API：`content`、`items`、`status`、`prefix`、`operation`、`suffixIcon`、`direction`、`maxLines`、`marquee`、`speed`、`interval`、`onPressed`、`TNoticeBarTapTarget`、`TNoticeBarThemeData`、`TNoticeBarStatus`。
 - 公开 Example 顺序为“组件类型 / 组件状态 / 可滚动公告栏”，对应官方页面 8 个 Demo 块、14 个 `TNoticeBar` 实例。
 - “组件类型”依次展示纯文字、带图标、带关闭、带入口、自定义样式、自定义内容；同一官方 Demo 块中的多个实例由单个 Example builder 组合。
 - “组件状态”在同一 Demo 块内依次展示普通、成功、警示、错误四种状态；“可滚动公告栏”在同一 Demo 块内依次展示无图标水平滚动、带图标水平滚动、垂直滚动。
-- 公开文案、图标和左右操作组合与 `tdesign-miniprogram@1.16.0` NoticeBar Demo 一致；Flutter 仅使用现有 `content/items/right/prefixIcon/suffixIcon/direction/marquee/speed` 等 API 表达。
+- 公开文案、默认图标和操作组合与 `tdesign-miniprogram@1.16.0` NoticeBar Demo 一致；Flutter 使用 `prefix` / `operation` Widget 插槽表达自定义区域。
 - `showTestModule` 关闭，内部点击验证不出现在公开页面与 Golden。
 
 ## 验收标准
@@ -66,5 +70,13 @@
 - [x] 站点 README API 表格与当前 `notice-bar_api.md` 一致。
 - [x] Flutter 3.32.0 与 latest 的聚焦组件测试、Example 测试和严格 analyze 通过。
 - [x] NoticeBar 生产源码 LCOV `LH/LF >= 95%`。
-- [x] 固定视口的 light/dark 页面截图完成验收。
-- [ ] 待确认的公开契约已获得维护者决策或明确留作后续。
+- [ ] 固定视口的 Flutter 3.32.0 Linux light/dark Golden 完成验收。
+- [x] interval、speed、默认图标、status、prefix 与 operation 契约已获得维护者确认。
+
+## Breaking change
+
+- `left` 迁移为 `prefix`。
+- `prefixIcon: IconData` 迁移为 `prefix: Icon(...)`；不传时改为显示 status 默认图标。
+- `right` 迁移为 `operation`，且不再遮蔽 `suffixIcon`。
+- `TNoticeBarVariant` 与 `TNoticeBarThemeData.variant` 迁移为实例 `TNoticeBar.status` / `TNoticeBarStatus`。
+- `interval` 默认值从 3 秒调整为 2 秒；纵向轮播不再复用横向 `marquee` / `speed`。
