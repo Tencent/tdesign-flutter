@@ -34,3 +34,10 @@
   - 阴影（Material elevation 6 vs 官方 `@shadow-1`/`@shadow-4`）；
   - 图标尺寸（Flutter 约束 20×22 vs 官方 44rpx=22px）。
 - `align` / `gap` / `single` / 自定义 content Widget / `marquee` 的 `speed`/`loop` 语义等官方能力，现有公开 API 未覆盖，属潜在增强，未纳入本次最小实现。
+
+## 2026-08-31 develop 同步复验
+
+- 已合并 `origin/develop@fb26b8d5`，保留 Message 回归登记并采用 develop 的共享测试基建。
+- CI 同款 Flutter 3.32.0 Linux：页面 light/dark 与点击“带关闭的通知”后的 Overlay light/dark Golden 共 4 项，更新后不带 `--update-goldens` 复跑通过。
+- Flutter 3.32.0 与 3.47.0：25 个组件测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
+- API 收敛复核：未新增、删除或重命名公共 API；仅将图标到文本的内部间距由 10 调为 8，并同步宽度计算。

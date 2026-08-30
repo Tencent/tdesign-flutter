@@ -28,18 +28,15 @@ class _TestPageState extends State<TestPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-          titleWidget: const TText('title'),
-          radius: 20,
-          backgroundColor: const Color(0xFFFAFFFC),
-          child: Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
-            decoration: const BoxDecoration(color: Colors.white),
-            child: const Column(
-              children: [
-                Center(child: Text('立即拨打')),
-              ],
-            ),
-          )),
+        headerBuilder: (_, __) => const TPopupHeader(title: TText('title')),
+        radius: 20,
+        backgroundColor: const Color(0xFFFAFFFC),
+        child: Container(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
+          decoration: const BoxDecoration(color: Colors.white),
+          child: const Column(children: [Center(child: Text('立即拨打'))]),
+        ),
+      ),
     );
   }
 

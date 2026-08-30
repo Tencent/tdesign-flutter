@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 't_tag.dart';
-import 't_tag_theme_data.dart';
 import 't_tag_types.dart';
 
 /// 严格受控的可选标签。
@@ -11,7 +10,8 @@ class TSelectTag extends StatelessWidget {
     super.key,
     required this.value,
     this.onChanged,
-    this.colorScheme,
+    this.colorScheme = TTagColorScheme.primary,
+    this.variant = TTagVariant.dark,
     this.icon,
     this.size = TTagSize.medium,
   });
@@ -25,8 +25,11 @@ class TSelectTag extends StatelessWidget {
   /// 选中状态变更回调；为空时禁用交互。
   final ValueChanged<bool>? onChanged;
 
-  /// 选中态语义色。
-  final TTagColorScheme? colorScheme;
+  /// 选中态预设配色。
+  final TTagColorScheme colorScheme;
+
+  /// 标签绘制形态。
+  final TTagVariant variant;
 
   /// 标签图标。
   final IconData? icon;
@@ -36,9 +39,8 @@ class TSelectTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<TTagThemeData>();
     final effectiveColorScheme = value
-        ? (colorScheme ?? theme?.colorScheme ?? TTagColorScheme.primary)
+        ? colorScheme
         : TTagColorScheme.defaultTheme;
 
     return Semantics(
@@ -47,6 +49,7 @@ class TSelectTag extends StatelessWidget {
       child: TTag(
         text,
         colorScheme: effectiveColorScheme,
+        variant: variant,
         icon: icon,
         size: size,
         enabled: onChanged != null,

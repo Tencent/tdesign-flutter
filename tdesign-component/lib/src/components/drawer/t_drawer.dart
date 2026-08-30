@@ -100,9 +100,11 @@ class TDrawer {
         placement: popupPlacement,
         width: width ?? theme.width ?? 280,
         inset: popupInset,
-        showOverlay: overlayEnabled,
-        closeOnOverlayClick: dismissible,
-        overlayColor: overlayEnabled ? null : Colors.transparent,
+        overlay: TPopupOverlayConfig(
+          showOverlay: overlayEnabled,
+          closeOnClick: dismissible,
+          color: overlayEnabled ? null : Colors.transparent,
+        ),
         useSafeArea: useSafeArea,
         onClosed: _deleteRouter,
         child: Theme(

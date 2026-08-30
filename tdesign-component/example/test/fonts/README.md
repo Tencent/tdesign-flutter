@@ -4,6 +4,12 @@
 Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它不会打包进 Example
 或组件产物。
 
+`TDesignFeedbackGoldenCJK-Regular.otf` 是 ActionSheet、Dialog、DropdownMenu、
+NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
+`component_demo_glyphs.txt` 与 `feedback_demo_glyphs.txt`。独立加载可避免扩充共享
+字体改变既有组件的像素基线，子集 SHA-256 为
+`ba86924f427f2537d08d05d5634c8ab1374dc4da067195352a687e37e53f77cc`。
+
 `TDesignAlignmentCJK-Regular.otf` 是 Loading、Message、Popover、Popup 对齐测试
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
@@ -28,5 +34,7 @@ Upload 等既有 Golden 的字形选择与像素基线。
 
 更新 Button、Divider、Fab、Icon、Link、Text、Form、Input、Rate、Search、Switch、
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
-更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单。随后在固定
-Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体生成基线。
+更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
+ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
+随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
+生成基线。
