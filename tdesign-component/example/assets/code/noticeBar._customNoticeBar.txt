@@ -4,11 +4,12 @@ Widget _customNoticeBar(BuildContext context) {
       TNoticeBarThemeData(
         variant: TNoticeBarVariant.info,
         backgroundColor: context.tTheme.bgColorComponent,
+        leftIconColor: context.tTheme.textColorPrimary,
       ),
     ),
     child: const TNoticeBar(
-      content: '这是一条普通的通知信息',
-      prefixIcon: TIcons.notification,
+      content: '提示文字描述提示文字描述提示文字描述',
+      prefixIcon: TIcons.sound,
       suffixIcon: TIcons.chevron_right,
     ),
   );

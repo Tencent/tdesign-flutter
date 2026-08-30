@@ -8,7 +8,7 @@ Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它�
 NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 `component_demo_glyphs.txt` 与 `feedback_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`e7b22c35e1788ed4cc7a43678fe7793a2a821953c16104d6656dcb9670d4f0c7`。
+`ba86924f427f2537d08d05d5634c8ab1374dc4da067195352a687e37e53f77cc`。
 
 `RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为

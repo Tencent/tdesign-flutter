@@ -1,0 +1,40 @@
+Widget _themeNoticeBars(BuildContext context) {
+  return Column(
+    children: [
+      const TNoticeBar(
+        content: '默认状态公告栏默认状态公告栏',
+        prefixIcon: TIcons.error_circle_filled,
+      ),
+      const SizedBox(height: 16),
+      Theme(
+        data: Theme.of(context).mergeExtension(
+          const TNoticeBarThemeData(variant: TNoticeBarVariant.success),
+        ),
+        child: const TNoticeBar(
+          content: '成功状态公告栏成功状态公告栏',
+          prefixIcon: TIcons.check_circle_filled,
+        ),
+      ),
+      const SizedBox(height: 16),
+      Theme(
+        data: Theme.of(context).mergeExtension(
+          const TNoticeBarThemeData(variant: TNoticeBarVariant.warning),
+        ),
+        child: const TNoticeBar(
+          content: '警示状态公告栏警示状态公告栏',
+          prefixIcon: TIcons.error_circle_filled,
+        ),
+      ),
+      const SizedBox(height: 16),
+      Theme(
+        data: Theme.of(context).mergeExtension(
+          const TNoticeBarThemeData(variant: TNoticeBarVariant.error),
+        ),
+        child: const TNoticeBar(
+          content: '错误状态公告栏错误状态公告栏',
+          prefixIcon: TIcons.error_circle_filled,
+        ),
+      ),
+    ],
+  );
+}

@@ -10,7 +10,7 @@
 4. **冗余 getter（轻微）**：`_effectiveMarquee`、`_effectiveInterval` 是纯透传 `widget.xxx`，冗余。
 5. **站点文档过期（P2）**：`tdesign-site/docs/components/notice-bar/README.md` 仍引用不存在的旧 API（`TNoticeBarStyle`、`TNoticeBarTheme`、`TNoticeBarType`、`onTap`、`interval: int`、`height`、`theme`、`style`），与当前实现及生成的 `notice-bar_api.md` 严重不符。
 6. **测试不足**：多为"不崩溃 + 元素存在"断言，未覆盖滚动距离（屏幕宽 bug）与 variant 具体色值。
-7. **公开 Demo 矩阵不完整**：官方垂直滚动与自定义内容场景藏在 `test` 分组；Flutter 特有的“卡片顶部”没有小程序平台依据。
+7. **公开 Demo 矩阵与官方页面结构不一致**：滚动场景被插入“组件类型”，入口、状态与滚动场景按内部 Widget 拆分；部分示例文案、图标和自定义内容组合也与官方公开 Demo 不同。
 
 ## 目标
 
@@ -19,7 +19,8 @@
 - 移除冗余 getter，统一尺寸测量。
 - 补全站点 README，使其与当前 API 一致。
 - 补充回归测试：滚动距离使用可视区宽度；variant 四档具体色值校验。
-- 将垂直滚动和自定义内容移入公开 Demo，并删除无平台依据的“卡片顶部”示例。
+- 按官方公开页面收敛为“组件类型 / 组件状态 / 可滚动公告栏”三个分组，保持每个公开 Demo 块的实例数量、顺序、文案和组合一致。
+- 内部点击验证不进入公开 Demo 或 Golden。
 
 ## 非目标
 
@@ -49,7 +50,11 @@
 - 垂直 step 每步位移 = 公告栏高度，时长 = `位移 / speed`。
 - 移除 `_effectiveMarquee`、`_effectiveInterval`，改用 `widget.marquee`、`widget.interval`。
 - 站点 README 只描述当前存在的 API：`content`、`items`、`left`、`right`、`prefixIcon`、`suffixIcon`、`direction`、`maxLines`、`marquee`、`speed`、`interval`、`onPressed`、`TNoticeBarTapTarget`、`TNoticeBarThemeData`、`TNoticeBarVariant`；不再出现 `TNoticeBarStyle`、`TNoticeBarTheme`、`TNoticeBarType`、`onTap`。
-- 官方垂直滚动和自定义内容场景可从公开 Example 入口访问；“卡片顶部”不再展示或生成代码片段。
+- 公开 Example 顺序为“组件类型 / 组件状态 / 可滚动公告栏”，对应官方页面 8 个 Demo 块、14 个 `TNoticeBar` 实例。
+- “组件类型”依次展示纯文字、带图标、带关闭、带入口、自定义样式、自定义内容；同一官方 Demo 块中的多个实例由单个 Example builder 组合。
+- “组件状态”在同一 Demo 块内依次展示普通、成功、警示、错误四种状态；“可滚动公告栏”在同一 Demo 块内依次展示无图标水平滚动、带图标水平滚动、垂直滚动。
+- 公开文案、图标和左右操作组合与 `tdesign-miniprogram@1.16.0` NoticeBar Demo 一致；Flutter 仅使用现有 `content/items/right/prefixIcon/suffixIcon/direction/marquee/speed` 等 API 表达。
+- `showTestModule` 关闭，内部点击验证不出现在公开页面与 Golden。
 
 ## 验收标准
 
@@ -61,5 +66,5 @@
 - [x] 站点 README API 表格与当前 `notice-bar_api.md` 一致。
 - [x] Flutter 3.32.0 与 latest 的聚焦组件测试、Example 测试和严格 analyze 通过。
 - [x] NoticeBar 生产源码 LCOV `LH/LF >= 95%`。
-- [ ] 真实运行时截图与垂直触摸交互完成验收。
+- [x] 固定视口的 light/dark 页面截图完成验收。
 - [ ] 待确认的公开契约已获得维护者决策或明确留作后续。

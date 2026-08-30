@@ -36,6 +36,16 @@
 - 测试：新增滚动距离回归测试、variant 色值校验。
 - 文档：站点 README 同步为当前 API。
 
+## 5. 公开 Demo 矩阵
+
+按 `tdesign-miniprogram@1.16.0` 的公开页面边界调整 `ExampleModule` / `ExampleItem`：
+
+- `01 组件类型`：纯文字、带图标、带关闭、带入口（2 个实例）、自定义样式、自定义内容。
+- `02 组件状态`：单个 Example builder 组合普通、成功、警示、错误 4 个实例。
+- `03 可滚动公告栏`：单个 Example builder 组合无图标水平、带图标水平、垂直 3 个实例。
+
+只修改 Demo 组合、文案与测试/Golden，不修改组件公开 API。内部点击回调已有组件聚焦测试覆盖，公开页面关闭 `showTestModule`，避免 debug 截图出现非官方分组。
+
 ## Breaking change 分析
 
 - 不改变公开 API 签名、默认行为，未删除能力，**非 breaking change**。
