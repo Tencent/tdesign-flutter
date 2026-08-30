@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 't_tag.dart';
-import 't_tag_theme_data.dart';
 import 't_tag_types.dart';
 
 /// 严格受控的可选标签。
@@ -36,9 +35,8 @@ class TSelectTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<TTagThemeData>();
     final effectiveColorScheme = value
-        ? (colorScheme ?? theme?.colorScheme ?? TTagColorScheme.primary)
+        ? (colorScheme ?? TTagColorScheme.primary)
         : TTagColorScheme.defaultTheme;
 
     return Semantics(

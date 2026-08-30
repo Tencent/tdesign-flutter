@@ -58,8 +58,7 @@ class TTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final resolvedColorScheme =
-        colorScheme ?? theme?.colorScheme ?? TTagColorScheme.defaultTheme;
+    final resolvedColorScheme = colorScheme ?? TTagColorScheme.defaultTheme;
     final isOutline = theme?.isOutline ?? false;
     final isLight = theme?.isLight ?? false;
     final shape = theme?.shape ?? TTagShape.square;

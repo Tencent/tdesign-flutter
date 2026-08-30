@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 't_popover_theme_data.dart';
+import 't_popover_types.dart';
 import 't_popover_widget.dart';
 
 class _PopoverAnchorLifecycle extends StatefulWidget {
@@ -201,7 +202,7 @@ class TPopover {
             content: content,
             contentWidget: contentWidget,
             offset: offset ?? theme.offset,
-            colorScheme: colorScheme ?? theme.colorScheme,
+            colorScheme: colorScheme,
             placement: placement,
             showArrow: showArrow ?? theme.showArrow,
             arrowSize: arrowSize ?? theme.arrowSize,

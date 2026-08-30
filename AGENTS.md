@@ -9,6 +9,9 @@
 > **面向所有 AI 助手的通用协作约定** → 仓库级 skill：`.agents/skills/tdesign-flutter-general/SKILL.md`
 > （含「何时创建 Spec / 何时写更新日志」四种情况、Flutter 双版本兼容、breaking change 分析、文档与注释规范、脚本生成的产物（供 AI 理解，贡献者无需关注）、lint 零告警等平台无关约定）
 >
+> **组件公开 Demo / API / Theme / Golden 对齐 Review** → 仓库级 skill：`.agents/skills/tdesign-component-align-review/SKILL.md`
+> （用于组件对齐与 PR Review，约束跨端证据、API 收敛、`variant` / `colorScheme` / `status` 所有权、Theme 优先级及视觉回归门禁）
+>
 > **面向 CNB 平台 NPC 的执行约定** → 仓库级 skill：`.agents/skills/tdesign-flutter-conventions/SKILL.md`
 > （含 `cnb-issue-<issue.number>` 等仅 CNB 平台可用的细化规则，通用工具以其可读取到的实际上下文为准；通用规则见 `.agents/skills/tdesign-flutter-general/SKILL.md`，不重复阐述）
 

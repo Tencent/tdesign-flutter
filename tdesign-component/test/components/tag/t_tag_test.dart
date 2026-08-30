@@ -291,14 +291,6 @@ void main() {
   // 主题覆盖（ThemeExtension）
   // ============================================================
   group('TTag 主题覆盖', () {
-    testWidgets('通过 TTagThemeData 设置 colorScheme', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TTag('主题色'),
-        tagTheme: const TTagThemeData(colorScheme: TTagColorScheme.success),
-      ));
-      expect(find.text('主题色'), findsOneWidget);
-    });
-
     testWidgets('通过 TTagThemeData 设置 fixedWidth', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
         const TTag('固定宽'),
@@ -439,22 +431,18 @@ void main() {
     });
 
     test('TTagThemeData copyWith 正确合并', () {
-      const base = TTagThemeData(
-        colorScheme: TTagColorScheme.primary,
-        isOutline: true,
-      );
+      const base = TTagThemeData(isOutline: true);
       final merged = base.copyWith(isLight: true);
-      expect(merged.colorScheme, TTagColorScheme.primary);
       expect(merged.isOutline, isTrue);
       expect(merged.isLight, isTrue);
     });
 
     test('TTagThemeData lerp 正确插值', () {
-      const a = TTagThemeData(colorScheme: TTagColorScheme.primary);
-      const b = TTagThemeData(colorScheme: TTagColorScheme.danger);
+      const a = TTagThemeData(shape: TTagShape.square);
+      const b = TTagThemeData(shape: TTagShape.round);
       final result = a.lerp(b, 0.3);
       // t < 0.5 取 a 的值
-      expect(result.colorScheme, TTagColorScheme.primary);
+      expect(result.shape, TTagShape.square);
     });
   });
 

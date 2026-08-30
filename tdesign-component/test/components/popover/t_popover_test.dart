@@ -1053,7 +1053,6 @@ void main() {
             },
           ),
           popoverTheme: const TPopoverThemeData(
-            colorScheme: TPopoverColorScheme.dark,
             backgroundColor: Colors.black,
             borderRadius: 8,
             arrowSize: 10,
@@ -1064,7 +1063,13 @@ void main() {
         ),
       );
 
-      unawaited(TPopover.showPopover(context: ctx, content: '主题气泡'));
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: '主题气泡',
+          colorScheme: TPopoverColorScheme.dark,
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('主题气泡'), findsOneWidget);

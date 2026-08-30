@@ -10,6 +10,7 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
 import 't_popover_theme_data.dart';
+import 't_popover_types.dart';
 
 const double _kDefaultPopoverMaxWidth = 300;
 const EdgeInsets _kDefaultPopoverPadding = EdgeInsets.all(12);

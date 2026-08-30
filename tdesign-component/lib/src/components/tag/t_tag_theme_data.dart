@@ -10,9 +10,6 @@ import 't_tag_types.dart';
 /// 通过 Theme 子树注入，控制子树的默认样式。
 /// 构造器参数优先于 Theme。
 class TTagThemeData extends ThemeExtension<TTagThemeData> {
-  /// 未传实例 colorScheme 时的默认语义色
-  final TTagColorScheme? colorScheme;
-
   /// 文字颜色
   final Color? textColor;
 
@@ -49,7 +46,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   final double? fixedWidth;
 
   const TTagThemeData({
-    this.colorScheme,
     this.textColor,
     this.backgroundColor,
     this.font,
@@ -65,7 +61,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
 
   @override
   TTagThemeData copyWith({
-    TTagColorScheme? colorScheme,
     Color? textColor,
     Color? backgroundColor,
     Font? font,
@@ -79,7 +74,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     double? fixedWidth,
   }) {
     return TTagThemeData(
-      colorScheme: colorScheme ?? this.colorScheme,
       textColor: textColor ?? this.textColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       font: font ?? this.font,
@@ -100,7 +94,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       return this;
     }
     return TTagThemeData(
-      colorScheme: t < 0.5 ? colorScheme : other.colorScheme,
       textColor: Color.lerp(textColor, other.textColor, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       font: t < 0.5 ? font : other.font,
