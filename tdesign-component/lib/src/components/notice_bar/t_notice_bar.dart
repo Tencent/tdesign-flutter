@@ -44,10 +44,14 @@ class TNoticeBar extends StatefulWidget {
   }) : assert(speed > 0, 'speed must be greater than zero'),
        assert(maxLines > 0, 'maxLines must be greater than zero');
 
-  /// 单条公告内容
+  /// 单条公告内容。
+  ///
+  /// 当 [items] 非空时不显示此内容。
   final String content;
 
-  /// 多条公告内容，主要用于垂直轮播
+  /// 多条公告内容，主要用于垂直轮播。
+  ///
+  /// 非空时作为内容数据源，并优先于 [content]。
   final List<String> items;
 
   /// 公告栏业务状态，决定默认配色和默认前缀图标。
@@ -56,7 +60,8 @@ class TNoticeBar extends StatefulWidget {
   /// 自定义前缀区域。
   ///
   /// 为 null 时根据 [status] 显示默认图标；传入 [SizedBox.shrink] 可隐藏
-  /// 前缀区域。自定义内容完全接管该区域的尺寸与间距。
+  /// 前缀区域。自定义内容负责该区域的间距；其中未显式指定颜色或尺寸的
+  /// [Icon] 会继承公告栏的状态图标颜色和标准图标尺寸。
   final Widget? prefix;
 
   /// 内容右侧、[suffixIcon] 左侧的自定义操作区。
@@ -419,10 +424,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
     );
   }
 
-  Widget _buildCustomTapTarget(
-    TNoticeBarTapTarget target,
-    Widget child,
-  ) {
+  Widget _buildCustomTapTarget(TNoticeBarTapTarget target, Widget child) {
     if (widget.onPressed == null) {
       return child;
     }
@@ -450,7 +452,16 @@ class _TNoticeBarState extends State<TNoticeBar> {
   Widget _buildPrefix() {
     final prefix = widget.prefix;
     if (prefix != null) {
-      return _buildCustomTapTarget(TNoticeBarTapTarget.prefix, prefix);
+      return _buildCustomTapTarget(
+        TNoticeBarTapTarget.prefix,
+        IconTheme.merge(
+          data: IconThemeData(
+            color: _resolved.leftIconColor,
+            size: _effectiveHeight,
+          ),
+          child: prefix,
+        ),
+      );
     }
     return _buildBuiltInTapTarget(
       TNoticeBarTapTarget.prefix,

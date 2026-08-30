@@ -39,6 +39,14 @@ void main() {
       expect(find.text('第一条'), findsOneWidget);
     });
 
+    testWidgets('items 非空时优先于 content', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(const TNoticeBar(content: '单条内容', items: ['列表内容'])),
+      );
+      expect(find.text('列表内容'), findsOneWidget);
+      expect(find.text('单条内容'), findsNothing);
+    });
+
     testWidgets('null 内容渲染空容器', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TNoticeBar()));
       expect(find.byType(TNoticeBar), findsOneWidget);
@@ -97,6 +105,38 @@ void main() {
       );
       expect(find.byIcon(Icons.info), findsOneWidget);
       expect(find.byIcon(TIcons.info_circle_filled), findsNothing);
+    });
+
+    testWidgets('prefix 中的 Icon 继承状态颜色与标准尺寸', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(
+            content: '带前缀图标',
+            status: TNoticeBarStatus.warning,
+            prefix: Icon(Icons.info),
+          ),
+        ),
+      );
+
+      final iconContext = tester.element(find.byIcon(Icons.info));
+      final iconTheme = IconTheme.of(iconContext);
+      expect(iconTheme.color, iconContext.tTheme.warningNormalColor);
+      expect(iconTheme.size, 22);
+    });
+
+    testWidgets('prefix 中的 Icon 可显式覆盖颜色与尺寸', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(
+            content: '带前缀图标',
+            prefix: Icon(Icons.info, color: Colors.purple, size: 30),
+          ),
+        ),
+      );
+
+      final icon = tester.widget<Icon>(find.byIcon(Icons.info));
+      expect(icon.color, Colors.purple);
+      expect(icon.size, 30);
     });
 
     testWidgets('suffixIcon 渲染右侧图标', (tester) async {

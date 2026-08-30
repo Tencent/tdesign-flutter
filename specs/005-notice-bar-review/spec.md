@@ -49,7 +49,8 @@
 - `speed` 表示横向跑马灯每秒滚动的逻辑像素数，单位为 px/s；不再控制纵向切换动画。
 - `interval` 默认值为 2 秒且仅控制纵向轮播；纵向列表由 `direction == Axis.vertical` 与多条 `items` 启用，不依赖 `marquee`。
 - `status` 是 info / success / warning / error 的唯一实例状态入口；ThemeData 不再保存枚举型状态选择器。
-- `prefix` 是 Flutter Widget 插槽：null 使用 status 默认图标，自定义 Widget 覆盖默认图标，`SizedBox.shrink()` 隐藏前缀。
+- `prefix` 是 Flutter Widget 插槽：null 使用 status 默认图标，自定义 Widget 覆盖默认图标，`SizedBox.shrink()` 隐藏前缀；自定义 Widget 中未显式指定颜色或尺寸的 `Icon` 继承状态图标颜色和标准图标尺寸。
+- `items` 非空时作为权威内容数据源并优先于 `content`；`content` 仅在 `items` 为空时显示。
 - `operation` 是内容右侧、尾部图标左侧的 Widget 插槽，可与 `suffixIcon` 共存；点击报告 `TNoticeBarTapTarget.operation`。
 - 删除职责重复或含义模糊的 `left`、`right`、`prefixIcon` 与 ThemeData `variant`。
 - 移除 `_effectiveMarquee`、`_effectiveInterval`，改用 `widget.marquee`、`widget.interval`。
@@ -70,7 +71,7 @@
 - [x] 站点 README API 表格与当前 `notice-bar_api.md` 一致。
 - [x] Flutter 3.32.0 与 latest 的聚焦组件测试、Example 测试和严格 analyze 通过。
 - [x] NoticeBar 生产源码 LCOV `LH/LF >= 95%`。
-- [ ] 固定视口的 Flutter 3.32.0 Linux light/dark Golden 完成验收。
+- [x] 固定视口的 Flutter 3.32.0 Linux light/dark Golden 完成验收。
 - [x] interval、speed、默认图标、status、prefix 与 operation 契约已获得维护者确认。
 
 ## Breaking change
