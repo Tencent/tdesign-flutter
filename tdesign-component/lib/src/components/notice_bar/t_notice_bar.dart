@@ -99,7 +99,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
   ScrollController? _scrollController;
   Timer? _timer;
 
-  Size? _size;
+  double _contentViewportWidth = 0;
   late TNoticeBarThemeData _resolved;
 
   final GlobalKey _key = GlobalKey();
@@ -291,22 +291,28 @@ class _TNoticeBarState extends State<TNoticeBar> {
 
   /// 获取文本内容宽度
   double _getContextWidth() {
-    var contextWidth =
-        _key.currentContext?.findRenderObject()?.paintBounds.size.width ?? 0;
+    var contextWidth = _renderWidth(_key) ?? 0;
     if (contextWidth == 0) {
       contextWidth = _getFontSize().width;
     }
     return contextWidth;
   }
 
+  double? _renderWidth(GlobalKey key) {
+    final renderObject = key.currentContext?.findRenderObject();
+    if (renderObject is RenderBox && renderObject.hasSize) {
+      return renderObject.size.width;
+    }
+    return null;
+  }
+
   /// 获取滚动区域宽度
   double _getEmptyWidth() {
-    return _contentKey.currentContext
-            ?.findRenderObject() // coverage:ignore-line
-            ?.paintBounds // coverage:ignore-line
-            .size // coverage:ignore-line
-            .width ?? // coverage:ignore-line
-        (_size!.width - _effectivePadding.horizontal);
+    final measuredWidth = _renderWidth(_contentKey);
+    if (measuredWidth != null && measuredWidth > 0) {
+      return measuredWidth;
+    }
+    return _contentViewportWidth;
   }
 
   /// 获取文字高度
@@ -479,7 +485,6 @@ class _TNoticeBarState extends State<TNoticeBar> {
   @override
   Widget build(BuildContext context) {
     _init();
-    _size = MediaQuery.of(context).size;
     final suffixIcon = widget.suffixIcon;
     return Container(
       padding: _effectivePadding,
@@ -494,9 +499,16 @@ class _TNoticeBarState extends State<TNoticeBar> {
           /// 中间内容
           Expanded(
             key: _contentKey,
-            child: _buildBuiltInTapTarget(
-              TNoticeBarTapTarget.content,
-              _contentWidget(),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                _contentViewportWidth = constraints.hasBoundedWidth
+                    ? constraints.maxWidth
+                    : 0;
+                return _buildBuiltInTapTarget(
+                  TNoticeBarTapTarget.content,
+                  _contentWidget(),
+                );
+              },
             ),
           ),
 

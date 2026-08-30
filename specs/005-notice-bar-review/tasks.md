@@ -20,6 +20,10 @@
 - [x] 加强 status `resolve` 色值断言为具体 Token 色值。
 - [x] 新增各 status 默认图标、背景色和 operation 点击测试。
 - [x] 固定 `items` 优先于 `content`，以及自定义 `Icon` 继承状态颜色和标准尺寸的契约测试。
+- [x] 将 NoticeBar Demo 功能测试同步登记到 GitHub 双版本回归入口。
+- [x] 新增 GitHub/CNB Example 功能回归清单一致性测试，防止后续再次漂移。
+- [x] 删除 NoticeBar 通用 Demo Spec 中未消费的重复结构期望。
+- [x] 增加首帧空白段使用内容区布局约束的窄容器断言。
 
 ## 文档
 
@@ -35,8 +39,9 @@
 - [x] Flutter 3.32.0 与 latest 的 NoticeBar 组件测试各 45 项通过。
 - [x] Flutter 3.32.0 与 latest 的 Example 测试通过。
 - [x] Flutter 3.32.0 与 latest 严格 analyze 均为 0 issues。
-- [x] NoticeBar 生产源码覆盖率 96.08%（`LH=245` / `LF=255`）。
+- [x] NoticeBar 生产源码覆盖率 96.20%（`LH=253` / `LF=263`）。
 - [x] 获取 interval、speed、operation、默认图标、prefix 和垂直轮播契约的维护者决策。
 - [x] 更新并复验 Flutter 3.32.0 Linux light/dark Golden。
 - [x] 完成收敛后固定视口 light/dark 页面截图验收。
+- [x] 移除首帧宽度对 `MediaQuery` 屏幕尺寸的兜底依赖。
 - [ ] 完成真实设备触摸、循环与逐帧验收。

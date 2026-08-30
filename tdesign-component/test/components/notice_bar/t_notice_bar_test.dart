@@ -596,6 +596,12 @@ void main() {
       final textWidth = tester.getSize(find.text(text).first).width;
       // 修复后动画总距离 = 文本宽度 + 可视区宽度(公告栏实际可视区)
       final viewportWidth = controller!.position.viewportDimension;
+      final contentRow = tester.widget<Row>(
+        find.descendant(of: scrollable, matching: find.byType(Row)).first,
+      );
+      final initialBlank = contentRow.children[1] as SizedBox;
+      // 首帧空白段直接使用 LayoutBuilder 的内容区约束，不再回退到屏幕宽度。
+      expect(initialBlank.width, closeTo(viewportWidth, 0.01));
       final expectedDistance = textWidth + viewportWidth;
 
       // 连续 pump，跟踪到达的最大滚动位置（到达总距离后回绕到 0）

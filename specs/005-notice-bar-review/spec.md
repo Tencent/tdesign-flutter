@@ -11,6 +11,7 @@
 5. **站点文档过期（P2）**：`tdesign-site/docs/components/notice-bar/README.md` 仍引用不存在的旧 API（`TNoticeBarStyle`、`TNoticeBarTheme`、`TNoticeBarType`、`onTap`、`interval: int`、`height`、`theme`、`style`），与当前实现及生成的 `notice-bar_api.md` 严重不符。
 6. **测试不足**：多为"不崩溃 + 元素存在"断言，未覆盖滚动距离（屏幕宽 bug）与 variant 具体色值。
 7. **公开 Demo 矩阵与官方页面结构不一致**：滚动场景被插入“组件类型”，入口、状态与滚动场景按内部 Widget 拆分；部分示例文案、图标和自定义内容组合也与官方公开 Demo 不同。
+8. **回归入口与首帧测量仍有尾项**：GitHub Actions 未执行 NoticeBar Demo 功能测试；NoticeBar 自定义结构测试已覆盖完整契约，但通用 Demo Spec 仍保留未消费的重复期望；跑马灯首帧在内容区尚未布局时仍回退到屏幕宽度。
 
 ## 目标
 
@@ -21,6 +22,8 @@
 - 补充回归测试：滚动距离使用可视区宽度；variant 四档具体色值校验。
 - 按官方公开页面收敛为“组件类型 / 组件状态 / 可滚动公告栏”三个分组，保持每个公开 Demo 块的实例数量、顺序、文案和组合一致。
 - 内部点击验证不进入公开 Demo 或 Golden。
+- GitHub 与 CNB 的双版本功能回归均执行 NoticeBar Demo 测试；结构断言只保留一个权威入口。
+- 跑马灯首帧空白段直接使用内容区布局约束，不再以屏幕宽度兜底。
 
 ## 非目标
 
@@ -46,6 +49,7 @@
 ## 行为契约
 
 - 水平跑马灯滚动总距离 = **文本宽度 + 公告栏可视区宽度**，与屏幕宽度无关。
+- 内容区尚未产生 RenderObject 尺寸时，使用 `LayoutBuilder` 提供的内容区约束；不得回退到 `MediaQuery` 屏幕宽度。
 - `speed` 表示横向跑马灯每秒滚动的逻辑像素数，单位为 px/s；不再控制纵向切换动画。
 - `interval` 默认值为 2 秒且仅控制纵向轮播；纵向列表由 `direction == Axis.vertical` 与多条 `items` 启用，不依赖 `marquee`。
 - `status` 是 info / success / warning / error 的唯一实例状态入口；ThemeData 不再保存枚举型状态选择器。
@@ -73,6 +77,9 @@
 - [x] NoticeBar 生产源码 LCOV `LH/LF >= 95%`。
 - [x] 固定视口的 Flutter 3.32.0 Linux light/dark Golden 完成验收。
 - [x] interval、speed、默认图标、status、prefix 与 operation 契约已获得维护者确认。
+- [x] GitHub 与 CNB 双版本功能回归均登记 `notice_bar_page_test.dart`。
+- [x] NoticeBar Demo 结构由自定义功能测试唯一断言，通用 Golden Spec 不保留重复且未消费的结构配置。
+- [x] 首帧空白段使用 `LayoutBuilder` 的内容区宽度，并有窄容器回归断言。
 
 ## Breaking change
 
