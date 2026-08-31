@@ -35,6 +35,7 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - 默认标题和正文样式保留应用 `TextTheme` 的主字体与 fallback，避免弹层丢失应用级字体覆盖。
 - 带图片场景在 Example 层通过任意 `content` Widget 组合；垂直两按钮通过 `actionsWidget` 组合；不扩大基础 API。
 - 22 个官方场景均有独立可见触发入口；小程序 `openType` 通过 Flutter 既有 `TDialogAction` 自定义子项表达，不新增跨端专用 API。
+- 公开页在“组件用法”后结束，不展示仅供内部验证的“单元测试”模块。
 
 ## 验收标准
 

@@ -37,3 +37,5 @@
 - CI 同款 Flutter 3.32.0 Linux：页面 light/dark 与点击“带关闭按钮的对话框”后的 Overlay light/dark Golden 共 4 项，更新后不带 `--update-goldens` 复跑通过。
 - Flutter 3.32.0 与 3.47.0：15 个组件测试、4 个 Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
 - API 收敛复核：未新增公共 API；保留既有 `contentPadding` 定制入口，仅把默认上内边距 32 调为 24、关闭按钮默认偏移从 0 调为 8，属于 PR 标题已声明的 breaking 默认行为变更。
+- 完整滚动 Web Demo 后发现并移除页尾内部“单元测试”模块；页面测试已增加公开页不出现该模块的断言。
+- CI 同款 Flutter 3.32.0 Linux 已重建 375×1992 明暗整页 Golden，并在不带 `--update-goldens` 时复跑页面与点击后弹层 4/4 通过；截图证据已同步更新。

@@ -17,6 +17,7 @@ class TDialogPage extends StatelessWidget {
       desc: '用于显示重要提示或请求用户完成关键操作。',
       exampleCodeGroup: 'dialog',
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

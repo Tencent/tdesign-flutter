@@ -80,6 +80,7 @@ void main() {
       );
       expect(find.widgetWithText(TButton, label), findsOneWidget);
     }
+    expect(find.text('单元测试'), findsNothing);
   });
 
   testWidgets('开放能力按钮通过现有 TDialogAction 组合', (tester) async {
