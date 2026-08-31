@@ -5,7 +5,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';

@@ -6,7 +6,7 @@ import 'package:flutter/scheduler.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../../util/list_ext.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_time_counter_controller.dart';
 import 't_time_counter_style.dart';
 import 't_time_counter_theme_data.dart';

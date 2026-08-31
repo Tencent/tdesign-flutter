@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_picker.dart' show TPicker;
 import 't_picker_types.dart';
 

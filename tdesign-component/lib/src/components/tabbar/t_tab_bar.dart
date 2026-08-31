@@ -8,7 +8,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_tab_bar_theme_data.dart';
 
 /// 展开项 向下箭头宽

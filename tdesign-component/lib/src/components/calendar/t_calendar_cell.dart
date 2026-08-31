@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_calendar_style.dart';
 import 't_calendar_types.dart';
 

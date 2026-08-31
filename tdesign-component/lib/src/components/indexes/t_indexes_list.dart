@@ -10,7 +10,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 'sticky_header/sticky_header_widget.dart';
 import 't_indexes_anchor.dart';
 

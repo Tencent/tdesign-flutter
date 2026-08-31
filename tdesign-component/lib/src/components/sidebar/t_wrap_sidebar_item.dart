@@ -4,7 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_sidebar_theme_data.dart';
 
 /// 侧边栏单项的内部渲染组件。

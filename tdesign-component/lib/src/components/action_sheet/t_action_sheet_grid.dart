@@ -9,7 +9,7 @@ import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
 import '../../util/list_ext.dart';
 import '../badge/t_badge.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
 import 't_action_sheet_types.dart';

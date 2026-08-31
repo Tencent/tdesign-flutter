@@ -6,7 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_backtop_theme_data.dart';
 
 /// 返回顶部组件

@@ -5,7 +5,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_tree_select_theme_data.dart';
 
 const _kTreeSelectHeight = 336.0;

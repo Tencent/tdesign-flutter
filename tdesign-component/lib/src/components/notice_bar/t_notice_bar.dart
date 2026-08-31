@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_notice_bar_theme_data.dart';
 import 't_notice_bar_types.dart';
 

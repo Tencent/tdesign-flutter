@@ -9,7 +9,7 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_loading.dart';
 import '../loading/t_loading_theme_data.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_pull_down_refresh_controller.dart';
 import 't_pull_down_refresh_texts.dart';
 

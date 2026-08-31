@@ -12,7 +12,7 @@ import '../../util/context_extension.dart';
 import '../../util/t_toolbar_pressable.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_circle_indicator.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_toast_theme_data.dart';
 
 /// Toast 文案排列方向

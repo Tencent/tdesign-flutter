@@ -11,7 +11,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_activity_indicator.dart';
 import 't_circle_indicator.dart';
 import 't_loading_theme_data.dart';

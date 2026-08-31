@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 
 // ---------------------------------------------------------------------------
 // TCalendarHeader — 星期标题栏

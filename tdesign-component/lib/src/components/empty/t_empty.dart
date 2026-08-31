@@ -6,7 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_empty_theme_data.dart';
 
 /// 空态形态

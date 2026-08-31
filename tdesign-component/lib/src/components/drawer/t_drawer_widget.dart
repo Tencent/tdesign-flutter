@@ -4,7 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
+import '../typography/t_text.dart';
 import 't_drawer.dart';
 import 't_drawer_theme_data.dart';
 
