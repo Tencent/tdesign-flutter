@@ -31,7 +31,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('带箭头'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -59,7 +59,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return LayoutBuilder(
       builder: (popoverContext, constrains) {
         return TButton(
-          size: TButtonSize.medium,
+          size: TButtonSize.large,
           child: const Text('不带箭头'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
@@ -84,14 +84,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildNCustomPopover(BuildContext context) {
-    var textStyle = TextStyle(
+    final textStyle = TextStyle(
       color: theme == TPopoverColorScheme.light
           ? context.tTheme.fontGyColor1
           : context.tTheme.fontWhColor1,
     );
+    final dividerColor = textStyle.color;
     return LayoutBuilder(
       builder: (popoverContext, constrains) {
         return TButton(
+          size: TButtonSize.large,
           child: const Text('自定义内容'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
@@ -112,7 +114,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     ),
                     child: TText('选项1', style: textStyle),
                   ),
-                  const TDivider(),
+                  Container(height: 1, color: dividerColor),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
@@ -120,7 +122,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     ),
                     child: TText('选项2', style: textStyle),
                   ),
-                  const TDivider(),
+                  Container(height: 1, color: dividerColor),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
@@ -153,7 +155,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('深色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -180,7 +182,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('浅色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -211,7 +213,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('品牌色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -242,7 +244,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('成功色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -273,7 +275,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('警告色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -304,7 +306,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('错误色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -337,7 +339,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('顶部左'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -369,7 +371,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('顶部中'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -401,7 +403,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('顶部右'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -433,7 +435,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部左'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -465,7 +467,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部中'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -497,7 +499,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部右'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -529,7 +531,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('右侧上'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -561,7 +563,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('右侧中'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -593,7 +595,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('右侧下'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -625,7 +627,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('左侧上'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -657,7 +659,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('左侧中'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -689,7 +691,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('左侧下'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
