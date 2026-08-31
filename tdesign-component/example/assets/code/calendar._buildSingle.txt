@@ -1,6 +1,16 @@
-Widget _buildSingle(BuildContext context) {
-    return TCalendar(
-      value: _singleValue,
-      onChanged: (value) => setState(() => _singleValue = value),
-    );
-  }
+Widget _buildSingle(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-single-trigger'),
+        title: const TText('单个选择日历'),
+        note: TText(_formatDates(_singleValue)),
+        arrow: true,
+        onTap: () => _showCalendar(
+          title: '选择日期',
+          variant: TCalendarVariant.single,
+          value: _singleValue,
+          onConfirm: (value) => setState(() => _singleValue = value),
+        ),
+      ),
+    ],
+  );

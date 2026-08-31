@@ -1,0 +1,52 @@
+Widget _buildDescribed(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TCellGroup(
+        cells: [
+          TCell(
+            key: const ValueKey('calendar-single-description-trigger'),
+            title: const TText('带单行描述的日历'),
+            note: TText(_formatDates(_describedSingleValue)),
+            arrow: true,
+            onTap: () => _showCalendar(
+              title: '选择日期',
+              variant: TCalendarVariant.single,
+              value: _describedSingleValue,
+              minDate: DateTime(2022, 2),
+              maxDate: DateTime(2022, 3, 15),
+              subtitleBuilder: (_, __) => const TText('¥60'),
+              onConfirm: (value) =>
+                  setState(() => _describedSingleValue = value),
+            ),
+          ),
+        ],
+      ),
+      Padding(
+        padding: EdgeInsets.all(context.tTheme.spacer16),
+        child: const TText('带双行描述的日历'),
+      ),
+      TCellGroup(
+        cells: [
+          TCell(
+            key: const ValueKey('calendar-double-description-trigger'),
+            title: const TText('带双行描述的日历'),
+            note: TText(_formatDates(_describedMultipleValue)),
+            arrow: true,
+            onTap: () => _showCalendar(
+              title: '选择多个日期',
+              variant: TCalendarVariant.multiple,
+              value: _describedMultipleValue,
+              minDate: DateTime(2022, 2),
+              maxDate: DateTime(2022, 3, 15),
+              subtitleBuilder: (_, model) {
+                const holidays = {1: '初一', 2: '初二', 14: '情人节', 15: '元宵节'};
+                return TText(holidays[model.date.day] ?? '¥60');
+              },
+              onConfirm: (value) =>
+                  setState(() => _describedMultipleValue = value),
+            ),
+          ),
+        ],
+      ),
+    ],
+  );

@@ -18,9 +18,14 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为
 `cdd6b80b52382a5345597848ba58ef53ddf630aa29bfa1a4165b63264c000c2d`。
 
+`CalendarGoldenCJK-Regular.otf` 仅补充 Calendar 整页 Golden 新增且既有子集
+未覆盖的字形，字符清单见 `calendar_demo_glyphs.txt`。独立加载可避免扩充共享
+字体改变既有组件的像素基线，子集 SHA-256 为
+`a9e36e95299dd57b9624054ea5853730a0600baf344d64a637262d87f8c57fe3`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
-- 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
+- 上游 SHA-256：`734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`
 - 子集工具：fonttools 4.59.1
 - 原子集 SHA-256：`2c4215bf330a1f6ba7da5c2be3eb1502e270d466c99852801e11164d946c690d`
 - 字符清单：`component_demo_glyphs.txt`
@@ -36,5 +41,6 @@ Upload 等既有 Golden 的字形选择与像素基线。
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
 更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
+更新 Calendar 页面文案时，更新 Calendar 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

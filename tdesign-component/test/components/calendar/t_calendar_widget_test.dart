@@ -101,6 +101,43 @@ void main() {
       expect(find.byType(TCalendar), findsOneWidget);
     });
 
+    testWidgets('日期边界按自然日归一化，并允许单日范围', (tester) async {
+      final date = DateTime(2026, 6, 15);
+      await tester.pumpWidget(wrap(TCalendar(
+        minDate: DateTime(2026, 6, 15, 18),
+        maxDate: DateTime(2026, 6, 15, 6),
+        value: [date],
+        onChanged: (_) {},
+      )));
+      await tester.pumpAndSettle();
+
+      final calendar = tester.widget<TCalendar>(find.byType(TCalendar));
+      expect(calendar.minDate, date);
+      expect(calendar.maxDate, date);
+      expect(find.text('15'), findsOneWidget);
+    });
+
+    testWidgets('默认高度完整容纳六行月份', (tester) async {
+      await tester.pumpWidget(wrap(TCalendar(
+        minDate: DateTime(2026, 8, 1),
+        maxDate: DateTime(2026, 8, 31),
+        anchorDate: DateTime(2026, 8, 1),
+        value: const [],
+        onChanged: (_) {},
+      )));
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TCalendar)).height, 508);
+      expect(find.text('31'), findsOneWidget);
+    });
+
+    test('firstDayOfWeek 只接受 0 到 6', () {
+      expect(
+        () => TCalendar(firstDayOfWeek: 7, value: const [], onChanged: (_) {}),
+        throwsAssertionError,
+      );
+    });
+
     testWidgets('点击单元格触发 onChanged（single）', (tester) async {
       List<DateTime>? changed;
       await tester.pumpWidget(wrap(TCalendar(
