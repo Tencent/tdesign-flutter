@@ -5,7 +5,9 @@
 
 ##### TMessage.show
 
-在 Overlay 中显示消息并返回控制句柄
+在 Overlay 中显示消息并返回控制句柄。
+未显式传入 `offset` 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
+显式传入不同 `offset` 的消息可以同时展示。
 
 返回类型：`TMessageHandle`
 
@@ -13,7 +15,7 @@
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 | content | String | '' | 通知内容 |
-| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 表示不自动关闭 |
+| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 或 `Duration.zero` 表示不自动关闭。 |
 | showIcon | bool | true | 是否显示前置图标 |
 | icon | Widget? | - | 自定义前置图标 |
 | link | TMessageLink? | - | 链接配置 |
@@ -34,7 +36,7 @@
 | --- | --- | --- | --- |
 | closeButton | Widget? | - | 自定义关闭按钮 |
 | content | String | '' | 通知内容 |
-| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 表示不自动关闭 |
+| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 或 `Duration.zero` 表示不自动关闭 |
 | icon | Widget? | - | 自定义前置图标 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | link | TMessageLink? | - | 链接配置 |
@@ -48,4 +50,4 @@
 | showIcon | bool | true | 是否显示前置图标 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
 | variant | TMessageVariant | TMessageVariant.info | 消息语义色 |
-| visible | bool | true | 是否显示 |
+| visible | bool | false | 是否显示，默认为 false |
