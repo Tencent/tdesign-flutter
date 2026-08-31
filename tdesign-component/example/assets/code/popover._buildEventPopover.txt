@@ -11,13 +11,13 @@ Widget _buildEventPopover(BuildContext context) {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '点击或长按我',
+                  content: const Text('点击或长按我'),
                   placement: TPopoverPlacement.bottom,
-                  onTap: (content) {
-                    setState(() => _eventStatus = 'onTap：$content');
+                  onTap: () {
+                    setState(() => _eventStatus = 'onTap：点击或长按我');
                   },
-                  onLongTap: (content) {
-                    setState(() => _eventStatus = 'onLongTap：$content');
+                  onLongTap: () {
+                    setState(() => _eventStatus = 'onLongTap：点击或长按我');
                   },
                 );
               },

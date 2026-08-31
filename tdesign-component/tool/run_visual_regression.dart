@@ -38,9 +38,9 @@ const visualTestSuites = <VisualTestSuite>[
   ),
   VisualTestSuite(
     'popover',
-    'Popover component',
-    workingDirectory: '.',
-    testFiles: ['test/components/popover/t_popover_golden_test.dart'],
+    'Popover Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/popover_demo_golden_test.dart'],
   ),
   VisualTestSuite(
     'checkbox',

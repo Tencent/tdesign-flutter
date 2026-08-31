@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/popover/t_popover_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TPopover 组件 Widget 测试
@@ -70,7 +72,10 @@ void main() {
           Builder(
             builder: (context) {
               return Center(
-                child: TPopoverWidget(context: context, content: '气泡内容'),
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Text('气泡内容'),
+                ),
               );
             },
           ),
@@ -89,7 +94,10 @@ void main() {
           Builder(
             builder: (context) {
               return Center(
-                child: TPopoverWidget(context: context, content: '默认气泡'),
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Text('默认气泡'),
+                ),
               );
             },
           ),
@@ -97,10 +105,12 @@ void main() {
       );
       await tester.pump();
 
-      final text = tester.widget<Text>(find.text('默认气泡'));
-      expect(text.style?.color, token.textColorAnti);
-      expect(text.style?.fontSize, token.fontBodyLarge?.size);
-      expect(text.style?.height, token.fontBodyLarge?.height);
+      final textStyle = DefaultTextStyle.of(
+        tester.element(find.text('默认气泡')),
+      ).style;
+      expect(textStyle.color, token.textColorAnti);
+      expect(textStyle.fontSize, token.fontBodyLarge?.size);
+      expect(textStyle.height, token.fontBodyLarge?.height);
 
       final container = tester.widget<Container>(
         find
@@ -125,7 +135,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '自定义背景',
+                  content: const Text('自定义背景'),
                   colorScheme: TPopoverColorScheme.primary,
                 ),
               );
@@ -157,7 +167,10 @@ void main() {
           Builder(
             builder: (context) {
               return Center(
-                child: TPopoverWidget(context: context, content: longContent),
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Text(longContent),
+                ),
               );
             },
           ),
@@ -183,7 +196,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('contentWidget 自定义内容渲染', (tester) async {
+    testWidgets('自定义 Widget 内容渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           Builder(
@@ -191,7 +204,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  contentWidget: const Text('自定义Widget'),
+                  content: const Text('自定义Widget'),
                   width: 100,
                   height: 50,
                 ),
@@ -218,7 +231,7 @@ void main() {
       expect(container.constraints?.maxHeight, 50);
     });
 
-    testWidgets('contentWidget 未指定 width/height 拒绝构建', (tester) async {
+    testWidgets('Widget 内容未指定 width/height 时按实际尺寸布局', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -226,24 +239,26 @@ void main() {
             builder: (context) {
               return TPopoverWidget(
                 context: context,
-                contentWidget: const Text('无尺寸'),
+                content: const Text('无尺寸'),
               );
             },
           ),
         ),
       );
 
-      expect(tester.takeException(), isA<FlutterError>());
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      expect(find.text('无尺寸'), findsOneWidget);
     });
 
-    testWidgets('contentWidget 更新为无确定尺寸时仍执行契约校验', (tester) async {
+    testWidgets('Widget 内容更新后无需固定尺寸', (tester) async {
       Widget build({required bool withSize}) => MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()),
         home: Builder(
           builder: (context) {
             return TPopoverWidget(
               context: context,
-              contentWidget: const Text('动态内容'),
+              content: const Text('动态内容'),
               width: withSize ? 100 : null,
               height: withSize ? 50 : null,
             );
@@ -254,7 +269,8 @@ void main() {
       await tester.pumpWidget(build(withSize: true));
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(build(withSize: false));
-      expect(tester.takeException(), isA<FlutterError>());
+      await tester.pump();
+      expect(tester.takeException(), isNull);
     });
   });
 
@@ -271,7 +287,7 @@ void main() {
                 return Center(
                   child: TPopoverWidget(
                     context: context,
-                    content: '${scheme.name}气泡',
+                    content: Text('${scheme.name}气泡'),
                     colorScheme: scheme,
                   ),
                 );
@@ -299,7 +315,7 @@ void main() {
                 return Center(
                   child: TPopoverWidget(
                     context: context,
-                    content: '${placement.name}定位',
+                    content: Text('${placement.name}定位'),
                     placement: placement,
                   ),
                 );
@@ -326,7 +342,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '有箭头',
+                  content: const Text('有箭头'),
                   placement: TPopoverPlacement.bottom,
                   showArrow: true,
                 ),
@@ -349,7 +365,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '无箭头',
+                  content: const Text('无箭头'),
                   showArrow: false,
                 ),
               );
@@ -370,7 +386,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '大箭头',
+                  content: const Text('大箭头'),
                   arrowSize: 16,
                   placement: TPopoverPlacement.top,
                 ),
@@ -396,7 +412,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '内边距',
+                  content: const Text('内边距'),
                   padding: const EdgeInsets.all(20),
                 ),
               );
@@ -416,7 +432,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '固定尺寸',
+                  content: const Text('固定尺寸'),
                   width: 200,
                   height: 80,
                 ),
@@ -448,7 +464,10 @@ void main() {
           Builder(
             builder: (context) {
               return Center(
-                child: TPopoverWidget(context: context, content: longContent),
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Text(longContent),
+                ),
               );
             },
           ),
@@ -475,7 +494,10 @@ void main() {
           Builder(
             builder: (context) {
               return Center(
-                child: TPopoverWidget(context: context, content: '短文本'),
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Text('短文本'),
+                ),
               );
             },
           ),
@@ -504,7 +526,7 @@ void main() {
               return Center(
                 child: TPopoverWidget(
                   context: context,
-                  content: '圆角',
+                  content: const Text('圆角'),
                   radius: BorderRadius.circular(20),
                 ),
               );
@@ -522,7 +544,10 @@ void main() {
           Builder(
             builder: (context) {
               return Center(
-                child: TPopoverWidget(context: context, content: '主题气泡'),
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Text('主题气泡'),
+                ),
               );
             },
           ),
@@ -551,8 +576,15 @@ void main() {
 
       expect(decoration.borderRadius, BorderRadius.circular(20));
       expect(container.padding, const EdgeInsets.all(10));
+      final arrowBorder =
+          (arrow.decoration! as BoxDecoration).border! as Border;
       expect(
-        ((arrow.decoration! as BoxDecoration).border as Border?)?.bottom.width,
+        [
+          arrowBorder.top.width,
+          arrowBorder.right.width,
+          arrowBorder.bottom.width,
+          arrowBorder.left.width,
+        ].reduce(math.max),
         16,
       );
     });
@@ -574,7 +606,7 @@ void main() {
                   onPressed: () {
                     TPopover.showPopover(
                       context: context,
-                      content: '气泡',
+                      content: const Text('气泡'),
                       placement: TPopoverPlacement.bottom,
                     );
                   },
@@ -608,6 +640,42 @@ void main() {
   // showPopover 静态方法
   // ============================================================
   group('TPopover.showPopover', () {
+    testWidgets('省略 placement 时默认显示在锚点上方', (tester) async {
+      late BuildContext anchorContext;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Center(
+            child: Builder(
+              builder: (context) {
+                anchorContext = context;
+                return const SizedBox(
+                  key: Key('default-placement-anchor'),
+                  width: 40,
+                  height: 40,
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      final anchorRect = tester.getRect(
+        find.byKey(const Key('default-placement-anchor')),
+      );
+      unawaited(
+        TPopover.showPopover(
+          context: anchorContext,
+          content: const Text('默认顶部'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final contentRect = tester.getRect(
+        find.byKey(const Key('t-popover-content')),
+      );
+      expect(contentRect.bottom, lessThan(anchorRect.top));
+    });
+
     testWidgets('showPopover 弹出气泡', (tester) async {
       late BuildContext ctx;
       await tester.pumpWidget(
@@ -624,7 +692,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: ctx,
-          content: '弹出气泡',
+          content: const Text('弹出气泡'),
           placement: TPopoverPlacement.bottom,
         ),
       );
@@ -649,7 +717,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: ctx,
-          content: '成功气泡',
+          content: const Text('成功气泡'),
           colorScheme: TPopoverColorScheme.success,
         ),
       );
@@ -674,7 +742,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: ctx,
-          content: '可关闭',
+          content: const Text('可关闭'),
           closeOnClickOutside: true,
         ),
       );
@@ -706,7 +774,7 @@ void main() {
                         unawaited(
                           TPopover.showPopover(
                             context: anchorContext,
-                            content: '滚动气泡',
+                            content: const Text('滚动气泡'),
                             placement: TPopoverPlacement.bottom,
                           ),
                         );
@@ -748,7 +816,7 @@ void main() {
                     unawaited(
                       TPopover.showPopover(
                         context: anchorContext,
-                        content: '保持展示',
+                        content: const Text('保持展示'),
                         closeOnScroll: false,
                       ),
                     );
@@ -788,7 +856,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: ctx,
-          content: '等待关闭',
+          content: const Text('等待关闭'),
         ).then((_) => completed = true),
       );
       await tester.pump();
@@ -799,10 +867,10 @@ void main() {
       expect(completed, isTrue);
     });
 
-    testWidgets('Popover 点击和长按回调会传递 content', (tester) async {
+    testWidgets('Popover 点击和长按回调各触发一次', (tester) async {
       late BuildContext ctx;
-      String? tapped;
-      String? longPressed;
+      var tapCount = 0;
+      var longPressCount = 0;
       await tester.pumpWidget(
         wrapWithTheme(
           Builder(
@@ -817,18 +885,18 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: ctx,
-          content: '回调内容',
+          content: const Text('回调内容'),
           placement: TPopoverPlacement.bottom,
-          onTap: (content) => tapped = content,
-          onLongTap: (content) => longPressed = content,
+          onTap: () => tapCount += 1,
+          onLongTap: () => longPressCount += 1,
         ),
       );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('回调内容'));
-      expect(tapped, '回调内容');
+      expect(tapCount, 1);
       await tester.longPress(find.text('回调内容'));
-      expect(longPressed, '回调内容');
+      expect(longPressCount, 1);
     });
 
     testWidgets('右下角锚点的 Popover 保持在安全区内', (tester) async {
@@ -850,7 +918,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: anchorContext,
-          content: '右下角的较长气泡内容',
+          content: const Text('右下角的较长气泡内容'),
           placement: TPopoverPlacement.bottomRight,
         ),
       );
@@ -884,7 +952,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: anchorContext,
-          content: '自动翻转到底部',
+          content: const Text('自动翻转到底部'),
           placement: TPopoverPlacement.top,
         ),
       );
@@ -919,7 +987,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: anchorContext,
-          content: '自动翻转到右侧',
+          content: const Text('自动翻转到右侧'),
           placement: TPopoverPlacement.left,
         ),
       );
@@ -957,7 +1025,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: anchorContext,
-          contentWidget: const ColoredBox(
+          content: const ColoredBox(
             key: Key('clamped-popover-content'),
             color: Colors.red,
           ),
@@ -1023,7 +1091,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: anchorContext,
-          content: '随锚点关闭',
+          content: const Text('随锚点关闭'),
           placement: TPopoverPlacement.bottom,
         ).then((_) => completed = true),
       );
@@ -1069,7 +1137,7 @@ void main() {
       unawaited(
         TPopover.showPopover(
           context: ctx,
-          content: '主题气泡',
+          content: const Text('主题气泡'),
           colorScheme: TPopoverColorScheme.defaultTheme,
         ),
       );

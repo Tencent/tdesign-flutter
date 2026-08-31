@@ -29,7 +29,7 @@
 # Example 页面共享功能回归，双 Flutter 版本共用；不包含 Golden。
 .example-regression-tests:
   name: flutter test (example shared regression)
-  script: cd tdesign-component/example && flutter test --no-pub --exclude-tags golden test/widget_test.dart test/action_sheet_page_test.dart test/notice_bar_page_test.dart test/popup_demo_test.dart test/popover_page_test.dart test/radio_page_test.dart test/rate_demo_test.dart test/tag_page_test.dart
+  script: cd tdesign-component/example && flutter test --no-pub --exclude-tags golden test/widget_test.dart test/action_sheet_page_test.dart test/notice_bar_page_test.dart test/popup_demo_test.dart test/popover_demo_test.dart test/popover_page_test.dart test/radio_page_test.dart test/rate_demo_test.dart test/tag_page_test.dart
 
 # Demo 结构与 Golden 固定在 Flutter 3.32.0 Linux 执行，测试清单由 Dart 统一维护。
 .visual-regression-tests:
