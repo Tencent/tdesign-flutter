@@ -27,40 +27,27 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildPureIconLoading(BuildContext context) {
     return Row(
-      // spacing: 36,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const TLoading(
-          icon: TLoadingIcon.circle,
-        ),
-        const SizedBox(width: 36),
-        const TLoading(
-          icon: TLoadingIcon.activity,
-        ),
-        const SizedBox(width: 36),
+        const TLoading(icon: TLoadingIcon.circle),
+        const SizedBox(width: 40),
+        const TLoading(icon: TLoadingIcon.activity),
+        const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(
-              iconColor: context.tTheme.brandNormalColor,
-            ),
+            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
-          child: const TLoading(
-            size: 40,
-            icon: TLoadingIcon.point,
-          ),
+          child: const TLoading(size: 40, icon: TLoadingIcon.point),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(
-              iconColor: context.tTheme.brandNormalColor,
-            ),
+            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
           child: const TLoading(
-            customIcon: SizedBox(
-              width: 20,
-              height: 20,
-              child: Icon(Icons.sync_rounded, size: 20, color: Colors.blue),
+            customIcon: Image(
+              image: AssetImage('assets/img/loading-logo2.png'),
+              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -78,25 +65,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
     return Row(
-      // spacing: 36,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Theme(
-          data: Theme.of(context)
-              .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(
-            icon: TLoadingIcon.circle,
-            text: '加载中…',
-          ),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中...'),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 64),
         Theme(
-          data: Theme.of(context)
-              .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(
-            icon: TLoadingIcon.activity,
-            text: '加载中…',
-          ),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中...'),
         ),
       ],
     );
@@ -112,25 +94,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildTextIconVerticalLoading(BuildContext context) {
     return Row(
-      // spacing: 36,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Theme(
-          data: Theme.of(context)
-              .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
-          child: const TLoading(
-            icon: TLoadingIcon.circle,
-            text: '加载中…',
-          ),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中'),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 64),
         Theme(
-          data: Theme.of(context)
-              .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
-          child: const TLoading(
-            icon: TLoadingIcon.activity,
-            text: '加载中…',
-          ),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中'),
         ),
       ],
     );
@@ -144,58 +121,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildPureTextLoading(BuildContext context) {
-    return Row(
-      // spacing: 36,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const TLoading(
-          text: '加载中…',
-        ),
-        const SizedBox(width: 36),
-        Theme(
-          data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(
-              textColor: context.tTheme.textColorPlaceholder,
-            ),
-          ),
-          child: const TLoading(
-            text: '加载失败',
-          ),
-        ),
-        const SizedBox(width: 36),
-        Theme(
-          data: Theme.of(context).mergeExtension(
-            const TLoadingThemeData(),
-          ),
-          child: const TLoading(
-            text: '加载失败',
-            refreshWidget: Text('刷新'),
-          ),
-        ),
-      ],
-    );
-  }</pre>
+  Widget _buildPureTextLoading(BuildContext context) =>
+      const TLoading(icon: null, text: '加载中...');</pre>
 
 </td-code-block>
                                   
 ### 2 组件尺寸
 
-自定义尺寸（32 / 28 / 24）
+大尺寸
 
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildLoadingSizes(BuildContext context) {
     Widget loading(double size) => Theme(
-      data: Theme.of(context).mergeExtension(
-        const TLoadingThemeData(axis: Axis.horizontal),
-      ),
-      child: TLoading(
-        size: size,
-        icon: TLoadingIcon.circle,
-        text: '加载中…',
-      ),
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+      child: TLoading(size: size, icon: TLoadingIcon.circle, text: '加载中...'),
     );
 
     return Column(
@@ -216,48 +159,78 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
 
-### 1 加载速度
+### 3 加载速度
 
-调整加载速度
+加载速度调整
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildCustomSpeedLoading(BuildContext context) {
     return Column(
-      // spacing: 16,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(
               axis: Axis.horizontal,
-              duration: _currentSliderValue.round(),
+              duration: (2000 - _currentSliderValue).round(),
             ),
           ),
           child: const TLoading(
             size: 26,
             icon: TLoadingIcon.circle,
-            text: '加载中…',
+            text: '加载中...',
           ),
         ),
         const SizedBox(height: 16),
-        TSlider(
-          value: _currentSliderValue,
-          sliderThemeData: TSliderThemeData(
-            context: context,
-            max: 2000,
-            min: -20,
-            divisions: 100,
-            showThumbValue: true,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const min = 100.0;
+            const max = 1500.0;
+            const trackInset = 24.0;
+            const labelWidth = 48.0;
+            final progress = (_currentSliderValue - min) / (max - min);
+            final trackWidth = constraints.maxWidth - trackInset * 2;
+            final thumbCenter = trackInset + trackWidth * progress;
+            final labelLeft = (thumbCenter - labelWidth / 2).clamp(
+              0.0,
+              constraints.maxWidth - labelWidth,
+            );
+            return SizedBox(
+              height: 64,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: labelLeft,
+                    width: labelWidth,
+                    child: Text(
+                      '${_currentSliderValue.round()}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: TSlider(
+                      value: _currentSliderValue,
+                      min: min,
+                      max: max,
+                      divisions: 100,
+                      onChanged: (double value) {
+                        setState(() {
+                          _currentSliderValue = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
-        )
+        ),
       ],
     );
   }</pre>

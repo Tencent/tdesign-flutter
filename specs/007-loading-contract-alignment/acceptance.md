@@ -54,3 +54,4 @@
 - Flutter 3.32.0 与 3.47.0：组件聚焦测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
 - API 收敛复核：没有新增一次性 props；`size` 从枚举收敛为默认 20 的单一 `double` 参数，Theme 不提供重复尺寸入口；该公开 API 变更与既有默认视觉行为变更均按 breaking 处理。
 - 公开 Demo 最终复核：按 `tdesign-miniprogram@1.16.0` 源码恢复左对齐、官方 custom 图片、横竖实例间距、纯文字单实例、24/28/32 尺寸和默认 800 的带数值滑块；Flutter 3.32.0 Linux 明暗整页 Golden 更新后已不带更新参数复跑通过。
+- 站点 README 最终复核：六段代码演示与当前 Demo/生成片段同步，修正 custom 图片、文案、间距、尺寸说明、小节编号及速度滑块的现行 API 和 `2000 - value` 映射，不再保留不可编译的旧 `TSliderThemeData` 调用。

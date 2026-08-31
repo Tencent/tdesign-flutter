@@ -288,7 +288,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
 
   double _currentSliderValue = 800;
 
-  /// 自定义尺寸
+  /// 加载速度
   @ExampleCode(group: 'loading')
   Widget _buildCustomSpeedLoading(BuildContext context) {
     return Column(

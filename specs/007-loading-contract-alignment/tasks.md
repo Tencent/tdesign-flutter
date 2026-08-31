@@ -18,6 +18,7 @@
 - [x] 补充 Demo 结构测试、明暗整页 Golden 与小程序实际页截图证据
 - [x] 补充 Widget 测试（duration/axis/尺寸/覆盖率补充）
 - [x] 修正站点 README（链接/API 表/示例代码）
+- [x] CNB 复审后重新逐段同步 README 与最终公开 Demo，移除过期 Slider API
 - [x] 执行验证：analyze / 双版本测试 / 覆盖率 / 示例生成
 
 ## DONE
