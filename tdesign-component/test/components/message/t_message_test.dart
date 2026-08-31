@@ -573,6 +573,7 @@ void main() {
 
     testWidgets('默认位置的新消息替换上一条且不新增公开状态', (tester) async {
       final key = GlobalKey();
+      var dismissed = false;
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -583,6 +584,7 @@ void main() {
         context: key.currentContext!,
         content: '上一条消息',
         duration: null,
+        onDismissed: () => dismissed = true,
       );
       final second = TMessage.show(
         context: key.currentContext!,
@@ -592,11 +594,72 @@ void main() {
       await tester.pump();
 
       expect(first.isShowing, isFalse);
+      expect(dismissed, isTrue);
       expect(second.isShowing, isTrue);
       expect(find.text('上一条消息'), findsNothing);
       expect(find.text('当前消息'), findsOneWidget);
       second.dismiss();
       await tester.pump();
+    });
+
+    testWidgets('visible=false 会取消关闭动画及其回调', (tester) async {
+      var visible = true;
+      var dismissed = false;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return TMessage(
+                content: '可关闭消息',
+                visible: visible,
+                duration: null,
+                showCloseButton: true,
+                onDismissed: () => dismissed = true,
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pump(const Duration(milliseconds: 100));
+      setState(() => visible = false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(dismissed, isFalse);
+    });
+
+    testWidgets('visible重新打开时恢复默认顶部位置', (tester) async {
+      var visible = true;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return TMessage(
+                content: '可重开消息',
+                visible: visible,
+                duration: null,
+                showCloseButton: true,
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pumpAndSettle();
+      setState(() => visible = false);
+      await tester.pump();
+      setState(() => visible = true);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<AnimatedPositioned>(find.byType(AnimatedPositioned)).top,
+        kToolbarHeight,
+      );
     });
   });
 

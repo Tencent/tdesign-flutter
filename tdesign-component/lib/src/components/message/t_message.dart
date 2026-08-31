@@ -51,6 +51,7 @@ final class TMessageHandle {
 
 final class _TMessageSlot {
   TMessageHandle? handle;
+  VoidCallback? onDismissed;
 }
 
 /// 顶部消息组件
@@ -163,7 +164,10 @@ class TMessage extends StatefulWidget {
     final slot = offset == null
         ? (_defaultSlots[overlay] ??= _TMessageSlot())
         : null;
-    slot?.handle?.dismiss();
+    final previousHandle = slot?.handle;
+    final previousOnDismissed = slot?.onDismissed;
+    previousOnDismissed?.call();
+    previousHandle?.dismiss();
 
     void removeEntry() {
       if (handle._entry == null) {
@@ -172,6 +176,7 @@ class TMessage extends StatefulWidget {
       handle.dismiss();
       if (slot?.handle == handle) {
         slot?.handle = null;
+        slot?.onDismissed = null;
       }
       onDismissed?.call();
     }
@@ -198,7 +203,11 @@ class TMessage extends StatefulWidget {
       ),
     );
     handle._entry = entry;
-    slot?.handle = handle;
+    if (slot case final currentSlot?) {
+      currentSlot
+        ..handle = handle
+        ..onDismissed = onDismissed;
+    }
     overlay.insert(entry);
     return handle;
   }
@@ -323,9 +332,13 @@ class _TMessageState extends State<TMessage>
       _scheduleMarqueeStart();
     } else if (oldWidget.visible && !widget.visible) {
       _durationTimer?.cancel();
+      _closeTimer?.cancel();
       _marqueeDelayTimer?.cancel();
       _animationController.stop();
       _isAnimationRunning = false;
+      _closing = false;
+      _isVisible = false;
+      _top = _effectiveOffset.dy;
     }
     if (oldWidget.offset != widget.offset ||
         oldWidget.useSafeArea != widget.useSafeArea) {

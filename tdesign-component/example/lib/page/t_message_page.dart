@@ -206,20 +206,23 @@ class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: 56,
-          child: Stack(
-            children: [
-              if (_visible)
-                const TMessage(
-                  content: '这是一条通过组件调用的消息通知',
-                  visible: true,
-                  offset: Offset.zero,
-                  useSafeArea: false,
-                  duration: null,
-                ),
-            ],
+        Transform.translate(
+          offset: const Offset(-16, 0),
+          child: SizedBox(
+            width: MediaQuery.sizeOf(context).width,
+            height: 56,
+            child: Stack(
+              children: [
+                if (_visible)
+                  const TMessage(
+                    content: '这是一条通过组件调用的消息通知',
+                    visible: true,
+                    offset: Offset.zero,
+                    useSafeArea: false,
+                    duration: null,
+                  ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 8),
