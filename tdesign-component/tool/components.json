@@ -771,7 +771,8 @@
       "api": {
         "names": [
           "TPopover",
-          "TPopoverWidget"
+          "TPopoverColorScheme",
+          "TPopoverPlacement"
         ],
         "getComments": true
       }
