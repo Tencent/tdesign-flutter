@@ -105,7 +105,7 @@
 - [ ] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
 - [ ] circle 尺寸 Demo 显式展示 24/28/32，Button Loading 保持默认 20。
 - [ ] 公开 Demo 的三个分组、实例顺序和文案与小程序一致，custom 指示器不单独扩展分组。
-- [ ] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页面截图完成人工比对。
+- [x] 明暗主题整页 Golden 已在 Flutter 3.32.0 Linux CI 复现通过，且已与小程序实际页面截图完成人工比对。
 - [ ] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。
 - [ ] Loading 全部手写生产源码行覆盖率 ≥95% 且不低于修改前基线（86.15%）。
 - [ ] `flutter analyze --fatal-infos` 0 error / 0 warning。

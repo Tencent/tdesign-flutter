@@ -36,7 +36,7 @@
 - [x] 默认 `duration` 800、默认 `axis` horizontal，与官方一致（示例页可见默认转圈速度与横向布局）。
 - [x] circle 三档尺寸 24/28/32 对齐官方小程序 `48/56/64rpx`；circle、activity、point 和 custom 都以 `size` 表示外部尺寸。
 - [x] 公开页收敛为小程序的三个分组；custom 指示器合并到“纯图标”，三档尺寸合并为一个示例。
-- [ ] 已使用微信开发者工具截取小程序实际页；当前 `double size` 最终改动仍需由 Flutter 3.32.0 Linux CI 复验明暗整页 Golden。
+- [x] 已使用微信开发者工具截取小程序实际页；`double size` 最终改动已由 Flutter 3.32.0 Linux CI 复验明暗整页 Golden（run `33352953431`）。
 - [x] 站点 README 文件链接、API 表、示例代码已修正，`loading_api.md` 保持生成原样。
 
 ## 未覆盖项与后续工作
@@ -49,6 +49,6 @@
 ## 2026-08-31 develop 同步复验
 
 - 已合并 `origin/develop@fb26b8d5`，保留 Loading 回归登记并采用 develop 的共享测试基建。
-- 上一版 CI 同款 Flutter 3.32.0 Linux Golden 曾复跑通过；当前 `double size` 最终改动尚未推送，不能沿用旧结论，需等待新 head 的 visual regression。
+- 最终 `double size` 改动已推送；Flutter 3.32.0 Linux visual regression 在 head `8e8d68f6` 的 CI run `33352953431` 通过。
 - Flutter 3.32.0 与 3.47.0：组件聚焦测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
 - API 收敛复核：没有新增一次性 props；`size` 从枚举收敛为默认 20 的单一 `double` 参数，Theme 不提供重复尺寸入口；该公开 API 变更与既有默认视觉行为变更均按 breaking 处理。
