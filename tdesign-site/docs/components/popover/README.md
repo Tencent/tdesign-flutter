@@ -38,7 +38,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: theme,
               );
             },
@@ -66,7 +66,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           onPressed: () {
             TPopover.showPopover(
               context: popoverContext,
-              content: '弹出气泡内容',
+              content: const Text('弹出气泡内容'),
               showArrow: false,
               colorScheme: theme,
             );
@@ -102,10 +102,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               context: popoverContext,
               padding: const EdgeInsets.all(0),
               colorScheme: theme,
-              // contentWidget 模式下必须指定确定的 width 和 height。
               width: 150,
               height: 146,
-              contentWidget: Column(
+              content: Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -160,7 +159,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
             onPressed: () {
-              TPopover.showPopover(context: popoverContext, content: '弹出气泡内容');
+              TPopover.showPopover(
+                context: popoverContext,
+                content: const Text('弹出气泡内容'),
+              );
             },
           );
         },
@@ -189,7 +191,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.light,
               );
             },
@@ -206,7 +208,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildInfoPopover(BuildContext context) {
+  Widget _buildPrimaryPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -220,8 +222,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
-                colorScheme: TPopoverColorScheme.info,
+                content: const Text('弹出气泡内容'),
+                colorScheme: TPopoverColorScheme.primary,
               );
             },
           );
@@ -251,7 +253,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.success,
               );
             },
@@ -282,7 +284,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.warning,
               );
             },
@@ -299,7 +301,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildErrorPopover(BuildContext context) {
+  Widget _buildDangerPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
@@ -313,8 +315,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
-                colorScheme: TPopoverColorScheme.error,
+                content: const Text('弹出气泡内容'),
+                colorScheme: TPopoverColorScheme.danger,
               );
             },
           );
@@ -346,7 +348,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.topLeft,
                 colorScheme: theme,
               );
@@ -378,7 +380,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.top,
                 colorScheme: theme,
               );
@@ -410,7 +412,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.topRight,
                 colorScheme: theme,
               );
@@ -442,7 +444,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.bottomLeft,
                 colorScheme: theme,
               );
@@ -474,7 +476,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.bottom,
                 colorScheme: theme,
               );
@@ -506,7 +508,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.bottomRight,
                 colorScheme: theme,
               );
@@ -530,19 +532,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('右侧上'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.rightTop,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧上'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.rightTop,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -562,19 +567,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('右侧中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.right,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧中'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.right,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -594,19 +602,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('右侧下'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.rightBottom,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧下'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.rightBottom,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -626,19 +637,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('左侧上'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.leftTop,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('左侧上'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.leftTop,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -658,19 +672,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('左侧中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.left,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('左侧中'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.left,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -690,19 +707,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('左侧下'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.leftBottom,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('左侧下'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.leftBottom,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -710,6 +730,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
+
+## 从旧版 API 迁移
+
+- 文本内容由 `content: '提示内容'` 改为 `content: const Text('提示内容')`。
+- 自定义内容由 `contentWidget: widget` 改为 `content: widget`，不再需要为了首帧定位强制指定 `width` 和 `height`。
+- `onTap`、`onLongTap` 改为无参数回调；内容已由调用方持有，无需从回调重复获取。
+- `placement` 可省略，默认使用 `TPopoverPlacement.top`。
+- `TPopoverWidget` 不再作为公开入口；统一通过 `TPopover.showPopover` 管理 Overlay 和生命周期。
 
 ## API
 ### TPopover
@@ -727,46 +755,36 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | 上下文 |
-| content | String? | - | 显示内容 |
-| contentWidget | Widget? | - | 自定义内容。 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 `width`/`height` 或组件主题提供确定尺寸。 |
+| context | BuildContext | - | 触发元素的上下文，用于计算气泡锚点位置。 |
+| content | Widget | - | 气泡内容。直接传入未设置样式的 `Text` 时使用气泡默认文字样式；组合内容应自行定义子组件样式和布局。 |
 | offset | double? | - | 弹层与触发元素的间距。 |
-| colorScheme | TPopoverColorScheme? | - | 气泡语义色。 |
+| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
-| placement | TPopoverPlacement? | - | 浮层出现位置 |
+| placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置，默认为 `TPopoverPlacement.top`。 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
 | arrowSize | double? | - | 箭头尺寸。 |
 | padding | EdgeInsetsGeometry? | - | 内容内边距。 |
-| width | double? | - | 内容外框宽度（包含 padding）。 使用 `contentWidget` 时必须同时提供 `width` 和 `height`，也可以由 `TPopoverThemeData` 提供对应尺寸。 |
-| height | double? | - | 内容外框高度（包含 padding）。 |
+| width | double? | - | 内容外框宽度（包含 padding）。未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。 |
+| height | double? | - | 内容外框高度（包含 padding）。未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。 |
 | overlayColor | Color? | - | 蒙层颜色。 |
-| onTap | TPopoverTapCallback? | - | 点击事件 |
-| onLongTap | TPopoverLongPressCallback? | - | 长按事件 |
+| onTap | VoidCallback? | - | 点击气泡内容时触发。 |
+| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
 | radius | BorderRadius? | - | 气泡圆角。 |
 
-### TPopoverWidget
+### TPopoverColorScheme
 #### 简介
-气泡弹层 Widget
-#### 默认构造方法
+弹出气泡预设配色。
+#### 枚举值
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| arrowSize | double? | - | 箭头大小 |
-| colorScheme | TPopoverColorScheme? | - | 弹出气泡主题 |
-| content | String? | - | 显示内容 |
-| contentWidget | Widget? | - | 自定义内容。 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 `width`/`height` 或组件主题提供确定尺寸。 |
-| context | BuildContext | - | 上下文 |
-| height | double? | - | 内容外框高度（包含 padding）。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| offset | double? | - | 偏移 |
-| onLongTap | TPopoverLongPressCallback? | - | 长按事件 |
-| onTap | TPopoverTapCallback? | - | 点击事件 |
-| padding | EdgeInsetsGeometry? | - | 内容内边距 |
-| placement | TPopoverPlacement? | - | 浮层出现位置 |
-| radius | BorderRadius? | - | 圆角 |
-| showArrow | bool? | - | 是否显示浮层箭头 |
-| width | double? | - | 内容外框宽度（包含 padding）。 |
+| 名称 | 说明 |
+| --- | --- |
+| defaultTheme | 默认深色配色。 |
+| light | 浅色。 |
+| primary | 品牌主色。 |
+| success | 成功。 |
+| warning | 警告。 |
+| danger | 危险色。 |
 
 ### TPopoverPlacement
 #### 简介
@@ -775,33 +793,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 说明 |
 | --- | --- |
-| topLeft | 上左 |
-| top | 上 |
-| topRight | 上右 |
-| rightTop | 右上 |
-| right | 右 |
-| rightBottom | 右下 |
-| bottomRight | 下右 |
-| bottom | 下 |
-| bottomLeft | 下左 |
-| leftBottom | 左下 |
-| left | 左 |
-| leftTop | 左上 |
-
-### TPopoverTapCallback
-#### 简介
-点击事件回调
-#### 类型定义
-
-```dart
-typedef TPopoverTapCallback = void Function(String? content);
-```
-
-### TPopoverLongPressCallback
-#### 简介
-长按事件回调
-#### 类型定义
-
-```dart
-typedef TPopoverLongPressCallback = void Function(String? content);
-```
+| topLeft | 上左。 |
+| top | 上方。 |
+| topRight | 上右。 |
+| rightTop | 右上。 |
+| right | 右侧。 |
+| rightBottom | 右下。 |
+| bottomRight | 下右。 |
+| bottom | 下方。 |
+| bottomLeft | 下左。 |
+| leftBottom | 左下。 |
+| left | 左侧。 |
+| leftTop | 左上。 |

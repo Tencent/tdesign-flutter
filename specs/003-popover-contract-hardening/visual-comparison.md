@@ -24,4 +24,4 @@
 - Flutter 为 3 个类型、6 种配色、12 种 placement 分别固定 light/dark 展开态，共 42 张 Golden；每张均断言 Overlay、气泡组件和内容真实可见后再截图。
 - 42 张 Golden 已逐张与小程序展开态复核，气泡内容、箭头方向、触发锚点、按钮尺寸/宽度和视口边界均正常；平台导航栏与页面滚动壳按 Flutter / 小程序原生形态保留。
 
-API 结论：合并 `develop@fb26b8d5` 后，实例 `colorScheme` 已是配色选择的唯一入口，`TPopoverThemeData` 仅保留具体样式值。Flutter 的 `contentWidget`、Overlay 关闭策略和 Future 生命周期属于平台原生组合能力，公开 Demo 不需要新增或删除 API。
+API 结论：合并 `develop@fb26b8d5` 后，实例 `colorScheme` 已是配色选择的唯一入口，`TPopoverThemeData` 仅保留具体样式值。Overlay 关闭策略和 Future 生命周期属于平台原生组合能力；后续内容入口 breaking 收敛见 `specs/022-popover-public-api-convergence`。

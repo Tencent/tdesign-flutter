@@ -55,7 +55,7 @@
 - [ ] 窄屏下十二种 placement 的内容和箭头均可接受
 - [ ] 刘海屏、圆角屏和底部安全区内不裁切
 - [ ] 键盘弹出后底部 Popover 不被遮挡
-- [x] Widget 测试确认 contentWidget 内部菜单项可点击并更新状态
+- [x] Widget 测试确认组合 Widget 内部菜单项可点击并更新状态
 - [x] Widget 测试确认列表锚点移除时 Popover 自动关闭且 Future 完成
 - [ ] 目标设备页面跳转时 Popover 自动关闭且无视觉残留
 

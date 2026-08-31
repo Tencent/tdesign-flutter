@@ -2,8 +2,8 @@
 
 ## 验证环境
 
-- 分支：`rss1102/fix/pr1033-visual-evidence`
-- 提交：工作区未提交
+- GitHub PR：`Tencent/tdesign-flutter#1033`
+- API 实现基线：`230140c1`；后续改动仅同步站点文档、Spec 与验收记录
 - Flutter/Dart：Flutter 3.32.0 与 Flutter 3.47.0；Golden 固定为 Flutter 3.32.0 Linux
 
 ## 自动化验证
@@ -16,9 +16,13 @@
 | Flutter 3.47.0 同一组件测试 | 通过 | 53 tests |
 | 双版本 `example/test/popover_page_test.dart test/popover_demo_test.dart` | 通过 | 每个版本 7 tests |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 生成片段与 Demo 源码同步 |
+| Popover API Markdown 定向生成 | 通过 | 仅生成 `TPopover`、`TPopoverColorScheme`、`TPopoverPlacement` |
+| 站点 README 示例同步检查 | 通过 | 21 个公开 Demo 代码块与生成片段逐项一致 |
 | Flutter 3.32.0 覆盖率门禁 | 通过 | Popover 生产源码 `502/518 = 96.91%` |
 | Flutter 3.32.0 Linux `flutter test --no-pub test/popover_demo_golden_test.dart` | 通过 | 2 张整页与 42 张展开态，共 44 tests；未更新基线 |
 | `git diff --check` | 通过 | 无空白错误 |
+
+组件测试文件包含 37 个静态 `test` / `testWidgets` 声明；其中配色与方位循环分别展开为 6 项和 12 项，运行总数为 `37 + 5 + 11 = 53`。
 
 ## 人工验收
 

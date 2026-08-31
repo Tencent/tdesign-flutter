@@ -44,7 +44,7 @@
 - 任意 Widget 内容优先按自身布局尺寸定位；`width`、`height` 显式传入时约束最终内容外框。
 - 默认文本样式通过 Popover 内容子树提供，调用方传入未指定样式的 `Text` 时保持既有文本视觉。
 - `TPopoverWidget` 仅作为 `src` 下的包内实现，且不再从 `package:tdesign_flutter/tdesign_flutter.dart` 导出。
-- 公开测试不得依赖私有实现类型，改用稳定语义或测试 Key 观察气泡内容和位置。
+- 包入口和 Example 公共行为测试不得依赖私有实现类型，改用稳定语义或测试 Key 观察气泡内容和位置；组件内部聚焦测试可以直接覆盖 `src` 下的布局原语。
 - 以上参数删除、类型收紧和底层类隐藏均属于 breaking change。
 
 ## 验收标准
