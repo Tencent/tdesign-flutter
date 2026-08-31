@@ -77,6 +77,8 @@
 
 - `t_loading_page.dart` 的公开页仅保留小程序公开矩阵：`01 组件类型`、`02 组件尺寸`、`03 加载速度`。
 - custom 指示器与 circle / spinner / dots 同属“纯图标”实例，使用小程序 Demo 同一张 `logo2.png` 的本地资产，不单独扩充一个 Flutter 专属 Demo。
+- custom 指示器与其他 Loading 指示器一致，按 `TLoadingThemeData.duration` 持续线性旋转；复用既有动画时长，不新增公开参数。
+- `customIcon` 是指示器内容的最高优先级入口；即使 `icon == null`，只要提供 customIcon 仍显示并旋转，避免两个现有参数形成冲突状态。
 - 大、中、小三档尺寸收敛在“大尺寸”示例内，与小程序页面层级一致。
 - 各示例内容按小程序带 padding 的 Demo 容器左对齐；横向图文实例间距 64，竖向图文实例间距 64。
 - 加载速度默认值为 800，滑块上方常驻展示当前数值；拖动后数值与动画时长映射同步更新。
@@ -100,15 +102,17 @@
 
 ## 验收标准
 
-- [ ] `TLoading()` 可省略 `size`，指示器外部尺寸默认为 20；非正数触发断言。
+- [x] `TLoading()` 可省略 `size`，指示器外部尺寸默认为 20；非正数触发断言。
 - [x] 仓库源码、测试、Demo、生成片段和用户文档中不再引用 `TLoadingSize`。
-- [ ] circle / activity / point 对同一个 `size` 使用统一外部尺寸语义。
-- [ ] `duration` 生效默认值从 2000 改为 800（未注入 Theme 时 circle indicator duration == 800）。
-- [ ] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
-- [ ] circle 尺寸 Demo 显式展示 24/28/32，Button Loading 保持默认 20。
-- [ ] 公开 Demo 的三个分组、实例顺序、对齐、文案与小程序一致，custom 指示器显示官方图片且不单独扩展分组，速度滑块常驻显示并更新数值。
+- [x] circle / activity / point 对同一个 `size` 使用统一外部尺寸语义。
+- [x] `duration` 生效默认值从 2000 改为 800（未注入 Theme 时 circle indicator duration == 800）。
+- [x] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
+- [x] circle 尺寸 Demo 显式展示 24/28/32，Button Loading 保持默认 20。
+- [x] 公开 Demo 的三个分组、实例顺序、对齐、文案与小程序一致，custom 指示器显示官方图片且不单独扩展分组，速度滑块常驻显示并更新数值。
+- [x] custom 指示器按默认 800ms 持续旋转，并响应 Theme duration 更新。
+- [x] `customIcon` 在 `icon == null` 时仍按最高优先级显示。
 - [x] 明暗主题整页 Golden 已在 Flutter 3.32.0 Linux CI 复现通过，且已与小程序实际页面截图完成人工比对。
-- [ ] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。
-- [ ] Loading 全部手写生产源码行覆盖率 ≥95% 且不低于修改前基线（86.15%）。
-- [ ] `flutter analyze --fatal-infos` 0 error / 0 warning。
-- [ ] 双版本（Flutter 3.32.0 / latest）focused tests 通过。
+- [x] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。
+- [x] Loading 全部手写生产源码行覆盖率 ≥95% 且不低于修改前基线（86.15%）。
+- [x] `flutter analyze --fatal-infos` 0 error / 0 warning。
+- [x] 双版本（Flutter 3.32.0 / latest）focused tests 通过。

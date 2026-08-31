@@ -12,9 +12,9 @@
 | --- | --- | --- |
 | `flutter analyze --fatal-infos --no-pub`（3.32.0） | ✅ 0 error / 0 warning | lib + test + example |
 | `flutter analyze --fatal-infos --no-pub`（3.47.0） | ✅ 0 error / 0 warning | lib + test + example |
-| `flutter test test/components/loading/t_loading_test.dart`（3.32.0） | ✅ 36/36 通过 | 包含默认值、连续尺寸和三种指示器几何契约 |
-| `flutter test test/components/loading/t_loading_test.dart`（3.47.0） | ✅ 36/36 通过 | 与受影响主题测试合计 63/63 通过 |
-| `flutter test --coverage test/components/loading/t_loading_test.dart` | ✅ 99.59% | Loading 目录 LF=244, LH=243 |
+| `flutter test test/components/loading/t_loading_test.dart`（3.32.0） | ✅ 38/38 通过 | 包含默认值、连续尺寸、三种预设指示器、自定义指示器旋转和优先级契约 |
+| `flutter test test/components/loading/t_loading_test.dart`（3.47.0） | ✅ 38/38 通过 | 与 3.32.0 行为一致 |
+| `flutter test --coverage test/components/loading/t_loading_test.dart` | ✅ 99.62% | Loading 目录 LF=264, LH=263 |
 | `flutter test test/loading_demo_test.dart`（3.32.0） | ✅ 2/2 通过 | 公开分组、文案、实例数量与顺序；官方自定义图片与滑块拖动后常驻数值 |
 | `flutter test test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart` | ✅ 11/11 通过 | 回归、覆盖率与 Golden 登记完整 |
 | `dart run tool/generate_example_code.dart --check` | ✅ 通过 | custom 指示器与尺寸示例按小程序分组生成 |
@@ -37,6 +37,8 @@
 - [x] circle 三档尺寸 24/28/32 对齐官方小程序 `48/56/64rpx`；circle、activity、point 和 custom 都以 `size` 表示外部尺寸。
 - [x] 公开页收敛为小程序的三个分组；custom 指示器合并到“纯图标”，三档尺寸合并为一个示例。
 - [x] 示例内容按小程序 Demo 左对齐；custom 指示器使用本地化的官方 `logo2.png`，Golden 预缓存图片后再截图，不保留未加载占位；速度滑块默认常驻展示 800，拖动后数值更新。
+- [x] custom 指示器与小程序一致由 Loading 统一驱动旋转，默认 800ms 一周，并响应子树 `TLoadingThemeData.duration` 更新；未新增公开参数或重复状态源。
+- [x] `customIcon` 是唯一自定义指示器入口，优先于预设 `icon`；`icon == null` 仅关闭预设图标，不会吞掉显式 customIcon。
 - [x] 已使用微信开发者工具截取小程序实际页；`double size` 最终改动已由 Flutter 3.32.0 Linux CI 复验明暗整页 Golden（run `33352953431`）。
 - [x] 站点 README 文件链接、API 表、示例代码已修正，`loading_api.md` 保持生成原样。
 

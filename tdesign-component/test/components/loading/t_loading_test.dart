@@ -149,7 +149,7 @@ void main() {
       expect(find.byType(TLoading), findsOneWidget);
     });
 
-    testWidgets('实例 customIcon 自定义图标', (tester) async {
+    testWidgets('实例 customIcon 按 duration 持续旋转', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TLoading(
@@ -168,6 +168,81 @@ void main() {
         tester.getSize(find.byKey(const Key('custom-icon'))),
         const Size.square(30),
       );
+
+      final rotation = tester.widget<RotationTransition>(
+        find.ancestor(
+          of: find.byKey(const Key('custom-icon')),
+          matching: find.byType(RotationTransition),
+        ),
+      );
+      final initialTurns = rotation.turns.value;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(rotation.turns.value, isNot(initialTurns));
+      expect(rotation.turns.value, closeTo(0.25, 0.01));
+    });
+
+    testWidgets('customIcon 响应 Theme duration 更新', (tester) async {
+      var duration = 800;
+      late StateSetter setState;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, update) {
+              setState = update;
+              return Theme(
+                data: Theme.of(
+                  context,
+                ).mergeExtension(TLoadingThemeData(duration: duration)),
+                child: const Scaffold(
+                  body: TLoading(
+                    customIcon: Icon(Icons.refresh, key: Key('custom-icon')),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+      final rotation = tester.widget<RotationTransition>(
+        find.ancestor(
+          of: find.byKey(const Key('custom-icon')),
+          matching: find.byType(RotationTransition),
+        ),
+      );
+      expect(rotation.turns.value, closeTo(0.25, 0.01));
+
+      setState(() => duration = 1600);
+      await tester.pump();
+      final rotationAfterUpdate = tester.widget<RotationTransition>(
+        find.ancestor(
+          of: find.byKey(const Key('custom-icon')),
+          matching: find.byType(RotationTransition),
+        ),
+      );
+      final turnsAfterUpdate = rotationAfterUpdate.turns.value;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(
+        rotationAfterUpdate.turns.value - turnsAfterUpdate,
+        closeTo(0.125, 0.01),
+      );
+    });
+
+    testWidgets('customIcon 在 icon 为 null 时仍保持最高优先级', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TLoading(
+            icon: null,
+            text: '自定义加载',
+            customIcon: Icon(Icons.refresh, key: Key('custom-icon')),
+          ),
+        ),
+      );
+
+      expect(find.byKey(const Key('custom-icon')), findsOneWidget);
+      expect(find.byType(RotationTransition), findsAtLeastNWidgets(1));
+      expect(find.text('自定义加载'), findsOneWidget);
     });
 
     testWidgets('未注入 Theme 时使用默认值', (tester) async {

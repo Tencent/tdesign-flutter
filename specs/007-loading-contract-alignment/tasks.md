@@ -19,6 +19,8 @@
 - [x] 补充 Widget 测试（duration/axis/尺寸/覆盖率补充）
 - [x] 修正站点 README（链接/API 表/示例代码）
 - [x] CNB 复审后重新逐段同步 README 与最终公开 Demo，移除过期 Slider API
+- [x] custom 指示器复用既有 duration 持续旋转，并补默认速度与运行期更新测试
+- [x] 修正 `customIcon` 与 `icon == null` 的冲突组合，落实自定义内容最高优先级
 - [x] 执行验证：analyze / 双版本测试 / 覆盖率 / 示例生成
 
 ## DONE
