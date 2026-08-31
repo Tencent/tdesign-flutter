@@ -28,6 +28,8 @@ dependencies:
 dev_dependencies:
   analyzer: ^7.4.0
   flutter_lints: ^1.0.4
+  flutter_localizations:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   image_picker_platform_interface: 2.11.1
