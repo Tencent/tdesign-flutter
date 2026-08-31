@@ -8,8 +8,9 @@
 | icon | TLoadingIcon? | TLoadingIcon.circle | 图标，支持圆形、点状、菊花状 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | refreshWidget | Widget? | - | 文案后的自定义操作内容 |
-| size | double | 20.0 | 加载指示器的外部尺寸，单位为逻辑像素，默认为 20。 |
+| size | double | 20 | 加载指示器的外部尺寸，单位为逻辑像素，默认为 20。 |
 | text | String? | - | 文案 |
+
 
 ### TLoadingIcon
 #### 枚举值
