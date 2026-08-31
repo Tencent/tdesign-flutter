@@ -14,6 +14,7 @@
 - [x] Demo 显式展示 circle 24/28/32、point 40、速度示例 26
 - [x] `t_loading_theme_data.dart`：`duration` dartdoc 默认说明
 - [x] 示例页收敛小程序公开矩阵（custom 合并到纯图标、三档尺寸合并，含生成代码）
+- [x] 公开 Demo 恢复左对齐，使用小程序官方 custom 图片，并补可拖动的常驻速度数值
 - [x] 补充 Demo 结构测试、明暗整页 Golden 与小程序实际页截图证据
 - [x] 补充 Widget 测试（duration/axis/尺寸/覆盖率补充）
 - [x] 修正站点 README（链接/API 表/示例代码）

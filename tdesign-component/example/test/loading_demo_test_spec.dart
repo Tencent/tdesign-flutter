@@ -8,6 +8,7 @@ const loadingDemoPageTestSpec = DemoPageTestSpec(
   title: 'Loading 加载',
   page: TLoadingPage(),
   useAlignmentCjkFont: true,
+  precacheAssetImages: ['assets/img/loading-logo2.png'],
   expectedTexts: [
     '01 组件类型',
     '纯图标',
@@ -20,7 +21,8 @@ const loadingDemoPageTestSpec = DemoPageTestSpec(
     '小尺寸',
     '03 加载速度',
     '加载速度调整',
+    '800',
   ],
   componentType: TLoading,
-  expectedComponentCount: 15,
+  expectedComponentCount: 13,
 );

@@ -29,26 +29,52 @@ class _TLoadingPageState extends State<TLoadingPage> {
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
+            ExampleItem(
+              desc: '纯图标',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildPureIconLoading,
+            ),
             ExampleItem(
               desc: '图标加文字横向',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               builder: _buildTextIconHorizontalLoading,
             ),
             ExampleItem(
               desc: '图标加文字竖向',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               builder: _buildTextIconVerticalLoading,
             ),
-            ExampleItem(desc: '纯文字', builder: _buildPureTextLoading),
+            ExampleItem(
+              desc: '纯文字',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildPureTextLoading,
+            ),
           ],
         ),
         ExampleModule(
           title: '组件尺寸',
-          children: [ExampleItem(desc: '大尺寸', builder: _buildLoadingSizes)],
+          children: [
+            ExampleItem(
+              desc: '大尺寸',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildLoadingSizes,
+            ),
+          ],
         ),
         ExampleModule(
           title: '加载速度',
           children: [
-            ExampleItem(desc: '加载速度调整', builder: _buildCustomSpeedLoading),
+            ExampleItem(
+              desc: '加载速度调整',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildCustomSpeedLoading,
+            ),
           ],
         ),
       ],
@@ -105,7 +131,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
                   child: const TLoading(
                     size: 32,
                     icon: TLoadingIcon.circle,
-                    text: '加载中…',
+                    text: '加载中...',
                   ),
                 ),
                 const SizedBox(width: 36),
@@ -116,7 +142,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
                   child: const TLoading(
                     size: 32,
                     icon: TLoadingIcon.activity,
-                    text: '加载中…',
+                    text: '加载中...',
                   ),
                 ),
               ],
@@ -155,28 +181,27 @@ class _TLoadingPageState extends State<TLoadingPage> {
   @ExampleCode(group: 'loading')
   Widget _buildPureIconLoading(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const TLoading(icon: TLoadingIcon.circle),
-        const SizedBox(width: 36),
+        const SizedBox(width: 40),
         const TLoading(icon: TLoadingIcon.activity),
-        const SizedBox(width: 36),
+        const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
           child: const TLoading(size: 40, icon: TLoadingIcon.point),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
           child: const TLoading(
-            customIcon: SizedBox(
-              width: 20,
-              height: 20,
-              child: Icon(Icons.sync_rounded, size: 20, color: Colors.blue),
+            customIcon: Image(
+              image: AssetImage('assets/img/loading-logo2.png'),
+              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -188,20 +213,20 @@ class _TLoadingPageState extends State<TLoadingPage> {
   @ExampleCode(group: 'loading')
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中…'),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中...'),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 64),
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中…'),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中...'),
         ),
       ],
     );
@@ -211,20 +236,20 @@ class _TLoadingPageState extends State<TLoadingPage> {
   @ExampleCode(group: 'loading')
   Widget _buildTextIconVerticalLoading(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
-          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中…'),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中'),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 64),
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
-          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中…'),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中'),
         ),
       ],
     );
@@ -232,26 +257,8 @@ class _TLoadingPageState extends State<TLoadingPage> {
 
   /// 纯文字
   @ExampleCode(group: 'loading')
-  Widget _buildPureTextLoading(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const TLoading(text: '加载中…'),
-        const SizedBox(width: 36),
-        Theme(
-          data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(textColor: context.tTheme.textColorPlaceholder),
-          ),
-          child: const TLoading(text: '加载失败'),
-        ),
-        const SizedBox(width: 36),
-        Theme(
-          data: Theme.of(context).mergeExtension(const TLoadingThemeData()),
-          child: const TLoading(text: '加载失败', refreshWidget: Text('刷新')),
-        ),
-      ],
-    );
-  }
+  Widget _buildPureTextLoading(BuildContext context) =>
+      const TLoading(icon: null, text: '加载中...');
 
   /// 组件尺寸
   @ExampleCode(group: 'loading')
@@ -260,7 +267,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
       data: Theme.of(
         context,
       ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-      child: TLoading(size: size, icon: TLoadingIcon.circle, text: '加载中…'),
+      child: TLoading(size: size, icon: TLoadingIcon.circle, text: '加载中...'),
     );
 
     return Column(
@@ -279,37 +286,73 @@ class _TLoadingPageState extends State<TLoadingPage> {
     );
   }
 
-  double _currentSliderValue = 1000;
+  double _currentSliderValue = 800;
 
   /// 自定义尺寸
   @ExampleCode(group: 'loading')
   Widget _buildCustomSpeedLoading(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(
               axis: Axis.horizontal,
-              duration: _currentSliderValue.round(),
+              duration: (2000 - _currentSliderValue).round(),
             ),
           ),
           child: const TLoading(
             size: 26,
             icon: TLoadingIcon.circle,
-            text: '加载中…',
+            text: '加载中...',
           ),
         ),
         const SizedBox(height: 16),
-        TSlider(
-          value: _currentSliderValue,
-          min: -20,
-          max: 2000,
-          divisions: 100,
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const min = 100.0;
+            const max = 1500.0;
+            const trackInset = 24.0;
+            const labelWidth = 48.0;
+            final progress = (_currentSliderValue - min) / (max - min);
+            final trackWidth = constraints.maxWidth - trackInset * 2;
+            final thumbCenter = trackInset + trackWidth * progress;
+            final labelLeft = (thumbCenter - labelWidth / 2).clamp(
+              0.0,
+              constraints.maxWidth - labelWidth,
+            );
+            return SizedBox(
+              height: 64,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: labelLeft,
+                    width: labelWidth,
+                    child: Text(
+                      '${_currentSliderValue.round()}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: TSlider(
+                      value: _currentSliderValue,
+                      min: min,
+                      max: max,
+                      divisions: 100,
+                      onChanged: (double value) {
+                        setState(() {
+                          _currentSliderValue = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ],

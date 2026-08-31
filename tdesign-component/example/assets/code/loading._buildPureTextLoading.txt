@@ -1,21 +1,3 @@
 /// 纯文字
-    Widget _buildPureTextLoading(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const TLoading(text: '加载中…'),
-        const SizedBox(width: 36),
-        Theme(
-          data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(textColor: context.tTheme.textColorPlaceholder),
-          ),
-          child: const TLoading(text: '加载失败'),
-        ),
-        const SizedBox(width: 36),
-        Theme(
-          data: Theme.of(context).mergeExtension(const TLoadingThemeData()),
-          child: const TLoading(text: '加载失败', refreshWidget: Text('刷新')),
-        ),
-      ],
-    );
-  }
+    Widget _buildPureTextLoading(BuildContext context) =>
+      const TLoading(icon: null, text: '加载中...');

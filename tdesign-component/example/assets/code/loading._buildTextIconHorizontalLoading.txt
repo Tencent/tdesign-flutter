@@ -1,20 +1,20 @@
 /// 图标加文字横向
     Widget _buildTextIconHorizontalLoading(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中…'),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中...'),
         ),
-        const SizedBox(width: 36),
+        const SizedBox(width: 64),
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中…'),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中...'),
         ),
       ],
     );
