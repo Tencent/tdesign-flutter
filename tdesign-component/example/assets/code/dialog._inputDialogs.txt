@@ -7,7 +7,7 @@ Widget _inputDialogs(BuildContext context) {
             title: const Text('带输入框对话框'),
             content: const TextField(
               decoration: InputDecoration(
-                hintText: '输入12文案',
+                hintText: '输入12字文案',
                 border: InputBorder.none,
               ),
             ),
@@ -26,7 +26,7 @@ Widget _inputDialogs(BuildContext context) {
                 SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
-                    hintText: '输入12文案',
+                    hintText: '输入12字文案',
                     border: InputBorder.none,
                   ),
                 ),
