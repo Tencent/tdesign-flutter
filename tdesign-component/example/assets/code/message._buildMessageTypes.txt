@@ -1,0 +1,17 @@
+Widget _buildMessageTypes(BuildContext context) {
+    return Column(
+      children: [
+        _buildTextMessage(context),
+        const SizedBox(height: 16),
+        _buildIconMessage(context),
+        const SizedBox(height: 16),
+        _buildCloseMessage(context),
+        const SizedBox(height: 16),
+        _buildScrollMessage(context),
+        const SizedBox(height: 16),
+        _buildLinkMessage(context),
+        const SizedBox(height: 16),
+        _buildComponentMessage(context),
+      ],
+    );
+  }

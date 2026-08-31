@@ -48,6 +48,9 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('loading', [
     'test/components/loading/t_loading_test.dart',
   ]),
+  ComponentTestSuite('message', [
+    'test/components/message/t_message_test.dart',
+  ]),
   ComponentTestSuite('notice_bar', [
     'test/components/notice_bar/t_notice_bar_test.dart',
   ]),

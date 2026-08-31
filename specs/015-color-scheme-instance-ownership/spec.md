@@ -48,7 +48,7 @@
 | Popover `colorScheme` | success/warning 等值只选择气泡调色板，不表达运行时状态、默认内容或行为 | 保留单一配色维度，不新增 `status` |
 | `TFabDefaults.defaultColorScheme` | 内部内置默认常量，不是 ThemeExtension 选择器 | 不属于禁止范围 |
 | `TLinkThemeData.defaultColorScheme` | Theme 与实例重复保存枚举型配色选择器，属于已发布历史债务 | 不在本 PR 扩大 breaking 范围；后续 Link 契约修改时单独迁移 |
-| `TMessageVariant`、旧 `TNoticeBarVariant` 的 info/success/warning/error | 名称为 variant，但取值可能表达消息或公告状态 | 不按名称直接定性；组件进入修改范围时按业务语义审计，禁止复制为新 API |
+| `TMessageStatus`、`TNoticeBarStatus` 的 info/success/warning/error | 表达消息或公告当前语义状态并决定默认图标 | 使用实例 `status` 作为唯一状态入口，Theme 不保存状态 |
 
 ## 行为契约
 

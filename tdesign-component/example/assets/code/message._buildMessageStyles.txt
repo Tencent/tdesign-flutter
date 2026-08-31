@@ -1,0 +1,13 @@
+Widget _buildMessageStyles(BuildContext context) {
+    return Column(
+      children: [
+        _buildInfoMessage(context),
+        const SizedBox(height: 16),
+        _buildSuccessMessage(context),
+        const SizedBox(height: 16),
+        _buildWarningMessage(context),
+        const SizedBox(height: 16),
+        _buildErrorMessage(context),
+      ],
+    );
+  }
