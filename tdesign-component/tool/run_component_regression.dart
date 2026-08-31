@@ -68,7 +68,7 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/typography/t_text_resolve_test.dart',
     'test/components/typography/t_text_test.dart',
     'test/components/typography/t_typography_test.dart',
-  ]),,
+  ]),
   ComponentTestSuite('search', ['test/components/search/t_search_test.dart']),
   ComponentTestSuite('switch', [
     'test/components/switch/t_switch_test.dart',
