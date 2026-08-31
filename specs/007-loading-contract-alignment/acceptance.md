@@ -23,7 +23,7 @@
 
 | 文件 | LF/LH | 覆盖率 |
 | --- | --- | --- |
-| t_loading.dart | 49/48 | 97.96%（未覆盖 `colorScheme?.primary` fallback 边界） |
+| t_loading.dart | 69/68 | 98.55%（未覆盖 `colorScheme?.primary` fallback 边界） |
 | t_loading_controller.dart | 20/20 | 100% |
 | t_loading_theme_data.dart | 20/20 | 100% |
 | t_circle_indicator.dart | 56/56 | 100% |
@@ -37,7 +37,7 @@
 - [x] circle 三档尺寸 24/28/32 对齐官方小程序 `48/56/64rpx`；circle、activity、point 和 custom 都以 `size` 表示外部尺寸。
 - [x] 公开页收敛为小程序的三个分组；custom 指示器合并到“纯图标”，三档尺寸合并为一个示例。
 - [x] 示例内容按小程序 Demo 左对齐；custom 指示器使用本地化的官方 `logo2.png`，Golden 预缓存图片后再截图，不保留未加载占位；速度滑块默认常驻展示 800，拖动后数值更新。
-- [x] custom 指示器与小程序一致由 Loading 统一驱动旋转，默认 800ms 一周，并响应子树 `TLoadingThemeData.duration` 更新；未新增公开参数或重复状态源。
+- [x] custom 指示器与小程序一致由 Loading 统一驱动旋转，默认 800ms 一周，并响应子树 `TLoadingThemeData.duration` 更新且保持当前旋转相位连续；未新增公开参数或重复状态源。
 - [x] `customIcon` 是唯一自定义指示器入口，优先于预设 `icon`；`icon == null` 仅关闭预设图标，不会吞掉显式 customIcon。
 - [x] 已使用微信开发者工具截取小程序实际页；`double size` 最终改动已由 Flutter 3.32.0 Linux CI 复验明暗整页 Golden（run `33352953431`）。
 - [x] 站点 README 文件链接、API 表、示例代码已修正，`loading_api.md` 保持生成原样。

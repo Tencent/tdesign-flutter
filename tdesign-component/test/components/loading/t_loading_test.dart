@@ -212,6 +212,7 @@ void main() {
         ),
       );
       expect(rotation.turns.value, closeTo(0.25, 0.01));
+      final turnsBeforeUpdate = rotation.turns.value;
 
       setState(() => duration = 1600);
       await tester.pump();
@@ -222,6 +223,7 @@ void main() {
         ),
       );
       final turnsAfterUpdate = rotationAfterUpdate.turns.value;
+      expect(turnsAfterUpdate, closeTo(turnsBeforeUpdate, 0.01));
       await tester.pump(const Duration(milliseconds: 200));
       expect(
         rotationAfterUpdate.turns.value - turnsAfterUpdate,
