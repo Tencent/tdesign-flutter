@@ -17,7 +17,7 @@ Token 默认值，阻断 Flutter 富文本的父级样式继承。
 
 ## 非目标
 
-- 不复制小程序 Typography 的复制、展开、省略和代码样式等高级能力。
+- 不复制小程序 Typography 的代码样式、ul/ol 列表与 start/middle 省略自定义绘制等高级能力（复制、展开/收起已由 Spec 023 纳入契约）。
 - 不实现平台 padding、强制字形垂直居中或 Web 行高修正。
 - 不提供旧 API 的 deprecated 别名、转发构造器或兼容分支。
 

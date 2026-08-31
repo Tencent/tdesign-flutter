@@ -23,6 +23,8 @@ class TTextPage extends StatelessWidget {
           children: [
             ExampleItem(desc: '普通文本', builder: _buildPlainText),
             ExampleItem(desc: '富文本', builder: _buildRichText),
+            ExampleItem(desc: '标题 Title', builder: _buildTitle),
+            ExampleItem(desc: '段落 Paragraph', builder: _buildParagraph),
           ],
         ),
         ExampleModule(
@@ -41,6 +43,21 @@ class TTextPage extends StatelessWidget {
             ExampleItem(desc: '对齐与文字缩放', builder: _buildLayout),
             ExampleItem(desc: '文字选择与语义', builder: _buildAccessibleText),
             ExampleItem(desc: '获取 Flutter 原生 Text', builder: _buildRawText),
+          ],
+        ),
+        ExampleModule(
+          title: '可复制',
+          children: [
+            ExampleItem(desc: '可复制文本', builder: _buildCopyable),
+            ExampleItem(desc: '可复制并展开收起', builder: _buildCopyableExpandable),
+          ],
+        ),
+        ExampleModule(
+          title: '文本省略（展开/收起）',
+          children: [
+            ExampleItem(desc: '可展开收起', builder: _buildExpandable),
+            ExampleItem(desc: '标题省略', builder: _buildTitleExpandable),
+            ExampleItem(desc: '段落省略', builder: _buildParagraphExpandable),
           ],
         ),
         ExampleModule(
@@ -75,6 +92,26 @@ class TTextPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildTitle(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TTitle('一级标题', level: TTitleLevel.h1),
+        TTitle('二级标题', level: TTitleLevel.h2),
+        TTitle('三级标题', level: TTitleLevel.h3),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildParagraph(BuildContext context) {
+    return const TParagraph(
+      '这是 TDesign 段落组件，使用语义化多行正文排版，'
+      '默认字号为 14，用于展示正文内容。',
     );
   }
 
@@ -168,6 +205,68 @@ class TTextPage extends StatelessWidget {
   @ExampleCode(group: 'text')
   Widget _buildRawText(BuildContext context) {
     return const TText(exampleText).getRawText(context: context);
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildCopyable(BuildContext context) {
+    return const TText(
+      '点击右侧图标复制这段文本',
+      copyable: true,
+    );
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildCopyableExpandable(BuildContext context) {
+    return const SizedBox(
+      width: 260,
+      child: TText(
+        '这是一段可复制且可展开收起的较长文本，'
+        '超出两行时显示展开操作，展开后可复制整段内容。',
+        maxLines: 2,
+        copyable: true,
+        expandable: true,
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildExpandable(BuildContext context) {
+    return const SizedBox(
+      width: 260,
+      child: TText(
+        '这是一段用于展示展开收起能力的较长文本，'
+        '默认只显示两行，点击「展开」查看完整内容，'
+        '展开后可点击「收起」恢复两行显示。',
+        maxLines: 2,
+        expandable: true,
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildTitleExpandable(BuildContext context) {
+    return const SizedBox(
+      width: 260,
+      child: TTitle(
+        '这是一段支持省略展开的标题内容，超出单行后显示展开操作',
+        level: TTitleLevel.h4,
+        maxLines: 1,
+        expandable: true,
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'text')
+  Widget _buildParagraphExpandable(BuildContext context) {
+    return const SizedBox(
+      width: 260,
+      child: TParagraph(
+        '这是一段支持省略展开的段落内容，默认显示两行，'
+        '点击「展开」可查看完整段落，展开后可点击「收起」恢复。',
+        maxLines: 2,
+        expandable: true,
+      ),
+    );
   }
 
   @ExampleCode(group: 'text')
