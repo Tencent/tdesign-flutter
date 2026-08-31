@@ -65,7 +65,6 @@ class _TLoadingPageState extends State<TLoadingPage> {
                 ),
                 child: const TLoading(
                   icon: TLoadingIcon.circle,
-                  size: TLoadingSize.small,
                   text: '加载失败',
                   refreshWidget: Text('刷新'),
                 ),
@@ -85,7 +84,6 @@ class _TLoadingPageState extends State<TLoadingPage> {
                 ).mergeExtension(const TLoadingThemeData()),
                 child: const TLoading(
                   icon: TLoadingIcon.circle,
-                  size: TLoadingSize.small,
                   text: '加载失败',
                   refreshWidget: Text('刷新'),
                 ),
@@ -105,7 +103,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
                     const TLoadingThemeData(axis: Axis.vertical),
                   ),
                   child: const TLoading(
-                    size: TLoadingSize.large,
+                    size: 32,
                     icon: TLoadingIcon.circle,
                     text: '加载中…',
                   ),
@@ -116,7 +114,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
                     const TLoadingThemeData(axis: Axis.vertical),
                   ),
                   child: const TLoading(
-                    size: TLoadingSize.large,
+                    size: 32,
                     icon: TLoadingIcon.activity,
                     text: '加载中…',
                   ),
@@ -159,18 +157,15 @@ class _TLoadingPageState extends State<TLoadingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TLoading(size: TLoadingSize.small, icon: TLoadingIcon.circle),
+        const TLoading(icon: TLoadingIcon.circle),
         const SizedBox(width: 36),
-        const TLoading(size: TLoadingSize.small, icon: TLoadingIcon.activity),
+        const TLoading(icon: TLoadingIcon.activity),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.point,
-          ),
+          child: const TLoading(size: 40, icon: TLoadingIcon.point),
         ),
         const SizedBox(width: 36),
         Theme(
@@ -178,7 +173,6 @@ class _TLoadingPageState extends State<TLoadingPage> {
             TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
             customIcon: SizedBox(
               width: 20,
               height: 20,
@@ -200,22 +194,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.circle,
-            text: '加载中…',
-          ),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中…'),
         ),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.activity,
-            text: '加载中…',
-          ),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中…'),
         ),
       ],
     );
@@ -231,22 +217,14 @@ class _TLoadingPageState extends State<TLoadingPage> {
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.circle,
-            text: '加载中…',
-          ),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中…'),
         ),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.activity,
-            text: '加载中…',
-          ),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中…'),
         ),
       ],
     );
@@ -258,22 +236,18 @@ class _TLoadingPageState extends State<TLoadingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const TLoading(size: TLoadingSize.small, text: '加载中…'),
+        const TLoading(text: '加载中…'),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(textColor: context.tTheme.textColorPlaceholder),
           ),
-          child: const TLoading(size: TLoadingSize.small, text: '加载失败'),
+          child: const TLoading(text: '加载失败'),
         ),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(context).mergeExtension(const TLoadingThemeData()),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            text: '加载失败',
-            refreshWidget: Text('刷新'),
-          ),
+          child: const TLoading(text: '加载失败', refreshWidget: Text('刷新')),
         ),
       ],
     );
@@ -282,7 +256,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
   /// 组件尺寸
   @ExampleCode(group: 'loading')
   Widget _buildLoadingSizes(BuildContext context) {
-    Widget loading(TLoadingSize size) => Theme(
+    Widget loading(double size) => Theme(
       data: Theme.of(
         context,
       ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
@@ -292,15 +266,15 @@ class _TLoadingPageState extends State<TLoadingPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        loading(TLoadingSize.large),
+        loading(32),
         const SizedBox(height: 24),
         const Text('中尺寸'),
         const SizedBox(height: 16),
-        loading(TLoadingSize.medium),
+        loading(28),
         const SizedBox(height: 24),
         const Text('小尺寸'),
         const SizedBox(height: 16),
-        loading(TLoadingSize.small),
+        loading(24),
       ],
     );
   }
@@ -321,7 +295,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
             ),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
+            size: 26,
             icon: TLoadingIcon.circle,
             text: '加载中…',
           ),

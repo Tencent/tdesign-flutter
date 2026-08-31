@@ -7,22 +7,14 @@
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.circle,
-            text: '加载中…',
-          ),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中…'),
         ),
         const SizedBox(width: 36),
         Theme(
           data: Theme.of(
             context,
           ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-          child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.activity,
-            text: '加载中…',
-          ),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中…'),
         ),
       ],
     );

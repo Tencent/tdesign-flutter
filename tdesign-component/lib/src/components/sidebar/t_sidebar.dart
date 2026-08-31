@@ -224,7 +224,7 @@ class _TSideBarState extends State<TSideBar> {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Align(
-          child: TLoading(icon: TLoadingIcon.circle, size: TLoadingSize.large),
+          child: TLoading(icon: TLoadingIcon.circle, size: 32),
         ),
       );
     }

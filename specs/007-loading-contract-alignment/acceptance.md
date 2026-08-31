@@ -10,30 +10,33 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter analyze --fatal-infos`（3.32.0） | ✅ 0 error / 0 warning | lib + test + example |
-| `flutter analyze --fatal-infos`（3.47.0） | ✅ 0 error / 0 warning | lib + test + example |
-| `flutter test test/components/loading/t_loading_test.dart`（3.32.0） | ✅ 35/35 通过 | 收回公开 Demo 未使用的 overlay 参数后复核 |
-| `flutter test test/components/loading/t_loading_test.dart`（3.47.0） | ✅ 35/35 通过 | 收回公开 Demo 未使用的 overlay 参数后复核 |
-| `flutter test --coverage ...` | ✅ 99.62% | LF=261, LH=260（基线 86.15%） |
+| `flutter analyze --fatal-infos --no-pub`（3.32.0） | ✅ 0 error / 0 warning | lib + test + example |
+| `flutter analyze --fatal-infos --no-pub`（3.47.0） | ✅ 0 error / 0 warning | lib + test + example |
+| `flutter test test/components/loading/t_loading_test.dart`（3.32.0） | ✅ 36/36 通过 | 包含默认值、连续尺寸和三种指示器几何契约 |
+| `flutter test test/components/loading/t_loading_test.dart`（3.47.0） | ✅ 36/36 通过 | 与受影响主题测试合计 63/63 通过 |
+| `flutter test --coverage test/components/loading/t_loading_test.dart` | ✅ 99.59% | Loading 目录 LF=244, LH=243 |
+| `flutter test example/test/loading_demo_test.dart`（3.32.0 / 3.47.0） | ✅ 各 1/1 通过 | 公开分组、文案、实例数量与顺序 |
+| `flutter test test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart` | ✅ 11/11 通过 | 回归、覆盖率与 Golden 登记完整 |
 | `dart run tool/generate_example_code.dart --check` | ✅ 通过 | custom 指示器与尺寸示例按小程序分组生成 |
 
 ## 覆盖率明细（`lib/src/components/loading/`）
 
 | 文件 | LF/LH | 覆盖率 |
 | --- | --- | --- |
-| t_loading.dart | 69/68 | 98.55%（未覆盖 line 92：`colorScheme?.primary` fallback 边界） |
+| t_loading.dart | 49/48 | 97.96%（未覆盖 `colorScheme?.primary` fallback 边界） |
 | t_loading_controller.dart | 20/20 | 100% |
 | t_loading_theme_data.dart | 20/20 | 100% |
 | t_circle_indicator.dart | 56/56 | 100% |
-| t_point_indicator.dart | 39/39 | 100% |
+| t_point_indicator.dart | 42/42 | 100% |
 | t_activity_indicator.dart | 57/57 | 100% |
 
 ## 人工验收
 
+- [x] `TLoading.size` 是唯一尺寸入口，类型为 `double`、默认 20，与 `TLoadingController.show` 一致；Theme 不重复持有尺寸。
 - [x] 默认 `duration` 800、默认 `axis` horizontal，与官方一致（示例页可见默认转圈速度与横向布局）。
-- [x] circle 三档尺寸 24/28/32 对齐官方小程序 `48/56/64rpx`；activity 保留自身视觉尺寸语义。
+- [x] circle 三档尺寸 24/28/32 对齐官方小程序 `48/56/64rpx`；circle、activity、point 和 custom 都以 `size` 表示外部尺寸。
 - [x] 公开页收敛为小程序的三个分组；custom 指示器合并到“纯图标”，三档尺寸合并为一个示例。
-- [x] 已使用微信开发者工具截取小程序实际页，并与 Flutter 3.32.0 Linux 明暗整页 Golden 比对。
+- [ ] 已使用微信开发者工具截取小程序实际页；当前 `double size` 最终改动仍需由 Flutter 3.32.0 Linux CI 复验明暗整页 Golden。
 - [x] 站点 README 文件链接、API 表、示例代码已修正，`loading_api.md` 保持生成原样。
 
 ## 未覆盖项与后续工作
@@ -46,6 +49,6 @@
 ## 2026-08-31 develop 同步复验
 
 - 已合并 `origin/develop@fb26b8d5`，保留 Loading 回归登记并采用 develop 的共享测试基建。
-- CI 同款 Flutter 3.32.0 Linux：页面 light/dark Golden 更新后不带 `--update-goldens` 复跑通过，Demo 功能测试同时通过。
+- 上一版 CI 同款 Flutter 3.32.0 Linux Golden 曾复跑通过；当前 `double size` 最终改动尚未推送，不能沿用旧结论，需等待新 head 的 visual regression。
 - Flutter 3.32.0 与 3.47.0：组件聚焦测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
-- API 收敛复核：没有新增一次性 props；仅调整既有默认布局、动画时长与三档图标尺寸，属于 PR 标题已声明的 breaking 默认行为变更。
+- API 收敛复核：没有新增一次性 props；`size` 从枚举收敛为默认 20 的单一 `double` 参数，Theme 不提供重复尺寸入口；该公开 API 变更与既有默认视觉行为变更均按 breaking 处理。

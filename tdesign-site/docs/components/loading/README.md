@@ -31,12 +31,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const TLoading(
-          size: TLoadingSize.small,
           icon: TLoadingIcon.circle,
         ),
         const SizedBox(width: 36),
         const TLoading(
-          size: TLoadingSize.small,
           icon: TLoadingIcon.activity,
         ),
         const SizedBox(width: 36),
@@ -47,7 +45,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             ),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
+            size: 40,
             icon: TLoadingIcon.point,
           ),
         ),
@@ -72,7 +70,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           data: Theme.of(context)
               .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
           child: const TLoading(
-            size: TLoadingSize.small,
             icon: TLoadingIcon.circle,
             text: '加载中…',
           ),
@@ -82,7 +79,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           data: Theme.of(context)
               .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
           child: const TLoading(
-            size: TLoadingSize.small,
             icon: TLoadingIcon.activity,
             text: '加载中…',
           ),
@@ -108,7 +104,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           data: Theme.of(context)
               .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
           child: const TLoading(
-            size: TLoadingSize.small,
             icon: TLoadingIcon.circle,
             text: '加载中…',
           ),
@@ -118,7 +113,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           data: Theme.of(context)
               .mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
           child: const TLoading(
-            size: TLoadingSize.small,
             icon: TLoadingIcon.activity,
             text: '加载中…',
           ),
@@ -141,7 +135,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const TLoading(
-          size: TLoadingSize.small,
           text: '加载中…',
         ),
         const SizedBox(width: 36),
@@ -152,7 +145,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             ),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
             text: '加载失败',
           ),
         ),
@@ -162,7 +154,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             const TLoadingThemeData(),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
             text: '加载失败',
             refreshWidget: Text('刷新'),
           ),
@@ -185,7 +176,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       data: Theme.of(context)
           .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
       child: const TLoading(
-        size: TLoadingSize.large,
+        size: 32,
         icon: TLoadingIcon.circle,
         text: '加载中…',
       ),
@@ -205,7 +196,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       data: Theme.of(context)
           .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
       child: const TLoading(
-        size: TLoadingSize.medium,
+        size: 28,
         icon: TLoadingIcon.circle,
         text: '加载中…',
       ),
@@ -225,7 +216,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       data: Theme.of(context)
           .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
       child: const TLoading(
-        size: TLoadingSize.small,
+        size: 24,
         icon: TLoadingIcon.circle,
         text: '加载中…',
       ),
@@ -254,7 +245,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             ),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
+            size: 26,
             icon: TLoadingIcon.circle,
             text: '加载中…',
           ),
@@ -294,7 +285,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | icon | TLoadingIcon? | TLoadingIcon.circle | 图标，支持圆形、点状、菊花状 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | refreshWidget | Widget? | - | 失败刷新组件 |
-| size | TLoadingSize | - | 尺寸 |
+| size | double | 20.0 | 加载指示器的外部尺寸，单位为逻辑像素，默认为 20。 |
 | text | String? | - | 文案 |
 
 ### TLoadingThemeData
@@ -308,17 +299,6 @@ Loading 的视觉配置通过 `TLoadingThemeData` 注入到子树（`Theme.of(co
 | iconColor | Color? | - | 图标颜色 |
 | textColor | Color? | - | 文案颜色 |
 
-### TLoadingSize
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| small | 小尺寸 |
-| medium | 中尺寸 |
-| large | 大尺寸 |
-
-
 ### TLoadingIcon
 #### 枚举值
 
@@ -328,6 +308,3 @@ Loading 的视觉配置通过 `TLoadingThemeData` 注入到子树（`Theme.of(co
 | circle | 圆形 |
 | point | 点状 |
 | activity | 菊花状 |
-
-
-  

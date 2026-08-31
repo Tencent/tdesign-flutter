@@ -98,7 +98,7 @@ class TSideBarLoadingPageState extends State<TSideBarLoadingPage> {
                   child: _loading
                       ? const TLoading(
                           icon: TLoadingIcon.circle,
-                          size: TLoadingSize.large,
+                          size: 32,
                         )
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

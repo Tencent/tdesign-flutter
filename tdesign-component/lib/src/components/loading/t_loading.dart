@@ -17,18 +17,6 @@ import 't_circle_indicator.dart';
 import 't_loading_theme_data.dart';
 import 't_point_indicator.dart';
 
-/// Loading 尺寸
-enum TLoadingSize {
-  /// 小尺寸
-  small,
-
-  /// 中尺寸
-  medium,
-
-  /// 大尺寸
-  large,
-}
-
 /// Loading图标
 enum TLoadingIcon {
   /// 圆形
@@ -45,15 +33,16 @@ enum TLoadingIcon {
 class TLoading extends StatelessWidget {
   const TLoading({
     Key? key,
-    required this.size,
+    this.size = 20,
     this.icon = TLoadingIcon.circle,
     this.text,
     this.customIcon,
     this.refreshWidget,
-  }) : super(key: key);
+  }) : assert(size > 0),
+       super(key: key);
 
-  /// 尺寸
-  final TLoadingSize size;
+  /// 加载指示器的外部尺寸，单位为逻辑像素，默认为 20。
+  final double size;
 
   /// 图标，支持圆形、点状、菊花状
   final TLoadingIcon? icon;
@@ -101,27 +90,31 @@ class TLoading extends StatelessWidget {
     } else {
       Widget? indicator;
       if (effectiveCustomIcon != null) {
-        indicator = effectiveCustomIcon;
+        indicator = SizedBox.square(
+          dimension: size,
+          child: effectiveCustomIcon,
+        );
       } else {
         switch (icon!) {
           case TLoadingIcon.activity:
             indicator = TCupertinoActivityIndicator(
               activeColor: effectiveIconColor,
-              radius: size == TLoadingSize.small
-                  ? 10
-                  : (size == TLoadingSize.medium ? 11 : 13),
+              radius: size / 2,
               duration: innerDuration,
             );
             break;
           case TLoadingIcon.circle:
-            indicator = _getCircleIndicator(effectiveIconColor, innerDuration);
+            indicator = TCircleIndicator(
+              color: effectiveIconColor,
+              size: size,
+              lineWidth: size / 8,
+              duration: innerDuration,
+            );
             break;
           case TLoadingIcon.point:
             indicator = TPointBounceIndicator(
               color: effectiveIconColor,
-              size: size == TLoadingSize.small
-                  ? 12
-                  : (size == TLoadingSize.medium ? 16 : 20),
+              size: size,
               duration: innerDuration,
             );
             break;
@@ -138,48 +131,11 @@ class TLoading extends StatelessWidget {
         children: [
           indicator,
           effectiveAxis == Axis.vertical
-              ? SizedBox(height: _getPaddingSize())
-              : SizedBox(width: _getPaddingSize()),
+              ? const SizedBox(height: 6)
+              : const SizedBox(width: 8),
           _textWidget(context, theme, effectiveRefreshWidget),
         ],
       );
-    }
-  }
-
-  Widget _getCircleIndicator(Color? iconColor, int duration) {
-    switch (size) {
-      case TLoadingSize.large:
-        return TCircleIndicator(
-          color: iconColor,
-          size: 32,
-          lineWidth: 4,
-          duration: duration,
-        );
-      case TLoadingSize.medium:
-        return TCircleIndicator(
-          color: iconColor,
-          size: 28,
-          lineWidth: 3.5,
-          duration: duration,
-        );
-      case TLoadingSize.small:
-        return TCircleIndicator(
-          color: iconColor,
-          size: 24,
-          lineWidth: 3,
-          duration: duration,
-        );
-    }
-  }
-
-  double _getPaddingSize() {
-    switch (size) {
-      case TLoadingSize.large:
-        return 10;
-      case TLoadingSize.medium:
-        return 8;
-      case TLoadingSize.small:
-        return 6;
     }
   }
 
@@ -188,15 +144,6 @@ class TLoading extends StatelessWidget {
     TLoadingThemeData theme,
     Widget? refreshWidget,
   ) {
-    final font = switch (size) {
-      TLoadingSize.large =>
-        context.tTheme.fontBodyLarge ?? Font(size: 16, lineHeight: 24),
-      TLoadingSize.medium =>
-        context.tTheme.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
-      TLoadingSize.small =>
-        context.tTheme.fontBodySmall ?? Font(size: 12, lineHeight: 20),
-    };
-
     Widget result = TText(
       text ?? '',
       textColor:
@@ -204,7 +151,7 @@ class TLoading extends StatelessWidget {
           Theme.of(context).tExplicitColorScheme?.onSurface ??
           context.tTheme.textColorPrimary,
       fontWeight: FontWeight.w400,
-      font: font,
+      font: context.tTheme.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
       textAlign: TextAlign.center,
     );
     if (refreshWidget != null) {

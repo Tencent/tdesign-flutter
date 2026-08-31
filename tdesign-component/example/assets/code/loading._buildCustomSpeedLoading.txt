@@ -11,7 +11,7 @@
             ),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
+            size: 26,
             icon: TLoadingIcon.circle,
             text: '加载中…',
           ),

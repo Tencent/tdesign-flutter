@@ -14,7 +14,7 @@ class TLoadingController {
   static void show(
     BuildContext context, {
     Widget? child,
-    TLoadingSize size = TLoadingSize.medium,
+    double size = 20,
     TLoadingIcon? icon = TLoadingIcon.circle,
     String? text,
     TLoadingThemeData? theme,

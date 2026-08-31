@@ -6,13 +6,14 @@
 
 1. **`duration` 默认值不一致**：官方默认 `800`ms，Flutter 默认 `2000`ms，转圈明显偏慢。
 2. **`layout` 默认方向不一致**：官方默认 `horizontal`（图标在左、文字在右），Flutter 默认 `Axis.vertical`（图标在上、文字在下）。
-3. **circle 尺寸未对齐公开 Demo**：官方小程序尺寸示例显式使用 `48/56/64rpx`，即 `24/28/32px`；Flutter 原有 circle 为 `18/21/24px`。
+3. **尺寸 API 语义不一致**：官方两端的 `size` 都是可连续配置的指示器尺寸，默认 `20px`；Flutter 使用 `TLoadingSize` 枚举，而且同一枚举在 circle / activity / point 上对应不同几何含义，无法表达 Button 默认 20px 与公开尺寸 Demo 的 24/28/32px。
 4. **站点文档多处过时/不一致**：示例文件链接笔误、`axis/iconColor/textColor/duration` 误列为 `TLoading` 构造参数（实际在 `TLoadingThemeData`）、示例代码与源码不符、`loading_api.md` 与 README 分叉。
 
 ## 目标
 
+- 将 `TLoading.size` 收敛为单一 `double` 参数，默认 `20.0`；移除 `TLoadingSize`，不在 Theme 中增加重复尺寸入口。
 - 对齐 `duration` 默认值 800ms、`axis` 默认方向 horizontal（对齐官方 `layout` 默认）。
-- 将 circle 三档容器直径对齐官方尺寸 Demo 的 `24/28/32px`；不同图标形态保留各自视觉尺寸语义。
+- 统一 circle / activity / point 的 `size` 为指示器外部尺寸；公开尺寸 Demo 显式使用 `24/28/32px`。
 - 按小程序公开页收敛 Demo 分组与实例顺序：纯图标中合并 custom 指示器，尺寸合并为一个完整示例（复用已有能力，不加新 API）。
 - 修正站点 README 与 `loading_api.md` 的过时/分叉内容。
 
@@ -20,7 +21,7 @@
 
 - **不新增** `reverse` / `pause` / `delay` 属性（官方发布版未公开展示这三个属性对应 Demo，按"最小 API 扩充 + 不为未发布 Demo 加一次性参数"原则，本期不实现，列为后续）。
 - **不实现** `attach`（仅 Vue 独有且发布版注释"视觉稿待定"）。
-- 不改变 `TLoadingSize` / `TLoadingIcon` 枚举的定义与命名。
+- 不改变 `TLoadingIcon` 枚举的定义与命名。
 - 不改变 `TLoadingController` 的命令式 `show/dismiss` 形态（属框架设计差异，可接受）。
 - 不为公开 Demo 未使用的全屏蒙层新增参数；保持 Loading 与 Toast 的公共契约独立。
 - 不改动其他 Overlay 组件（Toast / Dialog / ActionSheet）。
@@ -40,10 +41,18 @@
 
 ### 不涉及
 
-- `t_circle_indicator.dart` / `t_point_indicator.dart` / `t_activity_indicator.dart` 的公开 API（仅 `t_loading.dart` 内部传入的尺寸常量调整）
+- `t_circle_indicator.dart` / `t_activity_indicator.dart` 的公开 API
 - 其他组件与站点整体结构
 
 ## 行为契约
+
+### 0. `size` 单一尺寸契约
+
+- `TLoading.size` 类型由 `TLoadingSize` 改为 `double`，默认 `20.0`，要求大于 0。
+- `TLoadingController.show.size` 同步改为 `double`，默认 `20.0`。
+- 移除 `TLoadingSize`，也不在 `TLoadingThemeData` 增加 `size`，保证尺寸只有一个公开状态源。
+- `size` 统一表示指示器外部尺寸：circle 直径为 `size`、描边为 `size / 8`；activity 半径为 `size / 2`；point 使用 `size × size` 容器，单点直径为 `size × 0.2`；customIcon 受同尺寸方形约束。
+- 文本字号和图文间距不再由指示器尺寸联动：文本使用默认 body-medium，横向间距 8、纵向间距 6。
 
 ### 1. `duration` 默认值 2000 → 800
 
@@ -57,10 +66,12 @@
 - 显式传入 `axis` 或注入 `TLoadingThemeData(axis:)` 时行为不变。
 - 间距语义保持不变（horizontal 用横向间距、vertical 用纵向间距）。
 
-### 3. 尺寸统一
+### 3. 尺寸示例
 
-- circle 图标三档容器直径从 `18/21/24` 调整为 `24/28/32`，对应官方 `48/56/64rpx`。
-- `_getPaddingSize()` 与 point 指示器保持不变（point 的 `size` 语义与官方 dots 不同，官方 dots 无三档尺寸 Demo 依据，不做无依据调整）。
+- 默认指示器尺寸为 20，对齐官方两端 API 默认值及 Button Loading。
+- circle 尺寸 Demo 显式使用 24/28/32，对应小程序 `48/56/64rpx`。
+- 纯图标 Demo 的 point 显式使用 40，对应小程序 `80rpx`。
+- 加载速度 Demo 显式使用 26，对应小程序 `52rpx`。
 
 ### 4. Demo 收敛
 
@@ -81,19 +92,18 @@
 
 ### breaking change 汇总
 
+- **`size` 从 `TLoadingSize` 改为 `double` 并移除枚举**：现有调用需改为所需逻辑像素值；由于旧枚举对不同 icon 的映射不同，不提供机械的一对一别名。
 - **`duration` 默认 2000→800**：所有使用默认动画速度的调用转圈变快，属用户可感知的视觉行为变化。更新日志须加 `⚠️` 前置标记。
 - **`axis` 默认 vertical→horizontal**：未显式指定方向的默认调用从"图标在上文字在下"变为"图标在左文字在右"，属**明确 breaking change**。更新日志须加 `⚠️` 前置标记并建议显式传 `axis: Axis.vertical` 保留原行为。
 
-### 非 breaking
-
-- circle 尺寸调整不改变 API 签名，仅内部视觉常量。
-- 不新增公开 API；`TLoadingController.show` 保持原有签名。
-
 ## 验收标准
 
+- [ ] `TLoading()` 可省略 `size`，指示器外部尺寸默认为 20；非正数触发断言。
+- [x] 仓库源码、测试、Demo、生成片段和用户文档中不再引用 `TLoadingSize`。
+- [ ] circle / activity / point 对同一个 `size` 使用统一外部尺寸语义。
 - [ ] `duration` 生效默认值从 2000 改为 800（未注入 Theme 时 circle indicator duration == 800）。
 - [ ] `axis` 生效默认方向为 horizontal（未注入 Theme 时 Flex.direction == horizontal）。
-- [ ] circle 三档容器直径为 24/28/32。
+- [ ] circle 尺寸 Demo 显式展示 24/28/32，Button Loading 保持默认 20。
 - [ ] 公开 Demo 的三个分组、实例顺序和文案与小程序一致，custom 指示器不单独扩展分组。
 - [ ] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页面截图完成人工比对。
 - [ ] 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。

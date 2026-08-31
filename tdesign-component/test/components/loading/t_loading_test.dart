@@ -8,7 +8,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// TLoading Widget 测试
 ///
 /// Tier1 组件：覆盖 Theme 子树 mergeExtension(TLoadingThemeData)。
-/// 覆盖 size 三档、icon 三种、text、axis 方向。
+/// 覆盖自定义 size、icon 三种、text、axis 方向。
 void main() {
   Widget wrapWithTheme(Widget child, {TLoadingThemeData? loadingTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
@@ -28,17 +28,17 @@ void main() {
   // 基础渲染
   // ============================================================
   group('TLoading 基础渲染', () {
-    testWidgets('size=small 正常渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.small)),
-      );
+    test('size 必须大于 0', () {
+      expect(() => TLoading(size: 0), throwsAssertionError);
+    });
+
+    testWidgets('默认 size 正常渲染', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TLoading()));
       expect(find.byType(TLoading), findsOneWidget);
     });
 
-    testWidgets('size=medium 正常渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.medium)),
-      );
+    testWidgets('自定义 size 正常渲染', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TLoading(size: 28)));
       expect(find.byType(TLoading), findsOneWidget);
       final indicator = tester.widget<TCircleIndicator>(
         find.byType(TCircleIndicator),
@@ -48,10 +48,8 @@ void main() {
       expect(indicator.duration, 800);
     });
 
-    testWidgets('size=large 正常渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.large)),
-      );
+    testWidgets('大尺寸正常渲染', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TLoading(size: 32)));
       expect(find.byType(TLoading), findsOneWidget);
     });
   });
@@ -62,30 +60,21 @@ void main() {
   group('TLoading icon 类型', () {
     testWidgets('circle 图标正常渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium, icon: TLoadingIcon.circle),
-        ),
+        wrapWithTheme(const TLoading(icon: TLoadingIcon.circle)),
       );
       expect(find.byType(TLoading), findsOneWidget);
     });
 
     testWidgets('point 点状图标正常渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium, icon: TLoadingIcon.point),
-        ),
+        wrapWithTheme(const TLoading(icon: TLoadingIcon.point)),
       );
       expect(find.byType(TLoading), findsOneWidget);
     });
 
     testWidgets('activity 菊花状图标正常渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TLoading(
-            size: TLoadingSize.medium,
-            icon: TLoadingIcon.activity,
-          ),
-        ),
+        wrapWithTheme(const TLoading(icon: TLoadingIcon.activity)),
       );
       expect(find.byType(TLoading), findsOneWidget);
     });
@@ -96,18 +85,12 @@ void main() {
   // ============================================================
   group('TLoading 文案', () {
     testWidgets('text 显示加载文案', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium, text: '加载中...'),
-        ),
-      );
+      await tester.pumpWidget(wrapWithTheme(const TLoading(text: '加载中...')));
       expect(find.text('加载中...'), findsOneWidget);
     });
 
     testWidgets('无 text 时正常渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.medium)),
-      );
+      await tester.pumpWidget(wrapWithTheme(const TLoading()));
       expect(find.byType(TLoading), findsOneWidget);
     });
   });
@@ -119,7 +102,7 @@ void main() {
     testWidgets('mergeExtension 覆盖 axis 方向', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium, text: '横向加载'),
+          const TLoading(text: '横向加载'),
           loadingTheme: const TLoadingThemeData(axis: Axis.horizontal),
         ),
       );
@@ -131,7 +114,7 @@ void main() {
     testWidgets('mergeExtension 覆盖 iconColor 颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium),
+          const TLoading(),
           loadingTheme: const TLoadingThemeData(iconColor: Colors.red),
         ),
       );
@@ -145,7 +128,7 @@ void main() {
     testWidgets('mergeExtension 覆盖 textColor 颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium, text: '颜色测试'),
+          const TLoading(text: '颜色测试'),
           loadingTheme: const TLoadingThemeData(textColor: Colors.blue),
         ),
       );
@@ -159,7 +142,7 @@ void main() {
     testWidgets('mergeExtension 覆盖 duration 动画速度', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium),
+          const TLoading(),
           loadingTheme: const TLoadingThemeData(duration: 1000),
         ),
       );
@@ -170,19 +153,26 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TLoading(
-            size: TLoadingSize.medium,
-            customIcon: Icon(Icons.refresh, size: 24),
+            size: 30,
+            customIcon: SizedBox(
+              key: Key('custom-icon'),
+              width: 50,
+              height: 50,
+              child: Icon(Icons.refresh),
+            ),
           ),
         ),
       );
       expect(find.byIcon(Icons.refresh), findsOneWidget);
+      expect(
+        tester.getSize(find.byKey(const Key('custom-icon'))),
+        const Size.square(30),
+      );
     });
 
     testWidgets('未注入 Theme 时使用默认值', (tester) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.medium, text: '默认')),
-      );
+      await tester.pumpWidget(wrapWithTheme(const TLoading(text: '默认')));
       expect(find.text('默认'), findsOneWidget);
       expect(find.byType(TLoading), findsOneWidget);
       final text = tester.widget<TText>(_loadingTextFinder('默认'));
@@ -328,20 +318,9 @@ void main() {
 
   // TLoading icon=null 覆盖 _textWidget 分支
   group('TLoading 覆盖率补充', () {
-    testWidgets('icon=null + size=small 走 _textWidget', (tester) async {
+    testWidgets('icon=null 走 _textWidget', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TLoading(size: TLoadingSize.small, icon: null, text: '加载中'),
-        ),
-      );
-      expect(find.text('加载中'), findsOneWidget);
-    });
-
-    testWidgets('icon=null + size=large 走 _textWidget', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          const TLoading(size: TLoadingSize.large, icon: null, text: '加载中'),
-        ),
+        wrapWithTheme(const TLoading(icon: null, text: '加载中')),
       );
       expect(find.text('加载中'), findsOneWidget);
     });
@@ -351,12 +330,7 @@ void main() {
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
           home: const Scaffold(
-            body: TLoading(
-              size: TLoadingSize.medium,
-              icon: null,
-              text: '加载中',
-              refreshWidget: Text('刷新'),
-            ),
+            body: TLoading(icon: null, text: '加载中', refreshWidget: Text('刷新')),
           ),
         ),
       );
@@ -365,19 +339,19 @@ void main() {
       expect(find.byType(Row), findsOneWidget);
     });
 
-    testWidgets('icon=point + size=small 覆盖 _getPaddingSize', (tester) async {
+    testWidgets('icon=point 使用统一 size 并渲染固定间距', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.point,
-            text: '加载中',
-          ),
+          const TLoading(size: 40, icon: TLoadingIcon.point, text: '加载中'),
         ),
       );
       // point indicator 有无限动画，用 pump 而非 pumpAndSettle
       await tester.pump();
       expect(find.text('加载中'), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(TPointBounceIndicator)),
+        const Size.square(40),
+      );
     });
   });
 
@@ -473,10 +447,18 @@ void main() {
   // 新增契约：默认 duration / axis / 尺寸（对齐官方）
   // ============================================================
   group('TLoading 跨端对齐契约', () {
-    testWidgets('默认 duration 为 800', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.medium)),
+    testWidgets('size 省略时默认使用 20', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TLoading()));
+
+      final indicator = tester.widget<TCircleIndicator>(
+        find.byType(TCircleIndicator),
       );
+      expect(indicator.size, 20);
+      expect(indicator.lineWidth, 2.5);
+    });
+
+    testWidgets('默认 duration 为 800', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TLoading()));
       final indicator = tester.widget<TCircleIndicator>(
         find.byType(TCircleIndicator),
       );
@@ -484,52 +466,51 @@ void main() {
     });
 
     testWidgets('默认 axis 为 horizontal', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TLoading(size: TLoadingSize.medium, text: '加载')),
-      );
+      await tester.pumpWidget(wrapWithTheme(const TLoading(text: '加载')));
       expect(tester.widget<Flex>(find.byType(Flex)).direction, Axis.horizontal);
     });
 
     testWidgets('显式 vertical 覆盖纵向 SizedBox 分支', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TLoading(size: TLoadingSize.medium, text: '加载'),
+          const TLoading(text: '加载'),
           loadingTheme: const TLoadingThemeData(axis: Axis.vertical),
         ),
       );
       expect(tester.widget<Flex>(find.byType(Flex)).direction, Axis.vertical);
     });
 
-    testWidgets('circle 三档尺寸对齐官方 24/28/32', (tester) async {
-      Future<void> check(TLoadingSize size, double expectSize) async {
+    testWidgets('circle 支持 24/28/32 自定义尺寸', (tester) async {
+      Future<void> check(double size) async {
         await tester.pumpWidget(
           wrapWithTheme(TLoading(size: size, icon: TLoadingIcon.circle)),
         );
         final indicator = tester.widget<TCircleIndicator>(
           find.byType(TCircleIndicator),
         );
-        expect(indicator.size, expectSize);
+        expect(indicator.size, size);
+        expect(indicator.lineWidth, size / 8);
       }
 
-      await check(TLoadingSize.small, 24);
-      await check(TLoadingSize.medium, 28);
-      await check(TLoadingSize.large, 32);
+      await check(24);
+      await check(28);
+      await check(32);
     });
 
-    testWidgets('activity 三档保留既有 20/22/26 视觉尺寸', (tester) async {
-      Future<void> check(TLoadingSize size, double expectRadius) async {
+    testWidgets('activity 使用 size 的一半作为半径', (tester) async {
+      Future<void> check(double size) async {
         await tester.pumpWidget(
           wrapWithTheme(TLoading(size: size, icon: TLoadingIcon.activity)),
         );
         final indicator = tester.widget<TCupertinoActivityIndicator>(
           find.byType(TCupertinoActivityIndicator),
         );
-        expect(indicator.radius, expectRadius);
+        expect(indicator.radius, size / 2);
       }
 
-      await check(TLoadingSize.small, 10);
-      await check(TLoadingSize.medium, 11);
-      await check(TLoadingSize.large, 13);
+      await check(20);
+      await check(22);
+      await check(26);
     });
   });
 
@@ -594,7 +575,6 @@ void main() {
     });
   });
 }
-
 
 Finder _loadingTextFinder(String data) {
   return find.byWidgetPredicate(
