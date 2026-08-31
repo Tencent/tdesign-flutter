@@ -22,7 +22,7 @@ Widget _buildThemeSizePopover(BuildContext context) {
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
-                    content: '短文本',
+                    content: const Text('短文本'),
                     placement: TPopoverPlacement.bottom,
                   );
                 },
@@ -39,7 +39,7 @@ Widget _buildThemeSizePopover(BuildContext context) {
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
-                    content: '这是一段用于验证最大宽度和自然换行的较长气泡文本',
+                    content: const Text('这是一段用于验证最大宽度和自然换行的较长气泡文本'),
                     placement: TPopoverPlacement.bottom,
                   );
                 },

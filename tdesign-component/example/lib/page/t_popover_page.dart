@@ -222,7 +222,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: theme,
               );
             },
@@ -244,7 +244,7 @@ class _TPopoverPage extends State<TPopoverPage> {
           onPressed: () {
             TPopover.showPopover(
               context: popoverContext,
-              content: '弹出气泡内容',
+              content: const Text('弹出气泡内容'),
               showArrow: false,
               colorScheme: theme,
             );
@@ -274,10 +274,9 @@ class _TPopoverPage extends State<TPopoverPage> {
               context: popoverContext,
               padding: const EdgeInsets.all(0),
               colorScheme: theme,
-              // contentWidget 模式下必须指定确定的 width 和 height。
               width: 150,
               height: 146,
-              contentWidget: Column(
+              content: Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -325,13 +324,13 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '点击或长按我',
+                  content: const Text('点击或长按我'),
                   placement: TPopoverPlacement.bottom,
-                  onTap: (content) {
-                    setState(() => _eventStatus = 'onTap：$content');
+                  onTap: () {
+                    setState(() => _eventStatus = 'onTap：点击或长按我');
                   },
-                  onLongTap: (content) {
-                    setState(() => _eventStatus = 'onLongTap：$content');
+                  onLongTap: () {
+                    setState(() => _eventStatus = 'onLongTap：点击或长按我');
                   },
                 );
               },
@@ -363,7 +362,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                   height: 104,
                   padding: EdgeInsets.zero,
                   placement: TPopoverPlacement.bottom,
-                  contentWidget: Column(
+                  content: Column(
                     children: [
                       Expanded(
                         child: GestureDetector(
@@ -426,7 +425,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
-                    content: '短文本',
+                    content: const Text('短文本'),
                     placement: TPopoverPlacement.bottom,
                   );
                 },
@@ -443,7 +442,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
-                    content: '这是一段用于验证最大宽度和自然换行的较长气泡文本',
+                    content: const Text('这是一段用于验证最大宽度和自然换行的较长气泡文本'),
                     placement: TPopoverPlacement.bottom,
                   );
                 },
@@ -475,7 +474,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '$label边界内容',
+                  content: Text('$label边界内容'),
                   placement: placement,
                 );
               },
@@ -544,7 +543,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
-                    content: '键盘弹出时保持在可用区域',
+                    content: const Text('键盘弹出时保持在可用区域'),
                     placement: TPopoverPlacement.bottomRight,
                   );
                 },
@@ -578,7 +577,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                       unawaited(
                         TPopover.showPopover(
                           context: popoverContext,
-                          content: '移除锚点后自动关闭',
+                          content: const Text('移除锚点后自动关闭'),
                           placement: TPopoverPlacement.bottom,
                           closeOnClickOutside: false,
                           closeOnScroll: false,
@@ -630,7 +629,10 @@ class _TPopoverPage extends State<TPopoverPage> {
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
             onPressed: () {
-              TPopover.showPopover(context: popoverContext, content: '弹出气泡内容');
+              TPopover.showPopover(
+                context: popoverContext,
+                content: const Text('弹出气泡内容'),
+              );
             },
           );
         },
@@ -653,7 +655,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.light,
               );
             },
@@ -678,7 +680,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.primary,
               );
             },
@@ -703,7 +705,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.success,
               );
             },
@@ -728,7 +730,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.warning,
               );
             },
@@ -753,7 +755,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: TPopoverColorScheme.danger,
               );
             },
@@ -778,7 +780,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.topLeft,
                 colorScheme: theme,
               );
@@ -804,7 +806,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.top,
                 colorScheme: theme,
               );
@@ -830,7 +832,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.topRight,
                 colorScheme: theme,
               );
@@ -856,7 +858,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.bottomLeft,
                 colorScheme: theme,
               );
@@ -882,7 +884,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.bottom,
                 colorScheme: theme,
               );
@@ -908,7 +910,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 placement: TPopoverPlacement.bottomRight,
                 colorScheme: theme,
               );
@@ -936,7 +938,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.rightTop,
                   colorScheme: theme,
                 );
@@ -965,7 +967,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.right,
                   colorScheme: theme,
                 );
@@ -994,7 +996,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.rightBottom,
                   colorScheme: theme,
                 );
@@ -1023,7 +1025,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.leftTop,
                   colorScheme: theme,
                 );
@@ -1052,7 +1054,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.left,
                   colorScheme: theme,
                 );
@@ -1081,7 +1083,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.leftBottom,
                   colorScheme: theme,
                 );
@@ -1108,7 +1110,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+                content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
                 colorScheme: theme,
               );
             },
@@ -1135,7 +1137,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                 context: popoverContext,
                 radius: BorderRadius.circular(16),
                 colorScheme: theme,
-                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+                content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
               );
             },
           );

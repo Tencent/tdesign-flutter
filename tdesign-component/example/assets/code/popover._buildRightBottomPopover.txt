@@ -14,7 +14,7 @@ Widget _buildRightBottomPopover(BuildContext context) {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '气泡内容',
+                  content: const Text('气泡内容'),
                   placement: TPopoverPlacement.rightBottom,
                   colorScheme: theme,
                 );

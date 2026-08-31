@@ -75,15 +75,7 @@ void main() {
     await tester.tap(trigger);
     await tester.pumpAndSettle();
 
-    final containerFinder = find
-        .descendant(
-          of: find.byType(TPopoverWidget),
-          matching: find.byWidgetPredicate(
-            (widget) =>
-                widget is Container && widget.decoration is BoxDecoration,
-          ),
-        )
-        .first;
+    final containerFinder = find.byKey(const Key('t-popover-content'));
     final container = tester.widget<Container>(containerFinder);
     expect(
       (container.decoration! as BoxDecoration).color,

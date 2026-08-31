@@ -105,8 +105,8 @@ export 'src/components/picker/t_picker_types.dart';
 export 'src/components/popover/t_popover.dart';
 export 'src/components/popover/t_popover_theme_data.dart'
     show TPopoverThemeData;
-export 'src/components/popover/t_popover_types.dart' show TPopoverColorScheme;
-export 'src/components/popover/t_popover_widget.dart';
+export 'src/components/popover/t_popover_types.dart'
+    show TPopoverColorScheme, TPopoverPlacement;
 export 'src/components/popup/t_popup.dart'
     show
         TPopup,

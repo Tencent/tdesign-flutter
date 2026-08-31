@@ -112,7 +112,7 @@ void main() {
         await tester.tap(trigger);
         await tester.pumpAndSettle();
 
-        expect(find.byType(TPopoverWidget), findsOneWidget);
+        expect(find.byKey(const Key('t-popover-content')), findsOneWidget);
         for (final visibleText in popoverCase.visibleTexts) {
           expect(find.text(visibleText), findsOneWidget);
         }

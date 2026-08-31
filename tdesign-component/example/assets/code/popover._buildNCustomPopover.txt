@@ -17,10 +17,9 @@ Widget _buildNCustomPopover(BuildContext context) {
               context: popoverContext,
               padding: const EdgeInsets.all(0),
               colorScheme: theme,
-              // contentWidget 模式下必须指定确定的 width 和 height。
               width: 150,
               height: 146,
-              contentWidget: Column(
+              content: Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
