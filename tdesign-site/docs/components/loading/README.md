@@ -49,6 +49,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             icon: TLoadingIcon.point,
           ),
         ),
+        const SizedBox(width: 36),
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(
+              iconColor: context.tTheme.brandNormalColor,
+            ),
+          ),
+          child: const TLoading(
+            customIcon: SizedBox(
+              width: 20,
+              height: 20,
+              child: Icon(Icons.sync_rounded, size: 20, color: Colors.blue),
+            ),
+          ),
+        ),
       ],
     );
   }</pre>
@@ -164,67 +179,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
-### 1 组件尺寸
+### 2 组件尺寸
 
-大尺寸
-            
+自定义尺寸（32 / 28 / 24）
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildLargeLoading(BuildContext context) {
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-      child: const TLoading(
-        size: 32,
+  Widget _buildLoadingSizes(BuildContext context) {
+    Widget loading(double size) => Theme(
+      data: Theme.of(context).mergeExtension(
+        const TLoadingThemeData(axis: Axis.horizontal),
+      ),
+      child: TLoading(
+        size: size,
         icon: TLoadingIcon.circle,
         text: '加载中…',
       ),
     );
-  }</pre>
 
-</td-code-block>
-                                  
-
-中尺寸
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildMediumLoading(BuildContext context) {
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-      child: const TLoading(
-        size: 28,
-        icon: TLoadingIcon.circle,
-        text: '加载中…',
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        loading(32),
+        const SizedBox(height: 24),
+        const Text('中尺寸'),
+        const SizedBox(height: 16),
+        loading(28),
+        const SizedBox(height: 24),
+        const Text('小尺寸'),
+        const SizedBox(height: 16),
+        loading(24),
+      ],
     );
   }</pre>
 
 </td-code-block>
-                                  
 
-小尺寸
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSmallLoading(BuildContext context) {
-    return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
-      child: const TLoading(
-        size: 24,
-        icon: TLoadingIcon.circle,
-        text: '加载中…',
-      ),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
 ### 1 加载速度
 
 调整加载速度
