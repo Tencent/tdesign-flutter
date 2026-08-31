@@ -1,32 +1,11 @@
-Widget _buildInline(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: ValueListenableBuilder<TDateTimePickerValue?>(
-              valueListenable: _inlineSelectedNotifier,
-              builder: (context, selected, _) => TText(
-                '当前选择：${_formatResult(selected)}',
-                textColor: context.tTheme.textColorSecondary,
-              ),
-            ),
-          ),
-          TDateTimePicker(
-            mode: DateTimePickerMode(
-              dateMode: DateMode.date,
-              timeMode: TimeMode.minute,
-            ),
-            value: _kInlineValue,
-            onChanged: (result) => _inlineSelectedNotifier.value = result,
-          ),
-        ],
-      ),
-    );
-  }
+Widget _buildInline(BuildContext context) => Material(
+    color: context.tTheme.bgColorContainer,
+    child: TDateTimePicker(
+      key: const ValueKey('date-time-picker-inline-panel'),
+      value: _inline,
+      mode: DateTimePickerMode(dateMode: DateMode.date),
+      start: const TDateTimePickerValue(year: 2000, month: 1, day: 1),
+      end: const TDateTimePickerValue(year: 2030, month: 9, day: 9),
+      onChanged: (value) => setState(() => _inline = value),
+    ),
+  );

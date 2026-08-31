@@ -2,6 +2,7 @@ import 'dart:io';
 
 const componentTargets = <String, List<String>>{
   'button': ['lib/src/components/button/'],
+  'date_time_picker': ['lib/src/components/date_time_picker/'],
   'tag': ['lib/src/components/tag/'],
   'popover': ['lib/src/components/popover/'],
   'checkbox': ['lib/src/components/checkbox/'],

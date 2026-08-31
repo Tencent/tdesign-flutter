@@ -25,8 +25,13 @@ class DemoPageTestSpec {
     this.expectedComponentCount,
     this.useFeedbackGoldenFont = false,
     this.useAlignmentCjkFont = false,
+    this.supplementalCjkFontFamily,
+    this.supplementalCjkFontPath,
     this.precacheAssetImages = const [],
-  });
+  }) : assert(
+         (supplementalCjkFontFamily == null) ==
+             (supplementalCjkFontPath == null),
+       );
 
   final String name;
   final String title;
@@ -36,6 +41,8 @@ class DemoPageTestSpec {
   final int? expectedComponentCount;
   final bool useFeedbackGoldenFont;
   final bool useAlignmentCjkFont;
+  final String? supplementalCjkFontFamily;
+  final String? supplementalCjkFontPath;
   final List<String> precacheAssetImages;
 }
 
@@ -142,6 +149,15 @@ Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
       );
     loaders.add(alignmentCjkFont.load());
   }
+  if (spec.supplementalCjkFontFamily case final family?) {
+    final supplementalCjkFont = FontLoader(family)
+      ..addFont(
+        File(
+          spec.supplementalCjkFontPath!,
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    loaders.add(supplementalCjkFont.load());
+  }
   await Future.wait(loaders);
 }
 
@@ -233,6 +249,7 @@ ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     if (spec.useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
     _goldenCjkFontFamily,
     if (spec.useAlignmentCjkFont) _alignmentCjkFontFamily,
+    if (spec.supplementalCjkFontFamily case final family?) family,
   ];
   return theme.copyWith(
     textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
