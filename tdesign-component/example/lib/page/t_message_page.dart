@@ -206,6 +206,7 @@ class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {
               if (_visible)
                 const TMessage(
                   content: '这是一条通过组件调用的消息通知',
+                  visible: true,
                   offset: Offset.zero,
                   useSafeArea: false,
                   duration: null,

@@ -14,7 +14,14 @@
 
 ### 图标-文本间距
 
-`t_message.dart` 中图标后 `SizedBox(width: 10)` 改为 8，同步 `_calculateTextWidth()` 图标分支 `width -= 30` 改为 `width -= 28`。纯内部视觉微调，无公开 API 变化。
+`t_message.dart` 中图标后间距对齐 8px，图标约束对齐 22×22，并同步 `_calculateTextWidth()` 的占位计算。
+
+### 默认展示契约
+
+- 声明式 `visible` 默认改为 `false`，`TMessage.show()` 显式传入 `visible: true`；只有可见阶段才启动 duration / marquee 计时器。
+- 默认宽度使用安全可视区域全宽，默认纵向位置由 `MediaQuery.padding.top + kToolbarHeight` 推导，避免继续硬编码 80px。
+- 默认文本使用 Theme 中的 `bodyMedium`；默认阴影内部引用 `shadowsBase` token。已有 `TMessageThemeData.elevation` 仍是显式覆盖，不在 ThemeExtension 增加同义状态。
+- Overlay 维度以现有 `offset` 作为所有权边界：未传 `offset` 的默认槽位只保留当前消息；显式 offset 继续允许多消息，不新增 `single` API。
 
 ### 站点文档
 
@@ -28,7 +35,7 @@
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | lib/src/components/message/t_message.dart | 图标-文本间距 10→8px（内部视觉微调） |
+| 组件 | lib/src/components/message/t_message.dart | 默认可见性、位置、宽度、阴影、字体、图标尺寸、计时与默认替换策略 |
 | 测试 | test/components/message/t_message_test.dart | 补充 Demo 相关测试，提升覆盖率 |
 | 示例 | example/lib/page/t_message_page.dart | 补齐官方 Demo 矩阵 |
 | 示例生成 | example/assets/code/message.*.txt | 由 codegen 同步 |
@@ -37,13 +44,14 @@
 
 ## API 变化
 
-- 无。所有官方 Demo 均可用现有公开 API 表达，不新增 / 不删除 / 不重命名任何公共参数或类型。
+- 无签名增删或重命名；`visible` 默认值从 `true` 改为 `false`，属于默认行为 breaking change。
+- 不新增 `single` 或 Theme 同义状态。默认槽位替换由 `TMessage.show()` 内部管理；显式 offset 保留原多消息能力。
 
 ## 风险与取舍
 
-- **默认定位**（距顶 80px 居中卡片 vs 官方贴顶全宽条带）为视觉 breaking change，此 PR 不处理，需维护者另行拍板。
-- **阴影 / 图标尺寸 / SafeArea** 的像素级表现需真机截图确认，无法在本环境实测，标记为"未验证/阻塞"，不声称已对齐。
-- **间距微调**为 8px，经官方 `@spacer` 源码确认，风险低。
+- **默认行为变化**会影响未显式传 `visible` 的声明式调用以及默认位置连续触发；通过 dartdoc、示例和回归测试明确迁移方式。
+- **跨平台坐标系不同**：小程序 `top: 0` 是页面 WebView 原点，Flutter Overlay 需结合安全区和导航栏推导等效位置，不能机械复制 0。
+- **真机证据**仍需设备重连后补验；Web 触发和 Linux Golden 负责可复现回归，不替代真机 DPR 验收。
 
 ## 验证策略
 
@@ -51,4 +59,4 @@
 - 静态检查：`flutter analyze --fatal-infos`
 - 示例代码一致性：codegen `--check`
 - 站点/组件契约：`node scripts/check-flutter-component-contracts.mjs`
-- 人工验收：微信开发者工具小程序实际页截图与 Flutter 3.32.0 Linux 明暗整页 Golden 比对；真机 DPR 仍单独说明未验证。
+- 人工验收：先点击触发默认、关闭按钮与声明式实例，再比较微信开发者工具实际页、Flutter Web 触发态和 Flutter 3.32.0 Linux 明暗 Golden；真机 DPR 单独记录。

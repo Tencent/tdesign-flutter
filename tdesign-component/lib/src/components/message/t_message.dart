@@ -6,6 +6,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../link/t_link.dart';
 import '../link/t_link_theme_data.dart';
@@ -66,14 +67,22 @@ final class TMessageHandle {
   }
 }
 
+final class _TMessageSlot {
+  TMessageHandle? handle;
+}
+
 /// 顶部消息组件
 class TMessage extends StatefulWidget {
+  static final Expando<_TMessageSlot> _defaultSlots = Expando<_TMessageSlot>(
+    'TMessage.defaultSlots',
+  );
+
   /// 创建消息组件
   const TMessage({
     super.key,
     this.content = '',
     this.duration = const Duration(seconds: 3),
-    this.visible = true,
+    this.visible = false,
     this.showIcon = true,
     this.icon,
     this.link,
@@ -92,10 +101,10 @@ class TMessage extends StatefulWidget {
   /// 通知内容
   final String content;
 
-  /// 自动关闭时长，null 表示不自动关闭
+  /// 自动关闭时长，null 或 [Duration.zero] 表示不自动关闭
   final Duration? duration;
 
-  /// 是否显示
+  /// 是否显示，默认为 false
   final bool visible;
 
   /// 是否显示前置图标
@@ -139,11 +148,16 @@ class TMessage extends StatefulWidget {
   /// 关闭动画完成时触发
   final VoidCallback? onDismissed;
 
-  /// 在 Overlay 中显示消息并返回控制句柄
+  /// 在 Overlay 中显示消息并返回控制句柄。
+  ///
+  /// 未显式传入 [offset] 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
+  /// 显式传入不同 [offset] 的消息可以同时展示。
   static TMessageHandle show({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
     String content = '',
+
+    /// 自动关闭时长，null 或 [Duration.zero] 表示不自动关闭。
     Duration? duration = const Duration(seconds: 3),
     bool showIcon = true,
     Widget? icon,
@@ -163,12 +177,19 @@ class TMessage extends StatefulWidget {
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
     final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final slot = offset == null
+        ? (_defaultSlots[overlay] ??= _TMessageSlot())
+        : null;
+    slot?.handle?.dismiss();
 
     void removeEntry() {
       if (handle._entry == null) {
         return;
       }
       handle.dismiss();
+      if (slot?.handle == handle) {
+        slot?.handle = null;
+      }
       onDismissed?.call();
     }
 
@@ -177,6 +198,7 @@ class TMessage extends StatefulWidget {
         TMessage(
           content: content,
           duration: duration,
+          visible: true,
           showIcon: showIcon,
           icon: icon,
           link: link,
@@ -194,6 +216,7 @@ class TMessage extends StatefulWidget {
       ),
     );
     handle._entry = entry;
+    slot?.handle = handle;
     overlay.insert(entry);
     return handle;
   }
@@ -204,15 +227,12 @@ class TMessage extends StatefulWidget {
 
 class _TMessageState extends State<TMessage>
     with SingleTickerProviderStateMixin {
-  static const double _defaultTop = 80;
-  static const double _width = 343;
-  static const double _horizontalMargin = 16;
-
   late final AnimationController _animationController;
   bool _isVisible = true;
   bool _isAnimationRunning = false;
   bool _closing = false;
-  double _top = _defaultTop - 30;
+  bool _didAnimateIn = false;
+  double _top = 0;
   Timer? _durationTimer;
   Timer? _closeTimer;
   Timer? _marqueeDelayTimer;
@@ -224,15 +244,16 @@ class _TMessageState extends State<TMessage>
   EdgeInsets get _safePadding =>
       widget.useSafeArea ? MediaQuery.paddingOf(context) : EdgeInsets.zero;
 
-  double get _minimumLeft => math.max(_horizontalMargin, _safePadding.left);
+  double get _defaultTop => _safePadding.top + kToolbarHeight;
+
+  double get _minimumLeft => _safePadding.left;
 
   double get _maximumRight =>
-      MediaQuery.sizeOf(context).width -
-      math.max(_horizontalMargin, _safePadding.right);
+      MediaQuery.sizeOf(context).width - _safePadding.right;
 
   double get _effectiveWidth {
     final availableWidth = math.max(0.0, _maximumRight - _minimumLeft);
-    return math.min(_width, availableWidth);
+    return availableWidth;
   }
 
   double _safeTop(double desiredTop) {
@@ -274,11 +295,24 @@ class _TMessageState extends State<TMessage>
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        setState(() => _top = _effectiveOffset.dy);
+        setState(() {
+          _top = _effectiveOffset.dy;
+          _didAnimateIn = true;
+        });
       }
     });
-    _scheduleDurationClose();
-    _scheduleMarqueeStart();
+    if (widget.visible) {
+      _scheduleDurationClose();
+      _scheduleMarqueeStart();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didAnimateIn) {
+      _top = _effectiveOffset.dy;
+    }
   }
 
   @override
@@ -300,6 +334,12 @@ class _TMessageState extends State<TMessage>
       _closing = false;
       _isVisible = true;
       _scheduleDurationClose();
+      _scheduleMarqueeStart();
+    } else if (oldWidget.visible && !widget.visible) {
+      _durationTimer?.cancel();
+      _marqueeDelayTimer?.cancel();
+      _animationController.stop();
+      _isAnimationRunning = false;
     }
     if (oldWidget.offset != widget.offset ||
         oldWidget.useSafeArea != widget.useSafeArea) {
@@ -375,7 +415,9 @@ class _TMessageState extends State<TMessage>
   }
 
   Widget _buildText(BuildContext context) {
-    final style = TextStyle(color: context.tTheme.textColorPrimary);
+    final style = Theme.of(
+      context,
+    ).textTheme.bodyMedium?.copyWith(color: context.tTheme.textColorPrimary);
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,
@@ -439,7 +481,7 @@ class _TMessageState extends State<TMessage>
         context.tTheme.errorNormalColor,
       ),
     };
-    return Icon(icon, color: color);
+    return Icon(icon, color: color, size: 22);
   }
 
   Widget _buildLink(BuildContext context) {
@@ -480,67 +522,72 @@ class _TMessageState extends State<TMessage>
     }
     final offset = _effectiveOffset;
     final theme = _theme;
+    final backgroundColor =
+        theme.backgroundColor ?? context.tTheme.bgColorContainer;
+    final shape =
+        theme.shape ??
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+        );
+    final content = SizedBox(
+      width: _effectiveWidth,
+      height: 48,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            if (widget.showIcon) ...[
+              SizedBox(width: 22, height: 22, child: _buildIcon(context)),
+              const SizedBox(width: 8),
+            ],
+            Expanded(child: _buildText(context)),
+            if (widget.link != null) ...[
+              const SizedBox(width: 8),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 96),
+                child: _buildLink(context),
+              ),
+            ],
+            if (widget.showCloseButton || widget.closeButton != null) ...[
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 22,
+                height: 22,
+                child: _buildCloseButton(context),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+    final message = theme.elevation == null
+        ? DecoratedBox(
+            decoration: ShapeDecoration(
+              color: backgroundColor,
+              shape: shape,
+              shadows: context.tTheme.shadowsBase ?? const [],
+            ),
+            child: Material(type: MaterialType.transparency, child: content),
+          )
+        : Material(
+            color: backgroundColor,
+            shape: shape,
+            elevation: theme.elevation!,
+            child: content,
+          );
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       top: _safeTop(_top),
       left: offset.dx,
-      child: _isVisible
-          ? Material(
-              color: theme.backgroundColor ?? context.tTheme.bgColorContainer,
-              shape:
-                  theme.shape ??
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      context.tTheme.radiusDefault,
-                    ),
-                  ),
-              elevation: theme.elevation ?? 6,
-              child: SizedBox(
-                width: _effectiveWidth,
-                height: 48,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      if (widget.showIcon) ...[
-                        SizedBox(
-                          width: 20,
-                          height: 22,
-                          child: _buildIcon(context),
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                      Expanded(child: _buildText(context)),
-                      if (widget.link != null) ...[
-                        const SizedBox(width: 8),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 96),
-                          child: _buildLink(context),
-                        ),
-                      ],
-                      if (widget.showCloseButton ||
-                          widget.closeButton != null) ...[
-                        const SizedBox(width: 8),
-                        SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: _buildCloseButton(context),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            )
-          : const SizedBox.shrink(),
+      child: _isVisible ? message : const SizedBox.shrink(),
     );
   }
 
   double _calculateTextWidth() {
     var width = _effectiveWidth - 32;
     if (widget.showIcon) {
-      width -= 28;
+      width -= 30;
     }
     if (widget.link != null) {
       width -= 104;

@@ -11,6 +11,8 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 2. **示例生成代码不同步**：`example/assets/code/` 仅含 `message._marquee.txt`，未与完整 Demo 同步。
 3. **站点文档严重过期**：`tdesign-site/docs/components/message/README.md` 仍使用已废弃 API（`TMessage.showMessage`、`MessageTheme`、`MessageLink`、`MessageMarquee`、`closeBtn`、`icon`、`theme`、`onCloseBtnClick`、`onLinkClick` 等），无法编译，与现网 `TMessage.show` / `TMessageVariant` / `TMessageLink` / `TMessageMarquee` / `showIcon` / `showCloseButton` / `onCloseButtonPressed` / `onLinkPressed` 不一致。
 4. **像素级视觉差异**：图标与文本间距 Flutter 为 10px，官方为 `@spacer`（8px）。
+5. **默认展示契约未对齐**：Flutter 声明式组件默认可见、默认使用距顶 80px 的 343px 卡片、20px 图标和 Material elevation 6；小程序默认 `visible=false`，触发后在页面导航栏下方展示全宽 48px 条带，图标为 22px，并使用基础阴影。
+6. **默认并发行为未收敛**：Flutter 连续调用 `show()` 会在同一位置叠加；小程序默认只保留当前一条通知。
 
 ## 目标
 
@@ -18,22 +20,23 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - 同步 `example/assets/code/` 生成示例代码。
 - 修复 `tdesign-site/docs/components/message/README.md`，对齐现网公开 API。
 - 对齐图标与文本间距为官方 `@spacer`（8px），并同步 marquee 文本宽度计算。
+- 对齐声明式默认隐藏、3 秒自动关闭、导航栏下方全宽条带、22px 图标、body-medium 字体与基础阴影。
+- 默认位置连续调用 `show()` 时替换上一条；显式传入不同 `offset` 时继续支持多消息布局，不新增 `single` 等同义公开状态。
 - 补充组件测试，提升 `lib/src/components/message/` 手写源码行覆盖率。
 
 ## 非目标
 
-- 不新增 / 不删除 / 不重命名 `TMessage` 的任何公共参数或类型（现有公开 API 已足以表达全部官方 Demo）。
-- 不引入 `align`、`gap`、`single`、自定义 content Widget、`marquee` 的 `speed`/`loop` 语义等新 API（如未来需要，另行按仓库规范讨论）。
+- 不新增 / 不删除 / 不重命名 `TMessage` 的任何公共参数或类型；仅调整 `visible` 的默认值与默认展示行为。
+- 不引入 `align`、`gap`、`single`、自定义 content Widget、`marquee` 的 `speed`/`loop` 语义等新 API。
 - 不在小程序公开基线中展示 Mobile Vue / Flutter 扩展的“关闭所有通知”模块；底层 dismiss 能力不删除。
-- 不改变 `TMessage` 默认定位（当前距顶 80px 居中卡片 vs 官方贴顶全宽条带）——该调整属于视觉 breaking change，需维护者单独拍板后另行处理。
-- 不调整阴影（elevation）与图标尺寸的像素值——当前实现方式（Material elevation / 主题 Icon）属于框架差异，像素级表现需真机截图确认，不在此次断言对齐。
-- 不处理 Overlay 安全区默认值等涉及默认行为的变更。
+- 不重命名 `TMessageVariant`，也不移除暂未消费的 `TMessageLink.uri`；两者作为后续 API 债务单独评估。
+- 不将 `visible`、默认单例策略、尺寸或位置复制到 `TMessageThemeData`；Theme 只承载现有样式覆盖，避免形成第二公开状态源。
 
 ## 范围
 
 ### 涉及
 
-- tdesign-component/lib/src/components/message/t_message.dart（图标-文本间距对齐，仅内部视觉微调，无 API 变化）
+- tdesign-component/lib/src/components/message/t_message.dart（默认展示契约、生命周期、并发策略与视觉 token 对齐）
 - tdesign-component/example/lib/page/t_message_page.dart（补齐官方 Demo 矩阵）
 - tdesign-component/example/assets/code/message.*.txt（示例生成代码，由 codegen 同步）
 - tdesign-site/docs/components/message/README.md（对齐现网 API 与 Demo）
@@ -67,12 +70,27 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 ### 图标-文本间距
 
 - 图标与文本之间的水平间距由 10px 调整为官方 `@spacer`（8px）。
-- 同步调整 marquee 文本可用宽度计算（图标分支占位由 30 改为 28）。
+- 图标尺寸由 20×22 调整为 22×22，同步调整 marquee 文本可用宽度计算。
+
+### 默认展示与生命周期
+
+- 声明式 `TMessage.visible` 默认值由 `true` 调整为 `false`；`TMessage.show()` 内部显式创建可见实例。
+- `duration` 默认保持 3 秒；`null` 与 `Duration.zero` 均表示不自动关闭。
+- 默认消息宽度占满安全可视区域，纵向位置为系统安全区与 Flutter 页面导航栏之后；显式 `offset` 仍按既有规则受安全区约束。
+- 默认文本使用 TDesign `body-medium`，默认阴影内部引用 `shadowsBase` token；已有 `TMessageThemeData.elevation` 显式配置仍优先，不新增同义 Theme 字段。
+- 连续调用 `TMessage.show()` 且未传 `offset` 时，新消息替换上一条。显式传入不同 `offset` 的多消息能力保留。
 
 ### 站点文档
 
 - `tdesign-site/docs/components/message/README.md` 的示例代码、API 表格统一对齐现网公开 API（`TMessage.show`、`TMessageVariant`、`TMessageLink`、`TMessageMarquee`、`showIcon`、`showCloseButton`、`onCloseButtonPressed`、`onLinkPressed` 等）。
 - 示例文件链接、Demo 分组描述与 Flutter 示例页保持一致。
+
+### Breaking change 分析
+
+- `visible` 默认值从 `true` 改为 `false`：依赖 `const TMessage(...)` 默认立即展示的调用方需显式传入 `visible: true`。
+- 默认几何、阴影、字号和图标尺寸变化会更新可见快照。
+- 未传 `offset` 的连续 `show()` 从重叠改为替换；依赖并排展示的调用方需继续使用已有的显式 `offset`。
+- 未删除或重命名公开 API，也未新增与实例状态同义的 Theme / `single` 字段。
 
 ### 覆盖率
 
@@ -87,6 +105,9 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - [ ] `example/assets/code/message.*.txt` 与 `t_message_page.dart` 同步（codegen `--check` 通过）。
 - [ ] `tdesign-site/docs/components/message/README.md` 不再包含已废弃 API，示例可编译。
 - [ ] 图标-文本间距为 8px，marquee 宽度计算同步更新。
+- [ ] 声明式默认隐藏；命令式触发后默认显示，并在 3 秒后完成关闭与 Overlay 销毁。
+- [ ] 默认消息在导航栏下方全宽展示，图标 22px、body-medium 与基础阴影均有 Widget / Golden 证据。
+- [ ] 默认位置连续触发只保留当前消息；显式 offset 多消息仍可用，且未新增同义公开状态。
 - [ ] `lib/src/components/message/` 行覆盖率 ≥95%。
 - [ ] Message 相关 Widget 测试通过。
 - [ ] `flutter analyze --fatal-infos` 通过。
