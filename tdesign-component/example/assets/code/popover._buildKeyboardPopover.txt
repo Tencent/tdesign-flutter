@@ -21,7 +21,7 @@ Widget _buildKeyboardPopover(BuildContext context) {
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
-                    content: '键盘弹出时保持在可用区域',
+                    content: const Text('键盘弹出时保持在可用区域'),
                     placement: TPopoverPlacement.bottomRight,
                   );
                 },
