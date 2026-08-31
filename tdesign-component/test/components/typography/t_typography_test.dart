@@ -6,7 +6,7 @@ void main() {
   Widget wrap(Widget child, {Locale? locale}) {
     final theme = TThemeBuilder.light(TThemeData.defaultData());
     return MaterialApp(
-      locale: locale,
+      locale: locale ?? const Locale('zh'),
       theme: theme,
       home: Scaffold(body: child),
     );
