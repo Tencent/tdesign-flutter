@@ -8,7 +8,7 @@ import '../base/example_widget.dart';
 class TDialogPage extends StatelessWidget {
   const TDialogPage({super.key});
 
-  static const _description = '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内';
+  static const _description = '告知当前状态、信息和解决方法等内容。描述文案尽可能控制在三行内';
 
   @override
   Widget build(BuildContext context) {
@@ -354,7 +354,7 @@ class TDialogPage extends StatelessWidget {
             title: const Text('带输入框对话框'),
             content: const TextField(
               decoration: InputDecoration(
-                hintText: '输入12文案',
+                hintText: '输入12字文案',
                 border: InputBorder.none,
               ),
             ),
@@ -373,7 +373,7 @@ class TDialogPage extends StatelessWidget {
                 SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
-                    hintText: '输入12文案',
+                    hintText: '输入12字文案',
                     border: InputBorder.none,
                   ),
                 ),
