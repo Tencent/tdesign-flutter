@@ -18,7 +18,7 @@ Widget _buildLifecyclePopover(BuildContext context) {
                       unawaited(
                         TPopover.showPopover(
                           context: popoverContext,
-                          content: '移除锚点后自动关闭',
+                          content: const Text('移除锚点后自动关闭'),
                           placement: TPopoverPlacement.bottom,
                           closeOnClickOutside: false,
                           closeOnScroll: false,

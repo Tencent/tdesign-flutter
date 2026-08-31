@@ -16,7 +16,7 @@ Widget _buildBoundaryPopover(BuildContext context) {
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
-                  content: '$label边界内容',
+                  content: Text('$label边界内容'),
                   placement: placement,
                 );
               },

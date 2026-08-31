@@ -14,5 +14,9 @@
 - [x] 增加 Demo Widget 测试并同步生成代码片段
 - [x] 增加 placement 同轴自动翻转与双侧不足时的箭头补偿
 - [x] 补充自动翻转、viewport clamp 和圆角安全区回归测试
-- [ ] 在目标设备完成窄屏、键盘、四边 placement 和 contentWidget 交互人工验收
+- [x] 将 21 个公开触发按钮统一为与小程序一致的 large 尺寸
+- [x] 将右侧/左侧六个触发按钮按小程序 446rpx 对应为 223dp，并保持两侧对齐
+- [x] 使用微信开发者工具抓取并逐张检查 21 个小程序实际展开态
+- [x] 为 21 个公开 Demo 增加 light/dark 展开态 Golden 并逐张检查
+- [ ] 在目标设备完成窄屏、键盘、四边 placement 和组合 Widget 交互人工验收
 - [ ] 完成最终 Review 后关闭 Spec
