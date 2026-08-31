@@ -24,6 +24,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/button_demo_test.dart'],
   ),
   VisualTestSuite(
+    'cascader',
+    'Cascader Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/cascader_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'tag',
     'Tag Demo',
     workingDirectory: 'example',

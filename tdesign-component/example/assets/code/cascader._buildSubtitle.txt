@@ -1,0 +1,2 @@
+Widget _buildSubtitle(BuildContext context) =>
+      _trigger('subtitle', subtitles: const ['请选择省份', '请选择城市', '请选择区/县']);

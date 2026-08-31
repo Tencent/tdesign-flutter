@@ -16,6 +16,9 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('cascader', [
+    'test/components/cascader/t_cascader_test.dart',
+  ]),
   ComponentTestSuite('tag', [
     'test/components/tag/t_select_tag_test.dart',
     'test/components/tag/t_tag_test.dart',
