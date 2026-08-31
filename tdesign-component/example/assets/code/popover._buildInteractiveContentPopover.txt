@@ -15,7 +15,7 @@ Widget _buildInteractiveContentPopover(BuildContext context) {
                   height: 104,
                   padding: EdgeInsets.zero,
                   placement: TPopoverPlacement.bottom,
-                  contentWidget: Column(
+                  content: Column(
                     children: [
                       Expanded(
                         child: GestureDetector(

@@ -4,19 +4,22 @@ Widget _buildRightPopover(BuildContext context) {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('右侧中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.right,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧中'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: const Text('气泡内容'),
+                  placement: TPopoverPlacement.right,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
