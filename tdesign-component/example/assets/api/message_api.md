@@ -23,10 +23,10 @@
 | closeButton | Widget? | - | 自定义关闭按钮 |
 | marquee | TMessageMarquee? | - | 跑马灯配置 |
 | offset | Offset? | - | 期望的屏幕绝对坐标。 `useSafeArea` 为 true 时，最终消息矩形会被约束在安全可视区域内。 |
-| variant | TMessageVariant | TMessageVariant.info | 消息语义色 |
+| status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
-| onDismissed | VoidCallback? | - | 关闭动画完成时触发 |
+| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
 
 #### 默认构造方法
@@ -42,10 +42,10 @@
 | marquee | TMessageMarquee? | - | 跑马灯配置 |
 | offset | Offset? | - | 期望的屏幕绝对坐标。 `useSafeArea` 为 true 时，最终消息矩形会被约束在安全可视区域内。 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
-| onDismissed | VoidCallback? | - | 关闭动画完成时触发 |
+| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
 | showCloseButton | bool | false | 是否显示关闭按钮 |
 | showIcon | bool | true | 是否显示前置图标 |
+| status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
-| variant | TMessageVariant | TMessageVariant.info | 消息语义色 |
 | visible | bool | false | 是否显示，默认为 false |

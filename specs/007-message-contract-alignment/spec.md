@@ -32,7 +32,6 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 - 不引入 `align`、`gap`、`single`、自定义 content Widget、`marquee` 的 `speed`/`loop` 语义等新 API。
 - 不在小程序公开基线中展示 Mobile Vue / Flutter 扩展的“关闭所有通知”模块；底层 dismiss 能力不删除。
-- 不重命名 `TMessageVariant`。
 - 不将 `visible`、默认单例策略、尺寸或位置复制到 `TMessageThemeData`；Theme 只承载现有样式覆盖，避免形成第二公开状态源。
 
 ## 范围
@@ -64,7 +63,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 | 组件类型 | 可滚动的通知 | 跑马灯通知 | `TMessage.show(marquee: ...)` |
 | 组件类型 | 带按钮的通知 | 带操作通知 | `TMessage.show(action: TLink(...))` |
 | 组件类型 | 组件调用 | 组件声明式调用 | `TMessage(visible: ...)` |
-| 组件风格 | 普通 / 成功 / 警示 / 错误 | 同 4 主题 | `TMessage.show(variant: ...)` |
+| 组件风格 | 普通 / 成功 / 警示 / 错误 | 同 4 状态 | `TMessage.show(status: ...)` |
 
 - 官方存在、Flutter 缺失的 Demo 必须补齐（上表各条目）。
 - Flutter 公开页不携带小程序公开基线的扩展 Demo，如“关闭所有通知”，不继续对外展示。
@@ -82,10 +81,14 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - 默认消息宽度占满安全可视区域，纵向位置为系统安全区与 Flutter 页面导航栏之后；显式 `offset` 仍按既有规则受安全区约束。
 - 默认文本使用 TDesign `body-medium`，默认阴影内部引用 `shadowsBase` token；已有 `TMessageThemeData.elevation` 显式配置仍优先，不新增同义 Theme 字段。
 - 连续调用 `TMessage.show()` 且未传 `offset` 时，新消息替换上一条。显式传入不同 `offset` 的多消息能力保留。
+- `TMessageStatus` 是消息语义状态的唯一公开选择器；删除语义不准确的 `TMessageVariant` / `variant`。
+- `offset` 是消息位置的唯一公开输入；删除 `TMessageThemeData.defaultOffset`，避免 Theme 与实例形成同义状态源。
+- 命令式句柄、自动关闭、关闭按钮与默认消息替换复用同一幂等销毁闭环；每条消息释放 Overlay、slot、Timer 和动画资源后只回调一次。
+- 隐藏状态不启动自动关闭或跑马灯任务；跑马灯宽度使用布局阶段获得的真实可用约束，不按 action 最大宽度预估。
 
 ### 站点文档
 
-- `tdesign-site/docs/components/message/README.md` 的示例代码、API 表格统一对齐现网公开 API（`TMessage.show`、`TMessageVariant`、`TMessageMarquee`、`action`、`showIcon`、`showCloseButton`、`onCloseButtonPressed` 等）。
+- `tdesign-site/docs/components/message/README.md` 的示例代码、API 表格统一对齐现网公开 API（`TMessage.show`、`TMessageStatus`、`TMessageMarquee`、`action`、`showIcon`、`showCloseButton`、`onCloseButtonPressed` 等）。
 - 示例文件链接、Demo 分组描述与 Flutter 示例页保持一致。
 
 ### Breaking change 分析
@@ -95,6 +98,8 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - `Duration.zero` 不再表示永久展示；永久展示必须迁移为 `duration: null`。
 - 默认几何、阴影、字号和图标尺寸变化会更新可见快照。
 - 未传 `offset` 的连续 `show()` 从重叠改为替换；依赖并排展示的调用方需继续使用已有的显式 `offset`。
+- `TMessageVariant` / `variant` 重命名为 `TMessageStatus` / `status`；调用方按枚举成员一一迁移。
+- 删除 `TMessageThemeData.defaultOffset`；子树默认位置配置迁移为各消息实例的 `offset`。
 - 未新增与实例状态同义的 Theme / `single` 字段。
 
 ### 覆盖率

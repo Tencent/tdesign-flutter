@@ -9,6 +9,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import 't_message_theme_data.dart';
+import 't_message_types.dart';
 
 /// 跑马灯配置
 class TMessageMarquee {
@@ -33,26 +34,23 @@ class TMessageMarquee {
 final class TMessageHandle {
   TMessageHandle._();
 
-  OverlayEntry? _entry;
+  bool _isShowing = false;
+  void Function(_TMessageDismissCause cause)? _dismiss;
 
   /// 消息是否仍在 Overlay 中
-  bool get isShowing => _entry?.mounted == true;
+  bool get isShowing => _isShowing;
 
-  /// 立即移除消息
+  /// 立即移除消息；重复调用不会重复触发 `onDismissed`。
   void dismiss() {
-    final entry = _entry;
-    if (entry == null) {
-      return;
-    }
-    entry.remove();
-    _entry = null;
+    _dismiss?.call(_TMessageDismissCause.programmatic);
   }
 }
 
 final class _TMessageSlot {
   TMessageHandle? handle;
-  VoidCallback? onDismissed;
 }
+
+enum _TMessageDismissCause { programmatic, replaced, widget, unmounted }
 
 /// 顶部消息组件
 class TMessage extends StatefulWidget {
@@ -73,7 +71,7 @@ class TMessage extends StatefulWidget {
     this.closeButton,
     this.marquee,
     this.offset,
-    this.variant = TMessageVariant.info,
+    this.status = TMessageStatus.info,
     this.onCloseButtonPressed,
     this.onDurationEnd,
     this.onDismissed,
@@ -117,8 +115,8 @@ class TMessage extends StatefulWidget {
   /// 是否避让系统安全区，默认为 true。
   final bool useSafeArea;
 
-  /// 消息语义色
-  final TMessageVariant variant;
+  /// 消息语义状态
+  final TMessageStatus status;
 
   /// 点击关闭按钮时触发
   final VoidCallback? onCloseButtonPressed;
@@ -126,7 +124,9 @@ class TMessage extends StatefulWidget {
   /// 自动展示时长结束且关闭动画完成时触发
   final VoidCallback? onDurationEnd;
 
-  /// 关闭动画完成时触发
+  /// 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。
+  ///
+  /// 每次展示最多触发一次。
   final VoidCallback? onDismissed;
 
   /// 在 Overlay 中显示消息并返回控制句柄。
@@ -147,7 +147,7 @@ class TMessage extends StatefulWidget {
     Widget? closeButton,
     TMessageMarquee? marquee,
     Offset? offset,
-    TMessageVariant variant = TMessageVariant.info,
+    TMessageStatus status = TMessageStatus.info,
     VoidCallback? onCloseButtonPressed,
     VoidCallback? onDurationEnd,
     VoidCallback? onDismissed,
@@ -158,6 +158,7 @@ class TMessage extends StatefulWidget {
       'duration 必须为正数；使用 null 表示不自动关闭。',
     );
     final handle = TMessageHandle._();
+    final messageKey = GlobalKey<_TMessageState>();
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
     final captured = InheritedTheme.capture(from: context, to: overlay.context);
@@ -165,18 +166,29 @@ class TMessage extends StatefulWidget {
         ? (_defaultSlots[overlay] ??= _TMessageSlot())
         : null;
     final previousHandle = slot?.handle;
-    final previousOnDismissed = slot?.onDismissed;
-    previousOnDismissed?.call();
-    previousHandle?.dismiss();
 
-    void removeEntry() {
-      if (handle._entry == null) {
+    var dismissed = false;
+    late VoidCallback entryListener;
+
+    void dismissEntry(_TMessageDismissCause cause) {
+      if (dismissed) {
         return;
       }
-      handle.dismiss();
+      dismissed = true;
+      if (cause == _TMessageDismissCause.programmatic ||
+          cause == _TMessageDismissCause.replaced) {
+        messageKey.currentState?._cancelTasksForExternalDismiss();
+      }
+      entry.removeListener(entryListener);
+      handle
+        .._isShowing = false
+        .._dismiss = null;
       if (slot?.handle == handle) {
         slot?.handle = null;
-        slot?.onDismissed = null;
+        _defaultSlots[overlay] = null;
+      }
+      if (cause != _TMessageDismissCause.unmounted) {
+        entry.remove();
       }
       onDismissed?.call();
     }
@@ -184,6 +196,7 @@ class TMessage extends StatefulWidget {
     entry = OverlayEntry(
       builder: (context) => captured.wrap(
         TMessage(
+          key: messageKey,
           content: content,
           duration: duration,
           visible: true,
@@ -194,21 +207,28 @@ class TMessage extends StatefulWidget {
           closeButton: closeButton,
           marquee: marquee,
           offset: offset,
-          variant: variant,
+          status: status,
           onCloseButtonPressed: onCloseButtonPressed,
           onDurationEnd: onDurationEnd,
-          onDismissed: removeEntry,
+          onDismissed: () => dismissEntry(_TMessageDismissCause.widget),
           useSafeArea: useSafeArea,
         ),
       ),
     );
-    handle._entry = entry;
+    entryListener = () {
+      if (!entry.mounted) {
+        dismissEntry(_TMessageDismissCause.unmounted);
+      }
+    };
+    handle
+      .._isShowing = true
+      .._dismiss = dismissEntry;
     if (slot case final currentSlot?) {
-      currentSlot
-        ..handle = handle
-        ..onDismissed = onDismissed;
+      currentSlot.handle = handle;
     }
+    entry.addListener(entryListener);
     overlay.insert(entry);
+    previousHandle?._dismiss?.call(_TMessageDismissCause.replaced);
     return handle;
   }
 
@@ -260,9 +280,8 @@ class _TMessageState extends State<TMessage>
   }
 
   Offset get _effectiveOffset {
-    final configured = widget.offset ?? _theme.defaultOffset;
     final desired =
-        configured ??
+        widget.offset ??
         Offset(
           _minimumLeft + (_maximumRight - _minimumLeft - _effectiveWidth) / 2,
           _defaultTop,
@@ -355,8 +374,20 @@ class _TMessageState extends State<TMessage>
     super.dispose();
   }
 
+  void _cancelTasksForExternalDismiss() {
+    _closing = true;
+    _durationTimer?.cancel();
+    _closeTimer?.cancel();
+    _marqueeDelayTimer?.cancel();
+    _animationController.stop();
+    _isAnimationRunning = false;
+  }
+
   void _scheduleDurationClose() {
     _durationTimer?.cancel();
+    if (!widget.visible || _closing) {
+      return;
+    }
     final duration = widget.duration;
     assert(
       duration == null || duration > Duration.zero,
@@ -376,6 +407,9 @@ class _TMessageState extends State<TMessage>
 
   void _scheduleMarqueeStart() {
     _marqueeDelayTimer?.cancel();
+    if (!widget.visible || _closing) {
+      return;
+    }
     final marquee = widget.marquee;
     if (marquee == null) {
       return;
@@ -389,7 +423,11 @@ class _TMessageState extends State<TMessage>
 
   void _startAnimation() {
     final marquee = widget.marquee;
-    if (!mounted || marquee == null || _isAnimationRunning || _closing) {
+    if (!mounted ||
+        !widget.visible ||
+        marquee == null ||
+        _isAnimationRunning ||
+        _closing) {
       return;
     }
     setState(() => _isAnimationRunning = true);
@@ -450,21 +488,18 @@ class _TMessageState extends State<TMessage>
       end: Offset(-textPainter.width, 0),
     );
     return ClipRect(
-      child: SizedBox(
-        width: _calculateTextWidth(),
-        child: AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) => Transform.translate(
-            offset: tween.evaluate(_animationController),
-            child: OverflowBox(
-              minWidth: 0,
-              maxWidth: double.infinity,
-              alignment: Alignment.centerLeft,
-              child: child,
-            ),
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) => Transform.translate(
+          offset: tween.evaluate(_animationController),
+          child: OverflowBox(
+            minWidth: 0,
+            maxWidth: double.infinity,
+            alignment: Alignment.centerLeft,
+            child: child,
           ),
-          child: Text(widget.content, style: style, maxLines: 1),
         ),
+        child: Text(widget.content, style: style, maxLines: 1),
       ),
     );
   }
@@ -473,20 +508,20 @@ class _TMessageState extends State<TMessage>
     if (widget.icon != null) {
       return widget.icon!;
     }
-    final (icon, color) = switch (widget.variant) {
-      TMessageVariant.info => (
+    final (icon, color) = switch (widget.status) {
+      TMessageStatus.info => (
         TIcons.error_circle_filled,
         context.tTheme.brandNormalColor,
       ),
-      TMessageVariant.success => (
+      TMessageStatus.success => (
         TIcons.check_circle_filled,
         context.tTheme.successNormalColor,
       ),
-      TMessageVariant.warning => (
+      TMessageStatus.warning => (
         TIcons.error_circle_filled,
         context.tTheme.warningNormalColor,
       ),
-      TMessageVariant.error => (
+      TMessageStatus.error => (
         TIcons.error_circle_filled,
         context.tTheme.errorNormalColor,
       ),
@@ -573,19 +608,5 @@ class _TMessageState extends State<TMessage>
       left: offset.dx,
       child: _isVisible ? message : const SizedBox.shrink(),
     );
-  }
-
-  double _calculateTextWidth() {
-    var width = _effectiveWidth - 32;
-    if (widget.showIcon) {
-      width -= 30;
-    }
-    if (widget.action != null) {
-      width -= 104;
-    }
-    if (widget.showCloseButton || widget.closeButton != null) {
-      width -= 30;
-    }
-    return width;
   }
 }

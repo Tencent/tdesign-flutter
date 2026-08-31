@@ -161,7 +161,7 @@ class TMessagePage extends StatelessWidget {
       onPressed: () => TMessage.show(
         context: context,
         content: '这是一条成功的提示消息',
-        variant: TMessageVariant.success,
+        status: TMessageStatus.success,
       ),
     );
   }
@@ -172,7 +172,7 @@ class TMessagePage extends StatelessWidget {
       onPressed: () => TMessage.show(
         context: context,
         content: '这是一条需要用户关注到的警示通知',
-        variant: TMessageVariant.warning,
+        status: TMessageStatus.warning,
       ),
     );
   }
@@ -183,7 +183,7 @@ class TMessagePage extends StatelessWidget {
       onPressed: () => TMessage.show(
         context: context,
         content: '这是一条错误提示通知',
-        variant: TMessageVariant.error,
+        status: TMessageStatus.error,
       ),
     );
   }

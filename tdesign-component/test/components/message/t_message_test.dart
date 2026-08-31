@@ -42,15 +42,13 @@ void main() {
       expect(find.text('隐藏'), findsNothing);
     });
 
-    testWidgets('四种语义色图标均可渲染', (tester) async {
-      for (final variant in TMessageVariant.values) {
+    testWidgets('四种语义状态图标均可渲染', (tester) async {
+      for (final status in TMessageStatus.values) {
         await tester.pumpWidget(
-          wrap(
-            TMessage(content: variant.name, variant: variant, visible: true),
-          ),
+          wrap(TMessage(content: status.name, status: status, visible: true)),
         );
         await tester.pump();
-        expect(find.text(variant.name), findsOneWidget);
+        expect(find.text(status.name), findsOneWidget);
       }
     });
 
@@ -226,17 +224,21 @@ void main() {
       expect(find.text('常驻消息'), findsOneWidget);
     });
 
-    testWidgets('Theme 控制背景、形状、阴影与默认偏移', (tester) async {
+    testWidgets('Theme 控制背景、形状与阴影，实例 offset 控制位置', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TMessage(content: '主题', duration: null, visible: true),
+          const TMessage(
+            content: '主题',
+            duration: null,
+            visible: true,
+            offset: Offset(20, 40),
+          ),
           messageTheme: const TMessageThemeData(
             backgroundColor: Colors.yellow,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(4)),
             ),
             elevation: 2,
-            defaultOffset: Offset(20, 40),
           ),
         ),
       );
@@ -413,6 +415,71 @@ void main() {
       expect(find.text('更新'), findsOneWidget);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
+
+    testWidgets('隐藏状态更新 duration 和 marquee 不启动任务', (tester) async {
+      Duration? duration;
+      TMessageMarquee? marquee;
+      var durationEndCount = 0;
+      var dismissedCount = 0;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return TMessage(
+                content: '隐藏更新',
+                visible: false,
+                duration: duration,
+                marquee: marquee,
+                onDurationEnd: () => durationEndCount += 1,
+                onDismissed: () => dismissedCount += 1,
+              );
+            },
+          ),
+        ),
+      );
+
+      setState(() {
+        duration = const Duration(milliseconds: 10);
+        marquee = const TMessageMarquee(
+          duration: Duration(milliseconds: 20),
+          delay: Duration(milliseconds: 10),
+          repeat: true,
+        );
+      });
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('隐藏更新'), findsNothing);
+      expect(durationEndCount, 0);
+      expect(dismissedCount, 0);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('跑马灯使用 Expanded 分配的真实宽度', (tester) async {
+      const actionWidth = 32.0;
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: '这是一条需要滚动的长消息',
+            duration: null,
+            visible: true,
+            marquee: TMessageMarquee(),
+            action: SizedBox(width: actionWidth, child: Text('按钮')),
+            showCloseButton: true,
+          ),
+        ),
+      );
+      await tester.pump();
+
+      final clipWidth = tester.getSize(find.byType(ClipRect)).width;
+      // 375 - 水平内边距 32 - 图标与间距 30 - action 间距与宽度 40
+      // - 关闭按钮间距与宽度 30 = 243。
+      expect(clipWidth, 243);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
   });
 
   group('TMessage.show', () {
@@ -434,8 +501,9 @@ void main() {
       );
     });
 
-    testWidgets('返回句柄并支持立即关闭', (tester) async {
+    testWidgets('句柄立即关闭只完成一次销毁回调', (tester) async {
       final key = GlobalKey();
+      var dismissedCount = 0;
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -446,13 +514,53 @@ void main() {
         context: key.currentContext!,
         content: 'Overlay 消息',
         duration: null,
+        onDismissed: () => dismissedCount += 1,
       );
+      expect(handle.isShowing, isTrue);
       await tester.pump();
       expect(handle.isShowing, isTrue);
       expect(find.text('Overlay 消息'), findsOneWidget);
       handle.dismiss();
+      handle.dismiss();
       await tester.pump();
       expect(handle.isShowing, isFalse);
+      expect(dismissedCount, 1);
+
+      final next = TMessage.show(
+        context: key.currentContext!,
+        content: '下一条消息',
+        duration: null,
+      );
+      await tester.pump();
+      expect(dismissedCount, 1);
+      next.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('句柄关闭后自动关闭 Timer 不再回调', (tester) async {
+      final key = GlobalKey();
+      var durationEndCount = 0;
+      var dismissedCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: '手动优先关闭',
+        duration: const Duration(milliseconds: 10),
+        onDurationEnd: () => durationEndCount += 1,
+        onDismissed: () => dismissedCount += 1,
+      );
+      await tester.pump();
+      handle.dismiss();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(handle.isShowing, isFalse);
+      expect(durationEndCount, 0);
+      expect(dismissedCount, 1);
     });
 
     testWidgets('保留触发子树的 ThemeExtension', (tester) async {
@@ -535,6 +643,36 @@ void main() {
       expect(handle.isShowing, isFalse);
       expect(ended, isTrue);
       expect(dismissed, isTrue);
+      handle.dismiss();
+      await tester.pump();
+      expect(dismissed, isTrue);
+    });
+
+    testWidgets('Overlay 根节点销毁时句柄与监听一并释放', (tester) async {
+      final key = GlobalKey();
+      var dismissedCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: 'Overlay 销毁',
+        duration: null,
+        onDismissed: () => dismissedCount += 1,
+      );
+      await tester.pump();
+      expect(handle.isShowing, isTrue);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+
+      expect(handle.isShowing, isFalse);
+      expect(dismissedCount, 1);
+      handle.dismiss();
+      expect(dismissedCount, 1);
     });
 
     testWidgets('透传 useSafeArea=false', (tester) async {
@@ -573,7 +711,7 @@ void main() {
 
     testWidgets('默认位置的新消息替换上一条且不新增公开状态', (tester) async {
       final key = GlobalKey();
-      var dismissed = false;
+      var dismissedCount = 0;
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -584,7 +722,7 @@ void main() {
         context: key.currentContext!,
         content: '上一条消息',
         duration: null,
-        onDismissed: () => dismissed = true,
+        onDismissed: () => dismissedCount += 1,
       );
       final second = TMessage.show(
         context: key.currentContext!,
@@ -594,11 +732,51 @@ void main() {
       await tester.pump();
 
       expect(first.isShowing, isFalse);
-      expect(dismissed, isTrue);
+      expect(dismissedCount, 1);
       expect(second.isShowing, isTrue);
       expect(find.text('上一条消息'), findsNothing);
       expect(find.text('当前消息'), findsOneWidget);
       second.dismiss();
+      await tester.pump();
+      expect(dismissedCount, 1);
+    });
+
+    testWidgets('替换回调中重入 show 时最新消息保持槽位所有权', (tester) async {
+      final key = GlobalKey();
+      TMessageHandle? callbackHandle;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final first = TMessage.show(
+        context: key.currentContext!,
+        content: '第一条',
+        duration: null,
+        onDismissed: () {
+          callbackHandle = TMessage.show(
+            context: key.currentContext!,
+            content: '回调中的最新消息',
+            duration: null,
+          );
+        },
+      );
+      final second = TMessage.show(
+        context: key.currentContext!,
+        content: '第二条',
+        duration: null,
+      );
+      await tester.pump();
+
+      expect(first.isShowing, isFalse);
+      expect(second.isShowing, isFalse);
+      expect(callbackHandle?.isShowing, isTrue);
+      expect(find.text('第一条'), findsNothing);
+      expect(find.text('第二条'), findsNothing);
+      expect(find.text('回调中的最新消息'), findsOneWidget);
+
+      callbackHandle?.dismiss();
       await tester.pump();
     });
 

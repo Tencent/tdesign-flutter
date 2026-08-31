@@ -7,14 +7,14 @@
 重写 `tdesign-component/example/lib/page/t_message_page.dart`，按官方分组组织：
 
 - **组件类型**：纯文字（`showIcon: false`）/ 带图标（默认图标）/ 带关闭（`showCloseButton: true` + `action`）/ 可滚动（`marquee`）/ 带按钮（`action: TLink`）/ 组件声明式（`TMessage(visible: ...)`）。
-- **组件风格**：info / success / warning / error 四个 `variant`。
+- **组件风格**：info / success / warning / error 四个 `status`。
 - 公开页仅保留上述两个小程序分组；Mobile Vue / Flutter 扩展的“关闭所有通知”不继续对外展示，底层 `handle.dismiss()` 能力不删除。
 
 两个公开示例容器加 `@ExampleCode(group: 'message')`，由 codegen（`tool/generate_example_code.dart`）生成 `example/assets/code/message.*.txt`。
 
 ### 图标-文本间距
 
-`t_message.dart` 中图标后间距对齐 8px，图标约束对齐 22×22，并同步 `_calculateTextWidth()` 的占位计算。
+`t_message.dart` 中图标后间距对齐 8px，图标约束对齐 22×22；跑马灯直接使用 `Expanded` 分配后的真实布局宽度，不再手工扣减 action 和关闭按钮占位。
 
 ### 默认展示契约
 
@@ -24,10 +24,13 @@
 - Overlay 维度以现有 `offset` 作为所有权边界：未传 `offset` 的默认槽位只保留当前消息；显式 offset 继续允许多消息，不新增 `single` API。
 - 操作区域使用 `Widget? action` 组合槽，由传入组件完整持有外观与交互；删除 `TMessageLink`、未消费的 `uri` 及外层 `onLinkPressed`。
 - `duration` 仅允许正数或 null；null 是唯一的不自动关闭表达，`Duration.zero` 不再作为同义永久态。
+- 命令式 handle 内部持有唯一的幂等销毁入口。手动关闭、默认消息替换和组件关闭动画都通过该入口释放 Overlay 与默认 slot，并保证 `onDismissed` 最多调用一次。
+- `visible=false` 时不启动 duration Timer、marquee delay Timer 或 AnimationController；运行期切换隐藏会取消全部任务。
+- 将语义状态从 `TMessageVariant/variant` 收敛为 `TMessageStatus/status`；删除与实例 `offset` 同义的 `TMessageThemeData.defaultOffset`。
 
 ### 站点文档
 
-重写 `tdesign-site/docs/components/message/README.md`：示例代码全部改用现网 API（`TMessage.show`、`TMessageVariant`、`TMessageMarquee`、`action`），API 表格对齐生成的 `message_api.md`，Demo 分组与示例页一致。
+重写 `tdesign-site/docs/components/message/README.md`：示例代码全部改用现网 API（`TMessage.show`、`TMessageStatus`、`TMessageMarquee`、`action`），API 表格对齐生成的 `message_api.md`，Demo 分组与示例页一致。
 
 ### 覆盖率
 
@@ -38,6 +41,7 @@
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
 | 组件 | lib/src/components/message/t_message.dart | 默认可见性、位置、宽度、阴影、字体、图标尺寸、计时与默认替换策略 |
+| 类型 | lib/src/components/message/t_message_types.dart | `TMessageStatus` 唯一语义状态枚举 |
 | 测试 | test/components/message/t_message_test.dart | 补充 Demo 相关测试，提升覆盖率 |
 | 示例 | example/lib/page/t_message_page.dart | 补齐官方 Demo 矩阵 |
 | 示例生成 | example/assets/code/message.*.txt | 由 codegen 同步 |
@@ -50,6 +54,8 @@
 - 删除 `TMessageLink`、`link` 与 `onLinkPressed`，新增 `Widget? action`；调用方使用 Flutter Widget 组合操作外观和行为。
 - `Duration.zero` 不再表示永久展示，迁移为 `duration: null`。
 - 不新增 `single` 或 Theme 同义状态。默认槽位替换由 `TMessage.show()` 内部管理；显式 offset 保留原多消息能力。
+- `TMessageVariant/variant` 重命名为 `TMessageStatus/status`。
+- 删除 `TMessageThemeData.defaultOffset`，位置只由实例 `offset` 控制。
 
 ## 风险与取舍
 

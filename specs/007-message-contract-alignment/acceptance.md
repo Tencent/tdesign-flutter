@@ -21,7 +21,7 @@
 
 - [x] 小程序公开 Demo 的两个分组与十个触发实例已按顺序收敛。
 - [x] `example/assets/code/message.*.txt` 已与两个公开示例容器同步，旧的单实例与关闭所有片段已删除。
-- [x] 站点 `README.md` 已对齐现网 API（`TMessage.show` / `TMessageVariant` / `TMessageMarquee` / `action` / `showIcon` / `showCloseButton` / `onCloseButtonPressed`）。
+- [x] 站点 `README.md` 已对齐现网 API（`TMessage.show` / `TMessageStatus` / `TMessageMarquee` / `action` / `showIcon` / `showCloseButton` / `onCloseButtonPressed`）。
 - [x] 图标-文本间距对齐官方 `@spacer` = 8px，同步 marquee 宽度计算。
 - [x] Mobile Vue / Flutter 扩展的“关闭所有通知”不再作为小程序公开 Demo 基线；底层 dismiss 能力保留。
 - [x] 操作 API 已收敛为 `Widget? action`，移除 `TMessageLink` / `link` / `onLinkPressed` 的拆分状态。
@@ -30,14 +30,14 @@
 ## 未覆盖项与后续工作
 
 - `align` / `gap` / 自定义 content Widget / `marquee` 的 `speed`/`loop` 语义等官方能力，现有公开 API 未覆盖，属潜在增强，未纳入本次最小实现。
-- `TMessageVariant` 的 status 命名属于后续 API 债务，本次不扩大范围。
+- `TMessageVariant/variant` 已迁移为 `TMessageStatus/status`，不再保留语义不准确的别名。
 
 ## 2026-08-31 develop 同步复验
 
 - 已合并 `origin/develop@fb26b8d5`，保留 Message 回归登记并采用 develop 的共享测试基建。
 - CI 同款 Flutter 3.32.0 Linux：页面 light/dark 与点击“带关闭的通知”后的 Overlay light/dark Golden 共 4 项，更新后不带 `--update-goldens` 复跑通过。
 - Flutter 3.32.0 与 3.47.0：25 个组件测试、Demo 功能测试和 `flutter analyze --fatal-infos --no-pub` 均通过。
-- API 收敛复核：未新增、删除或重命名公共 API；仅将图标到文本的内部间距由 10 调为 8，并同步宽度计算。
+- 当时的 API 收敛复核未改公共 API；后续的完整收敛与销毁闭环见下方 2026-09-01 记录。
 
 ## 2026-08-31 默认契约对齐（待最终复验）
 
@@ -59,3 +59,15 @@
 - [x] Flutter 3.32.0 Linux 容器中 Message 页面与带关闭通知展开态 Golden 更新后复跑 4/4 通过。
 - [x] Message Demo 结构与操作点击测试 2/2 通过，`generate_example_code.dart --check` 与组件契约检查通过。
 - [ ] Flutter latest 双版本分析与 Android 真机更新后点击验收，待后续 CI / 设备可用时补验。
+
+## 2026-09-01 API 与资源销毁闭环复验
+
+- [x] `TMessageHandle.dismiss()`、默认消息替换、关闭动画与 Overlay 卸载复用同一幂等销毁入口；释放 entry listener、handle 闭包和 Expando slot，`onDismissed` 最多回调一次。
+- [x] 覆盖重复 dismiss、自动关闭后再 dismiss、Overlay 根节点销毁、首帧前连续 show 与替换回调重入 show。
+- [x] `visible=false` 时更新 duration / marquee 不创建有效 Timer 或启动 AnimationController；切换隐藏会取消所有计时和动画。
+- [x] 跑马灯使用 `Expanded` 真实约束，不再按 action 最大宽度重复预估。
+- [x] `TMessageVariant/variant` 迁移为独立 types 边界的 `TMessageStatus/status`；删除 `TMessageThemeData.defaultOffset`，位置只由实例 `offset` 控制。
+- [x] Flutter 3.32.0：Message 组件 36/36、Demo 功能 2/2、严格 analyze 0 问题，生产源码覆盖率 254/258 = 98.45%，回归登记自测 11/11。
+- [x] Flutter 3.47.0：clean 后 Message 组件 36/36、Demo 功能 2/2、严格 analyze 0 问题。
+- [x] 示例 codegen `--check`、Message API 源码生成与组件站点契约检查通过。
+- [ ] Flutter 3.32.0 Linux Golden 待 CI 复验；当前 macOS 因字体抗锯齿产生 4.10%~4.75% 平台差异，已人工检查，未覆盖 Linux 基线。

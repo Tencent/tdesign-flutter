@@ -12,4 +12,8 @@
 - [x] TODO 更新并复核触发后的明暗 Overlay Golden
 - [x] TODO Flutter 3.32.0 / latest 双版本回归与 lint 零告警
 - [ ] TODO 真机重连后补充实际点击与默认关闭时长验收
-- [ ] TODO 完成 Review
+- [x] TODO 完成 Review
+- [x] TODO 统一 handle / Overlay / 默认 slot 幂等销毁闭环并覆盖重复关闭
+- [x] TODO 隐藏态不启动 duration / marquee 任务并覆盖运行期参数更新
+- [x] TODO 跑马灯使用真实布局约束并覆盖短 action / 窄屏
+- [x] TODO `TMessageStatus/status` 与单一实例 `offset` API 迁移
