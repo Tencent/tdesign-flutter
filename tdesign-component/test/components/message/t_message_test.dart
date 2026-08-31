@@ -80,7 +80,7 @@ void main() {
       expect(find.byIcon(Icons.star), findsOneWidget);
     });
 
-    testWidgets('链接配置与颜色覆盖生效', (tester) async {
+    testWidgets('操作组件保留自身外观与点击行为', (tester) async {
       var pressed = false;
       await tester.pumpWidget(
         wrap(
@@ -88,25 +88,20 @@ void main() {
             content: '带链接',
             duration: null,
             visible: true,
-            link: TMessageLink(
-              name: '详情',
-              uri: Uri(path: '/detail'),
-              color: Colors.red,
+            action: TLink(
+              child: const Text('详情'),
+              colorScheme: TLinkColorScheme.danger,
+              onPressed: () => pressed = true,
             ),
-            onLinkPressed: () => pressed = true,
           ),
         ),
-      );
-      expect(
-        DefaultTextStyle.of(tester.element(find.text('详情'))).style.color,
-        Colors.red,
       );
       await tester.tap(find.text('详情'));
       expect(pressed, isTrue);
     });
 
-    testWidgets('长内容配合链接和关闭按钮不应溢出', (tester) async {
-      const longLink = '这是一个非常非常非常长的链接文案用于验证不会换行';
+    testWidgets('长内容配合操作和关闭按钮不应溢出', (tester) async {
+      const longAction = '这是一个非常非常非常长的操作文案用于验证不会换行';
       await tester.pumpWidget(
         wrap(
           TMessage(
@@ -114,9 +109,13 @@ void main() {
             duration: null,
             visible: true,
             showCloseButton: true,
-            link: TMessageLink(
-              name: longLink,
-              uri: Uri(path: '/detail'),
+            action: TLink(
+              child: const Text(
+                longAction,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              onPressed: () {},
             ),
           ),
         ),
@@ -125,11 +124,11 @@ void main() {
       final contentText = tester.widget<Text>(
         find.text('这是一段非常非常非常长的消息内容用于验证布局不会被撑坏'),
       );
-      final linkText = tester.widget<Text>(find.text(longLink));
+      final actionText = tester.widget<Text>(find.text(longAction));
       expect(contentText.maxLines, 1);
       expect(contentText.overflow, TextOverflow.ellipsis);
-      expect(linkText.maxLines, 1);
-      expect(linkText.overflow, TextOverflow.ellipsis);
+      expect(actionText.maxLines, 1);
+      expect(actionText.overflow, TextOverflow.ellipsis);
       expect(find.byIcon(TIcons.close), findsOneWidget);
     });
 
@@ -209,7 +208,7 @@ void main() {
       expect(ended, isTrue);
     });
 
-    testWidgets('默认 3 秒关闭，Duration.zero 保持显示', (tester) async {
+    testWidgets('默认 3 秒关闭，null 保持显示，非正数无效', (tester) async {
       await tester.pumpWidget(
         wrap(const TMessage(content: '默认时长', visible: true)),
       );
@@ -221,13 +220,7 @@ void main() {
 
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
       await tester.pumpWidget(
-        wrap(
-          const TMessage(
-            content: '常驻消息',
-            duration: Duration.zero,
-            visible: true,
-          ),
-        ),
+        wrap(const TMessage(content: '常驻消息', duration: null, visible: true)),
       );
       await tester.pump(const Duration(seconds: 4));
       expect(find.text('常驻消息'), findsOneWidget);
@@ -423,6 +416,24 @@ void main() {
   });
 
   group('TMessage.show', () {
+    testWidgets('非正数 duration 无效', (tester) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+
+      expect(
+        () => TMessage.show(
+          context: key.currentContext!,
+          content: '无效时长',
+          duration: Duration.zero,
+        ),
+        throwsAssertionError,
+      );
+    });
+
     testWidgets('返回句柄并支持立即关闭', (tester) async {
       final key = GlobalKey();
       await tester.pumpWidget(
@@ -477,7 +488,7 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('Overlay 带链接时保留 Material 交互祖先', (tester) async {
+    testWidgets('Overlay 带操作时保留 Material 交互祖先', (tester) async {
       final key = GlobalKey();
       await tester.pumpWidget(
         MaterialApp(
@@ -487,9 +498,9 @@ void main() {
       );
       final handle = TMessage.show(
         context: key.currentContext!,
-        content: '带链接消息',
+        content: '带操作消息',
         duration: null,
-        link: const TMessageLink(name: '按钮'),
+        action: TLink(child: const Text('按钮'), onPressed: () {}),
       );
       await tester.pump();
 

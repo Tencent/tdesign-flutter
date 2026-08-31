@@ -9,10 +9,12 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
    - 组件声明式调用（`visible` 受控）—— 对应小程序 `base/index.wxml` 的 `<t-message visible=...>`；
    - Mobile Vue 另有“关闭所有通知”扩展示例，但小程序公开 Demo 页不展示该分组，不应作为 Flutter 对齐基线。
 2. **示例生成代码不同步**：`example/assets/code/` 仅含 `message._marquee.txt`，未与完整 Demo 同步。
-3. **站点文档严重过期**：`tdesign-site/docs/components/message/README.md` 仍使用已废弃 API（`TMessage.showMessage`、`MessageTheme`、`MessageLink`、`MessageMarquee`、`closeBtn`、`icon`、`theme`、`onCloseBtnClick`、`onLinkClick` 等），无法编译，与现网 `TMessage.show` / `TMessageVariant` / `TMessageLink` / `TMessageMarquee` / `showIcon` / `showCloseButton` / `onCloseButtonPressed` / `onLinkPressed` 不一致。
+3. **站点文档严重过期**：`tdesign-site/docs/components/message/README.md` 仍使用已废弃 API（`TMessage.showMessage`、`MessageTheme`、`MessageLink`、`MessageMarquee`、`closeBtn`、`icon`、`theme`、`onCloseBtnClick`、`onLinkClick` 等），无法编译，与现网公开 API 不一致。
 4. **像素级视觉差异**：图标与文本间距 Flutter 为 10px，官方为 `@spacer`（8px）。
 5. **默认展示契约未对齐**：Flutter 声明式组件默认可见、默认使用距顶 80px 的 343px 卡片、20px 图标和 Material elevation 6；小程序默认 `visible=false`，触发后在页面导航栏下方展示全宽 48px 条带，图标为 22px，并使用基础阴影。
 6. **默认并发行为未收敛**：Flutter 连续调用 `show()` 会在同一位置叠加；小程序默认只保留当前一条通知。
+7. **操作 API 存在非法组合**：`TMessageLink` 仅保存文案、未消费的 `uri` 与颜色，点击行为却由外层 `onLinkPressed` 提供；只传 `link` 会渲染禁用态操作，形成两个公开状态源。
+8. **永久展示存在同义值**：`null` 与 `Duration.zero` 同时表示不自动关闭，无法区分永久展示与零时长，也机械暴露了跨端哨兵值差异。
 
 ## 目标
 
@@ -22,14 +24,15 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - 对齐图标与文本间距为官方 `@spacer`（8px），并同步 marquee 文本宽度计算。
 - 对齐声明式默认隐藏、3 秒自动关闭、导航栏下方全宽条带、22px 图标、body-medium 字体与基础阴影。
 - 默认位置连续调用 `show()` 时替换上一条；显式传入不同 `offset` 时继续支持多消息布局，不新增 `single` 等同义公开状态。
+- 使用 Flutter 原生组合的 `Widget? action` 承载消息操作，移除 `TMessageLink` 与 `onLinkPressed` 的拆分状态。
+- `duration` 仅以 `null` 表示不自动关闭；非 null 时必须为正数。
 - 补充组件测试，提升 `lib/src/components/message/` 手写源码行覆盖率。
 
 ## 非目标
 
-- 不新增 / 不删除 / 不重命名 `TMessage` 的任何公共参数或类型；仅调整 `visible` 的默认值与默认展示行为。
 - 不引入 `align`、`gap`、`single`、自定义 content Widget、`marquee` 的 `speed`/`loop` 语义等新 API。
 - 不在小程序公开基线中展示 Mobile Vue / Flutter 扩展的“关闭所有通知”模块；底层 dismiss 能力不删除。
-- 不重命名 `TMessageVariant`，也不移除暂未消费的 `TMessageLink.uri`；两者作为后续 API 债务单独评估。
+- 不重命名 `TMessageVariant`。
 - 不将 `visible`、默认单例策略、尺寸或位置复制到 `TMessageThemeData`；Theme 只承载现有样式覆盖，避免形成第二公开状态源。
 
 ## 范围
@@ -57,9 +60,9 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 | --- | --- | --- | --- |
 | 组件类型 | 纯文字的通知 | 纯文字通知 | `TMessage.show(showIcon: false)` |
 | 组件类型 | 带图标的通知 | 带图标通知 | `TMessage.show(showIcon: true)`（默认） |
-| 组件类型 | 带关闭的通知 | 带关闭通知 | `TMessage.show(showCloseButton: true, link: ...)` |
+| 组件类型 | 带关闭的通知 | 带关闭通知 | `TMessage.show(showCloseButton: true, action: TLink(...))` |
 | 组件类型 | 可滚动的通知 | 跑马灯通知 | `TMessage.show(marquee: ...)` |
-| 组件类型 | 带按钮的通知 | 带链接通知 | `TMessage.show(link: TMessageLink(...))` |
+| 组件类型 | 带按钮的通知 | 带操作通知 | `TMessage.show(action: TLink(...))` |
 | 组件类型 | 组件调用 | 组件声明式调用 | `TMessage(visible: ...)` |
 | 组件风格 | 普通 / 成功 / 警示 / 错误 | 同 4 主题 | `TMessage.show(variant: ...)` |
 
@@ -75,22 +78,24 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 ### 默认展示与生命周期
 
 - 声明式 `TMessage.visible` 默认值由 `true` 调整为 `false`；`TMessage.show()` 内部显式创建可见实例。
-- `duration` 默认保持 3 秒；`null` 与 `Duration.zero` 均表示不自动关闭。
+- `duration` 默认保持 3 秒；仅 `null` 表示不自动关闭，非 null 时必须为正数。
 - 默认消息宽度占满安全可视区域，纵向位置为系统安全区与 Flutter 页面导航栏之后；显式 `offset` 仍按既有规则受安全区约束。
 - 默认文本使用 TDesign `body-medium`，默认阴影内部引用 `shadowsBase` token；已有 `TMessageThemeData.elevation` 显式配置仍优先，不新增同义 Theme 字段。
 - 连续调用 `TMessage.show()` 且未传 `offset` 时，新消息替换上一条。显式传入不同 `offset` 的多消息能力保留。
 
 ### 站点文档
 
-- `tdesign-site/docs/components/message/README.md` 的示例代码、API 表格统一对齐现网公开 API（`TMessage.show`、`TMessageVariant`、`TMessageLink`、`TMessageMarquee`、`showIcon`、`showCloseButton`、`onCloseButtonPressed`、`onLinkPressed` 等）。
+- `tdesign-site/docs/components/message/README.md` 的示例代码、API 表格统一对齐现网公开 API（`TMessage.show`、`TMessageVariant`、`TMessageMarquee`、`action`、`showIcon`、`showCloseButton`、`onCloseButtonPressed` 等）。
 - 示例文件链接、Demo 分组描述与 Flutter 示例页保持一致。
 
 ### Breaking change 分析
 
 - `visible` 默认值从 `true` 改为 `false`：依赖 `const TMessage(...)` 默认立即展示的调用方需显式传入 `visible: true`。
+- `link: TMessageLink(...)` 与 `onLinkPressed` 替换为 `action: Widget`；操作组件自行持有外观和点击行为。
+- `Duration.zero` 不再表示永久展示；永久展示必须迁移为 `duration: null`。
 - 默认几何、阴影、字号和图标尺寸变化会更新可见快照。
 - 未传 `offset` 的连续 `show()` 从重叠改为替换；依赖并排展示的调用方需继续使用已有的显式 `offset`。
-- 未删除或重命名公开 API，也未新增与实例状态同义的 Theme / `single` 字段。
+- 未新增与实例状态同义的 Theme / `single` 字段。
 
 ### 覆盖率
 

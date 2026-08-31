@@ -68,7 +68,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         content: '这是一条带关闭的消息通知',
         duration: null,
         showCloseButton: true,
-        link: const TMessageLink(name: '按钮'),
+        action: TLink(
+          child: const Text('按钮'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () => TMessage.show(
+            context: context,
+            content: '已点击按钮',
+          ),
+        ),
       ),
     );
   }</pre>
@@ -107,7 +114,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         context: context,
         content: '这是一条带操作的消息通知',
         duration: null,
-        link: const TMessageLink(name: '链接'),
+        action: TLink(
+          child: const Text('链接'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () => TMessage.show(
+            context: context,
+            content: '已点击链接',
+          ),
+        ),
       ),
     );
   }</pre>
@@ -198,62 +212,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
 
-### 3 关闭所有通知
-
-打开多个通知
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildOpenAllMessage(BuildContext context) {
-    return _fullWidthButton(
-      text: '打开多个通知',
-      onPressed: () {
-        final themes = <TMessageVariant>[
-          TMessageVariant.info,
-          TMessageVariant.success,
-          TMessageVariant.warning,
-          TMessageVariant.error,
-        ];
-        for (var i = 0; i < themes.length; i++) {
-          Future<void>.delayed(Duration(milliseconds: 300 * i), () {
-            if (!context.mounted) {
-              return;
-            }
-            final handle = TMessage.show(
-              context: context,
-              content: '第${i + 1}条通知',
-              variant: themes[i],
-            );
-            _handles.add(handle);
-          });
-        }
-      },
-    );
-  }</pre>
-
-</td-code-block>
-
-关闭所有通知
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCloseAllMessage(BuildContext context) {
-    return _fullWidthButton(
-      text: '关闭所有通知',
-      onPressed: () {
-        for (final handle in _handles) {
-          handle.dismiss();
-        }
-        _handles.clear();
-      },
-    );
-  }</pre>
-
-</td-code-block>
-
-
 ## API
 ### TMessage
 
@@ -269,10 +227,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 | content | String | '' | 通知内容 |
-| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 或 Duration.zero 表示不自动关闭 |
+| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长；必须为正数，null 表示不自动关闭 |
 | showIcon | bool | true | 是否显示前置图标 |
 | icon | Widget? | - | 自定义前置图标 |
-| link | TMessageLink? | - | 链接配置 |
+| action | Widget? | - | 消息尾部操作组件，外观与行为由组件自身负责 |
 | showCloseButton | bool | false | 是否显示关闭按钮 |
 | closeButton | Widget? | - | 自定义关闭按钮 |
 | marquee | TMessageMarquee? | - | 跑马灯配置 |
@@ -280,7 +238,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | variant | TMessageVariant | TMessageVariant.info | 消息语义色 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
-| onLinkPressed | VoidCallback? | - | 点击链接时触发 |
 | onDismissed | VoidCallback? | - | 关闭动画完成时触发 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
 
@@ -290,16 +247,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | closeButton | Widget? | - | 自定义关闭按钮 |
 | content | String | '' | 通知内容 |
-| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长，null 或 Duration.zero 表示不自动关闭 |
+| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长；必须为正数，null 表示不自动关闭 |
 | icon | Widget? | - | 自定义前置图标 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| link | TMessageLink? | - | 链接配置 |
+| action | Widget? | - | 消息尾部操作组件，外观与行为由组件自身负责 |
 | marquee | TMessageMarquee? | - | 跑马灯配置 |
 | offset | Offset? | - | 期望的屏幕绝对坐标。 `useSafeArea` 为 true 时，最终消息矩形会被约束在安全可视区域内。 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
 | onDismissed | VoidCallback? | - | 关闭动画完成时触发 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
-| onLinkPressed | VoidCallback? | - | 点击链接时触发 |
 | showCloseButton | bool | false | 是否显示关闭按钮 |
 | showIcon | bool | true | 是否显示前置图标 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |

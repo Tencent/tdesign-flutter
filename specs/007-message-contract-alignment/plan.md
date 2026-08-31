@@ -6,7 +6,7 @@
 
 重写 `tdesign-component/example/lib/page/t_message_page.dart`，按官方分组组织：
 
-- **组件类型**：纯文字（`showIcon: false`）/ 带图标（默认图标）/ 带关闭（`showCloseButton: true` + `link`）/ 可滚动（`marquee`）/ 带按钮（`link: TMessageLink`）/ 组件声明式（`TMessage(visible: ...)`）。
+- **组件类型**：纯文字（`showIcon: false`）/ 带图标（默认图标）/ 带关闭（`showCloseButton: true` + `action`）/ 可滚动（`marquee`）/ 带按钮（`action: TLink`）/ 组件声明式（`TMessage(visible: ...)`）。
 - **组件风格**：info / success / warning / error 四个 `variant`。
 - 公开页仅保留上述两个小程序分组；Mobile Vue / Flutter 扩展的“关闭所有通知”不继续对外展示，底层 `handle.dismiss()` 能力不删除。
 
@@ -22,10 +22,12 @@
 - 默认宽度使用安全可视区域全宽，默认纵向位置由 `MediaQuery.padding.top + kToolbarHeight` 推导，避免继续硬编码 80px。
 - 默认文本使用 Theme 中的 `bodyMedium`；默认阴影内部引用 `shadowsBase` token。已有 `TMessageThemeData.elevation` 仍是显式覆盖，不在 ThemeExtension 增加同义状态。
 - Overlay 维度以现有 `offset` 作为所有权边界：未传 `offset` 的默认槽位只保留当前消息；显式 offset 继续允许多消息，不新增 `single` API。
+- 操作区域使用 `Widget? action` 组合槽，由传入组件完整持有外观与交互；删除 `TMessageLink`、未消费的 `uri` 及外层 `onLinkPressed`。
+- `duration` 仅允许正数或 null；null 是唯一的不自动关闭表达，`Duration.zero` 不再作为同义永久态。
 
 ### 站点文档
 
-重写 `tdesign-site/docs/components/message/README.md`：示例代码全部改用现网 API（`TMessage.show`、`TMessageVariant`、`TMessageLink`、`TMessageMarquee`），API 表格对齐生成的 `message_api.md`，Demo 分组与示例页一致。
+重写 `tdesign-site/docs/components/message/README.md`：示例代码全部改用现网 API（`TMessage.show`、`TMessageVariant`、`TMessageMarquee`、`action`），API 表格对齐生成的 `message_api.md`，Demo 分组与示例页一致。
 
 ### 覆盖率
 
@@ -44,7 +46,9 @@
 
 ## API 变化
 
-- 无签名增删或重命名；`visible` 默认值从 `true` 改为 `false`，属于默认行为 breaking change。
+- `visible` 默认值从 `true` 改为 `false`。
+- 删除 `TMessageLink`、`link` 与 `onLinkPressed`，新增 `Widget? action`；调用方使用 Flutter Widget 组合操作外观和行为。
+- `Duration.zero` 不再表示永久展示，迁移为 `duration: null`。
 - 不新增 `single` 或 Theme 同义状态。默认槽位替换由 `TMessage.show()` 内部管理；显式 offset 保留原多消息能力。
 
 ## 风险与取舍

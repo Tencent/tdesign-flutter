@@ -106,7 +106,11 @@ class TMessagePage extends StatelessWidget {
         content: '这是一条带关闭的消息通知',
         duration: null,
         showCloseButton: true,
-        link: const TMessageLink(name: '按钮'),
+        action: TLink(
+          child: const Text('按钮'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () => TMessage.show(context: context, content: '已点击按钮'),
+        ),
       ),
     );
   }
@@ -131,7 +135,11 @@ class TMessagePage extends StatelessWidget {
         context: context,
         content: '这是一条带操作的消息通知',
         duration: null,
-        link: const TMessageLink(name: '链接'),
+        action: TLink(
+          child: const Text('链接'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () => TMessage.show(context: context, content: '已点击链接'),
+        ),
       ),
     );
   }

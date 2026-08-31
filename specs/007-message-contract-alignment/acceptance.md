@@ -21,16 +21,16 @@
 
 - [x] 小程序公开 Demo 的两个分组与十个触发实例已按顺序收敛。
 - [x] `example/assets/code/message.*.txt` 已与两个公开示例容器同步，旧的单实例与关闭所有片段已删除。
-- [x] 站点 `README.md` 已对齐现网 API（`TMessage.show` / `TMessageVariant` / `TMessageLink` / `TMessageMarquee` / `showIcon` / `showCloseButton` / `onCloseButtonPressed` / `onLinkPressed`）。
+- [x] 站点 `README.md` 已对齐现网 API（`TMessage.show` / `TMessageVariant` / `TMessageMarquee` / `action` / `showIcon` / `showCloseButton` / `onCloseButtonPressed`）。
 - [x] 图标-文本间距对齐官方 `@spacer` = 8px，同步 marquee 宽度计算。
 - [x] Mobile Vue / Flutter 扩展的“关闭所有通知”不再作为小程序公开 Demo 基线；底层 dismiss 能力保留。
-- [x] 未新增 / 未删除 / 未重命名任何公共 API。
+- [x] 操作 API 已收敛为 `Widget? action`，移除 `TMessageLink` / `link` / `onLinkPressed` 的拆分状态。
 - [x] 已使用微信开发者工具截取小程序实际页，并与 Flutter 3.32.0 Linux 明暗整页 Golden 比对。
 
 ## 未覆盖项与后续工作
 
 - `align` / `gap` / 自定义 content Widget / `marquee` 的 `speed`/`loop` 语义等官方能力，现有公开 API 未覆盖，属潜在增强，未纳入本次最小实现。
-- `TMessageVariant` 的 status 命名与 `TMessageLink.uri` 的消费方式属于后续 API 债务，本次不扩大 breaking 范围。
+- `TMessageVariant` 的 status 命名属于后续 API 债务，本次不扩大范围。
 
 ## 2026-08-31 develop 同步复验
 
@@ -41,12 +41,21 @@
 
 ## 2026-08-31 默认契约对齐（待最终复验）
 
-- [x] 已以小程序 1.16.0 实际触发态与源码默认值为固定基线，确认 `visible=false`、`duration=3000`、`duration=0` 常驻、默认单条和 22px 图标。
+- [x] 已以小程序实际触发态与源码默认值为可见基线；跨端永久展示按行为映射为 Flutter `duration: null`，不复制数值哨兵。
 - [x] 声明式 `visible` 默认改为 false；`show()` 显式展示，默认 3 秒后动画关闭并移除 Overlay。
 - [x] 默认几何改为安全区与导航栏后的可视全宽条带；默认字体、图标和阴影改为 `bodyMedium`、22px 和 `shadowsBase`。
 - [x] 未传 offset 的连续触发只保留当前消息；显式不同 offset 继续允许多消息，未新增 `single` 或 Theme 同义状态。
-- [x] Flutter 3.32.0 与 3.47.0 Message 组件测试 28/28 通过；双版本 analyze 均 0 error / 0 warning。
+- [x] Flutter 3.32.0 Message 组件测试 29/29 通过；严格 analyze 0 error / 0 warning。
 - [x] `lib/src/components/message/` 覆盖率 96.76%（LH=239，LF=247）。
 - [x] Flutter 3.32.0 Linux 明暗页面与点击后 Overlay Golden 共 4 项更新后无参数复跑通过；实际变更为点击后的 light / dark 两张 Overlay 基线。
 - [x] Message Demo 功能测试与示例 codegen `--check` 通过。
 - [ ] Android 真机已在改动前成功安装启动，但验证时设备断开；重连后补充点击、3 秒关闭和常驻消息截图。
+
+## 2026-08-31 操作与时长 API 收敛（待复验）
+
+- [x] `TMessageLink`、`link` 与 `onLinkPressed` 已替换为 `Widget? action`，操作组件完整持有外观和行为。
+- [x] `duration: null` 是唯一永久展示表达；非 null 时长必须为正数。
+- [x] 更新 Message 组件测试、Demo 功能测试、API 生成文档及明暗页面 / 触发态 Golden。
+- [x] Flutter 3.32.0 Linux 容器中 Message 页面与带关闭通知展开态 Golden 更新后复跑 4/4 通过。
+- [x] Message Demo 结构与操作点击测试 2/2 通过，`generate_example_code.dart --check` 与组件契约检查通过。
+- [ ] Flutter latest 双版本分析与 Android 真机更新后点击验收，待后续 CI / 设备可用时补验。

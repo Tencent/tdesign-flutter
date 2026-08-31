@@ -8,25 +8,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
-import '../link/t_link.dart';
-import '../link/t_link_theme_data.dart';
-import '../link/t_link_types.dart';
 import 't_message_theme_data.dart';
-
-/// 消息中的链接配置
-class TMessageLink {
-  /// 创建消息链接
-  const TMessageLink({required this.name, this.uri, this.color});
-
-  /// 链接文案
-  final String name;
-
-  /// 链接地址
-  final Uri? uri;
-
-  /// 链接颜色
-  final Color? color;
-}
 
 /// 跑马灯配置
 class TMessageMarquee {
@@ -85,7 +67,7 @@ class TMessage extends StatefulWidget {
     this.visible = false,
     this.showIcon = true,
     this.icon,
-    this.link,
+    this.action,
     this.showCloseButton = false,
     this.closeButton,
     this.marquee,
@@ -93,7 +75,6 @@ class TMessage extends StatefulWidget {
     this.variant = TMessageVariant.info,
     this.onCloseButtonPressed,
     this.onDurationEnd,
-    this.onLinkPressed,
     this.onDismissed,
     this.useSafeArea = true,
   });
@@ -101,7 +82,7 @@ class TMessage extends StatefulWidget {
   /// 通知内容
   final String content;
 
-  /// 自动关闭时长，null 或 [Duration.zero] 表示不自动关闭
+  /// 自动关闭时长；必须为正数，null 表示不自动关闭。
   final Duration? duration;
 
   /// 是否显示，默认为 false
@@ -113,8 +94,10 @@ class TMessage extends StatefulWidget {
   /// 自定义前置图标
   final Widget? icon;
 
-  /// 链接配置
-  final TMessageLink? link;
+  /// 消息尾部操作组件。
+  ///
+  /// 操作的外观与行为由组件自身负责，例如传入带 [VoidCallback] 的按钮或链接。
+  final Widget? action;
 
   /// 是否显示关闭按钮
   final bool showCloseButton;
@@ -142,9 +125,6 @@ class TMessage extends StatefulWidget {
   /// 自动展示时长结束且关闭动画完成时触发
   final VoidCallback? onDurationEnd;
 
-  /// 点击链接时触发
-  final VoidCallback? onLinkPressed;
-
   /// 关闭动画完成时触发
   final VoidCallback? onDismissed;
 
@@ -157,11 +137,11 @@ class TMessage extends StatefulWidget {
     required BuildContext context,
     String content = '',
 
-    /// 自动关闭时长，null 或 [Duration.zero] 表示不自动关闭。
+    /// 自动关闭时长；必须为正数，null 表示不自动关闭。
     Duration? duration = const Duration(seconds: 3),
     bool showIcon = true,
     Widget? icon,
-    TMessageLink? link,
+    Widget? action,
     bool showCloseButton = false,
     Widget? closeButton,
     TMessageMarquee? marquee,
@@ -169,10 +149,13 @@ class TMessage extends StatefulWidget {
     TMessageVariant variant = TMessageVariant.info,
     VoidCallback? onCloseButtonPressed,
     VoidCallback? onDurationEnd,
-    VoidCallback? onLinkPressed,
     VoidCallback? onDismissed,
     bool useSafeArea = true,
   }) {
+    assert(
+      duration == null || duration > Duration.zero,
+      'duration 必须为正数；使用 null 表示不自动关闭。',
+    );
     final handle = TMessageHandle._();
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
@@ -201,7 +184,7 @@ class TMessage extends StatefulWidget {
           visible: true,
           showIcon: showIcon,
           icon: icon,
-          link: link,
+          action: action,
           showCloseButton: showCloseButton,
           closeButton: closeButton,
           marquee: marquee,
@@ -209,7 +192,6 @@ class TMessage extends StatefulWidget {
           variant: variant,
           onCloseButtonPressed: onCloseButtonPressed,
           onDurationEnd: onDurationEnd,
-          onLinkPressed: onLinkPressed,
           onDismissed: removeEntry,
           useSafeArea: useSafeArea,
         ),
@@ -289,6 +271,10 @@ class _TMessageState extends State<TMessage>
   @override
   void initState() {
     super.initState();
+    assert(
+      widget.duration == null || widget.duration! > Duration.zero,
+      'duration 必须为正数；使用 null 表示不自动关闭。',
+    );
     _animationController = AnimationController(
       vsync: this,
       duration: widget.marquee?.duration ?? const Duration(seconds: 10),
@@ -359,9 +345,20 @@ class _TMessageState extends State<TMessage>
   void _scheduleDurationClose() {
     _durationTimer?.cancel();
     final duration = widget.duration;
-    if (duration != null && duration > Duration.zero) {
-      _durationTimer = Timer(duration, () => _close(durationEnded: true));
+    assert(
+      duration == null || duration > Duration.zero,
+      'duration 必须为正数；使用 null 表示不自动关闭。',
+    );
+    if (duration == null) {
+      return;
     }
+    if (duration <= Duration.zero) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _close(durationEnded: true);
+      });
+      return;
+    }
+    _durationTimer = Timer(duration, () => _close(durationEnded: true));
   }
 
   void _scheduleMarqueeStart() {
@@ -484,25 +481,6 @@ class _TMessageState extends State<TMessage>
     return Icon(icon, color: color, size: 22);
   }
 
-  Widget _buildLink(BuildContext context) {
-    final link = widget.link!;
-    final linkWidget = TLink(
-      child: Text(link.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      colorScheme: TLinkColorScheme.primary,
-      size: TLinkSize.medium,
-      onPressed: widget.onLinkPressed,
-    );
-    if (link.color == null) {
-      return linkWidget;
-    }
-    return Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(TLinkThemeData(textStyle: TextStyle(color: link.color))),
-      child: linkWidget,
-    );
-  }
-
   Widget _buildCloseButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -541,11 +519,11 @@ class _TMessageState extends State<TMessage>
               const SizedBox(width: 8),
             ],
             Expanded(child: _buildText(context)),
-            if (widget.link != null) ...[
+            if (widget.action != null) ...[
               const SizedBox(width: 8),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 96),
-                child: _buildLink(context),
+                child: widget.action,
               ),
             ],
             if (widget.showCloseButton || widget.closeButton != null) ...[
@@ -589,7 +567,7 @@ class _TMessageState extends State<TMessage>
     if (widget.showIcon) {
       width -= 30;
     }
-    if (widget.link != null) {
+    if (widget.action != null) {
       width -= 104;
     }
     if (widget.showCloseButton || widget.closeButton != null) {
