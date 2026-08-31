@@ -64,11 +64,11 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/radio/t_radio_theme_contract_test.dart',
   ]),
   ComponentTestSuite('text', [
-    'test/components/text/t_font_loader_test.dart',
-    'test/components/text/t_text_resolve_test.dart',
-    'test/components/text/t_text_test.dart',
-    'test/components/text/t_typography_test.dart',
-  ]),
+    'test/components/typography/t_font_loader_test.dart',
+    'test/components/typography/t_text_resolve_test.dart',
+    'test/components/typography/t_text_test.dart',
+    'test/components/typography/t_typography_test.dart',
+  ]),,
   ComponentTestSuite('search', ['test/components/search/t_search_test.dart']),
   ComponentTestSuite('switch', [
     'test/components/switch/t_switch_test.dart',

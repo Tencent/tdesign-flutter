@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-在 `tdesign-component/lib/src/components/text/` 下：
+在 `tdesign-component/lib/src/components/typography/` 下：
 
 1. **扩展 `TText`**：新增 `copyable`、`expandable`、`expanded`、`onExpandedChange`、`onCopied` 参数。
    - `expanded == null` 时内部用 `StatefulWidget` 自管理；非 null 时受控。
@@ -19,13 +19,13 @@
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | `lib/src/components/text/t_text.dart` | 新增交互能力（保持兼容） |
-| 组件 | `lib/src/components/text/t_title.dart`（新增） | 新组件 |
-| 组件 | `lib/src/components/text/t_paragraph.dart`（新增） | 新组件 |
-| 组件 | `lib/src/components/text/t_typography.dart`（新增） | 命名空间父组件 |
+| 组件 | `lib/src/components/typography/t_text.dart` | 新增交互能力（保持兼容） |
+| 组件 | `lib/src/components/typography/t_title.dart`（新增） | 新组件 |
+| 组件 | `lib/src/components/typography/t_paragraph.dart`（新增） | 新组件 |
+| 组件 | `lib/src/components/typography/t_typography.dart`（新增） | 命名空间父组件 |
 | 导出 | `lib/tdesign_flutter.dart` | 新增导出 |
 | 示例 | `example/lib/page/t_text_page.dart` | 新增复制 / 展开收起 Demo |
-| 测试 | `test/components/text/` | 新增组件测试 |
+| 测试 | `test/components/typography/` | 新增组件测试 |
 | 文档 | `specs/011-text-flutter-contract-alignment` | 同步「非目标」 |
 
 ## API 变化

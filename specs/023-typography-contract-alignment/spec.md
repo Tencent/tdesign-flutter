@@ -31,7 +31,7 @@ Flutter 侧当前只有 `TText`（Flutter 原生 `Text` 的 Token 薄封装）�
 
 ### 涉及
 
-- `tdesign-component/lib/src/components/text/`（TText 扩展、新增 TTitle / TParagraph / TTypography）
+- `tdesign-component/lib/src/components/typography/`（TText 扩展、新增 TTitle / TParagraph / TTypography）
 - `tdesign-component/lib/tdesign_flutter.dart`（导出）
 - `tdesign-component/example/lib/page/t_text_page.dart`（Demo）
 - `specs/011-text-flutter-contract-alignment`（同步更新「非目标」）

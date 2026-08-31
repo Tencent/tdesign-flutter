@@ -23,7 +23,7 @@ const componentTargets = <String, List<String>>{
   'search': ['lib/src/components/search/'],
   'swipe_cell': ['lib/src/components/swipe_cell/'],
   'switch': ['lib/src/components/switch/'],
-  'text': ['lib/src/components/text/'],
+  'text': ['lib/src/components/typography/'],
   'textarea': ['lib/src/components/textarea/'],
   'toast': ['lib/src/components/toast/'],
   'upload': ['lib/src/components/upload/'],

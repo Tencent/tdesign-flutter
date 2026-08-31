@@ -59,10 +59,10 @@ export '../components/tabbar/t_tab_bar_theme_data.dart' show TTabBarThemeData;
 export '../components/table/t_table_theme_data.dart' show TTableThemeData;
 export '../components/tabs/t_tab_bar_theme_data.dart' show TTabsBarThemeData;
 export '../components/tag/t_tag_theme_data.dart' show TTagThemeData;
-export '../components/text/t_text_theme_data.dart' show TTextThemeData;
 export '../components/time_counter/t_time_counter_theme_data.dart'
     show TTimeCounterThemeData;
 export '../components/toast/t_toast_theme_data.dart' show TToastThemeData;
 export '../components/tree/t_tree_select_theme_data.dart'
     show TTreeSelectThemeData;
+export '../components/typography/t_text_theme_data.dart' show TTextThemeData;
 export '../components/upload/t_upload_theme_data.dart' show TUploadThemeData;

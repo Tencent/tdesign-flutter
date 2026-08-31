@@ -72,7 +72,7 @@
       "slug": "text",
       "source": {
         "type": "folder",
-        "path": "lib/src/components/text"
+        "path": "lib/src/components/typography"
       },
       "api": {
         "names": [

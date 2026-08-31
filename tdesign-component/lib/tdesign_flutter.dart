@@ -183,12 +183,6 @@ export 'src/components/tag/t_tag.dart';
 export 'src/components/tag/t_tag_theme_data.dart' show TTagThemeData;
 export 'src/components/tag/t_tag_types.dart'
     show TTagColorScheme, TTagShape, TTagSize, TTagVariant;
-export 'src/components/text/t_font_loader.dart';
-export 'src/components/text/t_paragraph.dart';
-export 'src/components/text/t_text.dart';
-export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;
-export 'src/components/text/t_title.dart';
-export 'src/components/text/t_typography.dart';
 export 'src/components/textarea/t_textarea.dart';
 export 'src/components/time_counter/t_time_counter.dart';
 export 'src/components/time_counter/t_time_counter_controller.dart'
@@ -202,6 +196,12 @@ export 'src/components/toast/t_toast_theme_data.dart' show TToastThemeData;
 export 'src/components/tree/t_tree_select.dart';
 export 'src/components/tree/t_tree_select_theme_data.dart'
     show TTreeSelectThemeData;
+export 'src/components/typography/t_font_loader.dart';
+export 'src/components/typography/t_paragraph.dart';
+export 'src/components/typography/t_text.dart';
+export 'src/components/typography/t_text_theme_data.dart' show TTextThemeData;
+export 'src/components/typography/t_title.dart';
+export 'src/components/typography/t_typography.dart';
 export 'src/components/upload/t_upload.dart';
 export 'src/components/upload/t_upload_theme_data.dart'
     show TUploadThemeData, TUploadVariant;
