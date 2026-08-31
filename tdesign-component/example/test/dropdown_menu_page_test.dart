@@ -28,53 +28,12 @@ void main() {
     );
   }
 
-  testWidgets('custom price panel updates, confirms and cancels draft', (
-    tester,
-  ) async {
+  testWidgets('官方多选和禁用 Demo 入口公开可见', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
     await tester.pumpAndSettle();
 
-    await tester.scrollUntilVisible(
-      find.text('¥100–500'),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.text('¥100–500'));
-    await tester.pumpAndSettle();
-
-    final slider = tester.widget<RangeSlider>(find.byType(RangeSlider));
-    slider.onChanged!(const RangeValues(200, 800));
-    await tester.pump();
-    tester.binding.handleMetricsChanged();
-    await tester.pump();
-    await tester.pump();
-    expect(find.text('价格区间：¥200–800'), findsOneWidget);
-
-    await tester.tap(find.text('应用价格'));
-    await tester.pumpAndSettle();
-    expect(find.text('¥200–800'), findsOneWidget);
-
-    await tester.tap(find.text('¥200–800'));
-    await tester.pumpAndSettle();
-    tester.widget<RangeSlider>(find.byType(RangeSlider)).onChanged!(
-      const RangeValues(300, 700),
-    );
-    await tester.pump();
-    expect(find.text('价格区间：¥300–700'), findsOneWidget);
-
-    await tester.tap(find.text('取消'));
-    await tester.pumpAndSettle();
-    expect(find.text('¥200–800'), findsOneWidget);
-    expect(find.text('¥300–700'), findsNothing);
-  });
-
-  testWidgets('官方多选、禁用和方向 Demo 入口公开可见', (tester) async {
-    configureViewport(tester);
-    await tester.pumpWidget(buildPage());
-    await tester.pumpAndSettle();
-
-    const labels = ['全部产品', '默认排序', '单列多选', '双列多选', '三列多选', '禁用菜单', '向上展开'];
+    const labels = ['全部产品', '默认排序', '单列多选', '双列多选', '三列多选', '禁用菜单'];
     for (final label in labels) {
       final finder = find.text(label);
       await tester.scrollUntilVisible(
@@ -84,6 +43,7 @@ void main() {
       );
       expect(finder, label == '禁用菜单' ? findsNWidgets(2) : findsOneWidget);
     }
+    expect(find.text('单元测试'), findsNothing);
   });
 
   testWidgets('两个禁用菜单均不展开', (tester) async {
@@ -105,27 +65,5 @@ void main() {
     await tester.tap(disabled.last);
     await tester.pumpAndSettle();
     expect(find.text('最新产品'), findsNothing);
-  });
-
-  testWidgets('自定义图标的菜单明确向上展开', (tester) async {
-    configureViewport(tester);
-    await tester.pumpWidget(buildPage());
-    await tester.pumpAndSettle();
-
-    final trigger = find.text('向上展开');
-    await tester.scrollUntilVisible(
-      trigger,
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    expect(find.byIcon(Icons.keyboard_arrow_up), findsOneWidget);
-    final triggerTop = tester.getTopLeft(trigger).dy;
-
-    await tester.tap(trigger);
-    await tester.pumpAndSettle();
-
-    expect(find.byIcon(Icons.keyboard_arrow_down), findsOneWidget);
-    expect(tester.getTopLeft(find.text('最新产品')).dy, lessThan(triggerTop));
-    expect(tester.takeException(), isNull);
   });
 }

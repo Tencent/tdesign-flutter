@@ -1,7 +1,8 @@
 # 实施任务
 
 - [x] DONE 复核 CNB Review 与官方 Demo 缺口
-- [x] DONE 用现有 API 补齐官方单选、同栏 1/2/3 列和双禁用 Demo，并把 direction 保留为 Flutter 扩展
+- [x] DONE 用现有 API 补齐官方单选、同栏 1/2/3 列和双禁用 Demo
+- [x] DONE 从公开页移除 Flutter 扩展分组与内部单元测试模块
 - [x] DONE 补齐 Example 矩阵和交互测试
 - [x] DONE 生成代码片段
 - [x] DONE 实测生产源码 LCOV
