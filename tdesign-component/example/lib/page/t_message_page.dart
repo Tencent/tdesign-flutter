@@ -189,7 +189,7 @@ class TMessagePage extends StatelessWidget {
   }
 }
 
-/// 组件声明式调用示例：通过 `visible` 受控展示 / 隐藏消息。
+/// 组件声明式调用示例：通过 Widget 树插入 / 移除消息。
 class _DeclarativeMessageDemo extends StatefulWidget {
   const _DeclarativeMessageDemo();
 
@@ -199,7 +199,7 @@ class _DeclarativeMessageDemo extends StatefulWidget {
 }
 
 class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {
-  bool _visible = false;
+  bool _showMessage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -213,10 +213,9 @@ class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {
             height: 56,
             child: Stack(
               children: [
-                if (_visible)
+                if (_showMessage)
                   const TMessage(
                     content: '这是一条通过组件调用的消息通知',
-                    visible: true,
                     offset: Offset.zero,
                     useSafeArea: false,
                     duration: null,
@@ -229,10 +228,10 @@ class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {
         SizedBox(
           width: double.infinity,
           child: TButton(
-            child: Text(_visible ? '隐藏消息' : '组件调用'),
+            child: Text(_showMessage ? '隐藏消息' : '组件调用'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
-            onPressed: () => setState(() => _visible = !_visible),
+            onPressed: () => setState(() => _showMessage = !_showMessage),
           ),
         ),
       ],

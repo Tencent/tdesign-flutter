@@ -52,7 +52,12 @@ final class _TMessageSlot {
 
 enum _TMessageDismissCause { programmatic, replaced, widget, unmounted }
 
-/// 顶部消息组件
+/// 顶部消息组件。
+///
+/// 直接构造即渲染消息，并应作为 [Stack] 的子组件使用。页面内的展示与隐藏由父级
+/// Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 [onDismissed] 中同步
+/// 移除父级状态。全局 Overlay 消息使用 [TMessage.show]，并通过返回的
+/// [TMessageHandle] 关闭。
 class TMessage extends StatefulWidget {
   static final Expando<_TMessageSlot> _defaultSlots = Expando<_TMessageSlot>(
     'TMessage.defaultSlots',
@@ -63,7 +68,6 @@ class TMessage extends StatefulWidget {
     super.key,
     this.content = '',
     this.duration = const Duration(seconds: 3),
-    this.visible = false,
     this.showIcon = true,
     this.icon,
     this.action,
@@ -83,9 +87,6 @@ class TMessage extends StatefulWidget {
 
   /// 自动关闭时长；必须为正数，null 表示不自动关闭。
   final Duration? duration;
-
-  /// 是否显示，默认为 false
-  final bool visible;
 
   /// 是否显示前置图标
   final bool showIcon;
@@ -199,7 +200,6 @@ class TMessage extends StatefulWidget {
           key: messageKey,
           content: content,
           duration: duration,
-          visible: true,
           showIcon: showIcon,
           icon: icon,
           action: action,
@@ -239,7 +239,7 @@ class TMessage extends StatefulWidget {
 class _TMessageState extends State<TMessage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-  bool _isVisible = true;
+  bool _isPresented = true;
   bool _isAnimationRunning = false;
   bool _closing = false;
   bool _didAnimateIn = false;
@@ -315,10 +315,8 @@ class _TMessageState extends State<TMessage>
         });
       }
     });
-    if (widget.visible) {
-      _scheduleDurationClose();
-      _scheduleMarqueeStart();
-    }
+    _scheduleDurationClose();
+    _scheduleMarqueeStart();
   }
 
   @override
@@ -343,21 +341,6 @@ class _TMessageState extends State<TMessage>
       _animationController.reset();
       _isAnimationRunning = false;
       _scheduleMarqueeStart();
-    }
-    if (!oldWidget.visible && widget.visible) {
-      _closing = false;
-      _isVisible = true;
-      _scheduleDurationClose();
-      _scheduleMarqueeStart();
-    } else if (oldWidget.visible && !widget.visible) {
-      _durationTimer?.cancel();
-      _closeTimer?.cancel();
-      _marqueeDelayTimer?.cancel();
-      _animationController.stop();
-      _isAnimationRunning = false;
-      _closing = false;
-      _isVisible = false;
-      _top = _effectiveOffset.dy;
     }
     if (oldWidget.offset != widget.offset ||
         oldWidget.useSafeArea != widget.useSafeArea) {
@@ -385,7 +368,7 @@ class _TMessageState extends State<TMessage>
 
   void _scheduleDurationClose() {
     _durationTimer?.cancel();
-    if (!widget.visible || _closing) {
+    if (!_isPresented || _closing) {
       return;
     }
     final duration = widget.duration;
@@ -407,7 +390,7 @@ class _TMessageState extends State<TMessage>
 
   void _scheduleMarqueeStart() {
     _marqueeDelayTimer?.cancel();
-    if (!widget.visible || _closing) {
+    if (!_isPresented || _closing) {
       return;
     }
     final marquee = widget.marquee;
@@ -424,7 +407,7 @@ class _TMessageState extends State<TMessage>
   void _startAnimation() {
     final marquee = widget.marquee;
     if (!mounted ||
-        !widget.visible ||
+        !_isPresented ||
         marquee == null ||
         _isAnimationRunning ||
         _closing) {
@@ -454,7 +437,7 @@ class _TMessageState extends State<TMessage>
       if (!mounted) {
         return;
       }
-      setState(() => _isVisible = false);
+      setState(() => _isPresented = false);
       if (durationEnded) {
         widget.onDurationEnd?.call();
       }
@@ -543,9 +526,6 @@ class _TMessageState extends State<TMessage>
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.visible) {
-      return const SizedBox.shrink();
-    }
     final offset = _effectiveOffset;
     final theme = _theme;
     final backgroundColor =
@@ -606,7 +586,7 @@ class _TMessageState extends State<TMessage>
       curve: Curves.easeInOut,
       top: _safeTop(_top),
       left: offset.dx,
-      child: _isVisible ? message : const SizedBox.shrink(),
+      child: _isPresented ? message : const SizedBox.shrink(),
     );
   }
 }

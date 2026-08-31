@@ -6,12 +6,12 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 1. **公开 Demo 覆盖不全**：Flutter 示例页 `t_message_page.dart` 仅覆盖"组件状态（4 主题）+ 跑马灯"，而官方存在以下公开 Demo 缺失：
    - 纯文字通知（无图标）、带关闭通知、带按钮（链接）通知 —— 对应小程序 `message/_example/base`、mobile-vue `message/demos/base.vue`；
-   - 组件声明式调用（`visible` 受控）—— 对应小程序 `base/index.wxml` 的 `<t-message visible=...>`；
+   - 组件声明式调用（由 Flutter Widget 树插入 / 移除）—— 对应小程序公开 Demo 中的组件调用效果，但不机械复制其 `visible` 属性；
    - Mobile Vue 另有“关闭所有通知”扩展示例，但小程序公开 Demo 页不展示该分组，不应作为 Flutter 对齐基线。
 2. **示例生成代码不同步**：`example/assets/code/` 仅含 `message._marquee.txt`，未与完整 Demo 同步。
 3. **站点文档严重过期**：`tdesign-site/docs/components/message/README.md` 仍使用已废弃 API（`TMessage.showMessage`、`MessageTheme`、`MessageLink`、`MessageMarquee`、`closeBtn`、`icon`、`theme`、`onCloseBtnClick`、`onLinkClick` 等），无法编译，与现网公开 API 不一致。
 4. **像素级视觉差异**：图标与文本间距 Flutter 为 10px，官方为 `@spacer`（8px）。
-5. **默认展示契约未对齐**：Flutter 声明式组件默认可见、默认使用距顶 80px 的 343px 卡片、20px 图标和 Material elevation 6；小程序默认 `visible=false`，触发后在页面导航栏下方展示全宽 48px 条带，图标为 22px，并使用基础阴影。
+5. **默认展示契约未对齐**：Flutter 原实现使用距顶 80px 的 343px 卡片、20px 图标和 Material elevation 6；小程序触发后在页面导航栏下方展示全宽 48px 条带，图标为 22px，并使用基础阴影。Flutter 的声明式存在性应由 Widget 树控制，不复制小程序的 `visible` 属性。
 6. **默认并发行为未收敛**：Flutter 连续调用 `show()` 会在同一位置叠加；小程序默认只保留当前一条通知。
 7. **操作 API 存在非法组合**：`TMessageLink` 仅保存文案、未消费的 `uri` 与颜色，点击行为却由外层 `onLinkPressed` 提供；只传 `link` 会渲染禁用态操作，形成两个公开状态源。
 8. **永久展示存在同义值**：`null` 与 `Duration.zero` 同时表示不自动关闭，无法区分永久展示与零时长，也机械暴露了跨端哨兵值差异。
@@ -22,7 +22,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - 同步 `example/assets/code/` 生成示例代码。
 - 修复 `tdesign-site/docs/components/message/README.md`，对齐现网公开 API。
 - 对齐图标与文本间距为官方 `@spacer`（8px），并同步 marquee 文本宽度计算。
-- 对齐声明式默认隐藏、3 秒自动关闭、导航栏下方全宽条带、22px 图标、body-medium 字体与基础阴影。
+- 声明式调用改为由 Widget 树控制插入 / 移除；命令式调用由 `TMessageHandle` 控制 Overlay 生命周期。对齐 3 秒自动关闭、导航栏下方全宽条带、22px 图标、body-medium 字体与基础阴影。
 - 默认位置连续调用 `show()` 时替换上一条；显式传入不同 `offset` 时继续支持多消息布局，不新增 `single` 等同义公开状态。
 - 使用 Flutter 原生组合的 `Widget? action` 承载消息操作，移除 `TMessageLink` 与 `onLinkPressed` 的拆分状态。
 - `duration` 仅以 `null` 表示不自动关闭；非 null 时必须为正数。
@@ -32,7 +32,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 - 不引入 `align`、`gap`、`single`、自定义 content Widget、`marquee` 的 `speed`/`loop` 语义等新 API。
 - 不在小程序公开基线中展示 Mobile Vue / Flutter 扩展的“关闭所有通知”模块；底层 dismiss 能力不删除。
-- 不将 `visible`、默认单例策略、尺寸或位置复制到 `TMessageThemeData`；Theme 只承载现有样式覆盖，避免形成第二公开状态源。
+- 不将显示状态、默认单例策略、尺寸或位置复制到 `TMessageThemeData`；Theme 只承载现有样式覆盖，避免形成第二公开状态源。
 
 ## 范围
 
@@ -62,7 +62,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 | 组件类型 | 带关闭的通知 | 带关闭通知 | `TMessage.show(showCloseButton: true, action: TLink(...))` |
 | 组件类型 | 可滚动的通知 | 跑马灯通知 | `TMessage.show(marquee: ...)` |
 | 组件类型 | 带按钮的通知 | 带操作通知 | `TMessage.show(action: TLink(...))` |
-| 组件类型 | 组件调用 | 组件声明式调用 | `TMessage(visible: ...)` |
+| 组件类型 | 组件调用 | 组件声明式调用 | `if (showMessage) TMessage(...)` |
 | 组件风格 | 普通 / 成功 / 警示 / 错误 | 同 4 状态 | `TMessage.show(status: ...)` |
 
 - 官方存在、Flutter 缺失的 Demo 必须补齐（上表各条目）。
@@ -76,7 +76,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 ### 默认展示与生命周期
 
-- 声明式 `TMessage.visible` 默认值由 `true` 调整为 `false`；`TMessage.show()` 内部显式创建可见实例。
+- 删除公开 `TMessage.visible`。直接构造 `TMessage` 即渲染消息，页面内展示 / 隐藏由父级 Widget 树插入或移除组件；`TMessage.show()` 创建 Overlay，并由返回的 `TMessageHandle` 关闭。
 - `duration` 默认保持 3 秒；仅 `null` 表示不自动关闭，非 null 时必须为正数。
 - 默认消息宽度占满安全可视区域，纵向位置为系统安全区与 Flutter 页面导航栏之后；显式 `offset` 仍按既有规则受安全区约束。
 - 默认文本使用 TDesign `body-medium`，默认阴影内部引用 `shadowsBase` token；已有 `TMessageThemeData.elevation` 显式配置仍优先，不新增同义 Theme 字段。
@@ -84,7 +84,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - `TMessageStatus` 是消息语义状态的唯一公开选择器；删除语义不准确的 `TMessageVariant` / `variant`。
 - `offset` 是消息位置的唯一公开输入；删除 `TMessageThemeData.defaultOffset`，避免 Theme 与实例形成同义状态源。
 - 命令式句柄、自动关闭、关闭按钮与默认消息替换复用同一幂等销毁闭环；每条消息释放 Overlay、slot、Timer 和动画资源后只回调一次。
-- 隐藏状态不启动自动关闭或跑马灯任务；跑马灯宽度使用布局阶段获得的真实可用约束，不按 action 最大宽度预估。
+- Widget 从树中移除或 Overlay 被句柄销毁时取消自动关闭与跑马灯任务；跑马灯宽度使用布局阶段获得的真实可用约束，不按 action 最大宽度预估。
 
 ### 站点文档
 
@@ -93,7 +93,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 ### Breaking change 分析
 
-- `visible` 默认值从 `true` 改为 `false`：依赖 `const TMessage(...)` 默认立即展示的调用方需显式传入 `visible: true`。
+- 删除 `visible`：原 `TMessage(visible: condition, ...)` 调用迁移为 `if (condition) TMessage(...)`；直接构造的消息保持立即展示语义。
 - `link: TMessageLink(...)` 与 `onLinkPressed` 替换为 `action: Widget`；操作组件自行持有外观和点击行为。
 - `Duration.zero` 不再表示永久展示；永久展示必须迁移为 `duration: null`。
 - 默认几何、阴影、字号和图标尺寸变化会更新可见快照。
@@ -110,14 +110,14 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 ## 验收标准
 
 - [x] 小程序公开 Demo 的两个分组、十个实例、顺序与文案在 Flutter 示例页落地。
-- [ ] 公开页不展示“关闭所有通知”扩展模块，且不因 Demo 对齐新增公开 API。
+- [x] 公开页不展示“关闭所有通知”扩展模块，且不因 Demo 对齐新增公开 API。
 - [x] 明暗主题整页及十个真实点击触发态 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页截图完成人工比对。
-- [ ] `example/assets/code/message.*.txt` 与 `t_message_page.dart` 同步（codegen `--check` 通过）。
-- [ ] `tdesign-site/docs/components/message/README.md` 不再包含已废弃 API，示例可编译。
-- [ ] 图标-文本间距为 8px，marquee 宽度计算同步更新。
-- [ ] 声明式默认隐藏；命令式触发后默认显示，并在 3 秒后完成关闭与 Overlay 销毁。
+- [x] `example/assets/code/message.*.txt` 与 `t_message_page.dart` 同步（codegen `--check` 通过）。
+- [x] `tdesign-site/docs/components/message/README.md` 不再包含已废弃 API，示例可编译。
+- [x] 图标-文本间距为 8px，marquee 宽度计算同步更新。
+- [x] 声明式组件由 Widget 树控制插入 / 移除；命令式触发后默认显示，并在 3 秒后完成关闭与 Overlay 销毁。
 - [x] 默认消息在导航栏下方全宽展示，图标 22px、body-medium 与基础阴影均有 Widget / Golden 证据。
-- [ ] 默认位置连续触发只保留当前消息；显式 offset 多消息仍可用，且未新增同义公开状态。
+- [x] 默认位置连续触发只保留当前消息；显式 offset 多消息仍可用，且未新增同义公开状态。
 - [x] `lib/src/components/message/` 行覆盖率 ≥95%。
 - [x] Message 相关 Widget 测试通过。
 - [x] `flutter analyze --fatal-infos` 通过。

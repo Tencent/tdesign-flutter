@@ -42,7 +42,7 @@
 ## 2026-08-31 默认契约对齐（待最终复验）
 
 - [x] 已以小程序实际触发态与源码默认值为可见基线；跨端永久展示按行为映射为 Flutter `duration: null`，不复制数值哨兵。
-- [x] 声明式 `visible` 默认改为 false；`show()` 显式展示，默认 3 秒后动画关闭并移除 Overlay。
+- [x] 声明式组件由 Widget 树插入 / 移除；`show()` 命令式展示，默认 3 秒后动画关闭并移除 Overlay。
 - [x] 默认几何改为安全区与导航栏后的可视全宽条带；默认字体、图标和阴影改为 `bodyMedium`、22px 和 `shadowsBase`。
 - [x] 未传 offset 的连续触发只保留当前消息；显式不同 offset 继续允许多消息，未新增 `single` 或 Theme 同义状态。
 - [x] Flutter 3.32.0 Message 组件测试 29/29 通过；严格 analyze 0 error / 0 warning。
@@ -64,7 +64,7 @@
 
 - [x] `TMessageHandle.dismiss()`、默认消息替换、关闭动画与 Overlay 卸载复用同一幂等销毁入口；释放 entry listener、handle 闭包和 Expando slot，`onDismissed` 最多回调一次。
 - [x] 覆盖重复 dismiss、自动关闭后再 dismiss、Overlay 根节点销毁、首帧前连续 show 与替换回调重入 show。
-- [x] `visible=false` 时更新 duration / marquee 不创建有效 Timer 或启动 AnimationController；切换隐藏会取消所有计时和动画。
+- [x] Widget 从树中移除或 Overlay 销毁时取消 Timer 与 AnimationController；内部关闭动画状态不再与公开 `visible` 形成双状态源。
 - [x] 跑马灯使用 `Expanded` 真实约束，不再按 action 最大宽度重复预估。
 - [x] `TMessageVariant/variant` 迁移为独立 types 边界的 `TMessageStatus/status`；删除 `TMessageThemeData.defaultOffset`，位置只由实例 `offset` 控制。
 - [x] Flutter 3.32.0：Message 组件 36/36、Demo 功能 2/2、严格 analyze 0 问题，生产源码覆盖率 254/258 = 98.45%，回归登记自测 11/11。
@@ -77,6 +77,16 @@
 - [x] 小程序公开 Demo 的十个入口均通过真实滚动与点击触发目标状态；初始隐藏页不替代触发态证据。
 - [x] 每个入口均保存 Flutter 3.32.0 Linux light / dark Overlay Golden；加上明暗初始页面共 22 项，更新后无参数复跑 22/22 通过。
 - [x] 循环跑马灯在点击后固定 400ms 保存快照，不使用无法收敛的 `pumpAndSettle`，连续两次 Linux 测试结果一致。
-- [x] Demo 功能测试覆盖十个入口的展示与生命周期，并真实点击关闭按钮、声明式隐藏及“按钮”/“链接”操作，13/13 通过。
+- [x] Demo 功能测试覆盖十个入口的展示与生命周期，并真实点击关闭按钮、通过 Widget 树隐藏声明式实例及“按钮”/“链接”操作，13/13 通过。
 - [x] Flutter 3.32.0 / 3.47.0：Message 组件测试 36/36、Demo 功能测试 13/13、严格 analyze 0 问题。
 - [x] Message 生产源码覆盖率维持 254/258 = 98.45%，组件与视觉回归登记自测 6/6 通过。
+
+## 2026-09-01 `visible` 状态源收敛复验
+
+- [x] 删除公开 `TMessage.visible`；直接构造即渲染，页面内开关由父级 Widget 树插入 / 移除，Overlay 消息继续由 `TMessageHandle` 管理。
+- [x] `TMessage.show()` 不再向内部组件传递固定 `visible: true`；内部 `_isPresented` 仅表示关闭动画阶段，不再与公开参数形成双状态源。
+- [x] Demo、站点文档、API 生成文档与 Spec 均同步迁移；站点示例明确 `TMessage` 作为 `Stack` 子组件使用，并在 `onDismissed` 中同步父级状态。
+- [x] Flutter 3.32.0：Message 组件测试 35/35、Demo 功能测试 13/13、组件与 example 严格 analyze 0 问题。
+- [x] Flutter 3.47.0：clean + pub get 后 Message 组件测试 35/35、Demo 功能测试 13/13、组件与 example 严格 analyze 0 问题。
+- [x] 生产源码覆盖率 238/242 = 98.35%；回归登记自测 11/11，示例 codegen `--check` 通过。
+- [x] CI 同款 Flutter 3.32.0 Linux 镜像无更新参数复跑 22/22 Golden 通过，确认本次迁移不改变十个触发态的最终视觉；macOS 对 Linux 基线产生约 4.08%–4.77% 的平台栅格差异，未用于更新基线，失败图已清理。

@@ -6,7 +6,7 @@
 
 重写 `tdesign-component/example/lib/page/t_message_page.dart`，按官方分组组织：
 
-- **组件类型**：纯文字（`showIcon: false`）/ 带图标（默认图标）/ 带关闭（`showCloseButton: true` + `action`）/ 可滚动（`marquee`）/ 带按钮（`action: TLink`）/ 组件声明式（`TMessage(visible: ...)`）。
+- **组件类型**：纯文字（`showIcon: false`）/ 带图标（默认图标）/ 带关闭（`showCloseButton: true` + `action`）/ 可滚动（`marquee`）/ 带按钮（`action: TLink`）/ 组件声明式（由 Widget 树插入 / 移除 `TMessage`）。
 - **组件风格**：info / success / warning / error 四个 `status`。
 - 公开页仅保留上述两个小程序分组；Mobile Vue / Flutter 扩展的“关闭所有通知”不继续对外展示，底层 `handle.dismiss()` 能力不删除。
 
@@ -18,14 +18,14 @@
 
 ### 默认展示契约
 
-- 声明式 `visible` 默认改为 `false`，`TMessage.show()` 显式传入 `visible: true`；只有可见阶段才启动 duration / marquee 计时器。
+- 删除公开 `visible`。直接构造 `TMessage` 即渲染；页面内开关由父级 Widget 树控制，Overlay 场景由 `TMessage.show()` 返回的 handle 控制。组件挂载后启动 duration / marquee 任务，移出 Widget 树或销毁 Overlay 时统一释放。
 - 默认宽度使用安全可视区域全宽，默认纵向位置由 `MediaQuery.padding.top + kToolbarHeight` 推导，避免继续硬编码 80px。
 - 默认文本使用 Theme 中的 `bodyMedium`；默认阴影内部引用 `shadowsBase` token。已有 `TMessageThemeData.elevation` 仍是显式覆盖，不在 ThemeExtension 增加同义状态。
 - Overlay 维度以现有 `offset` 作为所有权边界：未传 `offset` 的默认槽位只保留当前消息；显式 offset 继续允许多消息，不新增 `single` API。
 - 操作区域使用 `Widget? action` 组合槽，由传入组件完整持有外观与交互；删除 `TMessageLink`、未消费的 `uri` 及外层 `onLinkPressed`。
 - `duration` 仅允许正数或 null；null 是唯一的不自动关闭表达，`Duration.zero` 不再作为同义永久态。
 - 命令式 handle 内部持有唯一的幂等销毁入口。手动关闭、默认消息替换和组件关闭动画都通过该入口释放 Overlay 与默认 slot，并保证 `onDismissed` 最多调用一次。
-- `visible=false` 时不启动 duration Timer、marquee delay Timer 或 AnimationController；运行期切换隐藏会取消全部任务。
+- Widget 从树中移除或 Overlay 被销毁时取消 duration Timer、marquee delay Timer 与 AnimationController；内部可见状态只服务关闭动画，不再与公开参数形成双状态源。
 - 将语义状态从 `TMessageVariant/variant` 收敛为 `TMessageStatus/status`；删除与实例 `offset` 同义的 `TMessageThemeData.defaultOffset`。
 
 ### 站点文档
@@ -34,13 +34,13 @@
 
 ### 覆盖率
 
-`t_message_test.dart` 补充与新增 Demo 对应的 Widget 测试（纯文字无图标、带链接、带关闭、声明式 visible 切换、多消息叠加 + 句柄关闭、间距断言等），提升 `lib/src/components/message/` 行覆盖率。
+`t_message_test.dart` 补充与新增 Demo 对应的 Widget 测试（纯文字无图标、带链接、带关闭、Widget 树插入 / 移除、多消息叠加 + 句柄关闭、间距断言等），提升 `lib/src/components/message/` 行覆盖率。
 
 ## 影响范围
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | lib/src/components/message/t_message.dart | 默认可见性、位置、宽度、阴影、字体、图标尺寸、计时与默认替换策略 |
+| 组件 | lib/src/components/message/t_message.dart | 显示状态所有权、位置、宽度、阴影、字体、图标尺寸、计时与默认替换策略 |
 | 类型 | lib/src/components/message/t_message_types.dart | `TMessageStatus` 唯一语义状态枚举 |
 | 测试 | test/components/message/t_message_test.dart | 补充 Demo 相关测试，提升覆盖率 |
 | 示例 | example/lib/page/t_message_page.dart | 补齐官方 Demo 矩阵 |
@@ -50,7 +50,7 @@
 
 ## API 变化
 
-- `visible` 默认值从 `true` 改为 `false`。
+- 删除 `visible`；调用方将 `TMessage(visible: condition, ...)` 迁移为 `if (condition) TMessage(...)`。
 - 删除 `TMessageLink`、`link` 与 `onLinkPressed`，新增 `Widget? action`；调用方使用 Flutter Widget 组合操作外观和行为。
 - `Duration.zero` 不再表示永久展示，迁移为 `duration: null`。
 - 不新增 `single` 或 Theme 同义状态。默认槽位替换由 `TMessage.show()` 内部管理；显式 offset 保留原多消息能力。
@@ -59,7 +59,7 @@
 
 ## 风险与取舍
 
-- **默认行为变化**会影响未显式传 `visible` 的声明式调用以及默认位置连续触发；通过 dartdoc、示例和回归测试明确迁移方式。
+- **公开 API 删除**会影响使用 `visible` 的声明式调用；通过 dartdoc、示例和回归测试明确迁移为 Widget 树条件插入。直接构造仍立即展示，不引入默认隐藏行为。
 - **跨平台坐标系不同**：小程序 `top: 0` 是页面 WebView 原点，Flutter Overlay 需结合安全区和导航栏推导等效位置，不能机械复制 0。
 - **真机证据**仍需设备重连后补验；Web 触发和 Linux Golden 负责可复现回归，不替代真机 DPR 验收。
 

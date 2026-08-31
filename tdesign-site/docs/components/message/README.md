@@ -130,11 +130,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 组件调用
 
+声明式调用由 Flutter Widget 树控制。需要显示时将 `TMessage` 插入 `Stack`，隐藏时将其移除；使用自动关闭或关闭按钮时，可通过 `onDismissed` 同步父级状态。
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildComponentMessage(BuildContext context) {
-    return const _DeclarativeMessageDemo();
+  class MessageDemoState extends State&lt;MessageDemo&gt; {
+    bool _showMessage = false;
+
+    @override
+    Widget build(BuildContext context) {
+      return Column(
+        children: [
+          SizedBox(
+            height: 48,
+            child: Stack(
+              children: [
+                if (_showMessage)
+                  TMessage(
+                    content: '这是一条通过组件调用的消息通知',
+                    duration: null,
+                    offset: Offset.zero,
+                    useSafeArea: false,
+                    onDismissed: () =&gt;
+                        setState(() =&gt; _showMessage = false),
+                  ),
+              ],
+            ),
+          ),
+          TButton(
+            child: Text(_showMessage ? '隐藏消息' : '组件调用'),
+            onPressed: () =&gt; setState(
+              () =&gt; _showMessage = !_showMessage,
+            ),
+          ),
+        ],
+      );
+    }
   }</pre>
 
 </td-code-block>
@@ -260,4 +292,3 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | showIcon | bool | true | 是否显示前置图标 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
-| visible | bool | false | 是否显示，默认为 false |

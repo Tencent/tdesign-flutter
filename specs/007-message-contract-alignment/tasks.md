@@ -6,7 +6,7 @@
 - [x] TODO 更新示例和 API 文档（assets/code + site README）
 - [x] TODO 执行验证并记录结果（analyze / test / 覆盖率 / 契约）
 - [x] TODO 收敛小程序公开 Demo 矩阵并补充实际页截图、明暗 Golden
-- [x] TODO 对齐声明式默认隐藏、默认 3 秒关闭与零时长常驻语义
+- [x] TODO 删除公开 `visible`，声明式展示改由 Widget 树控制，保留默认 3 秒关闭与零时长迁移语义
 - [x] TODO 对齐默认全宽位置、22px 图标、body-medium 与基础阴影 token
 - [x] TODO 默认位置连续触发改为替换并保留显式 offset 多消息能力
 - [x] TODO 更新并复核触发后的明暗 Overlay Golden
@@ -14,6 +14,6 @@
 - [ ] TODO 真机重连后补充实际点击与默认关闭时长验收
 - [x] TODO 完成 Review
 - [x] TODO 统一 handle / Overlay / 默认 slot 幂等销毁闭环并覆盖重复关闭
-- [x] TODO 隐藏态不启动 duration / marquee 任务并覆盖运行期参数更新
+- [x] TODO Widget / Overlay 销毁时释放 duration / marquee 任务并覆盖运行期参数更新
 - [x] TODO 跑马灯使用真实布局约束并覆盖短 action / 窄屏
 - [x] TODO `TMessageStatus/status` 与单一实例 `offset` API 迁移

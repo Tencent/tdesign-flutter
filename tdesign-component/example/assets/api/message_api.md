@@ -48,4 +48,3 @@
 | showIcon | bool | true | 是否显示前置图标 |
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
-| visible | bool | false | 是否显示，默认为 false |

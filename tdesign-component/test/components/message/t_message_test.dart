@@ -23,29 +23,17 @@ void main() {
   }
 
   group('TMessage 渲染', () {
-    testWidgets('默认隐藏，visible=true 时显示内容与默认图标', (tester) async {
-      await tester.pumpWidget(wrap(const TMessage(content: '默认隐藏')));
-      expect(find.text('默认隐藏'), findsNothing);
-
-      await tester.pumpWidget(
-        wrap(const TMessage(content: '消息', visible: true)),
-      );
+    testWidgets('构造后显示内容与默认图标', (tester) async {
+      await tester.pumpWidget(wrap(const TMessage(content: '消息')));
       await tester.pump();
       expect(find.text('消息'), findsOneWidget);
       expect(find.byIcon(TIcons.error_circle_filled), findsOneWidget);
     });
 
-    testWidgets('visible=false 不渲染内容', (tester) async {
-      await tester.pumpWidget(
-        wrap(const TMessage(content: '隐藏', visible: false)),
-      );
-      expect(find.text('隐藏'), findsNothing);
-    });
-
     testWidgets('四种语义状态图标均可渲染', (tester) async {
       for (final status in TMessageStatus.values) {
         await tester.pumpWidget(
-          wrap(TMessage(content: status.name, status: status, visible: true)),
+          wrap(TMessage(content: status.name, status: status)),
         );
         await tester.pump();
         expect(find.text(status.name), findsOneWidget);
@@ -54,14 +42,7 @@ void main() {
 
     testWidgets('可隐藏或自定义图标', (tester) async {
       await tester.pumpWidget(
-        wrap(
-          const TMessage(
-            content: '无图标',
-            showIcon: false,
-            duration: null,
-            visible: true,
-          ),
-        ),
+        wrap(const TMessage(content: '无图标', showIcon: false, duration: null)),
       );
       expect(find.byType(Icon), findsNothing);
 
@@ -71,7 +52,6 @@ void main() {
             content: '自定义图标',
             icon: Icon(Icons.star),
             duration: null,
-            visible: true,
           ),
         ),
       );
@@ -85,7 +65,6 @@ void main() {
           TMessage(
             content: '带链接',
             duration: null,
-            visible: true,
             action: TLink(
               child: const Text('详情'),
               colorScheme: TLinkColorScheme.danger,
@@ -105,7 +84,6 @@ void main() {
           TMessage(
             content: '这是一段非常非常非常长的消息内容用于验证布局不会被撑坏',
             duration: null,
-            visible: true,
             showCloseButton: true,
             action: TLink(
               child: const Text(
@@ -133,7 +111,7 @@ void main() {
     testWidgets('窄屏时消息宽度收口到可用区域', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TMessage(content: '窄屏消息', duration: null, visible: true),
+          const TMessage(content: '窄屏消息', duration: null),
           mediaSize: const Size(320, 640),
         ),
       );
@@ -159,7 +137,6 @@ void main() {
           TMessage(
             content: '可关闭',
             duration: null,
-            visible: true,
             showCloseButton: true,
             onCloseButtonPressed: () => pressed = true,
             onDismissed: () => dismissed = true,
@@ -179,7 +156,6 @@ void main() {
           const TMessage(
             content: '自定义关闭',
             duration: null,
-            visible: true,
             closeButton: Text('关闭'),
           ),
         ),
@@ -196,7 +172,6 @@ void main() {
           TMessage(
             content: '自动关闭',
             duration: const Duration(milliseconds: 100),
-            visible: true,
             onDurationEnd: () => ended = true,
           ),
         ),
@@ -207,9 +182,7 @@ void main() {
     });
 
     testWidgets('默认 3 秒关闭，null 保持显示，非正数无效', (tester) async {
-      await tester.pumpWidget(
-        wrap(const TMessage(content: '默认时长', visible: true)),
-      );
+      await tester.pumpWidget(wrap(const TMessage(content: '默认时长')));
       await tester.pump(const Duration(milliseconds: 2999));
       expect(find.text('默认时长'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 1));
@@ -218,7 +191,7 @@ void main() {
 
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
       await tester.pumpWidget(
-        wrap(const TMessage(content: '常驻消息', duration: null, visible: true)),
+        wrap(const TMessage(content: '常驻消息', duration: null)),
       );
       await tester.pump(const Duration(seconds: 4));
       expect(find.text('常驻消息'), findsOneWidget);
@@ -227,12 +200,7 @@ void main() {
     testWidgets('Theme 控制背景、形状与阴影，实例 offset 控制位置', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TMessage(
-            content: '主题',
-            duration: null,
-            visible: true,
-            offset: Offset(20, 40),
-          ),
+          const TMessage(content: '主题', duration: null, offset: Offset(20, 40)),
           messageTheme: const TMessageThemeData(
             backgroundColor: Colors.yellow,
             shape: RoundedRectangleBorder(
@@ -257,7 +225,7 @@ void main() {
     testWidgets('默认位置位于安全区和导航栏下方', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TMessage(content: '默认安全位置', duration: null, visible: true),
+          const TMessage(content: '默认安全位置', duration: null),
           mediaPadding: const EdgeInsets.only(top: 44),
         ),
       );
@@ -269,7 +237,7 @@ void main() {
 
       await tester.pumpWidget(
         wrap(
-          const TMessage(content: '更高安全区', duration: null, visible: true),
+          const TMessage(content: '更高安全区', duration: null),
           mediaPadding: const EdgeInsets.only(top: 100),
         ),
       );
@@ -286,7 +254,6 @@ void main() {
             content: '安全偏移',
             duration: null,
             offset: Offset(999, 999),
-            visible: true,
           ),
           mediaSize: const Size(375, 200),
           mediaPadding: const EdgeInsets.fromLTRB(24, 44, 30, 20),
@@ -316,7 +283,6 @@ void main() {
             duration: null,
             offset: Offset.zero,
             useSafeArea: false,
-            visible: true,
           ),
           mediaSize: const Size(375, 200),
           mediaPadding: const EdgeInsets.fromLTRB(24, 44, 30, 20),
@@ -346,7 +312,6 @@ void main() {
           const TMessage(
             content: '单次跑马灯内容',
             duration: null,
-            visible: true,
             marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
           ),
         ),
@@ -360,7 +325,6 @@ void main() {
           const TMessage(
             content: '循环跑马灯内容',
             duration: null,
-            visible: true,
             marquee: TMessageMarquee(
               duration: Duration(milliseconds: 200),
               repeat: true,
@@ -382,10 +346,9 @@ void main() {
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
-    testWidgets('运行期更新 marquee、duration 与 visible', (tester) async {
-      var marquee = const TMessageMarquee();
+    testWidgets('运行期更新 marquee 与 duration', (tester) async {
+      TMessageMarquee? marquee;
       Duration? duration;
-      var visible = false;
       late StateSetter setState;
       await tester.pumpWidget(
         wrap(
@@ -396,7 +359,6 @@ void main() {
                 content: '更新',
                 marquee: marquee,
                 duration: duration,
-                visible: visible,
               );
             },
           ),
@@ -408,7 +370,6 @@ void main() {
           delay: Duration(milliseconds: 10),
         );
         duration = const Duration(seconds: 1);
-        visible = true;
       });
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 10));
@@ -416,9 +377,8 @@ void main() {
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
-    testWidgets('隐藏状态更新 duration 和 marquee 不启动任务', (tester) async {
-      Duration? duration;
-      TMessageMarquee? marquee;
+    testWidgets('从 Widget 树移除后取消 duration 和 marquee 任务', (tester) async {
+      var mounted = true;
       var durationEndCount = 0;
       var dismissedCount = 0;
       late StateSetter setState;
@@ -427,31 +387,28 @@ void main() {
           StatefulBuilder(
             builder: (context, setter) {
               setState = setter;
-              return TMessage(
-                content: '隐藏更新',
-                visible: false,
-                duration: duration,
-                marquee: marquee,
-                onDurationEnd: () => durationEndCount += 1,
-                onDismissed: () => dismissedCount += 1,
-              );
+              return mounted
+                  ? TMessage(
+                      content: '待移除',
+                      duration: const Duration(milliseconds: 100),
+                      marquee: const TMessageMarquee(
+                        duration: Duration(milliseconds: 20),
+                        delay: Duration(milliseconds: 50),
+                        repeat: true,
+                      ),
+                      onDurationEnd: () => durationEndCount += 1,
+                      onDismissed: () => dismissedCount += 1,
+                    )
+                  : const SizedBox.shrink();
             },
           ),
         ),
       );
-
-      setState(() {
-        duration = const Duration(milliseconds: 10);
-        marquee = const TMessageMarquee(
-          duration: Duration(milliseconds: 20),
-          delay: Duration(milliseconds: 10),
-          repeat: true,
-        );
-      });
+      setState(() => mounted = false);
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.text('隐藏更新'), findsNothing);
+      expect(find.text('待移除'), findsNothing);
       expect(durationEndCount, 0);
       expect(dismissedCount, 0);
       expect(tester.takeException(), isNull);
@@ -464,7 +421,6 @@ void main() {
           const TMessage(
             content: '这是一条需要滚动的长消息',
             duration: null,
-            visible: true,
             marquee: TMessageMarquee(),
             action: SizedBox(width: actionWidth, child: Text('按钮')),
             showCloseButton: true,
@@ -780,8 +736,8 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('visible=false 会取消关闭动画及其回调', (tester) async {
-      var visible = true;
+    testWidgets('从 Widget 树移除会取消关闭动画及其回调', (tester) async {
+      var mounted = true;
       var dismissed = false;
       late StateSetter setState;
       await tester.pumpWidget(
@@ -789,13 +745,14 @@ void main() {
           StatefulBuilder(
             builder: (context, setter) {
               setState = setter;
-              return TMessage(
-                content: '可关闭消息',
-                visible: visible,
-                duration: null,
-                showCloseButton: true,
-                onDismissed: () => dismissed = true,
-              );
+              return mounted
+                  ? TMessage(
+                      content: '可关闭消息',
+                      duration: null,
+                      showCloseButton: true,
+                      onDismissed: () => dismissed = true,
+                    )
+                  : const SizedBox.shrink();
             },
           ),
         ),
@@ -803,26 +760,27 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       await tester.tap(find.byIcon(TIcons.close));
       await tester.pump(const Duration(milliseconds: 100));
-      setState(() => visible = false);
+      setState(() => mounted = false);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
       expect(dismissed, isFalse);
     });
 
-    testWidgets('visible重新打开时恢复默认顶部位置', (tester) async {
-      var visible = true;
+    testWidgets('从 Widget 树移除后重新插入会恢复默认顶部位置', (tester) async {
+      var mounted = true;
       late StateSetter setState;
       await tester.pumpWidget(
         wrap(
           StatefulBuilder(
             builder: (context, setter) {
               setState = setter;
-              return TMessage(
-                content: '可重开消息',
-                visible: visible,
-                duration: null,
-                showCloseButton: true,
-              );
+              return mounted
+                  ? const TMessage(
+                      content: '可重开消息',
+                      duration: null,
+                      showCloseButton: true,
+                    )
+                  : const SizedBox.shrink();
             },
           ),
         ),
@@ -830,9 +788,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       await tester.tap(find.byIcon(TIcons.close));
       await tester.pumpAndSettle();
-      setState(() => visible = false);
+      setState(() => mounted = false);
       await tester.pump();
-      setState(() => visible = true);
+      setState(() => mounted = true);
       await tester.pumpAndSettle();
       expect(
         tester.widget<AnimatedPositioned>(find.byType(AnimatedPositioned)).top,
@@ -858,7 +816,7 @@ void main() {
   group('对齐官方 @spacer 的图标文本间距', () {
     testWidgets('带图标时图标与文本间距为 8px', (tester) async {
       await tester.pumpWidget(
-        wrap(const TMessage(content: '间距', duration: null, visible: true)),
+        wrap(const TMessage(content: '间距', duration: null)),
       );
       await tester.pump();
       // 图标与文本之间的 SizedBox 宽度应对齐官方 @spacer = 8px。
@@ -881,14 +839,7 @@ void main() {
 
     testWidgets('纯文字（无图标）不渲染图标且仅保留文本', (tester) async {
       await tester.pumpWidget(
-        wrap(
-          const TMessage(
-            content: '纯文字',
-            showIcon: false,
-            duration: null,
-            visible: true,
-          ),
-        ),
+        wrap(const TMessage(content: '纯文字', showIcon: false, duration: null)),
       );
       await tester.pump();
       expect(find.text('纯文字'), findsOneWidget);
@@ -938,30 +889,30 @@ void main() {
     });
   });
 
-  group('TMessage 声明式 visible 切换', () {
-    testWidgets('visible 从 false 切到 true 后内容出现', (tester) async {
-      var visible = false;
+  group('TMessage 声明式 Widget 树控制', () {
+    testWidgets('插入与移除组件可控制消息显示', (tester) async {
+      var mounted = false;
       late StateSetter setState;
       await tester.pumpWidget(
         wrap(
           StatefulBuilder(
             builder: (context, setter) {
               setState = setter;
-              return TMessage(
-                content: '组件调用',
-                visible: visible,
-                duration: null,
-              );
+              return mounted
+                  ? const TMessage(content: '组件调用', duration: null)
+                  : const SizedBox.shrink();
             },
           ),
         ),
       );
       expect(find.text('组件调用'), findsNothing);
-      setState(() => visible = true);
+      setState(() => mounted = true);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('组件调用'), findsOneWidget);
-      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+      setState(() => mounted = false);
+      await tester.pump();
+      expect(find.text('组件调用'), findsNothing);
     });
   });
 }
