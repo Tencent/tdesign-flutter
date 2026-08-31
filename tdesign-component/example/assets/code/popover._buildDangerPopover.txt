@@ -5,7 +5,7 @@ Widget _buildDangerPopover(BuildContext context) {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('错误色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,

@@ -2,9 +2,9 @@
 
 ## 验证环境
 
-- 分支：develop
-- 基线提交：541f76435e0a492f9f392fe98f72e72167b24516
-- 实现状态：工作区未提交
+- 分支：rss1102/fix/pr1033-visual-evidence
+- develop 合并基线：fb26b8d5
+- 实现状态：PR #1033 复核中
 - Flutter：3.32.0 stable
 - Dart：3.8.0
 
@@ -12,7 +12,7 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/popover/t_popover_test.dart test/components/popover/t_popover_golden_test.dart test/components/popup/t_popup_widget_test.dart test/components/popup/t_feedback_theme_data_test.dart test/components/popup/t_popup_theme_test.dart` | 通过 | 68 tests passed，覆盖 Popover、Golden、自动翻转、箭头补偿、锚点生命周期与关联 Popup/主题路径 |
+| `flutter test --no-pub --exclude-tags golden test/components/popover/t_popover_test.dart test/tool/run_visual_regression_test.dart` | 通过 | 55 tests passed，覆盖 Popover 行为、自动翻转、箭头补偿、锚点生命周期与视觉套件注册 |
 | `flutter analyze lib/src/components/popover test/components/popover` | 通过 | No issues found |
 | `flutter test test/popover_page_test.dart`（example） | 通过 | 4 tests passed，操作真实 Demo 覆盖事件、主题尺寸、窄屏、键盘和锚点销毁 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | Demo 代码片段与源码同步 |
@@ -21,8 +21,13 @@
 | `node scripts/check-flutter-component-contracts.mjs` | 通过 | 56 site routes have source, Example, and docs entries |
 | `git diff --check` | 通过 | 无空白错误 |
 | `flutter test test/popover_demo_test.dart` | 通过 | 公开 Demo 结构与 21 个触发按钮精确校验 |
-| `flutter test test/popover_demo_golden_test.dart` (Flutter 3.32.0 Linux) | 通过 | 明暗整页 Golden |
-| LCOV 覆盖率（`lib/src/components/popover/`） | 通过 | LH=501, LF=519，96.53% |
+| `flutter test --no-pub --update-goldens test/popover_demo_golden_test.dart --name ' light '` (Flutter 3.32.0 Linux) | 通过 | 1 张明亮整页 + 21 张明亮展开态，22 tests passed |
+| `flutter test --no-pub --update-goldens test/popover_demo_golden_test.dart --name ' dark '` (Flutter 3.32.0 Linux) | 通过 | 1 张暗色整页 + 21 张暗色展开态，22 tests passed |
+| 同一 Golden 命令移除 `--update-goldens` 后复跑 | 通过 | light 22 tests、dark 22 tests 均与固定基线完全匹配 |
+| LCOV 覆盖率（`lib/src/components/popover/`） | 通过 | LH=498, LF=516，96.51% |
+| Flutter 3.47.0：组件测试 + 视觉注册测试 | 通过 | 55 tests passed；定向 analyze 无问题 |
+| Flutter 3.47.0：Demo 结构 + 交互测试 | 通过 | 清理 Example 的跨 SDK shader 缓存后 7 tests passed；定向 analyze 无问题 |
+| 微信开发者工具：21 个公开展开态 | 通过 | RC 2.02.2607161、iPhone 12/13 (Pro)、390×844、DPR 3；21 张截图逐项检查 |
 
 ## 已验证行为
 
@@ -34,13 +39,16 @@
 - [x] 右下角锚点的文本内容保持在 viewport 内
 - [x] top 空间不足时翻转到 bottom，left 空间不足时翻转到 right
 - [x] 两侧空间都不足时 clamp，箭头位移限制在圆角安全区内
-- [x] light/dark Golden 未变化
+- [x] light/dark 整页 Golden 已随 21 个 large 触发按钮同步更新
 - [x] Popup 关联主题和 Overlay 测试无回归
 - [x] Demo 中事件和自定义内容可交互，结果状态可观察
 - [x] Demo 中主题尺寸、窄屏边界和键盘可用区域可验证
 - [x] Demo 中移除锚点后 Overlay 消失且 Future 完成状态可观察
 - [x] 公开页默认仅展示小程序的“组件类型 / 组件样式”矩阵，内部诊断场景由 Widget 测试显式开启。
-- [x] 已使用微信开发者工具截取小程序实际页，并与 Flutter 3.32.0 Linux 明暗整页 Golden 比对。
+- [x] 21 个公开按钮均使用与小程序 `size="large"` 对应的大尺寸；左右侧六个按钮按 `446rpx` 对应为 223dp。
+- [x] 自定义内容按小程序 48dp 菜单项和 1dp 无间距分隔线布局，146dp 外框内无溢出。
+- [x] 21 个公开 Demo 均有 light/dark 展开态 Golden，并已逐张检查。
+- [x] 已使用微信开发者工具在 390×844、DPR 3 下截取并逐张检查小程序 21 个实际展开态，与 Flutter 3.32.0 Linux 明暗展开态 Golden 比对。
 
 ## 人工验收
 

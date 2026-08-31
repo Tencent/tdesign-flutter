@@ -42,7 +42,7 @@
 
 - Widget 测试覆盖回调、主题背景色、maxHeight、默认宽度、外部关闭、滚动、同轴翻转、clamp 和箭头补偿。
 - Example Widget 测试操作真实 Demo，覆盖事件、自定义内容、主题尺寸、窄屏、键盘和锚点销毁。
-- Golden 测试覆盖 light/dark Overlay 视觉基线。
+- Golden 测试覆盖 light/dark 整页基线，以及 21 个公开 Demo 各自的 light/dark 展开态。
 - 关联 Popup 测试覆盖 Overlay、主题扩展和尺寸行为没有回归。
 - 运行 flutter analyze lib/src/components/popover test/components/popover。
 - 运行 scripts/check-flutter-component-contracts.mjs 和 git diff --check。

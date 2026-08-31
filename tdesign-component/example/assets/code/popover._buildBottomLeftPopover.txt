@@ -5,7 +5,7 @@ Widget _buildBottomLeftPopover(BuildContext context) {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部左'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,

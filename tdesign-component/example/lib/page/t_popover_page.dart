@@ -151,19 +151,12 @@ class _TPopoverPage extends State<TPopoverPage> {
                 return Container(
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Flex(
-                    direction: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            CodeWrapper(builder: _buildRightTopPopover),
-                            CodeWrapper(builder: _buildRightPopover),
-                            CodeWrapper(builder: _buildRightBottomPopover),
-                          ],
-                        ),
-                      ),
-                      const Expanded(child: SizedBox()),
+                      CodeWrapper(builder: _buildRightTopPopover),
+                      CodeWrapper(builder: _buildRightPopover),
+                      CodeWrapper(builder: _buildRightBottomPopover),
                     ],
                   ),
                 );
@@ -174,21 +167,14 @@ class _TPopoverPage extends State<TPopoverPage> {
               ignoreCode: true,
               builder: (context) {
                 return Container(
-                  alignment: Alignment.topLeft,
+                  alignment: Alignment.topRight,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Flex(
-                    direction: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Expanded(child: SizedBox()),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            CodeWrapper(builder: _buildLeftTopPopover),
-                            CodeWrapper(builder: _buildLeftPopover),
-                            CodeWrapper(builder: _buildLeftBottomPopover),
-                          ],
-                        ),
-                      ),
+                      CodeWrapper(builder: _buildLeftTopPopover),
+                      CodeWrapper(builder: _buildLeftPopover),
+                      CodeWrapper(builder: _buildLeftBottomPopover),
                     ],
                   ),
                 );
@@ -229,7 +215,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('带箭头'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -251,7 +237,7 @@ class _TPopoverPage extends State<TPopoverPage> {
     return LayoutBuilder(
       builder: (popoverContext, constrains) {
         return TButton(
-          size: TButtonSize.medium,
+          size: TButtonSize.large,
           child: const Text('不带箭头'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
@@ -270,14 +256,16 @@ class _TPopoverPage extends State<TPopoverPage> {
 
   @ExampleCode(group: 'popover')
   Widget _buildNCustomPopover(BuildContext context) {
-    var textStyle = TextStyle(
+    final textStyle = TextStyle(
       color: theme == TPopoverColorScheme.light
           ? context.tTheme.fontGyColor1
           : context.tTheme.fontWhColor1,
     );
+    final dividerColor = textStyle.color;
     return LayoutBuilder(
       builder: (popoverContext, constrains) {
         return TButton(
+          size: TButtonSize.large,
           child: const Text('自定义内容'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
@@ -298,7 +286,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                     ),
                     child: TText('选项1', style: textStyle),
                   ),
-                  const TDivider(),
+                  Container(height: 1, color: dividerColor),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
@@ -306,7 +294,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                     ),
                     child: TText('选项2', style: textStyle),
                   ),
-                  const TDivider(),
+                  Container(height: 1, color: dividerColor),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
@@ -637,7 +625,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('深色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -658,7 +646,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('浅色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -683,7 +671,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('品牌色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -708,7 +696,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('成功色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -733,7 +721,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('警告色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -758,7 +746,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('错误色'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -783,7 +771,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('顶部左'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -809,7 +797,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('顶部中'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -835,7 +823,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('顶部右'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -861,7 +849,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部左'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -887,7 +875,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部中'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -913,7 +901,7 @@ class _TPopoverPage extends State<TPopoverPage> {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('底部右'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
@@ -938,19 +926,22 @@ class _TPopoverPage extends State<TPopoverPage> {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('右侧上'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.rightTop,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧上'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '气泡内容',
+                  placement: TPopoverPlacement.rightTop,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -964,19 +955,22 @@ class _TPopoverPage extends State<TPopoverPage> {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('右侧中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.right,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧中'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '气泡内容',
+                  placement: TPopoverPlacement.right,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -990,19 +984,22 @@ class _TPopoverPage extends State<TPopoverPage> {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('右侧下'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.rightBottom,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('右侧下'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '气泡内容',
+                  placement: TPopoverPlacement.rightBottom,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -1016,19 +1013,22 @@ class _TPopoverPage extends State<TPopoverPage> {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('左侧上'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.leftTop,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('左侧上'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '气泡内容',
+                  placement: TPopoverPlacement.leftTop,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -1042,19 +1042,22 @@ class _TPopoverPage extends State<TPopoverPage> {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('左侧中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.left,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('左侧中'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '气泡内容',
+                  placement: TPopoverPlacement.left,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
@@ -1068,19 +1071,22 @@ class _TPopoverPage extends State<TPopoverPage> {
       margin: const EdgeInsets.all(8),
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('左侧下'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: '弹出气泡内容',
-                placement: TPopoverPlacement.leftBottom,
-                colorScheme: theme,
-              );
-            },
+          return SizedBox(
+            width: 223,
+            child: TButton(
+              size: TButtonSize.large,
+              child: const Text('左侧下'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  content: '气泡内容',
+                  placement: TPopoverPlacement.leftBottom,
+                  colorScheme: theme,
+                );
+              },
+            ),
           );
         },
       ),
