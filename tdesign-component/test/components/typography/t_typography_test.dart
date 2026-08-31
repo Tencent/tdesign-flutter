@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  // 复制交互依赖系统剪贴板，默认 fake-async 环境下平台通道不会主动返回，
+  // 这里 mock 掉 flutter/platform 通道，让 Clipboard.setData 同步完成。
+  setUp(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, (_) async => null);
+  });
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null);
+  });
+
   Widget wrap(Widget child, {Locale? locale}) {
     final theme = TThemeBuilder.light(TThemeData.defaultData());
     return MaterialApp(
       locale: locale ?? const Locale('zh'),
+      supportedLocales: const [Locale('zh'), Locale('en')],
       theme: theme,
       home: Scaffold(body: child),
     );
@@ -281,11 +295,11 @@ void main() {
 
     testWidgets('copyable 空数据时不回调 onCopied', (tester) async {
       var copied = false;
-      // TText.rich 不携带 data，copyText 为空字符串，_copy 提前返回不触发 onCopied。
+      // 纯空内容（无 data 且无 span 文本）时 copyText 为空，_copy 提前返回不触发 onCopied。
       await tester.pumpWidget(
         wrap(
           TText.rich(
-            const TextSpan(text: '富文本'),
+            const TextSpan(),
             copyable: true,
             onCopied: () => copied = true,
           ),

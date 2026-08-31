@@ -169,7 +169,7 @@ class TText extends StatelessWidget {
       return _rawText(context);
     }
     return _TInteractiveText(
-      copyText: data ?? '',
+      copyText: data ?? textSpan?.toPlainText() ?? '',
       copyable: copyable,
       expandable: expandable,
       expanded: expanded,
