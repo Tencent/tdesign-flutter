@@ -31,8 +31,6 @@ void main() {
       await tester.tap(trigger);
       await tester.pumpAndSettle();
 
-      expect(find.text('Move'), findsOneWidget);
-      expect(find.text('cancel'), findsOneWidget);
       await expectLater(
         find.byType(Overlay),
         matchesGoldenFile(

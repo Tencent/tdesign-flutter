@@ -6,7 +6,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/t_action_sheet_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
+import 'action_sheet_demo_test_spec.dart';
+import 'demo_page_test_utils.dart';
+
 void main() {
+  registerDemoStructureTests(actionSheetDemoPageTestSpec);
+
   Widget buildPage() {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
@@ -29,6 +34,19 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
     final trigger = find.widgetWithText(TButton, '常规宫格型');
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> openBasicList(WidgetTester tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    final trigger = find.widgetWithText(TButton, '常规列表型');
     await tester.scrollUntilVisible(
       trigger,
       200,
@@ -74,6 +92,16 @@ void main() {
     expect(find.text('微信'), findsOneWidget);
     expect(find.text('复制'), findsOneWidget);
     expect(find.text('取消'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('常规列表型触发后展示内容', (tester) async {
+    configurePhone(tester);
+
+    await openBasicList(tester);
+
+    expect(find.text('Move'), findsOneWidget);
+    expect(find.text('cancel'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
