@@ -81,6 +81,7 @@ void main() {
       );
       expect(trigger, findsOneWidget);
     }
+    expect(find.text('单元测试'), findsNothing);
   });
 
   testWidgets('常规宫格型在手机视口完整展示且不溢出', (tester) async {

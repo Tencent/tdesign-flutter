@@ -13,6 +13,7 @@ class TActionSheetPage extends StatelessWidget {
       title: tTitle(context),
       desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
       exampleCodeGroup: 'action_sheet',
+      showTestModule: false,
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '常规列表型', builder: _basicList),

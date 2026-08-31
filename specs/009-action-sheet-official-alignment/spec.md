@@ -35,6 +35,7 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - 面板描述和 item 描述均使用 `textColorPlaceholder`。
 - 分页当前点使用 `brandNormalColor`，非当前点使用 `textDisabledColor`。
 - Example 公开展示 9 个官方场景：3 个列表类型、3 个宫格类型、1 个状态场景和 2 个对齐场景。
+- 公开页在“组件样式”后结束，不展示仅供内部验证的“单元测试”模块。
 
 ## 验收标准
 
