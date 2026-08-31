@@ -594,10 +594,7 @@ class _TButtonPageState extends State<TButtonPage> {
         // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
         data: Theme.of(context).mergeExtension(
             TLoadingThemeData(iconColor: context.tTheme.whiteColor1)),
-        child: const TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.circle,
-        ),
+        child: const TLoading(icon: TLoadingIcon.circle),
       ),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,

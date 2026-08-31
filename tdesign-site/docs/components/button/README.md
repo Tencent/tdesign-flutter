@@ -153,7 +153,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return TButton(
       text: '加载中',
       iconWidget: TLoading(
-        size: TLoadingSize.small,
         icon: TLoadingIcon.circle,
         iconColor: TTheme.of(context).whiteColor1,
       ),
@@ -888,5 +887,4 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```dart
 typedef TButtonEvent = void Function();
 ```
-
 
