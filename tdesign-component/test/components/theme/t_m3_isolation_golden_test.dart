@@ -109,7 +109,7 @@ class _ControlColumn extends StatelessWidget {
               const SizedBox(height: 12),
               TProgress(variant: TProgressVariant.linear),
               const SizedBox(height: 20),
-              const TLoading(size: TLoadingSize.medium, text: 'Loading'),
+              const TLoading(text: 'Loading'),
               const SizedBox(height: 12),
               const Row(
                 children: [

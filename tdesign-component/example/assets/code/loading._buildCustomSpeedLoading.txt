@@ -1,33 +1,69 @@
-/// 自定义尺寸
+/// 加载速度
     Widget _buildCustomSpeedLoading(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Theme(
           data: Theme.of(context).mergeExtension(
             TLoadingThemeData(
               axis: Axis.horizontal,
-              duration: _currentSliderValue.round(),
+              duration: (2000 - _currentSliderValue).round(),
             ),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
+            size: 26,
             icon: TLoadingIcon.circle,
-            text: '加载中…',
+            text: '加载中...',
           ),
         ),
         const SizedBox(height: 16),
-        TSlider(
-          value: _currentSliderValue,
-          min: -20,
-          max: 2000,
-          divisions: 100,
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const min = 100.0;
+            const max = 1500.0;
+            const trackInset = 24.0;
+            const labelWidth = 48.0;
+            final progress = (_currentSliderValue - min) / (max - min);
+            final trackWidth = constraints.maxWidth - trackInset * 2;
+            final thumbCenter = trackInset + trackWidth * progress;
+            final labelLeft = (thumbCenter - labelWidth / 2).clamp(
+              0.0,
+              constraints.maxWidth - labelWidth,
+            );
+            return SizedBox(
+              height: 64,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: labelLeft,
+                    width: labelWidth,
+                    child: Text(
+                      '${_currentSliderValue.round()}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: TSlider(
+                      value: _currentSliderValue,
+                      min: min,
+                      max: max,
+                      divisions: 100,
+                      onChanged: (double value) {
+                        setState(() {
+                          _currentSliderValue = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
-        )
+        ),
       ],
     );
   }
