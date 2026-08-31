@@ -9,31 +9,50 @@ void main() {
   registerDemoGoldenTests(messageDemoPageTestSpec);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    testWidgets('message closeable ${mode.name} opened golden', (tester) async {
-      await pumpDemoPageAtPhoneViewport(tester, messageDemoPageTestSpec, mode);
+    for (final demoCase in messageDemoCases) {
+      testWidgets('message ${demoCase.name} ${mode.name} opened golden', (
+        tester,
+      ) async {
+        await pumpDemoPageAtPhoneViewport(
+          tester,
+          messageDemoPageTestSpec,
+          mode,
+        );
+        await _openMessage(tester, demoCase);
 
-      final trigger = find.widgetWithText(TButton, '带关闭的通知');
-      final scrollable = find.descendant(
-        of: find.byType(CustomScrollView).first,
-        matching: find.byType(Scrollable),
-      );
-      await tester.scrollUntilVisible(
-        trigger,
-        200,
-        scrollable: scrollable.first,
-      );
-      await tester.tap(trigger);
-      await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(Overlay),
+          matchesGoldenFile(
+            'goldens/message_${demoCase.name}_opened_${mode.name}.png',
+          ),
+        );
+        await disposeDemoPage(tester);
+      }, tags: 'golden');
+    }
+  }
+}
 
-      expect(find.text('这是一条带关闭的消息通知'), findsOneWidget);
-      expect(find.text('按钮'), findsOneWidget);
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/message_closeable_opened_${mode.name}.png',
-        ),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
+Future<void> _openMessage(WidgetTester tester, MessageDemoCase demoCase) async {
+  final trigger = find.widgetWithText(TButton, demoCase.triggerText);
+  final scrollable = find.descendant(
+    of: find.byType(CustomScrollView).first,
+    matching: find.byType(Scrollable),
+  );
+  await tester.scrollUntilVisible(trigger, 200, scrollable: scrollable.first);
+  final overflow = tester.getRect(trigger).bottom - 780;
+  if (overflow > 0) {
+    await tester.drag(scrollable.first, Offset(0, -overflow - 16));
+    await tester.pumpAndSettle();
+  }
+  await tester.tap(trigger);
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 400));
+
+  expect(find.text(demoCase.visibleText), findsOneWidget);
+  if (demoCase.actionText case final actionText?) {
+    expect(find.text(actionText), findsOneWidget);
+  }
+  if (demoCase.lifetime == MessageDemoLifetime.declarative) {
+    expect(find.widgetWithText(TButton, '隐藏消息'), findsOneWidget);
   }
 }

@@ -70,4 +70,13 @@
 - [x] Flutter 3.32.0：Message 组件 36/36、Demo 功能 2/2、严格 analyze 0 问题，生产源码覆盖率 254/258 = 98.45%，回归登记自测 11/11。
 - [x] Flutter 3.47.0：clean 后 Message 组件 36/36、Demo 功能 2/2、严格 analyze 0 问题。
 - [x] 示例 codegen `--check`、Message API 源码生成与组件站点契约检查通过。
-- [ ] Flutter 3.32.0 Linux Golden 待 CI 复验；当前 macOS 因字体抗锯齿产生 4.10%~4.75% 平台差异，已人工检查，未覆盖 Linux 基线。
+- [x] Flutter 3.32.0 Linux Golden 已在 CI 同款镜像中更新并无参数复跑 22/22 通过，未使用 macOS 结果覆盖 Linux 基线。
+
+## 2026-09-01 十入口触发态 Golden 完备复验
+
+- [x] 小程序公开 Demo 的十个入口均通过真实滚动与点击触发目标状态；初始隐藏页不替代触发态证据。
+- [x] 每个入口均保存 Flutter 3.32.0 Linux light / dark Overlay Golden；加上明暗初始页面共 22 项，更新后无参数复跑 22/22 通过。
+- [x] 循环跑马灯在点击后固定 400ms 保存快照，不使用无法收敛的 `pumpAndSettle`，连续两次 Linux 测试结果一致。
+- [x] Demo 功能测试覆盖十个入口的展示与生命周期，并真实点击关闭按钮、声明式隐藏及“按钮”/“链接”操作，13/13 通过。
+- [x] Flutter 3.32.0 / 3.47.0：Message 组件测试 36/36、Demo 功能测试 13/13、严格 analyze 0 问题。
+- [x] Message 生产源码覆盖率维持 254/258 = 98.45%，组件与视觉回归登记自测 6/6 通过。

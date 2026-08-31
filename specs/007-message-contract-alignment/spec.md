@@ -109,15 +109,15 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 ## 验收标准
 
-- [ ] 小程序公开 Demo 的两个分组、十个实例、顺序与文案在 Flutter 示例页落地。
+- [x] 小程序公开 Demo 的两个分组、十个实例、顺序与文案在 Flutter 示例页落地。
 - [ ] 公开页不展示“关闭所有通知”扩展模块，且不因 Demo 对齐新增公开 API。
-- [ ] 明暗主题整页 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页截图完成人工比对。
+- [x] 明暗主题整页及十个真实点击触发态 Golden 在 Flutter 3.32.0 Linux 可复现，且与小程序实际页截图完成人工比对。
 - [ ] `example/assets/code/message.*.txt` 与 `t_message_page.dart` 同步（codegen `--check` 通过）。
 - [ ] `tdesign-site/docs/components/message/README.md` 不再包含已废弃 API，示例可编译。
 - [ ] 图标-文本间距为 8px，marquee 宽度计算同步更新。
 - [ ] 声明式默认隐藏；命令式触发后默认显示，并在 3 秒后完成关闭与 Overlay 销毁。
-- [ ] 默认消息在导航栏下方全宽展示，图标 22px、body-medium 与基础阴影均有 Widget / Golden 证据。
+- [x] 默认消息在导航栏下方全宽展示，图标 22px、body-medium 与基础阴影均有 Widget / Golden 证据。
 - [ ] 默认位置连续触发只保留当前消息；显式 offset 多消息仍可用，且未新增同义公开状态。
-- [ ] `lib/src/components/message/` 行覆盖率 ≥95%。
-- [ ] Message 相关 Widget 测试通过。
-- [ ] `flutter analyze --fatal-infos` 通过。
+- [x] `lib/src/components/message/` 行覆盖率 ≥95%。
+- [x] Message 相关 Widget 测试通过。
+- [x] `flutter analyze --fatal-infos` 通过。
