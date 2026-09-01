@@ -37,7 +37,7 @@ class _TCascaderPageState extends State<TCascaderPage> {
           label: '天津市',
           value: 'tianjin-city',
           children: [
-            TCascaderOption(label: '和平区', value: 'heping'),
+            TCascaderOption(label: '和平区', value: 'peace-district'),
             TCascaderOption(label: '蓟州区', value: 'jizhou'),
           ],
         ),
