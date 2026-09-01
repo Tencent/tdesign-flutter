@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 import 't_badge_theme_data.dart';
 
 /// 徽标形态。
@@ -86,7 +87,18 @@ class TBadge extends StatelessWidget {
     final isDot = variant == TBadgeVariant.dot;
     final isSmall = variant == TBadgeVariant.small;
     final text = label ?? '';
-    final textLabel = Text(text);
+    final textLabel = TText(
+      text,
+      style: textStyle.copyWith(
+        color: textColor,
+        leadingDistribution:
+            textStyle.leadingDistribution ?? TextLeadingDistribution.even,
+      ),
+      textHeightBehavior: const TextHeightBehavior(
+        applyHeightToFirstAscent: false,
+        applyHeightToLastDescent: false,
+      ),
+    );
     final badgeLabel = isDot
         ? null
         : isSmall

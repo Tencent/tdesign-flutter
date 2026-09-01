@@ -1,6 +1,7 @@
 import 'dart:io';
 
 const componentTargets = <String, List<String>>{
+  'badge': ['lib/src/components/badge/'],
   'button': ['lib/src/components/button/'],
   'tag': ['lib/src/components/tag/'],
   'popover': ['lib/src/components/popover/'],
