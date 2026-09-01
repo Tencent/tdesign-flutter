@@ -178,6 +178,12 @@ void main() {
       ));
       await tester.pumpAndSettle();
       final widget = buildCancelButton(ctx, true, '取消', () {});
+      final divider = widget as Container;
+      expect(divider.color, TThemeData.defaultData().bgColorPage);
+      expect(
+        (divider.padding! as EdgeInsets).top,
+        TThemeData.defaultData().spacer16,
+      );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.text('取消'), findsOneWidget);
     });
@@ -192,6 +198,12 @@ void main() {
       ));
       await tester.pumpAndSettle();
       final widget = buildCancelButton(ctx, false, null, null);
+      final divider = widget as Container;
+      expect(divider.color, TThemeData.defaultData().bgColorPage);
+      expect(
+        (divider.padding! as EdgeInsets).top,
+        TThemeData.defaultData().spacer8,
+      );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.byType(GestureDetector), findsOneWidget);
     });

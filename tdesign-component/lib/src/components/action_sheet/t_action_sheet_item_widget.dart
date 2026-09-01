@@ -151,9 +151,11 @@ Widget buildCancelButton(
   String? cancelText,
   VoidCallback? onCancel,
 ) {
-  return Padding(
+  return Container(
+    color: context.tTheme.bgColorPage,
     padding: EdgeInsets.only(
-        top: showPagination ? context.tTheme.spacer16 : context.tTheme.spacer8),
+      top: showPagination ? context.tTheme.spacer16 : context.tTheme.spacer8,
+    ),
     child: GestureDetector(
       onTap: () {
         onCancel?.call();

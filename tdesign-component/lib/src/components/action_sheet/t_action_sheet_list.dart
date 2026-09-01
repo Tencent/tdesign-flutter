@@ -266,32 +266,15 @@ class TActionSheetList extends StatelessWidget {
 
   /// 构建取消按钮
   Widget _buildCancelButton(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          onCancel?.call();
-          Navigator.maybePop(context);
-        },
-        child: Column(
-          children: [
-            Container(
-              color: context.tTheme.bgColorContainer,
-              height: 48,
-              margin: EdgeInsets.only(top: context.tTheme.spacer8),
-              child: Center(
-                child: TText(
-                  cancelText ?? context.resource.cancel,
-                  font: context.tTheme.fontBodyLarge,
-                  textColor: context.tTheme.textColorPrimary,
-                ),
-              ),
-            ),
-            useSafeArea
-                ? Container(
-                    color: context.tTheme.bgColorContainer,
-                    height: MediaQuery.of(context).padding.bottom,
-                  )
-                : const SizedBox.shrink(),
-          ],
-        ));
+    return Column(
+      children: [
+        buildCancelButton(context, false, cancelText, onCancel),
+        if (useSafeArea)
+          Container(
+            color: context.tTheme.bgColorContainer,
+            height: MediaQuery.of(context).padding.bottom,
+          ),
+      ],
+    );
   }
 }
