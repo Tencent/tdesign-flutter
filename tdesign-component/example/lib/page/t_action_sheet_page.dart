@@ -198,13 +198,8 @@ class TActionSheetPage extends StatelessWidget {
     TActionSheetItem(label: '删除', icon: const Icon(TIcons.delete)),
   ];
 
-  List<TActionSheetItem> _gridItems(BuildContext context) => [
-    ..._appGridItems(context).take(4),
-    TActionSheetItem(label: '收藏', icon: const Icon(TIcons.star)),
-    TActionSheetItem(label: '刷新', icon: const Icon(TIcons.refresh)),
-    TActionSheetItem(label: '下载', icon: const Icon(TIcons.download)),
-    TActionSheetItem(label: '复制', icon: const Icon(TIcons.file_copy)),
-  ];
+  List<TActionSheetItem> _gridItems(BuildContext context) =>
+      _appGridItems(context);
 
   List<TActionSheetItem> _badgeGridItems(BuildContext context) {
     final items = _gridItems(context);

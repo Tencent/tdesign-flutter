@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_grid.dart';
+import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_item_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/t_action_sheet_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
@@ -163,9 +164,78 @@ void main() {
 
     expect(find.byType(TActionSheetGrid), findsOneWidget);
     expect(find.text('微信'), findsOneWidget);
-    expect(find.text('复制'), findsOneWidget);
+    expect(find.text('文件'), findsOneWidget);
     expect(find.text('取消'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('常规宫格与多行滚动宫格首屏 Item 视觉一致', (tester) async {
+    configurePhone(tester);
+
+    Future<
+      ({
+        Size itemSize,
+        Size iconSlotSize,
+        Size iconSize,
+        double iconTextGap,
+        TextStyle textStyle,
+      })
+    >
+    readMetrics(Future<void> Function(WidgetTester) open) async {
+      await open(tester);
+      final item = find
+          .ancestor(
+            of: find.text('微信'),
+            matching: find.byType(TActionSheetItemWidget),
+          )
+          .first;
+      final iconSlot = find
+          .descendant(
+            of: item,
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is SizedBox &&
+                  widget.width == 48 &&
+                  widget.height == 48,
+            ),
+          )
+          .first;
+      final icon = find.descendant(of: item, matching: find.byType(Icon)).first;
+      final label = find
+          .descendant(
+            of: item,
+            matching: find.byWidgetPredicate(
+              (widget) => widget is TText && widget.data == '微信',
+            ),
+          )
+          .first;
+      final labelWidget = tester.widget<TText>(label);
+      final metrics = (
+        itemSize: tester.getSize(item),
+        iconSlotSize: tester.getSize(iconSlot),
+        iconSize: tester.getSize(icon),
+        iconTextGap:
+            tester.getTopLeft(label).dy - tester.getBottomLeft(iconSlot).dy,
+        textStyle: labelWidget.getTextStyle(tester.element(label)),
+      );
+      await tester.tap(find.text('取消'));
+      await tester.pumpAndSettle();
+      return metrics;
+    }
+
+    final basic = await readMetrics(openBasicGrid);
+    final scroll = await readMetrics(openScrollGrid);
+
+    expect(scroll.itemSize, basic.itemSize);
+    expect(scroll.iconSlotSize, basic.iconSlotSize);
+    expect(scroll.iconSlotSize, const Size.square(48));
+    expect(scroll.iconSize, basic.iconSize);
+    expect(scroll.iconSize, const Size.square(24));
+    expect(scroll.iconTextGap, basic.iconTextGap);
+    expect(scroll.iconTextGap, 8);
+    expect(scroll.textStyle.fontSize, basic.textStyle.fontSize);
+    expect(scroll.textStyle.height, basic.textStyle.height);
+    expect(scroll.textStyle.fontWeight, basic.textStyle.fontWeight);
   });
 
   testWidgets('多行滚动宫格首屏按 count=8 rows=2 展示前八项', (tester) async {
