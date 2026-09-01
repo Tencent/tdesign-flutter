@@ -491,6 +491,95 @@ void main() {
   });
 
   group('TRate content and theme', () {
+    testWidgets(
+      'description uses the complete bodyLarge line box and centers with stars',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            const TRate(
+              value: 3,
+              texts: ['很差', '较差', '一般', '满意', '惊喜'],
+              onChanged: _noop,
+            ),
+          ),
+        );
+
+        final context = tester.element(find.byType(TRate));
+        final font = context.tTheme.fontBodyLarge!;
+        final text = tester.widget<Text>(find.text('一般'));
+        final textRect = tester.getRect(find.text('一般'));
+        final starRect = tester.getRect(find.byIcon(TIcons.star_filled).first);
+
+        expect(textRect.height, closeTo(font.size * font.height, 0.01));
+        expect(text.style?.fontSize, font.size);
+        expect(text.style?.height, font.height);
+        expect(text.style?.fontWeight, font.fontWeight);
+        expect(text.style?.leadingDistribution, TextLeadingDistribution.even);
+        expect(textRect.center.dy, closeTo(starRect.center.dy, 0.01));
+      },
+    );
+
+    testWidgets('description keeps core metrics under an ambient text style', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const DefaultTextStyle(
+            style: TextStyle(
+              fontSize: 30,
+              height: 3,
+              fontWeight: FontWeight.w900,
+            ),
+            child: TRate(
+              value: 3,
+              texts: ['很差', '较差', '一般', '满意', '惊喜'],
+              onChanged: _noop,
+            ),
+          ),
+        ),
+      );
+
+      final context = tester.element(find.byType(TRate));
+      final font = context.tTheme.fontBodyLarge!;
+      final text = tester.widget<Text>(find.text('一般'));
+      final textRect = tester.getRect(find.text('一般'));
+      final starRect = tester.getRect(find.byIcon(TIcons.star_filled).first);
+
+      expect(text.style?.fontSize, font.size);
+      expect(text.style?.height, font.height);
+      expect(text.style?.fontWeight, font.fontWeight);
+      expect(textRect.height, closeTo(font.size * font.height, 0.01));
+      expect(textRect.center.dy, closeTo(starRect.center.dy, 0.01));
+    });
+
+    testWidgets('description remains centered and unclipped while scaling', (
+      tester,
+    ) async {
+      for (final scale in const [1.0, 1.5, 2.0]) {
+        await tester.pumpWidget(
+          wrap(
+            MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: const TRate(
+                value: 3,
+                texts: ['很差', '较差', '一般', '满意', '惊喜'],
+                onChanged: _noop,
+              ),
+            ),
+          ),
+        );
+
+        final context = tester.element(find.byType(TRate));
+        final font = context.tTheme.fontBodyLarge!;
+        final textRect = tester.getRect(find.text('一般'));
+        final starRect = tester.getRect(find.byIcon(TIcons.star_filled).first);
+
+        expect(textRect.height, closeTo(font.size * font.height * scale, 0.01));
+        expect(textRect.center.dy, closeTo(starRect.center.dy, 0.01));
+        expect(tester.takeException(), isNull);
+      }
+    });
+
     testWidgets('text rating fits a narrow cell in vertical demo layout', (
       tester,
     ) async {
@@ -516,6 +605,9 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.text('一般'), findsOneWidget);
+      final textRect = tester.getRect(find.text('一般'));
+      final starRect = tester.getRect(find.byIcon(TIcons.star_filled).first);
+      expect(textRect.center.dy, closeTo(starRect.center.dy, 0.01));
     });
 
     testWidgets('long text shrinks in a bounded parent without textWidth', (
@@ -605,7 +697,15 @@ void main() {
       );
 
       expect(find.text('ok'), findsOneWidget);
-      expect(tester.widget<Text>(find.text('ok')).style, style);
+      final resolvedTextStyle = tester.widget<Text>(find.text('ok')).style;
+      expect(resolvedTextStyle?.color, style.color);
+      expect(resolvedTextStyle?.fontSize, style.fontSize);
+      expect(resolvedTextStyle?.height, 1.5);
+      expect(resolvedTextStyle?.fontWeight, FontWeight.w400);
+      expect(
+        resolvedTextStyle?.leadingDistribution,
+        TextLeadingDistribution.even,
+      );
       final icons = tester.widgetList<Icon>(find.byIcon(TIcons.star_filled));
       expect(icons.any((icon) => icon.color == Colors.red), isTrue);
       expect(icons.any((icon) => icon.color == Colors.blue), isTrue);
@@ -657,6 +757,45 @@ void main() {
         expect(icons.every((icon) => icon.size == 30), isTrue);
       },
     );
+
+    testWidgets('disabled text color follows the TDesign token', (
+      tester,
+    ) async {
+      final token =
+          TThemeData.defaultData().copyWith(
+                colorMap: {'textDisabledColor': Colors.orange},
+              )
+              as TThemeData;
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(value: 2, texts: ['bad', 'ok', 'good', 'great', 'best']),
+          token: token,
+        ),
+      );
+
+      expect(tester.widget<Text>(find.text('ok')).style?.color, Colors.orange);
+    });
+
+    testWidgets('disabled text color applies Material onSurface opacity', (
+      tester,
+    ) async {
+      final colorScheme = ColorScheme.fromSeed(
+        seedColor: Colors.teal,
+      ).copyWith(onSurface: Colors.purple);
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(value: 2, texts: ['bad', 'ok', 'good', 'great', 'best']),
+          colorScheme: colorScheme,
+        ),
+      );
+
+      expect(
+        tester.widget<Text>(find.text('ok')).style?.color,
+        Colors.purple.withValues(alpha: 0.38),
+      );
+    });
 
     testWidgets('disabled colors come from global tokens', (tester) async {
       await tester.pumpWidget(

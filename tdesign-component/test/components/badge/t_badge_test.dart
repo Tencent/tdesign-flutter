@@ -114,6 +114,74 @@ void main() {
   });
 
   group('布局与形态', () {
+    testWidgets('文字标签使用 TText 收紧单行外侧行高并均分 leading', (tester) async {
+      await tester.pumpWidget(app(const TBadge(label: '8')));
+
+      final label = tester.widget<TText>(find.widgetWithText(TText, '8'));
+      expect(label.style?.fontSize, token.fontMarkExtraSmall?.size);
+      expect(label.style?.height, token.fontMarkExtraSmall?.height);
+      expect(label.style?.fontWeight, token.fontMarkExtraSmall?.fontWeight);
+      expect(label.style?.leadingDistribution, TextLeadingDistribution.even);
+      expect(label.textHeightBehavior?.applyHeightToFirstAscent, isFalse);
+      expect(label.textHeightBehavior?.applyHeightToLastDescent, isFalse);
+    });
+
+    testWidgets('显式 leadingDistribution 保持 BadgeTheme 配置', (tester) async {
+      const textStyle = TextStyle(
+        fontSize: 11,
+        height: 1.4,
+        leadingDistribution: TextLeadingDistribution.proportional,
+      );
+      await tester.pumpWidget(app(
+        const TBadge(label: '12'),
+        localBadgeTheme: const BadgeThemeData(textStyle: textStyle),
+      ));
+
+      final label = tester.widget<TText>(find.widgetWithText(TText, '12'));
+      expect(badgeOf(tester).textStyle, textStyle);
+      expect(
+        label.style?.leadingDistribution,
+        TextLeadingDistribution.proportional,
+      );
+    });
+
+    testWidgets('单字符与多字符标签在文本缩放后仍由徽标容器居中', (tester) async {
+      const key8 = Key('badge-8');
+      const key12 = Key('badge-12');
+      const key99Plus = Key('badge-99-plus');
+      await tester.pumpWidget(app(
+        const MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TBadge(key: key8, label: '8'),
+              SizedBox(width: 8),
+              TBadge(key: key12, label: '12'),
+              SizedBox(width: 8),
+              TBadge(key: key99Plus, label: '99+'),
+            ],
+          ),
+        ),
+      ));
+
+      for (final (key, text) in [
+        (key8, '8'),
+        (key12, '12'),
+        (key99Plus, '99+'),
+      ]) {
+        final badge = find.byKey(key);
+        final label = find.descendant(
+          of: badge,
+          matching: find.widgetWithText(TText, text),
+        );
+        expect(
+          (tester.getCenter(label).dy - tester.getCenter(badge).dy).abs(),
+          lessThan(0.01),
+        );
+      }
+    });
+
     testWidgets('无 child 时 normal 是独立徽标', (tester) async {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 

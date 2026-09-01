@@ -18,6 +18,12 @@ class VisualTestSuite {
 
 const visualTestSuites = <VisualTestSuite>[
   VisualTestSuite(
+    'badge',
+    'Badge Component',
+    workingDirectory: '.',
+    testFiles: ['test/components/badge/t_badge_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'button',
     'Button Demo',
     workingDirectory: 'example',
