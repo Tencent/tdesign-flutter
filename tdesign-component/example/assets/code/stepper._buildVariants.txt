@@ -1,17 +1,18 @@
-Widget _buildVariants(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _normalValue,
-          variant: TStepperVariant.normal,
-          onChanged: (value) => setState(() => _normalValue = value),
-        ),
-        TStepper(
-          value: _filledValue,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _filledValue = value),
-        ),
-        TStepper(
-          value: _outlineValue,
-          variant: TStepperVariant.outline,
-          onChanged: (value) => setState(() => _outlineValue = value),
-        ),
-      ]);
+Widget _buildVariants(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-variants'),
+      value: _filled,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _filled = value),
+    ),
+    TStepper(
+      value: _outline,
+      variant: TStepperVariant.outline,
+      onChanged: (value) => setState(() => _outline = value),
+    ),
+    TStepper(
+      value: _normal,
+      variant: TStepperVariant.normal,
+      onChanged: (value) => setState(() => _normal = value),
+    ),
+  ]);

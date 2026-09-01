@@ -14,6 +14,10 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`StepperGoldenCJK-Regular.otf` 仅补充 Stepper 整页 Golden 的“步”字，字符清单见
+`stepper_demo_glyphs.txt`，不会改变既有组件的字形选择。子集 SHA-256 为
+`6df8e74aa398c55ff2140025fd79c31300653bc02ddf31d35ec94f9c5ae3d0d0`。
+
 `RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为
 `cdd6b80b52382a5345597848ba58ef53ddf630aa29bfa1a4165b63264c000c2d`。
@@ -36,5 +40,6 @@ Upload 等既有 Golden 的字形选择与像素基线。
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
 更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
+更新 Stepper 页面文案时，更新 Stepper 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

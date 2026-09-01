@@ -1,20 +1,21 @@
-Widget _buildSizes(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _smallValue,
-          size: TStepperSize.small,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _smallValue = value),
-        ),
-        TStepper(
-          value: _mediumValue,
-          size: TStepperSize.medium,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _mediumValue = value),
-        ),
-        TStepper(
-          value: _largeValue,
-          size: TStepperSize.large,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _largeValue = value),
-        ),
-      ]);
+Widget _buildSizes(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-sizes'),
+      value: _large,
+      size: TStepperSize.large,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _large = value),
+    ),
+    TStepper(
+      value: _medium,
+      size: TStepperSize.medium,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _medium = value),
+    ),
+    TStepper(
+      value: _small,
+      size: TStepperSize.small,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _small = value),
+    ),
+  ]);
