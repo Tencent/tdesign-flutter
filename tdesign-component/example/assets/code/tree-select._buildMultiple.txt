@@ -1,8 +1,7 @@
-Widget _buildMultiple(BuildContext context) {
-    return TTreeSelect(
-      options: _options,
-      value: _multipleValue,
-      multiple: true,
-      onChanged: (value) => setState(() => _multipleValue = value),
-    );
-  }
+Widget _buildMultiple(BuildContext context) => TTreeSelect(
+    key: const ValueKey('tree-select-multiple'),
+    options: _basicOptions,
+    value: _multiple,
+    multiple: true,
+    onChanged: (value) => setState(() => _multiple = value),
+  );
