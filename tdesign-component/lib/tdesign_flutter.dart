@@ -89,8 +89,8 @@ export 'src/components/loading/t_loading_controller.dart';
 export 'src/components/loading/t_loading_theme_data.dart'
     show TLoadingThemeData;
 export 'src/components/message/t_message.dart';
-export 'src/components/message/t_message_theme_data.dart'
-    show TMessageThemeData, TMessageVariant;
+export 'src/components/message/t_message_theme_data.dart' show TMessageThemeData;
+export 'src/components/message/t_message_types.dart' show TMessageStatus;
 export 'src/components/navbar/t_nav_bar.dart';
 export 'src/components/navbar/t_nav_bar_theme_data.dart'
     show TNavBarThemeData, TNavBarBorder;

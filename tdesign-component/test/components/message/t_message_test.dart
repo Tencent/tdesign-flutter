@@ -23,27 +23,20 @@ void main() {
   }
 
   group('TMessage 渲染', () {
-    testWidgets('基础内容与默认图标', (tester) async {
+    testWidgets('构造后显示内容与默认图标', (tester) async {
       await tester.pumpWidget(wrap(const TMessage(content: '消息')));
       await tester.pump();
       expect(find.text('消息'), findsOneWidget);
       expect(find.byIcon(TIcons.error_circle_filled), findsOneWidget);
     });
 
-    testWidgets('visible=false 不渲染内容', (tester) async {
-      await tester.pumpWidget(
-        wrap(const TMessage(content: '隐藏', visible: false)),
-      );
-      expect(find.text('隐藏'), findsNothing);
-    });
-
-    testWidgets('四种语义色图标均可渲染', (tester) async {
-      for (final variant in TMessageVariant.values) {
+    testWidgets('四种语义状态图标均可渲染', (tester) async {
+      for (final status in TMessageStatus.values) {
         await tester.pumpWidget(
-          wrap(TMessage(content: variant.name, variant: variant)),
+          wrap(TMessage(content: status.name, status: status)),
         );
         await tester.pump();
-        expect(find.text(variant.name), findsOneWidget);
+        expect(find.text(status.name), findsOneWidget);
       }
     });
 
@@ -65,41 +58,40 @@ void main() {
       expect(find.byIcon(Icons.star), findsOneWidget);
     });
 
-    testWidgets('链接配置与颜色覆盖生效', (tester) async {
+    testWidgets('操作组件保留自身外观与点击行为', (tester) async {
       var pressed = false;
       await tester.pumpWidget(
         wrap(
           TMessage(
             content: '带链接',
             duration: null,
-            link: TMessageLink(
-              name: '详情',
-              uri: Uri(path: '/detail'),
-              color: Colors.red,
+            action: TLink(
+              child: const Text('详情'),
+              colorScheme: TLinkColorScheme.danger,
+              onPressed: () => pressed = true,
             ),
-            onLinkPressed: () => pressed = true,
           ),
         ),
-      );
-      expect(
-        DefaultTextStyle.of(tester.element(find.text('详情'))).style.color,
-        Colors.red,
       );
       await tester.tap(find.text('详情'));
       expect(pressed, isTrue);
     });
 
-    testWidgets('长内容配合链接和关闭按钮不应溢出', (tester) async {
-      const longLink = '这是一个非常非常非常长的链接文案用于验证不会换行';
+    testWidgets('长内容配合操作和关闭按钮不应溢出', (tester) async {
+      const longAction = '这是一个非常非常非常长的操作文案用于验证不会换行';
       await tester.pumpWidget(
         wrap(
           TMessage(
             content: '这是一段非常非常非常长的消息内容用于验证布局不会被撑坏',
             duration: null,
             showCloseButton: true,
-            link: TMessageLink(
-              name: longLink,
-              uri: Uri(path: '/detail'),
+            action: TLink(
+              child: const Text(
+                longAction,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              onPressed: () {},
             ),
           ),
         ),
@@ -108,11 +100,11 @@ void main() {
       final contentText = tester.widget<Text>(
         find.text('这是一段非常非常非常长的消息内容用于验证布局不会被撑坏'),
       );
-      final linkText = tester.widget<Text>(find.text(longLink));
+      final actionText = tester.widget<Text>(find.text(longAction));
       expect(contentText.maxLines, 1);
       expect(contentText.overflow, TextOverflow.ellipsis);
-      expect(linkText.maxLines, 1);
-      expect(linkText.overflow, TextOverflow.ellipsis);
+      expect(actionText.maxLines, 1);
+      expect(actionText.overflow, TextOverflow.ellipsis);
       expect(find.byIcon(TIcons.close), findsOneWidget);
     });
 
@@ -127,14 +119,14 @@ void main() {
       final box = tester.widget<SizedBox>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 288,
+              widget is SizedBox && widget.height == 48 && widget.width == 320,
         ),
       );
-      expect(box.width, 288);
+      expect(box.width, 320);
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      expect(positioned.left, 16);
+      expect(positioned.left, 0);
     });
 
     testWidgets('关闭按钮完成关闭生命周期', (tester) async {
@@ -189,17 +181,32 @@ void main() {
       expect(ended, isTrue);
     });
 
-    testWidgets('Theme 控制背景、形状、阴影与默认偏移', (tester) async {
+    testWidgets('默认 3 秒关闭，null 保持显示，非正数无效', (tester) async {
+      await tester.pumpWidget(wrap(const TMessage(content: '默认时长')));
+      await tester.pump(const Duration(milliseconds: 2999));
+      expect(find.text('默认时长'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 1));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('默认时长'), findsNothing);
+
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+      await tester.pumpWidget(
+        wrap(const TMessage(content: '常驻消息', duration: null)),
+      );
+      await tester.pump(const Duration(seconds: 4));
+      expect(find.text('常驻消息'), findsOneWidget);
+    });
+
+    testWidgets('Theme 控制背景、形状与阴影，实例 offset 控制位置', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TMessage(content: '主题', duration: null),
+          const TMessage(content: '主题', duration: null, offset: Offset(20, 40)),
           messageTheme: const TMessageThemeData(
             backgroundColor: Colors.yellow,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(4)),
             ),
             elevation: 2,
-            defaultOffset: Offset(20, 40),
           ),
         ),
       );
@@ -210,13 +217,12 @@ void main() {
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      // 343 宽消息在 375 宽屏幕中最多只能位于 left=16，安全区会收口
-      // Theme 提供的期望坐标，避免右侧越出可视区域。
-      expect(positioned.left, 16);
+      // 默认全宽消息会把 Theme 期望坐标收口到安全可视区域。
+      expect(positioned.left, 0);
       expect(positioned.top, 40);
     });
 
-    testWidgets('默认位置仅在与顶部安全区冲突时调整', (tester) async {
+    testWidgets('默认位置位于安全区和导航栏下方', (tester) async {
       await tester.pumpWidget(
         wrap(
           const TMessage(content: '默认安全位置', duration: null),
@@ -227,7 +233,7 @@ void main() {
       var positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      expect(positioned.top, 80);
+      expect(positioned.top, 100);
 
       await tester.pumpWidget(
         wrap(
@@ -238,7 +244,7 @@ void main() {
       positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      expect(positioned.top, 100);
+      expect(positioned.top, 156);
     });
 
     testWidgets('显式 offset 被钳制在四侧安全可视区域内', (tester) async {
@@ -292,7 +298,7 @@ void main() {
       expect(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 343,
+              widget is SizedBox && widget.height == 48 && widget.width == 375,
         ),
         findsOneWidget,
       );
@@ -340,10 +346,9 @@ void main() {
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
-    testWidgets('运行期更新 marquee、duration 与 visible', (tester) async {
-      var marquee = const TMessageMarquee();
+    testWidgets('运行期更新 marquee 与 duration', (tester) async {
+      TMessageMarquee? marquee;
       Duration? duration;
-      var visible = false;
       late StateSetter setState;
       await tester.pumpWidget(
         wrap(
@@ -354,7 +359,6 @@ void main() {
                 content: '更新',
                 marquee: marquee,
                 duration: duration,
-                visible: visible,
               );
             },
           ),
@@ -366,18 +370,96 @@ void main() {
           delay: Duration(milliseconds: 10),
         );
         duration = const Duration(seconds: 1);
-        visible = true;
       });
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 10));
       expect(find.text('更新'), findsOneWidget);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
+
+    testWidgets('从 Widget 树移除后取消 duration 和 marquee 任务', (tester) async {
+      var mounted = true;
+      var durationEndCount = 0;
+      var dismissedCount = 0;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return mounted
+                  ? TMessage(
+                      content: '待移除',
+                      duration: const Duration(milliseconds: 100),
+                      marquee: const TMessageMarquee(
+                        duration: Duration(milliseconds: 20),
+                        delay: Duration(milliseconds: 50),
+                        repeat: true,
+                      ),
+                      onDurationEnd: () => durationEndCount += 1,
+                      onDismissed: () => dismissedCount += 1,
+                    )
+                  : const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      setState(() => mounted = false);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('待移除'), findsNothing);
+      expect(durationEndCount, 0);
+      expect(dismissedCount, 0);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('跑马灯使用 Expanded 分配的真实宽度', (tester) async {
+      const actionWidth = 32.0;
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: '这是一条需要滚动的长消息',
+            duration: null,
+            marquee: TMessageMarquee(),
+            action: SizedBox(width: actionWidth, child: Text('按钮')),
+            showCloseButton: true,
+          ),
+        ),
+      );
+      await tester.pump();
+
+      final clipWidth = tester.getSize(find.byType(ClipRect)).width;
+      // 375 - 水平内边距 32 - 图标与间距 30 - action 间距与宽度 40
+      // - 关闭按钮间距与宽度 30 = 243。
+      expect(clipWidth, 243);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
   });
 
   group('TMessage.show', () {
-    testWidgets('返回句柄并支持立即关闭', (tester) async {
+    testWidgets('非正数 duration 无效', (tester) async {
       final key = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+
+      expect(
+        () => TMessage.show(
+          context: key.currentContext!,
+          content: '无效时长',
+          duration: Duration.zero,
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    testWidgets('句柄立即关闭只完成一次销毁回调', (tester) async {
+      final key = GlobalKey();
+      var dismissedCount = 0;
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -388,13 +470,53 @@ void main() {
         context: key.currentContext!,
         content: 'Overlay 消息',
         duration: null,
+        onDismissed: () => dismissedCount += 1,
       );
+      expect(handle.isShowing, isTrue);
       await tester.pump();
       expect(handle.isShowing, isTrue);
       expect(find.text('Overlay 消息'), findsOneWidget);
       handle.dismiss();
+      handle.dismiss();
       await tester.pump();
       expect(handle.isShowing, isFalse);
+      expect(dismissedCount, 1);
+
+      final next = TMessage.show(
+        context: key.currentContext!,
+        content: '下一条消息',
+        duration: null,
+      );
+      await tester.pump();
+      expect(dismissedCount, 1);
+      next.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('句柄关闭后自动关闭 Timer 不再回调', (tester) async {
+      final key = GlobalKey();
+      var durationEndCount = 0;
+      var dismissedCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: '手动优先关闭',
+        duration: const Duration(milliseconds: 10),
+        onDurationEnd: () => durationEndCount += 1,
+        onDismissed: () => dismissedCount += 1,
+      );
+      await tester.pump();
+      handle.dismiss();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(handle.isShowing, isFalse);
+      expect(durationEndCount, 0);
+      expect(dismissedCount, 1);
     });
 
     testWidgets('保留触发子树的 ThemeExtension', (tester) async {
@@ -417,12 +539,40 @@ void main() {
         duration: null,
       );
       await tester.pump();
-      final material = tester.widget<Material>(
+      final decoratedBox = tester.widget<DecoratedBox>(
         find
-            .ancestor(of: find.text('局部消息主题'), matching: find.byType(Material))
+            .ancestor(
+              of: find.text('局部消息主题'),
+              matching: find.byType(DecoratedBox),
+            )
             .first,
       );
-      expect(material.color, Colors.purple);
+      expect((decoratedBox.decoration as ShapeDecoration).color, Colors.purple);
+      handle.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('Overlay 带操作时保留 Material 交互祖先', (tester) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: '带操作消息',
+        duration: null,
+        action: TLink(child: const Text('按钮'), onPressed: () {}),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(
+        find.ancestor(of: find.text('按钮'), matching: find.byType(Material)),
+        findsWidgets,
+      );
       handle.dismiss();
       await tester.pump();
     });
@@ -449,6 +599,36 @@ void main() {
       expect(handle.isShowing, isFalse);
       expect(ended, isTrue);
       expect(dismissed, isTrue);
+      handle.dismiss();
+      await tester.pump();
+      expect(dismissed, isTrue);
+    });
+
+    testWidgets('Overlay 根节点销毁时句柄与监听一并释放', (tester) async {
+      final key = GlobalKey();
+      var dismissedCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handle = TMessage.show(
+        context: key.currentContext!,
+        content: 'Overlay 销毁',
+        duration: null,
+        onDismissed: () => dismissedCount += 1,
+      );
+      await tester.pump();
+      expect(handle.isShowing, isTrue);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+
+      expect(handle.isShowing, isFalse);
+      expect(dismissedCount, 1);
+      handle.dismiss();
+      expect(dismissedCount, 1);
     });
 
     testWidgets('透传 useSafeArea=false', (tester) async {
@@ -484,6 +664,139 @@ void main() {
       handle.dismiss();
       await tester.pump();
     });
+
+    testWidgets('默认位置的新消息替换上一条且不新增公开状态', (tester) async {
+      final key = GlobalKey();
+      var dismissedCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final first = TMessage.show(
+        context: key.currentContext!,
+        content: '上一条消息',
+        duration: null,
+        onDismissed: () => dismissedCount += 1,
+      );
+      final second = TMessage.show(
+        context: key.currentContext!,
+        content: '当前消息',
+        duration: null,
+      );
+      await tester.pump();
+
+      expect(first.isShowing, isFalse);
+      expect(dismissedCount, 1);
+      expect(second.isShowing, isTrue);
+      expect(find.text('上一条消息'), findsNothing);
+      expect(find.text('当前消息'), findsOneWidget);
+      second.dismiss();
+      await tester.pump();
+      expect(dismissedCount, 1);
+    });
+
+    testWidgets('替换回调中重入 show 时最新消息保持槽位所有权', (tester) async {
+      final key = GlobalKey();
+      TMessageHandle? callbackHandle;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final first = TMessage.show(
+        context: key.currentContext!,
+        content: '第一条',
+        duration: null,
+        onDismissed: () {
+          callbackHandle = TMessage.show(
+            context: key.currentContext!,
+            content: '回调中的最新消息',
+            duration: null,
+          );
+        },
+      );
+      final second = TMessage.show(
+        context: key.currentContext!,
+        content: '第二条',
+        duration: null,
+      );
+      await tester.pump();
+
+      expect(first.isShowing, isFalse);
+      expect(second.isShowing, isFalse);
+      expect(callbackHandle?.isShowing, isTrue);
+      expect(find.text('第一条'), findsNothing);
+      expect(find.text('第二条'), findsNothing);
+      expect(find.text('回调中的最新消息'), findsOneWidget);
+
+      callbackHandle?.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('从 Widget 树移除会取消关闭动画及其回调', (tester) async {
+      var mounted = true;
+      var dismissed = false;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return mounted
+                  ? TMessage(
+                      content: '可关闭消息',
+                      duration: null,
+                      showCloseButton: true,
+                      onDismissed: () => dismissed = true,
+                    )
+                  : const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pump(const Duration(milliseconds: 100));
+      setState(() => mounted = false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(dismissed, isFalse);
+    });
+
+    testWidgets('从 Widget 树移除后重新插入会恢复默认顶部位置', (tester) async {
+      var mounted = true;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return mounted
+                  ? const TMessage(
+                      content: '可重开消息',
+                      duration: null,
+                      showCloseButton: true,
+                    )
+                  : const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pumpAndSettle();
+      setState(() => mounted = false);
+      await tester.pump();
+      setState(() => mounted = true);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<AnimatedPositioned>(find.byType(AnimatedPositioned)).top,
+        kToolbarHeight,
+      );
+    });
   });
 
   test('ThemeData 纯函数', () {
@@ -498,5 +811,108 @@ void main() {
     expect(base.lerp(other, 0.5), isA<TMessageThemeData>());
     expect(base.lerp(null, 0.5), same(base));
     expect(TMessageThemeData.lerpDouble(null, null, 0.5), isNull);
+  });
+
+  group('对齐官方 @spacer 的图标文本间距', () {
+    testWidgets('带图标时图标与文本间距为 8px', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TMessage(content: '间距', duration: null)),
+      );
+      await tester.pump();
+      // 图标与文本之间的 SizedBox 宽度应对齐官方 @spacer = 8px。
+      final messageRow = find
+          .ancestor(of: find.text('间距'), matching: find.byType(Row))
+          .first;
+      final gap = tester.widget<SizedBox>(
+        find.descendant(
+          of: messageRow,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox &&
+                widget.width == 8 &&
+                widget.height == null,
+          ),
+        ),
+      );
+      expect(gap.width, 8);
+    });
+
+    testWidgets('纯文字（无图标）不渲染图标且仅保留文本', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TMessage(content: '纯文字', showIcon: false, duration: null)),
+      );
+      await tester.pump();
+      expect(find.text('纯文字'), findsOneWidget);
+      expect(find.byIcon(TIcons.error_circle_filled), findsNothing);
+    });
+  });
+
+  group('多消息叠加与句柄关闭', () {
+    testWidgets('多个消息使用不同偏移展示且句柄可关闭全部消息', (tester) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(body: SizedBox(key: key)),
+        ),
+      );
+      final handles = <TMessageHandle>[
+        TMessage.show(
+          context: key.currentContext!,
+          content: '消息一',
+          duration: null,
+          offset: const Offset(16, 80),
+        ),
+        TMessage.show(
+          context: key.currentContext!,
+          content: '消息二',
+          duration: null,
+          offset: const Offset(16, 136),
+        ),
+      ];
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('消息一'), findsOneWidget);
+      expect(find.text('消息二'), findsOneWidget);
+      final positions = tester
+          .widgetList<AnimatedPositioned>(find.byType(AnimatedPositioned))
+          .map((positioned) => positioned.top)
+          .toSet();
+      expect(positions, containsAll(<double>{80, 136}));
+      for (final handle in handles) {
+        handle.dismiss();
+      }
+      await tester.pump();
+      expect(handles.every((handle) => !handle.isShowing), isTrue);
+      expect(find.text('消息一'), findsNothing);
+      expect(find.text('消息二'), findsNothing);
+    });
+  });
+
+  group('TMessage 声明式 Widget 树控制', () {
+    testWidgets('插入与移除组件可控制消息显示', (tester) async {
+      var mounted = false;
+      late StateSetter setState;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return mounted
+                  ? const TMessage(content: '组件调用', duration: null)
+                  : const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      expect(find.text('组件调用'), findsNothing);
+      setState(() => mounted = true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('组件调用'), findsOneWidget);
+      setState(() => mounted = false);
+      await tester.pump();
+      expect(find.text('组件调用'), findsNothing);
+    });
   });
 }
