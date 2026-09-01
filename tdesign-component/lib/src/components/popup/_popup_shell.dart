@@ -51,6 +51,9 @@ class PopupShell extends StatelessWidget {
         onCloseWithTrigger: onCloseWithTrigger,
       );
     }
+    if (options.shrinkWrap) {
+      return panel;
+    }
     return SizedBox(
       width: options.width ?? PopupLayout.defaultCenterWidth,
       height: options.height ?? PopupLayout.defaultCenterHeight,

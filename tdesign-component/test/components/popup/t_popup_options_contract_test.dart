@@ -130,4 +130,26 @@ void main() {
 
     expect(tester.getSize(find.byKey(contentKey)), const Size(180, 160));
   });
+
+  testWidgets('center shrinkWrap 按内容尺寸布局且不改变默认尺寸契约', (tester) async {
+    const contentKey = ValueKey('center-shrink-wrap-content');
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
+        home: Scaffold(
+          body: Center(
+            child: PopupShell(
+              options: TPopupOptions.center(
+                shrinkWrap: true,
+                child: const SizedBox(key: contentKey, width: 180, height: 160),
+              ),
+              onCloseWithTrigger: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byKey(contentKey)), const Size(180, 160));
+  });
 }

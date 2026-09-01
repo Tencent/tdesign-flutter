@@ -8,13 +8,13 @@ import '../base/example_widget.dart';
 class TDialogPage extends StatelessWidget {
   const TDialogPage({super.key});
 
-  static const _description = '告知当前状态、信息和解决方法等内容。描述文案尽可能控制在三行内';
+  static const _description = '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内';
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '用于显示重要提示或请求用户完成关键操作。',
+      desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
       exampleCodeGroup: 'dialog',
       padding: const EdgeInsets.symmetric(horizontal: 16),
       showTestModule: false,
@@ -30,7 +30,7 @@ class TDialogPage extends StatelessWidget {
         ),
         ExampleModule(
           title: '组件状态',
-          children: [ExampleItem(desc: '按钮布局与关闭按钮', builder: _buttonDialogs)],
+          children: [ExampleItem(builder: _buttonDialogs)],
         ),
         ExampleModule(
           title: '组件用法',
@@ -47,7 +47,7 @@ class TDialogPage extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) const SizedBox(height: 12),
+          if (index > 0) const SizedBox(height: 16),
           children[index],
         ],
       ],
@@ -67,11 +67,17 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  List<TDialogAction> _actions({bool destructive = false}) => [
-    const TDialogAction(child: Text('取消'), result: false),
+  List<TDialogAction> _actions({
+    bool destructive = false,
+    TButtonVariant? variant,
+    TButtonColorScheme primaryColorScheme = TButtonColorScheme.primary,
+  }) => [
+    TDialogAction(variant: variant, child: const Text('取消'), result: false),
     TDialogAction(
       child: Text(destructive ? '警示操作' : '确定'),
       result: true,
+      variant: variant,
+      colorScheme: destructive ? TButtonColorScheme.danger : primaryColorScheme,
       role: destructive
           ? TDialogActionRole.destructive
           : TDialogActionRole.primary,
@@ -143,7 +149,10 @@ class TDialogPage extends StatelessWidget {
       _trigger('确认类-纯标题', () {
         TDialog.show<bool>(
           context,
-          dialog: TDialog(title: const Text('对话框标题'), actions: _actions()),
+          dialog: TDialog(
+            title: const Text('对话框标题'),
+            actions: _actions(primaryColorScheme: TButtonColorScheme.light),
+          ),
         );
       }),
     ]);
@@ -152,65 +161,100 @@ class TDialogPage extends StatelessWidget {
   @ExampleCode(group: 'dialog')
   Widget _buttonDialogs(BuildContext context) {
     return _scenarios([
-      _trigger('文字按钮', () {
-        TDialog.show<bool>(
-          context,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            content: const Text(_description),
-            actions: _actions(),
-          ),
-        );
-      }),
-      _trigger('水平基础按钮', () {
-        TDialog.show<bool>(
-          context,
-          dialog: TDialog(
-            content: const Text(_description),
-            actions: _actions(),
-          ),
-        );
-      }),
-      _trigger('垂直基础按钮', () {
-        TDialog.show<void>(
-          context,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            content: const Text(_description),
-            actionsWidget: _verticalButtons(context),
-          ),
-        );
-      }),
-      _trigger('多按钮', () {
-        TDialog.show<String>(
-          context,
-          dialog: const TDialog(
-            title: Text('对话框标题'),
-            content: Text(_description),
-            actions: [
-              TDialogAction(child: Text('次要按钮'), result: 'secondary-1'),
-              TDialogAction(child: Text('次要按钮'), result: 'secondary-2'),
-              TDialogAction(
-                child: Text('主要按钮'),
-                result: 'primary',
-                role: TDialogActionRole.primary,
-              ),
-            ],
-          ),
-        );
-      }),
-      _trigger('带关闭按钮的对话框', () {
-        TDialog.show<bool>(
-          context,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            content: const Text(_description),
-            showCloseButton: true,
-            actions: _actions(destructive: true),
-          ),
-        );
-      }),
+      _statusScenario(
+        context,
+        '文字按钮',
+        _trigger('文字按钮', () {
+          TDialog.show<bool>(
+            context,
+            dialog: TDialog(
+              title: const Text('对话框标题'),
+              content: const Text(_description),
+              actions: _actions(variant: TButtonVariant.text),
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '水平基础按钮',
+        _trigger('水平基础按钮', () {
+          TDialog.show<bool>(
+            context,
+            dialog: TDialog(
+              content: const Text(_description),
+              actions: _actions(),
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '垂直基础按钮',
+        _trigger('垂直基础按钮', () {
+          TDialog.show<void>(
+            context,
+            dialog: TDialog(
+              title: const Text('对话框标题'),
+              content: const Text(_description),
+              actionsWidget: _verticalButtons(context),
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '多按钮',
+        _trigger('多按钮', () {
+          TDialog.show<String>(
+            context,
+            dialog: const TDialog(
+              title: Text('对话框标题'),
+              content: Text(_description),
+              actions: [
+                TDialogAction(child: Text('次要按钮'), result: 'secondary-1'),
+                TDialogAction(child: Text('次要按钮'), result: 'secondary-2'),
+                TDialogAction(
+                  child: Text('主要按钮'),
+                  result: 'primary',
+                  role: TDialogActionRole.primary,
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '带关闭按钮的对话框',
+        _trigger('带关闭按钮的对话框', () {
+          TDialog.show<bool>(
+            context,
+            dialog: TDialog(
+              title: const Text('对话框标题'),
+              content: const Text(_description),
+              showCloseButton: true,
+              actions: _actions(destructive: true),
+            ),
+          );
+        }),
+      ),
     ]);
+  }
+
+  Widget _statusScenario(BuildContext context, String label, Widget trigger) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TText(
+          label,
+          font: context.tTheme.fontBodyMedium,
+          textColor: context.tTheme.textColorSecondary,
+        ),
+        const SizedBox(height: 16),
+        trigger,
+      ],
+    );
   }
 
   Widget _verticalButtons(BuildContext context) {
@@ -298,7 +342,7 @@ class TDialogPage extends StatelessWidget {
   }) {
     const image = Image(
       image: AssetImage('assets/img/image.png'),
-      height: 140,
+      height: 160,
       width: double.infinity,
       fit: BoxFit.cover,
     );
@@ -353,12 +397,7 @@ class TDialogPage extends StatelessWidget {
           context,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: const TextField(
-              decoration: InputDecoration(
-                hintText: '输入12字文案',
-                border: InputBorder.none,
-              ),
-            ),
+            content: _dialogInput(context, topPadding: 8),
             actions: _actions(),
           ),
         );
@@ -368,16 +407,11 @@ class TDialogPage extends StatelessWidget {
           context,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: const Column(
+            content: Column(
               children: [
-                Text(_description),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: '输入12字文案',
-                    border: InputBorder.none,
-                  ),
-                ),
+                const Text(_description),
+                const SizedBox(height: 16),
+                _dialogInput(context),
               ],
             ),
             actions: _actions(),
@@ -385,6 +419,31 @@ class TDialogPage extends StatelessWidget {
         );
       }),
     ]);
+  }
+
+  Widget _dialogInput(BuildContext context, {double topPadding = 0}) {
+    final token = context.tTheme;
+    return Padding(
+      padding: EdgeInsets.only(top: topPadding),
+      child: Theme(
+        data: Theme.of(context).mergeExtension(
+          TInputThemeData(
+            clearButtonMode: TInputClearButtonMode.focused,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            borderRadius: 4,
+            backgroundColor: token.bgColorPage,
+          ),
+        ),
+        child: const TInput(
+          borderless: true,
+          hintText: '输入12文案',
+          clearButtonMode: TInputClearButtonMode.focused,
+        ),
+      ),
+    );
   }
 
   @ExampleCode(group: 'dialog')

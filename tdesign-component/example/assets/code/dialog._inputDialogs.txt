@@ -5,12 +5,7 @@ Widget _inputDialogs(BuildContext context) {
           context,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: const TextField(
-              decoration: InputDecoration(
-                hintText: '输入12字文案',
-                border: InputBorder.none,
-              ),
-            ),
+            content: _dialogInput(context, topPadding: 8),
             actions: _actions(),
           ),
         );
@@ -20,16 +15,11 @@ Widget _inputDialogs(BuildContext context) {
           context,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: const Column(
+            content: Column(
               children: [
-                Text(_description),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: '输入12字文案',
-                    border: InputBorder.none,
-                  ),
-                ),
+                const Text(_description),
+                const SizedBox(height: 16),
+                _dialogInput(context),
               ],
             ),
             actions: _actions(),

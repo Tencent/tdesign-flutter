@@ -82,12 +82,16 @@ final class TPopup {
     final theme = Theme.of(context).extension<TPopupThemeData>();
     final themedWidth = switch (options.placement) {
       TPopupPlacement.left || TPopupPlacement.right => theme?.drawerWidth,
-      TPopupPlacement.center => theme?.centerSize?.width,
+      TPopupPlacement.center when !options.shrinkWrap =>
+        theme?.centerSize?.width,
+      TPopupPlacement.center => null,
       TPopupPlacement.top || TPopupPlacement.bottom => null,
     };
     final themedHeight = switch (options.placement) {
       TPopupPlacement.top || TPopupPlacement.bottom => theme?.edgeHeight,
-      TPopupPlacement.center => theme?.centerSize?.height,
+      TPopupPlacement.center when !options.shrinkWrap =>
+        theme?.centerSize?.height,
+      TPopupPlacement.center => null,
       TPopupPlacement.left || TPopupPlacement.right => null,
     };
     final resolvedOptions = options.copyWith(

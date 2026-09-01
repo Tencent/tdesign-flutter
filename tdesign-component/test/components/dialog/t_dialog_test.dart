@@ -30,26 +30,32 @@ void main() {
   group('TDialog 路由与结果', () {
     testWidgets('通过 Popup 居中路由打开并返回 typed result', (tester) async {
       bool? result;
-      await tester.pumpWidget(app(launcher(() {
-        TDialog.show<bool>(
-          tester.element(find.text('打开')),
-          dialog: const TDialog(
-            title: Text('确认操作'),
-            actions: [
-              TDialogAction(
-                child: Text('确认'),
-                role: TDialogActionRole.primary,
-                result: true,
+      await tester.pumpWidget(
+        app(
+          launcher(() {
+            TDialog.show<bool>(
+              tester.element(find.text('打开')),
+              dialog: const TDialog(
+                title: Text('确认操作'),
+                actions: [
+                  TDialogAction(
+                    child: Text('确认'),
+                    role: TDialogActionRole.primary,
+                    result: true,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ).then((value) => result = value);
-        return tester.element(find.text('打开'));
-      })));
+            ).then((value) => result = value);
+            return tester.element(find.text('打开'));
+          }),
+        ),
+      );
 
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       expect(find.byType(TDialog), findsOneWidget);
+      expect(tester.getSize(find.byType(TDialog)).width, 311);
+      expect(tester.getSize(find.byType(TDialog)).height, isNot(240));
 
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
@@ -58,16 +64,22 @@ void main() {
     });
 
     testWidgets('barrierDismissible 控制蒙层关闭', (tester) async {
-      await tester.pumpWidget(app(Builder(builder: (context) {
-        return TButton(
-          child: const Text('打开'),
-          onPressed: () => TDialog.show<void>(
-            context,
-            barrierDismissible: true,
-            dialog: const TDialog(title: Text('可关闭')),
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) {
+              return TButton(
+                child: const Text('打开'),
+                onPressed: () => TDialog.show<void>(
+                  context,
+                  barrierDismissible: true,
+                  dialog: const TDialog(title: Text('可关闭')),
+                ),
+              );
+            },
           ),
-        );
-      })));
+        ),
+      );
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       await tester.tapAt(const Offset(5, 5));
@@ -78,49 +90,89 @@ void main() {
     testWidgets('Popup handle close 可返回结果', (tester) async {
       TPopupHandle? handle;
       Object? result;
-      await tester.pumpWidget(app(Builder(builder: (context) {
-        return TButton(
-          child: const Text('打开'),
-          onPressed: () {
-            handle = TPopup.show(
-              context,
-              options: TPopupOptions.center(
-                child: const Text('Popup 内容'),
-                closeBuilder: null,
-              ),
-            );
-            handle!.result.then((value) => result = value);
-          },
-        );
-      })));
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) {
+              return TButton(
+                child: const Text('打开'),
+                onPressed: () {
+                  handle = TPopup.show(
+                    context,
+                    options: TPopupOptions.center(
+                      child: const Text('Popup 内容'),
+                      closeBuilder: null,
+                    ),
+                  );
+                  handle!.result.then((value) => result = value);
+                },
+              );
+            },
+          ),
+        ),
+      );
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       handle!.close('done');
       await tester.pumpAndSettle();
       expect(result, 'done');
     });
+
+    testWidgets('内容自适应不继承 Popup centerSize 固定尺寸', (tester) async {
+      final base = theme();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: base.mergeExtension(
+            const TPopupThemeData(centerSize: Size(100, 100)),
+          ),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () => TDialog.show<void>(
+                  context,
+                  dialog: const TDialog(title: Text('自适应尺寸')),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TDialog)).width, 311);
+      expect(tester.takeException(), isNull);
+    });
   });
 
   group('TDialog 内容与操作', () {
     testWidgets('支持 title、content 和任意 content Widget', (tester) async {
-      await tester.pumpWidget(app(const TDialog(
-        title: Text('标题'),
-        content: Column(children: [Text('自定义内容'), Icon(Icons.info)]),
-      )));
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('标题'),
+            content: Column(children: [Text('自定义内容'), Icon(Icons.info)]),
+          ),
+        ),
+      );
       expect(find.text('标题'), findsOneWidget);
       expect(find.text('自定义内容'), findsOneWidget);
       expect(find.byIcon(Icons.info), findsOneWidget);
     });
 
     testWidgets('内容区只有一个纵向滚动视口', (tester) async {
-      await tester.pumpWidget(app(TDialog(
-        title: const Text('长内容'),
-        content: Text(List.filled(40, '内容').join()),
-        maxHeight: 200,
-        actions: const [
-          TDialogAction(child: Text('完成')),
-        ],
-      )));
+      await tester.pumpWidget(
+        app(
+          TDialog(
+            title: const Text('长内容'),
+            content: Text(List.filled(40, '内容').join()),
+            maxHeight: 200,
+            actions: const [TDialogAction(child: Text('完成'))],
+          ),
+        ),
+      );
       expect(
         find.descendant(
           of: find.byType(TDialog),
@@ -131,57 +183,97 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('一到两个操作横向排列，三个操作纵向排列', (tester) async {
-      await tester.pumpWidget(app(const TDialog(
-        title: Text('多操作'),
-        actions: [
-          TDialogAction(child: Text('一')),
-          TDialogAction(child: Text('二')),
-          TDialogAction(child: Text('三')),
-        ],
-      )));
+    testWidgets('一到两个操作横向排列，三个操作按主操作优先纵向排列', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('多操作'),
+            actions: [
+              TDialogAction(child: Text('一')),
+              TDialogAction(child: Text('二')),
+              TDialogAction(child: Text('三')),
+            ],
+          ),
+        ),
+      );
       final one = tester.getCenter(find.text('一'));
       final two = tester.getCenter(find.text('二'));
       final three = tester.getCenter(find.text('三'));
-      expect(one.dy, lessThan(two.dy));
-      expect(two.dy, lessThan(three.dy));
+      expect(three.dy, lessThan(two.dy));
+      expect(two.dy, lessThan(one.dy));
+    });
+
+    testWidgets('文字操作使用贴边 56dp Footer 和分隔线', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('文字操作'),
+            actions: [
+              TDialogAction(child: Text('取消'), variant: TButtonVariant.text),
+              TDialogAction(
+                child: Text('确定'),
+                role: TDialogActionRole.primary,
+                variant: TButtonVariant.text,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final dialog = tester.getRect(find.byType(TDialog));
+      final title = tester.getRect(find.text('文字操作'));
+      final cancel = tester.getRect(find.widgetWithText(TButton, '取消'));
+      final confirm = tester.getRect(find.widgetWithText(TButton, '确定'));
+      expect(cancel.left, closeTo(dialog.left, 0.01));
+      expect(confirm.right, closeTo(dialog.right, 0.01));
+      expect(cancel.height, 56);
+      expect(confirm.height, 56);
+      expect(cancel.top - title.bottom, closeTo(32, 0.01));
+      expect(cancel.right, lessThan(confirm.left));
     });
 
     testWidgets('操作角色、禁用与 closeOnPressed 生效', (tester) async {
-      await tester.pumpWidget(app(const TDialog(
-        title: Text('操作'),
-        actions: [
-          TDialogAction(child: Text('取消')),
-          TDialogAction(
-            child: Text('删除'),
-            role: TDialogActionRole.destructive,
-            disabled: true,
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('操作'),
+            actions: [
+              TDialogAction(child: Text('取消')),
+              TDialogAction(
+                child: Text('删除'),
+                role: TDialogActionRole.destructive,
+                disabled: true,
+              ),
+            ],
           ),
-        ],
-      )));
-      final delete = tester.widget<TButton>(
-        find.ancestor(
-          of: find.text('删除'),
-          matching: find.byType(TButton),
         ),
+      );
+      final delete = tester.widget<TButton>(
+        find.ancestor(of: find.text('删除'), matching: find.byType(TButton)),
       );
       expect(delete.colorScheme, TButtonColorScheme.danger);
       expect(delete.onPressed, isNull);
     });
 
     testWidgets('关闭按钮提供 tooltip 并关闭路由', (tester) async {
-      await tester.pumpWidget(app(Builder(builder: (context) {
-        return TButton(
-          child: const Text('打开'),
-          onPressed: () => TDialog.show<void>(
-            context,
-            dialog: const TDialog(
-              title: Text('带关闭按钮'),
-              showCloseButton: true,
-            ),
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) {
+              return TButton(
+                child: const Text('打开'),
+                onPressed: () => TDialog.show<void>(
+                  context,
+                  dialog: const TDialog(
+                    title: Text('带关闭按钮'),
+                    showCloseButton: true,
+                  ),
+                ),
+              );
+            },
           ),
-        );
-      })));
+        ),
+      );
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       final close = tester.widget<IconButton>(find.byType(IconButton));
@@ -197,22 +289,26 @@ void main() {
       final base = theme();
       const family = 'Test Primary Font';
       const fallback = 'Test CJK Fallback';
-      await tester.pumpWidget(MaterialApp(
-        theme: base.copyWith(
-          textTheme: base.textTheme.apply(
-            fontFamily: family,
-            fontFamilyFallback: const [fallback],
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: base.copyWith(
+            textTheme: base.textTheme.apply(
+              fontFamily: family,
+              fontFamilyFallback: const [fallback],
+            ),
+          ),
+          home: const Scaffold(
+            body: TDialog(title: Text('标题'), content: Text('正文')),
           ),
         ),
-        home: const Scaffold(
-          body: TDialog(title: Text('标题'), content: Text('正文')),
-        ),
-      ));
+      );
 
-      final titleStyle =
-          DefaultTextStyle.of(tester.element(find.text('标题'))).style;
-      final contentStyle =
-          DefaultTextStyle.of(tester.element(find.text('正文'))).style;
+      final titleStyle = DefaultTextStyle.of(
+        tester.element(find.text('标题')),
+      ).style;
+      final contentStyle = DefaultTextStyle.of(
+        tester.element(find.text('正文')),
+      ).style;
       expect(titleStyle.fontFamily, family);
       expect(contentStyle.fontFamily, family);
       expect(titleStyle.fontFamilyFallback, contains(fallback));
@@ -290,7 +386,10 @@ void main() {
       expect(unchanged.width, base.width);
 
       final interpolated = base.lerp(copied, 0.5);
-      expect(interpolated.backgroundColor, Color.lerp(Colors.red, Colors.green, 0.5));
+      expect(
+        interpolated.backgroundColor,
+        Color.lerp(Colors.red, Colors.green, 0.5),
+      );
       expect(interpolated.elevation, 3);
       expect(interpolated.titleTextStyle?.fontSize, 17);
       expect(interpolated.contentTextStyle?.fontSize, 14.5);
@@ -308,15 +407,17 @@ void main() {
         elevation: 4,
         maxHeight: 240,
       );
-      await tester.pumpWidget(app(
-        const TDialog(
-          title: Text('主题'),
-          backgroundColor: Colors.blue,
-          width: 260,
-          elevation: 8,
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('主题'),
+            backgroundColor: Colors.blue,
+            width: 260,
+            elevation: 8,
+          ),
+          dialogTheme: extension,
         ),
-        dialogTheme: extension,
-      ));
+      );
       final material = tester.widget<Material>(
         find.descendant(
           of: find.byType(TDialog),
@@ -330,18 +431,22 @@ void main() {
 
     testWidgets('ThemeExtension 通过 Popup 路由保留', (tester) async {
       const extension = TDialogThemeData(backgroundColor: Colors.green);
-      await tester.pumpWidget(app(
-        Builder(builder: (context) {
-          return TButton(
-            child: const Text('打开'),
-            onPressed: () => TDialog.show<void>(
-              context,
-              dialog: const TDialog(title: Text('局部主题')),
-            ),
-          );
-        }),
-        dialogTheme: extension,
-      ));
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) {
+              return TButton(
+                child: const Text('打开'),
+                onPressed: () => TDialog.show<void>(
+                  context,
+                  dialog: const TDialog(title: Text('局部主题')),
+                ),
+              );
+            },
+          ),
+          dialogTheme: extension,
+        ),
+      );
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       final material = tester.widget<Material>(
@@ -360,10 +465,12 @@ void main() {
           elevation: 6,
         ),
       );
-      await tester.pumpWidget(MaterialApp(
-        theme: base,
-        home: const Scaffold(body: TDialog(title: Text('Material 主题'))),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: base,
+          home: const Scaffold(body: TDialog(title: Text('Material 主题'))),
+        ),
+      );
       final material = tester.widget<Material>(
         find.descendant(
           of: find.byType(TDialog),
@@ -375,10 +482,9 @@ void main() {
     });
 
     testWidgets('默认内容顶边距与关闭按钮位置对齐官方基线', (tester) async {
-      await tester.pumpWidget(app(const TDialog(
-        title: Text('像素对齐'),
-        showCloseButton: true,
-      )));
+      await tester.pumpWidget(
+        app(const TDialog(title: Text('像素对齐'), showCloseButton: true)),
+      );
 
       final scrollView = tester.widget<SingleChildScrollView>(
         find.descendant(
@@ -402,20 +508,26 @@ void main() {
   testWidgets('TConfirmDialog 是自动关闭的单操作便捷层', (tester) async {
     var called = false;
     bool? result;
-    await tester.pumpWidget(app(Builder(builder: (context) {
-      return TButton(
-        child: const Text('打开'),
-        onPressed: () {
-          TDialog.show<bool>(
-            context,
-            dialog: TConfirmDialog(
-              title: '确认',
-              onPressed: () => called = true,
-            ),
-          ).then((value) => result = value);
-        },
-      );
-    })));
+    await tester.pumpWidget(
+      app(
+        Builder(
+          builder: (context) {
+            return TButton(
+              child: const Text('打开'),
+              onPressed: () {
+                TDialog.show<bool>(
+                  context,
+                  dialog: TConfirmDialog(
+                    title: '确认',
+                    onPressed: () => called = true,
+                  ),
+                ).then((value) => result = value);
+              },
+            );
+          },
+        ),
+      ),
+    );
     await tester.tap(find.text('打开'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('知道了'));

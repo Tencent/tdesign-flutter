@@ -74,6 +74,9 @@ class TDialogAction {
 /// 组件负责面板内容和操作区；使用 [show] 时，路由、蒙层、动画和安全区
 /// 复用 [TPopup] 的居中浮层能力。
 class TDialog extends StatelessWidget {
+  static const _defaultActionsPadding = EdgeInsets.fromLTRB(24, 24, 24, 24);
+  static const _textActionsPadding = EdgeInsets.only(top: 32);
+
   const TDialog({
     super.key,
     this.title,
@@ -88,7 +91,7 @@ class TDialog extends StatelessWidget {
     this.width,
     this.maxHeight,
     this.contentPadding,
-    this.actionsPadding = const EdgeInsets.fromLTRB(24, 24, 24, 24),
+    this.actionsPadding = _defaultActionsPadding,
     this.actionSpacing = 12,
   }) : assert(
          actionsWidget == null || actions.length == 0,
@@ -132,6 +135,9 @@ class TDialog extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
 
   /// 操作区内边距。
+  ///
+  /// 全部操作显式使用 [TButtonVariant.text] 且未覆盖本字段时，自动使用
+  /// 官方文字按钮 Footer 的 32dp 顶部间距，并保持按钮横向贴边。
   final EdgeInsetsGeometry actionsPadding;
 
   /// 操作之间的间距。
@@ -152,6 +158,7 @@ class TDialog extends StatelessWidget {
       useRootNavigator: useRootNavigator,
       options: TPopupOptions.center(
         child: dialog,
+        shrinkWrap: true,
         radius: 0,
         backgroundColor: Colors.transparent,
         overlay: TPopupOverlayConfig(
@@ -231,6 +238,13 @@ class TDialog extends StatelessWidget {
           resolvedContentStyle.fontFamilyFallback ??
           inheritedTextStyle?.fontFamilyFallback,
     );
+    final useTextActionLayout =
+        actions.isNotEmpty &&
+        actions.every((action) => action.variant == TButtonVariant.text);
+    final effectiveActionsPadding =
+        useTextActionLayout && actionsPadding == _defaultActionsPadding
+        ? _textActionsPadding
+        : actionsPadding;
 
     return Semantics(
       namesRoute: true,
@@ -282,10 +296,11 @@ class TDialog extends StatelessWidget {
                     actionsWidget!
                   else if (actions.isNotEmpty)
                     Padding(
-                      padding: actionsPadding,
+                      padding: effectiveActionsPadding,
                       child: _DialogActions(
                         actions: actions,
                         spacing: actionSpacing,
+                        textLayout: useTextActionLayout,
                         defaultStyle: extension?.actionButtonStyle,
                       ),
                     ),
@@ -313,11 +328,13 @@ class _DialogActions extends StatelessWidget {
   const _DialogActions({
     required this.actions,
     required this.spacing,
+    required this.textLayout,
     this.defaultStyle,
   });
 
   final List<TDialogAction> actions;
   final double spacing;
+  final bool textLayout;
   final ButtonStyle? defaultStyle;
 
   @override
@@ -345,6 +362,32 @@ class _DialogActions extends StatelessWidget {
         })
         .toList(growable: false);
 
+    if (textLayout && buttons.length <= 2) {
+      final divider = BorderSide(
+        color: context.tTheme.componentBorderColor,
+        width: 0.5,
+      );
+      return DecoratedBox(
+        decoration: BoxDecoration(border: Border(top: divider)),
+        child: SizedBox(
+          height: 56,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var index = 0; index < buttons.length; index++) ...[
+                if (index > 0)
+                  VerticalDivider(
+                    width: 0.5,
+                    thickness: 0.5,
+                    color: divider.color,
+                  ),
+                Expanded(child: buttons[index]),
+              ],
+            ],
+          ),
+        ),
+      );
+    }
     if (buttons.length <= 2) {
       return Row(
         children: [
@@ -355,12 +398,13 @@ class _DialogActions extends StatelessWidget {
         ],
       );
     }
+    final verticalButtons = buttons.reversed.toList(growable: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (var index = 0; index < buttons.length; index++) ...[
+        for (var index = 0; index < verticalButtons.length; index++) ...[
           if (index > 0) SizedBox(height: spacing),
-          buttons[index],
+          verticalButtons[index],
         ],
       ],
     );

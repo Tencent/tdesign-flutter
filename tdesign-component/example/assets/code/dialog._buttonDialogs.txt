@@ -1,62 +1,82 @@
 Widget _buttonDialogs(BuildContext context) {
     return _scenarios([
-      _trigger('文字按钮', () {
-        TDialog.show<bool>(
-          context,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            content: const Text(_description),
-            actions: _actions(),
-          ),
-        );
-      }),
-      _trigger('水平基础按钮', () {
-        TDialog.show<bool>(
-          context,
-          dialog: TDialog(
-            content: const Text(_description),
-            actions: _actions(),
-          ),
-        );
-      }),
-      _trigger('垂直基础按钮', () {
-        TDialog.show<void>(
-          context,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            content: const Text(_description),
-            actionsWidget: _verticalButtons(context),
-          ),
-        );
-      }),
-      _trigger('多按钮', () {
-        TDialog.show<String>(
-          context,
-          dialog: const TDialog(
-            title: Text('对话框标题'),
-            content: Text(_description),
-            actions: [
-              TDialogAction(child: Text('次要按钮'), result: 'secondary-1'),
-              TDialogAction(child: Text('次要按钮'), result: 'secondary-2'),
-              TDialogAction(
-                child: Text('主要按钮'),
-                result: 'primary',
-                role: TDialogActionRole.primary,
-              ),
-            ],
-          ),
-        );
-      }),
-      _trigger('带关闭按钮的对话框', () {
-        TDialog.show<bool>(
-          context,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            content: const Text(_description),
-            showCloseButton: true,
-            actions: _actions(destructive: true),
-          ),
-        );
-      }),
+      _statusScenario(
+        context,
+        '文字按钮',
+        _trigger('文字按钮', () {
+          TDialog.show<bool>(
+            context,
+            dialog: TDialog(
+              title: const Text('对话框标题'),
+              content: const Text(_description),
+              actions: _actions(variant: TButtonVariant.text),
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '水平基础按钮',
+        _trigger('水平基础按钮', () {
+          TDialog.show<bool>(
+            context,
+            dialog: TDialog(
+              content: const Text(_description),
+              actions: _actions(),
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '垂直基础按钮',
+        _trigger('垂直基础按钮', () {
+          TDialog.show<void>(
+            context,
+            dialog: TDialog(
+              title: const Text('对话框标题'),
+              content: const Text(_description),
+              actionsWidget: _verticalButtons(context),
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '多按钮',
+        _trigger('多按钮', () {
+          TDialog.show<String>(
+            context,
+            dialog: const TDialog(
+              title: Text('对话框标题'),
+              content: Text(_description),
+              actions: [
+                TDialogAction(child: Text('次要按钮'), result: 'secondary-1'),
+                TDialogAction(child: Text('次要按钮'), result: 'secondary-2'),
+                TDialogAction(
+                  child: Text('主要按钮'),
+                  result: 'primary',
+                  role: TDialogActionRole.primary,
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
+      _statusScenario(
+        context,
+        '带关闭按钮的对话框',
+        _trigger('带关闭按钮的对话框', () {
+          TDialog.show<bool>(
+            context,
+            dialog: TDialog(
+              title: const Text('对话框标题'),
+              content: const Text(_description),
+              showCloseButton: true,
+              actions: _actions(destructive: true),
+            ),
+          );
+        }),
+      ),
     ]);
   }

@@ -22,7 +22,10 @@ Widget _confirmDialogs(BuildContext context) {
       _trigger('确认类-纯标题', () {
         TDialog.show<bool>(
           context,
-          dialog: TDialog(title: const Text('对话框标题'), actions: _actions()),
+          dialog: TDialog(
+            title: const Text('对话框标题'),
+            actions: _actions(primaryColorScheme: TButtonColorScheme.light),
+          ),
         );
       }),
     ]);
