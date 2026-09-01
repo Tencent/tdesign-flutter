@@ -14,38 +14,31 @@ const actionSheetCancelButtonHeight = 48.0;
 
 /// 动作面板单个项目组件
 ///
-/// 在宫格/分组模式下渲染单个可点击项目，含图标、标签和角标。
-class TActionSheetItemWidget extends StatelessWidget {
-  const TActionSheetItemWidget({
-    super.key,
-    this.item,
-    required this.index,
-    this.onChanged,
-  });
+/// 在宫格模式下渲染单个可点击项目，含图标、标签和角标。
+class TActionSheetItemWidget<T> extends StatelessWidget {
+  const TActionSheetItemWidget({super.key, this.item, this.onSelected});
 
   /// 项目数据
-  final TActionSheetItem? item;
-
-  /// 项目索引
-  final int index;
+  final TActionSheetItem<T>? item;
 
   /// 选择项目时的回调函数
-  final TActionSheetOnChanged? onChanged;
+  final TActionSheetOnSelected<T>? onSelected;
 
   @override
   Widget build(BuildContext context) {
     if (item == null) {
       return const SizedBox.shrink();
     }
-    final actionSheetTheme =
-        Theme.of(context).extension<TActionSheetThemeData>();
+    final actionSheetTheme = Theme.of(
+      context,
+    ).extension<TActionSheetThemeData>();
     final iconSize = actionSheetTheme?.iconSize ?? 24;
     final iconExtent = actionSheetTheme?.gridIconExtent ?? 48;
     final iconColor = item!.disabled
         ? context.tTheme.textDisabledColor
         : (item!.textStyle?.color ??
-            actionSheetTheme?.iconColor ??
-            context.tTheme.textColorPrimary);
+              actionSheetTheme?.iconColor ??
+              context.tTheme.textColorPrimary);
     late ValueNotifier<List<double>> _offsetValue;
     late GlobalKey _offsetKey;
     if (item!.badge != null) {
@@ -56,7 +49,7 @@ class TActionSheetItemWidget extends StatelessWidget {
       onTap: item!.disabled
           ? null
           : () {
-              onChanged?.call(item!, index);
+              onSelected?.call(item!);
               Navigator.maybePop(context);
             },
       child: Column(
@@ -67,10 +60,7 @@ class TActionSheetItemWidget extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 IconTheme(
-                  data: IconThemeData(
-                    color: iconColor,
-                    size: iconSize,
-                  ),
+                  data: IconThemeData(color: iconColor, size: iconSize),
                   child: SizedBox(
                     width: iconExtent,
                     height: iconExtent,
@@ -114,8 +104,10 @@ class TActionSheetItemWidget extends StatelessWidget {
     );
   }
 
-  void _setOffsetValue(GlobalKey<State<StatefulWidget>> offsetKey,
-      ValueNotifier<List<double>> offsetValue) {
+  void _setOffsetValue(
+    GlobalKey<State<StatefulWidget>> offsetKey,
+    ValueNotifier<List<double>> offsetValue,
+  ) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final renderBox =
           offsetKey.currentContext?.findRenderObject() as RenderBox;

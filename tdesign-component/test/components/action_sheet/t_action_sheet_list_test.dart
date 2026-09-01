@@ -19,39 +19,41 @@ void main() {
     );
   }
 
-  List<TActionSheetItem> baseItems() => [
-    TActionSheetItem(label: '选项一'),
-    TActionSheetItem(label: '选项二'),
+  List<TActionSheetItem<int>> baseItems() => const [
+    TActionSheetItem(value: 1, label: '选项一'),
+    TActionSheetItem(value: 2, label: '选项二'),
   ];
 
   testWidgets('带图标 + 副标题 + 徽标渲染各分支', (tester) async {
     await tester.pumpWidget(
       wrap(
-        TActionSheetList(
+        const TActionSheetList(
           items: [
             TActionSheetItem(
+              value: 1,
               label: '带图标',
-              icon: const Icon(Icons.star),
+              icon: Icon(Icons.star),
               subtitle: '副标题内容',
-              badge: const TBadge(label: '1'),
+              badge: TBadge(label: '1'),
             ),
-            TActionSheetItem(label: '普通项'),
+            TActionSheetItem(value: 2, label: '普通项'),
           ],
         ),
       ),
     );
-    expect(find.byType(TActionSheetList), findsOneWidget);
+    expect(find.byType(TActionSheetList<int>), findsOneWidget);
   });
 
   testWidgets('列表图标尺寸来自 Theme 而不是文本字号', (tester) async {
     await tester.pumpWidget(
       wrap(
-        TActionSheetList(
+        const TActionSheetList(
           items: [
             TActionSheetItem(
+              value: 1,
               label: '图标',
-              icon: const Icon(Icons.star),
-              textStyle: const TextStyle(fontSize: 12),
+              icon: Icon(Icons.star),
+              textStyle: TextStyle(fontSize: 12),
             ),
           ],
           showCancel: false,
@@ -69,25 +71,25 @@ void main() {
     await tester.pumpWidget(
       wrap(
         TActionSheetList(
-          items: [
-            TActionSheetItem(label: '禁用项', disabled: true),
-            TActionSheetItem(label: '正常项'),
+          items: const [
+            TActionSheetItem(value: 'disabled', label: '禁用项', disabled: true),
+            TActionSheetItem(value: 'enabled', label: '正常项'),
           ],
-          onChanged: (item, index) => tapped = item.label,
+          onSelected: (item) => tapped = item.value,
         ),
       ),
     );
     // 点击正常项触发回调主体
     await tester.tap(find.text('正常项'));
     await tester.pump();
-    expect(tapped, '正常项');
+    expect(tapped, 'enabled');
   });
 
   testWidgets('useSafeArea=false 不渲染底部安全区', (tester) async {
     await tester.pumpWidget(
       wrap(TActionSheetList(useSafeArea: false, items: baseItems())),
     );
-    expect(find.byType(TActionSheetList), findsOneWidget);
+    expect(find.byType(TActionSheetList<int>), findsOneWidget);
   });
 
   testWidgets('点击取消按钮触发 onCancel', (tester) async {
@@ -110,7 +112,7 @@ void main() {
     await tester.pumpWidget(
       wrap(TActionSheetList(showCancel: false, items: baseItems())),
     );
-    expect(find.byType(TActionSheetList), findsOneWidget);
+    expect(find.byType(TActionSheetList<int>), findsOneWidget);
   });
 
   testWidgets('列表级 subtitle 渲染描述分支', (tester) async {
@@ -123,10 +125,16 @@ void main() {
   testWidgets('描述项高度与描述颜色对齐官方契约', (tester) async {
     await tester.pumpWidget(
       wrap(
-        TActionSheetList(
+        const TActionSheetList(
           subtitle: '面板描述',
           showCancel: false,
-          items: [TActionSheetItem(label: '主标题', subtitle: '选项描述')],
+          items: [
+            TActionSheetItem(
+              value: 'described',
+              label: '主标题',
+              subtitle: '选项描述',
+            ),
+          ],
         ),
       ),
     );

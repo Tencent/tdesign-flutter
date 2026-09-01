@@ -9,26 +9,27 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - 以 `tdesign-miniprogram` ActionSheet 当前 Demo 为唯一基线，提供一对一的公开 Demo 矩阵。
 - 对齐列表描述项高度、描述文本 token 和宫格分页点 token。
 - 统一默认宫格、分页宫格和多行滚动宫格的可视容量与密度语义。
-- 保持现有强类型 `TActionSheetItem` 与命令式入口，不为追平 Web 形态扩大 API。
+- 将公开入口收敛为 `showList` 与 `showGrid`，不保留缺少公开设计证据的二次分组能力。
+- 使用互斥的强类型宫格布局配置表达普通、分页与滚动模式，不允许无效参数组合。
 
 ## 非目标
 
-- 不删除现有 `showGroup` 公开能力。
 - 不新增字符串联合 item、`suffixIcon` 或 `popupProps` 等非 Flutter-native API。
 - 不以 Mobile Vue Demo 代替小程序基线。
+- 不新增 Section 或其他分组数据模型。
 
 ## 范围
 
 ### 涉及
 
 - ActionSheet 列表与宫格的可见样式。
+- ActionSheet 公开入口、Item、回调、宫格布局与 ThemeExtension 契约。
 - ActionSheet 组件 Widget 测试。
 - Example 页与自动生成的代码片段。
 
 ### 不涉及
 
 - Popup 底层路由与动画协议。
-- `showGroup` 的公开签名或行为。
 
 ## 行为契约
 
@@ -37,8 +38,16 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - 分页当前点使用 `brandNormalColor`，非当前点使用 `textDisabledColor`。
 - `count` 表示一个可视面板期望容纳的项目数量，`rows` 表示行数，
   `items.length` 表示全部数据数量；每行列数统一由 `count ~/ rows` 推导。
+- `TActionSheetGridLayout.fixed/paged/scroll` 是互斥布局；`itemMinWidth` 仅由
+  `scroll` 布局持有，不存在分页与滚动同时开启或无效参数静默被忽略的状态。
 - 默认宫格、分页宫格和多行滚动宫格在相同 `count` / `rows` 下使用相同的
-  默认项目宽度；仅显式 `itemMinWidth` 或 Theme 默认值可以扩大项目宽度并触发滚动。
+  默认项目宽度；仅滚动布局显式 `itemMinWidth` 可以扩大项目宽度并触发滚动。
+- `TActionSheetItem<T>` 只持有动作内容、状态与稳定业务值 `value`，不持有 `group`；
+  选择动作只通过 `onSelected(item)` 回传，不暴露会随布局变化的全局索引。
+- 删除 `showGroup`、`TActionSheetGroup` 与 `TActionSheetItem.group`；公开设计矩阵
+  不包含二次分组能力，现有 13 个 Demo 不受影响。
+- `TActionSheetThemeData` 只持有视觉默认值，不持有 `count`、`rows`、
+  `itemMinWidth` 或默认对齐等布局行为。
 - 默认、分页和滚动宫格统一复用 `TActionSheetItemWidget` 的 96dp 行高、48dp
   图标槽位、24dp 默认图标字号、8dp 图文间距和 `fontBodySmall` 标签字体。
 - Example 中常规宫格与多行滚动宫格的首个可视面板使用相同的前 8 项数据，
@@ -61,4 +70,7 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - [x] Flutter 3.32.0 Linux Golden 字体覆盖“腾、讯、档、箱、云、徽”且相关明暗快照无缺字方框。
 - [x] Flutter 3.32.0 与 latest 均通过聚焦测试及严格 analyze。
 - [x] ActionSheet 生产源码 LCOV `LH/LF >= 95%`。
+- [x] 公开入口仅保留 `showList/showGrid`，旧分组 API 与分组字段完全移除。
+- [x] Widget 测试覆盖三种互斥布局、选择回调业务值以及全部非法布局参数。
+- [ ] Demo、站点文档与生成检查全部使用新 API，13 个入口及视觉基线不减少。
 - [ ] 在真实运行时与小程序基线完成像素和交互对照。

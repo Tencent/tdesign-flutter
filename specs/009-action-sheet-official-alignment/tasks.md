@@ -11,7 +11,11 @@
 - [x] DONE 统一常规宫格与多行滚动宫格首屏数据并锁定 Item 视觉一致性
 - [x] DONE 补齐 Golden 字体缺失字形并重生成受影响的明暗快照
 - [x] DONE 统一宫格布局路径的回调索引换算，并补充 `itemMinWidth` 旧默认值迁移说明
+- [x] DONE 删除 Group 能力并新增互斥 `TActionSheetGridLayout`
+- [x] DONE 将 Item/回调/Theme 所有权迁移到无兼容的新契约
+- [x] DONE 迁移 13 个 Demo、站点文档和 ActionSheet 全部测试
+- [x] DONE 完成新 API 的双版本、Golden、覆盖率与真机验证
 - [x] DONE 完成双 Flutter 版本、覆盖率与代码生成检查
 - [x] DONE 完成真实运行时页面与列表弹层截图验收
 - [ ] TODO 完成全部入口的真机连续交互验收
-- [ ] TODO 完成最终 Review
+- [x] DONE 完成最终 Review

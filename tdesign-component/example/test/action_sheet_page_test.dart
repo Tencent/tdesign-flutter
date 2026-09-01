@@ -162,7 +162,7 @@ void main() {
 
     await openBasicGrid(tester);
 
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+    expect(find.byType(TActionSheetGrid<String>), findsOneWidget);
     expect(find.text('微信'), findsOneWidget);
     expect(find.text('文件'), findsOneWidget);
     expect(find.text('取消'), findsOneWidget);
@@ -186,7 +186,7 @@ void main() {
       final item = find
           .ancestor(
             of: find.text('微信'),
-            matching: find.byType(TActionSheetItemWidget),
+            matching: find.byType(TActionSheetItemWidget<String>),
           )
           .first;
       final iconSlot = find

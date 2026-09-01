@@ -6,7 +6,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TActionSheetGrid 宫格动作面板测试
 ///
-/// 覆盖描述文本、分页（PageView + 圆点 + 翻页回调）、横向滚动（scrollable）分支。
+/// 覆盖描述文本、分页（PageView + 圆点 + 翻页回调）和横向滚动布局。
 void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
@@ -17,12 +17,12 @@ void main() {
     );
   }
 
-  List<TActionSheetItem> items(int n) =>
-      List.generate(n, (i) => TActionSheetItem(label: '项$i'));
+  List<TActionSheetItem<int>> items(int n) =>
+      List.generate(n, (i) => TActionSheetItem(value: i, label: '项$i'));
 
   testWidgets('默认宫格渲染', (tester) async {
     await tester.pumpWidget(wrap(TActionSheetGrid(items: items(6))));
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+    expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
 
     final token = TThemeData.defaultData();
     final cancelSpacing = tester
@@ -64,11 +64,16 @@ void main() {
     );
   });
 
-  testWidgets('scrollable=true 横向滚动分支', (tester) async {
+  testWidgets('scroll layout 横向滚动分支', (tester) async {
     await tester.pumpWidget(
-      wrap(TActionSheetGrid(items: items(10), scrollable: true, rows: 2)),
+      wrap(
+        TActionSheetGrid(
+          items: items(10),
+          layout: const TActionSheetGridLayout.scroll(rows: 2),
+        ),
+      ),
     );
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+    expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
   });
 
   testWidgets('相同 count 和 rows 下默认宫格与滚动宫格密度一致', (tester) async {
@@ -79,15 +84,17 @@ void main() {
             width: 400,
             child: TActionSheetGrid(
               items: items(8),
-              count: 8,
-              rows: 2,
-              scrollable: scrollable,
+              layout: scrollable
+                  ? const TActionSheetGridLayout.scroll(count: 8, rows: 2)
+                  : const TActionSheetGridLayout.fixed(count: 8, rows: 2),
               showCancel: false,
             ),
           ),
         ),
       );
-      return tester.getSize(find.byType(TActionSheetItemWidget).first).width;
+      return tester
+          .getSize(find.byType(TActionSheetItemWidget<int>).first)
+          .width;
     }
 
     final defaultWidth = await itemWidth(scrollable: false);
@@ -104,9 +111,7 @@ void main() {
           width: 400,
           child: TActionSheetGrid(
             items: items(12),
-            count: 10,
-            rows: 2,
-            scrollable: true,
+            layout: const TActionSheetGridLayout.scroll(count: 10, rows: 2),
             showCancel: false,
           ),
         ),
@@ -117,7 +122,10 @@ void main() {
       expect(find.text('项$index'), findsOneWidget);
     }
     expect(find.text('项10'), findsNothing);
-    expect(tester.getSize(find.byType(TActionSheetItemWidget).first).width, 80);
+    expect(
+      tester.getSize(find.byType(TActionSheetItemWidget<int>).first).width,
+      80,
+    );
     expect(
       tester.getTopLeft(find.text('项0')).dy,
       tester.getTopLeft(find.text('项4')).dy,
@@ -131,7 +139,7 @@ void main() {
       tester.getCenter(find.text('项5')).dx,
     );
     final scrollView = find.descendant(
-      of: find.byType(TActionSheetGrid),
+      of: find.byType(TActionSheetGrid<int>),
       matching: find.byType(ListView),
     );
     await tester.drag(scrollView, const Offset(-400, 0));
@@ -151,21 +159,25 @@ void main() {
           width: 375,
           child: TActionSheetGrid(
             items: items(10),
-            count: 10,
-            rows: 2,
-            scrollable: true,
-            itemMinWidth: 80,
+            layout: const TActionSheetGridLayout.scroll(
+              count: 10,
+              rows: 2,
+              itemMinWidth: 80,
+            ),
             showCancel: false,
           ),
         ),
       ),
     );
 
-    expect(tester.getSize(find.byType(TActionSheetItemWidget).first).width, 80);
+    expect(
+      tester.getSize(find.byType(TActionSheetItemWidget<int>).first).width,
+      80,
+    );
     final scrollable = tester.state<ScrollableState>(
       find
           .descendant(
-            of: find.byType(TActionSheetGrid),
+            of: find.byType(TActionSheetGrid<int>),
             matching: find.byType(Scrollable),
           )
           .first,
@@ -175,46 +187,47 @@ void main() {
 
   test('count 和 rows 必须构成完整宫格', () {
     expect(
-      () => TActionSheetGrid(items: items(9), count: 9, rows: 2),
+      () => TActionSheetGridLayout.fixed(count: 9, rows: 2),
       throwsAssertionError,
     );
     expect(
-      () => TActionSheetGrid(items: items(1), count: 1, rows: 2),
+      () => TActionSheetGridLayout.fixed(count: 1, rows: 2),
       throwsAssertionError,
     );
+    expect(() => TActionSheetGridLayout.fixed(count: 0), throwsAssertionError);
+    expect(() => TActionSheetGridLayout.fixed(rows: 0), throwsAssertionError);
     expect(
-      () => TActionSheetGrid(items: items(1), count: 0),
-      throwsAssertionError,
-    );
-    expect(
-      () => TActionSheetGrid(items: items(1), rows: 0),
+      () => TActionSheetGridLayout.scroll(itemMinWidth: 0),
       throwsAssertionError,
     );
   });
 
   testWidgets('scrollable 空列表安全渲染', (tester) async {
     await tester.pumpWidget(
-      wrap(const TActionSheetGrid(items: [], scrollable: true, rows: 2)),
+      wrap(
+        const TActionSheetGrid<int>(
+          items: [],
+          layout: TActionSheetGridLayout.scroll(rows: 2),
+        ),
+      ),
     );
 
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+    expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('showPagination 分页 + 翻页触发回调', (tester) async {
-    int? selectedIndex;
+  testWidgets('paged layout 分页 + 翻页触发回调', (tester) async {
+    int? selectedValue;
     await tester.pumpWidget(
       wrap(
         TActionSheetGrid(
           items: items(12),
-          showPagination: true,
-          count: 8,
-          rows: 2,
-          onChanged: (_, index) => selectedIndex = index,
+          layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
+          onSelected: (item) => selectedValue = item.value,
         ),
       ),
     );
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+    expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
     final token = TThemeData.defaultData();
     final dotColors = tester
         .widgetList<Container>(find.byType(Container))
@@ -228,51 +241,41 @@ void main() {
     // 翻页（左滑）触发 onPageChanged
     await tester.drag(find.byType(PageView), const Offset(-400, 0));
     await tester.pumpAndSettle();
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+    expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
     await tester.tap(find.text('项10'));
-    expect(selectedIndex, 10);
+    expect(selectedValue, 10);
   });
 
-  testWidgets('scrollable 跨面板点击返回全局索引', (tester) async {
-    int? selectedIndex;
+  testWidgets('scroll layout 跨面板点击返回稳定业务值', (tester) async {
+    int? selectedValue;
     await tester.pumpWidget(
       wrap(
         SizedBox(
           width: 400,
           child: TActionSheetGrid(
             items: items(12),
-            count: 10,
-            rows: 2,
-            scrollable: true,
+            layout: const TActionSheetGridLayout.scroll(count: 10, rows: 2),
             showCancel: false,
-            onChanged: (_, index) => selectedIndex = index,
+            onSelected: (item) => selectedValue = item.value,
           ),
         ),
       ),
     );
 
     final scrollView = find.descendant(
-      of: find.byType(TActionSheetGrid),
+      of: find.byType(TActionSheetGrid<int>),
       matching: find.byType(ListView),
     );
     await tester.drag(scrollView, const Offset(-400, 0));
     await tester.pumpAndSettle();
     await tester.tap(find.text('项11'));
 
-    expect(selectedIndex, 11);
+    expect(selectedValue, 11);
   });
 
-  testWidgets('showPagination + scrollable 均 false 走默认 grid', (tester) async {
-    await tester.pumpWidget(
-      wrap(
-        TActionSheetGrid(
-          items: items(4),
-          showPagination: false,
-          scrollable: false,
-        ),
-      ),
-    );
-    expect(find.byType(TActionSheetGrid), findsOneWidget);
+  testWidgets('fixed layout 走默认 grid', (tester) async {
+    await tester.pumpWidget(wrap(TActionSheetGrid(items: items(4))));
+    expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
   });
 
   testWidgets('默认 grid 超出 count 时可纵向滚动', (tester) async {
@@ -280,10 +283,7 @@ void main() {
       wrap(
         TActionSheetGrid(
           items: items(12),
-          count: 8,
-          rows: 2,
-          showPagination: false,
-          scrollable: false,
+          layout: const TActionSheetGridLayout.fixed(count: 8, rows: 2),
         ),
       ),
     );

@@ -18,12 +18,12 @@ import 't_action_sheet_types.dart';
 ///
 /// 以列表布局展示可选项，支持描述文本。
 /// 通常不直接使用，由 `TActionSheet.showList` 创建。
-class TActionSheetList extends StatelessWidget {
+class TActionSheetList<T> extends StatelessWidget {
   static const double _itemExtent = 56;
   static const double _itemWithSubtitleExtent = 84;
 
   /// 动作面板的项目列表
-  final List<TActionSheetItem> items;
+  final List<TActionSheetItem<T>> items;
 
   /// 对齐方式
   final TActionSheetAlign align;
@@ -41,7 +41,7 @@ class TActionSheetList extends StatelessWidget {
   final VoidCallback? onCancel;
 
   /// 选择项目时的回调函数
-  final TActionSheetOnChanged? onChanged;
+  final TActionSheetOnSelected<T>? onSelected;
 
   /// 是否使用安全区域
   final bool useSafeArea;
@@ -54,13 +54,13 @@ class TActionSheetList extends StatelessWidget {
     this.subtitle,
     this.showCancel = true,
     this.onCancel,
-    this.onChanged,
+    this.onSelected,
     this.useSafeArea = true,
   });
 
-  static double preferredPopupHeight(
+  static double preferredPopupHeight<V>(
     BuildContext context, {
-    required List<TActionSheetItem> items,
+    required List<TActionSheetItem<V>> items,
     required String? subtitle,
     required bool showCancel,
   }) {
@@ -107,8 +107,10 @@ class TActionSheetList extends StatelessWidget {
     final borderRadius = Radius.circular(context.tTheme.radiusExtraLarge);
     return Container(
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        borderRadius: BorderRadius.only(
+          topLeft: borderRadius,
+          topRight: borderRadius,
+        ),
         color: context.tTheme.bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
@@ -166,8 +168,9 @@ class TActionSheetList extends StatelessWidget {
 
   /// 构建选项列表
   Widget _buildOptionsList(BuildContext context) {
-    final actionSheetTheme =
-        Theme.of(context).extension<TActionSheetThemeData>();
+    final actionSheetTheme = Theme.of(
+      context,
+    ).extension<TActionSheetThemeData>();
     final iconSize = actionSheetTheme?.iconSize ?? 24;
     return Container(
       color: context.tTheme.bgColorContainer,
@@ -182,15 +185,16 @@ class TActionSheetList extends StatelessWidget {
             onTap: item.disabled
                 ? null // 如果项被禁用，则不设置点击事件
                 : () {
-                    onChanged?.call(item, index); // 触发选中回调
+                    onSelected?.call(item); // 触发选中回调
                     Navigator.maybePop(context); // 关闭当前页面
                   },
             child: Container(
               height: item.subtitle == null || item.subtitle!.isEmpty
                   ? _itemExtent
                   : _itemWithSubtitleExtent,
-              padding:
-                  EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+              padding: EdgeInsets.symmetric(
+                horizontal: context.tTheme.spacer16,
+              ),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
@@ -211,8 +215,8 @@ class TActionSheetList extends StatelessWidget {
                             color: item.disabled
                                 ? context.tTheme.textDisabledColor
                                 : (item.textStyle?.color ??
-                                    actionSheetTheme?.iconColor ??
-                                    context.tTheme.textColorPrimary),
+                                      actionSheetTheme?.iconColor ??
+                                      context.tTheme.textColorPrimary),
                             size: iconSize,
                           ),
                           child: SizedBox(
@@ -227,7 +231,9 @@ class TActionSheetList extends StatelessWidget {
                         item.label,
                         font: context.tTheme.fontBodyLarge,
                         textColor: item.disabled
-                            ? context.tTheme.textDisabledColor // 禁用状态下的文本颜色
+                            ? context
+                                  .tTheme
+                                  .textDisabledColor // 禁用状态下的文本颜色
                             : context.tTheme.textColorPrimary, // 正常状态下的文本颜色
                         style: item.textStyle,
                         maxLines: 1,
@@ -244,17 +250,20 @@ class TActionSheetList extends StatelessWidget {
                   if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
                     SizedBox(height: context.tTheme.spacer4),
                     Row(
-                        mainAxisAlignment: getMainAxisAlignment(align),
-                        children: [
-                          Flexible(
-                              child: TText(item.subtitle!,
-                                  font: context.tTheme.fontBodyMedium,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textColor:
-                                      context.tTheme.textColorPlaceholder))
-                        ])
-                  ]
+                      mainAxisAlignment: getMainAxisAlignment(align),
+                      children: [
+                        Flexible(
+                          child: TText(
+                            item.subtitle!,
+                            font: context.tTheme.fontBodyMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textColor: context.tTheme.textColorPlaceholder,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

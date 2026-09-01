@@ -13,7 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 使用场景
 
-ActionSheet 通过 `TActionSheet.showList`、`showGrid` 和 `showGroup` 命令式打开。选择项目后会自动关闭面板，并通过 `onChanged` 返回被选中的项目。
+ActionSheet 通过 `TActionSheet.showList` 和 `TActionSheet.showGrid`
+命令式打开。选择项目后会自动关闭面板，并通过
+`onSelected` 返回带有稳定 `value` 的完整项目。
 
 ```dart
 TActionSheet.showList(
@@ -21,11 +23,19 @@ TActionSheet.showList(
   cancelText: 'cancel',
   subtitle: 'Email Settings',
   items: [
-    TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
-    TActionSheetItem(label: 'Add to Tasks', icon: const Icon(TIcons.cloud_upload)),
+    TActionSheetItem(
+      value: 'move',
+      label: 'Move',
+      icon: const Icon(TIcons.folder),
+    ),
+    TActionSheetItem(
+      value: 'add-to-tasks',
+      label: 'Add to Tasks',
+      icon: const Icon(TIcons.cloud_upload),
+    ),
   ],
-  onChanged: (item, index) {
-    // 执行业务操作
+  onSelected: (item) {
+    // 使用 item.value 执行业务操作
   },
 );
 ```
@@ -37,10 +47,8 @@ TActionSheet.showList(
 宫格中 `count` 表示一个可视面板期望容纳的项目数量，`rows` 表示行数，
 `items.length` 表示全部数据数量。`count` 必须能被 `rows` 整除；例如
 `count: 10, rows: 2` 表示每个可视面板两行五列。分页模式按 `count`
-切页，滚动模式保持相同密度并横向展示剩余项目。仅在显式设置
-`itemMinWidth` 或 Theme 最小宽度时，项目才会扩大并减少视口内实际可见数量。
-从旧版本升级时，如需保留多行滚动宫格固定 `80dp` 的项目宽度，请显式设置
-`itemMinWidth: 80`；不设置时使用上述自适应宽度。
+切页，滚动模式保持相同密度并横向展示剩余项目。
+`itemMinWidth` 只属于滚动布局；设置后可扩大项目并减少视口内实际可见数量。
 
 ```dart
 TActionSheet.showGrid(
@@ -48,14 +56,13 @@ TActionSheet.showGrid(
   items: List.generate(
     16,
     (index) => TActionSheetItem(
+      value: index,
       label: '标题文字',
       icon: const Icon(TIcons.image),
     ),
   ),
-  showPagination: true,
-  count: 8,
-  rows: 2,
-  onChanged: (item, index) {},
+  layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
+  onSelected: (item) {},
 );
 
 TActionSheet.showGrid(
@@ -63,14 +70,17 @@ TActionSheet.showGrid(
   items: List.generate(
     24,
     (index) => TActionSheetItem(
+      value: index,
       label: '操作 $index',
       icon: const Icon(TIcons.image),
     ),
   ),
-  count: 10,
-  rows: 2,
-  scrollable: true,
-  onChanged: (item, index) {},
+  layout: const TActionSheetGridLayout.scroll(
+    count: 10,
+    rows: 2,
+    itemMinWidth: 80,
+  ),
+  onSelected: (item) {},
 );
 
 TActionSheet.showList(
@@ -78,29 +88,46 @@ TActionSheet.showList(
   cancelText: 'cancel',
   items: [
     TActionSheetItem(
+      value: 'important',
       label: 'Mark as important',
       textStyle: TextStyle(color: context.tTheme.brandNormalColor),
     ),
     TActionSheetItem(
+      value: 'unsubscribe',
       label: 'Unsubscribe',
       icon: const Icon(TIcons.delete),
       textStyle: TextStyle(color: context.tTheme.errorNormalColor),
     ),
-    TActionSheetItem(label: 'Add to Tasks', disabled: true),
+    TActionSheetItem(
+      value: 'add-to-tasks',
+      label: 'Add to Tasks',
+      disabled: true,
+    ),
   ],
-  onChanged: (item, index) {},
+  onSelected: (item) {},
 );
 ```
 
 ## API 摘要
 
-- `TActionSheetItem`：`label`、`icon`、`subtitle`、`badge`、`disabled` 和 `group`。
+- `TActionSheetItem<T>`：必填稳定 `value`，并支持 `label`、`icon`、`subtitle`、`badge` 和 `disabled`。
 - `icon` 是 Widget 插槽；背景、形状和显式尺寸由该 Widget 自己控制。
 - `showList`：列表动作面板，支持副标题、取消按钮和禁用项。
-- `showGrid`：宫格动作面板，支持分页、滚动、行数和每页数量。
-- `showGroup`：按 `group` 分组并横向滚动展示动作。
-- 三种入口均返回 `TPopupHandle`，可设置 `showOverlay`、`closeOnOverlayClick`、`useSafeArea`、`onCancel` 和 `onClosed`。
+- `showGrid`：宫格动作面板，通过 `TActionSheetGridLayout.fixed`、
+  `paged` 或 `scroll` 明确选择一种互斥布局。
+- 两种入口均返回 `TPopupHandle`，可设置 `showOverlay`、`closeOnOverlayClick`、`useSafeArea`、`onCancel` 和 `onClosed`。
 
 `TActionSheetThemeData` 提供 `iconSize`、`gridIconExtent` 和 `iconColor` 等视觉默认值。解析优先级为自定义 Widget 显式样式 > ThemeExtension > TDesign token；ThemeExtension 缺失时组件直接使用 token。
+
+## 不兼容升级说明
+
+- `onChanged(item, index)` 改为 `onSelected(item)`；请使用必填的 `item.value`
+  识别业务动作，不再依赖可变的视图索引。
+- `count`、`rows`、`showPagination`、`scrollable` 和 `itemMinWidth`
+  收敛到 `layout`，不同布局的专属参数不会相互冲突。
+- 删除无设计依据的 `showGroup`、`TActionSheetGroup` 和
+  `TActionSheetItem.group`。
+- `TActionSheetThemeData` 只保留视觉配置；布局行为应在每次调用的
+  `layout` 中明确声明。
 
 示例源码：[t_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_action_sheet_page.dart)

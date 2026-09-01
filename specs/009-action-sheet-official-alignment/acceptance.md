@@ -51,3 +51,23 @@
 - `count=10`、`rows=2` 的 5 列 2 行首屏及后续数据滚动由 Widget 测试覆盖；本轮未改动 Demo 数据以制造该场景。
 - Flutter 3.47.0：ActionSheet 组件测试 47 项、Demo 测试 7 项与严格 analyze 均通过；首次 Demo 测试受跨 SDK `ink_sparkle.frag` 缓存污染影响，按约定 clean + pub get 后复跑通过。
 - 全部 13 个入口的连续真机交互与最终 Review 仍待完成。
+
+## 2026-09-01 无兼容 API 收敛复验
+
+- 公开入口收敛为 `showList` 和 `showGrid`，删除 `showGroup`、
+  `TActionSheetGroup` 与 `TActionSheetItem.group`。
+- `showGrid` 仅通过 `TActionSheetGridLayout.fixed/paged/scroll` 选择一种
+  互斥布局；`count` 表示一个可视面板容量，`rows` 表示行数，
+  `items.length` 表示总数据量。
+- `TActionSheetItem<T>.value` 必填，选择回调收敛为 `onSelected(item)`；
+  分页和滚动后的业务识别不再依赖视图索引。
+- Flutter 3.32.0 Linux：组件测试 46 项、Demo 测试 8 项、
+  ActionSheet Golden 10 项全部通过；组件包与 example 严格 analyze
+  均为 0 issues。
+- Flutter 3.32.0 Linux：ActionSheet 生产代码覆盖率
+  `400/408 = 98.04%`；回归清单、覆盖率目标和视觉测试登记 11 项通过。
+- Flutter 3.47.0：组件测试 46 项，组件包与 example 严格 analyze
+  均为 0 issues。
+- Android 16 物理手机：常规宫格与多行滚动宫格首屏均为
+  4 列 2 行，单项宽度一致；选择 QQ 后面板关闭并回显选择结果，
+  横向滑动可访问第二个面板的 8 项数据，底部安全区保持生效。
