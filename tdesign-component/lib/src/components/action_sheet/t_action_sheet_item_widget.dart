@@ -144,15 +144,17 @@ MainAxisAlignment getMainAxisAlignment(TActionSheetAlign align) {
 /// 构建取消按钮
 ///
 /// [showPagination] 是否显示分页（影响上方间距），
+/// [spacingColor] 取消按钮上方留白的颜色，默认为页面背景色。
 /// [cancelText] 取消按钮文本，[onCancel] 点击回调。
 Widget buildCancelButton(
   BuildContext context,
   bool showPagination,
   String? cancelText,
-  VoidCallback? onCancel,
-) {
+  VoidCallback? onCancel, {
+  Color? spacingColor,
+}) {
   return Container(
-    color: context.tTheme.bgColorPage,
+    color: spacingColor ?? context.tTheme.bgColorPage,
     padding: EdgeInsets.only(
       top: showPagination ? context.tTheme.spacer16 : context.tTheme.spacer8,
     ),

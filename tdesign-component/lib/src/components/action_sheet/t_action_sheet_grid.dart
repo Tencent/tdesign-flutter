@@ -161,6 +161,7 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
               widget.showPagination,
               widget.cancelText,
               widget.onCancel,
+              spacingColor: context.tTheme.bgColorContainer,
             ),
         ],
       ),

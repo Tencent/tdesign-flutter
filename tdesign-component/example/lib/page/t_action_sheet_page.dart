@@ -152,7 +152,7 @@ class TActionSheetPage extends StatelessWidget {
     );
   }
 
-  List<TActionSheetItem> _gridItems(BuildContext context) => [
+  List<TActionSheetItem> _appGridItems(BuildContext context) => [
     TActionSheetItem(
       label: '微信',
       icon: _gridIcon(TIcons.chat, context.tTheme.successNormalColor),
@@ -169,10 +169,22 @@ class TActionSheetPage extends StatelessWidget {
       label: '企业微信',
       icon: _gridIcon(TIcons.app, context.tTheme.brandNormalColor),
     ),
-    TActionSheetItem(label: '收藏', icon: const Icon(TIcons.star)),
-    TActionSheetItem(label: '刷新', icon: const Icon(TIcons.refresh)),
-    TActionSheetItem(label: '下载', icon: const Icon(TIcons.download)),
-    TActionSheetItem(label: '复制', icon: const Icon(TIcons.file_copy)),
+    TActionSheetItem(
+      label: '腾讯文档',
+      icon: _gridIcon(TIcons.folder, context.tTheme.warningNormalColor),
+    ),
+    TActionSheetItem(
+      label: '邮箱',
+      icon: _gridIcon(TIcons.notification, context.tTheme.errorNormalColor),
+    ),
+    TActionSheetItem(
+      label: '微云',
+      icon: _gridIcon(TIcons.cloud_upload, context.tTheme.brandNormalColor),
+    ),
+    TActionSheetItem(
+      label: '文件',
+      icon: _gridIcon(TIcons.file_copy, context.tTheme.warningNormalColor),
+    ),
   ];
 
   List<TActionSheetItem> _iconGridItems() => [
@@ -184,6 +196,14 @@ class TActionSheetPage extends StatelessWidget {
     TActionSheetItem(label: '刷新', icon: const Icon(TIcons.refresh)),
     TActionSheetItem(label: '上传', icon: const Icon(TIcons.cloud_upload)),
     TActionSheetItem(label: '删除', icon: const Icon(TIcons.delete)),
+  ];
+
+  List<TActionSheetItem> _gridItems(BuildContext context) => [
+    ..._appGridItems(context).take(4),
+    TActionSheetItem(label: '收藏', icon: const Icon(TIcons.star)),
+    TActionSheetItem(label: '刷新', icon: const Icon(TIcons.refresh)),
+    TActionSheetItem(label: '下载', icon: const Icon(TIcons.download)),
+    TActionSheetItem(label: '复制', icon: const Icon(TIcons.file_copy)),
   ];
 
   List<TActionSheetItem> _badgeGridItems(BuildContext context) {
@@ -204,7 +224,7 @@ class TActionSheetPage extends StatelessWidget {
   }
 
   List<TActionSheetItem> _scrollGridItems(BuildContext context) => [
-    ..._gridItems(context),
+    ..._appGridItems(context),
     ..._iconGridItems(),
   ];
 

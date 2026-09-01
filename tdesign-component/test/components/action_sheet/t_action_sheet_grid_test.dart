@@ -22,6 +22,16 @@ void main() {
   testWidgets('默认宫格渲染', (tester) async {
     await tester.pumpWidget(wrap(TActionSheetGrid(items: items(6))));
     expect(find.byType(TActionSheetGrid), findsOneWidget);
+
+    final token = TThemeData.defaultData();
+    final cancelSpacing = tester
+        .widgetList<Container>(find.byType(Container))
+        .firstWhere(
+          (container) =>
+              container.padding == EdgeInsets.only(top: token.spacer8) &&
+              container.color == token.bgColorContainer,
+        );
+    expect(cancelSpacing.color, token.bgColorContainer);
   });
 
   testWidgets('带 subtitle 渲染描述分支', (tester) async {

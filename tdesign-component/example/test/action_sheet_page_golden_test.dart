@@ -70,5 +70,67 @@ void main() {
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
+
+    testWidgets('action sheet basic grid ${mode.name} opened golden', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        actionSheetDemoPageTestSpec,
+        mode,
+      );
+
+      final trigger = find.widgetWithText(TButton, '常规宫格型');
+      final scrollable = find.descendant(
+        of: find.byType(CustomScrollView).first,
+        matching: find.byType(Scrollable),
+      );
+      await tester.scrollUntilVisible(
+        trigger,
+        200,
+        scrollable: scrollable.first,
+      );
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(Overlay),
+        matchesGoldenFile(
+          'goldens/action_sheet_basic_grid_opened_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
+    testWidgets('action sheet scroll grid ${mode.name} opened golden', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        actionSheetDemoPageTestSpec,
+        mode,
+      );
+
+      final trigger = find.widgetWithText(TButton, '多行滚动宫格型');
+      final scrollable = find.descendant(
+        of: find.byType(CustomScrollView).first,
+        matching: find.byType(Scrollable),
+      );
+      await tester.scrollUntilVisible(
+        trigger,
+        200,
+        scrollable: scrollable.first,
+      );
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(Overlay),
+        matchesGoldenFile(
+          'goldens/action_sheet_scroll_grid_opened_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
   }
 }
