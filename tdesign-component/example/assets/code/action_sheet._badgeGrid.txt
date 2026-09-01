@@ -3,6 +3,6 @@ Widget _badgeGrid(BuildContext context) => _trigger(
     onPressed: () => TActionSheet.showGrid(
       context,
       items: _badgeGridItems(context),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

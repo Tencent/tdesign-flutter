@@ -4,23 +4,30 @@ Widget _statusList(BuildContext context) => _trigger(
       context,
       cancelText: 'cancel',
       items: [
-        TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
+        const TActionSheetItem(
+          value: 'move',
+          label: 'Move',
+          icon: Icon(TIcons.folder),
+        ),
         TActionSheetItem(
+          value: 'important',
           label: 'Mark as important',
           icon: const Icon(TIcons.notification),
           textStyle: TextStyle(color: context.tTheme.brandNormalColor),
         ),
         TActionSheetItem(
+          value: 'unsubscribe',
           label: 'Unsubscribe',
           icon: const Icon(TIcons.delete),
           textStyle: TextStyle(color: context.tTheme.errorNormalColor),
         ),
-        TActionSheetItem(
+        const TActionSheetItem(
+          value: 'tasks',
           label: 'Add to Tasks',
-          icon: const Icon(TIcons.cloud_upload),
+          icon: Icon(TIcons.cloud_upload),
           disabled: true,
         ),
       ],
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

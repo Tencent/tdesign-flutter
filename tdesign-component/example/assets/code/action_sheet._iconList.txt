@@ -4,6 +4,6 @@ Widget _iconList(BuildContext context) => _trigger(
       context,
       cancelText: 'cancel',
       items: _iconItems(),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

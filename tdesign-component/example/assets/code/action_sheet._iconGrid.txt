@@ -3,6 +3,6 @@ Widget _iconGrid(BuildContext context) => _trigger(
     onPressed: () => TActionSheet.showGrid(
       context,
       items: _iconGridItems(),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

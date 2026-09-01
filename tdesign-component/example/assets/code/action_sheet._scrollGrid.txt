@@ -3,8 +3,7 @@ Widget _scrollGrid(BuildContext context) => _trigger(
     onPressed: () => TActionSheet.showGrid(
       context,
       items: _scrollGridItems(context),
-      scrollable: true,
-      rows: 2,
-      onChanged: (item, _) => _showSelection(context, item),
+      layout: const TActionSheetGridLayout.scroll(count: 8, rows: 2),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

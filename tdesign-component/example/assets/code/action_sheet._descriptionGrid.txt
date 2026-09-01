@@ -4,6 +4,6 @@ Widget _descriptionGrid(BuildContext context) => _trigger(
       context,
       subtitle: '动作面板描述文字',
       items: _gridItems(context),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

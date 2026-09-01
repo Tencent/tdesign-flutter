@@ -4,6 +4,6 @@ Widget _basicList(BuildContext context) => _trigger(
       context,
       cancelText: 'cancel',
       items: _textItems(),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

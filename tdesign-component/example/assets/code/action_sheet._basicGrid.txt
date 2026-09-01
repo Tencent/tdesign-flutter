@@ -3,6 +3,6 @@ Widget _basicGrid(BuildContext context) => _trigger(
     onPressed: () => TActionSheet.showGrid(
       context,
       items: _gridItems(context),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

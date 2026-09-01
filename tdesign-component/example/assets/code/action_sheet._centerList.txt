@@ -6,6 +6,6 @@ Widget _centerList(BuildContext context) => _trigger(
       subtitle: 'Email Settings',
       align: TActionSheetAlign.center,
       items: _iconItems(),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

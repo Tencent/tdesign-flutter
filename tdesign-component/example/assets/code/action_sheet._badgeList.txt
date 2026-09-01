@@ -4,6 +4,6 @@ Widget _badgeList(BuildContext context) => _trigger(
       context,
       cancelText: 'cancel',
       items: _badgeItems(),
-      onChanged: (item, _) => _showSelection(context, item),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );

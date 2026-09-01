@@ -4,8 +4,7 @@ Widget _descriptionScrollGrid(BuildContext context) => _trigger(
       context,
       subtitle: '动作面板描述文字',
       items: _scrollGridItems(context),
-      scrollable: true,
-      rows: 2,
-      onChanged: (item, _) => _showSelection(context, item),
+      layout: const TActionSheetGridLayout.scroll(count: 8, rows: 2),
+      onSelected: (item) => _showSelection(context, item),
     ),
   );
