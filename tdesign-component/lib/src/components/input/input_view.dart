@@ -109,7 +109,7 @@ class TDInputView extends StatelessWidget {
       this.inputAction,
       this.onTapOutside,
       this.selectionControls,
-      this.contextMenuBuilder,
+      this.contextMenuBuilder = _defaultContextMenuBuilder,
       this.enableInteractiveSelection})
       : super(
           key: key,
@@ -157,6 +157,12 @@ class TDInputView extends StatelessWidget {
             ),
           ),
     );
+  }
+
+  static Widget _defaultContextMenuBuilder(
+      BuildContext context, EditableTextState editableTextState) {
+    return const TextField()
+        .contextMenuBuilder!(context, editableTextState);
   }
 
   Widget? _buildCounter(BuildContext context, {required int currentLength, required bool isFocused, required int? maxLength}) {

@@ -72,7 +72,7 @@ class TDInput extends StatelessWidget {
     this.cardStyleBottomText,
     this.onTapOutside,
     this.selectionControls,
-    this.contextMenuBuilder,
+    this.contextMenuBuilder = _defaultContextMenuBuilder,
     this.enableInteractiveSelection,
   }) : spacer = spacer ?? TDInputSpacer.generateDefault();
 
@@ -234,6 +234,12 @@ class TDInput extends StatelessWidget {
 
   /// 是否启用交互式选择
   final bool? enableInteractiveSelection;
+
+  static Widget _defaultContextMenuBuilder(
+      BuildContext context, EditableTextState editableTextState) {
+    return const TextField()
+        .contextMenuBuilder!(context, editableTextState);
+  }
 
   /// 获取输入框规格
   double getInputPadding() {

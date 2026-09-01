@@ -490,8 +490,11 @@ class _TDToastLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
     return Container(
-        height: 110,
-        width: 110,
+        constraints: const BoxConstraints(
+          minWidth: 110,
+          minHeight: 110,
+          maxWidth: 191,
+        ),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: config.backgroundColor ?? theme.fontGyColor1,
@@ -499,7 +502,7 @@ class _TDToastLoading extends StatelessWidget {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
             TDCircleIndicator(
               color: config.iconColor ?? theme.whiteColor1,
