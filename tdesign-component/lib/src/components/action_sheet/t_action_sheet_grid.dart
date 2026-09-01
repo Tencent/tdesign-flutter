@@ -222,6 +222,10 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
     return SizedBox(height: widget.rows * widget.itemHeight, child: child);
   }
 
+  int _itemIndex(int panelIndex, int indexInPanel) {
+    return panelIndex * widget.count + indexInPanel;
+  }
+
   Widget _buildPaginationGrid(BuildContext context) {
     return _gridWrap(
       PageView.builder(
@@ -272,10 +276,8 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
                   children: List.generate(widget.rows, (row) {
                     return Row(
                       children: List.generate(columnsPerPanel, (column) {
-                        final index =
-                            panel * widget.count +
-                            row * columnsPerPanel +
-                            column;
+                        final indexInPanel = row * columnsPerPanel + column;
+                        final index = _itemIndex(panel, indexInPanel);
                         return SizedBox(
                           width: itemWidth,
                           height: widget.itemHeight,
@@ -330,7 +332,7 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
               final item = (items ?? widget.items)[index];
               return TActionSheetItemWidget(
                 item: item,
-                index: pageIndex * widget.count + index,
+                index: _itemIndex(pageIndex, index),
                 onChanged: widget.onChanged,
               );
             },

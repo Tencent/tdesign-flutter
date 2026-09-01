@@ -39,6 +39,8 @@ TActionSheet.showList(
 `count: 10, rows: 2` 表示每个可视面板两行五列。分页模式按 `count`
 切页，滚动模式保持相同密度并横向展示剩余项目。仅在显式设置
 `itemMinWidth` 或 Theme 最小宽度时，项目才会扩大并减少视口内实际可见数量。
+从旧版本升级时，如需保留多行滚动宫格固定 `80dp` 的项目宽度，请显式设置
+`itemMinWidth: 80`；不设置时使用上述自适应宽度。
 
 ```dart
 TActionSheet.showGrid(

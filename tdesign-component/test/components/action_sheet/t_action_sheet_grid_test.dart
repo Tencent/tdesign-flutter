@@ -202,6 +202,7 @@ void main() {
   });
 
   testWidgets('showPagination 分页 + 翻页触发回调', (tester) async {
+    int? selectedIndex;
     await tester.pumpWidget(
       wrap(
         TActionSheetGrid(
@@ -209,6 +210,7 @@ void main() {
           showPagination: true,
           count: 8,
           rows: 2,
+          onChanged: (_, index) => selectedIndex = index,
         ),
       ),
     );
@@ -227,6 +229,37 @@ void main() {
     await tester.drag(find.byType(PageView), const Offset(-400, 0));
     await tester.pumpAndSettle();
     expect(find.byType(TActionSheetGrid), findsOneWidget);
+    await tester.tap(find.text('项10'));
+    expect(selectedIndex, 10);
+  });
+
+  testWidgets('scrollable 跨面板点击返回全局索引', (tester) async {
+    int? selectedIndex;
+    await tester.pumpWidget(
+      wrap(
+        SizedBox(
+          width: 400,
+          child: TActionSheetGrid(
+            items: items(12),
+            count: 10,
+            rows: 2,
+            scrollable: true,
+            showCancel: false,
+            onChanged: (_, index) => selectedIndex = index,
+          ),
+        ),
+      ),
+    );
+
+    final scrollView = find.descendant(
+      of: find.byType(TActionSheetGrid),
+      matching: find.byType(ListView),
+    );
+    await tester.drag(scrollView, const Offset(-400, 0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('项11'));
+
+    expect(selectedIndex, 11);
   });
 
   testWidgets('showPagination + scrollable 均 false 走默认 grid', (tester) async {
