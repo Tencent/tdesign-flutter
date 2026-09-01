@@ -42,6 +42,7 @@ void main() {
     );
 
     expect(githubTests, cnbTests);
+    expect(githubTests, contains('test/badge_page_test.dart'));
     expect(githubTests, contains('test/notice_bar_page_test.dart'));
   });
 }
