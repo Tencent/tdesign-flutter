@@ -1,11 +1,6 @@
 Widget _buildDisabled(BuildContext context) => const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TSlider(value: 40, min: 0, max: 100),
-          TRangeSlider(
-            value: RangeValues(20, 70),
-            min: 0,
-            max: 100,
-          ),
-        ],
-      );
+    children: [
+      TSlider(key: ValueKey('slider-disabled'), value: 35, min: 0, max: 100),
+      TRangeSlider(value: RangeValues(40, 60), min: 0, max: 100),
+    ],
+  );

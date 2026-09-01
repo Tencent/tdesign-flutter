@@ -1,0 +1,12 @@
+Widget _buildScale(BuildContext context) => _panel(
+    TSlider(
+      key: const ValueKey('slider-scale'),
+      value: _scale,
+      min: 0,
+      max: 100,
+      divisions: 5,
+      showScaleValue: true,
+      scaleFormatter: _integer,
+      onChanged: (value) => setState(() => _scale = value),
+    ),
+  );

@@ -79,6 +79,7 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/switch/t_switch_test.dart',
     'test/components/switch/t_cupertino_switch_test.dart',
   ]),
+  ComponentTestSuite('slider', ['test/components/slider/t_slider_test.dart']),
   ComponentTestSuite('upload', ['test/components/upload/t_upload_test.dart']),
   ComponentTestSuite('form', ['test/components/form/t_form_test.dart']),
   ComponentTestSuite('input', [

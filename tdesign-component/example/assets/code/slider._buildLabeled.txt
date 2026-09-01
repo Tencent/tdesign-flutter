@@ -1,0 +1,11 @@
+Widget _buildLabeled(BuildContext context) => _panel(
+    TSlider(
+      key: const ValueKey('slider-labeled'),
+      value: _labeled,
+      min: 0,
+      max: 100,
+      showThumbValue: true,
+      thumbFormatter: _percent,
+      onChanged: (value) => setState(() => _labeled = value),
+    ),
+  );
