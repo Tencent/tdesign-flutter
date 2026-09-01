@@ -1,0 +1,11 @@
+Widget _descriptionScrollGrid(BuildContext context) => _trigger(
+    label: '带描述多行滚动宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      subtitle: '动作面板描述文字',
+      items: _scrollGridItems(context),
+      scrollable: true,
+      rows: 2,
+      onChanged: (item, _) => _showSelection(context, item),
+    ),
+  );

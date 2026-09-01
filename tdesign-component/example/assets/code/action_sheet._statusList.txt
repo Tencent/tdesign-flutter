@@ -1,26 +1,26 @@
 Widget _statusList(BuildContext context) => _trigger(
-        label: '列表型选项状态',
-        onPressed: () => TActionSheet.showList(
-          context,
-          cancelText: 'cancel',
-          items: [
-            TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
-            TActionSheetItem(
-              label: 'Mark as important',
-              icon: const Icon(TIcons.notification),
-              textStyle: TextStyle(color: context.tTheme.brandNormalColor),
-            ),
-            TActionSheetItem(
-              label: 'Unsubscribe',
-              icon: const Icon(TIcons.delete),
-              textStyle: TextStyle(color: context.tTheme.errorNormalColor),
-            ),
-            TActionSheetItem(
-              label: 'Add to Tasks',
-              icon: const Icon(TIcons.cloud_upload),
-              disabled: true,
-            ),
-          ],
-          onChanged: (item, _) => _showSelection(context, item),
+    label: '列表型选项状态',
+    onPressed: () => TActionSheet.showList(
+      context,
+      cancelText: 'cancel',
+      items: [
+        TActionSheetItem(label: 'Move', icon: const Icon(TIcons.folder)),
+        TActionSheetItem(
+          label: 'Mark as important',
+          icon: const Icon(TIcons.notification),
+          textStyle: TextStyle(color: context.tTheme.brandNormalColor),
         ),
-      );
+        TActionSheetItem(
+          label: 'Unsubscribe',
+          icon: const Icon(TIcons.delete),
+          textStyle: TextStyle(color: context.tTheme.errorNormalColor),
+        ),
+        TActionSheetItem(
+          label: 'Add to Tasks',
+          icon: const Icon(TIcons.cloud_upload),
+          disabled: true,
+        ),
+      ],
+      onChanged: (item, _) => _showSelection(context, item),
+    ),
+  );

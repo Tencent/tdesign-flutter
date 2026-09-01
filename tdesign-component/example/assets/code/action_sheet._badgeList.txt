@@ -1,9 +1,9 @@
-Widget _basicList(BuildContext context) => _trigger(
-    label: '常规列表型',
+Widget _badgeList(BuildContext context) => _trigger(
+    label: '带徽标列表型',
     onPressed: () => TActionSheet.showList(
       context,
       cancelText: 'cancel',
-      items: _textItems(),
+      items: _badgeItems(),
       onChanged: (item, _) => _showSelection(context, item),
     ),
   );

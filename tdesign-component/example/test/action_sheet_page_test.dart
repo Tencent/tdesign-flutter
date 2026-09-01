@@ -30,6 +30,11 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
+  Finder pageScrollable() => find.descendant(
+    of: find.byType(CustomScrollView),
+    matching: find.byType(Scrollable),
+  );
+
   Future<void> openBasicGrid(WidgetTester tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
@@ -37,7 +42,7 @@ void main() {
     await tester.scrollUntilVisible(
       trigger,
       200,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: pageScrollable().first,
     );
     await tester.tap(trigger);
     await tester.pumpAndSettle();
@@ -50,7 +55,7 @@ void main() {
     await tester.scrollUntilVisible(
       trigger,
       200,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: pageScrollable().first,
     );
     await tester.tap(trigger);
     await tester.pumpAndSettle();
@@ -63,7 +68,7 @@ void main() {
     await tester.scrollUntilVisible(
       trigger,
       200,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: pageScrollable().first,
     );
     await tester.tap(trigger);
     await tester.pumpAndSettle();
@@ -78,23 +83,64 @@ void main() {
       '常规列表型',
       '带描述列表型',
       '带图标列表型',
+      '带徽标列表型',
       '常规宫格型',
       '带描述宫格型',
-      '带翻页宫格型',
+      '带图标宫格型',
+      '带徽标宫格型',
+      '多行滚动宫格型',
+      '带描述多行滚动宫格型',
       '列表型选项状态',
       '居中列表型',
       '左对齐列表型',
     ];
-    for (final label in labels) {
-      final trigger = find.widgetWithText(TButton, label);
-      await tester.scrollUntilVisible(
-        trigger,
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(trigger, findsOneWidget);
+    final position = tester
+        .state<ScrollableState>(pageScrollable().first)
+        .position;
+    final foundLabels = <String>{};
+    for (var offset = 0.0; offset <= position.maxScrollExtent; offset += 200) {
+      position.jumpTo(offset.clamp(0, position.maxScrollExtent));
+      await tester.pump();
+      for (final label in labels) {
+        if (find.widgetWithText(TButton, label).evaluate().isNotEmpty) {
+          foundLabels.add(label);
+        }
+      }
     }
+    position.jumpTo(position.maxScrollExtent);
+    await tester.pump();
+    for (final label in labels) {
+      if (find.widgetWithText(TButton, label).evaluate().isNotEmpty) {
+        foundLabels.add(label);
+      }
+    }
+    expect(foundLabels, containsAll(labels));
     expect(find.text('单元测试'), findsNothing);
+  });
+
+  testWidgets('触发按钮按 Figma 使用 16dp 边距和 8dp 间距连续排列', (tester) async {
+    tester.view.physicalSize = const Size(375, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    final triggers = [
+      find.widgetWithText(TButton, '常规列表型'),
+      find.widgetWithText(TButton, '带描述列表型'),
+      find.widgetWithText(TButton, '带图标列表型'),
+      find.widgetWithText(TButton, '带徽标列表型'),
+    ];
+    final rects = triggers.map(tester.getRect).toList();
+    for (final rect in rects) {
+      expect(rect.left, 16);
+      expect(rect.right, 359);
+      expect(rect.height, 48);
+    }
+    for (var index = 1; index < rects.length; index++) {
+      expect(rects[index].top - rects[index - 1].bottom, 8);
+    }
   });
 
   testWidgets('常规宫格型在手机视口完整展示且不溢出', (tester) async {
