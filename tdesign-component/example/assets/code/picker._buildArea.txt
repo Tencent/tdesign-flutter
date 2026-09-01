@@ -1,0 +1,2 @@
+Widget _buildArea(BuildContext context) =>
+      TCellGroup(cells: [_cell('area', '选择地区', _area, popupTitle: '选择地区')]);

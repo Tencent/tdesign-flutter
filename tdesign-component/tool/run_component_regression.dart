@@ -16,6 +16,12 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('picker', [
+    'test/components/picker/t_picker_theme_test.dart',
+    'test/components/picker/t_picker_types_test.dart',
+    'test/components/picker/t_picker_widget_test.dart',
+    'test/components/picker/wheel_column_test.dart',
+  ]),
   ComponentTestSuite('tag', [
     'test/components/tag/t_select_tag_test.dart',
     'test/components/tag/t_tag_test.dart',
