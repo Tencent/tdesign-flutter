@@ -1,2 +1,11 @@
-Widget _centerList(BuildContext context) =>
-      _alignedList(context, '居中列表型', TActionSheetAlign.center);
+Widget _centerList(BuildContext context) => _trigger(
+        label: '居中列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          subtitle: 'Email Settings',
+          align: TActionSheetAlign.center,
+          items: _iconItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );

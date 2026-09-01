@@ -56,6 +56,19 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> openDescribedList(WidgetTester tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    final trigger = find.widgetWithText(TButton, '带描述列表型');
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('官方 Demo 矩阵公开展示全部场景', (tester) async {
     configurePhone(tester);
     await tester.pumpWidget(buildPage());
@@ -102,6 +115,24 @@ void main() {
     await openBasicList(tester);
 
     expect(find.text('Move'), findsOneWidget);
+    expect(find.text('cancel'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('带描述列表型完整展示描述、四个选项和取消项', (tester) async {
+    configurePhone(tester);
+
+    await openDescribedList(tester);
+
+    expect(find.text('Email Settings'), findsOneWidget);
+    for (final label in [
+      'Move',
+      'Mark as important',
+      'Unsubscribe',
+      'Add to Tasks',
+    ]) {
+      expect(find.text(label), findsOneWidget);
+    }
     expect(find.text('cancel'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

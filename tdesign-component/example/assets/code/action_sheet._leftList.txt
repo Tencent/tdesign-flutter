@@ -1,2 +1,11 @@
-Widget _leftList(BuildContext context) =>
-      _alignedList(context, '左对齐列表型', TActionSheetAlign.left);
+Widget _leftList(BuildContext context) => _trigger(
+        label: '左对齐列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          subtitle: 'Email Settings',
+          align: TActionSheetAlign.left,
+          items: _iconItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );

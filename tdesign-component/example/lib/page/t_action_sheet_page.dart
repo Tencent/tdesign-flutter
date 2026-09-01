@@ -14,6 +14,7 @@ class TActionSheetPage extends StatelessWidget {
       desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
       exampleCodeGroup: 'action_sheet',
       showTestModule: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '常规列表型', builder: _basicList),
@@ -35,7 +36,16 @@ class TActionSheetPage extends StatelessWidget {
   }
 
   Widget _trigger({required String label, required VoidCallback onPressed}) {
-    return TButton(child: Text(label), onPressed: onPressed);
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(label),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
   }
 
   List<TActionSheetItem> _textItems() => [
@@ -204,28 +214,28 @@ class TActionSheetPage extends StatelessWidget {
       );
 
   @ExampleCode(group: 'action_sheet')
-  Widget _centerList(BuildContext context) =>
-      _alignedList(context, '居中列表型', TActionSheetAlign.center);
+  Widget _centerList(BuildContext context) => _trigger(
+        label: '居中列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          subtitle: 'Email Settings',
+          align: TActionSheetAlign.center,
+          items: _iconItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
 
   @ExampleCode(group: 'action_sheet')
-  Widget _leftList(BuildContext context) =>
-      _alignedList(context, '左对齐列表型', TActionSheetAlign.left);
-
-  Widget _alignedList(
-    BuildContext context,
-    String label,
-    TActionSheetAlign align,
-  ) {
-    return _trigger(
-      label: label,
-      onPressed: () => TActionSheet.showList(
-        context,
-        cancelText: 'cancel',
-        subtitle: 'Email Settings',
-        align: align,
-        items: _iconItems(),
-        onChanged: (item, _) => _showSelection(context, item),
-      ),
-    );
-  }
+  Widget _leftList(BuildContext context) => _trigger(
+        label: '左对齐列表型',
+        onPressed: () => TActionSheet.showList(
+          context,
+          cancelText: 'cancel',
+          subtitle: 'Email Settings',
+          align: TActionSheetAlign.left,
+          items: _iconItems(),
+          onChanged: (item, _) => _showSelection(context, item),
+        ),
+      );
 }

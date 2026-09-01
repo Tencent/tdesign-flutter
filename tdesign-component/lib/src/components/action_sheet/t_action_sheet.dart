@@ -200,16 +200,23 @@ final class TActionSheet {
     final effectiveRows = rows ?? theme?.rows ?? 2;
     final effectiveItemHeight = itemHeight ?? theme?.itemHeight ?? 96;
     final effectiveItemMinWidth = itemMinWidth ?? theme?.itemMinWidth ?? 80;
-    final popupHeight = layout == _TActionSheetLayout.grid
-        ? TActionSheetGrid.preferredPopupHeight(
-            context,
-            subtitle: subtitle,
-            rows: effectiveRows,
-            itemHeight: effectiveItemHeight,
-            showPagination: showPagination,
-            showCancel: showCancel,
-          )
-        : null;
+    final popupHeight = switch (layout) {
+      _TActionSheetLayout.list => TActionSheetList.preferredPopupHeight(
+        context,
+        items: items,
+        subtitle: subtitle,
+        showCancel: showCancel,
+      ),
+      _TActionSheetLayout.grid => TActionSheetGrid.preferredPopupHeight(
+        context,
+        subtitle: subtitle,
+        rows: effectiveRows,
+        itemHeight: effectiveItemHeight,
+        showPagination: showPagination,
+        showCancel: showCancel,
+      ),
+      _TActionSheetLayout.group => null,
+    };
 
     final child = switch (layout) {
       _TActionSheetLayout.list => TActionSheetList(

@@ -56,6 +56,36 @@ void main() {
       expect(handle.isShowing, isFalse);
     });
 
+    testWidgets('列表弹层按内容自适应高度', (tester) async {
+      final context = await pumpHost(tester);
+      final basicHandle = TActionSheet.showList(
+        context,
+        items: List.generate(
+          4,
+          (index) => TActionSheetItem(label: '选项 $index'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TActionSheetList)).height, 280);
+      basicHandle.close();
+      await tester.pumpAndSettle();
+
+      final describedHandle = TActionSheet.showList(
+        context,
+        subtitle: 'Email Settings',
+        items: List.generate(
+          4,
+          (index) => TActionSheetItem(label: '选项 $index'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TActionSheetList)).height, 326);
+      describedHandle.close();
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('关闭动画期间重复点击不会重复回调或弹出宿主页', (tester) async {
       final context = await pumpHost(tester);
       var changedCount = 0;

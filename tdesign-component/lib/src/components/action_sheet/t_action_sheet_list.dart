@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -17,6 +19,9 @@ import 't_action_sheet_types.dart';
 /// 以列表布局展示可选项，支持描述文本。
 /// 通常不直接使用，由 `TActionSheet.showList` 创建。
 class TActionSheetList extends StatelessWidget {
+  static const double _itemExtent = 56;
+  static const double _itemWithSubtitleExtent = 84;
+
   /// 动作面板的项目列表
   final List<TActionSheetItem> items;
 
@@ -52,6 +57,50 @@ class TActionSheetList extends StatelessWidget {
     this.onChanged,
     this.useSafeArea = true,
   });
+
+  static double preferredPopupHeight(
+    BuildContext context, {
+    required List<TActionSheetItem> items,
+    required String? subtitle,
+    required bool showCancel,
+  }) {
+    final token = context.tTheme;
+    var height = items.fold<double>(
+      0,
+      (sum, item) =>
+          sum +
+          (item.subtitle == null || item.subtitle!.isEmpty
+              ? _itemExtent
+              : _itemWithSubtitleExtent),
+    );
+    if (subtitle != null) {
+      final font = token.fontBodyMedium;
+      final painter =
+          TextPainter(
+            text: TextSpan(
+              text: subtitle,
+              style: TextStyle(
+                fontSize: font?.size,
+                height: font?.height,
+                fontWeight: font?.fontWeight,
+              ),
+            ),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+          )..layout(
+            maxWidth: math.max(
+              0,
+              MediaQuery.sizeOf(context).width - token.spacer16 * 2,
+            ),
+          );
+      height += token.spacer12 * 2 + painter.height;
+      painter.dispose();
+    }
+    if (showCancel) {
+      height += token.spacer8 + actionSheetCancelButtonHeight;
+    }
+    return height;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +186,9 @@ class TActionSheetList extends StatelessWidget {
                     Navigator.maybePop(context); // 关闭当前页面
                   },
             child: Container(
-              height: item.subtitle == null || item.subtitle!.isEmpty ? 56 : 84,
+              height: item.subtitle == null || item.subtitle!.isEmpty
+                  ? _itemExtent
+                  : _itemWithSubtitleExtent,
               padding:
                   EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
               decoration: BoxDecoration(
