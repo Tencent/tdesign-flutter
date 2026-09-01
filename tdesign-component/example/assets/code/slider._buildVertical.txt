@@ -1,0 +1,36 @@
+Widget _buildVertical(BuildContext context) => SizedBox(
+    height: 210,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        RotatedBox(
+          quarterTurns: 3,
+          child: SizedBox(
+            width: 180,
+            child: TSlider(
+              key: const ValueKey('slider-vertical'),
+              value: _vertical,
+              min: 0,
+              max: 100,
+              showThumbValue: true,
+              thumbFormatter: _percent,
+              onChanged: (value) => setState(() => _vertical = value),
+            ),
+          ),
+        ),
+        const RotatedBox(
+          quarterTurns: 3,
+          child: SizedBox(
+            width: 180,
+            child: TRangeSlider(
+              value: RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              divisions: 5,
+              showScaleValue: true,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );

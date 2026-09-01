@@ -1,0 +1,16 @@
+Widget _buildCapsule(BuildContext context) => SliderTheme(
+    data: SliderTheme.of(context).copyWith(
+      trackHeight: 16,
+      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+      overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+    ),
+    child: _panel(
+      TSlider(
+        key: const ValueKey('slider-capsule'),
+        value: _capsule,
+        min: 0,
+        max: 100,
+        onChanged: (value) => setState(() => _capsule = value),
+      ),
+    ),
+  );
