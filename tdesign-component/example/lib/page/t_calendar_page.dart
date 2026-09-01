@@ -6,7 +6,10 @@ import '../base/example_widget.dart';
 
 /// TCalendar 演示。
 class TCalendarPage extends StatefulWidget {
-  const TCalendarPage({super.key});
+  const TCalendarPage({super.key, this.referenceDate});
+
+  /// 用于初始化依赖当前日期的示例；测试可传入固定日期以稳定截图。
+  final DateTime? referenceDate;
 
   @override
   State<TCalendarPage> createState() => _TCalendarPageState();
@@ -21,7 +24,16 @@ class _TCalendarPageState extends State<TCalendarPage> {
   List<DateTime> _rangeValue = [DateTime(2024, 12, 5), DateTime(2024, 12, 10)];
   List<DateTime> _localizedValue = [DateTime(2022, 2, 18)];
   List<DateTime> _limitedValue = [DateTime(2022, 2, 18)];
-  List<DateTime> _inlineValue = [DateTime.now()];
+  late final DateTime _referenceDate;
+  late List<DateTime> _inlineValue;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = widget.referenceDate ?? DateTime.now();
+    _referenceDate = DateTime(now.year, now.month, now.day);
+    _inlineValue = [_referenceDate];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +89,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
     bool localized = false,
   }) {
     var draft = List<DateTime>.of(value);
-    var anchor = draft.isEmpty ? minDate ?? DateTime.now() : draft.first;
+    var anchor = draft.isEmpty ? minDate ?? _referenceDate : draft.first;
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
@@ -337,8 +349,8 @@ class _TCalendarPageState extends State<TCalendarPage> {
         key: const ValueKey('calendar-inline-panel'),
         value: _inlineValue,
         variant: TCalendarVariant.multiple,
-        minDate: DateTime.now(),
-        maxDate: DateTime.now().add(const Duration(days: 180)),
+        minDate: _referenceDate,
+        maxDate: _referenceDate.add(const Duration(days: 180)),
         onChanged: (value) => setState(() => _inlineValue = value),
       ),
     ],

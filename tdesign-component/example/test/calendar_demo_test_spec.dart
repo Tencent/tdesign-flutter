@@ -3,10 +3,10 @@ import 'package:tdesign_flutter_example/page/t_calendar_page.dart';
 
 import 'demo_page_test_utils.dart';
 
-const calendarDemoPageTestSpec = DemoPageTestSpec(
+final calendarDemoPageTestSpec = DemoPageTestSpec(
   name: 'calendar',
   title: 'Calendar 日历',
-  page: TCalendarPage(),
+  page: TCalendarPage(referenceDate: DateTime(2026, 8, 31)),
   expectedTexts: [
     '按照日历形式展示数据或日期的容器。',
     '01 组件类型',
