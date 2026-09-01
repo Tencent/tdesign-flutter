@@ -71,3 +71,18 @@
 - Android 16 物理手机：常规宫格与多行滚动宫格首屏均为
   4 列 2 行，单项宽度一致；选择 QQ 后面板关闭并回显选择结果，
   横向滑动可访问第二个面板的 8 项数据，底部安全区保持生效。
+
+## 2026-09-01 API 作用域与文档登记复验
+
+- 删除仅影响副标题、无法控制宫格 Item 的 `showGrid.align`；
+  宫格 Item 与副标题统一居中，`TActionSheetAlign` 只属于列表。
+- `TActionSheetThemeData.itemHeight` 改名为 `gridItemHeight`，明确该默认值
+  只影响宫格 Item；实例级 `showGrid.itemHeight` 保留。
+- `TActionSheetGridLayout`、`TActionSheetGridMode` 和
+  `TActionSheetOnSelected` 已登记到 `tool/components.json`；
+  `node tool/generate_api.mjs` 成功生成 57 份 API 文档，ActionSheet 文档包含 7 个登记类型。
+- Flutter 3.32.0：ActionSheet 组件测试 46 项通过，
+  `flutter analyze --fatal-infos --no-pub` 为 0 issues。
+- Flutter 3.47.0：ActionSheet 组件测试 46 项通过，
+  `flutter analyze --fatal-infos --no-pub` 为 0 issues。
+- `node scripts/check-flutter-component-contracts.mjs` 通过，56 个站点路由均具备源码、Example 和文档登记。

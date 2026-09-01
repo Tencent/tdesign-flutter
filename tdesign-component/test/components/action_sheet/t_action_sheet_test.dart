@@ -222,16 +222,15 @@ void main() {
       expect(textBox.width, lessThanOrEqualTo(160));
     });
 
-    testWidgets('showGrid 传递互斥分页布局和 Theme 视觉尺寸', (tester) async {
+    testWidgets('showGrid 传递互斥分页布局和 Theme 宫格视觉尺寸', (tester) async {
       final context = await pumpHost(
         tester,
-        theme: const TActionSheetThemeData(itemHeight: 88),
+        theme: const TActionSheetThemeData(gridItemHeight: 88),
       );
 
       final handle = TActionSheet.showGrid(
         context,
         items: items(),
-        align: TActionSheetAlign.left,
         layout: const TActionSheetGridLayout.paged(count: 4, rows: 1),
       );
       await tester.pumpAndSettle();
@@ -239,7 +238,6 @@ void main() {
       final grid = tester.widget<TActionSheetGrid<String>>(
         find.byType(TActionSheetGrid<String>),
       );
-      expect(grid.align, TActionSheetAlign.left);
       expect(grid.layout.mode, TActionSheetGridMode.paged);
       expect(grid.layout.count, 4);
       expect(grid.layout.rows, 1);
@@ -447,20 +445,20 @@ void main() {
   group('TActionSheetThemeData', () {
     test('merge/copyWith/lerp 只处理视觉字段', () {
       const base = TActionSheetThemeData(
-        itemHeight: 80,
+        gridItemHeight: 80,
         barrierColor: Colors.black,
         iconSize: 24,
         iconColor: Colors.blue,
       );
       const override = TActionSheetThemeData(
-        itemHeight: 96,
+        gridItemHeight: 96,
         panelRadius: 12,
         gridIconExtent: 56,
         iconColor: Colors.red,
       );
 
       final merged = base.merge(override);
-      expect(merged.itemHeight, 96);
+      expect(merged.gridItemHeight, 96);
       expect(merged.panelRadius, 12);
       expect(merged.iconSize, 24);
       expect(merged.gridIconExtent, 56);
@@ -468,7 +466,7 @@ void main() {
 
       final copied = merged.copyWith(iconSize: 32);
       expect(copied.iconSize, 32);
-      expect(copied.itemHeight, 96);
+      expect(copied.gridItemHeight, 96);
 
       final lerped = base.lerp(override, 0.75);
       expect(lerped.panelRadius, 9);

@@ -19,3 +19,6 @@
 - [x] DONE 完成真实运行时页面与列表弹层截图验收
 - [ ] TODO 完成全部入口的真机连续交互验收
 - [x] DONE 完成最终 Review
+- [x] DONE 移除 `showGrid.align` 的误导性作用域并锁定宫格居中契约
+- [x] DONE 将 Theme 宫格高度字段收敛为 `gridItemHeight`
+- [x] DONE 登记宫格布局与回调公开类型并重建 API 文档

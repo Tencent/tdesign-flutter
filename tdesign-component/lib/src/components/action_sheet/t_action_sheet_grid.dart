@@ -25,9 +25,6 @@ class TActionSheetGrid<T> extends StatefulWidget {
   /// 描述文本
   final String? subtitle;
 
-  /// 对齐方式
-  final TActionSheetAlign align;
-
   /// 普通、分页或横向滚动宫格布局
   final TActionSheetGridLayout layout;
 
@@ -53,7 +50,6 @@ class TActionSheetGrid<T> extends StatefulWidget {
     super.key,
     required this.items,
     this.subtitle,
-    this.align = TActionSheetAlign.center,
     this.layout = const TActionSheetGridLayout.fixed(),
     this.cancelText,
     this.showCancel = true,
@@ -169,22 +165,13 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
         right: context.tTheme.spacer16,
         top: context.tTheme.spacer4,
       ),
-      child: Row(
-        mainAxisAlignment: getMainAxisAlignment(widget.align),
-        children: [
-          Flexible(
-            child: TText(
-              widget.subtitle!,
-              font: context.tTheme.fontBodyMedium,
-              textAlign: switch (widget.align) {
-                TActionSheetAlign.left => TextAlign.left,
-                TActionSheetAlign.right => TextAlign.right,
-                TActionSheetAlign.center => TextAlign.center,
-              },
-              textColor: context.tTheme.textColorPlaceholder,
-            ),
-          ),
-        ],
+      child: Center(
+        child: TText(
+          widget.subtitle!,
+          font: context.tTheme.fontBodyMedium,
+          textAlign: TextAlign.center,
+          textColor: context.tTheme.textColorPlaceholder,
+        ),
       ),
     );
   }

@@ -13,6 +13,9 @@
 `TActionSheetItem.group`，不引入 Section 模型。`TActionSheetItem<T>` 新增必填
 业务值 `value`，选择回调收敛为 `onSelected(item)`，不再回传布局相关索引。
 `TActionSheetThemeData` 只保留视觉默认值，布局容量和模式完全由调用参数所有。
+移除 `showGrid.align`：该参数无法改变宫格 Item 对齐，仅改变副标题会导致
+调用方误判作用域；宫格 Item 与副标题统一居中。Theme 的
+`itemHeight` 同步改名为 `gridItemHeight`，使名称与仅影响宫格的实际行为一致。
 常规宫格和多行滚动宫格继续共用 `TActionSheetItemWidget`，Example 的可比较
 入口改为复用同一组 8 项应用数据，不新增、删除或隐藏 Demo。
 默认、分页和横向滚动宫格统一回传带稳定 `value` 的完整 Item，
@@ -36,6 +39,8 @@
 - `TActionSheetItem` 改为带稳定业务值的泛型模型；`onChanged(item, index)` 改为
   `onSelected(item)`。
 - `showGrid` 改为接收单一 `layout`，三种布局构造互斥。
+- 删除不能控制宫格 Item 对齐的 `showGrid.align`；
+  `TActionSheetThemeData.itemHeight` 改名为 `gridItemHeight`。
 - 未显式设置 `itemMinWidth` 的多行滚动宫格默认宽度由固定 80dp 改为按
   `count / rows` 自适应，属于用户可感知的默认行为变化，按 breaking change 处理。
 - 非法 `count` / `rows` 组合新增断言约束。

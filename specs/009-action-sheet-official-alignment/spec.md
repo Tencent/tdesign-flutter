@@ -48,6 +48,10 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
   不包含二次分组能力，现有 13 个 Demo 不受影响。
 - `TActionSheetThemeData` 只持有视觉默认值，不持有 `count`、`rows`、
   `itemMinWidth` 或默认对齐等布局行为。
+- `TActionSheetAlign` 只属于列表布局；宫格 Item 与面板副标题固定居中，
+  `showGrid` 不暴露不能控制 Item 对齐的 `align` 参数。
+- `TActionSheetThemeData.gridItemHeight` 只提供宫格 Item 的默认高度；
+  列表项高度仍由列表视觉契约决定。
 - 默认、分页和滚动宫格统一复用 `TActionSheetItemWidget` 的 96dp 行高、48dp
   图标槽位、24dp 默认图标字号、8dp 图文间距和 `fontBodySmall` 标签字体。
 - Example 中常规宫格与多行滚动宫格的首个可视面板使用相同的前 8 项数据，
@@ -72,5 +76,7 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - [x] ActionSheet 生产源码 LCOV `LH/LF >= 95%`。
 - [x] 公开入口仅保留 `showList/showGrid`，旧分组 API 与分组字段完全移除。
 - [x] Widget 测试覆盖三种互斥布局、选择回调业务值以及全部非法布局参数。
+- [x] `showGrid` 无误导性对齐参数，Theme 宫格高度命名与实际作用域一致。
+- [x] 新增的宫格布局类型与选择回调已登记到 API 文档生成清单。
 - [ ] Demo、站点文档与生成检查全部使用新 API，13 个入口及视觉基线不减少。
 - [ ] 在真实运行时与小程序基线完成像素和交互对照。

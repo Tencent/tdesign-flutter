@@ -40,6 +40,7 @@ void main() {
       wrap(TActionSheetGrid(items: items(6), subtitle: '请选择')),
     );
     expect(find.text('请选择'), findsOneWidget);
+    expect(tester.widget<Text>(find.text('请选择')).textAlign, TextAlign.center);
   });
 
   testWidgets('长 subtitle 在窄宽度下可换行且不溢出', (tester) async {

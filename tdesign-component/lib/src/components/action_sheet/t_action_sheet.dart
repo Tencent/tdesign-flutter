@@ -64,7 +64,6 @@ final class TActionSheet {
   /// 显示宫格动作面板
   /// [context] 用于查找承载弹层的 Navigator。
   /// [items] 宫格中的动作项目。
-  /// [align] 项目对齐方式。
   /// [cancelText] 取消按钮文字。
   /// [subtitle] 面板副标题。
   /// [showCancel] 是否显示取消按钮。
@@ -72,7 +71,7 @@ final class TActionSheet {
   /// [closeOnOverlayClick] 点击蒙层是否关闭。
   /// [useSafeArea] 是否避让系统安全区。
   /// [layout] 普通、分页或横向滚动宫格布局。
-  /// [itemHeight] 项目高度。
+  /// [itemHeight] 宫格项目高度。
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击动作时回调。
@@ -80,7 +79,6 @@ final class TActionSheet {
     BuildContext context, {
     required List<TActionSheetItem<T>> items,
     TActionSheetGridLayout layout = const TActionSheetGridLayout.fixed(),
-    TActionSheetAlign align = TActionSheetAlign.center,
     String? cancelText,
     String? subtitle,
     bool showCancel = true,
@@ -96,7 +94,6 @@ final class TActionSheet {
       context,
       layout: _TActionSheetLayout.grid,
       items: items,
-      align: align,
       cancelText: cancelText,
       subtitle: subtitle,
       showCancel: showCancel,
@@ -131,7 +128,7 @@ final class TActionSheet {
     final theme = Theme.of(context).extension<TActionSheetThemeData>();
     final effectiveAlign = align ?? TActionSheetAlign.center;
     final effectiveCancelText = cancelText ?? context.resource.cancel;
-    final effectiveItemHeight = itemHeight ?? theme?.itemHeight ?? 96;
+    final effectiveItemHeight = itemHeight ?? theme?.gridItemHeight ?? 96;
     final popupHeight = switch (layout) {
       _TActionSheetLayout.list => TActionSheetList.preferredPopupHeight(
         context,
@@ -163,7 +160,6 @@ final class TActionSheet {
       _TActionSheetLayout.grid => TActionSheetGrid<T>(
         items: items,
         layout: gridLayout,
-        align: effectiveAlign,
         cancelText: effectiveCancelText,
         subtitle: subtitle,
         showCancel: showCancel,

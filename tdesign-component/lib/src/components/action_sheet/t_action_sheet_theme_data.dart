@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// TActionSheet 组件级 ThemeExtension
+/// TActionSheet 组件级视觉 ThemeExtension
 class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
-  /// 项高度
-  final double? itemHeight;
+  /// 宫格项目高度
+  final double? gridItemHeight;
 
   /// 蒙层颜色
   final Color? barrierColor;
@@ -21,7 +21,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   final Color? iconColor;
 
   const TActionSheetThemeData({
-    this.itemHeight,
+    this.gridItemHeight,
     this.barrierColor,
     this.panelRadius,
     this.iconSize,
@@ -34,7 +34,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
       return this;
     }
     return TActionSheetThemeData(
-      itemHeight: other.itemHeight ?? itemHeight,
+      gridItemHeight: other.gridItemHeight ?? gridItemHeight,
       barrierColor: other.barrierColor ?? barrierColor,
       panelRadius: other.panelRadius ?? panelRadius,
       iconSize: other.iconSize ?? iconSize,
@@ -45,7 +45,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
 
   @override
   TActionSheetThemeData copyWith({
-    double? itemHeight,
+    double? gridItemHeight,
     Color? barrierColor,
     double? panelRadius,
     double? iconSize,
@@ -53,7 +53,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
     Color? iconColor,
   }) {
     return TActionSheetThemeData(
-      itemHeight: itemHeight ?? this.itemHeight,
+      gridItemHeight: gridItemHeight ?? this.gridItemHeight,
       barrierColor: barrierColor ?? this.barrierColor,
       panelRadius: panelRadius ?? this.panelRadius,
       iconSize: iconSize ?? this.iconSize,
@@ -71,7 +71,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
       return this;
     }
     return TActionSheetThemeData(
-      itemHeight: lerpDouble(itemHeight, other.itemHeight, t),
+      gridItemHeight: lerpDouble(gridItemHeight, other.gridItemHeight, t),
       barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
       panelRadius: lerpDouble(panelRadius, other.panelRadius, t),
       iconSize: lerpDouble(iconSize, other.iconSize, t),

@@ -114,10 +114,13 @@ TActionSheet.showList(
 - `icon` 是 Widget 插槽；背景、形状和显式尺寸由该 Widget 自己控制。
 - `showList`：列表动作面板，支持副标题、取消按钮和禁用项。
 - `showGrid`：宫格动作面板，通过 `TActionSheetGridLayout.fixed`、
-  `paged` 或 `scroll` 明确选择一种互斥布局。
+  `paged` 或 `scroll` 明确选择一种互斥布局；宫格 Item 和副标题居中展示。
 - 两种入口均返回 `TPopupHandle`，可设置 `showOverlay`、`closeOnOverlayClick`、`useSafeArea`、`onCancel` 和 `onClosed`。
 
-`TActionSheetThemeData` 提供 `iconSize`、`gridIconExtent` 和 `iconColor` 等视觉默认值。解析优先级为自定义 Widget 显式样式 > ThemeExtension > TDesign token；ThemeExtension 缺失时组件直接使用 token。
+`TActionSheetThemeData` 提供 `gridItemHeight`、`iconSize`、`gridIconExtent` 和
+`iconColor` 等视觉默认值；`gridItemHeight` 只影响宫格项。解析优先级为
+自定义 Widget 显式样式 > ThemeExtension > TDesign token；ThemeExtension
+缺失时组件直接使用 token。
 
 ## 不兼容升级说明
 
@@ -129,5 +132,7 @@ TActionSheet.showList(
   `TActionSheetItem.group`。
 - `TActionSheetThemeData` 只保留视觉配置；布局行为应在每次调用的
   `layout` 中明确声明。
+- 删除 `showGrid.align`；宫格 Item 和副标题固定居中。
+- `TActionSheetThemeData.itemHeight` 改名为 `gridItemHeight`。
 
 示例源码：[t_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_action_sheet_page.dart)

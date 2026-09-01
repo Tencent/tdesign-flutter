@@ -678,7 +678,10 @@
           "TActionSheetItem",
           "TActionSheet",
           "TActionSheetThemeData",
-          "TActionSheetAlign"
+          "TActionSheetAlign",
+          "TActionSheetGridLayout",
+          "TActionSheetGridMode",
+          "TActionSheetOnSelected"
         ],
         "getComments": true
       }
