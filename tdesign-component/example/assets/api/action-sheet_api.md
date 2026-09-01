@@ -40,10 +40,10 @@
 | useSafeArea | bool | true | 是否避让系统安全区。 |
 | showPagination | bool | false | 是否显示分页指示器。 |
 | scrollable | bool | false | 是否允许滚动。 |
-| count | int? | - | 每页项目数。 |
-| rows | int? | - | 宫格行数。 |
+| count | int? | - | 一个可视面板期望容纳的项目数，默认 8。 |
+| rows | int? | - | 宫格行数，默认 2；`count` 必须能被 `rows` 整除。 |
 | itemHeight | double? | - | 项目高度。 |
-| itemMinWidth | double? | - | 项目最小宽度。 |
+| itemMinWidth | double? | - | 横向滚动项目的最小宽度；未指定时按面板宽度、`count` 和 `rows` 自适应。 |
 | onCancel | VoidCallback? | - | 点击取消时回调。 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 |
 | onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
@@ -121,7 +121,7 @@ TActionSheet 组件级 ThemeExtension
 | iconColor | Color? | - | 默认图标颜色。 |
 | iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 |
 | itemHeight | double? | - | 项高度 |
-| itemMinWidth | double? | - | 项最小宽度 |
+| itemMinWidth | double? | - | 横向滚动宫格与分组项目的最小宽度。 滚动宫格未配置时会按 `count / rows` 自适应项目宽度；配置后作为最小宽度。 |
 | panelRadius | double? | - | 面板圆角 |
 | rows | int? | - | 宫格行数 |
 

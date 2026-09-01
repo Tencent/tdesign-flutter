@@ -10,7 +10,9 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   /// 项高度
   final double? itemHeight;
 
-  /// 项最小宽度
+  /// 横向滚动宫格与分组项目的最小宽度。
+  ///
+  /// 滚动宫格未配置时会按 `count / rows` 自适应项目宽度；配置后作为最小宽度。
   final double? itemMinWidth;
 
   /// 宫格列数
@@ -94,7 +96,9 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
 
   @override
   TActionSheetThemeData lerp(
-      ThemeExtension<TActionSheetThemeData>? other, double t) {
+    ThemeExtension<TActionSheetThemeData>? other,
+    double t,
+  ) {
     if (other is! TActionSheetThemeData) {
       return this;
     }

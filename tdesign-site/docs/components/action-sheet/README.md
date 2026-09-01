@@ -34,6 +34,12 @@ TActionSheet.showList(
 
 `icon` 是完整的 Widget 插槽。普通 `Icon` 会继承 ActionSheet 的默认字号和颜色；渠道图标、品牌图标或带背景的工具图标由调用方直接构造完整 Widget，组件不会强制缩放。
 
+宫格中 `count` 表示一个可视面板期望容纳的项目数量，`rows` 表示行数，
+`items.length` 表示全部数据数量。`count` 必须能被 `rows` 整除；例如
+`count: 10, rows: 2` 表示每个可视面板两行五列。分页模式按 `count`
+切页，滚动模式保持相同密度并横向展示剩余项目。仅在显式设置
+`itemMinWidth` 或 Theme 最小宽度时，项目才会扩大并减少视口内实际可见数量。
+
 ```dart
 TActionSheet.showGrid(
   context,
@@ -47,6 +53,21 @@ TActionSheet.showGrid(
   showPagination: true,
   count: 8,
   rows: 2,
+  onChanged: (item, index) {},
+);
+
+TActionSheet.showGrid(
+  context,
+  items: List.generate(
+    24,
+    (index) => TActionSheetItem(
+      label: '操作 $index',
+      icon: const Icon(TIcons.image),
+    ),
+  ),
+  count: 10,
+  rows: 2,
+  scrollable: true,
   onChanged: (item, index) {},
 );
 

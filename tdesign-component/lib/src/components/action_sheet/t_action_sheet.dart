@@ -74,10 +74,10 @@ final class TActionSheet {
   /// [useSafeArea] 是否避让系统安全区。
   /// [showPagination] 是否显示分页指示器。
   /// [scrollable] 是否允许滚动。
-  /// [count] 每页项目数。
-  /// [rows] 宫格行数。
+  /// [count] 一个可视面板期望容纳的项目数，默认 8。
+  /// [rows] 宫格行数，默认 2；[count] 必须能被 [rows] 整除。
   /// [itemHeight] 项目高度。
-  /// [itemMinWidth] 项目最小宽度。
+  /// [itemMinWidth] 横向滚动项目的最小宽度；未指定时按面板宽度、[count] 和 [rows] 自适应。
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onChanged] 点击动作时回调。
@@ -199,7 +199,7 @@ final class TActionSheet {
     final effectiveCount = count ?? theme?.count ?? 8;
     final effectiveRows = rows ?? theme?.rows ?? 2;
     final effectiveItemHeight = itemHeight ?? theme?.itemHeight ?? 96;
-    final effectiveItemMinWidth = itemMinWidth ?? theme?.itemMinWidth ?? 80;
+    final effectiveItemMinWidth = itemMinWidth ?? theme?.itemMinWidth;
     final popupHeight = switch (layout) {
       _TActionSheetLayout.list => TActionSheetList.preferredPopupHeight(
         context,
@@ -253,7 +253,7 @@ final class TActionSheet {
         cancelText: effectiveCancelText,
         showCancel: showCancel,
         itemHeight: effectiveItemHeight,
-        itemMinWidth: effectiveItemMinWidth,
+        itemMinWidth: effectiveItemMinWidth ?? 80,
         onCancel: onCancel,
         onChanged: onChanged,
         // 命令式入口由 Popup 统一避让安全区，避免 Group 重复添加底部内边距。

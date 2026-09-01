@@ -74,6 +74,19 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> openScrollGrid(WidgetTester tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    final trigger = find.widgetWithText(TButton, '多行滚动宫格型');
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: pageScrollable().first,
+    );
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('官方 Demo 矩阵公开展示全部场景', (tester) async {
     configurePhone(tester);
     await tester.pumpWidget(buildPage());
@@ -152,6 +165,31 @@ void main() {
     expect(find.text('微信'), findsOneWidget);
     expect(find.text('复制'), findsOneWidget);
     expect(find.text('取消'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('多行滚动宫格首屏按 count=8 rows=2 展示前八项', (tester) async {
+    configurePhone(tester);
+
+    await openScrollGrid(tester);
+
+    final firstRow = ['微信', '朋友圈', 'QQ', '企业微信'];
+    final secondRow = ['腾讯文档', '邮箱', '微云', '文件'];
+    final firstTop = tester.getTopLeft(find.text(firstRow.first)).dy;
+    final secondTop = tester.getTopLeft(find.text(secondRow.first)).dy;
+    for (final label in firstRow) {
+      expect(tester.getTopLeft(find.text(label)).dy, firstTop);
+    }
+    for (final label in secondRow) {
+      expect(tester.getTopLeft(find.text(label)).dy, secondTop);
+    }
+    expect(secondTop, greaterThan(firstTop));
+    for (var column = 0; column < 4; column++) {
+      expect(
+        tester.getCenter(find.text(firstRow[column])).dx,
+        tester.getCenter(find.text(secondRow[column])).dx,
+      );
+    }
     expect(tester.takeException(), isNull);
   });
 

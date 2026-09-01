@@ -41,3 +41,13 @@
 - 站点 README 已移除旧的文件/分享/图片处理业务示例，改为与当前公开 Demo 一致的描述列表、分页宫格和状态示例；`showGroup` 仍保留在 API 摘要中。
 - 完整滚动 Web Demo 后发现并移除页尾内部“单元测试”模块；页面测试已增加公开页不出现该模块的断言。
 - CI 同款 Flutter 3.32.0 Linux 已重建 375×1232 明暗整页 Golden，并在不带 `--update-goldens` 时复跑页面与点击后弹层 4/4 通过；截图证据已同步更新。
+
+## 2026-09-01 宫格密度语义复验
+
+- Flutter 3.32.0：ActionSheet 组件测试 47 项通过，生产代码覆盖率 `467/473 = 98.73%`，`flutter analyze --fatal-infos --no-pub` 零问题。
+- Flutter 3.32.0：ActionSheet Demo 结构与交互测试 7 项通过，公开 Demo 仍保留 13 个入口；示例代码生成检查通过。
+- Android 16 物理手机：多行滚动宫格首屏按 `count=8`、`rows=2` 完整展示前 8 项，排列为 4 列 2 行，并可横向查看剩余数据。
+- Flutter 3.32.0 Linux：更新前多行滚动宫格 light/dark Golden 分别产生 7.58% / 7.57% 的预期布局差异；仅更新对应两张快照后，无 `--update-goldens` 复跑 2/2 通过。
+- `count=10`、`rows=2` 的 5 列 2 行首屏及后续数据滚动由 Widget 测试覆盖；本轮未改动 Demo 数据以制造该场景。
+- Flutter 3.47.0：ActionSheet 组件测试 47 项、Demo 测试 7 项与严格 analyze 均通过；首次 Demo 测试受跨 SDK `ink_sparkle.frag` 缓存污染影响，按约定 clean + pub get 后复跑通过。
+- 全部 13 个入口的连续真机交互与最终 Review 仍待完成。

@@ -257,6 +257,27 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('showGrid 未配置 itemMinWidth 时保持自适应宽度', (tester) async {
+      final context = await pumpHost(tester);
+
+      final handle = TActionSheet.showGrid(
+        context,
+        items: items(),
+        scrollable: true,
+      );
+      await tester.pumpAndSettle();
+
+      final grid = tester.widget<TActionSheetGrid>(
+        find.byType(TActionSheetGrid),
+      );
+      expect(grid.count, 8);
+      expect(grid.rows, 2);
+      expect(grid.itemMinWidth, isNull);
+
+      handle.close();
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('showGrid 按实际宫格内容计算弹窗高度', (tester) async {
       final context = await pumpHost(tester);
       final handle = TActionSheet.showGrid(

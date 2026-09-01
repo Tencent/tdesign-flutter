@@ -6,8 +6,6 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../../util/iterable_ext.dart';
-import '../../util/list_ext.dart';
 import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
@@ -30,7 +28,9 @@ class TActionSheetGrid extends StatefulWidget {
   /// 对齐方式
   final TActionSheetAlign align;
 
-  /// 每页显示的项目数
+  /// 一个可视面板期望容纳的项目数。
+  ///
+  /// 每行列数由 [count] ~/ [rows] 推导，因此 [count] 必须能被 [rows] 整除。
   final int count;
 
   /// 显示的行数
@@ -57,8 +57,11 @@ class TActionSheetGrid extends StatefulWidget {
   /// 项目的行高
   final double itemHeight;
 
-  /// 项目的最小宽度
-  final double itemMinWidth;
+  /// 横向滚动项目的最小宽度。
+  ///
+  /// 未指定时按面板可用宽度和每行列数自适应；显式值可以扩大项目宽度，
+  /// 此时一个视口实际可见的项目数可能少于 [count]。
+  final double? itemMinWidth;
 
   /// 是否使用安全区域
   final bool useSafeArea;
@@ -77,9 +80,16 @@ class TActionSheetGrid extends StatefulWidget {
     this.onCancel,
     this.onChanged,
     this.itemHeight = 96.0,
-    this.itemMinWidth = 80.0,
+    this.itemMinWidth,
     this.useSafeArea = true,
-  });
+  }) : assert(count > 0, 'count must be greater than 0'),
+       assert(rows > 0, 'rows must be greater than 0'),
+       assert(count >= rows, 'count must be greater than or equal to rows'),
+       assert(count % rows == 0, 'count must be divisible by rows'),
+       assert(
+         itemMinWidth == null || itemMinWidth > 0,
+         'itemMinWidth must be greater than 0',
+       );
 
   static double preferredPopupHeight(
     BuildContext context, {
@@ -93,23 +103,24 @@ class TActionSheetGrid extends StatefulWidget {
     var height = token.spacer8 + rows * itemHeight;
     if (subtitle != null) {
       final font = token.fontBodyMedium;
-      final painter = TextPainter(
-        text: TextSpan(
-          text: subtitle,
-          style: TextStyle(
-            fontSize: font?.size,
-            height: font?.height,
-            fontWeight: font?.fontWeight,
-          ),
-        ),
-        textDirection: Directionality.of(context),
-        textScaler: MediaQuery.textScalerOf(context),
-      )..layout(
-          maxWidth: math.max(
-            0,
-            MediaQuery.sizeOf(context).width - token.spacer16 * 2,
-          ),
-        );
+      final painter =
+          TextPainter(
+            text: TextSpan(
+              text: subtitle,
+              style: TextStyle(
+                fontSize: font?.size,
+                height: font?.height,
+                fontWeight: font?.fontWeight,
+              ),
+            ),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+          )..layout(
+            maxWidth: math.max(
+              0,
+              MediaQuery.sizeOf(context).width - token.spacer16 * 2,
+            ),
+          );
       height += token.spacer4 + painter.height;
       painter.dispose();
     }
@@ -151,10 +162,7 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
         children: [
           SizedBox(height: context.tTheme.spacer8),
           if (widget.subtitle != null) _buildDescription(context),
-          Flexible(
-            fit: FlexFit.loose,
-            child: _buildGridContent(context),
-          ),
+          Flexible(fit: FlexFit.loose, child: _buildGridContent(context)),
           if (widget.showCancel)
             buildCancelButton(
               context,
@@ -177,10 +185,7 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Flexible(
-          fit: FlexFit.loose,
-          child: _buildPaginationGrid(context),
-        ),
+        Flexible(fit: FlexFit.loose, child: _buildPaginationGrid(context)),
         _buildPaginationDots(context),
       ],
     );
@@ -245,29 +250,49 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
     if (widget.items.isEmpty) {
       return _gridWrap(const SizedBox.shrink());
     }
-    final chunks = widget.items.chunk(
-      (widget.items.length / widget.rows).ceil(),
-    );
-    final itemCount = chunks.first.length;
+    final columnsPerPanel = widget.count ~/ widget.rows;
+    final panelCount = (widget.items.length / widget.count).ceil();
     return _gridWrap(
-      ListView.builder(
-        itemCount: itemCount,
-        padding: EdgeInsets.zero,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, col) {
-          return Column(
-            children: List.generate(chunks.length, (row) {
-              final index = itemCount * row + col;
+      LayoutBuilder(
+        builder: (context, constraints) {
+          final availableWidth = constraints.maxWidth.isFinite
+              ? constraints.maxWidth
+              : MediaQuery.sizeOf(context).width;
+          final fittedItemWidth = availableWidth / columnsPerPanel;
+          final itemWidth = math.max(fittedItemWidth, widget.itemMinWidth ?? 0);
+          final panelWidth = itemWidth * columnsPerPanel;
+          return ListView.builder(
+            itemCount: panelCount,
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, panel) {
               return SizedBox(
-                width: widget.itemMinWidth,
-                height: widget.itemHeight,
-                child: TActionSheetItemWidget(
-                  item: chunks[row].getOrNull(col),
-                  index: index,
-                  onChanged: widget.onChanged,
+                width: panelWidth,
+                child: Column(
+                  children: List.generate(widget.rows, (row) {
+                    return Row(
+                      children: List.generate(columnsPerPanel, (column) {
+                        final index =
+                            panel * widget.count +
+                            row * columnsPerPanel +
+                            column;
+                        return SizedBox(
+                          width: itemWidth,
+                          height: widget.itemHeight,
+                          child: TActionSheetItemWidget(
+                            item: index < widget.items.length
+                                ? widget.items[index]
+                                : null,
+                            index: index,
+                            onChanged: widget.onChanged,
+                          ),
+                        );
+                      }),
+                    );
+                  }),
                 ),
               );
-            }),
+            },
           );
         },
       ),
