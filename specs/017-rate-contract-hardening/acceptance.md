@@ -1,5 +1,6 @@
 # 验收记录
 
+- 2026-09-02 禁用态辅助文字颜色回归：Flutter 3.32.0 与 3.47.0 的 `flutter test --no-pub --exclude-tags golden test/components/rate/t_rate_test.dart` 均为 36 项通过，分别直接断言默认 `textDisabledColor` Token 与显式 `ColorScheme.onSurface` 的 38% 透明度；3.32.0 覆盖率门禁为 361/367，98.37%；两个 SDK 的 `flutter analyze` 均零问题。
 - 2026-09-01 垂直对齐修复前根因测试：默认 `fontBodyLarge` 目标行盒为 24px，Rate 辅助文字实际为 23px，且 `TextStyle.height == null`；同一测试在修复后测得 24px，并确认文字与首个 24px 星标中心差小于 0.01px。
 - `flutter test test/components/rate/t_rate_test.dart test/components/text/t_text_test.dart test/components/text/t_text_resolve_test.dart`：56 项通过；Rate 辅助文字改用 `TText`，完整合并 `fontBodyLarge` 与 Theme 局部覆盖，并覆盖外层 `DefaultTextStyle`、窄容器位置和 1.0/1.5/2.0 文本缩放。
 - `flutter test test/components/rate/t_rate_test.dart --coverage` 与 `dart run tool/check_component_coverage.dart rate`：34 项通过，生产源码 360/367，98.09%。

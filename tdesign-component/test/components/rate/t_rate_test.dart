@@ -758,6 +758,45 @@ void main() {
       },
     );
 
+    testWidgets('disabled text color follows the TDesign token', (
+      tester,
+    ) async {
+      final token =
+          TThemeData.defaultData().copyWith(
+                colorMap: {'textDisabledColor': Colors.orange},
+              )
+              as TThemeData;
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(value: 2, texts: ['bad', 'ok', 'good', 'great', 'best']),
+          token: token,
+        ),
+      );
+
+      expect(tester.widget<Text>(find.text('ok')).style?.color, Colors.orange);
+    });
+
+    testWidgets('disabled text color applies Material onSurface opacity', (
+      tester,
+    ) async {
+      final colorScheme = ColorScheme.fromSeed(
+        seedColor: Colors.teal,
+      ).copyWith(onSurface: Colors.purple);
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(value: 2, texts: ['bad', 'ok', 'good', 'great', 'best']),
+          colorScheme: colorScheme,
+        ),
+      );
+
+      expect(
+        tester.widget<Text>(find.text('ok')).style?.color,
+        Colors.purple.withValues(alpha: 0.38),
+      );
+    });
+
     testWidgets('disabled colors come from global tokens', (tester) async {
       await tester.pumpWidget(
         wrap(
