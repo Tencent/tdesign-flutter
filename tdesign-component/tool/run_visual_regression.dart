@@ -127,6 +127,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/switch_demo_test.dart'],
   ),
   VisualTestSuite(
+    'tree_select',
+    'TreeSelect Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/tree_select_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'textarea',
     'Textarea Demo',
     workingDirectory: 'example',

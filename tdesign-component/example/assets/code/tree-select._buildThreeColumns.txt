@@ -1,0 +1,6 @@
+Widget _buildThreeColumns(BuildContext context) => TTreeSelect(
+    key: const ValueKey('tree-select-three-columns'),
+    options: _threeColumnOptions,
+    value: _threeColumn,
+    onChanged: (value) => setState(() => _threeColumn = value),
+  );
