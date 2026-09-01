@@ -25,6 +25,7 @@ const componentTargets = <String, List<String>>{
   'search': ['lib/src/components/search/'],
   'swipe_cell': ['lib/src/components/swipe_cell/'],
   'switch': ['lib/src/components/switch/'],
+  'stepper': ['lib/src/components/stepper/'],
   'text': ['lib/src/components/text/'],
   'textarea': ['lib/src/components/textarea/'],
   'toast': ['lib/src/components/toast/'],

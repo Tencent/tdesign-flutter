@@ -1,0 +1,7 @@
+Widget _buildDisabled(BuildContext context) => _row(const [
+    TStepper(
+      key: ValueKey('stepper-disabled'),
+      value: 1,
+      variant: TStepperVariant.filled,
+    ),
+  ]);

@@ -12,180 +12,136 @@ class TStepperPage extends StatefulWidget {
 }
 
 class _TStepperPageState extends State<TStepperPage> {
-  num _baseValue = 1;
-  num _normalValue = 2;
-  num _filledValue = 3;
-  num _outlineValue = 4;
-  num _smallValue = 1;
-  num _mediumValue = 2;
-  num _largeValue = 3;
-  num _minValue = 0;
-  num _maxValue = 10;
-  num _integerStepValue = 2;
-  num _decimalStepValue = 0.2;
-  num _themedValue = 5;
+  num _base = 3;
+  num _minimum = 0;
+  num _middle = 99;
+  num _maximum = 999;
+  num _filled = 3;
+  num _outline = 3;
+  num _normal = 3;
+  num _large = 3;
+  num _medium = 3;
+  num _small = 3;
 
   @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: tTitle(),
-      desc: '用于数量的增减。',
-      exampleCodeGroup: 'stepper',
-      children: [
-        ExampleModule(
-          title: '组件类型',
-          children: [
-            ExampleItem(desc: '基础步进器', builder: _buildBase),
-            ExampleItem(desc: '步进器形态', builder: _buildVariants),
-          ],
-        ),
-        ExampleModule(
-          title: '组件尺寸',
-          children: [
-            ExampleItem(desc: '小、中、大', builder: _buildSizes),
-          ],
-        ),
-        ExampleModule(
-          title: '组件状态',
-          children: [
-            ExampleItem(desc: '边界与整组禁用', builder: _buildStates),
-            ExampleItem(desc: '整数与小数步长', builder: _buildSteps),
-          ],
-        ),
-        ExampleModule(
-          title: '主题',
-          children: [
-            ExampleItem(desc: '局部 ThemeData', builder: _buildTheme),
-          ],
-        ),
-      ],
-      test: const [],
-    );
-  }
-
-  @ExampleCode(group: 'stepper')
-  Widget _buildBase(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _baseValue,
-          onChanged: (value) => setState(() => _baseValue = value),
-        ),
-      ]);
-
-  @ExampleCode(group: 'stepper')
-  Widget _buildVariants(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _normalValue,
-          variant: TStepperVariant.normal,
-          onChanged: (value) => setState(() => _normalValue = value),
-        ),
-        TStepper(
-          value: _filledValue,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _filledValue = value),
-        ),
-        TStepper(
-          value: _outlineValue,
-          variant: TStepperVariant.outline,
-          onChanged: (value) => setState(() => _outlineValue = value),
-        ),
-      ]);
-
-  @ExampleCode(group: 'stepper')
-  Widget _buildSizes(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _smallValue,
-          size: TStepperSize.small,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _smallValue = value),
-        ),
-        TStepper(
-          value: _mediumValue,
-          size: TStepperSize.medium,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _mediumValue = value),
-        ),
-        TStepper(
-          value: _largeValue,
-          size: TStepperSize.large,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _largeValue = value),
-        ),
-      ]);
-
-  @ExampleCode(group: 'stepper')
-  Widget _buildStates(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _minValue,
-          min: 0,
-          max: 10,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _minValue = value),
-        ),
-        TStepper(
-          value: _maxValue,
-          min: 0,
-          max: 10,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _maxValue = value),
-        ),
-        const TStepper(
-          value: 5,
-          variant: TStepperVariant.filled,
-        ),
-      ]);
-
-  @ExampleCode(group: 'stepper')
-  Widget _buildSteps(BuildContext context) => _buildRow(context, [
-        TStepper(
-          value: _integerStepValue,
-          min: 0,
-          max: 20,
-          step: 2,
-          variant: TStepperVariant.outline,
-          onChanged: (value) => setState(() => _integerStepValue = value),
-        ),
-        TStepper(
-          value: _decimalStepValue,
-          min: 0,
-          max: 1,
-          step: 0.1,
-          variant: TStepperVariant.outline,
-          onChanged: (value) => setState(() => _decimalStepValue = value),
-        ),
-      ]);
-
-  @ExampleCode(group: 'stepper')
-  Widget _buildTheme(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        TStepperThemeData(
-          size: TStepperSize.large,
-          variant: TStepperVariant.filled,
-          inputWidth: 72,
-          foregroundColor: context.tTheme.successNormalColor,
-          backgroundColor: context.tTheme.successLightColor,
-        ),
+  Widget build(BuildContext context) => ExamplePage(
+    title: tTitle(),
+    desc: '用于数量的增减。',
+    exampleCodeGroup: 'stepper',
+    compactDemo: true,
+    showTestModule: false,
+    children: [
+      ExampleModule(
+        title: '组件类型',
+        children: [ExampleItem(desc: '基础步进器', builder: _buildBase)],
       ),
-      child: _buildRow(context, [
-        TStepper(
-          value: _themedValue,
-          onChanged: (value) => setState(() => _themedValue = value),
-        ),
-      ]),
-    );
-  }
-
-  Widget _buildRow(BuildContext context, List<Widget> children) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      color: context.tTheme.bgColorContainer,
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: children,
+      ExampleModule(
+        title: '组件状态',
+        children: [
+          ExampleItem(desc: '最大最小状态', builder: _buildBounds),
+          ExampleItem(desc: '禁用状态', builder: _buildDisabled),
+        ],
       ),
-    );
-  }
+      ExampleModule(
+        title: '组件样式',
+        children: [
+          ExampleItem(desc: '步进器样式', builder: _buildVariants),
+          ExampleItem(desc: '步进器尺寸', builder: _buildSizes),
+        ],
+      ),
+    ],
+  );
+
+  @ExampleCode(group: 'stepper')
+  Widget _buildBase(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-base'),
+      value: _base,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _base = value),
+    ),
+  ]);
+
+  @ExampleCode(group: 'stepper')
+  Widget _buildBounds(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-minimum'),
+      value: _minimum,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _minimum = value),
+    ),
+    TStepper(
+      value: _middle,
+      min: 5,
+      max: 999,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _middle = value),
+    ),
+    TStepper(
+      key: const ValueKey('stepper-maximum'),
+      value: _maximum,
+      max: 999,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _maximum = value),
+    ),
+  ]);
+
+  @ExampleCode(group: 'stepper')
+  Widget _buildDisabled(BuildContext context) => _row(const [
+    TStepper(
+      key: ValueKey('stepper-disabled'),
+      value: 1,
+      variant: TStepperVariant.filled,
+    ),
+  ]);
+
+  @ExampleCode(group: 'stepper')
+  Widget _buildVariants(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-variants'),
+      value: _filled,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _filled = value),
+    ),
+    TStepper(
+      value: _outline,
+      variant: TStepperVariant.outline,
+      onChanged: (value) => setState(() => _outline = value),
+    ),
+    TStepper(
+      value: _normal,
+      variant: TStepperVariant.normal,
+      onChanged: (value) => setState(() => _normal = value),
+    ),
+  ]);
+
+  @ExampleCode(group: 'stepper')
+  Widget _buildSizes(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-sizes'),
+      value: _large,
+      size: TStepperSize.large,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _large = value),
+    ),
+    TStepper(
+      value: _medium,
+      size: TStepperSize.medium,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _medium = value),
+    ),
+    TStepper(
+      value: _small,
+      size: TStepperSize.small,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _small = value),
+    ),
+  ]);
+
+  Widget _row(List<Widget> children) => Wrap(
+    spacing: 16,
+    runSpacing: 16,
+    crossAxisAlignment: WrapCrossAlignment.center,
+    children: children,
+  );
 }

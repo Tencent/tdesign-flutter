@@ -1,0 +1,22 @@
+Widget _buildBounds(BuildContext context) => _row([
+    TStepper(
+      key: const ValueKey('stepper-minimum'),
+      value: _minimum,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _minimum = value),
+    ),
+    TStepper(
+      value: _middle,
+      min: 5,
+      max: 999,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _middle = value),
+    ),
+    TStepper(
+      key: const ValueKey('stepper-maximum'),
+      value: _maximum,
+      max: 999,
+      variant: TStepperVariant.filled,
+      onChanged: (value) => setState(() => _maximum = value),
+    ),
+  ]);
