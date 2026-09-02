@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/breaking/tabs-contract-alignment`
-- 基线分支：`rss1102/breaking/badge-design-alignment`
+- 基线分支：`develop`（重放时为 `de63f77d`）
 - Flutter/Dart：Flutter 3.32.0 与 Flutter 3.47.0（latest）
 
 ## 自动化验证
@@ -14,13 +14,14 @@
 | Flutter 3.32 Tabs 三个组件测试文件 | 通过 | 74 tests；含 Material 视觉隔离与 Theme 插值断言 |
 | Flutter 3.32 `example/test/tabs_page_test.dart` | 通过 | 公开 Demo 契约 |
 | Flutter 3.32 Tabs 覆盖率门禁 | 通过 | 754/778，96.92% |
-| Flutter 3.47 Tabs 定向 `flutter analyze --no-pub` | 通过 | `clean + pub get` 后 0 issues |
+| Flutter 3.47 Tabs 定向 `flutter analyze --no-pub` | 通过 | 独立临时 worktree 中 `clean + pub get` 后 0 issues |
 | Flutter 3.47 Tabs 三个组件测试文件 | 通过 | 74 tests；含 Material 视觉隔离断言 |
 | Flutter 3.47 `example/test/tabs_page_test.dart` | 通过 | 公开 Demo 契约 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例产物一致 |
 | `sh ./demo_tool/all_build.sh` | 通过 | 使用 Dart 3.32，生成 57 份 API 文档 |
 | 回归/覆盖率调度器自测 | 通过 | 11 tests |
 | Flutter 3.32 Linux Golden | 通过 | Tabs light/dark 与导航矩阵 light/dark，共 4 tests；默认精确比较器，无容差放宽 |
+| Tabs 相对 `develop` 的依赖审查 | 通过 | 仅包含 Tabs、Demo、测试、Spec 与回归配置；未引用 Badge 新增 variant、size 或 offset API |
 
 ## API 与实现收敛审查
 
@@ -30,6 +31,7 @@
 | `controller` / `DefaultTabController` | 同一状态机制的显式与继承入口 | 保留；二者不同时拥有状态 |
 | `onTap` | 用户点击事件；不负责保存选中状态 | 保留；与 Controller 不重复 |
 | `TTab.child` | 图标、文字、Badge 等任意内容组合 | 保留；不增加 `badgeBuilder` 等专用入口 |
+| Badge 依赖边界 | `TTab.child` 可组合任意已有 Widget | Tabs 仅使用 `develop` 已存在的基础 `TBadge` 组合方式，不依赖 Badge 分支的新 API |
 | `decoration` / `indicator` | 实例级完整样式逃逸入口 | 保留；优先于 `TTabsBarThemeData` |
 | `TTabsBarThemeData` | 子树级具体视觉默认值 | 保留；不承载 variant、状态或 Controller |
 | `TTabsBarView` | 内容区及默认不可滑动物理语义 | 保留；无状态实现，无私有 Controller |
