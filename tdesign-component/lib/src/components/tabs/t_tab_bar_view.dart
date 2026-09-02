@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 ///
 /// Material TabBarView 薄包装。
 /// `physics` 为空时默认不可滑动。
-class TTabsBarView extends StatefulWidget {
+class TTabsBarView extends StatelessWidget {
   /// 子widget列表
   final List<Widget> children;
 
-  /// 控制器
+  /// 可选的内容区控制器；为空时使用最近的 [DefaultTabController]。
+  ///
+  /// 与 `TTabsBar` 放在同一 [DefaultTabController] 下即可共享选中状态。
   final TabController? controller;
 
   /// 滑动物理特性；未传时默认不可滑动。
@@ -22,16 +24,11 @@ class TTabsBarView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TTabsBarView> createState() => _TTabsBarViewState();
-}
-
-class _TTabsBarViewState extends State<TTabsBarView> {
-  @override
   Widget build(BuildContext context) {
     return TabBarView(
-      physics: widget.physics ?? const NeverScrollableScrollPhysics(),
-      controller: widget.controller,
-      children: widget.children,
+      physics: physics ?? const NeverScrollableScrollPhysics(),
+      controller: controller,
+      children: children,
     );
   }
 }
