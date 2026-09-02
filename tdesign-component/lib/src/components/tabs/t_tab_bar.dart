@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
@@ -11,7 +9,7 @@ import 't_tab_bar_theme_data.dart';
 
 /// 标签栏
 ///
-/// 支持滚动、指示器自定义、胶囊/填充/卡片样式等。
+/// 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
 class TTabsBar extends StatelessWidget {
   const TTabsBar({
     Key? key,
@@ -21,13 +19,15 @@ class TTabsBar extends StatelessWidget {
     this.isScrollable = false,
     this.indicator,
     this.onTap,
-    this.variant = TTabsBarVariant.filled,
+    this.variant = TTabsBarVariant.line,
   }) : super(key: key);
 
   /// tab数组
   final List<TTab> tabs;
 
-  /// tab控制器
+  /// 可选的标签控制器；为空时使用最近的 [DefaultTabController]。
+  ///
+  /// 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。
   final TabController? controller;
 
   /// tabBar 修饰；非空时覆盖 Theme 的背景和分割线。
@@ -37,12 +37,15 @@ class TTabsBar extends StatelessWidget {
   final bool isScrollable;
 
   /// 自定义指示器；非空时覆盖 Theme 指示器。
+  ///
+  /// [TTabsBarVariant.line] 默认使用 TDesign 品牌色指示器，Tag 与 Card
+  /// 默认不显示指示器。
   final Decoration? indicator;
 
   /// 点击事件
   final ValueChanged<int>? onTap;
 
-  /// 选项卡样式。
+  /// 选项卡结构形态，默认为 [TTabsBarVariant.line]。
   final TTabsBarVariant variant;
   TTabsBarThemeData _themeData(BuildContext context) =>
       Theme.of(context).extension<TTabsBarThemeData>() ??
@@ -54,6 +57,8 @@ class TTabsBar extends StatelessWidget {
     final dividerHeight = themeData.dividerHeight ?? 0.5;
     final backgroundColor =
         themeData.backgroundColor ?? context.tTheme.bgColorContainer;
+    final resolvedIndicator =
+        indicator ?? themeData.indicator ?? _defaultIndicator(context);
     return Container(
       height: 48,
       decoration:
@@ -75,59 +80,71 @@ class TTabsBar extends StatelessWidget {
                 )),
       child: THorizontalTabBar(
         isScrollable: isScrollable,
-        indicator: indicator ?? themeData.indicator ?? _TNoneIndicator(),
+        indicator: resolvedIndicator,
+        indicatorSize: TabBarIndicatorSize.tab,
+        labelColor:
+            themeData.labelStyle?.color ?? context.tTheme.brandNormalColor,
         labelStyle: themeData.labelStyle ?? _getLabelStyle(context),
-        labelPadding: themeData.labelPadding ?? const EdgeInsets.all(8),
+        labelPadding:
+            themeData.labelPadding ??
+            (variant == TTabsBarVariant.tag
+                ? const EdgeInsets.all(4)
+                : const EdgeInsets.all(8)),
+        unselectedLabelColor:
+            themeData.unselectedLabelStyle?.color ??
+            context.tTheme.textColorPrimary,
         unselectedLabelStyle:
             themeData.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
         tabs: tabs,
         variant: variant,
         controller: controller,
-        backgroundColor: themeData.backgroundColor,
-        selectedBgColor: themeData.selectedBgColor,
-        unSelectedBgColor:
-            themeData.unSelectedBgColor ??
+        backgroundColor: backgroundColor,
+        selectedTagBackgroundColor: themeData.selectedTagBackgroundColor,
+        tagBackgroundColor:
+            themeData.tagBackgroundColor ??
             context.tTheme.bgColorSecondaryContainer,
         tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
-        onTap: (index) {
-          onTap?.call(index);
-        },
+        overlayColor: const WidgetStatePropertyAll<Color?>(Colors.transparent),
+        onTap: onTap,
       ),
     );
+  }
+
+  Decoration _defaultIndicator(BuildContext context) {
+    if (variant != TTabsBarVariant.line) {
+      return _TNoneIndicator();
+    }
+    return TTabsBarIndicator(indicatorColor: context.tTheme.brandNormalColor);
   }
 
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
     final tokenFont = context.tTheme.fontBodyMedium;
     final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
     return TextStyle(
-          fontSize: tokenFont?.size,
-          height: tokenFont?.height,
-          fontWeight: tokenFont?.fontWeight,
-          fontFamily: inheritedStyle?.fontFamily,
-          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
-        )
-        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
-        .copyWith(
-          fontWeight: FontWeight.w400,
-          color: context.tTheme.textColorPrimary,
-        );
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight,
+      fontFamily: inheritedStyle?.fontFamily,
+      fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+    ).copyWith(
+      fontWeight: FontWeight.w400,
+      color: context.tTheme.textColorPrimary,
+    );
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
     final tokenFont = context.tTheme.fontBodyMedium;
     final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
     return TextStyle(
-          fontSize: tokenFont?.size,
-          height: tokenFont?.height,
-          fontWeight: tokenFont?.fontWeight,
-          fontFamily: inheritedStyle?.fontFamily,
-          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
-        )
-        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
-        .copyWith(
-          fontWeight: FontWeight.w600,
-          color: context.tTheme.textColorPrimary,
-        );
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight,
+      fontFamily: inheritedStyle?.fontFamily,
+      fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+    ).copyWith(
+      fontWeight: FontWeight.w600,
+      color: context.tTheme.brandNormalColor,
+    );
   }
 }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../badge/t_badge.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
+import 't_tab_bar_theme_data.dart';
 
 /// Tab 组件
 ///
@@ -18,33 +20,19 @@ class TTab extends Tab {
   @override
   final Widget? icon;
 
-  /// 徽标
-  final TBadge? badge;
-
   /// 是否可用，默认 true；`false` 即禁用
   final bool enabled;
 
-  const TTab({
-    Key? key,
-    this.text,
-    this.child,
-    this.icon,
-    this.badge,
-    this.enabled = true,
-  })  : assert(
-          text == null || child == null,
-          'text and child cannot be provided together.',
-        ),
-        assert(
-          text != null || child != null || icon != null,
-          'Provide text, child, or icon.',
-        ),
-        super(
-          key: key,
-          text: text,
-          child: child,
-          icon: icon,
-        );
+  const TTab({Key? key, this.text, this.child, this.icon, this.enabled = true})
+    : assert(
+        text == null || child == null,
+        'text and child cannot be provided together.',
+      ),
+      assert(
+        text != null || child != null || icon != null,
+        'Provide text, child, or icon.',
+      ),
+      super(key: key, text: text, child: child, icon: icon);
 
   @override
   Size get preferredSize => const Size.fromHeight(46);
@@ -62,34 +50,30 @@ class TTab extends Tab {
               children: <Widget>[icon!, const SizedBox(width: 4), label],
             );
     }
-    if (badge != null) {
-      // Let Material's Badge lay out against the complete tab content. A
-      // positioned standalone badge does not contribute to Stack's size and
-      // can cover an icon or label.
-      label = TBadge(
-        label: badge!.label,
-        variant: badge!.variant,
-        border: badge!.border,
-        showZero: badge!.showZero,
-        onTap: badge!.onTap,
-        child: label!,
+    Widget content = Center(widthFactor: 1.0, child: label);
+    if (!enabled) {
+      final disabledStyle = DefaultTextStyle.of(context).style
+          .copyWith(color: context.tTheme.textDisabledColor)
+          .merge(
+            Theme.of(
+              context,
+            ).extension<TTabsBarThemeData>()?.disabledLabelStyle,
+          );
+      content = DefaultTextStyle.merge(
+        style: disabledStyle,
+        child: IconTheme.merge(
+          data: IconThemeData(color: disabledStyle.color),
+          child: content,
+        ),
       );
     }
-
-    return IgnorePointer(
-      ignoring: !enabled,
-      child: Center(widthFactor: 1.0, child: label),
-    );
+    return content;
   }
 
   Widget _buildLabelContent() {
     if (child != null) {
       return child!;
     }
-    return Text(
-      text!,
-      softWrap: false,
-      overflow: TextOverflow.fade,
-    );
+    return Text(text!, softWrap: false, overflow: TextOverflow.fade);
   }
 }

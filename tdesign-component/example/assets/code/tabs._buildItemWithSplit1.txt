@@ -1,7 +1,11 @@
 Widget _buildItemWithSplit1(BuildContext context) {
-    return TTabsBar(
-      tabs: subList(2),
-      controller: _tabController1,
-      indicator: _indicator(context),
+    return const DefaultTabController(
+      length: 2,
+      child: TTabsBar(
+        tabs: [
+          TTab(text: '选项'),
+          TTab(text: '选项'),
+        ],
+      ),
     );
   }
