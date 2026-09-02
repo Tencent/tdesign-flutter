@@ -48,6 +48,7 @@
 - `ribbonLeft/right` 与 `triangleLeft/right` 表示物理方位，在 RTL 中不自动互换。
 - `label == null` 隐藏普通文字徽标；`dot` 始终显示且不创建文字；`showZero` 仅控制字符串 `0`。
 - 默认文字使用 `TText`，Theme 显式 `textStyle` 保持最高覆盖优先级，未指定 `leadingDistribution` 时使用 `even`。
+- `TThemeBuilder` 为原生 Material `Badge` 生成的默认 `BadgeThemeData` 仅视为 Token 投影，不覆盖 `TBadgeSize` 的 16/20px 预设；调用方显式提供的局部或全局 `BadgeThemeData.textStyle`、`padding`、`largeSize` 仍按优先级覆盖两档预设。
 
 ## Token 与固定几何
 

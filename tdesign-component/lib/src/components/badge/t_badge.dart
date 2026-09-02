@@ -99,39 +99,28 @@ class TBadge extends StatelessWidget {
     final localBadgeTheme = context
         .dependOnInheritedWidgetOfExactType<BadgeTheme>()
         ?.data;
-    final globalBadgeTheme = materialTheme.badgeTheme;
+    final globalBadgeTheme = materialTheme.tExplicitBadgeTheme;
     final tTheme = Theme.of(context).extension<TBadgeThemeData>();
     final token = context.tTheme;
     final backgroundColor =
         localBadgeTheme?.backgroundColor ??
-        globalBadgeTheme.backgroundColor ??
+        globalBadgeTheme?.backgroundColor ??
         token.errorNormalColor;
     final textColor =
         localBadgeTheme?.textColor ??
-        globalBadgeTheme.textColor ??
+        globalBadgeTheme?.textColor ??
         token.textColorAnti;
     final smallSize =
-        localBadgeTheme?.smallSize ?? globalBadgeTheme.smallSize ?? 6.0;
-    final largeSize =
-        localBadgeTheme?.largeSize ?? globalBadgeTheme.largeSize ?? 16.0;
+        localBadgeTheme?.smallSize ?? globalBadgeTheme?.smallSize ?? 6.0;
     final font = size == TBadgeSize.large
         ? token.fontMarkSmall
         : token.fontMarkExtraSmall;
     final materialTextStyle = size == TBadgeSize.large
         ? materialTheme.tExplicitTextTheme?.labelMedium
         : materialTheme.tExplicitTextTheme?.labelSmall;
-    final defaultMediumFont = token.fontMarkExtraSmall;
-    final globalTextStyle =
-        size == TBadgeSize.large &&
-            globalBadgeTheme.textStyle?.fontSize == defaultMediumFont?.size &&
-            globalBadgeTheme.textStyle?.height == defaultMediumFont?.height &&
-            globalBadgeTheme.textStyle?.fontWeight ==
-                defaultMediumFont?.fontWeight
-        ? null
-        : globalBadgeTheme.textStyle;
     final textStyle =
         localBadgeTheme?.textStyle ??
-        globalTextStyle ??
+        globalBadgeTheme?.textStyle ??
         materialTextStyle ??
         TextStyle(
           color: textColor,
@@ -141,24 +130,26 @@ class TBadge extends StatelessWidget {
         );
     const mediumPadding = EdgeInsets.symmetric(horizontal: 4);
     const largePadding = EdgeInsets.symmetric(horizontal: 5);
-    final globalPadding =
-        size == TBadgeSize.large && globalBadgeTheme.padding == mediumPadding
-        ? null
-        : globalBadgeTheme.padding;
     final padding =
         localBadgeTheme?.padding ??
-        globalPadding ??
+        globalBadgeTheme?.padding ??
         (size == TBadgeSize.large ? largePadding : mediumPadding);
-    final alignment = localBadgeTheme?.alignment ?? globalBadgeTheme.alignment;
+    final alignment = localBadgeTheme?.alignment ?? globalBadgeTheme?.alignment;
     final effectiveOffset =
-        offset ?? localBadgeTheme?.offset ?? globalBadgeTheme.offset;
+        offset ?? localBadgeTheme?.offset ?? globalBadgeTheme?.offset;
     final visible =
         variant == TBadgeVariant.dot ||
         (label != null && (showZero || label != '0'));
     final tokenHeight = (font?.size ?? 0) * (font?.height ?? 0);
-    final effectiveLargeSize = size == TBadgeSize.large
-        ? (tokenHeight > 0 ? tokenHeight : 20.0)
-        : largeSize;
+    final defaultLabelHeight = tokenHeight > 0
+        ? tokenHeight
+        : size == TBadgeSize.large
+        ? 20.0
+        : 16.0;
+    final effectiveLargeSize =
+        localBadgeTheme?.largeSize ??
+        globalBadgeTheme?.largeSize ??
+        defaultLabelHeight;
     final isDot = variant == TBadgeVariant.dot;
     final isCorner = _isCornerVariant(variant);
     final text = label ?? '';

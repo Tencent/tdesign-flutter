@@ -14,14 +14,14 @@
 | --- | --- | --- |
 | `flutter analyze --no-pub`（component，3.32.0） | 通过 | 0 issues |
 | `flutter analyze --no-pub`（example，3.32.0） | 通过 | 0 issues |
-| `flutter test --no-pub test/components/badge/t_badge_test.dart`（3.32.0） | 通过 | 33 tests |
+| `flutter test --no-pub test/components/badge/t_badge_test.dart`（3.32.0） | 通过 | 35 tests |
 | `flutter test --no-pub test/components/badge/t_badge_golden_test.dart`（3.32.0） | 通过 | light/dark 2 tests，未更新基准 |
 | `flutter test --no-pub test/badge_page_test.dart`（example，3.32.0） | 通过 | 2 tests |
 | `flutter test --coverage test/components/badge/t_badge_test.dart` + coverage gate | 通过 | production LH/LF 177/177 = 100% |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码无漂移 |
 | Badge API 文档生成（3.32.0） | 通过 | TBadge、TBadgeThemeData、TBadgeVariant、TBadgeSize 均完整输出 |
 | `flutter analyze --no-pub`（component + example，3.47.0） | 通过 | 0 issues |
-| Badge component + Demo tests（3.47.0） | 通过 | 33 + 2 tests |
+| Badge component + Demo tests（3.47.0） | 通过 | 35 + 2 tests |
 
 ## 人工验收
 

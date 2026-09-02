@@ -300,6 +300,18 @@ extension TMaterialProjectionExtension on ThemeData {
             style == projection.outlinedButtonStyle ||
             style == projection.textButtonStyle);
   }
+
+  /// 返回调用方显式配置的 [BadgeThemeData]。
+  ///
+  /// [TThemeBuilder] 会为原生 Material [Badge] 投影一份 TDesign 默认主题，
+  /// 但该投影不能覆盖 `TBadge` 自己的尺寸 Token。这里按来源对象识别投影，
+  /// 避免用字体、内边距等数值相等关系猜测调用方是否显式配置。
+  BadgeThemeData? get tExplicitBadgeTheme {
+    final projection = extension<_TMaterialProjectionThemeData>();
+    return projection != null && identical(badgeTheme, projection.badgeTheme)
+        ? null
+        : badgeTheme;
+  }
 }
 
 class _TMaterialProjectionThemeData
@@ -309,6 +321,7 @@ class _TMaterialProjectionThemeData
     required this.textTheme,
     required this.iconTheme,
     required this.dividerTheme,
+    required this.badgeTheme,
     required this.elevatedButtonStyle,
     required this.outlinedButtonStyle,
     required this.textButtonStyle,
@@ -318,6 +331,7 @@ class _TMaterialProjectionThemeData
   final TextTheme textTheme;
   final IconThemeData iconTheme;
   final DividerThemeData dividerTheme;
+  final BadgeThemeData badgeTheme;
   final ButtonStyle elevatedButtonStyle;
   final ButtonStyle outlinedButtonStyle;
   final ButtonStyle textButtonStyle;
@@ -328,6 +342,7 @@ class _TMaterialProjectionThemeData
     TextTheme? textTheme,
     IconThemeData? iconTheme,
     DividerThemeData? dividerTheme,
+    BadgeThemeData? badgeTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
@@ -337,6 +352,7 @@ class _TMaterialProjectionThemeData
       textTheme: textTheme ?? this.textTheme,
       iconTheme: iconTheme ?? this.iconTheme,
       dividerTheme: dividerTheme ?? this.dividerTheme,
+      badgeTheme: badgeTheme ?? this.badgeTheme,
       elevatedButtonStyle: elevatedButtonStyle ?? this.elevatedButtonStyle,
       outlinedButtonStyle: outlinedButtonStyle ?? this.outlinedButtonStyle,
       textButtonStyle: textButtonStyle ?? this.textButtonStyle,
@@ -356,6 +372,7 @@ class _TMaterialProjectionThemeData
       textTheme: TextTheme.lerp(textTheme, other.textTheme, t),
       iconTheme: IconThemeData.lerp(iconTheme, other.iconTheme, t),
       dividerTheme: DividerThemeData.lerp(dividerTheme, other.dividerTheme, t),
+      badgeTheme: BadgeThemeData.lerp(badgeTheme, other.badgeTheme, t),
       elevatedButtonStyle: ButtonStyle.lerp(
         elevatedButtonStyle,
         other.elevatedButtonStyle,
@@ -521,6 +538,7 @@ class TMaterialThemeBuilder {
           textTheme: base.textTheme,
           iconTheme: base.iconTheme,
           dividerTheme: base.dividerTheme,
+          badgeTheme: base.badgeTheme,
           elevatedButtonStyle: base.elevatedButtonTheme.style!,
           outlinedButtonStyle: base.outlinedButtonTheme.style!,
           textButtonStyle: base.textButtonTheme.style!,

@@ -604,6 +604,49 @@ void main() {
       expect(badge.offset, badgeTheme.offset);
     });
 
+    testWidgets('TThemeBuilder 投影不覆盖 TBadge 两档尺寸 token', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TBadge(label: '8'),
+              TBadge(label: '8', size: TBadgeSize.large),
+            ],
+          ),
+        ),
+      );
+
+      final badges = tester.widgetList<Badge>(find.byType(Badge)).toList();
+      expect(badges[0].largeSize, 16);
+      expect(badges[0].padding, const EdgeInsets.symmetric(horizontal: 4));
+      expect(badges[0].textStyle?.fontSize, token.fontMarkExtraSmall?.size);
+      expect(badges[1].largeSize, 20);
+      expect(badges[1].padding, const EdgeInsets.symmetric(horizontal: 5));
+      expect(badges[1].textStyle?.fontSize, token.fontMarkSmall?.size);
+    });
+
+    testWidgets('large 保留与中号默认数值相同的显式全局主题', (tester) async {
+      final baseTheme = fullTheme();
+      final projectedBadgeTheme = baseTheme.badgeTheme;
+      final explicitBadgeTheme = BadgeThemeData(
+        textStyle: projectedBadgeTheme.textStyle,
+        padding: projectedBadgeTheme.padding,
+        largeSize: 24,
+      );
+      await tester.pumpWidget(
+        app(
+          const TBadge(label: '8', size: TBadgeSize.large),
+          theme: baseTheme.copyWith(badgeTheme: explicitBadgeTheme),
+        ),
+      );
+
+      final badge = badgeOf(tester);
+      expect(badge.largeSize, 24);
+      expect(badge.textStyle, explicitBadgeTheme.textStyle);
+      expect(badge.padding, explicitBadgeTheme.padding);
+    });
+
     testWidgets('局部 BadgeTheme 按字段覆盖并继承全局未设置字段', (tester) async {
       const globalTheme = BadgeThemeData(
         backgroundColor: Colors.red,

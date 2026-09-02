@@ -4,7 +4,7 @@
 
 - 将 `TBadgeVariant.small` 拆为独立 `TBadgeSize`，避免形态与尺寸双重所有权。
 - 继续复用 Material `Badge` 处理普通、圆点、方形和气泡的 child 锚定；角标使用 `Stack + CustomPainter` 按公开枚举指定的物理左右方位贴合内容边角。
-- 中/大尺寸从 `fontMarkExtraSmall`、`fontMarkSmall` 的字号和行高取得；颜色、文字样式、padding、alignment、offset 继续遵循实例、局部 Theme、全局 Theme、Token 的覆盖链。
+- 中/大尺寸从 `fontMarkExtraSmall`、`fontMarkSmall` 的字号和行高取得；颜色、文字样式、padding、alignment、offset 继续遵循实例、局部 Theme、显式全局 Theme、Token 的覆盖链。`TThemeBuilder` 自动投影给原生 Material Badge 的主题按来源识别，不通过数值相等启发式覆盖 TDesign 尺寸预设。
 - Demo 使用 `TCellGroup` 表达连续角标 Cell，builder 只展示可复制的组件组合。
 
 ## 影响范围
