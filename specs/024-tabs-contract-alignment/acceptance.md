@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/breaking/tabs-contract-alignment`
-- 基线提交：`8c4f9e7f`
+- 基线分支：`rss1102/breaking/badge-design-alignment`
 - Flutter/Dart：Flutter 3.32.0 与 Flutter 3.47.0（latest）
 
 ## 自动化验证
