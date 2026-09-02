@@ -1,0 +1,5 @@
+Widget _buildTriangleRightBadge(BuildContext context) => const TBadge(
+    label: 'NEW',
+    variant: TBadgeVariant.triangleRight,
+    child: TCell(title: Text('单行标题')),
+  );
