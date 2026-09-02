@@ -6,7 +6,6 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
@@ -69,7 +68,7 @@ class TActionSheetGrid<T> extends StatefulWidget {
     final token = context.tTheme;
     final showPagination = layout.mode == TActionSheetGridMode.paged;
     var height = token.spacer8 + layout.rows * itemHeight;
-    if (subtitle != null) {
+    if (subtitle?.isNotEmpty ?? false) {
       final font = token.fontBodyMedium;
       final painter =
           TextPainter(
@@ -129,7 +128,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: context.tTheme.spacer8),
-          if (widget.subtitle != null) _buildDescription(context),
+          if (widget.subtitle?.isNotEmpty ?? false) _buildDescription(context),
           Flexible(fit: FlexFit.loose, child: _buildGridContent(context)),
           if (widget.showCancel)
             buildCancelButton(
@@ -241,12 +240,12 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
                         return SizedBox(
                           width: itemWidth,
                           height: widget.itemHeight,
-                          child: TActionSheetItemWidget<T>(
-                            item: index < widget.items.length
-                                ? widget.items[index]
-                                : null,
-                            onSelected: widget.onSelected,
-                          ),
+                          child: index < widget.items.length
+                              ? TActionSheetItemWidget<T>(
+                                  item: widget.items[index],
+                                  onSelected: widget.onSelected,
+                                )
+                              : const SizedBox.shrink(),
                         );
                       }),
                     );

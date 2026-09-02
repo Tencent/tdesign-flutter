@@ -86,3 +86,23 @@
 - Flutter 3.47.0：ActionSheet 组件测试 46 项通过，
   `flutter analyze --fatal-infos --no-pub` 为 0 issues。
 - `node scripts/check-flutter-component-contracts.mjs` 通过，56 个站点路由均具备源码、Example 和文档登记。
+
+## 2026-09-03 develop 同步与 API 边界复验
+
+- 已合并 `origin/develop@617bbd40`；五处冲突均位于 CI / 回归登记清单，按
+  ActionSheet 与 develop 新增 Badge、Tabs 项的并集解决。
+- `TActionSheetItem.badge` 放宽为 Widget 槽位；`textStyle` 只控制标题，Demo
+  需要同色图标时显式设置 `Icon.color`；宫格空位不再通过 nullable Item 表达。
+- 面板与 Item 的空 `subtitle` 均按无描述处理，不再生成空白描述栏或额外高度。
+- 角标使用自身尺寸的分数平移定位，移除 build 内 `ValueNotifier`、`GlobalKey`
+  与帧后 RenderBox 强转；Widget 测试验证角标中心与图标槽位右上角重合。
+- `TActionSheetThemeData.lerpDouble` 收为内部辅助，不再进入生成 API 文档。
+- Flutter 3.32.0：组件测试 49 项通过，ActionSheet 生产源码覆盖率
+  `376/384 = 97.92%`；Demo 功能测试 8 项、回归调度器自测 11 项、示例代码
+  生成检查与严格 analyze 均通过。
+- Flutter 3.47.0：组件测试 49 项、Demo 功能测试 8 项、组件包与 Example
+  严格 analyze 均通过。首次 Demo 运行的 `ink_sparkle.frag` 解码失败在 Example
+  单独 clean + pub get 后复跑消失。
+- macOS 上不更新 Linux Golden：现有 10 项均出现 3.74%–5.39% 的整页文字与图标
+  抗锯齿差异，包含未触及的基础列表路径；差异图未显示局部布局漂移。最终 Golden
+  状态仍以 Flutter 3.32.0 Linux CI 为准。

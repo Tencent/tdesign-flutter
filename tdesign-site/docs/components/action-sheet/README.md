@@ -90,12 +90,16 @@ TActionSheet.showList(
     TActionSheetItem(
       value: 'important',
       label: 'Mark as important',
+      icon: Icon(
+        TIcons.notification,
+        color: context.tTheme.brandNormalColor,
+      ),
       textStyle: TextStyle(color: context.tTheme.brandNormalColor),
     ),
     TActionSheetItem(
       value: 'unsubscribe',
       label: 'Unsubscribe',
-      icon: const Icon(TIcons.delete),
+      icon: Icon(TIcons.delete, color: context.tTheme.errorNormalColor),
       textStyle: TextStyle(color: context.tTheme.errorNormalColor),
     ),
     TActionSheetItem(
@@ -110,11 +114,13 @@ TActionSheet.showList(
 
 ## API 摘要
 
-- `TActionSheetItem<T>`：必填稳定 `value`，并支持 `label`、`icon`、`subtitle`、`badge` 和 `disabled`。
+- `TActionSheetItem<T>`：必填稳定 `value`，并支持 `label`、`icon`、`subtitle`、`badge` 和 `disabled`；`badge` 是任意 Widget 槽位。
 - `icon` 是 Widget 插槽；背景、形状和显式尺寸由该 Widget 自己控制。
+- `textStyle` 只控制标题样式，不会隐式改变图标颜色；图标可显式设置样式，或继承 ActionSheet Theme。
 - `showList`：列表动作面板，支持副标题、取消按钮和禁用项。
 - `showGrid`：宫格动作面板，通过 `TActionSheetGridLayout.fixed`、
   `paged` 或 `scroll` 明确选择一种互斥布局；宫格 Item 和副标题居中展示。
+- 面板与 Item 的 `subtitle` 为 null 或空字符串时均按无描述处理。
 - 两种入口均返回 `TPopupHandle`，可设置 `showOverlay`、`closeOnOverlayClick`、`useSafeArea`、`onCancel` 和 `onClosed`。
 
 `TActionSheetThemeData` 提供 `gridItemHeight`、`iconSize`、`gridIconExtent` 和
@@ -134,5 +140,6 @@ TActionSheet.showList(
   `layout` 中明确声明。
 - 删除 `showGrid.align`；宫格 Item 和副标题固定居中。
 - `TActionSheetThemeData.itemHeight` 改名为 `gridItemHeight`。
+- `textStyle.color` 不再隐式覆盖图标颜色；需要同色时请同时设置 `Icon.color`。
 
 示例源码：[t_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_action_sheet_page.dart)

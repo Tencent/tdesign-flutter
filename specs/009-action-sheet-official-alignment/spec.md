@@ -35,6 +35,8 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 
 - 无描述列表项高 56；带描述列表项高 84。
 - 面板描述和 item 描述均使用 `textColorPlaceholder`。
+- 面板与 Item 的 `subtitle` 为 null 或空字符串时均视为无描述，不渲染空白描述栏，
+  也不计入弹层高度。
 - 分页当前点使用 `brandNormalColor`，非当前点使用 `textDisabledColor`。
 - `count` 表示一个可视面板期望容纳的项目数量，`rows` 表示行数，
   `items.length` 表示全部数据数量；每行列数统一由 `count ~/ rows` 推导。
@@ -44,6 +46,10 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
   默认项目宽度；仅滚动布局显式 `itemMinWidth` 可以扩大项目宽度并触发滚动。
 - `TActionSheetItem<T>` 只持有动作内容、状态与稳定业务值 `value`，不持有 `group`；
   选择动作只通过 `onSelected(item)` 回传，不暴露会随布局变化的全局索引。
+- `TActionSheetItem.badge` 是 Widget 槽位，不绑定具体 Badge 实现；`textStyle`
+  只控制标题，不作为图标颜色的第二来源。宫格尾部空位由布局直接占位，不允许
+  以 `item=null` 表达。需要标题与图标同色时，调用方分别设置 `textStyle` 与
+  `Icon.color`，Demo 状态项不得依赖隐式联动。
 - 删除 `showGroup`、`TActionSheetGroup` 与 `TActionSheetItem.group`；公开设计矩阵
   不包含二次分组能力，现有 13 个 Demo 不受影响。
 - `TActionSheetThemeData` 只持有视觉默认值，不持有 `count`、`rows`、
@@ -78,5 +84,6 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - [x] Widget 测试覆盖三种互斥布局、选择回调业务值以及全部非法布局参数。
 - [x] `showGrid` 无误导性对齐参数，Theme 宫格高度命名与实际作用域一致。
 - [x] 新增的宫格布局类型与选择回调已登记到 API 文档生成清单。
+- [x] Badge 槽位、标题样式与图标主题职责独立，Theme 内部插值辅助不进入公开 API。
 - [ ] Demo、站点文档与生成检查全部使用新 API，13 个入口及视觉基线不减少。
 - [ ] 在真实运行时与小程序基线完成像素和交互对照。

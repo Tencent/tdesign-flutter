@@ -66,6 +66,28 @@ void main() {
     expect(iconTheme.data.size, 32);
   });
 
+  testWidgets('列表标题颜色不覆盖图标 Theme', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetList(
+          items: [
+            TActionSheetItem(
+              value: 1,
+              label: '图标',
+              icon: Icon(Icons.star),
+              textStyle: TextStyle(color: Colors.red),
+            ),
+          ],
+          showCancel: false,
+        ),
+        actionSheetTheme: const TActionSheetThemeData(iconColor: Colors.purple),
+      ),
+    );
+
+    final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
+    expect(iconTheme.data.color, Colors.purple);
+  });
+
   testWidgets('禁用项 onTap 为 null（点击不触发回调）', (tester) async {
     String? tapped;
     await tester.pumpWidget(

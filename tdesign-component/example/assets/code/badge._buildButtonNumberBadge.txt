@@ -1,9 +1,0 @@
-Widget _buildButtonNumberBadge(BuildContext context) {
-    return TBadge(
-      label: '$num',
-      child: const TButton(
-        child: Text('按钮'),
-        size: TButtonSize.large,
-      ),
-    );
-  }

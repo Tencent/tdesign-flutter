@@ -16,6 +16,7 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/action_sheet/t_action_sheet_list_test.dart',
     'test/components/action_sheet/t_action_sheet_test.dart',
   ]),
+  ComponentTestSuite('badge', ['test/components/badge/t_badge_test.dart']),
   ComponentTestSuite('button', [
     'test/components/button/t_button_test.dart',
     'test/components/button/t_button_theme_priority_test.dart',
@@ -44,6 +45,11 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/refresh/t_refresh_test.dart',
   ]),
   ComponentTestSuite('rate', ['test/components/rate/t_rate_test.dart']),
+  ComponentTestSuite('tabs', [
+    'test/components/tabs/t_horizontal_tab_bar_test.dart',
+    'test/components/tabs/t_tab_bar_test.dart',
+    'test/components/tabs/t_tab_test.dart',
+  ]),
   ComponentTestSuite('icon', ['test/components/icon/t_icon_test.dart']),
   ComponentTestSuite('link', [
     'test/components/link/t_link_resolve_test.dart',

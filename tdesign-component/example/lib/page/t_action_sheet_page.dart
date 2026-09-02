@@ -381,13 +381,16 @@ class TActionSheetPage extends StatelessWidget {
         TActionSheetItem(
           value: 'important',
           label: 'Mark as important',
-          icon: const Icon(TIcons.notification),
+          icon: Icon(
+            TIcons.notification,
+            color: context.tTheme.brandNormalColor,
+          ),
           textStyle: TextStyle(color: context.tTheme.brandNormalColor),
         ),
         TActionSheetItem(
           value: 'unsubscribe',
           label: 'Unsubscribe',
-          icon: const Icon(TIcons.delete),
+          icon: Icon(TIcons.delete, color: context.tTheme.errorNormalColor),
           textStyle: TextStyle(color: context.tTheme.errorNormalColor),
         ),
         const TActionSheetItem(

@@ -1,7 +1,5 @@
-Widget _buildSquareBadge(BuildContext context) {
-    return TBadge(
-      label: '$num',
-      border: true,
-      child: const Icon(TIcons.notification),
-    );
-  }
+Widget _buildSquareBadge(BuildContext context) => const TBadge(
+    label: '8',
+    variant: TBadgeVariant.square,
+    child: Icon(TIcons.notification),
+  );

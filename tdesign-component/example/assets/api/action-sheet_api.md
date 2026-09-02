@@ -6,11 +6,11 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TBadge? | - | 角标 |
+| badge | Widget? | - | 角标槽位。 列表模式下跟随标题展示；宫格模式下仅在 `icon` 非空时展示在图标右上角。 |
 | disabled | bool | false | 是否禁用 |
 | icon | Widget? | - | 图标槽位；调用方拥有其背景、形状和显式尺寸。 未显式设置尺寸或颜色的 `Icon` 会继承 `TActionSheetThemeData`。 |
 | label | String | - | 标题 |
-| subtitle | String? | - | 描述信息 |
+| subtitle | String? | - | 列表模式下的描述信息；宫格模式不展示。 |
 | textStyle | TextStyle? | - | 标题样式 |
 | value | T | - | 稳定的业务值 |
 
@@ -33,7 +33,7 @@
 | items | List<TActionSheetItem<T>> | - | 宫格中的动作项目。 |
 | layout | TActionSheetGridLayout | const TActionSheetGridLayout.fixed() | 普通、分页或横向滚动宫格布局。 |
 | cancelText | String? | - | 取消按钮文字。 |
-| subtitle | String? | - | 面板副标题。 |
+| subtitle | String? | - | 面板副标题；为 null 或空字符串时不展示。 |
 | showCancel | bool | true | 是否显示取消按钮。 |
 | showOverlay | bool | true | 是否显示蒙层。 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
@@ -56,7 +56,7 @@
 | items | List<TActionSheetItem<T>> | - | 列表中的动作项目。 |
 | align | TActionSheetAlign | TActionSheetAlign.center | 项目文字对齐方式。 |
 | cancelText | String? | - | 取消按钮文字。 |
-| subtitle | String? | - | 面板副标题。 |
+| subtitle | String? | - | 面板副标题；为 null 或空字符串时不展示。 |
 | showCancel | bool | true | 是否显示取消按钮。 |
 | showOverlay | bool | true | 是否显示蒙层。 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
@@ -69,19 +69,6 @@
 ### TActionSheetThemeData
 #### 简介
 TActionSheet 组件级视觉 ThemeExtension
-
-#### 静态方法
-
-##### TActionSheetThemeData.lerpDouble
-
-返回类型：`double?`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| a | double? | - | - |
-| b | double? | - | - |
-| t | double | - | - |
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

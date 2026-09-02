@@ -22,7 +22,7 @@ final class TActionSheet {
   /// [items] 列表中的动作项目。
   /// [align] 项目文字对齐方式。
   /// [cancelText] 取消按钮文字。
-  /// [subtitle] 面板副标题。
+  /// [subtitle] 面板副标题；为 null 或空字符串时不展示。
   /// [showCancel] 是否显示取消按钮。
   /// [showOverlay] 是否显示蒙层。
   /// [closeOnOverlayClick] 点击蒙层是否关闭。
@@ -65,7 +65,7 @@ final class TActionSheet {
   /// [context] 用于查找承载弹层的 Navigator。
   /// [items] 宫格中的动作项目。
   /// [cancelText] 取消按钮文字。
-  /// [subtitle] 面板副标题。
+  /// [subtitle] 面板副标题；为 null 或空字符串时不展示。
   /// [showCancel] 是否显示取消按钮。
   /// [showOverlay] 是否显示蒙层。
   /// [closeOnOverlayClick] 点击蒙层是否关闭。

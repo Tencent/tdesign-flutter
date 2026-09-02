@@ -7,7 +7,6 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
@@ -73,7 +72,7 @@ class TActionSheetList<T> extends StatelessWidget {
               ? _itemExtent
               : _itemWithSubtitleExtent),
     );
-    if (subtitle != null) {
+    if (subtitle?.isNotEmpty ?? false) {
       final font = token.fontBodyMedium;
       final painter =
           TextPainter(
@@ -121,7 +120,7 @@ class TActionSheetList<T> extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (subtitle != null) _buildDescription(context),
+            if (subtitle?.isNotEmpty ?? false) _buildDescription(context),
             Flexible(child: _buildOptionsList(context)),
             if (showCancel) _buildCancelButton(context),
           ],
@@ -214,8 +213,7 @@ class TActionSheetList<T> extends StatelessWidget {
                           data: IconThemeData(
                             color: item.disabled
                                 ? context.tTheme.textDisabledColor
-                                : (item.textStyle?.color ??
-                                      actionSheetTheme?.iconColor ??
+                                : (actionSheetTheme?.iconColor ??
                                       context.tTheme.textColorPrimary),
                             size: iconSize,
                           ),

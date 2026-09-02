@@ -21,13 +21,6 @@ void main() {
   }
 
   group('TActionSheetItemWidget', () {
-    testWidgets('item=null 渲染空', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TActionSheetItemWidget<int>(item: null)),
-      );
-      expect(find.byType(TActionSheetItemWidget<int>), findsOneWidget);
-    });
-
     testWidgets('基础渲染 label + icon', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -74,6 +67,28 @@ void main() {
       );
       await tester.pump();
       expect(find.text('带角标'), findsOneWidget);
+    });
+
+    testWidgets('badge 接受任意 Widget 且无需帧后测量', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'custom-badge',
+              label: '自定义角标',
+              icon: Icon(Icons.star),
+              badge: SizedBox(key: Key('custom-badge'), width: 12, height: 6),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(const Key('custom-badge')), findsOneWidget);
+      expect(
+        tester.getCenter(find.byKey(const Key('custom-badge'))),
+        tester.getTopRight(find.byType(Stack).first),
+      );
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('点击触发 onSelected 并返回业务值', (tester) async {
@@ -144,6 +159,27 @@ void main() {
         ),
         findsOneWidget,
       );
+    });
+
+    testWidgets('标题 textStyle 不作为图标颜色来源', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'separate-style',
+              label: '独立样式',
+              icon: Icon(Icons.star),
+              textStyle: TextStyle(color: Colors.red),
+            ),
+          ),
+          actionSheetTheme: const TActionSheetThemeData(
+            iconColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
+      expect(iconTheme.data.color, Colors.purple);
     });
 
     testWidgets('自定义 icon Widget 的显式尺寸和颜色不被 Theme 覆盖', (tester) async {

@@ -71,16 +71,16 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
       return this;
     }
     return TActionSheetThemeData(
-      gridItemHeight: lerpDouble(gridItemHeight, other.gridItemHeight, t),
+      gridItemHeight: _lerpDouble(gridItemHeight, other.gridItemHeight, t),
       barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
-      panelRadius: lerpDouble(panelRadius, other.panelRadius, t),
-      iconSize: lerpDouble(iconSize, other.iconSize, t),
-      gridIconExtent: lerpDouble(gridIconExtent, other.gridIconExtent, t),
+      panelRadius: _lerpDouble(panelRadius, other.panelRadius, t),
+      iconSize: _lerpDouble(iconSize, other.iconSize, t),
+      gridIconExtent: _lerpDouble(gridIconExtent, other.gridIconExtent, t),
       iconColor: Color.lerp(iconColor, other.iconColor, t),
     );
   }
 
-  static double? lerpDouble(double? a, double? b, double t) {
+  static double? _lerpDouble(double? a, double? b, double t) {
     if (a == null && b == null) {
       return null;
     }

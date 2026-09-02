@@ -198,7 +198,9 @@
           "TTabsBar",
           "TTab",
           "TTabsBarView",
-          "TTabsBarIndicator"
+          "TTabsBarIndicator",
+          "TTabsBarThemeData",
+          "TTabsBarVariant"
         ],
         "getComments": false
       }
@@ -469,14 +471,15 @@
     {
       "slug": "badge",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/badge/t_badge.dart"
+        "type": "folder",
+        "path": "lib/src/components/badge"
       },
       "api": {
         "names": [
-          "TBadge"
+          "TBadge",
+          "TBadgeThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {

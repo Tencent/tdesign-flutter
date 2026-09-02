@@ -24,6 +24,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/action_sheet_page_golden_test.dart'],
   ),
   VisualTestSuite(
+    'badge',
+    'Badge Component',
+    workingDirectory: '.',
+    testFiles: ['test/components/badge/t_badge_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'button',
     'Button Demo',
     workingDirectory: 'example',
@@ -155,6 +161,15 @@ const visualTestSuites = <VisualTestSuite>[
     'Rate Demo',
     workingDirectory: 'example',
     testFiles: ['test/rate_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'tabs',
+    'Tabs Component',
+    workingDirectory: '.',
+    testFiles: [
+      'test/components/tabs/t_tab_golden_test.dart',
+      'test/components/navigation_components_golden_test.dart',
+    ],
   ),
   VisualTestSuite(
     'toast',

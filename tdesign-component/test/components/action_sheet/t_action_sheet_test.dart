@@ -81,6 +81,39 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('空面板副标题与未设置的高度语义一致', (tester) async {
+      final context = await pumpHost(tester);
+      final listWithoutSubtitle = TActionSheetList.preferredPopupHeight(
+        context,
+        items: items(),
+        subtitle: null,
+        showCancel: true,
+      );
+      final listWithEmptySubtitle = TActionSheetList.preferredPopupHeight(
+        context,
+        items: items(),
+        subtitle: '',
+        showCancel: true,
+      );
+      final gridWithoutSubtitle = TActionSheetGrid.preferredPopupHeight(
+        context,
+        subtitle: null,
+        layout: const TActionSheetGridLayout.fixed(),
+        itemHeight: 96,
+        showCancel: true,
+      );
+      final gridWithEmptySubtitle = TActionSheetGrid.preferredPopupHeight(
+        context,
+        subtitle: '',
+        layout: const TActionSheetGridLayout.fixed(),
+        itemHeight: 96,
+        showCancel: true,
+      );
+
+      expect(listWithEmptySubtitle, listWithoutSubtitle);
+      expect(gridWithEmptySubtitle, gridWithoutSubtitle);
+    });
+
     testWidgets('关闭动画期间重复点击不会重复回调或弹出宿主页', (tester) async {
       final context = await pumpHost(tester);
       var changedCount = 0;
