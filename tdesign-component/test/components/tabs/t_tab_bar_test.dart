@@ -272,6 +272,10 @@ void main() {
       expect(tagContainers, findsNWidgets(3));
 
       final containers = tester.widgetList<Container>(tagContainers).toList();
+      final tabBar = tester.widget<THorizontalTabBar>(
+        find.byType(THorizontalTabBar),
+      );
+      expect(tabBar.labelPadding, const EdgeInsets.all(4));
       expect(
         containers.map((item) => (item.decoration! as BoxDecoration).color),
         [selectedColor, backgroundColor, backgroundColor],
@@ -280,6 +284,7 @@ void main() {
         final size = tester.getSize(find.byWidget(container));
         expect(size.height, 32);
         expect(size.width, greaterThan(80));
+        expect(container.padding, const EdgeInsets.symmetric(horizontal: 8));
       }
     });
 

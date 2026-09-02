@@ -88,6 +88,7 @@ class TTabsBar extends StatelessWidget {
         labelPadding:
             themeData.labelPadding ??
             (variant == TTabsBarVariant.tag
+                // 标签之间的外间距；胶囊内部留白由 THorizontalTabBar 负责。
                 ? const EdgeInsets.all(4)
                 : const EdgeInsets.all(8)),
         unselectedLabelColor:
