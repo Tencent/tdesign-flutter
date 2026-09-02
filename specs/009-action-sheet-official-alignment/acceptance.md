@@ -25,7 +25,7 @@
 
 ## 人工验收
 
-- [ ] 9 个入口在 Example 应用中可打开、选择、取消和翻页。
+- [ ] 13 个入口在 Example 应用中可打开、选择、取消和翻页。
 - [x] 使用 375dp 视口完成小程序与 Flutter 页面、列表弹层截图对照，证据见 [visual-comparison.md](visual-comparison.md)。
 
 ## 未覆盖项与后续工作
