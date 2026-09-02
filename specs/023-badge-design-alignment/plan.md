@@ -12,7 +12,7 @@
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
 | 组件 | `lib/src/components/badge/` | 新形态、尺寸与位置解析 |
-| 调用方 | Tabs 与仓库 Demo/测试 | 迁移 `small`，复制新增字段 |
+| 调用方 | 仓库 Demo/测试 | 迁移 `small` 并覆盖新增形态、尺寸与偏移 |
 | 测试 | Badge 组件、Demo、Golden | 根因、契约和视觉回归 |
 | 示例 | `example/lib/page/t_badge_page.dart` | 按 Figma 重建公开 Demo |
 | 文档 | Spec、dartdoc、生成 API/示例 | 记录 breaking 迁移 |
