@@ -6,7 +6,7 @@
 - 提交：工作区待提交
 - Flutter/Dart：Flutter 3.32.0；Flutter 3.47.0 / Dart 3.13.0
 - 设计基准：Figma `TDesign for mobile` branch `4SdclZkcv5bPgX6pa8AsmI`，node `28591:41540`
-- 真机：25113PN0EC，Android 16（API 36），Flutter Impeller/Vulkan
+- 真机：Android 16（API 36），Flutter Impeller/Vulkan
 
 ## 自动化验证
 
