@@ -8,7 +8,7 @@ Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它�
 NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 `component_demo_glyphs.txt` 与 `feedback_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`ba86924f427f2537d08d05d5634c8ab1374dc4da067195352a687e37e53f77cc`。
+`56e09a6c40646403c4095114abfea212ff7be9089803ce9687a0e2937c0876d1`。
 
 `TDesignAlignmentCJK-Regular.otf` 是 Loading、Message、Popover、Popup 对齐测试
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、

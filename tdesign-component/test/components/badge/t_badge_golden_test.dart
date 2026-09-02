@@ -48,7 +48,10 @@ class _BadgeScene extends StatelessWidget {
     final theme = baseTheme.copyWith(
       textTheme: baseTheme.textTheme.apply(fontFamily: 'Roboto'),
       primaryTextTheme: baseTheme.primaryTextTheme.apply(fontFamily: 'Roboto'),
+      // Golden 为固定字体而复制 BadgeTheme；复制后属于显式主题，因此同时锁定
+      // TDesign Dot 的 8px 视觉。默认回退路径由 t_badge_test.dart 单独覆盖。
       badgeTheme: baseTheme.badgeTheme.copyWith(
+        smallSize: 8,
         textStyle: baseTheme.badgeTheme.textStyle?.copyWith(
           fontFamily: 'Roboto',
         ),

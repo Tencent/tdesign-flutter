@@ -10,6 +10,12 @@ class ComponentTestSuite {
 }
 
 const componentTestSuites = <ComponentTestSuite>[
+  ComponentTestSuite('action_sheet', [
+    'test/components/action_sheet/t_action_sheet_grid_test.dart',
+    'test/components/action_sheet/t_action_sheet_item_widget_test.dart',
+    'test/components/action_sheet/t_action_sheet_list_test.dart',
+    'test/components/action_sheet/t_action_sheet_test.dart',
+  ]),
   ComponentTestSuite('badge', ['test/components/badge/t_badge_test.dart']),
   ComponentTestSuite('button', [
     'test/components/button/t_button_test.dart',

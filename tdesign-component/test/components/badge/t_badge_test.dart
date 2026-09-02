@@ -190,7 +190,21 @@ void main() {
     testWidgets('无 child 时 dot 使用圆点尺寸而非占位尺寸', (tester) async {
       await tester.pumpWidget(app(const TBadge(variant: TBadgeVariant.dot)));
 
-      expect(tester.getSize(find.byType(Badge)), const Size(6, 6));
+      expect(tester.getSize(find.byType(Badge)), const Size(8, 8));
+    });
+
+    testWidgets('有 child 时 dot 仍使用 8px 圆点尺寸', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TBadge(
+            variant: TBadgeVariant.dot,
+            child: SizedBox(width: 24, height: 24),
+          ),
+        ),
+      );
+
+      expect(badgeOf(tester).smallSize, 8);
+      expect(tester.getSize(find.byType(TBadge)), const Size(24, 24));
     });
 
     testWidgets('无 child 且隐藏时收敛为零尺寸', (tester) async {
@@ -536,7 +550,7 @@ void main() {
         app(const TBadge(variant: TBadgeVariant.dot, border: true)),
       );
 
-      expect(tester.getSize(find.byType(Badge)), const Size(6, 6));
+      expect(tester.getSize(find.byType(Badge)), const Size(8, 8));
       final decorations = tester
           .widgetList<DecoratedBox>(find.byType(DecoratedBox))
           .map((box) => box.decoration)
@@ -549,6 +563,29 @@ void main() {
   });
 
   group('主题解析', () {
+    testWidgets('TThemeBuilder 不投影 smallSize 且 TBadge 使用 8px Dot', (
+      tester,
+    ) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData());
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: Row(
+              children: [
+                Badge(),
+                TBadge(variant: TBadgeVariant.dot),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(theme.badgeTheme.smallSize, isNull);
+      expect(tester.getSize(find.byType(Badge).first), const Size.square(6));
+      expect(tester.getSize(find.byType(Badge).last), const Size.square(8));
+    });
+
     testWidgets('完整 TDesign Theme 映射默认视觉 token', (tester) async {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
@@ -556,7 +593,7 @@ void main() {
       expect(badge.backgroundColor, token.errorNormalColor);
       expect(badge.textColor, token.textColorAnti);
       expect(badge.largeSize, 16);
-      expect(badge.smallSize, 6);
+      expect(badge.smallSize, 8);
       expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
       expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
@@ -571,7 +608,7 @@ void main() {
       expect(badge.backgroundColor, token.errorNormalColor);
       expect(badge.textColor, token.textColorAnti);
       expect(badge.largeSize, 16);
-      expect(badge.smallSize, 6);
+      expect(badge.smallSize, 8);
       expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
     });
 
