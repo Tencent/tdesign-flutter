@@ -1,13 +1,13 @@
-Widget _buildBubbleBadge(BuildContext context) => TBadge(
-    label: '领取积分',
-    variant: TBadgeVariant.bubble,
+Widget _buildCustomBadge(BuildContext context) => TBadge(
+    label: 'NEW',
+    offset: const Offset(-16, 0),
     child: Theme(
       data: Theme.of(
         context,
       ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
       child: TButton(
         size: TButtonSize.medium,
-        icon: const Icon(TIcons.shop),
+        icon: const Icon(TIcons.notification),
         onPressed: () {},
       ),
     ),

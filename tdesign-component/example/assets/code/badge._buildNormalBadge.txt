@@ -1,0 +1,2 @@
+Widget _buildNormalBadge(BuildContext context) =>
+      const TBadge(label: '8', child: Icon(TIcons.notification));

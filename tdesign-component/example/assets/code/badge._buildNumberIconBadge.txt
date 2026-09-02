@@ -1,0 +1,2 @@
+Widget _buildNumberIconBadge(BuildContext context) =>
+      const TBadge(label: '2', child: Icon(TIcons.notification));
