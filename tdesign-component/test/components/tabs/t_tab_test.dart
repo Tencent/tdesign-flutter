@@ -238,6 +238,36 @@ void main() {
   });
 
   group('TTabsBarView', () {
+    testWidgets('shares the inherited DefaultTabController with TTabsBar', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const DefaultTabController(
+            length: 2,
+            child: Column(
+              children: [
+                TTabsBar(
+                  tabs: [
+                    TTab(text: '第一页'),
+                    TTab(text: '第二页'),
+                  ],
+                ),
+                Expanded(
+                  child: TTabsBarView(children: [Text('内容一'), Text('内容二')]),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('内容一'), findsOneWidget);
+      await tester.tap(find.text('第二页'));
+      await tester.pumpAndSettle();
+      expect(find.text('内容二'), findsOneWidget);
+    });
+
     testWidgets('renders children with default and explicit physics', (
       tester,
     ) async {

@@ -6,7 +6,7 @@ import 't_tab_bar_theme_data.dart';
 
 /// Tab 组件
 ///
-/// Material Tab 薄包装。禁用：`enabled: false`。
+/// TDesign 选项卡标签，通常作为 `TTabsBar.tabs` 的子项使用。
 class TTab extends Tab {
   /// 文字内容
   @override
@@ -20,7 +20,11 @@ class TTab extends Tab {
   @override
   final Widget? icon;
 
-  /// 是否可用，默认 true；`false` 即禁用
+  /// 是否可用，默认 true。
+  ///
+  /// 设为 `false` 时使用禁用样式，并由 `TTabsBar` 阻止该项被选择。
+  /// Material [TabBar] 不识别此扩展字段；直接将 [TTab] 用作 Material
+  /// [TabBar.tabs] 时只会呈现禁用样式，不会阻止其切换。
   final bool enabled;
 
   const TTab({Key? key, this.text, this.child, this.icon, this.enabled = true})

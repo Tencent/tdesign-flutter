@@ -11,11 +11,11 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | Flutter 3.32 Tabs 定向 `flutter analyze --no-pub` | 通过 | 0 issues |
-| Flutter 3.32 Tabs 三个组件测试文件 | 通过 | 74 tests；含 Material 视觉隔离与 Theme 插值断言 |
+| Flutter 3.32 Tabs 三个组件测试文件 | 通过 | 75 tests；含 Material 视觉隔离、Theme 插值与继承 Controller 联动断言 |
 | Flutter 3.32 `example/test/tabs_page_test.dart` | 通过 | 公开 Demo 契约 |
 | Flutter 3.32 Tabs 覆盖率门禁 | 通过 | 754/778，96.92% |
 | Flutter 3.47 Tabs 定向 `flutter analyze --no-pub` | 通过 | 独立临时 worktree 中 `clean + pub get` 后 0 issues |
-| Flutter 3.47 Tabs 三个组件测试文件 | 通过 | 74 tests；含 Material 视觉隔离断言 |
+| Flutter 3.47 Tabs 三个组件测试文件 | 通过 | 75 tests；含 Material 视觉隔离与继承 Controller 联动断言 |
 | Flutter 3.47 `example/test/tabs_page_test.dart` | 通过 | 公开 Demo 契约 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例产物一致 |
 | `sh ./demo_tool/all_build.sh` | 通过 | 使用 Dart 3.32，生成 57 份 API 文档 |

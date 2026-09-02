@@ -46,6 +46,7 @@
 - API 生成清单登记 `TTabsBarThemeData` 与 `TTabsBarVariant`，使公开主题入口和形态枚举进入 Tabs API 文档。
 - `line` 在调用方未传 `indicator` 且 Theme 未提供 `indicator` 时，组件内部使用 TDesign 品牌色、16px 宽、3px 高的圆头指示器；`tag` 与 `card` 默认不绘制指示器。
 - 默认选中文字使用品牌色与 600 字重，未选中文字使用主文本色与 400 字重，禁用文字和图标使用禁用文本色；禁用态不再对整个子树统一乘透明度。
+- `TTab.enabled` 由 `TTab` 负责禁用视觉、由 `TTabsBar` 负责阻止选择；Material `TabBar` 不识别该扩展字段，直接组合时仅保留禁用视觉语义。
 - `tag` 使用次级容器背景和品牌浅色选中背景；圆角由标签可用高度派生。`card` 使用容器与次级容器 Token 形成连接卡片结构。
 - 实例 `decoration` / `indicator` > `TTabsBarThemeData` 对应字段 > TDesign Token / 组件内置规范值。`TabBarThemeData`、Material `ColorScheme`、`disabledColor` 与 `IconTheme` 不参与 Tabs 默认视觉解析，避免底层 Material 默认值或应用级 Material 配置改变 TDesign 组件契约；应用字体家族仍允许通过环境字体继承。
 - 底层可以复用 Material 的布局、动画、手势与 `TabController`，但默认不显示 Material splash/hover overlay，也不从内部 `THorizontalTabBar` 回读 `TabBarThemeData`。
