@@ -14,7 +14,7 @@ class TLoadingController {
   static void show(
     BuildContext context, {
     Widget? child,
-    TLoadingSize size = TLoadingSize.medium,
+    double size = 20,
     TLoadingIcon? icon = TLoadingIcon.circle,
     String? text,
     TLoadingThemeData? theme,
@@ -24,12 +24,15 @@ class TLoadingController {
       return;
     }
 
-    final overlay = Overlay.maybeOf(context);
-    if (overlay == null) {
+    final overlayState = Overlay.maybeOf(context);
+    if (overlayState == null) {
       debugPrint('warn: TLoading requires an Overlay ancestor.');
       return;
     }
-    final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final captured = InheritedTheme.capture(
+      from: context,
+      to: overlayState.context,
+    );
     final loadingText = text ?? context.resource.loading;
     _overlayEntry = OverlayEntry(
       builder: (overlayContext) => captured.wrap(
@@ -53,7 +56,7 @@ class TLoadingController {
 
     final entry = _overlayEntry!;
     try {
-      overlay.insert(entry);
+      overlayState.insert(entry);
       _isShowing = true;
     } catch (_) {
       _overlayEntry = null;

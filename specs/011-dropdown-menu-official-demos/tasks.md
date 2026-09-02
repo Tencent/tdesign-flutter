@@ -7,6 +7,12 @@
 - [x] DONE 生成代码片段
 - [x] DONE 实测生产源码 LCOV
 - [x] DONE 完成双 Flutter 版本 Example 测试和严格 analyze，记录 latest 既有组件几何断言差异
-- [ ] TODO 获取待确认契约的维护者决策
+- [x] DONE 读取 Figma `24386:5279` 的组件尺寸、Token 和问题标注
+- [x] DONE 复核现有公开 API、Controller、Theme 与滚动锚定实现
+- [x] DONE 在不新增 API 的前提下对齐触发项、单选项、多选项和紧凑 Demo
+- [x] DONE 合并 develop 并收敛 CI 清单与 Golden 字体冲突
+- [ ] TODO 补齐并通过 Figma 样式、三列展开态与 Token 回归测试
+- [ ] TODO 更新 Flutter 3.32.0 Linux Golden 并复跑
+- [ ] TODO 完成 Flutter 3.32.0 与 latest analyze、组件/Demo 测试和覆盖率门禁
 - [x] DONE 完成真实运行时页面截图验收
 - [x] DONE 完成官方单选菜单点击展开态截图验收与最终 Review

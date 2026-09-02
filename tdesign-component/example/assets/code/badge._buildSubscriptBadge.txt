@@ -1,6 +1,0 @@
-Widget _buildSubscriptBadge(BuildContext context) {
-    return const TBadge(
-      variant: TBadgeVariant.dot,
-      child: TCell(title: Text('单行标题')),
-    );
-  }

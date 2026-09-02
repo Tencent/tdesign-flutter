@@ -8,6 +8,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_dropdown_theme_data.dart';
 
@@ -622,6 +623,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
     final theme = _theme;
     final tokenFont = context.tTheme.fontBodyMedium;
+    final activeTokenFont = context.tTheme.fontMarkMedium;
     final baseStyle =
         theme.textStyle ??
         context.tExplicitDefaultTextStyle ??
@@ -643,6 +645,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         ? theme.activeTextStyle ??
               baseStyle.copyWith(
                 color: colorScheme?.primary ?? context.tTheme.brandNormalColor,
+                fontWeight: activeTokenFont?.fontWeight,
               )
         : baseStyle.copyWith(
             color: baseStyle.color ?? context.tTheme.textColorPrimary,
@@ -684,13 +687,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            SizedBox(width: context.tTheme.spacer4),
             AnimatedRotation(
               turns: arrowTurns,
               duration: _duration,
               curve: Curves.ease,
               child: Icon(
                 TIcons.caret_down_small,
-                size: theme.iconSize ?? 20,
+                size: theme.iconSize ?? 24,
                 color: iconColor,
               ),
             ),

@@ -66,4 +66,32 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('最新产品'), findsNothing);
   });
+
+  testWidgets('三列多选展开态与设计稿一致', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pumpAndSettle();
+
+    final trigger = find.text('三列多选');
+    await tester.scrollUntilVisible(
+      trigger,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+
+    expect(find.text('选项名称'), findsNWidgets(12));
+    expect(find.text('禁用选项'), findsNWidgets(3));
+    expect(find.text('数码'), findsNothing);
+    expect(find.text('生活'), findsNothing);
+    expect(
+      tester
+          .getSize(
+            find.byKey(const ValueKey<String>('t-dropdown-menu-panel-surface')),
+          )
+          .height,
+      closeTo(348, 0.5),
+    );
+  });
 }

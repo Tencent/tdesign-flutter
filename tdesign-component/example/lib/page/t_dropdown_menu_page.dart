@@ -15,25 +15,30 @@ class TDropdownMenuPage extends StatelessWidget {
   ];
 
   static const categoryOptions = <TDropdownMenuOption<String>>[
-    TDropdownMenuOption(value: 'phone', label: '手机', group: '数码'),
-    TDropdownMenuOption(value: 'computer', label: '电脑', group: '数码'),
-    TDropdownMenuOption(value: 'audio', label: '影音', group: '数码'),
-    TDropdownMenuOption(value: 'clothes', label: '服饰', group: '生活'),
-    TDropdownMenuOption(value: 'food', label: '食品', group: '生活'),
-    TDropdownMenuOption(
-      value: 'limited',
-      label: '限量',
-      group: '生活',
-      disabled: true,
-    ),
+    TDropdownMenuOption(value: 'option-1', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-2', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-3', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-4', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-5', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-6', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-7', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-8', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-9', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-10', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-11', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-12', label: '选项名称'),
+    TDropdownMenuOption(value: 'option-13', label: '禁用选项', disabled: true),
+    TDropdownMenuOption(value: 'option-14', label: '禁用选项', disabled: true),
+    TDropdownMenuOption(value: 'option-15', label: '禁用选项', disabled: true),
   ];
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '用于商品列表等页面的排序和多维筛选；表单选择请使用 Picker。',
+      desc: '菜单呈现数个并列的选项栏目，用于整个页面的内容筛选，由菜单面板和菜单选项组成。',
       exampleCodeGroup: 'dropdown_menu',
+      compactDemo: true,
       showTestModule: false,
       children: [
         ExampleModule(
@@ -94,9 +99,9 @@ class TDropdownMenuPage extends StatelessWidget {
 
   @ExampleCode(group: 'dropdown_menu')
   Widget _multiple(BuildContext context) {
-    var singleColumn = <String>{'phone'};
-    var doubleColumn = <String>{'phone'};
-    var tripleColumn = <String>{'phone'};
+    var singleColumn = <String>{'option-1'};
+    var doubleColumn = <String>{'option-1'};
+    var tripleColumn = <String>{'option-1'};
     return StatefulBuilder(
       builder: (context, setState) {
         TDropdownMenuItem menuItem(
@@ -113,7 +118,6 @@ class TDropdownMenuPage extends StatelessWidget {
                   options: categoryOptions,
                   values: selected,
                   columns: columns,
-                  maxHeight: 280,
                   onConfirm: onConfirm,
                 ),
           );

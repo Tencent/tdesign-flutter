@@ -1,7 +1,7 @@
 Widget _multiple(BuildContext context) {
-    var singleColumn = <String>{'phone'};
-    var doubleColumn = <String>{'phone'};
-    var tripleColumn = <String>{'phone'};
+    var singleColumn = <String>{'option-1'};
+    var doubleColumn = <String>{'option-1'};
+    var tripleColumn = <String>{'option-1'};
     return StatefulBuilder(
       builder: (context, setState) {
         TDropdownMenuItem menuItem(
@@ -18,7 +18,6 @@ Widget _multiple(BuildContext context) {
                   options: categoryOptions,
                   values: selected,
                   columns: columns,
-                  maxHeight: 280,
                   onConfirm: onConfirm,
                 ),
           );

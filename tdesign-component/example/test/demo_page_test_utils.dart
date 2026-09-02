@@ -25,6 +25,7 @@ class DemoPageTestSpec {
     this.expectedComponentCount,
     this.useFeedbackGoldenFont = false,
     this.useAlignmentCjkFont = false,
+    this.precacheAssetImages = const [],
   });
 
   final String name;
@@ -35,6 +36,7 @@ class DemoPageTestSpec {
   final int? expectedComponentCount;
   final bool useFeedbackGoldenFont;
   final bool useAlignmentCjkFont;
+  final List<String> precacheAssetImages;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -154,6 +156,15 @@ Future<void> pumpFullDemoPage(
     tester.view.devicePixelRatio = 1;
     await tester.pumpWidget(_buildPage(spec, mode));
     await tester.pump();
+    if (attempt == 0 && spec.precacheAssetImages.isNotEmpty) {
+      final context = tester.element(find.byType(MaterialApp));
+      await tester.runAsync(() async {
+        for (final assetName in spec.precacheAssetImages) {
+          await precacheImage(AssetImage(assetName), context);
+        }
+      });
+      await tester.pump();
+    }
 
     final scrollables = find.byType(CustomScrollView);
     if (scrollables.evaluate().isEmpty) {

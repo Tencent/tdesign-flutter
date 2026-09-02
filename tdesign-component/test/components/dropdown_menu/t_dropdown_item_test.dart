@@ -59,7 +59,33 @@ void main() {
     );
     await tester.tap(find.text('单选'));
     await tester.pumpAndSettle();
-    expect(find.byIcon(Icons.check), findsOneWidget);
+    final selectedText = find.text('选项 A');
+    final selectedIcon = find.byIcon(TIcons.check);
+    expect(selectedIcon, findsOneWidget);
+    expect(tester.widget<Icon>(selectedIcon).size, 24);
+    expect(tester.widget<Text>(selectedText).style?.fontSize, 16);
+    expect(tester.widget<Text>(selectedText).style?.height, 1.5);
+    expect(tester.getTopLeft(selectedText).dx, closeTo(16, 0.001));
+    expect(tester.getTopRight(selectedIcon).dx, closeTo(784, 0.001));
+    expect(
+      tester
+          .getSize(
+            find
+                .ancestor(of: selectedText, matching: find.byType(InkWell))
+                .first,
+          )
+          .height,
+      56,
+    );
+    expect(
+      tester.widgetList<DecoratedBox>(find.byType(DecoratedBox)).any((box) {
+        final decoration = box.decoration;
+        return decoration is BoxDecoration &&
+            decoration.border is Border &&
+            (decoration.border! as Border).bottom.width == 0.5;
+      }),
+      isTrue,
+    );
 
     await tester.tap(find.text('选项 B'));
     await tester.pumpAndSettle();
@@ -322,5 +348,61 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('选项 A'), findsOneWidget);
     expect(find.text('确定'), findsOneWidget);
+  });
+
+  testWidgets('three-column panel follows the Figma spacing contract', (
+    tester,
+  ) async {
+    final panelOptions = List<TDropdownMenuOption<int>>.generate(
+      15,
+      (index) => TDropdownMenuOption(
+        value: index,
+        label: index < 12 ? '选项名称' : '禁用选项',
+        disabled: index >= 12,
+      ),
+    );
+    await tester.pumpWidget(
+      wrap(
+        TDropdownMenu(
+          animationDuration: Duration.zero,
+          items: [
+            TDropdownMenuItem(
+              label: '三列多选',
+              panelBuilder: (context, controller) =>
+                  TDropdownMultiSelectPanel<int>(
+                    controller: controller,
+                    options: panelOptions,
+                    values: const {0},
+                    columns: 3,
+                    onConfirm: (_) {},
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('三列多选'));
+    await tester.pumpAndSettle();
+
+    final chips = find.text('选项名称');
+    expect(chips, findsNWidgets(12));
+    expect(find.text('禁用选项'), findsNWidgets(3));
+    expect(
+      tester
+          .getSize(
+            find.byKey(const ValueKey<String>('t-dropdown-menu-panel-surface')),
+          )
+          .height,
+      closeTo(348, 0.5),
+    );
+    final firstChip = tester.getRect(
+      find.ancestor(of: chips.at(0), matching: find.byType(InkWell)).first,
+    );
+    final secondChip = tester.getRect(
+      find.ancestor(of: chips.at(1), matching: find.byType(InkWell)).first,
+    );
+    expect(firstChip.left, closeTo(16, 0.001));
+    expect(secondChip.left - firstChip.right, 12);
   });
 }

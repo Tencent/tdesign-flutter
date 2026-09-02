@@ -39,5 +39,38 @@ void main() {
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
+
+    testWidgets('dropdown menu multiple select ${mode.name} opened golden', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        dropdownMenuDemoPageTestSpec,
+        mode,
+      );
+
+      final trigger = find.text('三列多选');
+      final scrollable = find.descendant(
+        of: find.byType(CustomScrollView).first,
+        matching: find.byType(Scrollable),
+      );
+      await tester.scrollUntilVisible(
+        trigger,
+        200,
+        scrollable: scrollable.first,
+      );
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+
+      expect(find.text('选项名称'), findsNWidgets(12));
+      expect(find.text('禁用选项'), findsNWidgets(3));
+      await expectLater(
+        find.byType(Overlay),
+        matchesGoldenFile(
+          'goldens/dropdown_menu_multiple_opened_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
   }
 }

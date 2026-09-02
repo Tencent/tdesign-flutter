@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -155,7 +156,12 @@ class _TDropdownMultiSelectPanelState<T>
             fit: FlexFit.loose,
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(context.tTheme.spacer16),
+                padding: EdgeInsets.fromLTRB(
+                  context.tTheme.spacer16,
+                  context.tTheme.spacer12,
+                  context.tTheme.spacer16,
+                  context.tTheme.spacer16,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -338,10 +344,10 @@ class _DropdownOptionRow extends StatelessWidget {
     final theme =
         Theme.of(context).extension<TDropdownThemeData>() ??
         const TDropdownThemeData();
-    final tokenFont = context.tTheme.fontBodyMedium;
+    final tokenFont = context.tTheme.fontBodyLarge;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
+        material.tExplicitTextTheme?.bodyLarge ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -365,29 +371,44 @@ class _DropdownOptionRow extends StatelessWidget {
       selected: selected,
       enabled: !disabled,
       button: true,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          height: height,
-          child: Padding(
-            padding: padding,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    label,
-                    style: style,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color:
+                  theme.dividerColor ??
+                  material.tExplicitDividerColor ??
+                  context.tTheme.componentStrokeColor,
+              width: 0.5,
+            ),
+          ),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          child: SizedBox(
+            height: height,
+            child: Padding(
+              padding: padding,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: style,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                if (selected)
-                  Icon(
-                    Icons.check,
-                    color:
-                        colorScheme?.primary ?? context.tTheme.brandNormalColor,
-                  ),
-              ],
+                  if (selected)
+                    Icon(
+                      TIcons.check,
+                      size: 24,
+                      color:
+                          colorScheme?.primary ??
+                          context.tTheme.brandNormalColor,
+                    ),
+                ],
+              ),
             ),
           ),
         ),
@@ -472,7 +493,7 @@ class _DropdownOptionChip extends StatelessWidget {
           ),
           padding:
               theme.optionPadding ??
-              EdgeInsets.symmetric(horizontal: context.tTheme.spacer8),
+              EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
           child: Text(
             label,
             style: style,

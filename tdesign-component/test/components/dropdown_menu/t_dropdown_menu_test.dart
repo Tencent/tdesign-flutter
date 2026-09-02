@@ -142,6 +142,29 @@ void main() {
   });
 
   group('rendering and theme', () {
+    testWidgets('default trigger follows the Figma token contract', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TDropdownMenu(animationDuration: Duration.zero, items: [item('筛选项')]),
+        ),
+      );
+
+      final text = find.text('筛选项');
+      final icon = find.descendant(
+        of: find.byType(TDropdownMenu),
+        matching: find.byIcon(TIcons.caret_down_small),
+      );
+      expect(tester.getSize(find.byType(TDropdownMenu)).height, 48);
+      expect(tester.widget<Icon>(icon).size, 24);
+      expect(tester.getTopLeft(icon).dx - tester.getTopRight(text).dx, 4);
+
+      await tester.tap(text);
+      await tester.pumpAndSettle();
+      expect(tester.widget<Text>(text).style?.fontWeight, FontWeight.w600);
+    });
+
     testWidgets('renders expanded, scrollable, custom and disabled triggers', (
       tester,
     ) async {
